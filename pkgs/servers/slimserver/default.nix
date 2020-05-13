@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, makeWrapper
-, perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
+{ stdenv
+, fetchurl
+, makeWrapper
+, perlPackages
+, flac
+, faad2
+, sox
+, lame
+, monkeysAudio
+, wavpack
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
@@ -71,7 +80,7 @@ perlPackages.buildPerlPackage rec {
     # relax audio scan version constraints
     substituteInPlace lib/Audio/Scan.pm --replace "0.93" "1.01"
     substituteInPlace modules.conf --replace "Audio::Scan 0.93 0.95" "Audio::Scan 0.93"
-    '';
+  '';
 
   preConfigurePhase = "";
 

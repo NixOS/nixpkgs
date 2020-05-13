@@ -1,4 +1,9 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, pythonOlder
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, python
+, pythonOlder
 , cython
 , eventlet
 , futures

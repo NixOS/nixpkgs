@@ -1,6 +1,13 @@
-{ stdenv, fetchurl, autoreconfHook,
-  gzip, bzip2, pkgconfig, flex, check,
-  pam, coreutils
+{ stdenv
+, fetchurl
+, autoreconfHook
+, gzip
+, bzip2
+, pkgconfig
+, flex
+, check
+, pam
+, coreutils
 }:
 
 stdenv.mkDerivation rec {

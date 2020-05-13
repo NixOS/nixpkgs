@@ -1,5 +1,4 @@
 { stdenv, fetchurl, makeWrapper, bootstrap-chicken ? null }:
-
 let
   version = "4.13.0";
   platform = with stdenv;
@@ -36,7 +35,8 @@ stdenv.mkDerivation {
     makeWrapper
   ] ++ (lib.ifEnable (bootstrap-chicken != null) [
     bootstrap-chicken
-  ]);
+  ]
+  );
 
   preBuild = lib.ifEnable (bootstrap-chicken != null) ''
     # Backup the build* files - those are generated from hostname,

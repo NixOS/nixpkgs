@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   baseName = "gsl";
   version = "0.12";
   name = "pure-${baseName}-${version}";
-  
+
   src = fetchurl {
     url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
     sha256 = "06bdd873d5417d90ca35093056a060b77365123ed24c3ac583cd3922d4c78a75";

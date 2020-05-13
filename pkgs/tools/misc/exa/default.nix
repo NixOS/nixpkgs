@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, cmake, perl, pkgconfig, zlib
-, darwin, libiconv, installShellFiles
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, cmake
+, perl
+, pkgconfig
+, zlib
+, darwin
+, libiconv
+, installShellFiles
 }:
 
 with rustPlatform;
@@ -28,8 +37,10 @@ buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkgconfig perl installShellFiles ];
   buildInputs = [ zlib ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [
-    libiconv darwin.apple_sdk.frameworks.Security ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv
+    darwin.apple_sdk.frameworks.Security
+  ]
   ;
 
   outputs = [ "out" "man" ];

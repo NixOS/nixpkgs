@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libbdplus";
-  version  = "0.1.2";
+  version = "0.1.2";
 
   src = fetchurl {
     url = "http://get.videolan.org/libbdplus/${version}/${pname}-${version}.tar.bz2";

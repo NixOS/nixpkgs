@@ -1,11 +1,9 @@
 { config, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.xserver.windowManager;
 in
-
 {
   imports = [
     ./2bwm.nix
@@ -35,7 +33,8 @@ in
     ./wmii.nix
     ./xmonad.nix
     ./qtile.nix
-    ./none.nix ];
+    ./none.nix
+  ];
 
   options = {
 
@@ -43,7 +42,7 @@ in
 
       session = mkOption {
         internal = true;
-        default = [];
+        default = [ ];
         example = [{
           name = "wmii";
           start = "...";

@@ -1,8 +1,8 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pytest,
+{ stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, pytest
+,
 }:
 
 buildPythonPackage rec {

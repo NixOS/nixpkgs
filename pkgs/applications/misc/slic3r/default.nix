@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchgit, perl, makeWrapper
-, makeDesktopItem, which, perlPackages, boost
+{ lib
+, stdenv
+, fetchgit
+, perl
+, makeWrapper
+, makeDesktopItem
+, which
+, perlPackages
+, boost
 }:
 
 stdenv.mkDerivation rec {
@@ -13,15 +20,36 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-  [boost] ++
-  (with perlPackages; [ perl makeWrapper which
-    EncodeLocale MathClipper ExtUtilsXSpp
-    MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
-    IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
-    ExtUtilsMakeMaker OpenGL WxGLCanvas ModuleBuild LWP
-    ExtUtilsCppGuess ModuleBuildWithXSpp ExtUtilsTypemapsDefault
-    DevelChecklib locallib
-  ]);
+    [ boost ] ++
+    (with perlPackages; [
+      perl
+      makeWrapper
+      which
+      EncodeLocale
+      MathClipper
+      ExtUtilsXSpp
+      MathConvexHullMonotoneChain
+      MathGeometryVoronoi
+      MathPlanePath
+      Moo
+      IOStringy
+      ClassXSAccessor
+      Wx
+      GrowlGNTP
+      NetDBus
+      ImportInto
+      XMLSAX
+      ExtUtilsMakeMaker
+      OpenGL
+      WxGLCanvas
+      ModuleBuild
+      LWP
+      ExtUtilsCppGuess
+      ModuleBuildWithXSpp
+      ExtUtilsTypemapsDefault
+      DevelChecklib
+      locallib
+    ]);
 
   desktopItem = makeDesktopItem {
     name = "slic3r";

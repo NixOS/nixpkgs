@@ -1,7 +1,5 @@
 { mkDerivation, lib, fetchurl, qtbase, qtsvg, qttools, qmake }:
-
 let inherit (lib) getDev; in
-
 mkDerivation rec {
   pname = "qt5ct";
   version = "0.41";

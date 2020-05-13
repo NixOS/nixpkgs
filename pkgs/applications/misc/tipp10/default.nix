@@ -1,5 +1,11 @@
-{ cmake, stdenv, mkDerivation, fetchFromGitLab,
-  qtmultimedia, qttools, ... }:
+{ cmake
+, stdenv
+, mkDerivation
+, fetchFromGitLab
+, qtmultimedia
+, qttools
+, ...
+}:
 
 mkDerivation rec {
   pname = "tipp10";

@@ -1,7 +1,20 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ stdenv
+, fetchgit
+, buildPythonPackage
 , python
-, pgpy, srht, redis, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache
-, sshpubkeys, weasyprint, prometheus_client }:
+, pgpy
+, srht
+, redis
+, bcrypt
+, qrcode
+, stripe
+, zxcvbn
+, alembic
+, pystache
+, sshpubkeys
+, weasyprint
+, prometheus_client
+}:
 
 buildPythonPackage rec {
   pname = "metasrht";

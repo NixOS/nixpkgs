@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm
-, inflect, more-itertools, six, pytest
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools_scm
+, inflect
+, more-itertools
+, six
+, pytest
 }:
 
 buildPythonPackage rec {

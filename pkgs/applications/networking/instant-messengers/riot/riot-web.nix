@@ -1,8 +1,7 @@
-{ lib, stdenv, fetchurl, writeText, jq, conf ? {} }:
+{ lib, stdenv, fetchurl, writeText, jq, conf ? { } }:
 
 # Note for maintainers:
 # Versions of `riot-web` and `riot-desktop` should be kept in sync.
-
 let
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
@@ -10,7 +9,8 @@ let
   };
   configOverrides = writeText "riot-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "riot-web";
   version = "1.5.13";
 
@@ -35,6 +35,6 @@ in stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ bachp pacien ma27 ];
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

@@ -1,5 +1,6 @@
 { callPackage
-, stdenv, overrideCC
+, stdenv
+, overrideCC
 }:
 
 # TODO(@oxij) on new Xen version: generalize this to generate [vanilla slim

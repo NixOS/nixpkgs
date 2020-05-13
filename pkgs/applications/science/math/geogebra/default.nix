@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ma27 ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     platforms = platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

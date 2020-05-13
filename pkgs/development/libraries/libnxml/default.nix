@@ -1,4 +1,4 @@
-{stdenv, fetchurl, curl}:
+{ stdenv, fetchurl, curl }:
 
 stdenv.mkDerivation {
   name = "libnxml-0.18.3";

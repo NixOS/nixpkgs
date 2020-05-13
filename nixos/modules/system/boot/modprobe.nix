@@ -10,7 +10,7 @@ with lib;
 
     boot.blacklistedKernelModules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "cirrusfb" "i2c_piix4" ];
       description = ''
         List of names of kernel modules that should not be loaded
@@ -54,14 +54,15 @@ with lib;
 
     environment.systemPackages = [ pkgs.kmod ];
 
-    system.activationScripts.modprobe = stringAfter ["specialfs"]
-      ''
-        # Allow the kernel to find our wrapped modprobe (which searches
-        # in the right location in the Nix store for kernel modules).
-        # We need this when the kernel (or some module) auto-loads a
-        # module.
-        echo ${pkgs.kmod}/bin/modprobe > /proc/sys/kernel/modprobe
-      '';
+    system.activationScripts.modprobe =
+      stringAfter [ "specialfs" ]
+        ''
+          # Allow the kernel to find our wrapped modprobe (which searches
+          # in the right location in the Nix store for kernel modules).
+          # We need this when the kernel (or some module) auto-loads a
+          # module.
+          echo ${pkgs.kmod}/bin/modprobe > /proc/sys/kernel/modprobe
+        '';
 
   };
 

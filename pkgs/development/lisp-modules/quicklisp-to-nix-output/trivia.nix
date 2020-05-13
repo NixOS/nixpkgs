@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivia";
 
-  asdFilesToKeep = ["trivia.asd"];
+  asdFilesToKeep = [ "trivia.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivia DESCRIPTION

@@ -1,5 +1,4 @@
 { stdenv, fetchurl, libjpeg }:
-
 let
   debianPatches = fetchurl {
     url = "mirror://debian/pool/main/u/uvccapture/uvccapture_0.5-3.debian.tar.gz";
@@ -7,7 +6,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation {
   name = "uvccapture-0.5";
 

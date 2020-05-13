@@ -1,16 +1,17 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   dataDir = "/var/lib/tedicross";
   cfg = config.services.tedicross;
   configJSON = pkgs.writeText "tedicross-settings.json" (builtins.toJSON cfg.config);
-  configYAML = pkgs.runCommand "tedicross-settings.yaml" { preferLocalBuild = true; } ''
+  configYAML = pkgs.runCommand "tedicross-settings.yaml"
+    { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
   '';
 
-in {
+in
+{
   options = {
     services.tedicross = {
       enable = mkEnableOption "the TediCross Telegram-Discord bridge service";
@@ -97,4 +98,3 @@ in {
 
   meta.maintainers = with maintainers; [ pacien ];
 }
-

@@ -1,7 +1,13 @@
-{ stdenv, fetchFromGitHub
-  , qt4, qmake4Hook, openssl
-  , xorgproto, libX11, libXScrnSaver
-  , xz, zlib
+{ stdenv
+, fetchFromGitHub
+, qt4
+, qmake4Hook
+, openssl
+, xorgproto
+, libX11
+, libXScrnSaver
+, xz
+, zlib
 }:
 stdenv.mkDerivation {
   pname = "vacuum-im";
@@ -15,7 +21,13 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    qt4 openssl xorgproto libX11 libXScrnSaver xz zlib
+    qt4
+    openssl
+    xorgproto
+    libX11
+    libXScrnSaver
+    xz
+    zlib
   ];
 
   # hack: needed to fix build issues in

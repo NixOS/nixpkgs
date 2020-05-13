@@ -20,11 +20,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig
+    meson
+    ninja
+    pkgconfig
   ];
 
   buildInputs = [
-    wayland gtk3 gobject-introspection
+    wayland
+    gtk3
+    gobject-introspection
   ];
 
   mesonFlags = [

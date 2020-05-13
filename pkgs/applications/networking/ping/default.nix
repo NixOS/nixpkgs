@@ -12,7 +12,8 @@
 , json-glib
 , libsoup
 , libgee
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "ping";

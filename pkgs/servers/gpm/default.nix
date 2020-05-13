@@ -1,6 +1,14 @@
-{ stdenv, fetchurl, automake, autoconf, libtool, flex, bison, texinfo, fetchpatch
+{ stdenv
+, fetchurl
+, automake
+, autoconf
+, libtool
+, flex
+, bison
+, texinfo
+, fetchpatch
 
-# Optional Dependencies
+  # Optional Dependencies
 , ncurses ? null
 }:
 

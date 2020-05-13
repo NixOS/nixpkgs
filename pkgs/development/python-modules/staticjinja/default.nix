@@ -27,4 +27,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ fgaz ];
   };
 }
-

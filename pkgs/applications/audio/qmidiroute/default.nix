@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "MIDI event processor and router";
     longDescription = ''
-    qmidiroute is a versatile MIDI event processor and router for the ALSA
-    sequencer.  The graphical  interface  is  based  on  the  Qt4  toolkit.
-    qmidiroute permits setting up an unlimited number of MIDI maps in which
-    incoming events are selected, modified or even changed in  type  before
-    being  directed  to  a  dedicated  ALSA  output  port. The maps work in
-    parallel, and they are organized in tabs.
+      qmidiroute is a versatile MIDI event processor and router for the ALSA
+      sequencer.  The graphical  interface  is  based  on  the  Qt4  toolkit.
+      qmidiroute permits setting up an unlimited number of MIDI maps in which
+      incoming events are selected, modified or even changed in  type  before
+      being  directed  to  a  dedicated  ALSA  output  port. The maps work in
+      parallel, and they are organized in tabs.
     '';
 
     license = licenses.gpl2;

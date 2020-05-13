@@ -19,7 +19,6 @@
 , oauthlib
 , certipy
 }:
-
 let
   # js/css assets that setup.py tries to fetch via `npm install` when building
   # from source.
@@ -50,7 +49,6 @@ let
     };
 
 in
-
 buildPythonPackage rec {
   pname = "jupyterhub";
   version = "1.0.0";
@@ -108,8 +106,20 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    alembic ipython jinja2 pamela python-oauth2 requests sqlalchemy tornado
-    traitlets prometheus_client async_generator notebook certipy oauthlib
+    alembic
+    ipython
+    jinja2
+    pamela
+    python-oauth2
+    requests
+    sqlalchemy
+    tornado
+    traitlets
+    prometheus_client
+    async_generator
+    notebook
+    certipy
+    oauthlib
   ];
 
   # Disable tests because they take an excessive amount of time to complete.

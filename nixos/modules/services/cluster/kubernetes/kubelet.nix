@@ -1,22 +1,23 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   top = config.services.kubernetes;
   cfg = top.kubelet;
 
   cniConfig =
-    if cfg.cni.config != [] && cfg.cni.configDir != null then
+    if cfg.cni.config != [ ] && cfg.cni.configDir != null then
       throw "Verbatim CNI-config and CNI configDir cannot both be set."
     else if cfg.cni.configDir != null then
       cfg.cni.configDir
     else
       (pkgs.buildEnv {
         name = "kubernetes-cni-config";
-        paths = imap (i: entry:
-          pkgs.writeTextDir "${toString (10+i)}-${entry.type}.conf" (builtins.toJSON entry)
-        ) cfg.cni.config;
+        paths = imap
+          (i: entry:
+            pkgs.writeTextDir "${toString (10 + i)}-${entry.type}.conf" (builtins.toJSON entry)
+          )
+          cfg.cni.config;
       });
 
   infraContainer = pkgs.dockerTools.buildImage {
@@ -44,7 +45,7 @@ let
       effect = mkOption {
         description = "Effect of taint.";
         example = "NoSchedule";
-        type = enum ["NoSchedule" "PreferNoSchedule" "NoExecute"];
+        type = enum [ "NoSchedule" "PreferNoSchedule" "NoExecute" ];
       };
     };
   };
@@ -89,13 +90,13 @@ in
       packages = mkOption {
         description = "List of network plugin packages to install.";
         type = listOf package;
-        default = [];
+        default = [ ];
       };
 
       config = mkOption {
         description = "Kubernetes CNI configuration.";
         type = listOf attrs;
-        default = [];
+        default = [ ];
         example = literalExample ''
           [{
             "cniVersion": "0.3.1",
@@ -164,12 +165,12 @@ in
     manifests = mkOption {
       description = "List of manifests to bootstrap with kubelet (only pods can be created as manifest entry)";
       type = attrsOf attrs;
-      default = {};
+      default = { };
     };
 
     networkPlugin = mkOption {
       description = "Network plugin to use by Kubernetes.";
-      type = nullOr (enum ["cni" "kubenet"]);
+      type = nullOr (enum [ "cni" "kubenet" ]);
       default = "kubenet";
     };
 
@@ -193,13 +194,13 @@ in
 
     seedDockerImages = mkOption {
       description = "List of docker images to preload on system";
-      default = [];
+      default = [ ];
       type = listOf package;
     };
 
     taints = mkOption {
       description = "Node taints (https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).";
-      default = {};
+      default = { };
       type = attrsOf (submodule [ taintOptions ]);
     };
 
@@ -235,7 +236,7 @@ in
   ###### implementation
   config = mkMerge [
     (mkIf cfg.enable {
-      services.kubernetes.kubelet.seedDockerImages = [infraContainer];
+      services.kubernetes.kubelet.seedDockerImages = [ infraContainer ];
 
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
@@ -272,7 +273,7 @@ in
             ${optionalString (cfg.clusterDomain != "")
               "--cluster-domain=${cfg.clusterDomain}"} \
             --cni-conf-dir=${cniConfig} \
-            ${optionalString (cfg.featureGates != [])
+            ${optionalString (cfg.featureGates != [ ])
               "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
             --hairpin-mode=hairpin-veth \
             --healthz-bind-address=${cfg.healthz.bind} \
@@ -284,7 +285,7 @@ in
             ${optionalString (cfg.nodeIp != null)
               "--node-ip=${cfg.nodeIp}"} \
             --pod-infra-container-image=pause \
-            ${optionalString (cfg.manifests != {})
+            ${optionalString (cfg.manifests != { })
               "--pod-manifest-path=/etc/${manifestPath}"} \
             --port=${toString cfg.port} \
             --register-node=${boolToString cfg.registerNode} \
@@ -303,9 +304,9 @@ in
       };
 
       # Allways include cni plugins
-      services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins];
+      services.kubernetes.kubelet.cni.packages = [ pkgs.cni-plugins ];
 
-      boot.kernelModules = ["br_netfilter"];
+      boot.kernelModules = [ "br_netfilter" ];
 
       services.kubernetes.kubelet.hostname = with config.networking;
         mkDefault (hostName + optionalString (domain != null) ".${domain}");
@@ -328,23 +329,29 @@ in
       };
 
       services.kubernetes.kubelet.kubeconfig.server = mkDefault top.apiserverAddress;
-    })
+    }
+    )
 
-    (mkIf (cfg.enable && cfg.manifests != {}) {
-      environment.etc = mapAttrs' (name: manifest:
-        nameValuePair "${manifestPath}/${name}.json" {
-          text = builtins.toJSON manifest;
-          mode = "0755";
-        }
-      ) cfg.manifests;
-    })
+    (mkIf (cfg.enable && cfg.manifests != { }) {
+      environment.etc =
+        mapAttrs'
+          (name: manifest:
+            nameValuePair "${manifestPath}/${name}.json" {
+              text = builtins.toJSON manifest;
+              mode = "0755";
+            }
+          )
+          cfg.manifests;
+    }
+    )
 
     (mkIf (cfg.unschedulable && cfg.enable) {
       services.kubernetes.kubelet.taints.unschedulable = {
         value = "true";
         effect = "NoSchedule";
       };
-    })
+    }
+    )
 
   ];
 }

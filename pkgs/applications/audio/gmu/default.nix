@@ -1,5 +1,14 @@
-{stdenv, fetchurl, SDL, SDL_gfx, SDL_image, tremor, flac, mpg123, libmikmod
-, speex, ncurses
+{ stdenv
+, fetchurl
+, SDL
+, SDL_gfx
+, SDL_image
+, tremor
+, flac
+, mpg123
+, libmikmod
+, speex
+, ncurses
 , keymap ? "default"
 , conf ? "unknown"
 }:

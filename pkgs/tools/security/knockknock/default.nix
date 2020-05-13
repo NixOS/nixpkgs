@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, python2Packages, hping }:
 
 python2Packages.buildPythonApplication rec {
-  rev  = "bf14bbff";
+  rev = "bf14bbff";
   name = "knockknock-r${rev}";
 
   src = fetchFromGitHub {
     inherit rev;
-    owner  = "moxie0";
-    repo   = "knockknock";
+    owner = "moxie0";
+    repo = "knockknock";
     sha256 = "1chpfs3w2vkjrgay69pbdr116z1jldv53fi768a1i05fdqhy1px4";
   };
 
@@ -24,10 +24,9 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Simple, secure port knocking daemon and client written in Python";
-    homepage    = "http://www.thoughtcrime.org/software/knockknock/";
-    license     = licenses.gpl3;
+    homepage = "http://www.thoughtcrime.org/software/knockknock/";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }
-

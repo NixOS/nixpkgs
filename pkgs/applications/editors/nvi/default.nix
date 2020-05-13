@@ -5,7 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls =
-      [ "ftp://ftp.eenet.ee/pub/cpan/src/misc/nvi-1.79.tar.gz"
+      [
+        "ftp://ftp.eenet.ee/pub/cpan/src/misc/nvi-1.79.tar.gz"
         "ftp://ftp.saintjoe.edu/pub/CPAN/src/misc/nvi-1.79.tar.gz"
         "ftp://ftp.free.fr/.mirrors1/ftp.netbsd.org/packages/distfiles/nvi-1.79.tar.gz"
       ];

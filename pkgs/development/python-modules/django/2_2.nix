@@ -1,7 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll,
-  isPy3k,
-  geos, gdal, pytz, sqlparse,
-  withGdal ? false
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, substituteAll
+, isPy3k
+, geos
+, gdal
+, pytz
+, sqlparse
+, withGdal ? false
 }:
 
 buildPythonPackage rec {
@@ -15,7 +21,8 @@ buildPythonPackage rec {
     sha256 = "16h7lw9vnmwarl4pjwc7xnkwmcjq1c79prvfwv8fzixiw65ic9hj";
   };
 
-  patches = stdenv.lib.optional withGdal
+  patches = stdenv.lib.optional
+    withGdal
     (substituteAll {
       src = ./1.10-gis-libs.template.patch;
       geos = geos;

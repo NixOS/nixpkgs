@@ -1,16 +1,34 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools, makeWrapper,
-  kcmutils, kcompletion, kconfig, kdnssd, knotifyconfig, kwallet, kwidgetsaddons,
-  kwindowsystem, libvncserver, freerdp
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, makeWrapper
+, kcmutils
+, kcompletion
+, kconfig
+, kdnssd
+, knotifyconfig
+, kwallet
+, kwidgetsaddons
+, kwindowsystem
+, libvncserver
+, freerdp
 }:
 
 mkDerivation {
   name = "krdc";
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
   buildInputs = [
-    kcmutils kcompletion kconfig kdnssd knotifyconfig kwallet kwidgetsaddons
-    kwindowsystem freerdp libvncserver
+    kcmutils
+    kcompletion
+    kconfig
+    kdnssd
+    knotifyconfig
+    kwallet
+    kwidgetsaddons
+    kwindowsystem
+    freerdp
+    libvncserver
   ];
   postFixup = ''
     wrapProgram $out/bin/krdc \

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perlPackages, makeWrapper}:
+{ stdenv, fetchurl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "slimrat-1.0";

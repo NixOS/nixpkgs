@@ -19,7 +19,7 @@ buildGoPackage rec {
   buildInputs = [ btrfs-progs go-md2man utillinux ];
   buildFlags = [ "VERSION=v${version}" ];
 
-  BUILDTAGS = []
+  BUILDTAGS = [ ]
     ++ optional (btrfs-progs == null) "no_btrfs";
 
   buildPhase = ''

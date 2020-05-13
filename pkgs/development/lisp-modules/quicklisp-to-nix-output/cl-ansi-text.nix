@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-ansi-text";
 
-  asdFilesToKeep = ["cl-ansi-text.asd"];
+  asdFilesToKeep = [ "cl-ansi-text.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-ansi-text DESCRIPTION

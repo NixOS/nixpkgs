@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   BUILD_REV_COUNT = src.revCount or 1;
-  RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix {};
+  RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
 
   nativeBuildInputs = with pkgs; [ rustPackages.rustfmt ];
   buildInputs =

@@ -1,9 +1,42 @@
-{ stdenv, fetchurl, pkgconfig, wrapGAppsHook, gettext, glib, gtk3
-, libmowgli, dbus-glib, libxml2, xorg, gnome3, alsaLib
-, libpulseaudio, libjack2, fluidsynth, libmad, libogg, libvorbis
-, libcdio, libcddb, flac, ffmpeg, mpg123, libcue, libmms, libbs2b
-, libsndfile, libmodplug, libsamplerate, soxr, lirc, curl, wavpack
-, neon, faad2, lame, libnotify, libsidplayfp
+{ stdenv
+, fetchurl
+, pkgconfig
+, wrapGAppsHook
+, gettext
+, glib
+, gtk3
+, libmowgli
+, dbus-glib
+, libxml2
+, xorg
+, gnome3
+, alsaLib
+, libpulseaudio
+, libjack2
+, fluidsynth
+, libmad
+, libogg
+, libvorbis
+, libcdio
+, libcddb
+, flac
+, ffmpeg
+, mpg123
+, libcue
+, libmms
+, libbs2b
+, libsndfile
+, libmodplug
+, libsamplerate
+, soxr
+, lirc
+, curl
+, wavpack
+, neon
+, faad2
+, lame
+, libnotify
+, libsidplayfp
 }:
 
 stdenv.mkDerivation rec {
@@ -21,16 +54,46 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook
+    pkgconfig
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gettext glib gtk3 libmowgli dbus-glib libxml2
-    xorg.libXcomposite gnome3.adwaita-icon-theme alsaLib libjack2
-    libpulseaudio fluidsynth libmad libogg libvorbis libcdio
-    libcddb flac ffmpeg mpg123 libcue libmms libbs2b libsndfile
-    libmodplug libsamplerate soxr lirc curl wavpack neon faad2
-    lame libnotify libsidplayfp
+    gettext
+    glib
+    gtk3
+    libmowgli
+    dbus-glib
+    libxml2
+    xorg.libXcomposite
+    gnome3.adwaita-icon-theme
+    alsaLib
+    libjack2
+    libpulseaudio
+    fluidsynth
+    libmad
+    libogg
+    libvorbis
+    libcdio
+    libcddb
+    flac
+    ffmpeg
+    mpg123
+    libcue
+    libmms
+    libbs2b
+    libsndfile
+    libmodplug
+    libsamplerate
+    soxr
+    lirc
+    curl
+    wavpack
+    neon
+    faad2
+    lame
+    libnotify
+    libsidplayfp
   ];
 
   configureFlags = [ "--enable-statusicon" ];
@@ -64,8 +127,11 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ eelco ramkromberg ];
     platforms = with platforms; linux;
     license = with licenses; [
-      bsd2 bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING
-      gpl2 gpl3 lgpl2Plus #http://redmine.audacious-media-player.org/issues/46
+      bsd2
+      bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING
+      gpl2
+      gpl3
+      lgpl2Plus #http://redmine.audacious-media-player.org/issues/46
     ];
   };
 }

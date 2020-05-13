@@ -1,8 +1,8 @@
-{stdenv, fetchFromGitHub, makeWrapper, gettext, python3Packages, rsync, cron, openssh, sshfs-fuse, encfs }:
-
+{ stdenv, fetchFromGitHub, makeWrapper, gettext, python3Packages, rsync, cron, openssh, sshfs-fuse, encfs }:
 let
   inherit (python3Packages) python dbus-python keyring;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "1.1.24";
 
   pname = "backintime-common";
@@ -24,11 +24,11 @@ in stdenv.mkDerivation rec {
 
   preFixup =
     ''
-    substituteInPlace "$out/bin/backintime" \
-      --replace "=\"/usr/share" "=\"$prefix/share"
-    wrapProgram "$out/bin/backintime" \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --prefix PATH : "$prefix/bin:$PATH"
+      substituteInPlace "$out/bin/backintime" \
+        --replace "=\"/usr/share" "=\"$prefix/share"
+      wrapProgram "$out/bin/backintime" \
+        --prefix PYTHONPATH : "$PYTHONPATH" \
+        --prefix PATH : "$prefix/bin:$PATH"
     '';
 
   meta = {

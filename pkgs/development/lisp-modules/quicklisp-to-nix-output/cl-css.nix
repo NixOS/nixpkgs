@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-css";
 
-  asdFilesToKeep = ["cl-css.asd"];
+  asdFilesToKeep = [ "cl-css.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-css DESCRIPTION Simple inline CSS generator SHA256

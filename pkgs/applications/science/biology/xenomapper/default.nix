@@ -1,4 +1,4 @@
-{buildPythonPackage, lib, fetchFromGitHub, statistics}:
+{ buildPythonPackage, lib, fetchFromGitHub, statistics }:
 
 buildPythonPackage rec {
   pname = "xenomapper";

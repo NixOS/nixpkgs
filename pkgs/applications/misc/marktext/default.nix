@@ -1,5 +1,4 @@
 { appimageTools, fetchurl, lib }:
-
 let
   pname = "marktext";
   version = "v0.16.0-rc.2";

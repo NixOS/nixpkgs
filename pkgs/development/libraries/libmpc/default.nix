@@ -1,13 +1,14 @@
-{ stdenv, fetchurl
-, gmp, mpfr
+{ stdenv
+, fetchurl
+, gmp
+, mpfr
 }:
-
 let
   version = "1.1.0";
 in
 stdenv.mkDerivation {
   pname = "libmpc";
-  inherit version; # to avoid clash with the MPD client
+  inherit version;# to avoid clash with the MPD client
 
   src = fetchurl {
     url = "mirror://gnu/mpc/mpc-${version}.tar.gz";

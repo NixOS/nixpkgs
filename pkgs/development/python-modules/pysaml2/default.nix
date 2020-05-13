@@ -5,8 +5,19 @@
 , fetchpatch
 , substituteAll
 , xmlsec
-, cryptography, defusedxml, future, pyopenssl, dateutil, pytz, requests, six
-, mock, pyasn1, pymongo, pytest, responses
+, cryptography
+, defusedxml
+, future
+, pyopenssl
+, dateutil
+, pytz
+, requests
+, six
+, mock
+, pyasn1
+, pymongo
+, pytest
+, responses
 }:
 
 buildPythonPackage rec {

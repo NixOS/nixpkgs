@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
     wayland
     xdg-dbus-proxy
   ] ++ optional enableGeoLocation geoclue2
-    ++ optional enableGtk2Plugins gtk2;
+  ++ optional enableGtk2Plugins gtk2;
 
   propagatedBuildInputs = [
     gtk3
@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
     "-DUSE_ACCELERATE=0"
     "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ optional (!enableGtk2Plugins) "-DENABLE_PLUGIN_PROCESS_GTK2=OFF"
-    ++ optional stdenv.isLinux "-DENABLE_GLES2=ON";
+  ++ optional stdenv.isLinux "-DENABLE_GLES2=ON";
 
   postPatch = ''
     patchShebangs .
@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
     homepage = https://webkitgtk.org/;
     license = licenses.bsd2;
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = gnome3.maintainers;
   };
 }

@@ -1,5 +1,12 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, file
-, isPy3k, mock, unittest2 }:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, file
+, isPy3k
+, mock
+, unittest2
+}:
 
 buildPythonPackage {
   pname = "filemagic";

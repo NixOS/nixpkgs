@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     # Prevent nauty from sniffing some cpu features. While those are very
     # widely available, it can lead to nasty bugs when they are not available:
     # https://groups.google.com/forum/#!topic/sage-packaging/Pe4SRDNYlhA
-    default        = [ "--disable-clz" "--disable-popcnt" ];
-    westmere       = [ "--disable-clz" ];
-    sandybridge    = [ "--disable-clz" ];
-    ivybridge      = [ "--disable-clz" ];
-  }.${stdenv.hostPlatform.platform.gcc.arch or "default"} or [];
+    default = [ "--disable-clz" "--disable-popcnt" ];
+    westmere = [ "--disable-clz" ];
+    sandybridge = [ "--disable-clz" ];
+    ivybridge = [ "--disable-clz" ];
+  }.${stdenv.hostPlatform.platform.gcc.arch or "default"} or [ ];
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/nauty} "$dev"/{lib,include/nauty}
 

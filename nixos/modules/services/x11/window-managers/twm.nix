@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.xserver.windowManager.twm;
 
 in
-
 {
 
   ###### interface
@@ -21,8 +19,9 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton
-      { name = "twm";
+    services.xserver.windowManager.session =
+      singleton {
+        name = "twm";
         start =
           ''
             ${pkgs.xorg.twm}/bin/twm &

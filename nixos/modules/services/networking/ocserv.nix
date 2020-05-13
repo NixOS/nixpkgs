@@ -1,13 +1,11 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.ocserv;
 
 in
-
 {
   options.services.ocserv = {
     enable = mkEnableOption "ocserv";
@@ -80,7 +78,7 @@ in
     environment.systemPackages = [ pkgs.ocserv ];
     environment.etc."ocserv/ocserv.conf".text = cfg.config;
 
-    security.pam.services.ocserv = {};
+    security.pam.services.ocserv = { };
 
     systemd.services.ocserv = {
       description = "OpenConnect SSL VPN server";

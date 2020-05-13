@@ -1,6 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libusb, pkgconfig, freeglut, libGLU, libGL, libXi, libXmu
-, GLUT, Cocoa
- }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libusb
+, pkgconfig
+, freeglut
+, libGLU
+, libGL
+, libXi
+, libXmu
+, GLUT
+, Cocoa
+}:
 
 stdenv.mkDerivation rec {
   pname = "freenect";
@@ -24,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://openkinect.org;
     license = with lib.licenses; [ gpl2 asl20 ];
     maintainers = with lib.maintainers; [ bennofs ];
-    platforms = with lib.platforms; linux ++ darwin ;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

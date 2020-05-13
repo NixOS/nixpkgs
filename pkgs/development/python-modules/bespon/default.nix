@@ -15,7 +15,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ];
   # upstream doesn't contain tests
   doCheck = false;
-  
+
   pythonImportsCheck = [ "bespon" ];
   meta = with stdenv.lib; {
     description = "Encodes and decodes data in the BespON format.";

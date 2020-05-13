@@ -8,7 +8,6 @@
 , udev
 , wrapGAppsHook
 }:
-
 let
   inherit (stdenv.hostPlatform) system;
 

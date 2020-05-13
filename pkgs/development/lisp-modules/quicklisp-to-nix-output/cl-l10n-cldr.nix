@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-l10n-cldr";
 
-  asdFilesToKeep = ["cl-l10n-cldr.asd"];
+  asdFilesToKeep = [ "cl-l10n-cldr.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-l10n-cldr DESCRIPTION

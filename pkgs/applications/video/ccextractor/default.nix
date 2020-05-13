@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
-, glew, glfw3, leptonica, libiconv, tesseract3, zlib }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, glew
+, glfw3
+, leptonica
+, libiconv
+, tesseract3
+, zlib
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {

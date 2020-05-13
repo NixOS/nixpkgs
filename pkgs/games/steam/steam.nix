@@ -1,10 +1,10 @@
-{stdenv, fetchurl, runtimeShell, traceDeps ? false}:
-
+{ stdenv, fetchurl, runtimeShell, traceDeps ? false }:
 let
   traceLog = "/tmp/steam-trace-dependencies.log";
   version = "1.0.0.61";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "steam-original";
   inherit version;
 

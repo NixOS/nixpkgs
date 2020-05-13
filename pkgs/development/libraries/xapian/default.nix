@@ -1,6 +1,9 @@
-{ stdenv, fetchurl, autoreconfHook
-, libuuid, zlib }:
-
+{ stdenv
+, fetchurl
+, autoreconfHook
+, libuuid
+, zlib
+}:
 let
   generic = version: sha256: stdenv.mkDerivation {
     pname = "xapian";
@@ -36,6 +39,7 @@ let
       platforms = platforms.unix;
     };
   };
-in {
+in
+{
   xapian_1_4 = generic "1.4.15" "1sjhz6vgql801rdgl6vrsjj0vy1mwlkcxjx6nr7h27m031cyjs5i";
 }

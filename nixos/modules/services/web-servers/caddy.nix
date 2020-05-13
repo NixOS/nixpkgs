@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.caddy;
   configFile = pkgs.writeText "Caddyfile" cfg.config;
-in {
+in
+{
   options.services.caddy = {
     enable = mkEnableOption "Caddy web server";
 
@@ -68,8 +68,9 @@ in {
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ]; # systemd-networkd-wait-online.service
       wantedBy = [ "multi-user.target" ];
-      environment = mkIf (versionAtLeast config.system.stateVersion "17.09")
-        { CADDYPATH = cfg.dataDir; };
+      environment =
+        mkIf
+          (versionAtLeast config.system.stateVersion "17.09") { CADDYPATH = cfg.dataDir; };
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/caddy -log stdout -log-timestamps=false \

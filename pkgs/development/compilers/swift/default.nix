@@ -32,7 +32,6 @@
 , gnumake
 , file
 }:
-
 let
   version = "5.1.1";
 
@@ -232,7 +231,7 @@ stdenv.mkDerivation {
     patch -p1 -d swift -i ${fetchpatch {
       url = "https://github.com/apple/swift/commit/f968f4282d53f487b29cf456415df46f9adf8748.patch";
       sha256 = "1aa7l66wlgip63i4r0zvi9072392bnj03s4cn12p706hbpq0k37c";
-    }}
+      }}
 
     PREFIX=''${out/#\/}
     substituteInPlace indexstore-db/Utilities/build-script-helper.py \

@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ asciidoc docbook_xsl libxslt installShellFiles ];
   buildInputs = (stdenv.lib.optional withPCRE2 pcre2)
-  ++ (stdenv.lib.optional stdenv.isDarwin Security);
+    ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   preFixup = ''
     (cd target/release/build/ripgrep-*/out

@@ -55,7 +55,8 @@ with lib;
   config = mkIf cfg.enable {
 
     users.users.${virtuosoUser} =
-      { uid = config.ids.uids.virtuoso;
+      {
+        uid = config.ids.uids.virtuoso;
         description = "virtuoso user";
         home = stateDir;
       };

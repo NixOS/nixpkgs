@@ -1,7 +1,18 @@
-{ stdenv, fetchPypi, fetchpatch
-, buildPythonApplication, python, pythonOlder
-, mock, nose, pathpy, pyhamcrest, pytest_4
-, glibcLocales, parse, parse-type, six
+{ stdenv
+, fetchPypi
+, fetchpatch
+, buildPythonApplication
+, python
+, pythonOlder
+, mock
+, nose
+, pathpy
+, pyhamcrest
+, pytest_4
+, glibcLocales
+, parse
+, parse-type
+, six
 , traceback2
 }:
 

@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python, libgcrypt
+{ stdenv
+, fetchurl
+, fetchpatch
+, libxml2
+, findXMLCatalogs
+, python
+, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
     "--without-mem-debug"
     "--without-debugger"
   ] ++ optional pythonSupport "--with-python=${python}"
-    ++ optional (!cryptoSupport) "--without-crypto";
+  ++ optional (!cryptoSupport) "--without-crypto";
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"

@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "0.20";
 
   src = fetchFromGitHub {
-    owner  = "baruch";
-    repo   = "diskscan";
-    rev    = version;
+    owner = "baruch";
+    repo = "diskscan";
+    rev = version;
     sha256 = "1s2df082yrnr3gqnapdsqz0yd0ld75bin37g0rms83ymzkh4ysgv";
   };
 

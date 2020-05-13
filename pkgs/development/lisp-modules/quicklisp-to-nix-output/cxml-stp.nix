@@ -16,7 +16,7 @@ rec {
 
   packageName = "cxml-stp";
 
-  asdFilesToKeep = ["cxml-stp.asd"];
+  asdFilesToKeep = [ "cxml-stp.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cxml-stp DESCRIPTION System lacks description SHA256

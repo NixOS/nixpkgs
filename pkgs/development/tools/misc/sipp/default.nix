@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, libpcap }:
+{ stdenv, fetchurl, ncurses, libpcap }:
 
 stdenv.mkDerivation rec {
   version = "3.6.0";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cp pcap/* $out/share/pcap
   '';
 
-  buildInputs = [ncurses libpcap];
+  buildInputs = [ ncurses libpcap ];
 
   meta = with stdenv.lib; {
     homepage = http://sipp.sf.net;
@@ -32,4 +32,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

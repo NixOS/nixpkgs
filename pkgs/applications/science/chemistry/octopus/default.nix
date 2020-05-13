@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitLab, symlinkJoin, gfortran, perl, procps
-, libyaml, libxc, fftw, openblas, gsl, netcdf, arpack, autoreconfHook
+{ stdenv
+, fetchFromGitLab
+, symlinkJoin
+, gfortran
+, perl
+, procps
+, libyaml
+, libxc
+, fftw
+, openblas
+, gsl
+, netcdf
+, arpack
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {

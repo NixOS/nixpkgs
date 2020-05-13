@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.riak-cs;
 
 in
-
 {
 
   ###### interface
@@ -35,7 +33,7 @@ in
           Name of the Erlang node.
         '';
       };
-      
+
       anonymousUserCreation = mkOption {
         type = types.bool;
         default = false;
@@ -152,7 +150,7 @@ in
       description = "Riak CS server user";
     };
 
-  systemd.services.riak-cs = {
+    systemd.services.riak-cs = {
       description = "Riak CS Server";
 
       wantedBy = [ "multi-user.target" ];

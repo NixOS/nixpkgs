@@ -1,5 +1,4 @@
 { stdenv, fetchpatch, fetchurl, bison, perl }:
-
 let
   version = "0.0.6";
   debianRevision = "7";
@@ -9,7 +8,8 @@ let
     sha256 = hash;
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "bulletml";
   inherit version;
 

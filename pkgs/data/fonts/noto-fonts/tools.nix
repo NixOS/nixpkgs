@@ -26,7 +26,9 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
-    pillow six bash
+    pillow
+    six
+    bash
   ];
 
   checkPhase = ''

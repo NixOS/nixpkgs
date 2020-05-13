@@ -1,9 +1,7 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.torque.mom;
   torque = pkgs.torque;
 
@@ -60,4 +58,4 @@ in
     };
 
   };
-}      
+}

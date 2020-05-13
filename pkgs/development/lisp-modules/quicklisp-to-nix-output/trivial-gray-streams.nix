@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivial-gray-streams";
 
-  asdFilesToKeep = ["trivial-gray-streams.asd"];
+  asdFilesToKeep = [ "trivial-gray-streams.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-gray-streams DESCRIPTION

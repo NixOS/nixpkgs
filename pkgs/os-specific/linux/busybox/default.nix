@@ -1,14 +1,17 @@
-{ stdenv, lib, buildPackages, fetchurl
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
 , enableStatic ? false
 , enableMinimal ? false
-# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
-# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
-, useMusl ? stdenv.hostPlatform.libc == "musl", musl
+  # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+  # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
+, useMusl ? stdenv.hostPlatform.libc == "musl"
+, musl
 , extraConfig ? ""
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
-
 let
   configParser = ''
     function parseconfig {
@@ -32,7 +35,6 @@ let
     CONFIG_FEATURE_WTMP n
   '';
 in
-
 stdenv.mkDerivation rec {
   name = "busybox-1.31.1";
 

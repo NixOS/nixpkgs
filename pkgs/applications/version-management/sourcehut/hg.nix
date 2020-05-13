@@ -1,6 +1,12 @@
-{ stdenv, fetchhg, buildPythonPackage
+{ stdenv
+, fetchhg
+, buildPythonPackage
 , python
-, srht, hglib, scmsrht, unidiff }:
+, srht
+, hglib
+, scmsrht
+, unidiff
+}:
 
 buildPythonPackage rec {
   pname = "hgsrht";

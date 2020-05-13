@@ -1,14 +1,14 @@
 { pkgs, lib, config, ... }:
 
 with lib;
-
 let
   cfg = config.services.thelounge;
   dataDir = "/var/lib/thelounge";
   configJsData = "module.exports = " + builtins.toJSON (
     { private = cfg.private; port = cfg.port; } // cfg.extraConfig
   );
-in {
+in
+{
   options.services.thelounge = {
     enable = mkEnableOption "The Lounge web IRC client";
 
@@ -30,7 +30,7 @@ in {
     };
 
     extraConfig = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
       example = literalExample ''{
         reverseProxy = true;
@@ -58,7 +58,7 @@ in {
       group = "thelounge";
       isSystemUser = true;
     };
-    users.groups.thelounge = {};
+    users.groups.thelounge = { };
     systemd.services.thelounge = {
       description = "The Lounge web IRC client";
       wantedBy = [ "multi-user.target" ];

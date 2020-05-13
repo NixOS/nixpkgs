@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub, nodejs, which, python27, utillinux }:
-
 let version = "20.5"; in
 stdenv.mkDerivation {
-  name = "cjdns-"+version;
+  name = "cjdns-" + version;
 
   src = fetchFromGitHub {
     owner = "cjdelisle";

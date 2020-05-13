@@ -1,5 +1,11 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonOlder
-, flask, blinker, twill }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, flask
+, blinker
+, twill
+}:
 
 with stdenv.lib;
 

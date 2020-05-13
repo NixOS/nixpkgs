@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-      meson
-      pkgconfig
-      cairo
-      ninja
+    meson
+    pkgconfig
+    cairo
+    ninja
   ];
 
   meta = with stdenv.lib; {

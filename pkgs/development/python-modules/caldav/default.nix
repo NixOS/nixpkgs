@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi
-, tzlocal, requests, vobject, lxml, nose }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, tzlocal
+, requests
+, vobject
+, lxml
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "caldav";

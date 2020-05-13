@@ -1,13 +1,22 @@
-{ stdenv, lib, fetchurl, zip, unzip
-, jzmq, jdk, python
-, confFile ? "", extraLibraryPaths ? [], extraJars ? [] }:
+{ stdenv
+, lib
+, fetchurl
+, zip
+, unzip
+, jzmq
+, jdk
+, python
+, confFile ? ""
+, extraLibraryPaths ? [ ]
+, extraJars ? [ ]
+}:
 
 stdenv.mkDerivation rec {
   name = "apache-storm-" + version;
   version = "1.2.1";
   src = fetchurl {
     url =
-    "mirror://apache/storm/${name}/${name}.tar.gz";
+      "mirror://apache/storm/${name}/${name}.tar.gz";
     sha256 = "177dqgbviagrpvalg8h67mwiwwgmiqsg0hh97hcqqcjg71ypnjkv";
   };
 

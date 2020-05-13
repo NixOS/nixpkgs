@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   # requires pandoc < 2.0
   # buildInputs = [ setuptools-markdown ];
-  checkInputs =  [ mock ];
+  checkInputs = [ mock ];
   propagatedBuildInputs = [ ansible pytest ];
 
   # tests not included with release, even on github

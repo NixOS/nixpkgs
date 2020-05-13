@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation";
-    license     = licenses.gpl3;
-    homepage    = http://hepmc.web.cern.ch/hepmc/;
-    platforms   = platforms.unix;
+    license = licenses.gpl3;
+    homepage = http://hepmc.web.cern.ch/hepmc/;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

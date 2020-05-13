@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, python3
-, libnotify ? null }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3
+, libnotify ? null
+}:
 
 with python3.pkgs;
 
@@ -8,9 +12,9 @@ buildPythonApplication rec {
   version = "4.2.0";
 
   src = fetchFromGitHub {
-    owner  = "insanum";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "insanum";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "0746vmhfclkpkqnyaidxid2z20mlv86hv0pjxy1qglrja91vkd72";
   };
 
@@ -20,8 +24,15 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    dateutil gflags httplib2 parsedatetime six vobject
-    google_api_python_client oauth2client uritemplate
+    dateutil
+    gflags
+    httplib2
+    parsedatetime
+    six
+    vobject
+    google_api_python_client
+    oauth2client
+    uritemplate
     libnotify
   ] ++ lib.optional (!isPy3k) futures;
 

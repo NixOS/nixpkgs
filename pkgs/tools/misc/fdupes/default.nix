@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
-    repo  = "fdupes";
-    rev   = "v${version}";
+    repo = "fdupes";
+    rev = "v${version}";
     sha256 = "19b6vqblddaw8ccw4sn0qsqzbswlhrz8ia6n4m3hymvcxn8skpz9";
   };
 

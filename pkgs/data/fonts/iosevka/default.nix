@@ -1,17 +1,24 @@
-{ stdenv, lib, pkgs, fetchFromGitHub, nodejs, nodePackages, remarshal
-, ttfautohint-nox, otfcc
+{ stdenv
+, lib
+, pkgs
+, fetchFromGitHub
+, nodejs
+, nodePackages
+, remarshal
+, ttfautohint-nox
+, otfcc
 
-# Custom font set options.
-# See https://github.com/be5invis/Iosevka#build-your-own-style
-# Ex:
-# privateBuildPlan = {
-#   family = "Iosevka Expanded";
-#
-#   design = [
-#     "sans"
-#     "expanded"
-#   ];
-# };
+  # Custom font set options.
+  # See https://github.com/be5invis/Iosevka#build-your-own-style
+  # Ex:
+  # privateBuildPlan = {
+  #   family = "Iosevka Expanded";
+  #
+  #   design = [
+  #     "sans"
+  #     "expanded"
+  #   ];
+  # };
 , privateBuildPlan ? null
   # Extra parameters. Can be used for ligature mapping.
   # It must be a raw toml string.
@@ -23,7 +30,8 @@
   # sequence = "+>"
 , extraParameters ? null
   # Custom font set name. Required if any custom settings above.
-, set ? null }:
+, set ? null
+}:
 
 assert (privateBuildPlan != null) -> set != null;
 

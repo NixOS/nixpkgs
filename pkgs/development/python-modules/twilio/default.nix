@@ -1,5 +1,14 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, pyjwt, pysocks, pytz, requests, six, nose, mock }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pyjwt
+, pysocks
+, pytz
+, requests
+, six
+, nose
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "twilio";

@@ -1,9 +1,20 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  akonadi, akonadi-mime, cyrus_sasl, kcmutils,
-  ki18n, kio, kmime, kwallet, ksmtp, libkgapi,
-  kcalendarcore, kcontacts
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, akonadi
+, akonadi-mime
+, cyrus_sasl
+, kcmutils
+, ki18n
+, kio
+, kmime
+, kwallet
+, ksmtp
+, libkgapi
+, kcalendarcore
+, kcontacts
 }:
 
 mkDerivation {

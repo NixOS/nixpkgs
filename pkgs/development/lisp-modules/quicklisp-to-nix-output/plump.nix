@@ -14,7 +14,7 @@ rec {
 
   packageName = "plump";
 
-  asdFilesToKeep = ["plump.asd"];
+  asdFilesToKeep = [ "plump.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM plump DESCRIPTION

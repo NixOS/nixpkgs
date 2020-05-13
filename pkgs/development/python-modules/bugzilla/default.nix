@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pep8, coverage, logilab_common, requests }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pep8
+, coverage
+, logilab_common
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "bugzilla";

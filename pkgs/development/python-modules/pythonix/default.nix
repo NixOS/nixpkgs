@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = ''
-       Eval nix code from python.
+      Eval nix code from python.
     '';
     maintainers = [ maintainers.mic92 ];
     license = licenses.mit;

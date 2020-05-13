@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub }:
-
 let
   pname = "publicsuffix-list";
   version = "2019-05-24";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "publicsuffix";
   repo = "list";

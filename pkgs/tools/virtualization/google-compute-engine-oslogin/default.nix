@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl.dev pam ];
 
-  NIX_CFLAGS_COMPILE="-I${json_c.dev}/include/json-c";
-  NIX_CFLAGS_LINK="-L${json_c}/lib";
+  NIX_CFLAGS_COMPILE = "-I${json_c.dev}/include/json-c";
+  NIX_CFLAGS_LINK = "-L${json_c}/lib";
 
   installPhase = ''
     mkdir -p $out/{bin,lib}

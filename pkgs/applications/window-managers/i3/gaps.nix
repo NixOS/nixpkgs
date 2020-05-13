@@ -1,6 +1,6 @@
 { fetchurl, stdenv, i3, autoreconfHook }:
 
-i3.overrideAttrs (oldAttrs : rec {
+i3.overrideAttrs (oldAttrs: rec {
 
   name = "i3-gaps-${version}";
   version = "4.18";
@@ -14,7 +14,7 @@ i3.overrideAttrs (oldAttrs : rec {
   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ autoreconfHook ];
 
   postUnpack = ''
-      echo -n "${version} (${releaseDate})" > ./i3-${version}/I3_VERSION
+    echo -n "${version} (${releaseDate})" > ./i3-${version}/I3_VERSION
   '';
 
   # fatal error: GENERATED_config_enums.h: No such file or directory
@@ -22,10 +22,10 @@ i3.overrideAttrs (oldAttrs : rec {
 
   meta = with stdenv.lib; {
     description = "A fork of the i3 tiling window manager with some additional features";
-    homepage    = "https://github.com/Airblader/i3";
+    homepage = "https://github.com/Airblader/i3";
     maintainers = with maintainers; [ fmthoma ];
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
 
     longDescription = ''
       Fork of i3wm, a tiling window manager primarily targeted at advanced users

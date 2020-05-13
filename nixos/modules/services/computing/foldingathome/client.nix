@@ -4,10 +4,10 @@ let
   cfg = config.services.foldingathome;
 
   args =
-    ["--team" "${toString cfg.team}"]
-    ++ lib.optionals (cfg.user != null) ["--user" cfg.user]
+    [ "--team" "${toString cfg.team}" ]
+    ++ lib.optionals (cfg.user != null) [ "--user" cfg.user ]
     ++ cfg.extraArgs
-    ;
+  ;
 in
 {
   imports = [
@@ -15,7 +15,8 @@ in
     (mkRenamedOptionModule [ "services" "foldingathome" "nickname" ] [ "services" "foldingathome" "user" ])
     (mkRemovedOptionModule [ "services" "foldingathome" "config" ] ''
       Use <literal>services.foldingathome.extraArgs instead<literal>
-    '')
+    ''
+    )
   ];
   options.services.foldingathome = {
     enable = mkEnableOption "Enable the Folding@home client";
@@ -51,7 +52,7 @@ in
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra startup options for the FAHClient. Run
         <literal>FAHClient --help</literal> to find all the available options.

@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   preBuild = "${python.interpreter} setup.py build_ext";
 
-  installPhase= "${python.interpreter} setup.py install --prefix=$out";
+  installPhase = "${python.interpreter} setup.py install --prefix=$out";
 
   doCheck = false;
 

@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, cmark, lmdb, mkDerivation, qtbase, qtmacextras
-, qtmultimedia, qttools, mtxclient, boost, spdlog, olm, pkgconfig
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, cmark
+, lmdb
+, mkDerivation
+, qtbase
+, qtmacextras
+, qtmultimedia
+, qttools
+, mtxclient
+, boost
+, spdlog
+, olm
+, pkgconfig
 , nlohmann_json
 }:
 
@@ -63,8 +76,15 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    mtxclient olm boost lmdb spdlog cmark
-    qtbase qtmultimedia qttools
+    mtxclient
+    olm
+    boost
+    lmdb
+    spdlog
+    cmark
+    qtbase
+    qtmultimedia
+    qttools
   ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
   enableParallelBuilding = true;

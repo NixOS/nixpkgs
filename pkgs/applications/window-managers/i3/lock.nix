@@ -1,5 +1,18 @@
-{ fetchurl, stdenv, which, pkgconfig, libxcb, xcbutilkeysyms, xcbutilimage,
-  xcbutilxrm, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
+{ fetchurl
+, stdenv
+, which
+, pkgconfig
+, libxcb
+, xcbutilkeysyms
+, xcbutilimage
+, xcbutilxrm
+, pam
+, libX11
+, libev
+, cairo
+, libxkbcommon
+, libxkbfile
+}:
 
 stdenv.mkDerivation rec {
   pname = "i3lock";
@@ -11,8 +24,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ which libxcb xcbutilkeysyms xcbutilimage xcbutilxrm
-    pam libX11 libev cairo libxkbcommon libxkbfile ];
+  buildInputs = [
+    which
+    libxcb
+    xcbutilkeysyms
+    xcbutilimage
+    xcbutilxrm
+    pam
+    libX11
+    libev
+    cairo
+    libxkbcommon
+    libxkbfile
+  ];
 
   makeFlags = [ "all" ];
   installFlags = [ "PREFIX=\${out}" "SYSCONFDIR=\${out}/etc" ];

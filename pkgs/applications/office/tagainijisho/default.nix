@@ -13,8 +13,10 @@ stdenv.mkDerivation {
     description = "A free, open-source Japanese dictionary and kanji lookup tool";
     homepage = https://www.tagaini.net/;
     license = with licenses; [
-      /* program */ gpl3Plus
-      /* data */ cc-by-sa-30
+      /* program */
+      gpl3Plus
+      /* data */
+      cc-by-sa-30
     ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ vbgl ];

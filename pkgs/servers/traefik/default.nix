@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, bash, go-bindata}:
+{ stdenv, buildGoPackage, fetchFromGitHub, bash, go-bindata }:
 
 buildGoPackage rec {
   pname = "traefik";

@@ -4,6 +4,7 @@ let pkg = import ./base.nix {
   pkgName = "cdemu-daemon";
   pkgSha256 = "022xzgwmncswb9md71w3ly3mjkdfc93lbij2llp2jamq8grxjjxr";
 };
-in callPackage pkg {
+in
+callPackage pkg {
   buildInputs = [ glib libao libmirage intltool ];
 }

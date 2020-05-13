@@ -1,7 +1,22 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy3k
-, cython, setuptools
-, numpy, affine, attrs, cligj, click-plugins, snuggs, gdal
-, pytest, pytestcov, packaging, hypothesis, boto3, mock
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, isPy3k
+, cython
+, setuptools
+, numpy
+, affine
+, attrs
+, cligj
+, click-plugins
+, snuggs
+, gdal
+, pytest
+, pytestcov
+, packaging
+, hypothesis
+, boto3
+, mock
 }:
 
 buildPythonPackage rec {

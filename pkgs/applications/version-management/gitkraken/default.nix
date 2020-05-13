@@ -1,13 +1,48 @@
-{ stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
-, libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
-, nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5
+{ stdenv
+, libXcomposite
+, libgnome-keyring
+, makeWrapper
+, udev
+, curl
+, alsaLib
+, libXfixes
+, atk
+, gtk3
+, libXrender
+, pango
+, gnome3
+, cairo
+, freetype
+, fontconfig
+, libX11
+, libXi
+, libxcb
+, libXext
+, libXcursor
+, glib
+, libXScrnSaver
+, libxkbfile
+, libXtst
+, nss
+, nspr
+, cups
+, fetchzip
+, expat
+, gdk-pixbuf
+, libXdamage
+, libXrandr
+, dbus
+, makeDesktopItem
+, openssl
+, wrapGAppsHook
+, at-spi2-atk
+, at-spi2-core
+, libuuid
+, e2fsprogs
+, krb5
 }:
 
 with stdenv.lib;
-
 let
   curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
 in

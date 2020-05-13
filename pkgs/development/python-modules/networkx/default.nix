@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ decorator setuptools ];
-  checkInputs = [ nose pytest];
+  checkInputs = [ nose pytest ];
   checkPhase = ''
     pytest
   '';

@@ -16,7 +16,7 @@ rec {
 
   packageName = "trivial-garbage";
 
-  asdFilesToKeep = ["trivial-garbage.asd"];
+  asdFilesToKeep = [ "trivial-garbage.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-garbage DESCRIPTION

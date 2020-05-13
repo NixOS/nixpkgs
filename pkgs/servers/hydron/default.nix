@@ -1,5 +1,13 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, ffmpeg-full, graphicsmagick
-, quicktemplate, go-bindata, easyjson }:
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, pkgconfig
+, ffmpeg-full
+, graphicsmagick
+, quicktemplate
+, go-bindata
+, easyjson
+}:
 
 buildGoPackage {
   pname = "hydron-unstable";

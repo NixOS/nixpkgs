@@ -1,5 +1,4 @@
 { lib, python3, git, pkgconfig }:
-
 let newPython = python3.override {
   packageOverrides = self: super: {
     distro = super.distro.overridePythonAttrs (oldAttrs: rec {
@@ -40,7 +39,8 @@ let newPython = python3.override {
   };
 };
 
-in newPython.pkgs.buildPythonApplication rec {
+in
+newPython.pkgs.buildPythonApplication rec {
   version = "1.12.3";
   pname = "conan";
 
@@ -50,9 +50,22 @@ in newPython.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
-    colorama deprecation distro fasteners bottle
-    future node-semver patch pygments pluginbase
-    pyjwt pylint pyyaml requests six tqdm
+    colorama
+    deprecation
+    distro
+    fasteners
+    bottle
+    future
+    node-semver
+    patch
+    pygments
+    pluginbase
+    pyjwt
+    pylint
+    pyyaml
+    requests
+    six
+    tqdm
   ];
 
   checkInputs = [

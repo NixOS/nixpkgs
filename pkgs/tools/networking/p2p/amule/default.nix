@@ -2,8 +2,22 @@
 , enableDaemon ? false # build amule daemon
 , httpServer ? false # build web interface for the daemon
 , client ? false # build amule remote gui
-, fetchFromGitHub, fetchpatch, stdenv, lib, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng ? null
-, autoreconfHook, pkgconfig, makeWrapper, libX11 ? null }:
+, fetchFromGitHub
+, fetchpatch
+, stdenv
+, lib
+, zlib
+, wxGTK
+, perl
+, cryptopp
+, libupnp
+, gettext
+, libpng ? null
+, autoreconfHook
+, pkgconfig
+, makeWrapper
+, libX11 ? null
+}:
 
 assert httpServer -> libpng != null;
 assert client -> libX11 != null;
@@ -51,9 +65,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook gettext makeWrapper pkgconfig ];
 
   buildInputs = [
-    zlib wxGTK perl cryptopp libupnp
+    zlib
+    wxGTK
+    perl
+    cryptopp
+    libupnp
   ] ++ lib.optional httpServer libpng
-    ++ lib.optional client libX11;
+  ++ lib.optional client libX11;
 
   enableParallelBuilding = true;
 
@@ -61,10 +79,10 @@ stdenv.mkDerivation rec {
     "--with-crypto-prefix=${cryptopp}"
     "--disable-debug"
     "--enable-optimize"
-    (lib.enableFeature monolithic   "monolithic")
+    (lib.enableFeature monolithic "monolithic")
     (lib.enableFeature enableDaemon "amule-daemon")
-    (lib.enableFeature client       "amule-gui")
-    (lib.enableFeature httpServer   "webserver")
+    (lib.enableFeature client "amule-gui")
+    (lib.enableFeature httpServer "webserver")
   ];
 
   # aMule will try to `dlopen' libupnp and libixml, so help it

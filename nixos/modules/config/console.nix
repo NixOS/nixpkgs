@@ -1,22 +1,22 @@
-
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.console;
 
-  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2*i) 2 x);
+  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2 * i) 2 x);
 
   isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
 
-  optimizedKeymap = pkgs.runCommand "keymap" {
-    nativeBuildInputs = [ pkgs.buildPackages.kbd ];
-    LOADKEYS_KEYMAP_PATH = "${consoleEnv}/share/keymaps/**";
-    preferLocalBuild = true;
-  } ''
-    loadkeys -b ${optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
-  '';
+  optimizedKeymap =
+    pkgs.runCommand "keymap"
+      {
+        nativeBuildInputs = [ pkgs.buildPackages.kbd ];
+        LOADKEYS_KEYMAP_PATH = "${consoleEnv}/share/keymaps/**";
+        preferLocalBuild = true;
+      } ''
+      loadkeys -b ${optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
+    '';
 
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
   vconsoleConf = pkgs.writeText "vconsole.conf" ''
@@ -37,11 +37,10 @@ let
 
   setVconsole = !config.boot.isContainer;
 in
-
 {
   ###### interface
 
-  options.console  = {
+  options.console = {
     font = mkOption {
       type = types.str;
       default = "Lat2-Terminus16";
@@ -64,12 +63,24 @@ in
 
     colors = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
-        "002b36" "dc322f" "859900" "b58900"
-        "268bd2" "d33682" "2aa198" "eee8d5"
-        "002b36" "cb4b16" "586e75" "657b83"
-        "839496" "6c71c4" "93a1a1" "fdf6e3"
+        "002b36"
+        "dc322f"
+        "859900"
+        "b58900"
+        "268bd2"
+        "d33682"
+        "2aa198"
+        "eee8d5"
+        "002b36"
+        "cb4b16"
+        "586e75"
+        "657b83"
+        "839496"
+        "6c71c4"
+        "93a1a1"
+        "fdf6e3"
       ];
       description = ''
         The 16 colors palette used by the virtual consoles.
@@ -91,9 +102,9 @@ in
     };
 
     extraTTYs = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
-      example = ["tty8" "tty9"];
+      example = [ "tty8" "tty9" ];
       description = ''
         TTY (virtual console) devices, in addition to the consoles on
         which mingetty and syslogd run, that must be initialised.
@@ -127,20 +138,26 @@ in
   ###### implementation
 
   config = mkMerge [
-    { console.keyMap = with config.services.xserver;
-        mkIf cfg.useXkbConfig
-          (pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
+    {
+      console.keyMap = with config.services.xserver;
+        mkIf
+          cfg.useXkbConfig
+          (pkgs.runCommand "xkb-console-keymap"
+            { preferLocalBuild = true; } ''
             '${pkgs.ckbcomp}/bin/ckbcomp' -model '${xkbModel}' -layout '${layout}' \
               -option '${xkbOptions}' -variant '${xkbVariant}' > "$out"
-          '');
+          ''
+          );
     }
 
     (mkIf (!setVconsole) {
       systemd.services.systemd-vconsole-setup.enable = false;
-    })
+    }
+    )
 
     (mkIf setVconsole (mkMerge [
-      { environment.systemPackages = [ pkgs.kbd ];
+      {
+        environment.systemPackages = [ pkgs.kbd ];
 
         # Let systemd-vconsole-setup.service do the work of setting up the
         # virtual consoles.
@@ -159,19 +176,21 @@ in
         '';
 
         systemd.services.systemd-vconsole-setup =
-          { before = [ "display-manager.service" ];
+          {
+            before = [ "display-manager.service" ];
             after = [ "systemd-udev-settle.service" ];
             restartTriggers = [ vconsoleConf consoleEnv ];
           };
       }
 
-      (mkIf (cfg.colors != []) {
+      (mkIf (cfg.colors != [ ]) {
         boot.kernelParams = [
           "vt.default_red=${makeColor 0 cfg.colors}"
           "vt.default_grn=${makeColor 1 cfg.colors}"
           "vt.default_blu=${makeColor 2 cfg.colors}"
         ];
-      })
+      }
+      )
 
       (mkIf cfg.earlySetup {
         boot.initrd.extraUtilsCommands = ''
@@ -187,8 +206,10 @@ in
             cp -L $font $out/share/consolefonts/font.psf
           fi
         '';
-      })
-    ]))
+      }
+      )
+    ])
+    )
   ];
 
   imports = [

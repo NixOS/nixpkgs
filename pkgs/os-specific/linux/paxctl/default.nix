@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool for controlling PaX flags on a per binary basis";
-    homepage    = "https://pax.grsecurity.net";
-    license     = licenses.gpl2;
-    platforms   = platforms.all;
+    homepage = "https://pax.grsecurity.net";
+    license = licenses.gpl2;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

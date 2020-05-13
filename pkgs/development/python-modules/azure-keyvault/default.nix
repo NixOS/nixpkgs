@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
 , azure-keyvault-keys
 , azure-keyvault-secrets
 }:

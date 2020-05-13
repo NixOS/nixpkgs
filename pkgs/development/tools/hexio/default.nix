@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
       --replace '-I/usr/local/include/PCSC/' '-I${stdenv.lib.getDev pcsclite}/include/PCSC/' \
       --replace '-L/usr/local/lib/pth' '-I${pth}/lib/'
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/sbin $out/man
     make DESTDIR=$out PREFIX=/ all
     make DESTDIR=$out PREFIX=/ install
-    '';
+  '';
 
   meta = with stdenv.lib; {
     description = "Low-level I/O helpers for hexadecimal, tty/serial devices and so on";

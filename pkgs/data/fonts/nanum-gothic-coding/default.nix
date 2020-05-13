@@ -1,10 +1,10 @@
 { lib, fetchzip }:
-
 let
   version = "VER2.5";
   fullName = "NanumGothicCoding-2.5";
 
-in fetchzip {
+in
+fetchzip {
   name = "nanum-gothic-coding";
   url = "https://github.com/naver/nanumfont/releases/download/${version}/${fullName}.zip";
 

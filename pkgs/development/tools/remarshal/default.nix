@@ -10,7 +10,9 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    dateutil pytoml pyyaml
+    dateutil
+    pytoml
+    pyyaml
   ];
 
   meta = with stdenv.lib; {

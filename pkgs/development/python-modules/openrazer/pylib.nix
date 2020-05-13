@@ -5,7 +5,6 @@
 , stdenv
 , openrazer-daemon
 }:
-
 let
   common = import ./common.nix { inherit stdenv fetchFromGitHub; };
 in

@@ -14,18 +14,20 @@ python3.pkgs.buildPythonApplication rec {
     agate-excel
     agate-dbf
     # sql test fail with agate-sql-0.5.4
-    (agate-sql.overridePythonAttrs(old: rec {
+    (agate-sql.overridePythonAttrs (old: rec {
       version = "0.5.3";
       src = python3.pkgs.fetchPypi {
         inherit (old) pname;
         inherit version;
         sha256 = "1d6rbahmdix7xi7ma2v86fpk5yi32q5dba5vama35w5mmn2pnyw7";
-      };}))
+      };
+    }))
     six
   ];
 
   checkInputs = with python3.pkgs; [
-    glibcLocales nose
+    glibcLocales
+    nose
   ];
 
   checkPhase = ''

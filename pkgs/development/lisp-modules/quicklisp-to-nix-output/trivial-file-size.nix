@@ -16,7 +16,7 @@ rec {
 
   packageName = "trivial-file-size";
 
-  asdFilesToKeep = ["trivial-file-size.asd"];
+  asdFilesToKeep = [ "trivial-file-size.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-file-size DESCRIPTION Stat a file's size. SHA256

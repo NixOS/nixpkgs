@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.unbound;
 
   stateDir = "/var/lib/unbound";
@@ -18,7 +16,7 @@ let
     optionalString (any isLocalAddress cfg.forwardAddresses) ''
       do-not-query-localhost: no
     '' +
-    optionalString (cfg.forwardAddresses != []) ''
+    optionalString (cfg.forwardAddresses != [ ]) ''
       forward-zone:
         name: .
     '' +
@@ -26,8 +24,10 @@ let
 
   rootTrustAnchorFile = "${stateDir}/root.key";
 
-  trustAnchor = optionalString cfg.enableRootTrustAnchor
-    "auto-trust-anchor-file: ${rootTrustAnchorFile}";
+  trustAnchor =
+    optionalString
+      cfg.enableRootTrustAnchor
+      "auto-trust-anchor-file: ${rootTrustAnchorFile}";
 
   confFile = pkgs.writeText "unbound.conf" ''
     server:
@@ -43,7 +43,6 @@ let
   '';
 
 in
-
 {
 
   ###### interface
@@ -130,7 +129,7 @@ in
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/unbound -d -c ${stateDir}/unbound.conf";
-        ExecStopPost="${pkgs.utillinux}/bin/umount ${stateDir}/dev/random";
+        ExecStopPost = "${pkgs.utillinux}/bin/umount ${stateDir}/dev/random";
 
         ProtectSystem = true;
         ProtectHome = true;

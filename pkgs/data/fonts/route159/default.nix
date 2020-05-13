@@ -1,11 +1,9 @@
 { lib, fetchzip }:
-
 let
   majorVersion = "1";
   minorVersion = "10";
   pname = "route159";
 in
-
 fetchzip {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 

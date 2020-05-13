@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, prompt_toolkit, docopt , jedi, pygments, isPy3k }:
+{ stdenv, buildPythonPackage, fetchPypi, prompt_toolkit, docopt, jedi, pygments, isPy3k }:
 
 buildPythonPackage rec {
   pname = "ptpython";

@@ -3,7 +3,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
 
   vteInitSnippet = ''
@@ -13,7 +12,6 @@ let
   '';
 
 in
-
 {
 
   options = {
@@ -43,10 +41,12 @@ in
   config = mkMerge [
     (mkIf config.programs.bash.vteIntegration {
       programs.bash.interactiveShellInit = mkBefore vteInitSnippet;
-    })
+    }
+    )
 
     (mkIf config.programs.zsh.vteIntegration {
       programs.zsh.interactiveShellInit = vteInitSnippet;
-    })
+    }
+    )
   ];
 }

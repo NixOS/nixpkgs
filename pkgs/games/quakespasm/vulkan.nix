@@ -14,11 +14,16 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/Quake";
 
   nativeBuildInputs = [
-    makeWrapper vulkan-headers
+    makeWrapper
+    vulkan-headers
   ];
 
   buildInputs = [
-    gzip SDL2 libvorbis libmad vulkan-loader
+    gzip
+    SDL2
+    libvorbis
+    libmad
+    vulkan-loader
   ];
 
   buildFlags = [ "DO_USERDIRS=1" ];

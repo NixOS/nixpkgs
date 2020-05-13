@@ -9,7 +9,6 @@
 , wrapGAppsHook
 , makeDesktopItem
 }:
-
 let
   libPath = lib.makeLibraryPath [
     libxkbcommon
@@ -27,7 +26,8 @@ let
     categories = "Utility";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "obinskit";
   version = "1.1.1";
 

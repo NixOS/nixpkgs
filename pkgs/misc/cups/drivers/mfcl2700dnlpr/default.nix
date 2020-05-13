@@ -25,8 +25,12 @@ stdenv.mkDerivation rec {
 
     wrapProgram $dir/lpd/filter_MFCL2700DN \
       --prefix PATH : ${stdenv.lib.makeBinPath [
-        coreutils ghostscript gnugrep gnused which
-      ]}
+      coreutils
+      ghostscript
+      gnugrep
+      gnused
+      which
+    ]}
 
     interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
     patchelf --set-interpreter "$interpreter" $dir/inf/braddprinter

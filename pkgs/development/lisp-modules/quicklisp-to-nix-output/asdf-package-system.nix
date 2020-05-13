@@ -14,7 +14,7 @@ rec {
 
   packageName = "asdf-package-system";
 
-  asdFilesToKeep = ["asdf-package-system.asd"];
+  asdFilesToKeep = [ "asdf-package-system.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM asdf-package-system DESCRIPTION System lacks description SHA256

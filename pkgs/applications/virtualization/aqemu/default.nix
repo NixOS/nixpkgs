@@ -1,4 +1,9 @@
-{ cmake, fetchFromGitHub, libvncserver, qemu, qtbase, stdenv
+{ cmake
+, fetchFromGitHub
+, libvncserver
+, qemu
+, qtbase
+, stdenv
 }:
 
 stdenv.mkDerivation rec {

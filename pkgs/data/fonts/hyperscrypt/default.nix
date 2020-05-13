@@ -1,10 +1,8 @@
 { fetchzip, lib }:
-
 let
   version = "1.1";
   pname = "HyperScrypt";
 in
-
 fetchzip {
   name = "${lib.toLower pname}-font-${version}";
   url = "https://gitlab.com/StudioTriple/Hyper-Scrypt/-/archive/${version}/Hyper-Scrypt-${version}.zip";
@@ -32,7 +30,7 @@ fetchzip {
       molted metal, Hyper Scrypt is based upon a rigorous grid,
       allowing some neat alignements between shapes in multi lines
       layouts.
-      '';
+    '';
     license = licenses.ofl;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;

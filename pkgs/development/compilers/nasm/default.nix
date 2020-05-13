@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     make golden && make test
   '';
 
-  NIX_CFLAGS_COMPILE="-Wno-error=attributes";
+  NIX_CFLAGS_COMPILE = "-Wno-error=attributes";
 
   meta = with stdenv.lib; {
     homepage = https://www.nasm.us/;

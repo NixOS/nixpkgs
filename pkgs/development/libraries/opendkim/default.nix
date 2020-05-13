@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, libbsd, openssl, libmilter
-, autoreconfHook, perl, makeWrapper }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libbsd
+, openssl
+, libmilter
+, autoreconfHook
+, perl
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "opendkim";
@@ -10,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "06v8bqhh604sz9rh5bvw278issrwjgc4h1wx2pz9a84lpxbvm823";
   };
 
-  configureFlags= [
+  configureFlags = [
     "--with-milter=${libmilter}"
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"

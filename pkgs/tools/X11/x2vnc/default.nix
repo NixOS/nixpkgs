@@ -9,8 +9,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = with xorg; [
-      libX11 xorgproto libXext libXrandr
-    ];
+    libX11
+    xorgproto
+    libXext
+    libXrandr
+  ];
 
   hardeningDisable = [ "format" ];
 

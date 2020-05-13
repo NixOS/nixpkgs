@@ -1,7 +1,5 @@
 { stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
-
 let version = "2.0.0"; in
-
 stdenv.mkDerivation {
   pname = "ocaml-base64";
   inherit version;
@@ -17,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://github.com/mirage/ocaml-base64;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     description = "Base64 encoding and decoding in OCaml";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

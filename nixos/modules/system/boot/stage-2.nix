@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   useHostResolvConf = config.networking.resolvconf.enable && config.networking.useHostResolvConf;
 
   bootStage2 = pkgs.substituteAll {
@@ -19,15 +17,15 @@ let
       pkgs.utillinux
     ] ++ lib.optional useHostResolvConf pkgs.openresolv);
     fsPackagesPath = lib.makeBinPath config.system.fsPackages;
-    postBootCommands = pkgs.writeText "local-cmds"
-      ''
-        ${config.boot.postBootCommands}
-        ${config.powerManagement.powerUpCommands}
-      '';
+    postBootCommands =
+      pkgs.writeText "local-cmds"
+        ''
+          ${config.boot.postBootCommands}
+          ${config.powerManagement.powerUpCommands}
+        '';
   };
 
 in
-
 {
   options = {
 

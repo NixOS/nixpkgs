@@ -14,7 +14,7 @@ rec {
 
   packageName = "chunga";
 
-  asdFilesToKeep = ["chunga.asd"];
+  asdFilesToKeep = [ "chunga.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM chunga DESCRIPTION System lacks description SHA256

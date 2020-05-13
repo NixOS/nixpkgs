@@ -1,6 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, python3
-, zlib, libssh2, openssl, http-parser
-, libiconv, Security
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, python3
+, zlib
+, libssh2
+, openssl
+, http-parser
+, libiconv
+, Security
 }:
 
 stdenv.mkDerivation rec {

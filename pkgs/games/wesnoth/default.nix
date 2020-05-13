@@ -1,6 +1,24 @@
-{ stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
-, pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
-, Cocoa, Foundation
+{ stdenv
+, fetchurl
+, cmake
+, pkgconfig
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_net
+, SDL2_ttf
+, pango
+, gettext
+, boost
+, libvorbis
+, fribidi
+, dbus
+, libpng
+, pcre
+, openssl
+, icu
+, Cocoa
+, Foundation
 , enableTools ? false
 }:
 
@@ -15,9 +33,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
-                  libvorbis fribidi dbus libpng pcre openssl icu ]
-                ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation];
+  buildInputs = [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_net
+    SDL2_ttf
+    pango
+    gettext
+    boost
+    libvorbis
+    fribidi
+    dbus
+    libpng
+    pcre
+    openssl
+    icu
+  ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation ];
 
   cmakeFlags = [ "-DENABLE_TOOLS=${if enableTools then "ON" else "OFF"}" ];
 

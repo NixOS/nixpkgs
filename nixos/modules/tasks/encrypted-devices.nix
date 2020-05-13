@@ -1,7 +1,6 @@
 { config, lib, ... }:
 
 with lib;
-
 let
   fileSystems = config.system.build.fileSystems ++ config.swapDevices;
   encDevs = filter (dev: dev.encrypted.enable) fileSystems;
@@ -42,7 +41,6 @@ let
     };
   };
 in
-
 {
 
   options = {
@@ -55,12 +53,15 @@ in
   };
 
   config = mkIf anyEncrypted {
-    assertions = map (dev: {
-      assertion = dev.encrypted.label != null;
-      message = ''
-        The filesystem for ${dev.mountPoint} has encrypted.enable set to true, but no encrypted.label set
-      '';
-    }) encDevs;
+    assertions =
+      map
+        (dev: {
+          assertion = dev.encrypted.label != null;
+          message = ''
+            The filesystem for ${dev.mountPoint} has encrypted.enable set to true, but no encrypted.label set
+          '';
+        })
+        encDevs;
 
     boot.initrd = {
       luks = {
@@ -73,4 +74,3 @@ in
     };
   };
 }
-

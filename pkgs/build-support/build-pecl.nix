@@ -2,9 +2,9 @@
 
 { pname
 , version
-, buildInputs ? []
-, nativeBuildInputs ? []
-, makeFlags ? []
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, makeFlags ? [ ]
 , src ? fetchurl {
     url = "http://pecl.php.net/get/${pname}-${version}.tgz";
     inherit (args) sha256;

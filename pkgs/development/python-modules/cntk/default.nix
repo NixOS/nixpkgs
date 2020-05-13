@@ -10,7 +10,6 @@
 , python
 , swig
 }:
-
 let
   cntk = pkgs.cntk;
 in

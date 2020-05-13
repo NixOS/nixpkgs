@@ -1,4 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi, cython, numpy, pysam, matplotlib
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, cython
+, numpy
+, pysam
+, matplotlib
 }:
 buildPythonPackage rec {
   version = "0.11.2";

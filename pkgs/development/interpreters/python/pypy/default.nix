@@ -1,10 +1,30 @@
-{ stdenv, substituteAll, fetchurl
-, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi, libunwind, Security
-, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
-, self, gdbm, db, lzma
+{ stdenv
+, substituteAll
+, fetchurl
+, zlib ? null
+, zlibSupport ? true
+, bzip2
+, pkgconfig
+, libffi
+, libunwind
+, Security
+, sqlite
+, openssl
+, ncurses
+, python
+, expat
+, tcl
+, tk
+, tix
+, xlibsWrapper
+, libX11
+, self
+, gdbm
+, db
+, lzma
 , python-setup-hook
-# For the Python package set
-, packageOverrides ? (self: super: {})
+  # For the Python package set
+, packageOverrides ? (self: super: { })
 , sourceVersion
 , pythonVersion
 , sha256
@@ -14,7 +34,6 @@
 assert zlibSupport -> zlib != null;
 
 with stdenv.lib;
-
 let
   isPy3k = substring 0 1 pythonVersion == "3";
   passthru = passthruFun {
@@ -30,7 +49,8 @@ let
   version = with sourceVersion; "${major}.${minor}.${patch}";
   pythonForPypy = python.withPackages (ppkgs: [ ppkgs.pycparser ]);
 
-in with passthru; stdenv.mkDerivation rec {
+in
+with passthru; stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
@@ -40,22 +60,35 @@ in with passthru; stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
-  ]  ++ optionals isPy3k [
+    bzip2
+    openssl
+    pythonForPypy
+    libffi
+    ncurses
+    expat
+    sqlite
+    tk
+    tcl
+    xlibsWrapper
+    libX11
+    gdbm
+    db
+  ] ++ optionals isPy3k [
     lzma
   ] ++ optionals (stdenv ? cc && stdenv.cc.libc != null) [
     stdenv.cc.libc
   ] ++ optionals zlibSupport [
     zlib
   ] ++ optionals stdenv.isDarwin [
-    libunwind Security
+    libunwind
+    Security
   ];
 
   hardeningDisable = optional stdenv.isi686 "pic";
 
   C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" buildInputs;
   LIBRARY_PATH = makeLibraryPath buildInputs;
-  LD_LIBRARY_PATH = makeLibraryPath (filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
+  LD_LIBRARY_PATH = makeLibraryPath (filter (x: x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
 
   patches = [
     (substituteAll {
@@ -93,37 +126,39 @@ in with passthru; stdenv.mkDerivation rec {
   # TODO: A bunch of tests are failing as of 7.1.1, please feel free to
   # fix and re-enable if you have the patience and tenacity.
   doCheck = false;
-  checkPhase = let
-    disabledTests = [
-      # disable shutils because it assumes gid 0 exists
-      "test_shutil"
-      # disable socket because it has two actual network tests that fail
-      "test_socket"
-    ] ++ optionals (!isPy3k) [
-      # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
-      "test_urllib2net"
-      "test_urllibnet"
-      "test_urllib2_localnet"
-    ] ++ optionals isPy3k [
-      # disable asyncio due to https://github.com/NixOS/nix/issues/1238
-      "test_asyncio"
-      # disable os due to https://github.com/NixOS/nixpkgs/issues/10496
-      "test_os"
-      # disable pathlib due to https://bitbucket.org/pypy/pypy/pull-requests/594
-      "test_pathlib"
-      # disable tarfile because it assumes gid 0 exists
-      "test_tarfile"
-      # disable __all__ because of spurious imp/importlib warning and
-      # warning-to-error test policy
-      "test___all__"
-    ];
-  in ''
-    export TERMINFO="${ncurses.out}/share/terminfo/";
-    export TERM="xterm";
-    export HOME="$TMPDIR";
+  checkPhase =
+    let
+      disabledTests = [
+        # disable shutils because it assumes gid 0 exists
+        "test_shutil"
+        # disable socket because it has two actual network tests that fail
+        "test_socket"
+      ] ++ optionals (!isPy3k) [
+        # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
+        "test_urllib2net"
+        "test_urllibnet"
+        "test_urllib2_localnet"
+      ] ++ optionals isPy3k [
+        # disable asyncio due to https://github.com/NixOS/nix/issues/1238
+        "test_asyncio"
+        # disable os due to https://github.com/NixOS/nixpkgs/issues/10496
+        "test_os"
+        # disable pathlib due to https://bitbucket.org/pypy/pypy/pull-requests/594
+        "test_pathlib"
+        # disable tarfile because it assumes gid 0 exists
+        "test_tarfile"
+        # disable __all__ because of spurious imp/importlib warning and
+        # warning-to-error test policy
+        "test___all__"
+      ];
+    in
+    ''
+      export TERMINFO="${ncurses.out}/share/terminfo/";
+      export TERM="xterm";
+      export HOME="$TMPDIR";
 
-    ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${concatStringsSep " or " disabledTests})' lib-python
-  '';
+      ${pythonForPypy.interpreter} ./pypy/test_all.py --pypy=./${executable}-c -k 'not (${concatStringsSep " or " disabledTests})' lib-python
+    '';
 
   installPhase = ''
     mkdir -p $out/{bin,include,lib,${executable}-c}
@@ -148,7 +183,7 @@ in with passthru; stdenv.mkDerivation rec {
   '';
 
   inherit passthru;
-  enableParallelBuilding = true;  # almost no parallelization without STM
+  enableParallelBuilding = true; # almost no parallelization without STM
 
   meta = with stdenv.lib; {
     homepage = http://pypy.org/;

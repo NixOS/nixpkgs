@@ -14,7 +14,7 @@ buildPythonApplication rec {
   disabled = isPyPy;
   buildInputs = [ glibcLocales ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   # No tests available
   doCheck = false;

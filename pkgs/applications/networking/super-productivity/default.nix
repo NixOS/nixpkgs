@@ -1,10 +1,30 @@
-{ stdenv, fetchurl, dpkg, makeWrapper
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gtk3, gdk-pixbuf, libnotify, libxcb, nspr, nss, pango
-, systemd, xorg, xprintidle-ng }:
-
+{ stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, alsaLib
+, atk
+, cairo
+, cups
+, curl
+, dbus
+, expat
+, fontconfig
+, freetype
+, glib
+, gnome2
+, gtk3
+, gdk-pixbuf
+, libnotify
+, libxcb
+, nspr
+, nss
+, pango
+, systemd
+, xorg
+, xprintidle-ng
+}:
 let
-
   version = "1.10.45";
 
   rpath = stdenv.lib.makeLibraryPath [
@@ -52,7 +72,8 @@ let
     else
       throw "super-productivity is not supported on ${stdenv.hostPlatform.system}";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "super-productivity";
   inherit version;
 
@@ -60,7 +81,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     dpkg
-    gtk3  # needed for GSETTINGS_SCHEMAS_PATH
+    gtk3 # needed for GSETTINGS_SCHEMAS_PATH
   ];
 
   nativeBuildInputs = [ makeWrapper ];

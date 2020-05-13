@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
     sed -i -e 's|OATH=\$(which oathtool)|OATH=${oathToolkit}/bin/oathtool|' otp.bash
   '';
 
-  installFlags = [ "PREFIX=$(out)"
-                   "BASHCOMPDIR=$(out)/share/bash-completion/completions"
-                 ];
+  installFlags = [
+    "PREFIX=$(out)"
+    "BASHCOMPDIR=$(out)/share/bash-completion/completions"
+  ];
 
   meta = with stdenv.lib; {
     description = "A pass extension for managing one-time-password (OTP) tokens";

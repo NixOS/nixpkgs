@@ -1,11 +1,12 @@
 { stdenv, callPackage, wineUnstable, libtxc_dxtn_Name }:
 
-with callPackage ./util.nix {};
-
-let patch = (callPackage ./sources.nix {}).staging;
-    build-inputs = pkgNames: extra:
-      (mkBuildInputs wineUnstable.pkgArches pkgNames) ++ extra;
-in assert stdenv.lib.getVersion wineUnstable == patch.version;
+with callPackage ./util.nix { };
+let
+  patch = (callPackage ./sources.nix { }).staging;
+  build-inputs = pkgNames: extra:
+    (mkBuildInputs wineUnstable.pkgArches pkgNames) ++ extra;
+in
+assert stdenv.lib.getVersion wineUnstable == patch.version;
 
 stdenv.lib.overrideDerivation wineUnstable (self: {
   buildInputs = build-inputs [ "perl" "utillinux" "autoconf" libtxc_dxtn_Name ] self.buildInputs;

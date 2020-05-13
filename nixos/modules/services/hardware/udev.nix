@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   udev = config.systemd.package;
 
   cfg = config.services.udev;
@@ -30,121 +28,125 @@ let
   '';
 
   # Perform substitutions in all udev rules files.
-  udevRules = pkgs.runCommand "udev-rules"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-      packages = unique (map toString cfg.packages);
-    }
-    ''
-      mkdir -p $out
-      shopt -s nullglob
-      set +o pipefail
+  udevRules =
+    pkgs.runCommand "udev-rules"
+      {
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        packages = unique (map toString cfg.packages);
+      }
+      ''
+        mkdir -p $out
+        shopt -s nullglob
+        set +o pipefail
 
-      # Set a reasonable $PATH for programs called by udev rules.
-      echo 'ENV{PATH}="${udevPath}/bin:${udevPath}/sbin"' > $out/00-path.rules
+        # Set a reasonable $PATH for programs called by udev rules.
+        echo 'ENV{PATH}="${udevPath}/bin:${udevPath}/sbin"' > $out/00-path.rules
 
-      # Add the udev rules from other packages.
-      for i in $packages; do
-        echo "Adding rules for package $i"
-        for j in $i/{etc,lib}/udev/rules.d/*; do
-          echo "Copying $j to $out/$(basename $j)"
-          cat $j > $out/$(basename $j)
-        done
-      done
-
-      # Fix some paths in the standard udev rules.  Hacky.
-      for i in $out/*.rules; do
-        substituteInPlace $i \
-          --replace \"/sbin/modprobe \"${pkgs.kmod}/bin/modprobe \
-          --replace \"/sbin/mdadm \"${pkgs.mdadm}/sbin/mdadm \
-          --replace \"/sbin/blkid \"${pkgs.utillinux}/sbin/blkid \
-          --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount \
-          --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
-          --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
-      done
-
-      echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev... "
-      import_progs=$(grep 'IMPORT{program}="[^/$]' $out/* |
-        sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
-      run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="[^/$]' |
-        sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
-      for i in $import_progs $run_progs; do
-        if [[ ! -x ${udev}/lib/udev/$i && ! $i =~ socket:.* ]]; then
-          echo "FAIL"
-          echo "$i is called in udev rules but not installed by udev"
-          exit 1
-        fi
-      done
-      echo "OK"
-
-      echo -n "Checking that all programs called by absolute paths in udev rules exist... "
-      import_progs=$(grep 'IMPORT{program}="\/' $out/* |
-        sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
-      run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="/' |
-        sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
-      for i in $import_progs $run_progs; do
-        if [[ ! -x $i ]]; then
-          echo "FAIL"
-          echo "$i is called in udev rules but is not executable or does not exist"
-          exit 1
-        fi
-      done
-      echo "OK"
-
-      filesToFixup="$(for i in "$out"/*; do
-        grep -l '\B\(/usr\)\?/s\?bin' "$i" || :
-      done)"
-
-      if [ -n "$filesToFixup" ]; then
-        echo "Consider fixing the following udev rules:"
-        echo "$filesToFixup" | while read localFile; do
-          remoteFile="origin unknown"
-          for i in ${toString cfg.packages}; do
-            for j in "$i"/*/udev/rules.d/*; do
-              [ -e "$out/$(basename "$j")" ] || continue
-              [ "$(basename "$j")" = "$(basename "$localFile")" ] || continue
-              remoteFile="originally from $j"
-              break 2
-            done
+        # Add the udev rules from other packages.
+        for i in $packages; do
+          echo "Adding rules for package $i"
+          for j in $i/{etc,lib}/udev/rules.d/*; do
+            echo "Copying $j to $out/$(basename $j)"
+            cat $j > $out/$(basename $j)
           done
-          refs="$(
-            grep -o '\B\(/usr\)\?/s\?bin/[^ "]\+' "$localFile" \
-              | sed -e ':r;N;''${s/\n/ and /;br};s/\n/, /g;br'
-          )"
-          echo "$localFile ($remoteFile) contains references to $refs."
         done
-        exit 1
-      fi
 
-      # If auto-configuration is disabled, then remove
-      # udev's 80-drivers.rules file, which contains rules for
-      # automatically calling modprobe.
-      ${optionalString (!config.boot.hardwareScan) ''
-        ln -s /dev/null $out/80-drivers.rules
-      ''}
-    ''; # */
-
-  hwdbBin = pkgs.runCommand "hwdb.bin"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-      packages = unique (map toString ([udev] ++ cfg.packages));
-    }
-    ''
-      mkdir -p etc/udev/hwdb.d
-      for i in $packages; do
-        echo "Adding hwdb files for package $i"
-        for j in $i/{etc,lib}/udev/hwdb.d/*; do
-          ln -s $j etc/udev/hwdb.d/$(basename $j)
+        # Fix some paths in the standard udev rules.  Hacky.
+        for i in $out/*.rules; do
+          substituteInPlace $i \
+            --replace \"/sbin/modprobe \"${pkgs.kmod}/bin/modprobe \
+            --replace \"/sbin/mdadm \"${pkgs.mdadm}/sbin/mdadm \
+            --replace \"/sbin/blkid \"${pkgs.utillinux}/sbin/blkid \
+            --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount \
+            --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
+            --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
         done
-      done
 
-      echo "Generating hwdb database..."
-      # hwdb --update doesn't return error code even on errors!
-      res="$(${pkgs.buildPackages.udev}/bin/udevadm hwdb --update --root=$(pwd) 2>&1)"
-      echo "$res"
-      [ -z "$(echo "$res" | egrep '^Error')" ]
-      mv etc/udev/hwdb.bin $out
-    '';
+        echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev... "
+        import_progs=$(grep 'IMPORT{program}="[^/$]' $out/* |
+          sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
+        run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="[^/$]' |
+          sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
+        for i in $import_progs $run_progs; do
+          if [[ ! -x ${udev}/lib/udev/$i && ! $i =~ socket:.* ]]; then
+            echo "FAIL"
+            echo "$i is called in udev rules but not installed by udev"
+            exit 1
+          fi
+        done
+        echo "OK"
+
+        echo -n "Checking that all programs called by absolute paths in udev rules exist... "
+        import_progs=$(grep 'IMPORT{program}="\/' $out/* |
+          sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
+        run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="/' |
+          sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
+        for i in $import_progs $run_progs; do
+          if [[ ! -x $i ]]; then
+            echo "FAIL"
+            echo "$i is called in udev rules but is not executable or does not exist"
+            exit 1
+          fi
+        done
+        echo "OK"
+
+        filesToFixup="$(for i in "$out"/*; do
+          grep -l '\B\(/usr\)\?/s\?bin' "$i" || :
+        done)"
+
+        if [ -n "$filesToFixup" ]; then
+          echo "Consider fixing the following udev rules:"
+          echo "$filesToFixup" | while read localFile; do
+            remoteFile="origin unknown"
+            for i in ${toString cfg.packages}; do
+              for j in "$i"/*/udev/rules.d/*; do
+                [ -e "$out/$(basename "$j")" ] || continue
+                [ "$(basename "$j")" = "$(basename "$localFile")" ] || continue
+                remoteFile="originally from $j"
+                break 2
+              done
+            done
+            refs="$(
+              grep -o '\B\(/usr\)\?/s\?bin/[^ "]\+' "$localFile" \
+                | sed -e ':r;N;''${s/\n/ and /;br};s/\n/, /g;br'
+            )"
+            echo "$localFile ($remoteFile) contains references to $refs."
+          done
+          exit 1
+        fi
+
+        # If auto-configuration is disabled, then remove
+        # udev's 80-drivers.rules file, which contains rules for
+        # automatically calling modprobe.
+        ${optionalString (!config.boot.hardwareScan) ''
+          ln -s /dev/null $out/80-drivers.rules
+        ''}
+      ''; # */
+
+  hwdbBin =
+    pkgs.runCommand "hwdb.bin"
+      {
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        packages = unique (map toString ([ udev ] ++ cfg.packages));
+      }
+      ''
+        mkdir -p etc/udev/hwdb.d
+        for i in $packages; do
+          echo "Adding hwdb files for package $i"
+          for j in $i/{etc,lib}/udev/hwdb.d/*; do
+            ln -s $j etc/udev/hwdb.d/$(basename $j)
+          done
+        done
+
+        echo "Generating hwdb database..."
+        # hwdb --update doesn't return error code even on errors!
+        res="$(${pkgs.buildPackages.udev}/bin/udevadm hwdb --update --root=$(pwd) 2>&1)"
+        echo "$res"
+        [ -z "$(echo "$res" | egrep '^Error')" ]
+        mv etc/udev/hwdb.bin $out
+      '';
 
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
@@ -156,7 +158,6 @@ let
   };
 
 in
-
 {
 
   ###### interface
@@ -178,7 +179,7 @@ in
 
       packages = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           List of packages containing <command>udev</command> rules.
           All files found in
@@ -191,7 +192,7 @@ in
 
       path = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Packages added to the <envar>PATH</envar> environment variable when
           executing programs from Udev rules.
@@ -230,7 +231,7 @@ in
 
     hardware.firmware = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = ''
         List of packages containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
@@ -308,7 +309,8 @@ in
       '';
 
     systemd.services.systemd-udevd =
-      { restartTriggers = cfg.packages;
+      {
+        restartTriggers = cfg.packages;
       };
 
   };

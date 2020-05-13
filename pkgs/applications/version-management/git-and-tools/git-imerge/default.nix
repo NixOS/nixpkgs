@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython ];
 
-  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ] ; 
- 
+  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
+
   meta = with stdenv.lib; {
     homepage = https://github.com/mhagger/git-imerge;
     description = "Perform a merge between two branches incrementally";

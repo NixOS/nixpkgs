@@ -1,6 +1,28 @@
-{ stdenv, fetchurl, fetchpatch, substituteAll, pkgconfig, libxslt, ninja, libX11, gnome3, gtk3, glib
-, gettext, libxml2, xkeyboard_config, isocodes, meson, wayland
-, libseccomp, systemd, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, substituteAll
+, pkgconfig
+, libxslt
+, ninja
+, libX11
+, gnome3
+, gtk3
+, glib
+, gettext
+, libxml2
+, xkeyboard_config
+, isocodes
+, meson
+, wayland
+, libseccomp
+, systemd
+, bubblewrap
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop";
@@ -14,12 +36,26 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig meson ninja gettext libxslt libxml2 gobject-introspection
-    gtk-doc docbook_xsl
+    pkgconfig
+    meson
+    ninja
+    gettext
+    libxslt
+    libxml2
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
   ];
   buildInputs = [
-    libX11 bubblewrap xkeyboard_config isocodes wayland
-    gtk3 glib libseccomp systemd
+    libX11
+    bubblewrap
+    xkeyboard_config
+    isocodes
+    wayland
+    gtk3
+    glib
+    libseccomp
+    systemd
   ];
 
   propagatedBuildInputs = [ gsettings-desktop-schemas ];

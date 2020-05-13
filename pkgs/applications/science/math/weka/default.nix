@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.9.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/weka/${stdenv.lib.replaceChars ["."]["-"] "${pname}-${version}"}.zip";
+    url = "mirror://sourceforge/weka/${stdenv.lib.replaceChars [ "." ] [ "-" ] "${pname}-${version}"}.zip";
     sha256 = "0zwmhspmqb0a7cm6k6i0s6q3w19ws1g9dx3cp2v3g3vsif6cdh31";
   };
 

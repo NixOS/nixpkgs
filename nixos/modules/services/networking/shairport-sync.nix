@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.shairport-sync;
 
 in
-
 {
 
   ###### interface
@@ -56,7 +54,8 @@ in
     services.avahi.publish.userServices = true;
 
     users.users.${cfg.user} =
-      { description = "Shairport user";
+      {
+        description = "Shairport user";
         isSystemUser = true;
         createHome = true;
         home = "/var/lib/shairport-sync";

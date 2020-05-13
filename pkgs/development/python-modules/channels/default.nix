@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  asgiref, django, daphne
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, asgiref
+, django
+, daphne
 }:
 buildPythonPackage rec {
   pname = "channels";

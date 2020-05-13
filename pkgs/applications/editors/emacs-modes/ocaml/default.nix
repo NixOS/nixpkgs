@@ -2,9 +2,9 @@
 
 # this package installs the emacs-mode which
 # resides in the ocaml compiler sources.
-
 let version = stdenv.lib.removePrefix "ocaml-" ocaml.name;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ocaml-mode";
   inherit version;
   inherit (ocaml) prefixKey src;

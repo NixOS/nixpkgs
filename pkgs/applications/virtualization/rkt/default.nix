@@ -1,6 +1,22 @@
-{ stdenv, lib, autoreconfHook, acl, go, file, git, wget, gnupg, trousers, squashfsTools,
-  cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper, glibc }:
-
+{ stdenv
+, lib
+, autoreconfHook
+, acl
+, go
+, file
+, git
+, wget
+, gnupg
+, trousers
+, squashfsTools
+, cpio
+, fetchurl
+, fetchFromGitHub
+, iptables
+, systemd
+, makeWrapper
+, glibc
+}:
 let
   # Always get the information from
   # https://github.com/coreos/rkt/blob/v${VERSION}/stage1/usr_from_coreos/coreos-common.mk
@@ -11,10 +27,11 @@ let
   stage1Flavours = [ "coreos" "fly" ];
   stage1Dir = "lib/rkt/stage1-images";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "1.30.0";
   pname = "rkt";
-  BUILDDIR="build-${pname}-${version}";
+  BUILDDIR = "build-${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "coreos";
@@ -29,8 +46,19 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    glibc.out glibc.static
-    autoreconfHook go file git wget gnupg trousers squashfsTools cpio acl systemd
+    glibc.out
+    glibc.static
+    autoreconfHook
+    go
+    file
+    git
+    wget
+    gnupg
+    trousers
+    squashfsTools
+    cpio
+    acl
+    systemd
     makeWrapper
   ];
 

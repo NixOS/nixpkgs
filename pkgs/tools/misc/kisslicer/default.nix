@@ -1,14 +1,14 @@
 { fetchzip
 , libX11
-, libGLU, libGL
+, libGLU
+, libGL
 , makeWrapper
 , stdenv
 }:
-
 let
-
   libPath = stdenv.lib.makeLibraryPath [
-    libGLU libGL
+    libGLU
+    libGL
     stdenv.cc.cc
     libX11
   ];
@@ -16,7 +16,6 @@ let
   inidir = "\\\${XDG_CONFIG_HOME:-\\$HOME/.config}/kisslicer";
 
 in
-
 stdenv.mkDerivation {
   name = "kisslicer-1.6.3";
 
@@ -30,7 +29,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     makeWrapper
-    libGLU libGL
+    libGLU
+    libGL
     libX11
   ];
 

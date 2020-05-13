@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let cfg = config.programs.criu;
-in {
+in
+{
 
   options = {
     programs.criu = {

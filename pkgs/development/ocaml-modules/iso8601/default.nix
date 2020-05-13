@@ -1,7 +1,5 @@
 { stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
-
 let version = "0.2.4"; in
-
 stdenv.mkDerivation {
   pname = "ocaml-iso8601";
   inherit version;
@@ -17,7 +15,7 @@ stdenv.mkDerivation {
     homepage = https://ocaml-community.github.io/ISO8601.ml/;
     description = "ISO 8601 and RFC 3999 date parsing for OCaml";
     license = stdenv.lib.licenses.mit;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

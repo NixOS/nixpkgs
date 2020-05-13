@@ -1,5 +1,14 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytest, pytestrunner, pyyaml, six, pathlib2, isPy27 }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytest
+, pytestrunner
+, pyyaml
+, six
+, pathlib2
+, isPy27
+}:
 
 buildPythonPackage rec {
   pname = "omegaconf";
@@ -19,7 +28,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "A framework for configuring complex applications";
     homepage = "https://github.com/omry/omegaconf";
-    license = licenses.free;  # prior bsd license (1988)
+    license = licenses.free; # prior bsd license (1988)
     maintainers = with maintainers; [ bcdarwin ];
   };
 }

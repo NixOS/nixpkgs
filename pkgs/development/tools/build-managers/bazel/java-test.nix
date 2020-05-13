@@ -1,5 +1,4 @@
-{
-  bazel
+{ bazel
 , bazelTest
 , bazel-examples
 , gccStdenv
@@ -11,9 +10,7 @@
 , writeText
 , distDir
 }:
-
 let
-
   toolsBazel = writeScript "bazel" ''
     #! ${runtimeShell}
 
@@ -28,14 +25,16 @@ let
     exec "$BAZEL_REAL" "$@"
   '';
 
-  workspaceDir = runLocal "our_workspace" {} (''
+  workspaceDir = runLocal "our_workspace"
+    { } (''
     cp -r ${bazel-examples}/java-tutorial $out
     find $out -type d -exec chmod 755 {} \;
   ''
   + (lib.optionalString gccStdenv.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
-  ''));
+  ''
+  ));
 
   testBazel = bazelTest {
     name = "bazel-test-cpp";
@@ -54,5 +53,5 @@ let
     '';
   };
 
-in testBazel
-
+in
+testBazel

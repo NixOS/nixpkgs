@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchhg, go, sqlite}:
+{ stdenv, fetchurl, fetchhg, go, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "storebrowse-20130318212204";

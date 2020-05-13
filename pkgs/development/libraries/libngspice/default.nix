@@ -1,4 +1,4 @@
-{stdenv, fetchurl, bison, flex, fftw}:
+{ stdenv, fetchurl, bison, flex, fftw }:
 
 # Note that this does not provide the ngspice command-line utility. For that see
 # the ngspice derivation.

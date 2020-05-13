@@ -1,5 +1,17 @@
-{ stdenv, fetchhg, fetchpatch, cmake, qt4, fftw, graphicsmagick_q16,
-  lcms2, lensfun, pkgconfig, libjpeg, exiv2, liblqr1 }:
+{ stdenv
+, fetchhg
+, fetchpatch
+, cmake
+, qt4
+, fftw
+, graphicsmagick_q16
+, lcms2
+, lensfun
+, pkgconfig
+, libjpeg
+, exiv2
+, liblqr1
+}:
 
 stdenv.mkDerivation {
   name = "photivo-2014-01-25";

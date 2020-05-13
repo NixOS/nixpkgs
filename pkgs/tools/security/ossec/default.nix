@@ -16,18 +16,18 @@ stdenv.mkDerivation {
   patches = [ ./no-root.patch ];
 
   buildPhase = ''
-    echo "en
+        echo "en
 
-agent
-$out
-no
-127.0.0.1
-yes
-yes
-yes
+    agent
+    $out
+    no
+    127.0.0.1
+    yes
+    yes
+    yes
 
 
-"   | ./install.sh
+    "   | ./install.sh
   '';
 
   meta = {
@@ -37,4 +37,3 @@ yes
     platforms = stdenv.lib.platforms.linux;
   };
 }
-

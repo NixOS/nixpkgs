@@ -1,5 +1,4 @@
 { stdenv, writeText, runtimeShell }:
-
 let script = writeText "script" ''
   #!${runtimeShell}
 

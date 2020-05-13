@@ -1,7 +1,26 @@
-{ fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU, libGL, boost,
-  pkgconfig, libuuid, openal, ogre, ois, curl, gtk2, mygui, unzip,
-  angelscript, ogrepaged, mysocketw, libxcb
-  }:
+{ fetchFromGitHub
+, stdenv
+, wxGTK30
+, freeimage
+, cmake
+, zziplib
+, libGLU
+, libGL
+, boost
+, pkgconfig
+, libuuid
+, openal
+, ogre
+, ois
+, curl
+, gtk2
+, mygui
+, unzip
+, angelscript
+, ogrepaged
+, mysocketw
+, libxcb
+}:
 
 stdenv.mkDerivation rec {
   version = "0.4.7.0";
@@ -26,16 +45,34 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ wxGTK30 freeimage cmake zziplib libGLU libGL boost
-    libuuid openal ogre ois curl gtk2 mygui unzip angelscript
-    ogrepaged mysocketw libxcb ];
+  buildInputs = [
+    wxGTK30
+    freeimage
+    cmake
+    zziplib
+    libGLU
+    libGL
+    boost
+    libuuid
+    openal
+    ogre
+    ois
+    curl
+    gtk2
+    mygui
+    unzip
+    angelscript
+    ogrepaged
+    mysocketw
+    libxcb
+  ];
 
   meta = {
     description = "3D simulator game where you can drive, fly and sail various vehicles";
     homepage = http://rigsofrods.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = stdenv.lib.platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

@@ -18,13 +18,13 @@ buildGoPackage rec {
   buildFlags = [ "--tags" "release" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb1  libiconv ];
+  buildInputs = [ libusb1 libiconv ];
 
   meta = with stdenv.lib; {
     inherit version;
     description = "aws-vault like tool for Okta authentication";
     license = licenses.mit;
-    maintainers = [maintainers.imalsogreg];
+    maintainers = [ maintainers.imalsogreg ];
     platforms = platforms.all;
     homepage = https://github.com/segmentio/aws-okta;
     downloadPage = "https://github.com/segmentio/aws-okta";

@@ -1,31 +1,32 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.mattermost;
 
-  defaultConfig = builtins.fromJSON (builtins.replaceStrings [ "\\u0026" ] [ "&" ]
-    (readFile "${pkgs.mattermost}/config/config.json")
+  defaultConfig = builtins.fromJSON (
+    builtins.replaceStrings [ "\\u0026" ] [ "&" ]
+      (readFile "${pkgs.mattermost}/config/config.json")
   );
 
   database = "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
 
-  mattermostConf = foldl recursiveUpdate defaultConfig
-    [ { ServiceSettings.SiteURL = cfg.siteUrl;
+  mattermostConf =
+    foldl
+      recursiveUpdate
+      defaultConfig
+      [{
+        ServiceSettings.SiteURL = cfg.siteUrl;
         ServiceSettings.ListenAddress = cfg.listenAddress;
         TeamSettings.SiteName = cfg.siteName;
         SqlSettings.DriverName = "postgres";
         SqlSettings.DataSource = database;
       }
-      cfg.extraConfig
-    ];
+        cfg.extraConfig];
 
   mattermostConfJSON = pkgs.writeText "mattermost-config-raw.json" (builtins.toJSON mattermostConf);
 
 in
-
 {
   options = {
     services.mattermost = {
@@ -216,7 +217,8 @@ in
         };
         unitConfig.JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
       };
-    })
+    }
+    )
     (mkIf cfg.matterircd.enable {
       systemd.services.matterircd = {
         description = "Mattermost IRC bridge service";
@@ -231,6 +233,7 @@ in
           RestartSec = "5";
         };
       };
-    })
+    }
+    )
   ];
 }

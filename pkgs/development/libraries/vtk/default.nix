@@ -1,20 +1,40 @@
-{ stdenv, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libtiff
+{ stdenv
+, fetchurl
+, cmake
+, libGLU
+, libGL
+, libX11
+, xorgproto
+, libXt
+, libtiff
 , fetchpatch
 , qtLib ? null
-, enablePython ? false, python ? null
-# Darwin support
-, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
-, ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc }:
+, enablePython ? false
+, python ? null
+  # Darwin support
+, Cocoa
+, CoreServices
+, DiskArbitration
+, IOKit
+, CFNetwork
+, Security
+, GLUT
+, OpenGL
+, ApplicationServices
+, CoreText
+, IOSurface
+, ImageIO
+, xpc
+, libobjc
+}:
 
 with stdenv.lib;
-
 let
   os = stdenv.lib.optionalString;
   majorVersion = "7.1";
   minorVersion = "1";
   version = "${majorVersion}.${minorVersion}";
 in
-
 stdenv.mkDerivation rec {
   name = "vtk-${os (qtLib != null) "qvtk-"}${version}";
   src = fetchurl {
@@ -34,12 +54,24 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtiff ]
     ++ optional (qtLib != null) qtLib
     ++ optionals stdenv.isLinux [ libGLU libGL libX11 xorgproto libXt ]
-    ++ optionals stdenv.isDarwin [ xpc Cocoa CoreServices DiskArbitration IOKit
-                                   CFNetwork Security ApplicationServices CoreText
-                                   IOSurface ImageIO OpenGL GLUT ]
+    ++ optionals stdenv.isDarwin [
+    xpc
+    Cocoa
+    CoreServices
+    DiskArbitration
+    IOKit
+    CFNetwork
+    Security
+    ApplicationServices
+    CoreText
+    IOSurface
+    ImageIO
+    OpenGL
+    GLUT
+  ]
     ++ optional enablePython [
-      python
-    ];
+    python
+  ];
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ libobjc ];
 
   preBuild = ''

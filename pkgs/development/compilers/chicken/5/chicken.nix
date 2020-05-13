@@ -1,5 +1,4 @@
 { stdenv, fetchurl, makeWrapper, bootstrap-chicken ? null }:
-
 let
   version = "5.2.0";
   platform = with stdenv;
@@ -30,7 +29,8 @@ stdenv.mkDerivation {
     makeWrapper
   ] ++ (lib.ifEnable (bootstrap-chicken != null) [
     bootstrap-chicken
-  ]);
+  ]
+  );
 
   postInstall = ''
     for f in $out/bin/*

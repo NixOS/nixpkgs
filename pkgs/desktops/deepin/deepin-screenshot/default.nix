@@ -1,6 +1,19 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, pkgconfig, xdg_utils, qttools, qtx11extras,
-  dtkcore, dtkwidget, dtkwm, deepin-turbo, deepin-shortcut-viewer,
-  deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkgconfig
+, xdg_utils
+, qttools
+, qtx11extras
+, dtkcore
+, dtkwidget
+, dtkwm
+, deepin-turbo
+, deepin-shortcut-viewer
+, deepin
+}:
 
 mkDerivation rec {
   pname = "deepin-screenshot";

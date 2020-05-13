@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, globalplatform, pcsclite, gppcscconnectionplugin
+{ stdenv
+, fetchurl
+, pkgconfig
+, globalplatform
+, pcsclite
+, gppcscconnectionplugin
 , makeWrapper
 }:
 

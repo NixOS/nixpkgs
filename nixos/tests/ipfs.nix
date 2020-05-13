@@ -1,5 +1,4 @@
-
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix ({ pkgs, ... }: {
   name = "ipfs";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ mguentner ];
@@ -51,5 +50,5 @@ import ./make-test.nix ({ pkgs, ...} : {
     $getter->mustSucceed("ipfs --api /ip4/127.0.0.1/tcp/5001 swarm connect /ip4/$addrIp/tcp/4001/ipfs/$addrId");
     $getter->mustSucceed("[ -n \"\$(ipfs --api /ip4/127.0.0.1/tcp/5001 cat /ipfs/$ipfsHash | grep fnord)\" ]");
     $getter->mustSucceed("[ -n \"$(cat /ipfs/$ipfsHash | grep fnord)\" ]");
-    '';
+  '';
 })

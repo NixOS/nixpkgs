@@ -1,5 +1,5 @@
 { stdenv, make, makeWrapper, which }:
-{ buildInputs ? [], ...} @ args:
+{ buildInputs ? [ ], ... } @ args:
 stdenv.mkDerivation (args // {
   buildInputs = [ makeWrapper make which ] ++ buildInputs;
 
@@ -15,5 +15,5 @@ stdenv.mkDerivation (args // {
 
     maintainers = with stdenv.lib.maintainers; [ ashalkhakov matthewbauer ];
     platforms = stdenv.lib.platforms.linux;
-  } // (if builtins.hasAttr "meta" args then args.meta else {});
+  } // (if builtins.hasAttr "meta" args then args.meta else { });
 })

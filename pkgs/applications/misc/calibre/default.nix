@@ -23,7 +23,6 @@
 , makeDesktopItem
 , removeReferencesTo
 }:
-
 let
   pypkgs = python2Packages;
 

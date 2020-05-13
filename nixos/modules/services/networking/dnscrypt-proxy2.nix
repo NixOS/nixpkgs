@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }: with lib;
-
 let
   cfg = config.services.dnscrypt-proxy2;
 in
-
 {
   options.services.dnscrypt-proxy2 = {
     enable = mkEnableOption "dnscrypt-proxy2";
@@ -24,7 +22,7 @@ in
         }
       '';
       type = types.attrs;
-      default = {};
+      default = { };
     };
 
     configFile = mkOption {
@@ -34,12 +32,14 @@ in
       '';
       example = "/etc/dnscrypt-proxy/dnscrypt-proxy.toml";
       type = types.path;
-      default = pkgs.runCommand "dnscrypt-proxy.toml" {
-        json = builtins.toJSON cfg.settings;
-        passAsFile = [ "json" ];
-      } ''
-        ${pkgs.remarshal}/bin/json2toml < $jsonPath > $out
-      '';
+      default =
+        pkgs.runCommand "dnscrypt-proxy.toml"
+          {
+            json = builtins.toJSON cfg.settings;
+            passAsFile = [ "json" ];
+          } ''
+          ${pkgs.remarshal}/bin/json2toml < $jsonPath > $out
+        '';
       defaultText = literalExample "TOML file generated from services.dnscrypt-proxy2.settings";
     };
   };

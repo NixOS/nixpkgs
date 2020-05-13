@@ -29,7 +29,7 @@ let
       maintainers = with maintainers; [
         vidbina
       ];
-    } // (attrs.meta or {});
+    } // (attrs.meta or { });
 
     buildInputs = [
       dpkg
@@ -55,10 +55,11 @@ let
     installPhase = attrs.installPhase or ''
       mkdir -p "$out/bin"
       cp -a usr/* "$out/"
-      ${(wrapBinary libs) attrs.toolName}
+      ${ (wrapBinary libs) attrs.toolName}
     '';
   });
-in buildFHSUserEnv {
+in
+buildFHSUserEnv {
   name = "${attrs.toolName}-${attrs.version}";
   runScript = "${pkg.outPath}/bin/${attrs.toolName}";
 } // { inherit (pkg) meta name; }

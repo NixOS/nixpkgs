@@ -1,11 +1,30 @@
-{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
-, bzip2, zlib, lz4, inotify-tools, pam, libcap
-, clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
+{ stdenv
+, lib
+, fetchurl
+, perl
+, pkgconfig
+, systemd
+, openssl
+, bzip2
+, zlib
+, lz4
+, inotify-tools
+, pam
+, libcap
+, clucene_core_2
+, icu
+, openldap
+, libsodium
+, libstemmer
+, cyrus_sasl
 , nixosTests
-# Auth modules
-, withMySQL ? false, libmysqlclient
-, withPgSQL ? false, postgresql
-, withSQLite ? true, sqlite
+  # Auth modules
+, withMySQL ? false
+, libmysqlclient
+, withPgSQL ? false
+, postgresql
+, withSQLite ? true
+, sqlite
 }:
 
 stdenv.mkDerivation rec {
@@ -75,10 +94,10 @@ stdenv.mkDerivation rec {
     "lib_cv___va_copy=yes"
     "lib_cv_va_val_copy=yes"
   ] ++ lib.optional (stdenv.isLinux) "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    ++ lib.optional (stdenv.isDarwin) "--enable-static"
-    ++ lib.optional withMySQL "--with-mysql"
-    ++ lib.optional withPgSQL "--with-pgsql"
-    ++ lib.optional withSQLite "--with-sqlite";
+  ++ lib.optional (stdenv.isDarwin) "--enable-static"
+  ++ lib.optional withMySQL "--with-mysql"
+  ++ lib.optional withPgSQL "--with-pgsql"
+  ++ lib.optional withSQLite "--with-sqlite";
 
   meta = {
     homepage = "https://dovecot.org/";

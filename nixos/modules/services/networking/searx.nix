@@ -1,15 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.searx;
 
   configFile = cfg.configFile;
 
 in
-
 {
 
   ###### interface
@@ -18,8 +15,9 @@ in
 
     services.searx = {
 
-      enable = mkEnableOption
-        "the searx server. See https://github.com/asciimoo/searx";
+      enable =
+        mkEnableOption
+          "the searx server. See https://github.com/asciimoo/searx";
 
       configFile = mkOption {
         type = types.nullOr types.path;
@@ -48,14 +46,16 @@ in
   config = mkIf config.services.searx.enable {
 
     users.users.searx =
-      { uid = config.ids.uids.searx;
+      {
+        uid = config.ids.uids.searx;
         description = "Searx user";
         createHome = true;
         home = "/var/lib/searx";
       };
 
     users.groups.searx =
-      { gid = config.ids.gids.searx;
+      {
+        gid = config.ids.gids.searx;
       };
 
     systemd.services.searx =
@@ -69,7 +69,8 @@ in
         };
       } // (optionalAttrs (configFile != null) {
         environment.SEARX_SETTINGS_PATH = configFile;
-      });
+      }
+      );
 
     environment.systemPackages = [ cfg.package ];
 

@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.osrm;
 in
-
 {
   options.services.osrm = {
     enable = mkOption {
@@ -40,7 +38,7 @@ in
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "--max-table-size 1000" "--max-matching-size 1000" ];
       description = "Extra command line arguments passed to osrm-routed";
     };

@@ -1,5 +1,4 @@
 { stdenv, fetchurl, glib, dbus, libgcrypt, pkgconfig, intltool, gobject-introspection, gnome3 }:
-
 let
   pname = "libgnome-keyring";
   version = "3.12.0";

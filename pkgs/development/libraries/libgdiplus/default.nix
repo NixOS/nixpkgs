@@ -1,6 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, cairo, Carbon, fontconfig
-, libtiff, giflib, libjpeg, libpng
-, libXrender, libexif, autoreconfHook, fetchpatch }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, glib
+, cairo
+, Carbon
+, fontconfig
+, libtiff
+, giflib
+, libjpeg
+, libpng
+, libXrender
+, libexif
+, autoreconfHook
+, fetchpatch
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgdiplus";
@@ -24,8 +37,16 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional stdenv.cc.isClang "--host=${stdenv.hostPlatform.system}";
 
   buildInputs =
-    [ glib cairo fontconfig libtiff giflib
-      libjpeg libpng libXrender libexif
+    [
+      glib
+      cairo
+      fontconfig
+      libtiff
+      giflib
+      libjpeg
+      libpng
+      libXrender
+      libexif
     ]
     ++ stdenv.lib.optional stdenv.isDarwin Carbon;
 

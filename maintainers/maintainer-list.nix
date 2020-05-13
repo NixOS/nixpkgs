@@ -1141,10 +1141,12 @@
     name = "Vladimir Serov";
     keys = [
       # compare with https://keybase.io/cab404
-      { longkeyid = "1BB96810926F4E715DEF567E6BA7C26C3FDF7BB3";
+      {
+        longkeyid = "1BB96810926F4E715DEF567E6BA7C26C3FDF7BB3";
         fingerprint = "rsa3072/0xCBDECF658C38079E";
       }
-      { longkeyid = "1EBC648C64D6045463013B3EB7EFFC271D55DB8A";
+      {
+        longkeyid = "1EBC648C64D6045463013B3EB7EFFC271D55DB8A";
         fingerprint = "ed25519/0xB7EFFC271D55DB8A";
       }
     ];
@@ -3720,7 +3722,7 @@
     name = "Jeff Zellner";
   };
   kaction = {
-    name  = "Dmitry Bogatov";
+    name = "Dmitry Bogatov";
     email = "KAction@disroot.org";
     github = "kaction";
     githubId = 44864956;
@@ -6181,10 +6183,12 @@
     github = "rissson";
     githubId = 18313093;
     keys = [
-      { longkeyid = "rsa4096/0xF6FD87B15C263EC9";
+      {
+        longkeyid = "rsa4096/0xF6FD87B15C263EC9";
         fingerprint = "8A0E 6A7C 08AB B9DE 67DE  2A13 F6FD 87B1 5C26 3EC9";
       }
-      { longkeyid = "ed25519/0xBBB7A6801DF1E03F";
+      {
+        longkeyid = "ed25519/0xBBB7A6801DF1E03F";
         fingerprint = "C0A7 A9BB 115B C857 4D75  EA99 BBB7 A680 1DF1 E03F";
       }
     ];
@@ -8240,7 +8244,7 @@
     name = "Asad Saeeduddin";
   };
   ngerstle = {
-    name  = "Nicholas Gerstle";
+    name = "Nicholas Gerstle";
     email = "ngerstle@gmail.com";
     github = "ngerstle";
   };
@@ -8251,5 +8255,3 @@
     name = "Xavier Zwirtz";
   };
 }
-
-  

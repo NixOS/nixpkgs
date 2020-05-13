@@ -1,8 +1,9 @@
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 (python2.buildEnv.override {
   extraLibs = with python2Packages;
-    [ debian
+    [
+      debian
     ];
   postBuild = ''
     mkdir -p $out/bin

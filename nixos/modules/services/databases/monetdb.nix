@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.monetdb;
 
-in {
+in
+{
   meta.maintainers = with maintainers; [ StillerHarpo primeos ];
 
   ###### interface

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python2Packages.python ];
   nativeBuildInputs = [
-    gitMinimal        # Used during build to generate Bash completion.
+    gitMinimal # Used during build to generate Bash completion.
     python2Packages.docutils
   ];
 

@@ -1,4 +1,4 @@
-{lib, python, git, mercurial, coreutils}:
+{ lib, python, git, mercurial, coreutils }:
 
 with python.pkgs;
 buildPythonApplication rec {

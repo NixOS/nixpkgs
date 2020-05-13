@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.virtlyst;
   stateDir = "/var/lib/virtlyst";
 
@@ -27,7 +25,6 @@ let
   '';
 
 in
-
 {
 
   options.services.virtlyst = {

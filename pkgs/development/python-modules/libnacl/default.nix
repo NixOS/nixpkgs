@@ -15,9 +15,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ libsodium ];
 
   postPatch =
-    let soext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
-    substituteInPlace "./libnacl/__init__.py" --replace "ctypes.cdll.LoadLibrary('libsodium${soext}')" "ctypes.cdll.LoadLibrary('${libsodium}/lib/libsodium${soext}')"
-  '';
+    let soext = stdenv.hostPlatform.extensions.sharedLibrary; in
+    ''
+      substituteInPlace "./libnacl/__init__.py" --replace "ctypes.cdll.LoadLibrary('libsodium${soext}')" "ctypes.cdll.LoadLibrary('${libsodium}/lib/libsodium${soext}')"
+    '';
 
   checkPhase = ''
     py.test

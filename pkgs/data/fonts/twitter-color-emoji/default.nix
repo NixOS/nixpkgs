@@ -13,7 +13,6 @@
 , zopfli
 , noto-fonts-emoji
 }:
-
 let
   version = "12.1.2";
 
@@ -61,28 +60,30 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = let
-    templateSubstitutions = stdenv.lib.concatStringsSep "; " [
-      ''s#Noto Color Emoji#Twitter Color Emoji#''
-      ''s#NotoColorEmoji#TwitterColorEmoji#''
-      ''s#Copyright .* Google Inc\.#Twitter, Inc and other contributors.#''
-      ''s# Version .*# ${version}#''
-      ''s#.*is a trademark.*##''
-      ''s#Google, Inc\.#Twitter, Inc and other contributors#''
-      ''s#http://www.google.com/get/noto/#https://twemoji.twitter.com/#''
-      ''s#.*is licensed under.*#      Creative Commons Attribution 4.0 International#''
-      ''s#http://scripts.sil.org/OFL#http://creativecommons.org/licenses/by/4.0/#''
-    ];
-  in ''
-    patchShebangs ./flag_glyph_name.py
+  postPatch =
+    let
+      templateSubstitutions = stdenv.lib.concatStringsSep "; " [
+        ''s#Noto Color Emoji#Twitter Color Emoji#''
+        ''s#NotoColorEmoji#TwitterColorEmoji#''
+        ''s#Copyright .* Google Inc\.#Twitter, Inc and other contributors.#''
+        ''s# Version .*# ${version}#''
+        ''s#.*is a trademark.*##''
+        ''s#Google, Inc\.#Twitter, Inc and other contributors#''
+        ''s#http://www.google.com/get/noto/#https://twemoji.twitter.com/#''
+        ''s#.*is licensed under.*#      Creative Commons Attribution 4.0 International#''
+        ''s#http://scripts.sil.org/OFL#http://creativecommons.org/licenses/by/4.0/#''
+      ];
+    in
+    ''
+      patchShebangs ./flag_glyph_name.py
 
-    sed '${templateSubstitutions}' NotoColorEmoji.tmpl.ttx.tmpl > TwitterColorEmoji.tmpl.ttx.tmpl
-    pushd ${twemojiSrc.name}/assets/72x72/
-    for png in *.png; do
-        mv $png emoji_u''${png//-/_}
-    done
-    popd
-  '';
+      sed '${templateSubstitutions}' NotoColorEmoji.tmpl.ttx.tmpl > TwitterColorEmoji.tmpl.ttx.tmpl
+      pushd ${twemojiSrc.name}/assets/72x72/
+      for png in *.png; do
+          mv $png emoji_u''${png//-/_}
+      done
+      popd
+    '';
 
   makeFlags = [
     "EMOJI=TwitterColorEmoji"

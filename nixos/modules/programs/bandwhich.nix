@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let cfg = config.programs.bandwhich;
-in {
+in
+{
   meta.maintainers = with maintainers; [ filalex77 ];
 
   options = {

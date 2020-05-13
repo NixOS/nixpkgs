@@ -4,7 +4,6 @@
 , makeWrapper
 , gdb
 }:
-
 let
   pythonPath = with python3.pkgs; makePythonPath [
     future
@@ -19,7 +18,8 @@ let
     pygments
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pwndbg";
   version = "2019.12.09";
   format = "other";

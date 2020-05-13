@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   name = "libf2c-20160102";

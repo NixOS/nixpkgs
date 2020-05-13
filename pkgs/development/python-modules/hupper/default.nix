@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcov, watchdog, mock
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, pytestcov
+, watchdog
+, mock
 }:
 
 buildPythonPackage rec {

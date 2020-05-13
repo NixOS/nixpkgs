@@ -14,7 +14,7 @@ rec {
 
   packageName = "pcall-queue";
 
-  asdFilesToKeep = ["pcall-queue.asd"];
+  asdFilesToKeep = [ "pcall-queue.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM pcall-queue DESCRIPTION System lacks description SHA256

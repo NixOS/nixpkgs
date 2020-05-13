@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, coreutils, autoreconfHook, smlnj }:
-
 let
   rev = "7376cb20ba5285a6b076a73c821e4743809c1d9d";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "manticore";
   version = "2019.12.03";
- 
+
   src = fetchFromGitHub {
     owner = "ManticoreProject";
     repo = "manticore";
@@ -14,9 +14,9 @@ in stdenv.mkDerivation {
   };
 
   enableParallelBuilding = false;
- 
+
   nativeBuildInputs = [ autoreconfHook ];
-  
+
   buildInputs = [ coreutils smlnj ];
 
   autoreconfFlags = "-Iconfig -vfi";
@@ -28,8 +28,8 @@ in stdenv.mkDerivation {
     mv source repo_checkout
     cd repo_checkout
     chmod u+w . -R
-  ''; 
-  
+  '';
+
   postPatch = ''
     patchShebangs .
     substituteInPlace configure.ac --replace 'MANTICORE_ROOT=`pwd`' 'MANTICORE_ROOT=$out/repo_checkout'

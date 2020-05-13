@@ -14,7 +14,7 @@ rec {
 
   packageName = "iolib.asdf";
 
-  asdFilesToKeep = ["iolib.asdf.asd"];
+  asdFilesToKeep = [ "iolib.asdf.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iolib.asdf DESCRIPTION A few ASDF component classes. SHA256

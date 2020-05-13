@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "lxappearance-0.6.3";
 
-  src = fetchurl{
+  src = fetchurl {
     url = "mirror://sourceforge/project/lxde/LXAppearance/${name}.tar.xz";
     sha256 = "0f4bjaamfxxdr9civvy55pa6vv9dx1hjs522gjbbgx7yp1cdh8kj";
   };

@@ -1,7 +1,5 @@
 { stdenv, fetchurl, withoutInitTools ? false }:
-
 let version = "2.96"; in
-
 stdenv.mkDerivation {
   name = (if withoutInitTools then "sysvtools" else "sysvinit") + "-" + version;
 
@@ -26,7 +24,9 @@ stdenv.mkDerivation {
     mv $out/sbin/killall5 $out/bin
     ln -sf killall5 $out/bin/pidof
   ''
-    + stdenv.lib.optionalString withoutInitTools
+  +
+  stdenv.lib.optionalString
+    withoutInitTools
     ''
       shopt -s extglob
       rm -rf $out/sbin/!(sulogin)

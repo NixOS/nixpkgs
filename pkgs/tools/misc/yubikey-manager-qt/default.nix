@@ -15,9 +15,7 @@
 , yubikey-manager
 , yubikey-personalization
 }:
-
 let inherit (stdenv) lib; in
-
 stdenv.mkDerivation rec {
   pname = "yubikey-manager-qt";
   version = "1.1.4";

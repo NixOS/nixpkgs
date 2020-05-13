@@ -1,10 +1,7 @@
-
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.uvcvideo;
 
   uvcdynctrl-udev-rules = packages: pkgs.callPackage ./uvcdynctrl-udev-rules.nix {
@@ -13,7 +10,6 @@ let
   };
 
 in
-
 {
 
   options = {

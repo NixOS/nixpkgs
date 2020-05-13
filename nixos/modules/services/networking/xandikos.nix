@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.xandikos;
 in
@@ -43,7 +42,7 @@ in
       };
 
       extraOptions = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         example = literalExample ''
           [ "--autocreate"
@@ -58,7 +57,7 @@ in
       };
 
       nginx = mkOption {
-        default = {};
+        default = { };
         description = ''
           Configuration for nginx reverse proxy.
         '';

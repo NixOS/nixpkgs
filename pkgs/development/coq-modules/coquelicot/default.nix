@@ -1,5 +1,4 @@
 { stdenv, fetchurl, which, coq, ssreflect }:
-
 let param =
   if stdenv.lib.versionAtLeast coq.coq-version "8.8"
   then {
@@ -12,7 +11,6 @@ let param =
     sha256 = "1biia7nfqf7vaqq5gmykl4rwjyvrcwss6r2jdf0in5pvp2rnrj2w";
   }
 ; in
-
 stdenv.mkDerivation {
   name = "coq${coq.coq-version}-coquelicot-${param.version}";
   src = fetchurl {

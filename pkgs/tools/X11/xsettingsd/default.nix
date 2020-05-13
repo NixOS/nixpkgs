@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     scons -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
   '';
-  
+
   installPhase = ''
     install -D -t "$out"/bin xsettingsd dump_xsettings
     install -D -t "$out"/usr/share/man/man1 xsettingsd.1 dump_xsettings.1

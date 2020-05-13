@@ -1,6 +1,12 @@
-{ stdenv, lib, python, kernel, makeWrapper, writeText
-, gawk, iproute }:
-
+{ stdenv
+, lib
+, python
+, kernel
+, makeWrapper
+, writeText
+, gawk
+, iproute
+}:
 let
   libexec = "libexec/hypervkvpd";
 
@@ -64,7 +70,8 @@ let
       WantedBy=hyperv-daemons.target
     '';
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "hyperv-daemons";
   inherit (kernel) version;
 
@@ -77,8 +84,8 @@ in stdenv.mkDerivation {
     system=$lib/lib/systemd/system
 
     install -Dm444 ${service "fcopy" "file copy (FCOPY)" "hv_fcopy" } $system/hv-fcopy.service
-    install -Dm444 ${service "kvp"   "key-value pair (KVP)"     ""  } $system/hv-kvp.service
-    install -Dm444 ${service "vss"   "volume shadow copy (VSS)" ""  } $system/hv-vss.service
+    install -Dm444 ${service "kvp" "key-value pair (KVP)" ""  } $system/hv-kvp.service
+    install -Dm444 ${service "vss" "volume shadow copy (VSS)" ""  } $system/hv-vss.service
 
     cat > $system/hyperv-daemons.target <<EOF
     [Unit]

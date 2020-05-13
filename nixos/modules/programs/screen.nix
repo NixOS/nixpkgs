@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
-
 let
   inherit (lib) mkOption mkIf types;
   cfg = config.programs.screen;
 in
-
 {
   ###### interface
 
@@ -27,7 +25,7 @@ in
     environment.etc.screenrc.text = cfg.screenrc;
 
     environment.systemPackages = [ pkgs.screen ];
-    security.pam.services.screen = {};
+    security.pam.services.screen = { };
   };
 
 }

@@ -17,7 +17,7 @@ buildGoPackage rec {
     description = "Open source framework for processing, monitoring, and alerting on time series data";
     license = licenses.mit;
     homepage = https://influxdata.com/time-series-platform/kapacitor/;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = with platforms; linux;
   };
 }

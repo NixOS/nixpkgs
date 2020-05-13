@@ -1,5 +1,4 @@
 { stdenv, pythonPackages, fetchFromGitHub }:
-
 let
   pgdbconn = pythonPackages.buildPythonPackage {
     pname = "pgdbconn";
@@ -18,7 +17,6 @@ let
     ];
   };
 in
-
 pythonPackages.buildPythonApplication {
   pname = "pyrseas";
   version = "0.8.0";

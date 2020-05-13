@@ -1,5 +1,4 @@
-{ pkgs, config, lib, ... } :
-
+{ pkgs, config, lib, ... }:
 let
   inherit (lib) mkIf concatStringsSep concatMapStrings toList mapAttrs
     mapAttrsToList;
@@ -7,23 +6,28 @@ let
   kerberos = config.krb5.kerberos;
   stateDir = "/var/heimdal";
   aclFiles = mapAttrs
-    (name: {acl, ...}: pkgs.writeText "${name}.acl" (concatMapStrings ((
-      {principal, access, target, ...} :
-      "${principal}\t${concatStringsSep "," (toList access)}\t${target}\n"
-    )) acl)) cfg.realms;
+    (name: { acl, ... }: pkgs.writeText "${name}.acl" (concatMapStrings
+      ((
+        { principal, access, target, ... }:
+        "${principal}\t${concatStringsSep "," (toList access)}\t${target}\n"
+      ))
+      acl
+    ))
+    cfg.realms;
 
-  kdcConfigs = mapAttrsToList (name: value: ''
-    database = {
-      dbname = ${stateDir}/heimdal
-      acl_file = ${value}
-    }
-  '') aclFiles;
+  kdcConfigs = mapAttrsToList
+    (name: value: ''
+      database = {
+        dbname = ${stateDir}/heimdal
+        acl_file = ${value}
+      }
+    '')
+    aclFiles;
   kdcConfFile = pkgs.writeText "kdc.conf" ''
     [kdc]
     ${concatStringsSep "\n" kdcConfigs}
   '';
 in
-
 {
   # No documentation about correct triggers, so guessing at them.
 

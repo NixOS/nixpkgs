@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   inherit (sourceInfo) name version;
-  buildInputs = [libuuid libselinux];
+  buildInputs = [ libuuid libselinux ];
 
   preConfigure = ''
     sed -e '/sysconfdir=\/etc/d; ' -i configure
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       sha256 = "0h89jz9l5d4rqj647ljbnv451l4ncqpsvzj0v70mn5391hfwsjlv";
     })
     (fetchpatch {
-      url =  "https://github.com/nilfs-dev/nilfs-utils/commit/51b32c614be9e98c32de7f531ee600ca0740946f.patch";
+      url = "https://github.com/nilfs-dev/nilfs-utils/commit/51b32c614be9e98c32de7f531ee600ca0740946f.patch";
       sha256 = "1ycq83c6jjy74aif47v075k5y2szzwhq6mbcrpd1z4b4i1x6yhpn";
     })
   ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     description = "NILFS utilities";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    license =  with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2 lgpl21 ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
     updateWalker = true;
   };

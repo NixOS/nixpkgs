@@ -1,5 +1,4 @@
 { stdenv, mkDerivation, fetchFromGitHub, cmake, qtbase, alsaLib, makeDesktopItem }:
-
 let
   desktopItem = makeDesktopItem rec {
     name = "Munt";
@@ -8,7 +7,8 @@ let
     genericName = "Munt synthesiser";
     categories = "Audio;AudioVideo;";
   };
-in mkDerivation rec {
+in
+mkDerivation rec {
   version = "2.3.0";
   pname = "munt";
 

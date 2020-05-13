@@ -3,13 +3,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.virtualisation.lxc;
 
 in
-
 {
   ###### interface
 

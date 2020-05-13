@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "2.2";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "oldstandard-${version}";
 
   url = "https://github.com/akryukov/oldstand/releases/download/v${version}/${name}.otf.zip";

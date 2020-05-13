@@ -1,5 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, future, networkx, pygments, lxml, colorama, matplotlib,
-  asn1crypto, click, pydot, ipython, pyqt5, pyperclip }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, future
+, networkx
+, pygments
+, lxml
+, colorama
+, matplotlib
+, asn1crypto
+, click
+, pydot
+, ipython
+, pyqt5
+, pyperclip
+}:
 
 buildPythonPackage rec {
   version = "3.3.5";

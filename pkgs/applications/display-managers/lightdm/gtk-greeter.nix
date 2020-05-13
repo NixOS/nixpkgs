@@ -17,7 +17,6 @@
 
 #ToDo: bad icons with gtk2;
 #  avatar icon is missing in standard hicolor theme, I don't know where gtk3 takes it from
-
 let
   ver_branch = "2.0";
   version = "2.0.7";

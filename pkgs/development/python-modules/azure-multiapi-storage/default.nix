@@ -1,4 +1,8 @@
-{ lib, python, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, python
+, buildPythonPackage
+, fetchPypi
+, isPy27
 , azure-common
 , msrest
 , msrestazure

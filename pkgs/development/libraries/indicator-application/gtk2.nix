@@ -1,7 +1,17 @@
-{ stdenv, fetchurl, lib, file
-, pkgconfig, autoconf
-, glib, dbus-glib, json-glib
-, gtk2, libindicator-gtk2, libdbusmenu-gtk2, libappindicator-gtk2 }:
+{ stdenv
+, fetchurl
+, lib
+, file
+, pkgconfig
+, autoconf
+, glib
+, dbus-glib
+, json-glib
+, gtk2
+, libindicator-gtk2
+, libdbusmenu-gtk2
+, libappindicator-gtk2
+}:
 
 with lib;
 
@@ -17,8 +27,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf ];
 
   buildInputs = [
-    glib dbus-glib json-glib
-    gtk2 libindicator-gtk2 libdbusmenu-gtk2 libappindicator-gtk2
+    glib
+    dbus-glib
+    json-glib
+    gtk2
+    libindicator-gtk2
+    libdbusmenu-gtk2
+    libappindicator-gtk2
   ];
 
   postPatch = ''

@@ -1,5 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, flask, events
-, pymongo, simplejson, cerberus, werkzeug }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, flask
+, events
+, pymongo
+, simplejson
+, cerberus
+, werkzeug
+}:
 
 buildPythonPackage rec {
   pname = "Eve";

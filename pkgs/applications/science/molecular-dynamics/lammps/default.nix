@@ -1,14 +1,38 @@
-{ stdenv, fetchFromGitHub
-, libpng, gzip, fftw, openblas
+{ stdenv
+, fetchFromGitHub
+, libpng
+, gzip
+, fftw
+, openblas
 , mpi ? null
 }:
-let packages = [
-     "asphere" "body" "class2" "colloid" "compress" "coreshell"
-     "dipole" "granular" "kspace" "manybody" "mc" "misc" "molecule"
-     "opt" "peri" "qeq" "replica" "rigid" "shock" "snap" "srd" "user-reaxc"
-    ];
-    lammps_includes = "-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64";
-    withMPI = (mpi != null);
+let
+  packages = [
+    "asphere"
+    "body"
+    "class2"
+    "colloid"
+    "compress"
+    "coreshell"
+    "dipole"
+    "granular"
+    "kspace"
+    "manybody"
+    "mc"
+    "misc"
+    "molecule"
+    "opt"
+    "peri"
+    "qeq"
+    "replica"
+    "rigid"
+    "shock"
+    "snap"
+    "srd"
+    "user-reaxc"
+  ];
+  lammps_includes = "-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64";
+  withMPI = (mpi != null);
 in
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
@@ -58,7 +82,7 @@ stdenv.mkDerivation rec {
       National Laboratories, a US Department of Energy facility, with
       funding from the DOE. It is an open-source code, distributed freely
       under the terms of the GNU Public License (GPL).
-      '';
+    '';
     homepage = http://lammps.sandia.gov;
     license = licenses.gpl2;
     platforms = platforms.linux;

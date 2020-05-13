@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
       url = "https://trac.macports.org/export/70964/trunk/dports/audio/cdparanoia/files/patch-paranoia_paranoia.c.10.4.diff";
       sha256 = "17l2qhn8sh4jy6ryy5si6ll6dndcm0r537rlmk4a6a8vkn852vad";
     })
-    ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./utils.patch
-    ++ [./fix_private_keyword.patch];
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./utils.patch
+  ++ [ ./fix_private_keyword.patch ];
 
   nativeBuildInputs = stdenv.lib.optional stdenv.isAarch64 autoreconfHook;
 

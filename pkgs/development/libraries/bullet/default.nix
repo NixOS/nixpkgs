@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut
-, Cocoa,  OpenGL
+{ stdenv
+, fetchFromGitHub
+, cmake
+, libGLU
+, libGL
+, freeglut
+, Cocoa
+, OpenGL
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +46,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString
+    stdenv.cc.isClang
     "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 
   meta = with stdenv.lib; {

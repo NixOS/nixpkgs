@@ -1,4 +1,4 @@
-{  makeWrapper, symlinkJoin, configFile ? null, termite }:
+{ makeWrapper, symlinkJoin, configFile ? null, termite }:
 
 if configFile == null then termite else symlinkJoin {
   name = "termite-with-config-${termite.version}";

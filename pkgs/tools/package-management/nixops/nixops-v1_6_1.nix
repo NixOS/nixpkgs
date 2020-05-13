@@ -20,13 +20,15 @@ callPackage ./generic.nix (rec {
   # see
   # https://github.com/NixOS/nixops/issues/1065
   python2Packages = pkgs.python2Packages.override {
-    overrides = (self: super: let callPackage = newScope self; in {
-      azure-mgmt-compute = callPackage ./azure-mgmt-compute { };
-      azure-mgmt-network = callPackage ./azure-mgmt-network { };
-      azure-mgmt-nspkg = callPackage ./azure-mgmt-nspkg { };
-      azure-mgmt-resource = callPackage ./azure-mgmt-resource { };
-      azure-mgmt-storage = callPackage ./azure-mgmt-storage { };
-      azure-storage = callPackage ./azure-storage { };
-    });
+    overrides = (self: super:
+      let callPackage = newScope self; in
+      {
+        azure-mgmt-compute = callPackage ./azure-mgmt-compute { };
+        azure-mgmt-network = callPackage ./azure-mgmt-network { };
+        azure-mgmt-nspkg = callPackage ./azure-mgmt-nspkg { };
+        azure-mgmt-resource = callPackage ./azure-mgmt-resource { };
+        azure-mgmt-storage = callPackage ./azure-mgmt-storage { };
+        azure-storage = callPackage ./azure-storage { };
+      });
   };
 })

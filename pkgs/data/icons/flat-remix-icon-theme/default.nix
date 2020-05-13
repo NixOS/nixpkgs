@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub , gtk3 }:
+{ stdenv, fetchFromGitHub, gtk3 }:
 
 stdenv.mkDerivation rec  {
   pname = "flat-remix-icon-theme";
   version = "20191122";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "daniruiz";
     repo = "flat-remix";
     rev = version;
@@ -32,4 +32,3 @@ stdenv.mkDerivation rec  {
     maintainers = with maintainers; [ mschneider ];
   };
 }
- 

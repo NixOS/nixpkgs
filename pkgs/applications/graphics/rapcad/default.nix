@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchurl, cgal, boost, gmp, mpfr, flex, bison, dxflib, readline
-, qtbase, qmake, libGLU
+{ stdenv
+, fetchFromGitHub
+, fetchurl
+, cgal
+, boost
+, gmp
+, mpfr
+, flex
+, bison
+, dxflib
+, readline
+, qtbase
+, qmake
+, libGLU
 }:
 
 stdenv.mkDerivation rec {

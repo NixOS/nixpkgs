@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, alsaLib, cmake, docbook_xsl, docbook_xml_dtd_45, doxygen
-, fluidsynth, pkgconfig, qt5
+{ stdenv
+, fetchurl
+, alsaLib
+, cmake
+, docbook_xsl
+, docbook_xml_dtd_45
+, doxygen
+, fluidsynth
+, pkgconfig
+, qt5
 }:
 
 stdenv.mkDerivation rec {
@@ -18,11 +26,15 @@ stdenv.mkDerivation rec {
   #Temporarily remove drumstick-piano; Gives segment fault. Submitted ticket
   postInstall = ''
     rm $out/bin/drumstick-vpiano
-    '';
+  '';
 
   nativeBuildInputs = [ cmake pkgconfig docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_45 ];
   buildInputs = [
-    alsaLib doxygen fluidsynth qt5.qtbase qt5.qtsvg
+    alsaLib
+    doxygen
+    fluidsynth
+    qt5.qtbase
+    qt5.qtsvg
   ];
 
   meta = with stdenv.lib; {

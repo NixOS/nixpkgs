@@ -34,9 +34,11 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
-       (if (readline != null)
-        then [ "--with-readline" ]
-        else [ "--without-readline" ])
+    (
+      if (readline != null)
+      then [ "--with-readline" ]
+      else [ "--without-readline" ]
+    )
     ++ stdenv.lib.optional (lvm2 == null) "--disable-device-mapper"
     ++ stdenv.lib.optional enableStatic "--enable-static";
 

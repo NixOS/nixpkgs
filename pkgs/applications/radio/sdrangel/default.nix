@@ -1,31 +1,29 @@
-{
-airspy,
-boost,
-cm256cc,
-cmake,
-codec2,
-fetchFromGitHub,
-fftwFloat,
-glew,
-hackrf,
-lib,
-libav,
-libiio,
-libopus,
-libpulseaudio,
-libusb,
-limesuite,
-mkDerivation,
-ocl-icd,
-opencv3,
-pkgconfig,
-qtbase,
-qtmultimedia,
-qtwebsockets,
-rtl-sdr,
-serialdv
+{ airspy
+, boost
+, cm256cc
+, cmake
+, codec2
+, fetchFromGitHub
+, fftwFloat
+, glew
+, hackrf
+, lib
+, libav
+, libiio
+, libopus
+, libpulseaudio
+, libusb
+, limesuite
+, mkDerivation
+, ocl-icd
+, opencv3
+, pkgconfig
+, qtbase
+, qtmultimedia
+, qtwebsockets
+, rtl-sdr
+, serialdv
 }:
-
 let
 
   codec2' = codec2.overrideAttrs (old: {
@@ -37,7 +35,8 @@ let
     };
   });
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "sdrangel";
   version = "4.11.12";
 
@@ -51,9 +50,25 @@ in mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
-    glew opencv3 libusb boost libopus limesuite libav libiio libpulseaudio
-    qtbase qtwebsockets qtmultimedia rtl-sdr airspy hackrf
-    fftwFloat codec2' cm256cc serialdv
+    glew
+    opencv3
+    libusb
+    boost
+    libopus
+    limesuite
+    libav
+    libiio
+    libpulseaudio
+    qtbase
+    qtwebsockets
+    qtmultimedia
+    rtl-sdr
+    airspy
+    hackrf
+    fftwFloat
+    codec2'
+    cm256cc
+    serialdv
   ];
   cmakeFlags = [
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
@@ -66,7 +81,7 @@ in mkDerivation rec {
   meta = with lib; {
     description = "Software defined radio (SDR) software";
     longDescription = ''
-        SDRangel is an Open Source Qt5 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
+      SDRangel is an Open Source Qt5 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
     '';
     homepage = "https://github.com/f4exb/sdrangel";
     license = licenses.gpl3Plus;

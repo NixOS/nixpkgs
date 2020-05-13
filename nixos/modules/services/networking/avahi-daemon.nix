@@ -1,11 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.avahi;
 
-  yesNo = yes : if yes then "yes" else "no";
+  yesNo = yes: if yes then "yes" else "no";
 
   avahiDaemonConf = with cfg; pkgs.writeText "avahi-daemon.conf" ''
     [server]
@@ -17,10 +16,10 @@ let
     browse-domains=${concatStringsSep ", " browseDomains}
     use-ipv4=${yesNo ipv4}
     use-ipv6=${yesNo ipv6}
-    ${optionalString (interfaces!=null) "allow-interfaces=${concatStringsSep "," interfaces}"}
-    ${optionalString (domainName!=null) "domain-name=${domainName}"}
+    ${optionalString (interfaces != null) "allow-interfaces=${concatStringsSep "," interfaces}"}
+    ${optionalString (domainName != null) "domain-name=${domainName}"}
     allow-point-to-point=${yesNo allowPointToPoint}
-    ${optionalString (cacheEntriesMax!=null) "cache-entries-max=${toString cacheEntriesMax}"}
+    ${optionalString (cacheEntriesMax != null) "cache-entries-max=${toString cacheEntriesMax}"}
 
     [wide-area]
     enable-wide-area=${yesNo wideArea}
@@ -111,7 +110,7 @@ in
     allowPointToPoint = mkOption {
       type = types.bool;
       default = false;
-      description= ''
+      description = ''
         Whether to use POINTTOPOINT interfaces. Might make mDNS unreliable due to usually large
         latencies with such links and opens a potential security hole by allowing mDNS access from Internet
         connections.
@@ -132,7 +131,7 @@ in
 
     extraServiceFiles = mkOption {
       type = with types; attrsOf (either str path);
-      default = {};
+      default = { };
       example = literalExample ''
         {
           ssh = "''${pkgs.avahi}/etc/avahi/services/ssh.service";
@@ -235,16 +234,19 @@ in
       isSystemUser = true;
     };
 
-    users.groups.avahi = {};
+    users.groups.avahi = { };
 
     system.nssModules = optional cfg.nssmdns pkgs.nssmdns;
 
     environment.systemPackages = [ pkgs.avahi ];
 
-    environment.etc = (mapAttrs' (n: v: nameValuePair
-      "avahi/services/${n}.service"
-      { ${if types.path.check v then "source" else "text"} = v; }
-    ) cfg.extraServiceFiles);
+    environment.etc = (
+      mapAttrs'
+        (n: v: nameValuePair
+          "avahi/services/${n}.service" { ${if types.path.check v then "source" else "text"} = v; }
+        )
+        cfg.extraServiceFiles
+    );
 
     systemd.sockets.avahi-daemon = {
       description = "Avahi mDNS/DNS-SD Stack Activation Socket";

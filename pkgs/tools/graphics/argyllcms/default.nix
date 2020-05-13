@@ -1,9 +1,26 @@
-{ stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
-, libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
-, libXdmcp, libXau, lib, openssl }:
+{ stdenv
+, fetchzip
+, jam
+, unzip
+, libX11
+, libXxf86vm
+, libXrandr
+, libXinerama
+, libXrender
+, libXext
+, libtiff
+, libjpeg
+, libpng
+, libXScrnSaver
+, writeText
+, libXdmcp
+, libXau
+, lib
+, openssl
+}:
 let
   version = "2.1.2";
- in
+in
 stdenv.mkDerivation rec {
   pname = "argyllcms";
   inherit version;
@@ -90,8 +107,19 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libtiff libjpeg libpng libX11 libXxf86vm libXrandr libXinerama libXext
-    libXrender libXScrnSaver libXdmcp libXau openssl
+    libtiff
+    libjpeg
+    libpng
+    libX11
+    libXxf86vm
+    libXrandr
+    libXinerama
+    libXext
+    libXrender
+    libXScrnSaver
+    libXdmcp
+    libXau
+    openssl
   ];
 
   buildFlags = [ "all" ];
@@ -118,7 +146,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.argyllcms.com;
     description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

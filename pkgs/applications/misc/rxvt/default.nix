@@ -1,6 +1,11 @@
-{ stdenv, fetchurl
-, pkgconfig, libtool
-, libX11, libXt, libXpm }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libtool
+, libX11
+, libXt
+, libXpm
+}:
 
 stdenv.mkDerivation rec {
   pname = "rxvt";

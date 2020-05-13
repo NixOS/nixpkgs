@@ -1,5 +1,4 @@
 { stdenv, fetchurl, fetchsvn, jdk, jre, ant, makeWrapper }:
-
 let
   fastutil = fetchurl {
     url = "http://ivy.mkgmap.org.uk/repo/it.unimi.dsi/fastutil/6.5.15-mkg.1b/jars/fastutil.jar";
@@ -14,7 +13,6 @@ let
     sha256 = "0x6c4pbsizvk3lm6nxcgi1g2iqgrxcna1ip74lbn01f0fm2wdhg0";
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "mkgmap";
   version = "4432";

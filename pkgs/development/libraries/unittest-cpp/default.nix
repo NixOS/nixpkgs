@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, cmake}:
+{ stdenv, fetchFromGitHub, cmake }:
 
 with stdenv.lib;
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sxb3835nly1jxn071f59fwbdzmqi74j040r81fanxyw3s1azw0i";
   };
 
-  buildInputs = [cmake];
+  buildInputs = [ cmake ];
 
   doCheck = false;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/unittest-cpp/unittest-cpp;
     description = "Lightweight unit testing framework for C++";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

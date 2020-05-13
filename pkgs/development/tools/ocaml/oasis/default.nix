@@ -15,20 +15,25 @@ stdenv.mkDerivation {
 
   buildInputs =
     [
-      ocaml findlib ocamlbuild ocamlmod ocamlify
+      ocaml
+      findlib
+      ocamlbuild
+      ocamlmod
+      ocamlify
     ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out";
-  buildPhase     = "ocaml setup.ml -build";
-  installPhase   = "ocaml setup.ml -install";
+  buildPhase = "ocaml setup.ml -build";
+  installPhase = "ocaml setup.ml -install";
 
   meta = with stdenv.lib; {
     homepage = http://oasis.forge.ocamlcore.org/;
     description = "Configure, build and install system for OCaml projects";
     license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with maintainers; [
-      vbgl maggesi
+      vbgl
+      maggesi
     ];
   };
 }

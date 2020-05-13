@@ -14,7 +14,7 @@ rec {
 
   packageName = "xsubseq";
 
-  asdFilesToKeep = ["xsubseq.asd"];
+  asdFilesToKeep = [ "xsubseq.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM xsubseq DESCRIPTION Efficient way to manage "subseq"s in Common Lisp

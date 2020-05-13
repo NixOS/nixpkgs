@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   installPhase = ''
-     mkdir -p $out/share/icons
-     mv {,e}Papirus* $out/share/icons
+    mkdir -p $out/share/icons
+    mv {,e}Papirus* $out/share/icons
   '';
 
   postFixup = ''

@@ -1,13 +1,15 @@
-{ stdenv, rustPlatform, fetchFromGitHub, sqlite }: let
+{ stdenv, rustPlatform, fetchFromGitHub, sqlite }:
+let
 
-manifest = {
-  description = "Bukubrow extension host application";
-  name = "com.samhh.bukubrow";
-  path = "@out@/bin/bukubrow";
-  type = "stdio";
-};
+  manifest = {
+    description = "Bukubrow extension host application";
+    name = "com.samhh.bukubrow";
+    path = "@out@/bin/bukubrow";
+    type = "stdio";
+  };
 
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "bukubrow-host";
   version = "5.0.0";
 
@@ -46,4 +48,3 @@ in rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ infinisil ];
   };
 }
-

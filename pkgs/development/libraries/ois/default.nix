@@ -1,11 +1,19 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, libX11, xorgproto
-, libXi, libXaw, libXmu, libXt }:
-
+{ stdenv
+, fetchurl
+, autoconf
+, automake
+, libtool
+, libX11
+, xorgproto
+, libXi
+, libXaw
+, libXmu
+, libXt
+}:
 let
   majorVersion = "1";
   minorVersion = "3";
 in
-
 stdenv.mkDerivation rec {
   pname = "ois";
   version = "${majorVersion}.${minorVersion}";
@@ -26,8 +34,15 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p0" ];
 
   buildInputs = [
-    autoconf automake libtool libX11 xorgproto libXi libXaw
-    libXmu libXt
+    autoconf
+    automake
+    libtool
+    libX11
+    xorgproto
+    libXi
+    libXaw
+    libXmu
+    libXt
   ];
 
   preConfigure = "sh bootstrap";

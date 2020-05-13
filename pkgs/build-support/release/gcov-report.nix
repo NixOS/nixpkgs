@@ -1,9 +1,10 @@
 { runCommand, lcov, rsync, coverageRuns, lcovFilter ? [ "/nix/store/*" ], baseDirHack ? false }:
 
 runCommand "coverage"
-  { buildInputs = [ lcov rsync ];
-    inherit lcovFilter baseDirHack;
-  }
+{
+  buildInputs = [ lcov rsync ];
+  inherit lcovFilter baseDirHack;
+}
   ''
     mkdir -p $TMPDIR/gcov $out/nix-support $out/coverage
     info=$out/coverage/full.info

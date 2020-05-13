@@ -9,7 +9,6 @@
 
 , buildWithPatches ? true
 }:
-
 let
   llvmPkgs = llvmPackages_8 // {
     inherit spirv-llvm-translator;
@@ -20,7 +19,8 @@ let
   addPatches = component: pkg:
     with builtins; with stdenv.lib;
     let path = "${passthru.patchesOut}/${component}";
-    in pkg.overrideAttrs (super: {
+    in
+    pkg.overrideAttrs (super: {
       postPatch = (if super ? postPatch then super.postPatch + "\n" else "") + ''
         for p in ${path}/*
         do
@@ -50,10 +50,11 @@ let
 
   };
 
-  lib = let
-    inherit (llvmPkgs) llvm;
-    inherit (if buildWithPatches then passthru else llvmPkgs) clang-unwrapped spirv-llvm-translator;
-  in
+  lib =
+    let
+      inherit (llvmPkgs) llvm;
+      inherit (if buildWithPatches then passthru else llvmPkgs) clang-unwrapped spirv-llvm-translator;
+    in
     stdenv.mkDerivation rec {
       pname = "opencl-clang";
       version = "unstable-2019-08-16";
@@ -68,8 +69,8 @@ let
       };
 
       patches = [
-      # Build script tries to find Clang OpenCL headers under ${llvm}
-      # Work around it by specifying that directory manually.
+        # Build script tries to find Clang OpenCL headers under ${llvm}
+        # Work around it by specifying that directory manually.
         ./opencl-headers-dir.patch
       ];
 
@@ -86,12 +87,12 @@ let
       ];
 
       meta = with stdenv.lib; {
-        homepage    = https://github.com/intel/opencl-clang/;
+        homepage = https://github.com/intel/opencl-clang/;
         description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
-        license     = licenses.ncsa;
-        platforms   = platforms.all;
+        license = licenses.ncsa;
+        platforms = platforms.all;
         maintainers = with maintainers; [ gloaming ];
       };
     };
 in
-  lib
+lib

@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412
-, libxslt, docbook_xsl, autoconf, automake, gettext, libiconv, libtool}:
+{ stdenv
+, fetchurl
+, fetchpatch
+, xmlto
+, docbook_xml_dtd_412
+, libxslt
+, docbook_xsl
+, autoconf
+, automake
+, gettext
+, libiconv
+, libtool
+}:
 
 stdenv.mkDerivation {
   name = "opensp-1.5.2";
@@ -20,14 +31,14 @@ stdenv.mkDerivation {
       sha256 = "04q14s8qsad0bkjmj067dn831i0r6v7742rafdlnbfm5y249m2q6";
     })
   ];
-  
+
   setupHook = ./setup-hook.sh;
 
   postFixup = ''
     # Remove random ids in the release notes
     sed -i -e 's/href="#idm.*"//g' $out/share/doc/OpenSP/releasenotes.html
     sed -i -e 's/name="idm.*"//g' $out/share/doc/OpenSP/releasenotes.html
-    '';
+  '';
 
   preConfigure = if stdenv.isCygwin then "autoreconf -fi" else null;
 

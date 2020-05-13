@@ -1,7 +1,13 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, oasis, ocaml_optcomp, camlp4
+{ stdenv
+, fetchzip
+, ocaml
+, findlib
+, ocamlbuild
+, oasis
+, ocaml_optcomp
+, camlp4
 , num
 }:
-
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.03"
   then {
@@ -13,9 +19,7 @@ let param =
     sha256 = "0gg3nr3iic4rwqrcc0qvfm9x0x57zclvdsnpy0z8rv2fl5isbzms";
   };
 in
-
 let inherit (param) version; in
-
 stdenv.mkDerivation {
   pname = "ocsigen-deriving";
   inherit version;
@@ -25,17 +29,18 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ ocaml findlib ocamlbuild oasis ocaml_optcomp camlp4 ]
-  ++ (param.buildInputs or []);
+    ++ (param.buildInputs or [ ]);
 
   createFindlibDestdir = true;
 
-  meta =  {
+  meta = {
     homepage = https://github.com/ocsigen/deriving;
     description = "Extension to OCaml for deriving functions from type declarations";
     license = stdenv.lib.licenses.mit;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with stdenv.lib.maintainers; [
-      gal_bolle vbgl
+      gal_bolle
+      vbgl
     ];
   };
 

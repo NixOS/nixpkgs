@@ -4,13 +4,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.rogue;
 
 in
-
 {
   ###### interface
 
@@ -43,10 +41,12 @@ in
     console.extraTTYs = [ cfg.tty ];
 
     systemd.services.rogue =
-      { description = "Rogue dungeon crawling game";
+      {
+        description = "Rogue dungeon crawling game";
         wantedBy = [ "multi-user.target" ];
         serviceConfig =
-          { ExecStart = "${pkgs.rogue}/bin/rogue";
+          {
+            ExecStart = "${pkgs.rogue}/bin/rogue";
             StandardInput = "tty";
             StandardOutput = "tty";
             TTYPath = "/dev/${cfg.tty}";

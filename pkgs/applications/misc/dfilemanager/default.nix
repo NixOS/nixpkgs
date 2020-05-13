@@ -1,5 +1,4 @@
 { stdenv, mkDerivation, fetchgit, cmake, file, qtbase, qttools, solid }:
-
 let
   version = "git-2016-01-10";
 in

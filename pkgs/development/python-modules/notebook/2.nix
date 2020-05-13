@@ -38,8 +38,19 @@ buildPythonPackage rec {
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [
-    jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
-    jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
+    jinja2
+    tornado
+    ipython_genutils
+    traitlets
+    jupyter_core
+    send2trash
+    jupyter_client
+    nbformat
+    nbconvert
+    ipykernel
+    terminado
+    requests
+    pexpect
     prometheus_client
   ];
 
@@ -61,7 +72,7 @@ buildPythonPackage rec {
       --exclude test_delete \
       --exclude test_checkpoints_follow_file
     ''
-    else ""}
+      else ""}
   '';
 
   # Some of the tests use localhost networking.

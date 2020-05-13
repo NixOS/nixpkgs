@@ -1,11 +1,11 @@
 { stdenv, fetchurl, guile, texinfo, pkgconfig }:
 
 assert stdenv ? cc && stdenv.cc.isGNU;
-
 let
   name = "guile-lib-${version}";
   version = "0.2.6.1";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {

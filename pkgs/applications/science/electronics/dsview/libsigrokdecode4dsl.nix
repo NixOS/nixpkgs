@@ -1,5 +1,10 @@
-{ stdenv, pkgconfig, autoreconfHook,
-glib, check, python3, dsview
+{ stdenv
+, pkgconfig
+, autoreconfHook
+, glib
+, check
+, python3
+, dsview
 }:
 
 stdenv.mkDerivation {
@@ -14,7 +19,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
   buildInputs = [
-    python3 glib check
+    python3
+    glib
+    check
   ];
 
   meta = with stdenv.lib; {

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Pure Python module to hyphenate text";
     homepage = "https://github.com/Kozea/Pyphen";
-    license = with licenses; [gpl2 lgpl21 mpl20];
+    license = with licenses; [ gpl2 lgpl21 mpl20 ];
     maintainers = with maintainers; [ rvl ];
   };
 }

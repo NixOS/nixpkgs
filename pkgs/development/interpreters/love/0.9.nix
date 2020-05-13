@@ -1,7 +1,18 @@
-{ stdenv, fetchurl, pkgconfig
-, SDL2, libGLU, libGL, openal, luajit
-, libdevil, freetype, physfs
-, libmodplug, mpg123, libvorbis, libogg
+{ stdenv
+, fetchurl
+, pkgconfig
+, SDL2
+, libGLU
+, libGL
+, openal
+, luajit
+, libdevil
+, freetype
+, physfs
+, libmodplug
+, mpg123
+, libvorbis
+, libogg
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +24,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    SDL2 libGLU libGL openal luajit
-    libdevil freetype physfs libmodplug mpg123 libvorbis libogg
+    SDL2
+    libGLU
+    libGL
+    openal
+    luajit
+    libdevil
+    freetype
+    physfs
+    libmodplug
+    mpg123
+    libvorbis
+    libogg
   ];
 
   configureFlags = [

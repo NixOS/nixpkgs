@@ -1,14 +1,19 @@
-{ stdenv, lib, fetchurl
-, SDL, dwarf-fortress-unfuck
+{ stdenv
+, lib
+, fetchurl
+, SDL
+, dwarf-fortress-unfuck
 
-# Our own "unfuck" libs for macOS
-, ncurses, fmodex, gcc
+  # Our own "unfuck" libs for macOS
+, ncurses
+, fmodex
+, gcc
 
-, dfVersion, df-hashes
+, dfVersion
+, df-hashes
 }:
 
 with lib;
-
 let
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
 
@@ -30,18 +35,20 @@ let
   baseVersion = elemAt dfVersionTriple 1;
   patchVersion = elemAt dfVersionTriple 2;
 
-  game = if hasAttr dfVersion df-hashes
-         then getAttr dfVersion df-hashes
-         else throw "Unknown Dwarf Fortress version: ${dfVersion}";
-  dfPlatform = if hasAttr stdenv.hostPlatform.system platforms
-               then getAttr stdenv.hostPlatform.system platforms
-               else throw "Unsupported system: ${stdenv.hostPlatform.system}";
-  sha256 = if hasAttr dfPlatform game
-           then getAttr dfPlatform game
-           else throw "Unsupported dfPlatform: ${dfPlatform}";
+  game =
+    if hasAttr dfVersion df-hashes
+    then getAttr dfVersion df-hashes
+    else throw "Unknown Dwarf Fortress version: ${dfVersion}";
+  dfPlatform =
+    if hasAttr stdenv.hostPlatform.system platforms
+    then getAttr stdenv.hostPlatform.system platforms
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  sha256 =
+    if hasAttr dfPlatform game
+    then getAttr dfPlatform game
+    else throw "Unsupported dfPlatform: ${dfPlatform}";
 
 in
-
 stdenv.mkDerivation {
   name = "dwarf-fortress-${dfVersion}";
 
@@ -56,7 +63,7 @@ stdenv.mkDerivation {
     rm $out/libs/lib*
 
     exe=$out/${if stdenv.isLinux then "libs/Dwarf_Fortress"
-                                 else "dwarfort.exe"}
+      else "dwarfort.exe"}
 
     # Store the original hash
     md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig

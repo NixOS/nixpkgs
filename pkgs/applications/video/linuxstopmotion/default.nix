@@ -1,11 +1,20 @@
-{ stdenv, fetchgit, pkgconfig, qt4, SDL, SDL_image, libvorbis, libtar, libxml2
-, gamin, qmake4Hook
+{ stdenv
+, fetchgit
+, pkgconfig
+, qt4
+, SDL
+, SDL_image
+, libvorbis
+, libtar
+, libxml2
+, gamin
+, qmake4Hook
 }:
 
 stdenv.mkDerivation rec {
   version = "0.8";
   pname = "linuxstopmotion";
-  
+
   src = fetchgit {
     url = "git://git.code.sf.net/p/linuxstopmotion/code";
     rev = "refs/tags/${version}";

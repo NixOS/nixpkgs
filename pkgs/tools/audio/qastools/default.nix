@@ -1,9 +1,7 @@
 { mkDerivation, lib, fetchurl, cmake, alsaLib, udev, qtbase, qtsvg, qttools }:
-
 let
   version = "0.21.0";
 in
-
 mkDerivation {
   pname = "qastools";
   inherit version;
@@ -14,7 +12,11 @@ mkDerivation {
   };
 
   buildInputs = [
-    alsaLib udev qtbase qtsvg qttools
+    alsaLib
+    udev
+    qtbase
+    qtsvg
+    qttools
   ];
   nativeBuildInputs = [ cmake ];
 

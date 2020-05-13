@@ -29,4 +29,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ aaronjanse ];
   };
 }
-

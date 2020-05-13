@@ -1,7 +1,6 @@
 { config, options, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.nixpkgs;
   opt = options.nixpkgs;
@@ -23,12 +22,12 @@ let
     optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
         optCall lhs.packageOverrides pkgs //
-        optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "packageOverrides" ] ({ }) rhs) pkgs;
     } //
     optionalAttrs (lhs ? perlPackageOverrides) {
       perlPackageOverrides = pkgs:
         optCall lhs.perlPackageOverrides pkgs //
-        optCall (attrByPath ["perlPackageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "perlPackageOverrides" ] ({ }) rhs) pkgs;
     };
 
   configType = mkOptionType {
@@ -36,10 +35,10 @@ let
     description = "nixpkgs config";
     check = x:
       let traceXIfNot = c:
-            if c x then true
-            else lib.traceSeqN 1 x false;
+        if c x then true
+        else lib.traceSeqN 1 x false;
       in traceXIfNot isConfig;
-    merge = args: fold (def: mergeConfig def.value) {};
+    merge = args: fold (def: mergeConfig def.value) { };
   };
 
   overlayType = mkOptionType {
@@ -62,13 +61,13 @@ let
   finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
 
 in
-
 {
   options.nixpkgs = {
 
     pkgs = mkOption {
-      defaultText = literalExample
-        ''import "''${nixos}/.." {
+      defaultText =
+        literalExample
+          ''import "''${nixos}/.." {
             inherit (cfg) config overlays localSystem crossSystem;
           }
         '';
@@ -108,11 +107,12 @@ in
     };
 
     config = mkOption {
-      default = {};
-      example = literalExample
-        ''
-          { allowBroken = true; allowUnfree = true; }
-        '';
+      default = { };
+      example =
+        literalExample
+          ''
+            { allowBroken = true; allowUnfree = true; }
+          '';
       type = configType;
       description = ''
         The configuration of the Nix Packages collection.  (For
@@ -124,18 +124,19 @@ in
     };
 
     overlays = mkOption {
-      default = [];
-      example = literalExample
-        ''
-          [
-            (self: super: {
-              openssh = super.openssh.override {
-                hpnSupport = true;
-                kerberos = self.libkrb5;
-              };
-            })
-          ]
-        '';
+      default = [ ];
+      example =
+        literalExample
+          ''
+            [
+              (self: super: {
+                openssh = super.openssh.override {
+                  hpnSupport = true;
+                  kerberos = self.libkrb5;
+                };
+              })
+            ]
+          '';
       type = types.listOf overlayType;
       description = ''
         List of overlays to use with the Nix Packages collection.
@@ -158,8 +159,9 @@ in
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
-      defaultText = literalExample
-        ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
+      defaultText =
+        literalExample
+          ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
         Specifies the platform on which NixOS should be built. When
         <code>nixpkgs.crossSystem</code> is unset, it also specifies
@@ -178,8 +180,9 @@ in
       type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
       example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
-      defaultText = literalExample
-        ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
+      defaultText =
+        literalExample
+          ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
         Specifies the platform for which NixOS should be
         built. Specify this only if it is different from
@@ -243,7 +246,8 @@ in
             then "nixpkgs.crossSystem"
             else "nixpkgs.localSystem";
           pkgsSystem = finalPkgs.stdenv.targetPlatform.system;
-        in {
+        in
+        {
           assertion = nixosExpectedSystem == pkgsSystem;
           message = "The NixOS nixpkgs.pkgs option was set to a Nixpkgs invocation that compiles to target system ${pkgsSystem} but NixOS was configured for system ${nixosExpectedSystem} via NixOS option ${nixosOption}. The NixOS system settings must match the Nixpkgs target system.";
         }

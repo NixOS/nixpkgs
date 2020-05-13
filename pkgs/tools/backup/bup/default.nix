@@ -1,12 +1,16 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, perl, pandoc, python2Packages, git
-, par2cmdline ? null, par2Support ? true
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, perl
+, pandoc
+, python2Packages
+, git
+, par2cmdline ? null
+, par2Support ? true
 }:
 
 assert par2Support -> par2cmdline != null;
-
 let version = "0.30"; in
-
 with stdenv.lib;
 
 stdenv.mkDerivation {
@@ -22,8 +26,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     git
-    (python2Packages.python.withPackages
-      (p: with p; [ setuptools tornado ]
+    (
+      python2Packages.python.withPackages (p: with p; [ setuptools tornado ]
         ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))
   ];
   nativeBuildInputs = [ pandoc perl makeWrapper ];

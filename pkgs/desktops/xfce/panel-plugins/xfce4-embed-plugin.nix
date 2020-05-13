@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-embed-plugin";
+  p_name = "xfce4-embed-plugin";
   ver_maj = "1.6";
   ver_min = "0";
 

@@ -3,51 +3,54 @@
   # Use a minimal kernel?
 , minimal ? false
   # Ignored
-, config ? {}
+, config ? { }
   # Modules to add to each VM
-, extraConfigurations ? [] }:
+, extraConfigurations ? [ ]
+}:
 
 with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;
-
 let
   jquery-ui = callPackage ./testing/jquery-ui.nix { };
   jquery = callPackage ./testing/jquery.nix { };
 
-in rec {
+in
+rec {
 
   inherit pkgs;
 
 
-  testDriver = lib.warn ''
-    Perl VM tests are deprecated and will be removed for 20.09.
-    Please update your tests to use the python test driver.
-    See https://github.com/NixOS/nixpkgs/pull/71684 for details.
-  '' stdenv.mkDerivation {
-    name = "nixos-test-driver";
+  testDriver =
+    lib.warn ''
+      Perl VM tests are deprecated and will be removed for 20.09.
+      Please update your tests to use the python test driver.
+      See https://github.com/NixOS/nixpkgs/pull/71684 for details.
+    ''
+      stdenv.mkDerivation {
+      name = "nixos-test-driver";
 
-    buildInputs = [ makeWrapper perl ];
+      buildInputs = [ makeWrapper perl ];
 
-    dontUnpack = true;
+      dontUnpack = true;
 
-    preferLocalBuild = true;
+      preferLocalBuild = true;
 
-    installPhase =
-      ''
-        mkdir -p $out/bin
-        cp ${./test-driver/test-driver.pl} $out/bin/nixos-test-driver
-        chmod u+x $out/bin/nixos-test-driver
+      installPhase =
+        ''
+          mkdir -p $out/bin
+          cp ${./test-driver/test-driver.pl} $out/bin/nixos-test-driver
+          chmod u+x $out/bin/nixos-test-driver
 
-        libDir=$out/${perl.libPrefix}
-        mkdir -p $libDir
-        cp ${./test-driver/Machine.pm} $libDir/Machine.pm
-        cp ${./test-driver/Logger.pm} $libDir/Logger.pm
+          libDir=$out/${perl.libPrefix}
+          mkdir -p $libDir
+          cp ${./test-driver/Machine.pm} $libDir/Machine.pm
+          cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
-        wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
-          --prefix PERL5LIB : "${with perlPackages; makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/${perl.libPrefix}"
-      '';
-  };
+          wrapProgram $out/bin/nixos-test-driver \
+            --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
+            --prefix PERL5LIB : "${with perlPackages; makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/${perl.libPrefix}"
+        '';
+    };
 
 
   # Run an automated test suite in the given virtual network.
@@ -91,7 +94,6 @@ in rec {
     , name ? "unnamed"
     , ...
     } @ t:
-
     let
       # A standard store path to the vm monitor is built like this:
       #   /tmp/nix-build-vm-test-run-$name.drv-0/vm-state-machine/monitor
@@ -108,7 +110,8 @@ in rec {
           "nixos-test-driver-${name}";
 
       nodes = buildVirtualNetwork (
-        t.nodes or (if t ? machine then { machine = t.machine; } else { }));
+        t.nodes or (if t ? machine then { machine = t.machine; } else { })
+      );
 
       testScript' =
         # Call the test script with the computed nodes.
@@ -127,8 +130,10 @@ in rec {
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
-      driver = runCommand testDriverName
-        { buildInputs = [ makeWrapper];
+      driver = runCommand
+        testDriverName
+        {
+          buildInputs = [ makeWrapper ];
           testScript = testScript';
           preferLocalBuild = true;
           testName = name;
@@ -141,7 +146,7 @@ in rec {
           wrapProgram $out/bin/nixos-test-driver \
             --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR
-              "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
+            "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
             --run "export testScript=\"\$(cat $out/test-script)\"" \
             --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
@@ -154,7 +159,7 @@ in rec {
         ''; # "
 
       passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
-        meta = (drv.meta or {}) // t.meta;
+        meta = (drv.meta or { }) // t.meta;
       };
 
       test = passMeta (runTests driver);
@@ -162,21 +167,22 @@ in rec {
 
       nodeNames = builtins.attrNames nodes;
       invalidNodeNames = lib.filter
-        (node: builtins.match "^[A-z_][A-z0-9_]+$" node == null) nodeNames;
+        (node: builtins.match "^[A-z_][A-z0-9_]+$" node == null)
+        nodeNames;
 
     in
-      if lib.length invalidNodeNames > 0 then
-        throw ''
-          Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
-          All machines are referenced as perl variables in the testing framework which will break the
-          script when special characters are used.
+    if lib.length invalidNodeNames > 0 then
+      throw ''
+        Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
+        All machines are referenced as perl variables in the testing framework which will break the
+        script when special characters are used.
 
-          Please stick to alphanumeric chars and underscores as separation.
-        ''
-      else
-        (if makeCoverageReport then report else test) // {
-          inherit nodes driver test;
-        };
+        Please stick to alphanumeric chars and underscores as separation.
+      ''
+    else
+      (if makeCoverageReport then report else test) // {
+        inherit nodes driver test;
+      };
 
   runInMachine =
     { drv
@@ -186,9 +192,12 @@ in rec {
     , ... # ???
     }:
     let
-      vm = buildVM { }
-        [ machine
-          { key = "run-in-machine";
+      vm = buildVM
+        { }
+        [
+          machine
+          {
+            key = "run-in-machine";
             networking.hostName = "client";
             nix.readOnlyStore = false;
             virtualisation.writableStore = false;
@@ -235,16 +244,16 @@ in rec {
       ''; # */
 
     in
-      lib.overrideDerivation drv (attrs: {
-        requiredSystemFeatures = [ "kvm" ];
-        builder = "${bash}/bin/sh";
-        args = ["-e" vmRunCommand];
-        origArgs = attrs.args;
-        origBuilder = attrs.builder;
-      });
+    lib.overrideDerivation drv (attrs: {
+      requiredSystemFeatures = [ "kvm" ];
+      builder = "${bash}/bin/sh";
+      args = [ "-e" vmRunCommand ];
+      origArgs = attrs.args;
+      origBuilder = attrs.builder;
+    });
 
 
-  runInMachineWithX = { require ? [], ... } @ args:
+  runInMachineWithX = { require ? [ ], ... } @ args:
     let
       client =
         { ... }:
@@ -260,13 +269,13 @@ in rec {
           services.xserver.windowManager.icewm.enable = true;
         };
     in
-      runInMachine ({
-        machine = client;
-        preBuild =
-          ''
-            $client->waitForX;
-          '';
-      } // args);
+    runInMachine ({
+      machine = client;
+      preBuild =
+        ''
+          $client->waitForX;
+        '';
+    } // args);
 
 
   simpleTest = as: (makeTest as).test;

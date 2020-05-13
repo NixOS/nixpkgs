@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, numpy }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, numpy
+}:
 
 buildPythonPackage rec {
   pname = "emcee";

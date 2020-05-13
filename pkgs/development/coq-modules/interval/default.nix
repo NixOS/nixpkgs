@@ -1,6 +1,12 @@
-{ stdenv, fetchurl, which, coq, coquelicot, flocq, mathcomp
-, bignums ? null }:
-
+{ stdenv
+, fetchurl
+, which
+, coq
+, coquelicot
+, flocq
+, mathcomp
+, bignums ? null
+}:
 let params =
   if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {
     version = "3.4.1";
@@ -12,7 +18,6 @@ let params =
     sha256 = "08fdcf3hbwqphglvwprvqzgkg0qbimpyhnqsgv3gac4y1ap0f903";
   }
 ; in
-
 stdenv.mkDerivation {
   name = "coq${coq.coq-version}-interval-${params.version}";
 

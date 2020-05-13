@@ -1,5 +1,4 @@
 { stdenv, fetchurl, makeWrapper }:
-
 let
   options = rec {
     x86_64-darwin = {
@@ -73,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "Lisp compiler";
     homepage = http://www.sbcl.org;
     license = licenses.publicDomain; # and FreeBSD
-    maintainers = [maintainers.raskin maintainers.tohl];
+    maintainers = [ maintainers.raskin maintainers.tohl ];
     platforms = attrNames options;
   };
 }

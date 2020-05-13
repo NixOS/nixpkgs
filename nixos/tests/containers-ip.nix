@@ -1,5 +1,4 @@
 # Test for NixOS' container support.
-
 let
   webserverFor = hostAddress: localAddress: {
     inherit hostAddress localAddress;
@@ -13,7 +12,8 @@ let
     };
   };
 
-in import ./make-test-python.nix ({ pkgs, ...} : {
+in
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "containers-ipv4-ipv6";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aristid aszlig eelco kampfschlaefer ];

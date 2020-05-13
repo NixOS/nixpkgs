@@ -1,6 +1,21 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libxml2, xorg, glib, pango
-, intltool, libgnome, libgnomecanvas, libbonoboui, GConf, libtool
-, gnome_vfs, libgnome-keyring, libglade }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, libxml2
+, xorg
+, glib
+, pango
+, intltool
+, libgnome
+, libgnomecanvas
+, libbonoboui
+, GConf
+, libtool
+, gnome_vfs
+, libgnome-keyring
+, libglade
+}:
 
 stdenv.mkDerivation rec {
   name = "libgnomeui-${minVer}.5";

@@ -34,5 +34,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ pmiddend ];
     badPlatforms = [ platforms.aarch64 ];
-  };  
+  };
 }

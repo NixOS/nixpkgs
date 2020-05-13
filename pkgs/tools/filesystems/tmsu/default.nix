@@ -53,10 +53,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://www.tmsu.org;
+    homepage = http://www.tmsu.org;
     description = "A tool for tagging your files using a virtual filesystem";
     maintainers = with maintainers; [ pSub ];
-    license     = licenses.gpl3;
-    platforms   = platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

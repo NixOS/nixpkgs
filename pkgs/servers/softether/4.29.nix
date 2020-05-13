@@ -1,6 +1,11 @@
-{ stdenv, fetchurl
-, openssl, readline, ncurses, zlib
-, dataDir ? "/var/lib/softether" }:
+{ stdenv
+, fetchurl
+, openssl
+, readline
+, ncurses
+, zlib
+, dataDir ? "/var/lib/softether"
+}:
 
 stdenv.mkDerivation rec {
   pname = "softether";
@@ -15,17 +20,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl readline ncurses zlib ];
 
   preConfigure = ''
-      ./configure
+    ./configure
   '';
 
   buildPhase = ''
-      mkdir -p $out/bin
-      sed -i \
-          -e "/INSTALL_BINDIR=/s|/usr/bin|/bin|g" \
-          -e "/_DIR=/s|/usr|${dataDir}|g" \
-          -e "s|\$(INSTALL|$out/\$(INSTALL|g" \
-          -e "/echo/s|echo $out/|echo |g" \
-          Makefile
+    mkdir -p $out/bin
+    sed -i \
+        -e "/INSTALL_BINDIR=/s|/usr/bin|/bin|g" \
+        -e "/_DIR=/s|/usr|${dataDir}|g" \
+        -e "s|\$(INSTALL|$out/\$(INSTALL|g" \
+        -e "/echo/s|echo $out/|echo |g" \
+        Makefile
   '';
 
   meta = with stdenv.lib; {

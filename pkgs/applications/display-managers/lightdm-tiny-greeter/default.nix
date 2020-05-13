@@ -1,5 +1,14 @@
-{ stdenv, linkFarm, lightdm-tiny-greeter, fetchFromGitHub
-, pkgconfig, lightdm, gtk3, glib, wrapGAppsHook, conf ? "" }:
+{ stdenv
+, linkFarm
+, lightdm-tiny-greeter
+, fetchFromGitHub
+, pkgconfig
+, lightdm
+, gtk3
+, glib
+, wrapGAppsHook
+, conf ? ""
+}:
 
 stdenv.mkDerivation rec {
   pname = "lightdm-tiny-greeter";
@@ -15,9 +24,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = [ lightdm gtk3 glib ];
 
-  postUnpack = if conf != "" then ''
-    cp ${builtins.toFile "config.h" conf} source/config.h
-  '' else "";
+  postUnpack =
+    if conf != "" then ''
+      cp ${builtins.toFile "config.h" conf} source/config.h
+    '' else "";
 
   buildPhase = ''
     mkdir -p $out/bin $out/share/xgreeters

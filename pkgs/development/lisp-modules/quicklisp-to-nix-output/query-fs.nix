@@ -14,7 +14,7 @@ rec {
 
   packageName = "query-fs";
 
-  asdFilesToKeep = ["query-fs.asd"];
+  asdFilesToKeep = [ "query-fs.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM query-fs DESCRIPTION

@@ -1,8 +1,8 @@
 { stdenv, windows, fetchurl }:
-
 let
   version = "5.0.4";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mingw-w64";
   inherit version;
 

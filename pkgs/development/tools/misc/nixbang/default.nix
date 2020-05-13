@@ -1,5 +1,4 @@
 { lib, pythonPackages, fetchFromGitHub }:
-
 let version = "0.1.2"; in
 pythonPackages.buildPythonApplication {
   pname = "nixbang";

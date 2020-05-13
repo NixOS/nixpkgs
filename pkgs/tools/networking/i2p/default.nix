@@ -1,5 +1,4 @@
 { stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
-
 let wrapper = stdenv.mkDerivation rec {
   pname = "wrapper";
   version = "3.5.35";
@@ -29,7 +28,6 @@ let wrapper = stdenv.mkDerivation rec {
 };
 
 in
-
 stdenv.mkDerivation rec {
   pname = "i2p";
   version = "0.9.42";

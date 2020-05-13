@@ -5,7 +5,7 @@
 , fuse
 , pkgconfig
 , libpcap
-, zlib 
+, zlib
 }:
 
 stdenv.mkDerivation rec {

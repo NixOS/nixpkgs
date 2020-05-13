@@ -1,5 +1,4 @@
 { fetchurl, stdenv, cmake, qt4, fftw }:
-
 let
   rev = "9895036d26";
 in

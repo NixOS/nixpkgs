@@ -1,4 +1,6 @@
-{ config, stdenv, lib
+{ config
+, stdenv
+, lib
 , fetchFromGitHub
 , fetchurl
 , cmake
@@ -10,13 +12,23 @@
 , protobuf
 , doxygen
 , openblas
-, Accelerate, CoreGraphics, CoreVideo
-, lmdbSupport ? true, lmdb
-, leveldbSupport ? true, leveldb, snappy
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
-, cudnnSupport ? cudaSupport, cudnn ? null
-, ncclSupport ? false, nccl ? null
-, pythonSupport ? false, python ? null, numpy ? null
+, Accelerate
+, CoreGraphics
+, CoreVideo
+, lmdbSupport ? true
+, lmdb
+, leveldbSupport ? true
+, leveldb
+, snappy
+, cudaSupport ? config.cudaSupport or false
+, cudatoolkit
+, cudnnSupport ? cudaSupport
+, cudnn ? null
+, ncclSupport ? false
+, nccl ? null
+, pythonSupport ? false
+, python ? null
+, numpy ? null
 , substituteAll
 }:
 
@@ -24,7 +36,6 @@ assert leveldbSupport -> (leveldb != null && snappy != null);
 assert cudnnSupport -> cudaSupport;
 assert ncclSupport -> cudaSupport;
 assert pythonSupport -> (python != null && numpy != null);
-
 let
   toggle = bool: if bool then "ON" else "OFF";
 
@@ -34,7 +45,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation rec {
   pname = "caffe";
   version = "1.0";
@@ -53,44 +63,59 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     # It's important that caffe is passed the major and minor version only because that's what
     # boost_python expects
-    [ (if pythonSupport then "-Dpython_version=${python.pythonVersion}" else "-DBUILD_python=OFF")
+    [
+      (if pythonSupport then "-Dpython_version=${python.pythonVersion}" else "-DBUILD_python=OFF")
       "-DBLAS=open"
-    ] ++ (if cudaSupport then [
-           "-DCUDA_ARCH_NAME=All"
-           "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
-         ] else [ "-DCPU_ONLY=ON" ])
-      ++ ["-DUSE_NCCL=${toggle ncclSupport}"]
-      ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
-      ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
+    ] ++ (
+      if cudaSupport then [
+        "-DCUDA_ARCH_NAME=All"
+        "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+      ] else [ "-DCPU_ONLY=ON" ]
+    )
+    ++ [ "-DUSE_NCCL=${toggle ncclSupport}" ]
+    ++ [ "-DUSE_LEVELDB=${toggle leveldbSupport}" ]
+    ++ [ "-DUSE_LMDB=${toggle lmdbSupport}" ];
 
   buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 openblas ]
-                ++ lib.optional cudaSupport cudatoolkit
-                ++ lib.optional cudnnSupport cudnn
-                ++ lib.optional lmdbSupport lmdb
-                ++ lib.optional ncclSupport nccl
-                ++ lib.optionals leveldbSupport [ leveldb snappy ]
-                ++ lib.optionals pythonSupport [ python numpy ]
-                ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ]
-                ;
+    ++ lib.optional cudaSupport cudatoolkit
+    ++ lib.optional cudnnSupport cudnn
+    ++ lib.optional lmdbSupport lmdb
+    ++ lib.optional ncclSupport nccl
+    ++ lib.optionals leveldbSupport [ leveldb snappy ]
+    ++ lib.optionals pythonSupport [ python numpy ]
+    ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ]
+  ;
 
   propagatedBuildInputs = lib.optionals pythonSupport (
     # requirements.txt
-    let pp = python.pkgs; in ([
-      pp.numpy pp.scipy pp.scikitimage pp.h5py
-      pp.matplotlib pp.ipython pp.networkx pp.nose
-      pp.pandas pp.dateutil pp.protobuf pp.gflags
-      pp.pyyaml pp.pillow pp.six
+    let pp = python.pkgs; in
+    ([
+      pp.numpy
+      pp.scipy
+      pp.scikitimage
+      pp.h5py
+      pp.matplotlib
+      pp.ipython
+      pp.networkx
+      pp.nose
+      pp.pandas
+      pp.dateutil
+      pp.protobuf
+      pp.gflags
+      pp.pyyaml
+      pp.pillow
+      pp.six
     ] ++ lib.optional leveldbSupport pp.leveldb)
   );
 
   outputs = [ "bin" "out" ];
-  propagatedBuildOutputs = []; # otherwise propagates out -> bin cycle
+  propagatedBuildOutputs = [ ]; # otherwise propagates out -> bin cycle
 
   patches = [
     ./darwin.patch
   ] ++ lib.optional pythonSupport (substituteAll {
     src = ./python.patch;
-    inherit (python.sourceVersion) major minor;  # Should be changed in case of PyPy
+    inherit (python.sourceVersion) major minor;# Should be changed in case of PyPy
   });
 
   postPatch = lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''

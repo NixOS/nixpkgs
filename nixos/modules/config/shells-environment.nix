@@ -4,9 +4,7 @@
 { config, lib, utils, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.environment;
 
   exportedEnvVars =
@@ -25,15 +23,14 @@ let
       exportVariables =
         mapAttrsToList (n: v: ''export ${n}="${concatStringsSep ":" v}"'') allVariables;
     in
-      concatStringsSep "\n" exportVariables;
+    concatStringsSep "\n" exportVariables;
 in
-
 {
 
   options = {
 
     environment.variables = mkOption {
-      default = {};
+      default = { };
       example = { EDITOR = "nvim"; VISUAL = "nvim"; };
       description = ''
         A set of environment variables used in the global environment.
@@ -47,7 +44,7 @@ in
     };
 
     environment.profiles = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         A list of profiles used to setup the global environment.
       '';
@@ -143,7 +140,7 @@ in
     };
 
     environment.shells = mkOption {
-      default = [];
+      default = [ ];
       example = literalExample "[ pkgs.bashInteractive pkgs.zsh ]";
       description = ''
         A list of permissible login shells for user accounts.
@@ -170,7 +167,7 @@ in
     environment.shellAliases = mapAttrs (name: mkDefault) {
       ls = "ls --color=tty";
       ll = "ls -l";
-      l  = "ls -alh";
+      l = "ls -alh";
     };
 
     environment.etc.shells.text =
@@ -183,31 +180,33 @@ in
     # and discoverability (see motivation of #30418).
     environment.etc.set-environment.source = config.system.build.setEnvironment;
 
-    system.build.setEnvironment = pkgs.writeText "set-environment"
-      ''
-        # DO NOT EDIT -- this file has been generated automatically.
+    system.build.setEnvironment =
+      pkgs.writeText "set-environment"
+        ''
+          # DO NOT EDIT -- this file has been generated automatically.
 
-        # Prevent this file from being sourced by child shells.
-        export __NIXOS_SET_ENVIRONMENT_DONE=1
+          # Prevent this file from being sourced by child shells.
+          export __NIXOS_SET_ENVIRONMENT_DONE=1
 
-        ${exportedEnvVars}
+          ${exportedEnvVars}
 
-        ${cfg.extraInit}
+          ${cfg.extraInit}
 
-        ${optionalString cfg.homeBinInPath ''
-          # ~/bin if it exists overrides other bin directories.
-          export PATH="$HOME/bin:$PATH"
-        ''}
-      '';
+          ${optionalString cfg.homeBinInPath ''
+            # ~/bin if it exists overrides other bin directories.
+            export PATH="$HOME/bin:$PATH"
+          ''}
+        '';
 
-    system.activationScripts.binsh = stringAfter [ "stdio" ]
-      ''
-        # Create the required /bin/sh symlink; otherwise lots of things
-        # (notably the system() function) won't work.
-        mkdir -m 0755 -p /bin
-        ln -sfn "${cfg.binsh}" /bin/.sh.tmp
-        mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
-      '';
+    system.activationScripts.binsh =
+      stringAfter [ "stdio" ]
+        ''
+          # Create the required /bin/sh symlink; otherwise lots of things
+          # (notably the system() function) won't work.
+          mkdir -m 0755 -p /bin
+          ln -sfn "${cfg.binsh}" /bin/.sh.tmp
+          mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
+        '';
 
   };
 

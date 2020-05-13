@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Components required to build an executable OpenMP program";
-    homepage    = http://openmp.llvm.org/;
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.all;
+    homepage = http://openmp.llvm.org/;
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.all;
   };
 }

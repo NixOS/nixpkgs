@@ -2,40 +2,40 @@
 
 { name ? "${args'.pname}-${args'.version}"
 , src
-, buildInputs ? []
-, nativeBuildInputs ? []
-, passthru ? {}
-, patches ? []
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, passthru ? { }
+, patches ? [ ]
 
-# A function to override the go-modules derivation
-, overrideModAttrs ? (_oldAttrs : {})
+  # A function to override the go-modules derivation
+, overrideModAttrs ? (_oldAttrs: { })
 
-# path to go.mod and go.sum directory
+  # path to go.mod and go.sum directory
 , modRoot ? "./"
 
-# modSha256 is the sha256 of the vendored dependencies
-#
-# CAUTION: if `null` is used as a value, the derivation won't be a
-# fixed-output derivation but disable the build sandbox instead. Don't use
-# this in nixpkgs as Hydra won't build those packages.
+  # modSha256 is the sha256 of the vendored dependencies
+  #
+  # CAUTION: if `null` is used as a value, the derivation won't be a
+  # fixed-output derivation but disable the build sandbox instead. Don't use
+  # this in nixpkgs as Hydra won't build those packages.
 , modSha256
 
-# We want parallel builds by default
+  # We want parallel builds by default
 , enableParallelBuilding ? true
 
-# Disabled flag
+  # Disabled flag
 , disabled ? false
 
-# Do not enable this without good reason
-# IE: programs coupled with the compiler
+  # Do not enable this without good reason
+  # IE: programs coupled with the compiler
 , allowGoReference ? false
 
-, meta ? {}
+, meta ? { }
 
-, ... }@args':
+, ...
+}@args':
 
 with builtins;
-
 let
   args = removeAttrs args' [ "overrideModAttrs" "modSha256" "disabled" ];
 
@@ -43,61 +43,64 @@ let
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
-  go-modules = go.stdenv.mkDerivation (let modArgs = {
-    name = "${name}-go-modules";
+  go-modules = go.stdenv.mkDerivation (
+    let modArgs = {
+      name = "${name}-go-modules";
 
-    nativeBuildInputs = [ go git cacert ];
+      nativeBuildInputs = [ go git cacert ];
 
-    inherit (args) src;
-    inherit (go) GOOS GOARCH;
+      inherit (args) src;
+      inherit (go) GOOS GOARCH;
 
-    patches = args.patches or [];
+      patches = args.patches or [ ];
 
-    GO111MODULE = "on";
+      GO111MODULE = "on";
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND" "SOCKS_SERVER"
-    ];
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+      ];
 
-    configurePhase = args.modConfigurePhase or ''
-      runHook preConfigure
+      configurePhase = args.modConfigurePhase or ''
+        runHook preConfigure
 
-      export GOCACHE=$TMPDIR/go-cache
-      export GOPATH="$TMPDIR/go"
-      mkdir -p "''${GOPATH}/pkg/mod/cache/download"
-      cd "${modRoot}"
-      runHook postConfigure
-    '';
+        export GOCACHE=$TMPDIR/go-cache
+        export GOPATH="$TMPDIR/go"
+        mkdir -p "''${GOPATH}/pkg/mod/cache/download"
+        cd "${modRoot}"
+        runHook postConfigure
+      '';
 
-    buildPhase = args.modBuildPhase or ''
-      runHook preBuild
+      buildPhase = args.modBuildPhase or ''
+        runHook preBuild
 
-      go mod download
+        go mod download
 
-      runHook postBuild
-    '';
+        runHook postBuild
+      '';
 
-    installPhase = args.modInstallPhase or ''
-      runHook preInstall
+      installPhase = args.modInstallPhase or ''
+        runHook preInstall
 
-      # remove cached lookup results and tiles
-      rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
-      cp -r "''${GOPATH}/pkg/mod/cache/download" $out
+        # remove cached lookup results and tiles
+        rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
+        cp -r "''${GOPATH}/pkg/mod/cache/download" $out
 
-      runHook postInstall
-    '';
+        runHook postInstall
+      '';
 
-    dontFixup = true;
-  }; in modArgs // (
-    if modSha256 == null then
-      { __noChroot = true; }
-    else
-      {
-        outputHashMode = "recursive";
-        outputHashAlgo = "sha256";
-        outputHash = modSha256;
-      }
-  ) // overrideModAttrs modArgs);
+      dontFixup = true;
+    }; in
+    modArgs // (
+      if modSha256 == null then
+        { __noChroot = true; }
+      else
+        {
+          outputHashMode = "recursive";
+          outputHashAlgo = "sha256";
+          outputHash = modSha256;
+        }
+    ) // overrideModAttrs modArgs);
 
   package = go.stdenv.mkDerivation (args // {
     nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;
@@ -219,11 +222,12 @@ let
       platforms = go.meta.platforms or lib.platforms.all;
     } // meta // {
       # add an extra maintainer to every package
-      maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.kalbasit ];
+      maintainers = (meta.maintainers or [ ]) ++
+        [ lib.maintainers.kalbasit ];
     };
   });
-in if disabled then
+in
+if disabled then
   throw "${package.name} not supported for go ${go.meta.branch}"
 else
   package

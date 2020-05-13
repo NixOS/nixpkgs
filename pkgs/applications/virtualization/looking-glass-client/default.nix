@@ -1,7 +1,23 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
-, libX11, freefont_ttf, nettle, libconfig, wayland, libpthreadstubs, libXdmcp
-, libXfixes, libbfd
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkgconfig
+, SDL2
+, SDL
+, SDL2_ttf
+, openssl
+, spice-protocol
+, fontconfig
+, libX11
+, freefont_ttf
+, nettle
+, libconfig
+, wayland
+, libpthreadstubs
+, libXdmcp
+, libXfixes
+, libbfd
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +34,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
-    SDL SDL2 SDL2_ttf openssl spice-protocol fontconfig
-    libX11 freefont_ttf nettle libconfig wayland libpthreadstubs
-    libXdmcp libXfixes libbfd cmake
+    SDL
+    SDL2
+    SDL2_ttf
+    openssl
+    spice-protocol
+    fontconfig
+    libX11
+    freefont_ttf
+    nettle
+    libconfig
+    wayland
+    libpthreadstubs
+    libXdmcp
+    libXfixes
+    libbfd
+    cmake
   ];
 
   enableParallelBuilding = true;

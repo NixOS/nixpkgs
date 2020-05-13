@@ -1,6 +1,9 @@
-{ stdenv, fetchurl, makeWrapper, jre
-, version ? "1.6" }:
-
+{ stdenv
+, fetchurl
+, makeWrapper
+, jre
+, version ? "1.6"
+}:
 let
   versionMap = {
     "1.5" = {
@@ -13,7 +16,6 @@ let
     };
   };
 in
-
 with versionMap.${version};
 
 stdenv.mkDerivation rec {

@@ -1,5 +1,11 @@
-{ stdenv, fetchurl
-, notmuch, openssl, pkgconfig, sqlite, xapian, zlib
+{ stdenv
+, fetchurl
+, notmuch
+, openssl
+, pkgconfig
+, sqlite
+, xapian
+, zlib
 }:
 stdenv.mkDerivation rec {
   version = "5";

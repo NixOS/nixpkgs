@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Mini PXE server";
     maintainers = [ maintainers.raskin ];
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.free;
   };
 }

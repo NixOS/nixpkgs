@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     (fetchurl {
       url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/Cascadia.ttf";
       sha256 = "1m5ymbngjg3n1g3p6vhcq7d825bwwln9afih651ar3jn7j9njnyg";
-     })
+    })
     (fetchurl {
       url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/CascadiaMono.ttf";
       sha256 = "0vkhm6rhspzd1iayxrzaag099wsc94azfqa3ips7f4x9s8fmbp80";

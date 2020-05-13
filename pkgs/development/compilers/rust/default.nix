@@ -4,14 +4,18 @@
 , bootstrapVersion
 , bootstrapHashes
 , selectRustPackage
-, rustcPatches ? []
+, rustcPatches ? [ ]
 }:
-{ stdenv, lib
+{ stdenv
+, lib
 , buildPackages
-, newScope, callPackage
-, CoreFoundation, Security
+, newScope
+, callPackage
+, CoreFoundation
+, Security
 , llvmPackages_5
-, pkgsBuildTarget, pkgsBuildBuild
+, pkgsBuildTarget
+, pkgsBuildBuild
 }: rec {
   toRustTarget = platform: with platform.parsed; let
     cpu_ = {
@@ -19,7 +23,8 @@
       "armv7l" = "armv7";
       "armv6l" = "arm";
     }.${cpu.name} or cpu.name;
-  in "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+  in
+  "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
 
   makeRustPlatform = { rustc, cargo, ... }: rec {
     rust = {
@@ -56,42 +61,45 @@
       version = bootstrapVersion;
       hashes = bootstrapHashes;
     };
-    stable = lib.makeScope newScope (self: let
-      # Like `buildRustPackages`, but may also contain prebuilt binaries to
-      # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
-      # nothing in the final package set should refer to this.
-      bootstrapRustPackages = self.buildRustPackages.overrideScope' (_: _:
-        lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
-          (selectRustPackage buildPackages).packages.prebuilt);
-      bootRustPlatform = makeRustPlatform bootstrapRustPackages;
-    in {
-      # Packages suitable for build-time, e.g. `build.rs`-type stuff.
-      buildRustPackages = (selectRustPackage buildPackages).packages.stable;
-      # Analogous to stdenv
-      rustPlatform = makeRustPlatform self.buildRustPackages;
-      rustc = self.callPackage ./rustc.nix ({
-        version = rustcVersion;
-        sha256 = rustcSha256;
-        inherit enableRustcDev;
+    stable = lib.makeScope newScope (self:
+      let
+        # Like `buildRustPackages`, but may also contain prebuilt binaries to
+        # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
+        # nothing in the final package set should refer to this.
+        bootstrapRustPackages = self.buildRustPackages.overrideScope' (_: _:
+          lib.optionalAttrs
+            (stdenv.buildPlatform == stdenv.hostPlatform)
+            (selectRustPackage buildPackages).packages.prebuilt);
+        bootRustPlatform = makeRustPlatform bootstrapRustPackages;
+      in
+      {
+        # Packages suitable for build-time, e.g. `build.rs`-type stuff.
+        buildRustPackages = (selectRustPackage buildPackages).packages.stable;
+        # Analogous to stdenv
+        rustPlatform = makeRustPlatform self.buildRustPackages;
+        rustc = self.callPackage ./rustc.nix ({
+          version = rustcVersion;
+          sha256 = rustcSha256;
+          inherit enableRustcDev;
 
-        patches = rustcPatches;
+          patches = rustcPatches;
 
-        # Use boot package set to break cycle
-        rustPlatform = bootRustPlatform;
-      } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
-        stdenv = llvmPackages_5.stdenv;
-        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
-        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
-        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+          # Use boot package set to break cycle
+          rustPlatform = bootRustPlatform;
+        } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
+          stdenv = llvmPackages_5.stdenv;
+          pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+          pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+          pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+        });
+        rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
+        cargo = self.callPackage ./cargo.nix {
+          # Use boot package set to break cycle
+          rustPlatform = bootRustPlatform;
+          inherit CoreFoundation Security;
+        };
+        clippy = self.callPackage ./clippy.nix { inherit Security; };
+        rls = self.callPackage ./rls { inherit CoreFoundation Security; };
       });
-      rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
-      cargo = self.callPackage ./cargo.nix {
-        # Use boot package set to break cycle
-        rustPlatform = bootRustPlatform;
-        inherit CoreFoundation Security;
-      };
-      clippy = self.callPackage ./clippy.nix { inherit Security; };
-      rls = self.callPackage ./rls { inherit CoreFoundation Security; };
-    });
   };
 }

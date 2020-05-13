@@ -1,7 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus, expat }:
-
 let version = "1.0.3"; in
-
 stdenv.mkDerivation {
   pname = "libnih";
   inherit version;

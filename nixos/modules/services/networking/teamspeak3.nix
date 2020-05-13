@@ -1,14 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   ts3 = pkgs.teamspeak_server;
   cfg = config.services.teamspeak3;
   user = "teamspeak";
   group = "teamspeak";
 in
-
 {
 
   ###### interface

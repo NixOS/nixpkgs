@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.virtualisation.libvirtd;
   vswitch = config.virtualisation.vswitch;
   configFile = pkgs.writeText "libvirtd.conf" ''
@@ -26,11 +24,14 @@ let
   dirName = "libvirt";
   subDirs = list: [ dirName ] ++ map (e: "${dirName}/${e}") list;
 
-in {
+in
+{
 
   imports = [
-    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
-      "Set the option `virtualisation.libvirtd.qemuPackage' instead.")
+    (
+      mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
+        "Set the option `virtualisation.libvirtd.qemuPackage' instead."
+    )
   ];
 
   ###### interface
@@ -110,7 +111,7 @@ in {
     };
 
     onBoot = mkOption {
-      type = types.enum ["start" "ignore" ];
+      type = types.enum [ "start" "ignore" ];
       default = "start";
       description = ''
         Specifies the action to be done to / on the guests when the host boots.
@@ -122,7 +123,7 @@ in {
     };
 
     onShutdown = mkOption {
-      type = types.enum ["shutdown" "suspend" ];
+      type = types.enum [ "shutdown" "suspend" ];
       default = "suspend";
       description = ''
         When shutting down / restarting the host what method should
@@ -149,8 +150,11 @@ in {
 
     environment = {
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
-      etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e:
-        "allow ${e}") cfg.allowedBridges;
+      etc."qemu/bridge.conf".text =
+        lib.concatMapStringsSep "\n"
+          (e:
+            "allow ${e}")
+          cfg.allowedBridges;
       systemPackages = with pkgs; [ libvirt libressl.nc iptables cfg.qemuPackage ];
       etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
@@ -219,12 +223,12 @@ in {
       wantedBy = [ "multi-user.target" ];
       requires = [ "libvirtd-config.service" ];
       after = [ "systemd-udev-settle.service" "libvirtd-config.service" ]
-              ++ optional vswitch.enable "ovs-vswitchd.service";
+        ++ optional vswitch.enable "ovs-vswitchd.service";
 
       environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
 
       path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
-             ++ optional vswitch.enable vswitch.package;
+        ++ optional vswitch.enable vswitch.package;
 
       serviceConfig = {
         Type = "notify";

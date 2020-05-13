@@ -5,7 +5,7 @@ python27Packages.buildPythonApplication rec {
   name = "qweechat-unstable-${version}";
   namePrefix = "";
 
- src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "weechat";
     repo = "qweechat";
     rev = "f5e54d01691adb3abef47e051a6412186c33313c";
@@ -18,7 +18,7 @@ python27Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python27Packages; [
-     pyside
+    pyside
   ];
 
   meta = with stdenv.lib; {

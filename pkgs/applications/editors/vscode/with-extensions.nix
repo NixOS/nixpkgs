@@ -1,5 +1,10 @@
-{ lib, runCommand, buildEnv, vscode, makeWrapper
-, vscodeExtensions ? [] }:
+{ lib
+, runCommand
+, buildEnv
+, vscode
+, makeWrapper
+, vscodeExtensions ? [ ]
+}:
 
 /*
   `vscodeExtensions`
@@ -40,9 +45,7 @@
       The original `code` executable will be wrapped so that it uses the set of pre-installed / unpacked
       extensions as its `--extensions-dir`.
 */
-
 let
-
   inherit (vscode) executableName;
   wrappedPkgVersion = lib.getVersion vscode;
   wrappedPkgName = lib.removeSuffix "-${wrappedPkgVersion}" vscode.name;
@@ -53,10 +56,10 @@ let
   };
 
 in
-
 # When no extensions are requested, we simply redirect to the original
-# non-wrapped vscode executable.
-runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
+  # non-wrapped vscode executable.
+runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}"
+{
   buildInputs = [ vscode makeWrapper ];
   dontPatchELF = true;
   dontStrip = true;
@@ -69,7 +72,7 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   ln -sT "${vscode}/share/pixmaps/code.png" "$out/share/pixmaps/code.png"
   ln -sT "${vscode}/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
   ln -sT "${vscode}/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
-  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${lib.optionalString (vscodeExtensions != []) ''
+  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${lib.optionalString (vscodeExtensions != [ ]) ''
     --add-flags "--extensions-dir ${combinedExtensionsDrv}"
   ''}
 ''

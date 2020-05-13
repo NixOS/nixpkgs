@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.aerospike;
 
   aerospikeConf = pkgs.writeText "aerospike.conf" ''
@@ -31,7 +29,6 @@ let
   '';
 
 in
-
 {
 
   ###### interface

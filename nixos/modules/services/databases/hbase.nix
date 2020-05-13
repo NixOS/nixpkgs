@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.hbase;
 
@@ -18,14 +17,16 @@ let
     </configuration>
   '';
 
-  configDir = pkgs.runCommand "hbase-config-dir" { preferLocalBuild = true; } ''
+  configDir = pkgs.runCommand "hbase-config-dir"
+    { preferLocalBuild = true; } ''
     mkdir -p $out
     cp ${cfg.package}/conf/* $out/
     rm $out/hbase-site.xml
     ln -s ${configFile} $out/hbase-site.xml
-  '' ;
+  '';
 
-in {
+in
+{
 
   ###### interface
 

@@ -1,6 +1,16 @@
-{ stdenv, fetchurl, yacc, flex, libusb, libelf, libftdi1, readline
-# docSupport is a big dependency, disabled by default
-, docSupport ? false, texLive ? null, texinfo ? null, texi2html ? null
+{ stdenv
+, fetchurl
+, yacc
+, flex
+, libusb
+, libelf
+, libftdi1
+, readline
+  # docSupport is a big dependency, disabled by default
+, docSupport ? false
+, texLive ? null
+, texinfo ? null
+, texi2html ? null
 }:
 
 assert docSupport -> texLive != null && texinfo != null && texi2html != null;

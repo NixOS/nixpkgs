@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, dbus, nettle, fetchpatch
-, libidn, libnetfilter_conntrack }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, dbus
+, nettle
+, fetchpatch
+, libidn
+, libnetfilter_conntrack
+}:
 
 with stdenv.lib;
 let

@@ -21,15 +21,15 @@ stdenv.mkDerivation rec {
 
   buildPhase = "ant all";
   installPhase =
-  ''
-    install -Dm644 jasmin.jar $out/share/java/jasmin.jar
-    mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/jasmin \
-      --add-flags "-jar $out/share/java/jasmin.jar"
-  '';
+    ''
+      install -Dm644 jasmin.jar $out/share/java/jasmin.jar
+      mkdir -p $out/bin
+      makeWrapper ${jre}/bin/java $out/bin/jasmin \
+        --add-flags "-jar $out/share/java/jasmin.jar"
+    '';
 
   passthru.tests = {
-    minimal-module = callPackage ./test-assemble-hello-world {};
+    minimal-module = callPackage ./test-assemble-hello-world { };
   };
 
   meta = with stdenv.lib; {
@@ -41,4 +41,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.redis;
   redisBool = b: if b then "yes" else "no";
@@ -128,9 +127,9 @@ in
 
       save = mkOption {
         type = with types; listOf (listOf int);
-        default = [ [900 1] [300 10] [60 10000] ];
+        default = [ [ 900 1 ] [ 300 10 ] [ 60 10000 ] ];
         description = "The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.";
-        example = [ [900 1] [300 10] [60 10000] ];
+        example = [ [ 900 1 ] [ 300 10 ] [ 60 10000 ] ];
       };
 
       slaveOf = mkOption {
@@ -208,7 +207,7 @@ in
     }];
     boot.kernel.sysctl = (mkMerge [
       { "vm.nr_hugepages" = "0"; }
-      ( mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; } )
+      (mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; })
     ]);
 
     networking.firewall = mkIf cfg.openFirewall {

@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi,
-  ruamel_yaml
+, fetchPypi
+, ruamel_yaml
 , ifconfig-parser
 , xmltodict
 , isPy27

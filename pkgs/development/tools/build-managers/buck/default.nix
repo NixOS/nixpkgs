@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     install -D -m755 buck-out/gen/programs/buck.pex $out/bin/buck
     wrapProgram $out/bin/buck \
       --prefix PYTHONPATH : $PYTHONPATH \
-      --prefix PATH : "${stdenv.lib.makeBinPath [jdk watchman]}"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ jdk watchman ]}"
   '';
 
   meta = with stdenv.lib; {

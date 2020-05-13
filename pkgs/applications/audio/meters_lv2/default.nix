@@ -1,6 +1,15 @@
-{ stdenv, fetchurl, pkgconfig
-, lv2, libGLU, libGL, gtk2, cairo, pango, fftwFloat, libjack2 }:
-
+{ stdenv
+, fetchurl
+, pkgconfig
+, lv2
+, libGLU
+, libGL
+, gtk2
+, cairo
+, pango
+, fftwFloat
+, libjack2
+}:
 let
   version = "0.9.10";
   name = "meters.lv2-${version}";
@@ -37,7 +46,8 @@ stdenv.mkDerivation {
   meter_VERSION = version;
 
   meta = with stdenv.lib;
-    { description = "Collection of audio level meters with GUI in LV2 plugin format";
+    {
+      description = "Collection of audio level meters with GUI in LV2 plugin format";
       homepage = http://x42.github.io/meters.lv2/;
       maintainers = with maintainers; [ ehmry ];
       license = licenses.gpl2;

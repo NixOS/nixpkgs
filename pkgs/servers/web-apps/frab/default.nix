@@ -1,5 +1,4 @@
 { stdenv, bundlerEnv, fetchFromGitHub, ruby, nodejs }:
-
 let
   env = bundlerEnv {
     name = "frab";
@@ -10,7 +9,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation {
   name = "frab-2016-12-28";
 

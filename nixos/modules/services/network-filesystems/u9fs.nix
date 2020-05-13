@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.u9fs;
 in
@@ -64,7 +63,8 @@ in
         reloadIfChanged = true;
         requires = [ "u9fs.socket" ];
         serviceConfig =
-          { ExecStart = "-${pkgs.u9fs}/bin/u9fs ${cfg.extraArgs}";
+          {
+            ExecStart = "-${pkgs.u9fs}/bin/u9fs ${cfg.extraArgs}";
             StandardInput = "socket";
             StandardError = "journal";
             User = cfg.user;

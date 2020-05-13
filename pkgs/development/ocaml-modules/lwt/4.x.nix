@@ -1,10 +1,18 @@
-{ lib, fetchzip, pkgconfig, ncurses, libev, buildDunePackage, ocaml
-, cppo, ocaml-migrate-parsetree, ocplib-endian, result
-, mmap, seq
+{ lib
+, fetchzip
+, pkgconfig
+, ncurses
+, libev
+, buildDunePackage
+, ocaml
+, cppo
+, ocaml-migrate-parsetree
+, ocplib-endian
+, result
+, mmap
+, seq
 }:
-
 let inherit (lib) optional versionAtLeast; in
-
 buildDunePackage rec {
   pname = "lwt";
   version = "4.5.0";
@@ -16,7 +24,7 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cppo ocaml-migrate-parsetree ]
-   ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
+    ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
   propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];
 
   meta = {

@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       B. Buchfink, Xie C., D. Huson,
       "Fast and sensitive protein alignment using DIAMOND",
       Nature Methods 12, 59-60 (2015).
-        '';
+    '';
     homepage = https://github.com/bbuchfink/diamond;
     license = {
       fullName = "University of Tuebingen, Benjamin Buchfink";

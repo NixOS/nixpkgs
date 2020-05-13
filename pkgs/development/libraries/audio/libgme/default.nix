@@ -1,7 +1,8 @@
 { stdenv, fetchFromBitbucket, cmake }:
 let
   version = "0.6.3";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libgme";
   inherit version;
 

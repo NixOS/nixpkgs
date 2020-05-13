@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitHub
-, ncurses }:
+{ stdenv
+, fetchFromGitHub
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
 
@@ -15,15 +17,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  makefile = if stdenv.hostPlatform.isDarwin
-  	     then "makefile.osx"
-	     else if stdenv.hostPlatform.isFreeBSD
-  	     then "makefile.bsd"
-  	     else if stdenv.hostPlatform.isOpenBSD
-  	     then "makefile.bsd"
-  	     else if stdenv.hostPlatform.isWindows
-  	     then "makefile.win"
-	     else "makefile.linux"; # I think Linux is a safe default...
+  makefile =
+    if stdenv.hostPlatform.isDarwin
+    then "makefile.osx"
+    else if stdenv.hostPlatform.isFreeBSD
+    then "makefile.bsd"
+    else if stdenv.hostPlatform.isOpenBSD
+    then "makefile.bsd"
+    else if stdenv.hostPlatform.isWindows
+    then "makefile.win"
+    else "makefile.linux"; # I think Linux is a safe default...
 
   makeFlags = [ "CC=${stdenv.cc}/bin/cc" "-C src/" ];
 
@@ -54,9 +57,9 @@ stdenv.mkDerivation rec {
       of Editor MACroS for TECO.
 
       TECOC is a portable C implementation of TECO-11.
- '';
+    '';
     homepage = https://github.com/blakemcbride/TECOC;
-    license = {  url = https://github.com/blakemcbride/TECOC/tree/master/doc/readme-1st.txt; };
+    license = { url = https://github.com/blakemcbride/TECOC/tree/master/doc/readme-1st.txt; };
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
   };

@@ -30,4 +30,3 @@ buildGoPackage rec {
     maintainers = with maintainers; [ rvolosatovs benpye ];
   };
 }
-

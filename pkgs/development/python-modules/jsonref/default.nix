@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, mock }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "jsonref";
@@ -18,9 +22,9 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An implementation of JSON Reference for Python";
-    homepage    = "https://github.com/gazpachoking/jsonref";
-    license     = licenses.mit;
+    homepage = "https://github.com/gazpachoking/jsonref";
+    license = licenses.mit;
     maintainers = with maintainers; [ nand0p ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

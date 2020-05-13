@@ -30,7 +30,7 @@ buildGoPackage rec {
     description = "Tool for deploying kubernetes on aws using coreos";
     license = licenses.asl20;
     homepage = https://github.com/coreos/coreos-kubernetes;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = with platforms; unix;
   };
 }

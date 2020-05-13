@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.elasticsearch;
 
@@ -36,7 +35,8 @@ let
     postBuild = "${pkgs.coreutils}/bin/mkdir -p $out/plugins";
   };
 
-in {
+in
+{
 
   ###### interface
 
@@ -116,20 +116,20 @@ in {
 
     extraCmdLineOptions = mkOption {
       description = "Extra command line options for the elasticsearch launcher.";
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
     };
 
     extraJavaOptions = mkOption {
       description = "Extra command line options for Java.";
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" ];
     };
 
     plugins = mkOption {
       description = "Extra elasticsearch plugins";
-      default = [];
+      default = [ ];
       type = types.listOf types.package;
       example = lib.literalExample "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };
@@ -146,8 +146,8 @@ in {
       path = [ pkgs.inetutils ];
       environment = {
         ES_HOME = cfg.dataDir;
-        ES_JAVA_OPTS = toString ( optional (!es6) [ "-Des.path.conf=${configDir}" ]
-                                  ++ cfg.extraJavaOptions);
+        ES_JAVA_OPTS = toString (optional (!es6) [ "-Des.path.conf=${configDir}" ]
+          ++ cfg.extraJavaOptions);
       } // optionalAttrs es6 {
         ES_PATH_CONF = configDir;
       };

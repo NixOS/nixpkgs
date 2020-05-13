@@ -1,7 +1,29 @@
-{ stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
-  psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
-  qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
-  spyder-kernels_0_5, qtpy, pyzmq, chardet
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, makeDesktopItem
+, jedi
+, pycodestyle
+, psutil
+, pyflakes
+, rope
+, numpy
+, scipy
+, matplotlib
+, pylint
+, keyring
+, numpydoc
+, qtconsole
+, qtawesome
+, nbconvert
+, mccabe
+, pyopengl
+, cloudpickle
+, pygments
+, spyder-kernels_0_5
+, qtpy
+, pyzmq
+, chardet
 , pyqtwebengine
 }:
 
@@ -17,9 +39,29 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
-    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels_0_5
-    pygments qtpy pyzmq chardet pyqtwebengine
+    jedi
+    pycodestyle
+    psutil
+    pyflakes
+    rope
+    numpy
+    scipy
+    matplotlib
+    pylint
+    keyring
+    numpydoc
+    qtconsole
+    qtawesome
+    nbconvert
+    mccabe
+    pyopengl
+    cloudpickle
+    spyder-kernels_0_5
+    pygments
+    qtpy
+    pyzmq
+    chardet
+    pyqtwebengine
   ];
 
   # There is no test for spyder

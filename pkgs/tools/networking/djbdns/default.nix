@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, glibc, dns-root-data } :
-
+{ stdenv, fetchurl, glibc, dns-root-data }:
 let
   version = "1.05";
 
@@ -9,7 +8,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation {
   pname = "djbdns";
   inherit version;

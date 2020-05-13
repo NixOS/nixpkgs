@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "0.11.0";
 
   src = fetchFromGitHub {
-    owner  = "crystal-ameba";
-    repo   = "ameba";
-    rev    = "v${version}";
+    owner = "crystal-ameba";
+    repo = "ameba";
+    rev = "v${version}";
     sha256 = "0zjv59f555q2w8ahrvmpdzasrifwjgr0mk6rly9yss4ab3rj8cy2";
   };
 

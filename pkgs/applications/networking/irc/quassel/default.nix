@@ -4,9 +4,17 @@
 , tag ? "-kf5" # tag added to the package name
 , static ? false # link statically
 
-, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
-, mkDerivation, qtbase, qtscript
-, phonon, libdbusmenu, qca-qt5
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, dconf
+, mkDerivation
+, qtbase
+, qtscript
+, phonon
+, libdbusmenu
+, qca-qt5
 
 , withKDE ? true # enable KDE integration
 , extra-cmake-modules
@@ -18,19 +26,16 @@
 , kwidgetsaddons
 , kxmlgui
 }:
-
 let
-    inherit (stdenv) lib;
-    buildClient = monolithic || client;
-    buildCore = monolithic || enableDaemon;
+  inherit (stdenv) lib;
+  buildClient = monolithic || client;
+  buildCore = monolithic || enableDaemon;
 in
-
 assert monolithic -> !client && !enableDaemon;
 assert client || enableDaemon -> !monolithic;
 assert !buildClient -> !withKDE; # KDE is used by the client only
-
 let
-  edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
+  edf = flag: feature: [ ("-D" + feature + (if flag then "=ON" else "=OFF")) ];
 
 in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
   name = "quassel${tag}-${version}";
@@ -49,12 +54,17 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
   NIX_CFLAGS_COMPILE = "-DQT_NO_VERSION_TAGGING=1";
 
   buildInputs =
-       [ cmake makeWrapper qtbase ]
-    ++ lib.optionals buildCore [qtscript qca-qt5]
-    ++ lib.optionals buildClient [libdbusmenu phonon]
+    [ cmake makeWrapper qtbase ]
+    ++ lib.optionals buildCore [ qtscript qca-qt5 ]
+    ++ lib.optionals buildClient [ libdbusmenu phonon ]
     ++ lib.optionals (buildClient && withKDE) [
-      extra-cmake-modules kconfigwidgets kcoreaddons
-      knotifications knotifyconfig ktextwidgets kwidgetsaddons
+      extra-cmake-modules
+      kconfigwidgets
+      kcoreaddons
+      knotifications
+      knotifyconfig
+      ktextwidgets
+      kwidgetsaddons
       kxmlgui
     ];
 
@@ -62,11 +72,11 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
     "-DEMBED_DATA=OFF"
     "-DUSE_QT5=ON"
   ]
-    ++ edf static "STATIC"
-    ++ edf monolithic "WANT_MONO"
-    ++ edf enableDaemon "WANT_CORE"
-    ++ edf client "WANT_QTCLIENT"
-    ++ edf withKDE "WITH_KDE";
+  ++ edf static "STATIC"
+  ++ edf monolithic "WANT_MONO"
+  ++ edf enableDaemon "WANT_CORE"
+  ++ edf client "WANT_QTCLIENT"
+  ++ edf withKDE "WITH_KDE";
 
   dontWrapQtApps = true;
 

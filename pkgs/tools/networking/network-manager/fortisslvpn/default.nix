@@ -1,10 +1,24 @@
-{ stdenv, fetchurl, substituteAll, openfortivpn, intltool, pkgconfig, file, gtk3,
-networkmanager, ppp, libsecret, withGnome ? true, gnome3, fetchpatch, networkmanagerapplet }:
-
+{ stdenv
+, fetchurl
+, substituteAll
+, openfortivpn
+, intltool
+, pkgconfig
+, file
+, gtk3
+, networkmanager
+, ppp
+, libsecret
+, withGnome ? true
+, gnome3
+, fetchpatch
+, networkmanagerapplet
+}:
 let
   pname = "NetworkManager-fortisslvpn";
   version = "1.2.10";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
@@ -53,4 +67,3 @@ in stdenv.mkDerivation {
     license = licenses.gpl2;
   };
 }
-

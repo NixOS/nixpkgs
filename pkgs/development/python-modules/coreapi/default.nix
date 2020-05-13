@@ -1,13 +1,13 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  django,
-  coreschema,
-  itypes,
-  uritemplate,
-  requests,
-  pytest,
+{ stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, django
+, coreschema
+, itypes
+, uritemplate
+, requests
+, pytest
+,
 }:
 
 buildPythonPackage rec {

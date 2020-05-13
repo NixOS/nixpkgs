@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qtbase, qtx11extras, ncurses5, xorg, zlib, python27Packages}:
+{ stdenv, fetchurl, qtbase, qtx11extras, ncurses5, xorg, zlib, python27Packages }:
 stdenv.mkDerivation {
   name = "fdr-4.2.3";
   src = fetchurl {

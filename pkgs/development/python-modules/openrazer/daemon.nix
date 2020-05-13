@@ -13,7 +13,6 @@
 , stdenv
 , wrapGAppsHook
 }:
-
 let
   common = import ./common.nix { inherit stdenv fetchFromGitHub; };
 in

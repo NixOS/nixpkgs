@@ -1,15 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.hardware.facetimehd;
 
   kernelPackages = config.boot.kernelPackages;
 
 in
-
 {
 
   options.hardware.facetimehd.enable = mkEnableOption "facetimehd kernel module";

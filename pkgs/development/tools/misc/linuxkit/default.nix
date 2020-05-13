@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  pname   = "linuxkit";
+  pname = "linuxkit";
   version = "0.7";
 
   goPackagePath = "github.com/linuxkit/linuxkit";

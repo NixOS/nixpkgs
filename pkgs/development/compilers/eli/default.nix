@@ -9,7 +9,6 @@
 , xorg
 , file
 }:
-
 let
   # eli derives the location of the include folder from the location of the lib folder
   tk_combined = symlinkJoin {
@@ -33,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/eli-project/Eli/Eli%20${version}/${pname}-${version}.tar.bz2";
-    sha256="1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
+    sha256 = "1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
   };
 
   buildInputs = [
@@ -55,7 +54,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "nobrowsers" ];
 
 
-  preConfigure=''
+  preConfigure = ''
     configureFlagsArray=(
       --with-tcltk="${tcl} ${tk_combined}"
       --with-curses="${curses_combined}"

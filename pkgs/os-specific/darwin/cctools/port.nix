@@ -1,9 +1,16 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
-, libcxxabi, libuuid
-, libobjc ? null, maloader ? null
-, enableTapiSupport ? true, libtapi
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, autoreconfHook
+, libcxxabi
+, libuuid
+, libobjc ? null
+, maloader ? null
+, enableTapiSupport ? true
+, libtapi
 }:
-
 let
 
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
@@ -12,19 +19,17 @@ let
     (stdenv.targetPlatform != stdenv.hostPlatform)
     "${stdenv.targetPlatform.config}-";
 in
-
 # Non-Darwin alternatives
 assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
-
 let
   baseParams = rec {
     name = "${targetPrefix}cctools-port";
     version = "927.0.2";
 
     src = fetchFromGitHub {
-      owner  = "tpoechtrager";
-      repo   = "cctools-port";
-      rev    = "8239a5211bcf07d6b9d359782e1a889ec1d7cce5";
+      owner = "tpoechtrager";
+      repo = "cctools-port";
+      rev = "8239a5211bcf07d6b9d359782e1a889ec1d7cce5";
       sha256 = "0h8b1my0wf1jyjq63wbiqkl2clgxsf87f6i4fjhqs431fzlq8sac";
     };
 
@@ -50,9 +55,9 @@ let
       ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
     configureFlags = [ "--disable-clang-as" ]
       ++ stdenv.lib.optionals enableTapiSupport [
-        "--enable-tapi-support"
-        "--with-libtapi=${libtapi}"
-      ];
+      "--enable-tapi-support"
+      "--with-libtapi=${libtapi}"
+    ];
 
     postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace cctools/Makefile.am --replace libobjc2 ""
@@ -102,4 +107,5 @@ let
       maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
     };
   };
-in stdenv.mkDerivation baseParams
+in
+stdenv.mkDerivation baseParams

@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-syntax";
 
-  asdFilesToKeep = ["cl-syntax.asd"];
+  asdFilesToKeep = [ "cl-syntax.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-syntax DESCRIPTION

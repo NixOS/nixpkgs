@@ -47,5 +47,5 @@ buildPythonPackage rec {
     homepage = https://github.com/irmen/Pyro4;
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
-    };
+  };
 }

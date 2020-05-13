@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner  = "crystal-lang";
-    repo   = "shards";
-    rev    = "v${version}";
+    owner = "crystal-lang";
+    repo = "shards";
+    rev = "v${version}";
     sha256 = "19q0xww4v0h5ln9gz8d8zv0c9ig761ik7gw8y31yxynzgzihwpf4";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dependency manager for the Crystal language";
-    license     = licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (crystal.meta) homepage platforms;
   };

@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-store";
 
-  asdFilesToKeep = ["cl-store.asd"];
+  asdFilesToKeep = [ "cl-store.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-store DESCRIPTION Serialization package SHA256

@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
-, six, twisted, werkzeug, incremental
-, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, six
+, twisted
+, werkzeug
+, incremental
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "klein";
@@ -29,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Klein Web Micro-Framework";
-    homepage    = "https://github.com/twisted/klein";
-    license     = licenses.mit;
+    homepage = "https://github.com/twisted/klein";
+    license = licenses.mit;
   };
 }

@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   isLocalPath = x:
     builtins.substring 0 1 x == "/"      # absolute path
     || builtins.substring 0 1 x == "."   # relative path
@@ -71,10 +69,12 @@ let
   mkBackupService = name: cfg:
     let
       userHome = config.users.users.${cfg.user}.home;
-    in nameValuePair "borgbackup-job-${name}" {
+    in
+    nameValuePair "borgbackup-job-${name}" {
       description = "BorgBackup job ${name}";
       path = with pkgs; [
-        borgbackup openssh
+        borgbackup
+        openssh
       ];
       script = mkBackupScript cfg;
       serviceConfig = {
@@ -99,15 +99,19 @@ let
     };
 
   # utility function around makeWrapper
-  mkWrapperDrv = {
-      original, name, set ? {}
+  mkWrapperDrv =
+    { original
+    , name
+    , set ? { }
     }:
-    pkgs.runCommandNoCC "${name}-wrapper" {
-      buildInputs = [ pkgs.makeWrapper ];
-    } (with lib; ''
-      makeWrapper "${original}" "$out/bin/${name}" \
-        ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
-    '');
+    pkgs.runCommandNoCC "${name}-wrapper"
+      {
+        buildInputs = [ pkgs.makeWrapper ];
+      }
+      (with lib; ''
+        makeWrapper "${original}" "$out/bin/${name}" \
+          ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
+      '');
 
   mkBorgWrapper = name: cfg: mkWrapperDrv {
     original = "${pkgs.borgbackup}/bin/borg";
@@ -120,15 +124,16 @@ let
     let
       install = "install -o ${cfg.user} -g ${cfg.group}";
     in
-      nameValuePair "borgbackup-job-${name}" (stringAfter [ "users" ] (''
-        # Ensure that the home directory already exists
-        # We can't assert createHome == true because that's not the case for root
-        cd "${config.users.users.${cfg.user}.home}"
-        ${install} -d .config/borg
-        ${install} -d .cache/borg
-      '' + optionalString (isLocalPath cfg.repo && !cfg.removableDevice) ''
-        ${install} -d ${escapeShellArg cfg.repo}
-      ''));
+    nameValuePair "borgbackup-job-${name}" (stringAfter [ "users" ] (''
+      # Ensure that the home directory already exists
+      # We can't assert createHome == true because that's not the case for root
+      cd "${config.users.users.${cfg.user}.home}"
+      ${install} -d .config/borg
+      ${install} -d .cache/borg
+    '' + optionalString (isLocalPath cfg.repo && !cfg.removableDevice) ''
+      ${install} -d ${escapeShellArg cfg.repo}
+    '')
+    );
 
   mkPassAssertion = name: cfg: {
     assertion = with cfg.encryption;
@@ -161,13 +166,13 @@ let
       quotaArg = optionalString (cfg.quota != null) "--storage-quota ${cfg.quota}";
       serveCommand = "borg serve ${restrictedArg} ${appendOnlyArg} ${quotaArg}";
     in
-      ''command="${cdCommand} && ${serveCommand}",restrict ${key}'';
+    ''command="${cdCommand} && ${serveCommand}",restrict ${key}'';
 
   mkUsersConfig = name: cfg: {
     users.${cfg.user} = {
       openssh.authorizedKeys.keys =
         (map (mkAuthorizedKey cfg false) cfg.authorizedKeys
-        ++ map (mkAuthorizedKey cfg true) cfg.authorizedKeysAppendOnly);
+          ++ map (mkAuthorizedKey cfg true) cfg.authorizedKeysAppendOnly);
       useDefaultShell = true;
     };
     groups.${cfg.group} = { };
@@ -187,7 +192,8 @@ let
     '';
   };
 
-in {
+in
+{
   meta.maintainers = with maintainers; [ dotlambda ];
 
   ###### interface
@@ -214,7 +220,8 @@ in {
         };
       }
     '';
-    type = types.attrsOf (types.submodule (let globalConfig = config; in
+    type = types.attrsOf (types.submodule (
+      let globalConfig = config; in
       { name, config, ... }: {
         options = {
 
@@ -292,9 +299,12 @@ in {
 
           encryption.mode = mkOption {
             type = types.enum [
-              "repokey" "keyfile"
-              "repokey-blake2" "keyfile-blake2"
-              "authenticated" "authenticated-blake2"
+              "repokey"
+              "keyfile"
+              "repokey-blake2"
+              "keyfile-blake2"
+              "authenticated"
+              "authenticated-blake2"
               "none"
             ];
             description = ''
@@ -627,23 +637,25 @@ in {
 
   ###### implementation
 
-  config = mkIf (with config.services.borgbackup; jobs != { } || repos != { })
-    (with config.services.borgbackup; {
-      assertions =
-        mapAttrsToList mkPassAssertion jobs
-        ++ mapAttrsToList mkKeysAssertion repos
-        ++ mapAttrsToList mkRemovableDeviceAssertions jobs;
+  config =
+    mkIf
+      (with config.services.borgbackup; jobs != { } || repos != { })
+      (with config.services.borgbackup; {
+        assertions =
+          mapAttrsToList mkPassAssertion jobs
+          ++ mapAttrsToList mkKeysAssertion repos
+          ++ mapAttrsToList mkRemovableDeviceAssertions jobs;
 
-      system.activationScripts = mapAttrs' mkActivationScript jobs;
+        system.activationScripts = mapAttrs' mkActivationScript jobs;
 
-      systemd.services =
-        # A job named "foo" is mapped to systemd.services.borgbackup-job-foo
-        mapAttrs' mkBackupService jobs
-        # A repo named "foo" is mapped to systemd.services.borgbackup-repo-foo
-        // mapAttrs' mkRepoService repos;
+        systemd.services =
+          # A job named "foo" is mapped to systemd.services.borgbackup-job-foo
+          mapAttrs' mkBackupService jobs
+          # A repo named "foo" is mapped to systemd.services.borgbackup-repo-foo
+          // mapAttrs' mkRepoService repos;
 
-      users = mkMerge (mapAttrsToList mkUsersConfig repos);
+        users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
-      environment.systemPackages = with pkgs; [ borgbackup ] ++ (mapAttrsToList mkBorgWrapper jobs);
-    });
+        environment.systemPackages = with pkgs; [ borgbackup ] ++ (mapAttrsToList mkBorgWrapper jobs);
+      });
 }

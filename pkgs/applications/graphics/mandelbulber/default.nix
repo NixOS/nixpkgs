@@ -48,9 +48,11 @@ mkDerivation rec {
 
   qmakeFlags = [
     "SHARED_PATH=${placeholder ''out''}"
-    (if withOpenCL
+    (
+      if withOpenCL
       then "qmake/mandelbulber-opencl.pro"
-      else "qmake/mandelbulber.pro")
+      else "qmake/mandelbulber.pro"
+    )
   ];
 
   meta = with lib; {

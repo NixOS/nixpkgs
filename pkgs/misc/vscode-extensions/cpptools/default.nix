@@ -1,8 +1,14 @@
-{ stdenv, vscode-utils
-, fetchurl, unzip
-, mono, writeScript, runtimeShell
-, jq, clang-tools
-, gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
+{ stdenv
+, vscode-utils
+, fetchurl
+, unzip
+, mono
+, writeScript
+, runtimeShell
+, jq
+, clang-tools
+, gdbUseFixed ? true
+, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
 assert gdbUseFixed -> null != gdb;
@@ -29,7 +35,6 @@ assert gdbUseFixed -> null != gdb;
 
   Once the symbolic link temporary solution taken, everything shoud run smootly.
 */
-
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
 
@@ -70,15 +75,15 @@ let
   openDebugAD7Script = writeScript "OpenDebugAD7" ''
     #!${runtimeShell}
     BIN_DIR="$(cd "$(dirname "$0")" && pwd -P)"
-    ${if gdbUseFixed
-        then ''
-          export PATH=''${PATH}''${PATH:+:}${gdb}/bin
-        ''
-        else ""}
+    ${
+      if gdbUseFixed
+      then ''
+        export PATH=''${PATH}''${PATH:+:}${gdb}/bin
+      ''
+      else ""}
     ${mono}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
   '';
 in
-
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cpptools";
@@ -119,11 +124,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
     find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
   '';
 
-    meta = with stdenv.lib; {
-      license = licenses.unfree;
-      maintainers = [ maintainers.jraygauthier ];
-      # A 32 bit linux would also be possible with some effort (specific download of binaries +
-      # patching of the elf files with 32 bit interpreter).
-      platforms = [ "x86_64-linux" ];
-    };
+  meta = with stdenv.lib; {
+    license = licenses.unfree;
+    maintainers = [ maintainers.jraygauthier ];
+    # A 32 bit linux would also be possible with some effort (specific download of binaries +
+    # patching of the elf files with 32 bit interpreter).
+    platforms = [ "x86_64-linux" ];
+  };
 }

@@ -1,5 +1,5 @@
 # DO NOT EDIT! This file is generated automatically by update.sh
-{ }:
+{}:
 {
   version = "1.12.0";
   pulumiPkgs = {

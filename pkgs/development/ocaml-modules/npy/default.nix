@@ -8,8 +8,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "LaurentMazare";
-    repo   = "${pname}-ocaml";
-    rev    = "c051086bfea6bee58208098bcf1c2f725a80a1fb";
+    repo = "${pname}-ocaml";
+    rev = "c051086bfea6bee58208098bcf1c2f725a80a1fb";
     sha256 = "06mgrnm7xiw2lhqvbdv2zmd65sqfdnjd7j4qmcswanmplm17yhvb";
   };
 

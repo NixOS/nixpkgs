@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, python, pkgconfig, readline, tdb, talloc, tevent
-, popt, libxslt, docbook_xsl, docbook_xml_dtd_42, cmocka
+{ stdenv
+, fetchurl
+, python
+, pkgconfig
+, readline
+, tdb
+, talloc
+, tevent
+, popt
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, cmocka
 }:
 
 stdenv.mkDerivation rec {
@@ -7,15 +18,22 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://samba/ldb/${name}.tar.gz";
-    sha256 = "14gsrm7dvyjpbpnc60z75j6fz2p187abm2h353lq95kx2bv70c1b"                                                                                                                                                             ;
+    sha256 = "14gsrm7dvyjpbpnc60z75j6fz2p187abm2h353lq95kx2bv70c1b";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python readline tdb talloc tevent popt
-    libxslt docbook_xsl docbook_xml_dtd_42
+    python
+    readline
+    tdb
+    talloc
+    tevent
+    popt
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
     cmocka
   ];
 

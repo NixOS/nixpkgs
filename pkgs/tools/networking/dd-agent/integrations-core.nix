@@ -33,10 +33,9 @@
 #
 # [1]: https://github.com/DataDog/integrations-core
 
-{ pkgs, python, extraIntegrations ? {} }:
+{ pkgs, python, extraIntegrations ? { } }:
 
 with pkgs.lib;
-
 let
   src = pkgs.fetchFromGitHub {
     owner = "DataDog";
@@ -65,27 +64,36 @@ let
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
     propagatedBuildInputs = with python.pkgs; [
-      requests protobuf prometheus_client uuid simplejson uptime
+      requests
+      protobuf
+      prometheus_client
+      uuid
+      simplejson
+      uptime
     ];
   };
 
   # Default integrations that should be built:
   defaultIntegrations = {
-    disk     = (ps: [ ps.psutil ]);
-    mongo    = (ps: [ ps.pymongo ]);
-    network  = (ps: [ ps.psutil ]);
-    nginx    = (ps: []);
+    disk = (ps: [ ps.psutil ]);
+    mongo = (ps: [ ps.pymongo ]);
+    network = (ps: [ ps.psutil ]);
+    nginx = (ps: [ ]);
     postgres = (ps: with ps; [ pg8000_1_12 psycopg2 ]);
   };
 
   # All integrations (default + extra):
   integrations = defaultIntegrations // extraIntegrations;
-  builtIntegrations = mapAttrs (pname: fdeps: buildIntegration {
-    inherit pname;
-    propagatedBuildInputs = (fdeps python.pkgs) ++ [ datadog_checks_base ];
-  }) integrations;
+  builtIntegrations =
+    mapAttrs
+      (pname: fdeps: buildIntegration {
+        inherit pname;
+        propagatedBuildInputs = (fdeps python.pkgs) ++ [ datadog_checks_base ];
+      })
+      integrations;
 
-in builtIntegrations // {
+in
+builtIntegrations // {
   inherit datadog_checks_base;
   python = python.withPackages (_: (attrValues builtIntegrations));
 }

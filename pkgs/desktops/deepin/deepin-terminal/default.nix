@@ -1,8 +1,38 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, ninja, vala_0_40,
-  gettext, at-spi2-core, dbus, epoxy, expect, gtk3, json-glib,
-  libXdmcp, libgee, libpthreadstubs, librsvg, libsecret, libtasn1,
-  libxcb, libxkbcommon, p11-kit, pcre, vte, wnck, libselinux, gnutls, pcre2,
-  libsepol, utillinux, deepin-menu, deepin-shortcut-viewer, deepin, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, ninja
+, vala_0_40
+, gettext
+, at-spi2-core
+, dbus
+, epoxy
+, expect
+, gtk3
+, json-glib
+, libXdmcp
+, libgee
+, libpthreadstubs
+, librsvg
+, libsecret
+, libtasn1
+, libxcb
+, libxkbcommon
+, p11-kit
+, pcre
+, vte
+, wnck
+, libselinux
+, gnutls
+, pcre2
+, libsepol
+, utillinux
+, deepin-menu
+, deepin-shortcut-viewer
+, deepin
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-terminal";
@@ -21,7 +51,9 @@ stdenv.mkDerivation rec {
     ninja
     vala_0_40 # xcb.vapi:411.3-411.48: error: missing return statement at end of subroutine body
     gettext
-    libselinux libsepol utillinux # required by gio
+    libselinux
+    libsepol
+    utillinux # required by gio
     deepin.setupHook
     wrapGAppsHook
   ];
@@ -69,7 +101,7 @@ stdenv.mkDerivation rec {
       Deepin terminal, it sharpens your focus in the world of command line!
       It is an advanced terminal emulator with workspace, multiple
       windows, remote management, quake mode and other features.
-     '';
+    '';
     homepage = https://github.com/linuxdeepin/deepin-terminal;
     license = licenses.gpl3;
     platforms = platforms.linux;

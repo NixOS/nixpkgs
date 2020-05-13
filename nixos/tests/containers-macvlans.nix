@@ -1,12 +1,10 @@
 # Test for NixOS' container support.
-
 let
   # containers IP on VLAN 1
   containerIp1 = "192.168.1.253";
   containerIp2 = "192.168.1.254";
 in
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "containers-macvlans";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ montag451 ];
@@ -26,9 +24,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           interface = "eth1";
           mode = "bridge";
         };
-        networking.interfaces.eth1.ipv4.addresses = lib.mkForce [];
+        networking.interfaces.eth1.ipv4.addresses = lib.mkForce [ ];
         networking.interfaces.mv-eth1-host = {
-          ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
+          ipv4.addresses = [{ address = "192.168.1.1"; prefixLength = 24; }];
         };
 
         containers.test1 = {
@@ -37,7 +35,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
           config = {
             networking.interfaces.mv-eth1 = {
-              ipv4.addresses = [ { address = containerIp1; prefixLength = 24; } ];
+              ipv4.addresses = [{ address = containerIp1; prefixLength = 24; }];
             };
           };
         };
@@ -48,7 +46,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
           config = {
             networking.interfaces.mv-eth1 = {
-              ipv4.addresses = [ { address = containerIp2; prefixLength = 24; } ];
+              ipv4.addresses = [{ address = containerIp2; prefixLength = 24; }];
             };
           };
         };

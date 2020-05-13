@@ -39,5 +39,5 @@ stdenv.mkDerivation rec {
       OGDF is developed and supported by Osnabrück University, TU Dortmund,
       University of Cologne, University of Konstanz, and TU Ilmenau.
     '';
-   };
+  };
 }

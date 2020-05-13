@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.vdr;
   libDir = "/var/lib/vdr";
-in {
+in
+{
 
   ###### interface
 
@@ -30,7 +30,7 @@ in {
 
       extraArguments = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Additional command line arguments to pass to VDR.";
       };
 
@@ -69,14 +69,15 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.vdr = {};
+    users.groups.vdr = { };
   }
 
-  (mkIf cfg.enableLirc {
-    services.lirc.enable = true;
-    users.users.vdr.extraGroups = [ "lirc" ];
-    services.vdr.extraArguments = [
-      "--lirc=${config.passthru.lirc.socket}"
-    ];
-  })]);
+    (mkIf cfg.enableLirc {
+      services.lirc.enable = true;
+      users.users.vdr.extraGroups = [ "lirc" ];
+      services.vdr.extraArguments = [
+        "--lirc=${config.passthru.lirc.socket}"
+      ];
+    }
+    )]);
 }

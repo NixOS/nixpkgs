@@ -13,10 +13,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ apacheHttpd avahi apr ];
 
-  patches = [ (fetchpatch {
-    url = "http://bazaar.launchpad.net/~ubuntu-branches/ubuntu/vivid/mod-dnssd/vivid/download/package-import%40ubuntu.com-20130530193334-kqebiy78q534or5k/portforapache2.4.pat-20130530222510-7tlw5btqchd04edb-3/port-for-apache2.4.patch";
-    sha256 = "1hgcxwy1q8fsxfqyg95w8m45zbvxzskf1jxd87ljj57l7x1wwp4r";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "http://bazaar.launchpad.net/~ubuntu-branches/ubuntu/vivid/mod-dnssd/vivid/download/package-import%40ubuntu.com-20130530193334-kqebiy78q534or5k/portforapache2.4.pat-20130530222510-7tlw5btqchd04edb-3/port-for-apache2.4.patch";
+      sha256 = "1hgcxwy1q8fsxfqyg95w8m45zbvxzskf1jxd87ljj57l7x1wwp4r";
+    })
+  ];
 
   installPhase = ''
     mkdir -p $out/modules

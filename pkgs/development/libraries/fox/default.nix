@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor, libXrandr, libXft
-, CoreServices ? null }:
+{ stdenv
+, fetchurl
+, xlibsWrapper
+, libpng
+, libjpeg
+, libtiff
+, zlib
+, bzip2
+, libXcursor
+, libXrandr
+, libXft
+, CoreServices ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "fox";
@@ -31,7 +42,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://fox-toolkit.org;
     license = licenses.lgpl3;
-    maintainers = [];
+    maintainers = [ ];
     broken = stdenv.isDarwin;
     platforms = platforms.all;
   };

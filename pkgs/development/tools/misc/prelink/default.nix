@@ -1,5 +1,4 @@
 { stdenv, fetchurl, libelf }:
-
 let
   version = "20130503";
 in
@@ -8,7 +7,9 @@ stdenv.mkDerivation {
   inherit version;
 
   buildInputs = [
-    libelf stdenv.cc.libc (stdenv.lib.getOutput "static" stdenv.cc.libc)
+    libelf
+    stdenv.cc.libc
+    (stdenv.lib.getOutput "static" stdenv.cc.libc)
   ];
 
   src = fetchurl {

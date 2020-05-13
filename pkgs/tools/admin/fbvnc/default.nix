@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub}:
+{ stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "fbvnc";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     rev = "783204ff6c92afec33d6d36f7e74f1fcf2b1b601";
   };
 
-  buildInputs = [];
+  buildInputs = [ ];
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Framebuffer VNC client";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     homepage = "https://github.com/zohead/fbvnc/";
   };

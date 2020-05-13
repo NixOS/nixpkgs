@@ -7,8 +7,10 @@
 , Mako
 , numpy
 , funcsigs
-, withCuda ? false, pycuda
-, withOpenCL ? true, pyopencl
+, withCuda ? false
+, pycuda
+, withOpenCL ? true
+, pyopencl
 }:
 
 buildPythonPackage rec {

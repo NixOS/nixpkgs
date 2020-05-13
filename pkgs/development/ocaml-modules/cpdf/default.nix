@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, camlpdf, ncurses }:
-
 let version = "2.3"; in
-
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-cpdf-${version}";
 
@@ -27,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = https://www.coherentpdf.com/;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     description = "PDF Command Line Tools";
     license = licenses.unfree;
     maintainers = [ maintainers.vbgl ];

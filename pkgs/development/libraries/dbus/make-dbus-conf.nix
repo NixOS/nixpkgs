@@ -1,5 +1,8 @@
-{ runCommand, writeText, libxslt, dbus
-, serviceDirectories ? []
+{ runCommand
+, writeText
+, libxslt
+, dbus
+, serviceDirectories ? [ ]
 , suidHelper ? "/var/setuid-wrappers/dbus-daemon-launch-helper"
 }:
 
@@ -9,24 +12,24 @@
  * *-local.conf -- it needs to be in the main configuration file.
  */
 runCommand "dbus-1"
-  {
-    inherit serviceDirectories suidHelper;
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-    XML_CATALOG_FILES = writeText "dbus-catalog.xml" ''
-      <?xml version="1.0"?>
-      <!DOCTYPE catalog PUBLIC
-        "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
-        "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+{
+  inherit serviceDirectories suidHelper;
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+  XML_CATALOG_FILES = writeText "dbus-catalog.xml" ''
+    <?xml version="1.0"?>
+    <!DOCTYPE catalog PUBLIC
+      "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
+      "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
 
-      <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-        <rewriteSystem
-          systemIdStartString="http://www.freedesktop.org/standards/dbus/1.0/"
-          rewritePrefix="file://${dbus}/share/xml/dbus-1/"/>
-      </catalog>
-    '';
-    nativeBuildInputs = [ libxslt.bin ];
-  }
+    <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+      <rewriteSystem
+        systemIdStartString="http://www.freedesktop.org/standards/dbus/1.0/"
+        rewritePrefix="file://${dbus}/share/xml/dbus-1/"/>
+    </catalog>
+  '';
+  nativeBuildInputs = [ libxslt.bin ];
+}
   ''
     mkdir -p $out
 

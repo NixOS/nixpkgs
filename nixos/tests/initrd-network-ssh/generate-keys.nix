@@ -1,8 +1,9 @@
-with import ../../.. {};
+with import ../../.. { };
 
-runCommand "gen-keys" {
-    buildInputs = [ dropbear openssh ];
-  }
+runCommand "gen-keys"
+{
+  buildInputs = [ dropbear openssh ];
+}
   ''
     mkdir $out
     dropbearkey -t rsa -f $out/dropbear.priv -s 4096 | sed -n 2p > $out/dropbear.pub

@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, lib
+{ fetchurl
+, stdenv
+, lib
 , enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
 , enableShared ? !stdenv.hostPlatform.useAndroidPrebuilt
 }:
@@ -20,7 +22,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch =
-    lib.optionalString ((stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
+    lib.optionalString
+      ((stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       ''

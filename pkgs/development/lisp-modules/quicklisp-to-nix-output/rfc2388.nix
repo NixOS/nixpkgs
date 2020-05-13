@@ -14,7 +14,7 @@ rec {
 
   packageName = "rfc2388";
 
-  asdFilesToKeep = ["rfc2388.asd"];
+  asdFilesToKeep = [ "rfc2388.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM rfc2388 DESCRIPTION Implementation of RFC 2388 SHA256

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, curl }: 
+{ stdenv, fetchFromGitHub, cmake, curl }:
 
 stdenv.mkDerivation rec {
   pname = "curlcpp";
@@ -21,4 +21,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ juliendehos rszibele ];
   };
 }
-

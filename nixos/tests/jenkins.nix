@@ -3,7 +3,7 @@
 #   2. jenkins user can be extended on both master and slave
 #   3. jenkins service not started on slave node
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "jenkins";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ bjornfor coconnor domenkozar eelco ];
@@ -13,7 +13,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     master =
       { ... }:
-      { services.jenkins.enable = true;
+      {
+        services.jenkins.enable = true;
 
         # should have no effect
         services.jenkinsSlave.enable = true;
@@ -25,7 +26,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     slave =
       { ... }:
-      { services.jenkinsSlave.enable = true;
+      {
+        services.jenkinsSlave.enable = true;
 
         users.users.jenkins.extraGroups = [ "users" ];
       };

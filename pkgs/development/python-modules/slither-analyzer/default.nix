@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, makeWrapper, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, makeWrapper
+, pythonOlder
 , prettytable
 , setuptools
 , solc

@@ -1,12 +1,19 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, cairo, ffmpeg, ffms, libjpeg, log4cpp, pango
-, avxeditSupport ? false, qt4 ? null
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, cairo
+, ffmpeg
+, ffms
+, libjpeg
+, log4cpp
+, pango
+, avxeditSupport ? false
+, qt4 ? null
 }:
-
 let
   inherit (stdenv.lib) enableFeature optional;
 in
-
 stdenv.mkDerivation {
   pname = "avxsynth";
   version = "2015-04-07";

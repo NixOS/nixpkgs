@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, pkgconfig
-, xorg, gtk2, spice, spice-protocol
+{ stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkgconfig
+, xorg
+, gtk2
+, spice
+, spice-protocol
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +23,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [
-    xorg.libxcb xorg.xcbutil xorg.utilmacros
-    gtk2 spice spice-protocol
+    xorg.libxcb
+    xorg.xcbutil
+    xorg.utilmacros
+    gtk2
+    spice
+    spice-protocol
   ];
 
   NIX_LDFLAGS = "-lpthread";

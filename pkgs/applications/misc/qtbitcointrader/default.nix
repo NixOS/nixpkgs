@@ -1,5 +1,4 @@
 { stdenv, fetchzip, qt5, mkDerivation }:
-
 let
   version = "1.40.43";
 in

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fuse];
+  buildInputs = [ fuse ];
 
   meta = {
     homepage = http://djmount.sourceforge.net/;

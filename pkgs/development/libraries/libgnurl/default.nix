@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, libtool, groff, perl, pkgconfig, python2, zlib, gnutls,
-  libidn2, libunistring, nghttp2 }:
+{ stdenv
+, fetchurl
+, libtool
+, groff
+, perl
+, pkgconfig
+, python2
+, zlib
+, gnutls
+, libidn2
+, libunistring
+, nghttp2
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgnurl";
@@ -38,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A fork of libcurl used by GNUnet";
-    homepage    = "https://gnunet.org/en/gnurl.html";
+    homepage = "https://gnunet.org/en/gnurl.html";
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
     license = licenses.curl;

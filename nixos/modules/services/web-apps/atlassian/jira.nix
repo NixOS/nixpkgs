@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.jira;
 
   pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
@@ -21,10 +19,10 @@ let
       session.validationinterval              ${toString cfg.sso.validationInterval}
       session.lastvalidation                  session.lastvalidation
     '';
-  });
+  }
+  );
 
 in
-
 {
   options = {
     services.jira = {
@@ -62,7 +60,7 @@ in
 
       catalinaOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "-Xms1024m" "-Xmx2048m" ];
         description = "Java options to pass to catalina/tomcat.";
       };
@@ -153,7 +151,7 @@ in
       group = cfg.group;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.home}' - ${cfg.user} - - -"
@@ -186,10 +184,11 @@ in
         mkdir -p ${cfg.home}/{logs,work,temp,deploy}
 
         sed -e 's,port="8080",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
-        '' + (lib.optionalString cfg.proxy.enable ''
-          -e 's,protocol="HTTP/1.1",protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${toString cfg.proxy.secure}",' \
-        '') + ''
-          ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
+      '' + (lib.optionalString cfg.proxy.enable ''
+        -e 's,protocol="HTTP/1.1",protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${toString cfg.proxy.secure}",' \
+      ''
+      ) + ''
+        ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
       serviceConfig = {

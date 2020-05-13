@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, perl, zlib
-, withCryptodev ? false, cryptodev
+{ stdenv
+, fetchFromGitHub
+, perl
+, zlib
+, withCryptodev ? false
+, cryptodev
 }:
 
 with stdenv.lib;

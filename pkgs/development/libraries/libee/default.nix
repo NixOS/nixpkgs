@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libestr];
+  buildInputs = [ libestr ];
 
   meta = {
     homepage = http://www.libee.org/;

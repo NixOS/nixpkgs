@@ -29,8 +29,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://vicerveza.homeunix.net/~viric/cgi-bin/offrss;
     description = "Offline RSS/Atom reader";
-    license="AGPLv3+";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = "AGPLv3+";
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

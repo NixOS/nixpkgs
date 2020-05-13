@@ -1,5 +1,4 @@
 { stdenv, fetchurl, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview }:
-
 let param =
   let check = stdenv.lib.versionAtLeast ocaml.version; in
   if check "4.06" then {
@@ -12,7 +11,6 @@ let param =
     sha256 = "0cyj6sfdvzx8hw7553lhgwc0krlgvlza0ph3dk9gsxy047dm3wib";
   } else throw "lablgtk is not available for OCaml ${ocaml.version}";
 in
-
 stdenv.mkDerivation {
   pname = "lablgtk";
   inherit (param) version;
@@ -35,9 +33,11 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with maintainers; [
-      maggesi roconnor vbgl
+      maggesi
+      roconnor
+      vbgl
     ];
     homepage = http://lablgtk.forge.ocamlcore.org/;
     description = "An OCaml interface to GTK";

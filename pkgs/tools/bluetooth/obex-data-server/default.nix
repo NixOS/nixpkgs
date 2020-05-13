@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   patches = [ ./obex-data-server-0.4.6-build-fixes-1.patch ];
 
   preConfigure = ''
-  addToSearchPath PKG_CONFIG_PATH ${openobex}/lib64/pkgconfig
-  export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
+    addToSearchPath PKG_CONFIG_PATH ${openobex}/lib64/pkgconfig
+    export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
   '';
 
   meta = with stdenv.lib; {

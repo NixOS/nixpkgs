@@ -2,7 +2,6 @@
 , python
 , enableTelemetry ? false
 }:
-
 let
   py = python.override {
     packageOverrides = self: super: {
@@ -25,7 +24,6 @@ let
   };
 
 in
-
 with py.pkgs;
 
 buildPythonApplication rec {

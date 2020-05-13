@@ -1,13 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.tomcat;
   tomcat = cfg.package;
 in
-
 {
 
   meta = {
@@ -54,26 +51,26 @@ in
       };
 
       logDirs = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "Directories to create in baseDir/logs/";
       };
 
       extraConfigFiles = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "Extra configuration files to pull into the tomcat conf directory";
       };
 
       extraEnvironment = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "ENVIRONMENT=production" ];
         description = "Environment Variables to pass to the tomcat service";
       };
 
       extraGroups = mkOption {
-        default = [];
+        default = [ ];
         example = [ "users" ];
         description = "Defines extra groups to which the tomcat user belongs.";
       };
@@ -104,7 +101,7 @@ in
 
       sharedLibs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
       };
 
@@ -119,7 +116,7 @@ in
 
       commonLibs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
       };
 
@@ -140,7 +137,7 @@ in
             aliases = mkOption {
               type = types.listOf types.str;
               description = "aliases of the virtualhost";
-              default = [];
+              default = [ ];
             };
             webapps = mkOption {
               type = types.listOf types.path;
@@ -148,11 +145,11 @@ in
                 List containing web application WAR files and/or directories containing
                 web applications and configuration files for the virtual host.
               '';
-              default = [];
+              default = [ ];
             };
           };
         });
-        default = [];
+        default = [ ];
         description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
       };
 
@@ -178,7 +175,7 @@ in
         };
 
         services = mkOption {
-          default = [];
+          default = [ ];
           type = types.listOf types.str;
           description = "List containing AAR files or directories with AAR files which are web services to be deployed on Axis2";
         };
@@ -197,7 +194,8 @@ in
     users.groups.tomcat.gid = config.ids.gids.tomcat;
 
     users.users.tomcat =
-      { uid = config.ids.uids.tomcat;
+      {
+        uid = config.ids.uids.tomcat;
         description = "Tomcat user";
         home = "/homeless-shelter";
         extraGroups = cfg.extraGroups;
@@ -232,7 +230,7 @@ in
           ln -sfn ${tomcat}/conf/$i ${cfg.baseDir}/conf/`basename $i`
         done
 
-        ${if cfg.extraConfigFiles != [] then ''
+        ${if cfg.extraConfigFiles != [ ] then ''
           for i in ${toString cfg.extraConfigFiles}; do
             ln -sfn $i ${cfg.baseDir}/conf/`basename $i`
           done
@@ -248,29 +246,32 @@ in
           cp -f ${pkgs.writeTextDir "server.xml" cfg.serverXml}/* ${cfg.baseDir}/conf/
         '' else
           let
-            hostElementForVirtualHost = virtualHost: ''
+          hostElementForVirtualHost = virtualHost: ''
               <Host name="${virtualHost.name}" appBase="virtualhosts/${virtualHost.name}/webapps"
                     unpackWARs="true" autoDeploy="true" xmlValidation="false" xmlNamespaceAware="false">
             '' + concatStrings (innerElementsForVirtualHost virtualHost) + ''
               </Host>
             '';
-            innerElementsForVirtualHost = virtualHost:
+          innerElementsForVirtualHost = virtualHost:
               (map (alias: ''
-                <Alias>${alias}</Alias>
-              '') virtualHost.aliases)
+                  <Alias>${alias}</Alias>
+                '') virtualHost.aliases
+                  )
               ++ (optional cfg.logPerVirtualHost ''
-                <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs/${virtualHost.name}"
-                       prefix="${virtualHost.name}_access_log." pattern="combined" resolveHosts="false"/>
-              '');
-            hostElementsString = concatMapStringsSep "\n" hostElementForVirtualHost cfg.virtualHosts;
-            hostElementsSedString = replaceStrings ["\n"] ["\\\n"] hostElementsString;
-          in ''
+                  <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs/${virtualHost.name}"
+                         prefix="${virtualHost.name}_access_log." pattern="combined" resolveHosts="false"/>
+                ''
+                  );
+          hostElementsString = concatMapStringsSep "\n" hostElementForVirtualHost cfg.virtualHosts;
+          hostElementsSedString = replaceStrings [ "\n" ] [ "\\\n" ] hostElementsString;
+          in
+          ''
             # Create a modified server.xml which also includes all virtual hosts
             sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\\"${escapeShellArg hostElementsSedString} \
                   ${tomcat}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
           ''
         }
-        ${optionalString (cfg.logDirs != []) ''
+        ${optionalString (cfg.logDirs != [ ]) ''
           for i in ${toString cfg.logDirs}; do
             mkdir -p ${cfg.baseDir}/logs/$i
             chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs/$i
@@ -279,7 +280,8 @@ in
         ${optionalString cfg.logPerVirtualHost (toString (map (h: ''
           mkdir -p ${cfg.baseDir}/logs/${h.name}
           chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs/${h.name}
-        '') cfg.virtualHosts))}
+        '') cfg.virtualHosts
+          ))}
 
         # Symlink all the given common libs files or paths into the lib/ directory
         for i in ${tomcat} ${toString cfg.commonLibs}; do
@@ -364,7 +366,8 @@ in
               fi
             fi
           done
-        '') cfg.virtualHosts)}
+        '') cfg.virtualHosts
+          )}
 
         ${optionalString cfg.axis2.enable ''
           # Copy the Axis2 web application
@@ -403,10 +406,10 @@ in
       serviceConfig = {
         Type = "forking";
         PermissionsStartOnly = true;
-        PIDFile="/run/tomcat/tomcat.pid";
+        PIDFile = "/run/tomcat/tomcat.pid";
         RuntimeDirectory = "tomcat";
         User = cfg.user;
-        Environment=[
+        Environment = [
           "CATALINA_BASE=${cfg.baseDir}"
           "CATALINA_PID=/run/tomcat/tomcat.pid"
           "JAVA_HOME='${cfg.jdk}'"

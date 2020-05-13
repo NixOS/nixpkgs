@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   configureFlags = [
-    (stdenv.lib.enableFeature stdenv.isCygwin    "static")
+    (stdenv.lib.enableFeature stdenv.isCygwin "static")
     (stdenv.lib.enableFeature (!stdenv.isCygwin) "shared")
   ];
 

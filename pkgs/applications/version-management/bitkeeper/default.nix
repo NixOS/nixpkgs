@@ -1,6 +1,16 @@
-{ stdenv, fetchurl, perl, gperf, bison, groff
-, pkgconfig, libXft, pcre
-, libtomcrypt, libtommath, lz4 }:
+{ stdenv
+, fetchurl
+, perl
+, gperf
+, bison
+, groff
+, pkgconfig
+, libXft
+, pcre
+, libtomcrypt
+, libtommath
+, lz4
+}:
 
 stdenv.mkDerivation rec {
   pname = "bitkeeper";
@@ -17,15 +27,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    perl gperf bison groff libXft
-    pcre libtomcrypt libtommath lz4
+    perl
+    gperf
+    bison
+    groff
+    libXft
+    pcre
+    libtomcrypt
+    libtommath
+    lz4
   ];
 
   postPatch = ''
-        substituteInPlace port/unix_platform.sh \
-                --replace /bin/rm rm
-        substituteInPlace ./undo.c \
-                --replace /bin/cat cat
+    substituteInPlace port/unix_platform.sh \
+            --replace /bin/rm rm
+    substituteInPlace ./undo.c \
+            --replace /bin/cat cat
   '';
 
   sourceRoot = "bk-${version}/src";
@@ -42,15 +59,15 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description     = "A distributed version control system";
+    description = "A distributed version control system";
     longDescription = ''
       BitKeeper is a fast, enterprise-ready, distributed SCM that
       scales up to very large projects and down to tiny ones.
     '';
-    homepage    = https://www.bitkeeper.org/;
-    license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.linux;
+    homepage = https://www.bitkeeper.org/;
+    license = stdenv.lib.licenses.asl20;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ wscott thoughtpolice ];
-    broken      = true; # seems to fail on recent glibc versions
+    broken = true; # seems to fail on recent glibc versions
   };
 }

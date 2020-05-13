@@ -1,11 +1,27 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, qt5
-, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsaLib, python
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, qt5
+, avahi
+, boost
+, libopus
+, libsndfile
+, protobuf
+, speex
+, libcap
+, alsaLib
+, python
 , rnnoise
-, jackSupport ? false, libjack2 ? null
-, speechdSupport ? false, speechd ? null
-, pulseSupport ? false, libpulseaudio ? null
-, iceSupport ? false, zeroc-ice ? null
+, jackSupport ? false
+, libjack2 ? null
+, speechdSupport ? false
+, speechd ? null
+, pulseSupport ? false
+, libpulseaudio ? null
+, iceSupport ? false
+, zeroc-ice ? null
 }:
 
 assert jackSupport -> libjack2 != null;
@@ -19,7 +35,7 @@ let
     pname = overrides.type;
     version = source.version;
 
-    patches = (source.patches or [])
+    patches = (source.patches or [ ])
       ++ [ ./fix-rnnoise-argument.patch ];
 
     nativeBuildInputs = [ pkgconfig python qt5.qmake ]
@@ -40,11 +56,11 @@ let
       "CONFIG+=no-bundled-speex"
       "DEFINES+=PLUGIN_PATH=${placeholder "out"}/lib/mumble"
     ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
-      ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
-      ++ (overrides.configureFlags or [ ]);
+    ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
+    ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''
-       patchShebangs scripts
+      patchShebangs scripts
     '';
 
     makeFlags = [ "release" ];
@@ -72,57 +88,61 @@ let
     };
   });
 
-  client = source: generic {
-    type = "mumble";
+  client = source: generic
+    {
+      type = "mumble";
 
-    nativeBuildInputs = [ qt5.qttools ];
-    buildInputs = [ libopus libsndfile speex qt5.qtsvg rnnoise ]
-      ++ optional stdenv.isLinux alsaLib
-      ++ optional jackSupport libjack2
-      ++ optional speechdSupport speechd
-      ++ optional pulseSupport libpulseaudio;
+      nativeBuildInputs = [ qt5.qttools ];
+      buildInputs = [ libopus libsndfile speex qt5.qtsvg rnnoise ]
+        ++ optional stdenv.isLinux alsaLib
+        ++ optional jackSupport libjack2
+        ++ optional speechdSupport speechd
+        ++ optional pulseSupport libpulseaudio;
 
-    configureFlags = [
-      "CONFIG+=no-server"
-    ];
+      configureFlags = [
+        "CONFIG+=no-server"
+      ];
 
-    NIX_CFLAGS_COMPILE = optional speechdSupport "-I${speechd}/include/speech-dispatcher";
+      NIX_CFLAGS_COMPILE = optional speechdSupport "-I${speechd}/include/speech-dispatcher";
 
-    installPhase = ''
-      # bin stuff
-      install -Dm755 release/mumble $out/bin/mumble
-      install -Dm755 scripts/mumble-overlay $out/bin/mumble-overlay
+      installPhase = ''
+        # bin stuff
+        install -Dm755 release/mumble $out/bin/mumble
+        install -Dm755 scripts/mumble-overlay $out/bin/mumble-overlay
 
-      # lib stuff
-      mkdir -p $out/lib/mumble
-      cp -P release/libmumble.so* $out/lib
-      cp -P release/libcelt* $out/lib/mumble
-      cp -P release/plugins/* $out/lib/mumble
+        # lib stuff
+        mkdir -p $out/lib/mumble
+        cp -P release/libmumble.so* $out/lib
+        cp -P release/libcelt* $out/lib/mumble
+        cp -P release/plugins/* $out/lib/mumble
 
-      # icons
-      install -Dm644 scripts/mumble.desktop $out/share/applications/mumble.desktop
-      install -Dm644 icons/mumble.svg $out/share/icons/hicolor/scalable/apps/mumble.svg
-    '';
-  } source;
+        # icons
+        install -Dm644 scripts/mumble.desktop $out/share/applications/mumble.desktop
+        install -Dm644 icons/mumble.svg $out/share/icons/hicolor/scalable/apps/mumble.svg
+      '';
+    }
+    source;
 
-  server = source: generic {
-    type = "murmur";
+  server = source: generic
+    {
+      type = "murmur";
 
-    postPatch = optional iceSupport ''
-      grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${zeroc-ice.dev}/share/ice/,g'
-    '';
+      postPatch = optional iceSupport ''
+        grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${zeroc-ice.dev}/share/ice/,g'
+      '';
 
-    configureFlags = [
-      "CONFIG+=no-client"
-    ] ++ optional (!iceSupport) "CONFIG+=no-ice";
+      configureFlags = [
+        "CONFIG+=no-client"
+      ] ++ optional (!iceSupport) "CONFIG+=no-ice";
 
-    buildInputs = [ libcap ] ++ optional iceSupport zeroc-ice;
+      buildInputs = [ libcap ] ++ optional iceSupport zeroc-ice;
 
-    installPhase = ''
-      # bin stuff
-      install -Dm755 release/murmurd $out/bin/murmurd
-    '';
-  } source;
+      installPhase = ''
+        # bin stuff
+        install -Dm755 release/murmurd $out/bin/murmurd
+      '';
+    }
+    source;
 
   source = rec {
     version = "1.3.0";
@@ -136,7 +156,8 @@ let
       fetchSubmodules = true;
     };
   };
-in {
-  mumble  = client source;
-  murmur  = server source;
+in
+{
+  mumble = client source;
+  murmur = server source;
 }

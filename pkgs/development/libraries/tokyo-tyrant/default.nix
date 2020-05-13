@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ tokyocabinet ];
 
-  doCheck = false;                                # FIXME
+  doCheck = false; # FIXME
 
   meta = {
     description = "Network interface of the Tokyo Cabinet DBM";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.lgpl21Plus;
 
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;         # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux; # arbitrary choice
     maintainers = [ ];
   };
 }

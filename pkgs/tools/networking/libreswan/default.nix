@@ -1,18 +1,49 @@
-{ stdenv, fetchurl, makeWrapper,
-  pkgconfig, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
-  bash, iproute, iptables, procps, coreutils, gnused, gawk, nss, which, python,
-  docs ? false, xmlto, libselinux, ldns
-  }:
-
+{ stdenv
+, fetchurl
+, makeWrapper
+, pkgconfig
+, systemd
+, gmp
+, unbound
+, bison
+, flex
+, pam
+, libevent
+, libcap_ng
+, curl
+, nspr
+, bash
+, iproute
+, iptables
+, procps
+, coreutils
+, gnused
+, gawk
+, nss
+, which
+, python
+, docs ? false
+, xmlto
+, libselinux
+, ldns
+}:
 let
   optional = stdenv.lib.optional;
   version = "3.31";
   name = "libreswan-${version}";
   binPath = stdenv.lib.makeBinPath [
-    bash iproute iptables procps coreutils gnused gawk nss.tools which python
+    bash
+    iproute
+    iptables
+    procps
+    coreutils
+    gnused
+    gawk
+    nss.tools
+    which
+    python
   ];
 in
-
 assert docs -> xmlto != null;
 assert stdenv.isLinux -> libselinux != null;
 
@@ -26,7 +57,9 @@ stdenv.mkDerivation {
   };
 
   # These flags were added to compile v3.18. Try to lift them when updating.
-  NIX_CFLAGS_COMPILE = toString [ "-Wno-error=redundant-decls" "-Wno-error=format-nonliteral"
+  NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=redundant-decls"
+    "-Wno-error=format-nonliteral"
     # these flags were added to build with gcc7
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=format-truncation"
@@ -35,10 +68,29 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
-                  libcap_ng curl nspr nss python ldns ]
-                ++ optional docs xmlto
-                ++ optional stdenv.isLinux libselinux;
+  buildInputs = [
+    bash
+    iproute
+    iptables
+    systemd
+    coreutils
+    gnused
+    gawk
+    gmp
+    unbound
+    bison
+    flex
+    pam
+    libevent
+    libcap_ng
+    curl
+    nspr
+    nss
+    python
+    ldns
+  ]
+  ++ optional docs xmlto
+  ++ optional stdenv.isLinux libselinux;
 
   prePatch = ''
     # Correct bash path

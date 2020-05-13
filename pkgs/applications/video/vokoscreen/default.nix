@@ -1,5 +1,15 @@
-{ stdenv, fetchFromGitHub, mkDerivation
-, pkgconfig, qtbase, qttools, qmake, qtmultimedia, qtx11extras, alsaLib, libv4l, libXrandr
+{ stdenv
+, fetchFromGitHub
+, mkDerivation
+, pkgconfig
+, qtbase
+, qttools
+, qmake
+, qtmultimedia
+, qtx11extras
+, alsaLib
+, libv4l
+, libXrandr
 , ffmpeg
 }:
 
@@ -9,10 +19,10 @@ mkDerivation rec {
   version = "2.5.8-beta";
 
   src = fetchFromGitHub {
-    owner   = "vkohaupt";
-    repo    = "vokoscreen";
-    rev     = version;
-    sha256  = "1a85vbsi53mhzva49smqwcs61c51wv3ic410nvb9is9nlsbifwan";
+    owner = "vkohaupt";
+    repo = "vokoscreen";
+    rev = version;
+    sha256 = "1a85vbsi53mhzva49smqwcs61c51wv3ic410nvb9is9nlsbifwan";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];

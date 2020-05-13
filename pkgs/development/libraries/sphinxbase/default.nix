@@ -36,4 +36,5 @@ stdenv.mkDerivation (rec {
     mkdir -p $headers
     cp -av $out/include $headers
   '';
-}))
+}
+))

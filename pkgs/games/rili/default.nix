@@ -20,9 +20,9 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus;
     description = "A children's train game";
     longDescription = ''
-     Ri-li is an arcade game licensed under the GPL (General Public License).
-You drive a toy wood engine in many levels and you must collect all the coaches
-to win.
+           Ri-li is an arcade game licensed under the GPL (General Public License).
+      You drive a toy wood engine in many levels and you must collect all the coaches
+      to win.
     '';
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
     platforms = with stdenv.lib.platforms; linux;

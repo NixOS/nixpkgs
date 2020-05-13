@@ -1,36 +1,44 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.xserver.desktopManager.xfce;
 in
-
 {
 
   imports = [
     # added 2019-08-18
     # needed to preserve some semblance of UI familarity
     # with original XFCE module
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "xfce4-14" "extraSessionCommands" ]
-      [ "services" "xserver" "displayManager" "sessionCommands" ])
+    (
+      mkRenamedOptionModule
+        [ "services" "xserver" "desktopManager" "xfce4-14" "extraSessionCommands" ]
+        [ "services" "xserver" "displayManager" "sessionCommands" ]
+    )
 
     # added 2019-11-04
     # xfce4-14 module removed and promoted to xfce.
     # Needed for configs that used xfce4-14 module to migrate to this one.
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "xfce4-14" "enable" ]
-      [ "services" "xserver" "desktopManager" "xfce" "enable" ])
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "xfce4-14" "noDesktop" ]
-      [ "services" "xserver" "desktopManager" "xfce" "noDesktop" ])
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "xfce4-14" "enableXfwm" ]
-      [ "services" "xserver" "desktopManager" "xfce" "enableXfwm" ])
-    (mkRenamedOptionModule
-      [ "services" "xserver" "desktopManager" "xfce" "extraSessionCommands" ]
-      [ "services" "xserver" "displayManager" "sessionCommands" ])
+    (
+      mkRenamedOptionModule
+        [ "services" "xserver" "desktopManager" "xfce4-14" "enable" ]
+        [ "services" "xserver" "desktopManager" "xfce" "enable" ]
+    )
+    (
+      mkRenamedOptionModule
+        [ "services" "xserver" "desktopManager" "xfce4-14" "noDesktop" ]
+        [ "services" "xserver" "desktopManager" "xfce" "noDesktop" ]
+    )
+    (
+      mkRenamedOptionModule
+        [ "services" "xserver" "desktopManager" "xfce4-14" "enableXfwm" ]
+        [ "services" "xserver" "desktopManager" "xfce" "enableXfwm" ]
+    )
+    (
+      mkRenamedOptionModule
+        [ "services" "xserver" "desktopManager" "xfce" "extraSessionCommands" ]
+        [ "services" "xserver" "displayManager" "sessionCommands" ]
+    )
     (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "xfce" "screenLock" ] "")
   ];
 
@@ -43,7 +51,7 @@ in
       };
 
       thunarPlugins = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExample "[ pkgs.xfce.thunar-archive-plugin ]";
         description = ''
@@ -102,23 +110,23 @@ in
 
       (thunar.override { thunarPlugins = cfg.thunarPlugins; })
     ] # TODO: NetworkManager doesn't belong here
-      ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optionals config.hardware.pulseaudio.enable [
-        pavucontrol
-        # volume up/down keys support:
-        # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
-        # but can only be used with xfce4-panel, so for no-desktop usage we still include
-        # xfce4-volumed-pulse
-        (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
-      ] ++ optionals cfg.enableXfwm [
-        xfwm4
-        xfwm4-themes
-      ] ++ optionals (!cfg.noDesktop) [
-        xfce4-notifyd
-        xfce4-panel
-        xfdesktop
-      ];
+    ++ optional config.networking.networkmanager.enable networkmanagerapplet
+    ++ optional config.powerManagement.enable xfce4-power-manager
+    ++ optionals config.hardware.pulseaudio.enable [
+      pavucontrol
+      # volume up/down keys support:
+      # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
+      # but can only be used with xfce4-panel, so for no-desktop usage we still include
+      # xfce4-volumed-pulse
+      (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
+    ] ++ optionals cfg.enableXfwm [
+      xfwm4
+      xfwm4-themes
+    ] ++ optionals (!cfg.noDesktop) [
+      xfce4-notifyd
+      xfce4-panel
+      xfdesktop
+    ];
 
     environment.pathsToLink = [
       "/share/xfce4"

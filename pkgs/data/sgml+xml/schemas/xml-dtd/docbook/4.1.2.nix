@@ -1,5 +1,4 @@
-{stdenv, fetchurl, unzip, findXMLCatalogs}:
-
+{ stdenv, fetchurl, unzip, findXMLCatalogs }:
 let
 
   # Urgh, DocBook 4.1.2 doesn't come with an XML catalog.  Use the one
@@ -10,7 +9,6 @@ let
   };
 
 in
-
 import ./generic.nix {
   inherit stdenv unzip findXMLCatalogs;
   name = "docbook-xml-4.1.2";

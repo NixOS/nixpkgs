@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, buildGoPackage
-, makeWrapper, nix-prefetch-scripts }:
+{ stdenv
+, fetchFromGitHub
+, buildGoPackage
+, makeWrapper
+, nix-prefetch-scripts
+}:
 
 buildGoPackage rec {
   pname = "dep2nix";

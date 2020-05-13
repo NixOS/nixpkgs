@@ -1,5 +1,5 @@
 { luarocks, fetchFromGitHub }:
-luarocks.overrideAttrs(old: {
+luarocks.overrideAttrs (old: {
   pname = "luarocks-nix";
   version = "2019-09-07";
   src = fetchFromGitHub {

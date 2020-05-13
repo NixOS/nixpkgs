@@ -23,4 +23,3 @@ python3Packages.buildPythonApplication rec {
     license = with lib.licenses; [ gpl3 ];
   };
 }
-

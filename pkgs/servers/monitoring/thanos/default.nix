@@ -14,14 +14,15 @@ buildGoModule rec {
 
   subPackages = "cmd/thanos";
 
-  buildFlagsArray = let t = "github.com/prometheus/common/version"; in ''
-    -ldflags=
-       -X ${t}.Version=${version}
-       -X ${t}.Revision=unknown
-       -X ${t}.Branch=unknown
-       -X ${t}.BuildUser=nix@nixpkgs
-       -X ${t}.BuildDate=unknown
-  '';
+  buildFlagsArray = let t = "github.com/prometheus/common/version"; in
+    ''
+      -ldflags=
+         -X ${t}.Version=${version}
+         -X ${t}.Revision=unknown
+         -X ${t}.Branch=unknown
+         -X ${t}.BuildUser=nix@nixpkgs
+         -X ${t}.BuildDate=unknown
+    '';
 
   meta = with stdenv.lib; {
     description = "Highly available Prometheus setup with long term storage capabilities";

@@ -1,15 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.security.pam.usb;
 
-  anyUsbAuth = any (attrByPath ["usbAuth"] false) (attrValues config.security.pam.services);
+  anyUsbAuth = any (attrByPath [ "usbAuth" ] false) (attrValues config.security.pam.services);
 
 in
-
 {
   options = {
 

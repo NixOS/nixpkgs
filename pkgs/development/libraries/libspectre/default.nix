@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # Need `libgs.so'.
-    pkgconfig ghostscript cairo /*for tests*/
+    pkgconfig
+    ghostscript
+    cairo /*for tests*/
   ];
 
   doCheck = true;

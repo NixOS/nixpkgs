@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
       substituteAll dust.in dust
     chmod +x dust
   '';
-# FIXME: AOT for dust
-#  buildPhase = ''
-#    find . -name "*.pxi" -exec pixie-vm -c {} \;
-#  '';
+  # FIXME: AOT for dust
+  #  buildPhase = ''
+  #    find . -name "*.pxi" -exec pixie-vm -c {} \;
+  #  '';
   installPhase = ''
     mkdir -p $out/bin $out/share/dust
     cp -a src/ run.pxi $out/share/dust

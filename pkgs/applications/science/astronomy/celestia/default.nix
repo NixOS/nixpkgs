@@ -1,7 +1,18 @@
-{ stdenv, fetchurl, freeglut, gtk2, gtkglext, libjpeg_turbo, libtheora, libXmu
-, lua, libGLU, libGL, pkgconfig, perl, autoreconfHook
+{ stdenv
+, fetchurl
+, freeglut
+, gtk2
+, gtkglext
+, libjpeg_turbo
+, libtheora
+, libXmu
+, lua
+, libGLU
+, libGL
+, pkgconfig
+, perl
+, autoreconfHook
 }:
-
 let
   name = "celestia-1.6.1";
 
@@ -44,8 +55,19 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ freeglut gtk2 gtkglext libjpeg_turbo libtheora libXmu libGLU libGL lua
-    perl autoreconfHook ];
+  buildInputs = [
+    freeglut
+    gtk2
+    gtkglext
+    libjpeg_turbo
+    libtheora
+    libXmu
+    libGLU
+    libGL
+    lua
+    perl
+    autoreconfHook
+  ];
 
   patchPhase = ''
     patch -Np0 -i "${gcc46Patch}"

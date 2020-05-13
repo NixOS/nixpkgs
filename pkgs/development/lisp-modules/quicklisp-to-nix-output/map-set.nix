@@ -14,7 +14,7 @@ rec {
 
   packageName = "map-set";
 
-  asdFilesToKeep = ["map-set.asd"];
+  asdFilesToKeep = [ "map-set.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM map-set DESCRIPTION Set-like data structure. SHA256

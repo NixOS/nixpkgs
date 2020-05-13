@@ -22,11 +22,16 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    flask mock six pytest pytest-localserver
+    flask
+    mock
+    six
+    pytest
+    pytest-localserver
   ];
 
   propagatedBuildInputs = [
-    google_auth httplib2
+    google_auth
+    httplib2
   ];
 
   checkPhase = ''

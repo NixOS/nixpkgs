@@ -1,9 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
-, alsaLib, glib, libjack2, libsndfile, libpulseaudio
-, AudioUnit, CoreAudio, CoreMIDI, CoreServices
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, alsaLib
+, glib
+, libjack2
+, libsndfile
+, libpulseaudio
+, AudioUnit
+, CoreAudio
+, CoreMIDI
+, CoreServices
 , version ? "2"
 }:
-
 let
   versionMap = {
     "1" = {
@@ -16,10 +26,9 @@ let
     };
   };
 in
-
 with versionMap.${version};
 
-stdenv.mkDerivation  {
+stdenv.mkDerivation {
   name = "fluidsynth-${fluidsynthVersion}";
   version = fluidsynthVersion;
 
@@ -40,9 +49,9 @@ stdenv.mkDerivation  {
 
   meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";
-    homepage    = http://www.fluidsynth.org;
-    license     = licenses.lgpl21Plus;
+    homepage = http://www.fluidsynth.org;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ goibhniu lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

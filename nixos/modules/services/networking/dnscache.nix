@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.dnscache;
 
-  dnscache-root = pkgs.runCommand "dnscache-root" { preferLocalBuild = true; } ''
+  dnscache-root = pkgs.runCommand "dnscache-root"
+    { preferLocalBuild = true; } ''
     mkdir -p $out/{servers,ip}
 
     ${concatMapStrings (ip: ''
@@ -16,7 +16,8 @@ let
       ${concatMapStrings (ip: ''
         echo ${lib.escapeShellArg ip} >> "$out/servers/"${lib.escapeShellArg host}
       '') ips}
-    '') cfg.domainServers)}
+    '') cfg.domainServers
+      )}
 
     # if a list of root servers was not provided in config, copy it
     # over. (this is also done by dnscache-conf, but we 'rm -rf
@@ -28,7 +29,8 @@ let
     fi
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -51,7 +53,7 @@ in {
         default = [ "127.0.0.1" ];
         type = types.listOf types.str;
         description = "Client IP addresses (or prefixes) from which to accept connections.";
-        example = ["192.168" "172.23.75.82"];
+        example = [ "192.168" "172.23.75.82" ];
       };
 
       domainServers = mkOption {
@@ -62,8 +64,8 @@ in {
           If entry for @ is not specified predefined list of root servers is used.
         '';
         example = {
-          "@" = ["8.8.8.8" "8.8.4.4"];
-          "example.com" = ["192.168.100.100"];
+          "@" = [ "8.8.8.8" "8.8.4.4" ];
+          "example.com" = [ "192.168.100.100" ];
         };
       };
 

@@ -6,7 +6,7 @@
 , gcc-unwrapped
 , ocl-icd
 , zlib
-, extraPkgs ? []
+, extraPkgs ? [ ]
 }:
 let
   majMin = stdenv.lib.versions.majorMinor version;

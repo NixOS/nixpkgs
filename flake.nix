@@ -7,7 +7,6 @@
 
   outputs = { self }:
     let
-
       jobs = import ./pkgs/top-level/release.nix {
         nixpkgs = self;
       };
@@ -24,11 +23,11 @@
         nixosSystem = { modules, ... } @ args:
           import ./nixos/lib/eval-config.nix (args // {
             modules = modules ++
-              [ { system.nixos.versionSuffix =
-                    ".${lib.substring 0 8 self.lastModified}.${self.shortRev or "dirty"}";
-                  system.nixos.revision = lib.mkIf (self ? rev) self.rev;
-                }
-              ];
+              [{
+                system.nixos.versionSuffix =
+                  ".${lib.substring 0 8 self.lastModified}.${self.shortRev or "dirty"}";
+                system.nixos.revision = lib.mkIf (self ? rev) self.rev;
+              }];
           });
       };
 
@@ -38,7 +37,8 @@
         nixpkgsManual = jobs.manual;
         nixosManual = (import ./nixos/release-small.nix {
           nixpkgs = self;
-        }).nixos.manual.x86_64-linux;
+        }
+        ).nixos.manual.x86_64-linux;
       };
 
       legacyPackages = forAllSystems (system: import ./. { inherit system; });

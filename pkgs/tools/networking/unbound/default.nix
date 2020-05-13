@@ -38,19 +38,22 @@ stdenv.mkDerivation rec {
     make unbound-event-install
   '';
 
-  preFixup = stdenv.lib.optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) # XXX: revisit
-    # Build libunbound again, but only against nettle instead of openssl.
-    # This avoids gnutls.out -> unbound.lib -> openssl.out.
-    # There was some problem with this on Darwin; let's not complicate non-Linux.
-    ''
-      configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
-      configurePhase
-      buildPhase
-      installPhase
-    ''
+  preFixup =
+    stdenv.lib.optionalString
+      (stdenv.isLinux && !stdenv.hostPlatform.isMusl) # XXX: revisit
+      # Build libunbound again, but only against nettle instead of openssl.
+      # This avoids gnutls.out -> unbound.lib -> openssl.out.
+      # There was some problem with this on Darwin; let's not complicate non-Linux.
+      ''
+        configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
+        configurePhase
+        buildPhase
+        installPhase
+      ''
     # get rid of runtime dependencies on $dev outputs
-  + ''substituteInPlace "$lib/lib/libunbound.la" ''
-    + stdenv.lib.concatMapStrings
+    + ''substituteInPlace "$lib/lib/libunbound.la" ''
+    +
+    stdenv.lib.concatMapStrings
       (pkg: " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
       buildInputs;
 

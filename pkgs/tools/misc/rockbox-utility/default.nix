@@ -1,10 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, libusb1
-, qtbase, qttools, makeWrapper, qmake
-, withEspeak ? false, espeak ? null }:
-
+{ stdenv
+, fetchurl
+, pkgconfig
+, libusb1
+, qtbase
+, qttools
+, makeWrapper
+, qmake
+, withEspeak ? false
+, espeak ? null
+}:
 let inherit (stdenv.lib) getDev; in
-
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "rockbox-utility";
   version = "1.4.0";
 

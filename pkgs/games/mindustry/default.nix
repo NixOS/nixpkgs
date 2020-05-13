@@ -7,15 +7,14 @@
 , jre
 , libpulseaudio
 
-# Make the build version easily overridable.
-# Server and client build versions must match, and an empty build version means
-# any build is allowed, so this parameter acts as a simple whitelist.
-# Takes the package version and returns the build version.
+  # Make the build version easily overridable.
+  # Server and client build versions must match, and an empty build version means
+  # any build is allowed, so this parameter acts as a simple whitelist.
+  # Takes the package version and returns the build version.
 , makeBuildVersion ? (v: v)
 , enableClient ? true
 , enableServer ? true
 }:
-
 let
   pname = "mindustry";
   # Note: when raising the version, ensure that all SNAPSHOT versions in
@@ -97,7 +96,8 @@ let
   '';
 
 in
-assert stdenv.lib.assertMsg (enableClient || enableServer)
+assert stdenv.lib.assertMsg
+  (enableClient || enableServer)
   "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
 stdenv.mkDerivation rec {
   inherit pname version src postPatch;
@@ -126,4 +126,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

@@ -1,6 +1,8 @@
-{ stdenv, perl, fetchFromGitHub, autoreconfHook
+{ stdenv
+, perl
+, fetchFromGitHub
+, autoreconfHook
 }:
-
 let
   dataDir = "/var/lib/sympa";
   runtimeDir = "/run/sympa";

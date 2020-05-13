@@ -1,10 +1,26 @@
-{ stdenv, fetchurl, dpkg, xorg
-, glib, libGLU, libGL, libpulseaudio, zlib, dbus, fontconfig, freetype
-, gtk3, pango
-, makeWrapper , python2Packages, lib
-, lsof, curl, libuuid, cups, mesa
+{ stdenv
+, fetchurl
+, dpkg
+, xorg
+, glib
+, libGLU
+, libGL
+, libpulseaudio
+, zlib
+, dbus
+, fontconfig
+, freetype
+, gtk3
+, pango
+, makeWrapper
+, python2Packages
+, lib
+, lsof
+, curl
+, libuuid
+, cups
+, mesa
 }:
-
 let
   all_data = builtins.fromJSON (builtins.readFile ./data.json);
   system_map = {
@@ -19,7 +35,8 @@ let
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
     mesa.drivers
-    libGLU libGL
+    libGLU
+    libGL
     fontconfig
     freetype
     libpulseaudio
@@ -53,14 +70,14 @@ let
       description = "a well known password manager";
       homepage = https://www.enpass.io/;
       license = lib.licenses.unfree;
-      platforms = [ "x86_64-linux" "i686-linux"];
+      platforms = [ "x86_64-linux" "i686-linux" ];
     };
 
-    buildInputs = [makeWrapper dpkg];
+    buildInputs = [ makeWrapper dpkg ];
     phases = [ "unpackPhase" "installPhase" ];
 
     unpackPhase = "dpkg -X $src .";
-    installPhase=''
+    installPhase = ''
       mkdir -p $out/bin
       cp -r opt/enpass/*  $out/bin
       cp -r usr/* $out
@@ -82,13 +99,14 @@ let
   updater = {
     update = stdenv.mkDerivation {
       name = "enpass-update-script";
-      SCRIPT =./update_script.py;
+      SCRIPT = ./update_script.py;
 
-      buildInputs = with python2Packages; [python requests pathlib2 six attrs ];
+      buildInputs = with python2Packages; [ python requests pathlib2 six attrs ];
       shellHook = ''
         exec python $SCRIPT --target pkgs/tools/security/enpass/data.json --repo ${baseUrl}
       '';
 
     };
   };
-in (package // {refresh = updater;})
+in
+(package // { refresh = updater; })

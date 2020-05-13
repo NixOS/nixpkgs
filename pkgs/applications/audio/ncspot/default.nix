@@ -1,9 +1,16 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config, ncurses, openssl
-, withALSA ? true, alsaLib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, ncurses
+, openssl
+, withALSA ? true
+, alsaLib ? null
+, withPulseAudio ? false
+, libpulseaudio ? null
+, withPortAudio ? false
+, portaudio ? null
 }:
-
 let
   features = [ "cursive/pancurses-backend" ]
     ++ lib.optional withALSA "alsa_backend"

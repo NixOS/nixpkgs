@@ -1,9 +1,7 @@
 { lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytest, pytest-lazy-fixture, pkgconfig, setuptools_scm, six }:
-
 let
   _arrow-cpp = arrow-cpp.override { inherit python; };
 in
-
 buildPythonPackage rec {
   pname = "pyarrow";
 

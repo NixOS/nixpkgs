@@ -1,8 +1,10 @@
-{
-  stdenv, lib, fetchFromGitHub, which,
-  enableStatic ? false,
-  enableMinimal ? false,
-  extraConfig ? ""
+{ stdenv
+, lib
+, fetchFromGitHub
+, which
+, enableStatic ? false
+, enableMinimal ? false
+, extraConfig ? ""
 }:
 
 stdenv.mkDerivation rec {
@@ -26,14 +28,12 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     make ${if enableMinimal then
       "allnoconfig"
-    else
-      if stdenv.isFreeBSD then
-        "freebsd_defconfig"
+      elseif stdenv.isFreeBSD then
+      "freebsd_defconfig"
+      elseif stdenv.isDarwin then
+      "macos_defconfig"
       else
-        if stdenv.isDarwin then
-          "macos_defconfig"
-        else
-          "defconfig"
+      "defconfig"
     }
 
     cat $extraConfigPath .config > .config-

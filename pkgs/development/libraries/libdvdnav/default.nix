@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libdvdread}:
+{ stdenv, fetchurl, pkgconfig, libdvdread }:
 
 stdenv.mkDerivation rec {
   pname = "libdvdnav";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [libdvdread];
+  buildInputs = [ libdvdread ];
 
   meta = {
     homepage = http://dvdnav.mplayerhq.hu/;

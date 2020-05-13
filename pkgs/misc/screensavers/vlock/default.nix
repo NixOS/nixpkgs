@@ -2,8 +2,7 @@
 
 stdenv.mkDerivation {
   name = "vlock-2.2.2";
-  src = fetchurl
-  {
+  src = fetchurl {
     url = mirror://debian/pool/main/v/vlock/vlock_2.2.2.orig.tar.gz;
     sha256 = "1b9gv7hmlb8swda5bn40lp1yki8b8wv29vdnhcjqfl6ir98551za";
   };

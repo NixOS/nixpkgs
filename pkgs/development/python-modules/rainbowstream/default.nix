@@ -31,7 +31,7 @@ buildPythonPackage rec {
     sed -i 's/requests.*"/requests"/' setup.py
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     mkdir -p $out/lib
@@ -42,12 +42,12 @@ buildPythonPackage rec {
     done
   '';
 
-  buildInputs =  [ pkgs.libjpeg pkgs.freetype pkgs.zlib pkgs.glibcLocales pillow twitter pyfiglet requests arrow dateutil pysocks pocket ];
+  buildInputs = [ pkgs.libjpeg pkgs.freetype pkgs.zlib pkgs.glibcLocales pillow twitter pyfiglet requests arrow dateutil pysocks pocket ];
 
   meta = with stdenv.lib; {
     description = "Streaming command-line twitter client";
-    homepage    = "http://www.rainbowstream.org/";
-    license     = licenses.mit;
+    homepage = "http://www.rainbowstream.org/";
+    license = licenses.mit;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 

@@ -1,6 +1,12 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
 , openssl
-, libcap, libpcap, libnfnetlink, libnetfilter_conntrack, libnetfilter_queue
+, libcap
+, libpcap
+, libnfnetlink
+, libnetfilter_conntrack
+, libnetfilter_queue
 }:
 
 with stdenv.lib;

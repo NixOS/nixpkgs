@@ -6,12 +6,13 @@ buildGoModule rec {
   # rev is the 3.3.1 commit, mainly for kustomize version command output
   rev = "f2ac5a2d0df13c047fb20cbc12ef1a3b41ce2dad";
 
-  buildFlagsArray = let t = "sigs.k8s.io/kustomize/v3/provenance"; in ''
-    -ldflags=
-      -s -X ${t}.version=${version}
-         -X ${t}.gitCommit=${rev}
-         -X ${t}.buildDate=unknown
-  '';
+  buildFlagsArray = let t = "sigs.k8s.io/kustomize/v3/provenance"; in
+    ''
+      -ldflags=
+        -s -X ${t}.version=${version}
+           -X ${t}.gitCommit=${rev}
+           -X ${t}.buildDate=unknown
+    '';
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
         sha256 = "0s8sqyc72lnc7dxd4cl559gyfx83x71jjpsld3i3nbp3mwwamczp";
       };
 
-  buildInputs = [python27 makeWrapper];
+  buildInputs = [ python27 makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     version = version;
     homepage = https://cloud.google.com/appengine/docs/go/;
     license = licenses.asl20;
-    platforms = ["x86_64-linux" "x86_64-darwin"];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ lufia ];
   };
 }

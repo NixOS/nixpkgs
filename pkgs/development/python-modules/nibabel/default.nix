@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Access a multitude of neuroimaging data formats";
     license = licenses.mit;
     maintainers = with maintainers; [ ashgillman ];
-    platforms = platforms.x86_64;  # https://github.com/nipy/nibabel/issues/861
+    platforms = platforms.x86_64; # https://github.com/nipy/nibabel/issues/861
   };
 }

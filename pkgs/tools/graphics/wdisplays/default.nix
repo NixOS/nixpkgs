@@ -14,11 +14,12 @@ stdenv.mkDerivation {
     sha256 = "0fk3l78hirxdi74iqmq6mxi9daqnxdkbb5a2wfshmr11ic9xixpm";
   };
 
-  meta = let inherit (stdenv) lib; in {
-    description = "A graphical application for configuring displays in Wayland compositors";
-    homepage = "https://github.com/cyclopsian/wdisplays";
-    maintainers = with lib.maintainers; [ lheckemann ma27 ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-  };
+  meta = let inherit (stdenv) lib; in
+    {
+      description = "A graphical application for configuring displays in Wayland compositors";
+      homepage = "https://github.com/cyclopsian/wdisplays";
+      maintainers = with lib.maintainers; [ lheckemann ma27 ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.linux;
+    };
 }

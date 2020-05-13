@@ -1,5 +1,10 @@
-{ stdenv, fetchFromGitHub, glibcLocales
-, cmake, python3, libpng, zlib
+{ stdenv
+, fetchFromGitHub
+, glibcLocales
+, cmake
+, python3
+, libpng
+, zlib
 }:
 
 stdenv.mkDerivation rec {

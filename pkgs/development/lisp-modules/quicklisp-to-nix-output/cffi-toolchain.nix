@@ -14,7 +14,7 @@ rec {
 
   packageName = "cffi-toolchain";
 
-  asdFilesToKeep = ["cffi-toolchain.asd"];
+  asdFilesToKeep = [ "cffi-toolchain.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cffi-toolchain DESCRIPTION The CFFI toolchain SHA256

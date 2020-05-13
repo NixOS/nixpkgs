@@ -1,9 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, six
-, wcwidth, pytest, mock, glibcLocales
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, six
+, wcwidth
+, pytest
+, mock
+, glibcLocales
 }:
-
 let
-
   fixTestSuiteFailure_1 = fetchpatch {
     url = https://github.com/jquast/blessed/pull/108/commits/76a54d39b0f58bfc71af04ee143459eefb0e1e7b.patch;
     sha256 = "1higmv4c03ly7ywac1d7s71f3hrl531vj16nsfl9xh6zh9c47qcg";
@@ -15,7 +20,6 @@ let
   };
 
 in
-
 buildPythonPackage rec {
   pname = "blessed";
   version = "1.15.0";

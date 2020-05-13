@@ -33,8 +33,18 @@ buildPythonPackage rec {
 
   checkInputs = [ testfixtures unittest2 webtest ];
   propagatedBuildInputs = [
-    pyramid sqlalchemy simplejson mozsvc cornice pyramid_hawkauth pymysql
-    pymysqlsa umemcache WSGIProxy requests pybrowserid
+    pyramid
+    sqlalchemy
+    simplejson
+    mozsvc
+    cornice
+    pyramid_hawkauth
+    pymysql
+    pymysqlsa
+    umemcache
+    WSGIProxy
+    requests
+    pybrowserid
   ];
 
   meta = with stdenv.lib; {

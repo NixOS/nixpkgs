@@ -21,7 +21,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   libxfce4util = callPackage ./core/libxfce4util { };
 
   thunar = callPackage ./core/thunar {
-    thunarPlugins = [];
+    thunarPlugins = [ ];
   };
 
   thunar-volman = callPackage ./core/thunar-volman { };
@@ -78,7 +78,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     inherit (pkgs.gnome3) libsoup;
   };
 
-  xfdashboard = callPackage ./applications/xfdashboard {};
+  xfdashboard = callPackage ./applications/xfdashboard { };
 
   # TODO: this repo is inactive for many years. Remove?
   xfce4-volumed = callPackage ./applications/xfce4-volumed { };
@@ -215,7 +215,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs.gnome3) vte gtksourceview;
   xfce4-mixer-pulse = xfce4-mixer;
   thunar-bare = thunar.override {
-    thunarPlugins = [];
+    thunarPlugins = [ ];
   };
 
   # added 2019-11-30

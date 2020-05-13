@@ -1,7 +1,14 @@
-{ stdenv, fetchFromGitHub
-, meson, pkgconfig, ninja, docutils, makeWrapper
-, fuse3, glib
-, which, python3Packages
+{ stdenv
+, fetchFromGitHub
+, meson
+, pkgconfig
+, ninja
+, docutils
+, makeWrapper
+, fuse3
+, glib
+, which
+, python3Packages
 , openssh
 }:
 

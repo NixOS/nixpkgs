@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.flashpolicyd;
 
   flashpolicyd = pkgs.stdenv.mkDerivation {
@@ -20,16 +18,16 @@ let
     installPhase = "mkdir $out; cp -pr * $out/; chmod +x $out/*/*.pl";
   };
 
-  flashpolicydWrapper = pkgs.writeScriptBin "flashpolicyd"
-    ''
-      #! ${pkgs.runtimeShell}
-      exec ${flashpolicyd}/Perl_xinetd/in.flashpolicyd.pl \
-        --file=${pkgs.writeText "flashpolixy.xml" cfg.policy} \
-        2> /dev/null
-    '';
+  flashpolicydWrapper =
+    pkgs.writeScriptBin "flashpolicyd"
+      ''
+        #! ${pkgs.runtimeShell}
+        exec ${flashpolicyd}/Perl_xinetd/in.flashpolicyd.pl \
+          --file=${pkgs.writeText "flashpolixy.xml" cfg.policy} \
+          2> /dev/null
+      '';
 
 in
-
 {
 
   ###### interface
@@ -72,8 +70,9 @@ in
 
     services.xinetd.enable = true;
 
-    services.xinetd.services = singleton
-      { name = "flashpolicy";
+    services.xinetd.services =
+      singleton {
+        name = "flashpolicy";
         port = 843;
         unlisted = true;
         server = "${flashpolicydWrapper}/bin/flashpolicyd";

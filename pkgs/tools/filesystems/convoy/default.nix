@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "0ihy0cfq7sa2wml904ajwr165hx2mas3jb1bqk3i0m4fg1lx1xw1";
   };
 
-  buildInputs = [lvm2];
+  buildInputs = [ lvm2 ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/rancher/convoy;

@@ -1,8 +1,13 @@
-{ stdenv, fetchFromGitHub, alsaLib, cmake, pkgconfig, glib
-, tracingSupport ? true, logToStderr ? true }:
-
+{ stdenv
+, fetchFromGitHub
+, alsaLib
+, cmake
+, pkgconfig
+, glib
+, tracingSupport ? true
+, logToStderr ? true
+}:
 let oz = x: if x then "1" else "0"; in
-
 stdenv.mkDerivation rec {
   pname = "apulse";
   version = "0.1.12";

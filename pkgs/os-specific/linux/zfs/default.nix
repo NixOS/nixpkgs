@@ -1,15 +1,30 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
-, perl, buildPackages
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, utillinux
+, nukeReferences
+, coreutils
+, perl
+, buildPackages
 , configFile ? "all"
 
-# Userspace dependencies
-, zlib, libuuid, python3, attr, openssl
+  # Userspace dependencies
+, zlib
+, libuuid
+, python3
+, attr
+, openssl
 , libtirpc
 , nfs-utils
-, gawk, gnugrep, gnused, systemd
-, smartmontools, sysstat, sudo
+, gawk
+, gnugrep
+, gnused
+, systemd
+, smartmontools
+, sysstat
+, sudo
 
-# Kernel dependencies
+  # Kernel dependencies
 , kernel ? null
 }:
 
@@ -18,19 +33,21 @@ let
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
 
-  common = { version
+  common =
+    { version
     , sha256
-    , extraPatches ? []
+    , extraPatches ? [ ]
     , rev ? "zfs-${version}"
     , isUnstable ? false
-    , incompatibleKernelVersion ? null }:
+    , incompatibleKernelVersion ? null
+    }:
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
-        versionAtLeast kernel.version incompatibleKernelVersion then
-       throw ''
-         Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
-         ${stdenv.lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
-       ''
+      versionAtLeast kernel.version incompatibleKernelVersion then
+      throw ''
+        Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
+        ${stdenv.lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
+      ''
     else stdenv.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
@@ -170,7 +187,8 @@ let
         maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
       };
     };
-in {
+in
+{
   # also check if kernel version constraints in
   # ./nixos/modules/tasks/filesystems/zfs.nix needs
   # to be adapted

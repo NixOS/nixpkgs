@@ -18,13 +18,13 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildPhase = ''
-      mkdir $dev
-      mkdir $out
-      '';
+    mkdir $dev
+    mkdir $out
+  '';
 
   installPhase = ''
-     mkdir -p $dev/include/OpenFX/
-     cp -r include/* $dev/include/OpenFX/
+    mkdir -p $dev/include/OpenFX/
+    cp -r include/* $dev/include/OpenFX/
   '';
 
   meta = with stdenv.lib; {

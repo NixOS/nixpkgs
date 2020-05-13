@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "01ayw2hzpxan95kncbxh9isj9g149cs8scq3xim1vy8bz085wb0m";
   };
 
-  buildInputs = [ocaml findlib];
-  propagatedBuildInputs = [camlidl fuse];
+  buildInputs = [ ocaml findlib ];
+  propagatedBuildInputs = [ camlidl fuse ];
   configurePhase = '' ocaml setup.ml -configure --prefix $out '';
   buildPhase = "ocaml setup.ml -build";
   installPhase = "ocaml setup.ml -install";

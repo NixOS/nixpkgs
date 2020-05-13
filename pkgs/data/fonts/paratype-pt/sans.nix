@@ -29,4 +29,3 @@ fetchzip {
     maintainers = with maintainers; [ raskin ];
   };
 }
-

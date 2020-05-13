@@ -16,7 +16,7 @@ rec {
 
   packageName = "anaphora";
 
-  asdFilesToKeep = ["anaphora.asd"];
+  asdFilesToKeep = [ "anaphora.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM anaphora DESCRIPTION The Anaphoric Macro Package from Hell SHA256

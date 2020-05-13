@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools_scm
-# , backports
+  # , backports
 , python
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ setuptools_scm ];
-#   checkInputs = [ backports ];
+  #   checkInputs = [ backports ];
 
   # Requires backports package
   doCheck = false;

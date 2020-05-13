@@ -1,6 +1,11 @@
-{ stdenv, fetchFromGitHub, lib
-, wrapGAppsHook, intltool
-, python3Packages, gtk3, poppler_gi
+{ stdenv
+, fetchFromGitHub
+, lib
+, wrapGAppsHook
+, intltool
+, python3Packages
+, gtk3
+, poppler_gi
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -15,13 +20,16 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool
+    wrapGAppsHook
+    intltool
   ] ++ (with python3Packages; [
-    setuptools distutils_extra
+    setuptools
+    distutils_extra
   ]);
 
   buildInputs = [
-    gtk3 poppler_gi
+    gtk3
+    poppler_gi
   ];
 
   propagatedBuildInputs = with python3Packages; [

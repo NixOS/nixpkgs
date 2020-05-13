@@ -10,7 +10,7 @@ buildPythonApplication rec {
     sha256 = "1fxzxipzdvk75yrcr78mpdz8lwpisba67lk4jcwxdnkv6997dwfp";
   };
 
-  nativeBuildInputs = [ pytestrunner flake8];
+  nativeBuildInputs = [ pytestrunner flake8 ];
 
   propagatedBuildInputs = [
     aioh2

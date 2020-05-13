@@ -5,16 +5,29 @@
 , perlBindings ? false
 , javahlBindings ? false
 , saslSupport ? false
-, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
-, apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
-, sasl ? null, serf ? null
+, stdenv
+, fetchurl
+, apr
+, aprutil
+, zlib
+, sqlite
+, openssl
+, lz4
+, utf8proc
+, apacheHttpd ? null
+, expat
+, swig ? null
+, jdk ? null
+, python ? null
+, perl ? null
+, sasl ? null
+, serf ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
 assert httpServer -> apacheHttpd != null;
 assert pythonBindings -> swig != null && python != null;
 assert javahlBindings -> jdk != null && perl != null;
-
 let
 
   common = { version, sha256, extraBuildInputs ? [ ] }: stdenv.mkDerivation (rec {
@@ -110,7 +123,8 @@ let
     CXXCPP = "clang++ -E";
   });
 
-in {
+in
+{
   subversion19 = common {
     version = "1.9.12";
     sha256 = "15z33gdnfiqblm5515020wfdwnp2837r3hnparava6m2fgyiafiw";

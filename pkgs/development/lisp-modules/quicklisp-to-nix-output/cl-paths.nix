@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-paths";
 
-  asdFilesToKeep = ["cl-paths.asd"];
+  asdFilesToKeep = [ "cl-paths.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-paths DESCRIPTION cl-paths: vectorial paths manipulation SHA256

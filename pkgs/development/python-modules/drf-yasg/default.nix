@@ -1,13 +1,13 @@
-{
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  inflection,
-  ruamel_yaml,
-  setuptools_scm,
-  six,
-  coreapi,
-  djangorestframework,
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, inflection
+, ruamel_yaml
+, setuptools_scm
+, six
+, coreapi
+, djangorestframework
+,
 }:
 
 buildPythonPackage rec {

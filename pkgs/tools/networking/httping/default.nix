@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, gettext, libintl, ncurses, openssl
-, fftw ? null }:
+{ stdenv
+, fetchurl
+, gettext
+, libintl
+, ncurses
+, openssl
+, fftw ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "httping";
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
       latency of the webserver + network. It supports IPv6.
     '';
     license = licenses.agpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

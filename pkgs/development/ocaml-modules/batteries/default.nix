@@ -1,7 +1,5 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, qtest, num }:
-
 let version = "3.0.0"; in
-
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-batteries-${version}";
 
@@ -27,7 +25,7 @@ stdenv.mkDerivation {
       language.
     '';
     license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [
       stdenv.lib.maintainers.maggesi
     ];

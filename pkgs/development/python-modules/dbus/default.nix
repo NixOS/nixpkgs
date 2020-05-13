@@ -1,5 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, python, pkgconfig, dbus, dbus-glib, isPyPy
-, ncurses, pygobject3 }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, python
+, pkgconfig
+, dbus
+, dbus-glib
+, isPyPy
+, ncurses
+, pygobject3
+}:
 
 buildPythonPackage rec {
   pname = "dbus-python";

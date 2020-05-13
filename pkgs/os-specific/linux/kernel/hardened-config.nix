@@ -17,17 +17,17 @@ with (stdenv.lib.kernel.whenHelpers version);
 assert (versionAtLeast version "4.9");
 
 optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
-  DEFAULT_MMAP_MIN_ADDR = freeform "65536";  # Prevent allocation of first 64K of memory
+  DEFAULT_MMAP_MIN_ADDR = freeform "65536"; # Prevent allocation of first 64K of memory
 
   # Reduce attack surface by disabling X32
-  X86_X32            = no;
+  X86_X32 = no;
   # Note: this config depends on EXPERT y and so will not take effect, hence
   # it is left "optional" for now.
   MODIFY_LDT_SYSCALL = option no;
-  VMAP_STACK         = yes; # Catch kernel stack overflows
+  VMAP_STACK = yes; # Catch kernel stack overflows
 
   # Randomize position of kernel and memory.
-  RANDOMIZE_BASE   = yes;
+  RANDOMIZE_BASE = yes;
   RANDOMIZE_MEMORY = yes;
 
   # Disable legacy virtual syscalls by default (modern glibc use vDSO instead).
@@ -43,7 +43,7 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   BUG_ON_DATA_CORRUPTION = whenAtLeast "4.10" yes;
 
   # Safer page access permissions (wrt. code injection).  Default on >=4.11.
-  DEBUG_RODATA          = whenOlder "4.11" yes;
+  DEBUG_RODATA = whenOlder "4.11" yes;
   DEBUG_SET_MODULE_RONX = whenOlder "4.11" yes;
 
   # Mark LSM hooks read-only after init.  SECURITY_WRITABLE_HOOKS n
@@ -55,21 +55,21 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   # We set SECURITY_WRITABLE_HOOKS n primarily for documentation purposes; the
   # config builder fails to detect that it has indeed been unset.
   SECURITY_SELINUX_DISABLE = whenAtLeast "4.12" no;
-  SECURITY_WRITABLE_HOOKS  = whenAtLeast "4.12" (option no);
+  SECURITY_WRITABLE_HOOKS = whenAtLeast "4.12" (option no);
 
   DEBUG_WX = yes; # boot-time warning on RWX mappings
   STRICT_KERNEL_RWX = whenAtLeast "4.11" yes;
 
   # Stricter /dev/mem
-  STRICT_DEVMEM    = option yes;
+  STRICT_DEVMEM = option yes;
   IO_STRICT_DEVMEM = option yes;
 
   # Perform additional validation of commonly targeted structures.
-  DEBUG_CREDENTIALS     = yes;
-  DEBUG_NOTIFIERS       = yes;
-  DEBUG_LIST            = yes;
-  DEBUG_PI_LIST         = yes; # doesn't BUG()
-  DEBUG_SG              = yes;
+  DEBUG_CREDENTIALS = yes;
+  DEBUG_NOTIFIERS = yes;
+  DEBUG_LIST = yes;
+  DEBUG_PI_LIST = yes; # doesn't BUG()
+  DEBUG_SG = yes;
   SCHED_STACK_END_CHECK = yes;
 
   REFCOUNT_FULL = whenAtLeast "4.13" yes;
@@ -90,9 +90,9 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   SLUB_DEBUG = yes;
 
   # Wipe higher-level memory allocations on free() with page_poison=1
-  PAGE_POISONING           = yes;
+  PAGE_POISONING = yes;
   PAGE_POISONING_NO_SANITY = yes;
-  PAGE_POISONING_ZERO      = yes;
+  PAGE_POISONING_ZERO = yes;
 
   # Enable the SafeSetId LSM
   SECURITY_SAFESETID = whenAtLeast "5.1" yes;
@@ -113,12 +113,12 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
 
   # Disable various dangerous settings
   ACPI_CUSTOM_METHOD = no; # Allows writing directly to physical memory
-  PROC_KCORE         = no; # Exposes kernel text image layout
-  INET_DIAG          = no; # Has been used for heap based attacks in the past
+  PROC_KCORE = no; # Exposes kernel text image layout
+  INET_DIAG = no; # Has been used for heap based attacks in the past
 
   # Use -fstack-protector-strong (gcc 4.9+) for best stack canary coverage.
   CC_STACKPROTECTOR_REGULAR = whenOlder "4.18" no;
-  CC_STACKPROTECTOR_STRONG  = whenOlder "4.18" yes;
+  CC_STACKPROTECTOR_STRONG = whenOlder "4.18" yes;
 
   # Enable compile/run-time buffer overflow detection ala glibc's _FORTIFY_SOURCE
   FORTIFY_SOURCE = whenAtLeast "4.13" yes;

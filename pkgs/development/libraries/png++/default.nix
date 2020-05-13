@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, libpng
-, docSupport ? true, doxygen ? null
+{ stdenv
+, fetchurl
+, libpng
+, docSupport ? true
+, doxygen ? null
 }:
 assert docSupport -> doxygen != null;
 

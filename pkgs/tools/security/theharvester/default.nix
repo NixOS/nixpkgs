@@ -11,9 +11,18 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0lxzxfa9wbzim50d2jmd27i57szd0grm1dfayhnym86jn01qpvn3";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ 
-    aiodns beautifulsoup4 dns grequests netaddr
-    plotly pyyaml requests retrying shodan texttable
+  propagatedBuildInputs = with python3.pkgs; [
+    aiodns
+    beautifulsoup4
+    dns
+    grequests
+    netaddr
+    plotly
+    pyyaml
+    requests
+    retrying
+    shodan
+    texttable
   ];
 
   checkInputs = [ python3.pkgs.pytest ];

@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.collectd;
 
@@ -21,7 +20,8 @@ let
       <Plugin "${plugin}">
       ${pluginConfig}
       </Plugin>
-    '') cfg.plugins)}
+    '') cfg.plugins
+      )}
 
     ${concatMapStrings (f: ''
       Include "${f}"
@@ -39,7 +39,8 @@ let
     enabledPlugins = [ "syslog" ] ++ builtins.attrNames cfg.plugins;
   };
 
-in {
+in
+{
   options.services.collectd = with types; {
     enable = mkEnableOption "collectd agent";
 
@@ -85,7 +86,7 @@ in {
     };
 
     include = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         Additional paths to load config from.
       '';
@@ -93,7 +94,7 @@ in {
     };
 
     plugins = mkOption {
-      default = {};
+      default = { };
       example = { cpu = ""; memory = ""; network = "Server 192.168.1.1 25826"; };
       description = ''
         Attribute set of plugin names to plugin config segments

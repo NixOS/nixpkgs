@@ -1,4 +1,4 @@
-{stdenv, lib, fetchFromGitHub, dmd, curl}:
+{ stdenv, lib, fetchFromGitHub, dmd, curl }:
 
 stdenv.mkDerivation rec {
   pname = "dtools";
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   postUnpack = ''
-      mv dmd dtools
-      cd dtools
+    mv dmd dtools
+    cd dtools
 
-      substituteInPlace posix.mak --replace "\$(DMD) \$(DFLAGS) -unittest -main -run rdmd.d" ""
+    substituteInPlace posix.mak --replace "\$(DMD) \$(DFLAGS) -unittest -main -run rdmd.d" ""
   '';
 
   nativeBuildInputs = [ dmd ];
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-      $makeCmd test_rdmd
-    '';
+    $makeCmd test_rdmd
+  '';
 
   installPhase = ''
-      $makeCmd INSTALL_DIR=$out install
-	'';
+    $makeCmd INSTALL_DIR=$out install
+  '';
 
   meta = with stdenv.lib; {
     description = "Ancillary tools for the D programming language compiler";

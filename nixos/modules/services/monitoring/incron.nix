@@ -1,14 +1,11 @@
-
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.incron;
 
 in
-
 {
   options = {
 
@@ -55,7 +52,7 @@ in
 
       extraPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.rsync ]";
         description = "Extra packages available to the system incrontab.";
       };
@@ -66,8 +63,10 @@ in
 
   config = mkIf cfg.enable {
 
-    warnings = optional (cfg.allow != null && cfg.deny != null)
-      ''If `services.incron.allow` is set then `services.incron.deny` will be ignored.'';
+    warnings =
+      optional
+        (cfg.allow != null && cfg.deny != null)
+        ''If `services.incron.allow` is set then `services.incron.deny` will be ignored.'';
 
     environment.systemPackages = [ pkgs.incron ];
 

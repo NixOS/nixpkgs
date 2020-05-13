@@ -5,7 +5,7 @@
 , bytes
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "http";
   version = "2018-02-25";
 

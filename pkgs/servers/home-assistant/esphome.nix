@@ -1,5 +1,4 @@
 { lib, python3, platformio, esptool, git, protobuf3_10, fetchpatch }:
-
 let
   python = python3.override {
     packageOverrides = self: super: {
@@ -16,7 +15,8 @@ let
     };
   };
 
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "esphome";
   version = "1.14.3";
 
@@ -28,8 +28,15 @@ in python.pkgs.buildPythonApplication rec {
   ESPHOME_USE_SUBPROCESS = "";
 
   propagatedBuildInputs = with python.pkgs; [
-    voluptuous pyyaml paho-mqtt colorlog
-    tornado protobuf tzlocal pyserial ifaddr
+    voluptuous
+    pyyaml
+    paho-mqtt
+    colorlog
+    tornado
+    protobuf
+    tzlocal
+    pyserial
+    ifaddr
     protobuf
   ];
 

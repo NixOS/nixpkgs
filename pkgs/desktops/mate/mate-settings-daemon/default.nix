@@ -1,7 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, dbus-glib, libxklavier,
-  libcanberra-gtk3, libnotify, nss, polkit, dconf, gtk3, mate,
-  pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
-  wrapGAppsHook }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gettext
+, glib
+, dbus-glib
+, libxklavier
+, libcanberra-gtk3
+, libnotify
+, nss
+, polkit
+, dconf
+, gtk3
+, mate
+, pulseaudioSupport ? stdenv.config.pulseaudio or true
+, libpulseaudio
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-settings-daemon";

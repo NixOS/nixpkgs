@@ -1,5 +1,4 @@
 { config, pkgs, lib, ... }:
-
 let
   cfg = config.services.ddclient;
   boolToStr = bool: if bool then "yes" else "no";
@@ -15,7 +14,7 @@ let
     protocol=${cfg.protocol}
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
     ${lib.optionalString (cfg.server != "") "server=${cfg.server}"}
-    ${lib.optionalString (cfg.zone != "")   "zone=${cfg.zone}"}
+    ${lib.optionalString (cfg.zone != "") "zone=${cfg.zone}"}
     ssl=${boolToStr cfg.ssl}
     wildcard=YES
     quiet=${boolToStr cfg.quiet}
@@ -25,16 +24,17 @@ let
   '';
 
 in
-
 with lib;
 
 {
 
   imports = [
-    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
-      (config:
-        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
-        in if value != "" then [ value ] else []))
+    (
+      mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
+        (config:
+          let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
+          in if value != "" then [ value ] else [ ])
+    )
     (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
   ];
 

@@ -1,5 +1,12 @@
-{ stdenv, fetchurl,  libX11, libXext, libXrandr, libXrender,
-  xorgproto, patches ? [] }:
+{ stdenv
+, fetchurl
+, libX11
+, libXext
+, libXrandr
+, libXrender
+, xorgproto
+, patches ? [ ]
+}:
 
 stdenv.mkDerivation rec {
   name = "evilwm-1.1.1";
@@ -9,8 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "79589c296a5915ee0bae1d231e8912601fc794d9f0a9cacb6b648ff9a5f2602a";
   };
 
-  buildInputs = [ libX11 libXext libXrandr libXrender
-                  xorgproto ];
+  buildInputs = [
+    libX11
+    libXext
+    libXrandr
+    libXrender
+    xorgproto
+  ];
 
   prePatch = ''substituteInPlace ./Makefile --replace /usr $out \
                                             --replace "CC = gcc" "#CC = gcc"'';
@@ -27,7 +39,7 @@ stdenv.mkDerivation rec {
       fullName = "Custom, inherited from aewm and 9wm";
       url = http://www.6809.org.uk/evilwm/;
       free = true;
-    };  # like BSD/MIT, but Share-Alike'y; See README.
+    }; # like BSD/MIT, but Share-Alike'y; See README.
 
     maintainers = with maintainers; [ amiloradovsky ];
     platforms = platforms.all;

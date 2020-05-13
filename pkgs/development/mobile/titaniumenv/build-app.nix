@@ -1,18 +1,30 @@
-{stdenv, composeAndroidPackages, composeXcodeWrapper, titaniumsdk, titanium, alloy, jdk, python, nodejs, which, file}:
-{ name, src, preBuild ? "", target, tiVersion ? null
-, release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "12.1", iosBuildStore ? false
-, enableWirelessDistribution ? false, installURL ? null
+{ stdenv, composeAndroidPackages, composeXcodeWrapper, titaniumsdk, titanium, alloy, jdk, python, nodejs, which, file }:
+{ name
+, src
+, preBuild ? ""
+, target
+, tiVersion ? null
+, release ? false
+, androidKeyStore ? null
+, androidKeyAlias ? null
+, androidKeyStorePassword ? null
+, iosMobileProvisioningProfile ? null
+, iosCertificateName ? null
+, iosCertificate ? null
+, iosCertificatePassword ? null
+, iosVersion ? "12.1"
+, iosBuildStore ? false
+, enableWirelessDistribution ? false
+, installURL ? null
 , xcodeBaseDir ? "/Applications/Xcode.app"
-, androidsdkArgs ? {}
-, xcodewrapperArgs ? {}
+, androidsdkArgs ? { }
+, xcodewrapperArgs ? { }
 , ...
 }@args:
 
 assert (release && target == "android") -> androidKeyStore != null && androidKeyAlias != null && androidKeyStorePassword != null;
 assert (release && target == "iphone") -> iosMobileProvisioningProfile != null && iosCertificateName != null && iosCertificate != null && iosCertificatePassword != null;
 assert enableWirelessDistribution -> installURL != null;
-
 let
   realAndroidsdkArgs = {
     platformVersions = [ "28" ];
@@ -34,7 +46,7 @@ let
   extraArgs = removeAttrs args [ "name" "preRebuild" "androidsdkArgs" "xcodewrapperArgs" ];
 in
 stdenv.mkDerivation ({
-  name = stdenv.lib.replaceChars [" "] [""] name;
+  name = stdenv.lib.replaceChars [ " " ] [ "" ] name;
 
   buildInputs = [ nodejs titanium alloy python which file jdk ];
 
@@ -85,7 +97,7 @@ stdenv.mkDerivation ({
         titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only -B foo --output $out
       ''}
     ''
-    else if target == "iphone" then ''
+      elseif target == "iphone" then ''
       # Be sure that the Xcode wrapper has priority over everything else.
       # When using buildInputs this does not seem to be the case.
       export PATH=${xcodewrapper}/bin:$PATH
@@ -159,29 +171,28 @@ stdenv.mkDerivation ({
   installPhase = ''
     ${if target == "android" then ''
       ${if release then ""
-      else ''
+        else ''
         cp "$(ls build/android/bin/*.apk | grep -v '\-unsigned.apk')" $out
       ''}
 
       mkdir -p $out/nix-support
       echo "file binary-dist \"$(ls $out/*.apk)\"" > $out/nix-support/hydra-build-products
     ''
-    else if target == "iphone" then
-      if release then ''
-        mkdir -p $out/nix-support
-        echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
+      elseif target == "iphone" thenif release then ''
+      mkdir -p $out/nix-support
+      echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
 
-        ${stdenv.lib.optionalString enableWirelessDistribution ''
-          appname="$(basename $out/*.ipa .ipa)"
-          bundleId=$(grep '<id>[a-zA-Z0-9.]*</id>' tiapp.xml | sed -e 's|<id>||' -e 's|</id>||' -e 's/ //g')
-          version=$(grep '<version>[a-zA-Z0-9.]*</version>' tiapp.xml | sed -e 's|<version>||' -e 's|</version>||' -e 's/ //g')
+      ${stdenv.lib.optionalString enableWirelessDistribution ''
+        appname="$(basename $out/*.ipa .ipa)"
+        bundleId=$(grep '<id>[a-zA-Z0-9.]*</id>' tiapp.xml | sed -e 's|<id>||' -e 's|</id>||' -e 's/ //g')
+        version=$(grep '<version>[a-zA-Z0-9.]*</version>' tiapp.xml | sed -e 's|<version>||' -e 's|</version>||' -e 's/ //g')
 
-          sed -e "s|@INSTALL_URL@|${installURL}?bundleId=$bundleId\&amp;version=$version\&amp;title=$appname|" ${../xcodeenv/install.html.template} > "$out/$appname.html"
-          echo "doc install \"$out/$appname.html\"" >> $out/nix-support/hydra-build-products
-        ''}
-      ''
+        sed -e "s|@INSTALL_URL@|${installURL}?bundleId=$bundleId\&amp;version=$version\&amp;title=$appname|" ${../xcodeenv/install.html.template} > "$out/$appname.html"
+        echo "doc install \"$out/$appname.html\"" >> $out/nix-support/hydra-build-products
+      ''}
+    ''
       else ""
-    else throw "Target: ${target} is not supported!"}
+      else throw "Target: ${target} is not supported!"}
   '';
 
   failureHook = stdenv.lib.optionalString (release && target == "iphone") deleteKeychain;

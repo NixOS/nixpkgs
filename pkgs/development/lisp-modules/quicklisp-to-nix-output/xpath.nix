@@ -16,7 +16,7 @@ rec {
 
   packageName = "xpath";
 
-  asdFilesToKeep = ["xpath.asd"];
+  asdFilesToKeep = [ "xpath.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM xpath DESCRIPTION

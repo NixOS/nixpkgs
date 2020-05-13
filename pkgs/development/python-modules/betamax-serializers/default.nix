@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, betamax, pyyaml }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, betamax
+, pyyaml
+}:
 
 buildPythonPackage rec {
   pname = "betamax-serializers";

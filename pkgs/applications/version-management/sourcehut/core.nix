@@ -1,9 +1,27 @@
-{ stdenv, fetchgit, fetchNodeModules, buildPythonPackage
-, pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
-, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, celery, alembic
+{ stdenv
+, fetchgit
+, fetchNodeModules
+, buildPythonPackage
+, pgpy
+, flask
+, bleach
+, misaka
+, humanize
+, markdown
+, psycopg2
+, pygments
+, requests
+, sqlalchemy
+, cryptography
+, beautifulsoup4
+, sqlalchemy-utils
+, celery
+, alembic
 , importlib-metadata
-, sassc, nodejs
-, writeText }:
+, sassc
+, nodejs
+, writeText
+}:
 
 buildPythonPackage rec {
   pname = "srht";

@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.gitea;
   gitea = cfg.package;
@@ -63,7 +62,6 @@ let
     ${cfg.extraConfig}
   '';
 in
-
 {
   options = {
     services.gitea = {
@@ -289,7 +287,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.database.createDatabase -> cfg.database.user == cfg.user;
+      {
+        assertion = cfg.database.createDatabase -> cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
     ];
@@ -299,7 +298,8 @@ in
 
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
         }
       ];
@@ -311,7 +311,8 @@ in
 
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
@@ -337,55 +338,57 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ gitea.bin pkgs.gitAndTools.git ];
 
-      preStart = let
-        runConfig = "${cfg.stateDir}/custom/conf/app.ini";
-        secretKey = "${cfg.stateDir}/custom/conf/secret_key";
-        jwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret";
-      in ''
-        # copy custom configuration and generate a random secret key if needed
-        ${optionalString (cfg.useWizard == false) ''
-          cp -f ${configFile} ${runConfig}
+      preStart =
+        let
+          runConfig = "${cfg.stateDir}/custom/conf/app.ini";
+          secretKey = "${cfg.stateDir}/custom/conf/secret_key";
+          jwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret";
+        in
+        ''
+          # copy custom configuration and generate a random secret key if needed
+          ${optionalString (cfg.useWizard == false) ''
+            cp -f ${configFile} ${runConfig}
 
-          if [ ! -e ${secretKey} ]; then
-              ${gitea.bin}/bin/gitea generate secret SECRET_KEY > ${secretKey}
-          fi
+            if [ ! -e ${secretKey} ]; then
+                ${gitea.bin}/bin/gitea generate secret SECRET_KEY > ${secretKey}
+            fi
 
-          if [ ! -e ${jwtSecret} ]; then
-              ${gitea.bin}/bin/gitea generate secret LFS_JWT_SECRET > ${jwtSecret}
-          fi
+            if [ ! -e ${jwtSecret} ]; then
+                ${gitea.bin}/bin/gitea generate secret LFS_JWT_SECRET > ${jwtSecret}
+            fi
 
-          KEY="$(head -n1 ${secretKey})"
-          DBPASS="$(head -n1 ${cfg.database.passwordFile})"
-          JWTSECRET="$(head -n1 ${jwtSecret})"
-          ${if (cfg.mailerPasswordFile == null) then ''
-            MAILERPASSWORD="#mailerpass#"
-          '' else ''
-            MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+            KEY="$(head -n1 ${secretKey})"
+            DBPASS="$(head -n1 ${cfg.database.passwordFile})"
+            JWTSECRET="$(head -n1 ${jwtSecret})"
+            ${if (cfg.mailerPasswordFile == null) then ''
+              MAILERPASSWORD="#mailerpass#"
+            '' else ''
+              MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+            ''}
+            sed -e "s,#secretkey#,$KEY,g" \
+                -e "s,#dbpass#,$DBPASS,g" \
+                -e "s,#jwtsecret#,$JWTSECRET,g" \
+                -e "s,#mailerpass#,$MAILERPASSWORD,g" \
+                -i ${runConfig}
+            chmod 640 ${runConfig} ${secretKey} ${jwtSecret}
           ''}
-          sed -e "s,#secretkey#,$KEY,g" \
-              -e "s,#dbpass#,$DBPASS,g" \
-              -e "s,#jwtsecret#,$JWTSECRET,g" \
-              -e "s,#mailerpass#,$MAILERPASSWORD,g" \
-              -i ${runConfig}
-          chmod 640 ${runConfig} ${secretKey} ${jwtSecret}
-        ''}
 
-        # update all hooks' binary paths
-        HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
-        if [ "$HOOKS" ]
-        then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
-        fi
+          # update all hooks' binary paths
+          HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
+          if [ "$HOOKS" ]
+          then
+            sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' $HOOKS
+            sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
+            sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
+            sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
+          fi
 
-        # update command option in authorized_keys
-        if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
-        then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
-        fi
-      '';
+          # update command option in authorized_keys
+          if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
+          then
+            sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
+          fi
+        '';
 
       serviceConfig = {
         Type = "simple";
@@ -433,10 +436,12 @@ in
       };
     };
 
-    users.groups.gitea = {};
+    users.groups.gitea = { };
 
-    warnings = optional (cfg.database.password != "")
-      ''config.services.gitea.database.password will be stored as plaintext
+    warnings =
+      optional
+        (cfg.database.password != "")
+        ''config.services.gitea.database.password will be stored as plaintext
         in the Nix store. Use database.passwordFile instead.'';
 
     # Create database passwordFile default when password is configured.
@@ -447,23 +452,23 @@ in
       })));
 
     systemd.services.gitea-dump = mkIf cfg.dump.enable {
-       description = "gitea dump";
-       after = [ "gitea.service" ];
-       wantedBy = [ "default.target" ];
-       path = [ gitea.bin ];
+      description = "gitea dump";
+      after = [ "gitea.service" ];
+      wantedBy = [ "default.target" ];
+      path = [ gitea.bin ];
 
-       environment = {
-         USER = cfg.user;
-         HOME = cfg.stateDir;
-         GITEA_WORK_DIR = cfg.stateDir;
-       };
+      environment = {
+        USER = cfg.user;
+        HOME = cfg.stateDir;
+        GITEA_WORK_DIR = cfg.stateDir;
+      };
 
-       serviceConfig = {
-         Type = "oneshot";
-         User = cfg.user;
-         ExecStart = "${gitea.bin}/bin/gitea dump";
-         WorkingDirectory = cfg.stateDir;
-       };
+      serviceConfig = {
+        Type = "oneshot";
+        User = cfg.user;
+        ExecStart = "${gitea.bin}/bin/gitea dump";
+        WorkingDirectory = cfg.stateDir;
+      };
     };
 
     systemd.timers.gitea-dump = mkIf cfg.dump.enable {

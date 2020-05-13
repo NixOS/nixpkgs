@@ -16,7 +16,7 @@ rec {
 
   packageName = "static-vectors";
 
-  asdFilesToKeep = ["static-vectors.asd"];
+  asdFilesToKeep = [ "static-vectors.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM static-vectors DESCRIPTION

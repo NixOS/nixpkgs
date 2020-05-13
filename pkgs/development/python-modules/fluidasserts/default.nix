@@ -3,7 +3,7 @@
 , isPy37
 , lib
 
-# pythonPackages
+  # pythonPackages
 , aiohttp
 , androguard
 , azure-identity
@@ -57,7 +57,7 @@
 , tlslite-ng
 , viewstate
 
-# pythonPackages to test the derivation
+  # pythonPackages to test the derivation
 , pytest
 , flask
 , flask-httpauth

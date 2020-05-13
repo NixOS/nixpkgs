@@ -1,14 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost
-, gmp, llvm, clang, sqlite, python3
-, ocamlPackages, mpfr, ppl, doxygen, graphviz
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, boost
+, gmp
+, llvm
+, clang
+, sqlite
+, python3
+, ocamlPackages
+, mpfr
+, ppl
+, doxygen
+, graphviz
 }:
-
 let
   python = python3.withPackages (ps: with ps; [
     pygments
   ]);
 in
-
 stdenv.mkDerivation rec {
   name = "ikos";
   version = "2.1";
@@ -20,8 +30,20 @@ stdenv.mkDerivation rec {
     sha256 = "09nf47hpk5w5az4c0hcr5hhwvpz8zg1byyg185542cpzbq1xj8cb";
   };
 
-  buildInputs = [ cmake boost gmp clang llvm sqlite python
-                  ocamlPackages.apron mpfr ppl doxygen graphviz ];
+  buildInputs = [
+    cmake
+    boost
+    gmp
+    clang
+    llvm
+    sqlite
+    python
+    ocamlPackages.apron
+    mpfr
+    ppl
+    doxygen
+    graphviz
+  ];
 
   cmakeFlags = [ "-DAPRON_ROOT=${ocamlPackages.apron}" ];
 

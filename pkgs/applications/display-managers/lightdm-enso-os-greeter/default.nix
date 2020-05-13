@@ -1,6 +1,27 @@
-{ stdenv, fetchgit, pkgconfig, linkFarm, lightdm-enso-os-greeter
-, dbus, pcre, epoxy, libXdmcp, at-spi2-core, libxklavier, libxkbcommon, libpthreadstubs
-, gtk3, vala, cmake, libgee, libX11, lightdm, gdk-pixbuf, clutter-gtk, wrapGAppsHook, librsvg }:
+{ stdenv
+, fetchgit
+, pkgconfig
+, linkFarm
+, lightdm-enso-os-greeter
+, dbus
+, pcre
+, epoxy
+, libXdmcp
+, at-spi2-core
+, libxklavier
+, libxkbcommon
+, libpthreadstubs
+, gtk3
+, vala
+, cmake
+, libgee
+, libX11
+, lightdm
+, gdk-pixbuf
+, clutter-gtk
+, wrapGAppsHook
+, librsvg
+}:
 
 stdenv.mkDerivation {
   version = "0.2.1";

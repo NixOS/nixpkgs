@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/mtcrypt.c --replace @@NIX_UTILLINUX@@ ${utillinux}/bin
     sh autogen.sh --prefix=$out
-    '';
+  '';
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -r $out/$out/* $out
     rm -r $out/nix
-    '';
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://pam-mount.sourceforge.net/;

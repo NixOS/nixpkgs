@@ -1,6 +1,7 @@
 let
   inherit (import <nixpkgs> { }) snapTools firefox;
-in snapTools.makeSnap {
+in
+snapTools.makeSnap {
   meta = {
     name = "nix-example-firefox";
     summary = firefox.meta.description;

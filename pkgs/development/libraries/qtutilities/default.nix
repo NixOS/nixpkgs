@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Common C++ classes and routines used by @Martchus' applications featuring argument parser, IO and conversion utilities";
     license = licenses.gpl2;
     maintainers = with maintainers; [ doronbehar ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

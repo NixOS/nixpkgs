@@ -1,5 +1,4 @@
 { stdenv, lib, fetchurl, openssl, fetchpatch, static ? false }:
-
 let
   pkgname = "ipmitool";
   version = "1.8.18";

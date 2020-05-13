@@ -24,7 +24,6 @@
 , qttools
 , stdenv
 }:
-
 let
   pythonEnv = python2.withPackages (
     ps: [

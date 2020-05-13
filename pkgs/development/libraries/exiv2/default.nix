@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "exiv2";
-    repo  = "exiv2";
+    repo = "exiv2";
     rev = "v${version}";
     sha256 = "0n8il52yzbmvbkryrl8waz7hd9a2fdkw8zsrmhyh63jlvmmc31gf";
   };
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       substituteInPlace ../test/Makefile --replace "conversions.sh" ""
       rm -f ../tests/bugfixes/redmine/test_issue_460.py
       rm -f ../tests/bugfixes/redmine/test_issue_662.py
-     ''}
+    ''}
   '';
 
   postCheck = ''

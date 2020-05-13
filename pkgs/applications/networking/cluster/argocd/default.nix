@@ -19,18 +19,18 @@ buildGoModule rec {
   patches = [ ./use-go-module.patch ];
 
   buildFlagsArray = ''
-     -ldflags=
-      -X github.com/argoproj/argo-cd/common.version=${version}
-      -X github.com/argoproj/argo-cd/common.buildDate=unknown
-      -X github.com/argoproj/argo-cd/common.gitCommit=${commit}
-      -X github.com/argoproj/argo-cd/common.gitTreeState=clean
+    -ldflags=
+     -X github.com/argoproj/argo-cd/common.version=${version}
+     -X github.com/argoproj/argo-cd/common.buildDate=unknown
+     -X github.com/argoproj/argo-cd/common.gitCommit=${commit}
+     -X github.com/argoproj/argo-cd/common.gitTreeState=clean
   '';
- 
+
   # run packr to embed assets
   preBuild = ''
     packr
   '';
-  
+
   meta = with lib; {
     description = "Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes";
     homepage = "https://github.com/argoproj/argo";

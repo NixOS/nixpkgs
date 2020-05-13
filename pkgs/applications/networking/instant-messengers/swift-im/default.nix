@@ -1,6 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, qttools, scons
-, GConf, avahi, boost, hunspell, libXScrnSaver, libedit, libidn, libnatpmp, libxml2
-, lua, miniupnpc, openssl, qtbase, qtmultimedia, qtsvg, qtwebkit, qtx11extras, zlib
+{ stdenv
+, fetchurl
+, pkgconfig
+, qttools
+, scons
+, GConf
+, avahi
+, boost
+, hunspell
+, libXScrnSaver
+, libedit
+, libidn
+, libnatpmp
+, libxml2
+, lua
+, miniupnpc
+, openssl
+, qtbase
+, qtmultimedia
+, qtsvg
+, qtwebkit
+, qtx11extras
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +37,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig qttools scons ];
 
   buildInputs = [
-    GConf avahi boost hunspell libXScrnSaver libedit libidn libnatpmp libxml2
-    lua miniupnpc openssl qtbase qtmultimedia qtsvg qtwebkit qtx11extras zlib
+    GConf
+    avahi
+    boost
+    hunspell
+    libXScrnSaver
+    libedit
+    libidn
+    libnatpmp
+    libxml2
+    lua
+    miniupnpc
+    openssl
+    qtbase
+    qtmultimedia
+    qtsvg
+    qtwebkit
+    qtx11extras
+    zlib
   ];
 
   propagatedUserEnvPkgs = [ GConf ];

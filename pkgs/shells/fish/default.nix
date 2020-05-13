@@ -1,18 +1,28 @@
-{ stdenv, fetchurl, coreutils, utillinux,
-  which, gnused, gnugrep,
-  groff, man-db, getent, libiconv, pcre2,
-  gettext, ncurses, python3,
-  cmake
-  , fetchpatch
+{ stdenv
+, fetchurl
+, coreutils
+, utillinux
+, which
+, gnused
+, gnugrep
+, groff
+, man-db
+, getent
+, libiconv
+, pcre2
+, gettext
+, ncurses
+, python3
+, cmake
+, fetchpatch
 
-  , writeText
+, writeText
 
-  , useOperatingSystemEtc ? true
+, useOperatingSystemEtc ? true
 
 }:
 
 with stdenv.lib;
-
 let
   etcConfigAppendixText = ''
     ############### ↓ Nix hook for sourcing /etc/fish/config.fish ↓ ###############
@@ -119,8 +129,12 @@ let
     # Required binaries during execution
     # Python: Autocompletion generated from manpages and config editing
     propagatedBuildInputs = [
-      coreutils gnugrep gnused
-      python3 groff gettext
+      coreutils
+      gnugrep
+      gnused
+      python3
+      groff
+      gettext
     ] ++ optional (!stdenv.isDarwin) man-db;
 
     postInstall = ''
@@ -202,7 +216,8 @@ let
 
         # cannot test the http server because it needs a localhost port
       '';
-      in ''
+      in
+      ''
         HOME=$(mktemp -d)
         ${fish}/bin/fish ${fishScript}
       '';
@@ -211,4 +226,5 @@ let
   # FIXME(Profpatsch) replace withTests stub
   withTests = flip const;
 
-in withTests tests fish
+in
+withTests tests fish

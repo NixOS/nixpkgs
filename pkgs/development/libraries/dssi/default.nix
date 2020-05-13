@@ -1,5 +1,20 @@
-{ stdenv, fetchurl, ladspaH, libjack2, liblo, alsaLib, qt4, libX11, libsndfile, libSM
-, libsamplerate, libtool, autoconf, automake, xorgproto, libICE, pkgconfig
+{ stdenv
+, fetchurl
+, ladspaH
+, libjack2
+, liblo
+, alsaLib
+, qt4
+, libX11
+, libsndfile
+, libSM
+, libsamplerate
+, libtool
+, autoconf
+, automake
+, xorgproto
+, libICE
+, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -12,16 +27,30 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ ladspaH libjack2 liblo alsaLib qt4 libX11 libsndfile libSM
-      libsamplerate libtool autoconf automake xorgproto libICE pkgconfig
+    [
+      ladspaH
+      libjack2
+      liblo
+      alsaLib
+      qt4
+      libX11
+      libsndfile
+      libSM
+      libsamplerate
+      libtool
+      autoconf
+      automake
+      xorgproto
+      libICE
+      pkgconfig
     ];
 
   meta = with stdenv.lib; {
     description = "A plugin SDK for virtual instruments";
     maintainers = with maintainers;
-    [
-      raskin
-    ];
+      [
+        raskin
+      ];
     platforms = platforms.linux;
     license = licenses.lgpl21;
     downloadPage = "https://sourceforge.net/projects/dssi/files/dssi/";

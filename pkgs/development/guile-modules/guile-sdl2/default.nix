@@ -1,12 +1,19 @@
-{ stdenv, fetchurl, guile, libtool, pkgconfig
-, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
+{ stdenv
+, fetchurl
+, guile
+, libtool
+, pkgconfig
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, SDL2_mixer
 }:
-
 let
   name = "${pname}-${version}";
   pname = "guile-sdl2";
   version = "0.4.0";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
@@ -16,7 +23,11 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ libtool pkgconfig ];
   buildInputs = [
-    guile SDL2 SDL2_image SDL2_ttf SDL2_mixer
+    guile
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    SDL2_mixer
   ];
 
   configureFlags = [

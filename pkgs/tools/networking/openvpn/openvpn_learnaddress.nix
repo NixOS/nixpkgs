@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, makeWrapper,  coreutils, gawk, utillinux }:
+{ stdenv, fetchgit, makeWrapper, coreutils, gawk, utillinux }:
 
 stdenv.mkDerivation {
   name = "openvpn-learnaddress-19b03c3";

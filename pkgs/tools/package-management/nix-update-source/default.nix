@@ -1,5 +1,10 @@
-{ lib, pkgs, fetchFromGitHub, python3Packages, nix-prefetch-scripts
-, runtimeShell }:
+{ lib
+, pkgs
+, fetchFromGitHub
+, python3Packages
+, nix-prefetch-scripts
+, runtimeShell
+}:
 python3Packages.buildPythonApplication rec {
   version = "0.6.3";
   name = "nix-update-source-${version}";

@@ -1,5 +1,10 @@
-{ stdenv, coq, ncurses, which
-, graphviz, mathcomp, withDoc ? false
+{ stdenv
+, coq
+, ncurses
+, which
+, graphviz
+, mathcomp
+, withDoc ? false
 }:
 
 stdenv.mkDerivation rec {

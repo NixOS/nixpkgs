@@ -1,7 +1,17 @@
-{ stdenv, fetchurl, python2, libxslt, texlive
-, enableAllFeatures ? false, imagemagick ? null, transfig ? null, inkscape ? null, fontconfig ? null, ghostscript ? null
+{ stdenv
+, fetchurl
+, python2
+, libxslt
+, texlive
+, enableAllFeatures ? false
+, imagemagick ? null
+, transfig ? null
+, inkscape ? null
+, fontconfig ? null
+, ghostscript ? null
 
-, tex ? texlive.combine { # satisfy all packages that ./configure mentions
+, tex ? texlive.combine {
+    # satisfy all packages that ./configure mentions
     inherit (texlive) scheme-basic epstopdf anysize appendix changebar
       fancybox fancyvrb float footmisc listings jknapltx/*for mathrsfs.sty*/
       multirow overpic pdfpages graphics stmaryrd subfigure titlesec wasysym
@@ -14,7 +24,7 @@
 # enable any extra features.
 
 assert enableAllFeatures ->
-  imagemagick != null &&
+imagemagick != null &&
   transfig != null &&
   inkscape != null &&
   fontconfig != null &&

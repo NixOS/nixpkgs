@@ -7,8 +7,10 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/sbin";
 
   src = fetchurl {
-    urls = [ "http://latencytop.org/download/${name}.tar.gz"
-     "http://dbg.download.sourcemage.org/mirror/latencytop-0.5.tar.gz" ];
+    urls = [
+      "http://latencytop.org/download/${name}.tar.gz"
+      "http://dbg.download.sourcemage.org/mirror/latencytop-0.5.tar.gz"
+    ];
     sha256 = "1vq3j9zdab6njly2wp900b3d5244mnxfm88j2bkiinbvxbxp4zwy";
   };
 

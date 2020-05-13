@@ -1,12 +1,25 @@
-{ stdenv, fetchurl, glib, flex, bison, meson, ninja, pkgconfig, libffi, python3
-, libintl, cctools, cairo, gnome3, glibcLocales
-, substituteAll, nixStoreDir ? builtins.storeDir
+{ stdenv
+, fetchurl
+, glib
+, flex
+, bison
+, meson
+, ninja
+, pkgconfig
+, libffi
+, python3
+, libintl
+, cctools
+, cairo
+, gnome3
+, glibcLocales
+, substituteAll
+, nixStoreDir ? builtins.storeDir
 , x11Support ? true
 }:
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
-
 let
   pname = "gobject-introspection";
   version = "1.62.0";
@@ -26,7 +39,7 @@ stdenv.mkDerivation rec {
   LC_ALL = "en_US.UTF-8"; # for tests
 
   nativeBuildInputs = [ meson ninja pkgconfig libintl glibcLocales ];
-  buildInputs = [ flex bison python3 setupHook/*move .gir*/ ]
+  buildInputs = [ flex bison python3 setupHook /*move .gir*/ ]
     ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];
 
@@ -48,7 +61,9 @@ stdenv.mkDerivation rec {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
     })
-  ] ++ stdenv.lib.optional x11Support # https://github.com/NixOS/nixpkgs/issues/34080
+  ] ++
+  stdenv.lib.optional
+    x11Support # https://github.com/NixOS/nixpkgs/issues/34080
     (substituteAll {
       src = ./absolute_gir_path.patch;
       cairoLib = "${getLib cairo}/lib";
@@ -64,9 +79,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";
-    homepage    = http://live.gnome.org/GObjectIntrospection;
+    homepage = http://live.gnome.org/GObjectIntrospection;
     maintainers = with maintainers; [ lovek323 lethalman ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
 
     longDescription = ''

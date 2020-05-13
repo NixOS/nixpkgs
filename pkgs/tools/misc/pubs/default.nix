@@ -25,7 +25,15 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    argcomplete dateutil configobj feedparser bibtexparser pyyaml requests six beautifulsoup4
+    argcomplete
+    dateutil
+    configobj
+    feedparser
+    bibtexparser
+    pyyaml
+    requests
+    six
+    beautifulsoup4
   ];
 
   checkInputs = with python3Packages; [ pyfakefs mock ddt ];

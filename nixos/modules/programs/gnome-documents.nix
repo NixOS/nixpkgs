@@ -8,9 +8,11 @@ with lib;
 
   # Added 2019-08-09
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-documents" "enable" ]
-      [ "programs" "gnome-documents" "enable" ])
+    (
+      mkRenamedOptionModule
+        [ "services" "gnome3" "gnome-documents" "enable" ]
+        [ "programs" "gnome-documents" "enable" ]
+    )
   ];
 
   ###### interface

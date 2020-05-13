@@ -38,4 +38,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jraygauthier ];
   };
 }
-

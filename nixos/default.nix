@@ -1,9 +1,7 @@
 { configuration ? import ./lib/from-env.nix "NIXOS_CONFIG" <nixos-config>
 , system ? builtins.currentSystem
 }:
-
 let
-
   eval = import ./lib/eval-config.nix {
     inherit system;
     modules = [ configuration ];
@@ -13,20 +11,22 @@ let
   vmConfig = (import ./lib/eval-config.nix {
     inherit system;
     modules = [ configuration ./modules/virtualisation/qemu-vm.nix ];
-  }).config;
+  }
+  ).config;
 
   # This is for `nixos-rebuild build-vm-with-bootloader'.
   vmWithBootLoaderConfig = (import ./lib/eval-config.nix {
     inherit system;
     modules =
-      [ configuration
+      [
+        configuration
         ./modules/virtualisation/qemu-vm.nix
         { virtualisation.useBootLoader = true; }
       ];
-  }).config;
+  }
+  ).config;
 
 in
-
 {
   inherit (eval) pkgs config options;
 

@@ -1,7 +1,5 @@
 { stdenv, fetchurl, cmake, qrencode, qt4, libdmtx }:
-
 let v = "1.0"; in
-
 stdenv.mkDerivation rec {
   name = "prison-${v}";
 

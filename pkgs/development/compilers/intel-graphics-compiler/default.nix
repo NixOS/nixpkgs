@@ -12,7 +12,6 @@
 
 , buildWithPatches ? true
 }:
-
 let
   llvmPkgs = llvmPackages_8 // {
     inherit spirv-llvm-translator;
@@ -21,7 +20,6 @@ let
   inherit (if buildWithPatches then opencl-clang else llvmPkgs) clang clang-unwrapped spirv-llvm-translator;
   inherit (stdenv.lib) getVersion optional optionals versionOlder versions;
 in
-
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
   version = "1.0.3151";
@@ -64,10 +62,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/intel/intel-graphics-compiler;
+    homepage = https://github.com/intel/intel-graphics-compiler;
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
-    license     = licenses.mit;
-    platforms   = platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
     maintainers = with maintainers; [ gloaming ];
   };
 }

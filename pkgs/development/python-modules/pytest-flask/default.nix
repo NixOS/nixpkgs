@@ -12,7 +12,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   buildInputs = [
-     pytest
+    pytest
   ];
 
   propagatedBuildInputs = [

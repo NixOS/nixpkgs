@@ -2,10 +2,10 @@
 , fetchgit
 , fetchurl
 
-# common
+  # common
 , zip
 
-# HTTPS Everywhere
+  # HTTPS Everywhere
 , git
 , libxml2 # xmllint
 , python27

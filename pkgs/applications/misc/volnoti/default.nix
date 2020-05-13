@@ -1,6 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, pkgconfig, dbus, gdk-pixbuf, glib, libX11, gtk2, librsvg
-, dbus-glib, autoreconfHook, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, dbus
+, gdk-pixbuf
+, glib
+, libX11
+, gtk2
+, librsvg
+, dbus-glib
+, autoreconfHook
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation {
   pname = "volnoti-unstable";
@@ -25,7 +36,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig autoreconfHook wrapGAppsHook ];
 
   buildInputs = [
-    dbus gdk-pixbuf glib libX11 gtk2 dbus-glib librsvg
+    dbus
+    gdk-pixbuf
+    glib
+    libX11
+    gtk2
+    dbus-glib
+    librsvg
   ];
 
   meta = with stdenv.lib; {

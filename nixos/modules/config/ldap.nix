@@ -2,9 +2,7 @@
 
 with pkgs;
 with lib;
-
 let
-
   cfg = config.users.ldap;
 
   # Careful: OpenLDAP seems to be very picky about the indentation of
@@ -42,7 +40,8 @@ let
   # nslcd normally reads configuration from /etc/nslcd.conf.
   # this file might contain secrets. We append those at runtime,
   # so redirect its location to something more temporary.
-  nslcdWrapped = runCommandNoCC "nslcd-wrapped" { nativeBuildInputs = [ makeWrapper ]; } ''
+  nslcdWrapped = runCommandNoCC "nslcd-wrapped"
+    { nativeBuildInputs = [ makeWrapper ]; } ''
     mkdir -p $out/bin
     makeWrapper ${nss_pam_ldapd}/sbin/nslcd $out/bin/nslcd \
       --set LD_PRELOAD    "${pkgs.libredirect}/lib/libredirect.so" \
@@ -50,7 +49,6 @@ let
   '';
 
 in
-
 {
 
   ###### interface
@@ -123,13 +121,13 @@ in
         };
 
         extraConfig = mkOption {
-          default =  "";
+          default = "";
           type = types.lines;
           description = ''
             Extra configuration options that will be added verbatim at
             the end of the nslcd configuration file (nslcd.conf).
-          '' ;
-        } ;
+          '';
+        };
 
         rootpwmoddn = mkOption {
           default = "";
@@ -211,7 +209,7 @@ in
           If <literal>users.ldap.daemon</literal> is enabled, this
           configuration will not be used. In that case, use
           <literal>users.ldap.daemon.extraConfig</literal> instead.
-        '' ;
+        '';
       };
 
     };
@@ -289,6 +287,7 @@ in
   };
 
   imports =
-    [ (mkRenamedOptionModule [ "users" "ldap" "bind" "password"] [ "users" "ldap" "bind" "passwordFile"])
+    [
+      (mkRenamedOptionModule [ "users" "ldap" "bind" "password" ] [ "users" "ldap" "bind" "passwordFile" ])
     ];
 }

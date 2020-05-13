@@ -1,12 +1,32 @@
-{ stdenv, fetchurl, alsaLib, atk, cairo, cups, udev
-, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libappindicator-gtk3
-, libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
-, runtimeShell, gsettings-desktop-schemas }:
-
+{ stdenv
+, fetchurl
+, alsaLib
+, atk
+, cairo
+, cups
+, udev
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gtk3
+, libappindicator-gtk3
+, libnotify
+, nspr
+, nss
+, pango
+, systemd
+, xorg
+, autoPatchelfHook
+, wrapGAppsHook
+, runtimeShell
+, gsettings-desktop-schemas
+}:
 let
   versionSuffix = "20200310205642.4f2689009b";
 in
-
 stdenv.mkDerivation rec {
   pname = "keybase-gui";
   version = "5.3.0"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages

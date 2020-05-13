@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchurl, utillinux, makeWrapper
-, enableReadline ? true, readline, ncurses }:
+{ stdenv
+, lib
+, fetchurl
+, utillinux
+, makeWrapper
+, enableReadline ? true
+, readline
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "calc";
@@ -20,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ utillinux makeWrapper ]
-             ++ lib.optionals enableReadline [ readline ncurses ];
+    ++ lib.optionals enableReadline [ readline ncurses ];
 
   makeFlags = [
     "T=$(out)"

@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, gawk, groff, icon-lang ? null }:
-
 let noweb = stdenv.mkDerivation rec {
   pname = "noweb";
   version = "2.12";
@@ -7,7 +6,7 @@ let noweb = stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nrnrnr";
     repo = "noweb";
-    rev = "v${builtins.replaceStrings ["."] ["_"] version}";
+    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "1160i2ghgzqvnb44kgwd6s3p4jnk9668rmc15jlcwl7pdf3xqm95";
   };
 

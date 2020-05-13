@@ -3,8 +3,12 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, gfortran, glibcLocales
-, numpy, scipy, pytest, pillow
+, gfortran
+, glibcLocales
+, numpy
+, scipy
+, pytest
+, pillow
 , cython
 , joblib
 , llvmPackages
@@ -14,7 +18,7 @@ buildPythonPackage rec {
   pname = "scikit-learn";
   version = "0.21.3";
   # UnboundLocalError: local variable 'message' referenced before assignment
-  disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
+  disabled = stdenv.isi686; # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
@@ -44,13 +48,13 @@ buildPythonPackage rec {
   patches = [
     # Fixes tests by changing threshold of a test-case that broke
     # with numpy versions >= 1.17. This should be removed for versions > 0.21.2.
-	( fetchpatch {
-	  url = "https://github.com/scikit-learn/scikit-learn/commit/b730befc821caec5b984d9ff3aa7bc4bd7f4d9bb.patch";
-	  sha256 = "0z36m05mv6d494qwq0688rgwa7c4bbnm5s2rcjlrp29fwn3fy1bv";
-	})
+    (fetchpatch {
+      url = "https://github.com/scikit-learn/scikit-learn/commit/b730befc821caec5b984d9ff3aa7bc4bd7f4d9bb.patch";
+      sha256 = "0z36m05mv6d494qwq0688rgwa7c4bbnm5s2rcjlrp29fwn3fy1bv";
+    })
   ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   doCheck = !stdenv.isAarch64;
   # Skip test_feature_importance_regression - does web fetch

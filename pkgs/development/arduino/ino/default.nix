@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, python2Packages, picocom
-, avrdude, arduino-core }:
+{ stdenv
+, fetchurl
+, python2Packages
+, picocom
+, avrdude
+, arduino-core
+}:
 
 python2Packages.buildPythonApplication rec {
   name = "ino-0.3.6";

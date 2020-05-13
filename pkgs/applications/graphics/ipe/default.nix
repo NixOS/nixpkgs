@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
-, libjpeg, libpng, qtbase
+{ stdenv
+, fetchurl
+, makeWrapper
+, pkgconfig
+, zlib
+, freetype
+, cairo
+, lua5
+, texlive
+, ghostscript
+, libjpeg
+, libpng
+, qtbase
 }:
 
 stdenv.mkDerivation rec {
@@ -12,12 +23,20 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${name}/src";
 
-  IPEPREFIX=placeholder "out";
-  URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
+  IPEPREFIX = placeholder "out";
+  URWFONTDIR = "${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 
   buildInputs = [
-    libjpeg libpng zlib qtbase freetype cairo lua5 texlive ghostscript
+    libjpeg
+    libpng
+    zlib
+    qtbase
+    freetype
+    cairo
+    lua5
+    texlive
+    ghostscript
   ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];

@@ -14,7 +14,7 @@ rec {
 
   packageName = "idna";
 
-  asdFilesToKeep = ["idna.asd"];
+  asdFilesToKeep = [ "idna.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM idna DESCRIPTION

@@ -1,9 +1,20 @@
-{ stdenv, fetchurl, libX11, libXt, libXext, libXpm, imake, gccmakedep
-, svgSupport ? false, librsvg, glib, gdk-pixbuf, pkgconfig
+{ stdenv
+, fetchurl
+, libX11
+, libXt
+, libXext
+, libXpm
+, imake
+, gccmakedep
+, svgSupport ? false
+, librsvg
+, glib
+, gdk-pixbuf
+, pkgconfig
 }:
 
 assert svgSupport ->
-  librsvg != null && glib != null && gdk-pixbuf != null && pkgconfig != null;
+librsvg != null && glib != null && gdk-pixbuf != null && pkgconfig != null;
 
 stdenv.mkDerivation rec {
   name = "xxkb-1.11.1";
@@ -15,7 +26,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [
-    libX11 libXt libXext libXpm
+    libX11
+    libXt
+    libXext
+    libXpm
   ] ++ stdenv.lib.optionals svgSupport [ librsvg glib gdk-pixbuf pkgconfig ];
 
   outputs = [ "out" "man" ];

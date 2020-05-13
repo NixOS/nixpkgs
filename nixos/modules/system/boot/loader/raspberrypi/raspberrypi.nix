@@ -1,13 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.boot.loader.raspberryPi;
 
   inherit (pkgs.stdenv.hostPlatform) platform;
 
-  builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
+  builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt;inherit (cfg) version; };
   builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
 
   builder =
@@ -34,15 +33,16 @@ let
     '' + optional isAarch64 ''
       # Boot in 64-bit mode.
       arm_64bit=1
-    '' + (if cfg.uboot.enable then ''
-      kernel=u-boot-rpi.bin
-    '' else ''
-      kernel=kernel.img
-      initramfs initrd followkernel
-    '') + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
+    '' + (
+      if cfg.uboot.enable then ''
+        kernel=u-boot-rpi.bin
+      '' else ''
+        kernel=kernel.img
+        initramfs initrd followkernel
+      ''
+    ) + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
 
 in
-
 {
   options = {
 

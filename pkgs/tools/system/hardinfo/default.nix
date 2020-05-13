@@ -1,4 +1,11 @@
-{ stdenv, fetchurl, which, pkgconfig, gtk2, pcre, glib, libxml2
+{ stdenv
+, fetchurl
+, which
+, pkgconfig
+, gtk2
+, pcre
+, glib
+, libxml2
 , libsoup ? null
 }:
 

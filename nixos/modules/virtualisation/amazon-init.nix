@@ -1,5 +1,4 @@
 { config, pkgs, ... }:
-
 let
   script = ''
     #!${pkgs.runtimeShell} -eu
@@ -7,7 +6,7 @@ let
     echo "attempting to fetch configuration from EC2 user data..."
 
     export HOME=/root
-    export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.git pkgs.gnutar pkgs.gzip pkgs.gnused config.system.build.nixos-rebuild]}:$PATH
+    export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.git pkgs.gnutar pkgs.gzip pkgs.gnused config.system.build.nixos-rebuild ]}:$PATH
     export NIX_PATH=nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
 
     userData=/etc/ec2-metadata/user-data
@@ -40,7 +39,8 @@ let
 
     nixos-rebuild switch
   '';
-in {
+in
+{
   systemd.services.amazon-init = {
     inherit script;
     description = "Reconfigure the system from EC2 userdata on startup";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, yacc, flex}:
+{ stdenv, fetchurl, autoreconfHook, yacc, flex }:
 
 stdenv.mkDerivation rec {
   version = "2.4.0";

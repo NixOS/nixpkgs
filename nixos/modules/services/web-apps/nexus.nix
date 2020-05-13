@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.nexus;
 
 in
-
 {
   options = {
     services.nexus = {
@@ -88,7 +86,7 @@ in
       createHome = true;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     systemd.services.nexus = {
       description = "Sonatype Nexus3";

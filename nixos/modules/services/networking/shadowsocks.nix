@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.shadowsocks;
 
@@ -17,7 +16,6 @@ let
   configFile = pkgs.writeText "shadowsocks.json" (builtins.toJSON opts);
 
 in
-
 {
 
   ###### interface
@@ -90,8 +88,9 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = singleton
-      { assertion = cfg.password == null || cfg.passwordFile == null;
+    assertions =
+      singleton {
+        assertion = cfg.password == null || cfg.passwordFile == null;
         message = "Cannot use both password and passwordFile for shadowsocks-libev";
       };
 

@@ -1,13 +1,24 @@
-{ stdenv, fetchurl, scons, pkgconfig, which, makeWrapper, python3
-, libraw1394, libconfig, libavc1394, libiec61883, libxmlxx3
+{ stdenv
+, fetchurl
+, scons
+, pkgconfig
+, which
+, makeWrapper
+, python3
+, libraw1394
+, libconfig
+, libavc1394
+, libiec61883
+, libxmlxx3
 , glibmm
-, dbus, dbus_cplusplus
+, dbus
+, dbus_cplusplus
 }:
-
 let
   inherit (python3.pkgs) pyqt5 dbus-python;
   python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ffado";
   version = "2.4.1";
 

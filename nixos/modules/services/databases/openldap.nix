@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.openldap;
   openldap = pkgs.openldap;
 
@@ -13,7 +11,8 @@ let
     include ${pkgs.openldap.out}/etc/schema/cosine.schema
     include ${pkgs.openldap.out}/etc/schema/inetorgperson.schema
     include ${pkgs.openldap.out}/etc/schema/nis.schema
-  '') + ''
+  ''
+  ) + ''
     ${cfg.extraConfig}
     database ${cfg.database}
     suffix ${cfg.suffix}
@@ -26,10 +25,10 @@ let
     directory ${cfg.dataDir}
     ${cfg.extraDatabaseConfig}
   '');
-  configOpts = if cfg.configDir == null then "-f ${configFile}"
-               else "-F ${cfg.configDir}";
+  configOpts =
+    if cfg.configDir == null then "-f ${configFile}"
+    else "-F ${cfg.configDir}";
 in
-
 {
 
   ###### interface
@@ -151,20 +150,20 @@ in
           slapd.conf configuration
         ";
         example = literalExample ''
-            '''
-            include ${pkgs.openldap.out}/etc/schema/core.schema
-            include ${pkgs.openldap.out}/etc/schema/cosine.schema
-            include ${pkgs.openldap.out}/etc/schema/inetorgperson.schema
-            include ${pkgs.openldap.out}/etc/schema/nis.schema
+          '''
+          include ${pkgs.openldap.out}/etc/schema/core.schema
+          include ${pkgs.openldap.out}/etc/schema/cosine.schema
+          include ${pkgs.openldap.out}/etc/schema/inetorgperson.schema
+          include ${pkgs.openldap.out}/etc/schema/nis.schema
 
-            database bdb
-            suffix dc=example,dc=org
-            rootdn cn=admin,dc=example,dc=org
-            # NOTE: change after first start
-            rootpw secret
-            directory /var/db/openldap
-            '''
-          '';
+          database bdb
+          suffix dc=example,dc=org
+          rootdn cn=admin,dc=example,dc=org
+          # NOTE: change after first start
+          rootpw secret
+          directory /var/db/openldap
+          '''
+        '';
       };
 
       declarativeContents = mkOption {
@@ -264,19 +263,21 @@ in
       '';
       serviceConfig.ExecStart =
         "${openldap.out}/libexec/slapd -d '${cfg.logLevel}' " +
-          "-u '${cfg.user}' -g '${cfg.group}' " +
-          "-h '${concatStringsSep " " cfg.urlList}' " +
-          "${configOpts}";
+        "-u '${cfg.user}' -g '${cfg.group}' " +
+        "-h '${concatStringsSep " " cfg.urlList}' " +
+        "${configOpts}";
     };
 
     users.users.openldap =
-      { name = cfg.user;
+      {
+        name = cfg.user;
         group = cfg.group;
         uid = config.ids.uids.openldap;
       };
 
     users.groups.openldap =
-      { name = cfg.group;
+      {
+        name = cfg.group;
         gid = config.ids.gids.openldap;
       };
 

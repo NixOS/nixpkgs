@@ -1,4 +1,6 @@
-{ buildPythonApplication, fetchPypi, lib
+{ buildPythonApplication
+, fetchPypi
+, lib
 , youtube-dl
 , PyChromecast
 , click
@@ -16,7 +18,11 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    youtube-dl PyChromecast click ifaddr requests
+    youtube-dl
+    PyChromecast
+    click
+    ifaddr
+    requests
   ];
 
   doCheck = false; # attempts to access various URLs
@@ -28,4 +34,3 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ dtzWill ];
   };
 }
-

@@ -1,5 +1,10 @@
-{ cmake, fetchFromGitHub, opencv3, stdenv, opencl-headers
-, cudaSupport ? false, cudatoolkit ? null
+{ cmake
+, fetchFromGitHub
+, opencv3
+, stdenv
+, opencl-headers
+, cudaSupport ? false
+, cudatoolkit ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +24,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    opencv3 opencl-headers
+    opencv3
+    opencl-headers
   ] ++ stdenv.lib.optional cudaSupport cudatoolkit;
 
   nativeBuildInputs = [ cmake ];

@@ -14,7 +14,7 @@ rec {
 
   packageName = "uiop";
 
-  asdFilesToKeep = ["uiop.asd"];
+  asdFilesToKeep = [ "uiop.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM uiop DESCRIPTION System lacks description SHA256

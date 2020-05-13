@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight GTK Clipboard Manager";
-    homepage    = "http://clipit.rspwn.com";
-    license     = licenses.gpl3;
-    platforms   = platforms.linux;
+    homepage = "http://clipit.rspwn.com";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

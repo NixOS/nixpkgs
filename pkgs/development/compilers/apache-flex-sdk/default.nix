@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, jre }:
-
 let
   playerglobal_ver = "27.0";
   playerglobal = fetchurl {
     url = "https://fpdownload.macromedia.com/get/flashplayer/updaters/27/playerglobal27_0.swc";
     sha256 = "0qw2bgls8qsmp80j8vpd4c7s0c8anlrk0ac8z42w89bajcdbwk2f";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "apache-flex-sdk";
   version = "4.16.1";
 
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $t/frameworks/libs/player/${playerglobal_ver}/
     cp ${playerglobal} $t/frameworks/libs/player/${playerglobal_ver}/playerglobal.swc
   '';
-  
+
   fixupPhase = ":";
 
   meta = with stdenv.lib; {

@@ -1,7 +1,14 @@
-{
-  mkDerivation, lib, copyPathsToStore,
-  extra-cmake-modules, kdoctools,
-  karchive, kconfig, kcoreaddons, ki18n, qtbase,
+{ mkDerivation
+, lib
+, copyPathsToStore
+, extra-cmake-modules
+, kdoctools
+, karchive
+, kconfig
+, kcoreaddons
+, ki18n
+, qtbase
+,
 }:
 
 mkDerivation {

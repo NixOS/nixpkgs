@@ -1,7 +1,6 @@
-{fetchurl, lib, virtualbox}:
+{ fetchurl, lib, virtualbox }:
 
 with lib;
-
 let
   inherit (virtualbox) version;
 in

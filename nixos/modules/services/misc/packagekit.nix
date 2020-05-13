@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.packagekit;
 
   packagekitConf = ''
@@ -22,18 +20,18 @@ let
   '';
 
 in
-
 {
 
   options = {
 
     services.packagekit = {
-      enable = mkEnableOption
-        ''
-          PackageKit provides a cross-platform D-Bus abstraction layer for
-          installing software. Software utilizing PackageKit can install
-          software regardless of the package manager.
-        '';
+      enable =
+        mkEnableOption
+          ''
+            PackageKit provides a cross-platform D-Bus abstraction layer for
+            installing software. Software utilizing PackageKit can install
+            software regardless of the package manager.
+          '';
 
       # TODO: integrate with PolicyKit if the nix backend matures to the point
       # where it will require elevated permissions

@@ -6,7 +6,7 @@
 , brotli
 , ijson
 , nose
-, requests_oauthlib 
+, requests_oauthlib
 , python_magic
 , pytz
 }:
@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pysnow";
   version = "0.7.14";
-  
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "0a6ce8b5f247fbfe5a53829c2f22391161e88646742283f861bce32bfe1626f1";
@@ -22,9 +22,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     brotli
-    ijson 
-    python_magic 
-    pytz 
+    ijson
+    python_magic
+    pytz
     requests_oauthlib
   ];
 
@@ -38,8 +38,7 @@ buildPythonPackage rec {
     description = "ServiceNow HTTP client library written in Python";
     homepage = "https://github.com/rbw/pysnow";
     license = licenses.mit;
-    maintainers = [ maintainers.almac ];  
+    maintainers = [ maintainers.almac ];
   };
 
 }
-

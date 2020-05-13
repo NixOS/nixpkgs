@@ -1,13 +1,13 @@
-{stdenv, fetchurl, which}:
+{ stdenv, fetchurl, which }:
 let
   s = # Generated upstream information
-  rec {
-    baseName="firejail";
-    version="0.9.62";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/firejail/firejail/firejail-${version}.tar.xz";
-    sha256="1q2silgy882fl61p5qa9f9jqkxcqnwa71jig3c729iahx4f0hs05";
-  };
+    rec {
+      baseName = "firejail";
+      version = "0.9.62";
+      name = "${baseName}-${version}";
+      url = "mirror://sourceforge/firejail/firejail/firejail-${version}.tar.xz";
+      sha256 = "1q2silgy882fl61p5qa9f9jqkxcqnwa71jig3c729iahx4f0hs05";
+    };
   buildInputs = [
     which
   ];
@@ -49,8 +49,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''Namespace-based sandboxing tool for Linux'';
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     homepage = https://firejail.wordpress.com/;
     downloadPage = "https://sourceforge.net/projects/firejail/files/firejail/";

@@ -1,17 +1,21 @@
-{ stdenv, fetchurl
-, raspberrypifw, pcre, boost, freetype, zlib
+{ stdenv
+, fetchurl
+, raspberrypifw
+, pcre
+, boost
+, freetype
+, zlib
 }:
-
 let
   ffmpeg = stdenv.mkDerivation rec {
     name = "ffmpeg-1.1.3";
-    
+
     src = fetchurl {
       url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
       sha256 = "03s1zsprz5p6gjgwwqcf7b6cvzwwid6l8k7bamx9i0f1iwkgdm0j";
     };
-    
-    configurePlatforms = [];
+
+    configurePlatforms = [ ];
     configureFlags = [
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ] ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch32 [

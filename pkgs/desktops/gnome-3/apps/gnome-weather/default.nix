@@ -1,5 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gjs, gobject-introspection
-, libgweather, meson, ninja, geoclue2, gnome-desktop, python3, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gnome3
+, gtk3
+, wrapGAppsHook
+, gjs
+, gobject-introspection
+, libgweather
+, meson
+, ninja
+, geoclue2
+, gnome-desktop
+, python3
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
@@ -12,8 +26,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig meson ninja wrapGAppsHook python3 ];
   buildInputs = [
-    gtk3 gjs gobject-introspection gnome-desktop
-    libgweather gnome3.adwaita-icon-theme geoclue2 gsettings-desktop-schemas
+    gtk3
+    gjs
+    gobject-introspection
+    gnome-desktop
+    libgweather
+    gnome3.adwaita-icon-theme
+    geoclue2
+    gsettings-desktop-schemas
   ];
 
   postPatch = ''

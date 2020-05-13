@@ -13,8 +13,17 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [
-    xorg.libX11 glib gtk2 xorg.libXpm xorg.libXt xorg.libXext xneur
-    libglade GConf pcre libappindicator-gtk2
+    xorg.libX11
+    glib
+    gtk2
+    xorg.libXpm
+    xorg.libXt
+    xorg.libXext
+    xneur
+    libglade
+    GConf
+    pcre
+    libappindicator-gtk2
   ];
 
   meta = with stdenv.lib; {

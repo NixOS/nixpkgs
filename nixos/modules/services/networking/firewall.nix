@@ -33,21 +33,20 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.networking.firewall;
 
   inherit (config.boot.kernelPackages) kernel;
 
-  kernelHasRPFilter = ((kernel.config.isEnabled or (x: false)) "IP_NF_MATCH_RPFILTER") || (kernel.features.netfilterRPFilter or false);
+  kernelHasRPFilter = ( (kernel.config.isEnabled or (x: false)) "IP_NF_MATCH_RPFILTER") || (kernel.features.netfilterRPFilter or false);
 
   helpers = import ./helpers.nix { inherit config lib; };
 
-  writeShScript = name: text: let dir = pkgs.writeScriptBin name ''
-    #! ${pkgs.runtimeShell} -e
-    ${text}
-  ''; in "${dir}/bin/${name}";
+  writeShScript = name: text:
+    let dir = pkgs.writeScriptBin name ''
+      #! ${pkgs.runtimeShell} -e
+      ${text}
+    ''; in "${dir}/bin/${name}";
 
   defaultInterface = { default = mapAttrs (name: value: cfg.${name}) commonOptions; };
   allInterfaces = defaultInterface // cfg.interfaces;
@@ -144,40 +143,44 @@ let
     # Accept connections to the allowed TCP ports.
     ${concatStrings (mapAttrsToList (iface: cfg:
       concatMapStrings (port:
-        ''
-          ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
-        ''
-      ) cfg.allowedTCPPorts
-    ) allInterfaces)}
+          ''
+            ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
+          ''
+          ) cfg.allowedTCPPorts
+      ) allInterfaces
+      )}
 
     # Accept connections to the allowed TCP port ranges.
     ${concatStrings (mapAttrsToList (iface: cfg:
       concatMapStrings (rangeAttr:
-        let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
-        ''
-          ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
-        ''
-      ) cfg.allowedTCPPortRanges
-    ) allInterfaces)}
+          let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
+          ''
+            ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
+          ''
+          ) cfg.allowedTCPPortRanges
+      ) allInterfaces
+      )}
 
     # Accept packets on the allowed UDP ports.
     ${concatStrings (mapAttrsToList (iface: cfg:
       concatMapStrings (port:
-        ''
-          ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
-        ''
-      ) cfg.allowedUDPPorts
-    ) allInterfaces)}
+          ''
+            ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
+          ''
+          ) cfg.allowedUDPPorts
+      ) allInterfaces
+      )}
 
     # Accept packets on the allowed UDP port ranges.
     ${concatStrings (mapAttrsToList (iface: cfg:
       concatMapStrings (rangeAttr:
-        let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
-        ''
-          ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
-        ''
-      ) cfg.allowedUDPPortRanges
-    ) allInterfaces)}
+          let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
+          ''
+            ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
+          ''
+          ) cfg.allowedUDPPortRanges
+      ) allInterfaces
+      )}
 
     # Accept IPv4 multicast.  Not a big security risk since
     # probably nobody is listening anyway.
@@ -187,7 +190,7 @@ let
     ${optionalString cfg.allowPing ''
       iptables -w -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
         "-m limit ${cfg.pingLimit} "
-      }-j nixos-fw-accept
+    }-j nixos-fw-accept
     ''}
 
     ${optionalString config.networking.enableIPv6 ''
@@ -271,7 +274,7 @@ let
     allowedTCPPortRanges = mkOption {
       type = types.listOf (types.attrsOf types.port);
       default = [ ];
-      example = [ { from = 8999; to = 9003; } ];
+      example = [{ from = 8999; to = 9003; }];
       description =
         ''
           A range of TCP ports on which incoming connections are
@@ -293,7 +296,7 @@ let
     allowedUDPPortRanges = mkOption {
       type = types.listOf (types.attrsOf types.port);
       default = [ ];
-      example = [ { from = 60000; to = 61000; } ];
+      example = [{ from = 60000; to = 61000; }];
       description =
         ''
           Range of open UDP ports.
@@ -302,7 +305,6 @@ let
   };
 
 in
-
 {
 
   ###### interface
@@ -415,7 +417,7 @@ in
       };
 
       checkReversePath = mkOption {
-        type = types.either types.bool (types.enum ["strict" "loose"]);
+        type = types.either types.bool (types.enum [ "strict" "loose" ]);
         default = kernelHasRPFilter;
         example = "loose";
         description =
@@ -519,7 +521,7 @@ in
 
       interfaces = mkOption {
         default = { };
-        type = with types; attrsOf (submodule [ { options = commonOptions; } ]);
+        type = with types; attrsOf (submodule [{ options = commonOptions; }]);
         description =
           ''
             Interface-specific open ports.
@@ -550,8 +552,10 @@ in
       # This is approximately "checkReversePath -> kernelHasRPFilter",
       # but the checkReversePath option can include non-boolean
       # values.
-      { assertion = cfg.checkReversePath == false || kernelHasRPFilter;
-        message = "This kernel does not support rpfilter"; }
+      {
+        assertion = cfg.checkReversePath == false || kernelHasRPFilter;
+        message = "This kernel does not support rpfilter";
+      }
     ];
 
     systemd.services.firewall = {

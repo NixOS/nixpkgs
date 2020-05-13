@@ -11,7 +11,7 @@
   # This is a list of attribute sets {source, target} where `source'
   # is the file system object (regular file or directory) to be
   # grafted in the file system at path `target'.
-, contents ? []
+, contents ? [ ]
 
 , # Type of partition table to use; either "legacy", "efi", or "none".
   # For "efi" images, the GPT partition table is used and a mandatory ESP
@@ -48,25 +48,26 @@ assert partitionTableType == "legacy" || partitionTableType == "efi" || partitio
 assert partitionTableType != "none" -> fsType == "ext4";
 
 with lib;
-
-let format' = format; in let
-
+let format' = format; in
+let
   format = if format' == "qcow2-compressed" then "qcow2" else format';
 
   compress = optionalString (format' == "qcow2-compressed") "-c";
 
   filename = "nixos." + {
     qcow2 = "qcow2";
-    vpc   = "vhd";
-    raw   = "img";
+    vpc = "vhd";
+    raw = "img";
   }.${format};
 
-  rootPartition = { # switch-case
+  rootPartition = {
+    # switch-case
     legacy = "1";
     efi = "2";
   }.${partitionTableType};
 
-  partitionDiskScript = { # switch-case
+  partitionDiskScript = {
+    # switch-case
     legacy = ''
       parted --script $diskImage -- \
         mklabel msdos \
@@ -85,7 +86,8 @@ let format' = format; in let
   nixpkgs = cleanSource pkgs.path;
 
   # FIXME: merge with channel.nix / make-channel.nix.
-  channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
+  channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}"
+    { } ''
     mkdir -p $out
     cp -prd ${nixpkgs.outPath} $out/nixos
     chmod -R u+w $out/nixos
@@ -97,7 +99,8 @@ let format' = format; in let
   '';
 
   binPath = with pkgs; makeBinPath (
-    [ rsync
+    [
+      rsync
       utillinux
       parted
       e2fsprogs
@@ -105,7 +108,8 @@ let format' = format; in let
       config.system.build.nixos-install
       config.system.build.nixos-enter
       nix
-    ] ++ stdenv.initialPath);
+    ] ++ stdenv.initialPath
+  );
 
   # I'm preserving the line below because I'm going to search for it across nixpkgs to consolidate
   # image building logic. The comment right below this now appears in 4 different places in nixpkgs :)
@@ -187,9 +191,12 @@ let format' = format; in let
     echo "copying staging root to image..."
     cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* /
   '';
-in pkgs.vmTools.runInLinuxVM (
-  pkgs.runCommand name
-    { preVM = prepareImage;
+in
+pkgs.vmTools.runInLinuxVM (
+  pkgs.runCommand
+    name
+    {
+      preVM = prepareImage;
       buildInputs = with pkgs; [ utillinux e2fsprogs dosfstools ];
       postVM = ''
         ${if format == "raw" then ''

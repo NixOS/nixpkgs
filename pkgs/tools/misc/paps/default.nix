@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub
-, autoconf, automake, pkgconfig, intltool, pango }:
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, pkgconfig
+, intltool
+, pango
+}:
 
 stdenv.mkDerivation rec {
   pname = "paps";

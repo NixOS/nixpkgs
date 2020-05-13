@@ -21,4 +21,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ xrelkd ];
   };
 }
-

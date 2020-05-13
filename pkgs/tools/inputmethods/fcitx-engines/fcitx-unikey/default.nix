@@ -20,15 +20,15 @@ stdenv.mkDerivation rec {
     substituteInPlace data/cmake_install.cmake \
       --replace ${fcitx} $out
   '';
-  
+
   meta = with stdenv.lib; {
     isFcitxEngine = true;
-    homepage      = "https://github.com/fcitx/fcitx-unikey";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";
-    description   = "Fcitx wrapper for unikey";
-    license       = licenses.gpl3Plus;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ ericsagnes ];
+    homepage = "https://github.com/fcitx/fcitx-unikey";
+    downloadPage = "http://download.fcitx-im.org/fcitx-table-other/";
+    description = "Fcitx wrapper for unikey";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ericsagnes ];
   };
 
 }

@@ -1,8 +1,54 @@
-{ lib, stdenv, fetchurl, python3Packages, docutils, help2man
-, acl, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
-, gzip, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
-, squashfsTools, tcpdump, unoconv, unzip, xxd, xz
+{ lib
+, stdenv
+, fetchurl
+, python3Packages
+, docutils
+, help2man
+, acl
+, apktool
+, binutils-unwrapped
+, bzip2
+, cbfstool
+, cdrkit
+, colord
+, colordiff
+, coreutils
+, cpio
+, db
+, diffutils
+, dtc
+, e2fsprogs
+, file
+, findutils
+, fontforge-fonttools
+, fpc
+, gettext
+, ghc
+, ghostscriptX
+, giflib
+, gnumeric
+, gnupg
+, gnutar
+, gzip
+, imagemagick
+, jdk
+, libarchive
+, libcaca
+, llvm
+, lz4
+, mono
+, openssh
+, pdftk
+, pgpdump
+, poppler_utils
+, sng
+, sqlite
+, squashfsTools
+, tcpdump
+, unoconv
+, unzip
+, xxd
+, xz
 , enableBloat ? false
 }:
 
@@ -12,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   version = "137";
 
   src = fetchurl {
-    url    = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
+    url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
     sha256 = "1qa508nlqvz0s0cd6jk5c8m43kqfx1h2mgx50iphy4y0spnyv946";
   };
 
@@ -36,17 +82,55 @@ python3Packages.buildPythonApplication rec {
   # Still missing these tools: abootimg docx2txt dumpxsb enjarify js-beautify lipo oggDump otool procyon-decompiler Rscript wasm2wat zipnode
   # Also these libraries: python3-guestfs
   pythonPath = [
-      binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
-      dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca lz4 pgpdump sng sqlite squashfsTools unzip xxd xz
-    ]
-    ++ (with python3Packages; [ debian libarchive-c python_magic tlsh rpm progressbar33 ])
-    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit ]
-    ++ lib.optionals enableBloat [
-      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg gnumeric imagemagick
-      llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
-      python3Packages.guestfs
-    ];
+    binutils-unwrapped
+    bzip2
+    colordiff
+    coreutils
+    cpio
+    db
+    diffutils
+    dtc
+    e2fsprogs
+    file
+    findutils
+    fontforge-fonttools
+    gettext
+    gnutar
+    gzip
+    libarchive
+    libcaca
+    lz4
+    pgpdump
+    sng
+    sqlite
+    squashfsTools
+    unzip
+    xxd
+    xz
+  ]
+  ++ (with python3Packages; [ debian libarchive-c python_magic tlsh rpm progressbar33 ])
+  ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit ]
+  ++ lib.optionals enableBloat [
+    apktool
+    cbfstool
+    colord
+    fpc
+    ghc
+    ghostscriptX
+    giflib
+    gnupg
+    gnumeric
+    imagemagick
+    llvm
+    jdk
+    mono
+    openssh
+    pdftk
+    poppler_utils
+    tcpdump
+    unoconv
+    python3Packages.guestfs
+  ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
   checkInputs = with python3Packages; [ pytest ];
@@ -69,9 +153,9 @@ python3Packages.buildPythonApplication rec {
       diffoscope is developed as part of the "reproducible builds" Debian
       project and was formerly known as "debbindiff".
     '';
-    homepage    = "https://diffoscope.org/";
-    license     = licenses.gpl3Plus;
+    homepage = "https://diffoscope.org/";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg ma27 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

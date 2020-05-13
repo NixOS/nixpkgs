@@ -62,25 +62,26 @@ stdenv.mkDerivation rec {
   # See: https://gist.github.com/worldofpeace/2f152a20b7c47895bb93239fce1c9f52
   #
   # Also omit ubuntu_calculator_snap.patch as that's obviously not useful here.
-  patches = let patchPath = "${src2}/debian/patches"; in [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit tzdata mousetweaks;
-    })
-    ./global-backlight-helper.patch
-    "${patchPath}/45_suppress-printer-may-not-be-connected-notification.patch"
-    "${patchPath}/64_restore_terminal_keyboard_shortcut_schema.patch"
-    "${patchPath}/correct_logout_action.patch"
-    "${patchPath}/ubuntu-lid-close-suspend.patch"
-    "${patchPath}/revert-wacom-migration.patch"
-    "${patchPath}/revert-gsettings-removals.patch"
-    "${patchPath}/revert-mediakeys-dbus-interface-drop.patch"
-    "${patchPath}/ubuntu_ibus_configs.patch"
-    (fetchurl {
-      url = "https://github.com/elementary/os-patches/raw/6975d1c254cb6ab913b8e2396877203aea8eaa65/debian/patches/elementary-dpms.patch";
-      sha256 = "0kh508ppiv4nvkg30gmw85cljlfq1bvkzhvf1iaxw0snb0mwgsxi";
-    })
-  ];
+  patches = let patchPath = "${src2}/debian/patches"; in
+    [
+      (substituteAll {
+        src = ./fix-paths.patch;
+        inherit tzdata mousetweaks;
+      })
+      ./global-backlight-helper.patch
+      "${patchPath}/45_suppress-printer-may-not-be-connected-notification.patch"
+      "${patchPath}/64_restore_terminal_keyboard_shortcut_schema.patch"
+      "${patchPath}/correct_logout_action.patch"
+      "${patchPath}/ubuntu-lid-close-suspend.patch"
+      "${patchPath}/revert-wacom-migration.patch"
+      "${patchPath}/revert-gsettings-removals.patch"
+      "${patchPath}/revert-mediakeys-dbus-interface-drop.patch"
+      "${patchPath}/ubuntu_ibus_configs.patch"
+      (fetchurl {
+        url = "https://github.com/elementary/os-patches/raw/6975d1c254cb6ab913b8e2396877203aea8eaa65/debian/patches/elementary-dpms.patch";
+        sha256 = "0kh508ppiv4nvkg30gmw85cljlfq1bvkzhvf1iaxw0snb0mwgsxi";
+      })
+    ];
 
   postPatch = ''
     for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do
@@ -148,8 +149,8 @@ stdenv.mkDerivation rec {
     "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
 
-    # Default for release buildtype but passed manually because
-    # we're using plain
+  # Default for release buildtype but passed manually because
+  # we're using plain
   NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   passthru = {

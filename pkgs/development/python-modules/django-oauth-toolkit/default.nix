@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, django_2_2, requests, oauthlib
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, django_2_2
+, requests
+, oauthlib
 }:
 
 buildPythonPackage rec {

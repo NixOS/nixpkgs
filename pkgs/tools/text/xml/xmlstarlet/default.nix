@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "xmlstarlet-1.6.1";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/xmlstar/${name}.tar.gz";
     sha256 = "1jp737nvfcf6wyb54fla868yrr39kcbijijmjpyk4lrpyg23in0m";

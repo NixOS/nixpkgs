@@ -1,7 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, libGL, libGLU }:
-
 let version = "1.0"; in
-
 stdenv.mkDerivation {
   pname = "libtxc_dxtn_s2tc";
   inherit version;

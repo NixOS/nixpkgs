@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, autoconf, gperf, flex, bison, readline, ncurses
-, bzip2, zlib
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, gperf
+, flex
+, bison
+, readline
+, ncurses
+, bzip2
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -7,9 +15,9 @@ stdenv.mkDerivation rec {
   version = "unstable-2019-08-01";
 
   src = fetchFromGitHub {
-    owner  = "steveicarus";
+    owner = "steveicarus";
     repo = pname;
-    rev    = "c383d2048c0bd15f5db083f14736400546fb6215";
+    rev = "c383d2048c0bd15f5db083f14736400546fb6215";
     sha256 = "1zs0gyhws0qa315magz3w5m45v97knczdgbf2zn4d7bdb7cv417c";
   };
 

@@ -3,13 +3,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.programs.xonsh;
 
 in
-
 {
 
   options = {
@@ -50,11 +48,11 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.shells =
-      [ "/run/current-system/sw/bin/xonsh"
+      [
+        "/run/current-system/sw/bin/xonsh"
         "${cfg.package}/bin/xonsh"
       ];
 
   };
 
 }
-

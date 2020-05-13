@@ -14,7 +14,7 @@ rec {
 
   packageName = "mk-string-metrics";
 
-  asdFilesToKeep = ["mk-string-metrics.asd"];
+  asdFilesToKeep = [ "mk-string-metrics.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM mk-string-metrics DESCRIPTION

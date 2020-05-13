@@ -1,9 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
 with lib;
-
 let
-
   bootFs = filterAttrs (n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)) config.fileSystems;
 
   commonFunctions = ''
@@ -33,12 +31,11 @@ let
       # bcachefs does not support mounting devices with colons in the path, ergo we don't (see #49671)
       firstDevice = head (splitString ":" fs.device);
     in
-      ''
-        tryUnlock ${name} ${firstDevice}
-      '';
+    ''
+      tryUnlock ${name} ${firstDevice}
+    '';
 
 in
-
 {
   config = mkIf (elem "bcachefs" config.boot.supportedFilesystems) (mkMerge [
     {
@@ -48,7 +45,7 @@ in
       boot.kernelPackages = pkgs.linuxPackages_testing_bcachefs;
     }
 
-    (mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
+    (mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != { })) {
       # the cryptographic modules are required only for decryption attempts
       boot.initrd.availableKernelModules = [ "bcachefs" "chacha20" "poly1305" ];
 
@@ -60,6 +57,7 @@ in
       '';
 
       boot.initrd.postDeviceCommands = commonFunctions + concatStrings (mapAttrsToList openCommand bootFs);
-    })
+    }
+    )
   ]);
 }

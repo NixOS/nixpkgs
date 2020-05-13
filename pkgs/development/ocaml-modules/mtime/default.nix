@@ -1,9 +1,15 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, js_of_ocaml
+{ stdenv
+, lib
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, topkg
+, js_of_ocaml
 , jsooSupport ? lib.versionAtLeast ocaml.version "4.03"
 }:
 
 with lib;
-
 let param =
   if versionAtLeast ocaml.version "4.03"
   then {
@@ -14,7 +20,6 @@ let param =
     sha256 = "1adm8sc3lkjly99hyi5gqnxas748k7h62ljgn8x423nkn8gyp8dh";
   };
 in
-
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-mtime-${param.version}";
 
@@ -25,7 +30,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   buildInputs = [ findlib topkg ]
-  ++ stdenv.lib.optional jsooSupport js_of_ocaml;
+    ++ stdenv.lib.optional jsooSupport js_of_ocaml;
 
   buildPhase = "${topkg.buildPhase} --with-js_of_ocaml ${boolToString jsooSupport}";
 

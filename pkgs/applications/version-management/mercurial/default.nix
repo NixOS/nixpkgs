@@ -1,12 +1,17 @@
-{ stdenv, fetchurl, python3Packages, makeWrapper, unzip
-, guiSupport ? false, tk ? null
+{ stdenv
+, fetchurl
+, python3Packages
+, makeWrapper
+, unzip
+, guiSupport ? false
+, tk ? null
 , ApplicationServices
 }:
-
 let
   inherit (python3Packages) docutils dulwich python;
 
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   pname = "mercurial";
   version = "5.3";
 
@@ -17,7 +22,7 @@ in python3Packages.buildPythonApplication rec {
 
   format = "other";
 
-  inherit python; # pass it so that the same version can be used in hg2git
+  inherit python;# pass it so that the same version can be used in hg2git
 
   buildInputs = [ makeWrapper docutils unzip ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
@@ -37,7 +42,8 @@ in python3Packages.buildPythonApplication rec {
     WRAP_TK=" --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}
               --set HG $out/bin/hg
               --prefix PATH : ${tk}/bin "
-  '') + ''
+  ''
+  ) + ''
     for i in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$i \
         $WRAP_TK

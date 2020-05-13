@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, libatomic_ops
 , enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
 }:
 
@@ -24,12 +29,14 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
   '';
 
-  patches = [ (fetchpatch {
-    url = "https://gitweb.gentoo.org/proj/musl.git/plain/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch";
-    sha256 = "1gydwlklvci30f5dpp5ccw2p2qpph5y41r55wx9idamjlq66fbb3";
-  }) ] ++
-    # https://github.com/ivmai/bdwgc/pull/208
-    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
+  patches = [
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/proj/musl.git/plain/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch";
+      sha256 = "1gydwlklvci30f5dpp5ccw2p2qpph5y41r55wx9idamjlq66fbb3";
+    })
+  ] ++
+  # https://github.com/ivmai/bdwgc/pull/208
+  lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
 
   configureFlags =
     [ "--enable-cplusplus" ]

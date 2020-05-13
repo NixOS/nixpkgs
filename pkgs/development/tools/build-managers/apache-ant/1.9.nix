@@ -1,7 +1,5 @@
 { fetchurl, stdenv, coreutils, makeWrapper }:
-
 let version = "1.9.6"; in
-
 stdenv.mkDerivation {
   pname = "ant";
   inherit version;

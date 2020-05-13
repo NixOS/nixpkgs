@@ -57,7 +57,7 @@ stdenv.mkDerivation (rec {
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
   ]
-;
+  ;
 
   enableParallelBuilding = true;
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation (rec {
     make docs-lldb-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     # manually install lldb man page

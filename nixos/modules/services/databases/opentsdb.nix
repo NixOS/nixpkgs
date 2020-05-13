@@ -1,13 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.opentsdb;
 
   configFile = pkgs.writeText "opentsdb.conf" cfg.config;
 
-in {
+in
+{
 
   ###### interface
 
@@ -86,7 +86,7 @@ in {
 
       preStart =
         ''
-        COMPRESSION=NONE HBASE_HOME=${config.services.hbase.package} ${cfg.package}/share/opentsdb/tools/create_table.sh
+          COMPRESSION=NONE HBASE_HOME=${config.services.hbase.package} ${cfg.package}/share/opentsdb/tools/create_table.sh
         '';
 
       serviceConfig = {

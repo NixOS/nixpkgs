@@ -29,9 +29,9 @@
 , wayland-protocols
 , enableAlsa ? stdenv.isLinux
 , alsaLib
-# Enabling Cocoa seems to currently not work, giving compile
-# errors. Suspected is that a newer version than clang
-# is needed than 5.0 but it is not clear.
+  # Enabling Cocoa seems to currently not work, giving compile
+  # errors. Suspected is that a newer version than clang
+  # is needed than 5.0 but it is not clear.
 , enableCocoa ? false
 , darwin
 , enableGl ? (enableX11 || enableWayland || enableCocoa)
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
   ] ++ lib.optional enableCocoa darwin.apple_sdk.frameworks.Cocoa
-    ++ lib.optional enableCdparanoia cdparanoia;
+  ++ lib.optional enableCdparanoia cdparanoia;
 
   propagatedBuildInputs = [
     gstreamer

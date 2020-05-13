@@ -1,29 +1,38 @@
-{ stdenv, fetchFromGitHub, runCommand, ncurses, gettext
-, pkgconfig, cscope, ruby, tcl, perl, luajit
+{ stdenv
+, fetchFromGitHub
+, runCommand
+, ncurses
+, gettext
+, pkgconfig
+, cscope
+, ruby
+, tcl
+, perl
+, luajit
 , darwin
 
 , usePython27 ? false
-, python27 ? null, python37 ? null
+, python27 ? null
+, python37 ? null
 }:
-
 let
-  python = if usePython27
-           then { pkg = python27; name = "python"; }
-           else { pkg = python37; name = "python3"; };
+  python =
+    if usePython27
+    then { pkg = python27; name = "python"; }
+    else { pkg = python37; name = "python3"; };
 in
 assert python.pkg != null;
-
 let
   # Building requires a few system tools to be in PATH.
   # Some of these we could patch into the relevant source files (such as xcodebuild and
   # qlmanage) but some are used by Xcode itself and we have no choice but to put them in PATH.
   # Symlinking them in this way is better than just putting all of /usr/bin in there.
-  buildSymlinks = runCommand "macvim-build-symlinks" {} ''
+  buildSymlinks = runCommand "macvim-build-symlinks"
+    { } ''
     mkdir -p $out/bin
     ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
   '';
 in
-
 stdenv.mkDerivation {
   pname = "macvim";
 
@@ -40,33 +49,40 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig buildSymlinks ];
   buildInputs = [
-    gettext ncurses cscope luajit ruby tcl perl python.pkg
+    gettext
+    ncurses
+    cscope
+    luajit
+    ruby
+    tcl
+    perl
+    python.pkg
   ];
 
   patches = [ ./macvim.patch ];
 
   configureFlags = [
-      "--enable-cscope"
-      "--enable-fail-if-missing"
-      "--with-features=huge"
-      "--enable-gui=macvim"
-      "--enable-multibyte"
-      "--enable-nls"
-      "--enable-luainterp=dynamic"
-      "--enable-${python.name}interp=dynamic"
-      "--enable-perlinterp=dynamic"
-      "--enable-rubyinterp=dynamic"
-      "--enable-tclinterp=yes"
-      "--without-local-dir"
-      "--with-luajit"
-      "--with-lua-prefix=${luajit}"
-      "--with-${python.name}-command=${python.pkg}/bin/${python.name}"
-      "--with-ruby-command=${ruby}/bin/ruby"
-      "--with-tclsh=${tcl}/bin/tclsh"
-      "--with-tlib=ncurses"
-      "--with-compiledby=Nix"
-      "--disable-sparkle"
-      "LDFLAGS=-headerpad_max_install_names"
+    "--enable-cscope"
+    "--enable-fail-if-missing"
+    "--with-features=huge"
+    "--enable-gui=macvim"
+    "--enable-multibyte"
+    "--enable-nls"
+    "--enable-luainterp=dynamic"
+    "--enable-${python.name}interp=dynamic"
+    "--enable-perlinterp=dynamic"
+    "--enable-rubyinterp=dynamic"
+    "--enable-tclinterp=yes"
+    "--without-local-dir"
+    "--with-luajit"
+    "--with-lua-prefix=${luajit}"
+    "--with-${python.name}-command=${python.pkg}/bin/${python.name}"
+    "--with-ruby-command=${ruby}/bin/ruby"
+    "--with-tclsh=${tcl}/bin/tclsh"
+    "--with-tlib=ncurses"
+    "--with-compiledby=Nix"
+    "--disable-sparkle"
+    "LDFLAGS=-headerpad_max_install_names"
   ];
 
   makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
@@ -102,7 +118,7 @@ stdenv.mkDerivation {
   ;
 
   postConfigure = ''
-    substituteInPlace src/auto/config.mk --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include"
+    substituteInPlace src/auto/config.mk --replace "PERL_CFLAGS  =" "PERL_CFLAGS  = -I${darwin.libutil}/include"
 
     substituteInPlace src/MacVim/vimrc --subst-var-by CSCOPE ${cscope}/bin/cscope
   '';
@@ -143,10 +159,10 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Vim - the text editor - for macOS";
-    homepage    = https://github.com/macvim-dev/macvim;
+    homepage = https://github.com/macvim-dev/macvim;
     license = licenses.vim;
     maintainers = with maintainers; [ cstrahan lilyball ];
-    platforms   = platforms.darwin;
-    hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
+    platforms = platforms.darwin;
+    hydraPlatforms = [ ]; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };
 }

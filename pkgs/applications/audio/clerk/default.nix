@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, makeWrapper, rofi, mpc_cli, perl,
-utillinux, pythonPackages, libnotify }:
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, rofi
+, mpc_cli
+, perl
+, utillinux
+, pythonPackages
+, libnotify
+}:
 
 stdenv.mkDerivation {
   name = "clerk-2016-10-14";
@@ -23,8 +31,8 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An MPD client built on top of rofi";
-    homepage    = https://github.com/carnager/clerk;
-    license     = licenses.mit;
+    homepage = https://github.com/carnager/clerk;
+    license = licenses.mit;
     maintainers = with maintainers; [ anderspapitto ];
   };
 }

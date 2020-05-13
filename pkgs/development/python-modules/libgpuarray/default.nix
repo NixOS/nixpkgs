@@ -8,12 +8,16 @@
 , six
 , nose
 , Mako
-, cudaSupport ? false, cudatoolkit , nvidia_x11
-, openclSupport ? true, ocl-icd, clblas
+, cudaSupport ? false
+, cudatoolkit
+, nvidia_x11
+, openclSupport ? true
+, ocl-icd
+, clblas
 }:
 
 assert cudaSupport -> nvidia_x11 != null
-                   && cudatoolkit != null;
+  && cudatoolkit != null;
 
 buildPythonPackage rec {
   pname = "libgpuarray";
@@ -32,7 +36,7 @@ buildPythonPackage rec {
   configurePhase = "cmakeConfigurePhase";
 
   libraryPath = lib.makeLibraryPath (
-    []
+    [ ]
     ++ lib.optionals cudaSupport [ cudatoolkit.lib cudatoolkit.out nvidia_x11 ]
     ++ lib.optionals openclSupport ([ clblas ] ++ lib.optional (!stdenv.isDarwin) ocl-icd)
   );

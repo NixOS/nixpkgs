@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, electron, makeDesktopItem, makeWrapper, nodePackages, autoPatchelfHook}:
+{ lib, stdenv, fetchurl, electron, makeDesktopItem, makeWrapper, nodePackages, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
   pname = "teleprompter";
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   desktopItem = makeDesktopItem {
-     name = "teleprompter";
-     exec = "teleprompter";
-     type = "Application";
-     desktopName = "Teleprompter";
+    name = "teleprompter";
+    exec = "teleprompter";
+    type = "Application";
+    desktopName = "Teleprompter";
   };
 
   meta = with lib; {
@@ -39,4 +39,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ Scriptkiddi ];
   };
 }
-

@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.morty;
 
 in
-
 {
 
   ###### interface
@@ -16,8 +14,9 @@ in
 
     services.morty = {
 
-      enable = mkEnableOption
-        "Morty proxy server. See https://github.com/asciimoo/morty";
+      enable =
+        mkEnableOption
+          "Morty proxy server. See https://github.com/asciimoo/morty";
 
       ipv6 = mkOption {
         type = types.bool;
@@ -30,8 +29,8 @@ in
         type = types.str;
         default = "";
         description = "HMAC url validation key (hexadecimal encoded).
-	Leave blank to disable. Without validation key, anyone can
-	submit proxy requests. Leave blank to disable.";
+  Leave blank to disable. Without validation key, anyone can
+  submit proxy requests. Leave blank to disable.";
         defaultText = "No HMAC url validation. Generate with echo -n somevalue | openssl dgst -sha1 -hmac somekey";
       };
 
@@ -71,7 +70,8 @@ in
   config = mkIf config.services.morty.enable {
 
     users.users.morty =
-      { description = "Morty user";
+      {
+        description = "Morty user";
         createHome = true;
         home = "/var/lib/morty";
         isSystemUser = true;
@@ -85,10 +85,10 @@ in
         serviceConfig = {
           User = "morty";
           ExecStart = ''${cfg.package}/bin/morty              \
-	    -listen ${cfg.listenAddress}:${toString cfg.port} \
-	    ${optionalString cfg.ipv6 "-ipv6"}                \
-	    ${optionalString (cfg.key != "") "-key " + cfg.key} \
-	  '';
+      -listen ${cfg.listenAddress}:${toString cfg.port} \
+      ${optionalString cfg.ipv6 "-ipv6"}                \
+      ${optionalString (cfg.key != "") "-key " + cfg.key} \
+    '';
         };
       };
     environment.systemPackages = [ cfg.package ];

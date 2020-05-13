@@ -3,11 +3,10 @@
 , makeDesktopItem
 , fetchFromGitLab
 , qmake
-# qt
+  # qt
 , qtbase
 , qtwebsockets
 }:
-
 let
   desktopItem = makeDesktopItem {
     type = "Application";
@@ -16,7 +15,8 @@ let
     exec = "Michabo";
   };
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "michabo";
   version = "0.1";
 
@@ -50,4 +50,3 @@ in mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

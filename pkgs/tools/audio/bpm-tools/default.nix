@@ -1,6 +1,6 @@
-{
-  stdenv,
-  fetchurl,
+{ stdenv
+, fetchurl
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,4 +29,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
   };
 }
-

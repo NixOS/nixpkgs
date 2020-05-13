@@ -1,15 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake
-, freetype, SDL2, SDL2_mixer, openal, zlib, libpng, python, libvorbis
-, libiconv }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, freetype
+, SDL2
+, SDL2_mixer
+, openal
+, zlib
+, libpng
+, python
+, libvorbis
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   pname = "gemrb";
   version = "0.8.6";
 
   src = fetchFromGitHub {
-    owner  = "gemrb";
-    repo   = "gemrb";
-    rev    = "v${version}";
+    owner = "gemrb";
+    repo = "gemrb";
+    rev = "v${version}";
     sha256 = "0vsr3fsqmv9b7s5l0cwhpq2pf7ah2wvgmcn9y8asj6w8hprp17d4";
   };
 

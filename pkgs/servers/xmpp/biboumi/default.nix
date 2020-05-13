@@ -1,5 +1,19 @@
-{ stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn,
-  libiconv, botan2, systemd, pkgconfig, udns, pandoc, coreutils } :
+{ stdenv
+, fetchurl
+, fetchgit
+, cmake
+, libuuid
+, expat
+, sqlite
+, libidn
+, libiconv
+, botan2
+, systemd
+, pkgconfig
+, udns
+, pandoc
+, coreutils
+}:
 
 stdenv.mkDerivation rec {
   pname = "biboumi";
@@ -19,8 +33,16 @@ stdenv.mkDerivation rec {
   patches = [ ./catch.patch ];
 
   nativeBuildInputs = [ cmake pkgconfig pandoc ];
-  buildInputs = [ libuuid expat sqlite libiconv libidn botan2 systemd
-    udns ];
+  buildInputs = [
+    libuuid
+    expat
+    sqlite
+    libiconv
+    libidn
+    botan2
+    systemd
+    udns
+  ];
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi

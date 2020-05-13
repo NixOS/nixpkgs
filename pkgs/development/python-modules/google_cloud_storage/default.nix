@@ -27,7 +27,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest mock ];
 
   checkPhase = ''
-   pytest tests/unit
+    pytest tests/unit
   '';
 
   meta = with stdenv.lib; {

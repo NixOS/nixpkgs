@@ -1,12 +1,36 @@
-{ stdenv, gettext, fetchurl, evolution-data-server, fetchpatch
-, pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, python3, gtk3, glib, cheese
-, libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
-, wrapGAppsHook, folks, libxml2, gnome3, telepathy-glib
-, vala, meson, ninja, libhandy, gsettings-desktop-schemas }:
-
+{ stdenv
+, gettext
+, fetchurl
+, evolution-data-server
+, fetchpatch
+, pkgconfig
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, python3
+, gtk3
+, glib
+, cheese
+, libchamplain
+, clutter-gtk
+, geocode-glib
+, gnome-desktop
+, gnome-online-accounts
+, wrapGAppsHook
+, folks
+, libxml2
+, gnome3
+, telepathy-glib
+, vala
+, meson
+, ninja
+, libhandy
+, gsettings-desktop-schemas
+}:
 let
   version = "3.34.1";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gnome-contacts";
   inherit version;
 
@@ -18,14 +42,34 @@ in stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ evolution-data-server ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gettext libxslt docbook_xsl docbook_xml_dtd_42 python3 wrapGAppsHook
+    meson
+    ninja
+    pkgconfig
+    vala
+    gettext
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
+    python3
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 glib evolution-data-server gsettings-desktop-schemas
-    folks gnome-desktop telepathy-glib libhandy
-    libxml2 gnome-online-accounts cheese
-    gnome3.adwaita-icon-theme libchamplain clutter-gtk geocode-glib
+    gtk3
+    glib
+    evolution-data-server
+    gsettings-desktop-schemas
+    folks
+    gnome-desktop
+    telepathy-glib
+    libhandy
+    libxml2
+    gnome-online-accounts
+    cheese
+    gnome3.adwaita-icon-theme
+    libchamplain
+    clutter-gtk
+    geocode-glib
   ];
 
   mesonFlags = [

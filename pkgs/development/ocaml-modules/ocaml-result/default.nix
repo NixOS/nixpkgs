@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, ocaml, findlib }:
-
 let version = "1.2"; in
-
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-result-${version}";
 
@@ -25,6 +23,6 @@ stdenv.mkDerivation {
       Result module defined in this library.
     '';
     license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.fail2ban;
 
   fail2banConf = pkgs.writeText "fail2ban.local" cfg.daemonConfig;
@@ -15,10 +13,11 @@ let
 
     ${concatStringsSep "\n" (attrValues (flip mapAttrs cfg.jails (name: def:
       optionalString (def != "")
-        ''
-          [${name}]
-          ${def}
-        '')))}
+      ''
+        [${name}]
+        ${def}
+      '')
+      ))}
   '';
 
   pathsConf = pkgs.writeText "paths-nixos.conf" ''
@@ -34,7 +33,6 @@ let
   '';
 
 in
-
 {
 
   ###### interface
@@ -176,7 +174,7 @@ in
         description = ''
           The contents of Fail2ban's main configuration file.  It's
           generally not necessary to change it.
-       '';
+        '';
       };
 
       jails = mkOption {

@@ -1,36 +1,40 @@
 { enableMultiThreading ? true
-, enableG3toG4         ? false
-, enableInventor       ? false
-, enableGDML           ? false
-, enableQT             ? false
-, enableXM             ? false
-, enableOpenGLX11      ? true
-, enableRaytracerX11   ? false
+, enableG3toG4 ? false
+, enableInventor ? false
+, enableGDML ? false
+, enableQT ? false
+, enableXM ? false
+, enableOpenGLX11 ? true
+, enableRaytracerX11 ? false
 
-# Standard build environment with cmake.
-, stdenv, fetchurl, fetchpatch, cmake
+  # Standard build environment with cmake.
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
 
-# Optional system packages, otherwise internal GEANT4 packages are used.
+  # Optional system packages, otherwise internal GEANT4 packages are used.
 , clhep ? null # not packaged currently
 , expat
 , zlib
 
-# For enableGDML.
+  # For enableGDML.
 , xercesc
 
-# For enableQT.
+  # For enableQT.
 , qtbase
 
-# For enableXM.
+  # For enableXM.
 , motif
 
-# For enableInventor
+  # For enableInventor
 , coin3d
 , soxt
 , libXpm
 
-# For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
-, libGLU, libGL
+  # For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
+, libGLU
+, libGL
 , xlibsWrapper
 , libXmu
 }:
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
   version = "10.6.1";
   pname = "geant4";
 
-  src = fetchurl{
+  src = fetchurl {
     url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.p01.tar.gz";
     sha256 = "0ssxg7dd7vxljb3fdyb0llg7gsxack21qjfsb3n23k107a19yibk";
   };
@@ -63,7 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  nativeBuildInputs =  [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libGLU xlibsWrapper libXmu ]
     ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt motif ];
@@ -82,9 +86,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     data = import ./datasets.nix {
-          inherit stdenv fetchurl;
-          geant_version = version;
-      };
+      inherit stdenv fetchurl;
+      geant_version = version;
+    };
   };
 
   # Set the myriad of envars required by Geant4 if we use a nix-shell.

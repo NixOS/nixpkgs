@@ -1,12 +1,12 @@
 { pkgs, lib, config, ... }:
 
 with lib;
-
 let
   cfg = config.services.shout;
   shoutHome = "/var/lib/shout";
 
-  defaultConfig = pkgs.runCommand "config.js" { preferLocalBuild = true; } ''
+  defaultConfig = pkgs.runCommand "config.js"
+    { preferLocalBuild = true; } ''
     EDITOR=true ${pkgs.shout}/bin/shout config --home $PWD
     mv config.js $out
   '';
@@ -21,7 +21,8 @@ let
     )
   '';
 
-in {
+in
+{
   options.services.shout = {
     enable = mkEnableOption "Shout web IRC client";
 
@@ -60,7 +61,7 @@ in {
     };
 
     config = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
       example = {
         displayNetwork = false;
@@ -98,9 +99,12 @@ in {
       script = concatStringsSep " " [
         "${pkgs.shout}/bin/shout"
         (if cfg.private then "--private" else "--public")
-        "--port" (toString cfg.port)
-        "--host" (toString cfg.listenAddress)
-        "--home" shoutHome
+        "--port"
+        (toString cfg.port)
+        "--host"
+        (toString cfg.listenAddress)
+        "--home"
+        shoutHome
       ];
       serviceConfig = {
         User = "shout";

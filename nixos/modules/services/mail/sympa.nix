@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.sympa;
   dataDir = "/var/lib/sympa";
@@ -58,12 +57,16 @@ let
     listmaster@${domain}             sympa:listmaster@${domain}
     bounce@${domain}                 sympabounce:sympa@${domain}
     abuse-feedback-report@${domain}  sympabounce:sympa@${domain}
-  '')));
+  '')
+  )
+  );
 
   virtual = pkgs.writeText "virtual.sympa" (concatStringsSep "\n" (flip map fqdns (domain: ''
     sympa-request@${domain}  postmaster@localhost
     sympa-owner@${domain}    postmaster@localhost
-  '')));
+  '')
+  )
+  );
 
   listAliases = pkgs.writeText "list_aliases.tt2" ''
     #--- [% list.name %]@[% list.domain %]: list transport map created at [% date %]
@@ -134,7 +137,7 @@ in
           };
           settings = mkOption {
             type = attrsOf (oneOf [ str int bool ]);
-            default = {};
+            default = { };
             example = {
               default_max_list_members = 3;
             };
@@ -280,7 +283,7 @@ in
 
     settings = mkOption {
       type = attrsOf (oneOf [ str int bool ]);
-      default = {};
+      default = { };
       example = literalExample ''
         {
           default_home = "lists";
@@ -315,7 +318,7 @@ in
 
         config.source = mkIf (config.text != null) (mkDefault (pkgs.writeText "sympa-${baseNameOf name}" config.text));
       }));
-      default = {};
+      default = { };
       example = literalExample ''
         {
           "list_data/lists.example.org/help" = {
@@ -332,12 +335,12 @@ in
   config = mkIf cfg.enable {
 
     services.sympa.settings = (mapAttrs (_: v: mkDefault v) {
-      domain     = if cfg.mainDomain != null then cfg.mainDomain else head fqdns;
+      domain = if cfg.mainDomain != null then cfg.mainDomain else head fqdns;
       listmaster = concatStringsSep "," cfg.listMasters;
-      lang       = cfg.lang;
+      lang = cfg.lang;
 
-      home        = "${dataDir}/list_data";
-      arc_path    = "${dataDir}/arc";
+      home = "${dataDir}/list_data";
+      arc_path = "${dataDir}/arc";
       bounce_path = "${dataDir}/bounce";
 
       sendmail = "${pkgs.system-sendmail}/bin/sendmail";
@@ -347,38 +350,46 @@ in
     }
     // (optionalAttrs (cfg.database.host != null) {
       db_host = cfg.database.host;
-    })
+    }
+    )
     // (optionalAttrs mysqlLocal {
       db_host = "localhost"; # use unix domain socket
-    })
+    }
+    )
     // (optionalAttrs pgsqlLocal {
       db_host = "/run/postgresql"; # use unix domain socket
-    })
+    }
+    )
     // (optionalAttrs (cfg.database.port != null) {
       db_port = cfg.database.port;
-    })
+    }
+    )
     // (optionalAttrs (cfg.database.user != null) {
       db_user = cfg.database.user;
-    })
+    }
+    )
     // (optionalAttrs (cfg.mta.type == "postfix") {
       sendmail_aliases = "${dataDir}/sympa_transport";
-      aliases_program  = "${pkgs.postfix}/bin/postmap";
-      aliases_db_type  = "hash";
-    })
+      aliases_program = "${pkgs.postfix}/bin/postmap";
+      aliases_db_type = "hash";
+    }
+    )
     // (optionalAttrs cfg.web.enable {
       static_content_path = "${dataDir}/static_content";
-      css_path            = "${dataDir}/static_content/css";
-      pictures_path       = "${dataDir}/static_content/pictures";
-      mhonarc             = "${pkgs.perlPackages.MHonArc}/bin/mhonarc";
-    }));
+      css_path = "${dataDir}/static_content/css";
+      pictures_path = "${dataDir}/static_content/pictures";
+      mhonarc = "${pkgs.perlPackages.MHonArc}/bin/mhonarc";
+    }
+    ));
 
     services.sympa.settingsFile = {
-      "virtual.sympa"        = mkDefault { source = virtual; };
-      "transport.sympa"      = mkDefault { source = transport; };
+      "virtual.sympa" = mkDefault { source = virtual; };
+      "transport.sympa" = mkDefault { source = transport; };
       "etc/list_aliases.tt2" = mkDefault { source = listAliases; };
     }
     // (flip mapAttrs' cfg.domains (fqdn: domain:
-          nameValuePair "etc/${fqdn}/robot.conf" (mkDefault { source = robotConfig fqdn domain; })));
+      nameValuePair "etc/${fqdn}/robot.conf" (mkDefault { source = robotConfig fqdn domain; }))
+    );
 
     environment = {
       systemPackages = [ pkg ];
@@ -392,13 +403,15 @@ in
       isSystemUser = true;
     };
 
-    users.groups.${group} = {};
+    users.groups.${group} = { };
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == user;
         message = "services.sympa.database.user must be set to ${user} if services.sympa.database.createLocally is set to true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.sympa.database.createLocally is set to true";
       }
     ];
@@ -423,7 +436,8 @@ in
     ++ (flip concatMap fqdns (fqdn: [
       "d  ${dataDir}/etc/${fqdn}       0700 ${user} ${group} - -"
       "d  ${dataDir}/list_data/${fqdn} 0700 ${user} ${group} - -"
-    ]))
+    ])
+    )
     #++ (flip mapAttrsToList enabledFiles (k: v:
     #  "L+ ${dataDir}/${k}              -    -       -        - ${v.source}"
     #))
@@ -432,7 +446,8 @@ in
       # force-copy instead
       "R ${dataDir}/${k}              -    -       -        - -"
       "C ${dataDir}/${k}              0700 ${user}  ${group} - ${v.source}"
-    ])));
+    ])
+    ));
 
     systemd.services.sympa = {
       description = "Sympa mailing list manager";
@@ -504,26 +519,27 @@ in
     };
 
     services.nginx.enable = mkIf usingNginx true;
-    services.nginx.virtualHosts = mkIf usingNginx (let
-      vHosts = unique (remove null (mapAttrsToList (_k: v: v.webHost) cfg.domains));
-      hostLocations = host: map (v: v.webLocation) (filter (v: v.webHost == host) (attrValues cfg.domains));
-      httpsOpts = optionalAttrs cfg.web.https { forceSSL = mkDefault true; enableACME = mkDefault true; };
-    in
-    genAttrs vHosts (host: {
-      locations = genAttrs (hostLocations host) (loc: {
-        extraConfig = ''
-          include ${config.services.nginx.package}/conf/fastcgi_params;
+    services.nginx.virtualHosts = mkIf usingNginx (
+      let
+        vHosts = unique (remove null (mapAttrsToList (_k: v: v.webHost) cfg.domains));
+        hostLocations = host: map (v: v.webLocation) (filter (v: v.webHost == host) (attrValues cfg.domains));
+        httpsOpts = optionalAttrs cfg.web.https { forceSSL = mkDefault true; enableACME = mkDefault true; };
+      in
+      genAttrs vHosts (host: {
+        locations = genAttrs (hostLocations host) (loc: {
+          extraConfig = ''
+            include ${config.services.nginx.package}/conf/fastcgi_params;
 
-          fastcgi_pass unix:/run/sympa/wwsympa.socket;
-          fastcgi_split_path_info ^(${loc})(.*)$;
+            fastcgi_pass unix:/run/sympa/wwsympa.socket;
+            fastcgi_split_path_info ^(${loc})(.*)$;
 
-          fastcgi_param PATH_INFO       $fastcgi_path_info;
-          fastcgi_param SCRIPT_FILENAME ${pkg}/bin/wwsympa.fcgi;
-        '';
-      }) // {
-        "/static-sympa/".alias = "${dataDir}/static_content/";
-      };
-    } // httpsOpts));
+            fastcgi_param PATH_INFO       $fastcgi_path_info;
+            fastcgi_param SCRIPT_FILENAME ${pkg}/bin/wwsympa.fcgi;
+          '';
+        }) // {
+          "/static-sympa/".alias = "${dataDir}/static_content/";
+        };
+      } // httpsOpts));
 
     services.postfix = mkIf (cfg.mta.type == "postfix") {
       enable = true;
@@ -574,7 +590,8 @@ in
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
@@ -584,7 +601,8 @@ in
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
         }
       ];

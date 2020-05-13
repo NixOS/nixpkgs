@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, mono}:
+{ stdenv, fetchFromGitHub, mono }:
 stdenv.mkDerivation rec {
   pname = "syntex";
   version = "0.0pre20160915";
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     echo "'${mono}/bin/mono' '$out/bin/syntex.exe' \"\$@\"" >>  "$out/bin/syntex"
     chmod a+x "$out/bin/syntex"
   '';
-  buildInputs = [mono];
+  buildInputs = [ mono ];
   meta = {
     inherit version;
     description = ''Texture synthesis from examples'';
     license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

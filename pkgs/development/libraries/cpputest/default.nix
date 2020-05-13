@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "3.8";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://cpputest.github.io/;
     description = "Unit testing and mocking framework for C/C++";
-    platforms = stdenv.lib.platforms.linux ;
+    platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.juliendehos ];
   };

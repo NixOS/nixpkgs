@@ -1,5 +1,7 @@
-{ stdenv, fetchurl
-, lzip, ncurses
+{ stdenv
+, fetchurl
+, lzip
+, ncurses
 }:
 
 with stdenv.lib;

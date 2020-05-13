@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.safeeyes;
 
 in
-
 {
 
   ###### interface
@@ -33,7 +31,7 @@ in
       description = "Safeeyes";
 
       wantedBy = [ "graphical-session.target" ];
-      partOf   = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
 
       serviceConfig = {
         ExecStart = ''

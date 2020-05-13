@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, fetchFromGitHub
-, llvmPackages, ncurses, lua
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, llvmPackages
+, ncurses
+, lua
 }:
-
 let
   luajitArchive = "LuaJIT-2.0.5.tar.gz";
   luajitSrc = fetchurl {
-    url    = "http://luajit.org/download/${luajitArchive}";
+    url = "http://luajit.org/download/${luajitArchive}";
     sha256 = "0yg9q4q6v028bgh85317ykc9whgxgysp76qzaqgq55y6jy11yjw7";
   };
 in
@@ -14,9 +17,9 @@ stdenv.mkDerivation rec {
   version = "1.0.0pre1175_${builtins.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
-    owner  = "zdevito";
-    repo   = "terra";
-    rev    = "ef6a75ffee15a30f3c74f4e6943851cfbc0fec3d";
+    owner = "zdevito";
+    repo = "terra";
+    rev = "ef6a75ffee15a30f3c74f4e6943851cfbc0fec3d";
     sha256 = "0aky17vbv3d9zng34hp17p9zb00dbzwhvzsdjzrrqvk9lmyvix0s";
   };
 
@@ -60,9 +63,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A low-level counterpart to Lua";
-    homepage    = http://terralang.org/;
-    platforms   = platforms.x86_64;
+    homepage = http://terralang.org/;
+    platforms = platforms.x86_64;
     maintainers = with maintainers; [ jb55 thoughtpolice ];
-    license     = licenses.mit;
+    license = licenses.mit;
   };
 }

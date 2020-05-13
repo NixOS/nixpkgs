@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.duplicati;
 in
@@ -64,4 +63,3 @@ in
 
   };
 }
-

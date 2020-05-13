@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, m4}:
+{ stdenv, fetchurl, pkgconfig, m4 }:
 
 stdenv.mkDerivation rec {
   name = "libsigc++-1.2.7";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ m4];
+  buildInputs = [ m4 ];
 
   meta = with stdenv.lib; {
     homepage = https://libsigcplusplus.github.io/libsigcplusplus/;

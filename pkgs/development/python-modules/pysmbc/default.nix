@@ -1,6 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, samba, pkgconfig
-, setuptools }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, samba
+, pkgconfig
+, setuptools
+}:
 
 buildPythonPackage rec {
   version = "1.0.18";

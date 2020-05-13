@@ -1,5 +1,4 @@
 { stdenv, fetchurl, unzip, makeWrapper, makeDesktopItem, icoutils, jre }:
-
 let
   desktopItem = makeDesktopItem {
     name = "groove-simulator";
@@ -10,12 +9,13 @@ let
     categories = "Science;ComputerScience;";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "groove";
   version = "5.7.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/groove/groove/${version}/${pname}-${builtins.replaceStrings ["."] ["_"] version}-bin.zip";
+    url = "mirror://sourceforge/groove/groove/${version}/${pname}-${builtins.replaceStrings [ "." ] [ "_" ] version}-bin.zip";
     sha256 = "1cl3xzl3n8b9a7h5pvnv31bab9j9zaw07ppk8whk8h865dcq1d10";
   };
 

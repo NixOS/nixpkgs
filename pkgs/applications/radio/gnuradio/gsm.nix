@@ -1,6 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
-, makeWrapper, cppunit, libosmocore, gr-osmosdr
-, pythonSupport ? true, python, swig
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, boost
+, gnuradio
+, makeWrapper
+, cppunit
+, libosmocore
+, gr-osmosdr
+, pythonSupport ? true
+, python
+, swig
 }:
 
 assert pythonSupport -> python != null && swig != null;
@@ -18,7 +28,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake boost gnuradio makeWrapper cppunit libosmocore gr-osmosdr
+    cmake
+    boost
+    gnuradio
+    makeWrapper
+    cppunit
+    libosmocore
+    gr-osmosdr
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''

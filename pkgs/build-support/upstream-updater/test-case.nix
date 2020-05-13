@@ -1,10 +1,10 @@
 {
-  a=1;
-  b="text";
-  c=''
-  text
+  a = 1;
+  b = "text";
+  c = ''
+    text
   '';
-  d=''
+  d = ''
     Multi-line text with special characters - 
     like \ (backslash) and ''${} (dollar + 
     curly braces) and $ (dollar) and ' (quote)

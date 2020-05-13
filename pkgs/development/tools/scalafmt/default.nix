@@ -1,5 +1,4 @@
 { stdenv, jdk, jre, coursier, makeWrapper }:
-
 let
   baseName = "scalafmt";
   version = "2.4.2";
@@ -13,7 +12,7 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "0axinxfyycnmxg561n80s90swr6d0pgsw669gvpsk557nhmcclja";
+    outputHash = "0axinxfyycnmxg561n80s90swr6d0pgsw669gvpsk557nhmcclja";
   };
 in
 stdenv.mkDerivation {

@@ -1,6 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, mock, tornado, pyopenssl, cryptography
-, idna, certifi, ipaddress, pysocks }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, mock
+, tornado
+, pyopenssl
+, cryptography
+, idna
+, certifi
+, ipaddress
+, pysocks
+}:
 
 buildPythonPackage rec {
   pname = "urllib3";
@@ -12,8 +22,12 @@ buildPythonPackage rec {
   };
 
   NOSE_EXCLUDE = stdenv.lib.concatStringsSep "," [
-    "test_headers" "test_headerdict" "test_can_validate_ip_san" "test_delayed_body_read_timeout"
-    "test_timeout_errors_cause_retries" "test_select_multiple_interrupts_with_event"
+    "test_headers"
+    "test_headerdict"
+    "test_can_validate_ip_san"
+    "test_delayed_body_read_timeout"
+    "test_timeout_errors_cause_retries"
+    "test_select_multiple_interrupts_with_event"
   ];
 
   checkPhase = ''

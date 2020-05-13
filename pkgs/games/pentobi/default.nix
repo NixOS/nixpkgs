@@ -1,6 +1,18 @@
-{ stdenv, appstream, fetchurl, cmake, gettext, libxslt, librsvg, itstool
-  , qtbase, qtquickcontrols2, qtsvg, qttools, qtwebview, docbook_xsl
-  , wrapQtAppsHook
+{ stdenv
+, appstream
+, fetchurl
+, cmake
+, gettext
+, libxslt
+, librsvg
+, itstool
+, qtbase
+, qtquickcontrols2
+, qtsvg
+, qttools
+, qtwebview
+, docbook_xsl
+, wrapQtAppsHook
 }:
 
 with stdenv.lib;

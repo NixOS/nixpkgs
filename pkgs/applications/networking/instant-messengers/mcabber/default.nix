@@ -1,4 +1,11 @@
-{ stdenv, fetchurl, openssl, ncurses, pkgconfig, glib, loudmouth, libotr
+{ stdenv
+, fetchurl
+, openssl
+, ncurses
+, pkgconfig
+, glib
+, loudmouth
+, libotr
 , gpgme
 }:
 

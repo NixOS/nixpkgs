@@ -1,9 +1,7 @@
 { config, lib, callPackage, fetchurl }:
-
 let
-  common = opts: callPackage (import ./common.nix opts) {};
+  common = opts: callPackage (import ./common.nix opts) { };
 in
-
 rec {
   firefox = common rec {
     pname = "firefox";

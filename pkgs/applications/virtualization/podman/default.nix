@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, pkgconfig, installShellFiles
-, buildGoPackage, gpgme, lvm2, btrfs-progs, libseccomp, systemd
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, installShellFiles
+, buildGoPackage
+, gpgme
+, lvm2
+, btrfs-progs
+, libseccomp
+, systemd
 , go-md2man
 }:
 
@@ -8,9 +16,9 @@ buildGoPackage rec {
   version = "1.8.1";
 
   src = fetchFromGitHub {
-    owner  = "containers";
-    repo   = "libpod";
-    rev    = "v${version}";
+    owner = "containers";
+    repo = "libpod";
+    rev = "v${version}";
     sha256 = "047nji6vbrdb1pm8ymxz4dv07xdnp5c624bq2cfy58m5l4f1dn75";
   };
 
@@ -25,7 +33,8 @@ buildGoPackage rec {
   buildPhase = ''
     pushd go/src/${goPackagePath}
     patchShebangs .
-    ${if stdenv.isDarwin
+    ${
+      if stdenv.isDarwin
       then "make CGO_ENABLED=0 BUILDTAGS='remoteclient containers_image_openpgp exclude_graphdriver_devicemapper' varlink_generate all"
       else "make binaries docs"}
   '';

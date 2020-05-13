@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.rsyslogd;
 
   syslogConf = pkgs.writeText "syslog.conf" ''
@@ -28,7 +26,6 @@ let
   '';
 
 in
-
 {
   ###### interface
 
@@ -86,14 +83,16 @@ in
     environment.systemPackages = [ pkgs.rsyslog ];
 
     systemd.services.syslog =
-      { description = "Syslog Daemon";
+      {
+        description = "Syslog Daemon";
 
         requires = [ "syslog.socket" ];
 
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig =
-          { ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
+          {
+            ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
             ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/spool/rsyslog";
             # Prevent syslogd output looping back through journald.
             StandardOutput = "null";

@@ -1,9 +1,7 @@
 { config, lib, pkgs, baseModules, extraModules, modules, modulesPath, ... }:
 
 with lib;
-
 let
-
   cfg = config.documentation;
 
   manualModules = baseModules ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
@@ -20,7 +18,7 @@ let
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
+          modules = [{ nixpkgs.localSystem = config.nixpkgs.localSystem; }] ++ manualModules;
           args = (config._module.args) // { modules = [ ]; };
           specialArgs = {
             pkgs = scrubDerivations "pkgs" pkgs;
@@ -36,27 +34,29 @@ let
             else value
           )
           pkgSet;
-      in scrubbedEval.options;
+      in
+      scrubbedEval.options;
   };
 
-  helpScript = pkgs.writeScriptBin "nixos-help"
-    ''
-      #! ${pkgs.runtimeShell} -e
-      # Finds first executable browser in a colon-separated list.
-      # (see how xdg-open defines BROWSER)
-      browser="$(
-        IFS=: ; for b in $BROWSER; do
-          [ -n "$(type -P "$b" || true)" ] && echo "$b" && break
-        done
-      )"
-      if [ -z "$browser" ]; then
-        browser="$(type -P xdg-open || true)"
+  helpScript =
+    pkgs.writeScriptBin "nixos-help"
+      ''
+        #! ${pkgs.runtimeShell} -e
+        # Finds first executable browser in a colon-separated list.
+        # (see how xdg-open defines BROWSER)
+        browser="$(
+          IFS=: ; for b in $BROWSER; do
+            [ -n "$(type -P "$b" || true)" ] && echo "$b" && break
+          done
+        )"
         if [ -z "$browser" ]; then
-          browser="${pkgs.w3m-nographics}/bin/w3m"
+          browser="$(type -P xdg-open || true)"
+          if [ -z "$browser" ]; then
+            browser="${pkgs.w3m-nographics}/bin/w3m"
+          fi
         fi
-      fi
-      exec "$browser" ${manual.manualHTMLIndex}
-    '';
+        exec "$browser" ${manual.manualHTMLIndex}
+      '';
 
   desktopItem = pkgs.makeDesktopItem {
     name = "nixos-manual";
@@ -68,11 +68,10 @@ let
   };
 
 in
-
 {
   imports = [
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
-    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (mkRenamedOptionModule [ "programs" "man" "enable" ] [ "documentation" "man" "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
   ];
 
@@ -174,7 +173,8 @@ in
       environment.pathsToLink = [ "/share/man" ];
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
       environment.etc."man.conf".source = "${pkgs.man-db}/etc/man_db.conf";
-    })
+    }
+    )
 
     (mkIf cfg.info.enable {
       environment.systemPackages = [ pkgs.texinfoInteractive ];
@@ -188,27 +188,30 @@ in
           done
         fi
       '';
-    })
+    }
+    )
 
     (mkIf cfg.doc.enable {
       environment.pathsToLink = [ "/share/doc" ];
       environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
-    })
+    }
+    )
 
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
-      environment.systemPackages = []
+      environment.systemPackages = [ ]
         ++ optional cfg.man.enable manual.manpages
         ++ optionals cfg.doc.enable ([ manual.manualHTML helpScript ]
-           ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]);
+        ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]);
 
       services.mingetty.helpLine = mkIf cfg.doc.enable (
-          "\nRun `nixos-help` "
+        "\nRun `nixos-help` "
         + optionalString config.services.nixosManual.showManual "or press <Alt-F${toString config.services.nixosManual.ttyNumber}> "
         + "for the NixOS manual."
       );
-    })
+    }
+    )
 
   ]);
 

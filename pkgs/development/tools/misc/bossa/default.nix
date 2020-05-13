@@ -1,5 +1,4 @@
 { stdenv, fetchgit, wxGTK, libX11, readline }:
-
 let
   # BOSSA needs a "bin2c" program to embed images.
   # Source taken from:

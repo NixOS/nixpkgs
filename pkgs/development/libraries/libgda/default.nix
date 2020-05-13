@@ -1,7 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3, gobject-introspection, vala, libgee
-, overrideCC, gcc6
-, mysqlSupport ? false, libmysqlclient ? null
-, postgresSupport ? false, postgresql ? null
+{ stdenv
+, fetchurl
+, pkgconfig
+, intltool
+, itstool
+, libxml2
+, gtk3
+, openssl
+, gnome3
+, gobject-introspection
+, vala
+, libgee
+, overrideCC
+, gcc6
+, mysqlSupport ? false
+, libmysqlclient ? null
+, postgresSupport ? false
+, postgresql ? null
 }:
 
 assert mysqlSupport -> libmysqlclient != null;

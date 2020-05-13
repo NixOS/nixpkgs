@@ -12,16 +12,16 @@ let
       inter = intersectLists values winners;
       winner = head winners;
     in
-    if defs == [] then abort "This case should never happen."
-    else if winner == [] then abort "Give a valid list of winner"
-    else if inter == [] then mergeOneOption locs defs
+    if defs == [ ] then abort "This case should never happen."
+    else if winner == [ ] then abort "Give a valid list of winner"
+    else if inter == [ ] then mergeOneOption locs defs
     else if findWinner values winner then
       winner
     else
       mergeAnswer (tail winners) locs defs;
 
   mergeFalseByDefault = locs: defs:
-    if defs == [] then abort "This case should never happen."
+    if defs == [ ] then abort "This case should never happen."
     else if any (x: x == false) defs then false
     else true;
 
@@ -61,10 +61,10 @@ let
   };
 
   mkValue = with lib; val:
-  let
-    isNumber = c: elem c ["0" "1" "2" "3" "4" "5" "6" "7" "8" "9"];
+    let
+      isNumber = c: elem c [ "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" ];
 
-  in
+    in
     if (val == "") then "\"\""
     else if val == "y" || val == "m" || val == "n" then val
     else if all isNumber (stringToCharacters val) then val
@@ -84,19 +84,20 @@ let
   # Use mkValuePreprocess to preprocess option values, aka mark 'modules' as 'yes' or vice-versa
   # use the identity if you don't want to override the configured values
   generateNixKConf = exprs:
-  let
-    mkConfigLine = key: item:
-      let
-        val = if item.freeform != null then item.freeform else item.tristate;
-      in
+    let
+      mkConfigLine = key: item:
+        let
+          val = if item.freeform != null then item.freeform else item.tristate;
+        in
         if val == null
-          then ""
-          else if (item.optional)
-            then "${key}? ${mkValue val}\n"
-            else "${key} ${mkValue val}\n";
+        then ""
+        else if (item.optional)
+        then "${key}? ${mkValue val}\n"
+        else "${key} ${mkValue val}\n";
 
-    mkConf = cfg: concatStrings (mapAttrsToList mkConfigLine cfg);
-  in mkConf exprs;
+      mkConf = cfg: concatStrings (mapAttrsToList mkConfigLine cfg);
+    in
+    mkConf exprs;
 
 in
 {

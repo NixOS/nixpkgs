@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, lilypond }:
-
 let
 
   olpFont = { fontName, rev, sha256, version ? rev, ... }:
@@ -38,7 +37,6 @@ let
     };
 
 in
-
 rec {
   beethoven = olpFont {
     fontName = "beethoven";

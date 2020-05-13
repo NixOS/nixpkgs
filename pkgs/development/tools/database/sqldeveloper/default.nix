@@ -1,5 +1,4 @@
 { stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
-
 let
   version = "19.4.0.354.1759";
 
@@ -13,7 +12,7 @@ let
     categories = "Application;Development;";
   };
 in
-  stdenv.mkDerivation {
+stdenv.mkDerivation {
 
   inherit version;
   pname = "sqldeveloper";

@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.colord;
 
-in {
+in
+{
 
   options = {
 
@@ -34,7 +34,7 @@ in {
       group = "colord";
     };
 
-    users.groups.colord = {};
+    users.groups.colord = { };
 
   };
 

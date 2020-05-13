@@ -1,6 +1,22 @@
-{ mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg_utils, dbus
-, qtbase, qtwebkit, qtx11extras, qtquickcontrols, glibc
-, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes
+{ mkDerivation
+, lib
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, xdg_utils
+, dbus
+, qtbase
+, qtwebkit
+, qtx11extras
+, qtquickcontrols
+, glibc
+, libXrandr
+, libX11
+, libXext
+, libXdamage
+, libXtst
+, libSM
+, libXfixes
 , wrapQtAppsHook
 }:
 
@@ -48,7 +64,7 @@ mkDerivation rec {
     wrapProgram $out/share/teamviewer/tv_bin/script/teamviewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
     wrapProgram $out/share/teamviewer/tv_bin/teamviewerd --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
     wrapProgram $out/share/teamviewer/tv_bin/TeamViewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
-    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libXrandr libX11 libXext libXdamage libXtst libSM libXfixes ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 libXext libXdamage libXtst libSM libXfixes ]}"
 
     wrapQtApp $out/bin/teamviewer
   '';

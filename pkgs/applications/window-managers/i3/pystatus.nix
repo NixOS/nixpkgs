@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpulseaudio, python3Packages, extraLibs ? [] }:
+{ stdenv, fetchFromGitHub, libpulseaudio, python3Packages, extraLibs ? [ ] }:
 
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
@@ -6,8 +6,7 @@ python3Packages.buildPythonApplication rec {
   version = "unstable-2019-06-10";
   pname = "i3pystatus";
 
-  src = fetchFromGitHub
-  {
+  src = fetchFromGitHub {
     owner = "enkore";
     repo = "i3pystatus";
     rev = "56ce08d0ff8d5d64950d6b588ebede35a95e0ce2";

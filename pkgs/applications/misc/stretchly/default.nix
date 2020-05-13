@@ -47,7 +47,6 @@
 , writeScript
 , file
 }:
-
 let
   libs = [
     GConf
@@ -156,14 +155,13 @@ let
     };
 
 in
-
 buildFHSUserEnv {
   inherit (stretchly) meta;
 
   name = "stretchly";
 
   targetPkgs = pkgs: [
-     stretchly
+    stretchly
   ];
 
   runScript = "stretchly";

@@ -30,4 +30,3 @@ buildPythonPackage {
     maintainers = with maintainers; [ chaduffy ];
   };
 }
-

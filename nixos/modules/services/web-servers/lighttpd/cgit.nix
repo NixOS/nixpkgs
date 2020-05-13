@@ -1,20 +1,20 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.lighttpd.cgit;
   pathPrefix = if stringLength cfg.subdir == 0 then "" else "/" + cfg.subdir;
-  configFile = pkgs.writeText "cgitrc"
-    ''
-      # default paths to static assets
-      css=${pathPrefix}/cgit.css
-      logo=${pathPrefix}/cgit.png
-      favicon=${pathPrefix}/favicon.ico
+  configFile =
+    pkgs.writeText "cgitrc"
+      ''
+        # default paths to static assets
+        css=${pathPrefix}/cgit.css
+        logo=${pathPrefix}/cgit.png
+        favicon=${pathPrefix}/favicon.ico
 
-      # user configuration
-      ${cfg.configText}
-    '';
+        # user configuration
+        ${cfg.configText}
+      '';
 in
 {
 

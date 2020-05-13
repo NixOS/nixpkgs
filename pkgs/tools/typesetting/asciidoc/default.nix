@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, python2
+{ fetchurl
+, stdenv
+, python2
 
 , enableStandardFeatures ? false
 , sourceHighlight ? null
@@ -17,33 +19,44 @@
 , docbook_xsl_ns ? null
 , docbook_xsl ? null
 , fop ? null
-# TODO: Package this:
-#, epubcheck ? null
+  # TODO: Package this:
+  #, epubcheck ? null
 , gnused ? null
 , coreutils ? null
 
-# if true, enable all the below filters and backends
+  # if true, enable all the below filters and backends
 , enableExtraPlugins ? false
 
-# unzip is needed to extract filter and backend plugins
+  # unzip is needed to extract filter and backend plugins
 , unzip ? null
-# filters
-, enableDitaaFilter ? false, jre ? null
-, enableMscgenFilter ? false, mscgen ? null
-, enableDiagFilter ? false, blockdiag ? null, seqdiag ? null, actdiag ? null, nwdiag ? null
-, enableQrcodeFilter ? false, qrencode ? null
-, enableMatplotlibFilter ? false, matplotlib ? null, numpy ? null
-, enableAafigureFilter ? false, aafigure ? null, recursivePthLoader ? null
-# backends
+  # filters
+, enableDitaaFilter ? false
+, jre ? null
+, enableMscgenFilter ? false
+, mscgen ? null
+, enableDiagFilter ? false
+, blockdiag ? null
+, seqdiag ? null
+, actdiag ? null
+, nwdiag ? null
+, enableQrcodeFilter ? false
+, qrencode ? null
+, enableMatplotlibFilter ? false
+, matplotlib ? null
+, numpy ? null
+, enableAafigureFilter ? false
+, aafigure ? null
+, recursivePthLoader ? null
+  # backends
 , enableDeckjsBackend ? false
 , enableOdfBackend ? false
 
-# java is problematic on some platforms, where it is unfree
+  # java is problematic on some platforms, where it is unfree
 , enableJava ? true
 }:
 
 assert enableStandardFeatures ->
-  sourceHighlight != null &&
+sourceHighlight != null &&
   highlight != null &&
   pygments != null &&
   graphviz != null &&
@@ -59,8 +72,8 @@ assert enableStandardFeatures ->
   docbook_xsl_ns != null &&
   docbook_xsl != null &&
   (fop != null || !enableJava) &&
-# TODO: Package this:
-#  epubcheck != null &&
+  # TODO: Package this:
+  #  epubcheck != null &&
   gnused != null &&
   coreutils != null;
 
@@ -73,9 +86,7 @@ assert enableExtraPlugins || enableMatplotlibFilter -> matplotlib != null && num
 assert enableExtraPlugins || enableAafigureFilter -> aafigure != null && recursivePthLoader != null;
 # backends
 assert enableExtraPlugins || enableDeckjsBackend || enableOdfBackend -> unzip != null;
-
 let
-
   _enableDitaaFilter = (enableExtraPlugins && enableJava) || enableDitaaFilter;
   _enableMscgenFilter = enableExtraPlugins || enableMscgenFilter;
   _enableDiagFilter = enableExtraPlugins || enableDiagFilter;
@@ -111,11 +122,12 @@ let
   };
 
   # there are no archives or tags, using latest commit in master branch as per 2013-09-22
-  matplotlibFilterSrc = let commit = "75f0d009629f93f33fab04b83faca20cc35dd358"; in fetchurl {
-    name = "mplw-${commit}.tar.gz";
-    url = "https://api.github.com/repos/lvv/mplw/tarball/${commit}";
-    sha256 = "0yfhkm2dr8gnp0fcg25x89hwiymkri2m5cyqzmzragzwj0hbmcf1";
-  };
+  matplotlibFilterSrc = let commit = "75f0d009629f93f33fab04b83faca20cc35dd358"; in
+    fetchurl {
+      name = "mplw-${commit}.tar.gz";
+      url = "https://api.github.com/repos/lvv/mplw/tarball/${commit}";
+      sha256 = "0yfhkm2dr8gnp0fcg25x89hwiymkri2m5cyqzmzragzwj0hbmcf1";
+    };
 
   aafigureFilterSrc = fetchurl {
     url = "https://asciidoc-aafigure-filter.googlecode.com/files/aafigure-filter-1.1.zip";
@@ -142,7 +154,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation rec {
   name = "asciidoc-8.6.9";
 

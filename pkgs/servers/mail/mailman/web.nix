@@ -1,5 +1,13 @@
-{ buildPythonPackage, lib, fetchgit, isPy3k
-, git, makeWrapper, sassc, hyperkitty, postorius, whoosh
+{ buildPythonPackage
+, lib
+, fetchgit
+, isPy3k
+, git
+, makeWrapper
+, sassc
+, hyperkitty
+, postorius
+, whoosh
 , django
 }:
 

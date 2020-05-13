@@ -22,7 +22,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./vlc-paths.patch;
-      libvlcPath="${vlc}/lib/libvlc.so.5";
+      libvlcPath = "${vlc}/lib/libvlc.so.5";
     })
   ];
 

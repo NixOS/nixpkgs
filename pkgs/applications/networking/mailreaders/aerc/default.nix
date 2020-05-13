@@ -1,11 +1,19 @@
-{ stdenv, buildGoModule, fetchurl
-, go, ncurses, notmuch, scdoc
-, python3, perl, w3m, dante
+{ stdenv
+, buildGoModule
+, fetchurl
+, go
+, ncurses
+, notmuch
+, scdoc
+, python3
+, perl
+, w3m
+, dante
 }:
-
 let
   rev = "ea0df7bee433fedae5716906ea56141f92b9ce53";
-in buildGoModule rec {
+in
+buildGoModule rec {
   pname = "aerc";
   version = "unstable-2020-02-01";
 
@@ -31,7 +39,7 @@ in buildGoModule rec {
 
   buildInputs = [ python3 notmuch ];
 
-  GOFLAGS="-tags=notmuch";
+  GOFLAGS = "-tags=notmuch";
 
   buildPhase = "
     runHook preBuild

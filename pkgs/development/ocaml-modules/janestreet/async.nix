@@ -1,5 +1,9 @@
-{stdenv, buildOcamlJane, async_kernel,
- async_unix, async_extra}:
+{ stdenv
+, buildOcamlJane
+, async_kernel
+, async_unix
+, async_extra
+}:
 
 buildOcamlJane {
   name = "async";

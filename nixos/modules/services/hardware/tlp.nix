@@ -5,17 +5,20 @@ let
   enableRDW = config.networking.networkmanager.enable;
   tlp = pkgs.tlp.override { inherit enableRDW; };
   # TODO: Use this for having proper parameters in the future
-  mkTlpConfig = tlpConfig: generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault {
-      mkValueString = val:
-        if isInt val then toString val
-        else if isString val then val
-        else if true == val then "1"
-        else if false == val then "0"
-        else if isList val then "\"" + (concatStringsSep " " val) + "\""
-        else err "invalid value provided to mkTlpConfig:" (toString val);
-    } "=";
-  } tlpConfig;
+  mkTlpConfig = tlpConfig: generators.toKeyValue
+    {
+      mkKeyValue = generators.mkKeyValueDefault
+        {
+          mkValueString = val:
+            if isInt val then toString val
+            else if isString val then val
+            else if true == val then "1"
+            else if false == val then "0"
+            else if isList val then "\"" + (concatStringsSep " " val) + "\""
+            else err "invalid value provided to mkTlpConfig:" (toString val);
+        } "=";
+    }
+    tlpConfig;
 in
 {
   ###### interface

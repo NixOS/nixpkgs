@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "DESTDIR=" ];
 
-  preBuild = stdenv.lib.optionalString stdenv.cc.isClang
+  preBuild = stdenv.lib.optionalString
+    stdenv.cc.isClang
     ''
       substituteInPlace Makefile \
         --replace -fpredictive-commoning ""

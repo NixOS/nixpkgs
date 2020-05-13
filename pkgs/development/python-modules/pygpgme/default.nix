@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchurl, isPyPy
-, gpgme }:
+{ stdenv
+, buildPythonPackage
+, fetchurl
+, isPyPy
+, gpgme
+}:
 
 buildPythonPackage rec {
   version = "0.3";

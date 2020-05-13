@@ -19,7 +19,7 @@ buildPythonPackage rec {
   buildInputs = [ setuptools_scm ];
   nativeBuildInputs = [ glibcLocales ];
 
-  LC_ALL="en_US.utf-8";
+  LC_ALL = "en_US.utf-8";
 
   postPatch = ''
     substituteInPlace setup.cfg --replace " --cov" ""

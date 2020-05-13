@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     rev = "ccb792fc713aa7163fffd37fc20c83ffe9ca7523";
     sha256 = "0cdyz94znycsc3qxg5bmg51bwms7586d4ja1bsmj8cb9pd3lv980";
   };
-  
+
   sourceRoot = "source/src-qt5";
 
   nativeBuildInputs = [ qmake qttools ];

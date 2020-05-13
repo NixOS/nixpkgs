@@ -1,82 +1,91 @@
-{ lib, stdenv, callPackage, fetchurl
+{ lib
+, stdenv
+, callPackage
+, fetchurl
 , python
-, jdk, cmake, libxml2, zlib, python3, ncurses5
+, jdk
+, cmake
+, libxml2
+, zlib
+, python3
+, ncurses5
 }:
 
 with stdenv.lib;
-
 let
   mkJetBrainsProduct = callPackage ./common.nix { };
 
   # Sorted alphabetically
 
   buildClion = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
-      product = "CLion";
-      meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/clion/;
-        inherit description license;
-        longDescription = ''
-          Enhancing productivity for every C and C++
-          developer on Linux, macOS and Windows.
-        '';
-        maintainers = with maintainers; [ edwtjo mic92 ];
-        platforms = platforms.linux;
-      };
-    }) (attrs: {
-      postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
-        (
-          cd $out/clion-${version}
-          # bundled cmake does not find libc
-          rm -rf bin/cmake/linux
-          ln -s ${cmake} bin/cmake/linux
+    lib.overrideDerivation
+      (mkJetBrainsProduct {
+        inherit name version src wmClass jdk;
+        product = "CLion";
+        meta = with stdenv.lib; {
+          homepage = https://www.jetbrains.com/clion/;
+          inherit description license;
+          longDescription = ''
+            Enhancing productivity for every C and C++
+            developer on Linux, macOS and Windows.
+          '';
+          maintainers = with maintainers; [ edwtjo mic92 ];
+          platforms = platforms.linux;
+        };
+      })
+      (attrs: {
+        postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
+          (
+            cd $out/clion-${version}
+            # bundled cmake does not find libc
+            rm -rf bin/cmake/linux
+            ln -s ${cmake} bin/cmake/linux
 
-          lldbLibPath=$out/clion-${version}/bin/lldb/linux/lib
-          interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-          ln -s ${ncurses5.out}/lib/libtinfo.so.5 $lldbLibPath/libtinfo.so.5
+            lldbLibPath=$out/clion-${version}/bin/lldb/linux/lib
+            interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+            ln -s ${ncurses5.out}/lib/libtinfo.so.5 $lldbLibPath/libtinfo.so.5
 
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/linux/bin/lldb-server
-
-          for i in LLDBFrontend lldb lldb-argdumper; do
             patchelf --set-interpreter $interp \
+              --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib ]}:$lldbLibPath" \
+              bin/lldb/linux/bin/lldb-server
+
+            for i in LLDBFrontend lldb lldb-argdumper; do
+              patchelf --set-interpreter $interp \
+                --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
+                "bin/lldb/linux/bin/$i"
+            done
+
+            patchelf \
               --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-              "bin/lldb/linux/bin/$i"
-          done
+              bin/lldb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
 
-          patchelf \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
+            patchelf \
+              --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python3 ]}:$lldbLibPath" \
+              bin/lldb/linux/lib/liblldb.so
 
-          patchelf \
-            --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python3 ]}:$lldbLibPath" \
-            bin/lldb/linux/lib/liblldb.so
+            gdbLibPath=$out/clion-${version}/bin/gdb/linux/lib
+            patchelf \
+              --set-rpath "$gdbLibPath" \
+              bin/gdb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
+            patchelf --set-interpreter $interp \
+              --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$gdbLibPath" \
+              bin/gdb/linux/bin/gdb
+            patchelf --set-interpreter $interp \
+              --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$gdbLibPath" \
+              bin/gdb/linux/bin/gdbserver
 
-          gdbLibPath=$out/clion-${version}/bin/gdb/linux/lib
-          patchelf \
-            --set-rpath "$gdbLibPath" \
-            bin/gdb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$gdbLibPath" \
-            bin/gdb/linux/bin/gdb
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$gdbLibPath" \
-            bin/gdb/linux/bin/gdbserver
+            patchelf --set-interpreter $interp \
+              --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
+              bin/clang/linux/clangd
+            patchelf --set-interpreter $interp \
+              --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
+              bin/clang/linux/clang-tidy
 
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
-            bin/clang/linux/clangd
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
-            bin/clang/linux/clang-tidy
-
-          wrapProgram $out/bin/clion \
-            --set CL_JDK "${jdk}"
-        )
-      '';
-    });
+            wrapProgram $out/bin/clion \
+              --set CL_JDK "${jdk}"
+          )
+        '';
+      });
 
   buildDataGrip = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
@@ -96,29 +105,31 @@ let
     });
 
   buildGoland = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
-      product = "Goland";
-      meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/go/;
-        inherit description license;
-        longDescription = ''
-          Goland is the codename for a new commercial IDE by JetBrains
-          aimed at providing an ergonomic environment for Go development.
-          The new IDE extends the IntelliJ platform with the coding assistance
-          and tool integrations specific for the Go language
-        '';
-        maintainers = [ maintainers.miltador ];
-        platforms = platforms.linux;
-      };
-    }) (attrs: {
-      postFixup = (attrs.postFixup or "") + ''
-        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp $out/goland*/plugins/go/lib/dlv/linux/dlv
+    lib.overrideDerivation
+      (mkJetBrainsProduct {
+        inherit name version src wmClass jdk;
+        product = "Goland";
+        meta = with stdenv.lib; {
+          homepage = https://www.jetbrains.com/go/;
+          inherit description license;
+          longDescription = ''
+            Goland is the codename for a new commercial IDE by JetBrains
+            aimed at providing an ergonomic environment for Go development.
+            The new IDE extends the IntelliJ platform with the coding assistance
+            and tool integrations specific for the Go language
+          '';
+          maintainers = [ maintainers.miltador ];
+          platforms = platforms.linux;
+        };
+      })
+      (attrs: {
+        postFixup = (attrs.postFixup or "") + ''
+          interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+          patchelf --set-interpreter $interp $out/goland*/plugins/go/lib/dlv/linux/dlv
 
-        chmod +x $out/goland*/plugins/go/lib/dlv/linux/dlv
-      '';
-    });
+          chmod +x $out/goland*/plugins/go/lib/dlv/linux/dlv
+        '';
+      });
 
   buildIdea = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
@@ -183,30 +194,32 @@ let
     };
 
   buildRider = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
-      product = "Rider";
-      meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/rider/;
-        inherit description license;
-        longDescription = ''
-          JetBrains Rider is a new .NET IDE based on the IntelliJ
-          platform and ReSharper. Rider supports .NET Core,
-          .NET Framework and Mono based projects. This lets you
-          develop a wide array of applications including .NET desktop
-          apps, services and libraries, Unity games, ASP.NET and
-          ASP.NET Core web applications.
-        '';
-        maintainers = [ maintainers.miltador ];
-        platforms = platforms.linux;
-      };
-    }) (attrs: {
-      patchPhase = lib.optionalString (!stdenv.isDarwin) (attrs.patchPhase + ''
-        # Patch built-in mono for ReSharperHost to start successfully
-        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-        patchelf --set-interpreter "$interpreter" lib/ReSharperHost/linux-x64/mono/bin/mono-sgen
-      '');
-    });
+    lib.overrideDerivation
+      (mkJetBrainsProduct {
+        inherit name version src wmClass jdk;
+        product = "Rider";
+        meta = with stdenv.lib; {
+          homepage = https://www.jetbrains.com/rider/;
+          inherit description license;
+          longDescription = ''
+            JetBrains Rider is a new .NET IDE based on the IntelliJ
+            platform and ReSharper. Rider supports .NET Core,
+            .NET Framework and Mono based projects. This lets you
+            develop a wide array of applications including .NET desktop
+            apps, services and libraries, Unity games, ASP.NET and
+            ASP.NET Core web applications.
+          '';
+          maintainers = [ maintainers.miltador ];
+          platforms = platforms.linux;
+        };
+      })
+      (attrs: {
+        patchPhase = lib.optionalString (!stdenv.isDarwin) (attrs.patchPhase + ''
+          # Patch built-in mono for ReSharperHost to start successfully
+          interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+          patchelf --set-interpreter "$interpreter" lib/ReSharperHost/linux-x64/mono/bin/mono-sgen
+        '');
+      });
 
   buildRubyMine = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
@@ -222,36 +235,37 @@ let
     });
 
   buildWebStorm = { name, version, src, license, description, wmClass, ... }:
-    lib.overrideDerivation (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
-      product = "WebStorm";
-      meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/webstorm/;
-        inherit description license;
-        longDescription = ''
-          WebStorm provides an editor for HTML, JavaScript (incl. Node.js),
-          and CSS with on-the-fly code analysis, error prevention and
-          automated refactorings for JavaScript code.
+    lib.overrideDerivation
+      (mkJetBrainsProduct {
+        inherit name version src wmClass jdk;
+        product = "WebStorm";
+        meta = with stdenv.lib; {
+          homepage = https://www.jetbrains.com/webstorm/;
+          inherit description license;
+          longDescription = ''
+            WebStorm provides an editor for HTML, JavaScript (incl. Node.js),
+            and CSS with on-the-fly code analysis, error prevention and
+            automated refactorings for JavaScript code.
+          '';
+          maintainers = with maintainers; [ abaldeau ];
+          platforms = platforms.linux;
+        };
+      })
+      (attrs: {
+        patchPhase = (attrs.patchPhase or "") + optionalString (stdenv.isLinux) ''
+          # Webstorm tries to use bundled jre if available.
+          # Lets prevent this for the moment
+          rm -r jbr
         '';
-        maintainers = with maintainers; [ abaldeau ];
-        platforms = platforms.linux;
-      };
-    }) (attrs: {
-      patchPhase = (attrs.patchPhase or "") + optionalString (stdenv.isLinux) ''
-        # Webstorm tries to use bundled jre if available.
-        # Lets prevent this for the moment
-        rm -r jbr
-      '';
-    });
+      });
 in
-
 {
   # Sorted alphabetically
 
   clion = buildClion rec {
     name = "clion-${version}";
     version = "2019.3.4"; /* updated by script */
-    description  = "C/C++ IDE. New. Intelligent. Cross-platform";
+    description = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";

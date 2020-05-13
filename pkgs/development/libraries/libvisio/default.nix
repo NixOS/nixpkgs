@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, boost, libwpd, libwpg, pkgconfig, zlib, gperf
-, librevenge, libxml2, icu, perl, cppunit, doxygen
+{ stdenv
+, fetchurl
+, boost
+, libwpd
+, libwpg
+, pkgconfig
+, zlib
+, gperf
+, librevenge
+, libxml2
+, icu
+, perl
+, cppunit
+, doxygen
 }:
 
 stdenv.mkDerivation rec {

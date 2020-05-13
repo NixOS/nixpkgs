@@ -1,8 +1,22 @@
-{ stdenv, fetchFromGitHub, pkgconfig
-, lua, gettext, which, groff, xmessage, xterm
-, readline, fontconfig, libX11, libXext, libSM
-, libXinerama, libXrandr, libXft
-, xlibsWrapper, makeWrapper
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, lua
+, gettext
+, which
+, groff
+, xmessage
+, xterm
+, readline
+, fontconfig
+, libX11
+, libXext
+, libSM
+, libXinerama
+, libXrandr
+, libXft
+, xlibsWrapper
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec{
@@ -17,8 +31,20 @@ stdenv.mkDerivation rec{
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper groff ];
-  buildInputs = [ lua gettext which readline fontconfig libX11 libXext libSM
-                  libXinerama libXrandr libXft xlibsWrapper ];
+  buildInputs = [
+    lua
+    gettext
+    which
+    readline
+    fontconfig
+    libX11
+    libXext
+    libSM
+    libXinerama
+    libXrandr
+    libXft
+    xlibsWrapper
+  ];
 
   buildFlags = [ "CC=cc" "LUA_DIR=${lua}" "X11_PREFIX=/no-such-path" ];
 
@@ -32,7 +58,7 @@ stdenv.mkDerivation rec{
   meta = with stdenv.lib; {
     description = "Tiling tabbed window manager, follow-on to the Ion";
     homepage = "https://notionwm.net/";
-    license   = licenses.lgpl21;
+    license = licenses.lgpl21;
     maintainers = with maintainers; [ jfb AndersonTorres ];
     platforms = platforms.linux;
   };

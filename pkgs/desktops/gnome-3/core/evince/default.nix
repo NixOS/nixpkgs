@@ -95,8 +95,14 @@ stdenv.mkDerivation rec {
     t1lib
     texlive.bin.core # kpathsea for DVI support
   ] ++ stdenv.lib.optional supportXPS libgxps
-    ++ stdenv.lib.optionals supportMultimedia (with gst_all_1; [
-      gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
+  ++ stdenv.lib.optionals supportMultimedia (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
 
   mesonFlags = [
     "-Dnautilus=false"

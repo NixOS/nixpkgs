@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg, libmcrypt, zlib, libmhash, gettext, libtool}:
+{ stdenv, fetchurl, libjpeg, libmcrypt, zlib, libmhash, gettext, libtool }:
 
 stdenv.mkDerivation rec {
   buildInputs = [ libjpeg libmcrypt zlib libmhash gettext libtool ];
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "steghide";
 
   src = fetchurl {
-    url = "mirror://sourceforge/steghide/steghide/${version}/steghide-${version}.tar.gz" ;
+    url = "mirror://sourceforge/steghide/steghide/${version}/steghide-${version}.tar.gz";
     sha256 = "78069b7cfe9d1f5348ae43f918f06f91d783c2b3ff25af021e6a312cf541b47b";
   };
 

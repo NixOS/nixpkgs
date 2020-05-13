@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "linenoise";
-  version = "1.0.10";  # Its version 1.0 plus 10 commits
+  version = "1.0.10"; # Its version 1.0 plus 10 commits
 
   src = fetchFromGitHub {
     owner = "antirez";

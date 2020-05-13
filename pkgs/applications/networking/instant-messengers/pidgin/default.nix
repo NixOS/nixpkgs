@@ -1,17 +1,39 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gtk2, gtkspell2, aspell
-, gst_all_1, startupnotification, gettext
-, perlPackages, libxml2, nss, nspr, farstream
-, libXScrnSaver, ncurses, avahi, dbus, dbus-glib, intltool, libidn
-, lib, python, libICE, libXext, libSM
+{ stdenv
+, fetchurl
+, makeWrapper
+, pkgconfig
+, gtk2
+, gtkspell2
+, aspell
+, gst_all_1
+, startupnotification
+, gettext
+, perlPackages
+, libxml2
+, nss
+, nspr
+, farstream
+, libXScrnSaver
+, ncurses
+, avahi
+, dbus
+, dbus-glib
+, intltool
+, libidn
+, lib
+, python
+, libICE
+, libXext
+, libSM
 , cyrus_sasl ? null
 , openssl ? null
 , gnutls ? null
 , libgcrypt ? null
-, plugins, symlinkJoin
+, plugins
+, symlinkJoin
 }:
 
 # FIXME: clean the mess around choosing the SSL library (nss by default)
-
 let unwrapped = stdenv.mkDerivation rec {
   pname = "pidgin";
   majorVersion = "2";
@@ -29,12 +51,28 @@ let unwrapped = stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
   buildInputs = [
-    gtkspell2 aspell startupnotification
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-    libxml2 nss nspr farstream
-    libXScrnSaver ncurses python
-    avahi dbus dbus-glib intltool libidn
-    libICE libXext libSM cyrus_sasl
+    gtkspell2
+    aspell
+    startupnotification
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    libxml2
+    nss
+    nspr
+    farstream
+    libXScrnSaver
+    ncurses
+    python
+    avahi
+    dbus
+    dbus-glib
+    intltool
+    libidn
+    libICE
+    libXext
+    libSM
+    cyrus_sasl
   ]
   ++ (lib.optional (openssl != null) openssl)
   ++ (lib.optional (gnutls != null) gnutls)
@@ -56,7 +94,7 @@ let unwrapped = stdenv.mkDerivation rec {
     "--disable-tcl"
   ]
   ++ (lib.optionals (cyrus_sasl != null) [ "--enable-cyrus-sasl=yes" ])
-  ++ (lib.optionals (gnutls != null) ["--enable-gnutls=yes" "--enable-nss=no"]);
+  ++ (lib.optionals (gnutls != null) [ "--enable-gnutls=yes" "--enable-nss=no" ]);
 
   enableParallelBuilding = true;
 
@@ -74,8 +112,9 @@ let unwrapped = stdenv.mkDerivation rec {
   };
 };
 
-in if plugins == [] then unwrapped
-    else import ./wrapper.nix {
-      inherit makeWrapper symlinkJoin plugins;
-      pidgin = unwrapped;
-    }
+in
+if plugins == [ ] then unwrapped
+else import ./wrapper.nix {
+  inherit makeWrapper symlinkJoin plugins;
+  pidgin = unwrapped;
+}

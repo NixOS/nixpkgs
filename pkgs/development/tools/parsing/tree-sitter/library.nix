@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [ tree-sitter ];
 
   dontUnpack = true;
-  configurePhase= ":";
+  configurePhase = ":";
   buildPhase = ''
     runHook preBuild
     $CC -I$src/src/ -shared -o parser -Os $src/src/parser.c

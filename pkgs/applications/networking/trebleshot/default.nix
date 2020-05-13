@@ -1,5 +1,9 @@
-{ mkDerivation, lib, fetchFromGitHub
-, cmake, qtbase, kdnssd
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, qtbase
+, kdnssd
 }:
 
 mkDerivation rec {

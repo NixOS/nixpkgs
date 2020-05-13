@@ -1,14 +1,12 @@
-{stdenv, fetchurl}:
-
+{ stdenv, fetchurl }:
 let
-
   # HG revision in which this version of the font can be fount.
   rev = "8e98053718f9a15184c93d6530885791be71b756";
 
   urlBase = "https://googlefontdirectory.googlecode.com/hg-history/${rev}/ofl/lobstertwo";
 
   # Just a small convenience function.
-  fetch = {name, path ? "/src", sha256}:
+  fetch = { name, path ? "/src", sha256 }:
     {
       inherit name;
       file = fetchurl {
@@ -48,33 +46,32 @@ let
       sha256 = "147m3sa3sqqbkbw1hgjdwnw8w0y37x58g5p09s7q2vm74flcpbq1";
     };
 in
+stdenv.mkDerivation rec {
+  pname = "lobstertwo";
+  version = "1.006";
 
-  stdenv.mkDerivation rec {
-    pname = "lobstertwo";
-    version = "1.006";
+  phases = [ "installPhase" ];
 
-    phases = ["installPhase"];
+  installPhase = ''
+    mkdir -p $out/share/fonts/opentype
+    mkdir -p $out/share/doc/${pname}-${version}
+    cp -v ${fontlog.file} $out/share/doc/${pname}-${version}/${fontlog.name}
+    cp -v ${bold.file} $out/share/fonts/opentype/${bold.name}
+    cp -v ${boldItalic.file} $out/share/fonts/opentype/${boldItalic.name}
+    cp -v ${italic.file} $out/share/fonts/opentype/${italic.name}
+    cp -v ${regular.file} $out/share/fonts/opentype/${regular.name}
+  '';
 
-    installPhase = ''
-      mkdir -p $out/share/fonts/opentype
-      mkdir -p $out/share/doc/${pname}-${version}
-      cp -v ${fontlog.file} $out/share/doc/${pname}-${version}/${fontlog.name}
-      cp -v ${bold.file} $out/share/fonts/opentype/${bold.name}
-      cp -v ${boldItalic.file} $out/share/fonts/opentype/${boldItalic.name}
-      cp -v ${italic.file} $out/share/fonts/opentype/${italic.name}
-      cp -v ${regular.file} $out/share/fonts/opentype/${regular.name}
-    '';
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "0if9l8pzwgfnbdjg5yblcy08dwn9yj3wzz29l0fycia46xlzd4ym";
 
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "0if9l8pzwgfnbdjg5yblcy08dwn9yj3wzz29l0fycia46xlzd4ym";
-
-    meta = with stdenv.lib; {
-      homepage = https://github.com/librefonts/lobstertwo;
-      description = "Script font with many ligatures";
-      license = licenses.ofl;
-      platforms = platforms.all;
-      maintainers = [maintainers.rycee];
-      broken = true; # googlecode.com RIP; can be built from sources
-    };
-  }
+  meta = with stdenv.lib; {
+    homepage = https://github.com/librefonts/lobstertwo;
+    description = "Script font with many ligatures";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = [ maintainers.rycee ];
+    broken = true; # googlecode.com RIP; can be built from sources
+  };
+}

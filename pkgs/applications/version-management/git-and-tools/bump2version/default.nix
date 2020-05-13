@@ -16,7 +16,7 @@ buildPythonApplication rec {
   # X's in pytest are git tests which won't run in sandbox
   checkPhase = ''
     pytest tests/ -k 'not usage_string_fork'
-  ''; 
+  '';
 
   meta = with stdenv.lib; {
     description = "Version-bump your software with a single command";

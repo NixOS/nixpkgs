@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitHub
-, parted, udev
+{ stdenv
+, fetchFromGitHub
+, parted
+, udev
 }:
 
 stdenv.mkDerivation rec {
@@ -19,14 +21,16 @@ stdenv.mkDerivation rec {
 
   patchPhase = "sed -i 's/-oroot -groot//' Makefile";
 
-  buildFlags   = [ "all"                    # f3read, f3write
-                   "extra"                  # f3brew, f3fix, f3probe
-                 ];
+  buildFlags = [
+    "all" # f3read, f3write
+    "extra" # f3brew, f3fix, f3probe
+  ];
 
-  installFlags = [ "PREFIX=$(out)"
-                   "install"
-                   "install-extra"
-                 ];
+  installFlags = [
+    "PREFIX=$(out)"
+    "install"
+    "install-extra"
+  ];
 
   meta = {
     description = "Fight Flash Fraud";

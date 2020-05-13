@@ -1,6 +1,10 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ stdenv
+, fetchgit
+, buildPythonPackage
 , python
-, srht, pyyaml }:
+, srht
+, pyyaml
+}:
 
 buildPythonPackage rec {
   pname = "pastesrht";

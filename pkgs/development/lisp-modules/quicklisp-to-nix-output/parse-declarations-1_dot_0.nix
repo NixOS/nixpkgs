@@ -14,7 +14,7 @@ rec {
 
   packageName = "parse-declarations-1.0";
 
-  asdFilesToKeep = ["parse-declarations-1.0.asd"];
+  asdFilesToKeep = [ "parse-declarations-1.0.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM parse-declarations-1.0 DESCRIPTION

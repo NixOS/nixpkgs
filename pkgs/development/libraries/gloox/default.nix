@@ -1,7 +1,11 @@
-{ stdenv, fetchurl
-, zlibSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
-, idnSupport ? true, libidn ? null
+{ stdenv
+, fetchurl
+, zlibSupport ? true
+, zlib ? null
+, sslSupport ? true
+, openssl ? null
+, idnSupport ? true
+, libidn ? null
 }:
 
 assert zlibSupport -> zlib != null;
@@ -9,7 +13,6 @@ assert sslSupport -> openssl != null;
 assert idnSupport -> libidn != null;
 
 with stdenv.lib;
-
 let
   version = "1.0.23";
 in

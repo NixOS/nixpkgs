@@ -1,6 +1,24 @@
-{ stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools, wrapQtAppsHook
-, dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2, alsaLib
-, liblo, liblrdf, libsamplerate, libsndfile, lirc ? null, qtbase }:
+{ stdenv
+, fetchurl
+, cmake
+, makedepend
+, perl
+, pkgconfig
+, qttools
+, wrapQtAppsHook
+, dssi
+, fftwSinglePrec
+, ladspaH
+, ladspaPlugins
+, libjack2
+, alsaLib
+, liblo
+, liblrdf
+, libsamplerate
+, libsndfile
+, lirc ? null
+, qtbase
+}:
 
 stdenv.mkDerivation (rec {
   version = "19.12";

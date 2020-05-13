@@ -6,7 +6,7 @@ buildGoModule rec {
   pname = "docker-machine-kvm2";
   subPackages = [ "cmd/drivers/kvm" ];
 
-  modSha256   = minikube.go-modules.outputHash;
+  modSha256 = minikube.go-modules.outputHash;
 
   postInstall = ''
     mv $out/bin/kvm $out/bin/docker-machine-driver-kvm2

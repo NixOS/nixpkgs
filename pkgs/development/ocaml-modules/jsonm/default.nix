@@ -1,7 +1,5 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf }:
-
 let version = "1.0.1"; in
-
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-jsonm-${version}";
 
@@ -21,6 +19,6 @@ stdenv.mkDerivation {
     homepage = https://erratique.ch/software/jsonm;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

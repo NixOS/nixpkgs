@@ -1,13 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
-, openssl, curl, libevent, inotify-tools, systemd, zlib
-, enableGTK3 ? false, gtk3
+{ stdenv
+, fetchurl
+, pkgconfig
+, intltool
+, file
+, wrapGAppsHook
+, openssl
+, curl
+, libevent
+, inotify-tools
+, systemd
+, zlib
+, enableGTK3 ? false
+, gtk3
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
 , enableCli ? true
 }:
-
 let inherit (stdenv.lib) optional optionals optionalString; in
-
 stdenv.mkDerivation rec {
   name = "transmission-" + optionalString enableGTK3 "gtk-" + version;
   version = "2.94";
@@ -32,12 +41,12 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      ("--enable-cli=" + (if enableCli then "yes" else "no"))
-      ("--enable-daemon=" + (if enableDaemon then "yes" else "no"))
-      "--disable-mac" # requires xcodebuild
-    ]
-    ++ optional enableSystemd "--with-systemd-daemon"
-    ++ optional enableGTK3 "--with-gtk";
+    ("--enable-cli=" + (if enableCli then "yes" else "no"))
+    ("--enable-daemon=" + (if enableDaemon then "yes" else "no"))
+    "--disable-mac" # requires xcodebuild
+  ]
+  ++ optional enableSystemd "--with-systemd-daemon"
+  ++ optional enableGTK3 "--with-gtk";
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";
 
@@ -60,4 +69,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

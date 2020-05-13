@@ -1,30 +1,56 @@
-{ stdenv, fetchurl, fetchpatch, makeWrapper, wrapGAppsHook
+{ stdenv
+, fetchurl
+, fetchpatch
+, makeWrapper
+, wrapGAppsHook
 
-# Buildtime dependencies.
+  # Buildtime dependencies.
 
-, check, pkgconfig, xxd
+, check
+, pkgconfig
+, xxd
 
-# Runtime dependencies.
+  # Runtime dependencies.
 
-, curl, expat, libXcursor, libXrandr, libidn, libjpeg, libpng, libwebp, libxml2
-, openssl, perl, perlPackages
+, curl
+, expat
+, libXcursor
+, libXrandr
+, libidn
+, libjpeg
+, libpng
+, libwebp
+, libxml2
+, openssl
+, perl
+, perlPackages
 
-# uilib-specific dependencies
+  # uilib-specific dependencies
 
 , gtk2 # GTK 2
 , SDL  # Framebuffer
 
-# Configuration
+  # Configuration
 
 , uilib ? "framebuffer"
 
-# Netsurf-specific dependencies
+  # Netsurf-specific dependencies
 
-, libcss, libdom, libhubbub, libnsbmp, libnsfb, libnsgif
-, libnslog, libnspsl, libnsutils, libparserutils, libsvgtiny, libutf8proc
-, libwapcaplet, nsgenbind
+, libcss
+, libdom
+, libhubbub
+, libnsbmp
+, libnsfb
+, libnsgif
+, libnslog
+, libnspsl
+, libnsutils
+, libparserutils
+, libsvgtiny
+, libutf8proc
+, libwapcaplet
+, nsgenbind
 }:
-
 let
   inherit (stdenv.lib) optional optionals;
 in
@@ -41,7 +67,7 @@ stdenv.mkDerivation rec {
   patches = [
     # GTK: prefer using curl's intrinsic defaults for CURLOPT_CA*
     (fetchpatch {
-	  name = "0001-GTK-prefer-using-curl-s-intrinsic-defaults-for-CURLO.patch";
+      name = "0001-GTK-prefer-using-curl-s-intrinsic-defaults-for-CURLO.patch";
       url = "http://source.netsurf-browser.org/netsurf.git/patch/?id=87177d8aa109206d131e0d80a2080ce55dab01c7";
       sha256 = "08bc60pc5k5qpckqv21zgmgszj3rpwskfc84shs8vg92vkimv2ai";
     })
@@ -57,11 +83,31 @@ stdenv.mkDerivation rec {
   ++ optional (uilib == "gtk") wrapGAppsHook
   ;
 
-  buildInputs = [ 
-    check curl libXcursor libXrandr libidn libjpeg libpng libwebp libxml2 openssl
+  buildInputs = [
+    check
+    curl
+    libXcursor
+    libXrandr
+    libidn
+    libjpeg
+    libpng
+    libwebp
+    libxml2
+    openssl
     # Netsurf-specific libraries
-    nsgenbind libnsfb libwapcaplet libparserutils libnslog libcss
-    libhubbub libdom libnsbmp libnsgif libsvgtiny libnsutils libnspsl
+    nsgenbind
+    libnsfb
+    libwapcaplet
+    libparserutils
+    libnslog
+    libcss
+    libhubbub
+    libdom
+    libnsbmp
+    libnsgif
+    libsvgtiny
+    libnsutils
+    libnspsl
     libutf8proc
   ]
   ++ optionals (uilib == "framebuffer") [ expat SDL ]

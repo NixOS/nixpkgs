@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.metabase;
 
@@ -8,7 +7,8 @@ let
 
   dataDir = "/var/lib/metabase";
 
-in {
+in
+{
 
   options = {
 

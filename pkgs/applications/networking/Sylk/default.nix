@@ -1,10 +1,8 @@
 { appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3 }:
-
 let
   pname = "Sylk";
   version = "2.5.0";
 in
-
 appimageTools.wrapType2 rec {
   name = "${pname}-${version}";
 

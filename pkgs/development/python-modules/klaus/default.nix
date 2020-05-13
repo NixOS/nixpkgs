@@ -17,11 +17,18 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    six flask pygments dulwich httpauth humanize
+    six
+    flask
+    pygments
+    dulwich
+    httpauth
+    humanize
   ];
 
   checkInputs = [
-    pytest requests python-ctags3
+    pytest
+    requests
+    python-ctags3
   ] ++ lib.optional (!isPy3k) mock;
 
   checkPhase = ''
@@ -33,8 +40,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The first Git web viewer that Just Works";
-    homepage    = https://github.com/jonashaag/klaus;
-    license     = licenses.isc;
+    homepage = https://github.com/jonashaag/klaus;
+    license = licenses.isc;
     maintainers = with maintainers; [ pSub ];
   };
 }

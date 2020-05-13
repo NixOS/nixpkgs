@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, coq }:
-
 let mkContrib = repo: revs: param:
   stdenv.mkDerivation rec {
     name = "coq${coq.coq-version}-${repo}-${version}";
@@ -15,26 +14,27 @@ let mkContrib = repo: revs: param:
     buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
 
     installFlags =
-       stdenv.lib.optional (stdenv.lib.versionAtLeast coq.coq-version "8.9") "-f Makefile.coq"
-    ++ [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
+      stdenv.lib.optional (stdenv.lib.versionAtLeast coq.coq-version "8.9") "-f Makefile.coq"
+      ++ [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
     passthru = {
       compatibleCoqVersions = v: builtins.elem v revs;
     };
   }; in
 {
-  aac-tactics = mkContrib "aac-tactics" [ "8.7" "8.8" ] {
-    "8.7" = {
-      version = "20180530";
-      rev = "f01df35e1d796ce1fdc7ba3d670ce5d63c95d544";
-      sha256 = "1bwvnbd5ws1plgj147blcrvyycf3gg3fz3rm2mckln8z3sfxyq2k";
-    };
-    "8.8" = {
-      version = "20180530";
-      rev = "86ac28259030649ef51460e4de2441c8a1017751";
-      sha256 = "09bbk2a7pn0j76mmapl583f8a20zqd3a1m9lkml8rpwml692bzi9";
-    };
-  }.${coq.coq-version};
+  aac-tactics = mkContrib "aac-tactics" [ "8.7" "8.8" ]
+    {
+      "8.7" = {
+        version = "20180530";
+        rev = "f01df35e1d796ce1fdc7ba3d670ce5d63c95d544";
+        sha256 = "1bwvnbd5ws1plgj147blcrvyycf3gg3fz3rm2mckln8z3sfxyq2k";
+      };
+      "8.8" = {
+        version = "20180530";
+        rev = "86ac28259030649ef51460e4de2441c8a1017751";
+        sha256 = "09bbk2a7pn0j76mmapl583f8a20zqd3a1m9lkml8rpwml692bzi9";
+      };
+    }.${coq.coq-version};
 
   abp = mkContrib "abp" [ "8.5" "8.6" "8.7" ] {
     version = "v8.6.0";
@@ -198,28 +198,29 @@ let mkContrib = repo: revs: param:
     sha256 = "1ddwzg12pbzpnz3njin4zhpph92kscrbsn3bzds26yj8fp76zc33";
   };
 
-  containers = mkContrib "containers" [ "8.6" "8.7" "8.8" "8.9" ] {
-    "8.6" = {
-      version = "8.6.0";
-      rev = "fa1fec7";
-      sha256 = "1ns0swlr8hzb1zc7fsyd3vws1vbq0vvfxcf0lszqnca9c9hfkfy4";
-    };
-    "8.7" = {
-      version = "20180313";
-      rev = "77ac16366529c9e558f70ba86f0168a76ca76b8f";
-      sha256 = "01gp8injb0knaxgqsdc4x9h8714k7qxg7j5w7y6i45dnpd81ndr4";
-    };
-    "8.8" = {
-      version = "20180330";
-      rev = "52b86bed1671321b25fe4d7495558f9f221b12aa";
-      sha256 = "0hbnrwdgryr52170cfrlbiymr88jsyxilnpr343vnprqq3zk1xz0";
-    };
-    "8.9" = {
-      version = "20190222";
-      rev = "aa33052c1edfc5a65885942a67c2773b5d96f8cc";
-      sha256 = "0mjgfdr9bzsch0dlk4vq1frkaig14dqh46r54cv0l15flxapg0iw";
-    };
-  }.${coq.coq-version};
+  containers = mkContrib "containers" [ "8.6" "8.7" "8.8" "8.9" ]
+    {
+      "8.6" = {
+        version = "8.6.0";
+        rev = "fa1fec7";
+        sha256 = "1ns0swlr8hzb1zc7fsyd3vws1vbq0vvfxcf0lszqnca9c9hfkfy4";
+      };
+      "8.7" = {
+        version = "20180313";
+        rev = "77ac16366529c9e558f70ba86f0168a76ca76b8f";
+        sha256 = "01gp8injb0knaxgqsdc4x9h8714k7qxg7j5w7y6i45dnpd81ndr4";
+      };
+      "8.8" = {
+        version = "20180330";
+        rev = "52b86bed1671321b25fe4d7495558f9f221b12aa";
+        sha256 = "0hbnrwdgryr52170cfrlbiymr88jsyxilnpr343vnprqq3zk1xz0";
+      };
+      "8.9" = {
+        version = "20190222";
+        rev = "aa33052c1edfc5a65885942a67c2773b5d96f8cc";
+        sha256 = "0mjgfdr9bzsch0dlk4vq1frkaig14dqh46r54cv0l15flxapg0iw";
+      };
+    }.${coq.coq-version};
 
   continuations = mkContrib "continuations" [ ] {
     version = "v8.5.0-13-g6885310";

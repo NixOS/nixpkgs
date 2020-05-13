@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "2a5883456c0caba0dad90f07968c75a50d5fc425a3aa06d1c538472ddf8c7e22";
   };
 
-  propagatedBuildInputs = [setuptools_scm pyyaml jsonschema sphinxcontrib_httpdomain];
+  propagatedBuildInputs = [ setuptools_scm pyyaml jsonschema sphinxcontrib_httpdomain ];
 
   doCheck = false;
 

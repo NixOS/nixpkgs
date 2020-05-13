@@ -1,14 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.programs.dconf;
 
   mkDconfProfile = name: path:
     {
       name = "dconf/profile/${name}";
-      value.source = path; 
+      value.source = path;
     };
 
 in
@@ -21,7 +20,7 @@ in
 
       profiles = mkOption {
         type = types.attrsOf types.path;
-        default = {};
+        default = { };
         description = "Set of dconf profile files.";
         internal = true;
       };
@@ -31,9 +30,11 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.profiles != {} || cfg.enable) {
-    environment.etc = optionalAttrs (cfg.profiles != {})
-      (mapAttrs' mkDconfProfile cfg.profiles);
+  config = mkIf (cfg.profiles != { } || cfg.enable) {
+    environment.etc =
+      optionalAttrs
+        (cfg.profiles != { })
+        (mapAttrs' mkDconfProfile cfg.profiles);
 
     services.dbus.packages = [ pkgs.dconf ];
 

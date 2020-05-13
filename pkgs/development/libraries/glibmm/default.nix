@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [raskin];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
   };
 }

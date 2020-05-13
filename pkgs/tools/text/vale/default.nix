@@ -7,9 +7,9 @@ buildGoPackage rec {
   subPackages = [ "." ];
 
   src = fetchFromGitHub {
-    owner  = "errata-ai";
-    repo   = "vale";
-    rev    = "v${version}";
+    owner = "errata-ai";
+    repo = "vale";
+    rev = "v${version}";
     sha256 = "068973ayd883kzkxl60lpammf3icjz090nw07kfccvhcf24x07bh";
   };
 

@@ -1,6 +1,18 @@
-{ stdenv, fetchFromGitHub, which
-, boost, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf
-, glew, zlib, icu, pkgconfig, cairo, libvpx }:
+{ stdenv
+, fetchFromGitHub
+, which
+, boost
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, glew
+, zlib
+, icu
+, pkgconfig
+, cairo
+, libvpx
+}:
 
 stdenv.mkDerivation {
   pname = "anura-engine";
@@ -16,7 +28,8 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    which pkgconfig
+    which
+    pkgconfig
   ];
 
   buildInputs = [

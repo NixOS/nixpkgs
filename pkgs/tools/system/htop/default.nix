@@ -1,5 +1,10 @@
-{ lib, fetchurl, stdenv, ncurses,
-IOKit, python3 }:
+{ lib
+, fetchurl
+, stdenv
+, ncurses
+, IOKit
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "htop";

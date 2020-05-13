@@ -1,7 +1,6 @@
 { config, lib, pkgs, options }:
 
 with lib;
-
 let
   logPrefix = "services.prometheus.exporter.blackbox";
   cfg = config.services.prometheus.exporters.blackbox;
@@ -12,25 +11,28 @@ let
     if (builtins.isPath file) || (lib.isStorePath file) then
       file
     else
-      (lib.warn ''
-        ${logPrefix}: configuration file "${file}" is being copied to the nix-store.
-        If you would like to avoid that, please set enableConfigCheck to false.
-      '' /. + file);
+      (
+        lib.warn ''
+          ${logPrefix}: configuration file "${file}" is being copied to the nix-store.
+          If you would like to avoid that, please set enableConfigCheck to false.
+        '' /. + file);
   checkConfigLocation = file:
     if lib.hasPrefix "/tmp/" file then
       throw
-      "${logPrefix}: configuration file must not reside within /tmp - it won't be visible to the systemd service."
+        "${logPrefix}: configuration file must not reside within /tmp - it won't be visible to the systemd service."
     else
       true;
   checkConfig = file:
-    pkgs.runCommand "checked-blackbox-exporter.conf" {
-      preferLocalBuild = true;
-      buildInputs = [ pkgs.buildPackages.prometheus-blackbox-exporter ];
-    } ''
+    pkgs.runCommand "checked-blackbox-exporter.conf"
+      {
+        preferLocalBuild = true;
+        buildInputs = [ pkgs.buildPackages.prometheus-blackbox-exporter ];
+      } ''
       ln -s ${coerceConfigFile file} $out
       blackbox_exporter --config.check --config.file $out
     '';
-in {
+in
+{
   port = 9115;
   extraOpts = {
     configFile = mkOption {
@@ -50,21 +52,24 @@ in {
     };
   };
 
-  serviceOpts = let
-    adjustedConfigFile = if cfg.enableConfigCheck then
-      checkConfig cfg.configFile
-    else
-      checkConfigLocation cfg.configFile;
-  in {
-    serviceConfig = {
-      AmbientCapabilities = [ "CAP_NET_RAW" ]; # for ping probes
-      ExecStart = ''
-        ${pkgs.prometheus-blackbox-exporter}/bin/blackbox_exporter \
-          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-          --config.file ${escapeShellArg adjustedConfigFile} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
-      '';
-      ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+  serviceOpts =
+    let
+      adjustedConfigFile =
+        if cfg.enableConfigCheck then
+          checkConfig cfg.configFile
+        else
+          checkConfigLocation cfg.configFile;
+    in
+    {
+      serviceConfig = {
+        AmbientCapabilities = [ "CAP_NET_RAW" ]; # for ping probes
+        ExecStart = ''
+          ${pkgs.prometheus-blackbox-exporter}/bin/blackbox_exporter \
+            --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+            --config.file ${escapeShellArg adjustedConfigFile} \
+            ${concatStringsSep " \\\n  " cfg.extraFlags}
+        '';
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      };
     };
-  };
 }

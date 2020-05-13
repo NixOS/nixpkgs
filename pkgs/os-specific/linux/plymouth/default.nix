@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libxslt, docbook_xsl
-, gtk3, udev, systemd
+{ stdenv
+, fetchurl
+, autoreconfHook
+, pkgconfig
+, libxslt
+, docbook_xsl
+, gtk3
+, udev
+, systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -12,11 +19,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig libxslt docbook_xsl
+    autoreconfHook
+    pkgconfig
+    libxslt
+    docbook_xsl
   ];
 
   buildInputs = [
-    gtk3 udev systemd
+    gtk3
+    udev
+    systemd
   ];
 
   postPatch = ''

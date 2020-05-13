@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, asciidoc
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, asciidoc
 , cryptsetup
 }:
 

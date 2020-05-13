@@ -1,13 +1,20 @@
-{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
-, jre, binaryen, enableWasm ? true ,  cmake
+{ emscriptenVersion
+, stdenv
+, fetchFromGitHub
+, emscriptenfastcomp
+, python
+, nodejs
+, closurecompiler
+, jre
+, binaryen
+, enableWasm ? true
+, cmake
 }:
-
 let
   rev = emscriptenVersion;
   appdir = "share/emscripten";
   binaryenVersioned = binaryen.override { emscriptenRev = rev; };
 in
-
 stdenv.mkDerivation {
   name = "emscripten-${rev}";
 

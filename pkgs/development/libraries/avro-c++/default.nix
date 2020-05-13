@@ -1,7 +1,5 @@
-{ stdenv, fetchurl, cmake, boost, python2}:
-
+{ stdenv, fetchurl, cmake, boost, python2 }:
 let version = "1.8.2"; in
-
 stdenv.mkDerivation {
   pname = "avro-c++";
   inherit version;

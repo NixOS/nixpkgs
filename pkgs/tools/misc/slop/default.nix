@@ -1,5 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, glew, glm, libGLU, libGL, libX11, libXext, libXrender, icu
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, glew
+, glm
+, libGLU
+, libGL
+, libX11
+, libXext
+, libXrender
+, icu
 , cppcheck
 }:
 
@@ -16,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ glew glm libGLU libGL libX11 libXext libXrender icu ]
-                ++ stdenv.lib.optional doCheck cppcheck;
+    ++ stdenv.lib.optional doCheck cppcheck;
 
   doCheck = false;
 

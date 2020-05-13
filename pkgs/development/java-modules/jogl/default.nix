@@ -11,7 +11,8 @@
         sha256 = "00hybisjwqs88p24dds652bzrwbbmhn2dpx56kp4j6xpadkp33d0";
         fetchSubmodules = true;
       };
-    in stdenv.mkDerivation {
+    in
+    stdenv.mkDerivation {
       pname = "jogl";
       inherit version;
 

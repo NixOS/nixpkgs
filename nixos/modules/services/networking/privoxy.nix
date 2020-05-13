@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) privoxy;
 
   cfg = config.services.privoxy;
@@ -19,7 +17,6 @@ let
   '';
 
 in
-
 {
 
   ###### interface
@@ -74,7 +71,7 @@ in
 
       extraConfig = mkOption {
         type = types.lines;
-        default = "" ;
+        default = "";
         description = ''
           Extra configuration. Contents will be added verbatim to the configuration file.
         '';
@@ -93,7 +90,7 @@ in
       group = "privoxy";
     };
 
-    users.groups.privoxy = {};
+    users.groups.privoxy = { };
 
     systemd.services.privoxy = {
       description = "Filtering web proxy";

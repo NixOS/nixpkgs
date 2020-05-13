@@ -1,8 +1,32 @@
-{ lib, stdenv, fetchurl, qt4, pkgconfig, boost, expat, cairo, python2Packages,
-  cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
-  poppler, imagemagick, openexr, ffmpeg, opencolorio, openimageio,
-  qmake4Hook, libpng, libGL, lndir }:
-
+{ lib
+, stdenv
+, fetchurl
+, qt4
+, pkgconfig
+, boost
+, expat
+, cairo
+, python2Packages
+, cmake
+, flex
+, bison
+, pango
+, librsvg
+, librevenge
+, libxml2
+, libcdr
+, libzip
+, poppler
+, imagemagick
+, openexr
+, ffmpeg
+, opencolorio
+, openimageio
+, qmake4Hook
+, libpng
+, libGL
+, lndir
+}:
 let
   minorVersion = "2.1";
   version = "${minorVersion}.9";
@@ -20,7 +44,7 @@ let
     nativeBuildInputs = [ cmake ];
     buildInputs = [ libpng flex bison ];
   };
-  buildPlugin = { pluginName, sha256, nativeBuildInputs ? [], buildInputs ? [], preConfigure ? "" }:
+  buildPlugin = { pluginName, sha256, nativeBuildInputs ? [ ], buildInputs ? [ ], preConfigure ? "" }:
     stdenv.mkDerivation {
       name = "openfx-${pluginName}-${version}";
       src = fetchurl {
@@ -52,8 +76,15 @@ let
       sha256 = "0qba13vn9qdfax7nqlz1ps27zspr5kh795jp1xvbmwjzjzjpkqkf";
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        pango librsvg librevenge libcdr opencolorio libxml2 libzip
-        poppler imagemagick
+        pango
+        librsvg
+        librevenge
+        libcdr
+        opencolorio
+        libxml2
+        libzip
+        poppler
+        imagemagick
       ];
       preConfigure = ''
         sed -i 's|pkg-config poppler-glib|pkg-config poppler poppler-glib|g' Makefile.master
@@ -68,7 +99,13 @@ let
       sha256 = "0s196i9fkgr9iw92c94mxgs1lkxbhynkf83vmsgrldflmf0xjky7";
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        libpng ffmpeg openexr opencolorio openimageio boost libGL
+        libpng
+        ffmpeg
+        openexr
+        opencolorio
+        openimageio
+        boost
+        libGL
         seexpr
       ];
     })
@@ -96,7 +133,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ qmake4Hook pkgconfig python2Packages.wrapPython ];
 
   buildInputs = [
-    qt4 boost expat cairo python2Packages.pyside python2Packages.pysideShiboken
+    qt4
+    boost
+    expat
+    cairo
+    python2Packages.pyside
+    python2Packages.pysideShiboken
   ];
 
   preConfigure = ''

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, aspell, which, writeScript}:
+{ lib, stdenv, fetchurl, aspell, which, writeScript }:
 
 with lib;
 
@@ -30,18 +30,16 @@ with lib;
    * Enjoy.
 
 */
-
 let
-
   /* Function to compile an Aspell dictionary.  Fortunately, they all
      build in the exact same way. */
   buildDict =
-    {shortName, fullName, ...}@args:
+    { shortName, fullName, ... }@args:
 
     stdenv.mkDerivation ({
       name = "aspell-dict-${shortName}";
 
-      buildInputs = [aspell which];
+      buildInputs = [ aspell which ];
 
       dontAddPrefix = true;
 
@@ -50,12 +48,12 @@ let
       meta = {
         description = "Aspell dictionary for ${fullName}";
         platforms = stdenv.lib.platforms.all;
-      } // (args.meta or {});
+      } // (args.meta or { });
     } // removeAttrs args [ "meta" ]);
 
 
   buildOfficialDict =
-    {language, version, filename, fullName, sha256, ...}@args:
+    { language, version, filename, fullName, sha256, ... }@args:
     let buildArgs = {
       shortName = "${language}-${version}";
 
@@ -99,14 +97,14 @@ let
 
       meta = {
         homepage = "http://ftp.gnu.org/gnu/aspell/dict/0index.html";
-      } // (args.meta or {});
+      } // (args.meta or { });
 
     } // removeAttrs args [ "language" "filename" "sha256" "meta" ];
     in buildDict buildArgs;
 
   /* Function to compile txt dict files into Aspell dictionaries. */
   buildTxtDict =
-    {langInputs ? [], ...}@args:
+    { langInputs ? [ ], ... }@args:
     buildDict ({
       propagatedUserEnvPackages = langInputs;
 
@@ -115,7 +113,8 @@ let
         # Copy everything we might possibly need
         ${concatMapStringsSep "\n" (p: ''
           cp -a ${p}/lib/aspell/* .
-        '') ([ aspell ] ++ langInputs)}
+        '')
+          ([ aspell ] ++ langInputs)}
         export ASPELL_CONF="data-dir $(pwd)"
 
         aspell-create() {
@@ -156,7 +155,8 @@ let
       phases = [ "preBuild" "buildPhase" "installPhase" ];
     } // args);
 
-in rec {
+in
+rec {
 
   ### Languages
 

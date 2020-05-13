@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, alsaLib, pkgconfig, libjack2
-, AudioUnit, AudioToolbox, CoreAudio, CoreServices, Carbon }:
+{ stdenv
+, fetchurl
+, alsaLib
+, pkgconfig
+, libjack2
+, AudioUnit
+, AudioToolbox
+, CoreAudio
+, CoreServices
+, Carbon
+}:
 
 stdenv.mkDerivation {
   name = "portaudio-190600-20161030";
@@ -39,11 +48,11 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Portable cross-platform Audio API";
-    homepage    = http://www.portaudio.com/;
+    homepage = http://www.portaudio.com/;
     # Not exactly a bsd license, but alike
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 
   passthru = {

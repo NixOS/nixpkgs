@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, frozendict, simplejson, six
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, frozendict
+, simplejson
+, six
 }:
 
 buildPythonPackage rec {
@@ -12,7 +16,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    frozendict simplejson six
+    frozendict
+    simplejson
+    six
   ];
 
   meta = with stdenv.lib; {

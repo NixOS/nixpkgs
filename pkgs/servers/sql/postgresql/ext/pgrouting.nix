@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql boost gmp cgal mpfr ];
 
   src = fetchFromGitHub {
-    owner  = "pgRouting";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "pgRouting";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "0jdjb8476vjgc7i26v2drcqjvhdbsk1wx243fddffg169nb664ml";
   };
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A PostgreSQL/PostGIS extension that provides geospatial routing functionality";
-    homepage    = https://pgrouting.org/;
+    homepage = https://pgrouting.org/;
     maintainers = [ maintainers.steve-chavez ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.gpl2;
+    platforms = postgresql.meta.platforms;
+    license = licenses.gpl2;
   };
 }

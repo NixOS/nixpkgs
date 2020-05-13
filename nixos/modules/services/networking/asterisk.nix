@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.asterisk;
 
@@ -16,77 +15,85 @@ let
   defaultConfFiles = subtractLists (attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
   allConfFiles =
     cfg.confFiles //
-    builtins.listToAttrs (map (x: { name = x;
-                                    value = builtins.readFile (cfg.package + "/etc/asterisk/" + x); })
-                              defaultConfFiles);
-
-  asteriskEtc = pkgs.stdenv.mkDerivation
-  ((mapAttrs' (name: value: nameValuePair
-        # Fudge the names to make bash happy
-        ((replaceChars ["."] ["_"] name) + "_")
-        (value)
-      ) allConfFiles) //
-  {
-    confFilesString = concatStringsSep " " (
-      attrNames allConfFiles
+    builtins.listToAttrs (
+      map
+        (x: {
+          name = x;
+          value = builtins.readFile (cfg.package + "/etc/asterisk/" + x);
+        })
+        defaultConfFiles
     );
 
-    name = "asterisk-etc";
+  asteriskEtc =
+    pkgs.stdenv.mkDerivation ((
+      mapAttrs'
+        (name: value: nameValuePair
+          # Fudge the names to make bash happy
+          ((replaceChars [ "." ] [ "_" ] name) + "_")
+          (value)
+        )
+        allConfFiles
+    ) //
+    {
+      confFilesString = concatStringsSep " " (
+        attrNames allConfFiles
+      );
 
-    # Default asterisk.conf file
-    # (Notice that astetcdir will be set to the path of this derivation)
-    asteriskConf = ''
-      [directories]
-      astetcdir => /etc/asterisk
-      astmoddir => ${cfg.package}/lib/asterisk/modules
-      astvarlibdir => /var/lib/asterisk
-      astdbdir => /var/lib/asterisk
-      astkeydir => /var/lib/asterisk
-      astdatadir => /var/lib/asterisk
-      astagidir => /var/lib/asterisk/agi-bin
-      astspooldir => /var/spool/asterisk
-      astrundir => /run/asterisk
-      astlogdir => /var/log/asterisk
-      astsbindir => ${cfg.package}/sbin
-    '';
-    extraConf = cfg.extraConfig;
+      name = "asterisk-etc";
 
-    # Loading all modules by default is considered sensible by the authors of
-    # "Asterisk: The Definitive Guide". Secure sites will likely want to
-    # specify their own "modules.conf" in the confFiles option.
-    modulesConf = ''
-      [modules]
-      autoload=yes
-    '';
+      # Default asterisk.conf file
+      # (Notice that astetcdir will be set to the path of this derivation)
+      asteriskConf = ''
+        [directories]
+        astetcdir => /etc/asterisk
+        astmoddir => ${cfg.package}/lib/asterisk/modules
+        astvarlibdir => /var/lib/asterisk
+        astdbdir => /var/lib/asterisk
+        astkeydir => /var/lib/asterisk
+        astdatadir => /var/lib/asterisk
+        astagidir => /var/lib/asterisk/agi-bin
+        astspooldir => /var/spool/asterisk
+        astrundir => /run/asterisk
+        astlogdir => /var/log/asterisk
+        astsbindir => ${cfg.package}/sbin
+      '';
+      extraConf = cfg.extraConfig;
 
-    # Use syslog for logging so logs can be viewed with journalctl
-    loggerConf = ''
-      [general]
+      # Loading all modules by default is considered sensible by the authors of
+      # "Asterisk: The Definitive Guide". Secure sites will likely want to
+      # specify their own "modules.conf" in the confFiles option.
+      modulesConf = ''
+        [modules]
+        autoload=yes
+      '';
 
-      [logfiles]
-      syslog.local0 => notice,warning,error
-    '';
+      # Use syslog for logging so logs can be viewed with journalctl
+      loggerConf = ''
+        [general]
 
-    buildCommand = ''
-      mkdir -p "$out"
+        [logfiles]
+        syslog.local0 => notice,warning,error
+      '';
 
-      # Create asterisk.conf, pointing astetcdir to the path of this derivation
-      echo "$asteriskConf" | sed "s|@out@|$out|g" > "$out"/asterisk.conf
-      echo "$extraConf" >> "$out"/asterisk.conf
+      buildCommand = ''
+        mkdir -p "$out"
 
-      echo "$modulesConf" > "$out"/modules.conf
+        # Create asterisk.conf, pointing astetcdir to the path of this derivation
+        echo "$asteriskConf" | sed "s|@out@|$out|g" > "$out"/asterisk.conf
+        echo "$extraConf" >> "$out"/asterisk.conf
 
-      echo "$loggerConf" > "$out"/logger.conf
+        echo "$modulesConf" > "$out"/modules.conf
 
-      # Config files specified in confFiles option override all other files
-      for i in $confFilesString; do
-        conf=$(echo "$i"_ | sed 's/\./_/g')
-        echo "''${!conf}" > "$out"/"$i"
-      done
-    '';
-  });
+        echo "$loggerConf" > "$out"/logger.conf
+
+        # Config files specified in confFiles option override all other files
+        for i in $confFilesString; do
+          conf=$(echo "$i"_ | sed 's/\./_/g')
+          echo "''${!conf}" > "$out"/"$i"
+        done
+      '';
+    });
 in
-
 {
   options = {
     services.asterisk = {
@@ -113,54 +120,55 @@ in
       };
 
       confFiles = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf types.str;
-        example = literalExample
-          ''
-            {
-              "extensions.conf" = '''
-                [tests]
-                ; Dial 100 for "hello, world"
-                exten => 100,1,Answer()
-                same  =>     n,Wait(1)
-                same  =>     n,Playback(hello-world)
-                same  =>     n,Hangup()
+        example =
+          literalExample
+            ''
+              {
+                "extensions.conf" = '''
+                  [tests]
+                  ; Dial 100 for "hello, world"
+                  exten => 100,1,Answer()
+                  same  =>     n,Wait(1)
+                  same  =>     n,Playback(hello-world)
+                  same  =>     n,Hangup()
 
-                [softphones]
-                include => tests
+                  [softphones]
+                  include => tests
 
-                [unauthorized]
-              ''';
-              "sip.conf" = '''
-                [general]
-                allowguest=no              ; Require authentication
-                context=unauthorized       ; Send unauthorized users to /dev/null
-                srvlookup=no               ; Don't do DNS lookup
-                udpbindaddr=0.0.0.0        ; Listen on all interfaces
-                nat=force_rport,comedia    ; Assume device is behind NAT
+                  [unauthorized]
+                ''';
+                "sip.conf" = '''
+                  [general]
+                  allowguest=no              ; Require authentication
+                  context=unauthorized       ; Send unauthorized users to /dev/null
+                  srvlookup=no               ; Don't do DNS lookup
+                  udpbindaddr=0.0.0.0        ; Listen on all interfaces
+                  nat=force_rport,comedia    ; Assume device is behind NAT
 
-                [softphone](!)
-                type=friend                ; Match on username first, IP second
-                context=softphones         ; Send to softphones context in
-                                           ; extensions.conf file
-                host=dynamic               ; Device will register with asterisk
-                disallow=all               ; Manually specify codecs to allow
-                allow=g722
-                allow=ulaw
-                allow=alaw
+                  [softphone](!)
+                  type=friend                ; Match on username first, IP second
+                  context=softphones         ; Send to softphones context in
+                                             ; extensions.conf file
+                  host=dynamic               ; Device will register with asterisk
+                  disallow=all               ; Manually specify codecs to allow
+                  allow=g722
+                  allow=ulaw
+                  allow=alaw
 
-                [myphone](softphone)
-                secret=GhoshevFew          ; Change this password!
-              ''';
-              "logger.conf" = '''
-                [general]
+                  [myphone](softphone)
+                  secret=GhoshevFew          ; Change this password!
+                ''';
+                "logger.conf" = '''
+                  [general]
 
-                [logfiles]
-                ; Add debug output to log
-                syslog.local0 => notice,warning,error,debug
-              ''';
-            }
-        '';
+                  [logfiles]
+                  ; Add debug output to log
+                  syslog.local0 => notice,warning,error,debug
+                ''';
+              }
+            '';
         description = ''
           Sets the content of config files (typically ending with
           <literal>.conf</literal>) in the Asterisk configuration directory.
@@ -189,7 +197,7 @@ in
       };
 
       extraArguments = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         example =
           [ "-vvvddd" "-e" "1024" ];
@@ -212,7 +220,8 @@ in
     environment.etc.asterisk.source = asteriskEtc;
 
     users.users.asterisk =
-      { name = asteriskUser;
+      {
+        name = asteriskUser;
         group = asteriskGroup;
         uid = config.ids.uids.asterisk;
         description = "Asterisk daemon user";
@@ -220,7 +229,8 @@ in
       };
 
     users.groups.asterisk =
-      { name = asteriskGroup;
+      {
+        name = asteriskGroup;
         gid = config.ids.gids.asterisk;
       };
 

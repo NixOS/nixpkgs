@@ -1,30 +1,32 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.pdnsd;
   pdnsd = pkgs.pdnsd;
   pdnsdUser = "pdnsd";
   pdnsdGroup = "pdnsd";
-  pdnsdConf = pkgs.writeText "pdnsd.conf"
-    ''
-      global {
-        run_as=${pdnsdUser};
-        cache_dir="${cfg.cacheDir}";
-        ${cfg.globalConfig}
-      }
+  pdnsdConf =
+    pkgs.writeText "pdnsd.conf"
+      ''
+        global {
+          run_as=${pdnsdUser};
+          cache_dir="${cfg.cacheDir}";
+          ${cfg.globalConfig}
+        }
 
-      server {
-        ${cfg.serverConfig}
-      }
-      ${cfg.extraConfig}
-    '';
+        server {
+          ${cfg.serverConfig}
+        }
+        ${cfg.extraConfig}
+      '';
 in
-
-{ options =
-    { services.pdnsd =
-        { enable = mkEnableOption "pdnsd";
+{
+  options =
+    {
+      services.pdnsd =
+        {
+          enable = mkEnableOption "pdnsd";
 
           cacheDir = mkOption {
             type = types.str;
@@ -73,7 +75,8 @@ in
     };
 
     systemd.services.pdnsd =
-      { wantedBy = [ "multi-user.target" ];
+      {
+        wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         preStart =
           ''

@@ -6,8 +6,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "UnixJunkie";
-    repo   = pname;
-    rev    = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "19yz1yqyqx6gawy93jlh3x6vji2p9qsy6nsbj65q5pii8p1fjlsm";
   };
 

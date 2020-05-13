@@ -1,5 +1,4 @@
 { lib, fetchzip }:
-
 let version = "1.100"; in
 fetchzip {
   name = "ankacoder-condensed-${version}";
@@ -21,4 +20,3 @@ fetchzip {
     platforms = platforms.all;
   };
 }
-

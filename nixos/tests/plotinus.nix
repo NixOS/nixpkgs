@@ -7,7 +7,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   machine =
     { pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
+    {
+      imports = [ ./common/x11.nix ];
       programs.plotinus.enable = true;
       environment.systemPackages = [ pkgs.gnome3.gnome-calculator pkgs.xdotool ];
     };

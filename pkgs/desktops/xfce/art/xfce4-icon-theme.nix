@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk2 }:
 
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-icon-theme";
+  p_name = "xfce4-icon-theme";
   ver_maj = "4.4";
   ver_min = "3";
 

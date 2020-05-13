@@ -1,6 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, fribidi
-, libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg, perl
-, boost, libxslt, goffice, wrapGAppsHook, gnome3
+{ stdenv
+, fetchurl
+, pkgconfig
+, gtk3
+, fribidi
+, libpng
+, popt
+, libgsf
+, enchant
+, wv
+, librsvg
+, bzip2
+, libjpeg
+, perl
+, boost
+, libxslt
+, goffice
+, wrapGAppsHook
+, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -31,8 +47,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
   buildInputs = [
-    gtk3 librsvg bzip2 fribidi libpng popt
-    libgsf enchant wv libjpeg perl boost libxslt goffice gnome3.adwaita-icon-theme
+    gtk3
+    librsvg
+    bzip2
+    fribidi
+    libpng
+    popt
+    libgsf
+    enchant
+    wv
+    libjpeg
+    perl
+    boost
+    libxslt
+    goffice
+    gnome3.adwaita-icon-theme
   ];
 
   meta = with stdenv.lib; {

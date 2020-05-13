@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfgC = config.services.synergy.client;
   cfgS = config.services.synergy.server;
 
 in
-
 {
   ###### interface
 
@@ -91,7 +88,8 @@ in
         serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
         serviceConfig.Restart = "on-failure";
       };
-    })
+    }
+    )
     (mkIf cfgS.enable {
       systemd.user.services.synergy-server = {
         after = [ "network.target" "graphical-session.target" ];
@@ -101,7 +99,8 @@ in
         serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f ${optionalString (cfgS.address != "") "-a ${cfgS.address}"} ${optionalString (cfgS.screenName != "") "-n ${cfgS.screenName}" }'';
         serviceConfig.Restart = "on-failure";
       };
-    })
+    }
+    )
   ];
 
 }

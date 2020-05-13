@@ -1,5 +1,4 @@
 { stdenv, makeWrapper, fetchurl, unzip, atomEnv, makeDesktopItem, buildFHSUserEnv, gtk2 }:
-
 let
   version = "0.11.1";
   pname = "mist";
@@ -10,11 +9,11 @@ let
     description = "Browse and use Ðapps on the Ethereum network";
     homepage = https://github.com/ethereum/mist;
     license = licenses.gpl3;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 
-  urlVersion = builtins.replaceStrings ["."] ["-"] version;
+  urlVersion = builtins.replaceStrings [ "." ] [ "-" ] version;
 
   desktopItem = makeDesktopItem rec {
     name = "Mist";
@@ -60,7 +59,7 @@ buildFHSUserEnv {
   inherit meta;
 
   targetPkgs = pkgs: with pkgs; [
-     mist
+    mist
   ];
 
   extraInstallCommands = ''

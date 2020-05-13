@@ -1,4 +1,6 @@
-{ buildPythonPackage, fetchFromGitHub, isPy38
+{ buildPythonPackage
+, fetchFromGitHub
+, isPy38
 , flask
 , gevent
 , mock

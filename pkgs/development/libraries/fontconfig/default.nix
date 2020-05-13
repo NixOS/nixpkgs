@@ -1,5 +1,12 @@
-{ stdenv, substituteAll, fetchurl
-, pkgconfig, freetype, expat, libxslt, gperf, dejavu_fonts
+{ stdenv
+, substituteAll
+, fetchurl
+, pkgconfig
+, freetype
+, expat
+, libxslt
+, gperf
+, dejavu_fonts
 }:
 
 /** Font configuration scheme
@@ -12,7 +19,6 @@
  - See ./make-fonts-conf.xsl for config details.
 
 */
-
 let
   configVersion = "2.11"; # bump whenever fontconfig breaks compatibility with older configurations
 in

@@ -1,6 +1,17 @@
-{ stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib
+{ stdenv
+, fetchurl
+, SDL
+, zlib
+, libmpeg2
+, libmad
+, libogg
+, libvorbis
+, flac
+, alsaLib
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, openglSupport ? libGLSupported, libGLU, libGL ? null
+, openglSupport ? libGLSupported
+, libGLU
+, libGL ? null
 }:
 
 assert openglSupport -> libGL != null && libGLU != null;

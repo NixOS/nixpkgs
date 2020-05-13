@@ -1,5 +1,4 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, opaline }:
-
 let
   inherit (stdenv.lib) getVersion versionAtLeast;
 
@@ -7,7 +6,6 @@ let
   version = "0.9.1";
   webpage = "https://erratique.ch/software/${pname}";
 in
-
 assert versionAtLeast (getVersion ocaml) "4.01.0";
 
 stdenv.mkDerivation {
@@ -36,7 +34,7 @@ stdenv.mkDerivation {
       raster data.
     '';
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];
   };

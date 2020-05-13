@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, buildGoPackage, go-md2man
-, pkgconfig, libapparmor, apparmor-parser, libseccomp, which }:
+{ lib
+, fetchFromGitHub
+, buildGoPackage
+, go-md2man
+, pkgconfig
+, libapparmor
+, apparmor-parser
+, libseccomp
+, which
+}:
 
 with lib;
 
@@ -17,7 +25,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/opencontainers/runc";
   outputs = [ "bin" "out" "man" ];
 
-  hardeningDisable = ["fortify"];
+  hardeningDisable = [ "fortify" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ go-md2man libseccomp libapparmor apparmor-parser which ];

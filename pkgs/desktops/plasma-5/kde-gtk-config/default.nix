@@ -1,17 +1,35 @@
-{
-  mkDerivation,
-  extra-cmake-modules, wrapGAppsHook,
-  glib, gtk2, gtk3, karchive, kcmutils, kconfigwidgets, ki18n, kiconthemes, kio,
-  knewstuff, gsettings-desktop-schemas
+{ mkDerivation
+, extra-cmake-modules
+, wrapGAppsHook
+, glib
+, gtk2
+, gtk3
+, karchive
+, kcmutils
+, kconfigwidgets
+, ki18n
+, kiconthemes
+, kio
+, knewstuff
+, gsettings-desktop-schemas
 }:
 
 mkDerivation {
   name = "kde-gtk-config";
   nativeBuildInputs = [ extra-cmake-modules wrapGAppsHook ];
-  dontWrapGApps = true;  # There is nothing to wrap
+  dontWrapGApps = true; # There is nothing to wrap
   buildInputs = [
-    ki18n kio glib gtk2 gtk3 karchive kcmutils kconfigwidgets kiconthemes
-    knewstuff gsettings-desktop-schemas
+    ki18n
+    kio
+    glib
+    gtk2
+    gtk3
+    karchive
+    kcmutils
+    kconfigwidgets
+    kiconthemes
+    knewstuff
+    gsettings-desktop-schemas
   ];
   patches = [ ./patches/follow-symlinks.patch ./patches/gsettings.patch ];
   cmakeFlags = [

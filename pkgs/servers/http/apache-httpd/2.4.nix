@@ -1,16 +1,28 @@
-{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
+{ stdenv
+, fetchurl
+, perl
+, zlib
+, apr
+, aprutil
+, pcre
+, libiconv
+, lynx
 , proxySupport ? true
-, sslSupport ? true, openssl
-, http2Support ? true, nghttp2
-, ldapSupport ? true, openldap
-, libxml2Support ? true, libxml2
-, brotliSupport ? true, brotli
-, luaSupport ? false, lua5
+, sslSupport ? true
+, openssl
+, http2Support ? true
+, nghttp2
+, ldapSupport ? true
+, openldap
+, libxml2Support ? true
+, libxml2
+, brotliSupport ? true
+, brotli
+, luaSupport ? false
+, lua5
 }:
-
 let inherit (stdenv.lib) optional;
 in
-
 assert sslSupport -> aprutil.sslSupport && openssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert http2Support -> nghttp2 != null;
@@ -28,10 +40,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
-  buildInputs = [perl] ++
+  buildInputs = [ perl ] ++
     optional brotliSupport brotli ++
     optional sslSupport openssl ++
-    optional ldapSupport openldap ++    # there is no --with-ldap flag
+    optional ldapSupport openldap ++ # there is no --with-ldap flag
     optional libxml2Support libxml2 ++
     optional http2Support nghttp2 ++
     optional stdenv.isDarwin libiconv;
@@ -90,9 +102,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Apache HTTPD, the world's most popular web server";
-    homepage    = http://httpd.apache.org/;
-    license     = licenses.asl20;
-    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    homepage = http://httpd.apache.org/;
+    license = licenses.asl20;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = with maintainers; [ lovek323 peti ];
   };
 }

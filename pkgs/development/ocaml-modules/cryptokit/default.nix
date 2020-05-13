@@ -1,7 +1,6 @@
 { stdenv, fetchurl, zlib, ocaml, findlib, ocamlbuild, zarith, ncurses }:
 
 assert stdenv.lib.versionAtLeast ocaml.version "3.12";
-
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02"
   then {
@@ -16,7 +15,6 @@ let param =
     zarith = null;
   };
 in
-
 stdenv.mkDerivation {
   pname = "cryptokit";
   inherit (param) version;
@@ -35,7 +33,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://pauillac.inria.fr/~xleroy/software.html;
     description = "A library of cryptographic primitives for OCaml";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [
       stdenv.lib.maintainers.maggesi
     ];

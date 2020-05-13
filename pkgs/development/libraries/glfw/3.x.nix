@@ -1,6 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, cmake
-, libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
-, Cocoa, Kernel, fixDarwinDylibNames
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libGL
+, libXrandr
+, libXinerama
+, libXcursor
+, libX11
+, libXi
+, libXext
+, Cocoa
+, Kernel
+, fixDarwinDylibNames
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +36,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  preConfigure  = lib.optional (!stdenv.isDarwin) ''
+  preConfigure = lib.optional (!stdenv.isDarwin) ''
     substituteInPlace src/glx_context.c --replace "libGL.so.1" "${lib.getLib libGL}/lib/libGL.so.1"
   '';
 

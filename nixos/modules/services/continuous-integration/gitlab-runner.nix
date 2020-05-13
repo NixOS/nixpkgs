@@ -1,19 +1,21 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.gitlab-runner;
   configFile =
     if (cfg.configFile == null) then
-      (pkgs.runCommand "config.toml" {
-        buildInputs = [ pkgs.remarshal ];
-        preferLocalBuild = true;
-      } ''
+      (pkgs.runCommand "config.toml"
+        {
+          buildInputs = [ pkgs.remarshal ];
+          preferLocalBuild = true;
+        } ''
         remarshal -if json -of toml \
-          < ${pkgs.writeText "config.json" (builtins.toJSON cfg.configOptions)} \
+          < ${pkgs.writeText "config.json"
+          (builtins.toJSON cfg.configOptions)} \
           > $out
-      '')
+      ''
+      )
     else
       cfg.configFile;
   hasDocker = config.virtualisation.docker.enable;
@@ -128,7 +130,7 @@ in
           --user gitlab-runner \
         '';
 
-      } //  optionalAttrs (cfg.gracefulTermination) {
+      } // optionalAttrs (cfg.gracefulTermination) {
         TimeoutStopSec = "${cfg.gracefulTimeout}";
         KillSignal = "SIGQUIT";
         KillMode = "process";

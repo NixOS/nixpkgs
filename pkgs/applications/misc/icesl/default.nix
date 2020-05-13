@@ -6,13 +6,14 @@ stdenv.mkDerivation rec {
   pname = "iceSL";
   version = "2.1.10";
 
-  src =  if stdenv.hostPlatform.system == "x86_64-linux" then fetchzip {
-    url = "https://gforge.inria.fr/frs/download.php/file/37268/icesl${version}-amd64.zip";
-    sha256 = "0dv3mq6wy46xk9blzzmgbdxpsjdaxid3zadfrysxlhmgl7zb2cn2";
-  } else if stdenv.hostPlatform.system == "i686-linux" then fetchzip {
-    url = "https://gforge.inria.fr/frs/download.php/file/37267/icesl${version}-i386.zip";
-    sha256 = "0sl54fsb2gz6dy0bwdscpdq1ab6ph5b7zald3bwzgkqsvna7p1jr";
-  } else throw "Unsupported architecture";
+  src =
+    if stdenv.hostPlatform.system == "x86_64-linux" then fetchzip {
+      url = "https://gforge.inria.fr/frs/download.php/file/37268/icesl${version}-amd64.zip";
+      sha256 = "0dv3mq6wy46xk9blzzmgbdxpsjdaxid3zadfrysxlhmgl7zb2cn2";
+    } else if stdenv.hostPlatform.system == "i686-linux" then fetchzip {
+      url = "https://gforge.inria.fr/frs/download.php/file/37267/icesl${version}-i386.zip";
+      sha256 = "0sl54fsb2gz6dy0bwdscpdq1ab6ph5b7zald3bwzgkqsvna7p1jr";
+    } else throw "Unsupported architecture";
 
   buildInputs = [ makeWrapper ];
   installPhase = ''

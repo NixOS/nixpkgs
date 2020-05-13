@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
 , tornado
 , toolz
 , zict
@@ -22,12 +25,12 @@ buildPythonPackage rec {
 
   patches = [
     # fix networkx rename issue of GiGraph.node -> DiGraph.nodes, remove on next bump
-    ( fetchpatch {
+    (fetchpatch {
       url = "https://github.com/python-streamz/streamz/commit/f8b7bdb6bcb9dd107677e82e755ff4695bf0c4be.patch";
       sha256 = "1b2frp0j369gf55plxk2pigblhsc44m0rm9az01y83cjlcm26x2s";
     })
     # also, fix networkx rename issue of GiGraph.node -> DiGraph.nodes, remove on next bump
-    ( fetchpatch {
+    (fetchpatch {
       url = "https://github.com/python-streamz/streamz/commit/f7603f4cbea54f1548885881206a3ca9d6e52250.patch";
       sha256 = "1125kqiaz6b3cifz0yk1zrkxj5804lfzl4kc58jhqajv8rsrbs45";
     })

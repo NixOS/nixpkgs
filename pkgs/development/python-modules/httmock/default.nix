@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, requests }:
 
 buildPythonPackage rec {
-  pname   = "httmock";
+  pname = "httmock";
   version = "1.3.0";
 
   src = fetchFromGitHub {
@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A mocking library for requests";
-    homepage    = https://github.com/patrys/httmock;
-    license     = licenses.asl20;
+    homepage = https://github.com/patrys/httmock;
+    license = licenses.asl20;
     maintainers = with maintainers; [ nyanloutre ];
   };
 }

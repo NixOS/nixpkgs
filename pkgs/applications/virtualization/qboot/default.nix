@@ -22,6 +22,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/bonzini/qboot;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];
-    platforms = ["x86_64-linux" "i686-linux"];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

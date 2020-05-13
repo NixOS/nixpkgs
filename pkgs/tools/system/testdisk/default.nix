@@ -7,18 +7,21 @@
 , libjpeg
 , zlib
 , libewf
-, enableNtfs ? !stdenv.isDarwin, ntfs3g ? null
-, enableExtFs ? !stdenv.isDarwin, e2fsprogs ? null
-, enableQt ? false, qtbase ? null, qttools ? null, qwt ? null
+, enableNtfs ? !stdenv.isDarwin
+, ntfs3g ? null
+, enableExtFs ? !stdenv.isDarwin
+, e2fsprogs ? null
+, enableQt ? false
+, qtbase ? null
+, qttools ? null
+, qwt ? null
 }:
 
 assert enableNtfs -> ntfs3g != null;
 assert enableExtFs -> e2fsprogs != null;
 assert enableQt -> qtbase != null;
 assert enableQt -> qttools != null;
-assert enableQt -> qwt != null;
-
-(if enableQt then mkDerivation else stdenv.mkDerivation) rec {
+assert enableQt -> qwt != null; (if enableQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "testdisk";
   version = "7.1";
   src = fetchurl {
@@ -41,7 +44,7 @@ assert enableQt -> qwt != null;
 
   nativeBuildInputs = [ pkgconfig ];
 
-  NIX_CFLAGS_COMPILE="-Wno-unused";
+  NIX_CFLAGS_COMPILE = "-Wno-unused";
 
   meta = with stdenv.lib; {
     homepage = https://www.cgsecurity.org/wiki/Main_Page;

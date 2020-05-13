@@ -6,7 +6,6 @@ with lib;
 #imagick
 #php-geoip -> php.ini: extension = geoip.so
 #expat
-
 let
   cfg = config.services.restya-board;
   fpm = config.services.phpfpm.pools.${poolName};
@@ -16,7 +15,6 @@ let
   poolName = "restya-board";
 
 in
-
 {
 
   ###### interface
@@ -209,7 +207,7 @@ in
 
     services.nginx.enable = true;
     services.nginx.virtualHosts.${cfg.virtualHost.serverName} = {
-      listen = [ { addr = cfg.virtualHost.listenHost; port = cfg.virtualHost.listenPort; } ];
+      listen = [{ addr = cfg.virtualHost.listenHost; port = cfg.virtualHost.listenPort; }];
       serverName = cfg.virtualHost.serverName;
       root = runDir;
       extraConfig = ''
@@ -361,23 +359,26 @@ in
       isSystemUser = true;
       createHome = false;
       home = runDir;
-      group  = "restya-board";
+      group = "restya-board";
     };
-    users.groups.restya-board = {};
+    users.groups.restya-board = { };
 
     services.postgresql.enable = mkIf (cfg.database.host == null) true;
 
-    services.postgresql.identMap = optionalString (cfg.database.host == null)
-      ''
-        restya-board-users restya-board restya_board
-      '';
+    services.postgresql.identMap =
+      optionalString
+        (cfg.database.host == null)
+        ''
+          restya-board-users restya-board restya_board
+        '';
 
-    services.postgresql.authentication = optionalString (cfg.database.host == null)
-      ''
-        local restya_board all ident map=restya-board-users
-      '';
+    services.postgresql.authentication =
+      optionalString
+        (cfg.database.host == null)
+        ''
+          local restya_board all ident map=restya-board-users
+        '';
 
   };
 
 }
-

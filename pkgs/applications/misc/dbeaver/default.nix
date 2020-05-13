@@ -1,6 +1,17 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
-, fontconfig, freetype, glib, gtk3
-, jdk, libX11, libXrender, libXtst, zlib }:
+{ stdenv
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, fontconfig
+, freetype
+, glib
+, gtk3
+, jdk
+, libX11
+, libXrender
+, libXtst
+, zlib
+}:
 
 # The build process is almost like eclipse's.
 # See `pkgs/applications/editors/eclipse/*.nix`
@@ -20,8 +31,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    fontconfig freetype glib gtk3
-    jdk libX11 libXrender libXtst zlib
+    fontconfig
+    freetype
+    glib
+    gtk3
+    jdk
+    libX11
+    libXrender
+    libXtst
+    zlib
   ];
 
   nativeBuildInputs = [

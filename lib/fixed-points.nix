@@ -16,13 +16,15 @@ rec {
   #
   # See https://en.wikipedia.org/wiki/Fixed-point_combinator for further
   # details.
-  fix = f: let x = f x; in x;
+  fix = f:
+    let x = f x; in x;
 
   # A variant of `fix` that records the original recursive attribute set in the
   # result. This is useful in combination with the `extends` function to
   # implement deep overriding. See pkgs/development/haskell-modules/default.nix
   # for a concrete example.
-  fix' = f: let x = f x // { __unfix__ = f; }; in x;
+  fix' = f:
+    let x = f x // { __unfix__ = f; }; in x;
 
   # Return the fixpoint that `f` converges to when called recursively, starting
   # with the input `x`.
@@ -33,9 +35,9 @@ rec {
     let
       x' = f x;
     in
-      if x' == x
-      then x
-      else converge f x';
+    if x' == x
+    then x
+    else converge f x';
 
   # Modify the contents of an explicitly recursive attribute set in a way that
   # honors `self`-references. This is accomplished with a function
@@ -66,16 +68,19 @@ rec {
   #             = self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; } // { foo = "foo" + " + "; }
   #             = self: { foo = "foo + "; bar = "bar"; foobar = self.foo + self.bar; }
   #
-  extends = f: rattrs: self: let super = rattrs self; in super // f self super;
+  extends = f: rattrs: self:
+    let super = rattrs self; in super // f self super;
 
   # Compose two extending functions of the type expected by 'extends'
   # into one where changes made in the first are available in the
   # 'super' of the second
   composeExtensions =
     f: g: self: super:
-      let fApplied = f self super;
-          super' = super // fApplied;
-      in fApplied // g self super';
+    let
+      fApplied = f self super;
+      super' = super // fApplied;
+    in
+    fApplied // g self super';
 
   # Create an overridable, recursive attribute set. For example:
   #
@@ -100,5 +105,5 @@ rec {
   makeExtensibleWithCustomName = extenderName: rattrs:
     fix' rattrs // {
       ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
-   };
+    };
 }

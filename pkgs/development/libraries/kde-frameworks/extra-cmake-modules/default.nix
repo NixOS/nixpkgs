@@ -5,7 +5,7 @@ mkDerivation {
 
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
 
-  outputs = [ "out" ];  # this package has no runtime components
+  outputs = [ "out" ]; # this package has no runtime components
 
   propagatedBuildInputs = [ cmake pkgconfig ];
 

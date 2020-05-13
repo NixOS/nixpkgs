@@ -1,5 +1,4 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, xmlm, topkg }:
-
 let
   pname = "uucd";
   webpage = "https://erratique.ch/software/${pname}";
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An OCaml module to decode the data of the Unicode character database from its XML representation";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;
   };

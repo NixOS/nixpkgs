@@ -1,4 +1,8 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy27
 , backports_ssl_match_hostname
 , mock
 , paramiko

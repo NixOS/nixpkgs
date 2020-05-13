@@ -1,11 +1,19 @@
-{ stdenv, fetchurl, glib, meson, ninja, pkgconfig, gettext
-, gobject-introspection, fixDarwinDylibNames, gnome3
+{ stdenv
+, fetchurl
+, glib
+, meson
+, ninja
+, pkgconfig
+, gettext
+, gobject-introspection
+, fixDarwinDylibNames
+, gnome3
 }:
-
 let
   pname = "json-glib";
   version = "1.4.4";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

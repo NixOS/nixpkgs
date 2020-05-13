@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "1.959";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "lmmath-${version}";
 
   url = "http://www.gust.org.pl/projects/e-foundry/lm-math/download/latinmodern-math-1959.zip";

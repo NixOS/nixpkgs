@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.programs.captive-browser;
 in
@@ -27,15 +26,16 @@ in
       # the options below are the same as in "captive-browser.toml"
       browser = mkOption {
         type = types.str;
-        default = concatStringsSep " " [ ''${pkgs.chromium}/bin/chromium''
-                                         ''--user-data-dir=$HOME/.chromium-captive''
-                                         ''--proxy-server="socks5://$PROXY"''
-                                         ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
-                                         ''--no-first-run''
-                                         ''--new-window''
-                                         ''--incognito''
-                                         ''http://cache.nixos.org/''
-                                       ];
+        default = concatStringsSep " " [
+          ''${pkgs.chromium}/bin/chromium''
+          ''--user-data-dir=$HOME/.chromium-captive''
+          ''--proxy-server="socks5://$PROXY"''
+          ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
+          ''--no-first-run''
+          ''--new-window''
+          ''--incognito''
+          ''http://cache.nixos.org/''
+        ];
         description = ''
           The shell (/bin/sh) command executed once the proxy starts.
           When browser exits, the proxy exits. An extra env var PROXY is available.
@@ -90,33 +90,33 @@ in
         "${cfg.package}/bin/systemd-networkd-dns ${escapeShellArg cfg.interface}"
       else
         "${config.security.wrapperDir}/udhcpc --quit --now -f -i ${escapeShellArg cfg.interface} -O dns --script ${
-            pkgs.writeScript "udhcp-script" ''
-              #!/bin/sh
-              if [ "$1" = bound ]; then
-                echo "$dns"
-              fi
-            ''}"
+          pkgs.writeScript "udhcp-script" ''
+            #!/bin/sh
+            if [ "$1" = bound ]; then
+              echo "$dns"
+            fi
+          ''}"
     );
 
     security.wrappers.udhcpc = {
-      capabilities  = "cap_net_raw+p";
-      source        = "${pkgs.busybox}/bin/udhcpc";
+      capabilities = "cap_net_raw+p";
+      source = "${pkgs.busybox}/bin/udhcpc";
     };
 
     security.wrappers.captive-browser = {
-      capabilities  = "cap_net_raw+p";
-      source        = pkgs.writeScript "captive-browser" ''
-                        #!${pkgs.bash}/bin/bash
-                        export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
-                                                  browser = """${cfg.browser}"""
-                                                  dhcp-dns = """${cfg.dhcp-dns}"""
-                                                  socks5-addr = """${cfg.socks5-addr}"""
-                                                  ${optionalString cfg.bindInterface ''
-                                                    bind-device = """${cfg.interface}"""
-                                                  ''}
-                                                ''}
-                        exec ${cfg.package}/bin/captive-browser
-                      '';
+      capabilities = "cap_net_raw+p";
+      source = pkgs.writeScript "captive-browser" ''
+        #!${pkgs.bash}/bin/bash
+        export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
+          browser = """${cfg.browser}"""
+          dhcp-dns = """${cfg.dhcp-dns}"""
+          socks5-addr = """${cfg.socks5-addr}"""
+          ${optionalString cfg.bindInterface ''
+            bind-device = """${cfg.interface}"""
+          ''}
+        ''}
+        exec ${cfg.package}/bin/captive-browser
+      '';
     };
   };
 }

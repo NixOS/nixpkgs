@@ -1,8 +1,32 @@
-{ stdenv, fetchzip, wxGTK30, pkgconfig, file, gettext,
-  libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame,
-  expat, libid3tag, ffmpeg, soundtouch, /*, portaudio - given up fighting their portaudio.patch */
-  autoconf, automake, libtool
-  }:
+{ stdenv
+, fetchzip
+, wxGTK30
+, pkgconfig
+, file
+, gettext
+, libvorbis
+, libmad
+, libjack2
+, lv2
+, lilv
+, serd
+, sord
+, sratom
+, suil
+, alsaLib
+, libsndfile
+, soxr
+, flac
+, lame
+, expat
+, libid3tag
+, ffmpeg
+, soundtouch
+, /*, portaudio - given up fighting their portaudio.patch */
+  autoconf
+, automake
+, libtool
+}:
 
 with stdenv.lib;
 
@@ -45,9 +69,28 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
   buildInputs = [
-    file gettext wxGTK30 expat alsaLib
-    libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil wxGTK30.gtk
-    ffmpeg libmad lame libvorbis flac soundtouch
+    file
+    gettext
+    wxGTK30
+    expat
+    alsaLib
+    libsndfile
+    soxr
+    libid3tag
+    libjack2
+    lv2
+    lilv
+    serd
+    sord
+    sratom
+    suil
+    wxGTK30.gtk
+    ffmpeg
+    libmad
+    lame
+    libvorbis
+    flac
+    soundtouch
   ]; #ToDo: detach sbsms
 
   enableParallelBuilding = true;

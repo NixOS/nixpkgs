@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.xserver.windowManager.cwm;
 in
@@ -10,8 +9,9 @@ in
     services.xserver.windowManager.cwm.enable = mkEnableOption "cwm";
   };
   config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton
-      { name = "cwm";
+    services.xserver.windowManager.session =
+      singleton {
+        name = "cwm";
         start =
           ''
             cwm &

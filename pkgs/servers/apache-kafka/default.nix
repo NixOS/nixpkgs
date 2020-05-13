@@ -1,6 +1,14 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
-  majorVersion ? "1.0" }:
-
+{ stdenv
+, fetchurl
+, jre
+, makeWrapper
+, bash
+, coreutils
+, gnugrep
+, gnused
+, ps
+, majorVersion ? "1.0"
+}:
 let
   versionMap = {
     "0.9" = {
@@ -55,7 +63,6 @@ let
     };
   };
 in
-
 with versionMap.${majorVersion};
 
 stdenv.mkDerivation rec {

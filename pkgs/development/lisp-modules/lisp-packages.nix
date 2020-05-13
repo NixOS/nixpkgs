@@ -1,19 +1,19 @@
-{stdenv, clwrapper, pkgs, sbcl, coreutils, nix, asdf}:
+{ stdenv, clwrapper, pkgs, sbcl, coreutils, nix, asdf }:
 let lispPackages = rec {
   inherit pkgs clwrapper stdenv;
   nixLib = pkgs.lib;
   callPackage = nixLib.callPackageWith lispPackages;
 
-  buildLispPackage =  callPackage ./define-package.nix;
+  buildLispPackage = callPackage ./define-package.nix;
 
   quicklisp = buildLispPackage rec {
     baseName = "quicklisp";
     version = "2019-02-16";
 
-    buildSystems = [];
+    buildSystems = [ ];
 
     description = "The Common Lisp package manager";
-    deps = [];
+    deps = [ ];
     src = pkgs.fetchgit {
       url = "https://github.com/quicklisp/quicklisp-client/";
       rev = "refs/tags/version-${version}";
@@ -40,9 +40,10 @@ let lispPackages = rec {
     pname = "quicklisp-to-nix-system-info";
     version = "1.0.0";
     src = ./quicklisp-to-nix;
-    nativeBuildInputs = [sbcl];
+    nativeBuildInputs = [ sbcl ];
     buildInputs = [
-      lispPackages.quicklisp coreutils
+      lispPackages.quicklisp
+      coreutils
     ];
     touch = coreutils;
     nix-prefetch-url = nix;
@@ -61,12 +62,12 @@ let lispPackages = rec {
     pname = "quicklisp-to-nix";
     version = "1.0.0";
     src = ./quicklisp-to-nix;
-    buildDependencies = [sbcl quicklisp-to-nix-system-info];
-    buildInputs = with pkgs.lispPackages; [md5 cl-emb alexandria external-program];
+    buildDependencies = [ sbcl quicklisp-to-nix-system-info ];
+    buildInputs = with pkgs.lispPackages; [ md5 cl-emb alexandria external-program ];
     touch = coreutils;
     nix-prefetch-url = nix;
     inherit quicklisp;
-    deps = [];
+    deps = [ ];
     system-info = quicklisp-to-nix-system-info;
     buildPhase = ''
       ${clwrapper}/bin/cl-wrapper.sh "${sbcl}/bin/sbcl" --eval '(load #P"${asdf}/lib/common-lisp/asdf/build/asdf.lisp")' --load $src/ql-to-nix.lisp --eval '(ql-to-nix::dump-image)'

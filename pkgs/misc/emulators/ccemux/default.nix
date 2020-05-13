@@ -1,7 +1,10 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, jre
+{ stdenv
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, jre
 , useCCTweaked ? true
 }:
-
 let
   version = "1.1.1";
   rev = "af12e2e4da586275ba931eae8f40a2201251bf59";
@@ -22,7 +25,7 @@ let
     url = "https://github.com/CCEmuX/CCEmuX/raw/${rev}/src/main/resources/img/icon.png";
     sha256 = "1vmb6rg9k2y99j8xqfgbsvfgfi3g985rmqwrd7w3y54ffr2r99c2";
   };
-  desktopItem =  makeDesktopItem {
+  desktopItem = makeDesktopItem {
     name = "CCEmuX";
     exec = "ccemux";
     icon = desktopIcon;
@@ -32,7 +35,6 @@ let
     categories = "Application;Emulator;";
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "ccemux";
   inherit version;

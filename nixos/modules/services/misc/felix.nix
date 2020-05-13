@@ -2,13 +2,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.felix;
 
 in
-
 {
 
   ###### interface
@@ -50,7 +48,8 @@ in
     users.groups.osgi.gid = config.ids.gids.osgi;
 
     users.users.osgi =
-      { uid = config.ids.uids.osgi;
+      {
+        uid = config.ids.uids.osgi;
         description = "OSGi user";
         home = "/homeless-shelter";
       };

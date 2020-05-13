@@ -1,5 +1,11 @@
-{ enableX11 ? true,
-  stdenv, fetchurl, pkgconfig, xorg, python3, frame }:
+{ enableX11 ? true
+, stdenv
+, fetchurl
+, pkgconfig
+, xorg
+, python3
+, frame
+}:
 
 stdenv.mkDerivation rec {
   pname = "grail";
@@ -12,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python3 frame ]
-  ++ stdenv.lib.optionals enableX11 [xorg.libX11 xorg.libXtst xorg.libXext xorg.libXi xorg.libXfixes];
+    ++ stdenv.lib.optionals enableX11 [ xorg.libX11 xorg.libXtst xorg.libXext xorg.libXi xorg.libXfixes ];
 
   configureFlags = stdenv.lib.optional enableX11 "--with-x11";
 

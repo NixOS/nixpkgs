@@ -9,8 +9,8 @@ bundlerApp rec {
 
   meta = with lib; {
     description = "A markdown parser with multiple backends";
-    homepage    = "https://github.com/cabo/kramdown-rfc2629";
-    license     = with licenses; mit;
+    homepage = "https://github.com/cabo/kramdown-rfc2629";
+    license = with licenses; mit;
     maintainers = with maintainers; [
       vcunat # not really, but I expect to use it occasionally around IETF
     ];

@@ -1,5 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, ounit, expat}:
-
+{ stdenv, fetchurl, ocaml, findlib, ounit, expat }:
 let
   pname = "ocaml-expat";
   testcase = fetchurl {
@@ -8,7 +7,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "0.9.1";
@@ -18,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "16n2j3y0jc9xgqyshw9plrwqnjiz30vnpbhahmgxlidbycw8rgjz";
   };
 
-  buildInputs = [ocaml findlib ounit expat];
+  buildInputs = [ ocaml findlib ounit expat ];
 
   createFindlibDestdir = true;
 
@@ -32,7 +30,7 @@ stdenv.mkDerivation rec {
       --replace "gcc" "\$(CC)"
   '';
 
-  dontConfigure = true;  	# Skip configure
+  dontConfigure = true; # Skip configure
 
   buildPhase = ''
     make all allopt

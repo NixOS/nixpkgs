@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivial-types";
 
-  asdFilesToKeep = ["trivial-types.asd"];
+  asdFilesToKeep = [ "trivial-types.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-types DESCRIPTION Trivial type definitions SHA256

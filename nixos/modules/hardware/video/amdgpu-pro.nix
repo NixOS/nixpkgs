@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   drivers = config.services.xserver.videoDrivers;
 
   enabled = elem "amdgpu-pro" drivers;
@@ -22,15 +20,14 @@ let
   };
 
 in
-
 {
 
   config = mkIf enabled {
 
     nixpkgs.config.xorg.abiCompat = "1.19";
 
-    services.xserver.drivers = singleton
-      { name = "amdgpu"; modules = [ package ]; display = true; };
+    services.xserver.drivers =
+      singleton { name = "amdgpu"; modules = [ package ]; display = true; };
 
     hardware.opengl.package = package;
     hardware.opengl.package32 = package32;

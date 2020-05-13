@@ -3,7 +3,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.environment.freetds;
@@ -16,7 +15,7 @@ in
 
     environment.freetds = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = literalExample ''
         { MYDATABASE = '''
             host = 10.0.2.100
@@ -25,14 +24,14 @@ in
           ''';
         }
       '';
-      description = 
+      description =
         ''
-        Configure freetds database entries. Each attribute denotes
-        a section within freetds.conf, and the value (a string) is the config
-        content for that section. When at least one entry is configured
-        the global environment variables FREETDSCONF, FREETDS and SYBASE
-        will be configured to allow the programs that use freetds to find the
-        library and config.
+          Configure freetds database entries. Each attribute denotes
+          a section within freetds.conf, and the value (a string) is the config
+          content for that section. When at least one entry is configured
+          the global environment variables FREETDSCONF, FREETDS and SYBASE
+          will be configured to allow the programs that use freetds to find the
+          library and config.
         '';
 
     };
@@ -47,13 +46,18 @@ in
     environment.variables.FREETDS = "/etc/freetds.conf";
     environment.variables.SYBASE = "${pkgs.freetds}";
 
-    environment.etc."freetds.conf" = { text = 
-      (concatStrings (mapAttrsToList (name: value:
-        ''
-        [${name}]
-        ${value}
-        ''
-      ) cfg));
+    environment.etc."freetds.conf" = {
+      text =
+        (concatStrings (
+          mapAttrsToList
+            (name: value:
+              ''
+                [${name}]
+                ${value}
+              ''
+            )
+            cfg
+        ));
     };
 
   };

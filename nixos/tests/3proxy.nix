@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "3proxy";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ misuzu ];

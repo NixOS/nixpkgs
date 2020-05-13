@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.xserver.windowManager."2bwm";
 
 in
-
 {
 
   ###### interface
@@ -21,8 +19,9 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton
-      { name = "2bwm";
+    services.xserver.windowManager.session =
+      singleton {
+        name = "2bwm";
         start =
           ''
             ${pkgs._2bwm}/bin/2bwm &

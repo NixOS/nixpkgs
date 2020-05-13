@@ -51,4 +51,3 @@ buildGoPackage rec {
     platforms = platforms.all;
   };
 }
-

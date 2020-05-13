@@ -19,7 +19,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ jupyterlab_server notebook ];
 
   makeWrapperArgs = [
-    "--set" "JUPYTERLAB_DIR" "$out/share/jupyter/lab"
+    "--set"
+    "JUPYTERLAB_DIR"
+    "$out/share/jupyter/lab"
   ];
 
   # Depends on npm

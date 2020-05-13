@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager;
 
@@ -12,15 +10,25 @@ let
   needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable;
 
 in
-
 {
   # Note: the order in which desktop manager modules are imported here
   # determines the default: later modules (if enabled) are preferred.
   # E.g., if Plasma 5 is enabled, it supersedes xterm.
   imports = [
-    ./none.nix ./xterm.nix ./xfce.nix ./plasma5.nix ./lumina.nix
-    ./lxqt.nix ./enlightenment.nix ./gnome3.nix ./kodi.nix ./maxx.nix
-    ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
+    ./none.nix
+    ./xterm.nix
+    ./xfce.nix
+    ./plasma5.nix
+    ./lumina.nix
+    ./lxqt.nix
+    ./enlightenment.nix
+    ./gnome3.nix
+    ./kodi.nix
+    ./maxx.nix
+    ./mate.nix
+    ./pantheon.nix
+    ./surf-display.nix
+    ./cde.nix
   ];
 
   options = {
@@ -57,9 +65,10 @@ in
 
       session = mkOption {
         internal = true;
-        default = [];
-        example = singleton
-          { name = "kde";
+        default = [ ];
+        example =
+          singleton {
+            name = "kde";
             bgSupport = true;
             start = "...";
           };
@@ -71,7 +80,7 @@ in
         apply = map (d: d // {
           manage = "desktop";
           start = d.start
-          + optionalString (needBGCond d) ''
+            + optionalString (needBGCond d) ''
             if [ -e $HOME/.background-image ]; then
               ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
             fi

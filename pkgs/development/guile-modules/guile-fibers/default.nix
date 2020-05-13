@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, guile, texinfo }:
-
 let
   version = "1.0.0";
   name = "guile-fibers-${version}";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchFromGitHub {

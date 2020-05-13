@@ -3,7 +3,6 @@ let
   pname = "uunf";
   webpage = "https://erratique.ch/software/${pname}";
 in
-
 assert stdenv.lib.versionAtLeast ocaml.version "4.01";
 
 stdenv.mkDerivation rec {
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An OCaml module for normalizing Unicode text";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
     broken = stdenv.isAarch64;

@@ -1,6 +1,14 @@
-{ stdenv, lib, runCommand, patchelf
-, fetchFromGitHub, rustPlatform
-, pkgconfig, curl, Security, CoreServices }:
+{ stdenv
+, lib
+, runCommand
+, patchelf
+, fetchFromGitHub
+, rustPlatform
+, pkgconfig
+, curl
+, Security
+, CoreServices
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
@@ -24,12 +32,14 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--features no-self-update" ];
 
   patches = lib.optionals stdenv.isLinux [
-    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC=stdenv.cc; patchelf = patchelf; } ''
-       export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-       substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-         --subst-var patchelf \
-         --subst-var dynamicLinker
-    '')
+    (runCommand "0001-dynamically-patchelf-binaries.patch"
+      { CC = stdenv.cc; patchelf = patchelf; } ''
+      export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+        --subst-var patchelf \
+        --subst-var dynamicLinker
+    ''
+    )
   ];
 
   doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;

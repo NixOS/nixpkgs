@@ -1,7 +1,6 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
-
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02"
   then {
@@ -10,8 +9,7 @@ let param =
   } else {
     version = "20140424";
     sha256 = "0sc9q89dnyarcg24czyhr6ams0ylqvia3745s6rfwd2nldpygsdk";
-}; in
-
+  }; in
 stdenv.mkDerivation {
 
   name = "ocaml${ocaml.version}-pprint-${param.version}";
@@ -33,6 +31,6 @@ stdenv.mkDerivation {
     description = "An OCaml adaptation of Wadler’s and Leijen’s prettier printer";
     license = licenses.cecill-c;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

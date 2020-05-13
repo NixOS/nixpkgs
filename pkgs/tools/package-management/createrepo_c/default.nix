@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "0.11.1";
 
   src = fetchFromGitHub {
-    owner  = "rpm-software-management";
-    repo   = "createrepo_c";
-    rev    = version;
+    owner = "rpm-software-management";
+    repo = "createrepo_c";
+    rev = version;
     sha256 = "0cmysc7gdd2czagl4drfh9gin6aa2847vgi30a3p0cfqvczf9cm6";
   };
 
@@ -29,10 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C implementation of createrepo";
-    homepage    = "http://rpm-software-management.github.io/createrepo_c/";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage = "http://rpm-software-management.github.io/createrepo_c/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];
   };
 }
-

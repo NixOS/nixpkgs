@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) cups cups-pk-helper cups-filters;
 
   cfg = config.services.printing;
@@ -11,9 +9,11 @@ let
   avahiEnabled = config.services.avahi.enable;
   polkitEnabled = config.security.polkit.enable;
 
-  additionalBackends = pkgs.runCommand "additional-cups-backends" {
-      preferLocalBuild = true;
-    } ''
+  additionalBackends =
+    pkgs.runCommand "additional-cups-backends"
+      {
+        preferLocalBuild = true;
+      } ''
       mkdir -p $out
       if [ ! -e ${cups.out}/lib/cups/backend/smb ]; then
         mkdir -p $out/lib/cups/backend
@@ -99,7 +99,7 @@ let
       (writeConf "client.conf" cfg.clientConf)
       (writeConf "snmp.conf" cfg.snmpConf)
     ] ++ optional avahiEnabled browsedFile
-      ++ cfg.drivers;
+    ++ cfg.drivers;
     pathsToLink = [ "/etc/cups" ];
     ignoreCollisions = true;
   };
@@ -109,14 +109,15 @@ let
   getGutenprint = pkgs: head (filterGutenprint pkgs);
 
 in
-
 {
 
   imports = [
-    (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
-      (config:
-        let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
-        in if enabled then [ pkgs.gutenprint ] else [ ]))
+    (
+      mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
+        (config:
+          let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
+          in if enabled then [ pkgs.gutenprint ] else [ ])
+    )
     (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ] "")
     (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ] "")
   ];
@@ -259,7 +260,7 @@ in
 
       drivers = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         example = literalExample "with pkgs; [ gutenprint hplip splix cups-googlecloudprint ]";
         description = ''
           CUPS drivers to use. Drivers provided by CUPS, cups-filters,
@@ -289,7 +290,8 @@ in
   config = mkIf config.services.printing.enable {
 
     users.users.cups =
-      { uid = config.ids.uids.cups;
+      {
+        uid = config.ids.uids.cups;
         group = "lp";
         description = "CUPS printing services";
       };
@@ -323,11 +325,12 @@ in
     systemd.sockets.cups = mkIf cfg.startWhenNeeded {
       wantedBy = [ "sockets.target" ];
       listenStreams = [ "/run/cups/cups.sock" ]
-        ++ map (x: replaceStrings ["localhost"] ["127.0.0.1"] (removePrefix "*:" x)) cfg.listenAddresses;
+        ++ map (x: replaceStrings [ "localhost" ] [ "127.0.0.1" ] (removePrefix "*:" x)) cfg.listenAddresses;
     };
 
     systemd.services.cups =
-      { wantedBy = optionals (!cfg.startWhenNeeded) [ "multi-user.target" ];
+      {
+        wantedBy = optionals (!cfg.startWhenNeeded) [ "multi-user.target" ];
         wants = [ "network.target" ];
         after = [ "network.target" ];
 
@@ -375,14 +378,16 @@ in
             ''}
           '';
 
-          serviceConfig = {
-            PrivateTmp = true;
-            RuntimeDirectory = [ "cups" ];
-          };
+        serviceConfig = {
+          PrivateTmp = true;
+          RuntimeDirectory = [ "cups" ];
+        };
       };
 
-    systemd.services.cups-browsed = mkIf avahiEnabled
-      { description = "CUPS Remote Printer Discovery";
+    systemd.services.cups-browsed =
+      mkIf
+        avahiEnabled {
+        description = "CUPS Remote Printer Discovery";
 
         wantedBy = [ "multi-user.target" ];
         wants = [ "avahi-daemon.service" ] ++ optional (!cfg.startWhenNeeded) "cups.service";
@@ -441,7 +446,7 @@ in
         </Policy>
       '';
 
-    security.pam.services.cups = {};
+    security.pam.services.cups = { };
 
   };
 

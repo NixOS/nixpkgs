@@ -6,4 +6,3 @@ with lib;
     boot.blacklistedKernelModules = [ "radeon" ];
   };
 }
-

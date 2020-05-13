@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.ejabberd;
 
   ctlcfg = pkgs.writeText "ejabberdctl.cfg" ''
@@ -15,7 +13,8 @@ let
 
   dumps = lib.escapeShellArgs cfg.loadDumps;
 
-in {
+in
+{
 
   ###### interface
 
@@ -74,7 +73,7 @@ in {
 
       loadDumps = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = "Configuration dumps that should be loaded on the first startup";
         example = literalExample "[ ./myejabberd.dump ]";
       };
@@ -150,7 +149,7 @@ in {
       "d '${cfg.spoolDir}' 0700 ${cfg.user} ${cfg.group} -"
     ];
 
-    security.pam.services.ejabberd = {};
+    security.pam.services.ejabberd = { };
 
   };
 

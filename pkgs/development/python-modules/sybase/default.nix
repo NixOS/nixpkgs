@@ -22,9 +22,9 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "The Sybase module provides a Python interface to the Sybase relational database system";
-    homepage    = http://python-sybase.sourceforge.net;
-    license     = licenses.bsd3;
+    homepage = http://python-sybase.sourceforge.net;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ veprbl ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

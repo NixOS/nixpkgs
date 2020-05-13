@@ -1,8 +1,7 @@
 { fetchurl, stdenv, glib, xorg, cairo, gtk2, makeDesktopItem }:
 let
-  libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk2 cairo];
+  libPath = stdenv.lib.makeLibraryPath [ glib xorg.libX11 gtk2 cairo ];
 in
-
 stdenv.mkDerivation rec {
   name = "sublimetext-2.0.2";
   src =

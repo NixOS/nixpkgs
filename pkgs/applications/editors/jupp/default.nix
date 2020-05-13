@@ -1,5 +1,7 @@
-{ stdenv, fetchurl
-, ncurses, gpm
+{ stdenv
+, fetchurl
+, ncurses
+, gpm
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +13,8 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     urls = [
       "https://www.mirbsd.org/MirOS/dist/jupp/${srcName}.tgz"
-      "https://pub.allbsd.org/MirOS/dist/jupp/${srcName}.tgz" ];
+      "https://pub.allbsd.org/MirOS/dist/jupp/${srcName}.tgz"
+    ];
     sha256 = "1fnf9jsd6p4jyybkhjjs328qx38ywy8w029ngc7j7kqp0ixn0l0s";
   };
 

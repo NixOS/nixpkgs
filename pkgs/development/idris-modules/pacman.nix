@@ -4,7 +4,7 @@
 , sdl2
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "pacman";
   version = "2017-11-10";
 

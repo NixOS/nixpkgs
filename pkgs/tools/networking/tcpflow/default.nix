@@ -1,16 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, automake, autoconf
-, openssl, zlib, libpcap, boost
-, useCairo ? false, cairo
+{ stdenv
+, lib
+, fetchFromGitHub
+, automake
+, autoconf
+, openssl
+, zlib
+, libpcap
+, boost
+, useCairo ? false
+, cairo
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "tcpflow";
+  pname = "tcpflow";
   version = "1.5.2";
 
   src = fetchFromGitHub {
-    owner  = "simsong";
-    repo   = pname;
-    rev    = "${pname}-${version}";
+    owner = "simsong";
+    repo = pname;
+    rev = "${pname}-${version}";
     sha256 = "063n3pfqa0lgzcwk4c0h01g2y5c3sli615j6a17dxpg95aw1zryy";
     fetchSubmodules = true;
   };
@@ -37,8 +45,8 @@ stdenv.mkDerivation rec {
       protocol analysis and debugging.
     '';
     inherit (src.meta) homepage;
-    license     = licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ primeos raskin obadz ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

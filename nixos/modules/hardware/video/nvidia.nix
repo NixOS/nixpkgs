@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   drivers = config.services.xserver.videoDrivers;
 
   # FIXME: should introduce an option like
@@ -13,9 +11,9 @@ let
   # driver.
   nvidiaForKernel = kernelPackages:
     if elem "nvidia" drivers then
-        kernelPackages.nvidia_x11
+      kernelPackages.nvidia_x11
     else if elem "nvidiaBeta" drivers then
-        kernelPackages.nvidia_x11_beta
+      kernelPackages.nvidia_x11_beta
     else if elem "nvidiaLegacy304" drivers then
       kernelPackages.nvidia_x11_legacy304
     else if elem "nvidiaLegacy340" drivers then
@@ -39,7 +37,6 @@ let
   offloadCfg = pCfg.offload;
   primeEnabled = syncCfg.enable || offloadCfg.enable;
 in
-
 {
   imports =
     [
@@ -179,11 +176,13 @@ in
       name = "nvidia";
       modules = [ nvidia_x11.bin ];
       display = !offloadCfg.enable;
-      deviceSection = optionalString primeEnabled
-        ''
-          BusID "${pCfg.nvidiaBusId}"
-          ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
-        '';
+      deviceSection =
+        optionalString
+          primeEnabled
+          ''
+            BusID "${pCfg.nvidiaBusId}"
+            ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
+          '';
       screenSection =
         ''
           Option "RandRRotation" "on"
@@ -215,9 +214,13 @@ in
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ filter (p: p != null) [ nvidia_x11.persistenced ];
 
-    systemd.tmpfiles.rules = optional config.virtualisation.docker.enableNvidia
+    systemd.tmpfiles.rules =
+      optional
+        config.virtualisation.docker.enableNvidia
         "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
-      ++ optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+      ++
+      optional
+        (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
         "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
     boot.extraModulePackages = [ nvidia_x11.bin ];

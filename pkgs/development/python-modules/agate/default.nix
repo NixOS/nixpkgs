@@ -1,7 +1,20 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k
-, six, pytimeparse, parsedatetime, Babel
-, isodate, python-slugify, leather
-, glibcLocales, nose, lxml, cssselect, unittest2 }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, isPy3k
+, six
+, pytimeparse
+, parsedatetime
+, Babel
+, isodate
+, python-slugify
+, leather
+, glibcLocales
+, nose
+, lxml
+, cssselect
+, unittest2
+}:
 
 buildPythonPackage rec {
   pname = "agate";
@@ -17,8 +30,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    six pytimeparse parsedatetime Babel
-    isodate python-slugify leather
+    six
+    pytimeparse
+    parsedatetime
+    Babel
+    isodate
+    python-slugify
+    leather
   ];
 
   checkInputs = [ glibcLocales nose lxml cssselect ]
@@ -30,8 +48,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python data analysis library that is optimized for humans instead of machines";
-    homepage    = https://github.com/wireservice/agate;
-    license     = with licenses; [ mit ];
+    homepage = https://github.com/wireservice/agate;
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ vrthra ];
   };
 }

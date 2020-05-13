@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fftw gtk2 lv2 libsamplerate libsndfile zita-convolver ];
 
-  nativeBuildInputs = [  pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   postBuild = "make convert4chan";
 

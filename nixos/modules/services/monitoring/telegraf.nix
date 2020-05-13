@@ -1,19 +1,22 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.telegraf;
 
-  configFile = pkgs.runCommand "config.toml" {
-    buildInputs = [ pkgs.remarshal ];
-    preferLocalBuild = true;
-  } ''
-    remarshal -if json -of toml \
-      < ${pkgs.writeText "config.json" (builtins.toJSON cfg.extraConfig)} \
-      > $out
-  '';
-in {
+  configFile =
+    pkgs.runCommand "config.toml"
+      {
+        buildInputs = [ pkgs.remarshal ];
+        preferLocalBuild = true;
+      } ''
+      remarshal -if json -of toml \
+        < ${pkgs.writeText "config.json"
+        (builtins.toJSON cfg.extraConfig)} \
+        > $out
+    '';
+in
+{
   ###### interface
   options = {
     services.telegraf = {
@@ -27,13 +30,13 @@ in {
       };
 
       extraConfig = mkOption {
-        default = {};
+        default = { };
         description = "Extra configuration options for telegraf";
         type = types.attrs;
         example = {
           outputs = {
             influxdb = {
-              urls = ["http://localhost:8086"];
+              urls = [ "http://localhost:8086" ];
               database = "telegraf";
             };
           };
@@ -56,8 +59,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
-        ExecStart=''${cfg.package}/bin/telegraf -config "${configFile}"'';
-        ExecReload="${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecStart = ''${cfg.package}/bin/telegraf -config "${configFile}"'';
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "telegraf";
         Restart = "on-failure";
       };

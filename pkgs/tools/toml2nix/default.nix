@@ -2,13 +2,13 @@
 { lib, buildPlatform, buildRustCrate, buildRustCrateHelpers, cratesIO, fetchgit }:
 with buildRustCrateHelpers;
 let inherit (lib.lists) fold;
-    inherit (lib.attrsets) recursiveUpdate;
+  inherit (lib.attrsets) recursiveUpdate;
 in
 let crates = cratesIO; in
 rec {
   toml2nix = crates.crates.toml2nix."0.1.1" deps;
-  __all = [ (toml2nix {}) ];
-  deps.serde."1.0.84" = {};
+  __all = [ (toml2nix { }) ];
+  deps.serde."1.0.84" = { };
   deps.toml."0.4.10" = {
     serde = "1.0.84";
   };

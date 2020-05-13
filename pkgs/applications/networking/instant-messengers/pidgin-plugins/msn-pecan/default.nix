@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pidgin} :
+{ stdenv, fetchurl, pidgin }:
 
 stdenv.mkDerivation {
   name = "pidgin-msn-pecan-0.1.4";
@@ -18,5 +18,5 @@ stdenv.mkDerivation {
     "PURPLE_DATADIR=${placeholder "out"}/share/data"
   ];
 
-  buildInputs = [pidgin];
+  buildInputs = [ pidgin ];
 }

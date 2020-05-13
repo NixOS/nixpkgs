@@ -1,9 +1,7 @@
 { stdenv, fetchFromGitHub, coq, mathcomp-algebra }:
-
 let
   version = "20190812";
 in
-
 stdenv.mkDerivation {
   name = "coq${coq.coq-version}-coq-bits-${version}";
 

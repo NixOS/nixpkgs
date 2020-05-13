@@ -1,5 +1,4 @@
 { appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, lib }:
-
 let
   pname = "station";
   version = "1.52.2";
@@ -13,7 +12,8 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit name src;
 
   profile = ''

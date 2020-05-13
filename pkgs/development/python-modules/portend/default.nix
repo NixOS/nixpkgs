@@ -1,5 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, setuptools_scm, tempora, pytest-black, pytestcov }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, setuptools_scm
+, tempora
+, pytest-black
+, pytestcov
+}:
 
 buildPythonPackage rec {
   pname = "portend";

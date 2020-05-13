@@ -12,16 +12,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkgconfig ]
     # `help2man' wants to run Zile, which won't work when the
     # newly-produced binary can't be run at build-time.
-    ++ stdenv.lib.optional
-         (stdenv.hostPlatform == stdenv.buildPlatform)
-         help2man;
+    ++
+    stdenv.lib.optional
+      (stdenv.hostPlatform == stdenv.buildPlatform)
+      help2man;
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.
   doCheck = false;
 
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
-  gl_cv_func_fstatat_zero_flag="yes";
+  gl_cv_func_fstatat_zero_flag = "yes";
 
   meta = with stdenv.lib; {
     description = "Lightweight Emacs clone";

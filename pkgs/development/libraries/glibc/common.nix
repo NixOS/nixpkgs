@@ -17,11 +17,13 @@
   but the exact set depends on the library version and the configuration.
 */
 
-{ stdenv, lib
+{ stdenv
+, lib
 , buildPackages
 , fetchurl
 , linuxHeaders ? null
-, gd ? null, libpng ? null
+, gd ? null
+, libpng ? null
 , libidn2
 , bison
 , python3Minimal
@@ -34,13 +36,11 @@
 , meta
 , ...
 } @ args:
-
 let
   version = "2.30";
   patchSuffix = "";
   sha256 = "1bxqpg91d02qnaz837a5kamm0f43pr1il4r9pknygywsar713i72";
 in
-
 assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
@@ -139,7 +139,8 @@ stdenv.mkDerivation ({
     '';
 
   configureFlags =
-    [ "-C"
+    [
+      "-C"
       "--enable-add-ons"
       "--enable-obsolete-nsl"
       "--enable-obsolete-rpc"
@@ -150,8 +151,11 @@ stdenv.mkDerivation ({
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      (lib.flip lib.withFeature "fp"
-         (stdenv.hostPlatform.platform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
+      (
+        lib.flip
+          lib.withFeature "fp"
+          (stdenv.hostPlatform.platform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft")
+      )
       "--with-__thread"
     ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
       "--host=arm-linux-gnueabi"

@@ -1,14 +1,23 @@
-{ stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python, makeWrapper, rlwrap ? null
-, tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
+{ stdenv
+, fetchurl
+, fetchpatch
+, sbcl
+, texinfo
+, perl
+, python
+, makeWrapper
+, rlwrap ? null
+, tk ? null
+, gnuplot ? null
+, ecl ? null
+, ecl-fasl ? false
 }:
-
 let
-  name    = "maxima";
+  name = "maxima";
   version = "5.42.2";
 
   searchPath =
-    stdenv.lib.makeBinPath
-      (stdenv.lib.filter (x: x != null) [ sbcl ecl rlwrap tk gnuplot ]);
+    stdenv.lib.makeBinPath (stdenv.lib.filter (x: x != null) [ sbcl ecl rlwrap tk gnuplot ]);
 in
 stdenv.mkDerivation ({
   inherit version;
@@ -20,8 +29,13 @@ stdenv.mkDerivation ({
   };
 
   buildInputs = stdenv.lib.filter (x: x != null) [
-    sbcl ecl texinfo perl python makeWrapper
-    gnuplot   # required in the test suite
+    sbcl
+    ecl
+    texinfo
+    perl
+    python
+    makeWrapper
+    gnuplot # required in the test suite
   ];
 
   postInstall = ''
@@ -34,9 +48,10 @@ stdenv.mkDerivation ({
     ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   ''
-   + (stdenv.lib.optionalString ecl-fasl ''
-     cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
-   '')
+  + (stdenv.lib.optionalString ecl-fasl ''
+    cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
+  ''
+  )
   ;
 
   patches = [
@@ -82,7 +97,7 @@ stdenv.mkDerivation ({
   #
   # These failures don't look serious. It would be nice to fix them, but I
   # don't know how and probably won't have the time to find out.
-  doCheck = false;    # try to re-enable after next version update
+  doCheck = false; # try to re-enable after next version update
 
   enableParallelBuilding = true;
 

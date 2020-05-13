@@ -7,7 +7,8 @@
 , cmake
 , ninja
 , vala
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "plotinus";

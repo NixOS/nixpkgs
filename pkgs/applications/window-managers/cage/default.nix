@@ -1,7 +1,18 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkgconfig, makeWrapper
-, wlroots, wayland, wayland-protocols, pixman, libxkbcommon
-, systemd, libGL, libX11
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkgconfig
+, makeWrapper
+, wlroots
+, wayland
+, wayland-protocols
+, pixman
+, libxkbcommon
+, systemd
+, libGL
+, libX11
 , xwayland ? null
 }:
 
@@ -25,9 +36,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig makeWrapper ];
 
   buildInputs = [
-    wlroots wayland wayland-protocols pixman libxkbcommon
+    wlroots
+    wayland
+    wayland-protocols
+    pixman
+    libxkbcommon
     # TODO: Not specified but required:
-    systemd libGL libX11
+    systemd
+    libGL
+    libX11
   ];
 
   enableParallelBuilding = true;
@@ -40,9 +57,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Wayland kiosk";
-    homepage    = https://www.hjdskes.nl/projects/cage/;
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = https://www.hjdskes.nl/projects/cage/;
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };
 }

@@ -1,5 +1,13 @@
-{ stdenv, fetchurl
-, unzip, zlib, SDL, readline, libGLU, libGL, libX11 }:
+{ stdenv
+, fetchurl
+, unzip
+, zlib
+, SDL
+, readline
+, libGLU
+, libGL
+, libX11
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec{

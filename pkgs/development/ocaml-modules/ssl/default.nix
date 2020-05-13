@@ -12,7 +12,7 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [openssl];
+  propagatedBuildInputs = [ openssl ];
 
   meta = {
     homepage = http://savonet.rastageeks.org/;

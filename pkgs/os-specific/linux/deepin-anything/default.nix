@@ -12,11 +12,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-     install -m 644 -D -t $out/lib/modules/${kernel.modDirVersion}/extra src/deepin-anything-0.0/*.ko
+    install -m 644 -D -t $out/lib/modules/${kernel.modDirVersion}/extra src/deepin-anything-0.0/*.ko
   '';
 
   meta = deepin.deepin-anything.meta // {
     description = deepin.deepin-anything.meta.description + " (kernel modules)";
-    badPlatforms = [ "aarch64-linux" ];  # the kernel module is not building
+    badPlatforms = [ "aarch64-linux" ]; # the kernel module is not building
   };
 }

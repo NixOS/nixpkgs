@@ -1,12 +1,25 @@
-{ stdenv, fetchurl, makeWrapper, gtk2, libcddb, intltool, pkgconfig, cdparanoia
-, mp3Support ? false, lame
-, oggSupport ? true, vorbis-tools
-, flacSupport ? true, flac
-, opusSupport ? false, opusTools
-, wavpackSupport ? false, wavpack
-#, musepackSupport ? false, TODO: mpcenc
-, monkeysAudioSupport ? false, monkeysAudio
-#, aacSupport ? false, TODO: neroAacEnc
+{ stdenv
+, fetchurl
+, makeWrapper
+, gtk2
+, libcddb
+, intltool
+, pkgconfig
+, cdparanoia
+, mp3Support ? false
+, lame
+, oggSupport ? true
+, vorbis-tools
+, flacSupport ? true
+, flac
+, opusSupport ? false
+, opusTools
+, wavpackSupport ? false
+, wavpack
+  #, musepackSupport ? false, TODO: mpcenc
+, monkeysAudioSupport ? false
+, monkeysAudio
+  #, aacSupport ? false, TODO: neroAacEnc
 }:
 
 with stdenv.lib;

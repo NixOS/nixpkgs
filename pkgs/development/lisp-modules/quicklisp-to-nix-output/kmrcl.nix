@@ -14,7 +14,7 @@ rec {
 
   packageName = "kmrcl";
 
-  asdFilesToKeep = ["kmrcl.asd"];
+  asdFilesToKeep = [ "kmrcl.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM kmrcl DESCRIPTION System lacks description SHA256

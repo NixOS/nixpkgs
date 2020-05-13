@@ -1,5 +1,15 @@
-{ stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib, 
-    freetype, fontconfig, xorg }:
+{ stdenv
+, rpmextract
+, patchelf
+, makeWrapper
+, file
+, requireFile
+, glib
+, zlib
+, freetype
+, fontconfig
+, xorg
+}:
 
 stdenv.mkDerivation {
   name = "diamond-3.10";
@@ -96,8 +106,16 @@ stdenv.mkDerivation {
   '';
 
   libPath = stdenv.lib.makeLibraryPath [
-    glib zlib freetype fontconfig
-    xorg.libSM xorg.libICE xorg.libXrender xorg.libXext xorg.libX11 xorg.libXt
+    glib
+    zlib
+    freetype
+    fontconfig
+    xorg.libSM
+    xorg.libICE
+    xorg.libXrender
+    xorg.libXext
+    xorg.libX11
+    xorg.libXt
   ];
 
   meta = {

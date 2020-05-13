@@ -1,6 +1,21 @@
-{ stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
-, texinfo, libX11, xorgproto, libXi, gmp
-, libXext, libXt, libXaw, libXmu } :
+{ stdenv
+, fetchurl
+, mpfr
+, m4
+, binutils
+, emacs
+, zlib
+, which
+, texinfo
+, libX11
+, xorgproto
+, libXi
+, gmp
+, libXext
+, libXt
+, libXaw
+, libXmu
+}:
 
 assert stdenv ? cc ;
 assert stdenv.cc.isGNU ;
@@ -16,10 +31,12 @@ stdenv.mkDerivation rec {
     url = "http://gnu.spinellicreations.com/gcl/${pname}-${version}.tar.gz";
   };
 
-  patches = [(fetchurl {
-    url = https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-lisp/gcl/files/gcl-2.6.12-gcc5.patch;
-    sha256 = "00jbsn0qp8ki2w7dx8caha7g2hr9076xa6bg48j3qqqncff93zdh";
-  })];
+  patches = [
+    (fetchurl {
+      url = https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-lisp/gcl/files/gcl-2.6.12-gcc5.patch;
+      sha256 = "00jbsn0qp8ki2w7dx8caha7g2hr9076xa6bg48j3qqqncff93zdh";
+    })
+  ];
 
   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=902475
   postPatch = ''
@@ -28,10 +45,21 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    mpfr m4 binutils emacs gmp
-    libX11 xorgproto libXi
-    libXext libXt libXaw libXmu
-    zlib which texinfo
+    mpfr
+    m4
+    binutils
+    emacs
+    gmp
+    libX11
+    xorgproto
+    libXi
+    libXext
+    libXt
+    libXaw
+    libXmu
+    zlib
+    which
+    texinfo
   ];
 
   configureFlags = [

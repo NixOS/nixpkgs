@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.hardware.steam-hardware;
 
 in
-
 {
   options.hardware.steam-hardware = {
     enable = mkOption {

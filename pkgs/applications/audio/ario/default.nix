@@ -1,7 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk3, intltool,
-  wrapGAppsHook, libxml2, curl, mpd_clientlib, dbus-glib,
-  libsoup, avahi, taglib
-  }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gettext
+, gtk3
+, intltool
+, wrapGAppsHook
+, libxml2
+, curl
+, mpd_clientlib
+, dbus-glib
+, libsoup
+, avahi
+, taglib
+}:
 
 stdenv.mkDerivation rec {
   version = "1.6";
@@ -14,7 +25,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext intltool wrapGAppsHook ];
   buildInputs = [
-    gtk3 libxml2 curl mpd_clientlib dbus-glib libsoup avahi taglib
+    gtk3
+    libxml2
+    curl
+    mpd_clientlib
+    dbus-glib
+    libsoup
+    avahi
+    taglib
   ];
 
   meta = {

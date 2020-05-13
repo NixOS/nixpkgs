@@ -1,5 +1,4 @@
 { stdenv, fetchurl, jre, pcsclite, makeDesktopItem, makeWrapper }:
-
 let
   version = "1.2.4";
 
@@ -17,7 +16,8 @@ let
       sha256 = "0rpmyv10vjx2yfpm03mqliygcww8af2wnrnrppmsazdplksaxkhs";
     };
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   appName = "open-ecard";
   name = "${appName}-${version}";
 

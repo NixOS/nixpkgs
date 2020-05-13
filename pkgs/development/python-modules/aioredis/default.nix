@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pkgs, async-timeout, hiredis, isPyPy, isPy27
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pkgs
+, async-timeout
+, hiredis
+, isPyPy
+, isPy27
 }:
 
 buildPythonPackage rec {

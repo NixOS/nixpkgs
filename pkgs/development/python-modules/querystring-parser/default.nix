@@ -1,4 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, isPy27
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, python
+, isPy27
 , six
 }:
 

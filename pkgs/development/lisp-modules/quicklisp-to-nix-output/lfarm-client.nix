@@ -14,7 +14,7 @@ rec {
 
   packageName = "lfarm-client";
 
-  asdFilesToKeep = ["lfarm-client.asd"];
+  asdFilesToKeep = [ "lfarm-client.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lfarm-client DESCRIPTION

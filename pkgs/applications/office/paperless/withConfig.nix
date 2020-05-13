@@ -19,28 +19,34 @@
 # Start web interface
 # ./paperless runserver --noreload localhost:8000
 
-{ config ? {}, dataDir ? null, ocrLanguages ? null
-, paperlessPkg ? paperless, extraCmds ? "" }:
+{ config ? { }
+, dataDir ? null
+, ocrLanguages ? null
+, paperlessPkg ? paperless
+, extraCmds ? ""
+}:
 with lib;
 let
-  paperless = if ocrLanguages == null then
-    paperlessPkg
-  else
-    (paperlessPkg.override {
-      tesseract = paperlessPkg.tesseract.override {
-        enableLanguages = ocrLanguages;
-      };
-    }).overrideDerivation (_: {
-      # `ocrLanguages` might be missing some languages required by the tests.
-      doCheck = false;
-    });
+  paperless =
+    if ocrLanguages == null then
+      paperlessPkg
+    else
+      (paperlessPkg.override {
+        tesseract = paperlessPkg.tesseract.override {
+          enableLanguages = ocrLanguages;
+        };
+      }).overrideDerivation (_: {
+        # `ocrLanguages` might be missing some languages required by the tests.
+        doCheck = false;
+      });
 
   envVars = (optionalAttrs (dataDir != null) {
     PAPERLESS_CONSUMPTION_DIR = "${dataDir}/consume";
     PAPERLESS_MEDIADIR = "${dataDir}/media";
     PAPERLESS_STATICDIR = "${dataDir}/static";
     PAPERLESS_DBDIR = dataDir;
-  }) // config;
+  }
+  ) // config;
 
   envVarDefs = mapAttrsToList (n: v: ''export ${n}="${toString v}"'') envVars;
   setupEnvVars = builtins.concatStringsSep "\n" envVarDefs;
@@ -63,6 +69,6 @@ let
     exec python $paperlessSrc/manage.py "$@"
   '';
 in
-  runPaperless // {
-    inherit paperless setupEnv;
-  }
+runPaperless // {
+  inherit paperless setupEnv;
+}

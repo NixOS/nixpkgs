@@ -1,11 +1,17 @@
-{ stdenv, buildGoPackage, fetchurl
-, cmake, xz, which, autoconf
-, ncurses6, libedit, libunwind
+{ stdenv
+, buildGoPackage
+, fetchurl
+, cmake
+, xz
+, which
+, autoconf
+, ncurses6
+, libedit
+, libunwind
 }:
-
 let
   darwinDeps = [ libunwind libedit ];
-  linuxDeps  = [ ncurses6 ];
+  linuxDeps = [ ncurses6 ];
 
   buildInputs = if stdenv.isDarwin then darwinDeps else linuxDeps;
   nativeBuildInputs = [ cmake xz which autoconf ];
@@ -57,10 +63,10 @@ buildGoPackage rec {
   outputs = [ "bin" "man" "out" ];
 
   meta = with stdenv.lib; {
-    homepage    = https://www.cockroachlabs.com;
+    homepage = https://www.cockroachlabs.com;
     description = "A scalable, survivable, strongly-consistent SQL database";
-    license     = licenses.asl20;
-    platforms   = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    license = licenses.asl20;
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ rushmorem thoughtpolice rvolosatovs ];
   };
 }

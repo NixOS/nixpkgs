@@ -15,7 +15,6 @@
 , tzdata
 , substituteAll
 }:
-
 let
   # Pytrainer needs a matplotlib with GTK backend.
   matplotlibGtk = python3.pkgs.matplotlib.override {
@@ -23,7 +22,6 @@ let
   };
 
 in
-
 python3.pkgs.buildPythonApplication rec {
   pname = "pytrainer";
   version = "2.0.1";

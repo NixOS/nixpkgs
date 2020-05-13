@@ -1,32 +1,46 @@
-{ stdenv, targetPackages
+{ stdenv
+, targetPackages
 
-# Build time
-, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
+  # Build time
+, fetchurl
+, pkgconfig
+, perl
+, texinfo
+, setupDebugInfoDirs
+, buildPackages
 
-# Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
+  # Run time
+, ncurses
+, readline
+, gmp
+, mpfr
+, expat
+, libipt
+, zlib
+, dejagnu
 
-, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
+, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin
+, python3 ? null
 , guile ? null
 , safePaths ? [
-   # $debugdir:$datadir/auto-load are whitelisted by default by GDB
-   "$debugdir" "$datadir/auto-load"
-   # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
-   targetPackages.stdenv.cc.cc.lib
+    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
+    "$debugdir"
+    "$datadir/auto-load"
+    # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
+    targetPackages.stdenv.cc.cc.lib
   ]
 }:
-
 let
   basename = "gdb-${version}";
   version = "9.1";
 in
-
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   name =
-    stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                              (stdenv.targetPlatform.config + "-")
+    stdenv.lib.optionalString
+      (stdenv.targetPlatform != stdenv.hostPlatform)
+      (stdenv.targetPlatform.config + "-")
     + basename;
 
   src = fetchurl {
@@ -34,10 +48,11 @@ stdenv.mkDerivation rec {
     sha256 = "0dqp1p7w836iwijg1zb4a784n0j4pyjiw5v6h8fg5lpx6b40x7k9";
   };
 
-  postPatch = if stdenv.isDarwin then ''
-    substituteInPlace gdb/darwin-nat.c \
-      --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
-  '' else null;
+  postPatch =
+    if stdenv.isDarwin then ''
+      substituteInPlace gdb/darwin-nat.c \
+        --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+    '' else null;
 
   patches = [
     ./debug-info-from-env.patch
@@ -73,15 +88,18 @@ stdenv.mkDerivation rec {
   configureScript = "../configure";
 
   configureFlags = with stdenv.lib; [
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-targets=all"
+    "--enable-64-bit-bfd"
     "--disable-install-libbfd"
-    "--disable-shared" "--enable-static"
+    "--disable-shared"
+    "--enable-static"
     "--with-system-zlib"
     "--with-system-readline"
 
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
-    "--with-expat" "--with-libexpat-prefix=${expat.dev}"
+    "--with-expat"
+    "--with-libexpat-prefix=${expat.dev}"
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ stdenv.lib.optional (!pythonSupport) "--without-python";
 

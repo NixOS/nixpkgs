@@ -1,5 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, libredirect
-, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
+{ lib
+, buildPythonPackage
+, fetchPypi
+, libredirect
+, case
+, pytest
+, boto3
+, moto
+, kombu
+, billiard
+, pytz
+, anyjson
+, amqp
+, eventlet
 }:
 
 buildPythonPackage rec {

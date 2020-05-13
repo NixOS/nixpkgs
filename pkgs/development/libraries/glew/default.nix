@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
+{ stdenv
+, fetchurl
+, libGLU
+, xlibsWrapper
+, libXmu
+, libXi
 }:
 
 with stdenv.lib;
@@ -49,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "An OpenGL extension loading library for C(++)";
     homepage = http://glew.sourceforge.net/;
     license = licenses.free; # different files under different licenses
-      #["BSD" "GLX" "SGI-B" "GPL2"]
+    #["BSD" "GLX" "SGI-B" "GPL2"]
     platforms = platforms.mesaPlatforms;
   };
 }

@@ -9,7 +9,8 @@
 , gawk
 , utillinux
 , runtimeShell
-, e2fsprogs }:
+, e2fsprogs
+}:
 
 rec {
   shellScript = name: text:
@@ -19,34 +20,38 @@ rec {
       ${text}
     '';
 
-  mkLayer = {
-    name,
-    contents ? [],
-  }:
-    runCommand "singularity-layer-${name}" {
-      inherit contents;
-    } ''
+  mkLayer =
+    { name
+    , contents ? [ ]
+    ,
+    }:
+    runCommand "singularity-layer-${name}"
+      {
+        inherit contents;
+      } ''
       mkdir $out
       for f in $contents ; do
         cp -ra $f $out/
       done
     '';
 
-  buildImage = {
-    name,
-    contents ? [],
-    diskSize ? 1024,
-    runScript ? "#!${stdenv.shell}\nexec /bin/sh",
-    runAsRoot ? null
-  }:
-    let layer = mkLayer {
-          inherit name;
-          contents = contents ++ [ bash runScriptFile ];
-          };
-        runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
-        runScriptFile = shellScript "run-script.sh" runScript;
-        result = vmTools.runInLinuxVM (
-          runCommand "singularity-image-${name}.img" {
+  buildImage =
+    { name
+    , contents ? [ ]
+    , diskSize ? 1024
+    , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
+    , runAsRoot ? null
+    }:
+    let
+      layer = mkLayer {
+        inherit name;
+        contents = contents ++ [ bash runScriptFile ];
+      };
+      runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
+      runScriptFile = shellScript "run-script.sh" runScript;
+      result = vmTools.runInLinuxVM (
+        runCommand "singularity-image-${name}.img"
+          {
             buildInputs = [ singularity e2fsprogs utillinux gawk ];
             layerClosure = writeReferencesToFile layer;
             preVM = vmTools.createEmptyImage {
@@ -98,7 +103,9 @@ rec {
             mkdir -p /var/singularity/mnt/{container,final,overlay,session,source}
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
             TMPDIR=$(pwd -P) singularity build $out ./img
-          '');
+          ''
+      );
 
-    in result;
+    in
+    result;
 }

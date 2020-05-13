@@ -1,6 +1,14 @@
-{ stdenv, fetchurl, fetchzip, libogg, libvorbis, libao, pkgconfig, curl
-, speex, flac }:
-
+{ stdenv
+, fetchurl
+, fetchzip
+, libogg
+, libvorbis
+, libao
+, pkgconfig
+, curl
+, speex
+, flac
+}:
 let
   debPatch = fetchzip {
     url = "mirror://debian/pool/main/v/vorbis-tools/vorbis-tools_1.4.0-11.debian.tar.xz";
@@ -34,4 +42,3 @@ stdenv.mkDerivation {
     platforms = platforms.all;
   };
 }
-

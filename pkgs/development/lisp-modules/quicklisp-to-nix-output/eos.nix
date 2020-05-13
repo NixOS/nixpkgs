@@ -16,7 +16,7 @@
 
   packageName = "eos";
 
-  asdFilesToKeep = ["eos.asd"];
+  asdFilesToKeep = [ "eos.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM eos DESCRIPTION UNMAINTAINED fork of 5AM, a test framework SHA256

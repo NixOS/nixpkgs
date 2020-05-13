@@ -10,15 +10,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-     glib
-     itstool
-     libxml2
+    glib
+    itstool
+    libxml2
 
-     mate.mate-desktop
+    mate.mate-desktop
 
-     vte
-     gtk3
-     dconf
+    vte
+    gtk3
+    dconf
   ];
 
   nativeBuildInputs = [

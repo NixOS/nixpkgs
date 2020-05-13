@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl}:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation {
   name = "surfraw-2.3.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Provides a fast unix command line interface to a variety of popular WWW search engines and other artifacts of power";
     homepage = https://gitlab.com/surfraw/Surfraw;
-    maintainers = [];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.publicDomain;
   };

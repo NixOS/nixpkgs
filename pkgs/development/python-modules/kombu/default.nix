@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , amqp
 , case
 , Pyro4
@@ -33,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Messaging library for Python";
-    homepage    = https://github.com/celery/kombu;
-    license     = licenses.bsd3;
+    homepage = https://github.com/celery/kombu;
+    license = licenses.bsd3;
   };
 }

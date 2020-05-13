@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
       # Note: fetchurl seems to be unhappy with openwrt git
       # server's URLs containing semicolons. Using the github mirror instead.
       url = "https://raw.githubusercontent.com/openwrt/openwrt/master/package/network/services/hostapd/patches/300-noscan.patch";
-      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";})
+      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";
+    })
   ];
 
   outputs = [ "out" "man" ];

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
       sha256 = "1n095lk94jq1rwi0l24g2wbgms7249wdd31n0ji895dr6755s93y";
     })
   ;
-  
+
   createFindlibDestdir = true;
 
   buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
@@ -34,11 +34,11 @@ stdenv.mkDerivation {
     ocamlfind install optcomp META _build/src/optcomp.{a,cma,cmxa,cmxs} _build/src/pa_optcomp.{cmi,cmx,mli}
   '';
 
-  meta =  {
+  meta = {
     homepage = https://github.com/diml/optcomp;
     description = "Optional compilation for OCaml with cpp-like directives";
     license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [
       stdenv.lib.maintainers.gal_bolle
     ];

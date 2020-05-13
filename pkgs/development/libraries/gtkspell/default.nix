@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk2, aspell, pkgconfig, enchant, intltool}:
+{ stdenv, fetchurl, gtk2, aspell, pkgconfig, enchant, intltool }:
 
 stdenv.mkDerivation {
   name = "gtkspell-2.0.16";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [aspell gtk2 enchant intltool];
+  buildInputs = [ aspell gtk2 enchant intltool ];
 
   meta = with stdenv.lib; {
     description = "Word-processor-style highlighting and replacement of misspelled words";

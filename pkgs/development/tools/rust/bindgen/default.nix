@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin,
-  runtimeShell }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, clang
+, llvmPackages
+, rustfmt
+, writeScriptBin
+, runtimeShell
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
@@ -40,11 +47,12 @@ rustPlatform.buildRustPackage rec {
       shift
       exec "$@"
     '';
-  in [
-    rustfmt
-    fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
-    clang
-  ];
+    in
+    [
+      rustfmt
+      fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
+      clang
+    ];
   preCheck = ''
     # for the ci folder, notably
     patchShebangs .

@@ -1,7 +1,22 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
-, qtbase, qtx11extras, qtsvg, makeWrapper
-, vulkan-loader, libglvnd, xorg, python3, python3Packages
-, bison, pcre, automake, autoconf, addOpenGLRunpath
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, mkDerivation
+, qtbase
+, qtx11extras
+, qtsvg
+, makeWrapper
+, vulkan-loader
+, libglvnd
+, xorg
+, python3
+, python3Packages
+, bison
+, pcre
+, automake
+, autoconf
+, addOpenGLRunpath
 }:
 let
   custom_swig = fetchFromGitHub {
@@ -24,7 +39,13 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python3
+    qtbase
+    qtsvg
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    qtx11extras
+    vulkan-loader
+    python3
   ]; # ++ (with pythonPackages; [pyside2 pyside2-tools shiboken2]);
   # TODO: figure out how to make cmake recognise pyside2
 
@@ -73,7 +94,7 @@ mkDerivation rec {
       of any application using Vulkan, D3D11, OpenGL or D3D12 across
       Windows 7 - 10, Linux or Android.
     '';
-    maintainers = [maintainers.jansol];
-    platforms = ["i686-linux" "x86_64-linux"];
+    maintainers = [ maintainers.jansol ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

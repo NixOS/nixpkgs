@@ -5,9 +5,9 @@ python3Packages.buildPythonApplication rec {
   version = "2.17";
 
   src = fetchFromGitHub {
-    owner  = "thp";
-    repo   = "urlwatch";
-    rev    = version;
+    owner = "thp";
+    repo = "urlwatch";
+    rev = version;
     sha256 = "1865p3yczgpq8gvgh4cpgbx2ibc1fwycd7pagga9sj8r3q0giqyk";
   };
 

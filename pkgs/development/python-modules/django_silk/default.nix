@@ -42,8 +42,17 @@ buildPythonPackage rec {
 
   buildInputs = [ mock ];
   propagatedBuildInputs = [
-    django pygments simplejson dateutil requests
-    sqlparse jinja2 autopep8 pytz pillow gprof2dot
+    django
+    pygments
+    simplejson
+    dateutil
+    requests
+    sqlparse
+    jinja2
+    autopep8
+    pytz
+    pillow
+    gprof2dot
   ];
 
   checkInputs = [ freezegun contextlib2 networkx pydot factory_boy ];

@@ -1,9 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui,
- xfconf, gtk2, exo, gnutls, libgcrypt }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, intltool
+, libxfce4util
+, xfce4-panel
+, libxfce4ui
+, xfconf
+, gtk2
+, exo
+, gnutls
+, libgcrypt
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-mailwatch-plugin";
+  p_name = "xfce4-mailwatch-plugin";
   ver_maj = "1.2";
   ver_min = "0";
 
@@ -14,8 +25,17 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel
-    xfconf gtk2 exo gnutls libgcrypt ];
+  buildInputs = [
+    intltool
+    libxfce4util
+    libxfce4ui
+    xfce4-panel
+    xfconf
+    gtk2
+    exo
+    gnutls
+    libgcrypt
+  ];
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

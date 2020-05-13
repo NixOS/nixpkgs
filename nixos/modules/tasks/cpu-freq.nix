@@ -1,12 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cpupower = config.boot.kernelPackages.cpupower;
   cfg = config.powerManagement;
 in
-
 {
   ###### interface
 
@@ -86,5 +84,5 @@ in
         };
       };
 
-  };
+    };
 }

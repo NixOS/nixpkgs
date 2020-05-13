@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, redland, pkgconfig, gmp, zlib, librdf_raptor2
-  , librdf_rasqal }:
+{ stdenv
+, fetchurl
+, redland
+, pkgconfig
+, gmp
+, zlib
+, librdf_raptor2
+, librdf_rasqal
+}:
 
 stdenv.mkDerivation rec {
   name = "redstore-0.5.4";

@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
   '';
 
-  meta =  with stdenv.lib; {
+  meta = with stdenv.lib; {
     description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
     homepage = https://github.com/elementary/gala;
     license = licenses.gpl3Plus;

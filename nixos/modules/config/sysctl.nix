@@ -1,7 +1,6 @@
 { config, lib, ... }:
 
 with lib;
-
 let
 
   sysctlOption = mkOptionType {
@@ -10,18 +9,17 @@ let
       let
         checkType = x: isBool x || isString x || isInt x || x == null;
       in
-        checkType val || (val._type or "" == "override" && checkType val.content);
+      checkType val || (val._type or "" == "override" && checkType val.content);
     merge = loc: defs: mergeOneOption loc (filterOverrides defs);
   };
 
 in
-
 {
 
   options = {
 
     boot.kernel.sysctl = mkOption {
-      default = {};
+      default = { };
       example = literalExample ''
         { "net.ipv4.tcp_syncookies" = false; "vm.swappiness" = 60; }
       '';
@@ -43,12 +41,17 @@ in
   config = {
 
     environment.etc."sysctl.d/60-nixos.conf".text =
-      concatStrings (mapAttrsToList (n: v:
-        optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
-      ) config.boot.kernel.sysctl);
+      concatStrings (
+        mapAttrsToList
+          (n: v:
+            optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
+          )
+          config.boot.kernel.sysctl
+      );
 
     systemd.services.systemd-sysctl =
-      { wantedBy = [ "multi-user.target" ];
+      {
+        wantedBy = [ "multi-user.target" ];
         restartTriggers = [ config.environment.etc."sysctl.d/60-nixos.conf".source ];
       };
 

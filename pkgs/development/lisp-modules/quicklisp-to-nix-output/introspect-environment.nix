@@ -14,7 +14,7 @@ rec {
 
   packageName = "introspect-environment";
 
-  asdFilesToKeep = ["introspect-environment.asd"];
+  asdFilesToKeep = [ "introspect-environment.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM introspect-environment DESCRIPTION

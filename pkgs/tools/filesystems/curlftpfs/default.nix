@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fuse, curl, pkgconfig, glib, zlib}:
+{ stdenv, fetchurl, fuse, curl, pkgconfig, glib, zlib }:
 
 stdenv.mkDerivation {
   name = "curlftpfs-0.9.2";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "0n397hmv21jsr1j7zx3m21i7ryscdhkdsyqpvvns12q7qwwlgd2f";
   };
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [fuse curl glib zlib];
+  buildInputs = [ fuse curl glib zlib ];
 
   doCheck = false; # fails, doesn't work well too, btw
 

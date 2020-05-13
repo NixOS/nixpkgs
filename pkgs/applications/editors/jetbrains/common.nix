@@ -1,22 +1,32 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, patchelf, p7zip
-, coreutils, gnugrep, which, git, unzip, libsecret, libnotify
+{ stdenv
+, lib
+, makeDesktopItem
+, makeWrapper
+, patchelf
+, p7zip
+, coreutils
+, gnugrep
+, which
+, git
+, unzip
+, libsecret
+, libnotify
 }:
 
 { name, product, version, src, wmClass, jdk, meta }:
 
 with stdenv.lib;
-
-let loName = toLower product;
-    hiName = toUpper product;
-    execName = concatStringsSep "-" (init (splitString "-" name));
+let
+  loName = toLower product;
+  hiName = toUpper product;
+  execName = concatStringsSep "-" (init (splitString "-" name));
 in
-
 with stdenv; lib.makeOverridable mkDerivation rec {
   inherit name src meta;
   desktopItem = makeDesktopItem {
     name = execName;
     exec = execName;
-    comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
+    comment = lib.replaceChars [ "\n" ] [ " " ] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
     categories = "Application;Development;";
@@ -29,28 +39,28 @@ with stdenv; lib.makeOverridable mkDerivation rec {
   nativeBuildInputs = [ makeWrapper patchelf p7zip unzip ];
 
   patchPhase = lib.optionalString (!stdenv.isDarwin) ''
-      get_file_size() {
-        local fname="$1"
-        echo $(ls -l $fname | cut -d ' ' -f5)
-      }
+    get_file_size() {
+      local fname="$1"
+      echo $(ls -l $fname | cut -d ' ' -f5)
+    }
 
-      munge_size_hack() {
-        local fname="$1"
-        local size="$2"
-        strip $fname
-        truncate --size=$size $fname
-      }
+    munge_size_hack() {
+      local fname="$1"
+      local size="$2"
+      strip $fname
+      truncate --size=$size $fname
+    }
 
-      interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-      if [ "${stdenv.hostPlatform.system}" == "x86_64-linux" ]; then
-        target_size=$(get_file_size bin/fsnotifier64)
-        patchelf --set-interpreter "$interpreter" bin/fsnotifier64
-        munge_size_hack bin/fsnotifier64 $target_size
-      else
-        target_size=$(get_file_size bin/fsnotifier)
-        patchelf --set-interpreter "$interpreter" bin/fsnotifier
-        munge_size_hack bin/fsnotifier $target_size
-      fi
+    interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+    if [ "${stdenv.hostPlatform.system}" == "x86_64-linux" ]; then
+      target_size=$(get_file_size bin/fsnotifier64)
+      patchelf --set-interpreter "$interpreter" bin/fsnotifier64
+      munge_size_hack bin/fsnotifier64 $target_size
+    else
+      target_size=$(get_file_size bin/fsnotifier)
+      patchelf --set-interpreter "$interpreter" bin/fsnotifier
+      munge_size_hack bin/fsnotifier $target_size
+    fi
   '';
 
   installPhase = ''
@@ -65,10 +75,11 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
       --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
-        # Some internals want libstdc++.so.6
-        stdenv.cc.cc.lib libsecret
-        libnotify
-      ]}" \
+      # Some internals want libstdc++.so.6
+      stdenv.cc.cc.lib
+      libsecret
+      libnotify
+    ]}" \
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \
       --set ANDROID_JAVA_HOME "$jdk" \

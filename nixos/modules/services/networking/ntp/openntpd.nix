@@ -1,7 +1,6 @@
 { pkgs, lib, config, options, ... }:
 
 with lib;
-
 let
   cfg = config.services.openntpd;
 

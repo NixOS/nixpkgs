@@ -1,8 +1,11 @@
-{ stdenv, fetchurl
-, ocaml, findlib, pkgconfig, perl
+{ stdenv
+, fetchurl
+, ocaml
+, findlib
+, pkgconfig
+, perl
 , gmp
 }:
-
 let source =
   if stdenv.lib.versionAtLeast ocaml.version "4.02"
   then {
@@ -15,7 +18,6 @@ let source =
     sha256 = "1mx3nxcn5h33qhx4gbg0hgvvydwlwdvdhqcnvfwnmf9jy3b8frll";
   };
 in
-
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-zarith-${version}";
   inherit (source) version;
@@ -33,8 +35,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fast, arbitrary precision OCaml integers";
-    homepage    = "http://forge.ocamlcore.org/projects/zarith";
-    license     = licenses.lgpl2;
+    homepage = "http://forge.ocamlcore.org/projects/zarith";
+    license = licenses.lgpl2;
     inherit (ocaml.meta) platforms;
     maintainers = with maintainers; [ thoughtpolice vbgl ];
   };

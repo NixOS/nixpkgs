@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchurl, pkgconfig, libcdio, libxml2, popt
-, libiconv, darwin }:
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
+, libcdio
+, libxml2
+, popt
+, libiconv
+, darwin
+}:
 
 stdenv.mkDerivation rec {
   name = "vcdimager-2.0.1";
@@ -12,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ libxml2 popt libiconv ]
-             ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit DiskArbitration ]);
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit DiskArbitration ]);
 
   propagatedBuildInputs = [ libcdio ];
 

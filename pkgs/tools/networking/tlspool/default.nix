@@ -1,14 +1,24 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig, arpa2cm
-, openldap, p11-kit, unbound, libtasn1, db, openssl, quickder, libkrb5, ldns, gnutls-kdh
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, arpa2cm
+, openldap
+, p11-kit
+, unbound
+, libtasn1
+, db
+, openssl
+, quickder
+, libkrb5
+, ldns
+, gnutls-kdh
 , softhsm
 }:
-
 let
   pname = "tlspool";
   version = "20180227";
 in
-
 stdenv.mkDerivation {
   name = "${pname}-${version}";
   src = fetchFromGitHub {
@@ -19,11 +29,22 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig arpa2cm
+    cmake
+    pkgconfig
+    arpa2cm
   ];
 
   buildInputs = [
-    openldap p11-kit unbound libtasn1 db openssl quickder libkrb5 ldns gnutls-kdh
+    openldap
+    p11-kit
+    unbound
+    libtasn1
+    db
+    openssl
+    quickder
+    libkrb5
+    ldns
+    gnutls-kdh
   ];
 
   postPatch = ''

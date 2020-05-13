@@ -1,15 +1,26 @@
-{ stdenv, pkgsBuildBuild, buildPackages
-, fetchpatch, fetchurl, makeWrapper, gawk, pkgconfig
-, libffi, libtool, readline, gmp, boehmgc, libunistring
+{ stdenv
+, pkgsBuildBuild
+, buildPackages
+, fetchpatch
+, fetchurl
+, makeWrapper
+, gawk
+, pkgconfig
+, libffi
+, libtool
+, readline
+, gmp
+, boehmgc
+, libunistring
 , coverageAnalysis ? null
 }:
 
 # Do either a coverage analysis build or a standard build.
-(if coverageAnalysis != null
- then coverageAnalysis
- else stdenv.mkDerivation)
-
-(rec {
+(
+  if coverageAnalysis != null
+  then coverageAnalysis
+  else stdenv.mkDerivation
+) (rec {
   name = "guile-2.0.13";
 
   src = fetchurl {
@@ -21,24 +32,31 @@
   setOutputFlags = false; # $dev gets into the library otherwise
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-                           pkgsBuildBuild.guile_2_0;
+  ++
+  stdenv.lib.optional
+    (stdenv.hostPlatform != stdenv.buildPlatform)
+    pkgsBuildBuild.guile_2_0;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
 
   propagatedBuildInputs = [
-    gmp boehmgc
+    gmp
+    boehmgc
 
     # XXX: These ones aren't normally needed here, but `libguile*.la' has '-l'
     # flags for them without corresponding '-L' flags. Adding them here will add
     # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
     # see below.
-    libtool libunistring
+    libtool
+    libunistring
   ];
 
   enableParallelBuilding = true;
 
-  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch
+  patches = [
+    ./disable-gc-sensitive-tests.patch
+    ./eai_system.patch
+    ./clang.patch
     (fetchpatch {
       # Fixes stability issues with 00-repl-server.test
       url = "https://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
@@ -46,14 +64,14 @@
     })
     ./riscv.patch
   ] ++
-    (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
-    ++ stdenv.lib.optionals stdenv.isDarwin [
-      (fetchpatch {
-        url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
-        sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
-      })
-      ./filter-mkostemp-darwin.patch
-    ];
+  (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
+      sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
+    })
+    ./filter-mkostemp-darwin.patch
+  ];
 
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
@@ -62,27 +80,27 @@
   LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
   configureFlags = [ "--with-libreadline-prefix" ]
-    ++ stdenv.lib.optionals stdenv.isSunOS [
-      # Make sure the right <gmp.h> is found, and not the incompatible
-      # /usr/include/mp.h from OpenSolaris.  See
-      # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
-      # for details.
-      "--with-libgmp-prefix=${gmp.dev}"
+  ++ stdenv.lib.optionals stdenv.isSunOS [
+    # Make sure the right <gmp.h> is found, and not the incompatible
+    # /usr/include/mp.h from OpenSolaris.  See
+    # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+    # for details.
+    "--with-libgmp-prefix=${gmp.dev}"
 
-      # Same for these (?).
-      "--with-libreadline-prefix=${readline.dev}"
-      "--with-libunistring-prefix=${libunistring}"
+    # Same for these (?).
+    "--with-libreadline-prefix=${readline.dev}"
+    "--with-libunistring-prefix=${libunistring}"
 
-      # See below.
-      "--without-threads"
-    ];
+    # See below.
+    "--without-threads"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
   ''
-    # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
-    # why `--with-libunistring-prefix' and similar options coming from
-    # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
+  # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
+  # why `--with-libunistring-prefix' and similar options coming from
+  # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
   + ''
     sed -i "$out/lib/pkgconfig/guile"-*.pc    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
@@ -101,10 +119,10 @@
 
   meta = {
     description = "Embeddable Scheme implementation";
-    homepage    = https://www.gnu.org/software/guile/;
-    license     = stdenv.lib.licenses.lgpl3Plus;
+    homepage = https://www.gnu.org/software/guile/;
+    license = stdenv.lib.licenses.lgpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ ludo lovek323 ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.all;
 
     longDescription = ''
       GNU Guile is an implementation of the Scheme programming language, with
@@ -118,10 +136,11 @@
   };
 })
 
-//
+  //
 
 (stdenv.lib.optionalAttrs (!stdenv.isLinux) {
   # Work around <https://bugs.gnu.org/14201>.
   SHELL = stdenv.shell;
   CONFIG_SHELL = stdenv.shell;
-})
+}
+)

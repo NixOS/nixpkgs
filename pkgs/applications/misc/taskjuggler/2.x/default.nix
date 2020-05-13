@@ -1,6 +1,16 @@
-{stdenv, fetchurl,
-zlib, libpng, libjpeg, perl, expat, qt3,
-libX11, libXext, libSM, libICE,
+{ stdenv
+, fetchurl
+, zlib
+, libpng
+, libjpeg
+, perl
+, expat
+, qt3
+, libX11
+, libXext
+, libSM
+, libICE
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,8 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [zlib libpng libX11 libXext libSM libICE perl expat libjpeg]
-    ;
+    [ zlib libpng libX11 libXext libSM libICE perl expat libjpeg ];
 
   patches = [ ./timezone-glibc.patch ];
 
@@ -45,7 +54,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--without-arts" "--disable-docs"
+    "--without-arts"
+    "--disable-docs"
     "--x-includes=${libX11.dev}/include"
     "--x-libraries=${libX11.out}/lib"
     "--with-qt-dir=${qt3}"

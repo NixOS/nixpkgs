@@ -1,5 +1,16 @@
-{ coreutils, dpkg, fetchurl, file, ghostscript, gnugrep, gnused,
-makeWrapper, perl, pkgs, stdenv, which }:
+{ coreutils
+, dpkg
+, fetchurl
+, file
+, ghostscript
+, gnugrep
+, gnused
+, makeWrapper
+, perl
+, pkgs
+, stdenv
+, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfcl8690cdwlpr";
@@ -27,8 +38,13 @@ stdenv.mkDerivation rec {
 
     wrapProgram $filter \
       --prefix PATH : ${stdenv.lib.makeBinPath [
-      coreutils file ghostscript gnugrep gnused which
-      ]}
+      coreutils
+      file
+      ghostscript
+      gnugrep
+      gnused
+      which
+    ]}
 
     # need to use i686 glibc here, these are 32bit proprietary binaries
     interpreter=${pkgs.pkgsi686Linux.glibc}/lib/ld-linux.so.2

@@ -1,4 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, zlib, openssl, libedit, pkgconfig, pam, autoreconfHook
+{ stdenv
+, fetchurl
+, fetchpatch
+, zlib
+, openssl
+, libedit
+, pkgconfig
+, pam
+, autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? true
@@ -6,9 +14,8 @@
 , kerberos
 , libfido2
 , withFIDO ? stdenv.hostPlatform.isUnix
-, linkOpenssl? true
+, linkOpenssl ? true
 }:
-
 let
 
   # **please** update this patch when you update to a new openssh release.
@@ -24,7 +31,8 @@ stdenv.mkDerivation rec {
   pname = "openssh";
   version = if hpnSupport then "8.1p1" else "8.2p1";
 
-  src = if hpnSupport then
+  src =
+    if hpnSupport then
       fetchurl {
         url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-8_1_P1.tar.gz";
         sha256 = "1xiv28df9c15h44fv1i93fq8rvkyapjj9vj985ndnw3xk1nvqjyd";
@@ -75,10 +83,10 @@ stdenv.mkDerivation rec {
     "--disable-strip"
     (if pam != null then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
-    ++ optional withFIDO "--with-security-key-builtin=yes"
-    ++ optional withKerberos (assert kerberos != null; "--with-kerberos5=${kerberos}")
-    ++ optional stdenv.isDarwin "--disable-libutil"
-    ++ optional (!linkOpenssl) "--without-openssl";
+  ++ optional withFIDO "--with-security-key-builtin=yes"
+  ++ optional withKerberos (assert kerberos != null; "--with-kerberos5=${kerberos}")
+  ++ optional stdenv.isDarwin "--disable-libutil"
+  ++ optional (!linkOpenssl) "--without-openssl";
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 

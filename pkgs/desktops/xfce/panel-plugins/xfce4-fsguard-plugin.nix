@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk2}:
+{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk2 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-fsguard-plugin";
+  p_name = "xfce4-fsguard-plugin";
   ver_maj = "1.0";
   ver_min = "2";
 

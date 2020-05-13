@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.slimserver;
 
-in {
+in
+{
   options = {
 
     services.slimserver = {
@@ -64,9 +64,8 @@ in {
         home = cfg.dataDir;
         group = "slimserver";
       };
-      groups.slimserver = {};
+      groups.slimserver = { };
     };
   };
 
 }
-

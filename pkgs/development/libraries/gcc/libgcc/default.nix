@@ -1,5 +1,7 @@
-{ stdenvNoLibs, buildPackages
-, gcc, glibc
+{ stdenvNoLibs
+, buildPackages
+, gcc
+, glibc
 , libiberty
 }:
 
@@ -112,7 +114,8 @@ stdenvNoLibs.mkDerivation rec {
     "--target=${stdenvNoLibs.hostPlatform.config}"
 
     "--disable-bootstrap"
-    "--disable-multilib" "--with-multilib-list="
+    "--disable-multilib"
+    "--with-multilib-list="
     "--enable-languages=c"
 
     "--disable-fixincludes"
@@ -128,8 +131,10 @@ stdenvNoLibs.mkDerivation rec {
     "--disable-vtable-verify"
 
     "--with-system-zlib"
-  ] ++ stdenvNoLibs.lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
-       "--with-glibc-version=${glibc.version}";
+  ] ++
+  stdenvNoLibs.lib.optional
+    (stdenvNoLibs.hostPlatform.libc == "glibc")
+    "--with-glibc-version=${glibc.version}";
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [

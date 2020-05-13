@@ -1,5 +1,15 @@
-{ fetchurl, fetchpatch, stdenv, autoreconfHook
-, perl, bison, flex, pkgconfig, glib, libxml2, libintl, libunwind
+{ fetchurl
+, fetchpatch
+, stdenv
+, autoreconfHook
+, perl
+, bison
+, flex
+, pkgconfig
+, glib
+, libxml2
+, libintl
+, libunwind
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls =
-      [ "${meta.homepage}/src/gstreamer/${name}.tar.xz"
+      [
+        "${meta.homepage}/src/gstreamer/${name}.tar.xz"
         "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
     sha256 = "1nkid1n2l3rrlmq5qrf5yy06grrkwjh3yxl5g0w58w0pih8allci";
@@ -43,8 +54,8 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
   ] ++
-    # See https://trac.macports.org/ticket/40783 for explanation of patch
-    stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
+  # See https://trac.macports.org/ticket/40783 for explanation of patch
+  stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
 
   postPatch = ''
     sed -i -e 's/^   /\t/' docs/gst/Makefile.in docs/libs/Makefile.in docs/plugins/Makefile.in

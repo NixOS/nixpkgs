@@ -24,7 +24,7 @@ buildPythonApplication rec {
 
   checkInputs = [ mock freezegun coverage green pylint ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = with stdenv.lib; {
     description = "A cli todo application compatible with the todo.txt format";

@@ -1,5 +1,4 @@
 { stdenv, lib, fetchurl }:
-
 let
 
   common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation (rec {
@@ -29,7 +28,8 @@ let
     };
   });
 
-in {
+in
+{
   tomcat7 = common {
     versionMajor = "7";
     versionMinor = "0.100";

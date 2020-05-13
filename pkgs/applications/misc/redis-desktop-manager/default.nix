@@ -1,9 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, fetchFromGitiles, pkgconfig, libssh2
-, qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
-, qtsvg, qttools, qtquick1, qtcharts
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchFromGitiles
+, pkgconfig
+, libssh2
+, qtbase
+, qtdeclarative
+, qtgraphicaleffects
+, qtimageformats
+, qtquickcontrols
+, qtsvg
+, qttools
+, qtquick1
+, qtcharts
 , qmake
 }:
-
 let
   breakpad_lss = fetchFromGitiles {
     url = "https://chromium.googlesource.com/linux-syscall-support";
@@ -12,7 +23,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation rec {
   pname = "redis-desktop-manager";
   version = "0.9.1";
@@ -27,8 +37,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
-    qtquick1 qtquickcontrols qtsvg qttools qtcharts
+    libssh2
+    qtbase
+    qtdeclarative
+    qtgraphicaleffects
+    qtimageformats
+    qtquick1
+    qtquickcontrols
+    qtsvg
+    qttools
+    qtcharts
   ];
 
   dontUseQmakeConfigure = true;
@@ -41,30 +59,30 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    srcdir=$PWD
+        srcdir=$PWD
 
-    cat <<EOF > src/version.h
-#ifndef RDM_VERSION
-    #define RDM_VERSION "${version}-120"
-#endif // !RDM_VERSION
-EOF
+        cat <<EOF > src/version.h
+    #ifndef RDM_VERSION
+        #define RDM_VERSION "${version}-120"
+    #endif // !RDM_VERSION
+    EOF
 
-    cd $srcdir/3rdparty/gbreakpad
-    cp -r ${breakpad_lss} src/third_party/lss
-    chmod +w -R src/third_party/lss
-    touch README
+        cd $srcdir/3rdparty/gbreakpad
+        cp -r ${breakpad_lss} src/third_party/lss
+        chmod +w -R src/third_party/lss
+        touch README
 
-    cd $srcdir/3rdparty/crashreporter
-    qmake CONFIG+=release DESTDIR="$srcdir/rdm/bin/linux/release" QMAKE_LFLAGS_RPATH=""
-    make
+        cd $srcdir/3rdparty/crashreporter
+        qmake CONFIG+=release DESTDIR="$srcdir/rdm/bin/linux/release" QMAKE_LFLAGS_RPATH=""
+        make
 
-    cd $srcdir/3rdparty/gbreakpad
-    ./configure
-    make
+        cd $srcdir/3rdparty/gbreakpad
+        ./configure
+        make
 
-    cd $srcdir/src
-    qmake
-    make
+        cd $srcdir/src
+        qmake
+        make
   '';
 
   installPhase = ''

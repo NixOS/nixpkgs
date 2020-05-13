@@ -1,7 +1,5 @@
-{stdenv, autoreconfHook, fetchFromGitHub, bison}:
-
+{ stdenv, autoreconfHook, fetchFromGitHub, bison }:
 let version = "1.1.1"; in
-
 stdenv.mkDerivation rec {
   pname = "tcpkali";
   inherit version;
@@ -12,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "09ky3cccaphcqc6nhfs00pps99lasmzc2pf5vk0gi8hlqbbhilxf";
   };
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ bison];
+  buildInputs = [ bison ];
   meta = {
     description = "High performance TCP and WebSocket load generator and sink";
     license = stdenv.lib.licenses.bsd2;

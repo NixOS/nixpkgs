@@ -19,12 +19,13 @@
 , pkgconfig
 , polkit
 , systemd
-, wrapGAppsHook }:
-
+, wrapGAppsHook
+}:
 let
   pname = "gnome-panel";
   version = "3.34.1";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "man" ];

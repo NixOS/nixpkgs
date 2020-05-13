@@ -1,5 +1,4 @@
-{stdenv, fetchFromGitHub, nim, htslib, pcre}:
-
+{ stdenv, fetchFromGitHub, nim, htslib, pcre }:
 let
   hts-nim = fetchFromGitHub {
     owner = "brentp";
@@ -15,7 +14,8 @@ let
     sha256 = "1ga7ckg21fzwwvh26jp2phn2h3pvkn8g8sm13dxif33rp471bv37";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "mosdepth";
   version = "0.2.6";
 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, automake, autoconf, libtool}:
+{ stdenv, fetchurl, automake, autoconf, libtool }:
 
 stdenv.mkDerivation {
   name = "libdnet-1.12";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     description = "Provides a simplified, portable interface to several low-level networking routines";
     homepage = https://github.com/dugsong/libdnet;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.marcweber];
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

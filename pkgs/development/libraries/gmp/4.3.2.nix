@@ -1,5 +1,4 @@
 { stdenv, fetchurl, m4, cxx ? true }:
-
 let self = stdenv.mkDerivation rec {
   name = "gmp-4.3.2";
 
@@ -72,4 +71,4 @@ let self = stdenv.mkDerivation rec {
     badPlatforms = [ "x86_64-darwin" ];
   };
 };
-  in self
+in self

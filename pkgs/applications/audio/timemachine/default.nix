@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, gtk2
-, libjack2, libsndfile
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, pkgconfig
+, gtk2
+, libjack2
+, libsndfile
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +19,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ autoconf automake gtk2 libjack2
-      libsndfile
-    ];
+  buildInputs = [
+    autoconf
+    automake
+    gtk2
+    libjack2
+    libsndfile
+  ];
 
   preConfigure = "./autogen.sh";
 
@@ -29,4 +39,3 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.nico202 ];
   };
 }
-

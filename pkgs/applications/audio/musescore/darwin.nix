@@ -1,10 +1,8 @@
 { stdenv, lib, fetchurl, undmg }:
-
 let
   versionComponents = [ "2" "1" ];
   appName = "MuseScore ${builtins.head versionComponents}";
 in
-
 with lib;
 
 stdenv.mkDerivation rec {
@@ -12,7 +10,7 @@ stdenv.mkDerivation rec {
   version = concatStringsSep "." versionComponents;
 
   src = fetchurl {
-    url =  "ftp://ftp.osuosl.org/pub/musescore/releases/MuseScore-${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
+    url = "ftp://ftp.osuosl.org/pub/musescore/releases/MuseScore-${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
     sha256 = "19xkaxlkbrhvfip6n3iw6q7463ngr6y5gfisrpjqg2xl2igyl795";
   };
 

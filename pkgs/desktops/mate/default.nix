@@ -1,5 +1,4 @@
 { newScope }:
-
 let
   callPackage = newScope self;
 
@@ -90,4 +89,5 @@ let
 
   };
 
-in self
+in
+self

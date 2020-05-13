@@ -1,15 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.lambdabot;
 
   rc = builtins.toFile "script.rc" cfg.script;
 
 in
-
 {
 
   ### configuration

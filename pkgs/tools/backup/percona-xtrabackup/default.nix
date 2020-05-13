@@ -1,6 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, boost, bison, curl, ncurses, openssl, xxd
-, libaio, libev, libgcrypt, libgpgerror, libtool, zlib
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, boost
+, bison
+, curl
+, ncurses
+, openssl
+, xxd
+, libaio
+, libev
+, libgcrypt
+, libgpgerror
+, libtool
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +30,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    boost bison curl ncurses openssl xxd
-    libaio libev libgcrypt libgpgerror libtool zlib
+    boost
+    bison
+    curl
+    ncurses
+    openssl
+    xxd
+    libaio
+    libev
+    libgcrypt
+    libgpgerror
+    libtool
+    zlib
   ];
 
   cmakeFlags = [

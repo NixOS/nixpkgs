@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.hadoop;
   hadoopConf = import ./conf.nix { hadoop = cfg; pkgs = pkgs; };
@@ -42,7 +42,8 @@ with lib;
           ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} namenode";
         };
       };
-    })
+    }
+    )
     (mkIf cfg.hdfs.datanode.enabled {
       systemd.services.hdfs-datanode = {
         description = "Hadoop HDFS DataNode";
@@ -58,16 +59,20 @@ with lib;
           ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} datanode";
         };
       };
-    })
-    (mkIf (
-        cfg.hdfs.namenode.enabled || cfg.hdfs.datanode.enabled
-    ) {
-      users.users.hdfs = {
-        description = "Hadoop HDFS user";
-        group = "hadoop";
-        uid = config.ids.uids.hdfs;
-      };
-    })
+    }
+    )
+    (
+      mkIf
+        (
+          cfg.hdfs.namenode.enabled || cfg.hdfs.datanode.enabled
+        ) {
+        users.users.hdfs = {
+          description = "Hadoop HDFS user";
+          group = "hadoop";
+          uid = config.ids.uids.hdfs;
+        };
+      }
+    )
 
   ];
 }

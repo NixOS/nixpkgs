@@ -1,7 +1,23 @@
-{ stdenv, makeWrapper, fetchFromBitbucket, fetchFromGitHub, pkgconfig
-, alsaLib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
-, libzip, rtaudio, rtmidi, speex, libsamplerate }:
-
+{ stdenv
+, makeWrapper
+, fetchFromBitbucket
+, fetchFromGitHub
+, pkgconfig
+, alsaLib
+, curl
+, glew
+, glfw
+, gtk2-x11
+, jansson
+, libjack2
+, libXext
+, libXi
+, libzip
+, rtaudio
+, rtmidi
+, speex
+, libsamplerate
+}:
 let
   # The package repo vendors some of the package dependencies as submodules.
   # Others are downloaded with `make deps`. Due to previous issues with the

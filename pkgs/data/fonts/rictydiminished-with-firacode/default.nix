@@ -45,4 +45,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ mt-caret ];
   };
 }
-

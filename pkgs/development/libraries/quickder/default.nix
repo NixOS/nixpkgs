@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, python2Packages, hexio
-, cmake, bash, arpa2cm, git, asn2quickder }:
+{ stdenv
+, fetchFromGitHub
+, python2Packages
+, hexio
+, cmake
+, bash
+, arpa2cm
+, git
+, asn2quickder
+}:
 
 stdenv.mkDerivation rec {
   pname = "quickder";

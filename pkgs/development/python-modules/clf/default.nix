@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, docopt, requests, pygments }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, docopt
+, requests
+, pygments
+}:
 
 buildPythonPackage rec {
   pname = "clf";

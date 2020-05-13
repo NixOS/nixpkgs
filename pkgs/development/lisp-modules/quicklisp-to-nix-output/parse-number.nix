@@ -16,7 +16,7 @@ rec {
 
   packageName = "parse-number";
 
-  asdFilesToKeep = ["parse-number.asd"];
+  asdFilesToKeep = [ "parse-number.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM parse-number DESCRIPTION Number parsing library SHA256

@@ -1,12 +1,37 @@
-{ stdenv, fetchurl, lib
-, autoconf, automake, gnum4, libtool, perl, uthash, pkgconfig, gettext
-, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, cairo, pango
-, readline, woff2, zeromq, libuninameslist
-, withSpiro ? false, libspiro
-, withGTK ? false, gtk2
+{ stdenv
+, fetchurl
+, lib
+, autoconf
+, automake
+, gnum4
+, libtool
+, perl
+, uthash
+, pkgconfig
+, gettext
+, python
+, freetype
+, zlib
+, glib
+, libungif
+, libpng
+, libjpeg
+, libtiff
+, libxml2
+, cairo
+, pango
+, readline
+, woff2
+, zeromq
+, libuninameslist
+, withSpiro ? false
+, libspiro
+, withGTK ? false
+, gtk2
 , withPython ? true
 , withExtras ? true
-, Carbon ? null, Cocoa ? null
+, Carbon ? null
+, Cocoa ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -32,14 +57,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf automake gnum4 libtool perl gettext ];
   buildInputs = [
-    readline uthash woff2 zeromq libuninameslist
-    python freetype zlib glib libungif libpng libjpeg libtiff libxml2
+    readline
+    uthash
+    woff2
+    zeromq
+    libuninameslist
+    python
+    freetype
+    zlib
+    glib
+    libungif
+    libpng
+    libjpeg
+    libtiff
+    libxml2
   ]
-    ++ lib.optionals withSpiro [libspiro]
-    ++ lib.optionals withGTK [ gtk2 cairo pango ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+  ++ lib.optionals withSpiro [ libspiro ]
+  ++ lib.optionals withGTK [ gtk2 cairo pango ]
+  ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
-    configureFlags = [ "--enable-woff2" ]
+  configureFlags = [ "--enable-woff2" ]
     ++ lib.optionals (!withPython) [ "--disable-python-scripting" "--disable-python-extension" ]
     ++ lib.optional withGTK "--enable-gtk2-use"
     ++ lib.optional (!withGTK) "--without-x"

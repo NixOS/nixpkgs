@@ -1,23 +1,22 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.xinetd;
 
-  configFile = pkgs.writeText "xinetd.conf"
-    ''
-      defaults
-      {
-        log_type       = SYSLOG daemon info
-        log_on_failure = HOST
-        log_on_success = PID HOST DURATION EXIT
-        ${cfg.extraDefaults}
-      }
+  configFile =
+    pkgs.writeText "xinetd.conf"
+      ''
+        defaults
+        {
+          log_type       = SYSLOG daemon info
+          log_on_failure = HOST
+          log_on_success = PID HOST DURATION EXIT
+          ${cfg.extraDefaults}
+        }
 
-      ${concatMapStrings makeService cfg.services}
-    '';
+        ${concatMapStrings makeService cfg.services}
+      '';
 
   makeService = srv:
     ''
@@ -37,7 +36,6 @@ let
     '';
 
 in
-
 {
 
   ###### interface
@@ -60,7 +58,7 @@ in
     };
 
     services.xinetd.services = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         A list of services provided by xinetd.
       '';

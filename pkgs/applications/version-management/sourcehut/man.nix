@@ -1,6 +1,10 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ stdenv
+, fetchgit
+, buildPythonPackage
 , python
-, srht, pygit2 }:
+, srht
+, pygit2
+}:
 
 buildPythonPackage rec {
   pname = "mansrht";

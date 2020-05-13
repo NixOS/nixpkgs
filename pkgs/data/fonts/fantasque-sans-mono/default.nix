@@ -1,9 +1,7 @@
 { lib, fetchzip }:
-
 let
   version = "1.8.0";
 in
-
 fetchzip rec {
   name = "fantasque-sans-mono-${version}";
 

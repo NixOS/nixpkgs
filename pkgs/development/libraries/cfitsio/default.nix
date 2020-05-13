@@ -1,7 +1,9 @@
-{ fetchurl, stdenv
+{ fetchurl
+, stdenv
 
-# Optional dependencies
-, bzip2 ? null }:
+  # Optional dependencies
+, bzip2 ? null
+}:
 stdenv.mkDerivation rec {
   pname = "cfitsio";
   version = "3.47";

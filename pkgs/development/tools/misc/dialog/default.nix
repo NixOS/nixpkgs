@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, ncurses
-, withLibrary ? false, libtool
+{ stdenv
+, fetchurl
+, ncurses
+, withLibrary ? false
+, libtool
 , unicodeSupport ? true
 , enableShared ? !stdenv.isDarwin
 }:

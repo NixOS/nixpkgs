@@ -16,19 +16,20 @@ mkDerivation rec {
 
   # Upstream install is mostly defunct. It hardcodes target.path and doesn't
   # install anything but the binary.
-  installPhase = if stdenv.isDarwin then ''
-    mkdir -p "$out"/{Applications,bin}
-    mv qMasterPassword.app "$out"/Applications/
-    ln -s ../Applications/qMasterPassword.app/Contents/MacOS/qMasterPassword "$out"/bin/qMasterPassword
-  '' else ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/{applications,doc/qMasterPassword,icons/qmasterpassword,icons/hicolor/512x512/apps}
-    mv qMasterPassword $out/bin
-    mv data/qMasterPassword.desktop $out/share/applications
-    mv LICENSE README.md $out/share/doc/qMasterPassword
-    mv data/icons/app_icon.png $out/share/icons/hicolor/512x512/apps/qmasterpassword.png
-    mv data/icons/* $out/share/icons/qmasterpassword
-  '';
+  installPhase =
+    if stdenv.isDarwin then ''
+      mkdir -p "$out"/{Applications,bin}
+      mv qMasterPassword.app "$out"/Applications/
+      ln -s ../Applications/qMasterPassword.app/Contents/MacOS/qMasterPassword "$out"/bin/qMasterPassword
+    '' else ''
+      mkdir -p $out/bin
+      mkdir -p $out/share/{applications,doc/qMasterPassword,icons/qmasterpassword,icons/hicolor/512x512/apps}
+      mv qMasterPassword $out/bin
+      mv data/qMasterPassword.desktop $out/share/applications
+      mv LICENSE README.md $out/share/doc/qMasterPassword
+      mv data/icons/app_icon.png $out/share/icons/hicolor/512x512/apps/qmasterpassword.png
+      mv data/icons/* $out/share/icons/qmasterpassword
+    '';
 
   meta = with stdenv.lib; {
     description = "Stateless Master Password Manager";

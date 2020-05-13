@@ -254,7 +254,7 @@ rec {
   };
 
   # https://developer.android.com/ndk/guides/abis#v7a
-  armv7a-android =  {
+  armv7a-android = {
     name = "armeabi-v7a";
     gcc = {
       arch = "armv7-a";
@@ -456,16 +456,16 @@ rec {
   };
 
   selectBySystem = system: {
-      i486-linux = pc32;
-      i586-linux = pc32;
-      i686-linux = pc32;
-      x86_64-linux = pc64;
-      armv5tel-linux = sheevaplug;
-      armv6l-linux = raspberrypi;
-      armv7a-linux = armv7l-hf-multiplatform;
-      armv7l-linux = armv7l-hf-multiplatform;
-      aarch64-linux = aarch64-multiplatform;
-      mipsel-linux = fuloong2f_n32;
-      powerpc64le-linux = powernv;
-    }.${system} or pcBase;
+    i486-linux = pc32;
+    i586-linux = pc32;
+    i686-linux = pc32;
+    x86_64-linux = pc64;
+    armv5tel-linux = sheevaplug;
+    armv6l-linux = raspberrypi;
+    armv7a-linux = armv7l-hf-multiplatform;
+    armv7l-linux = armv7l-hf-multiplatform;
+    aarch64-linux = aarch64-multiplatform;
+    mipsel-linux = fuloong2f_n32;
+    powerpc64le-linux = powernv;
+  }.${system} or pcBase;
 }

@@ -7,35 +7,36 @@ rec {
     { rootFile
     , generatePDF ? true # generate PDF, not DVI
     , generatePS ? false # generate PS in addition to DVI
-    , extraFiles ? []
+    , extraFiles ? [ ]
     , compressBlanksInIndex ? true
-    , packages ? []
-    , texPackages ? {}
+    , packages ? [ ]
+    , texPackages ? { }
     , copySources ? false
     }:
 
-    assert generatePDF -> !generatePS;
+      assert generatePDF -> !generatePS;
+      let
+        tex =
+          pkgs.texlive.combine
+            # always include basic stuff you need for LaTeX
+            ({ inherit (pkgs.texlive) scheme-basic; } // texPackages);
+      in
+      pkgs.stdenv.mkDerivation {
+        name = "doc";
 
-    let
-      tex = pkgs.texlive.combine
-        # always include basic stuff you need for LaTeX
-        ({inherit (pkgs.texlive) scheme-basic;} // texPackages);
-    in
+        builder = ./run-latex.sh;
+        copyIncludes = ./copy-includes.pl;
 
-    pkgs.stdenv.mkDerivation {
-      name = "doc";
+        inherit rootFile generatePDF generatePS extraFiles
+          compressBlanksInIndex copySources;
 
-      builder = ./run-latex.sh;
-      copyIncludes = ./copy-includes.pl;
+        includes =
+          map
+            (x: [ x.key (baseNameOf (toString x.key)) ])
+            (findLaTeXIncludes { inherit rootFile; });
 
-      inherit rootFile generatePDF generatePS extraFiles
-        compressBlanksInIndex copySources;
-
-      includes = map (x: [x.key (baseNameOf (toString x.key))])
-        (findLaTeXIncludes {inherit rootFile;});
-
-      buildInputs = [ tex pkgs.perl ] ++ packages;
-    };
+        buildInputs = [ tex pkgs.perl ] ++ packages;
+      };
 
 
   # Returns the closure of the "dependencies" of a LaTeX source file.
@@ -47,13 +48,11 @@ rec {
     }:
 
     builtins.genericClosure {
-      startSet = [{key = rootFile;}];
+      startSet = [{ key = rootFile; }];
 
       operator =
-        {key, ...}:
-
+        { key, ... }:
         let
-
           # `find-includes.pl' returns the dependencies of the current
           # source file (`key') as a list, e.g. [{type = "tex"; name =
           # "introduction.tex";} {type = "img"; name = "example"}].
@@ -61,7 +60,8 @@ rec {
           # what extensions we use to look for it.
           deps = import (pkgs.runCommand "latex-includes"
             { rootFile = baseNameOf (toString rootFile); src = key; }
-            "${pkgs.perl}/bin/perl ${./find-includes.pl}");
+            "${pkgs.perl}/bin/perl ${./find-includes.pl}"
+          );
 
           # Look for the dependencies of `key', trying various
           # extensions determined by the type of each dependency.
@@ -69,15 +69,19 @@ rec {
           foundDeps = dep: xs:
             let
               exts =
-                if dep.type == "img" then [".pdf" ".png" ".ps" ".jpg"]
-                else if dep.type == "tex" then [".tex" ""]
-                else [""];
-              fn = pkgs.lib.findFirst (fn: builtins.pathExists fn) null
+                if dep.type == "img" then [ ".pdf" ".png" ".ps" ".jpg" ]
+                else if dep.type == "tex" then [ ".tex" "" ]
+                else [ "" ];
+              fn = pkgs.lib.findFirst
+                (fn: builtins.pathExists fn)
+                null
                 (map (ext: dirOf key + ("/" + dep.name + ext)) exts);
-            in if fn != null then [{key = fn;}] ++ xs
-               else xs;
+            in
+            if fn != null then [{ key = fn; }] ++ xs
+            else xs;
 
-        in pkgs.lib.fold foundDeps [] deps;
+        in
+        pkgs.lib.fold foundDeps [ ] deps;
     };
 
 
@@ -86,19 +90,21 @@ rec {
     }:
 
     builtins.genericClosure {
-      startSet = [{key = rootFile;}];
+      startSet = [{ key = rootFile; }];
 
       operator =
-        {key, ...}:
-
+        { key, ... }:
         let
 
           deps = import (pkgs.runCommand "lhs2tex-includes"
             { src = key; }
-            "${pkgs.stdenv.bash}/bin/bash ${./find-lhs2tex-includes.sh}");
+            "${pkgs.stdenv.bash}/bin/bash ${./find-lhs2tex-includes.sh}"
+          );
 
-        in pkgs.lib.concatMap (x: if builtins.pathExists x then [{key = x;}] else [])
-                              (map (x: dirOf key + ("/" + x)) deps);
+        in
+        pkgs.lib.concatMap
+          (x: if builtins.pathExists x then [{ key = x; }] else [ ])
+          (map (x: dirOf key + ("/" + x)) deps);
     };
 
   dot2pdf =
@@ -110,7 +116,8 @@ rec {
       builder = ./dot2pdf.sh;
       inherit dotGraph fontsConf;
       buildInputs = [
-        pkgs.perl pkgs.graphviz
+        pkgs.perl
+        pkgs.graphviz
       ];
     };
 
@@ -124,20 +131,23 @@ rec {
       builder = ./dot2ps.sh;
       inherit dotGraph;
       buildInputs = [
-        pkgs.perl pkgs.graphviz pkgs.ghostscript
+        pkgs.perl
+        pkgs.graphviz
+        pkgs.ghostscript
       ];
     };
 
   lhs2tex =
-    { source, flags ? null } :
+    { source, flags ? null }:
     pkgs.stdenv.mkDerivation {
       name = "tex";
       builder = ./lhs2tex.sh;
       inherit source flags;
       buildInputs = [ pkgs.lhs2tex pkgs.perl ];
       copyIncludes = ./copy-includes.pl;
-      includes = map (x: [x.key (baseNameOf (toString x.key))])
-        (findLhs2TeXIncludes {rootFile = source;});
+      includes = map
+        (x: [ x.key (baseNameOf (toString x.key)) ])
+        (findLhs2TeXIncludes { rootFile = source; });
     };
 
   animateDot = dotGraph: nrFrames: pkgs.stdenv.mkDerivation {
@@ -179,7 +189,7 @@ rec {
       name = "png";
       inherit postscript;
 
-      buildInputs = [pkgs.imagemagick pkgs.ghostscript];
+      buildInputs = [ pkgs.imagemagick pkgs.ghostscript ];
 
       buildCommand = ''
         if test -d $postscript; then
@@ -207,7 +217,7 @@ rec {
   simpleTeXToPNG =
     { preamble ? null
     , body
-    , packages ? []
+    , packages ? [ ]
     }:
 
     postscriptToPNG {
@@ -226,7 +236,7 @@ rec {
   simpleTeXToPDF =
     { preamble ? null
     , body
-    , packages ? []
+    , packages ? [ ]
     }:
 
     runLaTeX {

@@ -1,14 +1,23 @@
-{ stdenv, fetchFromGitHub, sassc, autoreconfHook, pkgconfig, gtk3, gnome3
-, gtk-engine-murrine, optipng, inkscape }:
+{ stdenv
+, fetchFromGitHub
+, sassc
+, autoreconfHook
+, pkgconfig
+, gtk3
+, gnome3
+, gtk-engine-murrine
+, optipng
+, inkscape
+}:
 
 stdenv.mkDerivation rec {
   pname = "arc-theme";
   version = "20190917";
 
   src = fetchFromGitHub {
-    owner  = "arc-design";
-    repo   = pname;
-    rev    = version;
+    owner = "arc-design";
+    repo = pname;
+    rev = version;
     sha256 = "1qgpk4p2hi5hd4yy0hj93kq1vs0b32wb8qkaj1wi90c8gwddq5wa";
   };
 
@@ -44,9 +53,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
-    homepage    = https://github.com/arc-design/arc-theme;
-    license     = licenses.gpl3;
+    homepage = https://github.com/arc-design/arc-theme;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ simonvandel romildo ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

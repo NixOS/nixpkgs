@@ -1,9 +1,38 @@
-{ stdenv, mkDerivation, fetchFromGitHub, chromaprint
-, fftw, flac, faad2, glibcLocales, mp4v2
-, libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
-, libGLU, libxcb, lilv, lv2, opusfile
-, pkgconfig, portaudio, portmidi, protobuf, qtbase, qtscript, qtsvg
-, qtx11extras, rubberband, scons, sqlite, taglib, upower, vampSDK
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, chromaprint
+, fftw
+, flac
+, faad2
+, glibcLocales
+, mp4v2
+, libid3tag
+, libmad
+, libopus
+, libshout
+, libsndfile
+, libusb1
+, libvorbis
+, libGLU
+, libxcb
+, lilv
+, lv2
+, opusfile
+, pkgconfig
+, portaudio
+, portmidi
+, protobuf
+, qtbase
+, qtscript
+, qtsvg
+, qtx11extras
+, rubberband
+, scons
+, sqlite
+, taglib
+, upower
+, vampSDK
 }:
 
 mkDerivation rec {
@@ -18,9 +47,38 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout libsndfile
-    libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkgconfig portaudio portmidi protobuf qtbase qtscript qtsvg
-    qtx11extras rubberband scons sqlite taglib upower vampSDK
+    chromaprint
+    fftw
+    flac
+    faad2
+    glibcLocales
+    mp4v2
+    libid3tag
+    libmad
+    libopus
+    libshout
+    libsndfile
+    libusb1
+    libvorbis
+    libxcb
+    libGLU
+    lilv
+    lv2
+    opusfile
+    pkgconfig
+    portaudio
+    portmidi
+    protobuf
+    qtbase
+    qtscript
+    qtsvg
+    qtx11extras
+    rubberband
+    scons
+    sqlite
+    taglib
+    upower
+    vampSDK
   ];
 
   enableParallelBuilding = true;

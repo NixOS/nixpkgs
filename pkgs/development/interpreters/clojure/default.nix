@@ -17,18 +17,18 @@ stdenv.mkDerivation rec {
     let
       binPath = stdenv.lib.makeBinPath [ rlwrap jdk11 ];
     in
-      ''
-        mkdir -p $out/libexec
-        cp clojure-tools-${version}.jar $out/libexec
-        cp example-deps.edn $out
-        cp deps.edn $out
+    ''
+      mkdir -p $out/libexec
+      cp clojure-tools-${version}.jar $out/libexec
+      cp example-deps.edn $out
+      cp deps.edn $out
 
-        substituteInPlace clojure --replace PREFIX $out
+      substituteInPlace clojure --replace PREFIX $out
 
-        install -Dt $out/bin clj clojure
-        wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
-        wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
-      '';
+      install -Dt $out/bin clj clojure
+      wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
+      wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
+    '';
 
   doInstallCheck = true;
   installCheckPhase = ''

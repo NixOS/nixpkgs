@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub
-, buildPythonPackage, python-jose, pyjwt, requests, deprecated, httpretty }:
+{ stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, python-jose
+, pyjwt
+, requests
+, deprecated
+, httpretty
+}:
 
 buildPythonPackage rec {
   pname = "PyGithub";

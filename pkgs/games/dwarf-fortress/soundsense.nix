@@ -1,4 +1,6 @@
-{ stdenv, fetchzip, dos2unix
+{ stdenv
+, fetchzip
+, dos2unix
 , soundPack ? stdenv.mkDerivation {
     name = "soundsense-soundpack";
     src = fetchzip {
@@ -8,7 +10,8 @@
     installPhase = ''
       cp -r . $out
     '';
-}}:
+  }
+}:
 
 stdenv.mkDerivation rec {
   version = "2016-1_196";

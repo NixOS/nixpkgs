@@ -1,5 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast
-, flask, blinker, nose, mock, semantic-version }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, flask
+, blinker
+, nose
+, mock
+, semantic-version
+}:
 
 buildPythonPackage rec {
   pname = "Flask-Login";

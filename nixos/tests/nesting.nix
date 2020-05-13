@@ -1,6 +1,6 @@
 import ./make-test-python.nix {
   name = "nesting";
-  nodes =  {
+  nodes = {
     clone = { pkgs, ... }: {
       environment.systemPackages = [ pkgs.cowsay ];
       nesting.clone = [

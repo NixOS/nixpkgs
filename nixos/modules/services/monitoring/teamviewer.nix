@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.teamviewer;
 
 in
-
 {
 
   ###### interface
@@ -15,7 +13,7 @@ in
   options = {
 
     services.teamviewer.enable = mkEnableOption "TeamViewer daemon";
-      
+
   };
 
   ###### implementation

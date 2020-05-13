@@ -21,11 +21,13 @@ stdenv.mkDerivation {
     sha256 = "03wq526r80l2px797hd0n5m224a6jibwipcbsvps6l9h740xabzg";
   };
 
-  patches = [ (fetchpatch {
-    url = https://github.com/garrynewman/bootil/pull/22.patch;
-    name = "github-pull-request-22.patch";
-    sha256 = "1qf8wkv00pb9w1aa0dl89c8gm4rmzkxfl7hidj4gz0wpy7a24qa2";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = https://github.com/garrynewman/bootil/pull/22.patch;
+      name = "github-pull-request-22.patch";
+      sha256 = "1qf8wkv00pb9w1aa0dl89c8gm4rmzkxfl7hidj4gz0wpy7a24qa2";
+    })
+  ];
 
   # Avoid guessing where files end up. Just use current directory.
   postPatch = ''

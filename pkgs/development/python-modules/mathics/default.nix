@@ -14,9 +14,9 @@
 }:
 
 if (stdenv.lib.versionOlder django.version "1.8") ||
-   (stdenv.lib.versionAtLeast django.version "1.9")
-   then throw "mathics only supports django-1.8.x"
-   else buildPythonPackage rec {
+(stdenv.lib.versionAtLeast django.version "1.9")
+then throw "mathics only supports django-1.8.x"
+else buildPythonPackage rec {
   pname = "mathics";
   version = "0.9";
 

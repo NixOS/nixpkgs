@@ -37,7 +37,7 @@ stdenv.mkDerivation {
       (if versionAtLeast version "20170418" then gpl2 else qpl) /* generator */
       lgpl2 /* library */
     ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with maintainers; [ maggesi ];
   };
 }

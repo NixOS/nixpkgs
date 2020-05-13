@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
-, blockdiag, setuptools
+{ stdenv
+, fetchurl
+, buildPythonPackage
+, pep8
+, nose
+, unittest2
+, docutils
+, blockdiag
+, setuptools
 }:
 
 buildPythonPackage rec {

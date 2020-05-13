@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses}:
+{ stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation {
   name = "rogue-5.4.4";

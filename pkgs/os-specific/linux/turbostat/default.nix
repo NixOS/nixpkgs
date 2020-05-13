@@ -17,4 +17,3 @@ stdenv.mkDerivation {
     platforms = [ "i686-linux" "x86_64-linux" ]; # x86-specific
   };
 }
-

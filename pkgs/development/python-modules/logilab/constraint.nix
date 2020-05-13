@@ -10,7 +10,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    logilab_common six
+    logilab_common
+    six
   ];
 
 
@@ -19,4 +20,3 @@ buildPythonPackage rec {
     homepage = "https://www.logilab.org/project/logilab-database";
   };
 }
-

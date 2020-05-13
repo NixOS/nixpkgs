@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   inherit (pkgs) htpdate;
 
   cfg = config.services.htpdate;
 in
-
 {
 
   ###### interface

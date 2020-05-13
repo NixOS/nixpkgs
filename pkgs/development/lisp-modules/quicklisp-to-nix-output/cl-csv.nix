@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-csv";
 
-  asdFilesToKeep = ["cl-csv.asd"];
+  asdFilesToKeep = [ "cl-csv.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-csv DESCRIPTION

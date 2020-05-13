@@ -18,7 +18,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jsonpickle wrapt requests future botocore
+    jsonpickle
+    wrapt
+    requests
+    future
+    botocore
   ];
 
   meta = {

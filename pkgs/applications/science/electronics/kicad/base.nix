@@ -1,16 +1,45 @@
-{ lib, stdenv, fetchFromGitLab, cmake, libGLU, libGL, zlib, wxGTK
-, libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
-, doxygen, pcre, libpthreadstubs, libXdmcp, fetchpatch, lndir, callPackages
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, libGLU
+, libGL
+, zlib
+, wxGTK
+, libX11
+, gettext
+, glew
+, glm
+, cairo
+, curl
+, openssl
+, boost
+, pkgconfig
+, doxygen
+, pcre
+, libpthreadstubs
+, libXdmcp
+, fetchpatch
+, lndir
+, callPackages
 
 , pname ? "kicad"
 , stable ? true
 , baseName ? "kicad"
 , versions ? { }
-, oceSupport ? false, opencascade
-, withOCCT ? true, opencascade-occt
-, ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python, pythonPackages, wxPython
-, debug ? false, valgrind
+, oceSupport ? false
+, opencascade
+, withOCCT ? true
+, opencascade-occt
+, ngspiceSupport ? true
+, libngspice
+, scriptingSupport ? true
+, swig
+, python
+, pythonPackages
+, wxPython
+, debug ? false
+, valgrind
 , withI18n ? true
 }:
 
@@ -18,7 +47,6 @@ assert ngspiceSupport -> libngspice != null;
 
 with lib;
 let
-
   versionConfig = versions.${baseName};
   baseVersion = "${versions.${baseName}.kicadVersion.version}";
 
@@ -71,7 +99,9 @@ stdenv.mkDerivation rec {
       "-DKICAD_SCRIPTING_PYTHON3=ON"
       "-DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON"
     ]
-    ++ optional (!scriptingSupport)
+    ++
+    optional
+      (!scriptingSupport)
       "-DKICAD_SCRIPTING=OFF"
     ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON"
     ++ optional (!withOCE) "-DKICAD_USE_OCE=OFF"
@@ -94,8 +124,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake doxygen pkgconfig lndir ];
 
   buildInputs = [
-    libGLU libGL zlib libX11 wxGTK pcre libXdmcp gettext
-    glew glm libpthreadstubs cairo curl openssl boost
+    libGLU
+    libGL
+    zlib
+    libX11
+    wxGTK
+    pcre
+    libXdmcp
+    gettext
+    glew
+    glm
+    libpthreadstubs
+    cairo
+    curl
+    openssl
+    boost
   ]
   ++ optionals (scriptingSupport) [ swig python wxPython ]
   ++ optional (ngspiceSupport) libngspice

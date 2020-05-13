@@ -1,5 +1,17 @@
-{ mkDerivation, stdenv, fetchurl, qtbase, qmake, openjpeg, pkgconfig, fftw,
-  libpulseaudio, alsaLib, hamlib, libv4l, fftwFloat }:
+{ mkDerivation
+, stdenv
+, fetchurl
+, qtbase
+, qmake
+, openjpeg
+, pkgconfig
+, fftw
+, libpulseaudio
+, alsaLib
+, hamlib
+, libv4l
+, fftwFloat
+}:
 
 mkDerivation rec {
   version = "9.4.4";
@@ -17,8 +29,16 @@ mkDerivation rec {
     pkgconfig
   ];
 
-  buildInputs = [ qtbase openjpeg fftw libpulseaudio alsaLib hamlib libv4l
-                  fftwFloat ];
+  buildInputs = [
+    qtbase
+    openjpeg
+    fftw
+    libpulseaudio
+    alsaLib
+    hamlib
+    libv4l
+    fftwFloat
+  ];
 
   postInstall = ''
     # Install desktop icon
@@ -33,4 +53,3 @@ mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ hax404 ];
   };
 }
-

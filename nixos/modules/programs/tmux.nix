@@ -1,12 +1,11 @@
 { config, pkgs, lib, ... }:
-
 let
   inherit (lib) mkOption mkIf types;
 
   cfg = config.programs.tmux;
 
-  defaultKeyMode  = "emacs";
-  defaultResize   = 5;
+  defaultKeyMode = "emacs";
+  defaultResize = 5;
   defaultShortcut = "b";
   defaultTerminal = "screen";
 
@@ -20,31 +19,31 @@ let
     ${if cfg.newSession then "new-session" else ""}
 
     ${if cfg.reverseSplit then ''
-    bind v split-window -h
-    bind s split-window -v
+      bind v split-window -h
+      bind s split-window -v
     '' else ""}
 
     set -g status-keys ${cfg.keyMode}
     set -g mode-keys   ${cfg.keyMode}
 
     ${if cfg.keyMode == "vi" && cfg.customPaneNavigationAndResize then ''
-    bind h select-pane -L
-    bind j select-pane -D
-    bind k select-pane -U
-    bind l select-pane -R
+      bind h select-pane -L
+      bind j select-pane -D
+      bind k select-pane -U
+      bind l select-pane -R
 
-    bind -r H resize-pane -L ${toString cfg.resizeAmount}
-    bind -r J resize-pane -D ${toString cfg.resizeAmount}
-    bind -r K resize-pane -U ${toString cfg.resizeAmount}
-    bind -r L resize-pane -R ${toString cfg.resizeAmount}
+      bind -r H resize-pane -L ${toString cfg.resizeAmount}
+      bind -r J resize-pane -D ${toString cfg.resizeAmount}
+      bind -r K resize-pane -U ${toString cfg.resizeAmount}
+      bind -r L resize-pane -R ${toString cfg.resizeAmount}
     '' else ""}
 
     ${if (cfg.shortcut != defaultShortcut) then ''
-    # rebind main key: C-${cfg.shortcut}
-    unbind C-${defaultShortcut}
-    set -g prefix C-${cfg.shortcut}
-    bind ${cfg.shortcut} send-prefix
-    bind C-${cfg.shortcut} last-window
+      # rebind main key: C-${cfg.shortcut}
+      unbind C-${defaultShortcut}
+      set -g prefix C-${cfg.shortcut}
+      bind ${cfg.shortcut} send-prefix
+      bind C-${cfg.shortcut} last-window
     '' else ""}
 
     setw -g aggressive-resize ${boolToStr cfg.aggressiveResize}
@@ -55,7 +54,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
   ###### interface
 
   options = {

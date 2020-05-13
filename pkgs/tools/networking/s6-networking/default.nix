@@ -1,9 +1,11 @@
-{ stdenv, skawarePackages
+{ stdenv
+, skawarePackages
 
-# Whether to build the TLS/SSL tools and what library to use
-# acceptable values: "libressl", false
-# TODO: add bearssl
-, sslSupport ? "libressl" , libressl
+  # Whether to build the TLS/SSL tools and what library to use
+  # acceptable values: "libressl", false
+  # TODO: add bearssl
+, sslSupport ? "libressl"
+, libressl
 }:
 
 with skawarePackages;
@@ -49,11 +51,12 @@ buildPackage {
     "--with-dynlib=${s6-dns.lib}/lib"
   ]
   ++ (lib.optionals sslSupportEnabled [
-       "--enable-ssl=${sslSupport}"
-       "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
-       "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
-       "--with-dynlib=${lib.getLib sslLibs.${sslSupport}}/lib"
-     ]);
+    "--enable-ssl=${sslSupport}"
+    "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
+    "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
+    "--with-dynlib=${lib.getLib sslLibs.${sslSupport}}/lib"
+  ]
+  );
 
   postInstall = ''
     # remove all s6 executables from build directory

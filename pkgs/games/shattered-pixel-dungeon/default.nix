@@ -8,7 +8,6 @@
 , xorg
 , openal
 }:
-
 let
   pname = "shattered-pixel-dungeon";
   version = "0.7.5f";
@@ -46,7 +45,8 @@ let
     outputHash = "1k0v5scadw9ziq4dw2rckmh8x2xlmxslfsxmpw79zg78n3hvwhf1";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src postPatch;
 
   nativeBuildInputs = [ gradle_5 perl makeWrapper ];
@@ -75,4 +75,3 @@ in stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

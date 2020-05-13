@@ -1,4 +1,4 @@
-{stdenv, fetchgit, emacs}:
+{ stdenv, fetchgit, emacs }:
 
 stdenv.mkDerivation {
   name = "sunrise-commander-6r435";

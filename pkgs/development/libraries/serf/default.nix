@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, kerberos
-, pkgconfig, libiconv }:
+{ stdenv
+, fetchurl
+, apr
+, scons
+, openssl
+, aprutil
+, zlib
+, kerberos
+, pkgconfig
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   name = "serf-1.3.9";

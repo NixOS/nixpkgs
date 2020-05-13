@@ -11,7 +11,7 @@ let
     spec.containers = [{
       name = "redis";
       image = "redis";
-      args = ["--bind" "0.0.0.0"];
+      args = [ "--bind" "0.0.0.0" ];
       imagePullPolicy = "Never";
       ports = [{
         name = "redis-server";
@@ -25,8 +25,8 @@ let
     apiVersion = "v1";
     metadata.name = "redis";
     spec = {
-      ports = [{port = 6379; targetPort = 6379;}];
-      selector = {name = "redis";};
+      ports = [{ port = 6379; targetPort = 6379; }];
+      selector = { name = "redis"; };
     };
   });
 
@@ -122,7 +122,8 @@ let
       $machine1->succeed("kubectl exec -ti probe -- /bin/host redis.default.svc.cluster.local");
     '';
   };
-in {
+in
+{
   singlenode = mkKubernetesSingleNodeTest (base // singleNodeTest);
   multinode = mkKubernetesMultiNodeTest (base // multiNodeTest);
 }

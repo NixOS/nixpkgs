@@ -16,7 +16,7 @@ The system contains the definitions for the 'unification' machinery.'';
 
   packageName = "cl-unification";
 
-  asdFilesToKeep = ["cl-unification.asd"];
+  asdFilesToKeep = [ "cl-unification.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-unification DESCRIPTION The CL-UNIFICATION system.

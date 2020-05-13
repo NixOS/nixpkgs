@@ -1,10 +1,8 @@
 { stdenv, fetchurl, omake, ocaml, libtiff, libjpeg, libpng, giflib, findlib, libXpm, freetype, graphicsmagick, ghostscript }:
-
 let
   pname = "camlimages";
   version = "4.0.1";
 in
-
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
@@ -15,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml omake findlib graphicsmagick ghostscript ];
 
-  propagatedBuildInputs = [libtiff libjpeg libpng giflib freetype libXpm ];
+  propagatedBuildInputs = [ libtiff libjpeg libpng giflib freetype libXpm ];
 
   createFindlibDestdir = true;
 

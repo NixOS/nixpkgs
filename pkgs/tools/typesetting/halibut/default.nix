@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl}:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   name = "halibut-1.2";

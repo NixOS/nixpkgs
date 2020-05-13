@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.hardware.logitech;
 
-in {
+in
+{
   options.hardware.logitech = {
     enable = mkEnableOption "Logitech Devices";
 

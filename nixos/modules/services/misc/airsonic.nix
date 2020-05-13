@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.airsonic;
-in {
+in
+{
   options = {
 
     services.airsonic = {
@@ -74,7 +74,7 @@ in {
       transcoders = mkOption {
         type = types.listOf types.path;
         default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
-        defaultText= [ "\${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
+        defaultText = [ "\${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
         description = ''
           List of paths to transcoder executables that should be accessible
           from Airsonic. Symlinks will be created to each executable inside

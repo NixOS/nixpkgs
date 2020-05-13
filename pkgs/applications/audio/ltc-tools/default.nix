@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, pkgconfig, libltc, libsndfile, jack2}:
+{ stdenv, fetchFromGitHub, pkgconfig, libltc, libsndfile, jack2 }:
 
 stdenv.mkDerivation rec {
   pname = "ltc-tools";

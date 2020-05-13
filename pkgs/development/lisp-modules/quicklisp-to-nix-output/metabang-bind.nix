@@ -14,7 +14,7 @@ rec {
 
   packageName = "metabang-bind";
 
-  asdFilesToKeep = ["metabang-bind.asd"];
+  asdFilesToKeep = [ "metabang-bind.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM metabang-bind DESCRIPTION

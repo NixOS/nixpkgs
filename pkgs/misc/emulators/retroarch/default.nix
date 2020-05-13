@@ -1,6 +1,17 @@
-{ stdenv, fetchFromGitHub, which, pkgconfig, makeWrapper
-, ffmpeg, libGLU, libGL, freetype, libxml2, python3
-, libobjc, AppKit, Foundation
+{ stdenv
+, fetchFromGitHub
+, which
+, pkgconfig
+, makeWrapper
+, ffmpeg
+, libGLU
+, libGL
+, freetype
+, libxml2
+, python3
+, libobjc
+, AppKit
+, Foundation
 , alsaLib ? null
 , libdrm ? null
 , libpulseaudio ? null
@@ -12,13 +23,14 @@
 , mesa ? null
 , SDL2 ? null
 , udev ? null
-, enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
-, withVulkan ? stdenv.isLinux, vulkan-loader ? null
+, enableNvidiaCgToolkit ? false
+, nvidia_cg_toolkit ? null
+, withVulkan ? stdenv.isLinux
+, vulkan-loader ? null
 , fetchurl
 }:
 
 with stdenv.lib;
-
 let
 
   # ibtool is closed source so we have to download the blob
@@ -27,7 +39,8 @@ let
     sha256 = "13k1l628wy0rp6wxrpwr4g1m9c997d0q8ks50f8zhmh40l5j2sp8";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "retroarch-bare";
   version = "1.8.1";
 
@@ -39,14 +52,24 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ]
-                      ++ optional withVulkan makeWrapper;
+    ++ optional withVulkan makeWrapper;
 
   buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ]
-                ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
-                ++ optional withVulkan vulkan-loader
-                ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
-                ++ optionals stdenv.isLinux [ alsaLib libdrm libpulseaudio libv4l libX11
-                                              libXdmcp libXext libXxf86vm mesa udev ];
+    ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
+    ++ optional withVulkan vulkan-loader
+    ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
+    ++ optionals stdenv.isLinux [
+    alsaLib
+    libdrm
+    libpulseaudio
+    libv4l
+    libX11
+    libXdmcp
+    libXext
+    libXxf86vm
+    mesa
+    udev
+  ];
 
   enableParallelBuilding = true;
 

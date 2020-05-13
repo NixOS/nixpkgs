@@ -1,15 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.stunnel;
   yesNo = val: if val then "yes" else "no";
 
   verifyChainPathAssert = n: c: {
     assertion = c.verifyHostname == null || (c.verifyChain || c.verifyPeer);
-    message =  "stunnel: \"${n}\" client configuration - hostname verification " +
+    message = "stunnel: \"${n}\" client configuration - hostname verification " +
       "is not possible without either verifyChain or verifyPeer enabled";
   };
 
@@ -78,7 +76,6 @@ let
 
 
 in
-
 {
 
   ###### interface
@@ -170,8 +167,8 @@ in
     environment.systemPackages = [ pkgs.stunnel ];
 
     environment.etc."stunnel.cfg".text = ''
-      ${ if cfg.user != null then "setuid = ${cfg.user}" else "" }
-      ${ if cfg.group != null then "setgid = ${cfg.group}" else "" }
+      ${if cfg.user != null then "setuid = ${cfg.user}" else "" }
+      ${if cfg.group != null then "setgid = ${cfg.group}" else "" }
 
       debug = ${cfg.logLevel}
 
@@ -180,34 +177,36 @@ in
 
       ; ----- SERVER CONFIGURATIONS -----
       ${ lib.concatStringsSep "\n"
-           (lib.mapAttrsToList
-             (n: v: ''
-               [${n}]
-               accept = ${toString v.accept}
-               connect = ${toString v.connect}
-               cert = ${v.cert}
+        (lib.mapAttrsToList
+            (n: v: ''
+                [${n}]
+                accept = ${toString v.accept}
+                connect = ${toString v.connect}
+                cert = ${v.cert}
 
-             '')
-           cfg.servers)
+              '')
+            cfg.servers
+        )
       }
 
       ; ----- CLIENT CONFIGURATIONS -----
       ${ lib.concatStringsSep "\n"
-           (lib.mapAttrsToList
-             (n: v: ''
-               [${n}]
-               client = yes
-               accept = ${v.accept}
-               connect = ${v.connect}
-               verifyChain = ${yesNo v.verifyChain}
-               verifyPeer = ${yesNo v.verifyPeer}
-               ${optionalString (v.CAPath != null) "CApath = ${v.CAPath}"}
-               ${optionalString (v.CAFile != null) "CAFile = ${v.CAFile}"}
-               ${optionalString (v.verifyHostname != null) "checkHost = ${v.verifyHostname}"}
-               OCSPaia = yes
+        (lib.mapAttrsToList
+            (n: v: ''
+                [${n}]
+                client = yes
+                accept = ${v.accept}
+                connect = ${v.connect}
+                verifyChain = ${yesNo v.verifyChain}
+                verifyPeer = ${yesNo v.verifyPeer}
+                ${optionalString (v.CAPath != null) "CApath = ${v.CAPath}"}
+                ${optionalString (v.CAFile != null) "CAFile = ${v.CAFile}"}
+                ${optionalString (v.verifyHostname != null) "checkHost = ${v.verifyHostname}"}
+                OCSPaia = yes
 
-             '')
-           cfg.clients)
+              '')
+            cfg.clients
+        )
       }
     '';
 

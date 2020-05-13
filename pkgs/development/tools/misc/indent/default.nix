@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ texinfo ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString
+    stdenv.cc.isClang
     "-Wno-implicit-function-declaration";
 
   hardeningDisable = [ "format" ];

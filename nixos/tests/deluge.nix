@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "deluge";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ flokli ];
@@ -31,7 +31,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           };
           web = {
             enable = true;
-            port =  3142;
+            port = 3142;
           };
           authFile = pkgs.writeText "deluge-auth" ''
             localclient:a7bef72a890:10

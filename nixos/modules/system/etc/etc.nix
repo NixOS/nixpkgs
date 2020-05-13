@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   etc' = filter (f: f.enable) (attrValues config.environment.etc);
 
   etc = pkgs.stdenvNoCC.mkDerivation {
@@ -20,12 +18,11 @@ let
     sources = map (x: x.source) etc';
     targets = map (x: x.target) etc';
     modes = map (x: x.mode) etc';
-    users  = map (x: x.user) etc';
-    groups  = map (x: x.group) etc';
+    users = map (x: x.user) etc';
+    groups = map (x: x.group) etc';
   };
 
 in
-
 {
 
   ###### interface
@@ -33,7 +30,7 @@ in
   options = {
 
     environment.etc = mkOption {
-      default = {};
+      default = { };
       example = literalExample ''
         { example-configuration-file =
             { source = "/nix/store/.../etc/dir/file.conf.example";
@@ -48,7 +45,8 @@ in
 
       type = with types; loaOf (submodule (
         { name, config, ... }:
-        { options = {
+        {
+          options = {
 
             enable = mkOption {
               type = types.bool;
@@ -96,7 +94,7 @@ in
               description = ''
                 UID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
-                '';
+              '';
             };
 
             gid = mkOption {
@@ -134,10 +132,12 @@ in
             target = mkDefault name;
             source = mkIf (config.text != null) (
               let name' = "etc-" + baseNameOf name;
-              in mkDefault (pkgs.writeText name' config.text));
+              in mkDefault (pkgs.writeText name' config.text)
+            );
           };
 
-        }));
+        }
+      ));
 
     };
 
@@ -150,12 +150,13 @@ in
 
     system.build.etc = etc;
 
-    system.activationScripts.etc = stringAfter [ "users" "groups" ]
-      ''
-        # Set up the statically computed bits of /etc.
-        echo "setting up /etc..."
-        ${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} ${./setup-etc.pl} ${etc}/etc
-      '';
+    system.activationScripts.etc =
+      stringAfter [ "users" "groups" ]
+        ''
+          # Set up the statically computed bits of /etc.
+          echo "setting up /etc..."
+          ${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} ${./setup-etc.pl} ${etc}/etc
+        '';
 
   };
 

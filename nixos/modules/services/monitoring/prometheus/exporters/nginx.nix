@@ -1,7 +1,6 @@
 { config, lib, pkgs, options }:
 
 with lib;
-
 let
   cfg = config.services.prometheus.exporters.nginx;
 in
@@ -32,7 +31,7 @@ in
     };
     constLabels = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
         "label1=value1"
         "label2=value2"
@@ -59,7 +58,8 @@ in
     (mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
     (mkRemovedOptionModule [ "insecure" ] ''
       This option was replaced by 'prometheus.exporters.nginx.sslVerify'.
-    '')
+    ''
+    )
     ({ options.warnings = options.warnings; options.assertions = options.assertions; })
   ];
 }

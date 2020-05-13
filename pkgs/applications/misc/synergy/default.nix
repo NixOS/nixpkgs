@@ -1,7 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, cmake, openssl
-, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
-, xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
-, withGUI ? true, wrapQtAppsHook }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, openssl
+, ApplicationServices
+, Carbon
+, Cocoa
+, CoreServices
+, ScreenSaver
+, xlibsWrapper
+, libX11
+, libXi
+, libXtst
+, libXrandr
+, xinput
+, avahi-compat
+, withGUI ? true
+, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
@@ -14,7 +30,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jk60xw4h6s5crha89wk4y8rrf1f3bixgh5mzh3cq3xyrkba41gh";
   };
 
-  patches = [ ./build-tests.patch
+  patches = [
+    ./build-tests.patch
   ] ++ lib.optional stdenv.isDarwin ./macos_build_fix.patch;
 
   # Since the included gtest and gmock don't support clang and the
@@ -44,9 +61,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices Carbon Cocoa CoreServices ScreenSaver
+    ApplicationServices
+    Carbon
+    Cocoa
+    CoreServices
+    ScreenSaver
   ] ++ lib.optionals stdenv.isLinux [
-    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat
+    xlibsWrapper
+    libX11
+    libXi
+    libXtst
+    libXrandr
+    xinput
+    avahi-compat
   ];
 
   installPhase = ''

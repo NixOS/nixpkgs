@@ -4,7 +4,7 @@ buildGoPackage rec {
   pname = "go-bindata";
   version = "20151023-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "a0ff2567cfb70903282db057e799fd826784d41d";
-  
+
   goPackagePath = "github.com/jteeuwen/go-bindata";
 
   src = fetchgit {
@@ -16,10 +16,10 @@ buildGoPackage rec {
   excludedPackages = "testdata";
 
   meta = with stdenv.lib; {
-    homepage    = "https://github.com/jteeuwen/go-bindata";
+    homepage = "https://github.com/jteeuwen/go-bindata";
     description = "A small utility which generates Go code from any file, useful for embedding binary data in a Go program";
     maintainers = with maintainers; [ cstrahan ];
-    license     = licenses.cc0 ;
-    platforms   = platforms.all;
+    license = licenses.cc0;
+    platforms = platforms.all;
   };
 }

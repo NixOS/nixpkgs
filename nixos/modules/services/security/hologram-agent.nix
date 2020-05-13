@@ -1,14 +1,14 @@
-{pkgs, config, lib, ...}:
+{ pkgs, config, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.hologram-agent;
 
   cfgFile = pkgs.writeText "hologram-agent.json" (builtins.toJSON {
     host = cfg.dialAddress;
   });
-in {
+in
+{
   options = {
     services.hologram-agent = {
       enable = mkOption {
@@ -18,14 +18,14 @@ in {
       };
 
       dialAddress = mkOption {
-        type        = types.str;
-        default     = "localhost:3100";
+        type = types.str;
+        default = "localhost:3100";
         description = "Hologram server and port.";
       };
 
       httpPort = mkOption {
-        type        = types.str;
-        default     = "80";
+        type = types.str;
+        default = "80";
         description = "Port for metadata service to listen on.";
       };
 
@@ -41,9 +41,9 @@ in {
 
     systemd.services.hologram-agent = {
       description = "Provide EC2 instance credentials to machines outside of EC2";
-      after       = [ "network.target" ];
-      wantedBy    = [ "multi-user.target" ];
-      requires    = [ "network-link-dummy0.service" "network-addresses-dummy0.service" ]; 
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      requires = [ "network-link-dummy0.service" "network-addresses-dummy0.service" ];
       preStart = ''
         /run/current-system/sw/bin/rm -fv /run/hologram.sock
       '';

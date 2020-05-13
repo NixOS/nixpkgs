@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, glibcLocales, pytest }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, glibcLocales
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "ephem";

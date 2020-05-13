@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool for reverse engineering Android apk files";
-    homepage    = https://ibotpeaches.github.io/Apktool/;
-    license     = licenses.asl20;
+    homepage = https://ibotpeaches.github.io/Apktool/;
+    license = licenses.asl20;
     maintainers = with maintainers; [ offline ];
-    platforms   = with platforms; unix;
+    platforms = with platforms; unix;
   };
 
 }

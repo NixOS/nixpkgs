@@ -1,5 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake
-, qtscript, qtwebengine, gdal, proj, routino, quazip }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, qtscript
+, qtwebengine
+, gdal
+, proj
+, routino
+, quazip
+}:
 
 mkDerivation rec {
   pname = "qmapshack";

@@ -1,13 +1,22 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv
+, fetchurl
+, pkgconfig
 
-# Optional Dependencies
-, openssl ? null, zlib ? null
-, enableLibEv ? !stdenv.hostPlatform.isWindows, libev ? null
-, enableCAres ? !stdenv.hostPlatform.isWindows, c-ares ? null
-, enableHpack ? false, jansson ? null
-, enableAsioLib ? false, boost ? null
-, enableGetAssets ? false, libxml2 ? null
-, enableJemalloc ? false, jemalloc ? null
+  # Optional Dependencies
+, openssl ? null
+, zlib ? null
+, enableLibEv ? !stdenv.hostPlatform.isWindows
+, libev ? null
+, enableCAres ? !stdenv.hostPlatform.isWindows
+, c-ares ? null
+, enableHpack ? false
+, jansson ? null
+, enableAsioLib ? false
+, boost ? null
+, enableGetAssets ? false
+, libxml2 ? null
+, enableJemalloc ? false
+, jemalloc ? null
 , enableApp ? !stdenv.hostPlatform.isWindows
 }:
 
@@ -15,9 +24,7 @@ assert enableHpack -> jansson != null;
 assert enableAsioLib -> boost != null;
 assert enableGetAssets -> libxml2 != null;
 assert enableJemalloc -> jemalloc != null;
-
 let inherit (stdenv.lib) optional; in
-
 stdenv.mkDerivation rec {
   pname = "nghttp2";
   version = "1.40.0";

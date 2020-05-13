@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
 
@@ -10,7 +9,8 @@ let
     paths = map (p: "${p}/pcsc/drivers") config.services.pcscd.plugins;
   };
 
-in {
+in
+{
 
   ###### interface
 

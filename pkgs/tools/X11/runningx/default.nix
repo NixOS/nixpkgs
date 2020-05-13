@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   pname = "runningx";
   version = "1.0";
-  
+
   src = fetchurl {
     url = "http://www.fiction.net/blong/programs/mutt/autoview/RunningX.c";
     sha256 = "1mikkhrx6jsx716041qdy3nwjac08pxxvxyq2yablm8zg9hrip0d";

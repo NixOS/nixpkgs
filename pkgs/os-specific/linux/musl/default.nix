@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl
+{ stdenv
+, lib
+, fetchurl
 , linuxHeaders ? null
 , useBSDCompatHeaders ? true
 }:
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
   version = "1.1.24";
 
   src = fetchurl {
-    url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
+    url = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
     sha256 = "18r2a00k82hz0mqdvgm7crzc7305l36109c0j9yjmkxj2alcjw0k";
   };
 
@@ -112,9 +114,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An efficient, small, quality libc implementation";
-    homepage    = "http://www.musl-libc.org";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "http://www.musl-libc.org";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
 }

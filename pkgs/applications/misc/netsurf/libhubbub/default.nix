@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, perl
+{ stdenv
+, fetchurl
+, pkgconfig
+, perl
 , buildsystem
 , libparserutils
 }:
@@ -15,7 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ perl
+  buildInputs = [
+    perl
     buildsystem
     libparserutils
   ];

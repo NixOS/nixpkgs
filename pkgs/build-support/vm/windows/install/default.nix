@@ -1,13 +1,20 @@
-{ stdenv, runCommand, openssh, qemu, controller, mkCygwinImage
-, writeText, dosfstools, mtools
+{ stdenv
+, runCommand
+, openssh
+, qemu
+, controller
+, mkCygwinImage
+, writeText
+, dosfstools
+, mtools
 }:
 
 { isoFile
 , productKey
 }:
-
 let
-  bootstrapAfterLogin = runCommand "bootstrap.sh" {} ''
+  bootstrapAfterLogin = runCommand "bootstrap.sh"
+    { } ''
     cat > "$out" <<EOF
     mkdir -p ~/.ssh
     cat > ~/.ssh/authorized_keys <<PUBKEY
@@ -60,7 +67,8 @@ let
     ];
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "cygwin-base-vm";
   buildCommand = ''
     ${qemu}/bin/qemu-img create -f qcow2 winvm.img 2G

@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = https://forge.ocamlcore.org/projects/ocaml-gettext;
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

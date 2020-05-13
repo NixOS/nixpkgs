@@ -1,6 +1,8 @@
-{ stdenv, fetchurl
-, fixedPoint ? false, withCustomModes ? true }:
-
+{ stdenv
+, fetchurl
+, fixedPoint ? false
+, withCustomModes ? true
+}:
 let
   version = "1.3.1";
 in
@@ -16,7 +18,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   configureFlags = stdenv.lib.optional fixedPoint "--enable-fixed-point"
-                ++ stdenv.lib.optional withCustomModes "--enable-custom-modes";
+    ++ stdenv.lib.optional withCustomModes "--enable-custom-modes";
 
   doCheck = true;
 

@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
-    repo ="${pname}-fb";
+    repo = "${pname}-fb";
     rev = "v${version}";
     sha256 = "0cn9azi44hf59mp47207igv72kjbkyz4rsvgzmwbpz0s57b0hnab";
   };

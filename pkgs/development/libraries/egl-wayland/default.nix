@@ -9,7 +9,6 @@
 , libGL
 , wayland
 }:
-
 let
   eglexternalplatform = stdenv.mkDerivation {
     pname = "eglexternalplatform";
@@ -38,7 +37,8 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "egl-wayland";
   version = "1.1.4";
 

@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
+{ stdenv
+, fetchFromGitHub
+, gzip
+, popt
+, autoreconfHook
 , mailutils ? null
 }:
 
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
            -e 's,[a-z/]\+gunzip,${gzip}/bin/gunzip,' configure.ac
 
     ${stdenv.lib.optionalString (mailutils != null) ''
-    sed -i -e 's,[a-z/]\+mail,${mailutils}/bin/mail,' configure.ac
+      sed -i -e 's,[a-z/]\+mail,${mailutils}/bin/mail,' configure.ac
     ''}
   '';
 

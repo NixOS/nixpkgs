@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, coreutils, scrot, imagemagick, gawk
-, i3lock-color, getopt, fontconfig
+{ stdenv
+, fetchFromGitHub
+, coreutils
+, scrot
+, imagemagick
+, gawk
+, i3lock-color
+, getopt
+, fontconfig
 }:
 
 stdenv.mkDerivation rec {

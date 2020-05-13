@@ -3,9 +3,7 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   # GNOME initial setup's run is conditioned on whether
   # the gnome-initial-setup-done file exists in XDG_CONFIG_HOME
   # Because of this, every existing user will have initial setup
@@ -41,7 +39,6 @@ let
   };
 
 in
-
 {
 
   ###### interface

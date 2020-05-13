@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv
+, fetchurl
+, pkgconfig
 , buildsystem
 }:
 

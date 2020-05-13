@@ -12,8 +12,12 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    lilypond pygame python-ly sip
-    pyqt5 poppler-qt5
+    lilypond
+    pygame
+    python-ly
+    sip
+    pyqt5
+    poppler-qt5
     pyqtwebengine
   ];
 
@@ -24,7 +28,7 @@ buildPythonApplication rec {
 
   dontWrapQtApps = true;
   makeWrapperArgs = [
-      "\${qtWrapperArgs[@]}"
+    "\${qtWrapperArgs[@]}"
   ];
 
   meta = with lib; {

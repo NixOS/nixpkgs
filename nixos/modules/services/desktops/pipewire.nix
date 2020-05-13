@@ -2,12 +2,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.pipewire;
   packages = with pkgs; [ pipewire ];
 
-in {
+in
+{
   ###### interface
   options = {
     services.pipewire = {

@@ -5,22 +5,26 @@
 , libtool
 , libpcap
 
-# Optional Dependencies
+  # Optional Dependencies
 , zlib ? null
-, withJansson ? true, jansson ? null
-, withNflog ? true, libnetfilter_log ? null
-, withSQLite ? true, sqlite ? null
-, withPgSQL ? true, postgresql ? null
-, withMysql ? true, libmysqlclient ? null }:
+, withJansson ? true
+, jansson ? null
+, withNflog ? true
+, libnetfilter_log ? null
+, withSQLite ? true
+, sqlite ? null
+, withPgSQL ? true
+, postgresql ? null
+, withMysql ? true
+, libmysqlclient ? null
+}:
 
 assert withJansson -> jansson != null;
 assert withNflog -> libnetfilter_log != null;
 assert withSQLite -> sqlite != null;
 assert withPgSQL -> postgresql != null;
 assert withMysql -> libmysqlclient != null;
-
 let inherit (stdenv.lib) optional; in
-
 stdenv.mkDerivation rec {
   version = "1.7.3";
   pname = "pmacct";
@@ -43,10 +47,10 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-pcap-includes=${libpcap}/include"
   ] ++ optional withJansson "--enable-jansson"
-    ++ optional withNflog "--enable-nflog"
-    ++ optional withSQLite "--enable-sqlite3"
-    ++ optional withPgSQL "--enable-pgsql"
-    ++ optional withMysql "--enable-mysql";
+  ++ optional withNflog "--enable-nflog"
+  ++ optional withSQLite "--enable-sqlite3"
+  ++ optional withPgSQL "--enable-pgsql"
+  ++ optional withMysql "--enable-mysql";
 
   meta = with stdenv.lib; {
     description = "pmacct is a small set of multi-purpose passive network monitoring tools";

@@ -3,25 +3,24 @@
 # Please insert new packages *alphabetically*
 # in the OTHER PACKAGES section.
 { pkgs, haskellLib }:
-
 let
   removeLibraryHaskellDepends = pnames: depends:
     builtins.filter (e: !(builtins.elem (e.pname or "") pnames)) depends;
 in
-
 with haskellLib;
 
 self: super:
 
 ## GENERAL SETUP BASE PACKAGES
-
-  let # The stage 1 packages
-      stage1 = pkgs.lib.genAttrs super.ghc.stage1Packages (pkg: null);
-      # The stage 2 packages. Regenerate with ../compilers/ghcjs/gen-stage2.rb
-      stage2 = super.ghc.mkStage2 {
-        inherit (self) callPackage;
-      };
-  in stage1 // stage2 // {
+let
+  # The stage 1 packages
+  stage1 = pkgs.lib.genAttrs super.ghc.stage1Packages (pkg: null);
+  # The stage 2 packages. Regenerate with ../compilers/ghcjs/gen-stage2.rb
+  stage2 = super.ghc.mkStage2 {
+    inherit (self) callPackage;
+  };
+in
+stage1 // stage2 // {
 
   # GHCJS does not ship with the same core packages as GHC.
   # https://github.com/ghcjs/ghcjs/issues/676
@@ -50,7 +49,7 @@ self: super:
   terminfo = self.terminfo_0_4_1_4;
   xhtml = self.xhtml_3000_2_2_1;
 
-## OTHER PACKAGES
+  ## OTHER PACKAGES
 
   # haddock throws the error: No input file(s).
   fail = dontHaddock super.fail;
@@ -76,55 +75,88 @@ self: super:
   });
 
   # experimental
-  ghcjs-ffiqq = self.callPackage
-    ({ mkDerivation, base, template-haskell, ghcjs-base, split, containers, text, ghc-prim
-     }:
-     mkDerivation {
-       pname = "ghcjs-ffiqq";
-       version = "0.1.0.0";
-       src = pkgs.fetchFromGitHub {
-         owner = "ghcjs";
-         repo = "ghcjs-ffiqq";
-         rev = "b52338c2dcd3b0707bc8aff2e171411614d4aedb";
-         sha256 = "08zxfm1i6zb7n8vbz3dywdy67vkixfyw48580rwfp48rl1s2z1c7";
-       };
-       libraryHaskellDepends = [
-         base template-haskell ghcjs-base split containers text ghc-prim
-       ];
-       description = "FFI QuasiQuoter for GHCJS";
-       license = pkgs.stdenv.lib.licenses.mit;
-     }) {};
+  ghcjs-ffiqq =
+    self.callPackage
+      ({ mkDerivation
+       , base
+       , template-haskell
+       , ghcjs-base
+       , split
+       , containers
+       , text
+       , ghc-prim
+       }:
+        mkDerivation {
+          pname = "ghcjs-ffiqq";
+          version = "0.1.0.0";
+          src = pkgs.fetchFromGitHub {
+            owner = "ghcjs";
+            repo = "ghcjs-ffiqq";
+            rev = "b52338c2dcd3b0707bc8aff2e171411614d4aedb";
+            sha256 = "08zxfm1i6zb7n8vbz3dywdy67vkixfyw48580rwfp48rl1s2z1c7";
+          };
+          libraryHaskellDepends = [
+            base
+            template-haskell
+            ghcjs-base
+            split
+            containers
+            text
+            ghc-prim
+          ];
+          description = "FFI QuasiQuoter for GHCJS";
+          license = pkgs.stdenv.lib.licenses.mit;
+        }
+      ) { };
   # experimental
-  ghcjs-vdom = self.callPackage
-    ({ mkDerivation, base, ghc-prim, ghcjs-ffiqq, ghcjs-base, ghcjs-prim
-      , containers, split, template-haskell
-    }:
-    mkDerivation rec {
-      pname = "ghcjs-vdom";
-      version = "0.2.0.0";
-      src = pkgs.fetchFromGitHub {
-        owner = "ghcjs";
-        repo = pname;
-        rev = "1c1175ba22eca6d7efa96f42a72290ade193c148";
-        sha256 = "0c6l1dk2anvz94yy5qblrfh2iv495rjq4qmhlycc24dvd02f7n9m";
-      };
-      libraryHaskellDepends = [
-        base ghc-prim ghcjs-ffiqq ghcjs-base ghcjs-prim containers split
-        template-haskell
-      ];
-      license = pkgs.stdenv.lib.licenses.mit;
-      description = "bindings for https://github.com/Matt-Esch/virtual-dom";
-    }) {};
+  ghcjs-vdom =
+    self.callPackage
+      ({ mkDerivation
+       , base
+       , ghc-prim
+       , ghcjs-ffiqq
+       , ghcjs-base
+       , ghcjs-prim
+       , containers
+       , split
+       , template-haskell
+       }:
+        mkDerivation rec {
+          pname = "ghcjs-vdom";
+          version = "0.2.0.0";
+          src = pkgs.fetchFromGitHub {
+            owner = "ghcjs";
+            repo = pname;
+            rev = "1c1175ba22eca6d7efa96f42a72290ade193c148";
+            sha256 = "0c6l1dk2anvz94yy5qblrfh2iv495rjq4qmhlycc24dvd02f7n9m";
+          };
+          libraryHaskellDepends = [
+            base
+            ghc-prim
+            ghcjs-ffiqq
+            ghcjs-base
+            ghcjs-prim
+            containers
+            split
+            template-haskell
+          ];
+          license = pkgs.stdenv.lib.licenses.mit;
+          description = "bindings for https://github.com/Matt-Esch/virtual-dom";
+        }
+      ) { };
 
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
     libraryHaskellDepends = with self; [
-      ghcjs-base ghcjs-dom-jsffi text transformers
+      ghcjs-base
+      ghcjs-dom-jsffi
+      text
+      transformers
     ];
     configureFlags = [ "-fjsffi" "-f-webkit" ];
   });
 
   ghcjs-dom-jsffi = overrideCabal super.ghcjs-dom-jsffi (drv: {
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ [ self.ghcjs-base self.text ];
+    libraryHaskellDepends = (drv.libraryHaskellDepends or [ ]) ++ [ self.ghcjs-base self.text ];
     isLibrary = true;
   });
 
@@ -139,12 +171,24 @@ self: super:
   # By default, the `miso` derivation present in hackage-packages.nix
   # does not contain dependencies suitable for ghcjs
   miso = overrideCabal super.miso (drv: {
-      libraryHaskellDepends = with self; [
-        BoundedChan bytestring containers ghcjs-base aeson base
-        http-api-data http-types network-uri scientific servant text
-        transformers unordered-containers vector
-      ];
-    });
+    libraryHaskellDepends = with self; [
+      BoundedChan
+      bytestring
+      containers
+      ghcjs-base
+      aeson
+      base
+      http-api-data
+      http-types
+      network-uri
+      scientific
+      servant
+      text
+      transformers
+      unordered-containers
+      vector
+    ];
+  });
 
   pqueue = overrideCabal super.pqueue (drv: {
     postPatch = ''
@@ -185,12 +229,18 @@ self: super:
     };
     libraryHaskellDepends =
       removeLibraryHaskellDepends [
-        "glib" "gtk3" "webkitgtk3" "webkitgtk3-javascriptcore" "raw-strings-qq" "unix"
-      ] drv.libraryHaskellDepends;
+        "glib"
+        "gtk3"
+        "webkitgtk3"
+        "webkitgtk3-javascriptcore"
+        "raw-strings-qq"
+        "unix"
+      ]
+        drv.libraryHaskellDepends;
   });
 
   transformers-compat = overrideCabal super.transformers-compat (drv: {
-    configureFlags = [];
+    configureFlags = [ ];
   });
 
   # triggers an internal pattern match failure in haddock

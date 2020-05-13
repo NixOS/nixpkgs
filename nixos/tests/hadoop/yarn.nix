@@ -1,6 +1,6 @@
-import ../make-test-python.nix ({...}: {
+import ../make-test-python.nix ({ ... }: {
   nodes = {
-    resourcemanager = {pkgs, ...}: {
+    resourcemanager = { pkgs, ... }: {
       services.hadoop.package = pkgs.hadoop_3_1;
       services.hadoop.yarn.resourcemanager.enabled = true;
       services.hadoop.yarnSite = {
@@ -11,7 +11,7 @@ import ../make-test-python.nix ({...}: {
         8031 # resourcemanager.resource-tracker.address
       ];
     };
-    nodemanager = {pkgs, ...}: {
+    nodemanager = { pkgs, ... }: {
       services.hadoop.package = pkgs.hadoop_3_1;
       services.hadoop.yarn.nodemanager.enabled = true;
       services.hadoop.yarnSite = {

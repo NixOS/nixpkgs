@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
       --add-flags "$out/bin/Lidarr.exe" \
       --prefix PATH : ${stdenv.lib.makeBinPath [ chromaprint ]} \
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
-          curl sqlite libmediainfo ]}
+      curl
+      sqlite
+      libmediainfo
+    ]}
   '';
 
   meta = with stdenv.lib; {

@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.fprintd;
 
 in
-
-
 {
 
   ###### interface

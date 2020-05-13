@@ -1,5 +1,6 @@
 { stdenv, runCommand }:
-runCommand "documentation-highlighter" {
+runCommand "documentation-highlighter"
+{
   meta = {
     description = "Highlight.js sources for the Nix Ecosystem's documentation.";
     homepage = https://highlightjs.org;

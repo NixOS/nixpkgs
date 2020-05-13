@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) mysql gzip;
 
   cfg = config.services.mysqlBackup;
@@ -31,7 +29,6 @@ let
   '';
 
 in
-
 {
   options = {
 
@@ -60,7 +57,7 @@ in
       };
 
       databases = mkOption {
-        default = [];
+        default = [ ];
         description = ''
           List of database names to dump.
         '';
@@ -100,7 +97,7 @@ in
           privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
           grant = db: nameValuePair "${db}.*" privs;
         in
-          listToAttrs (map grant cfg.databases);
+        listToAttrs (map grant cfg.databases);
     }];
 
     systemd = {

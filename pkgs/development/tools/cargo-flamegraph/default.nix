@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, perf
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, perf
 , Security
 }:
 

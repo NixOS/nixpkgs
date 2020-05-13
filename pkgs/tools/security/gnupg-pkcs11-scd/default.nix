@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, libgpgerror, libassuan, libgcrypt, pkcs11helper,
-  pkgconfig, openssl }:
+{ stdenv
+, fetchurl
+, libgpgerror
+, libassuan
+, libgcrypt
+, pkcs11helper
+, pkgconfig
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnupg-pkcs11-scd";
@@ -21,8 +28,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A smart-card daemon to enable the use of PKCS#11 tokens with GnuPG";
     longDescription = ''
-    gnupg-pkcs11 is a project to implement a BSD-licensed smart-card
-    daemon to enable the use of PKCS#11 tokens with GnuPG.
+      gnupg-pkcs11 is a project to implement a BSD-licensed smart-card
+      daemon to enable the use of PKCS#11 tokens with GnuPG.
     '';
     homepage = http://gnupg-pkcs11.sourceforge.net/;
     license = licenses.bsd3;
@@ -30,4 +37,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

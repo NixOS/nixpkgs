@@ -1,7 +1,5 @@
 { stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, redshift, fetchFromGitHub, }:
-
 let version = "1.0.18"; in
-
 stdenv.mkDerivation {
   pname = "redshift-plasma-applet";
   inherit version;

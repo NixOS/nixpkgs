@@ -1,29 +1,64 @@
-{ config, stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg
-, aalibSupport ? true, aalib ? null
-, fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
-, fribidiSupport ? true, fribidi ? null
-, x11Support ? true, libX11 ? null, libXext ? null, libGLU, libGL ? null
-, xineramaSupport ? true, libXinerama ? null
-, xvSupport ? true, libXv ? null
-, alsaSupport ? stdenv.isLinux, alsaLib ? null
-, screenSaverSupport ? true, libXScrnSaver ? null
-, vdpauSupport ? false, libvdpau ? null
-, cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
-, dvdnavSupport ? !stdenv.isDarwin, libdvdnav ? null
-, dvdreadSupport ? true, libdvdread ? null
-, bluraySupport ? true, libbluray ? null
-, amrSupport ? false, amrnb ? null, amrwb ? null
-, cacaSupport ? true, libcaca ? null
-, lameSupport ? true, lame ? null
-, speexSupport ? true, speex ? null
-, theoraSupport ? true, libtheora ? null
-, x264Support ? false, x264 ? null
-, jackaudioSupport ? false, libjack2 ? null
-, pulseSupport ? config.pulseaudio or false, libpulseaudio ? null
-, bs2bSupport ? false, libbs2b ? null
-# For screenshots
-, libpngSupport ? true, libpng ? null
-, libjpegSupport ? true, libjpeg ? null
+{ config
+, stdenv
+, fetchurl
+, pkgconfig
+, freetype
+, yasm
+, ffmpeg
+, aalibSupport ? true
+, aalib ? null
+, fontconfigSupport ? true
+, fontconfig ? null
+, freefont_ttf ? null
+, fribidiSupport ? true
+, fribidi ? null
+, x11Support ? true
+, libX11 ? null
+, libXext ? null
+, libGLU
+, libGL ? null
+, xineramaSupport ? true
+, libXinerama ? null
+, xvSupport ? true
+, libXv ? null
+, alsaSupport ? stdenv.isLinux
+, alsaLib ? null
+, screenSaverSupport ? true
+, libXScrnSaver ? null
+, vdpauSupport ? false
+, libvdpau ? null
+, cddaSupport ? !stdenv.isDarwin
+, cdparanoia ? null
+, dvdnavSupport ? !stdenv.isDarwin
+, libdvdnav ? null
+, dvdreadSupport ? true
+, libdvdread ? null
+, bluraySupport ? true
+, libbluray ? null
+, amrSupport ? false
+, amrnb ? null
+, amrwb ? null
+, cacaSupport ? true
+, libcaca ? null
+, lameSupport ? true
+, lame ? null
+, speexSupport ? true
+, speex ? null
+, theoraSupport ? true
+, libtheora ? null
+, x264Support ? false
+, x264 ? null
+, jackaudioSupport ? false
+, libjack2 ? null
+, pulseSupport ? config.pulseaudio or false
+, libpulseaudio ? null
+, bs2bSupport ? false
+, libbs2b ? null
+  # For screenshots
+, libpngSupport ? true
+, libpng ? null
+, libjpegSupport ? true
+, libjpeg ? null
 , useUnfreeCodecs ? false
 , darwin ? null
 , buildPackages
@@ -53,9 +88,7 @@ assert pulseSupport -> libpulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
 assert libjpegSupport -> libjpeg != null;
-
 let
-
   codecs_src =
     let
       dir = http://www.mplayerhq.hu/MPlayer/releases/codecs/;
@@ -72,23 +105,23 @@ let
       sha256 = "18mlj8dp4wnz42xbhdk1jlz2ygra6fbln9wyrcyvynxh96g1871z";
     } else null;
 
-  codecs = if codecs_src != null then stdenv.mkDerivation {
-    pname = "MPlayer-codecs-essential";
+  codecs =
+    if codecs_src != null then stdenv.mkDerivation {
+      pname = "MPlayer-codecs-essential";
 
-    src = codecs_src;
+      src = codecs_src;
 
-    installPhase = ''
-      mkdir $out
-      cp -prv * $out
-    '';
+      installPhase = ''
+        mkdir $out
+        cp -prv * $out
+      '';
 
-    meta.license = stdenv.lib.licenses.unfree;
-  } else null;
+      meta.license = stdenv.lib.licenses.unfree;
+    } else null;
 
   crossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
 
 in
-
 stdenv.mkDerivation rec {
   pname = "mplayer";
   version = "1.4";
@@ -133,7 +166,7 @@ stdenv.mkDerivation rec {
     ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
     ++ (with darwin.apple_sdk.frameworks; optionals stdenv.isDarwin [ Cocoa OpenGL ])
-    ;
+  ;
 
   configurePlatforms = [ ];
   configureFlags = with stdenv.lib; [
@@ -164,16 +197,18 @@ stdenv.mkDerivation rec {
     "--yasm=${buildPackages.yasm}/bin/yasm"
     # Note, the `target` vs `host` confusion is intensional.
     "--target=${stdenv.hostPlatform.config}"
-  ] ++ optional
-         (useUnfreeCodecs && codecs != null && !crossBuild)
-         "--codecsdir=${codecs}"
-    ++ optional
-         ((stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) && !crossBuild)
-         "--enable-runtime-cpudetection"
-    ++ optional fribidiSupport "--enable-fribidi"
-    ++ optional stdenv.isLinux "--enable-vidix"
-    ++ optional stdenv.isLinux "--enable-fbdev"
-    ++ optionals (crossBuild) [
+  ] ++
+  optional
+    (useUnfreeCodecs && codecs != null && !crossBuild)
+    "--codecsdir=${codecs}"
+  ++
+  optional
+    ((stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) && !crossBuild)
+    "--enable-runtime-cpudetection"
+  ++ optional fribidiSupport "--enable-fribidi"
+  ++ optional stdenv.isLinux "--enable-vidix"
+  ++ optional stdenv.isLinux "--enable-fbdev"
+  ++ optionals (crossBuild) [
     "--enable-cross-compile"
     "--disable-vidix-pcidb"
     "--with-vidix-drivers=no"
@@ -196,8 +231,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = with stdenv.lib; toString (
-       optional  fontconfigSupport "-lfontconfig"
-    ++ optional  fribidiSupport "-lfribidi"
+    optional fontconfigSupport "-lfontconfig"
+    ++ optional fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
   );
 
@@ -206,14 +241,16 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Provide a reasonable standard font when not using fontconfig. Maybe we should symlink here.
-  postInstall = stdenv.lib.optionalString (!fontconfigSupport)
-    ''
-      mkdir -p $out/share/mplayer
-      cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
-      if test -f $out/share/applications/mplayer.desktop ; then
-        echo "NoDisplay=True" >> $out/share/applications/mplayer.desktop
-      fi
-    '';
+  postInstall =
+    stdenv.lib.optionalString
+      (!fontconfigSupport)
+      ''
+        mkdir -p $out/share/mplayer
+        cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
+        if test -f $out/share/applications/mplayer.desktop ; then
+          echo "NoDisplay=True" >> $out/share/applications/mplayer.desktop
+        fi
+      '';
 
   meta = {
     description = "A movie player that supports many video formats";

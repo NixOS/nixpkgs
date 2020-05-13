@@ -1,5 +1,4 @@
-{stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk, perl, gnugrep, which}:
-
+{ stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk, perl, gnugrep, which }:
 let
   version = "3.2.0-1";
   lprdeb = fetchurl {
@@ -43,8 +42,11 @@ stdenv.mkDerivation {
     ; do
       wrapProgram $f \
         --prefix PATH : ${stdenv.lib.makeBinPath [
-          coreutils ghostscript gnugrep gnused
-        ]}
+      coreutils
+      ghostscript
+      gnugrep
+      gnused
+    ]}
     done
 
     mkdir -p $out/lib/cups/filter/
@@ -55,7 +57,7 @@ stdenv.mkDerivation {
 
     wrapProgram $out/opt/brother/Printers/HLL2340D/lpd/filter_HLL2340D \
       --prefix PATH ":" ${ stdenv.lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
-    '';
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.brother.com/;

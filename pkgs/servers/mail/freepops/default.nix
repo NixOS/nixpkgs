@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, openssl, lua5, curl, readline, bison, expat}:
+{ stdenv, fetchurl, pkgconfig, openssl, lua5, curl, readline, bison, expat }:
 
 stdenv.mkDerivation {
   name = "freepops-0.2.9";
@@ -7,13 +7,13 @@ stdenv.mkDerivation {
     sha256 = "3a065e30cafed03d9b6fdb28251ae5bf0d8aeb62181746154beecd25dc0c9cae";
   };
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl lua5 curl readline bison expat];
+  buildInputs = [ openssl lua5 curl readline bison expat ];
   configurePhase =
-  ''
-    export WHERE=$prefix/
-    export LOCALEDIR=$prefix/share/locale/
-    ./configure.sh linux
-  '';
+    ''
+      export WHERE=$prefix/
+      export LOCALEDIR=$prefix/share/locale/
+      ./configure.sh linux
+    '';
 
   meta = {
     description = "An extensible pop3 server";

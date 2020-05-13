@@ -1,6 +1,19 @@
-{ stdenv, file, curl, pkgconfig, python3, openssl, cmake, zlib
-, installShellFiles, makeWrapper, libiconv, cacert, rustPlatform, rustc
-, CoreFoundation, Security
+{ stdenv
+, file
+, curl
+, pkgconfig
+, python3
+, openssl
+, cmake
+, zlib
+, installShellFiles
+, makeWrapper
+, libiconv
+, cacert
+, rustPlatform
+, rustc
+, CoreFoundation
+, Security
 }:
 
 rustPlatform.buildRustPackage {

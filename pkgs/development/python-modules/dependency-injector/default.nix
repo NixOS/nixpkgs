@@ -1,12 +1,10 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k, six, unittest2 }:
-
 let
   testPath =
     if isPy3k
     then "test_*_py3.py"
     else "test_*_py2_py3.py";
 in
-
 buildPythonPackage rec {
   pname = "dependency-injector";
   version = "3.14.12";

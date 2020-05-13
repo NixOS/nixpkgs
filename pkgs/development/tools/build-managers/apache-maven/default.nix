@@ -1,7 +1,6 @@
 { stdenv, fetchurl, jdk, makeWrapper }:
 
 assert jdk != null;
-
 let version = "3.6.3"; in
 stdenv.mkDerivation rec {
   pname = "apache-maven";

@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, jre, git, gradle_5, perl, makeWrapper }:
-
 let
   name = "ma1sd-${version}";
   version = "2.1.1";

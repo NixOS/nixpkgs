@@ -1,5 +1,4 @@
 { stdenv }:
-
 let
   foo = stdenv.mkDerivation {
     name = "foo-test";
@@ -36,7 +35,6 @@ let
     '';
   };
 in
-
 stdenv.mkDerivation {
   name = "stdenv-inputs-test";
   phases = [ "buildPhase" ];

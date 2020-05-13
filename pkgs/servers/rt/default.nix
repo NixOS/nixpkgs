@@ -48,24 +48,78 @@ stdenv.mkDerivation rec {
     (buildEnv {
       name = "rt-perl-deps";
       paths = (with perlPackages; [
-        ApacheSession BusinessHours CGIEmulatePSGI CGIPSGI
-        CSSMinifierXS CSSSquish ConvertColor CryptEksblowfish
-        CryptSSLeay DBDSQLite DBDmysql DBIxSearchBuilder DataGUID
-        DataICal DataPagePageset DateExtract DateManip
-        DateTimeFormatNatural DevelGlobalDestruction EmailAddress
-        EmailAddressList FCGI FCGIProcManager FileShareDir FileWhich
-        GD GDGraph GnuPGInterface GraphViz HTMLFormatTextWithLinks
-        HTMLFormatTextWithLinksAndTables HTMLMason
-        HTMLMasonPSGIHandler HTMLQuoted HTMLRewriteAttributes
-        HTMLScrubber IPCRun IPCRun3 JSON JavaScriptMinifierXS LWP
-        LWPProtocolHttps LocaleMaketextFuzzy LocaleMaketextLexicon
-        LogDispatch MIMETools MIMETypes MailTools ModuleRefresh
-        ModuleVersionsReport MozillaCA NetCIDR NetIP PerlIOeol Plack
-        RegexpCommon RegexpCommonnetCIDR RegexpIPv6 RoleBasic
-        ScopeUpper Starlet SymbolGlobalName TermReadKey
-        TextPasswordPronounceable TextQuoted TextTemplate
-        TextWikiFormat TextWrapper TimeParseDate TreeSimple
-        UNIVERSALrequire XMLRSS
+        ApacheSession
+        BusinessHours
+        CGIEmulatePSGI
+        CGIPSGI
+        CSSMinifierXS
+        CSSSquish
+        ConvertColor
+        CryptEksblowfish
+        CryptSSLeay
+        DBDSQLite
+        DBDmysql
+        DBIxSearchBuilder
+        DataGUID
+        DataICal
+        DataPagePageset
+        DateExtract
+        DateManip
+        DateTimeFormatNatural
+        DevelGlobalDestruction
+        EmailAddress
+        EmailAddressList
+        FCGI
+        FCGIProcManager
+        FileShareDir
+        FileWhich
+        GD
+        GDGraph
+        GnuPGInterface
+        GraphViz
+        HTMLFormatTextWithLinks
+        HTMLFormatTextWithLinksAndTables
+        HTMLMason
+        HTMLMasonPSGIHandler
+        HTMLQuoted
+        HTMLRewriteAttributes
+        HTMLScrubber
+        IPCRun
+        IPCRun3
+        JSON
+        JavaScriptMinifierXS
+        LWP
+        LWPProtocolHttps
+        LocaleMaketextFuzzy
+        LocaleMaketextLexicon
+        LogDispatch
+        MIMETools
+        MIMETypes
+        MailTools
+        ModuleRefresh
+        ModuleVersionsReport
+        MozillaCA
+        NetCIDR
+        NetIP
+        PerlIOeol
+        Plack
+        RegexpCommon
+        RegexpCommonnetCIDR
+        RegexpIPv6
+        RoleBasic
+        ScopeUpper
+        Starlet
+        SymbolGlobalName
+        TermReadKey
+        TextPasswordPronounceable
+        TextQuoted
+        TextTemplate
+        TextWikiFormat
+        TextWrapper
+        TimeParseDate
+        TreeSimple
+        UNIVERSALrequire
+        XMLRSS
       ]);
     })
   ];

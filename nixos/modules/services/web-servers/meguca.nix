@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.meguca;
   postgres = config.services.postgresql;
-in with lib; {
+in
+with lib; {
   options.services.meguca = {
     enable = mkEnableOption "meguca";
 
@@ -89,7 +89,7 @@ in with lib; {
 
     videoPaths = mkOption {
       type = types.listOf types.path;
-      default = [];
+      default = [ ];
       example = [ "/home/okina/Videos/tehe_pero.webm" ];
       description = "Videos that will be symlinked into www/videos.";
     };
@@ -132,10 +132,10 @@ in with lib; {
           -c "ALTER ROLE meguca WITH PASSWORD '$(cat ${escapeShellArg cfg.passwordFile})';" || true
       '';
 
-    script = ''
-      cd ${escapeShellArg cfg.dataDir}
+      script = ''
+        cd ${escapeShellArg cfg.dataDir}
 
-      ${pkgs.meguca}/bin/meguca -d "$(cat ${escapeShellArg cfg.postgresArgsFile})"''
+        ${pkgs.meguca}/bin/meguca -d "$(cat ${escapeShellArg cfg.postgresArgsFile})"''
       + optionalString (cfg.reverseProxy != null) " -R ${cfg.reverseProxy}"
       + optionalString (cfg.sslCertificate != null) " -S ${cfg.sslCertificate}"
       + optionalString (cfg.listenAddress != null) " -a ${cfg.listenAddress}"

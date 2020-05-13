@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, buildPackages, ncurses }:
-
 let dialect = with stdenv.lib; last (splitString "-" stdenv.hostPlatform.system); in
-
 stdenv.mkDerivation rec {
   pname = "lsof";
   version = "4.93.2";

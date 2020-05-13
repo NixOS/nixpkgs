@@ -7,7 +7,7 @@ let
   */
   staticdb = symlinkJoin {
     inherit (db) name;
-    paths = with db.overrideAttrs(old: { dontDisableStatic = true; }); [ out dev ];
+    paths = with db.overrideAttrs (old: { dontDisableStatic = true; }); [ out dev ];
     postBuild = ''
       rm $out/lib/*.so*
     '';
@@ -23,20 +23,21 @@ let
   };
   net = symlinkJoin {
     inherit (libnet) name;
-    paths = [ (libnet.overrideAttrs(old: { dontDisableStatic = true; })) ];
+    paths = [ (libnet.overrideAttrs (old: { dontDisableStatic = true; })) ];
     postBuild = ''
       # prevent dynamic linking, now that we have a static library
       rm $out/lib/*.so*
     '';
   };
-  nids = libnids.overrideAttrs(old: {
+  nids = libnids.overrideAttrs (old: {
     dontDisableStatic = true;
   });
   ssl = symlinkJoin {
     inherit (openssl) name;
     paths = with openssl.override { static = true; }; [ out dev ];
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "dsniff";
   version = "2.4b1";
   # upstream is so old that nearly every distribution packages the beta version.

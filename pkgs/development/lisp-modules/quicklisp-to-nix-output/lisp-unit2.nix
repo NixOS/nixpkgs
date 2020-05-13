@@ -16,7 +16,7 @@ rec {
 
   packageName = "lisp-unit2";
 
-  asdFilesToKeep = ["lisp-unit2.asd"];
+  asdFilesToKeep = [ "lisp-unit2.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lisp-unit2 DESCRIPTION

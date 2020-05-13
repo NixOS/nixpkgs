@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.tinc;
 
 in
-
 {
 
   ###### interface
@@ -127,26 +125,30 @@ in
 
   config = mkIf (cfg.networks != { }) {
 
-    environment.etc = fold (a: b: a // b) { }
-      (flip mapAttrsToList cfg.networks (network: data:
-        flip mapAttrs' data.hosts (host: text: nameValuePair
-          ("tinc/${network}/hosts/${host}")
-          ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
-        ) // {
-          "tinc/${network}/tinc.conf" = {
-            mode = "0444";
-            text = ''
-              Name = ${if data.name == null then "$HOST" else data.name}
-              DeviceType = ${data.interfaceType}
-              ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
-              ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
-              ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
-              Interface = tinc.${network}
-              ${data.extraConfig}
-            '';
-          };
-        }
-      ));
+    environment.etc =
+      fold
+        (a: b: a // b)
+        { }
+        (flip mapAttrsToList cfg.networks (network: data:
+          flip mapAttrs' data.hosts (host: text: nameValuePair
+            ("tinc/${network}/hosts/${host}")
+            ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
+          ) // {
+            "tinc/${network}/tinc.conf" = {
+              mode = "0444";
+              text = ''
+                Name = ${if data.name == null then "$HOST" else data.name}
+                DeviceType = ${data.interfaceType}
+                ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
+                ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
+                ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
+                Interface = tinc.${network}
+                ${data.extraConfig}
+              '';
+            };
+          }
+        )
+        );
 
     systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
       ("tinc.${network}")
@@ -184,21 +186,24 @@ in
       })
     );
 
-    environment.systemPackages = let
-      cli-wrappers = pkgs.stdenv.mkDerivation {
-        name = "tinc-cli-wrappers";
-        buildInputs = [ pkgs.makeWrapper ];
-        buildCommand = ''
-          mkdir -p $out/bin
-          ${concatStringsSep "\n" (mapAttrsToList (network: data:
-            optionalString (versionAtLeast data.package.version "1.1pre") ''
+    environment.systemPackages =
+      let
+        cli-wrappers = pkgs.stdenv.mkDerivation {
+          name = "tinc-cli-wrappers";
+          buildInputs = [ pkgs.makeWrapper ];
+          buildCommand = ''
+            mkdir -p $out/bin
+            ${concatStringsSep "\n" (mapAttrsToList (network: data:
+              optionalString (versionAtLeast data.package.version "1.1pre") ''
               makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
                 --add-flags "--pidfile=/run/tinc.${network}.pid" \
                 --add-flags "--config=/etc/tinc/${network}"
-            '') cfg.networks)}
-        '';
-      };
-    in [ cli-wrappers ];
+            '') cfg.networks
+              )}
+          '';
+        };
+      in
+      [ cli-wrappers ];
 
     users.users = flip mapAttrs' cfg.networks (network: _:
       nameValuePair ("tinc.${network}") ({

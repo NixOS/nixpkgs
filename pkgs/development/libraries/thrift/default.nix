@@ -1,5 +1,18 @@
-{ stdenv, fetchurl, fetchpatch, boost, zlib, libevent, openssl, python, cmake, pkgconfig
-, bison, flex, twisted, static ? false }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, boost
+, zlib
+, libevent
+, openssl
+, python
+, cmake
+, pkgconfig
+, bison
+, flex
+, twisted
+, static ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "thrift";
@@ -21,7 +34,7 @@ stdenv.mkDerivation rec {
 
   # Workaround to make the python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
-  pythonPath = [];
+  pythonPath = [ ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ boost zlib libevent openssl python bison flex ]

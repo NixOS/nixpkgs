@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
   cfg = dmcfg.sddm;
@@ -33,7 +31,7 @@ let
     HaltCommand=${pkgs.systemd}/bin/systemctl poweroff
     RebootCommand=${pkgs.systemd}/bin/systemctl reboot
     ${optionalString cfg.autoNumlock ''
-    Numlock=on
+      Numlock=on
     ''}
 
     [Theme]
@@ -62,10 +60,10 @@ let
     SessionDir=${dmcfg.sessionData.desktops}/share/wayland-sessions
 
     ${optionalString cfg.autoLogin.enable ''
-    [Autologin]
-    User=${cfg.autoLogin.user}
-    Session=${autoLoginSessionName}.desktop
-    Relogin=${boolToString cfg.autoLogin.relogin}
+      [Autologin]
+      User=${cfg.autoLogin.user}
+      Session=${autoLoginSessionName}.desktop
+      Relogin=${boolToString cfg.autoLogin.relogin}
     ''}
 
     ${cfg.extraConfig}
@@ -76,8 +74,10 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "sddm" "themes" ]
-      "Set the option `services.xserver.displayManager.sddm.package' instead.")
+    (
+      mkRemovedOptionModule [ "services" "xserver" "displayManager" "sddm" "themes" ]
+        "Set the option `services.xserver.displayManager.sddm.package' instead."
+    )
   ];
 
   options = {
@@ -154,7 +154,7 @@ in
       };
 
       autoLogin = mkOption {
-        default = {};
+        default = { };
         description = ''
           Configuration for automatic login.
         '';
@@ -196,17 +196,20 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = xcfg.enable;
+      {
+        assertion = xcfg.enable;
         message = ''
           SDDM requires services.xserver.enable to be true
         '';
       }
-      { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
+      {
+        assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> autoLoginSessionName != null;
+      {
+        assertion = cfg.autoLogin.enable -> autoLoginSessionName != null;
         message = ''
           SDDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, dict, glibcLocales, writeScript}:
+{ stdenv, fetchurl, python, dict, glibcLocales, writeScript }:
 
 stdenv.mkDerivation rec {
   version = "20161001";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   convert = ./wiktionary2dict.py;
-  buildInputs = [python dict glibcLocales];
+  buildInputs = [ python dict glibcLocales ];
 
   builder = writeScript "wiktionary-builder.sh" ''
     source $stdenv/setup

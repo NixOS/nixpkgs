@@ -14,7 +14,7 @@ rec {
 
   packageName = "fast-io";
 
-  asdFilesToKeep = ["fast-io.asd"];
+  asdFilesToKeep = [ "fast-io.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fast-io DESCRIPTION Alternative I/O mechanism to a stream or vector

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "--with-posix-acl"
     "--with-selinux"
     "--with-xattr"
-    ];
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://aide.sourceforge.net/;

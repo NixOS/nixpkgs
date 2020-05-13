@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub }:
-
 let
   version = "1.6";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "work-sans-${version}";
 
   owner = "weiweihuanghuang";

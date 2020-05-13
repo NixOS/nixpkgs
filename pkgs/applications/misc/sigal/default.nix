@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   version = "2.0";
-  pname   = "sigal";
+  pname = "sigal";
 
   src = python3Packages.fetchPypi {
     inherit version pname;
@@ -27,8 +27,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Yet another simple static gallery generator";
-    homepage    = http://sigal.saimon.org/en/latest/index.html;
-    license     = licenses.mit;
+    homepage = http://sigal.saimon.org/en/latest/index.html;
+    license = licenses.mit;
     maintainers = with maintainers; [ domenkozar matthiasbeyer ];
   };
 }

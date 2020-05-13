@@ -1,15 +1,33 @@
-{ stdenv, lib, fetchurl, pkgconfig, cmake, perlPackages, curl, gtest
-, gnutls, libtasn1, lzma, bzip2, lz4, zstd, libseccomp, udev
-, db, dpkg, libxslt, docbook_xsl, docbook_xml_dtd_45
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
+, cmake
+, perlPackages
+, curl
+, gtest
+, gnutls
+, libtasn1
+, lzma
+, bzip2
+, lz4
+, zstd
+, libseccomp
+, udev
+, db
+, dpkg
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_45
 
-# used when WITH_DOC=ON
+  # used when WITH_DOC=ON
 , w3m
 , doxygen
 
-# used when WITH_NLS=ON
+  # used when WITH_NLS=ON
 , gettext
 
-# opts
+  # opts
 , withDocs ? true
 , withNLS ? true
 }:
@@ -26,9 +44,23 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake gtest libxslt.bin ];
 
   buildInputs = [
-    perlPackages.perl curl gnutls libtasn1 lzma bzip2 lz4 zstd libseccomp udev db dpkg
+    perlPackages.perl
+    curl
+    gnutls
+    libtasn1
+    lzma
+    bzip2
+    lz4
+    zstd
+    libseccomp
+    udev
+    db
+    dpkg
   ] ++ lib.optionals withDocs [
-    doxygen perlPackages.Po4a w3m docbook_xml_dtd_45
+    doxygen
+    perlPackages.Po4a
+    w3m
+    docbook_xml_dtd_45
   ] ++ lib.optionals withNLS [
     gettext
   ];

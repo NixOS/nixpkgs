@@ -21,4 +21,4 @@ stdenv.mkDerivation {
   meta = {
     description = "Free Pascal Compiler from a binary distribution";
   };
-} 
+}

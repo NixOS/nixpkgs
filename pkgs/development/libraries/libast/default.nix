@@ -1,5 +1,7 @@
-{ stdenv, fetchurl
-, pkgconfig }:
+{ stdenv
+, fetchurl
+, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
   pname = "libast";

@@ -1,17 +1,21 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
-
 let
-
   # The configuration to install.
-  makeConfig = { bootLoader, grubVersion, grubDevice, grubIdentifier, grubUseEfi
-               , extraConfig, forceGrubReinstallCount ? 0
-               }:
+  makeConfig =
+    { bootLoader
+    , grubVersion
+    , grubDevice
+    , grubIdentifier
+    , grubUseEfi
+    , extraConfig
+    , forceGrubReinstallCount ? 0
+    }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
 
@@ -24,27 +28,27 @@ let
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
 
         ${optionalString (bootLoader == "grub") ''
-          boot.loader.grub.version = ${toString grubVersion};
-          ${optionalString (grubVersion == 1) ''
-            boot.loader.grub.splashImage = null;
-          ''}
-
-          boot.loader.grub.extraConfig = "serial; terminal_output.serial";
-          ${if grubUseEfi then ''
-            boot.loader.grub.device = "nodev";
-            boot.loader.grub.efiSupport = true;
-            boot.loader.grub.efiInstallAsRemovable = true; # XXX: needed for OVMF?
-          '' else ''
-            boot.loader.grub.device = "${grubDevice}";
-            boot.loader.grub.fsIdentifier = "${grubIdentifier}";
-          ''}
-
-          boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
+        boot.loader.grub.version = ${toString grubVersion};
+        ${optionalString (grubVersion == 1) ''
+          boot.loader.grub.splashImage = null;
         ''}
+
+        boot.loader.grub.extraConfig = "serial; terminal_output.serial";
+        ${if grubUseEfi then ''
+          boot.loader.grub.device = "nodev";
+          boot.loader.grub.efiSupport = true;
+          boot.loader.grub.efiInstallAsRemovable = true; # XXX: needed for OVMF?
+        '' else ''
+          boot.loader.grub.device = "${grubDevice}";
+          boot.loader.grub.fsIdentifier = "${grubIdentifier}";
+        ''}
+
+        boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
+      ''}
 
         ${optionalString (bootLoader == "systemd-boot") ''
-          boot.loader.systemd-boot.enable = true;
-        ''}
+        boot.loader.systemd-boot.enable = true;
+      ''}
 
         users.users.alice = {
           isNormalUser = true;
@@ -54,7 +58,7 @@ let
 
         hardware.enableAllFirmware = lib.mkForce false;
 
-        ${replaceChars ["\n"] ["\n  "] extraConfig}
+        ${replaceChars [ "\n" ] [ "\n  " ] extraConfig}
       }
     '';
 
@@ -63,22 +67,32 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
-                  , grubIdentifier, preBootCommands, extraConfig
-                  , testCloneConfig
-                  }:
-    let iface = if grubVersion == 1 then "ide" else "virtio";
-        isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
-        bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
-    in if !isEfi && !(pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
+  testScriptFun =
+    { bootLoader
+    , createPartitions
+    , grubVersion
+    , grubDevice
+    , grubUseEfi
+    , grubIdentifier
+    , preBootCommands
+    , extraConfig
+    , testCloneConfig
+    }:
+    let
+      iface = if grubVersion == 1 then "ide" else "virtio";
+      isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+      bios = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
+    in
+    if !isEfi && !(pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
       throw "Non-EFI boot methods are only supported on i686 / x86_64"
     else ''
       def assemble_qemu_flags():
           flags = "-cpu host"
-          ${if system == "x86_64-linux"
-            then ''flags += " -m 768"''
-            else ''flags += " -m 512 -enable-kvm -machine virt,gic-version=host"''
-          }
+          ${
+        if system == "x86_64-linux"
+        then ''flags += " -m 768"''
+        else ''flags += " -m 512 -enable-kvm -machine virt,gic-version=host"''
+      }
           return flags
 
 
@@ -116,10 +130,10 @@ let
           machine.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
           machine.copy_from_host(
               "${ makeConfig {
-                    inherit bootLoader grubVersion grubDevice grubIdentifier
-                            grubUseEfi extraConfig;
-                  }
-              }",
+        inherit bootLoader grubVersion grubDevice grubIdentifier
+        grubUseEfi extraConfig;
+        }
+      }",
               "/mnt/etc/nixos/configuration.nix",
           )
 
@@ -143,10 +157,11 @@ let
 
       with subtest("Assert that /boot get mounted"):
           machine.wait_for_unit("local-fs.target")
-          ${if bootLoader == "grub"
-              then ''machine.succeed("test -e /boot/grub")''
-              else ''machine.succeed("test -e /boot/loader/loader.conf")''
-          }
+          ${
+        if bootLoader == "grub"
+        then ''machine.succeed("test -e /boot/grub")''
+        else ''machine.succeed("test -e /boot/loader/loader.conf")''
+      }
 
       with subtest("Check whether /root has correct permissions"):
           assert "700" in machine.succeed("stat -c '%a' /root")
@@ -174,11 +189,11 @@ let
           # doesn't know about the host-guest sharing mechanism.
           machine.copy_from_host_via_shell(
               "${ makeConfig {
-                    inherit bootLoader grubVersion grubDevice grubIdentifier
-                            grubUseEfi extraConfig;
-                    forceGrubReinstallCount = 1;
-                  }
-              }",
+        inherit bootLoader grubVersion grubDevice grubIdentifier
+        grubUseEfi extraConfig;
+        forceGrubReinstallCount = 1;
+        }
+      }",
               "/etc/nixos/configuration.nix",
           )
 
@@ -202,11 +217,11 @@ let
       # doesn't know about the host-guest sharing mechanism.
       machine.copy_from_host_via_shell(
           "${ makeConfig {
-                inherit bootLoader grubVersion grubDevice grubIdentifier
-                grubUseEfi extraConfig;
-                forceGrubReinstallCount = 2;
-              }
-          }",
+        inherit bootLoader grubVersion grubDevice grubIdentifier
+        grubUseEfi extraConfig;
+        forceGrubReinstallCount = 2;
+        }
+      }",
           "/etc/nixos/configuration.nix",
       )
       machine.succeed("nixos-rebuild boot >&2")
@@ -258,11 +273,17 @@ let
 
 
   makeInstallerTest = name:
-    { createPartitions, preBootCommands ? "", extraConfig ? ""
-    , extraInstallerConfig ? {}
+    { createPartitions
+    , preBootCommands ? ""
+    , extraConfig ? ""
+    , extraInstallerConfig ? { }
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
-    , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
-    , enableOCR ? false, meta ? {}
+    , grubVersion ? 2
+    , grubDevice ? "/dev/vda"
+    , grubIdentifier ? "uuid"
+    , grubUseEfi ? false
+    , enableOCR ? false
+    , meta ? { }
     , testCloneConfig ? false
     }:
     makeTest {
@@ -270,7 +291,7 @@ let
       name = "installer-" + name;
       meta = with pkgs.stdenv.lib.maintainers; {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
-        maintainers = (meta.maintainers or []);
+        maintainers = (meta.maintainers or [ ]);
       };
       nodes = {
 
@@ -337,41 +358,41 @@ let
 
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands
-                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
-                testCloneConfig;
+          grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
+          testCloneConfig;
       };
     };
 
-    makeLuksRootTest = name: luksFormatOpts: makeInstallerTest name {
-      createPartitions = ''
-        machine.succeed(
-            "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-            + " mkpart primary ext2 1M 50MB"  # /boot
-            + " mkpart primary linux-swap 50M 1024M"
-            + " mkpart primary 1024M -1s",  # LUKS
-            "udevadm settle",
-            "mkswap /dev/vda2 -L swap",
-            "swapon -L swap",
-            "modprobe dm_mod dm_crypt",
-            "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
-            "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
-            "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
-            "mount LABEL=nixos /mnt",
-            "mkfs.ext3 -L boot /dev/vda1",
-            "mkdir -p /mnt/boot",
-            "mount LABEL=boot /mnt/boot",
-        )
-      '';
-      extraConfig = ''
-        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-      '';
-      enableOCR = true;
-      preBootCommands = ''
-        machine.start()
-        machine.wait_for_text("Passphrase for")
-        machine.send_chars("supersecret\n")
-      '';
-    };
+  makeLuksRootTest = name: luksFormatOpts: makeInstallerTest name {
+    createPartitions = ''
+      machine.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          + " mkpart primary ext2 1M 50MB"  # /boot
+          + " mkpart primary linux-swap 50M 1024M"
+          + " mkpart primary 1024M -1s",  # LUKS
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "modprobe dm_mod dm_crypt",
+          "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
+          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
+          "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
+          "mount LABEL=nixos /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
+      )
+    '';
+    extraConfig = ''
+      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+    '';
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("Passphrase for")
+      machine.send_chars("supersecret\n")
+    '';
+  };
 
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
@@ -431,7 +452,8 @@ let
   };
 
 
-in {
+in
+{
 
   # !!! `parted mkpart' seems to silently create overlapping partitions.
 

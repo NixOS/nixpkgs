@@ -1,20 +1,45 @@
-{ stdenv, fetchurl, fetchgit, buildPythonPackage, python, pythonOlder,
-  cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null, magma ? null,
-  mklSupport ? false, mkl ? null,
-  openMPISupport ? false, openmpi ? null,
-  buildNamedTensor ? false,
-  buildBinaries ? false,
-  cudaArchList ? null,
-  fetchFromGitHub, lib, numpy, pyyaml, cffi, click, typing, cmake, hypothesis, numactl,
-  linkFarm, symlinkJoin,
-
-  # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
-  ninja,
-
-  # dependencies for torch.utils.tensorboard
-  tensorboardSupport ? true, pillow, six, future, tensorflow-tensorboard,
-
-  utillinux, which, isPy3k }:
+{ stdenv
+, fetchurl
+, fetchgit
+, buildPythonPackage
+, python
+, pythonOlder
+, cudaSupport ? false
+, cudatoolkit ? null
+, cudnn ? null
+, nccl ? null
+, magma ? null
+, mklSupport ? false
+, mkl ? null
+, openMPISupport ? false
+, openmpi ? null
+, buildNamedTensor ? false
+, buildBinaries ? false
+, cudaArchList ? null
+, fetchFromGitHub
+, lib
+, numpy
+, pyyaml
+, cffi
+, click
+, typing
+, cmake
+, hypothesis
+, numactl
+, linkFarm
+, symlinkJoin
+, # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
+  ninja
+, # dependencies for torch.utils.tensorboard
+  tensorboardSupport ? true
+, pillow
+, six
+, future
+, tensorflow-tensorboard
+, utillinux
+, which
+, isPy3k
+}:
 
 assert !openMPISupport || openmpi != null;
 assert !tensorboardSupport || tensorflow-tensorboard != null;
@@ -22,9 +47,9 @@ assert !tensorboardSupport || tensorflow-tensorboard != null;
 # assert that everything needed for cuda is present and that the correct cuda versions are used
 assert !cudaSupport || cudatoolkit != null;
 assert cudnn == null || cudatoolkit != null;
-assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
-                        in majorIs == "9" || majorIs == "10");
-
+assert !cudaSupport || (
+  let majorIs = lib.versions.major cudatoolkit.version;
+  in majorIs == "9" || majorIs == "10");
 let
   hasDependency = dep: pkg: lib.lists.any (inp: inp == dep) pkg.buildInputs;
   matchesCudatoolkit = hasDependency cudatoolkit;
@@ -38,7 +63,6 @@ assert !cudaSupport || matchesCudatoolkit magma;
 assert !mklSupport || mkl != null;
 assert !(mklSupport && cudaSupport) || matchesMkl magma;
 assert !mklSupport || (numpy.blasImplementation == "mkl" && numpy.blas == mkl);
-
 let
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
@@ -81,12 +105,12 @@ let
     "6.0"
     "6.1"
     "7.0"
-    "7.0+PTX"  # I am getting a "undefined architecture compute_75" on cuda 9
-               # which leads me to believe this is the final cuda-9-compatible architecture.
+    "7.0+PTX" # I am getting a "undefined architecture compute_75" on cuda 9
+    # which leads me to believe this is the final cuda-9-compatible architecture.
   ];
   cuda10ArchList = cuda9ArchList ++ [
     "7.5"
-    "7.5+PTX"  # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
+    "7.5+PTX" # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
   ];
   final_cudaArchList =
     if !cudaSupport || cudaArchList != null
@@ -104,23 +128,26 @@ let
     name = "libcuda.so.1";
     path = "${cudatoolkit}/lib/stubs/libcuda.so";
   }];
-  cudaStubEnv = lib.optionalString cudaSupport
-    "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
+  cudaStubEnv =
+    lib.optionalString
+      cudaSupport
+      "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   version = "1.2.0";
   pname = "pytorch";
   disabled = !isPy3k;
 
   outputs = [
-    "out"   # output standard python package
-    "dev"   # output libtorch only
+    "out" # output standard python package
+    "dev" # output libtorch only
   ];
 
   src = fetchFromGitHub {
-    owner  = "pytorch";
-    repo   = "pytorch";
-    rev    = "v${version}";
+    owner = "pytorch";
+    repo = "pytorch";
+    rev = "v${version}";
     fetchSubmodules = true;
     sha256 = "1biyq2p48chakf2xw7hazzqmr5ps1nx475ql8vkmxjg5zaa071cz";
   };
@@ -155,8 +182,8 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  BUILD_NAMEDTENSOR = buildNamedTensor;  # experimental feature
-  USE_SYSTEM_NCCL=true;                  # don't build pytorch's third_party NCCL
+  BUILD_NAMEDTENSOR = buildNamedTensor; # experimental feature
+  USE_SYSTEM_NCCL = true; # don't build pytorch's third_party NCCL
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -177,7 +204,7 @@ in buildPythonPackage rec {
   buildInputs = [
     numpy.blas
   ] ++ lib.optionals cudaSupport [ cudnn magma nccl ]
-    ++ lib.optionals stdenv.isLinux [ numactl ];
+  ++ lib.optionals stdenv.isLinux [ numactl ];
 
   propagatedBuildInputs = [
     cffi
@@ -185,8 +212,8 @@ in buildPythonPackage rec {
     numpy
     pyyaml
   ] ++ lib.optionals openMPISupport [ openmpi ]
-    ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optionals tensorboardSupport [pillow six future tensorflow-tensorboard];
+  ++ lib.optional (pythonOlder "3.5") typing
+  ++ lib.optionals tensorboardSupport [ pillow six future tensorflow-tensorboard ];
 
   checkInputs = [ hypothesis ninja ];
 
@@ -196,7 +223,7 @@ in buildPythonPackage rec {
 
     # Other tests which have been disabled in previous nix derivations of pytorch.
     # --exclude dataloader sparse torch utils thd_distributed distributed cpp_extensions
-    ;
+  ;
   postInstall = ''
     mkdir $dev
     cp -r $out/${python.sitePackages}/torch/lib     $dev/lib
@@ -230,9 +257,9 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Open source, prototype-to-production deep learning platform";
-    homepage    = https://pytorch.org/;
-    license     = lib.licenses.bsd3;
-    platforms   = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    homepage = https://pytorch.org/;
+    license = lib.licenses.bsd3;
+    platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     maintainers = with lib.maintainers; [ teh thoughtpolice stites tscholak ]; # tscholak esp. for darwin-related builds
   };
 }

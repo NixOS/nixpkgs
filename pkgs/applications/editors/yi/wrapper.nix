@@ -1,12 +1,12 @@
 # To use this for hacking of your Yi config file, drop into a shell
 # with env attribute.
-{ stdenv, makeWrapper
+{ stdenv
+, makeWrapper
 , haskellPackages
-, extraPackages ? (s: [])
+, extraPackages ? (s: [ ])
 }:
 let
-  yiEnv = haskellPackages.ghcWithPackages
-    (self: [ self.yi ] ++ extraPackages self);
+  yiEnv = haskellPackages.ghcWithPackages (self: [ self.yi ] ++ extraPackages self);
 in
 stdenv.mkDerivation {
   pname = "yi-custom";

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "12r7rjjyibjdj08dvwbp0iflfpzl4s0zhn6cr6zj3hwf9gbzgl1g";
   };
 
-  configureFlags = ["--sysconfdir=/etc"];
+  configureFlags = [ "--sysconfdir=/etc" ];
 
   hardeningDisable = [ "format" ];
 

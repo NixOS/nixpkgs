@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, systemd, libusb
-, darwin }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, systemd
+, libusb
+, darwin
+}:
 
 stdenv.mkDerivation rec {
   pname = "hidapi";

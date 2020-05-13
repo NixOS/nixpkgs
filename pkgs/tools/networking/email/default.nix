@@ -1,5 +1,4 @@
 { stdenv, lib, fetchFromGitHub, openssl }:
-
 let
   eMailSrc = fetchFromGitHub {
     owner = "deanproxy";
@@ -18,7 +17,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation {
   name = "email-git-2016-01-31";
   src = eMailSrc;

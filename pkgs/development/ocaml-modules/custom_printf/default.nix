@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, type_conv, sexplib_p4, pa_ounit}:
+{ stdenv, buildOcaml, fetchurl, type_conv, sexplib_p4, pa_ounit }:
 
 buildOcaml rec {
   name = "custom_printf";

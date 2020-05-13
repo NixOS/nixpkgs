@@ -1,4 +1,10 @@
-{ lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
+{ lib
+, stdenv
+, ghc
+, llvmPackages
+, packages
+, symlinkJoin
+, makeWrapper
 , withLLVM ? false
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
@@ -29,34 +35,34 @@ assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs || ghc.isHaLVM;
 #   if [ -e ~/.nix-profile/bin/ghc ]; then
 #     eval $(grep export ~/.nix-profile/bin/ghc)
 #   fi
-
 let
-  isGhcjs       = ghc.isGhcjs or false;
-  isHaLVM       = ghc.isHaLVM or false;
+  isGhcjs = ghc.isGhcjs or false;
+  isHaLVM = ghc.isHaLVM or false;
   ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand'    = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
-  ghcCommandCaps= lib.toUpper ghcCommand';
-  libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
-                  else "$out/lib/${ghcCommand}-${ghc.version}";
-  docDir        = "$out/share/doc/ghc/html";
+  ghcCommandCaps = lib.toUpper ghcCommand';
+  libDir =
+    if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
+    else "$out/lib/${ghcCommand}-${ghc.version}";
+  docDir = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
-  paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
-  hasLibraries  = lib.any (x: x.isHaskellLibrary) paths;
+  paths = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
+  hasLibraries = lib.any (x: x.isHaskellLibrary) paths;
   # CLang is needed on Darwin for -fllvm to work:
   # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
-  llvm          = lib.makeBinPath
-                  ([ llvmPackages.llvm ]
-                   ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
+  llvm =
+    lib.makeBinPath ([ llvmPackages.llvm ]
+      ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
 in
-if paths == [] && !withLLVM then ghc else
+if paths == [ ] && !withLLVM then ghc else
 symlinkJoin {
   # this makes computing paths from the name attribute impossible;
   # if such a feature is needed, the real compiler name should be saved
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
-  paths = paths ++ [ghc];
+  paths = paths ++ [ ghc ];
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
@@ -72,8 +78,8 @@ symlinkJoin {
           --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
           --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"                  \
           ${lib.optionalString (ghc.isGhcjs or false)
-            ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
-          } \
+      ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
+    } \
           ${lib.optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''}
       fi
     done
@@ -126,14 +132,15 @@ symlinkJoin {
       sed "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f-tmp > $f
       rm $f-tmp
     done
-  '') + ''
+  ''
+  ) + ''
     ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
     ${# ghcjs will read the ghc_libdir file when resolving plugins.
       lib.optionalString (isGhcjs && ghcLibdir != null) ''
-      mkdir -p "${libDir}"
-      rm -f "${libDir}/ghc_libdir"
-      printf '%s' '${ghcLibdir}' > "${libDir}/ghc_libdir"
-    ''}
+        mkdir -p "${libDir}"
+        rm -f "${libDir}/ghc_libdir"
+        printf '%s' '${ghcLibdir}' > "${libDir}/ghc_libdir"
+      ''}
     $out/bin/${ghcCommand}-pkg check
   '' + postBuild;
   passthru = {

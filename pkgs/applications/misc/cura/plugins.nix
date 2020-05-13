@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, python3Packages }:
-
 let
 
   self = {
@@ -31,4 +30,5 @@ let
 
   };
 
-in self
+in
+self

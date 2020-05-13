@@ -4,9 +4,10 @@ let
   # Sanitizers are not supported on Darwin.
   # Sanitizer headers aren't available in older libc++ stdenvs due to a bug
   sanitizersWorking =
-       (stdenv.cc.isClang && versionAtLeast (getVersion stdenv.cc.name) "5.0.0")
+    (stdenv.cc.isClang && versionAtLeast (getVersion stdenv.cc.name) "5.0.0")
     || (stdenv.cc.isGNU && stdenv.isLinux);
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "cc-wrapper-test";
 
   buildCommand = ''

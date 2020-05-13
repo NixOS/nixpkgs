@@ -1,7 +1,5 @@
 { stdenv, fetchurl, cpio, xz, pkgs }:
-
 let
-
   version = "1.43_5";
 
 
@@ -32,7 +30,6 @@ let
   '';
 
 in
-
 stdenv.mkDerivation {
 
   pname = "facetimehd-firmware";

@@ -15,7 +15,6 @@
 , enableManpages ? false
 , enableSharedLibraries ? true
 }:
-
 let
   inherit (stdenv.lib) optional optionals optionalString;
 
@@ -24,7 +23,6 @@ let
     let parts = splitVersion release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
-
 stdenv.mkDerivation ({
   pname = "llvm";
   inherit version;
@@ -89,7 +87,7 @@ stdenv.mkDerivation ({
 
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
+    "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
@@ -149,10 +147,10 @@ stdenv.mkDerivation ({
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.ncsa;
+    homepage = http://llvm.org/;
+    license = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
@@ -161,7 +159,7 @@ stdenv.mkDerivation ({
     make docs-llvm-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     make -C docs install

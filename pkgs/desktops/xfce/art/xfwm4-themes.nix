@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  p_name  = "xfwm4-themes";
+  p_name = "xfwm4-themes";
   ver_maj = "4.10";
   ver_min = "0";
 

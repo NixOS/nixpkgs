@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
 
       -java $JAVA_OPTS -cp $SOAPUI_CLASSPATH com.eviware.soapui.SoapUI "$@"
       +${jdk}/bin/java $JAVA_OPTS -cp $SOAPUI_CLASSPATH com.eviware.soapui.SoapUI "$@"
-    '')
+    ''
+    )
   ];
 
   meta = with stdenv.lib; {

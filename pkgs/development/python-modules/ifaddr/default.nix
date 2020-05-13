@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ipaddress ];
 
   checkPhase = ''
-   ${python.interpreter} -m unittest discover
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = with stdenv.lib; {

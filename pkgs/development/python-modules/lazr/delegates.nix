@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ nose zope_interface ];
 
-  doCheck = false;  # cannot import name 'ClassType' from 'types'
+  doCheck = false; # cannot import name 'ClassType' from 'types'
 
   src = fetchPypi {
     inherit pname version;

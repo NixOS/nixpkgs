@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, openssl, check, pcsclite, PCSC
+{ stdenv
+, fetchurl
+, pkgconfig
+, openssl
+, check
+, pcsclite
+, PCSC
 , withApplePCSC ? stdenv.isDarwin
 }:
 

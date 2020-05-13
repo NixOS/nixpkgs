@@ -3,7 +3,6 @@
 , makeWrapper
 , common-updater-scripts
 }:
-
 let
 
   poison_4 = beamPackages.buildMix {
@@ -19,7 +18,6 @@ let
 
 
 in
-
 beamPackages.buildMix {
   name = "nixpkgs-github-update";
   version = "0.1.0";

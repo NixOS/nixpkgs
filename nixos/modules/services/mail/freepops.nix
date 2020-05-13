@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.mail.freepopsd;
 in
-
 {
   options = {
     services.mail.freepopsd = {

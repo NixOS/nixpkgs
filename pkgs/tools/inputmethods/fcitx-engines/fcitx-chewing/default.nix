@@ -13,20 +13,20 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake fcitx gettext libchewing ];
 
   preInstall = ''
-   substituteInPlace src/cmake_install.cmake \
-      --replace ${fcitx} $out
-   substituteInPlace data/cmake_install.cmake \
-      --replace ${fcitx} $out
+    substituteInPlace src/cmake_install.cmake \
+       --replace ${fcitx} $out
+    substituteInPlace data/cmake_install.cmake \
+       --replace ${fcitx} $out
   '';
 
   meta = with stdenv.lib; {
     isFcitxEngine = true;
-    homepage      = "https://github.com/fcitx/fcitx-chewing";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-chewing/";
-    description   = "Fcitx engine for chewing";
-    license       = licenses.gpl2;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ ericsagnes ];
+    homepage = "https://github.com/fcitx/fcitx-chewing";
+    downloadPage = "http://download.fcitx-im.org/fcitx-chewing/";
+    description = "Fcitx engine for chewing";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ericsagnes ];
   };
 
 }

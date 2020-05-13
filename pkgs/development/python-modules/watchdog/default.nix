@@ -16,7 +16,8 @@ buildPythonPackage rec {
     sha256 = "965f658d0732de3188211932aeb0bb457587f04f63ab4c1e33eab878e9de961d";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin
+  buildInputs = stdenv.lib.optionals
+    stdenv.isDarwin
     [ pkgs.darwin.apple_sdk.frameworks.CoreServices ];
   propagatedBuildInputs = [ argh pathtools pyyaml ];
 

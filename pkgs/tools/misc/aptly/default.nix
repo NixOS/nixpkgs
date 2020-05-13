@@ -1,7 +1,5 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, gnupg, bzip2, xz, graphviz }:
-
 let
-
   version = "1.3.0";
   rev = "v${version}";
 
@@ -20,7 +18,6 @@ let
   };
 
 in
-
 buildGoPackage {
   pname = "aptly";
   inherit version;

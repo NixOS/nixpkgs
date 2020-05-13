@@ -1,5 +1,4 @@
 { lib, buildFHSUserEnv }:
-
 let
   pio-pkgs = pkgs:
     let
@@ -8,7 +7,8 @@ let
           platformio = self.callPackage ./core.nix { };
         };
       };
-    in (with pkgs; [
+    in
+    (with pkgs; [
       zlib
       git
     ]) ++ (with python.pkgs; [
@@ -19,7 +19,8 @@ let
       platformio
     ]);
 
-in buildFHSUserEnv {
+in
+buildFHSUserEnv {
   name = "platformio";
 
   targetPkgs = pio-pkgs;

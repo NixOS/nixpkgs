@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  libyamlcpp, gmock }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, glog
+, leveldb
+, marisa
+, opencc
+, libyamlcpp
+, gmock
+}:
 
 stdenv.mkDerivation rec {
   pname = "librime";
@@ -19,10 +28,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage    = "https://rime.im/";
+    homepage = "https://rime.im/";
     description = "Rime Input Method Engine, the core library";
-    license     = licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ sifmelcara ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

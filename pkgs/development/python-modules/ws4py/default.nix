@@ -1,5 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock, git
-, cherrypy, gevent, tornado }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, mock
+, git
+, cherrypy
+, gevent
+, tornado
+}:
 
 buildPythonPackage rec {
   pname = "ws4py";
@@ -20,7 +28,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = https://ws4py.readthedocs.org;
     description = "A WebSocket package for Python";
-    maintainers = [];
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

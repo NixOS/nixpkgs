@@ -17,7 +17,8 @@ callPackage ../nginx/generic.nix args rec {
   };
 
   fixPatch = patch:
-    runCommand "openresty-${patch.name}" { src = patch; } ''
+    runCommand "openresty-${patch.name}"
+      { src = patch; } ''
       substitute $src $out \
         --replace "src/" "bundle/nginx-${nginxVersion}/src/"
     '';
@@ -37,9 +38,9 @@ callPackage ../nginx/generic.nix args rec {
 
   meta = {
     description = "A fast web application server built on Nginx";
-    homepage    = http://openresty.org;
-    license     = lib.licenses.bsd2;
-    platforms   = lib.platforms.all;
+    homepage = http://openresty.org;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice lblasc emily ];
   };
 }

@@ -32,12 +32,13 @@ let
 
     ${optionalString (cfg.backend.service == "sql" && cfg.backend.sql.driver == "native_pgsql") (
       with cfg.backend; ''
-        Driver = ${sql.driver}
-        ${if (sql.database!= null) then "Database = ${sql.database}" else ""}
-        ${if (sql.host != null) then "Host = ${sql.host}" else ""}
-        ${if (sql.user != null) then "User = ${sql.user}" else ""}
-        ${if (sql.password != null) then "Password = ${sql.password}" else ""}
-      '')}
+      Driver = ${sql.driver}
+      ${if (sql.database != null) then "Database = ${sql.database}" else ""}
+      ${if (sql.host != null) then "Host = ${sql.host}" else ""}
+      ${if (sql.user != null) then "User = ${sql.user}" else ""}
+      ${if (sql.password != null) then "Password = ${sql.password}" else ""}
+    ''
+      )}
 
     ${cfg.extraConfig.smsd}
   '';
@@ -49,7 +50,8 @@ let
     postgresSupport = (service == "sql" && sql.driver == "native_pgsql");
   });
 
-in {
+in
+{
   options = {
     services.gammu-smsd = {
 
@@ -207,7 +209,7 @@ in {
     };
 
     environment.systemPackages = with cfg.backend; [ gammuPackage ]
-    ++ optionals (service == "sql" && sql.driver == "sqlite")  [ pkgs.sqlite ];
+      ++ optionals (service == "sql" && sql.driver == "sqlite") [ pkgs.sqlite ];
 
     systemd.services.gammu-smsd = {
       description = "gammu-smsd daemon";
@@ -215,7 +217,7 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       wants = with cfg.backend; [ ]
-      ++ optionals (service == "sql" && sql.driver == "native_pgsql") [ "postgresql.service" ];
+        ++ optionals (service == "sql" && sql.driver == "native_pgsql") [ "postgresql.service" ];
 
       preStart = with cfg.backend;
 
@@ -226,20 +228,22 @@ in {
           chown ${cfg.user} -R ${sentSMSPath}
           chown ${cfg.user} -R ${errorSMSPath}
         '')
-      + optionalString (service == "sql" && sql.driver == "sqlite") ''
-         cat "${gammuPackage}/${initDBDir}/sqlite.sql" \
-         | ${pkgs.sqlite.bin}/bin/sqlite3 ${sql.database}
+        + optionalString (service == "sql" && sql.driver == "sqlite") ''
+          cat "${gammuPackage}/${initDBDir}/sqlite.sql" \
+          | ${pkgs.sqlite.bin}/bin/sqlite3 ${sql.database}
         ''
-      + (let execPsql = extraArgs: concatStringsSep " " [
-          (optionalString (sql.password != null) "PGPASSWORD=${sql.password}")
-          "${config.services.postgresql.package}/bin/psql"
-          (optionalString (sql.host != null) "-h ${sql.host}")
-          (optionalString (sql.user != null) "-U ${sql.user}")
-          "$extraArgs"
-          "${sql.database}"
-        ]; in optionalString (service == "sql" && sql.driver == "native_pgsql") ''
-         echo '\i '"${gammuPackage}/${initDBDir}/pgsql.sql" | ${execPsql ""}
-       '');
+        + (
+          let execPsql = extraArgs: concatStringsSep " " [
+            (optionalString (sql.password != null) "PGPASSWORD=${sql.password}")
+            "${config.services.postgresql.package}/bin/psql"
+            (optionalString (sql.host != null) "-h ${sql.host}")
+            (optionalString (sql.user != null) "-U ${sql.user}")
+            "$extraArgs"
+            "${sql.database}"
+          ]; in
+          optionalString (service == "sql" && sql.driver == "native_pgsql") ''
+            echo '\i '"${gammuPackage}/${initDBDir}/pgsql.sql" | ${execPsql ""}
+          '');
 
       serviceConfig = {
         User = "${cfg.user}";

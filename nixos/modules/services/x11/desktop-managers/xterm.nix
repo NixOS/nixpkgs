@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.xserver.desktopManager.xterm;
   xSessionEnabled = config.services.xserver.enable;
 
 in
-
 {
   options = {
 
@@ -23,8 +20,9 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.desktopManager.session = singleton
-      { name = "xterm";
+    services.xserver.desktopManager.session =
+      singleton {
+        name = "xterm";
         start = ''
           ${pkgs.xterm}/bin/xterm -ls &
           waitPID=$!

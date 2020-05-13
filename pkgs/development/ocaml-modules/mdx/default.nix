@@ -1,5 +1,19 @@
-{ lib, fetchurl, buildDunePackage, opaline, ocaml
-, astring, cmdliner, cppo, fmt, logs, ocaml-migrate-parsetree, ocaml-version, ocaml_lwt, pandoc, re }:
+{ lib
+, fetchurl
+, buildDunePackage
+, opaline
+, ocaml
+, astring
+, cmdliner
+, cppo
+, fmt
+, logs
+, ocaml-migrate-parsetree
+, ocaml-version
+, ocaml_lwt
+, pandoc
+, re
+}:
 
 buildDunePackage rec {
   pname = "mdx";

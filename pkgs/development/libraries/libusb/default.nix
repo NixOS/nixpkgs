@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1}:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation rec {
   name = "libusb-compat-${version}";

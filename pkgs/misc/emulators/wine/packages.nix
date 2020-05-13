@@ -1,16 +1,20 @@
-{ stdenv_32bit, lib, pkgs, pkgsi686Linux, callPackage,
-  wineRelease ? "stable",
-  supportFlags
+{ stdenv_32bit
+, lib
+, pkgs
+, pkgsi686Linux
+, callPackage
+, wineRelease ? "stable"
+, supportFlags
 }:
-
-let src = lib.getAttr wineRelease (callPackage ./sources.nix {});
-in with src; {
+let src = lib.getAttr wineRelease (callPackage ./sources.nix { });
+in
+with src; {
   wine32 = pkgsi686Linux.callPackage ./base.nix {
     name = "wine-${version}";
     inherit src version supportFlags;
     pkgArches = [ pkgsi686Linux ];
     geckos = [ gecko32 ];
-    monos =  [ mono ];
+    monos = [ mono ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
   wine64 = callPackage ./base.nix {
@@ -18,7 +22,7 @@ in with src; {
     inherit src version supportFlags;
     pkgArches = [ pkgs ];
     geckos = [ gecko64 ];
-    monos =  [ mono ];
+    monos = [ mono ];
     configureFlags = [ "--enable-win64" ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
@@ -28,7 +32,7 @@ in with src; {
     stdenv = stdenv_32bit;
     pkgArches = [ pkgs pkgsi686Linux ];
     geckos = [ gecko32 gecko64 ];
-    monos =  [ mono ];
+    monos = [ mono ];
     buildScript = ./builder-wow.sh;
     platforms = [ "x86_64-linux" ];
   };

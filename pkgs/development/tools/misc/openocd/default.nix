@@ -41,7 +41,8 @@ stdenv.mkDerivation rec {
     "-Wno-error=tautological-compare"
     "-Wno-error=array-bounds"
     "-Wno-error=cpp"
-  ]);
+  ]
+  );
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d"

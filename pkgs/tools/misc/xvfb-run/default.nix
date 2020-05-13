@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, xorgserver, getopt
-, xauth, utillinux, which, fontsConf, gawk, coreutils }:
+{ stdenv
+, fetchurl
+, makeWrapper
+, xorgserver
+, getopt
+, xauth
+, utillinux
+, which
+, fontsConf
+, gawk
+, coreutils
+}:
 let
   xvfb_run = fetchurl {
     name = "xvfb-run";
@@ -10,7 +20,7 @@ let
 in
 stdenv.mkDerivation {
   name = "xvfb-run";
-  buildInputs = [makeWrapper];
+  buildInputs = [ makeWrapper ];
   buildCommand = ''
     mkdir -p $out/bin
     cp ${xvfb_run} $out/bin/xvfb-run

@@ -1,5 +1,8 @@
-{ fetchFromGitHub, ncurses, stdenv,
-  updateAutotoolsGnuConfigScriptsHook }:
+{ fetchFromGitHub
+, ncurses
+, stdenv
+, updateAutotoolsGnuConfigScriptsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "freesweep";

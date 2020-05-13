@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.jboss;
 
   jbossService = pkgs.stdenv.mkDerivation {
@@ -14,7 +12,6 @@ let
   };
 
 in
-
 {
 
   ###### interface

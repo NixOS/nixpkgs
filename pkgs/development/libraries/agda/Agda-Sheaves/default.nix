@@ -11,7 +11,7 @@ agda.mkDerivation (self: rec {
 
   everythingFile = "sheaves.agda";
   topSourceDirectories = [ "../$sourceRoot" ];
-  sourceDirectories = [];
+  sourceDirectories = [ ];
 
   meta = {
     homepage = https://github.com/jonsterling/Agda-Sheaves;
@@ -19,6 +19,6 @@ agda.mkDerivation (self: rec {
     license = stdenv.lib.licenses.cc-by-40;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ ];
-    broken = true;  # replaced by constructive-sheaf-semantics
+    broken = true; # replaced by constructive-sheaf-semantics
   };
 })

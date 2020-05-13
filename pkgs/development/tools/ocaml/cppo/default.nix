@@ -4,7 +4,6 @@ let
   webpage = "https://github.com/ocaml-community/${pname}";
 in
 assert stdenv.lib.versionAtLeast ocaml.version "3.12";
-
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
     version = "1.6.5";
@@ -25,7 +24,6 @@ let param =
     };
   }
 ; in
-
 stdenv.mkDerivation ({
 
   name = "${pname}-${param.version}";
@@ -37,7 +35,7 @@ stdenv.mkDerivation ({
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ] ++ (param.buildInputs or []);
+  buildInputs = [ ocaml findlib ocamlbuild ] ++ (param.buildInputs or [ ]);
 
   meta = with stdenv.lib; {
     description = "The C preprocessor for OCaml";

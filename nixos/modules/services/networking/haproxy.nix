@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.haproxy;
 
@@ -82,7 +81,7 @@ with lib;
     };
 
     users.groups = optionalAttrs (cfg.group == "haproxy") {
-      haproxy = {};
+      haproxy = { };
     };
   };
 }

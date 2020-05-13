@@ -1,6 +1,13 @@
 { stdenv
-, fetchgit, autoconf, automake, pkgconfig, help2man
-, openssl, libuuid, gnu-efi, libbfd
+, fetchgit
+, autoconf
+, automake
+, pkgconfig
+, help2man
+, openssl
+, libuuid
+, gnu-efi
+, libbfd
 }:
 
 stdenv.mkDerivation {
@@ -35,19 +42,18 @@ stdenv.mkDerivation {
     automake --add-missing -Wno-portability
 
     ./configure --prefix=$out
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out
     make install
-    '';
+  '';
 
   meta = with stdenv.lib; {
     description = "Tools for maintaining UEFI signature databases";
-    homepage    = http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases;
+    homepage = http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases;
     maintainers = [ maintainers.tstrobel ];
-    platforms   = [ "x86_64-linux" ]; # Broken on i686
-    license     = licenses.gpl3;
+    platforms = [ "x86_64-linux" ]; # Broken on i686
+    license = licenses.gpl3;
   };
 }
-

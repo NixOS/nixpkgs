@@ -1,9 +1,7 @@
 { config, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.powerManagement.scsiLinkPolicy;
 
   kernel = config.boot.kernelPackages.kernel;
@@ -16,7 +14,6 @@ let
   ];
 
 in
-
 {
   ###### interface
 

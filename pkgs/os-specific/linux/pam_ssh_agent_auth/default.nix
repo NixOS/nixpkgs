@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ # Allow multiple colon-separated authorized keys files to be
+    [
+      # Allow multiple colon-separated authorized keys files to be
       # specified in the file= option.
       ./multiple-key-files.patch
       (fetchpatch {

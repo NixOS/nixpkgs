@@ -1,5 +1,4 @@
 { buildDunePackage, atd, biniou, yojson }:
-
 let runtime =
   buildDunePackage {
     pname = "atdgen-runtime";
@@ -10,7 +9,6 @@ let runtime =
     meta = { inherit (atd.meta) license; };
   }
 ; in
-
 buildDunePackage {
   pname = "atdgen";
   inherit (atd) version src;

@@ -1,7 +1,33 @@
-{ stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, intervaltree, jedi, pycodestyle,
-  psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
-  qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
-  spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle, watchdog, python-language-server
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, makeDesktopItem
+, intervaltree
+, jedi
+, pycodestyle
+, psutil
+, pyflakes
+, rope
+, numpy
+, scipy
+, matplotlib
+, pylint
+, keyring
+, numpydoc
+, qtconsole
+, qtawesome
+, nbconvert
+, mccabe
+, pyopengl
+, cloudpickle
+, pygments
+, spyder-kernels
+, qtpy
+, pyzmq
+, chardet
+, qdarkstyle
+, watchdog
+, python-language-server
 , pyqtwebengine
 }:
 
@@ -17,9 +43,33 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    intervaltree jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
-    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
+    intervaltree
+    jedi
+    pycodestyle
+    psutil
+    pyflakes
+    rope
+    numpy
+    scipy
+    matplotlib
+    pylint
+    keyring
+    numpydoc
+    qtconsole
+    qtawesome
+    nbconvert
+    mccabe
+    pyopengl
+    cloudpickle
+    spyder-kernels
+    pygments
+    qtpy
+    pyzmq
+    chardet
+    pyqtwebengine
+    qdarkstyle
+    watchdog
+    python-language-server
   ];
 
   # There is no test for spyder

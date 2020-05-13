@@ -1,16 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python, makeWrapper, rlwrap ? null
-, tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
+{ stdenv
+, fetchurl
+, fetchpatch
+, sbcl
+, texinfo
+, perl
+, python
+, makeWrapper
+, rlwrap ? null
+, tk ? null
+, gnuplot ? null
+, ecl ? null
+, ecl-fasl ? false
 }:
-
 let
-  name    = "maxima";
+  name = "maxima";
   # old version temporarily kept for sage, see discussion at
   # https://github.com/NixOS/nixpkgs/commit/82254747af35f3e0e0d6f78023ded3a81e25331b
   version = "5.41.0";
 
   searchPath =
-    stdenv.lib.makeBinPath
-      (stdenv.lib.filter (x: x != null) [ sbcl ecl rlwrap tk gnuplot ]);
+    stdenv.lib.makeBinPath (stdenv.lib.filter (x: x != null) [ sbcl ecl rlwrap tk gnuplot ]);
 in
 stdenv.mkDerivation ({
   inherit version;
@@ -22,7 +31,12 @@ stdenv.mkDerivation ({
   };
 
   buildInputs = stdenv.lib.filter (x: x != null) [
-    sbcl ecl texinfo perl python makeWrapper
+    sbcl
+    ecl
+    texinfo
+    perl
+    python
+    makeWrapper
   ];
 
   postInstall = ''
@@ -35,9 +49,10 @@ stdenv.mkDerivation ({
     ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   ''
-   + (stdenv.lib.optionalString ecl-fasl ''
-     cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
-   '')
+  + (stdenv.lib.optionalString ecl-fasl ''
+    cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
+  ''
+  )
   ;
 
   patches = [

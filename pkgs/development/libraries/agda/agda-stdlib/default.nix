@@ -11,7 +11,7 @@ agda.mkDerivation (self: rec {
     sha256 = "190bxsy92ffmvwpmyyg3lxs91vyss2z25rqz1w79gkj56484cy64";
   };
 
-  nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];
+  nativeBuildInputs = [ (ghcWithPackages (self: [ self.filemanip ])) ];
   preConfigure = ''
     runhaskell GenerateEverything.hs
   '';

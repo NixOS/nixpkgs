@@ -1,5 +1,4 @@
 { fetchFromGitHub, lib, pkgs }:
-
 let
 
   http_proxy_connect_module_generic = patchName: rec {
@@ -16,7 +15,6 @@ let
   };
 
 in
-
 {
   brotli = {
     src = let gitsrc = pkgs.fetchFromGitHub {
@@ -24,19 +22,21 @@ in
       repo = "ngx_brotli";
       rev = "e505dce68acc190cc5a1e780a3b0275e39f160ca";
       sha256 = "00j48lffki62y1nmjyy81iklw5nlyzvrjy3z04qch4fp3p57hwla";
-    }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
-      cp -a ${gitsrc} $out
-      substituteInPlace $out/filter/config \
-        --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
-    '';
+    }; in
+      pkgs.runCommandNoCC "ngx_brotli-src"
+        { } ''
+        cp -a ${gitsrc} $out
+        substituteInPlace $out/filter/config \
+          --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
+      '';
     inputs = [ pkgs.brotli ];
   };
 
   coolkit = {
     src = fetchFromGitHub {
-      owner  = "FRiCKLE";
-      repo   = "ngx_coolkit";
-      rev    = "0.2";
+      owner = "FRiCKLE";
+      repo = "ngx_coolkit";
+      rev = "0.2";
       sha256 = "1idj0cqmfsdqawjcqpr1fsq670fdki51ksqk2lslfpcs3yrfjpqh";
     };
   };
@@ -80,9 +80,9 @@ in
 
   fastcgi-cache-purge = {
     src = fetchFromGitHub {
-      owner  = "nginx-modules";
-      repo   = "ngx_cache_purge";
-      rev    = "2.5";
+      owner = "nginx-modules";
+      repo = "ngx_cache_purge";
+      rev = "2.5";
       sha256 = "1f4kxagzvz10vqbcjwi57wink6xw3s1h7wlrrlrlpkmhfbf9704y";
     };
   };
@@ -119,7 +119,7 @@ in
     };
   };
 
-  live ={
+  live = {
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-live-module";
@@ -179,7 +179,7 @@ in
     };
   };
 
-  mpeg-ts ={
+  mpeg-ts = {
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-ts-module";
@@ -188,7 +188,7 @@ in
     };
   };
 
-  naxsi ={
+  naxsi = {
     src = fetchFromGitHub {
       owner = "nbs-system";
       repo = "naxsi";
@@ -223,9 +223,9 @@ in
       version = pkgs.psol.version;
 
       moduleSrc = fetchFromGitHub {
-        owner  = "pagespeed";
-        repo   = "ngx_pagespeed";
-        rev    = "v${version}-stable";
+        owner = "pagespeed";
+        repo = "ngx_pagespeed";
+        rev = "v${version}-stable";
         sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
       };
 
@@ -234,8 +234,8 @@ in
         {
           meta = {
             description = "PageSpeed module for Nginx";
-            homepage    = "https://developers.google.com/speed/pagespeed/module/";
-            license     = pkgs.stdenv.lib.licenses.asl20;
+            homepage = "https://developers.google.com/speed/pagespeed/module/";
+            license = pkgs.stdenv.lib.licenses.asl20;
           };
         }
         ''
@@ -243,7 +243,8 @@ in
           chmod -R +w "$out"
           ln -s "${pkgs.psol}" "$out/psol"
         '';
-    in {
+    in
+    {
       src = ngx_pagespeed;
       inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
     };
@@ -267,7 +268,7 @@ in
     };
   };
 
-  push-stream ={
+  push-stream = {
     src = fetchFromGitHub {
       owner = "wandenberg";
       repo = "nginx-push-stream-module";
@@ -276,7 +277,7 @@ in
     };
   };
 
-  rtmp ={
+  rtmp = {
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-rtmp-module";
@@ -314,9 +315,9 @@ in
 
   slowfs-cache = {
     src = fetchFromGitHub {
-      owner  = "FRiCKLE";
-      repo   = "ngx_slowfs_cache";
-      rev    = "1.10";
+      owner = "FRiCKLE";
+      repo = "ngx_slowfs_cache";
+      rev = "1.10";
       sha256 = "1gyza02pcws3zqm1phv3ag50db5gnapxyjwy8skjmvawz7p5bmxr";
     };
   };

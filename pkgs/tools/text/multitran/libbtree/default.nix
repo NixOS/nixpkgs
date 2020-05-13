@@ -1,4 +1,4 @@
-{stdenv, fetchurl} :
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "libbtree-0.0.1alpha2";

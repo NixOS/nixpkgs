@@ -1,7 +1,11 @@
-{ stdenv, fetchurl, transfig, tex, ghostscript, colm
+{ stdenv
+, fetchurl
+, transfig
+, tex
+, ghostscript
+, colm
 , build-manual ? false
 }:
-
 let
   generic = { version, sha256, license }:
     stdenv.mkDerivation rec {
@@ -35,7 +39,6 @@ let
     };
 
 in
-
 {
   ragelStable = generic {
     version = "6.10";

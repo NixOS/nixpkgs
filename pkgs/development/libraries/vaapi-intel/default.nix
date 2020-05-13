@@ -1,6 +1,18 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gnum4, pkgconfig, python2
-, intel-gpu-tools, libdrm, libva, libX11, libGL, wayland, libXext
-, enableHybridCodec ? false, vaapi-intel-hybrid
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gnum4
+, pkgconfig
+, python2
+, intel-gpu-tools
+, libdrm
+, libva
+, libX11
+, libGL
+, wayland
+, libXext
+, enableHybridCodec ? false
+, vaapi-intel-hybrid
 }:
 
 stdenv.mkDerivation rec {
@@ -8,9 +20,9 @@ stdenv.mkDerivation rec {
   version = "2.4.0";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "intel-vaapi-driver";
-    rev    = version;
+    owner = "intel";
+    repo = "intel-vaapi-driver";
+    rev = version;
     sha256 = "019w0hvjc9l85yqhy01z2bvvljq208nkb43ai2v377l02krgcrbl";
   };
 

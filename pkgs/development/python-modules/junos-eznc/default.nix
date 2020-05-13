@@ -26,7 +26,15 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   propagatedBuildInputs = [
-    scp six pyserial paramiko netaddr ncclient lxml jinja2 pyyaml
+    scp
+    six
+    pyserial
+    paramiko
+    netaddr
+    ncclient
+    lxml
+    jinja2
+    pyyaml
   ];
 
   checkPhase = ''

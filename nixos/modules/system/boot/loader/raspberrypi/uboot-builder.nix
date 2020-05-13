@@ -1,5 +1,4 @@
 { pkgs, version, configTxt }:
-
 let
   isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
 
@@ -27,11 +26,10 @@ pkgs.substituteAll {
   src = ./uboot-builder.sh;
   isExecutable = true;
   inherit (pkgs) bash;
-  path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+  path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep ];
   firmware = pkgs.raspberrypifw;
   inherit uboot;
   inherit configTxt;
   inherit extlinuxConfBuilder;
   inherit version;
 }
-

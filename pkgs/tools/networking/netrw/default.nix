@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , checksumType ? "built-in"
 , libmhash ? null
 , openssl ? null
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = stdenv.lib.optional (checksumType == "mhash") libmhash
-             ++ stdenv.lib.optional (checksumType == "openssl") openssl;
+    ++ stdenv.lib.optional (checksumType == "openssl") openssl;
 
   src = fetchurl {
     urls = [

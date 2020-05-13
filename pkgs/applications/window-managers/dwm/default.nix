@@ -1,5 +1,4 @@
-{stdenv, fetchurl, libX11, libXinerama, libXft, patches ? []}:
-
+{ stdenv, fetchurl, libX11, libXinerama, libXft, patches ? [ ] }:
 let
   name = "dwm-6.2";
 in
@@ -24,7 +23,7 @@ stdenv.mkDerivation {
     homepage = https://suckless.org/;
     description = "Dynamic window manager for X";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = with stdenv.lib.platforms; all;
   };
 }

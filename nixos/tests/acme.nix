@@ -1,7 +1,7 @@
 let
   commonConfig = ./common/letsencrypt/common.nix;
 
-  dnsScript = {writeScript, dnsAddress, bash, curl}: writeScript "dns-hook.sh" ''
+  dnsScript = { writeScript, dnsAddress, bash, curl }: writeScript "dns-hook.sh" ''
     #!${bash}/bin/bash
     set -euo pipefail
     echo '[INFO]' "[$2]" 'dns-hook.sh' $*
@@ -12,7 +12,8 @@ let
     fi
   '';
 
-in import ./make-test-python.nix {
+in
+import ./make-test-python.nix {
   name = "acme";
 
   nodes = rec {
@@ -48,10 +49,10 @@ in import ./make-test-python.nix {
       security.acme = {
         server = "https://acme-v02.api.letsencrypt.org/dir";
         certs."standalone.com" = {
-            webroot = "/var/lib/acme/acme-challenges";
+          webroot = "/var/lib/acme/acme-challenges";
         };
       };
-      systemd.targets."acme-finished-standalone.com" = {};
+      systemd.targets."acme-finished-standalone.com" = { };
       systemd.services."acme-standalone.com" = {
         wants = [ "acme-finished-standalone.com.target" ];
         before = [ "acme-finished-standalone.com.target" ];
@@ -71,7 +72,7 @@ in import ./make-test-python.nix {
 
       # A target remains active. Use this to probe the fact that
       # a service fired eventhough it is not RemainAfterExit
-      systemd.targets."acme-finished-a.example.com" = {};
+      systemd.targets."acme-finished-a.example.com" = { };
       systemd.services."acme-a.example.com" = {
         wants = [ "acme-finished-a.example.com.target" ];
         before = [ "acme-finished-a.example.com.target" ];
@@ -83,7 +84,8 @@ in import ./make-test-python.nix {
       services.nginx.virtualHosts."a.example.com" = {
         enableACME = true;
         forceSSL = true;
-        locations."/".root = pkgs.runCommand "docroot" {} ''
+        locations."/".root = pkgs.runCommand "docroot"
+          { } ''
           mkdir -p "$out"
           echo hello world > "$out/index.html"
         '';
@@ -92,8 +94,8 @@ in import ./make-test-python.nix {
       security.acme.server = "https://acme-v02.api.letsencrypt.org/dir";
 
       nesting.clone = [
-        ({pkgs, ...}: {
-          systemd.targets."acme-finished-b.example.com" = {};
+        ({ pkgs, ... }: {
+          systemd.targets."acme-finished-b.example.com" = { };
           systemd.services."acme-b.example.com" = {
             wants = [ "acme-finished-b.example.com.target" ];
             before = [ "acme-finished-b.example.com.target" ];
@@ -102,13 +104,14 @@ in import ./make-test-python.nix {
           services.nginx.virtualHosts."b.example.com" = {
             enableACME = true;
             forceSSL = true;
-            locations."/".root = pkgs.runCommand "docroot" {} ''
+            locations."/".root = pkgs.runCommand "docroot"
+              { } ''
               mkdir -p "$out"
               echo hello world > "$out/index.html"
             '';
           };
         })
-        ({pkgs, config, nodes, lib, ...}: {
+        ({ pkgs, config, nodes, lib, ... }: {
           security.acme.certs."example.com" = {
             domain = "*.example.com";
             dnsProvider = "exec";
@@ -119,7 +122,7 @@ in import ./make-test-python.nix {
             user = config.services.nginx.user;
             group = config.services.nginx.group;
           };
-          systemd.targets."acme-finished-example.com" = {};
+          systemd.targets."acme-finished-example.com" = { };
           systemd.services."acme-example.com" = {
             wants = [ "acme-finished-example.com.target" ];
             before = [ "acme-finished-example.com.target" "nginx.service" ];
@@ -130,7 +133,8 @@ in import ./make-test-python.nix {
             sslCertificate = config.security.acme.certs."example.com".directory + "/cert.pem";
             sslTrustedCertificate = config.security.acme.certs."example.com".directory + "/full.pem";
             sslCertificateKey = config.security.acme.certs."example.com".directory + "/key.pem";
-            locations."/".root = pkgs.runCommand "docroot" {} ''
+            locations."/".root = pkgs.runCommand "docroot"
+              { } ''
               mkdir -p "$out"
               echo hello world > "$out/index.html"
             '';
@@ -139,7 +143,7 @@ in import ./make-test-python.nix {
       ];
     };
 
-    client = {nodes, lib, ...}: {
+    client = { nodes, lib, ... }: {
       imports = [ commonConfig ];
       networking.nameservers = lib.mkForce [
         nodes.dnsserver.config.networking.primaryIPAddress
@@ -147,16 +151,16 @@ in import ./make-test-python.nix {
     };
   };
 
-  testScript = {nodes, ...}:
+  testScript = { nodes, ... }:
     let
       newServerSystem = nodes.webserver.config.system.build.toplevel;
       switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
     in
     # Note, wait_for_unit does not work for oneshot services that do not have RemainAfterExit=true,
-    # this is because a oneshot goes from inactive => activating => inactive, and never
-    # reaches the active state. To work around this, we create some mock target units which
-    # get pulled in by the oneshot units. The target units linger after activation, and hence we
-    # can use them to probe that a oneshot fired. It is a bit ugly, but it is the best we can do
+      # this is because a oneshot goes from inactive => activating => inactive, and never
+      # reaches the active state. To work around this, we create some mock target units which
+      # get pulled in by the oneshot units. The target units linger after activation, and hence we
+      # can use them to probe that a oneshot fired. It is a bit ugly, but it is the best we can do
     ''
       client.start()
       dnsserver.start()

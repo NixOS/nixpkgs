@@ -1,7 +1,13 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  kdelibs4support, kdnssd, libvncserver, libXtst, libXdamage, qtx11extras
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, kdelibs4support
+, kdnssd
+, libvncserver
+, libXtst
+, libXdamage
+, qtx11extras
 }:
 
 mkDerivation {

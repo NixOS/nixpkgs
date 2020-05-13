@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.dbus;
 
   homeDir = "/run/dbus";
@@ -16,7 +14,6 @@ let
   };
 
 in
-
 {
 
   ###### interface

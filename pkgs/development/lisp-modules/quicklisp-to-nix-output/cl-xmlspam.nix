@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-xmlspam";
 
-  asdFilesToKeep = ["cl-xmlspam.asd"];
+  asdFilesToKeep = [ "cl-xmlspam.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-xmlspam DESCRIPTION Streaming pattern matching for XML SHA256

@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "2.100";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "scheherazade-${version}";
 
   url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade-${version}.zip";

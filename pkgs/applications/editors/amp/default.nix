@@ -1,5 +1,15 @@
-{ stdenv, fetchFromGitHub, rustPlatform, openssl, pkgconfig, python3, xorg, cmake, libgit2, darwin
-, curl }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, openssl
+, pkgconfig
+, python3
+, xorg
+, cmake
+, libgit2
+, darwin
+, curl
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "amp";
@@ -15,8 +25,10 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "09v991rl2w4c4jh7ga7q1lk6wyl2vr71j5cpniij8mcvszrz78qf";
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ openssl python3 xorg.libxcb libgit2 ] ++ stdenv.lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ curl Security AppKit ]);
+  buildInputs = [ openssl python3 xorg.libxcb libgit2 ] ++
+    stdenv.lib.optionals
+      stdenv.isDarwin
+      (with darwin.apple_sdk.frameworks; [ curl Security AppKit ]);
 
   # Tests need to write to the theme directory in HOME.
   preCheck = "export HOME=`mktemp -d`";

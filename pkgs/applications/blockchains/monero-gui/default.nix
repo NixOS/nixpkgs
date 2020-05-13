@@ -1,11 +1,32 @@
-{ stdenv, wrapQtAppsHook, makeDesktopItem, fetchFromGitHub
-, qtbase, qmake, qtmultimedia, qttools
-, qtgraphicaleffects, qtdeclarative
-, qtlocation, qtquickcontrols, qtquickcontrols2
-, qtwebchannel, qtwebengine, qtx11extras, qtxmlpatterns
-, monero, unbound, readline, boost, libunwind
-, libsodium, pcsclite, zeromq, cppzmq, pkgconfig
-, hidapi, randomx
+{ stdenv
+, wrapQtAppsHook
+, makeDesktopItem
+, fetchFromGitHub
+, qtbase
+, qmake
+, qtmultimedia
+, qttools
+, qtgraphicaleffects
+, qtdeclarative
+, qtlocation
+, qtquickcontrols
+, qtquickcontrols2
+, qtwebchannel
+, qtwebengine
+, qtx11extras
+, qtxmlpatterns
+, monero
+, unbound
+, readline
+, boost
+, libunwind
+, libsodium
+, pcsclite
+, zeromq
+, cppzmq
+, pkgconfig
+, hidapi
+, randomx
 }:
 
 with stdenv.lib;
@@ -15,22 +36,37 @@ stdenv.mkDerivation rec {
   version = "0.15.0.1";
 
   src = fetchFromGitHub {
-    owner  = "monero-project";
-    repo   = "monero-gui";
-    rev    = "v${version}";
+    owner = "monero-project";
+    repo = "monero-gui";
+    rev = "v${version}";
     sha256 = "08j8kkncdn57xql0bhmlzjpjkdfhqbpda1p07r797q8qi0nl4w8n";
   };
 
   nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
 
   buildInputs = [
-    qtbase qtmultimedia qtgraphicaleffects
-    qtdeclarative qtlocation
-    qtquickcontrols qtquickcontrols2
-    qtwebchannel qtwebengine qtx11extras
-    qtxmlpatterns monero unbound readline
-    boost libunwind libsodium pcsclite zeromq
-    cppzmq hidapi randomx
+    qtbase
+    qtmultimedia
+    qtgraphicaleffects
+    qtdeclarative
+    qtlocation
+    qtquickcontrols
+    qtquickcontrols2
+    qtwebchannel
+    qtwebengine
+    qtx11extras
+    qtxmlpatterns
+    monero
+    unbound
+    readline
+    boost
+    libunwind
+    libsodium
+    pcsclite
+    zeromq
+    cppzmq
+    hidapi
+    randomx
   ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
@@ -61,7 +97,7 @@ stdenv.mkDerivation rec {
     icon = "monero";
     desktopName = "Monero";
     genericName = "Wallet";
-    categories  = "Application;Network;Utility;";
+    categories = "Application;Network;Utility;";
   };
 
   postInstall = ''
@@ -79,11 +115,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description  = "Private, secure, untraceable currency";
-    homepage     = https://getmonero.org/;
-    license      = licenses.bsd3;
-    platforms    = platforms.all;
+    description = "Private, secure, untraceable currency";
+    homepage = https://getmonero.org/;
+    license = licenses.bsd3;
+    platforms = platforms.all;
     badPlatforms = platforms.darwin;
-    maintainers  = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj ];
   };
 }

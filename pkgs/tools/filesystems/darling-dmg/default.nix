@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu } :
+{ stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu }:
 
 stdenv.mkDerivation rec {
   pname = "darling-dmg";

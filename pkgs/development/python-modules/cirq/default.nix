@@ -73,8 +73,8 @@ buildPythonPackage rec {
   ];
   # TODO: enable op_serializer_test. Error is type checking, for some reason wants bool instead of numpy.bool_. Not sure if protobuf or internal issue
   pytestFlagsArray = [
-    "--ignore=dev_tools"  # Only needed when developing new code, which is out-of-scope
-    "--ignore=cirq/google/op_serializer_test.py"  # investigating in https://github.com/quantumlib/Cirq/issues/2727
+    "--ignore=dev_tools" # Only needed when developing new code, which is out-of-scope
+    "--ignore=cirq/google/op_serializer_test.py" # investigating in https://github.com/quantumlib/Cirq/issues/2727
   ];
 
   meta = with lib; {

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fftw perl ]
-  ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
+    ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
 
   cmakeFlags = (
     if singlePrec then [

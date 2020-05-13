@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "3.000";
-in fetchzip {
+in
+fetchzip {
   name = "source-serif-pro-${version}";
 
   url = "https://github.com/adobe-fonts/source-serif-pro/releases/download/${version}R/source-serif-pro-${version}R.zip";
@@ -24,4 +24,3 @@ in fetchzip {
     maintainers = with maintainers; [ ttuegel ];
   };
 }
-

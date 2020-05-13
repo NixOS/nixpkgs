@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , linkStatic ? (stdenv.hostPlatform.system == "i686-cygwin")
 , autoreconfHook
 }:
@@ -43,6 +44,6 @@ stdenv.mkDerivation rec {
     description = "High-quality data compression program";
     license = licenses.bsdOriginal;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

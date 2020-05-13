@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, nss, python3
-, blacklist ? []
+{ stdenv
+, fetchurl
+, nss
+, python3
+, blacklist ? [ ]
 , includeEmail ? false
 }:
 
 with stdenv.lib;
-
 let
 
   certdata2pem = fetchurl {
@@ -14,7 +16,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation {
   name = "nss-cacert-${nss.version}";
 

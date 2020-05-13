@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-async";
 
-  asdFilesToKeep = ["cl-async.asd"];
+  asdFilesToKeep = [ "cl-async.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-async DESCRIPTION Asynchronous operations for Common Lisp. SHA256

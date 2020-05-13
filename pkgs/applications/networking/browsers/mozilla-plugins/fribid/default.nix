@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ./translation-xgettext-to-intltool.patch
     ./plugin-linkfix.patch
     ./ipc-lazytrace.patch
-    ];
+  ];
 
   postPatch = "substituteInPlace plugin/pluginutil.c --replace strndup strndup_";
 

@@ -9,14 +9,14 @@ import ./make-test-python.nix (pkgs: {
 
       systemd.services.backdoor.conflicts = [ "sleep.target" ];
 
-      swapDevices = mkOverride 0 [ { device = "/dev/vdb"; } ];
+      swapDevices = mkOverride 0 [{ device = "/dev/vdb"; }];
 
       networking.firewall.allowedTCPPorts = [ 4444 ];
 
       systemd.services.listener.serviceConfig.ExecStart = "${pkgs.netcat}/bin/nc -l 4444 -k";
     };
 
-    probe = { pkgs, ...}: {
+    probe = { pkgs, ... }: {
       environment.systemPackages = [ pkgs.netcat ];
     };
   };

@@ -1,10 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, ocaml, findlib }:
-
 let
   pname = "ocplib-simplex";
   version = "0.4";
 in
-
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-${pname}-${version}";
 

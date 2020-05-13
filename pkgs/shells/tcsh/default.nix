@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, fetchpatch
-, ncurses }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "tcsh";
@@ -16,7 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
+  patches = stdenv.lib.optional
+    stdenv.hostPlatform.isMusl
     (fetchpatch {
       name = "sysmalloc.patch";
       url = "https://git.alpinelinux.org/cgit/aports/plain/community/tcsh/001-sysmalloc.patch?id=184585c046cdd56512f1a76e426dd799b368f8cf";

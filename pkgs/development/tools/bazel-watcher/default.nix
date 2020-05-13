@@ -6,7 +6,6 @@
 , python
 , stdenv
 }:
-
 let
   patches = [
     ./use-go-in-path.patch

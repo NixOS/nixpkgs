@@ -3,7 +3,7 @@ stdenv.mkDerivation rec {
   pname = "obliv-c";
   version = "0.0pre20180624";
   buildInputs = [ perl ]
-  ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ]);
+    ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ]);
   propagatedBuildInputs = [ libgcrypt ];
   src = fetchFromGitHub {
     owner = "samee";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = ''A GCC wrapper that makes it easy to embed secure computation protocols inside regular C programs'';
     license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -3,27 +3,29 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
-  cfg  = config.programs.ssh;
+  cfg = config.programs.ssh;
 
   askPassword = cfg.askPassword;
 
-  askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper"
-    ''
-      #! ${pkgs.runtimeShell} -e
-      export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
-      exec ${askPassword}
-    '';
+  askPasswordWrapper =
+    pkgs.writeScript "ssh-askpass-wrapper"
+      ''
+        #! ${pkgs.runtimeShell} -e
+        export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
+        exec ${askPassword}
+      '';
 
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
-  knownHostsText = (flip (concatMapStringsSep "\n") knownHosts
-    (h: assert h.hostNames != [];
+  knownHostsText = (
+    flip
+      (concatMapStringsSep "\n")
+      knownHosts
+      (h: assert h.hostNames != [ ];
       optionalString h.certAuthority "@cert-authority " + concatStringsSep "," h.hostNames + " "
-      + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
-    )) + "\n";
+        + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile))
+  ) + "\n";
 
 in
 {
@@ -135,7 +137,7 @@ in
       };
 
       knownHosts = mkOption {
-        default = {};
+        default = { };
         type = types.loaOf (types.submodule ({ name, ... }: {
           options = {
             certAuthority = mkOption {
@@ -148,7 +150,7 @@ in
             };
             hostNames = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               description = ''
                 A list of host names and/or IP numbers used for accessing
                 the host's ssh service.
@@ -209,12 +211,12 @@ in
       mkDefault (config.services.xserver.enable || config.programs.ssh.forwardX11 || config.services.openssh.forwardX11);
 
     assertions =
-      [ { assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
-          message = "cannot enable X11 forwarding without setting XAuth location";
-        }
-      ] ++ flip mapAttrsToList cfg.knownHosts (name: data: {
+      [{
+        assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
+        message = "cannot enable X11 forwarding without setting XAuth location";
+      }] ++ flip mapAttrsToList cfg.knownHosts (name: data: {
         assertion = (data.publicKey == null && data.publicKeyFile != null) ||
-                    (data.publicKey != null && data.publicKeyFile == null);
+        (data.publicKey != null && data.publicKeyFile == null);
         message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
       });
 
@@ -235,24 +237,27 @@ in
 
         ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
 
-        ${optionalString (cfg.pubkeyAcceptedKeyTypes != []) "PubkeyAcceptedKeyTypes ${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
-        ${optionalString (cfg.hostKeyAlgorithms != []) "HostKeyAlgorithms ${concatStringsSep "," cfg.hostKeyAlgorithms}"}
+        ${optionalString (cfg.pubkeyAcceptedKeyTypes != [ ]) "PubkeyAcceptedKeyTypes ${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
+        ${optionalString (cfg.hostKeyAlgorithms != [ ]) "HostKeyAlgorithms ${concatStringsSep "," cfg.hostKeyAlgorithms}"}
       '';
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
     # FIXME: this should really be socket-activated for über-awesomeness.
-    systemd.user.services.ssh-agent = mkIf cfg.startAgent
-      { description = "SSH Agent";
+    systemd.user.services.ssh-agent =
+      mkIf
+        cfg.startAgent {
+        description = "SSH Agent";
         wantedBy = [ "default.target" ];
         unitConfig.ConditionUser = "!@system";
         serviceConfig =
-          { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
+          {
+            ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
             ExecStart =
-                "${cfg.package}/bin/ssh-agent " +
-                optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
-                optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") +
-                "-a %t/ssh-agent";
+              "${cfg.package}/bin/ssh-agent " +
+              optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
+              optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") +
+              "-a %t/ssh-agent";
             StandardOutput = "null";
             Type = "forking";
             Restart = "on-failure";
@@ -265,12 +270,14 @@ in
         environment.DISPLAY = "fake"; # required to make ssh-agent start $SSH_ASKPASS
       };
 
-    environment.extraInit = optionalString cfg.startAgent
-      ''
-        if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
-          export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent"
-        fi
-      '';
+    environment.extraInit =
+      optionalString
+        cfg.startAgent
+        ''
+          if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
+            export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent"
+          fi
+        '';
 
     environment.variables.SSH_ASKPASS = optionalString config.services.xserver.enable askPassword;
 

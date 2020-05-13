@@ -1,15 +1,19 @@
 { version, sha256 }:
 
-{ stdenv, buildPackages, fetchurl, perl, xz
+{ stdenv
+, buildPackages
+, fetchurl
+, perl
+, xz
 
-# we are a dependency of gcc, this simplifies bootstraping
-, interactive ? false, ncurses, procps
+  # we are a dependency of gcc, this simplifies bootstraping
+, interactive ? false
+, ncurses
+, procps
 }:
-
 let
   crossBuildTools = interactive && stdenv.hostPlatform != stdenv.buildPlatform;
 in
-
 with stdenv.lib;
 
 stdenv.mkDerivation {

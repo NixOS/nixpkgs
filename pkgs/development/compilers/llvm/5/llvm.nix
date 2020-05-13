@@ -14,14 +14,12 @@
 , enableManpages ? false
 , enableSharedLibraries ? !enableManpages
 }:
-
 let
   # Used when creating a versioned symlinks of libLLVM.dylib
   versionSuffixes = with stdenv.lib;
     let parts = splitVersion release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
-
 stdenv.mkDerivation ({
   pname = "llvm";
   inherit version;
@@ -89,7 +87,7 @@ stdenv.mkDerivation ({
 
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
+    "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
@@ -98,7 +96,9 @@ stdenv.mkDerivation ({
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
   ]
-  ++ stdenv.lib.optional enableSharedLibraries
+  ++
+  stdenv.lib.optional
+    enableSharedLibraries
     "-DLLVM_LINK_LLVM_DYLIB=ON"
   ++ stdenv.lib.optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
@@ -107,7 +107,9 @@ stdenv.mkDerivation ({
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ]
-  ++ stdenv.lib.optional (!isDarwin)
+  ++
+  stdenv.lib.optional
+    (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
@@ -151,10 +153,10 @@ stdenv.mkDerivation ({
   requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.ncsa;
+    homepage = http://llvm.org/;
+    license = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
@@ -163,7 +165,7 @@ stdenv.mkDerivation ({
     make docs-llvm-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     make -C docs install

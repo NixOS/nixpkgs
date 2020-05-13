@@ -14,7 +14,7 @@ rec {
 
   packageName = "misc-extensions";
 
-  asdFilesToKeep = ["misc-extensions.asd"];
+  asdFilesToKeep = [ "misc-extensions.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM misc-extensions DESCRIPTION System lacks description SHA256

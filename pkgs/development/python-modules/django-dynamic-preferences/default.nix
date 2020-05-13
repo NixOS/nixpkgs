@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, django, persisting-theory, six
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, django
+, persisting-theory
+, six
 }:
 
 buildPythonPackage rec {
@@ -11,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1v7mf48gb2qmmks3ifnhkh0vfd7hpvx5v81ypc9cqy35n3ir0q4a";
   };
 
-  propagatedBuildInputs = [ six django persisting-theory ]; 
+  propagatedBuildInputs = [ six django persisting-theory ];
 
   # django.core.exceptions.ImproperlyConfigured: Requested setting DYNAMIC_PREFERENCES, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings
   doCheck = false;

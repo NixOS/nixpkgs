@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
 , python3
 , gsettings-desktop-schemas
 , desktop-file-utils
@@ -18,7 +20,8 @@
 let
   version = "7.3";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "gradio";
   inherit version;
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
   buildInputs = [ zlib ]
-              ++ stdenv.lib.optional stdenv.hostPlatform.isWindows libgnurx;
+    ++ stdenv.lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   doCheck = true;
 

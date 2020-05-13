@@ -1,6 +1,22 @@
-{ stdenv, fetchurl, cairo, fontconfig, freetype, gdk-pixbuf, glib
-, glibc, gtk2, libX11, makeWrapper, nspr, nss, pango, unzip, gconf
-, libXi, libXrender, libXext
+{ stdenv
+, fetchurl
+, cairo
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, glibc
+, gtk2
+, libX11
+, makeWrapper
+, nspr
+, nss
+, pango
+, unzip
+, gconf
+, libXi
+, libXrender
+, libXext
 }:
 let
   allSpecs = {
@@ -20,10 +36,21 @@ let
 
   libs = stdenv.lib.makeLibraryPath [
     stdenv.cc.cc.lib
-    cairo fontconfig freetype
-    gdk-pixbuf glib gtk2 gconf
-    libX11 nspr nss pango libXrender
-    gconf libXext libXi
+    cairo
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gtk2
+    gconf
+    libX11
+    nspr
+    nss
+    pango
+    libXrender
+    gconf
+    libXext
+    libXi
   ];
 in
 stdenv.mkDerivation rec {

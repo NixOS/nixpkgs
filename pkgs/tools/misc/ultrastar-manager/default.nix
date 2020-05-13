@@ -1,6 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub, pkgconfig, symlinkJoin, qmake, diffPlugins
-, qtbase, qtmultimedia, taglib, libmediainfo, libzen, libbass }:
-
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, symlinkJoin
+, qmake
+, diffPlugins
+, qtbase
+, qtmultimedia
+, taglib
+, libmediainfo
+, libzen
+, libbass
+}:
 let
   version = "2019-04-23";
   rev = "ef4524e2239ddbb60f26e05bfba1f4f28cb7b54f";
@@ -16,7 +27,7 @@ let
     "lyric"
     "preparatory"
     "rename"
- ];
+  ];
 
   patchedSrc =
     let src = fetchFromGitHub {
@@ -24,7 +35,8 @@ let
       repo = "UltraStar-Manager";
       inherit rev sha256;
     };
-    in mkDerivation {
+    in
+    mkDerivation {
       name = "${src.name}-patched";
       inherit src;
       phases = [ "unpackPhase" "patchPhase" ];
@@ -82,7 +94,8 @@ let
       paths = map buildPlugin plugins;
     };
 
-in mkDerivation {
+in
+mkDerivation {
   pname = "ultrastar-manager";
   inherit version;
   src = patchedSrc;

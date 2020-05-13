@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python3 }:
-
 let
-
   major = "2020";
   minor = "02";
   patch = "18";
@@ -32,8 +30,6 @@ let
   };
 
 in
-
-
 stdenv.mkDerivation {
   pname = "empty-epsilon";
   inherit version;

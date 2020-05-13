@@ -1,7 +1,6 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.stubby;
 
@@ -85,7 +84,6 @@ let
     ${cfg.upstreamServers}
   '';
 in
-
 {
   options = {
     services.stubby = {

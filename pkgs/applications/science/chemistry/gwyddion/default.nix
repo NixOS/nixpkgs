@@ -1,7 +1,6 @@
 { stdenv, fetchurl, gtk2, pkgconfig }:
 
 with stdenv.lib;
-
 let version = "2.48"; in
 stdenv.mkDerivation {
   pname = "gwyddion";

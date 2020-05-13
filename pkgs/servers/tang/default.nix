@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, asciidoc
-, jansson, jose, http-parser, systemd
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, asciidoc
+, jansson
+, jose
+, http-parser
+, systemd
 }:
 
 stdenv.mkDerivation rec {

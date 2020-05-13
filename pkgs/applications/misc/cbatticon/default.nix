@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext wrapGAppsHook ];
 
-  buildInputs =  [ glib gtk3 libnotify ];
+  buildInputs = [ glib gtk3 libnotify ];
 
   patchPhase = ''
     sed -i -e 's/ -Wno-format//g' Makefile

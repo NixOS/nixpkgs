@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=( \
       --prefix PATH : ${makeBinPath [ jre which ]} \
       --prefix LD_LIBRARY_PATH : ${makeLibraryPath [
-        gtk3
-        glib
-        libXtst
-      ]} \
+      gtk3
+      glib
+      libXtst
+    ]} \
       --prefix JRE_HOME : ${jre} \
       --prefix JAVA_HOME : ${jre} \
       --prefix SMARTGITHG_JAVA_HOME : ${jre} \

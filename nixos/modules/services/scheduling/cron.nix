@@ -1,20 +1,19 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   # Put all the system cronjobs together.
-  systemCronJobsFile = pkgs.writeText "system-crontab"
-    ''
-      SHELL=${pkgs.bash}/bin/bash
-      PATH=${config.system.path}/bin:${config.system.path}/sbin
-      ${optionalString (config.services.cron.mailto != null) ''
-        MAILTO="${config.services.cron.mailto}"
-      ''}
-      NIX_CONF_DIR=/etc/nix
-      ${lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
-    '';
+  systemCronJobsFile =
+    pkgs.writeText "system-crontab"
+      ''
+        SHELL=${pkgs.bash}/bin/bash
+        PATH=${config.system.path}/bin:${config.system.path}/sbin
+        ${optionalString (config.services.cron.mailto != null) ''
+          MAILTO="${config.services.cron.mailto}"
+        ''}
+        NIX_CONF_DIR=/etc/nix
+        ${lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
+      '';
 
   # Vixie cron requires build-time configuration for the sendmail path.
   cronNixosPkg = pkgs.cron.override {
@@ -24,11 +23,10 @@ let
   };
 
   allFiles =
-    optional (config.services.cron.systemCronJobs != []) systemCronJobsFile
+    optional (config.services.cron.systemCronJobs != [ ]) systemCronJobsFile
     ++ config.services.cron.cronFiles;
 
 in
-
 {
 
   ###### interface
@@ -51,7 +49,7 @@ in
 
       systemCronJobs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = literalExample ''
           [ "* * * * *  test   ls -l / > /tmp/cronout 2>&1"
             "* * * * *  eelco  echo Hello World > /home/eelco/cronout"
@@ -75,7 +73,7 @@ in
 
       cronFiles = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of extra crontab files that will be read and appended to the main
           crontab file when the cron service starts.
@@ -91,23 +89,27 @@ in
 
   config = mkMerge [
 
-    { services.cron.enable = mkDefault (allFiles != []); }
+    { services.cron.enable = mkDefault (allFiles != [ ]); }
     (mkIf (config.services.cron.enable) {
       security.wrappers.crontab.source = "${cronNixosPkg}/bin/crontab";
       environment.systemPackages = [ cronNixosPkg ];
       environment.etc.crontab =
-        { source = pkgs.runCommand "crontabs" { inherit allFiles; preferLocalBuild = true; }
-            ''
-              touch $out
-              for i in $allFiles; do
-                cat "$i" >> $out
-              done
-            '';
+        {
+          source =
+            pkgs.runCommand "crontabs"
+              { inherit allFiles; preferLocalBuild = true; }
+              ''
+                touch $out
+                for i in $allFiles; do
+                  cat "$i" >> $out
+                done
+              '';
           mode = "0600"; # Cron requires this.
         };
 
       systemd.services.cron =
-        { description = "Cron Daemon";
+        {
+          description = "Cron Daemon";
 
           wantedBy = [ "multi-user.target" ];
 
@@ -126,7 +128,8 @@ in
           serviceConfig.ExecStart = "${cronNixosPkg}/bin/cron -n";
         };
 
-    })
+    }
+    )
 
   ];
 

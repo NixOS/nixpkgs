@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-   HOME=$(mktemp -d) pytest test/perfplot_test.py
+    HOME=$(mktemp -d) pytest test/perfplot_test.py
   '';
 
   meta = with lib; {

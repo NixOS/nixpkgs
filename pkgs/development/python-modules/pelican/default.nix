@@ -1,8 +1,26 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, glibcLocales, git
-, mock, nose, markdown, lxml, typogrify
-, jinja2, pygments, docutils, pytz, unidecode, six, dateutil, feedgenerator
-, blinker, pillow, beautifulsoup4, markupsafe }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, glibcLocales
+, git
+, mock
+, nose
+, markdown
+, lxml
+, typogrify
+, jinja2
+, pygments
+, docutils
+, pytz
+, unidecode
+, six
+, dateutil
+, feedgenerator
+, blinker
+, pillow
+, beautifulsoup4
+, markupsafe
+}:
 
 buildPythonPackage rec {
   pname = "pelican";
@@ -40,15 +58,26 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
-    blinker pillow beautifulsoup4 markupsafe lxml
+    jinja2
+    pygments
+    docutils
+    pytz
+    unidecode
+    six
+    dateutil
+    feedgenerator
+    blinker
+    pillow
+    beautifulsoup4
+    markupsafe
+    lxml
   ];
 
   checkInputs = [
     nose
   ];
 
-  postPatch= ''
+  postPatch = ''
     substituteInPlace pelican/tests/test_pelican.py \
       --replace "'git'" "'${git}/bin/git'"
 
@@ -58,7 +87,7 @@ buildPythonPackage rec {
         @unittest.skip("")' pelican/tests/test_readers.py
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
 
   # We only want to patch shebangs in /bin, and not those

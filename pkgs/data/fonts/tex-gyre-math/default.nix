@@ -1,5 +1,4 @@
 { stdenv, fetchzip }:
-
 let
   variants = {
     bonum = {
@@ -28,8 +27,8 @@ let
     };
   };
 
-  mkVariant = variant: {displayName, version, sha256, outputHash}:
-    let dotless_version = builtins.replaceStrings ["."] [""] version; in
+  mkVariant = variant: { displayName, version, sha256, outputHash }:
+    let dotless_version = builtins.replaceStrings [ "." ] [ "" ] version; in
     stdenv.mkDerivation rec {
       name = "tex-gyre-${variant}-math-${version}";
       inherit version;
@@ -64,4 +63,4 @@ let
       };
     };
 in
-  stdenv.lib.mapAttrs mkVariant variants
+stdenv.lib.mapAttrs mkVariant variants

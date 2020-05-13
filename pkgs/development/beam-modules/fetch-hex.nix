@@ -1,7 +1,9 @@
 { stdenv, fetchurl }:
 
-{ pkg, version, sha256
-, meta ? {}
+{ pkg
+, version
+, sha256
+, meta ? { }
 }:
 
 with stdenv.lib;

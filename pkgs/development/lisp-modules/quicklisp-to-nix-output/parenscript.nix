@@ -14,7 +14,7 @@ rec {
 
   packageName = "parenscript";
 
-  asdFilesToKeep = ["parenscript.asd"];
+  asdFilesToKeep = [ "parenscript.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM parenscript DESCRIPTION Lisp to JavaScript transpiler SHA256

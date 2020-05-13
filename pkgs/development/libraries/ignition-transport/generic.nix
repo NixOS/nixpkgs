@@ -1,8 +1,14 @@
-{ stdenv, cmake, pkgconfig, utillinux,
-  protobuf, zeromq, cppzmq,
-  version, src    # parametrize version and src so we can easily have pkgs
-                  # for different versions
-  , ...
+{ stdenv
+, cmake
+, pkgconfig
+, utillinux
+, protobuf
+, zeromq
+, cppzmq
+, version
+, src    # parametrize version and src so we can easily have pkgs
+  # for different versions
+, ...
 }:
 
 stdenv.mkDerivation {
@@ -11,7 +17,10 @@ stdenv.mkDerivation {
   inherit src;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake protobuf zeromq
+  buildInputs = [
+    cmake
+    protobuf
+    zeromq
     utillinux # we need utillinux/e2fsprogs uuid/uuid.h
   ];
 

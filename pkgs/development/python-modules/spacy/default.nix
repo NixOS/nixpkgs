@@ -29,19 +29,19 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-   blis
-   catalogue
-   cymem
-   jsonschema
-   murmurhash
-   numpy
-   plac
-   preshed
-   requests
-   setuptools
-   srsly
-   thinc
-   wasabi
+    blis
+    catalogue
+    cymem
+    jsonschema
+    murmurhash
+    numpy
+    plac
+    preshed
+    requests
+    setuptools
+    srsly
+    thinc
+    wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
@@ -58,5 +58,5 @@ buildPythonPackage rec {
     homepage = https://github.com/explosion/spaCy;
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk sdll ];
-    };
+  };
 }

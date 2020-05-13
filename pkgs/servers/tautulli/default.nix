@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, python }:
+{ stdenv, fetchFromGitHub, python }:
 
 stdenv.mkDerivation rec {
   version = "2.2.0";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out" "$out $pythonPath"
   '';
 
-  meta  = with stdenv.lib; {
+  meta = with stdenv.lib; {
     description = "A Python based monitoring and tracking tool for Plex Media Server.";
     homepage = "https://tautulli.com/";
     license = licenses.gpl3;

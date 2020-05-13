@@ -3,27 +3,43 @@
 with lib;
 with import ./systemd-unit-options.nix { inherit config lib; };
 with import ./systemd-lib.nix { inherit config lib pkgs; };
-
 let
-
   cfg = config.systemd.network;
 
   checkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name" "OriginalName"
-      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port" "Advertise"
-      "TCPSegmentationOffload" "TCP6SegmentationOffload" "GenericSegmentationOffload"
-      "GenericReceiveOffload" "LargeReceiveOffload" "RxChannels" "TxChannels"
-      "OtherChannels" "CombinedChannels"
+      "Description"
+      "Alias"
+      "MACAddressPolicy"
+      "MACAddress"
+      "NamePolicy"
+      "Name"
+      "OriginalName"
+      "MTUBytes"
+      "BitsPerSecond"
+      "Duplex"
+      "AutoNegotiation"
+      "WakeOnLan"
+      "Port"
+      "Advertise"
+      "TCPSegmentationOffload"
+      "TCP6SegmentationOffload"
+      "GenericSegmentationOffload"
+      "GenericReceiveOffload"
+      "LargeReceiveOffload"
+      "RxChannels"
+      "TxChannels"
+      "OtherChannels"
+      "CombinedChannels"
     ])
-    (assertValueOneOf "MACAddressPolicy" ["persistent" "random" "none"])
+    (assertValueOneOf "MACAddressPolicy" [ "persistent" "random" "none" ])
     (assertMacAddress "MACAddress")
     (assertByteFormat "MTUBytes")
     (assertByteFormat "BitsPerSecond")
-    (assertValueOneOf "Duplex" ["half" "full"])
+    (assertValueOneOf "Duplex" [ "half" "full" ])
     (assertValueOneOf "AutoNegotiation" boolValues)
-    (assertValueOneOf "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon" "off"])
-    (assertValueOneOf "Port" ["tp" "aui" "bnc" "mii" "fibre"])
+    (assertValueOneOf "WakeOnLan" [ "phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon" "off" ])
+    (assertValueOneOf "Port" [ "tp" "aui" "bnc" "mii" "fibre" ])
     (assertValueOneOf "TCPSegmentationOffload" boolValues)
     (assertValueOneOf "TCP6SegmentationOffload" boolValues)
     (assertValueOneOf "GenericSegmentationOffload" boolValues)
@@ -42,15 +58,44 @@ let
 
   checkNetdev = checkUnitConfig "Netdev" [
     (assertOnlyFields [
-      "Description" "Name" "Kind" "MTUBytes" "MACAddress"
+      "Description"
+      "Name"
+      "Kind"
+      "MTUBytes"
+      "MACAddress"
     ])
     (assertHasField "Name")
     (assertHasField "Kind")
     (assertValueOneOf "Kind" [
-      "bond" "bridge" "dummy" "gre" "gretap" "ip6gre" "ip6tnl" "ip6gretap" "ipip"
-      "ipvlan" "macvlan" "macvtap" "sit" "tap" "tun" "veth" "vlan" "vti" "vti6"
-      "vxlan" "geneve" "vrf" "vcan" "vxcan" "wireguard" "netdevsim" "xfrm"
-    ])
+      "bond"
+      "bridge"
+      "dummy"
+      "gre"
+      "gretap"
+      "ip6gre"
+      "ip6tnl"
+      "ip6gretap"
+      "ipip"
+      "ipvlan"
+      "macvlan"
+      "macvtap"
+      "sit"
+      "tap"
+      "tun"
+      "veth"
+      "vlan"
+      "vti"
+      "vti6"
+      "vxlan"
+      "geneve"
+      "vrf"
+      "vcan"
+      "vxcan"
+      "wireguard"
+      "netdevsim"
+      "xfrm"
+    ]
+    )
     (assertByteFormat "MTUBytes")
     (assertMacAddress "MACAddress")
   ];
@@ -65,7 +110,9 @@ let
   # refrain ourselves from providing a footgun.
   checkWireGuard = checkUnitConfig "WireGuard" [
     (assertOnlyFields [
-      "PrivateKeyFile" "ListenPort" "FwMark"
+      "PrivateKeyFile"
+      "ListenPort"
+      "FwMark"
     ])
     # The following check won't work on nix <= 2.2
     # see https://github.com/NixOS/nix/pull/2378
@@ -80,14 +127,17 @@ let
   # refrain ourselves from providing a footgun.
   checkWireGuardPeer = checkUnitConfig "WireGuardPeer" [
     (assertOnlyFields [
-      "PublicKey" "PresharedKeyFile" "AllowedIPs"
-      "Endpoint" "PersistentKeepalive"
+      "PublicKey"
+      "PresharedKeyFile"
+      "AllowedIPs"
+      "Endpoint"
+      "PersistentKeepalive"
     ])
     (assertRange "PersistentKeepalive" 1 65535)
   ];
 
   checkVlan = checkUnitConfig "VLAN" [
-    (assertOnlyFields ["Id" "GVRP" "MVRP" "LooseBinding" "ReorderHeader"])
+    (assertOnlyFields [ "Id" "GVRP" "MVRP" "LooseBinding" "ReorderHeader" ])
     (assertRange "Id" 0 4094)
     (assertValueOneOf "GVRP" boolValues)
     (assertValueOneOf "MVRP" boolValues)
@@ -96,17 +146,32 @@ let
   ];
 
   checkMacvlan = checkUnitConfig "MACVLAN" [
-    (assertOnlyFields ["Mode"])
-    (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
+    (assertOnlyFields [ "Mode" ])
+    (assertValueOneOf "Mode" [ "private" "vepa" "bridge" "passthru" ])
   ];
 
   checkVxlan = checkUnitConfig "VXLAN" [
     (assertOnlyFields [
-      "Id" "Remote" "Local" "TOS" "TTL" "MacLearning" "FDBAgeingSec"
-      "MaximumFDBEntries" "ReduceARPProxy" "L2MissNotification"
-      "L3MissNotification" "RouteShortCircuit" "UDPChecksum"
-      "UDP6ZeroChecksumTx" "UDP6ZeroChecksumRx" "RemoteChecksumTx"
-      "RemoteChecksumRx" "GroupPolicyExtension" "DestinationPort" "PortRange"
+      "Id"
+      "Remote"
+      "Local"
+      "TOS"
+      "TTL"
+      "MacLearning"
+      "FDBAgeingSec"
+      "MaximumFDBEntries"
+      "ReduceARPProxy"
+      "L2MissNotification"
+      "L3MissNotification"
+      "RouteShortCircuit"
+      "UDPChecksum"
+      "UDP6ZeroChecksumTx"
+      "UDP6ZeroChecksumRx"
+      "RemoteChecksumTx"
+      "RemoteChecksumRx"
+      "GroupPolicyExtension"
+      "DestinationPort"
+      "PortRange"
       "FlowLabel"
     ])
     (assertRange "TTL" 0 255)
@@ -126,25 +191,36 @@ let
 
   checkTunnel = checkUnitConfig "Tunnel" [
     (assertOnlyFields [
-      "Local" "Remote" "TOS" "TTL" "DiscoverPathMTU" "IPv6FlowLabel" "CopyDSCP"
-      "EncapsulationLimit" "Key" "InputKey" "OutputKey" "Mode" "Independent"
+      "Local"
+      "Remote"
+      "TOS"
+      "TTL"
+      "DiscoverPathMTU"
+      "IPv6FlowLabel"
+      "CopyDSCP"
+      "EncapsulationLimit"
+      "Key"
+      "InputKey"
+      "OutputKey"
+      "Mode"
+      "Independent"
       "AllowLocalRemote"
     ])
     (assertRange "TTL" 0 255)
     (assertValueOneOf "DiscoverPathMTU" boolValues)
     (assertValueOneOf "CopyDSCP" boolValues)
-    (assertValueOneOf "Mode" ["ip6ip6" "ipip6" "any"])
+    (assertValueOneOf "Mode" [ "ip6ip6" "ipip6" "any" ])
     (assertValueOneOf "Independent" boolValues)
     (assertValueOneOf "AllowLocalRemote" boolValues)
   ];
 
   checkPeer = checkUnitConfig "Peer" [
-    (assertOnlyFields ["Name" "MACAddress"])
+    (assertOnlyFields [ "Name" "MACAddress" ])
     (assertMacAddress "MACAddress")
   ];
 
   tunTapChecks = [
-    (assertOnlyFields ["OneQueue" "MultiQueue" "PacketInfo" "VNetHeader" "User" "Group"])
+    (assertOnlyFields [ "OneQueue" "MultiQueue" "PacketInfo" "VNetHeader" "User" "Group" ])
     (assertValueOneOf "OneQueue" boolValues)
     (assertValueOneOf "MultiQueue" boolValues)
     (assertValueOneOf "PacketInfo" boolValues)
@@ -157,25 +233,50 @@ let
 
   checkBond = checkUnitConfig "Bond" [
     (assertOnlyFields [
-      "Mode" "TransmitHashPolicy" "LACPTransmitRate" "MIIMonitorSec"
-      "UpDelaySec" "DownDelaySec" "LearnPacketIntervalSec" "AdSelect"
-      "FailOverMACPolicy" "ARPValidate" "ARPIntervalSec" "ARPIPTargets"
-      "ARPAllTargets" "PrimaryReselectPolicy" "ResendIGMP" "PacketsPerSlave"
-      "GratuitousARP" "AllSlavesActive" "MinLinks"
+      "Mode"
+      "TransmitHashPolicy"
+      "LACPTransmitRate"
+      "MIIMonitorSec"
+      "UpDelaySec"
+      "DownDelaySec"
+      "LearnPacketIntervalSec"
+      "AdSelect"
+      "FailOverMACPolicy"
+      "ARPValidate"
+      "ARPIntervalSec"
+      "ARPIPTargets"
+      "ARPAllTargets"
+      "PrimaryReselectPolicy"
+      "ResendIGMP"
+      "PacketsPerSlave"
+      "GratuitousARP"
+      "AllSlavesActive"
+      "MinLinks"
     ])
     (assertValueOneOf "Mode" [
-      "balance-rr" "active-backup" "balance-xor"
-      "broadcast" "802.3ad" "balance-tlb" "balance-alb"
-    ])
+      "balance-rr"
+      "active-backup"
+      "balance-xor"
+      "broadcast"
+      "802.3ad"
+      "balance-tlb"
+      "balance-alb"
+    ]
+    )
     (assertValueOneOf "TransmitHashPolicy" [
-      "layer2" "layer3+4" "layer2+3" "encap2+3" "encap3+4"
-    ])
-    (assertValueOneOf "LACPTransmitRate" ["slow" "fast"])
-    (assertValueOneOf "AdSelect" ["stable" "bandwidth" "count"])
-    (assertValueOneOf "FailOverMACPolicy" ["none" "active" "follow"])
-    (assertValueOneOf "ARPValidate" ["none" "active" "backup" "all"])
-    (assertValueOneOf "ARPAllTargets" ["any" "all"])
-    (assertValueOneOf "PrimaryReselectPolicy" ["always" "better" "failure"])
+      "layer2"
+      "layer3+4"
+      "layer2+3"
+      "encap2+3"
+      "encap3+4"
+    ]
+    )
+    (assertValueOneOf "LACPTransmitRate" [ "slow" "fast" ])
+    (assertValueOneOf "AdSelect" [ "stable" "bandwidth" "count" ])
+    (assertValueOneOf "FailOverMACPolicy" [ "none" "active" "follow" ])
+    (assertValueOneOf "ARPValidate" [ "none" "active" "backup" "all" ])
+    (assertValueOneOf "ARPAllTargets" [ "any" "all" ])
+    (assertValueOneOf "PrimaryReselectPolicy" [ "always" "better" "failure" ])
     (assertRange "ResendIGMP" 0 255)
     (assertRange "PacketsPerSlave" 0 65535)
     (assertRange "GratuitousARP" 0 255)
@@ -184,7 +285,8 @@ let
 
   checkXfrm = checkUnitConfig "Xfrm" [
     (assertOnlyFields [
-      "InterfaceId" "Independent"
+      "InterfaceId"
+      "Independent"
     ])
     # The following check won't work on nix <= 2.2
     # see https://github.com/NixOS/nix/pull/2378
@@ -197,30 +299,63 @@ let
 
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
-      "Description" "DHCP" "DHCPServer" "LinkLocalAddressing" "IPv4LLRoute"
-      "IPv6Token" "LLMNR" "MulticastDNS" "DNSOverTLS" "DNSSEC"
-      "DNSSECNegativeTrustAnchors" "LLDP" "EmitLLDP" "BindCarrier" "Address"
-      "Gateway" "DNS" "Domains" "NTP" "IPForward" "IPMasquerade"
-      "IPv6PrivacyExtensions" "IPv6AcceptRA" "IPv6DuplicateAddressDetection"
-      "IPv6HopLimit" "IPv4ProxyARP" "IPv6ProxyNDP" "IPv6ProxyNDPAddress"
-      "IPv6PrefixDelegation" "IPv6MTUBytes" "Bridge" "Bond" "VRF" "VLAN"
-      "IPVLAN" "MACVLAN" "VXLAN" "Tunnel" "ActiveSlave" "PrimarySlave"
-      "ConfigureWithoutCarrier" "Xfrm"
+      "Description"
+      "DHCP"
+      "DHCPServer"
+      "LinkLocalAddressing"
+      "IPv4LLRoute"
+      "IPv6Token"
+      "LLMNR"
+      "MulticastDNS"
+      "DNSOverTLS"
+      "DNSSEC"
+      "DNSSECNegativeTrustAnchors"
+      "LLDP"
+      "EmitLLDP"
+      "BindCarrier"
+      "Address"
+      "Gateway"
+      "DNS"
+      "Domains"
+      "NTP"
+      "IPForward"
+      "IPMasquerade"
+      "IPv6PrivacyExtensions"
+      "IPv6AcceptRA"
+      "IPv6DuplicateAddressDetection"
+      "IPv6HopLimit"
+      "IPv4ProxyARP"
+      "IPv6ProxyNDP"
+      "IPv6ProxyNDPAddress"
+      "IPv6PrefixDelegation"
+      "IPv6MTUBytes"
+      "Bridge"
+      "Bond"
+      "VRF"
+      "VLAN"
+      "IPVLAN"
+      "MACVLAN"
+      "VXLAN"
+      "Tunnel"
+      "ActiveSlave"
+      "PrimarySlave"
+      "ConfigureWithoutCarrier"
+      "Xfrm"
     ])
     # Note: For DHCP the values both, none, v4, v6 are deprecated
-    (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6" "both" "none" "v4" "v6"])
+    (assertValueOneOf "DHCP" [ "yes" "no" "ipv4" "ipv6" "both" "none" "v4" "v6" ])
     (assertValueOneOf "DHCPServer" boolValues)
-    (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "ipv4-fallback" "fallback"])
+    (assertValueOneOf "LinkLocalAddressing" [ "yes" "no" "ipv4" "ipv6" "ipv4-fallback" "fallback" ])
     (assertValueOneOf "IPv4LLRoute" boolValues)
-    (assertValueOneOf "LLMNR" ["yes" "resolve" "no"])
-    (assertValueOneOf "MulticastDNS" ["yes" "resolve" "no"])
-    (assertValueOneOf "DNSOverTLS" ["opportunistic" "no"])
-    (assertValueOneOf "DNSSEC" ["yes" "allow-downgrade" "no"])
-    (assertValueOneOf "LLDP" ["yes" "routers-only" "no"])
-    (assertValueOneOf "EmitLLDP" ["yes" "no" "nearest-bridge" "non-tpmr-bridge" "customer-bridge"])
-    (assertValueOneOf "IPForward" ["yes" "no" "ipv4" "ipv6"])
+    (assertValueOneOf "LLMNR" [ "yes" "resolve" "no" ])
+    (assertValueOneOf "MulticastDNS" [ "yes" "resolve" "no" ])
+    (assertValueOneOf "DNSOverTLS" [ "opportunistic" "no" ])
+    (assertValueOneOf "DNSSEC" [ "yes" "allow-downgrade" "no" ])
+    (assertValueOneOf "LLDP" [ "yes" "routers-only" "no" ])
+    (assertValueOneOf "EmitLLDP" [ "yes" "no" "nearest-bridge" "non-tpmr-bridge" "customer-bridge" ])
+    (assertValueOneOf "IPForward" [ "yes" "no" "ipv4" "ipv6" ])
     (assertValueOneOf "IPMasquerade" boolValues)
-    (assertValueOneOf "IPv6PrivacyExtensions" ["yes" "no" "prefer-public" "kernel"])
+    (assertValueOneOf "IPv6PrivacyExtensions" [ "yes" "no" "prefer-public" "kernel" ])
     (assertValueOneOf "IPv6AcceptRA" boolValues)
     (assertValueOneOf "IPv4ProxyARP" boolValues)
     (assertValueOneOf "IPv6ProxyNDP" boolValues)
@@ -232,12 +367,20 @@ let
 
   checkAddress = checkUnitConfig "Address" [
     (assertOnlyFields [
-      "Address" "Peer" "Broadcast" "Label" "PreferredLifetime" "Scope"
-      "HomeAddress" "DuplicateAddressDetection" "ManageTemporaryAddress"
-      "PrefixRoute" "AutoJoin"
+      "Address"
+      "Peer"
+      "Broadcast"
+      "Label"
+      "PreferredLifetime"
+      "Scope"
+      "HomeAddress"
+      "DuplicateAddressDetection"
+      "ManageTemporaryAddress"
+      "PrefixRoute"
+      "AutoJoin"
     ])
     (assertHasField "Address")
-    (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
+    (assertValueOneOf "PreferredLifetime" [ "forever" "infinity" "0" 0 ])
     (assertValueOneOf "HomeAddress" boolValues)
     (assertValueOneOf "DuplicateAddressDetection" boolValues)
     (assertValueOneOf "ManageTemporaryAddress" boolValues)
@@ -247,9 +390,19 @@ let
 
   checkRoutingPolicyRule = checkUnitConfig "RoutingPolicyRule" [
     (assertOnlyFields [
-      "TypeOfService" "From" "To" "FirewallMark" "Table" "Priority"
-      "IncomingInterface" "OutgoingInterface" "SourcePort" "DestinationPort"
-      "IPProtocol" "InvertRule" "Family"
+      "TypeOfService"
+      "From"
+      "To"
+      "FirewallMark"
+      "Table"
+      "Priority"
+      "IncomingInterface"
+      "OutgoingInterface"
+      "SourcePort"
+      "DestinationPort"
+      "IPProtocol"
+      "InvertRule"
+      "Family"
     ])
     (assertRange "TypeOfService" 0 255)
     # The following check won't work on nix <= 2.2
@@ -262,25 +415,53 @@ let
     (assertPort "SourcePort")
     (assertPort "DestinationPort")
     (assertValueOneOf "InvertRule" boolValues)
-    (assertValueOneOf "Family" ["ipv4" "ipv6" "both"])
+    (assertValueOneOf "Family" [ "ipv4" "ipv6" "both" ])
   ];
 
   checkRoute = checkUnitConfig "Route" [
     (assertOnlyFields [
-      "Gateway" "GatewayOnLink" "Destination" "Source" "Metric"
-      "IPv6Preference" "Scope" "PreferredSource" "Table" "Protocol" "Type"
-      "InitialCongestionWindow" "InitialAdvertisedReceiveWindow" "QuickAck"
+      "Gateway"
+      "GatewayOnLink"
+      "Destination"
+      "Source"
+      "Metric"
+      "IPv6Preference"
+      "Scope"
+      "PreferredSource"
+      "Table"
+      "Protocol"
+      "Type"
+      "InitialCongestionWindow"
+      "InitialAdvertisedReceiveWindow"
+      "QuickAck"
       "MTUBytes"
     ])
   ];
 
   checkDhcp = checkUnitConfig "DHCP" [
     (assertOnlyFields [
-      "UseDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
-      "Hostname" "UseDomains" "UseRoutes" "UseTimezone" "CriticalConnection"
-      "ClientIdentifier" "VendorClassIdentifier" "UserClass" "DUIDType"
-      "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
-      "ListenPort" "RapidCommit"
+      "UseDNS"
+      "UseNTP"
+      "UseMTU"
+      "Anonymize"
+      "SendHostname"
+      "UseHostname"
+      "Hostname"
+      "UseDomains"
+      "UseRoutes"
+      "UseTimezone"
+      "CriticalConnection"
+      "ClientIdentifier"
+      "VendorClassIdentifier"
+      "UserClass"
+      "DUIDType"
+      "DUIDRawData"
+      "IAID"
+      "RequestBroadcast"
+      "RouteMetric"
+      "RouteTable"
+      "ListenPort"
+      "RapidCommit"
     ])
     (assertValueOneOf "UseDNS" boolValues)
     (assertValueOneOf "UseNTP" boolValues)
@@ -288,7 +469,7 @@ let
     (assertValueOneOf "Anonymize" boolValues)
     (assertValueOneOf "SendHostname" boolValues)
     (assertValueOneOf "UseHostname" boolValues)
-    (assertValueOneOf "UseDomains" ["yes" "no" "route"])
+    (assertValueOneOf "UseDomains" [ "yes" "no" "route" ])
     (assertValueOneOf "UseRoutes" boolValues)
     (assertValueOneOf "UseTimezone" boolValues)
     (assertValueOneOf "CriticalConnection" boolValues)
@@ -300,8 +481,17 @@ let
 
   checkDhcpServer = checkUnitConfig "DHCPServer" [
     (assertOnlyFields [
-      "PoolOffset" "PoolSize" "DefaultLeaseTimeSec" "MaxLeaseTimeSec"
-      "EmitDNS" "DNS" "EmitNTP" "NTP" "EmitRouter" "EmitTimezone" "Timezone"
+      "PoolOffset"
+      "PoolSize"
+      "DefaultLeaseTimeSec"
+      "MaxLeaseTimeSec"
+      "EmitDNS"
+      "DNS"
+      "EmitNTP"
+      "NTP"
+      "EmitRouter"
+      "EmitTimezone"
+      "Timezone"
     ])
     (assertValueOneOf "EmitDNS" boolValues)
     (assertValueOneOf "EmitNTP" boolValues)
@@ -312,14 +502,19 @@ let
   # .network files have a [Link] section with different options than in .netlink files
   checkNetworkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "MACAddress" "MTUBytes" "ARP" "Multicast" "Unmanaged" "RequiredForOnline"
+      "MACAddress"
+      "MTUBytes"
+      "ARP"
+      "Multicast"
+      "Unmanaged"
+      "RequiredForOnline"
     ])
     (assertMacAddress "MACAddress")
     (assertByteFormat "MTUBytes")
     (assertValueOneOf "ARP" boolValues)
     (assertValueOneOf "Multicast" boolValues)
     (assertValueOneOf "Unmanaged" boolValues)
-    (assertValueOneOf "RequiredForOnline" (boolValues ++ ["off" "no-carrier" "dormant" "degraded-carrier" "carrier" "degraded" "enslaved" "routable"]))
+    (assertValueOneOf "RequiredForOnline" (boolValues ++ [ "off" "no-carrier" "dormant" "degraded-carrier" "carrier" "degraded" "enslaved" "routable" ]))
   ];
 
 
@@ -334,7 +529,7 @@ let
     };
 
     matchConfig = mkOption {
-      default = {};
+      default = { };
       example = { Name = "eth0"; };
       type = types.attrsOf unitOption;
       description = ''
@@ -357,7 +552,7 @@ let
   linkOptions = commonNetworkOptions // {
 
     linkConfig = mkOption {
-      default = {};
+      default = { };
       example = { MACAddress = "00:ff:ee:aa:cc:dd"; };
       type = types.addCheck (types.attrsOf unitOption) checkLink;
       description = ''
@@ -373,7 +568,7 @@ let
   netdevOptions = commonNetworkOptions // {
 
     netdevConfig = mkOption {
-      default = {};
+      default = { };
       example = { Name = "mybridge"; Kind = "bridge"; };
       type = types.addCheck (types.attrsOf unitOption) checkNetdev;
       description = ''
@@ -385,7 +580,7 @@ let
     };
 
     vrfConfig = mkOption {
-      default = {};
+      default = { };
       example = { Table = 2342; };
       type = types.addCheck (types.attrsOf unitOption) checkVRF;
       description = ''
@@ -400,7 +595,7 @@ let
     };
 
     wireguardConfig = mkOption {
-      default = {};
+      default = { };
       example = {
         PrivateKeyFile = "/etc/wireguard/secret.key";
         ListenPort = 51820;
@@ -419,14 +614,16 @@ let
     };
 
     wireguardPeers = mkOption {
-      default = [];
-      example = [ { wireguardPeerConfig={
-        Endpoint = "192.168.1.1:51820";
-        PublicKey = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
-        PresharedKeyFile = "/etc/wireguard/psk.key";
-        AllowedIPs = [ "10.0.0.1/32" ];
-        PersistentKeepalive = 15;
-      };}];
+      default = [ ];
+      example = [{
+        wireguardPeerConfig = {
+          Endpoint = "192.168.1.1:51820";
+          PublicKey = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
+          PresharedKeyFile = "/etc/wireguard/psk.key";
+          AllowedIPs = [ "10.0.0.1/32" ];
+          PersistentKeepalive = 15;
+        };
+      }];
       type = with types; listOf (submodule wireguardPeerOptions);
       description = ''
         Each item in this array specifies an option in the
@@ -440,7 +637,7 @@ let
     };
 
     vlanConfig = mkOption {
-      default = {};
+      default = { };
       example = { Id = "4"; };
       type = types.addCheck (types.attrsOf unitOption) checkVlan;
       description = ''
@@ -452,7 +649,7 @@ let
     };
 
     macvlanConfig = mkOption {
-      default = {};
+      default = { };
       example = { Mode = "private"; };
       type = types.addCheck (types.attrsOf unitOption) checkMacvlan;
       description = ''
@@ -464,7 +661,7 @@ let
     };
 
     vxlanConfig = mkOption {
-      default = {};
+      default = { };
       example = { Id = "4"; };
       type = types.addCheck (types.attrsOf unitOption) checkVxlan;
       description = ''
@@ -476,7 +673,7 @@ let
     };
 
     tunnelConfig = mkOption {
-      default = {};
+      default = { };
       example = { Remote = "192.168.1.1"; };
       type = types.addCheck (types.attrsOf unitOption) checkTunnel;
       description = ''
@@ -488,7 +685,7 @@ let
     };
 
     peerConfig = mkOption {
-      default = {};
+      default = { };
       example = { Name = "veth2"; };
       type = types.addCheck (types.attrsOf unitOption) checkPeer;
       description = ''
@@ -500,7 +697,7 @@ let
     };
 
     tunConfig = mkOption {
-      default = {};
+      default = { };
       example = { User = "openvpn"; };
       type = types.addCheck (types.attrsOf unitOption) checkTun;
       description = ''
@@ -512,7 +709,7 @@ let
     };
 
     tapConfig = mkOption {
-      default = {};
+      default = { };
       example = { User = "openvpn"; };
       type = types.addCheck (types.attrsOf unitOption) checkTap;
       description = ''
@@ -524,7 +721,7 @@ let
     };
 
     bondConfig = mkOption {
-      default = {};
+      default = { };
       example = { Mode = "802.3ad"; };
       type = types.addCheck (types.attrsOf unitOption) checkBond;
       description = ''
@@ -536,7 +733,7 @@ let
     };
 
     xfrmConfig = mkOption {
-      default = {};
+      default = { };
       example = { InterfaceId = 1; };
       type = types.addCheck (types.attrsOf unitOption) checkXfrm;
       description = ''
@@ -552,7 +749,7 @@ let
   addressOptions = {
     options = {
       addressConfig = mkOption {
-        default = {};
+        default = { };
         example = { Address = "192.168.0.100/24"; };
         type = types.addCheck (types.attrsOf unitOption) checkAddress;
         description = ''
@@ -569,7 +766,7 @@ let
     options = {
       routingPolicyRuleConfig = mkOption {
         default = { };
-        example = { routingPolicyRuleConfig = { Table = 10; IncomingInterface = "eth1"; Family = "both"; } ;};
+        example = { routingPolicyRuleConfig = { Table = 10; IncomingInterface = "eth1"; Family = "both"; }; };
         type = types.addCheck (types.attrsOf unitOption) checkRoutingPolicyRule;
         description = ''
           Each attribute in this set specifies an option in the
@@ -584,7 +781,7 @@ let
   routeOptions = {
     options = {
       routeConfig = mkOption {
-        default = {};
+        default = { };
         example = { Gateway = "192.168.0.1"; };
         type = types.addCheck (types.attrsOf unitOption) checkRoute;
         description = ''
@@ -600,7 +797,7 @@ let
   wireguardPeerOptions = {
     options = {
       wireguardPeerConfig = mkOption {
-        default = {};
+        default = { };
         example = { };
         type = types.addCheck (types.attrsOf unitOption) checkWireGuardPeer;
         description = ''
@@ -617,7 +814,7 @@ let
   networkOptions = commonNetworkOptions // {
 
     networkConfig = mkOption {
-      default = {};
+      default = { };
       example = { Description = "My Network"; };
       type = types.addCheck (types.attrsOf unitOption) checkNetwork;
       description = ''
@@ -629,7 +826,7 @@ let
     };
 
     dhcpConfig = mkOption {
-      default = {};
+      default = { };
       example = { UseDNS = true; UseRoutes = true; };
       type = types.addCheck (types.attrsOf unitOption) checkDhcp;
       description = ''
@@ -641,7 +838,7 @@ let
     };
 
     dhcpServerConfig = mkOption {
-      default = {};
+      default = { };
       example = { PoolOffset = 50; EmitDNS = false; };
       type = types.addCheck (types.attrsOf unitOption) checkDhcpServer;
       description = ''
@@ -653,7 +850,7 @@ let
     };
 
     linkConfig = mkOption {
-      default = {};
+      default = { };
       example = { Unmanaged = true; };
       type = types.addCheck (types.attrsOf unitOption) checkNetworkLink;
       description = ''
@@ -853,13 +1050,14 @@ let
     };
   };
 
-  commonMatchText = def: optionalString (def.matchConfig != {}) ''
+  commonMatchText = def: optionalString (def.matchConfig != { }) ''
     [Match]
     ${attrsToSection def.matchConfig}
   '';
 
   linkToUnit = name: def:
-    { inherit (def) enable;
+    {
+      inherit (def) enable;
       text = commonMatchText def +
         ''
           [Link]
@@ -870,7 +1068,8 @@ let
     };
 
   netdevToUnit = name: def:
-    { inherit (def) enable;
+    {
+      inherit (def) enable;
       text = commonMatchText def +
         ''
           [NetDev]
@@ -941,7 +1140,8 @@ let
     };
 
   networkToUnit = name: def:
-    { inherit (def) enable;
+    {
+      inherit (def) enable;
       text = commonMatchText def +
         ''
           ${optionalString (def.linkConfig != { }) ''
@@ -994,12 +1194,15 @@ let
         '';
     };
 
-  unitFiles = listToAttrs (map (name: {
-    name = "systemd/network/${name}";
-    value.source = "${cfg.units.${name}.unit}/${name}";
-  }) (attrNames cfg.units));
+  unitFiles = listToAttrs (
+    map
+      (name: {
+        name = "systemd/network/${name}";
+        value.source = "${cfg.units.${name}.unit}/${name}";
+      })
+      (attrNames cfg.units)
+  );
 in
-
 {
 
   options = {
@@ -1013,34 +1216,36 @@ in
     };
 
     systemd.network.links = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
+      default = { };
+      type = with types; attrsOf (submodule [{ options = linkOptions; }]);
       description = "Definition of systemd network links.";
     };
 
     systemd.network.netdevs = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
+      default = { };
+      type = with types; attrsOf (submodule [{ options = netdevOptions; }]);
       description = "Definition of systemd network devices.";
     };
 
     systemd.network.networks = mkOption {
-      default = {};
-      type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
+      default = { };
+      type = with types; attrsOf (submodule [{ options = networkOptions; } networkConfig]);
       description = "Definition of systemd networks.";
     };
 
     systemd.network.units = mkOption {
       description = "Definition of networkd units.";
-      default = {};
+      default = { };
       internal = true;
       type = with types; attrsOf (submodule (
         { name, config, ... }:
-        { options = mapAttrs (_: x: x // { internal = true; }) concreteUnitOptions;
+        {
+          options = mapAttrs (_: x: x // { internal = true; }) concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
-        }));
+        }
+      ));
     };
 
   };
@@ -1050,7 +1255,8 @@ in
     users.users.systemd-network.group = "systemd-network";
 
     systemd.additionalUpstreamSystemUnits = [
-      "systemd-networkd.service" "systemd-networkd-wait-online.service"
+      "systemd-networkd.service"
+      "systemd-networkd-wait-online.service"
     ];
 
     systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links

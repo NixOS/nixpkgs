@@ -1,6 +1,11 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, intltool
-, gtk, pkgconfig, flex }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, intltool
+, gtk
+, pkgconfig
+, flex
+}:
 
 stdenv.mkDerivation rec {
   pname = "galculator";

@@ -1,11 +1,9 @@
-{config, pkgs, lib, ...}:
+{ config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.monit;
 in
-
 {
   options.services.monit = {
 

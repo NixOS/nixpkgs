@@ -1,6 +1,10 @@
-{stdenv, fetchurl, libedit, automake, autoconf, libtool
-,
-  # icu = null: use icu which comes with firebird
+{ stdenv
+, fetchurl
+, libedit
+, automake
+, autoconf
+, libtool
+, # icu = null: use icu which comes with firebird
 
   # icu = pkgs.icu => you may have trouble sharing database files with windows
   # users if "Collation unicode" columns are being used
@@ -49,14 +53,15 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags =
-    [ "--with-serivec-port=${builtins.toString port}"
+    [
+      "--with-serivec-port=${builtins.toString port}"
       "--with-service-name=${serviceName}"
       "--with-system-editline"
       "--with-fblog=/var/log/firebird"
       "--with-fbconf=/etc/firebird"
       "--with-fbsecure-db=/var/db/firebird/system"
     ]
-    ++ (stdenv.lib.optional  (icu != null) "--with-system-icu")
+    ++ (stdenv.lib.optional (icu != null) "--with-system-icu")
     ++ (stdenv.lib.optional superServer "--enable-superserver");
 
   src = fetchurl {
@@ -70,7 +75,7 @@ stdenv.mkDerivation rec {
   #   sed -i 's@cp /usr/share/automake-.*@@' autogen.sh
   #   sh autogen.sh $configureFlags --prefix=$out
   # '';
-  buildInputs = [libedit icu automake autoconf libtool];
+  buildInputs = [ libedit icu automake autoconf libtool ];
 
   # TODO: Probably this hase to be tidied up..
   # make install requires beeing. disabling the root checks
@@ -82,8 +87,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SQL relational database management system";
     homepage = https://www.firebirdnews.org;
-    license = ["IDPL" "Interbase-1.0"];
-    maintainers = [stdenv.lib.maintainers.marcweber];
+    license = [ "IDPL" "Interbase-1.0" ];
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
     broken = true;
   };

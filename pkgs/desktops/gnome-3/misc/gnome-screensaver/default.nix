@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # the original package is deprecated and the Ubuntu version has a number of useful patches
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/gnome-screensaver";
-    rev =  "4f7b666131dec060a5aac9117f395ac522a627b4";
+    rev = "4f7b666131dec060a5aac9117f395ac522a627b4";
     sha256 = "15xqgcpm825cy3rm8pj00qlblq66svmh06lcw8qi74a3g0xcir87";
   };
 

@@ -1,8 +1,14 @@
-{ stdenv, fetchurl, qt4, pkgconfig, libsamplerate, fftwSinglePrec, which, cmake
-, darwin }:
-
+{ stdenv
+, fetchurl
+, qt4
+, pkgconfig
+, libsamplerate
+, fftwSinglePrec
+, which
+, cmake
+, darwin
+}:
 let version = "1.1.0"; in
-
 stdenv.mkDerivation rec {
   pname = "liblastfm";
   inherit version;
@@ -24,7 +30,7 @@ stdenv.mkDerivation rec {
     repositories.git = git://github.com/lastfm/liblastfm.git;
     description = "Official LastFM library";
     inherit (qt4.meta) platforms;
-    maintainers =  [ maintainers.phreedom ];
+    maintainers = [ maintainers.phreedom ];
     license = licenses.gpl3;
   };
 }

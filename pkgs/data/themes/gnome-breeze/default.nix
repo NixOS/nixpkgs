@@ -20,6 +20,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.lgpl2;
     maintainers = with stdenv.lib.maintainers; [ bennofs ];
     platforms = stdenv.lib.platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

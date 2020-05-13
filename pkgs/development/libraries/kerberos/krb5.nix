@@ -1,13 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, perl, yacc, bootstrap_cmds
-, openssl, openldap, libedit, keyutils
+{ stdenv
+, fetchurl
+, pkgconfig
+, perl
+, yacc
+, bootstrap_cmds
+, openssl
+, openldap
+, libedit
+, keyutils
 
-# Extra Arguments
+  # Extra Arguments
 , type ? ""
-# This is called "staticOnly" because krb5 does not support
-# builting both static and shared, see below.
+  # This is called "staticOnly" because krb5 does not support
+  # builting both static and shared, see below.
 , staticOnly ? false
 }:
-
 let
   libOnly = type == "lib";
 in
@@ -24,16 +31,19 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = [ "--with-tcl=no" "--localstatedir=/var/lib"]
+  configureFlags = [ "--with-tcl=no" "--localstatedir=/var/lib" ]
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
     ++ optional staticOnly [ "--enable-static" "--disable-shared" ]
     ++ optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
-    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform)
-       [ "krb5_cv_attr_constructor_destructor=yes,yes"
-         "ac_cv_func_regcomp=yes"
-         "ac_cv_printf_positional=yes"
-       ];
+    ++
+    optionals
+      (stdenv.buildPlatform != stdenv.hostPlatform)
+      [
+        "krb5_cv_attr_constructor_destructor=yes,yes"
+        "ac_cv_func_regcomp=yes"
+        "ac_cv_printf_positional=yes"
+      ];
 
   nativeBuildInputs = [ pkgconfig perl ]
     ++ optional (!libOnly) yacc

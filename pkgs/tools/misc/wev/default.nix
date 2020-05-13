@@ -1,12 +1,16 @@
-{ stdenv, fetchurl
-, pkg-config, scdoc
-, wayland, wayland-protocols, libxkbcommon
+{ stdenv
+, fetchurl
+, pkg-config
+, scdoc
+, wayland
+, wayland-protocols
+, libxkbcommon
 }:
-
 let
   version = "2019-08-11";
   commit = "47d17393473be152cf601272faf5704fff1c3f92";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "wev-unstable";
   inherit version;
 

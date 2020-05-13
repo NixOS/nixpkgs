@@ -1,8 +1,22 @@
-{ stdenv, fetchurl, alsaLib, cairo, cmake, libjack2, fftw, fltk13, lash,  libjpeg
-, libXpm, minixml, ntk, pkgconfig, zlib, liblo
+{ stdenv
+, fetchurl
+, alsaLib
+, cairo
+, cmake
+, libjack2
+, fftw
+, fltk13
+, lash
+, libjpeg
+, libXpm
+, minixml
+, ntk
+, pkgconfig
+, zlib
+, liblo
 }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "zynaddsubfx";
   version = "3.0.5";
 

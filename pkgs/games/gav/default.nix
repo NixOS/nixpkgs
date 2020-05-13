@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net} :
+{ stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net }:
 
 stdenv.mkDerivation {
   name = "gav-0.9.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   '';
 
   patches = [ ./gcc.patch ];
-  buildInputs = [SDL SDL_image SDL_mixer SDL_net];
+  buildInputs = [ SDL SDL_image SDL_mixer SDL_net ];
 
   meta = {
     description = "Remake of AV Arcade Volleyball";

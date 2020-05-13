@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.xserver.desktopManager.pantheon;
   serviceCfg = config.services.pantheon;
 
@@ -13,7 +11,6 @@ let
   };
 
 in
-
 {
 
   meta = {
@@ -26,7 +23,7 @@ in
     services.pantheon = {
 
       contractor = {
-         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
+        enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
       };
 
       apps.enable = mkEnableOption "Pantheon default applications";
@@ -41,7 +38,7 @@ in
       };
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.gnome3.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
@@ -50,9 +47,9 @@ in
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
         apply = list: list ++
-        [
-          pkgs.pantheon.pantheon-agent-geoclue2
-        ];
+          [
+            pkgs.pantheon.pantheon-agent-geoclue2
+          ];
       };
 
       extraWingpanelIndicators = mkOption {
@@ -74,7 +71,7 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
@@ -84,7 +81,7 @@ in
     };
 
     environment.pantheon.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExample "[ pkgs.pantheon.elementary-camera ]";
       type = types.listOf types.package;
       description = "Which packages pantheon should exclude from the default environment";
@@ -100,10 +97,12 @@ in
 
       # Ensure lightdm is used when Pantheon is enabled
       # Without it screen locking will be nonfunctional because of the use of lightlocker
-      warnings = optional (config.services.xserver.displayManager.lightdm.enable != true)
-        ''
-          Using Pantheon without LightDM as a displayManager will break screenlocking from the UI.
-        '';
+      warnings =
+        optional
+          (config.services.xserver.displayManager.lightdm.enable != true)
+          ''
+            Using Pantheon without LightDM as a displayManager will break screenlocking from the UI.
+          '';
 
       services.xserver.displayManager.lightdm.greeters.pantheon.enable = mkDefault true;
 
@@ -114,15 +113,15 @@ in
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
             ${concatMapStrings (p: ''
-              if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-                export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
-              fi
+          if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+            export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+          fi
 
-              if [ -d "${p}/lib/girepository-1.0" ]; then
-                export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-                export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
-              fi
-            '') cfg.sessionPath}
+          if [ -d "${p}/lib/girepository-1.0" ]; then
+            export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+            export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+          fi
+        '') cfg.sessionPath}
         fi
       '';
 
@@ -212,11 +211,14 @@ in
         elementary-settings-daemon
         pantheon-agent-geoclue2
         pantheon-agent-polkit
-      ]) ++ (gnome3.removePackagesByName [
-        gnome3.geary
-        gnome3.epiphany
-        gnome3.gnome-font-viewer
-      ] config.environment.pantheon.excludePackages);
+      ]) ++ (
+        gnome3.removePackagesByName [
+          gnome3.geary
+          gnome3.epiphany
+          gnome3.gnome-font-viewer
+        ]
+          config.environment.pantheon.excludePackages
+      );
 
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
@@ -259,27 +261,31 @@ in
         monospace = [ "Roboto Mono" ];
         sansSerif = [ "Open Sans" ];
       };
-    })
+    }
+    )
 
     (mkIf serviceCfg.apps.enable {
-      environment.systemPackages = (with pkgs.pantheon; pkgs.gnome3.removePackagesByName [
-        elementary-calculator
-        elementary-calendar
-        elementary-camera
-        elementary-code
-        elementary-files
-        elementary-music
-        elementary-photos
-        elementary-screenshot-tool
-        elementary-terminal
-        elementary-videos
-      ] config.environment.pantheon.excludePackages);
+      environment.systemPackages = (with pkgs.pantheon;
+        pkgs.gnome3.removePackagesByName [
+          elementary-calculator
+          elementary-calendar
+          elementary-camera
+          elementary-code
+          elementary-files
+          elementary-music
+          elementary-photos
+          elementary-screenshot-tool
+          elementary-terminal
+          elementary-videos
+        ]
+          config.environment.pantheon.excludePackages);
 
       # needed by screenshot-tool
       fonts.fonts = [
         pkgs.pantheon.elementary-redacted-script
       ];
-    })
+    }
+    )
 
     (mkIf serviceCfg.contractor.enable {
       environment.systemPackages = with  pkgs.pantheon; [
@@ -290,7 +296,8 @@ in
       environment.pathsToLink = [
         "/share/contractor"
       ];
-    })
+    }
+    )
 
   ];
 }

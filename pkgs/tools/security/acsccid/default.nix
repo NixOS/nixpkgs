@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pcsclite libusb autoconf automake libtool gettext flex perl ]
-                ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
   postPatch = ''
     sed -e s_/bin/echo_echo_g -i src/Makefile.am

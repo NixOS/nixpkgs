@@ -1,9 +1,15 @@
-{ stdenv, buildPackages
-, fetchurl, binutils ? null, bison, utillinux
+{ stdenv
+, buildPackages
+, fetchurl
+, binutils ? null
+, bison
+, utillinux
 
-# patch for cygwin requires readline support
-, interactive ? stdenv.isCygwin, readline80 ? null
-, withDocs ? false, texinfo ? null
+  # patch for cygwin requires readline support
+, interactive ? stdenv.isCygwin
+, readline80 ? null
+, withDocs ? false
+, texinfo ? null
 }:
 
 with stdenv.lib;
@@ -11,14 +17,12 @@ with stdenv.lib;
 assert interactive -> readline80 != null;
 assert withDocs -> texinfo != null;
 assert stdenv.hostPlatform.isDarwin -> binutils != null;
-
 let
   upstreamPatches = import ./bash-5.0-patches.nix (nr: sha256: fetchurl {
     url = "mirror://gnu/bash/bash-5.0-patches/bash50-${nr}";
     inherit sha256;
   });
 in
-
 stdenv.mkDerivation rec {
   name = "bash-${optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
   version = "5.0";
@@ -87,7 +91,8 @@ stdenv.mkDerivation rec {
     rm -f $out/lib/bash/Makefile.inc
   '';
 
-  postFixup = if interactive
+  postFixup =
+    if interactive
     then ''
       substituteInPlace "$out/bin/bashbug" \
         --replace '${stdenv.shell}' "$out/bin/bash"
@@ -101,7 +106,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.gnu.org/software/bash/;
     description =
       "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
-        (if interactive then " (for interactive use)" else "");
+      (if interactive then " (for interactive use)" else "");
 
     longDescription = ''
       Bash is the shell, or command language interpreter, that will

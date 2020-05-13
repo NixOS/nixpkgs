@@ -2,7 +2,7 @@
 buildPythonPackage rec {
   pname = "typed-ast";
   version = "1.4.0";
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "python";
     repo = "typed_ast";
     rev = version;

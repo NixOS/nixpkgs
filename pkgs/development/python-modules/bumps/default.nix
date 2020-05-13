@@ -1,10 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi, six}:
+{ stdenv, buildPythonPackage, fetchPypi, six }:
 
 buildPythonPackage rec {
   pname = "bumps";
   version = "0.7.14";
 
-  propagatedBuildInputs = [six];
+  propagatedBuildInputs = [ six ];
 
   # Bumps does not provide its own tests.py, so the test
   # always fails

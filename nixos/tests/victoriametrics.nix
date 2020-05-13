@@ -1,6 +1,6 @@
 # This test runs influxdb and checks if influxdb is up and running
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "victoriametrics";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ yorickvp ];

@@ -1,7 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, udev, libcec_platform, libraspberrypi ? null }:
-
 let version = "4.0.4"; in
-
 stdenv.mkDerivation {
   pname = "libcec";
   inherit version;

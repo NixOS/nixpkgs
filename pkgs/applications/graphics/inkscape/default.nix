@@ -1,16 +1,44 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perlPackages, libXft
-, libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
-, glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
-, gsl, gtkspell2, cairo, python2, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, potrace, cmake
-, librsvg, wrapGAppsHook
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, perlPackages
+, libXft
+, libpng
+, zlib
+, popt
+, boehmgc
+, libxml2
+, libxslt
+, glib
+, gtkmm2
+, glibmm
+, libsigcxx
+, lcms
+, boost
+, gettext
+, makeWrapper
+, gsl
+, gtkspell2
+, cairo
+, python2
+, poppler
+, imagemagick
+, libwpg
+, librevenge
+, libvisio
+, libcdr
+, libexif
+, potrace
+, cmake
+, librsvg
+, wrapGAppsHook
 }:
-
 let
-  python2Env = python2.withPackages(ps: with ps;
-    [ numpy lxml scour ]);
+  python2Env = python2.withPackages (ps: with ps;
+    [ numpy lxml scour ]
+  );
 in
-
 stdenv.mkDerivation rec {
   name = "inkscape-0.92.4";
 
@@ -62,16 +90,36 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env wrapGAppsHook ]
     ++ (with perlPackages; [ perl XMLParser ]);
   buildInputs = [
-    libXft libpng zlib popt boehmgc
-    libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
-    gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif potrace
+    libXft
+    libpng
+    zlib
+    popt
+    boehmgc
+    libxml2
+    libxslt
+    glib
+    gtkmm2
+    glibmm
+    libsigcxx
+    lcms
+    boost
+    gettext
+    gsl
+    poppler
+    imagemagick
+    libwpg
+    librevenge
+    libvisio
+    libcdr
+    libexif
+    potrace
 
     librsvg # for loading icons
 
-    python2Env perlPackages.perl
+    python2Env
+    perlPackages.perl
   ] ++ stdenv.lib.optional (!stdenv.isDarwin) gtkspell2
-    ++ stdenv.lib.optional stdenv.isDarwin cairo;
+  ++ stdenv.lib.optional stdenv.isDarwin cairo;
 
   enableParallelBuilding = true;
 

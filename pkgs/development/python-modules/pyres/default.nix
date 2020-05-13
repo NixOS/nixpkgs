@@ -1,5 +1,4 @@
 { stdenv, fetchPypi, buildPythonPackage, fetchFromGitHub, simplejson, redis, setproctitle, nose, pkgs }:
-
 let
 
   # the requirements of `pyres` support Redis 3.x (due to a missing upper-bound),
@@ -14,7 +13,6 @@ let
   });
 
 in
-
 buildPythonPackage rec {
   pname = "pyres";
   version = "1.5";

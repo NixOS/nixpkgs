@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "\$(DESTDIR)/usr" "$out"
     substituteInPlace Makefile --replace "/local" ""
   '';
-  
+
   meta = {
     description = "An offline WPS bruteforce utility";
     homepage = https://github.com/wiire/pixiewps;

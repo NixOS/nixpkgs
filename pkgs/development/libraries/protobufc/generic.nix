@@ -1,5 +1,10 @@
-{ stdenv, src, version
-, autoreconfHook, pkgconfig, protobuf, zlib
+{ stdenv
+, src
+, version
+, autoreconfHook
+, pkgconfig
+, protobuf
+, zlib
 , ...
 }:
 

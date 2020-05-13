@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 }:
 
@@ -6,7 +7,7 @@ stdenv.mkDerivation rec {
 
   name = "ts-1.0";
 
-  installPhase=''make install "PREFIX=$out"'';
+  installPhase = ''make install "PREFIX=$out"'';
 
   patchPhase = ''
     sed -i s,/usr/sbin/sendmail,${sendmailPath}, mail.c ts.1

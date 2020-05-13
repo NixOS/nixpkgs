@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, libcap, readline, texinfo, nss, nspr
-, libseccomp, pps-tools }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libcap
+, readline
+, texinfo
+, nss
+, nspr
+, libseccomp
+, pps-tools
+}:
 
 assert stdenv.isLinux -> libcap != null;
 

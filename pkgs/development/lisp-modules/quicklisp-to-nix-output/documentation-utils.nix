@@ -14,7 +14,7 @@ rec {
 
   packageName = "documentation-utils";
 
-  asdFilesToKeep = ["documentation-utils.asd"];
+  asdFilesToKeep = [ "documentation-utils.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM documentation-utils DESCRIPTION

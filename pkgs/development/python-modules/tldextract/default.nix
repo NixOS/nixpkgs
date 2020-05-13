@@ -1,10 +1,15 @@
-{ lib, fetchPypi, buildPythonPackage
-, requests, requests-file, idna, pytest
+{ lib
+, fetchPypi
+, buildPythonPackage
+, requests
+, requests-file
+, idna
+, pytest
 , responses
 }:
 
 buildPythonPackage rec {
-  pname   = "tldextract";
+  pname = "tldextract";
   version = "2.2.2";
 
   src = fetchPypi {

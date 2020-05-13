@@ -1,7 +1,20 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage,
-  lxml, tzlocal, python-dateutil, pygments, future, requests-kerberos,
-  defusedxml, cached-property, isodate, requests_ntlm, dnspython,
-  psutil, requests-mock, pyyaml
+{ stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, lxml
+, tzlocal
+, python-dateutil
+, pygments
+, future
+, requests-kerberos
+, defusedxml
+, cached-property
+, isodate
+, requests_ntlm
+, dnspython
+, psutil
+, requests-mock
+, pyyaml
 }:
 
 buildPythonPackage rec {
@@ -20,13 +33,23 @@ buildPythonPackage rec {
   patches = [ ./skip_failing_test.patch ];
   checkInputs = [ psutil requests-mock pyyaml ];
   propagatedBuildInputs = [
-    lxml tzlocal python-dateutil pygments requests-kerberos
-    future defusedxml cached-property isodate requests_ntlm dnspython ];
+    lxml
+    tzlocal
+    python-dateutil
+    pygments
+    requests-kerberos
+    future
+    defusedxml
+    cached-property
+    isodate
+    requests_ntlm
+    dnspython
+  ];
 
   meta = with stdenv.lib; {
     description = "Client for Microsoft Exchange Web Services (EWS)";
-    homepage    = "https://github.com/ecederstrand/exchangelib";
-    license     = licenses.bsd2;
+    homepage = "https://github.com/ecederstrand/exchangelib";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ catern ];
     broken = true;
   };

@@ -1,5 +1,4 @@
 { lib, fetchFromGitHub, gcc, python }:
-
 let
   xhtml2pdf = import ./xhtml2pdf.nix {
     inherit lib;
@@ -14,7 +13,6 @@ let
   };
 
 in
-
 python.pkgs.buildPythonApplication rec {
   pname = "sasview";
   version = "4.2.0";

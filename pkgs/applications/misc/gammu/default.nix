@@ -1,7 +1,19 @@
-{ stdenv, fetchFromGitHub, python, pkgconfig, cmake, bluez, libusb1, curl
-, libiconv, gettext, sqlite
-, dbiSupport ? false, libdbi ? null, libdbiDrivers ? null
-, postgresSupport ? false, postgresql ? null
+{ stdenv
+, fetchFromGitHub
+, python
+, pkgconfig
+, cmake
+, bluez
+, libusb1
+, curl
+, libiconv
+, gettext
+, sqlite
+, dbiSupport ? false
+, libdbi ? null
+, libdbiDrivers ? null
+, postgresSupport ? false
+, postgresql ? null
 }:
 
 with stdenv.lib;
@@ -22,8 +34,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ];
 
   buildInputs = [ python bluez libusb1 curl gettext sqlite libiconv ]
-  ++ optionals dbiSupport [ libdbi libdbiDrivers ]
-  ++ optionals postgresSupport [ postgresql ];
+    ++ optionals dbiSupport [ libdbi libdbiDrivers ]
+    ++ optionals postgresSupport [ postgresql ];
 
   enableParallelBuilding = true;
 

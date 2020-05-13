@@ -14,7 +14,7 @@ args @ { fetchurl, ... }:
 
   packageName = "moptilities";
 
-  asdFilesToKeep = ["moptilities.asd"];
+  asdFilesToKeep = [ "moptilities.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM moptilities DESCRIPTION Common Lisp MOP utilities SHA256

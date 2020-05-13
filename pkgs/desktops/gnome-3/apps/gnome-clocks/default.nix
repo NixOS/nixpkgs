@@ -1,8 +1,28 @@
-{ stdenv, fetchurl
-, meson, ninja, gettext, pkgconfig, wrapGAppsHook, itstool, desktop-file-utils
-, vala, gobject-introspection, libxml2, gtk3, glib, gsound, sound-theme-freedesktop
-, gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop, geocode-glib
-, gnome3, gdk-pixbuf, geoclue2, libgweather }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
+, pkgconfig
+, wrapGAppsHook
+, itstool
+, desktop-file-utils
+, vala
+, gobject-introspection
+, libxml2
+, gtk3
+, glib
+, gsound
+, sound-theme-freedesktop
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, gnome-desktop
+, geocode-glib
+, gnome3
+, gdk-pixbuf
+, geoclue2
+, libgweather
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-clocks";
@@ -23,12 +43,28 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    vala meson ninja pkgconfig gettext itstool wrapGAppsHook desktop-file-utils libxml2
+    vala
+    meson
+    ninja
+    pkgconfig
+    gettext
+    itstool
+    wrapGAppsHook
+    desktop-file-utils
+    libxml2
     gobject-introspection # for finding vapi files
   ];
   buildInputs = [
-    gtk3 glib gsettings-desktop-schemas gdk-pixbuf adwaita-icon-theme
-    gnome-desktop geocode-glib geoclue2 libgweather gsound
+    gtk3
+    glib
+    gsettings-desktop-schemas
+    gdk-pixbuf
+    adwaita-icon-theme
+    gnome-desktop
+    geocode-glib
+    geoclue2
+    libgweather
+    gsound
   ];
 
   preFixup = ''

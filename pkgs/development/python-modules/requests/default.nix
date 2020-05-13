@@ -1,6 +1,12 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, urllib3, idna, chardet, certifi
-, pytest }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, urllib3
+, idna
+, chardet
+, certifi
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "requests";

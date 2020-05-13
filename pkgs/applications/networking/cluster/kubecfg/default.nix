@@ -1,7 +1,5 @@
 { lib, buildGoPackage, fetchFromGitHub, ... }:
-
 let version = "0.13.1"; in
-
 buildGoPackage {
   pname = "kubecfg";
   inherit version;

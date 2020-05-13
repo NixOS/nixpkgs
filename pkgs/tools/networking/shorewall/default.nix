@@ -14,15 +14,16 @@
 }:
 let
   PATH = stdenv.lib.concatStringsSep ":"
-           [ "${coreutils}/bin"
-             "${iproute}/bin"
-             "${iptables}/bin"
-             "${ipset}/bin"
-             "${ebtables}/bin"
-             "${utillinux}/bin"
-             "${gnugrep}/bin"
-             "${gnused}/bin"
-           ];
+    [
+      "${coreutils}/bin"
+      "${iproute}/bin"
+      "${iptables}/bin"
+      "${ipset}/bin"
+      "${ebtables}/bin"
+      "${utillinux}/bin"
+      "${gnugrep}/bin"
+      "${gnused}/bin"
+    ];
 in
 stdenv.mkDerivation rec {
   pname = "shorewall";

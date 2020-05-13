@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, gnutls, libite, libconfuse }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, gnutls
+, libite
+, libconfuse
+}:
 
 stdenv.mkDerivation rec {
   pname = "inadyn";

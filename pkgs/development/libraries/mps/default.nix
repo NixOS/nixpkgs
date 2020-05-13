@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.117.0";
 
   src = fetchurl {
-    url    = "https://www.ravenbrook.com/project/mps/release/${version}/mps-kit-${version}.tar.gz";
+    url = "https://www.ravenbrook.com/project/mps/release/${version}/mps-kit-${version}.tar.gz";
     sha256 = "04ix4l7lk6nxxk9sawpnxbybvqb82lks5606ym10bc1qbc2kqdcz";
   };
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A flexible memory management and garbage collection library";
-    homepage    = "https://www.ravenbrook.com/project/mps";
-    license     = stdenv.lib.licenses.sleepycat;
-    platforms   = stdenv.lib.platforms.linux;
+    homepage = "https://www.ravenbrook.com/project/mps";
+    license = stdenv.lib.licenses.sleepycat;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

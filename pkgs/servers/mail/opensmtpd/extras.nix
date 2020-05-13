@@ -1,12 +1,24 @@
-{ stdenv, fetchurl, openssl, libevent, libasr,
-  python2, pkgconfig, lua5, perl, libmysqlclient, postgresql, sqlite, hiredis,
-  enablePython ? true,
-  enableLua ? true,
-  enablePerl ? true,
-  enableMysql ? true,
-  enablePostgres ? true,
-  enableSqlite ? true,
-  enableRedis ? true,
+{ stdenv
+, fetchurl
+, openssl
+, libevent
+, libasr
+, python2
+, pkgconfig
+, lua5
+, perl
+, libmysqlclient
+, postgresql
+, sqlite
+, hiredis
+, enablePython ? true
+, enableLua ? true
+, enablePerl ? true
+, enableMysql ? true
+, enablePostgres ? true
+, enableSqlite ? true
+, enableRedis ? true
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +31,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libevent
-    libasr python2 lua5 perl libmysqlclient postgresql sqlite hiredis ];
+  buildInputs = [
+    openssl
+    libevent
+    libasr
+    python2
+    lua5
+    perl
+    libmysqlclient
+    postgresql
+    sqlite
+    hiredis
+  ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -76,9 +98,13 @@ stdenv.mkDerivation rec {
     "--with-table-redis"
   ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString enableRedis
+  NIX_CFLAGS_COMPILE =
+    stdenv.lib.optionalString
+      enableRedis
       "-I${hiredis}/include/hiredis -lhiredis"
-    + stdenv.lib.optionalString enableMysql
+    +
+    stdenv.lib.optionalString
+      enableMysql
       " -L${libmysqlclient}/lib/mysql";
 
   meta = with stdenv.lib; {

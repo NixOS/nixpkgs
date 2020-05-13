@@ -3,7 +3,7 @@
 , contrib
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "data";
   version = "2018-03-19";
 

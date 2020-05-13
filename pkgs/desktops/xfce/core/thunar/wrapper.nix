@@ -24,11 +24,12 @@ symlinkJoin {
     done
   '';
 
-   meta = with lib; {
+  meta = with lib; {
     inherit (thunar.meta) homepage license platforms maintainers;
 
-    description = thunar.meta.description + optionalString
-      (0 != length thunarPlugins)
-      " (with plugins: ${concatStrings (intersperse ", " (map (x: x.name) thunarPlugins))})";
+    description = thunar.meta.description +
+      optionalString
+        (0 != length thunarPlugins)
+        " (with plugins: ${concatStrings (intersperse ", " (map (x: x.name) thunarPlugins))})";
   };
 }

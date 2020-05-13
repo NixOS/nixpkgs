@@ -1,7 +1,17 @@
-{ stdenv, makeWrapper, buildEnv,
-  bazaar, coreutils, cvs, findutils, gawk, git, gnused, mercurial, nix, subversion
+{ stdenv
+, makeWrapper
+, buildEnv
+, bazaar
+, coreutils
+, cvs
+, findutils
+, gawk
+, git
+, gnused
+, mercurial
+, nix
+, subversion
 }:
-
 let mkPrefetchScript = tool: src: deps:
   stdenv.mkDerivation {
     name = "nix-prefetch-${tool}";
@@ -25,11 +35,12 @@ let mkPrefetchScript = tool: src: deps:
       platforms = stdenv.lib.platforms.unix;
     };
   };
-in rec {
+in
+rec {
   nix-prefetch-bzr = mkPrefetchScript "bzr" ../../../build-support/fetchbzr/nix-prefetch-bzr [ bazaar ];
   nix-prefetch-cvs = mkPrefetchScript "cvs" ../../../build-support/fetchcvs/nix-prefetch-cvs [ cvs ];
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [ coreutils findutils gawk git ];
-  nix-prefetch-hg  = mkPrefetchScript "hg"  ../../../build-support/fetchhg/nix-prefetch-hg   [ mercurial ];
+  nix-prefetch-hg = mkPrefetchScript "hg" ../../../build-support/fetchhg/nix-prefetch-hg [ mercurial ];
   nix-prefetch-svn = mkPrefetchScript "svn" ../../../build-support/fetchsvn/nix-prefetch-svn [ subversion ];
 
   nix-prefetch-scripts = buildEnv {

@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchurl, isPy3k
-, pytest, werkzeug, pygments
+{ lib
+, buildPythonPackage
+, fetchurl
+, isPy3k
+, pytest
+, werkzeug
+, pygments
 }:
 
 buildPythonPackage rec {

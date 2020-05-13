@@ -14,10 +14,10 @@ buildGoModule rec {
   modSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
 
   meta = with stdenv.lib; {
-    homepage    = "https://github.com/golang/protobuf";
+    homepage = "https://github.com/golang/protobuf";
     description = " Go bindings for protocol buffer";
     maintainers = with maintainers; [ lewo ];
-    license     = licenses.bsd3;
-    platforms   = platforms.unix;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
   };
 }

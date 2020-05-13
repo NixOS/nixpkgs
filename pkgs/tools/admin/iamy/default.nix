@@ -15,9 +15,11 @@ buildGoModule rec {
 
   modSha256 = "0akak573zvz3xg5d7vf0ch2mrmj1jkzcdc29v3kn43f7944c2wcl";
 
-  buildFlagsArray = [''-ldflags=
+  buildFlagsArray = [
+    ''-ldflags=
     -X main.Version=v${version} -s -w
-  ''];
+  ''
+  ];
 
   meta = with stdenv.lib; {
     description = "A cli tool for importing and exporting AWS IAM configuration to YAML files";

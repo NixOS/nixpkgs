@@ -1,18 +1,42 @@
-{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig
-, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
-, wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
-, ffmpeg_4, x264, libvpx, libwebp, x265
+{ stdenv
+, lib
+, fetchurl
+, callPackage
+, substituteAll
+, python3
+, pkgconfig
+, xorg
+, gtk3
+, glib
+, pango
+, cairo
+, gdk-pixbuf
+, atk
+, wrapGAppsHook
+, xorgserver
+, getopt
+, xauth
+, utillinux
+, which
+, ffmpeg_4
+, x264
+, libvpx
+, libwebp
+, x265
 , libfakeXinerama
-, gst_all_1, pulseaudio, gobject-introspection
-, pam }:
+, gst_all_1
+, pulseaudio
+, gobject-introspection
+, pam
+}:
 
 with lib;
-
 let
   inherit (python3.pkgs) cython buildPythonApplication;
 
   xf86videodummy = callPackage ./xf86videodummy { };
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "xpra";
   version = "3.0.6";
 
@@ -34,15 +58,31 @@ in buildPythonApplication rec {
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = with xorg; [
-    libX11 xorgproto libXrender libXi
-    libXtst libXfixes libXcomposite libXdamage
-    libXrandr libxkbfile
-    ] ++ [
+    libX11
+    xorgproto
+    libXrender
+    libXi
+    libXtst
+    libXfixes
+    libXcomposite
+    libXdamage
+    libXrandr
+    libxkbfile
+  ] ++ [
     cython
 
-    pango cairo gdk-pixbuf atk.out gtk3 glib
+    pango
+    cairo
+    gdk-pixbuf
+    atk.out
+    gtk3
+    glib
 
-    ffmpeg_4 libvpx x264 libwebp x265
+    ffmpeg_4
+    libvpx
+    x264
+    libwebp
+    x265
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -54,13 +94,29 @@ in buildPythonApplication rec {
     gobject-introspection
   ];
   propagatedBuildInputs = with python3.pkgs; [
-    pillow rencode pycrypto cryptography pycups lz4 dbus-python
-    netifaces numpy pygobject3 pycairo gst-python pam
-    pyopengl paramiko opencv4 python-uinput pyxdg
-    ipaddress idna
+    pillow
+    rencode
+    pycrypto
+    cryptography
+    pycups
+    lz4
+    dbus-python
+    netifaces
+    numpy
+    pygobject3
+    pycairo
+    gst-python
+    pam
+    pyopengl
+    paramiko
+    opencv4
+    python-uinput
+    pyxdg
+    ipaddress
+    idna
   ];
 
-    # error: 'import_cairo' defined but not used
+  # error: 'import_cairo' defined but not used
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
   setupPyBuildFlags = [

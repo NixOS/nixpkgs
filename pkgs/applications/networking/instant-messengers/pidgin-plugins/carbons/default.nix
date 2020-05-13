@@ -1,4 +1,4 @@
-{ stdenv, libxml2, pidgin, pkgconfig, fetchFromGitHub } :
+{ stdenv, libxml2, pidgin, pkgconfig, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-carbons";
@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gkdr";
-    repo  = "carbons";
-    rev   = "v${version}";
+    repo = "carbons";
+    rev = "v${version}";
     sha256 = "05hcqvsirb7gnpfcszsrgal5q7dajl2wdi2dy7c41zgl377syavw";
   };
 

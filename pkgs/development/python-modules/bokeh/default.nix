@@ -56,7 +56,7 @@ buildPythonPackage rec {
     numpy
     packaging
   ]
-  ++ lib.optionals ( isPy27 ) [
+  ++ lib.optionals (isPy27) [
     futures
   ];
 

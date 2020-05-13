@@ -1,5 +1,4 @@
 { stdenv, lib, fetchFromGitHub, cmake }:
-
 let
   games = {
     ctf = {
@@ -34,7 +33,7 @@ let
       inherit sha256;
       owner = "yquake2";
       repo = data.id;
-      rev = "${lib.toUpper id}_${builtins.replaceStrings ["."] ["_"] version}";
+      rev = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     };
 
     enableParallelBuilding = true;
@@ -56,4 +55,4 @@ let
   };
 
 in
-  lib.mapAttrs toDrv games
+lib.mapAttrs toDrv games

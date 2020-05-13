@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   top = config.services.kubernetes;
   cfg = top.flannel;
@@ -10,14 +9,16 @@ let
   storageBackend = "kubernetes";
 
   # needed for flannel to pass options to docker
-  mkDockerOpts = pkgs.runCommand "mk-docker-opts" {
-    buildInputs = [ pkgs.makeWrapper ];
-  } ''
-    mkdir -p $out
+  mkDockerOpts =
+    pkgs.runCommand "mk-docker-opts"
+      {
+        buildInputs = [ pkgs.makeWrapper ];
+      } ''
+      mkdir -p $out
 
-    # bashInteractive needed for `compgen`
-    makeWrapper ${pkgs.bashInteractive}/bin/bash $out/mk-docker-opts --add-flags "${pkgs.kubernetes}/bin/mk-docker-opts.sh"
-  '';
+      # bashInteractive needed for `compgen`
+      makeWrapper ${pkgs.bashInteractive}/bin/bash $out/mk-docker-opts --add-flags "${pkgs.kubernetes}/bin/mk-docker-opts.sh"
+    '';
 in
 {
   ###### interface
@@ -76,8 +77,8 @@ in
 
     networking = {
       firewall.allowedUDPPorts = [
-        8285  # flannel udp
-        8472  # flannel vxlan
+        8285 # flannel udp
+        8472 # flannel vxlan
       ];
       dhcpcd.denyInterfaces = [ "docker*" "flannel*" ];
     };
@@ -102,16 +103,16 @@ in
           resources = [ "pods" ];
           verbs = [ "get" ];
         }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes" ];
-          verbs = [ "list" "watch" ];
-        }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes/status" ];
-          verbs = [ "patch" ];
-        }];
+          {
+            apiGroups = [ "" ];
+            resources = [ "nodes" ];
+            verbs = [ "list" "watch" ];
+          }
+          {
+            apiGroups = [ "" ];
+            resources = [ "nodes/status" ];
+            verbs = [ "patch" ];
+          }];
       };
 
       flannel-crb = {

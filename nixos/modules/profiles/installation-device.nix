@@ -5,7 +5,8 @@ with lib;
 
 {
   imports =
-    [ # Enable devices which are usually scanned, because we don't know the
+    [
+      # Enable devices which are usually scanned, because we don't know the
       # target system.
       ../installer/scan/detected.nix
       ../installer/scan/not-detected.nix
@@ -70,11 +71,11 @@ with lib;
       # It is safe as root doesn't have a password by default and SSH is disabled by default
       permitRootLogin = "yes";
     };
-    systemd.services.sshd.wantedBy = mkOverride 50 [];
+    systemd.services.sshd.wantedBy = mkOverride 50 [ ];
 
     # Enable wpa_supplicant, but don't start it by default.
     networking.wireless.enable = mkDefault true;
-    systemd.services.wpa_supplicant.wantedBy = mkOverride 50 [];
+    systemd.services.wpa_supplicant.wantedBy = mkOverride 50 [ ];
 
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't

@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, perl, yasm
+{ stdenv
+, fetchFromGitHub
+, perl
+, yasm
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
 , vp9DecoderSupport ? true # VP9 decoder
@@ -23,7 +26,9 @@
 , errorConcealmentSupport ? false # decoder conceals losses
 , smallSupport ? false # favor smaller binary over speed
 , postprocVisualizerSupport ? false # macro block/block level visualizers
-, unitTestsSupport ? false, curl ? null, coreutils ? null # unit tests
+, unitTestsSupport ? false
+, curl ? null
+, coreutils ? null # unit tests
 , webmIOSupport ? true # input from and output to webm container
 , libyuvSupport ? true # libyuv
 , decodePerfTestsSupport ? false # build decoder perf tests with unit tests
@@ -32,17 +37,15 @@
 , temporalDenoisingSupport ? true # use temporal denoising instead of spatial denoising
 , coefficientRangeCheckingSupport ? false # decoder checks if intermediate transform coefficients are in valid range
 , vp9HighbitdepthSupport ? true # 10/12 bit color support in VP9
-# Experimental features
+  # Experimental features
 , experimentalSpatialSvcSupport ? false # Spatial scalable video coding
 , experimentalFpMbStatsSupport ? false
 , experimentalEmulateHardwareSupport ? false
 }:
-
 let
   inherit (stdenv) is64bit isMips isDarwin isCygwin;
   inherit (stdenv.lib) enableFeature optional optionals;
 in
-
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
 assert internalStatsSupport && (vp9DecoderSupport || vp9EncoderSupport) -> postprocSupport;
 /* If spatialResamplingSupport not enabled, build will fail with undeclared variable errors.
@@ -74,7 +77,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
 
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   configureFlags = [
     (enableFeature (vp8EncoderSupport || vp8DecoderSupport) "vp8")
     (enableFeature vp8EncoderSupport "vp8-encoder")
@@ -115,10 +118,12 @@ stdenv.mkDerivation rec {
     (enableFeature ontheflyBitpackingSupport "onthefly-bitpacking")
     (enableFeature errorConcealmentSupport "error-concealment")
     # Shared libraries are only supported on ELF platforms
-    (if isDarwin || isCygwin then
-       "--enable-static --disable-shared"
-     else
-       "--enable-shared")
+    (
+      if isDarwin || isCygwin then
+        "--enable-static --disable-shared"
+      else
+        "--enable-shared"
+    )
     (enableFeature smallSupport "small")
     (enableFeature postprocVisualizerSupport "postproc-visualizer")
     (enableFeature unitTestsSupport "unit-tests")
@@ -131,9 +136,12 @@ stdenv.mkDerivation rec {
     (enableFeature (temporalDenoisingSupport && (vp9DecoderSupport || vp9EncoderSupport)) "vp9-temporal-denoising")
     (enableFeature coefficientRangeCheckingSupport "coefficient-range-checking")
     (enableFeature (vp9HighbitdepthSupport && is64bit) "vp9-highbitdepth")
-    (enableFeature (experimentalSpatialSvcSupport ||
-                    experimentalFpMbStatsSupport ||
-                    experimentalEmulateHardwareSupport) "experimental")
+    (
+      enableFeature
+        (experimentalSpatialSvcSupport ||
+          experimentalFpMbStatsSupport ||
+          experimentalEmulateHardwareSupport) "experimental"
+    )
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     #"--extra-cflags="
     #"--extra-cxxflags="
@@ -144,21 +152,19 @@ stdenv.mkDerivation rec {
     # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
     # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
     # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
-    "--force-target=${stdenv.hostPlatform.config}${
-            if stdenv.hostPlatform.isDarwin then
-              if      stdenv.hostPlatform.osxMinVersion == "10.10" then "14"
-              else if stdenv.hostPlatform.osxMinVersion == "10.9"  then "13"
-              else if stdenv.hostPlatform.osxMinVersion == "10.8"  then "12"
-              else if stdenv.hostPlatform.osxMinVersion == "10.7"  then "11"
-              else if stdenv.hostPlatform.osxMinVersion == "10.6"  then "10"
-              else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
-              else "8"
-            else ""}-gcc"
+    "--force-target=${stdenv.hostPlatform.config}${if stdenv.hostPlatform.isDarwin thenif stdenv.hostPlatform.osxMinVersion == "10.10" then "14"
+        elseif stdenv.hostPlatform.osxMinVersion == "10.9" then "13"
+        elseif stdenv.hostPlatform.osxMinVersion == "10.8" then "12"
+        elseif stdenv.hostPlatform.osxMinVersion == "10.7" then "11"
+        elseif stdenv.hostPlatform.osxMinVersion == "10.6" then "10"
+        elseif stdenv.hostPlatform.osxMinVersion == "10.5" then "9"
+        else "8"
+        else ""}-gcc"
     (if stdenv.hostPlatform.isCygwin then "--enable-static-msvcrt" else "")
   ] # Experimental features
-    ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"
-    ++ optional experimentalFpMbStatsSupport "--enable-fp-mb-stats"
-    ++ optional experimentalEmulateHardwareSupport "--enable-emulate-hardware";
+  ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"
+  ++ optional experimentalFpMbStatsSupport "--enable-fp-mb-stats"
+  ++ optional experimentalEmulateHardwareSupport "--enable-emulate-hardware";
 
   nativeBuildInputs = [ perl yasm ];
 
@@ -171,9 +177,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "WebM VP8/VP9 codec SDK";
-    homepage    = https://www.webmproject.org/;
-    license     = licenses.bsd3;
+    homepage = https://www.webmproject.org/;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -8,7 +8,8 @@ let
     sha256 = "0asfdswh8sbnapbqhbz539zzxmv72f1iviha95iys34sgnd5k1nk";
   };
 
-in pkgs.mkShell {
+in
+pkgs.mkShell {
 
   buildInputs = [
     pkgs.bash

@@ -11,7 +11,6 @@
 , numba
 , python
 }:
-
 let
   propagatedBuildInputs = [ numpy cloudpickle ipyparallel numba ];
 
@@ -27,7 +26,8 @@ let
     '';
   });
 
-in buildPythonPackage {
+in
+buildPythonPackage {
   pname = "pygmo";
   version = pagmo2WithPython.version;
 

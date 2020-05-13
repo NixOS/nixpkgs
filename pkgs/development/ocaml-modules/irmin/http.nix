@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, cohttp-lwt, irmin, webmachine
-, checkseum, git-unix, irmin-git, irmin-mem, irmin-test
+{ lib
+, buildDunePackage
+, cohttp-lwt
+, irmin
+, webmachine
+, checkseum
+, git-unix
+, irmin-git
+, irmin-mem
+, irmin-test
 }:
 
 buildDunePackage rec {
@@ -19,5 +27,3 @@ buildDunePackage rec {
   };
 
 }
-
-

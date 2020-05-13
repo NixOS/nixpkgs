@@ -28,4 +28,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.fishi0x01 ];
   };
 }
-

@@ -14,7 +14,9 @@ buildPythonApplication rec {
   };
 
   checkInputs = [
-    nose nose-exclude mock
+    nose
+    nose-exclude
+    mock
   ];
 
   NOSE_EXCLUDE_TESTS = lib.concatStringsSep ";" [

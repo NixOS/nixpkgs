@@ -8,7 +8,7 @@
 , rsync
 , coreutils
 , diffutils
-} :
+}:
 
 stdenv.mkDerivation rec {
   pname = "cvsq";
@@ -28,16 +28,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/bin/cvsq --replace "/bin/sh" "${stdenv.shell}"
     substituteInPlace $out/bin/lcvs --replace "/bin/sh" "${stdenv.shell}"
-    wrapProgram $out/bin/cvsq --prefix PATH : ${stdenv.lib.makeBinPath
-      [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/cvsq-branch --prefix PATH : ${stdenv.lib.makeBinPath
-      [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/cvsq-merge --prefix PATH : ${stdenv.lib.makeBinPath
-      [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/cvsq-switch --prefix PATH : ${stdenv.lib.makeBinPath
-      [ cvs nettools findutils rsync coreutils diffutils ]}
-    wrapProgram $out/bin/lcvs --prefix PATH : ${stdenv.lib.makeBinPath
-      [ cvs nettools findutils rsync coreutils diffutils ]}
+    wrapProgram $out/bin/cvsq --prefix PATH : ${stdenv.lib.makeBinPath [ cvs nettools findutils rsync coreutils diffutils ]}
+    wrapProgram $out/bin/cvsq-branch --prefix PATH : ${stdenv.lib.makeBinPath [ cvs nettools findutils rsync coreutils diffutils ]}
+    wrapProgram $out/bin/cvsq-merge --prefix PATH : ${stdenv.lib.makeBinPath [ cvs nettools findutils rsync coreutils diffutils ]}
+    wrapProgram $out/bin/cvsq-switch --prefix PATH : ${stdenv.lib.makeBinPath [ cvs nettools findutils rsync coreutils diffutils ]}
+    wrapProgram $out/bin/lcvs --prefix PATH : ${stdenv.lib.makeBinPath [ cvs nettools findutils rsync coreutils diffutils ]}
   '';
 
   meta = {

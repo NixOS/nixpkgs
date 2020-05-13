@@ -1,5 +1,4 @@
 { stdenv, fetchurl, pkgconfig, libpng, libX11, libXext, libXi, libXtst }:
-
 let version = "1.09"; in
 stdenv.mkDerivation {
   pname = "xautomation";

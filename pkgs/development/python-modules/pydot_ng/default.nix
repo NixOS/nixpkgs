@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
 , graphviz
 , mock
 , pyparsing
@@ -21,7 +24,7 @@ buildPythonPackage rec {
     graphviz
     mock
     pytest
-  ] ++ lib.optionals isPy27 [ unittest2];
+  ] ++ lib.optionals isPy27 [ unittest2 ];
 
   checkPhase = ''
     pytest

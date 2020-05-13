@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "3.12.2";
@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = stdenv.lib.platforms.linux;
     description = ''DXF file format library'';
   };
 }
-

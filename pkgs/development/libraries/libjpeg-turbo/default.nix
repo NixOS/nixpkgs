@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    stdenv.lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
+    stdenv.lib.optional
+      (stdenv.hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch;
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];

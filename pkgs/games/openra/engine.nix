@@ -51,10 +51,12 @@ stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
 
     ${concatStrings (map (mod: ''
       makeWrapper $out/bin/openra $out/bin/openra-${mod} --add-flags Game.Mod=${mod}
-    '') engine.mods)}
+    '') engine.mods
+      )}
   '';
 
   meta = {
     inherit (engine) description homepage;
   };
-})
+}
+)

@@ -15,7 +15,7 @@ rec {
 
   packageName = "salza2";
 
-  asdFilesToKeep = ["salza2.asd"];
+  asdFilesToKeep = [ "salza2.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM salza2 DESCRIPTION

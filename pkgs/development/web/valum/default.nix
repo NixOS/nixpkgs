@@ -1,5 +1,15 @@
-{ stdenv, meson, ninja, pkgconfig, fetchFromGitHub, glib, vala, ctpl
-, libgee, libsoup, fcgi }:
+{ stdenv
+, meson
+, ninja
+, pkgconfig
+, fetchFromGitHub
+, glib
+, vala
+, ctpl
+, libgee
+, libsoup
+, fcgi
+}:
 
 stdenv.mkDerivation rec {
   pname = "valum";

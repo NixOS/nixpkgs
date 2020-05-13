@@ -14,7 +14,7 @@ rec {
 
   packageName = "unit-test";
 
-  asdFilesToKeep = ["unit-test.asd"];
+  asdFilesToKeep = [ "unit-test.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM unit-test DESCRIPTION unit-testing framework for common lisp SHA256

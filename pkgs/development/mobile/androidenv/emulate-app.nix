@@ -1,11 +1,16 @@
 { composeAndroidPackages, stdenv, lib }:
-{ name, app ? null
-, platformVersion ? "16", abiVersion ? "armeabi-v7a", systemImageType ? "default"
-, enableGPU ? false, extraAVDFiles ? []
-, package ? null, activity ? null
-, avdHomeDir ? null, sdkExtraArgs ? {}
+{ name
+, app ? null
+, platformVersion ? "16"
+, abiVersion ? "armeabi-v7a"
+, systemImageType ? "default"
+, enableGPU ? false
+, extraAVDFiles ? [ ]
+, package ? null
+, activity ? null
+, avdHomeDir ? null
+, sdkExtraArgs ? { }
 }:
-
 let
   sdkArgs = {
     platformVersions = [ platformVersion ];
@@ -75,13 +80,13 @@ stdenv.mkDerivation {
         yes "" | ${sdk}/libexec/android-sdk/tools/android create avd -n device -t 1 --abi ${systemImageType}/${abiVersion} $NIX_ANDROID_AVD_FLAGS
 
         ${lib.optionalString enableGPU ''
-          # Enable GPU acceleration
-          echo "hw.gpu.enabled=yes" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
-        ''}
+      # Enable GPU acceleration
+      echo "hw.gpu.enabled=yes" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
+    ''}
 
         ${lib.concatMapStrings (extraAVDFile: ''
-          ln -sf ${extraAVDFile} $ANDROID_SDK_HOME/.android/avd/device.avd
-        '') extraAVDFiles}
+      ln -sf ${extraAVDFile} $ANDROID_SDK_HOME/.android/avd/device.avd
+    '') extraAVDFiles}
     fi
 
     # Launch the emulator
@@ -127,7 +132,7 @@ stdenv.mkDerivation {
 
       # Start the application
       ${lib.optionalString (package != null && activity != null) ''
-          ${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/${activity}
+        ${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/${activity}
       ''}
     ''}
     EOF

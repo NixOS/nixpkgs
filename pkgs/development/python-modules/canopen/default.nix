@@ -3,7 +3,8 @@
 , fetchFromGitHub
 , nose
 , can
-, canmatrix }:
+, canmatrix
+}:
 
 buildPythonPackage {
   pname = "canopen";
@@ -29,7 +30,8 @@ buildPythonPackage {
   doCheck = false;
 
   propagatedBuildInputs =
-    [ can
+    [
+      can
       canmatrix
     ];
 

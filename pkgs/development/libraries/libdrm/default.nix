@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchurl, pkgconfig, meson, ninja, libpthreadstubs, libpciaccess
-, withValgrind ? valgrind-light.meta.available, valgrind-light, fetchpatch
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
+, meson
+, ninja
+, libpthreadstubs
+, libpciaccess
+, withValgrind ? valgrind-light.meta.available
+, valgrind-light
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {

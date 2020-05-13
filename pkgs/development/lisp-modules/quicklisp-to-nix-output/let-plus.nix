@@ -16,7 +16,7 @@ rec {
 
   packageName = "let-plus";
 
-  asdFilesToKeep = ["let-plus.asd"];
+  asdFilesToKeep = [ "let-plus.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM let-plus DESCRIPTION Destructuring extension of LET*. SHA256

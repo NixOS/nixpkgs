@@ -3,14 +3,14 @@
 stdenv.mkDerivation rec {
   version = "0.6.14";
   pname = "piqi";
- 
+
   src = fetchurl {
     url = "https://github.com/alavrik/piqi/archive/v${version}.tar.gz";
     sha256 = "1ssccnwqzfyf7syfq2fv4zyhwayxwd75rhq9y28mvq1w6qbww4l7";
   };
 
   buildInputs = [ ocaml findlib which ocaml_optcomp ];
-  propagatedBuildInputs = [ulex xmlm easy-format base64];
+  propagatedBuildInputs = [ ulex xmlm easy-format base64 ];
 
   patches = [ ./no-ocamlpath-override.patch ];
 

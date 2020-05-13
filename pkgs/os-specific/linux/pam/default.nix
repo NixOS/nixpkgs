@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.3.1";
 
   src = fetchurl {
-    url    = "https://github.com/linux-pam/linux-pam/releases/download/v1.3.1/Linux-PAM-${version}.tar.xz";
+    url = "https://github.com/linux-pam/linux-pam/releases/download/v1.3.1/Linux-PAM-${version}.tar.xz";
     sha256 = "1nyh9kdi3knhxcbv5v4snya0g3gff0m671lnvqcbygw3rm77mx7g";
   };
 
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
   # $out/etc was also missed: pam_env(login:session): Unable to open config file
 
   preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-      # export ac_cv_search_crypt=no
-      # (taken from Alpine linux, apparently insecure but also doesn't build O:))
-      # disable insecure modules
-      # sed -e 's/pam_rhosts//g' -i modules/Makefile.am
-      sed -e 's/pam_rhosts//g' -i modules/Makefile.in
+    # export ac_cv_search_crypt=no
+    # (taken from Alpine linux, apparently insecure but also doesn't build O:))
+    # disable insecure modules
+    # sed -e 's/pam_rhosts//g' -i modules/Makefile.am
+    sed -e 's/pam_rhosts//g' -i modules/Makefile.in
   '';
 
   configureFlags = [

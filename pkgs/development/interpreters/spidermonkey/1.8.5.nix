@@ -50,8 +50,9 @@ stdenv.mkDerivation {
   # so the failure of that test does not matter much.
   configureFlags = [ "--enable-threadsafe" "--with-system-nspr" ] ++
     stdenv.lib.optionals (stdenv.hostPlatform.system == "armv5tel-linux") [
-        "--with-cpu-arch=armv5t"
-        "--disable-tracejit" ];
+      "--with-cpu-arch=armv5t"
+      "--disable-tracejit"
+    ];
 
   # hack around a make problem, see https://github.com/NixOS/nixpkgs/issues/1279#issuecomment-29547393
   preBuild = ''
@@ -76,4 +77,3 @@ stdenv.mkDerivation {
     broken = stdenv.isAarch64; # 2018-08-21, broken since 2017-03-08
   };
 }
-

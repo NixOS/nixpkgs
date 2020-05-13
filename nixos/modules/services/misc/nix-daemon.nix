@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.nix;
 
   nix = cfg.package.out;
@@ -13,7 +11,7 @@ let
   isNix23 = versionAtLeast nixVersion "2.3pre";
 
   makeNixBuildUser = nr: {
-    name  = "nixbld${toString nr}";
+    name = "nixbld${toString nr}";
     value = {
       description = "Nix build user ${toString nr}";
 
@@ -30,7 +28,8 @@ let
 
   nixConf =
     assert versionAtLeast nixVersion "2.2";
-    pkgs.runCommand "nix.conf" { preferLocalBuild = true; extraOptions = cfg.extraOptions; } (
+    pkgs.runCommand "nix.conf"
+      { preferLocalBuild = true; extraOptions = cfg.extraOptions; } (
       ''
         cat > $out <<END
         # WARNING: this file is generated from the nix.* options in
@@ -58,17 +57,17 @@ let
         $extraOptions
         END
       '' + optionalString cfg.checkConfig (
-            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
-              echo "Ignore nix.checkConfig when cross-compiling"
-            '' else ''
-              echo "Checking that Nix can read nix.conf..."
-              ln -s $out ./nix.conf
-              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${optionalString isNix23 "--no-net --option experimental-features nix-command"} >/dev/null
-            '')
-      );
+        if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
+          echo "Ignore nix.checkConfig when cross-compiling"
+        '' else ''
+          echo "Checking that Nix can read nix.conf..."
+          ln -s $out ./nix.conf
+          NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config ${optionalString isNix23 "--no-net --option experimental-features nix-command"} >/dev/null
+        ''
+      )
+    );
 
 in
-
 {
   imports = [
     (mkRenamedOptionModule [ "nix" "useChroot" ] [ "nix" "useSandbox" ])
@@ -91,7 +90,7 @@ in
       };
 
       maxJobs = mkOption {
-        type = types.either types.int (types.enum ["auto"]);
+        type = types.either types.int (types.enum [ "auto" ]);
         default = 1;
         example = 64;
         description = ''
@@ -107,10 +106,10 @@ in
         default = false;
         example = true;
         description = ''
-         If set to true, Nix automatically detects files in the store that have
-         identical contents, and replaces them with hard links to a single copy.
-         This saves disk space. If set to false (the default), you can still run
-         nix-store --optimise to get rid of duplicate files.
+          If set to true, Nix automatically detects files in the store that have
+          identical contents, and replaces them with hard links to a single copy.
+          This saves disk space. If set to false (the default), you can still run
+          nix-store --optimise to get rid of duplicate files.
         '';
       };
 
@@ -129,7 +128,7 @@ in
       };
 
       useSandbox = mkOption {
-        type = types.either types.bool (types.enum ["relaxed"]);
+        type = types.either types.bool (types.enum [ "relaxed" ]);
         default = true;
         description = "
           If set, Nix will perform builds in a sandboxed environment that it
@@ -145,7 +144,7 @@ in
 
       sandboxPaths = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "/dev" "/proc" ];
         description =
           ''
@@ -193,7 +192,7 @@ in
 
       buildMachines = mkOption {
         type = types.listOf types.attrs;
-        default = [];
+        default = [ ];
         example = literalExample ''
           [ { hostName = "voila.labs.cs.uu.nl";
               sshUser = "nix";
@@ -243,7 +242,7 @@ in
       envVars = mkOption {
         type = types.attrs;
         internal = true;
-        default = {};
+        default = { };
         description = "Environment variables used by Nix.";
       };
 
@@ -393,19 +392,22 @@ in
     # List of machines for distributed Nix builds in the format
     # expected by build-remote.pl.
     environment.etc."nix/machines" =
-      { enable = cfg.buildMachines != [];
+      {
+        enable = cfg.buildMachines != [ ];
         text =
-          concatMapStrings (machine:
-            "${if machine ? sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
-            + machine.system or (concatStringsSep "," machine.systems)
-            + " ${machine.sshKey or "-"} ${toString machine.maxJobs or 1} "
-            + toString (machine.speedFactor or 1)
-            + " "
-            + concatStringsSep "," (machine.mandatoryFeatures or [] ++ machine.supportedFeatures or [])
-            + " "
-            + concatStringsSep "," machine.mandatoryFeatures or []
-            + "\n"
-          ) cfg.buildMachines;
+          concatMapStrings
+            (machine:
+              "${if machine ? sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
+              + machine.system or (concatStringsSep "," machine.systems)
+              + " ${machine.sshKey or "-"} ${toString machine.maxJobs or 1} "
+              + toString (machine.speedFactor or 1)
+              + " "
+              + concatStringsSep "," (machine.mandatoryFeatures or [ ] ++ machine.supportedFeatures or [ ])
+              + " "
+              + concatStringsSep "," machine.mandatoryFeatures or [ ]
+              + "\n"
+            )
+            cfg.buildMachines;
       };
 
     systemd.packages = [ nix ];
@@ -413,7 +415,8 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.utillinux config.programs.ssh.package ]
+      {
+        path = [ nix pkgs.utillinux config.programs.ssh.package ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars
@@ -423,7 +426,8 @@ in
         unitConfig.RequiresMountsFor = "/nix/store";
 
         serviceConfig =
-          { Nice = cfg.daemonNiceLevel;
+          {
+            Nice = cfg.daemonNiceLevel;
             IOSchedulingPriority = cfg.daemonIONiceLevel;
             LimitNOFILE = 4096;
           };
@@ -433,7 +437,8 @@ in
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars //
-      { NIX_PATH = cfg.nixPath;
+      {
+        NIX_PATH = cfg.nixPath;
       };
 
     environment.extraInit =
@@ -449,29 +454,30 @@ in
 
     services.xserver.displayManager.hiddenUsers = attrNames nixbldUsers;
 
-    system.activationScripts.nix = stringAfter [ "etc" "users" ]
-      ''
-        # Create directories in /nix.
-        ${nix}/bin/nix ping-store --no-net
+    system.activationScripts.nix =
+      stringAfter [ "etc" "users" ]
+        ''
+          # Create directories in /nix.
+          ${nix}/bin/nix ping-store --no-net
 
-        # Subscribe the root user to the NixOS channel by default.
-        if [ ! -e "/root/.nix-channels" ]; then
-            echo "${config.system.defaultChannel} nixos" > "/root/.nix-channels"
-        fi
-      '';
+          # Subscribe the root user to the NixOS channel by default.
+          if [ ! -e "/root/.nix-channels" ]; then
+              echo "${config.system.defaultChannel} nixos" > "/root/.nix-channels"
+          fi
+        '';
 
     nix.systemFeatures = mkDefault (
       [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
       optionals (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
         # a x86_64 builder can run code for `platform.gcc.arch` and minor architectures:
         [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++ {
-          sandybridge    = [ "gccarch-westmere" ];
-          ivybridge      = [ "gccarch-westmere" "gccarch-sandybridge" ];
-          haswell        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
-          broadwell      = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
-          skylake        = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
+          sandybridge = [ "gccarch-westmere" ];
+          ivybridge = [ "gccarch-westmere" "gccarch-sandybridge" ];
+          haswell = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" ];
+          broadwell = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" ];
+          skylake = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" ];
           skylake-avx512 = [ "gccarch-westmere" "gccarch-sandybridge" "gccarch-ivybridge" "gccarch-haswell" "gccarch-broadwell" "gccarch-skylake" ];
-        }.${pkgs.hostPlatform.platform.gcc.arch} or []
+        }.${pkgs.hostPlatform.platform.gcc.arch} or [ ]
       )
     );
 

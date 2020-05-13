@@ -14,7 +14,7 @@ rec {
 
   packageName = "lfarm-server";
 
-  asdFilesToKeep = ["lfarm-server.asd"];
+  asdFilesToKeep = [ "lfarm-server.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lfarm-server DESCRIPTION

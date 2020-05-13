@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   addToXDGDirs = p: ''
     if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
       export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
@@ -19,7 +17,6 @@ let
   cfg = xcfg.desktopManager.mate;
 
 in
-
 {
   options = {
 
@@ -34,7 +31,7 @@ in
     };
 
     environment.mate.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExample "[ pkgs.mate.mate-terminal pkgs.mate.pluma ]";
       type = types.listOf types.package;
       description = "Which MATE packages to exclude from the default environment";
@@ -58,7 +55,7 @@ in
           if [ -d "${p}/lib/caja/extensions-2.0" ]; then
             ${addToXDGDirs p}
           fi
-          '')
+        '')
           config.environment.systemPackages
         }
 
@@ -76,9 +73,11 @@ in
 
     environment.systemPackages =
       pkgs.mate.basePackages ++
-      (pkgs.gnome3.removePackagesByName
-        pkgs.mate.extraPackages
-        config.environment.mate.excludePackages) ++
+      (
+        pkgs.gnome3.removePackagesByName
+          pkgs.mate.extraPackages
+          config.environment.mate.excludePackages
+      ) ++
       [
         pkgs.desktop-file-utils
         pkgs.glib

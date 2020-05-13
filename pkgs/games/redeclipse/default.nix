@@ -1,6 +1,16 @@
-{ stdenv, fetchFromGitHub, fetchurl, fetchpatch
-, curl, ed, pkgconfig, freetype, zlib, libX11
-, SDL2, SDL2_image, SDL2_mixer
+{ stdenv
+, fetchFromGitHub
+, fetchurl
+, fetchpatch
+, curl
+, ed
+, pkgconfig
+, freetype
+, zlib
+, libX11
+, SDL2
+, SDL2_image
+, SDL2_mixer
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +23,18 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 freetype zlib
-    SDL2 SDL2_image SDL2_mixer
+    libX11
+    freetype
+    zlib
+    SDL2
+    SDL2_image
+    SDL2_mixer
   ];
 
   nativeBuildInputs = [
-    curl ed pkgconfig
+    curl
+    ed
+    pkgconfig
   ];
 
   makeFlags = [ "-C" "src/" "prefix=$(out)" ];
@@ -28,7 +44,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "system-install" ];
 
   postInstall = ''
-      cp -R -t $out/share/redeclipse/data/ data/*
+    cp -R -t $out/share/redeclipse/data/ data/*
   '';
 
   meta = with stdenv.lib; {
@@ -43,6 +59,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ licenses.zlib cc-by-sa-30 ];
     maintainers = with maintainers; [ lambda-11235 ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

@@ -1,16 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   defaultUserGroup = "usbmux";
   apple = "05ac";
 
   cfg = config.services.usbmuxd;
 
 in
-
 {
   options.services.usbmuxd = {
     enable = mkOption {

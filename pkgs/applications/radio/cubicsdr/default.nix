@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake, fftw, hamlib, libpulseaudio, libGL, libX11, liquid-dsp,
-  pkgconfig, soapysdr-with-plugins, wxGTK, enableDigitalLab ? false }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, fftw
+, hamlib
+, libpulseaudio
+, libGL
+, libX11
+, liquid-dsp
+, pkgconfig
+, soapysdr-with-plugins
+, wxGTK
+, enableDigitalLab ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "cubicsdr";
@@ -26,4 +38,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

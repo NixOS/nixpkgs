@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, autoreconfHook, pkgconfig, libusb1, hwdata , python3 }:
+{ stdenv, fetchurl, substituteAll, autoreconfHook, pkgconfig, libusb1, hwdata, python3 }:
 
 stdenv.mkDerivation rec {
   name = "usbutils-012";

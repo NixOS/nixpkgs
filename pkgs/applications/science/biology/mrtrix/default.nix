@@ -1,16 +1,30 @@
-{ stdenv, lib, fetchFromGitHub, python, makeWrapper
-, eigen, fftw, libtiff, zlib, ants, bc
-, qt5, libGL, libGLU, libX11, libXext
-, withGui ? true }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, python
+, makeWrapper
+, eigen
+, fftw
+, libtiff
+, zlib
+, ants
+, bc
+, qt5
+, libGL
+, libGLU
+, libX11
+, libXext
+, withGui ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "mrtrix";
   version = "3.0_RC3_latest";
 
   src = fetchFromGitHub {
-    owner  = "MRtrix3";
-    repo   = "mrtrix3";
-    rev    = version;
+    owner = "MRtrix3";
+    repo = "mrtrix3";
+    rev = version;
     sha256 = "184nv524p8j94qicjy9l288bqcgl2yxqqs55a7042i0gfsnwp51c";
     fetchSubmodules = true;
   };
@@ -22,7 +36,8 @@ stdenv.mkDerivation rec {
     python
     fftw
     libtiff
-    zlib ] ++ lib.optionals withGui [
+    zlib
+  ] ++ lib.optionals withGui [
     libGL
     libGLU
     libX11
@@ -72,6 +87,6 @@ stdenv.mkDerivation rec {
     description = "Suite of tools for diffusion imaging";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.linux;
-    license   = licenses.mpl20;
+    license = licenses.mpl20;
   };
 }

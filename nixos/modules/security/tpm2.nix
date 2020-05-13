@@ -12,10 +12,11 @@ let
       ''KERNEL=="tpmrm[0-9]*", MODE="0660"''
       + lib.optionalString (tssUser != null) '', OWNER="${tssUser}"''
       + lib.optionalString (tssGroup != null) '', GROUP="${tssGroup}"''
-     }
+    }
   '';
 
-in {
+in
+{
   options.security.tpm2 = {
     enable = lib.mkEnableOption "Trusted Platform Module 2 support";
 
@@ -27,7 +28,7 @@ in {
       type = lib.types.nullOr lib.types.str;
       default = if cfg.abrmd.enable then "tss" else "root";
       defaultText = ''"tss" when using the userspace resource manager,'' +
-                    ''"root" otherwise'';
+        ''"root" otherwise'';
     };
 
     tssGroup = lib.mkOption {
@@ -140,25 +141,26 @@ in {
         (lib.getLib cfg.pkcs11.package)
       ];
 
-      services.udev.extraRules = lib.mkIf cfg.applyUdevRules
+      services.udev.extraRules = lib.mkIf
+        cfg.applyUdevRules
         (udevRules cfg.tssUser cfg.tssGroup);
 
       # Create the tss user and group only if the default value is used
       users.users.${cfg.tssUser} = lib.mkIf (cfg.tssUser == "tss") {
         isSystemUser = true;
       };
-      users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") {};
+      users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") { };
 
       environment.variables = lib.mkIf cfg.tctiEnvironment.enable (
         lib.attrsets.genAttrs [
           "TPM2TOOLS_TCTI"
           "TPM2_PKCS11_TCTI"
-        ] (_: ''${cfg.tctiEnvironment.interface}:${
-          if cfg.tctiEnvironment.interface == "tabrmd" then
-            cfg.tctiEnvironment.tabrmdConf
-          else
-            cfg.tctiEnvironment.deviceConf
-        }'')
+        ]
+          (_: ''${cfg.tctiEnvironment.interface}:${if cfg.tctiEnvironment.interface == "tabrmd" then
+              cfg.tctiEnvironment.tabrmdConf
+              else
+              cfg.tctiEnvironment.deviceConf
+            }'')
       );
     }
 
@@ -178,7 +180,8 @@ in {
       };
 
       services.dbus.packages = lib.singleton cfg.abrmd.package;
-    })
+    }
+    )
   ]);
 
   meta.maintainers = with lib.maintainers; [ lschuermann ];

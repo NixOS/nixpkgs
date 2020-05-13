@@ -1,31 +1,36 @@
-{ lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
+{ lib
+, fetchurl
+, fetchFromGitHub
+, fetchpatch
+, python3
+, protobuf3_6
 
-# Look up dependencies of specified components in component-packages.nix
+  # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
 
-# Additional packages to add to propagatedBuildInputs
-, extraPackages ? ps: []
+  # Additional packages to add to propagatedBuildInputs
+, extraPackages ? ps: [ ]
 
-# Override Python packages using
-# self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
-# Applied after defaultOverrides
+  # Override Python packages using
+  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
+  # Applied after defaultOverrides
 , packageOverrides ? self: super: {
-  # TODO: Remove this override after updating to cryptography 2.8:
+    # TODO: Remove this override after updating to cryptography 2.8:
 
-}
+  }
 
-# Skip pip install of required packages on startup
-, skipPip ? true }:
-
+  # Skip pip install of required packages on startup
+, skipPip ? true
+}:
 let
-
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
 
     # used by check_config script
     # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
     (mkOverride "colorlog" "4.0.2"
-      "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
+      "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42"
+    )
 
     # required by aioesphomeapi
     (self: super: {
@@ -69,7 +74,8 @@ let
   # Don't forget to run parse-requirements.py after updating
   hassVersion = "0.106.6";
 
-in with py.pkgs; buildPythonApplication rec {
+in
+with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
 
@@ -89,16 +95,43 @@ in with py.pkgs; buildPythonApplication rec {
 
   propagatedBuildInputs = [
     # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi importlib-metadata jinja2
-    pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
-    setuptools voluptuous voluptuous-serialize
+    aiohttp
+    astral
+    async-timeout
+    attrs
+    bcrypt
+    certifi
+    importlib-metadata
+    jinja2
+    pyjwt
+    cryptography
+    pip
+    python-slugify
+    pytz
+    pyyaml
+    requests
+    ruamel_yaml
+    setuptools
+    voluptuous
+    voluptuous-serialize
     # From http, frontend and recorder components and auth.mfa_modules.totp
-    sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode
+    sqlalchemy
+    aiohttp-cors
+    hass-frontend
+    pyotp
+    pyqrcode
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
-    asynctest pytest pytest-aiohttp requests-mock pydispatcher aiohue netdisco
-    hass-nabucasa defusedxml
+    asynctest
+    pytest
+    pytest-aiohttp
+    requests-mock
+    pydispatcher
+    aiohue
+    netdisco
+    hass-nabucasa
+    defusedxml
   ];
 
   postPatch = ''

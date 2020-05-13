@@ -1,12 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
-  smbToString = x: if builtins.typeOf x == "bool"
-                   then boolToString x
-                   else toString x;
+  smbToString = x:
+    if builtins.typeOf x == "bool"
+    then boolToString x
+    else toString x;
 
   cfg = config.services.samba;
 
@@ -15,30 +14,33 @@ let
   shareConfig = name:
     let share = getAttr name cfg.shares; in
     "[${name}]\n " + (smbToString (
-       map
-         (key: "${key} = ${smbToString (getAttr key share)}\n")
-         (attrNames share)
+      map
+        (key: "${key} = ${smbToString (getAttr key share)}\n")
+        (attrNames share)
     ));
 
-  configFile = pkgs.writeText "smb.conf"
-    (if cfg.configText != null then cfg.configText else
-    ''
-      [global]
-      security = ${cfg.securityType}
-      passwd program = /run/wrappers/bin/passwd %u
-      pam password change = ${smbToString cfg.syncPasswordsByPam}
-      invalid users = ${smbToString cfg.invalidUsers}
+  configFile =
+    pkgs.writeText "smb.conf"
+      (if cfg.configText != null then cfg.configText else
+      ''
+        [global]
+        security = ${cfg.securityType}
+        passwd program = /run/wrappers/bin/passwd %u
+        pam password change = ${smbToString cfg.syncPasswordsByPam}
+        invalid users = ${smbToString cfg.invalidUsers}
 
-      ${cfg.extraConfig}
+        ${cfg.extraConfig}
 
-      ${smbToString (map shareConfig (attrNames cfg.shares))}
-    '');
+        ${smbToString (map shareConfig (attrNames cfg.shares))}
+      ''
+      );
 
   # This may include nss_ldap, needed for samba if it has to use ldap.
   nssModulesPath = config.system.nssModules.path;
 
   daemonService = appName: args:
-    { description = "Samba Service Daemon ${appName}";
+    {
+      description = "Samba Service Daemon ${appName}";
 
       after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") ];
       requiredBy = [ "samba.target" ];
@@ -63,7 +65,6 @@ let
     };
 
 in
-
 {
   imports = [
     (mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
@@ -183,20 +184,22 @@ in
       };
 
       shares = mkOption {
-        default = {};
+        default = { };
         description = ''
           A set describing shared resources.
           See <command>man smb.conf</command> for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
         example =
-          { public =
-            { path = "/srv/public";
-              "read only" = true;
-              browseable = "yes";
-              "guest ok" = "yes";
-              comment = "Public samba share.";
-            };
+          {
+            public =
+              {
+                path = "/srv/public";
+                "read only" = true;
+                browseable = "yes";
+                "guest ok" = "yes";
+                comment = "Public samba share.";
+              };
           };
       };
 
@@ -207,18 +210,19 @@ in
 
   ###### implementation
 
-  config = mkMerge
-    [ { assertions =
-          [ { assertion = cfg.nsswins -> cfg.enableWinbindd;
-              message   = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
-            }
-          ];
-        # Always provide a smb.conf to shut up programs like smbclient and smbspool.
-        environment.etc."samba/smb.conf".source = mkOptionDefault (
-          if cfg.enable then configFile
-          else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
-        );
-      }
+  config =
+    mkMerge [{
+      assertions =
+        [{
+          assertion = cfg.nsswins -> cfg.enableWinbindd;
+          message = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
+        }];
+      # Always provide a smb.conf to shut up programs like smbclient and smbspool.
+      environment.etc."samba/smb.conf".source = mkOptionDefault (
+        if cfg.enable then configFile
+        else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
+      );
+    }
 
       (mkIf cfg.enable {
 
@@ -245,9 +249,9 @@ in
           ];
         };
 
-        security.pam.services.samba = {};
+        security.pam.services.samba = { };
 
-      })
-    ];
+      }
+      )];
 
 }

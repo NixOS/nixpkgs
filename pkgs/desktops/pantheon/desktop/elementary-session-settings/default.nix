@@ -17,9 +17,7 @@
 , ninja
 , git
 }:
-
 let
-
   #
   # ─── ENSURES PLANK GETS ELEMENTARY'S DEFAULT DOCKITEMS ────────────────────────────
   #
@@ -66,7 +64,6 @@ let
   '';
 
 in
-
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
   version = "5.0.3";

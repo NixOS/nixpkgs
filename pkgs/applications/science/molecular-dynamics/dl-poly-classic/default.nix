@@ -1,5 +1,7 @@
-{ stdenv, fetchurl
-, gfortran, mpi
+{ stdenv
+, fetchurl
+, gfortran
+, mpi
 }:
 
 stdenv.mkDerivation {

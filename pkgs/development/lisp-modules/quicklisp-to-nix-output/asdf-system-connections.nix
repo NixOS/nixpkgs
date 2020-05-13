@@ -14,7 +14,7 @@ rec {
 
   packageName = "asdf-system-connections";
 
-  asdFilesToKeep = ["asdf-system-connections.asd"];
+  asdFilesToKeep = [ "asdf-system-connections.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM asdf-system-connections DESCRIPTION

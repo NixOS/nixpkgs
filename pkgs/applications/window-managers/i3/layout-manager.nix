@@ -1,9 +1,7 @@
 { stdenv, fetchFromGitHub, vim, makeWrapper, jq, rofi, xrandr, xdotool, i3, gawk, libnotify }:
-
 let
   path = stdenv.lib.makeBinPath [ vim jq rofi xrandr xdotool i3 gawk libnotify ];
 in
-
 stdenv.mkDerivation rec {
   pname = "i3-layout-manager";
   version = "unstable-2019-12-06";

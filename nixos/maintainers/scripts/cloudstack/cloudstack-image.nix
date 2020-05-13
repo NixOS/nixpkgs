@@ -12,12 +12,13 @@ with lib;
     inherit lib config pkgs;
     diskSize = 8192;
     format = "qcow2";
-    configFile = pkgs.writeText "configuration.nix"
-      ''
-        {
-          imports = [ <nixpkgs/nixos/modules/virtualisation/cloudstack-config.nix> ];
-        }
-      '';
+    configFile =
+      pkgs.writeText "configuration.nix"
+        ''
+          {
+            imports = [ <nixpkgs/nixos/modules/virtualisation/cloudstack-config.nix> ];
+          }
+        '';
   };
 
 }

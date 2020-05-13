@@ -87,18 +87,24 @@ rec {
 
   /* bitwise “and” */
   bitAnd = builtins.bitAnd
-    or (import ./zip-int-bits.nix
-        (a: b: if a==1 && b==1 then 1 else 0));
+    or (
+    import ./zip-int-bits.nix
+      (a: b: if a == 1 && b == 1 then 1 else 0)
+  );
 
   /* bitwise “or” */
   bitOr = builtins.bitOr
-    or (import ./zip-int-bits.nix
-        (a: b: if a==1 || b==1 then 1 else 0));
+    or (
+    import ./zip-int-bits.nix
+      (a: b: if a == 1 || b == 1 then 1 else 0)
+  );
 
   /* bitwise “xor” */
   bitXor = builtins.bitXor
-    or (import ./zip-int-bits.nix
-        (a: b: if a!=b then 1 else 0));
+    or (
+    import ./zip-int-bits.nix
+      (a: b: if a != b then 1 else 0)
+  );
 
   /* bitwise “not” */
   bitNot = builtins.sub (-1);
@@ -176,7 +182,8 @@ rec {
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
     let suffixFile = ../.version-suffix;
-    in if pathExists suffixFile
+    in
+    if pathExists suffixFile
     then lib.strings.fileContents suffixFile
     else "pre-git";
 
@@ -190,11 +197,12 @@ rec {
     default:
     let
       revisionFile = "${toString ./..}/.git-revision";
-      gitRepo      = "${toString ./..}/.git";
-    in if lib.pathIsGitRepo gitRepo
-       then lib.commitIdFromGitRepo gitRepo
-       else if lib.pathExists revisionFile then lib.fileContents revisionFile
-       else default;
+      gitRepo = "${toString ./..}/.git";
+    in
+    if lib.pathIsGitRepo gitRepo
+    then lib.commitIdFromGitRepo gitRepo
+    else if lib.pathExists revisionFile then lib.fileContents revisionFile
+    else default;
 
   nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
@@ -237,8 +245,8 @@ rec {
     if a < b
     then -1
     else if a > b
-         then 1
-         else 0;
+    then 1
+    else 0;
 
   /* Split type into two subtypes by predicate `p`, take all elements
      of the first subtype to be less than all the elements of the
@@ -314,7 +322,8 @@ rec {
      like callPackage expect to be able to query expected arguments.
   */
   setFunctionArgs = f: args:
-    { # TODO: Should we add call-time "type" checking like built in?
+    {
+      # TODO: Should we add call-time "type" checking like built in?
       __functor = self: f;
       __functionArgs = args;
     };

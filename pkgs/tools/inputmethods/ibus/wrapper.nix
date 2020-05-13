@@ -1,7 +1,13 @@
-{ stdenv, runCommand, makeWrapper, lndir
-, dconf, hicolor-icon-theme, ibus, librsvg, plugins ? []
+{ stdenv
+, runCommand
+, makeWrapper
+, lndir
+, dconf
+, hicolor-icon-theme
+, ibus
+, librsvg
+, plugins ? [ ]
 }:
-
 let
   name = "ibus-with-plugins-" + stdenv.lib.getVersion ibus;
   env = {
@@ -61,4 +67,4 @@ let
     done
   '';
 in
-  runCommand name env command
+runCommand name env command

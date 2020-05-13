@@ -6,7 +6,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.ssmtp;
 
@@ -134,27 +133,29 @@ in
 
   config = mkIf cfg.enable {
 
-    services.ssmtp.authPassFile = mkIf (cfg.authPass != "")
-      (mkDefault (toString (pkgs.writeTextFile {
-        name = "ssmtp-authpass";
-        text = cfg.authPass;
-      })));
+    services.ssmtp.authPassFile =
+      mkIf
+        (cfg.authPass != "")
+        (mkDefault (toString (pkgs.writeTextFile {
+          name = "ssmtp-authpass";
+          text = cfg.authPass;
+        })));
 
     environment.etc."ssmtp/ssmtp.conf".text =
-      let yesNo = yes : if yes then "YES" else "NO"; in
+      let yesNo = yes: if yes then "YES" else "NO"; in
       ''
         MailHub=${cfg.hostName}
         FromLineOverride=YES
-        ${optionalString (cfg.root   != "") "root=${cfg.root}"}
+        ${optionalString (cfg.root != "") "root=${cfg.root}"}
         ${optionalString (cfg.domain != "") "rewriteDomain=${cfg.domain}"}
         UseTLS=${yesNo cfg.useTLS}
         UseSTARTTLS=${yesNo cfg.useSTARTTLS}
         #Debug=YES
-        ${optionalString (cfg.authUser != "")       "AuthUser=${cfg.authUser}"}
+        ${optionalString (cfg.authUser != "") "AuthUser=${cfg.authUser}"}
         ${optionalString (cfg.authPassFile != null) "AuthPassFile=${cfg.authPassFile}"}
       '';
 
-    environment.systemPackages = [pkgs.ssmtp];
+    environment.systemPackages = [ pkgs.ssmtp ];
 
     services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail {
       program = "sendmail";

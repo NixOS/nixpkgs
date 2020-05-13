@@ -1,7 +1,5 @@
 { lib, buildGoModule, fetchFromGitHub, makeWrapper, kubernetes-helm, ... }:
-
 let version = "0.102.0"; in
-
 buildGoModule {
   pname = "helmfile";
   inherit version;

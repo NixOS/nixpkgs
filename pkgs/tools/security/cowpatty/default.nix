@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, openssl, libpcap
+{ stdenv
+, fetchurl
+, openssl
+, libpcap
 }:
 
 with stdenv.lib;

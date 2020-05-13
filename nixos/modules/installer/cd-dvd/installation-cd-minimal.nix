@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ ./installation-cd-base.nix
+    [
+      ./installation-cd-base.nix
     ];
 
   fonts.fontconfig.enable = false;

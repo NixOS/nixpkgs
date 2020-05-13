@@ -1,17 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, expat, ncurses, pciutils, numactl
-, x11Support ? false, libX11 ? null, cairo ? null
+{ stdenv
+, fetchurl
+, pkgconfig
+, expat
+, ncurses
+, pciutils
+, numactl
+, x11Support ? false
+, libX11 ? null
+, cairo ? null
 }:
 
 assert x11Support -> libX11 != null && cairo != null;
 
 with stdenv.lib;
-
 let
   version = "2.1.0";
   versmm = versions.major version + "." + versions.minor version;
   name = "hwloc-${version}";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
@@ -29,10 +37,12 @@ in stdenv.mkDerivation {
 
   # Filter out `null' inputs.  This allows users to `.override' the
   # derivation and set optional dependencies to `null'.
-  buildInputs = stdenv.lib.filter (x: x != null)
-   ([ expat ncurses ]
-     ++  (optionals x11Support [ cairo libX11 ])
-     ++  (optionals stdenv.isLinux [ numactl ]));
+  buildInputs =
+    stdenv.lib.filter
+      (x: x != null)
+      ([ expat ncurses ]
+        ++ (optionals x11Support [ cairo libX11 ])
+        ++ (optionals stdenv.isLinux [ numactl ]));
 
   propagatedBuildInputs =
     # Since `libpci' appears in `hwloc.pc', it must be propagated.
@@ -41,7 +51,8 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   postInstall =
-    optionalString (stdenv.isLinux && numactl != null)
+    optionalString
+      (stdenv.isLinux && numactl != null)
       '' if [ -d "${numactl}/lib64" ]
          then
              numalibdir="${numactl}/lib64"
@@ -63,19 +74,19 @@ in stdenv.mkDerivation {
   meta = {
     description = "Portable abstraction of hierarchical architectures for high-performance computing";
     longDescription = ''
-       hwloc provides a portable abstraction (across OS,
-       versions, architectures, ...) of the hierarchical topology of
-       modern architectures, including NUMA memory nodes, sockets,
-       shared caches, cores and simultaneous multithreading.  It also
-       gathers various attributes such as cache and memory
-       information.  It primarily aims at helping high-performance
-       computing applications with gathering information about the
-       hardware so as to exploit it accordingly and efficiently.
+      hwloc provides a portable abstraction (across OS,
+      versions, architectures, ...) of the hierarchical topology of
+      modern architectures, including NUMA memory nodes, sockets,
+      shared caches, cores and simultaneous multithreading.  It also
+      gathers various attributes such as cache and memory
+      information.  It primarily aims at helping high-performance
+      computing applications with gathering information about the
+      hardware so as to exploit it accordingly and efficiently.
 
-       hwloc may display the topology in multiple convenient
-       formats.  It also offers a powerful programming interface to
-       gather information about the hardware, bind processes, and much
-       more.
+      hwloc may display the topology in multiple convenient
+      formats.  It also offers a powerful programming interface to
+      gather information about the hardware, bind processes, and much
+      more.
     '';
 
     # https://www.open-mpi.org/projects/hwloc/license.php

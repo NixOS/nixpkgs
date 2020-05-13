@@ -28,7 +28,6 @@ let
     fi
   '';
 in
-
 {
   options = {
     services.miniflux = {
@@ -49,7 +48,7 @@ in
         '';
       };
 
-      adminCredentialsFile = mkOption  {
+      adminCredentialsFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         description = ''
@@ -64,7 +63,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.miniflux.config =  {
+    services.miniflux.config = {
       LISTEN_ADDR = mkDefault "localhost:8080";
       DATABASE_URL = "postgresql://${dbUser}:${dbPassword}@${dbHost}/${dbName}?sslmode=disable";
       RUN_MIGRATIONS = "1";
@@ -85,9 +84,10 @@ in
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
         RuntimeDirectoryMode = "0700";
-        EnvironmentFile = if cfg.adminCredentialsFile == null
-        then defaultCredentials
-        else cfg.adminCredentialsFile;
+        EnvironmentFile =
+          if cfg.adminCredentialsFile == null
+          then defaultCredentials
+          else cfg.adminCredentialsFile;
       };
 
       environment = cfg.config;

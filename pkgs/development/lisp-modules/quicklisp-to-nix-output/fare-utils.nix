@@ -14,7 +14,7 @@ rec {
 
   packageName = "fare-utils";
 
-  asdFilesToKeep = ["fare-utils.asd"];
+  asdFilesToKeep = [ "fare-utils.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fare-utils DESCRIPTION

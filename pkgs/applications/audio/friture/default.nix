@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
-
 let
   py = python3Packages;
-in py.buildPythonApplication rec {
+in
+py.buildPythonApplication rec {
   pname = "friture";
   version = "0.37";
 

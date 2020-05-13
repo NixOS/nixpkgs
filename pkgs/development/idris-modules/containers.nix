@@ -4,7 +4,7 @@
 , test
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "containers";
   version = "2017-09-10";
 

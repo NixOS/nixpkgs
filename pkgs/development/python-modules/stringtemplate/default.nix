@@ -1,4 +1,4 @@
-{stdenv, fetchurl, buildPythonPackage, antlr, isPy3k}:
+{ stdenv, fetchurl, buildPythonPackage, antlr, isPy3k }:
 
 buildPythonPackage rec {
   pname = "PyStringTemplate";

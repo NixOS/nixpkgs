@@ -1,19 +1,31 @@
-{ fetchurl, mkDerivation, fetchpatch, stdenv, lib, pkgconfig, autoreconfHook, wrapGAppsHook
-, libgpgerror, libassuan, qtbase, wrapQtAppsHook
-, ncurses, gtk2, gcr
-, libcap ? null, libsecret ? null
+{ fetchurl
+, mkDerivation
+, fetchpatch
+, stdenv
+, lib
+, pkgconfig
+, autoreconfHook
+, wrapGAppsHook
+, libgpgerror
+, libassuan
+, qtbase
+, wrapQtAppsHook
+, ncurses
+, gtk2
+, gcr
+, libcap ? null
+, libsecret ? null
 , enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
 }:
 
 with stdenv.lib;
 
-assert isList enabledFlavors && enabledFlavors != [];
-
+assert isList enabledFlavors && enabledFlavors != [ ];
 let
   pinentryMkDerivation =
     if (builtins.elem "qt" enabledFlavors)
-      then mkDerivation
-      else stdenv.mkDerivation;
+    then mkDerivation
+    else stdenv.mkDerivation;
 
   mkFlag = pfxTrue: pfxFalse: cond: name:
     "--${if cond then pfxTrue else pfxFalse}-${name}";
@@ -25,8 +37,9 @@ let
       info = flavorInfo.${f};
       flag = flavorInfo.${f}.flag or null;
     in
-      optionalString (flag != null)
-        (mkEnable (elem f enabledFlavors) ("pinentry-" + flag));
+    optionalString
+      (flag != null)
+      (mkEnable (elem f enabledFlavors) ("pinentry-" + flag));
 
   flavorInfo = {
     curses = { bin = "curses"; flag = "curses"; buildInputs = [ ncurses ]; };
@@ -34,11 +47,10 @@ let
     gtk2 = { bin = "gtk-2"; flag = "gtk2"; buildInputs = [ gtk2 ]; };
     gnome3 = { bin = "gnome3"; flag = "gnome3"; buildInputs = [ gcr ]; nativeBuildInputs = [ wrapGAppsHook ]; };
     qt = { bin = "qt"; flag = "qt"; buildInputs = [ qtbase ]; nativeBuildInputs = [ wrapQtAppsHook ]; };
-    emacs = { bin = "emacs"; flag = "emacs"; buildInputs = []; };
+    emacs = { bin = "emacs"; flag = "emacs"; buildInputs = [ ]; };
   };
 
 in
-
 pinentryMkDerivation rec {
   pname = "pinentry";
   version = "1.1.0";
@@ -49,9 +61,9 @@ pinentryMkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ]
-    ++ concatMap(f: flavorInfo.${f}.nativeBuildInputs or []) enabledFlavors;
+    ++ concatMap (f: flavorInfo.${f}.nativeBuildInputs or [ ]) enabledFlavors;
   buildInputs = [ libgpgerror libassuan libcap libsecret ]
-    ++ concatMap(f: flavorInfo.${f}.buildInputs or []) enabledFlavors;
+    ++ concatMap (f: flavorInfo.${f}.buildInputs or [ ]) enabledFlavors;
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
@@ -66,7 +78,7 @@ pinentryMkDerivation rec {
   ];
 
   configureFlags = [
-    (mkWith   (libcap != null)    "libcap")
+    (mkWith (libcap != null) "libcap")
     (mkEnable (libsecret != null) "libsecret")
   ] ++ (map mkEnablePinentry (attrNames flavorInfo));
 
@@ -74,14 +86,16 @@ pinentryMkDerivation rec {
     concatStrings (flip map enabledFlavors (f:
       let
         binary = "pinentry-" + flavorInfo.${f}.bin;
-      in ''
+      in
+      ''
         moveToOutput bin/${binary} ${placeholder f}
         ln -sf ${placeholder f}/bin/${binary} ${placeholder f}/bin/pinentry
       '' + optionalString (f == "gnome3") ''
         wrapGApp ${placeholder f}/bin/${binary}
       '' + optionalString (f == "qt") ''
         wrapQtApp ${placeholder f}/bin/${binary}
-      '')) + ''
+      '')
+    ) + ''
       ln -sf ${placeholder (head enabledFlavors)}/bin/pinentry-${flavorInfo.${head enabledFlavors}.bin} $out/bin/pinentry
     '';
 

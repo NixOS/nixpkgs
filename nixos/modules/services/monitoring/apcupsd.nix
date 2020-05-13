@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.apcupsd;
 
@@ -45,7 +44,8 @@ let
 
   eventToShellCmds = event: if builtins.hasAttr event cfg.hooks then (shellCmdsForEventScript event (builtins.getAttr event cfg.hooks)) else "";
 
-  scriptDir = pkgs.runCommand "apcupsd-scriptdir" { preferLocalBuild = true; } (''
+  scriptDir = pkgs.runCommand "apcupsd-scriptdir"
+    { preferLocalBuild = true; } (''
     mkdir "$out"
     # Copy SCRIPTDIR from apcupsd package
     cp -r ${pkgs.apcupsd}/etc/apcupsd/* "$out"/
@@ -58,12 +58,11 @@ let
     rm "$out/apcupsd.conf"
     # Set the SCRIPTDIR= line in apccontrol to the dir we're creating now
     sed -i -e "s|^SCRIPTDIR=.*|SCRIPTDIR=$out|" "$out/apccontrol"
-    '' + concatStringsSep "\n" (map eventToShellCmds eventList)
+  '' + concatStringsSep "\n" (map eventToShellCmds eventList)
 
   );
 
 in
-
 {
 
   ###### interface
@@ -102,7 +101,7 @@ in
       };
 
       hooks = mkOption {
-        default = {};
+        default = { };
         example = {
           doshutdown = ''# shell commands to notify that the computer is shutting down'';
         };
@@ -128,14 +127,14 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [ {
+    assertions = [{
       assertion = let hooknames = builtins.attrNames cfg.hooks; in all (x: elem x eventList) hooknames;
       message = ''
         One (or more) attribute names in services.apcupsd.hooks are invalid.
         Current attribute names: ${toString (builtins.attrNames cfg.hooks)}
         Valid attribute names  : ${toString eventList}
       '';
-    } ];
+    }];
 
     # Give users access to the "apcaccess" tool
     environment.systemPackages = [ pkgs.apcupsd ];

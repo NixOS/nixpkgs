@@ -12,9 +12,7 @@
 # cpp and mpi options are mutually exclusive
 # (--enable-unsupported could be used to force the build)
 assert !cpp || mpi == null;
-
 let inherit (stdenv.lib) optional optionals; in
-
 stdenv.mkDerivation rec {
   version = "1.10.6";
   pname = "hdf5";
@@ -32,19 +30,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ removeReferencesTo ];
 
-  buildInputs = []
+  buildInputs = [ ]
     ++ optional (gfortran != null) gfortran
     ++ optional (szip != null) szip;
 
-  propagatedBuildInputs = []
+  propagatedBuildInputs = [ ]
     ++ optional (zlib != null) zlib
     ++ optional (mpi != null) mpi;
 
-  configureFlags = []
+  configureFlags = [ ]
     ++ optional cpp "--enable-cxx"
     ++ optional (gfortran != null) "--enable-fortran"
     ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
+    ++ optionals (mpi != null) [ "--enable-parallel" "CC=${mpi}/bin/mpicc" ]
     ++ optional enableShared "--enable-shared";
 
   patches = [

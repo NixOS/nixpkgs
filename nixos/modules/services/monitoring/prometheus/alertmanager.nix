@@ -1,39 +1,48 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.prometheus.alertmanager;
   mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
 
-  checkedConfig = file: pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
+  checkedConfig = file: pkgs.runCommand "checked-config"
+    { buildInputs = [ cfg.package ]; } ''
     ln -s ${file} $out
     amtool check-config $out
   '';
 
-  alertmanagerYml = let
-    yml = if cfg.configText != null then
-        pkgs.writeText "alertmanager.yml" cfg.configText
+  alertmanagerYml =
+    let
+      yml =
+        if cfg.configText != null then
+          pkgs.writeText "alertmanager.yml" cfg.configText
         else mkConfigFile;
-    in checkedConfig yml;
+    in
+    checkedConfig yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
     "--config.file /tmp/alert-manager-substituted.yaml"
     "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
     "--log.level ${cfg.logLevel}"
-    ] ++ (optional (cfg.webExternalUrl != null)
+  ] ++ (
+    optional
+      (cfg.webExternalUrl != null)
       "--web.external-url ${cfg.webExternalUrl}"
-    ) ++ (optional (cfg.logFormat != null)
+  ) ++ (
+    optional
+      (cfg.logFormat != null)
       "--log.format ${cfg.logFormat}"
   );
-in {
+in
+{
   imports = [
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "user" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a user setting.")
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "group" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a group setting.")
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanagerURL" ] ''
       Due to incompatibility, the alertmanagerURL option has been removed,
       please use 'services.prometheus2.alertmanagers' instead.
-    '')
+    ''
+    )
   ];
 
   options = {
@@ -77,7 +86,7 @@ in {
       };
 
       logLevel = mkOption {
-        type = types.enum ["debug" "info" "warn" "error" "fatal"];
+        type = types.enum [ "debug" "info" "warn" "error" "fatal" ];
         default = "warn";
         description = ''
           Only log messages with the given severity or above.
@@ -122,7 +131,7 @@ in {
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Extra commandline options when launching the Alertmanager.
         '';
@@ -147,21 +156,22 @@ in {
       assertions = singleton {
         assertion = cfg.configuration != null || cfg.configText != null;
         message = "Can not enable alertmanager without a configuration. "
-         + "Set either the `configuration` or `configText` attribute.";
+          + "Set either the `configuration` or `configText` attribute.";
       };
-    })
+    }
+    )
     (mkIf cfg.enable {
       networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
 
       systemd.services.alertmanager = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" ];
+        after = [ "network.target" ];
         preStart = ''
-           ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
-                                                    -i "${alertmanagerYml}"
+          ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
+                                                   -i "${alertmanagerYml}"
         '';
         serviceConfig = {
-          Restart  = "always";
+          Restart = "always";
           DynamicUser = true; # implies PrivateTmp
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
           WorkingDirectory = "/tmp";
@@ -171,6 +181,7 @@ in {
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
       };
-    })
+    }
+    )
   ];
 }

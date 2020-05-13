@@ -1,12 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.networking.rxe;
 
   runRxeCmd = cmd: ifcs:
-    concatStrings ( map (x: "${pkgs.rdma-core}/bin/rxe_cfg -n ${cmd} ${x};") ifcs);
+    concatStrings (map (x: "${pkgs.rdma-core}/bin/rxe_cfg -n ${cmd} ${x};") ifcs);
 
   startScript = pkgs.writeShellScriptBin "rxe-start" ''
     ${pkgs.rdma-core}/bin/rxe_cfg -n start
@@ -19,7 +18,8 @@ let
     ${pkgs.rdma-core}/bin/rxe_cfg -n stop
   '';
 
-in {
+in
+{
   ###### interface
 
   options = {
@@ -60,4 +60,3 @@ in {
     };
   };
 }
-

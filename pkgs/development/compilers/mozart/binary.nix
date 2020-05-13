@@ -1,9 +1,12 @@
-{ stdenv, fetchurl, makeWrapper
-, boost, gmp
-, tcl-8_5, tk-8_5
+{ stdenv
+, fetchurl
+, makeWrapper
+, boost
+, gmp
+, tcl-8_5
+, tk-8_5
 , emacs
 }:
-
 let
   version = "2.0.0";
 
@@ -14,7 +17,6 @@ let
     };
   };
 in
-
 stdenv.mkDerivation {
   pname = "mozart-binary";
   inherit version;
@@ -23,13 +25,13 @@ stdenv.mkDerivation {
 
   src = binaries.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.cc
-      boost
-      gmp
-      tcl-8_5
-      tk-8_5
-    ];
+  libPath = stdenv.lib.makeLibraryPath [
+    stdenv.cc.cc
+    boost
+    gmp
+    tcl-8_5
+    tk-8_5
+  ];
 
   TK_LIBRARY = "${tk-8_5}/lib/tk8.5";
 
@@ -75,6 +77,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.mit;
     platforms = attrNames binaries;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

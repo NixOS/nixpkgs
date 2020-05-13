@@ -1,34 +1,33 @@
 { stdenv, fetchgit, coq, ssreflect }:
+let
+  params =
+    {
+      "8.5" = {
+        version = "20171215";
+        rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
+        sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
+      };
 
-let params =
-  {
-    "8.5" = {
-      version = "20171215";
-      rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
-      sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
-    };
+      "8.6" = {
+        version = "20171215";
+        rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
+        sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
+      };
 
-    "8.6" = {
-      version = "20171215";
-      rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
-      sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
-    };
+      "8.7" = {
+        version = "20171215";
+        rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
+        sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
+      };
 
-    "8.7" = {
-      version = "20171215";
-      rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
-      sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
+      "8.8" = {
+        version = "20171215";
+        rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
+        sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
+      };
     };
-
-    "8.8" = {
-      version = "20171215";
-      rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
-      sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
-    };
-  };
   param = params.${coq.coq-version};
 in
-
 stdenv.mkDerivation {
 
   name = "coq${coq.coq-version}-coq-haskell-${param.version}";

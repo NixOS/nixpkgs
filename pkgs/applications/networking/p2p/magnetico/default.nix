@@ -5,9 +5,9 @@ buildGoModule rec {
   version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner  = "boramalper";
-    repo   = "magnetico";
-    rev    = "v${version}";
+    owner = "boramalper";
+    repo = "magnetico";
+    rev = "v${version}";
     sha256 = "1flw7r8igc0hhm288p67lpy9aj1fnywva5b28yfknpw8g97c9r5x";
   };
 
@@ -24,10 +24,10 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description  = "Autonomous (self-hosted) BitTorrent DHT search engine suite.";
-    homepage     = https://github.com/boramalper/magnetico;
-    license      = licenses.agpl3;
+    description = "Autonomous (self-hosted) BitTorrent DHT search engine suite.";
+    homepage = https://github.com/boramalper/magnetico;
+    license = licenses.agpl3;
     badPlatforms = platforms.darwin;
-    maintainers  = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj ];
   };
 }

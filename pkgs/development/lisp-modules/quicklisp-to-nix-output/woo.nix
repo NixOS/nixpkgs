@@ -14,7 +14,7 @@ rec {
 
   packageName = "woo";
 
-  asdFilesToKeep = ["woo.asd"];
+  asdFilesToKeep = [ "woo.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM woo DESCRIPTION An asynchronous HTTP server written in Common Lisp

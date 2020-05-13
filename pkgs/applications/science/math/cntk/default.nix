@@ -1,12 +1,24 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, cmake
-, openblas, opencv3, libzip, boost, protobuf, openmpi
+{ lib
+, stdenv
+, fetchgit
+, fetchFromGitHub
+, cmake
+, openblas
+, opencv3
+, libzip
+, boost
+, protobuf
+, openmpi
 , onebitSGDSupport ? false
-, cudaSupport ? false, addOpenGLRunpath, cudatoolkit, nvidia_x11
-, cudnnSupport ? cudaSupport, cudnn
+, cudaSupport ? false
+, addOpenGLRunpath
+, cudatoolkit
+, nvidia_x11
+, cudnnSupport ? cudaSupport
+, cudnn
 }:
 
 assert cudnnSupport -> cudaSupport;
-
 let
   # Old specific version required for CNTK.
   cub = fetchFromGitHub {
@@ -16,7 +28,8 @@ let
     sha256 = "0ksd5n1lxqhm5l5cd2lps4cszhjkf6gmzahaycs7nxb06qci8c66";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "CNTK";
   version = "2.7";
 
@@ -33,8 +46,8 @@ in stdenv.mkDerivation rec {
   OMPI_CXX = "g++";
 
   buildInputs = [ openblas opencv3 libzip boost protobuf openmpi ]
-             ++ lib.optional cudaSupport cudatoolkit
-             ++ lib.optional cudnnSupport cudnn;
+    ++ lib.optional cudaSupport cudatoolkit
+    ++ lib.optional cudnnSupport cudnn;
 
   configureFlags = [
     "--with-opencv=${opencv3}"

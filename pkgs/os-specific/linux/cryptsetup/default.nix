@@ -1,6 +1,14 @@
-{ stdenv, fetchurl, lvm2, json_c
-, openssl, libuuid, pkgconfig, popt
-, enablePython ? false, python2 ? null }:
+{ stdenv
+, fetchurl
+, lvm2
+, json_c
+, openssl
+, libuuid
+, pkgconfig
+, popt
+, enablePython ? false
+, python2 ? null
+}:
 
 assert enablePython -> python2 != null;
 

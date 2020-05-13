@@ -1,5 +1,10 @@
-{ fetchPypi, buildPythonPackage
-, semantic-version, boto3, flask, docutils, requests
+{ fetchPypi
+, buildPythonPackage
+, semantic-version
+, boto3
+, flask
+, docutils
+, requests
 }:
 
 buildPythonPackage rec {

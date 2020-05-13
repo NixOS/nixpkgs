@@ -1,6 +1,16 @@
-{ stdenv, fetchpatch, python, buildPythonPackage, isPy37
-, protobuf, google_apputils, pyext, libcxx, isPy27
-, disabled, doCheck ? true }:
+{ stdenv
+, fetchpatch
+, python
+, buildPythonPackage
+, isPy37
+, protobuf
+, google_apputils
+, pyext
+, libcxx
+, isPy27
+, disabled
+, doCheck ? true
+}:
 
 with stdenv.lib;
 
@@ -16,17 +26,19 @@ buildPythonPackage {
   );
 
   propagatedBuildInputs = [ google_apputils ];
-  propagatedNativeBuildInputs = [ protobuf ];  # For protoc.
+  propagatedNativeBuildInputs = [ protobuf ]; # For protoc.
   nativeBuildInputs = [ google_apputils pyext ];
   buildInputs = [ protobuf ];
 
-  patches = optional (isPy37 && (versionOlder protobuf.version "3.6.1.2"))
-    # Python 3.7 compatibility (not needed for protobuf >= 3.6.1.2)
-    (fetchpatch {
-      url = "https://github.com/protocolbuffers/protobuf/commit/0a59054c30e4f0ba10f10acfc1d7f3814c63e1a7.patch";
-      sha256 = "09hw22y3423v8bbmc9xm07znwdxfbya6rp78d4zqw6fisdvjkqf1";
-      stripLen = 1;
-    })
+  patches =
+    optional
+      (isPy37 && (versionOlder protobuf.version "3.6.1.2"))
+      # Python 3.7 compatibility (not needed for protobuf >= 3.6.1.2)
+      (fetchpatch {
+        url = "https://github.com/protocolbuffers/protobuf/commit/0a59054c30e4f0ba10f10acfc1d7f3814c63e1a7.patch";
+        sha256 = "09hw22y3423v8bbmc9xm07znwdxfbya6rp78d4zqw6fisdvjkqf1";
+        stripLen = 1;
+      })
   ;
 
   prePatch = ''
@@ -48,8 +60,10 @@ buildPythonPackage {
     ${python.interpreter} setup.py build_ext --cpp_implementation
   '';
 
-  installFlags = optional (versionAtLeast protobuf.version "2.6.0")
-    "--install-option='--cpp_implementation'";
+  installFlags =
+    optional
+      (versionAtLeast protobuf.version "2.6.0")
+      "--install-option='--cpp_implementation'";
 
   # the _message.so isn't installed, so we'll do that manually.
   # if someone can figure out a less hacky way to get the _message.so to

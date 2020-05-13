@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitLab, cmake, openal, pkgconfig, libogg,
-  libvorbis, SDL2, makeWrapper, libpng, libjpeg_turbo, libGLU }:
+{ stdenv
+, fetchFromGitLab
+, cmake
+, openal
+, pkgconfig
+, libogg
+, libvorbis
+, SDL2
+, makeWrapper
+, libpng
+, libjpeg_turbo
+, libGLU
+}:
 
 with stdenv.lib;
 

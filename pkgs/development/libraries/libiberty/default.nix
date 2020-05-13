@@ -1,7 +1,5 @@
 { stdenv, buildPackages, staticBuild ? false }:
-
 let inherit (buildPackages.buildPackages) gcc; in
-
 stdenv.mkDerivation {
   name = "libiberty-${gcc.cc.version}";
 

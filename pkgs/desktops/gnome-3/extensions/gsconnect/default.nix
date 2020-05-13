@@ -1,6 +1,23 @@
-{ stdenv, fetchFromGitHub, substituteAll, python3, openssl, gsound
-, meson, ninja, libxml2, pkgconfig, gobject-introspection, wrapGAppsHook
-, glib, gtk3, at-spi2-core, upower, openssh, gnome3, gjs }:
+{ stdenv
+, fetchFromGitHub
+, substituteAll
+, python3
+, openssl
+, gsound
+, meson
+, ninja
+, libxml2
+, pkgconfig
+, gobject-introspection
+, wrapGAppsHook
+, glib
+, gtk3
+, at-spi2-core
+, upower
+, openssh
+, gnome3
+, gjs
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-gsconnect";
@@ -22,7 +39,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig
+    meson
+    ninja
+    pkgconfig
     gobject-introspection # for locating typelibs
     wrapGAppsHook # for wrapping daemons
     libxml2 # xmllint

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests}:
+{ stdenv, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "update_checker";

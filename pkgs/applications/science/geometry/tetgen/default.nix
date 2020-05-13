@@ -1,5 +1,4 @@
-{stdenv, fetchurl}: 
-
+{ stdenv, fetchurl }:
 let version = "1.5.1"; in
 stdenv.mkDerivation {
   pname = "tetgen";

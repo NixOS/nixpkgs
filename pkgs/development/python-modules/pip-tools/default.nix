@@ -1,5 +1,15 @@
-{ stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six
-, setuptools_scm, git, glibcLocales, mock }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, pip
+, pytest
+, click
+, six
+, setuptools_scm
+, git
+, glibcLocales
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "pip-tools";

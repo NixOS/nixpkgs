@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, pkgconfig, meson, vala, ninja
-, gtk3, poppler, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, meson
+, vala
+, ninja
+, gtk3
+, poppler
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "pdftag";

@@ -1,22 +1,23 @@
-{ stdenv, makeWrapper, bash, curl, darwin
+{ stdenv
+, makeWrapper
+, bash
+, curl
+, darwin
 , version
 , src
 , platform
 , versionType
 }:
-
 let
   inherit (stdenv.lib) optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";
 
-  installComponents
-    = "rustc,rust-std-${platform}"
+  installComponents = "rustc,rust-std-${platform}"
     + (optionalString bootstrapping ",cargo")
-    ;
+  ;
 in
-
 rec {
   rustc = stdenv.mkDerivation {
     name = "rustc-${versionType}-${version}";

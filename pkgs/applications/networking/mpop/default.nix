@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   configureFlags = optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   meta = {
-      description = "POP3 mail retrieval agent";
-      homepage = https://marlam.de/mpop;
-      license = licenses.gpl3Plus;
-      platforms = platforms.unix;
-    };
+    description = "POP3 mail retrieval agent";
+    homepage = https://marlam.de/mpop;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+  };
 }

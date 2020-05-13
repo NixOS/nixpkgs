@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libjpeg, lcms2, gettext, jasper, libiconv }:
+{ stdenv, fetchurl, libjpeg, lcms2, gettext, jasper, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "dcraw-9.28.0";

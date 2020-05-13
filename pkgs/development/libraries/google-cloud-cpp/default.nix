@@ -28,7 +28,8 @@ let
     url = "https://github.com/nlohmann/json/releases/download/v3.4.0/json.hpp";
     sha256 = "0pw3jpi572irbp2dqclmyhgic6k9rxav5mpp9ygbp9xj48gnvnk3";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
   version = "0.14.0";
 

@@ -1,12 +1,11 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.prometheus.pushgateway;
 
   cmdlineArgs =
-       opt "web.listen-address" cfg.web.listen-address
+    opt "web.listen-address" cfg.web.listen-address
     ++ opt "web.telemetry-path" cfg.web.telemetry-path
     ++ opt "web.external-url" cfg.web.external-url
     ++ opt "web.route-prefix" cfg.web.route-prefix
@@ -16,9 +15,10 @@ let
     ++ opt "log.format" cfg.log.format
     ++ cfg.extraFlags;
 
-  opt = k : v : optional (v != null) ''--${k}="${v}"'';
+  opt = k: v: optional (v != null) ''--${k}="${v}"'';
 
-in {
+in
+{
   options = {
     services.prometheus.pushgateway = {
       enable = mkEnableOption "Prometheus Pushgateway";
@@ -83,7 +83,7 @@ in {
       };
 
       log.level = mkOption {
-        type = types.nullOr (types.enum ["debug" "info" "warn" "error" "fatal"]);
+        type = types.nullOr (types.enum [ "debug" "info" "warn" "error" "fatal" ]);
         default = null;
         description = ''
           Only log messages with the given severity or above.
@@ -105,7 +105,7 @@ in {
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Extra commandline options when launching the Pushgateway.
         '';
@@ -152,9 +152,9 @@ in {
     ];
     systemd.services.pushgateway = {
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
-        Restart  = "always";
+        Restart = "always";
         DynamicUser = true;
         ExecStart = "${cfg.package}/bin/pushgateway" +
           optionalString (length cmdlineArgs != 0) (" \\\n  " +

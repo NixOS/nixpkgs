@@ -1,6 +1,12 @@
-{ stdenv, fetchbzr, pkgconfig
-, qmake, qtbase, qtdeclarative, wrapQtAppsHook
-, glib, gobject-introspection
+{ stdenv
+, fetchbzr
+, pkgconfig
+, qmake
+, qtbase
+, qtdeclarative
+, wrapQtAppsHook
+, glib
+, gobject-introspection
 }:
 
 stdenv.mkDerivation {

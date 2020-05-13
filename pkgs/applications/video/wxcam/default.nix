@@ -1,15 +1,20 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , pkgconfig
 , intltool
-, libX11, libXv, libSM
-, gtk, libglade
+, libX11
+, libXv
+, libSM
+, gtk
+, libglade
 , wxGTK
 , perlPackages
 , xvidcore
 , mjpegtools
 , alsaLib
 , libv4l
-, cimg }:
+, cimg
+}:
 
 stdenv.mkDerivation rec {
 
@@ -22,9 +27,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig intltool libX11 libXv libSM gtk libglade wxGTK perlPackages.XMLParser xvidcore mjpegtools alsaLib libv4l cimg ];
+    [ pkgconfig intltool libX11 libXv libSM gtk libglade wxGTK perlPackages.XMLParser xvidcore mjpegtools alsaLib libv4l cimg ];
 
-  NIX_CFLAGS_COMPILE="-I ${cimg}/include/cimg";
+  NIX_CFLAGS_COMPILE = "-I ${cimg}/include/cimg";
 
   postUnpack = ''
     sed -ie 's|/usr/share/|'"$out/share/"'|g' $sourceRoot/Makefile.in
@@ -37,11 +42,11 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An open-source, wxGTK-based webcam app for Linux";
     longDescription = ''
-    wxCam is a webcam application for linux. It supports video recording
-    (avi uncompressed and Xvid formats), snapshot taking, and some special
-    commands for philips webcams, so you can also use it for astronomy purposes.
-    It supports both video4linux 1 and 2 drivers,
-    so it should work on a very large number of devices.
+      wxCam is a webcam application for linux. It supports video recording
+      (avi uncompressed and Xvid formats), snapshot taking, and some special
+      commands for philips webcams, so you can also use it for astronomy purposes.
+      It supports both video4linux 1 and 2 drivers,
+      so it should work on a very large number of devices.
     '';
     homepage = http://wxcam.sourceforge.net/;
     license = licenses.gpl3Plus;

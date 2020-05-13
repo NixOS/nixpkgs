@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, type_conv}:
+{ stdenv, buildOcaml, fetchurl, type_conv }:
 
 buildOcaml rec {
   name = "typerep";

@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, makeWrapper
 , meson
 , ninja
 , pkgconfig
@@ -8,7 +11,6 @@
 , ffmpeg
 , SDL2
 }:
-
 let
   version = "1.12.1";
   prebuilt_server = fetchurl {

@@ -1,7 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, attrs, click, toml, appdirs, aiohttp, aiohttp-cors
-, glibcLocales, typed-ast, pathspec, regex
-, setuptools_scm, pytest }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, attrs
+, click
+, toml
+, appdirs
+, aiohttp
+, aiohttp-cors
+, glibcLocales
+, typed-ast
+, pathspec
+, regex
+, setuptools_scm
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "black";
@@ -15,7 +28,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  checkInputs =  [ pytest glibcLocales ];
+  checkInputs = [ pytest glibcLocales ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Black starts a local server and needs to bind a local address.
@@ -34,8 +47,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "The uncompromising Python code formatter";
-    homepage    = https://github.com/ambv/black;
-    license     = licenses.mit;
+    homepage = https://github.com/ambv/black;
+    license = licenses.mit;
     maintainers = with maintainers; [ sveitser ];
   };
 

@@ -1,8 +1,26 @@
-{ stdenv, fetchurl, pkgconfig
-, libjack2, gettext, intltool, guile_2_0, lilypond
-, glib, libxml2, librsvg, libsndfile, aubio
-, gtk3, gtksourceview, evince, fluidsynth, rubberband
-, portaudio, portmidi, fftw, wrapGAppsHook }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libjack2
+, gettext
+, intltool
+, guile_2_0
+, lilypond
+, glib
+, libxml2
+, librsvg
+, libsndfile
+, aubio
+, gtk3
+, gtksourceview
+, evince
+, fluidsynth
+, rubberband
+, portaudio
+, portmidi
+, fftw
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "denemo";
@@ -14,8 +32,22 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libjack2 guile_2_0 lilypond glib libxml2 librsvg libsndfile
-    aubio gtk3 gtksourceview evince fluidsynth rubberband portaudio fftw portmidi
+    libjack2
+    guile_2_0
+    lilypond
+    glib
+    libxml2
+    librsvg
+    libsndfile
+    aubio
+    gtk3
+    gtksourceview
+    evince
+    fluidsynth
+    rubberband
+    portaudio
+    fftw
+    portmidi
   ];
 
   preFixup = ''

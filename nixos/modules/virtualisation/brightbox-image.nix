@@ -10,7 +10,8 @@ in
   system.build.brightboxImage =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "brightbox-image"
-        { preVM =
+        {
+          preVM =
             ''
               mkdir $out
               diskImage=$out/$diskImageBase
@@ -112,7 +113,8 @@ in
   environment.systemPackages = [ pkgs.cryptsetup ];
 
   systemd.services.fetch-ec2-data =
-    { description = "Fetch EC2 Data";
+    {
+      description = "Fetch EC2 Data";
 
       wantedBy = [ "multi-user.target" "sshd.service" ];
       before = [ "sshd.service" ];

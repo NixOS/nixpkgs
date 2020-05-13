@@ -1,16 +1,15 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.babeld;
 
   conditionalBoolToString = value: if (isBool value) then (boolToString value) else (toString value);
 
   paramsString = params:
-    concatMapStringsSep " " (name: "${name} ${conditionalBoolToString (getAttr name params)}")
-                   (attrNames params);
+    concatMapStringsSep " "
+      (name: "${name} ${conditionalBoolToString (getAttr name params)}")
+      (attrNames params);
 
   interfaceConfig = name:
     let
@@ -21,12 +20,13 @@ let
   configFile = with cfg; pkgs.writeText "babeld.conf" (
     (optionalString (cfg.interfaceDefaults != null) ''
       default ${paramsString cfg.interfaceDefaults}
-    '')
+    ''
+    )
     + (concatMapStrings interfaceConfig (attrNames cfg.interfaces))
-    + extraConfig);
+    + extraConfig
+  );
 
 in
-
 {
 
   ###### interface
@@ -57,18 +57,20 @@ in
       };
 
       interfaces = mkOption {
-        default = {};
+        default = { };
         description = ''
           A set describing babeld interfaces.
           See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
         example =
-          { enp0s2 =
-            { type = "wired";
-              hello-interval = 5;
-              split-horizon = "auto";
-            };
+          {
+            enp0s2 =
+              {
+                type = "wired";
+                hello-interval = 5;
+                split-horizon = "auto";
+              };
           };
       };
 

@@ -16,7 +16,7 @@ rec {
 
   packageName = "esrap";
 
-  asdFilesToKeep = ["esrap.asd"];
+  asdFilesToKeep = [ "esrap.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM esrap DESCRIPTION

@@ -1,16 +1,34 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
-, libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
-, gtk3, python, pygobject3, pyxdg
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, gettext
+, intltool
+, libtool
+, pkgconfig
+, wrapGAppsHook
+, wrapPython
+, gobject-introspection
+, gtk3
+, python
+, pygobject3
+, pyxdg
 
-, withQuartz ? stdenv.isDarwin, ApplicationServices
-, withRandr ? stdenv.isLinux, libxcb
-, withDrm ? stdenv.isLinux, libdrm
+, withQuartz ? stdenv.isDarwin
+, ApplicationServices
+, withRandr ? stdenv.isLinux
+, libxcb
+, withDrm ? stdenv.isLinux
+, libdrm
 
 , withGeolocation ? true
-, withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
-, withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
+, withCoreLocation ? withGeolocation && stdenv.isDarwin
+, CoreLocation
+, Foundation
+, Cocoa
+, withGeoclue ? withGeolocation && stdenv.isLinux
+, geoclue
 }:
-
 let
   mkRedshift =
     { pname, version, src, meta }:
@@ -45,12 +63,12 @@ let
         gobject-introspection
         gtk3
         python
-      ] ++ stdenv.lib.optional  withRandr        libxcb
-        ++ stdenv.lib.optional  withGeoclue      geoclue
-        ++ stdenv.lib.optional  withDrm          libdrm
-        ++ stdenv.lib.optional  withQuartz       ApplicationServices
-        ++ stdenv.lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
-        ;
+      ] ++ stdenv.lib.optional withRandr libxcb
+      ++ stdenv.lib.optional withGeoclue geoclue
+      ++ stdenv.lib.optional withDrm libdrm
+      ++ stdenv.lib.optional withQuartz ApplicationServices
+      ++ stdenv.lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
+      ;
 
       pythonPath = [ pygobject3 pyxdg ];
 

@@ -1,9 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui,
- xfconf, gtk2, exo }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, intltool
+, libxfce4util
+, xfce4-panel
+, libxfce4ui
+, xfconf
+, gtk2
+, exo
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-mpc-plugin";
+  p_name = "xfce4-mpc-plugin";
   ver_maj = "0.4";
   ver_min = "5";
   name = "${p_name}-${ver_maj}.${ver_min}";
@@ -14,8 +23,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel
-    xfconf gtk2 exo ];
+  buildInputs = [
+    intltool
+    libxfce4util
+    libxfce4ui
+    xfce4-panel
+    xfconf
+    gtk2
+    exo
+  ];
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

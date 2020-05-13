@@ -14,10 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo perl ];
 
   doCheck = true;
-  preCheck = if stdenv.isDarwin then
-    "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs"
-  else
-    null;
+  preCheck =
+    if stdenv.isDarwin then
+      "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs"
+    else
+      null;
 
   meta = with stdenv.lib; {
     homepage = https://www.gnu.org/software/libtasn1/;

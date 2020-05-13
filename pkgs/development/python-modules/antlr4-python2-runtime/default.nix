@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, isPy3k, python
+{ lib
+, buildPythonPackage
+, isPy3k
+, python
 , antlr4
 }:
 

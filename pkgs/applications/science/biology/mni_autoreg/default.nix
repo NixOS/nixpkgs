@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mni_autoreg";
-  name  = "${pname}-2017-09-22";
+  name = "${pname}-2017-09-22";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";

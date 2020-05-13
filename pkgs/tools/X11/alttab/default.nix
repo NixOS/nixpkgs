@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, ronn, libpng, uthash
-, xorg }:
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, pkgconfig
+, ronn
+, libpng
+, uthash
+, xorg
+}:
 
 stdenv.mkDerivation rec {
   version = "1.4.0";
@@ -13,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "028ifp54yl3xq5mj2ww9baga8p56nmrx4ypvj8k35akcaxdpyga9";
   };
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     autoconf
     automake
     pkgconfig

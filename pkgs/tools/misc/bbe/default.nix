@@ -1,4 +1,4 @@
-{ stdenv , fetchurl, autoreconfHook }:
+{ stdenv, fetchurl, autoreconfHook }:
 stdenv.mkDerivation rec {
   pname = "bbe";
   version = "0.2.2";

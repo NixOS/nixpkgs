@@ -2,7 +2,6 @@
 # licenses, etc).
 
 { lib, config, hostPlatform }:
-
 let
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
@@ -16,15 +15,17 @@ let
   allowUnfree = config.allowUnfree or false
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
-  whitelist = config.whitelistedLicenses or [];
-  blacklist = config.blacklistedLicenses or [];
+  whitelist = config.whitelistedLicenses or [ ];
+  blacklist = config.blacklistedLicenses or [ ];
 
   onlyLicenses = list:
-    lib.lists.all (license:
-      let l = lib.licenses.${license.shortName or "BROKEN"} or false; in
-      if license == l then true else
+    lib.lists.all
+      (license:
+        let l = lib.licenses.${license.shortName or "BROKEN"} or false; in
+        if license == l then true else
         throw ''‘${showLicense license}’ is not an attribute of lib.licenses''
-    ) list;
+      )
+      list;
 
   areLicenseListsValid =
     if lib.mutuallyExclusive whitelist blacklist then
@@ -67,11 +68,11 @@ let
     isUnfree (lib.lists.toList attrs.meta.license) &&
     !allowUnfreePredicate attrs;
 
-  allowInsecureDefaultPredicate = x: builtins.elem (getName x) (config.permittedInsecurePackages or []);
+  allowInsecureDefaultPredicate = x: builtins.elem (getName x) (config.permittedInsecurePackages or [ ]);
   allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
-    (attrs.meta.knownVulnerabilities or []) == [] ||
+    (attrs.meta.knownVulnerabilities or [ ]) == [ ] ||
     allowInsecurePredicate attrs ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
@@ -130,11 +131,13 @@ let
 
       '';
 
-  remediateOutputsToInstall = attrs: let
-      expectedOutputs = attrs.meta.outputsToInstall or [];
+  remediateOutputsToInstall = attrs:
+    let
+      expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
       missingOutputs = builtins.filter (output: ! builtins.elem output actualOutputs) expectedOutputs;
-    in ''
+    in
+    ''
       The package ${getName attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
 
       however ${getName attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
@@ -144,19 +147,22 @@ let
       ${lib.concatStrings (builtins.map (output: "  - ${output}\n") missingOutputs)}
     '';
 
-  handleEvalIssue = { meta, attrs }: { reason , errormsg ? "" }:
+  handleEvalIssue = { meta, attrs }: { reason, errormsg ? "" }:
     let
-      msg = if inHydra
+      msg =
+        if inHydra
         then "Failed to evaluate ${getName attrs}: «${reason}»: ${errormsg}"
         else ''
           Package ‘${getName attrs}’ in ${pos_str meta} ${errormsg}, refusing to evaluate.
 
         '' + (builtins.getAttr reason remediation) attrs;
 
-      handler = if config ? handleEvalIssue
+      handler =
+        if config ? handleEvalIssue
         then config.handleEvalIssue reason
         else throw;
-    in handler msg;
+    in
+    handler msg;
 
 
   metaTypes = with lib.types; rec {
@@ -177,9 +183,9 @@ let
     # This is currently dead code due to https://github.com/NixOS/nix/issues/2532
     tests = attrsOf (mkOptionType {
       name = "test";
-      check = x: x == {} || ( # Accept {} for tests that are unsupported
+      check = x: x == { } || (# Accept {} for tests that are unsupported
         isDerivation x &&
-        x ? meta.timeout
+          x ? meta.timeout
       );
       merge = lib.options.mergeOneOption;
     });
@@ -209,15 +215,17 @@ let
     if metaTypes?${k} then
       if metaTypes.${k}.check v then null else "key '${k}' has a value ${toString v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
     else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
-  checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
+  checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [ ];
 
-  checkOutputsToInstall = attrs: let
-      expectedOutputs = attrs.meta.outputsToInstall or [];
+  checkOutputsToInstall = attrs:
+    let
+      expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
       missingOutputs = builtins.filter (output: ! builtins.elem output actualOutputs) expectedOutputs;
-    in if shouldCheckMeta
-       then builtins.length missingOutputs > 0
-       else false;
+    in
+    if shouldCheckMeta
+    then builtins.length missingOutputs > 0
+    else false;
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
@@ -233,24 +241,30 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem &&
-            (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
-              lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or [])) then
+      (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
+        lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or [ ])) then
       { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
     else if checkOutputsToInstall attrs then
       { valid = false; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
-    else let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
-    else { valid = true; };
+    else
+      let res = checkMeta (attrs.meta or { }); in
+      if res != [ ] then
+        { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
+      else { valid = true; };
 
-  assertValidity = { meta, attrs }: let
+  assertValidity = { meta, attrs }:
+    let
       validity = checkValidity attrs;
-    in validity // {
+    in
+    validity // {
       # Throw an error if trying to evaluate an non-valid derivation
-      handled = if !validity.valid
-        then handleEvalIssue { inherit meta attrs; } (removeAttrs validity ["valid"])
+      handled =
+        if !validity.valid
+        then handleEvalIssue { inherit meta attrs; } (removeAttrs validity [ "valid" ])
         else true;
-  };
+    };
 
-in assertValidity
+in
+assertValidity

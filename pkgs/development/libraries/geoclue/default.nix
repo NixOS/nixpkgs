@@ -1,5 +1,24 @@
-{ stdenv, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk-pixbuf
-, modemmanager, avahi, glib-networking, python3, wrapGAppsHook, gobject-introspection, vala
+{ stdenv
+, fetchFromGitLab
+, intltool
+, meson
+, ninja
+, pkgconfig
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, glib
+, json-glib
+, libsoup
+, libnotify
+, gdk-pixbuf
+, modemmanager
+, avahi
+, glib-networking
+, python3
+, wrapGAppsHook
+, gobject-introspection
+, vala
 , withDemoAgent ? false
 }:
 
@@ -24,15 +43,28 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig intltool meson ninja wrapGAppsHook python3 vala gobject-introspection
+    pkgconfig
+    intltool
+    meson
+    ninja
+    wrapGAppsHook
+    python3
+    vala
+    gobject-introspection
     # devdoc
-    gtk-doc docbook_xsl docbook_xml_dtd_412
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
   ];
 
   buildInputs = [
-    glib json-glib libsoup avahi
+    glib
+    json-glib
+    libsoup
+    avahi
   ] ++ optionals withDemoAgent [
-    libnotify gdk-pixbuf
+    libnotify
+    gdk-pixbuf
   ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
   propagatedBuildInputs = [ glib glib-networking ];

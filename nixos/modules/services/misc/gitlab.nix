@@ -1,20 +1,20 @@
 { config, lib, pkgs, utils, ... }:
 
 with lib;
-
 let
   cfg = config.services.gitlab;
 
   ruby = cfg.packages.gitlab.ruby;
 
-  postgresqlPackage = if config.services.postgresql.enable then
-                        config.services.postgresql.package
-                      else
-                        pkgs.postgresql;
+  postgresqlPackage =
+    if config.services.postgresql.enable then
+      config.services.postgresql.package
+    else
+      pkgs.postgresql;
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
-  pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
+  pathUrlQuote = url: replaceStrings [ "/" ] [ "%2F" ] url;
 
   databaseConfig = {
     production = {
@@ -31,7 +31,7 @@ let
   databaseActuallyCreateLocally = cfg.databaseCreateLocally && cfg.databaseHost == "";
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
-    socket_path = "${lib.escape ["\""] gitalySocket}"
+    socket_path = "${lib.escape [ "\"" ] gitalySocket}"
     bin_dir = "${cfg.packages.gitaly}/bin"
     prometheus_listen_addr = "localhost:9236"
 
@@ -45,10 +45,11 @@ let
     dir = "${cfg.packages.gitlab-shell}"
 
     ${concatStringsSep "\n" (attrValues (mapAttrs (k: v: ''
-    [[storage]]
-    name = "${lib.escape ["\""] k}"
-    path = "${lib.escape ["\""] v.path}"
-    '') gitlabConfig.production.repositories.storages))}
+      [[storage]]
+      name = "${lib.escape [ "\"" ] k}"
+      path = "${lib.escape [ "\"" ] v.path}"
+    '') gitlabConfig.production.repositories.storages
+      ))}
   '';
 
   gitlabShellConfig = {
@@ -120,7 +121,7 @@ let
           port = 3807;
         };
       };
-      extra = {};
+      extra = { };
       uploads.storage_path = cfg.statePath;
     };
   };
@@ -149,7 +150,7 @@ let
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
-     '';
+    '';
   };
 
   gitlab-rails = pkgs.stdenv.mkDerivation {
@@ -163,7 +164,7 @@ let
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
-     '';
+    '';
   };
 
   extraGitlabRb = pkgs.writeText "extra-gitlab.rb" cfg.extraGitlabRb;
@@ -187,7 +188,8 @@ let
     end
   '';
 
-in {
+in
+{
 
   imports = [
     (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
@@ -304,7 +306,7 @@ in {
 
       extraDatabaseConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Extra configuration in config/database.yml.";
       };
 
@@ -510,7 +512,7 @@ in {
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = literalExample ''
           {
             gitlab = {
@@ -628,13 +630,15 @@ in {
           rm "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
       fi
       $PSQL '${cfg.databaseName}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
-    '');
+    ''
+    );
 
     # Use postfix to send out mails.
     services.postfix.enable = mkDefault true;
 
     users.users.${cfg.user} =
-      { group = cfg.group;
+      {
+        group = cfg.group;
         home = "${cfg.statePath}/home";
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.gitlab;
@@ -701,7 +705,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production -P ${cfg.statePath}/tmp/sidekiq.pid";
+        ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production -P ${cfg.statePath}/tmp/sidekiq.pid";
       };
     };
 
@@ -710,7 +714,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         openssh
-        procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
+        procps # See https://gitlab.com/gitlab-org/gitaly/issues/1562
         gitAndTools.git
         cfg.packages.gitaly.rubyEnv
         cfg.packages.gitaly.rubyEnv.wrappedRuby
@@ -778,94 +782,96 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStartPre = let
-          preStartFullPrivileges = ''
-            shopt -s dotglob nullglob
-            set -eu
+        ExecStartPre =
+          let
+            preStartFullPrivileges = ''
+              shopt -s dotglob nullglob
+              set -eu
 
-            chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/*
-            chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/config/*
-          '';
-          preStart = ''
-            set -eu
+              chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/*
+              chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/config/*
+            '';
+            preStart = ''
+              set -eu
 
-            cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
-            rm -rf ${cfg.statePath}/db/*
-            rm -rf ${cfg.statePath}/config/initializers/*
-            rm -f ${cfg.statePath}/lib
-            cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
-            cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
+              cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+              rm -rf ${cfg.statePath}/db/*
+              rm -rf ${cfg.statePath}/config/initializers/*
+              rm -f ${cfg.statePath}/lib
+              cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+              cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
 
-            ${cfg.packages.gitlab-shell}/bin/install
+              ${cfg.packages.gitlab-shell}/bin/install
 
-            ${optionalString cfg.smtp.enable ''
-              install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
-              ${optionalString (cfg.smtp.passwordFile != null) ''
-                smtp_password=$(<'${cfg.smtp.passwordFile}')
-                ${pkgs.replace}/bin/replace-literal -e '@smtpPassword@' "$smtp_password" '${cfg.statePath}/config/initializers/smtp_settings.rb'
+              ${optionalString cfg.smtp.enable ''
+                install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
+                ${optionalString (cfg.smtp.passwordFile != null) ''
+                  smtp_password=$(<'${cfg.smtp.passwordFile}')
+                  ${pkgs.replace}/bin/replace-literal -e '@smtpPassword@' "$smtp_password" '${cfg.statePath}/config/initializers/smtp_settings.rb'
+                ''}
               ''}
-            ''}
 
-            (
-              umask u=rwx,g=,o=
+              (
+                umask u=rwx,g=,o=
 
-              ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/gitlab_shell_secret
+                ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/gitlab_shell_secret
 
-              if [[ -h '${cfg.statePath}/config/database.yml' ]]; then
-                rm '${cfg.statePath}/config/database.yml'
-              fi
+                if [[ -h '${cfg.statePath}/config/database.yml' ]]; then
+                  rm '${cfg.statePath}/config/database.yml'
+                fi
 
-              ${if cfg.databasePasswordFile != null then ''
-                  export db_password="$(<'${cfg.databasePasswordFile}')"
+                ${if cfg.databasePasswordFile != null then ''
+                export db_password="$(<'${cfg.databasePasswordFile}')"
 
-                  if [[ -z "$db_password" ]]; then
-                    >&2 echo "Database password was an empty string!"
-                    exit 1
-                  fi
+                if [[ -z "$db_password" ]]; then
+                  >&2 echo "Database password was an empty string!"
+                  exit 1
+                fi
 
-                  ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
-                                    '.production.password = $ENV.db_password' \
-                                    >'${cfg.statePath}/config/database.yml'
-                ''
+                ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
+                                  '.production.password = $ENV.db_password' \
+                                  >'${cfg.statePath}/config/database.yml'
+              ''
                 else ''
-                  ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
-                                    >'${cfg.statePath}/config/database.yml'
-                ''
+                ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
+                                  >'${cfg.statePath}/config/database.yml'
+              ''
               }
 
-              ${utils.genJqSecretsReplacementSnippet
-                  gitlabConfig
-                  "${cfg.statePath}/config/gitlab.yml"
+                ${utils.genJqSecretsReplacementSnippet
+                gitlabConfig
+                "${cfg.statePath}/config/gitlab.yml"
               }
 
-              if [[ -h '${cfg.statePath}/config/secrets.yml' ]]; then
-                rm '${cfg.statePath}/config/secrets.yml'
-              fi
+                if [[ -h '${cfg.statePath}/config/secrets.yml' ]]; then
+                  rm '${cfg.statePath}/config/secrets.yml'
+                fi
 
-              export secret="$(<'${cfg.secrets.secretFile}')"
-              export db="$(<'${cfg.secrets.dbFile}')"
-              export otp="$(<'${cfg.secrets.otpFile}')"
-              export jws="$(<'${cfg.secrets.jwsFile}')"
-              ${pkgs.jq}/bin/jq -n '{production: {secret_key_base: $ENV.secret,
-                                                  otp_key_base: $ENV.otp,
-                                                  db_key_base: $ENV.db,
-                                                  openid_connect_signing_key: $ENV.jws}}' \
-                                > '${cfg.statePath}/config/secrets.yml'
-            )
+                export secret="$(<'${cfg.secrets.secretFile}')"
+                export db="$(<'${cfg.secrets.dbFile}')"
+                export otp="$(<'${cfg.secrets.otpFile}')"
+                export jws="$(<'${cfg.secrets.jwsFile}')"
+                ${pkgs.jq}/bin/jq -n '{production: {secret_key_base: $ENV.secret,
+                                                    otp_key_base: $ENV.otp,
+                                                    db_key_base: $ENV.db,
+                                                    openid_connect_signing_key: $ENV.jws}}' \
+                                  > '${cfg.statePath}/config/secrets.yml'
+              )
 
-            initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
-            ${gitlab-rake}/bin/gitlab-rake gitlab:db:configure GITLAB_ROOT_PASSWORD="$initial_root_password" \
-                                                               GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}' > /dev/null
+              initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
+              ${gitlab-rake}/bin/gitlab-rake gitlab:db:configure GITLAB_ROOT_PASSWORD="$initial_root_password" \
+                                                                 GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}' > /dev/null
 
-            # We remove potentially broken links to old gitlab-shell versions
-            rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
+              # We remove potentially broken links to old gitlab-shell versions
+              rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
 
-            ${pkgs.git}/bin/git config --global core.autocrlf "input"
-          '';
-        in [
-          "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}"
-          "${pkgs.writeShellScript "gitlab-pre-start" preStart}"
-        ];
+              ${pkgs.git}/bin/git config --global core.autocrlf "input"
+            '';
+          in
+          [
+            "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}"
+            "${pkgs.writeShellScript "gitlab-pre-start" preStart}"
+          ];
         ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/unicorn -c ${cfg.statePath}/config/unicorn.rb -E production";
       };
 

@@ -8,10 +8,11 @@
 let
   lib = import ../default.nix;
   mseteq = x: y: {
-    expr     = lib.sort lib.lessThan x;
+    expr = lib.sort lib.lessThan x;
     expected = lib.sort lib.lessThan y;
   };
-in with lib.systems.doubles; lib.runTests {
+in
+with lib.systems.doubles; lib.runTests {
   testall = mseteq all (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ wasi ++ windows ++ embedded ++ js);
 
   testarm = mseteq arm [ "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "arm-none" "armv7a-darwin" ];

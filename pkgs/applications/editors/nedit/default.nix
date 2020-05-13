@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # the linux config works fine on darwin too!
   buildFlags = stdenv.lib.optional (stdenv.isLinux || stdenv.isDarwin) "linux";
 
-  NIX_CFLAGS_COMPILE="-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
+  NIX_CFLAGS_COMPILE = "-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
 
   installPhase = ''
     mkdir -p $out/bin

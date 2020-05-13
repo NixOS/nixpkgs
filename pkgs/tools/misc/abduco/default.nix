@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wqcif633nbgnznn46j0sng9l0wncppw1x1c42f75b4p9hrph203";
   };
 
-  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  configFile = optionalString (conf != null) (writeText "config.def.h" conf);
+  preBuild = optionalString (conf != null) "cp ${configFile} config.def.h";
 
   CFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
 

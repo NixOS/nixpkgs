@@ -1,5 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest
-, nibabel, numpy, pandas, scikitlearn, scipy, matplotlib, joblib }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, nibabel
+, numpy
+, pandas
+, scikitlearn
+, scipy
+, matplotlib
+, joblib
+}:
 
 buildPythonPackage rec {
   pname = "nilearn";

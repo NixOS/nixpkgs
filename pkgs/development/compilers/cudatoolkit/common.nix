@@ -4,7 +4,7 @@ args@
 , url ? ""
 , name ? ""
 , developerProgram ? false
-, runPatches ? []
+, runPatches ? [ ]
 , addOpenGLRunpath
 , alsaLib
 , expat
@@ -56,9 +56,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
   buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
   runtimeDependencies = [
-    ncurses5 expat python27 zlib glibc
-    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsaLib
+    ncurses5
+    expat
+    python27
+    zlib
+    glibc
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXt
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXext
+    gtk2
+    glib
+    fontconfig
+    freetype
+    unixODBC
+    alsaLib
   ];
 
   rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
@@ -85,15 +100,15 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir $out
     ${lib.optionalString (lib.versionOlder version "10.1") ''
-    cd $(basename $src)
-    export PERL5LIB=.
-    perl ./install-linux.pl --prefix="$out"
-    cd ..
-    for patch in $runPatches; do
-      cd $(basename $patch)
-      perl ./install_patch.pl --silent --accept-eula --installdir="$out"
+      cd $(basename $src)
+      export PERL5LIB=.
+      perl ./install-linux.pl --prefix="$out"
       cd ..
-    done
+      for patch in $runPatches; do
+        cd $(basename $patch)
+        perl ./install_patch.pl --silent --accept-eula --installdir="$out"
+        cd ..
+      done
     ''}
     ${lib.optionalString (lib.versionAtLeast version "10.1") ''
       cd pkg/builds/cuda-toolkit
@@ -103,8 +118,8 @@ stdenv.mkDerivation rec {
     rm $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
     ${lib.optionalString (lib.versionOlder version "10.1") ''
-    # let's remove the 32-bit libraries, they confuse the lib64->lib mover
-    rm -rf $out/lib
+      # let's remove the 32-bit libraries, they confuse the lib64->lib mover
+      rm -rf $out/lib
     ''}
 
     # Remove some cruft.
@@ -189,22 +204,24 @@ stdenv.mkDerivation rec {
   # when we figure out how to get `cuda-gdb --version` to run correctly
   # when not using sandboxing.
   doInstallCheck = false;
-  postInstallCheck = let
-  in ''
-    # Smoke test binaries
-    pushd $out/bin
-    for f in *; do
-      case $f in
-        crt)                           continue;;
-        nvcc.profile)                  continue;;
-        nsight_ee_plugins_manage.sh)   continue;;
-        uninstall_cuda_toolkit_6.5.pl) continue;;
-        computeprof|nvvp|nsight)       continue;; # GUIs don't feature "--version"
-        *)                             echo "Executing '$f --version':"; ./$f --version;;
-      esac
-    done
-    popd
-  '';
+  postInstallCheck =
+    let
+    in
+    ''
+      # Smoke test binaries
+      pushd $out/bin
+      for f in *; do
+        case $f in
+          crt)                           continue;;
+          nvcc.profile)                  continue;;
+          nsight_ee_plugins_manage.sh)   continue;;
+          uninstall_cuda_toolkit_6.5.pl) continue;;
+          computeprof|nvvp|nsight)       continue;; # GUIs don't feature "--version"
+          *)                             echo "Executing '$f --version':"; ./$f --version;;
+        esac
+      done
+      popd
+    '';
   passthru = {
     cc = gcc;
     majorVersion = lib.versions.majorMinor version;
@@ -217,4 +234,3 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
   };
 }
-

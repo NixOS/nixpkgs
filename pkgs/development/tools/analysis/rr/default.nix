@@ -23,7 +23,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake libpfm zlib python3Packages.python python3Packages.pexpect which procps gdb capnproto
+    cmake
+    libpfm
+    zlib
+    python3Packages.python
+    python3Packages.pexpect
+    which
+    procps
+    gdb
+    capnproto
   ];
   propagatedBuildInputs = [ gdb ]; # needs GDB to replay programs at runtime
   cmakeFlags = [

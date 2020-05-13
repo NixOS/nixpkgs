@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let cfg = config.services.drbd; in
-
 {
 
   ###### interface

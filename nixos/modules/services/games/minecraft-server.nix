@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.minecraft-server;
 
@@ -11,16 +10,20 @@ let
     eula=true
   '';
 
-  whitelistFile = pkgs.writeText "whitelist.json"
-    (builtins.toJSON
-      (mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
+  whitelistFile =
+    pkgs.writeText "whitelist.json"
+      (
+        builtins.toJSON (mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
 
   cfgToString = v: if builtins.isBool v then boolToString v else toString v;
 
   serverPropertiesFile = pkgs.writeText "server.properties" (''
     # server.properties managed by NixOS configuration
-  '' + concatStringsSep "\n" (mapAttrsToList
-    (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
+  '' + concatStringsSep "\n" (
+    mapAttrsToList
+      (n: v: "${n}=${cfgToString v}")
+      cfg.serverProperties
+  ));
 
 
   # To be able to open the firewall, we need to read out port values in the
@@ -30,15 +33,18 @@ let
 
   serverPort = cfg.serverProperties.server-port or defaultServerPort;
 
-  rconPort = if cfg.serverProperties.enable-rcon or false
+  rconPort =
+    if cfg.serverProperties.enable-rcon or false
     then cfg.serverProperties."rcon.port" or 25575
     else null;
 
-  queryPort = if cfg.serverProperties.enable-query or false
+  queryPort =
+    if cfg.serverProperties.enable-query or false
     then cfg.serverProperties."query.port" or 25565
     else null;
 
-in {
+in
+{
   options = {
     services.minecraft-server = {
 
@@ -92,13 +98,16 @@ in {
       };
 
       whitelist = mkOption {
-        type = let
-          minecraftUUID = types.strMatching
-            "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
-              description = "Minecraft UUID";
-            };
-          in types.attrsOf minecraftUUID;
-        default = {};
+        type =
+          let
+            minecraftUUID =
+              types.strMatching
+                "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
+                description = "Minecraft UUID";
+              };
+          in
+          types.attrsOf minecraftUUID;
+        default = { };
         description = ''
           Whitelisted players, only has an effect when
           <option>services.minecraft-server.declarative</option> is
@@ -119,7 +128,7 @@ in {
 
       serverProperties = mkOption {
         type = with types; attrsOf (oneOf [ bool int str ]);
-        default = {};
+        default = { };
         example = literalExample ''
           {
             server-port = 43000;
@@ -164,16 +173,16 @@ in {
   config = mkIf cfg.enable {
 
     users.users.minecraft = {
-      description     = "Minecraft server service user";
-      home            = cfg.dataDir;
-      createHome      = true;
-      uid             = config.ids.uids.minecraft;
+      description = "Minecraft server service user";
+      home = cfg.dataDir;
+      createHome = true;
+      uid = config.ids.uids.minecraft;
     };
 
     systemd.services.minecraft-server = {
-      description   = "Minecraft Server Service";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Minecraft Server Service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minecraft-server ${cfg.jvmOpts}";
@@ -184,7 +193,8 @@ in {
 
       preStart = ''
         ln -sf ${eulaFile} eula.txt
-      '' + (if cfg.declarative then ''
+      '' + (
+        if cfg.declarative then ''
 
         if [ -e .declarative ]; then
 
@@ -206,24 +216,28 @@ in {
 
         fi
       '' else ''
-        if [ -e .declarative ]; then
-          rm .declarative
-        fi
-      '');
+          if [ -e .declarative ]; then
+            rm .declarative
+          fi
+        ''
+      );
     };
 
-    networking.firewall = mkIf cfg.openFirewall (if cfg.declarative then {
-      allowedUDPPorts = [ serverPort ];
-      allowedTCPPorts = [ serverPort ]
-        ++ optional (queryPort != null) queryPort
-        ++ optional (rconPort != null) rconPort;
-    } else {
-      allowedUDPPorts = [ defaultServerPort ];
-      allowedTCPPorts = [ defaultServerPort ];
-    });
+    networking.firewall = mkIf cfg.openFirewall (
+      if cfg.declarative then {
+        allowedUDPPorts = [ serverPort ];
+        allowedTCPPorts = [ serverPort ]
+          ++ optional (queryPort != null) queryPort
+          ++ optional (rconPort != null) rconPort;
+      } else {
+        allowedUDPPorts = [ defaultServerPort ];
+        allowedTCPPorts = [ defaultServerPort ];
+      }
+    );
 
     assertions = [
-      { assertion = cfg.eula;
+      {
+        assertion = cfg.eula;
         message = "You must agree to Mojangs EULA to run minecraft-server."
           + " Read https://account.mojang.com/documents/minecraft_eula and"
           + " set `services.minecraft-server.eula` to `true` if you agree.";

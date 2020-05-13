@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.rippled;
 
@@ -21,17 +20,18 @@ let
     ${concatMapStringsSep "\n" (n: "port_${n}") (attrNames cfg.ports)}
 
     ${concatMapStrings (p: ''
-    [port_${p.name}]
-    ip=${p.ip}
-    port=${toString p.port}
-    protocol=${concatStringsSep "," p.protocol}
-    ${optionalString (p.user != "") "user=${p.user}"}
-    ${optionalString (p.password != "") "user=${p.password}"}
-    admin=${concatStringsSep "," p.admin}
-    ${optionalString (p.ssl.key != null) "ssl_key=${p.ssl.key}"}
-    ${optionalString (p.ssl.cert != null) "ssl_cert=${p.ssl.cert}"}
-    ${optionalString (p.ssl.chain != null) "ssl_chain=${p.ssl.chain}"}
-    '') (attrValues cfg.ports)}
+      [port_${p.name}]
+      ip=${p.ip}
+      port=${toString p.port}
+      protocol=${concatStringsSep "," p.protocol}
+      ${optionalString (p.user != "") "user=${p.user}"}
+      ${optionalString (p.password != "") "user=${p.password}"}
+      admin=${concatStringsSep "," p.admin}
+      ${optionalString (p.ssl.key != null) "ssl_key=${p.ssl.key}"}
+      ${optionalString (p.ssl.cert != null) "ssl_cert=${p.ssl.cert}"}
+      ${optionalString (p.ssl.chain != null) "ssl_chain=${p.ssl.chain}"}
+    '')
+      (attrValues cfg.ports)}
 
     [database_path]
     ${cfg.databasePath}
@@ -40,12 +40,12 @@ let
     ${dbCfg cfg.nodeDb}
 
     ${optionalString (cfg.tempDb != null) ''
-    [temp_db]
-    ${dbCfg cfg.tempDb}''}
+      [temp_db]
+      ${dbCfg cfg.tempDb}''}
 
     ${optionalString (cfg.importDb != null) ''
-    [import_db]
-    ${dbCfg cfg.importDb}''}
+      [import_db]
+      ${dbCfg cfg.importDb}''}
 
     [ips]
     ${concatStringsSep "\n" cfg.ips}
@@ -72,17 +72,17 @@ let
     ${concatStringsSep "\n" cfg.sntpServers}
 
     ${optionalString cfg.statsd.enable ''
-    [insight]
-    server=statsd
-    address=${cfg.statsd.address}
-    prefix=${cfg.statsd.prefix}
+      [insight]
+      server=statsd
+      address=${cfg.statsd.address}
+      prefix=${cfg.statsd.prefix}
     ''}
 
     [rpc_startup]
     { "command": "log_level", "severity": "${cfg.logLevel}" }
   '' + cfg.extraConfig;
 
-  portOptions = { name, ...}: {
+  portOptions = { name, ... }: {
     options = {
       name = mkOption {
         internal = true;
@@ -102,7 +102,7 @@ let
 
       protocol = mkOption {
         description = "Protocols expose by rippled.";
-        type = types.listOf (types.enum ["http" "https" "ws" "wss" "peer"]);
+        type = types.listOf (types.enum [ "http" "https" "ws" "wss" "peer" ]);
       };
 
       user = mkOption {
@@ -120,7 +120,7 @@ let
       admin = mkOption {
         description = "A comma-separated list of admin IP addresses.";
         type = types.listOf types.str;
-        default = ["127.0.0.1"];
+        default = [ "127.0.0.1" ];
       };
 
       ssl = {
@@ -157,7 +157,7 @@ let
     options = {
       type = mkOption {
         description = "Rippled database type.";
-        type = types.enum ["rocksdb" "nudb"];
+        type = types.enum [ "rocksdb" "nudb" ];
         default = "rocksdb";
       };
 
@@ -197,7 +197,6 @@ let
   };
 
 in
-
 {
 
   ###### interface
@@ -219,20 +218,20 @@ in
         default = {
           rpc = {
             port = 5005;
-            admin = ["127.0.0.1"];
-            protocol = ["http"];
+            admin = [ "127.0.0.1" ];
+            protocol = [ "http" ];
           };
 
           peer = {
             port = 51235;
             ip = "0.0.0.0";
-            protocol = ["peer"];
+            protocol = [ "peer" ];
           };
 
           ws_public = {
             port = 5006;
             ip = "0.0.0.0";
-            protocol = ["ws" "wss"];
+            protocol = [ "ws" "wss" ];
           };
         };
       };
@@ -269,7 +268,7 @@ in
           Rippled size of the node you are running.
           "tiny", "small", "medium", "large", and "huge"
         '';
-        type = types.enum ["tiny" "small" "medium" "large" "huge"];
+        type = types.enum [ "tiny" "small" "medium" "large" "huge" ];
         default = "small";
       };
 
@@ -285,7 +284,7 @@ in
           to least trusted.
         '';
         type = types.listOf types.str;
-        default = ["r.ripple.com 51235"];
+        default = [ "r.ripple.com 51235" ];
       };
 
       ipsFixed = mkOption {
@@ -299,7 +298,7 @@ in
           A port may optionally be specified after adding a space to the address
         '';
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
       };
 
       validators = mkOption {
@@ -339,7 +338,7 @@ in
           The number of past ledgers to acquire on server startup and the minimum
           to maintain while running.
         '';
-        type = types.either types.int (types.enum ["full"]);
+        type = types.either types.int (types.enum [ "full" ]);
         default = 1296000; # 1 month
       };
 
@@ -348,7 +347,7 @@ in
           The number of past ledgers to serve to other peers that request historical
           ledger data (or "full" for no limit).
         '';
-        type = types.either types.int (types.enum ["full"]);
+        type = types.either types.int (types.enum [ "full" ]);
         default = "full";
       };
 
@@ -367,7 +366,7 @@ in
 
       logLevel = mkOption {
         description = "Logging verbosity.";
-        type = types.enum ["debug" "error" "info"];
+        type = types.enum [ "debug" "error" "info" ];
         default = "error";
       };
 
@@ -407,7 +406,8 @@ in
   config = mkIf cfg.enable {
 
     users.users.rippled =
-      { description = "Ripple server user";
+      {
+        description = "Ripple server user";
         uid = config.ids.uids.rippled;
         home = cfg.databasePath;
         createHome = true;
@@ -421,7 +421,7 @@ in
         ExecStart = "${cfg.package}/bin/rippled --fg --conf ${cfg.config}";
         User = "rippled";
         Restart = "on-failure";
-        LimitNOFILE=10000;
+        LimitNOFILE = 10000;
       };
     };
 

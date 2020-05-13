@@ -4,49 +4,50 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
-  requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-    [ config.nix.package
-      pkgs.acl
-      pkgs.attr
-      pkgs.bashInteractive # bash with ncurses support
-      pkgs.bzip2
-      pkgs.coreutils-full
-      pkgs.cpio
-      pkgs.curl
-      pkgs.diffutils
-      pkgs.findutils
-      pkgs.gawk
-      pkgs.stdenv.cc.libc
-      pkgs.getent
-      pkgs.getconf
-      pkgs.gnugrep
-      pkgs.gnupatch
-      pkgs.gnused
-      pkgs.gnutar
-      pkgs.gzip
-      pkgs.xz
-      pkgs.less
-      pkgs.libcap
-      pkgs.nano
-      pkgs.ncurses
-      pkgs.netcat
-      pkgs.nix-info
-      config.programs.ssh.package
-      pkgs.perl
-      pkgs.procps
-      pkgs.rsync
-      pkgs.strace
-      pkgs.su
-      pkgs.time
-      pkgs.utillinux
-      pkgs.which # 88K size
-    ];
+  requiredPackages =
+    map
+      (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
+      [
+        config.nix.package
+        pkgs.acl
+        pkgs.attr
+        pkgs.bashInteractive # bash with ncurses support
+        pkgs.bzip2
+        pkgs.coreutils-full
+        pkgs.cpio
+        pkgs.curl
+        pkgs.diffutils
+        pkgs.findutils
+        pkgs.gawk
+        pkgs.stdenv.cc.libc
+        pkgs.getent
+        pkgs.getconf
+        pkgs.gnugrep
+        pkgs.gnupatch
+        pkgs.gnused
+        pkgs.gnutar
+        pkgs.gzip
+        pkgs.xz
+        pkgs.less
+        pkgs.libcap
+        pkgs.nano
+        pkgs.ncurses
+        pkgs.netcat
+        pkgs.nix-info
+        config.programs.ssh.package
+        pkgs.perl
+        pkgs.procps
+        pkgs.rsync
+        pkgs.strace
+        pkgs.su
+        pkgs.time
+        pkgs.utillinux
+        pkgs.which # 88K size
+      ];
 
 in
-
 {
   options = {
 
@@ -54,7 +55,7 @@ in
 
       systemPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that appear in
@@ -71,8 +72,8 @@ in
         type = types.listOf types.str;
         # Note: We need `/lib' to be among `pathsToLink' for NSS modules
         # to work.
-        default = [];
-        example = ["/"];
+        default = [ ];
+        example = [ "/" ];
         description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
       };
 
@@ -109,7 +110,8 @@ in
     environment.systemPackages = requiredPackages;
 
     environment.pathsToLink =
-      [ "/bin"
+      [
+        "/bin"
         "/etc/xdg"
         "/etc/gtk-2.0"
         "/etc/gtk-3.0"

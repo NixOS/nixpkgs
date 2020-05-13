@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libmtsupport, libfacet, libbtree, multitrandata } :
+{ stdenv, fetchurl, libmtsupport, libfacet, libbtree, multitrandata }:
 
 stdenv.mkDerivation {
   name = "libmtquery-0.0.1alpha3";

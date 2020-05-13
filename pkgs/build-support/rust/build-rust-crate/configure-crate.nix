@@ -18,35 +18,39 @@
 , release
 , target_os
 , verbose
-, workspace_member }:
-let version_ = lib.splitString "-" crateVersion;
-    versionPre = if lib.tail version_ == [] then "" else lib.elemAt version_ 1;
-    version = lib.splitVersion (lib.head version_);
-    rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
-        (if release then "-C opt-level=3" else "-C debuginfo=2")
-        (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
-    buildDeps = mkRustcDepArgs buildDependencies crateRenames;
-    authors = lib.concatStringsSep ":" crateAuthors;
-    optLevel = if release then 3 else 0;
-    completeDepsDir = lib.concatStringsSep " " completeDeps;
-    completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
-in ''
+, workspace_member
+}:
+let
+  version_ = lib.splitString "-" crateVersion;
+  versionPre = if lib.tail version_ == [ ] then "" else lib.elemAt version_ 1;
+  version = lib.splitVersion (lib.head version_);
+  rustcOpts = lib.foldl'
+    (opts: opt: opts + " " + opt)
+    (if release then "-C opt-level=3" else "-C debuginfo=2")
+    ([ "-C codegen-units=$NIX_BUILD_CORES" ] ++ extraRustcOpts);
+  buildDeps = mkRustcDepArgs buildDependencies crateRenames;
+  authors = lib.concatStringsSep ":" crateAuthors;
+  optLevel = if release then 3 else 0;
+  completeDepsDir = lib.concatStringsSep " " completeDeps;
+  completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
+in
+''
   ${echo_colored colors}
   ${noisily colors verbose}
   source ${./lib.sh}
 
   ${lib.optionalString (workspace_member != null) ''
-  noisily cd "${workspace_member}"
-''}
+    noisily cd "${workspace_member}"
+  ''}
   ${lib.optionalString (workspace_member == null) ''
-  echo_colored "Searching for matching Cargo.toml (${crateName})" 
-  local cargo_toml_dir=$(matching_cargo_toml_dir "${crateName}")
-  if [ -z "$cargo_toml_dir" ]; then
-    echo_error "ERROR configuring ${crateName}: No matching Cargo.toml in $(pwd) found." >&2
-    exit 23
-  fi
-  noisily cd "$cargo_toml_dir"
-''}
+    echo_colored "Searching for matching Cargo.toml (${crateName})" 
+    local cargo_toml_dir=$(matching_cargo_toml_dir "${crateName}")
+    if [ -z "$cargo_toml_dir" ]; then
+      echo_error "ERROR configuring ${crateName}: No matching Cargo.toml in $(pwd) found." >&2
+      exit 23
+    fi
+    noisily cd "$cargo_toml_dir"
+  ''}
 
   runHook preConfigure
  

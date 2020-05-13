@@ -1,14 +1,19 @@
 { stdenv
-, fetchurl, perl, gcc
-, ncurses5, gmp, glibc, libiconv
+, fetchurl
+, perl
+, gcc
+, ncurses5
+, gmp
+, glibc
+, libiconv
 }:
 
 # Prebuilt only does native
 assert stdenv.targetPlatform == stdenv.hostPlatform;
-
 let
   libPath = stdenv.lib.makeLibraryPath ([
-    ncurses5 gmp
+    ncurses5
+    gmp
   ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
 
   libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
@@ -16,13 +21,12 @@ let
 
   glibcDynLinker = assert stdenv.isLinux;
     if stdenv.hostPlatform.libc == "glibc" then
-       # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
-       ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
+    # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
+      ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
       "${stdenv.lib.getLib glibc}/lib/ld-linux*";
 
 in
-
 stdenv.mkDerivation rec {
   version = "8.6.3";
 
@@ -114,7 +118,7 @@ stdenv.mkDerivation rec {
     "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
     "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"
   ] ++ stdenv.lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
+  ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # Stripping combined with patchelf breaks the executables (they die
   # with a segfault or the kernel even refuses the execve). (NIXPKGS-85)
@@ -168,5 +172,5 @@ stdenv.mkDerivation rec {
   };
 
   meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+  meta.platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
 }

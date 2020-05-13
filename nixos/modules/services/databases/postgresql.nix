@@ -1,31 +1,29 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.postgresql;
 
   postgresql =
-    if cfg.extraPlugins == []
-      then cfg.package
-      else cfg.package.withPackages (_: cfg.extraPlugins);
+    if cfg.extraPlugins == [ ]
+    then cfg.package
+    else cfg.package.withPackages (_: cfg.extraPlugins);
 
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeText "postgresql.conf"
-    ''
-      hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
-      ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
-      log_destination = 'stderr'
-      listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
-      port = ${toString cfg.port}
-      ${cfg.extraConfig}
-    ''; 
+  configFile =
+    pkgs.writeText "postgresql.conf"
+      ''
+        hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
+        ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
+        log_destination = 'stderr'
+        listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
+        port = ${toString cfg.port}
+        ${cfg.extraConfig}
+      '';
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
 in
-
 {
 
   ###### interface
@@ -92,7 +90,7 @@ in
 
       initdbArgs = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         example = [ "--data-checksums" "--allow-group-access" ];
         description = ''
           Additional arguments passed to <literal>initdb</literal> during data dir
@@ -110,7 +108,7 @@ in
 
       ensureDatabases = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Ensures that the specified databases exist.
           This option will never delete existing databases, especially not when the value of this
@@ -134,7 +132,7 @@ in
             };
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
-              default = {};
+              default = { };
               description = ''
                 Permissions to ensure for the user, specified as an attribute set.
                 The attribute names specify the database and tables to grant the permissions for.
@@ -155,7 +153,7 @@ in
             };
           };
         });
-        default = [];
+        default = [ ];
         description = ''
           Ensures that the specified users exist and have at least the ensured permissions.
           The PostgreSQL users will be identified using peer authentication. This authenticates the Unix user with the
@@ -194,7 +192,7 @@ in
 
       extraPlugins = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         example = literalExample "with pkgs.postgresql_11.pkgs; [ postgis pg_repack ]";
         description = ''
           List of PostgreSQL plugins. PostgreSQL version for each plugin should
@@ -217,14 +215,14 @@ in
       };
       superUser = mkOption {
         type = types.str;
-        default= if versionAtLeast config.system.stateVersion "17.09" then "postgres" else "root";
+        default = if versionAtLeast config.system.stateVersion "17.09" then "postgres" else "root";
         internal = true;
         description = ''
           NixOS traditionally used 'root' as superuser, most other distros use 'postgres'.
           From 17.09 we also try to follow this standard. Internal since changing this value
           would lead to breakage while setting up databases.
         '';
-        };
+      };
     };
 
   };
@@ -238,26 +236,32 @@ in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
-            else if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
-            else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
-            else throw "postgresql_9_4 was removed, please upgrade your postgresql version.");
+      mkDefault (
+        if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
+        else if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
+        else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
+        else throw "postgresql_9_4 was removed, please upgrade your postgresql version."
+      );
 
     services.postgresql.dataDir =
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09"
-                  then "/var/lib/postgresql/${cfg.package.psqlSchema}"
-                  else "/var/db/postgresql");
+      mkDefault (
+        if versionAtLeast config.system.stateVersion "17.09"
+        then "/var/lib/postgresql/${cfg.package.psqlSchema}"
+        else "/var/db/postgresql"
+      );
 
-    services.postgresql.authentication = mkAfter
-      ''
-        # Generated file; do not edit!
-        local all all              peer
-        host  all all 127.0.0.1/32 md5
-        host  all all ::1/128      md5
-      '';
+    services.postgresql.authentication =
+      mkAfter
+        ''
+          # Generated file; do not edit!
+          local all all              peer
+          host  all all 127.0.0.1/32 md5
+          host  all all ::1/128      md5
+        '';
 
     users.users.postgres =
-      { name = "postgres";
+      {
+        name = "postgres";
         uid = config.ids.uids.postgres;
         group = "postgres";
         description = "PostgreSQL server user";
@@ -270,11 +274,12 @@ in
     environment.systemPackages = [ postgresql ];
 
     environment.pathsToLink = [
-     "/share/postgresql"
+      "/share/postgresql"
     ];
 
     systemd.services.postgresql =
-      { description = "PostgreSQL Server";
+      {
+        description = "PostgreSQL Server";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
@@ -315,14 +320,16 @@ in
           '';
 
         serviceConfig =
-          { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          {
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             User = "postgres";
             Group = "postgres";
             PermissionsStartOnly = true;
             RuntimeDirectory = "postgresql";
-            Type = if versionAtLeast cfg.package.version "9.6"
-                   then "notify"
-                   else "simple";
+            Type =
+              if versionAtLeast cfg.package.version "9.6"
+              then "notify"
+              else "simple";
 
             # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
             # http://www.postgresql.org/docs/current/static/server-shutdown.html
@@ -346,11 +353,11 @@ in
 
             if test -e "${cfg.dataDir}/.first_startup"; then
               ${optionalString (cfg.initialScript != null) ''
-                $PSQL -f "${cfg.initialScript}" -d postgres
-              ''}
+              $PSQL -f "${cfg.initialScript}" -d postgres
+            ''}
               rm -f "${cfg.dataDir}/.first_startup"
             fi
-          '' + optionalString (cfg.ensureDatabases != []) ''
+          '' + optionalString (cfg.ensureDatabases != [ ]) ''
             ${concatMapStrings (database: ''
               $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
             '') cfg.ensureDatabases}
@@ -359,7 +366,8 @@ in
               $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
               ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
                 $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
-              '') user.ensurePermissions)}
+              '') user.ensurePermissions
+                )}
             '') cfg.ensureUsers}
           '';
 

@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) plymouth;
   inherit (pkgs) nixos-icons;
 
@@ -29,7 +27,6 @@ let
   '';
 
 in
-
 {
 
   options = {

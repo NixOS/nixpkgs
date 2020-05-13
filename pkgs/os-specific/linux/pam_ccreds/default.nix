@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pam, openssl, db}:
+{ stdenv, fetchurl, pam, openssl, db }:
 
 stdenv.mkDerivation rec {
   name = "pam_ccreds-10";

@@ -11,9 +11,7 @@
 
 with lib;
 with import ../../lib/qemu-flags.nix { inherit pkgs; };
-
 let
-
   qemu = config.system.build.qemu or pkgs.qemu_test;
 
   vmName =
@@ -36,13 +34,13 @@ let
 
       driveExtraOpts = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = "Extra options passed to drive flag.";
       };
 
       deviceExtraOpts = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = "Extra options passed to device flag.";
       };
 
@@ -53,7 +51,7 @@ let
   driveCmdline = idx: { file, driveExtraOpts, deviceExtraOpts, ... }:
     let
       drvId = "drive${toString idx}";
-      mkKeyValue = generators.mkKeyValueDefault {} "=";
+      mkKeyValue = generators.mkKeyValueDefault { } "=";
       mkOpts = opts: concatStringsSep "," (mapAttrsToList mkKeyValue opts);
       driveOpts = mkOpts (driveExtraOpts // {
         index = idx;
@@ -70,7 +68,7 @@ let
         else
           "-device virtio-blk-pci,${deviceOpts}";
     in
-      "-drive ${driveOpts} ${device}";
+    "-drive ${driveOpts} ${device}";
 
   drivesCmdLine = drives: concatStringsSep " " (imap1 driveCmdline drives);
 
@@ -143,7 +141,8 @@ let
   bootDisk =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "nixos-boot-disk"
-        { preVM =
+        {
+          preVM =
             ''
               mkdir $out
               diskImage=$out/disk.img
@@ -156,9 +155,10 @@ let
               ''}
             '';
           buildInputs = [ pkgs.utillinux ];
-          QEMU_OPTS = if cfg.useEFIBoot
-                      then "-pflash $out/bios.bin -nographic -serial pty"
-                      else "-nographic -serial pty";
+          QEMU_OPTS =
+            if cfg.useEFIBoot
+            then "-pflash $out/bios.bin -nographic -serial pty"
+            else "-nographic -serial pty";
         }
         ''
           # Create a /boot EFI partition with 40M and arbitrary but fixed GUIDs for reproducibility
@@ -199,11 +199,10 @@ let
     );
 
 in
-
 {
   imports = [
     ../profiles/qemu-guest.nix
-   ./docker-preloader.nix
+    ./docker-preloader.nix
   ];
 
   options = {
@@ -249,7 +248,7 @@ in
 
     virtualisation.emptyDiskImages =
       mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.int;
         description =
           ''
@@ -267,7 +266,7 @@ in
             Whether to run QEMU with a graphics window, or in nographic mode.
             Serial console will be enabled on both settings, but this will
             change the preferred console.
-            '';
+          '';
       };
 
     virtualisation.cores =
@@ -284,7 +283,7 @@ in
 
     virtualisation.pathsInNixDB =
       mkOption {
-        default = [];
+        default = [ ];
         description =
           ''
             The list of paths whose closure is registered in the Nix
@@ -344,16 +343,18 @@ in
       options =
         mkOption {
           type = types.listOf types.unspecified;
-          default = [];
+          default = [ ];
           example = [ "-vga std" ];
           description = "Options passed to QEMU.";
         };
 
       consoles = mkOption {
         type = types.listOf types.str;
-        default = let
-          consoles = [ "${qemuSerialDevice},115200n8" "tty0" ];
-        in if cfg.graphics then consoles else reverseList consoles;
+        default =
+          let
+            consoles = [ "${qemuSerialDevice},115200n8" "tty0" ];
+          in
+          if cfg.graphics then consoles else reverseList consoles;
         example = [ "console=tty1" ];
         description = ''
           The output console devices to pass to the kernel command line via the
@@ -499,22 +500,32 @@ in
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
       (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
-        "-vga std" "-usb" "-device usb-tablet,bus=usb-bus.0"
-      ])
+        "-vga std"
+        "-usb"
+        "-device usb-tablet,bus=usb-bus.0"
+      ]
+      )
       (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
-        "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet"
-      ])
+        "-device virtio-gpu-pci"
+        "-device usb-ehci,id=usb0"
+        "-device usb-kbd"
+        "-device usb-tablet"
+      ]
+      )
       (mkIf (!cfg.useBootLoader) [
         "-kernel ${config.system.build.toplevel}/kernel"
         "-initrd ${config.system.build.toplevel}/initrd"
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
-      ])
+      ]
+      )
       (mkIf cfg.useEFIBoot [
         "-pflash $TMPDIR/bios.bin"
-      ])
+      ]
+      )
       (mkIf (!cfg.graphics) [
         "-nographic"
-      ])
+      ]
+      )
     ];
 
     virtualisation.qemu.drives = mkMerge [
@@ -529,18 +540,24 @@ in
           driveExtraOpts.media = "disk";
           deviceExtraOpts.bootindex = "1";
         }
-      ])
+      ]
+      )
       (mkIf (!cfg.useBootLoader) [
         {
           file = "$NIX_DISK_IMAGE";
           driveExtraOpts.cache = "writeback";
           driveExtraOpts.werror = "report";
         }
-      ])
-      (imap0 (idx: _: {
-        file = "$(pwd)/empty${toString idx}.qcow2";
-        driveExtraOpts.werror = "report";
-      }) cfg.emptyDiskImages)
+      ]
+      )
+      (
+        imap0
+          (idx: _: {
+            file = "$(pwd)/empty${toString idx}.qcow2";
+            driveExtraOpts.werror = "report";
+          })
+          cfg.emptyDiskImages
+      )
     ];
 
     # Mount the host filesystem via 9P, and bind-mount the Nix store
@@ -550,67 +567,82 @@ in
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
     fileSystems = mkVMOverride (
-      { "/".device = cfg.bootDevice;
+      {
+        "/".device = cfg.bootDevice;
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
-          { device = "store";
+          {
+            device = "store";
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
             neededForBoot = true;
           };
-        "/tmp" = mkIf config.boot.tmpOnTmpfs
-          { device = "tmpfs";
+        "/tmp" =
+          mkIf
+            config.boot.tmpOnTmpfs {
+            device = "tmpfs";
             fsType = "tmpfs";
             neededForBoot = true;
             # Sync with systemd's tmp.mount;
             options = [ "mode=1777" "strictatime" "nosuid" "nodev" ];
           };
         "/tmp/xchg" =
-          { device = "xchg";
+          {
+            device = "xchg";
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
             neededForBoot = true;
           };
         "/tmp/shared" =
-          { device = "shared";
+          {
+            device = "shared";
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" ];
             neededForBoot = true;
           };
-      } // optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs)
-      { "/nix/.rw-store" =
-          { fsType = "tmpfs";
+      } //
+      optionalAttrs
+        (cfg.writableStore && cfg.writableStoreUseTmpfs) {
+        "/nix/.rw-store" =
+          {
+            fsType = "tmpfs";
             options = [ "mode=0755" ];
             neededForBoot = true;
           };
-      } // optionalAttrs cfg.useBootLoader
-      { "/boot" =
-          { device = "/dev/vdb2";
+      } //
+      optionalAttrs
+        cfg.useBootLoader {
+        "/boot" =
+          {
+            device = "/dev/vdb2";
             fsType = "vfat";
             options = [ "ro" ];
             noCheck = true; # fsck fails on a r/o filesystem
           };
-      });
+      }
+    );
 
     swapDevices = mkVMOverride [ ];
-    boot.initrd.luks.devices = mkVMOverride {};
+    boot.initrd.luks.devices = mkVMOverride { };
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
     services.timesyncd.enable = false;
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
-    system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
-      ''
-        mkdir -p $out/bin
-        ln -s ${config.system.build.toplevel} $out/system
-        ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${vmName}-vm
-      '';
+    system.build.vm =
+      pkgs.runCommand "nixos-vm"
+        { preferLocalBuild = true; }
+        ''
+          mkdir -p $out/bin
+          ln -s ${config.system.build.toplevel} $out/system
+          ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${vmName}-vm
+        '';
 
     # When building a regular system configuration, override whatever
     # video driver the host uses.
     services.xserver.videoDrivers = mkVMOverride [ "modesetting" ];
     services.xserver.defaultDepth = mkVMOverride 0;
-    services.xserver.resolutions = mkVMOverride [ { x = 1024; y = 768; } ];
+    services.xserver.resolutions = mkVMOverride [{ x = 1024; y = 768; }];
     services.xserver.monitorSection =
       ''
         # Set a higher refresh rate so that resolutions > 800x600 work.
@@ -628,7 +660,8 @@ in
     networking.usePredictableInterfaceNames = false;
 
     system.requiredKernelConfig = with config.lib.kernelConfig;
-      [ (isEnabled "VIRTIO_BLK")
+      [
+        (isEnabled "VIRTIO_BLK")
         (isEnabled "VIRTIO_PCI")
         (isEnabled "VIRTIO_NET")
         (isEnabled "EXT4_FS")

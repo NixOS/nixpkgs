@@ -1,6 +1,23 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, curl, zlib, ffmpeg, glew, pcre
-, rtmpdump, cairo, boost, SDL2, SDL2_mixer, libjpeg, gnome2, lzma, nasm
-, llvm, glibmm
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, curl
+, zlib
+, ffmpeg
+, glew
+, pcre
+, rtmpdump
+, cairo
+, boost
+, SDL2
+, SDL2_mixer
+, libjpeg
+, gnome2
+, lzma
+, nasm
+, llvm
+, glibmm
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +38,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ];
 
   buildInputs = [
-    curl zlib ffmpeg glew pcre rtmpdump cairo boost SDL2 SDL2_mixer libjpeg
-    gnome2.pango lzma nasm llvm glibmm
+    curl
+    zlib
+    ffmpeg
+    glew
+    pcre
+    rtmpdump
+    cairo
+    boost
+    SDL2
+    SDL2_mixer
+    libjpeg
+    gnome2.pango
+    lzma
+    nasm
+    llvm
+    glibmm
   ];
 
   enableParallelBuilding = true;

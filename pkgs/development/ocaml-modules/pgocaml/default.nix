@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, calendar, csv, hex, re
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, calendar
+, csv
+, hex
+, re
 }:
 
 buildDunePackage rec {

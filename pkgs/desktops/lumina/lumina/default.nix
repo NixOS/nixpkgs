@@ -1,17 +1,17 @@
-{ stdenv,
-  fetchFromGitHub,
-  desktop-file-utils,
-  fluxbox,
-  numlockx,
-  qmake,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
-  qttools,
-  qtx11extras,
-  xorg,
-  xscreensaver,
-  wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, desktop-file-utils
+, fluxbox
+, numlockx
+, qmake
+, qtbase
+, qtmultimedia
+, qtsvg
+, qttools
+, qtx11extras
+, xorg
+, xscreensaver
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {

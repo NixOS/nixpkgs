@@ -7,7 +7,7 @@
 , pyvcd
 , jinja2
 
-# for tests
+  # for tests
 , yosys
 , symbiyosys
 , yices

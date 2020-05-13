@@ -1,24 +1,40 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, texinfo
-, cairo, gd, libcerf, pango, readline, zlib
-, withTeXLive ? false, texlive
-, withLua ? false, lua
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkgconfig
+, texinfo
+, cairo
+, gd
+, libcerf
+, pango
+, readline
+, zlib
+, withTeXLive ? false
+, texlive
+, withLua ? false
+, lua
 , libX11 ? null
 , libXt ? null
 , libXpm ? null
 , libXaw ? null
 , aquaterm ? false
-, withWxGTK ? false, wxGTK ? null
+, withWxGTK ? false
+, wxGTK ? null
 , fontconfig ? null
 , gnused ? null
 , coreutils ? null
-, withQt ? false, mkDerivation, qttools, qtbase, qtsvg
+, withQt ? false
+, mkDerivation
+, qttools
+, qtbase
+, qtsvg
 }:
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
   withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
-in
-(if withQt then mkDerivation else stdenv.mkDerivation) rec {
+in (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
   version = "5.2.8";
 

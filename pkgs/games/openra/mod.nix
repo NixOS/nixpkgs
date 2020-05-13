@@ -15,13 +15,13 @@
 }:
 
 with stdenv.lib;
-
 let
   engineSourceName = engine.src.name or "engine";
   modSourceName = mod.src.name or "mod";
 
-# Based on: https://build.opensuse.org/package/show/home:fusion809/openra-ura
-in stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
+  # Based on: https://build.opensuse.org/package/show/home:fusion809/openra-ura
+in
+stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
   name = "${pname}-${version}";
   pname = "openra-${mod.name}";
   inherit (mod) version;
@@ -102,4 +102,5 @@ in stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
   meta = {
     inherit (mod) description homepage;
   };
-})
+}
+)

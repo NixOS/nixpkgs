@@ -7,7 +7,7 @@ xorgserver.overrideAttrs (oldAttrs: {
   name = "xwayland-${xorgserver.version}";
   buildInputs = oldAttrs.buildInputs ++ [ egl-wayland ];
   propagatedBuildInputs = oldAttrs.propagatedBuildInputs
-    ++ [wayland wayland-protocols epoxy libxslt makeWrapper libunwind];
+    ++ [ wayland wayland-protocols epoxy libxslt makeWrapper libunwind ];
   configureFlags = [
     "--disable-docs"
     "--disable-devel-docs"

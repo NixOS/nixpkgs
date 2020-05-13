@@ -1,5 +1,4 @@
 { stdenv, fetchurl, lib, xorg }:
-
 let
   name = "scilab-bin-${ver}";
 

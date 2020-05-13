@@ -5,7 +5,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.networking.nat;
 
@@ -43,7 +42,7 @@ let
     '') cfg.internalInterfaces}
 
     # NAT the marked packets.
-    ${optionalString (cfg.internalInterfaces != []) ''
+    ${optionalString (cfg.internalInterfaces != [ ]) ''
       iptables -w -t nat -A nixos-nat-post -m mark --mark 1 \
         ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
     ''}
@@ -63,10 +62,11 @@ let
 
       ${concatMapStrings (loopbackip:
         let
-          m                = builtins.match "([0-9.]+):([0-9-]+)" fwd.destination;
-          destinationIP    = if (m == null) then throw "bad ip:ports `${fwd.destination}'" else elemAt m 0;
-          destinationPorts = if (m == null) then throw "bad ip:ports `${fwd.destination}'" else builtins.replaceStrings ["-"] [":"] (elemAt m 1);
-        in ''
+        m = builtins.match "([0-9.]+):([0-9-]+)" fwd.destination;
+        destinationIP =if (m == null) then throw "bad ip:ports `${fwd.destination}'" else elemAt m 0;
+        destinationPorts =if (m == null) then throw "bad ip:ports `${fwd.destination}'" else builtins.replaceStrings [ "-" ] [ ":" ] (elemAt m 1);
+        in
+        ''
           # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from the host itself
           iptables -w -t nat -A nixos-nat-out \
             -d ${loopbackip} -p ${fwd.proto} \
@@ -101,7 +101,6 @@ let
   '';
 
 in
-
 {
 
   ###### interface
@@ -119,7 +118,7 @@ in
 
     networking.nat.internalInterfaces = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "eth0" ];
       description =
         ''
@@ -131,7 +130,7 @@ in
 
     networking.nat.internalIPs = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "192.168.1.0/24" ];
       description =
         ''
@@ -188,14 +187,14 @@ in
 
           loopbackIPs = mkOption {
             type = types.listOf types.str;
-            default = [];
+            default = [ ];
             example = literalExample ''[ "55.1.2.3" ]'';
             description = "Public IPs for NAT reflection; for connections to `loopbackip:sourcePort' from the host itself and from other hosts behind NAT";
           };
         };
       });
-      default = [];
-      example = [ { sourcePort = 8080; destination = "10.0.0.1:80"; proto = "tcp"; } ];
+      default = [ ];
+      example = [{ sourcePort = 8080; destination = "10.0.0.1:80"; proto = "tcp"; }];
       description =
         ''
           List of forwarded ports from the external interface to
@@ -246,10 +245,12 @@ in
     (mkIf config.networking.nat.enable {
 
       assertions = [
-        { assertion = (cfg.dmzHost != null)    -> (cfg.externalInterface != null);
+        {
+          assertion = (cfg.dmzHost != null) -> (cfg.externalInterface != null);
           message = "networking.nat.dmzHost requires networking.nat.externalInterface";
         }
-        { assertion = (cfg.forwardPorts != []) -> (cfg.externalInterface != null);
+        {
+          assertion = (cfg.forwardPorts != [ ]) -> (cfg.externalInterface != null);
           message = "networking.nat.forwardPorts requires networking.nat.externalInterface";
         }
       ];
@@ -269,22 +270,25 @@ in
         extraStopCommands = flushNat;
       };
 
-      systemd.services = mkIf (!config.networking.firewall.enable) { nat = {
-        description = "Network Address Translation";
-        wantedBy = [ "network.target" ];
-        after = [ "network-pre.target" "systemd-modules-load.service" ];
-        path = [ pkgs.iptables ];
-        unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+      systemd.services = mkIf (!config.networking.firewall.enable) {
+        nat = {
+          description = "Network Address Translation";
+          wantedBy = [ "network.target" ];
+          after = [ "network-pre.target" "systemd-modules-load.service" ];
+          path = [ pkgs.iptables ];
+          unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+
+          script = flushNat + setupNat;
+
+          postStop = flushNat;
         };
-
-        script = flushNat + setupNat;
-
-        postStop = flushNat;
-      }; };
-    })
+      };
+    }
+    )
   ];
 }

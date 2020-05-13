@@ -1,11 +1,44 @@
-{ stdenv, fetchurl, makeWrapper, autoPatchelfHook, gnused
-, gcc, bash, gtk-engine-murrine, gtk_engines, librsvg
+{ stdenv
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+, gnused
+, gcc
+, bash
+, gtk-engine-murrine
+, gtk_engines
+, librsvg
 
-, libX11, libXext, libXi, libXau, libXrender, libXft, libXmu, libSM, libXcomposite, libXfixes, libXpm
-, libXinerama, libXdamage, libICE, libXtst, libXaw, fontconfig, pango, cairo, glib, libxml2, atk, gtk2
-, gdk-pixbuf, libGL, ncurses5
+, libX11
+, libXext
+, libXi
+, libXau
+, libXrender
+, libXft
+, libXmu
+, libSM
+, libXcomposite
+, libXfixes
+, libXpm
+, libXinerama
+, libXdamage
+, libICE
+, libXtst
+, libXaw
+, fontconfig
+, pango
+, cairo
+, glib
+, libxml2
+, atk
+, gtk2
+, gdk-pixbuf
+, libGL
+, ncurses5
 
-, dmidecode, pciutils, usbutils
+, dmidecode
+, pciutils
+, usbutils
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +55,33 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook gnused ];
   buildInputs = [
-    stdenv.cc.cc libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
-    libXinerama libXdamage libICE libXtst libXaw fontconfig pango cairo glib libxml2 atk gtk2
-    gdk-pixbuf libGL ncurses5
+    stdenv.cc.cc
+    libX11
+    libXext
+    libXi
+    libXau
+    libXrender
+    libXft
+    libXmu
+    libSM
+    libXcomposite
+    libXfixes
+    libXpm
+    libXinerama
+    libXdamage
+    libICE
+    libXtst
+    libXaw
+    fontconfig
+    pango
+    cairo
+    glib
+    libxml2
+    atk
+    gtk2
+    gdk-pixbuf
+    libGL
+    ncurses5
   ];
 
   buildPhase = ''
@@ -68,7 +125,7 @@ stdenv.mkDerivation rec {
       free = false; # redistribution is only allowed to *some* hardware, etc.
     };
     maintainers = [ maintainers.gnidorah ];
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     longDescription = ''
       A clone of IRIX Interactive Desktop made in agreement with SGI.
       Provides simple and fast retro desktop environment.

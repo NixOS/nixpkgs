@@ -20,26 +20,27 @@
 }:
 
 with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
-
 let
-
   systemsWithAnySupport = supportedSystems ++ limitedSupportedSystems;
 
   supportDarwin = builtins.elem "x86_64-darwin" systemsWithAnySupport;
 
   jobs =
-    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
+    {
+      tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
       manual = import ../../doc { inherit pkgs nixpkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
 
-      darwin-tested = if supportDarwin then pkgs.releaseTools.aggregate
-        { name = "nixpkgs-darwin-${jobs.tarball.version}";
+      darwin-tested =
+        if supportDarwin then pkgs.releaseTools.aggregate {
+          name = "nixpkgs-darwin-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
           constituents =
-            [ jobs.tarball
+            [
+              jobs.tarball
               jobs.cabal2nix.x86_64-darwin
               jobs.ghc.x86_64-darwin
               jobs.git.x86_64-darwin
@@ -84,11 +85,13 @@ let
             ];
         } else null;
 
-      unstable = pkgs.releaseTools.aggregate
-        { name = "nixpkgs-${jobs.tarball.version}";
+      unstable =
+        pkgs.releaseTools.aggregate {
+          name = "nixpkgs-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
-            [ jobs.tarball
+            [
+              jobs.tarball
               jobs.metrics
               jobs.manual
               jobs.lib-tests
@@ -156,7 +159,8 @@ let
         };
 
       stdenvBootstrapTools = with lib;
-        genAttrs systemsWithAnySupport
+        genAttrs
+          systemsWithAnySupport
           (system: {
             inherit
               (import ../stdenv/linux/make-bootstrap-tools.nix {
@@ -169,13 +173,14 @@ let
           x86_64-darwin =
             let
               bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
-            in {
+            in
+            {
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
               # Test a full stdenv bootstrap from the bootstrap tools definition
               inherit (bootstrap.test-pkgs) stdenv;
             };
-          };
+        };
 
     } // (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
@@ -192,9 +197,10 @@ let
       perlPackages = { };
 
       darwin = packagePlatforms pkgs.darwin // {
-        cf-private = {};
-        xcode = {};
+        cf-private = { };
+        xcode = { };
       };
-    } ));
+    }));
 
-in jobs
+in
+jobs

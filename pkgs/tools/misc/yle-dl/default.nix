@@ -12,7 +12,13 @@ pythonPackages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    lxml pyamf pycrypto requests future ffmpeg setuptools
+    lxml
+    pyamf
+    pycrypto
+    requests
+    future
+    ffmpeg
+    setuptools
   ];
   pythonPath = [ rtmpdump php ];
 

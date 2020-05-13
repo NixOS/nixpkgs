@@ -15,7 +15,15 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    paramiko pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
+    paramiko
+    pymysql
+    configobj
+    sqlparse
+    prompt_toolkit
+    pygments
+    click
+    pycrypto
+    cli-helpers
   ];
 
   checkInputs = [ pytest mock glibcLocales ];

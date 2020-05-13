@@ -11,7 +11,8 @@ buildGoPackage rec {
 
   buildFlagsArray =
     let t = goPackagePath;
-    in ''
+    in
+    ''
       -ldflags=
         -s -X ${t}/pkg/buildinfo.Version=${version}
            -X ${t}/pkg/buildinfo.GitSHA=${rev}

@@ -14,7 +14,7 @@ rec {
 
   packageName = "iolib.common-lisp";
 
-  asdFilesToKeep = ["iolib.common-lisp.asd"];
+  asdFilesToKeep = [ "iolib.common-lisp.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iolib.common-lisp DESCRIPTION Slightly modified Common Lisp. SHA256

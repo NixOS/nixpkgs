@@ -1,4 +1,4 @@
-{ stdenv, lib, brscan4, netDevices ? [] }:
+{ stdenv, lib, brscan4, netDevices ? [ ] }:
 
 /*
 
@@ -20,9 +20,7 @@ nix-shell -E 'with import <nixpkgs> { }; brscan4-etc-files.override{netDevices=[
 */
 
 with lib;
-
 let
-
   addNetDev = nd: ''
     brsaneconfig4 -a \
     name="${nd.name}" \
@@ -32,7 +30,6 @@ let
       ''ip="${nd.ip}"''}'';
   addAllNetDev = xs: concatStringsSep "\n" (map addNetDev xs);
 in
-
 stdenv.mkDerivation {
 
   name = "brscan4-etc-files-0.4.3-3";

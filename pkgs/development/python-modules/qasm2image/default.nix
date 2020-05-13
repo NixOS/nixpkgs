@@ -39,12 +39,12 @@ buildPythonPackage {
     ${python.interpreter} tests/launch_tests.py
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = {
     description = "A Python module to visualise quantum circuit";
-    homepage    = https://github.com/nelimeee/qasm2image;
-    license     = lib.licenses.cecill-b;
+    homepage = https://github.com/nelimeee/qasm2image;
+    license = lib.licenses.cecill-b;
     maintainers = with lib.maintainers; [
       pandaman
     ];

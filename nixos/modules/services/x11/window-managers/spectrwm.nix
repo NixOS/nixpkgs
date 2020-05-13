@@ -1,12 +1,9 @@
-
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.xserver.windowManager.spectrwm;
 in
-
 {
   options = {
     services.xserver.windowManager.spectrwm.enable = mkEnableOption "spectrwm";

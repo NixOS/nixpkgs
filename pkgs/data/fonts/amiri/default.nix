@@ -1,9 +1,9 @@
 { lib, fetchzip }:
-
 let
   version = "0.112";
 
-in fetchzip rec {
+in
+fetchzip rec {
   name = "Amiri-${version}";
 
   url = "https://github.com/alif-type/amiri/releases/download/${version}/${name}.zip";
@@ -24,4 +24,3 @@ in fetchzip rec {
     platforms = platforms.all;
   };
 }
-

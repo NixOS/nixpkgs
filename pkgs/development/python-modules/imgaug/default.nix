@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-     pytest ./test
+    pytest ./test
   '';
 
   checkInputs = [ opencv3 pytest ];

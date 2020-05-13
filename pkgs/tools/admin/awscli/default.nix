@@ -3,7 +3,6 @@
 , groff
 , less
 }:
-
 let
   py = python3.override {
     packageOverrides = self: super: {
@@ -17,7 +16,8 @@ let
     };
   };
 
-in with py.pkgs; buildPythonApplication rec {
+in
+with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
   version = "1.17.13"; # N.B: if you change this, change botocore to a matching version too
 

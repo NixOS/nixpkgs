@@ -1,7 +1,6 @@
-{ config, lib, pkgs, ...} :
+{ config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.orangefs.server;
 
@@ -13,42 +12,47 @@ let
   # One range of handles for each meta/data instance
   handleStep = maxHandle / (length aliases) / 2;
 
-  fileSystems = mapAttrsToList (name: fs: ''
-    <FileSystem>
-      Name ${name}
-      ID ${toString fs.id}
-      RootHandle ${toString fs.rootHandle}
+  fileSystems =
+    mapAttrsToList
+      (name: fs: ''
+        <FileSystem>
+          Name ${name}
+          ID ${toString fs.id}
+          RootHandle ${toString fs.rootHandle}
 
-      ${fs.extraConfig}
+          ${fs.extraConfig}
 
-      <MetaHandleRanges>
-      ${concatStringsSep "\n" (
+          <MetaHandleRanges>
+          ${concatStringsSep "\n" (
           imap0 (i: alias:
-            let
+              let
               begin = i * handleStep + 3;
               end = begin + handleStep - 1;
-            in "Range ${alias} ${toString begin}-${toString end}") aliases
-       )}
-      </MetaHandleRanges>
+              in
+              "Range ${alias} ${toString begin}-${toString end}") aliases
+          )}
+          </MetaHandleRanges>
 
-      <DataHandleRanges>
-      ${concatStringsSep "\n" (
+          <DataHandleRanges>
+          ${concatStringsSep "\n" (
           imap0 (i: alias:
-            let
+              let
               begin = i * handleStep + 3 + (length aliases) * handleStep;
               end = begin + handleStep - 1;
-            in "Range ${alias} ${toString begin}-${toString end}") aliases
-       )}
-      </DataHandleRanges>
+              in
+              "Range ${alias} ${toString begin}-${toString end}") aliases
+          )}
+          </DataHandleRanges>
 
-      <StorageHints>
-      TroveSyncMeta ${if fs.troveSyncMeta then "yes" else "no"}
-      TroveSyncData ${if fs.troveSyncData then "yes" else "no"}
-      ${fs.extraStorageHints}
-      </StorageHints>
+          <StorageHints>
+          TroveSyncMeta ${if fs.troveSyncMeta then "yes" else "no"}
+          TroveSyncData ${if fs.troveSyncData then "yes" else "no"}
+          ${fs.extraStorageHints}
+          </StorageHints>
 
-    </FileSystem>
-  '') cfg.fileSystems;
+        </FileSystem>
+      '')
+      cfg.fileSystems;
 
   configFile = ''
     <Defaults>
@@ -69,7 +73,8 @@ let
     ${concatStringsSep "\n" fileSystems}
   '';
 
-in {
+in
+{
   ###### interface
 
   options = {
@@ -99,7 +104,7 @@ in {
       BMIModules = mkOption {
         type = with types; listOf str;
         default = [ "bmi_tcp" ];
-        example = [ "bmi_tcp" "bmi_ib"];
+        example = [ "bmi_tcp" "bmi_ib" ];
         description = "List of BMI modules to load.";
       };
 
@@ -117,7 +122,7 @@ in {
 
       servers = mkOption {
         type = with types; attrsOf types.str;
-        default = {};
+        default = { };
         example = ''
           {
             node1="tcp://node1:3334";
@@ -131,7 +136,7 @@ in {
         description = ''
           These options will create the <literal>&lt;FileSystem&gt;</literal> sections of config file.
         '';
-        default = { orangefs = {}; };
+        default = { orangefs = { }; };
         defaultText = literalExample "{ orangefs = {}; }";
         example = literalExample ''
           {
@@ -144,7 +149,7 @@ in {
             };
           }
         '';
-        type = with types; attrsOf (submodule ({ ... } : {
+        type = with types; attrsOf (submodule ({ ... }: {
           options = {
             id = mkOption {
               type = types.int;
@@ -194,7 +199,7 @@ in {
 
     # orangefs daemon will run as user
     users.users.orangefs.isSystemUser = true;
-    users.groups.orangefs = {};
+    users.groups.orangefs = { };
 
     # To format the file system the config file is needed.
     environment.etc."orangefs/server.conf" = {

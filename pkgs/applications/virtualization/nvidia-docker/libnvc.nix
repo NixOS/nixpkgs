@@ -1,7 +1,6 @@
 { stdenv, lib, fetchFromGitHub, libelf, libcap, libseccomp }:
 
 with lib; let
-
   modp-ver = "396.51";
 
   nvidia-modprobe = fetchFromGitHub {
@@ -11,7 +10,8 @@ with lib; let
     sha256 = "1fw2qwc84k64agw6fx2v0mjf88aggph9c6qhs4cv7l3gmflv8qbk";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libnvidia-container";
   version = "1.0.0";
 

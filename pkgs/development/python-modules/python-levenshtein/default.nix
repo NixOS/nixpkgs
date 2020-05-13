@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
-    homepage    = "https://github.com/ztane/python-Levenshtein";
-    license     = licenses.gpl2;
+    homepage = "https://github.com/ztane/python-Levenshtein";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ aske ];
   };
 

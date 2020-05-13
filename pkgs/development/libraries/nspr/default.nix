@@ -1,9 +1,9 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , CoreServices ? null
-, buildPackages }:
-
+, buildPackages
+}:
 let version = "4.25"; in
-
 stdenv.mkDerivation {
   pname = "nspr";
   inherit version;
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     moveToOutput share "$dev" # just aclocal
   '';
 
-  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = [ ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 

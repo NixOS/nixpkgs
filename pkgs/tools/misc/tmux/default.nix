@@ -7,7 +7,6 @@
 , ncurses
 , libevent
 }:
-
 let
 
   bashCompletion = fetchFromGitHub {
@@ -18,7 +17,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation rec {
   pname = "tmux";
   version = "3.0a";

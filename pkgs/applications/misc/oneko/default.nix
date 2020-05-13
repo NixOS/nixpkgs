@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Creates a cute cat chasing around your mouse cursor";
     longDescription = ''
-    Oneko changes your mouse cursor into a mouse
-    and creates a little cute cat, which starts
-    chasing around your mouse cursor.
-    When the cat is done catching the mouse, it starts sleeping.
+      Oneko changes your mouse cursor into a mouse
+      and creates a little cute cat, which starts
+      chasing around your mouse cursor.
+      When the cat is done catching the mouse, it starts sleeping.
     '';
     homepage = "http://www.daidouji.com/oneko/";
     license = licenses.publicDomain;

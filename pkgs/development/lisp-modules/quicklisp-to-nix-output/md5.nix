@@ -14,7 +14,7 @@ rec {
 
   packageName = "md5";
 
-  asdFilesToKeep = ["md5.asd"];
+  asdFilesToKeep = [ "md5.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM md5 DESCRIPTION The MD5 Message-Digest Algorithm RFC 1321 SHA256

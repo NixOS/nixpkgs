@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net }:
+{ stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net }:
 
 stdenv.mkDerivation {
   name = "njam-1.25";

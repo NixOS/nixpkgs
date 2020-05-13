@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.hydron;
-in with lib; {
+in
+with lib; {
   options.services.hydron = {
     enable = mkEnableOption "hydron";
 
@@ -67,7 +67,7 @@ in with lib; {
 
     importPaths = mkOption {
       type = types.listOf types.path;
-      default = [];
+      default = [ ];
       example = [ "/home/okina/Pictures" ];
       description = "Paths that hydron will recursively import.";
     };
@@ -93,7 +93,8 @@ in with lib; {
       enable = true;
       ensureDatabases = [ "hydron" ];
       ensureUsers = [
-        { name = "hydron";
+        {
+          name = "hydron";
           ensurePermissions = { "DATABASE hydron" = "ALL PRIVILEGES"; };
         }
       ];
@@ -117,7 +118,7 @@ in with lib; {
         User = "hydron";
         Group = "hydron";
         ExecStart = "${pkgs.hydron}/bin/hydron serve"
-        + optionalString (cfg.listenAddress != null) " -a ${cfg.listenAddress}";
+          + optionalString (cfg.listenAddress != null) " -a ${cfg.listenAddress}";
       };
     };
 
@@ -129,8 +130,8 @@ in with lib; {
         User = "hydron";
         Group = "hydron";
         ExecStart = "${pkgs.hydron}/bin/hydron import "
-        + optionalString cfg.fetchTags "-f "
-        + (escapeShellArg cfg.dataDir) + "/images " + (escapeShellArgs cfg.importPaths);
+          + optionalString cfg.fetchTags "-f "
+          + (escapeShellArg cfg.dataDir) + "/images " + (escapeShellArgs cfg.importPaths);
       };
     };
 

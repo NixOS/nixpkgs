@@ -1,4 +1,12 @@
-{ buildPythonPackage, fetchPypi, stdenv, sip, qtbase, pyqt5, poppler, pkgconfig, fetchpatch
+{ buildPythonPackage
+, fetchPypi
+, stdenv
+, sip
+, qtbase
+, pyqt5
+, poppler
+, pkgconfig
+, fetchpatch
 , substituteAll
 }:
 

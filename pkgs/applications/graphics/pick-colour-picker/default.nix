@@ -48,7 +48,7 @@ buildPythonPackage rec {
     mv "$shareLoc/share" "$out/share"
 
     sed "s|os.environ.get('SNAP'), \"usr\"|'$out'|g" -i "$pickLoc/__main__.py"
-    '';
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://kryogenix.org/code/pick/";
@@ -61,6 +61,6 @@ buildPythonPackage rec {
       Pick lets you pick colours from anywhere on your screen. Choose the colour you want and Pick remembers it, names it, and shows you a screenshot so you can remember where you got it from.
 
       Zoom all the way in to pixels to pick just the right one. Show your colours in your choice of format: rgba() or hex, CSS or Gdk or Qt, whichever you prefer. Copy to the clipboard ready for pasting into code or graphics apps.
-      '';
+    '';
   };
 }

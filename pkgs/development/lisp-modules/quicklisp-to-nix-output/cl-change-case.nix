@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-change-case";
 
-  asdFilesToKeep = ["cl-change-case.asd"];
+  asdFilesToKeep = [ "cl-change-case.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-change-case DESCRIPTION

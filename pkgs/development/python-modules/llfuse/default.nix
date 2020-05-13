@@ -1,11 +1,18 @@
-{ stdenv, fetchurl, fetchpatch, buildPythonPackage, pkgconfig, pytest, fuse, attr, which
-, contextlib2, osxfuse
+{ stdenv
+, fetchurl
+, fetchpatch
+, buildPythonPackage
+, pkgconfig
+, pytest
+, fuse
+, attr
+, which
+, contextlib2
+, osxfuse
 }:
-
 let
   inherit (stdenv.lib) optionals optionalString;
 in
-
 buildPythonPackage rec {
   pname = "llfuse";
   version = "1.3.6";

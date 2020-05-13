@@ -29,9 +29,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ nose sure coverage mock rednose
+  checkInputs = [
+    nose
+    sure
+    coverage
+    mock
+    rednose
     # Following not declared in setup.py
-    nose-randomly requests tornado httplib2 nose-exclude
+    nose-randomly
+    requests
+    tornado
+    httplib2
+    nose-exclude
   ];
 
   __darwinAllowLocalNetworking = true;

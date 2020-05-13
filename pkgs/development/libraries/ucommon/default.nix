@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, pkgconfig
-, openssl ? null, zlib ? null, gnutls ? null
+{ stdenv
+, fetchurl
+, pkgconfig
+, openssl ? null
+, zlib ? null
+, gnutls ? null
 }:
-
 let
   xor = a: b: (a || b) && (!(a && b));
 in
-
 assert xor (openssl != null) (gnutls != null);
 assert !(xor (openssl != null) (zlib != null));
 

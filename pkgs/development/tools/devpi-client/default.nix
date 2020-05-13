@@ -1,16 +1,16 @@
 { stdenv
 , buildPythonApplication
 , fetchPypi
-# buildInputs
+  # buildInputs
 , glibcLocales
 , pkginfo
 , check-manifest
-# propagatedBuildInputs
+  # propagatedBuildInputs
 , py
 , devpi-common
 , pluggy
 , setuptools
-# CheckInputs
+  # CheckInputs
 , pytest
 , pytest-flake8
 , webtest
@@ -21,7 +21,7 @@
 , wheel
 , git
 , mercurial
-} :
+}:
 
 buildPythonApplication rec {
   pname = "devpi-client";
@@ -37,9 +37,16 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ py devpi-common pluggy setuptools ];
 
   checkInputs = [
-    pytest pytest-flake8 webtest mock
-    devpi-server tox
-    sphinx wheel git mercurial
+    pytest
+    pytest-flake8
+    webtest
+    mock
+    devpi-server
+    tox
+    sphinx
+    wheel
+    git
+    mercurial
   ];
 
   checkPhase = ''

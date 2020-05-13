@@ -10,7 +10,6 @@
 , futures
 , version ? "5.1"
 }:
-
 let
   versionMap = {
     "4.5.3" = {
@@ -21,14 +20,13 @@ let
     };
   };
 in
-
 with versionMap.${version};
 
 buildPythonPackage rec {
   pname = "tornado";
   inherit version;
 
-  propagatedBuildInputs = [ backports_abc  certifi singledispatch ]
+  propagatedBuildInputs = [ backports_abc certifi singledispatch ]
     ++ lib.optional (pythonOlder "3.5") backports_ssl_match_hostname
     ++ lib.optional (pythonOlder "3.2") futures;
 

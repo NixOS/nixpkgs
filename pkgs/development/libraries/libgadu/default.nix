@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib}:
+{ stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation {
 

@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, config, wrapGAppsHook
+{ lib
+, stdenv
+, fetchurl
+, config
+, wrapGAppsHook
 , alsaLib
 , atk
 , cairo
@@ -32,7 +36,8 @@
 , libgnomeui
 , libnotify
 , gnome3
-, libGLU, libGL
+, libGLU
+, libGL
 , nspr
 , nss
 , pango
@@ -52,9 +57,7 @@
 , runtimeShell
 , systemLocale ? config.i18n.defaultLocale or "en-US"
 }:
-
 let
-
   inherit (generated) version sources;
 
   mozillaPlatforms = {
@@ -68,7 +71,7 @@ let
     builtins.substring 0 (builtins.stringLength prefix) string == prefix;
 
   sourceMatches = locale: source:
-      (isPrefixOf source.locale locale) && source.arch == arch;
+    (isPrefixOf source.locale locale) && source.arch == arch;
 
   policies = {
     DisableAppUpdate = true;
@@ -76,14 +79,13 @@ let
 
   policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
 
-  defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") { } sources;
 
   source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
   name = "firefox-${channel}-bin-unwrapped-${version}";
 
 in
-
 stdenv.mkDerivation {
   inherit name;
 
@@ -91,8 +93,9 @@ stdenv.mkDerivation {
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
-  libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.cc
+  libPath =
+    stdenv.lib.makeLibraryPath [
+      stdenv.cc.cc
       alsaLib
       (lib.getDev alsaLib)
       atk
@@ -126,7 +129,8 @@ stdenv.mkDerivation {
       libgnome
       libgnomeui
       libnotify
-      libGLU libGL
+      libGLU
+      libGL
       nspr
       nss
       pango
@@ -194,8 +198,8 @@ stdenv.mkDerivation {
     inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
-        then "http://archive.mozilla.org/pub/devedition/releases/"
-        else "http://archive.mozilla.org/pub/firefox/releases/";
+      then "http://archive.mozilla.org/pub/devedition/releases/"
+      else "http://archive.mozilla.org/pub/firefox/releases/";
   };
   meta = with stdenv.lib; {
     description = "Mozilla Firefox, free web browser (binary package)";

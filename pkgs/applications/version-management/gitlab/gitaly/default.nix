@@ -1,6 +1,12 @@
-{ stdenv, fetchFromGitLab, fetchFromGitHub, buildGoPackage, ruby,
-  bundlerEnv, pkgconfig, libgit2 }:
-
+{ stdenv
+, fetchFromGitLab
+, fetchFromGitHub
+, buildGoPackage
+, ruby
+, bundlerEnv
+, pkgconfig
+, libgit2
+}:
 let
   rubyEnv = bundlerEnv rec {
     name = "gitaly-env";
@@ -9,7 +15,8 @@ let
     gemdir = ./.;
     gemset =
       let x = import (gemdir + "/gemset.nix");
-      in x // {
+      in
+      x // {
         # grpc expects the AR environment variable to contain `ar rpc`. See the
         # discussion in nixpkgs #63056.
         grpc = x.grpc // {
@@ -27,7 +34,8 @@ let
       sha256 = "0wzx8nkyy9m7mx6cks58chjd4289vjsw97mxm9w6f1ggqsfnmbr9";
     };
   });
-in buildGoPackage rec {
+in
+buildGoPackage rec {
   version = "12.8.6";
   pname = "gitaly";
 

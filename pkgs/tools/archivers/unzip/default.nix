@@ -1,6 +1,8 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , bzip2
-, enableNLS ? false, libnatspec
+, enableNLS ? false
+, libnatspec
 }:
 
 stdenv.mkDerivation {
@@ -41,7 +43,9 @@ stdenv.mkDerivation {
       name = "CVE-2019-13232-3.patch";
       sha256 = "1jvs7dkdqs97qnsqc6hk088alhv8j4c638k65dbib9chh40jd7pf";
     })
-  ] ++ stdenv.lib.optional enableNLS
+  ] ++
+  stdenv.lib.optional
+    enableNLS
     (fetchurl {
       url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/unzip/files/unzip-6.0-natspec.patch?revision=1.1";
       name = "unzip-6.0-natspec.patch";

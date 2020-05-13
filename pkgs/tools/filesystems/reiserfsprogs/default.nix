@@ -1,5 +1,4 @@
 { stdenv, fetchurl, libuuid, autoreconfHook }:
-
 let version = "3.6.24"; in
 stdenv.mkDerivation rec {
   pname = "reiserfsprogs";

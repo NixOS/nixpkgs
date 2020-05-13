@@ -16,7 +16,7 @@ rec {
 
   packageName = "log4cl";
 
-  asdFilesToKeep = ["log4cl.asd"];
+  asdFilesToKeep = [ "log4cl.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM log4cl DESCRIPTION System lacks description SHA256

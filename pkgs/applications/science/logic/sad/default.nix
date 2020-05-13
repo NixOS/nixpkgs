@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   ];
   postPatch = ''
     substituteInPlace Alice/Main.hs --replace init.opt $out/init.opt
-    '';
+  '';
   installPhase = ''
     mkdir -p $out/{bin,provers}
     install alice $out/bin
@@ -23,14 +23,14 @@ stdenv.mkDerivation {
     substituteAll provers/provers.dat $out/provers/provers.dat
     substituteAll init.opt $out/init.opt
     cp -r examples $out
-    '';
+  '';
   inherit spass;
   meta = {
     description = "A program for automated proving of mathematical texts";
     longDescription = ''
       The system for automated deduction is intended for automated processing of formal mathematical texts
       written in a special language called ForTheL (FORmal THEory Language) or in a traditional first-order language
-      '';
+    '';
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.schmitthenner ];
     homepage = http://nevidal.org/sad.en.html;

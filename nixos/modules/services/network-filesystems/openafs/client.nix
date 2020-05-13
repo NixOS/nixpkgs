@@ -2,7 +2,6 @@
 
 # openafsMod, openafsBin, mkCellServDB
 with import ./lib.nix { inherit config lib pkgs; };
-
 let
   inherit (lib) getBin mkOption mkIf optionalString singleton types;
 
@@ -15,7 +14,8 @@ let
 
   clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (mkCellServDB cfg.cellName cfg.cellServDB);
 
-  afsConfig = pkgs.runCommand "afsconfig" { preferLocalBuild = true; } ''
+  afsConfig = pkgs.runCommand "afsconfig"
+    { preferLocalBuild = true; } ''
     mkdir -p $out
     echo ${cfg.cellName} > $out/ThisCell
     cat ${cellServDB} ${clientServDB} > $out/CellServDB
@@ -50,7 +50,7 @@ in
       };
 
       cellServDB = mkOption {
-        default = [];
+        default = [ ];
         type = with types; listOf (submodule { options = cellServDBConfig; });
         description = ''
           This cell's database server records, added to the global
@@ -186,10 +186,12 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.afsdb || cfg.cellServDB != [];
+      {
+        assertion = cfg.afsdb || cfg.cellServDB != [ ];
         message = "You should specify all cell-local database servers in config.services.openafsClient.cellServDB or set config.services.openafsClient.afsdb.";
       }
-      { assertion = cfg.cellName != "";
+      {
+        assertion = cfg.cellName != "";
         message = "You must specify the local cell name in config.services.openafsClient.cellName.";
       }
     ];
@@ -198,7 +200,8 @@ in
 
     environment.etc = {
       clientCellServDB = {
-        source = pkgs.runCommand "CellServDB" { preferLocalBuild = true; } ''
+        source = pkgs.runCommand "CellServDB"
+          { preferLocalBuild = true; } ''
           cat ${cellServDB} ${clientServDB} > $out
         '';
         target = "openafs/CellServDB";
@@ -216,7 +219,7 @@ in
     systemd.services.afsd = {
       description = "AFS client";
       wantedBy = [ "multi-user.target" ];
-      after = singleton (if cfg.startDisconnected then  "network.target" else "network-online.target");
+      after = singleton (if cfg.startDisconnected then "network.target" else "network-online.target");
       serviceConfig = { RemainAfterExit = true; };
       restartIfChanged = false;
 

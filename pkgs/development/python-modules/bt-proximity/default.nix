@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, pybluez }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pybluez
+}:
 
 buildPythonPackage {
   pname = "bt-proximity";
@@ -7,9 +10,9 @@ buildPythonPackage {
 
   # pypi only has a pre-compiled wheel and no sources
   src = fetchFromGitHub {
-    owner  = "FrederikBolding";
-    repo   = "bluetooth-proximity";
-    rev    = "463bade8a9080b47f09bf4a47830b31c69c5dffd";
+    owner = "FrederikBolding";
+    repo = "bluetooth-proximity";
+    rev = "463bade8a9080b47f09bf4a47830b31c69c5dffd";
     sha256 = "0anfh90cj3c2g7zqrjvq0d6dzpb4hjl6gk8zw0r349j2zw9i4h7y";
   };
 

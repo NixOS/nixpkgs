@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake } :
-
+{ stdenv, fetchFromGitHub, cmake }:
 let
   version = "0.9.2";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "codec2";
   inherit version;
 

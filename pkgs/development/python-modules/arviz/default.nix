@@ -13,11 +13,11 @@
 , setuptools
 , tensorflow-probability
 , xarray
-#, h5py (used by disabled tests)
-#, pymc3 (broken)
-#, pyro-ppl (broken)
-#, pystan (not packaged)
-#, numpyro (not packaged)
+  #, h5py (used by disabled tests)
+  #, pymc3 (broken)
+  #, pyro-ppl (broken)
+  #, pystan (not packaged)
+  #, numpyro (not packaged)
 }:
 
 buildPythonPackage rec {

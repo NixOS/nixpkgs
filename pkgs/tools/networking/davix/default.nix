@@ -22,10 +22,9 @@ stdenv.mkDerivation rec {
     operations with Http based protocols (WebDav, Amazon S3, ...).
     Davix provides an API and a set of command line tools";
 
-    license     = licenses.lgpl2Plus;
-    homepage    = http://dmc.web.cern.ch/projects/davix/home;
+    license = licenses.lgpl2Plus;
+    homepage = http://dmc.web.cern.ch/projects/davix/home;
     maintainers = [ maintainers.adev ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }
-

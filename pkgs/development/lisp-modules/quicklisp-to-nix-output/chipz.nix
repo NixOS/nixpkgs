@@ -14,7 +14,7 @@ rec {
 
   packageName = "chipz";
 
-  asdFilesToKeep = ["chipz.asd"];
+  asdFilesToKeep = [ "chipz.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM chipz DESCRIPTION

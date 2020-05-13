@@ -1,9 +1,9 @@
 { lib, fetchzip }:
-
 let
   pname = "source-han-code-jp";
   version = "2.011R";
-in fetchzip {
+in
+fetchzip {
   name = "${pname}-${version}";
 
   url = "https://github.com/adobe-fonts/${pname}/archive/${version}.zip";

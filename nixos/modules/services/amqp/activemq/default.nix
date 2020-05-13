@@ -2,9 +2,7 @@
 
 with pkgs;
 with lib;
-
 let
-
   cfg = config.services.activemq;
 
   activemqBroker = stdenv.mkDerivation {
@@ -20,7 +18,8 @@ let
     '';
   };
 
-in {
+in
+{
 
   options = {
     services.activemq = {

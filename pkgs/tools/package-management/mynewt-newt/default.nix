@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "mynewt-newt";
-    rev = "mynewt_${builtins.replaceStrings ["."] ["_"] version}_tag";
+    rev = "mynewt_${builtins.replaceStrings [ "." ] [ "_" ] version}_tag";
     sha256 = "0rwn4ghh7kal8csxlh0w1p29b5m1nam9lkrxla5wdfhnzbsg8hfa";
   };
 

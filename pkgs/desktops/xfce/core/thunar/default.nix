@@ -15,9 +15,8 @@
 , gvfs
 , makeWrapper
 , symlinkJoin
-, thunarPlugins ? []
+, thunarPlugins ? [ ]
 }:
-
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
@@ -63,8 +62,9 @@ let unwrapped = mkXfceDerivation {
   };
 };
 
-in if thunarPlugins == [] then unwrapped
-  else import ./wrapper.nix {
-    inherit makeWrapper symlinkJoin thunarPlugins lib;
-    thunar = unwrapped;
-  }
+in
+if thunarPlugins == [ ] then unwrapped
+else import ./wrapper.nix {
+  inherit makeWrapper symlinkJoin thunarPlugins lib;
+  thunar = unwrapped;
+}

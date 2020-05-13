@@ -19,7 +19,7 @@ buildGoPackage rec {
   # remove patch when it becomes part of a release.
   patches = [
     (fetchpatch {
-      url    = "https://github.com/cloudflare/cfssl/commit/7e13f60773c96644db9dd8d342d42fe3a4d26f36.patch";
+      url = "https://github.com/cloudflare/cfssl/commit/7e13f60773c96644db9dd8d342d42fe3a4d26f36.patch";
       sha256 = "1z2v2i8yj7qpj8zj5f2q739nhrr9s59jwzfzk52wfgssl4vv5mn5";
     })
   ];

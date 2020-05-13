@@ -1,5 +1,10 @@
-{stdenv, buildOcamlJane,
- ppx_core, ppx_tools, ppx_type_conv, bin_prot}:
+{ stdenv
+, buildOcamlJane
+, ppx_core
+, ppx_tools
+, ppx_type_conv
+, bin_prot
+}:
 
 buildOcamlJane {
   name = "ppx_bin_prot";

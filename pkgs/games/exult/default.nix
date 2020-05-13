@@ -1,5 +1,4 @@
 { stdenv, fetchurl, pkgconfig, SDL, libogg, libvorbis, zlib, unzip }:
-
 let
 
   # Digital recordings of the music on an original Roland MT-32.  So
@@ -10,7 +9,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation rec {
   name = "exult-1.4.9rc1";
 
@@ -22,7 +20,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-tools" ];
 
   patches =
-    [ # Arch Linux patch set.
+    [
+      # Arch Linux patch set.
       ./arch.patch
     ];
 

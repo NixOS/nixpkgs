@@ -1,6 +1,9 @@
 { fetchzip }:
 
-{ owner, repo, rev, name ? "source"
+{ owner
+, repo
+, rev
+, name ? "source"
 , ... # For hash agility
 }@args: fetchzip ({
   inherit name;

@@ -1,6 +1,12 @@
-{ stdenv, fetchurl
-, libX11, libXext, libXaw
-, pkgconfig, imlib2, libast }:
+{ stdenv
+, fetchurl
+, libX11
+, libXext
+, libXaw
+, pkgconfig
+, imlib2
+, libast
+}:
 
 stdenv.mkDerivation rec {
   pname = "eterm";

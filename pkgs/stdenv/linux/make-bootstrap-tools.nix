@@ -1,11 +1,11 @@
 { localSystem ? { system = builtins.currentSystem; }
 , crossSystem ? null
 }:
-
 let
   pkgs = import ../../.. { inherit localSystem crossSystem; };
   libc = pkgs.stdenv.cc.libc;
-in with pkgs; rec {
+in
+with pkgs; rec {
 
 
   coreutilsMinimal = coreutils.override (args: {
@@ -53,49 +53,51 @@ in with pkgs; rec {
         set -x
         mkdir -p $out/bin $out/lib $out/libexec
 
-      '' + (if (stdenv.hostPlatform.libc == "glibc") then ''
-        # Copy what we need of Glibc.
-        cp -d ${libc.out}/lib/ld*.so* $out/lib
-        cp -d ${libc.out}/lib/libc*.so* $out/lib
-        cp -d ${libc.out}/lib/libc_nonshared.a $out/lib
-        cp -d ${libc.out}/lib/libm*.so* $out/lib
-        cp -d ${libc.out}/lib/libdl*.so* $out/lib
-        cp -d ${libc.out}/lib/librt*.so*  $out/lib
-        cp -d ${libc.out}/lib/libpthread*.so* $out/lib
-        cp -d ${libc.out}/lib/libnsl*.so* $out/lib
-        cp -d ${libc.out}/lib/libutil*.so* $out/lib
-        cp -d ${libc.out}/lib/libnss*.so* $out/lib
-        cp -d ${libc.out}/lib/libresolv*.so* $out/lib
-        cp -d ${libc.out}/lib/crt?.o $out/lib
+      '' + (
+        if (stdenv.hostPlatform.libc == "glibc") then ''
+          # Copy what we need of Glibc.
+          cp -d ${libc.out}/lib/ld*.so* $out/lib
+          cp -d ${libc.out}/lib/libc*.so* $out/lib
+          cp -d ${libc.out}/lib/libc_nonshared.a $out/lib
+          cp -d ${libc.out}/lib/libm*.so* $out/lib
+          cp -d ${libc.out}/lib/libdl*.so* $out/lib
+          cp -d ${libc.out}/lib/librt*.so*  $out/lib
+          cp -d ${libc.out}/lib/libpthread*.so* $out/lib
+          cp -d ${libc.out}/lib/libnsl*.so* $out/lib
+          cp -d ${libc.out}/lib/libutil*.so* $out/lib
+          cp -d ${libc.out}/lib/libnss*.so* $out/lib
+          cp -d ${libc.out}/lib/libresolv*.so* $out/lib
+          cp -d ${libc.out}/lib/crt?.o $out/lib
 
-        cp -rL ${libc.dev}/include $out
-        chmod -R u+w "$out"
+          cp -rL ${libc.dev}/include $out
+          chmod -R u+w "$out"
 
-        # libc can contain linker scripts: find them, copy their deps,
-        # and get rid of absolute paths (nuke-refs would make them useless)
-        local lScripts=$(grep --files-with-matches --max-count=1 'GNU ld script' -R "$out/lib")
-        cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${libc.out}' | sort -u)
-        for f in $lScripts; do
-          substituteInPlace "$f" --replace '${libc.out}/lib/' ""
-        done
+          # libc can contain linker scripts: find them, copy their deps,
+          # and get rid of absolute paths (nuke-refs would make them useless)
+          local lScripts=$(grep --files-with-matches --max-count=1 'GNU ld script' -R "$out/lib")
+          cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${libc.out}' | sort -u)
+          for f in $lScripts; do
+            substituteInPlace "$f" --replace '${libc.out}/lib/' ""
+          done
 
-        # Hopefully we won't need these.
-        rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
-        find $out/include -name .install -exec rm {} \;
-        find $out/include -name ..install.cmd -exec rm {} \;
-        mv $out/include $out/include-glibc
-    '' else if (stdenv.hostPlatform.libc == "musl") then ''
-        # Copy what we need from musl
-        cp ${libc.out}/lib/* $out/lib
-        cp -rL ${libc.dev}/include $out
-        chmod -R u+w "$out"
+          # Hopefully we won't need these.
+          rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
+          find $out/include -name .install -exec rm {} \;
+          find $out/include -name ..install.cmd -exec rm {} \;
+          mv $out/include $out/include-glibc
+        '' else if (stdenv.hostPlatform.libc == "musl") then ''
+          # Copy what we need from musl
+          cp ${libc.out}/lib/* $out/lib
+          cp -rL ${libc.dev}/include $out
+          chmod -R u+w "$out"
 
-        rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
-        find $out/include -name .install -exec rm {} \;
-        find $out/include -name ..install.cmd -exec rm {} \;
-        mv $out/include $out/include-libc
-    '' else throw "unsupported libc for bootstrap tools")
-    + ''
+          rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
+          find $out/include -name .install -exec rm {} \;
+          find $out/include -name ..install.cmd -exec rm {} \;
+          mv $out/include $out/include-libc
+        '' else throw "unsupported libc for bootstrap tools"
+      )
+      + ''
         # Copy coreutils, bash, etc.
         cp -d ${coreutilsMinimal.out}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
@@ -193,7 +195,7 @@ in with pkgs; rec {
       # The result should not contain any references (store paths) so
       # that we can safely copy them out of the store and to other
       # locations in the store.
-      allowedReferences = [];
+      allowedReferences = [ ];
     };
 
   dist = stdenv.mkDerivation {
@@ -208,25 +210,26 @@ in with pkgs; rec {
 
   bootstrapFiles = {
     # Make them their own store paths to test that busybox still works when the binary is named /nix/store/HASH-busybox
-    busybox = runCommand "busybox" {} "cp ${build}/on-server/busybox $out";
-    bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
+    busybox = runCommand "busybox" { } "cp ${build}/on-server/busybox $out";
+    bootstrapTools = runCommand "bootstrap-tools.tar.xz" { } "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
-  bootstrapTools = if (stdenv.hostPlatform.libc == "glibc") then
-    import ./bootstrap-tools {
-      inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
-    }
+  bootstrapTools =
+    if (stdenv.hostPlatform.libc == "glibc") then
+      import ./bootstrap-tools {
+        inherit (stdenv.buildPlatform) system;# Used to determine where to build
+        inherit bootstrapFiles;
+      }
     else if (stdenv.hostPlatform.libc == "musl") then
-    import ./bootstrap-tools-musl {
-      inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
-    }
+      import ./bootstrap-tools-musl {
+        inherit (stdenv.buildPlatform) system;# Used to determine where to build
+        inherit bootstrapFiles;
+      }
     else throw "unsupported libc";
 
   test = derivation {
     name = "test-bootstrap-tools";
-    inherit (stdenv.hostPlatform) system; # We cannot "cross test"
+    inherit (stdenv.hostPlatform) system;# We cannot "cross test"
     builder = bootstrapFiles.busybox;
     args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
 

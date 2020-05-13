@@ -1,9 +1,25 @@
-{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg, jack2,
-  liblo, libpulseaudio, libsndfile, pkgconfig, python3Packages,
-  which, withFrontend ? true,
-  withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
-  withGtk2 ? true, gtk2 ? null,
-  withGtk3 ? true, gtk3 ? null }:
+{ stdenv
+, fetchFromGitHub
+, alsaLib
+, file
+, fluidsynth
+, ffmpeg
+, jack2
+, liblo
+, libpulseaudio
+, libsndfile
+, pkgconfig
+, python3Packages
+, which
+, withFrontend ? true
+, withQt ? true
+, qtbase ? null
+, wrapQtAppsHook ? null
+, withGtk2 ? true
+, gtk2 ? null
+, withGtk3 ? true
+, gtk3 ? null
+}:
 
 with stdenv.lib;
 
@@ -25,19 +41,30 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    python3Packages.wrapPython pkgconfig which wrapQtAppsHook
+    python3Packages.wrapPython
+    pkgconfig
+    which
+    wrapQtAppsHook
   ];
 
   pythonPath = with python3Packages; [
-    rdflib pyliblo
+    rdflib
+    pyliblo
   ] ++ optional withFrontend pyqt5;
 
   buildInputs = [
-    file liblo alsaLib fluidsynth ffmpeg jack2 libpulseaudio libsndfile
+    file
+    liblo
+    alsaLib
+    fluidsynth
+    ffmpeg
+    jack2
+    libpulseaudio
+    libsndfile
   ] ++ pythonPath
-    ++ optional withQt qtbase
-    ++ optional withGtk2 gtk2
-    ++ optional withGtk3 gtk3;
+  ++ optional withQt qtbase
+  ++ optional withGtk2 gtk2
+  ++ optional withGtk3 gtk3;
 
   enableParallelBuilding = true;
 

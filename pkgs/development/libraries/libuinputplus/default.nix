@@ -4,10 +4,10 @@ stdenv.mkDerivation rec {
   pname = "libuinputplus";
   version = "2019-10-01";
 
-  src  = fetchFromGitHub {
-    owner  = "YukiWorkshop";
-    repo   = "libuInputPlus";
-    rev    = "962f180b4cc670e1f5cc73c2e4d5d196ae52d630";
+  src = fetchFromGitHub {
+    owner = "YukiWorkshop";
+    repo = "libuInputPlus";
+    rev = "962f180b4cc670e1f5cc73c2e4d5d196ae52d630";
     sha256 = "0jy5i7bmjad7hw1qcyjl4swqribp2027s9g3609zwj7lj8z5x0bg";
   };
 

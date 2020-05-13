@@ -1,6 +1,10 @@
-{ stdenv, fetchurl, python3
-, libfaketime, fonttosfnt
-, bdftopcf, mkfontscale
+{ stdenv
+, fetchurl
+, python3
+, libfaketime
+, fonttosfnt
+, bdftopcf
+, mkfontscale
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +17,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ python3 bdftopcf libfaketime
-      fonttosfnt mkfontscale
+    [
+      python3
+      bdftopcf
+      libfaketime
+      fonttosfnt
+      mkfontscale
     ];
 
   enableParallelBuilding = true;

@@ -1,9 +1,7 @@
 { stdenv, fetchurl, omake, ocaml, flex, bison }:
-
 let
   version = "2.1";
 in
-
 stdenv.mkDerivation {
   pname = "teyjus";
   inherit version;

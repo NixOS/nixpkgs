@@ -1,11 +1,44 @@
-{ stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
-, libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
-, less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
+{ stdenv
+, fetchurl
+, bzip2
+, gfortran
+, libX11
+, libXmu
+, libXt
+, libjpeg
+, libpng
+, libtiff
+, ncurses
+, pango
+, pcre
+, perl
+, readline
+, tcl
+, texLive
+, tk
+, xz
+, zlib
+, less
+, texinfo
+, graphviz
+, icu
+, pkgconfig
+, bison
+, imake
+, which
+, jdk
+, openblas
+, curl
+, Cocoa
+, Foundation
+, libobjc
+, libcxx
+, tzdata
+, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
-# R as of writing does not support outputting both .so and .a files; it outputs:
-#     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
+  # R as of writing does not support outputting both .so and .a files; it outputs:
+  #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
 , static ? false
 }:
 
@@ -20,9 +53,36 @@ stdenv.mkDerivation rec {
   dontUseImakeConfigure = true;
 
   buildInputs = [
-    bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
-    pango pcre perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which openblas curl tcl tk jdk
+    bzip2
+    gfortran
+    libX11
+    libXmu
+    libXt
+    libXt
+    libjpeg
+    libpng
+    libtiff
+    ncurses
+    pango
+    pcre
+    perl
+    readline
+    texLive
+    xz
+    zlib
+    less
+    texinfo
+    graphviz
+    icu
+    pkgconfig
+    bison
+    imake
+    which
+    openblas
+    curl
+    tcl
+    tk
+    jdk
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
@@ -63,10 +123,10 @@ stdenv.mkDerivation rec {
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-      --disable-R-framework
-      OBJC="clang"
-      CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
-      LDFLAGS="-L${libcxx}/lib"
+    --disable-R-framework
+    OBJC="clang"
+    CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
+    LDFLAGS="-L${libcxx}/lib"
   '' + ''
     )
     echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"

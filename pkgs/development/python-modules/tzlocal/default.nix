@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytz }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytz
+}:
 
 buildPythonPackage rec {
   pname = "tzlocal";

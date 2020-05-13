@@ -1,4 +1,4 @@
-{stdenv, fetchurl, coq, unzip}:
+{ stdenv, fetchurl, coq, unzip }:
 
 stdenv.mkDerivation rec {
 

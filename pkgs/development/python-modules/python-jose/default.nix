@@ -1,6 +1,15 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, future, six, ecdsa, rsa
-, pycrypto, pytest, pytestcov, pytestrunner, cryptography
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, future
+, six
+, ecdsa
+, rsa
+, pycrypto
+, pytest
+, pytestcov
+, pytestrunner
+, cryptography
 }:
 
 buildPythonPackage rec {

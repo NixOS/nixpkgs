@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, aiohttp, jsonrpc-base, pep8 }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, jsonrpc-base
+, pep8
+}:
 
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";

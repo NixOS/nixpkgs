@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib libpng bzip2 libusb openssl ];
 
   meta = with stdenv.lib; {
-    homepage    = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";
+    homepage = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";
     description = "Custom NOR firmware loader/IPSW generator for the iPhone";
-    license     = licenses.gpl3Plus;
-    platforms   = with platforms; linux ++ darwin;
+    license = licenses.gpl3Plus;
+    platforms = with platforms; linux ++ darwin;
   };
 }

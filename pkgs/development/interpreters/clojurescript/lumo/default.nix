@@ -84,12 +84,14 @@ let
        :target             :nodejs
        :hashbang           false
        ;; :libs               [ \"src/cljs/bundled\" \"src/js\" ]
-       :output-dir         ${if simple
-  then ''\"cljstmp\"''
-  else ''\"target\"''}
-       :output-to          ${if simple
-  then ''\"cljstmp/main.js\"''
-  else ''\"target/deleteme.js\"'' }})
+       :output-dir         ${
+      if simple
+      then ''\"cljstmp\"''
+      else ''\"target\"''}
+       :output-to          ${
+      if simple
+      then ''\"cljstmp/main.js\"''
+      else ''\"target/deleteme.js\"'' }})
   ''
   );
 
@@ -162,8 +164,7 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     xcbuild
-  ]
-  );
+  ]);
 
   patches = [ ./no_mangle.patch ./mkdir_promise.patch ];
 

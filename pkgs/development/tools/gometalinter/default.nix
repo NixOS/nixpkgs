@@ -19,7 +19,6 @@
 }:
 
 with lib;
-
 let
   runtimeDeps = [
     deadcode
@@ -38,7 +37,8 @@ let
     unconvert
   ];
 
-in buildGoPackage rec {
+in
+buildGoPackage rec {
   pname = "gometalinter";
   version = "3.0.0";
 

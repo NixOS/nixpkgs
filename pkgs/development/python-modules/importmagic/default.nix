@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  doCheck = false;  # missing json file from tarball
+  doCheck = false; # missing json file from tarball
 
   meta = with stdenv.lib; {
     description = "Python Import Magic - automagically add, remove and manage imports";

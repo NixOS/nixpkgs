@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, python2, git }:
-
 let
   name = "stgit-${version}";
   version = "0.22";

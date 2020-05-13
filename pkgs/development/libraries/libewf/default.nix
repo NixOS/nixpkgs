@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Library for support of the Expert Witness Compression Format";
     homepage = https://sourceforge.net/projects/libewf/;
     license = stdenv.lib.licenses.lgpl3;
-    maintainers = [ stdenv.lib.maintainers.raskin ] ;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.unix;
     inherit version;
   };

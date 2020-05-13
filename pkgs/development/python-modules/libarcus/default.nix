@@ -1,5 +1,12 @@
-{ stdenv, buildPythonPackage, python, fetchFromGitHub
-, cmake, sip, protobuf, pythonOlder }:
+{ stdenv
+, buildPythonPackage
+, python
+, fetchFromGitHub
+, cmake
+, sip
+, protobuf
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "libarcus";

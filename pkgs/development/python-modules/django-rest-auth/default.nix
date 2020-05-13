@@ -1,9 +1,9 @@
-{ lib,
-  fetchPypi,
-  django,
-  djangorestframework,
-  six,
-  buildPythonPackage
+{ lib
+, fetchPypi
+, django
+, djangorestframework
+, six
+, buildPythonPackage
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,26 @@
-{ stdenv, fetchurl, erlang, elixir, python, libxml2, libxslt, xmlto
-, docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync, getconf, socat
-, procps, coreutils, gnused, systemd, glibcLocales
-, AppKit, Carbon, Cocoa
+{ stdenv
+, fetchurl
+, erlang
+, elixir
+, python
+, libxml2
+, libxslt
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, zip
+, unzip
+, rsync
+, getconf
+, socat
+, procps
+, coreutils
+, gnused
+, systemd
+, glibcLocales
+, AppKit
+, Carbon
+, Cocoa
 , nixosTests
 }:
 
@@ -32,8 +51,11 @@ stdenv.mkDerivation rec {
   runtimePath = stdenv.lib.makeBinPath [
     erlang
     getconf # for getting memory limits
-    socat systemd procps # for systemd unit activation check
-    gnused coreutils # used by helper scripts
+    socat
+    systemd
+    procps # for systemd unit activation check
+    gnused
+    coreutils # used by helper scripts
   ];
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early

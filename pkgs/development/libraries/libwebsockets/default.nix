@@ -1,5 +1,4 @@
 { fetchFromGitHub, stdenv, cmake, openssl, zlib, libuv }:
-
 let
   generic = { version, sha256 }: stdenv.mkDerivation rec {
     pname = "libwebsockets";

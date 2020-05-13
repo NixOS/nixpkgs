@@ -1,9 +1,7 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.cachefilesd;
 
   cfgFile = pkgs.writeText "cachefilesd.conf" ''
@@ -12,7 +10,6 @@ let
   '';
 
 in
-
 {
   options = {
     services.cachefilesd = {

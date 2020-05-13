@@ -1,9 +1,8 @@
 let mirrors = import ./mirrors.nix; in
-
 { system }:
 
 { url ? builtins.head urls
-, urls ? []
+, urls ? [ ]
 , sha256
 , name ? baseNameOf (toString url)
 }:

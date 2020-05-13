@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "1gbrg03z1b6rlrvjyc6d41bc8j1bsr7rm8206gb1apscyii5bnii";
   };
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isDarwin
+  patches = stdenv.lib.optional
+    stdenv.hostPlatform.isDarwin
     (fetchpatch {
       # https://sourceforge.net/p/giflib/bugs/133/
       name = "darwin-soname.patch";

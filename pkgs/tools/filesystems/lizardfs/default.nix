@@ -33,8 +33,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
 
   buildInputs =
-    [ db fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
-      zlib boost judy pam spdlog python2
+    [
+      db
+      fuse
+      asciidoc
+      libxml2
+      libxslt
+      docbook_xml_dtd_412
+      docbook_xsl
+      zlib
+      boost
+      judy
+      pam
+      spdlog
+      python2
     ];
 
   patches = [

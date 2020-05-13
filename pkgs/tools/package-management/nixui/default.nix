@@ -1,5 +1,11 @@
-{ stdenv, pkgs, fetchgit, nix, node_webkit, makeDesktopItem
-, writeScript }:
+{ stdenv
+, pkgs
+, fetchgit
+, nix
+, node_webkit
+, makeDesktopItem
+, writeScript
+}:
 let
   version = "0.2.1";
   src = fetchgit {
@@ -10,7 +16,8 @@ let
   nixui = (import ./nixui.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
-  })."nixui-git://github.com/matejc/nixui.git#0.2.1";
+  }
+  )."nixui-git://github.com/matejc/nixui.git#0.2.1";
   script = writeScript "nixui" ''
     #! ${stdenv.shell}
     export PATH="${nix}/bin:\$PATH"

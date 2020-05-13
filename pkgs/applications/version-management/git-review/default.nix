@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages} :
+{ stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "git-review";

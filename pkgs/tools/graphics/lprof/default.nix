@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
   prefixKey = "PREFIX=";
 
-  patches = [ ./lcms-1.17.patch  ./keep-environment.patch ];
+  patches = [ ./lcms-1.17.patch ./keep-environment.patch ];
 
   meta = {
     description = "Little CMS ICC profile construction set";

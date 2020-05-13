@@ -1,15 +1,26 @@
-{ stdenv, lib, fetchFromGitHub, cmake, docbook_xsl, libxslt
-, openssl, libuuid, libwebsockets_3_1, c-ares, libuv
-, systemd ? null, withSystemd ? stdenv.isLinux }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, docbook_xsl
+, libxslt
+, openssl
+, libuuid
+, libwebsockets_3_1
+, c-ares
+, libuv
+, systemd ? null
+, withSystemd ? stdenv.isLinux
+}:
 
 stdenv.mkDerivation rec {
   pname = "mosquitto";
   version = "1.6.8";
 
   src = fetchFromGitHub {
-    owner  = "eclipse";
-    repo   = "mosquitto";
-    rev    = "v${version}";
+    owner = "eclipse";
+    repo = "mosquitto";
+    rev = "v${version}";
     sha256 = "1py13vg3vwwwg6jdnmq46z6rlzb84r4ggqsmsrn4yar5hrw9pa90";
   };
 
@@ -30,7 +41,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    openssl libuuid libwebsockets_3_1 c-ares libuv
+    openssl
+    libuuid
+    libwebsockets_3_1
+    c-ares
+    libuv
   ] ++ lib.optional withSystemd systemd;
 
   nativeBuildInputs = [ cmake docbook_xsl libxslt ];

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoModule }:
-
 let version = "1.2.1";
-in buildGoModule rec {
+in
+buildGoModule rec {
   inherit version;
   pname = "drone-cli";
   revision = "v${version}";

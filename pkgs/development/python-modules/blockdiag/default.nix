@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
-, pillow, webcolors, funcparserlib
+{ stdenv
+, fetchurl
+, buildPythonPackage
+, pep8
+, nose
+, unittest2
+, docutils
+, pillow
+, webcolors
+, funcparserlib
 }:
 
 buildPythonPackage rec {

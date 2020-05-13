@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, cmake, clang, python, v8, coreutils }:
-
 let
   sexpr_wasm_prototype = stdenv.mkDerivation {
     name = "sexpr_wasm_prototype";
@@ -27,7 +26,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation {
   name = "wasm-0.0.1";
 

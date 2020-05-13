@@ -2,7 +2,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.fusionInventory;
 
@@ -14,7 +13,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
 
   ###### interface
 

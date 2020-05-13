@@ -1,7 +1,15 @@
-{ stdenv, fetchgit, fetchurl, cmake, protobuf, libunwind, openssl, glog
-, gflags, gmock, gtest
+{ stdenv
+, fetchgit
+, fetchurl
+, cmake
+, protobuf
+, libunwind
+, openssl
+, glog
+, gflags
+, gmock
+, gtest
 }:
-
 let
   protoTar = fetchurl {
     url = "https://github.com/Seagate/kinetic-protocol/archive/3.0.0.tar.gz";

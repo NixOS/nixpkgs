@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.networking.wireless.iwd;
-in {
+in
+{
   options.networking.wireless.iwd.enable = mkEnableOption "iwd";
 
   config = mkIf cfg.enable {
@@ -16,7 +16,7 @@ in {
     }];
 
     # for iwctl
-    environment.systemPackages =  [ pkgs.iwd ];
+    environment.systemPackages = [ pkgs.iwd ];
 
     services.dbus.packages = [ pkgs.iwd ];
 

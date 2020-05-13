@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.i2p;
   homeDir = "/var/lib/i2p";
-in {
+in
+{
   ###### interface
   options.services.i2p.enable = mkEnableOption "I2P router";
 

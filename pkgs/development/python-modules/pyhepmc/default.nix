@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A simple wrapper on the main classes of the HepMC event simulation representation, making it possible to create, read and manipulate HepMC events from Python code";
-    license     = licenses.gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ veprbl ];
   };
 

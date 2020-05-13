@@ -44,6 +44,6 @@ rec {
   */
   majorMinor = v:
     builtins.concatStringsSep "."
-    (lib.take 2 (splitVersion v));
+      (lib.take 2 (splitVersion v));
 
 }

@@ -2,9 +2,7 @@
 
 with utils;
 with lib;
-
 let
-
   randomEncryptionCoerce = enable: { inherit enable; };
 
   randomEncryptionOpts = { ... }: {
@@ -51,7 +49,7 @@ let
 
   };
 
-  swapCfg = {config, options, ...}: {
+  swapCfg = { config, options, ... }: {
 
     options = {
 
@@ -127,16 +125,16 @@ let
     };
 
     config = rec {
-      device = mkIf options.label.isDefined
+      device = mkIf
+        options.label.isDefined
         "/dev/disk/by-label/${config.label}";
-      deviceName = lib.replaceChars ["\\"] [""] (escapeSystemdPath config.device);
+      deviceName = lib.replaceChars [ "\\" ] [ "" ] (escapeSystemdPath config.device);
       realDevice = if config.randomEncryption.enable then "/dev/mapper/${deviceName}" else config.device;
     };
 
   };
 
 in
-
 {
 
   ###### interface
@@ -144,7 +142,7 @@ in
   options = {
 
     swapDevices = mkOption {
-      default = [];
+      default = [ ];
       example = [
         { device = "/dev/hda7"; }
         { device = "/var/swapfile"; }
@@ -178,11 +176,12 @@ in
 
         createSwapDevice = sw:
           assert sw.device != "";
-          assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-uuid"  sw.device);
+          assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-uuid" sw.device);
           assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-label" sw.device);
           let realDevice' = escapeSystemdPath sw.realDevice;
-          in nameValuePair "mkswap-${sw.deviceName}"
-          { description = "Initialisation of swap device ${sw.device}";
+          in
+          nameValuePair "mkswap-${sw.deviceName}" {
+            description = "Initialisation of swap device ${sw.device}";
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
             # If swap is encrypted, depending on rngd resolves a possible entropy starvation during boot
@@ -217,7 +216,8 @@ in
             restartIfChanged = false;
           };
 
-      in listToAttrs (map createSwapDevice (filter (sw: sw.size != null || sw.randomEncryption.enable) config.swapDevices));
+      in
+      listToAttrs (map createSwapDevice (filter (sw: sw.size != null || sw.randomEncryption.enable) config.swapDevices));
 
   };
 

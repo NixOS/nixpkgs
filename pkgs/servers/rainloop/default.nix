@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, unzip, dataPath ? "/etc/rainloop" }: let
+{ stdenv, fetchurl, unzip, dataPath ? "/etc/rainloop" }:
+let
   common = { edition, sha256 }:
     stdenv.mkDerivation (rec {
       pname = "rainloop${stdenv.lib.optionalString (edition != "") "-${edition}"}";
@@ -32,13 +33,14 @@
         maintainers = with maintainers; [ das_j ];
       };
     });
-  in {
-    rainloop-community = common {
-      edition = "community";
-      sha256 = "1skwq6bn98142xf8r77b818fy00nb4x0s1ii3mw5849ih94spx40";
-    };
-    rainloop-standard = common {
-      edition = "";
-      sha256 = "e3ec8209cb3b9f092938a89094e645ef27659763432bedbe7fad4fa650554222";
-    };
-  }
+in
+{
+  rainloop-community = common {
+    edition = "community";
+    sha256 = "1skwq6bn98142xf8r77b818fy00nb4x0s1ii3mw5849ih94spx40";
+  };
+  rainloop-standard = common {
+    edition = "";
+    sha256 = "e3ec8209cb3b9f092938a89094e645ef27659763432bedbe7fad4fa650554222";
+  };
+}

@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.virtualbox;
 
-in {
+in
+{
 
   options = {
     virtualbox = {
@@ -57,7 +57,7 @@ in {
 
           Run <literal>VBoxManage modifyvm --help</literal> to see more options.
         '';
-     };
+      };
     };
   };
 
@@ -76,7 +76,8 @@ in {
         usb = "on";
         usbehci = "on";
         mouse = "usbtablet";
-      })
+      }
+      )
       (mkIf (pkgs.stdenv.hostPlatform.system == "i686-linux") { pae = "on"; })
     ];
 

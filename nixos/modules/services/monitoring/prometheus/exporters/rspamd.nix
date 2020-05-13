@@ -1,49 +1,56 @@
 { config, lib, pkgs, options }:
 
 with lib;
-
 let
   cfg = config.services.prometheus.exporters.rspamd;
 
   prettyJSON = conf:
-    pkgs.runCommand "rspamd-exporter-config.yml" { } ''
+    pkgs.runCommand "rspamd-exporter-config.yml"
+      { } ''
       echo '${builtins.toJSON conf}' | ${pkgs.buildPackages.jq}/bin/jq '.' > $out
     '';
 
-  generateConfig = extraLabels: (map (path: {
-    name = "rspamd_${replaceStrings [ "." " " ] [ "_" "_" ] path}";
-    path = "$.${path}";
-    labels = extraLabels;
-  }) [
-    "actions.'add header'"
-    "actions.'no action'"
-    "actions.'rewrite subject'"
-    "actions.'soft reject'"
-    "actions.greylist"
-    "actions.reject"
-    "bytes_allocated"
-    "chunks_allocated"
-    "chunks_freed"
-    "chunks_oversized"
-    "connections"
-    "control_connections"
-    "ham_count"
-    "learned"
-    "pools_allocated"
-    "pools_freed"
-    "read_only"
-    "scanned"
-    "shared_chunks_allocated"
-    "spam_count"
-    "total_learns"
-  ]) ++ [{
+  generateConfig = extraLabels: (
+    map
+      (path: {
+        name = "rspamd_${replaceStrings [ "." " " ] [ "_" "_" ] path}";
+        path = "$.${path}";
+        labels = extraLabels;
+      })
+      [
+        "actions.'add header'"
+        "actions.'no action'"
+        "actions.'rewrite subject'"
+        "actions.'soft reject'"
+        "actions.greylist"
+        "actions.reject"
+        "bytes_allocated"
+        "chunks_allocated"
+        "chunks_freed"
+        "chunks_oversized"
+        "connections"
+        "control_connections"
+        "ham_count"
+        "learned"
+        "pools_allocated"
+        "pools_freed"
+        "read_only"
+        "scanned"
+        "shared_chunks_allocated"
+        "spam_count"
+        "total_learns"
+      ]
+  ) ++ [{
     name = "rspamd_statfiles";
     type = "object";
     path = "$.statfiles[*]";
-    labels = recursiveUpdate {
-      symbol = "$.symbol";
-      type = "$.type";
-    } extraLabels;
+    labels =
+      recursiveUpdate
+        {
+          symbol = "$.symbol";
+          type = "$.type";
+        }
+        extraLabels;
     values = {
       revision = "$.revision";
       size = "$.size";
@@ -57,7 +64,7 @@ in
 {
   port = 7980;
   extraOpts = {
-    listenAddress = {}; # not used
+    listenAddress = { }; # not used
 
     url = mkOption {
       type = types.str;

@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, coq }:
-
 let
   params = {
     "8.6" = {
@@ -34,7 +33,6 @@ let
   };
   param = params.${coq.coq-version};
 in
-
 stdenv.mkDerivation rec {
 
   name = "coq${coq.coq-version}-equations-${version}";

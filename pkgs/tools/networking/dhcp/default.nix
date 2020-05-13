@@ -1,6 +1,16 @@
-{ stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper
-, coreutils, gnused, openldap ? null
-, buildPackages, lib
+{ stdenv
+, fetchurl
+, perl
+, file
+, nettools
+, iputils
+, iproute
+, makeWrapper
+, coreutils
+, gnused
+, openldap ? null
+, buildPackages
+, lib
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +47,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ lib.optional stdenv.isLinux "--with-randomdev=/dev/random"
-    ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+  ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
   NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=pointer-compare"
@@ -65,11 +75,11 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
-      sed -i "includes/dhcpd.h" \
-	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
+          substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
+          sed -i "includes/dhcpd.h" \
+      -"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
 
-      export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
+          export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
     '';
 
   meta = with stdenv.lib; {
@@ -80,7 +90,7 @@ stdenv.mkDerivation rec {
       provides a freely redistributable reference implementation of
       all aspects of DHCP, through a suite of DHCP tools: server,
       client, and relay agent.
-   '';
+    '';
 
     homepage = "https://www.isc.org/dhcp/";
     license = licenses.isc;

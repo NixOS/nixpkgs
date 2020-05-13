@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   inInitrd = any (fs: fs == "jfs") config.boot.initrd.supportedFilesystems;
 in

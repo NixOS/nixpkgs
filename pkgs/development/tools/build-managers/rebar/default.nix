@@ -1,6 +1,4 @@
 { stdenv, fetchurl, erlang }:
-
-
 let
   version = "2.6.4";
 in
@@ -33,7 +31,7 @@ stdenv.mkDerivation {
       work. rebar also provides dependency management, enabling
       application writers to easily re-use common libraries from a
       variety of locations (git, hg, etc).
-      '';
+    '';
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.the-kenny ];

@@ -1,7 +1,5 @@
 { stdenv, fetchurl, cmake }:
-
 let version = "2.1.0.1"; in
-
 stdenv.mkDerivation {
   pname = "p8-platform";
   inherit version;

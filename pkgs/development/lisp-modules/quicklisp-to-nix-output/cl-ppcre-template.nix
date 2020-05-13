@@ -18,7 +18,7 @@ REGULAR-EXPRESSION-TEMPLATE.'';
 
   packageName = "cl-ppcre-template";
 
-  asdFilesToKeep = ["cl-ppcre-template.asd"];
+  asdFilesToKeep = [ "cl-ppcre-template.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-ppcre-template DESCRIPTION

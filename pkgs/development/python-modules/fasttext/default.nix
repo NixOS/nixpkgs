@@ -1,4 +1,4 @@
-{stdenv, buildPythonPackage, fetchFromGitHub, numpy, pybind11}:
+{ stdenv, buildPythonPackage, fetchFromGitHub, numpy, pybind11 }:
 
 buildPythonPackage rec {
   pname = "fasttext";

@@ -1,6 +1,18 @@
-{ stdenv, buildDunePackage, fetchFromGitHub
-, ounit, async, base64, camlzip, cfstream
-, core, ppx_jane, ppx_sexp_conv, rresult, uri, xmlm }:
+{ stdenv
+, buildDunePackage
+, fetchFromGitHub
+, ounit
+, async
+, base64
+, camlzip
+, cfstream
+, core
+, ppx_jane
+, ppx_sexp_conv
+, rresult
+, uri
+, xmlm
+}:
 
 buildDunePackage rec {
   pname = "biocaml";
@@ -12,8 +24,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     inherit owner;
-    repo   = pname;
-    rev    = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "1f19nc8ld0iv45jjnsvaah3ddj88s2n9wj8mrz726kzg85cfr8xj";
   };
 

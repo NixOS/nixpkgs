@@ -36,4 +36,3 @@ with python2.pkgs; buildPythonApplication rec {
     maintainers = with maintainers; [ fgaz ];
   };
 }
-

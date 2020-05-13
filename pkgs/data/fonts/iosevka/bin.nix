@@ -1,8 +1,8 @@
 { stdenv, fetchzip }:
-
 let
   version = "2.3.3";
-in fetchzip {
+in
+fetchzip {
   name = "iosevka-bin-${version}";
 
   url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-iosevka-${version}.zip";

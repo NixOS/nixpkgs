@@ -8,9 +8,11 @@ with lib;
 
   # Added 2019-08-09
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "evince" "enable" ]
-      [ "programs" "evince" "enable" ])
+    (
+      mkRenamedOptionModule
+        [ "services" "gnome3" "evince" "enable" ]
+        [ "programs" "evince" "enable" ]
+    )
   ];
 
   ###### interface
@@ -19,8 +21,9 @@ with lib;
 
     programs.evince = {
 
-      enable = mkEnableOption
-        "Evince, the GNOME document viewer";
+      enable =
+        mkEnableOption
+          "Evince, the GNOME document viewer";
 
     };
 

@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "2.3";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "comic-neue-${version}";
 
   url = "http://comicneue.com/${name}.zip";

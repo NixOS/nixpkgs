@@ -1,14 +1,15 @@
-{ stdenv, callPackage, CoreFoundation
-, tiles ? true, Cocoa
+{ stdenv
+, callPackage
+, CoreFoundation
+, tiles ? true
+, Cocoa
 , debug ? false
 }:
-
 let
   inherit (stdenv.lib) substring;
   inherit (callPackage ./common.nix { inherit tiles CoreFoundation Cocoa debug; }) common utils;
   inherit (utils) fetchFromCleverRaven;
 in
-
 stdenv.mkDerivation (common // rec {
   version = "2019-11-22";
   name = "cataclysm-dda-git-${version}";

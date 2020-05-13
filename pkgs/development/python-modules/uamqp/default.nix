@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
 , certifi
 , CFNetwork
 , cmake
@@ -25,7 +28,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!isPy3k) [
     enum34
   ] ++ lib.optionals stdenv.isDarwin [
-    CFNetwork Security
+    CFNetwork
+    Security
   ];
 
   dontUseCmakeConfigure = true;

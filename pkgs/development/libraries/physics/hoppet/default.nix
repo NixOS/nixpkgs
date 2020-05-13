@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Higher Order Perturbative Parton Evolution Toolkit";
-    license     = licenses.gpl2;
-    homepage    = https://hoppet.hepforge.org;
-    platforms   = platforms.unix;
+    license = licenses.gpl2;
+    homepage = https://hoppet.hepforge.org;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

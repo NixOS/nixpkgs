@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-openssl"
   ] ++ stdenv.lib.optional (pam != null) "--with-pam"
-    ++ stdenv.lib.optional (libmemcached != null) "--with-memcached=${libmemcached}";
+  ++ stdenv.lib.optional (libmemcached != null) "--with-memcached=${libmemcached}";
 
   installFlags = [
     "sysconfdir=\${out}/etc"

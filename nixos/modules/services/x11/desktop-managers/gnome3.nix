@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.xserver.desktopManager.gnome3;
   serviceCfg = config.services.gnome3;
 
@@ -17,44 +15,45 @@ let
     '';
   };
 
-  nixos-gsettings-desktop-schemas = let
-    defaultPackages = with pkgs; [ gsettings-desktop-schemas gnome3.gnome-shell ];
-  in
-  pkgs.runCommand "nixos-gsettings-desktop-schemas" { preferLocalBuild = true; }
-    ''
-     mkdir -p $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+  nixos-gsettings-desktop-schemas =
+    let
+      defaultPackages = with pkgs; [ gsettings-desktop-schemas gnome3.gnome-shell ];
+    in
+    pkgs.runCommand "nixos-gsettings-desktop-schemas"
+      { preferLocalBuild = true; }
+      ''
+        mkdir -p $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
-     ${concatMapStrings
-        (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n")
-        (defaultPackages ++ cfg.extraGSettingsOverridePackages)}
+        ${concatMapStrings
+          (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n")
+          (defaultPackages ++ cfg.extraGSettingsOverridePackages)}
 
-     cp -f ${pkgs.gnome3.gnome-shell}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+        cp -f ${pkgs.gnome3.gnome-shell}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
-     ${optionalString flashbackEnabled ''
-       cp -f ${pkgs.gnome3.gnome-flashback}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
-     ''}
+        ${optionalString flashbackEnabled ''
+          cp -f ${pkgs.gnome3.gnome-flashback}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+        ''}
 
-     chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
-     cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
-       [org.gnome.desktop.background]
-       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png'
+        chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
+        cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
+          [org.gnome.desktop.background]
+          picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png'
 
-       [org.gnome.desktop.screensaver]
-       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png'
+          [org.gnome.desktop.screensaver]
+          picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png'
 
-       [org.gnome.shell]
-       favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
+          [org.gnome.shell]
+          favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
 
-       ${cfg.extraGSettingsOverrides}
-     EOF
+          ${cfg.extraGSettingsOverrides}
+        EOF
 
-     ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/
-    '';
+        ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/
+      '';
 
   flashbackEnabled = cfg.flashback.enableMetacity || length cfg.flashback.customSessions > 0;
 
 in
-
 {
 
   options = {
@@ -73,7 +72,7 @@ in
       };
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.gnome3.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
@@ -91,7 +90,7 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
@@ -123,14 +122,14 @@ in
               };
             };
           });
-          default = [];
+          default = [ ];
           description = "Other GNOME Flashback sessions to enable.";
         };
       };
     };
 
     environment.gnome3.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExample "[ pkgs.gnome3.totem ]";
       type = types.listOf types.package;
       description = "Which packages gnome should exclude from the default environment";
@@ -166,19 +165,22 @@ in
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-       # If gnome3 is installed, build vim for gtk3 too.
+      # If gnome3 is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
-    })
+    }
+    )
 
     (mkIf flashbackEnabled {
-      services.xserver.displayManager.sessionPackages =  map
-        (wm: pkgs.gnome3.gnome-flashback.mkSessionForWm {
-          inherit (wm) wmName wmLabel wmCommand;
-        }) (optional cfg.flashback.enableMetacity {
-              wmName = "metacity";
-              wmLabel = "Metacity";
-              wmCommand = "${pkgs.gnome3.metacity}/bin/metacity";
-            } ++ cfg.flashback.customSessions);
+      services.xserver.displayManager.sessionPackages =
+        map
+          (wm: pkgs.gnome3.gnome-flashback.mkSessionForWm {
+            inherit (wm) wmName wmLabel wmCommand;
+          })
+          (optional cfg.flashback.enableMetacity {
+            wmName = "metacity";
+            wmLabel = "Metacity";
+            wmCommand = "${pkgs.gnome3.metacity}/bin/metacity";
+          } ++ cfg.flashback.customSessions);
 
       security.pam.services.gnome-screensaver = {
         enableGnomeKeyring = true;
@@ -186,15 +188,19 @@ in
 
       systemd.packages = with pkgs.gnome3; [
         gnome-flashback
-      ] ++ (map
-        (wm: gnome-flashback.mkSystemdTargetForWm {
-          inherit (wm) wmName;
-        }) cfg.flashback.customSessions);
+      ] ++ (
+        map
+          (wm: gnome-flashback.mkSystemdTargetForWm {
+            inherit (wm) wmName;
+          })
+          cfg.flashback.customSessions
+      );
 
       services.dbus.packages = [
         pkgs.gnome3.gnome-screensaver
       ];
-    })
+    }
+    )
 
     (mkIf serviceCfg.core-os-services.enable {
       hardware.bluetooth.enable = mkDefault true;
@@ -234,7 +240,8 @@ in
       environment.pathsToLink = [
         "/share" # TODO: https://github.com/NixOS/nixpkgs/issues/47173
       ];
-    })
+    }
+    )
 
     (mkIf serviceCfg.core-shell.enable {
       services.colord.enable = mkDefault true;
@@ -291,18 +298,21 @@ in
         capabilities = "cap_sys_nice=ep";
       };
 
-      systemd.user.services.gnome-shell-wayland = let
-        gnomeShellRT = with pkgs.gnome3; pkgs.runCommand "gnome-shell-rt" {} ''
-          mkdir -p $out/bin/
-          cp ${gnome-shell}/bin/gnome-shell $out/bin
-          sed -i "s@${gnome-shell}/bin/@${config.security.wrapperDir}/@" $out/bin/gnome-shell
-        '';
-      in {
-        # Note we need to clear ExecStart before overriding it
-        serviceConfig.ExecStart = ["" "${gnomeShellRT}/bin/gnome-shell"];
-        # Do not use the default environment, it provides a broken PATH
-        environment = mkForce {};
-      };
+      systemd.user.services.gnome-shell-wayland =
+        let
+          gnomeShellRT = with pkgs.gnome3; pkgs.runCommand "gnome-shell-rt"
+            { } ''
+            mkdir -p $out/bin/
+            cp ${gnome-shell}/bin/gnome-shell $out/bin
+            sed -i "s@${gnome-shell}/bin/@${config.security.wrapperDir}/@" $out/bin/gnome-shell
+          '';
+        in
+        {
+          # Note we need to clear ExecStart before overriding it
+          serviceConfig.ExecStart = [ "" "${gnomeShellRT}/bin/gnome-shell" ];
+          # Do not use the default environment, it provides a broken PATH
+          environment = mkForce { };
+        };
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
@@ -325,37 +335,40 @@ in
         pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
         vino
       ];
-    })
+    }
+    )
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
-      environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
-        baobab
-        cheese
-        eog
-        epiphany
-        gedit
-        gnome-calculator
-        gnome-calendar
-        gnome-characters
-        gnome-clocks
-        gnome-contacts
-        gnome-font-viewer
-        gnome-logs
-        gnome-maps
-        gnome-music
-        gnome-photos
-        gnome-screenshot
-        gnome-software
-        gnome-system-monitor
-        gnome-weather
-        nautilus
-        simple-scan
-        totem
-        yelp
-        # Unsure if sensible for NixOS
-        /* gnome-boxes */
-      ] config.environment.gnome3.excludePackages);
+      environment.systemPackages = (with pkgs.gnome3;
+        removePackagesByName [
+          baobab
+          cheese
+          eog
+          epiphany
+          gedit
+          gnome-calculator
+          gnome-calendar
+          gnome-characters
+          gnome-clocks
+          gnome-contacts
+          gnome-font-viewer
+          gnome-logs
+          gnome-maps
+          gnome-music
+          gnome-photos
+          gnome-screenshot
+          gnome-software
+          gnome-system-monitor
+          gnome-weather
+          nautilus
+          simple-scan
+          totem
+          yelp
+          # Unsure if sensible for NixOS
+          /* gnome-boxes */
+        ]
+          config.environment.gnome3.excludePackages);
 
       # Enable default programs
       programs.evince.enable = mkDefault true;
@@ -376,16 +389,35 @@ in
       environment.pathsToLink = [
         "/share/nautilus-python/extensions"
       ];
-    })
+    }
+    )
 
     (mkIf serviceCfg.games.enable {
-      environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
-        aisleriot atomix five-or-more four-in-a-row gnome-chess gnome-klotski
-        gnome-mahjongg gnome-mines gnome-nibbles gnome-robots gnome-sudoku
-        gnome-taquin gnome-tetravex hitori iagno lightsoff quadrapassel
-        swell-foop tali
-      ] config.environment.gnome3.excludePackages);
-    })
+      environment.systemPackages = (with pkgs.gnome3;
+        removePackagesByName [
+          aisleriot
+          atomix
+          five-or-more
+          four-in-a-row
+          gnome-chess
+          gnome-klotski
+          gnome-mahjongg
+          gnome-mines
+          gnome-nibbles
+          gnome-robots
+          gnome-sudoku
+          gnome-taquin
+          gnome-tetravex
+          hitori
+          iagno
+          lightsoff
+          quadrapassel
+          swell-foop
+          tali
+        ]
+          config.environment.gnome3.excludePackages);
+    }
+    )
   ];
 
 }

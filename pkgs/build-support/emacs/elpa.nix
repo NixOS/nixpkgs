@@ -10,7 +10,8 @@ with lib;
 , ...
 }@args:
 
-import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
+import ./generic.nix
+{ inherit lib stdenv emacs texinfo; } ({
 
   phases = "installPhase fixupPhase distPhase";
 
@@ -25,6 +26,8 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
   '';
 }
 
-// removeAttrs args [ "files" "fileSpecs"
-                      "meta"
-                    ])
+// removeAttrs args [
+  "files"
+  "fileSpecs"
+  "meta"
+])

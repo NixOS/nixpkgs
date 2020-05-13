@@ -1,6 +1,20 @@
-{ buildPythonApplication, lib, fetchPypi, isPy3k
-, cli-helpers, click, configobj, humanize, prompt_toolkit, psycopg2
-, pygments, sqlparse, pgspecial, setproctitle, keyring, pytest, mock
+{ buildPythonApplication
+, lib
+, fetchPypi
+, isPy3k
+, cli-helpers
+, click
+, configobj
+, humanize
+, prompt_toolkit
+, psycopg2
+, pygments
+, sqlparse
+, pgspecial
+, setproctitle
+, keyring
+, pytest
+, mock
 }:
 
 buildPythonApplication rec {
@@ -15,8 +29,17 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    cli-helpers click configobj humanize prompt_toolkit psycopg2
-    pygments sqlparse pgspecial setproctitle keyring
+    cli-helpers
+    click
+    configobj
+    humanize
+    prompt_toolkit
+    psycopg2
+    pygments
+    sqlparse
+    pgspecial
+    setproctitle
+    keyring
   ];
 
   postPatch = ''

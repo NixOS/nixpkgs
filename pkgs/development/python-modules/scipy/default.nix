@@ -1,13 +1,13 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy, pybind11}:
-
+{ lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy, pybind11 }:
 let
-  pybind = pybind11.overridePythonAttrs(oldAttrs: {
+  pybind = pybind11.overridePythonAttrs (oldAttrs: {
     cmakeFlags = oldAttrs.cmakeFlags ++ [
       "-DPYBIND11_TEST=off"
     ];
     doCheck = false; # Circular test dependency
   });
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "scipy";
   version = "1.4.1";
 

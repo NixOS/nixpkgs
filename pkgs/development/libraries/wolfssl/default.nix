@@ -18,17 +18,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   postInstall = ''
-     # fix recursive cycle:
-     # wolfssl-config points to dev, dev propagates bin
-     moveToOutput bin/wolfssl-config "$dev"
-     # moveToOutput also removes "$out" so recreate it
-     mkdir -p "$out"
+    # fix recursive cycle:
+    # wolfssl-config points to dev, dev propagates bin
+    moveToOutput bin/wolfssl-config "$dev"
+    # moveToOutput also removes "$out" so recreate it
+    mkdir -p "$out"
   '';
 
   meta = with stdenv.lib; {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
-    homepage    = "https://www.wolfssl.com/";
-    platforms   = platforms.all;
+    homepage = "https://www.wolfssl.com/";
+    platforms = platforms.all;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ mcmtroffaes ];
   };

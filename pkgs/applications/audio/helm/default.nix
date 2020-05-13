@@ -1,7 +1,17 @@
-{ stdenv, fetchFromGitHub , xorg, freetype, alsaLib, curl, libjack2
-, lv2, pkgconfig, libGLU, libGL }:
+{ stdenv
+, fetchFromGitHub
+, xorg
+, freetype
+, alsaLib
+, curl
+, libjack2
+, lv2
+, pkgconfig
+, libGLU
+, libGL
+}:
 
-  stdenv.mkDerivation {
+stdenv.mkDerivation {
   version = "0.9.0";
   pname = "helm";
 
@@ -13,9 +23,21 @@
   };
 
   buildInputs = [
-    xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
-    xorg.libXinerama xorg.libXrender xorg.libXrandr
-    freetype alsaLib curl libjack2 pkgconfig libGLU libGL lv2
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXinerama
+    xorg.libXrender
+    xorg.libXrandr
+    freetype
+    alsaLib
+    curl
+    libjack2
+    pkgconfig
+    libGLU
+    libGL
+    lv2
   ];
 
   CXXFLAGS = "-DHAVE_LROUND";
@@ -30,7 +52,7 @@
   '';
 
   installPhase = ''
-   make DESTDIR="$out" install
+    make DESTDIR="$out" install
   '';
 
   meta = with stdenv.lib; {

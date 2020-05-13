@@ -1,7 +1,6 @@
 { stdenv }:
 
 # This tests that libraries listed in LD_LIBRARY_PATH take precedence over those listed in RPATH.
-
 let
   # A simple test library: libgreeting.so which exports a single function getGreeting() returning the good old hello greeting.
   libgreeting = stdenv.mkDerivation {
@@ -70,7 +69,8 @@ let
     '';
 
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "test-LD_LIBRARY_PATH";
   nativeBuildInputs = [ testProgram ];
 

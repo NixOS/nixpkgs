@@ -1,5 +1,4 @@
 { stdenv, fetchurl, glib, pkgconfig, libfm-extra }:
-
 let name = "menu-cache-1.1.0";
 in
 stdenv.mkDerivation {

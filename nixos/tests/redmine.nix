@@ -1,16 +1,16 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
-
 let
   mysqlTest = package: makeTest {
     machine =
       { config, pkgs, ... }:
-      { services.redmine.enable = true;
+      {
+        services.redmine.enable = true;
         services.redmine.package = package;
         services.redmine.database.type = "mysql2";
         services.redmine.plugins = {
@@ -38,7 +38,8 @@ let
   pgsqlTest = package: makeTest {
     machine =
       { config, pkgs, ... }:
-      { services.redmine.enable = true;
+      {
+        services.redmine.enable = true;
         services.redmine.package = package;
         services.redmine.database.type = "postgresql";
         services.redmine.plugins = {

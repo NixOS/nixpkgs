@@ -14,7 +14,11 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   propagatedBuildInputs = with python3Packages; [
-    boto3 termcolor dateutil docutils setuptools
+    boto3
+    termcolor
+    dateutil
+    docutils
+    setuptools
   ];
 
   meta = with stdenv.lib; {

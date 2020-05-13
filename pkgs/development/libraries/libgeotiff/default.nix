@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
     homepage = https://github.com/OSGeo/libgeotiff;
     license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.marcweber];
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

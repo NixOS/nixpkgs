@@ -1,5 +1,4 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, dune, benchmark }:
-
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.03"
   then rec {
@@ -19,7 +18,6 @@ let param =
     extra = { createFindlibDestdir = true; };
   };
 in
-
 stdenv.mkDerivation ({
   name = "ocaml${ocaml.version}-rope-${param.version}";
 
@@ -31,7 +29,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = http://rope.forge.ocamlcore.org/;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     description = ''Ropes ("heavyweight strings") in OCaml'';
     license = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ volth ];

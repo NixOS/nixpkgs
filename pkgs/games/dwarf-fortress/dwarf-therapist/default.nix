@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, qtbase
-, qtdeclarative, cmake, texlive, ninja }:
+{ stdenv
+, fetchFromGitHub
+, qtbase
+, qtdeclarative
+, cmake
+, texlive
+, ninja
+}:
 
 stdenv.mkDerivation rec {
   pname = "dwarf-therapist";
@@ -15,10 +21,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texlive cmake ninja ];
   buildInputs = [ qtbase qtdeclarative ];
 
-  installPhase = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    cp -r DwarfTherapist.app $out/Applications
-  '' else null;
+  installPhase =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      cp -r DwarfTherapist.app $out/Applications
+    '' else null;
 
   meta = with stdenv.lib; {
     description = "Tool to manage dwarves in a running game of Dwarf Fortress";

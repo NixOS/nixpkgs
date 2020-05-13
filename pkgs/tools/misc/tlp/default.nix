@@ -63,7 +63,7 @@
   ];
 
   installTargets = [ "install-tlp" "install-man" ]
-  ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
+    ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
 
   # XXX: This is disabled because it's basically just noise since upstream
   # itself does not seem to care about the zillion shellcheck errors.
@@ -71,26 +71,27 @@
   checkInputs = [ checkbashisms shellcheck ];
   checkTarget = [ "checkall" ];
 
-  postInstall = let
-    paths = lib.makeBinPath (
-      [
-        coreutils
-        ethtool
-        gawk
-        gnugrep
-        gnused
-        hdparm
-        iw
-        kmod
-        pciutils
-        perl
-        smartmontools
-        systemd
-        utillinux
-        x86_energy_perf_policy
-      ] ++ lib.optional enableRDW networkmanager
-    );
-  in
+  postInstall =
+    let
+      paths = lib.makeBinPath (
+        [
+          coreutils
+          ethtool
+          gawk
+          gnugrep
+          gnused
+          hdparm
+          iw
+          kmod
+          pciutils
+          perl
+          smartmontools
+          systemd
+          utillinux
+          x86_energy_perf_policy
+        ] ++ lib.optional enableRDW networkmanager
+      );
+    in
     ''
       fixup_perl=(
         $out/share/tlp/tlp-pcilist

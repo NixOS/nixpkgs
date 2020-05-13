@@ -1,7 +1,6 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.mosquitto;
 
@@ -27,9 +26,13 @@ let
     ${cfg.extraConf}
   '';
 
-  userAcl = (concatStringsSep "\n\n" (mapAttrsToList (n: c:
-    "user ${n}\n" + (concatStringsSep "\n" c.acl)) cfg.users
-  ));
+  userAcl = (concatStringsSep "\n\n" (
+    mapAttrsToList
+      (n: c:
+        "user ${n}\n" + (concatStringsSep "\n" c.acl))
+      cfg.users
+  )
+  );
 
   aclFile = pkgs.writeText "mosquitto.acl" ''
     ${cfg.aclExtraConf}
@@ -37,7 +40,6 @@ let
   '';
 
 in
-
 {
 
   ###### Interface
@@ -209,12 +211,16 @@ in
         rm -f ${cfg.dataDir}/passwd
         touch ${cfg.dataDir}/passwd
       '' + concatStringsSep "\n" (
-        mapAttrsToList (n: c:
-          if c.hashedPassword != null then
-            "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
-          else optionalString (c.password != null)
-            "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} '${c.password}'"
-        ) cfg.users);
+        mapAttrsToList
+          (n: c:
+            if c.hashedPassword != null then
+              "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
+            else optionalString
+              (c.password != null)
+              "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} '${c.password}'"
+          )
+          cfg.users
+      );
     };
 
     users.users.mosquitto = {

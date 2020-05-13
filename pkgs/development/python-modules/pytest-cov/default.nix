@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, coverage }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, coverage
+}:
 
 buildPythonPackage rec {
   pname = "pytest-cov";

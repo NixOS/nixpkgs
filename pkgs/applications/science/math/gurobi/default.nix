@@ -1,8 +1,8 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, python }:
-
 let
   majorVersion = "8.1";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gurobi";
   version = "${majorVersion}.0";
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1yjqbzqnq4jjkjm616d36bgd3rmqr0a1ii17n0prpdjzmdlq63dz";
   };
 
-  sourceRoot = "gurobi${builtins.replaceStrings ["."] [""] version}/linux64";
+  sourceRoot = "gurobi${builtins.replaceStrings [ "." ] [ "" ] version}/linux64";
 
   nativeBuildInputs = [ autoPatchelfHook ];
   buildInputs = [ (python.withPackages (ps: [ ps.gurobipy ])) ];
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/lib/gurobi-javadoc.jar $out/share/java/
   '';
 
-  passthru.libSuffix = lib.replaceStrings ["."] [""] majorVersion;
+  passthru.libSuffix = lib.replaceStrings [ "." ] [ "" ] majorVersion;
 
   meta = with stdenv.lib; {
     description = "Optimization solver for mathematical programming";

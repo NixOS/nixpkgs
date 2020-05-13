@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, pidgin, xosd
-, autoreconfHook } :
+{ stdenv
+, fetchFromGitHub
+, pidgin
+, xosd
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   name = "pidgin-osd-0.2.0";

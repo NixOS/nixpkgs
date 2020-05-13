@@ -34,9 +34,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Utilities for archiving photos for saving to long term storage or serving over the web";
-    homepage    = "https://github.com/danielgtaylor/jpeg-archive";
+    homepage = "https://github.com/danielgtaylor/jpeg-archive";
     # license = ...; # mixed?
     maintainers = [ maintainers.srghma ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

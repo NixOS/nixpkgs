@@ -1,5 +1,14 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig
-, boost, openssl, log4shib, xercesc, xml-security-c, xml-tooling-c, zlib
+{ stdenv
+, fetchgit
+, autoreconfHook
+, pkgconfig
+, boost
+, openssl
+, log4shib
+, xercesc
+, xml-security-c
+, xml-tooling-c
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +22,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    boost openssl log4shib xercesc xml-security-c xml-tooling-c zlib
+    boost
+    openssl
+    log4shib
+    xercesc
+    xml-security-c
+    xml-tooling-c
+    zlib
   ];
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
@@ -22,10 +37,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage    = "https://shibboleth.net/products/opensaml-cpp.html";
+    homepage = "https://shibboleth.net/products/opensaml-cpp.html";
     description = "A low-level library written in C++ that provides support for producing and consuming SAML messages";
-    platforms   = platforms.unix;
-    license     = licenses.asl20;
+    platforms = platforms.unix;
+    license = licenses.asl20;
     maintainers = [ maintainers.jammerful ];
   };
 }

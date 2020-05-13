@@ -14,7 +14,7 @@
 
   packageName = "db3";
 
-  asdFilesToKeep = ["db3.asd"];
+  asdFilesToKeep = [ "db3.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM db3 DESCRIPTION DB3 file reader SHA256

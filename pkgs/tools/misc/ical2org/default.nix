@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, buildGoPackage}:
+{ stdenv, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
   pname = "ical2org";
-  version="1.1.5";
+  version = "1.1.5";
 
   goPackagePath = "github.com/rjhorniii/ical2org";
 
@@ -23,5 +23,5 @@ buildGoPackage rec {
     maintainers = with maintainers; [ swflint ];
     platforms = platforms.unix;
   };
-  
+
 }

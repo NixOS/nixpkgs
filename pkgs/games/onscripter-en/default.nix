@@ -1,6 +1,16 @@
-{ stdenv, fetchurl
-, libpng, libjpeg, libogg, libvorbis, freetype, smpeg
-, SDL, SDL_image, SDL_mixer, SDL_ttf }:
+{ stdenv
+, fetchurl
+, libpng
+, libjpeg
+, libogg
+, libvorbis
+, freetype
+, smpeg
+, SDL
+, SDL_image
+, SDL_mixer
+, SDL_ttf
+}:
 
 
 stdenv.mkDerivation {
@@ -12,9 +22,18 @@ stdenv.mkDerivation {
     sha256 = "1kzm6d894c0ihgkwhd03x3kaqqz0sb6kf0r86xrrz12y309zfam6";
   };
 
-  buildInputs = [ libpng libjpeg libogg libvorbis freetype smpeg
-                  SDL SDL_image SDL_mixer SDL_ttf
-                ];
+  buildInputs = [
+    libpng
+    libjpeg
+    libogg
+    libvorbis
+    freetype
+    smpeg
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_ttf
+  ];
 
   configureFlags = [ "--no-werror" ];
 

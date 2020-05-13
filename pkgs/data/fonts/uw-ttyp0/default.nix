@@ -1,7 +1,11 @@
-{ stdenv, fetchurl, perl
-, bdftopcf, bdf2psf, mkfontdir
+{ stdenv
+, fetchurl
+, perl
+, bdftopcf
+, bdf2psf
+, mkfontdir
 , fonttosfnt
-, targetsDat  ? null
+, targetsDat ? null
 , variantsDat ? null
 }:
 
@@ -21,7 +25,8 @@ stdenv.mkDerivation rec {
 
   # configure sizes, encodings and variants
   preConfigure =
-    (if targetsDat == null
+    (
+      if targetsDat == null
       then ''
         cat << EOF > TARGETS.dat
         SIZES = 11 12 13 14 15 16 17 18 22 \
@@ -29,8 +34,10 @@ stdenv.mkDerivation rec {
         ENCODINGS = uni
         EOF
       ''
-      else ''cp "${targetsDat}" TARGETS.dat'') +
-    (if variantsDat == null
+      else ''cp "${targetsDat}" TARGETS.dat''
+    ) +
+    (
+      if variantsDat == null
       then ''
         cat << EOF > VARIANTS.dat
         COPYTO AccStress PApostropheAscii
@@ -38,7 +45,8 @@ stdenv.mkDerivation rec {
         COPYTO Digit0Slashed Digit0
         EOF
       ''
-      else ''cp "${variantsDat}" VARIANTS.dat'');
+      else ''cp "${variantsDat}" VARIANTS.dat''
+    );
 
   postBuild = ''
     # convert bdf fonts to psf

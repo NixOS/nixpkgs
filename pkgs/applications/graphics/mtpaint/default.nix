@@ -1,10 +1,19 @@
-{ stdenv, fetchFromGitHub
+{ stdenv
+, fetchFromGitHub
 , pkgconfig
-, freetype, giflib, gtk2, lcms2, libjpeg, libpng, libtiff, openjpeg, gifsicle
+, freetype
+, giflib
+, gtk2
+, lcms2
+, libjpeg
+, libpng
+, libtiff
+, openjpeg
+, gifsicle
 }:
 
 stdenv.mkDerivation rec {
-  p_name  = "mtPaint";
+  p_name = "mtPaint";
   ver_maj = "3.49";
   ver_min = "12";
   name = "${p_name}-${ver_maj}.${ver_min}";
@@ -18,7 +27,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    freetype giflib gtk2 lcms2 libjpeg libpng libtiff openjpeg gifsicle
+    freetype
+    giflib
+    gtk2
+    lcms2
+    libjpeg
+    libpng
+    libtiff
+    openjpeg
+    gifsicle
   ];
 
   meta = {
@@ -38,4 +55,3 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.vklquevs ];
   };
 }
-

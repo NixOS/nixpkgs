@@ -11,13 +11,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # required
-    numpy six
+    numpy
+    six
     # optional
-    scipy pillow
+    scipy
+    pillow
   ];
 
   checkInputs = [
-    pytest Keras
+    pytest
+    Keras
   ];
 
   checkPhase = ''

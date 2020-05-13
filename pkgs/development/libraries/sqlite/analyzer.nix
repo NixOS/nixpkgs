@@ -1,9 +1,7 @@
 { stdenv, fetchurl, unzip, sqlite, tcl }:
-
 let
   archiveVersion = import ./archive-version.nix stdenv.lib;
 in
-
 stdenv.mkDerivation rec {
   pname = "sqlite-analyzer";
   version = "3.31.1";

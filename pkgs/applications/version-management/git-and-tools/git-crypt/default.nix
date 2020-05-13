@@ -1,5 +1,11 @@
-{ fetchFromGitHub, git, gnupg, makeWrapper, openssl, stdenv
-, libxslt, docbook_xsl
+{ fetchFromGitHub
+, git
+, gnupg
+, makeWrapper
+, openssl
+, stdenv
+, libxslt
+, docbook_xsl
 }:
 
 stdenv.mkDerivation rec {

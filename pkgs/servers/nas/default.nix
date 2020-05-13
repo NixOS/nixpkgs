@@ -1,10 +1,22 @@
-{ stdenv, fetchurl, imake, bison, flex, gccmakedep
-, xorgproto, libXau, libXt, libXext, libXaw, libXpm, xorgcffiles }:
-
+{ stdenv
+, fetchurl
+, imake
+, bison
+, flex
+, gccmakedep
+, xorgproto
+, libXau
+, libXt
+, libXext
+, libXaw
+, libXpm
+, xorgcffiles
+}:
 let
   pname = "nas";
   version = "1.9.4";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {

@@ -18,14 +18,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    cp $src $out/share/java/${pname}.jar
+        cp $src $out/share/java/${pname}.jar
 
-    cat > $out/bin/${pname} << EOF
-#! $SHELL
-$jdk/bin/java -jar $out/share/java/${pname}.jar "\$@"
-EOF
+        cat > $out/bin/${pname} << EOF
+    #! $SHELL
+    $jdk/bin/java -jar $out/share/java/${pname}.jar "\$@"
+    EOF
 
-    chmod +x $out/bin/${pname}
+        chmod +x $out/bin/${pname}
   '';
 
   meta = with stdenv.lib; {

@@ -14,7 +14,7 @@ args @ { fetchurl, ... }:
 
   packageName = "dynamic-classes";
 
-  asdFilesToKeep = ["dynamic-classes.asd"];
+  asdFilesToKeep = [ "dynamic-classes.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM dynamic-classes DESCRIPTION NIL SHA256

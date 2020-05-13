@@ -14,7 +14,7 @@ rec {
 
   packageName = "serapeum";
 
-  asdFilesToKeep = ["serapeum.asd"];
+  asdFilesToKeep = [ "serapeum.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM serapeum DESCRIPTION Utilities beyond Alexandria. SHA256

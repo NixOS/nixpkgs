@@ -10,7 +10,6 @@
 , systemd
 , yajl
 }:
-
 let
   # these tests require additional permissions
   disabledTests = [
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
 
     ${lib.concatMapStringsSep "\n" (e:
       "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
-    ) disabledTests}
+      ) disabledTests}
   '';
 
   doCheck = true;

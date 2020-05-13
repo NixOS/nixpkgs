@@ -1,6 +1,4 @@
 { stdenv, fetchFromGitHub, fetchhg, pidgin, glib, json-glib, autoreconfHook }:
-
-
 let
   pidginHg = fetchhg {
     url = "https://bitbucket.org/pidgin/main";
@@ -9,7 +7,8 @@ let
     sha256 = "06imlhsps4wrjgjb92zpaxprxfxl2pjb2x9pl859c8cryssrz2jv";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "purple-facebook-0.9.5";
 
   src = fetchFromGitHub {

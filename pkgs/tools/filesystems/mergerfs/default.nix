@@ -12,7 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    automake autoconf pkgconfig gettext libtool pandoc which
+    automake
+    autoconf
+    pkgconfig
+    gettext
+    libtool
+    pandoc
+    which
   ];
   buildInputs = [ attr libiconv ];
 

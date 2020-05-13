@@ -5,7 +5,6 @@
 , reattach-to-user-namespace
 , stdenv
 }:
-
 let
   rtpPath = "share/tmux-plugins";
 
@@ -14,21 +13,21 @@ let
       overrideAttrs = f: mkDerivation (attrs // f attrs);
     };
 
-  mkDerivation = a@{
-    pluginName,
-    rtpFilePath ? (builtins.replaceStrings ["-"] ["_"] pluginName) + ".tmux",
-    namePrefix ? "tmuxplugin-",
-    src,
-    unpackPhase ? "",
-    configurePhase ? ":",
-    buildPhase ? ":",
-    addonInfo ? null,
-    preInstall ? "",
-    postInstall ? "",
-    path ? lib.getName pluginName,
-    dependencies ? [],
-    ...
-  }:
+  mkDerivation =
+    a@{ pluginName
+    , rtpFilePath ? (builtins.replaceStrings [ "-" ] [ "_" ] pluginName) + ".tmux"
+    , namePrefix ? "tmuxplugin-"
+    , src
+    , unpackPhase ? ""
+    , configurePhase ? ":"
+    , buildPhase ? ":"
+    , addonInfo ? null
+    , preInstall ? ""
+    , postInstall ? ""
+    , path ? lib.getName pluginName
+    , dependencies ? [ ]
+    , ...
+    }:
     addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
       name = namePrefix + pluginName;
 
@@ -50,7 +49,8 @@ let
       dependencies = [ pkgs.bash ] ++ dependencies;
     }));
 
-in rec {
+in
+rec {
 
   inherit mkDerivation;
 

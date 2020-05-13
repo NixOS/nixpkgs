@@ -1,4 +1,6 @@
-{ buildPythonPackage, stdenv, fetchPypi
+{ buildPythonPackage
+, stdenv
+, fetchPypi
 , requests
 , nose
 , responses

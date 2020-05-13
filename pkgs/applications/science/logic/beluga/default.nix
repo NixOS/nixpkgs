@@ -4,9 +4,9 @@ stdenv.mkDerivation {
   name = "beluga-20180403";
 
   src = fetchFromGitHub {
-    owner  = "Beluga-lang";
-    repo   = "Beluga";
-    rev    = "046aa59f008be70a7c4700b723bed0214ea8b687";
+    owner = "Beluga-lang";
+    repo = "Beluga";
+    rev = "046aa59f008be70a7c4700b723bed0214ea8b687";
     sha256 = "0m68y0r0wdw3mg2jks68bihaww7sg305zdfnic1rkndq2cxv0mld";
   };
 
@@ -26,9 +26,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A functional language for reasoning about formal systems";
-    homepage    = http://complogic.cs.mcgill.ca/beluga/;
-    license     = stdenv.lib.licenses.gpl3Plus;
+    homepage = http://complogic.cs.mcgill.ca/beluga/;
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.bcdarwin ];
-    platforms   = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

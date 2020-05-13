@@ -2,7 +2,6 @@
 
 with lib;
 let
-
   dataDir = "/var/lib/consul";
   cfg = config.services.consul;
 
@@ -15,8 +14,10 @@ let
     ++ cfg.extraConfigFiles;
 
   devices = attrValues (filterAttrs (_: i: i != null) cfg.interface);
-  systemdDevices = forEach devices
-    (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
+  systemdDevices =
+    forEach
+      devices
+      (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
 in
 {
   options = {
@@ -175,7 +176,9 @@ in
         after = [ "network.target" ] ++ systemdDevices;
         bindsTo = systemdDevices;
         restartTriggers = [ config.environment.etc."consul.json".source ]
-          ++ mapAttrsToList (_: d: d.source)
+          ++
+          mapAttrsToList
+            (_: d: d.source)
             (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
@@ -188,7 +191,8 @@ in
           TimeoutStartSec = "infinity";
         } // (optionalAttrs (cfg.leaveOnStop) {
           ExecStop = "${cfg.package.bin}/bin/consul leave";
-        });
+        }
+        );
 
         path = with pkgs; [ iproute gnugrep gawk consul ];
         preStart = ''
@@ -222,33 +226,34 @@ in
           optionalString (i != null) ''
             echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
             delim=","
-          ''))
+          '')
+        )
         + ''
           echo "}" >> /etc/consul-addrs.json
         '';
       };
     }
 
-    (mkIf (cfg.alerts.enable) {
-      systemd.services.consul-alerts = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "consul.service" ];
+      (mkIf (cfg.alerts.enable) {
+        systemd.services.consul-alerts = {
+          wantedBy = [ "multi-user.target" ];
+          after = [ "consul.service" ];
 
-        path = [ cfg.package ];
+          path = [ cfg.package ];
 
-        serviceConfig = {
-          ExecStart = ''
-            ${cfg.alerts.package.bin}/bin/consul-alerts start \
-              --alert-addr=${cfg.alerts.listenAddr} \
-              --consul-addr=${cfg.alerts.consulAddr} \
-              ${optionalString cfg.alerts.watchChecks "--watch-checks"} \
-              ${optionalString cfg.alerts.watchEvents "--watch-events"}
-          '';
-          User = if cfg.dropPrivileges then "consul" else null;
-          Restart = "on-failure";
+          serviceConfig = {
+            ExecStart = ''
+              ${cfg.alerts.package.bin}/bin/consul-alerts start \
+                --alert-addr=${cfg.alerts.listenAddr} \
+                --consul-addr=${cfg.alerts.consulAddr} \
+                ${optionalString cfg.alerts.watchChecks "--watch-checks"} \
+                ${optionalString cfg.alerts.watchEvents "--watch-events"}
+            '';
+            User = if cfg.dropPrivileges then "consul" else null;
+            Restart = "on-failure";
+          };
         };
-      };
-    })
-
-  ]);
+      }
+      )]
+  );
 }

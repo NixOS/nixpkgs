@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Insight Segmentation and Registration Toolkit";
     homepage = http://www.itk.org/;
     license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
   };
 }

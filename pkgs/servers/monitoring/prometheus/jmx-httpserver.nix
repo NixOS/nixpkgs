@@ -1,10 +1,10 @@
 { stdenv, fetchurl, jre, makeWrapper }:
-
 let
   version = "0.10";
   jarName = "jmx_prometheus_httpserver-${version}-jar-with-dependencies.jar";
   mavenUrl = "http://central.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_httpserver/${version}/${jarName}";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit version jarName;
 
   name = "jmx-prometheus-httpserver-${version}";

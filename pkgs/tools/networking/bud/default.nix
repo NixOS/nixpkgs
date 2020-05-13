@@ -12,7 +12,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    python gyp
+    python
+    gyp
   ] ++ lib.optional stdenv.isLinux utillinux;
 
   buildPhase = ''
@@ -27,8 +28,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A TLS terminating proxy";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     # Does not build on aarch64-linux.
     badPlatforms = [ "aarch64-linux" ];
     maintainers = with maintainers; [ cstrahan ];

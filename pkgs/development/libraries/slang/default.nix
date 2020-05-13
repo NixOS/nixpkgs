@@ -27,7 +27,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pcre libpng zlib readline
+    pcre
+    libpng
+    zlib
+    readline
   ] ++ stdenv.lib.optionals (stdenv.isDarwin) [ libiconv ];
 
   propagatedBuildInputs = [ ncurses ];

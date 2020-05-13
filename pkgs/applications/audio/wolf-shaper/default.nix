@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub , libjack2, lv2, xorg, liblo, libGL, libXcursor, pkgconfig }:
+{ stdenv, fetchFromGitHub, libjack2, lv2, xorg, liblo, libGL, libXcursor, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "wolf-shaper";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libjack2 lv2 xorg.libX11 liblo libGL libXcursor  ];
+  buildInputs = [ libjack2 lv2 xorg.libX11 liblo libGL libXcursor ];
 
   makeFlags = [
     "BUILD_LV2=true"

@@ -1,15 +1,20 @@
-{ stdenv, fetchFromGitLab, rustPlatform, cmake, pkgconfig, openssl
-, darwin, installShellFiles
+{ stdenv
+, fetchFromGitLab
+, rustPlatform
+, cmake
+, pkgconfig
+, openssl
+, darwin
+, installShellFiles
 
 , x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
-, xclip ? null, xsel ? null
+, xclip ? null
+, xsel ? null
 , preferXsel ? false # if true and xsel is non-null, use it instead of xclip
 }:
-
 let
   usesX11 = stdenv.isLinux || stdenv.hostPlatform.isBSD;
 in
-
 assert (x11Support && usesX11) -> xclip != null || xsel != null;
 
 with rustPlatform;
@@ -29,7 +34,7 @@ buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
   buildInputs = [ openssl ]
-  ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
+    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
   ;
 
   preBuild = stdenv.lib.optionalString (x11Support && usesX11) (

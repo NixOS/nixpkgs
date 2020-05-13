@@ -7,7 +7,8 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
   NIX_CFLAGS_LINK = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin
+  NIX_LDFLAGS = stdenv.lib.optionalString
+    stdenv.isDarwin
     "-framework CoreFoundation -framework OpenGL -framework Cocoa";
 
   patches = [ ./use-home-dir.patch ];
@@ -31,11 +32,10 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A 2D puzzle-platformer game about a scientist with telekinetic abilities";
-    homepage    = http://kiwisauce.com/beret/;
-    license     = licenses.lgpl2;
+    homepage = http://kiwisauce.com/beret/;
+    license = licenses.lgpl2;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
     broken = true; # source won't download, and no replacement is visible
   };
 }
-

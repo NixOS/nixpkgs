@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  MANPAGE_DOCBOOK_XSL="${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
+  MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
   dontConfigure = true;
 
@@ -28,9 +28,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
-    homepage    = https://kernelshark.org/;
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage = https://kernelshark.org/;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice basvandijk ];
   };
 }

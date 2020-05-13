@@ -1,21 +1,26 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, zlib, libusb1
-, enableGUI ? false, qtbase ? null
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, zlib
+, libusb1
+, enableGUI ? false
+, qtbase ? null
 }:
-
 let version = "1.4.2"; in
-
 mkDerivation {
   name = "heimdall-${if enableGUI then "gui-" else ""}${version}";
 
   src = fetchFromGitHub {
-    owner  = "Benjamin-Dobell";
-    repo   = "Heimdall";
-    rev    = "v${version}";
+    owner = "Benjamin-Dobell";
+    repo = "Heimdall";
+    rev = "v${version}";
     sha256 = "1ygn4snvcmi98rgldgxf5hwm7zzi1zcsihfvm6awf9s6mpcjzbqz";
   };
 
   buildInputs = [
-    zlib libusb1
+    zlib
+    libusb1
   ] ++ stdenv.lib.optional enableGUI qtbase;
   nativeBuildInputs = [ cmake ];
 
@@ -42,10 +47,10 @@ mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage    = http://www.glassechidna.com.au/products/heimdall/;
+    homepage = http://www.glassechidna.com.au/products/heimdall/;
     description = "A cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

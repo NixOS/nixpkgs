@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openjdk, runtimeShell}:
+{ stdenv, fetchurl, openjdk, runtimeShell }:
 stdenv.mkDerivation rec {
   pname = "leo3";
   version = "1.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lgwxbr1rnk72rnvc8raq5i1q71ckhn998pwd9xk6zf27wlzijk7";
   };
 
-  phases=["installPhase" "fixupPhase"];
+  phases = [ "installPhase" "fixupPhase" ];
 
   installPhase = ''
     mkdir -p "$out"/{bin,lib/java/leo3}
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "An automated theorem prover for classical higher-order logic with choice";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     homepage = "https://page.mi.fu-berlin.de/lex/leo3/";
   };

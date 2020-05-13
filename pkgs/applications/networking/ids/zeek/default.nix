@@ -1,5 +1,19 @@
-{stdenv, fetchurl, cmake, flex, bison, openssl, libpcap, zlib, file, curl
-, libmaxminddb, gperftools, python, swig, rocksdb }:
+{ stdenv
+, fetchurl
+, cmake
+, flex
+, bison
+, openssl
+, libpcap
+, zlib
+, file
+, curl
+, libmaxminddb
+, gperftools
+, python
+, swig
+, rocksdb
+}:
 let
   preConfigure = (import ./script.nix);
 in
@@ -17,7 +31,7 @@ stdenv.mkDerivation rec {
 
   #see issue https://github.com/zeek/zeek/issues/804 to modify hardlinking duplicate files.
   inherit preConfigure;
-  
+
   enableParallelBuilding = true;
 
   cmakeFlags = [

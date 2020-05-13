@@ -14,7 +14,7 @@ rec {
 
   packageName = "dbd-mysql";
 
-  asdFilesToKeep = ["dbd-mysql.asd"];
+  asdFilesToKeep = [ "dbd-mysql.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM dbd-mysql DESCRIPTION Database driver for MySQL. SHA256

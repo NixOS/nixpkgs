@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub }:
-
 let
   pname = "gandom-fonts";
   version = "0.6";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "rastikerdar";
   repo = "gandom-font";

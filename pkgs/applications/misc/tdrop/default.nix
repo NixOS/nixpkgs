@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, xwininfo, xdotool, xprop }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, xwininfo
+, xdotool
+, xprop
+}:
 
 stdenv.mkDerivation {
   pname = "tdrop";

@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitHub, vala, pkgconfig, meson, ninja, python3, pantheon
-, gtk3, gtksourceview, json-glib, libgee, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, vala
+, pkgconfig
+, meson
+, ninja
+, python3
+, pantheon
+, gtk3
+, gtksourceview
+, json-glib
+, libgee
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "notejot";

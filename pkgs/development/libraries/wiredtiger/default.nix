@@ -1,8 +1,17 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool
+{ stdenv
+, fetchFromGitHub
+, automake
+, autoconf
+, libtool
 
-# Optional Dependencies
-, lz4 ? null, snappy ? null, zlib ? null, bzip2 ? null, db ? null
-, gperftools ? null, leveldb ? null
+  # Optional Dependencies
+, lz4 ? null
+, snappy ? null
+, zlib ? null
+, bzip2 ? null
+, db ? null
+, gperftools ? null
+, leveldb ? null
 }:
 
 with stdenv.lib;
@@ -39,19 +48,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ optLz4 optSnappy optZlib optBzip2 optDb optGperftools optLeveldb ];
 
   configureFlags = [
-    (mkWith   false                   "attach"     null)
-    (mkWith   true                    "builtins"   "")
-    (mkEnable (optBzip2 != null)      "bzip2"      null)
-    (mkEnable false                   "diagnostic" null)
-    (mkEnable false                   "java"       null)
-    (mkEnable (optLeveldb != null)    "leveldb"    null)
-    (mkEnable false                   "python"     null)
-    (mkEnable (optSnappy != null)     "snappy"     null)
-    (mkEnable (optLz4 != null)        "lz4"        null)
-    (mkEnable (optGperftools != null) "tcmalloc"   null)
-    (mkEnable (optZlib != null)       "zlib"       null)
-    (mkWith   (optDb != null)         "berkeleydb" optDb)
-    (mkWith   false                   "helium"     null)
+    (mkWith false "attach" null)
+    (mkWith true "builtins" "")
+    (mkEnable (optBzip2 != null) "bzip2" null)
+    (mkEnable false "diagnostic" null)
+    (mkEnable false "java" null)
+    (mkEnable (optLeveldb != null) "leveldb" null)
+    (mkEnable false "python" null)
+    (mkEnable (optSnappy != null) "snappy" null)
+    (mkEnable (optLz4 != null) "lz4" null)
+    (mkEnable (optGperftools != null) "tcmalloc" null)
+    (mkEnable (optZlib != null) "zlib" null)
+    (mkWith (optDb != null) "berkeleydb" optDb)
+    (mkWith false "helium" null)
   ];
 
   preConfigure = ''

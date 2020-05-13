@@ -1,5 +1,4 @@
 { fetchurl, stdenv }:
-
 let
   name = "antiword-0.37";
 in

@@ -17,4 +17,3 @@ fetchzip rec {
     license = "BSD-like";
   };
 }
-

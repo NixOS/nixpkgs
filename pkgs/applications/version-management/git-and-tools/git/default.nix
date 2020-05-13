@@ -1,10 +1,35 @@
-{ fetchurl, stdenv, buildPackages
-, curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
-, gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
-, openssh, pcre2
-, asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
-, libxslt, tcl, tk, makeWrapper, libiconv
-, svnSupport, subversionClient, perlLibs, smtpPerlLibs
+{ fetchurl
+, stdenv
+, buildPackages
+, curl
+, openssl
+, zlib
+, expat
+, perlPackages
+, python3
+, gettext
+, cpio
+, gnugrep
+, gnused
+, gawk
+, coreutils # needed at runtime by git-filter-branch etc
+, openssh
+, pcre2
+, asciidoc
+, texinfo
+, xmlto
+, docbook2x
+, docbook_xsl
+, docbook_xml_dtd_45
+, libxslt
+, tcl
+, tk
+, makeWrapper
+, libiconv
+, svnSupport
+, subversionClient
+, perlLibs
+, smtpPerlLibs
 , perlSupport ? true
 , guiSupport
 , withManual ? true
@@ -13,20 +38,20 @@
 , sendEmailSupport
 , darwin
 , withLibsecret ? false
-, pkgconfig, glib, libsecret
+, pkgconfig
+, glib
+, libsecret
 , gzip # needed at runtime by gitweb.cgi
 }:
 
 assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
-
 let
   version = "2.25.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
-
 stdenv.mkDerivation {
   pname = "git";
   inherit version;
@@ -64,18 +89,25 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ gettext perlPackages.perl ]
-    ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
-         docbook_xsl docbook_xml_dtd_45 libxslt ];
-  buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]
+    ++ stdenv.lib.optionals withManual [
+    asciidoc
+    texinfo
+    xmlto
+    docbook2x
+    docbook_xsl
+    docbook_xml_dtd_45
+    libxslt
+  ];
+  buildInputs = [ curl openssl zlib expat cpio makeWrapper libiconv ]
     ++ stdenv.lib.optionals perlSupport [ perlPackages.perl ]
-    ++ stdenv.lib.optionals guiSupport [tcl tk]
+    ++ stdenv.lib.optionals guiSupport [ tcl tk ]
     ++ stdenv.lib.optionals withpcre2 [ pcre2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ]
     ++ stdenv.lib.optionals withLibsecret [ pkgconfig glib libsecret ];
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
-              + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
+    + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
   configureFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_fread_reads_directories=yes"
@@ -90,11 +122,11 @@ stdenv.mkDerivation {
     "prefix=\${out}"
     "SHELL_PATH=${stdenv.shell}"
   ]
-  ++ (if perlSupport then ["PERL_PATH=${perlPackages.perl}/bin/perl"] else ["NO_PERL=1"])
-  ++ (if pythonSupport then ["PYTHON_PATH=${python3}/bin/python"] else ["NO_PYTHON=1"])
-  ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
-  ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc"])
-  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"]
+  ++ (if perlSupport then [ "PERL_PATH=${perlPackages.perl}/bin/perl" ] else [ "NO_PERL=1" ])
+  ++ (if pythonSupport then [ "PYTHON_PATH=${python3}/bin/python" ] else [ "NO_PYTHON=1" ])
+  ++ stdenv.lib.optionals stdenv.isSunOS [ "INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON=" ]
+  ++ (if stdenv.isDarwin then [ "NO_APPLE_COMMON_CRYPTO=1" ] else [ "sysconfdir=/etc" ])
+  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [ "NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease" ]
   ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1";
 
 
@@ -102,11 +134,14 @@ stdenv.mkDerivation {
     make -C contrib/subtree
   '' + (stdenv.lib.optionalString perlSupport ''
     make -C contrib/diff-highlight
-  '') + (stdenv.lib.optionalString stdenv.isDarwin ''
+  ''
+  ) + (stdenv.lib.optionalString stdenv.isDarwin ''
     make -C contrib/credential/osxkeychain
-  '') + (stdenv.lib.optionalString withLibsecret ''
+  ''
+  ) + (stdenv.lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret
-  '');
+  ''
+  );
 
 
   ## Install
@@ -120,11 +155,13 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin/
     rm -f $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain.o
-  '') + (stdenv.lib.optionalString withLibsecret ''
+  ''
+  ) + (stdenv.lib.optionalString withLibsecret ''
     mkdir -p $out/bin
     ln -s $out/share/git/contrib/credential/libsecret/git-credential-libsecret $out/bin/
     rm -f $PWD/contrib/credential/libsecret/git-credential-libsecret.o
-  '');
+  ''
+  );
 
   postInstall =
     ''
@@ -205,50 +242,56 @@ stdenv.mkDerivation {
       done
     ''
 
-   + (if svnSupport then ''
+    + (
+      if svnSupport then ''
         # wrap git-svn
         wrapProgram $out/libexec/git-core/git-svn                                                                                \
-                     --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath (perlLibs ++ [svn.out])}" \
+                     --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath (perlLibs ++ [ svn.out ])}" \
                      --prefix PATH : "${svn.out}/bin" ''
-       else '' # replace git-svn by notification script
+      else '' # replace git-svn by notification script
         notSupported $out/libexec/git-core/git-svn
-     '')
+     ''
+    )
 
-   + (if sendEmailSupport then ''
+    + (
+      if sendEmailSupport then ''
         # wrap git-send-email
         wrapProgram $out/libexec/git-core/git-send-email \
                      --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath smtpPerlLibs}"
       '' else ''
         # replace git-send-email by notification script
         notSupported $out/libexec/git-core/git-send-email
-      '')
+      ''
+    )
 
-   + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
+    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
        make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-info \
          -C Documentation ''
 
-   + (if guiSupport then ''
-       # Wrap Tcl/Tk programs
-       for prog in bin/gitk libexec/git-core/{git-gui,git-citool,git-gui--askpass}; do
-         sed -i -e "s|exec 'wish'|exec '${tk}/bin/wish'|g" \
-                -e "s|exec wish|exec '${tk}/bin/wish'|g" \
-                -e "s|exec \"[^\"]*/MacOS/Wish\"|exec '${tk}/bin/wish'|g" \
-                "$out/$prog"
-       done
-       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/gitk
-     '' else ''
-       # Don't wrap Tcl/Tk, replace them by notification scripts
-       for prog in bin/gitk libexec/git-core/git-gui; do
-         notSupported "$out/$prog"
-       done
-     '')
-   + stdenv.lib.optionalString stdenv.isDarwin ''
-    # enable git-credential-osxkeychain by default if darwin
-    cat > $out/etc/gitconfig << EOF
-    [credential]
-      helper = osxkeychain
-    EOF
-  '';
+    + (
+      if guiSupport then ''
+        # Wrap Tcl/Tk programs
+        for prog in bin/gitk libexec/git-core/{git-gui,git-citool,git-gui--askpass}; do
+          sed -i -e "s|exec 'wish'|exec '${tk}/bin/wish'|g" \
+                 -e "s|exec wish|exec '${tk}/bin/wish'|g" \
+                 -e "s|exec \"[^\"]*/MacOS/Wish\"|exec '${tk}/bin/wish'|g" \
+                 "$out/$prog"
+        done
+        ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/gitk
+      '' else ''
+        # Don't wrap Tcl/Tk, replace them by notification scripts
+        for prog in bin/gitk libexec/git-core/git-gui; do
+          notSupported "$out/$prog"
+        done
+      ''
+    )
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+      # enable git-credential-osxkeychain by default if darwin
+      cat > $out/etc/gitconfig << EOF
+      [credential]
+        helper = osxkeychain
+      EOF
+    '';
 
 
   ## InstallCheck

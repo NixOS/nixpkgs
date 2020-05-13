@@ -1,7 +1,5 @@
 { lib, fetchzip }:
-
 let version = "3.1"; in
-
 fetchzip {
   name = "intel2200BGFirmware-${version}";
   url = "https://src.fedoraproject.org/repo/pkgs/ipw2200-firmware/ipw2200-fw-${version}.tgz/eaba788643c7cc7483dd67ace70f6e99/ipw2200-fw-${version}.tgz";

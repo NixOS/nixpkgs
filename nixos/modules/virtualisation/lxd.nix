@@ -3,14 +3,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.virtualisation.lxd;
   zfsCfg = config.boot.zfs;
 
 in
-
 {
   ###### interface
 
@@ -121,8 +118,8 @@ in
     users.groups.lxd.gid = config.ids.gids.lxd;
 
     users.users.root = {
-      subUidRanges = [ { startUid = 1000000; count = 65536; } ];
-      subGidRanges = [ { startGid = 1000000; count = 65536; } ];
+      subUidRanges = [{ startUid = 1000000; count = 65536; }];
+      subGidRanges = [{ startGid = 1000000; count = 65536; }];
     };
 
     boot.kernel.sysctl = mkIf cfg.recommendedSysctlSettings {

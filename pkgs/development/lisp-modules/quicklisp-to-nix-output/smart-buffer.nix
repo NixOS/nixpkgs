@@ -14,7 +14,7 @@ rec {
 
   packageName = "smart-buffer";
 
-  asdFilesToKeep = ["smart-buffer.asd"];
+  asdFilesToKeep = [ "smart-buffer.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM smart-buffer DESCRIPTION Smart octets buffer SHA256

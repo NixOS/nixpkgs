@@ -1,16 +1,60 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, imagemagick, gdk-pixbuf, librsvg
-, hicolor-icon-theme, procps
+{ stdenv
+, fetchurl
+, perlPackages
+, makeWrapper
+, imagemagick
+, gdk-pixbuf
+, librsvg
+, hicolor-icon-theme
+, procps
 }:
-
 let
   perlModules = with perlPackages;
-    [ Gnome2 Gnome2Canvas Gtk2 Glib Pango Gnome2VFS Gnome2Wnck Gtk2ImageView
-      Gtk2Unique FileBaseDir FileWhich FileCopyRecursive XMLSimple NetDBus XMLTwig
-      XMLParser HTTPMessage ProcSimple SortNaturally LocaleGettext
-      ProcProcessTable URI ImageExifTool Gtk2AppIndicator LWP JSON
-      PerlMagick WWWMechanize HTTPDate HTMLForm HTMLParser HTMLTagset JSONMaybeXS
-      commonsense HTTPCookies NetOAuth PathClass GooCanvas X11Protocol Cairo
-      EncodeLocale TryTiny TypesSerialiser LWPMediaTypes
+    [
+      Gnome2
+      Gnome2Canvas
+      Gtk2
+      Glib
+      Pango
+      Gnome2VFS
+      Gnome2Wnck
+      Gtk2ImageView
+      Gtk2Unique
+      FileBaseDir
+      FileWhich
+      FileCopyRecursive
+      XMLSimple
+      NetDBus
+      XMLTwig
+      XMLParser
+      HTTPMessage
+      ProcSimple
+      SortNaturally
+      LocaleGettext
+      ProcProcessTable
+      URI
+      ImageExifTool
+      Gtk2AppIndicator
+      LWP
+      JSON
+      PerlMagick
+      WWWMechanize
+      HTTPDate
+      HTMLForm
+      HTMLParser
+      HTMLTagset
+      JSONMaybeXS
+      commonsense
+      HTTPCookies
+      NetOAuth
+      PathClass
+      GooCanvas
+      X11Protocol
+      Cairo
+      EncodeLocale
+      TryTiny
+      TypesSerialiser
+      LWPMediaTypes
     ];
 in
 stdenv.mkDerivation {

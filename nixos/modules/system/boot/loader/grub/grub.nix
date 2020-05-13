@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.boot.loader.grub;
 
   efi = config.boot.loader.efi;
@@ -12,18 +10,20 @@ let
     # Package set of targeted architecture
     if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
-  realGrub = if cfg.version == 1 then grubPkgs.grub
+  realGrub =
+    if cfg.version == 1 then grubPkgs.grub
     else if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
     else if cfg.trustedBoot.enable
-         then if cfg.trustedBoot.isHPLaptop
-              then grubPkgs.trustedGrub-for-HP
-              else grubPkgs.trustedGrub
-         else grubPkgs.grub2;
+    then
+      if cfg.trustedBoot.isHPLaptop
+      then grubPkgs.trustedGrub-for-HP
+      else grubPkgs.trustedGrub
+    else grubPkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
     # in EC2 instances).
-    if cfg.devices == ["nodev"]
+    if cfg.devices == [ "nodev" ]
     then null
     else realGrub;
 
@@ -40,8 +40,8 @@ let
       efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
       efiSysMountPoint' = replaceChars [ "/" ] [ "-" ] efiSysMountPoint;
     in
-    pkgs.writeText "grub-config.xml" (builtins.toXML
-    { splashImage = f cfg.splashImage;
+    pkgs.writeText "grub-config.xml" (builtins.toXML {
+      splashImage = f cfg.splashImage;
       splashMode = f cfg.splashMode;
       backgroundColor = f cfg.backgroundColor;
       grub = f grub;
@@ -65,27 +65,40 @@ let
       path = with pkgs; makeBinPath (
         [ coreutils gnused gnugrep findutils diffutils btrfs-progs utillinux mdadm ]
         ++ optional (cfg.efiSupport && (cfg.version == 2)) efibootmgr
-        ++ optionals cfg.useOSProber [ busybox os-prober ]);
-      font = if cfg.font == null then ""
-        else (if lib.last (lib.splitString "." cfg.font) == "pf2"
-             then cfg.font
-             else "${convertedFont}");
-    });
+        ++ optionals cfg.useOSProber [ busybox os-prober ]
+      );
+      font =
+        if cfg.font == null then ""
+        else (
+          if lib.last (lib.splitString "." cfg.font) == "pf2"
+          then cfg.font
+          else "${convertedFont}"
+        );
+    }
+    );
 
-  bootDeviceCounters = fold (device: attr: attr // { ${device} = (attr.${device} or 0) + 1; }) {}
-    (concatMap (args: args.devices) cfg.mirroredBoots);
+  bootDeviceCounters =
+    fold
+      (device: attr: attr // { ${device} = (attr.${device} or 0) + 1; })
+      { }
+      (concatMap (args: args.devices) cfg.mirroredBoots);
 
-  convertedFont = (pkgs.runCommand "grub-font-converted.pf2" {}
-           (builtins.concatStringsSep " "
-             ([ "${realGrub}/bin/grub-mkfont"
-               cfg.font
-               "--output" "$out"
-             ] ++ (optional (cfg.fontSize!=null) "--size ${toString cfg.fontSize}")))
-         );
+  convertedFont = (
+    pkgs.runCommand "grub-font-converted.pf2"
+      { }
+      (
+        builtins.concatStringsSep " "
+          ([
+            "${realGrub}/bin/grub-mkfont"
+            cfg.font
+            "--output"
+            "$out"
+          ] ++ (optional (cfg.fontSize != null) "--size ${toString cfg.fontSize}"))
+      )
+  );
 
   defaultSplash = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bootloader.png";
 in
-
 {
 
   ###### interface
@@ -127,7 +140,7 @@ in
       };
 
       devices = mkOption {
-        default = [];
+        default = [ ];
         example = [ "/dev/disk/by-id/wwn-0x500001234567890a" ];
         type = types.listOf types.str;
         description = ''
@@ -280,7 +293,7 @@ in
 
       extraFiles = mkOption {
         type = types.attrsOf types.path;
-        default = {};
+        default = { };
         example = literalExample ''
           { "memtest.bin" = "''${pkgs.memtest86plus}/memtest.bin"; }
         '';
@@ -586,26 +599,29 @@ in
 
   config = mkMerge [
 
-    { boot.loader.grub.splashImage = mkDefault (
+    {
+      boot.loader.grub.splashImage = mkDefault (
         if cfg.version == 1 then pkgs.fetchurl {
           url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.
-        else defaultSplash);
+        else defaultSplash
+      );
     }
 
     (mkIf (cfg.splashImage == defaultSplash) {
       boot.loader.grub.backgroundColor = mkDefault "#2F302F";
       boot.loader.grub.splashMode = mkDefault "normal";
-    })
+    }
+    )
 
     (mkIf cfg.enable {
 
       boot.loader.grub.devices = optional (cfg.device != "") cfg.device;
 
       boot.loader.grub.mirroredBoots = optionals (cfg.devices != [ ]) [
-        { path = "/boot"; inherit (cfg) devices; inherit (efi) efiSysMountPoint; }
+        { path = "/boot"; inherit (cfg) devices;inherit (efi) efiSysMountPoint; }
       ];
 
       system.build.installBootLoader =
@@ -615,14 +631,15 @@ in
             inherit (pkgs) utillinux;
             btrfsprogs = pkgs.btrfs-progs;
           };
-        in pkgs.writeScript "install-grub.sh" (''
-        #!${pkgs.runtimeShell}
-        set -e
-        export PERL5LIB=${with pkgs.perlPackages; makePerlPath [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare ]}
-        ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
-      '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
-      ''));
+        in
+        pkgs.writeScript "install-grub.sh" (''
+          #!${pkgs.runtimeShell}
+          set -e
+          export PERL5LIB=${with pkgs.perlPackages; makePerlPath [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare ]}
+          ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
+        '' + flip concatMapStrings cfg.mirroredBoots (args: ''
+          ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
+        ''));
 
       system.build.grub = grub;
 
@@ -633,9 +650,13 @@ in
       environment.systemPackages = optional (grub != null) grub;
 
       boot.loader.grub.extraPrepareConfig =
-        concatStrings (mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/cp -pf "${v}" "@bootPath@/${n}"
-        '') config.boot.loader.grub.extraFiles);
+        concatStrings (
+          mapAttrsToList
+            (n: v: ''
+              ${pkgs.coreutils}/bin/cp -pf "${v}" "@bootPath@/${n}"
+            '')
+            config.boot.loader.grub.extraFiles
+        );
 
       assertions = [
         {
@@ -692,13 +713,15 @@ in
         assertion = device == "nodev" || hasPrefix "/" device;
         message = "GRUB devices must be absolute paths, not ${device} in ${args.path}";
       }));
-    })
+    }
+    )
 
   ];
 
 
   imports =
-    [ (mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "")
+    [
+      (mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "")
       (mkRenamedOptionModule [ "boot" "copyKernels" ] [ "boot" "loader" "grub" "copyKernels" ])
       (mkRenamedOptionModule [ "boot" "extraGrubEntries" ] [ "boot" "loader" "grub" "extraEntries" ])
       (mkRenamedOptionModule [ "boot" "extraGrubEntriesBeforeNixos" ] [ "boot" "loader" "grub" "extraEntriesBeforeNixOS" ])

@@ -1,5 +1,4 @@
 { stdenv, buildPythonApplication, buildPythonPackage, isPy3k, fetchurl, rpkg, offtrac, urlgrabber, pyopenssl, python_fedora }:
-
 let
   fedora_cert = buildPythonPackage rec {
     name = "fedora-cert";
@@ -13,7 +12,8 @@ let
     propagatedBuildInputs = [ python_fedora pyopenssl ];
     doCheck = false;
   };
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "fedpkg";
   version = "1.29";
 

@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   format = "other";
   disabled = !isPy27;
-  
+
   src = fetchFromGitHub {
     owner = "travisb-ca";
     repo = pname;
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     '';
     homepage = http://travisbrown.ca/projects/nitpick/docs/nitpick.html;
     license = with stdenv.lib.licenses; gpl2;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

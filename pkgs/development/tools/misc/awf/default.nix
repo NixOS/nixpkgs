@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gtk2, gtk3, pkgconfig
-, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gtk2
+, gtk3
+, pkgconfig
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "awf";

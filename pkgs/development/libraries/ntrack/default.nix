@@ -1,9 +1,7 @@
 { stdenv, fetchurl, qt4, pkgconfig, libnl, python }:
-
 let
   version = "016";
 in
-
 stdenv.mkDerivation rec {
   pname = "ntrack";
   inherit version;

@@ -2,11 +2,11 @@
 , python3
 , fetchFromGitHub
 }:
-
 let
   pname = "niff";
   version = "0.1";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

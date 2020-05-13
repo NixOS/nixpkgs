@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Twitter API library";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 

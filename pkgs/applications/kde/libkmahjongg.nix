@@ -1,8 +1,14 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  kcompletion, kconfig, kconfigwidgets, kcoreaddons, ki18n,
-  kwidgetsaddons
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, kcompletion
+, kconfig
+, kconfigwidgets
+, kcoreaddons
+, ki18n
+, kwidgetsaddons
 }:
 
 mkDerivation {
@@ -12,7 +18,13 @@ mkDerivation {
     maintainers = with lib.maintainers; [ genesis ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ kcompletion kconfig kconfigwidgets kcoreaddons ki18n
-    kwidgetsaddons ];
+  buildInputs = [
+    kcompletion
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    ki18n
+    kwidgetsaddons
+  ];
   outputs = [ "out" "dev" ];
 }

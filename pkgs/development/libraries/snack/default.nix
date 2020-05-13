@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     make install DESTDIR="$out" 
   '';
 
-  meta = { 
+  meta = {
     description = "The Snack Sound Toolkit (Tcl)";
     homepage = http://www.speech.kth.se/snack/;
     license = stdenv.lib.licenses.gpl2;

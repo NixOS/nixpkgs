@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [
-      ( substituteAll {
+      (substituteAll {
         src = ./nix-purity.patch;
         inherit libpcap;
         glibc = stdenv.cc.libc.dev or stdenv.cc.libc;

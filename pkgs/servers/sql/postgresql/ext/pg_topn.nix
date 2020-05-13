@@ -7,9 +7,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
-    owner  = "citusdata";
-    repo   = "postgresql-topn";
-    rev    = "refs/tags/v${version}";
+    owner = "citusdata";
+    repo = "postgresql-topn";
+    rev = "refs/tags/v${version}";
     sha256 = "05mjzm7rz5j7byzag23526hhsqsg4dsyxxsg8q9ray1rwxjbr392";
   };
 
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Efficient querying of 'top values' for PostgreSQL";
-    homepage    = https://github.com/citusdata/postgresql-topn;
+    homepage = https://github.com/citusdata/postgresql-topn;
     maintainers = with maintainers; [ thoughtpolice ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.agpl3;
+    platforms = postgresql.meta.platforms;
+    license = licenses.agpl3;
   };
 }

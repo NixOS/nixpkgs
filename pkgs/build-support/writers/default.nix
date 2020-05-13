@@ -14,14 +14,17 @@ rec {
     let
       name = last (builtins.split "/" nameOrPath);
     in
-
-    pkgs.runCommandLocal name (if (types.str.check content) then {
-      inherit content interpreter;
-      passAsFile = [ "content" ];
-    } else {
-      inherit interpreter;
-      contentPath = content;
-    }) ''
+    pkgs.runCommandLocal
+      name
+      (
+        if (types.str.check content) then {
+          inherit content interpreter;
+          passAsFile = [ "content" ];
+        } else {
+          inherit interpreter;
+          contentPath = content;
+        }
+      ) ''
       echo "#! $interpreter" > $out
       cat "$contentPath" >> $out
       ${optionalString (check != "") ''
@@ -46,12 +49,16 @@ rec {
     let
       name = last (builtins.split "/" nameOrPath);
     in
-    pkgs.runCommand name (if (types.str.check content) then {
-      inherit content;
-      passAsFile = [ "content" ];
-    } else {
-      contentPath = content;
-    }) ''
+    pkgs.runCommand
+      name
+      (
+        if (types.str.check content) then {
+          inherit content;
+          passAsFile = [ "content" ];
+        } else {
+          contentPath = content;
+        }
+      ) ''
       ${compileScript}
       ${optionalString (types.path.check nameOrPath) ''
         mv $out tmp
@@ -86,31 +93,33 @@ rec {
   #        return 0;
   #      }
   #    ''
-  writeC = name: { libraries ? [] }:
-    makeBinWriter {
-      compileScript = ''
-        PATH=${makeBinPath [
-          pkgs.binutils-unwrapped
-          pkgs.coreutils
-          pkgs.findutils
-          pkgs.gcc
-          pkgs.pkgconfig
-        ]}
-        export PKG_CONFIG_PATH=${concatMapStringsSep ":" (pkg: "${pkg}/lib/pkgconfig") libraries}
-        gcc \
-            ${optionalString (libraries != [])
-              "$(pkg-config --cflags --libs ${
+  writeC = name: { libraries ? [ ] }:
+    makeBinWriter
+      {
+        compileScript = ''
+          PATH=${makeBinPath [
+            pkgs.binutils-unwrapped
+            pkgs.coreutils
+            pkgs.findutils
+            pkgs.gcc
+            pkgs.pkgconfig
+          ]}
+          export PKG_CONFIG_PATH=${concatMapStringsSep ":" (pkg: "${pkg}/lib/pkgconfig") libraries}
+          gcc \
+              ${optionalString (libraries != [ ])
+            "$(pkg-config --cflags --libs ${
                 concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgconfig -name \\*.pc)") libraries
               })"
-            } \
-            -O \
-            -o "$out" \
-            -Wall \
-            -x c \
-            "$contentPath"
-        strip --strip-unneeded "$out"
-      '';
-    } name;
+          } \
+              -O \
+              -o "$out" \
+              -Wall \
+              -x c \
+              "$contentPath"
+          strip --strip-unneeded "$out"
+        '';
+      }
+      name;
 
   # writeCBin takes the same arguments as writeC but outputs a directory (like writeScriptBin)
   writeCBin = name:
@@ -139,18 +148,19 @@ rec {
   #
   #     main = launchMissiles
   #   '';
-  writeHaskell = name: {
-    libraries ? [],
-    ghc ? pkgs.ghc
-  }:
-    makeBinWriter {
-      compileScript = ''
-        cp $contentPath tmp.hs
-        ${ghc.withPackages (_: libraries )}/bin/ghc tmp.hs
-        mv tmp $out
-        ${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded "$out"
-      '';
-    } name;
+  writeHaskell = name: { libraries ? [ ]
+                       , ghc ? pkgs.ghc
+                       }:
+    makeBinWriter
+      {
+        compileScript = ''
+          cp $contentPath tmp.hs
+          ${ghc.withPackages (_: libraries)}/bin/ghc tmp.hs
+          mv tmp $out
+          ${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded "$out"
+        '';
+      }
+      name;
 
   # writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
   writeHaskellBin = name:
@@ -166,19 +176,20 @@ rec {
   #     var result = UglifyJS.minify(code);
   #     console.log(result.code);
   #   ''
-  writeJS = name: { libraries ? [] }: content:
-  let
-    node-env = pkgs.buildEnv {
-      name = "node";
-      paths = libraries;
-      pathsToLink = [
-        "/lib/node_modules"
-      ];
-    };
-  in writeDash name ''
-    export NODE_PATH=${node-env}/lib/node_modules
-    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content}
-  '';
+  writeJS = name: { libraries ? [ ] }: content:
+    let
+      node-env = pkgs.buildEnv {
+        name = "node";
+        paths = libraries;
+        pathsToLink = [
+          "/lib/node_modules"
+        ];
+      };
+    in
+    writeDash name ''
+      export NODE_PATH=${node-env}/lib/node_modules
+      exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content}
+    '';
 
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
   writeJSBin = name:
@@ -190,12 +201,14 @@ rec {
     /\{/{ctx++;idx=1}
     /\}/{ctx--}
     {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
-   '';
+  '';
 
-  writeNginxConfig = name: text: pkgs.runCommandLocal name {
-    inherit text;
-    passAsFile = [ "text" ];
-  } /* sh */ ''
+  writeNginxConfig = name: text: pkgs.runCommandLocal
+    name
+    {
+      inherit text;
+      passAsFile = [ "text" ];
+    } /* sh */ ''
     # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
     ${pkgs.gawk}/bin/awk -f ${awkFormatNginx} "$textPath" | ${pkgs.gnused}/bin/sed '/^\s*$/d' > $out
     ${pkgs.gixy}/bin/gixy $out
@@ -209,19 +222,21 @@ rec {
   #     use boolean;
   #     print "Howdy!\n" if true;
   #   ''
-  writePerl = name: { libraries ? [] }:
-  let
-    perl-env = pkgs.buildEnv {
-      name = "perl-environment";
-      paths = libraries;
-      pathsToLink = [
-        "/${pkgs.perl.libPrefix}"
-      ];
-    };
-  in
-  makeScriptWriter {
-    interpreter = "${pkgs.perl}/bin/perl -I ${perl-env}/${pkgs.perl.libPrefix}";
-  } name;
+  writePerl = name: { libraries ? [ ] }:
+    let
+      perl-env = pkgs.buildEnv {
+        name = "perl-environment";
+        paths = libraries;
+        pathsToLink = [
+          "/${pkgs.perl.libPrefix}"
+        ];
+      };
+    in
+    makeScriptWriter
+      {
+        interpreter = "${pkgs.perl}/bin/perl -I ${perl-env}/${pkgs.perl.libPrefix}";
+      }
+      name;
 
   # writePerlBin takes the same arguments as writePerl but outputs a directory (like writeScriptBin)
   writePerlBin = name:
@@ -239,17 +254,19 @@ rec {
   #
   #   print Test.a
   # ''
-  writePython2 = name: { libraries ? [], flakeIgnore ? [] }:
-  let
-    py = pkgs.python2.withPackages (ps: libraries);
-    ignoreAttribute = optionalString (flakeIgnore != []) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
-  in
-  makeScriptWriter {
-    interpreter = "${py}/bin/python";
-    check = writeDash "python2check.sh" ''
-      exec ${pkgs.python2Packages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
-    '';
-  } name;
+  writePython2 = name: { libraries ? [ ], flakeIgnore ? [ ] }:
+    let
+      py = pkgs.python2.withPackages (ps: libraries);
+      ignoreAttribute = optionalString (flakeIgnore != [ ]) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
+    in
+    makeScriptWriter
+      {
+        interpreter = "${py}/bin/python";
+        check = writeDash "python2check.sh" ''
+          exec ${pkgs.python2Packages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
+        '';
+      }
+      name;
 
   # writePython2Bin takes the same arguments as writePython2 but outputs a directory (like writeScriptBin)
   writePython2Bin = name:
@@ -267,17 +284,19 @@ rec {
   #   """)
   #   print(y[0]['test'])
   # ''
-  writePython3 = name: { libraries ? [], flakeIgnore ? [] }:
-  let
-    py = pkgs.python3.withPackages (ps: libraries);
-    ignoreAttribute = optionalString (flakeIgnore != []) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
-  in
-  makeScriptWriter {
-    interpreter = "${py}/bin/python";
-    check = writeDash "python3check.sh" ''
-      exec ${pkgs.python3Packages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
-    '';
-  } name;
+  writePython3 = name: { libraries ? [ ], flakeIgnore ? [ ] }:
+    let
+      py = pkgs.python3.withPackages (ps: libraries);
+      ignoreAttribute = optionalString (flakeIgnore != [ ]) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
+    in
+    makeScriptWriter
+      {
+        interpreter = "${py}/bin/python";
+        check = writeDash "python3check.sh" ''
+          exec ${pkgs.python3Packages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
+        '';
+      }
+      name;
 
   # writePython3Bin takes the same arguments as writePython3 but outputs a directory (like writeScriptBin)
   writePython3Bin = name:

@@ -28,7 +28,6 @@
 , flite ? null
 , libXxf86vm ? null
 }:
-
 let
   desktopItem = makeDesktopItem {
     name = "minecraft-launcher";
@@ -40,13 +39,13 @@ let
   };
 
   envLibPath = stdenv.lib.makeLibraryPath [
-      curl
-      libpulseaudio
-      systemd
-      alsaLib # needed for narrator
-      flite # needed for narrator
-      libXxf86vm # needed only for versions <1.13
-    ];
+    curl
+    libpulseaudio
+    systemd
+    alsaLib # needed for narrator
+    flite # needed for narrator
+    libXxf86vm # needed only for versions <1.13
+  ];
 
   libPath = stdenv.lib.makeLibraryPath ([
     alsaLib
@@ -83,7 +82,7 @@ let
     libXScrnSaver
   ]));
 in
- stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
   version = "2.1.11314";

@@ -1,6 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, mock, pytest, pytestrunner
-, configparser, enum34, mccabe, pycodestyle, pyflakes, entrypoints, functools32, typing
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, mock
+, pytest
+, pytestrunner
+, configparser
+, enum34
+, mccabe
+, pycodestyle
+, pyflakes
+, entrypoints
+, functools32
+, typing
 }:
 
 buildPythonPackage rec {

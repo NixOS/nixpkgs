@@ -5,9 +5,9 @@ buildGoPackage rec {
   pname = "hecate";
 
   src = fetchFromGitHub {
-    owner  = "evanmiller";
-    repo   = "hecate";
-    rev    = "v${version}";
+    owner = "evanmiller";
+    repo = "hecate";
+    rev = "v${version}";
     sha256 = "0ymirsd06z3qa9wi59k696mg8f4mhscw8gc5c5zkd0n3n8s0k0z8";
   };
 

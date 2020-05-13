@@ -1,4 +1,4 @@
-{stdenv, darwin}:
+{ stdenv, darwin }:
 
 /*
  * This is needed to build GCC on Darwin.

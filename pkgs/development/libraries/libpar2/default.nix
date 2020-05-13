@@ -1,7 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libsigcxx }:
-
 let version = "0.4"; in
-
 stdenv.mkDerivation rec {
   pname = "libpar2";
   inherit version;

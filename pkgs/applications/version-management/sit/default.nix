@@ -1,6 +1,14 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, libzip, gnupg,
-  # Darwin
-  libiconv, CoreFoundation, Security }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, libzip
+, gnupg
+, # Darwin
+  libiconv
+, CoreFoundation
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "sit";
@@ -14,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [ cmake libzip gnupg ] ++
-    (if stdenv.isDarwin then [ libiconv CoreFoundation Security ] else []);
+    (if stdenv.isDarwin then [ libiconv CoreFoundation Security ] else [ ]);
 
   preCheck = ''
     export HOME=$(mktemp -d)

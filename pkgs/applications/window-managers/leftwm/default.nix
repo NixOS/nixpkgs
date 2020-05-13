@@ -1,9 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, libX11, libXinerama, makeWrapper }:
-
 let
-    rpath = stdenv.lib.makeLibraryPath [ libXinerama libX11 ];
+  rpath = stdenv.lib.makeLibraryPath [ libXinerama libX11 ];
 in
-
 rustPlatform.buildRustPackage rec {
   pname = "leftwm";
   version = "0.2.2";

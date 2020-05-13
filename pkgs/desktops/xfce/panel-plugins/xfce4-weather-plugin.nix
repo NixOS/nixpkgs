@@ -1,9 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2, libxml2, libsoup, upower,
-libxfce4ui, libxfce4util, xfce4-panel, hicolor-icon-theme }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, intltool
+, gtk2
+, libxml2
+, libsoup
+, upower
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
-  p_name  = "xfce4-weather-plugin";
+  p_name = "xfce4-weather-plugin";
   ver_maj = "0.8";
   ver_min = "10";
 
@@ -14,8 +25,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  buildInputs = [ gtk2 libxml2 libsoup upower libxfce4ui libxfce4util
-   xfce4-panel hicolor-icon-theme ];
+  buildInputs = [
+    gtk2
+    libxml2
+    libsoup
+    upower
+    libxfce4ui
+    libxfce4util
+    xfce4-panel
+    hicolor-icon-theme
+  ];
 
   enableParallelBuilding = true;
 

@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   configFile = ./xfs.conf;
 
 in
-
 {
 
   ###### interface
@@ -30,8 +28,9 @@ in
   ###### implementation
 
   config = mkIf config.services.xfs.enable {
-    assertions = singleton
-      { assertion = config.fonts.enableFontDir;
+    assertions =
+      singleton {
+        assertion = config.fonts.enableFontDir;
         message = "Please enable fonts.enableFontDir to use the X Font Server.";
       };
 

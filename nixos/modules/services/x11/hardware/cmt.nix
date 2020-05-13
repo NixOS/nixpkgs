@@ -1,13 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
+  cfg = config.services.xserver.cmt;
+  etcPath = "X11/xorg.conf.d";
 
-cfg = config.services.xserver.cmt;
-etcPath = "X11/xorg.conf.d";
-
-in {
+in
+{
 
   options = {
 

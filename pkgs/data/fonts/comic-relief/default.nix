@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "1.1";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "comic-relief-${version}";
 
   url = "https://fontlibrary.org/assets/downloads/comic-relief/45c456b6db2aaf2f7f69ac66b5ac7239/comic-relief.zip";
@@ -30,7 +30,7 @@ in fetchzip rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
 
     # Reduce the priority of this package. The intent is that if you
     # also install the `corefonts` package, then you probably will not

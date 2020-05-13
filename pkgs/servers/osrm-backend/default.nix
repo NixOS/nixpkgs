@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, libxml2, libzip, boost, lua, luabind, tbb, expat}:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, libxml2, libzip, boost, lua, luabind, tbb, expat }:
 
 stdenv.mkDerivation rec {
   pname = "osrm-backend";
@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    owner  = "Project-OSRM";
-    repo   = "osrm-backend";
+    owner = "Project-OSRM";
+    repo = "osrm-backend";
     sha256 = "1m4hf26mgfvvx9z37qww8v8w4mhzyfl554ymdnzl99pr5ild093s";
   };
 

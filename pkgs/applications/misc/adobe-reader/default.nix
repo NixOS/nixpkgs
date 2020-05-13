@@ -1,10 +1,18 @@
-{ stdenv, fetchurl, libX11, cups, zlib, libxml2, pango, atk, gtk2, glib
-, gdk-pixbuf }:
+{ stdenv
+, fetchurl
+, libX11
+, cups
+, zlib
+, libxml2
+, pango
+, atk
+, gtk2
+, glib
+, gdk-pixbuf
+}:
 
 assert stdenv.hostPlatform.system == "i686-linux";
-
 let version = "9.5.5"; in
-
 stdenv.mkDerivation {
   name = "adobe-reader-${version}-1";
 
@@ -19,8 +27,8 @@ stdenv.mkDerivation {
   # We should probably remove those and use the regular Nixpkgs
   # versions.
 
-  libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk-pixbuf ];
+  libPath =
+    stdenv.lib.makeLibraryPath [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk-pixbuf ];
 
   passthru.mozillaPlugin = "/libexec/adobe-reader/Browser/intellinux";
 

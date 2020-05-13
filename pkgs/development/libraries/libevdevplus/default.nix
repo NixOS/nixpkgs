@@ -4,10 +4,10 @@ stdenv.mkDerivation rec {
   pname = "libevdevplus";
   version = "unstable-2019-10-01";
 
-  src  = fetchFromGitHub {
-    owner  = "YukiWorkshop";
-    repo   = "libevdevPlus";
-    rev    = "e863df2ade43e2c7d7748cc33ca27fb3eed325ca";
+  src = fetchFromGitHub {
+    owner = "YukiWorkshop";
+    repo = "libevdevPlus";
+    rev = "e863df2ade43e2c7d7748cc33ca27fb3eed325ca";
     sha256 = "18z6pn4j7fhmwwh0q22ip5nn7sc1hfgwvkdzqhkja60i8cw2cvvj";
   };
 

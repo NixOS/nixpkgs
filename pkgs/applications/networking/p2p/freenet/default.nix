@@ -1,5 +1,4 @@
 { stdenv, fetchurl, fetchFromGitHub, ant, jdk, bash, coreutils, substituteAll }:
-
 let
   freenet_ext = fetchurl {
     url = https://downloads.freenetproject.org/latest/freenet-ext.jar;
@@ -48,7 +47,8 @@ let
     '';
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "freenet-${version}";
   inherit version;
 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, apacheAnt, unzip, sharutils, lib, jdk}:
+{ stdenv, fetchurl, apacheAnt, unzip, sharutils, lib, jdk }:
 
 stdenv.mkDerivation {
   name = "freetts-1.2.2";

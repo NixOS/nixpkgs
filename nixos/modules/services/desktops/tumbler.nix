@@ -3,19 +3,19 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.tumbler;
 
 in
-
 {
 
   imports = [
-    (mkRemovedOptionModule
-      [ "services" "tumbler" "package" ]
-      "")
+    (
+      mkRemovedOptionModule
+        [ "services" "tumbler" "package" ]
+        ""
+    )
   ];
 
   ###### interface

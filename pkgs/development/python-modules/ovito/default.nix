@@ -1,6 +1,15 @@
-{ stdenv, fetchgit
+{ stdenv
+, fetchgit
 , cmake
-, libav, netcdf, qscintilla, zlib, boost, git, fftw, hdf5, libssh
+, libav
+, netcdf
+, qscintilla
+, zlib
+, boost
+, git
+, fftw
+, hdf5
+, libssh
 , pythonPackages
 }:
 

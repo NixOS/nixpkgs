@@ -36,7 +36,6 @@
 assert withWayland -> wayland != null && libxkbcommon != null;
 
 with stdenv.lib;
-
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
   python3BuildEnv = python3.buildEnv.override {
@@ -48,7 +47,6 @@ let
     '';
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "ibus";
   version = "1.5.22";

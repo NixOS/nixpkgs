@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   checkPhase = ''
     ${stdenv.lib.optionalString (stdenv.isDarwin) ''
-    # specifically needed for darwin
-    export HOME=$(mktemp -d)
-    mkdir -p $HOME/.matplotlib
-    echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
+      # specifically needed for darwin
+      export HOME=$(mktemp -d)
+      mkdir -p $HOME/.matplotlib
+      echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
     ''}
 
     pytest trackpy --ignore trackpy/tests/test_motion.py \

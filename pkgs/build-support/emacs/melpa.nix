@@ -5,7 +5,8 @@
 
 with lib;
 
-{ /*
+{
+  /*
     pname: Nix package name without special symbols and without version or
     "emacs-" prefix.
   */
@@ -16,10 +17,9 @@ with lib;
 , ename ? null
 , version
 , recipe
-, meta ? {}
+, meta ? { }
 , ...
 }@args:
-
 let
 
   defaultMeta = {
@@ -27,8 +27,8 @@ let
   };
 
 in
-
-import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
+import ./generic.nix
+{ inherit lib stdenv emacs texinfo; } ({
 
   ename =
     if ename == null
@@ -73,7 +73,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
         $ename $version
 
     runHook postBuild
-    '';
+  '';
 
   installPhase = ''
     runHook preInstall

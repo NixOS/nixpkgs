@@ -2,19 +2,17 @@
 , config ? { }
 , pkgs ? import ../../.. { inherit system config; }
 }:
-
 let
-
   trivialJob = pkgs.writeTextDir "trivial.nix" ''
-   { trivial = builtins.derivation {
-       name = "trivial";
-       system = "${system}";
-       builder = "/bin/sh";
-       allowSubstitutes = false;
-       preferLocalBuild = true;
-       args = ["-c" "echo success > $out; exit 0"];
-     };
-   }
+    { trivial = builtins.derivation {
+        name = "trivial";
+        system = "${system}";
+        builder = "/bin/sh";
+        allowSubstitutes = false;
+        preferLocalBuild = true;
+        args = ["-c" "echo success > $out; exit 0"];
+      };
+    }
   '';
 
   createTrivialProject = pkgs.stdenv.mkDerivation {
@@ -67,7 +65,7 @@ let
                 systems = [ system ];
               }];
 
-              binaryCaches = [];
+              binaryCaches = [ ];
             };
           };
 
@@ -98,7 +96,9 @@ let
               'journalctl -eu hydra-notify.service -o cat | grep -q "sending mail notification to hydra@localhost"'
           )
         '';
-      })));
+      }
+    )
+    ));
 
 in
-  tests
+tests

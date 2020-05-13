@@ -1,7 +1,5 @@
 { stdenv, fetchurl, pkgconfig }:
-
 let baseurl = "https://perso.b2b2c.ca/~sarrazip/dev"; in
-
 stdenv.mkDerivation rec {
   name = "boolstuff-0.1.16";
 

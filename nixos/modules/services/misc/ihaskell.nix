@@ -1,16 +1,13 @@
 { pkgs, lib, config, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.ihaskell;
   ihaskell = pkgs.ihaskell.override {
     packages = self: cfg.extraPackages self;
   };
 
 in
-
 {
   options = {
     services.ihaskell = {
@@ -20,7 +17,7 @@ in
       };
 
       extraPackages = mkOption {
-        default = self: [];
+        default = self: [ ];
         example = literalExample ''
           haskellPackages: [
             haskellPackages.wreq

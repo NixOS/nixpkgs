@@ -1,6 +1,19 @@
-{ stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
-, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, gnome2, libGLU
-, nvidia_cg_toolkit, zlib, openssl, portaudio
+{ stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, buildFHSUserEnv
+, gtk3
+, gdk-pixbuf
+, cairo
+, libjpeg_original
+, glib
+, gnome2
+, libGLU
+, nvidia_cg_toolkit
+, zlib
+, openssl
+, portaudio
 }:
 let
   fullPath = stdenv.lib.makeLibraryPath [
@@ -75,12 +88,13 @@ let
     };
   };
 
-# Lightworks expects some files in /usr/share/lightworks
-in buildFHSUserEnv {
+  # Lightworks expects some files in /usr/share/lightworks
+in
+buildFHSUserEnv {
   name = lightworks.name;
 
   targetPkgs = pkgs: [
-      lightworks
+    lightworks
   ];
 
   runScript = "lightworks";

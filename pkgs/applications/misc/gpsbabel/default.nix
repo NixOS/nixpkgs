@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gpsbabel";
     repo = "gpsbabel";
-    rev = "gpsbabel_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "gpsbabel_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "0q17jhmaf7z5lld2ff7h6jb3v1yz8hbwd2rmaq2dsamc53dls8iw";
   };
 
@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
     # Floating point behavior on i686 causes test failures. Preventing
     # extended precision fixes this problem.
     ++ stdenv.lib.optionals stdenv.isi686 [
-      "CFLAGS=-ffloat-store" "CXXFLAGS=-ffloat-store"
-    ];
+    "CFLAGS=-ffloat-store"
+    "CXXFLAGS=-ffloat-store"
+  ];
 
   enableParallelBuilding = true;
 
@@ -42,11 +43,11 @@ stdenv.mkDerivation rec {
     substituteInPlace testo \
       --replace "-x /usr/bin/hexdump" ""
   ''
-    # The raymarine and gtm tests fail on i686 despite -ffloat-store.
+  # The raymarine and gtm tests fail on i686 despite -ffloat-store.
   + lib.optionalString stdenv.isi686 "rm -v testo.d/raymarine.test testo.d/gtm.test;"
-    # The gtm, kml and tomtom asc tests fail on darwin, see PR #23572.
+  # The gtm, kml and tomtom asc tests fail on darwin, see PR #23572.
   + lib.optionalString stdenv.isDarwin "rm -v testo.d/gtm.test testo.d/kml.test testo.d/tomtom_asc.test testo.d/classic-2.test"
-    # The arc-project test fails on aarch64.
+  # The arc-project test fails on aarch64.
   + lib.optionalString stdenv.isAarch64 "rm -v testo.d/arc-project.test";
 
   meta = with stdenv.lib; {

@@ -1,21 +1,20 @@
 { stdenv, runCommand, fetchFromGitHub, autoreconfHook }:
-
 let
   version = "3.8.3";
 
-  headers = runCommand "osxfuse-common-${version}" {
-    src = fetchFromGitHub {
-      owner = "osxfuse";
-      repo = "osxfuse";
-      rev = "osxfuse-${version}";
-      sha256 = "13lmg41zcyiajh8m42w7szkbg2is4551ryx2ia2mmzvvd23pag0z";
-    };
-  } ''
+  headers = runCommand "osxfuse-common-${version}"
+    {
+      src = fetchFromGitHub {
+        owner = "osxfuse";
+        repo = "osxfuse";
+        rev = "osxfuse-${version}";
+        sha256 = "13lmg41zcyiajh8m42w7szkbg2is4551ryx2ia2mmzvvd23pag0z";
+      };
+    } ''
     mkdir -p $out/include
     cp --target-directory=$out/include $src/common/*.h
   '';
 in
-
 stdenv.mkDerivation {
 
   pname = "osxfuse";

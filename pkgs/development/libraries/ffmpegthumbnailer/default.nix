@@ -1,4 +1,10 @@
-{ fetchFromGitHub, stdenv, ffmpeg, cmake, libpng, pkgconfig, libjpeg
+{ fetchFromGitHub
+, stdenv
+, ffmpeg
+, cmake
+, libpng
+, pkgconfig
+, libjpeg
 }:
 
 stdenv.mkDerivation rec {

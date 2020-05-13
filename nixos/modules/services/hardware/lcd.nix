@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.hardware.lcd;
   pkg = lib.getBin pkgs.lcdproc;
@@ -27,7 +26,8 @@ let
     Slice = "lcd.slice";
   };
 
-in with lib; {
+in
+with lib; {
 
   meta.maintainers = with maintainers; [ peterhoeg ];
 

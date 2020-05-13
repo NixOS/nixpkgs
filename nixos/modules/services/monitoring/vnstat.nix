@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.vnstat;
-in {
+in
+{
   options.services.vnstat = {
     enable = mkOption {
       type = types.bool;

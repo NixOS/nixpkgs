@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, codecov, coverage
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, codecov
+, coverage
 , flake8
 , matplotlib
 , mock
@@ -12,7 +15,7 @@
 , twine
 , wheel
 }:
-  
+
 buildPythonPackage rec {
   pname = "word_cloud";
   version = "1.6.0";
@@ -33,7 +36,7 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest -k 'not cli_as_executable'
   '';
-  
+
   meta = with stdenv.lib; {
     description = "A little word cloud generator in Python";
     homepage = "https://github.com/amueller/word_cloud";

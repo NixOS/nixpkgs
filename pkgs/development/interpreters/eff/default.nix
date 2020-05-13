@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, which, ocamlPackages }:
-
 let version = "5.0"; in
-
 stdenv.mkDerivation {
 
   pname = "eff";
@@ -15,7 +13,12 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ which ] ++ (with ocamlPackages; [
-    ocaml findlib ocamlbuild menhir js_of_ocaml js_of_ocaml-ocamlbuild
+    ocaml
+    findlib
+    ocamlbuild
+    menhir
+    js_of_ocaml
+    js_of_ocaml-ocamlbuild
   ]);
 
   doCheck = true;

@@ -1,5 +1,5 @@
 { stdenv, python3, qt5, fetchFromGitHub, wrapPython, pyqt5, pyserial }:
- 
+
 stdenv.mkDerivation rec {
   pname = "sumorobot-manager";
   version = "0.9.0";
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 ];
   pythonPath = [
-    pyqt5 pyserial
+    pyqt5
+    pyserial
   ];
 
   nativeBuildInputs = [ wrapPython qt5.wrapQtAppsHook ];

@@ -1,7 +1,16 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, topkg, dune
-, cmdliner, astring, fmt, result, uuidm
+{ stdenv
+, fetchzip
+, ocaml
+, findlib
+, ocamlbuild
+, topkg
+, dune
+, cmdliner
+, astring
+, fmt
+, result
+, uuidm
 }:
-
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
     version = "0.8.5";
@@ -18,7 +27,6 @@ let param =
     inherit (topkg) buildPhase installPhase;
   };
 in
-
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-alcotest-${version}";
   inherit (param) version buildPhase installPhase;
@@ -28,11 +36,11 @@ stdenv.mkDerivation rec {
     inherit (param) sha256;
   };
 
-  nativeBuildInputs = [ ocaml findlib ] ++ (param.nativeBuildInputs or []);
-  buildInputs = [ findlib ] ++ (param.buildInputs or []);
+  nativeBuildInputs = [ ocaml findlib ] ++ (param.nativeBuildInputs or [ ]);
+  buildInputs = [ findlib ] ++ (param.buildInputs or [ ]);
 
   propagatedBuildInputs = [ cmdliner astring fmt result ]
-  ++ (param.propagatedBuildInputs or []);
+    ++ (param.propagatedBuildInputs or [ ]);
 
   createFindlibDestdir = true;
 

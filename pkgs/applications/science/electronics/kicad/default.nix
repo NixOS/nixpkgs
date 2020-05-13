@@ -1,14 +1,29 @@
-{ lib, stdenv, gnome3, pkgs, wxGTK30, wxGTK31
-, gsettings-desktop-schemas, hicolor-icon-theme
-, callPackage, callPackages
-, librsvg, cups
+{ lib
+, stdenv
+, gnome3
+, pkgs
+, wxGTK30
+, wxGTK31
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+, callPackage
+, callPackages
+, librsvg
+, cups
 
 , pname ? "kicad"
-, oceSupport ? false, opencascade
-, withOCCT ? true, opencascade-occt
-, ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python3, python3Packages
-, debug ? false, valgrind
+, oceSupport ? false
+, opencascade
+, withOCCT ? true
+, opencascade-occt
+, ngspiceSupport ? true
+, libngspice
+, scriptingSupport ? true
+, swig
+, python3
+, python3Packages
+, debug ? false
+, valgrind
 , with3d ? true
 , withI18n ? true
 }:
@@ -17,14 +32,14 @@ assert ngspiceSupport -> libngspice != null;
 
 with lib;
 let
-
   stable = pname != "kicad-unstable";
   baseName = if (stable) then "kicad" else "kicad-unstable";
 
-  versions =  import ./versions.nix;
+  versions = import ./versions.nix;
   versionConfig = versions.${baseName};
 
-  wxGTK = if (stable)
+  wxGTK =
+    if (stable)
     # wxGTK3x may default to withGtk2 = false, see #73145
     then wxGTK30.override { withGtk2 = false; }
     # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew
@@ -55,11 +70,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontFixup = true;
 
-  pythonPath = optionals (scriptingSupport)
-    [ wxPython pythonPackages.six ];
+  pythonPath =
+    optionals
+      (scriptingSupport)
+      [ wxPython pythonPackages.six ];
 
-  nativeBuildInputs = optionals (scriptingSupport)
-    [ pythonPackages.wrapPython ];
+  nativeBuildInputs =
+    optionals
+      (scriptingSupport)
+      [ pythonPackages.wrapPython ];
 
   # wrapGAppsHook added the equivalent to ${base}/share
   # though i noticed no difference without it
@@ -124,7 +143,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = [ ./update.sh "all" ];
 
   meta = {
-    description = if (stable)
+    description =
+      if (stable)
       then "Open Source Electronics Design Automation Suite"
       else "Open Source EDA Suite, Development Build";
     homepage = "https://www.kicad-pcb.org/";
@@ -140,6 +160,6 @@ stdenv.mkDerivation rec {
   } // optionalAttrs with3d {
     # We can't download the 3d models on Hydra - they are a ~1 GiB download and
     # they occupy ~5 GiB in store.
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

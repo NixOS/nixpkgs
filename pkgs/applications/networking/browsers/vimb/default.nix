@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libsoup, webkitgtk, gtk3, glib-networking
-, gsettings-desktop-schemas, wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, libsoup
+, webkitgtk
+, gtk3
+, glib-networking
+, gsettings-desktop-schemas
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://fanglingsu.github.io/vimb/;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -3,8 +3,10 @@
 , fetchFromGitHub
 , python
 , isPy27
-, pinqSupport ? false, sqlalchemy
-, pyxlSupport ? false, pyxl3
+, pinqSupport ? false
+, sqlalchemy
+, pyxlSupport ? false
+, pyxl3
 }:
 
 buildPythonPackage rec {

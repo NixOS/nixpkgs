@@ -1,10 +1,24 @@
-{ fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan
-, libksba, coreutils, libiconv, pcsclite
+{ fetchurl
+, stdenv
+, readline
+, zlib
+, libgpgerror
+, pth
+, libgcrypt
+, libassuan
+, libksba
+, coreutils
+, libiconv
+, pcsclite
 
-# Each of the dependencies below are optional.
-# Gnupg can be built without them at the cost of reduced functionality.
-, pinentry ? null, guiSupport ? false
-, openldap ? null, bzip2 ? null, libusb ? null, curl ? null
+  # Each of the dependencies below are optional.
+  # Gnupg can be built without them at the cost of reduced functionality.
+, pinentry ? null
+, guiSupport ? false
+, openldap ? null
+, bzip2 ? null
+, libusb ? null
+, curl ? null
 }:
 
 with stdenv.lib;
@@ -20,9 +34,20 @@ stdenv.mkDerivation rec {
     sha256 = "0wax4cy14hh0h7kg9hj0hjn9424b71z8lrrc5kbsasrn9xd7hag3";
   };
 
-  buildInputs
-    = [ readline zlib libgpgerror libgcrypt libassuan libksba pth
-        openldap bzip2 libusb curl libiconv ];
+  buildInputs = [
+    readline
+    zlib
+    libgpgerror
+    libgcrypt
+    libassuan
+    libksba
+    pth
+    openldap
+    bzip2
+    libusb
+    curl
+    libiconv
+  ];
 
   patches = [ ./gpgkey2ssh-20.patch ];
 
@@ -41,7 +66,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
 
-  checkPhase="GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";
+  checkPhase = "GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";
 
   doCheck = true;
 

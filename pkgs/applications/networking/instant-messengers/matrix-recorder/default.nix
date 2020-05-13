@@ -2,7 +2,8 @@
 (import ./composition.nix {
   inherit pkgs;
   inherit (stdenv.hostPlatform) system;
-})."package".override {
+}
+)."package".override {
   postInstall = ''
     mkdir "$out/bin"
     echo '#!/bin/sh' >> "$out/bin/matrix-recorder"

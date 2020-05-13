@@ -1,10 +1,18 @@
-{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt, libxml2
-, docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
-, pam ? null, glibcCross ? null
+{ stdenv
+, fetchpatch
+, fetchFromGitHub
+, autoreconfHook
+, libxslt
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, itstool
+, flex
+, bison
+, pam ? null
+, glibcCross ? null
 }:
-
 let
-
   glibc =
     if stdenv.hostPlatform != stdenv.buildPlatform
     then glibcCross
@@ -16,7 +24,6 @@ let
   };
 
 in
-
 stdenv.mkDerivation rec {
   pname = "shadow";
   version = "4.8";
@@ -29,12 +36,20 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
-  nativeBuildInputs = [autoreconfHook libxslt libxml2
-    docbook_xml_dtd_45 docbook_xsl flex bison itstool
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    libxslt
+    libxml2
+    docbook_xml_dtd_45
+    docbook_xsl
+    flex
+    bison
+    itstool
+  ];
 
   patches =
-    [ ./keep-path.patch
+    [
+      ./keep-path.patch
       # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
       ./respect-xml-catalog-files-var.patch
       dots_in_usernames
@@ -61,7 +76,8 @@ stdenv.mkDerivation rec {
     "--with-group-name-max-length=32"
   ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd";
 
-  preBuild = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "glibc")
+  preBuild = stdenv.lib.optionalString
+    (stdenv.hostPlatform.libc == "glibc")
     ''
       substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc.bin}/bin/nscd
     '';

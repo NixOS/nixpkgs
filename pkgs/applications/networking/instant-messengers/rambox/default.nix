@@ -1,10 +1,21 @@
-{ stdenv, fetchurl, xdg_utils, dpkg, makeWrapper, autoPatchelfHook
-, libXtst, libXScrnSaver, gtk3, nss, alsaLib, udev, libnotify
+{ stdenv
+, fetchurl
+, xdg_utils
+, dpkg
+, makeWrapper
+, autoPatchelfHook
+, libXtst
+, libXScrnSaver
+, gtk3
+, nss
+, alsaLib
+, udev
+, libnotify
 }:
-
 let
   version = "0.7.3";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "rambox";
   inherit version;
   src = {
@@ -44,7 +55,7 @@ in stdenv.mkDerivation rec {
     homepage = http://rambox.pro;
     license = licenses.mit;
     maintainers = [ maintainers.gnidorah ];
-    platforms = ["i686-linux" "x86_64-linux"];
-    hydraPlatforms = [];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    hydraPlatforms = [ ];
   };
 }

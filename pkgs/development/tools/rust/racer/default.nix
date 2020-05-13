@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0zaqa89z3nf23s2q1jpmfz4lygh4zq9ymql71d748fgjy9psr449";
 
   buildInputs = [ makeWrapper ]
-                ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   # a nightly compiler is required unless we use this cheat code.
-  RUSTC_BOOTSTRAP=1;
+  RUSTC_BOOTSTRAP = 1;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
   postInstall = ''

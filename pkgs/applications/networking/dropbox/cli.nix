@@ -9,7 +9,6 @@
 , gdk-pixbuf
 , gobject-introspection
 }:
-
 let
   version = "2019.02.14";
   dropboxd = "${dropbox}/bin/dropbox";

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, dateutil, requests, pytz, pyproj , pytest } :
+{ lib, buildPythonPackage, fetchPypi, dateutil, requests, pytz, pyproj, pytest }:
 buildPythonPackage rec {
   pname = "OWSLib";
   version = "0.19.0";

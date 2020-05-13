@@ -1,6 +1,15 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, deepin,
-  dtkcore, dtkwidget, kcodecs, qttools, syntax-highlighting,
-  wrapQtAppsHook
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, deepin
+, dtkcore
+, dtkwidget
+, kcodecs
+, qttools
+, syntax-highlighting
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {

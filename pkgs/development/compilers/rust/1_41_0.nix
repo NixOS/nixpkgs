@@ -7,16 +7,21 @@
 # 2. The LLVM version used for building should match with rust upstream.
 # 3. Firefox and Thunderbird should still build on x86_64-linux.
 
-{ stdenv, lib
+{ stdenv
+, lib
 , buildPackages
-, newScope, callPackage
-, CoreFoundation, Security
+, newScope
+, callPackage
+, CoreFoundation
+, Security
 , llvmPackages_5
-, pkgsBuildTarget, pkgsBuildBuild
+, pkgsBuildTarget
+, pkgsBuildBuild
 , fetchpatch
 } @ args:
 
-import ./default.nix {
+import ./default.nix
+{
   rustcVersion = "1.41.0";
   rustcSha256 = "0jypz2mrzac41sj0zh07yd1z36g2s2rvgsb8g624sk4l14n84ijm";
 
@@ -44,5 +49,4 @@ import ./default.nix {
     })
   ];
 }
-
-(builtins.removeAttrs args [ "fetchpatch" ])
+  (builtins.removeAttrs args [ "fetchpatch" ])

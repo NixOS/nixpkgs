@@ -31,9 +31,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    requests requests_oauthlib isodate certifi
+    requests
+    requests_oauthlib
+    isodate
+    certifi
   ] ++ lib.optionals (!isPy3k) [ enum34 typing ]
-    ++ lib.optionals isPy3k [ aiohttp aiodns ];
+  ++ lib.optionals isPy3k [ aiohttp aiodns ];
 
   checkInputs = [ pytest httpretty ]
     ++ lib.optionals (!isPy3k) [ mock futures ]

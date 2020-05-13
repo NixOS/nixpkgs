@@ -1,10 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, bison, file, flex
-, asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
-, libmnl, libnftnl, libpcap
-, gmp, jansson, readline
+{ stdenv
+, fetchurl
+, pkgconfig
+, bison
+, file
+, flex
+, asciidoc
+, libxslt
+, findXMLCatalogs
+, docbook_xml_dtd_45
+, docbook_xsl
+, libmnl
+, libnftnl
+, libpcap
+, gmp
+, jansson
+, readline
 , withDebugSymbols ? false
-, withPython ? false , python3
-, withXtables ? false , iptables
+, withPython ? false
+, python3
+, withXtables ? false
+, iptables
 }:
 
 with stdenv.lib;
@@ -19,15 +34,26 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig bison file flex
-    asciidoc docbook_xml_dtd_45 docbook_xsl findXMLCatalogs libxslt 
+    pkgconfig
+    bison
+    file
+    flex
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    findXMLCatalogs
+    libxslt
   ];
 
   buildInputs = [
-    libmnl libnftnl libpcap
-    gmp jansson readline
+    libmnl
+    libnftnl
+    libpcap
+    gmp
+    jansson
+    readline
   ] ++ optional withXtables iptables
-    ++ optional withPython python3;
+  ++ optional withPython python3;
 
   preConfigure = ''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
@@ -36,9 +62,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-json"
   ] ++ optional (!withDebugSymbols) "--disable-debug"
-    ++ optional (!withPython) "--disable-python"
-    ++ optional withPython "--enable-python"
-    ++ optional withXtables "--with-xtables";
+  ++ optional (!withPython) "--disable-python"
+  ++ optional withPython "--enable-python"
+  ++ optional withXtables "--with-xtables";
 
   meta = {
     description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";

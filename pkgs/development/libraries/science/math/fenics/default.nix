@@ -22,10 +22,10 @@
 , zlib ? null
 , docs ? false
 , pythonBindings ? false
-, doCheck ? true }:
+, doCheck ? true
+}:
 
 assert pythonBindings -> python != null && ply != null && swig != null;
-
 let
   version = "2017.1.0";
 
@@ -138,11 +138,30 @@ stdenv.mkDerivation {
   };
   propagatedBuildInputs = [ dijitso fiat numpy six ufl ];
   buildInputs = [
-    boost cmake dijitso doxygen eigen ffc fiat gtest hdf5 instant mpi
-    numpy pkgconfig six sphinx suitesparse sympy ufl vtk zlib
-    ] ++ stdenv.lib.optionals pythonBindings [ ply python numpy swig ];
+    boost
+    cmake
+    dijitso
+    doxygen
+    eigen
+    ffc
+    fiat
+    gtest
+    hdf5
+    instant
+    mpi
+    numpy
+    pkgconfig
+    six
+    sphinx
+    suitesparse
+    sympy
+    ufl
+    vtk
+    zlib
+  ] ++ stdenv.lib.optionals pythonBindings [ ply python numpy swig ];
   patches = [ ./unicode.patch ];
-  cmakeFlags = [ "-DDOLFIN_CXX_FLAGS=-std=c++11"
+  cmakeFlags = [
+    "-DDOLFIN_CXX_FLAGS=-std=c++11"
     "-DDOLFIN_AUTO_DETECT_MPI=OFF"
     ("-DDOLFIN_ENABLE_CHOLMOD=" + (if suitesparse != null then "ON" else "OFF"))
     ("-DDOLFIN_ENABLE_DOCS=" + (if docs then "ON" else "OFF"))

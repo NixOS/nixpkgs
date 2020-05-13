@@ -1,14 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   generationsDirBuilder = pkgs.substituteAll {
     src = ./generations-dir-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+    path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep ];
     inherit (config.boot.loader.generationsDir) copyKernels;
   };
 
@@ -16,7 +15,6 @@ let
   inherit (pkgs.stdenv.hostPlatform) platform;
 
 in
-
 {
   options = {
 

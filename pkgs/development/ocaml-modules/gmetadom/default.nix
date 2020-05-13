@@ -1,9 +1,7 @@
-{stdenv, fetchurl, ocaml, findlib, gdome2, libxslt, pkgconfig}:
-
+{ stdenv, fetchurl, ocaml, findlib, gdome2, libxslt, pkgconfig }:
 let
   pname = "gmetadom";
 in
-
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "0.2.6";
@@ -17,14 +15,14 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true;
 
-  preConfigure=''
+  preConfigure = ''
     configureFlags="--with-ocaml-lib-prefix=$out/lib/ocaml/${ocaml.version}/site-lib"
   '';
 
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ocaml findlib gdome2 libxslt];
-  propagatedBuildInputs = [gdome2];
+  buildInputs = [ ocaml findlib gdome2 libxslt ];
+  propagatedBuildInputs = [ gdome2 ];
 
   meta = {
     homepage = http://gmetadom.sourceforge.net/;

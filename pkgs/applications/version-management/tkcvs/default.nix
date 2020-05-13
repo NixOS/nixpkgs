@@ -1,7 +1,6 @@
-{stdenv, fetchurl, tcl, tk}:
+{ stdenv, fetchurl, tcl, tk }:
 
-stdenv.mkDerivation
-{
+stdenv.mkDerivation {
   name = "tkcvs-8.2.1";
 
   src = fetchurl {

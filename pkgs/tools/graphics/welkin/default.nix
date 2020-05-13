@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [
       raskin
     ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = stdenv.lib.licenses.free;
     platforms = with stdenv.lib.platforms; unix;
   };

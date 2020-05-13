@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.logstash;
   pluginPath = lib.concatStringsSep ":" cfg.plugins;
@@ -27,15 +26,16 @@ let
 
   logstashSettingsYml = pkgs.writeText "logstash.yml" cfg.extraSettings;
 
-  logstashSettingsDir = pkgs.runCommand "logstash-settings" {
-      inherit logstashSettingsYml;
-      preferLocalBuild = true;
-    } ''
-    mkdir -p $out
-    ln -s $logstashSettingsYml $out/logstash.yml
-  '';
+  logstashSettingsDir =
+    pkgs.runCommand "logstash-settings"
+      {
+        inherit logstashSettingsYml;
+        preferLocalBuild = true;
+      } ''
+      mkdir -p $out
+      ln -s $logstashSettingsYml $out/logstash.yml
+    '';
 in
-
 {
   imports = [
     (mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
@@ -178,7 +178,8 @@ in
           "-f ${logstashConf}"
           "--path.settings ${logstashSettingsDir}"
           "--path.data ${cfg.dataDir}"
-        ]);
+        ]
+        );
       };
     };
   };

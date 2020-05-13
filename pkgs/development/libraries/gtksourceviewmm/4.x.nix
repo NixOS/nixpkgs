@@ -27,4 +27,3 @@ stdenv.mkDerivation rec {
     maintainers = gnome3.maintainers;
   };
 }
-

@@ -1,13 +1,11 @@
 { stdenv, lib, writeScript, coreutils, curl, gnugrep, gnused, jq, common-updater-scripts, nix }:
 { name, ignored-versions ? "^2014(\\.|rc)|^v[0-9]+" }:
-
 let
   nameAndVersion = builtins.parseDrvName name;
   packageVersion = nameAndVersion.version;
   packageName = nameAndVersion.name;
   attrPath = "deepin.${packageName}";
 in
-
 writeScript "update-${packageName}" ''
   #!${stdenv.shell}
   set -o errexit

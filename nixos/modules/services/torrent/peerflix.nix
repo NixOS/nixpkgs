@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.peerflix;
 
@@ -12,7 +11,8 @@ let
     }
   '';
 
-in {
+in
+{
 
   ###### interface
 

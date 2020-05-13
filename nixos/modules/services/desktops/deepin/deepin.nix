@@ -95,10 +95,10 @@
 
       security.pam.services.deepin-auth-keyboard.text = ''
         # original at ${pkgs.deepin.dde-daemon}/etc/pam.d/deepin-auth-keyboard
-        auth	[success=2 default=ignore]	pam_lsass.so
-        auth	[success=1 default=ignore]	pam_unix.so nullok_secure try_first_pass
-        auth	requisite	pam_deny.so
-        auth	required	pam_permit.so
+        auth  [success=2 default=ignore]  pam_lsass.so
+        auth  [success=1 default=ignore]  pam_unix.so nullok_secure try_first_pass
+        auth  requisite  pam_deny.so
+        auth  required  pam_permit.so
       '';
 
       environment.etc = {
@@ -109,16 +109,19 @@
 
       services.deepin.deepin-menu.enable = true;
       services.deepin.deepin-turbo.enable = true;
-    })
+    }
+    )
 
     (lib.mkIf config.services.deepin.deepin-menu.enable {
       services.dbus.packages = [ pkgs.deepin.deepin-menu ];
-    })
+    }
+    )
 
     (lib.mkIf config.services.deepin.deepin-turbo.enable {
       environment.systemPackages = [ pkgs.deepin.deepin-turbo ];
       systemd.packages = [ pkgs.deepin.deepin-turbo ];
-    })
+    }
+    )
 
   ];
 

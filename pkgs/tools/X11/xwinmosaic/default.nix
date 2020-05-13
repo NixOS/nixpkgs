@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = ''X window switcher drawing a colourful grid'';
-    license = stdenv.lib.licenses.bsd2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.bsd2;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

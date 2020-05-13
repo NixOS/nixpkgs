@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, pcsclite, talloc, python2, gnutls
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, pcsclite
+, talloc
+, python2
+, gnutls
 }:
 
 stdenv.mkDerivation rec {
@@ -18,11 +24,14 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig
+    autoreconfHook
+    pkgconfig
   ];
 
   buildInputs = [
-    pcsclite python2 gnutls
+    pcsclite
+    python2
+    gnutls
   ];
 
   enableParallelBuilding = true;

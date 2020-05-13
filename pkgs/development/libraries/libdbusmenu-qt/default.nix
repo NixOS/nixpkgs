@@ -1,12 +1,10 @@
 { stdenv, fetchurl, qt4, cmake }:
-
 let
   baseName = "libdbusmenu-qt";
   v = "0.9.2";
   homepage = "https://launchpad.net/${baseName}";
   name = "${baseName}-${v}";
 in
-
 stdenv.mkDerivation {
   inherit name;
 

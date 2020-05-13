@@ -14,7 +14,7 @@ rec {
 
   packageName = "dbd-sqlite3";
 
-  asdFilesToKeep = ["dbd-sqlite3.asd"];
+  asdFilesToKeep = [ "dbd-sqlite3.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM dbd-sqlite3 DESCRIPTION Database driver for SQLite3. SHA256

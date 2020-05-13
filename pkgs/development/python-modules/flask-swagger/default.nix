@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, flask, pyyaml }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, flask
+, pyyaml
+}:
 
 buildPythonPackage rec {
   version = "0.2.14";

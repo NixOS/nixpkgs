@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   pname = "live555";
   version = "2019.11.22";
 
-  src = fetchurl { # the upstream doesn't provide a stable URL
+  src = fetchurl {
+    # the upstream doesn't provide a stable URL
     urls = [
       "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
       "https://download.videolan.org/contrib/live555/live.${version}.tar.gz"
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
       i686-linux = "linux";
       x86_64-linux = "linux-64bit";
       aarch64-linux = "linux-64bit";
-    }.${stdenv.hostPlatform.system}}
+      }.${stdenv.hostPlatform.system}}
 
     runHook postConfigure
   '';

@@ -2,7 +2,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
 
   cfg = config.services.irqbalance;
@@ -15,7 +14,7 @@ in
 
     environment.systemPackages = [ pkgs.irqbalance ];
 
-    systemd.services.irqbalance.wantedBy = ["multi-user.target"];
+    systemd.services.irqbalance.wantedBy = [ "multi-user.target" ];
 
     systemd.packages = [ pkgs.irqbalance ];
 

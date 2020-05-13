@@ -1,10 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv
+, buildPythonPackage
+, fetchPypi
 , inflect
 , jinja2
 , jinja2_pluralize
 , pygments
 , six
-# test dependencies
+  # test dependencies
 , coverage
 , flake8
 , mock

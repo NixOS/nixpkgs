@@ -1,5 +1,4 @@
 { stdenv, fetchurl, SDL2, SDL2_ttf, SDL2_image, SDL2_mixer, pkgconfig, lua, zlib, unzip }:
-
 let
   version = "3.3.1";
 
@@ -27,7 +26,6 @@ let
     })
   ];
 in
-
 stdenv.mkDerivation {
   name = "instead-" + version;
 

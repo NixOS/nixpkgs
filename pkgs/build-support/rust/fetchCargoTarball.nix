@@ -19,8 +19,8 @@ let cargo-vendor-normalise = stdenv.mkDerivation {
 in
 { name ? "cargo-deps"
 , src ? null
-, srcs ? []
-, patches ? []
+, srcs ? [ ]
+, patches ? [ ]
 , sourceRoot
 , sha256
 , cargoUpdateHook ? ""
@@ -77,5 +77,8 @@ stdenv.mkDerivation ({
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
 } // (builtins.removeAttrs args [
-  "name" "sha256" "cargoUpdateHook"
-]))
+  "name"
+  "sha256"
+  "cargoUpdateHook"
+]
+))

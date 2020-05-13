@@ -1,11 +1,9 @@
 { stdenv, fetchurl, ncurses, xlibsWrapper }:
-
 let
-   useX11 = stdenv.isi686 || stdenv.isx86_64;
-   useNativeCompilers = stdenv.isi686 || stdenv.isx86_64 || stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
+  useX11 = stdenv.isi686 || stdenv.isx86_64;
+  useNativeCompilers = stdenv.isi686 || stdenv.isx86_64 || stdenv.isMips;
+  inherit (stdenv.lib) optionals optionalString;
 in
-
 stdenv.mkDerivation rec {
 
   pname = "ocaml";
@@ -20,17 +18,18 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = if stdenv.isMips then "-fPIC" else "";
 
   patches = optionals stdenv.isDarwin [ ./gnused-on-osx-fix.patch ] ++
-    [ (fetchurl {
+    [
+      (fetchurl {
         name = "0007-Fix-ocamlopt-w.r.t.-binutils-2.21.patch";
         url = "http://caml.inria.fr/mantis/file_download.php?file_id=418&type=bug";
-	sha256 = "612a9ac108bbfce2238aa5634123da162f0315dedb219958be705e0d92dcdd8e";
+        sha256 = "612a9ac108bbfce2238aa5634123da162f0315dedb219958be705e0d92dcdd8e";
       })
     ];
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
+  configureFlags = [ "-no-tk" ] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
   buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
-  buildInputs = [ncurses] ++ optionals useX11 [ xlibsWrapper ];
+  buildInputs = [ ncurses ] ++ optionals useX11 [ xlibsWrapper ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   prePatch = ''
     CAT=$(type -tp cat)

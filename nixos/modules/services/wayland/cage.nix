@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.cage;
-in {
+in
+{
   options.services.cage.enable = mkEnableOption "cage kiosk service";
 
   options.services.cage.user = mkOption {
@@ -17,10 +17,10 @@ in {
 
   options.services.cage.extraArguments = mkOption {
     type = types.listOf types.str;
-    default = [];
+    default = [ ];
     defaultText = "[]";
     description = "Additional command line arguments to pass to Cage.";
-    example = ["-d"];
+    example = [ "-d" ];
   };
 
   options.services.cage.program = mkOption {
@@ -46,7 +46,7 @@ in {
         "getty@tty1.service"
       ];
       before = [ "graphical.target" ];
-      wants = [ "dbus.socket" "systemd-logind.service" "plymouth-quit.service"];
+      wants = [ "dbus.socket" "systemd-logind.service" "plymouth-quit.service" ];
       wantedBy = [ "graphical.target" ];
       conflicts = [ "getty@tty1.service" ];
 

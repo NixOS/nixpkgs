@@ -3,7 +3,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.buildbot-worker;
 
@@ -41,7 +40,8 @@ let
     s.setServiceParent(application)
   '';
 
-in {
+in
+{
   options = {
     services.buildbot-worker = {
 
@@ -65,7 +65,7 @@ in {
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List of extra groups that the Buildbot Worker user should be a part of.";
       };
 

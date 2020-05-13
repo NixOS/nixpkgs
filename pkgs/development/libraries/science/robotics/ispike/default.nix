@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, cmake, boost
+{ stdenv
+, fetchurl
+, cmake
+, boost
 }:
 
 stdenv.mkDerivation rec {
@@ -20,5 +23,5 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.nico202 ];
   };
 
-  
+
 }

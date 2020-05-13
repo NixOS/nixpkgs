@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, autoreconfHook, libtool, pkgconfig, file, zip, wxGTK, gtk2
-, contribPlugins ? false, hunspell, gamin, boost
+{ stdenv
+, fetchurl
+, autoreconfHook
+, libtool
+, pkgconfig
+, file
+, zip
+, wxGTK
+, gtk2
+, contribPlugins ? false
+, hunspell
+, gamin
+, boost
 }:
 
 with stdenv.lib;

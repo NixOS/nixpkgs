@@ -1,11 +1,11 @@
 { pkgs, config, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.devmon;
 
-in {
+in
+{
   options = {
     services.devmon = {
       enable = mkOption {

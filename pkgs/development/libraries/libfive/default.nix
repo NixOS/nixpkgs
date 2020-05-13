@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, eigen,
-zlib, libpng, boost, qt5, guile
+{ stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkgconfig
+, eigen
+, zlib
+, libpng
+, boost
+, qt5
+, guile
 }:
 
 stdenv.mkDerivation {
@@ -7,9 +16,9 @@ stdenv.mkDerivation {
   version = "2018-07-01";
 
   src = fetchFromGitHub {
-    owner  = "libfive";
-    repo   = "libfive";
-    rev    = "0f517dde9521d751310a22f85ee69b2c84690267";
+    owner = "libfive";
+    repo = "libfive";
+    rev = "0f517dde9521d751310a22f85ee69b2c84690267";
     sha256 = "0bfxysf5f4ripgcv546il8wnw5p0d4s75kdjlwvj32549537hlz0";
   };
   nativeBuildInputs = [ cmake ninja pkgconfig ];

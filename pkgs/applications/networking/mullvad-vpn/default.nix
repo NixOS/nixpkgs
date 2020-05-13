@@ -1,43 +1,60 @@
-{ stdenv, makeWrapper, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
-, xorg, autoPatchelfHook, systemd, libnotify
+{ stdenv
+, makeWrapper
+, fetchurl
+, dpkg
+, alsaLib
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gnome2
+, pango
+, nspr
+, nss
+, gtk3
+, xorg
+, autoPatchelfHook
+, systemd
+, libnotify
 }:
-
 let deps = [
-    alsaLib
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gnome2.GConf
-    pango
-    gtk3
-    libnotify
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
-    nspr
-    nss
-    systemd
-  ];
+  alsaLib
+  atk
+  cairo
+  cups
+  dbus
+  expat
+  fontconfig
+  freetype
+  gdk-pixbuf
+  glib
+  gnome2.GConf
+  pango
+  gtk3
+  libnotify
+  xorg.libX11
+  xorg.libXScrnSaver
+  xorg.libXcomposite
+  xorg.libXcursor
+  xorg.libXdamage
+  xorg.libXext
+  xorg.libXfixes
+  xorg.libXi
+  xorg.libXrandr
+  xorg.libXrender
+  xorg.libXtst
+  xorg.libxcb
+  nspr
+  nss
+  systemd
+];
 
 in
-
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
   version = "2020.2";

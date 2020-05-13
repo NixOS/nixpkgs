@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
-let cfg = config.services.subsonic; in {
+let cfg = config.services.subsonic; in
+{
   options = {
     services.subsonic = {
       enable = mkEnableOption "Subsonic daemon";

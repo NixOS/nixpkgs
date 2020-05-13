@@ -1,10 +1,10 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.hail;
-in {
+in
+{
 
 
   ###### interface

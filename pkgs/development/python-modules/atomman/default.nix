@@ -1,4 +1,7 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
 , cython
 , datamodeldict
 , matplotlib
@@ -18,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "usnistgov";
-    repo  = "atomman";
+    repo = "atomman";
     rev = "v${version}";
     sha256 = "09pfykd96wmw00s3kgabghykjn8b4yjml4ybpi7kwy7ygdmzcx51";
   };

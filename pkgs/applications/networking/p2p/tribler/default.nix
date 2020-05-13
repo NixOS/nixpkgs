@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, pkgs, python3Packages, makeWrapper
-, enablePlayer ? true, vlc ? null, qt5, lib }:
+{ stdenv
+, fetchurl
+, pkgs
+, python3Packages
+, makeWrapper
+, enablePlayer ? true
+, vlc ? null
+, qt5
+, lib
+}:
 
 stdenv.mkDerivation rec {
   pname = "tribler";
@@ -69,8 +77,8 @@ stdenv.mkDerivation rec {
         --run 'cd $_TRIBLERPATH' \
         --add-flags "-O $out/run_tribler.py" \
         ${stdenv.lib.optionalString enablePlayer ''
-          --prefix LD_LIBRARY_PATH : ${vlc}/lib
-        ''}
+      --prefix LD_LIBRARY_PATH : ${vlc}/lib
+    ''}
   '';
 
   meta = with stdenv.lib; {

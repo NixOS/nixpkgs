@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
-, libvorbis, freetype, openal, libGL }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libjpeg
+, libX11
+, libXxf86vm
+, curl
+, libogg
+, libvorbis
+, freetype
+, openal
+, libGL
+}:
 
 stdenv.mkDerivation {
   name = "alienarena-7.65";
@@ -10,8 +21,17 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libjpeg libX11 curl libogg libvorbis
-                  freetype openal libGL libXxf86vm ];
+  buildInputs = [
+    libjpeg
+    libX11
+    curl
+    libogg
+    libvorbis
+    freetype
+    openal
+    libGL
+    libXxf86vm
+  ];
 
   patchPhase = ''
     substituteInPlace ./configure \
@@ -35,6 +55,6 @@ stdenv.mkDerivation {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   src = python3Packages.fetchPypi {
     inherit version;
-    pname  = "pinggraph";
+    pname = "pinggraph";
     sha256 = "0q5ma98457zb6vxsnhmrr3p38j1vg0gl155y0adzfg67wlniac92";
   };
 

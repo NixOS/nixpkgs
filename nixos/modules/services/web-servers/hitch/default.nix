@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.hitch;
   ocspDir = lib.optionalString cfg.ocsp-stapling.enabled "/var/cache/hitch/ocsp";
@@ -11,7 +11,8 @@ let
     "user = \"${cfg.user}\""
     "group = \"${cfg.group}\""
     cfg.extraConfig
-  ]);
+  ]
+  );
 in
 with lib;
 {
@@ -37,15 +38,15 @@ with lib;
         type = types.either types.str (types.listOf types.str);
         default = "[127.0.0.1]:443";
         description = ''
-          The port and interface of the listen endpoint in the
-+         form [HOST]:PORT[+CERT].
+                    The port and interface of the listen endpoint in the
+          +         form [HOST]:PORT[+CERT].
         '';
         apply = toList;
       };
 
       pem-files = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = "PEM files to use";
       };
 
@@ -89,7 +90,8 @@ with lib;
       '' + (optionalString cfg.ocsp-stapling.enabled ''
         mkdir -p ${ocspDir}
         chown -R hitch:hitch ${ocspDir}
-      '');
+      ''
+      );
       serviceConfig = {
         Type = "forking";
         ExecStart = "${pkgs.hitch}/sbin/hitch --daemon --config ${hitchConfig}";
@@ -106,6 +108,6 @@ with lib;
       group = "hitch";
       isSystemUser = true;
     };
-    users.groups.hitch = {};
+    users.groups.hitch = { };
   };
 }

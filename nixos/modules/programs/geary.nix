@@ -1,11 +1,11 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.programs.geary;
 
-in {
+in
+{
   options = {
     programs.geary.enable = mkEnableOption "Geary, a Mail client for GNOME 3";
   };
@@ -17,4 +17,3 @@ in {
     services.gnome3.gnome-online-accounts.enable = true;
   };
 }
-

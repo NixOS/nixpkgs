@@ -22,4 +22,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ jglukasik ];
   };
 }
-

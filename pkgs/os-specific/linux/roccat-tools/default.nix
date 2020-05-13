@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gettext
-, dbus, dbus-glib, libgaminggear, libgudev, lua
+{ stdenv
+, fetchurl
+, cmake
+, pkgconfig
+, gettext
+, dbus
+, dbus-glib
+, libgaminggear
+, libgudev
+, lua
 }:
 
 stdenv.mkDerivation rec {

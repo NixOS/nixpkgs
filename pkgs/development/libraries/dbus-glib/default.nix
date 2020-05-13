@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, buildPackages
-, pkgconfig, expat, gettext, libiconv, dbus, glib
+{ stdenv
+, fetchurl
+, buildPackages
+, pkgconfig
+, expat
+, gettext
+, libiconv
+, dbus
+, glib
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +27,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ dbus glib ];
 
   configureFlags = [ "--exec-prefix=${placeholder "dev"}" ] ++
-    stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform)
+    stdenv.lib.optional
+      (stdenv.buildPlatform != stdenv.hostPlatform)
       "--with-dbus-binding-tool=${buildPackages.dbus-glib.dev}/bin/dbus-binding-tool";
 
   doCheck = false;

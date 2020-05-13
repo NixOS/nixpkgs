@@ -1,9 +1,7 @@
 { options, config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.matterbridge;
 
   matterbridgeConfToml =
@@ -13,7 +11,6 @@ let
       cfg.configPath;
 
 in
-
 {
   options = {
     services.matterbridge = {
@@ -89,18 +86,24 @@ in
   };
 
   config = mkIf cfg.enable {
-    warnings = optional options.services.matterbridge.configFile.isDefined
-      "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
+    warnings =
+      optional
+        options.services.matterbridge.configFile.isDefined
+        "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
 
-    users.users = optionalAttrs (cfg.user == "matterbridge")
-      { matterbridge = {
+    users.users =
+      optionalAttrs
+        (cfg.user == "matterbridge") {
+        matterbridge = {
           group = "matterbridge";
           isSystemUser = true;
         };
       };
 
-    users.groups = optionalAttrs (cfg.group == "matterbridge")
-      { matterbridge = { };
+    users.groups =
+      optionalAttrs
+        (cfg.group == "matterbridge") {
+        matterbridge = { };
       };
 
     systemd.services.matterbridge = {

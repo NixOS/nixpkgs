@@ -27,9 +27,7 @@
 , xorg
 , yelp
 }:
-
 let
-
   customHunspell = hunspellWithDicts [
     hunspellDicts.en-us
   ];
@@ -37,7 +35,6 @@ let
   majorVersion = "1.4";
 
 in
-
 python3.pkgs.buildPythonApplication rec {
   pname = "onboard";
   version = "${majorVersion}.1";

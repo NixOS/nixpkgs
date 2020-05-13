@@ -1,6 +1,6 @@
 # Test for NixOS' container support.
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "containers-hosts";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ montag451 ];
@@ -10,9 +10,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     { lib, ... }:
     {
       virtualisation.memorySize = 256;
-      virtualisation.vlans = [];
+      virtualisation.vlans = [ ];
 
-      networking.bridges.br0.interfaces = [];
+      networking.bridges.br0.interfaces = [ ];
       networking.interfaces.br0.ipv4.addresses = [
         { address = "10.11.0.254"; prefixLength = 24; }
       ];
@@ -28,7 +28,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         localAddress = "10.10.0.1";
         hostAddress = "10.10.0.254";
 
-        config = {};
+        config = { };
       };
 
       containers.netmask = {
@@ -37,7 +37,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         hostBridge = "br0";
         localAddress = "10.11.0.1/24";
 
-        config = {};
+        config = { };
       };
     };
 

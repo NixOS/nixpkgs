@@ -1,13 +1,12 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  # build dependencies
-  cython,
-  leptonica,
-  pkg-config,
-  tesseract,
-  # extra python packages
+{ buildPythonPackage
+, fetchPypi
+, lib
+, # build dependencies
+  cython
+, leptonica
+, pkg-config
+, tesseract
+, # extra python packages
   pillow
 }:
 

@@ -1,10 +1,8 @@
 { stdenv, fetchurl, makeWrapper, jre }:
-
 let
   version = "2019.3.1.3";
   majorVersion = builtins.substring 0 6 version;
 in
-
 stdenv.mkDerivation rec {
   pname = "flexibee";
   inherit version;

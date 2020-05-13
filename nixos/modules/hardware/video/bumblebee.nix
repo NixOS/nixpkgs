@@ -20,7 +20,6 @@ let
   };
 
 in
-
 {
 
   options = {

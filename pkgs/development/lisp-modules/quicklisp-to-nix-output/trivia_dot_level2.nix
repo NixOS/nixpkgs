@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivia.level2";
 
-  asdFilesToKeep = ["trivia.level2.asd"];
+  asdFilesToKeep = [ "trivia.level2.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivia.level2 DESCRIPTION

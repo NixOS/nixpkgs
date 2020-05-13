@@ -1,5 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform
-, openssl, cmake, perl, pkgconfig, zlib, curl, libgit2, libssh2
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, openssl
+, cmake
+, perl
+, pkgconfig
+, zlib
+, curl
+, libgit2
+, libssh2
 }:
 
 with rustPlatform;
@@ -46,9 +56,9 @@ buildRustPackage rec {
   meta = with stdenv.lib; {
     description = "A tool to help with formatting git patches for review on mailing lists";
     longDescription = ''
-          git series tracks changes to a patch series over time. git
-          series also tracks a cover letter for the patch series,
-          formats the series for email, and prepares pull requests.
+      git series tracks changes to a patch series over time. git
+      series also tracks a cover letter for the patch series,
+      formats the series for email, and prepares pull requests.
     '';
     homepage = https://github.com/git-series/git-series;
 

@@ -9,28 +9,30 @@ stdenv.mkDerivation rec {
     sha256 = "18ascpjzsy70h6hk7wpg8zmzjwgdyrdr7c6z4pg5z4l9hhyv24bf";
   };
 
-  configureFlags= [
+  configureFlags = [
     "--enable-telnet"
     "--enable-pam"
     "--with-sys-screenrc=/etc/screenrc"
     "--enable-colors256"
   ];
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
+  patches = stdenv.lib.optional
+    stdenv.hostPlatform.isMusl
     (fetchpatch {
       url = https://gist.githubusercontent.com/yujinakayama/4608863/raw/76b9f89af5e5a2e97d9a0f36aac989fb56cf1447/gistfile1.diff;
       sha256 = "0f9bf83p8zdxaa1pr75jyf5g8xr3r8kv7cyzzbpraa1q4j15ss1p";
       stripLen = 1;
     });
 
-  postPatch = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+  postPatch = stdenv.lib.optionalString
+    (stdenv.buildPlatform != stdenv.hostPlatform)
     # XXX: Awful hack to allow cross-compilation.
     '' sed -i ./configure \
            -e 's/^as_fn_error .. \("cannot run test program while cross compiling\)/$as_echo \1/g'
     ''; # "
 
   buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam
-                            ++ stdenv.lib.optional stdenv.isDarwin utmp;
+    ++ stdenv.lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 

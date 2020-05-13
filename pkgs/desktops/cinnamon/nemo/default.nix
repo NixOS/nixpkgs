@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { # details see https://github.com/linuxmint/nemo/pull/2303
+    (fetchpatch {
+      # details see https://github.com/linuxmint/nemo/pull/2303
       url = "https://github.com/linuxmint/nemo/pull/2303/commits/9c1ec7812abe712419317df07d6b64623e8f639d.patch";
       sha256 = "09dz7lq3i47rbvycawrxwgjmd9g1mhb76ibx2vq85wck6r08arml";
     })

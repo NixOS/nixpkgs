@@ -1,7 +1,9 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules,
-  qtbase, qttools, shared-mime-info
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, qtbase
+, qttools
+, shared-mime-info
 }:
 
 mkDerivation {

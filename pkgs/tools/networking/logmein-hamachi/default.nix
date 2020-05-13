@@ -1,7 +1,6 @@
 { stdenv, fetchurl }:
 
 with stdenv.lib;
-
 let
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -14,7 +13,8 @@ let
     else throwSystem;
   libraries = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "logmein-hamachi";
   version = "2.1.0.203";
 

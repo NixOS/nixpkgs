@@ -1,6 +1,6 @@
 { libmodulemd, fetchurl }:
 
-libmodulemd.overrideAttrs(old: rec {
+libmodulemd.overrideAttrs (old: rec {
   name = "libmodulemd-${version}";
   version = "1.8.15";
 

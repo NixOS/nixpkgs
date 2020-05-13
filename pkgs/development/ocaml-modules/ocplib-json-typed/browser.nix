@@ -11,4 +11,3 @@ buildDunePackage {
     inherit (ocplib-json-typed.meta) homepage license maintainers;
   };
 }
-

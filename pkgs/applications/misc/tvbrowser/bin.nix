@@ -1,5 +1,4 @@
 { stdenv, fetchurl, makeWrapper, jre, makeDesktopItem }:
-
 let
   desktopItem = makeDesktopItem {
     name = "tvbrowser";
@@ -15,7 +14,8 @@ let
     '';
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tvbrowser";
   version = "4.0.1";
   name = "${pname}-bin-${version}";

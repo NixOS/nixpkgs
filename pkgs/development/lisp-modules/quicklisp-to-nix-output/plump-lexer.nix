@@ -14,7 +14,7 @@
 
   packageName = "plump-lexer";
 
-  asdFilesToKeep = ["plump-lexer.asd"];
+  asdFilesToKeep = [ "plump-lexer.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM plump-lexer DESCRIPTION

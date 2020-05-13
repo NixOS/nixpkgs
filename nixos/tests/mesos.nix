@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : rec {
+import ./make-test.nix ({ pkgs, ... }: rec {
   name = "mesos";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ offline kamilchm cstrahan ];
@@ -9,8 +9,8 @@ import ./make-test.nix ({ pkgs, ...} : rec {
       networking.firewall.enable = false;
       services.zookeeper.enable = true;
       services.mesos.master = {
-          enable = true;
-          zk = "zk://master:2181/mesos";
+        enable = true;
+        zk = "zk://master:2181/mesos";
       };
     };
 
@@ -45,7 +45,8 @@ import ./make-test.nix ({ pkgs, ...} : rec {
     };
   };
 
-  registry = pkgs.runCommand "registry" { } ''
+  registry = pkgs.runCommand "registry"
+    { } ''
     mkdir -p $out
     cp ${simpleDocker} $out/echo:latest.tar
   '';

@@ -11,6 +11,7 @@ with lib;
       Other issues include it not fully supporting systemd and logind sessions.
       Please use a different display manager such as LightDM, SDDM, or GDM.
       You can also use the startx module which uses Xinitrc.
-    '')
+    ''
+    )
   ];
 }

@@ -1,5 +1,4 @@
 { stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, fetchpatch }:
-
 let
   pythonEnv = pythonPackages.python.withPackages (p: [
     p.defusedxml
@@ -7,7 +6,8 @@ let
     p.pyaml
   ]);
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pass-import";
   version = "2.6";
 

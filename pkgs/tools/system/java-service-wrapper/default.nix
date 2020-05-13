@@ -1,6 +1,9 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , jdk
-, ant, cunit, ncurses
+, ant
+, cunit
+, ncurses
 }:
 
 stdenv.mkDerivation rec {

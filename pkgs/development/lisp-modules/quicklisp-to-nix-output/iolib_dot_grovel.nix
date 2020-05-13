@@ -14,7 +14,7 @@ rec {
 
   packageName = "iolib.grovel";
 
-  asdFilesToKeep = ["iolib.grovel.asd"];
+  asdFilesToKeep = [ "iolib.grovel.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iolib.grovel DESCRIPTION The CFFI Groveller SHA256

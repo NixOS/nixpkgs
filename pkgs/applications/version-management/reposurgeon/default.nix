@@ -1,13 +1,29 @@
-{ stdenv, fetchurl, makeWrapper, python27Packages, git
-, docbook_xml_dtd_412, docbook_xsl, asciidoc, xmlto, pypy
-, bazaar ? null, cvs ? null, darcs ? null, fossil ? null
-, mercurial ? null, monotone ? null, rcs ? null
-, subversion ? null, cvs_fast_export ? null }:
+{ stdenv
+, fetchurl
+, makeWrapper
+, python27Packages
+, git
+, docbook_xml_dtd_412
+, docbook_xsl
+, asciidoc
+, xmlto
+, pypy
+, bazaar ? null
+, cvs ? null
+, darcs ? null
+, fossil ? null
+, mercurial ? null
+, monotone ? null
+, rcs ? null
+, subversion ? null
+, cvs_fast_export ? null
+}:
 
 with stdenv; with lib;
 let
   inherit (python27Packages) python;
-in mkDerivation rec {
+in
+mkDerivation rec {
   name = "reposurgeon-${meta.version}";
   meta = {
     description = "A tool for editing version-control repository history";
@@ -41,15 +57,30 @@ in mkDerivation rec {
   postInstall =
     let
       binpath = makeBinPath (
-        filter (x: x != null)
-        [ out git bazaar cvs darcs fossil mercurial
-          monotone rcs src subversion cvs_fast_export ]
+        filter
+          (x: x != null)
+          [
+            out
+            git
+            bazaar
+            cvs
+            darcs
+            fossil
+            mercurial
+            monotone
+            rcs
+            src
+            subversion
+            cvs_fast_export
+          ]
       );
       pythonpath = makeSearchPathOutput "lib" python.sitePackages (
-        filter (x: x != null)
-        [ python27Packages.readline or null python27Packages.hglib or null ]
+        filter
+          (x: x != null)
+          [ python27Packages.readline or null python27Packages.hglib or null ]
       );
-    in ''
+    in
+    ''
       for prog in reposurgeon repodiffer repotool; do
         wrapProgram $out/bin/$prog \
           --prefix PATH : "${binpath}" \

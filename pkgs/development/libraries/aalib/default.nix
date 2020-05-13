@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, automake}:
+{ stdenv, fetchurl, ncurses, automake }:
 
 stdenv.mkDerivation {
   name = "aalib-1.4rc5";

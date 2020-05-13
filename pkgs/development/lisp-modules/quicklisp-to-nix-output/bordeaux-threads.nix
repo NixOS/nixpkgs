@@ -16,7 +16,7 @@ rec {
 
   packageName = "bordeaux-threads";
 
-  asdFilesToKeep = ["bordeaux-threads.asd"];
+  asdFilesToKeep = [ "bordeaux-threads.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM bordeaux-threads DESCRIPTION

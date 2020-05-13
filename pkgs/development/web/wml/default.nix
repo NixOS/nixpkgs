@@ -47,8 +47,10 @@ perlPackages.buildPerlPackage {
   preFixup = ''
     wrapProgram $out/bin/wml \
       --set PERL5LIB ${with perlPackages; makePerlPath [
-        BitVector TermReadKey ImageSize
-      ]}
+      BitVector
+      TermReadKey
+      ImageSize
+    ]}
   '';
 
   enableParallelBuilding = false;

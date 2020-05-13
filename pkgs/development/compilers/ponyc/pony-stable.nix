@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, ponyc }:
+{ stdenv, fetchFromGitHub, ponyc }:
 
 stdenv.mkDerivation rec {
   pname = "pony-stable";

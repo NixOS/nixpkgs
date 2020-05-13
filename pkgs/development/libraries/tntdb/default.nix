@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://www.tntnet.org/tntdb.html;
     description = "C++ library which makes accessing SQL databases easy and robust";
-    platforms = platforms.linux ;
+    platforms = platforms.linux;
     license = licenses.lgpl21;
     maintainers = [ maintainers.juliendehos ];
   };

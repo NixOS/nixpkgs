@@ -1,16 +1,19 @@
-{ stdenv, fetchurl, pkgconfig
-, libsndfile, libpulseaudio
+{ stdenv
+, fetchurl
+, pkgconfig
+, libsndfile
+, libpulseaudio
 }:
-
 let
   version = "5.8.2";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ekho";
   inherit version;
 
   meta = with stdenv.lib; {
     description = "Chinese text-to-speech software";
-    homepage    = "http://www.eguidedog.net/ekho.php";
+    homepage = "http://www.eguidedog.net/ekho.php";
     longDescription = ''
       Ekho (余音) is a free, open source and multilingual text-to-speech (TTS)
       software. It supports Cantonese (Chinese dialect spoken in Hong Kong and
@@ -18,9 +21,9 @@ in stdenv.mkDerivation rec {
       (a dialect in Taiwan), Tibetan, Ngangien (an ancient Chinese before
       Yuan Dynasty) and Korean (in trial).
     '';
-    license        = licenses.gpl2Plus;
-    platforms      = platforms.linux;
-    hydraPlatforms = [];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    hydraPlatforms = [ ];
   };
 
   src = fetchurl {

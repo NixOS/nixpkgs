@@ -1,6 +1,22 @@
-{ fetchgit, stdenv, zlib, bzip2, docbook2x, pcre, curl, libxml2, libevent, perl
-, pkgconfig, protobuf, tokyocabinet, tokyotyrant, opencv, autoconf, automake
-, libtool, seeks_confDir ? ""
+{ fetchgit
+, stdenv
+, zlib
+, bzip2
+, docbook2x
+, pcre
+, curl
+, libxml2
+, libevent
+, perl
+, pkgconfig
+, protobuf
+, tokyocabinet
+, tokyotyrant
+, opencv
+, autoconf
+, automake
+, libtool
+, seeks_confDir ? ""
 }:
 
 stdenv.mkDerivation {
@@ -13,12 +29,28 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ zlib bzip2 docbook2x pcre curl libxml2 libevent perl pkgconfig
-      protobuf tokyocabinet tokyotyrant opencv autoconf automake libtool
+    [
+      zlib
+      bzip2
+      docbook2x
+      pcre
+      curl
+      libxml2
+      libevent
+      perl
+      pkgconfig
+      protobuf
+      tokyocabinet
+      tokyotyrant
+      opencv
+      autoconf
+      automake
+      libtool
     ];
 
   configureFlags =
-    [ # Enable the built-in web server providing a web search interface.
+    [
+      # Enable the built-in web server providing a web search interface.
       "--enable-httpserv-plugin=yes"
       "--with-libevent=${libevent.dev}"
     ];
@@ -63,7 +95,7 @@ stdenv.mkDerivation {
     maintainers = [
       stdenv.lib.maintainers.matejc
     ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux; # arbitrary choice
     broken = true; # 2018-04-11
   };
 }

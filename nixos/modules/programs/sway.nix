@@ -1,20 +1,20 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.programs.sway;
 
   wrapperOptions = types.submodule {
     options =
       let
-        mkWrapperFeature  = default: description: mkOption {
+        mkWrapperFeature = default: description: mkOption {
           type = types.bool;
           inherit default;
           example = !default;
           description = "Whether to make use of the ${description}";
         };
-      in {
+      in
+      {
         base = mkWrapperFeature true ''
           base wrapper to execute extra session commands and prepend a
           dbus-run-session to the sway command.
@@ -23,7 +23,7 @@ let
           wrapGAppsHook wrapper to execute sway with required environment
           variables for GTK applications.
         '';
-    };
+      };
   };
 
   swayPackage = pkgs.sway.override {
@@ -32,7 +32,8 @@ let
     withBaseWrapper = cfg.wrapperFeatures.base;
     withGtkWrapper = cfg.wrapperFeatures.gtk;
   };
-in {
+in
+{
   options.programs.sway = {
     enable = mkEnableOption ''
       Sway, the i3-compatible tiling Wayland compositor. You can manually launch
@@ -70,7 +71,7 @@ in {
 
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
         "--verbose"
         "--debug"
@@ -86,8 +87,11 @@ in {
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
-        swaylock swayidle
-        xwayland alacritty dmenu
+        swaylock
+        swayidle
+        xwayland
+        alacritty
+        dmenu
         rxvt-unicode # For backward compatibility (old default terminal)
       ];
       defaultText = literalExample ''
@@ -124,7 +128,7 @@ in {
         #"sway/config.d".source = mkOptionDefault "${swayPackage}/etc/sway/config.d/";
       };
     };
-    security.pam.services.swaylock = {};
+    security.pam.services.swaylock = { };
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;
     programs.dconf.enable = mkDefault true;

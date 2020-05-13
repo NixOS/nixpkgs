@@ -1,11 +1,19 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut ? null, libGL ? null, libGLU ? null # OpenGL (required for vwebp)
-, pngSupport ? true, libpng ? null # PNG image format
-, jpegSupport ? true, libjpeg ? null # JPEG image format
-, tiffSupport ? true, libtiff ? null # TIFF image format
-, gifSupport ? true, giflib ? null # GIF image format
-#, wicSupport ? true # Windows Imaging Component
+, openglSupport ? false
+, freeglut ? null
+, libGL ? null
+, libGLU ? null # OpenGL (required for vwebp)
+, pngSupport ? true
+, libpng ? null # PNG image format
+, jpegSupport ? true
+, libjpeg ? null # JPEG image format
+, tiffSupport ? true
+, libtiff ? null # TIFF image format
+, gifSupport ? true
+, giflib ? null # GIF image format
+  #, wicSupport ? true # Windows Imaging Component
 , alignedSupport ? false # Force aligned memory operations
 , swap16bitcspSupport ? false # Byte swap for 16bit color spaces
 , experimentalSupport ? false # Experimental code
@@ -19,11 +27,9 @@ assert pngSupport -> (libpng != null);
 assert jpegSupport -> (libjpeg != null);
 assert tiffSupport -> (libtiff != null);
 assert gifSupport -> (giflib != null);
-
 let
   mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
 in
-
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "libwebp";

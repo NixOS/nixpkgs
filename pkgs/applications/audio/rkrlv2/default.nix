@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub,
-automake, pkgconfig, lv2, fftw, cmake, xorg, libjack2, libsamplerate, libsndfile
+{ stdenv
+, fetchFromGitHub
+, automake
+, pkgconfig
+, lv2
+, fftw
+, cmake
+, xorg
+, libjack2
+, libsamplerate
+, libsndfile
 }:
 
 stdenv.mkDerivation rec {

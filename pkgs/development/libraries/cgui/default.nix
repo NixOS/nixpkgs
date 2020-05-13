@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cgui";
-  version="2.1.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/cgui/${version}/${pname}-${version}.tar.gz";

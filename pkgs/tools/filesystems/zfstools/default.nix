@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, ruby, zfs }:
-
 let version = "0.3.6"; in
 stdenv.mkDerivation rec {
   pname = "zfstools";

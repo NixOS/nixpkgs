@@ -49,4 +49,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ primeos fpletz globin ];
   };
 }
-

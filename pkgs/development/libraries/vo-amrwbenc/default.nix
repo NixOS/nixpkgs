@@ -1,7 +1,6 @@
 { stdenv, fetchurl, autoreconfHook }:
-
 let
-    version = "0.1.3";
+  version = "0.1.3";
 in
 stdenv.mkDerivation {
   name = "vo-amrwbenc-${version}";

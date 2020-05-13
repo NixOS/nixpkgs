@@ -1,16 +1,29 @@
-{ stdenv, fetchurl, substituteAll
+{ stdenv
+, fetchurl
+, substituteAll
 , pkgconfig
-, cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
-, dbus, file, ghostscript, usbutils
-, net-snmp, openssl, perl, nettools
-, bash, coreutils, utillinux
+, cups
+, zlib
+, libjpeg
+, libusb1
+, python3Packages
+, sane-backends
+, dbus
+, file
+, ghostscript
+, usbutils
+, net-snmp
+, openssl
+, perl
+, nettools
+, bash
+, coreutils
+, utillinux
 , withQt5 ? true
 , withPlugin ? false
 , withStaticPPDInstall ? false
 }:
-
 let
-
   name = "hplip-${version}";
   version = "3.19.12";
 
@@ -30,7 +43,7 @@ let
   };
 
   hplipPlatforms = {
-    i686-linux   = "x86_32";
+    i686-linux = "x86_32";
     x86_64-linux = "x86_64";
     armv6l-linux = "arm32";
     armv7l-linux = "arm32";
@@ -43,7 +56,6 @@ let
   pluginArches = [ "x86_32" "x86_64" "arm32" "aarch64" ];
 
 in
-
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
@@ -222,7 +234,8 @@ python3Packages.buildPythonApplication {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = https://developers.hp.com/hp-linux-imaging-and-printing;
     downloadPage = https://sourceforge.net/projects/hplip/files/hplip/;
-    license = if withPlugin
+    license =
+      if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ];

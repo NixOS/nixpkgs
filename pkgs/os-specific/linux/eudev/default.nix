@@ -1,17 +1,20 @@
-{stdenv, fetchurl, pkgconfig, glib, gperf, utillinux, kmod}:
+{ stdenv, fetchurl, pkgconfig, glib, gperf, utillinux, kmod }:
 let
   s = # Generated upstream information
-  rec {
-    baseName="eudev";
-    version = "3.2.9";
-    name="${baseName}-${version}";
-    url="http://dev.gentoo.org/~blueness/eudev/eudev-${version}.tar.gz";
-    sha256 = "1z6lfhhbjs6j7pbp6ybn17ywjsdl87ql6g1p3m2y26aa10cqcqc9";
-  };
+    rec {
+      baseName = "eudev";
+      version = "3.2.9";
+      name = "${baseName}-${version}";
+      url = "http://dev.gentoo.org/~blueness/eudev/eudev-${version}.tar.gz";
+      sha256 = "1z6lfhhbjs6j7pbp6ybn17ywjsdl87ql6g1p3m2y26aa10cqcqc9";
+    };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glib gperf utillinux kmod
+    glib
+    gperf
+    utillinux
+    kmod
   ];
 in
 stdenv.mkDerivation {
@@ -30,7 +33,7 @@ stdenv.mkDerivation {
   makeFlags = [
     "hwdb_bin=/var/lib/udev/hwdb.bin"
     "udevrulesdir=/etc/udev/rules.d"
-    ];
+  ];
 
   preInstall = ''
     # Disable install-exec-hook target as it conflicts with our move-sbin setup-hook
@@ -39,19 +42,19 @@ stdenv.mkDerivation {
 
   installFlags =
     [
-    "localstatedir=$(TMPDIR)/var"
-    "sysconfdir=$(out)/etc"
-    "udevconfdir=$(out)/etc/udev"
-    "udevhwdbbin=$(out)/var/lib/udev/hwdb.bin"
-    "udevhwdbdir=$(out)/var/lib/udev/hwdb.d"
-    "udevrulesdir=$(out)/var/lib/udev/rules.d"
+      "localstatedir=$(TMPDIR)/var"
+      "sysconfdir=$(out)/etc"
+      "udevconfdir=$(out)/etc/udev"
+      "udevhwdbbin=$(out)/var/lib/udev/hwdb.bin"
+      "udevhwdbdir=$(out)/var/lib/udev/hwdb.d"
+      "udevrulesdir=$(out)/var/lib/udev/rules.d"
     ];
   enableParallelBuilding = true;
   meta = {
     inherit (s) version;
     description = ''An udev fork by Gentoo'';
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     homepage = ''https://www.gentoo.org/proj/en/eudev/'';
     downloadPage = ''http://dev.gentoo.org/~blueness/eudev/'';

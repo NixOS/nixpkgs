@@ -16,7 +16,7 @@ See: http://www.ergy.com/FSet.html
 
   packageName = "fset";
 
-  asdFilesToKeep = ["fset.asd"];
+  asdFilesToKeep = [ "fset.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fset DESCRIPTION A functional set-theoretic collections library.

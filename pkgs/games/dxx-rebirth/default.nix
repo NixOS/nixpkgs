@@ -11,7 +11,6 @@
 , libpng
 , physfs
 }:
-
 let
   music = fetchurl {
     url = "https://www.dxx-rebirth.com/download/dxx/res/d2xr-sc55-music.dxa";

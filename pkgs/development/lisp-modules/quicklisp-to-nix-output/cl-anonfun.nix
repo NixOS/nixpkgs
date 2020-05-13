@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-anonfun";
 
-  asdFilesToKeep = ["cl-anonfun.asd"];
+  asdFilesToKeep = [ "cl-anonfun.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-anonfun DESCRIPTION Anonymous function helpers for Common Lisp

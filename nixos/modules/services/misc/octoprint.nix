@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.octoprint;
 
   baseConfig = {
@@ -66,7 +64,7 @@ in
       };
 
       plugins = mkOption {
-        default = plugins: [];
+        default = plugins: [ ];
         defaultText = "plugins: []";
         example = literalExample "plugins: [ m3d-fio ]";
         description = "Additional plugins.";
@@ -74,7 +72,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Extra options which are added to OctoPrint's YAML configuration file.";
       };
 

@@ -23,29 +23,28 @@
 , xorg
 , libGL
 }:
-
 let
   version = "4.3.4";
 
-  binpath = stdenv.lib.makeBinPath
-    [ cabextract
-      python2Packages.python
-      gettext
-      glxinfo
-      gnupg
-      icoutils
-      imagemagick
-      netcat-gnu
-      p7zip
-      unzip
-      wget
-      wine
-      xdg-user-dirs
-      xterm
-      which
-      curl
-      jq
-    ];
+  binpath = stdenv.lib.makeBinPath [
+    cabextract
+    python2Packages.python
+    gettext
+    glxinfo
+    gnupg
+    icoutils
+    imagemagick
+    netcat-gnu
+    p7zip
+    unzip
+    wget
+    wine
+    xdg-user-dirs
+    xterm
+    which
+    curl
+    jq
+  ];
 
   ld32 =
     if stdenv.hostPlatform.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
@@ -54,7 +53,8 @@ let
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: stdenv.lib.makeLibraryPath [ xorg.libX11 libGL ];
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "playonlinux";
   inherit version;
 
@@ -66,7 +66,8 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs =
-    [ python2Packages.python
+    [
+      python2Packages.python
       python2Packages.wxPython
       python2Packages.setuptools
       xorg.libX11

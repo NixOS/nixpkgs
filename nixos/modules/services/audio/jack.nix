@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.jack;
 
@@ -12,7 +11,8 @@ let
 
   umaskNeeded = versionOlder cfg.jackd.package.version "1.9.12";
   bridgeNeeded = versionAtLeast cfg.jackd.package.version "1.9.12";
-in {
+in
+{
   options = {
     services.jack = {
       jackd = {
@@ -139,13 +139,15 @@ in {
           default "plug:jack"
         }
       '';
-    })
+    }
+    )
 
     (mkIf loopback {
       boot.kernelModules = [ "snd-aloop" ];
       boot.kernelParams = [ "snd-aloop.index=${toString cfg.loopback.index}" ];
       sound.extraConfig = cfg.loopback.config;
-    })
+    }
+    )
 
     (mkIf cfg.jackd.enable {
       services.jack.jackd.session = ''
@@ -230,7 +232,7 @@ in {
         { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
         { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }
       ];
-      users.groups.jackaudio = {};
+      users.groups.jackaudio = { };
 
       environment = {
         systemPackages = [ cfg.jackd.package ];
@@ -283,7 +285,8 @@ in {
         after = [ "jack.service" ];
         restartIfChanged = false;
       };
-    })
+    }
+    )
 
   ];
 

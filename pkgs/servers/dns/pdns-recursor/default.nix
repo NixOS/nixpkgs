@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, boost
-, openssl, systemd, lua, luajit, protobuf
+{ stdenv
+, fetchurl
+, pkgconfig
+, boost
+, openssl
+, systemd
+, lua
+, luajit
+, protobuf
 , enableProtoBuf ? false
 }:
 assert enableProtoBuf -> protobuf != null;
@@ -17,8 +24,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    boost openssl systemd
-    lua luajit
+    boost
+    openssl
+    systemd
+    lua
+    luajit
   ] ++ optional enableProtoBuf protobuf;
 
   configureFlags = [

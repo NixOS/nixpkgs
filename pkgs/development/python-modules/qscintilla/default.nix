@@ -8,7 +8,8 @@
 , pyqt4
 }:
 
-disabledIf (isPy3k || isPyPy)
+disabledIf
+  (isPy3k || isPyPy)
   (buildPythonPackage {
     # TODO: Qt5 support
     pname = "qscintilla";

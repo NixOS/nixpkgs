@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.jellyfin;
 in
@@ -48,7 +47,7 @@ in
     };
 
     users.groups = mkIf (cfg.group == "jellyfin") {
-      jellyfin = {};
+      jellyfin = { };
     };
 
   };

@@ -2,7 +2,6 @@
 , python2
 , fetchFromGitHub
 }:
-
 let
   python = python2.override {
     packageOverrides = self: super: {
@@ -17,8 +16,9 @@ let
     };
   };
 
-# buildPythonPackage is necessary for syncserver to work with gunicorn or paster scripts
-in python.pkgs.buildPythonPackage rec {
+  # buildPythonPackage is necessary for syncserver to work with gunicorn or paster scripts
+in
+python.pkgs.buildPythonPackage rec {
   pname = "syncserver";
   version = "1.8.0";
 
@@ -33,8 +33,16 @@ in python.pkgs.buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = with python.pkgs; [
-    cornice gunicorn pyramid requests simplejson sqlalchemy mozsvc tokenserver
-    serversyncstorage configparser
+    cornice
+    gunicorn
+    pyramid
+    requests
+    simplejson
+    sqlalchemy
+    mozsvc
+    tokenserver
+    serversyncstorage
+    configparser
   ];
 
   meta = with lib; {

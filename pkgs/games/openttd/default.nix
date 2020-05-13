@@ -1,9 +1,25 @@
-{ stdenv, fetchurl, fetchzip, pkgconfig, SDL, libpng, zlib, xz, freetype, fontconfig
-, withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
-, withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
-, writeScriptBin, makeWrapper, runtimeShell
+{ stdenv
+, fetchurl
+, fetchzip
+, pkgconfig
+, SDL
+, libpng
+, zlib
+, xz
+, freetype
+, fontconfig
+, withOpenGFX ? true
+, withOpenSFX ? true
+, withOpenMSX ? true
+, withFluidSynth ? true
+, audioDriver ? "alsa"
+, fluidsynth
+, soundfont-fluid
+, procps
+, writeScriptBin
+, makeWrapper
+, runtimeShell
 }:
-
 let
   opengfx = fetchzip {
     url = "https://binaries.openttd.org/extra/opengfx/0.5.5/opengfx-0.5.5-all.zip";

@@ -1,18 +1,18 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.rabbitmq;
 
   inherit (builtins) concatStringsSep;
 
-  config_file_content = lib.generators.toKeyValue {} cfg.configItems;
+  config_file_content = lib.generators.toKeyValue { } cfg.configItems;
   config_file = pkgs.writeText "rabbitmq.conf" config_file_content;
 
   advanced_config_file = pkgs.writeText "advanced.config" cfg.config;
 
-in {
+in
+{
   ###### interface
   options = {
     services.rabbitmq = {
@@ -78,7 +78,7 @@ in {
       };
 
       configItems = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf types.str;
         example = literalExample ''
           {
@@ -122,13 +122,13 @@ in {
       };
 
       plugins = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = "The names of plugins to enable";
       };
 
       pluginDirs = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "The list of directories containing external plugins";
       };
@@ -179,7 +179,7 @@ in {
         RABBITMQ_ENABLED_PLUGINS_FILE = pkgs.writeText "enabled_plugins" ''
           [ ${concatStringsSep "," cfg.plugins} ].
         '';
-      } //  optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
+      } // optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
 
       serviceConfig = {
         ExecStart = "${cfg.package}/sbin/rabbitmq-server";
@@ -199,8 +199,8 @@ in {
 
       preStart = ''
         ${optionalString (cfg.cookie != "") ''
-            echo -n ${cfg.cookie} > ${cfg.dataDir}/.erlang.cookie
-            chmod 600 ${cfg.dataDir}/.erlang.cookie
+          echo -n ${cfg.cookie} > ${cfg.dataDir}/.erlang.cookie
+          chmod 600 ${cfg.dataDir}/.erlang.cookie
         ''}
       '';
     };

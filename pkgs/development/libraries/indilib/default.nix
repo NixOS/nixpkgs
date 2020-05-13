@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, cmake, cfitsio, libusb, zlib, boost, libnova
-, curl, libjpeg, gsl }:
+{ stdenv
+, fetchurl
+, cmake
+, cfitsio
+, libusb
+, zlib
+, boost
+, libnova
+, curl
+, libjpeg
+, gsl
+}:
 
 stdenv.mkDerivation {
   name = "indilib-1.1.0";
@@ -9,10 +19,19 @@ stdenv.mkDerivation {
     sha256 = "1bs6lkwqd4aashg93mqqkc7nrg7fbx9mdw85qs5263jqa6sr780w";
   };
 
-  patches = [ ./udev-dir.patch ] ;
+  patches = [ ./udev-dir.patch ];
 
-  buildInputs = [ curl cmake cfitsio libusb zlib boost
-                            libnova libjpeg gsl ];
+  buildInputs = [
+    curl
+    cmake
+    cfitsio
+    libusb
+    zlib
+    boost
+    libnova
+    libjpeg
+    gsl
+  ];
 
   meta = {
     homepage = https://www.indilib.org/;

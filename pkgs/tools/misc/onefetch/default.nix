@@ -1,5 +1,12 @@
-{ fetchFromGitHub, rustPlatform, stdenv, fetchpatch
-, CoreFoundation, libiconv, libresolv, Security }:
+{ fetchFromGitHub
+, rustPlatform
+, stdenv
+, fetchpatch
+, CoreFoundation
+, libiconv
+, libresolv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";

@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, alsaLib, boost, cmake, glib, lash, libjack2, libarchive
-, liblrdf, libsndfile, pkgconfig, qt4 }:
+{ stdenv
+, fetchurl
+, alsaLib
+, boost
+, cmake
+, glib
+, lash
+, libjack2
+, libarchive
+, liblrdf
+, libsndfile
+, pkgconfig
+, qt4
+}:
 
 stdenv.mkDerivation rec {
   version = "0.9.7";
@@ -12,7 +24,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    alsaLib boost cmake glib lash libjack2 libarchive liblrdf libsndfile qt4
+    alsaLib
+    boost
+    cmake
+    glib
+    lash
+    libjack2
+    libarchive
+    liblrdf
+    libsndfile
+    qt4
   ];
 
   meta = with stdenv.lib; {

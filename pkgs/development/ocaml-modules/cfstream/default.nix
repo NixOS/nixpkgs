@@ -8,8 +8,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "biocaml";
-    repo   = pname;
-    rev    = version;
+    repo = pname;
+    rev = version;
     sha256 = "0qnxfp6y294gjsccx7ksvwn9x5q20hi8sg24rjypzsdkmlphgdnd";
   };
 

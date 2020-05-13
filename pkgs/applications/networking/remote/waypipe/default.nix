@@ -1,7 +1,17 @@
-{ stdenv, fetchFromGitLab
-, meson, ninja, pkgconfig, scdoc
-, wayland, wayland-protocols, openssh
-, mesa, lz4, zstd, ffmpeg_4, libva
+{ stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkgconfig
+, scdoc
+, wayland
+, wayland-protocols
+, openssh
+, mesa
+, lz4
+, zstd
+, ffmpeg_4
+, libva
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +34,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
 
   buildInputs = [
-    wayland wayland-protocols
+    wayland
+    wayland-protocols
     # Optional dependencies:
-    mesa lz4 zstd ffmpeg_4 libva
+    mesa
+    lz4
+    zstd
+    ffmpeg_4
+    libva
   ];
 
   enableParallelBuilding = true;

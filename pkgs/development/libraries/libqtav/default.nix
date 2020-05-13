@@ -1,8 +1,20 @@
-{ mkDerivation, lib, fetchFromGitHub, extra-cmake-modules
-, qtbase, qtmultimedia, qtquick1, qttools
-, libGL, libX11
-, libass, openal, ffmpeg, libuchardet
-, alsaLib, libpulseaudio, libva
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, extra-cmake-modules
+, qtbase
+, qtmultimedia
+, qtquick1
+, qttools
+, libGL
+, libX11
+, libass
+, openal
+, ffmpeg
+, libuchardet
+, alsaLib
+, libpulseaudio
+, libva
 }:
 
 with lib;
@@ -13,10 +25,18 @@ mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules qttools ];
   buildInputs = [
-    qtbase qtmultimedia qtquick1
-    libGL libX11
-    libass openal ffmpeg libuchardet
-    alsaLib libpulseaudio libva
+    qtbase
+    qtmultimedia
+    qtquick1
+    libGL
+    libX11
+    libass
+    openal
+    ffmpeg
+    libuchardet
+    alsaLib
+    libpulseaudio
+    libva
   ];
 
   src = fetchFromGitHub {
@@ -48,4 +68,3 @@ mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

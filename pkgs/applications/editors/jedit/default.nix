@@ -1,5 +1,4 @@
 { stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging, bsh }:
-
 let
   version = "5.2.0";
   bcpg = fetchurl {
@@ -11,7 +10,6 @@ let
     sha256 = "0s74pv8qjc42c7q8nbc0c3b1hgx0bmk3b8vbk1z80p4bbgx56zqy";
   };
 in
-
 stdenv.mkDerivation {
   pname = "jedit";
   inherit version;

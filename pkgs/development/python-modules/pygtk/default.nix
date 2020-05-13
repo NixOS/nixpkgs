@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, fetchpatch, python, pkgconfig, gtk2, pygobject2, pycairo, pango
-, buildPythonPackage, libglade ? null, isPy3k }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, python
+, pkgconfig
+, gtk2
+, pygobject2
+, pycairo
+, pango
+, buildPythonPackage
+, libglade ? null
+, isPy3k
+}:
 
 buildPythonPackage rec {
   pname = "pygtk";
@@ -39,15 +50,17 @@ buildPythonPackage rec {
 
   installPhase = "installPhase";
 
-  checkPhase = stdenv.lib.optionalString (libglade == null)
-    ''
-      sed -i -e "s/glade = importModule('gtk.glade', buildDir)//" \
-             tests/common.py
-      sed -i -e "s/, glade$//" \
-             -e "s/.*testGlade.*//" \
-             -e "s/.*(glade.*//" \
-             tests/test_api.py
-    '' + ''
+  checkPhase =
+    stdenv.lib.optionalString
+      (libglade == null)
+      ''
+        sed -i -e "s/glade = importModule('gtk.glade', buildDir)//" \
+               tests/common.py
+        sed -i -e "s/, glade$//" \
+               -e "s/.*testGlade.*//" \
+               -e "s/.*(glade.*//" \
+               tests/test_api.py
+      '' + ''
       sed -i -e "s/sys.path.insert(0, os.path.join(buildDir, 'gtk'))//" \
              -e "s/sys.path.insert(0, buildDir)//" \
              tests/common.py

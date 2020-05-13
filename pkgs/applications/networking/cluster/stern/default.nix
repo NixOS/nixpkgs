@@ -1,7 +1,5 @@
 { stdenv, lib, buildPackages, buildGoPackage, fetchFromGitHub }:
-
 let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform; in
-
 buildGoPackage rec {
   pname = "stern";
   version = "1.11.0";
@@ -27,10 +25,10 @@ buildGoPackage rec {
     '';
 
   meta = with lib; {
-    description      = "Multi pod and container log tailing for Kubernetes";
-    homepage         = "https://github.com/wercker/stern";
-    license          = licenses.asl20;
-    maintainers      = with maintainers; [ mbode ];
-    platforms        = platforms.unix;
+    description = "Multi pod and container log tailing for Kubernetes";
+    homepage = "https://github.com/wercker/stern";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mbode ];
+    platforms = platforms.unix;
   };
 }

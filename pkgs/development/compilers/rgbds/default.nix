@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, bison, flex, pkg-config, libpng}:
+{ stdenv, fetchFromGitHub, bison, flex, pkg-config, libpng }:
 
 # TODO: byacc is the recommended parser generator but due to https://github.com/rednex/rgbds/issues/333
 # it does not work for the moment. We should switch back to byacc as soon as the fix is integrated

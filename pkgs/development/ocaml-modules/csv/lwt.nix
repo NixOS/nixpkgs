@@ -4,11 +4,11 @@ if !lib.versionAtLeast ocaml.version "4.02"
 then throw "csv-lwt is not available for OCaml ${ocaml.version}"
 else
 
-buildDunePackage {
-  pname = "csv-lwt";
-  inherit (csv) src version meta;
+  buildDunePackage {
+    pname = "csv-lwt";
+    inherit (csv) src version meta;
 
-  propagatedBuildInputs = [ csv ocaml_lwt ];
+    propagatedBuildInputs = [ csv ocaml_lwt ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.03";
-}
+    doCheck = lib.versionAtLeast ocaml.version "4.03";
+  }

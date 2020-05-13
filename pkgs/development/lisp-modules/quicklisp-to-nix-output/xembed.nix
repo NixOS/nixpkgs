@@ -14,7 +14,7 @@ rec {
 
   packageName = "xembed";
 
-  asdFilesToKeep = ["xembed.asd"];
+  asdFilesToKeep = [ "xembed.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM xembed DESCRIPTION

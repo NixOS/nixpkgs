@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, unittest2, lxml, robotframework
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, unittest2
+, lxml
+, robotframework
 }:
 
 buildPythonPackage rec {

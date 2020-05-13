@@ -3,7 +3,6 @@ let
   # Update spirv-headers rev in lockstep according to DEPs file
   version = "2019.4";
 in
-
 stdenv.mkDerivation rec {
   pname = "spirv-tools";
   inherit version;

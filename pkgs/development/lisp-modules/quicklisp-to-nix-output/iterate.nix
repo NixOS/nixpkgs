@@ -16,7 +16,7 @@ rec {
 
   packageName = "iterate";
 
-  asdFilesToKeep = ["iterate.asd"];
+  asdFilesToKeep = [ "iterate.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iterate DESCRIPTION

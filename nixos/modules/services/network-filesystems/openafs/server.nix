@@ -2,7 +2,6 @@
 
 # openafsBin, openafsSrv, mkCellServDB
 with import ./lib.nix { inherit config lib pkgs; };
-
 let
   inherit (lib) concatStringsSep mkIf mkOption optionalString types;
 
@@ -17,22 +16,26 @@ let
     bnode simple ptserver 1
     parm ${openafsSrv}/libexec/openafs/ptserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} ${cfg.roles.database.ptserverArgs}
     end
-  '') + (optionalString cfg.roles.fileserver.enable ''
+  ''
+  ) + (optionalString cfg.roles.fileserver.enable ''
     bnode dafs dafs 1
     parm ${openafsSrv}/libexec/openafs/dafileserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.fileserverArgs}
     parm ${openafsSrv}/libexec/openafs/davolserver ${optionalString cfg.dottedPrincipals "-allow-dotted-principals"} -udpsize ${udpSizeStr} ${cfg.roles.fileserver.volserverArgs}
     parm ${openafsSrv}/libexec/openafs/salvageserver ${cfg.roles.fileserver.salvageserverArgs}
     parm ${openafsSrv}/libexec/openafs/dasalvager ${cfg.roles.fileserver.salvagerArgs}
     end
-  '') + (optionalString (cfg.roles.database.enable && cfg.roles.backup.enable) ''
+  ''
+  ) + (optionalString (cfg.roles.database.enable && cfg.roles.backup.enable) ''
     bnode simple buserver 1
-    parm ${openafsSrv}/libexec/openafs/buserver ${cfg.roles.backup.buserverArgs} ${optionalString (cfg.roles.backup.cellServDB != []) "-cellservdb /etc/openafs/backup/"}
+    parm ${openafsSrv}/libexec/openafs/buserver ${cfg.roles.backup.buserverArgs} ${optionalString (cfg.roles.backup.cellServDB != [ ]) "-cellservdb /etc/openafs/backup/"}
     end
-  ''));
+  ''
+  ));
 
-  netInfo = if (cfg.advertisedAddresses != []) then
-    pkgs.writeText "NetInfo" ((concatStringsSep "\nf " cfg.advertisedAddresses) + "\n")
-  else null;
+  netInfo =
+    if (cfg.advertisedAddresses != [ ]) then
+      pkgs.writeText "NetInfo" ((concatStringsSep "\nf " cfg.advertisedAddresses) + "\n")
+    else null;
 
   buCellServDB = pkgs.writeText "backup-cellServDB-${cfg.cellName}" (mkCellServDB cfg.cellName cfg.roles.backup.cellServDB);
 
@@ -40,7 +43,8 @@ let
 
   udpSizeStr = toString cfg.udpPacketSize;
 
-in {
+in
+{
 
   options = {
 
@@ -61,7 +65,7 @@ in {
       };
 
       advertisedAddresses = mkOption {
-        default = [];
+        default = [ ];
         description = "List of IP addresses this server is advertised under. See NetInfo(5)";
       };
 
@@ -73,8 +77,8 @@ in {
       };
 
       cellServDB = mkOption {
-        default = [];
-        type = with types; listOf (submodule [ { options = cellServDBConfig;} ]);
+        default = [ ];
+        type = with types; listOf (submodule [{ options = cellServDBConfig; }]);
         description = "Definition of all cell-local database server machines.";
       };
 
@@ -172,8 +176,8 @@ in {
           };
 
           cellServDB = mkOption {
-            default = [];
-            type = with types; listOf (submodule [ { options = cellServDBConfig;} ]);
+            default = [ ];
+            type = with types; listOf (submodule [{ options = cellServDBConfig; }]);
             description = ''
               Definition of all cell-local backup database server machines.
               Use this when your cell uses less backup database servers than
@@ -183,7 +187,7 @@ in {
         };
       };
 
-      dottedPrincipals= mkOption {
+      dottedPrincipals = mkOption {
         default = false;
         type = types.bool;
         description = ''
@@ -211,10 +215,12 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.cellServDB != [];
+      {
+        assertion = cfg.cellServDB != [ ];
         message = "You must specify all cell-local database servers in config.services.openafsServer.cellServDB.";
       }
-      { assertion = cfg.cellName != "";
+      {
+        assertion = cfg.cellName != "";
         message = "You must specify the local cell name in config.services.openafsServer.cellName.";
       }
     ];
@@ -238,7 +244,7 @@ in {
         mode = "0644";
       };
       buCellServDB = {
-        enable = (cfg.roles.backup.cellServDB != []);
+        enable = (cfg.roles.backup.cellServDB != [ ]);
         text = mkCellServDB cfg.cellName cfg.roles.backup.cellServDB;
         target = "openafs/backup/CellServDB";
       };
@@ -257,7 +263,7 @@ in {
         preStart = ''
           mkdir -m 0755 -p /var/openafs
           ${optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
-          ${optionalString (cfg.roles.backup.cellServDB != []) "cp ${buCellServDB}"}
+          ${optionalString (cfg.roles.backup.cellServDB != [ ]) "cp ${buCellServDB}"}
         '';
         serviceConfig = {
           ExecStart = "${openafsBin}/bin/bosserver -nofork";

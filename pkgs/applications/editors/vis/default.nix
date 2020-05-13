@@ -1,11 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, makeWrapper, makeDesktopItem
-, ncurses, libtermkey, lpeg, lua
-, acl ? null, libselinux ? null
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, makeWrapper
+, makeDesktopItem
+, ncurses
+, libtermkey
+, lpeg
+, lua
+, acl ? null
+, libselinux ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "vis";
-  version  = "0.5";
+  version = "0.5";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -30,8 +38,8 @@ stdenv.mkDerivation rec {
     patchShebangs ./configure
   '';
 
-  LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;";
-  LUA_PATH="${lpeg}/share/lua/${lua.luaversion}/?.lua";
+  LUA_CPATH = "${lpeg}/lib/lua/${lua.luaversion}/?.so;";
+  LUA_PATH = "${lpeg}/share/lua/${lua.luaversion}/?.lua";
 
   postInstall = ''
     mkdir -p "$out/share/applications"
@@ -52,10 +60,13 @@ stdenv.mkDerivation rec {
     desktopName = "vis";
     genericName = "Text editor";
     categories = stdenv.lib.concatStringsSep ";" [
-      "Application" "Development" "IDE"
+      "Application"
+      "Development"
+      "IDE"
     ];
     mimeType = stdenv.lib.concatStringsSep ";" [
-      "text/plain" "application/octet-stream"
+      "text/plain"
+      "application/octet-stream"
     ];
     startupNotify = "false";
     terminal = "true";

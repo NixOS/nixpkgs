@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ dateutil pyopenssl requests ]
-                            ++ pkgs.lib.optionals (!isPy3k) [ futures ];
+    ++ pkgs.lib.optionals (!isPy3k) [ futures ];
 
   # depends on futures for python 3 (not necissary)
   patchPhase = if (!isPy3k) then "" else ''

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, libiconv, ncurses, perl, fortune}:
+{ stdenv, fetchurl, makeWrapper, libiconv, ncurses, perl, fortune }:
 
 stdenv.mkDerivation rec {
   pname = "gtypist";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper ncurses perl fortune ]
-   ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
   preFixup = ''
-     wrapProgram "$out/bin/typefortune" \
-       --prefix PATH : "${fortune}/bin" \
+    wrapProgram "$out/bin/typefortune" \
+      --prefix PATH : "${fortune}/bin" \
   '';
 
   meta = with stdenv.lib; {

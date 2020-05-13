@@ -1,25 +1,40 @@
-{ clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, gyp, which, ninja,
-  python, pkgconfig, protobuf, gtk2, zinnia, qt5, libxcb,
-  fcitx, gettext }:
+{ clangStdenv
+, fetchFromGitHub
+, fetchurl
+, fetchpatch
+, gyp
+, which
+, ninja
+, python
+, pkgconfig
+, protobuf
+, gtk2
+, zinnia
+, qt5
+, libxcb
+, fcitx
+, gettext
+}:
 let
   japanese_usage_dictionary = fetchFromGitHub {
-    owner  = "hiroyuki-komatsu";
-    repo   = "japanese-usage-dictionary";
-    rev    = "e5b3425575734c323e1d947009dd74709437b684";
+    owner = "hiroyuki-komatsu";
+    repo = "japanese-usage-dictionary";
+    rev = "e5b3425575734c323e1d947009dd74709437b684";
     sha256 = "0pyrpz9c8nxccwpgyr36w314mi8h132cis8ijvlqmmhqxwsi30hm";
   };
   icons = fetchurl {
-    url    = "http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-icon.tar.gz";
+    url = "http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-icon.tar.gz";
     sha256 = "10bdjn481jsh32vll7r756l392anz44h6207vjqwby3rplk31np1";
   };
-in clangStdenv.mkDerivation rec {
-  name    = "fcitx-mozc-${version}";
+in
+clangStdenv.mkDerivation rec {
+  name = "fcitx-mozc-${version}";
   version = "2.20.2673.102";
 
   src = fetchFromGitHub {
-    owner  = "google";
-    repo   = "mozc";
-    rev    = "280e38fe3d9db4df52f0713acf2ca65898cd697a";
+    owner = "google";
+    repo = "mozc";
+    rev = "280e38fe3d9db4df52f0713acf2ca65898cd697a";
     sha256 = "0s599f817gjgqynm4n1yll1ipd25ai2c55y8k6wvhg9s7qaxnyhs";
   };
 
@@ -35,10 +50,10 @@ in clangStdenv.mkDerivation rec {
   patch_version = "2.18.2612.102.1";
   patches = [
     (fetchpatch rec {
-      name   = "fcitx-mozc-${patch_version}.patch";
-      url    = "https://download.fcitx-im.org/fcitx-mozc/${name}";
+      name = "fcitx-mozc-${patch_version}.patch";
+      url = "https://download.fcitx-im.org/fcitx-mozc/${name}";
       sha256 = "1f9m4310kz09v5qvnv75ka2vq63m7by023qrkpddgq4dv7gxx3ca";
-     })
+    })
     # https://github.com/google/mozc/pull/444 - fix for gcc8 STL
     (fetchpatch {
       url = "https://github.com/google/mozc/commit/82d38f929882a9c62289b179c6fe41efed249987.patch";
@@ -95,12 +110,12 @@ in clangStdenv.mkDerivation rec {
 
   meta = with clangStdenv.lib; {
     isFcitxEngine = true;
-    description   = "Fcitx engine for Google japanese input method";
-    homepage      = https://github.com/google/mozc;
-    downloadPage  = "http://download.fcitx-im.org/fcitx-mozc/";
-    license       = licenses.free;
-    platforms     = platforms.linux;
-    maintainers   = [ maintainers.ericsagnes ];
+    description = "Fcitx engine for Google japanese input method";
+    homepage = https://github.com/google/mozc;
+    downloadPage = "http://download.fcitx-im.org/fcitx-mozc/";
+    license = licenses.free;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.ericsagnes ];
   };
 
 }

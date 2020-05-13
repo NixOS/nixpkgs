@@ -1,5 +1,21 @@
-{ stdenv, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
-, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
+{ stdenv
+, mkDerivation
+, fetchgit
+, fetchurl
+, cmake
+, darkhttpd
+, gettext
+, makeWrapper
+, pkgconfig
+, libdigidocpp
+, opensc
+, openldap
+, openssl
+, pcsclite
+, qtbase
+, qttranslations
+, qtsvg
+}:
 
 mkDerivation rec {
   pname = "qdigidoc";

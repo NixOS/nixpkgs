@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.programs.digitalbitbox;
 in
-
 {
   options.programs.digitalbitbox = {
     enable = mkOption {

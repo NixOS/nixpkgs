@@ -13,8 +13,8 @@ buildPythonPackage rec {
 
   # No real changes in 2.0.0...e0edfa3
   postPatch = ''
-   substituteInPlace setup.py \
-     --replace "readchar == 2.0.1" "readchar >= 2.0.0"
+    substituteInPlace setup.py \
+      --replace "readchar == 2.0.1" "readchar >= 2.0.0"
   '';
 
   checkInputs = [ pytest pytestcov pexpect pytest-mock ];

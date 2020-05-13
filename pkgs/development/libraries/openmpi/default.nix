@@ -1,18 +1,29 @@
-{ stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
-, rdma-core, zlib, numactl, libevent, hwloc, pkgsTargetTarget, symlinkJoin
+{ stdenv
+, fetchurl
+, fetchpatch
+, gfortran
+, perl
+, libnl
+, rdma-core
+, zlib
+, numactl
+, libevent
+, hwloc
+, pkgsTargetTarget
+, symlinkJoin
 
-# Enable CUDA support
-, cudaSupport ? false, cudatoolkit ? null
+  # Enable CUDA support
+, cudaSupport ? false
+, cudatoolkit ? null
 
-# Enable the Sun Grid Engine bindings
+  # Enable the Sun Grid Engine bindings
 , enableSGE ? false
 
-# Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
+  # Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
 , enablePrefix ? false
 }:
 
 assert !cudaSupport || cudatoolkit != null;
-
 let
   version = "4.0.3";
 
@@ -20,7 +31,8 @@ let
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "openmpi";
   inherit version;
 
@@ -49,20 +61,20 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
 
   configureFlags = with stdenv; lib.optional (!cudaSupport) "--disable-mca-dso"
-    ++ lib.optional isLinux  "--with-libnl=${libnl.dev}"
+    ++ lib.optional isLinux "--with-libnl=${libnl.dev}"
     ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
     ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
-    ;
+  ;
 
   enableParallelBuilding = true;
 
   postInstall = ''
     rm -f $out/lib/*.la
-   '';
+  '';
 
   postFixup = ''
     # default compilers should be indentical to the

@@ -1,7 +1,14 @@
-{ fetchgit, pkgconfig, gettext, runCommand, makeWrapper
-, elfutils, kernel, gnumake, python2, python2Packages
+{ fetchgit
+, pkgconfig
+, gettext
+, runCommand
+, makeWrapper
+, elfutils
+, kernel
+, gnumake
+, python2
+, python2Packages
 }:
-
 let
   ## fetchgit info
   url = git://sourceware.org/git/systemtap.git;
@@ -23,7 +30,8 @@ let
   };
 
   ## a kernel build dir as expected by systemtap
-  kernelBuildDir = runCommand "kbuild-${kernel.version}-merged" { } ''
+  kernelBuildDir = runCommand "kbuild-${kernel.version}-merged"
+    { } ''
     mkdir -p $out
     for f in \
         ${kernel}/System.map \
@@ -36,7 +44,9 @@ let
 
   pypkgs = with python2Packages; makePythonPath [ pyparsing ];
 
-in runCommand "systemtap-${kernel.version}-${version}" {
+in
+runCommand "systemtap-${kernel.version}-${version}"
+{
   inherit stapBuild kernelBuildDir;
   buildInputs = [ makeWrapper ];
   meta = {

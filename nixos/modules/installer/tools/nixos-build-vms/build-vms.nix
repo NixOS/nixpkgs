@@ -1,10 +1,8 @@
 { system ? builtins.currentSystem
-, config ? {}
+, config ? { }
 , networkExpr
 }:
-
 let nodes = import networkExpr; in
-
 with import ../../../../lib/testing-python.nix {
   inherit system;
   pkgs = import ../../../../.. { inherit system config; };

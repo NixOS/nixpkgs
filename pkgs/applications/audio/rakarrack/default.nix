@@ -1,7 +1,19 @@
-{ stdenv, fetchurl, alsaLib, alsaUtils, fltk, libjack2, libXft,
-libXpm, libjpeg, libpng, libsamplerate, libsndfile, zlib }:
+{ stdenv
+, fetchurl
+, alsaLib
+, alsaUtils
+, fltk
+, libjack2
+, libXft
+, libXpm
+, libjpeg
+, libpng
+, libsamplerate
+, libsndfile
+, zlib
+}:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "rakarrack";
   version = "0.6.1";
 
@@ -14,8 +26,19 @@ stdenv.mkDerivation  rec {
 
   patches = [ ./fltk-path.patch ];
 
-  buildInputs = [ alsaLib alsaUtils fltk libjack2 libXft libXpm libjpeg
-    libpng libsamplerate libsndfile zlib ];
+  buildInputs = [
+    alsaLib
+    alsaUtils
+    fltk
+    libjack2
+    libXft
+    libXpm
+    libjpeg
+    libpng
+    libsamplerate
+    libsndfile
+    zlib
+  ];
 
   meta = with stdenv.lib; {
     description = "Multi-effects processor emulating a guitar effects pedalboard";

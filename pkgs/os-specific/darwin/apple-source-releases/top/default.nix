@@ -1,4 +1,4 @@
-{xcbuildHook, appleDerivation, apple_sdk, ncurses, libutil, lib}:
+{ xcbuildHook, appleDerivation, apple_sdk, ncurses, libutil, lib }:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];

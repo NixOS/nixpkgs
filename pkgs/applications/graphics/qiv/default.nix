@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, imlib2, file, lcms2, libexif } :
+{ stdenv, fetchurl, pkgconfig, gtk2, imlib2, file, lcms2, libexif }:
 
 stdenv.mkDerivation (rec {
   version = "2.3.2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk2 imlib2 file lcms2 libexif ];
 
-  preBuild=''
+  preBuild = ''
     substituteInPlace Makefile --replace /usr/local "$out"
     substituteInPlace Makefile --replace /man/ /share/man/
     substituteInPlace Makefile --replace /share/share/ /share/

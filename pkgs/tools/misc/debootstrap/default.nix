@@ -1,19 +1,32 @@
-{ stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, utillinux
-, gnugrep, gnutar, gnused, gzip, makeWrapper }:
+{ stdenv
+, fetchurl
+, dpkg
+, gawk
+, perl
+, wget
+, coreutils
+, utillinux
+, gnugrep
+, gnutar
+, gnused
+, gzip
+, makeWrapper
+}:
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
 let binPath = stdenv.lib.makeBinPath [
-    coreutils
-    dpkg
-    gawk
-    gnugrep
-    gnused
-    gnutar
-    gzip
-    perl
-    wget
-  ];
-in stdenv.mkDerivation rec {
+  coreutils
+  dpkg
+  gawk
+  gnugrep
+  gnused
+  gnutar
+  gzip
+  perl
+  wget
+];
+in
+stdenv.mkDerivation rec {
   pname = "debootstrap";
   version = "1.0.119";
 

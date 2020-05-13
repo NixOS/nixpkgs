@@ -17,9 +17,10 @@ with pkgs.lib;
           ln -s ${pkgs.writeText "sshPublicKey" sshPublicKey} $out/1.0/meta-data/public-keys/0/openssh-key
         '';
       };
-    in makeTest {
+    in
+    makeTest {
       name = "ec2-" + name;
-      nodes = {};
+      nodes = { };
       testScript =
         ''
           my $imageDir = ($ENV{'TMPDIR'} // "/tmp") . "/vm-state-machine";

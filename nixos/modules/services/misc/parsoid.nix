@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.parsoid;
 
   parsoid = pkgs.nodePackages.parsoid;
@@ -79,7 +77,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = ''
           Extra configuration to add to parsoid configuration.
         '';

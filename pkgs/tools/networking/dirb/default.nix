@@ -1,9 +1,9 @@
 { fetchurl, stdenv, autoreconfHook, curl }:
-
 let
   major = "2";
   minor = "22";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dirb";
   version = "${major}.${minor}";
 

@@ -1,5 +1,4 @@
-{stdenv, fetchurl, gtk2, perlPackages, pkgconfig } :
-
+{ stdenv, fetchurl, gtk2, perlPackages, pkgconfig }:
 let version = "0.4"; in
 stdenv.mkDerivation {
   pname = "gcolor2";
@@ -16,9 +15,10 @@ stdenv.mkDerivation {
   '';
 
   # from https://github.com/PhantomX/slackbuilds/tree/master/gcolor2/patches
-  patches = if stdenv.hostPlatform.system == "x86_64-linux" then
-        [ ./gcolor2-amd64.patch ] else
-        [ ];
+  patches =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      [ ./gcolor2-amd64.patch ] else
+      [ ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk2 ]

@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-syntax-anonfun";
 
-  asdFilesToKeep = ["cl-syntax-anonfun.asd"];
+  asdFilesToKeep = [ "cl-syntax-anonfun.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-syntax-anonfun DESCRIPTION CL-Syntax Reader Syntax for cl-anonfun

@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "1.12";
 
   src = fetchFromGitHub {
-    owner  = "micropython";
-    repo   = "micropython";
-    rev    = "v${version}";
+    owner = "micropython";
+    repo = "micropython";
+    rev = "v${version}";
     sha256 = "1fsigdahnv5yn0mc7dr1y6h7g8ywg084pcgj6d64kb39w641n8j5";
     fetchSubmodules = true;
   };

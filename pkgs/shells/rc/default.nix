@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, autoreconfHook
+{ stdenv
+, fetchurl
+, autoreconfHook
 , ncurses #acinclude.m4 wants headers for tgetent().
 , historySupport ? false
 , readline ? null
@@ -19,8 +21,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-def-interp=${stdenv.shell}" #183
-    ] ++ stdenv.lib.optionals historySupport [ "--with-history" ]
-    ++ stdenv.lib.optionals (readline != null) [ "--with-edit=readline" ];
+  ] ++ stdenv.lib.optionals historySupport [ "--with-history" ]
+  ++ stdenv.lib.optionals (readline != null) [ "--with-edit=readline" ];
 
   prePatch = ''
     substituteInPlace configure.ac \

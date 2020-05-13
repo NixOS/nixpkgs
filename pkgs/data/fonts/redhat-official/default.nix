@@ -1,5 +1,4 @@
 { lib, fetchzip }:
-
 let version = "2.2.0"; in
 fetchzip {
   name = "redhat-official-${version}";

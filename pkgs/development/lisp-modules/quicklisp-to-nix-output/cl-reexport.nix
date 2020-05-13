@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-reexport";
 
-  asdFilesToKeep = ["cl-reexport.asd"];
+  asdFilesToKeep = [ "cl-reexport.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-reexport DESCRIPTION Reexport external symbols in other packages.

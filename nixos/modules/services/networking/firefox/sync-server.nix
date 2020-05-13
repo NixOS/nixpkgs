@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.firefox.syncserver;
 
@@ -33,7 +32,6 @@ let
   user = "syncserver";
   group = "syncserver";
 in
-
 {
   meta.maintainers = with lib.maintainers; [ nadrieril ];
 
@@ -121,7 +119,7 @@ in
 
           If this file does not exists, then it is created with a generated
           <option>syncserver.secret</option> settings.
-       '';
+        '';
       };
     };
   };
@@ -178,6 +176,6 @@ in
       isSystemUser = true;
     };
 
-    users.groups.${group} = {};
+    users.groups.${group} = { };
   };
 }

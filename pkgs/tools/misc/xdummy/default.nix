@@ -1,5 +1,4 @@
 { writeText, writeScriptBin, xorg, xkeyboard_config, runtimeShell }:
-
 let
   xorgConfig = writeText "dummy-xorg.conf" ''
     Section "ServerLayout"
@@ -72,7 +71,8 @@ let
     EndSection
   '';
 
-in writeScriptBin "xdummy" ''
+in
+writeScriptBin "xdummy" ''
   #!${runtimeShell}
   exec ${xorg.xorgserver.out}/bin/Xorg \
     -noreset \

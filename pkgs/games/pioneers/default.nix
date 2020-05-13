@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk3, pkgconfig, intltool } :
+{ stdenv, fetchurl, gtk3, pkgconfig, intltool }:
 
 stdenv.mkDerivation rec {
   name = "pioneers-15.4";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     homepage = http://pio.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Addicting game based on The Settlers of Catan";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

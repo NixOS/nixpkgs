@@ -1,5 +1,4 @@
 { writeText, bazel, bazelTest, runLocal, distDir }:
-
 let
   WORKSPACE = writeText "WORKSPACE" ''
     workspace(name = "our_workspace")
@@ -29,7 +28,8 @@ let
     )
   '';
 
-  workspaceDir = runLocal "our_workspace" {} ''
+  workspaceDir = runLocal "our_workspace"
+    { } ''
     mkdir $out
     cp ${WORKSPACE} $out/WORKSPACE
     mkdir $out/python
@@ -50,4 +50,5 @@ let
     '';
   };
 
-in testBazel
+in
+testBazel

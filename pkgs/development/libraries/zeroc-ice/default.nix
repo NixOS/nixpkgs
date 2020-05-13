@@ -1,8 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, mcpp, bzip2, expat, openssl, lmdb
-, darwin, libiconv, Security
+{ stdenv
+, lib
+, fetchFromGitHub
+, mcpp
+, bzip2
+, expat
+, openssl
+, lmdb
+, darwin
+, libiconv
+, Security
 , cpp11 ? false
 }:
-
 let
   zeroc_mcpp = mcpp.overrideAttrs (self: rec {
     pname = "zeroc-mcpp";
@@ -18,7 +26,8 @@ let
     installFlags = [ "PREFIX=$(out)" ];
   });
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zeroc-ice";
   version = "3.7.2";
 

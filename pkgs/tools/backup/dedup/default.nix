@@ -1,6 +1,11 @@
-{ stdenv, fetchurl, lz4, snappy, libsodium
-# For testing
-, coreutils, gawk
+{ stdenv
+, fetchurl
+, lz4
+, snappy
+, libsodium
+  # For testing
+, coreutils
+, gawk
 }:
 
 stdenv.mkDerivation rec {

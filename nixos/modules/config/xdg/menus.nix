@@ -14,7 +14,7 @@ with lib;
   };
 
   config = mkIf config.xdg.menus.enable {
-    environment.pathsToLink = [ 
+    environment.pathsToLink = [
       "/share/applications"
       "/share/desktop-directories"
       "/etc/xdg/menus"

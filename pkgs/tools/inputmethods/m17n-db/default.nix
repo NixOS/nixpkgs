@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext ];
 
-  configureFlags = stdenv.lib.optional (stdenv ? glibc)
+  configureFlags = stdenv.lib.optional
+    (stdenv ? glibc)
     "--with-charmaps=${stdenv.glibc.out}/share/i18n/charmaps"
   ;
 

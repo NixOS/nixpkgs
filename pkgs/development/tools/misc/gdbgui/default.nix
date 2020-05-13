@@ -8,7 +8,8 @@
 , pygdbmi
 , pygments
 , gevent
-, }:
+,
+}:
 
 buildPythonApplication rec {
   pname = "gdbgui";

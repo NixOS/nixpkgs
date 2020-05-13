@@ -1,11 +1,9 @@
 { lib, fetchzip }:
-
 let
   majorVersion = "0";
   minorVersion = "110";
   pname = "f5_6";
 in
-
 fetchzip {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 

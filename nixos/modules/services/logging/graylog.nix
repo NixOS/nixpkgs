@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.graylog;
 
@@ -25,7 +24,6 @@ let
   };
 
 in
-
 {
   ###### interface
 
@@ -161,7 +159,7 @@ in
         done
       '';
       serviceConfig = {
-        User="${cfg.user}";
+        User = "${cfg.user}";
         StateDirectory = "graylog";
         ExecStart = "${cfg.package}/bin/graylogctl run";
       };

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk2, libpng}:
+{ stdenv, fetchurl, pkgconfig, gtk2, libpng }:
 
 assert pkgconfig != null && gtk2 != null && libpng != null;
 # Note that we cannot just copy gtk's png attribute, since gtk might
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 libpng];
+  buildInputs = [ gtk2 libpng ];
 
   hardeningDisable = [ "format" ];
 

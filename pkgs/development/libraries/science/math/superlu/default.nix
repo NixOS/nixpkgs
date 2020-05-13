@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, cmake,
-  gfortran, openblasCompat}:
+{ stdenv
+, fetchurl
+, cmake
+, gfortran
+, openblasCompat
+}:
 
 stdenv.mkDerivation rec {
   version = "5.2.1";

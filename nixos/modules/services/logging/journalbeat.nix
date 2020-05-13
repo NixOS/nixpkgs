@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.journalbeat;
 
@@ -42,7 +41,7 @@ in
 
       tags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Tags to place on the shipped log messages";
       };
 

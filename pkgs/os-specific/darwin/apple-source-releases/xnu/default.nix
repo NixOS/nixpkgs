@@ -1,6 +1,14 @@
-{ appleDerivation, lib, bootstrap_cmds, bison, flex
-, gnum4, unifdef, perl, python3
-, headersOnly ? true }:
+{ appleDerivation
+, lib
+, bootstrap_cmds
+, bison
+, flex
+, gnum4
+, unifdef
+, perl
+, python3
+, headersOnly ? true
+}:
 
 appleDerivation ({
   nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python3 ];

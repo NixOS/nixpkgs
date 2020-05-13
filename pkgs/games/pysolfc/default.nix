@@ -1,5 +1,10 @@
-{ stdenv, fetchzip, buildPythonApplication, python3Packages
-  , desktop-file-utils, freecell-solver }:
+{ stdenv
+, fetchzip
+, buildPythonApplication
+, python3Packages
+, desktop-file-utils
+, freecell-solver
+}:
 
 buildPythonApplication rec {
   pname = "PySolFC";
@@ -16,9 +21,13 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    tkinter six random2
+    tkinter
+    six
+    random2
     # optional :
-    pygame freecell-solver pillow
+    pygame
+    freecell-solver
+    pillow
   ];
 
   patches = [

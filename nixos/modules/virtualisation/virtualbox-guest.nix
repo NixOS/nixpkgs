@@ -3,14 +3,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.virtualisation.virtualbox.guest;
   kernel = config.boot.kernelPackages;
 
 in
-
 {
 
   ###### interface
@@ -47,7 +44,8 @@ in
     users.groups.vboxsf.gid = config.ids.gids.vboxsf;
 
     systemd.services.virtualbox =
-      { description = "VirtualBox Guest Services";
+      {
+        description = "VirtualBox Guest Services";
 
         wantedBy = [ "multi-user.target" ];
         requires = [ "dev-vboxguest.device" ];
@@ -67,27 +65,29 @@ in
         # Allow systemd dependencies on vboxguest.
         SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
       '';
-  } (mkIf cfg.x11 {
-    services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" "modesetting" ];
+  }
+    (mkIf cfg.x11 {
+      services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" "modesetting" ];
 
-    services.xserver.config =
-      ''
-        Section "InputDevice"
-          Identifier "VBoxMouse"
-          Driver "vboxmouse"
-        EndSection
-      '';
+      services.xserver.config =
+        ''
+          Section "InputDevice"
+            Identifier "VBoxMouse"
+            Driver "vboxmouse"
+          EndSection
+        '';
 
-    services.xserver.serverLayoutSection =
-      ''
-        InputDevice "VBoxMouse"
-      '';
+      services.xserver.serverLayoutSection =
+        ''
+          InputDevice "VBoxMouse"
+        '';
 
-    services.xserver.displayManager.sessionCommands =
-      ''
-        PATH=${makeBinPath [ pkgs.gnugrep pkgs.which pkgs.xorg.xorgserver.out ]}:$PATH \
-          ${kernel.virtualboxGuestAdditions}/bin/VBoxClient-all
-      '';
-  })]);
+      services.xserver.displayManager.sessionCommands =
+        ''
+          PATH=${makeBinPath [ pkgs.gnugrep pkgs.which pkgs.xorg.xorgserver.out ]}:$PATH \
+            ${kernel.virtualboxGuestAdditions}/bin/VBoxClient-all
+        '';
+    }
+    )]);
 
 }

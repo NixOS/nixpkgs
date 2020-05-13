@@ -14,7 +14,7 @@
 
   packageName = "garbage-pools";
 
-  asdFilesToKeep = ["garbage-pools.asd"];
+  asdFilesToKeep = [ "garbage-pools.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM garbage-pools DESCRIPTION NIL SHA256

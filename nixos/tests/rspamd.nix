@@ -1,11 +1,10 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
-
 let
   initMachine = ''
     start_all()
@@ -164,7 +163,8 @@ in
       services.rspamd = {
         enable = true;
         locals = {
-          "antivirus.conf" = mkIf false { text = ''
+          "antivirus.conf" = mkIf false {
+            text = ''
               clamav {
                 action = "reject";
                 symbol = "CLAM_VIRUS";
@@ -172,7 +172,8 @@ in
                 log_clean = true;
                 servers = "/run/clamav/clamd.ctl";
               }
-            '';};
+            '';
+          };
           "redis.conf" = {
             enable = false;
             text = ''
@@ -209,7 +210,7 @@ in
               return false
             end,
             score = 5.0,
-	          description = 'Allow no cows',
+            description = 'Allow no cows',
             group = "cows",
           }
           rspamd_logger.infox(rspamd_config, 'Work dammit!!!')
@@ -271,7 +272,7 @@ in
       users.users.tester.password = "test";
       services.postfix = {
         enable = true;
-        destination = ["example.com"];
+        destination = [ "example.com" ];
       };
       services.rspamd = {
         enable = true;

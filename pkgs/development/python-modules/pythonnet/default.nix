@@ -11,9 +11,7 @@
 , clang
 , mono
 }:
-
 let
-
   UnmanagedExports127 = fetchNuGet {
     baseName = "UnmanagedExports";
     version = "1.2.7";
@@ -29,7 +27,6 @@ let
   };
 
 in
-
 buildPythonPackage rec {
   pname = "pythonnet";
   version = "2.4.0";

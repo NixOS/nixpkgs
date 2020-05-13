@@ -1,5 +1,22 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, perl, flex, bison, curl,
-  pam, popt, libiconv, libuuid, openssl_1_0_2, cyrus_sasl, sqlite, tdb, libxml2 }:
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, perl
+, flex
+, bison
+, curl
+, pam
+, popt
+, libiconv
+, libuuid
+, openssl_1_0_2
+, cyrus_sasl
+, sqlite
+, tdb
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "pbis-open";
@@ -13,13 +30,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf automake libtool perl flex bison
+    autoconf
+    automake
+    libtool
+    perl
+    flex
+    bison
   ];
 
   # curl must be placed after openssl_1_0_2, because it pulls openssl 1.1 dependency.
   buildInputs = [
-    pam popt libiconv libuuid openssl_1_0_2 cyrus_sasl
-    curl sqlite popt tdb libxml2 /*libglade2 for gtk*/
+    pam
+    popt
+    libiconv
+    libuuid
+    openssl_1_0_2
+    cyrus_sasl
+    curl
+    sqlite
+    popt
+    tdb
+    libxml2 /*libglade2 for gtk*/
   ];
 
   postPatch = ''
@@ -47,7 +78,7 @@ stdenv.mkDerivation rec {
     "--fail-on-warn=no"
     # "--debug=yes"
   ]; # ^ See https://github.com/BeyondTrust/pbis-open/issues/124
-  configureFlagsArray = [ "--lw-bundled-libs=linenoise-mob tomlc99 opensoap krb5 cyrus-sasl curl openldap ${ if libuuid == null then "libuuid" else "" }" ];
+  configureFlagsArray = [ "--lw-bundled-libs=linenoise-mob tomlc99 opensoap krb5 cyrus-sasl curl openldap ${if libuuid == null then "libuuid" else "" }" ];
   # ^ it depends on old krb5 version 1.9 (issue #228)
   # linenoise-mod, tomlc99, opensoap is not in nixpkgs.
   # krb5 must be old one, and cyrus-sasl and openldap have dependency to newer libkrb5 that cause runtime error
