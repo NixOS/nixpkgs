@@ -1,4 +1,4 @@
-{ lib, fetchzip, p7zip }:
+{ lib, fetchzip, libarchive }:
 
 let
   pname = "rounded-mgenplus";
@@ -8,7 +8,7 @@ in fetchzip rec {
 
   url = "https://osdn.jp/downloads/users/8/8598/${name}.7z";
   postFetch = ''
-    ${p7zip}/bin/7z x $downloadedFile
+    ${libarchive}/bin/bsdtar xf $downloadedFile
     install -m 444 -D -t $out/share/fonts/${pname} ${pname}-*.ttf
   '';
   sha256 = "0vwdknagdrl5dqwpb1x5lxkbfgvbx8dpg7cb6yamgz71831l05v1";
