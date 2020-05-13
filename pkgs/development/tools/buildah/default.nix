@@ -4,9 +4,9 @@
 , installShellFiles
 , pkg-config
 , gpgme
-, libgpgerror
 , lvm2
 , btrfs-progs
+, libapparmor
 , libselinux
 , libseccomp
 }:
@@ -27,9 +27,18 @@ buildGoModule rec {
   vendorSha256 = null;
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
-  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs libselinux libseccomp ];
+
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ];
 
   buildPhase = ''
+    patchShebangs .
     make GIT_COMMIT="unknown"
     make -C docs
   '';
