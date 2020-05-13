@@ -164,7 +164,6 @@ let
       "systemd-timedated.service"
       "systemd-localed.service"
       "systemd-hostnamed.service"
-      "systemd-binfmt.service"
       "systemd-exit.service"
       "systemd-update-done.service"
     ] ++ optionals config.services.journald.enableHttpGateway [
@@ -1056,7 +1055,6 @@ in
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
-    systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.mount" ];
     systemd.services.systemd-importd.environment = proxy_env;
 
     # Don't bother with certain units in containers.
