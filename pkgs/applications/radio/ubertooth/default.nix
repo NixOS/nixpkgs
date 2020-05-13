@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, libbtbb, libpcap , libusb1, bluez }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, libbtbb, libpcap , libusb1, bluez
+, udevGroup ? "ubertooth"
+}:
 
 stdenv.mkDerivation rec {
   pname = "ubertooth";
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals stdenv.isLinux [
     "-DINSTALL_UDEV_RULES=TRUE"
     "-DUDEV_RULES_PATH=etc/udev/rules.d"
-    "-DUDEV_RULES_GROUP=ubertooth"
+    "-DUDEV_RULES_GROUP=${udevGroup}"
   ];
 
   meta = with stdenv.lib; {
