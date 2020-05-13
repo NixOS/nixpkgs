@@ -4036,6 +4036,8 @@ in
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
+  libbtbb = callPackage ../development/libraries/libbtbb { };
+
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
   lprof = callPackage ../tools/graphics/lprof { };
