@@ -1,49 +1,13 @@
 { stdenv
+, lib
 , callPackage
-, Cocoa
-, CoreFoundation
-, Foundation
-, JavaNativeFoundation
-, JavaRuntimeSupport
-, JavaVM
-, bash
-, bzip2
-, curl
-, ed
-, fetchFromGitHub
+, darwin
+, openjdk8
+, python27
 , fetchgit
 , fetchurl
-, fetchzip
-, gcc
-, gfortran
-, git
-, glibc
-, icu
-, lib
-, libiconv
-, libobjc
-, libresolv
-, lzma
-, makeWrapper
-, mercurial_4
-, newScope
-, ninja
-, openjdk8
-, openjdk11
-, openssl
-, pcre
-, perl
-, python27
-, readline
-, ruby
-, rsync
-, setJavaClassPath
-, unzip
-, which
-, writeScriptBin
-, xcodebuild
-, zlib
-, pkgs
+, fetchFromGitHub
+, fetchpatch
 }:
 let
   sdkVersion = "20.0.0";
@@ -81,31 +45,33 @@ let
     };
   };
   python27withPackages = python27.withPackages (ps: [ ninja-syntax ]);
-  llvm-sulong = callPackage ./ce/llvm.nix {};
-  # https://github.com/graalvm/openjdk8-jvmci-builder/issues/11#issuecomment-542195999
-  # openjdk8Static = openjdk8.override { static = true; };
-  callPackageGraal8 = newScope ({
-    openjdk = openjdk8.override { static = true; };
-    inherit stdenv sdkVersion fetchFromGitHub
-      makeMxCache makeMxGitCache graalVMSource
-      python27withPackages ninja mercurial_4 bash;
-  }
-  );
+  openjdk8Static = openjdk8.override { static = true; };
 in
 rec {
   graalvm8Packages = rec {
-    mx = callPackageGraal8 ./ce/mx.nix {
-      inherit makeWrapper fetchzip;
+    mx = callPackage ./ce/mx.nix { inherit python27withPackages; };
+    jvmci8 = callPackage ./ce/jvmci8.nix {
+      openjdk = openjdk8Static;
+      inherit mx makeMxCache;
+      inherit (darwin) libobjc;
+      inherit (darwin.apple_sdk.frameworks)
+        CoreFoundation Foundation JavaNativeFoundation
+        JavaVM JavaRuntimeSupport Cocoa;
+      # inherit libobjc CoreFoundation Foundation
+      #   JavaNativeFoundation JavaRuntimeSupport JavaVM
+      #   xcodebuild Cocoa
+      # libresolv
+      # inherit (darwin) libiconv libobjc;
     };
-    jvmci = callPackageGraal8 ./ce/jvmci8.nix {
-      inherit mx setJavaClassPath;
-      inherit libobjc CoreFoundation Foundation
-        JavaNativeFoundation JavaRuntimeSupport JavaVM
-        xcodebuild Cocoa;
+    sdk = callPackage ./ce/sdk.nix {
+      inherit mx sdkVersion graalVMSource makeMxCache python27withPackages;
+      jvmci = jvmci8;
     };
-    sdk = callPackageGraal8 ./ce/sdk.nix {
-      inherit jvmci mx;
-      llvm = llvm-sulong;
+
+    graalpython = callPackage ./suites/graalpython/graalpython.nix {
+      inherit sdkVersion;
+      graalvm = sdk;
     };
   };
 }
+

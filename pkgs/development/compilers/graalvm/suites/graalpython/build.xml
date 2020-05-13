@@ -1,0 +1,62 @@
+<project>
+    <target name="graalpython-launcher-compile">
+        <mkdir dir="target/classes"/>
+        <javac srcdir="graalpython/com.oracle.graal.python.shell/src"
+               destdir="target/classes"
+               classpath="${java.class.path}:graalpython/com.oracle.graal.python.shell/src"
+               encoding="UTF-8"
+               includeantruntime="false"
+               debug="true" />
+    </target>
+    <target name="graalpython-launcher-jar">
+        <mkdir dir="target/jar"/>
+        <jar destfile="target/jar/graalpython-launcher.jar" basedir="target/classes">
+             <archives>
+                 <zips>
+                     <restrict>
+                         <path path="${java.class.path}"/>
+                         <name name="*/sulong-toolchain-launchers.jar"/>
+                     </restrict>
+                     <restrict>
+                         <path path="${java.class.path}"/>
+                         <name name="*/launcher-common.jar"/>
+                     </restrict>
+                 </zips>
+             </archives>
+        </jar>
+    </target>
+    <target name="graalpython-antlr-compile">
+        <java classname="org.antlr.v4.Tool"
+              classpath="${java.class.path}"
+              fork="true">
+            <arg value="-package" />
+            <arg value="com.oracle.graal.python.parser.antlr" />
+            <arg value="-o" />
+            <arg value="graalpython/com.oracle.graal.python/src/com/oracle/graal/python/parser/antlr"/>
+            <arg value="graalpython/com.oracle.graal.python/src/com/oracle/graal/python/parser/antlr/Python3.g4"/>
+        </java>
+    </target>
+    <target name="graalpython-compile">
+        <delete dir="target/classes"/>
+        <mkdir dir="target/classes"/>
+        <javac srcdir="graalpython/com.oracle.graal.python/src"
+               destdir="target/classes"
+               classpath="target/jar/graalpython-launcher.jar:graalpython/com.oracle.graal.python/src:${java.class.path}"
+               encoding="UTF-8"
+               includeantruntime="false"
+               debug="false"
+               fork="true" />
+    </target>
+    <target name="graalpython-jar">
+        <jar destfile="target/jar/graalpython.jar" basedir="target/classes">
+            <archives>
+                 <zips>
+                     <restrict>
+                         <path path="${java.class.path}"/>
+                         <name name="*org_tukaani_xz-1.8.jar"/>
+                     </restrict>
+                 </zips>
+            </archives>
+        </jar>
+    </target>
+</project>

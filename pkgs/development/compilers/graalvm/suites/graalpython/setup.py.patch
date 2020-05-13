@@ -1,0 +1,13 @@
+diff --git a/graalpython/com.oracle.graal.python.cext/setup.py b/graalpython/com.oracle.graal.python.cext/setup.py
+index 397459c21..14b33d5f5 100644
+--- a/graalpython/com.oracle.graal.python.cext/setup.py
++++ b/graalpython/com.oracle.graal.python.cext/setup.py
+@@ -223,7 +223,7 @@ builtin_exts = (
+     NativeBuiltinModule("_mmap"),
+     NativeBuiltinModule("_struct"),
+     # the above modules are more core, we need them first to deal with later, more complex modules with dependencies
+-    NativeBuiltinModule("_bz2", deps=[Bzip2Depedency("bz2", "bzip2==1.0.8", "BZIP2")], extra_link_args=["-Wl,-rpath,%s/../lib/%s/" % (relative_rpath, SOABI)]),
++    NativeBuiltinModule("_bz2"),
+ )
+ 
+ 

@@ -247,3 +247,4 @@ stdenv.mkDerivation rec {
   dontStrip = true; # stripped javac crashes with "segmentaion fault"
   inherit (openjdk) meta;
 }
+
