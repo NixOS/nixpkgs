@@ -121,7 +121,6 @@ stdenv.mkDerivation rec {
     luajit
     openjpeg
     poppler
-    python3Packages.dbus-python
     utillinux
     xorg.libXScrnSaver
     xorg.libXcomposite
