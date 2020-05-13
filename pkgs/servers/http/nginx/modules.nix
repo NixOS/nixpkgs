@@ -73,8 +73,8 @@ in
     src = fetchFromGitHub {
       owner = "aperezdc";
       repo = "ngx-fancyindex";
-      rev = "v0.4.3";
-      sha256 = "12xdx6a76sfrq0yciylvyjlnvyczszpadn31jqya8c2dzdkyyx7f";
+      rev = "v0.4.4";
+      sha256 = "14xmzcl608pr7hb7wng6hpz7by51cfnxlszbka3zhp3kk86ljsi6";
     };
   };
 
