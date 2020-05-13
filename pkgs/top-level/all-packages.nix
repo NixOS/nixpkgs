@@ -8092,6 +8092,8 @@ in
 
   ubridge = callPackage ../tools/networking/ubridge { };
 
+  ubertooth = callPackage ../applications/radio/ubertooth { };
+
   ucl = callPackage ../development/libraries/ucl { };
 
   ucspi-tcp = callPackage ../tools/networking/ucspi-tcp { };
