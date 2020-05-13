@@ -32,8 +32,8 @@ let
           (name: pkg:
             let
               result = builtins.tryEval (
-                if lib.isDerivation pkg && cond name pkg
-                  then [(return name pkg)]
+                if lib.isDerivation pkg
+                  then lib.optional (cond name pkg) (return name pkg)
                 else if pkg.recurseForDerivations or false || pkg.recurseForRelease or false
                   then packagesWith cond return pkg
                 else []
