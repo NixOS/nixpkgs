@@ -1,4 +1,4 @@
-{ lib, fetchurl, p7zip }:
+{ lib, fetchurl, libarchive }:
 
 let
   version = "0.8.2";
@@ -12,7 +12,8 @@ in fetchurl {
   downloadToTemp = true;
 
   postFetch = ''
-    ${p7zip}/bin/7z x $downloadedFile -o$out/share/fonts
+    mkdir -p $out/share/fonts
+    ${libarchive}/bin/bsdtar -xf $downloadedFile -C $out/share/fonts
   '';
 
   meta = with lib; {
