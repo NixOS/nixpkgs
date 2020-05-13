@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, fetchgx, gx-go }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ipfs-cluster";
