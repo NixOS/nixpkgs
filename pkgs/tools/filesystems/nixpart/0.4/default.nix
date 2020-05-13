@@ -18,7 +18,7 @@ let
 
   cryptsetup = import ./cryptsetup.nix {
     inherit stdenv fetchurl python;
-    inherit (pkgs) pkgconfig libgcrypt libuuid popt lvm2;
+    inherit (pkgs) fetchpatch pkgconfig libgcrypt libuuid popt lvm2;
   };
 
   dmraid = import ./dmraid.nix {
