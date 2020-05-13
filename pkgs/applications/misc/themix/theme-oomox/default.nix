@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
   # No tests
   doCheck = false; 
 
-  installFlags = [ "-f Makefile_oomox_plugin" "DESTDIR=$(out)" "PREFIX=" ];
+  makefile = "Makefile_oomox_plugin";
+
+  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   postInstall = ''
     cp -r __pycache__ "$out/opt/oomox/plugins/theme_oomox"/
