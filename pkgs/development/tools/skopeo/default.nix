@@ -3,11 +3,9 @@
 , fetchFromGitHub
 , runCommand
 , gpgme
-, libgpgerror
 , lvm2
 , btrfs-progs
 , pkg-config
-, libselinux
 , go-md2man
 , installShellFiles
 , makeWrapper
@@ -41,8 +39,9 @@ buildGoModule {
   excludedPackages = [ "integration" ];
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
+
   buildInputs = [ gpgme ]
-  ++ stdenv.lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs libselinux ];
+  ++ stdenv.lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
   buildFlagsArray = ''
     -ldflags=
