@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, python
 , numpy
 , qiskit-terra
 , scikitlearn
@@ -38,11 +39,12 @@ buildPythonPackage rec {
     scikitlearn
     scipy
   ];
+  postInstall = "rm -rf $out/${python.sitePackages}/docs";  # this dir can create conflicts
 
   # Tests
   pythonImportsCheck = [ "qiskit.ignis" ];
   dontUseSetuptoolsCheck = true;
-  preCheck = ''export HOME=$TMPDIR'';
+  preCheck = "export HOME=$TMPDIR";
   checkInputs = [
     ddt
     pytestCheckHook

@@ -1,15 +1,62 @@
-{ stdenvNoCC, fetchurl, qemu, expect, writeScript, ncurses }:
+{ stdenvNoCC, fetchurl, qemu, expect, writeScript, writeScriptBin, ncurses, bash, coreutils }:
 
 let
 
-  # We execute the installer in qemu-user, because otherwise the
-  # installer fails to open itself due to a failed stat() call. This
-  # seems like an incompatibility of new Linux kernels to run this
-  # ancient binary.
-  performInstall = writeScript "perform-ow-install" ''
+  # We execute all OpenWatcom binaries in qemu-user, because otherwise
+  # some binaries (most notably the installer itself and wlib) fail to
+  # use the stat() systemcall. The failure mode is that it returns
+  # EOVERFLOW for completely legitimate requests. This seems like an
+  # incompatibility of new Linux kernels to run this ancient binary.
+  wrapLegacyBinary = writeScript "wrapLegacyBinary" ''
+    #!${bash}/bin/bash
+
+    set -eu
+
+    if [ $# -ne 2 ]; then
+       echo "Usage: $0 unwrapped-binary wrapped-binary"
+       exit 1
+    fi
+
+    IN="$(${coreutils}/bin/realpath $1)"
+    OUT="$2"
+    ARGV0="$(basename $2)"
+
+    cat > "$OUT" <<EOF
+    #!${bash}/bin/bash
+
+    TERMINFO=${ncurses}/share/terminfo TERM=vt100 exec ${qemu}/bin/qemu-i386 -0 $ARGV0 $IN "\$@"
+    EOF
+
+    chmod +x "$OUT"
+  '';
+
+  wrapInPlace = writeScriptBin "wrapInPlace" ''
+    #!${bash}/bin/bash
+
+    set -eu
+
+    if [ $# -ne 1 ]; then
+       echo "Usage: $0 unwrapped-binary"
+       exit 1
+    fi
+
+    TARGET="$1"
+
+    mv "$TARGET" "$TARGET-unwrapped"
+    chmod +x "$TARGET-unwrapped"
+
+    exec ${wrapLegacyBinary} "$TARGET-unwrapped" "$TARGET"
+  '';
+
+  # Do a scripted installation of OpenWatcom with its original installer.
+  #
+  # If maintaining this expect script turns out to be too much of a
+  # hassle, we can switch to just using `unzip' on the installer and
+  # the correct file permissions manually.
+  performInstall = writeScriptBin "performInstall" ''
     #!${expect}/bin/expect -f
 
-    spawn env TERMINFO=${ncurses}/share/terminfo TERM=vt100 ${qemu}/bin/qemu-i386 [lindex $argv 0]
+    spawn [lindex $argv 0]
 
     # Wait for button saying "I agree" with escape sequences.
     expect "gree"
@@ -46,15 +93,23 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "1wzkvc6ija0cjj5mcyjng5b7hnnc5axidz030c0jh05pgvi4nj7p";
   };
 
+  nativeBuildInputs = [ wrapInPlace performInstall ];
+
   dontUnpack = true;
-  dontBuild = true;
   dontConfigure = true;
 
-  installPhase = ''
-    cp ${src} install-bin
-    chmod +x install-bin
+  buildPhase = ''
+    cp ${src} install-bin-unwrapped
+    wrapInPlace install-bin-unwrapped
+  '';
 
-    ${performInstall} install-bin
+  installPhase = ''
+    performInstall ./install-bin-unwrapped
+
+    for e in $(find $out/binl -type f -executable); do
+      echo "Wrapping $e"
+      wrapInPlace "$e"
+    done
   '';
 
   meta = with stdenvNoCC.lib; {

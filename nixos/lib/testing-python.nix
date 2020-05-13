@@ -62,25 +62,11 @@ in rec {
 
       requiredSystemFeatures = [ "kvm" "nixos-test" ];
 
-      buildInputs = [ libxslt ];
-
       buildCommand =
         ''
-          mkdir -p $out/nix-support
+          mkdir -p $out
 
-          LOGFILE=$out/log.xml tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
-
-          # Generate a pretty-printed log.
-          xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
-          ln -s ${./test-driver/logfile.css} $out/logfile.css
-          ln -s ${./test-driver/treebits.js} $out/treebits.js
-          ln -s ${jquery}/js/jquery.min.js $out/
-          ln -s ${jquery}/js/jquery.js $out/
-          ln -s ${jquery-ui}/js/jquery-ui.min.js $out/
-          ln -s ${jquery-ui}/js/jquery-ui.js $out/
-
-          touch $out/nix-support/hydra-build-products
-          echo "report testlog $out log.html" >> $out/nix-support/hydra-build-products
+          LOGFILE=/dev/null tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
 
           for i in */xchg/coverage-data; do
             mkdir -p $out/coverage-data

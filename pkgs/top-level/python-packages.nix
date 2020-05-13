@@ -1479,6 +1479,8 @@ in {
 
   transforms3d = callPackage ../development/python-modules/transforms3d { };
 
+  trimesh = callPackage ../development/python-modules/trimesh {};
+
   sentinel = callPackage ../development/python-modules/sentinel { };
 
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk {};
@@ -4065,6 +4067,8 @@ in {
   xnd = callPackage ../development/python-modules/xnd { };
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
+
+  unrpa = callPackage ../development/python-modules/unrpa { };
 
   lsi = callPackage ../development/python-modules/lsi { };
 

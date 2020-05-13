@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit, fetchFromGitHub, go, fuse, installShellFiles }:
+{ stdenv, buildGoPackage, fetchFromGitHub, fuse, installShellFiles }:
 
 buildGoPackage rec {
   pname = "tmsu";
@@ -24,8 +24,8 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    mv $bin/bin/{TMSU,tmsu}
-    cp src/misc/bin/* $bin/bin/
+    mv $out/bin/{TMSU,tmsu}
+    cp src/misc/bin/* $out/bin/
     installManPage src/misc/man/tmsu.1
     installShellCompletion --zsh src/misc/zsh/_tmsu
   '';

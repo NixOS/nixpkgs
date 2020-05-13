@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions" ];
 
+  uuid = "arc-menu@linxgem33.com";
+
   meta = with stdenv.lib; {
     description = "Gnome shell extension designed to replace the standard menu found in Gnome 3";
     license = licenses.gpl2Plus;

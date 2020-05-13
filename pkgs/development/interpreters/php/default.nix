@@ -67,7 +67,7 @@ let
               getDepsRecursively = extensions:
                 let
                   deps = lib.concatMap
-                           (ext: ext.internalDeps or [])
+                           (ext: (ext.internalDeps or []) ++ (ext.peclDeps or []))
                            extensions;
                 in
                   if ! (deps == []) then
@@ -86,12 +86,12 @@ let
                   (map (ext:
                     let
                       extName = getExtName ext;
+                      phpDeps = (ext.internalDeps or []) ++ (ext.peclDeps or []);
                       type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
                     in
                       lib.nameValuePair extName {
                         text = "${type}=${ext}/lib/php/extensions/${extName}.so";
-                        deps = lib.optionals (ext ? internalDeps)
-                          (map getExtName ext.internalDeps);
+                        deps = map getExtName phpDeps;
                       })
                     (enabledExtensions ++ (getDepsRecursively enabledExtensions)));
 
@@ -112,8 +112,10 @@ let
                   phpIni = "${phpWithExtensions}/lib/php.ini";
                   unwrapped = php;
                   tests = nixosTests.php;
-                  inherit (php-packages) packages extensions;
-                  inherit (php) meta;
+                  inherit (php-packages) packages extensions buildPecl;
+                  meta = php.meta // {
+                    outputsToInstall = [ "out" ];
+                  };
                 };
                 paths = [ php ];
                 postBuild = ''

@@ -77,7 +77,9 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+      There is a new <xref linkend="opt-security.doas.enable"/> module that provides <command>doas</command>, a lighter alternative to <command>sudo</command> with many of the same features.
+    </para>
    </listitem>
   </itemizedlist>
 
@@ -279,6 +281,13 @@ php.override {
    </listitem>
    <listitem>
     <para>
+      The Nginx log directory has been moved to <literal>/var/log/nginx</literal>, the cache directory
+      to <literal>/var/cache/nginx</literal>. The option <literal>services.nginx.stateDir</literal> has
+      been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The httpd web server previously started its main process as root
      privileged, then ran worker processes as a less privileged identity user.
      This was changed to start all of httpd as a less privileged user (defined by
@@ -324,6 +333,15 @@ php.override {
       <xref linkend="opt-services.picom.activeOpacity"/>) have been changed
       to the (relatively) new native <literal>float</literal> type. To migrate
       your configuration simply remove the quotes around the numbers.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      When using <literal>buildBazelPackage</literal> from Nixpkgs,
+      <literal>flat</literal> hash mode is now used for dependencies
+      instead of <literal>recursive</literal>. This is to better allow
+      using hashed mirrors where needed. As a result, these hashes
+      will have changed.
     </para>
    </listitem>
   </itemizedlist>

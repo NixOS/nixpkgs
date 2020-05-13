@@ -2,6 +2,7 @@
 , gocode ? null
 , godef ? null
 , gotools ? null
+, nodePackages ? null
 , rustracerd ? null
 , fixDarwinDylibNames, Cocoa ? null
 }:
@@ -69,6 +70,9 @@ stdenv.mkDerivation {
     TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
     mkdir -p $TARGET
     ln -sf ${gotools}/bin/gopls $TARGET
+  '' + lib.optionalString (nodePackages != null) ''
+    TARGET=$out/lib/ycmd/third_party/tsserver
+    ln -sf ${nodePackages.typescript} $TARGET
   '' + lib.optionalString (rustracerd != null) ''
     TARGET=$out/lib/ycmd/third_party/racerd/target/release
     mkdir -p $TARGET

@@ -1,17 +1,32 @@
-{ stdenv, fetchFromGitHub, liblo, libxml2, libjack2, libsndfile, wxGTK, libsigcxx
-, libsamplerate, rubberband, pkgconfig, libtool, gettext, ncurses, which
+{ stdenv
+, fetchFromGitHub
 , autoreconfHook
+, pkgconfig
+, which
+, libtool
+, liblo
+, libxml2
+, libjack2
+, libsndfile
+, wxGTK30
+, libsigcxx
+, libsamplerate
+, rubberband
+, gettext
+, ncurses
+, alsaLib
+, fftw
 }:
 
 stdenv.mkDerivation rec {
-  pname = "sooperlooper-git";
-  version = "2016-07-19";
+  pname = "sooperlooper";
+  version = "unstable-2019-09-30";
 
   src = fetchFromGitHub {
     owner = "essej";
     repo = "sooperlooper";
-    rev = "3bdfe184cd59b51c757b8048536abc1146fb0de4";
-    sha256 = "0qz25h4idv79m97ici2kzx72fwzks3lysyksk3p3rx72lsijhf3g";
+    rev = "4d1da14176e16b0f56b727bb1e6c2e8957515625";
+    sha256 = "1gsgqa7hdymzw2al1ymzv0f33y161dyhh3fmy88lpjwv3bfchamg";
   };
 
   autoreconfPhase = ''
@@ -22,11 +37,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig which libtool ];
 
   buildInputs = [
-    liblo libxml2 libjack2 libsndfile wxGTK libsigcxx
-    libsamplerate rubberband gettext ncurses
+    liblo
+    libxml2
+    libjack2
+    libsndfile
+    wxGTK30
+    libsigcxx
+    libsamplerate
+    rubberband
+    gettext
+    ncurses
+    alsaLib
+    fftw
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A live looping sampler capable of immediate loop recording, overdubbing, multiplying, reversing and more";
     longDescription = ''
       It allows for multiple simultaneous multi-channel loops limited only by your computer's available memory.
@@ -35,11 +60,9 @@ stdenv.mkDerivation rec {
       However, this kind of live performance looping tool is most effectively used via hardware (midi footpedals, etc)
       and the engine can be run standalone on a computer without a monitor.
     '';
-
-    version = version;
-    homepage = "http://essej.net/sooperlooper/index.html";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://essej.net/sooperlooper/"; # https is broken
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.linux;
   };
 }

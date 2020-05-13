@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-metadata";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fk6icip2x1nh4kzhbc8cnqrs77avpqvj7ny3xadfh6yhn9aaw90";
+    sha256 = "1711gippwsl7c1wi8pc2y75xqq5sn1sscpqvrxjvpjm8pcx2138n";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
