@@ -22,6 +22,7 @@ in
     ./i3.nix
     ./jwm.nix
     ./leftwm.nix
+    ./lwm.nix
     ./metacity.nix
     ./mwm.nix
     ./openbox.nix
