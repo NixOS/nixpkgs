@@ -27,7 +27,7 @@ let
 
   lvm2 = import ./lvm2.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) pkgconfig utillinux systemd coreutils;
+    inherit (pkgs) fetchpatch pkgconfig utillinux systemd coreutils;
   };
 
   multipath_tools = import ./multipath-tools.nix {
