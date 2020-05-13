@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-gnome-shell" # 3.36 not supported
+    "--with-gnome-shell=${gnome3.gnome-shell.version}"
     "--disable-cinnamon" # not equipped to test
     "--disable-unity"
   ];
