@@ -6759,6 +6759,12 @@
     githubId = 8641;
     name = "Pierre Carrier";
   };
+  pengmeiyu = {
+    email = "pengmyu@gmail.com";
+    github = "pmeiyu";
+    githubId = 8529551;
+    name = "Peng Mei Yu";
+  };
   penguwin = {
     email = "penguwin@penguwin.eu";
     github = "penguwin";
