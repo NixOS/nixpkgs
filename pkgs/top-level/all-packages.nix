@@ -18675,6 +18675,8 @@ in
 
   bb =  callPackage ../applications/misc/bb { };
 
+  berry = callPackage ../applications/window-managers/berry { };
+
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
