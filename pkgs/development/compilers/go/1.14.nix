@@ -229,8 +229,6 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  setupHook = ./setup-hook.sh;
-
   disallowedReferences = [ goBootstrap ];
 
   meta = with stdenv.lib; {
