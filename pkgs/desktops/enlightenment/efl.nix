@@ -3,7 +3,6 @@
 , meson
 , ninja
 , pkgconfig
-, SDL
 , SDL2
 , alsaLib
 , avahi
@@ -71,7 +70,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL
     avahi
     fontconfig
     freetype
