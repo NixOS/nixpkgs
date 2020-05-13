@@ -37,7 +37,7 @@ let
 
   parted = import ./parted.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) utillinux readline libuuid gettext check lvm2;
+    inherit (pkgs) fetchpatch utillinux readline libuuid gettext check lvm2;
   };
 
   pyblock = import ./pyblock.nix {
