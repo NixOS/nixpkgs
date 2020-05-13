@@ -142,6 +142,7 @@ stdenv.mkDerivation rec {
     "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disalbed by default, scim is not availabe in nixpkgs
     "-D embedded-lz4=false"
     "-D fb=true"
+    "-D network-backend=connman"
     "-D sdl=true"
   ];
 
