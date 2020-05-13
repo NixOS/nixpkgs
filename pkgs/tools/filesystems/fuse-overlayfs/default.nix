@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     longDescription = "An implementation of overlay+shiftfs in FUSE for rootless containers.";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ma9e ] ++ teams.podman.members;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     inherit (src.meta) homepage;
   };
 }
