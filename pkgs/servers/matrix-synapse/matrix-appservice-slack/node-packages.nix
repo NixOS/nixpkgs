@@ -3065,13 +3065,13 @@ let
         sha512 = "bdNz1L4ekHiJul6SHtZWs1ujEKERJnHs4HxN7rjTyyVOFf3HaJ6sLqe6aPG62XTzAB/63pKRh5jTSWL0D7bsvw==";
       };
     };
-    "tslib-1.11.2" = {
+    "tslib-1.12.0" = {
       name = "tslib";
       packageName = "tslib";
-      version = "1.11.2";
+      version = "1.12.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/tslib/-/tslib-1.11.2.tgz";
-        sha512 = "tTSkux6IGPnUGUd1XAZHcpu85MOkIl5zX49pO+jfsie3eP0B6pyhOlLXm3cAC6T7s+euSDDUUV+Acop5WmtkVg==";
+        url = "https://registry.npmjs.org/tslib/-/tslib-1.12.0.tgz";
+        sha512 = "5rxCQkP0kytf4H1T4xz1imjxaUUPMvc5aWp0rJ/VMIN7ClRiH1FwFvBt8wOeMasp/epeUnmSW6CixSIePtiLqA==";
       };
     };
     "tslint-6.1.2" = {
@@ -3128,13 +3128,13 @@ let
         sha512 = "TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==";
       };
     };
-    "typescript-3.8.3" = {
+    "typescript-3.9.2" = {
       name = "typescript";
       packageName = "typescript";
-      version = "3.8.3";
+      version = "3.9.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/typescript/-/typescript-3.8.3.tgz";
-        sha512 = "MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==";
+        url = "https://registry.npmjs.org/typescript/-/typescript-3.9.2.tgz";
+        sha512 = "q2ktq4n/uLuNNShyayit+DTobV2ApPEo/6so68JaD5ojvc/6GClBipedB9zNWYxRSAlZXAe405Rlijzl6qDiSw==";
       };
     };
     "underscore-1.4.4" = {
@@ -3374,14 +3374,14 @@ let
   };
 in
 {
-  "matrix-appservice-slack-git+https://github.com/matrix-org/matrix-appservice-slack.git#1.3.0" = nodeEnv.buildNodePackage {
+  "matrix-appservice-slack-git+https://github.com/matrix-org/matrix-appservice-slack.git#1.3.1" = nodeEnv.buildNodePackage {
     name = "matrix-appservice-slack";
     packageName = "matrix-appservice-slack";
-    version = "1.3.0";
+    version = "1.3.1";
     src = fetchgit {
       url = "https://github.com/matrix-org/matrix-appservice-slack.git";
-      rev = "888c4e60f6677db86e999a8edfb0781a51fec23f";
-      sha256 = "cc458ba7a6cde7c5f203e44baed2b05e5fca1a2004558db758fbeb688b4b578d";
+      rev = "368c7af0c87053779d61b3c702fc533003960a99";
+      sha256 = "add6a164e982cfa8837168e4a8c0b4a3fb248c9cf331ea8c6109767f6fc76cef";
     };
     dependencies = [
       sources."@babel/code-frame-7.8.3"
@@ -3776,7 +3776,7 @@ in
           sources."diff-4.0.2"
         ];
       })
-      sources."tslib-1.11.2"
+      sources."tslib-1.12.0"
       (sources."tslint-6.1.2" // {
         dependencies = [
           sources."diff-4.0.2"
@@ -3788,7 +3788,7 @@ in
       sources."tweetnacl-0.14.5"
       sources."type-detect-4.0.8"
       sources."type-is-1.6.18"
-      sources."typescript-3.8.3"
+      sources."typescript-3.9.2"
       sources."underscore-1.4.4"
       sources."unhomoglyph-1.0.5"
       sources."unpipe-1.0.0"
