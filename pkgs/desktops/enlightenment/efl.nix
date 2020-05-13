@@ -5,7 +5,6 @@
 , pkgconfig
 , SDL2
 , alsaLib
-, avahi
 , bullet
 , check
 , curl
@@ -70,7 +69,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    avahi
     fontconfig
     freetype
     giflib
