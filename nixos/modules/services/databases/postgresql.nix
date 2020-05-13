@@ -199,7 +199,7 @@ in
         example = "%m [%p] ";
         description = ''
           A printf-style string that is output at the beginning of each log line.
-          Upstream default is '%m [%p] ', i.e. it includes the timestamp. We do
+          Upstream default is <literal>'%m [%p] '</literal>, i.e. it includes the timestamp. We do
           not include the timestamp, because journal has it anyway.
         '';
       };
