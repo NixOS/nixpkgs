@@ -114,6 +114,27 @@
   org-mac-link =
     callPackage ./org-mac-link { };
 
+  org-roam = melpaBuild rec {
+    pname = "org-roam";
+    version = "0.1.2";
+    src = pkgs.fetchFromGitHub {
+      owner = "jethrokuan";
+      repo = "org-roam";
+      rev = "v${version}";
+      sha256 = "1p8bhj09s0iyb3fcjibsl1p61wiac17sn1w7hwm1wqrcydj8h8hx";
+    };
+    recipe = pkgs.writeText "recipe" ''
+      (org-roam
+       :repo "jethrokuan/org-roam"
+       :fetcher github
+       :files ("*.el"))
+    '';
+    packageRequires = [ dash f s async ];
+    meta = {
+      license = gpl3;
+    };
+  };
+
   perl-completion =
     callPackage ./perl-completion { };
 
