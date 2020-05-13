@@ -1,21 +1,21 @@
 { stdenv
 , fetchurl
-, pkgconfig
-, intltool
 , glib
-, gtk3
 , gmime
 , gnutls
-, webkitgtk
-, libesmtp
-, openssl
-, libnotify
-, gtkspell3
-, gpgme
-, libcanberra-gtk3
-, libsecret
-, gtksourceview
 , gobject-introspection
+, gpgme
+, gtk3
+, gtksourceview
+, gtkspell3
+, intltool
+, libcanberra-gtk3
+, libesmtp
+, libnotify
+, libsecret
+, openssl
+, pkgconfig
+, webkitgtk
 , wrapGAppsHook
 }:
 
@@ -37,18 +37,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gtk3
     gmime
     gnutls
-    webkitgtk
-    openssl
-    libnotify
-    gtkspell3
     gpgme
-    libcanberra-gtk3
+    gtk3
     gtksourceview
-    libsecret
+    gtkspell3
+    libcanberra-gtk3
     libesmtp
+    libnotify
+    libsecret
+    openssl
+    webkitgtk
   ];
 
   configureFlags = [
