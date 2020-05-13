@@ -748,8 +748,6 @@ let
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
 
-    textutils_p4 = callPackage ../development/ocaml-modules/textutils { };
-
     tls = callPackage ../development/ocaml-modules/tls { };
 
     type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
@@ -1163,13 +1161,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core.nix {}
       else core_p4;
-
-    textutils =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.textutils
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/textutils.nix {}
-      else textutils_p4;
 
     async_kernel =
       if lib.versionOlder "4.03" ocaml.version
