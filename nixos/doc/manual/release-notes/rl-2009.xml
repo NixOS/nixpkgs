@@ -910,6 +910,13 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
       The packages <package>perl</package>, <package>rsync</package> and <package>strace</package> were removed from <option>systemPackages</option>. If you need them, install them again with <code><xref linkend="opt-environment.systemPackages"/> = with pkgs; [ perl rsync strace ];</code> in your <filename>configuration.nix</filename>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>undervolt</literal> option no longer needs to apply its
+      settings every 30s. If they still become undone, open an issue and restore
+      the previous behaviour using <literal>undervolt.useTimer</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
