@@ -144,9 +144,8 @@ stdenv.mkDerivation rec {
     "--buildtype=release"
     "-D build-tests=false" # disable build tests, which are not working
     "-D drm=true"
-    "-D embedded-lz4=false"
     "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disalbed by default, scim is not availabe in nixpkgs
-    "-D evas-loaders-disabler=json"
+    "-D embedded-lz4=false"
     "-D fb=true"
     "-D opengl=full"
     "-D sdl=true"
