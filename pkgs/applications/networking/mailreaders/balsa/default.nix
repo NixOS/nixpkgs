@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , glib
-, gmime
+, gmime3
 , gnutls
 , gobject-introspection
 , gpgme
@@ -11,6 +11,7 @@
 , intltool
 , libcanberra-gtk3
 , libesmtp
+, libical
 , libnotify
 , libsecret
 , openssl
@@ -21,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "balsa";
-  version = "2.5.9";
+  version = "2.6.1";
 
   src = fetchurl {
     url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.bz2";
-    sha256 = "19gs1qfvbk9qx4rjmgrmvid00kl9k153zjjx8zjii2lz09w7g19i";
+    sha256 = "1xkxx801p7sbfkn0bh3cz85wra4xf1z1zhjqqc80z1z1nln7fhb4";
   };
 
   nativeBuildInputs = [
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gmime
+    gmime3
     gnutls
     gpgme
     gtk3
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     gtkspell3
     libcanberra-gtk3
     libesmtp
+    libical
     libnotify
     libsecret
     openssl
@@ -53,7 +55,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-canberra"
-    "--with-gpgme"
     "--with-gtksourceview"
     "--with-libsecret"
     "--with-ssl"
