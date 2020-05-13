@@ -10266,8 +10266,8 @@ in
 
 
   ccls = callPackage ../development/tools/misc/ccls {
-    llvmPackages = llvmPackages_8;
-    stdenv = llvmPackages_8.stdenv;
+    # From some reason the build fails for darwin if it uses llvm 10
+    llvmPackages = if stdenv.isDarwin then llvmPackages_latest else llvmPackages_9;
   };
 
   credstash = with python3Packages; toPythonApplication credstash;
