@@ -50,8 +50,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  setupHook = ./setup-hook.sh;
-
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = {
