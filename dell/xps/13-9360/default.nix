@@ -1,6 +1,14 @@
 { lib, pkgs, ... }:
 
-{
+# TODO: move to general HiDPI profile
+# 4K screen, use bigger console font
+# i18n.consoleFont deprecated in >=20.03, choose option based on OS version
+lib.recursiveUpdate
+(if lib.versionAtLeast (lib.versions.majorMinor lib.version) "20.03" then {
+  console.font = lib.mkDefault "latarcyrheb-sun32";
+} else {
+  i18n.consoleFont = lib.mkDefault "latarcyrheb-sun32";
+}) {
   imports = [
     ../../../common/cpu/intel/kaby-lake
     ../../../common/pc/laptop
@@ -15,9 +23,6 @@
   };
 
   hardware.firmware = lib.mkBefore [ pkgs.qca6174-firmware ];
-
-  # TODO: move to general HiDPI profile
-  i18n.consoleFont = lib.mkDefault "latarcyrheb-sun32"; # 4K screen, use bigger console font
 
   # TODO: upstream to NixOS/nixpkgs
   nixpkgs.overlays = [(final: previous: {
