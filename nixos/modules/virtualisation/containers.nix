@@ -34,6 +34,25 @@ in
         '';
       };
 
+    containersConf = mkOption {
+      default = {};
+      description = "containers.conf configuration";
+      type = types.submodule {
+        options = {
+
+          extraConfig = mkOption {
+            type = types.lines;
+            default = "";
+            description = ''
+              Extra configuration that should be put in the containers.conf
+              configuration file
+            '';
+
+          };
+        };
+      };
+    };
+
     registries = {
       search = mkOption {
         type = types.listOf types.str;
@@ -92,6 +111,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    environment.etc."containers/containers.conf".text = ''
+      [network]
+      cni_plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
+
+    '' + cfg.containersConf.extraConfig;
 
     environment.etc."containers/registries.conf".source = toTOML "registries.conf" {
       registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;

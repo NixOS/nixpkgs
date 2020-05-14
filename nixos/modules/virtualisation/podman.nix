@@ -28,6 +28,10 @@ let
 
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "virtualisation" "podman" "libpod" ] [ "virtualisation" "containers" "containersConf" ])
+  ];
+
   meta = {
     maintainers = lib.teams.podman.members;
   };
@@ -67,25 +71,6 @@ in
       '';
     };
 
-    libpod = mkOption {
-      default = {};
-      description = "Libpod configuration";
-      type = types.submodule {
-        options = {
-
-          extraConfig = mkOption {
-            type = types.lines;
-            default = "";
-            description = ''
-              Extra configuration that should be put in the libpod.conf
-              configuration file
-            '';
-
-          };
-        };
-      };
-    };
-
     package = lib.mkOption {
       type = types.package;
       default = podmanPackage;
@@ -102,11 +87,6 @@ in
 
     environment.systemPackages = [ cfg.package ]
       ++ lib.optional cfg.dockerCompat dockerCompat;
-
-    environment.etc."containers/libpod.conf".text = ''
-      cni_plugin_dir = ["${pkgs.cni-plugins}/bin/"]
-
-    '' + cfg.libpod.extraConfig;
 
     environment.etc."cni/net.d/87-podman-bridge.conflist".source = copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
 
