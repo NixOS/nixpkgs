@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0krdfaha19wzi10rh0wfhki5nknbd5mndaxhrq7y9m840xy43d6d";
   };
 
-  modSha256 = "1wb15vrkb4ryvrjp68ygmadnf78s354106ya210pnmsbb53rbhaz";
+  vendorSha256 = "1cyr621fb6hxwswz9lf75brc9qjy1n9rqjkwi6r8s3y6nhw20db6";
 
   meta = with lib; {
     description = "Configure kubernetes objects on multiple clusters using jsonnet https://qbec.io";

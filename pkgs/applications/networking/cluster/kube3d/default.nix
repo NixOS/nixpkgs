@@ -21,7 +21,7 @@ buildGoModule rec {
       -X github.com/rancher/k3d/version.K3sVersion=v${k3sVersion}
   '';
 
-  modSha256 = "0c8bfl0hz5cfhi6jzhhylz051jiix6s7s20fn23w7wri4xaqrjn8";
+  vendorSha256 = null;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/rancher/k3d";

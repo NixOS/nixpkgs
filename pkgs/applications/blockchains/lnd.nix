@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1amciz924s2h6qhy7w34jpv1jc25p5ayfxzvjph6hhx0bccrm88w";
   };
 
-  modSha256 = "15i4h3pkvyav9qsbfinzifram0knkylg24j6j0mxs4bnj80j4ycm";
+  vendorSha256 = "1iyghg11cxvbzi0gl40fvv8pl3d3k52j179w3x5m1f09r5ji223y";
 
   subPackages = ["cmd/lncli" "cmd/lnd"];
 

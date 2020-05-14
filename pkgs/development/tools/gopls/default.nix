@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   modRoot = "gopls";
-  modSha256 = "1p0g28i707xyxz1g6hb56qlc4km9ik7vjky0v80hw7n73vzs5mr9";
+  vendorSha256 = "1zj0zpyl9wq23vks426vqg5xjwjcaj1079rkc67489h0p7y0aqv5";
 
   meta = with stdenv.lib; {
     description = "Official language server for the Go language";
