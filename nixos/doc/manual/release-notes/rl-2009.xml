@@ -102,7 +102,6 @@
     <para>
      The go-modules builder now uses vendorSha256 instead of modSha256 to pin
      fetched version data. This is currently a warning, but will be removed in the next release.
-</programlisting>
     </para>
    </listitem>
    <listitem>
@@ -196,13 +195,13 @@ environment.systemPackages = [
              customizable to your liking by using
              <literal>php.withExtensions</literal> or
              <literal>php.buildEnv</literal> instead of writing config files
-             or changing configure flags.             
+             or changing configure flags.
            </para>
          </listitem>
          <listitem>
            <para>
              The remaining configuration flags can now be set directly on
-             the <literal>php</literal> attribute. For example, instead of 
+             the <literal>php</literal> attribute. For example, instead of
 
              <programlisting>
 php.override {
