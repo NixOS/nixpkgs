@@ -17,6 +17,7 @@ let
       hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
       log_destination = 'stderr'
+      log_line_prefix = '${cfg.logLinePrefix}'
       listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
       port = ${toString cfg.port}
       ${cfg.extraConfig}
@@ -183,6 +184,17 @@ in
           Whether PostgreSQL should listen on all network interfaces.
           If disabled, the database can only be accessed via its Unix
           domain socket or via TCP connections to localhost.
+        '';
+      };
+
+      logLinePrefix = mkOption {
+        type = types.str;
+        default = "[%p] ";
+        example = "%m [%p] ";
+        description = ''
+          A printf-style string that is output at the beginning of each log line.
+          Upstream default is <literal>'%m [%p] '</literal>, i.e. it includes the timestamp. We do
+          not include the timestamp, because journal has it anyway.
         '';
       };
 
