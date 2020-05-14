@@ -6,7 +6,6 @@
 , gobject-introspection
 , gtk3
 , glib
-, gnome3
 , gst_all_1
 }:
 
@@ -67,12 +66,6 @@ python3.pkgs.buildPythonApplication rec {
     requests
     twisted
   ];
-
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
-    };
-  };
 
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
