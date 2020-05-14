@@ -18276,6 +18276,8 @@ in
 
   tamsyn = callPackage ../data/fonts/tamsyn { inherit (buildPackages.xorg) mkfontscale; };
 
+  tamzen = callPackage ../data/fonts/tamzen { inherit (buildPackages.xorg) mkfontscale; };
+
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
     gtk = res.gtk2;
   };
