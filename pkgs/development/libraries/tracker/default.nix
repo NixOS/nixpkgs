@@ -12,7 +12,6 @@
 , docbook_xml_dtd_43
 , docbook_xml_dtd_45
 , libxml2
-, upower
 , glib
 , wrapGAppsHook
 , vala
@@ -71,7 +70,6 @@ stdenv.mkDerivation rec {
     glib
     libxml2
     sqlite
-    upower
     icu
     networkmanager
     libsoup
