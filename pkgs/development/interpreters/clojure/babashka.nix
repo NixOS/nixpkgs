@@ -3,17 +3,17 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.0.89";
+  version = "0.0.94";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "0bc5rbizd2lg7qfh733yiip8m9zqrwgjf5ca09sdibxp7nhhsjby";
+    sha256 = "103x5ih48rhhdipar66bp0s0j62fv4r3sszh8fwaivs7dvsvcvsd";
   };
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "11jhqbm3svvikr9glz8wwps1267y25g3384ijw6avn267s7d7l8c";
+    sha256 = "0fin80x898qzylzq91q6mp8pgwk0sciwwa9l71mdhahqasa90sri";
   };
 
   dontUnpack = true;
@@ -79,6 +79,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/borkdude/babashka";
     license = licenses.epl10;
     platforms = graalvm8.meta.platforms;
-    maintainers = with maintainers; [ bhougland DerGuteMoritz jlesquembre ];
+    maintainers = with maintainers; [ bandresen bhougland DerGuteMoritz jlesquembre ];
   };
 }

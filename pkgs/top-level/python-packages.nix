@@ -2935,6 +2935,8 @@ in {
 
   hglib = callPackage ../development/python-modules/hglib {};
 
+  huey = callPackage ../development/python-modules/huey { };
+
   humanize = callPackage ../development/python-modules/humanize { };
 
   humanfriendly = callPackage ../development/python-modules/humanfriendly { };
@@ -3234,6 +3236,9 @@ in {
   poyo = callPackage ../development/python-modules/poyo { };
 
   priority = callPackage ../development/python-modules/priority { };
+
+  privacyidea = callPackage ../development/python-modules/privacyidea { };
+  privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea/ldap-proxy.nix { };
 
   prov = callPackage ../development/python-modules/prov { };
 
@@ -3755,6 +3760,8 @@ in {
 
   flask_testing = callPackage ../development/python-modules/flask-testing { };
 
+  flask-versioned = callPackage ../development/python-modules/flask-versioned { };
+
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
   wtforms = callPackage ../development/python-modules/wtforms { };
@@ -4075,6 +4082,8 @@ in {
   xnd = callPackage ../development/python-modules/xnd { };
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
+
+  unrpa = callPackage ../development/python-modules/unrpa { };
 
   lsi = callPackage ../development/python-modules/lsi { };
 
@@ -5241,6 +5250,8 @@ in {
 
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
 
+  pyrad = callPackage ../development/python-modules/pyrad { };
+
   pyrr = callPackage ../development/python-modules/pyrr { };
 
   pysha3 = callPackage ../development/python-modules/pysha3 { };
@@ -5851,6 +5862,8 @@ in {
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
+  sqlsoup = callPackage ../development/python-modules/sqlsoup { };
+
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
@@ -6262,6 +6275,8 @@ in {
   six = callPackage ../development/python-modules/six { };
 
   smartdc = callPackage ../development/python-modules/smartdc { };
+
+  smpplib = callPackage ../development/python-modules/smpplib { };
 
   socksipy-branch = callPackage ../development/python-modules/socksipy-branch { };
 

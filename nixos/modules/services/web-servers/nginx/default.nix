@@ -463,6 +463,14 @@ in
         '';
       };
 
+      enableSandbox = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Starting Nginx web server with additional sandbox/hardening options.
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "nginx";
@@ -710,6 +718,27 @@ in
         LogsDirectoryMode = "0750";
         # Capabilities
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
+        # Security
+        NoNewPrivileges = true;
+      } // optionalAttrs cfg.enableSandbox {
+        # Sandboxing
+        ProtectSystem = "strict";
+        ProtectHome = mkDefault true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) pkgs.nginx.modules);
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
       };
     };
 

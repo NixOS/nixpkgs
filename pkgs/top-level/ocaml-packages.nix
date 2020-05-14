@@ -267,6 +267,8 @@ let
 
     farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
+    fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
+
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
 
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
@@ -295,9 +297,13 @@ let
       inherit (pkgs) gnuplot;
     };
 
+    hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
+
+    hkdf = callPackage ../development/ocaml-modules/hkdf { };
 
     hmap = callPackage ../development/ocaml-modules/hmap { };
 
@@ -732,8 +738,6 @@ let
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
 
-    re2_p4 = callPackage ../development/ocaml-modules/re2 { };
-
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
@@ -1167,13 +1171,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core.nix {}
       else core_p4;
-
-    re2 =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.re2
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/re2.nix {}
-      else re2_p4;
 
     textutils =
       if lib.versionOlder "4.03" ocaml.version

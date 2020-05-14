@@ -201,8 +201,23 @@ let
     ];
 
   makeJobScript = name: text:
-    let mkScriptName =  s: "unit-script-" + (replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape s) );
-    in  pkgs.writeTextFile { name = mkScriptName name; executable = true; inherit text; };
+    let
+      scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
+      out = pkgs.writeTextFile {
+        # The derivation name is different from the script file name
+        # to keep the script file name short to avoid cluttering logs.
+        name = "unit-script-${scriptName}";
+        executable = true;
+        destination = "/bin/${scriptName}";
+        text = ''
+          #!${pkgs.runtimeShell} -e
+          ${text}
+        '';
+        checkPhase = ''
+          ${pkgs.stdenv.shell} -n "$out/bin/${scriptName}"
+        '';
+      };
+    in "${out}/bin/${scriptName}";
 
   unitConfig = { config, options, ... }: {
     config = {
@@ -250,40 +265,28 @@ let
           environment.PATH = config.path;
         }
         (mkIf (config.preStart != "")
-          { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.preStart}
-            '';
+          { serviceConfig.ExecStartPre =
+              makeJobScript "${name}-pre-start" config.preStart;
           })
         (mkIf (config.script != "")
-          { serviceConfig.ExecStart = makeJobScript "${name}-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.script}
-            '' + " " + config.scriptArgs;
+          { serviceConfig.ExecStart =
+              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
           })
         (mkIf (config.postStart != "")
-          { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.postStart}
-            '';
+          { serviceConfig.ExecStartPost =
+              makeJobScript "${name}-post-start" config.postStart;
           })
         (mkIf (config.reload != "")
-          { serviceConfig.ExecReload = makeJobScript "${name}-reload" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.reload}
-            '';
+          { serviceConfig.ExecReload =
+              makeJobScript "${name}-reload" config.reload;
           })
         (mkIf (config.preStop != "")
-          { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.preStop}
-            '';
+          { serviceConfig.ExecStop =
+              makeJobScript "${name}-pre-stop" config.preStop;
           })
         (mkIf (config.postStop != "")
-          { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.postStop}
-            '';
+          { serviceConfig.ExecStopPost =
+              makeJobScript "${name}-post-stop" config.postStop;
           })
       ];
   };

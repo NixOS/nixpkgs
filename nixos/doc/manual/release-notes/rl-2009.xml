@@ -235,7 +235,16 @@ php.override {
        Be aware that backwards state migrations are not supported by Deluge.
      </para>
    </listitem>
-
+   <listitem>
+     <para>
+       Add option <literal>services.nginx.enableSandbox</literal> to starting Nginx web server with additional sandbox/hardening options.
+       By default, write access to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
+       use <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
+       <programlisting>
+systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
+       </programlisting>
+     </para>
+   </listitem>
    <listitem>
     <para>
       The NixOS options <literal>nesting.clone</literal> and
@@ -333,6 +342,15 @@ php.override {
       <xref linkend="opt-services.picom.activeOpacity"/>) have been changed
       to the (relatively) new native <literal>float</literal> type. To migrate
       your configuration simply remove the quotes around the numbers.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      When using <literal>buildBazelPackage</literal> from Nixpkgs,
+      <literal>flat</literal> hash mode is now used for dependencies
+      instead of <literal>recursive</literal>. This is to better allow
+      using hashed mirrors where needed. As a result, these hashes
+      will have changed.
     </para>
    </listitem>
   </itemizedlist>

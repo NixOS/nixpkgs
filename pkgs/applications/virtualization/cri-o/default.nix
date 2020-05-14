@@ -1,5 +1,4 @@
-{ flavor ? ""
-, stdenv
+{ stdenv
 , btrfs-progs
 , buildGoPackage
 , fetchFromGitHub
@@ -18,7 +17,6 @@
 buildGoPackage rec {
   pname = "cri-o";
   version = "1.18.0";
-  name = "${pname}-${version}${flavor}";
 
   goPackagePath = "github.com/cri-o/cri-o";
 
@@ -54,9 +52,7 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    install -Dm755 bin/crio $out/bin/crio${flavor}
-    install -Dm755 bin/crio-status $out/bin/crio-status${flavor}
-    install -Dm755 bin/pinns $out/bin/pinns${flavor}
+    install -Dm755 bin/* -t $out/bin
 
     for shell in bash fish zsh; do
       installShellCompletion --$shell completions/$shell/*
