@@ -1,19 +1,19 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 with stdenv.lib;
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "kind";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "kubernetes-sigs";
     repo   = "kind";
-    sha256 = "0hvb0rbi1m0d1flk15l3wws96kmmjhsy6islkhy5h7jalc4k0nx4";
+    sha256 = "0r301nqvycik8fwlghq0cymmq4rm7xp8haj39i2nynxyw8zk6zym";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "1vfdyd4yj79f2n0w98k9h4sklxwg49ajlp1blvpslbzmpfkmcjsz";
   goPackagePath = "sigs.k8s.io/kind";
   subPackages = [ "." ];
 

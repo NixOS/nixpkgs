@@ -167,6 +167,9 @@ buildPythonPackage rec {
       --replace "/bin/bash" "${stdenv.shell}"
   '';
 
+  # allow for gunicorn processes to have access to python packages
+  makeWrapperArgs = [ "--prefix PYTHONPATH : $PYTHONPATH" ];
+
   checkPhase = ''
    export HOME=$(mktemp -d)
    export AIRFLOW_HOME=$HOME

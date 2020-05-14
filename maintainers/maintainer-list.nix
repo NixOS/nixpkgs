@@ -2044,6 +2044,12 @@
     githubId = 108501;
     name = "David Pflug";
   };
+  dramaturg = {
+    email = "seb@ds.ag";
+    github = "dramaturg";
+    githubId = 472846;
+    name = "Sebastian Krohn";
+  };
   drets = {
     email = "dmitryrets@gmail.com";
     github = "drets";
@@ -2482,7 +2488,7 @@
   };
   evils = {
     email = "evils.devils@protonmail.com";
-    github = "evils-devils";
+    github = "evils";
     githubId = 30512529;
     name = "Evils";
   };
@@ -4608,6 +4614,12 @@
     github = "lolwat97";
     githubId = 2057309;
     name = "Sergey Sofeychuk";
+  };
+  lynty = {
+    email = "ltdong93+nix@gmail.com";
+    github = "lynty";
+    githubId = 39707188;
+    name = "Lynn Dong";
   };
   lyt = {
     email = "wheatdoge@gmail.com";
@@ -7129,6 +7141,12 @@
     github = "sleexyz";
     githubId = 1505617;
     name = "Sean Lee";
+  };
+  SlothOfAnarchy = {
+    email = "slothofanarchy1@gmail.com";
+    github = "SlothOfAnarchy";
+    githubId = 12828415;
+    name = "Michel Weitbrecht";
   };
   smakarov = {
     email = "setser200018@gmail.com";

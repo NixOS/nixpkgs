@@ -94,6 +94,11 @@ stdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
+    # Fix for NSS 3.52 (add missing CK_GCM_PARMS field)
+    (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/463069687b3d";
+      sha256 = "00yhz67flnkww3rbry0kqn6z6bm7vxfb2sgf7qikgbjcm3ysvpsm";
+    })
   ]
   ++ patches;
 

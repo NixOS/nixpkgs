@@ -2,6 +2,7 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+# , cplex
 , cvxopt
 , dlx
 , docplex
@@ -10,19 +11,20 @@
 , networkx
 , numpy
 , psutil
+, python
 , qiskit-ignis
 , qiskit-terra
 , quandl
 , scikitlearn
   # Check Inputs
-, parameterized
+, ddt
 , pytestCheckHook
 , qiskit-aer
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
-  version = "0.6.6";
+  version = "0.7.0";
 
   disabled = pythonOlder "3.5";
 
@@ -31,11 +33,12 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aqua";
     rev = version;
-    sha256 = "080m5nsy3ia6bcdypq5d3ijb7762yl1l9llygmxsi6si449zl2cp";
+    sha256 = "0yykw6k1rb3f2ihcp0y9pb0695mcmy29nyqlj89qs4da0503vxvh";
   };
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.
   propagatedBuildInputs = [
+    # cplex
     cvxopt
     docplex
     dlx # Python Dancing Links package
@@ -57,19 +60,33 @@ buildPythonPackage rec {
   # It can also be installed at runtime from the pip wheel.
   # We disable appropriate tests below to allow building without pyscf installed
 
+  # NOTE: we remove cplex b/c we can't build pythonPackages.cplex.
+  # cplex is only distributed in manylinux1 wheel (no source), and Nix python is not manylinux1 compatible
+
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pyscf; sys_platform == 'linux' or (python_version < '3.8' and sys_platform != 'win32')" ""
+      --replace "pyscf; sys_platform != 'win32'" "" \
+      --replace "cplex; python_version >= '3.6' and python_version < '3.8'" ""
 
     # Add ImportWarning when running qiskit.chemistry (pyscf is a chemistry package) that pyscf is not included
-    echo -e "\nimport warnings\ntry: import pyscf;\nexcept:\n    " \
+    echo -e "\nimport warnings\ntry: import pyscf;\nexcept ImportError:\n    " \
       "warnings.warn('pyscf is not supported on Nixpkgs so some qiskit features will fail." \
         "You must install it yourself via pip or add it to your environment from the Nix User Repository." \
         "See https://github.com/NixOS/nixpkgs/pull/83447 for details', ImportWarning)\n" \
       >> qiskit/chemistry/__init__.py
+
+    # Add ImportWarning when running qiskit.optimization that cplex (optimization package) is not included
+    echo -e "\nimport warnings\ntry: import cplex;\nexcept ImportError:\n    " \
+      "warnings.warn('cplex is not supported on Nixpkgs so some qiskit features will fail." \
+        "You must install it yourself via pip or add it to your environment from the Nix User Repository." \
+        "', ImportWarning)\n" \
+      >> qiskit/optimization/__init__.py
+
   '';
 
-  checkInputs = [ parameterized qiskit-aer pytestCheckHook ];
+  postInstall = "rm -rf $out/${python.sitePackages}/docs";  # Remove docs dir b/c it can cause conflicts.
+
+  checkInputs = [ ddt qiskit-aer pytestCheckHook ];
   dontUseSetuptoolsCheck = true;
   pythonImportsCheck = [
     "qiskit.aqua"
@@ -84,42 +101,35 @@ buildPythonPackage rec {
     "--ignore=test/chemistry/test_qeom_ee.py"
     "--ignore=test/chemistry/test_qeom_vqe.py"
     "--ignore=test/chemistry/test_vqe_uccsd_adapt.py"
-
-    # Following tend to be slow tests, all pass
-    "--ignore=test/aqua/test_vqc.py"
-    "--ignore=test/aqua/test_hhl.py"
-    "--ignore=test/aqua/test_qgan.py"
-    "--ignore=test/aqua/test_mcr.py"
-    "--ignore=test/aqua/test_mcu1.py"
-    "--ignore=test/aqua/test_vqe.py"
   ];
   disabledTests = [
     # Disabled due to missing pyscf
     "test_validate" # test/chemistry/test_inputparser.py
 
     # Disabling slow tests > 10 seconds
-    "test_clique_vqe"
-    "test_delta_3_qasm"
-    "test_evaluate_qasm_mode"
-    "test_evolve_1_suzuki"
-    "test_exact_cover_vqe"
-    "test_exchangedata"
-    "test_expected_value_0_statevector"
-    "test_expected_value_1_qasm"
-    "test_expected_value_2_statevector"
+    "TestVQE"
+    "TestVQC"
+    "TestQSVM"
     "test_graph_partition_vqe"
-    "test_lookup_rotation"
-    "test_mct_with_dirty_ancillae_15"
-    "test_mcrz_11"
+    "TestLookupRotation"
+    "_vqe"
+    "TestHHL"
+    "TestQGAN"
+    "test_evaluate_qasm_mode"
     "test_measurement_error_mitigation_auto_refresh"
-    "test_qgan_training"
-    "test_qsvm_multiclass"
-    "test_shor_factoring_0"
-    "test_vertex_cover_vqe"
-    "test_vqc_with_raw_feature_vector_on_wine"
-    "test_vqe_2_iqpe"
-    "test_vqe_qasm"
+    "test_exchangedata"
     "test_wikipedia"
+    "test_shor_factoring_1__15___qasm_simulator____3__5__"
+    "test_readme_sample"
+    "test_ecev"
+    "test_expected_value"
+    "test_qubo_gas_int_paper_example"
+    "test_shor_no_factors_1_5"
+    "test_shor_no_factors_2_7"
+    "test_evolve_2___suzuki___1__3_"
+    "test_delta_4"
+    "test_swaprz"
+    "test_deprecated_algo_result"
   ];
 
   meta = with lib; {

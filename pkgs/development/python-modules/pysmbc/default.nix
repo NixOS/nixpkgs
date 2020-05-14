@@ -9,7 +9,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.bz2";
-    sha256 = "5ea23fdac4cd6e5d5c814a9fff84edbc3701270e6f40fcffa18a4554862b6791";
+    sha256 = "14b75f358ical7zzqh3g1qkh2dxwxn2gz7sah5f5svndqkd3z8jy";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -29,7 +29,7 @@ let
 
 in runCommand podman.name {
   name = "${podman.pname}-wrapper-${podman.version}";
-  inherit (podman) pname version;
+  inherit (podman) pname version passthru;
 
   meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
 

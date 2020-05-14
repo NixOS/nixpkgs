@@ -173,6 +173,8 @@ in
 
   colorz = callPackage ../tools/misc/colorz { };
 
+  cpu-x = callPackage ../applications/misc/cpu-x { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
@@ -778,6 +780,8 @@ in
 
   ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
 
+  exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
+
   altermime = callPackage ../tools/networking/altermime {};
 
   alttab = callPackage ../tools/X11/alttab { };
@@ -880,6 +884,8 @@ in
   crumbs = callPackage ../applications/misc/crumbs { };
 
   crc32c = callPackage ../development/libraries/crc32c { };
+
+  cudd = callPackage ../development/libraries/cudd { };
 
   cue = callPackage ../development/tools/cue { };
 
@@ -1967,6 +1973,8 @@ in
   link-grammar = callPackage ../tools/text/link-grammar { };
 
   linuxptp = callPackage ../os-specific/linux/linuxptp { };
+
+  lite = callPackage ../applications/editors/lite { };
 
   loadwatch = callPackage ../tools/system/loadwatch { };
 
@@ -5606,6 +5614,9 @@ in
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { };
 
+  openbazaar = callPackage ../applications/networking/openbazaar { };
+  openbazaar-client = callPackage ../applications/networking/openbazaar/client.nix { };
+
   opencc = callPackage ../tools/text/opencc { };
 
   opencl-info = callPackage ../tools/system/opencl-info { };
@@ -7200,6 +7211,8 @@ in
   unoconv = callPackage ../tools/text/unoconv { };
 
   unrtf = callPackage ../tools/text/unrtf { };
+
+  unrpa = with python3Packages; toPythonApplication unrpa;
 
   untex = callPackage ../tools/text/untex { };
 
@@ -19301,6 +19314,8 @@ in
 
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
 
+  gspeech = callPackage ../applications/audio/gspeech { };
+
   icesl = callPackage ../applications/misc/icesl { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
@@ -22288,6 +22303,8 @@ in
   traverso = libsForQt5.callPackage ../applications/audio/traverso { };
 
   trayer = callPackage ../applications/window-managers/trayer { };
+
+  tinywm = callPackage ../applications/window-managers/tinywm { };
 
   tree-from-tags = callPackage ../applications/audio/tree-from-tags { };
 
@@ -25433,6 +25450,8 @@ in
   };
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
+
+  helmsman = callPackage ../applications/networking/cluster/helmsman { };
 
   heptio-ark = callPackage ../applications/networking/cluster/heptio-ark { };
 

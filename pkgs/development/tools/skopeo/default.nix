@@ -10,6 +10,8 @@
 , libselinux
 , go-md2man
 , installShellFiles
+, makeWrapper
+, fuse-overlayfs
 }:
 
 let
@@ -38,7 +40,7 @@ buildGoPackage {
 
   excludedPackages = [ "integration" ];
 
-  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
   buildInputs = [ gpgme ]
   ++ stdenv.lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs libselinux ];
 
@@ -54,6 +56,11 @@ buildGoPackage {
     make install-docs MANINSTALLDIR="$man/share/man"
     installShellCompletion --bash completions/bash/skopeo
     popd
+  '';
+
+  postInstall = stdenv.lib.optionals stdenv.isLinux ''
+    wrapProgram $out/bin/skopeo \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
   '';
 
   meta = with stdenv.lib; {
