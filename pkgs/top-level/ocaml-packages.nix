@@ -217,7 +217,12 @@ let
 
     dune = callPackage ../development/tools/ocaml/dune { };
 
-    dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
+    dune_2 =
+      if lib.versionAtLeast ocaml.version "4.07"
+      then callPackage ../development/tools/ocaml/dune/2.nix { }
+      else if lib.versionAtLeast ocaml.version "4.02"
+      then pkgs.dune_2
+      else throw "dune_2 is not available for OCaml ${ocaml.version}";
 
     dune-build-info = callPackage ../development/ocaml-modules/dune-build-info { };
 
