@@ -1,4 +1,4 @@
-{ lib, fetchzip, p7zip }:
+{ lib, fetchzip, libarchive }:
 
 let
   version = "0.1";
@@ -8,7 +8,7 @@ in fetchzip rec {
   url = "https://github.com/MihailJP/oldsindhi/releases/download/0.1/OldSindhi-0.1.7z";
 
   postFetch = ''
-    ${p7zip}/bin/7z x $downloadedFile
+    ${libarchive}/bin/bsdtar -xf $downloadedFile
 
     install -m444 -Dt $out/share/fonts/truetype OldSindhi/*.ttf
     install -m444 -Dt $out/share/doc/${name}    OldSindhi/README OldSindhi/*.txt
