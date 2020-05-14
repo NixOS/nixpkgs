@@ -358,12 +358,12 @@ in
         preStart = if isMariaDB then ''
           if ! test -e ${cfg.dataDir}/mysql; then
             ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${mysqldOptions}
-            touch /tmp/mysql_init
+            touch ${cfg.dataDir}/mysql_init
           fi
         '' else ''
           if ! test -e ${cfg.dataDir}/mysql; then
             ${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} --initialize-insecure
-            touch /tmp/mysql_init
+            touch ${cfg.dataDir}/mysql_init
           fi
         '';
 
@@ -395,7 +395,7 @@ in
                   done
                 ''}
 
-                if [ -f /tmp/mysql_init ]
+                if [ -f ${cfg.dataDir}/mysql_init ]
                 then
                     ${concatMapStrings (database: ''
                       # Create initial databases
