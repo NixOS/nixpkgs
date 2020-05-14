@@ -6,16 +6,27 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "jrnl";
-  version = "1.9.8";
+  version = "2.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d254c9c8f24dcf985b98a1d5311337c7f416e6305107eec34c567f58c95b06f4";
+    sha256 = "05m6h96mzw3fp6kyb49xipnv8vh8qmxg8mishfdjmx5zqwssc4qx";
   };
 
   propagatedBuildInputs = [
-    pytz six tzlocal keyring dateutil
-    parsedatetime pycrypto
+    ansiwrap
+    asteval
+    colorama
+    dateutil
+    keyring
+    parsedatetime
+    passlib
+    pycrypto
+    pytz
+    pyyaml
+    pyxdg
+    six
+    tzlocal
   ];
 
   # No tests in archive
