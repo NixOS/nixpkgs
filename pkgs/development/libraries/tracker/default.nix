@@ -1,8 +1,34 @@
-{ stdenv, fetchurl, gettext, meson, ninja, pkgconfig, gobject-introspection, python3
-, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
-, libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
-, gnome3, icu, libuuid, networkmanager, libsoup, json-glib, systemd, dbus
-, substituteAll }:
+{ stdenv
+, fetchurl
+, gettext
+, meson
+, ninja
+, pkgconfig
+, gobject-introspection
+, python3
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, docbook_xml_dtd_43
+, glibcLocales
+, libxml2
+, upower
+, glib
+, wrapGAppsHook
+, vala
+, sqlite
+, libxslt
+, libstemmer
+, gnome3
+, icu
+, libuuid
+, networkmanager
+, libsoup
+, json-glib
+, systemd
+, dbus
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
@@ -15,29 +41,49 @@ stdenv.mkDerivation rec {
     sha256 = "V3lSJEq5d8eLC4ji9jxBl+q6FuTWa/9pK39YmT4GUW0=";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      gdbus = "${glib.bin}/bin/gdbus";
+    })
+  ];
+
   nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext libxslt wrapGAppsHook gobject-introspection
-    gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_43 glibcLocales
+    meson
+    ninja
+    vala
+    pkgconfig
+    gettext
+    libxslt
+    wrapGAppsHook
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+    docbook_xml_dtd_43
+    glibcLocales
     python3 # for data-generators
     systemd # used for checks to install systemd user service
     dbus # used for checks and pkgconfig to install dbus service/s
   ];
 
   buildInputs = [
-    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json-glib libstemmer
+    glib
+    libxml2
+    sqlite
+    upower
+    icu
+    networkmanager
+    libsoup
+    libuuid
+    json-glib
+    libstemmer
   ];
 
   mesonFlags = [
     # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
     "-Dfunctional_tests=false"
     "-Ddocs=true"
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      gdbus = "${glib.bin}/bin/gdbus";
-    })
   ];
 
   postPatch = ''
@@ -60,7 +106,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }
