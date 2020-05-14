@@ -334,7 +334,8 @@ in
     environment.etc."my.cnf".source = cfg.configFile;
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} mysql -"
+      "d '${cfg.dataDir}' 0700 ${cfg.user} mysql - -"
+      "z '${cfg.dataDir}' 0700 ${cfg.user} mysql - -"
     ];
 
     systemd.services.mysql = let
