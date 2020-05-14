@@ -18,7 +18,7 @@
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick
+, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkgconfig , ncurses, xapian, gpgme, utillinux, tzdata, icu, libffi
 , cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
@@ -329,11 +329,17 @@ in
             $out/${ruby.gemPath}/extensions/*/*/mathematical-${attrs.version}/gem_make.out
     '';
 
-    # For some reason 'mathematical.so' is missing cairo and glib in its RPATH, add them explicitly here
+    # For some reason 'mathematical.so' is missing cairo, glib, and
+    # lasem in its RPATH, add them explicitly here
     postFixup = lib.optionalString stdenv.isLinux ''
       soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
+      rpath="$(${patchelf}/bin/patchelf --print-rpath "$soPath")"
       ${patchelf}/bin/patchelf \
-        --set-rpath "${lib.makeLibraryPath [ glib cairo ]}:$(${patchelf}/bin/patchelf --print-rpath "$soPath")" \
+        --set-rpath "${lib.makeLibraryPath [ lasem glib cairo ]}:$rpath" \
+        "$soPath"
+
+      ${patchelf}/bin/patchelf \
+        --replace-needed liblasem.so liblasem-0.4.so \
         "$soPath"
     '';
   };
