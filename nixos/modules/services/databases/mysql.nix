@@ -32,13 +32,7 @@ in
 
     services.mysql = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "
-          Whether to enable the MySQL server.
-        ";
-      };
+      enable = mkEnableOption "MySQL server";
 
       package = mkOption {
         type = types.package;
