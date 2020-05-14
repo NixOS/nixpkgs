@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, p7zip, cmake
+{ stdenv, fetchurl, unar, cmake
 , SDL2, openal, fluidsynth, soundfont-fluid, bzip2, zlib, libjpeg, game-music-emu
 , libsndfile, mpg123 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0453fqrh9l00xwphfxni5qkf9y134n3s1mr1dvi5cbkxcva7j8bq";
   };
 
-  nativeBuildInputs = [ p7zip cmake ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     SDL2 openal fluidsynth bzip2 zlib libjpeg game-music-emu libsndfile mpg123
   ];
@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   NIX_CFLAGS_LINK = [ "-lopenal" "-lfluidsynth" ];
+
+  unpackPhase = ''
+    ${unar}/bin/unar -no-directory ${src}
+  '';
 
   preConfigure = ''
     sed -i \
