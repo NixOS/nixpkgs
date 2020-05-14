@@ -2708,6 +2708,7 @@ broken-packages:
   - adaptive-containers
   - adaptive-tuple
   - adb
+  - addy
   - adhoc-network
   - adict
   - adobe-swatch-exchange
@@ -7431,6 +7432,7 @@ broken-packages:
   - miniforth
   - minilens
   - minilight
+  - minilight-lua
   - minimung
   - minions
   - minioperational
@@ -9279,6 +9281,13 @@ broken-packages:
   - ShortestPathProblems
   - show-prettyprint
   - showdown
+  - Shpadoinkle
+  - Shpadoinkle-backend-pardiff
+  - Shpadoinkle-backend-snabbdom
+  - Shpadoinkle-backend-static
+  - Shpadoinkle-html
+  - Shpadoinkle-router
+  - Shpadoinkle-widgets
   - shpider
   - shuffle
   - si-clock
