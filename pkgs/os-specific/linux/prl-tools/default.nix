@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, p7zip
+{ stdenv, lib, makeWrapper, libarchive
 , gawk, utillinux, xorg, glib, dbus-glib, zlib
 , kernel ? null, libsOnly ? false
 , undmg, fetchurl
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" "format" ];
 
   # also maybe python2 to generate xorg.conf
-  nativeBuildInputs = [ p7zip undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ] ++ kernel.moduleBuildDependencies;
 
   inherit libsOnly;
 
@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
     undmg < "${src}"
 
     export sourceRoot=prl-tools-build
-    7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso" -o$sourceRoot
+    mkdir $sourceRoot
+    ${libarchive}/bin/bsdtar --no-same-permissions \
+      -xf "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso" \
+      -C $sourceRoot
+    chmod -R +w $sourceRoot
     if test -z "$libsOnly"; then
       ( cd $sourceRoot/kmods; tar -xaf prl_mod.tar.gz )
     fi
