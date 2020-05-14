@@ -1,10 +1,29 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, alsaLib, bc,
-  bzip2, efl, gdbm, libXdmcp, libXrandr, libcap, libffi,
-  libpthreadstubs, libxcb, luajit, mesa, pam, pcre, xcbutilkeysyms,
-  xkeyboard_config,
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gettext
+, alsaLib
+, bc
+, bzip2
+, efl
+, gdbm
+, libXdmcp
+, libXrandr
+, libcap
+, libffi
+, libpthreadstubs
+, libxcb
+, luajit
+, mesa
+, pam
+, pcre
+, xcbutilkeysyms
+, xkeyboard_config
 
-  bluetoothSupport ? true, bluez5,
-  pulseSupport ? !stdenv.isDarwin, libpulseaudio,
+, bluetoothSupport ? true, bluez5
+, pulseSupport ? !stdenv.isDarwin, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib
-    bc  # for the Everything module calculator mode
+    bc # for the Everything module calculator mode
     bzip2
     efl
     gdbm
@@ -74,7 +93,9 @@ stdenv.mkDerivation rec {
       --replace "ecore_exe_pipe_run(\"bc -l\"" "ecore_exe_pipe_run(\"${bc}/bin/bc -l\""
   '';
 
-  mesonFlags = [ "-Dsystemdunitdir=lib/systemd/user" ];
+  mesonFlags = [
+    "-D systemdunitdir=lib/systemd/user"
+  ];
 
   enableParallelBuilding = true;
 
