@@ -4,7 +4,7 @@ let
   # license: Free for commercial use
   desktopIcon = fetchurl {
     url = "https://www.iconfinder.com/icons/50835/download/png/256";
-    sha256 = "0abdya42yf9alxbsmc2nf8jwld50zfria6z3d4ncvp1zw2a9jhb8";
+    sha256 = "1wpcrqgjhql587midg8n159w8pcln8rkd0vh99w615687rx9y0sb";
   };
 in
 mkDerivation rec {
