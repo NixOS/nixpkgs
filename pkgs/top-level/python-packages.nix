@@ -226,6 +226,8 @@ in {
 
   aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
 
+  asteval = callPackage ../development/python-modules/asteval { };
+
   astral = callPackage ../development/python-modules/astral { };
 
   astropy = callPackage ../development/python-modules/astropy { };
