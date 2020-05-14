@@ -12864,7 +12864,7 @@ in
 
   libfabric = callPackage ../os-specific/linux/libfabric {};
 
-  libfive = callPackage ../development/libraries/libfive { };
+  libfive = libsForQt5.callPackage ../development/libraries/libfive { };
 
   libfixposix = callPackage ../development/libraries/libfixposix {};
 
