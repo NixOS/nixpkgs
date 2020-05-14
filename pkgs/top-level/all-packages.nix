@@ -1896,6 +1896,8 @@ in
 
   grim = callPackage ../tools/graphics/grim { };
 
+  grimshot = callPackage ../tools/graphics/grimshot { };
+
   gringo = callPackage ../tools/misc/gringo { };
 
   grobi = callPackage ../tools/X11/grobi { };
