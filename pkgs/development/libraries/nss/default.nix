@@ -53,7 +53,9 @@ in stdenv.mkDerivation rec {
   preConfigure = "cd nss";
 
   makeFlags = let
-    cpu = stdenv.hostPlatform.parsed.cpu.name;
+    # NSS's build systems expects aarch32 to be called arm; if we pass in armv6l/armv7l, it
+    # fails with a linker error
+    cpu = if stdenv.hostPlatform.isAarch32 then "arm" else stdenv.hostPlatform.parsed.cpu.name;
   in [
     "NSPR_INCLUDE_DIR=${nspr.dev}/include"
     "NSPR_LIB_DIR=${nspr.out}/lib"
@@ -64,9 +66,11 @@ in stdenv.mkDerivation rec {
     "USE_SYSTEM_ZLIB=1"
     "NSS_USE_SYSTEM_SQLITE=1"
     "NATIVE_CC=${buildPackages.stdenv.cc}/bin/cc"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # Pass in CPU even if we're not cross compiling, because otherwise it tries to guess with
+    # uname, which can be wrong if e.g. we're compiling for aarch32 on aarch64
     "OS_TEST=${cpu}"
     "CPU_ARCH=${cpu}"
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=1"
     "NSS_DISABLE_GTESTS=1" # don't want to build tests when cross-compiling
   ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1"
