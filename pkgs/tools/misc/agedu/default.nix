@@ -1,7 +1,7 @@
 {stdenv, fetchgit, autoreconfHook, halibut}:
 let
-  date = "20180918";
-  rev = "80c7beb";
+  date = "20200206";
+  rev = "963bc9d";
 in
 stdenv.mkDerivation {
   name = "agedu-${date}.${rev}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://git.tartarus.org/simon/agedu.git";
     inherit rev;
-    sha256 = "0i930izna3s73p2q52qa377ixd14zij5q1n7w3irl7csyy78g0cd";
+    sha256 = "1jmvgg2v6aqgbgpxbndrdhgfhlglrq4yv4sdbjaj6bsz9fb8lqhc";
   };
 
   nativeBuildInputs = [autoreconfHook halibut];
