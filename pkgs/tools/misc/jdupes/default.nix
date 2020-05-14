@@ -15,8 +15,11 @@ stdenv.mkDerivation rec {
     extraPostFetch = "rm -r $out/testdir";
   };
 
+  dontConfigure = true;
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    "HARDEN=1"
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     "ENABLE_DEDUPE=1"
     "STATIC_DEDUPE_H=1"
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # broken Makefile, the above also removes tests
 
   postInstall = ''
-    install -Dm644 -t $out/share/doc/jdupes CHANGES LICENSE README.md
+    install -Dm444 -t $out/share/doc/jdupes CHANGES LICENSE README.md
   '';
 
   meta = with stdenv.lib; {
@@ -40,6 +43,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jbruchon/jdupes";
     license = licenses.mit;
     maintainers = with maintainers; [ romildo ];
-    platforms = platforms.all;
   };
 }
