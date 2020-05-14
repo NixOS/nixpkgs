@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1gn7q6wg7byhr1l5ly60rbb700xrww9slbq7gbxbw5c1fl0pp3yk";
   };
 
-  modSha256 = "1iiv12ginb3ky739z7v8wf4z5lv24gmghbybs3lzay0kqn449n4x";
+  vendorSha256 = "1w5hsdmi95v7qj3fc4jkjapw8cnh41f09wbbzcfmfmvygrii7z16";
 
   meta = with lib; {
     description = "A tool to verify that your files are in harmony with your .editorconfig";

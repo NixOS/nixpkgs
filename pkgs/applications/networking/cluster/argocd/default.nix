@@ -12,7 +12,7 @@ buildGoModule rec {
     sha256 = "01vsyrks1k5yfvrarv8ia0isr7snilr21b7lfiy860si82r2r8hj";
   };
 
-  modSha256 = "1qivg7yy7ymmgkrvl365x29d8jnsphbz18j1ykgwwysyw3n4jkdg";
+  vendorSha256 = "0r2nh7v00m6zbdnhsgjn01q9pkiz41ckkqgfnpqmkxaqmjz31iyj";
 
   nativeBuildInputs = [ packr ];
 

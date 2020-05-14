@@ -18,7 +18,14 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   goPackagePath = "tailscale.com";
-  modSha256 = "1xgdhbck3pkix10lfshzdszrv6d3p0hbx8jdjvswz7jjd0vzm4x1";
+  overrideModAttrs = (_: {
+    preBuild = ''
+    rm ipn/e2e_test.go
+    rm control/controlclient/auto_test.go
+    rm control/controlclient/direct_test.go
+    '';
+  });
+  vendorSha256 = "1v90lbwgrc2m4kvpglf2jykrm8rry3pbhqqbc3mcysrzmqlw84yl";
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
 
   postInstall = ''

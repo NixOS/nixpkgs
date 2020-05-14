@@ -19,7 +19,7 @@ buildGoModule rec {
       --replace "/usr/local" "$out"
   '';
 
-  modSha256 = "110b647q6ljsg5gwlciqv4cddxmk332nahcrpidrpsiqs2yjv1md";
+  vendorSha256 = "0yak221mlyfacvlsaq9g3xiyk94n94vqgkbaji8d21pi8hhr38m6";
 
   nativeBuildInputs = [ gnum4 ];
   buildInputs = [ pam ];

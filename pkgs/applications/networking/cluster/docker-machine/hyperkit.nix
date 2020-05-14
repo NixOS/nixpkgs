@@ -1,7 +1,7 @@
 { lib, buildGoModule, minikube }:
 
 buildGoModule rec {
-  inherit (minikube) version src nativeBuildInputs buildInputs modSha256 commit;
+  inherit (minikube) version src nativeBuildInputs buildInputs vendorSha256 commit;
 
   pname = "docker-machine-hyperkit";
 

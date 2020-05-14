@@ -10,7 +10,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "1x05xnc3czk7vpn9qnfdavdjy5agv800nh7jyqczpiw125l9jfyd";
   };
-  modSha256 = "000knqwsajlqika4abp3fh721mn1vykcsnv3c1qw0mzffkmzwsqd";
+  vendorSha256 = "0j25m56cwzjd9b75v7xlb26q81bsmln77k23h9n8v2f2gqwwpkrl";
 
   subPackages = [ "cmd/helm" ];
   buildFlagsArray = [ "-ldflags=-w -s -X helm.sh/helm/v3/internal/version.version=v${version}" ];

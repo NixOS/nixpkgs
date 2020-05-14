@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "0pvi1mzhy6zgx4zfgdypbl4zhvgg11hl5qv7blf2qs0a96j2djhf";
   };
 
-  modSha256 = "03560xjr2531xj87paskfx2zs364fz6y4kpsid8x08s1syq9nq7p";
+  vendorSha256 = "0nbbngsphklzhcmqafrw1im2l1vnfcma9sb4vskdpdrsadv5ss5r";
 
   meta = with lib; {
     description = "A collection of tools and libraries for working with Go code, including linters and static analysis";

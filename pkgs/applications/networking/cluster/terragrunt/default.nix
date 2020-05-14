@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1znb9d4n9zv3dq10dw17kb1h04gj8iz6gwx1a741fcf4ygp8zpy1";
   };
 
-  modSha256 = "0pjqsb6lxk73prc6jxj07iwd1wyy5gqz24kigb308r3n0c2vcnky";
+  vendorSha256 = "0h737h25f80zfx84vm6ry0581c32ylcb5h9givqk5k5kh5qgkbgx";
 
   buildInputs = [ makeWrapper ];
 
