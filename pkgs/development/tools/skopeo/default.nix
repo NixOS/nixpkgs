@@ -1,5 +1,5 @@
 { stdenv
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , runCommand
 , gpgme
@@ -26,17 +26,17 @@ let
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
 
-  goPackagePath = "github.com/containers/skopeo";
-
-  vendorPath = "${goPackagePath}/vendor/github.com/containers/image/v5";
+  vendorPath = "github.com/containers/skopeo/vendor/github.com/containers/image/v5";
 
 in
-buildGoPackage {
+buildGoModule {
   pname = "skopeo";
   inherit version;
-  inherit src goPackagePath;
+  inherit src;
 
   outputs = [ "out" "man" ];
+
+  vendorSha256 = null;
 
   excludedPackages = [ "integration" ];
 
@@ -51,11 +51,8 @@ buildGoPackage {
   '';
 
   postBuild = ''
-    # depends on buildGoPackage not changing …
-    pushd ./go/src/${goPackagePath}
     make install-docs MANINSTALLDIR="$man/share/man"
     installShellCompletion --bash completions/bash/skopeo
-    popd
   '';
 
   postInstall = stdenv.lib.optionals stdenv.isLinux ''

@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cni-plugins";
   version = "0.8.6";
 
@@ -11,10 +11,10 @@ buildGoPackage rec {
     sha256 = "0f1cqxjf26sy1c4aw6y7pyd9lrz0vknby4q5j6xj77a1pab9073m";
   };
 
-  goPackagePath = "github.com/containernetworking/plugins";
+  vendorSha256 = null;
 
   buildFlagsArray = [
-    "-ldflags=-X ${goPackagePath}/pkg/utils/buildversion.BuildVersion=${version}"
+    "-ldflags=-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=${version}"
   ];
 
   subPackages = [
