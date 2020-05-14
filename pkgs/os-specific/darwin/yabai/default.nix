@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yabai";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ajsh85p2vx18h3s4nicasyhdbh82zg97b1ryhi6l5lkbjpdl4ah";
+    sha256 = "1m7hnrbwvahf174g6j5wjlcqa8zgd1fzqwrgnx9pma6pnh8q45lx";
   };
 
   buildInputs = [ Carbon Cocoa ScriptingBridge ];
