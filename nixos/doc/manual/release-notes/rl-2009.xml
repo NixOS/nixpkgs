@@ -73,7 +73,7 @@
       MariaDB 10.4 introduces a number of changes to the authentication process, intended to make things easier and more
       intuitive. See <link xlink:href="https://mariadb.com/kb/en/authentication-from-mariadb-104/">Authentication from MariaDB 10.4</link>.
       unix_socket auth plugin does not use a password, and uses the connecting user's UID instead. When a new MariaDB data directory is initialized, two MariaDB users are
-      created and can be used with new unix_socket auth plugin, as well as traditional mysql_native_password plugin: root@localhost and mysql@localhost. To actually use 
+      created and can be used with new unix_socket auth plugin, as well as traditional mysql_native_password plugin: root@localhost and mysql@localhost. To actually use
       the traditional mysql_native_password plugin method, one must run the following:
 <programlisting>
 services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
@@ -124,7 +124,6 @@ services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
     <para>
      The go-modules builder now uses vendorSha256 instead of modSha256 to pin
      fetched version data. This is currently a warning, but will be removed in the next release.
-</programlisting>
     </para>
    </listitem>
    <listitem>
@@ -218,13 +217,13 @@ environment.systemPackages = [
              customizable to your liking by using
              <literal>php.withExtensions</literal> or
              <literal>php.buildEnv</literal> instead of writing config files
-             or changing configure flags.             
+             or changing configure flags.
            </para>
          </listitem>
          <listitem>
            <para>
              The remaining configuration flags can now be set directly on
-             the <literal>php</literal> attribute. For example, instead of 
+             the <literal>php</literal> attribute. For example, instead of
 
              <programlisting>
 php.override {
