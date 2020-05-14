@@ -199,9 +199,10 @@ stdenv.mkDerivation rec {
         --replace "includedir=$out" "includedir=''${!outputInclude}"
     done
   '' + optionalString stdenv.isLinux ''
-    # Set RUNPATH so that libnvcuvid in /run/opengl-driver(-32)/lib can be found.
+    # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
     # See the explanation in addOpenGLRunpath.
-    addOpenGLRunpath $out/lib/libavcodec.so*
+    addOpenGLRunpath $out/lib/libavcodec.so
+    addOpenGLRunpath $out/lib/libavutil.so
   '';
 
   installFlags = [ "install-man" ];
