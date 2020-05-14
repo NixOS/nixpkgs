@@ -1,12 +1,8 @@
-{ stdenv
-, fetchFromGitHub
-, glib
-, gettext
-}:
+{ stdenv , fetchFromGitHub , glib , gettext }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-dash-to-dock-unstable";
-  version = "2020-04-20";
+  pname = "gnome-shell-extension-dash-to-dock";
+  version = "unstable-2020-04-20";
 
   src = fetchFromGitHub {
     owner = "micheleg";

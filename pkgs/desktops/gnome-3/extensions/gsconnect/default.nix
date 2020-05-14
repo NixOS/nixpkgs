@@ -1,9 +1,10 @@
 { stdenv, fetchFromGitHub, substituteAll, python3, openssl, gsound
 , meson, ninja, libxml2, pkgconfig, gobject-introspection, wrapGAppsHook
-, glib, gtk3, at-spi2-core, upower, openssh, gnome3, gjs }:
+, glib, gtk3, at-spi2-core, upower, openssh, gnome3, gjs
+}:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-gsconnect";
+  pname = "gnome-shell-extension-gsconnect";
   version = "35";
 
   src = fetchFromGitHub {

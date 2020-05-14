@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, glib, gettext, substituteAll, gnome-menus }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-arc-menu";
+  pname = "gnome-shell-extension-arc-menu";
   version = "43";
 
   src = fetchFromGitLab {

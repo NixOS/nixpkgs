@@ -1,9 +1,10 @@
-{stdenv, fetchurl, cmake, ninja, jq, python3, gnome3, wrapGAppsHook}:
+{ stdenv, fetchurl, cmake, ninja, jq, python3, gnome3, wrapGAppsHook }:
 
 let
   version = "10.1";
 
   inherit (python3.pkgs) python pygobject3 requests;
+
 in stdenv.mkDerivation rec {
   pname = "chrome-gnome-shell";
   inherit version;
