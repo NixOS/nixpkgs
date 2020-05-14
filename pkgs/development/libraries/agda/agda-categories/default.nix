@@ -23,6 +23,6 @@ mkDerivation rec {
     hydraPlatforms = [];
     # Waiting for release 0.2 for this to work
     broken = true;
-    maintainers = with maintainers; [ alexarice ];
+    maintainers = with maintainers; [ alexarice turion ];
   };
 }
