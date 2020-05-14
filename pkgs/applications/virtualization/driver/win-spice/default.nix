@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, p7zip, win-virtio }:
+{ stdenv, fetchurl, libarchive, msitools, win-virtio }:
 
 let
   src_usbdk_x86 = fetchurl {
@@ -36,16 +36,16 @@ stdenv.mkDerivation  {
 
   buildPhase = ''
     mkdir -p usbdk/x86 usbdk/amd64
-    (cd usbdk/x86; ${p7zip}/bin/7z x ${src_usbdk_x86})
-    (cd usbdk/amd64; ${p7zip}/bin/7z x ${src_usbdk_amd64})
+    (cd usbdk/x86; ${msitools}/bin/msiextract ${src_usbdk_x86})
+    (cd usbdk/amd64; ${msitools}/bin/msiextract ${src_usbdk_amd64})
 
     mkdir -p vdagent/x86 vdagent/amd64
-    (cd vdagent/x86; ${p7zip}/bin/7z x ${src_vdagent_x86}; mv vdagent_0_7_3_x86/* .; rm -r vdagent_0_7_3_x86)
-    (cd vdagent/amd64; ${p7zip}/bin/7z x ${src_vdagent_amd64}; mv vdagent_0_7_3_x64/* .; rm -r vdagent_0_7_3_x64)
+    (cd vdagent/x86; ${libarchive}/bin/bsdtar -xf ${src_vdagent_x86}; mv vdagent_0_7_3_x86/* .; rm -r vdagent_0_7_3_x86)
+    (cd vdagent/amd64; ${libarchive}/bin/bsdtar -xf ${src_vdagent_amd64}; mv vdagent_0_7_3_x64/* .; rm -r vdagent_0_7_3_x64)
 
     mkdir -p qxlwddm
-    (cd qxlwddm; ${p7zip}/bin/7z x ${src_qxlwddm}; mv Win8 w8.1; cd w8.1; mv x64 amd64)
-    '';
+    (cd qxlwddm; ${libarchive}/bin/bsdtar -xf ${src_qxlwddm}; mv Win8 w8.1; cd w8.1; mv x64 amd64)
+  '';
 
   installPhase =
     let
