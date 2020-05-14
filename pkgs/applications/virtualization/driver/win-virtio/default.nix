@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, p7zip }:
+{ stdenv, fetchurl, libarchive }:
 stdenv.mkDerivation rec {
   pname = "win-virtio";
   version = "0.1.141-1";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    ${p7zip}/bin/7z x $src
-    '';
+    ${libarchive}/bin/bsdtar -xf $src
+  '';
 
   installPhase =
     let
