@@ -1,4 +1,4 @@
-{ config, stdenv, lib, callPackage, fetchurl }:
+{ config, stdenv, lib, callPackage, fetchurl, fetchpatch }:
 
 let
   common = opts: callPackage (import ./common.nix opts) {};
@@ -15,6 +15,11 @@ rec {
 
     patches = [
       ./no-buildconfig-ffx76.patch
+      # Fix for NSS 3.52 (add missing CK_GCM_PARMS field)
+      (fetchpatch {
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/463069687b3d";
+        sha256 = "00yhz67flnkww3rbry0kqn6z6bm7vxfb2sgf7qikgbjcm3ysvpsm";
+      })
     ];
 
     meta = {
