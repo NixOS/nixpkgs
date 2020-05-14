@@ -63,7 +63,12 @@ in
       fi
     '';
 
-    security.wrappers = (import "${e.enlightenment}/e-wrappers.nix").security.wrappers;
+    # Wrappers for programs installed by enlightenment that should be setuid
+    security.wrappers = {
+      enlightenment_ckpasswd.source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_ckpasswd";
+      enlightenment_sys.source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_sys";
+      enlightenment_system.source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_system";
+    };
 
     environment.etc."X11/xkb".source = xcfg.xkbDir;
 

@@ -48,20 +48,10 @@ stdenv.mkDerivation rec {
   ;
 
   patches = [
-    # Some programs installed by enlightenment (to set the cpu frequency,
-    # for instance) need root ownership and setuid/setgid permissions, which
-    # are not allowed for files in /nix/store. Instead of allowing the
-    # installer to try to do this, the file $out/e-wrappers.nix is created,
-    # containing the needed configuration for wrapping those programs. It
-    # can be used in the enlightenment module. The idea is:
-    #
-    #  1) rename the original binary adding the extension .orig
-    #  2) wrap the renamed binary at /run/wrappers/bin/
-    #  3) create a new symbolic link using the original binary name (in the
-    #     original directory where enlightenment wants it) pointing to the
-    #     wrapper
-
-    ./enlightenment.suid-exes.patch
+    # Executables cannot be made setuid in nix store. They should be
+    # wrapped in the enlightenment service module, and the wrapped
+    # executables should be used instead.
+    ./0001-wrapped-setuid-executables.patch
   ];
 
   postPatch = ''
