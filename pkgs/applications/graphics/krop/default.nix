@@ -15,8 +15,10 @@ python3Packages.buildPythonApplication rec {
     pyqt5
     pypdf2
     poppler-qt5
-    libsForQt5.poppler
     ghostscript
+  ];
+  buildInputs = [
+    libsForQt5.poppler
   ];
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
