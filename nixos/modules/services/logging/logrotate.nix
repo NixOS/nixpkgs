@@ -51,8 +51,7 @@ let
   '';
 
   configFile = pkgs.writeText "logrotate.conf" (
-    (concatStringsSep "\n" (map pathConfig cfg.paths)) +
-    cfg.extraConfig
+    (concatStringsSep "\n" ((map pathConfig cfg.paths) ++ [cfg.extraConfig]))
   );
 
 in
