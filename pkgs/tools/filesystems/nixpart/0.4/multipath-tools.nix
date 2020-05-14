@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
 
       substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${systemd.lib}/lib/udev/scsi_id
       substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${systemd.lib}/lib/udev/scsi_id
+
+      sed -i -re '
+         s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
+      ' libmultipath/defaults.h
+
     '';
 
   meta = {
