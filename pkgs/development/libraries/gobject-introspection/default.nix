@@ -5,6 +5,10 @@
 , bison
 , meson
 , ninja
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, docbook_xml_dtd_45
 , pkg-config
 , libffi
 , python3
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "devdoc" "man" ];
   outputBin = "dev";
 
   src = fetchurl {
@@ -55,6 +59,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    docbook_xml_dtd_45
   ];
 
   buildInputs = [
@@ -75,6 +83,7 @@ stdenv.mkDerivation rec {
     "--datadir=${placeholder "dev"}/share"
     "-Ddoctool=disabled"
     "-Dcairo=disabled"
+    "-Dgtk_doc=true"
   ];
 
   doCheck = !stdenv.isAarch64;
