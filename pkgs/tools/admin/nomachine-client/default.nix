@@ -13,12 +13,18 @@ in
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_x86_64}_x86_64.tar.gz";
+          urls = [
+            "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_x86_64}_x86_64.tar.gz"
+            "https://web.archive.org/web/https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_x86_64}_x86_64.tar.gz"
+          ];
           sha256 = "17yb377ry7i7cmkb72xmhyqkfggv1ygqlz55ymvmrs7psbh7ql01";
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
-          url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_i686}_i686.tar.gz";
+          urls = [
+            "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_i686}_i686.tar.gz"
+            "https://web.archive.org/web/https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_i686}_i686.tar.gz"
+          ];
           sha256 = "0k6dspmwdkm0zf0c2zqlqy0jya8qgsg90wwv9wa12fn4chp66gqg";
         }
       else
