@@ -8,11 +8,9 @@
 , pkg-config
 , libffi
 , python3
-, libintl
 , cctools
 , cairo
 , gnome3
-, glibcLocales
 , substituteAll
 , nixStoreDir ? builtins.storeDir
 , x11Support ? true
@@ -58,8 +56,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    libintl
-    glibcLocales
   ];
 
   buildInputs = [
@@ -84,9 +80,7 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isAarch64;
 
-  LC_ALL = "en_US.UTF-8"; # for tests
-
-  preBuild = ''
+  preCheck = ''
     # Our gobject-introspection patches make the shared library paths absolute
     # in the GIR files. When running tests, the library is not yet installed,
     # though, so we need to replace the absolute path with a local one during build.
@@ -95,7 +89,7 @@ stdenv.mkDerivation rec {
     ln -s $PWD/tests/scanner/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary} $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
   '';
 
-  preInstall = ''
+  postCheck = ''
     rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
   '';
 
@@ -109,8 +103,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";
-    homepage = "http://live.gnome.org/GObjectIntrospection";
-    maintainers = with maintainers; [ lovek323 lethalman ];
+    homepage = "https://gi.readthedocs.io/";
+    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 ]);
     platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
 
