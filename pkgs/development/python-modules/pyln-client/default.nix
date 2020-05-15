@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Client library for lightningd";
-    homepage = https://github.com/ElementsProject/lightning;
+    homepage = "https://github.com/ElementsProject/lightning";
     license = licenses.mit;
     maintainers = with maintainers; [ zhenyavinogradov ];
   };
