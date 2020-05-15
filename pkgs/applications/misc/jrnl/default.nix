@@ -17,6 +17,7 @@ buildPythonApplication rec {
     ansiwrap
     asteval
     colorama
+    cryptography
     dateutil
     keyring
     parsedatetime
