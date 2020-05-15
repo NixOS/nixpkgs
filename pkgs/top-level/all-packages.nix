@@ -501,6 +501,10 @@ in
 
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
+  validatePkgConfig = makeSetupHook
+    { name = "validate-pkg-config"; deps = [ findutils pkgconfig ]; }
+    ../build-support/setup-hooks/validate-pkg-config.sh;
+
   #package writers
   writers = callPackage ../build-support/writers {};
 

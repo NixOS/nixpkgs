@@ -2085,6 +2085,16 @@ postInstall = ''
     </varlistentry>
     <varlistentry>
      <term>
+      validatePkgConfig
+     </term>
+     <listitem>
+      <para>
+       The <literal>validatePkgConfig</literal> hook validates all pkg-config (<filename>.pc</filename>) files in a package. This helps catching some common errors in pkg-config files, such as undefined variables.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       cmake
      </term>
      <listitem>
