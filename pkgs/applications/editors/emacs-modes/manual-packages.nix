@@ -136,7 +136,6 @@
   emacsSessionManagement = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
   ido-ubiquitous = callPackage ./ido-ubiquitous { };
-  ocaml-mode = callPackage ./ocaml { };
   prolog-mode = callPackage ./prolog { };
   rectMark = callPackage ./rect-mark { };
   sunriseCommander = callPackage ./sunrise-commander { };
@@ -146,7 +145,6 @@
   #
   # Ideally this should be dropped some time during/after 20.03
   bbdb3 = self.melpaStablePackages.bbdb;
-  ocamlMode = self.ocaml-mode;
   jade = self.jade-mode;
   # scalaMode2 = null;  # No clear mapping as of now
   flymakeCursor = self.melpaStablePackages.flymake-cursor;
