@@ -45,17 +45,17 @@ let
           readOnly = true;
           description = ''
             Path to the unix socket file on which to accept FastCGI requests.
-            <note><para>This option is read-only and managed by NixOS.</para></note>
+            <note><para>This option is read-only and reflects the value of <xref linkend="opt-services.phpfpm.pools._name_.listen"/> if a socket path is specified, and otherwise blank.</para></note>
           '';
           example = "${runtimeDir}/<name>.sock";
         };
 
         listen = mkOption {
           type = types.str;
-          default = "";
+          default = "${runtimeDir}/${name}.sock";
           example = "/path/to/unix/socket";
           description = ''
-            The address on which to accept FastCGI requests.
+            The address on which to accept FastCGI requests. Valid syntaxes are: 'ip.add.re.ss:port', 'port', '/path/to/unix/socket'.
           '';
         };
 
@@ -112,6 +112,8 @@ let
           '';
           example = literalExample ''
             {
+              "listen.owner" = "nginx";
+              "listen.group" = "nginx";
               "pm" = "dynamic";
               "pm.max_children" = 75;
               "pm.start_servers" = 10;
@@ -133,17 +135,24 @@ let
         };
       };
 
-      config = {
-        socket = if poolOpts.listen == "" then "${runtimeDir}/${name}.sock" else poolOpts.listen;
-        group = mkDefault poolOpts.user;
-        phpOptions = mkBefore cfg.phpOptions;
+      config =
+        let
+          createSocket = hasPrefix "/" poolOpts.listen;
+        in
+        {
+          socket = if createSocket then poolOpts.listen else "";
+          group = mkDefault poolOpts.user;
+          phpOptions = mkBefore cfg.phpOptions;
 
-        settings = mapAttrs (name: mkDefault){
-          listen = poolOpts.socket;
-          user = poolOpts.user;
-          group = poolOpts.group;
+          settings = mkMerge [
+            { "listen" = poolOpts.listen; }
+            (mkIf createSocket (mapAttrs (name: mkDefault) {
+              "listen.owner" = poolOpts.user;
+              "listen.group" = poolOpts.group;
+              "listen.mode" = "0660";
+            }))
+          ];
         };
-      };
     };
 
 in {
@@ -231,9 +240,6 @@ in {
 
     warnings =
       mapAttrsToList (pool: poolOpts: ''
-        Using config.services.phpfpm.pools.${pool}.listen is deprecated and will become unsupported in a future release. Please reference the read-only option config.services.phpfpm.pools.${pool}.socket to access the path of your socket.
-      '') (filterAttrs (pool: poolOpts: poolOpts.listen != "") cfg.pools) ++
-      mapAttrsToList (pool: poolOpts: ''
         Using config.services.phpfpm.pools.${pool}.extraConfig is deprecated and will become unsupported in a future release. Please migrate your configuration to config.services.phpfpm.pools.${pool}.settings.
       '') (filterAttrs (pool: poolOpts: poolOpts.extraConfig != null) cfg.pools) ++
       optional (cfg.extraConfig != null) ''
@@ -255,30 +261,60 @@ in {
       wantedBy = [ "multi-user.target" ];
     };
 
-    systemd.services = mapAttrs' (pool: poolOpts:
+    systemd.sockets = mapAttrs' (pool: poolOpts:
       nameValuePair "phpfpm-${pool}" {
-        description = "PHP FastCGI Process Manager service for pool ${pool}";
-        after = [ "network.target" ];
-        wantedBy = [ "phpfpm.target" ];
-        partOf = [ "phpfpm.target" ];
-        serviceConfig = let
-          cfgFile = fpmCfgFile pool poolOpts;
-          iniFile = phpIni poolOpts;
-        in {
-          Slice = "phpfpm.slice";
-          PrivateDevices = true;
-          PrivateTmp = true;
-          ProtectSystem = "full";
-          ProtectHome = true;
-          # XXX: We need AF_NETLINK to make the sendmail SUID binary from postfix work
-          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
-          Type = "notify";
-          ExecStart = "${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
-          ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
-          RuntimeDirectory = "phpfpm";
-          RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
+        description = "PHP FastCGI Process manager socket for pool ${pool}";
+        wantedBy = [ "sockets.target" ];
+        listenStreams = [ poolOpts.socket ];
+        socketConfig = {
+          RemoveOnStop = true;
+          SocketUser = poolOpts.settings."listen.owner";
+          SocketGroup = poolOpts.settings."listen.group";
+          SocketMode = poolOpts.settings."listen.mode";
         };
       }
+    ) (filterAttrs (pool: poolOpts: poolOpts.socket != "") cfg.pools);
+
+    systemd.services = mapAttrs' (pool: poolOpts:
+      let
+        createSocket = poolOpts.socket != "";
+        cfgFile = fpmCfgFile pool poolOpts;
+        iniFile = phpIni poolOpts;
+      in
+        nameValuePair "phpfpm-${pool}" (mkMerge [
+          {
+            description = "PHP FastCGI Process Manager service for pool ${pool}";
+            after = [ "network.target" ];
+            partOf = [ "phpfpm.target" ];
+            serviceConfig = {
+              Slice = "phpfpm.slice";
+              PrivateDevices = true;
+              PrivateTmp = true;
+              ProtectSystem = "full";
+              ProtectHome = true;
+              # XXX: We need AF_NETLINK to make the sendmail SUID binary from postfix work
+              RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+              Type = "notify";
+              User = poolOpts.user;
+              Group = poolOpts.group;
+              ExecStart = "${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
+              ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+            };
+          }
+          (mkIf createSocket {
+            after = [ "phpfpm-${pool}.socket" ];
+            environment.FPM_SOCKETS = "${poolOpts.socket}=3";
+            serviceConfig = {
+              KillMode = "process";
+            };
+            unitConfig = {
+              ConditionPathExists = poolOpts.socket;
+            };
+          })
+          (mkIf (!createSocket) {
+            wantedBy = [ "phpfpm.target" ];
+          })
+        ])
     ) cfg.pools;
   };
 }
