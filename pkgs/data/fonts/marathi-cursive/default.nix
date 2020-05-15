@@ -1,4 +1,4 @@
-{ lib, fetchzip, p7zip }:
+{ lib, fetchzip, libarchive }:
 
 let
   version = "1.2";
@@ -8,7 +8,7 @@ in fetchzip rec {
   url = "https://github.com/MihailJP/MarathiCursive/releases/download/${version}/MarathiCursive-${version}.7z";
 
   postFetch = ''
-    ${p7zip}/bin/7z x $downloadedFile
+    ${libarchive}/bin/bsdtar -xf $downloadedFile
     cd MarathiCursive
 
     install -m444 -Dt $out/share/fonts/marathi-cursive *.otf *.ttf

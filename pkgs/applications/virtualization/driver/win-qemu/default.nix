@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, p7zip }:
+{ stdenv, fetchurl, libarchive, msitools }:
 
 stdenv.mkDerivation  {
   name = "win-qemu-0.1.105-1";
@@ -12,8 +12,8 @@ stdenv.mkDerivation  {
   };
 
   buildPhase = ''
-    ${p7zip}/bin/7z x $src
-    '';
+    ${libarchive}/bin/bsdtar -xf $src
+  '';
 
   installPhase =
     let
@@ -22,7 +22,7 @@ stdenv.mkDerivation  {
       copy_agent = arch: ''
         mkdir -p $out/${arch}/qemuagent
         cp guest-agent/${if arch=="x86" then "qemu-ga-x86.msi" else "qemu-ga-x64.msi"} $out/${arch}/qemuagent/qemu-guest-agent.msi
-        (cd $out/${arch}/qemuagent; ${p7zip}/bin/7z x qemu-guest-agent.msi; rm qemu-guest-agent.msi)
+        (cd $out/${arch}/qemuagent; ${msitools}/bin/msiextract qemu-guest-agent.msi; rm qemu-guest-agent.msi)
         '';
       copy = arch: version: (copy_pvpanic arch version) + (copy_pciserial arch) + (copy_agent arch);
     in

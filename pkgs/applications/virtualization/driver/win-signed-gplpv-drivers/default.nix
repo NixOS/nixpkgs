@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, p7zip }:
+{ stdenv, fetchurl, msitools }:
 
 let
   src_x86 = fetchurl {
@@ -20,9 +20,9 @@ stdenv.mkDerivation  {
 
   buildPhase = ''
     mkdir -p x86
-    (cd x86; ${p7zip}/bin/7z e ${src_x86})
+    (cd x86; ${msitools}/bin/msiextract ${src_x86})
     mkdir -p amd64
-    (cd amd64; ${p7zip}/bin/7z e ${src_amd64})
+    (cd amd64; ${msitools}/bin/msiextract ${src_amd64})
     '';
 
   installPhase = ''

@@ -1,4 +1,4 @@
-{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, p7zip, rsync }:
+{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, libarchive, rsync }:
 
 assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.0";
 
@@ -7,7 +7,7 @@ let
 in stdenv.mkDerivation {
   pname = "ply";
   inherit version;
-  nativeBuildInputs = [ autoreconfHook flex yacc p7zip rsync ];
+  nativeBuildInputs = [ autoreconfHook flex yacc rsync ];
 
   src = fetchFromGitHub {
     owner = "iovisor";
@@ -25,8 +25,8 @@ in stdenv.mkDerivation {
       chmod -R a+w linux-${kernel.version}
     else
       # ply wants to install header files to its build directory
-      # use 7z to handle multiple archive formats transparently
-      7z x ${kernel.src} -so | 7z x -aoa -si -ttar
+      # use libarchive to handle multiple archive formats transparently
+      ${libarchive}/bin/bsdtar -xf ${kernel.src}
     fi
 
     configureFlagsArray+=(--with-kerneldir=$(echo $(pwd)/linux-*))
