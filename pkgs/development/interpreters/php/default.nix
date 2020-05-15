@@ -256,8 +256,8 @@ let
         };
 
   php72base = callPackage generic (_args // {
-    version = "7.2.29";
-    sha256 = "08xry2fgqgg8s0ym1hh11wkbr36av3zq1bn4krbciw1b7x8gb8ga";
+    version = "7.2.30";
+    sha256 = "1gqjly3nmb5z4pl5gbjm4p9bva535z7k2clk1bpqvzg8xffmrky4";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
