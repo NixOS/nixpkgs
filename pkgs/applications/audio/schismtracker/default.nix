@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook python ];
 
-  buildInputs = [ alsaLib SDL ];
+  buildInputs = [ SDL ] ++ stdenv.lib.optional stdenv.isLinux alsaLib;
 
   meta = with stdenv.lib; {
     description = "Music tracker application, free reimplementation of Impulse Tracker";
     homepage = "http://schismtracker.org/";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ ftrvxmtrx ];
   };
 }
