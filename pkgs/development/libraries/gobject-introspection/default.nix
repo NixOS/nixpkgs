@@ -35,16 +35,15 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./test_shlibs.patch;
-      inherit nixStoreDir;
-    })
-
+    # Make g-ir-scanner put absolute path to GIR files it generates
+    # so that programs can just dlopen them without having to muck
+    # with LD_LIBRARY_PATH environment variable.
     (substituteAll {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
     })
   ] ++ stdenv.lib.optionals x11Support [
+    # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
     # https://github.com/NixOS/nixpkgs/issues/34080
     (substituteAll {
       src = ./absolute_gir_path.patch;
