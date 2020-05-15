@@ -718,6 +718,7 @@ self: super: builtins.intersectAttrs super {
   # dhall's tests access the network.
   dhall_1_29_0 = dontCheck super.dhall_1_29_0;
   dhall_1_31_1 = dontCheck super.dhall_1_31_1;
+  dhall_1_32_0 = dontCheck super.dhall_1_32_0;
 
   cut-the-crap =
     let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg ];
