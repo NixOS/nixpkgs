@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six }:
+{ stdenv, buildPythonPackage, fetchPypi, six, pytest }:
 
 buildPythonPackage rec {
   pname = "latexcodec";
@@ -10,6 +10,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ];
+
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = {
     homepage = "https://github.com/mcmtroffaes/latexcodec";
