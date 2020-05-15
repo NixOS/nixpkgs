@@ -4468,6 +4468,8 @@ in
 
   jucipp = callPackage ../applications/editors/jucipp { };
 
+  jugglinglab = callPackage ../tools/misc/jugglinglab { };
+
   jupp = callPackage ../applications/editors/jupp { };
 
   jupyter = callPackage ../applications/editors/jupyter { };
@@ -7203,8 +7205,6 @@ in
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
 
   umlet = callPackage ../tools/misc/umlet { };
-
-  jugglinglab = callPackage ../tools/misc/jugglinglab { };
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
 
