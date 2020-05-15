@@ -72,6 +72,8 @@ common = rec { # attributes common to both builds
     "-DINSTALL_SUPPORTFILESDIR=share/doc/mysql"
     "-DINSTALL_MYSQLTESTDIR=OFF"
     "-DINSTALL_SQLBENCHDIR=OFF"
+    "-DINSTALL_PAMDIR=share/pam/lib/security"
+    "-DINSTALL_PAMDATADIR=share/pam/etc/security"
 
     "-DWITH_ZLIB=system"
     "-DWITH_SSL=system"
