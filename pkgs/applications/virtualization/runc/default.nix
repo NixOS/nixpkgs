@@ -8,6 +8,7 @@
 , libapparmor
 , apparmor-parser
 , libseccomp
+, libselinux
 }:
 
 buildGoPackage rec {
@@ -25,9 +26,11 @@ buildGoPackage rec {
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ go-md2man installShellFiles pkg-config which ];
-  buildInputs = [ libseccomp libapparmor apparmor-parser ];
 
-  makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" ];
+  buildInputs = [ libselinux libseccomp libapparmor apparmor-parser ];
+
+  # these will be the default in the next release
+  makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" "BUILDTAGS+=selinux" ];
 
   buildPhase = ''
     cd go/src/${goPackagePath}

@@ -6,7 +6,9 @@
 , gpgme
 , lvm2
 , btrfs-progs
+, libapparmor
 , libseccomp
+, libselinux
 , systemd
 , go-md2man
 , nixosTests
@@ -29,7 +31,15 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs libseccomp gpgme lvm2 systemd ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+    systemd
+  ];
 
   buildPhase = ''
     patchShebangs .
