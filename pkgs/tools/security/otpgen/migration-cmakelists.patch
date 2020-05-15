@@ -1,0 +1,11 @@
+--- a/Source/MigrationTool/CMakeLists.txt	2020-05-14 18:14:53.243364585 +0200
++++ b/Source/MigrationTool/CMakeLists.txt	2020-05-14 19:03:31.856907182 +0200
+@@ -28,7 +28,7 @@
+ else()
+     find_package(PkgConfig)
+ 
+-    pkg_check_modules(CRYPTOPP REQUIRED libcrypto++)
++    pkg_check_modules(CRYPTOPP REQUIRED libcryptopp)
+     target_include_directories("MigrationTool" PRIVATE "${CRYPTOPP_INCLUDEDIR}")
+     target_link_libraries("MigrationTool" ${CRYPTOPP_LDFLAGS})
+ endif()

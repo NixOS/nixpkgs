@@ -1,0 +1,13 @@
+diff --git a/Source/Core/CMakeLists.txt b/Source/Core/CMakeLists.txt
+index 78f78c5..f3f35e6 100644
+--- a/Source/Core/CMakeLists.txt
++++ b/Source/Core/CMakeLists.txt
+@@ -34,7 +34,7 @@ if (BUNDLED_CRYPTOPP)
+ else()
+     find_package(PkgConfig)
+ 
+-    pkg_check_modules(CRYPTOPP REQUIRED libcrypto++)
++    pkg_check_modules(CRYPTOPP REQUIRED libcryptopp)
+     target_include_directories("CoreLib" PRIVATE "${CRYPTOPP_INCLUDEDIR}")
+     target_link_libraries("CoreLib" ${CRYPTOPP_LDFLAGS})
+ endif()
