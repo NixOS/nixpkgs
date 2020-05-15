@@ -338,7 +338,7 @@ let
     }
     ''
       cat ${php}/etc/php.ini > $out
-      cat ${php}/lib/custom-php.ini > $out
+      cat ${php.phpIni} > $out
       echo "$options" >> $out
     '';
 

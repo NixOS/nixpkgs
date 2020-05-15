@@ -34,7 +34,7 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    install -Dm555 out/cf "$bin/bin/cf"
+    install -Dm555 out/cf "$out/bin/cf"
     installShellCompletion --bash "$src/ci/installers/completion/cf"
   '';
 

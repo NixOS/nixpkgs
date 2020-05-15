@@ -80,7 +80,7 @@ def parse_components(version: str = "master"):
 
 # Recursively get the requirements of a component and its dependencies
 def get_reqs(components, component):
-    requirements = set(components[component]["requirements"])
+    requirements = set(components[component].get("requirements", []))
     deps = components[component].get("dependencies", [])
     for dependency in deps:
         requirements.update(get_reqs(components, dependency))

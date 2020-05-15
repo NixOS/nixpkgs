@@ -1,15 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, bison, pam }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, bison
+, pam
+}:
 
 stdenv.mkDerivation rec {
   pname = "doas";
-
-  version = "6.0";
+  version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "Duncaen";
     repo = "OpenDoas";
     rev = "v${version}";
-    sha256 = "1j50l3jvbgvg8vmp1nx6vrjxkbj5bvfh3m01bymzfn25lkwwhz1x";
+    sha256 = "07kkc5729p654jrgfsc8zyhiwicgmq38yacmwfvay2b3gmy728zn";
   };
 
   # otherwise confuses ./configure
@@ -26,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Duncaen/OpenDoas";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ cole-h cstrahan ];
   };
 }

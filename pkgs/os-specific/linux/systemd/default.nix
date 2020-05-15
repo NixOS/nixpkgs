@@ -31,7 +31,7 @@ let gnupg-minimal = gnupg.override {
   bzip2 = null;
 };
 in stdenv.mkDerivation {
-  version = "245.3";
+  version = "245.5";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -39,29 +39,29 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-stable";
-    rev = "0f5047b7d393cfba37f91e25cae559a0bc910582";
-    sha256 = "0wyh14gbvvpgdmk1mjgpxr9i4pv1i9n7pnwpa0gvjh6hq948fyn2";
+    rev = "9a506b7e9291d997a920af9ac299e7b834368119";
+    sha256 = "19qd92hjlsljr6x5mbw1l2vdzz5y9hy7y7g0dwgpfifb0lwkxqbr";
   };
 
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
-    ./0003-Don-t-try-to-unmount-nix-or-nix-store.patch
-    ./0004-Fix-NixOS-containers.patch
-    ./0006-Look-for-fsck-in-the-right-place.patch
-    ./0007-Add-some-NixOS-specific-unit-directories.patch
-    ./0009-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0010-hostnamed-localed-timedated-disable-methods-that-cha.patch
-    ./0011-Fix-hwdb-paths.patch
-    ./0012-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0013-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0016-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0018-Install-default-configuration-into-out-share-factory.patch
-    ./0019-inherit-systemd-environment-when-calling-generators.patch
-    ./0021-add-rootprefix-to-lookup-dir-paths.patch
-    ./0022-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0023-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0024-kmod-static-nodes.service-Update-ConditionFileNotEmpty.patch
-    ./0025-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0003-Fix-NixOS-containers.patch
+    ./0004-Look-for-fsck-in-the-right-place.patch
+    ./0005-Add-some-NixOS-specific-unit-directories.patch
+    ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
+    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0008-Fix-hwdb-paths.patch
+    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0012-Install-default-configuration-into-out-share-factory.patch
+    ./0013-inherit-systemd-environment-when-calling-generators.patch
+    ./0014-add-rootprefix-to-lookup-dir-paths.patch
+    ./0015-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0016-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
+    ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
   ];
 
   postPatch = ''

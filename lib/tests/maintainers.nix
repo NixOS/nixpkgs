@@ -1,10 +1,11 @@
-# to run these tests:
-# nix-build nixpkgs/lib/tests/maintainers.nix
-# If nothing is output, all tests passed
-{ pkgs ? import ../.. {} }:
+# to run these tests (and the others)
+# nix-build nixpkgs/lib/tests/release.nix
+{ # The pkgs used for dependencies for the testing itself
+  pkgs
+, lib
+}:
 
 let
-  inherit (pkgs) lib;
   inherit (lib) types;
 
   maintainerModule = { config, ... }: {

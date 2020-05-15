@@ -4,18 +4,18 @@ let
 
   inherit (lib) mkOption types;
 
-  # Provides a fake "docker" binary mapping to podman
-  dockerCompat = pkgs.runCommandNoCC "${pkgs.podman.pname}-docker-compat-${pkgs.podman.version}" {
-    outputs = [ "out" "bin" "man" ];
-    inherit (pkgs.podman) meta;
-  } ''
-    mkdir $out
+  podmanPackage = (pkgs.podman.override { inherit (cfg) extraPackages; });
 
-    mkdir -p $bin/bin
-    ln -s ${pkgs.podman.bin}/bin/podman $bin/bin/docker
+  # Provides a fake "docker" binary mapping to podman
+  dockerCompat = pkgs.runCommandNoCC "${podmanPackage.pname}-docker-compat-${podmanPackage.version}" {
+    outputs = [ "out" "man" ];
+    inherit (podmanPackage) meta;
+  } ''
+    mkdir -p $out/bin
+    ln -s ${podmanPackage}/bin/podman $out/bin/docker
 
     mkdir -p $man/share/man/man1
-    for f in ${pkgs.podman.man}/share/man/man1/*; do
+    for f in ${podmanPackage.man}/share/man/man1/*; do
       basename=$(basename $f | sed s/podman/docker/g)
       ln -s $f $man/share/man/man1/$basename
     done
@@ -54,6 +54,19 @@ in
       '';
     };
 
+    extraPackages = mkOption {
+      type = with types; listOf package;
+      default = [ ];
+      example = lib.literalExample ''
+        [
+          pkgs.gvisor
+        ]
+      '';
+      description = ''
+        Extra packages to be installed in the Podman wrapper.
+      '';
+    };
+
     libpod = mkOption {
       default = {};
       description = "Libpod configuration";
@@ -73,32 +86,37 @@ in
       };
     };
 
+    package = lib.mkOption {
+      type = types.package;
+      default = podmanPackage;
+      internal = true;
+      description = ''
+        The final Podman package (including extra packages).
+      '';
+    };
+
+
   };
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [
-      pkgs.podman # Docker compat
-      pkgs.runc # Default container runtime
-      pkgs.crun # Default container runtime (cgroups v2)
-      pkgs.conmon # Container runtime monitor
-      pkgs.slirp4netns # User-mode networking for unprivileged namespaces
-      pkgs.fuse-overlayfs # CoW for images, much faster than default vfs
-      pkgs.utillinux # nsenter
-      pkgs.iptables
-    ]
-    ++ lib.optional cfg.dockerCompat dockerCompat;
+    environment.systemPackages = [ cfg.package ]
+      ++ lib.optional cfg.dockerCompat dockerCompat;
 
     environment.etc."containers/libpod.conf".text = ''
       cni_plugin_dir = ["${pkgs.cni-plugins}/bin/"]
-      cni_config_dir = "/etc/cni/net.d/"
 
     '' + cfg.libpod.extraConfig;
 
-    environment.etc."cni/net.d/87-podman-bridge.conflist".source = copyFile "${pkgs.podman.src}/cni/87-podman-bridge.conflist";
+    environment.etc."cni/net.d/87-podman-bridge.conflist".source = copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
 
     # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;
+
+    assertions = [{
+      assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
+      message = "Option dockerCompat conflicts with docker";
+    }];
 
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups, libusb, libxml2 }:
+{ stdenv, fetchurl, cups, libusb-compat-0_1, libxml2 }:
 
 let
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     cups
-    libusb
+    libusb-compat-0_1
     libxml2
   ];
 
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
     done
 
     patchelf --set-rpath "$out/lib:${stdenv.lib.getLib cups}/lib" "$out/lib/libscmssc.so"
-    patchelf --set-rpath "$out/lib:${libxml2.out}/lib:${libusb.out}/lib" "$out/lib/sane/libsane-smfp.so.1.0.1"
+    patchelf --set-rpath "$out/lib:${libxml2.out}/lib:${libusb-compat-0_1.out}/lib" "$out/lib/sane/libsane-smfp.so.1.0.1"
 
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
   '';

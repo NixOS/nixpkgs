@@ -1,4 +1,13 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, pkgconfig, qmake, qtx11extras, dtkcore, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, qmake
+, qtx11extras
+, dtkcore
+, deepin
+}:
 
 mkDerivation rec {
   pname = "dtkwm";
@@ -37,7 +46,7 @@ mkDerivation rec {
     "LIB_INSTALL_DIR=${outRef}/lib"
   ];
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin graphical user interface library";

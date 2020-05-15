@@ -1,4 +1,4 @@
-{stdenv, fetchurl, patchelf, libusb}:
+{stdenv, fetchurl, patchelf, libusb-compat-0_1}:
 
 assert stdenv ? cc && stdenv.cc.libc != null;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ patchelf ];
 
   installPhase = ''
-    RPATH=${libusb.out}/lib:${stdenv.cc.libc.out}/lib
+    RPATH=${libusb-compat-0_1.out}/lib:${stdenv.cc.libc.out}/lib
 
     for a in proprietary/*/Contents/Linux/*.so*; do
         if ! test -L $a; then

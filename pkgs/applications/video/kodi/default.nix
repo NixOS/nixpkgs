@@ -25,7 +25,7 @@
 , rtmpSupport ? true, rtmpdump ? null
 , sambaSupport ? true, samba ? null
 , udevSupport ? true, udev ? null
-, usbSupport  ? false, libusb ? null
+, usbSupport  ? false, libusb-compat-0_1 ? null
 , vdpauSupport ? true, libvdpau ? null
 , useWayland ? false, wayland ? null, wayland-protocols ? null
 , waylandpp ?  null, libxkbcommon ? null
@@ -39,7 +39,7 @@ assert pulseSupport -> libpulseaudio != null;
 assert rtmpSupport  -> rtmpdump != null;
 assert sambaSupport -> samba != null;
 assert udevSupport  -> udev != null;
-assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used if udev is avaliable
+assert usbSupport   -> libusb-compat-0_1 != null && ! udevSupport; # libusb-compat-0_1 won't be used if udev is avaliable
 assert vdpauSupport -> libvdpau != null;
 assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
 
@@ -189,7 +189,7 @@ in stdenv.mkDerivation {
     ++ lib.optional  rtmpSupport     rtmpdump
     ++ lib.optional  sambaSupport    samba
     ++ lib.optional  udevSupport     udev
-    ++ lib.optional  usbSupport      libusb
+    ++ lib.optional  usbSupport      libusb-compat-0_1
     ++ lib.optional  vdpauSupport    libvdpau
     ++ lib.optionals useWayland [
       wayland 

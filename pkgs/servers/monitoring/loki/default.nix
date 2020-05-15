@@ -24,7 +24,7 @@ buildGoPackage rec {
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ systemd.dev ];
 
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    wrapProgram $bin/bin/promtail \
+    wrapProgram $out/bin/promtail \
       --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib"
   '';
 

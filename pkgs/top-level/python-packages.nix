@@ -18,7 +18,7 @@ let
   packages = ( self:
 
 let
-  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
 
   callPackage = pkgs.newScope self;
 
@@ -100,7 +100,7 @@ let
 
 in {
 
-  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit python bootstrapped-pip buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
@@ -248,6 +248,8 @@ in {
 
   authres = callPackage ../development/python-modules/authres { };
 
+  auth0-python = callPackage ../development/python-modules/auth0-python { };
+
   autograd = callPackage ../development/python-modules/autograd { };
 
   autologging = callPackage ../development/python-modules/autologging { };
@@ -278,8 +280,6 @@ in {
     withPython = true;
   });
 
-  azure = callPackage ../development/python-modules/azure { };
-
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
 
   azure-common = callPackage ../development/python-modules/azure-common { };
@@ -307,6 +307,8 @@ in {
   azure-identity = callPackage ../development/python-modules/azure-identity { };
 
   azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
+
+  azure-keyvault-certificates = callPackage ../development/python-modules/azure-keyvault-certificates { };
 
   azure-keyvault-keys = callPackage ../development/python-modules/azure-keyvault-keys { };
 
@@ -373,6 +375,8 @@ in {
   azure-mgmt-containerregistry = callPackage ../development/python-modules/azure-mgmt-containerregistry { };
 
   azure-mgmt-containerservice = callPackage ../development/python-modules/azure-mgmt-containerservice { };
+
+  azure-mgmt-core = callPackage ../development/python-modules/azure-mgmt-core { };
 
   azure-mgmt-cosmosdb = callPackage ../development/python-modules/azure-mgmt-cosmosdb { };
 
@@ -453,6 +457,8 @@ in {
   azure-mgmt-recoveryservices = callPackage ../development/python-modules/azure-mgmt-recoveryservices { };
 
   azure-mgmt-recoveryservicesbackup = callPackage ../development/python-modules/azure-mgmt-recoveryservicesbackup { };
+
+  azure-mgmt-redhatopenshift = callPackage ../development/python-modules/azure-mgmt-redhatopenshift { };
 
   azure-mgmt-redis = callPackage ../development/python-modules/azure-mgmt-redis { };
 
@@ -669,6 +675,8 @@ in {
   };
 
   dftfit = callPackage ../development/python-modules/dftfit { };
+
+  dicom2nifti = callPackage ../development/python-modules/dicom2nifti { };
 
   discid = callPackage ../development/python-modules/discid { };
 
@@ -935,6 +943,8 @@ in {
 
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
 
+  mortgage = callPackage ../development/python-modules/mortgage { };
+
   msal = callPackage ../development/python-modules/msal { };
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
@@ -960,6 +970,8 @@ in {
   nbval = callPackage ../development/python-modules/nbval { };
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
+
+  neo = callPackage ../development/python-modules/neo { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
@@ -1220,6 +1232,10 @@ in {
 
   pylev = callPackage ../development/python-modules/pylev { };
 
+  pylibftdi = callPackage ../development/python-modules/pylibftdi {
+    inherit (pkgs) libusb1;
+  };
+
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
@@ -1460,6 +1476,10 @@ in {
   };
 
   transformers = callPackage ../development/python-modules/transformers { };
+
+  transforms3d = callPackage ../development/python-modules/transforms3d { };
+
+  trimesh = callPackage ../development/python-modules/trimesh {};
 
   sentinel = callPackage ../development/python-modules/sentinel { };
 
@@ -2218,6 +2238,8 @@ in {
 
   closure-linter = callPackage ../development/python-modules/closure-linter { };
 
+  cloudflare = callPackage ../development/python-modules/cloudflare { };
+
   cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 
   cmdline = callPackage ../development/python-modules/cmdline { };
@@ -2680,6 +2702,8 @@ in {
 
   dpath = callPackage ../development/python-modules/dpath { };
 
+  dparse = callPackage ../development/python-modules/dparse { };
+
   dpkt = callPackage ../development/python-modules/dpkt {};
 
   urllib3 = callPackage ../development/python-modules/urllib3 {};
@@ -2901,11 +2925,15 @@ in {
 
   helpdev = callPackage ../development/python-modules/helpdev { };
 
+  heudiconv = callPackage ../development/python-modules/heudiconv { };
+
   hickle = callPackage ../development/python-modules/hickle { };
 
   hiro = callPackage ../development/python-modules/hiro {};
 
   hglib = callPackage ../development/python-modules/hglib {};
+
+  huey = callPackage ../development/python-modules/huey { };
 
   humanize = callPackage ../development/python-modules/humanize { };
 
@@ -3206,6 +3234,9 @@ in {
   poyo = callPackage ../development/python-modules/poyo { };
 
   priority = callPackage ../development/python-modules/priority { };
+
+  privacyidea = callPackage ../development/python-modules/privacyidea { };
+  privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea/ldap-proxy.nix { };
 
   prov = callPackage ../development/python-modules/prov { };
 
@@ -3727,6 +3758,8 @@ in {
 
   flask_testing = callPackage ../development/python-modules/flask-testing { };
 
+  flask-versioned = callPackage ../development/python-modules/flask-versioned { };
+
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
   wtforms = callPackage ../development/python-modules/wtforms { };
@@ -4042,6 +4075,8 @@ in {
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
 
+  unrpa = callPackage ../development/python-modules/unrpa { };
+
   lsi = callPackage ../development/python-modules/lsi { };
 
   hkdf = callPackage ../development/python-modules/hkdf { };
@@ -4081,6 +4116,8 @@ in {
   iptools = callPackage ../development/python-modules/iptools { };
 
   ipy = callPackage ../development/python-modules/IPy { };
+
+  ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
   ipykernel = if pythonOlder "3.4" then
       callPackage ../development/python-modules/ipykernel/4.nix { }
@@ -4158,7 +4195,10 @@ in {
     inherit (pkgs.jsonnet) name src;
   };
 
-  jupyter_client = callPackage ../development/python-modules/jupyter_client { };
+  jupyter_client = if isPy3k then
+    callPackage ../development/python-modules/jupyter_client { }
+  else
+    callPackage ../development/python-modules/jupyter_client/5.nix { };
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
@@ -5196,6 +5236,8 @@ in {
 
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
 
+  pyrad = callPackage ../development/python-modules/pyrad { };
+
   pyrr = callPackage ../development/python-modules/pyrr { };
 
   pysha3 = callPackage ../development/python-modules/pysha3 { };
@@ -5641,6 +5683,8 @@ in {
 
   safe = callPackage ../development/python-modules/safe { };
 
+  safety = callPackage ../development/python-modules/safety { };
+
   sampledata = callPackage ../development/python-modules/sampledata { };
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
@@ -5804,6 +5848,8 @@ in {
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
+  sqlsoup = callPackage ../development/python-modules/sqlsoup { };
+
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
@@ -5850,6 +5896,8 @@ in {
   testtools = callPackage ../development/python-modules/testtools { };
 
   traitlets = callPackage ../development/python-modules/traitlets { };
+
+  traittypes = callPackage ../development/python-modules/traittypes { };
 
   transitions = callPackage ../development/python-modules/transitions { };
 
@@ -6213,6 +6261,8 @@ in {
   six = callPackage ../development/python-modules/six { };
 
   smartdc = callPackage ../development/python-modules/smartdc { };
+
+  smpplib = callPackage ../development/python-modules/smpplib { };
 
   socksipy-branch = callPackage ../development/python-modules/socksipy-branch { };
 
@@ -7252,7 +7302,7 @@ in {
 
   scour = callPackage ../development/python-modules/scour { };
 
-  pymssql = callPackage ../development/python-modules/pymssql { };
+  pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 

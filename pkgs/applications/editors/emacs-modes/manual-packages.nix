@@ -65,6 +65,8 @@
     };
   };
 
+  emacspeak = callPackage ./emacspeak {};
+
   ess-R-object-popup =
     callPackage ./ess-R-object-popup { };
 
@@ -133,7 +135,6 @@
   colorThemeSolarized = callPackage ./color-theme-solarized { };
   emacsSessionManagement = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
-  hol_light_mode = callPackage ./hol_light { };
   ido-ubiquitous = callPackage ./ido-ubiquitous { };
   ocaml-mode = callPackage ./ocaml { };
   prolog-mode = callPackage ./prolog { };

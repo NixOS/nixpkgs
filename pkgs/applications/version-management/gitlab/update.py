@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p bundix bundler common-updater-scripts nix nix-prefetch-git python3 python3Packages.requests python3Packages.lxml python3Packages.click python3Packages.click-log vgo2nix yarn2nix
+#! nix-shell -i python3 -p bundix bundler common-updater-scripts nix nix-prefetch-git python3 python3Packages.requests python3Packages.click python3Packages.click-log vgo2nix yarn2nix
 
 import click
 import click_log
@@ -13,7 +13,6 @@ from distutils.version import LooseVersion
 from typing import Iterable
 
 import requests
-from xml.etree import ElementTree
 
 logger = logging.getLogger(__name__)
 
@@ -30,12 +29,11 @@ class GitLabRepo:
 
     @property
     def tags(self) -> Iterable[str]:
-        r = requests.get(self.url + "/tags?format=atom", stream=True)
+        r = requests.get(self.url + "/refs?sort=updated_desc&ref=master").json()
+        tags = r.get("Tags", [])
 
-        tree = ElementTree.fromstring(r.content)
-        versions = [e.text for e in tree.findall('{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}title')]
         # filter out versions not matching version_regex
-        versions = list(filter(self.version_regex.match, versions))
+        versions = list(filter(self.version_regex.match, tags))
 
         # sort, but ignore v and -ee for sorting comparisons
         versions.sort(key=lambda x: LooseVersion(x.replace("v", "").replace("-ee", "")), reverse=True)

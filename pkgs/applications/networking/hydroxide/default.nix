@@ -2,24 +2,16 @@
 
 buildGoModule rec {
   pname = "hydroxide";
-  version = "0.2.11";
+  version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rn35iyli80kgj3yn93lrx0ybgc8fhvmkvx1d18ill7r4cmavand";
+    sha256 = "0d8wjyzmw89yhrszz487f7i19rcz7xlx4w2wd4c69k5nsdrs6dys";
   };
 
-  modSha256 = "0b19rcif8yiyvhrsjd3q5nsvr580lklamlphx4dk47n456ckcqfp";
-
-  # FIXME: remove with next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/emersion/hydroxide/commit/80e0fa6f3e0154338fb0af8a82ca32ae6281dd15.patch";
-      sha256 = "1xi0clzgz14a7sxnwr0li7sz9p05sfh3zh5iqg2qz5f415k9jknj";
-    })
-  ];
+  vendorSha256 = "0d8yfmsl8rycbq8gjnvc657j14644lq0zmr9l88ik360szw6v6gc";
 
   subPackages = [ "cmd/hydroxide" ];
 

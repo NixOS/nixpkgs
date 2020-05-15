@@ -17,7 +17,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   postFixup = ''
-    wrapProgram $bin/bin/out-of-tree \
+    wrapProgram $out/bin/out-of-tree \
       --prefix PATH : "${stdenv.lib.makeBinPath [ qemu docker which ]}"
   '';
 

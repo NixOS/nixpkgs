@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb }:
+{ stdenv, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb-compat-0_1 }:
 
 let
   myPatchElf = file: with stdenv.lib; ''
@@ -30,13 +30,13 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ makeWrapper patchelf coreutils udevRules ];
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb-compat-0_1 ];
   dontBuild = true;
 
   patchPhase = ''
     ${myPatchElf "opt/brother/scanner/brscan4/brsaneconfig4"}
 
-    RPATH=${libusb.out}/lib
+    RPATH=${libusb-compat-0_1.out}/lib
     for a in usr/lib64/sane/*.so*; do
       if ! test -L $a; then
         patchelf --set-rpath $RPATH $a

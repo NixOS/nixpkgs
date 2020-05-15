@@ -130,6 +130,15 @@
       };
     }
     rec {
+      name = "libatomic1_5.4.0-7.really.6+steamrt1.2+srt2_amd64";
+      sha256 = "8dd843d4497f66c1af07551d8cc636e63ffff692187b51d0a01191c96bc0049a";
+      url = "mirror://steamrt/pool/main/g/gcc-5/libatomic1_5.4.0-7.really.6+steamrt1.2+srt2_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libatomic1.deb";
+      };
+    }
+    rec {
       name = "libattr1_2.4.46-5ubuntu1+steamrt1.1+srt2_amd64";
       sha256 = "d33b00c3e19337f3abbb070f646adda7420f171f5487dca5e253b68b63a4d8fc";
       url = "mirror://steamrt/pool/main/a/attr/libattr1_2.4.46-5ubuntu1+steamrt1.1+srt2_amd64.deb";
@@ -244,6 +253,15 @@
       source = fetchurl {
         inherit url sha256;
         name = "libcap2.deb";
+      };
+    }
+    rec {
+      name = "libcapsule-tools-relocatable_0.20190926.0-0co1+srt1_amd64";
+      sha256 = "9ddaac17a0f812eec785e34eefccb8ea24a4abf0fa6ad008d03b26d5493ea010";
+      url = "mirror://steamrt/pool/main/libc/libcapsule/libcapsule-tools-relocatable_0.20190926.0-0co1+srt1_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libcapsule-tools-relocatable.deb";
       };
     }
     rec {
@@ -670,6 +688,15 @@
       };
     }
     rec {
+      name = "libitm1_5.4.0-7.really.6+steamrt1.2+srt2_amd64";
+      sha256 = "3c01841997e77fe1616b16936394c86383dc76e875f70e6d96ed016e4b945050";
+      url = "mirror://steamrt/pool/main/g/gcc-5/libitm1_5.4.0-7.really.6+steamrt1.2+srt2_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libitm1.deb";
+      };
+    }
+    rec {
       name = "libjack-jackd2-0_1.9.8~dfsg.1-1ubuntu2+srt5_amd64";
       sha256 = "9a419baf1b88386cf643ca64965de607321e5d27f13c5bd68be0eb1a803fd7a9";
       url = "mirror://steamrt/pool/main/j/jackd2/libjack-jackd2-0_1.9.8~dfsg.1-1ubuntu2+srt5_amd64.deb";
@@ -994,6 +1021,15 @@
       };
     }
     rec {
+      name = "libquadmath0_5.4.0-7.really.6+steamrt1.2+srt2_amd64";
+      sha256 = "12523138b2f21cd6d824b5c778ee49789ef0129ba6207cf03d3cf6b4138b1a1b";
+      url = "mirror://steamrt/pool/main/g/gcc-5/libquadmath0_5.4.0-7.really.6+steamrt1.2+srt2_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libquadmath0.deb";
+      };
+    }
+    rec {
       name = "libroken18-heimdal_1.6~git20120311.dfsg.1-2+srt6_amd64";
       sha256 = "e55b129066b92ab99f518d2f857b54e8754c3c873b5fb603270e3c4c36564a7b";
       url = "mirror://steamrt/pool/main/h/heimdal/libroken18-heimdal_1.6~git20120311.dfsg.1-2+srt6_amd64.deb";
@@ -1192,27 +1228,27 @@
       };
     }
     rec {
-      name = "libsteam-runtime-tools-0-0_0.20200109.0-0+steamrt1.1+srt1_amd64";
-      sha256 = "680a2855b601ecccc81179df162722081ad0c7f4d1689e25bbce9d19de1a3eb6";
-      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-0_0.20200109.0-0+steamrt1.1+srt1_amd64.deb";
+      name = "libsteam-runtime-tools-0-0_0.20200415.0+srt1_amd64";
+      sha256 = "0db05ccf5ca6705a6001d2c43ae5163cc289ef60126381bf886014e2344b4190";
+      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-0_0.20200415.0+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libsteam-runtime-tools-0-0.deb";
       };
     }
     rec {
-      name = "libsteam-runtime-tools-0-helpers_0.20200109.0-0+steamrt1.1+srt1_amd64";
-      sha256 = "b33f5c1217c7927057428b54faa4d0fcdddda1b5b18d708f755e96893ed6e108";
-      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-helpers_0.20200109.0-0+steamrt1.1+srt1_amd64.deb";
+      name = "libsteam-runtime-tools-0-helpers_0.20200415.0+srt1_amd64";
+      sha256 = "c568548d3c73df1c61efe06574e4ab17c2250059e9659690dec6c43db8695ce8";
+      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-helpers_0.20200415.0+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libsteam-runtime-tools-0-helpers.deb";
       };
     }
     rec {
-      name = "libsteam-runtime-tools-0-relocatable-libs_0.20200109.0-0+steamrt1.1+srt1_amd64";
-      sha256 = "4f2ddb4dd6f48636f95bb301541a023ba8235672e1e053be8da9961787958d18";
-      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-relocatable-libs_0.20200109.0-0+steamrt1.1+srt1_amd64.deb";
+      name = "libsteam-runtime-tools-0-relocatable-libs_0.20200415.0+srt1_amd64";
+      sha256 = "450c03778f4901e8b54f5dc879b071a84d18f4fc65e6308b91eebf40c77ef093";
+      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-relocatable-libs_0.20200415.0+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libsteam-runtime-tools-0-relocatable-libs.deb";
@@ -1444,18 +1480,18 @@
       };
     }
     rec {
-      name = "libvulkan1_1.2.135~srt-0+steamrt1.1+srt1_amd64";
-      sha256 = "99b0d38e6a2240dbea57c3ebee18de7013ee5d346c82bc82243c18e66bc50ae4";
-      url = "mirror://steamrt/pool/main/v/vulkan-loader/libvulkan1_1.2.135~srt-0+steamrt1.1+srt1_amd64.deb";
+      name = "libvulkan1_1.2.135.0-1~steamrt1.1+srt1_amd64";
+      sha256 = "fa3dfb44b47c35e8a16de3c8240accdca131b70dd59a84f6e38cc6824219fa28";
+      url = "mirror://steamrt/pool/main/v/vulkan-loader/libvulkan1_1.2.135.0-1~steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libvulkan1.deb";
       };
     }
     rec {
-      name = "libwaffle-1-0_1.6.0-2~steamrt1.3+srt1_amd64";
-      sha256 = "40ebf5f91707d0f183841ab8673f7bdd6d77540f090fc97cb69be54381c382be";
-      url = "mirror://steamrt/pool/main/w/waffle/libwaffle-1-0_1.6.0-2~steamrt1.3+srt1_amd64.deb";
+      name = "libwaffle-1-0_1.6.1-0+steamrt1.1+srt1_amd64";
+      sha256 = "a2a73515ddef193da5de918190df27fce75cf27c3081662c2f6fc5d227c96cc4";
+      url = "mirror://steamrt/pool/main/w/waffle/libwaffle-1-0_1.6.1-0+steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libwaffle-1-0.deb";
@@ -1912,27 +1948,27 @@
       };
     }
     rec {
-      name = "steam-runtime-tools-bin_0.20200109.0-0+steamrt1.1+srt1_amd64";
-      sha256 = "b5fcefb31c79a4ac085ef1050cdb2770507fbcf04eae713f9f16fdc3a483a85d";
-      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/steam-runtime-tools-bin_0.20200109.0-0+steamrt1.1+srt1_amd64.deb";
+      name = "steam-runtime-tools-bin_0.20200415.0+srt1_amd64";
+      sha256 = "e21848eb4cf02402600a952f5ca8bafbd95db9f5b3bb8d5af746721c5ac4ebc3";
+      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/steam-runtime-tools-bin_0.20200415.0+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "steam-runtime-tools-bin.deb";
       };
     }
     rec {
-      name = "steamrt-legacy_1.20200128.0+srt1_amd64";
-      sha256 = "16a8adf316032424fa5cd53f498c53472c45a66b572e8c60adb2ff3ae7556eed";
-      url = "mirror://steamrt/pool/main/s/steamrt/steamrt-legacy_1.20200128.0+srt1_amd64.deb";
+      name = "steamrt-legacy_1.20200421.0+srt1_amd64";
+      sha256 = "9ee2744dbefc6c8055d3f496ad8e7ab8df01049a5571b9558c23b15001218fa6";
+      url = "mirror://steamrt/pool/main/s/steamrt/steamrt-legacy_1.20200421.0+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "steamrt-legacy.deb";
       };
     }
     rec {
-      name = "steamrt-libs_1.20200128.0+srt1_amd64";
-      sha256 = "18247c8534f8d67f63f4ece884b15276e0eecf540d0758ed6d5ae8b6a6ba510b";
-      url = "mirror://steamrt/pool/main/s/steamrt/steamrt-libs_1.20200128.0+srt1_amd64.deb";
+      name = "steamrt-libs_1.20200421.0+srt1_amd64";
+      sha256 = "52ffad4cdca3f7f1c8091474a1a978941512c993e52d15fadab49165e248603b";
+      url = "mirror://steamrt/pool/main/s/steamrt/steamrt-libs_1.20200421.0+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "steamrt-libs.deb";
@@ -1975,72 +2011,54 @@
       };
     }
     rec {
-      name = "vulkan-tools_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64";
-      sha256 = "b5c0c3fd9f5329f2aff54ce73f9281e3e61156556e1ee50c697b37f2144b1531";
-      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64.deb";
+      name = "vulkan-tools_1.2.135.0+dfsg1-1~steamrt1.1+srt1_amd64";
+      sha256 = "bb70e1a31fe204319ea24292fe0ee7a9073f1b8f79e66ffb1ab192e500f8452b";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools_1.2.135.0+dfsg1-1~steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "vulkan-tools.deb";
       };
     }
     rec {
-      name = "vulkan-tools-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64";
-      sha256 = "33b03b9413ec308f5ee5b8699e9f9ad939b501b602eea185fdcaa69863deb70c";
-      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64.deb";
+      name = "vulkan-tools-multiarch_1.2.135.0+dfsg1-1~steamrt1.1+srt1_amd64";
+      sha256 = "8e8aa0bf8fe147dd52e442a88e57a16f86b3a807201175585d47c64531865822";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools-multiarch_1.2.135.0+dfsg1-1~steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "vulkan-tools-multiarch.deb";
       };
     }
     rec {
-      name = "vulkan-utils_1.2.131.1+dfsg1-1+steamrt1.1+srt1_all";
-      sha256 = "f10004e20ed5fc93edf035f8f34bb9f8307eb34974a3ed5aae9ba87f00a2c468";
-      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-utils_1.2.131.1+dfsg1-1+steamrt1.1+srt1_all.deb";
-      source = fetchurl {
-        inherit url sha256;
-        name = "vulkan-utils.deb";
-      };
-    }
-    rec {
-      name = "vulkan-utils-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64";
-      sha256 = "a1e9387bb5cb7effb23c5994dd2724614cfed7a447ec9c449ee4effcab58fd4c";
-      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-utils-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64.deb";
-      source = fetchurl {
-        inherit url sha256;
-        name = "vulkan-utils-multiarch.deb";
-      };
-    }
-    rec {
-      name = "waffle-utils_1.6.0-2~steamrt1.3+srt1_amd64";
-      sha256 = "b465d2c357b0376f355a99ac99830e78974747859ec4ca9084bdeff9891920d6";
-      url = "mirror://steamrt/pool/main/w/waffle/waffle-utils_1.6.0-2~steamrt1.3+srt1_amd64.deb";
+      name = "waffle-utils_1.6.1-0+steamrt1.1+srt1_amd64";
+      sha256 = "ad14f1e2dcc6b9ed7b036989cf5f18efb683879927a4b474692bbe1d7ddbe94c";
+      url = "mirror://steamrt/pool/main/w/waffle/waffle-utils_1.6.1-0+steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "waffle-utils.deb";
       };
     }
     rec {
-      name = "waffle-utils-multiarch_1.6.0-2~steamrt1.3+srt1_amd64";
-      sha256 = "de563095affd9fd5a4ec2941b72481bbd6176bdc210dad587372bab3cec406c1";
-      url = "mirror://steamrt/pool/main/w/waffle/waffle-utils-multiarch_1.6.0-2~steamrt1.3+srt1_amd64.deb";
+      name = "waffle-utils-multiarch_1.6.1-0+steamrt1.1+srt1_amd64";
+      sha256 = "cf66bcb711bee45fb722d4125d37d8001fe7f3691f81ac224b62f849af0b4fba";
+      url = "mirror://steamrt/pool/main/w/waffle/waffle-utils-multiarch_1.6.1-0+steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "waffle-utils-multiarch.deb";
       };
     }
     rec {
-      name = "zenity_3.4.0-0ubuntu4+steamrt2+srt6_amd64";
-      sha256 = "5eb59aa8d2211153c780aab2304e8694d7eb0204f284193ff2a037dc9e1274db";
-      url = "mirror://steamrt/pool/main/z/zenity/zenity_3.4.0-0ubuntu4+steamrt2+srt6_amd64.deb";
+      name = "zenity_3.4.0-0ubuntu4+steamrt3+srt1_amd64";
+      sha256 = "c31a99f8d47cba157db251ea97cd14074d99c622969dd4d4173f76494feb7723";
+      url = "mirror://steamrt/pool/main/z/zenity/zenity_3.4.0-0ubuntu4+steamrt3+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "zenity.deb";
       };
     }
     rec {
-      name = "zenity-common_3.4.0-0ubuntu4+steamrt2+srt6_all";
-      sha256 = "bc8f0b80672833be72c6dd87d406b5fc0ef92e51f91e3a461678fc97844649bc";
-      url = "mirror://steamrt/pool/main/z/zenity/zenity-common_3.4.0-0ubuntu4+steamrt2+srt6_all.deb";
+      name = "zenity-common_3.4.0-0ubuntu4+steamrt3+srt1_all";
+      sha256 = "7ec603c8b00c5573e88e1df9785af4baef93b54e377e697515eb939b7c119cdc";
+      url = "mirror://steamrt/pool/main/z/zenity/zenity-common_3.4.0-0ubuntu4+steamrt3+srt1_all.deb";
       source = fetchurl {
         inherit url sha256;
         name = "zenity-common.deb";
@@ -2184,6 +2202,15 @@
       };
     }
     rec {
+      name = "libatomic1_5.4.0-7.really.6+steamrt1.2+srt2_i386";
+      sha256 = "aafd5b3b573f22562e3f93bfa449ca374e2788fb14d555193c5c57e996def8fb";
+      url = "mirror://steamrt/pool/main/g/gcc-5/libatomic1_5.4.0-7.really.6+steamrt1.2+srt2_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libatomic1.deb";
+      };
+    }
+    rec {
       name = "libattr1_2.4.46-5ubuntu1+steamrt1.1+srt2_i386";
       sha256 = "bcea5d6f2743c617dac44c4d836b6937a64816f3c288a56b656ee4adbf63714a";
       url = "mirror://steamrt/pool/main/a/attr/libattr1_2.4.46-5ubuntu1+steamrt1.1+srt2_i386.deb";
@@ -2298,6 +2325,15 @@
       source = fetchurl {
         inherit url sha256;
         name = "libcap2.deb";
+      };
+    }
+    rec {
+      name = "libcapsule-tools-relocatable_0.20190926.0-0co1+srt1_i386";
+      sha256 = "5ce9e11e0204db54cecb59b59b1c6fc6bd5e4aefe73a327dbb85283b08591428";
+      url = "mirror://steamrt/pool/main/libc/libcapsule/libcapsule-tools-relocatable_0.20190926.0-0co1+srt1_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libcapsule-tools-relocatable.deb";
       };
     }
     rec {
@@ -2724,6 +2760,15 @@
       };
     }
     rec {
+      name = "libitm1_5.4.0-7.really.6+steamrt1.2+srt2_i386";
+      sha256 = "188591aec152ece7b33b765079593a110a005046977d15794d5cc3be5b3381c7";
+      url = "mirror://steamrt/pool/main/g/gcc-5/libitm1_5.4.0-7.really.6+steamrt1.2+srt2_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libitm1.deb";
+      };
+    }
+    rec {
       name = "libjack-jackd2-0_1.9.8~dfsg.1-1ubuntu2+srt5_i386";
       sha256 = "a59a4de570335899d10f36b4b9552ee894fc0bb21c4ee4e06ed689f3fa55c2e6";
       url = "mirror://steamrt/pool/main/j/jackd2/libjack-jackd2-0_1.9.8~dfsg.1-1ubuntu2+srt5_i386.deb";
@@ -3048,6 +3093,15 @@
       };
     }
     rec {
+      name = "libquadmath0_5.4.0-7.really.6+steamrt1.2+srt2_i386";
+      sha256 = "58f646279972a537cf838fc935f9f37285e5255604d7b5c1e034644e77d3e25b";
+      url = "mirror://steamrt/pool/main/g/gcc-5/libquadmath0_5.4.0-7.really.6+steamrt1.2+srt2_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libquadmath0.deb";
+      };
+    }
+    rec {
       name = "libroken18-heimdal_1.6~git20120311.dfsg.1-2+srt6_i386";
       sha256 = "8827d782d8fedf7fe0285bbab14914e61d2ac5fe5e7ea297fbff916c7fd73939";
       url = "mirror://steamrt/pool/main/h/heimdal/libroken18-heimdal_1.6~git20120311.dfsg.1-2+srt6_i386.deb";
@@ -3246,27 +3300,27 @@
       };
     }
     rec {
-      name = "libsteam-runtime-tools-0-0_0.20200109.0-0+steamrt1.1+srt1_i386";
-      sha256 = "dfd80854857cdbc764f799f34acd7f37a4c3e773c4ba5c7c81394071148a140f";
-      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-0_0.20200109.0-0+steamrt1.1+srt1_i386.deb";
+      name = "libsteam-runtime-tools-0-0_0.20200415.0+srt1_i386";
+      sha256 = "7da98a9a206829dbf5cc95570049502d1cf8dd2a2234a981787f14cc098c1739";
+      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-0_0.20200415.0+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libsteam-runtime-tools-0-0.deb";
       };
     }
     rec {
-      name = "libsteam-runtime-tools-0-helpers_0.20200109.0-0+steamrt1.1+srt1_i386";
-      sha256 = "f2c5fc6abcc3a938e2a0b27e8682b56944a2a61416e8d0edb5878af2e16c98cb";
-      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-helpers_0.20200109.0-0+steamrt1.1+srt1_i386.deb";
+      name = "libsteam-runtime-tools-0-helpers_0.20200415.0+srt1_i386";
+      sha256 = "bf06ad0ef0d5c80ddff53c58e4397c87fd655e1913ecf48a29560d27719b4d71";
+      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-helpers_0.20200415.0+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libsteam-runtime-tools-0-helpers.deb";
       };
     }
     rec {
-      name = "libsteam-runtime-tools-0-relocatable-libs_0.20200109.0-0+steamrt1.1+srt1_i386";
-      sha256 = "c06ea7ec21d2114925c09d5245e87482c81cc4e1928ed31827ab58cb094721ae";
-      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-relocatable-libs_0.20200109.0-0+steamrt1.1+srt1_i386.deb";
+      name = "libsteam-runtime-tools-0-relocatable-libs_0.20200415.0+srt1_i386";
+      sha256 = "79e3b5b5a2904daccb17f5f54e3a87842dd9408fe04a8fee8d4ee83c3a3c0bcf";
+      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/libsteam-runtime-tools-0-relocatable-libs_0.20200415.0+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libsteam-runtime-tools-0-relocatable-libs.deb";
@@ -3498,18 +3552,18 @@
       };
     }
     rec {
-      name = "libvulkan1_1.2.135~srt-0+steamrt1.1+srt1_i386";
-      sha256 = "ac161149e1106247de706788a7ea29dbe5e3c17c2b8aedf97ec892b311abbb75";
-      url = "mirror://steamrt/pool/main/v/vulkan-loader/libvulkan1_1.2.135~srt-0+steamrt1.1+srt1_i386.deb";
+      name = "libvulkan1_1.2.135.0-1~steamrt1.1+srt1_i386";
+      sha256 = "dd6167b259a8ec4c927f3fa710d01456321b3ff40f6daa3383ec353866615aaa";
+      url = "mirror://steamrt/pool/main/v/vulkan-loader/libvulkan1_1.2.135.0-1~steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libvulkan1.deb";
       };
     }
     rec {
-      name = "libwaffle-1-0_1.6.0-2~steamrt1.3+srt1_i386";
-      sha256 = "875ebdcc60fd8be86b6e83a2155bea69aa3ef7442d60eef277bcdf814c663452";
-      url = "mirror://steamrt/pool/main/w/waffle/libwaffle-1-0_1.6.0-2~steamrt1.3+srt1_i386.deb";
+      name = "libwaffle-1-0_1.6.1-0+steamrt1.1+srt1_i386";
+      sha256 = "06f22a35ca49969e44f1bdaca82a1d085e69211bf3b39915d77d80f414ea8668";
+      url = "mirror://steamrt/pool/main/w/waffle/libwaffle-1-0_1.6.1-0+steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libwaffle-1-0.deb";
@@ -3966,27 +4020,27 @@
       };
     }
     rec {
-      name = "steam-runtime-tools-bin_0.20200109.0-0+steamrt1.1+srt1_i386";
-      sha256 = "52e587b75463b08e0e903e30cd4b836bd4e39ead8d556807e5628eff36fdc477";
-      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/steam-runtime-tools-bin_0.20200109.0-0+steamrt1.1+srt1_i386.deb";
+      name = "steam-runtime-tools-bin_0.20200415.0+srt1_i386";
+      sha256 = "3ea27a32f19f6e5133385fe4072f3d9a027c4f83604355baa34cf3ae5e346db5";
+      url = "mirror://steamrt/pool/main/s/steam-runtime-tools/steam-runtime-tools-bin_0.20200415.0+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "steam-runtime-tools-bin.deb";
       };
     }
     rec {
-      name = "steamrt-legacy_1.20200128.0+srt1_i386";
-      sha256 = "3adf8b89ac83f12eeb431785bd18a569b1174bc81aa24d5c562687b823704f28";
-      url = "mirror://steamrt/pool/main/s/steamrt/steamrt-legacy_1.20200128.0+srt1_i386.deb";
+      name = "steamrt-legacy_1.20200421.0+srt1_i386";
+      sha256 = "08371f2a03aacd50f578b7aca4e6934fc60b9db1927e9eb3c8f1a5f6421e79e5";
+      url = "mirror://steamrt/pool/main/s/steamrt/steamrt-legacy_1.20200421.0+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "steamrt-legacy.deb";
       };
     }
     rec {
-      name = "steamrt-libs_1.20200128.0+srt1_i386";
-      sha256 = "8ad6092d1b4d257883ca4f3fac8ee5b9a71413c8bdbc149a9bec843047867311";
-      url = "mirror://steamrt/pool/main/s/steamrt/steamrt-libs_1.20200128.0+srt1_i386.deb";
+      name = "steamrt-libs_1.20200421.0+srt1_i386";
+      sha256 = "0f84ef7ebea603df58d4549a8368a51ceb3989d136174870bfd4c2ed50a13195";
+      url = "mirror://steamrt/pool/main/s/steamrt/steamrt-libs_1.20200421.0+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "steamrt-libs.deb";
@@ -4029,72 +4083,54 @@
       };
     }
     rec {
-      name = "vulkan-tools_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386";
-      sha256 = "6a8576cc6fadc4d18c97b100dc24bad1906f6f56cab024997787355025695df4";
-      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386.deb";
+      name = "vulkan-tools_1.2.135.0+dfsg1-1~steamrt1.1+srt1_i386";
+      sha256 = "1a252f79e90034726d80e49ab892ddfd504fa32dfef93887ed2c6e6e83e77248";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools_1.2.135.0+dfsg1-1~steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "vulkan-tools.deb";
       };
     }
     rec {
-      name = "vulkan-tools-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386";
-      sha256 = "fae0430f540c71bd8f6ab3099f8aa132d2eda858b66facf3d8a586ab38cffde6";
-      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386.deb";
+      name = "vulkan-tools-multiarch_1.2.135.0+dfsg1-1~steamrt1.1+srt1_i386";
+      sha256 = "f7f68aefcb4f45f855949ad84463c68071595568db27480d3df3ed9be5683b5f";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools-multiarch_1.2.135.0+dfsg1-1~steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "vulkan-tools-multiarch.deb";
       };
     }
     rec {
-      name = "vulkan-utils_1.2.131.1+dfsg1-1+steamrt1.1+srt1_all";
-      sha256 = "f10004e20ed5fc93edf035f8f34bb9f8307eb34974a3ed5aae9ba87f00a2c468";
-      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-utils_1.2.131.1+dfsg1-1+steamrt1.1+srt1_all.deb";
-      source = fetchurl {
-        inherit url sha256;
-        name = "vulkan-utils.deb";
-      };
-    }
-    rec {
-      name = "vulkan-utils-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386";
-      sha256 = "f81b81ef14f11662d2d5e5a7f688c2ef4f9ad9625ec5e59de91aab3f1ad45406";
-      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-utils-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386.deb";
-      source = fetchurl {
-        inherit url sha256;
-        name = "vulkan-utils-multiarch.deb";
-      };
-    }
-    rec {
-      name = "waffle-utils_1.6.0-2~steamrt1.3+srt1_i386";
-      sha256 = "37df214d4f0fd1c5e9afce405756fc1615f2d5cba468b34569b13f3e8a08a2a5";
-      url = "mirror://steamrt/pool/main/w/waffle/waffle-utils_1.6.0-2~steamrt1.3+srt1_i386.deb";
+      name = "waffle-utils_1.6.1-0+steamrt1.1+srt1_i386";
+      sha256 = "c88c88a12f5a9486a20275624c45ab7ac2170e846ea1368d1180e7b39c9d586f";
+      url = "mirror://steamrt/pool/main/w/waffle/waffle-utils_1.6.1-0+steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "waffle-utils.deb";
       };
     }
     rec {
-      name = "waffle-utils-multiarch_1.6.0-2~steamrt1.3+srt1_i386";
-      sha256 = "5866f8bf43b6c19608670a8c565ce8f0dac9db9c943e65ac25e9cb4f951997a4";
-      url = "mirror://steamrt/pool/main/w/waffle/waffle-utils-multiarch_1.6.0-2~steamrt1.3+srt1_i386.deb";
+      name = "waffle-utils-multiarch_1.6.1-0+steamrt1.1+srt1_i386";
+      sha256 = "9aa2ee8c466c343dda5c8db9465238eb5f4cb55b5cfcfca8a3c109ba1d6c6d65";
+      url = "mirror://steamrt/pool/main/w/waffle/waffle-utils-multiarch_1.6.1-0+steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "waffle-utils-multiarch.deb";
       };
     }
     rec {
-      name = "zenity_3.4.0-0ubuntu4+steamrt2+srt6_i386";
-      sha256 = "1c772d4f96424d204ab4913efcafbe43518257ca5032ca7b23d6c6ab76439117";
-      url = "mirror://steamrt/pool/main/z/zenity/zenity_3.4.0-0ubuntu4+steamrt2+srt6_i386.deb";
+      name = "zenity_3.4.0-0ubuntu4+steamrt3+srt1_i386";
+      sha256 = "b8b0d0781ed2e59ac22af8006e61323a5f1f5be44d47e0fea0ca32e8c575528d";
+      url = "mirror://steamrt/pool/main/z/zenity/zenity_3.4.0-0ubuntu4+steamrt3+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "zenity.deb";
       };
     }
     rec {
-      name = "zenity-common_3.4.0-0ubuntu4+steamrt2+srt6_all";
-      sha256 = "bc8f0b80672833be72c6dd87d406b5fc0ef92e51f91e3a461678fc97844649bc";
-      url = "mirror://steamrt/pool/main/z/zenity/zenity-common_3.4.0-0ubuntu4+steamrt2+srt6_all.deb";
+      name = "zenity-common_3.4.0-0ubuntu4+steamrt3+srt1_all";
+      sha256 = "7ec603c8b00c5573e88e1df9785af4baef93b54e377e697515eb939b7c119cdc";
+      url = "mirror://steamrt/pool/main/z/zenity/zenity-common_3.4.0-0ubuntu4+steamrt3+srt1_all.deb";
       source = fetchurl {
         inherit url sha256;
         name = "zenity-common.deb";

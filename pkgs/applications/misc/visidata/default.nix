@@ -43,7 +43,7 @@ buildPythonApplication rec {
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin;
     homepage = "http://visidata.org/";
   };
 }

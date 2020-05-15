@@ -1,19 +1,17 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage {
+buildGoPackage rec {
   pname = "gox";
-  version = "20181025";
+  version = "1.0.1";
 
   goPackagePath = "github.com/mitchellh/gox";
 
   src = fetchFromGitHub {
     owner = "mitchellh";
     repo = "gox";
-    rev = "9cc487598128d0963ff9dcc51176e722788ec645";
-    sha256 = "18indkdwq2m1wy95d71lgbf46jxxrfc5km1fys5laapz993h77v6";
+    rev = "v${version}";
+    sha256 = "0mkh81hd7kn45dz7b6yhzqsg2mvg1g6pwx89jjigxrnqhyg9vrl7";
   };
-
-  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mitchellh/gox";
@@ -21,5 +19,4 @@ buildGoPackage {
     platforms = platforms.all;
     license = licenses.mpl20;
   };
-
 }

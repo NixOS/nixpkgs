@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "EasyProcess";
-  version = "0.2.8";
+  version = "0.2.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "da7f67a006e2eb63d86a8f3f4baa9d6752dab9676009a67193a4e433f2f41c2a";
+    sha256 = "06zaxydyqvb5mk5kxs6y3pjbq5nm6lmi3h5g3y41xpic48q5wsv3";
   };
 
   # No tests

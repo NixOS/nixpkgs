@@ -16,7 +16,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = https://github.com/c-cube/ocaml-bigstring;
+    homepage = "https://github.com/c-cube/ocaml-bigstring";
     description = "Bigstring built on top of bigarrays, and convenient functions";
     license = licenses.bsd2;
     maintainers = [ maintainers.alexfmpe ];

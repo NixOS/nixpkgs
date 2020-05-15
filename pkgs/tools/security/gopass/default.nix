@@ -1,10 +1,15 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, wl-clipboard, installShellFiles, makeWrapper }:
+{ stdenv, makeWrapper
+, buildGoModule, fetchFromGitHub, installShellFiles
+, git
+, gnupg
+, xclip
+, wl-clipboard
+, passAlias ? false
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gopass";
-  version = "1.8.6";
-
-  goPackagePath = "github.com/gopasspw/gopass";
+  version = "1.9.2";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -12,8 +17,12 @@ buildGoPackage rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0v3sx9hb03bdn4rvsv2r0jzif6p1rx47hrkpsbnwva31k396mck2";
+    sha256 = "066dphw8xq0g72kj64sdai2yyllnr6ca27bfy5sxhk8x69j97rvz";
   };
+
+  vendorSha256 = "1wn20bh7ma4pblsf6qnlbz5bx4p9apig3d1yz7cpsqv4z3w07baw";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
 
   wrapperPath = stdenv.lib.makeBinPath ([
     git
@@ -23,13 +32,15 @@ buildGoPackage rec {
 
   postInstall = ''
     for shell in bash fish zsh; do
-      $bin/bin/gopass completion $shell > gopass.$shell
+      $out/bin/gopass completion $shell > gopass.$shell
       installShellCompletion gopass.$shell
     done
+  '' + stdenv.lib.optionalString passAlias ''
+    ln -s $out/bin/gopass $out/bin/pass
   '';
 
   postFixup = ''
-    wrapProgram $bin/bin/gopass \
+    wrapProgram $out/bin/gopass \
       --prefix PATH : "${wrapperPath}"
   '';
 
@@ -37,7 +48,7 @@ buildGoPackage rec {
     description     = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go.";
     homepage        = "https://www.gopass.pw/";
     license         = licenses.mit;
-    maintainers     = with maintainers; [ andir ];
+    maintainers     = with maintainers; [ andir rvolosatovs ];
     platforms       = platforms.unix;
 
     longDescription = ''

@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions"
   ];
 
+  uuid = "dash-to-dock@micxgx.gmail.com";
+
   meta = with stdenv.lib; {
     description = "A dock for the Gnome Shell";
     homepage = "https://micheleg.github.io/dash-to-dock/";

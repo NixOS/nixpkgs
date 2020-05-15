@@ -16,6 +16,7 @@
 , python3
 , cmake
 
+, runCommand
 , writeText
 , nixosTests
 , useOperatingSystemEtc ? true
@@ -97,7 +98,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.1.1";
+    version = "3.1.2";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -107,7 +108,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.gz";
-      sha256 = "1f12c56v7n4s0f9mi9xinviwj6kpwlcjwaig1d4vsk5wlgp7ip07";
+      sha256 = "1vblmb3x2k2cb0db5jdyflppnlqsm7i6jjaidyhmvaaw7ch2gffm";
     };
 
     # We don't have access to the codesign executable, so we patch this out.
@@ -197,43 +198,46 @@ let
       homepage = "http://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ocharles cole-h ];
     };
 
     passthru = {
       shellPath = "/bin/fish";
-      tests.nixos = nixosTests.fish;
+      tests = {
+        nixos = nixosTests.fish;
+
+        # Test the fish_config tool by checking the generated splash page.
+        # Since the webserver requires a port to run, it is not started.
+        fishConfig =
+          let fishScript = writeText "test.fish" ''
+            set -x __fish_bin_dir ${fish}/bin
+            echo $__fish_bin_dir
+            cp -r ${fish}/share/fish/tools/web_config/* .
+            chmod -R +w *
+
+            # if we don't set `delete=False`, the file will get cleaned up
+            # automatically (leading the test to fail because there's no
+            # tempfile to check)
+            sed -e "s@, mode='w'@, mode='w', delete=False@" -i webconfig.py
+
+            # we delete everything after the fileurl is assigned
+            sed -e '/fileurl =/q' -i webconfig.py
+            echo "print(fileurl)" >> webconfig.py
+
+            # and check whether the message appears on the page
+            cat (${python3}/bin/python ./webconfig.py \
+              | tail -n1 | sed -ne 's|.*\(/build/.*\)|\1|p' \
+            ) | grep 'a href="http://localhost.*Start the Fish Web config'
+
+            # cannot test the http server because it needs a localhost port
+          '';
+          in
+          runCommand "test-web-config" { } ''
+            HOME=$(mktemp -d)
+            ${fish}/bin/fish ${fishScript} && touch $out
+          '';
+      };
     };
   };
-
-  tests = {
-
-    # Test the fish_config tool by checking the generated splash page.
-    # Since the webserver requires a port to run, it is not started.
-    fishConfig =
-      let
-        fishScript = writeText "test.fish" ''
-          set -x __fish_bin_dir ${fish}/bin
-          echo $__fish_bin_dir
-          cp -r ${fish}/share/fish/tools/web_config/* .
-          chmod -R +w *
-          # we delete everything after the fileurl is assigned
-          sed -e '/fileurl =/q' -i webconfig.py
-          echo "print(fileurl)" >> webconfig.py
-          # and check whether the message appears on the page
-          cat (${python3}/bin/python ./webconfig.py \
-            | tail -n1 | sed -ne 's|.*\(/tmp/.*\)|\1|p' \
-          ) | grep 'a href="http://localhost.*Start the Fish Web config'
-
-          # cannot test the http server because it needs a localhost port
-        '';
-      in ''
-        HOME=$(mktemp -d)
-        ${fish}/bin/fish ${fishScript}
-      '';
-  };
-
-  # FIXME(Profpatsch) replace withTests stub
-  withTests = with lib; flip const;
 in
-withTests tests fish
+fish

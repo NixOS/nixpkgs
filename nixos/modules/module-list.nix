@@ -200,6 +200,7 @@
   ./security/rtkit.nix
   ./security/wrappers/default.nix
   ./security/sudo.nix
+  ./security/doas.nix
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
   ./services/admin/oxidized.nix
@@ -791,6 +792,7 @@
   ./services/security/nginx-sso.nix
   ./services/security/oauth2_proxy.nix
   ./services/security/oauth2_proxy_nginx.nix
+  ./services/security/privacyidea.nix
   ./services/security/physlock.nix
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
@@ -984,9 +986,9 @@
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
   ./virtualisation/nixos-containers.nix
+  ./virtualisation/oci-containers.nix
   ./virtualisation/cri-o.nix
   ./virtualisation/docker.nix
-  ./virtualisation/docker-containers.nix
   ./virtualisation/ecs-agent.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix

@@ -15,7 +15,6 @@ mountPoint=/mnt
 channelPath=
 system=
 verbosity=()
-buildLogs=
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -60,9 +59,6 @@ while [ "$#" -gt 0 ]; do
         -v*|--verbose)
             verbosity+=("$i")
             ;;
-        -L|--print-build-logs)
-            buildLogs="$i"
-            ;;
         *)
             echo "$0: unknown option \`$i'"
             exit 1
@@ -91,8 +87,11 @@ if [[ ! -e $NIXOS_CONFIG && -z $system ]]; then
 fi
 
 # A place to drop temporary stuff.
+tmpdir="$(mktemp -d -p $mountPoint)"
 trap "rm -rf $tmpdir" EXIT
-tmpdir="$(mktemp -d)"
+
+# store temporary files on target filesystem by default
+export TMPDIR=${TMPDIR:-$tmpdir}
 
 sub="auto?trusted=1"
 
@@ -100,9 +99,9 @@ sub="auto?trusted=1"
 if [[ -z $system ]]; then
     echo "building the configuration in $NIXOS_CONFIG..."
     outLink="$tmpdir/system"
-    nix build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
+    nix-build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
-        -f '<nixpkgs/nixos>' system -I "nixos-config=$NIXOS_CONFIG" ${verbosity[@]} ${buildLogs}
+        '<nixpkgs/nixos>' -A system -I "nixos-config=$NIXOS_CONFIG" ${verbosity[@]}
     system=$(readlink -f $outLink)
 fi
 

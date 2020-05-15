@@ -515,10 +515,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0r0qpgf80h764k176yr63gqbs2z0xbsp8vlvs2a79d5r9vs83kln";
+      sha256 = "12j76d0bp608932xkzmfi638c7aqah57l437q8494znzbj610qnm";
       type = "gem";
     };
-    version = "1.10.7";
+    version = "1.10.9";
   };
   nokogumbo = {
     dependencies = ["nokogiri"];

@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, gtk3, xcursorgen, papirus-icon-theme, deepin, hicolor-icon-theme }:
+{ stdenv
+, fetchFromGitHub
+, gtk3
+, xcursorgen
+, papirus-icon-theme
+, deepin
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-icon-theme";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "12rzzjp906np95ckbxrd4mb345lm198wz69kxy48f8q1zg78q8iw";
   };
 
-  nativeBuildInputs = [ gtk3 xcursorgen ];
+  nativeBuildInputs = [
+    gtk3
+    xcursorgen
+  ];
 
   propagatedBuildInputs = [
     papirus-icon-theme
@@ -38,7 +48,7 @@ stdenv.mkDerivation rec {
     cp -a ./Sea ./usr/share/icons/hicolor "$out"/share/icons/
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Icons for the Deepin Desktop Environment";

@@ -80,7 +80,6 @@ mkDerivation rec {
     homepage = "http://openscad.org/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers;
-      [ bjornfor raskin the-kenny gebner ];
+    maintainers = with stdenv.lib.maintainers; [ bjornfor raskin gebner ];
   };
 }

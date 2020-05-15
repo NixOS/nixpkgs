@@ -1,29 +1,26 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, terraform, makeWrapper }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, terraform, makeWrapper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "terragrunt";
-  version = "0.23.2";
+  version = "0.23.14";
 
-  goPackagePath = "github.com/gruntwork-io/terragrunt";
-
-  src = fetchFromGitHub {
-    owner  = "gruntwork-io";
-    repo   = "terragrunt";
-    rev    = "v${version}";
-    sha256 = "1r3q7faxys0h147cr9154pcix1qgj36v41ja9hhbggm4c7vig4s1";
+   src = fetchFromGitHub {
+    owner = "gruntwork-io";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1znb9d4n9zv3dq10dw17kb1h04gj8iz6gwx1a741fcf4ygp8zpy1";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "0h737h25f80zfx84vm6ry0581c32ylcb5h9givqk5k5kh5qgkbgx";
 
   buildInputs = [ makeWrapper ];
 
   preBuild = ''
-    find go/src -name vendor | xargs -I % sh -c 'echo Removing %; rm -rf %'
     buildFlagsArray+=("-ldflags" "-X main.VERSION=v${version}")
   '';
 
   postInstall = ''
-    wrapProgram $bin/bin/terragrunt \
+    wrapProgram $out/bin/terragrunt \
       --set TERRAGRUNT_TFPATH ${lib.getBin terraform.full}/bin/terraform
   '';
 

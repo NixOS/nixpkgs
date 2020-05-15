@@ -1,22 +1,31 @@
 { stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
 , xapian, glib, gmime3, texinfo , emacs, guile
 , gtk3, webkitgtk, libsoup, icu
-, withMug ? false }:
+, withMug ? false
+, batchSize ? null }:
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.4.1";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "0q2ik7fj5k9i76js4ijyxbgrwqff437lass0sd5if2r40rqh0as0";
+    sha256 = "18y672cqaicp30zymxr88spmzcn0x7rcv14nbdmd8hzp52rscpj7";
   };
 
+  postPatch = stdenv.lib.optionalString (batchSize != null) ''
+    sed -i lib/mu-store.cc --regexp-extended \
+      -e 's@(constexpr auto BatchSize).*@\1 = ${toString batchSize};@'
+  '';
+
   buildInputs = [
-    sqlite xapian glib gmime3 texinfo emacs guile libsoup icu
-  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk ];
+    sqlite xapian glib gmime3 texinfo emacs libsoup icu
+  ]
+    # Workaround for https://github.com/djcb/mu/issues/1641
+    ++ stdenv.lib.optional (!stdenv.isDarwin) guile
+    ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
 
@@ -41,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "A collection of utilties for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
-    maintainers = with maintainers; [ antono the-kenny peterhoeg ];
+    maintainers = with maintainers; [ antono peterhoeg ];
     platforms = platforms.mesaPlatforms;
   };
 }

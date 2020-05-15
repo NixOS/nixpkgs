@@ -1,13 +1,42 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, alsaLib,
-  coreutils, dbus-factory, dde-api, dde-daemon, dde-dock,
-  dde-file-manager, dde-polkit-agent, dde-session-ui, deepin,
-  deepin-desktop-base, deepin-desktop-schemas, deepin-turbo,
-  dde-kwin, glib, gnome3, go, go-dbus-factory, go-gir-generator,
-  go-lib, gtk3, jq, kmod, libX11, libXi, libcgroup, pciutils, psmisc,
-  pulseaudio, systemd, xorg, wrapGAppsHook }:
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, pkgconfig
+, alsaLib
+, coreutils
+, dbus-factory
+, dde-api
+, dde-daemon
+, dde-dock
+, dde-file-manager
+, dde-polkit-agent
+, dde-session-ui
+, deepin
+, deepin-desktop-base
+, deepin-desktop-schemas
+, deepin-turbo
+, dde-kwin
+, glib
+, gnome3
+, go
+, go-dbus-factory
+, go-gir-generator
+, go-lib
+, gtk3
+, jq
+, kmod
+, libX11
+, libXi
+, libcgroup
+, pciutils
+, psmisc
+, pulseaudio
+, systemd
+, xorg
+, wrapGAppsHook
+}:
 
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "startdde";
   version = "5.0.1";
 
@@ -21,8 +50,6 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
-
-  outputs = [ "out" ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -114,7 +141,7 @@ buildGoPackage rec {
   installPhase = ''
     make install PREFIX="$out" -C go/src/${goPackagePath}
     rm -rf $out/share/lightdm  # this is uselesss for NixOS
-    remove-references-to -t ${go} $out/bin/* $out/sbin/*
+    remove-references-to -t ${go} $out/sbin/*
   '';
 
   postFixup = ''
@@ -122,7 +149,7 @@ buildGoPackage rec {
   '';
 
   passthru = {
-    updateScript = deepin.updateScript { inherit name; };
+    updateScript = deepin.updateScript { inherit pname version src; };
     providedSessions = [ "deepin" ];
   };
 

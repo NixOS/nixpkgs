@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "azure-identity";
-  version = "1.3.0";
+  version = "1.3.1";
   disabled = isPy38;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "17fa904e0447fd2a2dc19909379edb769b05656dbaf4863b8c4fdfb2bb54350c";
+    sha256 = "5a59c36b4b05bdaec455c390feda71b6495fc828246593404351b9a41c2e877a";
   };
 
   propagatedBuildInputs = [

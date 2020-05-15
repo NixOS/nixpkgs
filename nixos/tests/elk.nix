@@ -101,6 +101,7 @@ let
                       prefixed indices. Ignore the error if the filter does not result in an
                       actionable list of indices (ignore_empty_list) and exit cleanly.
                     options:
+                      allow_ilm_indices: true
                       ignore_empty_list: True
                       disable_action: False
                     filters:

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+    homepage = "https://www.alsa-project.org/";
     description = "ALSA Use Case Manager configuration";
 
     longDescription = ''

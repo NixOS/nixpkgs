@@ -328,7 +328,6 @@ let
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = [ pkgs.postgresql pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
-    rPython = [ pkgs.python ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
@@ -425,7 +424,6 @@ let
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
     tcltk2 = [ pkgs.tcl pkgs.tk ];
     tikzDevice = [ pkgs.which pkgs.texlive.combined.scheme-medium ];
-    rPython = [ pkgs.which ];
     gridGraphics = [ pkgs.which ];
     adimpro = [ pkgs.which pkgs.xorg.xdpyinfo ];
     mzR = [ pkgs.netcdf ];
@@ -446,6 +444,8 @@ let
     sundialr = [ pkgs.libiconv ];
     ucminf = [ pkgs.libiconv ];
     glmnet = [ pkgs.libiconv ];
+    mvtnorm = [ pkgs.libiconv ];
+    statmod = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [

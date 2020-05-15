@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   pname = "fmt";
   version = "6.2.0";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "fmtlib";
     repo = "fmt";
@@ -19,9 +21,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/fmtlib/fmt/commit/7d01859ef16e6b65bc023ad8bebfedecb088bf81.patch";
       sha256 = "vdttRGgdltabeRAs4/z0BNtW2dLOhCxtXQFGVFKpEG0=";
     })
-  ];
 
-  outputs = [ "out" "dev" ];
+    # Fix paths in pkg-config file
+    # https://github.com/fmtlib/fmt/pull/1657
+    (fetchpatch {
+      url = "https://github.com/fmtlib/fmt/commit/78f041ab5b40a1145ba686aeb8013e8788b08cd2.patch";
+      sha256 = "hjE6Q/ubA4UhvuJXgcsA3wiGoDK031P19njQRL9JF8M=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

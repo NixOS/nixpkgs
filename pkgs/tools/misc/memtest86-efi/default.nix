@@ -1,4 +1,10 @@
-{ fetchzip, lib, p7zip, stdenv }:
+{ stdenv
+, lib
+, fetchzip
+, utillinux
+, jq
+, mtools
+}:
 
 stdenv.mkDerivation rec {
   pname = "memtest86-efi";
@@ -22,19 +28,28 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ p7zip ];
+  nativeBuildInputs = [
+    utillinux
+    jq
+    mtools
+  ];
 
   installPhase = ''
-    mkdir -p $out
-
     # memtest86 is distributed as a bootable USB image.  It contains the actual
     # memtest86 EFI app.
     #
-    # The following command uses p7zip to extract the actual EFI app from the
-    # usb image so that it can be installed directly on the hard drive.
-    7z x -o$TEMP/temp-efi-dirs $src/memtest86-usb.img
-    7z x -o$TEMP/memtest86-files $TEMP/temp-efi-dirs/EFI\ System\ Partition.img
-    cp -r $TEMP/memtest86-files/EFI/BOOT/* $out/
+    # The following uses sfdisk to calculate the offset of the FAT EFI System
+    # Partition in the disk image, and mcopy to extract the actual EFI app from
+    # the filesystem so that it can be installed directly on the hard drive.
+    IMG=$src/memtest86-usb.img
+    ESP_OFFSET=$(sfdisk --json $IMG | jq -r '
+      # Partition type GUID identifying EFI System Partitions
+      def ESP_GUID: "C12A7328-F81F-11D2-BA4B-00A0C93EC93B";
+      .partitiontable |
+      .sectorsize * (.partitions[] | select(.type == ESP_GUID) | .start)
+    ')
+    mkdir $out
+    mcopy -vsi $IMG@@$ESP_OFFSET ::'/EFI/BOOT/*' $out/
   '';
 
   meta = with lib; {

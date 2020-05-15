@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "PyGithub";
-  version = "1.47";
+  version = "1.51";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
     rev = "v${version}";
-    sha256 = "0zvp1gib2lryw698vxkbdv40n3lsmdlhwp7vdcg41dqqa5nfryhn";
+    hash = "sha256-8uQCFiw1ByPOX8ZRUlSLYPIibjmd19r/JtTnmQdz5cM=";
   };
 
   checkInputs = [ httpretty parameterized pytestCheckHook ];

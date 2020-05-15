@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, garmintools, libgcrypt, libusb, pkgconfig, tinyxml, zlib }:
+{ stdenv, fetchurl, garmintools, libgcrypt, libusb-compat-0_1, pkgconfig, tinyxml, zlib }:
 stdenv.mkDerivation {
   name = "garmin-plugin-0.3.26";
   src = fetchurl {
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   };
   sourceRoot = "GarminPlugin-0.3.26/src";
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ garmintools libusb libgcrypt tinyxml zlib ];
+  buildInputs = [ garmintools libusb-compat-0_1 libgcrypt tinyxml zlib ];
   configureFlags = [
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-garmintools-incdir=${garmintools}/include"

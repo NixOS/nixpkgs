@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libusb }:
+{ stdenv, fetchurl, unzip, libusb-compat-0_1 }:
 
 let
   arch = if stdenv.hostPlatform.system == "i686-linux" then "32"
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp -r proprietary/*.bundle $out/pcsc/drivers
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [ libusb ];
+  libPath = stdenv.lib.makeLibraryPath [ libusb-compat-0_1 ];
 
   fixupPhase = ''
     patchelf --set-rpath $libPath \

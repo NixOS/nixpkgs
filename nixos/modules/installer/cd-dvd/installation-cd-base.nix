@@ -1,7 +1,7 @@
 # This module contains the basic configuration for building a NixOS
 # installation CD.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -14,6 +14,9 @@ with lib;
       ../../profiles/base.nix
       ../../profiles/installation-device.nix
     ];
+
+  # Adds terminus_font for people with HiDPI displays
+  console.packages = options.console.packages.default ++ [ pkgs.terminus_font ];
 
   # ISO naming.
   isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.iso";

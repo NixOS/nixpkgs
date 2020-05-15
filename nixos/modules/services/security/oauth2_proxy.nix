@@ -577,7 +577,7 @@ in
       serviceConfig = {
         User = "oauth2_proxy";
         Restart = "always";
-        ExecStart = "${cfg.package.bin}/bin/oauth2_proxy ${configString}";
+        ExecStart = "${cfg.package}/bin/oauth2_proxy ${configString}";
         EnvironmentFile = mkIf (cfg.keyFile != null) cfg.keyFile;
       };
     };

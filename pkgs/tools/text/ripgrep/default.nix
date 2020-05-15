@@ -1,9 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , rustPlatform
-, asciidoc
-, docbook_xsl
-, libxslt
+, asciidoctor
 , installShellFiles
 , Security
 , withPCRE2 ? true
@@ -12,27 +10,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "12.0.1";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    sha256 = "1c0v51s05kbg9825n6mvpizhkkgz38wl7hp8f3vzbjfg4i8l8wb0";
+    sha256 = "1vgkk78c25ia9y4q5psrh7xrlbfdn7dz7bc20kci40n8zr0vjwww";
   };
 
-  cargoSha256 = "0i8x2xgri8f8mzrlkc8l2yzcgczl35nw4bmwg09d343mjkmk6d8y";
+  cargoSha256 = "143lnf4yah9ik7v8rphv7gbvr2ckhjpmy8zfgqml1n3fqxiqvxnb";
 
   cargoBuildFlags = stdenv.lib.optional withPCRE2 "--features pcre2";
 
-  nativeBuildInputs = [ asciidoc docbook_xsl libxslt installShellFiles ];
+  nativeBuildInputs = [ asciidoctor installShellFiles ];
   buildInputs = (stdenv.lib.optional withPCRE2 pcre2)
   ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   preFixup = ''
-    (cd target/release/build/ripgrep-*/out
-    installManPage rg.1
-    installShellCompletion rg.{bash,fish})
+    installManPage $releaseDir/build/ripgrep-*/out/rg.1
+
+    installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
     installShellCompletion --zsh "$src/complete/_rg"
   '';
 

@@ -2,7 +2,7 @@
 
 let
   pname = "Sylk";
-  version = "2.6.1";
+  version = "2.7.2";
 in
 
 appimageTools.wrapType2 rec {
@@ -10,7 +10,7 @@ appimageTools.wrapType2 rec {
 
   src = fetchurl {
     url = "http://download.ag-projects.com/Sylk/Sylk-${version}-x86_64.AppImage";
-    hash = "sha256:0417qk925k7p3fiq1zha9al86jrz6mqspda7mi3h9blpbyvlcy7w";
+    hash = "sha256:1hz41jan8hw56ahpaajlb1yy5zjkyxrclzmqhklm5x59b76pd0zx";
   };
 
   profile = ''

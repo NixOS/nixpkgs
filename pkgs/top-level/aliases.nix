@@ -60,6 +60,8 @@ mapAliases ({
   bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync20 = throw "bittorrentSync20 has been deprecated by resilio-sync."; # added 2019-06-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
+  buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
+  buildGo112Module = throw "buildGo112Module has been removed"; # added 2020-04-26
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   catfish = xfce.catfish; # added 2019-12-22
@@ -98,6 +100,7 @@ mapAliases ({
   devicemapper = lvm2; # added 2018-04-25
   digikam5 = digikam; # added 2017-02-18
   dmtx = dmtx-utils; # added 2018-04-25
+  dnnl = oneDNN; # added 2020-04-22
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
   double_conversion = double-conversion; # 2017-11-22
@@ -166,6 +169,7 @@ mapAliases ({
   gnuradio-rds = gr-rds; # added 2019-05-27
   gnuradio-osmosdr = gr-osmosdr; # added 2019-05-27
   gnustep-make = gnustep.make; # added 2016-7-6
+  go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
   goimports = gotools; # added 2018-09-16
@@ -250,6 +254,7 @@ mapAliases ({
   libtxc_dxtn = throw "removed 2020-03-16, now integrated in Mesa";
   libtxc_dxtn_s2tc = throw "removed 2020-03-16, now integrated in Mesa";
   libudev = udev; # added 2018-04-25
+  libusb = libusb1; # added 2020-04-28
   libsexy = throw "libsexy has been removed from nixpkgs, as it's abandoned and no package needed it."; # 2019-12-10
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   links = links2; # added 2016-01-31
@@ -270,6 +275,7 @@ mapAliases ({
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
   mariadb-client = hiPrio mariadb.client; #added 2019.07.28
+  matcha = throw "matcha was renamed to matcha-gtk-theme"; # added 2020-05-09
   matrique = spectral; # added 2020-01-27
   mbedtls_1_3 = throw "mbedtls_1_3 is end of life, see https://tls.mbed.org/kb/how-to/upgrade-2.0"; # added 2019-12-08
   mess = mame; # added 2019-10-30
@@ -335,48 +341,50 @@ mapAliases ({
   pg_tmp = ephemeralpg; # added 2018-01-16
 
   php-embed = throw ''
-    php*-embed has been dropped, you can build the same package by using
-     something similar with this following snippet:
-    (php74.override { config.php.embed = true; config.php.apxs2 = false; })
+    php*-embed has been dropped, you can build something similar
+    with the following snippet:
+    php74.override { embedSupport = true; apxs2Support = false; }
   ''; # added 2020-04-01
   php72-embed = php-embed; # added 2020-04-01
   php73-embed = php-embed; # added 2020-04-01
   php74-embed = php-embed; # added 2020-04-01
 
   phpPackages-embed = throw ''
-    php*Packages-embed has been dropped, you can build the same package by using
-     something similar with this following snippet:
-    (php74.override { config.php.embed = true; config.php.apxs2 = false; }).packages
+    php*Packages-embed has been dropped, you can build something
+    similar with the following snippet:
+    (php74.override { embedSupport = true; apxs2Support = false; }).packages
   ''; # added 2020-04-01
   php74Packages-embed = phpPackages-embed;
   php73Packages-embed = phpPackages-embed;
   php72Packages-embed = phpPackages-embed;
 
   php-unit = throw ''
-    php*-unit has been dropped, you can build the same package by using
-     something similar with this following snippet:
-    (php74.override {
-      config.php.embed = true;
-      config.php.apxs2 = false;
-      config.php.systemd = false;
-      config.php.phpdbg = false;
-      config.php.cgi = false;
-      config.php.fpm = false; })
+    php*-unit has been dropped, you can build something similar with
+    the following snippet:
+    php74.override {
+      embedSupport = true;
+      apxs2Support = false;
+      systemdSupport = false;
+      phpdbgSupport = false;
+      cgiSupport = false;
+      fpmSupport = false;
+    }
   ''; # added 2020-04-01
   php72-unit = php-unit; # added 2020-04-01
   php73-unit = php-unit; # added 2020-04-01
   php74-unit = php-unit; # added 2020-04-01
 
   phpPackages-unit = throw ''
-    php*Packages-unit has been dropped, you can build the same package by using
-     something similar with this following snippet:
+    php*Packages-unit has been dropped, you can build something
+     similar with this following snippet:
     (php74.override {
-      config.php.embed = true;
-      config.php.apxs2 = false;
-      config.php.systemd = false;
-      config.php.phpdbg = false;
-      config.php.cgi = false;
-      config.php.fpm = false; }).packages
+      embedSupport = true;
+      apxs2Support = false;
+      systemdSupport = false;
+      phpdbgSupport = false;
+      cgiSupport = false;
+      fpmSupport = false;
+    }).packages
   ''; # added 2020-04-01
   php74Packages-unit = phpPackages-unit;
   php73Packages-unit = phpPackages-unit;
@@ -526,6 +534,7 @@ mapAliases ({
   spice_gtk = spice-gtk; # added 2018-02-25
   spice_protocol = spice-protocol; # added 2018-02-25
   spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_60 instead."; # added 2019-10-16
+  spring-boot = spring-boot-cli; # added 2020-04-24
   sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   squid4 = squid;  # added 2019-08-22
@@ -569,8 +578,10 @@ mapAliases ({
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
   transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
+  trilium = throw "trilium has been removed. Please use trilium-desktop instead."; # added 2020-04-29
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
+  uberwriter = apostrophe; # added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12
@@ -597,6 +608,7 @@ mapAliases ({
   winswitch = throw "winswitch has been removed from nixpkgs."; # added 2019-12-10
   wireguard = wireguard-tools; # added 2018-05-19
   morituri = whipper; # added 2018-09-13
+  xp-pen-g430 = pentablet-driver; # added 2020-05-03
   xfceUnstable = xfce4-14; # added 2019-09-17
   xfce4-14 = xfce;
   xfce4-12 = throw "xfce4-12 has been replaced by xfce4-14"; # added 2020-03-14

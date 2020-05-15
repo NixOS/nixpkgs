@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "picard-tools";
-  version = "2.22.2";
+  version = "2.22.4";
 
   src = fetchurl {
     url = "https://github.com/broadinstitute/picard/releases/download/${version}/picard.jar";
-    sha256 = "11mzz483f89pb2s8jmwhl12d0m6k41kmi4xh0i6hq69rxrqi8l4s";
+    sha256 = "0gzna5df8nk42l7mc0qbp9h73gwr1030jnw10fawjp6ql6213kdd";
   };
 
   nativeBuildInputs = [ makeWrapper ];

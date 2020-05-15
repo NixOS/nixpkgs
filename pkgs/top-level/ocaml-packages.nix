@@ -38,19 +38,9 @@ let
 
     async_extra_p4 = callPackage ../development/ocaml-modules/async_extra { };
 
-    async_find =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async_find
-      else callPackage ../development/ocaml-modules/async_find { };
-
     async_kernel_p4 = callPackage ../development/ocaml-modules/async_kernel { };
 
     async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
-
-    async_p4 =
-      if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/async { }
-      else null;
 
     atd = callPackage ../development/ocaml-modules/atd { };
 
@@ -277,6 +267,8 @@ let
 
     farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
+    fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
+
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
 
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
@@ -305,9 +297,13 @@ let
       inherit (pkgs) gnuplot;
     };
 
+    hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
+
+    hkdf = callPackage ../development/ocaml-modules/hkdf { };
 
     hmap = callPackage ../development/ocaml-modules/hmap { };
 
@@ -397,9 +393,7 @@ let
 
     irmin-watcher = callPackage ../development/ocaml-modules/irmin-watcher { };
 
-    jingoo = callPackage ../development/ocaml-modules/jingoo {
-      pcre = ocaml_pcre;
-    };
+    jingoo = callPackage ../development/ocaml-modules/jingoo { };
 
     js_of_ocaml =
     if lib.versionOlder "4.02" ocaml.version
@@ -452,10 +446,6 @@ let
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/lablgtk-extras { }
       else callPackage ../development/ocaml-modules/lablgtk-extras/1.4.nix { };
-
-    lablgtkmathview = callPackage ../development/ocaml-modules/lablgtkmathview {
-      gtkmathview = callPackage ../development/libraries/gtkmathview { };
-    };
 
     labltk = callPackage ../development/ocaml-modules/labltk { };
 
@@ -592,8 +582,6 @@ let
     parmap = callPackage ../development/ocaml-modules/parmap { };
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
-
-    core_extended_p4 = callPackage ../development/ocaml-modules/core_extended { };
 
     core_kernel_p4 = callPackage ../development/ocaml-modules/core_kernel { };
 
@@ -743,8 +731,6 @@ let
     psq = callPackage ../development/ocaml-modules/psq { };
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
-
-    re2_p4 = callPackage ../development/ocaml-modules/re2 { };
 
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
@@ -926,16 +912,9 @@ let
     uucp = callPackage ../development/ocaml-modules/uucp { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
 
-    uri =
-      if lib.versionAtLeast ocaml.version "4.3"
-      then callPackage ../development/ocaml-modules/uri { }
-      else callPackage ../development/ocaml-modules/uri/legacy.nix { };
+    uri = callPackage ../development/ocaml-modules/uri { };
 
     uri-sexp = callPackage ../development/ocaml-modules/uri/sexp.nix { };
-
-    uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
-      legacyVersion = true;
-    };
 
     uuseg = callPackage ../development/ocaml-modules/uuseg { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
@@ -1187,26 +1166,12 @@ let
       then callPackage ../development/ocaml-modules/janestreet/core.nix {}
       else core_p4;
 
-    re2 =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.re2
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/re2.nix {}
-      else re2_p4;
-
     textutils =
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.textutils
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/textutils.nix {}
       else textutils_p4;
-
-    core_extended =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.core_extended
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/core-extended.nix {}
-      else core_extended_p4;
 
     async_kernel =
       if lib.versionOlder "4.03" ocaml.version
@@ -1233,13 +1198,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async-extra.nix {}
       else async_extra_p4;
-
-    async =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/async.nix {}
-      else async_p4;
 
     # Apps / from all-packages
 

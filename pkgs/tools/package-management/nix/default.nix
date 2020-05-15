@@ -14,6 +14,8 @@ common =
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
   , jq, libarchive, rustc, cargo
+  # Used by tests
+  , gmock
   , busybox-sandbox-shell
   , storeDir
   , stateDir
@@ -39,7 +41,8 @@ common =
 
       nativeBuildInputs =
         [ pkgconfig ]
-        ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns jq ];
+        ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt
+                                docbook5 docbook_xsl_ns jq gmock ];
 
       buildInputs =
         [ curl openssl sqlite xz bzip2 nlohmann_json
@@ -177,7 +180,7 @@ in rec {
   nixStable = callPackage common (rec {
     name = "nix-2.3.4";
     src = fetchurl {
-      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "1c626a0de0acc69830b1891ec4d3c96aabe673b2a9fd04cef84f2304d05ad00d";
     };
 
@@ -188,18 +191,18 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre7346_5e7ccdc9";
+    suffix = "pre7534_b92f58f6";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "5e7ccdc9e3ddd61dc85e20c898001345bfb497a5";
-      sha256 = "10jg0rq92xbigbbri7harn4b75blqaf6rjgq4hhvlnggf2w9iprg";
+      rev = "b92f58f6d9e44f97002d1722bd77bad939824c1c";
+      sha256 = "1p791961y5v04kpz37g6hm98f1ig7i34inxl9dcj3pbqhf5kicxg";
     };
 
     crates = fetchurl {
-      url = "https://hydra.nixos.org/build/115942497/download/1/nix-vendored-crates-2.4pre20200403_3473b19.tar.xz";
-      sha256 = "a83785553bb4bc5b28220562153e201ec555a00171466ac08b716f0c97aee45a";
+      url = "https://hydra.nixos.org/build/118797694/download/1/nix-vendored-crates-2.4pre7534_b92f58f6.tar.xz";
+      sha256 = "a4c2612bbd81732bbb899bc0c230e07b16f6b6150ffbb19c4907dedbbc2bf9fc";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -207,18 +210,18 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20200403_3473b19";
+    suffix = "pre20200501_941f952";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "3473b1950a90d596a3baa080fdfdb080f55a5cc0";
-      sha256 = "1bb7a8a5lzmb3pzq80zxd3s9y3qv757q7032s5wvp75la9wgvmvr";
+      rev = "941f95284ab57e9baa317791327cf1715d8564b5";
+      sha256 = "0d99jl5baxji5dmqb4fwmbffx0z04k0naanms5zzbwvxdmzn3yhs";
     };
 
     crates = fetchurl {
-      url = "https://hydra.nixos.org/build/115942497/download/1/nix-vendored-crates-2.4pre20200403_3473b19.tar.xz";
-      sha256 = "a83785553bb4bc5b28220562153e201ec555a00171466ac08b716f0c97aee45a";
+      url = "https://hydra.nixos.org/build/118093786/download/1/nix-vendored-crates-2.4pre20200501_941f952.tar.xz";
+      sha256 = "060f4n5srdbb8vsj0m14aqch7im79a4h5g3nrs41p1xc602vhcdl";
     };
 
     inherit storeDir stateDir confDir boehmgc;

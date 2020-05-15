@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "BINDIR=${placeholder "bin"}/bin"
+    "BINDIR=${placeholder "out"}/bin"
   ];
 
   buildPhase = ''

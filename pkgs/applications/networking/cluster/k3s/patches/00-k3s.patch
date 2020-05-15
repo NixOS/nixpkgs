@@ -55,10 +55,17 @@ index 72d3c07ece..3e5455b262 100755
  echo Building containerd-shim
  make -C ./vendor/github.com/containerd/containerd bin/containerd-shim
 diff --git a/scripts/package-cli b/scripts/package-cli
-index 4c66ce32df..6d1e0c03cb 100755
+index 4c66ce32df..280b428bb8 100755
 --- a/scripts/package-cli
 +++ b/scripts/package-cli
-@@ -55,10 +55,10 @@ LDFLAGS="
+@@ -49,16 +49,16 @@ fi
+ 
+ CMD_NAME=dist/artifacts/k3s${BIN_SUFFIX}
+ 
+-go generate
++CGO_ENABLED=0 env -u GOARCH go generate
+ LDFLAGS="
+     -X github.com/rancher/k3s/pkg/version.Version=$VERSION
      -X github.com/rancher/k3s/pkg/version.GitCommit=${COMMIT:0:8}
      -w -s
  "

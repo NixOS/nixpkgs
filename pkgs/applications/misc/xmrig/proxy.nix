@@ -1,20 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, libuuid, openssl
+{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl
 , donateLevel ? 0
 }:
 
 stdenv.mkDerivation rec {
   pname = "xmrig-proxy";
-  version = "5.0.1";
+  version = "5.10.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig-proxy";
     rev = "v${version}";
-    sha256 = "0lp11p4lf03l9x2kcpq1j19z7c1zrdvjmcfh2xyvlbw8pqx0hxkv";
+    sha256 = "1p8bxp2nv30c3j3kb0bpby86378h6m7nv2vvzw06lqsj5fqbw4g5";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libuv libmicrohttpd libuuid openssl ];
+  buildInputs = [ libuv libmicrohttpd openssl ];
 
   postPatch = ''
     # Link dynamically against libuuid instead of statically

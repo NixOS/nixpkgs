@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2002.0";
+  version = "8.2004.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "1y414g61j93dgm5xg0ni985a99cyag0flvv1fqn2188dhr6w31py";
+    sha256 = "1n97kx6cyyzd4zh6q01fyqi2wq1ah68h95kdc109m1zhfnvxghsz";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
