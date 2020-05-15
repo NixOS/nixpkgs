@@ -1852,6 +1852,8 @@ in
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
 
+  go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
+
   geckodriver = callPackage ../development/tools/geckodriver { };
 
   geekbench = callPackage ../tools/misc/geekbench { };
