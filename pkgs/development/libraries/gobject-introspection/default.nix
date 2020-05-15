@@ -1,31 +1,80 @@
-{ stdenv, fetchurl, glib, flex, bison, meson, ninja, pkgconfig, libffi, python3
-, libintl, cctools, cairo, gnome3, glibcLocales
-, substituteAll, nixStoreDir ? builtins.storeDir
+{ stdenv
+, fetchurl
+, glib
+, flex
+, bison
+, meson
+, ninja
+, pkg-config
+, libffi
+, python3
+, libintl
+, cctools
+, cairo
+, gnome3
+, glibcLocales
+, substituteAll
+, nixStoreDir ? builtins.storeDir
 , x11Support ? true
 }:
+
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "gobject-introspection";
   version = "1.64.1";
+
+  # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
+  # by pygobject3 (and maybe others), but it's only searched in $out
+  outputs = [ "out" "dev" "man" ];
+  outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "19vz7vp10h0zj3f491yk72dp89bix6rgkzxg4qcm4d6151ksxgl0";
   };
 
-  outputs = [ "out" "dev" "man" ];
-  outputBin = "dev";
+  patches = [
+    (substituteAll {
+      src = ./test_shlibs.patch;
+      inherit nixStoreDir;
+    })
 
-  LC_ALL = "en_US.UTF-8"; # for tests
+    (substituteAll {
+      src = ./absolute_shlib_path.patch;
+      inherit nixStoreDir;
+    })
+  ] ++ stdenv.lib.optionals x11Support [
+    # https://github.com/NixOS/nixpkgs/issues/34080
+    (substituteAll {
+      src = ./absolute_gir_path.patch;
+      cairoLib = "${stdenv.lib.getLib cairo}/lib";
+    })
+  ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig libintl glibcLocales ];
-  buildInputs = [ flex bison python3 setupHook/*move .gir*/ ]
-    ++ stdenv.lib.optional stdenv.isDarwin cctools;
-  propagatedBuildInputs = [ libffi glib ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    libintl
+    glibcLocales
+  ];
+
+  buildInputs = [
+    flex
+    bison
+    python3
+    setupHook /*move .gir*/
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    cctools
+  ];
+
+  propagatedBuildInputs = [
+    libffi
+    glib
+  ];
 
   mesonFlags = [
     "--datadir=${placeholder "dev"}/share"
@@ -33,27 +82,9 @@ stdenv.mkDerivation rec {
     "-Dcairo=disabled"
   ];
 
-  # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
-  # by pygobject3 (and maybe others), but it's only searched in $out
-
-  setupHook = ./setup-hook.sh;
-
-  patches = [
-    (substituteAll {
-      src = ./test_shlibs.patch;
-      inherit nixStoreDir;
-    })
-    (substituteAll {
-      src = ./absolute_shlib_path.patch;
-      inherit nixStoreDir;
-    })
-  ] ++ stdenv.lib.optional x11Support # https://github.com/NixOS/nixpkgs/issues/34080
-    (substituteAll {
-      src = ./absolute_gir_path.patch;
-      cairoLib = "${getLib cairo}/lib";
-    });
-
   doCheck = !stdenv.isAarch64;
+
+  LC_ALL = "en_US.UTF-8"; # for tests
 
   preBuild = ''
     # Our gobject-introspection patches make the shared library paths absolute
@@ -68,6 +99,8 @@ stdenv.mkDerivation rec {
     rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
   '';
 
+  setupHook = ./setup-hook.sh;
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
@@ -76,9 +109,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";
-    homepage    = "http://live.gnome.org/GObjectIntrospection";
+    homepage = "http://live.gnome.org/GObjectIntrospection";
     maintainers = with maintainers; [ lovek323 lethalman ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
 
     longDescription = ''
