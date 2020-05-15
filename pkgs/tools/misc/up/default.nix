@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "up";
   version = "0.3.2";
 
-  patches = [ ./gomod.patch ];
-
   src = fetchFromGitHub {
     owner = "akavel";
     repo = "up";
@@ -13,7 +11,8 @@ buildGoModule rec {
     sha256 = "1psixyymk98z52yy92lwb75yfins45dw6rif9cxwd7yiascwg2if";
   };
 
-  vendorSha256 = "1h3w4i7dyh6yagqmdclvflfq6fx0z880jdnpf28assv7fxd9rjsx";
+  vendorSha256 = "1b0s8s12f58gvhdnsw29s5wvfahhs7ip464y5l0j51sy7fmp1jbb";
+  regenGoMod = true;
 
   meta = with lib; {
     description = "Ultimate Plumber is a tool for writing Linux pipes with instant live preview";
