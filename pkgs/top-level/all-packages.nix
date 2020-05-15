@@ -7204,6 +7204,8 @@ in
 
   umlet = callPackage ../tools/misc/umlet { };
 
+  jugglinglab = callPackage ../tools/misc/jugglinglab { };
+
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
 
   unfs3 = callPackage ../servers/unfs3 { };
