@@ -20,6 +20,8 @@
 , vendorSha256 ? null
 # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
+# Lots of packages don't have a good go.mod file, this regenerates it and uses it for downloading & building.
+, regenGoMod ? false
 
 , modSha256 ? null
 
@@ -47,6 +49,7 @@ let
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
   deleteFlag = if deleteVendor then "true" else "false";
+  regenFlag = if regenGoMod then "true" else "false";
 
   go-modules = if vendorSha256 != null then go.stdenv.mkDerivation (let modArgs = {
 
@@ -83,12 +86,20 @@ let
         rm -rf vendor
       fi
 
+      if [ ${regenFlag} == "true" ]; then
+        go mod tidy
+      fi
+
       if [ -e vendor ]; then
         echo "vendor folder exists, please set 'vendorSha256=null;' or 'deleteVendor=true;' in your expression"
         exit 10
       fi
       go mod vendor
       mkdir -p vendor
+
+      if [ ${regenFlag} == "true" ]; then
+        cp go.mod vendor/go.mod
+      fi
 
       runHook postBuild
     '';
@@ -130,6 +141,9 @@ let
       if [ -n "${go-modules}" ]; then 
           rm -rf vendor
           ln -s ${go-modules} vendor
+          if [ ${regenFlag} == "true" ]; then
+            cp -f vendor/go.mod go.mod
+          fi
       fi
 
       runHook postConfigure
