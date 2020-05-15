@@ -37,11 +37,16 @@ let
     import os
 
     from twisted.application import service
+    from twisted.python.log import ILogObserver, FileLogObserver
+    from twisted.python.logfile import LogFile
     from buildbot.master import BuildMaster
 
     basedir = '${cfg.buildbotDir}'
 
     configfile = '${cfg.masterCfg}'
+
+    rotateLength = ${toString cfg.logRotateLength}
+    maxRotatedFiles = ${toString cfg.logMaxRotateFiles}
 
     # Default umask for server
     umask = None
@@ -49,9 +54,15 @@ let
     # note: this line is matched against to check that this is a buildmaster
     # directory; do not edit it.
     application = service.Application('buildmaster')
+    logfile = LogFile.fromFullPath(os.path.join(basedir, "twistd.log"),
+                                   rotateLength=rotateLength,
+                                   maxRotatedFiles=maxRotatedFiles)
+    application.setComponent(ILogObserver, FileLogObserver(logfile).emit)
 
     m = BuildMaster(basedir, configfile, umask)
     m.setServiceParent(application)
+    m.log_rotation.rotateLength = rotateLength
+    m.log_rotation.maxRotatedFiles = maxRotatedFiles
   '';
 
 in {
@@ -94,6 +105,18 @@ in {
         description = "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
         default = defaultMasterCfg;
         example = "/etc/nixos/buildbot/master.cfg";
+      };
+
+      logRotateLength = mkOption {
+        type = types.int;
+        description = "Size of the twistd log file in bytes where it rotates.";
+        default = 10000000;
+      };
+
+      logMaxRotateFiles = mkOption {
+        type = types.int;
+        description = "Maximum number of log files twistd creates.";
+        default = 10;
       };
 
       schedulers = mkOption {
