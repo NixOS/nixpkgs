@@ -1,10 +1,9 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dnscrypt-proxy2";
   version = "2.0.42";
 
-  goPackagePath = "github.com/jedisct1/dnscrypt-proxy";
 
   src = fetchFromGitHub {
     owner = "jedisct1";

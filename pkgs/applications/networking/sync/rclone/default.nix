@@ -1,6 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, buildPackages, installShellFiles }:
+{ stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "rclone";
   version = "1.51.0";
 
@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "0z4kaq6wnj5dgl52g7f86phxlvnk5pbpda7prgh3hahpyhxj0z7d";
   };
 
-  goPackagePath = "github.com/rclone/rclone";
 
   subPackages = [ "." ];
 

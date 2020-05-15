@@ -1,6 +1,6 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "tfsec";
   version = "0.19.0";
 
@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "1ddyvkv0949p0b6m1rwai5r87mca5xwyjwsjq7gbyqz9h10bv7nf";
   };
 
-  goPackagePath = "github.com/liamg/tfsec";
 
   meta = with lib; {
     homepage = "https://github.com/liamg/tfsec";

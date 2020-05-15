@@ -1,10 +1,9 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "lazygit";
   version = "0.18";
 
-  goPackagePath = "github.com/jesseduffield/lazygit";
 
   subPackages = [ "." ];
 

@@ -1,11 +1,10 @@
-{ buildGoPackage, fetchFromGitHub, stdenv }:
+{ buildGoModule, fetchFromGitHub, stdenv }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "nginx-sso";
   version = "0.24.1";
   rev = "v${version}";
 
-  goPackagePath = "github.com/Luzifer/nginx-sso";
 
   src = fetchFromGitHub {
     inherit rev;

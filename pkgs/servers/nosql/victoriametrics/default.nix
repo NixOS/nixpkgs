@@ -1,6 +1,6 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "VictoriaMetrics";
   version = "1.34.7";
 
@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "0k4l3nq1d6f5qjx8svgga0ygv9mmhykvs3n3xr824ih6d0vrkzbg";
   };
 
-  goPackagePath = "github.com/VictoriaMetrics/VictoriaMetrics";
 
   meta = with lib; {
     homepage = "https://victoriametrics.com/";

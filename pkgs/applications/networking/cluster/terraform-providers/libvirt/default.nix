@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, libvirt, pkgconfig, makeWrapper, cdrtools }:
+{ stdenv, buildGoModule, fetchFromGitHub, libvirt, pkgconfig, makeWrapper, cdrtools }:
 
 # USAGE:
 # install the following package globally or in nix-shell:
@@ -17,11 +17,10 @@
 # pick an example from (i.e ubuntu):
 # https://github.com/dmacvicar/terraform-provider-libvirt/tree/master/examples
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "terraform-provider-libvirt";
   version = "0.6.1";
 
-  goPackagePath = "github.com/dmacvicar/terraform-provider-libvirt";
 
   src = fetchFromGitHub {
     owner = "dmacvicar";

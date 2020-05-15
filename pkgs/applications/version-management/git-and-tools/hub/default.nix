@@ -1,10 +1,9 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, groff, installShellFiles, utillinux }:
+{ stdenv, buildGoModule, fetchFromGitHub, groff, installShellFiles, utillinux }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "hub";
   version = "2.14.2";
 
-  goPackagePath = "github.com/github/hub";
 
   # Only needed to build the man-pages
   excludedPackages = [ "github.com/github/hub/md2roff-bin" ];
@@ -23,7 +22,6 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    cd go/src/${goPackagePath}
     installShellCompletion --zsh --name _hub etc/hub.zsh_completion
     installShellCompletion --bash --name hub etc/hub.bash_completion.sh
     installShellCompletion --fish --name hub.fish etc/hub.fish_completion

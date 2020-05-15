@@ -1,10 +1,9 @@
-{ lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomJsSupport ? false, phantomjs2 ? null }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, phantomJsSupport ? false, phantomjs2 ? null }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "grafana";
   version = "6.7.3";
 
-  goPackagePath = "github.com/grafana/grafana";
 
   excludedPackages = [ "release_publisher" ];
 
@@ -25,7 +24,6 @@ buildGoPackage rec {
       --replace 'var version = "5.0.0"'  'var version = "${version}"'
   '';
 
-  preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
 
   postInstall = ''
     tar -xvf $srcStatic

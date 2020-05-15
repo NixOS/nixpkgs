@@ -1,7 +1,7 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub
+{ stdenv, lib, buildGoModule, fetchFromGitHub
 , Cocoa ? null }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "noti";
   version = "3.4.0";
 
@@ -14,10 +14,8 @@ buildGoPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin Cocoa;
 
-  goPackagePath = "github.com/variadico/noti";
 
   preBuild = ''
-    buildFlagsArray+=("-ldflags" "-X ${goPackagePath}/internal/command.Version=${version}")
   '';
 
   postInstall = ''

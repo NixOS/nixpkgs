@@ -1,10 +1,9 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, net-snmp }:
+{ stdenv, buildGoModule, fetchFromGitHub, net-snmp }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "snmp_exporter";
   version = "0.17.0";
 
-  goPackagePath = "github.com/prometheus/snmp_exporter";
 
   src = fetchFromGitHub {
     owner = "prometheus";

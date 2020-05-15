@@ -1,15 +1,13 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils
+{ stdenv, lib, buildEnv, buildGoModule, fetchFromGitHub, makeWrapper, coreutils
 , runCommand, writeText, terraform-providers, fetchpatch }:
 
 let
-  goPackagePath = "github.com/hashicorp/terraform";
 
   generic = { version, sha256, ... }@attrs:
     let attrs' = builtins.removeAttrs attrs [ "version" "sha256" ];
-    in buildGoPackage ({
+    in buildGoModule ({
       name = "terraform-${version}";
 
-      inherit goPackagePath;
 
       src = fetchFromGitHub {
         owner = "hashicorp";

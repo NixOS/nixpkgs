@@ -1,11 +1,10 @@
-{  buildGoPackage, fetchFromGitHub, lib  }:
+{  buildGoModule, fetchFromGitHub, lib  }:
 
 with lib;
 
-buildGoPackage rec {
+buildGoModule rec {
   pname   = "nats-streaming-server";
   version = "0.16.2";
-  goPackagePath = "github.com/nats-io/${pname}";
 
   src = fetchFromGitHub {
     rev    = "v${version}";

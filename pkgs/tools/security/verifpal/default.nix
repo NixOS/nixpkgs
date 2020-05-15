@@ -1,15 +1,13 @@
 { lib
 , fetchgit
-, buildGoPackage
+, buildGoModule
 , pigeon
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "verifpal";
   version = "0.7.5";
 
-  goPackagePath = "github.com/SymbolicSoft/verifpal";
-  goDeps = ./deps.nix;
 
   src = fetchgit {
     url = "https://source.symbolic.software/verifpal/verifpal.git";
@@ -24,12 +22,10 @@ buildGoPackage rec {
   '';
 
   buildPhase = ''
-    make -C go/src/$goPackagePath parser linux
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp go/src/$goPackagePath/build/bin/linux/verifpal $out/bin/
   '';
 
   meta = {

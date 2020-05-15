@@ -1,11 +1,10 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, keybase }:
+{ stdenv, buildGoModule, fetchFromGitHub, keybase }:
 
-buildGoPackage {
+buildGoModule {
   pname = "kbfs";
 
   inherit (keybase) src version;
 
-  goPackagePath = "github.com/keybase/client";
   subPackages = [ "go/kbfs/kbfsfuse" "go/kbfs/redirector" "go/kbfs/kbfsgit/git-remote-keybase" ];
 
   dontRenameImports = true;

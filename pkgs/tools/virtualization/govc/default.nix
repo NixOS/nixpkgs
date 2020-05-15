@@ -1,10 +1,9 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoModule }:
   
-buildGoPackage rec {
+buildGoModule rec {
   pname = "govc";
   version = "0.21.0";
 
-  goPackagePath = "github.com/vmware/govmomi";
 
   subPackages = [ "govc" ];
 

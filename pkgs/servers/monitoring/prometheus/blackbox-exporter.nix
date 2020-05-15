@@ -1,11 +1,10 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "blackbox_exporter";
   version = "0.16.0";
   rev = version;
 
-  goPackagePath = "github.com/prometheus/blackbox_exporter";
 
   src = fetchFromGitHub {
     rev = "v${version}";

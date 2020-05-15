@@ -1,10 +1,9 @@
-{ buildGoPackage, fetchFromGitHub, libusb1, pkgconfig, stdenv, libiconv }:
+{ buildGoModule, fetchFromGitHub, libusb1, pkgconfig, stdenv, libiconv }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "aws-okta";
   version = "0.26.3";
 
-  goPackagePath = "github.com/segmentio/aws-okta";
 
   src = fetchFromGitHub {
     owner = "segmentio";
@@ -13,7 +12,6 @@ buildGoPackage rec {
     sha256 = "0n6xm3yv0lxfapchzfrqi05hk918n4lh1hcp7gq7hybam93rld96";
   };
 
-  goDeps = ./deps.nix;
 
   buildFlags = [ "--tags" "release" ];
 

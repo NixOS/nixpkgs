@@ -1,6 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "miniflux";
   version = "2.0.19";
 
@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "121qy1af1qbc09c3yfwhpk6r3hwmh3jg6gjx8ygfv3hfrss9yfll";
   };
 
-  goPackagePath = "miniflux.app";
 
   doCheck = true;
 
@@ -30,4 +29,3 @@ buildGoPackage rec {
     maintainers = with maintainers; [ rvolosatovs benpye ];
   };
 }
-

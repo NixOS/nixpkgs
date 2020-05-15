@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , openssl
 , pkgconfig
@@ -21,11 +21,10 @@ let
   ];
   version = "4.2.0";
 
-in buildGoPackage {
+in buildGoModule {
   pname = "mongo-tools";
   inherit version;
 
-  goPackagePath = "github.com/mongodb/mongo-tools";
   subPackages = tools;
 
   src = fetchFromGitHub {
@@ -45,7 +44,6 @@ in buildGoPackage {
     runHook preBuild
 
     ${stdenv.lib.concatMapStrings (t: ''
-      go build -o "$out/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
     '') tools}
 
     runHook postBuild

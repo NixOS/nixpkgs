@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, bash }:
+{ stdenv, fetchFromGitHub, buildGoModule, bash }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "direnv";
   version = "2.21.3";
-  goPackagePath = "github.com/direnv/direnv";
 
   src = fetchFromGitHub {
     owner = "direnv";
@@ -13,7 +12,6 @@ buildGoPackage rec {
   };
 
   postConfigure = ''
-    cd $NIX_BUILD_TOP/go/src/$goPackagePath
   '';
 
   # we have no bash at the moment for windows

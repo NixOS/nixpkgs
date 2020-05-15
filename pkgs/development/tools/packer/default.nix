@@ -1,9 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
-buildGoPackage rec {
+{ stdenv, buildGoModule, fetchFromGitHub }:
+buildGoModule rec {
   pname = "packer";
   version = "1.5.6";
 
-  goPackagePath = "github.com/hashicorp/packer";
 
   subPackages = [ "." ];
 

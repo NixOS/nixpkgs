@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd, hostname, extraTags ? [] }:
+{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, pythonPackages, pkgconfig, systemd, hostname, extraTags ? [] }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
   payloadVersion = "4.7.1";
   python = pythonPackages.python;
 
-in buildGoPackage rec {
+in buildGoModule rec {
   pname = "datadog-agent";
   version = "6.11.2";
   owner   = "DataDog";
@@ -24,8 +24,6 @@ in buildGoPackage rec {
     "cmd/py-launcher"
     "cmd/trace-agent"
   ];
-  goDeps = ./datadog-agent-deps.nix;
-  goPackagePath = "github.com/${owner}/${repo}";
 
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
@@ -35,10 +33,6 @@ in buildGoPackage rec {
 
   preBuild = let
     ldFlags = stdenv.lib.concatStringsSep " " [
-      "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
-      "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
-      "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
-      "-X ${goPackagePath}/pkg/collector/py.pythonHome=${python}"
       "-r ${python}/lib"
     ];
   in ''

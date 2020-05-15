@@ -1,8 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub, ... }:
+{ lib, buildGoModule, fetchFromGitHub, ... }:
 
 let version = "0.13.1"; in
 
-buildGoPackage {
+buildGoModule {
   pname = "kubecfg";
   inherit version;
 
@@ -13,7 +13,6 @@ buildGoPackage {
     sha256 = "0x2mg13p8r1sgqr1bbzh57kfymb8z392y43djgks2agc7rjnd45f";
   };
 
-  goPackagePath = "github.com/bitnami/kubecfg";
 
   meta = {
     description = "A tool for managing Kubernetes resources as code";

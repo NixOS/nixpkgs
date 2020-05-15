@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "umoci";
   version = "0.4.5";
 
@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "1gzj4nnys73wajdwjn5jsskvnhzh8s2vmyl76ax8drpvw19bd5g3";
   };
 
-  goPackagePath = "github.com/openSUSE/umoci";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchurl, makeWrapper
+{ stdenv, buildGoModule, fetchurl, makeWrapper
 , git, bash, gzip, openssh, pam
 , fetchpatch
 , sqliteSupport ? true
@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gitea";
   version = "1.11.5";
 
@@ -55,15 +55,12 @@ buildGoPackage rec {
 
   postInstall = ''
     mkdir $data
-    cp -R ./go/src/${goPackagePath}/{public,templates,options} $data
     mkdir -p $out
-    cp -R ./go/src/${goPackagePath}/options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
       --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
 
-  goPackagePath = "code.gitea.io/gitea";
 
   meta = {
     description = "Git with a cup of tea";

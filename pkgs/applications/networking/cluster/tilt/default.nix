@@ -1,6 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "tilt";
   /* Do not use "dev" as a version. If you do, Tilt will consider itself
      running in development environment and try to serve assets from the
@@ -14,7 +14,6 @@ buildGoPackage rec {
     sha256 = "035czgr0rn6gcv24vnlr35n9yvy0fwq4spdzsc76gfxckcbcmzz0";
   };
 
-  goPackagePath = "github.com/windmilleng/tilt";
 
   subPackages = [ "cmd/tilt" ];
 

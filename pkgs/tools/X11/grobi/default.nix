@@ -1,10 +1,9 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage {
+buildGoModule {
   version = "0.5.1";
   pname = "grobi";
 
-  goPackagePath = "github.com/fd0/grobi";
 
   src = fetchFromGitHub {
     rev = "5ddc167b9e4f84755a515828360abda15c54b7de";

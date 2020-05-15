@@ -1,8 +1,8 @@
-{ buildGoPackage, fetchFromGitHub, lib
+{ buildGoModule, fetchFromGitHub, lib
 , wayland, libX11, xbitmaps, libXcursor, libXmu, libXpm
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "wallutils";
   version = "5.9.0";
 
@@ -13,7 +13,6 @@ buildGoPackage rec {
     sha256 = "17xw1311xpmi5c8mwa9yvn4pxa7g4n09j84lvy61gmxc5m128fwy";
   };
 
-  goPackagePath = "github.com/xyproto/wallutils";
 
   patches = [ ./lscollection-Add-NixOS-paths-to-DefaultWallpaperDirectories.patch ];
 

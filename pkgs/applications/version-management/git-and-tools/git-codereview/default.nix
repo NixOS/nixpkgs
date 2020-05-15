@@ -1,9 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage {
+buildGoModule {
   pname = "git-codereview";
   version = "2020-01-15";
-  goPackagePath = "golang.org/x/review";
 
   src = fetchFromGitHub {
     owner = "golang";

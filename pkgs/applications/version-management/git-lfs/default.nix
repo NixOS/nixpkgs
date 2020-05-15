@@ -1,6 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, ronn, installShellFiles }:
+{ stdenv, buildGoModule, fetchFromGitHub, ronn, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "git-lfs";
   version = "2.11.0";
 
@@ -11,20 +11,16 @@ buildGoPackage rec {
     sha256 = "05qd96bn2cl7gn5qarbcv6scdpj28qiwdfzalamqk5jjiidpmng5";
   };
 
-  goPackagePath = "github.com/git-lfs/git-lfs";
 
   nativeBuildInputs = [ ronn installShellFiles ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/config.Vendor=${version} -X ${goPackagePath}/config.GitCommit=${src.rev}" ];
 
   subPackages = [ "." ];
 
   postBuild = ''
-    make -C go/src/${goPackagePath} man
   '';
 
   postInstall = ''
-    installManPage go/src/${goPackagePath}/man/*.{1,5}
   '';
 
   meta = with stdenv.lib; {

@@ -1,6 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cadvisor";
   version = "0.36.0";
 
@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "12hk2l82i7hawzbvj6imcfwn6v8pcfv0dbjfn259yi4b0jrlx6l8";
   };
 
-  goPackagePath = "github.com/google/cadvisor";
 
   subPackages = [ "." ];
 

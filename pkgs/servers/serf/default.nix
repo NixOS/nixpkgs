@@ -1,11 +1,10 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "serf";
   version = "0.8.1";
   rev = "v${version}";
 
-  goPackagePath = "github.com/hashicorp/serf";
 
   src = fetchFromGitHub {
     owner = "hashicorp";

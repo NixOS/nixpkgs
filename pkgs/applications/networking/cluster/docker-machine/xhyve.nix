@@ -1,10 +1,9 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch, pkgconfig, cctools, Hypervisor, vmnet }:
+{ stdenv, buildGoModule, fetchFromGitHub, fetchpatch, pkgconfig, cctools, Hypervisor, vmnet }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "docker-machine-xhyve";
   version = "0.4.0";
 
-  goPackagePath = "github.com/zchee/docker-machine-driver-xhyve";
 
   # https://github.com/machine-drivers/docker-machine-driver-xhyve/pull/225
   patches = fetchpatch {
@@ -13,9 +12,6 @@ buildGoPackage rec {
   };
 
   preBuild = ''
-    make -C go/src/${goPackagePath} CC=${stdenv.cc}/bin/cc LIBTOOL=${cctools}/bin/libtool GIT_CMD=: lib9p
-    export CGO_CFLAGS=-I$(pwd)/go/src/${goPackagePath}/vendor/github.com/jceel/lib9p
-    export CGO_LDFLAGS=$(pwd)/go/src/${goPackagePath}/vendor/build/lib9p/lib9p.a
   '';
   buildFlags = "--tags lib9p";
 

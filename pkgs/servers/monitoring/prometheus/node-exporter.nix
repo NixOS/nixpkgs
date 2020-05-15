@@ -1,11 +1,10 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "node_exporter";
   version = "0.18.1";
   rev = "v${version}";
 
-  goPackagePath = "github.com/prometheus/node_exporter";
 
   src = fetchFromGitHub {
     inherit rev;
@@ -19,8 +18,6 @@ buildGoPackage rec {
 
   buildFlagsArray = ''
     -ldflags=
-        -X ${goPackagePath}/vendor/github.com/prometheus/common/version.Version=${version}
-        -X ${goPackagePath}/vendor/github.com/prometheus/common/version.Revision=${rev}
   '';
 
   meta = with stdenv.lib; {

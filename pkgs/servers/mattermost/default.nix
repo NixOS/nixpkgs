@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub, buildGoPackage, buildEnv }:
+{ stdenv, fetchurl, fetchFromGitHub, buildGoModule, buildEnv }:
 
 let
   version = "5.15.0";
 
-  mattermost-server = buildGoPackage rec {
+  mattermost-server = buildGoModule rec {
     pname = "mattermost-server";
     inherit version;
 
@@ -14,11 +14,9 @@ let
       sha256 = "1bh53h0bmpc1qmnbpsmwkfrvj66z18m7b1xg7pqikid57ssqxjx9";
     };
 
-    goPackagePath = "github.com/mattermost/mattermost-server";
 
     buildFlagsArray = ''
       -ldflags=
-        -X ${goPackagePath}/model.BuildNumber=nixpkgs-${version}
     '';
 
   };

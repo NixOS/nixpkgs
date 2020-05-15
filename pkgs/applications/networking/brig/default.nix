@@ -1,11 +1,10 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "brig";
   version = "0.4.1";
   rev = "v${version}";
 
-  goPackagePath = "github.com/sahib/brig";
   subPackages = ["."];
 
   src = fetchFromGitHub {

@@ -1,9 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub, tmux, which, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, tmux, which, makeWrapper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "overmind";
   version = "2.0.3";
-  goPackagePath = "github.com/DarthSim/overmind";
 
   nativeBuildInputs = [ makeWrapper ];
 

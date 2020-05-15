@@ -1,6 +1,6 @@
-{ buildGoPackage, stdenv, fetchFromGitHub }:
+{ buildGoModule, stdenv, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   version = "2.0.0";
   pname = "xurls";
 
@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "1jdjwlp19r8cb7vycyrjmpwf8dz2fzrqphq4lkvy9x2v7x0kksx8";
   };
 
-  goPackagePath = "mvdan.cc/xurls/v2";
   subPackages = [ "cmd/xurls" ];
 
   meta = with stdenv.lib; {

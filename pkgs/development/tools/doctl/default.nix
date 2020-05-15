@@ -1,19 +1,14 @@
-{ lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "doctl";
   version = "1.40.0";
 
-  goPackagePath = "github.com/digitalocean/doctl";
 
   subPackages = [ "cmd/doctl" ];
 
   buildFlagsArray = ''
     -ldflags=
-    -X ${goPackagePath}.Major=${lib.versions.major version}
-    -X ${goPackagePath}.Minor=${lib.versions.minor version}
-    -X ${goPackagePath}.Patch=${lib.versions.patch version}
-    -X ${goPackagePath}.Label=release
   '';
 
   nativeBuildInputs = [ installShellFiles ];

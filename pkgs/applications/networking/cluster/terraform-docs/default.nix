@@ -1,9 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-buildGoPackage rec {
+{ lib, buildGoModule, fetchFromGitHub }:
+buildGoModule rec {
   pname = "terraform-docs";
   version = "0.9.1";
 
-  goPackagePath = "github.com/segmentio/${pname}";
 
   src = fetchFromGitHub {
     owner  = "segmentio";

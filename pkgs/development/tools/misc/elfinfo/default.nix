@@ -1,10 +1,9 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "elfinfo";
   version = "1.0.1";
 
-  goPackagePath = "github.com/xyproto/elfinfo";
   src = fetchFromGitHub {
     rev = version;
     owner = "xyproto";

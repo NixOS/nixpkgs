@@ -1,12 +1,11 @@
 { stdenv
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 }:
 
-buildGoPackage {
+buildGoModule {
   pname = "demoit";
   version = "unstable-2019-05-10";
-  goPackagePath = "github.com/dgageot/demoit";
 
   src = fetchFromGitHub {
     owner = "dgageot";

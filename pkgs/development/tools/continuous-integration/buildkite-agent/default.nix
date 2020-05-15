@@ -1,10 +1,9 @@
-{ fetchFromGitHub, stdenv, buildGoPackage,
+{ fetchFromGitHub, stdenv, buildGoModule,
   makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
-buildGoPackage rec {
+buildGoModule rec {
   name = "buildkite-agent-${version}";
   version = "3.17.0";
 
-  goPackagePath = "github.com/buildkite/agent";
 
   src = fetchFromGitHub {
     owner = "buildkite";

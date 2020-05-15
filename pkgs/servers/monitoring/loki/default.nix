@@ -1,9 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
+{ stdenv, buildGoModule, fetchFromGitHub, makeWrapper, systemd }:
 
-buildGoPackage rec {
+buildGoModule rec {
   version = "1.4.0";
   pname = "grafana-loki";
-  goPackagePath = "github.com/grafana/loki";
 
   doCheck = true;
 

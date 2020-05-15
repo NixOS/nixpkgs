@@ -1,10 +1,9 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, installShellFiles, nixosTests}:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "restic";
   version = "0.9.6";
 
-  goPackagePath = "github.com/restic/restic";
 
   src = fetchFromGitHub {
     owner = "restic";

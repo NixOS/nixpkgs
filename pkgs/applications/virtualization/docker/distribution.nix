@@ -1,11 +1,10 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "distribution";
   version = "2.7.1";
   rev = "v${version}";
 
-  goPackagePath = "github.com/docker/distribution";
 
   src = fetchFromGitHub {
     owner = "docker";

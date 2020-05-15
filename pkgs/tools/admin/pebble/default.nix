@@ -1,4 +1,4 @@
-{ buildGoPackage
+{ buildGoModule
 , fetchFromGitHub
 , lib
 }:
@@ -6,9 +6,8 @@
 let
   version = "v2.3.0";
   pname = "pebble";
-in buildGoPackage {
+in buildGoModule {
   inherit pname version;
-  goPackagePath = "github.com/letsencrypt/${pname}";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";

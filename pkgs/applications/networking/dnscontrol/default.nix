@@ -1,10 +1,9 @@
-{ stdenv, fetchFromGitHub, buildGoPackage}:
+{ stdenv, fetchFromGitHub, buildGoModule}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dnscontrol";
   version = "3.0.0";
 
-  goPackagePath = "github.com/StackExchange/dnscontrol";
 
   src = fetchFromGitHub {
     owner = "StackExchange";

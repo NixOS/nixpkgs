@@ -1,4 +1,4 @@
-{ buildGoPackage
+{ buildGoModule
 , libtool
 , fetchFromGitHub
 , lib
@@ -7,12 +7,11 @@
 let
   version = "release-2019-10-13";
 
-in buildGoPackage {
+in buildGoModule {
 
   pname = "boulder";
   inherit version;
 
-  goPackagePath = "github.com/letsencrypt/boulder";
 
   buildInputs = [ libtool ];
 

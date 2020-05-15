@@ -1,6 +1,6 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dex";
   version = "2.17.0";
 
@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "1z94svpiwrs64m83gpfnniv0ac1fnmvywvl05f20ind1wlf8bvwn";
   };
 
-  goPackagePath = "github.com/dexidp/dex";
 
   subPackages = [
     "cmd/dex"

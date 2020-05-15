@@ -1,11 +1,10 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   # https://github.com/erroneousboat/slack-term
   pname = "slack-term";
   version = "0.5.0";
 
-  goPackagePath = "github.com/erroneousboat/slack-term";
 
   src = fetchFromGitHub {
     owner = "erroneousboat";

@@ -1,6 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "vale";
   version = "2.0.0";
 
@@ -13,7 +13,6 @@ buildGoPackage rec {
     sha256 = "068973ayd883kzkxl60lpammf3icjz090nw07kfccvhcf24x07bh";
   };
 
-  goPackagePath = "github.com/errata-ai/vale";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 

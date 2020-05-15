@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, buildGoPackage  }:
+{ stdenv, fetchFromGitHub, buildGoModule  }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "datadog-process-agent";
   version = "6.11.1";
   owner   = "DataDog";
@@ -12,8 +12,6 @@ buildGoPackage rec {
     sha256 = "0fc2flm0pa44mjxvn4fan0mkvg9yyg27w68xdgrnpdifj99kxxjf";
   };
 
-  goDeps = ./datadog-process-agent-deps.nix;
-  goPackagePath = "github.com/${owner}/${repo}";
 
   meta = with stdenv.lib; {
     description = "Live process collector for the DataDog Agent v6";

@@ -1,10 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "restic-rest-server";
   version = "0.9.7";
 
-  goPackagePath = "github.com/restic/rest-server";
 
   src = fetchFromGitHub {
     owner = "restic";
@@ -14,7 +13,6 @@ buildGoPackage rec {
   };
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
     go run build.go
   '';
 

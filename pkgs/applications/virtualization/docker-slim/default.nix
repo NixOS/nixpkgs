@@ -1,14 +1,13 @@
 { stdenv
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , makeWrapper
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "docker-slim";
   version = "1.29.0";
 
-  goPackagePath = "github.com/docker-slim/docker-slim";
 
   src = fetchFromGitHub {
     owner = "docker-slim";
@@ -25,8 +24,6 @@ buildGoPackage rec {
 
   buildFlagsArray = [
     ''-ldflags=
-        -s -w -X ${goPackagePath}/pkg/version.appVersionTag=${version}
-              -X ${goPackagePath}/pkg/version.appVersionRev=${src.rev}
     ''
   ];
 

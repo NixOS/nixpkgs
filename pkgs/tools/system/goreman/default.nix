@@ -1,9 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-buildGoPackage rec {
+{ lib, buildGoModule, fetchFromGitHub }:
+buildGoModule rec {
   pname = "goreman";
   version = "0.2.1";
 
-  goPackagePath = "github.com/mattn/goreman";
   subPackages = ["."];
 
   src = fetchFromGitHub {
@@ -20,4 +19,3 @@ buildGoPackage rec {
     maintainers = with maintainers; [ zimbatm ];
   };
 }
-

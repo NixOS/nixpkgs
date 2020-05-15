@@ -1,10 +1,8 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
-buildGoPackage rec {
+{ stdenv, fetchFromGitHub, buildGoModule }:
+buildGoModule rec {
   pname = "terraform-provider-ansible";
   version = "1.0.3";
 
-  goPackagePath = "github.com/nbering/terraform-provider-ansible";
-  goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
     owner = "nbering";

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, installShellFiles }:
+{ stdenv, fetchFromGitHub, buildGoModule, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "vault";
   version = "1.4.1";
 
@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "0fbbvihvlzh95rrk65bwxfcam6y57q0yffq8dzvcbm3i0ap7ndar";
   };
 
-  goPackagePath = "github.com/hashicorp/vault";
 
   subPackages = [ "." ];
 

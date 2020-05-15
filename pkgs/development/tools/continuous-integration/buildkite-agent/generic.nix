@@ -1,14 +1,12 @@
-{ stdenv, buildGoPackage, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep
+{ stdenv, buildGoModule, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep
 , src, version, hasBootstrapScript, postPatch ? ""
 , ... }:
 let
-  goPackagePath = "github.com/buildkite/agent";
 in
-buildGoPackage {
+buildGoModule {
   pname = "buildkite-agent";
   inherit version;
 
-  inherit goPackagePath src postPatch;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -16,7 +14,6 @@ buildGoPackage {
     ${stdenv.lib.optionalString hasBootstrapScript ''
     # Install bootstrap.sh
     mkdir -p $out/libexec/buildkite-agent
-    cp $NIX_BUILD_TOP/go/src/${goPackagePath}/templates/bootstrap.sh $out/libexec/buildkite-agent
     sed -e "s|#!/bin/bash|#!${bash}/bin/bash|g" -i $out/libexec/buildkite-agent/bootstrap.sh
     ''}
 

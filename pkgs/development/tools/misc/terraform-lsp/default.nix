@@ -1,6 +1,6 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "terraform-lsp";
   version = "0.0.10";
 
@@ -11,7 +11,6 @@ buildGoPackage rec {
     sha256 = "1j69j1pkd0q6bds1c6pcaars5hl3hk93q2p31mymkzmy640k8zfn";
   };
 
-  goPackagePath = "github.com/juliosueiras/terraform-lsp";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version} -X main.GitCommit=${src.rev}" ];
 
