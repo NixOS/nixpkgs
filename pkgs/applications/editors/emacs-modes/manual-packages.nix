@@ -98,7 +98,7 @@
       sha256 = "09b7bg2s9aa4s8f2kdqs4xps3jxkq5wsvbi87ih8b6id38blhf78";
     };
     recipe = pkgs.writeText "recipe" ''
-      (haskell-unicode-input-method
+      (emacs-haskell-unicode-input-method
        :repo "roelvandijk/emacs-haskell-unicode-input-method"
        :fetcher github)
     '';
