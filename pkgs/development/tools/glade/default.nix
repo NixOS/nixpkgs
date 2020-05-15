@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "glade"; attrPath = "gnome3.glade"; };
+    updateScript = gnome3.updateScript { packageName = "glade"; };
   };
 
   nativeBuildInputs = [
