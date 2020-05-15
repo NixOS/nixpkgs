@@ -1,5 +1,5 @@
 { stdenv
-, intltool
+, gettext
 , fetchurl
 , python3
 , pkg-config
@@ -18,16 +18,16 @@
 
 stdenv.mkDerivation rec {
   pname = "glade";
-  version = "3.22.2";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glade/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "08bayb1rrpblxf6jhhbw2n3c425w170is4l94pampldl4kmsdvzd";
+    sha256 = "GbVGtSfMRiE8z8gCLUnsV+YY/iyqmqUdstKGIjPqbwg=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    intltool
+    gettext
     itstool
     wrapGAppsHook
     docbook-xsl-nons
