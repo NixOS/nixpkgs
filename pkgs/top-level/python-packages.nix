@@ -7360,6 +7360,8 @@ in {
   gffutils = callPackage ../development/python-modules/gffutils { };
 
   scikit-plot = callPackage ../development/python-modules/scikit-plot { };
+
+  pybedtools = callPackage ../development/python-modules/pybedtools { };
 });
 
 in fix' (extends overrides packages)
