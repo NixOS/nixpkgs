@@ -2095,6 +2095,8 @@ in {
 
   bleach = callPackage ../development/python-modules/bleach { };
 
+  bleak = callPackage ../development/python-modules/bleak { };
+
   blinker = callPackage ../development/python-modules/blinker { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
