@@ -4,7 +4,7 @@
 , imagecorruptions
 , numpy
 , opencv3
-, pytest
+, pytestCheckHook
 , scikitimage
 , scipy
 , shapely
@@ -43,11 +43,16 @@ buildPythonPackage rec {
     six
   ];
 
-  checkPhase = ''
-     pytest ./test
-  '';
+  # checkPhase = ''
+  #    pytest
+  # '';
 
-  checkInputs = [ opencv3 pytest ];
+  pytestFlagsArray = [ 
+    # imagecorruptions not currently in nixpkgs
+    "--ignore=test/augmenters/test_imgcorruptlike.py"
+  ];
+
+  checkInputs = [ pytestCheckHook ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/aleju/imgaug";
