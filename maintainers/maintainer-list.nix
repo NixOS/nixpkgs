@@ -8253,6 +8253,12 @@
     githubId = 6016963;
     name = "Patrick Winter";
   };
+  wishfort36 = {
+    email = "42300264+wishfort36@users.noreply.github.com";
+    github = "wishfort36";
+    githubId = 42300264;
+    name = "wishfort36";
+  };
   wizeman = {
     email = "rcorreia@wizy.org";
     github = "wizeman";
