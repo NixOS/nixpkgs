@@ -2,6 +2,7 @@
 , pythonAtLeast
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , fetchpatch
 , click
 , click-log
@@ -24,6 +25,7 @@
 buildPythonPackage rec {
   version = "0.16.7";
   pname = "vdirsyncer";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

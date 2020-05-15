@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, isPy27
 , fetchpatch
 , rustPlatform
 , pkg-config
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   version = "unstable-2018-08-05";
   pname = "vdirsyncer";
   name = "${pname}-${version}";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "spk";
