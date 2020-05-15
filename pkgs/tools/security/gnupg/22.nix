@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
     "--with-npth-prefix=${npth}"
   ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
+  preBuild = ''
+    echo $SOURCE_DATE_EPOCH > doc/defsincdate
+  '';
+
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}
