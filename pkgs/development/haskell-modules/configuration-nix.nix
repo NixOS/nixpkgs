@@ -730,4 +730,24 @@ self: super: builtins.intersectAttrs super {
 
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
+
+  # Compiling the readme throws errors and has no purpose in nixpkgs
+  aeson-gadt-th =
+    disableCabalFlag (doJailbreak (super.aeson-gadt-th)) "build-readme";
+
+  neuron = overrideCabal (super.neuron) (drv: {
+    # neuron expects the neuron-search script to be in PATH at built-time.
+    buildTools = [ pkgs.makeWrapper ];
+    preConfigure = ''
+      mkdir -p $out/bin
+      cp src-bash/neuron-search $out/bin/neuron-search
+      chmod +x $out/bin/neuron-search
+      wrapProgram $out/bin/neuron-search --prefix 'PATH' ':' ${
+        with pkgs;
+        lib.makeBinPath [ fzf ripgrep gawk bat findutils envsubst ]
+      }
+      PATH=$PATH:$out/bin
+    '';
+  });
+
 }

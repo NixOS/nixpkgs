@@ -1502,17 +1502,21 @@ self: super: {
   });
 
   # stackage right now is not new enough for hlint-3.0
-  ghc-lib-parser-ex_8_10_0_6 = super.ghc-lib-parser-ex_8_10_0_6.override {
+  ghc-lib-parser-ex_8_10_0_8 = super.ghc-lib-parser-ex_8_10_0_8.override {
     ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
   };
 
   hlint = super.hlint.override {
     ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_6;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_8;
     extra = self.extra_1_7_1;
     filepattern = self.filepattern.override {
       extra = self.extra_1_7_1;
     };
   };
+
+  # hasn‘t bumped upper bounds
+  # upstream: https://github.com/obsidiansystems/which/pull/6
+  which = doJailbreak super.which;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
