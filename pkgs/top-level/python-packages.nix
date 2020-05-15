@@ -7358,6 +7358,8 @@ in {
   pyensembl = callPackage ../development/python-modules/pyensembl { };
 
   gffutils = callPackage ../development/python-modules/gffutils { };
+
+  scikit-plot = callPackage ../development/python-modules/scikit-plot { };
 });
 
 in fix' (extends overrides packages)
