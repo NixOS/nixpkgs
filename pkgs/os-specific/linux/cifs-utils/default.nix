@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kerberos keyutils pam talloc ];
 
-  makeFlags = "root_sbindir=$(out)/sbin";
+  makeFlags = [ "root_sbindir=$(out)/sbin" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.samba.org/linux-cifs/cifs-utils/;
+    homepage = "http://www.samba.org/linux-cifs/cifs-utils/";
     description = "Tools for managing Linux CIFS client filesystems";
     platforms = platforms.linux;
     license = licenses.lgpl3;

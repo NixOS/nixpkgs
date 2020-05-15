@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, libtool, pkgconfig, gettext, gnused
+{ stdenv, fetchFromGitHub, fetchpatch, substituteAll, libtool, pkgconfig, gettext, gnused
 , gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
 , gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "01wx2x8xyal595dhdih7rva2bz7gqzgwdp56gi0ikjdzayx17wcf";
   };
 
-  outputs = [ "out" "man" "dev" "devdoc" ];
+  outputs = [ "out" "man" "dev" ] ++ stdenv.lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
 
   patches = [
     (substituteAll {
@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
         btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils
         xfsprogs ntfs3g parted utillinux
       ];
+    })
+
+    # Fix tests: https://github.com/storaged-project/udisks/issues/724
+    (fetchpatch {
+      url = "https://github.com/storaged-project/udisks/commit/60a0c1c967821d317046d9494e45b9a8e4e7a1c1.patch";
+      sha256 = "tWl49mSc1zDyB3kV6SKlhHFPi/Kg7mg6OWDlY7vGj2Y=";
     })
   ];
 
@@ -57,7 +63,7 @@ stdenv.mkDerivation rec {
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
-    "--enable-gtk-doc"
+    (stdenv.lib.enableFeature (stdenv.buildPlatform == stdenv.hostPlatform) "gtk-doc")
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"

@@ -7,7 +7,7 @@ python27Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eggnogdb";
     repo = "eggnog-mapper";
-    rev = "${version}";
+    rev = version;
     sha256 = "1aaaflppy84bhkh2hb5gnzm4xgrz0rz0cgfpadr9w8cva8p0sqdv";
   };
 
@@ -33,7 +33,7 @@ python27Packages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Fast genome-wide functional annotation through orthology assignment";
     license = licenses.gpl2;
-    homepage = https://github.com/eggnogdb/eggnog-mapper/wiki;
+    homepage = "https://github.com/eggnogdb/eggnog-mapper/wiki";
     maintainers = with maintainers; [ luispedro ];
     platforms = platforms.all;
   };

@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.18.0";
+  version = "3.19.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ycp1yksysiiz902gn762030sfmirxm950pwpw2rcrpjvq95zm1r";
+    sha256 = "03xzpmpask2q2609kkq0hfgzsfvkyjpbjws7qx00nnfrbbnjk443";
   };
 
   propagatedBuildInputs = [ numpy scipy matplotlib flask pillow psycopg2 ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Atomic Simulation Environment";
-    homepage = https://wiki.fysik.dtu.dk/ase/;
+    homepage = "https://wiki.fysik.dtu.dk/ase/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ costrouc ];
   };

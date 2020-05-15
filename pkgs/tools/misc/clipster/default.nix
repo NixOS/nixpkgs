@@ -8,7 +8,7 @@ stdenv.mkDerivation  rec {
   src = fetchFromGitHub {
     owner = "mrichar1";
     repo = "clipster";
-    rev = "${version}";
+    rev = version;
     sha256 = "0582r8840dk4k4jj1zq6kmyh7z9drcng099bj7f4wvr468nb9z1p";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation  rec {
       - Ability to delete items in clipboard history.
     '';
     license = licenses.agpl3;
-    homepage = https://github.com/mrichar1/clipster;
+    homepage = "https://github.com/mrichar1/clipster";
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];
   };

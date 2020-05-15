@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "6.3.1";
+  version = "6.5.1";
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "praw";
     rev = "v${version}";
-    sha256 = "0by89aw7m803dvjcc33m9390msjm6v5v8g3k8ink9gfm421lw8ky";
+    sha256 = "0d5whaw4731gllffhwrh2qqnlki4j8q83xaf3v4spkd40ps3q7b4";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,6 @@ buildPythonPackage rec {
     description = "Python Reddit API wrapper";
     homepage = "https://praw.readthedocs.org/";
     license = licenses.bsd2;
-    platforms = platforms.all;
     maintainers = with maintainers; [ ];
   };
 }

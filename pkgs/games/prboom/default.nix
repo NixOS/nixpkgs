@@ -1,17 +1,20 @@
 { stdenv, fetchurl, SDL, SDL_mixer, SDL_net
-, libGLU_combined ? assert false; null
+, libGLU ? null
+, libGL ? null
 , useOpenGL ? stdenv.hostPlatform == stdenv.buildPlatform
 }:
+
+assert useOpenGL -> libGL != null && libGLU != null;
 
 stdenv.mkDerivation rec {
   name = "prboom-2.5.0";
   src = fetchurl {
-    url = mirror://sourceforge/prboom/prboom-2.5.0.tar.gz;
+    url = "mirror://sourceforge/prboom/prboom-2.5.0.tar.gz";
     sha256 = "1bjb04q8dk232956k30qlpq6q0hxb904yh1nflr87jcc1x3iqv12";
   };
 
   buildInputs = [ SDL SDL_mixer SDL_net ]
-    ++ stdenv.lib.optional useOpenGL libGLU_combined;
+    ++ stdenv.lib.optionals useOpenGL [ libGL libGLU ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 

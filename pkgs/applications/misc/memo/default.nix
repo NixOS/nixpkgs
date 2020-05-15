@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "mrVanDalo";
     repo   = "memo";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "0azx2bx6y7j0637fg3m8zigcw09zfm2mw9wjfg218sx88cm1wdkp";
   };
 
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
       A simple tool written in bash to memorize stuff.
       Memo organizes is structured through topics which are folders in ~/memo.
     '';
-    homepage = http://palovandalo.com/memo/;
-    downloadPage = https://github.com/mrVanDalo/memo/releases;
+    homepage = "http://palovandalo.com/memo/";
+    downloadPage = "https://github.com/mrVanDalo/memo/releases";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.mrVanDalo ];
     platforms = stdenv.lib.platforms.all;

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nvi-1.79";
 
   src = fetchurl {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.bostic.com/vi/;
+    homepage = "http://www.bostic.com/vi/";
     description = "The Berkeley Vi Editor";
     license = stdenv.lib.licenses.free;
   };

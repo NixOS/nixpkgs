@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "flask-oldsessions";
-    rev = "${version}";
+    rev = version;
     sha256 = "04b5m8njjiwld9a0zw55iqwvyjgwcpdbhz1cic8nyhgcmypbicqn";
   };
 
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Provides a session class that works like the one in Flask before 0.10.";
     license = licenses.bsd2;
     maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/mitsuhiko/flask-oldsessions;
+    homepage = "https://github.com/mitsuhiko/flask-oldsessions";
   };
 }

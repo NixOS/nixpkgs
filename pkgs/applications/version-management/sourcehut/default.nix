@@ -1,12 +1,12 @@
 { python37, openssl
-, callPackage }:
+, callPackage, recurseIntoAttrs }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
 # Then we expose them through all-packages.nix as an application through `toPythonApplication`
 # https://github.com/NixOS/nixpkgs/pull/54425#discussion_r250688781
 
 let
-  fetchNodeModules = callPackage ../../networking/instant-messengers/rambox/fetchNodeModules.nix { };
+  fetchNodeModules = callPackage ./fetchNodeModules.nix { };
 
   python = python37.override {
     packageOverrides = self: super: {
@@ -25,7 +25,7 @@ let
       scmsrht = self.callPackage ./scm.nix { };
     };
   };
-in with python.pkgs; {
+in with python.pkgs; recurseIntoAttrs {
   inherit python;
   buildsrht = toPythonApplication buildsrht;
   dispatchsrht = toPythonApplication dispatchsrht;

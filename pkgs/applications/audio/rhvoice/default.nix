@@ -3,7 +3,7 @@
 
 let
   version = "unstable-2018-02-10";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "rhvoice";
   inherit version;
 
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    scons pkgconfig
+    scons.py2 pkgconfig
   ];
 
   buildInputs = [
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A free and open source speech synthesizer for Russian language and others";
-    homepage = https://github.com/Olga-Yakovleva/RHVoice/wiki;
+    homepage = "https://github.com/Olga-Yakovleva/RHVoice/wiki";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ berce ];
     platforms = with lib.platforms; all;

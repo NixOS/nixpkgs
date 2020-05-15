@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "serpent";
 
   # I can't find any version numbers, so we're just using the date
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       style, and at the same time adding special domain-specific
       features for contract programming.
     '';
-    homepage = https://github.com/ethereum/wiki/wiki/Serpent;
+    homepage = "https://github.com/ethereum/wiki/wiki/Serpent";
     license = with licenses; [ wtfpl ];
     maintainers = with maintainers; [ chris-martin ];
     platforms = with platforms; linux;

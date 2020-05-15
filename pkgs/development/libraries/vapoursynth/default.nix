@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, makeWrapper
 , zimg, libass, python3, libiconv
-, ApplicationServices, nasm
+, ApplicationServices
 , ocrSupport ?  false, tesseract ? null
 , imwriSupport? true,  imagemagick7 ? null
 }:
@@ -12,16 +12,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "R47.2";
+  version = "R49";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "004h0vvih7dlhkcz6l2786pf7s04qhiv0bii4gjx23cxyklglh9i";
+    sha256 = "1d298mlb24nlc2x7pixfbkd0qbpv4c706c32idsgpi96z1spkhvl";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook nasm makeWrapper ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper ];
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     ++ optional imwriSupport imagemagick7;
 
   configureFlags = [
-    "--disable-static"
     (optionalString (!ocrSupport)   "--disable-ocr")
     (optionalString (!imwriSupport) "--disable-imwri")
   ];
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A video processing framework with the future in mind";
-    homepage    = http://www.vapoursynth.com/;
+    homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
     maintainers = with maintainers; [ rnhmjoj tadeokondrak ];

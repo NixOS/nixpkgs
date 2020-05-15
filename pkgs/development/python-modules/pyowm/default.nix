@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python wrapper around the OpenWeatherMap web API";
-    homepage = https://pyowm.readthedocs.io/;
+    homepage = "https://pyowm.readthedocs.io/";
     license = licenses.mit;
   };
 }

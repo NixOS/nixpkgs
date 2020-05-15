@@ -1,6 +1,6 @@
 { libsmbios, stdenv, autoreconfHook, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "netperf";
   version = "20180613";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Benchmark to measure the performance of many different types of networking";
-    homepage = http://www.netperf.org/netperf/;
+    homepage = "http://www.netperf.org/netperf/";
     license = "Hewlett-Packard BSD-like license";
 
     platforms = stdenv.lib.platforms.linux;

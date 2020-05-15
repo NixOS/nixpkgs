@@ -3,11 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "squid-4.8";
+  pname = "squid";
+  version = "4.11";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v4/${name}.tar.xz";
-    sha256 = "0432m0ix046rkja7r7qpydgsm2kf1w393xym15nx6h9kv4jb7kbq";
+    url = "http://www.squid-cache.org/Versions/v4/${pname}-${version}.tar.xz";
+    sha256 = "0z986kykx539wjqd7mr8y0abf3z6hz8byf8fmmbky9hh4ihlgnaf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
-    homepage = http://www.squid-cache.org;
+    homepage = "http://www.squid-cache.org";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz raskin ];

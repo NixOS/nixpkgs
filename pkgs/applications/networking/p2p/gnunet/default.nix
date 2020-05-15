@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.11.6";
+  version = "0.12.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "1gspr1lh885sb9r2anh7bi4zan3zjqx33lpyhq9hm2g0n5ip187q";
+    sha256 = "0zhz3dd4mr6k7wlcxw2xclq8p8l4ia5nlg78dylyz6lbz96h2lsm";
   };
 
   enableParallelBuilding = true;
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
       network are rewarded with better service.
     '';
 
-    homepage = https://gnunet.org/;
-    license = licenses.gpl2Plus;
+    homepage = "https://gnunet.org/";
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.gnu ++ platforms.linux;
   };

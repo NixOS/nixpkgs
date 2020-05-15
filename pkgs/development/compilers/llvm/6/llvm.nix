@@ -1,7 +1,7 @@
 { stdenv
 , fetch
 , cmake
-, python
+, python3
 , libffi
 , libbfd
 , libxml2
@@ -21,12 +21,13 @@ let
 
   # Used when creating a versioned symlinks of libLLVM.dylib
   versionSuffixes = with stdenv.lib;
-    let parts = splitString "." release_version; in
+    let parts = splitVersion release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
 
-stdenv.mkDerivation (rec {
-  name = "llvm-${version}";
+stdenv.mkDerivation ({
+  pname = "llvm";
+  inherit version;
 
   src = fetch "llvm" "1qpls3vk85lydi5b4axl0809fv932qgsqgdgrk098567z4jc7mmn";
 
@@ -39,8 +40,8 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "python" ]
     ++ optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ cmake python ]
-    ++ optional enableManpages python.pkgs.sphinx;
+  nativeBuildInputs = [ cmake python3 ]
+    ++ optional enableManpages python3.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ];
 
@@ -119,7 +120,7 @@ stdenv.mkDerivation (rec {
   '';
 
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
   postInstall = ''
@@ -146,15 +147,16 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
+  requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = http://llvm.org/;
+    homepage    = "https://llvm.org/";
     license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
+  pname = "llvm-manpages";
 
   buildPhase = ''
     make docs-llvm-man

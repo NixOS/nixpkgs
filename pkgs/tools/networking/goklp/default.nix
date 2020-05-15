@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Golang OpenSSH Keys Ldap Provider for AuthorizedKeysCommand";
-    homepage = https://github.com/AppliedTrust/goklp;
+    homepage = "https://github.com/AppliedTrust/goklp";
     maintainers = with maintainers; [ disassembler ];
     license = licenses.bsd2;
   };

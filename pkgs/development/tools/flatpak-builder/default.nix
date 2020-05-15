@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , substituteAll
+, nixosTests
 
 , autoreconfHook
 , docbook_xml_dtd_412
@@ -43,16 +44,15 @@
 let
   installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
-  version = "1.0.8";
 in stdenv.mkDerivation rec {
   pname = "flatpak-builder";
-  inherit version;
+  version = "1.0.10";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0ns1vv2phhd3vsi2749cajwapapx7xa841kkvssixwgfa575d912";
+    sha256 = "1fn61cl1d33yd1jgqm8jpffjw3xlyyhkn032g14d9gnwkcaf4649";
   };
 
   nativeBuildInputs = [
@@ -131,13 +131,22 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    installedTestsDependencies = [ gnupg ostree python2 gnumake ];
+    installedTestsDependencies = [
+      gnupg
+      ostree
+      python2
+      gnumake
+    ];
+
+    tests = {
+      installedTests = nixosTests.installed-tests.flatpak-builder;
+    };
   };
 
   meta = with stdenv.lib; {
     description = "Tool to build flatpaks from source";
-    homepage = https://flatpak.org/;
-    license = licenses.lgpl21;
+    homepage = "https://github.com/flatpak/flatpak-builder";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

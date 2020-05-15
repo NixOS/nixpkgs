@@ -1,37 +1,44 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, makeWrapper, Security }:
 
-with rustPlatform;
+rustPlatform.buildRustPackage rec {
+  pname = "racerd";
+  version = "unstable-2019-09-02";
 
-buildRustPackage rec {
-  name = "racerd-${version}";
-  version = "2019-03-20";
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "racerd";
-    rev = "6f74488e58e42314a36ff000bae796fe54c1bdd1";
-    sha256 = "1lg7j2plxpn5l65jxhsm99vmy08ljdb666hm0y1nnmmzalrakrg1";
+    rev = "e3d380b9a1d3f3b67286d60465746bc89fea9098";
+    sha256 = "13jqdvjk4savcl03mrn2vzgdsd7vxv2racqbyavrxp2cm9h6cjln";
   };
+
+  cargoPatches = [
+    (fetchpatch {
+      url = "https://github.com/jwilm/racerd/commit/856f3656e160cd2909c5166e962f422c901720ee.patch";
+      sha256 = "1qq2k4bnwjz5qgn7s8yxd090smwn2wvdm8dd1rrlgpln0a5vxkpb";
+    })
+  ];
+
+  cargoSha256 = "1z0dh2j9ik66i6nww3z7z2gw7nhc0b061zxbjzamk1jybpc845lq";
 
   # a nightly compiler is required unless we use this cheat code.
   RUSTC_BOOTSTRAP=1;
 
   doCheck = false;
 
-  cargoSha256 = "15894qr0kpp5kivx0p71zmmfhfh8in0ydkvfirxh2r12x0r2jhdd";
-
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -p target/release/racerd $out/bin/
+    cp -p $releaseDir/racerd $out/bin/
     wrapProgram $out/bin/racerd --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
   '';
 
   meta = with stdenv.lib; {
     description = "JSON/HTTP Server based on racer for adding Rust support to editors and IDEs";
-    homepage = https://github.com/jwilm/racerd;
+    homepage = "https://github.com/jwilm/racerd";
     license = licenses.asl20;
     platforms = platforms.all;
   };

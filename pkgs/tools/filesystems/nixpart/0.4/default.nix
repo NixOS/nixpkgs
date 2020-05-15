@@ -1,4 +1,5 @@
 { stdenv, fetchurl, python, buildPythonApplication
+, libselinux
 # Propagated to blivet
 , useNixUdev ? true
 # Needed by NixOps
@@ -10,10 +11,9 @@
 let
   blivet = import ./blivet.nix {
     inherit stdenv fetchurl buildPythonApplication;
-    inherit pykickstart pyparted pyblock cryptsetup multipath_tools;
+    inherit pykickstart pyparted pyblock cryptsetup libselinux multipath_tools;
     inherit useNixUdev;
     inherit (pkgs) lsof utillinux systemd;
-    libselinux = pkgs.libselinux.override { enablePython = true; };
   };
 
   cryptsetup = import ./cryptsetup.nix {

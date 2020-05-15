@@ -43,6 +43,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+  passthru = {
+    providedSessions = [ "surf-display" ];
+  };
+
   meta = with stdenv.lib; {
     description = "Kiosk browser session manager based on the surf browser";
     homepage = "https://code.it-zukunft-schule.de/cgit/surf-display/";

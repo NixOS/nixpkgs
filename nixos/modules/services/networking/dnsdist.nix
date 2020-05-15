@@ -46,11 +46,10 @@ in {
         RestartSec="1";
         DynamicUser = true;
         StartLimitInterval="0";
-        PrivateTmp=true;
         PrivateDevices=true;
-        CapabilityBoundingSet="CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID";
+        AmbientCapabilities="CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet="CAP_NET_BIND_SERVICE";
         ExecStart = "${pkgs.dnsdist}/bin/dnsdist --supervised --disable-syslog --config ${configFile}";
-        ProtectSystem="full";
         ProtectHome=true;
         RestrictAddressFamilies="AF_UNIX AF_INET AF_INET6";
         LimitNOFILE="16384";

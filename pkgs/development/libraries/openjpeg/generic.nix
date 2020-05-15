@@ -23,7 +23,7 @@ let
   mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "openjpeg";
   inherit version;
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open-source JPEG 2000 codec written in C language";
-    homepage = http://www.openjpeg.org/;
+    homepage = "http://www.openjpeg.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ codyopel ];
     platforms = platforms.all;

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "ammonite";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ nequissimus ];
@@ -13,8 +13,8 @@ import ./make-test.nix ({ pkgs, ...} : {
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $amm->succeed("amm -c 'val foo = 21; println(foo * 2)' | grep 42")
+    amm.succeed("amm -c 'val foo = 21; println(foo * 2)' | grep 42")
   '';
 })

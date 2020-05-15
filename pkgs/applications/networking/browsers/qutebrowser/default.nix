@@ -10,23 +10,23 @@ assert withMediaPlayback -> gst_all_1 != null;
 
 let
   pdfjs = let
-    version = "2.1.266";
+    version = "2.3.200";
   in
   fetchzip rec {
     name = "pdfjs-${version}";
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "1ybbnpz2jcdikzwr7r13lq528vxj3bpms1fqmg3n1zgs30cqpkby";
+    sha256 = "1fpxsw0hzahccyng08acvc7g0gk29j2x701p6w6fg1718mvcrm1q";
     stripRoot = false;
   };
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.7.0";
+  version = "1.11.1";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0wyjmb2qvnw3gn0ypgckwblmn7kasi12dfwp343hi6wscqripw7i";
+    sha256 = "0cxmmw002f5rvxzyhlhzqm2ipf64w4vspf298p6c5kpg535m8cvs";
   };
 
   # Needs tox
@@ -47,7 +47,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pyyaml pyqt5 pyqtwebengine jinja2 pygments
-    pypeg2 cssutils pyopengl attrs
+    pypeg2 cssutils pyopengl attrs setuptools
     # scripts and userscripts libs
     tldextract beautifulsoup4
     pyreadability pykeepass stem
@@ -105,9 +105,9 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/The-Compiler/qutebrowser;
+    homepage    = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jagajaga rnhmjoj ];
+    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry ];
   };
 }

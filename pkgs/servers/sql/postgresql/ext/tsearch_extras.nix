@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, postgresql }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tsearch-extras";
   version = "0.4";
 
@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Provides a few PostgreSQL functions for a lower-level data full text search";
-    homepage = https://github.com/zulip/tsearch_extras/;
+    homepage = "https://github.com/zulip/tsearch_extras/";
     license = licenses.postgresql;
+    platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [ DerTim1 ];
   };
 }

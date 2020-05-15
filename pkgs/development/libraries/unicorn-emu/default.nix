@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = '' patchShebangs make.sh '';
-  buildPhase = '' ./make.sh '';
+  buildPhase = '' ./make.sh '' + stdenv.lib.optionalString stdenv.isDarwin "macos-universal-no";
   installPhase = '' env PREFIX=$out ./make.sh install '';
 
   nativeBuildInputs = [ pkgconfig python ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight multi-platform CPU emulator library";
     homepage    = "http://www.unicorn-engine.org";
     license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

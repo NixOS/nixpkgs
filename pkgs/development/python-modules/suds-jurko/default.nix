@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight SOAP client (Jurko's fork)";
-    homepage = https://bitbucket.org/jurko/suds;
+    homepage = "https://bitbucket.org/jurko/suds";
     license = licenses.lgpl3;
   };
 

@@ -1,50 +1,60 @@
-{ stdenv, buildGoPackage, fetchFromGitHub
-, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, ostree, libselinux, libseccomp
+{ stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, gpgme
+, lvm2
+, btrfs-progs
+, libapparmor
+, libselinux
+, libseccomp
 }:
 
-let
-  version = "1.10.1";
+buildGoModule rec {
+  pname = "buildah";
+  version = "1.14.9";
 
   src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "containers";
-    repo   = "buildah";
-    sha256 = "0dki2v8j2jzbw49sdzcyjqbalbh70m0lgzrldgj6cc92mj896pxk";
+    owner = "containers";
+    repo = "buildah";
+    rev = "v${version}";
+    sha256 = "1vp59xp374wr7sbx89aikz4rv8fdg0a40v06saryxww9iqyvk8wp";
   };
 
-  goPackagePath = "github.com/containers/buildah";
+  outputs = [ "out" "man" ];
 
-in buildGoPackage rec {
-  pname = "buildah";
-  inherit version;
-  inherit src;
+  vendorSha256 = null;
 
-  outputs = [ "bin" "man" "out" ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  inherit goPackagePath;
-  excludedPackages = [ "tests" ];
-
-  # Optimizations break compilation of libseccomp c bindings
-  hardeningDisable = [ "fortify" ];
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs ostree libselinux libseccomp ];
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ];
 
   buildPhase = ''
-    pushd go/src/${goPackagePath}
     patchShebangs .
     make GIT_COMMIT="unknown"
-    install -Dm755 buildah $bin/bin/buildah
+    make -C docs
   '';
 
-  postBuild = ''
+  installPhase = ''
+    install -Dm755 buildah $out/bin/buildah
+    installShellCompletion --bash contrib/completions/bash/buildah
     make -C docs install PREFIX="$man"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool which facilitates building OCI images";
-    homepage = https://github.com/containers/buildah;
-    maintainers = with stdenv.lib.maintainers; [ Profpatsch vdemeester ];
-    license = stdenv.lib.licenses.asl20;
+    homepage = "https://buildah.io/";
+    changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
+    platforms = platforms.linux;
   };
 }

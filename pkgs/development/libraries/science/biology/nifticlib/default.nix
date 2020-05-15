@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails 7 out of 293 tests
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/niftilib;
+    homepage = "https://sourceforge.net/projects/niftilib";
     description = "Medical imaging format C API";
     maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.publicDomain;
   };
 }

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
-    homepage = https://github.com/amzn/amzn-drivers;
+    homepage = "https://github.com/amzn/amzn-drivers";
     license = licenses.gpl2;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux;

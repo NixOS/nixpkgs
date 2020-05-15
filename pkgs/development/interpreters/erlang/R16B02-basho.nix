@@ -1,6 +1,6 @@
 { pkgs, mkDerivation }:
 
-mkDerivation rec {
+mkDerivation {
   baseName = "erlang";
   version = "16B02.basho10";
 
@@ -42,7 +42,7 @@ mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/basho/otp/;
+    homepage = "https://github.com/basho/otp/";
     description = "Programming language used for massively scalable soft real-time systems, Basho fork";
 
     longDescription = ''

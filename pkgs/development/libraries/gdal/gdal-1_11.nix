@@ -40,9 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Allow use of old proj_api.h
-  NIX_CFLAGS_COMPILE = [
-    "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1"
-  ];
+  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
 
   # Prevent this:
   #
@@ -60,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Translator library for raster geospatial data formats";
-    homepage = https://www.gdal.org/;
+    homepage = "https://www.gdal.org/";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

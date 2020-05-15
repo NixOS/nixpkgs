@@ -1,49 +1,58 @@
-{ stdenv, fetchurl, unzip, version ? "2.0.0" }:
+{ stdenv, fetchurl, unzip, version ? "2.7.2" }:
 
 let
 
   sources = let
 
     base = "https://storage.googleapis.com/dart-archive/channels";
-    stable = "${base}/stable/release";
-    dev = "${base}/dev/release";
+    stable_version = "stable";
+    dev_version = "dev";
+    x86_64 = "x64";
+    i686 = "ia32";
+    aarch64 = "arm64";
 
   in {
-    "1.16.1-x86_64-linux" = fetchurl {
-      url = "${stable}/${version}/sdk/dartsdk-linux-x64-release.zip";
-      sha256 = "01cbnc8hd2wwprmivppmzvld9ps644k16wpgqv31h1596l5p82n2";
-    };
-    "1.16.1-i686-linux" = fetchurl {
-      url = "${stable}/${version}/sdk/dartsdk-linux-ia32-release.zip";
-      sha256 = "0jfwzc3jbk4n5j9ka59s9bkb25l5g85fl1nf676mvj36swcfykx3";
-    };
     "1.24.3-x86_64-linux" = fetchurl {
-      url = "${stable}/${version}/sdk/dartsdk-linux-x64-release.zip";
-      sha256 = "e323c97c35e6bc5d955babfe2e235a5484a82bb1e4870fa24562c8b9b800559b";
+      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
+      sha256 = "16sm02wbkj328ni0z1z4n4msi12lb8ijxzmbbfamvg766mycj8z3";
     };
     "1.24.3-i686-linux" = fetchurl {
-      url = "${stable}/${version}/sdk/dartsdk-linux-ia32-release.zip";
-      sha256 = "d67b8f8f9186e7d460320e6bce25ab343c014b6af4b2f61369ee83755d4da528";
+      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
+      sha256 = "0a559mfpb0zfd49zdcpld95h2g1lmcjwwsqf69hd9rw6j67qyyyn";
     };
-    "2.0.0-x86_64-linux" = fetchurl {
-      url = "${stable}/${version}/sdk/dartsdk-linux-x64-release.zip";
-      sha256 = "4014a1e8755d2d32cc1573b731a4a53acdf6dfca3e26ee437f63fe768501d336";
+    "1.24.3-aarch64-linux" = fetchurl {
+      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
+      sha256 = "1p5bn04gr91chcszgmw5ng8mlzgwsrdr2v7k7ppwr1slkx97fsrh";
     };
-    "2.0.0-i686-linux" = fetchurl {
-      url = "${stable}/${version}/sdk/dartsdk-linux-ia32-release.zip";
-      sha256 = "3164a9de70bf11ab5b20af0d51c8b3303f2dce584604dce33bea0040bdc0bbba";
+    "2.7.2-x86_64-linux" = fetchurl {
+      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
+      sha256 = "0vvsgda1smqdjn35yiq9pxx8f5haxb4hqnspcsfs6sn5c36k854v";
     };
-    "2.0.0-dev.26.0-x86_64-linux" = fetchurl {
-      url = "${dev}/${version}/sdk/dartsdk-linux-x64-release.zip";
-      sha256 = "18360489a7914d5df09b34934393e16c7627ba673c1e9ab5cfd11cd1d58fd7df";
+    "2.7.2-i686-linux" = fetchurl {
+      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
+      sha256 = "0dj01d2wwrp3cc5x73vs6fzhs6db60gkbjlrw3w9j04wcx69i38m";
     };
-    "2.0.0-dev.26.0-i686-linux" = fetchurl {
-      url = "${dev}/${version}/sdk/dartsdk-linux-ia32-release.zip";
-      sha256 = "83ba8b64c76f48d8de4e0eb887e49b7960053f570d27e7ea438cc0bac789955e";
+    "2.7.2-aarch64-linux" = fetchurl {
+      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
+      sha256 = "1p66fkdh1kv0ypmadmg67c3y3li3aaf1lahqh2g6r6qrzbh5da2p";
+    };
+    "2.9.0-4.0.dev-x86_64-linux" = fetchurl {
+      url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
+      sha256 = "16d9842fb3qbc0hy0zmimav9zndfkq96glgykj20xssc88qpjk2r";
+    };
+    "2.9.0-4.0.dev-i686-linux" = fetchurl {
+      url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
+      sha256 = "105wgyxmi491c7qw0z3zhn4lv52h80ngyz4ch9dyj0sq8nndz2rc";
+    };
+    "2.9.0-4.0.dev-aarch64-linux" = fetchurl {
+      url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
+      sha256 = "1x6mlmc4hccmx42k7srhma18faxpxvghjwqahna80508rdpljwgc";
     };
   };
 
 in
+
+with stdenv.lib;
 
 stdenv.mkDerivation {
 
@@ -65,19 +74,20 @@ stdenv.mkDerivation {
              $out/bin/dart
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
+  libPath = makeLibraryPath [ stdenv.cc.cc ];
 
   dontStrip = true;
 
   meta = {
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    homepage = https://www.dartlang.org/;
+    homepage = "https://www.dartlang.org/";
+    maintainers = with maintainers; [ grburst ];
     description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''
       Dart is a class-based, single inheritance, object-oriented language
       with C-style syntax. It offers compilation to JavaScript, interfaces,
       mixins, abstract classes, reified generics, and optional typing.
     '';
-    license = stdenv.lib.licenses.bsd3;
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    license = licenses.bsd3;
   };
 }

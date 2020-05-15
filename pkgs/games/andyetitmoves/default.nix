@@ -4,7 +4,7 @@ let plainName = "andyetitmoves";
     version   = "1.2.2";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${plainName}-${version}";
 
   src = if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux"
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       And Yet It Moves is an award-winning physics-based platform game in which players rotate the game world at will to solve challenging puzzles. Tilting the world turns walls into floors, slides into platforms, and stacks of rocks into dangerous hazards.
     '';
 
-    homepage = http://www.andyetitmoves.net/;
+    homepage = "http://www.andyetitmoves.net/";
 
     license = stdenv.lib.licenses.unfree;
 

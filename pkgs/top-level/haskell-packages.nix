@@ -1,15 +1,12 @@
-{ buildPackages, pkgs
-, newScope
-}:
+{ buildPackages, pkgs, newScope }:
 
 let
   # These are attributes in compiler and packages that don't support integer-simple.
   integerSimpleExcludes = [
     "ghc822Binary"
-    "ghc863Binary"
+    "ghc865Binary"
     "ghc844"
     "ghcjs"
-    "ghcjs84"
     "ghcjs86"
     "integer-simple"
   ];
@@ -45,25 +42,13 @@ in {
 
     ghc822Binary = callPackage ../development/compilers/ghc/8.2.2-binary.nix { };
 
-    ghc863Binary = callPackage ../development/compilers/ghc/8.6.3-binary.nix { };
+    ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
 
-    ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
-      bootPkgs = packages.ghc822Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_39;
-      llvmPackages = pkgs.llvmPackages_39;
-    };
     ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
       bootPkgs = packages.ghc822Binary;
       sphinx = buildPackages.python3Packages.sphinx_1_7_9;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
-    };
-    ghc864 = callPackage ../development/compilers/ghc/8.6.4.nix {
-      bootPkgs = packages.ghc822Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_6;
-      llvmPackages = pkgs.llvmPackages_6;
     };
     ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
       bootPkgs = packages.ghc822Binary;
@@ -71,27 +56,34 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
-    ghc881 = callPackage ../development/compilers/ghc/8.8.1.nix {
-      bootPkgs = packages.ghc863Binary;
+    ghc882 = callPackage ../development/compilers/ghc/8.8.2.nix {
+      bootPkgs = packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
-    ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc863Binary;
+    ghc883 = callPackage ../development/compilers/ghc/8.8.3.nix {
+      bootPkgs = packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_6;
-      llvmPackages = pkgs.llvmPackages_6;
+      buildLlvmPackages = buildPackages.llvmPackages_7;
+      llvmPackages = pkgs.llvmPackages_7;
+    };
+    ghc8101 = callPackage ../development/compilers/ghc/8.10.1.nix {
+      bootPkgs = packages.ghc865Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_9;
+      llvmPackages = pkgs.llvmPackages_9;
+    };
+    ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
+      bootPkgs = packages.ghc883; # no binary yet
+      inherit (buildPackages.python3Packages) sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_10;
+      llvmPackages = pkgs.llvmPackages_10;
+      libffi = pkgs.libffi;
     };
     ghcjs = compiler.ghcjs86;
-    ghcjs84 = callPackage ../development/compilers/ghcjs-ng {
-      bootPkgs = packages.ghc844;
-      ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.4/git.json;
-      stage0 = ../development/compilers/ghcjs-ng/8.4/stage0.nix;
-      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.4/dep-overrides.nix {};
-    };
     ghcjs86 = callPackage ../development/compilers/ghcjs-ng {
-      bootPkgs = packages.ghc864;
+      bootPkgs = packages.ghc865;
       ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.6/git.json;
       stage0 = ../development/compilers/ghcjs-ng/8.6/stage0.nix;
       ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.6/dep-overrides.nix {};
@@ -105,7 +97,7 @@ in {
         (pkgs.lib.attrNames compiler);
     in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
       integerSimpleGhcNames
-      (name: compiler."${name}".override { enableIntegerSimple = true; }));
+      (name: compiler.${name}.override { enableIntegerSimple = true; }));
   };
 
   # Default overrides that are applied to all package sets.
@@ -120,36 +112,36 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc863Binary = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc863Binary;
-      ghc = bh.compiler.ghc863Binary;
+    ghc865Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc865Binary;
+      ghc = bh.compiler.ghc865Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
       packageSetConfig = bootstrapPackageSet;
-    };
-    ghc822 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc822;
-      ghc = bh.compiler.ghc822;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
     ghc844 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc844;
       ghc = bh.compiler.ghc844;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
-    ghc864 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc864;
-      ghc = bh.compiler.ghc864;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
-    };
     ghc865 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc865;
       ghc = bh.compiler.ghc865;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
     };
-    ghc881 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc881;
-      ghc = bh.compiler.ghc881;
+    ghc882 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc882;
+      ghc = bh.compiler.ghc882;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
+    };
+    ghc883 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc883;
+      ghc = bh.compiler.ghc883;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
+    };
+    ghc8101 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8101;
+      ghc = bh.compiler.ghc8101;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
@@ -157,12 +149,6 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
     ghcjs = packages.ghcjs86;
-    ghcjs84 = callPackage ../development/haskell-modules rec {
-      buildHaskellPackages = ghc.bootPkgs;
-      ghc = bh.compiler.ghcjs84;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
-    };
     ghcjs86 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs86;
@@ -176,9 +162,9 @@ in {
       integerSimpleGhcNames = pkgs.lib.filter
         (name: ! builtins.elem name integerSimpleExcludes)
         (pkgs.lib.attrNames packages);
-    in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
-      ghc = bh.compiler.integer-simple."${name}";
-      buildHaskellPackages = bh.packages.integer-simple."${name}";
+    in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages.${name}.override {
+      ghc = bh.compiler.integer-simple.${name};
+      buildHaskellPackages = bh.packages.integer-simple.${name};
       overrides = _self : _super : {
         integer-simple = null;
         integer-gmp = null;

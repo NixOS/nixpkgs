@@ -1,6 +1,6 @@
 { stdenv, fetchurl, tcl, tk, fetchpatch } :
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "8.4.3";
   pname = "tix";
   src = fetchurl {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A widget library for Tcl/Tk";
-    homepage    = http://tix.sourceforge.net/;
+    homepage    = "http://tix.sourceforge.net/";
     platforms   = platforms.all;
     license     = with licenses; [
       bsd2 # tix

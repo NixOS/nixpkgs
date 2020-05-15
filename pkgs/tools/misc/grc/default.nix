@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Yet another colouriser for beautifying your logfiles or output of commands";
-    homepage    = http://korpus.juls.savba.sk/~garabik/software/grc.html;
+    homepage    = "http://korpus.juls.savba.sk/~garabik/software/grc.html";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 AndersonTorres peterhoeg ];
     platforms   = platforms.unix;

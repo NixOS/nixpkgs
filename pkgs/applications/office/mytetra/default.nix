@@ -2,7 +2,7 @@
 
 let
   version = "1.44.55";
-in mkDerivation rec {
+in mkDerivation {
   pname = "mytetra";
   inherit version;
   src = fetchurl {
@@ -31,7 +31,7 @@ in mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Smart manager for information collecting";
-    homepage = https://webhamster.ru/site/page/index/articles/projectcode/138;
+    homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
     license = licenses.gpl3;
     maintainers = [ maintainers.gnidorah ];
     platforms = platforms.linux;

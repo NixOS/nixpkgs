@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       privileges are dropped as soon as the program has bound itself to that
       port.
     '';
-    homepage = http://www.mavetju.org/unix/general.php;
+    homepage = "http://www.mavetju.org/unix/general.php";
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

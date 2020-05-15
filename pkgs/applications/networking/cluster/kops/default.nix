@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
 
 let
   goPackagePath = "k8s.io/kops";
@@ -18,8 +18,8 @@ let
           inherit sha256;
         };
 
-        buildInputs = [go-bindata];
-        subPackages = ["cmd/kops"];
+        nativeBuildInputs = [ go-bindata installShellFiles ];
+        subPackages = [ "cmd/kops" ];
 
         buildFlagsArray = ''
           -ldflags=
@@ -33,17 +33,17 @@ let
         '';
 
         postInstall = ''
-          mkdir -p $bin/share/bash-completion/completions
-          mkdir -p $bin/share/zsh/site-functions
-          $bin/bin/kops completion bash > $bin/share/bash-completion/completions/kops
-          $bin/bin/kops completion zsh > $bin/share/zsh/site-functions/_kops
+          for shell in bash zsh; do
+            $out/bin/kops completion $shell > kops.$shell
+            installShellCompletion kops.$shell
+          done
         '';
 
         meta = with stdenv.lib; {
           description = "Easiest way to get a production Kubernetes up and running";
-          homepage = https://github.com/kubernetes/kops;
+          homepage = "https://github.com/kubernetes/kops";
           license = licenses.asl20;
-          maintainers = with maintainers; [offline zimbatm];
+          maintainers = with maintainers; [ offline zimbatm kampka ];
           platforms = platforms.unix;
         };
       } // attrs';
@@ -51,13 +51,13 @@ in rec {
 
   mkKops = generic;
 
-  kops_1_12 = mkKops {
-    version = "1.12.3";
-    sha256 = "0rpbaz54l5v1z7ab5kpxcb4jyakkl5ysgz1sxajqmw2d6dvf7xly";
+  kops_1_15 = mkKops {
+    version = "1.15.3";
+    sha256 = "0pzgrsl61nw8pm3s032lj020fw13x3fpzlj7lknsnd581f0gg4df";
   };
 
-  kops_1_13 = mkKops {
-    version = "1.13.0";
-    sha256 = "04kbbg3gqzwzzzq1lmnpw2gqky3pfwfk7pc0laxv2yssk9wac5k1";
+  kops_1_16 = mkKops {
+    version = "1.16.2";
+    sha256 = "1vhkjhx1n3f6ggw5cy1avs3sbqb2da6khck9zqd4s7almjbpc2h2";
   };
 }

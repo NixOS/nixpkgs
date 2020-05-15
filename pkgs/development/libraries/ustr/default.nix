@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.and.org/ustr/;
+    homepage = "http://www.and.org/ustr/";
     description = "Micro String API for C language";
     license = licenses.bsd2;
     maintainers = [ maintainers.phreedom ];

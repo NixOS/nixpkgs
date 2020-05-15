@@ -3,7 +3,7 @@
 let
   pname = "behdad-fonts";
   version = "0.0.3";
-in fetchFromGitHub rec {
+in fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "font-store";
   repo = "BehdadFont";
@@ -16,7 +16,7 @@ in fetchFromGitHub rec {
   sha256 = "0c57232462cv1jrfn0m2bl7jzcfkacirrdd2qimrc8iqhkz0ajfz";
 
   meta = with lib; {
-    homepage = https://github.com/font-store/BehdadFont;
+    homepage = "https://github.com/font-store/BehdadFont";
     description = "A Persian/Arabic Open Source Font";
     license = licenses.ofl;
     platforms = platforms.all;

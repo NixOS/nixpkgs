@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gotools-unstable";
-  version = "2019-07-06";
-  rev = "72ffa07ba3db8d09f5215feec0f89464f3028f8e";
+  version = "2020-04-21";
+  rev = "72e4a01eba4315301fd9ce00c8c2f492580ded8a";
 
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/tools";
-    sha256 = "0c0s5aiwj807vxfzwrah32spwq8cnxvy0j117i5cbsqw2df80pgv";
+    sha256 = "0a8c7j4w784w441j3j3bh640vy1g6g214641qv485wyi0xj49anf";
   };
 
   # Build of golang.org/x/tools/gopls fails with:
@@ -21,7 +21,7 @@ buildGoModule rec {
     rm -rf gopls
   '';
 
-  modSha256 = "16nkrpki9fnxsrxxxs9ljz49plcz393z0sqq2knkk30pmncpwd3q";
+  vendorSha256 = "0pplmqxrnc8qnr5708igx4dm7rb0hicvhg6lh5hj8zkx38nb19s0";
 
   postConfigure = ''
     # Make the builtin tools available here
@@ -40,9 +40,8 @@ buildGoModule rec {
   # Set GOTOOLDIR for derivations adding this to buildInputs
   postInstall = ''
     mkdir -p $out/nix-support
-    substituteAll ${../../go-modules/tools/setup-hook.sh} $out/nix-support/setup-hook.tmp
-    cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
-    rm $out/nix-support/setup-hook.tmp
+    substitute ${../../go-modules/tools/setup-hook.sh} $out/nix-support/setup-hook \
+      --subst-var-by bin $out
   '';
 
   # Do not copy this without a good reason for enabling

@@ -23,7 +23,7 @@
 , pngquant
 }:
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.15";
+  name = "appstream-glib-0.7.17";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
   outputBin = "dev";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings [ "." "-" ] [ "_" "_" ] name;
-    sha256 = "16cqs1s7nqc551sipgaxbbzwap1km0n12s4lcgfbxzzl9bcjbp9m";
+    sha256 = "06pm8l58y0ladimyckbvlslr5bjj9rwb70rgjmn09l41pdpipy2i";
   };
 
   nativeBuildInputs = [
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Objects and helper methods to read and write AppStream metadata";
-    homepage = https://people.freedesktop.org/~hughsient/appstream-glib/;
+    homepage = "https://people.freedesktop.org/~hughsient/appstream-glib/";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ lethalman matthewbauer ];

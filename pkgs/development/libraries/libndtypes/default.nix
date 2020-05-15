@@ -2,7 +2,7 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libndtypes";
   version = "unstable-2018-11-27";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dynamic types for data description and in-memory computations";
-    homepage = https://xnd.io/;
+    homepage = "https://xnd.io/";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];
   };

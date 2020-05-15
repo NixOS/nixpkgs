@@ -1,17 +1,34 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, dde-qt-dbus-factory,
-  dde-session-ui, deepin, deepin-desktop-schemas, deepin-wallpapers,
-  dtkcore, dtkwidget, gsettings-qt, qtsvg, qttools, qtx11extras,
-  which, xdg_utils, wrapGAppsHook }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, dde-qt-dbus-factory
+, dde-session-ui
+, deepin
+, deepin-desktop-schemas
+, deepin-wallpapers
+, dtkcore
+, dtkwidget
+, gsettings-qt
+, qtsvg
+, qttools
+, qtx11extras
+, which
+, xdg_utils
+, wrapGAppsHook
+, glib
+}:
 
 mkDerivation rec {
   pname = "dde-launcher";
-  version = "4.6.13";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1lwwn2qjbd4i7wx18mi8n7hzdh832i3kdadrivr10sbafdank7ky";
+    sha256 = "0zh6bb0r3pgjrnw9rba46ghdzza1ka1mv7r1znf8gw24wsjgjcpn";
   };
 
   nativeBuildInputs = [
@@ -29,6 +46,7 @@ mkDerivation rec {
     deepin-wallpapers
     dtkcore
     dtkwidget
+    glib
     gsettings-qt
     qtsvg
     qtx11extras
@@ -58,16 +76,24 @@ mkDerivation rec {
     # note: `dbus-send` path does not need to be hard coded because it is not used for dtkcore >= 2.0.8.0
   '';
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
   postFixup = ''
     # debugging
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin Desktop Environment launcher module";
-    homepage = https://github.com/linuxdeepin/dde-launcher;
+    homepage = "https://github.com/linuxdeepin/dde-launcher";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cairomm lv2 libpthreadstubs libXdmcp libXft ntk pcre fftwFloat zita-resampler ];
 
   meta = with stdenv.lib; {
-    homepage = https://ssj71.github.io/infamousPlugins;
+    homepage = "https://ssj71.github.io/infamousPlugins";
     description = "A collection of open-source LV2 plugins";
     longDescription = ''
       These are audio plugins in the LV2 format, developed for linux. Most are suitable for live use.

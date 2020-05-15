@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   patches = [ ./bench.patch ];
 
   meta = with stdenv.lib; {
-    description = "Application designed to test GTK+ performance";
-    homepage = http://gtkperf.sourceforge.net/;
+    description = "Application designed to test GTK performance";
+    homepage = "http://gtkperf.sourceforge.net/";
     license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [ dtzWill ];
   };

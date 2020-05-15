@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "google-pasta";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zmqfvy28i2509277s6sz098kddd16cx21vpxyc8xml1nclcxlbr";
+    sha256 = "713813a9f7d6589e5defdaf21e80e4392eb124662f8bd829acd51a4f8735c0cb";
   };
 
   propagatedBuildInputs = [
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "An AST-based Python refactoring library";
-    homepage    = https://github.com/google/pasta;
+    homepage    = "https://github.com/google/pasta";
     license     = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ timokau ];
   };

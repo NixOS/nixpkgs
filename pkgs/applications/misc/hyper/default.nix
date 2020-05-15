@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   meta = with lib; {
     description = "A terminal built on web technologies";
-    homepage    = https://hyper.is/;
+    homepage    = "https://hyper.is/";
     maintainers = with maintainers; [ puffnfresh ];
     license     = licenses.mit;
     platforms   = [ "x86_64-linux" ];

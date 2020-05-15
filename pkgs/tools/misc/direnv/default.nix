@@ -2,14 +2,14 @@
 
 buildGoPackage rec {
   pname = "direnv";
-  version = "2.20.1";
+  version = "2.21.3";
   goPackagePath = "github.com/direnv/direnv";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "0v8mqxb5g8z9kdnvbwfg39hlb9l3wpb8qwslwgln42k4bs8kg9hs";
+    sha256 = "1adi6ld9g4zgz0f6q0kkzrywclqrmikyp7yh22zm9lfdvd5hs8wp";
   };
 
   postConfigure = ''
@@ -23,9 +23,9 @@ buildGoPackage rec {
 
   installPhase = ''
     mkdir -p $out
-    make install DESTDIR=$bin
-    mkdir -p $bin/share/fish/vendor_conf.d
-    echo "eval ($bin/bin/direnv hook fish)" > $bin/share/fish/vendor_conf.d/direnv.fish
+    make install DESTDIR=$out
+    mkdir -p $out/share/fish/vendor_conf.d
+    echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish
   '';
 
   meta = with stdenv.lib; {
@@ -41,7 +41,7 @@ buildGoPackage rec {
       In short, this little tool allows you to have project-specific
       environment variables.
     '';
-    homepage = https://direnv.net;
+    homepage = "https://direnv.net";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
   };

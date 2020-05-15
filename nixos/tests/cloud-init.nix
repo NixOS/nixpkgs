@@ -3,7 +3,7 @@
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -30,6 +30,7 @@ let
       '';
   };
 in makeTest {
+  name = "cloud-init";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ lewo ];
   };
@@ -40,10 +41,12 @@ in makeTest {
       services.cloud-init.enable = true;
     };
   testScript = ''
-     $machine->start;
-     $machine->waitForUnit("cloud-init.service");
-     $machine->succeed("cat /tmp/cloudinit-write-file | grep -q 'cloudinit'");
+      machine.start()
+      machine.wait_for_unit("cloud-init.service")
+      machine.succeed("cat /tmp/cloudinit-write-file | grep -q 'cloudinit'")
 
-     $machine->waitUntilSucceeds("cat /root/.ssh/authorized_keys | grep -q 'should be a key!'");
+      machine.wait_until_succeeds(
+          "cat /root/.ssh/authorized_keys | grep -q 'should be a key!'"
+      )
   '';
 }

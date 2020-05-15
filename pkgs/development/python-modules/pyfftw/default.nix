@@ -2,12 +2,12 @@
 , fftw, fftwFloat, fftwLongDouble, numpy, scipy, cython, dask }:
 
 buildPythonPackage rec {
-  version = "0.11.1";
+  version = "0.12.0";
   pname = "pyFFTW";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05ea28dede4c3aaaf5c66f56eb0f71849d0d50f5bc0f53ca0ffa69534af14926";
+    sha256 = "60988e823ca75808a26fd79d88dbae1de3699e72a293f812aa4534f8a0a58cb0";
   };
 
   buildInputs = [ fftw fftwFloat fftwLongDouble];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
-    homepage = http://hgomersall.github.com/pyFFTW/;
+    homepage = "http://hgomersall.github.com/pyFFTW/";
     license = with licenses; [ bsd2 bsd3 ];
     maintainers = with maintainers; [ fridh ];
   };

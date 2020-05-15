@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, cmake, libusb }:
+{ stdenv, fetchurl, cmake, libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
   pname = "garmindev";
   version = "0.3.4";
 
   src = fetchurl {
-    url = "https://bitbucket.org/maproom/qlandkarte-gt/downloads/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/qlandkartegt/${pname}-${version}.tar.gz";
     sha256 = "1mc7rxdn9790pgbvz02xzipxp2dp9h4hfq87xgawa18sp9jqzhw6";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.qlandkarte.org/;
+    homepage = "http://www.qlandkarte.org/";
     description = "Garmin Device Drivers for QlandkarteGT";
     license = licenses.gpl2;
     maintainers = with maintainers; [ sikmir ];

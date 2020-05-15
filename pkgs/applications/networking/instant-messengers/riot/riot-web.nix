@@ -1,31 +1,38 @@
-{ lib, stdenv, fetchurl, writeText, conf ? null }:
+{ lib, stdenv, fetchurl, writeText, jq, conf ? {} }:
 
 # Note for maintainers:
 # Versions of `riot-web` and `riot-desktop` should be kept in sync.
 
-stdenv.mkDerivation rec {
+let
+  noPhoningHome = {
+    disable_guests = true; # disable automatic guest account registration at matrix.org
+    piwik = false; # disable analytics
+  };
+  configOverrides = writeText "riot-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
+
+in stdenv.mkDerivation rec {
   pname = "riot-web";
-  version = "1.3.3";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/vector-im/riot-web/releases/download/v${version}/riot-v${version}.tar.gz";
-    sha256 = "1n5h7q3h0akw09p4z7nwprxsa8jnmwbvwn2npq7zz62ccasb4fv9";
+    sha256 = "1mm4xk69ya1k3gz6jjhc4njx7b3rp157jmrqsxr5i382zs035ff7";
   };
 
-  installPhase = let
-    configFile = if (conf != null)
-      then writeText "riot-config.json" conf
-      else "$out/config.sample.json";
-  in ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/
     cp -R . $out/
-    ln -s ${configFile} $out/config.json
+    ${jq}/bin/jq -s '.[0] * .[1]' "config.sample.json" "${configOverrides}" > "$out/config.json"
+
+    runHook postInstall
   '';
 
   meta = {
     description = "A glossy Matrix collaboration client for the web";
-    homepage = http://riot.im/;
-    maintainers = with stdenv.lib.maintainers; [ bachp pacien ];
+    homepage = "http://riot.im/";
+    maintainers = with stdenv.lib.maintainers; [ bachp pacien ma27 ];
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
     hydraPlatforms = [];

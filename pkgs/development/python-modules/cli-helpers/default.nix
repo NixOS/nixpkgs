@@ -1,14 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, configobj
-, terminaltables
-, tabulate
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , backports_csv
-, wcwidth
-, pytest
+, configobj
 , mock
-, isPy27
+, pytest
+, tabulate
+, terminaltables
+, wcwidth
 }:
 
 buildPythonPackage rec {
@@ -26,6 +23,9 @@ buildPythonPackage rec {
     tabulate
     wcwidth
   ] ++ (lib.optionals isPy27 [ backports_csv ]);
+
+  # namespace collision between backport.csv and backports.configparser
+  doCheck = !isPy27;
 
   checkInputs = [ pytest mock ];
 
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
       Read the documentation at http://cli-helpers.rtfd.io
     '';
-    homepage = https://cli-helpers.readthedocs.io/en/stable/;
+    homepage = "https://cli-helpers.readthedocs.io/en/stable/";
     license = licenses.bsd3 ;
     maintainers = [ maintainers.kalbasit ];
   };

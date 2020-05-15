@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''ixf'';
   version = ''cl-20180228-git'';
 

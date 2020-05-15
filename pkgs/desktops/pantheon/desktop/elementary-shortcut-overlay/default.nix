@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "1.0.1";
+  version = "1.1.1";
 
   repoName = "shortcut-overlay";
 
@@ -25,13 +25,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1ph4rx2l5fn0zh4fjfjlgbgskmzc0lvzqgcv7v4kr5m4rij1p4y4";
+    sha256 = "03wnc3vfnrkm5i7h370n7h2mbcmaxnhynmjs37q63vq6vq7agldb";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -55,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A native OS-wide shortcut overlay to be launched by Gala";
-    homepage = https://github.com/elementary/shortcut-overlay;
+    homepage = "https://github.com/elementary/shortcut-overlay";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

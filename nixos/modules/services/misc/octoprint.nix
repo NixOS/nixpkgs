@@ -17,9 +17,9 @@ let
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = pkgs.python.buildEnv.override {
-    extraLibs = cfg.plugins pkgs.octoprint-plugins;
-  };
+  pluginsEnv = package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
+
+  package = pkgs.octoprint;
 
 in
 {
@@ -86,16 +86,16 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == "octoprint") (singleton
-      { name = "octoprint";
+    users.users = optionalAttrs (cfg.user == "octoprint") {
+      octoprint = {
         group = cfg.group;
         uid = config.ids.uids.octoprint;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "octoprint") (singleton
-      { name = "octoprint";
-        gid = config.ids.gids.octoprint;
-      });
+    users.groups = optionalAttrs (cfg.group == "octoprint") {
+      octoprint.gid = config.ids.gids.octoprint;
+    };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
@@ -106,7 +106,6 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = [ pluginsEnv ];
-      environment.PYTHONPATH = makeSearchPathOutput "lib" pkgs.python.sitePackages [ pluginsEnv ];
 
       preStart = ''
         if [ -e "${cfg.stateDir}/config.yaml" ]; then
@@ -119,7 +118,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.octoprint}/bin/octoprint serve -b ${cfg.stateDir}";
+        ExecStart = "${pluginsEnv}/bin/octoprint serve -b ${cfg.stateDir}";
         User = cfg.user;
         Group = cfg.group;
       };

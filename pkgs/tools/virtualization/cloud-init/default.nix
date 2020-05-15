@@ -2,7 +2,7 @@
 
 let version = "0.7.9";
 
-in pythonPackages.buildPythonApplication rec {
+in pythonPackages.buildPythonApplication {
   pname = "cloud-init";
   inherit version;
   namePrefix = "";
@@ -37,7 +37,7 @@ in pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    homepage = https://cloudinit.readthedocs.org;
+    homepage = "https://cloudinit.readthedocs.org";
     description = "Provides configuration and customization of cloud instance";
     maintainers = [ lib.maintainers.madjar lib.maintainers.phile314 ];
     platforms = lib.platforms.all;

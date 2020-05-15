@@ -18,10 +18,6 @@ stdenv.mkDerivation rec {
       shared-mime-info glib gdk-pixbuf perl
     ];
 
-  preFixup = ''
-    rm $out/share/icons/*/icon-theme.cache
-  '';
-
   meta = {
     description = "Fast and simple image viewer";
     longDescription =
@@ -34,7 +30,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3;
 
-    homepage = http://siyanpanayotov.com/project/viewnior/;
+    homepage = "http://siyanpanayotov.com/project/viewnior/";
 
     maintainers = [ stdenv.lib.maintainers.smironov ];
 

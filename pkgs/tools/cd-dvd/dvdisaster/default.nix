@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://dvdisaster.net/;
+    homepage = "http://dvdisaster.net/";
     description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''
       Dvdisaster provides a margin of safety against data loss on CD and

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "radsecproxy";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1268lbysa82b6h0101jzs0v6ixvmy3x0d0a8hw37sy95filsjmia";
+    sha256 = "12pvwd7v3iswki3riycxaiiqxingg4bqnkwc5ay3j4n2kzynr1qg";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://software.nordu.net/radsecproxy/;
+    homepage = "https://software.nordu.net/radsecproxy/";
     description = "A generic RADIUS proxy that supports both UDP and TLS (RadSec) RADIUS transports.";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sargon ];

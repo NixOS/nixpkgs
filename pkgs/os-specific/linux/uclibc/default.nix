@@ -48,7 +48,7 @@ let
     UCLIBC_HAS_FPU n
   '';
 
-  version = "1.0.31";
+  version = "1.0.33";
 in
 
 stdenv.mkDerivation {
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${version}/uClibc-ng-${version}.tar.bz2";
     # from "${url}.sha256";
-    sha256 = "0ba9yh7ir1jamrgc9x9v7zw0sw144f78q4vidiz6ynpr4dwbd5qm";
+    sha256 = "0qy9xsqacrhhrxd16azm26pqb2ks6c43wbrlq3i8xmq2917kw3xi";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -109,6 +109,6 @@ stdenv.mkDerivation {
     description = "A small implementation of the C library";
     maintainers = with maintainers; [ rasendubi ];
     license = licenses.lgpl2;
-    platforms = platforms.linux;
+    platforms = intersectLists platforms.linux platforms.x86; # fails to build on ARM
   };
 }

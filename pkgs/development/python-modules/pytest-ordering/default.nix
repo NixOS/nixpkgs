@@ -23,7 +23,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/ftobia/pytest-ordering;
+    homepage = "https://github.com/ftobia/pytest-ordering";
     description = "Pytest plugin to run your tests in a specific order";
     license = licenses.mit;
     maintainers = with maintainers; [ eadwu ];

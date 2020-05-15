@@ -8,7 +8,7 @@ let
     in {
       displayName = "Python 3";
       argv = [
-        "${env.interpreter}"
+        env.interpreter
         "-m"
         "ipykernel_launcher"
         "-f"
@@ -26,7 +26,7 @@ in
 
   # Definitions is an attribute set.
 
-  create = { definitions ?  default }: with lib; stdenv.mkDerivation rec {
+  create = { definitions ?  default }: with lib; stdenv.mkDerivation {
 
     name = "jupyter-kernels";
 
@@ -67,7 +67,7 @@ in
 
     meta = {
       description = "Wrapper to create jupyter notebook kernel definitions";
-      homepage = https://jupyter.org/;
+      homepage = "https://jupyter.org/";
       maintainers = with maintainers; [ aborsu ];
     };
   };

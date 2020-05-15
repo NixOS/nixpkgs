@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/selmf/unarr;
+    homepage = "https://github.com/selmf/unarr";
     description = "A lightweight decompression library with support for rar, tar and zip archives";
     license = licenses.lgpl3;
   };

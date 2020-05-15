@@ -1,23 +1,23 @@
-import ./make-test.nix {
+import ./make-test-python.nix {
   name = "systemd-confinement";
 
   machine = { pkgs, lib, ... }: let
     testServer = pkgs.writeScript "testserver.sh" ''
-      #!${pkgs.stdenv.shell}
+      #!${pkgs.runtimeShell}
       export PATH=${lib.escapeShellArg "${pkgs.coreutils}/bin"}
-      ${lib.escapeShellArg pkgs.stdenv.shell} 2>&1
+      ${lib.escapeShellArg pkgs.runtimeShell} 2>&1
       echo "exit-status:$?"
     '';
 
     testClient = pkgs.writeScriptBin "chroot-exec" ''
-      #!${pkgs.stdenv.shell} -e
+      #!${pkgs.runtimeShell} -e
       output="$(echo "$@" | nc -NU "/run/test$(< /teststep).sock")"
       ret="$(echo "$output" | sed -nre '$s/^exit-status:([0-9]+)$/\1/p')"
       echo "$output" | head -n -1
       exit "''${ret:-1}"
     '';
 
-    mkTestStep = num: { description, config ? {}, testScript }: {
+    mkTestStep = num: { config ? {}, testScript }: {
       systemd.sockets."test${toString num}" = {
         description = "Socket for Test Service ${toString num}";
         wantedBy = [ "sockets.target" ];
@@ -34,52 +34,48 @@ import ./make-test.nix {
         };
       } // removeAttrs config [ "confinement" "serviceConfig" ];
 
-      __testSteps = lib.mkOrder num ''
-        subtest '${lib.escape ["\\" "'"] description}', sub {
-          $machine->succeed('echo ${toString num} > /teststep');
-          ${testScript}
-        };
-      '';
+      __testSteps = lib.mkOrder num (''
+        machine.succeed("echo ${toString num} > /teststep")
+      '' + testScript);
     };
 
   in {
     imports = lib.imap1 mkTestStep [
-      { description = "chroot-only confinement";
-        config.confinement.mode = "chroot-only";
+      { config.confinement.mode = "chroot-only";
         testScript = ''
-          $machine->succeed(
-            'test "$(chroot-exec ls -1 / | paste -sd,)" = bin,nix',
-            'test "$(chroot-exec id -u)" = 0',
-            'chroot-exec chown 65534 /bin',
-          );
+          with subtest("chroot-only confinement"):
+              machine.succeed(
+                  'test "$(chroot-exec ls -1 / | paste -sd,)" = bin,nix',
+                  'test "$(chroot-exec id -u)" = 0',
+                  "chroot-exec chown 65534 /bin",
+              )
         '';
       }
-      { description = "full confinement with APIVFS";
-        testScript = ''
-          $machine->fail(
-            'chroot-exec ls -l /etc',
-            'chroot-exec ls -l /run',
-            'chroot-exec chown 65534 /bin',
-          );
-          $machine->succeed(
-            'test "$(chroot-exec id -u)" = 0',
-            'chroot-exec chown 0 /bin',
-          );
+      { testScript = ''
+          with subtest("full confinement with APIVFS"):
+              machine.fail(
+                  "chroot-exec ls -l /etc",
+                  "chroot-exec ls -l /run",
+                  "chroot-exec chown 65534 /bin",
+              )
+              machine.succeed(
+                  'test "$(chroot-exec id -u)" = 0', "chroot-exec chown 0 /bin",
+              )
         '';
       }
-      { description = "check existence of bind-mounted /etc";
-        config.serviceConfig.BindReadOnlyPaths = [ "/etc" ];
+      { config.serviceConfig.BindReadOnlyPaths = [ "/etc" ];
         testScript = ''
-          $machine->succeed('test -n "$(chroot-exec cat /etc/passwd)"');
+          with subtest("check existence of bind-mounted /etc"):
+              machine.succeed('test -n "$(chroot-exec cat /etc/passwd)"')
         '';
       }
-      { description = "check if User/Group really runs as non-root";
-        config.serviceConfig.User = "chroot-testuser";
+      { config.serviceConfig.User = "chroot-testuser";
         config.serviceConfig.Group = "chroot-testgroup";
         testScript = ''
-          $machine->succeed('chroot-exec ls -l /dev');
-          $machine->succeed('test "$(chroot-exec id -u)" != 0');
-          $machine->fail('chroot-exec touch /bin/test');
+          with subtest("check if User/Group really runs as non-root"):
+              machine.succeed("chroot-exec ls -l /dev")
+              machine.succeed('test "$(chroot-exec id -u)" != 0')
+              machine.fail("chroot-exec touch /bin/test")
         '';
       }
       (let
@@ -87,62 +83,60 @@ import ./make-test.nix {
           target = pkgs.writeText "symlink-target" "got me\n";
         } "ln -s \"$target\" \"$out\"";
       in {
-        description = "check if symlinks are properly bind-mounted";
         config.confinement.packages = lib.singleton symlink;
         testScript = ''
-          $machine->fail('chroot-exec test -e /etc');
-          $machine->succeed('chroot-exec cat ${symlink} >&2');
-          $machine->succeed('test "$(chroot-exec cat ${symlink})" = "got me"');
+          with subtest("check if symlinks are properly bind-mounted"):
+              machine.fail("chroot-exec test -e /etc")
+              machine.succeed(
+                  "chroot-exec cat ${symlink} >&2",
+                  'test "$(chroot-exec cat ${symlink})" = "got me"',
+              )
         '';
       })
-      { description = "check if StateDirectory works";
-        config.serviceConfig.User = "chroot-testuser";
+      { config.serviceConfig.User = "chroot-testuser";
         config.serviceConfig.Group = "chroot-testgroup";
         config.serviceConfig.StateDirectory = "testme";
         testScript = ''
-          $machine->succeed('chroot-exec touch /tmp/canary');
-          $machine->succeed('chroot-exec "echo works > /var/lib/testme/foo"');
-          $machine->succeed('test "$(< /var/lib/testme/foo)" = works');
-          $machine->succeed('test ! -e /tmp/canary');
+          with subtest("check if StateDirectory works"):
+              machine.succeed("chroot-exec touch /tmp/canary")
+              machine.succeed('chroot-exec "echo works > /var/lib/testme/foo"')
+              machine.succeed('test "$(< /var/lib/testme/foo)" = works')
+              machine.succeed("test ! -e /tmp/canary")
         '';
       }
-      { description = "check if /bin/sh works";
+      { testScript = ''
+          with subtest("check if /bin/sh works"):
+              machine.succeed(
+                  "chroot-exec test -e /bin/sh",
+                  'test "$(chroot-exec \'/bin/sh -c "echo bar"\')" = bar',
+              )
+        '';
+      }
+      { config.confinement.binSh = null;
         testScript = ''
-          $machine->succeed(
-            'chroot-exec test -e /bin/sh',
-            'test "$(chroot-exec \'/bin/sh -c "echo bar"\')" = bar',
-          );
+          with subtest("check if suppressing /bin/sh works"):
+              machine.succeed("chroot-exec test ! -e /bin/sh")
+              machine.succeed('test "$(chroot-exec \'/bin/sh -c "echo foo"\')" != foo')
         '';
       }
-      { description = "check if suppressing /bin/sh works";
-        config.confinement.binSh = null;
+      { config.confinement.binSh = "${pkgs.hello}/bin/hello";
         testScript = ''
-          $machine->succeed(
-            'chroot-exec test ! -e /bin/sh',
-            'test "$(chroot-exec \'/bin/sh -c "echo foo"\')" != foo',
-          );
+          with subtest("check if we can set /bin/sh to something different"):
+              machine.succeed("chroot-exec test -e /bin/sh")
+              machine.succeed('test "$(chroot-exec /bin/sh -g foo)" = foo')
         '';
       }
-      { description = "check if we can set /bin/sh to something different";
-        config.confinement.binSh = "${pkgs.hello}/bin/hello";
+      { config.environment.FOOBAR = pkgs.writeText "foobar" "eek\n";
         testScript = ''
-          $machine->succeed(
-            'chroot-exec test -e /bin/sh',
-            'test "$(chroot-exec /bin/sh -g foo)" = foo',
-          );
+          with subtest("check if only Exec* dependencies are included"):
+              machine.succeed('test "$(chroot-exec \'cat "$FOOBAR"\')" != eek')
         '';
       }
-      { description = "check if only Exec* dependencies are included";
-        config.environment.FOOBAR = pkgs.writeText "foobar" "eek\n";
-        testScript = ''
-          $machine->succeed('test "$(chroot-exec \'cat "$FOOBAR"\')" != eek');
-        '';
-      }
-      { description = "check if all unit dependencies are included";
-        config.environment.FOOBAR = pkgs.writeText "foobar" "eek\n";
+      { config.environment.FOOBAR = pkgs.writeText "foobar" "eek\n";
         config.confinement.fullUnit = true;
         testScript = ''
-          $machine->succeed('test "$(chroot-exec \'cat "$FOOBAR"\')" = eek');
+          with subtest("check if all unit dependencies are included"):
+              machine.succeed('test "$(chroot-exec \'cat "$FOOBAR"\')" = eek')
         '';
       }
     ];
@@ -162,7 +156,6 @@ import ./make-test.nix {
   };
 
   testScript = { nodes, ... }: ''
-    $machine->waitForUnit('multi-user.target');
-    ${nodes.machine.config.__testSteps}
-  '';
+    machine.wait_for_unit("multi-user.target")
+  '' + nodes.machine.config.__testSteps;
 }

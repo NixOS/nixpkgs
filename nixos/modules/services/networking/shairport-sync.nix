@@ -17,6 +17,7 @@ in
     services.shairport-sync = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable the shairport-sync daemon.
@@ -55,9 +56,8 @@ in
     services.avahi.publish.enable = true;
     services.avahi.publish.userServices = true;
 
-    users.users = singleton
-      { name = cfg.user;
-        description = "Shairport user";
+    users.users.${cfg.user} =
+      { description = "Shairport user";
         isSystemUser = true;
         createHome = true;
         home = "/var/lib/shairport-sync";

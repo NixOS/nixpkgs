@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "qr-filetransfer-unstable";
   version = "2018-10-22";
 
@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/claudiodangelis/qr-filetransfer;
+    homepage = "https://github.com/claudiodangelis/qr-filetransfer";
     description = "Transfer files over wifi by scanning a QR code from your terminal";
     longDescription = ''
       qr-filetransfer binds a web server to the address of your Wi-Fi network

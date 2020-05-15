@@ -3,7 +3,7 @@
 let
   version = "0.8";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pidgin-xmpp-receipts";
   inherit version;
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://devel.kondorgulasch.de/pidgin-xmpp-receipts/;
+    homepage = "http://devel.kondorgulasch.de/pidgin-xmpp-receipts/";
     description = "Message delivery receipts (XEP-0184) Pidgin plugin";
     license = licenses.gpl3;
     platforms = platforms.linux;

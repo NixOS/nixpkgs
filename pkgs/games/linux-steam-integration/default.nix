@@ -4,7 +4,7 @@
 let
   version = "0.7.3";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "linux-steam-integration";
   inherit version;
 
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
       various workarounds to get games working, and fixes long standing bugs in
       both games and the client
     '';
-    homepage = https://github.com/clearlinux/linux-steam-integration;
+    homepage = "https://github.com/clearlinux/linux-steam-integration";
     license = licenses.lgpl21;
     maintainers = [ maintainers.etu ];
     platforms = [ "x86_64-linux" ];

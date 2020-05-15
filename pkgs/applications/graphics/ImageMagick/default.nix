@@ -13,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.9-34";
-    sha256 = "0sqrgyfi7i7x1akna95c1qhk9sxxswzm3pkssfi4w6v7bn24g25g";
+    version = "6.9.10-71";
+    sha256 = "0c69xmr8k8c4dplgzxydm30s2dr8biq71x07hc15bw196nsx3srr";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -31,7 +31,7 @@ let
       };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "imagemagick";
   inherit (cfg) version;
 
@@ -96,10 +96,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.imagemagick.org/;
+    homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ the-kenny ];
     license = licenses.asl20;
   };
 }

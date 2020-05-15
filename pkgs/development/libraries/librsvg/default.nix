@@ -1,25 +1,27 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintl, darwin, rustc, cargo, gnome3
-, withGTK ? false, gtk3 ? null
+{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2
+, bzip2, libintl, darwin, rustc, cargo, gnome3
 , vala, gobject-introspection }:
 
 let
   pname = "librsvg";
-  version = "2.44.14";
+  version = "2.48.4";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "00z3qimpk909pcqq0jlsis5sskc6kn7cqia20smd9k9rhs3ag1ba";
+    sha256 = "0vlmgisf87dz4vcl1ypcw7g211wkyvhydv6ksf1p6mgdbkw3mdi8";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
 
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintl ];
+  buildInputs = [ libxml2 bzip2 pango libintl ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
 
-  propagatedBuildInputs = [ glib gdk-pixbuf cairo ] ++ lib.optional withGTK gtk3;
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lobjc" else null;
+
+  propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 
   nativeBuildInputs = [ pkgconfig rustc cargo vala gobject-introspection ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -78,9 +80,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A small library to render SVG images to Cairo surfaces";
-    homepage = https://wiki.gnome.org/Projects/LibRsvg;
+    homepage = "https://wiki.gnome.org/Projects/LibRsvg";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

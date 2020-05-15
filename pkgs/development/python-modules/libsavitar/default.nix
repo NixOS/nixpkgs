@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "libsavitar";
-  version = "4.2.0";
+  version = "4.6.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libSavitar";
     rev = version;
-    sha256 = "0cqskd8rcg7pih8nj3s2i137lwxpibmdmym6f8hii14ashny73i1";
+    sha256 = "0nk8zl5b0b36wrrkj271ck4phzxsigkjsazndscjslc9nkldmnpq";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "C++ implementation of 3mf loading with SIP python bindings";
-    homepage = https://github.com/Ultimaker/libSavitar;
+    homepage = "https://github.com/Ultimaker/libSavitar";
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar orivej gebner ];

@@ -9,7 +9,11 @@ in
     inherit version;
 
     src = fetchurl {
-      url = "https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201207w-${version}-1lsb3.2.src.rpm";
+      # NOTE: Don't forget to update the webarchive link too!
+      urls = [
+        "https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201207w-${version}-1lsb3.2.src.rpm"
+        "https://web.archive.org/web/https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201207w-${version}-1lsb3.2.src.rpm"
+      ];
       sha256 = "1ixnhn2dk83nh9v8sdivzgc2bm9z2phvsbx8bc6ainbjq6vn7lns";
     };
 
@@ -43,7 +47,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://www.openprinting.org/driver/epson-201207w;
+      homepage = "https://www.openprinting.org/driver/epson-201207w";
       description = "Epson printer driver (L110, L210, L300, L350, L355, L550, L555)";
       longDescription = ''
         This software is a filter program used with the Common UNIX Printing

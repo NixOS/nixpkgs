@@ -26,6 +26,11 @@ in stdenv.mkDerivation rec {
     sha256 = "0n09jd7yqj18mx6zqbg7kab4idg5llr15g6avafj74fpg1h7iimj";
   };
 
+  postPatch = ''
+   # fix build with gettext 0.20
+   sed -i 's/AM_GNU_GETTEXT/AM_GNU_GETTEXT([external])/' configure.in
+  '';
+
   nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];
   buildInputs       = [ file gtk2 libGLU gtkglarea ];
 
@@ -39,7 +44,7 @@ in stdenv.mkDerivation rec {
       hard drive, or any arbitrarily large collection of files, limited only
       by the host computer's memory and graphics hardware.
     '';
-    homepage    = https://github.com/mcuelenaere/fsv;
+    homepage    = "https://github.com/mcuelenaere/fsv";
     license     = licenses.lgpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];

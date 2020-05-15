@@ -4,38 +4,42 @@
 }:
 
 let
-  name = "openrct2-${version}";
-  version = "0.2.3";
+  version = "0.2.6";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${version}";
-    sha256 = "01mj6jlbl2cn3wpk6sy34ldzdl0qykpn7fncznjykklj2nqzr4ig";
+    sha256 = "1vikbkg3wh5ngzdfilb6irbh6nqinf138qpdz8wz9izlvl8s36k4";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
-    rev = "v1.0.11";
-    sha256 = "1bh7mngpqnhzwnhhawq5y3a6hbvwxis2yagk4dcmc4w1fifq2y66";
+    rev = "v1.0.14";
+    sha256 = "1bqbia5y73v4r0sv5cvi5729jh2ns7cxn557blh715yxswk91590";
   };
 
   title-sequences-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "title-sequences";
-    rev = "v0.1.2";
-    sha256 = "1yb1ynkfmiankii3fngr9km5wbc07rp30nh0apkj6wryrhy7imgm";
+    rev = "v0.1.2c";
+    sha256 = "1qdrm4q75bznmgdrpjdaiqvbf3q4vwbkkmls45izxvyg1djrpsdf";
   };
 in
-stdenv.mkDerivation rec {
-  inherit name;
+stdenv.mkDerivation {
+  inherit version;
+  pname = "openrct2";
 
   src = openrct2-src;
 
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
+  ];
+
   buildInputs = [
     SDL2
-    cmake
     curl
     fontconfig
     freetype
@@ -47,7 +51,6 @@ stdenv.mkDerivation rec {
     libzip
     libGLU
     openssl
-    pkgconfig
     speexdsp
     zlib
   ];
@@ -58,18 +61,17 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RELWITHDEBINFO"
     "-DDOWNLOAD_OBJECTS=OFF"
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
-  makeFlags = ["all" "g2"];
+  enableParallelBuilding = true;
 
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 
   meta = with stdenv.lib; {
     description = "An open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
-    homepage = https://openrct2.io/;
+    homepage = "https://openrct2.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ geistesk ];

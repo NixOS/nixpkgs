@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip, libX11, libXt }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "unicon-lang";
   version = "11.7";
   src = fetchurl {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
     license = licenses.gpl2;
-    homepage = http://unicon.org;
+    homepage = "http://unicon.org";
   };
 }
 

@@ -3,7 +3,7 @@
 , ...
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "msgpack";
   inherit version;
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "MessagePack implementation for C and C++";
-    homepage    = https://msgpack.org;
+    homepage    = "https://msgpack.org";
     license     = licenses.asl20;
     maintainers = with maintainers; [ redbaron ];
     platforms   = platforms.all;

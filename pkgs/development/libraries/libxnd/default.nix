@@ -4,7 +4,7 @@
 , libndtypes
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libxnd";
   version = "unstable-2018-11-27";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C library for managing typed memory blocks and Python container module";
-    homepage = https://xnd.io/;
+    homepage = "https://xnd.io/";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ costrouc ];
   };

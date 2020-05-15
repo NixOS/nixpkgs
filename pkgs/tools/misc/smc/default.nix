@@ -1,6 +1,6 @@
 { stdenv, fetchurl, jre, runtimeShell }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "smc-6.6.3";
 
   src = fetchurl {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
       SMC can also generate GraphViz state diagrams from the input file.
     '';
-    homepage = http://smc.sourceforge.net/;
+    homepage = "http://smc.sourceforge.net/";
     license = licenses.mpl11;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

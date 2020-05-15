@@ -6,9 +6,9 @@ pythonPackages.buildPythonApplication rec {
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
-  PBR_VERSION = "${version}";
+  PBR_VERSION = version;
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "openstack-infra";
     repo = pname;
     rev = version;
@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/openstack-infra/git-review;
+    homepage = "https://github.com/openstack-infra/git-review";
     description = "Tool to submit code to Gerrit";
     license = stdenv.lib.licenses.asl20;
   };

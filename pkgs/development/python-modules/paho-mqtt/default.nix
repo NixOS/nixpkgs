@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "paho-mqtt";
-  version = "1.4.0";
+  version = "1.5.0";
 
   # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.python";
     rev = "v${version}";
-    sha256 = "1xg9ppz2lqacd9prsrx93q2wfkjjyla03xlfw74aj1alz9ki5hrs";
+    sha256 = "1fq5z53g2k18iiqnz5qq87vzjpppfza072nx0dwllmhimm2dskh5";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    homepage = https://eclipse.org/paho;
+    homepage = "https://eclipse.org/paho";
     description = "MQTT version 3.1.1 client class";
     license = licenses.epl10;
     maintainers = with maintainers; [ mog dotlambda ];

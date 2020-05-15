@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hitori";
-  version = "3.32.0";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/hitori/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15s20db2fq4cy031sw20pmf53hxiak44fgyjy5njqnp2h2sg3806";
+    sha256 = "0mq1jv8rbmvksnhbm1d25kcvcfr9lq58qipcacn7wa26xpx7cvs5";
   };
 
   nativeBuildInputs = [
@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Hitori;
-    description = "GTK+ application to generate and let you play games of Hitori";
-    maintainers = gnome3.maintainers;
+    homepage = "https://wiki.gnome.org/Apps/Hitori";
+    description = "GTK application to generate and let you play games of Hitori";
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

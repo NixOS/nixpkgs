@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  patches = [ ./help2man-SOURCE_DATE_EPOCH-support.patch ];
+
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.
   preCheck = "unset NIX_INDENT_MAKE";
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     branch = "1.15";
-    homepage = https://www.gnu.org/software/automake/;
+    homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
     license = stdenv.lib.licenses.gpl2Plus;
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ant, jre, jdk, swt, acl, attr }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "areca-7.5";
 
   src = fetchurl {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.areca-backup.org/;
+    homepage = "http://www.areca-backup.org/";
     description = "An Open Source personal backup solution";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];

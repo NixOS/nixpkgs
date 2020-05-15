@@ -1,8 +1,11 @@
-#!/usr/bin/env nix-shell
-#! nix-shell -i bash -p nodePackages.node2nix
-
+#!/usr/bin/env bash
 set -eu -o pipefail
 
-rm -f node-env.nix
-node2nix --nodejs-10 -i node-packages-v10.json -o node-packages-v10.nix -c composition-v10.nix
-node2nix --nodejs-12 -i node-packages-v12.json -o node-packages-v12.nix -c composition-v12.nix
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+node2nix=$(nix-build ../../.. --no-out-link -A nodePackages.node2nix)
+
+cd ${DIR}
+rm -f ./node-env.nix
+for version in 10 12 13; do
+  "${node2nix}/bin/node2nix" --nodejs-$version -i node-packages-v$version.json -o node-packages-v$version.nix -c composition-v$version.nix
+done

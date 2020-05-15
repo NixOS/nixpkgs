@@ -4,7 +4,7 @@ if stdenv.lib.versionAtLeast ocaml.version "4.06"
 then throw "cryptgps is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ocaml-cryptgps";
   version = "0.2.1";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://projects.camlcity.org/projects/cryptgps.html;
+    homepage = "http://projects.camlcity.org/projects/cryptgps.html";
     description = "Cryptographic functions for OCaml";
     longDescription = ''
       This library implements the symmetric cryptographic algorithms
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

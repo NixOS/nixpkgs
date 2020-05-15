@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "6.30";
   pname = "clips";
   src = fetchurl {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with stdenv.lib; {
     description = "A Tool for Building Expert Systems";
-    homepage = http://www.clipsrules.net/;
+    homepage = "http://www.clipsrules.net/";
     longDescription = ''
       Developed at NASA's Johnson Space Center from 1985 to 1996,
       CLIPS is a rule-based programming language useful for creating

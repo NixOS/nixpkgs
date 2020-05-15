@@ -1,7 +1,7 @@
 { stdenv, lib, buildPythonPackage, fetchFromGitHub, file
 , isPy3k, mock, unittest2 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "filemagic";
   version = "1.6";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "File type identification using libmagic";
-    homepage = https://github.com/aliles/filemagic;
+    homepage = "https://github.com/aliles/filemagic";
     license = licenses.asl20;
     maintainers = with maintainers; [ earvstedt ];
   };

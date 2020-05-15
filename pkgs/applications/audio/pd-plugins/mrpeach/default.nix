@@ -1,6 +1,6 @@
 { stdenv, fetchurl, puredata }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mrpeach";
   version = "1.1";
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A collection of Pd objectclasses for OSC-messages";
-    homepage = http://puredata.info/downloads/osc;
+    homepage = "http://puredata.info/downloads/osc";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

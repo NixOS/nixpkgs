@@ -59,9 +59,10 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Flight controller software (firmware) used to fly multi-rotor craft and fixed wing craft";
-    homepage = https://github.com/betaflight/betaflight;
+    homepage = "https://github.com/betaflight/betaflight";
     license = licenses.gpl3;
     maintainers = with maintainers; [ elitak ];
+    broken = true;
   };
 
 }

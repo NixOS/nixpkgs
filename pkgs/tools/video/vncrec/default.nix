@@ -2,7 +2,7 @@
 , libXaw, libXext, libSM, libICE, libXpm, libXp
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "vncrec-0.2"; # version taken from Arch AUR
 
   src = fetchurl {
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/share/man"
   ];
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = {
     description = "VNC recorder";
-    homepage = http://ronja.twibright.com/utils/vncrec/;
+    homepage = "http://ronja.twibright.com/utils/vncrec/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;
   };

@@ -1,21 +1,29 @@
-{ stdenv, fetchurl, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
+{ stdenv, fetchurl, nixosTests, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
 , docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, jasper, gobject-introspection, doCheck ? false, makeWrapper }:
+, gobject-introspection, doCheck ? false, makeWrapper
+, fetchpatch
+}:
 
 let
   pname = "gdk-pixbuf";
-  version = "2.38.1";
+  version = "2.40.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0fmbjgjcyym3qg46f64qgl7icdm4ii77flyc1mhk244rp8vgi7zi";
+    sha256 = "1rnlx9yfw970maxi2x6niaxmih5la11q1ilr7gzshz2kk585k0hm";
   };
 
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
+    # Temporary until the fix is released.
+    (fetchpatch {
+      name = "tests-circular-table.patch";
+      url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/merge_requests/59.diff";
+      sha256 = "0kaflac3mrh6031hwxk7j9fhli775hc503818h8zfl6b28zyn93f";
+    })
   ];
 
   outputs = [ "out" "dev" "man" "devdoc" "installedTests" ];
@@ -27,15 +35,14 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext python3 libxml2 libxslt docbook_xsl docbook_xml_dtd_43
-    gtk-doc gobject-introspection makeWrapper
+    gtk-doc gobject-introspection makeWrapper glib
   ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
+  propagatedBuildInputs = [ glib libtiff libjpeg libpng ];
 
   mesonFlags = [
     "-Ddocs=true"
-    "-Djasper=true"
     "-Dx11=true"
     "-Dgir=${if gobject-introspection != null then "true" else "false"}"
     "-Dgio_sniffing=false"
@@ -61,7 +68,7 @@ in stdenv.mkDerivation rec {
     + ''
       moveToOutput "bin" "$dev"
       moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
-
+    '' + stdenv.lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
       $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
@@ -85,13 +92,17 @@ in stdenv.mkDerivation rec {
       packageName = pname;
     };
 
+    tests = {
+      installedTests = nixosTests.installed-tests.gdk-pixbuf;
+    };
+
     # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
     moduleDir = "lib/gdk-pixbuf-2.0/2.10.0/loaders";
   };
 
   meta = with stdenv.lib; {
     description = "A library for image loading and manipulation";
-    homepage = http://library.gnome.org/devel/gdk-pixbuf/;
+    homepage = "http://library.gnome.org/devel/gdk-pixbuf/";
     maintainers = [ maintainers.eelco ];
     license = licenses.lgpl21;
     platforms = platforms.unix;

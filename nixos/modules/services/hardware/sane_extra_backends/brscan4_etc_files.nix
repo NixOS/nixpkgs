@@ -33,7 +33,7 @@ let
   addAllNetDev = xs: concatStringsSep "\n" (map addNetDev xs);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "brscan4-etc-files-0.4.3-3";
   src = "${brscan4}/opt/brother/scanner/brscan4";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother brscan4 sane backend driver etc files";
-    homepage = http://www.brother.com;
+    homepage = "http://www.brother.com";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ jraygauthier ];

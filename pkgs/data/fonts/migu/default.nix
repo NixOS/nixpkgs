@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A high-quality Japanese font based on modified M+ fonts and IPA fonts";
-    homepage = http://mix-mplus-ipa.osdn.jp/migu/;
+    homepage = "http://mix-mplus-ipa.osdn.jp/migu/";
     license = licenses.ipa;
     maintainers = [ maintainers.mikoim ];
   };

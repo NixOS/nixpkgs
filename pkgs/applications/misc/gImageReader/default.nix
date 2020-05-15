@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple Gtk/Qt front-end to tesseract-ocr";
-    homepage = https://github.com/manisandro/gImageReader;
+    homepage = "https://github.com/manisandro/gImageReader";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [teto];
     platforms = platforms.linux;

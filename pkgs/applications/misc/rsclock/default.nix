@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1i93qkz6d8sbk78i4rvx099hnn4lklp4cjvanpm9ssv8na4rqvh2";
   };
    
-  cargoSha256 = "0zg5q2p9snpfyxl0gx87ix1f46afrfm5jq0m6c7s8qw2x9hpvxzr";
+  cargoSha256 = "01dhkis6zswq1y40n7sdq9xv1sp61f2v7nfqbkicyjngmdrmcgrl";
 
   meta = with stdenv.lib; {
     description = "A simple terminal clock written in Rust";

@@ -1,6 +1,7 @@
 { lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , aiofiles
 , graphene
 , itsdangerous
@@ -8,20 +9,31 @@
 , pyyaml
 , requests
 , ujson
+, python-multipart
 , pytest
-, python
 , uvicorn
 , isPy27
+, darwin
+, databases
+, aiosqlite
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.12.4";
+
+  # This is not the latest version of Starlette, however, later
+  # versions of Starlette break FastAPI due to
+  # https://github.com/tiangolo/fastapi/issues/683. Please update when
+  # possible. FastAPI is currently Starlette's only dependent.
+
+  version = "0.13.4";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1m7qf4g5dn7n36406zbqsag71nmwp2dz91yxpplm7h7wiw2xxw93";
+  src = fetchFromGitHub {
+    owner = "encode";
+    repo = pname;
+    rev = version;
+    sha256 = "1rk20rj62iigkkikb80bmalriyg1j3g28s25l8z2gijagv1v5c7l";
   };
 
   propagatedBuildInputs = [
@@ -33,17 +45,21 @@ buildPythonPackage rec {
     requests
     ujson
     uvicorn
+    python-multipart
+    databases
+  ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
+
+  checkInputs = [
+    pytest
+    aiosqlite
   ];
 
   checkPhase = ''
-    ${python.interpreter} -c """
-from starlette.applications import Starlette
-app = Starlette(debug=True)
-"""
+    pytest --ignore=tests/test_graphql.py
   '';
 
   meta = with lib; {
-    homepage = https://www.starlette.io/;
+    homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

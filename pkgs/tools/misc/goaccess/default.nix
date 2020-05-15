@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, geoipWithDatabase, ncurses, glib }:
+{ stdenv, fetchurl, pkgconfig, ncurses, glib, libmaxminddb }:
 
 stdenv.mkDerivation rec {
   version = "1.3";
@@ -10,20 +10,20 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    "--enable-geoip"
+    "--enable-geoip=mmdb"
     "--enable-utf8"
   ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    geoipWithDatabase
+    libmaxminddb
     ncurses
     glib
   ];
 
   meta = {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";
-    homepage    = https://goaccess.io;
+    homepage    = "https://goaccess.io";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = with stdenv.lib.maintainers; [ ederoyd46 ];

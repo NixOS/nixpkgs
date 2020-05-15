@@ -3,7 +3,7 @@
 , Carbon ? null, Cocoa ? null
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pangolin";
 
   version = "2017-08-02";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       integration, and has a flexible real-time plotter for visualising
       graphical data.
     '';
-    homepage = https://github.com/stevenlovegrove/Pangolin;
+    homepage = "https://github.com/stevenlovegrove/Pangolin";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.expipiplus1 ];
     platforms = stdenv.lib.platforms.all;

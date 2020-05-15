@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hwinfo";
-  version = "21.67";
+  version = "21.70";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
-    rev = "${version}";
-    sha256 = "1fvlrqx1wgl79a9j3xhhhdihj4lkpbrchfsc27il0p52fynn4dji";
+    rev = version;
+    sha256 = "13vvsxj06wy86m7fy6bwy63ga49a2k4chdnk8jj3klj2cnh7ql8z";
   };
 
   patchPhase = ''
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Hardware detection tool from openSUSE";
     license = licenses.gpl2;
-    homepage = https://github.com/openSUSE/hwinfo;
-    maintainers = with maintainers; [ bobvanderlinden ndowens ];
+    homepage = "https://github.com/openSUSE/hwinfo";
+    maintainers = with maintainers; [ bobvanderlinden ];
     platforms = platforms.linux;
   };
 }

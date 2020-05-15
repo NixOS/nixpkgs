@@ -119,9 +119,8 @@ in
     };
     users.groups.vault.gid = config.ids.gids.vault;
 
-    systemd.tmpfiles.rules = optional (cfg.storagePath != null) [
-      "d '${cfg.storagePath}' 0700 vault vault - -"
-    ];
+    systemd.tmpfiles.rules = optional (cfg.storagePath != null)
+      "d '${cfg.storagePath}' 0700 vault vault - -";
 
     systemd.services.vault = {
       description = "Vault server daemon";
@@ -136,6 +135,7 @@ in
         User = "vault";
         Group = "vault";
         ExecStart = "${cfg.package}/bin/vault server -config ${configFile}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         PrivateDevices = true;
         PrivateTmp = true;
         ProtectSystem = "full";

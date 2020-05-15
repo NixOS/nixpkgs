@@ -1,14 +1,14 @@
 { stdenv, fetchurl, intltool, gettext, makeWrapper, coreutils, gnused, gnome3
-, gnugrep, parted, glib, libuuid, pkgconfig, gtkmm3, libxml2, hicolor-icon-theme
+, gnugrep, parted, glib, libuuid, pkgconfig, gtkmm3, libxml2
 , gpart, hdparm, procps, utillinux, polkit, wrapGAppsHook, substituteAll
 }:
 
 stdenv.mkDerivation rec {
-  name = "gparted-1.0.0";
+  name = "gparted-1.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gparted/${name}.tar.gz";
-    sha256 = "0mdvn85jvy72ff7nds3dakx9kzknh8gx1z8i0w2sf970q03qp2z4";
+    sha256 = "092rgwjh1825fal6v3yafq2wr0i61hh0a2n0j4296zn0zdx7pzp2";
   };
 
   # Tries to run `pkexec --version` to get version.
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-doc" ];
 
-  buildInputs = [ parted glib libuuid gtkmm3 libxml2 hicolor-icon-theme polkit.bin gnome3.adwaita-icon-theme  ];
+  buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome3.adwaita-icon-theme  ];
   nativeBuildInputs = [ intltool gettext pkgconfig wrapGAppsHook ];
 
   preFixup = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       partitions. GParted enables you to change the partition organization
       while preserving the partition contents.
     '';
-    homepage = https://gparted.org;
+    homepage = "https://gparted.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

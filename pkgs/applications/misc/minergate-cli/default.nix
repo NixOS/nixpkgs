@@ -1,6 +1,6 @@
 { fetchurl, stdenv, dpkg, makeWrapper, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "8.2";
   pname = "minergate-cli";
   src = fetchurl {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Minergate CPU/GPU console client mining software";
-    homepage = https://www.minergate.com/;
+    homepage = "https://www.minergate.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ bfortz ];
     platforms = [ "x86_64-linux" ];

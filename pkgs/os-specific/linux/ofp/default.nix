@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenFastPath";
     repo = "ofp";
-    rev = "${version}";
+    rev = version;
     sha256 = "05902593fycgkwzk5g7wzgk0k40nrrgybplkdka3rqnlj6aydhqf";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "High performance TCP/IP stack";
-    homepage = http://www.openfastpath.org;
+    homepage = "http://www.openfastpath.org";
     license = licenses.bsd3;
     platforms =  [ "x86_64-linux" ];
     maintainers = [ maintainers.abuibrahim ];

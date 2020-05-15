@@ -116,7 +116,7 @@ in
         };
 
         passwordFile = mkOption {
-          type = types.nullOr types.str;
+          type = types.nullOr types.path;
           default = null;
           description = ''
             The database user's password. 'null' if no password is set.
@@ -179,8 +179,9 @@ in
   config = mkIf cfg.enable {
 
     services.phpfpm.pools = {
-      "${poolName}" = {
+      ${poolName} = {
         inherit (cfg) user group;
+
         phpOptions = ''
           date.timezone = "CET"
 
@@ -207,7 +208,7 @@ in
     };
 
     services.nginx.enable = true;
-    services.nginx.virtualHosts."${cfg.virtualHost.serverName}" = {
+    services.nginx.virtualHosts.${cfg.virtualHost.serverName} = {
       listen = [ { addr = cfg.virtualHost.listenHost; port = cfg.virtualHost.listenPort; } ];
       serverName = cfg.virtualHost.serverName;
       root = runDir;
@@ -215,7 +216,6 @@ in
         index index.html index.php;
 
         gzip on;
-        gzip_disable "msie6";
 
         gzip_comp_level 6;
         gzip_min_length  1100;
@@ -235,7 +235,7 @@ in
 
       locations."/".root = "${runDir}/client";
 
-      locations."~ \.php$" = {
+      locations."~ \\.php$" = {
         tryFiles = "$uri =404";
         extraConfig = ''
           include ${pkgs.nginx}/conf/fastcgi_params;
@@ -246,7 +246,7 @@ in
         '';
       };
 
-      locations."~* \.(css|js|less|html|ttf|woff|jpg|jpeg|gif|png|bmp|ico)" = {
+      locations."~* \\.(css|js|less|html|ttf|woff|jpg|jpeg|gif|png|bmp|ico)" = {
         root = "${runDir}/client";
         extraConfig = ''
           if (-f $request_filename) {
@@ -285,7 +285,7 @@ in
           sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', 'restya');/g" "${runDir}/server/php/config.inc.php"
         '' else ''
           sed -i "s/^.*'R_DB_HOST'.*$/define('R_DB_HOST', '${cfg.database.host}');/g" "${runDir}/server/php/config.inc.php"
-          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', '$(<${cfg.database.dbPassFile})');/g" "${runDir}/server/php/config.inc.php"
+          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', ${if cfg.database.passwordFile == null then "''" else "'file_get_contents(${cfg.database.passwordFile})'"});/g" "${runDir}/server/php/config.inc.php
         ''}
         sed -i "s/^.*'R_DB_PORT'.*$/define('R_DB_PORT', '${toString cfg.database.port}');/g" "${runDir}/server/php/config.inc.php"
         sed -i "s/^.*'R_DB_NAME'.*$/define('R_DB_NAME', '${cfg.database.name}');/g" "${runDir}/server/php/config.inc.php"

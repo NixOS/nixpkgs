@@ -7,7 +7,7 @@
 , bash
 , glib
 , glibcLocales
-, gnome3
+, dconf
 , gobject-introspection
 , gsettings-desktop-schemas
 , gtk3
@@ -66,7 +66,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     bash
     glib
-    gnome3.dconf
+    dconf
     gsettings-desktop-schemas
     gtk3
     hunspell
@@ -89,7 +89,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedUserEnvPkgs = [
-    gnome3.dconf
+    dconf
   ];
 
   checkInputs = [
@@ -173,7 +173,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://launchpad.net/onboard;
+    homepage = "https://launchpad.net/onboard";
     description = "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
     maintainers = with maintainers; [ johnramsden ];
     license = licenses.gpl3;

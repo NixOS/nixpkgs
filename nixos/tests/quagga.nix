@@ -5,7 +5,7 @@
 #
 # All interfaces are in OSPF Area 0.
 
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
   let
 
     ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ipv4.addresses).address;
@@ -74,23 +74,23 @@ import ./make-test.nix ({ pkgs, ... }:
       testScript =
         { ... }:
         ''
-          startAll;
+          start_all()
 
           # Wait for the networking to start on all machines
-          $_->waitForUnit("network.target") foreach values %vms;
+          for machine in client, router1, router2, server:
+              machine.wait_for_unit("network.target")
 
-          # Wait for OSPF to form adjacencies
-          for my $gw ($router1, $router2) {
-              $gw->waitForUnit("ospfd");
-              $gw->waitUntilSucceeds("vtysh -c 'show ip ospf neighbor' | grep Full");
-              $gw->waitUntilSucceeds("vtysh -c 'show ip route' | grep '^O>'");
-          }
+          with subtest("Wait for OSPF to form adjacencies"):
+              for gw in router1, router2:
+                  gw.wait_for_unit("ospfd")
+                  gw.wait_until_succeeds("vtysh -c 'show ip ospf neighbor' | grep Full")
+                  gw.wait_until_succeeds("vtysh -c 'show ip route' | grep '^O>'")
 
-          # Test ICMP.
-          $client->succeed("ping -c 3 server >&2");
+          with subtest("Test ICMP"):
+              client.wait_until_succeeds("ping -c 3 server >&2")
 
-          # Test whether HTTP works.
-          $server->waitForUnit("httpd");
-          $client->succeed("curl --fail http://server/ >&2");
+          with subtest("Test whether HTTP works"):
+              server.wait_for_unit("httpd")
+              client.succeed("curl --fail http://server/ >&2")
         '';
     })

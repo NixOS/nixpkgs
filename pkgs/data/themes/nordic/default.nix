@@ -2,24 +2,32 @@
 
 stdenv.mkDerivation rec {
   pname = "nordic";
-  version = "1.6.5";
+  version = "1.9.0";
 
   srcs = [
     (fetchurl {
       url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic.tar.xz";
-      sha256 = "163g1kh92fhgbwi91053xs39bpdd032w2v67c3jf8lf4cgvkwggp";
-    })
-    (fetchurl {
-      url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-blue.tar.xz";
-      sha256 = "05qq1v8sil8s51aa78q2najcqdnkpgdzc8dckrx47wy36cfxbxwz";
+      sha256 = "12x13h9w4yqk56a009zpj1kq3vn2hn290xryfv1b0vyf2r45rsn7";
     })
     (fetchurl {
       url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-standard-buttons.tar.xz";
-      sha256 = "17r450xxd8v8125a4bwd0yj3f3vnwcad2f19a0vgmk63s9grvkg0";
+      sha256 = "0f38nx1rvp9l6xz62yx6cbab4im8d425gxr52jkc8gfqpl5lrf0q";
     })
     (fetchurl {
-      url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-blue-standard-buttons.tar.xz";
-      sha256 = "0894naw0wkl2h9l27qz9h1k02dfgfqyb02icmgadg0cb44j3zlpb";
+      url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-darker.tar.xz";
+      sha256 = "0frp0jf7hbiapl3m67av7rbm3sx8db52zi3j01k2hysh6kba7x33";
+    })
+    (fetchurl {
+      url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-darker-standard-buttons.tar.xz";
+      sha256 = "0grfsjr9kq0lszmqxvjvpgvf4avm34446nqykz1zfpdg50j7r54b";
+    })
+    (fetchurl {
+      url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-bluish-accent.tar.xz";
+      sha256 = "0zndldwavir22ay2r0jazpikzzww3hc09gsmbiyjmw54v29qhl9r";
+    })
+    (fetchurl {
+      url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-bluish-accent-standard-buttons.tar.xz";
+      sha256 = "1b9d2fvdndyh7lh3xhmc75csfbapl4gv59y7wy15k2awisvlvz07";
     })
   ];
 
@@ -35,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dark Gtk theme created using the awesome Nord color pallete";
-    homepage = https://github.com/EliverLara/Nordic;
+    homepage = "https://github.com/EliverLara/Nordic";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];

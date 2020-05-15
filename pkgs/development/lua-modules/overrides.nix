@@ -29,7 +29,7 @@ with super;
     # Parse out a version number without the Lua version inserted
     version = with pkgs.lib; let
       version' = super.cqueues.version;
-      rel = splitString "." version';
+      rel = splitVersion version';
       date = head rel;
       rev = last (splitString "-" (last rel));
     in "${date}-${rev}";
@@ -42,7 +42,8 @@ with super;
     ];
 
     # https://github.com/wahern/cqueues/issues/227
-    NIX_CFLAGS_COMPILE = if pkgs.stdenv.hostPlatform.isDarwin then [ "-DCLOCK_MONOTONIC" "-DCLOCK_REALTIME" ] else null;
+    NIX_CFLAGS_COMPILE = with pkgs.stdenv; lib.optionalString hostPlatform.isDarwin
+      "-DCLOCK_MONOTONIC -DCLOCK_REALTIME";
 
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
@@ -105,7 +106,7 @@ with super;
     ];
     buildInputs = [
       pkgs.glib
-      pkgs.gobjectIntrospection
+      pkgs.gobject-introspection
     ];
     patches = [
       (pkgs.fetchpatch {
@@ -152,14 +153,14 @@ with super;
   });
 
   luadbi-mysql = super.luadbi-mysql.override({
-    extraVariables = ''
-      -- Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR='${pkgs.mysql.connector-c}/include/mysql';
-      MYSQL_LIBDIR='${pkgs.mysql.connector-c}/lib/mysql';
-    '';
+    extraVariables = {
+      # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
+      MYSQL_INCDIR="${pkgs.libmysqlclient}/include/mysql";
+      MYSQL_LIBDIR="${pkgs.libmysqlclient}/lib/mysql";
+    };
     buildInputs = [
       pkgs.mysql.client
-      pkgs.mysql.connector-c
+      pkgs.libmysqlclient
     ];
   });
 
@@ -224,7 +225,7 @@ with super;
   });
 
   luasystem = super.luasystem.override({
-    buildInputs = [
+    buildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [
       pkgs.glibc
     ];
   });
@@ -232,6 +233,12 @@ with super;
   luazip = super.luazip.override({
     buildInputs = [
       pkgs.zziplib
+    ];
+  });
+
+  lua-yajl = super.lua-yajl.override({
+    buildInputs = [
+      pkgs.yajl
     ];
   });
 
@@ -247,7 +254,7 @@ with super;
     # Upstreams:
     # 5.1: http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/5.1/luuid.tar.gz
     # 5.2: http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/5.2/luuid.tar.gz
-    patchFlags = "-p2";
+    patchFlags = [ "-p2" ];
     patches = [
       ./luuid.patch
     ];
@@ -267,10 +274,26 @@ with super;
      sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
      rm -rf deps/libuv
     '';
-    propagatedBuildInputs = [
-      pkgs.libuv
-    ];
+
+    buildInputs = [ pkgs.libuv ];
+
+    passthru = {
+      libluv = self.luv.override ({
+        preBuild = self.luv.preBuild + ''
+          sed -i 's,\(option(BUILD_MODULE.*\)ON,\1OFF,' CMakeLists.txt
+          sed -i 's,\(option(BUILD_SHARED_LIBS.*\)OFF,\1ON,' CMakeLists.txt
+          sed -i 's,${"\${INSTALL_INC_DIR}"},${placeholder "out"}/include/luv,' CMakeLists.txt
+        '';
+
+        nativeBuildInputs = [ pkgs.fixDarwinDylibNames ];
+
+        # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
+        NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+          (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
+      });
+    };
   });
+
 
   rapidjson = super.rapidjson.override({
     preBuild = ''

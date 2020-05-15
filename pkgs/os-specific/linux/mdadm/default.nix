@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \
         -e 's@ -Werror @ @' \
-        -e 's@/usr/sbin/sendmail@${system-sendmail}@' -i Makefile
+        -e 's@/usr/sbin/sendmail@${system-sendmail}/bin/sendmail@' -i Makefile
     sed -i \
         -e 's@/usr/bin/basename@${coreutils}/bin/basename@g' \
         -e 's@BINDIR/blkid@${utillinux}/bin/blkid@g' \
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Programs for managing RAID arrays under Linux";
-    homepage = http://neil.brown.name/blog/mdadm;
+    homepage = "http://neil.brown.name/blog/mdadm";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ekleog ];
     platforms = platforms.linux;

@@ -4,7 +4,7 @@
 , ninja
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mutest";
   version = "unstable-2019-08-26";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://ebassi.github.io/mutest/mutest.md.html;
+    homepage = "https://ebassi.github.io/mutest/mutest.md.html";
     description = "A BDD testing framework for C, inspired by Mocha";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar worldofpeace ];

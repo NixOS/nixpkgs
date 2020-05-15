@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hostapd";
-  version = "2.8";
+  version = "2.9";
 
   src = fetchurl {
     url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
-    sha256 = "1c74rrazkhy4lr7pwgwa2igzca7h9l4brrs7672kiv7fwqmm57wj";
+    sha256 = "1mrbvg4v7vm7mknf0n29mf88k3s4a4qj6r4d51wq8hmjj1m7s7c8";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -17,7 +17,13 @@ stdenv.mkDerivation rec {
       # Note: fetchurl seems to be unhappy with openwrt git
       # server's URLs containing semicolons. Using the github mirror instead.
       url = "https://raw.githubusercontent.com/openwrt/openwrt/master/package/network/services/hostapd/patches/300-noscan.patch";
-      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";})
+      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";
+    })
+    (fetchurl {
+      name = "CVE-2019-16275.patch";
+      url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
+      sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
+    })
   ];
 
   outputs = [ "out" "man" ];
@@ -49,6 +55,7 @@ stdenv.mkDerivation rec {
     CONFIG_INTERNETWORKING=y
     CONFIG_HS20=y
     CONFIG_ACS=y
+    CONFIG_GETRANDOM=y
   '' + stdenv.lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
@@ -69,8 +76,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://hostap.epitest.fi;
-    repositories.git = git://w1.fi/hostap.git;
+    homepage = "https://hostap.epitest.fi";
+    repositories.git = "git://w1.fi/hostap.git";
     description = "A user space daemon for access point and authentication servers";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom ninjatrappeur ];

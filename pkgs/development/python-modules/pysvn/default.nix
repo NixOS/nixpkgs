@@ -51,8 +51,9 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python bindings for Subversion";
-    homepage = http://pysvn.tigris.org/;
+    homepage = "http://pysvn.tigris.org/";
     license = licenses.asl20;
+    broken = true;
   };
 
 }

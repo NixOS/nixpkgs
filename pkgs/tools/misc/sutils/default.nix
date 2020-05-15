@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
    meta = {
      description = "Small command-line utilities";
-     homepage = https://github.com/baskerville/sutils;
+     homepage = "https://github.com/baskerville/sutils";
      maintainers = [ stdenv.lib.maintainers.meisternu ];
      license = "Custom";
      platforms = stdenv.lib.platforms.linux;

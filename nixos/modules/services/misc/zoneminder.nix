@@ -11,7 +11,7 @@ let
   group = {
     nginx = config.services.nginx.group;
     none  = user;
-  }."${cfg.webserver}";
+  }.${cfg.webserver};
 
   useNginx = cfg.webserver == "nginx";
 
@@ -77,6 +77,8 @@ in {
         `config.services.zoneminder.database.createLocally` to true. Otherwise,
         when set to `false` (the default), you will have to create the database
         and database user as well as populate the database yourself.
+        Additionally, you will need to run `zmupdate.pl` yourself when
+        upgrading to a newer version.
       '';
 
       webserver = mkOption {
@@ -225,7 +227,7 @@ in {
       nginx = lib.mkIf useNginx {
         enable = true;
         virtualHosts = {
-          "${cfg.hostname}" = {
+          ${cfg.hostname} = {
             default = true;
             root = "${pkg}/share/zoneminder/www";
             listen = [ { addr = "0.0.0.0"; inherit (cfg) port; } ];
@@ -265,7 +267,7 @@ in {
                 }
 
                 location /cache/ {
-                  alias /var/cache/${dirName};
+                  alias /var/cache/${dirName}/;
                 }
 
                 location ~ \.php$ {
@@ -312,7 +314,7 @@ in {
     };
 
     systemd.services = {
-      zoneminder = with pkgs; rec {
+      zoneminder = with pkgs; {
         inherit (zoneminder.meta) description;
         documentation = [ "https://zoneminder.readthedocs.org/en/latest/" ];
         path = [
@@ -330,6 +332,8 @@ in {
             ${config.services.mysql.package}/bin/mysql < ${pkg}/share/zoneminder/db/zm_create.sql
             touch "/var/lib/${dirName}/db-created"
           fi
+
+          ${zoneminder}/bin/zmupdate.pl -nointeractive
         '';
         serviceConfig = {
           User = user;
@@ -356,11 +360,11 @@ in {
       };
     };
 
-    users.groups."${user}" = {
+    users.groups.${user} = {
       gid = config.ids.gids.zoneminder;
     };
 
-    users.users."${user}" = {
+    users.users.${user} = {
       uid = config.ids.uids.zoneminder;
       group = user;
       inherit home;

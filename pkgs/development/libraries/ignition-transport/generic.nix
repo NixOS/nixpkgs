@@ -5,7 +5,7 @@
   , ...
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ign-transport";
   inherit version;
   inherit src;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://ignitionrobotics.org/libraries/math;
+    homepage = "https://ignitionrobotics.org/libraries/math";
     description = "Math library by Ingition Robotics, created for the Gazebo project";
     license = licenses.asl20;
     maintainers = with maintainers; [ pxc ];

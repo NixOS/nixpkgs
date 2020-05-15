@@ -5,6 +5,10 @@ with lib;
 let
   cfg = config.services.kubernetes.addons.dashboard;
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "kubernetes" "addons" "dashboard" "enableRBAC" ] [ "services" "kubernetes" "addons" "dashboard" "rbac" "enable" ])
+  ];
+
   options.services.kubernetes.addons.dashboard = {
     enable = mkEnableOption "kubernetes dashboard addon";
 
@@ -74,7 +78,7 @@ in {
         spec = {
           replicas = 1;
           revisionHistoryLimit = 10;
-          selector.matchLabels."k8s-app" = "kubernetes-dashboard";
+          selector.matchLabels.k8s-app = "kubernetes-dashboard";
           template = {
             metadata = {
               labels = {
@@ -169,23 +173,6 @@ in {
         };
       };
 
-      kubernetes-dashboard-cm = {
-        apiVersion = "v1";
-        kind = "ConfigMap";
-        metadata = {
-          labels = {
-            k8s-app = "kubernetes-dashboard";
-            # Allows editing resource and makes sure it is created first.
-            "addonmanager.kubernetes.io/mode" = "EnsureExists";
-          };
-          name = "kubernetes-dashboard-settings";
-          namespace = "kube-system";
-        };
-      };
-    };
-
-    services.kubernetes.addonManager.bootstrapAddons = mkMerge [{
-
       kubernetes-dashboard-sa = {
         apiVersion = "v1";
         kind = "ServiceAccount";
@@ -227,9 +214,20 @@ in {
         };
         type = "Opaque";
       };
-    }
-
-    (optionalAttrs cfg.rbac.enable
+      kubernetes-dashboard-cm = {
+        apiVersion = "v1";
+        kind = "ConfigMap";
+        metadata = {
+          labels = {
+            k8s-app = "kubernetes-dashboard";
+            # Allows editing resource and makes sure it is created first.
+            "addonmanager.kubernetes.io/mode" = "EnsureExists";
+          };
+          name = "kubernetes-dashboard-settings";
+          namespace = "kube-system";
+        };
+      };
+    } // (optionalAttrs cfg.rbac.enable
       (let
         subjects = [{
           kind = "ServiceAccount";
@@ -329,6 +327,6 @@ in {
             inherit subjects;
           };
         })
-    ))];
+    ));
   };
 }

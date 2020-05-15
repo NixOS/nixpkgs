@@ -1,5 +1,5 @@
 # Inherit arguments given in mkDerivation
-qtWrapperArgs=( $qtWrapperArgs )
+qtWrapperArgs=( ${qtWrapperArgs-} )
 
 qtHostPathSeen=()
 
@@ -64,25 +64,25 @@ qtOwnPathsHook() {
 
 preFixupPhases+=" qtOwnPathsHook"
 
-# Note: $qtWrapperArgs still gets defined even if $dontWrapQtApps is set.
+# Note: $qtWrapperArgs still gets defined even if ${dontWrapQtApps-} is set.
 wrapQtAppsHook() {
     # skip this hook when requested
-    [ -z "$dontWrapQtApps" ] || return 0
+    [ -z "${dontWrapQtApps-}" ] || return 0
 
     # guard against running multiple times (e.g. due to propagation)
     [ -z "$wrapQtAppsHookHasRun" ] || return 0
     wrapQtAppsHookHasRun=1
 
-    local targetDirs=( "$prefix/bin" "$prefix/libexec"  )
+    local targetDirs=( "$prefix/bin" "$prefix/sbin" "$prefix/libexec"  )
     echo "wrapping Qt applications in ${targetDirs[@]}"
 
     for targetDir in "${targetDirs[@]}"
     do
         [ -d "$targetDir" ] || continue
 
-        find "$targetDir" -executable -print0 | while IFS= read -r -d '' file
+        find "$targetDir" ! -type d -executable -print0 | while IFS= read -r -d '' file
         do
-            isELF "$file" || continue
+            patchelf --print-interpreter "$file" >/dev/null 2>&1 || continue
 
             if [ -f "$file" ]
             then

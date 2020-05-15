@@ -4,14 +4,14 @@
 , srht, redis, celery, pyyaml, markdown }:
 
 let
-  version = "0.45.13";
+  version = "0.56.13";
 
   buildWorker = src: buildGoModule {
     inherit src version;
     pname = "builds-sr-ht-worker";
     goPackagePath = "git.sr.ht/~sircmpwn/builds.sr.ht/worker";
 
-    modSha256 = "1jm259ncw8dgqp0fqbjn30c4y3v3vwqj41gfh99jx30bwlmpgfax";
+  vendorSha256 = "0prdlihcy5yz760llwyby747yy2981dn3gy401a48df7ndlfj6lp";
   };
 in buildPythonPackage rec {
   inherit version;
@@ -20,7 +20,7 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     rev = version;
-    sha256 = "002pcj2a98gbmv77a10449w1q6iqhqjz4fim8hm4qm7vn6bwp0hz";
+    sha256 = "uFoS9xaVXsZZf4neZQcUyTqKo2RshOQeifD27kaKSVE=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ in buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/builds.sr.ht;
+    homepage = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     description = "Continuous integration service for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

@@ -1,4 +1,4 @@
-import ../make-test.nix ({ pkgs, ... }:
+import ../make-test-python.nix ({ pkgs, ... }:
 {
   name = "hitch";
   meta = with pkgs.stdenv.lib.maintainers; {
@@ -16,18 +16,18 @@ import ../make-test.nix ({ pkgs, ... }:
 
     services.httpd = {
       enable = true;
-      documentRoot = ./example;
+      virtualHosts.localhost.documentRoot = ./example;
       adminAddr = "noone@testing.nowhere";
     };
   };
 
   testScript =
     ''
-      startAll;
+      start_all()
 
-      $machine->waitForUnit('multi-user.target');
-      $machine->waitForUnit('hitch.service');
-      $machine->waitForOpenPort(443);
-      $machine->succeed('curl -k https://localhost:443/index.txt | grep "We are all good!"');
+      machine.wait_for_unit("multi-user.target")
+      machine.wait_for_unit("hitch.service")
+      machine.wait_for_open_port(443)
+      assert "We are all good!" in machine.succeed("curl -k https://localhost:443/index.txt")
     '';
 })

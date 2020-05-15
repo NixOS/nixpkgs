@@ -1,5 +1,5 @@
 { mkDerivation, fetchFromGitHub, lib, makeWrapper, pkgconfig
-, kcoreaddons, ki18n, kwallet, mksh, pinentry_qt5 }:
+, kcoreaddons, ki18n, kwallet, mksh, pinentry-qt }:
 
 mkDerivation rec {
   pname = "kwalletcli";
@@ -36,13 +36,13 @@ mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/pinentry-kwallet \
-      --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry_qt5 ]} \
+      --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry-qt ]} \
       --set-default PINENTRY pinentry-qt
   '';
 
   meta = with lib; {
     description = "Command-Line Interface to the KDE Wallet";
-    homepage = https://www.mirbsd.org/kwalletcli.htm;
+    homepage = "https://www.mirbsd.org/kwalletcli.htm";
     license = licenses.miros;
     maintainers = with maintainers; [ peterhoeg ];
   };

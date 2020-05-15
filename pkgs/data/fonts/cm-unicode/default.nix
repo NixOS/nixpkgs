@@ -16,7 +16,7 @@ in fetchzip rec {
   sha256 = "1rzz7yhqq3lljyqxbg46jfzfd09qgpgx865lijr4sgc94riy1ypn";
 
   meta = with lib; {
-    homepage = http://canopus.iacp.dvo.ru/~panov/cm-unicode/;
+    homepage = "http://canopus.iacp.dvo.ru/~panov/cm-unicode/";
     description = "Computer Modern Unicode fonts";
     maintainers = with maintainers; [ raskin rycee ];
     license = licenses.ofl;

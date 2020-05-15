@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
-    rev = "${version}";
+    rev = version;
     sha256 = "1qamls0fll0qc27lqavf56hv1yj6v6n4ry90g7bcnwpvccmd82yd";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Thunderbolt 3 device management daemon";
-    homepage = https://gitlab.freedesktop.org/bolt/bolt;
+    homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.callahad ];
     platforms = platforms.linux;

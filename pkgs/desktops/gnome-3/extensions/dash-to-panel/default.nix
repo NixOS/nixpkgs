@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-dash-to-panel";
-  version = "23";
+  version = "31";
 
   src = fetchFromGitHub {
     owner = "home-sweet-gnome";
     repo = "dash-to-panel";
     rev = "v${version}";
-    sha256 = "12smkz3clcvgicr0pdc0fk6igf82nw4hzih1ywv9q43xkqh9w1i6";
+    sha256 = "A8Ft+tLNv8KlTnVUzrWGavBWpP0u2rhkuG5LZls1A24=";
   };
 
   buildInputs = [
@@ -17,10 +17,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
 
+  uuid = "dash-to-panel@jderose9.github.com";
+
   meta = with stdenv.lib; {
     description = "An icon taskbar for Gnome Shell";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mounium ];
-    homepage = https://github.com/jderose9/dash-to-panel;
+    homepage = "https://github.com/jderose9/dash-to-panel";
   };
 }

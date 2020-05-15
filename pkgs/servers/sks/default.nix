@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromBitbucket {
     owner = "skskeyserver";
     repo = "sks-keyserver";
-    rev = "${version}";
+    rev = version;
     sha256 = "00q5ma5rvl10rkc6cdw8d69bddgrmvy0ckqj3hbisy65l4idj2zm";
   };
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jwm-settings-manager";
   version = "2018-10-19";
   
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A full configuration manager for JWM";
-    homepage = https://joewing.net/projects/jwm;
+    homepage = "https://joewing.net/projects/jwm";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

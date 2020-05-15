@@ -15,7 +15,7 @@ let
     rev    = "c894b9e59f02203dbe4e2be657572cf88c4230c3";
     sha256 = "0wasql7ph5g473zxhc2z47z3pjp42q0dsn4gpijwzbxawid71b4w";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "xcbuild";
 
   # Once a version is released that includes
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Xcode-compatible build tool";
-    homepage = https://github.com/facebook/xcbuild;
+    homepage = "https://github.com/facebook/xcbuild";
     platforms = platforms.unix;
     maintainers = with maintainers; [ copumpkin matthewbauer ];
     license = with licenses; [ bsd2 bsd3 ];

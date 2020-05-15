@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q28xl36difma1wq0acq111cqxjya32kn3lxp6fbidz3wg8jkmpq";
+    sha256 = "012d716c8b9ed1e513fcc4b18e5af16a8791f51e6d1716baccf988ad355c5a1f";
   };
 
   passthru = {
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description =
       "Python bindings for the Message Passing Interface standard";
-    homepage = http://code.google.com/p/mpi4py/;
+    homepage = "https://bitbucket.org/mpi4py/mpi4py/";
     license = stdenv.lib.licenses.bsd3;
   };
 }

@@ -2,7 +2,7 @@
 , eigen, opencv, ceres-solver, cgal, boost, vcg
 , gmp, mpfr, glog, gflags, libjpeg_turbo }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "openmvs-unstable-2018-05-26";
 
   src = fetchFromGitHub {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community";
-    homepage = http://cdcseacave.github.io/openMVS/;
+    homepage = "http://cdcseacave.github.io/openMVS/";
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mdaiter ];

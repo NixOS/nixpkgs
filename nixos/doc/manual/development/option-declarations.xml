@@ -99,7 +99,7 @@ xlink:href="https://nixos.org/nixpkgs/manual/#sec-package-naming">
   <para>
    As an example, we will take the case of display managers. There is a central
    display manager module for generic display manager options and a module file
-   per display manager backend (slim, sddm, gdm ...).
+   per display manager backend (sddm, gdm ...).
   </para>
 
   <para>
@@ -146,7 +146,7 @@ xlink:href="https://nixos.org/nixpkgs/manual/#sec-package-naming">
       />), and to extend
    it in each backend module
    (<xref
-      linkend='ex-option-declaration-eot-backend-slim' />,
+      linkend='ex-option-declaration-eot-backend-gdm' />,
    <xref
       linkend='ex-option-declaration-eot-backend-sddm' />).
   </para>
@@ -167,11 +167,11 @@ services.xserver.displayManager.enable = mkOption {
 };</screen>
   </example>
 
-  <example xml:id='ex-option-declaration-eot-backend-slim'>
-   <title>Extending <literal>services.xserver.displayManager.enable</literal> in the <literal>slim</literal> module</title>
+  <example xml:id='ex-option-declaration-eot-backend-gdm'>
+   <title>Extending <literal>services.xserver.displayManager.enable</literal> in the <literal>gdm</literal> module</title>
 <screen>
 services.xserver.displayManager.enable = mkOption {
-  type = with types; nullOr (enum [ "slim" ]);
+  type = with types; nullOr (enum [ "gdm" ]);
 };</screen>
   </example>
 

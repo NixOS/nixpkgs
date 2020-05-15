@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "axoloti";
     repo = "axoloti";
-    rev = "${version}";
+    rev = version;
     sha256 = "1qffis277wshldr3i939b0r2x3a2mlr53samxqmr2nk1sfm2b4w9";
   };
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.axoloti.com;
+    homepage = "http://www.axoloti.com";
     description = ''
       Sketching embedded digital audio algorithms.
 

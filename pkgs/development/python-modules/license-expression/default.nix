@@ -4,14 +4,15 @@
 
 buildPythonPackage rec {
   pname = "license-expression";
-  version = "0.999";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "license-expression";
     rev = "v${version}";
-    sha256 = "0q8sha38w7ajg7ar0rmbqrwv0n58l8yzyl96cqwcbvp578fn3ir0";
+    sha256 = "0bbd7d90z58p9sd01b00g0vfd9bmwzksjb7pc8833s2jpja9mxz1";
   };
+  postPatch = "patchShebangs ./configure";
 
   propagatedBuildInputs = [ boolean-py ];
 

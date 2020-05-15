@@ -6,7 +6,7 @@
 # Dependencies
 , bzip2
 , zlib
-, openssl
+, openssl_1_0_2
 , expat
 , libffi
 , ncurses
@@ -27,7 +27,7 @@ with stdenv.lib;
 
 let
   isPy3k = majorVersion == "3";
-  passthru = passthruFun rec {
+  passthru = passthruFun {
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
@@ -44,7 +44,7 @@ let
   deps = [
     bzip2
     zlib
-    openssl
+    openssl_1_0_2
     expat
     libffi
     ncurses
@@ -117,7 +117,7 @@ in with passthru; stdenv.mkDerivation {
   inherit passthru;
 
   meta = with stdenv.lib; {
-    homepage = http://pypy.org/;
+    homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];

@@ -10,13 +10,13 @@ assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   pname = "libarchive";
-  version = "3.4.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${version}";
-    sha256 = "063f5bw9qmksj3iy6094qxwawx174cx00q1fg6l698wqw7xn8ihq";
+    sha256 = "0mjm77wbqs8sbn9j44lj39nwbg6anmgz6pkyfxsww54a4rs0p3iz";
   };
 
   outputs = [ "out" "lib" "dev" ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       compressions formats including (but not limited to) tar, shar, cpio, zip, and
       compressed with gzip, bzip2, lzma, xz, ...
     '';
-    homepage = http://libarchive.org;
+    homepage = "http://libarchive.org";
     license = stdenv.lib.licenses.bsd3;
     platforms = with stdenv.lib.platforms; all;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];

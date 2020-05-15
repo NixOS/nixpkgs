@@ -40,7 +40,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "GMP/MPIR, MPFR, and MPC interface to Python 2.6+ and 3.x";
-    homepage = https://github.com/aleaxit/gmpy/;
+    homepage = "https://github.com/aleaxit/gmpy/";
     license = licenses.gpl3Plus;
   };
 }

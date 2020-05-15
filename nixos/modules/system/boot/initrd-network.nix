@@ -6,7 +6,11 @@ let
 
   cfg = config.boot.initrd.network;
 
-  dhcpinterfaces = lib.attrNames (lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or {}));
+  dhcpInterfaces = lib.attrNames (lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or {}));
+  doDhcp = config.networking.useDHCP || dhcpInterfaces != [];
+  dhcpIfShellExpr = if config.networking.useDHCP
+                      then "$(ls /sys/class/net/ | grep -v ^lo$)"
+                      else lib.concatMapStringsSep " " lib.escapeShellArg dhcpInterfaces;
 
   udhcpcScript = pkgs.writeScript "udhcp-script"
     ''
@@ -62,6 +66,16 @@ in
       '';
     };
 
+    boot.initrd.network.flushBeforeStage2 = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to clear the configuration of the interfaces that were set up in
+        the initrd right before stage 2 takes over. Stage 2 will do the regular network
+        configuration based on the NixOS networking options.
+      '';
+    };
+
     boot.initrd.network.udhcpc.extraArgs = mkOption {
       default = [];
       type = types.listOf types.str;
@@ -89,49 +103,45 @@ in
     boot.initrd.kernelModules = [ "af_packet" ];
 
     boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.mkinitcpio-nfs-utils}/bin/ipconfig
+      copy_bin_and_libs ${pkgs.klibc}/lib/klibc/bin.static/ipconfig
     '';
 
     boot.initrd.preLVMCommands = mkBefore (
       # Search for interface definitions in command line.
       ''
+        ifaces=""
         for o in $(cat /proc/cmdline); do
           case $o in
             ip=*)
-              ipconfig $o && hasNetwork=1
+              ipconfig $o && ifaces="$ifaces $(echo $o | cut -d: -f6)"
               ;;
           esac
         done
       ''
 
       # Otherwise, use DHCP.
-      + optionalString (config.networking.useDHCP || dhcpinterfaces != []) ''
-        if [ -z "$hasNetwork" ]; then
+      + optionalString doDhcp ''
+        # Bring up all interfaces.
+        for iface in ${dhcpIfShellExpr}; do
+          echo "bringing up network interface $iface..."
+          ip link set "$iface" up && ifaces="$ifaces $iface"
+        done
 
-          # Bring up all interfaces.
-          for iface in $(ls /sys/class/net/); do
-            echo "bringing up network interface $iface..."
-            ip link set "$iface" up
-          done
-
-          # Acquire DHCP leases.
-          for iface in ${ if config.networking.useDHCP then
-                            "$(ls /sys/class/net/ | grep -v ^lo$)"
-                          else
-                            lib.concatMapStringsSep " " lib.escapeShellArg dhcpinterfaces
-                        }; do
-            echo "acquiring IP address via DHCP on $iface..."
-            udhcpc --quit --now -i $iface -O staticroutes --script ${udhcpcScript} ${udhcpcArgs} && hasNetwork=1
-          done
-        fi
+        # Acquire DHCP leases.
+        for iface in ${dhcpIfShellExpr}; do
+          echo "acquiring IP address via DHCP on $iface..."
+          udhcpc --quit --now -i $iface -O staticroutes --script ${udhcpcScript} ${udhcpcArgs}
+        done
       ''
 
-      + ''
-        if [ -n "$hasNetwork" ]; then
-          echo "networking is up!"
-          ${cfg.postCommands}
-        fi
-      '');
+      + cfg.postCommands);
+
+    boot.initrd.postMountCommands = mkIf cfg.flushBeforeStage2 ''
+      for iface in $ifaces; do
+        ip address flush "$iface"
+        ip link down "$iface"
+      done
+    '';
 
   };
 

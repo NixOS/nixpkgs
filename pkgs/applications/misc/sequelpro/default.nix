@@ -1,6 +1,6 @@
 { stdenv, fetchurl, undmg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sequel-pro";
   version = "1.1.2";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "MySQL database management for macOS";
-    homepage = http://www.sequelpro.com/;
+    homepage = "http://www.sequelpro.com/";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.darwin;
   };

@@ -2,7 +2,7 @@
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "droopy";
   version = "20160830";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mini Web server that let others upload files to your computer";
-    homepage = http://stackp.online.fr/droopy;
+    homepage = "http://stackp.online.fr/droopy";
     license = licenses.bsd3;
     maintainers = [ maintainers.Profpatsch ];
   };

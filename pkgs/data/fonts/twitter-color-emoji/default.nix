@@ -1,66 +1,64 @@
-# Based upon https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/tree/454acad50ba584d9602ccd4238fc5e585abc15c9
+# Based upon https://src.fedoraproject.org/rpms/twitter-twemoji-fonts
 # The main difference is that we use “Twitter Color Emoji” name (which is recognized by upstream fontconfig)
 
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , cairo
-, imagemagick
+, graphicsmagick
 , pkg-config
 , pngquant
-, python2
+, python3
 , which
 , zopfli
+, noto-fonts-emoji
 }:
 
 let
-  version = "12.1.2";
-
-  # Cannot use noto-fonts-emoji.src since it is too old
-  # and still tries to use vendored pngquant.
-  notoSrc = fetchFromGitHub {
-    name = "noto";
-    owner = "googlefonts";
-    repo = "noto-emoji";
-    rev = "833a43d03246a9325e748a2d783006454d76ff66";
-    sha256 = "1g6ikzk8banm3ihqm9g27ggjq2mn1b1hq3zhpl13lxid6mp60s4a";
-  };
+  version = "12.1.5";
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
     owner = "twitter";
     repo = "twemoji";
     rev = "v${version}";
-    sha256 = "0vzmlp83vnk4njcfkn03jcc1vkg2rf12zf5kj3p3a373xr4ds1zn";
+    hash = "sha256-qb3bLiUgtA8QQ13u928kvM+3qwmQpyjUk0EPKja1kSk=";
   };
 
-  python = python2.withPackages (pp: with pp; [
-    nototools
-  ]);
 in
 stdenv.mkDerivation rec {
   pname = "twitter-color-emoji";
   inherit version;
 
   srcs = [
-    notoSrc
+    noto-fonts-emoji.src
     twemojiSrc
   ];
 
-  sourceRoot = notoSrc.name;
+  sourceRoot = noto-fonts-emoji.src.name;
 
   postUnpack = ''
     chmod -R +w ${twemojiSrc.name}
-    mv ${twemojiSrc.name} ${notoSrc.name}
+    mv ${twemojiSrc.name} ${noto-fonts-emoji.src.name}
   '';
 
   nativeBuildInputs = [
     cairo
-    imagemagick
+    graphicsmagick
     pkg-config
     pngquant
-    python
+    python3
+    python3.pkgs.nototools
     which
     zopfli
+  ];
+
+  patches = [
+    # ImageMagick -> GraphicsMagick
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/07778605d50696f6aa929020e82611a01d254c90/f/noto-emoji-use-gm.patch";
+      sha256 = "sha256-kyJwT1SKS1vnXxvPTiIMK6TRHMp1ZOSlb6rodL4Jbxs=";
+    })
   ];
 
   postPatch = let
@@ -116,7 +114,9 @@ stdenv.mkDerivation rec {
     # In twemoji source
     ## Artwork is Creative Commons Attribution 4.0 International
     ## Non-artwork is MIT
+    # In Fedora twitter-twemoji-fonts source
+    ## spec files are MIT: https://fedoraproject.org/wiki/Licensing:Main#License_of_Fedora_SPEC_Files
     license = with licenses; [ asl20 ofl cc-by-40 mit ];
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ jtojnar emily ];
   };
 }

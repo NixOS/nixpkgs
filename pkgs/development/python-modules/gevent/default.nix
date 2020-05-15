@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Coroutine-based networking library";
-    homepage = http://www.gevent.org/;
+    homepage = "http://www.gevent.org/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];

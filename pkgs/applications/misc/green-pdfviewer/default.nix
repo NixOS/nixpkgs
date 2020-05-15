@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, poppler, pkgconfig, gdk-pixbuf, SDL, gtk2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "green-pdfviewer";
   version = "nightly-2014-04-22";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/schandinat/green/;
+    homepage = "https://github.com/schandinat/green/";
     description = "Viewer for PDF files, uses SDL and libpoppler";
 
     platforms = platforms.unix;

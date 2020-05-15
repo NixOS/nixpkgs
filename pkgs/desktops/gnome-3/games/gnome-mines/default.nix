@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-mines";
-  version = "3.32.2";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-mines/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1nv966wkp2rqxzcdb76bwlbzpjqadcaqzrnkxpzwnvjjr167yx8g";
+    sha256 = "0m53ymxbgr3rb3yv13fzjwqh6shsfr51abkm47rchsy2jryqkzja";
   };
 
   # gobject-introspection for finding vapi files
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Mines;
+    homepage = "https://wiki.gnome.org/Apps/Mines";
     description = "Clear hidden mines from a minefield";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

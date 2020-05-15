@@ -1,19 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromGitHub, runtimeShell,
   nose, dbus, dbus-python, pygobject3,
   which, pyflakes, pycodestyle, bluez, networkmanager
 }:
 
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.18.1";
+  version = "0.19";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1hj02p65cic4jdc6a5xf1hx8j5icwy7dcrm5kg91lkjks4gwpg5h";
+  src = fetchFromGitHub {
+    owner = "martinpitt";
+    repo = pname;
+    rev = version;
+    sha256 = "09j338lmrjabbd3fpajr4piz4r20sl33030szfsqfzlwrrmvkyi0";
   };
 
   prePatch = ''
-    sed -i -e 's|pyflakes3|pyflakes|g' tests/test_code.py;
+    substituteInPlace tests/test_code.py \
+      --replace "pyflakes3" "pyflakes" \
+      --replace "/bin/bash" "${runtimeShell}" \
+      --replace "--ignore=E124,E402,E731,W504" "--ignore=E124,E402,E731,W504,E501" # ignore long lines too
   '';
 
   # TODO: Get the rest of these tests running?
@@ -39,19 +44,19 @@ buildPythonPackage rec {
 
   checkInputs = [
     nose dbus dbus-python which pycodestyle pyflakes
-    pygobject3 bluez bluez.test networkmanager
+    pygobject3 bluez (lib.getOutput "test" bluez) networkmanager
   ];
 
   checkPhase = ''
     runHook preCheck
-    export PATH="$PATH:${bluez.test}/test";
+    export PATH="$PATH:${lib.getOutput "test" bluez}/test";
     nosetests -v
     runHook postCheck
   '';
 
   meta = with lib; {
     description = "Mock D-Bus objects for tests";
-    homepage = https://github.com/martinpitt/python-dbusmock;
+    homepage = "https://github.com/martinpitt/python-dbusmock";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ callahad ];
     platforms = platforms.linux;

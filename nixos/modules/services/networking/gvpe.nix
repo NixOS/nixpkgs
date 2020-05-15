@@ -42,12 +42,8 @@ in
 {
   options = {
     services.gvpe = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run gvpe
-        '';
-      };
+      enable = lib.mkEnableOption "gvpe";
+
       nodename = mkOption {
         default = null;
         description =''

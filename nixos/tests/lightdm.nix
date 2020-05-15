@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "lightdm";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aszlig worldofpeace ];
@@ -8,9 +8,8 @@ import ./make-test.nix ({ pkgs, ...} : {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.lightdm.enable = true;
-    services.xserver.windowManager.default = "icewm";
+    services.xserver.displayManager.defaultSession = "none+icewm";
     services.xserver.windowManager.icewm.enable = true;
-    services.xserver.desktopManager.default = "none";
   };
 
   enableOCR = true;
@@ -18,12 +17,12 @@ import ./make-test.nix ({ pkgs, ...} : {
   testScript = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
   in ''
-    startAll;
-    $machine->waitForText(qr/${user.description}/);
-    $machine->screenshot("lightdm");
-    $machine->sendChars("${user.password}\n");
-    $machine->waitForFile("/home/alice/.Xauthority");
-    $machine->succeed("xauth merge ~alice/.Xauthority");
-    $machine->waitForWindow("^IceWM ");
+    start_all()
+    machine.wait_for_text("${user.description}")
+    machine.screenshot("lightdm")
+    machine.send_chars("${user.password}\n")
+    machine.wait_for_file("${user.home}/.Xauthority")
+    machine.succeed("xauth merge ${user.home}/.Xauthority")
+    machine.wait_for_window("^IceWM ")
   '';
 })

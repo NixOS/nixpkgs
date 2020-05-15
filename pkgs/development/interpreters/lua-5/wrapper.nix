@@ -11,7 +11,7 @@
 let
   env = let
     paths =  requiredLuaModules (extraLibs ++ [ lua ] );
-  in buildEnv {
+  in (buildEnv {
     name = "${lua.name}-env";
 
     inherit paths;
@@ -20,12 +20,6 @@ let
 
     # we create wrapper for the binaries in the different packages
     postBuild = ''
-
-      . "${makeWrapper}/nix-support/setup-hook"
-
-      # get access to lua functions
-      . ${lua}/nix-support/setup-hook
-
       if [ -L "$out/bin" ]; then
           unlink "$out/bin"
       fi
@@ -43,7 +37,7 @@ let
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
                 nix_debug "Making wrapper $prg"
-                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --suffix LUA_PATH ';' "$NIX_LUA_PATH"   --suffix LUA_CPATH ';' "$NIX_LUA_CPATH" ${stdenv.lib.concatStringsSep " " makeWrapperArgs}
+                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --suffix LUA_PATH ';' "$LUA_PATH"   --suffix LUA_CPATH ';' "$LUA_CPATH" ${stdenv.lib.concatStringsSep " " makeWrapperArgs}
               fi
             fi
           done
@@ -68,5 +62,8 @@ let
         '';
     };
     };
-  };
+  }).overrideAttrs (_: {
+    # Add extra deps needed for postBuild hook.
+    nativeBuildInputs = [ makeWrapper lua ];
+  });
 in env

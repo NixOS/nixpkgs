@@ -19,6 +19,7 @@
 , glibcLocales
 , nose
 , jsonschema
+, setuptools
 , send2trash
 , CoreAudio
 # This little flag adds a huge number of dependencies, but we assume that
@@ -87,7 +88,7 @@ buildPythonApplication rec {
 
     propagatedBuildInputs = [
       pyqtwebengine sqlalchemy beautifulsoup4 send2trash pyaudio requests decorator
-      markdown jsonschema
+      markdown jsonschema setuptools
     ]
       ++ lib.optional plotsSupport matplotlib
       ++ lib.optional stdenv.isDarwin [ CoreAudio ]
@@ -162,10 +163,13 @@ buildPythonApplication rec {
     '';
 
     dontWrapQtApps = true;
-    makeWrapperArgs = [
-        ''--prefix PATH ':' "${lame}/bin:${mplayer}/bin"''
-        "\${qtWrapperArgs[@]}"
-    ];
+
+    preFixup = ''
+      makeWrapperArgs+=(
+        "''${qtWrapperArgs[@]}"
+        --prefix PATH ':' "${lame}/bin:${mplayer}/bin"
+      )
+    '';
 
     # now wrapPythonPrograms from postFixup will add both python and qt env variables
 
@@ -191,6 +195,6 @@ buildPythonApplication rec {
       license = licenses.agpl3Plus;
       broken = stdenv.hostPlatform.isAarch64;
       platforms = platforms.mesaPlatforms;
-      maintainers = with maintainers; [ oxij the-kenny Profpatsch enzime ];
+      maintainers = with maintainers; [ oxij Profpatsch enzime ];
     };
 }

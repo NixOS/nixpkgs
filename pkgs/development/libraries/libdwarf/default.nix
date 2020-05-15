@@ -10,13 +10,13 @@ let
            + "5be7f9ee368f1cc8940cea4ddda01ff99d28bbf1fe58";
   };
   meta = {
-    homepage = https://www.prevanders.net/dwarf.html;
+    homepage = "https://www.prevanders.net/dwarf.html";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl21Plus;
   };
 
 in rec {
-  libdwarf = stdenv.mkDerivation rec {
+  libdwarf = stdenv.mkDerivation {
     pname = "libdwarf";
     inherit version;
 
@@ -37,7 +37,7 @@ in rec {
     inherit meta src;
   };
 
-  dwarfdump = stdenv.mkDerivation rec {
+  dwarfdump = stdenv.mkDerivation {
     pname = "dwarfdump";
     inherit version;
 

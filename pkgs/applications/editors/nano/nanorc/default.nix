@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nanorc";
   version = "2018-09-05";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Improved Nano Syntax Highlighting Files";
-    homepage = https://github.com/scopatz/nanorc;
+    homepage = "https://github.com/scopatz/nanorc";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ nequissimus ];
     platforms = stdenv.lib.platforms.all;

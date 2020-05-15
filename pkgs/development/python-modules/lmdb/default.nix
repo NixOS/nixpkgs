@@ -7,16 +7,15 @@
 
 buildPythonPackage rec {
   pname = "lmdb";
-  version = "0.97";
+  version = "0.98";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jw3n14x6qg5wps2w4qkqf4pyan949h1s2nbkrz2qh7xwnnp2g8p";
+    sha256 = "0625bc28bf0893e6000a83be7234f915ca078c32f9e73d8ae48b3508db7af708";
   };
 
   checkInputs = [ pytest cffi ];
   checkPhase = ''
-    export PYTHONPATH=.:$PYTHONPATH
     py.test
   '';
 
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     description = "Universal Python binding for the LMDB 'Lightning' Database";
     homepage = "https://github.com/dw/py-lmdb";
     license = licenses.openldap;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [ copumpkin ivan ];
   };
 
 }

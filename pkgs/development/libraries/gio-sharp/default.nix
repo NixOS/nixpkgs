@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mono";
     repo = "gio-sharp";
 
-    rev = "${version}";
+    rev = version;
     sha256 = "13pc529pjabj7lq23dbndc26ssmg5wkhc7lfvwapm87j711m0zig";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GIO API bindings";
-    homepage = https://github.com/mono/gio-sharp;
+    homepage = "https://github.com/mono/gio-sharp";
     license = licenses.mit;
     platforms = platforms.linux;
   };

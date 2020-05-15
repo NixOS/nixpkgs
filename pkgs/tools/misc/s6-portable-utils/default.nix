@@ -7,8 +7,8 @@ let
 
 in buildPackage {
   pname = pname;
-  version = "2.2.1.3";
-  sha256 = "1ibjns1slyg1p7jl9irzlrjz8b01f506iw87g3s7db5arhf17vv2";
+  version = "2.2.2.2";
+  sha256 = "1k3la37q46n93vjwk9wm9ym4w87z6lqzv43f03qd0vqj9k94mpv3";
 
   description = "A set of tiny general Unix utilities optimized for simplicity and small size";
 

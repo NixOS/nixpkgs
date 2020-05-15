@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OCaml native toplevel";
-    homepage = http://benediktmeurer.de/ocamlnat/;
+    homepage = "http://benediktmeurer.de/ocamlnat/";
     license = stdenv.lib.licenses.qpl;
     longDescription = ''
       The ocamlnat project provides a new native code OCaml toplevel
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

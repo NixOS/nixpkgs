@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "0.6.1";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4008c72f5ef2b7936447dcb83db41d97e9791c83221be13d5e19db0796df1972";
+    sha256 = "1h5mxh84rcw04dvxy1qbfn2hisavfqgilh9k09rgyjhd936dad4m";
   };
 
   checkPhase = ''
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   meta = {
-    homepage = https://github.com/msgpack/msgpack-python;
+    homepage = "https://github.com/msgpack/msgpack-python";
     description = "MessagePack serializer implementation for Python";
     license = lib.licenses.asl20;
     # maintainers =  ?? ;

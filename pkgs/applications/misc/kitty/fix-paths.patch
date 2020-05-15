@@ -1,14 +1,3 @@
---- a/kitty/desktop.c
-+++ b/kitty/desktop.c
-@@ -30,7 +30,7 @@
- static PyObject*
- init_x11_startup_notification(PyObject UNUSED *self, PyObject *args) {
-     static bool done = false;
--    static const char* libname = "libstartup-notification-1.so";
-+    static const char* libname = "@libstartup_notification@";
-     // some installs are missing the .so symlink, so try the full name
-     static const char* libname2 = "libstartup-notification-1.so.0";
-
 --- a/docs/Makefile
 +++ b/docs/Makefile
 @@ -3,7 +3,7 @@

@@ -1,58 +1,68 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
-, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, ostree, libselinux
-, go-md2man }:
-
-with stdenv.lib;
+{ stdenv
+, buildGoModule
+, fetchFromGitHub
+, runCommand
+, gpgme
+, lvm2
+, btrfs-progs
+, pkg-config
+, go-md2man
+, installShellFiles
+, makeWrapper
+, fuse-overlayfs
+}:
 
 let
-  version = "0.1.37";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "1ly5yq3aj4ciqn6hbhvxqp1im81pbas9smdhbbks7iwjvh944d62";
+    sha256 = "09zqzrw6f1s6kaknnj3hra3xz4nq6y86vmw5vk8p4f6g7cwakg1x";
   };
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
 
-  goPackagePath = "github.com/containers/skopeo";
+  vendorPath = "github.com/containers/skopeo/vendor/github.com/containers/image/v5";
 
 in
-buildGoPackage rec {
+buildGoModule {
   pname = "skopeo";
   inherit version;
-  inherit src goPackagePath;
+  inherit src;
 
-  outputs = [ "bin" "man" "out" ];
+  outputs = [ "out" "man" ];
 
-  excludedPackages = "integration";
+  vendorSha256 = null;
 
-  nativeBuildInputs = [ pkgconfig (lib.getBin go-md2man) ];
-  buildInputs = [ gpgme ] ++ lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs ostree libselinux ];
+  excludedPackages = [ "integration" ];
+
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
+
+  buildInputs = [ gpgme ]
+  ++ stdenv.lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
   buildFlagsArray = ''
     -ldflags=
-    -X github.com/containers/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}
-    -X github.com/containers/skopeo/vendor/github.com/containers/image/internal/tmpdir.unixTempDirForBigFiles=/tmp
-  '';
-
-  preBuild = ''
-    export CGO_CFLAGS="$CFLAGS"
-    export CGO_LDFLAGS="$LDFLAGS"
+    -X ${vendorPath}/signature.systemDefaultPolicyPath=${defaultPolicyFile}
+    -X ${vendorPath}/internal/tmpdir.unixTempDirForBigFiles=/tmp
   '';
 
   postBuild = ''
-    # depends on buildGoPackage not changing …
-    pushd ./go/src/${goPackagePath}
     make install-docs MANINSTALLDIR="$man/share/man"
-    popd
+    installShellCompletion --bash completions/bash/skopeo
   '';
 
-  meta = {
+  postInstall = stdenv.lib.optionals stdenv.isLinux ''
+    wrapProgram $out/bin/skopeo \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
+  '';
+
+  meta = with stdenv.lib; {
     description = "A command line utility for various operations on container images and image repositories";
-    homepage = https://github.com/projectatomic/skopeo;
-    maintainers = with stdenv.lib.maintainers; [ vdemeester lewo ];
-    license = stdenv.lib.licenses.asl20;
+    homepage = "https://github.com/containers/skopeo";
+    maintainers = with maintainers; [ lewo ] ++ teams.podman.members;
+    license = licenses.asl20;
   };
 }

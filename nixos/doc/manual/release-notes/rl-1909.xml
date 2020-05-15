@@ -3,7 +3,7 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-19.09">
- <title>Release 19.09 (“Loris”, 2019/09/??)</title>
+ <title>Release 19.09 (“Loris”, 2019/10/09)</title>
 
  <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -22,6 +22,26 @@
     <para>
      End of support is planned for end of April 2020, handing over to 20.03.
     </para>
+   </listitem>
+   <listitem>
+    <para>
+     Nix has been updated to 2.3; see its
+     <link xlink:href="https://nixos.org/nix/manual/#ssec-relnotes-2.3">release
+     notes</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>Core version changes:</para>
+    <para>systemd: 239 -&gt; 243</para>
+    <para>gcc: 7 -&gt; 8</para>
+    <para>glibc: 2.27 (unchanged)</para>
+    <para>linux: 4.19 LTS (unchanged)</para>
+    <para>openssl: 1.0 -&gt; 1.1</para>
+   </listitem>
+   <listitem>
+    <para>Desktop version changes:</para>
+    <para>plasma5: 5.14 -&gt; 5.16</para>
+    <para>gnome3: 3.30 -&gt; 3.32</para>
    </listitem>
    <listitem>
     <para>
@@ -63,10 +83,10 @@
       like games.
       <itemizedlist>
       <para>This can be achieved with the following options which the desktop manager default enables, excluding <literal>games</literal>.</para>
-      <listitem><para><link linkend="opt-services.gnome3.core-os-services.enable"><literal>services.gnome3.core-os-services.enable</literal></link></para></listitem>
-      <listitem><para><link linkend="opt-services.gnome3.core-shell.enable"><literal>services.gnome3.core-shell.enable</literal></link></para></listitem>
-      <listitem><para><link linkend="opt-services.gnome3.core-utilities.enable"><literal>services.gnome3.core-utilities.enable</literal></link></para></listitem>
-      <listitem><para><link linkend="opt-services.gnome3.games.enable"><literal>services.gnome3.games.enable</literal></link></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.core-os-services.enable"/></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.core-shell.enable"/></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.core-utilities.enable"/></para></listitem>
+      <listitem><para><xref linkend="opt-services.gnome3.games.enable"/></para></listitem>
       </itemizedlist>
       With these options we hope to give users finer grained control over their systems. Prior to this change you'd either have to manually
       disable options or use <option>environment.gnome3.excludePackages</option> which only excluded the optional applications.
@@ -144,6 +164,39 @@
      but will make sure that the given printers are configured as declared.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     There is a new <xref linkend="opt-services.system-config-printer.enable"/> and <xref linkend="opt-programs.system-config-printer.enable"/> module
+     for the program of the same name. If you previously had <literal>system-config-printer</literal> enabled through some other
+     means you should migrate to using one of these modules.
+    </para>
+    <itemizedlist>
+     <para>If you're a user of the following desktopManager modules no action is needed:</para>
+     <listitem>
+      <para><option>services.xserver.desktopManager.plasma5</option></para>
+     </listitem>
+     <listitem>
+      <para><option>services.xserver.desktopManager.gnome3</option></para>
+     </listitem>
+     <listitem>
+      <para><option>services.xserver.desktopManager.pantheon</option></para>
+     </listitem>
+     <listitem>
+      <para><option>services.xserver.desktopManager.mate</option></para>
+      <para>
+       Note Mate uses <literal>programs.system-config-printer</literal> as it doesn't
+       use it as a service, but its graphical interface directly.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
+     <xref linkend="opt-services.blueman.enable"/> has been added.
+     If you previously had blueman installed via <option>environment.systemPackages</option> please
+     migrate to using the NixOS module, as this would result in an insufficiently configured blueman.
+    </para>
+   </listitem>
   </itemizedlist>
 
  </section>
@@ -176,6 +229,11 @@
      if you run an application like eg. Nextcloud, where you need to use
      the Unix socket path as the database host name, you need to change it
      accordingly.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     PostgreSQL 9.4 is scheduled EOL during the 19.09 life cycle and has been removed.
     </para>
    </listitem>
    <listitem>
@@ -418,11 +476,121 @@
    </listitem>
    <listitem>
      <para>
-       <option>services.xserver.desktopManager.xterm</option> is now disabled by default.
-       It was not useful except for debugging purposes and was confusingly set as default in some circumstances.
+       <option>services.xserver.desktopManager.xterm</option> is now disabled by default if <literal>stateVersion</literal> is 19.09 or higher.
+       Previously the xterm desktopManager was enabled when xserver was enabled, but it isn't useful for all people so it didn't make sense to
+       have any desktopManager enabled default.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     The WeeChat plugin <literal>pkgs.weechatScripts.weechat-xmpp</literal> has been removed as it doesn't receive
+     any updates from upstream and depends on outdated Python2-based modules.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Old unsupported versions (<literal>logstash5</literal>,
+     <literal>kibana5</literal>,
+     <literal>filebeat5</literal>,
+     <literal>heartbeat5</literal>,
+     <literal>metricbeat5</literal>,
+     <literal>packetbeat5</literal>) of the ELK-stack and Elastic beats have been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     For NixOS 19.03, both Prometheus 1 and 2 were available to allow for
+     a seamless transition from version 1 to 2 with existing setups.
+     Because Prometheus 1 is no longer developed, it was removed.
+     Prometheus 2 is now configured with <literal>services.prometheus</literal>.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       Citrix Receiver (<literal>citrix_receiver</literal>) has been dropped in favor of Citrix Workspace
+       (<literal>citrix_workspace</literal>).
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The <literal>services.gitlab</literal> module has had its literal secret options (<option>services.gitlab.smtp.password</option>,
+       <option>services.gitlab.databasePassword</option>,
+       <option>services.gitlab.initialRootPassword</option>,
+       <option>services.gitlab.secrets.secret</option>,
+       <option>services.gitlab.secrets.db</option>,
+       <option>services.gitlab.secrets.otp</option> and
+       <option>services.gitlab.secrets.jws</option>) replaced by file-based versions (<option>services.gitlab.smtp.passwordFile</option>,
+       <option>services.gitlab.databasePasswordFile</option>,
+       <option>services.gitlab.initialRootPasswordFile</option>,
+       <option>services.gitlab.secrets.secretFile</option>,
+       <option>services.gitlab.secrets.dbFile</option>,
+       <option>services.gitlab.secrets.otpFile</option> and
+       <option>services.gitlab.secrets.jwsFile</option>). This was done so that secrets aren't stored
+       in the world-readable nix store, but means that for each option you'll have to create a file with
+       the same exact string, add "File" to the end of the option name, and change the definition to a
+       string pointing to the corresponding file; e.g. <literal>services.gitlab.databasePassword = "supersecurepassword"</literal>
+       becomes <literal>services.gitlab.databasePasswordFile = "/path/to/secret_file"</literal> where the
+       file <literal>secret_file</literal> contains the string <literal>supersecurepassword</literal>.
+     </para>
+     <para>
+       The state path (<option>services.gitlab.statePath</option>) now has the following restriction:
+       no parent directory can be owned by any other user than <literal>root</literal> or the user
+       specified in <option>services.gitlab.user</option>; i.e. if <option>services.gitlab.statePath</option>
+       is set to <literal>/var/lib/gitlab/state</literal>, <literal>gitlab</literal> and all parent directories
+       must be owned by either <literal>root</literal> or the user specified in <option>services.gitlab.user</option>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+      The <option>networking.useDHCP</option> option is unsupported in combination with
+      <option>networking.useNetworkd</option> in anticipation of defaulting to it.
+      It has to be set to <literal>false</literal> and enabled per
+      interface with <option>networking.interfaces.&lt;name&gt;.useDHCP = true;</option>
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The Twitter client <literal>corebird</literal> has been dropped as <link xlink:href="https://www.patreon.com/posts/corebirds-future-18921328">it is discontinued and does not work against the new Twitter API</link>.
+       Please use the fork <literal>cawbird</literal> instead which has been adapted to the API changes and is still maintained.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+      The <literal>nodejs-11_x</literal> package has been removed as it's EOLed by upstream.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Because of the systemd upgrade,
+       <application>systemd-timesyncd</application> will no longer work if
+       <option>system.stateVersion</option> is not set correctly. When
+       upgrading from NixOS 19.03, please make sure that
+       <option>system.stateVersion</option> is set to
+       <literal>"19.03"</literal>, or lower if the installation dates back to an
+       earlier version of NixOS.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Due to the short lifetime of non-LTS kernel releases package attributes like <literal>linux_5_1</literal>,
+       <literal>linux_5_2</literal> and <literal>linux_5_3</literal> have been removed to discourage dependence
+       on specific non-LTS kernel versions in stable NixOS releases.
 
+       Going forward, versioned attributes like <literal>linux_4_9</literal> will exist for LTS versions only.
+       Please use <literal>linux_latest</literal> or <literal>linux_testing</literal> if you depend on non-LTS
+       releases. Keep in mind that <literal>linux_latest</literal> and <literal>linux_testing</literal> will
+       change versions under the hood during the lifetime of a stable release and might include breaking changes.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Because of the systemd upgrade,
+       some network interfaces might change their name. For details see
+       <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html#History">
+       upstream docs</link> or <link xlink:href="https://github.com/NixOS/nixpkgs/issues/71086">
+       our ticket</link>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -621,7 +789,7 @@
       </para>
      </listitem>
     </itemizedlist>
-     This also configures the kernel to pass coredumps to <literal>systemd-coredump</literal>,
+     This also configures the kernel to pass core dumps to <literal>systemd-coredump</literal>,
      and restricts the SysRq key combinations to the sync command only.
      These sysctl snippets can be found in <literal>/etc/sysctl.d/50-*.conf</literal>,
      and overridden via <link linkend="opt-boot.kernel.sysctl">boot.kernel.sysctl</link>
@@ -630,12 +798,15 @@
    </listitem>
    <listitem>
     <para>
-      Coredumps are now acquired by <literal>systemd-coredump</literal> by default.
-      <literal>systemd-coredump</literal> behaviour can still be modified via
-      <option>systemd.coredump.extraConfig</option>.
-      To stick to the old behaviour (having the kernel dump to a file called <literal>core</literal>
-      in the working directory), without piping it through <literal>systemd-coredump</literal>, set
-      <option>boot.kernel.sysctl."kernel.core_pattern"</option> to <literal>"core"</literal>.
+      Core dumps are now processed by <literal>systemd-coredump</literal>
+      by default. <literal>systemd-coredump</literal> behaviour can
+      still be modified via
+      <option>systemd.coredump.extraConfig</option>. To stick to the
+      old behaviour (having the kernel dump to a file called
+      <literal>core</literal> in the working directory), without piping
+      it through <literal>systemd-coredump</literal>, set
+      <option>systemd.coredump.enable</option> to
+      <literal>false</literal>.
     </para>
    </listitem>
    <listitem>
@@ -711,12 +882,21 @@
      </para>
    </listitem>
    <listitem>
-     Ceph has been upgraded to v14.2.1.
-     See the <link xlink:href="https://ceph.com/releases/v14-2-0-nautilus-released/">release notes</link> for details.
-     The mgr dashboard as well as osds backed by loop-devices is no longer explicitly supported by the package and module.
-     Note: There's been some issues with python-cherrypy, which is used by the dashboard
-     and prometheus mgr modules (and possibly others), hence 0000-dont-check-cherrypy-version.patch.
-   </listitem>
+     <para>
+       Ceph has been upgraded to v14.2.1.
+       See the <link xlink:href="https://ceph.com/releases/v14-2-0-nautilus-released/">release notes</link> for details.
+       The mgr dashboard as well as osds backed by loop-devices is no longer explicitly supported by the package and module.
+       Note: There's been some issues with python-cherrypy, which is used by the dashboard
+       and prometheus mgr modules (and possibly others), hence 0000-dont-check-cherrypy-version.patch.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <literal>pkgs.weechat</literal> is now compiled against <literal>pkgs.python3</literal>.
+      Weechat also recommends <link xlink:href="https://weechat.org/scripts/python3/">to use Python3
+      in their docs.</link>
+     </para>
+    </listitem>
   </itemizedlist>
  </section>
 </section>

@@ -17,10 +17,7 @@ in
 
     services.disnix = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable Disnix";
-      };
+      enable = mkEnableOption "Disnix";
 
       enableMultiUser = mkOption {
         type = types.bool;
@@ -28,10 +25,7 @@ in
         description = "Whether to support multi-user mode by enabling the Disnix D-Bus service";
       };
 
-      useWebServiceInterface = mkOption {
-        default = false;
-        description = "Whether to enable the DisnixWebService interface running on Apache Tomcat";
-      };
+      useWebServiceInterface = mkEnableOption "the DisnixWebService interface running on Apache Tomcat";
 
       package = mkOption {
         type = types.path;
@@ -61,10 +55,7 @@ in
       ++ optional cfg.useWebServiceInterface "${pkgs.dbus_java}/share/java/dbus.jar";
     services.tomcat.webapps = optional cfg.useWebServiceInterface pkgs.DisnixWebService;
 
-    users.groups = singleton
-      { name = "disnix";
-        gid = config.ids.gids.disnix;
-      };
+    users.groups.disnix.gid = config.ids.gids.disnix;
 
     systemd.services = {
       disnix = mkIf cfg.enableMultiUser {

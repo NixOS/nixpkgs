@@ -28,7 +28,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/scott-maddox/fdint;
+    homepage = "https://github.com/scott-maddox/fdint";
     description = "A free, open-source python package for quickly and precisely approximating Fermi-Dirac integrals";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

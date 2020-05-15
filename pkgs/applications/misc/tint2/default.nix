@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, pkgconfig, cmake, gettext, cairo, pango, pcre
 , glib, imlib2, gtk2, libXinerama, libXrender, libXcomposite, libXdamage
 , libX11, libXrandr, librsvg, libpthreadstubs, libXdmcp
-, libstartup_notification, hicolor-icon-theme, wrapGAppsHook
+, libstartup_notification, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cairo pango pcre glib imlib2 gtk2 libXinerama libXrender
     libXcomposite libXdamage libX11 libXrandr librsvg libpthreadstubs
-    libXdmcp libstartup_notification hicolor-icon-theme ];
+    libXdmcp libstartup_notification ];
 
   postPatch = ''
     for f in ./src/launcher/apps-common.c \
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://gitlab.com/o9000/tint2;
+    homepage = "https://gitlab.com/o9000/tint2";
     description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
     license = licenses.gpl2;
     platforms = platforms.linux;

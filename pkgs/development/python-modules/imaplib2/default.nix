@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A threaded Python IMAP4 client";
-    homepage = https://github.com/bcoe/imaplib2;
+    homepage = "https://github.com/bcoe/imaplib2";
     # See https://github.com/bcoe/imaplib2/issues/25
     license = licenses.psfl;
     maintainers = with maintainers; [ dotlambda ];

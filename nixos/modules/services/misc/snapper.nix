@@ -44,7 +44,7 @@ in
     configs = mkOption {
       default = { };
       example = literalExample {
-        "home" = {
+        home = {
           subvolume = "/home";
           extraConfig = ''
             ALLOW_USERS="alice"

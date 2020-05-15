@@ -4,12 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.2.4";
+  version = "1.5.1";
   pname = "bids-validator";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mvp1mi1k6yqgyj7rxij8mlwclqlyfzq08s67v0qaycw44l68ifg";
+    sha256 = "1fy8w56m0x546zjk3is1xp83jm19fkn4y15g5jgmq29sfzc8n3y3";
   };
 
   propagatedBuildInputs = [ ];

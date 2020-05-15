@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, makeWrapper, gcc, libGLU_combined, xdg_utils,
+{ stdenv, fetchurl, dpkg, makeWrapper, gcc, libGLU, libGL, xdg_utils,
   dbus, alsaLib, cups, fontconfig, glib, icu, libpng12,
   xkeyboard_config, zlib, libxslt, libxml2, sqlite, orc,
   libX11, libXcursor, libXrandr, libxcb, libXi, libSM, libICE,
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
     sha256 = "05lrvml0zkzqg0sj6sj2h8h66hxdmsw5fg9fwz923r1y8j48qxdx";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [ gcc.cc libGLU_combined xdg_utils
+  libPath = stdenv.lib.makeLibraryPath [ gcc.cc libGLU libGL xdg_utils
     dbus alsaLib cups.lib fontconfig glib icu libpng12
     xkeyboard_config zlib libxslt libxml2 sqlite orc libX11
     libXcursor libXrandr libxcb libXi libSM libICE libXrender
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "2D design & drafting application, meant to be similar to AutoCAD";
     longDescription = "Professional-grade 2D design and drafting solution from Dassault Systèmes that lets you create, edit, view and mark up any kind of 2D CAD drawing.";
-    homepage = https://www.3ds.com/products-services/draftsight-cad-software/;
+    homepage = "https://www.3ds.com/products-services/draftsight-cad-software/";
     license = stdenv.lib.licenses.unfree;
     maintainers = with maintainers; [ hodapp ];
     platforms = [ "x86_64-linux" ];

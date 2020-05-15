@@ -18,6 +18,12 @@
 , ecl
 , maxima-ecl
 , singular
+, fflas-ffpack
+, givaro
+, gd
+, libpng
+, linbox
+, m4ri
 , giac
 , palp
 , rWrapper
@@ -35,7 +41,8 @@
 , lcalc
 , rubiks
 , flintqs
-, openblasCompat
+, blas
+, lapack
 , flint
 , gmp
 , mpfr
@@ -44,7 +51,10 @@
 , gsl
 , ntl
 , jdk
+, less
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 # This generates a `sage-env` shell file that will be sourced by sage on startup.
 # It sets up various environment variables, telling sage where to find its
@@ -92,6 +102,7 @@ let
     rubiks
     flintqs
     jdk # only needed for `jmol` which may be replaced in the future
+    less # needed to prevent transient test errors until https://github.com/ipython/ipython/pull/11864 is resolved
   ]
   ));
 in
@@ -99,14 +110,21 @@ writeTextFile rec {
   name = "sage-env";
   destination = "/${name}";
   text = ''
-    export PKG_CONFIG_PATH='${lib.concatStringsSep ":" (map (pkg: "${pkg}/lib/pkgconfig") [
-        # This is only needed in the src/sage/misc/cython.py test and I'm not
-        # sure if there's really a usecase for it outside of the tests. However
-        # since singular and openblas are runtime dependencies anyways, it doesn't
-        # really hurt to include.
+    export PKG_CONFIG_PATH='${lib.makeSearchPathOutput "dev" "lib/pkgconfig" [
+        # This should only be needed during build. However, since the  doctests
+        # also test the cython build (for example in src/sage/misc/cython.py),
+        # it is also needed for the testsuite to pass. We could fix the
+        # testsuite instead, but since all the packages are also runtime
+        # dependencies it doesn't really hurt to include them here.
         singular
-        openblasCompat
-      ])
+        blas lapack
+        fflas-ffpack givaro
+        gd
+        libpng zlib
+        gsl
+        linbox
+        m4ri
+      ]
     }'
     export SAGE_ROOT='${sagelib.src}'
     export SAGE_LOCAL='@sage-local@'
@@ -162,7 +180,7 @@ writeTextFile rec {
     export SAGE_EXTCODE='${sagelib.src}/src/ext'
 
   # for find_library
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}:$DYLD_LIBRARY_PATH"
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
 } // {
   lib = sagelib; # equivalent of `passthru`, which `writeTextFile` doesn't support

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Inverts the colors of your screen";
     license = stdenv.lib.licenses.gpl3Plus;
-    homepage = https://github.com/zoltanp/xrandr-invert-colors;
+    homepage = "https://github.com/zoltanp/xrandr-invert-colors";
     maintainers = [stdenv.lib.maintainers.magnetophon ];
     platforms = platforms.linux;
   }; 

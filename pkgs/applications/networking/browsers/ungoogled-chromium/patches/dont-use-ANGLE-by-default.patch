@@ -1,0 +1,26 @@
+A field trial currently enables the passthrough command decoder, which causes
+gl_factory.cc to try kGLImplementationEGLANGLE first, which causes Chromium to fail
+to load libGLESv2.so on NixOS.  It somehow does not try kGLImplementationDesktopGL,
+and so there is no GL support at all.
+
+Revert to using the validating command decoder, which prevents gl_factory.cc
+from touching allowed_impls, allowing it to successfully use kGLImplementationDesktopGL.
+
+diff --git a/ui/gl/gl_utils.cc b/ui/gl/gl_utils.cc
+index 697cbed5fe2d..8419bdb21a2f 100644
+--- a/ui/gl/gl_utils.cc
++++ b/ui/gl/gl_utils.cc
+@@ -71,9 +71,10 @@ bool UsePassthroughCommandDecoder(const base::CommandLine* command_line) {
+   } else if (switch_value == kCmdDecoderValidatingName) {
+     return false;
+   } else {
+-    // Unrecognized or missing switch, use the default.
+-    return base::FeatureList::IsEnabled(
+-        features::kDefaultPassthroughCommandDecoder);
++    // Ignore the field trial that enables it; disable it until
++    // gl_factory.cc kGLImplementationEGLANGLE issues are sorted
++    // out on NixOS.
++    return false;
+   }
+ }
+ }

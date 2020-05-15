@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, unzip, erlang, git, wget, which, pam
 , Carbon ? null, Cocoa ? null }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "riak_cs-2.1.1";
 
   buildInputs = [

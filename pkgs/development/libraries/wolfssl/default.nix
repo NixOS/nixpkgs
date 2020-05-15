@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "4.1.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "16d1dzbdx6x7czbxf6i1rlb5mv59yzzpnha7qgwab3yq62rlsgw3";
+    sha256 = "1bgkxqgxwa5dvi7fkna64wpcs552f3yxvs6fh6d32v7vg88vpfx9";
   };
 
   configureFlags = [ "--enable-all" ];

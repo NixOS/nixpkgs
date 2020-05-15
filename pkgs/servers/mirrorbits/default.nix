@@ -24,6 +24,11 @@ buildGoPackage rec {
     rm -rf testing
   '';
 
+  # Fix build with go >=1.12
+  preBuild = ''
+    sed -i s/"_Ctype_struct_GeoIPRecordTag"/"C.struct_GeoIPRecordTag"/ ./go/src/github.com/etix/geoip/geoip.go
+  '';
+
   goPackagePath = "github.com/etix/mirrorbits";
   goDeps = ./deps.nix;
 

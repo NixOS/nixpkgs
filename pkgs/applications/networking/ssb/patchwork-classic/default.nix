@@ -5,7 +5,7 @@
   glibc, systemd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   version = "2.12.0";
 

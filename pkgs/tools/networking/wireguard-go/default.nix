@@ -2,14 +2,16 @@
 
 buildGoPackage rec {
   pname = "wireguard-go";
-  version = "0.0.20190517";
+  version = "0.0.20200320";
 
-  goPackagePath = "git.zx2c4.com/wireguard-go";
+  goPackagePath = "golang.zx2c4.com/wireguard";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${version}.tar.xz";
-    sha256 = "0ir3dp13vkkqr76q0jvw610qw40053ngk51psqhqxfaw3jicdqgr";
+    sha256 = "0fy4qsss3i3pkq1rpgjds4aipbwlh1dr9hbbf7jn2a1c63kfks0r";
   };
+
+  patches = [ ./0001-Fix-darwin-build.patch ];
 
   goDeps = ./deps.nix;
 
@@ -17,9 +19,8 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Userspace Go implementation of WireGuard";
-    homepage = https://git.zx2c4.com/wireguard-go/about/;
+    homepage = "https://git.zx2c4.com/wireguard-go/about/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ elseym kirelagin yegortimoshenko zx2c4 ];
-    platforms = platforms.darwin;
   };
 }

@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ggrandou/abootimg;
+    homepage = "https://github.com/ggrandou/abootimg";
     description = "Manipulate Android Boot Images";
     license = licenses.gpl2;
     platforms = platforms.linux;

@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libipfix";
   version = "110209";
   src = fetchurl {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0h7v0sxjjdc41hl5vq2x0yhyn04bczl11bqm97825mivrvfymhn6";
   };
   meta = with stdenv.lib; {
-    homepage = http://libipfix.sourceforge.net/;
+    homepage = "http://libipfix.sourceforge.net/";
     description = "The libipfix C-library implements the IPFIX protocol defined by the IP Flow Information Export working group of the IETF.";
     license = licenses.lgpl3;
     platforms = platforms.linux;

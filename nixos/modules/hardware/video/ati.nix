@@ -21,7 +21,7 @@ in
     nixpkgs.config.xorg.abiCompat = "1.17";
 
     services.xserver.drivers = singleton
-      { name = "fglrx"; modules = [ ati_x11 ]; };
+      { name = "fglrx"; modules = [ ati_x11 ]; display = true; };
 
     hardware.opengl.package = ati_x11;
     hardware.opengl.package32 = pkgs.pkgsi686Linux.linuxPackages.ati_drivers_x11.override { libsOnly = true; kernel = null; };
@@ -33,7 +33,7 @@ in
 
     boot.blacklistedKernelModules = [ "radeon" ];
 
-    environment.etc."ati".source = "${ati_x11}/etc/ati";
+    environment.etc.ati.source = "${ati_x11}/etc/ati";
 
   };
 

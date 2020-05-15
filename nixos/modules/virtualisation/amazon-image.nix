@@ -135,6 +135,9 @@ in
     services.openssh.enable = true;
     services.openssh.permitRootLogin = "prohibit-password";
 
+    # Creates symlinks for block device names.
+    services.udev.packages = [ pkgs.ec2-utils ];
+
     # Force getting the hostname from EC2.
     networking.hostName = mkDefault "";
 
@@ -147,7 +150,7 @@ in
     networking.timeServers = [ "169.254.169.123" ];
 
     # udisks has become too bloated to have in a headless system
-    # (e.g. it depends on GTK+).
+    # (e.g. it depends on GTK).
     services.udisks2.enable = false;
   };
 }

@@ -5,8 +5,9 @@
 , pyparsing
 }:
 
-buildPythonPackage rec {
-  name = "mutag-0.0.2-2ffa0258ca";
+buildPythonPackage {
+  pname = "mutag";
+  version = "0.0.2-2ffa0258ca";
   disabled = ! isPy3k;
 
   src = fetchgit {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyparsing ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/aroig/mutag;
+    homepage = "https://github.com/aroig/mutag";
     description = "A script to change email tags in a mu indexed maildir";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];

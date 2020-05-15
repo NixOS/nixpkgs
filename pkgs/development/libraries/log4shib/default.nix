@@ -1,6 +1,6 @@
 { stdenv, fetchgit, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "log4shib";
   version = "1.0.9";
 
@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "A forked version of log4cpp that has been created for the Shibboleth project";
     maintainers = [ maintainers.jammerful ];
     license = licenses.lgpl21;
-    homepage = http://log4cpp.sf.net;
+    homepage = "http://log4cpp.sf.net";
   };
 }

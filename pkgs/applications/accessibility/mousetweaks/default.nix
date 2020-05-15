@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       The features can be activated and configured through the Universal Access
       panel of the GNOME Control Center.
     '';
-    homepage = https://wiki.gnome.org/Projects/Mousetweaks;
+    homepage = "https://wiki.gnome.org/Projects/Mousetweaks";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.johnazoidberg ];

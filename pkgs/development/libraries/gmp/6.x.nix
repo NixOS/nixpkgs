@@ -6,11 +6,11 @@
 let inherit (stdenv.lib) optional; in
 
 let self = stdenv.mkDerivation rec {
-  name = "gmp-6.1.2";
+  name = "gmp-6.2.0";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
-    sha256 = "1clg7pbpk6qwxj5b2mw0pghzawp2qlm3jf9gdd8i6fl6yh2bnxaj";
+    sha256 = "1sji8i9yjzfv5l2fsadpgjfyn452q6ab9zvm02k23ssd275rj77m";
   };
 
   #outputs TODO: split $cxx due to libstdc++ dependency
@@ -27,7 +27,7 @@ let self = stdenv.mkDerivation rec {
     (stdenv.lib.enableFeature cxx "cxx")
     # Build a "fat binary", with routines for several sub-architectures
     # (x86), except on Solaris where some tests crash with "Memory fault".
-    # See <http://hydra.nixos.org/build/2760931>, for instance.
+    # See <https://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
     (stdenv.lib.enableFeature (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "fat")
@@ -37,7 +37,9 @@ let self = stdenv.mkDerivation rec {
     "--build=${stdenv.buildPlatform.config}"
   ] ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
     ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
-    ++ optional (with stdenv.hostPlatform; useAndroidPrebuilt || useiOSPrebuilt) "--disable-assembly"
+    # to build a .dll on windows, we need --disable-static + --enable-shared
+    # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
+    ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"
     ;
 
   doCheck = true; # not cross;
@@ -47,7 +49,7 @@ let self = stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://gmplib.org/;
+    homepage = "https://gmplib.org/";
     description = "GNU multiple precision arithmetic library";
     license = licenses.gpl3Plus;
 

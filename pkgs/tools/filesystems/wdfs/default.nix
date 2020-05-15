@@ -1,7 +1,6 @@
 {stdenv, fetchurl, glib, neon, fuse, pkgconfig}:
 
-stdenv.mkDerivation rec
-{
+stdenv.mkDerivation {
   name = "wdfs-fuse-1.4.2";
   src = fetchurl {
     url = "http://noedler.de/projekte/wdfs/wdfs-1.4.2.tar.gz";
@@ -11,7 +10,7 @@ stdenv.mkDerivation rec
   buildInputs = [fuse glib neon];
 
   meta = with stdenv.lib; {
-    homepage = http://noedler.de/projekte/wdfs/;
+    homepage = "http://noedler.de/projekte/wdfs/";
     license = licenses.gpl2;
     description = "User-space filesystem that allows to mount a webdav share";
     platforms = platforms.linux;

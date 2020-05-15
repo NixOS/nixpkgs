@@ -4,7 +4,7 @@ let
   pname = "nbxmpp";
   version = "0.6.10";
   name = "${pname}-${version}";
-in buildPythonPackage rec {
+in buildPythonPackage {
   inherit pname version;
   # Tests aren't included in PyPI tarball.
   src = fetchzip {

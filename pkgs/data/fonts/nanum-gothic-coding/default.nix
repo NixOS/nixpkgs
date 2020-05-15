@@ -4,7 +4,7 @@ let
   version = "VER2.5";
   fullName = "NanumGothicCoding-2.5";
 
-in fetchzip rec {
+in fetchzip {
   name = "nanum-gothic-coding";
   url = "https://github.com/naver/nanumfont/releases/download/${version}/${fullName}.zip";
 
@@ -17,7 +17,7 @@ in fetchzip rec {
 
   meta = with lib; {
     description = "A contemporary monospaced sans-serif typeface with a warm touch";
-    homepage = https://github.com/naver/nanumfont;
+    homepage = "https://github.com/naver/nanumfont";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ linarcx ];

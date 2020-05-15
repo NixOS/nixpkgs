@@ -1,33 +1,24 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "go-jsonnet";
-  version = "0.13.0";
-
-  goPackagePath = "github.com/google/go-jsonnet";
-
-  # regenerate deps.nix using following steps:
-  #
-  # go get -u github.com/google/go-jsonnet
-  # cd $GOPATH/src/github.com/google/go-jsonnet
-  # git checkout <version>
-  # dep init
-  # dep2nix
-  goDeps = ./deps.nix;
+  version = "0.15.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "google";
     repo = "go-jsonnet";
-    sha256 = "0x95sqhrw4pscxq0q8781wix0w881k9my5kn5nf6k0fg1d6qlgiy";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "0l6cwky2xl7m8nnc9abp76bhkdcf2ldbbv3r8p30xv2yr5wd1j8i";
   };
 
-  meta = {
+  vendorSha256 = "1vdv0nq31mjprxzxf8x0diaigissy07vnm338h8jrk5i74x5by39";
+
+  subPackages = [ "cmd/jsonnet" ];
+
+  meta = with lib; {
     description = "An implementation of Jsonnet in pure Go";
-    maintainers = with lib.maintainers; [ nshalman ];
-    license = lib.licenses.asl20;
-    homepage = https://github.com/google/go-jsonnet;
-    platforms = lib.platforms.unix;
+    homepage = "https://github.com/google/go-jsonnet";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nshalman ];
   };
 }

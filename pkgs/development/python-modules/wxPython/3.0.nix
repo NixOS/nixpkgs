@@ -30,6 +30,9 @@ buildPythonPackage rec {
     sha256 = "0qfzx3sqx4mwxv99sfybhsij4b5pc03ricl73h4vhkzazgjjjhfm";
   };
 
+  dontUseSetuptoolsBuild = true;
+  dontUsePipInstall = true;
+
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkgconfig ]

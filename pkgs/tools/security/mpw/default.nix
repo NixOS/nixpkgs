@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A stateless password management solution";
-    homepage = https://masterpasswordapp.com/;
+    homepage = "https://masterpasswordapp.com/";
     license = licenses.gpl3;
     platforms = platforms.unix;
   };

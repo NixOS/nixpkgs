@@ -1,6 +1,6 @@
 { stdenv, lib, coreutils, gnused, gawk, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rsbep";
   version = "0.1.0";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Create resilient backups with Reed-Solomon error correction and byte-spreading";
-    homepage = https://www.thanassis.space/rsbep.html;
+    homepage = "https://www.thanassis.space/rsbep.html";
     license = licenses.gpl3;
     maintainers = [ maintainers.earvstedt ];
   };

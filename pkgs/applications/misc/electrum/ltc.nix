@@ -5,7 +5,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "electrum-ltc";
-  version = "3.1.3.1";
+  version = "3.3.8.1";
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
@@ -48,10 +48,10 @@ python3Packages.buildPythonApplication rec {
       about losing your litecoins to theft or hardware failure. No waiting, no
       lengthy blockchain downloads and no syncing to the network.
     '';
-    homepage = https://electrum-ltc.org/;
+    homepage = "https://electrum-ltc.org/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ asymmetric ];
+    maintainers = with maintainers; [ ];
   };
 }
 

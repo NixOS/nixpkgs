@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Math extension for Python-Markdown";
-    homepage = https://github.com/mitya57/python-markdown-math;
+    homepage = "https://github.com/mitya57/python-markdown-math";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ klntsky ];
   };

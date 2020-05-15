@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, glibc
-, bison2, curl, flex, gperftools, jansson, jemalloc, kerberos, lua, mariadb
+, bison, curl, flex, gperftools, jansson, jemalloc, kerberos, lua, libmysqlclient
 , ncurses, openssl, pcre, pcre2, perl, rabbitmq-c, sqlite, tcl
 , libaio, libedit, libtool, libui, libuuid, zlib
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    bison2 curl flex gperftools jansson jemalloc kerberos lua mariadb.connector-c
+    bison curl flex gperftools jansson jemalloc kerberos lua libmysqlclient
     ncurses openssl pcre pcre2 perl rabbitmq-c sqlite tcl
     libaio libedit libtool libui libuuid zlib
   ];
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     find $out/bin -type f -perm -0100 | while read f1; do
       patchelf \
-        --set-rpath "$(patchelf --print-rpath $f1):${mariadb.connector-c}/lib/mariadb:$out/lib/maxscale" \
+        --set-rpath "$(patchelf --print-rpath $f1):${libmysqlclient}/lib/mariadb:$out/lib/maxscale" \
         --set-interpreter "$(cat ${stdenv.cc}/nix-support/dynamic-linker)" $f1 \
         && patchelf --shrink-rpath $f1
     done
@@ -79,9 +79,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
      description = ''MaxScale database proxy extends MariaDB Server's high availability'';
-     homepage = https://mariadb.com/products/technology/maxscale;
+     homepage = "https://mariadb.com/products/technology/maxscale";
      license = licenses.bsl11;
      platforms = platforms.linux;
      maintainers = with maintainers; [ izorkin ];
+     broken = true;
  };
 }

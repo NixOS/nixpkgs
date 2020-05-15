@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "funtoo";
     repo = "keychain";
-    rev = "${version}";
+    rev = version;
     sha256 = "1bkjlg0a2bbdjhwp37ci1rwikvrl4s3xlbf2jq2z4azc96dr83mj";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Keychain management tool";
-    homepage = https://www.funtoo.org/Keychain;
+    homepage = "https://www.funtoo.org/Keychain";
     license = stdenv.lib.licenses.gpl2;
     # other platforms are untested (AFAIK)
     platforms =

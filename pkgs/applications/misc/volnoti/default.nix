@@ -2,7 +2,7 @@
 , pkgconfig, dbus, gdk-pixbuf, glib, libX11, gtk2, librsvg
 , dbus-glib, autoreconfHook, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "volnoti-unstable";
   version = "2013-09-23";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight volume notification for Linux";
-    homepage = https://github.com/davidbrazdil/volnoti;
+    homepage = "https://github.com/davidbrazdil/volnoti";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.gilligan ];

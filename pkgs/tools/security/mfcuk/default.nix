@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libnfc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mfcuk";
   version = "0.3.8";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "MiFare Classic Universal toolKit";
     license = licenses.gpl2;
-    homepage = https://github.com/nfc-tools/mfcuk;
+    homepage = "https://github.com/nfc-tools/mfcuk";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };

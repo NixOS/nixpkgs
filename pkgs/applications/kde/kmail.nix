@@ -7,7 +7,7 @@
   kmail-account-wizard, kmailtransport, knotifications, knotifyconfig,
   kontactinterface, kparts, kpty, kservice, ktextwidgets, ktnef, kwallet,
   kwidgetsaddons, kwindowsystem, kxmlgui, libgravatar, libksieve, mailcommon,
-  messagelib, pim-sieve-editor, qtscript, qtwebengine,
+  messagelib, pim-sieve-editor, qtscript, qtwebengine, akonadi
 }:
 
 mkDerivation {
@@ -25,6 +25,6 @@ mkDerivation {
     ktextwidgets ktnef kwidgetsaddons kwindowsystem kxmlgui libgravatar
     libksieve mailcommon messagelib pim-sieve-editor qtscript qtwebengine
   ];
-  propagatedUserEnvPkgs = [ kdepim-runtime kwallet ];
+  propagatedUserEnvPkgs = [ kdepim-runtime kwallet akonadi ];
   patches = [ ./kmail.patch ];
 }

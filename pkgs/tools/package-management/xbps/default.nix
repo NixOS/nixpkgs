@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xbps";
-  version = "0.56";
+  version = "0.59.1";
 
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "xbps";
     rev = version;
-    sha256 = "0hqvq6fq62l5sgm4fy3zb0ks889d21mqz4f4my3iifs6c9f50na2";
+    sha256 = "0pab3xf97y4wqlyrb92zxd3cfsrbnlx6pssbw4brgwcxccw9jrhy";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib openssl libarchive ];
 
   patches = [ ./cert-paths.patch ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   postPatch = ''
     # fix unprefixed ranlib (needed on cross)
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/void-linux/xbps;
+    homepage = "https://github.com/void-linux/xbps";
     description = "The X Binary Package System";
     platforms = platforms.linux; # known to not work on Darwin, at least
     license = licenses.bsd2;

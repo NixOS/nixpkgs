@@ -60,7 +60,7 @@ let
   };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
-    inherit lib lndir makeWrapper stdenv runCommand;
+    inherit lib lndir makeWrapper runCommand;
   };
 
   mkManualPackages = import ../applications/editors/emacs-modes/manual-packages.nix {
@@ -78,7 +78,7 @@ in lib.makeScope newScope (self: lib.makeOverridable ({
   // melpaStablePackages // { inherit melpaStablePackages; }
   // melpaPackages // { inherit melpaPackages; }
   // orgPackages // { inherit orgPackages; }
-  // manualPackages
+  // manualPackages // { inherit manualPackages; }
   // {
     inherit emacs melpaBuild trivialBuild;
     emacsWithPackages = emacsWithPackages self;

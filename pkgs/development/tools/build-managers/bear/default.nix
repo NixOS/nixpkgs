@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, python }:
+{ stdenv, fetchFromGitHub, cmake, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
-    repo = "Bear";
+    repo = pname;
     rev = version;
-    sha256 = "0fqhhavyz9ddjc3wgb2ng47bfgk1q4w5bwah74nsa02k8r22pbch";
+    sha256 = "1w1kyjzvvy5lj16kn3yyf7iil2cqlfkszi8kvagql7f5h5l6w9b1";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ python ]; # just for shebang of bin/bear
+  buildInputs = [ python3 ]; # just for shebang of bin/bear
 
   doCheck = false; # all fail
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       e.g. for YouCompleteMe.  You just enter your development nix-shell
       and run `bear make`.  It's not perfect, but it gets a long way.
     '';
-    homepage = https://github.com/rizsotto/Bear;
+    homepage = "https://github.com/rizsotto/Bear";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.babariviere ];

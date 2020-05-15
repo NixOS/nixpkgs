@@ -68,17 +68,16 @@ in
 
     services.bind = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable BIND domain name server.
-        ";
-      };
+      enable = mkEnableOption "BIND domain name server";
 
       cacheNetworks = mkOption {
         default = ["127.0.0.0/24"];
         description = "
-          What networks are allowed to use us as a resolver.
+          What networks are allowed to use us as a resolver.  Note
+          that this is for recursive queries -- all networks are
+          allowed to query zones configured with the `zones` option.
+          It is recommended that you limit cacheNetworks to avoid your
+          server being used for DNS amplification attacks.
         ";
       };
 
@@ -174,9 +173,8 @@ in
 
     networking.resolvconf.useLocalResolver = mkDefault true;
 
-    users.users = singleton
-      { name = bindUser;
-        uid = config.ids.uids.bind;
+    users.users.${bindUser} =
+      { uid = config.ids.uids.bind;
         description = "BIND daemon user";
       };
 

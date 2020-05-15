@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "3.32.2";
+  version = "3.36.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "00iwbllh8dmnqch0ysng9xhkzzs3ir9jl9f4hp41vbvg1pq5zv98";
+    sha256 = "0bd30g3facfcgf18y2110xhc7ijly313y49mpwdkvl482z0fxzyj";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext vala gtk-doc docbook_xsl docbook_xml_dtd_43 gobject-introspection python3 ];
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library to access weather information from online services for numerous locations";
-    homepage = https://wiki.gnome.org/Projects/LibGWeather;
+    homepage = "https://wiki.gnome.org/Projects/LibGWeather";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

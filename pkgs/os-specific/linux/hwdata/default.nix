@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   outputHash = "0g2w4jr4p1hykracp2za7jb0rcr51kks1m43pzcaf7g99x8669ww";
 
   meta = {
-    homepage = https://github.com/vcrhonek/hwdata;
+    homepage = "https://github.com/vcrhonek/hwdata";
     description = "Hardware Database, including Monitors, pci.ids, usb.ids, and video cards";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

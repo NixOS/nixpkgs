@@ -51,12 +51,18 @@ in lib.init bootStages ++ [
       extraBuildInputs = [ ]; # Old ones run on wrong platform
       allowedRequisites = null;
 
+      hasCC = !targetPlatform.isGhcjs;
+
       cc = if crossSystem.useiOSPrebuilt or false
              then buildPackages.darwin.iosSdkPkgs.clang
            else if crossSystem.useAndroidPrebuilt or false
              then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".clang
            else if targetPlatform.isGhcjs
-             then null
+             # Need to use `throw` so tryEval for splicing works, ugh.  Using
+             # `null` or skipping the attribute would cause an eval failure
+             # `tryEval` wouldn't catch, wrecking accessing previous stages
+             # when there is a C compiler and everything should be fine.
+             then throw "no C compiler provided for this platform"
            else if crossSystem.useLLVM or false
              then buildPackages.llvmPackages_8.lldClang
            else buildPackages.gcc;

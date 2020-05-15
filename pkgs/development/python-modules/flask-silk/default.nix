@@ -4,7 +4,7 @@
 , flask
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "Flask-Silk";
   version = "2018-06-28";
 
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Adds silk icons to your Flask application or module, or extension";
     license = licenses.bsd3;
     maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/sublee/flask-silk;
+    homepage = "https://github.com/sublee/flask-silk";
   };
 }

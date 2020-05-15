@@ -4,6 +4,10 @@
 with lib;
 
 {
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   ###### interface
   options = {
     services.gnome3.rygel = {
@@ -26,5 +30,7 @@ with lib;
     services.dbus.packages = [ pkgs.gnome3.rygel ];
 
     systemd.packages = [ pkgs.gnome3.rygel ];
+
+    environment.etc."rygel.conf".source = "${pkgs.gnome3.rygel}/etc/rygel.conf";
   };
 }

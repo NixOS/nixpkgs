@@ -1,81 +1,80 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, bison, flex
-, tcl, readline, libffi, python3
-, protobuf, zlib
+{ stdenv
+, abc-verifier
+, bison
+, fetchFromGitHub
+, flex
+, libffi
+, pkgconfig
+, protobuf
+, python3
+, readline
+, tcl
+, verilog
+, zlib
 }:
 
-with builtins;
-
 stdenv.mkDerivation rec {
-  pname = "yosys";
-  version = "2019.09.01";
+  pname   = "yosys";
+  version = "2020.03.24";
 
-  srcs = [
-    (fetchFromGitHub {
-      owner  = "yosyshq";
-      repo   = "yosys";
-      rev    = "4aa505d1b254b3fbb66af2d95b396a8f077da9d0";
-      sha256 = "16rhwmn1z2ppaq3wycgq713krq48s80a6h57vgzjzj17hgncg7hs";
-      name   = "yosys";
-    })
-
-    # NOTE: the version of abc used here is synchronized with
-    # the one in the yosys Makefile of the version above;
-    # keep them the same for quality purposes.
-    (fetchFromGitHub {
-      owner  = "berkeley-abc";
-      repo   = "abc";
-      rev    = "5776ad07e7247993976bffed4802a5737c456782";
-      sha256 = "1la4idmssg44rp6hd63sd5vybvs3vr14yzvwcg03ls37p39cslnl";
-      name   = "yosys-abc";
-    })
-  ];
-  sourceRoot = "yosys";
+  src = fetchFromGitHub {
+    owner  = "YosysHQ";
+    repo   = "yosys";
+    rev    = "c9555c9adeba886a308c60615ac794ec20d9276e";
+    sha256 = "1fh118fv06jyfmkx6zy0w2k0rjj22m0ffyll3k5giaw8zzaf0j3a";
+  };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ tcl readline libffi python3 bison flex protobuf zlib ];
 
-  makeFlags = [ "ENABLE_PROTOBUF=1" ];
+  makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
 
   patchPhase = ''
-    substituteInPlace ../yosys-abc/Makefile \
-      --replace 'CC   := gcc' "" \
-      --replace 'CXX  := g++' ""
     substituteInPlace ./Makefile \
       --replace 'CXX = clang' "" \
       --replace 'LD = clang++' 'LD = $(CXX)' \
       --replace 'CXX = gcc' "" \
       --replace 'LD = gcc' 'LD = $(CXX)' \
       --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
-      --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
+      --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 src.rev}'
+    patchShebangs tests
   '';
 
-  preBuild = ''
-    chmod -R u+w ../yosys-abc
-    ln -s ../yosys-abc abc
+  preBuild = let
+    shortAbcRev = builtins.substring 0 7 abc-verifier.rev;
+  in ''
+    chmod -R u+w .
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
-    echo 'ABCREV := default' >> Makefile.conf
-    makeFlags="PREFIX=$out $makeFlags"
+    echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
 
     # we have to do this ourselves for some reason...
     (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
+
+    if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
+      echo "yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
+      exit 1
+    fi
   '';
 
-  meta = {
-    description = "Framework for RTL synthesis tools";
-    longDescription = ''
-      Yosys is a framework for RTL synthesis tools. It currently has
-      extensive Verilog-2005 support and provides a basic set of
-      synthesis algorithms for various application domains.
-      Yosys can be adapted to perform any synthesis job by combining
-      the existing passes (algorithms) using synthesis scripts and
-      adding additional passes as needed by extending the yosys C++
-      code base.
-    '';
-    homepage    = http://www.clifford.at/yosys/;
-    license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
-    platforms   = stdenv.lib.platforms.all;
+  doCheck = true;
+  checkInputs = [ verilog ];
+
+  # Internally, yosys knows to use the specified hardcoded ABCEXTERNAL binary.
+  # But other tools (like mcy or symbiyosys) can't know how yosys was built, so
+  # they just assume that 'yosys-abc' is available -- but it's not installed
+  # when using ABCEXTERNAL
+  #
+  # add a symlink to fake things so that both variants work the same way.
+  postInstall = ''
+    ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Open RTL synthesis framework and tools";
+    homepage    = "http://www.clifford.at/yosys/";
+    license     = licenses.isc;
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ shell thoughtpolice emily ];
   };
 }

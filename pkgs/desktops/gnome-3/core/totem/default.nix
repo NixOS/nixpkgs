@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "totem";
-  version = "3.32.1";
+  version = "3.34.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0yra8apc7smpwf7d1k8crhrm8d4wix24ds6i9yxbch1v11jnhr3v";
+    sha256 = "028sc6xbyi7rs884862d8f3di6zhcm0lhvlpc3r69ifzjsq9my3b";
   };
 
   doCheck = true;
@@ -31,14 +31,6 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  mesonFlags = [
-    "-Dwith-nautilusdir=${placeholder "out"}/lib/nautilus/extensions-3.0"
-    # https://bugs.launchpad.net/ubuntu/+source/totem/+bug/1712021
-    # https://bugzilla.gnome.org/show_bug.cgi?id=784236
-    # https://github.com/mesonbuild/meson/issues/1994
-    "-Denable-vala=no"
-  ];
-
   checkInputs = [ xvfb_run ];
 
   checkPhase = ''
@@ -56,9 +48,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Videos;
+    homepage = "https://wiki.gnome.org/Apps/Videos";
     description = "Movie player for the GNOME desktop based on GStreamer";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -1,6 +1,6 @@
 { stdenv, fetchgit, autoreconfHook, gawk, trousers, cryptsetup, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tpm-luks";
   version = "git-2015-07-11";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LUKS key storage in TPM NVRAM";
-    homepage    = https://github.com/shpedoikal/tpm-luks/;
+    homepage    = "https://github.com/shpedoikal/tpm-luks/";
     maintainers = [ maintainers.tstrobel ];
     platforms   = platforms.linux;
   };

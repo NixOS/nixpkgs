@@ -2,7 +2,7 @@
 , aiger
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lingeling";
   # This is the version used in satcomp2018, which was
   # relicensed, and also known as version 'bcj'
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fast SAT solver";
-    homepage    = http://fmv.jku.at/lingeling/;
+    homepage    = "http://fmv.jku.at/lingeling/";
     license     = licenses.mit;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

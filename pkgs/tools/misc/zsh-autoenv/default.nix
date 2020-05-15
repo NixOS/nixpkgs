@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, runtimeShell }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zsh-autoenv";
   version = "2017-12-16";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       It handles "enter" and "leave" events, nesting, and stashing of
       variables (overwriting and restoring).
     '';
-    homepage = https://github.com/Tarrasch/zsh-autoenv;
+    homepage = "https://github.com/Tarrasch/zsh-autoenv";
     platforms = stdenv.lib.platforms.all;
   };
 }

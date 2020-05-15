@@ -10,7 +10,7 @@
 , gtk3
 , glib
 , libnotify
-, gtkspell3
+, gspell
 , evolution-data-server
 , adwaita-icon-theme
 , gnome-desktop
@@ -38,15 +38,16 @@
 , procps
 , p11-kit
 , openldap
+, spamassassin
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.32.4";
+  version = "3.36.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "00hmmg4hfns8rq9rcilmy0gi1xkksld27lfbd9zmw2xw37wjmbqh";
+    sha256 = "12ii8crp4v4bpdxrc2rkxwdxqz3qjizyfgfrmir9pcyxlg0lh2f5";
   };
 
   nativeBuildInputs = [
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     gtk3
-    gtkspell3
+    gspell
     highlight
     icu
     libcanberra-gtk3
@@ -102,6 +103,10 @@ stdenv.mkDerivation rec {
     "-DENABLE_LIBCRYPTUI=OFF"
     "-DENABLE_PST_IMPORT=OFF"
     "-DENABLE_YTNEF=OFF"
+    "-DWITH_SPAMASSASSIN=${spamassassin}/bin/spamassassin"
+    "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
+    "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
+    "-DWITH_OPENLDAP=${openldap}"
   ];
 
   requiredSystemFeatures = [
@@ -120,9 +125,9 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Evolution;
+    homepage = "https://wiki.gnome.org/Apps/Evolution";
     description = "Personal information management application that provides integrated mail, calendaring and address book functionality";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

@@ -13,14 +13,13 @@ stdenv.mkDerivation rec {
     "--with-openssl"
     "--with-xerces"
     "--with-xalan"
-    "--disable-static"
   ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ xalanc xercesc openssl ];
 
   meta = {
-    homepage = http://santuario.apache.org/;
+    homepage = "http://santuario.apache.org/";
     description = "C++ Implementation of W3C security standards for XML";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

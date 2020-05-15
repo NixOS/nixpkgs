@@ -1,6 +1,6 @@
 { fetchurl, stdenv, makeWrapper, which, perl, perlPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "taskopen-1.1.4";
   src = fetchurl {
     url = "https://github.com/ValiValpas/taskopen/archive/v1.1.4.tar.gz";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Script for taking notes and open urls with taskwarrior";
-    homepage = https://github.com/ValiValpas/taskopen;
+    homepage = "https://github.com/ValiValpas/taskopen";
     platforms = platforms.linux;
     license = stdenv.lib.licenses.free ;
     maintainers = [ maintainers.winpat ];

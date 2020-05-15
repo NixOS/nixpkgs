@@ -2,7 +2,7 @@
 
 let version = "2.0";
 in
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
     pname = "hibernate";
     inherit version;
     src = fetchurl {
@@ -40,7 +40,7 @@ in
       '';
 
       license = stdenv.lib.licenses.gpl2Plus;
-      homepage = http://www.tuxonice.net/;
+      homepage = "http://www.tuxonice.net/";
       platforms = stdenv.lib.platforms.linux;
     };
   }

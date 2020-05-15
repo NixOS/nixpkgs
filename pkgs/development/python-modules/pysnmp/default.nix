@@ -8,12 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pysnmp";
-  version = "4.4.11";
+  version = "4.4.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1v7vz045pami4nx5hfvk8drarcswjclb0pfmg932x95fddbdx2zy";
+    sha256 = "1acbfvpbr45i137s00mbhh21p71ywjfw3r8z0ybcmjjqz7rbwg8c";
   };
+
+  patches = [ ./setup.py-Fix-the-setuptools-version-check.patch ];
 
   # NameError: name 'mibBuilder' is not defined
   doCheck = false;
@@ -21,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyasn1 pycryptodomex pysmi ];
 
   meta = with stdenv.lib; {
-    homepage = http://snmplabs.com/pysnmp/index.html;
+    homepage = "http://snmplabs.com/pysnmp/index.html";
     description = "A pure-Python SNMPv1/v2c/v3 library";
     license = licenses.bsd2;
     maintainers = with maintainers; [ primeos koral ];

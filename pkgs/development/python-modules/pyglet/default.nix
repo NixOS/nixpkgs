@@ -1,13 +1,17 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, libGLU_combined
+, libGL
+, libGLU
 , xorg
 , future
 , pytest
 , glibc
 , gtk2-x11
 , gdk-pixbuf
+, fontconfig
+, freetype
+, ffmpeg-full
 }:
 
 buildPythonPackage rec {
@@ -32,9 +36,9 @@ buildPythonPackage rec {
         for name in names:
             path = None
             if name == 'GL':
-                path = '${libGLU_combined}/lib/libGL${ext}'
+                path = '${libGL}/lib/libGL${ext}'
             elif name == 'GLU':
-                path = '${libGLU_combined}/lib/libGLU${ext}'
+                path = '${libGLU}/lib/libGLU${ext}'
             elif name == 'c':
                 path = '${glibc}/lib/libc${ext}.6'
             elif name == 'X11':
@@ -43,6 +47,14 @@ buildPythonPackage rec {
                 path = '${gtk2-x11}/lib/libgdk-x11-2.0${ext}'
             elif name == 'gdk_pixbuf-2.0':
                 path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
+            elif name == 'Xext':
+                path = '${xorg.libXext}/lib/libXext${ext}'
+            elif name == 'fontconfig':
+                path = '${fontconfig.lib}/lib/libfontconfig${ext}'
+            elif name == 'freetype':
+                path = '${freetype}/lib/libfreetype${ext}'
+            elif name[0:2] == 'av' or name[0:2] == 'sw':
+                path = '${ffmpeg-full}/lib/lib' + name + '${ext}'
             if path is not None:
                 return ctypes.cdll.LoadLibrary(path)
         raise Exception("Could not load library {}".format(names))

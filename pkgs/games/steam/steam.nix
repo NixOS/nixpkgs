@@ -4,7 +4,7 @@ let
   traceLog = "/tmp/steam-trace-dependencies.log";
   version = "1.0.0.61";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "steam-original";
   inherit version;
 
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A digital distribution platform";
-    homepage = http://store.steampowered.com/;
+    homepage = "http://store.steampowered.com/";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ jagajaga ];
   };

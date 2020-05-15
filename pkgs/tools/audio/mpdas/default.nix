@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Music Player Daemon AudioScrobbler";
-    homepage = https://50hz.ws/mpdas/;
+    homepage = "https://50hz.ws/mpdas/";
     license = licenses.bsd3;
     maintainers = [ maintainers.taketwo ];
     platforms = platforms.all;

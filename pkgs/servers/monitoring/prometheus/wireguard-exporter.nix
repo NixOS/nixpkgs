@@ -2,23 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wireguard-exporter";
-  version = "3.0.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "MindFlavor";
     repo = "prometheus_wireguard_exporter";
     rev = version;
-    sha256 = "0wfv54ny557mjajjdf0lyq5sbf9m7y50ggm7s2v30c639i0swyrc";
+    sha256 = "1c6zadqnn4b83yglcdn1hw54jj1c4makbdy6fli3cfb7sha1ynml";
   };
 
-  cargoSha256 = "06s9194lvwd7lynxnsrjfbjfj87ngvjbqjhx3idf7d1w9mgi4ysw";
+  cargoSha256 = "148982ypkxhab2kmijk9zwwi5l6nk4rcdwaz0r1j9fni47q49f35";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "A Prometheus exporter for WireGuard, written in Rust.";
+    homepage = "https://github.com/MindFlavor/prometheus_wireguard_exporter";
     license = licenses.mit;
-    homepage = https://github.com/MindFlavor/prometheus_wireguard_exporter;
     maintainers = with maintainers; [ ma27 globin ];
   };
 }

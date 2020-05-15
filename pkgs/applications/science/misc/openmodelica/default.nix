@@ -1,7 +1,7 @@
 {stdenv, fetchgit, fetchsvn, autoconf, automake, libtool, gfortran, clang, cmake, gnumake,
-hwloc, jre, liblapack, blas, hdf5, expat, ncurses, readline, qt4, webkitgtk, which,
+hwloc, jre, lapack, blas, hdf5, expat, ncurses, readline, qt4, webkitgtk, which,
 lp_solve, omniorb, sqlite, libatomic_ops, pkgconfig, file, gettext, flex, bison,
-doxygen, boost, openscenegraph, gnome2, pangox_compat, xorg, git, bash, gtk2, makeWrapper }:
+doxygen, boost, openscenegraph, gnome2, xorg, git, bash, gtk2, makeWrapper }:
 
 let
 
@@ -15,9 +15,9 @@ stdenv.mkDerivation {
   src = fetchgit (import ./src-main.nix);
 
   buildInputs = [autoconf cmake automake libtool gfortran clang gnumake
-    hwloc jre liblapack blas hdf5 expat ncurses readline qt4 webkitgtk which
+    hwloc jre lapack blas hdf5 expat ncurses readline qt4 webkitgtk which
     lp_solve omniorb sqlite libatomic_ops pkgconfig file gettext flex bison
-    doxygen boost openscenegraph gnome2.gtkglext pangox_compat xorg.libXmu
+    doxygen boost openscenegraph gnome2.gtkglext xorg.libXmu
     git gtk2 makeWrapper];
 
   hardeningDisable = [ "format" ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     for e in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$e \
         --prefix PATH : "${gnumake}/bin" \
-        --prefix LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ liblapack blas ]}"
+        --prefix LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ lapack blas ]}"
     done
   '';
 
@@ -53,5 +53,3 @@ stdenv.mkDerivation {
     broken      = true;
   };
 }
-
-

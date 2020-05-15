@@ -6,7 +6,7 @@
 }:
 
 let
-mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation rec {
+mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
   pname = "protobuf";
   inherit version;
 
@@ -50,7 +50,7 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation rec {
       '';
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
-    homepage = https://developers.google.com/protocol-buffers/;
+    homepage = "https://developers.google.com/protocol-buffers/";
   };
 
   passthru.version = version;

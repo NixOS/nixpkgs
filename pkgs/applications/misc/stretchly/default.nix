@@ -1,125 +1,48 @@
-{ GConf
-, alsaLib
-, at-spi2-atk
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, fetchurl
-, fontconfig
-, gdk-pixbuf
-, glib
-, gtk2
-, gtk3
-, lib
-, libX11
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libappindicator
-, libdrm
-, libnotify
-, libpciaccess
-, libpng12
-, libxcb
-, nspr
-, nss
-, pango
-, pciutils
-, pulseaudio
-, stdenv
-, udev
-, wrapGAppsHook
+{ stdenv, lib, fetchurl, makeWrapper, wrapGAppsHook, electron
+, common-updater-scripts
+, writeShellScript
 }:
-
-let
-  libs = [
-    GConf
-    alsaLib
-    at-spi2-atk
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    gdk-pixbuf
-    glib
-    gtk2
-    gtk3
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libappindicator
-    libdrm
-    libnotify
-    libpciaccess
-    libpng12
-    libxcb
-    nspr
-    nss
-    pango
-    pciutils
-    pulseaudio
-    stdenv.cc.cc.lib
-    udev
-  ];
-
-  libPath = lib.makeLibraryPath libs;
-in
 
 stdenv.mkDerivation rec {
   pname = "stretchly";
-  version = "0.19.1";
+  version = "0.21.1";
 
   src = fetchurl {
     url = "https://github.com/hovancik/stretchly/releases/download/v${version}/stretchly-${version}.tar.xz";
-    sha256 = "1q2wxfqs8qv9b1rfh5lhmyp3rrgdl05m6ihsgkxlgp0yzi07afz8";
+    sha256 = "0776pywyqylwd33m85l4wdr89x0q9xkrjgliag10fp1bswz844lf";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook
   ];
 
-  buildInputs = libs;
-
-  dontPatchELF = true;
-  dontBuild = true;
-  dontConfigure = true;
-
   installPhase = ''
-    mkdir -p $out/bin $out/lib/stretchly
-    cp -r ./* $out/lib/stretchly/
-    ln -s $out/lib/stretchly/libffmpeg.so $out/lib/
-    ln -s $out/lib/stretchly/libnode.so $out/lib/
-    ln -s $out/lib/stretchly/stretchly $out/bin/
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share/${pname}/
+    mv resources/app.asar $out/share/${pname}/
+
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/app.asar \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+
+    runHook postInstall
   '';
 
-  preFixup = ''
-    patchelf --set-rpath "${libPath}" $out/lib/stretchly/libffmpeg.so
-    patchelf --set-rpath "${libPath}" $out/lib/stretchly/libnode.so
 
-    patchelf \
-      --set-rpath "$out/lib/stretchly:${libPath}" \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/lib/stretchly/stretchly
-  '';
+  passthru = {
+    updateScript = writeShellScript "update-stretchly" ''
+      set -eu -o pipefail
+
+      # get the latest release version
+      latest_version=$(curl -s https://api.github.com/repos/hovancik/stretchly/releases/latest | jq --raw-output .tag_name | sed -e 's/^v//')
+
+      echo "updating to $latest_version..."
+
+      ${common-updater-scripts}/bin/update-source-version stretchly "$latest_version"
+    '';
+  };
 
   meta = with stdenv.lib; {
     description = "A break time reminder app";
@@ -130,8 +53,8 @@ stdenv.mkDerivation rec {
       seconds every 10 minutes. Every 30 minutes, it displays a window
       containing an idea for a longer 5 minute break.
     '';
-    homepage = https://hovancik.net/stretchly;
-    downloadPage = https://hovancik.net/stretchly/downloads/;
+    homepage = "https://hovancik.net/stretchly";
+    downloadPage = "https://hovancik.net/stretchly/downloads/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ cdepillabout ];
     platforms = platforms.linux;

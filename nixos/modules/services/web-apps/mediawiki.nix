@@ -29,7 +29,7 @@ let
       '') cfg.skins)}
 
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
-        ln -s ${v} $out/share/mediawiki/extensions/${k}
+        ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
     '';
   };
@@ -64,7 +64,7 @@ let
       $wgScriptPath = "";
 
       ## The protocol and server name to use in fully-qualified URLs
-      $wgServer = "${if cfg.virtualHost.enableSSL then "https" else "http"}://${cfg.virtualHost.hostName}";
+      $wgServer = "${if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL then "https" else "http"}://${cfg.virtualHost.hostName}";
 
       ## The URL path to static resources (images, scripts, etc.)
       $wgResourceBasePath = $wgScriptPath;
@@ -204,17 +204,28 @@ in
         default = {};
         type = types.attrsOf types.path;
         description = ''
-          List of paths whose content is copied to the 'skins'
-          subdirectory of the MediaWiki installation.
+          Attribute set of paths whose content is copied to the <filename>skins</filename>
+          subdirectory of the MediaWiki installation in addition to the default skins.
         '';
       };
 
       extensions = mkOption {
         default = {};
-        type = types.attrsOf types.path;
+        type = types.attrsOf (types.nullOr types.path);
         description = ''
-          List of paths whose content is copied to the 'extensions'
-          subdirectory of the MediaWiki installation.
+          Attribute set of paths whose content is copied to the <filename>extensions</filename>
+          subdirectory of the MediaWiki installation and enabled in configuration.
+
+          Use <literal>null</literal> instead of path to enable extensions that are part of MediaWiki.
+        '';
+        example = literalExample ''
+          {
+            Matomo = pkgs.fetchzip {
+              url = "https://github.com/DaSchTour/matomo-mediawiki-extension/archive/v4.0.1.tar.gz";
+              sha256 = "0g5rd3zp0avwlmqagc59cg9bbkn3r7wx7p6yr80s644mj6dlvs1b";
+            };
+            ParserFunctions = null;
+          }
         '';
       };
 
@@ -290,19 +301,13 @@ in
       };
 
       virtualHost = mkOption {
-        type = types.submodule ({
-          options = import ../web-servers/apache-httpd/per-server-options.nix {
-            inherit lib;
-            forMainServer = false;
-          };
-        });
+        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
         example = literalExample ''
           {
             hostName = "mediawiki.example.org";
-            enableSSL = true;
             adminAddr = "webmaster@example.org";
-            sslServerCert = "/var/lib/acme/mediawiki.example.org/full.pem";
-            sslServerKey = "/var/lib/acme/mediawiki.example.org/key.pem";
+            forceSSL = true;
+            enableACME = true;
           }
         '';
         description = ''
@@ -389,31 +394,28 @@ in
 
     services.httpd = {
       enable = true;
-      adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = [ (mkMerge [
-        cfg.virtualHost {
-          documentRoot = mkForce "${pkg}/share/mediawiki";
-          extraConfig = ''
-            <Directory "${pkg}/share/mediawiki">
-              <FilesMatch "\.php$">
-                <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-                </If>
-              </FilesMatch>
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
+        documentRoot = mkForce "${pkg}/share/mediawiki";
+        extraConfig = ''
+          <Directory "${pkg}/share/mediawiki">
+            <FilesMatch "\.php$">
+              <If "-f %{REQUEST_FILENAME}">
+                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+              </If>
+            </FilesMatch>
 
-              Require all granted
-              DirectoryIndex index.php
-              AllowOverride All
-            </Directory>
-          '' + optionalString (cfg.uploadsDir != null) ''
-            Alias "/images" "${cfg.uploadsDir}"
-            <Directory "${cfg.uploadsDir}">
-              Require all granted
-            </Directory>
-          '';
-        }
-      ]) ];
+            Require all granted
+            DirectoryIndex index.php
+            AllowOverride All
+          </Directory>
+        '' + optionalString (cfg.uploadsDir != null) ''
+          Alias "/images" "${cfg.uploadsDir}"
+          <Directory "${cfg.uploadsDir}">
+            Require all granted
+          </Directory>
+        '';
+      } ];
     };
 
     systemd.tmpfiles.rules = [
@@ -461,7 +463,10 @@ in
 
     systemd.services.httpd.after = optional (cfg.database.createLocally && cfg.database.type == "mysql") "mysql.service";
 
-    users.users.${user}.group = group;
+    users.users.${user} = {
+      group = group;
+      isSystemUser = true;
+    };
 
     environment.systemPackages = [ mediawikiScripts ];
   };

@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "nordic-polar";
-  version = "1.5.0";
+  version = "1.9.0";
 
   srcs = [
     (fetchurl {
-      url = "https://github.com/EliverLara/Nordic-Polar/releases/download/v.${version}/Nordic-Polar.tar.xz";
-      sha256 = "0ddccxvyf929045x6fm8xyx6rvb0d6wh6pylycwgqqm4vxbdwnly";
+      url = "https://github.com/EliverLara/Nordic-Polar/releases/download/v${version}/Nordic-Polar.tar.xz";
+      sha256 = "1583mx8frkl5w26myczbyrggrp07lmpsfj00h1bzicw6lz8jbxf1";
     })
     (fetchurl {
-      url = "https://github.com/EliverLara/Nordic-Polar/releases/download/v.${version}/Nordic-Polar-standard-buttons.tar.xz";
-      sha256 = "0q0qfy0aw80rds6isx3pjrqx4zrq2crxrm29nrmyzh4gr7n17li6";
+      url = "https://github.com/EliverLara/Nordic-Polar/releases/download/v${version}/Nordic-Polar-standard-buttons.tar.xz";
+      sha256 = "1n2qys0xcg1k28bwfrrr44cqz7q2rnfj6ry6qgd67ivgh63kmcq6";
     })
   ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gtk theme created using the awesome Nord color pallete";
-    homepage = https://github.com/EliverLara/Nordic-Polar;
+    homepage = "https://github.com/EliverLara/Nordic-Polar";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];

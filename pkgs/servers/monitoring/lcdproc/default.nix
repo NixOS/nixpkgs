@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, pkgconfig
-, doxygen, freetype, libX11, libftdi, libusb, libusb1, ncurses, perl }:
+, doxygen, freetype, libX11, libftdi, libusb-compat-0_1, libusb1, ncurses, perl }:
 
 stdenv.mkDerivation rec {
   pname = "lcdproc";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "--with-pidfile-dir=/run"
   ];
 
-  buildInputs = [ freetype libX11 libftdi libusb libusb1 ncurses ];
+  buildInputs = [ freetype libX11 libftdi libusb-compat-0_1 libusb1 ncurses ];
   nativeBuildInputs = [ autoreconfHook doxygen makeWrapper pkgconfig ];
 
   # In 0.5.9: gcc: error: libbignum.a: No such file or directory
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Client/server suite for controlling a wide variety of LCD devices";
-    homepage    = http://lcdproc.org/;
+    homepage    = "http://lcdproc.org/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;

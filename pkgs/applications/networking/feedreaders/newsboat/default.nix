@@ -1,40 +1,46 @@
-{ stdenv, rustPlatform, fetchurl, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
-, asciidoc, docbook_xml_dtd_45, libxslt, docbook_xsl, libiconv, Security, makeWrapper }:
+{ stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
+, asciidoctor, libiconv, Security, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
-  name = "newsboat-${version}";
-  version = "2.16.1";
+  pname = "newsboat";
+  version = "2.19";
 
-  src = fetchurl {
-    url = "https://newsboat.org/releases/${version}/${name}.tar.xz";
-    sha256 = "0lxdsfcwa4byhfnn0gv34w3rr531f4nfqgi8j4qqmh3gncbwh8s0";
+  src = fetchFromGitHub {
+    owner = "newsboat";
+    repo = "newsboat";
+    rev = "r${version}";
+    sha256 = "0yyrq8a90l6pkrczm9qvdg75jhsdq0niwp79vrdpm8rsxqpdmfq7";
   };
 
-  cargoSha256 = "0ck2dgfk4fay4cjl66wqkbnq4rqrd717jl63l1mvqmvad9i19igm";
+  cargoSha256 = "1q3jf3d80c0ik38qk8jgbhfz5jxv0cy3lzmkyh2l002azp9hvv59";
 
   postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # Allow other ncurses versions on Darwin
     substituteInPlace config.sh \
       --replace "ncurses5.4" "ncurses"
   '';
 
-  nativeBuildInputs = [ pkgconfig asciidoc docbook_xml_dtd_45 libxslt docbook_xsl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper libiconv ];
+  nativeBuildInputs = [
+    pkgconfig
+    asciidoctor
+    gettext
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ncurses ];
 
-  buildInputs = [ stfl sqlite curl gettext libxml2 json_c ncurses ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = [ stfl sqlite curl libxml2 json_c ncurses ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Security libiconv gettext ];
 
   postBuild = ''
-    make
+    make prefix="$out"
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=sign-compare" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-Wno-error=format-security";
+  # TODO: Check if that's still needed
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
 
   doCheck = true;
 
-  checkPhase = ''
+  preCheck = ''
     make test
   '';
 
@@ -48,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://newsboat.org/;
+    homepage    = "https://newsboat.org/";
     description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with maintainers; [ dotlambda nicknovitski ];
     license     = licenses.mit;

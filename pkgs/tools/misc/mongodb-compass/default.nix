@@ -1,6 +1,6 @@
 { stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gnome3, libnotify, libxcb, nspr, nss, systemd, xorg }:
+, gnome2, gnome3, libnotify, libxcb, nspr, nss, systemd, xorg, wrapGAppsHook }:
 
 let
 
@@ -57,7 +57,7 @@ in stdenv.mkDerivation {
 
   inherit src;
 
-  buildInputs = [ dpkg ];
+  buildInputs = [ dpkg wrapGAppsHook gnome3.gtk ];
   dontUnpack = true;
 
   buildCommand = ''
@@ -76,11 +76,12 @@ in stdenv.mkDerivation {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
       patchelf --set-rpath ${rpath}:$out/share/mongodb-compass "$file" || true
     done
+    wrapGAppsHook $out/bin/mongodb-compass
   '';
 
   meta = with stdenv.lib; {
     description = "The GUI for MongoDB";
-    homepage = https://www.mongodb.com/products/compass;
+    homepage = "https://www.mongodb.com/products/compass";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

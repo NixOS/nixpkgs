@@ -37,10 +37,14 @@ buildPythonPackage rec {
 
     install -dm755 "$out/share/tmux"
     install -m644 "powerline/bindings/tmux/powerline.conf" "$out/share/tmux/powerline.conf"
+    
+    install -dm755 "$out/share/fish/vendor_functions.d"
+    install -m644 "powerline/bindings/fish/powerline-setup.fish" "$out/share/fish/vendor_functions.d/powerline-setup.fish"
+
     '';
 
   meta = {
-    homepage    = https://github.com/powerline/powerline;
+    homepage    = "https://github.com/powerline/powerline";
     description = "The ultimate statusline/prompt utility";
     license     = lib.licenses.mit;
   };

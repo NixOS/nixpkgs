@@ -5,6 +5,7 @@
 , jinja2
 , selenium
 , six
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,14 +18,14 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest selenium ];
-  propagatedBuildInputs = [ jinja2 six ];
+  propagatedBuildInputs = [ jinja2 six setuptools ];
 
   # Seems to require a browser
   doCheck = false;
 
   meta = {
     description = "Generate complex HTML+JS pages with Python";
-    homepage = https://github.com/python-visualization/branca;
+    homepage = "https://github.com/python-visualization/branca";
     license = with lib.licenses; [ mit ];
   };
 }

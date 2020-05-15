@@ -1,49 +1,55 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, libxslt, popt, perl
-, glib, pango, pangoxsl, gtk2, libtool, autoconf, automake }:
+{ stdenv, fetchFromGitHub
+, autoreconfHook
+, gtk2
+, libxml2
+, libxslt
+, pango
+, pangoxsl
+, perl
+, pkgconfig
+, popt
+}:
 
 stdenv.mkDerivation rec {
   pname = "xmlroff";
-  version = "0.6.2";
+  version = "0.6.3";
 
-  src = fetchurl {
-    url = "https://github.com/xmlroff/xmlroff/archive/v${version}.tar.gz";
-    sha256 = "1sczn6xjczsfdxlbjqv4xqlki2a95y2s8ih2nl9v1vhqfk17fiww";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0dgp72094lx9i9gvg21pp8ak7bg39707rdf6wz011p9s6n6lrq5g";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    autoconf
-    automake
     libxml2
     libxslt
-    libtool
-    glib
     pango
     pangoxsl
     gtk2
     popt
   ];
 
+  sourceRoot = "source/xmlroff/";
+
+  enableParallelBuilding = true;
+
   configureScript = "./autogen.sh";
 
   configureFlags = [
-    "--disable-pangoxsl"
     "--disable-gp"
   ];
 
-  hardeningDisable = [ "format" ];
-
   preBuild = ''
     substituteInPlace tools/insert-file-as-string.pl --replace "/usr/bin/perl" "${perl}/bin/perl"
-    substituteInPlace Makefile --replace "docs" ""
+    substituteInPlace Makefile --replace "docs" ""  # docs target wants to download from network
   '';
 
-  sourceRoot = "${pname}-${version}/xmlroff/";
-
-  patches = [./xmlroff.patch];
-
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.bsd3;
+  meta = with stdenv.lib; {
+    description = "XSL Formatter";
+    homepage = "http://xmlroff.org/";
+    platforms = platforms.unix;
+    license = licenses.bsd3;
   };
 }

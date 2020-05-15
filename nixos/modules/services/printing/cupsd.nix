@@ -31,7 +31,7 @@ let
   # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
   # we can't update ${cups.out}/lib/cups itself, we create a symlink tree
   # here and add the additional programs.  The ServerBin directive in
-  # cupsd.conf tells cupsd to use this tree.
+  # cups-files.conf tells cupsd to use this tree.
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths =
@@ -112,6 +112,15 @@ in
 
 {
 
+  imports = [
+    (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
+      (config:
+        let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
+        in if enabled then [ pkgs.gutenprint ] else [ ]))
+    (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ] "")
+    (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ] "")
+  ];
+
   ###### interface
 
   options = {
@@ -141,6 +150,16 @@ in
         example = [ "*:631" ];
         description = ''
           A list of addresses and ports on which to listen.
+        '';
+      };
+
+      allowFrom = mkOption {
+        type = types.listOf types.str;
+        default = [ "localhost" ];
+        example = [ "all" ];
+        apply = concatMapStringsSep "\n" (x: "Allow ${x}");
+        description = ''
+          From which hosts to allow unconditional access.
         '';
       };
 
@@ -279,17 +298,26 @@ in
 
   config = mkIf config.services.printing.enable {
 
-    users.users = singleton
-      { name = "cups";
-        uid = config.ids.uids.cups;
+    users.users.cups =
+      { uid = config.ids.uids.cups;
         group = "lp";
         description = "CUPS printing services";
       };
 
     environment.systemPackages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
-    environment.etc."cups".source = "/var/lib/cups";
+    environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
+
+    # Allow asswordless printer admin for members of wheel group
+    security.polkit.extraConfig = mkIf polkitEnabled ''
+      polkit.addRule(function(action, subject) {
+          if (action.id == "org.opensuse.cupspkhelper.mechanism.all-edit" &&
+              subject.isInGroup("wheel")){
+              return polkit.Result.YES;
+          }
+      });
+    '';
 
     # Cups uses libusb to talk to printers, and does not use the
     # linux kernel driver. If the driver is not in a black list, it
@@ -385,19 +413,19 @@ in
 
         <Location />
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Location /admin>
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Location /admin/conf>
           AuthType Basic
           Require user @SYSTEM
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Policy default>

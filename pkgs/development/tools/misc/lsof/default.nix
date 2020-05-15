@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
-    rev = "${version}";
+    rev = version;
     sha256 = "1gd6r0nv8xz76pmvk52dgmfl0xjvkxl0s51b4jk4a0lphw3393yv";
   };
 
@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    # Fix references from man page https://github.com/lsof-org/lsof/issues/66
+    substituteInPlace Lsof.8 \
+      --replace ".so ./00DIALECTS" "" \
+      --replace ".so ./version" ".ds VN ${version}"
     mkdir -p $out/bin $out/man/man8
     cp Lsof.8 $out/man/man8/lsof.8
     cp lsof $out/bin

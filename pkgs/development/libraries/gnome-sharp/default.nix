@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mono";
     repo = "gnome-sharp";
-    rev = "${version}";
+    rev = version;
     sha256 = "15jsm6n0sih0nf3w8vmvik97q7l3imz4vkdzmp9k7bssiz4glj1z";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.mono-project.com/docs/gui/gtksharp/;
+    homepage = "https://www.mono-project.com/docs/gui/gtksharp/";
     description = "A .NET language binding for assorted GNOME libraries";
     license = licenses.lgpl21;
     platforms = platforms.linux;

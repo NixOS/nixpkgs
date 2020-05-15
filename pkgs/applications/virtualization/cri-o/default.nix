@@ -1,69 +1,67 @@
-{ flavor ? ""
-, ldflags ? ""
-, stdenv
+{ stdenv
 , btrfs-progs
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , glibc
 , gpgme
+, installShellFiles
 , libapparmor
-, libassuan
-, libgpgerror
 , libseccomp
 , libselinux
 , lvm2
-, pkgconfig
+, pkg-config
 }:
 
-buildGoPackage rec {
-  project = "cri-o";
-  version = "1.15.0";
-  name = "${project}-${version}${flavor}";
-
-  goPackagePath = "github.com/${project}/${project}";
+buildGoModule rec {
+  pname = "cri-o";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "08m84rlar25w6dwv76rab4vdlavacn7kb5ravzqnb8ngx68csbp3";
+    sha256 = "142flmv54pj48rjqkd26fbxrcbx2cv6pdmrc33jgyvn6r99zliah";
   };
+  vendorSha256 = null;
+  outputs = [ "out" "man" ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  outputs = [ "bin" "out" ];
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ btrfs-progs gpgme libapparmor libassuan libgpgerror
-                 libseccomp libselinux lvm2 ]
-                ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ] ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
 
-  makeFlags = ''BUILDTAGS="apparmor seccomp selinux
-    containers_image_ostree_stub"'';
-
+  BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
-    pushd go/src/${goPackagePath}
+    patchShebangs .
 
-    # Build pause
-    go build -tags ${makeFlags} -o bin/crio-config -buildmode=pie \
-      -ldflags '-s -w ${ldflags}' ${goPackagePath}/cmd/crio-config
+    sed -i '/version.buildDate/d' Makefile
 
-    make -C pause
-
-    # Build the crio binary
-    go build -tags ${makeFlags} -o bin/crio -buildmode=pie \
-      -ldflags '-s -w ${ldflags}' ${goPackagePath}/cmd/crio
+    make binaries docs BUILDTAGS="$BUILDTAGS"
   '';
-  installPhase = ''
-    install -Dm755 bin/crio $bin/bin/crio${flavor}
 
-    mkdir -p $bin/libexec/crio
-    install -Dm755 bin/pause $bin/libexec/crio/pause${flavor}
+  installPhase = ''
+    install -Dm755 bin/* -t $out/bin
+
+    for shell in bash fish zsh; do
+      installShellCompletion --$shell completions/$shell/*
+    done
+
+    installManPage docs/*.[1-9]
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://cri-o.io;
-    description = ''Open Container Initiative-based implementation of the
-                    Kubernetes Container Runtime Interface'';
+    homepage = "https://cri-o.io";
+    description = ''
+      Open Container Initiative-based implementation of the
+      Kubernetes Container Runtime Interface
+    '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ saschagrunert ];
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

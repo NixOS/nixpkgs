@@ -6,7 +6,7 @@ let
   cfg = config.programs.x2goserver;
 
   defaults = {
-    superenicer = { "enable" = cfg.superenicer.enable; };
+    superenicer = { enable = cfg.superenicer.enable; };
   };
   confText = generators.toINI {} (recursiveUpdate defaults cfg.settings);
   x2goServerConf = pkgs.writeText "x2goserver.conf" confText;
@@ -69,6 +69,7 @@ in {
     users.users.x2go = {
       home = "/var/lib/x2go/db";
       group = "x2go";
+      isSystemUser = true;
     };
 
     security.wrappers.x2gosqliteWrapper = {

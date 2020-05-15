@@ -4,35 +4,30 @@
 , fetchPypi
 , pythonOlder
 , pytest
-, cython
-, cymem
-, darwin
-, msgpack-numpy
-, msgpack-python
-, preshed
-, numpy
-, murmurhash
-, pathlib
-, hypothesis
-, tqdm
-, cytoolz
-, plac
-, six
-, mock
-, wrapt
-, dill
 , blis
+, catalogue
+, cymem
+, cython
+, darwin
+, hypothesis
+, mock
+, murmurhash
+, numpy
+, pathlib
+, plac
+, preshed
 , srsly
+, tqdm
 , wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.0.8";
+  version = "7.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "191admjvhqsbxpqn73q42i0i8kvlblj0k6p0z9p7n3pcxzl75nsw";
+    sha256 = "1f2qpjb8nfdklqp3vf6m36bklydlnr8y8v207p8d2gmapzhrngjj";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -41,20 +36,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
    blis
-   cython
+   catalogue
    cymem
-   msgpack-numpy
-   msgpack-python
-   preshed
-   numpy
+   cython
    murmurhash
-   tqdm
-   cytoolz
+   numpy
    plac
-   six
+   preshed
    srsly
-   wrapt
-   dill
+   tqdm
    wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
@@ -65,11 +55,6 @@ buildPythonPackage rec {
     pytest
   ];
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6"
-  '';
-
   # Cannot find cython modules.
   doCheck = false;
 
@@ -79,7 +64,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Practical Machine Learning for NLP in Python";
-    homepage = https://github.com/explosion/thinc;
+    homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu danieldk sdll ];
     };

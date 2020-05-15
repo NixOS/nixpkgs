@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dablin";
-  version = "1.11.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "Opendigitalradio";
     repo = "dablin";
-    rev = "${version}";
-    sha256 = "04ir7yg7psnnb48s1qfppvvx6lak4s8f6fqdg721y2kd9129jm82";
+    rev = version;
+    sha256 = "0143jnhwwh4din6mlrkbm8m2wm8vnrlk0yk9r5qcvj70r2314bgq";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Play DAB/DAB+ from ETI-NI aligned stream";
-    homepage = https://github.com/Opendigitalradio/dablin;
+    homepage = "https://github.com/Opendigitalradio/dablin";
     license = with licenses; [ gpl3 lgpl21 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.0.0";
+  version = "2.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "46baf7c4571fe75374071674727c2beb0388cf57073e0623d8457f04b1c54495";
+    sha256 = "6e6ce41ce8a51723b94d974adfee032cddce5b9300984dd23b59e101ed0a2861";
   };
 
   propagatedBuildInputs = [ numpy pyyaml matplotlib h5py ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A package for phonon calculations at harmonic and quasi-harmonic levels";
-    homepage = https://atztogo.github.io/phonopy/;
+    homepage = "https://atztogo.github.io/phonopy/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ psyanticy ];
   };

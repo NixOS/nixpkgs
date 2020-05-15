@@ -2,7 +2,7 @@
 
 let
   generic = { version, sha256, suffix ? "" }:
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
     pname = "unifi-controller";
     inherit version;
 
@@ -30,7 +30,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://www.ubnt.com/;
+      homepage = "http://www.ubnt.com/";
       description = "Controller for Ubiquiti UniFi access points";
       license = licenses.unfree;
       platforms = platforms.unix;
@@ -38,7 +38,7 @@ let
     };
   };
 
-in rec {
+in {
 
   # https://community.ui.com/releases / https://www.ui.com/download/unifi
   # Outdated FAQ: https://help.ubnt.com/hc/en-us/articles/115000441548-UniFi-Current-Controller-Versions
@@ -49,7 +49,7 @@ in rec {
   };
 
   unifiStable = generic {
-    version = "5.11.39";
-    sha256 = "0v1gnvdazxa3bcbq8hl6796yw0mxzki2xn4s5im5k5ngmfmnswyj";
+    version = "5.12.66";
+    sha256 = "119jdwk2ys3vzg9wa4h25rwgl6sjly6v52k1g1ycrq0bspzxdhm2";
   };
 }

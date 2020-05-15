@@ -1,6 +1,6 @@
 { stdenv, ocaml, makeWrapper, fetchsvn, ghostscript, imagemagick, perl, poppler_utils, tesseract, unpaper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.1.7";
   pname = "pdfsandwich";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
 meta = with stdenv.lib; {
     description = "OCR tool for scanned PDFs";
-    homepage = http://www.tobias-elze.de/pdfsandwich/;
+    homepage = "http://www.tobias-elze.de/pdfsandwich/";
     license = licenses.gpl2;
     maintainers = [ maintainers.rps ];
     platforms = platforms.linux;

@@ -21,11 +21,11 @@ assert enableAllFeatures ->
   ghostscript != null;
 
 stdenv.mkDerivation rec {
-  name = "dblatex-0.3.10";
+  name = "dblatex-0.3.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/dblatex/${name}.tar.bz2";
-    sha256 = "1yicd861rqz78i2khl35j7nvc0ccv4jx4hzqrbhll17082vrdmkg";
+    sha256 = "0rp1bc2lgisigscq1i7zxfd2qdaxxxld6khbcxss4pq7fpi9fzkv";
   };
 
   buildInputs = [ python2 libxslt tex ]
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A program to convert DocBook to DVI, PostScript or PDF via LaTeX or ConTeXt";
-    homepage = http://dblatex.sourceforge.net/;
+    homepage = "http://dblatex.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };

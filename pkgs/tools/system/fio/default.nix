@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.15";
+  version = "3.19";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "0wzy5byc2qx5mbnwkcyjkrzc662n4wkrzpcg4h611q4ix494zka9";
+    sha256 = "1gr62mzv5rk6mbhll2c0fxgb46anx375cm2ym10mj2rvabcrhnqq";
   };
 
   buildInputs = [ python zlib ]
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Flexible IO Tester - an IO benchmark tool";
-    homepage = "http://git.kernel.dk/?p=fio.git;a=summary;";
+    homepage = "https://git.kernel.dk/cgit/fio/";
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

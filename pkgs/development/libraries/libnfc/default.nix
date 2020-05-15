@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, libusb, readline }:
+{ stdenv, fetchurl, libusb-compat-0_1, readline }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libnfc";
   version = "1.7.1";
 
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0wj0iwwcpmpalyk61aa7yc6i4p9hgdajkrgnlswgk0vnwbc78pll";
   };
 
-  buildInputs = [ libusb readline ];
+  buildInputs = [ libusb-compat-0_1 readline ];
 
   meta = with stdenv.lib; {
     description = "Open source library libnfc for Near Field Communication";
     license = licenses.gpl3;
-    homepage = https://github.com/nfc-tools/libnfc;
+    homepage = "https://github.com/nfc-tools/libnfc";
     maintainers = with maintainers; [offline];
     platforms = platforms.unix;
   };

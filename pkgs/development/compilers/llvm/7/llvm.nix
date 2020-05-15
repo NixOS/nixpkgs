@@ -2,7 +2,7 @@
 , fetch
 , fetchpatch
 , cmake
-, python
+, python3
 , libffi
 , libbfd
 , libpfm
@@ -17,6 +17,7 @@
 , enableSharedLibraries ? true
 , enablePFM ? !(stdenv.isDarwin
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+  || stdenv.isAarch32 # broken for the armv7l builder
   )
 , enablePolly ? false
 }:
@@ -26,11 +27,12 @@ let
 
   # Used when creating a versioned symlinks of libLLVM.dylib
   versionSuffixes = with stdenv.lib;
-    let parts = splitString "." release_version; in
+    let parts = splitVersion release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 
-in stdenv.mkDerivation (rec {
-  name = "llvm-${version}";
+in stdenv.mkDerivation ({
+  pname = "llvm";
+  inherit version;
 
   src = fetch "llvm" "0r1p5didv4rkgxyvbkyz671xddg6i3dxvbpsi1xxipkla0l9pk0v";
   polly_src = fetch "polly" "16qkns4ab4x0azrvhy4j7cncbyb2rrbdrqj87zphvqxm5pvm8m1h";
@@ -47,8 +49,8 @@ in stdenv.mkDerivation (rec {
   outputs = [ "out" "python" ]
     ++ optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ cmake python ]
-    ++ optional enableManpages python.pkgs.sphinx;
+  nativeBuildInputs = [ cmake python3 ]
+    ++ optional enableManpages python3.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
@@ -94,6 +96,9 @@ in stdenv.mkDerivation (rec {
     rm test/tools/llvm-dwarfdump/X86/debug_addr_dwarf4.s
     rm test/tools/llvm-dwarfdump/X86/debug_addr_unsupported_version.s
     rm test/tools/llvm-dwarfdump/X86/debug_addr_version_mismatch.s
+  '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
+    # Seems to require certain floating point hardware (NEON?)
+    rm test/ExecutionEngine/frem.ll
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';
@@ -137,7 +142,7 @@ in stdenv.mkDerivation (rec {
   '';
 
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
   postInstall = ''
@@ -164,15 +169,16 @@ in stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
+  requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = http://llvm.org/;
+    homepage    = "https://llvm.org/";
     license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
+  pname = "llvm-manpages";
 
   buildPhase = ''
     make docs-llvm-man

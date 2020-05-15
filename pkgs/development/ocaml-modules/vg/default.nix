@@ -19,7 +19,7 @@ if !versionAtLeast ocaml.version "4.03"
 then throw "vg is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     Renderers for PDF, SVG and the HTML canvas are distributed with the
     module. An API allows to implement new renderers.
     '';
-    homepage = "${webpage}";
+    homepage = webpage;
     inherit (ocaml.meta) platforms;
     license = licenses.isc;
     maintainers = [ maintainers.jirkamarsik ];

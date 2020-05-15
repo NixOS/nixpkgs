@@ -4,7 +4,7 @@
 , version, src
 , ...}:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
   name = "nettle-${version}";
 
   inherit src;
@@ -15,6 +15,8 @@ stdenv.mkDerivation (rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
+
+  configureFlags = [ "--enable-fat" ]; # runtime selection of HW-accelerated code
 
   doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.isDarwin);
 
@@ -51,7 +53,7 @@ stdenv.mkDerivation (rec {
 
      license = licenses.gpl2Plus;
 
-     homepage = http://www.lysator.liu.se/~nisse/nettle/;
+     homepage = "http://www.lysator.liu.se/~nisse/nettle/";
 
      platforms = platforms.all;
   };

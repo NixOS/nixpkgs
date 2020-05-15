@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A text-mode web browser";
-    homepage = https://lynx.invisible-island.net/;
+    homepage = "https://lynx.invisible-island.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

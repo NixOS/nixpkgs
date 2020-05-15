@@ -1,7 +1,11 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 {
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   options = {
     xdg.sounds.enable = mkOption {
       type = types.bool;
@@ -14,6 +18,10 @@ with lib;
   };
 
   config = mkIf config.xdg.sounds.enable {
+    environment.systemPackages = [
+      pkgs.sound-theme-freedesktop
+    ];
+
     environment.pathsToLink = [
       "/share/sounds"
     ];

@@ -5,7 +5,7 @@ buildPythonApplication rec {
   version = "1.1.3";
   pname = "udocker";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = "udocker" ;
     rev = "v${version}";
@@ -33,7 +33,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "basic user tool to execute simple docker containers in user space without root privileges";
-    homepage = https://indigo-dc.gitbooks.io/udocker;
+    homepage = "https://indigo-dc.gitbooks.io/udocker";
     license = licenses.asl20;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.linux;

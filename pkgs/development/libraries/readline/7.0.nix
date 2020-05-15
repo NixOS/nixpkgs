@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ncurses];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   upstreamPatches =
     (let
@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
       desire its capabilities.
     '';
 
-    homepage = https://savannah.gnu.org/projects/readline/;
+    homepage = "https://savannah.gnu.org/projects/readline/";
 
     license = licenses.gpl3Plus;
 
-    maintainers = [ maintainers.vanschelven ];
+    maintainers = [ ];
 
     platforms = platforms.unix;
     branch = "7.0";

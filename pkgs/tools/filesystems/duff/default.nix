@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gettext }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "duff";
   # The last release (0.5.2) is more than 2 years old and lacks features like -D,
   # limiting its usefulness. Upstream appears comatose if not dead.
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       Duff is a Unix command-line utility for quickly finding duplicates in
       a given set of files.
     '';
-    homepage = http://duff.dreda.org/;
+    homepage = "https://duff.dreda.org/";
     license = licenses.zlib;
     platforms = platforms.all;
   };

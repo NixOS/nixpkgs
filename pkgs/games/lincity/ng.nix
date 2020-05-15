@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, autoreconfHook, jam, pkgconfig
-, zlib, libxml2, libxslt, xorgproto, libX11, libGLU_combined, SDL
+, zlib, libxml2, libxslt, xorgproto, libX11, libGLU, libGL, SDL
 , SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, physfs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lincity-ng";
   version = "2.9beta.20170715";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    zlib libxml2 libxslt xorgproto libX11 libGLU_combined SDL SDL_mixer SDL_image
+    zlib libxml2 libxslt xorgproto libX11 libGLU libGL SDL SDL_mixer SDL_image
     SDL_ttf SDL_gfx physfs
   ];
 

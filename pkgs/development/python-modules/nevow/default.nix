@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, twisted }:
+{ stdenv, buildPythonPackage, fetchpatch, fetchPypi, isPy3k, twisted }:
 
 buildPythonPackage rec {
   pname = "Nevow";
-  version = "0.14.4";
+  version = "0.14.5";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "2299a0d2a0c1312040705599d5d571acfea74df82b968c0b9264f6f45266cf6e";
+    sha256 = "afb6ba85a5351953578c018fcdb9dfbd62f29a8d46c58bc9652bc000a27223f3";
   };
 
   propagatedBuildInputs = [ twisted ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
       pages if appropriate.  Once a form post has validated
       successfully, the method will be called with the coerced values.
     '';
-    homepage = https://github.com/twisted/nevow;
+    homepage = "https://github.com/twisted/nevow";
     license = licenses.mit;
   };
 }

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-unshare";
   # pypi version doesn't support Python 3 and the package didn't update for a long time:
   # https://github.com/TheTincho/python-unshare/pull/8

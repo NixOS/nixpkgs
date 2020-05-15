@@ -22,7 +22,7 @@ let
   ver = "2018.3.0";
   build = "f2";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "unity-editor";
   version = "${ver}x${build}";
 
@@ -127,7 +127,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    homepage = https://unity3d.com/;
+    homepage = "https://unity3d.com/";
     description = "Game development tool";
     longDescription = ''
       Popular development platform for creating 2D and 3D multiplatform games

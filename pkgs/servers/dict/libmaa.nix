@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtool ];
   # configureFlags = [ "--datadir=/run/current-system/share/dictd" ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+
   meta = with stdenv.lib; {
     description = "Dict protocol server and client";
     maintainers = [ ];

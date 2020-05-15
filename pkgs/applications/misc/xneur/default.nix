@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, xorg, pcre, gst_all_1, glib
 , xosd, libnotify, enchant, wrapGAppsHook, gdk-pixbuf }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
    pname = "xneur";
    version = "0.20.0";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utility for switching between keyboard layouts";
-    homepage = https://xneur.ru;
+    homepage = "https://xneur.ru";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

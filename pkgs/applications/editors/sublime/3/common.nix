@@ -13,7 +13,7 @@ let
   primaryBinary = "sublime_text";
   primaryBinaryAliases = [ "subl" "sublime" "sublime3" ];
   downloadUrl = "https://download.sublimetext.com/sublime_text_3_build_${buildVersion}_${arch}.tar.bz2";
-  versionUrl = "https://www.sublimetext.com/${if dev then "3dev" else "3"}";
+  versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
   versionFile = builtins.toString ./packages.nix;
   archSha256 =
     if stdenv.hostPlatform.system == "i686-linux" then
@@ -133,7 +133,12 @@ in stdenv.mkDerivation (rec {
     set -o errexit
     PATH=${stdenv.lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
 
-    latestVersion=$(curl -s ${versionUrl} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
+    latestVersion=$(curl -s ${versionUrl})
+
+    if [[ "${buildVersion}" = "$latestVersion" ]]; then
+        echo "The new version same as the old version."
+        exit 0
+    fi
 
     for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
         # The script will not perform an update when the version attribute is up to date from previous platform run
@@ -145,7 +150,7 @@ in stdenv.mkDerivation (rec {
 
   meta = with stdenv.lib; {
     description = "Sophisticated text editor for code, markup and prose";
-    homepage = https://www.sublimetext.com/;
+    homepage = "https://www.sublimetext.com/";
     maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];

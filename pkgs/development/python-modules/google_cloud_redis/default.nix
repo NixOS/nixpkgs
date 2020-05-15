@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "449fd11699f9ae23ec2ccf1b06681bb90b4c1788f82fbbf1ce1c1d2e77833eb1";
+    sha256 = "e24a5eeb126a3e8fcf990806c7a853a27bb9b830c2f03fda42a499894b7614c6";
   };
 
   checkInputs = [ pytest mock ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Google Cloud Memorystore for Redis API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

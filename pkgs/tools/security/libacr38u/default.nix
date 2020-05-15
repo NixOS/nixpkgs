@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, pcsclite , libusb }:
+{ stdenv, fetchurl, pkgconfig, pcsclite , libusb-compat-0_1 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.7.11";
   pname = "libacr38u";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pcsclite libusb ];
+  buildInputs = [ pcsclite libusb-compat-0_1 ];
 
   preBuild = ''
     makeFlagsArray=(usbdropdir="$out/pcsc/drivers");
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
       The package is based on the debian package libacr38u.
     '';
-    homepage = https://www.acs.com.hk;
+    homepage = "https://www.acs.com.hk";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; unix;

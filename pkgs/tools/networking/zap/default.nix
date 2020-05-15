@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zaproxy";
     repo = "zaproxy";
-    rev ="${version}";
+    rev =version;
     sha256 = "1bz4pgq66v6kxmgj99llacm1d85vj8z78jlgc2z9hv0ha5i57y32";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.owasp.org/index.php/ZAP;
+    homepage = "https://www.owasp.org/index.php/ZAP";
     description = "Java application for web penetration testing";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;

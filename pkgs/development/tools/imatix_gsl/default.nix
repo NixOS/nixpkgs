@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pcre } :
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "imatix_gsl";
   version = "4.1";
 
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   postPatch = "sed -e 's,/usr/bin/install,install,g' -i src/Makefile";
   preBuild = "cd src";
-  installFlags = "DESTDIR=$(out)";
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     license = licenses.gpl3Plus;
-    homepage = https://github.com/imatix/gsl/;
+    homepage = "https://github.com/imatix/gsl/";
     description = "A universal code generator";
     platforms = platforms.unix;
     maintainers = [ maintainers.moosingin3space ];

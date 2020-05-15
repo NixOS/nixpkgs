@@ -15,10 +15,10 @@ let
     #       The command
     #         find /nix/store/...-glusterfs-.../ -name '*.py' -executable
     #       can help with finding new Python scripts.
-    version = "6.5";
+    version = "7.5";
     name="${baseName}-${version}";
     url="https://github.com/gluster/glusterfs/archive/v${version}.tar.gz";
-    sha256 = "17vdrw71ys1n5g9pdmzipmr706bslq0gbxxjhacxnrgsz8r4rl6a";
+    sha256 = "1zahld2v1y920i0p25zcn15a593g3bl5sgnmhkdmn7kvk7mx4p93";
   };
 
   buildInputs = [
@@ -62,7 +62,7 @@ let
   ];
 in
 stdenv.mkDerivation
-rec {
+{
   inherit (s) name version;
   inherit buildInputs propagatedBuildInputs;
 
@@ -73,19 +73,25 @@ rec {
 
   postPatch = ''
     sed -e '/chmod u+s/d' -i contrib/fuse-util/Makefile.am
+    substituteInPlace libglusterfs/src/glusterfs/lvm-defaults.h \
+      --replace '/sbin/' '${lvm2}/bin/'
+    substituteInPlace libglusterfs/src/glusterfs/compat.h \
+      --replace '/bin/umount' '${utillinux}/bin/umount'
+    substituteInPlace contrib/fuse-lib/mount-gluster-compat.h \
+      --replace '/bin/mount' '${utillinux}/bin/mount'
   '';
 
-   # Note that the VERSION file is something that is present in release tarballs
-   # but not in git tags (at least not as of writing in v3.10.1).
-   # That's why we have to create it.
-   # Without this, gluster (at least 3.10.1) will fail very late and cryptically,
-   # for example when setting up geo-replication, with a message like
-   #   Staging of operation 'Volume Geo-replication Create' failed on localhost : Unable to fetch master volume details. Please check the master cluster and master volume.
-   # What happens here is that the gverify.sh script tries to compare the versions,
-   # but fails when the version is empty.
-   # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
-   preConfigure = ''
-     echo "v${s.version}" > VERSION
+  # Note that the VERSION file is something that is present in release tarballs
+  # but not in git tags (at least not as of writing in v3.10.1).
+  # That's why we have to create it.
+  # Without this, gluster (at least 3.10.1) will fail very late and cryptically,
+  # for example when setting up geo-replication, with a message like
+  #   Staging of operation 'Volume Geo-replication Create' failed on localhost : Unable to fetch master volume details. Please check the master cluster and master volume.
+  # What happens here is that the gverify.sh script tries to compare the versions,
+  # but fails when the version is empty.
+  # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
+  preConfigure = ''
+    echo "v${s.version}" > VERSION
     ./autogen.sh
     export PYTHON=${python3}/bin/python
     '';
@@ -94,7 +100,7 @@ rec {
     ''--localstatedir=/var''
     ];
 
-  makeFlags = "DESTDIR=$(out)";
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   enableParallelBuilding = true;
 
@@ -186,7 +192,7 @@ rec {
   meta = with stdenv.lib; {
     inherit (s) version;
     description = "Distributed storage system";
-    homepage = https://www.gluster.org;
+    homepage = "https://www.gluster.org";
     license = licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
     maintainers = [ maintainers.raskin ];
     platforms = with platforms; linux ++ freebsd;

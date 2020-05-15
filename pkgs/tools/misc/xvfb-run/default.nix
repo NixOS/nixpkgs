@@ -4,7 +4,7 @@ let
   xvfb_run = fetchurl {
     name = "xvfb-run";
     # https://git.archlinux.org/svntogit/packages.git/?h=packages/xorg-server
-    url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/xvfb-run?h=packages/xorg-server&id=9cb733cefa92af3fca608fb051d5251160c9bbff;
+    url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/xvfb-run?h=packages/xorg-server&id=9cb733cefa92af3fca608fb051d5251160c9bbff";
     sha256 = "1307mz4nr8ga3qz73i8hbcdphky75rq8lrvfk2zm4kmv6pkbk611";
   };
 in

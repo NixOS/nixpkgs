@@ -4,10 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  emacsVersion = "26.3";
-  emacsName = "emacs-${emacsVersion}";
+  pname = "emacs";
+  version = "26.3";
+
+  emacsName = "emacs-${version}";
   macportVersion = "7.7";
-  name = "emacs-mac-${emacsVersion}-${macportVersion}";
+  name = "emacs-mac-${version}-${macportVersion}";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
@@ -78,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The extensible, customizable text editor";
-    homepage    = https://www.gnu.org/software/emacs/;
+    homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jwiegley matthewbauer ];
     platforms   = platforms.darwin;

@@ -30,13 +30,12 @@ buildPythonPackage rec {
   doCheck = true;
 
   checkPhase = ''
-    ${python.interpreter} python${pythonSuffix}/smoketest.py
     ${python.interpreter} python${pythonSuffix}/pythontest.py
   '';
 
   meta = with lib; {
     description = "Python Bindings for Xapian";
-    homepage = https://xapian.org/;
+    homepage = "https://xapian.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonringer ];
   };

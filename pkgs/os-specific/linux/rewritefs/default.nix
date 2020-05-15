@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, fuse, pcre }: 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rewritefs";
   version = "2017-08-14";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = ''A FUSE filesystem intended to be used
       like Apache mod_rewrite'';
-    homepage    = https://github.com/sloonz/rewritefs;
+    homepage    = "https://github.com/sloonz/rewritefs";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms   = platforms.linux;

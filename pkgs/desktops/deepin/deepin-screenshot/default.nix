@@ -1,16 +1,29 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, pkgconfig, xdg_utils, qttools, qtx11extras,
-  dtkcore, dtkwidget, dtkwm, deepin-turbo, deepin-shortcut-viewer,
-  deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkgconfig
+, xdg_utils
+, qttools
+, qtx11extras
+, dtkcore
+, dtkwidget
+, dtkwm
+, deepin-turbo
+, deepin-shortcut-viewer
+, deepin
+}:
 
 mkDerivation rec {
   pname = "deepin-screenshot";
-  version = "4.2.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "16wy1ywp4lm7fg488laqxgxpir745rbpj9z410r6x7krpgjds189";
+    sha256 = "0h1kcf9i8q6rz4jhym3yf84zr6svzff0hh9sl7b24sflzkxx6zwk";
   };
 
   nativeBuildInputs = [
@@ -31,7 +44,7 @@ mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = https://github.com/linuxdeepin/deepin-screenshot/pull/52/commits/e14508b223fd9965854ed41c944cea2ea19e6e0c.patch;
+      url = "https://github.com/linuxdeepin/deepin-screenshot/pull/52/commits/e14508b223fd9965854ed41c944cea2ea19e6e0c.patch";
       sha256 = "18zvz98z3hr8pcdyb706za6h2nwx23zsjb1hgyp21ycinhzr9j9h";
     })
   ];
@@ -48,11 +61,11 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Easy-to-use screenshot tool for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-screenshot;
+    homepage = "https://github.com/linuxdeepin/deepin-screenshot";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo flokli ];

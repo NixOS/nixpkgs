@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, base58, ecdsa, pycryptodome, requests, six }:
+{ stdenv, fetchPypi, buildPythonPackage, base58, ecdsa, pycryptodome, requests, six, setuptools }:
 
 buildPythonPackage rec {
   pname = "block-io";
@@ -15,6 +15,7 @@ buildPythonPackage rec {
     pycryptodome
     requests
     six
+    setuptools
   ];
 
   preConfigure = ''
@@ -28,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Integrate Bitcoin, Dogecoin and Litecoin in your Python applications using block.io";
-    homepage = https://github.com/BlockIo/block_io-python;
+    homepage = "https://github.com/BlockIo/block_io-python";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];
   };

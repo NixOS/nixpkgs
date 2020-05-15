@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "A simple GTK+1/2 painting program";
+    description = "A simple GTK painting program";
     longDescription = ''
-      mtPaint is a simple GTK+1/2 painting program designed for
+      mtPaint is a simple GTK painting program designed for
       creating icons and pixel based artwork.  It can edit indexed palette
       or 24 bit RGB images and offers basic painting and palette manipulation
       tools. It also has several other more powerful features such as channels,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Due to its simplicity and lack of dependencies it runs well on
       GNU/Linux, Windows and older PC hardware.
     '';
-    homepage = http://mtpaint.sourceforge.net/;
+    homepage = "http://mtpaint.sourceforge.net/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.vklquevs ];

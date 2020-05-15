@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Incremental journaling backup utility and archiver";
-    homepage = http://mattmahoney.net/dc/zpaq.html;
+    homepage = "http://mattmahoney.net/dc/zpaq.html";
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

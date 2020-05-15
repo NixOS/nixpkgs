@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libusb, pkgconfig, pmutils, udev} :
+{ stdenv, fetchgit, libusb1, pkgconfig, pmutils, udev} :
 
 let
 
@@ -11,7 +11,7 @@ daemonlib = fetchgit {
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "brickd";
   inherit version;
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb pmutils udev ];
+  buildInputs = [ libusb1 pmutils udev ];
 
   # shell thing didn't work so i replaced it using nix
   prePatch = ''
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://www.tinkerforge.com/;
+    homepage = "https://www.tinkerforge.com/";
     description = "A daemon (or service on Windows) that acts as a bridge between the Bricks/Bricklets and the API bindings for the different programming languages";
     maintainers = [ stdenv.lib.maintainers.qknight ];
     license = stdenv.lib.licenses.gpl2;

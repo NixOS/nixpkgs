@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, glib, procps, libxml2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dbus-map";
   version = "2015-05-28";
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Simple utility for enumerating D-Bus endpoints, an nmap for D-Bus";
-    homepage = https://github.com/taviso/dbusmap;
+    homepage = "https://github.com/taviso/dbusmap";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

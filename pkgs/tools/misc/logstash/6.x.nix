@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
     url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
     sha256 =
       if enableUnfree
-      then "178shgxwc9kw9w9vwsvwxp8m8r6lssaw1i32vvmx9na01b4w5m4p"
-      else "0gyq97qsg7fys9cc5yj4kpcf3xxvdd5qgzal368yg9swps37g5yj";
+      then "00pwi7clgdflzzg15bh3y30gzikvvy7p5fl88fww7xhhy47q8053"
+      else "0spxgqsyh72n0l0xh6rljp0lbqz46xmr02sqz25ybycr4qkxdhgk";
   };
 
   dontBuild         = true;
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Logstash is a data pipeline that helps you process logs and other event data from a variety of systems";
-    homepage    = https://www.elastic.co/products/logstash;
+    homepage    = "https://www.elastic.co/products/logstash";
     license     = if enableUnfree then licenses.elastic else licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ wjlroe offline basvandijk ];

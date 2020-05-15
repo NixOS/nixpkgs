@@ -1,4 +1,4 @@
-import ../make-test.nix ({...}: {
+import ../make-test-python.nix ({...}: {
   nodes = {
     namenode = {pkgs, ...}: {
       services.hadoop = {
@@ -35,20 +35,20 @@ import ../make-test.nix ({...}: {
   };
 
   testScript = ''
-    startAll
+    start_all()
 
-    $namenode->waitForUnit("hdfs-namenode");
-    $namenode->waitForUnit("network.target");
-    $namenode->waitForOpenPort(8020);
-    $namenode->waitForOpenPort(9870);
+    namenode.wait_for_unit("hdfs-namenode")
+    namenode.wait_for_unit("network.target")
+    namenode.wait_for_open_port(8020)
+    namenode.wait_for_open_port(9870)
 
-    $datanode->waitForUnit("hdfs-datanode");
-    $datanode->waitForUnit("network.target");
-    $datanode->waitForOpenPort(9864);
-    $datanode->waitForOpenPort(9866);
-    $datanode->waitForOpenPort(9867);
+    datanode.wait_for_unit("hdfs-datanode")
+    datanode.wait_for_unit("network.target")
+    datanode.wait_for_open_port(9864)
+    datanode.wait_for_open_port(9866)
+    datanode.wait_for_open_port(9867)
 
-    $namenode->succeed("curl http://namenode:9870");
-    $datanode->succeed("curl http://datanode:9864");
+    namenode.succeed("curl http://namenode:9870")
+    datanode.succeed("curl http://datanode:9864")
   '';
 })

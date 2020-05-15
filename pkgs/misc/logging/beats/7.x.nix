@@ -8,7 +8,7 @@ let beat = package : extraArgs : buildGoPackage (rec {
         owner = "elastic";
         repo = "beats";
         rev = "v${version}";
-        sha256 = "1ca6a4zm062jpqwhmd8ivvzha1cvrw7mg5342vnmn99xdlr1pk9j";
+        sha256 = "192ygz3ppfah8d2b811x67jfqhcr5ivz7qh4vwrd729rjfr0bbgb";
       };
 
       goPackagePath = "github.com/elastic/beats";
@@ -16,7 +16,7 @@ let beat = package : extraArgs : buildGoPackage (rec {
       subPackages = [ package ];
 
       meta = with stdenv.lib; {
-        homepage = https://www.elastic.co/products/beats;
+        homepage = "https://www.elastic.co/products/beats";
         license = licenses.asl20;
         maintainers = with maintainers; [ fadenb basvandijk ];
         platforms = platforms.linux;
@@ -46,7 +46,7 @@ in {
     '';
     buildInputs = [ systemd.dev ];
     postFixup = let libPath = stdenv.lib.makeLibraryPath [ systemd.lib ]; in ''
-      patchelf --set-rpath ${libPath} "$bin/bin/journalbeat"
+      patchelf --set-rpath ${libPath} "$out/bin/journalbeat"
     '';
   };
 }

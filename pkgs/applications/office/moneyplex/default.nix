@@ -18,7 +18,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "moneyplex";
   version = "16.0.22424";
 
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ tstrobel ];
     platforms = platforms.linux;
     license = licenses.unfree;
-    downloadPage = http://matrica.de/download/download.html;
+    downloadPage = "http://matrica.de/download/download.html";
   };
 
 }

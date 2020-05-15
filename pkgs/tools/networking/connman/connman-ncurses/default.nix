@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, dbus, json_c, ncurses, connman }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "connman-ncurses";
   version = "2015-07-21";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple ncurses UI for connman";
-    homepage = https://github.com/eurogiciel-oss/connman-json-client;
+    homepage = "https://github.com/eurogiciel-oss/connman-json-client";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

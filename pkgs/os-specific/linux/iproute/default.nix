@@ -1,29 +1,27 @@
-{ fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf }:
+{ stdenv, fetchurl
+, buildPackages, bison, flex, pkg-config
+, db, iptables, libelf, libmnl
+}:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.2.0";
+  version = "5.6.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1a2dywa2kam24951byv9pl32mb9z6klh7d4vp8fwfgrm4vn5vfd5";
+    sha256 = "14j6n1bc09xhq8lxs40vfsx8bb8lx12a07ga4rsxl8vfrqjhwnqv";
   };
 
   preConfigure = ''
-    patchShebangs ./configure
+    # Don't try to create /var/lib/arpd:
     sed -e '/ARPDDIR/d' -i Makefile
-    # Don't build netem tools--they're not installed and require HOSTCC
-    substituteInPlace Makefile --replace " netem " " "
   '';
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   makeFlags = [
-    "DESTDIR="
-    "LIBDIR=$(out)/lib"
+    "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
-    "MANDIR=$(out)/share/man"
-    "BASH_COMPDIR=$(out)/share/bash-completion/completions"
     "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
   ];
@@ -36,17 +34,14 @@ stdenv.mkDerivation rec {
     "CONFDIR=$(out)/etc/iproute2"
   ];
 
-  buildInputs = [ db iptables libelf ];
-  nativeBuildInputs = [ bison flex pkgconfig ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
+  nativeBuildInputs = [ bison flex pkg-config ];
+  buildInputs = [ db iptables libelf libmnl ];
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    PATH=${bash}/bin:$PATH patchShebangs $out/sbin
-  '';
-
   meta = with stdenv.lib; {
-    homepage = https://wiki.linuxfoundation.org/networking/iproute2;
+    homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;

@@ -3,7 +3,7 @@
 let
   version = "0.2.1";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libopusenc";
   inherit version;
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Library for encoding .opus audio files and live streams";
     license = licenses.bsd3;
-    homepage = http://www.opus-codec.org/;
+    homepage = "http://www.opus-codec.org/";
     platforms = platforms.unix;
     maintainers = with maintainers; [ pmiddend ];
   };

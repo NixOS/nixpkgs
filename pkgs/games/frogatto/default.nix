@@ -15,7 +15,7 @@ let
     categories = "Application;Game;ArcadeGame;";
   };
   version = "unstable-2018-12-18";
-in buildEnv rec {
+in buildEnv {
   name = "frogatto-${version}";
 
   buildInputs = [ makeWrapper ];
@@ -34,7 +34,7 @@ in buildEnv rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://frogatto.com;
+    homepage = "https://frogatto.com";
     description = description;
     license = with licenses; [ cc-by-30 unfree ];
     platforms = platforms.linux;

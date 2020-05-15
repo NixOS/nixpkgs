@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "archiver";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "mholt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kq2cyhbniwdabk426j493cs8d4nj35vmznm9031rrdd9ln5h9gl";
+    sha256 = "1yr2jhidqvbwh1y08lpqaidwpr5yx3bhvznm5fc9pk64s7z5kq3h";
   };
 
-  modSha256 = "13vwgqpw7ypq6mrvwmnl8n38x0h89ymryrrzkf7ya478fp00vclj";
+  vendorSha256 = "1ikrgl03r9zkn86kxkqi2kf540g3qzzz24i5wvh6g3d5q49nygl9";
 
   meta = with lib; {
     description = "Easily create & extract archives, and compress & decompress files of various formats";

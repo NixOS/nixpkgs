@@ -1,26 +1,33 @@
-{ stdenv, fetchFromGitHub, cairo, cmake, libxkbcommon
+{ stdenv, lib, fetchFromGitHub, cairo, libxkbcommon
 , pango, fribidi, harfbuzz, pcre, pkgconfig
 , ncursesSupport ? true, ncurses ? null
-, waylandSupport ? true, wayland ? null
+, waylandSupport ? true, wayland ? null, wayland-protocols ? null
 , x11Support ? true, xlibs ? null, xorg ? null
 }:
 
 assert ncursesSupport -> ncurses != null;
-assert waylandSupport -> wayland != null;
+assert waylandSupport -> ! lib.elem null [wayland wayland-protocols];
 assert x11Support -> xlibs != null && xorg != null;
 
 stdenv.mkDerivation rec {
   pname = "bemenu";
-  version = "0.1.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
-    repo = "bemenu";
-    rev = "33e540a2b04ce78f5c7ab4a60b899c67f586cc32";
-    sha256 = "11h55m9dx6ai12pqij52ydjm36dvrcc856pa834njihrp626pl4w";
+    repo = pname;
+    rev = version;
+    sha256 = "1fjcs9d3533ay3nz79cx3c0lmy2chgragr2lhsy0xl2ckr0iins0";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig pcre ];
+  nativeBuildInputs = [ pkgconfig pcre ];
+
+  makeFlags = ["PREFIX=$(out)"];
+
+  buildFlags = ["clients"]
+    ++ lib.optional ncursesSupport "curses"
+    ++ lib.optional waylandSupport "wayland"
+    ++ lib.optional x11Support "x11";
 
   buildInputs = with stdenv.lib; [
     cairo
@@ -28,18 +35,18 @@ stdenv.mkDerivation rec {
     harfbuzz
     libxkbcommon
     pango
-  ] ++ optionals ncursesSupport [ ncurses ]
-    ++ optionals waylandSupport [ wayland ]
+  ] ++ optional ncursesSupport ncurses
+    ++ optionals waylandSupport [ wayland wayland-protocols ]
     ++ optionals x11Support [
       xlibs.libX11 xlibs.libXinerama xlibs.libXft
       xorg.libXdmcp xorg.libpthreadstubs xorg.libxcb
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Cloudef/bemenu";
     description = "Dynamic menu library and client program inspired by dmenu";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ lheckemann ];
     platforms = with platforms; linux;
   };
 }

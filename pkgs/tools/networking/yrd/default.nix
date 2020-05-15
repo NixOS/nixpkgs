@@ -10,7 +10,7 @@ in pythonPackages.buildPythonApplication {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     inherit sha256;
   };
@@ -22,6 +22,6 @@ in pythonPackages.buildPythonApplication {
     maintainers = with maintainers; [ akru ];
     platforms = platforms.linux;
     license = licenses.gpl3;
-    homepage = https://github.com/kpcyrd/yrd;
+    homepage = "https://github.com/kpcyrd/yrd";
   };
 }

@@ -18,7 +18,7 @@ in buildEnv {
   name = "gitweb-${stdenv.lib.getVersion git}";
 
   ignoreCollisions = true;
-  paths = stdenv.lib.optional gitwebTheme "${gitwebThemeSrc}"
+  paths = stdenv.lib.optional gitwebTheme gitwebThemeSrc
        ++ [ "${git}/share/gitweb" ];
 
   meta = git.meta // {

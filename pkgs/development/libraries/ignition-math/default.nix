@@ -3,7 +3,7 @@
 let
   version = "2.6.0";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ign-math2";
   inherit version;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://ignitionrobotics.org/libraries/math;
+    homepage = "https://ignitionrobotics.org/libraries/math";
     description = "Math library by Ingition Robotics, created for the Gazebo project";
     license = licenses.asl20;
     maintainers = with maintainers; [ pxc ];

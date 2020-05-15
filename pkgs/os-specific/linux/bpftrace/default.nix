@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "refs/tags/v${version}";
-    sha256 = "17qf1c3h99iyxkc0xzix4jnxwqvxbg9ki23zm7l04qw73lj01g1m";
+    sha256 = "00fvkq3razwacnpb82zkpv63dgyigbqx3gj6g0ka94nwa74i5i77";
   };
 
   enableParallelBuilding = true;
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "High-level tracing language for Linux eBPF";
-    homepage    = https://github.com/iovisor/bpftrace;
+    homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;
     maintainers = with maintainers; [ rvl thoughtpolice ];
   };

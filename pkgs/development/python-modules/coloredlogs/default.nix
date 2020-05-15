@@ -19,7 +19,8 @@ buildPythonPackage rec {
   });
 
   checkPhase = ''
-    PATH=$PATH:$out/bin pytest . -k "not test_plain_text_output_format"
+    PATH=$PATH:$out/bin pytest . -k "not test_plain_text_output_format \
+                                     and not test_auto_install"
   '';
   checkInputs = [ pytest mock utillinux ];
 
@@ -27,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Colored stream handler for Python's logging module";
-    homepage = https://github.com/xolox/python-coloredlogs;
+    homepage = "https://github.com/xolox/python-coloredlogs";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
   };

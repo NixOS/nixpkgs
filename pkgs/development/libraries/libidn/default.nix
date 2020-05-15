@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = {
-    homepage = https://www.gnu.org/software/libidn/;
+    homepage = "https://www.gnu.org/software/libidn/";
     description = "Library for internationalized domain names";
 
     longDescription = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       included.
     '';
 
-    repositories.git = git://git.savannah.gnu.org/libidn.git;
+    repositories.git = "git://git.savannah.gnu.org/libidn.git";
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];

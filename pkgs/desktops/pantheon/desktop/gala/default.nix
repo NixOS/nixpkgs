@@ -26,19 +26,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "unstable-2019-07-21"; # Is tracking https://github.com/elementary/gala/commits/stable/juno
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = "50694796d4c8f0ca92517d5a628b0efdf748279c";
-    sha256 = "17d0hd2145mrf8y5ws3xypdbwj72qv7hrrp6p6lm4k16xd96yznr";
+    rev = version;
+    sha256 = "03cq9ihgjasnv1n4v3dn1m3ypzj26k2ybd5b1a7yrbprb35zbrs4";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      versionPolicy = "master";
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -71,6 +70,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./plugins-dir.patch
+    ./use-new-notifications-default.patch
   ];
 
   postPatch = ''
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta =  with stdenv.lib; {
     description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
-    homepage = https://github.com/elementary/gala;
+    homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

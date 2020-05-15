@@ -4,13 +4,13 @@
 
 let
   pname = "eog";
-  version = "3.32.2";
+  version = "3.36.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1bcxpqgzlk2cy4wfb3b5h66mhpj2fhrk1rrb5qqcv5xrr62ik5xy";
+    sha256 = "135pw7ifr585grz1rbmynyyrmhd8w880pilg7c4nvq58jl16n1aw";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook libxml2 gobject-introspection python3 ];
@@ -43,9 +43,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME image viewer";
-    homepage = https://wiki.gnome.org/Apps/EyeOfGnome;
+    homepage = "https://wiki.gnome.org/Apps/EyeOfGnome";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

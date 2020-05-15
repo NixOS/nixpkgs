@@ -6,7 +6,7 @@ let
           buildInputs = [ drv ];
     };
 
-  pkg = self: buildRebar3 rec {
+  pkg = self: buildRebar3 {
     name = "pgsql";
     version = "25+beta.2";
 
@@ -22,7 +22,7 @@ let
     meta = {
       description = "Erlang PostgreSQL Driver";
       license = stdenv.lib.licenses.mit;
-      homepage = https://github.com/semiocast/pgsql;
+      homepage = "https://github.com/semiocast/pgsql";
       maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
     };
 

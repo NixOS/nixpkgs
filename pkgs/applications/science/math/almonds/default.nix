@@ -19,7 +19,7 @@ with python3.pkgs; buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Terminal Mandelbrot fractal viewer";
-    homepage = https://github.com/Tenchi2xh/Almonds;
+    homepage = "https://github.com/Tenchi2xh/Almonds";
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];
   };

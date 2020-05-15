@@ -107,6 +107,7 @@ xorriso="xorriso
  -publisher nixos
  -graft-points
  -full-iso9660-filenames
+ -joliet
  ${isoBootFlags}
  ${usbBootFlags}
  ${efiBootFlags}

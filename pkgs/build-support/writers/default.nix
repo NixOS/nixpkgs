@@ -15,7 +15,7 @@ rec {
       name = last (builtins.split "/" nameOrPath);
     in
 
-    pkgs.runCommand name (if (types.str.check content) then {
+    pkgs.runCommandLocal name (if (types.str.check content) then {
       inherit content interpreter;
       passAsFile = [ "content" ];
     } else {
@@ -92,13 +92,15 @@ rec {
         PATH=${makeBinPath [
           pkgs.binutils-unwrapped
           pkgs.coreutils
+          pkgs.findutils
           pkgs.gcc
           pkgs.pkgconfig
         ]}
+        export PKG_CONFIG_PATH=${concatMapStringsSep ":" (pkg: "${pkg}/lib/pkgconfig") libraries}
         gcc \
             ${optionalString (libraries != [])
               "$(pkg-config --cflags --libs ${
-                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgsconfig -name \*.pc -exec basename {} \;)") libraries
+                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgconfig -name \\*.pc)") libraries
               })"
             } \
             -O \
@@ -146,6 +148,7 @@ rec {
         cp $contentPath tmp.hs
         ${ghc.withPackages (_: libraries )}/bin/ghc tmp.hs
         mv tmp $out
+        ${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded "$out"
       '';
     } name;
 
@@ -189,7 +192,7 @@ rec {
     {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
    '';
 
-  writeNginxConfig = name: text: pkgs.runCommand name {
+  writeNginxConfig = name: text: pkgs.runCommandLocal name {
     inherit text;
     passAsFile = [ "text" ];
   } /* sh */ ''

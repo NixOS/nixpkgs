@@ -1,28 +1,35 @@
-{ stdenv, fetchFromGitHub, pkgconfig, openssl, rustPlatform, Security
-}:
+{ stdenv, fetchFromGitHub, pkgconfig, openssl, rustPlatform, Security, makeWrapper, bash }:
 
 rustPlatform.buildRustPackage rec {
-  name = "websocat-${version}";
-  version = "1.3.0";
+  pname = "websocat";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
-    owner  = "vi";
-    repo   = "websocat";
-    rev    = "v${version}";
-    sha256 = "1gf2snr12vnx2mhsrwkb5274r1pvdrf8m3bybrqbh8s9wd83nrh6";
+    owner = "vi";
+    repo = "websocat";
+    rev = "v${version}";
+    sha256 = "1lmra91ahpk4gamhnbdr066hl4vzwfh5i09fbabzdnxcvylbx8zf";
   };
 
   cargoBuildFlags = [ "--features=ssl" ];
-  cargoSha256 = "1zqfvbihf8xwgh092n9wzm3mdgbv0n99gjsfk9przqj2vh7wfvh2";
+  cargoSha256 = "09chj0bgf4r8v5cjq0hvb84zvh98nrzrh1m0wdqjy5gi7zc30cis";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+
+  # The wrapping is required so that the "sh-c" option of websocat works even
+  # if sh is not in the PATH (as can happen, for instance, when websocat is
+  # started as a systemd service).
+  postInstall = ''
+    wrapProgram $out/bin/websocat \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ bash ]}
+  '';
 
   meta = with stdenv.lib; {
     description = "Command-line client for WebSockets (like netcat/socat)";
-    homepage    = https://github.com/vi/websocat;
-    license     = with licenses; [ mit ];
-    maintainers = [ maintainers.thoughtpolice ];
-    platforms   = platforms.all;
+    homepage = "https://github.com/vi/websocat";
+    license = licenses.mit;
+    maintainers = with maintainers; [ thoughtpolice filalex77 ];
+    platforms = platforms.all;
   };
 }

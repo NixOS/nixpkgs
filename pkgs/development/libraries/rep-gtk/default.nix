@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "GTK+ bindings for librep";
-    homepage = http://sawfish.wikia.com;
+    description = "GTK bindings for librep";
+    homepage = "http://sawfish.wikia.com";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
   };

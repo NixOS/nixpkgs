@@ -3,7 +3,7 @@
   pkgs ? import ../../.. { inherit system config; }
 }:
 
-with import ../../lib/testing.nix { inherit system pkgs; };
+with import ../../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -30,10 +30,7 @@ let
         { config, pkgs, lib, nodes, ... }:
           mkMerge [
             {
-              boot = {
-                postBootCommands = "rm -fr /var/lib/kubernetes/secrets /tmp/shared/*";
-                kernel.sysctl = { "fs.inotify.max_user_instances" = 256; };
-              };
+              boot.postBootCommands = "rm -fr /var/lib/kubernetes/secrets /tmp/shared/*";
               virtualisation.memorySize = mkDefault 1536;
               virtualisation.diskSize = mkDefault 4096;
               networking = {
@@ -56,6 +53,7 @@ let
               services.flannel.iface = "eth1";
               services.kubernetes = {
                 addons.dashboard.enable = true;
+                proxy.hostname = "${masterName}.${domain}";
 
                 easyCerts = true;
                 inherit (machine) roles;
@@ -71,16 +69,14 @@ let
                 443 # kubernetes apiserver
               ];
             })
-            (optionalAttrs (machine ? "extraConfiguration") (machine.extraConfiguration { inherit config pkgs lib nodes; }))
+            (optionalAttrs (machine ? extraConfiguration) (machine.extraConfiguration { inherit config pkgs lib nodes; }))
             (optionalAttrs (extraConfiguration != null) (extraConfiguration { inherit config pkgs lib nodes; }))
           ]
       ) machines;
 
       testScript = ''
-        startAll;
-
-        ${test}
-      '';
+        start_all()
+      '' + test;
     };
 
   mkKubernetesMultiNodeTest = attrs: mkKubernetesBaseTest ({

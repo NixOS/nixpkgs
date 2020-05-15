@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, darwin, python }:
+{ stdenv, fetchFromGitHub, darwin, python2 }:
 
 stdenv.mkDerivation rec {
   version = "1.2.1";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1n6la7blbxza2m79cpnywsavhzsdv4gzdxrkly4dppyidjg6jy1h";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
 
   postPatch = ''
     substituteInPlace src/ip.py \
-      --replace /usr/bin/python ${python}/bin/python \
+      --replace /usr/bin/python ${python2}/bin/python \
       --replace /sbin/ifconfig ${darwin.network_cmds}/bin/ifconfig \
       --replace /sbin/route ${darwin.network_cmds}/bin/route \
       --replace /usr/sbin/netstat ${darwin.network_cmds}/bin/netstat \
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/brona/iproute2mac;
+    homepage = "https://github.com/brona/iproute2mac";
     description = "CLI wrapper for basic network utilites on Mac OS X inspired with iproute2 on Linux systems - ip command.";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];

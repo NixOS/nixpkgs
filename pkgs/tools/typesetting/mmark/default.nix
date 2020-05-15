@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A powerful markdown processor in Go geared towards the IETF";
-    homepage = https://github.com/miekg/mmark;
+    homepage = "https://github.com/miekg/mmark";
     license = with stdenv.lib.licenses; bsd2;
     maintainers = with stdenv.lib.maintainers; [ yrashk ];
     platforms = stdenv.lib.platforms.unix;

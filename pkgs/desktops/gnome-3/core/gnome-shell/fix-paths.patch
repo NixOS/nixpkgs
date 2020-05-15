@@ -11,12 +11,20 @@
                                            null);
 --- a/js/ui/status/keyboard.js
 +++ b/js/ui/status/keyboard.js
-@@ -1059,7 +1059,7 @@ class InputSourceIndicator extends PanelMenu.Button {
-         let description = xkbLayout;
+@@ -1062,6 +1062,6 @@ class InputSourceIndicator extends PanelMenu.Button {
          if (xkbVariant.length > 0)
-             description = description + '\t' + xkbVariant;
+             description = `${description}\t${xkbVariant}`;
  
 -        Util.spawn(['gkbd-keyboard-display', '-l', description]);
 +        Util.spawn(['@libgnomekbd@/bin/gkbd-keyboard-display', '-l', description]);
      }
  });
+--- a/data/gnome-shell-disable-extensions.service
++++ b/data/gnome-shell-disable-extensions.service
+@@ -10,5 +10,5 @@ Requisite=gnome-session-stable.timer
+ [Service]
+ Type=simple
+ # Disable extensions
+-ExecStart=gsettings set org.gnome.shell disable-user-extensions true
++ExecStart=@gsettings@ set org.gnome.shell disable-user-extensions true
+ Restart=no

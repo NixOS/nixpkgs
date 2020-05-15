@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.17";
+  version = "0.19";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    sha256 = "0pnxjv6n2q6igxdr8wzbahcj7vccw4nfjdk8fjdnaivf2lyrpv2d";
+    sha256 = "1jdmwljckajqb3ys8azd1nyy49nvq9kb2knrrqdcfnvzq0m5lpqr";
   };
 
   nativeBuildInputs = [
@@ -45,13 +45,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs meson-post-install.py src/generate-authors.py
-    sed -i '/gtk-update-icon-cache/s/^/#/' meson-post-install.py
   '';
 
   doCheck = true;
 
   meta = with stdenv.lib; {
-    description = "Simple GTK+ frontend for the mpv video player";
+    description = "Simple GTK frontend for the mpv video player";
     longDescription = ''
       GNOME MPV interacts with mpv via the client API exported by libmpv,
       allowing access to mpv's powerful playback capabilities through an
@@ -59,6 +58,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/celluloid-player/celluloid";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, fftw, hackrf, libusb1 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "kalibrate-hackrf-unstable-20160827";
 
   # There are no tags/releases, so use the latest commit from git master.
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
       This package is for hackrf devices.
     '';
-    homepage = https://github.com/scateu/kalibrate-hackrf;
+    homepage = "https://github.com/scateu/kalibrate-hackrf";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = [ maintainers.mog ];

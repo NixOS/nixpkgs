@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem
+{ stdenv, mkDerivation, fetchurl, makeDesktopItem
 , libXrender, libXrandr, libXcursor, libX11, libXext, libXi, libxcb
  , libGL, glib, nss, nspr, expat, alsaLib
 , qtbase, qtdeclarative, qtsvg, qtlocation, qtwebchannel, qtwebengine
@@ -11,13 +11,13 @@ let
       qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine
     ];
   in
-  stdenv.mkDerivation rec {
+  mkDerivation rec {
     pname = "eagle";
-    version = "9.4.2";
+    version = "9.6.1";
 
     src = fetchurl {
       url = "https://eagle-updates.circuits.io/downloads/${builtins.replaceStrings ["."] ["_"] version}/Autodesk_EAGLE_${version}_English_Linux_64bit.tar.gz";
-      sha256 = "0lrwrvqcb91mcggmicvwjrngccsdy0f06l7a8nfgp9ckn4d9vmg2";
+      sha256 = "1iq4aahrh4g3549vbr7gka5y2h7f17n3yafzl21njc2mkqb12jdw";
     };
 
     desktopItem = makeDesktopItem {
@@ -72,7 +72,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Schematic editor and PCB layout tool from Autodesk (formerly CadSoft)";
-      homepage = https://www.autodesk.com/products/eagle/overview;
+      homepage = "https://www.autodesk.com/products/eagle/overview";
       license = licenses.unfree;
       platforms = [ "x86_64-linux" ];
       maintainers = [ maintainers.rittelle ];

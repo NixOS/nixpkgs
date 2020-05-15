@@ -1,34 +1,34 @@
-{
-  stdenv
-, python
-}:
+{ stdenv, python3Packages }:
 
-python.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "5.4.4";
+  version = "5.16.0";
 
-  propagatedBuildInputs = with python; [
+  propagatedBuildInputs = with python3Packages; [
     appdirs
     ConfigArgParse
     datrie
     docutils
     GitPython
     jsonschema
+    nbformat
+    psutil
     pyyaml
     ratelimiter
     requests
+    toposort
     wrapt
   ];
 
-  src = python.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "157323e0e1be34302edbbf399b2acbe25a4291bceffd47a0469963a970c9375f";
+    sha256 = "0jlf3y8b1gdv5xz37yk9b5g2b65zkk45p15x0ypvd2blpzy80537";
   };
 
   doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
 
   meta = with stdenv.lib; {
-    homepage = http://snakemake.bitbucket.io;
+    homepage = "https://snakemake.readthedocs.io";
     license = licenses.mit;
     description = "Python-based execution environment for make-like workflows";
     longDescription = ''
@@ -38,6 +38,6 @@ python.buildPythonPackage rec {
       workflows are essentially Python scripts extended by declarative code to define
       rules. Rules describe how to create output files from input files.
     '';
-    maintainers = with maintainers; [ helkafen renatoGarcia ];
+    maintainers = with maintainers; [ helkafen renatoGarcia veprbl ];
   };
 }

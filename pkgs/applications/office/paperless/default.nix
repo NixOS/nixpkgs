@@ -57,6 +57,12 @@ let
       cp -r --no-preserve=mode $src/src/* $src/LICENSE $srcDir
     '';
 
+    postPatch = ''
+      # django-cors-headers 3.x requires a scheme for allowed hosts
+      substituteInPlace $out/share/paperless/paperless/settings.py \
+        --replace "localhost:8080" "http://localhost:8080"
+    '';
+
     buildPhase = let
       # Paperless has explicit runtime checks that expect these binaries to be in PATH
       extraBin = lib.makeBinPath [ imagemagick7 ghostscript optipng tesseract unpaper ];
@@ -93,7 +99,7 @@ let
 
     meta = with lib; {
       description = "Scan, index, and archive all of your paper documents";
-      homepage = https://github.com/the-paperless-project/paperless;
+      homepage = "https://github.com/the-paperless-project/paperless";
       license = licenses.gpl3;
       maintainers = [ maintainers.earvstedt ];
     };
@@ -110,7 +116,7 @@ let
     };
   };
 
-  django_2_0 = pyPkgs: pyPkgs.django_2_1.overrideDerivation (_: rec {
+  django_2_0 = pyPkgs: pyPkgs.django_2_2.overrideDerivation (_: rec {
     pname = "Django";
     version = "2.0.12";
     name = "${pname}-${version}";

@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "quicktemplate";
   version = "unstable-2019-07-08";
   goPackagePath = "github.com/valyala/quicktemplate";

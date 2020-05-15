@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.10.1";
+  version = "0.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "320659a80f916c2edf9dfbe83512d9004bb562b72eedb7d9374562038697fa10";
+    sha256 = "5bde3fa0a35a91b45dba7cbc28270b5b649ff1d721c89290883f6e831672d5f0";
   };
 
   checkInputs = with self; [ nose ];
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Statistical computations and models for use with SciPy";
-    homepage = https://www.github.com/statsmodels/statsmodels;
+    homepage = "https://www.github.com/statsmodels/statsmodels";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

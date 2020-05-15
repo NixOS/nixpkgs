@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       serializes changes to shared memory buffers over a single socket. This
       makes application forwarding similar to ssh -X feasible.
     '';
-    homepage = https://mstoeckl.com/notes/gsoc/blog.html;
+    homepage = "https://mstoeckl.com/notes/gsoc/blog.html";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

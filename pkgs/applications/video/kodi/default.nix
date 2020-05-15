@@ -1,24 +1,23 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
+{ stdenv, lib, fetchpatch, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
 , pkgconfig, cmake, gnumake, yasm, python2Packages
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
 , gettext, pcre-cpp, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre
-, libX11, xorgproto, libxml2
-, libXt, libXmu, libXext
-, libXinerama, libXrandr
-, libXtst, libXfixes, systemd
-, alsaLib, libGLU_combined, glew, fontconfig, freetype, ftgl
-, libjpeg, jasper, libpng, libtiff
+, libxml2, systemd
+, alsaLib, libGLU, libGL, glew, fontconfig, freetype, ftgl
+, libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray
-, sqlite, mysql, nasm, gnutls, libva, libdrm
-, curl, bzip2, zip, unzip, glxinfo, xdpyinfo
+, sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
+, curl, bzip2, zip, unzip, glxinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
-, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1, libXdmcp
+, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1
 , libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
+, lirc
+, x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
 , dbusSupport ? true, dbus ? null
 , joystickSupport ? true, cwiid ? null
 , nfsSupport ? true, libnfs ? null
@@ -26,10 +25,12 @@
 , rtmpSupport ? true, rtmpdump ? null
 , sambaSupport ? true, samba ? null
 , udevSupport ? true, udev ? null
-, usbSupport  ? false, libusb ? null
+, usbSupport  ? false, libusb-compat-0_1 ? null
 , vdpauSupport ? true, libvdpau ? null
 , useWayland ? false, wayland ? null, wayland-protocols ? null
 , waylandpp ?  null, libxkbcommon ? null
+, useGbm ? false, mesa ? null, libinput ? null
+, buildPackages
 }:
 
 assert dbusSupport  -> dbus != null;
@@ -38,20 +39,20 @@ assert pulseSupport -> libpulseaudio != null;
 assert rtmpSupport  -> rtmpdump != null;
 assert sambaSupport -> samba != null;
 assert udevSupport  -> udev != null;
-assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used if udev is avaliable
+assert usbSupport   -> libusb-compat-0_1 != null && ! udevSupport; # libusb-compat-0_1 won't be used if udev is avaliable
 assert vdpauSupport -> libvdpau != null;
 assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
 
 let
-  kodiReleaseDate = "20190901";
-  kodiVersion = "18.4";
+  kodiReleaseDate = "20200301";
+  kodiVersion = "18.6";
   rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "1m0295czxabdcqyqf5m94av9d88pzhnzjvyfs1q07xqq82h313p7";
+    sha256 = "0rwymipn5hljy5xrslzmrljmj6f9wb191wi7gjw20wl6sv44d0bk";
   };
 
   cmakeProto = fetchurl {
@@ -92,10 +93,18 @@ let
     sha256  = "1krsjlr949iy5l6ljxancza1yi6w1annxc5s6k283i9mb15qy8cy";
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
+      sed -i 's/ --cpu=''${CPU}//' CMakeLists.txt
+      sed -i 's/--strip=''${CMAKE_STRIP}/--strip=''${CMAKE_STRIP} --ranlib=''${CMAKE_RANLIB}/' CMakeLists.txt
     '';
-    buildInputs = [ gnutls libidn libtasn1 p11-kit zlib libva ]
+    cmakeFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "-DCROSSCOMPILING=ON"
+      "-DCPU=${stdenv.hostPlatform.parsed.cpu.name}"
+      "-DOS=${stdenv.hostPlatform.parsed.kernel.name}"
+      "-DPKG_CONFIG_EXECUTABLE=pkgconfig"
+    ];
+    buildInputs = [ libidn libtasn1 p11-kit zlib libva ]
       ++ lib.optional  vdpauSupport    libvdpau;
-    nativeBuildInputs = [ cmake nasm pkgconfig ];
+    nativeBuildInputs = [ cmake nasm pkgconfig gnutls ];
   };
 
   # We can build these externally but FindLibDvd.cmake forces us to build it
@@ -143,46 +152,56 @@ let
     postPatch         = cmakeProtoPatch;
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
     name = "kodi-${lib.optionalString useWayland "wayland-"}${kodiVersion}";
 
     src = kodi_src;
 
     buildInputs = [
       gnutls libidn libtasn1 nasm p11-kit
-      libxml2 yasm python2Packages.python
+      libxml2 python2Packages.python
       boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva libdrm
-      openssl gperf tinyxml2 taglib libssh swig jre
-      libX11 xorgproto libXt libXmu libXext
-      libXinerama libXrandr libXtst libXfixes
-      alsaLib libGLU_combined glew fontconfig freetype ftgl
-      libjpeg jasper libpng libtiff
+      openssl gperf tinyxml2 taglib libssh
+      alsaLib libGL libGLU fontconfig freetype ftgl
+      libjpeg libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql.connector-c avahi lame
-      curl bzip2 zip unzip glxinfo xdpyinfo
+      sqlite libmysqlclient avahi lame
+      curl bzip2 zip unzip glxinfo
       libcec libcec_platform dcadec libuuid
       libgcrypt libgpgerror libunistring
-      libcrossguid cwiid libplist
-      bluez giflib glib harfbuzz lcms2 libpthreadstubs libXdmcp
+      libcrossguid libplist
+      bluez giflib glib harfbuzz lcms2 libpthreadstubs
       ffmpeg flatbuffers fmt fstrcmp rapidjson
+      lirc
       # libdvdcss libdvdnav libdvdread
     ]
+    ++ lib.optional x11Support [
+      libX11 xorgproto libXt libXmu libXext libXdmcp
+      libXinerama libXrandr libXtst libXfixes
+    ]
     ++ lib.optional  dbusSupport     dbus
-    ++ lib.optionals joystickSupport [ cwiid ]
+    ++ lib.optional joystickSupport cwiid
     ++ lib.optional  nfsSupport      libnfs
     ++ lib.optional  pulseSupport    libpulseaudio
     ++ lib.optional  rtmpSupport     rtmpdump
     ++ lib.optional  sambaSupport    samba
     ++ lib.optional  udevSupport     udev
-    ++ lib.optional  usbSupport      libusb
+    ++ lib.optional  usbSupport      libusb-compat-0_1
     ++ lib.optional  vdpauSupport    libvdpau
-    ++ lib.optional  useWayland [
-      wayland waylandpp
+    ++ lib.optionals useWayland [
+      wayland 
+      waylandpp.dev 
+      wayland-protocols
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
+    ]
+    ++ lib.optional useGbm [
+      libxkbcommon.dev
+      mesa.dev
+      libinput.dev
     ];
 
     nativeBuildInputs = [
@@ -192,7 +211,15 @@ in stdenv.mkDerivation rec {
       which
       pkgconfig gnumake
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
-    ] ++ lib.optional useWayland [ wayland-protocols ];
+      jre yasm gettext python2Packages.python flatbuffers
+
+      # for TexturePacker
+      giflib zlib libpng libjpeg lzo
+    ] ++ lib.optionals useWayland [ wayland-protocols waylandpp.bin ];
+
+    depsBuildBuild = [
+      buildPackages.stdenv.cc
+    ];
 
     cmakeFlags = [
       "-Dlibdvdcss_URL=${libdvdcss.src}"
@@ -203,9 +230,16 @@ in stdenv.mkDerivation rec {
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
       "-DENABLE_OPTICAL=ON"
       "-DLIRC_DEVICE=/run/lirc/lircd"
+      "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
+      "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
+      "-DPYTHON_EXECUTABLE=${buildPackages.python2Packages.python}/bin/python"
     ] ++ lib.optional useWayland [
       "-DCORE_PLATFORM_NAME=wayland"
       "-DWAYLAND_RENDER_SYSTEM=gl"
+      "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
+    ] ++ lib.optional useGbm [
+      "-DCORE_PLATFORM_NAME=gbm"
+      "-DGBM_RENDER_SYSTEM=gles"
     ];
 
     enableParallelBuilding = true;
@@ -213,6 +247,16 @@ in stdenv.mkDerivation rec {
     # 14 tests fail but the biggest issue is that every test takes 30 seconds -
     # I'm guessing there is a thing waiting to time out
     doCheck = false;
+
+    # Need these tools on the build system when cross compiling,
+    # hacky, but have found no other way.
+    preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      CXX=c++ LD=ld make -C tools/depends/native/JsonSchemaBuilder
+      cmakeFlags+=" -DWITH_JSONSCHEMABUILDER=$PWD/tools/depends/native/JsonSchemaBuilder/bin"
+
+      CXX=c++ LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
+      cmakeFlags+=" -DWITH_TEXTUREPACKER=$PWD/tools/depends/native/TexturePacker/bin"
+    '';
 
     postPatch = ''
       substituteInPlace xbmc/platform/linux/LinuxTimezone.cpp \
@@ -222,9 +266,11 @@ in stdenv.mkDerivation rec {
     postInstall = ''
       for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH            ":" "${lib.makeBinPath [ python2Packages.python glxinfo xdpyinfo ]}" \
+          --prefix PATH            ":" "${lib.makeBinPath ([ python2Packages.python glxinfo ] ++ lib.optional x11Support xdpyinfo)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
-              ([ curl systemd libmad libvdpau libcec libcec_platform rtmpdump libass ] ++ lib.optional nfsSupport libnfs)}"
+              ([ curl systemd libmad libvdpau libcec libcec_platform libass ]
+                 ++ lib.optional nfsSupport libnfs
+                 ++ lib.optional rtmpSupport rtmpdump)}"
       done
 
       substituteInPlace $out/share/xsessions/kodi.desktop \
@@ -241,7 +287,7 @@ in stdenv.mkDerivation rec {
 
     meta = with stdenv.lib; {
       description = "Media center";
-      homepage    = https://kodi.tv/;
+      homepage    = "https://kodi.tv/";
       license     = licenses.gpl2;
       platforms   = platforms.linux;
       maintainers = with maintainers; [ domenkozar titanous edwtjo peterhoeg sephalon ];

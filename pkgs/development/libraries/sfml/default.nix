@@ -7,7 +7,7 @@ let
   version = "2.5.1";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sfml";
   inherit version;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
                  "-DSFML_USE_SYSTEM_DEPS=yes" ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.sfml-dev.org/;
+    homepage = "https://www.sfml-dev.org/";
     description = "Simple and fast multimedia library";
     longDescription = ''
       SFML is a simple, fast, cross-platform and object-oriented multimedia API.

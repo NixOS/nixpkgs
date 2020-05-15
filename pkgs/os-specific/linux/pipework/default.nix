@@ -2,7 +2,7 @@
 , bridge-utils, iproute, lxc, openvswitch, docker, busybox, dhcpcd, dhcp
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pipework";
   version = "2017-08-22";
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Software-Defined Networking tools for LXC";
-    homepage = https://github.com/jpetazzo/pipework;
+    homepage = "https://github.com/jpetazzo/pipework";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "sourcetrail";
-  version = "2019.2.39";
+  version = "2019.3.46";
 
   src = fetchurl {
     name = "sourtrail.tar.gz";
     url = "https://www.sourcetrail.com/downloads/${version}/linux/64bit";
-    sha256 = "13kzfnsb5lf9v6bqw41qljp5bgz2rd3w163r6xg59hzd3dv8f90q";
+    sha256 = "0dnkxr3fijcsbn6pd20lyxhr9ns6ji1c4dffly9s16yq4x9ad5r4";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.sourcetrail.com;
+    homepage = "https://www.sourcetrail.com";
     description = "A cross-platform source explorer for C/C++ and Java";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;

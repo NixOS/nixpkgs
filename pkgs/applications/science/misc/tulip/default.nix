@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libxml2, freetype, libGLU_combined, glew, qt4
+{ fetchurl, stdenv, libxml2, freetype, libGLU, libGL, glew, qt4
 , cmake, makeWrapper, libjpeg, python }:
 
 let version = "5.2.1"; in
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bqmqy6sri87a8xv5xf7ffaq5zin4hiaa13g0l64b84i7yckfwky";
   };
 
-  buildInputs = [ libxml2 freetype glew libGLU_combined qt4 libjpeg python ];
+  buildInputs = [ libxml2 freetype glew libGLU libGL qt4 libjpeg python ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
          data that can be tailored to the problems he or she is addressing.
       '';
 
-    homepage = http://tulip.labri.fr/;
+    homepage = "http://tulip.labri.fr/";
 
     license = stdenv.lib.licenses.gpl3Plus;
 

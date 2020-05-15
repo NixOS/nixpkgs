@@ -1,70 +1,46 @@
-{ stdenv
-, libev
-, buildPythonPackage
-, fetchPypi
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, pythonOlder
 , cython
-, futures
-, six
-, python
-, scales
 , eventlet
-, twisted
+, futures
+, libev
 , mock
-, gevent
 , nose
+, pytest
 , pytz
 , pyyaml
+, scales
+, six
 , sure
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.18.0";
+  version = "3.20.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w9a7fdl626m977cjj9zclh4a0mr3s4q9jpwm1fsmpi7v3gbribi";
+    sha256 = "03nycyn5nd1pnrg6fffq3wcjqnw13lgja137zq5zszx68mc15wnl";
   };
 
-  buildInputs = [
-    libev
-  ];
-
-  nativeBuildInputs = [
-    # NOTE: next version will work with cython 0.29
-    # Requires 'Cython!=0.25,<0.29,>=0.20'
-    (cython.overridePythonAttrs(old: rec {
-      pname = "Cython";
-      version = "0.28.3";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "1aae6d6e9858888144cea147eb5e677830f45faaff3d305d77378c3cba55f526";
-      };
-    }))
-  ];
-
+  nativeBuildInputs = [ cython ];
+  buildInputs = [ libev ];
   propagatedBuildInputs = [ six ]
-    ++ stdenv.lib.optionals (pythonOlder "3.4") [ futures ];
+    ++ lib.optionals (pythonOlder "3.4") [ futures ];
 
-  postPatch = ''
-    sed -i "s/<=1.0.1//" setup.py
-  '';
+  checkInputs = [ eventlet mock nose pytest pytz pyyaml sure ];
 
+  # ignore test files which try to do socket.getprotocolname('tcp')
+  # as it fails in sandbox mode due to lack of a /etc/protocols file
   checkPhase = ''
-    ${python.interpreter} setup.py gevent_nosetests
-    ${python.interpreter} setup.py eventlet_nosetests
+    pytest tests/unit \
+      --ignore=tests/unit/io/test_libevreactor.py \
+      --ignore=tests/unit/io/test_eventletreactor.py \
+      --ignore=tests/unit/io/test_asyncorereactor.py
   '';
 
-  checkInputs = [ scales eventlet twisted mock gevent nose pytz pyyaml sure ];
-
-  # Could not get tests running
-  doCheck = false;
-
-  meta = with stdenv.lib; {
-    homepage = http://datastax.github.io/python-driver/;
+  meta = with lib; {
     description = "A Python client driver for Apache Cassandra";
+    homepage = "http://datastax.github.io/python-driver";
     license = licenses.asl20;
   };
-
 }

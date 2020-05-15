@@ -5,11 +5,11 @@ let
 
 in buildPythonPackage rec {
   pname = "typing";
-  version = "3.7.4";
+  version = "3.7.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kj4kvkh89psajxlyb72rm5fr7w70yb32zkj2h174arsz325wxjk";
+    sha256 = "91dfe6f3f706ee8cc32d38edbbf304e9b7583fb37108fef38229617f8b3eba23";
   };
 
   # Error for Python3.6: ImportError: cannot import name 'ann_module'
@@ -24,7 +24,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Backport of typing module to Python versions older than 3.5";
-    homepage = https://docs.python.org/3/library/typing.html;
+    homepage = "https://docs.python.org/3/library/typing.html";
     license = licenses.psfl;
   };
 }

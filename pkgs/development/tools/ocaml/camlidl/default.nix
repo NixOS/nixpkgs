@@ -37,14 +37,14 @@ stdenv.mkDerivation rec {
   '';
 
   setupHook = writeText "setupHook.sh" ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
     export NIX_CFLAGS_COMPILE+=" -isystem $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
     export NIX_LDFLAGS+=" -L $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
   '';
 
   meta = {
     description = "A stub code generator and COM binding for Objective Caml";
-    homepage = "${webpage}";
+    homepage = webpage;
     license = "LGPL";
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };

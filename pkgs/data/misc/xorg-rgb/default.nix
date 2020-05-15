@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = http://xorg.freedesktop.org/;
+    homepage = "http://xorg.freedesktop.org/";
   };
 }

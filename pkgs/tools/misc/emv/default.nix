@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "emv";
   version = "1.95";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.i0i0.de/toolchest/emv;
+    homepage = "http://www.i0i0.de/toolchest/emv";
     description = "Editor Move: Rename files with your favourite text editor";
     license = stdenv.lib.licenses.publicDomain;
     platforms = stdenv.lib.platforms.unix;

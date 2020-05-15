@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, gtk3, xcursorgen, papirus-icon-theme, deepin }:
+{ stdenv
+, fetchFromGitHub
+, gtk3
+, xcursorgen
+, papirus-icon-theme
+, deepin
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-icon-theme";
@@ -11,9 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "12rzzjp906np95ckbxrd4mb345lm198wz69kxy48f8q1zg78q8iw";
   };
 
-  nativeBuildInputs = [ gtk3 xcursorgen ];
+  nativeBuildInputs = [
+    gtk3
+    xcursorgen
+  ];
 
-  buildInputs = [ papirus-icon-theme ];
+  propagatedBuildInputs = [
+    papirus-icon-theme
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
 
   postPatch = ''
     patchShebangs tools/hicolor.links
@@ -26,18 +41,18 @@ stdenv.mkDerivation rec {
   '';
 
   buildTargets = "all hicolor-links";
-  installTargets = "install-icons install-cursors";
+  installTargets = [ "install-icons" "install-cursors" ];
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     cp -a ./Sea ./usr/share/icons/hicolor "$out"/share/icons/
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Icons for the Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-icon-theme;
+    homepage = "https://github.com/linuxdeepin/deepin-icon-theme";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];

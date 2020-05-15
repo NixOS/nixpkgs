@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libsndfile, libsamplerate, liblo, libjack2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dirt-2018-01-01";
   src = fetchFromGitHub {
     repo = "Dirt";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An unimpressive thingie for playing bits of samples with some level of accuracy";
-    homepage = https://github.com/tidalcycles/Dirt;
+    homepage = "https://github.com/tidalcycles/Dirt";
     license = licenses.gpl3;
     maintainers = with maintainers; [ anderspapitto ];
     platforms = with platforms; linux;

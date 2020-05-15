@@ -4,7 +4,7 @@
 , pymaging
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pymaging-png";
   version = "unstable-2016-11-16";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pure Python imaging library with Python 2.6, 2.7, 3.1+ support";
-    homepage    = https://github.com/ojii/pymaging-png/;
+    homepage    = "https://github.com/ojii/pymaging-png/";
     license     = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
   };

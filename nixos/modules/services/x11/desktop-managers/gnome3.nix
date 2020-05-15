@@ -28,6 +28,12 @@ let
         (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n")
         (defaultPackages ++ cfg.extraGSettingsOverridePackages)}
 
+     cp -f ${pkgs.gnome3.gnome-shell}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+
+     ${optionalString flashbackEnabled ''
+       cp -f ${pkgs.gnome3.gnome-flashback}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+     ''}
+
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
@@ -51,6 +57,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   options = {
 
     services.gnome3 = {
@@ -62,6 +72,7 @@ in
 
     services.xserver.desktopManager.gnome3 = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Enable Gnome 3 desktop manager.";
       };
@@ -138,7 +149,7 @@ in
       services.gnome3.core-shell.enable = true;
       services.gnome3.core-utilities.enable = mkDefault true;
 
-      services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ];
+      services.xserver.displayManager.sessionPackages = [ pkgs.gnome3.gnome-session.sessions ];
 
       environment.extraInit = ''
         ${concatMapStrings (p: ''
@@ -155,17 +166,17 @@ in
 
       environment.systemPackages = cfg.sessionPath;
 
-      environment.variables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
+      environment.sessionVariables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
 
       # Override GSettings schemas
-      environment.variables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
+      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
        # If gnome3 is installed, build vim for gtk3 too.
       nixpkgs.config.vim.gui = "gtk3";
     })
 
     (mkIf flashbackEnabled {
-      services.xserver.displayManager.extraSessionFilePackages =  map
+      services.xserver.displayManager.sessionPackages =  map
         (wm: pkgs.gnome3.gnome-flashback.mkSessionForWm {
           inherit (wm) wmName wmLabel wmCommand;
         }) (optional cfg.flashback.enableMetacity {
@@ -174,13 +185,21 @@ in
               wmCommand = "${pkgs.gnome3.metacity}/bin/metacity";
             } ++ cfg.flashback.customSessions);
 
-      security.pam.services.gnome-screensaver = {
+      security.pam.services.gnome-flashback = {
         enableGnomeKeyring = true;
       };
 
-      services.dbus.packages = [
-        pkgs.gnome3.gnome-screensaver
-      ];
+      systemd.packages = with pkgs.gnome3; [
+        gnome-flashback
+      ] ++ (map
+        (wm: gnome-flashback.mkSystemdTargetForWm {
+          inherit (wm) wmName;
+        }) cfg.flashback.customSessions);
+
+        # gnome-panel needs these for menu applet
+        environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.gnome3.gnome-flashback}/share" ];
+        # TODO: switch to sessionVariables (resolve conflict)
+        environment.variables.XDG_CONFIG_DIRS = [ "${pkgs.gnome3.gnome-flashback}/etc/xdg" ];
     })
 
     (mkIf serviceCfg.core-os-services.enable {
@@ -209,15 +228,13 @@ in
 
       networking.networkmanager.enable = mkDefault true;
 
-      # Use the correct gnome3 packageSet
-      networking.networkmanager.basePackages = {
-        inherit (pkgs) networkmanager modemmanager wpa_supplicant crda;
-        inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
-        networkmanager-openconnect networkmanager-fortisslvpn
-        networkmanager-iodine networkmanager-l2tp;
-      };
-
       services.xserver.updateDbusEnvironment = true;
+
+      # gnome has a custom alert theme but it still
+      # inherits from the freedesktop theme.
+      environment.systemPackages = with pkgs; [
+        sound-theme-freedesktop
+      ];
 
       # Needed for themes and backgrounds
       environment.pathsToLink = [
@@ -227,27 +244,36 @@ in
 
     (mkIf serviceCfg.core-shell.enable {
       services.colord.enable = mkDefault true;
+      services.gnome3.chrome-gnome-shell.enable = mkDefault true;
       services.gnome3.glib-networking.enable = true;
+      services.gnome3.gnome-initial-setup.enable = mkDefault true;
       services.gnome3.gnome-remote-desktop.enable = mkDefault true;
       services.gnome3.gnome-settings-daemon.enable = true;
       services.gnome3.gnome-user-share.enable = mkDefault true;
       services.gnome3.rygel.enable = mkDefault true;
       services.gvfs.enable = true;
+      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.telepathy.enable = mkDefault true;
-      systemd.packages = [ pkgs.gnome3.vino ];
-      services.dbus.packages =
-        optional config.services.printing.enable pkgs.system-config-printer;
+
+      systemd.packages = with pkgs.gnome3; [
+        gnome-session
+        gnome-shell
+      ];
 
       services.avahi.enable = mkDefault true;
+
+      xdg.portal.extraPortals = [
+        pkgs.gnome3.gnome-shell
+      ];
 
       services.geoclue2.enable = mkDefault true;
       services.geoclue2.enableDemoAgent = false; # GNOME has its own geoclue agent
 
-      services.geoclue2.appConfig."gnome-datetime-panel" = {
+      services.geoclue2.appConfig.gnome-datetime-panel = {
         isAllowed = true;
         isSystem = true;
       };
-      services.geoclue2.appConfig."gnome-color-panel" = {
+      services.geoclue2.appConfig.gnome-color-panel = {
         isAllowed = true;
         isSystem = true;
       };
@@ -263,7 +289,27 @@ in
         source-sans-pro
       ];
 
-      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-shell.bst
+      ## Enable soft realtime scheduling, only supported on wayland ##
+
+      security.wrappers.".gnome-shell-wrapped" = {
+        source = "${pkgs.gnome3.gnome-shell}/bin/.gnome-shell-wrapped";
+        capabilities = "cap_sys_nice=ep";
+      };
+
+      systemd.user.services.gnome-shell-wayland = let
+        gnomeShellRT = with pkgs.gnome3; pkgs.runCommand "gnome-shell-rt" {} ''
+          mkdir -p $out/bin/
+          cp ${gnome-shell}/bin/gnome-shell $out/bin
+          sed -i "s@${gnome-shell}/bin/@${config.security.wrapperDir}/@" $out/bin/gnome-shell
+        '';
+      in {
+        # Note we need to clear ExecStart before overriding it
+        serviceConfig.ExecStart = ["" "${gnomeShellRT}/bin/gnome-shell"];
+        # Do not use the default environment, it provides a broken PATH
+        environment = mkForce {};
+      };
+
+      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
         adwaita-icon-theme
         gnome-backgrounds
@@ -274,7 +320,7 @@ in
         gnome-shell
         gnome-shell-extensions
         gnome-themes-extra
-        gnome-user-docs
+        pkgs.gnome-user-docs
         pkgs.orca
         pkgs.glib # for gsettings
         pkgs.gnome-menus
@@ -282,18 +328,16 @@ in
         pkgs.hicolor-icon-theme
         pkgs.shared-mime-info # for update-mime-database
         pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-        vino
       ];
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-utilities.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
         baobab
         cheese
         eog
         epiphany
-        geary
         gedit
         gnome-calculator
         gnome-calendar
@@ -320,6 +364,7 @@ in
       # Enable default programs
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
+      programs.geary.enable = mkDefault true;
       programs.gnome-disks.enable = mkDefault true;
       programs.gnome-terminal.enable = mkDefault true;
       programs.seahorse.enable = mkDefault true;
@@ -327,10 +372,10 @@ in
 
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package
-      environment.variables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
+      environment.sessionVariables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
 
       # Override default mimeapps for nautilus
-      environment.variables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
+      environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
 
       environment.pathsToLink = [
         "/share/nautilus-python/extensions"

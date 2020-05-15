@@ -1,0 +1,51 @@
+From 3bd82a82cf4ba693d2c31c7b95aaec4e56dc92a4 Mon Sep 17 00:00:00 2001
+From: Paul Eggert <eggert@cs.ucla.edu>
+Date: Mon, 11 Mar 2019 16:40:29 -0700
+Subject: [PATCH 1/1] strtod: fix clash with strtold
+
+Problem reported for RHEL 5 by Jesse Caldwell (Bug#34817).
+* lib/strtod.c (compute_minus_zero, minus_zero):
+Simplify by remving the macro / external variable,
+and having just a function.  User changed.  This avoids
+the need for an external variable that might clash.
+---
+ ChangeLog    |  9 +++++++++
+ lib/strtod.c | 11 +++++------
+ 2 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/lib/strtod.c b/lib/strtod.c
+index b9eaa51..69b1564 100644
+--- a/lib/strtod.c
++++ b/lib/strtod.c
+@@ -294,16 +294,15 @@ parse_number (const char *nptr,
+    ICC 10.0 has a bug when optimizing the expression -zero.
+    The expression -MIN * MIN does not work when cross-compiling
+    to PowerPC on Mac OS X 10.5.  */
+-#if defined __hpux || defined __sgi || defined __ICC
+ static DOUBLE
+-compute_minus_zero (void)
++minus_zero (void)
+ {
++#if defined __hpux || defined __sgi || defined __ICC
+   return -MIN * MIN;
+-}
+-# define minus_zero compute_minus_zero ()
+ #else
+-DOUBLE minus_zero = -0.0;
++  return -0.0;
+ #endif
++}
+ 
+ /* Convert NPTR to a DOUBLE.  If ENDPTR is not NULL, a pointer to the
+    character after the last one used in the number is put in *ENDPTR.  */
+@@ -479,6 +478,6 @@ STRTOD (const char *nptr, char **endptr)
+   /* Special case -0.0, since at least ICC miscompiles negation.  We
+      can't use copysign(), as that drags in -lm on some platforms.  */
+   if (!num && negative)
+-    return minus_zero;
++    return minus_zero ();
+   return negative ? -num : num;
+ }
+-- 
+1.9.1
+

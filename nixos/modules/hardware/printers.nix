@@ -94,8 +94,8 @@ in {
             ppdOptions = mkOption {
               type = types.attrsOf types.str;
               example = {
-                "PageSize" = "A4";
-                "Duplex" = "DuplexNoTumble";
+                PageSize = "A4";
+                Duplex = "DuplexNoTumble";
               };
               default = {};
               description = ''
@@ -110,7 +110,7 @@ in {
   };
 
   config = mkIf (cfg.ensurePrinters != [] && config.services.printing.enable) {
-    systemd.services."ensure-printers" = let
+    systemd.services.ensure-printers = let
       cupsUnit = if config.services.printing.startWhenNeeded then "cups.socket" else "cups.service";
     in {
       description = "Ensure NixOS-configured CUPS printers";

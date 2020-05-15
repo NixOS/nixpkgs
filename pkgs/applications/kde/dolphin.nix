@@ -15,6 +15,7 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  propagatedUserEnvPkgs = [ baloo ];
   propagatedBuildInputs = [
     baloo baloo-widgets kactivities kbookmarks kcmutils kcompletion kconfig
     kcoreaddons kdelibs4support kdbusaddons kfilemetadata ki18n kiconthemes

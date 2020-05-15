@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       completely free fast-paced first-person shooter (FPS) for Windows, Linux
       and macOS.
     '';
-    homepage = http://www.warsow.net;
+    homepage = "http://www.warsow.net";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl abbradar ];
     platforms = warsow-engine.meta.platforms;

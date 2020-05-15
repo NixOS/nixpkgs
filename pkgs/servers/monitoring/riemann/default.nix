@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "riemann";
-  version = "0.3.3";
+  version = "0.3.5";
 
   src = fetchurl {
     url = "https://github.com/riemann/riemann/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "11xcmmp5k78vr5ch42zwx9ym84y6kf81z9zwawqybvx7wmlbpdiq";
+    sha256 = "1d7v2lg1b7z6v0qckq70nzqpqcs90v29laizsf8ghyj113ips3rc";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://riemann.io/;
+    homepage = "http://riemann.io/";
     description = "A network monitoring system";
     license = licenses.epl10;
     platforms = platforms.all;

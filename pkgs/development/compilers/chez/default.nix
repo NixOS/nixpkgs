@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
+
   /*
   ** We patch out a very annoying 'feature' in ./configure, which
   ** tries to use 'git' to update submodules.
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description  = "A powerful and incredibly fast R6RS Scheme compiler";
-    homepage     = https://cisco.github.io/ChezScheme/;
+    homepage     = "https://cisco.github.io/ChezScheme/";
     license      = stdenv.lib.licenses.asl20;
     maintainers  = with stdenv.lib.maintainers; [ thoughtpolice ];
     platforms    = stdenv.lib.platforms.unix;

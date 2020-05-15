@@ -23,7 +23,7 @@ with lib;
         type        = types.listOf types.str;
         default     = [];
         example     = ''[ "toxid1" "toxid2" ]'';
-        description = "peers to automacally connect to on startup";
+        description = "peers to automatically connect to on startup";
       };
     };
   };

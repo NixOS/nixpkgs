@@ -4,7 +4,7 @@ let
   version = "2.7.0";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnustep-make";
   inherit version;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
   meta = {
     description = "A build manager for GNUstep";
-    homepage = http://gnustep.org/;
+    homepage = "http://gnustep.org/";
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ ashalkhakov matthewbauer ];
     platforms = stdenv.lib.platforms.unix;

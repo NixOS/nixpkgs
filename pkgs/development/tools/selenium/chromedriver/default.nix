@@ -4,18 +4,18 @@
 }:
 let
   allSpecs = {
-    "x86_64-linux" = {
+    x86_64-linux = {
       system = "linux64";
-      sha256 = "04wb6h57daxmnv3a3xrcsznawbx7r8wyi1vk1g26z2l2ppcnsbzv";
+      sha256 = "1mqsangjindfqgvjxgmpgfrcd8a2lqmwl587l0ip0p5wwz8yq5wi";
     };
 
-    "x86_64-darwin" = {
+    x86_64-darwin = {
       system = "mac64";
-      sha256 = "0f8j7m8ardaaw8pv02vxhwkqbcm34366bln0np0j0ig21d4fag09";
+      sha256 = "18ydf2bk5aiin3yffb9z8215idz65nkhgxq0mmlvwb8gwsdvnwi1";
     };
   };
 
-  spec = allSpecs."${stdenv.hostPlatform.system}"
+  spec = allSpecs.${stdenv.hostPlatform.system}
     or (throw "missing chromedriver binary for ${stdenv.hostPlatform.system}");
 
   libs = stdenv.lib.makeLibraryPath [
@@ -28,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "chromedriver";
-  version = "76.0.3809.68";
+  version = "81.0.4044.69";
 
   src = fetchurl {
     url = "https://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://sites.google.com/a/chromium.org/chromedriver;
+    homepage = "https://sites.google.com/a/chromium.org/chromedriver";
     description = "A WebDriver server for running Selenium tests on Chrome";
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ maintainers.goibhniu maintainers.marsam ];
     platforms = attrNames allSpecs;
   };
 }

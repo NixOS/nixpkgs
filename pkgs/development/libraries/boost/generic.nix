@@ -14,6 +14,7 @@
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
 , mpi ? null
+, extraB2Args ? []
 
 # Attributes inherit from specific versions
 , version, src
@@ -26,6 +27,9 @@ assert enableShared || enableStatic;
 # Python isn't supported when cross-compiling
 assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
+
+# Boost <1.69 can't be build with clang >8, because pth was removed
+assert with stdenv.lib; ((toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
 
 with stdenv.lib;
 let
@@ -92,7 +96,8 @@ let
     ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
     ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
-  ]);
+  ] ++ extraB2Args
+  );
 
 in
 
@@ -101,16 +106,17 @@ stdenv.mkDerivation {
 
   inherit src version;
 
-  patchFlags = "";
+  patchFlags = [];
 
   patches = patches
   ++ optional stdenv.isDarwin (
     if version == "1.55.0"
     then ./darwin-1.55-no-system-python.patch
-    else ./darwin-no-system-python.patch);
+    else ./darwin-no-system-python.patch)
+  ++ optional (versionAtLeast version "1.70") ./cmake-paths.patch;
 
   meta = {
-    homepage = http://boost.org/;
+    homepage = "http://boost.org/";
     description = "Collection of C++ libraries";
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;

@@ -1,5 +1,5 @@
 { lib, stdenv, python3, openssl
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? stdenv.isLinux, nixosTests
 }:
 
 with python3.pkgs;
@@ -7,11 +7,11 @@ with python3.pkgs;
 let
   matrix-synapse-ldap3 = buildPythonPackage rec {
     pname = "matrix-synapse-ldap3";
-    version = "0.1.3";
+    version = "0.1.4";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0a0d1y9yi0abdkv6chbmxr3vk36gynnqzrjhbg26q4zg06lh9kgn";
+      sha256 = "01bms89sl16nyh9f141idsz4mnhxvjrc3gj721wxh1fhikps0djx";
     };
 
     propagatedBuildInputs = [ service-identity ldap3 twisted ];
@@ -23,11 +23,11 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.3.1";
+  version = "1.12.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nz9bhy5hraa1h7100vr0innz8npnpha6xr9j2ln7h3cgwv73739";
+    sha256 = "0psr17ai42ma9923g9bj3q9fd8kph9rx7jpxsxwbfzr2y6lwr306";
   };
 
   patches = [
@@ -36,6 +36,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools
     bcrypt
     bleach
     canonicaljson
@@ -70,18 +71,23 @@ in buildPythonApplication rec {
     treq
     twisted
     unpaddedbase64
+    typing-extensions
   ] ++ lib.optional enableSystemd systemd;
 
   checkInputs = [ mock parameterized openssl ];
+
+  doCheck = !stdenv.isDarwin;
+
+  passthru.tests = { inherit (nixosTests) matrix-synapse; };
 
   checkPhase = ''
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://matrix.org;
+    homepage = "https://matrix.org";
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ralith roblabla ekleog pacien ];
+    maintainers = with maintainers; [ ralith roblabla ekleog pacien ma27 ];
   };
 }

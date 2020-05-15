@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, perl, openssl, curl, libusb1
 , enableUnsafe ? false }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ttwatch";
   version = "2018-12-04";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ryanbinns/ttwatch;
+    homepage = "https://github.com/ryanbinns/ttwatch";
     description = "Linux TomTom GPS Watch Utilities";
     maintainers = with maintainers; [ dotlambda ];
     license = licenses.mit;

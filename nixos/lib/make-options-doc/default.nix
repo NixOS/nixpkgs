@@ -126,13 +126,14 @@ let
     }
   '';
 
-in rec {
+in {
   inherit optionsNix;
 
   optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
+      buildInputs = [ pkgs.brotli ];
     }
     ''
       # Export list of options in different format.
@@ -141,8 +142,11 @@ in rec {
 
       cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix))} $dst/options.json
 
+      brotli -9 < $dst/options.json > $dst/options.json.br
+
       mkdir -p $out/nix-support
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
+      echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     ''; # */
 
   optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''

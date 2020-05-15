@@ -1,29 +1,34 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
+{ stdenv, hwdata, pkgconfig, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables, libcap, dqlite
-, sqlite-replication
+, squashfsTools, iproute, iptables, ebtables, libcap, libco-canonical, dqlite
+, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
 , bash
+, installShellFiles
 }:
 
 buildGoPackage rec {
   pname = "lxd";
-  version = "3.13";
+  version = "4.1";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1kasnzd8hw9biyx8avbjmpfax1pdbp9g543g8hs6xpksmk93hl82";
+    sha256 = "0svzj57wwm43d2gnx0myr2p9pzjmkivwhgg0dww6zl169bx32liz";
   };
+
+  postPatch = ''
+    substituteInPlace shared/usbid/load.go \
+      --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
+  '';
 
   preBuild = ''
     # unpack vendor
     pushd go/src/github.com/lxc/lxd
-    rm dist/src/github.com/lxc/lxd
-    cp -r dist/src/* ../../..
-    rm -r dist
+    rm _dist/src/github.com/lxc/lxd
+    cp -r _dist/src/* ../../..
     popd
   '';
 
@@ -31,27 +36,27 @@ buildGoPackage rec {
 
   postInstall = ''
     # test binaries, code generation
-    rm $bin/bin/{deps,macaroon-identity,generate}
+    rm $out/bin/{deps,macaroon-identity,generate}
 
-    wrapProgram $bin/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
+    wrapProgram $out/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
       acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash criu
       (writeShellScriptBin "apparmor_parser" ''
         exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
       '')
     ]}
 
-    mkdir -p "$bin/share/bash-completion/completions/"
-    cp -av go/src/github.com/lxc/lxd/scripts/bash/lxd-client "$bin/share/bash-completion/completions/lxc"
+    installShellCompletion --bash go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ lxc acl libcap dqlite sqlite-replication ];
+  nativeBuildInputs = [ installShellFiles pkgconfig makeWrapper ];
+  buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
+                  raft-canonical.dev sqlite-replication udev.dev ];
 
   meta = with stdenv.lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
-    homepage = https://linuxcontainers.org/lxd/;
+    homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz wucke13 ];
     platforms = platforms.linux;
   };
 }

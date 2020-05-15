@@ -3,7 +3,7 @@
 , buildPackages
 , withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
-, withMySQL ? false, mysql
+, withMySQL ? false, libmysqlclient
 , withSQLite ? false, sqlite
 }:
 
@@ -12,7 +12,7 @@ let
     "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ]
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE"
      ++ lib.optionals withLDAP ["-DHAS_LDAP" "-DUSE_LDAP_SASL"]);
    auxlibs = lib.concatStringsSep " " ([
@@ -26,17 +26,17 @@ in stdenv.mkDerivation rec {
 
   pname = "postfix";
 
-  version = "3.4.6";
+  version = "3.4.10";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "09p3vg2xlh6iq45gp6zanbp1728fc31r7zz71r131vh20ssajx6n";
+    sha256 = "0m36wn5grm4cf8nnvlgsgwsm6v09xz01n7jnx13h0yjk73y6d2lh";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
   buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
                 ++ lib.optional withPgSQL postgresql
-                ++ lib.optional withMySQL mysql.connector-c
+                ++ lib.optional withMySQL libmysqlclient
                 ++ lib.optional withSQLite sqlite
                 ++ lib.optional withLDAP openldap;
 
@@ -48,6 +48,7 @@ in stdenv.mkDerivation rec {
     ./postfix-3.0-no-warnings.patch
     ./post-install-script.patch
     ./relative-symlinks.patch
+    ./0001-Fix-build-with-glibc-2.30.patch
   ];
 
   postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -79,7 +80,7 @@ in stdenv.mkDerivation rec {
     make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
   '';
 
-  NIX_LDFLAGS = lib.optional withLDAP "-llber";
+  NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
 
   installTargets = [ "non-interactive-package" ];
 
@@ -97,7 +98,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = http://www.postfix.org/;
+    homepage = "http://www.postfix.org/";
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;

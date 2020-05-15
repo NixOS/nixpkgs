@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       automatically record your Skype calls. It supports several audio (output)
       formats such as OGG audio, Flac, MP3 and WAV.
     '';
-    homepage = https://launchpad.net/~audio-recorder;
+    homepage = "https://launchpad.net/~audio-recorder";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

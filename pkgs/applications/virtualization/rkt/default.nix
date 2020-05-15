@@ -65,9 +65,14 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fast, composable, and secure App Container runtime for Linux";
-    homepage = https://github.com/coreos/rkt;
+    homepage = "https://github.com/coreos/rkt";
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge steveej ];
     platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [
+      "CVE-2019-10144: processes run with `rkt enter` are given all capabilities during stage 2"
+      "CVE-2019-10145: processes run with `rkt enter` do not have seccomp filtering during stage 2"
+      "CVE-2019-10147: processes run with `rkt enter` are not limited by cgroups during stage 2"
+    ];
   };
 }

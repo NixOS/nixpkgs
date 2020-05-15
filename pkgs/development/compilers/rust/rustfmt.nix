@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rustfmt-${version}";
+  pname = "rustfmt";
   inherit (rustPlatform.rust.rustc) version src;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tool for formatting Rust code according to style guidelines";
-    homepage = https://github.com/rust-lang-nursery/rustfmt;
+    homepage = "https://github.com/rust-lang-nursery/rustfmt";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ globin basvandijk ];
     platforms = platforms.all;

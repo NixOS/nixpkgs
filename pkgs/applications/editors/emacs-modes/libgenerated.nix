@@ -25,10 +25,12 @@ let
         }
       ) {};
       git = self.callPackage ({ fetchgit }:
-        fetchgit {
+        (fetchgit {
           rev = commit;
           inherit sha256 url;
-        }
+        }).overrideAttrs(_: {
+          GIT_SSL_NO_VERIFY = true;
+        })
       ) {};
       bitbucket = self.callPackage ({ fetchhg }:
         fetchhg {
@@ -53,7 +55,7 @@ in {
                       , sha256 ? null
                       , ... }@args:
       let
-        sourceArgs = args."${variant}";
+        sourceArgs = args.${variant};
         version = sourceArgs.version or null;
         deps = sourceArgs.deps or null;
         error = sourceArgs.error or args.error or null;
@@ -61,8 +63,9 @@ in {
         pname = builtins.replaceStrings [ "@" ] [ "at" ] ename;
         broken = ! isNull error;
       in
-      lib.nameValuePair ename (if hasSource then (
-        self.callPackage ({ melpaBuild, fetchurl, ... }@pkgargs:
+      if hasSource then
+        lib.nameValuePair ename (
+          self.callPackage ({ melpaBuild, fetchurl, ... }@pkgargs:
           melpaBuild {
             inherit pname;
             ename = ename;
@@ -77,14 +80,16 @@ in {
                 url = "https://raw.githubusercontent.com/melpa/melpa/${commit}/recipes/${ename}";
                 inherit sha256;
               };
-            packageRequires = lib.optional (! isNull deps)
-              (map (dep: pkgargs."${dep}" or self."${dep}" or null)
+            packageRequires = lib.optionals (! isNull deps)
+              (map (dep: pkgargs.${dep} or self.${dep} or null)
                    deps);
             meta = (sourceArgs.meta or {}) // {
               inherit broken;
             };
           }
         ) {}
-      ) else null);
+      )
+    else
+      null;
 
 }

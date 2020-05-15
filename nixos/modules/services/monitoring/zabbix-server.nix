@@ -30,6 +30,7 @@ let
     DBUser = ${cfg.database.user}
     ${optionalString (cfg.database.passwordFile != null) "Include ${passwordFile}"}
     ${optionalString (mysqlLocal && cfg.database.socket != null) "DBSocket = ${cfg.database.socket}"}
+    PidFile = ${runtimeDir}/zabbix_server.pid
     SocketDir = ${runtimeDir}
     FpingLocation = /run/wrappers/bin/fping
     ${optionalString (cfg.modules != {}) "LoadModulePath = ${moduleEnv}/lib"}
@@ -43,6 +44,11 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "zabbixServer" "dbServer" ] [ "services" "zabbixServer" "database" "host" ])
+    (lib.mkRemovedOptionModule [ "services" "zabbixServer" "dbPassword" ] "Use services.zabbixServer.database.passwordFile instead.")
+  ];
+
   # interface
 
   options = {
@@ -237,7 +243,7 @@ in
       fping.source = "${pkgs.fping}/bin/fping";
     };
 
-    systemd.services."zabbix-server" = {
+    systemd.services.zabbix-server = {
       description = "Zabbix Server";
 
       wantedBy = [ "multi-user.target" ];

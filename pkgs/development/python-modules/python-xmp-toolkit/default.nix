@@ -7,7 +7,7 @@
 , stdenv
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-xmp-toolkit";
   version = "2.0.2";
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/python-xmp-toolkit/python-xmp-toolkit;
+    homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
     description = "Python XMP Toolkit for working with metadata";
     license = licenses.bsd3;
     maintainers = [ maintainers.kiwi ];

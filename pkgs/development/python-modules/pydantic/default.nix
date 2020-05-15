@@ -1,21 +1,25 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ujson
 , email_validator
 , typing-extensions
 , python
 , isPy3k
+, pytest
+, pytestcov
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "0.31";
+  version = "1.5.1";
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0x9xc5hpyrlf05dc4bx9f7v51fahxcahkvh0ij8ibay15nwli53d";
+  src = fetchFromGitHub {
+    owner = "samuelcolvin";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0fwrx7p6d5vskg9ibganahiz9y9299idvdmzhjw62jy84gn1vrb4";
   };
 
   propagatedBuildInputs = [
@@ -24,22 +28,13 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  checkInputs = [
+    pytest
+    pytestcov
+  ];
+
   checkPhase = ''
-    ${python.interpreter} -c """
-from datetime import datetime
-from typing import List
-from pydantic import BaseModel
-
-class User(BaseModel):
-    id: int
-    name = 'John Doe'
-    signup_ts: datetime = None
-    friends: List[int] = []
-
-external_data = {'id': '123', 'signup_ts': '2017-06-01 12:22', 'friends': [1, '2', b'3']}
-user = User(**external_data)
-assert user.id is "123"
-"""
+    pytest
   '';
 
   meta = with lib; {

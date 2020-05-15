@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bean-add-2018-01-08";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/simon-v/bean-add/;
+    homepage = "https://github.com/simon-v/bean-add/";
     description = "beancount transaction entry assistant";
 
     # The (only) source file states:

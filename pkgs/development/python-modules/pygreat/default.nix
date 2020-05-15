@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, future, pyusb }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pygreat";
   version = "2019.5.1.dev0";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library for talking with libGreat devices";
-    homepage = https://greatscottgadgets.com/greatfet/;
+    homepage = "https://greatscottgadgets.com/greatfet/";
     license = with licenses; [ bsd3 ];
   };
 

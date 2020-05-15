@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Allows to `from nixpkgs import` stuff in interactive Python sessions";
-    homepage = https://github.com/t184256/nixpkgs-python-importer;
+    homepage = "https://github.com/t184256/nixpkgs-python-importer";
     license = licenses.mit;
     maintainers = with maintainers; [ t184256 ];
   };

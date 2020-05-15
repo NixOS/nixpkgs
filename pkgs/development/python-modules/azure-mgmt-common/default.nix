@@ -28,13 +28,14 @@ buildPythonPackage rec {
 
   postInstall = if isPy3k then "" else ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
+    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
   '';
 
   doCheck = false;
 
   meta = with pkgs.lib; {
     description = "This is the Microsoft Azure Resource Management common code";
-    homepage = https://pypi.org/project/azure-mgmt-common;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ olcai mwilsoninsight ];
   };

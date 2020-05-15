@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmicrohttpd";
-  version = "0.9.64";
+  version = "0.9.70";
 
   src = fetchurl {
     url = "mirror://gnu/libmicrohttpd/${pname}-${version}.tar.gz";
-    sha256 = "03imzkd1hl2mkkpi84vg5xq9x6b58gwsv86ym85km0lhb7nxi4p7";
+    sha256 = "01vkjy89b1ylmh22dy5yza2r414nfwcfixxh3v29nvzrjv9s7l4h";
   };
 
   outputs = [ "out" "dev" "devdoc" "info" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
 
-    homepage = https://www.gnu.org/software/libmicrohttpd/;
+    homepage = "https://www.gnu.org/software/libmicrohttpd/";
 
     maintainers = with maintainers; [ eelco vrthra fpletz ];
     platforms = platforms.unix;

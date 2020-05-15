@@ -45,14 +45,17 @@ let
 
   # generate the font cache setting file for a fontconfig version
   # use latest when no version is passed
+  # When cross-compiling, we can’t generate the cache, so we skip the
+  # <cachedir> part. fontconfig still works but is a little slower in
+  # looking things up.
   makeCacheConf = { version ? null }:
     let
       fcPackage = if version == null
                   then "fontconfig"
                   else "fontconfig_${version}";
       makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
-      cache     = makeCache pkgs."${fcPackage}";
-      cache32   = makeCache pkgs.pkgsi686Linux."${fcPackage}";
+      cache     = makeCache pkgs.${fcPackage};
+      cache32   = makeCache pkgs.pkgsi686Linux.${fcPackage};
     in
     pkgs.writeText "fc-00-nixos-cache.conf" ''
       <?xml version='1.0'?>
@@ -60,10 +63,12 @@ let
       <fontconfig>
         <!-- Font directories -->
         ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
+        ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
         <!-- Pre-generated font caches -->
         <cachedir>${cache}</cachedir>
         ${optionalString (pkgs.stdenv.isx86_64 && cfg.cache32Bit) ''
           <cachedir>${cache32}</cachedir>
+        ''}
         ''}
       </fontconfig>
     '';
@@ -264,6 +269,16 @@ let
   };
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "allowBitmaps" ] [ "fonts" "fontconfig" "allowBitmaps" ])
+    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "allowType1" ] [ "fonts" "fontconfig" "allowType1" ])
+    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps" ] [ "fonts" "fontconfig" "useEmbeddedBitmaps" ])
+    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "forceAutohint" ] [ "fonts" "fontconfig" "forceAutohint" ])
+    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ] [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ])
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "hinting" "style" ] "")
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
+  ];
 
   options = {
 

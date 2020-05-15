@@ -23,7 +23,7 @@ let
   relpathToArg = relpath: lib.escapeShellArg "${src}/${relpath}"; # paths need to be absolute
   testFileList = lib.concatStringsSep " " (map relpathToArg files);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = src.version;
   pname = "sage-tests";
   inherit src;
@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     export GLIBC_TUNABLES=glibc.malloc.arena_max=4
 
     echo "Running sage tests with arguments ${timeSpecifier} ${patienceSpecifier} ${testArgs}"
-    "sage" -t --nthreads "$NIX_BUILD_CORES" --optional=sage ${timeSpecifier} ${patienceSpecifier} ${testArgs}
+    "sage" -t --timeout=0 --nthreads "$NIX_BUILD_CORES" --optional=sage ${timeSpecifier} ${patienceSpecifier} ${testArgs}
   '';
 }

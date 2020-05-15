@@ -87,7 +87,7 @@ functions/library/generated: doc-support/result
 	ln -rfs ./doc-support/result/function-docs functions/library/generated
 
 %.section.xml: %.section.md
-	pandoc $^ -w docbook+smart \
+	pandoc $^ -w docbook \
 		-f markdown+smart \
 	  | sed -e 's|<ulink url=|<link xlink:href=|' \
 	      -e 's|</ulink>|</link>|' \
@@ -98,7 +98,7 @@ functions/library/generated: doc-support/result
 	| cat  > $@
 
 %.chapter.xml: %.chapter.md
-	pandoc $^ -w docbook+smart \
+	pandoc $^ -w docbook \
 		--top-level-division=chapter \
 		-f markdown+smart \
 	  | sed -e 's|<ulink url=|<link xlink:href=|' \

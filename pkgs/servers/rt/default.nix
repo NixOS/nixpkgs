@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     perl
     (buildEnv {
       name = "rt-perl-deps";
-      paths = (with perlPackages; [
+      paths = with perlPackages; (requiredPerlModules [
         ApacheSession BusinessHours CGIEmulatePSGI CGIPSGI
-        CSSMinifierXP CSSSquish ConvertColor CryptEksblowfish
+        CSSMinifierXS CSSSquish ConvertColor CryptEksblowfish
         CryptSSLeay DBDSQLite DBDmysql DBIxSearchBuilder DataGUID
         DataICal DataPagePageset DateExtract DateManip
         DateTimeFormatNatural DevelGlobalDestruction EmailAddress

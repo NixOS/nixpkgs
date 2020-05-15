@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gmp, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "4.2.1";
   pname = "form";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The FORM project for symbolic manipulation of very big expressions";
-    homepage = https://www.nikhef.nl/~form/;
+    homepage = "https://www.nikhef.nl/~form/";
     license = licenses.gpl3;
     maintainers = [ maintainers.veprbl ];
     platforms = platforms.unix;

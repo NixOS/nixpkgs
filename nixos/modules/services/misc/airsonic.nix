@@ -138,8 +138,9 @@ in {
 
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
-      virtualHosts."${cfg.virtualHost}" = {
-        locations."${cfg.contextPath}".proxyPass = "http://${cfg.listenAddress}:${toString cfg.port}";
+      recommendedProxySettings = true;
+      virtualHosts.${cfg.virtualHost} = {
+        locations.${cfg.contextPath}.proxyPass = "http://${cfg.listenAddress}:${toString cfg.port}";
       };
     };
 
@@ -148,6 +149,7 @@ in {
       name = cfg.user;
       home = cfg.home;
       createHome = true;
+      isSystemUser = true;
     };
   };
 }

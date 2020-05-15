@@ -4,7 +4,7 @@
 let
   version = "1.2.28";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xmlsec";
   inherit version;
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-soap" ];
 
   # otherwise libxmlsec1-gnutls.so won't find libgcrypt.so, after #909
-  NIX_LDFLAGS = [ "-lgcrypt" ];
+  NIX_LDFLAGS = "-lgcrypt";
 
   postInstall = ''
     moveToOutput "bin/xmlsec1-config" "$dev"
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.aleksey.com/xmlsec;
-    downloadPage = https://www.aleksey.com/xmlsec/download.html;
+    homepage = "http://www.aleksey.com/xmlsec";
+    downloadPage = "https://www.aleksey.com/xmlsec/download.html";
     description = "XML Security Library in C based on libxml2";
     license = stdenv.lib.licenses.mit;
     platforms = with stdenv.lib.platforms; linux ++ darwin;

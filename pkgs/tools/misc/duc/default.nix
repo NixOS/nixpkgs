@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zevv";
     repo = "duc";
-    rev = "${version}";
+    rev = version;
     sha256 = "1i7ry25xzy027g6ysv6qlf09ax04q4vy0kikl8h0aq5jbxsl9q52";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionals (!enableCairo) [ "--disable-x11" "--disable-cairo" ];
 
   meta = with stdenv.lib; {
-    homepage = http://duc.zevv.nl/;
+    homepage = "http://duc.zevv.nl/";
     description = "Collection of tools for inspecting and visualizing disk usage";
     license = licenses.gpl2;
 

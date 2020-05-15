@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = http://commons.apache.org/proper/commons-fileupload;
+    homepage    = "http://commons.apache.org/proper/commons-fileupload";
     description = "Makes it easy to add robust, high-performance, file upload capability to your servlets and web applications";
     maintainers = with stdenv.lib.maintainers; [ copumpkin ];
     license     = stdenv.lib.licenses.asl20;

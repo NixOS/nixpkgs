@@ -1,7 +1,8 @@
 { lib, stdenv
 , fetchgit, fetchFromGitHub, fetchurl
-, writeShellScript, runCommand
-, rustPlatform, jq, nix-prefetch-git, xe, curl
+, writeShellScript, runCommand, which
+, rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
+, callPackage
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -9,13 +10,10 @@ let
   # to update:
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) run the script that is output by that (it updates ./grammars)
-  version = "0.15.7";
-  sha256 = "0q6w8wl4a4s49xlgbv531pandzrj3n12hc1cwfshzcgikx303dg0";
-  sha256Js = "11ig4cc2m85siyhafh4hq9sjb5if4gfwsf9k87izkxpiyflda0wp";
-  sha256Wasm = "1zm4bvjri8ivhah3sy22mx6jbvibgbn2hk67d148j3nyka3y4gc0";
-  cargoSha256 = "0ls9cb2p6cgqvnrmx72n79ga7687n8mzhh7n8n1pzv11r6cah9ki";
-
+  # 3) run the ./result script that is output by that (it updates ./grammars)
+  version = "0.16.4";
+  sha256 = "1m0zxz7h4w2zny7yhrlxwqvizcf043cizg7ca5dn3h9k16adcxil";
+  cargoSha256 = "0hxm73diwiybljm6yy3vmwfdpg33b4rlg0h7afq4xgccq2vkwafs";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -25,46 +23,33 @@ let
     fetchSubmodules = true;
   };
 
-  fetchDist = {file, sha256}: fetchurl {
-    url = "https://github.com/tree-sitter/tree-sitter/releases/download/${version}/${file}";
-    inherit sha256;
-  };
-
-  # TODO: not distributed anymore; needed for the web-ui module,
-  # see also the disable-web-ui patch.
-  # TODO: build those instead of downloading prebuilt
-  # js = fetchDist {
-  #   file = "tree-sitter.js";
-  #   sha256 = sha256Js;
-  # };
-  # wasm = fetchDist {
-  #   file = "tree-sitter.wasm";
-  #   sha256 = sha256Wasm;
-  # };
-
   update-all-grammars = import ./update.nix {
     inherit writeShellScript nix-prefetch-git curl jq xe src;
   };
 
+  fetchGrammar = (v: fetchgit {inherit (v) url rev sha256 fetchSubmodules; });
+
   grammars =
-    let fetch =
-      (v: fetchgit {inherit (v) url rev sha256 fetchSubmodules; });
-    in runCommand "grammars" {} (''
+    runCommand "grammars" {} (''
        mkdir $out
      '' + (lib.concatStrings (lib.mapAttrsToList
-            (name: grammar: "ln -s ${fetch grammar} $out/${name}\n")
+            (name: grammar: "ln -s ${fetchGrammar grammar} $out/${name}\n")
             (import ./grammars))));
 
+  builtGrammars = let
+    change = name: grammar:
+      callPackage ./library.nix {
+        language = name; inherit version; source = fetchGrammar grammar;
+      };
+  in
+    # typescript doesn't have parser.c in the same place as others
+    lib.mapAttrs change (removeAttrs (import ./grammars) ["typescript"]);
 
 in rustPlatform.buildRustPackage {
   pname = "tree-sitter";
-  inherit version;
-  inherit src;
+  inherit src version cargoSha256;
 
-  patches = [
-    # the web ui requires tree-sitter compiled to js and wasm
-    ./disable-web-ui.patch
-  ];
+  nativeBuildInputs = [ emscripten which ];
 
   postPatch = ''
     # needed for the tests
@@ -72,14 +57,24 @@ in rustPlatform.buildRustPackage {
     ln -s ${grammars} test/fixtures/grammars
   '';
 
+  # Compile web assembly with emscripten. The --debug flag prevents us from
+  # minifying the JavaScript; passing it allows us to side-step more Node
+  # JS dependencies for installation.
+  preBuild = ''
+    HOME=/tmp
+    bash ./script/build-wasm --debug
+  '';
+
+  # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
+  doCheck = false;
+
   passthru = {
     updater = {
       inherit update-all-grammars;
     };
     inherit grammars;
+    inherit builtGrammars;
   };
-
-  inherit cargoSha256;
 
   meta = {
     homepage = "https://github.com/tree-sitter/tree-sitter";

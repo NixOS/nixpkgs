@@ -10,13 +10,23 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaPackages
 3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
+## Update from overlay
+
+Alternatively, run the following command:
+
+./update-from-overlay
+
+It will update both melpa and elpa packages using
+https://github.com/nix-community/emacs-overlay. It's almost
+instantenous and formats commits for you.
+
 */
 
 { lib, external, pkgs }: variant: self: let
 
   dontConfigure = pkg: if pkg != null then pkg.override (args: {
     melpaBuild = drv: args.melpaBuild (drv // {
-      configureScript = "true";
+      dontConfigure = true;
     });
   }) else null;
 
@@ -26,17 +36,30 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
     });
   }) else null;
 
+  externalSrc = pkg : epkg : if pkg != null then pkg.override (args : {
+    melpaBuild = drv : args.melpaBuild (drv // {
+      inherit (epkg) src version;
+
+      propagatedUserEnvPkgs = [ epkg ];
+    });
+  }) else null;
+
+  fix-rtags = pkg : if pkg != null then dontConfigure (externalSrc pkg external.rtags)
+                    else null;
+
   generateMelpa = lib.makeOverridable ({
     archiveJson ? ./recipes-archive-melpa.json
   }: let
 
     inherit (import ./libgenerated.nix lib self) melpaDerivation;
-    super = lib.listToAttrs (map (melpaDerivation variant) (lib.importJSON archiveJson));
+    super = lib.listToAttrs (builtins.filter (s: s != null)
+                                             (map (melpaDerivation variant)
+                                                  (lib.importJSON archiveJson)));
 
     overrides = rec {
       shared = rec {
         # Expects bash to be at /bin/bash
-        ac-rtags = markBroken super.ac-rtags;
+        ac-rtags = fix-rtags super.ac-rtags;
 
         airline-themes = super.airline-themes.override {
           inherit (self.melpaPackages) powerline;
@@ -52,25 +75,15 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # part of a larger package
         caml = dontConfigure super.caml;
 
-        cmake-mode = super.cmake-mode.overrideAttrs (attrs: {
-          buildInputs = (attrs.buildInputs or []) ++ [
-            external.openssl
-          ];
-          nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [
-            external.pkgconfig
-          ];
-        });
+        # part of a larger package
+        # upstream issue: missing package version
+        cmake-mode = dontConfigure super.cmake-mode;
 
-        # Expects bash to be at /bin/bash
-        company-rtags = markBroken super.company-rtags;
+        company-rtags = fix-rtags super.company-rtags;
 
         easy-kill-extras = super.easy-kill-extras.override {
           inherit (self.melpaPackages) easy-kill;
         };
-
-        elpy = super.elpy.overrideAttrs(old: {
-          propagatedUserEnvPkgs = old.propagatedUserEnvPkgs ++ [ external.elpy ];
-        });
 
         emacsql-sqlite = super.emacsql-sqlite.overrideAttrs(old: {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
@@ -89,8 +102,22 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           stripDebugList = [ "share" ];
         });
 
+        # https://github.com/syl20bnr/evil-escape/pull/86
+        evil-escape = super.evil-escape.overrideAttrs (attrs: {
+          postPatch = ''
+            substituteInPlace evil-escape.el \
+              --replace ' ;;; evil' ';;; evil'
+          '';
+          packageRequires = with self; [ evil ];
+        });
+
         evil-magit = super.evil-magit.overrideAttrs (attrs: {
           # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        eopengrok = super.eopengrok.overrideAttrs (attrs: {
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
@@ -99,8 +126,12 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           inherit (self.melpaPackages) ess ctable popup;
         };
 
-        # Expects bash to be at /bin/bash
-        flycheck-rtags = markBroken super.flycheck-rtags;
+        flycheck-rtags = fix-rtags super.flycheck-rtags;
+
+        gnuplot = super.gnuplot.overrideAttrs (old: {
+          nativeBuildInputs =
+            (old.nativeBuildInputs or []) ++ [ pkgs.autoreconfHook ];
+        });
 
         pdf-tools = super.pdf-tools.overrideAttrs(old: {
           nativeBuildInputs = [ external.pkgconfig ];
@@ -114,11 +145,8 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         });
 
         # Build same version as Haskell package
-        hindent = super.hindent.overrideAttrs (attrs: {
-          version = external.hindent.version;
-          src = external.hindent.src;
+        hindent = (externalSrc super.hindent external.hindent).overrideAttrs (attrs: {
           packageRequires = [ self.haskell-mode ];
-          propagatedUserEnvPkgs = [ external.hindent ];
         });
 
         irony = super.irony.overrideAttrs (old: {
@@ -151,10 +179,69 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           HOME = "/tmp";
         });
 
-        # Expects bash to be at /bin/bash
-        ivy-rtags = markBroken super.ivy-rtags;
+        ivy-rtags = fix-rtags super.ivy-rtags;
 
         magit = super.magit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-find-file = super.magit-find-file.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-gh-pulls = super.magit-gh-pulls.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-imerge = super.magit-imerge.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-lfs = super.magit-lfs.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-org-todos = super.magit-org-todos.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-stgit = super.magit-stgit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-tbdiff = super.magit-tbdiff.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-topgit = super.magit-topgit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-vcsh = super.magit-vcsh.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-gerrit = super.magit-gerrit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
@@ -202,6 +289,12 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
+        kubernetes-evil = super.kubernetes-evil.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         # upstream issue: missing file header
         mhc = super.mhc.override {
           inherit (self.melpaPackages) calfw;
@@ -212,6 +305,8 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
+
+        rtags = dontConfigure (externalSrc super.rtags external.rtags);
 
         shm = super.shm.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
@@ -256,10 +351,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
         _0blayout = super."0blayout";
-        _0xc = super."0xc";
-        _2048-game = super."2048-game";
-        _4clojure = super."4clojure";
-        at = super."@";
         desktop-plus = super."desktop+";
         ghub-plus = super."ghub+";
         git-gutter-plus = super."git-gutter+";
@@ -270,20 +361,12 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         markdown-mode-plus = super."markdown-mode+";
         package-plus = super."package+";
         rect-plus = super."rect+";
-        term-plus = super."term+";
-        term-plus-key-intercept = super."term+key-intercept";
-        term-plus-mux = super."term+mux";
-        xml-plus = super."xml+";
       };
 
       stable = shared // {
 
         # upstream issue: missing file header
         bufshow = markBroken super.bufshow;
-
-        # part of a larger package
-        # upstream issue: missing package version
-        cmake-mode = dontConfigure super.cmake-mode;
 
         # upstream issue: missing file header
         connection = markBroken super.connection;
@@ -312,8 +395,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: doesn't build
         eterm-256color = markBroken super.eterm-256color;
 
-        # Expects bash to be at /bin/bash
-        helm-rtags = markBroken super.helm-rtags;
+        helm-rtags = fix-rtags super.helm-rtags;
 
         # upstream issue: missing file header
         qiita = markBroken super.qiita;
@@ -351,14 +433,87 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           packageRequires = with self; [ evil highlight ];
         });
 
+        kapacitor = super.kapacitor.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         forge = super.forge.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
-        # Expects bash to be at /bin/bash
-        helm-rtags = markBroken super.helm-rtags;
+        gerrit = super.gerrit.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        gerrit-download = super.gerrit-download.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        github-pullrequest = super.github-pullrequest.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        helm-rtags = fix-rtags super.helm-rtags;
+
+        jist = super.jist.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        mandoku = super.mandoku.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        mandoku-tls = super.mandoku-tls.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-p4 = super.magit-p4.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-rbr = super.magit-rbr.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-diff-flycheck = super.magit-diff-flycheck.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-reviewboard = super.magit-reviewboard.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-patch-changelog = super.magit-patch-changelog.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-circleci = super.magit-circleci.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
 
         orgit =
           (super.orgit.overrideAttrs (attrs: {
@@ -389,54 +544,34 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
-        vterm = let
-          emacsSources = pkgs.stdenv.mkDerivation {
-            name = self.emacs.name + "-sources";
-            src = self.emacs.src;
-
-            dontConfigure = true;
-            dontBuild = true;
-            doCheck = false;
-            fixupPhase = ":";
-
-            installPhase = ''
-              mkdir -p $out
-              cp -a * $out
-            '';
-
-          };
-
-          libvterm = pkgs.libvterm-neovim.overrideAttrs(old: rec {
-            pname = "libvterm-neovim";
-            version = "2019-04-27";
-            name = pname + "-" + version;
-            src = pkgs.fetchFromGitHub {
-              owner = "neovim";
-              repo = "libvterm";
-              rev = "89675ffdda615ffc3f29d1c47a933f4f44183364";
-              sha256 = "0l9ixbj516vl41v78fi302ws655xawl7s94gmx1kb3fmfgamqisy";
-            };
-          });
-
-        in pkgs.stdenv.mkDerivation rec {
-          inherit (super.vterm) name version src;
-
-          nativeBuildInputs = [ pkgs.cmake ];
-          buildInputs = [ self.emacs libvterm ];
-
+        vterm = super.vterm.overrideAttrs(old: {
+          buildInputs = old.buildInputs ++ [ self.emacs pkgs.cmake pkgs.libvterm-neovim ];
           cmakeFlags = [
-            "-DEMACS_SOURCE=${emacsSources}"
-            "-DUSE_SYSTEM_LIBVTERM=True"
+            "-DEMACS_SOURCE=${self.emacs.src}"
+            "-DUSE_SYSTEM_LIBVTERM=ON"
           ];
-
-          installPhase = ''
-            install -d $out/share/emacs/site-lisp
-            install ../*.el $out/share/emacs/site-lisp
-            install ../*.so $out/share/emacs/site-lisp
+          # we need the proper out directory to exist, so we do this in the
+          # postInstall instead of postBuild
+          postInstall = ''
+            pushd source/build >/dev/null
+            make
+            install -m444 -t $out/share/emacs/site-lisp/elpa/vterm-** ../*.so
+            popd > /dev/null
+            rm -rf $out/share/emacs/site-lisp/elpa/vterm-**/{CMake*,build,*.c,*.h}
           '';
-        };
+        });
         # Legacy alias
         emacs-libvterm = unstable.vterm;
+
+        # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
+        _0xc = super."0xc";
+        _2048-game = super."2048-game";
+        _4clojure = super."4clojure";
+        at = super."@";
+        term-plus = super."term+";
+        term-plus-key-intercept = super."term+key-intercept";
+        term-plus-mux = super."term+mux";
+        xml-plus = super."xml+";
 
         w3m = super.w3m.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {
@@ -451,6 +586,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
       };
     };
 
-  in super // overrides."${variant}");
+  in super // overrides.${variant});
 
 in generateMelpa { }

@@ -16,12 +16,7 @@ in
 
     services.quassel = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the Quassel IRC client daemon.
-        '';
-      };
+      enable = mkEnableOption "the Quassel IRC client daemon";
 
       certificateFile = mkOption {
         type = types.nullOr types.str;
@@ -92,17 +87,21 @@ in
         message = "Quassel needs a certificate file in order to require SSL";
       }];
 
-    users.users = mkIf (cfg.user == null) [
-      { name = "quassel";
+    users.users = optionalAttrs (cfg.user == null) {
+      quassel = {
+        name = "quassel";
         description = "Quassel IRC client daemon";
         group = "quassel";
         uid = config.ids.uids.quassel;
-      }];
+      };
+    };
 
-    users.groups = mkIf (cfg.user == null) [
-      { name = "quassel";
+    users.groups = optionalAttrs (cfg.user == null) {
+      quassel = {
+        name = "quassel";
         gid = config.ids.gids.quassel;
-      }];
+      };
+    };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${user} - - -"

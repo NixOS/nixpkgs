@@ -4,7 +4,7 @@
 
 let
   ## fetchgit info
-  url = git://sourceware.org/git/systemtap.git;
+  url = "git://sourceware.org/git/systemtap.git";
   rev = "release-${version}";
   sha256 = "0mmpiq7bsrwhp7z07a1pwka4q6d2fbmdx5wp83nxj31rvdxhqwnw";
   version = "4.1";
@@ -40,7 +40,7 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   inherit stapBuild kernelBuildDir;
   buildInputs = [ makeWrapper ];
   meta = {
-    homepage = https://sourceware.org/systemtap/;
+    homepage = "https://sourceware.org/systemtap/";
     repositories.git = url;
     description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
     license = lib.licenses.gpl2;

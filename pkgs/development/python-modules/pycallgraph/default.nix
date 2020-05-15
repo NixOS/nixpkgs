@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://pycallgraph.slowchop.com;
+    homepage = "http://pycallgraph.slowchop.com";
     description = "Call graph visualizations for Python applications";
     maintainers = with maintainers; [ auntie ];
     license = licenses.gpl2;

@@ -1,7 +1,7 @@
 { stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
 , mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "x2goclient";
   version = "unstable-2019-07-24";
 
@@ -32,7 +32,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical NoMachine NX3 remote desktop client";
-    homepage = http://x2go.org/;
+    homepage = "http://x2go.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

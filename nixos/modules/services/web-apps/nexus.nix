@@ -68,6 +68,7 @@ in
           -Dkaraf.data=${cfg.home}/nexus3
           -Djava.io.tmpdir=${cfg.home}/nexus3/tmp
           -Dkaraf.startLocalConsole=false
+          -Djava.endorsed.dirs=${cfg.package}/lib/endorsed
         '';
 
         description = ''
@@ -80,14 +81,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users."${cfg.user}" = {
+    users.users.${cfg.user} = {
       isSystemUser = true;
       group = cfg.group;
       home = cfg.home;
       createHome = true;
     };
 
-    users.groups."${cfg.group}" = {};
+    users.groups.${cfg.group} = {};
 
     systemd.services.nexus = {
       description = "Sonatype Nexus3";

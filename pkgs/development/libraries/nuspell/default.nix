@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
-  version = "2.3.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     rev = "v${version}";
-    sha256 = "0n5cajrp1fhk8p54ch3akkd9nl8b9c6wwf25980dhagcdys3vab3";
+    sha256 = "18zz3rdzlb3knzsd98vw8cfyb3iq0ilipnlz7rz10zgb5ail73s2";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ronn ];

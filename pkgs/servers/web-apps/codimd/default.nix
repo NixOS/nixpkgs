@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, fetchpatch, makeWrapper
-, which, nodejs, yarn2nix, python2 }:
+, which, nodejs, mkYarnPackage, python2 }:
 
-yarn2nix.mkYarnPackage rec {
+mkYarnPackage rec {
   name = "codimd";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner  = "codimd";
     repo   = "server";
     rev    = version;
-    sha256 = "1sd7r5ws1k7dxmr57m67c1k23pzbkn25k2wvcnbrqn7gza6mhlf0";
+    sha256 = "1208a24v664ha9qzr7ky6i3ynphkaj0xi5l3rsw743i22nv5aj33";
   };
 
   nativeBuildInputs = [ which makeWrapper ];
@@ -35,14 +35,8 @@ yarn2nix.mkYarnPackage rec {
     popd
 
     pushd node_modules/sqlite3
-    export OLD_HOME="$HOME"
-    export HOME="$PWD"
-    mkdir -p .node-gyp/${nodejs.version}
-    echo 9 > .node-gyp/${nodejs.version}/installVersion
-    ln -s ${nodejs}/include .node-gyp/${nodejs.version}
-    npm run install
-    export HOME="$OLD_HOME"
-    unset OLD_HOME
+    export CPPFLAGS="-I${nodejs}/include/node"
+    npm run install --build-from-source --nodedir=${nodejs}/include/node
     popd
 
     npm run build

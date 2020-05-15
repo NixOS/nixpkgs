@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake qt4 taglib chromaprint ffmpeg ];
 
-  cmakeFlags = [ "-DTAGLIB_MIN_VERSION=${(builtins.parseDrvName taglib.name).version}" ];
+  cmakeFlags = [ "-DTAGLIB_MIN_VERSION=${stdenv.lib.getVersion taglib}" ];
 
   patches = [
     (fetchpatch {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://acoustid.org/fingerprinter;
+    homepage = "https://acoustid.org/fingerprinter";
     description = "Audio fingerprinting tool using chromaprint";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ ehmry ];

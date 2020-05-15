@@ -22,7 +22,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "A toolkit for building secure, portable and lean operating systems for containers";
     license = licenses.asl20;
-    homepage = https://github.com/linuxkit/linuxkit;
+    homepage = "https://github.com/linuxkit/linuxkit";
     maintainers = [ maintainers.nicknovitski ];
     platforms = platforms.unix;
   };

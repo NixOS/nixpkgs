@@ -269,6 +269,7 @@ in
       };
 
       enableSmtp = mkOption {
+        type = types.bool;
         default = true;
         description = "Whether to enable smtp in master.cf.";
       };
@@ -612,10 +613,7 @@ in
     {
 
       environment = {
-        etc = singleton
-          { source = "/var/lib/postfix/conf";
-            target = "postfix";
-          };
+        etc.postfix.source = "/var/lib/postfix/conf";
 
         # This makes it comfortable to run 'postqueue/postdrop' for example.
         systemPackages = [ pkgs.postfix ];
@@ -626,6 +624,14 @@ in
       services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
         program = "sendmail";
         source = "${pkgs.postfix}/bin/sendmail";
+        group = setgidGroup;
+        setuid = false;
+        setgid = true;
+      };
+
+      security.wrappers.mailq = {
+        program = "mailq";
+        source = "${pkgs.postfix}/bin/mailq";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -647,21 +653,20 @@ in
         setgid = true;
       };
 
-      users.users = optional (user == "postfix")
-        { name = "postfix";
-          description = "Postfix mail server user";
-          uid = config.ids.uids.postfix;
-          group = group;
+      users.users = optionalAttrs (user == "postfix")
+        { postfix = {
+            description = "Postfix mail server user";
+            uid = config.ids.uids.postfix;
+            group = group;
+          };
         };
 
       users.groups =
-        optional (group == "postfix")
-        { name = group;
-          gid = config.ids.gids.postfix;
+        optionalAttrs (group == "postfix")
+        { ${group}.gid = config.ids.gids.postfix;
         }
-        ++ optional (setgidGroup == "postdrop")
-        { name = setgidGroup;
-          gid = config.ids.gids.postdrop;
+        // optionalAttrs (setgidGroup == "postdrop")
+        { ${setgidGroup}.gid = config.ids.gids.postdrop;
         };
 
       systemd.services.postfix =
@@ -877,22 +882,22 @@ in
     }
 
     (mkIf haveAliases {
-      services.postfix.aliasFiles."aliases" = aliasesFile;
+      services.postfix.aliasFiles.aliases = aliasesFile;
     })
     (mkIf haveTransport {
-      services.postfix.mapFiles."transport" = transportFile;
+      services.postfix.mapFiles.transport = transportFile;
     })
     (mkIf haveVirtual {
-      services.postfix.mapFiles."virtual" = virtualFile;
+      services.postfix.mapFiles.virtual = virtualFile;
     })
     (mkIf haveLocalRecipients {
-      services.postfix.mapFiles."local_recipients" = localRecipientMapFile;
+      services.postfix.mapFiles.local_recipients = localRecipientMapFile;
     })
     (mkIf cfg.enableHeaderChecks {
-      services.postfix.mapFiles."header_checks" = headerChecksFile;
+      services.postfix.mapFiles.header_checks = headerChecksFile;
     })
     (mkIf (cfg.dnsBlacklists != []) {
-      services.postfix.mapFiles."client_access" = checkClientAccessFile;
+      services.postfix.mapFiles.client_access = checkClientAccessFile;
     })
   ]);
 }

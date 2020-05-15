@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservices";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "e1e794760232239f8a9328d5de1740565ff70d1612a2921c9609746ba5671e6c";
+    sha256 = "3c90e6b2e358dbe6d5c6d7204955bdf52c3e977c6f8b727cbbb8811427d7fd52";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Recovery Services Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/recoveryservices?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

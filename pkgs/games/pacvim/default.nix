@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pacvim";
   version = "2018-05-16";
   src = fetchFromGitHub {

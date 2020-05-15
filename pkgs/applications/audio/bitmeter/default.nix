@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchurl {
-      url = https://gitweb.gentoo.org/repo/gentoo.git/plain/media-sound/bitmeter/files/bitmeter-1.2-fix-build-system.patch;
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-sound/bitmeter/files/bitmeter-1.2-fix-build-system.patch";
       sha256 = "021mz6933iw7mpk6b9cbjr8naj6smbq1hwqjszlyx72qbwrrid7k";
     })
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://devel.tlrmx.org/audio/bitmeter/;
+    homepage = "http://devel.tlrmx.org/audio/bitmeter/";
     description = "Also known as jack bitscope. Useful to detect denormals";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

@@ -5,6 +5,7 @@
 , glib
 , gtk3
 , itstool
+, libdazzle
 , libxml2
 , meson, ninja
 , pango
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.32.0";
+  version = "3.36.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0kamsnnig56lzs4ziwcxm3b1xyis4z361s9nj3nca0c78sgac8pw";
+    sha256 = "hnDbTaz3shnTDFdcRlsXyO1nJNut40fyzelUi/8DkQg=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     gnome3.adwaita-icon-theme
   ];
-  buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib ];
+  buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib libdazzle ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "System-wide profiler for Linux";
-    homepage = https://wiki.gnome.org/Apps/Sysprof;
+    homepage = "https://wiki.gnome.org/Apps/Sysprof";
     longDescription = ''
       Sysprof is a sampling CPU profiler for Linux that uses the perf_event_open
       system call to profile the entire system, not just a single
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
       be restarted.
     '';
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

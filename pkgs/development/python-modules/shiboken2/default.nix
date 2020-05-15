@@ -1,7 +1,7 @@
 { buildPythonPackage, python, fetchurl, stdenv, pyside2,
   cmake, qt5, llvmPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "shiboken2";
 
   inherit (pyside2) version src;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     cd sources/shiboken2
   '';
 
-  CLANG_INSTALL_DIR = "${llvmPackages.libclang.out}";
+  CLANG_INSTALL_DIR = llvmPackages.libclang.out;
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvmPackages.libclang python qt5.qtbase qt5.qtxmlpatterns ];

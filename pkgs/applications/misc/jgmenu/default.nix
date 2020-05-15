@@ -1,14 +1,27 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, pango, librsvg, libxml2, menu-cache, xorg, makeWrapper }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, python3Packages
+, pango
+, librsvg
+, libxml2
+, menu-cache
+, xorg
+, makeWrapper
+, enableXfcePanelApplet ? false
+, xfce
+, gtk3
+}:
 
 stdenv.mkDerivation rec {
   pname = "jgmenu";
-  version = "3.3";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "johanmalm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02qpvlmcis7217hkqilhszza4g1smb4byx4gihgp5207aj8qhz0l";
+    sha256 = "1wcmx2yhm6n54w6nymgb8pgfjv411i3zj1vk79q9vr052y1622z0";
   };
 
   nativeBuildInputs = [
@@ -25,9 +38,17 @@ stdenv.mkDerivation rec {
     xorg.libXinerama
     xorg.libXrandr
     python3Packages.python
+  ] ++ stdenv.lib.optionals enableXfcePanelApplet [
+    gtk3
+    xfce.libxfce4util
+    xfce.xfce4-panel
   ];
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  configureFlags = [
+  ]
+  ++ stdenv.lib.optionals enableXfcePanelApplet [
+    "--with-xfce4-panel-applet"
+  ];
 
   postFixup = ''
     wrapPythonProgramsIn "$out/lib/jgmenu"
@@ -37,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/johanmalm/jgmenu;
+    homepage = "https://github.com/johanmalm/jgmenu";
     description = "Small X11 menu intended to be used with openbox and tint2";
     license = licenses.gpl2;
     platforms = platforms.linux;

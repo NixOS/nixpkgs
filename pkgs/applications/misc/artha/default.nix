@@ -1,6 +1,6 @@
 { stdenv, autoreconfHook, fetchurl, dbus-glib, gtk2, pkgconfig, wordnet }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "artha";
   version = "1.0.3";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An offline thesaurus based on WordNet";
-    homepage = http://artha.sourceforge.net;
+    homepage = "http://artha.sourceforge.net";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

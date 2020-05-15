@@ -2,14 +2,14 @@
 
 let
   name = "source-highlight";
-  version = "3.1.8";
+  version = "3.1.9";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/src-highlite/${name}-${version}.tar.gz";
-    sha256 = "18xdalxg7yzrxc1njzgw7aryq2jdm7zq2yqz41sc7k6il5z6lcq1";
+    sha256 = "148w47k3zswbxvhg83z38ifi85f9dqcpg7icvvw1cm6bg21x4zrs";
   };
 
   buildInputs = [ boost ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Source code renderer with syntax highlighting";
-    homepage = https://www.gnu.org/software/src-highlite/;
+    homepage = "https://www.gnu.org/software/src-highlite/";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
     longDescription =

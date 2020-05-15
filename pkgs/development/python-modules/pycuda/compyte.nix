@@ -2,7 +2,7 @@
 , fetchFromGitHub
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "compyte";
   version = "git-20150817";
 

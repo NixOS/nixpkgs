@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "linenoise";
   version = "1.0.10";  # Its version 1.0 plus 10 commits
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/antirez/linenoise;
+    homepage = "https://github.com/antirez/linenoise";
     description = "A minimal, zero-config, BSD licensed, readline replacement";
     maintainers = with stdenv.lib.maintainers; [ mpsyco ];
     platforms = stdenv.lib.platforms.unix;

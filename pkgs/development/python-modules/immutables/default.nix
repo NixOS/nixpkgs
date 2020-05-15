@@ -2,17 +2,17 @@
 
 buildPythonPackage rec {
   pname = "immutables";
-  version = "0.9";
+  version = "0.12";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h7i00x6sdbw62rdipp0kaw1mcrvfipxv0054x1n2r4q4j11q7fp";
+    sha256 = "12i8r5z0y6ya850fwl2r4hig5hyli8skvjmgylapxa4zbr13fqmc";
   };
 
   meta = {
     description = "An immutable mapping type for Python";
-    homepage = https://github.com/MagicStack/immutables;
+    homepage = "https://github.com/MagicStack/immutables";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ catern ];
   };

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "macdylibbundler";
   version = "20180825";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       this with a single command on the teminal! It will also work if your
       program uses plug-ins that have dependencies too.
     '';
-    homepage = https://github.com/auriamg/macdylibbundler;
+    homepage = "https://github.com/auriamg/macdylibbundler";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.nomeata ];

@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "modem-manager";
-  version = "1.10.0";
+  version = "1.12.8";
 
   package = "ModemManager";
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
-    sha256 = "1qkfnxqvaraz1npahqvm5xc73mbxxic8msnsjmlwkni5c2ckj3zx";
+    sha256 = "1zrsf57bn9rmaa2qvavr1aisci76vwlx0viqpwmkw3ds2l33vdb8";
   };
 
   nativeBuildInputs = [ vala gobject-introspection gettext pkgconfig ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-polkit"
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"
-    "--with-dbus-sys-dir=${placeholder "out"}/etc/dbus-1/system.d"
+    "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
@@ -30,18 +30,13 @@ stdenv.mkDerivation rec {
     export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
   '';
 
-  doCheck = true;
+  enableParallelBuilding = true;
 
-  postInstall = ''
-    # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
-    # aliases ourselves.
-    ln -s $out/etc/systemd/system/ModemManager.service \
-      $out/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service
-  '';
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "WWAN modem manager, part of NetworkManager";
-    homepage = https://www.freedesktop.org/wiki/Software/ModemManager/;
+    homepage = "https://www.freedesktop.org/wiki/Software/ModemManager/";
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.linux;

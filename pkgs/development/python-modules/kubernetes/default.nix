@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "10.0.0";
+  version = "10.0.1";
 
   prePatch = ''
     sed -e 's/sphinx>=1.2.1,!=1.3b1,<1.4 # BSD/sphinx/' -i test-requirements.txt
@@ -17,13 +17,14 @@ buildPythonPackage rec {
     sed -e '/ipaddress/d' -i requirements.txt
   '' else "");
 
+  doCheck = pythonAtLeast "3";
   checkPhase = ''
     py.test
   '';
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0v3hiy427ca010k8brys3aafgb5013i32yva1nmiibk3xcf7f90f";
+    sha256 = "14l5mj0yjmqsq084pdh8g8hlagvvjkdylpk6xwfsv5ikcsba8w1p";
   };
 
   checkInputs = [ isort coverage pytest mock sphinx autopep8 pep8 codecov recommonmark nose ];
@@ -31,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Kubernetes python client";
-    homepage = https://github.com/kubernetes-client/python;
+    homepage = "https://github.com/kubernetes-client/python";
     license = licenses.asl20;
     maintainers = with maintainers; [ lsix ];
   };

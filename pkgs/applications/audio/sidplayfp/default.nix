@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A SID player using libsidplayfp";
-    homepage = https://sourceforge.net/projects/sidplay-residfp/;
+    homepage = "https://sourceforge.net/projects/sidplay-residfp/";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ dezgeg ];
     platforms = with platforms; linux;

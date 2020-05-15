@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, zlib, gmp }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "open-wbo-2.0";
 
   src = fetchFromGitHub {
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
     license = licenses.mit;
-    homepage = http://sat.inesc-id.pt/open-wbo/;
+    homepage = "http://sat.inesc-id.pt/open-wbo/";
   };
 }

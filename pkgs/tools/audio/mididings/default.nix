@@ -1,7 +1,7 @@
 { stdenv, pythonPackages, fetchFromGitHub, pkg-config, glib, alsaLib, libjack2  }:
 
-pythonPackages.buildPythonApplication rec {
-  version = "20151117";
+pythonPackages.buildPythonApplication {
+  version = "2015-11-17";
   pname = "mididings";
 
   src = fetchFromGitHub {

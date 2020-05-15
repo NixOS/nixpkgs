@@ -10,7 +10,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ArduPilot";
     repo = "apm_planner";
-    rev = "${version}";
+    rev = version;
     sha256 = "1k0786mjzi49nb6yw4chh9l4dmkf9gybpxg9zqkr5yg019nyzcvd";
   };
 
@@ -46,7 +46,7 @@ mkDerivation rec {
       A GUI ground control station for autonomous vehicles using the MAVLink protocol.
       Includes support for the APM and PX4 based controllers.
     '';
-    homepage = http://ardupilot.org/planner2/;
+    homepage = "https://ardupilot.org/planner2/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ wucke13 ];
   };

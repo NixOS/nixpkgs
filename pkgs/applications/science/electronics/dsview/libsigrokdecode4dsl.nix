@@ -2,7 +2,7 @@
 glib, check, python3, dsview
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (dsview) version src;
 
   pname = "libsigrokdecode4dsl";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A fork of the sigrokdecode library for usage with DSView";
-    homepage = https://www.dreamsourcelab.com/;
+    homepage = "https://www.dreamsourcelab.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bachp ];

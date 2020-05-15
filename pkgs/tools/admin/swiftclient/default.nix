@@ -1,15 +1,15 @@
-{ lib, buildPythonApplication, fetchPypi, requests, six, pbr }:
+{ lib, buildPythonApplication, fetchPypi, requests, six, pbr, setuptools }:
 
 buildPythonApplication rec {
   pname = "python-swiftclient";
-  version = "3.6.0";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0sv6z72zdwzwdjng0djk3l2maryn9pz3khf69yq5ig2ycz8hh0qv";
+    sha256 = "0xx3v5kk8jp352rydy3jxndy1b9kl2zmkj1gi14fjxjc5r4rf82g";
   };
 
-  propagatedBuildInputs = [ requests six pbr ];
+  propagatedBuildInputs = [ requests six pbr setuptools ];
 
   # For the tests the following requirements are needed:
   # https://github.com/openstack/python-swiftclient/blob/master/test-requirements.txt
@@ -24,7 +24,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/openstack/python-swiftclient;
+    homepage = "https://github.com/openstack/python-swiftclient";
     description = "Python bindings to the OpenStack Object Storage API";
     license = licenses.asl20;
     maintainers = with maintainers; [ c0deaddict ];

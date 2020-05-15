@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tool for visualization and analysis of profiling data";
-    homepage = https://github.com/google/pprof;
+    homepage = "https://github.com/google/pprof";
     license = licenses.asl20;
     longDescription = ''
       pprof reads a collection of profiling samples in profile.proto format and generates reports to visualize and help analyze the data. It can generate both text and graphical reports (through the use of the dot visualization package).

@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/matthewbauer/undmg;
+    homepage = "https://github.com/matthewbauer/undmg";
     description = "Extract a DMG file";
     license = licenses.gpl3;
     platforms = platforms.all;

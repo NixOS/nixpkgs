@@ -3,17 +3,12 @@
 
 buildPythonPackage rec {
   pname = "Deprecated";
-  version = "1.2.6";
+  version = "1.2.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hcw9y7dvhwg5flk6wy8aa4kkgpvcqq3q4jd53h54586fp7w85d5";
+    sha256 = "1k7c5kkh8jxxqdm0cbcvmhn3mwj0rcjwapwbzmm5r04n78lpvwqc";
   };
-
-  postPatch = ''
-    # odd broken tests, don't appear in GitHub repo
-    rm tests/demo_classic_usage*.py
-  '';
 
   propagatedBuildInputs = [ wrapt ];
   checkInputs = [ pytest ];

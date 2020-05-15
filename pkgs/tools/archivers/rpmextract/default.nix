@@ -1,6 +1,6 @@
 { stdenv, rpm, cpio, substituteAll }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "rpmextract";
 
   buildCommand = ''

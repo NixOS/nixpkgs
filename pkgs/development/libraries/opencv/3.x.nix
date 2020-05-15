@@ -9,9 +9,9 @@
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
 , enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
-, enableJPEG2K    ? true, jasper
+, enableJPEG2K    ? false, jasper  # disable jasper by default (many CVE)
 , enableEigen     ? true, eigen
-, enableOpenblas  ? true, openblas
+, enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
 
 , enableCuda      ? (config.cudaSupport or false) &&
@@ -35,21 +35,23 @@
 , AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
 }:
 
+assert blas.implementation == "openblas" && lapack.implementation == "openblas";
+
 let
-  version = "3.4.7";
+  version = "3.4.8";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "0r5rrcnqx2lsnr1ja5ij2chb7yk9kkamr4p0ik52sqxydwkv3z50";
+    sha256 = "1dnz3gfj70lm1gbrk8pz28apinlqi2x6nvd6xcy5hs08505nqnjp";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "1ik6acsmgrx66awf19r2y3ijqvv9xg43gaphwszbiyi0jq3r43yw";
+    sha256 = "0psaa1yx36n34l09zd1y8jxgf8q4jzxd3vn06fqmzwzy85hcqn8i";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -140,7 +142,7 @@ let
   printEnabled = enabled : if enabled then "ON" else "OFF";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "opencv";
   inherit version src;
 
@@ -208,7 +210,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig unzip ];
 
-  NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+  NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
@@ -274,7 +276,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
-    homepage = https://opencv.org/;
+    homepage = "https://opencv.org/";
     license = with licenses; if enableUnfree then unfree else bsd3;
     maintainers = with maintainers; [mdaiter basvandijk];
     platforms = with platforms; linux ++ darwin;

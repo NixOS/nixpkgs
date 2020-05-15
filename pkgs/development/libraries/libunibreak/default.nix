@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://vimgadgets.sourceforge.net/libunibreak/;
+    homepage = "http://vimgadgets.sourceforge.net/libunibreak/";
     description = "A library implementing a line breaking algorithm as described in Unicode 6.0.0 Standard";
     license = licenses.zlib;
     platforms = platforms.unix;

@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
 , pybluez }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "bt-proximity";
   version = "0.0.20180217";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Bluetooth Proximity Detection using Python";
-    homepage = https://github.com/FrederikBolding/bluetooth-proximity;
+    homepage = "https://github.com/FrederikBolding/bluetooth-proximity";
     maintainers = with maintainers; [ peterhoeg ];
     license = licenses.asl20;
   };

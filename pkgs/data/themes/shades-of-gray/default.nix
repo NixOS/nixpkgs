@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "shades-of-gray-theme";
-  version = "1.1.8";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "WernerFP";
     repo = pname;
     rev = version;
-    sha256 = "08i2pkq7ygf9fs9cdrw4khrb8m1w2hvgmz064g36fh35r02sms3w";
+    sha256 = "13ydym0i3032g5dyrnl5wxpvxv57b43q7iaq5achpmaixgn58gs8";
   };
 
   buildInputs = [ gtk_engines ];
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A flat dark GTK-theme with ergonomic contrasts";
-    homepage = https://github.com/WernerFP/Shades-of-gray-theme;
+    description = "Flat dark GTK theme with ergonomic contrasts";
+    homepage = "https://github.com/WernerFP/Shades-of-gray-theme";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

@@ -15,8 +15,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.varnish5;
-        defaultText = "pkgs.varnish5";
+        default = pkgs.varnish;
+        defaultText = "pkgs.varnish";
         description = ''
           The package to use
         '';
@@ -48,7 +48,7 @@ in
       extraModules = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.varnish5Packages.geoip ]";
+        example = literalExample "[ pkgs.varnishPackages.geoip ]";
         description = "
           Varnish modules (except 'std').
         ";

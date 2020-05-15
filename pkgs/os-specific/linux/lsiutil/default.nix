@@ -12,7 +12,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lsiutils";
   inherit version;
   
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   installPhase = "true";
   
   meta = {
-    homepage = http://www.lsi.com/;
+    homepage = "http://www.lsi.com/";
     description = "LSI Logic Fusion MPT command line management tool";
     license = stdenv.lib.licenses.unfree;
   };

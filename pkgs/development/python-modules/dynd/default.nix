@@ -26,6 +26,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'--always', '--match', 'v*']).decode('ascii').strip('\n')" ""
   '';
 
+  dontUseCmakeConfigure = true;
+
   # Python 3 works but has a broken import test that I couldn't
   # figure out.
   doCheck = !isPy3k;
@@ -34,7 +36,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy pkgs.libdynd ];
 
   meta = with stdenv.lib; {
-    homepage = http://libdynd.org;
+    homepage = "http://libdynd.org";
     license = licenses.bsd2;
     description = "Python exposure of dynd";
     maintainers = with maintainers; [ teh ];

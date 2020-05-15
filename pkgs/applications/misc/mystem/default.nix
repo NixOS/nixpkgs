@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.cdn.yandex.net/mystem/${pname}-${version}-linux-64bit.tar.gz";
-    sha256 = "0q3vxvyj5bqllqnlivy5llss39z7j0bgpn6kv8mrc54vjdhppx10";
+    sha256 = "0qha7jvkdmil3jiwrpsfhkqsbkqn9dzgx3ayxwjdmv73ikmg95j6";
   };
 
   buildCommand = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Morphological analysis of Russian text";
-    homepage = https://yandex.ru/dev/mystem/;
+    homepage = "https://yandex.ru/dev/mystem/";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ abbradar ];
     platforms = [ "x86_64-linux" ];

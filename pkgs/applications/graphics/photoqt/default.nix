@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, cmake, exiv2, graphicsmagick, libraw, fetchpatch
+{ mkDerivation, stdenv, fetchurl, cmake, exiv2, graphicsmagick, libraw, fetchpatch
 , qtbase, qtdeclarative, qtmultimedia, qtquickcontrols, qttools, qtgraphicaleffects
 , extra-cmake-modules, poppler, kimageformats, libarchive, libdevil
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "photoqt";
   version = "1.7.1";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://photoqt.org/;
+    homepage = "https://photoqt.org/";
     description = "Simple, yet powerful and good looking image viewer";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

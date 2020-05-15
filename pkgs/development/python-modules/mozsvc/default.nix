@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyramid simplejson konfig ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mozilla-services/mozservices;
+    homepage = "https://github.com/mozilla-services/mozservices";
     description = "Various utilities for Mozilla apps";
     license = licenses.mpl20;
     maintainers = with maintainers; [ nadrieril ];

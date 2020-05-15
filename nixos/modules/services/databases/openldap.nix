@@ -231,6 +231,10 @@ in
 
   };
 
+  meta = {
+    maintainers = lib.maintainers.mic92;
+  };
+
 
   ###### implementation
 
@@ -259,6 +263,8 @@ in
           ${openldap.out}/bin/slapadd ${configOpts} -l ${dataFile}
         ''}
         chown -R "${cfg.user}:${cfg.group}" "${cfg.dataDir}"
+
+        ${openldap}/bin/slaptest ${configOpts}
       '';
       serviceConfig.ExecStart =
         "${openldap.out}/libexec/slapd -d '${cfg.logLevel}' " +

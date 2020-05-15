@@ -3,13 +3,13 @@ libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "transgui";
-  version = "5.17.0";
+  version = "5.18.0";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gui";
     repo = "transgui";
     rev = "v${version}";
-    sha256 = "0p76vavny5asi5naa4jn67raxlarsmrkbchfn96y6gh5p2vzwpl7";
+    sha256 = "1dyx778756zhvz5sxgdvy49p2c0x44w4nmcfd90wqrmgfknncnf5";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A cross platform front-end for the Transmission Bit-Torrent client";
-    homepage = https://sourceforge.net/p/transgui;
+    homepage = "https://sourceforge.net/p/transgui";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ ramkromberg ];
     platforms = stdenv.lib.platforms.linux;

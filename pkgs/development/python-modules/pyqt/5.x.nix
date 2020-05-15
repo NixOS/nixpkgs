@@ -6,6 +6,7 @@
 , qtdeclarative
 , qtwebchannel
 , withConnectivity ? false, qtconnectivity
+, withMultimedia ? false, qtmultimedia
 , withWebKit ? false, qtwebkit
 , withWebSockets ? false, qtwebsockets
 }:
@@ -50,6 +51,7 @@ in buildPythonPackage rec {
     qtwebchannel
   ]
     ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
   ;
@@ -78,6 +80,9 @@ in buildPythonPackage rec {
 
   passthru = {
     inherit sip;
+    multimediaEnabled = withMultimedia;
+    webKitEnabled = withWebKit;
+    WebSocketsEnabled = withWebSockets;
   };
 
   configurePhase = ''
@@ -121,6 +126,7 @@ in buildPythonPackage rec {
     ]
     ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
     ++ lib.optional withWebKit "PyQt5.QtWebKit"
+    ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
     ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
     ;
     imports = lib.concatMapStrings (module: "import ${module};") modules;
@@ -135,7 +141,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = http://www.riverbankcomputing.co.uk;
+    homepage    = "http://www.riverbankcomputing.co.uk";
     license     = licenses.gpl3;
     platforms   = platforms.mesaPlatforms;
     maintainers = with maintainers; [ sander ];

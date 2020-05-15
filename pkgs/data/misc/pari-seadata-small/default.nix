@@ -2,7 +2,7 @@
 , fetchurl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "20090618";
   pname = "pari-seadata-small";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PARI database needed by ellap for large primes";
-    homepage = http://pari.math.u-bordeaux.fr/;
+    homepage = "http://pari.math.u-bordeaux.fr/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ timokau ];

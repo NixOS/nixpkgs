@@ -15,7 +15,7 @@ let
     else
       badArch;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.scilab.org/;
+    homepage = "http://www.scilab.org/";
     description = "Scientific software package for numerical computations (Matlab lookalike)";
     # see http://www.scilab.org/legal_notice
     license = "Scilab";

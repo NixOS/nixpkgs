@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jsonnet";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "google";
     repo = "jsonnet";
-    sha256 = "1fibr1kysbxcf8jp2a4xvs3n7i8d9k2430agxzc9mdyqrh79zlxk";
+    sha256 = "06imnpbc5mn1dis051f54q6nq80dbm51nhxmba61rdyhf1131ml8";
   };
 
   enableParallelBuilding = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Purely-functional configuration language that helps you define JSON data";
     maintainers = with lib.maintainers; [ benley copumpkin ];
     license = lib.licenses.asl20;
-    homepage = https://github.com/google/jsonnet;
+    homepage = "https://github.com/google/jsonnet";
     platforms = lib.platforms.unix;
   };
 }

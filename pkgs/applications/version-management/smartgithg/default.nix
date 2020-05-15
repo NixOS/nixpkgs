@@ -6,7 +6,6 @@
 , glib
 , gnome3
 , wrapGAppsHook
-, hicolor-icon-theme
 , libXtst
 , which
 }:
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ jre gnome3.adwaita-icon-theme hicolor-icon-theme gtk3 ];
+  buildInputs = [ jre gnome3.adwaita-icon-theme gtk3 ];
 
   preFixup = with stdenv.lib; ''
     gappsWrapperArgs+=( \
@@ -87,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GUI for Git, Mercurial, Subversion";
-    homepage = http://www.syntevo.com/smartgit/;
+    homepage = "https://www.syntevo.com/smartgit/";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ jraygauthier ];

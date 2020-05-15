@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   name = "kino-1.3.4";
 
   src = fetchurl {
-    url = mirror://sourceforge/kino/kino-1.3.4.tar.gz;
+    url = "mirror://sourceforge/kino/kino-1.3.4.tar.gz";
     sha256 = "020s05k0ma83rq2kfs8x474pqicaqp9spar81qc816ddfrnh8k8i";
   };
 
@@ -71,16 +71,13 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  NIX_LDFLAGS = [
-    "-lavcodec"
-    "-lavutil"
-  ];
+  NIX_LDFLAGS = "-lavcodec -lavutil";
 
   patches = [ ./kino-1.3.4-v4l1.patch ./kino-1.3.4-libav-0.7.patch ./kino-1.3.4-libav-0.8.patch ]; #./kino-1.3.4-libavcodec-pkg-config.patch ];
 
   postInstall = "
     rpath=`patchelf --print-rpath \$out/bin/kino`;
-    for i in $\buildInputs; do
+    for i in $buildInputs; do
       echo adding \$i/lib
       rpath=\$rpath\${rpath:+:}\$i/lib
     done
@@ -91,7 +88,7 @@ stdenv.mkDerivation {
 
   meta = {
       description = "Non-linear DV editor for GNU/Linux";
-      homepage = http://www.kinodv.org/;
+      homepage = "http://www.kinodv.org/";
       license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

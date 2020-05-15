@@ -1,11 +1,11 @@
-import ./make-test.nix ({ pkgs, lib, ...} :
+import ./make-test-python.nix ({ pkgs, lib, ...} :
 let
-  client_base = rec {
-    
+  client_base = {
+
     containers.test1 = {
       autoStart = true;
       config = {
-        environment.etc."check".text = "client_base";
+        environment.etc.check.text = "client_base";
       };
     };
 
@@ -29,7 +29,7 @@ in {
       imports = [ client_base ];
 
       containers.test1.config = {
-        environment.etc."check".text = lib.mkForce "client_c1";
+        environment.etc.check.text = lib.mkForce "client_c1";
         services.httpd.enable = true;
         services.httpd.adminAddr = "nixos@example.com";
       };
@@ -38,7 +38,7 @@ in {
       imports = [ client_base ];
 
       containers.test1.config = {
-        environment.etc."check".text = lib.mkForce "client_c2";
+        environment.etc.check.text = lib.mkForce "client_c2";
         services.nginx.enable = true;
       };
     };
@@ -48,18 +48,25 @@ in {
     c1System = nodes.client_c1.config.system.build.toplevel;
     c2System = nodes.client_c2.config.system.build.toplevel;
   in ''
-    $client->start();
-    $client->waitForUnit("default.target");
-    $client->succeed("[[ \$(nixos-container run test1 cat /etc/check) == client_base ]] >&2");
+    client.start()
+    client.wait_for_unit("default.target")
 
-    $client->succeed("${c1System}/bin/switch-to-configuration test >&2");
-    $client->succeed("[[ \$(nixos-container run test1 cat /etc/check) == client_c1 ]] >&2");
-    $client->succeed("systemctl status httpd -M test1 >&2");
+    assert "client_base" in client.succeed("nixos-container run test1 cat /etc/check")
 
-    $client->succeed("${c2System}/bin/switch-to-configuration test >&2");
-    $client->succeed("[[ \$(nixos-container run test1 cat /etc/check) == client_c2 ]] >&2");
-    $client->fail("systemctl status httpd -M test1 >&2");
-    $client->succeed("systemctl status nginx -M test1 >&2");
+    with subtest("httpd is available after activating config1"):
+        client.succeed(
+            "${c1System}/bin/switch-to-configuration test >&2",
+            "[[ $(nixos-container run test1 cat /etc/check) == client_c1 ]] >&2",
+            "systemctl status httpd -M test1 >&2",
+        )
+
+    with subtest("httpd is not available any longer after switching to config2"):
+        client.succeed(
+            "${c2System}/bin/switch-to-configuration test >&2",
+            "[[ $(nixos-container run test1 cat /etc/check) == client_c2 ]] >&2",
+            "systemctl status nginx -M test1 >&2",
+        )
+        client.fail("systemctl status httpd -M test1 >&2")
   '';
 
 })

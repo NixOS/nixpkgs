@@ -5,7 +5,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "cliapp";
   version = "1.20150305";
   disabled = isPy3k;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://liw.fi/cliapp/;
+    homepage = "http://liw.fi/cliapp/";
     description = "Python framework for Unix command line programs";
     license = licenses.gpl2;
     maintainers = [];

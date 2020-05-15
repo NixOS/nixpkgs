@@ -3,7 +3,7 @@
 , fetchurl
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pynac";
   version = "0.2";
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/se-esss-litterbox/Pynac;
+    homepage = "https://github.com/se-esss-litterbox/Pynac";
     description = "A Python wrapper around the Dynac charged particle simulator";
     license = licenses.gpl3;
   };

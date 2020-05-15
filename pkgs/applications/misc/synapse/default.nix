@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gettext, pkgconfig, glib, libnotify, gtk3, libgee
-, keybinder3, json-glib, zeitgeist, vala, hicolor-icon-theme, gobject-introspection
+, keybinder3, json-glib, zeitgeist, vala, gobject-introspection
 }:
 
 let
@@ -20,7 +20,6 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib libnotify gtk3 libgee keybinder3 json-glib zeitgeist
-    hicolor-icon-theme
   ];
 
   meta = with stdenv.lib; {
@@ -30,7 +29,7 @@ in stdenv.mkDerivation rec {
       the Zeitgeist engine
     '';
     description = "Semantic launcher to start applications and find relevant files";
-    homepage = https://launchpad.net/synapse-project;
+    homepage = "https://launchpad.net/synapse-project";
     license = licenses.gpl3;
     maintainers = with maintainers; [ mahe ];
     platforms = with platforms; all;

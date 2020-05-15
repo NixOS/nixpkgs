@@ -9,7 +9,7 @@ let
   version = "20180227";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "arpa2";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A supercharged TLS daemon that allows for easy, strong and consistent deployment";
     license = licenses.gpl3;
-    homepage = http://www.tlspool.org;
+    homepage = "http://www.tlspool.org";
     maintainers = with maintainers; [ leenaars qknight ];
   };
 }

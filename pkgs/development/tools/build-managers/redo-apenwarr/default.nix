@@ -1,30 +1,67 @@
-{stdenv, fetchFromGitHub, python2, which}:
-stdenv.mkDerivation rec {
+{ stdenv, lib, python3, fetchFromGitHub, mkdocs, which, findutils, coreutils
+, perl
+, doCheck ? true
+}: stdenv.mkDerivation rec {
+
   pname = "redo-apenwarr";
+  version = "0.42a";
 
-  version = "unstable-2019-06-21";
-
-  src = fetchFromGitHub {
+  src = fetchFromGitHub rec {
     owner = "apenwarr";
     repo = "redo";
-    rev = "8924fa35fa7363b531f8e6b48a1328d2407ad5cf";
-    sha256 = "1dj20w29najqjyvk0jh5kqbcd10k32rad986q5mzv4v49qcwdc1q";
+    rev = "${repo}-${version}";
+    sha256 = "172z2idslhcqibd4lw82k6349nl5fdda2vj10dqcjz0lvv6n7php";
   };
 
-  DESTDIR="";
-  PREFIX = placeholder "out";
+  postPatch = ''
 
-  patchPhase = ''
-    patchShebangs .
+    patchShebangs minimal/do
+
+  '' + lib.optionalString doCheck ''
+    unset CC CXX
+
+    substituteInPlace minimal/do.test \
+      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+
+    substituteInPlace t/105-sympath/all.do \
+      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+
+    substituteInPlace t/all.do \
+      --replace "/bin/ls" "ls"
+
+    substituteInPlace t/110-compile/hello.o.do \
+      --replace "/usr/include" "${stdenv.lib.getDev stdenv.cc.libc}/include"
+
+    substituteInPlace t/200-shell/nonshelltest.do \
+      --replace "/usr/bin/env perl" "${perl}/bin/perl"
+
   '';
 
-  buildInputs = [ python2 which ];
+  inherit doCheck;
 
-  meta = with stdenv.lib; {
-    description = "Apenwarr version of the redo build tool.";
-    homepage = https://github.com/apenwarr/redo/;
-    license = stdenv.lib.licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ andrewchambers ];
+  checkTarget = "test";
+
+  outputs = [ "out" "man" ];
+
+  installFlags = [
+    "PREFIX=$(out)"
+    "DESTDIR=/"
+  ];
+
+  nativeBuildInputs = [
+    python3
+    (with python3.pkgs; [ beautifulsoup4 markdown ])
+    which
+    findutils
+  ];
+
+  meta = with lib; {
+    description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo.";
+    homepage = "https://github.com/apenwarr/redo";
+    maintainers = with maintainers; [
+      andrewchambers
+      ck3d
+    ];
+    license = licenses.asl20;
   };
 }

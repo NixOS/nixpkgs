@@ -9,12 +9,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  pname = "zathura-core";
-  version = "0.4.3";
+  pname = "zathura";
+  version = "0.4.5";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/zathura/download/zathura-${version}.tar.xz";
-    sha256 = "0hgx5x09i6d0z45llzdmh4l348fxh1y102sb1w76f2fp4r21j4ky";
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "0b3nrcvykkpv2vm99kijnic2gpfzva520bsjlihaxandzfm9ff8c";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
+    # Make sure tests are enabled for doCheck
+    "-Dtests=enabled"
   ];
 
   nativeBuildInputs = [
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = https://pwmt.org/projects/zathura/;
+    homepage = "https://git.pwmt.org/pwmt/zathura";
     description = "A core component for zathura PDF viewer";
     license = licenses.zlib;
     platforms = platforms.unix;

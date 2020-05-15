@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Serial console TTY";
-    homepage = https://tio.github.io/;
+    homepage = "https://tio.github.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ yegortimoshenko ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

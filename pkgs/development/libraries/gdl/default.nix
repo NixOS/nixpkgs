@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gdl";
-  version = "3.28.0";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1dipnzqpxl0yfwzl2lqdf6vb3174gb9f1d5jndkq8505q7n9ik2j";
+    sha256 = "00ldva6wg6s4wlxmisiqzyz8ihsprra7sninx2rlqk6frpq312w5";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gnome docking library";
-    homepage = https://developer.gnome.org/gdl/;
-    maintainers = gnome3.maintainers;
+    homepage = "https://developer.gnome.org/gdl/";
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

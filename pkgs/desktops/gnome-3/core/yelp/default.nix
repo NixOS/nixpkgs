@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yelp";
-  version = "3.32.2";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0yrl96icmmrxvg7sxl519gzg9qb368cmzgrr9ddh181ignkxzx7f";
+    sha256 = "097djjyl096zmicjpxlb858yz6rd5cj813xc8azbxlhsscikwjzx";
   };
 
   nativeBuildInputs = [ pkgconfig gettext itstool wrapGAppsHook ];
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Yelp;
+    homepage = "https://wiki.gnome.org/Apps/Yelp";
     description = "The help viewer in Gnome";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

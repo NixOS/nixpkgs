@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, qtbase, qtquickcontrols, qmake, makeDesktopItem }:
+{ mkDerivation, stdenv, fetchgit, qtbase, qtquickcontrols, qmake, makeDesktopItem }:
 
 # we now have libqmatrixclient so a future version of tensor that supports it
 # should use that
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "tensor-git";
   version = "2017-02-21";
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://matrix.org/docs/projects/client/tensor.html;
+    homepage = "https://matrix.org/docs/projects/client/tensor.html";
     description = "Cross-platform Qt5/QML-based Matrix client";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];

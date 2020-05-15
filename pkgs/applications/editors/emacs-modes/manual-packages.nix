@@ -6,7 +6,7 @@
     src = pkgs.fetchFromGitHub {
       owner = "skeeto";
       repo = "elisp-ffi";
-      rev = "${version}";
+      rev = version;
       sha256 = "0z2n3h5l5fj8wl8i1ilfzv11l3zba14sgph6gz7dx7q12cnp9j22";
     };
     buildInputs = [ external.libffi ];
@@ -52,14 +52,27 @@
     };
   };
 
+  agda-input = self.trivialBuild {
+    pname = "agda-input";
+
+    inherit (external.Agda) src version;
+
+    postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
+
+    meta = {
+      description = "Standalone package providing the agda-input method without building Agda.";
+      inherit (external.Agda.meta) homepage license;
+    };
+  };
+
+  emacspeak = callPackage ./emacspeak {};
+
   ess-R-object-popup =
     callPackage ./ess-R-object-popup { };
 
-  filesets-plus = callPackage ./filesets-plus { };
-
   font-lock-plus = callPackage ./font-lock-plus { };
 
-  ghc-mod = melpaBuild rec {
+  ghc-mod = melpaBuild {
     pname = "ghc";
     version = external.ghc-mod.version;
     src = external.ghc-mod.src;
@@ -75,7 +88,7 @@
     };
   };
 
-  haskell-unicode-input-method = melpaBuild rec {
+  haskell-unicode-input-method = melpaBuild {
     pname = "emacs-haskell-unicode-input-method";
     version = "20110905.2307";
     src = pkgs.fetchFromGitHub {
@@ -96,31 +109,7 @@
     };
   };
 
-  hexrgb = callPackage ./hexrgb { };
-
-  header2 = callPackage ./header2 { };
-
   helm-words = callPackage ./helm-words { };
-
-  icicles = callPackage ./icicles { };
-
-  rtags = melpaBuild rec {
-    inherit (external.rtags) version src meta;
-
-    pname = "rtags";
-
-    dontConfigure = true;
-
-    propagatedUserEnvPkgs = [ external.rtags ];
-    recipe = pkgs.writeText "recipe" ''
-      (rtags
-       :repo "andersbakken/rtags" :fetcher github
-       :files ("src/*.el"))
-    '';
-  };
-
-  lib-requires =
-    callPackage ./lib-requires { };
 
   org-mac-link =
     callPackage ./org-mac-link { };
@@ -128,27 +117,24 @@
   perl-completion =
     callPackage ./perl-completion { };
 
+  pod-mode = callPackage ./pod-mode { };
+
   railgun = callPackage ./railgun { };
 
   structured-haskell-mode = self.shm;
 
-  thingatpt-plus = callPackage ./thingatpt-plus { };
+  sv-kalender = callPackage ./sv-kalender { };
 
   tramp = callPackage ./tramp { };
-
-  yaoddmuse = callPackage ./yaoddmuse { };
 
   zeitgeist = callPackage ./zeitgeist { };
 
   # From old emacsPackages (pre emacsPackagesNg)
   cedet = callPackage ./cedet { };
   cedille = callPackage ./cedille { cedille = pkgs.cedille; };
-  colorThemeSolarized = callPackage ./color-theme-solarized {
-    colorTheme = self.color-theme;
-  };
+  colorThemeSolarized = callPackage ./color-theme-solarized { };
   emacsSessionManagement = callPackage ./session-management-for-emacs { };
   hsc3-mode = callPackage ./hsc3 { };
-  hol_light_mode = callPackage ./hol_light { };
   ido-ubiquitous = callPackage ./ido-ubiquitous { };
   ocaml-mode = callPackage ./ocaml { };
   prolog-mode = callPackage ./prolog { };

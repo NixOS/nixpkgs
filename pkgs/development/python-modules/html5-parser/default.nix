@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "html5-parser";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00d1zfk72xzyibh7l4ib57y0isn5gic7avgbh7afbkk99iwd5smi";
+    sha256 = "25fe8f6848cbc15187f6748c0695df32bcf1b37df6420b6a01b4ebe1ec1ed48f";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Fast C based HTML 5 parsing for python";
-    homepage = https://html5-parser.readthedocs.io;
+    homepage = "https://html5-parser.readthedocs.io";
     license = licenses.asl20;
   };
 }

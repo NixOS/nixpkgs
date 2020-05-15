@@ -7,12 +7,12 @@
 , json_c
 , libtool
 , pkgconfig
-, python2
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmypaint";
-  version = "1.4.0";
+  version = "1.6.0";
 
   outputs = [ "out" "dev" ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "mypaint";
     repo = "libmypaint";
     rev = "v${version}";
-    sha256 = "1ynm2g2wdb9zsymncndlgs6gpcbsa122n52d11161jrj5nrdliaq";
+    sha256 = "1fdyywm915mmilfmzp7lz4rnmm05kkw0adrdqpqi4n8icp4d530g";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     intltool
     libtool
     pkgconfig
-    python2
+    python3
   ];
 
   buildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = http://mypaint.org/;
+    homepage = "http://mypaint.org/";
     description = "Library for making brushstrokes which is used by MyPaint and other projects";
     license = licenses.isc;
     maintainers = with maintainers; [ goibhniu jtojnar ];

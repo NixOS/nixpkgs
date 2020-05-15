@@ -21,6 +21,7 @@ rec {
     isSparc        = { cpu = { family = "sparc"; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
     isMsp430       = { cpu = { family = "msp430"; }; };
+    isVc4          = { cpu = { family = "vc4"; }; };
     isAvr          = { cpu = { family = "avr"; }; };
     isAlpha        = { cpu = { family = "alpha"; }; };
     isJavaScript   = { cpu = cpuTypes.js; };
@@ -46,6 +47,7 @@ rec {
     isMinGW        = { kernel = kernels.windows; abi = abis.gnu; };
     isWasi         = { kernel = kernels.wasi; };
     isGhcjs        = { kernel = kernels.ghcjs; };
+    isGenode       = { kernel = kernels.genode; };
     isNone         = { kernel = kernels.none; };
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
@@ -54,9 +56,6 @@ rec {
 
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
-
-    # Deprecated after 18.03
-    isArm = isAarch32;
   };
 
   matchAnyAttrs = patterns:

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "idevicerestore";
-  version = "2019-02-14";
+  version = "2019-12-26";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "8a882038b2b1e022fbd19eaf8bea51006a373c06";
-    sha256 = "17lisl7ll43ixl1zqwchn7jljrdyl2p9q99w30i6qaci71mas37m";
+    rev = "8207daaa2ac3cb3a5107aae6aefee8ecbe39b6d4";
+    sha256 = "1jz72bzk1fh12bs65pv06l85135hgfz1aqnbb084bvqcpj4gl40h";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/libimobiledevice/idevicerestore;
+    homepage = "https://github.com/libimobiledevice/idevicerestore";
     description = "Restore/upgrade firmware of iOS devices";
     longDescription = ''
       The idevicerestore tool allows to restore firmware files to iOS devices.

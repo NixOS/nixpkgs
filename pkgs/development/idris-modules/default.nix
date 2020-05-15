@@ -103,8 +103,6 @@
 
     html = callPackage ./html.nix {};
 
-    heyting-algebra = callPackage ./heyting-algebra.nix {};
-
     hezarfen = callPackage ./hezarfen.nix {};
 
     hrtime = callPackage ./hrtime.nix {};
@@ -178,6 +176,8 @@
     tap = callPackage ./tap.nix {};
 
     test = callPackage ./test.nix {};
+
+    tf-random = callPackage ./tfrandom.nix {};
 
     tlhydra = callPackage ./tlhydra.nix {};
 

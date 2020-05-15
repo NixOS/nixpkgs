@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "IgnorantGuru";
     repo = "spacefm";
-    rev = "${version}";
+    rev = version;
     sha256 = "089r6i40lxcwzp60553b18f130asspnzqldlpii53smz52kvpirx";
   };
+
+  patches = [ ./glibc-fix.patch ];
 
   configureFlags = [
     "--with-bash-path=${pkgs.bash}/bin/bash"
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
       with built-in VFS, udev- or HAL-based device manager,
       customizable menu system, and bash integration
     '';
-    homepage = http://ignorantguru.github.io/spacefm/;
+    homepage = "http://ignorantguru.github.io/spacefm/";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jagajaga obadz ];

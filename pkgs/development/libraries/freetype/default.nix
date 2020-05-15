@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
       autofit which can be used instead of hinting instructions included in
       fonts.
     '';
-    homepage = https://www.freetype.org/;
+    homepage = "https://www.freetype.org/";
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" "--enable-freetype-config" ];
+  configureFlags = [ "--bindir=$(dev)/bin" "--enable-freetype-config" ];
 
   # native compiler to generate building tool
   CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";

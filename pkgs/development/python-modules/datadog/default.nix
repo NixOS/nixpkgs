@@ -1,27 +1,30 @@
 { lib, buildPythonPackage, fetchPypi
-, decorator, requests, simplejson
-, nose, mock }:
+, decorator, requests, simplejson, pillow
+, nose, mock, pytest, freezegun }:
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.29.3";
+  version = "0.35.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p47hy1p2hf233blalyz0yr6nf13iwk9ndkqdk428dmf8b8m2plr";
+    sha256 = "0qpy6mg9gfjxvjms0aaglzayhmdds4agv0lh05g2mkfw620nm8zl";
   };
 
   postPatch = ''
     find . -name '*.pyc' -exec rm {} \;
   '';
 
-  propagatedBuildInputs = [ decorator requests simplejson ];
+  propagatedBuildInputs = [ decorator requests simplejson pillow ];
 
-  checkInputs = [ nose mock ];
+  checkInputs = [ nose mock pytest freezegun ];
+  checkPhase = ''
+    pytest tests/unit
+  '';
 
   meta = with lib; {
     description = "The Datadog Python library";
     license = licenses.bsd3;
-    homepage = https://github.com/DataDog/datadogpy;
+    homepage = "https://github.com/DataDog/datadogpy";
   };
 }

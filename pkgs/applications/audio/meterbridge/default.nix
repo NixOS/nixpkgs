@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Various meters (VU, PPM, DPM, JF, SCO) for Jack Audio Connection Kit";
-    homepage = http://plugin.org.uk/meterbridge/;
+    homepage = "http://plugin.org.uk/meterbridge/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.nico202 ];

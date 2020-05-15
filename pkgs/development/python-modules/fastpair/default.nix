@@ -27,7 +27,7 @@ buildPythonPackage {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/carsonfarmer/fastpair;
+    homepage = "https://github.com/carsonfarmer/fastpair";
     description = "Data-structure for the dynamic closest-pair problem";
     license = licenses.mit;
     maintainers = with maintainers; [ cmcdragonkai ];

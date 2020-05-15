@@ -26,7 +26,7 @@ buildPythonPackage rec {
       a Terminal. It is implemented in python (no C library calls) and has
       no 3rd-party dependencies.
     '';
-    homepage = https://github.com/jquast/wcwidth;
+    homepage = "https://github.com/jquast/wcwidth";
     license = licenses.mit;
   };
 }

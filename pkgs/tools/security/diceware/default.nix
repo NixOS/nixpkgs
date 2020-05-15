@@ -1,8 +1,8 @@
 { lib
-, pythonPackages
+, python3Packages
 }:
 
-with pythonPackages;
+with python3Packages;
 
 buildPythonApplication rec {
   pname = "diceware";
@@ -15,6 +15,8 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ pytestrunner ];
 
+  propagatedBuildInputs = [ setuptools ];
+
   checkInputs = [ coverage pytest ];
 
   # see https://github.com/ulif/diceware/commit/a7d844df76cd4b95a717f21ef5aa6167477b6733
@@ -24,7 +26,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Generates passphrases by concatenating words randomly picked from wordlists";
-    homepage = https://github.com/ulif/diceware;
+    homepage = "https://github.com/ulif/diceware";
     license = licenses.gpl3;
     maintainers = with maintainers; [ asymmetric ];
   };

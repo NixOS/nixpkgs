@@ -13,7 +13,7 @@ let
       EncodeLocale TryTiny TypesSerialiser LWPMediaTypes
     ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "shutter-0.94.3";
 
   src = fetchurl {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Screenshot and annotation tool";
-    homepage = http://shutter-project.org/;
+    homepage = "https://shutter-project.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

@@ -1,4 +1,4 @@
-{stdenv, fetchgit, cmake, libGLU_combined, xorg }:
+{stdenv, fetchgit, cmake, libGLU, libGL, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "glee";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libGLU_combined xorg.libX11 ];
+  buildInputs = [ libGLU libGL xorg.libX11 ];
 
   configureScript = ''
     cmake
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GL Easy Extension Library";
-    homepage = https://sourceforge.net/p/glee/glee/;
+    homepage = "https://sourceforge.net/p/glee/glee/";
     maintainers = with maintainers; [ nand0p ];
     platforms = platforms.linux;
     license = licenses.gpl3;

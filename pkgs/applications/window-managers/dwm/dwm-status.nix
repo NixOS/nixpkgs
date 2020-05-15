@@ -8,20 +8,20 @@ let
 in
 
 rustPlatform.buildRustPackage rec {
-  name = "dwm-status-${version}";
-  version = "1.6.2";
+  pname = "dwm-status";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = "dwm-status";
     rev = version;
-    sha256 = "16vf7val1isc4227amng2ap9af34xa2va23dxv43px006xhrar78";
+    sha256 = "05dhd2gy7ysrnchdimrdd7jvzs1db9fyrk4ci7850jhrgavfd7c4";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk-pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "0pprf8509d321azg2l51lpxylgpk7290y38z9p5hxgkcwhrhrcss";
+  cargoSha256 = "0zkbps8vsjcvy7x0sgb07kacszi57dlyq8j6ia6yy0jyqnvlaqa7";
 
   postInstall = lib.optionalString (bins != [])  ''
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${stdenv.lib.makeBinPath bins}"
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Highly performant and configurable DWM status service";
-    homepage = https://github.com/Gerschtli/dwm-status;
+    homepage = "https://github.com/Gerschtli/dwm-status";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gerschtli ];
     platforms = platforms.linux;

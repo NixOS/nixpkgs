@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchzip, freeglut, libXmu, libXi, libX11, libICE, libGLU_combined, libSM, libXext, dialog, makeWrapper }:
+{ stdenv, lib, fetchzip, freeglut, libXmu, libXi, libX11, libICE, libGLU, libGL, libSM, libXext, dialog, makeWrapper }:
 let
-  lpath = stdenv.lib.makeLibraryPath [ libXmu libXi libX11 freeglut libICE libGLU_combined libSM libXext ];
+  lpath = stdenv.lib.makeLibraryPath [ libXmu libXi libX11 freeglut libICE libGLU libGL libSM libXext ];
 in
 stdenv.mkDerivation rec {
   pname = "iceSL";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "IceSL is a GPU-accelerated procedural modeler and slicer for 3D printing.";
-    homepage = http://shapeforge.loria.fr/icesl/index.html;
+    homepage = "http://shapeforge.loria.fr/icesl/index.html";
     license = licenses.inria-icesl;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ mgttlinger ];

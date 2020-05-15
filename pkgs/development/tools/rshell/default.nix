@@ -2,17 +2,17 @@
 
 buildPythonApplication rec {
   pname = "rshell";
-  version = "0.0.25";
+  version = "0.0.27";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f6857cdc3c53c8ce9ba7a560c2759c10b988f3d9fafde912d3fa4deecb4d4664";
+    sha256 = "15pm60jfmr5nms43nrh5jlpz4lxxfhaahznfcys6nc4g80r2fwr2";
   };
 
   propagatedBuildInputs = [ pyserial pyudev ];
 
   meta = with lib; {
-    homepage = https://github.com/dhylands/rshell;
+    homepage = "https://github.com/dhylands/rshell";
     description = "Remote Shell for MicroPython";
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];

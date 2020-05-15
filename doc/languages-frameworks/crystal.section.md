@@ -66,6 +66,6 @@ crystal.buildCrystalPackage rec {
   shardsFile = ./shards.nix;
   crystalBinaries.mint.src = "src/mint.cr";
 
-  buildInputs = [ openssl_1_0_2 ];
+  buildInputs = [ openssl ];
 }
 ```

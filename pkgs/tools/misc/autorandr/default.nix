@@ -6,7 +6,7 @@
 
 let
   python = python3Packages.python;
-  version = "1.8.1";
+  version = "1.10";
 in
   stdenv.mkDerivation {
     pname = "autorandr";
@@ -48,12 +48,12 @@ in
     src = fetchFromGitHub {
       owner = "phillipberndt";
       repo = "autorandr";
-      rev = "${version}";
-      sha256 = "1bp1cqkrpg77rjyh4lq1agc719fmxn92jkiicf6nbhfl8kf3l3vy";
+      rev = version;
+      sha256 = "0rcgs1n09p0p16lr5y239s0yrw7bch0x2cqwgc2dyh7rz7d9qmwn";
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/phillipberndt/autorandr/;
+      homepage = "https://github.com/phillipberndt/autorandr/";
       description = "Automatically select a display configuration based on connected devices";
       license = licenses.gpl3Plus;
       maintainers = with maintainers; [ coroa globin ];

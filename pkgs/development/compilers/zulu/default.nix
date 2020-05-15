@@ -23,7 +23,7 @@ let
     xorg.libXt xorg.libXrender stdenv.cc.cc
   ]));
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version openjdk platform hash extension;
 
   pname = "zulu";
@@ -55,18 +55,18 @@ in stdenv.mkDerivation rec {
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
-    if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+    if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
   '';
 
   rpath = stdenv.lib.strings.makeLibraryPath libraries;
 
   passthru = {
-    home = "${zulu}";
+    home = zulu;
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.azul.com/products/zulu/;
+    homepage = "https://www.azul.com/products/zulu/";
     license = licenses.gpl2;
     description = "Certified builds of OpenJDK";
     longDescription = ''

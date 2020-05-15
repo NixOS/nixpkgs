@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
 
   meta = with stdenv.lib; {
-    description = "A font selection program for X11 using the GTK2 toolkit";
+    description = "A font selection program for X11 using the GTK 2 toolkit";
     longDescription = ''
-      Font selection tool similar to xfontsel implemented using GTK+ 2.
+      Font selection tool similar to xfontsel implemented using GTK 2.
       Trivial, but useful nonetheless.
     '';
-    homepage = http://gtk2fontsel.sourceforge.net/;
-    downloadPage = https://sourceforge.net/projects/gtk2fontsel/;
+    homepage = "http://gtk2fontsel.sourceforge.net/";
+    downloadPage = "https://sourceforge.net/projects/gtk2fontsel/";
     license = licenses.gpl2;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;

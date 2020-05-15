@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, Carbon }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qes";
   version = "0.0.2";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Quartz Event Synthesizer";
-    homepage = https://github.com/koekeishiya/qes;
+    homepage = "https://github.com/koekeishiya/qes";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ lnl7 ];
     license = licenses.mit;

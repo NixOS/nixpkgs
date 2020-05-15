@@ -1,8 +1,8 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
-, cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends
+, cups, zlib, libjpeg, libusb1, python2Packages, sane-backends
 , dbus, file, ghostscript, usbutils
-, net_snmp, openssl, perl, nettools
+, net-snmp, openssl, perl, nettools
 , bash, coreutils, utillinux
 , withQt5 ? true
 , withPlugin ? false
@@ -30,14 +30,14 @@ let
   };
 
   hplipPlatforms = {
-    "i686-linux"    = "x86_32";
-    "x86_64-linux"  = "x86_64";
-    "armv6l-linux"  = "arm32";
-    "armv7l-linux"  = "arm32";
-    "aarch64-linux" = "arm64";
+    i686-linux    = "x86_32";
+    x86_64-linux  = "x86_64";
+    armv6l-linux  = "arm32";
+    armv7l-linux  = "arm32";
+    aarch64-linux = "arm64";
   };
 
-  hplipArch = hplipPlatforms."${stdenv.hostPlatform.system}"
+  hplipArch = hplipPlatforms.${stdenv.hostPlatform.system}
     or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
   pluginArches = [ "x86_32" "x86_64" "arm32" "arm64" ];
@@ -47,7 +47,7 @@ in
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
-pythonPackages.buildPythonApplication {
+python2Packages.buildPythonApplication {
   inherit name src;
   format = "other";
 
@@ -59,7 +59,7 @@ pythonPackages.buildPythonApplication {
     dbus
     file
     ghostscript
-    net_snmp
+    net-snmp
     openssl
     perl
     zlib
@@ -69,7 +69,7 @@ pythonPackages.buildPythonApplication {
     pkgconfig
   ];
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python2Packages; [
     dbus
     pillow
     pygobject2
@@ -213,8 +213,8 @@ pythonPackages.buildPythonApplication {
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
-    homepage = https://developers.hp.com/hp-linux-imaging-and-printing;
-    downloadPage = https://sourceforge.net/projects/hplip/files/hplip/;
+    homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
+    downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];

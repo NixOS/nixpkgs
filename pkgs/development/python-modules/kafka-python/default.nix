@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, six, mock }:
 
 buildPythonPackage rec {
-  version = "1.4.6";
+  version = "2.0.1";
   pname = "kafka-python";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08f83d8e0af2e64d25f94314d4bef6785b34e3b0df0effe9eebf76b98de66eeb";
+    sha256 = "1y7ny81rihnhc8lj921d76ir4kf4aj5iy35szgim8zccxhnx96p5";
   };
 
   checkInputs = [ pytest six mock ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pure Python client for Apache Kafka";
-    homepage = https://github.com/dpkp/kafka-python;
+    homepage = "https://github.com/dpkp/kafka-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

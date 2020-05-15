@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Musical key detection for digital audio (C++ library)";
-    homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
+    homepage = "http://www.ibrahimshaath.co.uk/keyfinder/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

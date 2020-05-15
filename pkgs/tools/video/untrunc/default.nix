@@ -1,6 +1,6 @@
 { stdenv, gcc, libav_12, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "untrunc";
   version = "2018.01.13";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Restore a damaged (truncated) mp4, m4v, mov, 3gp video from a similar, undamaged video";
     license = licenses.gpl2;
-    homepage = https://github.com/ponchio/untrunc;
+    homepage = "https://github.com/ponchio/untrunc";
     maintainers = [ maintainers.earvstedt ];
   };
 }

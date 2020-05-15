@@ -135,9 +135,9 @@ in
       };
     };
 
-    users.users = singleton {
-      name = hansUser;
+    users.users.${hansUser} = {
       description = "Hans daemon user";
+      isSystemUser = true;
     };
   };
 

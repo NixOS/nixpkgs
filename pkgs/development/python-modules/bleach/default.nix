@@ -5,6 +5,7 @@
 , pytestrunner
 , six
 , html5lib
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,15 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ six html5lib ];
+  propagatedBuildInputs = [ six html5lib setuptools ];
 
   postPatch = ''
     substituteInPlace setup.py --replace ",<3dev" ""
   '';
 
-  # Disable a test
-  # https://github.com/mozilla/bleach/issues/467
+  # Disable network tests
   checkPhase = ''
-    pytest -k "not test_only_text_is_cleaned"
+    pytest -k "not protocols"
   '';
 
   meta = {
@@ -42,8 +42,8 @@ buildPythonPackage rec {
       to do lots of things, you're probably outside the use cases. Either
       trust those users, or don't.
     '';
-    homepage = https://github.com/mozilla/bleach;
-    downloadPage = https://github.com/mozilla/bleach/releases;
+    homepage = "https://github.com/mozilla/bleach";
+    downloadPage = "https://github.com/mozilla/bleach/releases";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ prikhi ];
   };

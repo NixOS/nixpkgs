@@ -1,26 +1,27 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, google_api_core, grpcio, pytest, mock }:
+{ stdenv, buildPythonPackage, fetchPypi, python
+, google_api_core, grpcio, pytest, mock, setuptools }:
 
 buildPythonPackage rec {
   pname = "google-cloud-core";
-  version = "0.29.1";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d85b1aaaf3bad9415ad1d8ee5eadce96d7007a82f13ce0a0629a003a11e83f29";
+    sha256 = "1n19q57y4d89cjgmrg0f2a7yp7l1np2448mrhpndq354h389m3w7";
   };
 
-  propagatedBuildInputs = [ google_api_core grpcio ];
+  propagatedBuildInputs = [ google_api_core grpcio setuptools ];
   checkInputs = [ pytest mock ];
 
   checkPhase = ''
-    py.test
+    cd tests
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = with stdenv.lib; {
     description = "API Client library for Google Cloud: Core Helpers";
     homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,6 +1,6 @@
 { mkDerivation, haskellPackages, fetchFromGitHub, lib }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "fffuu";
   version = "unstable-2018-05-26";
 
@@ -45,7 +45,7 @@ mkDerivation rec {
   ];
 
   description = "Fancy Formal Firewall Universal Understander";
-  homepage = https://github.com/diekmann/Iptables_Semantics/tree/master/haskell_tool;
+  homepage = "https://github.com/diekmann/Iptables_Semantics/tree/master/haskell_tool";
   license = lib.licenses.bsd2;
   maintainers = [ lib.maintainers.marsam ];
 }

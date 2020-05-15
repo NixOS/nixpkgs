@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/cedadev/ndg_httpsclient/;
+    homepage = "https://github.com/cedadev/ndg_httpsclient/";
     description = "Provide enhanced HTTPS support for httplib and urllib2 using PyOpenSSL";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];

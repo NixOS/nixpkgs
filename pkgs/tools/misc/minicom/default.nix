@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoreconfHook, makeWrapper, pkgconfig
 , lrzsz, ncurses, libiconv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "minicom";
   version = "2.7.1";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Modem control and terminal emulation program";
-    homepage = https://salsa.debian.org/minicom-team/minicom;
+    homepage = "https://salsa.debian.org/minicom-team/minicom";
     license = licenses.gpl2;
     longDescription = ''
       Minicom is a menu driven communications program. It emulates ANSI

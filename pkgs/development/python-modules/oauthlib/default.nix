@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.0.1";
+  version = "3.1.0";
   pname = "oauthlib";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ce32c5d989a1827e3f1148f98b9085ed2370fc939bf524c9c851d8714797298";
+    sha256 = "bee41cc35fcca6e988463cacc3bcb8a96224f470ca547e697b604cc697b2f889";
   };
 
   checkInputs = [ mock pytest ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/idan/oauthlib;
+    homepage = "https://github.com/idan/oauthlib";
     description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
     maintainers = with maintainers; [ prikhi ];
     license = licenses.bsd3;

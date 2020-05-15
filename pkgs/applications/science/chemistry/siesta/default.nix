@@ -1,9 +1,9 @@
 { stdenv, fetchurl
-, gfortran, openblas
+, gfortran, blas, lapack
 , mpi ? null, scalapack
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "4.1-b3";
   pname = "siesta";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     inherit mpi;
   };
 
-  buildInputs = [ openblas gfortran ]
+  buildInputs = [ blas lapack gfortran ]
     ++ (stdenv.lib.optionals (mpi != null) [ mpi scalapack ]);
 
   enableParallelBuilding = true;
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     makeFlagsArray=(
         CC="mpicc" FC="mpifort"
         FPPFLAGS="-DMPI" MPI_INTERFACE="libmpi_f90.a" MPI_INCLUDE="."
-        COMP_LIBS="" LIBS="-lopenblas -lscalapack"
+        COMP_LIBS="" LIBS="-lblas -llapack -lscalapack"
     );
   '' else ''
     makeFlagsArray=(
-      COMP_LIBS="" LIBS="-lopenblas"
+      COMP_LIBS="" LIBS="-lblas -llapack"
     );
   '';
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
          matching the quality of other approaches, such as plane-wave
          and all-electron methods.
       '';
-    homepage = https://www.quantum-espresso.org/;
+    homepage = "https://www.quantum-espresso.org/";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.costrouc ];

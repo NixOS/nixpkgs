@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xcbuildHook, Foundation, AddressBook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.1a-3";
   pname = "contacts";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Access contacts from the Mac address book from command-line";
-    homepage    = http://www.gnufoo.org/contacts/contacts.html;
+    homepage    = "http://www.gnufoo.org/contacts/contacts.html";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ jwiegley ];
     platforms   = stdenv.lib.platforms.darwin;

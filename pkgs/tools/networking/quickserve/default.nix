@@ -3,7 +3,7 @@ let
   threaded_servers = python3Packages.buildPythonPackage {
     name = "threaded_servers";
     src = fetchzip {
-      url = https://xyne.archlinux.ca/projects/python3-threaded_servers/src/python3-threaded_servers-2018.6.tar.xz;
+      url = "https://xyne.archlinux.ca/projects/python3-threaded_servers/src/python3-threaded_servers-2018.6.tar.xz";
       sha256 = "1irliz90a1dk4lyl7mrfq8qnnrfad9czvbcw1spc13zyai66iyhf";
     };
 
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A simple HTTP server for quickly sharing files.";
-    homepage = https://xyne.archlinux.ca/projects/quickserve/;
+    homepage = "https://xyne.archlinux.ca/projects/quickserve/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ lassulus ];
   };

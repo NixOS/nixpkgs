@@ -1,6 +1,6 @@
 { pythonPackages, isPy3k, pkgs }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonPackage {
   name = "beautifulsoup-3.2.1";
   disabled = isPy3k;
 
@@ -13,7 +13,7 @@ pythonPackages.buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = http://www.crummy.com/software/BeautifulSoup/;
+    homepage = "http://www.crummy.com/software/BeautifulSoup/";
     license = "bsd";
     description = "Undemanding HTML/XML parser";
   };

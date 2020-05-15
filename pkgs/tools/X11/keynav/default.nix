@@ -2,7 +2,7 @@
 , libXinerama, libXrandr, glib, cairo, xdotool }:
 
 let release = "20180821"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "keynav-0.${release}.0";
 
   src = fetchFromGitHub {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Generate X11 mouse clicks from keyboard";
-    homepage = https://www.semicomplete.com/projects/keynav/;
+    homepage = "https://www.semicomplete.com/projects/keynav/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

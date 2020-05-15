@@ -4,8 +4,6 @@ python2Packages.buildPythonApplication rec {
   pname = "git-big-picture";
   version = "0.10.1";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "esc";
     repo = pname;
@@ -24,7 +22,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = {
     description = "Tool for visualization of Git repositories";
-    homepage = https://github.com/esc/git-big-picture;
+    homepage = "https://github.com/esc/git-big-picture";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nthorne ];

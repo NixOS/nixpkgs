@@ -4,7 +4,7 @@
 , python2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname   = "ecryptfs-helper";
   version = "20160722";
 

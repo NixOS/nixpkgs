@@ -8,7 +8,7 @@ let param =
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "coq${coq.coq-version}-Cheerios-${param.version}";
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs ./configure";
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   passthru = {
     compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" "8.9" ];

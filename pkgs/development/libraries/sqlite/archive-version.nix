@@ -1,9 +1,9 @@
 lib: version:
 
 with lib;
-  
+
 let
-  fragments = splitString "." version;
+  fragments = splitVersion version;
   major = head fragments;
   minor = concatMapStrings (fixedWidthNumber 2) (tail fragments);
 in

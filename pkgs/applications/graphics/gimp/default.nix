@@ -1,31 +1,120 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk-pixbuf, isocodes
-, pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff
-, libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
-, python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
-, harfbuzz, mypaint-brushes, libwebp, libheif, libgudev, openexr
-, AppKit, Cocoa, gtk-mac-integration-gtk2 }:
+{ stdenv
+, lib
+, fetchurl
+, substituteAll
+, pkgconfig
+, intltool
+, babl
+, gegl
+, gtk2
+, glib
+, gdk-pixbuf
+, isocodes
+, pango
+, cairo
+, freetype
+, fontconfig
+, lcms
+, libpng
+, libjpeg
+, poppler
+, poppler_data
+, libtiff
+, libmng
+, librsvg
+, libwmf
+, zlib
+, libzip
+, ghostscript
+, aalib
+, shared-mime-info
+, python2Packages
+, libexif
+, gettext
+, xorg
+, glib-networking
+, libmypaint
+, gexiv2
+, harfbuzz
+, mypaint-brushes1
+, libwebp
+, libheif
+, libgudev
+, openexr
+, AppKit
+, Cocoa
+, gtk-mac-integration-gtk2
+}:
 
 let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
   pname = "gimp";
-  version = "2.10.12";
+  version = "2.10.18";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "0wdcr8d2ink4swn5r4v13bsiya6s3xm4ya97sdbhs4l40y7bb03x";
+    url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "Zb/hEejuv/093jAWzLUH+ZSNJmPZSXy0ONm7YJ4R1xY=";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool gettext wrapPython ];
-  propagatedBuildInputs = [ gegl ]; # needed by gimp-2.0.pc
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+    gettext
+    wrapPython
+  ];
+
   buildInputs = [
-    babl gegl gtk2 glib gdk-pixbuf pango cairo gexiv2 harfbuzz isocodes
-    freetype fontconfig lcms libpng libjpeg poppler poppler_data libtiff openexr
-    libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp libheif
-    python pygtk libexif xorg.libXpm glib-networking libmypaint mypaint-brushes
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    AppKit Cocoa gtk-mac-integration-gtk2
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];
+    babl
+    gegl
+    gtk2
+    glib
+    gdk-pixbuf
+    pango
+    cairo
+    gexiv2
+    harfbuzz
+    isocodes
+    freetype
+    fontconfig
+    lcms
+    libpng
+    libjpeg
+    poppler
+    poppler_data
+    libtiff
+    openexr
+    libmng
+    librsvg
+    libwmf
+    zlib
+    libzip
+    ghostscript
+    aalib
+    shared-mime-info
+    libwebp
+    libheif
+    python
+    pygtk
+    libexif
+    xorg.libXpm
+    glib-networking
+    libmypaint
+    mypaint-brushes1
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Cocoa
+    gtk-mac-integration-gtk2
+  ] ++ lib.optionals stdenv.isLinux [
+    libgudev
+  ];
+
+  # needed by gimp-2.0.pc
+  propagatedBuildInputs = [
+    gegl
+  ];
 
   pythonPath = [ pygtk ];
 
@@ -48,7 +137,7 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapPythonProgramsIn $out/lib/gimp/${passthru.majorVersion}/plug-ins/
-    wrapProgram $out/bin/gimp-${stdenv.lib.versions.majorMinor version} \
+    wrapProgram $out/bin/gimp-${lib.versions.majorMinor version} \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
@@ -56,9 +145,9 @@ in stdenv.mkDerivation rec {
   passthru = rec {
     # The declarations for `gimp-with-plugins` wrapper,
     # used for determining plug-in installation paths
-    majorVersion = "${stdenv.lib.versions.major version}.0";
+    majorVersion = "${lib.versions.major version}.0";
     targetPluginDir = "lib/gimp/${majorVersion}/plug-ins";
-    targetScriptDir = "lib/gimp/${majorVersion}/scripts";
+    targetScriptDir = "share/gimp/${majorVersion}/scripts";
 
     # probably its a good idea to use the same gtk in plugins ?
     gtk = gtk2;
@@ -66,8 +155,11 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--without-webkit" # old version is required
+    "--disable-check-update"
     "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
     "--with-icc-directory=/run/current-system/sw/share/color/icc"
+    # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
+    "--libdir=\${exec_prefix}/lib"
   ];
 
   # on Darwin,
@@ -76,9 +168,9 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GNU Image Manipulation Program";
-    homepage = https://www.gimp.org/;
+    homepage = "https://www.gimp.org/";
     maintainers = with maintainers; [ jtojnar ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

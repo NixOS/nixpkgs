@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   installPhase = "./remake install";
 
   meta = with stdenv.lib; {
-    homepage = http://coq-interval.gforge.inria.fr/;
+    homepage = "http://coq-interval.gforge.inria.fr/";
     description = "Tactics for simplifying the proofs of inequalities on expressions of real numbers for the Coq proof assistant";
     license = licenses.cecill-c;
     maintainers = with maintainers; [ vbgl ];

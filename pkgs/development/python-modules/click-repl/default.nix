@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ click prompt_toolkit ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/click-contrib/click-repl;
+    homepage = "https://github.com/click-contrib/click-repl";
     description = "Subcommand REPL for click apps";
     license = licenses.mit;
     maintainers = with maintainers; [ twey ];

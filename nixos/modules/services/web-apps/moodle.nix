@@ -18,7 +18,7 @@ let
   global $CFG;
   $CFG = new stdClass();
 
-  $CFG->dbtype    = '${ { "mysql" = "mariadb"; "pgsql" = "pgsql"; }.${cfg.database.type} }';
+  $CFG->dbtype    = '${ { mysql = "mariadb"; pgsql = "pgsql"; }.${cfg.database.type} }';
   $CFG->dblibrary = 'native';
   $CFG->dbhost    = '${cfg.database.host}';
   $CFG->dbname    = '${cfg.database.name}';
@@ -32,7 +32,7 @@ let
     'dbcollation' => 'utf8mb4_unicode_ci',
   );
 
-  $CFG->wwwroot   = '${if cfg.virtualHost.enableSSL then "https" else "http"}://${cfg.virtualHost.hostName}';
+  $CFG->wwwroot   = '${if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL then "https" else "http"}://${cfg.virtualHost.hostName}';
   $CFG->dataroot  = '${stateDir}';
   $CFG->admin     = 'admin';
 
@@ -44,6 +44,8 @@ let
   $CFG->pathtodu = '${pkgs.coreutils}/bin/du';
   $CFG->aspellpath = '${pkgs.aspell}/bin/aspell';
   $CFG->pathtodot = '${pkgs.graphviz}/bin/dot';
+
+  ${cfg.extraConfig}
 
   require_once('${cfg.package}/share/moodle/lib/setup.php');
 
@@ -92,8 +94,8 @@ in
         type = types.int;
         description = "Database host port.";
         default = {
-          "mysql" = 3306;
-          "pgsql" = 5432;
+          mysql = 3306;
+          pgsql = 5432;
         }.${cfg.database.type};
         defaultText = "3306";
       };
@@ -138,19 +140,15 @@ in
     };
 
     virtualHost = mkOption {
-      type = types.submodule ({
-        options = import ../web-servers/apache-httpd/per-server-options.nix {
-          inherit lib;
-          forMainServer = false;
-        };
-      });
-      example = {
-        hostName = "moodle.example.org";
-        enableSSL = true;
-        adminAddr = "webmaster@example.org";
-        sslServerCert = "/var/lib/acme/moodle.example.org/full.pem";
-        sslServerKey = "/var/lib/acme/moodle.example.org/key.pem";
-      };
+      type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+      example = literalExample ''
+        {
+          hostName = "moodle.example.org";
+          adminAddr = "webmaster@example.org";
+          forceSSL = true;
+          enableACME = true;
+        }
+      '';
       description = ''
         Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
         See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
@@ -170,6 +168,19 @@ in
       description = ''
         Options for the Moodle PHP pool. See the documentation on <literal>php-fpm.conf</literal>
         for details on configuration directives.
+      '';
+    };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Any additional text to be appended to the config.php
+        configuration file. This is a PHP script. For configuration
+        details, see <link xlink:href="https://docs.moodle.org/37/en/Configuration_file"/>.
+      '';
+      example = ''
+        $CFG->disableupdatenotifications = true;
       '';
     };
   };
@@ -226,22 +237,20 @@ in
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = [ (mkMerge [
-        cfg.virtualHost {
-          documentRoot = mkForce "${cfg.package}/share/moodle";
-          extraConfig = ''
-            <Directory "${cfg.package}/share/moodle">
-              <FilesMatch "\.php$">
-                <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-                </If>
-              </FilesMatch>
-              Options -Indexes
-              DirectoryIndex index.php
-            </Directory>
-          '';
-        }
-      ]) ];
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
+        documentRoot = mkForce "${cfg.package}/share/moodle";
+        extraConfig = ''
+          <Directory "${cfg.package}/share/moodle">
+            <FilesMatch "\.php$">
+              <If "-f %{REQUEST_FILENAME}">
+                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+              </If>
+            </FilesMatch>
+            Options -Indexes
+            DirectoryIndex index.php
+          </Directory>
+        '';
+      } ];
     };
 
     systemd.tmpfiles.rules = [
@@ -294,7 +303,9 @@ in
 
     systemd.services.httpd.after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
 
-    users.users."${user}".group = group;
-
+    users.users.${user} = {
+      group = group;
+      isSystemUser = true;
+    };
   };
 }

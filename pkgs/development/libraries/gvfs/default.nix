@@ -14,7 +14,7 @@
 , libgphoto2
 , avahi
 , libarchive
-, fuse
+, fuse3
 , libcdio
 , libxml2
 , libxslt
@@ -36,15 +36,16 @@
 , libsecret
 , libgdata
 , python3
+, gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.40.2";
+  version = "1.44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "07lpcfric3h0302n9b1pwa38mjb76r9s98kg2867y2d1qvzfivxx";
+    sha256 = "0ipv0jgzim6glsgizmfjkx0m3gd1l9lr242m0jj6cdmhs52k5vsh";
   };
 
   postPatch = ''
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
     libgphoto2
     avahi
     libarchive
-    fuse
+    fuse3
     libcdio
     samba
     libmtp
@@ -87,6 +88,7 @@ stdenv.mkDerivation rec {
     libcdio-paranoia
     libnfs
     openssh
+    gsettings-desktop-schemas
     # TODO: a ligther version of libsoup to have FTP/HTTP support?
   ] ++ stdenv.lib.optionals gnomeSupport [
     gnome3.libsoup
@@ -124,6 +126,6 @@ stdenv.mkDerivation rec {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ] ++ gnome3.maintainers;
+    maintainers = [ maintainers.lethalman ] ++ teams.gnome.members;
   };
 }

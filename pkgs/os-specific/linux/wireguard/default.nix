@@ -1,32 +1,42 @@
-{ stdenv, kernel, wireguard-tools, perl }:
+{ stdenv, fetchzip, kernel, perl, wireguard-tools, bc }:
 
 # module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
 assert stdenv.lib.versionAtLeast kernel.version "3.10";
+# wireguard upstreamed since 5.6 https://lists.zx2c4.com/pipermail/wireguard/2019-December/004704.html
+assert stdenv.lib.versionOlder kernel.version "5.6";
 
 stdenv.mkDerivation rec {
   pname = "wireguard";
-  inherit (wireguard-tools) src version;
+  version = "1.0.20200506";
 
-  preConfigure = ''
-    cd src
-    sed -i '/depmod/,+1d' Makefile
-  '';
+  src = fetchzip {
+    url = "https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-${version}.tar.xz";
+    sha256 = "05dphmcxm3lg860r5bj1b995avh43d1pap8p18p4ig4kv2r2g9nq";
+  };
 
   hardeningDisable = [ "pic" ];
 
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  INSTALL_MOD_PATH = "\${out}";
 
-  NIX_CFLAGS = ["-Wno-error=cpp"];
+  nativeBuildInputs = [ perl bc ] ++ kernel.moduleBuildDependencies;
 
-  nativeBuildInputs = [ perl ] ++ kernel.moduleBuildDependencies;
-
+  preBuild = "cd src";
   buildFlags = [ "module" ];
-  installTargets = [ "module-install" ];
+
+  INSTALL_MOD_PATH = placeholder "out";
+  installFlags = [ "DEPMOD=true" ];
+  enableParallelBuilding = true;
+
+  passthru = {
+    # remove this when our kernel comes with native wireguard support
+    # and our tests no longer tests this package
+    inherit (wireguard-tools) tests;
+  };
 
   meta = with stdenv.lib; {
     inherit (wireguard-tools.meta) homepage license maintainers;
     description = "Kernel module for the WireGuard secure network tunnel";
+    downloadPage = "https://git.zx2c4.com/wireguard-linux-compat/refs/";
     platforms = platforms.linux;
   };
 }

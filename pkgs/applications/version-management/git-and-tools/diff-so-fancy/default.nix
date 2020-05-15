@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "diff-so-fancy";
-  version = "1.2.6";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${version}";
-    sha256 = "1w8x2d83zdhrnydiqq1qjf3j1y4cawdg8p1isj8zqwblnc47ygjm";
+    sha256 = "0aavxahzha2mms4vdwysk79pa6wzswpfwgsq2hwaxnaf66maahfl";
   };
 
   # Perl is needed here for patchShebangs
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/so-fancy/diff-so-fancy;
+    homepage = "https://github.com/so-fancy/diff-so-fancy";
     description = "Good-looking diffs filter for git";
     license = licenses.mit;
     platforms = platforms.all;

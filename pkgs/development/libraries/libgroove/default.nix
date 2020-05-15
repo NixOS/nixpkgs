@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "andrewrk";
     repo = "libgroove";
-    rev = "${version}";
+    rev = version;
     sha256 = "1la9d9kig50mc74bxvhx6hzqv0nrci9aqdm4k2j4q0s1nlfgxipd";
   };
 
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Streaming audio processing library";
-    homepage = https://github.com/andrewrk/libgroove;
+    homepage = "https://github.com/andrewrk/libgroove";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andrewrk ma27 ];
+    maintainers = with maintainers; [ andrewrk ];
   };
 }

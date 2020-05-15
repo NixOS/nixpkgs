@@ -1,5 +1,7 @@
 self: super: {
 
+    periods = super.callPackage ./ext/periods.nix { };
+
     postgis = super.callPackage ./ext/postgis.nix {
         gdal = self.gdal.override {
             postgresql = self.postgresql;
@@ -50,4 +52,6 @@ self: super: {
     pg_partman = super.callPackage ./ext/pg_partman.nix { };
 
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
+
+    repmgr = super.callPackage ./ext/repmgr.nix { };
 }

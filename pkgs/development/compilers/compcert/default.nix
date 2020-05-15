@@ -4,7 +4,7 @@
 }:
 
 assert lib.versionAtLeast ocamlPackages.ocaml.version "4.02";
-assert lib.versionAtLeast coq.coq-version "8.6.1";
+assert lib.versionAtLeast coq.coq-version "8.8.0";
 
 let
   ocaml-pkgs      = with ocamlPackages; [ ocaml findlib menhir ];
@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "compcert";
-  version = "3.5";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "AbsInt";
     repo = "CompCert";
     rev = "v${version}";
-    sha256 = "1g8067a5x3vd0l47d04gjvy5yx49nghh55am5d1fbrjirfsnsz8j";
+    sha256 = "1h4zhk9rrqki193nxs9vjvya7nl9yxjcf07hfqb6g77riy1vd2jr";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ./configure \
-      --replace '|8.9.0' '|8.9.0|8.9.1' \
       --replace '{toolprefix}gcc' '{toolprefix}cc'
   '';
 

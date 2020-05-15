@@ -1,0 +1,19 @@
+Patch source: https://aur.archlinux.org/cgit/aur.git/plain/004-exiv2.patch?h=mythtv&id=76ea37f8556805b205878772ad7874e487c0d946
+--- a/libs/libmythmetadata/imagemetadata.cpp
++++ b/libs/libmythmetadata/imagemetadata.cpp
+@@ -7,14 +7,7 @@
+ #include "exitcodes.h"        // for ffprobe
+ 
+ // libexiv2 for Exif metadata
+-//#include <exiv2/exiv2.hpp>
+-// Note: Older versions of Exiv2 don't have the exiv2.hpp include
+-// file.  Using image.hpp instead seems to work.
+-#ifdef _MSC_VER
+-#include <exiv2/src/image.hpp>
+-#else
+-#include <exiv2/image.hpp>
+-#endif
++#include <exiv2/exiv2.hpp>
+ 
+ // To read FFMPEG Metadata
+ extern "C" {

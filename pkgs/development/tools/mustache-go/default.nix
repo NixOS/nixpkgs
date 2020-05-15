@@ -14,7 +14,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/cbroglie/mustache;
+    homepage = "https://github.com/cbroglie/mustache";
     description = "The mustache template language in Go";
     license = [ licenses.mit ];
     maintainers = [ maintainers.Zimmi48 ];

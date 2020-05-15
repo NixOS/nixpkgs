@@ -5,16 +5,21 @@ let
   inherit (darwin.apple_sdk.frameworks) Security;
 in rustPlatform.buildRustPackage rec {
   name = "maturin-${version}";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    sha256 = "0srsb305gld6zmz7qm5zk4gawqqlywdpray04z8xcij146mccci2";
+    sha256 = "1fjai0c0j8zzaj4c186dkbvx6cpj0vi3sc1qbjbgn2cm8azsd6m6";
   };
 
-  cargoSha256 = "0bscwbrzjaps4yqcrqhan56kdmh0n014w4ldsbv3sbhpw5izz335";
+  # The maturin 0.8.0 lockfile has an incorrect version for maturin
+  # itself. The upstream lockfiles are normally correct, so this
+  # should be removed post-0.8.0.
+  cargoPatches = [ ./Cargo.lock.patch ];
+
+  cargoSha256 = "01sh523fi46k5xwdslhnmjz128jkdw47gp9bd8gim3ay13zkcn1i";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -27,7 +32,7 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Build and publish crates with pyo3 bindings as python packages";
-    homepage = https://github.com/PyO3/maturin;
+    homepage = "https://github.com/PyO3/maturin";
     license = licenses.mit;
     maintainers = [ maintainers.danieldk ];
     platforms = platforms.all;

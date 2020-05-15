@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "google-fonts";
   version = "2019-07-14";
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://fonts.google.com;
+    homepage = "https://fonts.google.com";
     description = "Font files available from Google Fonts";
     license = with licenses; [ asl20 ofl ufl ];
     platforms = platforms.all;

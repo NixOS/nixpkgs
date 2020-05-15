@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, imlib2, libX11 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ssocr";
   version = "unstable-2018-08-11";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Seven Segment Optical Character Recognition";
-    homepage = https://github.com/auerswal/ssocr;
+    homepage = "https://github.com/auerswal/ssocr";
     license = licenses.gpl3;
     maintainers = [ maintainers.kroell ];
   };

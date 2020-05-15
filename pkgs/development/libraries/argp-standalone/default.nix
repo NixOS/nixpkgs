@@ -19,7 +19,7 @@ let
     sha256 = "1xx2zdc187a1m2x6c1qs62vcrycbycw7n0q3ks2zkxpaqzx2dgkw";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "argp-standalone-1.3";
 
   src = fetchurl {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
        stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ patch-argp-fmtstream ]
     ++ stdenv.lib.optionals stdenv.hostPlatform.isLinux [ patch-throw-in-funcdef patch-shared ];
 
-  patchFlags = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "-p0";
+  patchFlags = stdenv.lib.optional stdenv.hostPlatform.isDarwin "-p0";
 
   preConfigure = stdenv.lib.optionalString stdenv.hostPlatform.isLinux "export CFLAGS='-fgnu89-inline'";
 
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  makeFlags = [ "AR:=$(AR)" ];
 
   enableParallelBuilding = true;
 

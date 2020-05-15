@@ -13,7 +13,7 @@ libav,
 libiio,
 libopus,
 libpulseaudio,
-libusb,
+libusb-compat-0_1,
 limesuite,
 mkDerivation,
 ocl-icd,
@@ -39,7 +39,7 @@ let
 
 in mkDerivation rec {
   pname = "sdrangel";
-  version = "4.11.7";
+  version = "4.11.12";
 
   src = fetchFromGitHub {
     owner = "f4exb";
@@ -51,7 +51,7 @@ in mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
-    glew opencv3 libusb boost libopus limesuite libav libiio libpulseaudio
+    glew opencv3 libusb-compat-0_1 boost libopus limesuite libav libiio libpulseaudio
     qtbase qtwebsockets qtmultimedia rtl-sdr airspy hackrf
     fftwFloat codec2' cm256cc serialdv
   ];

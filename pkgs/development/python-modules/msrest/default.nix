@@ -18,7 +18,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.6.9";
+  version = "0.6.13";
   pname = "msrest";
 
   # no tests in PyPI tarball
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "Azure";
     repo = "msrest-for-python";
     rev = "v${version}";
-    sha256 = "0540dmxz90jsmwvd4q06cr1ficixknjk8q06f2dqcp06w92vnl8r";
+    sha256 = "1s34xp6wgas17mbg6ysciqlgb3qc2p2d5bs9brwr05ys62l6y8cz";
   };
 
   propagatedBuildInputs = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The runtime library 'msrest' for AutoRest generated Python clients.";
-    homepage = https://github.com/Azure/msrest-for-python;
+    homepage = "https://github.com/Azure/msrest-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ bendlas jonringer mwilsoninsight ];
   };

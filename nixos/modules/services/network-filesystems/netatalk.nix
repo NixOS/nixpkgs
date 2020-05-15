@@ -43,10 +43,7 @@ in
   options = {
     services.netatalk = {
 
-      enable = mkOption {
-          default = false;
-          description = "Whether to enable the Netatalk AFP fileserver.";
-        };
+      enable = mkEnableOption "the Netatalk AFP fileserver";
 
       port = mkOption {
         default = 548;
@@ -65,6 +62,7 @@ in
 
       homes = {
         enable = mkOption {
+          type = types.bool;
           default = false;
           description = "Enable sharing of the UNIX server user home directories.";
         };
@@ -98,13 +96,14 @@ in
             Set of AFP volumes to export.
             See <literal>man apf.conf</literal> for more information.
           '';
-        example =
+        example = literalExample ''
           { srv =
              { path = "/srv";
                "read only" = true;
                "hosts allow" = "10.1.0.0/16 10.2.1.100 2001:0db8:1234::/48";
              };
-          };
+          }
+        '';
       };
 
       extmap = mkOption {

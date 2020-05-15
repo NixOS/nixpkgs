@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.4.13";
+  version = "0.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18jpyivnq5pjbkymk3i473rihpj2bgikafpha7xvr6w736hiqmpy";
+    sha256 = "813023269686045f8e01e2289cc1e7e9ae5ab22ddd1e2849a9093ab3ab7270eb";
   };
 
   buildInputs = [ mock ];
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Persistent cache for requests library";
-    homepage = https://pypi.python.org/pypi/requests-cache;
+    homepage = "https://pypi.python.org/pypi/requests-cache";
     license = licenses.bsd3;
   };
 }

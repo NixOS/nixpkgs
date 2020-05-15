@@ -6,7 +6,7 @@
 
 # The celt codec has been deprecated and is now a part of the opus codec
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "celt";
   inherit version;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ultra-low delay audio codec";
-    homepage    = http://www.celt-codec.org/;
+    homepage    = "http://www.celt-codec.org/";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ codyopel raskin ];
     platforms   = platforms.unix;

@@ -1,6 +1,6 @@
 { stdenv, slop, ffmpeg, fetchFromGitHub, makeWrapper}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "capture-unstable";
   version = "2019-03-10";
 

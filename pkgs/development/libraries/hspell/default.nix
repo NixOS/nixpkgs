@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Hebrew spell checker";
-    homepage = http://hspell.ivrix.org.il/;
+    homepage = "http://hspell.ivrix.org.il/";
     platforms = platforms.all;
     license = licenses.gpl2;
   };

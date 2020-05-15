@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = https://swfdec.freedesktop.org/wiki/;
+    homepage = "https://swfdec.freedesktop.org/wiki/";
   };
 }

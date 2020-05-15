@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A forensic/data recovery tool";
-    homepage = https://www.sleuthkit.org/;
+    homepage = "https://www.sleuthkit.org/";
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.ipl10;

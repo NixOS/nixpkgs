@@ -2,7 +2,7 @@
 
 let
 
-patch-base = https://github.com/LukeSmithxyz/kjv/commit/;
+patch-base = "https://github.com/LukeSmithxyz/kjv/commit/";
 
 add-apocrypha = fetchpatch {
   url = patch-base + "b92b7622285d10464f9274f11e740bef90705bbc.patch";

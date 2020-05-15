@@ -2,7 +2,7 @@
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, makeWrapper, xmlto
 , pythonPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "git-bz";
   version = "3.2015-09-08";
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       Chromium on Linux.
     '';
     license = licenses.gpl2Plus;
-    homepage = http://git.fishsoup.net/cgit/git-bz/;
+    homepage = "http://git.fishsoup.net/cgit/git-bz/";
 
     platforms = platforms.linux;
   };

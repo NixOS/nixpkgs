@@ -5,7 +5,7 @@
 , dbus-python
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "Snapper-GUI";
   version = "0.1";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pygobject3 dbus-python ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ricardomv/snapper-gui;
+    homepage = "https://github.com/ricardomv/snapper-gui";
     description = "Graphical frontend for snapper";
     license = licenses.gpl2;
     maintainers = with maintainers; [ tstrobel ];

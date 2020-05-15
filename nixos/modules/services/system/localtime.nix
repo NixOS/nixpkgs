@@ -8,6 +8,7 @@ in {
   options = {
     services.localtime = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable <literal>localtime</literal>, simple daemon for keeping the system
@@ -22,7 +23,7 @@ in {
   config = mkIf cfg.enable {
     services.geoclue2 = {
       enable = true;
-      appConfig."localtime" = {
+      appConfig.localtime = {
         isAllowed = true;
         isSystem = true;
       };
@@ -34,6 +35,10 @@ in {
     environment.systemPackages = [ pkgs.localtime.out ];
     # Install the systemd unit.
     systemd.packages = [ pkgs.localtime.out ];
+
+    users.users.localtimed = {
+      description = "Taskserver user";
+    };
 
     systemd.services.localtime = {
       wantedBy = [ "multi-user.target" ];

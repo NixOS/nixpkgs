@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-store'';
-  version = ''20180328-git'';
+  version = ''20191130-git'';
 
   parasites = [ "cl-store-tests" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."rt" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-store/2018-03-28/cl-store-20180328-git.tgz'';
-    sha256 = ''1r5fmmpjcshfqv43zv282kjsxxp0imxd2fdpwwcr7y7m256w660n'';
+    url = ''http://beta.quicklisp.org/archive/cl-store/2019-11-30/cl-store-20191130-git.tgz'';
+    sha256 = ''1pybx08w486d3bmn8fc6zxvxyprc3da24kk3wxhkrgh0fi1vmcbc'';
   };
 
   packageName = "cl-store";
@@ -20,8 +20,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-store DESCRIPTION Serialization package SHA256
-    1r5fmmpjcshfqv43zv282kjsxxp0imxd2fdpwwcr7y7m256w660n URL
-    http://beta.quicklisp.org/archive/cl-store/2018-03-28/cl-store-20180328-git.tgz
-    MD5 2f8831cb60c0b0575c65e1dbebc07dee NAME cl-store FILENAME cl-store DEPS
-    ((NAME rt FILENAME rt)) DEPENDENCIES (rt) VERSION 20180328-git SIBLINGS NIL
+    1pybx08w486d3bmn8fc6zxvxyprc3da24kk3wxhkrgh0fi1vmcbc URL
+    http://beta.quicklisp.org/archive/cl-store/2019-11-30/cl-store-20191130-git.tgz
+    MD5 d6052274cd0c6a86bfc2de1e4a8a0886 NAME cl-store FILENAME cl-store DEPS
+    ((NAME rt FILENAME rt)) DEPENDENCIES (rt) VERSION 20191130-git SIBLINGS NIL
     PARASITES (cl-store-tests)) */

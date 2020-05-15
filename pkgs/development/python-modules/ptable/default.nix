@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, nose }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "ptable";
   version = "unstable-2019-06-14";
 

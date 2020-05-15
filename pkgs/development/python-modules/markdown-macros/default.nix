@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An extension for python-markdown that makes writing trac-like macros easy";
-    homepage = https://github.com/wnielson/markdown-macros;
+    homepage = "https://github.com/wnielson/markdown-macros";
     license = licenses.mit;
     maintainers = [ maintainers.abigailbuccaneer ];
   };

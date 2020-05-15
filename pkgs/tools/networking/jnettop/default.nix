@@ -1,6 +1,6 @@
 { fetchurl, fetchpatch, stdenv, autoconf, libpcap, ncurses, pkgconfig, glib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "jnettop-0.13.0";
 
   src = fetchurl {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       by bandwidth they use.
     '';
 
-    homepage = http://jnettop.kubs.info/;
+    homepage = "http://jnettop.kubs.info/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };

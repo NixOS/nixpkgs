@@ -1,7 +1,7 @@
 { lib, bundlerEnv, ruby, bundlerUpdateScript
 }:
 
-bundlerEnv rec {
+bundlerEnv {
   pname = "doing";
   version = (import ./gemset.nix).doing.version;
 
@@ -17,7 +17,7 @@ bundlerEnv rec {
       in a TaskPaper-formatted text file. It allows for multiple
       sections/categories and flexible output formatting.
     '';
-    homepage    = https://brettterpstra.com/projects/doing/;
+    homepage    = "https://brettterpstra.com/projects/doing/";
     license     = licenses.mit;
     maintainers = with maintainers; [ ktf nicknovitski ];
     platforms   = platforms.unix;

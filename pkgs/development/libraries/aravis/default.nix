@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, intltool
-, audit, glib, libusb, libxml2
+, audit, glib, libusb1, libxml2
 , wrapGAppsHook
 , gstreamer ? null
 , gst-plugins-base ? null
@@ -33,13 +33,13 @@ in
   stdenv.mkDerivation rec {
 
     pname = "aravis";
-    version = "0.6.3";
+    version = "0.6.4";
 
     src = fetchFromGitHub {
       owner = "AravisProject";
       repo = pname;
       rev= "ARAVIS_${builtins.replaceStrings ["."] ["_"] version}";
-      sha256 = "0lmgx854z522dwcxsg37bxdyiai9fnycpx1nvgayksj38h39kfn2";
+      sha256 = "18fnliks661kzc3g8v08hcaj18hjid8b180d6s9gwn0zgv4g374w";
     };
 
     outputs = [ "bin" "dev" "out" "lib" ];
@@ -53,7 +53,7 @@ in
 
     buildInputs =
       [ glib libxml2 ]
-      ++ stdenv.lib.optional enableUsb libusb
+      ++ stdenv.lib.optional enableUsb libusb1
       ++ stdenv.lib.optional enablePacketSocket audit
       ++ stdenv.lib.optionals (enableViewer || enableGstPlugin) [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]
       ++ stdenv.lib.optionals (enableViewer) [ libnotify gtk3 gnome3.adwaita-icon-theme ];

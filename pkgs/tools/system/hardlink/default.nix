@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pcre2 }:
 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hardlink";
   version = "1.3-4";
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Consolidate duplicate files via hardlinks";
-    homepage = https://pagure.io/hardlink;
-    repositories.git = https://src.fedoraproject.org/cgit/rpms/hardlink.git;
+    homepage = "https://pagure.io/hardlink";
+    repositories.git = "https://src.fedoraproject.org/cgit/rpms/hardlink.git";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

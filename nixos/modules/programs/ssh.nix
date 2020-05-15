@@ -61,12 +61,9 @@ in
         '';
       };
 
-      # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
       pubkeyAcceptedKeyTypes = mkOption {
         type = types.listOf types.str;
-        default = [
-          "+ssh-dss"
-        ];
+        default = [];
         example = [ "ssh-ed25519" "ssh-rsa" ];
         description = ''
           Specifies the key types that will be used for public key authentication.
@@ -75,9 +72,7 @@ in
 
       hostKeyAlgorithms = mkOption {
         type = types.listOf types.str;
-        default = [
-          "+ssh-dss"
-        ];
+        default = [];
         example = [ "ssh-ed25519" "ssh-rsa" ];
         description = ''
           Specifies the host key algorithms that the client wants to use in order of preference.
@@ -112,6 +107,16 @@ in
         example = "1h";
         description = ''
           How long to keep the private keys in memory. Use null to keep them forever.
+        '';
+      };
+
+      agentPKCS11Whitelist = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "\${pkgs.opensc}/lib/opensc-pkcs11.so";
+        description = ''
+          A pattern-list of acceptable paths for PKCS#11 shared libraries
+          that may be used with the -s option to ssh-add.
         '';
       };
 
@@ -241,6 +246,7 @@ in
             ExecStart =
                 "${cfg.package}/bin/ssh-agent " +
                 optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
+                optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") +
                 "-a %t/ssh-agent";
             StandardOutput = "null";
             Type = "forking";

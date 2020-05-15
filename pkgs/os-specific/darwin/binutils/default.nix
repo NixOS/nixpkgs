@@ -14,8 +14,9 @@ in
 
 # TODO: loop over targetPrefixed binaries too
 stdenv.mkDerivation {
-  name = "${targetPrefix}cctools-binutils-darwin";
-  outputs = [ "out" "info" "man" ];
+  pname = "${targetPrefix}cctools-binutils-darwin";
+  inherit (cctools) version;
+  outputs = [ "out" "man" ];
   buildCommand = ''
     mkdir -p $out/bin $out/include
 
@@ -41,12 +42,13 @@ stdenv.mkDerivation {
 
     ln -s ${cctools}/libexec $out/libexec
 
-    mkdir -p "$info/nix-support" "$man/nix-support"
-    printWords ${binutils-unwrapped.info} \
-      >> $info/nix-support/propagated-build-inputs
-    # FIXME: cctools missing man pages
-    printWords ${binutils-unwrapped.man} \
-      >> $man/nix-support/propagated-build-inputs
+    mkdir -p "$man"/share/man/man{1,5}
+    for i in ${builtins.concatStringsSep " " cmds}; do
+      for path in "${cctools.man}"/share/man/man?/$i.*; do
+        dest_path="$man''${path#${cctools.man}}"
+        ln -sv "$path" "$dest_path"
+      done
+    done
   '';
 
   passthru = {

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "shc";
   version = "4.0.3";
-  rev = "${version}";
+  rev = version;
 
   src = fetchFromGitHub {
     inherit rev;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://neurobin.org/projects/softwares/unix/shc/;
+    homepage = "https://neurobin.org/projects/softwares/unix/shc/";
     description = "Shell Script Compiler";
     platforms = stdenv.lib.platforms.linux;
     license = licenses.gpl3;

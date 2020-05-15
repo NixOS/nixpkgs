@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-pomodoro";
-  version = "0.15.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "codito";
     repo = "gnome-pomodoro";
     rev = version;
-    sha256 = "0nmgd122gsfka0p50mila88iwrzckq2r36a3h20lswn5qkn321i1";
+    sha256 = "0s9wzx7wbynpqgj7nlgs5wwx4w2akz7nli89sy7pxcn4xpnahqgn";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://gnomepomodoro.org/;
+    homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
     longDescription = ''
       This GNOME utility helps to manage time according to Pomodoro Technique.

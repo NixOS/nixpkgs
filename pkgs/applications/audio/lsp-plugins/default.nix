@@ -1,39 +1,38 @@
-{ stdenv, fetchFromGitHub, pkgconfig, makeWrapper
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, makeWrapper
 , libsndfile, jack2Full
 , libGLU, libGL, lv2, cairo
-, ladspaH, php, expat }:
+, ladspaH, php }:
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.1.9";
+  version = "1.1.19";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
-    repo = "${pname}";
+    repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "1dzpl7f354rwp37bkr9h2yyafykcdn6m1qqfshqg77fj0pcsw8r2";
+    sha256 = "1wiph3vxhydc6mr9hn2c6crd4cx592l2zv0wrzgmpnlm1lflzpbg";
   };
 
-  nativeBuildInputs = [ pkgconfig php expat ];
-  buildInputs = [ jack2Full libsndfile libGLU libGL lv2 cairo ladspaH makeWrapper ];
-
-  makeFlags = [
-    "BIN_PATH=$(out)/bin"
-    "LIB_PATH=$(out)/lib"
-    "DOC_PATH=$(out)/share/doc"
+  patches = [
+    # Fix build
+    # https://github.com/sadko4u/lsp-plugins/issues/104
+    (fetchpatch {
+      url = "https://github.com/sadko4u/lsp-plugins/commit/4d901135fb82fa95e668b4d55d05e405f5e620d2.patch";
+      excludes = [ "TODO.txt" ];
+      sha256 = "wR2B6XnDXT2BGwmrsL72PH/BM1e9d9JvqHxDtfFDAug=";
+    })
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-DLSP_NO_EXPERIMENTAL" ];
+  nativeBuildInputs = [ pkgconfig php makeWrapper ];
+  buildInputs = [ jack2Full libsndfile libGLU libGL lv2 cairo ladspaH ];
 
-  patchPhase = ''
-    runHook prePatch
-    substituteInPlace Makefile --replace "/usr/lib" "$out/lib"
-    substituteInPlace ./include/container/jack/main.h --replace "/usr/lib" "$out/lib"
-    substituteInPlace ./include/container/vst/main.h --replace "/usr/lib" "$out/lib"
-    # for https://github.com/sadko4u/lsp-plugins/issues/7#issuecomment-426561549 :
-    sed -i '/X11__NET_WM_WINDOW_TYPE_DOCK;/d' ./src/ui/ws/x11/X11Window.cpp
-    runHook postPatch
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder ''out''}"
+    "ETC_PATH=$(out)/etc"
+  ];
+
+  NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
 
   doCheck = true;
 
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  buildFlags = "release";
+  buildFlags = [ "release" ];
 
   meta = with stdenv.lib;
     { description = "Collection of open-source audio plugins";
@@ -151,7 +150,7 @@ stdenv.mkDerivation rec {
         - Delay Compensator Stereo - Verzögerungsausgleicher Stereo
         - Delay Compensator x2 Stereo - Verzögerungsausgleicher x2 Stereo
       '';
-      homepage = https://lsp-plug.in;
+      homepage = "https://lsp-plug.in";
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
       platforms = platforms.linux;

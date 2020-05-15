@@ -38,7 +38,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kennethreitz/httpbin;
+    homepage = "https://github.com/kennethreitz/httpbin";
     description = "HTTP Request & Response Service";
     license = licenses.mit;
   };

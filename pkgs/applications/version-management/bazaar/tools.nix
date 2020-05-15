@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  name = "bzr-tools-${version}";
+  pname = "bzr-tools";
   version = "2.6.0";
 
   src = fetchurl {
@@ -13,7 +13,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Bazaar plugins";
-    homepage = http://wiki.bazaar.canonical.com/BzrTools;
+    homepage = "http://wiki.bazaar.canonical.com/BzrTools";
     platforms = platforms.unix;
     license = licenses.gpl2;
   };

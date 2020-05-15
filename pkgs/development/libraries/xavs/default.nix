@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/xavs/code/trunk";
-    rev = "${version}";
+    rev = version;
     sha256 = "0drw16wm95dqszpl7j33y4gckz0w0107lnz6wkzb66f0dlbv48cf";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "AVS encoder and decoder";
-    homepage    = http://xavs.sourceforge.net/;
+    homepage    = "http://xavs.sourceforge.net/";
     license     = licenses.lgpl2;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ codyopel ];

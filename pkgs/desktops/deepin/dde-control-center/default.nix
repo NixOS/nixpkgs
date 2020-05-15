@@ -1,20 +1,51 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, deepin, qttools, qtdeclarative,
- networkmanager, qtsvg, qtx11extras,  dtkcore, dtkwidget, geoip, gsettings-qt,
- dde-network-utils, networkmanager-qt, xorg, mtdev, fontconfig, freetype, dde-api,
- dde-daemon, qt5integration, deepin-desktop-base, deepin-desktop-schemas, dbus,
- systemd, dde-qt-dbus-factory, qtmultimedia, qtbase, glib, gnome3, which,
- substituteAll, tzdata, wrapGAppsHook
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, deepin
+, qttools
+, qtdeclarative
+, networkmanager
+, qtsvg
+, qtx11extras
+, dtkcore
+, dtkwidget
+, geoip
+, gsettings-qt
+, dde-network-utils
+, networkmanager-qt
+, xorg
+, mtdev
+, fontconfig
+, freetype
+, dde-api
+, dde-daemon
+, qt5integration
+, deepin-desktop-base
+, deepin-desktop-schemas
+, dbus
+, systemd
+, dde-qt-dbus-factory
+, qtmultimedia
+, qtbase
+, glib
+, gnome3
+, which
+, substituteAll
+, tzdata
+, wrapGAppsHook
 }:
 
 mkDerivation rec {
   pname = "dde-control-center";
-  version = "4.10.11";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1ip8wjwf0n9q8xnqymzh8lz0j5gcnns976n291np6k5kdh2wqhr5";
+    sha256 = "10bx8bpvi3ib32a3l4nyb1j0iq3bch8jm9wfm6d5v0ym1zb92x3b";
   };
 
   nativeBuildInputs = [
@@ -93,17 +124,25 @@ mkDerivation rec {
       --replace "/bin/systemctl" "${systemd}/bin/systemctl"
   '';
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
   postFixup = ''
     # debuging
     searchForUnresolvedDLL $out
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Control panel of Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/dde-control-center;
+    homepage = "https://github.com/linuxdeepin/dde-control-center";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo worldofpeace ];

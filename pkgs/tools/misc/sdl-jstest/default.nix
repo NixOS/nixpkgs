@@ -1,6 +1,6 @@
 { stdenv, fetchgit, cmake, pkgconfig, SDL, SDL2, ncurses, docbook_xsl, git }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sdl-jstest";
   version = "2018-06-15";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig docbook_xsl git ];
   
   meta = with stdenv.lib; {
-    homepage = https://github.com/Grumbel/sdl-jstest;
+    homepage = "https://github.com/Grumbel/sdl-jstest";
     description = "Simple SDL joystick test application for the console";
     license = licenses.gpl3;
     platforms = platforms.linux;

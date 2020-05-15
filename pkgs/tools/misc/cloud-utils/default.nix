@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper
 , gawk, gnused, utillinux, file
-, wget, python3, qemu, euca2ools
+, wget, python3, qemu-utils, euca2ools
 , e2fsprogs, cdrkit }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   # according to https://packages.ubuntu.com/source/zesty/cloud-utils
   binDeps = [
-    wget e2fsprogs file gnused gawk utillinux qemu euca2ools cdrkit
+    wget e2fsprogs file gnused gawk utillinux qemu-utils euca2ools cdrkit
   ];
 
   postFixup = ''

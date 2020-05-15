@@ -7,7 +7,7 @@
 let
   runtime_bins =  [ file unzip gzip ] ++ extraBackends;
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "unp";
   version = "2.0-pre7";
   buildInputs = [ perl makeWrapper ];
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command line tool for unpacking archives easily";
-    homepage = https://packages.qa.debian.org/u/unp.html;
+    homepage = "https://packages.qa.debian.org/u/unp.html";
     license = with licenses; [ gpl2 ];
     maintainers = [ maintainers.timor ];
     platforms = platforms.all;

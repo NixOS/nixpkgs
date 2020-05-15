@@ -1,8 +1,9 @@
-{ buildPythonPackage, fetchPypi, lib, ipaddress }:
+{ buildPythonPackage, fetchPypi, lib, ipaddress, isPy3k }:
 
 buildPythonPackage rec {
   pname = "piccata";
   version = "1.0.1";
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;

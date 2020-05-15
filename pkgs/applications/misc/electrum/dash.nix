@@ -2,7 +2,7 @@
 
 python2Packages.buildPythonApplication rec {
   version = "2.9.3.1";
-  name = "electrum-dash-${version}";
+  pname = "electrum-dash";
 
   src = fetchurl {
     url = "https://github.com/akhavr/electrum-dash/releases/download/${version}/Electrum-DASH-${version}.tar.gz";
@@ -39,8 +39,9 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Electrum DASH";
-    homepage = https://github.com/dashpay/electrum-dash;
+    homepage = "https://github.com/dashpay/electrum-dash";
     license = licenses.gpl3;
     maintainers = with maintainers; [ np ];
+    knownVulnerabilities = [ "CVE-2018-1000022" ];
   };
 }

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       GNU guile-gnome brings the power of Scheme to your graphical application.
       guile-gnome modules support the entire Gnome library stack: from Pango to
-      GnomeCanvas, Gtk+ to GStreamer, Glade to GtkSourceView, you will find in
+      GnomeCanvas, GTK to GStreamer, Glade to GtkSourceView, you will find in
       guile-gnome a comprehensive environment for developing modern
       applications.
     '';

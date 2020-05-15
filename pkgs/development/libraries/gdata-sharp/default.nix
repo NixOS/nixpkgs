@@ -2,7 +2,7 @@
 
 let
   newtonsoft-json = dotnetPackages.NewtonsoftJson;
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "gdata-sharp";
   version = "2.2.0.0";
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://code.google.com/archive/p/google-gdata/;
+    homepage = "https://code.google.com/archive/p/google-gdata/";
 
     description = "The Google Data APIs";
     longDescription = ''
@@ -37,5 +37,6 @@ in stdenv.mkDerivation rec {
 
     license = licenses.asl20;
     platforms = platforms.linux;
+    broken = true;
   };
 }

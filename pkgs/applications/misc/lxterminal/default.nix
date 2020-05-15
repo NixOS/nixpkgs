@@ -4,7 +4,7 @@
 
 let version = "0.3.2"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lxterminal";
   inherit version;
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       desktop-independent VTE-based terminal emulator for LXDE without any
       unnecessary dependencies.
     '';
-    homepage = https://wiki.lxde.org/en/LXTerminal;
+    homepage = "https://wiki.lxde.org/en/LXTerminal";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.velovix ];
     platforms = stdenv.lib.platforms.linux;

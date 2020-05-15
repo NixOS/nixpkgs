@@ -24,7 +24,7 @@ with lib; let
     sha256 = "0jcj5xxbg7x7gyhbb67h3ds6vly62gx7j02zm6lg102h34jajj7a";
   };
 
-  nvidia-container-runtime-hook = buildGoPackage rec {
+  nvidia-container-runtime-hook = buildGoPackage {
     pname = "nvidia-container-runtime-hook";
     version = "1.4.0";
 
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/NVIDIA/nvidia-docker;
+    homepage = "https://github.com/NVIDIA/nvidia-docker";
     description = "NVIDIA container runtime for Docker";
     license = licenses.bsd3;
     platforms = platforms.linux;

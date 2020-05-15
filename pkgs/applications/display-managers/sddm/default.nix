@@ -6,7 +6,7 @@
 let
   version = "0.18.1";
 
-in mkDerivation rec {
+in mkDerivation {
   pname = "sddm";
   inherit version;
 
@@ -46,6 +46,7 @@ in mkDerivation rec {
     "-DQT_IMPORTS_DIR=${placeholder "out"}/${qtbase.qtQmlPrefix}"
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
     "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
+    "-DDBUS_CONFIG_DIR=${placeholder "out"}/share/dbus-1/system.d"
   ];
 
   postInstall = ''
@@ -59,7 +60,7 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "QML based X11 display manager";
-    homepage    = https://github.com/sddm/sddm;
+    homepage    = "https://github.com/sddm/sddm";
     maintainers = with maintainers; [ abbradar ttuegel ];
     platforms   = platforms.linux;
     license     = licenses.gpl2Plus;

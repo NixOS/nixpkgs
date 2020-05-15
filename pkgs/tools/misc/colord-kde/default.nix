@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchurl
+{ mkDerivation, lib, fetchurl
 , extra-cmake-modules, ki18n
 , kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kiconthemes, kcmutils
 , kio, knotifications, plasma-framework, kwidgetsaddons, kwindowsystem
 , kitemviews, lcms2, libXrandr, qtx11extras
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "colord-kde";
   version = "0.5.0";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = https://projects.kde.org/projects/playground/graphics/colord-kde;
+    homepage = "https://projects.kde.org/projects/playground/graphics/colord-kde";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ttuegel ];
   };

@@ -122,7 +122,7 @@ in
 
     # Since we lack the right setuid/setcap binaries, set up a host-only network by default.
   } (mkIf cfg.addNetworkInterface {
-    systemd.services."vboxnet0" =
+    systemd.services.vboxnet0 =
       { description = "VirtualBox vboxnet0 Interface";
         requires = [ "dev-vboxnetctl.device" ];
         after = [ "dev-vboxnetctl.device" ];
@@ -149,5 +149,12 @@ in
     # Make sure NetworkManager won't assume this interface being up
     # means we have internet access.
     networking.networkmanager.unmanaged = ["vboxnet0"];
-  })]);
+  }) (mkIf config.networking.useNetworkd {
+    systemd.network.networks."40-vboxnet0".extraConfig = ''
+      [Link]
+      RequiredForOnline=no
+    '';
+  })
+
+]);
 }

@@ -23,12 +23,12 @@ index e353a37..b06f842 100644
  
  struct cmLinkImplementation;
  
--#if defined(CMAKE_BUILD_WITH_CMAKE) && defined(__APPLE__)
+-#if !defined(CMAKE_BOOTSTRAP) && defined(__APPLE__)
 -#  define HAVE_APPLICATION_SERVICES
 -#  include <ApplicationServices/ApplicationServices.h>
 -#endif
 -
- #if defined(CMAKE_BUILD_WITH_CMAKE)
+ #if !defined(CMAKE_BOOTSTRAP)
  #  include "cmXMLParser.h"
  
 diff --git a/Utilities/cmlibarchive/CMakeLists.txt b/Utilities/cmlibarchive/CMakeLists.txt

@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ openssl zlib ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=format-truncation"
+    "-Wno-error=address-of-packed-member"
+    "-Wno-error=format-overflow"
+    "-Wno-error=stringop-truncation"
+  ];
+
   preBuild = ''
     patchShebangs build/gen_version
     substituteInPlace build/gen_version --replace 'git describe' 'echo ${version}'
@@ -28,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Flash-optimized, in-memory, NoSQL database";
-    homepage = http://aerospike.com/;
+    homepage = "http://aerospike.com/";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kalbasit ];

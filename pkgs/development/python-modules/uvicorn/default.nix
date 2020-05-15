@@ -1,23 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , click
 , h11
 , httptools
 , uvloop
 , websockets
 , wsproto
+, pytest
+, requests
 , isPy27
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.8.4";
+  version = "0.11.2";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1l8rfm30inx9pma893i7sby9h7y910k58841zqaajksn563b882k";
+  src = fetchFromGitHub {
+    owner = "encode";
+    repo = pname;
+    rev = version;
+    sha256 = "145c569j4511zw3wglyv9qgd7g1757ypi2blcckpcmahqw11l5p2";
   };
 
   propagatedBuildInputs = [
@@ -29,14 +33,24 @@ buildPythonPackage rec {
     wsproto
   ];
 
-  checkPhase = ''
-    $out/bin/uvicorn --help
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "h11==0.8.*" "h11"
   '';
 
-  patches = [ ./setup.patch ];
+  checkInputs = [ pytest requests ];
+  checkPhase = ''
+    pytest
+  '';
+
+  # LICENCE.md gets propagated without this, causing collisions
+  # see https://github.com/encode/uvicorn/issues/392
+  postInstall = ''
+    rm $out/LICENSE.md
+  '';
 
   meta = with lib; {
-    homepage = https://www.uvicorn.org/;
+    homepage = "https://www.uvicorn.org/";
     description = "The lightning-fast ASGI server";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, libusb, libusb1 }:
+{ stdenv, fetchPypi, buildPythonPackage, libusb1 }:
 
 buildPythonPackage rec {
   pname = "pyusb";
@@ -17,14 +17,12 @@ buildPythonPackage rec {
       sed -i -e "s|find_library=None|find_library=lambda _:\"$libusb\"|" usb/backend/libusb1.py
     '';
 
-  propagatedBuildInputs = [ libusb ];
-
   # No tests included
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python USB access module (wraps libusb 1.0)";  # can use other backends
-    homepage = http://pyusb.sourceforge.net/;
+    homepage = "https://pyusb.github.io/pyusb/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bjornfor ];
   };

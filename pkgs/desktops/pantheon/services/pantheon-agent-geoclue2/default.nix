@@ -15,18 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-geoclue2";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1hjnbbzsch09090b200b3i85x8fv95agfqd6nrlc9za3jqjhm2xs";
+    sha256 = "1lky7pw47d5mdza3bhq0ahdhgdv159ixngdsc1ys6j1kszsfxc1f";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Pantheon Geoclue2 Agent";
-    homepage = https://github.com/elementary/pantheon-agent-geoclue2;
+    homepage = "https://github.com/elementary/pantheon-agent-geoclue2";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

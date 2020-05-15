@@ -1,17 +1,20 @@
 { stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
-, lsb-release, glog, protobuf, cbc, zlib
-, ensureNewerSourcesForZipFilesHook, python, swig
-, pythonProtobuf }:
+, lsb-release, glog, protobuf3_11, cbc, zlib
+, ensureNewerSourcesForZipFilesHook, python, swig }:
 
-stdenv.mkDerivation rec {
+let
+  protobuf = protobuf3_11;
+  pythonProtobuf = python.pkgs.protobuf.override { inherit protobuf; };
+
+in stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "v7.0";
+  version = "7.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
-    rev = version;
-    sha256 = "09rs2j3w4ljw9qhhnsjlvfii297njjszwvkbgj1i6kns3wnlr7cp";
+    rev = "v${version}";
+    sha256 = "0605q3y7vh7x7m9azrbkx44blq12zrab6v28b9wmpcn1lmykbw1b";
   };
 
   # The original build system uses cmake which does things like pull
@@ -59,12 +62,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "python" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/google/or-tools;
+    homepage = "https://github.com/google/or-tools";
     license = licenses.asl20;
     description = ''
       Google's software suite for combinatorial optimization.
     '';
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ andersk ];
     platforms = with platforms; linux;
   };
 }

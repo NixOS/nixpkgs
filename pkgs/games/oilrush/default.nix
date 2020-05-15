@@ -68,7 +68,7 @@ stdenv.mkDerivation {
       combines the strategic challenge of a classical RTS with the sheer fun
       of Tower Defense.
     '';
-    homepage = http://oilrush-game.com/;
+    homepage = "http://oilrush-game.com/";
     license = stdenv.lib.licenses.unfree;
     #maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = stdenv.lib.platforms.linux;

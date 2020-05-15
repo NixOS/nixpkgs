@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cddlib";
     repo = "cddlib";
-    rev = "${version}";
+    rev = version;
     sha256 = "1z03ljy3rrr0qq5gq54vynnif6fn0xhn05g90nnv0dpyc3ps8lzp";
   };
   buildInputs = [gmp];
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [raskin timokau];
     platforms = platforms.unix;
-    homepage = https://www.inf.ethz.ch/personal/fukudak/cdd_home/index.html;
+    homepage = "https://www.inf.ethz.ch/personal/fukudak/cdd_home/index.html";
   };
 }

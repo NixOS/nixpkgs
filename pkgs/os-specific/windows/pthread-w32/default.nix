@@ -1,6 +1,6 @@
 { stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pthreads-w32";
   version = "2.9.1";
 

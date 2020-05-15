@@ -18,14 +18,14 @@ let
 in
 
 rec {
-  rustc = stdenv.mkDerivation rec {
+  rustc = stdenv.mkDerivation {
     name = "rustc-${versionType}-${version}";
 
     inherit version;
     inherit src;
 
     meta = with stdenv.lib; {
-      homepage = http://www.rust-lang.org/;
+      homepage = "http://www.rust-lang.org/";
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
@@ -64,14 +64,14 @@ rec {
     setupHooks = ./setup-hook.sh;
   };
 
-  cargo = stdenv.mkDerivation rec {
+  cargo = stdenv.mkDerivation {
     name = "cargo-${versionType}-${version}";
 
     inherit version;
     inherit src;
 
     meta = with stdenv.lib; {
-      homepage = http://www.rust-lang.org/;
+      homepage = "http://www.rust-lang.org/";
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];

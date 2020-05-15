@@ -1,12 +1,15 @@
 { stdenv, substituteAll
-, fetchurl, perl, gcc, llvm_39
+, fetchurl, perl, gcc, llvm
 , ncurses5, gmp, glibc, libiconv
+, llvmPackages
 }:
 
 # Prebuilt only does native
 assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
+  useLLVM = !stdenv.targetPlatform.isx86;
+
   libPath = stdenv.lib.makeLibraryPath ([
     ncurses5 gmp
   ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
@@ -29,23 +32,23 @@ stdenv.mkDerivation rec {
   name = "ghc-${version}-binary";
 
   src = fetchurl ({
-    "i686-linux" = {
+    i686-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb8-linux.tar.xz";
       sha256 = "08w2ik55dp3n95qikmrflc91lsiq01xp53ki3jlhnbj8fqnxfrwy";
     };
-    "x86_64-linux" = {
+    x86_64-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb8-linux.tar.xz";
       sha256 = "0ahv26304pqi3dm7i78si4pxwvg5f5dc2jwsfgvcrhcx5g30bqj8";
     };
-    "armv7l-linux" = {
+    armv7l-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-armv7-deb8-linux.tar.xz";
       sha256 = "1jmv8qmnh5bn324fivbwdcaj55kvw7cb2zq9pafmlmv3qwwx7s46";
     };
-    "aarch64-linux" = {
+    aarch64-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-aarch64-deb8-linux.tar.xz";
       sha256 = "1k2amylcp1ad67c75h1pqf7czf9m0zj1i7hdc45ghjklnfq9hrk7";
     };
-    "x86_64-darwin" = {
+    x86_64-darwin = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "09swx71gh5habzbx55shz2xykgr96xkcy09nzinnm4z0yxicy3zr";
     };
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
-  buildInputs = stdenv.lib.optionals (stdenv.targetPlatform.isAarch32 || stdenv.targetPlatform.isAarch64) [ llvm_39 ];
+  propagatedBuildInputs = stdenv.lib.optionals useLLVM [ llvmPackages.llvm ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/

@@ -430,14 +430,14 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  Deedle = fetchNuGet rec {
+  Deedle = fetchNuGet {
     baseName = "Deedle";
     version = "1.2.5";
     sha256 = "0g19ll6bp97ixprcnpwwvshr1n9jxxf9xjhkxp0r63mg46z48jnw";
     outputFiles = [ "*" ];
   };
 
-  ExcelDna = buildDotnetPackage rec {
+  ExcelDna = buildDotnetPackage {
     baseName = "Excel-DNA";
     version = "0.32.0";
 
@@ -496,7 +496,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  ExtCore = buildDotnetPackage rec {
+  ExtCore = buildDotnetPackage {
     baseName = "ExtCore";
     version = "0.8.46";
 
@@ -527,6 +527,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
+      broken = true;
     };
   };
 
@@ -557,14 +558,14 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         FSharp.Compiler.Service project. It is intended to be used as a backend
         service for rich editing or 'intellisense' features for editors.
         '';
-      homepage = https://github.com/fsharp/FSharp.AutoComplete;
+      homepage = "https://github.com/fsharp/FSharp.AutoComplete";
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
     };
   };
 
-  FSharpCompilerService = buildDotnetPackage rec {
+  FSharpCompilerService = buildDotnetPackage {
     baseName = "FSharp.Compiler.Service";
     version = "0.0.90";
 
@@ -606,13 +607,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     fileProvidedTypes = fetchurl {
       name = "ProvidedTypes.fs";
-      url = https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/ProvidedTypes.fs;
+      url = "https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/ProvidedTypes.fs";
       sha256 = "1lb056v1xld1rfx6a8p8i2jz8i6qa2r2823n5izsf1qg1qgf2980";
     };
 
     fileDebugProvidedTypes = fetchurl {
       name = "DebugProvidedTypes.fs";
-      url = https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/DebugProvidedTypes.fs;
+      url = "https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/DebugProvidedTypes.fs";
       sha256 = "1whyrf2jv6fs7kgysn2086v15ggjsd54g1xfs398mp46m0nxp91f";
     };
 
@@ -667,7 +668,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   };
   # };
 
-  GitVersionTree = buildDotnetPackage rec {
+  GitVersionTree = buildDotnetPackage {
     baseName = "GitVersionTree";
     version = "2013-10-01";
 
@@ -708,7 +709,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = with stdenv.lib; {
       description = "A tool to help visualize git revisions and branches";
-      homepage = https://github.com/crc8/GitVersionTree;
+      homepage = "https://github.com/crc8/GitVersionTree";
       license = licenses.gpl2;
       maintainers = with maintainers; [ obadz ];
       platforms = platforms.all;
@@ -732,7 +733,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
-      homepage = https://numerics.mathdotnet.com/;
+      homepage = "https://numerics.mathdotnet.com/";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -762,7 +763,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A generic framework for creating extensible applications";
-      homepage = https://www.mono-project.com/Mono.Addins;
+      homepage = "https://www.mono-project.com/Mono.Addins";
       longDescription = ''
         A generic framework for creating extensible applications,
         and for creating libraries which extend those applications.
@@ -853,7 +854,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A callback-based program option parser for C#";
-      homepage = http://www.ndesk.org/Options;
+      homepage = "http://www.ndesk.org/Options";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -927,7 +928,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  UnionArgParser = buildDotnetPackage rec {
+  UnionArgParser = buildDotnetPackage {
     baseName = "UnionArgParser";
     version = "0.8.7";
 
@@ -948,7 +949,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A declarative CLI argument/XML configuration parser for F# applications";
-      homepage = https://nessos.github.io/UnionArgParser/;
+      homepage = "https://nessos.github.io/UnionArgParser/";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;

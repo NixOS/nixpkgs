@@ -1,24 +1,24 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "minio-client";
-  version = "2019-01-30T19-57-22Z";
+  version = "2020-04-25T00-43-23Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "mc";
     rev = "RELEASE.${version}";
-    sha256 = "1w0ig0daf0zxpkz449xq2hm7ajhzn8hlnnmpac6ip82qy53xnbm4";
+    sha256 = "0ff2fyr3787zp0lpgbph064am33py2wzjikzmxd3zwp3y0dic770";
   };
 
-  goPackagePath = "github.com/minio/mc";
+  vendorSha256 = "0nfcxz47v5gl0wih59xarhz82nd8wy61c3ijvg2v08ipk29zivcc";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags=-X github.com/minio/mc/cmd.Version=${version}")
-  '';
+  subPackages = [ "." ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/minio/mc/cmd.Version=${version}" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/minio/mc;
+    homepage = "https://github.com/minio/mc";
     description = "A replacement for ls, cp, mkdir, diff and rsync commands for filesystems and object storage";
     maintainers = with maintainers; [ eelco bachp ];
     platforms = platforms.unix;

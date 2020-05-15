@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "face";
-  version = "0.1.0";
+  version = "19.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zdp5qlrhxf4dypvvd0zr7zxj2svkz9wblp37vgw01wvcy9b1ds7";
+    sha256 = "38c94ec17a4d6f9628f094b697faca0f802f4028071ce8cbdb3116d4cde772a3";
   };
 
   propagatedBuildInputs = [ boltons ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mahmoud/face;
+    homepage = "https://github.com/mahmoud/face";
     description = "A command-line interface parser and framework";
     longDescription = ''
       A command-line interface parser and framework, friendly for

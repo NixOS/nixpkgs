@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PDF viewer for the Lumina Desktop";
-    homepage = https://github.com/lumina-desktop/lumina-pdf;
+    homepage = "https://github.com/lumina-desktop/lumina-pdf";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

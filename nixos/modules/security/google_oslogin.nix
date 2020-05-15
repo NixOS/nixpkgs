@@ -49,6 +49,8 @@ in
 
     # enable the nss module, so user lookups etc. work
     system.nssModules = [ package ];
+    system.nssDatabases.passwd = [ "cache_oslogin" "oslogin" ];
+    system.nssDatabases.group = [ "cache_oslogin" "oslogin" ];
 
     # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
     # So indirect by a symlink.
@@ -59,10 +61,8 @@ in
         exec ${package}/bin/google_authorized_keys "$@"
       '';
     };
-    services.openssh.extraConfig = ''
-      AuthorizedKeysCommand /etc/ssh/authorized_keys_command_google_oslogin %u
-      AuthorizedKeysCommandUser nobody
-    '';
+    services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command_google_oslogin %u";
+    services.openssh.authorizedKeysCommandUser = "nobody";
   };
 
 }

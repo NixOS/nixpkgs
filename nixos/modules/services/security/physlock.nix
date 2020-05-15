@@ -99,7 +99,7 @@ in
       # for physlock -l and physlock -L
       environment.systemPackages = [ pkgs.physlock ];
 
-      systemd.services."physlock" = {
+      systemd.services.physlock = {
         enable = true;
         description = "Physlock";
         wantedBy = optional cfg.lockOn.suspend   "suspend.target"

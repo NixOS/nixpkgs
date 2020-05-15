@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "2.2.2";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b8ddc6e2e60bd64b7003f9a685a09ba387b74adf2f6bea7534a76d61892f573e";
+    sha256 = "2d545c71e9439c21bcd7c28f5f55b3606e6106f7031ab58375656a1aed483ef2";
   };
 
   buildInputs = [ setuptools_scm ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
-    homepage = https://github.com/agronholm/typeguard;
+    homepage = "https://github.com/agronholm/typeguard";
     license = licenses.mit;
   };
 }

@@ -6,7 +6,7 @@
 
 with (import ./srcs.nix { inherit fetchurl; });
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "openafs";
   inherit version srcs;
 
@@ -81,9 +81,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     outputsToInstall = [ "out" "doc" "man" ];
     description = "Open AFS client";
-    homepage = https://www.openafs.org;
+    homepage = "https://www.openafs.org";
     license = licenses.ipl10;
     platforms = platforms.linux;
-    maintainers = [ maintainers.z77z maintainers.spacefrogg ];
+    maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
   };
 }

@@ -18,7 +18,7 @@ in
       enable = mkOption {
         default = false;
         description = ''
-          Whether to enable the Plotinus GTK+3 plugin.  Plotinus provides a
+          Whether to enable the Plotinus GTK 3 plugin. Plotinus provides a
           popup (triggered by Ctrl-Shift-P) to search the menus of a
           compatible application.
         '';

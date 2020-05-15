@@ -1,43 +1,36 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook }:
+{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper }:
 
 with lib;
 
 let
-
-  version = "0.17.27";
-
-  # switch the dropdown to “manual” on https://pulumi.io/quickstart/install.html # TODO: update script
-  pulumiArchPackage = {
-    "x86_64-linux" = {
-      url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-linux-x64.tar.gz";
-      sha256 = "13ajgc8x5l3s93hmz6jg88if10bvd319jmkljy4n26zdp30vfqmw";
-    };
-    "x86_64-darwin" = {
-      url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-darwin-x64.tar.gz";
-      sha256 = "0chpbnz2s4icwgmfq6kl8blz5mg4lpdqg061w3nh0p04adpgrn48";
-    };
-  };
-
-in stdenv.mkDerivation rec {
-  inherit version;
+  data = import ./data.nix {};
+in stdenv.mkDerivation {
   pname = "pulumi";
+  version = data.version;
 
-  src = fetchurl pulumiArchPackage.${stdenv.hostPlatform.system};
+  postUnpack = ''
+    mv pulumi-* pulumi
+  '';
+
+  srcs = map (x: fetchurl x) data.pulumiPkgs.${stdenv.hostPlatform.system};
 
   installPhase = ''
     mkdir -p $out/bin
     cp * $out/bin/
+  '' + optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
   '';
 
-  buildInputs = optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
 
   meta = {
-    homepage = https://pulumi.io/;
+    homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
     license = with licenses; [ asl20 ];
-    platforms = builtins.attrNames pulumiArchPackage;
+    platforms = builtins.attrNames data.pulumiPkgs;
     maintainers = with maintainers; [
       peterromfeldhk
+      jlesquembre
     ];
   };
 }

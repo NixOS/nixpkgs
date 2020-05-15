@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-jinja2";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g4pqdm2kp2abam0nx0pgs5lk19f8lsfpcgwxpigdwmy1lvblsa5";
+    sha256 = "2dfe29cfd278d07cd0a851afb98471bc8ce2a830968443e40d67636f3c035d79";
   };
 
   propagatedBuildInputs = [ aiohttp jinja2 ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jinja2 support for aiohttp";
-    homepage = https://github.com/aio-libs/aiohttp_jinja2;
+    homepage = "https://github.com/aio-libs/aiohttp_jinja2";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
   };

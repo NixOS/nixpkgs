@@ -43,9 +43,8 @@ in {
           <literal>[DEFAULT]</literal> block along with the
           <literal>to</literal> parameter.
 
-          See
-          <literal>https://github.com/rss2email/rss2email/blob/master/r2e.1</literal>
-          for more information on which parameters are accepted.
+          See <literal>man r2e</literal> for more information on which
+          parameters are accepted.
         '';
       };
 
@@ -91,6 +90,8 @@ in {
         group = "rss2email";
       };
     };
+
+    environment.systemPackages = with pkgs; [ rss2email ];
 
     services.rss2email.config.to = cfg.to;
 

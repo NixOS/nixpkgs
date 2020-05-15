@@ -21,13 +21,13 @@ buildPythonPackage rec {
     sha256 = "5fb8d95d6c95c93eaa400b38447c63e7a176b9502bc49b2f9b788c9905f4ec5e";
   })];
 
-  patchFlags = "irclib.py";
+  patchFlags = [ "irclib.py" ];
 
   propagatedBuildInputs = [ paver ];
 
   meta = with stdenv.lib; {
     description = "Python IRC library";
-    homepage = https://bitbucket.org/jaraco/irc;
+    homepage = "https://github.com/jaraco/irc";
     license = with licenses; [ lgpl21 ];
   };
 

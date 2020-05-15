@@ -4,7 +4,7 @@
 , pythonPackages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   # compilation error in 2.9.0 https://gitlab.com/stuko/ovito/issues/40
   # This is not the "released" 3.0.0 just a commit
   version = "3.0.0";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Scientific visualization and analysis software for atomistic simulation data";
-    homepage = https://www.ovito.org;
+    homepage = "https://www.ovito.org";
     license = licenses.gpl3;
     maintainers = [ maintainers.costrouc ];
     # ensures not built on hydra

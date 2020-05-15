@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.4.2";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b794219e465b3aab500b800884ff40fd152bb19d8b6f87580de1f3a07170aef8";
+    sha256 = "0kh0d83xavpffdp4xp4hq8xy43l6lyv3d1a25rnc15jcbdf1nghw";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter Notebook Tools for Sphinx";
-    homepage = https://nbsphinx.readthedocs.io/;
+    homepage = "https://nbsphinx.readthedocs.io/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

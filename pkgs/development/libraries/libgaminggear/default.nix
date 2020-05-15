@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Provides functionality for gaming input devices";
-    homepage = https://sourceforge.net/projects/libgaminggear/;
+    homepage = "https://sourceforge.net/projects/libgaminggear/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
   };

@@ -9,19 +9,20 @@
   libarchive, libzip,
 
   # Archive tools
-  p7zip, lrzip,
+  lrzip,
 
   # Unfree tools
   unfreeEnableUnrar ? false, unrar,
 }:
 
 let
-  extraTools = [ p7zip lrzip ] ++ lib.optional unfreeEnableUnrar unrar;
+  extraTools = [ lrzip ] ++ lib.optional unfreeEnableUnrar unrar;
 in
 
 mkDerivation {
   name = "ark";
   meta = {
+    description = "Graphical file compression/decompression utility";
     license = with lib.licenses;
       [ gpl2 lgpl3 ] ++ lib.optional unfreeEnableUnrar unfree;
     maintainers = [ lib.maintainers.ttuegel ];

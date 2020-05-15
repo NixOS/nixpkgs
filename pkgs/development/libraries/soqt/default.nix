@@ -1,6 +1,6 @@
 { fetchhg, stdenv, coin3d, qt5, cmake, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "soqt";
   version = "1.6.0a";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
-    homepage = https://bitbucket.org/Coin3D/coin/wiki/Home;
+    homepage = "https://bitbucket.org/Coin3D/coin/wiki/Home";
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Glue between Coin high-level 3D visualization library and Qt";
 

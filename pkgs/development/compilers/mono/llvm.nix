@@ -13,7 +13,7 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "llvm";
   version = "3.6-mono-2017-02-15";
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies - Mono build";
-    homepage    = http://llvm.org/;
+    homepage    = "http://llvm.org/";
     license     = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
     platforms   = stdenv.lib.platforms.all;

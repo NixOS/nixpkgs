@@ -2,21 +2,20 @@
 
 buildPythonPackage rec {
   pname = "PuLP";
-  version = "1.6.8";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1irzpfnnm5f0qf8y9ddxi489nwixyj0q4zlvqafm621bijkxdv6g";
+    sha256 = "fb0b0e8073aa82f3459c4241b9625e0ccd26c0838ad8253c6bc67e041901b765";
   };
 
-  buildInputs = [];
   propagatedBuildInputs = [ pyparsing ];
 
   # only one test that requires an extra
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/coin-or/pulp;
+    homepage = "https://github.com/coin-or/pulp";
     description = "PuLP is an LP modeler written in python";
     maintainers = with maintainers; [ teto ];
     license = licenses.mit;

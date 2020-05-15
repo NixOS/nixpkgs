@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "lnd";
-  version = "0.7.1-beta";
+  version = "0.10.0-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
     rev = "v${version}";
-    sha256 = "1c0sm0lavdai4w6d283q54knggw9d42vvqmglnv2h9swbw1l23ry";
+    sha256 = "1amciz924s2h6qhy7w34jpv1jc25p5ayfxzvjph6hhx0bccrm88w";
   };
 
-  modSha256 = "13hjaf4bswk8g57lyxzdlqqp4a6ddl3qm6n4jja4b1h58mlbil73";
+  vendorSha256 = "1iyghg11cxvbzi0gl40fvv8pl3d3k52j179w3x5m1f09r5ji223y";
+
+  subPackages = ["cmd/lncli" "cmd/lnd"];
 
   meta = with lib; {
     description = "Lightning Network Daemon";

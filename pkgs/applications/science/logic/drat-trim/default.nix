@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "drat-trim-2017-08-31";
 
   src = fetchFromGitHub {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       competing SAT solvers' work when they claim that a SAT instance
       is unsatisfiable.
     '';
-    homepage = https://www.cs.utexas.edu/~marijn/drat-trim/;
+    homepage = "https://www.cs.utexas.edu/~marijn/drat-trim/";
     license = licenses.mit;
     maintainers = with maintainers; [ kini ];
     platforms = platforms.all;

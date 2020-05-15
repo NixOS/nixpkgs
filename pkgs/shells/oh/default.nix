@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ stdenv, buildGoPackage, fetchgit, lib }:
 
 buildGoPackage rec {
   pname = "oh";
@@ -14,4 +14,10 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
+
+  meta = with lib;{
+    homepage = "https://github.com/michaelmacinnis/oh";
+    description = "A Unix shell";
+    license = stdenv.lib.licenses.mit;
+  };
 }

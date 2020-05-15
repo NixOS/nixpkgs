@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace diod/xattr.c --replace attr/xattr.h sys/xattr.h
+    sed -i -e '/sys\/types\.h>/a #include <sys/sysmacros.h>' diod/ops.c
   '';
 
   buildInputs = [ munge lua libcap perl ncurses ];

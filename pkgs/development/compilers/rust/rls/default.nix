@@ -2,7 +2,7 @@
 , openssh, openssl, pkgconfig, cmake, zlib, curl, libiconv
 , CoreFoundation, Security }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "rls";
   inherit (rustPlatform.rust.rustc) src version;
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   CARGO_BUILD_RUSTFLAGS = if stdenv.isDarwin then "-C rpath" else null;
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ openssh openssl curl zlib libiconv ]
+  buildInputs = [ openssh openssl curl zlib libiconv rustPlatform.rust.rustc.llvm ]
     ++ (stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security ]);
 
   doCheck = true;
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Rust Language Server - provides information about Rust programs to IDEs and other tools";
-    homepage = https://github.com/rust-lang/rls/;
+    homepage = "https://github.com/rust-lang/rls/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ symphorien ];
     platforms = platforms.all;

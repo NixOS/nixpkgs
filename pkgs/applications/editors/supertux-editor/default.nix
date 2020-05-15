@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, mono, gtk-sharp-2_0, pkgconfig, makeWrapper, gnome2, gtk2 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "git-2014-08-20";
   pname = "supertux-editor";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Level editor for SuperTux";
-    homepage = https://github.com/SuperTux/supertux-editor;
+    homepage = "https://github.com/SuperTux/supertux-editor";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mathnerd314 ];
     platforms = platforms.linux;

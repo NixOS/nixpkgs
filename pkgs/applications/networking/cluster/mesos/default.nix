@@ -61,6 +61,9 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     pythonProtobuf
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-overflow -Wno-error=class-memaccess";
+
   preConfigure = ''
     # https://issues.apache.org/jira/browse/MESOS-6616
     configureFlagsArray+=(
@@ -253,7 +256,8 @@ in stdenv.mkDerivation rec {
     homepage    = "http://mesos.apache.org";
     license     = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
-    maintainers = with maintainers; [ cstrahan kevincox offline ];
+    maintainers = with maintainers; [ cstrahan offline ];
     platforms   = platforms.unix;
+    broken = true; # Broken since 2019-10-22 (https://hydra.nixos.org/build/115475123)
   };
 }

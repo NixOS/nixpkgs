@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, qttools, mpv }:
+{ stdenv, mkDerivation, fetchFromGitLab, pkgconfig, qmake, qtx11extras, qttools, mpv }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "mpc-qt";
-  version = "18.08";
+  version = "2019-06-09";
 
-  src = fetchFromGitHub {
-    owner = "cmdrkotori";
+  src = fetchFromGitLab {
+    owner = "mpc-qt";
     repo = "mpc-qt";
-    rev = "v${version}";
-    sha256 = "1rxlkg3vsrapazdlb1i6c5a1vvf2114bsqwzcm3n2wc5c93yqsna";
+    rev = "2abe6e7fc643068d50522468fe75d614861555ad";
+    sha256 = "1cis8dl9pm91mpnp696zvwsfp96gkwr8jgs45anbwd7ldw78w4x5";
   };
 
   nativeBuildInputs = [ pkgconfig qmake qttools ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Media Player Classic Qute Theater";
-    homepage = https://github.com/cmdrkotori/mpc-qt;
+    homepage = "https://gitlab.com/mpc-qt/mpc-qt";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];

@@ -3,13 +3,13 @@
 let mkContrib = repo: revs: param:
   stdenv.mkDerivation rec {
     name = "coq${coq.coq-version}-${repo}-${version}";
-    version = "${param.version}";
+    version = param.version;
 
     src = fetchFromGitHub {
       owner = "coq-contribs";
-      repo = "${repo}";
-      rev = "${param.rev}";
-      sha256 = "${param.sha256}";
+      repo = repo;
+      rev = param.rev;
+      sha256 = param.sha256;
     };
 
     buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
@@ -34,7 +34,7 @@ let mkContrib = repo: revs: param:
       rev = "86ac28259030649ef51460e4de2441c8a1017751";
       sha256 = "09bbk2a7pn0j76mmapl583f8a20zqd3a1m9lkml8rpwml692bzi9";
     };
-  }."${coq.coq-version}";
+  }.${coq.coq-version};
 
   abp = mkContrib "abp" [ "8.5" "8.6" "8.7" ] {
     version = "v8.6.0";
@@ -42,7 +42,7 @@ let mkContrib = repo: revs: param:
     sha256 = "18f5vbq6nx9gz2gcj5p7v2gmjczpspc5dmlj6by4jqv07iirzsz2";
   };
 
-  additions = mkContrib "additions" [ "8.6" "8.7" ] {
+  additions = mkContrib "additions" [ "8.6" ] {
     version = "v8.5.0-9-gbec504e";
     rev = "bec504e7822747376159aaa2156cf7453dbbd2b4";
     sha256 = "1vvkqjnqrf6m726krhlm2viza64ha2081xgc5wb9y5sygd0baaz7";
@@ -219,7 +219,7 @@ let mkContrib = repo: revs: param:
       rev = "aa33052c1edfc5a65885942a67c2773b5d96f8cc";
       sha256 = "0mjgfdr9bzsch0dlk4vq1frkaig14dqh46r54cv0l15flxapg0iw";
     };
-  }."${coq.coq-version}";
+  }.${coq.coq-version};
 
   continuations = mkContrib "continuations" [ ] {
     version = "v8.5.0-13-g6885310";
@@ -1031,10 +1031,10 @@ let mkContrib = repo: revs: param:
     sha256 = "0iwkpmc22nwasrk4g7ki4s5y05zjs7kmqk3j98giwp2wiavhgapn";
   };
 
-  zorns-lemma = mkContrib "zorns-lemma" [ "8.6" "8.7" "8.8" "8.9" ] {
-    version = "v8.9.0";
-    rev = "6ac9bb914f6017cdd9a544ff4b0bef73fd33b44c";
-    sha256 = "1vdsl5gxpadkjjjw314s4fawzlssdmp4qkwrjz5qdmyl2dcpil4p";
+  zorns-lemma = mkContrib "zorns-lemma" [ "8.10" "8.11" ] {
+    version = "v8.11.0";
+    rev = "a573b50fff994f996b8e15dec2079490a5233dc6";
+    sha256 = "0jbp1ay6abal66glbablbqsh5hzgd5fv81dc1vzn65jw0iiznxyq";
   };
 
   zsearch-trees = mkContrib "zsearch-trees" [ "8.6" "8.7" ] {

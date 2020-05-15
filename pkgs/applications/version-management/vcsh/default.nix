@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, which, git, ronn, perlPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.20170915";       # date of commit we're pulling
   pname = "vcsh";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Version Control System for $HOME";
-    homepage = https://github.com/RichiH/vcsh;
+    homepage = "https://github.com/RichiH/vcsh";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ttuegel ];
     platforms = platforms.unix;

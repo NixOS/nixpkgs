@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://autotrace.sourceforge.net/;
+    homepage = "http://autotrace.sourceforge.net/";
     description = "Utility for converting bitmap into vector graphics";
     platforms = platforms.unix;
     maintainers = with maintainers; [ hodapp ];

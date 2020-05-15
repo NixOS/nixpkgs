@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, autoconf, ... }:
+{ stdenv, fetchurl, autoconf, gcc, coreutils, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gambit-bootstrap";
   version = "4.9.3";
 
@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoconf ];
 
   configurePhase = ''
+    export CC=${gcc}/bin/gcc CXX=${gcc}/bin/g++ \
+           CPP=${gcc}/bin/cpp CXXCPP=${gcc}/bin/cpp LD=${gcc}/bin/ld \
+           XMKMF=${coreutils}/bin/false
+    unset CFLAGS LDFLAGS LIBS CPPFLAGS CXXFLAGS
     ./configure --prefix=$out
   '';
 

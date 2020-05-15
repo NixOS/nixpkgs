@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0i26yfn2vjgsg1kdvhhv55jwzds7ih7cnad1xqvilqm83zh47ksd";
+    sha256 = "0wxcbfqsk8p84zizy6lf3gp5j122wrf8c7xlipki6nhcfhksn33b";
   };
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkgconfig ];
@@ -31,10 +31,13 @@ stdenv.mkDerivation rec {
     make install
     make install-doc
 
-    substituteInPlace contrib/tig-completion.zsh \
-      --replace 'e=$(dirname ''${funcsourcetrace[1]%:*})/tig-completion.bash' "e=$out/etc/bash_completion.d/tig-completion.bash"
+    # fixes tig-completion __git-complete dependency
+    sed -i '1s;^;source ${git}/share/bash-completion/completions/git\n;' contrib/tig-completion.bash
 
-    install -D contrib/tig-completion.bash $out/etc/bash_completion.d/tig-completion.bash
+    substituteInPlace contrib/tig-completion.zsh \
+      --replace 'e=$(dirname ''${funcsourcetrace[1]%:*})/tig-completion.bash' "e=$out/share/bash-completion/completions/tig"
+
+    install -D contrib/tig-completion.bash $out/share/bash-completion/completions/tig
     install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
     cp contrib/vim.tigrc $out/etc/
 
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://jonas.github.io/tig/;
+    homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
     maintainers = with maintainers; [ bjornfor domenkozar qknight globin ];
     license = licenses.gpl2;

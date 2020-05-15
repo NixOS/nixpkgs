@@ -4,7 +4,7 @@
 
 let
   rev = "361bb413203fd43bab624d98edf6f7d20ce6bfd3";
-in buildPythonPackage rec {
+in buildPythonPackage {
   pname = "pycangjie";
   version = "1.3_rev_${rev}";
   format = "other";
@@ -28,7 +28,7 @@ in buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python wrapper to libcangjie";
-    homepage = http://cangjians.github.io/projects/pycangjie/;
+    homepage = "http://cangjians.github.io/projects/pycangjie/";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.linquize ];
     platforms = platforms.all;

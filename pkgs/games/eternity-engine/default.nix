@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "team-eternity";
     repo = "eternity";
-    rev = "${version}";
+    rev = version;
     sha256 = "00kpq4k23hjmzjaymw3sdda7mqk8fjq6dzf7fmdal9fm7lfmj41k";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://doomworld.com/eternity;
+    homepage = "http://doomworld.com/eternity";
     description = "New school Doom port by James Haley";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

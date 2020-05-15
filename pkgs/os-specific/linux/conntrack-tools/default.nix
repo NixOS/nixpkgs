@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "conntrack-tools";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchurl {
     url = "https://www.netfilter.org/projects/conntrack-tools/files/${pname}-${version}.tar.bz2";
-    sha256 = "0qm4m78hr6a4fbmnkw5nyjm1pzzhydzx0nz7f96iv1c4fsfdkiin";
+    sha256 = "0psx41bclqrh4514yzq03rvs3cq3scfpd1v4kkyxnic2hk65j22r";
   };
 
   buildInputs = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex bison pkgconfig ];
 
   meta = with stdenv.lib; {
-    homepage = http://conntrack-tools.netfilter.org/;
+    homepage = "http://conntrack-tools.netfilter.org/";
     description = "Connection tracking userspace tools";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

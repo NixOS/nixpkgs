@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   # name of library file ("libzn_poly.so")
   libbasename = "libzn_poly";
-  libext = "${stdenv.targetPlatform.extensions.sharedLibrary}";
+  libext = stdenv.targetPlatform.extensions.sharedLibrary;
 
   makeFlags = [ "CC=cc" ];
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = http://web.maths.unsw.edu.au/~davidharvey/code/zn_poly/;
+    homepage = "http://web.maths.unsw.edu.au/~davidharvey/code/zn_poly/";
     description = "Polynomial arithmetic over Z/nZ";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ timokau ];

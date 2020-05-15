@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, boost, ladspaH, lilv, lv2, pkgconfig, serd, sord, sratom }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "plugin-torture";
   version = "2016-07-25";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/cth103/plugin-torture;
+    homepage = "https://github.com/cth103/plugin-torture";
     description = "A tool to test LADSPA and LV2 plugins";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

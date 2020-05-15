@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       currently available for Windows and Linux.
     '';
 
-    homepage = http://www.asc-hq.org/;
+    homepage = "http://www.asc-hq.org/";
 
     license = licenses.gpl2Plus;
 

@@ -10,12 +10,12 @@ buildGoModule rec {
     sha256 = "05aqmw8x8s0yqyqmdj5zcsq06gsbcmrlcd52gaqm20m1pg9503ad";
   };
 
-  modSha256 = "150kg22kznrdj5icjxk3qd70g7wpq8zd2zklw1y2fgvrggw8zvyv";
+  vendorSha256 = "0h3gjxv26pc6cysvy1hny2f4abw6i847dk8fx0m113ixx9qghk87";
 
   meta = with lib; {
     description = "A pluggable transport proxy";
-    homepage = https://www.torproject.org/projects/obfsproxy;
-    repositories.git = https://git.torproject.org/pluggable-transports/obfs4.git;
+    homepage = "https://www.torproject.org/projects/obfsproxy";
+    repositories.git = "https://git.torproject.org/pluggable-transports/obfs4.git";
     maintainers = with maintainers; [ phreedom thoughtpolice ];
   };
 }

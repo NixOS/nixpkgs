@@ -25,27 +25,26 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "3.6";
+  version = "3.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "09azp17ghn7i8kwk0ci3gq0qkn5pvbknhf1cbk7v43mvc3g8djzi";
+    sha256 = "05kgg7mhizndwn7icnarqk3c19xrzfawf90y9nb3jdm6fv1741xn";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
 
   buildInputs = [
     boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
-    webkitgtk dconf hicolor-icon-theme libofx aqbanking gwenhywfar libdbi
+    webkitgtk dconf libofx aqbanking gwenhywfar libdbi
     libdbiDrivers guile
     perlWrapper perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
 
   propagatedUserEnvPkgs = [ dconf ];
 
-  # glib-2.58 deprecrated g_type_class_add_private
-  # Should probably be removed next version bump
-  CXXFLAGS = [ "-Wno-deprecated-declarations" ];
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   patches = [ ./cmake_check_symbol_exists.patch ];
 
@@ -70,7 +69,6 @@ stdenv.mkDerivation rec {
   '';
 
   # TODO: The following tests FAILED:
-  #   61 - test-gnc-timezone (Failed)
   #   70 - test-load-c (Failed)
   #   71 - test-modsysver (Failed)
   #   72 - test-incompatdep (Failed)
@@ -80,7 +78,7 @@ stdenv.mkDerivation rec {
   #   80 - test-gnc-module-scm-module (Failed)
   #   81 - test-gnc-module-scm-multi (Failed)
   preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
     export NIX_CFLAGS_LINK="-lgtest -lgtest_main"
   '';
   doCheck = false;
@@ -103,7 +101,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = http://www.gnucash.org/;
+    homepage = "http://www.gnucash.org/";
 
     maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;

@@ -3,10 +3,10 @@
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
   # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.12";
+  version = "0.13";
 
   src = fetchurl {
-    sha256 = "09b0h704fh7r4f5h92p5997cj3zk1v04bqp4jk1j1f6cmfq2z2d5";
+    sha256 = "1jav4qf7d303by9iy6v08w73wfwzj76i54inh90w1s34m9q44aa9";
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       actually needed for this file (for both .cc and .h files), and by
       replacing #includes with forward-declares when possible.
     '';
-    homepage = https://include-what-you-use.org;
+    homepage = "https://include-what-you-use.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
   };

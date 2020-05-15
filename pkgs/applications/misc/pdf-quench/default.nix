@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgs, pythonPackages, wrapGAppsHook}:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication {
   pname = "pdf-quench";
   version = "1.0.5";
 
@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/linuxerwang/pdf-quench;
+    homepage = "https://github.com/linuxerwang/pdf-quench";
     description = "A visual tool for cropping pdf files";
     platforms = platforms.linux;
     license = licenses.gpl2;

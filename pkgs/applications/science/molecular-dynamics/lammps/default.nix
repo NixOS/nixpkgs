@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, libpng, gzip, fftw, openblas
+, libpng, gzip, fftw, blas, lapack
 , mpi ? null
 }:
 let packages = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
-    rev = "${version}";
+    rev = version;
     sha256 = "1dlifm9wm1jcw2zwal3fnzzl41ng08c7v48w6hx2mz84zljg1nsj";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     inherit packages;
   };
 
-  buildInputs = [ fftw libpng openblas gzip ]
+  buildInputs = [ fftw libpng blas lapack gzip ]
     ++ (stdenv.lib.optionals withMPI [ mpi ]);
 
   configurePhase = ''
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       funding from the DOE. It is an open-source code, distributed freely
       under the terms of the GNU Public License (GPL).
       '';
-    homepage = http://lammps.sandia.gov;
+    homepage = "http://lammps.sandia.gov";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.costrouc ];

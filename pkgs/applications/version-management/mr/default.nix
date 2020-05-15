@@ -1,6 +1,6 @@
 { stdenv, fetchgit, perl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mr";
   version = "1.20180726";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     description = "Multiple Repository management tool";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       bzr, darcs, fossil and veracity repositories, and support for
       other version control systems can easily be added.
     '';
-    homepage = http://myrepos.branchable.com/;
+    homepage = "http://myrepos.branchable.com/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ antono henrytill ];

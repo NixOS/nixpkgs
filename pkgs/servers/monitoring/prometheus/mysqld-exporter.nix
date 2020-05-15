@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Prometheus exporter for MySQL server metrics";
-    homepage = https://github.com/prometheus/mysqld_exporter;
+    homepage = "https://github.com/prometheus/mysqld_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley globin ];
     platforms = platforms.unix;

@@ -406,9 +406,8 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = singleton
-      { name = "rippled";
-        description = "Ripple server user";
+    users.users.rippled =
+      { description = "Ripple server user";
         uid = config.ids.uids.rippled;
         home = cfg.databasePath;
         createHome = true;

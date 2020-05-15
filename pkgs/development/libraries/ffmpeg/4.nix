@@ -4,9 +4,9 @@
 , ...
 }@args:
 
-callPackage ./generic.nix (args // rec {
-  version = "${branch}";
+callPackage ./generic.nix (rec {
+  version = "4.2.2";
   branch = "4.2";
-  sha256 = "1f3glany3p2j832a9wia5vj8ds9xpm0xxlyia91y17hy85gxwsrh";
+  sha256 = "0p0f024rxrpk8pgmrprhfywq10rvdhrs0422wwcwlxkgqa3x285n";
   darwinFrameworks = [ Cocoa CoreMedia VideoToolbox ];
-})
+} // args)

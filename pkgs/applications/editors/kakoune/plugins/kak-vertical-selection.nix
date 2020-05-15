@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib;
   { description = "Select up and down lines that match the same pattern in Kakoune";
     homepage = "https://github.com/occivink/kakoune-vertical-selection";
-    license = licenses.publicDoman;
+    license = licenses.unlicense;
     maintainers = with maintainers; [ nrdxp ];
     platform = platforms.all;
   };

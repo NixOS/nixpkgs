@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv, jansson }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "universal-ctags";
   version = "unstable-2019-07-30";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig pythonPackages.docutils ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ jansson ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
   # to generate makefile.in
   autoreconfPhase = ''
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkFlags = "units";
+  checkFlags = [ "units" ];
 
   meta = with stdenv.lib; {
     description = "A maintained ctags implementation";
-    homepage = https://ctags.io/;
+    homepage = "https://ctags.io/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     # universal-ctags is preferred over emacs's ctags
     priority = 1;
-    maintainers = [ maintainers.mimadrid ];
+    maintainers = [ maintainers.mimame ];
   };
 }

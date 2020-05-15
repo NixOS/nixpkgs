@@ -1,0 +1,32 @@
+From 8de09b82c5ac900317043e1c1025f431516b6788 Mon Sep 17 00:00:00 2001
+From: Michael Weiss <dev.primeos@gmail.com>
+Date: Tue, 21 Apr 2020 21:41:04 +0200
+Subject: [PATCH] Switch from the alias apiclient to googleapiclient
+
+This fixes the package after a breaking change / bug in
+google-api-python-client 1.8.1 (see [0] and a lot of duplicate issues).
+
+The module apiclient is just an alias for googleapiclient [1].
+
+[0]: https://github.com/googleapis/google-api-python-client/issues/870
+[1]: https://github.com/googleapis/google-api-python-client/blob/v1.8.1/apiclient/__init__.py
+---
+ goobook/goobook.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/goobook/goobook.py b/goobook/goobook.py
+index 5bcb0b3..a2e25e9 100755
+--- a/goobook/goobook.py
++++ b/goobook/goobook.py
+@@ -31,7 +31,7 @@ import sys
+ import time
+ 
+ import httplib2
+-from apiclient.discovery import build
++from googleapiclient.discovery import build
+ 
+ from goobook.storage import Storage, storageify, unstorageify
+ 
+-- 
+2.26.1
+

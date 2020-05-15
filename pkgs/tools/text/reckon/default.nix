@@ -4,17 +4,17 @@ stdenv.mkDerivation rec {
   pname = "reckon";
   version = (import ./gemset.nix).reckon.version;
 
-  env = bundlerEnv {
-    name = "${pname}-${version}-gems";
-
-    gemdir = ./.;
-  };
-
   phases = [ "installPhase" ];
 
   buildInputs = [ makeWrapper ];
 
-  installPhase = ''
+  installPhase = let
+    env = bundlerEnv {
+      name = "${pname}-${version}-gems";
+
+      gemdir = ./.;
+    };
+  in ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/reckon $out/bin/reckon
   '';

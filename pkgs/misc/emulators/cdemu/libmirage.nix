@@ -3,9 +3,9 @@
 , pcre, utillinux, libselinux, libsepol }:
 
 let pkg = import ./base.nix {
-  version = "3.2.2";
+  version = "3.2.3";
   pkgName = "libmirage";
-  pkgSha256 = "0gwrfia0fyhi0b3p2pfyyvrcfcb0qysfzgpdqsqjqbx4xaqx5wpi";
+  pkgSha256 = "08mfvqyk3833ksfd47i4j3ppmrw5ry219km6h7lywdh9hm9x14yf";
 };
 in callPackage pkg {
   buildInputs = [ glib libsndfile zlib bzip2 lzma libsamplerate intltool ];

@@ -1,6 +1,6 @@
 { stdenv, python3Packages, fetchFromGitHub }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "bashplotlib";
   version = "2019-01-02";
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/glamp/bashplotlib;
+    homepage = "https://github.com/glamp/bashplotlib";
     description = "Plotting in the terminal";
     maintainers = with maintainers; [ dtzWill ];
     license = licenses.mit;

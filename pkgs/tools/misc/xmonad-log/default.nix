@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "xmonad DBus monitoring solution";
-    homepage = https://github.com/xintron/xmonad-log;
+    homepage = "https://github.com/xintron/xmonad-log";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ joko ];

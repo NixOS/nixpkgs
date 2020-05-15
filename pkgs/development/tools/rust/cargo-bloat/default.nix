@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bloat";
-  version = "0.8.3";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "088px2kdcfjdb8zfmk7g409h7ij9dngywz336hj2ny82lrdjzazc";
+    sha256 = "04h9yyna47cgn2d232v2fpbgki9gg4lykpmx46ncpsq4g6azl1a9";
   };
 
-  cargoSha256 = "11q8j8y7m59gc8047qhz6pp2825qjcpg9xwgj09l8a5aijf25avb";
+  cargoSha256 = "0lzc2nwz9lpwxv704k40d1416qnf3wy3g6ad8w8xbkfc6ydcaa4l";
 
   meta = with lib; {
     description = "A tool and Cargo subcommand that helps you find out what takes most of the space in your executable";

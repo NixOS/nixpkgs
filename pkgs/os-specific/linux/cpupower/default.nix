@@ -14,7 +14,11 @@ stdenv.mkDerivation {
     sed -i 's,/usr/bin/install,${buildPackages.coreutils}/bin/install,' Makefile
   '';
 
-  makeFlags = [ "CROSS=${stdenv.cc.targetPrefix}" ];
+  makeFlags = [
+    "CROSS=${stdenv.cc.targetPrefix}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
+  ];
 
   installFlags = stdenv.lib.mapAttrsToList
     (n: v: "${n}dir=${placeholder "out"}/${v}") {
@@ -33,7 +37,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Tool to examine and tune power saving features";
-    homepage = https://www.kernel.org/;
+    homepage = "https://www.kernel.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
