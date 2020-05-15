@@ -5945,6 +5945,8 @@ in {
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
 
+  txdbus = callPackage ../development/python-modules/txdbus { };
+
   tzlocal = callPackage ../development/python-modules/tzlocal { };
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
