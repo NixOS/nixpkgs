@@ -442,7 +442,11 @@ Retype new UNIX password: ***</screen>
       <para>
        For unattended installations, it is possible to use
        <command>nixos-install --no-root-passwd</command> in order to disable
-       the password prompt entirely.
+       the password prompt entirely. Note that at least one user with valid
+       password is required; you can do this later with
+       <command>chpasswd --root /mnt</command> (unattended version for
+       <command>passwd</command>). Be aware of security implication of setting
+       password non-interactively.
       </para>
      </note>
     </para>
