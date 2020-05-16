@@ -4213,6 +4213,8 @@ in {
 
   icalendar = callPackage ../development/python-modules/icalendar { };
 
+  icecream = callPackage ../development/python-modules/icecream { };
+
   ics = callPackage ../development/python-modules/ics { };
 
   ifaddr = callPackage ../development/python-modules/ifaddr { };
