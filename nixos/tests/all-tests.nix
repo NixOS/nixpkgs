@@ -22,6 +22,7 @@ let
 in
 {
   _3proxy = handleTest ./3proxy.nix {};
+  ackee = handleTest ./ackee.nix {};
   acme = handleTest ./acme.nix {};
   agda = handleTest ./agda.nix {};
   airsonic = handleTest ./airsonic.nix {};
