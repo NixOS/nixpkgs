@@ -1856,6 +1856,8 @@ in
 
   gixy = callPackage ../tools/admin/gixy { };
 
+  glpaper = callPackage ../development/tools/glpaper { };
+  
   gllvm = callPackage ../development/tools/gllvm { };
 
   glide = callPackage ../development/tools/glide { };
