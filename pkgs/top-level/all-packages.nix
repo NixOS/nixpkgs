@@ -3453,6 +3453,8 @@ in
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
+  fdk-aac-encoder = callPackage ../applications/audio/fdkaac { };
+
   feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
 
   fbv = callPackage ../tools/graphics/fbv { };
