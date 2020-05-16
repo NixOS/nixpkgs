@@ -3403,6 +3403,8 @@ in
 
   sqlint = callPackage ../development/tools/sqlint { };
 
+  ackee = callPackage ../servers/web-apps/ackee { };
+
   antibody = callPackage ../shells/zsh/antibody { };
 
   antigen = callPackage ../shells/zsh/antigen { };

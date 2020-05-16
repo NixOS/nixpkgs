@@ -44,6 +44,14 @@
     <itemizedlist>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/electerious/Ackee">ackee</link>,
+          a self-hosted, Node.js based analytics tool for those who care
+          about privacy. Available as
+          <link xlink:href="options.html#opt-services.ackee.enable">services.ackee</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://digint.ch/btrbk/index.html">btrbk</link>,
           a backup tool for btrfs subvolumes, taking advantage of btrfs
           specific capabilities to create atomic snapshots and transfer
