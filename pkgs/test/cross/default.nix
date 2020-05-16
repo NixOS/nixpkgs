@@ -13,7 +13,7 @@ let
   compareTest = { emulator, pkgFun, hostPkgs, crossPkgs, exec, args ? [] }: let
     pkgName = (pkgFun hostPkgs).name;
     args' = lib.concatStringsSep " " args;
-  in pkgs.runCommand "test-${pkgName}-${crossPkgs.hostPlatform.config}" {
+  in crossPkgs.runCommand "test-${pkgName}-${crossPkgs.hostPlatform.config}" {
     nativeBuildInputs = [ pkgs.dos2unix ];
   } ''
     # Just in case we are using wine, get rid of that annoying extra
