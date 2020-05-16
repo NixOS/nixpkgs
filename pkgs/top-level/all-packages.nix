@@ -27737,6 +27737,14 @@ in
 
   octopus = callPackage ../applications/science/chemistry/octopus { };
 
+  openlp = libsForQt5.callPackage ../applications/misc/openlp { };
+  openlpFull = appendToName "full" (openlp.override {
+    pdfSupport = true;
+    presentationSupport = true;
+    vlcSupport = true;
+    gstreamerSupport = true;
+  });
+
   openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 
   pymol = callPackage ../applications/science/chemistry/pymol { };
