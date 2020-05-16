@@ -15683,7 +15683,7 @@ in
   mod_timestamp = pkgs.apacheHttpdPackages.mod_timestamp;
 
   inherit (callPackages ../servers/mpd { })
-    mpd mpd-small mpdWithFeatures;
+    mpd mpd-full mpd-small mpdWithFeatures;
 
   mpd_clientlib = callPackage ../servers/mpd/clientlib.nix { };
 

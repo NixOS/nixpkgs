@@ -19,6 +19,13 @@
 # Tag support
 , libid3tag
 , nixosTests
+# For documentation
+, doxygen
+, python3Packages # for sphinx-build
+# For tests
+, gtest
+, fetchpatch # used to fetch an upstream patch fixing a failing test
+, zip
 }:
 
 let
@@ -78,7 +85,7 @@ let
     zeroconf      = [ avahi dbus ];
   };
 
-  run = { features ? null }:
+  run = { features ? null, options ? {} }:
     let
       # Disable platform specific features if needed
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
@@ -101,6 +108,37 @@ let
                 then throw "Feature(s) ${lib.concatStringsSep " " unsupported} are not supported on ${stdenv.hostPlatform.system}"
                 else features;
 
+      # All of these options were taken straight from upstream's
+      # meson_options.txt file and were formatted into a Nix expression with
+      # almost all of the defaults unchanged.
+      defaultOptions = {
+        documentation = false; # Build documentation
+        # NOTE: The only exception were we differ from upstream. Upstream
+        # describes this option as:
+        #
+        # 'Build the unit tests and debug programs'
+        # 
+        # But these don't get installed so it's not harmful to enable them by default
+        test = true;
+        inotify = true; # inotify support (for automatic database update)
+        daemon = true; # enable daemonization
+        epoll = true; # Use epoll (on Linux)
+        eventfd = true; # Use eventfd (on Linux)
+        signalfd = true; # Use signalfd (on Linux)
+        tcp = true; # Support for clients connecting via TCP
+        local_socket = true; # Support for clients connecting via local sockets
+        dsd = true; # Support the DSD audio format
+        database = true; # enable support for the music database
+        neighbor = true; # enable support for neighbor discovery
+        cue = true; # CUE sheet support
+        wave_encoder = true; # PCM wave encoder encoder plugin
+        fifo = true; # FIFO output plugin
+        httpd = true; # HTTP streaming output plugin
+        pipe = true; # Pipe output plugin
+        recorder = true; # Recorder output plugin
+      };
+      options_ = defaultOptions // options;
+
     in stdenv.mkDerivation rec {
       pname = "mpd";
       version = "0.21.23";
@@ -112,15 +150,46 @@ let
         sha256 = "0jnhjhm1ilpcwb4f58b8pgyzjq3dlr0j2xyk0zck0afwkdxyj9cb";
       };
 
+      # Won't be needed when 0.21.24 will be out
+      patches = lib.optionals options_.test [
+        # Tests fail otherwise, see https://github.com/MusicPlayerDaemon/MPD/issues/844
+        (fetchpatch {
+          url = "https://github.com/MusicPlayerDaemon/MPD/commit/7aea2853612743e111ae5e947c8d467049e291a8.patch";
+          sha256 = "1bmxlsaiz3wlg1yyc4rkwsmgvc0pirv0s1vdxxsn91yssmh16c2g";
+          excludes = [
+            # The patch fails otherwise because it tries to update the NEWS
+            # file which doesn't have the title "ver 0.21.24" yet.
+            "NEWS"
+          ];
+        })
+      ];
+
       buildInputs = [ glib boost ]
         ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
+        # According to the configurePhase of meson, gtest is considered a
+        # runtime dependency. Quoting:
+        #
+        #    Run-time dependency GTest found: YES 1.10.0
+        ++ lib.optionals options_.test [ gtest ]
         ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
 
       nativeBuildInputs = [
         meson
         ninja
         pkg-config
-      ];
+      ]
+        ++ lib.optionals options_.documentation [
+          python3Packages.sphinx
+          doxygen
+        ]
+      ;
+
+      # Otherwise, the meson log says:
+      #
+      #    Program zip found: NO
+      checkInputs = lib.optionals options_.test [ zip ];
+
+      doCheck = options_.test;
 
       enableParallelBuilding = true;
 
@@ -131,7 +200,16 @@ let
         ++ lib.optional (builtins.elem "zeroconf" features_)
           "-Dzeroconf=avahi"
         ++ lib.optional (builtins.elem "systemd" features_)
-          "-Dsystemd_system_unit_dir=etc/systemd/system";
+          "-Dsystemd_system_unit_dir=etc/systemd/system"
+        ++ lib.attrsets.mapAttrsToList (
+          name:
+          value:
+          # Expects a boolean which is converted to `true` or `false` with
+          # `toJSON`, `builtins.toString` converts these to `1` or `0` which
+          # doesn't fit for meson
+          "-D${name}=${builtins.toJSON value}"
+        ) options_
+      ;
 
       passthru.tests.nixos = nixosTests.mpd;
 
@@ -152,6 +230,14 @@ let
 in
 {
   mpd = run { };
+  # Includes documentation
+  mpd-full = run {
+    # This argument is only updating the default options using the `//`
+    # operator. the defaults are listed right before the mkDerivation call
+    options = {
+      documentation = true;
+    };
+  };
   mpd-small = run { features = [
     "webdav" "curl" "mms" "bzip2" "zzip"
     "audiofile" "faad" "flac" "gme" "mad"
