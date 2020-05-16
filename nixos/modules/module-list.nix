@@ -1002,7 +1002,6 @@
   ./virtualisation/podman.nix
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/railcar.nix
-  ./virtualisation/rkt.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix

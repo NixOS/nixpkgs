@@ -21695,8 +21695,6 @@ in
 
   ripser = callPackage ../applications/science/math/ripser { };
 
-  rkt = callPackage ../applications/virtualization/rkt { };
-
   rkdeveloptool = callPackage ../misc/rkdeveloptool { };
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
