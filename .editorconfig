@@ -13,14 +13,20 @@ charset = utf-8
 
 # see https://nixos.org/nixpkgs/manual/#chap-conventions
 
-# Match nix/ruby/docbook files, set indent to spaces with width of two
-[*.{nix,rb,xml}]
+# Match nix/perl/python/ruby/shell/docbook files, set indent to spaces
+[*.{nix,pl,py,rb,sh,xml}]
 indent_style = space
+
+# Match docbook files, set indent width of one
+[*.xml]
+indent_size = 1
+
+# Match nix/ruby files, set indent width of two
+[*.{nix,rb}]
 indent_size = 2
 
-# Match shell/python/perl scripts, set indent to spaces with width of four
-[*.{sh,py,pl}]
-indent_style = space
+# Match perl/python/shell scripts, set indent width of four
+[*.{pl,py,sh}]
 indent_size = 4
 
 # Match diffs, avoid to trim trailing whitespace
