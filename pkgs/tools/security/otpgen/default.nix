@@ -1,14 +1,14 @@
 { 
-  pkgs ? import <nixpkgs> {}
-  , lib ? pkgs.lib
-  , stdenv ? pkgs.stdenv
-  , makeWrapper ? pkgs.makeWrapper
-  , fetchFromGitHub ? pkgs.fetchFromGitHub
-  , fakeSha256 ? pkgs.lib.fakeSha256
-  , cmake ? pkgs.cmake
-  , pkg-config ? pkgs.pkg-config
-  , cryptopp ? pkgs.cryptopp
-  , qtbase ? pkgs.qt5.qtbase
+  pkgs
+  , lib
+  , stdenv
+  , makeWrapper
+  , fetchFromGitHub
+  , fakeSha256
+  , cmake
+  , pkg-config
+  , cryptopp
+  , qtbase
 }:
 
 stdenv.mkDerivation {
@@ -20,8 +20,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     homepage = "https://github.com/magiruuvelvet/OTPGen";
     maintainers = with lib.maintainers; [ shamilton ];
-    priority = "10";
-    timeout = 3600;
     platforms = stdenv.lib.platforms.linux;
   };
 
