@@ -1,5 +1,5 @@
 { stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
-, clang_9, llvm_9, gcc, which, libcgroup, python, perl, gmp
+, clang, llvm, gcc, which, libcgroup, python, perl, gmp
 , file, wine ? null, fetchpatch
 }:
 
@@ -29,16 +29,16 @@ let
 
     # Note: libcgroup isn't needed for building, just for the afl-cgroup
     # script.
-    nativeBuildInputs = [ makeWrapper which clang_9 gcc ];
-    buildInputs = [ llvm_9 python gmp ]
+    nativeBuildInputs = [ makeWrapper which clang gcc ];
+    buildInputs = [ llvm python gmp ]
       ++ stdenv.lib.optional (wine != null) python.pkgs.wrapPython;
 
 
     postPatch = ''
       # Replace the CLANG_BIN variables with the correct path
       substituteInPlace llvm_mode/afl-clang-fast.c \
-        --replace "CLANGPP_BIN" '"${clang_9}/bin/clang++"' \
-        --replace "CLANG_BIN" '"${clang_9}/bin/clang"' \
+        --replace "CLANGPP_BIN" '"${clang}/bin/clang++"' \
+        --replace "CLANG_BIN" '"${clang}/bin/clang"' \
         --replace 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")"
 
       # Replace "gcc" and friends with full paths in afl-gcc
