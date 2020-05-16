@@ -128,6 +128,12 @@ instantenous and formats commits for you.
           inherit (self.melpaPackages) ess ctable popup;
         };
 
+        forge = super.forge.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         gnuplot = super.gnuplot.overrideAttrs (old: {
@@ -444,12 +450,6 @@ instantenous and formats commits for you.
         });
 
         kapacitor = super.kapacitor.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
-        });
-
-        forge = super.forge.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
