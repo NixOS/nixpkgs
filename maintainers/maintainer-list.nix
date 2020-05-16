@@ -8301,6 +8301,12 @@
     githubId = 54934;
     name = "Wout Mertens";
   };
+  wnklmnn = {
+    email = "pascal@wnklmnn.de";
+    github = "wnklmnn";
+    githubId = 9423014;
+    name = "Pascal Winkelmann";
+  };
   woffs = {
     email = "github@woffs.de";
     github = "woffs";
