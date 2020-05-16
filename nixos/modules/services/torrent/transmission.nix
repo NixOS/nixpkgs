@@ -53,6 +53,7 @@ in
             download-dir = downloadDir;
             incomplete-dir = incompleteDir;
             incomplete-dir-enabled = true;
+            encryption = 2;
           };
         example =
           {
