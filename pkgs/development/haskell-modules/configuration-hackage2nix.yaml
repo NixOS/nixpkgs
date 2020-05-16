@@ -9861,7 +9861,6 @@ broken-packages:
   - tapioca
   - tar-bytestring
   - target
-  - tart
   - task
   - task-distribution
   - taskell
