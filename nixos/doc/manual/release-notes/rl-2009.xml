@@ -413,6 +413,11 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      The default output of <literal>buildGoPackage</literal> is now <literal>$out</literal> instead of <literal>$bin</literal>.
    </para>
    </listitem>
+   <listitem>
+   <para>
+     Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
+   </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
