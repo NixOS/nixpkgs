@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "pkgconfig";
   version = "1.5.1";
 
-  setupHook = pkgconfig.setupHook;
+  setupHooks = pkgconfig.setupHooks;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   patches = [ ./executable.patch ];
   postPatch = ''
-    substituteInPlace pkgconfig/pkgconfig.py --replace 'PKG_CONFIG_EXE = "pkg-config"' 'PKG_CONFIG_EXE = "${pkgconfig}/bin/pkg-config"'
+    substituteInPlace pkgconfig/pkgconfig.py --replace 'PKG_CONFIG_EXE = "pkg-config"' 'PKG_CONFIG_EXE = "${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"'
   '';
 
   meta = with lib; {
