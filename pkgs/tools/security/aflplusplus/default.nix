@@ -1,6 +1,6 @@
 { stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
 , clang_9, llvm_9, gcc, which, libcgroup, python, perl, gmp
-, file, cmocka, wine ? null, fetchpatch
+, file, wine ? null, fetchpatch
 }:
 
 # wine fuzzing is only known to work for win32 binaries, and using a mixture of
@@ -105,7 +105,7 @@ let
         wrapPythonProgramsIn $out/bin ${python.pkgs.pefile}
     '';
 
-    installCheckInputs = [ perl file cmocka ];
+    installCheckInputs = [ perl file ];
     doInstallCheck = true;
     installCheckPhase = ''
       # replace references to tools in build directory with references to installed locations
