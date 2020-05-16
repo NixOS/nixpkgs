@@ -9,16 +9,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "palp";
-  version = "2.1";
+  version = "2.11";
 
   src = fetchurl {
     url = "http://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/palp-${version}.tar.gz";
-    sha256 = "1s7s2lc5f0ig1yy7ygsh3sddm3sbq4mxwybqsj8lp9wjdxs7qfrs";
+    sha256 = "09l4ysrdkqs91igg1faah75ay6ii684634ggvcxbkjsck65378l4";
   };
 
   hardeningDisable = [
     "format"
-    "strictoverflow" # causes runtime failure (tested in checkPhase)
   ];
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
