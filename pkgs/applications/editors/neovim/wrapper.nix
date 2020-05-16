@@ -73,6 +73,10 @@ let
         --cmd \"${if withRuby then "let g:ruby_host_prog='$out/bin/nvim-ruby'" else "let g:loaded_ruby_provider=1"}\" " \
         --suffix PATH : ${binPath} \
         ${optionalString withRuby '' --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath}'' }
+
+        # expose the manpage from neovim-unwrapped
+        mkdir -p $out/share/man/man1
+        ln -s ${neovim}/share/man/man1/nvim.1.gz $out/share/man/man1/nvim.1.gz
       ''
       + optionalString (!stdenv.isDarwin) ''
         # copy icon and patch the original neovim.desktop file
@@ -81,10 +85,6 @@ let
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
-
-        # expose the manpage from neovim-unwrapped
-        mkdir -p $out/share/man/man1
-        ln -s ${neovim}/share/man/man1/nvim.1.gz $out/share/man/man1/nvim.1.gz
       ''
       + optionalString withPython ''
         makeWrapper ${pythonEnv}/bin/python $out/bin/nvim-python --unset PYTHONPATH
