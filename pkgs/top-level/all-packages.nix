@@ -5740,6 +5740,8 @@ in
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
+  otpgen = libsForQt5.callPackage ../tools/security/otpgen {};
+
   overcommit = callPackage ../development/tools/overcommit { };
 
   overmind = callPackage ../applications/misc/overmind { };
