@@ -116,7 +116,11 @@ let
         ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
         ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
 
-      nativeBuildInputs = [ meson ninja pkg-config ];
+      nativeBuildInputs = [
+        meson
+        ninja
+        pkg-config
+      ];
 
       enableParallelBuilding = true;
 
