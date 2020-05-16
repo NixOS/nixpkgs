@@ -5,11 +5,11 @@
 
 let
   pname = "session-messenger-desktop";
-  version = "1.0.7";
+  version = "1.0.8";
   name="${pname}-${version}.AppImage";
   src = fetchurl {
     url = "https://github.com/loki-project/session-desktop/releases/download/v${version}/session-messenger-desktop-linux-x86_64-${version}.AppImage";
-    sha256 = "5d61a66c96dc098458475d4be85c36522866b833ab677cdd060d3bb521852606";
+    sha256 = "923774ad431f9cef689df417a9f48109711b1c8235f34bd335cc4f6244fe9afc";
     name="${pname}-${version}.AppImage";
   };
 
