@@ -330,6 +330,12 @@ instantenous and formats commits for you.
           '';
         });
 
+        treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
@@ -539,12 +545,6 @@ instantenous and formats commits for you.
         spaceline = super.spaceline.override {
           inherit (self.melpaPackages) powerline;
         };
-
-        treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
-        });
 
         vterm = super.vterm.overrideAttrs(old: {
           buildInputs = old.buildInputs ++ [ self.emacs pkgs.cmake pkgs.libvterm-neovim ];
