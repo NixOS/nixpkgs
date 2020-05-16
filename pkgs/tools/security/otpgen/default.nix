@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     description = "MULTI-PURPOSE OTP TOKEN GENERATOR WRITTEN IN C++ AND QT WITH ENCRYPTION AND SYSTEM TRAY ICON. SUPPORTS TOTP, HOTP, AUTHY AND STEAM AND CUSTOM DIGIT LENGTHS AND PERIODS.";
     license = lib.licenses.mit;
     homepage = "https://github.com/magiruuvelvet/OTPGen";
-    maintainers = [ "Scott Hamilton <sgn'dot'hamilton'at'protonmail'dot'com>" ];
+    maintainers = with lib.maintainers; [ shamilton ];
     priority = "10";
     timeout = 3600;
     platforms = stdenv.lib.platforms.linux;
