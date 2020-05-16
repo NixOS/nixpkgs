@@ -19,9 +19,7 @@ rustPlatform.buildRustPackage rec {
    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
-  # no test on darwin due to
-  # https://github.com/bytecodealliance/wasmtime/issues/1556
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
 
   meta = with lib; {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
