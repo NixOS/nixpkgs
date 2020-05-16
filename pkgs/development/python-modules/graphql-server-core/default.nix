@@ -36,5 +36,8 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       kamadorueda
     ];
+    # Broken because no release of graphql-server-core
+    # supports graphql-core >=3.
+    broken = true;
   };
 }

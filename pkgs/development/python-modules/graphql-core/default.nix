@@ -1,47 +1,30 @@
 { buildPythonPackage
 , fetchFromGitHub
+, isPy3k
 , lib
 
-, coveralls
-, promise
 , pytest
 , pytest-benchmark
-, pytest-mock
-, rx
-, six
 }:
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "2.3.1";
+  version = "3.1.0";
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
     rev = "v${version}";
-    sha256 = "029jnwy6zbj4x7f3ffpn1gyx0w9ala9cj2g115g6aa7im3xd2jma";
+    sha256 = "058318j1c1g26bgm10sf89iqi6c0wvkwpk8v2fybs53zy062xlwx";
   };
 
-  propagatedBuildInputs = [
-    promise
-    rx
-    six
-  ];
-
   checkInputs = [
-    coveralls
     pytest
     pytest-benchmark
-    pytest-mock
   ];
 
   checkPhase = "pytest";
-
-  configurePhase = ''
-    substituteInPlace setup.py \
-      --replace 'pytest-mock==1.2' 'pytest-mock==1.13.0' \
-      --replace 'pytest-benchmark==3.0.0' 'pytest-benchmark==3.2.2'
-  '';
 
   meta = with lib; {
     description = "Port of graphql-js to Python";
