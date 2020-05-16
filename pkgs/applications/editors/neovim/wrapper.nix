@@ -81,6 +81,10 @@ let
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
+
+        # expose the manpage from neovim-unwrapped
+        mkdir -p $out/share/man/man1
+        ln -s ${neovim}/share/man/man1/nvim.1.gz $out/share/man/man1/nvim.1.gz
       ''
       + optionalString withPython ''
         makeWrapper ${pythonEnv}/bin/python $out/bin/nvim-python --unset PYTHONPATH
