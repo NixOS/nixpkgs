@@ -4216,6 +4216,8 @@ in
 
   iannix = libsForQt5.callPackage ../applications/audio/iannix { };
 
+  jamulus = libsForQt5.callPackage ../applications/audio/jamulus { };
+
   ibm-sw-tpm2 = callPackage ../tools/security/ibm-sw-tpm2 { };
 
   ibniz = callPackage ../tools/graphics/ibniz { };
