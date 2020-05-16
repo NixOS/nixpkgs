@@ -5179,6 +5179,8 @@ in
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
 
+  m4b-tool = callPackage ../tools/audio/m4b-tool { };
+
   ma1sd = callPackage ../servers/ma1sd { };
 
   mailcatcher = callPackage ../development/web/mailcatcher { };
