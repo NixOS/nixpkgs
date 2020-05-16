@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
 # Inputs
 , curl, libmms, libnfs, samba
 # Archive support
@@ -116,7 +116,7 @@ let
         ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
         ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
 
-      nativeBuildInputs = [ meson ninja pkgconfig ];
+      nativeBuildInputs = [ meson ninja pkg-config ];
 
       enableParallelBuilding = true;
 
