@@ -17,25 +17,15 @@ let
   libtokencap = callPackage ./libtokencap.nix { inherit aflplusplus; };
   aflplusplus = stdenvNoCC.mkDerivation rec {
     pname = "aflplusplus";
-    version = "2.64c";
+    version = "2.65c";
 
     src = fetchFromGitHub {
       owner = "AFLplusplus";
       repo = "AFLplusplus";
       rev = version;
-      sha256 = "0n618pk6nlmkcbv1qm05fny4mnhcprrw0ppmra1phvk1y22iildj";
+      sha256 = "1np2a3kypb2m8nyv6qnij18yzn41pl8619jzydci40br4vxial9l";
     };
     enableParallelBuilding = true;
-
-    # build of unsigaction32 broken in 2.64c:
-    # https://github.com/AFLplusplus/AFLplusplus/commit/079fdbf9bc5be1adba19e4bd08be965bd4dd79dc#commitcomment-38428357
-    # The applied patch fixes it.
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/AFLplusplus/AFLplusplus/commit/5b9928f1a9d4b017ea04365ca8b522fde71236eb.patch";
-        sha256 = "1m4w9w4jaxb2mjkwvr6r4qa2j5cdzzpchjphpwd95861h0zvb6hh";
-      })
-    ];
 
     # Note: libcgroup isn't needed for building, just for the afl-cgroup
     # script.
@@ -123,7 +113,7 @@ let
         --replace '../libcompcov.so' '`$out/bin/get-afl-qemu-libcompcov-so`' \
         --replace '../libdislocator.so' '`$out/bin/get-libdislocator-so`' \
         --replace '../libtokencap.so' '`$out/bin/get-libtokencap-so`'
-      perl -pi -e 's|(?<!\.)(\.\./)([^\s\/]+?)(?<!\.c)(?<!\.s?o)(?=\s)|\$out/bin/\2|g' test/test.sh
+      perl -pi -e 's|(?<!\.)(?<!-I)(\.\./)([^\s\/]+?)(?<!\.c)(?<!\.s?o)(?=\s)|\$out/bin/\2|g' test/test.sh
       cd test && ./test.sh
     '';
 
