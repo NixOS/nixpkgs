@@ -5738,6 +5738,8 @@ in
 
   otfcc = callPackage ../tools/misc/otfcc { };
 
+  otpgen = libsForQt5.callPackage ../tools/security/otpgen {};
+
   otpw = callPackage ../os-specific/linux/otpw { };
 
   overcommit = callPackage ../development/tools/overcommit { };
