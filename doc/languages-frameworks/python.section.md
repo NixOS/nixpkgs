@@ -1023,7 +1023,8 @@ are used in `buildPythonPackage`.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
-  `venv` is created if it does not yet exist.
+  `venv` is created if it does not yet exist. `postVenvCreation` can be used to
+  to run commands only after venv is first created.
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
 
@@ -1291,10 +1292,17 @@ in pkgs.mkShell rec {
     zlib
   ];
 
+  # Run this command, only after creating the virtual environment
+  postVenvCreation = ''
+    unset SOURCE_DATE_EPOCH
+    pip install -r requirements.txt
+  '';
+
   # Now we can execute any commands within the virtual environment.
   # This is optional and can be left out to run pip manually.
   postShellHook = ''
-    pip install -r requirements.txt
+    # allow pip to install wheels
+    unset SOURCE_DATE_EPOCH
   '';
 
 }
