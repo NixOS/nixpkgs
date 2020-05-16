@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
+{ stdenv, addOpenGLRunpath, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -416,7 +416,7 @@ stdenv.mkDerivation rec {
     "--enable-cross-compile"
   ];
 
-  nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
 
   buildInputs = [
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
@@ -442,6 +442,13 @@ stdenv.mkDerivation rec {
   # Hacky framework patching technique borrowed from the phantomjs2 package
   postInstall = optionalString qtFaststartProgram ''
     cp -a tools/qt-faststart $out/bin/
+  '';
+
+  postFixup = optionalString stdenv.isLinux ''
+    # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
+    # See the explanation in addOpenGLRunpath.
+    addOpenGLRunpath $out/lib/libavcodec.so
+    addOpenGLRunpath $out/lib/libavutil.so
   '';
 
   enableParallelBuilding = true;
