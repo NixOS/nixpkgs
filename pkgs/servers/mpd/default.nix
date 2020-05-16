@@ -112,11 +112,18 @@ let
         sha256 = "0jnhjhm1ilpcwb4f58b8pgyzjq3dlr0j2xyk0zck0afwkdxyj9cb";
       };
 
-      buildInputs = [ glib boost ]
+      buildInputs = [
+        glib
+        boost
+      ]
         ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
         ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
 
-      nativeBuildInputs = [ meson ninja pkg-config ];
+      nativeBuildInputs = [
+        meson
+        ninja
+        pkg-config
+      ];
 
       enableParallelBuilding = true;
 
