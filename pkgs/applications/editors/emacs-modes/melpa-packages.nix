@@ -22,42 +22,50 @@ instantenous and formats commits for you.
 
 */
 
-{ lib, external, pkgs }: variant: self: let
+{ lib, external, pkgs }: variant: self:
+let
+  dontConfigure = pkg:
+    if pkg != null then pkg.override (args: {
+      melpaBuild = drv: args.melpaBuild (drv // {
+        dontConfigure = true;
+      });
+    }) else null;
 
-  dontConfigure = pkg: if pkg != null then pkg.override (args: {
-    melpaBuild = drv: args.melpaBuild (drv // {
-      dontConfigure = true;
-    });
-  }) else null;
+  markBroken = pkg:
+    if pkg != null then pkg.override (args: {
+      melpaBuild = drv: args.melpaBuild (drv // {
+        meta = (drv.meta or { }) // { broken = true; };
+      });
+    }) else null;
 
-  markBroken = pkg: if pkg != null then pkg.override (args: {
-    melpaBuild = drv: args.melpaBuild (drv // {
-      meta = (drv.meta or {}) // { broken = true; };
-    });
-  }) else null;
+  externalSrc = pkg: epkg:
+    if pkg != null then pkg.override (args: {
+      melpaBuild = drv: args.melpaBuild (drv // {
+        inherit (epkg) src version;
 
-  externalSrc = pkg : epkg : if pkg != null then pkg.override (args : {
-    melpaBuild = drv : args.melpaBuild (drv // {
-      inherit (epkg) src version;
+        propagatedUserEnvPkgs = [ epkg ];
+      });
+    }) else null;
 
-      propagatedUserEnvPkgs = [ epkg ];
-    });
-  }) else null;
+  fix-rtags = pkg:
+    if pkg != null then dontConfigure (externalSrc pkg external.rtags)
+    else null;
 
-  fix-rtags = pkg : if pkg != null then dontConfigure (externalSrc pkg external.rtags)
-                    else null;
+  generateMelpa = lib.makeOverridable ({ archiveJson ? ./recipes-archive-melpa.json
+                                       }:
+    let
+      inherit (import ./libgenerated.nix lib self) melpaDerivation;
+      super = (
+        lib.listToAttrs (builtins.filter
+          (s: s != null)
+          (map
+            (melpaDerivation variant)
+            (lib.importJSON archiveJson)
+          )
+        )
+      );
 
-  generateMelpa = lib.makeOverridable ({
-    archiveJson ? ./recipes-archive-melpa.json
-  }: let
-
-    inherit (import ./libgenerated.nix lib self) melpaDerivation;
-    super = lib.listToAttrs (builtins.filter (s: s != null)
-                                             (map (melpaDerivation variant)
-                                                  (lib.importJSON archiveJson)));
-
-    overrides = rec {
-      shared = rec {
+      overrides = {
         # Expects bash to be at /bin/bash
         ac-rtags = fix-rtags super.ac-rtags;
 
@@ -65,12 +73,11 @@ instantenous and formats commits for you.
           inherit (self.melpaPackages) powerline;
         };
 
-        auto-complete-clang-async = super.auto-complete-clang-async.overrideAttrs(old: {
+        auto-complete-clang-async = super.auto-complete-clang-async.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ external.llvmPackages.llvm ];
           CFLAGS = "-I${external.llvmPackages.clang}/include";
           LDFLAGS = "-L${external.llvmPackages.clang}/lib";
         });
-        emacsClangCompleteAsync = auto-complete-clang-async;
 
         # part of a larger package
         caml = dontConfigure super.caml;
@@ -87,7 +94,7 @@ instantenous and formats commits for you.
 
         dune = dontConfigure super.dune;
 
-        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs(old: {
+        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
           postBuild = ''
@@ -116,12 +123,12 @@ instantenous and formats commits for you.
         evil-magit = super.evil-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         eopengrok = super.eopengrok.overrideAttrs (attrs: {
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         ess-R-data-view = super.ess-R-data-view.override {
@@ -131,17 +138,17 @@ instantenous and formats commits for you.
         forge = super.forge.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         gnuplot = super.gnuplot.overrideAttrs (old: {
           nativeBuildInputs =
-            (old.nativeBuildInputs or []) ++ [ pkgs.autoreconfHook ];
+            (old.nativeBuildInputs or [ ]) ++ [ pkgs.autoreconfHook ];
         });
 
-        pdf-tools = super.pdf-tools.overrideAttrs(old: {
+        pdf-tools = super.pdf-tools.overrideAttrs (old: {
           nativeBuildInputs = [ external.pkgconfig ];
           buildInputs = with external; old.buildInputs ++ [ autoconf automake libpng zlib poppler ];
           preBuild = "make server/epdfinfo";
@@ -158,7 +165,7 @@ instantenous and formats commits for you.
         });
 
         irony = super.irony.overrideAttrs (old: {
-          cmakeFlags = old.cmakeFlags or [] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
+          cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
           NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
           preConfigure = ''
             cd server
@@ -192,115 +199,115 @@ instantenous and formats commits for you.
         magit = super.magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-find-file = super.magit-find-file.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-gh-pulls = super.magit-gh-pulls.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-imerge = super.magit-imerge.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-lfs = super.magit-lfs.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-org-todos = super.magit-org-todos.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-stgit = super.magit-stgit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-tbdiff = super.magit-tbdiff.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-topgit = super.magit-topgit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-vcsh = super.magit-vcsh.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-gerrit = super.magit-gerrit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-annex = super.magit-annex.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-todos = super.magit-todos.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-filenotify = super.magit-filenotify.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-gitflow = super.magit-gitflow.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magithub = super.magithub.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-svn = super.magit-svn.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         kubernetes = super.kubernetes.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         kubernetes-evil = super.kubernetes-evil.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         # upstream issue: missing file header
@@ -323,7 +330,7 @@ instantenous and formats commits for you.
         });
 
         # Telega has a server portion for it's network protocol
-        telega = super.telega.overrideAttrs(old: {
+        telega = super.telega.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
 
           postBuild = ''
@@ -341,21 +348,24 @@ instantenous and formats commits for you.
         treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
-        zmq = super.zmq.overrideAttrs(old: {
+        zmq = super.zmq.overrideAttrs (old: {
           stripDebugList = [ "share" ];
           preBuild = ''
             make
           '';
           nativeBuildInputs = [
-            external.autoconf external.automake external.pkgconfig external.libtool
+            external.autoconf
+            external.automake
+            external.pkgconfig
+            external.libtool
             (external.zeromq.override { enableDrafts = true; })
           ];
           postInstall = ''
@@ -377,9 +387,6 @@ instantenous and formats commits for you.
         markdown-mode-plus = super."markdown-mode+";
         package-plus = super."package+";
         rect-plus = super."rect+";
-      };
-
-      stable = shared // {
 
         # upstream issue: missing file header
         bufshow = markBroken super.bufshow;
@@ -389,9 +396,6 @@ instantenous and formats commits for you.
 
         # upstream issue: missing file header
         dictionary = markBroken super.dictionary;
-
-        # missing git
-        egg = markBroken super.egg;
 
         # upstream issue: missing file header
         elmine = markBroken super.elmine;
@@ -411,8 +415,6 @@ instantenous and formats commits for you.
         # upstream issue: doesn't build
         eterm-256color = markBroken super.eterm-256color;
 
-        helm-rtags = fix-rtags super.helm-rtags;
-
         # upstream issue: missing file header
         qiita = markBroken super.qiita;
 
@@ -431,9 +433,6 @@ instantenous and formats commits for you.
         # upstream issue: missing file header
         window-numbering = markBroken super.window-numbering;
 
-      };
-
-      unstable = shared // {
         editorconfig = super.editorconfig.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ external.editorconfig-core-c ];
         });
@@ -441,7 +440,7 @@ instantenous and formats commits for you.
         egg = super.egg.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         # missing dependencies
@@ -452,85 +451,85 @@ instantenous and formats commits for you.
         kapacitor = super.kapacitor.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         gerrit = super.gerrit.overrideAttrs (attrs: {
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         gerrit-download = super.gerrit-download.overrideAttrs (attrs: {
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         github-pullrequest = super.github-pullrequest.overrideAttrs (attrs: {
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         helm-rtags = fix-rtags super.helm-rtags;
 
         jist = super.jist.overrideAttrs (attrs: {
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         mandoku = super.mandoku.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         mandoku-tls = super.mandoku-tls.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-p4 = super.magit-p4.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-rbr = super.magit-rbr.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-diff-flycheck = super.magit-diff-flycheck.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-reviewboard = super.magit-reviewboard.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-patch-changelog = super.magit-patch-changelog.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         magit-circleci = super.magit-circleci.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
         orgit =
           (super.orgit.overrideAttrs (attrs: {
             # searches for Git at build time
             nativeBuildInputs =
-              (attrs.nativeBuildInputs or []) ++ [ external.git ];
-           }));
+              (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
+          }));
 
         # tries to write to $HOME
         php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
@@ -548,7 +547,7 @@ instantenous and formats commits for you.
           inherit (self.melpaPackages) powerline;
         };
 
-        vterm = super.vterm.overrideAttrs(old: {
+        vterm = super.vterm.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ self.emacs pkgs.cmake pkgs.libvterm-neovim ];
           cmakeFlags = [
             "-DEMACS_SOURCE=${self.emacs.src}"
@@ -564,32 +563,38 @@ instantenous and formats commits for you.
             rm -rf $out/share/emacs/site-lisp/elpa/vterm-**/{CMake*,build,*.c,*.h}
           '';
         });
-        # Legacy alias
-        emacs-libvterm = unstable.vterm;
-
-        # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
-        _0xc = super."0xc";
-        _2048-game = super."2048-game";
-        _4clojure = super."4clojure";
-        at = super."@";
-        term-plus = super."term+";
-        term-plus-key-intercept = super."term+key-intercept";
-        term-plus-mux = super."term+mux";
-        xml-plus = super."xml+";
 
         w3m = super.w3m.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {
             prePatch =
-              let w3m = "${lib.getBin external.w3m}/bin/w3m"; in ''
+              let w3m = "${lib.getBin external.w3m}/bin/w3m"; in
+              ''
                 substituteInPlace w3m.el \
-                  --replace 'defcustom w3m-command nil' \
-                            'defcustom w3m-command "${w3m}"'
+                --replace 'defcustom w3m-command nil' \
+                'defcustom w3m-command "${w3m}"'
               '';
           });
         });
       };
-    };
 
-  in super // overrides.${variant});
+      # Deprecated legacy aliases for backwards compat
+      aliases = lib.listToAttrs (lib.attrValues (lib.mapAttrs (n: v: { name = v; value = builtins.trace "Melpa attribute '${v}' is a legacy alias that will be removed in 21.03, use '${n}' instead" melpaPackages.${n}; }) (lib.filterAttrs (n: v: lib.hasAttr n melpaPackages) {
+        "auto-complete-clang-async" = "emacsClangCompleteAsync";
+        "vterm" = "emacs-libvterm";
+        "0xc" = "_0xc";
+        "2048-game" = "_2048-game";
+        "4clojure" = "_4clojure";
+        "@" = "at";
+        "term+" = "term-plus";
+        "term+key-intercept" = "term-plus-key-intercept";
+        "term+mux" = "term-plus-mux";
+        "xml+" = "xml-plus";
+      })));
 
-in generateMelpa { }
+      melpaPackages = lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super;
+
+    in
+    melpaPackages // aliases);
+
+in
+generateMelpa { }
