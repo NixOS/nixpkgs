@@ -187,3 +187,9 @@
 /pkgs/build-support/build-pecl.nix       @etu
 /pkgs/development/interpreters/php       @etu
 /pkgs/top-level/php-packages.nix         @etu
+
+# Podman, CRI-O modules and related
+/nixos/modules/virtualisation/containers.nix @NixOS/podman
+/nixos/modules/virtualisation/cri-o.nix      @NixOS/podman
+/nixos/modules/virtualisation/podman.nix     @NixOS/podman
+/nixos/tests/podman.nix                      @NixOS/podman
