@@ -78,6 +78,9 @@ stdenv.mkDerivation rec {
       facet enumeration compares well with existing packages.
     '';
     homepage = "http://hep.itp.tuwien.ac.at/~kreuzer/CY/CYpalp.html";
+    # Not really a changelog, but a one-line summary of each update that should
+    # be reviewed on update.
+    changelog = "http://hep.itp.tuwien.ac.at/~kreuzer/CY/CYpalp.html";
     # Just a link on the website pointing to gpl -- now gplv3. When the last
     # version was released that pointed to gplv2 however, so thats probably
     # the right license.
