@@ -85,6 +85,8 @@ instantenous and formats commits for you.
           inherit (self.melpaPackages) easy-kill;
         };
 
+        dune = dontConfigure super.dune;
+
         emacsql-sqlite = super.emacsql-sqlite.overrideAttrs(old: {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
