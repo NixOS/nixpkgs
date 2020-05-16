@@ -20836,6 +20836,7 @@ in
   mpv-with-scripts = callPackage ../applications/video/mpv/wrapper.nix { };
 
   mpvScripts = recurseIntoAttrs {
+    autoload = callPackage ../applications/video/mpv/scripts/autoload.nix {};
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
     mpris = callPackage ../applications/video/mpv/scripts/mpris.nix {};
   };
