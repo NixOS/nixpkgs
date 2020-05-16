@@ -308,6 +308,8 @@ instantenous and formats commits for you.
 
         rtags = dontConfigure (externalSrc super.rtags external.rtags);
 
+        rtags-xref = dontConfigure super.rtags;
+
         shm = super.shm.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
         });
