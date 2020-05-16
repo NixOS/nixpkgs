@@ -19,6 +19,9 @@
 # Tag support
 , libid3tag
 , nixosTests
+# For documentation
+, doxygen
+, python3Packages # for sphinx-build
 # For tests
 , gtest
 , fetchpatch # used to fetch an upstream patch fixing a failing test
@@ -146,6 +149,8 @@ let
         meson
         ninja
         pkg-config
+        python3Packages.sphinx
+        doxygen
       ];
 
       # Otherwise, the meson log says:
@@ -159,7 +164,12 @@ let
 
       mesonAutoFeatures = "disabled";
 
+      outputs = [ "out" "doc" "man" ];
+
       mesonFlags = [
+        # Documentation is enabled unconditionally but it's not installed
+        # unconditionally thanks to the outputs being split
+        "-Ddocumentation=true"
         "-Dtest=true"
       ]
         ++ map (x: "-D${x}=enabled") features_
