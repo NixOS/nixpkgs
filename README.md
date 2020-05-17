@@ -104,6 +104,7 @@ See code for all available configurations.
 [Purism Librem 13v3]: purism/librem/13v3
 [Purism Librem 13v5]: purism/librem/13v5
 [Toshiba Chromebook 2 `swanky`]: toshiba/swanky
+[Tuxedo InfinityBook v4]: nixos-hardware/tuxedo/infinitybook/v4
 
 ## How to contribute a new device profile
 
