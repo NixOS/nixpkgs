@@ -24,14 +24,4 @@ rec {
       sha256 = "0sgshaaqyjq3i035yi5hivmrrwrq05hxrbjrv1w3hfzmvljn41d1";
     };
   }));
-
-  ansible_2_6 = python3Packages.toPythonApplication (python3Packages.ansible.overridePythonAttrs (old: rec {
-    pname = "ansible";
-    version = "2.6.20";
-
-    src = fetchurl {
-      url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "02ra9q2mifyawn0719y78wrbqzik73aymlzwi90fq71jgyfvkkqn";
-    };
-  }));
 }
