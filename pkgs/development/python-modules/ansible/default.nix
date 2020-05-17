@@ -51,7 +51,7 @@ buildPythonPackage rec {
     homepage = http://www.ansible.com;
     description = "Radically simple IT automation";
     license = [ licenses.gpl3 ] ;
-    maintainers = with maintainers; [ joamaki costrouc ];
+    maintainers = with maintainers; [ joamaki costrouc hexa ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
