@@ -421,8 +421,29 @@ in
               fi
               poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
             fi
-            ${lib.optionalString cfgZfs.requestEncryptionCredentials ''
-              zfs load-key -a
+            ${optionalString cfgZfs.requestEncryptionCredentials ''
+                zfs list -r -H -o encryptionroot,keystatus,keylocation "${pool}" | sort | uniq | while IFS="	" read encryptionroot keystatus keylocation; do
+                    if [ "$keystatus" != "unavailable" -o "$keylocation" == "none" ]; then
+                        continue
+                    fi
+
+                    if [ "$keylocation" != "prompt" ]; then
+                        "${packages.zfsUser}/bin/zfs" load-key "$encryptionroot" || die "Failed to load key for $encryptionroot"
+                        continue
+                    fi
+
+                    success=
+                    for i in $(seq 1 3); do
+                        if askPassword "Enter key for $encryptionroot: " | zfs load-key "$encryptionroot"; then
+                            success=1
+                            break
+                        fi
+                    done
+
+                    if [ -z "$success" ]; then
+                        die "Failed to load key for $encryptionroot"
+                    fi
+                done
             ''}
         '') rootPools));
       };
