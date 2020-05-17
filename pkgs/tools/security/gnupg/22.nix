@@ -53,8 +53,10 @@ stdenv.mkDerivation rec {
     "--with-npth-prefix=${npth}"
   ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
+  # ensure doc/defsincdate is more recent than anything we touched until now, especially in postPatch
+  # otherwise these modification times might leak into the generated documentation
   preBuild = ''
-    echo $SOURCE_DATE_EPOCH > doc/defsincdate
+    touch doc/defsincdate
   '';
 
   postInstall = if enableMinimal
