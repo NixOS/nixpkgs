@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , bison
 , pam
+
+, withTimestamp ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +20,11 @@ stdenv.mkDerivation rec {
 
   # otherwise confuses ./configure
   dontDisableStatic = true;
+
+  configureFlags = [
+    (lib.optionalString withTimestamp "--with-timestamp") # to allow the "persist" setting
+    "--pamdir=${placeholder "out"}/etc/pam.d"
+  ];
 
   postPatch = ''
     sed -i '/\(chown\|chmod\)/d' bsd.prog.mk
