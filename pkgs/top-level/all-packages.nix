@@ -302,6 +302,8 @@ in
 
   pet = callPackage ../development/tools/pet { };
 
+  pkger = callPackage ../development/libraries/pkger { };
+
   run = callPackage ../development/tools/run { };
 
   mod = callPackage ../development/tools/mod { };
