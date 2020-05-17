@@ -187,6 +187,10 @@ let
 
     csv-lwt = callPackage ../development/ocaml-modules/csv/lwt.nix { };
 
+    curly = callPackage ../development/ocaml-modules/curly {
+      inherit (pkgs) curl;
+    };
+
     curses = callPackage ../development/ocaml-modules/curses { };
 
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
