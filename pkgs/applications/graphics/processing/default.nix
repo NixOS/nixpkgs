@@ -1,58 +1,133 @@
-{ stdenv, fetchFromGitHub, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
-
-stdenv.mkDerivation rec {
+{ stdenv, lib, jdk, patchelf, makeWrapper, xlibs, zip, unzip, rsync
+, xdg_utils ? null, gsettings-desktop-schemas ? null }:
+let
+  arch = "linux64";
+  libs = (with xlibs; [ libXext libX11 libXrender libXtst libXi libXxf86vm ]);
+in stdenv.mkDerivation rec {
   pname = "processing";
-  version = "3.5.3";
+  version = "3.5.4";
 
-  src = fetchFromGitHub {
-    owner = "processing";
-    repo = "processing";
-    rev = "processing-0269-${version}";
-    sha256 = "0ajniy3a0i0rx7is46r85yh3ah4zm4ra1gbllmihw9pmnfjgfajn";
+  src = fetchTarball {
+    url = "https://download.processing.org/${pname}-${version}-${arch}.tgz";
+    sha256 = "0fqjsa1j05wriwpa7fzvv2rxhhsz6ixqzf52syxr4z74j3wkxk8k";
   };
 
-  nativeBuildInputs = [ ant rsync makeWrapper ];
-  buildInputs = [ jdk ];
+  nativeBuildInputs = [ patchelf makeWrapper zip unzip rsync ]
+    ++ (lib.optional (xdg_utils != null) xdg_utils);
+  buildInputs = [ jdk ] ++ libs;
 
+  dontConfigure = true;
+
+  # Suppress "Not fond of this Java VM" message box.
+  # The block of code we're replacing is:
+  #
+  #   $ javap -v processing/app/platform/LinuxPlatform.class
+  #   52: ldc           #42                 // String Not fond of this Java VM
+  #   54: ldc           #44                 // String Processing requires Java 8 from Oracle. ...
+  #   56: aconst_null
+  #   57: invokestatic  #46                 // Method processing/app/Messages.showWarning:(
+  #                                         //    Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)V
+  #
+  # which gets written to the .class file as the following bytes:
+  #
+  #     $ xxd processing/app/platform/LinuxPlatform.class
+  #     00000c90: .... .... .... .... .... .... .... 122a
+  #     00000ca0: 122c 01b8 002e .... .... .... .... ....
+  #
+  # i.e. 8 bytes starting at 0xc9e (= 3230):
+  #
+  #     12 2a    |  ldc 42
+  #     12 2c    |  ldc 44
+  #     01       |  aconst_null
+  #     b8 00 2e |  invokestatic 46
+  #
+  # We overwrite those instructions with null bytes (`nop`) using `dd`.
+  #
+  # See the JVM instruction set specification:
+  #     https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html
+  # Patching binary files with `dd`:
+  #     https://stackoverflow.com/a/5586379
   buildPhase = ''
-    # use compiled jogl to avoid patchelf'ing .so files inside jars
-    rm core/library/*.jar
-    cp ${javaPackages.jogl_2_3_2}/share/java/*.jar core/library/
+    # `unzip` will need to make a directory named `processing`, but right now
+    # that's a shell script. Move it to the side and we'll move it back when
+    # we're done.
+    mv processing processing-bin
 
-    # do not download a file during build
-    ${xmlstarlet}/bin/xmlstarlet ed --inplace -P -d '//get[@src="http://download.processing.org/reference.zip"]' build/build.xml
-    install -D -m0444 ${fetchurl {
-                          url    = "http://download.processing.org/reference.zip";
-                          sha256 = "198bpk8mzns6w5h0zdf50wr6iv7sgdi6v7jznj5rbsnpgyilxz35";
-                        }
-                       } ./java/reference.zip
+    class="processing/app/platform/LinuxPlatform.class"
+    unzip lib/pde.jar "$class"
 
-    # suppress "Not fond of this Java VM" message box
-    substituteInPlace app/src/processing/app/platform/LinuxPlatform.java \
-      --replace 'Messages.showWarning' 'if (false) Messages.showWarning'
+    # Make sure the extracted class has the right checksum -- if
+    # `LinuxPlatform.class` changes in a future release, we'll need to
+    # recalculate the correct offset.
+    echo "b8ceb19e1c8d022f963d2abfb56abc02b5f037e32042f522e1f2663d0ee8f18d $class" \
+      | sha256sum --check
 
-    ( cd build
-      substituteInPlace build.xml --replace "jre-download," ""  # do not download jre1.8.0_144
-      mkdir -p linux/jre1.8.0_144                               # fake dir to avoid error
-      ant build )
+    # Overwrite the 8 bytes / 4 instructions.
+    printf '\x00\x00\x00\x00\x00\x00\x00\x00' \
+      | dd of="$class" \
+           bs=1 \
+           seek=3230 \
+           conv=notrunc
+
+    # Update `LinuxPlatform.class` in the `.jar`.
+    zip lib/pde.jar -u "$class"
+
+    # Remove the temporary directory named `processing` and move the shell
+    # script named `processing` back to its original location.
+    rm -r processing
+    mv processing-bin processing
   '';
 
   installPhase = ''
-    mkdir $out
-    cp -dpR build/linux/work $out/${pname}
+    mkdir -p $out/${pname}
+    rsync --copy-links --safe-links --recursive . $out/${pname}
 
-    rmdir $out/${pname}/java
+    # Use our JDK
+    rm -r $out/${pname}/java
     ln -s ${jdk} $out/${pname}/java
 
-    makeWrapper $out/${pname}/processing      $out/bin/processing \
-        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
-        --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
-        --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
-    makeWrapper $out/${pname}/processing-java $out/bin/processing-java \
-        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
-        --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
-        --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
-  '';
+    for binary in ${pname} ${pname}-java
+    do
+      makeWrapper $out/${pname}/$binary $out/bin/$binary \
+        --argv0 $binary \
+        ${
+          lib.optionalString (gsettings-desktop-schemas == null)
+          "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+        } \
+        --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=lcd" \
+        --prefix LD_LIBRARY_PATH : "${xlibs.libXxf86vm}/lib"
+    done
+  '' + (lib.optionalString (xdg_utils != null) ''
+    # See: $out/processing/install.sh
+    resource_name="processing-pde"
+    desktop_file="$out/${pname}/lib/$resource_name.desktop"
+    mkdir -p $out/share/{applications,desktop-directories,icons,mime/packages,icons/hicolor}
+    mkdir -p $out/etc/xdg
+
+    substitute "$out/${pname}/lib/desktop.template" "$desktop_file" \
+      --replace "<BINARY_LOCATION>" "$out/bin/processing" \
+      --replace "<ICON_NAME>" "$resource_name"
+
+    export XDG_UTILS_INSTALL_MODE="system"
+    export XDG_DATA_DIRS="$out/share"
+    export XDG_CONFIG_DIRS="$out/etc/xdg"
+
+    for size in 16 32 48 64 128 256 512 1024
+    do
+      for name in "$resource_name" text-x-processing
+      do
+        xdg-icon-resource install \
+          --context mimetypes --size "$size" \
+          "$out/${pname}/lib/icons/pde-$size.png" "$resource_name"
+      done
+    done
+
+    # Install the created *.desktop file
+    xdg-desktop-menu install "$desktop_file"
+
+    # Install Processing mime type
+    xdg-mime install "$out/${pname}/lib/$resource_name.xml"
+  '');
 
   meta = with stdenv.lib; {
     description = "A language and IDE for electronic arts";
