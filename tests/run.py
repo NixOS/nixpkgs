@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p nix -p python3 -i python
+#!nix-shell --quiet -p nix -p python3 -i python
 
 import argparse
 import multiprocessing
@@ -33,12 +33,13 @@ def build_profile(profile: str) -> Tuple[str, subprocess.CompletedProcess]:
         system = "armv7l-linux"
 
     cmd = [
-        "nix-build",
+        "nix",
+        "build",
+        "-f", "build-profile.nix",
         "-I",
         f"nixos-hardware={ROOT}",
         "--dry-run",
         "--show-trace",
-        "build-profile.nix",
         "--system",
         system,
         "--arg",
