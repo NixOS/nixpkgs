@@ -59,19 +59,22 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    flex
+    bison
     gtk-doc
     docbook-xsl-nons
-    docbook_xml_dtd_43
+    docbook_xml_dtd_43 # FIXME: remove in next release
     docbook_xml_dtd_45
+    python3
+    setupHook # move .gir files
   ];
 
   buildInputs = [
-    flex
-    bison
     python3
-    setupHook /*move .gir*/
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    cctools
+  ];
+
+  checkInputs = stdenv.lib.optionals stdenv.isDarwin [
+    cctools # for otool
   ];
 
   propagatedBuildInputs = [
