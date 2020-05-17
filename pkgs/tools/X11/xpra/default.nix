@@ -27,6 +27,7 @@ in buildPythonApplication rec {
       inherit (xorg) xkeyboardconfig;
       inherit libfakeXinerama;
     })
+    ./fix-41106.patch
   ];
 
   postPatch = ''
