@@ -1,6 +1,7 @@
 { stdenv, openssl, fetchFromGitHub }:
 stdenv.mkDerivation {
-  name = "pev-unstable-2018-07-22";
+  pname = "pev-unstable";
+  version = "2018-07-22";
   buildInputs = [ openssl ];
   src = fetchFromGitHub {
     owner = "merces";

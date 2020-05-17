@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "speedread-unstable-2016-09-21";
+  pname = "speedread-unstable";
+  version = "2016-09-21";
 
   src = fetchFromGitHub {
     owner  = "pasky";

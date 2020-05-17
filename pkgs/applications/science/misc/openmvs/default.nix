@@ -3,7 +3,8 @@
 , gmp, mpfr, glog, gflags, libjpeg_turbo }:
 
 stdenv.mkDerivation {
-  name = "openmvs-unstable-2018-05-26";
+  pname = "openmvs-unstable";
+  version = "2018-05-26";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";

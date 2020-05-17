@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "git-fire-unstable-2017-08-27";
+  pname = "git-fire-unstable";
+  version = "2017-08-27";
 
   src = fetchFromGitHub {
     owner = "qw3rtman";

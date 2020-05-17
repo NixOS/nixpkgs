@@ -5,7 +5,8 @@
 let
   libinf = libinfinity.override { gtkWidgets = true; inherit avahiSupport; };
 in stdenv.mkDerivation {
-  name = "gobby-unstable-2018-04-03";
+  pname = "gobby-unstable";
+  version = "2018-04-03";
   src = fetchFromGitHub {
     owner = "gobby";
     repo = "gobby";

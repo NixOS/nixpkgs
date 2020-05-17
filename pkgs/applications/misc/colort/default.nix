@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "colort-unstable-2017-03-12";
+  pname = "colort-unstable";
+  version = "2017-03-12";
 
   src = fetchFromGitHub {
     owner = "neeasade";

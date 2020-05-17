@@ -1,7 +1,8 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, libogg }:
 
 stdenv.mkDerivation {
-  name = "tremor-unstable-2018-03-16";
+  pname = "tremor-unstable";
+  version = "2018-03-16";
 
   src = fetchgit {
     url = "https://git.xiph.org/tremor.git";

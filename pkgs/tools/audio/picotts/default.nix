@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, popt }:
 
 stdenv.mkDerivation {
-  name = "picotts-unstable-2018-10-19";
+  pname = "picotts-unstable";
+  version = "2018-10-19";
   src = fetchFromGitHub {
     repo = "picotts";
     owner = "naggety";

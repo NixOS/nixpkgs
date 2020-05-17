@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     sha256 = "11v1i5gkxvfsipigc1w1m16ijzh85drpl694kg6ih4jfam1q4vdh";
   };
   # # See "12.2. Package naming"
-  # name = "skktools-unstable-${version}";
+  # pname = "skktools-unstable";
   # version = "2017-03-05";
   # src = fetchFromGitHub {
   #   owner = "skk-dev";

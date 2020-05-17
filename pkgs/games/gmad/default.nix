@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, premake4, bootil }:
 
 stdenv.mkDerivation rec {
-  name = "gmad-unstable-2015-04-16";
+  pname = "gmad-unstable";
+  version = "2015-04-16";
 
   meta = {
     description = "Garry's Mod Addon Creator and Extractor";

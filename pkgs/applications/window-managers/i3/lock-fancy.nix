@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  rev = "7accfb2aa2f918d1a3ab975b860df1693d20a81a";
-  name = "i3lock-fancy-unstable-2018-11-25_rev${builtins.substring 0 7 rev}";
+  pname = "i3lock-fancy-unstable";
+  version = "2018-11-25";
   src = fetchFromGitHub {
     owner = "meskarune";
     repo = "i3lock-fancy";
-    inherit rev;
+    rev = "7accfb2aa2f918d1a3ab975b860df1693d20a81a";
     sha256 = "00lqsvz1knb8iqy8lnkn3sf4c2c4nzb0smky63qf48m8za5aw9b1";
   };
   patchPhase = ''

@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, fetchpatch, premake4 }:
 
 stdenv.mkDerivation {
-  name = "bootil-unstable-2015-12-17";
+  pname = "bootil-unstable";
+  version = "2015-12-17";
 
   meta = {
     description = "Garry Newman's personal utility library";

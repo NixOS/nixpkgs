@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication {
-  name = "xdxf2slob-unstable-2015-06-30";
+  pname = "xdxf2slob-unstable";
+  version = "2015-06-30";
 
   src = fetchFromGitHub {
     owner = "itkach";

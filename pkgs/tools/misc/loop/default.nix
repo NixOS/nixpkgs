@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage {
-  name = "loop-unstable-2018-12-04";
+  pname = "loop-unstable";
+  version = "2018-12-04";
 
   src = fetchFromGitHub {
     owner = "Miserlou";

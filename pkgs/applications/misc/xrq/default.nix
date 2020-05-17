@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, libX11}:
 
 stdenv.mkDerivation {
-  name = "xrq-unstable-2016-01-15";
+  pname = "xrq-unstable";
+  version = "2016-01-15";
 
   src = fetchFromGitHub {
 	  owner = "arianon";

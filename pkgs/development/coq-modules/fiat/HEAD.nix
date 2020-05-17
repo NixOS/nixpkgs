@@ -1,8 +1,7 @@
 {stdenv, fetchgit, coq, python27}:
 
 stdenv.mkDerivation rec {
-
-  name = "coq-fiat-${coq.coq-version}-unstable-${version}";
+  pname = "coq-fiat-unstable";
   version = "2016-10-24";
 
   src = fetchgit {

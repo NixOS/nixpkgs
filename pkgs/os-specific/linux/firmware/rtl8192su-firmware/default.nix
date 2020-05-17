@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub }:
 with stdenv.lib;
 stdenv.mkDerivation {
-  name = "rtl8192su-unstable-2016-10-05";
+  pname = "rtl8192su-unstable";
+  version = "2016-10-05";
 
   src = fetchFromGitHub {
     owner = "chunkeey";

@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, fftw, hackrf, libusb1 }:
 
 stdenv.mkDerivation {
-  name = "kalibrate-hackrf-unstable-20160827";
+  pname = "kalibrate-hackrf-unstable";
+  version = "20160827";
 
   # There are no tags/releases, so use the latest commit from git master.
   # Currently, the latest commit is from 2016-07-03.

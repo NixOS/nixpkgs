@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, libxcb, libXinerama, xcbutil, xcbutilkeysyms, xcbutilwm }:
 
 stdenv.mkDerivation {
-  name = "bspwm-unstable-2016-09-30";
+  pname = "bspwm-unstable";
+  version = "2016-09-30";
 
 
   src = fetchFromGitHub {
