@@ -1280,6 +1280,12 @@
     githubId = 64804;
     name = "Dennis Gosnell";
   };
+  ccellado = {
+    email = "annplague@gmail.com";
+    github = "ccellado";
+    githubId = 44584960;
+    name = "Denis Khalmatov";
+  };
   ceedubs = {
     email = "ceedubs@gmail.com";
     github = "ceedubs";
