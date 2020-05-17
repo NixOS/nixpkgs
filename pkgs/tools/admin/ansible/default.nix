@@ -1,7 +1,7 @@
 { python3Packages, fetchurl }:
 
 rec {
-  ansible = ansible_2_8;
+  ansible = ansible_2_9;
 
   ansible_2_9 = python3Packages.toPythonApplication python3Packages.ansible;
 
