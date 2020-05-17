@@ -20979,6 +20979,10 @@ in
 
   polyphone = libsForQt5.callPackage ../applications/audio/polyphone { };
 
+  portfolio = callPackage ../applications/office/portfolio {
+    jre = openjdk11;
+  };
+
   ptex = callPackage ../development/libraries/ptex {};
 
   qbec = callPackage ../applications/networking/cluster/qbec { };
