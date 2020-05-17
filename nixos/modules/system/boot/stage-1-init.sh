@@ -62,11 +62,6 @@ EOF
 trap 'fail' 0
 
 
-# Print a greeting.
-echo
-echo "[1;32m<<< NixOS Stage 1 >>>[0m"
-echo
-
 # Make several required directories.
 mkdir -p /etc/udev
 touch /etc/fstab # to shut up mount
@@ -116,6 +111,23 @@ source @earlyMountScript@
 mkdir -p /tmp
 mkfifo /tmp/stage-1-init.log.fifo
 logOutFd=8 && logErrFd=9
+
+# askPassword <prompt>
+askPassword() {
+    # Ensure that we don't reset the echo flag.
+    curStatus=$(stty -g)
+    stty -echo
+
+    printf "%s" "$1" >&2
+    IFS= read -r password
+    printf "\n" >&2
+
+    stty "$curStatus"
+    printf "%s" "$password"
+}
+
+@preLogCommands@
+
 eval "exec $logOutFd>&1 $logErrFd>&2"
 if test -w /dev/kmsg; then
     tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
@@ -129,6 +141,10 @@ else
 fi
 exec > /tmp/stage-1-init.log.fifo 2>&1
 
+# Print a greeting.
+echo
+echo -e "\e[1;3m<<< NixOS Stage 1 >>>\e[0m"
+echo
 
 # Process the kernel command line.
 export stage2Init=/init
