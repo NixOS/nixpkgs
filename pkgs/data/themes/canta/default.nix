@@ -1,4 +1,14 @@
-{ stdenv, fetchFromGitHub, gdk-pixbuf, librsvg, gtk-engine-murrine, gtk3, gnome3, gnome-icon-theme, numix-icon-theme-circle, hicolor-icon-theme }:
+{ stdenv
+, fetchFromGitHub
+, gdk-pixbuf
+, librsvg
+, gtk-engine-murrine
+, gtk3
+, gnome3
+, gnome-icon-theme
+, numix-icon-theme-circle
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "canta-theme";
@@ -11,13 +21,25 @@ stdenv.mkDerivation rec {
     sha256 = "0b9ffkw611xxb2wh43sjqla195jp0ygxph5a8dvifkxdw6nxc2y0";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [
+    gtk3
+  ];
 
-  buildInputs = [ gdk-pixbuf librsvg ];
+  buildInputs = [
+    gdk-pixbuf
+    librsvg
+  ];
 
-  propagatedBuildInputs = [ gnome3.adwaita-icon-theme gnome-icon-theme numix-icon-theme-circle hicolor-icon-theme ];
+  propagatedBuildInputs = [
+    gnome3.adwaita-icon-theme
+    gnome-icon-theme
+    numix-icon-theme-circle
+    hicolor-icon-theme
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
 
   dontDropIconThemeCache = true;
 
