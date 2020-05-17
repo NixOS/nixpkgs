@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "canta-theme";
-  version = "2020-01-31";
+  version = "2020-05-17";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "070lhbhh3n7nd6rkwm52v1x4v8spyb932w6qmgs2r19g0whyn55w";
+    sha256 = "0b9ffkw611xxb2wh43sjqla195jp0ygxph5a8dvifkxdw6nxc2y0";
   };
 
   buildInputs = [ gdk-pixbuf librsvg ];
