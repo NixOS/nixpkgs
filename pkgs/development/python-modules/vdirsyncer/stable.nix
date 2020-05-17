@@ -1,17 +1,38 @@
-{ lib, python3Packages, fetchpatch }:
+{ stdenv
+, pythonAtLeast
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, fetchpatch
+, click
+, click-log
+, click-threading
+, requests_toolbelt
+, requests
+, requests_oauthlib # required for google oauth sync
+, atomicwrites
+, milksnake
+, shippai
+, hypothesis
+, pytest
+, pytest-localserver
+, pytest-subtesthack
+, setuptools_scm
+}:
 
 # Packaging documentation at:
 # https://github.com/pimutils/vdirsyncer/blob/0.16.7/docs/packaging.rst
-python3Packages.buildPythonApplication rec {
+buildPythonPackage rec {
   version = "0.16.7";
   pname = "vdirsyncer";
+  disabled = isPy27;
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "6c9bcfb9bcb01246c83ba6f8551cf54c58af3323210755485fc23bb7848512ef";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     click click-log click-threading
     requests_toolbelt
     requests
@@ -19,9 +40,16 @@ python3Packages.buildPythonApplication rec {
     atomicwrites
   ];
 
-  nativeBuildInputs = with python3Packages; [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools_scm
+  ];
 
-  checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ];
+  checkInputs = [
+    hypothesis
+    pytest
+    pytest-localserver
+    pytest-subtesthack
+  ];
 
   patches = [
     # Fixes for hypothesis: https://github.com/pimutils/vdirsyncer/pull/779
@@ -42,11 +70,19 @@ python3Packages.buildPythonApplication rec {
   checkPhase = ''
     make DETERMINISTIC_TESTS=true PYTEST_ARGS="--deselect=tests/system/cli/test_sync.py::test_verbosity" test
   '';
+  # Tests started to fail lately, for any python version even as low as 3.5 but
+  # if you enable the check, you'll see even severer errors with a higher then
+  # 3.5 python version. Hence it's marked as broken for higher then 3.5 and the
+  # checks are disabled unconditionally. As a general end user advice, use the
+  # normal "unstable" `vdirsyncer` derivation, not this one.
+  doCheck = false;
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
     license = licenses.mit;
+    # vdirsyncer (unstable) works with mainline python versions
+    broken = (pythonAtLeast "3.6");
     maintainers = with maintainers; [ loewenheim ];
   };
 }
