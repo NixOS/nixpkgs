@@ -183,7 +183,7 @@ in
 
   glade = callPackage ../development/tools/glade { };
 
-  hobbes = callPackage ../development/tools/hobbes { stdenv = gcc6Stdenv; }; # GCC 6 is latest currently supported. See https://git.io/JvK6M.
+  hobbes = callPackage ../development/tools/hobbes { };
 
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 

@@ -4162,6 +4162,12 @@
     githubId = 10544;
     name = "Giuluo Eulisse";
   };
+  kthielen = {
+    email = "kthielen@gmail.com";
+    github = "kthielen";
+    githubId = 1409287;
+    name = "Kalani Thielen";
+  };
   ktor = {
     email = "kruszewsky@gmail.com";
     github = "ktor";
