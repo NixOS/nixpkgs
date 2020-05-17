@@ -1,0 +1,133 @@
+0.2-11 debian patch
+--- Makefile.orig	2020-05-17 10:38:59.515558290 +0300
++++ ./Makefile	2020-05-17 10:39:26.270914143 +0300
+@@ -19,15 +19,12 @@ SAVE_XSERVER_MEMORY = -DSAVE_XSERVER_MEM
+ # Change these variables as necessary
+ #
+ CC = gcc
+-OPTIM = -O2	# change to -g for debugging
+ LIBX11DIR = -L /usr/X11R6/lib
+ PREFIX = /usr/local
+ #
+ # You shouldn't need to modify anything below this line
+ #
+ OPTIONS = $(BELL_ON_UNKNOWN_KEYPRESS) $(USE_PASTELS) $(SAVE_XSERVER_MEMORY)
+-CFLAGS = $(OPTIM) -Wall $(OPTIONS)
+-LDFLAGS = $(OPTIM)
+ LIBX11 = $(LIBX11DIR) -lX11
+ LIBS = $(LIBX11)
+ BINDIR = $(PREFIX)/bin
+@@ -50,7 +47,7 @@ proctest:	proctest.o hash.o
+ 	$(CC) $(LDFLAGS) -o $@ proctest.o hash.o
+ 
+ proctest.o:	proc.c common.h
+-	$(CC) $(CFLAGS) -DDEBUG -o proctest.o -c proc.c
++	$(CC) $(CFLAGS) $(OPTIONS) -DDEBUG -o proctest.o -c proc.c
+ 
+ install:	gmemusage
+ 	install -m 0755 -o bin -g bin gmemusage $(BINDIR)/gmemusage
+--- gmemusage.c.orig	2020-05-17 10:38:57.092525431 +0300
++++ ./gmemusage.c	2020-05-17 10:39:20.103833211 +0300
+@@ -40,6 +40,9 @@
+ 
+ #define TOO_SMALL	0
+ #define	BIG_ENOUGH	1
++
++#define name_length 64
++
+ /*
+  * I hate these file-wide variables, but since draw_window is going to be
+  * called from a signal, we can't pass it any args.
+@@ -108,9 +111,10 @@ void main ( int argc , char **argv )
+       border_width = 4 ,
+       display_width ,
+       display_height ;
+-   char
+-      *window_name = "gmemusage" ,
+-      *icon_name = "gmemusage" ;
++   char 
++     window_name [name_length];
++   char 
++     * window_name_list [1];
+    Pixmap
+       icon_pixmap ;
+    XSizeHints
+@@ -141,6 +145,11 @@ void main ( int argc , char **argv )
+    {
+       strcpy ( progname , argv [0] ) ;
+    }
++
++   strcpy(window_name, "gmemusage: ");
++   gethostname (&window_name[11], name_length - 11); 
++   window_name_list[0] = window_name;
++
+ /*
+  * Allocate necessaru X structures for later use. Apparently this needs to
+  * be done before any other X stuff.
+@@ -228,13 +237,14 @@ void main ( int argc , char **argv )
+    size_hints -> flags = PPosition | PSize | PMinSize ;
+    size_hints -> min_width = default_width ;
+    size_hints -> min_height = default_height ;
+-   if ( XStringListToTextProperty (&window_name , 1 , &windowName ) == 0 )
++   
++   if ( XStringListToTextProperty ( window_name_list , 1 , &windowName ) == 0 )
+    {
+       fprintf ( stderr , "%s: struct allocation for windowName failed\n" ,
+ 		progname ) ;
+       exit ( 1 ) ;
+    }
+-   if ( XStringListToTextProperty ( &icon_name , 1 , &iconName ) == 0 )
++   if ( XStringListToTextProperty ( window_name_list , 1 , &iconName ) == 0 )
+    {
+       fprintf ( stderr , "%s: struct allocation for iconName failed\n" ,
+ 		progname ) ;
+@@ -752,7 +762,7 @@ getGCs ( Window win , Colormap cmap )
+    valuemask |= GCPlaneMask;
+    values.plane_mask = AllPlanes;
+    blackGC = XCreateGC ( display , win , valuemask , &values ) ;
+-   XSetForeground ( display , blackGC , BlackPixel ( display , screen_num ) ) ;
++   XSetForeground ( display , blackGC , Background . pixel ) ;
+    return ;
+ }
+ #if 0
+--- proc.c.orig	2020-05-17 10:38:53.761480090 +0300
++++ ./proc.c	2020-05-17 10:39:20.104833224 +0300
+@@ -23,6 +23,9 @@ int
+ /*
+  * Set values for various memory usages
+  */
++#define MemTotalLine   "MemTotal:"
++#define        MemFreeLine     "MemFree:"
++#define        BuffersLine     "Buffers:"
+ static void
+ SetMemInfo ( void )
+ {
+@@ -63,12 +66,28 @@ SetMemInfo ( void )
+    {
+       if ( !strncmp ( buf , MemLine , MemLineLen ) )
+       {
++	 /* Linux 2.4 (and earlier?) */
+ 	 /* Mem: total used free shared buffers cached */
+ 	 sscanf ( buf , "%*s %d %*d %d %*d %d" , &totalmem , &freemem ,
+ 		  &buffermem ) ;
+ 	 break ;
++	 
++       /* Linux 2.6 (and later?) */
++       } else if (!strncmp(buf, MemTotalLine, strlen(MemTotalLine))) {
++	      sscanf(buf, "%*s %d", &totalmem);
++       } else if (!strncmp(buf, MemFreeLine, strlen(MemFreeLine))) {
++	      sscanf(buf, "%*s %d", &freemem);
++       } else if (!strncmp(buf, BuffersLine, strlen(BuffersLine))) {
++	      sscanf(buf, "%*s %d", &buffermem);
+       }
+    }
++   
++   if (!totalmem) {
++	 fprintf(stderr, "Fatal error reading /proc/meminfo\n");
++	 exit(1);
++   }
++   
++   sysmem /= 1024 ;
+    sysmem /= 1024 ;
+    totalmem /= 1024 ;
+    freemem /= 1024 ;
