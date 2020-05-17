@@ -1,9 +1,8 @@
-{ pkgs, gccStdenv, lib, coreutils, # makeStaticLibraries,
+{ pkgs, gccStdenv, lib, coreutils, bash, # makeStaticLibraries,
   openssl, zlib, sqlite, libxml2, libyaml, libmysqlclient, lmdb, leveldb, postgresql,
   version, git-version,
   gambit-support,
-  gambit ? pkgs.gambit, gambit-params ? pkgs.gambit-support.stable-params,
-  src, configurePhase, installPhase }:
+  gambit ? pkgs.gambit, gambit-params ? pkgs.gambit-support.stable-params, src }:
 
 # We use Gambit, that works 10x better with GCC than Clang. See ../gambit/build.nix
 let stdenv = gccStdenv; in
@@ -48,7 +47,18 @@ stdenv.mkDerivation rec {
 # LEVELDB=${makeStaticLibraries leveldb}/lib/libleveldb.a
 # EOF
 
-  inherit configurePhase installPhase;
+  configurePhase = ''
+    (cd src && ./configure \
+      --prefix=$out/gerbil \
+      --with-gambit=${gambit}/gambit \
+      --enable-libxml \
+      --enable-libyaml \
+      --enable-zlib \
+      --enable-sqlite \
+      --enable-mysql \
+      --enable-lmdb \
+      --enable-leveldb)
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -67,6 +77,14 @@ stdenv.mkDerivation rec {
     ( cd src && sh build.sh )
 
     runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/gerbil $out/bin
+    (cd src; ./install)
+    (cd $out/bin ; ln -s ../gerbil/bin/* .)
+    runHook postInstall
   '';
 
   dontStrip = true;
