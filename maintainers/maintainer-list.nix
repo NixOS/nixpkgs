@@ -7655,7 +7655,7 @@
     name = "Thane Gill";
   };
   TheBrainScrambler = {
-    email = "the.pumpkin.man@disroot.org"; # This could change soon
+    email = "esthromeris@riseup.net";
     github = "TheBrainScrambler";
     githubId = 34945377;
     name = "John Smith";

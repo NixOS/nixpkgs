@@ -21250,6 +21250,8 @@ in
     stdenv = gcc7Stdenv;
   };
 
+  webbrowser = callPackage ../applications/networking/browsers/webbrowser {};
+
   pamix = callPackage ../applications/audio/pamix { };
 
   pamixer = callPackage ../applications/audio/pamixer { };
