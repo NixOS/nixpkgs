@@ -178,7 +178,7 @@ rec {
     let suffixFile = ../.version-suffix;
     in if pathExists suffixFile
     then lib.strings.fileContents suffixFile
-    else "pre-git";
+    else "post-git";
 
   /* Attempts to return the the current revision of nixpkgs and
      returns the supplied default value otherwise.

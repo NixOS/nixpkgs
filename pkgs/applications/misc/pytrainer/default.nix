@@ -57,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     requests
     certifi
+    setuptools
   ];
 
   nativeBuildInputs = [

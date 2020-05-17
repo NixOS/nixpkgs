@@ -1,4 +1,12 @@
-{ stdenvNoCC, fetchurl, rpmextract, undmg, darwin, enableStatic ? false }:
+{ stdenvNoCC
+, fetchurl
+, pkgconfig
+, rpmextract
+, undmg
+, darwin
+, enableStatic ? false
+}:
+
 /*
   For details on using mkl as a blas provider for python packages such as numpy,
   numexpr, scipy, etc., see the Python section of the NixPkgs manual.
@@ -42,6 +50,10 @@ in stdenvNoCC.mkDerivation {
     else
       [ rpmextract ];
 
+  installCheckInputs = [ pkgconfig ];
+
+  doInstallCheck = true;
+
   buildPhase = if stdenvNoCC.isDarwin then ''
     for f in Contents/Resources/pkg/*.tgz; do
       tar xzvf $f
@@ -75,6 +87,7 @@ in stdenvNoCC.mkDerivation {
       bn=$(basename $f)
       substituteInPlace $f \
         --replace "prefix=<INSTALLDIR>/mkl" "prefix=$out" \
+        --replace $\{MKLROOT} "$out" \
         --replace "lib/intel64_lin" "lib"
     done
 
@@ -123,6 +136,11 @@ in stdenvNoCC.mkDerivation {
     install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libmkl_intel_thread.dylib
     install_name_tool -change @rpath/libtbb.dylib $out/lib/libtbb.dylib $out/lib/libmkl_tbb_thread.dylib
     install_name_tool -change @rpath/libtbbmalloc.dylib $out/lib/libtbbmalloc.dylib $out/lib/libtbbmalloc_proxy.dylib
+  '';
+
+  # Validate pkgconfig files, since they break often on updates.
+  installCheckPhase = ''
+    pkg-config --validate $out/lib/pkgconfig/*.pc
   '';
 
   # Per license agreement, do not modify the binary
