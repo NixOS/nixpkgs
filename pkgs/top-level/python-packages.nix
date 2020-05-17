@@ -5022,6 +5022,8 @@ in {
 
   prox-tv = callPackage ../development/python-modules/prox-tv { };
 
+  ptvsd = callPackage ../development/python-modules/ptvsd { };
+
   pvlib = callPackage ../development/python-modules/pvlib { };
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
