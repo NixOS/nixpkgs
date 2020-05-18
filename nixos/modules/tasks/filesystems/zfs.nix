@@ -433,7 +433,16 @@ in
 
       services.zfs.zed.settings = {
         ZED_EMAIL_PROG = mkDefault "${pkgs.mailutils}/bin/mail";
-        PATH = lib.makeBinPath [ packages.zfsUser pkgs.utillinux pkgs.gawk pkgs.gnused pkgs.gnugrep pkgs.coreutils pkgs.curl ];
+        PATH = lib.makeBinPath [
+          packages.zfsUser
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.gawk
+          pkgs.gnugrep
+          pkgs.gnused
+          pkgs.nettools
+          pkgs.utillinux
+        ];
       };
 
       environment.etc = genAttrs
