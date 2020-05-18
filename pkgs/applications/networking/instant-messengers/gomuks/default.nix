@@ -5,6 +5,7 @@ buildGoModule rec {
   version = "2020-03-20";
 
   goPackagePath = "maunium.net/go/gomuks";
+  patches = [ ./gomod.patch ];
 
   src = fetchFromGitHub {
     owner = "tulir";
@@ -13,7 +14,7 @@ buildGoModule rec {
     sha256 = "0f7i88vrvl1xl4hmjplq3wwihqwijbgxy6nk5fkvc8pfmm5hsjcs";
   };
 
-  modSha256 = "10w0bjhnf6bbqx5jbgfv2jxxyqswzx25p64kkjmvh5qamjzpbjz2";
+  vendorSha256 = "0awiw41nzgp4gj9fd8lcgk880aa07n535jksn0ya1cmsgavcfbvc";
 
   postInstall = ''
     cp -r ${

@@ -13,7 +13,7 @@ let
         sha256 = "0yy31rfvr9d6kidfvvy36ljxlc14x5ir3ln19zg4k02hdqn0xkpj";
       };
 
-      modSha256 = "1vs7lxlqd7jr4r9xkk7w7k6gxzjmm7ic0a1scfpx8rcr5swa9cq1";
+  vendorSha256 = "03df08nghcf6k3a7xxgw03cq2mvvkmrrzzai0w18mrga0aa700c9";
 
       patches = [
         ./add-stcli-target.patch

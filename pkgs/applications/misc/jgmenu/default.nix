@@ -1,4 +1,17 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, pango, librsvg, libxml2, menu-cache, xorg, makeWrapper }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, python3Packages
+, pango
+, librsvg
+, libxml2
+, menu-cache
+, xorg
+, makeWrapper
+, enableXfcePanelApplet ? false
+, xfce
+, gtk3
+}:
 
 stdenv.mkDerivation rec {
   pname = "jgmenu";
@@ -25,9 +38,17 @@ stdenv.mkDerivation rec {
     xorg.libXinerama
     xorg.libXrandr
     python3Packages.python
+  ] ++ stdenv.lib.optionals enableXfcePanelApplet [
+    gtk3
+    xfce.libxfce4util
+    xfce.xfce4-panel
   ];
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  configureFlags = [
+  ]
+  ++ stdenv.lib.optionals enableXfcePanelApplet [
+    "--with-xfce4-panel-applet"
+  ];
 
   postFixup = ''
     wrapPythonProgramsIn "$out/lib/jgmenu"

@@ -61,6 +61,28 @@
       This is to make it possible to use <literal>podman</literal> instead of <literal>docker</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      MariaDB has been updated to 10.4, MariaDB Galera to 26.4.
+      Before you upgrade, it would be best to take a backup of your database.
+      For MariaDB Galera Cluster, see <link xlink:href="https://mariadb.com/kb/en/upgrading-from-mariadb-103-to-mariadb-104-with-galera-cluster/">Upgrading
+      from MariaDB 10.3 to MariaDB 10.4 with Galera Cluster</link> instead.
+      Before doing the upgrade read <link xlink:href="https://mariadb.com/kb/en/upgrading-from-mariadb-103-to-mariadb-104/#incompatible-changes-between-103-and-104">Incompatible
+      Changes Between 10.3 and 10.4</link>.
+      After the upgrade you will need to run <literal>mysql_upgrade</literal>.
+      MariaDB 10.4 introduces a number of changes to the authentication process, intended to make things easier and more
+      intuitive. See <link xlink:href="https://mariadb.com/kb/en/authentication-from-mariadb-104/">Authentication from MariaDB 10.4</link>.
+      unix_socket auth plugin does not use a password, and uses the connecting user's UID instead. When a new MariaDB data directory is initialized, two MariaDB users are
+      created and can be used with new unix_socket auth plugin, as well as traditional mysql_native_password plugin: root@localhost and mysql@localhost. To actually use
+      the traditional mysql_native_password plugin method, one must run the following:
+<programlisting>
+services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
+  ALTER USER root@localhost IDENTIFIED VIA mysql_native_password USING PASSWORD("verysecret");
+'';
+</programlisting>
+      When MariaDB data directory is just upgraded (not initialized), the users are not created or modified.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -98,6 +120,12 @@
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     The go-modules builder now uses vendorSha256 instead of modSha256 to pin
+     fetched version data. This is currently a warning, but will be removed in the next release.
+    </para>
+   </listitem>
    <listitem>
     <para>
      Grafana is now built without support for phantomjs by default. Phantomjs support has been
@@ -189,13 +217,13 @@ environment.systemPackages = [
              customizable to your liking by using
              <literal>php.withExtensions</literal> or
              <literal>php.buildEnv</literal> instead of writing config files
-             or changing configure flags.             
+             or changing configure flags.
            </para>
          </listitem>
          <listitem>
            <para>
              The remaining configuration flags can now be set directly on
-             the <literal>php</literal> attribute. For example, instead of 
+             the <literal>php</literal> attribute. For example, instead of
 
              <programlisting>
 php.override {
@@ -351,6 +379,11 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
       instead of <literal>recursive</literal>. This is to better allow
       using hashed mirrors where needed. As a result, these hashes
       will have changed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The rkt module has been removed, it was archived by upstream.
     </para>
    </listitem>
   </itemizedlist>

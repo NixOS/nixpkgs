@@ -20,7 +20,7 @@ buildGoModule rec {
     installShellCompletion scripts/cheat.{bash,fish,zsh}
   '';
 
-  modSha256 = "1z4za3rivc3vqv59p5yb5c9dcpmq669rzmf4z7zilbvmgm0pbgfp";
+  vendorSha256 = null;
 
   meta = with stdenv.lib; {
     description = "Create and view interactive cheatsheets on the command-line";

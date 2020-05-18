@@ -1,6 +1,7 @@
 { stdenv, buildGoModule, fetchurl
 , go, ncurses, notmuch, scdoc
 , python3, perl, w3m, dante
+, fetchFromGitHub
 }:
 
 let
@@ -14,7 +15,21 @@ in buildGoModule rec {
     sha256 = "1bx2fypw053v3bzalfgyi6a0s5fvv040z8jy4i63s7p53m8gmzs9";
   };
 
-  modSha256 = "127xrah6xxrvc224g5dxn432sagrssx8v7phzapcsdajsnmagq6x";
+  libvterm = fetchFromGitHub {
+    owner = "ddevault";
+    repo = "go-libvterm";
+    rev = "b7d861da381071e5d3701e428528d1bfe276e78f";
+    sha256 = "06vv4pgx0i6hjdjcar4ch18hp9g6q6687mbgkvs8ymmbacyhp7s6";
+  };
+
+  vendorSha256 = "0rnyjjlsxsi0y23m6ckyd52562m33qr35fvdcdzy31mbfpi8kl2k";
+
+  overrideModAttrs = (_: {
+      postBuild = ''
+      cp -r --reflink=auto ${libvterm}/libvterm vendor/github.com/ddevault/go-libvterm
+      cp -r --reflink=auto ${libvterm}/encoding vendor/github.com/ddevault/go-libvterm
+      '';
+    });
 
   nativeBuildInputs = [
     scdoc

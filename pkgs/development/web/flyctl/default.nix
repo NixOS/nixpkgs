@@ -20,7 +20,7 @@ buildGoModule rec {
     rm $out/bin/helpgen
   '';
 
-  modSha256 = "0d0hfmdk81apha3r7zspam8wqadpy6qmqkgbq0sbiwrji4155hrh";
+  vendorSha256 = "10wcyxzkwvbhf86dq1rh852zgdg28draay0515zp459z34vv4zna";
 
   meta = with lib; {
     description = "Command line tools for fly.io services";
@@ -29,4 +29,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ aaronjanse ];
   };
 }
-

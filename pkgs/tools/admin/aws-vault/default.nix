@@ -10,7 +10,7 @@ buildGoModule rec {
     sha256 = "04dyibcaijv5011laycf39m4gvprvvsn5zkxslyih1kqd170w3wg";
   };
 
-  modSha256 = "1d3hjfmfmlpw2scfyn597zkzz864w97p0wrsxjp49m9mi0pgmhq9";
+  vendorSha256 = "0jlraq480llamns6yw8yjkzxsndyqiyzy120djni8sw5h0bz65j7";
   subPackages = [ "." ];
 
   # set the version. see: aws-vault's Makefile

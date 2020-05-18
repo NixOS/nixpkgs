@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0p8ck4s5jj53nc638darhwbylcsslfmfz72bwy6wxby9iqi9kq6b";
   };
 
-  modSha256 = "0kassq52v07zmffs6l066g0d3kfv6wmrh9g5cgk79bmyq13clqjj";
+  vendorSha256 = "1mzvpr12qh9668iz97p62zl4zhlrcyfgwr4a9zg9irj585pkb5x2";
 
   meta = with stdenv.lib; {
     homepage = "https://pgcenter.org/";

@@ -19,7 +19,7 @@ buildGoModule rec {
     sha256 = "18hwz9m16pxlb7wp78iqmdi0kimrx3h05fs0zhzm8qhzancq8alf";
   };
 
-  modSha256 = "1qhmrjb3fvw6maxrl7hb3bizrw6szhwx6s2g59p5pj3dz4x8jajn";
+  vendorSha256 = "1j272w0zdndcz4fmh9fzbk2q8wmyfi70vn0p6d8cg0r0l231sbyx";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpcap libnfnetlink libnetfilter_queue libusb1 ];

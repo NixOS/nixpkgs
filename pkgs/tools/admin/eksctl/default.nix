@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0xlr7hsncih4nzydi6sphp7j7k82cbhmi7jb0sd954i8kzl3sc1q";
   };
 
-  modSha256 = "0iw5za1fc9hsbc3fhhj3l276064vfdjqsad9c3c54y7b9rjgcqrv";
+  vendorSha256 = "14d9hl01z7ixp1wa8kp1zs0z1p3pvz6hkp49z582nqllpb2xjmkx";
 
   subPackages = [ "cmd/eksctl" ];
 

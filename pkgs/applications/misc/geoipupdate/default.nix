@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "057f9kp8g3wixjh9dm58g0qvzfcmhwbk1d573ldly4g5404r9bvf";
   };
 
-  modSha256 = "1bypanvrkcqp8rk84cv2569671irgaf3cy27lcrknyina4pdvir5";
+  vendorSha256 = "0q4byhvs1c1xm4qjvs2vyf98vdv121qn0z51arcf7k4ayrys5xcx";
 
   meta = with stdenv.lib; {
     description = "Automatic GeoIP database updater";

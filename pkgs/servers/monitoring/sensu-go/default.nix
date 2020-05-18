@@ -18,7 +18,7 @@ let
 
       inherit subPackages postInstall;
 
-      modSha256 = "02h4cav6ivzs3z0qakwxzf5lfy6hzax5c0i2icp0qymqc2789npw";
+  vendorSha256 = "03lkra5vf07zicd2aipvmkrda56ys5swwj6lq5hnp324ndajfcya";
 
       buildFlagsArray = let
         versionPkg = "github.com/sensu/sensu-go/version";

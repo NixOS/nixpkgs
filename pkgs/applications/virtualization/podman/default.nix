@@ -2,17 +2,19 @@
 , fetchFromGitHub
 , pkg-config
 , installShellFiles
-, buildGoPackage
+, buildGoModule
 , gpgme
 , lvm2
 , btrfs-progs
+, libapparmor
 , libseccomp
+, libselinux
 , systemd
 , go-md2man
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "podman";
   version = "1.9.2";
 
@@ -23,16 +25,23 @@ buildGoPackage rec {
     sha256 = "0jvqzn1q52z6aka98d2i3dyn2i8xld7xvmi2zfxgm9g53wdgi2g2";
   };
 
-  goPackagePath = "github.com/containers/libpod";
+  vendorSha256 = null;
 
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs libseccomp gpgme lvm2 systemd ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+    systemd
+  ];
 
   buildPhase = ''
-    pushd go/src/${goPackagePath}
     patchShebangs .
     ${if stdenv.isDarwin
       then "make CGO_ENABLED=0 BUILDTAGS='remoteclient containers_image_openpgp exclude_graphdriver_devicemapper' varlink_generate all"

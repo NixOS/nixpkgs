@@ -1,24 +1,22 @@
 { stdenv, fetchFromGitHub, buildEnv
 , asio, boost, check, openssl, scons
-, version, sha256, ...
 }:
 
 let
-  pname = "mariadb-galera";
   galeraLibs = buildEnv {
     name = "galera-lib-inputs-united";
     paths = [ openssl.out boost check ];
   };
 
-in stdenv.mkDerivation {
-  inherit pname;
-  inherit version;
+in stdenv.mkDerivation rec {
+  pname = "mariadb-galera";
+  version = "26.4.3";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
     rev = "release_${version}";
-    inherit sha256;
+    sha256 = "1r0b4kxgqrivnwm4hprnpscb16v6l6j8cnvk4i8c64fig1ly8g3j";
     fetchSubmodules = true;
   };
 
@@ -40,7 +38,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     # copied with modifications from scripts/packages/freebsd.sh
-    GALERA_LICENSE_DIR="$share/licenses/${pname}"
+    GALERA_LICENSE_DIR="$share/licenses/${pname}-${version}"
     install -d $out/{bin,lib/galera,share/doc/galera,$GALERA_LICENSE_DIR}
     install -m 555 "garb/garbd"                       "$out/bin/garbd"
     install -m 444 "libgalera_smm.so"                 "$out/lib/galera/libgalera_smm.so"

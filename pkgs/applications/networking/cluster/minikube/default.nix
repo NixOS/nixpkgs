@@ -16,7 +16,7 @@ buildGoModule rec {
   # for -ldflags
   commit = "63ab801ac27e5742ae442ce36dff7877dcccb278";
 
-  modSha256 = "1g94jjwr5higg1b297zwp6grkj7if3mrdafjq9vls9y2svh11xr8";
+  vendorSha256 = "1l9dxn7yy21x4b3cg6l5a08wx2ng8qf531ilg8yf1rznwfwjajrv";
 
   src = fetchFromGitHub {
     owner = "kubernetes";

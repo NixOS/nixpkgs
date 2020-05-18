@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0a7d36hzcvj68apzc726r2vqsjyrkcynxif5laarxapm6p67g3z4";
   };
 
-  modSha256 = "0ak34wr5cbcvblndslsxdd24vfj3h02xqjqnj5amkll5iqn5mzi1";
+  vendorSha256 = "09alkpfyxapycv6zsaz7prgbr0a1jzd78n7w2mh01mg4hhb2j3k7";
 
   subPackages = [ "cmd/pdfcpu" ];
 
@@ -23,4 +23,3 @@ buildGoModule rec {
     platforms = platforms.all;
   };
 }
-

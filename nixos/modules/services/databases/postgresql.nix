@@ -343,7 +343,7 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            PSQL="${pkgs.sudo}/bin/sudo -u ${cfg.superUser} psql --port=${toString cfg.port}"
+            PSQL="${pkgs.utillinux}/bin/runuser -u ${cfg.superUser} -- psql --port=${toString cfg.port}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi

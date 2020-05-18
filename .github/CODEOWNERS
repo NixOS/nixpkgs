@@ -55,6 +55,13 @@
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
 
+# Updaters
+## update.nix
+/maintainers/scripts/update.nix   @jtojnar
+/maintainers/scripts/update.py    @jtojnar
+## common-updater-scripts
+/pkgs/common-updater/scripts/update-source-version    @jtojnar
+
 # Python-related code and docs
 /maintainers/scripts/update-python-libraries	@FRidh
 /pkgs/top-level/python-packages.nix     @FRidh @jonringer
@@ -174,9 +181,15 @@
 /nixos/modules/services/monitoring/prometheus/exporters.xml  @WilliButz
 /nixos/tests/prometheus-exporters.nix                        @WilliButz
 
-# PHP
-/doc/languages-frameworks/php.section.md @etu
-/nixos/tests/php                         @etu
-/pkgs/build-support/build-pecl.nix       @etu
-/pkgs/development/interpreters/php       @etu
-/pkgs/top-level/php-packages.nix         @etu
+# PHP interpreter, packages, extensions, tests and documentation
+/doc/languages-frameworks/php.section.md @NixOS/php
+/nixos/tests/php                         @NixOS/php
+/pkgs/build-support/build-pecl.nix       @NixOS/php
+/pkgs/development/interpreters/php       @NixOS/php
+/pkgs/top-level/php-packages.nix         @NixOS/php
+
+# Podman, CRI-O modules and related
+/nixos/modules/virtualisation/containers.nix @NixOS/podman
+/nixos/modules/virtualisation/cri-o.nix      @NixOS/podman
+/nixos/modules/virtualisation/podman.nix     @NixOS/podman
+/nixos/tests/podman.nix                      @NixOS/podman

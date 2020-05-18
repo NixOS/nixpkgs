@@ -7,9 +7,9 @@
 # be nice to add the native GUI (and/or the GTK GUI) as an option too, but that
 # requires invoking the Xcode build system, which is non-trivial for now.
 
-{ stdenv, lib, fetchurl, fetchpatch,
+{ stdenv, lib, fetchurl,
   # Main build tools
-  python2, pkgconfig, autoconf, automake, libtool, m4, lzma,
+  pkgconfig, autoconf, automake, libtool, m4, lzma, python3,
   numactl,
   # Processing, video codecs, containers
   ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora, dav1d,
@@ -49,15 +49,18 @@ assert stdenv.isDarwin -> AudioToolbox != null && Foundation != null
 
 stdenv.mkDerivation rec {
   pname = "handbrake";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
-    url = ''https://download.handbrake.fr/releases/${version}/HandBrake-${version}-source.tar.bz2'';
-    sha256 = "09rcrq0kjs1lc1as7w3glbpbfvzldwpx3xv0pfmkn4pl7acxw1f0";
+    #  2020-05-05: NOTE: Thou fetching from GitHub, still fetchurl required,
+    #  because this tarball has their "special" packaging and so
+    #  internal "special" version information
+    url = ''https://github.com/HandBrake/HandBrake/releases/download/${version}/HandBrake-${version}-source.tar.bz2'';
+    sha256 = "0w7jxjrccvxp7g15dv0spildg5apmqp4gwbcqmg58va2gylynvzc";
   };
 
   nativeBuildInputs = [
-    python2 pkgconfig autoconf automake libtool m4
+    pkgconfig autoconf automake libtool m4 python3
   ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
@@ -80,12 +83,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace libhb/module.defs \
       --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
-    substituteInPlace libhb/module.defs \
-      --replace '$(CONTRIB.build/)include/libxml2' ${libxml2.dev}/include/libxml2
 
     # Force using nixpkgs dependencies
     sed -i '/MODULES += contrib/d' make/include/main.defs
-    sed -i '/PKG_CONFIG_PATH=/d' gtk/module.rules
     sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
         -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
         -i make/configure.py

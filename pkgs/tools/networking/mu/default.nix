@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.4.3";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "1i9chd8ks1q4g5pyscsir6pw4kahkx3k8ckzbi8j3gr6jz1qzzsg";
+    sha256 = "18y672cqaicp30zymxr88spmzcn0x7rcv14nbdmd8hzp52rscpj7";
   };
 
   postPatch = stdenv.lib.optionalString (batchSize != null) ''
@@ -21,8 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    sqlite xapian glib gmime3 texinfo emacs guile libsoup icu
-  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk ];
+    sqlite xapian glib gmime3 texinfo emacs libsoup icu
+  ]
+    # Workaround for https://github.com/djcb/mu/issues/1641
+    ++ stdenv.lib.optional (!stdenv.isDarwin) guile
+    ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
 
