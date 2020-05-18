@@ -3,6 +3,8 @@
 let
   arch = "linux64";
   libs = (with xorg; [ libXext libX11 libXrender libXtst libXi libXxf86vm ]);
+  repeatString = n: str:
+    lib.concatStrings (lib.lists.map (lib.range 1 n) (lib.const str));
 in stdenv.mkDerivation rec {
   pname = "processing";
   version = "3.5.4";
@@ -47,36 +49,49 @@ in stdenv.mkDerivation rec {
   #     https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html
   # Patching binary files with `dd`:
   #     https://stackoverflow.com/a/5586379
-  buildPhase = ''
-    # `unzip` will need to make a directory named `processing`, but right now
-    # that's a shell script. Move it to the side and we'll move it back when
-    # we're done.
-    mv processing processing-bin
 
-    class="processing/app/platform/LinuxPlatform.class"
-    unzip lib/pde.jar "$class"
+  notFondOfThisJVM = {
+    suppressPopup = true;
+    # Used by sha256sum -- can't be a base-32 Nix hash.
+    linuxPlatformSHA256 =
+      "b8ceb19e1c8d022f963d2abfb56abc02b5f037e32042f522e1f2663d0ee8f18d";
+    classToPatch = "processing/app/platform/LinuxPlatform.class";
+    bytesToOverwrite = 8;
+    startOverwritingAt = 3230;
+  };
 
-    # Make sure the extracted class has the right checksum -- if
-    # `LinuxPlatform.class` changes in a future release, we'll need to
-    # recalculate the correct offset.
-    echo "b8ceb19e1c8d022f963d2abfb56abc02b5f037e32042f522e1f2663d0ee8f18d $class" \
-      | sha256sum --check
+  buildPhase = with notFondOfThisJVM;
+    lib.optionalString suppressPopup
+    (let class = lib.escapeShellArg classToPatch;
+    in ''
+      # `unzip` will need to make a directory named `processing`, but right now
+      # that's a shell script. Move it to the side and we'll move it back when
+      # we're done.
+      mv processing processing-bin
 
-    # Overwrite the 8 bytes / 4 instructions.
-    printf '\x00\x00\x00\x00\x00\x00\x00\x00' \
-      | dd of="$class" \
-           bs=1 \
-           seek=3230 \
-           conv=notrunc
+      unzip lib/pde.jar ${class}
 
-    # Update `LinuxPlatform.class` in the `.jar`.
-    zip lib/pde.jar -u "$class"
+      # Make sure the extracted class has the right checksum -- if
+      # `LinuxPlatform.class` changes in a future release, we'll need to
+      # recalculate the correct offset.
+      echo ${linuxPlatformSHA256} ${class} \
+        | sha256sum --check
 
-    # Remove the temporary directory named `processing` and move the shell
-    # script named `processing` back to its original location.
-    rm -r processing
-    mv processing-bin processing
-  '';
+      # Overwrite the 8 bytes / 4 instructions.
+      printf '${repeatString bytesToOverwrite "\\x00"}' \
+        | dd of=${class} \
+             bs=1 \
+             seek=${startOverwritingAt} \
+             conv=notrunc
+
+      # Update `LinuxPlatform.class` in the `.jar`.
+      zip lib/pde.jar -u ${class}
+
+      # Remove the temporary directory named `processing` and move the shell
+      # script named `processing` back to its original location.
+      rm -r processing
+      mv processing-bin processing
+    '');
 
   installPhase = ''
     mkdir -p $out/${pname}
@@ -131,7 +146,16 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A language and IDE for electronic arts";
+    longDescription = ''
+      Processing is a flexible software sketchbook and a language for learning
+      how to code within the context of the visual arts. Since 2001, Processing
+      has promoted software literacy within the visual arts and visual literacy
+      within technology. There are tens of thousands of students, artists,
+      designers, researchers, and hobbyists who use Processing for learning and
+      prototyping.
+    '';
     homepage = "https://processing.org";
+    downloadPage = "https://processing.org/download/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
