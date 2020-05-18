@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-batch";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "18dwgbwk1kc0pdqa85hbsm9312l50rf8ymb60fia1c9rni9bdi8n";
+    sha256 = "228ea058361763a5a31273df7d813b9134d0ecff4567c533eb7e1afaf772fbc7";
   };
 
   propagatedBuildInputs = [
