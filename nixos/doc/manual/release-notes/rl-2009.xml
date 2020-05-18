@@ -391,6 +391,11 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
       This matches the autotools convention for env vars which standard for these things, making interfacing with other tools easier.
    </para>
    </listitem>
+   <listitem>
+   <para>
+     Additional Git documentation (HTML and text files) is now available via the <literal>git-doc</literal> package.
+   </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
