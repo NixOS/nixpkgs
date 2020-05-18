@@ -1,13 +1,13 @@
-{ stdenv, lib, jdk, patchelf, makeWrapper, xlibs, zip, unzip, rsync
+{ stdenv, lib, jdk, patchelf, makeWrapper, xorg, zip, unzip, rsync, fetchzip
 , xdg_utils ? null, gsettings-desktop-schemas ? null }:
 let
   arch = "linux64";
-  libs = (with xlibs; [ libXext libX11 libXrender libXtst libXi libXxf86vm ]);
+  libs = (with xorg; [ libXext libX11 libXrender libXtst libXi libXxf86vm ]);
 in stdenv.mkDerivation rec {
   pname = "processing";
   version = "3.5.4";
 
-  src = fetchTarball {
+  src = fetchzip {
     url = "https://download.processing.org/${pname}-${version}-${arch}.tgz";
     sha256 = "0fqjsa1j05wriwpa7fzvv2rxhhsz6ixqzf52syxr4z74j3wkxk8k";
   };
@@ -95,7 +95,7 @@ in stdenv.mkDerivation rec {
           "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
         } \
         --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=lcd" \
-        --prefix LD_LIBRARY_PATH : "${xlibs.libXxf86vm}/lib"
+        --prefix LD_LIBRARY_PATH : "${xorg.libXxf86vm}/lib"
     done
   '' + (lib.optionalString (xdg_utils != null) ''
     # See: $out/processing/install.sh
