@@ -6,6 +6,7 @@ import multiprocessing
 import re
 import subprocess
 import sys
+from functools import partial
 from pathlib import Path
 from typing import List, Tuple
 
@@ -26,7 +27,9 @@ def parse_readme() -> List[str]:
     return list(profiles)
 
 
-def build_profile(profile: str) -> Tuple[str, subprocess.CompletedProcess]:
+def build_profile(
+    profile: str, verbose: bool
+) -> Tuple[str, subprocess.CompletedProcess]:
     # Hard-code this for now until we have enough other architectures to care about this.
     system = "x86_64-linux"
     if "raspberry-pi/2" in profile:
@@ -50,7 +53,8 @@ def build_profile(profile: str) -> Tuple[str, subprocess.CompletedProcess]:
     # uses import from derivation
     if profile != "<nixos-hardware/toshiba/swanky>":
         cmd += ["--dry-run"]
-    print("$ " + " ".join(cmd))
+    if verbose:
+        print(f"$ {' '.join(cmd)}")
     res = subprocess.run(
         cmd, cwd=TEST_ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
     )
@@ -65,6 +69,9 @@ def parse_args() -> argparse.Namespace:
         default=multiprocessing.cpu_count(),
         help="Number of parallel evaluations."
         "If set to 1 it disable multi processing (suitable for debugging)",
+    )
+    parser.add_argument(
+        "--verbose", action="store_true", help="Print evaluation commands executed",
     )
     parser.add_argument("profiles", nargs="*")
     return parser.parse_args()
@@ -90,12 +97,13 @@ def main() -> None:
             print(f"{RED}{res.stderr.rstrip()}{RESET}", file=sys.stderr)
             failed_profiles.append(profile)
 
+    build = partial(build_profile, verbose=args.verbose)
     if len(profiles) == 0 or args.jobs == 1:
         for profile in profiles:
-            eval_finished(build_profile(profile))
+            eval_finished(build(profile))
     else:
         pool = multiprocessing.Pool(processes=args.jobs)
-        for r in pool.imap(build_profile, profiles):
+        for r in pool.imap(build, profiles):
             eval_finished(r)
     if len(failed_profiles) > 0:
         print(f"\n{RED}The following {len(failed_profiles)} test(s) failed:{RESET}")
