@@ -31,7 +31,10 @@ in buildGoPackage rec {
 
   # Fix a check which assumes that hook files are writeable by their
   # owner.
-  patches = [ ./fix-executable-check.patch ];
+  patches = [
+    ./fix-executable-check.patch
+    ./0001-Revert-Allow-gitlabshell-config-to-be-passed-in-thro.patch
+  ];
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";
 
