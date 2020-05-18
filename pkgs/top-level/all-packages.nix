@@ -1863,7 +1863,7 @@ in
   gixy = callPackage ../tools/admin/gixy { };
 
   glpaper = callPackage ../development/tools/glpaper { };
-  
+
   gllvm = callPackage ../development/tools/gllvm { };
 
   glide = callPackage ../development/tools/glide { };
@@ -16522,8 +16522,6 @@ in
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
-
-  fwupdate = callPackage ../os-specific/linux/firmware/fwupdate { };
 
   fwts = callPackage ../os-specific/linux/fwts { };
 
