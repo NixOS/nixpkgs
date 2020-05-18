@@ -33,5 +33,10 @@ rec {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
       sha256 = "02ra9q2mifyawn0719y78wrbqzik73aymlzwi90fq71jgyfvkkqn";
     };
+
+    meta.knownVulnerabilities = [
+      # https://access.redhat.com/support/policy/updates/ansible-engine
+      "Ansible 2.6 is End-of-Life since 2019/11/06 and affected by multiple CVEs."
+    ];
   }));
 }
