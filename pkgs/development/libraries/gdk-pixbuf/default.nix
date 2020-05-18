@@ -16,7 +16,6 @@
 , libtiff
 , libjpeg
 , libpng
-, libX11
 , gnome3
 , gobject-introspection
 , doCheck ? false
@@ -65,11 +64,6 @@ stdenv.mkDerivation rec {
     fixDarwinDylibNames
   ];
 
-  # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
-  buildInputs = [
-    libX11
-  ];
-
   propagatedBuildInputs = [
     glib
     libtiff
@@ -79,7 +73,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=true"
-    "-Dx11=true"
+    "-Dx11=false" # use gdk-pixbuf-xlib
     "-Dgir=${if gobject-introspection != null then "true" else "false"}"
     "-Dgio_sniffing=false"
   ];
