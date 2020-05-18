@@ -4331,6 +4331,12 @@
     githubId = 1572058;
     name = "Leonardo Cecchi";
   };
+  leungbk = {
+    email = "leungbk@mailfence.com";
+    github = "leungbk";
+    githubId = 29217594;
+    name = "Brian Leung";
+  };
   leshainc = {
     email = "leshainc@fomalhaut.me";
     github = "LeshaInc";
