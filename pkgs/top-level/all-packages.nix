@@ -5882,6 +5882,8 @@ in
 
   fmodex = callPackage ../games/zandronum/fmod.nix { };
 
+  pdfminer = with python3Packages; toPythonApplication pdfminer;
+
   pdfmod = callPackage ../applications/misc/pdfmod { };
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
