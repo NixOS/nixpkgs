@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sh Build -f ./a.m4
   '';
 
-  patches = [ ./install.patch ./sharedlib.patch ./glibc-2.30.patch ];
+  patches = [ ./install.patch ./sharedlib.patch ./glibc-2.30.patch ./darwin.patch ];
 
   nativeBuildInputs = [ m4 ];
 
