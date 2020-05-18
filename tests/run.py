@@ -35,10 +35,10 @@ def build_profile(profile: str) -> Tuple[str, subprocess.CompletedProcess]:
     cmd = [
         "nix",
         "build",
-        "-f", "build-profile.nix",
+        "-f",
+        "build-profile.nix",
         "-I",
         f"nixos-hardware={ROOT}",
-        "--dry-run",
         "--show-trace",
         "--system",
         system,
@@ -46,6 +46,11 @@ def build_profile(profile: str) -> Tuple[str, subprocess.CompletedProcess]:
         "profile",
         profile,
     ]
+
+    # uses import from derivation
+    if profile != "<nixos-hardware/toshiba/swanky>":
+        cmd += ["--dry-run"]
+    print("$ " + " ".join(cmd))
     res = subprocess.run(
         cmd, cwd=TEST_ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
     )
