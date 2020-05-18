@@ -6,7 +6,9 @@
 , libGLU
 , gnutls, pam, nettle
 , xterm, openssh, perl
-, makeWrapper}:
+, makeWrapper
+, nixosTests
+}:
 
 with stdenv.lib;
 
@@ -94,6 +96,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;
 
   enableParallelBuilding = true;
+
+  passthru.tests.tigervnc = nixosTests.tigervnc;
 
   meta = {
     homepage = "https://tigervnc.org/";
