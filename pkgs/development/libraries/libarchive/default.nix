@@ -1,5 +1,5 @@
 {
-  fetchFromGitHub, stdenv, pkgconfig, autoreconfHook,
+  fetchurl, stdenv, pkgconfig,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
 
   # Optional but increases closure only negligibly.
@@ -12,16 +12,14 @@ stdenv.mkDerivation rec {
   pname = "libarchive";
   version = "3.4.2";
 
-  src = fetchFromGitHub {
-    owner = "libarchive";
-    repo = "libarchive";
-    rev = "v${version}";
-    sha256 = "0mjm77wbqs8sbn9j44lj39nwbg6anmgz6pkyfxsww54a4rs0p3iz";
+  src = fetchurl {
+    url = "https://github.com/libarchive/libarchive/releases/download/v${version}/libarchive-${version}.tar.gz";
+    sha256 = "0xk12znlmbywxi3nnx15asiki5vb5k46scfpzblg3v1j4v8mh3dn";
   };
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ sharutils zlib bzip2 openssl xz lzo ]
     ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
     ++ stdenv.lib.optional xarSupport libxml2;
