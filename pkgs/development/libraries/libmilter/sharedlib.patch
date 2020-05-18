@@ -35,7 +35,7 @@ diff -Nru sendmail-8.14.3.orig/devtools/M4/UNIX/milterlibrary.m4 sendmail-8.14.3
 +ifdef(`bldINSTALLABLE', `	ifdef(`confMKDIR', `if [ ! -d "${DESTDIR}${bldINSTALL_DIR`'LIBDIR}" ]; then confMKDIR -p "${DESTDIR}${bldINSTALL_DIR`'LIBDIR}"; else :; fi ')
 +	${INSTALL} -c bldCURRENT_PRODUCT.confSOEXT "${DESTDIR}${LIBDIR}/bldCURRENT_PRODUCT.confSOEXT.${MILTER_SOVER}"
 +	${LN} ${LNOPTS} bldCURRENT_PRODUCT.confSOEXT.${MILTER_SOVER} "${DESTDIR}${LIBDIR}/bldCURRENT_PRODUCT.confSOEXT"
-+	${INSTALL} -c bldCURRENT_PRODUCT.a "${DESTDIR}${LIBDIR}"')
++	${INSTALL} -c -m 644 bldCURRENT_PRODUCT.a "${DESTDIR}${LIBDIR}"')
 +
 +bldCURRENT_PRODUCT-clean:
 +	rm -f ${OBJS} bldCURRENT_PRODUCT.confSOEXT bldCURRENT_PRODUCT.a ${MANPAGES}
