@@ -1,4 +1,5 @@
 { stdenv
+
 , fetchurl
 , coreutils
 , makeWrapper
@@ -9,6 +10,8 @@
 , slurp
 , grim
 , jq
+
+, python3Packages
 }:
 
 {
@@ -73,6 +76,31 @@ grimshot = stdenv.mkDerivation rec {
       sway-unwrapped.meta.maintainers
       evils
     ];
+  };
+};
+
+
+inactive-windows-transparency = python3Packages.buildPythonApplication rec {
+  # long name is long
+  lname = "inactive-windows-transparency";
+  pname = "sway-${lname}";
+  version = sway-unwrapped.version;
+
+  src = sway-unwrapped.src;
+
+  format = "other";
+  dontBuild = true;
+  dontConfigure = true;
+
+  propagatedBuildInputs = [ python3Packages.i3ipc ];
+
+  installPhase = ''
+    install -Dm 0755 $src/contrib/${lname}.py $out/bin/${lname}.py
+  '';
+
+  meta = sway-unwrapped.meta // {
+    description = "It makes inactive sway windows transparent";
+    homepage    = "https://github.com/swaywm/sway/tree/${sway-unwrapped.version}/contrib";
   };
 };
 
