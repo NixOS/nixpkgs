@@ -5483,6 +5483,8 @@ in {
     doCheck = false;
   });
 
+  python-http-client = callPackage ../development/python-modules/python-http-client { };
+
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
   rasterio = callPackage ../development/python-modules/rasterio {
@@ -6869,6 +6871,8 @@ in {
   Lasagne = callPackage ../development/python-modules/lasagne { };
 
   send2trash = callPackage ../development/python-modules/send2trash { };
+
+  sendgrid = callPackage ../development/python-modules/sendgrid { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
 
