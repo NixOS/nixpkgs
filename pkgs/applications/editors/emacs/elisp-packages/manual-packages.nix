@@ -212,6 +212,8 @@
 
   tramp = callPackage ./tramp { };
 
+  youtube-dl = callPackage ./youtube-dl { };
+
   zeitgeist = callPackage ./zeitgeist { };
 
   # From old emacsPackages (pre emacsPackagesNg)
