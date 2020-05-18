@@ -88,6 +88,8 @@
     };
   };
 
+  git-undo = callPackage ./git-undo { };
+
   haskell-unicode-input-method = melpaBuild {
     pname = "emacs-haskell-unicode-input-method";
     version = "20110905.2307";
