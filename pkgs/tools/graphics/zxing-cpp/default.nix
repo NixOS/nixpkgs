@@ -7,8 +7,8 @@
 }:
 stdenv.mkDerivation rec {
 
-  pname = "zxing-cpp";
-  version = "0.0";
+  pname = "zxing-cpp-unstable";
+  version = "2020-03-20";
 
   src = fetchFromGitHub {
     owner = "glassechidna";
