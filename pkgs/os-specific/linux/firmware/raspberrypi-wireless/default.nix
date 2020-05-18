@@ -2,22 +2,22 @@
 
 stdenv.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "2019-08-16";
+  version = "2020-04-17";
 
   srcs = [
     (fetchFromGitHub {
       name = "bluez-firmware";
       owner = "RPi-Distro";
       repo = "bluez-firmware";
-      rev = "96eefffcccc725425fd83be5e0704a5c32b79e54";
-      sha256 = "05h57gcxhb2c84h99cyxxx4mzi6kd5fm8pjqkz3nq5vs3nv8cqhr";
+      rev = "fff76cb15527c435ce99a9787848eacd6288282c";
+      sha256 = "0wflk5cwxi2x82n633j89fqjydajn1f6dm8lrghs9gqdy16xpz32";
     })
     (fetchFromGitHub {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "130cb86fa30cafbd575d38865fa546350d4c5f9c";
-      sha256 = "0jmhgbpldzz8n8lncpzwfl5ym8zgss05y952rfpwcf9v5c7vgabx";
+      rev = "616fc2dd4df421e3974179d9e46d45e7006aeb28";
+      sha256 = "1aa95szbn7gii4zm9daimcikmbqjmppj0zn4nfr1ms7yladbjsdm";
     })
   ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "1r4alf1fbj6vkkf54d0anm47ymb6gn2ykl4a2hhd34b0hnf1dnhn";
+  outputHash = "0ifjivysipf8al133r9a35ls1lf34z0nyh2p61zlr6j9w8nfspnz";
 
   meta = with stdenv.lib; {
     description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3 and Zero W";
