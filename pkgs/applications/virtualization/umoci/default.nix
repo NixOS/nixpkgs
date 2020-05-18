@@ -1,6 +1,11 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, go-md2man
+, installShellFiles
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "umoci";
   version = "0.4.5";
 
@@ -11,9 +16,17 @@ buildGoPackage rec {
     sha256 = "1gzj4nnys73wajdwjn5jsskvnhzh8s2vmyl76ax8drpvw19bd5g3";
   };
 
-  goPackagePath = "github.com/openSUSE/umoci";
+  vendorSha256 = null;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  nativeBuildInputs = [ go-md2man installShellFiles ];
+
+  postInstall = ''
+    sed -i '/SHELL =/d' Makefile
+    make local-doc
+    installManPage doc/man/*.[1-9]
+  '';
 
   meta = with lib; {
     description = "umoci modifies Open Container images";

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0ykzrxlllip4wvhd9rja5bcr2m72695fjj2q1scwn8ri6jcgfa19";
   };
 
-  modSha256 = "1r6b4y6civk75if6nljl66pgv5qm7x05qqby1anf7s7cz7d1rc3g";
+  vendorSha256 = "0szs9yc49fyh55ra1wf8zj76kdah0x49d45cgivk3gqh2hl17j6l";
 
   subPackages = [ "cmd/mutagen" "cmd/mutagen-agent" ];
 

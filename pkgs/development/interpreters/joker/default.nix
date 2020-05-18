@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1pxj6flyhf522zjab1dfvxfajyx3v3rzs7l8ma7ma6b8zmwp2wdn";
   };
 
-  modSha256 = "165mjfjk4x95ckw7wg96bg9pzb3297sggnip38nz2jxxbqr0ff8b";
+  vendorSha256 = "1rn8ijq3v3fzlbyvm7g4i3qpwcl3vrl4rbcvlbzv05wxrgcw9iqb";
 
   preBuild = ''
     go generate ./...

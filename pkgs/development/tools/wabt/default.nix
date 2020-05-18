@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   # https://github.com/WebAssembly/wabt/pull/1408
   patches = [ (fetchpatch {
-    url = "https://github.com/WebAssembly/wabt/pull/1408/commits/9115d0c55067435ec9c55924e8a2bb151bac095d.patch";
-    sha256 = "1iklbz630vih08brsgq2d5q91kialg255sgd1mxl7023pvrhi44g";
+    url = "https://github.com/WebAssembly/wabt/pull/1408/commits/28505f4db6e4561cf6840af5c304a9aa900c4987.patch";
+    sha256 = "1nh1ddsak6w51np17xf2r7i0czxrjslz1i4impmmp88h5bp2yjba";
   }) ];
 
   nativeBuildInputs = [ cmake ];

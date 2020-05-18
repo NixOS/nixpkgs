@@ -15,8 +15,7 @@ buildGoModule rec {
     sha256 = "1d9c1bhidh781dis4427wramfrla4avqw9y2bmpjp81cqq3nc27d";
   };
 
-  modSha256 = "0r062nka72ah2nb2gf8dfrrj4sxadkykcqjzkp4c9vwk93mhw41k";
-  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
+  vendorSha256 = "1f780vhxw0brvnr8hhah4sf6ms8spar29rqmy1kcqf9m75n94g56";
 
   subPackages = [ "cmd/pistol" ];
 

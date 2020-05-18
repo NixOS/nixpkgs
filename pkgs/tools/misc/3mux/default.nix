@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "02ry066psvlqdyhimci7nskw4sfb70dw5z7ag7s7rz36gmx1vnmr";
   };
 
-  modSha256 = "1ag9lx8xcp2z9lrg404914zin45n8f4s08365yk71q5vyiwxjj3i";
+  vendorSha256 = "1hjzpg3q4znvgzk0wbl8rq6cq877xxdsf950bcsks92cs8386847";
 
   meta = with stdenv.lib; {
     description = "Terminal multiplexer inspired by i3";

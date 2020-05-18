@@ -1,17 +1,17 @@
 { stdenv
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , pkg-config
 , gpgme
-, libgpgerror
 , lvm2
 , btrfs-progs
+, libapparmor
 , libselinux
 , libseccomp
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "buildah";
   version = "1.14.9";
 
@@ -24,15 +24,21 @@ buildGoPackage rec {
 
   outputs = [ "out" "man" ];
 
-  goPackagePath = "github.com/containers/buildah";
+  vendorSha256 = null;
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
-  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs libselinux libseccomp ];
 
-  patches = [ ./disable-go-module-mode.patch ];
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ];
 
   buildPhase = ''
-    pushd go/src/${goPackagePath}
+    patchShebangs .
     make GIT_COMMIT="unknown"
     make -C docs
   '';
