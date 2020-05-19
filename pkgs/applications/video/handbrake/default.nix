@@ -7,7 +7,7 @@
 # be nice to add the native GUI (and/or the GTK GUI) as an option too, but that
 # requires invoking the Xcode build system, which is non-trivial for now.
 
-{ stdenv, lib, fetchurl,
+{ stdenv, lib, fetchFromGitHub,
   # Main build tools
   pkgconfig, autoconf, automake, libtool, m4, lzma, python3,
   numactl,
@@ -30,34 +30,61 @@
   # for now we disable GTK GUI support on Darwin. (It may be possible to remove
   # this restriction later.)
   useGtk ? !stdenv.isDarwin, wrapGAppsHook ? null,
-                             intltool ? null,
-                             glib ? null,
-                             gtk3 ? null,
-                             libappindicator-gtk3 ? null,
-                             libnotify ? null,
-                             gst_all_1 ? null,
-                             dbus-glib ? null,
-                             udev ? null,
-                             libgudev ? null,
-                             hicolor-icon-theme ? null,
+  intltool ? null,
+  glib ? null,
+  gtk3 ? null,
+  libappindicator-gtk3 ? null,
+  libnotify ? null,
+  gst_all_1 ? null,
+  dbus-glib ? null,
+  udev ? null,
+  libgudev ? null,
+  hicolor-icon-theme ? null,
   # FDK
   useFdk ? false, fdk_aac ? null
 }:
 
-assert stdenv.isDarwin -> AudioToolbox != null && Foundation != null
-  && libobjc != null && VideoToolbox != null;
+assert stdenv.isDarwin -> AudioToolbox != null
+       && Foundation != null
+       && libobjc != null
+       && VideoToolbox != null;
 
 stdenv.mkDerivation rec {
   pname = "handbrake";
   version = "1.3.2";
 
-  src = fetchurl {
-    #  2020-05-05: NOTE: Thou fetching from GitHub, still fetchurl required,
-    #  because this tarball has their "special" packaging and so
-    #  internal "special" version information
-    url = ''https://github.com/HandBrake/HandBrake/releases/download/${version}/HandBrake-${version}-source.tar.bz2'';
-    sha256 = "0w7jxjrccvxp7g15dv0spildg5apmqp4gwbcqmg58va2gylynvzc";
+  src = fetchFromGitHub {
+    owner = "HandBrake";
+    repo = "HandBrake";
+    rev = version;
+    sha256 = "04z3hcy7m5yvma849rlrsx2wdqmkilkl1qds9yrzr2ydpw697f85";
+    extraPostFetch = ''
+      echo "DATE=$(date +"%F %T %z" -r $out/NEWS.markdown)" > $out/version.txt
+    '';
   };
+
+  # we put as little as possible in src.extraPostFetch as it's much easier to
+  # add to it here without having to fiddle with src.sha256
+  # only DATE and HASH are absolutely necessary
+  postPatch = ''
+    cat >> version.txt <<_EOF
+HASH=${src.rev}
+SHORTHASH=${src.rev}
+TAG=${version}
+URL=${src.meta.homepage}
+_EOF
+
+    patchShebangs scripts
+
+    substituteInPlace libhb/module.defs \
+      --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
+
+    # Force using nixpkgs dependencies
+    sed -i '/MODULES += contrib/d' make/include/main.defs
+    sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
+        -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
+        -i make/configure.py
+  '';
 
   nativeBuildInputs = [
     pkgconfig autoconf automake libtool m4 python3
@@ -73,25 +100,15 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
     libgudev hicolor-icon-theme
   ] ++ lib.optional useFdk fdk_aac
-    ++ lib.optionals stdenv.isDarwin [ AudioToolbox Foundation libobjc VideoToolbox ]
+  ++ lib.optionals stdenv.isDarwin [ AudioToolbox Foundation libobjc VideoToolbox ]
   # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
   # look at ./make/configure.py search "enable_nvenc"
-    ++ lib.optional stdenv.isLinux nv-codec-headers;
+  ++ lib.optional stdenv.isLinux nv-codec-headers;
 
-  preConfigure = ''
-    patchShebangs scripts
-
-    substituteInPlace libhb/module.defs \
-      --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
-
-    # Force using nixpkgs dependencies
-    sed -i '/MODULES += contrib/d' make/include/main.defs
-    sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
-        -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
-        -i make/configure.py
-  '';
+  enableParallelBuilding = true;
 
   configureFlags = [
+    "--harden"
     "--disable-df-fetch"
     "--disable-df-verify"
     (if useGtk          then "--disable-gtk-update-checks" else "--disable-gtk")
