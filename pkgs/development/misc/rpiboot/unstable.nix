@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libusb1 }:
 
 let
-  version = "2018-03-27";
+  version = "2020-02-17";
   name = "rpiboot-unstable-${version}";
 in stdenv.mkDerivation {
   inherit name;
@@ -9,8 +9,8 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "usbboot";
-    rev = "fb86716935f2e820333b037a2ff93a338ad9b695";
-    sha256 = "163g7iw7kf6ra71adx6lf1xzf3kv20bppva15ljwn54jlah5mv98";
+    rev = "7ef900578a2c410062cfc93c439157aec0ef9f5c";
+    sha256 = "095fvdiijhi1wl650ssw2bqcxnhpvhldppx8fir5c8h6qjkh1f1i";
   };
 
   nativeBuildInputs = [ libusb1 ];
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/raspberrypi/usbboot";
-    description = "Utility to boot a Raspberry Pi CM/CM3/Zero over USB";
+    description = "Utility to boot a Raspberry Pi 4/CM/CM3/Zero over USB";
     maintainers = [ stdenv.lib.maintainers.cartr ];
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;
