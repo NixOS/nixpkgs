@@ -1,6 +1,7 @@
 { pkgs, lib, callPackage, newScope, Agda }:
 
 let
+  cubical = (import ../build-support/agda/package-index.nix { inherit pkgs; }).cubical;
   mkAgdaPackages = Agda: lib.makeScope newScope (mkAgdaPackages' Agda);
   mkAgdaPackages' = Agda: self: let
     callPackage = self.callPackage;
@@ -22,5 +23,7 @@ let
     agda-prelude = callPackage ../development/libraries/agda/agda-prelude { };
 
     agda-categories = callPackage ../development/libraries/agda/agda-categories { };
+
+    cubical = callPackage cubical {};
   };
 in mkAgdaPackages Agda
