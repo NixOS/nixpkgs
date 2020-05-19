@@ -15,6 +15,8 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kubeseal" ];
 
+  buildFlagsArray = [ "-ldflags=-s -w -X main.VERSION=${version}" ];
+
   meta = with lib; {
     description = "A Kubernetes controller and tool for one-way encrypted Secrets";
     homepage = "https://github.com/bitnami-labs/sealed-secrets";
