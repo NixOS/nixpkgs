@@ -23,7 +23,6 @@ let
 
     agda-categories = callPackage ../development/libraries/agda/agda-categories { };
 
-    cubical = callPackage ../development/libraries/agda/cubical {
-    };
+    cubical = callPackage ../development/libraries/agda/cubical { };
   };
 in mkAgdaPackages Agda
