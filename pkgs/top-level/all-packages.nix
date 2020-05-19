@@ -6879,6 +6879,8 @@ in
     libxml2 = libxml2Python;
    };
 
+  systembus-notify = callPackage ../applications/misc/systembus-notify { };
+
   stricat = callPackage ../tools/security/stricat { };
 
   staruml = callPackage ../tools/misc/staruml { inherit (gnome2) GConf; libgcrypt = libgcrypt_1_5; };
