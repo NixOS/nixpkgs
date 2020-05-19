@@ -310,6 +310,8 @@ in rec {
       # darwin: https://github.com/oracle/graal/issues/1816
       substituteInPlace src/share/vm/code/compiledIC.cpp \
         --replace 'entry == false' '*entry == false'
+      substituteInPlace make/bsd/makefiles/saproc.make \
+        --replace 'shell xcrun --show-sdk-path' 'shell echo'
     '';
     hardeningDisable = [ "fortify" ];
     NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.isDarwin [
@@ -410,8 +412,9 @@ in rec {
       substituteInPlace substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/image/CCLinkerInvocation.java \
         --replace 'cmd.add("-v");' 'cmd.add("-v"); cmd.add("-L${zlib}/lib");'
 
-      # For debugging native-image build, add this replace statement on CCompilerInvoker.java
-      # --replace '(String line : lines) {' '(String line : lines) {System.out.println("DEBUG: " + line);'
+      # Always print compiler errors/warnings (this makes debugging in nix much more plesant)
+      substituteInPlace substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/c/codegen/CCompilerInvoker.java \
+        --replace '(String line : lines) {' '(String line : lines) {System.out.println(line);'
       ${if stdenv.isLinux then ''
           substituteInPlace substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/c/codegen/CCompilerInvoker.java \
             --replace 'command.add(Platform.includedIn(Platform.WINDOWS.class) ? "CL" : "gcc");' \
@@ -468,8 +471,10 @@ in rec {
         export NIX_ENFORCE_PURITY=0
       ''}
       ( cd vm
-        mx-internal -v --suite sdk --suite compiler --suite vm --suite tools --suite regex --suite truffle \
-                       --dynamicimports /substratevm,/sulong,graal-js,graalpython,fastr,truffleruby build
+        mx-internal -v --max-cpus 1 \
+          --suite sdk --suite compiler --suite vm --suite tools --suite regex --suite truffle \
+          --dynamicimports substratevm,sulong,graal-js,graal-nodejs,graalpython,fastr,truffleruby \
+          build
       )
     '';
 
