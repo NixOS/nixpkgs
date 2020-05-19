@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchFromGitLab
 , glib
 , flex
 , bison
@@ -26,16 +27,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gobject-introspection";
-  version = "1.64.1";
+  version = "1.65-pre${stdenv.lib.strings.substring 0 7 src.rev}";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
   outputs = [ "out" "dev" "devdoc" "man" ];
   outputBin = "dev";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19vz7vp10h0zj3f491yk72dp89bix6rgkzxg4qcm4d6151ksxgl0";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "Ericson2314";
+    repo = "gobject-introspection";
+    rev = "d7a4fcb82957271f98b4492494a71cfaa8699c03";
+    sha256 = "0qnbld1k08c91zgvlasg38d7kidl7rr0drzd4dnyslj0vhssd5qz";
   };
 
   patches = [
