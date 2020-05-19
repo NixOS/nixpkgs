@@ -8896,8 +8896,6 @@ broken-packages:
   - rfc-psql
   - rfc-redis
   - rfc-servant
-  - rhine
-  - rhine-gloss
   - rhythm-game-tutorial
   - ribbit
   - RichConditional
