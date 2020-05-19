@@ -21,8 +21,6 @@ mkDerivation rec {
     make
   '';
 
-  sourceDirectories = [ "." ];
-
   meta = with lib; {
     description =
       "A cubical type theory library for use with the Agda compiler";
