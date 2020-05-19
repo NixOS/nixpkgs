@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-wlr";
-  version = "2020-03-13";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
-    rev = "dfa0ac704064304824b6d4fea7870d33359dcd15";
-    sha256 = "0k73nyd9z25ph4pc4vpa3xsd49b783qfk1dxqk20bgyg1ln54b81";
+    rev = "v${version}";
+    sha256 = "12k92h9dmn1fyn8nzxk69cyv0gnb7g9gj7a66mw5dcl5zqnl07nc";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig wayland-protocols ];
