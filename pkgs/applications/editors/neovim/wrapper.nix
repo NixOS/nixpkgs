@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper
+{ stdenv, symlinkJoin, lib, makeWrapper
 , vimUtils
 , bundlerEnv, ruby
 , nodejs
@@ -55,44 +55,95 @@ let
 
   binPath = makeBinPath (optionals withRuby [rubyEnv] ++ optionals withNodeJs [nodejs]);
 
+  # Mapping a boolean argument to a key that tells us whether to add or not to
+  # add to nvim's 'embedded rc' this:
+  #
+  #    let g:<key>_host_prog=$out/bin/nvim-<key>
+  #
+  # Or this:
+  #
+  #    let g:loaded_${prog}_provider=1
+  #
+  # While the later tells nvim that this provider is not available
+  #
+  hostprog_check_table = {
+    node = withNodeJs;
+    python = withPython;
+    python3 = withPython3;
+    ruby = withRuby;
+  };
+  ## Here we calculate all of the arguments to the 1st call of `makeWrapper`
+  # We start with the executable itself NOTE we call this variable "initial"
+  # because if configure != {} we need to call makeWrapper twice, in order to
+  # avoid double wrapping, see comment near finalMakeWrapperArgs
+  initialMakeWrapperArgs =
+    let
+      flags = lib.concatLists (lib.mapAttrsToList (
+        prog:
+        withProg:
+        [
+          "--cmd"
+          (if withProg then
+            "let g:${prog}_host_prog='${placeholder "out"}/bin/nvim-${prog}'"
+          else
+            "let g:loaded_${prog}_provider=1"
+            )
+        ]
+      ) hostprog_check_table);
+    in [
+      "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim"
+      "--argv0" "$0"
+      "--add-flags" (lib.escapeShellArgs flags)
+    ] ++ lib.optionals withRuby [
+      "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
+    ] ++ lib.optionals (binPath != "") [
+      "--suffix" "PATH" ":" binPath
+    ];
+  # If configure != {}, we can't generate the rplugin.vim file with e.g
+  # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
+  # the wrapper. That's why only when configure != {} (tested both here and
+  # when postBuild is evaluated), we call makeWrapper once to generate a
+  # wrapper with most arguments we need, excluding those that cause problems to
+  # generate rplugin.vim, but still required for the final wrapper.
+  finalMakeWrapperArgs = initialMakeWrapperArgs
+    # this relies on a patched neovim, see
+    # https://github.com/neovim/neovim/issues/9413
+    ++ lib.optionals (configure != {}) [
+      "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim"
+      "--add-flags" "-u ${vimUtils.vimrcFile configure}"
+    ]
+  ;
   in
-  stdenv.mkDerivation {
+  symlinkJoin {
       name = "neovim-${stdenv.lib.getVersion neovim}";
-      buildCommand = let bin="${neovim}/bin/nvim"; in ''
-        if [ ! -x "${bin}" ]
-        then
-            echo "cannot find executable file \`${bin}'"
-            exit 1
-        fi
-
-        makeWrapper "$(readlink -v --canonicalize-existing "${bin}")" \
-          "$out/bin/nvim" --add-flags " \
-        --cmd \"${if withNodeJs then "let g:node_host_prog='${nodePackages.neovim}/bin/neovim-node-host'" else "let g:loaded_node_provider=1"}\" \
-        --cmd \"${if withPython then "let g:python_host_prog='$out/bin/nvim-python'" else "let g:loaded_python_provider = 1"}\" \
-        --cmd \"${if withPython3 then "let g:python3_host_prog='$out/bin/nvim-python3'" else "let g:loaded_python3_provider = 1"}\" \
-        --cmd \"${if withRuby then "let g:ruby_host_prog='$out/bin/nvim-ruby'" else "let g:loaded_ruby_provider=1"}\" " \
-        --suffix PATH : ${binPath} \
-        ${optionalString withRuby '' --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath}'' }
-      ''
-      + optionalString (!stdenv.isDarwin) ''
-        # copy icon and patch the original neovim.desktop file
-        mkdir -p $out/share/{applications,pixmaps}
-        ln -s ${neovim}/share/pixmaps/nvim.png $out/share/pixmaps/nvim.png
+      postBuild = ''
+        # Remove the symlinks created by symlinkJoin which we need to perform
+        # extra actions upon
+        rm $out/share/applications/nvim.desktop $out/bin/nvim
+        makeWrapper ${lib.escapeShellArgs initialMakeWrapperArgs} ${extraMakeWrapperArgs}
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
       ''
       + optionalString withPython ''
         makeWrapper ${pythonEnv}/bin/python $out/bin/nvim-python --unset PYTHONPATH
-      '' + optionalString withPython3 ''
+      ''
+      + optionalString withPython3 ''
         makeWrapper ${python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH
-      '' + optionalString withRuby ''
+      ''
+      + optionalString withRuby ''
         ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
-      '' + optionalString vimAlias ''
+      ''
+      + optionalString withNodeJs ''
+        ln -s ${nodePackages.neovim}/bin/neovim-node $out/bin/nvim-node
+      ''
+      + optionalString vimAlias ''
         ln -s $out/bin/nvim $out/bin/vim
-      '' + optionalString viAlias ''
+      ''
+      + optionalString viAlias ''
         ln -s $out/bin/nvim $out/bin/vi
-      '' + optionalString (configure != {}) ''
+      ''
+      + optionalString (configure != {}) ''
         echo "Generating remote plugin manifest"
         export NVIM_RPLUGIN_MANIFEST=$out/rplugin.vim
         # Some plugins assume that the home directory is accessible for
@@ -119,14 +170,10 @@ let
           echo -e "\nGenerating rplugin.vim failed!"
           exit 1
         fi
-        unset NVIM_RPLUGIN_MANIFEST
-
-        # this relies on a patched neovim, see
-        # https://github.com/neovim/neovim/issues/9413
-        wrapProgram $out/bin/nvim \
-          --set NVIM_SYSTEM_RPLUGIN_MANIFEST $out/rplugin.vim \
-          --add-flags "-u ${vimUtils.vimrcFile configure}" ${extraMakeWrapperArgs}
+        makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs} ${extraMakeWrapperArgs}
       '';
+
+    paths = [ neovim ];
 
     preferLocalBuild = true;
 
@@ -134,7 +181,7 @@ let
     passthru = { unwrapped = neovim; };
 
     meta = neovim.meta // {
-      description = neovim.meta.description;
+      # To prevent builds on hydra
       hydraPlatforms = [];
       # prefer wrapper over the package
       priority = (neovim.meta.priority or 0) - 1;
