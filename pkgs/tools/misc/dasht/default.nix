@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "dasht";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner  = "sunaku";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0d0pcjalba58nvxdgn39m4b6n9ifajf3ygyjaqgvzwxzgpzw0a60";
+    sha256 = "08wssmifxi7pnvn9gqrvpzpkc2qpkfbzbhxh0dk1gff2y2211qqk";
   };
 
   deps = lib.makeBinPath [
