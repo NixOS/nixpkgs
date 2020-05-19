@@ -6700,6 +6700,11 @@
     githubId = 889991;
     name = "Ryan Artecona";
   };
+  ryanorendorff = {
+    email = "12442942+ryanorendorff@users.noreply.github.com";
+    github = "ryanorendorff";
+    name = "Ryan Orendorff";
+  };
   ryansydnor = {
     email = "ryan.t.sydnor@gmail.com";
     github = "ryansydnor";
