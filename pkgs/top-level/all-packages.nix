@@ -18225,6 +18225,8 @@ in
 
   sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
 
+  scheme-manpages = callPackage ../data/documentation/scheme-manpages { };
+
   scowl = callPackage ../data/misc/scowl { };
 
   seshat = callPackage ../data/fonts/seshat { };
