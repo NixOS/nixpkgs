@@ -186,7 +186,7 @@ in stdenv.mkDerivation rec {
   wrapperFlags =
     ''--prefix PATH : "${luaEnv}/bin" \''
   + optionalString youtubeSupport ''
-      --prefix PATH : "${youtube-dl}/bin" \
+      --suffix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
       --prefix PYTHONPATH : "${vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
   '';
