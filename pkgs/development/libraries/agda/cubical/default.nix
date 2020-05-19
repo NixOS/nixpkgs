@@ -28,6 +28,6 @@ mkDerivation rec {
       "A cubical type theory library for use with the Agda compiler";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ryanorendorff ];
+    maintainers = with maintainers; [ alexarice ryanorendorff ];
   };
 }
