@@ -25125,7 +25125,9 @@ in
     inherit (pkgs.gnome2) gtkglext;
   };
 
-  cytoscape = callPackage ../applications/science/misc/cytoscape { };
+  cytoscape = callPackage ../applications/science/misc/cytoscape {
+    jre = openjdk11;
+  };
 
   fityk = callPackage ../applications/science/misc/fityk { };
 
