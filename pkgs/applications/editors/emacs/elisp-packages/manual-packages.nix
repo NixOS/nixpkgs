@@ -70,6 +70,8 @@
   ess-R-object-popup =
     callPackage ./ess-R-object-popup { };
 
+  evil-markdown = callPackage ./evil-markdown { };
+
   font-lock-plus = callPackage ./font-lock-plus { };
 
   ghc-mod = melpaBuild {
