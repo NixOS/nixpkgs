@@ -17,7 +17,6 @@ mkDerivation rec {
   # compiled through the make file they provide.
   nativeBuildInputs = [ (ghcWithPackages (self: [ ])) ];
   buildPhase = ''
-    patchShebangs
     make
   '';
 
