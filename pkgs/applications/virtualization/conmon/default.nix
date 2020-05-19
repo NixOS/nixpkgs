@@ -4,6 +4,7 @@
 , glib
 , glibc
 , systemd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,8 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.podman = nixosTests.podman;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/containers/conmon";

@@ -9,6 +9,7 @@
 , apparmor-parser
 , libseccomp
 , libselinux
+, nixosTests
 }:
 
 buildGoPackage rec {
@@ -44,6 +45,8 @@ buildGoPackage rec {
     install -Dm755 runc $out/bin/runc
     installManPage man/*/*.[1-9]
   '';
+
+  passthru.tests.podman = nixosTests.podman;
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";
