@@ -6703,6 +6703,7 @@
   ryanorendorff = {
     email = "12442942+ryanorendorff@users.noreply.github.com";
     github = "ryanorendorff";
+    githubId = 12442942;
     name = "Ryan Orendorff";
   };
   ryansydnor = {
