@@ -95,7 +95,7 @@ rec {
       sourceURL = "docker://${imageName}@${imageDigest}";
       destNameTag = "${finalImageName}:${finalImageTag}";
     } ''
-      skopeo --override-os ${os} --override-arch ${arch} copy "$sourceURL" "docker-archive://$out:$destNameTag"
+      skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy "$sourceURL" "docker-archive://$out:$destNameTag"
     '';
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
