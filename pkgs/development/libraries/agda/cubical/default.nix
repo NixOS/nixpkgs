@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, ghc }:
+{ lib, mkDerivation, fetchFromGitHub, ghc, glibcLocales }:
 
 mkDerivation rec {
 
@@ -13,9 +13,11 @@ mkDerivation rec {
     sha256 = "07qlp2f189jvzbn3aqvpqk2zxpkmkxhhkjsn62iq436kxqj3z6c2";
   };
 
+  LC_ALL = "en_US.UTF-8";
+
   # The cubical library has several `Everything.agda` files, which are
   # compiled through the make file they provide.
-  nativeBuildInputs = [ ghc ];
+  nativeBuildInputs = [ ghc glibcLocales ];
   buildPhase = ''
     make
   '';
