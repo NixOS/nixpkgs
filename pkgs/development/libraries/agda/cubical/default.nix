@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, ghcWithPackages }:
+{ lib, mkDerivation, fetchFromGitHub, ghc }:
 
 mkDerivation rec {
 
@@ -15,7 +15,7 @@ mkDerivation rec {
 
   # The cubical library has several `Everything.agda` files, which are
   # compiled through the make file they provide.
-  nativeBuildInputs = [ (ghcWithPackages (self: [ ])) ];
+  nativeBuildInputs = [ ghc ];
   buildPhase = ''
     make
   '';
