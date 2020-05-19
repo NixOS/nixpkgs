@@ -1,0 +1,41 @@
+From 05b32236adf0f3f43d74b7824b7b20bc917c6db9 Mon Sep 17 00:00:00 2001
+From: Ruud van Asseldonk <dev@veniogames.com>
+Date: Tue, 19 May 2020 22:32:01 +0200
+Subject: [PATCH] Include limits.h in compat.c
+
+Without this, the compiler says:
+
+    compat.c: In function 'strtonum':
+    compat.c:235:19: error: 'LLONG_MIN' undeclared (first use in this function)
+      235 |   else if ((ll == LLONG_MIN && errno == ERANGE) || ll < minval)
+          |                   ^~~~~~~~~
+    compat.c:9:1: note: 'LLONG_MIN' is defined in header '<limits.h>'; did you forget to '#include <limits.h>'?
+        8 | #include <unistd.h>
+      +++ |+#include <limits.h>
+        9 |
+    compat.c:235:19: note: each undeclared identifier is reported only once for each function it appears in
+      235 |   else if ((ll == LLONG_MIN && errno == ERANGE) || ll < minval)
+          |                   ^~~~~~~~~
+    compat.c:237:19: error: 'LLONG_MAX' undeclared (first use in this function)
+      237 |   else if ((ll == LLONG_MAX && errno == ERANGE) || ll > maxval)
+          |                   ^~~~~~~~~
+    compat.c:237:19: note: 'LLONG_MAX' is defined in header '<limits.h>'; did you forget to '#include <limits.h>'?
+---
+ compat.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git ./compat.c ./compat.c
+index 72a2f96..f990eca 100644
+--- compat.c
++++ compat.c
+@@ -1,6 +1,7 @@
+ #include "compat.h"
+ 
+ #include <errno.h>
++#include <limits.h>
+ #include <stdint.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+-- 
+2.26.2
+
