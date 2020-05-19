@@ -25797,7 +25797,7 @@ in
 
   nut = callPackage ../applications/misc/nut { };
 
-  solfege = callPackage ../misc/solfege { };
+  solfege = python3Packages.callPackage ../misc/solfege { };
 
   disnix = callPackage ../tools/package-management/disnix { };
 
