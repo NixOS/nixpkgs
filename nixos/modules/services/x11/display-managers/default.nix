@@ -39,7 +39,7 @@ let
 
       ${optionalString cfg.startDbusSession ''
         if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-          exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$@"
+          ${config.systemd.package}/bin/systemctl --user start dbus.socket
         fi
       ''}
 
