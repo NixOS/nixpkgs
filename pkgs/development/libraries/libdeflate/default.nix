@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace /usr $out
+    substituteInPlace Makefile --replace /usr/local $out
   '';
 
   configurePhase = ''
