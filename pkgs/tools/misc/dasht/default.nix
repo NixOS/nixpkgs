@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , makeWrapper
+, installShellFiles
 , coreutils
 , gnused
 , gnugrep
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     (placeholder "out")
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   installPhase = ''
     runHook preInstall
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp bin/* $out/bin/
 
-    mkdir -p $out/share/man/man1
-    cp man/man1/* $out/share/man/man1/
+    installManPage man/man1/*
+    installShellCompletion --zsh etc/zsh/completions/*
 
     for i in $out/bin/*; do
       echo "Wrapping $i"
