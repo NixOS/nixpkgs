@@ -10491,7 +10491,6 @@ broken-packages:
   - vty-menu
   - vty-ui
   - vty-ui-extras
-  - vulkan
   - VulkanMemoryAllocator
   - waargonaut
   - wacom-daemon
