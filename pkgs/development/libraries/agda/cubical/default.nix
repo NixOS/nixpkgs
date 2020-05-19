@@ -26,7 +26,7 @@ mkDerivation rec {
   meta = with lib; {
     description =
       "A cubical type theory library for use with the Agda compiler";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ryanorendorff ];
   };
