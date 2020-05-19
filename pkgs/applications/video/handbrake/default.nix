@@ -108,7 +108,7 @@ _EOF
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--harden"
+    "--harden" # enable buffer overflow protection
     "--disable-df-fetch"
     "--disable-df-verify"
     (if useGtk          then "--disable-gtk-update-checks" else "--disable-gtk")
@@ -117,7 +117,7 @@ _EOF
   ];
 
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
-  NIX_LDFLAGS = toString [
+  NIX_LDFLAGS = [
     "-lx265"
   ];
 
