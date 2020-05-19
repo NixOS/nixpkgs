@@ -217,6 +217,14 @@ stdenv.mkDerivation {
 
     + optionalString cc.langGo or false ''
       wrap ${targetPrefix}gccgo $wrapper $ccPath/${targetPrefix}gccgo
+    ''
+    + optionalString cc.isGNU or false ''
+      ln -s $ccPath/${targetPrefix}gcc-ar $out/bin/${targetPrefix}gcc-ar
+      ln -s $ccPath/${targetPrefix}gcc-nm $out/bin/${targetPrefix}gcc-nm
+      ln -s $ccPath/${targetPrefix}gcc-ranlib $out/bin/${targetPrefix}gcc-ranlib
+      ln -s $ccPath/${targetPrefix}gcov $out/bin/${targetPrefix}gcov
+      ln -s $ccPath/${targetPrefix}gcov-dump $out/bin/${targetPrefix}gcov-dump
+      ln -s $ccPath/${targetPrefix}gcov-tool $out/bin/${targetPrefix}gcov-tool
     '';
 
   strictDeps = true;
