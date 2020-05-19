@@ -14002,7 +14002,9 @@ in
     libressl_3_0
     libressl_3_1;
 
-  libressl = libressl_3_0;
+  # Please keep this pointed to the latest version. See also
+  # https://discourse.nixos.org/t/nixpkgs-policy-regarding-libraries-available-in-multiple-versions/7026/2
+  libressl = libressl_3_1;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
