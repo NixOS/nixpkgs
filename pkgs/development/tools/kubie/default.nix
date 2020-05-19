@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ stdenv, rustPlatform, fetchFromGitHub, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kubie";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "13zs2xz3s4732zxsimg7b22d9707ln4gpscznxi13cjkf5as9gbz";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   postInstall = ''
     installShellCompletion completion/kubie.bash
