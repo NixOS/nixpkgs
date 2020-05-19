@@ -6220,6 +6220,8 @@ in
 
   pywal = with python3Packages; toPythonApplication pywal;
 
+  rbw = callPackage ../tools/security/rbw { };
+
   remarshal = callPackage ../development/tools/remarshal { };
 
   rig = callPackage ../tools/misc/rig {
