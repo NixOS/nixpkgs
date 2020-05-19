@@ -28,6 +28,12 @@
    </listitem>
    <listitem>
     <para>
+    <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
+    Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      We now distribute a GNOME ISO.
     </para>
    </listitem>

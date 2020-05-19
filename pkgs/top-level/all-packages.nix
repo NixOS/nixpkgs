@@ -24287,8 +24287,6 @@ in
 
   pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
 
-  maxx = callPackage ../desktops/maxx { };
-
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
 
   inherit (callPackages ../applications/misc/redshift {
