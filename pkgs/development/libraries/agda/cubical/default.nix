@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, ghcWithPackages }:
+{ lib, mkDerivation, fetchFromGitHub, ghcWithPackages }:
 
 mkDerivation rec {
 
