@@ -15,12 +15,15 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
+  preBuild = ''
+    export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=gcc
+  '';
+
   meta = with stdenv.lib; {
     description = "Sort of like top or htop but with zoom-able charts, network, and disk usage";
     homepage = "https://github.com/bvaisvil/zenith";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
-    # doesn't build on aarch64 https://github.com/bvaisvil/zenith/issues/19
-    platforms = platforms.x86;
+    platforms = platforms.all;
   };
 }
