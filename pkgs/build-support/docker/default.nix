@@ -392,14 +392,10 @@ rec {
         (cd layer; eval "$extraCommands")
       fi
 
-      # Tar up the layer and throw it into 'layer.tar'.
+      # Tar up the layer and throw it into 'layer.tar', while calculating its checksum.
       echo "Packing layer..."
       mkdir $out
-      tar --transform='s|^\./||' -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
-
-      # Compute a checksum of the tarball.
-      echo "Computing layer checksum..."
-      tarhash=$(tarsum < $out/layer.tar)
+      tarhash=$(tar --transform='s|^\./||' -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf - . | tee $out/layer.tar | tarsum)
 
       # Add a 'checksum' field to the JSON, with the value set to the
       # checksum of the tarball.
@@ -449,11 +445,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
-
-      # Compute a checksum of the tarball.
-      echo "Computing layer checksum..."
-      tarhash=$(tarsum < $out/layer.tar)
+      tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf - . | tee $out/layer.tar | tarsum)
 
       # Add a 'checksum' field to the JSON, with the value set to the
       # checksum of the tarball.
@@ -537,11 +529,10 @@ rec {
 
         echo "Packing layer..."
         mkdir -p $out
-        tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
+        tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
+                    tee $out/layer.tar |
+                    ${tarsum}/bin/tarsum)
 
-        # Compute the tar checksum and add it to the output json.
-        echo "Computing checksum..."
-        tarhash=$(${tarsum}/bin/tarsum < $out/layer.tar)
         cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
         # Indicate to docker that we're using schema version 1.0.
         echo -n "1.0" > $out/VERSION
