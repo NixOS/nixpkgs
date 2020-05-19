@@ -45,7 +45,7 @@ buildGoModule rec {
     patchShebangs .
     ${if stdenv.isDarwin
       then "make CGO_ENABLED=0 BUILDTAGS='remoteclient containers_image_openpgp exclude_graphdriver_devicemapper' varlink_generate all"
-      else "make binaries docs"}
+      else "make podman docs"}
   '';
 
   installPhase = ''
