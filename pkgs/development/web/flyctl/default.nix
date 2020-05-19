@@ -15,12 +15,11 @@ buildGoModule rec {
     go generate ./...
   '';
 
-  preFixup = ''
-    rm $out/bin/doc
-    rm $out/bin/helpgen
-  '';
+  subPackages = [ "." ];
 
   vendorSha256 = "10wcyxzkwvbhf86dq1rh852zgdg28draay0515zp459z34vv4zna";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/superfly/flyctl/flyctl.Version=${version} -X github.com/superfly/flyctl/flyctl.Commit=${src.rev} -X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000 -X github.com/superfly/flyctl/flyctl.Environment=production" ];
 
   meta = with lib; {
     description = "Command line tools for fly.io services";
