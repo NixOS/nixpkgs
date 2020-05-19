@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep-all";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "phiresky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nl03i36ilhxn5xbcry6pcr7vbl5667m43flpxaa0lf1wijzn5c2";
+    sha256 = "1wjpgi7m3lxybllkr3r60zaphp02ykq2syq72q9ail2760cjcir6";
   };
 
-  cargoSha256 = "0ndyd8qrvljkk6yvpsp0w17iizxb529sh5q2bj790m32x0gz2w8l";
+  cargoSha256 = "0arwxqrpxdws4q1pnqzqkp1yv5aas08lkzh1vcgmf26j58sycniy";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optional stdenv.isDarwin Security;
 
