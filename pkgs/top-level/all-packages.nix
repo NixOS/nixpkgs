@@ -2837,6 +2837,10 @@ in
 
   deer = callPackage ../shells/zsh/zsh-deer { };
 
+  deno = callPackage ../development/web/deno {
+    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
+  };
+
   detox = callPackage ../tools/misc/detox { };
 
   devilspie2 = callPackage ../applications/misc/devilspie2 {
