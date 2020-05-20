@@ -21,7 +21,7 @@ buildDunePackage rec {
     description = "Embeddable λProlog Interpreter";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/LPCIC/elpi";
   };
 
   useDune2 = true;
