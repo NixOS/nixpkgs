@@ -86,11 +86,11 @@ in
  stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
-  version = "2.1.13509";
+  version = "2.1.14403";
 
   src = fetchurl {
     url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "1f7b4gr2cnnf6wgxdz38215v31664q2pw00yibb3cjp8a9irvs47";
+    sha256 = "086c8rqica0wrin7kj8mj6vqxyyx1gzq31a0hz4lhg0k4fs8z21g";
   };
 
   icon = fetchurl {
