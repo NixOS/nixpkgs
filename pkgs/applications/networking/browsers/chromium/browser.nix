@@ -86,5 +86,15 @@ mkChromiumDerivation (base: rec {
     # backported to 19.09. Therefore we'll only maintain M81 for NixOS 19.09
     # which will give us approx. one month of security updates / time for users
     # to transition to 20.03 (as per our policy).
+    knownVulnerabilities = [
+      # Since the release of M83 the previous version isn't secure anymore.
+      # nixos-unstable update: https://github.com/NixOS/nixpkgs/pull/88206
+      ''
+        This version of Chromium is no longer being updated. Consider switching
+        to the new stable NixOS channel or installing Chromium from a different
+        channel. A list of the missing security fixes can be found here:
+        https://chromereleases.googleblog.com/2020/05/stable-channel-update-for-desktop_19.html
+      ''
+    ];
   };
 })
