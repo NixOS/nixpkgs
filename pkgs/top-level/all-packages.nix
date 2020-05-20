@@ -15658,6 +15658,8 @@ in
 
   jetty = callPackage ../servers/http/jetty { };
 
+  kapow = callPackage ../servers/kapow { };
+
   keycloak = callPackage ../servers/keycloak { };
 
   knot-dns = callPackage ../servers/dns/knot-dns { };
