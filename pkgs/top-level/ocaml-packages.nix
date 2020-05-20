@@ -682,6 +682,10 @@ let
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
 
+    opam-format = callPackage ../development/ocaml-modules/opam-format {
+      inherit (pkgs) unzip;
+    };
+
     opium = callPackage ../development/ocaml-modules/opium { };
 
     opium_kernel = callPackage ../development/ocaml-modules/opium_kernel { };
