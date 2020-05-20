@@ -25754,6 +25754,8 @@ in
 
   nix-query-tree-viewer = callPackage ../tools/nix/nix-query-tree-viewer { };
 
+  nix-update = python3Packages.callPackage ../tools/package-management/nix-update { };
+
   nix-update-source = callPackage ../tools/package-management/nix-update-source {};
 
   nix-script = callPackage ../tools/nix/nix-script {};
