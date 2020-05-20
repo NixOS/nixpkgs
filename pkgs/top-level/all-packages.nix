@@ -19342,6 +19342,8 @@ in
 
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 
+  fbmenugen = callPackage ../applications/misc/fbmenugen { };
+
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
   fbreader = callPackage ../applications/misc/fbreader {
