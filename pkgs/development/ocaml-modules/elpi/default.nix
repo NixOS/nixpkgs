@@ -1,12 +1,9 @@
-{ stdenv, fetchzip, lib, sedutil, bash, fetchFromGitHub
-, dune_2, ocaml, findlib, opaline, camlp5
-, ppx_tools_versioned, ppxlib, ppx_deriving, re
-, ocaml-migrate-parsetree, ppxfind
+{ lib, fetchzip, buildDunePackage, camlp5
+, ppx_tools_versioned, ppx_deriving, re
 }:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "elpi";
-  name = "ocaml${ocaml.version}-${pname}-${version}";
   version = "1.11.2";
 
    src = fetchzip {
@@ -16,37 +13,9 @@ stdenv.mkDerivation rec {
 
   minimumOCamlVersion = "4.04";
 
-  buildInputs = [ ocaml dune_2 findlib sedutil ppx_tools_versioned ];
+  buildInputs = [ ppx_tools_versioned ];
 
   propagatedBuildInputs = [ camlp5 ppx_deriving re ];
-
-  SHELL="${bash}/bin/bash";
-
-  patchPhase = ''
-    sed -e "s/SHELL:=/SHELL?=/" -i Makefile
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    make build DUNE_OPTS="-p ${pname}" ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
-    runHook postBuild
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-    make test DUNE_OPTS="-p ${pname}" ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
-    runHook postCheck
-  '';
-
-  preInstall = ''
-    make fix-elpi.install
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    ${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
-    runHook postInstall
-  '';
 
   meta = {
     description = "Embeddable λProlog Interpreter";
@@ -55,5 +24,5 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
   };
 
-  # useDune2 = true;
+  useDune2 = true;
 }
