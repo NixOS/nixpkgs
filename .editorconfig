@@ -13,9 +13,9 @@ charset = utf-8
 
 # Ignore diffs/patches
 [*.{diff,patch}]
-end_of_line = ignore
-insert_final_newline = ignore
-trim_trailing_whitespace = ignore
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
 
 # see https://nixos.org/nixpkgs/manual/#chap-conventions
 
