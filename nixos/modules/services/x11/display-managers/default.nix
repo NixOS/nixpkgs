@@ -40,6 +40,7 @@ let
       ${optionalString cfg.startDbusSession ''
         if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
           ${config.systemd.package}/bin/systemctl --user start dbus.socket
+          export `${config.systemd.package}/bin/systemctl --user show-environment | grep '^DBUS_SESSION_BUS_ADDRESS'`
         fi
       ''}
 
