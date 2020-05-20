@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "1.0.0-errata1";
+  version = "2.0.0";
 
   src = fetchgit {
     url = "https://aomedia.googlesource.com/aom";
     rev	= "v${version}";
-    sha256 = "090phh4jl9z6m2pwpfpwcjh6iyw0byngb2n112qxkg6a3gsaa62f";
+    sha256 = "1616xjhj6770ykn82ml741h8hx44v507iky3s9h7a5lnk9d4cxzy";
   };
 
   nativeBuildInputs = [
@@ -24,10 +24,26 @@ stdenv.mkDerivation rec {
     export PATH=$NIX_BUILD_TOP:$PATH
   '';
 
+  # Configuration options:
+  # https://aomedia.googlesource.com/aom/+/refs/heads/master/build/cmake/aom_config_defaults.cmake
+
+  cmakeFlags = [
+    # For libaom these must be relative instead of absolute paths:
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
+
   meta = with stdenv.lib; {
-    description = "AV1 Bitstream and Decoding Library";
+    description = "Alliance for Open Media AV1 codec library";
+    longDescription = ''
+      Libaom is the reference implementation of the AV1 codec from the Alliance
+      for Open Media. It contains an AV1 library as well as applications like
+      an encoder (aomenc) and a decoder (aomdec).
+    '';
     homepage    = "https://aomedia.org/av1-features/get-started/";
-    maintainers = with maintainers; [ kiloreux ];
+    changelog   = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
+    maintainers = with maintainers; [ primeos kiloreux ];
     platforms   = platforms.all;
     license = licenses.bsd2;
   };
