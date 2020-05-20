@@ -158,6 +158,35 @@ in {
           + "-XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10";
         description = "JVM options for the Minecraft server.";
       };
+
+      standardInputFifo = mkOption {
+        type = types.str;
+        default = "/run/minecraft/stdin";
+        description = ''
+          The path to a FIFO for sending commands to standard input of the
+          Minecraft server process. E.g. this can be used to op players with
+          <command>echo "op Steve" > ''${standardInputFifo}</command>.
+          Note that only users in the <literal>minecraft</literal> group can run such commands.
+        '';
+      };
+
+      stopCommands = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        example = ''
+           echo "say This server is stopping in 3.."
+           sleep 1
+           echo "say 2.."
+           sleep 1
+           echo "say 1.."
+           sleep 1
+        '';
+        description = ''
+          Bash commands to execute before stopping the server. Standard output
+          is piped to the Minecraft server, allowing you to execute server commands
+          with <command>echo "say Hello from the server"</command>.
+        '';
+      };
     };
   };
 
@@ -168,18 +197,23 @@ in {
       home            = cfg.dataDir;
       createHome      = true;
       uid             = config.ids.uids.minecraft;
+      group           = "minecraft";
     };
+    users.groups.minecraft = { };
 
     systemd.services.minecraft-server = {
       description   = "Minecraft Server Service";
       wantedBy      = [ "multi-user.target" ];
       after         = [ "network.target" ];
+      requires = [ "minecraft-server.socket" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minecraft-server ${cfg.jvmOpts}";
         Restart = "always";
         User = "minecraft";
         WorkingDirectory = cfg.dataDir;
+        StandardInput = "socket";
+        StandardOutput = mkDefault "journal";
       };
 
       preStart = ''
@@ -210,6 +244,24 @@ in {
           rm .declarative
         fi
       '');
+
+      preStop = let 
+        script = pkgs.writeShellScript "minecraft-stop-commands" cfg.stopCommands;
+      in optionalString (cfg.stopCommands != null) ''
+        ${script} > ${cfg.standardInputFifo}
+      '';
+    };
+
+    systemd.sockets.minecraft-server = {
+      description = "Minecraft stdin fifo file";
+      socketConfig = {
+        ListenFIFO = cfg.standardInputFifo;
+        SocketUser = "minecraft";
+        SocketGroup = "minecraft";
+        SocketMode = "0660";
+      };
+      #wantedBy = [ "sockets.target" ];
+
     };
 
     networking.firewall = mkIf cfg.openFirewall (if cfg.declarative then {
