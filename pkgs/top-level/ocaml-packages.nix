@@ -320,6 +320,8 @@ let
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
+    io-page-unix = callPackage ../development/ocaml-modules/io-page/unix.nix { };
+
     ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
 
     irmin_1 = callPackage ../development/ocaml-modules/irmin/1.4.nix { };
