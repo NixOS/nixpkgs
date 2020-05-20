@@ -1,0 +1,31 @@
+From 45ace6fa3b111278b2ca9c7bca5f22270747fd69 Mon Sep 17 00:00:00 2001
+From: "Patrick J. Henning" <path@fea.st>
+Date: Tue, 19 May 2020 02:27:11 -0700
+Subject: [PATCH] Only search manually specified SDL2_PATH (nix)
+
+---
+ cmake/FindSDL2.cmake | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/cmake/FindSDL2.cmake b/cmake/FindSDL2.cmake
+index 0badaa10..c472a55c 100644
+--- a/cmake/FindSDL2.cmake
++++ b/cmake/FindSDL2.cmake
+@@ -68,14 +68,6 @@
+ message("<FindSDL2.cmake>")
+ 
+ SET(SDL2_SEARCH_PATHS
+-	~/Library/Frameworks
+-	/Library/Frameworks
+-	/usr/local
+-	/usr
+-	/sw # Fink
+-	/opt/local # DarwinPorts
+-	/opt/csw # Blastwave
+-	/opt
+ 	${SDL2_PATH}
+ )
+ 
+-- 
+2.24.0
+
