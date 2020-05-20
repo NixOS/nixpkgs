@@ -185,6 +185,8 @@
 
   };
 
+  mu4e-patch = callPackage ./mu4e-patch { };
+
   org-mac-link =
     callPackage ./org-mac-link { };
 
