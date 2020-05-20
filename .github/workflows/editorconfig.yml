@@ -1,0 +1,20 @@
+name: editorconfig
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  editorconfig:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: technote-space/get-diff-action@v1.2.8
+    - name: fetch image
+      run: docker pull mstruebing/editorconfig-checker
+    - name: editorconfig check
+      run: |
+        docker run --volume="$PWD":/check mstruebing/editorconfig-checker ec \
+          -disable-indentation \
+          ${{ env.GIT_DIFF }}
