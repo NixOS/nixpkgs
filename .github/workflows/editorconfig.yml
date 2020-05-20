@@ -1,4 +1,4 @@
-name: editorconfig
+name: actions
 
 on:
   pull_request:
@@ -9,12 +9,14 @@ jobs:
   editorconfig:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     - uses: technote-space/get-diff-action@v1.2.8
-    - name: fetch image
-      run: docker pull mstruebing/editorconfig-checker
     - name: editorconfig check
+      env:
+        VERSION: "2.0.4"
+        OS: "linux"
+        ARCH: "amd64"
       run: |
-        docker run --volume="$PWD":/check mstruebing/editorconfig-checker ec \
-          -disable-indentation \
-          ${{ env.GIT_DIFF }}
+        curl -O -L -C - https://github.com/editorconfig-checker/editorconfig-checker/releases/download/$VERSION/ec-$OS-$ARCH.tar.gz && \
+        tar xzf ec-$OS-$ARCH.tar.gz && \
+        ./bin/ec-$OS-$ARCH -disable-indentation ${{ env.GIT_DIFF }}
