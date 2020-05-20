@@ -463,10 +463,15 @@ in
                 A specification of the desired configuration of this
                 container, as a NixOS module.
               '';
-              type = lib.mkOptionType {
+              type = let
+                confPkgs = if config.pkgs == null then pkgs else config.pkgs;
+              in lib.mkOptionType {
                 name = "Toplevel NixOS config";
-                merge = loc: defs: (import ../../lib/eval-config.nix {
+                merge = loc: defs: (import (confPkgs.path + "/nixos/lib/eval-config.nix") {
                   inherit system;
+                  pkgs = confPkgs;
+                  baseModules = import (confPkgs.path + "/nixos/modules/module-list.nix");
+                  inherit (confPkgs) lib;
                   modules =
                     let
                       extraConfig = {
@@ -512,6 +517,15 @@ in
                 Grant additional capabilities to the container.  See the
                 capabilities(7) and systemd-nspawn(1) man pages for more
                 information.
+              '';
+            };
+
+            pkgs = mkOption {
+              type = types.nullOr types.attrs;
+              default = null;
+              example = literalExample "pkgs";
+              description = ''
+                Customise which nixpkgs to use for this container.
               '';
             };
 
