@@ -4,7 +4,7 @@ let
   arch = "linux64";
   libs = (with xorg; [ libXext libX11 libXrender libXtst libXi libXxf86vm ]);
   repeatString = n: str:
-    lib.concatStrings (lib.lists.map (lib.range 1 n) (lib.const str));
+    lib.concatStrings (lib.lists.map (lib.const str) (lib.range 1 n));
 in stdenv.mkDerivation rec {
   pname = "processing";
   version = "3.5.4";
@@ -50,48 +50,43 @@ in stdenv.mkDerivation rec {
   # Patching binary files with `dd`:
   #     https://stackoverflow.com/a/5586379
 
-  notFondOfThisJVM = {
-    suppressPopup = true;
-    # Used by sha256sum -- can't be a base-32 Nix hash.
-    linuxPlatformSHA256 =
-      "b8ceb19e1c8d022f963d2abfb56abc02b5f037e32042f522e1f2663d0ee8f18d";
-    classToPatch = "processing/app/platform/LinuxPlatform.class";
-    bytesToOverwrite = 8;
-    startOverwritingAt = 3230;
-  };
+  popupSuppress = true;
+  # Used by sha256sum -- can't be a base-32 Nix hash.
+  linuxPlatformSHA256 =
+    "b8ceb19e1c8d022f963d2abfb56abc02b5f037e32042f522e1f2663d0ee8f18d";
+  popupClassToPatch = "processing/app/platform/LinuxPlatform.class";
+  popupBytesToOverwrite = 8;
+  popupStartOverwritingAt = 3230;
 
-  buildPhase = with notFondOfThisJVM;
-    lib.optionalString suppressPopup
-    (let class = lib.escapeShellArg classToPatch;
-    in ''
-      # `unzip` will need to make a directory named `processing`, but right now
-      # that's a shell script. Move it to the side and we'll move it back when
-      # we're done.
-      mv processing processing-bin
+  buildPhase = lib.optionalString popupSuppress ''
+    # `unzip` will need to make a directory named `processing`, but right now
+    # that's a shell script. Move it to the side and we'll move it back when
+    # we're done.
+    mv processing processing-bin
 
-      unzip lib/pde.jar ${class}
+    unzip lib/pde.jar $popupClassToPatch
 
-      # Make sure the extracted class has the right checksum -- if
-      # `LinuxPlatform.class` changes in a future release, we'll need to
-      # recalculate the correct offset.
-      echo ${linuxPlatformSHA256} ${class} \
-        | sha256sum --check
+    # Make sure the extracted class has the right checksum -- if
+    # `LinuxPlatform.class` changes in a future release, we'll need to
+    # recalculate the correct offset.
+    echo $linuxPlatformSHA256 $popupClassToPatch \
+      | sha256sum --check
 
-      # Overwrite the 8 bytes / 4 instructions.
-      printf '${repeatString bytesToOverwrite "\\x00"}' \
-        | dd of=${class} \
-             bs=1 \
-             seek=${startOverwritingAt} \
-             conv=notrunc
+    # Overwrite the 8 bytes / 4 instructions.
+    printf '${repeatString popupBytesToOverwrite "\\x00"}' \
+      | dd of=$popupClassToPatch \
+           bs=1 \
+           seek=$popupStartOverwritingAt \
+           conv=notrunc
 
-      # Update `LinuxPlatform.class` in the `.jar`.
-      zip lib/pde.jar -u ${class}
+    # Update `LinuxPlatform.class` in the `.jar`.
+    zip lib/pde.jar -u $popupClassToPatch
 
-      # Remove the temporary directory named `processing` and move the shell
-      # script named `processing` back to its original location.
-      rm -r processing
-      mv processing-bin processing
-    '');
+    # Remove the temporary directory named `processing` and move the shell
+    # script named `processing` back to its original location.
+    rm -r processing
+    mv processing-bin processing
+  '';
 
   installPhase = ''
     mkdir -p $out/${pname}
