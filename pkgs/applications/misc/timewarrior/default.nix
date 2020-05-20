@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "timewarrior";
-  version = "1.2.0";
+  version = "1.3.0";
 
   enableParallelBuilding = true;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";
     rev = "v${version}";
-    sha256 = "0ci8kb7gdp1dsv6xj30nbz8lidrmn50pbriw26wv8mdhs17rfk7w";
+    sha256 = "1aijh1ad7gpa61cn7b57w24vy7fyjj0zx5k9z8d6m1ldzbw589cl";
     fetchSubmodules = true;
   };
 
