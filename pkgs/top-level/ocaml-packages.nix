@@ -547,6 +547,8 @@ let
 
     mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
 
+    mirage-runtime = callPackage ../development/ocaml-modules/mirage/runtime.nix { };
+
     mirage-stack = callPackage ../development/ocaml-modules/mirage-stack { };
 
     mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
