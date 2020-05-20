@@ -28,13 +28,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "4.4.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "0q5h2pbwysc6hwq5js3lwi6zn7i5qjjy070ynfhfn3z69lw5iz2d";
+    sha256 = "1caa43cplb40dm1bwnwca7z4yafvnrncm96k7mih6kg3m87fxqi5";
   };
 
   propagatedBuildInputs = [
