@@ -4,7 +4,8 @@
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
 , guiSupport ? true, enableMinimal ? false
-, adns ? null , bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
+, openldapSupport ? stdenv.isLinux, openldap ? null
+, adns ? null , bzip2 ? null , gnutls ? null , libusb1 ? null
 , pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
 null
 }:
@@ -12,6 +13,7 @@ null
 with stdenv.lib;
 
 assert guiSupport -> pinentry != null && enableMinimal == false;
+assert openldapSupport -> openldap != null;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
@@ -27,8 +29,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
-    readline libusb1 gnutls adns openldap zlib bzip2 sqlite
-  ];
+    readline libusb1 gnutls adns zlib bzip2 sqlite
+  ] ++ optional openldapSupport openldap;
 
   patches = [
     ./fix-libusb-include-path.patch
