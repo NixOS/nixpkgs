@@ -1,20 +1,19 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "etcd";
-  version = "3.3.21";
+  version = "3.4.8";
 
-  goPackagePath = "github.com/coreos/etcd";
+  vendorSha256 = null;
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "1xrhkynach3c7wsfac6zlpi5n1hy3y75vyimvw2zl7ryhm00413s";
+    sha256 = "0kx36kq6a7i3cja3wp9mwbnar752pz8c0n2fcvwyzi6l6ph6alx7";
   };
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
     patchShebangs .
     ./build
     ./functional/build
@@ -23,11 +22,6 @@ buildGoPackage rec {
   installPhase = ''
     install -Dm755 bin/* bin/functional/cmd/* -t $out/bin
   '';
-
-  passthru.tests = with nixosTests; {
-    etcd = etcd;
-    etcd-cluster = etcd-cluster;
-  };
 
   meta = with lib; {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
