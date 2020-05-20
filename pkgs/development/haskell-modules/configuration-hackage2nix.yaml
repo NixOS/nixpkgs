@@ -4187,7 +4187,6 @@ broken-packages:
   - dgs
   - dhall-check
   - dhall-fly
-  - dhall-lsp-server
   - dhall-nix
   - dhall-text
   - dhall-to-cabal

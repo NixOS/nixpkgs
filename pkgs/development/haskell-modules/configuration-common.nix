@@ -1519,4 +1519,8 @@ self: super: {
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
 
+  # the test suite attempts to run the binaries built in this package
+  # through $PATH but they aren't in $PATH
+  dhall-lsp-server = dontCheck super.dhall-lsp-server;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
