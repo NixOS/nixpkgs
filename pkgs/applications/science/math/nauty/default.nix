@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin timokau ];
     platforms = platforms.unix;
+    # I'm not sure if the filename will remain the same for future changelog or
+    # if it will track changes to minor releases. Lets see. Better than nothing
+    # in any case.
+    changelog = "http://pallini.di.uniroma1.it/changes24-27.txt";
     homepage = "http://pallini.di.uniroma1.it/";
   };
 }
