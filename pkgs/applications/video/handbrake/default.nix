@@ -108,13 +108,12 @@ _EOF
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--harden" # enable buffer overflow protection
     "--disable-df-fetch"
     "--disable-df-verify"
     (if useGtk          then "--disable-gtk-update-checks" else "--disable-gtk")
     (if useFdk          then "--enable-fdk-aac"            else "")
     (if stdenv.isDarwin then "--disable-xcode"             else "")
-  ];
+  ] ++ lib.optional (stdenv.isx86_32 || stdenv.isx86_64) "--harden";
 
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
   NIX_LDFLAGS = [
