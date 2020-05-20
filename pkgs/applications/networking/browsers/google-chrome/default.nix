@@ -137,5 +137,15 @@ in stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = [ maintainers.msteen ];
     platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [
+      # Since the release of M83 the previous version isn't secure anymore.
+      # nixos-unstable update: https://github.com/NixOS/nixpkgs/pull/88206
+      ''
+        This version of Google Chrome is no longer being updated. Consider switching
+        to the new stable NixOS channel or installing Google Chrome from a different
+        channel. A list of the missing security fixes can be found here:
+        https://chromereleases.googleblog.com/2020/05/stable-channel-update-for-desktop_19.html
+      ''
+    ];
   };
 }
