@@ -31,8 +31,14 @@ stdenv.mkDerivation rec {
     "--bindir=${placeholder "bin"}/bin"
     "--sbindir=${placeholder "bin"}/bin"
     "--libdir=${placeholder "lib"}/lib"
-  ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd"
-  ++ stdenv.lib.optional enable_cmdlib "--enable-cmdlib"
+    "--with-default-locking-dir=/run/lock/lvm"
+    "--with-default-run-dir=/run/lvm"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ] ++ stdenv.lib.optionals enable_dmeventd [
+    "--enable-dmeventd"
+    "--with-dmeventd-pidfile=/run/dmeventd/pid"
+    "--with-default-dm-run-dir=/run/dmeventd"
+  ] ++ stdenv.lib.optional enable_cmdlib "--enable-cmdlib"
   ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
