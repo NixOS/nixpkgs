@@ -17,6 +17,6 @@ jobs:
         OS: "linux"
         ARCH: "amd64"
       run: |
-        curl -O -L -C - https://github.com/editorconfig-checker/editorconfig-checker/releases/download/$VERSION/ec-$OS-$ARCH.tar.gz && \
+        curl -sSf -O -L -C - https://github.com/editorconfig-checker/editorconfig-checker/releases/download/$VERSION/ec-$OS-$ARCH.tar.gz && \
         tar xzf ec-$OS-$ARCH.tar.gz && \
         ./bin/ec-$OS-$ARCH -disable-indentation ${{ env.GIT_DIFF }}
