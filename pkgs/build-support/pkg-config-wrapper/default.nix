@@ -4,6 +4,7 @@
 { stdenvNoCC
 , buildPackages
 , pkg-config
+, baseBinName ? "pkg-config"
 , propagateDoc ? pkg-config != null && pkg-config ? man
 , extraPackages ? [], extraBuildCommands ? ""
 }:
@@ -34,9 +35,9 @@ stdenv.mkDerivation {
 
   shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
 
-  inherit targetPrefix suffixSalt;
+  inherit targetPrefix suffixSalt baseBinName;
 
-  outputs = [ "out" ] ++ optionals propagateDoc [ "man" ];
+  outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (pkg-config ? doc) "doc");
 
   passthru = {
     inherit pkg-config;
@@ -63,7 +64,16 @@ stdenv.mkDerivation {
 
       echo $pkg-config > $out/nix-support/orig-pkg-config
 
-      wrap ${targetPrefix}pkg-config ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/pkg-config"
+      wrap ${targetPrefix}${baseBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
+    ''
+    # symlink in share for autoconf to find macros
+
+    # TODO(@Ericson2314): in the future just make the unwrapped pkg-config a
+    # propagated dep once we can rely on downstream deps comming first in
+    # search paths. (https://github.com/NixOS/nixpkgs/pull/31414 took a crack
+    # at this.)
+    + ''
+      ln -s ${pkg-config}/share $out/share
     '';
 
   strictDeps = true;
@@ -76,34 +86,33 @@ stdenv.mkDerivation {
   ];
 
   postFixup =
+    ##
+    ## User env support
+    ##
+
+    # Propagate the underling unwrapped pkg-config so that if you
+    # install the wrapper, you get anything else it might provide.
     ''
-
-      ##
-      ## User env support
-      ##
-
-      # Propagate the underling unwrapped pkg-config so that if you
-      # install the wrapper, you get anything else it might provide.
       printWords ${pkg-config} > $out/nix-support/propagated-user-env-packages
     ''
 
-    + optionalString propagateDoc ''
-      ##
-      ## Man page and info support
-      ##
-
+    ##
+    ## Man page and doc support
+    ##
+    + optionalString propagateDoc (''
       ln -s ${pkg-config.man} $man
-    ''
+    '' + optionalString (pkg-config ? doc) ''
+      ln -s ${pkg-config.doc} $doc
+    '')
 
     + ''
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
-
-      ##
-      ## Extra custom steps
-      ##
     ''
 
+    ##
+    ## Extra custom steps
+    ##
     + extraBuildCommands;
 
   meta =
