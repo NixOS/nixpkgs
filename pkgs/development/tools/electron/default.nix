@@ -1,4 +1,4 @@
-{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, glib, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core }@args:
+{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, glib, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core, libdrm, mesa }@args:
 
 let
   mkElectron = import ./generic.nix args;
@@ -42,5 +42,13 @@ in
     i686-linux = "2cf7fc55a74427d96ebe67fb601ece2f27802deb95a5bae3d7b427afe71d272c";
     armv7l-linux = "14b67e8a41ce8882442816a2db0eee69fac141e359911704002beb7063aa0eff";
     aarch64-linux = "1d89a75fff3b690efe1295fe6f91225c4fa64f3c22c6acddec895d54e1040b4d";
+  };
+
+  electron_9 = mkElectron "9.0.0" {
+    x86_64-linux = "03c69d66ae8784edcc6a4b8081eb4e07da802035a6257fb6e2260a456371224f";
+    x86_64-darwin = "86096d2ecff0698957bfbbe8a8d56c7f9ed9abe7e5a5bfe84a8f4af0635625e1";
+    i686-linux = "67ea9e04db5a709b10d2f101d977e803b5f5da9e9573cbcc7bce362b1a9406d7";
+    armv7l-linux = "7917624b81318197da52de04073e07c4b2d3947737d4103f647a8abc907600c0";
+    aarch64-linux = "e3dd2e15cfd346a59c69ff4b0b234daf5bb06790b508ae0056a55c17eef78a9e";
   };
 }
