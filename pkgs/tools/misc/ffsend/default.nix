@@ -28,9 +28,9 @@ buildRustPackage rec {
   cargoSha256 = "0svmbay9waaq9fpc8lg1nys6l35xsjvkri5v1frlgxida5dzghpq";
 
   nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
-  buildInputs = [ openssl ]
-  ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
-  ;
+  buildInputs =
+    if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
+    else [ openssl ];
 
   preBuild = stdenv.lib.optionalString (x11Support && usesX11) (
     if preferXsel && xsel != null then ''
