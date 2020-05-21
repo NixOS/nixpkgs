@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
     description = "OS Login Guest Environment for Google Compute Engine";
     license = licenses.asl20;
-    maintainers = with maintainers; [ adisbladis flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }
