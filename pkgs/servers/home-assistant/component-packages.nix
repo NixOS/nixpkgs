@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.110.0";
+  version = "0.110.1";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];

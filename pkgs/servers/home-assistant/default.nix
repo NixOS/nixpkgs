@@ -67,7 +67,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.110.0";
+  hassVersion = "0.110.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -86,7 +86,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1z6dvq75nx8l9d9siifqf08qf4rx95shpk28g055nsv0g89wmxbs";
+    sha256 = "1495kl997mvk9k11lk1ahv5w0yc0185qmxwa1h51j6d0zyqwz749";
   };
 
   propagatedBuildInputs = [
