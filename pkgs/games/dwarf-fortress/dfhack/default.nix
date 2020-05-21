@@ -53,10 +53,10 @@ let
       prerelease = true;
     };
     "0.47.04" = {
-      dfHackRelease = "0.47.04-alpha0";
-      sha256 = "07056k6717mqim9skwjprqplj8jmmli6g4p2c72c8000jwnn2hjy";
-      xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd50aa";
-      prerelease = true;
+      dfHackRelease = "0.47.04-r1";
+      sha256 = "10awv5nlifqrw42hiiz846f4q5x8xbxzj6l4s8qznhi1dbmdnjqm";
+      xmlRev = "2079b9fb69b8b4db48aa35ec54a96f5cca7cc8ef";
+      prerelease = false;
     };
   };
 
