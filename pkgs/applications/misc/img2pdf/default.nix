@@ -11,8 +11,6 @@ buildPythonApplication rec {
     sha256 = "1yx0ljbg7phpix507wq584qvspp2jgax7flpp1148pxpc2d51mcc";
   };
 
-  doCheck = false; # needs pdfrw
-
   propagatedBuildInputs = [
     pillow
   ];
