@@ -1,21 +1,33 @@
-{ stdenv, lib, fetchurl, coursier, python, makeWrapper }:
+{ stdenv, fetchurl, coursier,
+ autoPatchelfHook, 
+ lib, zlib }:
 
 let
   baseName = "bloop";
-  version = "1.3.4";
-  nailgunCommit = "d7ed5db"; # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
+  version = "1.4.1";
 
   client = stdenv.mkDerivation {
     name = "${baseName}-client-${version}";
 
-    src = fetchurl {
-      url = "https://raw.githubusercontent.com/scalacenter/nailgun/${nailgunCommit}/pynailgun/ng.py";
-      sha256 = "0lrj25m0nvphz2i5mqjwccpyrd7gn8a5k22k5khrpdh6ldxqis8a";
-    };
+    nativeBuildInputs = [ autoPatchelfHook ] ;
+    phases = [ "installPhase" "fixupPhase" ];
+    buildInputs = [ stdenv.cc.cc.lib zlib] ;
 
-    phases = [ "installPhase" ];
-
-    installPhase = ''cp $src $out'';
+    installPhase = ''
+      mkdir -p $out/bin
+ 
+      export COURSIER_CACHE=$(pwd)
+      ${coursier}/bin/coursier install bloop:${version} \
+                               --repository "bintray:scalameta/maven" \
+                               --repository "bintray:scalacenter/releases" \
+                               --repository "https://oss.sonatype.org/content/repositories/staging" \
+                               --force \
+                               --install-dir $out
+    '';
+    
+    outputHashMode = "recursive";
+    outputHashAlgo = "sha256";
+    outputHash     = "01hgv0j0a4v8iqi638rcqdirpa30jwfp7gh7dvsk32apx003ylvb";
   };
 
   server = stdenv.mkDerivation {
@@ -25,15 +37,17 @@ let
 
       export COURSIER_CACHE=$(pwd)
       ${coursier}/bin/coursier bootstrap ch.epfl.scala:bloop-frontend_2.12:${version} \
-        -r "bintray:scalameta/maven" \
-        -r "bintray:scalacenter/releases" \
-        -r "https://oss.sonatype.org/content/repositories/staging" \
-        --deterministic \
-        -f --main bloop.Server -o $out/bin/blp-server
+                               --repository "bintray:scalameta/maven" \
+                               --repository "bintray:scalacenter/releases" \
+                               --repository "https://oss.sonatype.org/content/repositories/staging" \
+                               --deterministic \
+                               --force \
+                               --main bloop.Server \
+                               --output $out/blp-server
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "1z33ip6hgfwiixm2gimz819p5cnxn1fmxb3ryyf77jzwsx7py718";
+    outputHash     = "01kyzb374kyicm1nmx6vzz42gj8cd9m6bd5dgrajkcr6q09jfgbg";
   };
 
   zsh = stdenv.mkDerivation {
@@ -41,7 +55,7 @@ let
 
     src = fetchurl {
       url = "https://raw.githubusercontent.com/scalacenter/bloop/v${version}/etc/zsh/_bloop";
-      sha256 = "09qq5888vaqlqan2jbs2qajz2c3ff13zj8r0x2pcxsqmvlqr02hp";
+      sha256 = "1xzg0qfkjdmzm3mvg82mc4iia8cl7b6vbl8ng4ir2xsz00zjrlsq";
     };
 
     phases = [ "installPhase" ];
@@ -52,21 +66,16 @@ in
 stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
-  buildInputs = [ makeWrapper ];
-
   phases = [ "installPhase" ];
 
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/zsh/site-functions
 
-    ln -s ${server}/bin/blp-server $out/blp-server
-    ln -s ${zsh} $out/share/zsh/site-functions/_bloop
+    ln -s ${server}/blp-server $out/bin/blp-server
 
-    cp ${client} $out/bloop
-    chmod +x $out/bloop
-    makeWrapper $out/bloop $out/bin/bloop \
-      --prefix PATH : ${lib.makeBinPath [ python ]}
+    ln -s ${zsh} $out/share/zsh/site-functions/_bloop
+    ln -s ${client}/.bloop.aux $out/bin/bloop
   '';
 
   meta = with stdenv.lib; {
