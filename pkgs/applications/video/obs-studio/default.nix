@@ -35,6 +35,7 @@
 
 let
   inherit (stdenv.lib) optional optionals;
+
 in mkDerivation rec {
   pname = "obs-studio";
   version = "24.0.6";
@@ -48,32 +49,37 @@ in mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ curl
-                  fdk_aac
-                  ffmpeg
-                  jansson
-                  libjack2
-                  libv4l
-                  libxkbcommon
-                  libpthreadstubs
-                  libXdmcp
-                  qtbase
-                  qtx11extras
-                  qtsvg
-                  speex
-                  x264
-                  vlc
-                  makeWrapper
-                  mbedtls
-                ]
-                ++ optionals scriptingSupport [ luajit swig python3 ]
-                ++ optional alsaSupport alsaLib
-                ++ optional pulseaudioSupport libpulseaudio;
+  buildInputs = [
+    curl
+    fdk_aac
+    ffmpeg
+    jansson
+    libjack2
+    libv4l
+    libxkbcommon
+    libpthreadstubs
+    libXdmcp
+    qtbase
+    qtx11extras
+    qtsvg
+    speex
+    x264
+    vlc
+    makeWrapper
+    mbedtls
+  ]
+  ++ optionals scriptingSupport [ luajit swig python3 ]
+  ++ optional alsaSupport alsaLib
+  ++ optional pulseaudioSupport libpulseaudio;
 
   # obs attempts to dlopen libobs-opengl, it fails unless we make sure
   # DL_OPENGL is an explicit path. Not sure if there's a better way
   # to handle this.
-  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-DDL_OPENGL=\\\"$(out)/lib/libobs-opengl.so\\\"" ];
+  cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-DDL_OPENGL=\\\"$(out)/lib/libobs-opengl.so\\\""
+    "-DOBS_VERSION_OVERRIDE=${version}"
+    "-Wno-dev" # kill dev warnings that are useless for packaging
+  ];
 
   postInstall = ''
       wrapProgram $out/bin/obs \
