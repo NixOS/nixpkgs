@@ -128,8 +128,16 @@ services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
   <itemizedlist>
    <listitem>
     <para>
-     The go-modules builder now uses vendorSha256 instead of modSha256 to pin
-     fetched version data. This is currently a warning, but will be removed in the next release.
+     <literal>buildGoModule</literal> now internally creates a vendor directory
+     in the source tree for downloaded modules instead of using go's <link
+     xlink:href="https://golang.org/cmd/go/#hdr-Module_proxy_protocol">module
+     proxy protocol</link>. This storage format is simpler and therefore less
+     likekly to break with future versions of go. As a result
+     <literal>buildGoModule</literal> switched from
+     <literal>modSha256</literal> to the <literal>vendorSha256</literal>
+     attribute to pin fetched version data. <literal>buildGoModule</literal>
+     still accepts <literal>modSha256</literal> with a warning, but support will
+     be removed in the next release.
     </para>
    </listitem>
    <listitem>
