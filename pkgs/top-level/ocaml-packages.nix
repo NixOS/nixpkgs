@@ -161,6 +161,8 @@ let
 
     cpuid = callPackage ../development/ocaml-modules/cpuid { };
 
+    crowbar = callPackage ../development/ocaml-modules/crowbar { };
+
     crunch = callPackage ../development/tools/ocaml/crunch { };
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
