@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   inherit targetPrefix suffixSalt;
 
-  outputs = [ "out" ] ++ optionals propagateDoc [ "man" ];
+  outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (pkg-config ? doc) "doc");
 
   passthru = {
     inherit pkg-config;
@@ -87,13 +87,15 @@ stdenv.mkDerivation {
       printWords ${pkg-config} > $out/nix-support/propagated-user-env-packages
     ''
 
-    + optionalString propagateDoc ''
+    + optionalString propagateDoc (''
       ##
-      ## Man page and info support
+      ## Man page and doc support
       ##
 
       ln -s ${pkg-config.man} $man
-    ''
+    '' + optionalString (pkg-config ? doc) ''
+      ln -s ${pkg-config.doc} $doc
+    '')
 
     + ''
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh

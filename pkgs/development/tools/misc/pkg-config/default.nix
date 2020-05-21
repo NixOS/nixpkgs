@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "14fmwzki1rlz8bs2p810lk6jqdxsk966d8drgsjmi54cd00rrikg";
   };
 
+  outputs = [ "out" "man" "doc" ];
+
   # Process Requires.private properly, see
   # http://bugs.freedesktop.org/show_bug.cgi?id=4738, migrated to
   # https://gitlab.freedesktop.org/pkg-config/pkg-config/issues/28
