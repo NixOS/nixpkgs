@@ -1,4 +1,5 @@
-{ lib, fetchurl, buildDunePackage, fmt, logs, mtime, stdlib-shims }:
+{ lib, fetchurl, buildDunePackage, fmt, logs, mtime, stdlib-shims
+, alcotest, crowbar, re }:
 
 buildDunePackage rec {
   pname = "index";
@@ -13,6 +14,9 @@ buildDunePackage rec {
 
   buildInputs = [ stdlib-shims ];
   propagatedBuildInputs = [ fmt logs mtime ];
+
+  doCheck = true;
+  checkInputs = [ crowbar alcotest re ];
 
   meta = {
     homepage = "https://github.com/mirage/index";
