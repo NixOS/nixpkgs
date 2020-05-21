@@ -75,6 +75,10 @@ pet = buildGoModule rec {
     If you'd like to not have to update this field on dependency changes, 
     run `go mod vendor` in your source repo and set 'vendorSha256 = null;'
   </para>
+
+  <para>
+    <varname>regenGoMod</varname> runs `go mod tidy` before attempting to vendor the package. This is frequently useful when the go.mod file is out of date or incorrect + doesn't match the underlying source code.
+  </para>
  </section>
 
  <section xml:id="ssec-go-legacy">
