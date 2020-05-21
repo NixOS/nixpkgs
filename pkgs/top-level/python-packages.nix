@@ -3517,6 +3517,8 @@ in {
 
   lirc = disabledIf isPy27 (toPythonModule (pkgs.lirc.override { python3 = python; }));
 
+  littleutils = callPackage ../development/python-modules/littleutils { };
+
   livelossplot = callPackage ../development/python-modules/livelossplot { };
 
   livereload = callPackage ../development/python-modules/livereload { };
