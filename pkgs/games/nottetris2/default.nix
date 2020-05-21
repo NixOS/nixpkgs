@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zip, love_0_7, lua, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchFromGitHub, zip, love_0_7, makeWrapper, makeDesktopItem }:
 
 let
   pname = "nottetris2";
@@ -25,8 +25,8 @@ stdenv.mkDerivation {
     sha256 = "17iabh6rr8jim70n96rbhif4xq02g2kppscm8l339yqx6mhb64hs";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ lua love_0_7 zip ];
+  nativeBuildInputs = [ zip ];
+  buildInputs = [ love_0_7 makeWrapper ];
 
   phases = [ "unpackPhase" "installPhase" ];
 
