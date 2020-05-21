@@ -1583,6 +1583,8 @@ in {
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
 
+  tls-parser = callPackage ../development/python-modules/tls-parser { };
+
   trueskill = callPackage ../development/python-modules/trueskill { };
 
   trustme = callPackage ../development/python-modules/trustme {};
