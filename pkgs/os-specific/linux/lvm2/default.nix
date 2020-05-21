@@ -103,6 +103,6 @@ stdenv.mkDerivation rec {
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 bsd2 lgpl21 ];
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin ajs124 ];
   };
 }
