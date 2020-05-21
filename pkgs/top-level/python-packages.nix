@@ -6905,6 +6905,8 @@ in {
 
   sslyze = callPackage ../development/python-modules/sslyze { };
 
+  stack-data = callPackage ../development/python-modules/stack-data { };
+
   starlette = callPackage ../development/python-modules/starlette { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
