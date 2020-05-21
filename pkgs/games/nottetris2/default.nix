@@ -44,6 +44,7 @@ stdenv.mkDerivation {
     description = "It's like Tetris, but it's not";
     platforms = platforms.linux;
     license = licenses.wtfpl;
+    maintainers = with maintainers; [ yorickvp ];
     downloadPage = "https://stabyourself.net/nottetris2/";
   };
 
