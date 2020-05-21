@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib
+{ stdenv, fetchurl, fetchpatch, lib
 , autoconf, automake, gnum4, libtool, perl, uthash, pkgconfig, gettext
 , python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, cairo, pango
 , readline, woff2, zeromq, libuninameslist
@@ -17,6 +17,14 @@ stdenv.mkDerivation rec {
     url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "0lh8yx01asbzxm6car5cfi64njh5p4lxc7iv8dldr5rwg357a86r";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2020-5395+CVE-2020-5496.patch";
+      url = "https://github.com/fontforge/fontforge/commit/048a91e2682c1a8936ae34dbc7bd70291ec05410.patch";
+      sha256 = "1vbhlpsh1qnwb16pndv10k9k5fvic0a41ifq0bcfk1mcxgyank75";
+    })
+  ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
   postPatch = ''
@@ -67,7 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A font editor";
-    homepage = "http://fontforge.github.io";
+    homepage = "https://fontforge.github.io";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.erictapen ];
