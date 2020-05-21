@@ -16,6 +16,8 @@ let
 
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
 
+    afl-persistent = callPackage ../development/ocaml-modules/afl-persistent { };
+
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix {};
