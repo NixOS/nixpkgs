@@ -30,8 +30,8 @@ let
 
   cfgFile = pkgs.writeText "sddm.conf" ''
     [General]
-    HaltCommand=${pkgs.systemd}/bin/systemctl poweroff
-    RebootCommand=${pkgs.systemd}/bin/systemctl reboot
+    HaltCommand=/run/current-system/systemd/bin/systemctl poweroff
+    RebootCommand=/run/current-system/systemd/bin/systemctl reboot
     ${optionalString cfg.autoNumlock ''
     Numlock=on
     ''}
