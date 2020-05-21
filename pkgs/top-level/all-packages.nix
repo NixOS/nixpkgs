@@ -22253,6 +22253,8 @@ in
     git = gitMinimal;
   };
 
+  sslyze = with python3Packages; toPythonApplication sslyze;
+
   ssr = callPackage ../applications/audio/soundscape-renderer {};
 
   ssrc = callPackage ../applications/audio/ssrc { };

@@ -1555,6 +1555,8 @@ in {
 
   sslib = callPackage ../development/python-modules/sslib { };
 
+  sslyze = callPackage ../development/python-modules/sslyze { };
+
   statistics = callPackage ../development/python-modules/statistics { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
