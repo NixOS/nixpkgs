@@ -4,6 +4,7 @@
 { stdenvNoCC
 , buildPackages
 , pkg-config
+, baseBinName ? "pkg-config"
 , propagateDoc ? pkg-config != null && pkg-config ? man
 , extraPackages ? [], extraBuildCommands ? ""
 }:
@@ -34,7 +35,7 @@ stdenv.mkDerivation {
 
   shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
 
-  inherit targetPrefix suffixSalt;
+  inherit targetPrefix suffixSalt baseBinName;
 
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (pkg-config ? doc) "doc");
 
@@ -63,7 +64,7 @@ stdenv.mkDerivation {
 
       echo $pkg-config > $out/nix-support/orig-pkg-config
 
-      wrap ${targetPrefix}pkg-config ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/pkg-config"
+      wrap ${targetPrefix}${baseBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
     ''
     # symlink in share for autoconf to find macros
 

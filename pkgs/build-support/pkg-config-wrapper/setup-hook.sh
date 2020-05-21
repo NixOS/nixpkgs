@@ -23,7 +23,7 @@ getTargetRoleWrapper
 
 addEnvHooks "$targetOffset" pkgConfigWrapper_addPkgConfigPath
 
-export PKG_CONFIG${role_post}=@targetPrefix@pkg-config
+export PKG_CONFIG${role_post}=@targetPrefix@@baseBinName@
 
 # No local scope in sourced file
 unset -v role_post
