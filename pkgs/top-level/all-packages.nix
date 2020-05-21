@@ -171,7 +171,7 @@ in
 
   deadcode = callPackage ../development/tools/deadcode { };
 
-  hobbes = callPackage ../development/tools/hobbes { stdenv = gcc6Stdenv; }; # GCC 6 is latest currently supported. See https://git.io/JvK6M.
+  hobbes = callPackage ../development/tools/hobbes { };
 
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
@@ -6505,6 +6505,8 @@ in
   suricata = callPackage ../applications/networking/ids/suricata {
     python = python3;
   };
+
+  sof-firmware = callPackage ../os-specific/linux/firmware/sof-firmware { };
 
   softhsm = callPackage ../tools/security/softhsm {
     inherit (darwin) libobjc;
