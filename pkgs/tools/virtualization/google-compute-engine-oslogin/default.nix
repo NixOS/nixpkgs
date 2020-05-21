@@ -1,10 +1,11 @@
 { stdenv
 , lib
-, fetchFromGitHub
-, curl
-, json_c
-, pam
 , bashInteractive
+, curl
+, fetchFromGitHub
+, json_c
+, nixosTests
+, pam
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,10 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit (nixosTests) google-oslogin;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
