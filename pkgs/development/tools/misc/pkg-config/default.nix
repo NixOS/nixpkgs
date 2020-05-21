@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   # Process Requires.private properly, see
-  # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
+  # http://bugs.freedesktop.org/show_bug.cgi?id=4738, migrated to
+  # https://gitlab.freedesktop.org/pkg-config/pkg-config/issues/28
   patches = optional (!vanilla) ./requires-private.patch
     ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
