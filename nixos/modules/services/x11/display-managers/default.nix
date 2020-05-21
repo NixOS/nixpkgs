@@ -39,8 +39,8 @@ let
 
       ${optionalString cfg.startDbusSession ''
         if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-          ${config.systemd.package}/bin/systemctl --user start dbus.socket
-          export `${config.systemd.package}/bin/systemctl --user show-environment | grep '^DBUS_SESSION_BUS_ADDRESS'`
+          /run/current-system/systemd/bin/systemctl --user start dbus.socket
+          export `/run/current-system/systemd/bin/systemctl --user show-environment | grep '^DBUS_SESSION_BUS_ADDRESS'`
         fi
       ''}
 
@@ -60,7 +60,7 @@ let
       #
       # Also tell systemd about the dbus session bus address.
       # This is required by user units using the session bus.
-      ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
+      /run/current-system/systemd/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
 
       # Load X defaults. This should probably be safe on wayland too.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
@@ -89,7 +89,7 @@ let
       fi
 
       # Start systemd user services for graphical sessions
-      ${config.systemd.package}/bin/systemctl --user start graphical-session.target
+      /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
       # Allow the user to setup a custom session type.
       if test -x ~/.xsession; then
@@ -394,7 +394,7 @@ in
 
           test -n "$waitPID" && wait "$waitPID"
 
-          ${config.systemd.package}/bin/systemctl --user stop graphical-session.target
+          /run/current-system/systemd/bin/systemctl --user stop graphical-session.target
 
           exit 0
         '';

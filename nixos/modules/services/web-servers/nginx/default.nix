@@ -756,9 +756,9 @@ in
       serviceConfig.Type = "oneshot";
       serviceConfig.TimeoutSec = 60;
       script = ''
-        if ${pkgs.systemd}/bin/systemctl -q is-active nginx.service ; then
+        if /run/current-system/systemd/bin/systemctl -q is-active nginx.service ; then
           ${execCommand} -t && \
-            ${pkgs.systemd}/bin/systemctl reload nginx.service
+            /run/current-system/systemd/bin/systemctl reload nginx.service
         fi
       '';
       serviceConfig.RemainAfterExit = true;
@@ -772,7 +772,7 @@ in
             webroot = vhostConfig.acmeRoot;
             extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
             postRun = ''
-              systemctl reload nginx
+              /run/current-system/systemd/bin/systemctl reload nginx
             '';
           }; }) acmeEnabledVhosts;
       in

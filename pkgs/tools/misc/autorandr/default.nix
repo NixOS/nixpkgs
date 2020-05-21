@@ -34,7 +34,7 @@ in
           SYSTEMD_UNIT_DIR=/lib/systemd/system \
           UDEV_RULES_DIR=/etc/udev/rules.d
         substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
-          --replace /bin/systemctl "${systemd}/bin/systemctl"
+          --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl"
       '' else ''
         make install TARGETS='pmutils' DESTDIR=$out \
           PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
