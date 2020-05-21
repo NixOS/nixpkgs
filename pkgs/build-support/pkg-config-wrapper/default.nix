@@ -86,22 +86,20 @@ stdenv.mkDerivation {
   ];
 
   postFixup =
+    ##
+    ## User env support
+    ##
+
+    # Propagate the underling unwrapped pkg-config so that if you
+    # install the wrapper, you get anything else it might provide.
     ''
-
-      ##
-      ## User env support
-      ##
-
-      # Propagate the underling unwrapped pkg-config so that if you
-      # install the wrapper, you get anything else it might provide.
       printWords ${pkg-config} > $out/nix-support/propagated-user-env-packages
     ''
 
+    ##
+    ## Man page and doc support
+    ##
     + optionalString propagateDoc (''
-      ##
-      ## Man page and doc support
-      ##
-
       ln -s ${pkg-config.man} $man
     '' + optionalString (pkg-config ? doc) ''
       ln -s ${pkg-config.doc} $doc
@@ -110,12 +108,11 @@ stdenv.mkDerivation {
     + ''
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
-
-      ##
-      ## Extra custom steps
-      ##
     ''
 
+    ##
+    ## Extra custom steps
+    ##
     + extraBuildCommands;
 
   meta =
