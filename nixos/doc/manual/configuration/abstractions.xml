@@ -37,6 +37,7 @@ let
     { adminAddr = "alice@example.org";
       forceSSL = true;
       enableACME = true;
+      enablePHP = true;
     };
 in
 {
@@ -84,6 +85,7 @@ in
           adminAddr = "alice@example.org";
           forceSSL = true;
           enableACME = true;
+          enablePHP = true;
         };
     in
       { "example.org" = (makeVirtualHost "/webroot/example.org");
