@@ -185,7 +185,11 @@ in {
         enable = "yes";
         configuration = "/var/lib/mailman/mailman-hyperkitty.cfg";
       };
-    };
+    } // (let
+      loggerNames = ["root" "archiver" "bounce" "config" "database" "debug" "error" "fromusenet" "http" "locks" "mischief" "plugins" "runner" "smtp"];
+      loggerSectionNames = map (n: "logging.${n}") loggerNames;
+      in lib.genAttrs loggerSectionNames(name: { handler = "stderr"; })
+    );
 
     assertions = let
       inherit (config.services) postfix;
