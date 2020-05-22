@@ -12,6 +12,9 @@
 , pandoc
 }:
 
+let
+  electron = electron_8;
+in
 stdenv.mkDerivation rec {
   pname = "typora";
   version = "0.9.89";
@@ -52,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_8}/bin/electron $out/bin/typora \
+    makeWrapper ${electron}/bin/electron $out/bin/typora \
       --add-flags $out/share/typora \
       "''${gappsWrapperArgs[@]}" \
       ${lib.optionalString withPandoc ''--prefix PATH : "${lib.makeBinPath [ pandoc ]}"''} \

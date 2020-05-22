@@ -10145,7 +10145,7 @@ in
 
   inherit (callPackages ../development/tools/electron { })
     electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9;
-  electron = electron_4;
+  electron = electron_9;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -22530,10 +22530,7 @@ in
 
   stp = callPackage ../applications/science/logic/stp { };
 
-  stretchly = callPackage ../applications/misc/stretchly {
-    # Error on launch w/electron_8
-    electron = electron_7;
-  };
+  stretchly = callPackage ../applications/misc/stretchly { };
 
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
