@@ -1,14 +1,15 @@
-{ stdenv, fetchgit, cmake, bison, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, bison, pkgconfig
 , libuecc, libsodium, libcap, json_c }:
 
 stdenv.mkDerivation rec {
-  version = "18";
   pname = "fastd";
+  version = "19";
 
-  src = fetchgit {
-    url = "git://git.universe-factory.net/fastd";
+  src = fetchFromGitHub {
+    owner  = "Neoraider";
+    repo = "fastd";
     rev = "refs/tags/v${version}";
-    sha256 = "0c9v3igv3812b3jr7jk75a2np658yy00b3i4kpbpdjgvqzc1jrq8";
+    sha256 = "1h3whjvy2n2cyvbkbg4y1z9vlrn790spzbdhj4glwp93xcykhz5i";
   };
 
   postPatch = ''
