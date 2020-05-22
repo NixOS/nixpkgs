@@ -20862,12 +20862,14 @@ in
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
 
-  mpv = callPackage ../applications/video/mpv {
+  mpv-unwrapped = callPackage ../applications/video/mpv {
     inherit lua;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
   };
 
-  mpv-with-scripts = callPackage ../applications/video/mpv/wrapper.nix { };
+  # Wraps without trigerring a rebuild
+  wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
+  mpv = wrapMpv mpv-unwrapped {};
 
   mpvScripts = recurseIntoAttrs {
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
