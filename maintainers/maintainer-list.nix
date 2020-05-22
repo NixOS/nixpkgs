@@ -4168,6 +4168,12 @@
     githubId = 10544;
     name = "Giuluo Eulisse";
   };
+  kthielen = {
+    email = "kthielen@gmail.com";
+    github = "kthielen";
+    githubId = 1409287;
+    name = "Kalani Thielen";
+  };
   ktor = {
     email = "kruszewsky@gmail.com";
     github = "ktor";
@@ -6640,6 +6646,12 @@
     githubId = 1942810;
     name = "Christian Ulrich";
   };
+  rpearce = {
+    email = "me@robertwpearce.com";
+    github = "rpearce";
+    githubId = 592876;
+    name = "Robert W. Pearce";
+  };
   rprospero = {
     email = "rprospero+nix@gmail.com";
     github = "rprospero";
@@ -6699,6 +6711,12 @@
     github = "ryanartecona";
     githubId = 889991;
     name = "Ryan Artecona";
+  };
+  ryanorendorff = {
+    email = "12442942+ryanorendorff@users.noreply.github.com";
+    github = "ryanorendorff";
+    githubId = 12442942;
+    name = "Ryan Orendorff";
   };
   ryansydnor = {
     email = "ryan.t.sydnor@gmail.com";

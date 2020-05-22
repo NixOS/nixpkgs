@@ -184,6 +184,8 @@ in stdenv.mkDerivation rec {
 
   # Ensure youtube-dl is available in $PATH for mpv
   wrapperFlags =
+    ''--prefix LUA_CPATH ';' "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \'' +
+    ''--prefix LUA_PATH ';' "${luaEnv}/share/lua/${lua.luaversion}/?.lua" \'' +
     ''--prefix PATH : "${luaEnv}/bin" \''
   + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \

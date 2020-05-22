@@ -183,7 +183,7 @@ in
 
   glade = callPackage ../development/tools/glade { };
 
-  hobbes = callPackage ../development/tools/hobbes { stdenv = gcc6Stdenv; }; # GCC 6 is latest currently supported. See https://git.io/JvK6M.
+  hobbes = callPackage ../development/tools/hobbes { };
 
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
@@ -677,6 +677,8 @@ in
 
   aptly = callPackage ../tools/misc/aptly { };
 
+  ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
+
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
@@ -815,6 +817,8 @@ in
   automirror = callPackage ../tools/misc/automirror { };
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
+
+  bashcards = callPackage ../tools/misc/bashcards { };
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
@@ -1867,7 +1871,7 @@ in
   gixy = callPackage ../tools/admin/gixy { };
 
   glpaper = callPackage ../development/tools/glpaper { };
-  
+
   gllvm = callPackage ../development/tools/gllvm { };
 
   glide = callPackage ../development/tools/glide { };
@@ -3365,6 +3369,8 @@ in
 
   fdm = callPackage ../tools/networking/fdm {};
 
+  fdtools = callPackage ../tools/misc/fdtools { };
+
   featherpad = callPackage ../applications/editors/featherpad {};
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
@@ -3394,8 +3400,6 @@ in
   fluent-bit = callPackage ../tools/misc/fluent-bit {
     stdenv = gccStdenv;
   };
-
-  fluidasserts = with python37Packages; toPythonApplication fluidasserts;
 
   flux = callPackage ../development/compilers/flux { };
 
@@ -6954,6 +6958,8 @@ in
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
   };
+
+  termius = callPackage ../applications/networking/termius { };
 
   termplay = callPackage ../tools/misc/termplay { };
 
@@ -10591,7 +10597,9 @@ in
 
   kubicorn = callPackage ../development/tools/kubicorn {  };
 
-  kubie = callPackage ../development/tools/kubie { };
+  kubie = callPackage ../development/tools/kubie {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kustomize = callPackage ../development/tools/kustomize { };
 
@@ -11082,6 +11090,8 @@ in
   visualvm = callPackage ../development/tools/java/visualvm { };
 
   vultr = callPackage ../development/tools/vultr { };
+
+  vultr-cli = callPackage ../development/tools/vultr-cli { };
 
   vulnix = callPackage ../tools/security/vulnix { };
 
@@ -15570,6 +15580,7 @@ in
   dspam = callPackage ../servers/mail/dspam { };
 
   etcd = callPackage ../servers/etcd { };
+  etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
@@ -16551,8 +16562,6 @@ in
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
-
-  fwupdate = callPackage ../os-specific/linux/firmware/fwupdate { };
 
   fwts = callPackage ../os-specific/linux/fwts { };
 
@@ -18255,6 +18264,8 @@ in
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
   sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
+
+  scheme-manpages = callPackage ../data/documentation/scheme-manpages { };
 
   scowl = callPackage ../data/misc/scowl { };
 
@@ -23787,13 +23798,7 @@ in
 
   openmw = libsForQt5.callPackage ../games/openmw { };
 
-  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix {
-    openmw = openmw.override {
-      stdenv = gcc8Stdenv;
-      openscenegraph = openscenegraph.override { stdenv = gcc8Stdenv; };
-      mygui = mygui.override { stdenv = gcc8Stdenv; };
-    };
-  };
+  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
   openraPackages = import ../games/openra pkgs;
 
@@ -24312,8 +24317,6 @@ in
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
 
   pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
-
-  maxx = callPackage ../desktops/maxx { };
 
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
 
@@ -25155,7 +25158,9 @@ in
     inherit (pkgs.gnome2) gtkglext;
   };
 
-  cytoscape = callPackage ../applications/science/misc/cytoscape { };
+  cytoscape = callPackage ../applications/science/misc/cytoscape {
+    jre = openjdk11;
+  };
 
   fityk = callPackage ../applications/science/misc/fityk { };
 
@@ -25783,6 +25788,8 @@ in
 
   nix-query-tree-viewer = callPackage ../tools/nix/nix-query-tree-viewer { };
 
+  nix-update = python3Packages.callPackage ../tools/package-management/nix-update { };
+
   nix-update-source = callPackage ../tools/package-management/nix-update-source {};
 
   nix-script = callPackage ../tools/nix/nix-script {};
@@ -25823,7 +25830,7 @@ in
 
   nut = callPackage ../applications/misc/nut { };
 
-  solfege = callPackage ../misc/solfege { };
+  solfege = python3Packages.callPackage ../misc/solfege { };
 
   disnix = callPackage ../tools/package-management/disnix { };
 

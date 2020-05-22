@@ -1,13 +1,13 @@
 { stdenv, lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
-  unzip, icoutils, gtk2, xorg, xdotool, xsel, plugins ? [] }:
+  unzip, icoutils, gtk2, xorg, xdotool, xsel, coreutils, unixtools, glib, plugins ? [] }:
 
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.40";
+  version = "2.45";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "1gldl74wz2lvsci6rn71d6q1zmnhr52z6fjib9nsragsazq5byz9";
+    sha256 = "07wyp3k2kiprr47mc4vxb7vmh7g5kshcqw0gq3qr87gi78c9i66m";
   };
 
   sourceRoot = ".";
@@ -20,6 +20,9 @@ with builtins; buildDotnetPackage rec {
       xsel = "${xsel}/bin/xsel";
       xprop = "${xorg.xprop}/bin/xprop";
       xdotool = "${xdotool}/bin/xdotool";
+      uname = "${coreutils}/bin/uname";
+      whereis = "${unixtools.whereis}/bin/whereis";
+      gsettings = "${glib}/bin/gsettings";
     })
   ];
 

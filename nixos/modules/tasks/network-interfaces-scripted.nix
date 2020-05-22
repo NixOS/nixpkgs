@@ -327,7 +327,7 @@ let
                   # if `libvirtd.service` is not running, do not use `virsh` which would try activate it via 'libvirtd.socket' and thus start it out-of-order.
                   # `libvirtd.service` will set up bridge interfaces when it will start normally.
                   #
-                  if ${pkgs.systemd}/bin/systemctl --quiet is-active 'libvirtd.service'; then
+                  if /run/current-system/systemd/bin/systemctl --quiet is-active 'libvirtd.service'; then
                     for uri in qemu:///system lxc:///; do
                       for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
                         ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \

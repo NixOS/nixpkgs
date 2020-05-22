@@ -42,6 +42,7 @@ in buildPythonApplication rec {
       src = ./fix-paths.patch;
       inherit (xorg) xkeyboardconfig;
     })
+    ./fix-41106.patch
   ];
 
   postPatch = ''

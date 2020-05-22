@@ -38,8 +38,6 @@ let
 
     async_kernel_p4 = callPackage ../development/ocaml-modules/async_kernel { };
 
-    async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
-
     atd = callPackage ../development/ocaml-modules/atd { };
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
@@ -290,6 +288,8 @@ let
 
     functoria = callPackage ../development/ocaml-modules/functoria { };
 
+    functoria-runtime = callPackage ../development/ocaml-modules/functoria/runtime.nix { };
+
     functory = callPackage ../development/ocaml-modules/functory { };
 
     gen = callPackage ../development/ocaml-modules/gen { };
@@ -319,6 +319,8 @@ let
     integers = callPackage ../development/ocaml-modules/integers { };
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
+
+    io-page-unix = callPackage ../development/ocaml-modules/io-page/unix.nix { };
 
     ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
 
@@ -543,11 +545,15 @@ let
 
     mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
 
+    mirage-runtime = callPackage ../development/ocaml-modules/mirage/runtime.nix { };
+
     mirage-stack = callPackage ../development/ocaml-modules/mirage-stack { };
 
     mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
     mirage-time-unix = callPackage ../development/ocaml-modules/mirage-time/unix.nix { };
+
+    mirage-unix = callPackage ../development/ocaml-modules/mirage-unix { };
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
@@ -747,8 +753,6 @@ let
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
-
-    textutils_p4 = callPackage ../development/ocaml-modules/textutils { };
 
     tls = callPackage ../development/ocaml-modules/tls { };
 
@@ -1164,13 +1168,6 @@ let
       then callPackage ../development/ocaml-modules/janestreet/core.nix {}
       else core_p4;
 
-    textutils =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.textutils
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/textutils.nix {}
-      else textutils_p4;
-
     async_kernel =
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.async_kernel
@@ -1182,13 +1179,6 @@ let
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.async_rpc_kernel
       else callPackage ../development/ocaml-modules/janestreet/async-rpc-kernel.nix {};
-
-    async_unix =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async_unix
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/async-unix.nix {}
-      else async_unix_p4;
 
     # Apps / from all-packages
 
