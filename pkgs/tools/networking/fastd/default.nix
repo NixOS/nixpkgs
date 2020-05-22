@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, bison, pkgconfig
-, libuecc, libsodium, libcap, json_c }:
+, libuecc, libsodium, libcap, json_c, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "fastd";
@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig bison cmake ];
-  buildInputs = [ libuecc libsodium libcap json_c ];
+  buildInputs = [ libuecc libsodium libcap json_c openssl ];
+
+  cmakeFlags = [
+    "-DENABLE_OPENSSL=true"
+  ];
 
   enableParallelBuilding = true;
 
