@@ -11,6 +11,7 @@
 # extensions to be copied into the project's extensions folder
 , mutableExtensions    ? []        
 , vscodeExtsFolderName ? ".vscode-exts"        
+, user-data-dir ? ''"''${TMP}vscodeWithConfiguration/vscode-data-dir"''
 }:
 let 
   nixExtsDrvs = extensionsFromVscodeMarketplace nixExtensions;
@@ -39,9 +40,11 @@ let
 in
   writeShellScriptBin "code" ''
     if ! [[ "$@" =~ "--list-extension" ]]; then 
-      mkdir -p ${vscodeExtsFolderName} 
+      mkdir -p "${vscodeExtsFolderName}" 
       ${rmExtensions}
       ${cpExtensions}
     fi
-    ${vscode}/bin/code --extensions-dir ${vscodeExtsFolderName} "$@"
+    ${vscode}/bin/code --extensions-dir "${vscodeExtsFolderName}" ${ 
+      lib.optionalString (user-data-dir != "") ''--user-data-dir ${user-data-dir }''
+      } "$@"
   ''

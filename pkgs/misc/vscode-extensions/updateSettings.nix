@@ -9,6 +9,8 @@
 # if marked as true will create an empty json file if does not exists
 , createIfDoesNotExists ? true
 , vscodeSettingsFile ? ".vscode/settings.json"
+, userSettingsFolder ? ""
+, symlinkFromUserSetting ? false
 }:
 let
 
@@ -20,13 +22,18 @@ let
   )'';
 
   createEmptySettingsCmd = ''mkdir -p .vscode && echo "{}" > ${vscodeSettingsFile}'';
+  fileName = builtins.baseNameOf vscodeSettingsFile;
+  symlinkFromUserSettingCmd = lib.optionalString symlinkFromUserSetting
+    '' && mkdir -p "${userSettingsFolder}" && ln -sfv "$(pwd)/${vscodeSettingsFile}" "${userSettingsFolder}/" '';
 in 
 
-  writeShellScriptBin ''vscodeNixUpdate-${lib.removeSuffix ".json" (builtins.baseNameOf vscodeSettingsFile)}''
+  writeShellScriptBin ''vscodeNixUpdate-${lib.removeSuffix ".json" (fileName)}''
   (lib.optionalString (settings != {}) 
-  (if createIfDoesNotExists then ''
-    [ ! -f "${vscodeSettingsFile}" ] && ${createEmptySettingsCmd}
-    ${updateVSCodeSettingsCmd}
-  ''
-  else ''[ -f "${vscodeSettingsFile}" ] && ${updateVSCodeSettingsCmd}''
-  ))
+    (if createIfDoesNotExists then ''
+      [ ! -f "${vscodeSettingsFile}" ] && ${createEmptySettingsCmd}
+      ${updateVSCodeSettingsCmd} ${symlinkFromUserSettingCmd}
+    ''
+    else ''[ -f "${vscodeSettingsFile}" ] && ${updateVSCodeSettingsCmd} ${symlinkFromUserSettingCmd}
+    ''
+    )
+  )
