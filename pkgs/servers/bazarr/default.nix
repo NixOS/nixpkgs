@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "0.8.4.3";
+  version = "0.8.4.4";
 
   src = fetchurl {
     url = "https://github.com/morpheus65535/bazarr/archive/v${version}.tar.gz";
-    sha256 = "0vvx1lrngxq8c9i0ad8sy6sigcf67b2h7kkaxnlfdlnp1d8kmf1m";
+    sha256 = "09qpy5fyyidi45968qg37cighfh3rgwsi8pfz4fk5fp2v1xq23yg";
   };
 
   nativeBuildInputs = [ makeWrapper ];
