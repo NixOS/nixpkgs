@@ -11,11 +11,11 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ pyyaml podman ];
 
-  meta = with lib; {
+  meta = {
     description = "An implementation of docker-compose with podman backend";
     homepage = "https://github.com/containers/podman-compose";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sikmir ] ++ lib.teams.podman.members;
   };
 }
