@@ -23969,10 +23969,6 @@ in
 
   steamcmd = steamPackages.steamcmd;
 
-  linux-steam-integration = callPackage ../games/linux-steam-integration {
-    gtk = pkgs.gtk3;
-  };
-
   protontricks = callPackage ../tools/package-management/protontricks {
     inherit (python3Packages) buildPythonApplication pytest setuptools_scm vdf;
     inherit (gnome3) zenity;
