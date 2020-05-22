@@ -22443,6 +22443,7 @@ in
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
   unison = callPackage ../applications/networking/sync/unison {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_09;
     enableX11 = config.unison.enableX11 or true;
   };
 
