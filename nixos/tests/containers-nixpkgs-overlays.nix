@@ -1,12 +1,10 @@
-# Test for NixOS' container support.
+# Test for nixpkgs overlays inside NixOS containers.
 
 import ./make-test-python.nix ({ pkgs, lib, ...} : let
 
-  customPkgs = pkgs // {
-    hello = pkgs.hello.overrideAttrs(old: {
-      name = "custom-hello";
-    });
-  };
+  customHello = pkgs.hello.overrideAttrs(old: {
+    name = "custom-hello";
+  });
 
 in {
   name = "containers-hosts";
@@ -22,8 +20,11 @@ in {
 
       containers.simple = {
         autoStart = true;
-        pkgs = customPkgs;
         config = {pkgs, config, ... }: {
+          nixpkgs.overlays = [(self: super: {
+            hello = customHello;
+          })];
+
           environment.systemPackages = [
             pkgs.hello
           ];
@@ -36,7 +37,7 @@ in {
     start_all()
     machine.wait_for_unit("default.target")
     machine.succeed(
-        "test $(nixos-container run simple -- readlink -f /run/current-system/sw/bin/hello) = ${customPkgs.hello}/bin/hello"
+        "test $(nixos-container run simple -- readlink -f /run/current-system/sw/bin/hello) = ${customHello}/bin/hello"
     )
   '';
 })
