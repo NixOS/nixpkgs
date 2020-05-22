@@ -32,10 +32,14 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [
-      e.efl e.enlightenment
-      e.terminology e.econnman
-      pkgs.xorg.xcursorthemes
+    environment.systemPackages = with pkgs; [
+      enlightenment.econnman
+      enlightenment.efl
+      enlightenment.enlightenment
+      enlightenment.ephoto
+      enlightenment.rage
+      enlightenment.terminology
+      xorg.xcursorthemes
     ];
 
     environment.pathsToLink = [
