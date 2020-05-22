@@ -65,12 +65,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # edge_cc is a binary provided by efl and cannot be found at the directory
-    # given by e_prefix_bin_get(), which is $out/bin
-
-    substituteInPlace src/bin/e_import_config_dialog.c \
-      --replace "e_prefix_bin_get()" "\"${efl}/bin\""
-
     substituteInPlace src/modules/everything/evry_plug_calc.c \
       --replace "ecore_exe_pipe_run(\"bc -l\"" "ecore_exe_pipe_run(\"${bc}/bin/bc -l\""
   '';
