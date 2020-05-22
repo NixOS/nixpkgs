@@ -7,6 +7,7 @@
 , udevSupport  ? true,  udev
 , swaySupport  ? true,  sway
 , mpdSupport   ? true,  mpd_clientlib
+, withMediaPlayer ? false, glib, gobject-introspection, python3, python38Packages, playerctl
 }:
   stdenv.mkDerivation rec {
     pname = "waybar";
@@ -21,7 +22,14 @@
 
     nativeBuildInputs = [
       meson ninja pkgconfig scdoc wrapGAppsHook cmake
+    ] ++ stdenv.lib.optional withMediaPlayer gobject-introspection;
+
+    propagatedBuildInputs = stdenv.lib.optionals withMediaPlayer [
+      glib
+      playerctl
+      python38Packages.pygobject3
     ];
+    strictDeps = false;
 
     buildInputs = with stdenv.lib;
       [ wayland wlroots gtkmm3 libinput libsigcxx jsoncpp fmt spdlog gtk-layer-shell howard-hinnant-date ]
@@ -45,6 +53,13 @@
       "-Dout=${placeholder "out"}"
       "-Dsystemd=disabled"
     ];
+
+    preFixup = stdenv.lib.optional withMediaPlayer ''
+      cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
+
+      wrapProgram $out/bin/waybar-mediaplayer.py \
+        --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
+    '';
 
     meta = with stdenv.lib; {
       description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
