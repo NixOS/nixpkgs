@@ -5558,6 +5558,12 @@
     githubId = 4368690;
     name = "Ratko Mladic";
   };
+  nilp0inter = {
+    email = "robertomartinezp@gmail.com";
+    github = "nilp0inter";
+    githubId = 1224006;
+    name = "Roberto Abdelkader Martínez Pérez";
+  };
   ninjatrappeur = {
     email = "felix@alternativebit.fr";
     github = "ninjatrappeur";
