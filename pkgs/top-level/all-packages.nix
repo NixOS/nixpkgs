@@ -4849,6 +4849,8 @@ in
 
   kea = callPackage ../tools/networking/kea { };
 
+  keysmith = libsForQt5.callPackage ../tools/security/keysmith { };
+
   ispell = callPackage ../tools/text/ispell {};
 
   jumanpp = callPackage ../tools/text/jumanpp {};
