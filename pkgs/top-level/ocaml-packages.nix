@@ -38,8 +38,6 @@ let
 
     astring = callPackage ../development/ocaml-modules/astring { };
 
-    async_kernel_p4 = callPackage ../development/ocaml-modules/async_kernel { };
-
     atd = callPackage ../development/ocaml-modules/atd { };
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
@@ -1177,13 +1175,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core.nix {}
       else core_p4;
-
-    async_kernel =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async_kernel
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/async-kernel.nix {}
-      else async_kernel_p4;
 
     async_rpc_kernel =
       if lib.versionOlder "4.03" ocaml.version
