@@ -54,8 +54,6 @@ in
 
     services.xserver.displayManager.sessionCommands = ''
       if test "$XDG_CURRENT_DESKTOP" = "Enlightenment"; then
-        export XDG_MENU_PREFIX=e-
-
         export GST_PLUGIN_PATH="${GST_PLUGIN_PATH}"
 
         # make available for D-BUS user services
