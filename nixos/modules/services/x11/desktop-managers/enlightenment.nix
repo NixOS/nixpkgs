@@ -50,9 +50,10 @@ in
       "/share/locale"
     ];
 
-    services.xserver.desktopManager.session = [
-    { name = "Enlightenment";
-      start = ''
+    services.xserver.displayManager.sessionPackages = [ pkgs.enlightenment.enlightenment ];
+
+    services.xserver.displayManager.sessionCommands = ''
+      if test "$XDG_CURRENT_DESKTOP" = "Enlightenment"; then
         export XDG_MENU_PREFIX=e-
 
         export GST_PLUGIN_PATH="${GST_PLUGIN_PATH}"
@@ -62,10 +63,8 @@ in
 
         # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
         ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
-
-        exec ${e.enlightenment}/bin/enlightenment_start
-      '';
-    }];
+      fi
+    '';
 
     security.wrappers = (import "${e.enlightenment}/e-wrappers.nix").security.wrappers;
 
