@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi, podman, pyyaml }:
+{ lib, buildPythonApplication, fetchPypi, pyyaml }:
 
 buildPythonApplication rec {
   version = "0.1.5";
@@ -9,7 +9,7 @@ buildPythonApplication rec {
     sha256 = "1sgbc889zq127qhxa9frhswa1mid19fs5qnyzfihx648y5i968pv";
   };
 
-  propagatedBuildInputs = [ pyyaml podman ];
+  propagatedBuildInputs = [ pyyaml ];
 
   meta = {
     description = "An implementation of docker-compose with podman backend";
