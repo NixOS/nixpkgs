@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1616xjhj6770ykn82ml741h8hx44v507iky3s9h7a5lnk9d4cxzy";
   };
 
+  patches = [ ./outputs.patch ];
+
   nativeBuildInputs = [
     yasm perl cmake pkgconfig python3
   ];
@@ -28,11 +30,15 @@ stdenv.mkDerivation rec {
   # https://aomedia.googlesource.com/aom/+/refs/heads/master/build/cmake/aom_config_defaults.cmake
 
   cmakeFlags = [
-    # For libaom these must be relative instead of absolute paths:
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DENABLE_TESTS=OFF"
   ];
+
+  postFixup = ''
+    moveToOutput lib/libaom.a "$static"
+  '';
+
+  outputs = [ "out" "bin" "dev" "static" ];
 
   meta = with stdenv.lib; {
     description = "Alliance for Open Media AV1 codec library";

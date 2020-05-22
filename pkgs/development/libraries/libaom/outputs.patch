@@ -1,0 +1,45 @@
+--- a/build/cmake/aom_install.cmake
++++ b/build/cmake/aom_install.cmake
+@@ -45,2 +45,2 @@ macro(setup_aom_install_targets)
+-              -DCMAKE_INSTALL_INCLUDEDIR=${CMAKE_INSTALL_INCLUDEDIR}
+-              -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}
++              -DCMAKE_INSTALL_FULL_INCLUDEDIR=${CMAKE_INSTALL_FULL_INCLUDEDIR}
++              -DCMAKE_INSTALL_FULL_LIBDIR=${CMAKE_INSTALL_FULL_LIBDIR}
+@@ -82,14 +82,14 @@ macro(setup_aom_install_targets)
+     install(
+       FILES ${AOM_INSTALL_INCS}
+-      DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/aom")
++      DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/aom")
+     install(
+       FILES "${AOM_PKG_CONFIG_FILE}"
+-      DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig")
++      DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
+     install(TARGETS ${AOM_INSTALL_LIBS} DESTINATION
+-                    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
++                    "${CMAKE_INSTALL_FULL_LIBDIR}")
+ 
+     if(ENABLE_EXAMPLES)
+       install(TARGETS ${AOM_INSTALL_BINS} DESTINATION
+-                      "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
++                      "${CMAKE_INSTALL_FULL_BINDIR}")
+     endif()
+   endif()
+--- a/build/cmake/pkg_config.cmake
++++ b/build/cmake/pkg_config.cmake
+@@ -14,2 +14,2 @@
+-                  "CMAKE_INSTALL_BINDIR" "CMAKE_INSTALL_INCLUDEDIR"
+-                  "CMAKE_INSTALL_LIBDIR" "CMAKE_PROJECT_NAME"
++                  "CMAKE_INSTALL_BINDIR" "CMAKE_INSTALL_FULL_INCLUDEDIR"
++                  "CMAKE_INSTALL_FULL_LIBDIR" "CMAKE_PROJECT_NAME"
+@@ -38,4 +38,4 @@ endif()
+-set(prefix "${CMAKE_INSTALL_PREFIX}")
+-set(bindir "${CMAKE_INSTALL_BINDIR}")
+-set(includedir "${CMAKE_INSTALL_INCLUDEDIR}")
+-set(libdir "${CMAKE_INSTALL_LIBDIR}")
++get_filename_component(prefix "${CMAKE_INSTALL_FULL_INCLUDEDIR}" DIRECTORY)
++get_filename_component(exec_prefix "${CMAKE_INSTALL_FULL_LIBDIR}" DIRECTORY)
++get_filename_component(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}" NAME)
++get_filename_component(libdir "${CMAKE_INSTALL_FULL_LIBDIR}" NAME)
+@@ -46 +46 @@ file(APPEND "${pkgconfig_file}" "prefix=${prefix}\n")
+-file(APPEND "${pkgconfig_file}" "exec_prefix=\${prefix}\n")
++file(APPEND "${pkgconfig_file}" "exec_prefix=${exec_prefix}\n")
