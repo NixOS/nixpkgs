@@ -441,6 +441,18 @@ in
           '';
       };
 
+    virtualisation.bios =
+      mkOption {
+        default = null;
+        type = types.nullOr types.package;
+        description =
+          ''
+            An alternate BIOS (such as <package>qboot</package>) with which to start the VM.
+            Should containin a file named <literal>bios.bin</literal>.
+            If <literal>null</literal>, QEMU's builtin SeaBIOS will be used.
+          '';
+      };
+
   };
 
   config = {
@@ -520,6 +532,9 @@ in
       ])
       (mkIf cfg.useEFIBoot [
         "-pflash $TMPDIR/bios.bin"
+      ])
+      (mkIf (cfg.bios != null) [
+        "-bios ${cfg.bios}/bios.bin"
       ])
       (mkIf (!cfg.graphics) [
         "-nographic"
