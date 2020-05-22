@@ -20604,7 +20604,9 @@ in
 
   linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
-  llpp = ocamlPackages.callPackage ../applications/misc/llpp { };
+  llpp = callPackage ../applications/misc/llpp {
+    inherit (ocaml-ng.ocamlPackages_4_09) ocaml;
+  };
 
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
