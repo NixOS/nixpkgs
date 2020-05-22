@@ -14612,6 +14612,8 @@ in
 
   sonic = callPackage ../development/libraries/sonic { };
 
+  sope = callPackage ../development/libraries/sope { };
+
   soprano = callPackage ../development/libraries/soprano { };
 
   soqt = callPackage ../development/libraries/soqt { };
@@ -16221,6 +16223,8 @@ in
   slimserver = callPackage ../servers/slimserver { };
 
   smcroute = callPackage ../servers/smcroute { };
+
+  sogo = callPackage ../servers/web-apps/sogo { };
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 

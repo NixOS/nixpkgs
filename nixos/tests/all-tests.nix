@@ -292,6 +292,7 @@ in
   slurm = handleTest ./slurm.nix {};
   smokeping = handleTest ./smokeping.nix {};
   snapper = handleTest ./snapper.nix {};
+  sogo = handleTest ./sogo.nix {};
   solr = handleTest ./solr.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
   spike = handleTest ./spike.nix {};
