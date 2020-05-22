@@ -80,7 +80,7 @@ let
   ############################
   rec-mathcomp-extra-config = {
     initial = {
-      mathcomp-finmap = version: {
+      mathcomp-finmap = {version, coqPackages}: {
         meta = {
           description = "A finset and finmap library";
           repo = "finmap";
@@ -89,7 +89,7 @@ let
         passthru.compatibleCoqVersions = flip elem [ "8.8" "8.9" "8.10" "8.11" ];
       };
 
-      mathcomp-bigenough = version: {
+      mathcomp-bigenough = {version, coqPackages}: {
         meta = {
           description = "A small library to do epsilon - N reasonning";
           repo = "bigenough";
@@ -98,7 +98,7 @@ let
         passthru.compatibleCoqVersions = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
       };
 
-      multinomials = version: {
+      multinomials = {version, coqPackages}: {
         buildInputs = [ which ];
         propagatedBuildInputs = with coqPackages;
           [ mathcomp.algebra mathcomp-finmap mathcomp-bigenough ];
@@ -110,7 +110,7 @@ let
         passthru.compatibleCoqVersions = flip elem [ "8.9" "8.10" "8.11" ];
       };
 
-      mathcomp-analysis = version: {
+      mathcomp-analysis = {version, coqPackages}: {
         propagatedBuildInputs = with coqPackages;
           [ mathcomp.field mathcomp-finmap mathcomp-bigenough ];
         meta = {
@@ -122,9 +122,9 @@ let
         passthru.compatibleCoqVersions = flip elem ["8.8" "8.9" "8.10" "8.11" ];
       };
 
-      mathcomp-real-closed = version: {
+      mathcomp-real-closed = {version, coqPackages}: {
         propagatedBuildInputs = with coqPackages;
-          [ coq mathcomp.field  mathcomp-bigenough ];
+          [ mathcomp.field mathcomp-bigenough ];
         meta = {
           description = "Mathematical Components Library on real closed fields";
           repo = "real-closed";
@@ -133,7 +133,7 @@ let
         passthru.compatibleCoqVersions = flip elem ["8.8" "8.9" "8.10" "8.11" ];
       };
 
-      coqeal = version: {
+      coqeal = {version, coqPackages}: {
         buildInputs = [ which ];
         propagatedBuildInputs = with coqPackages;
           [ mathcomp-algebra bignums paramcoq multinomials ];
@@ -240,7 +240,7 @@ let
           "1.10.0"       = v4 // {mathcomp-finmap = "1.4.0+coq-8.11";};
         };
         "8.10" = {
-          "1.11.0+beta1" = v5;
+          "1.11.0+beta1" = removeAttrs v5 ["coqeal"];
           "1.10.0"       = v4;
           "1.9.0"        = removeAttrs v3 ["coqeal"];
         };
@@ -260,8 +260,8 @@ let
         "8.7" = {
           "1.11.0+beta1" = removeAttrs v5 ["mathcomp-analysis"];
           "1.10.0"       = removeAttrs v4 ["mathcomp-analysis"];
-          "1.9.0"        = removeAttrs v3 ["coqeal"];
-          "1.8.0"        = removeAttrs v2 ["coqeal"];
+          "1.9.0"        = removeAttrs v3 ["coqeal" "mathcomp-analysis"];
+          "1.8.0"        = removeAttrs v2 ["coqeal" "mathcomp-analysis"];
           "1.7.0"        = removeAttrs v1 ["coqeal" "multinomials"];
         };
       };
@@ -318,13 +318,14 @@ let
   rec-mathcomp-extra-override = generic: old: let
     version = getVersion generic;
     package = old.meta.package or "math-comp-nix";
-    cfg = pkgUp ((mathcomp-extra-config.initial.${package} or (_: {})) version) old
+    cfg = pkgUp ((mathcomp-extra-config.initial.${package} or (_: {}))
+      { inherit version coqPackages; }) old
           // { inherit version; };
     fix = attrs: fix-attrs (pkgUp cfg attrs);
   in
     if isFunction generic then fix (generic cfg)
     else  if generic == null || generic == "" then fix {}
-    else  if isDerivation generic then fix generic.drvAttrs
+    else  if isDerivation generic then generic.drvAttrs
     else  if isAttrs generic then fix generic
     else  if generic == "broken" then fix { meta.broken = true; passthru.compatibleCoqVersions = _: false; }
     else  let fixedcfg = fix cfg; in fixedcfg // (
@@ -365,7 +366,7 @@ in
     mathcomp-real-closed  = current-mathcomp-extra "mathcomp-real-closed";
     coqeal                = current-mathcomp-extra "coqeal";
 
-    mathcomp-extra-fast    = map (pkg: current-mathcomp-extra pkg)
+    mathcomp-extra-fast    = map current-mathcomp-extra
       (attrNames (filterAttrs (pkg: config: !(config?slow && config.slow)) for-this));
-    mathcomp-extra-all    = map (pkg: current-mathcomp-extra pkg) (attrNames for-this);
+    mathcomp-extra-all    = map current-mathcomp-extra (attrNames for-this);
   }
