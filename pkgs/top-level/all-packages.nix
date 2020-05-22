@@ -22513,6 +22513,8 @@ in
 
   wayvnc = callPackage ../applications/networking/remote/wayvnc { };
 
+  webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
+
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
