@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "etcd";
-  version = "3.3.21";
+  version = "3.3.22";
 
   goPackagePath = "github.com/coreos/etcd";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "1xrhkynach3c7wsfac6zlpi5n1hy3y75vyimvw2zl7ryhm00413s";
+    sha256 = "1rd390qfx9k20j9gh1wp1g9ygc571f2kv1dg2wvqij3kwydhymcj";
   };
 
   buildPhase = ''
