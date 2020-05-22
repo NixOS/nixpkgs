@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.providedSessions = [ "enlightenment" ];
+
   meta = with stdenv.lib; {
     description = "The Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
