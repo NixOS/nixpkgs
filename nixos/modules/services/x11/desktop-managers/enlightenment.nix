@@ -35,11 +35,6 @@ in
     environment.systemPackages = [
       e.efl e.enlightenment
       e.terminology e.econnman
-      pkgs.xorg.xauth # used by kdesu
-      pkgs.gtk2 # To get GTK's themes.
-      pkgs.tango-icon-theme
-
-      pkgs.gnome-icon-theme
       pkgs.xorg.xcursorthemes
     ];
 
