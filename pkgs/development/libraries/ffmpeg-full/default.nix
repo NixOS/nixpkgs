@@ -238,11 +238,11 @@ assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
-  version = "4.2.2";
+  version = "4.2.3";
 
   src = fetchurl {
-    url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "176jn1lcdf0gk7sa5l2mv0faqp5dsqdhx1gqcrgymqhfmdal4xfb";
+    url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.bz2";
+    sha256 = "0pkrariwjv25k7inwshch7b5820ly3hsp991amyb60rkqc8v4zi1";
   };
 
   patches = [ ./prefer-libdav1d-over-libaom.patch ];
