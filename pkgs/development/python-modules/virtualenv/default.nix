@@ -1,25 +1,38 @@
 { buildPythonPackage
 , fetchPypi
 , lib
-, recursivePthLoader
+, appdirs
+, contextlib2
+, distlib
+, filelock
+, importlib-metadata
+, importlib-resources
+, pathlib2
+, setuptools_scm
+, six
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "16.7.9";
+  version = "20.0.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d62c70883c0342d59c11d0ddac0d954d0431321a41ab20851facf2b222598f3";
+    sha256 = "1kxnxxwa25ghlkpyrxa8pi49v87b7ps2gyla7d1h6kbz9sfn45m1";
+
   };
 
-  # Doubt this is needed - FRidh 2017-07-07
-  pythonPath = [ recursivePthLoader ];
-
-  patches = [ ./virtualenv-change-prefix.patch ];
-
-  # Tarball doesn't contain tests
-  doCheck = false;
+  propagatedBuildInputs = [
+    appdirs
+    contextlib2
+    distlib
+    filelock
+    importlib-metadata
+    importlib-resources
+    pathlib2
+    setuptools_scm
+    six
+  ];
 
   meta = {
     description = "A tool to create isolated Python environments";
