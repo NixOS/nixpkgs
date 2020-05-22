@@ -6496,6 +6496,12 @@
     githubId = 353885;
     name = "Rob Vermaas";
   };
+  robaca = {
+    email = "carsten@r0hrbach.de";
+    github = "robaca";
+    githubId = 580474;
+    name = "Carsten Rohrbach";
+  };
   robberer = {
     email = "robberer@freakmail.de";
     github = "robberer";
