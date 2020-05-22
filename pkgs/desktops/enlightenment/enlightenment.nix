@@ -5,22 +5,13 @@
 , pkgconfig
 , gettext
 , alsaLib
+, acpid
 , bc
-, bzip2
+, ddcutil
 , efl
-, gdbm
-, libXdmcp
-, libXrandr
-, libcap
-, libffi
-, libpthreadstubs
-, libxcb
-, luajit
-, mesa
 , pam
-, pcre
-, xcbutilkeysyms
 , xkeyboard_config
+, udisks2
 
 , bluetoothSupport ? true, bluez5
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
@@ -44,25 +35,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib
+    acpid # for systems with ACPI for lid events, AC/Battery plug in/out etc
     bc # for the Everything module calculator mode
-    bzip2
+    ddcutil # specifically libddcutil.so.2 for backlight control
     efl
-    gdbm
-    libXdmcp
-    libXrandr
-    libffi
-    libpthreadstubs
-    libxcb
-    luajit
-    mesa
     pam
-    pcre
-    xcbutilkeysyms
     xkeyboard_config
+    udisks2 # for removable storage mounting/unmounting
   ]
-  ++ stdenv.lib.optional stdenv.isLinux libcap
-  ++ stdenv.lib.optional bluetoothSupport bluez5
-  ++ stdenv.lib.optional pulseSupport libpulseaudio
+  ++ stdenv.lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
+  ++ stdenv.lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
   ;
 
   patches = [
