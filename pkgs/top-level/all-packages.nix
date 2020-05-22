@@ -23758,6 +23758,8 @@ in
 
   newtonwars = callPackage ../games/newtonwars { };
 
+  nottetris2 = callPackage ../games/nottetris2 { };
+
   nudoku = callPackage ../games/nudoku { };
 
   nxengine-evo = callPackage ../games/nxengine-evo { };
