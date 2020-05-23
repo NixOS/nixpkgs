@@ -13594,6 +13594,8 @@ in
     python = if stdenv.isDarwin then python2 else python3;
   };
 
+  libxsmm = callPackage ../development/libraries/libxsmm { };
+
   libixp_hg = callPackage ../development/libraries/libixp-hg { };
 
   libyaml = callPackage ../development/libraries/libyaml { };
