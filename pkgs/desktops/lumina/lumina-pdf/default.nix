@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, poppler }:
+{ stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools, poppler }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lumina-pdf";
   version = "1.6.0";
 
