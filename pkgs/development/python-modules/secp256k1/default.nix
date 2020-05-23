@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   postPatch = ''
-    substituteInPlace setup.py --replace "[int(i) for i in setuptools_version.split('.')] < [3, 3]" "setuptools_version < '3.3'"
+    substituteInPlace setup.py --replace "int(i)" "int(i) if i.isdigit() else 0"
     substituteInPlace setup.py --replace ", 'pytest-runner==2.6.2'" ""
   '';
 
