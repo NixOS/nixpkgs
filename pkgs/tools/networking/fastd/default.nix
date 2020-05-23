@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "Neoraider";
     repo = "fastd";
-    rev = "refs/tags/v${version}";
+    rev = "v${version}";
     sha256 = "1h3whjvy2n2cyvbkbg4y1z9vlrn790spzbdhj4glwp93xcykhz5i";
   };
 
