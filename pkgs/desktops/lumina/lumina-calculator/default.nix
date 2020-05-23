@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qttools }:
+{ stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lumina-calculator";
   version = "1.6.0";
 
