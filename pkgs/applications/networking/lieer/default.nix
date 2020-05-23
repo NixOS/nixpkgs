@@ -28,6 +28,6 @@ python3Packages.buildPythonApplication rec {
     homepage         = "https://lieer.gaute.vetsj.com/";
     repositories.git = "https://github.com/gauteh/lieer.git";
     license          = licenses.gpl3Plus;
-    maintainers      = with maintainers; [ kaiha ];
+    maintainers      = with maintainers; [ flokli kaiha ];
   };
 }
