@@ -39,6 +39,12 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools ];
 
+  # No tests are available by upstream, but we test --help anyway
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/syncthingtray --help | grep ${version}
+  '';
+
   cmakeFlags = [
     # See https://github.com/Martchus/syncthingtray/issues/42
     "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"

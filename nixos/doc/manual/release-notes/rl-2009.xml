@@ -448,6 +448,21 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
    </para>
    </listitem>
+   <listitem>
+    <para>
+     The scripted networking system now uses <literal>.link</literal> files in
+     <literal>/etc/systemd/network</literal> to configure mac address and link MTU,
+     instead of the sometimes buggy <literal>network-link-*</literal> units, which
+     have been removed.
+     Bringing the interface up has been moved to the beginning of the
+     <literal>network-addresses-*</literal> unit.
+     Note this doesn't require <command>systemd-networkd</command> - it's udev that
+     parses <literal>.link</literal> files.
+     Extra care needs to be taken in the presence of <link xlink:href="https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME">legacy udev rules</link>
+     to rename interfaces, as MAC Address and MTU defined in these options can only match on the original link name.
+     In such cases, you most likely want to create a <literal>10-*.link</literal> file through <xref linkend="opt-systemd.network.links"/> and set both name and MAC Address / MTU there.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
