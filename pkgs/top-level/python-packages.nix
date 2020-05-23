@@ -2600,6 +2600,8 @@ in {
 
   zigpy-xbee = callPackage ../development/python-modules/zigpy-xbee { };
 
+  zigpy-zigate = callPackage ../development/python-modules/zigpy-zigate { };
+
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
