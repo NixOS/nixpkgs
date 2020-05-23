@@ -18,7 +18,7 @@ buildGoPackage rec {
   passthru.updateScript = ./update.sh;
 
   postInstall = ''
-    mv $bin/bin/wireguard $bin/bin/wireguard-go
+    ln -sf $bin/bin/wireguard $bin/bin/wireguard-go
   '';
 
   meta = with stdenv.lib; {
