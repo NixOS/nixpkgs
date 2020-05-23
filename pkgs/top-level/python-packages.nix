@@ -2592,6 +2592,8 @@ in {
 
   zigpy = callPackage ../development/python-modules/zigpy { };
 
+  zigpy-cc = callPackage ../development/python-modules/zigpy-cc { };
+
   zigpy-deconz = callPackage ../development/python-modules/zigpy-deconz { };
 
   zigpy-homeassistant = callPackage ../development/python-modules/zigpy-homeassistant { };
