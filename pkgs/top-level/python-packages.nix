@@ -2076,6 +2076,8 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
+  pyee = callPackage ../development/python-modules/pyee { };
+
   pyepsg = callPackage ../development/python-modules/pyepsg { };
 
   billiard = callPackage ../development/python-modules/billiard { };
@@ -2516,6 +2518,8 @@ in {
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 
+  pytest-trio = callPackage ../development/python-modules/pytest-trio { };
+
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
@@ -2626,6 +2630,8 @@ in {
   requests-cache = callPackage ../development/python-modules/requests-cache { };
 
   requests-file = callPackage ../development/python-modules/requests-file { };
+
+  requests-html = callPackage ../development/python-modules/requests-html { };
 
   requests-kerberos = callPackage ../development/python-modules/requests-kerberos { };
 
@@ -2787,6 +2793,8 @@ in {
   faker = callPackage ../development/python-modules/faker { };
 
   fake_factory = callPackage ../development/python-modules/fake_factory { };
+
+  fake-useragent = callPackage ../development/python-modules/fake-useragent { };
 
   factory_boy = callPackage ../development/python-modules/factory_boy { };
 
@@ -3287,6 +3295,8 @@ in {
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
   pyphen = callPackage ../development/python-modules/pyphen {};
+
+  pyppeteer = callPackage ../development/python-modules/pyppeteer {};
 
   pypoppler = callPackage ../development/python-modules/pypoppler { };
 
