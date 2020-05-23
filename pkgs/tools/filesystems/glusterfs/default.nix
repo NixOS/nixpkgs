@@ -15,10 +15,10 @@ let
     #       The command
     #         find /nix/store/...-glusterfs-.../ -name '*.py' -executable
     #       can help with finding new Python scripts.
-    version = "7.5";
+    version = "7.6";
     name="${baseName}-${version}";
     url="https://github.com/gluster/glusterfs/archive/v${version}.tar.gz";
-    sha256 = "1zahld2v1y920i0p25zcn15a593g3bl5sgnmhkdmn7kvk7mx4p93";
+    sha256 = "0zdcv2jk8dp67id8ic30mkn97ccp07jf20g7v09a5k31pw9aqyih";
   };
 
   buildInputs = [
