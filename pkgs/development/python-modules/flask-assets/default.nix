@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-Assets";
-  version = "0.12";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ivqsihk994rxw58vdgzrx4d77d7lpzjm4qxb38hjdgvi5xm4cb0";
+    sha256 = "1hmqldxc7zciksmcl35jx0wbyrrxc7vk2a57mmmd8i07whsymz8x";
   };
 
   patchPhase = ''
