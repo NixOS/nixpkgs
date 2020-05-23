@@ -1,4 +1,5 @@
 { stdenv,
+  mkDerivation,
   fetchFromGitHub,
   desktop-file-utils,
   fluxbox,
@@ -14,7 +15,7 @@
   wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lumina";
   version = "1.6.0";
 
