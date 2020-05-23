@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , lib
+, pythonOlder
 , appdirs
 , contextlib2
 , distlib
@@ -22,16 +23,23 @@ buildPythonPackage rec {
 
   };
 
+  buildInputs = [
+    setuptools_scm
+  ];
+
   propagatedBuildInputs = [
     appdirs
-    contextlib2
     distlib
     filelock
-    importlib-metadata
-    importlib-resources
-    pathlib2
-    setuptools_scm
     six
+  ] ++ lib.optionals (pythonOlder "3.3") [
+    contextlib2
+  ] ++ lib.optionals (pythonOlder "3.4" && !lib.stdenv.isWindows) [
+    pathlib2
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    importlib-resources
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   meta = {
