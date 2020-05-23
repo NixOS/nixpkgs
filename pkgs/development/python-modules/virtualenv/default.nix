@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , lib
+, stdenv
 , pythonOlder
 , appdirs
 , contextlib2
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     six
   ] ++ lib.optionals (pythonOlder "3.3") [
     contextlib2
-  ] ++ lib.optionals (pythonOlder "3.4" && !lib.stdenv.isWindows) [
+  ] ++ lib.optionals (pythonOlder "3.4" && !stdenv.isCygwin) [
     pathlib2
   ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
