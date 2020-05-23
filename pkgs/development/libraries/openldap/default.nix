@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "STRIP="
     "prefix=$(out)"
     "moduledir=$(out)/lib/modules"
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ "CC=cc" ];
 
   configureFlags = [
     "--enable-overlays"
