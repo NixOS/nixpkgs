@@ -932,7 +932,7 @@
     "zeroconf" = ps: with ps; [ aiohttp-cors zeroconf];
     "zerproc" = ps: with ps; [ ]; # missing inputs: pyzerproc
     "zestimate" = ps: with ps; [ xmltodict];
-    "zha" = ps: with ps; [ pyserial zha-quirks zigpy-deconz]; # missing inputs: bellows zigpy-cc zigpy-xbee zigpy-zigate zigpy
+    "zha" = ps: with ps; [ bellows pyserial zha-quirks zigpy zigpy-cc zigpy-deconz zigpy-xbee zigpy-zigate];
     "zhong_hong" = ps: with ps; [ ]; # missing inputs: zhong_hong_hvac
     "zigbee" = ps: with ps; [ ]; # missing inputs: xbee-helper
     "ziggo_mediabox_xl" = ps: with ps; [ ]; # missing inputs: ziggo-mediabox-xl
