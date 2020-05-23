@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig
-, libdrm, libva, libX11, libXext, libXfixes, wayland, meson, ninja
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config
+, libdrm, libva, libX11, libXext, libXfixes, wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -13,17 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "13a0dccphi4cpr2cx45kg4djxsssi3d1fcjrkx27b16xiayp5lx9";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [ libdrm libva libX11 libXext libXfixes wayland ];
-
-  mesonFlags = [
-    "-Ddrm=true"
-    "-Dx11=true"
-    "-Dwayland=true"
-  ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A collection of utilities and examples for VA-API";
