@@ -5383,6 +5383,8 @@ in {
 
   pyspf = callPackage ../development/python-modules/pyspf { };
 
+  pyspice = callPackage ../development/python-modules/pyspice { };
+
   pyspinel = callPackage ../development/python-modules/pyspinel { };
 
   pyspotify = callPackage ../development/python-modules/pyspotify { };
