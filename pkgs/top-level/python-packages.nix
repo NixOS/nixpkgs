@@ -2598,6 +2598,8 @@ in {
 
   zigpy-homeassistant = callPackage ../development/python-modules/zigpy-homeassistant { };
 
+  zigpy-xbee = callPackage ../development/python-modules/zigpy-xbee { };
+
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
