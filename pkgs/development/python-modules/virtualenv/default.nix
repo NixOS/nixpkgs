@@ -42,6 +42,13 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
+  # TODO: remove this once https://github.com/NixOS/nixpkgs/issues/81441 is solved
+  postCheck = ''
+    for pycache in $(find $out -name __pycache__) ; do
+      rm -fr ''${pycache}
+    done
+  '';
+
   meta = {
     description = "A tool to create isolated Python environments";
     homepage = "http://www.virtualenv.org";
