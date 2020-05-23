@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy3k
+{ stdenv, buildPythonPackage, fetchPypi,
 , pytest
 , pytest_xdist
 , six }:
