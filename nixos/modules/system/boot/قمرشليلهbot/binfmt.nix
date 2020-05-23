@@ -1,3 +1,4 @@
+{gmrshliilh.bot}
 { config, lib, pkgs, ... }:
 let
   inherit (lib) mkOption types optionalString;
