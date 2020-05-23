@@ -3,29 +3,29 @@
 , fetchFromGitHub
 , cmake
 , pkgconfig
+, alsaLib
+, kguiaddons
+, kwindowsystem
+, libXdamage
+, libdbusmenu
+, liblxqt
+, libpulseaudio
+, libqtxdg
+, libstatgrab
+, libsysstat
+, lm_sensors
+, lxmenu-data
 , lxqt-build-tools
+, lxqt-globalkeys
+, lxqtUpdateScript
+, menu-cache
+, pcre
 , qtbase
+, qtsvg
 , qttools
 , qtx11extras
-, qtsvg
-, libdbusmenu
-, kwindowsystem
 , solid
-, kguiaddons
-, liblxqt
-, libqtxdg
-, lxqt-globalkeys
-, libsysstat
 , xorg
-, libstatgrab
-, lm_sensors
-, libpulseaudio
-, alsaLib
-, menu-cache
-, lxmenu-data
-, pcre
-, libXdamage
-, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -46,28 +46,28 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    alsaLib
+    kguiaddons
+    kwindowsystem
+    libXdamage
+    libdbusmenu
+    liblxqt
+    libpulseaudio
+    libqtxdg
+    libstatgrab
+    libsysstat
+    lm_sensors
+    lxmenu-data
+    lxqt-globalkeys
+    menu-cache
+    pcre
     qtbase
+    qtsvg
     qttools
     qtx11extras
-    qtsvg
-    libdbusmenu
-    kwindowsystem
     solid
-    kguiaddons
-    liblxqt
-    libqtxdg
-    lxqt-globalkeys
-    libsysstat
-    xorg.libpthreadstubs
     xorg.libXdmcp
-    libstatgrab
-    lm_sensors
-    libpulseaudio
-    alsaLib
-    menu-cache
-    lxmenu-data
-    pcre
-    libXdamage
+    xorg.libpthreadstubs
   ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
