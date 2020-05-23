@@ -274,4 +274,6 @@ in {
 
 
   libev = super.libev.override { static = true; };
+
+  lmdb = super.lmdb.override { static = true; };
 }

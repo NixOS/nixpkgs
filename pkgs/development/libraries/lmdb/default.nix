@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, static ? false }:
 
 stdenv.mkDerivation rec {
   pname = "lmdb";
@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./hardcoded-compiler.patch ];
   patchFlags = [ "-p3" ];
+
+  # Only build one library version, either static or dynamic.
+  postPatch = ''
+    sed '/^ILIBS\t/s/liblmdb${if static then "\\$(SOEXT)" else "\.a"}//' -i Makefile
+  '';
 
   outputs = [ "bin" "out" "dev" ];
 
