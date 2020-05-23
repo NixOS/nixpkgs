@@ -29,6 +29,7 @@
 , systemd
 , xdg_utils
 , xorg
+, runCommand
 }:
 
 let
@@ -161,6 +162,18 @@ let
       defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
     '';
   };
-in if stdenv.isDarwin
-  then darwin
-  else linux
+
+  # Fallback to dummy derivation to give the user a better error message
+  dummyDerivation = runCommand pname {
+    name = pname;
+    inherit pname version meta;
+    platforms = [];
+  } ''
+    >&2 echo "There is no Slack derivation for system ${system}"
+    exit 1
+  '';
+
+in {
+  x86_64-darwin = darwin;
+  x86_64-linux = linux;
+}.${system} or dummyDerivation
