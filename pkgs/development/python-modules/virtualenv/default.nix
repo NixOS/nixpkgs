@@ -35,7 +35,7 @@ buildPythonPackage rec {
     six
   ] ++ lib.optionals (pythonOlder "3.3") [
     contextlib2
-  ] ++ lib.optionals (pythonOlder "3.4" && !stdenv.isCygwin) [
+  ] ++ lib.optionals (pythonOlder "3.4" && !stdenv.hostPlatform.isWindows) [
     pathlib2
   ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
