@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "proverif";
-  version = "2.00";
+  version = "2.01";
 
   src = fetchurl {
     url    = "http://prosecco.gforge.inria.fr/personal/bblanche/proverif/proverif${version}.tar.gz";
-    sha256 = "0vjphj85ch9q39vc7sd6n4vxy5bplp017vlshk989yhfwb00r37y";
+    sha256 = "01wp5431c77z0aaa99h8bnm5yhr6jslpqc8iyg0a7gxfqnb19gxi";
   };
 
   buildInputs = with ocamlPackages; [ ocaml findlib lablgtk ];
