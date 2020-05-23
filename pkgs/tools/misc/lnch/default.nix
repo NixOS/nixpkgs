@@ -14,7 +14,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/mitchellh/gox";
+    homepage = "https://github.com/oem/lnch";
     description = "A small go app that launches a process and moves it out of the process group";
     platforms = platforms.all;
     license = licenses.publicDomain; # really I don't know
