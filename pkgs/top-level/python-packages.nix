@@ -2693,6 +2693,8 @@ in {
 
   zigpy-deconz = callPackage ../development/python-modules/zigpy-deconz { };
 
+  zigpy-xbee = callPackage ../development/python-modules/zigpy-xbee { };
+
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
