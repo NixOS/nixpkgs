@@ -1,6 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
-, aiohttp, zigpy
-, pytest, isPy27 }:
+, isPy27 }:
 
 buildPythonPackage rec {
   pname = "flux_led";

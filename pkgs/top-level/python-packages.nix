@@ -2590,9 +2590,9 @@ in {
 
   zict = callPackage ../development/python-modules/zict { };
 
-  zigpy = callPackage ../development/python-modules/zigpy { };
-
   zigpy-deconz = callPackage ../development/python-modules/zigpy-deconz { };
+
+  zigpy-homeassistant = callPackage ../development/python-modules/zigpy-homeassistant { };
 
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 

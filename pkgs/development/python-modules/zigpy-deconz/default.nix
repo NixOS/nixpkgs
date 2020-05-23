@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, aiohttp, crccheck, pyserial, pyserial-asyncio, pycryptodome, zigpy
+, aiohttp, crccheck, pyserial, pyserial-asyncio, pycryptodome, zigpy-homeassistant
 , pytest }:
 
 buildPythonPackage rec {
@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytest ];
   buildInputs = [ aiohttp crccheck pycryptodome ];
-  propagatedBuildInputs = [ pyserial pyserial-asyncio zigpy ];
+  propagatedBuildInputs = [ pyserial pyserial-asyncio zigpy-homeassistant ];
 
   src = fetchPypi {
     inherit pname version;

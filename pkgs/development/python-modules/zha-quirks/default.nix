@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, aiohttp, zigpy
+, aiohttp, zigpy-homeassistant
 , pytest }:
 
 buildPythonPackage rec {
@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "0.0.30";
 
   nativeBuildInputs = [ pytest ];
-  buildInputs = [ aiohttp zigpy ];
+  buildInputs = [ aiohttp zigpy-homeassistant ];
 
   src = fetchPypi {
     inherit pname version;
