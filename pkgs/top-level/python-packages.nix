@@ -2689,6 +2689,8 @@ in {
 
   zigpy = callPackage ../development/python-modules/zigpy { };
 
+  zigpy-cc = callPackage ../development/python-modules/zigpy-cc { };
+
   zigpy-deconz = callPackage ../development/python-modules/zigpy-deconz { };
 
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
