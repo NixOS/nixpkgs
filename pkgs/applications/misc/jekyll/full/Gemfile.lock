@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.0.3)
+    activesupport (6.0.3.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -93,9 +93,9 @@ GEM
     mercenary (0.3.6)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2020.0425)
+    mime-types-data (3.2020.0512)
     mini_portile2 (2.4.0)
-    minitest (5.14.0)
+    minitest (5.14.1)
     multipart-post (2.1.1)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
@@ -110,7 +110,7 @@ GEM
       ffi (~> 1.0)
     rdoc (6.2.1)
     rexml (3.2.4)
-    rouge (3.18.0)
+    rouge (3.19.0)
     safe_yaml (1.0.5)
     sassc (2.3.0)
       ffi (~> 1.9)

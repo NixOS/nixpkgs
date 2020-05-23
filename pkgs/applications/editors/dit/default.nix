@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dit";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchurl {
     url = "https://hisham.hm/dit/releases/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0ryvm54xxkg2gcgz4r8zdxrl6j2h8mgg9nfqmdmdr31qkcj8wjsq";
+    sha256 = "0cmbyzqfz2qa83cg8lpjifn34wmx34c5innw485zh4vk3c0k8wlj";
   };
 
   buildInputs = [ ncurses lua ]

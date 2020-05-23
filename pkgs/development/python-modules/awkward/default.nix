@@ -3,7 +3,6 @@
 , fetchPypi
 , numpy
 , pandas
-, pyarrow
 , pytestrunner
 , pytest
 , h5py
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pytestrunner ];
-  checkInputs = [ pandas pyarrow pytest h5py ];
+  checkInputs = [ pandas pytest h5py ];
   propagatedBuildInputs = [ numpy ];
 
   checkPhase = ''

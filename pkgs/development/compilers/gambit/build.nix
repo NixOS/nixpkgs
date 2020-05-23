@@ -40,7 +40,6 @@ gccStdenv.mkDerivation rec {
     "--enable-gcc-opts"
     "--enable-shared"
     "--enable-absolute-shared-libs" # Yes, NixOS will want an absolute path, and fix it.
-    "--enable-poll"
     "--enable-openssl"
     "--enable-default-runtime-options=${gambit-params.defaultRuntimeOptions}"
     # "--enable-debug" # Nope: enables plenty of good stuff, but also the costly console.log
@@ -57,7 +56,9 @@ gccStdenv.mkDerivation rec {
     # "--enable-coverage"
     # "--enable-inline-jumps"
     # "--enable-char-size=1" # default is 4
-  ];
+  ] ++
+    # due not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
+    lib.optional (!gccStdenv.isDarwin) "--enable-poll";
 
   configurePhase = ''
     export CC=${gcc}/bin/gcc \

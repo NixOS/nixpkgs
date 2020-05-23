@@ -16,13 +16,13 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libpod";
     rev = "v${version}";
-    sha256 = "0jvqzn1q52z6aka98d2i3dyn2i8xld7xvmi2zfxgm9g53wdgi2g2";
+    sha256 = "0gbp12xn1vliyawkw2w2bpn6b5h2cm41g3nj72vk4jyhis0igq1s";
   };
 
   vendorSha256 = null;
@@ -45,7 +45,7 @@ buildGoModule rec {
     patchShebangs .
     ${if stdenv.isDarwin
       then "make CGO_ENABLED=0 BUILDTAGS='remoteclient containers_image_openpgp exclude_graphdriver_devicemapper' varlink_generate all"
-      else "make binaries docs"}
+      else "make podman docs"}
   '';
 
   installPhase = ''

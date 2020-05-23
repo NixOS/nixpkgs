@@ -183,7 +183,7 @@ in
 
   glade = callPackage ../development/tools/glade { };
 
-  hobbes = callPackage ../development/tools/hobbes { stdenv = gcc6Stdenv; }; # GCC 6 is latest currently supported. See https://git.io/JvK6M.
+  hobbes = callPackage ../development/tools/hobbes { };
 
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
@@ -673,6 +673,8 @@ in
 
   aptly = callPackage ../tools/misc/aptly { };
 
+  ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
+
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
@@ -811,6 +813,10 @@ in
   automirror = callPackage ../tools/misc/automirror { };
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
+
+  bashcards = callPackage ../tools/misc/bashcards { };
+
+  bazarr = callPackage ../servers/bazarr { };
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
@@ -1863,7 +1869,7 @@ in
   gixy = callPackage ../tools/admin/gixy { };
 
   glpaper = callPackage ../development/tools/glpaper { };
-  
+
   gllvm = callPackage ../development/tools/gllvm { };
 
   glide = callPackage ../development/tools/glide { };
@@ -3361,6 +3367,8 @@ in
 
   fdm = callPackage ../tools/networking/fdm {};
 
+  fdtools = callPackage ../tools/misc/fdtools { };
+
   featherpad = callPackage ../applications/editors/featherpad {};
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
@@ -3390,8 +3398,6 @@ in
   fluent-bit = callPackage ../tools/misc/fluent-bit {
     stdenv = gccStdenv;
   };
-
-  fluidasserts = with python37Packages; toPythonApplication fluidasserts;
 
   flux = callPackage ../development/compilers/flux { };
 
@@ -3820,6 +3826,12 @@ in
 
   # rename to upower-notify?
   go-upower-notify = callPackage ../tools/misc/upower-notify { };
+
+  goattracker = callPackage ../applications/audio/goattracker { };
+
+  goattracker-stereo = callPackage ../applications/audio/goattracker {
+    isStereo = true;
+  };
 
   google-app-engine-go-sdk = callPackage ../development/tools/google-app-engine-go-sdk { };
 
@@ -6950,6 +6962,8 @@ in
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
   };
+
+  termius = callPackage ../applications/networking/termius { };
 
   termplay = callPackage ../tools/misc/termplay { };
 
@@ -10587,7 +10601,9 @@ in
 
   kubicorn = callPackage ../development/tools/kubicorn {  };
 
-  kubie = callPackage ../development/tools/kubie { };
+  kubie = callPackage ../development/tools/kubie {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kustomize = callPackage ../development/tools/kustomize { };
 
@@ -11067,6 +11083,8 @@ in
   visualvm = callPackage ../development/tools/java/visualvm { };
 
   vultr = callPackage ../development/tools/vultr { };
+
+  vultr-cli = callPackage ../development/tools/vultr-cli { };
 
   vulnix = callPackage ../tools/security/vulnix { };
 
@@ -14616,6 +14634,8 @@ in
 
   sonic = callPackage ../development/libraries/sonic { };
 
+  sope = callPackage ../development/libraries/sope { };
+
   soprano = callPackage ../development/libraries/soprano { };
 
   soqt = callPackage ../development/libraries/soqt { };
@@ -15555,6 +15575,7 @@ in
   dspam = callPackage ../servers/mail/dspam { };
 
   etcd = callPackage ../servers/etcd { };
+  etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
@@ -15664,6 +15685,8 @@ in
   jboss_mysql_jdbc = callPackage ../servers/http/jboss/jdbc/mysql { };
 
   jetty = callPackage ../servers/http/jetty { };
+
+  kapow = callPackage ../servers/kapow { };
 
   keycloak = callPackage ../servers/keycloak { };
 
@@ -16223,6 +16246,8 @@ in
 
   smcroute = callPackage ../servers/smcroute { };
 
+  sogo = callPackage ../servers/web-apps/sogo { };
+
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
   spring-boot-cli = callPackage ../development/tools/spring-boot-cli { };
@@ -16537,8 +16562,6 @@ in
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
 
-  fwupdate = callPackage ../os-specific/linux/firmware/fwupdate { };
-
   fwts = callPackage ../os-specific/linux/fwts { };
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
@@ -16827,14 +16850,6 @@ in
     ];
   };
 
-  linux_5_5 = callPackage ../os-specific/linux/kernel/linux-5.5.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
-    ];
-  };
-
   linux_5_6 = callPackage ../os-specific/linux/kernel/linux-5.6.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -17065,7 +17080,6 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
-  linuxPackages_5_5 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_5);
   linuxPackages_5_6 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_6);
 
   # When adding to this list:
@@ -18241,6 +18255,8 @@ in
 
   sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
 
+  scheme-manpages = callPackage ../data/documentation/scheme-manpages { };
+
   scowl = callPackage ../data/misc/scowl { };
 
   seshat = callPackage ../data/fonts/seshat { };
@@ -19353,6 +19369,8 @@ in
   exrtools = callPackage ../applications/graphics/exrtools { };
 
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
+
+  fbmenugen = callPackage ../applications/misc/fbmenugen { };
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
@@ -23748,6 +23766,8 @@ in
 
   newtonwars = callPackage ../games/newtonwars { };
 
+  nottetris2 = callPackage ../games/nottetris2 { };
+
   nudoku = callPackage ../games/nudoku { };
 
   nxengine-evo = callPackage ../games/nxengine-evo { };
@@ -23772,13 +23792,7 @@ in
 
   openmw = libsForQt5.callPackage ../games/openmw { };
 
-  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix {
-    openmw = openmw.override {
-      stdenv = gcc8Stdenv;
-      openscenegraph = openscenegraph.override { stdenv = gcc8Stdenv; };
-      mygui = mygui.override { stdenv = gcc8Stdenv; };
-    };
-  };
+  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
   openraPackages = import ../games/openra pkgs;
 
@@ -23979,10 +23993,6 @@ in
 
   steamcmd = steamPackages.steamcmd;
 
-  linux-steam-integration = callPackage ../games/linux-steam-integration {
-    gtk = pkgs.gtk3;
-  };
-
   protontricks = callPackage ../tools/package-management/protontricks {
     inherit (python3Packages) buildPythonApplication pytest setuptools_scm vdf;
     inherit (gnome3) zenity;
@@ -24040,6 +24050,8 @@ in
   tintin = callPackage ../games/tintin { };
 
   tinyfugue = callPackage ../games/tinyfugue { };
+
+  tockloader = callPackage ../development/tools/misc/tockloader { };
 
   tome2 = callPackage ../games/tome2 { };
 
@@ -24297,8 +24309,6 @@ in
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
 
   pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
-
-  maxx = callPackage ../desktops/maxx { };
 
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
 
@@ -25140,7 +25150,9 @@ in
     inherit (pkgs.gnome2) gtkglext;
   };
 
-  cytoscape = callPackage ../applications/science/misc/cytoscape { };
+  cytoscape = callPackage ../applications/science/misc/cytoscape {
+    jre = openjdk11;
+  };
 
   fityk = callPackage ../applications/science/misc/fityk { };
 
@@ -25768,6 +25780,8 @@ in
 
   nix-query-tree-viewer = callPackage ../tools/nix/nix-query-tree-viewer { };
 
+  nix-update = python3Packages.callPackage ../tools/package-management/nix-update { };
+
   nix-update-source = callPackage ../tools/package-management/nix-update-source {};
 
   nix-script = callPackage ../tools/nix/nix-script {};
@@ -25808,7 +25822,7 @@ in
 
   nut = callPackage ../applications/misc/nut { };
 
-  solfege = callPackage ../misc/solfege { };
+  solfege = python3Packages.callPackage ../misc/solfege { };
 
   disnix = callPackage ../tools/package-management/disnix { };
 

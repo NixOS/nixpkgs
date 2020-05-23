@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, fuse3 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, fuse3, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "fuse-overlayfs";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ fuse3 ];
+
+  passthru.tests.podman = nixosTests.podman;
 
   meta = with stdenv.lib; {
     description = "FUSE implementation for overlayfs";

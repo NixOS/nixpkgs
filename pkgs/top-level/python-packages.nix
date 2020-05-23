@@ -738,8 +738,6 @@ in {
 
   flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
 
-  fluidasserts = callPackage ../development/python-modules/fluidasserts { };
-
   foxdot = callPackage ../development/python-modules/foxdot { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
@@ -2101,6 +2099,8 @@ in {
   httpserver = callPackage ../development/python-modules/httpserver {};
 
   bleach = callPackage ../development/python-modules/bleach { };
+
+  bleak = callPackage ../development/python-modules/bleak { };
 
   blinker = callPackage ../development/python-modules/blinker { };
 
@@ -5965,6 +5965,8 @@ in {
   twisted = callPackage ../development/python-modules/twisted { };
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
+
+  txdbus = callPackage ../development/python-modules/txdbus { };
 
   tzlocal = callPackage ../development/python-modules/tzlocal { };
 
