@@ -4648,6 +4648,8 @@ in
 
   lnav = callPackage ../tools/misc/lnav { };
 
+  lnch = callPackage ../tools/misc/lnch { };
+
   loadlibrary = callPackage ../tools/misc/loadlibrary { };
 
   loc = callPackage ../development/misc/loc { };
