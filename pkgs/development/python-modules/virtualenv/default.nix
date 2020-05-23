@@ -3,6 +3,7 @@
 , lib
 , stdenv
 , pythonOlder
+, isPy27
 , appdirs
 , contextlib2
 , distlib
@@ -33,9 +34,9 @@ buildPythonPackage rec {
     distlib
     filelock
     six
-  ] ++ lib.optionals (pythonOlder "3.3") [
+  ] ++ lib.optionals isPy27 [
     contextlib2
-  ] ++ lib.optionals (pythonOlder "3.4" && !stdenv.hostPlatform.isWindows) [
+  ] ++ lib.optionals (isPy27 && !stdenv.hostPlatform.isWindows) [
     pathlib2
   ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
