@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, postgresql, perl, cmake, boost, gmp, cgal, mpfr }:
+{ stdenv, fetchFromGitHub, postgresql, perl, cmake, boost }:
 
 stdenv.mkDerivation rec {
   pname = "pgrouting";
   version = "3.0.0";
 
   nativeBuildInputs = [ cmake perl ];
-  buildInputs = [ postgresql boost gmp cgal mpfr ];
+  buildInputs = [ postgresql boost ];
 
   src = fetchFromGitHub {
     owner  = "pgRouting";
