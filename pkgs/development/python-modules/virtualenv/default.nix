@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     setuptools_scm
   ];
 
