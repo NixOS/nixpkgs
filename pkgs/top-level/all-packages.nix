@@ -25215,8 +25215,6 @@ in
 
   lhapdf = callPackage ../development/libraries/physics/lhapdf { };
 
-  mcgrid = callPackage ../development/libraries/physics/mcgrid { };
-
   mela = callPackage ../development/libraries/physics/mela { };
 
   nlojet = callPackage ../development/libraries/physics/nlojet { };
