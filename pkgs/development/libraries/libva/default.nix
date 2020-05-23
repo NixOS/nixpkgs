@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
-, libXext, libdrm, libXfixes, wayland, libffi, libX11
-, libGL, mesa
+{ stdenv, lib, fetchFromGitHub, fetchpatch, meson, pkg-config, ninja, wayland
+, libdrm
 , minimal ? false, libva-minimal
-, buildPackages
+, libX11, libXext, libXfixes, libffi, libGL
+, mesa
 }:
 
 stdenv.mkDerivation rec {
@@ -17,24 +17,30 @@ stdenv.mkDerivation rec {
     sha256 = "0ywasac7z3hwggj8szp83sbxi2naa0a3amblx64y7i1hyyrn0csq";
   };
 
+  patches = [
+    (fetchpatch { # meson: Allow for libdir and includedir to be absolute paths
+      url = "https://github.com/intel/libva/commit/de902e2905abff635f3bb151718cc52caa3f669c.patch";
+      sha256 = "1lpc8qzvsxnlsh9g0ab5lja204zxz8rr2p973pfihcw7dcxc3gia";
+    })
+  ];
+
+  postPatch = ''
+    # Remove the execute bit from all source code files
+    # https://github.com/intel/libva/commit/dbd2cd635f33af1422cbc2079af0a7e68671c102
+    chmod -x va/va{,_dec_av1,_trace,_vpp}.h
+  '';
+
   outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig wayland ];
+  nativeBuildInputs = [ meson pkg-config ninja wayland ];
 
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    # Add FHS paths for non-NixOS applications.
-    "--with-drivers-path=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
-    "ac_cv_path_WAYLAND_SCANNER=${buildPackages.wayland}/bin/wayland-scanner"
-  ] ++ lib.optionals (!minimal) [ "--enable-glx" ];
-
-  installFlags = [
-    "dummy_drv_video_ladir=$(out)/lib/dri"
+  mesonFlags = [
+    # Add FHS paths for non-NixOS applications:
+    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
   ];
 
   meta = with stdenv.lib; {
