@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # fix paths in cmake
+  postInstall = ''
+    substituteInPlace $out/lib/cmake/fmt/fmt-targets.cmake \
+        --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
