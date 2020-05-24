@@ -4769,6 +4769,12 @@
       fingerprint = "B573 5118 0375 A872 FBBF  7770 B629 036B E399 EEE9";
     }];
   };
+  masipcat = {
+    email = "jordi@masip.cat";
+    github = "masipcat";
+    githubId = 775189;
+    name = "Jordi Masip";
+  };
   matejc = {
     email = "cotman.matej@gmail.com";
     github = "matejc";
