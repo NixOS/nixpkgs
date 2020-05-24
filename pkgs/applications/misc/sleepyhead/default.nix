@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, qt5, zlib, libGLU, libX11 }:
+{ stdenv, fetchgit, qt5, zlib, libGLU, libX11, wrapQtAppsHook }:
 
 let
   name = "sleepyhead-${version}";
@@ -18,6 +18,8 @@ in qt5.mkDerivation {
     libGLU
     libX11
   ];
+
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   patchPhase = ''
     patchShebangs configure
