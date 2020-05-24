@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-readline"
     "--enable-pkgconfig"
+    "--bindir=${placeholder "bin"}/bin"
+    "--sbindir=${placeholder "bin"}/bin"
+    "--libdir=${placeholder "lib"}/lib"
   ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd"
   ++ stdenv.lib.optional enable_cmdlib "--enable-cmdlib"
   ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -87,6 +90,12 @@ stdenv.mkDerivation rec {
     "install_systemd_units"
     "install_tmpfiles_configuration"
   ];
+
+  postInstall = ''
+    moveToOutput lib/libdevmapper.so $lib
+  '';
+
+  outputs = [ "out" "bin" "lib" "dev" "man" ];
 
   meta = with stdenv.lib; {
     homepage = "http://sourceware.org/lvm2/";
