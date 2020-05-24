@@ -3592,11 +3592,23 @@
     githubId = 51518420;
     name = "jitwit";
   };
+  jk = {
+    email = "hello+nixpkgs@j-k.io";
+    github = "06kellyjac";
+    githubId = 9866621;
+    name = "Jack";
+  };
   jlesquembre = {
     email = "jl@lafuente.me";
     github = "jlesquembre";
     githubId = 1058504;
     name = "José Luis Lafuente";
+  };
+  jloyet = {
+    email = "ml@fatbsd.com";
+    github = "fatpat";
+    githubId = 822436;
+    name = "Jérôme Loyet";
   };
   jluttine = {
     email = "jaakko.luttinen@iki.fi";
@@ -6579,6 +6591,12 @@
     github = "rbvermaa";
     githubId = 353885;
     name = "Rob Vermaas";
+  };
+  robaca = {
+    email = "carsten@r0hrbach.de";
+    github = "robaca";
+    githubId = 580474;
+    name = "Carsten Rohrbach";
   };
   robberer = {
     email = "robberer@freakmail.de";

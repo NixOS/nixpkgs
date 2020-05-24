@@ -1,4 +1,5 @@
 { stdenv,
+  mkDerivation,
   fetchFromGitHub,
   desktop-file-utils,
   fluxbox,
@@ -14,15 +15,15 @@
   wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lumina";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "lumina-desktop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rj2gzifr98db7i82cg3hg7l5yfik810pjpawg6n54qbzq987z25";
+    sha256 = "0bvs12c9pkc6fnkfcr7rrxc8jfbzbslch4nlfjrzwi203fcv4avw";
   };
 
   nativeBuildInputs = [
