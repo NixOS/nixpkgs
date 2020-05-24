@@ -30,12 +30,13 @@ mkdir -p nix/store
 # store path to the absolute store path.
 tarhash=$(
   basename -a "$@" |
-    tar -cp nix \
-      -C /nix/store --verbatim-files-from --files-from - \
+    tar --create --preserve-permissions --absolute-names nix \
+      --directory /nix/store --verbatim-files-from --files-from - \
       --hard-dereference --sort=name \
       --mtime="@$SOURCE_DATE_EPOCH" \
       --owner=0 --group=0 \
-      --transform 's,^nix(/|$),/nix/,' \
+      --transform 's,^nix$,/\0,' \
+      --transform 's,^nix/store$,/\0,' \
       --transform 's,^[^/],/nix/store/\0,rS' |
     tee "$layerPath/layer.tar" |
     tarsum
