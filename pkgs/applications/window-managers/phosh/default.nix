@@ -27,6 +27,7 @@
 , git
 , writeText
 , makeWrapper
+, makeDesktopItem
 }:
 
 let
@@ -38,20 +39,21 @@ let
     sha256 = "0a4qh5pgyjki904qf7qmvqz2ksxb0p8xhgl2aixfbhixn0pw6saw";
   };
 
-  osk_desktop = writeText "sm.puri.OSK0.desktop" ''
-    [Desktop Entry]
-    Type=Application
-    Name=On-screen keyboard
-    Comment=Default on-screen keyboard
-    Exec=${squeekboard}/bin/squeekboard
-    Categories=GNOME;Core;
-    OnlyShowIn=GNOME;
-    NoDisplay=true
-    X-GNOME-Autostart-Phase=Panel
-    X-GNOME-Provides=inputmethod
-    X-GNOME-Autostart-Notify=true
-    X-GNOME-AutoRestart=true
-  '';
+  oskDesktop = makeDesktopItem {
+    name = "sm.puri.OSK0";
+    type = "Application";
+    desktopName = "On-screen keyboard";
+    exec = "${squeekboard}/bin/squeekboard";
+    categories = "GNOME;Core;";
+    extraEntries = ''
+      OnlyShowIn=GNOME;
+      NoDisplay=true
+      X-GNOME-Autostart-Phase=Panel
+      X-GNOME-Provides=inputmethod
+      X-GNOME-Autostart-Notify=true
+      X-GNOME-AutoRestart=true
+    '';
+  };
 
 in stdenv.mkDerivation rec {
   pname = "phosh";
@@ -127,7 +129,7 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     mkdir -p $out/share/wayland-sessions
     ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
-    cp -r ${osk_desktop} $out/share/applications/sm.puri.OSK0.desktop
+    cp -r ${oskDesktop} $out/share/applications/sm.puri.OSK0.desktop
     cp -r $out/share/gsettings-schemas/phosh-${version}/glib-2.0/schemas $out/share/glib-2.0/
   '';
 
