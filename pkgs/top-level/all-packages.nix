@@ -11261,6 +11261,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
   };
 
+  ayatana-ido = callPackage ../development/libraries/ayatana-ido { };
+
   babl = callPackage ../development/libraries/babl { };
 
   backward-cpp = callPackage ../development/libraries/backward-cpp { };
