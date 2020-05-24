@@ -10398,6 +10398,8 @@ in
 
   fedpkg = pythonPackages.callPackage ../development/tools/fedpkg { };
 
+  feedbackd = callPackage ../applications/misc/feedbackd { };
+
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
 
