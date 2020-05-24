@@ -73,8 +73,6 @@ stdenv.mkDerivation rec {
     "-D systemdunitdir=lib/systemd/user"
   ];
 
-  enableParallelBuilding = true;
-
   passthru.providedSessions = [ "enlightenment" ];
 
   meta = with stdenv.lib; {
