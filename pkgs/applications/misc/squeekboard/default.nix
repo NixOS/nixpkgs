@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Squeekboard is a virtual keyboard supporting Wayland";
-    homepage = https://source.puri.sm/Librem5/squeekboard;
+    homepage = "https://source.puri.sm/Librem5/squeekboard";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ masipcat ];
     platforms = platforms.linux;

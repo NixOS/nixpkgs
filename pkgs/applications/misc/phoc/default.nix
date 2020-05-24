@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Wayland compositor for mobile phones like the Librem 5";
-    homepage = https://source.puri.sm/Librem5/phoc;
+    homepage = "https://source.puri.sm/Librem5/phoc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ masipcat ];
     platforms = platforms.linux;

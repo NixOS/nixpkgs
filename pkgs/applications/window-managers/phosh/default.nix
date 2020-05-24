@@ -139,7 +139,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
-    homepage = https://source.puri.sm/Librem5/phosh;
+    homepage = "https://source.puri.sm/Librem5/phosh";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
