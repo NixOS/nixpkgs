@@ -1,18 +1,18 @@
-{ stdenv,
-  mkDerivation,
-  fetchFromGitHub,
-  desktop-file-utils,
-  fluxbox,
-  numlockx,
-  qmake,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
-  qttools,
-  qtx11extras,
-  xorg,
-  xscreensaver,
-  wrapGAppsHook
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, desktop-file-utils
+, fluxbox
+, numlockx
+, qmake
+, qtbase
+, qtmultimedia
+, qtsvg
+, qttools
+, qtx11extras
+, xorg
+, xscreensaver
+, wrapGAppsHook
 }:
 
 mkDerivation rec {
@@ -33,19 +33,19 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libxcb
+    desktop-file-utils
+    fluxbox # window manager for Lumina DE
+    numlockx # required for changing state of numlock at login
+    qtbase
+    qtmultimedia
+    qtsvg
+    qtx11extras
     xorg.libXcursor
     xorg.libXdamage
-    xorg.xcbutilwm
+    xorg.libxcb
     xorg.xcbutilimage
-    qtbase
-    qtsvg
-    qtmultimedia
-    qtx11extras
-    fluxbox
+    xorg.xcbutilwm
     xscreensaver
-    desktop-file-utils
-    numlockx
   ];
 
   patches = [
