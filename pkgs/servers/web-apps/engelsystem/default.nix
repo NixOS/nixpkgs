@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, php, writeText }:
+{ stdenv, fetchzip, php, writeText, nixosTests }:
 
 let
   phpExt = php.withExtensions
@@ -38,6 +38,8 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = nixosTests.engelsystem;
 
   meta = with stdenv.lib; {
     description =
