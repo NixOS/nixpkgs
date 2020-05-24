@@ -39,7 +39,7 @@ let
       interpreter = env.interpreter;
       is_venv = "False";
       is_nixenv = "True";
-      is_virtualenv = "True";
+      is_virtualenv = "False";
     };
   } // lib.optionalAttrs (python.isPy3k && (!python.isPyPy)) rec {
     # Venv built using plain Python
@@ -52,7 +52,7 @@ let
       interpreter = "${env}/bin/${python.executable}";
       is_venv = "True";
       is_nixenv = "False";
-      is_virtualenv = "True";
+      is_virtualenv = "False";
     };
 
   } // lib.optionalAttrs (python.pythonAtLeast "3.8") {
@@ -66,7 +66,7 @@ let
       interpreter = "${env}/bin/${pythonEnv.executable}";
       is_venv = "True";
       is_nixenv = "True";
-      is_virtualenv = "True";
+      is_virtualenv = "False";
     };
   };
 
