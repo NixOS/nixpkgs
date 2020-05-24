@@ -8,7 +8,7 @@
 , oceSupport ? false, opencascade
 , withOCCT ? true, opencascade-occt
 , ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python, pythonPackages, wxPython
+, scriptingSupport ? true, swig, python, wxPython
 , debug ? false, valgrind
 , withI18n ? true
 }:

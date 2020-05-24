@@ -463,6 +463,14 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      In such cases, you most likely want to create a <literal>10-*.link</literal> file through <xref linkend="opt-systemd.network.links"/> and set both name and MAC Address / MTU there.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Grafana received a major update to version 7.x. A plugin is now needed for
+     image rendering support, and plugins must now be signed by default. More
+     information can be found
+     <link xlink:href="https://grafana.com/docs/grafana/latest/installation/upgrading/#upgrading-to-v7-0">in the Grafana documentation</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
