@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, gdk-pixbuf, gtk_engines, gtk-engine-murrine, librsvg }:
+{ stdenv
+, fetchFromGitHub
+, gdk-pixbuf
+, gtk_engines
+, gtk-engine-murrine
+, librsvg
+}:
 
 stdenv.mkDerivation rec {
   pname = "plano-theme";
@@ -11,9 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "0spbyvzb47vyfhcn3gr0z1gdb5xrprynm6442y1z32znai2bgpnd";
   };
 
-  buildInputs = [ gdk-pixbuf gtk_engines librsvg ];
+  buildInputs = [
+    gdk-pixbuf
+    gtk_engines
+    librsvg
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
 
   dontBuild = true;
 
