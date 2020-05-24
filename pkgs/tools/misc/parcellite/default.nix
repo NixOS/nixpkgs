@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook
-, gtk2, hicolor-icon-theme, intltool, pkgconfig
+, gtk2, hicolor-icon-theme, intltool, pkgconfig, libappindicator-gtk2
 , which, wrapGAppsHook, xdotool }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "19q4x6x984s6gxk1wpzaxawgvly5vnihivrhmja2kcxhzqrnfhiy";
   };
 
+  configureFlags = [ "--enable-appindicator=yes" ];
   nativeBuildInputs = [ autoreconfHook intltool pkgconfig wrapGAppsHook ];
-  buildInputs = [ gtk2 hicolor-icon-theme ];
+  buildInputs = [ gtk2 hicolor-icon-theme libappindicator-gtk2 ];
   NIX_LDFLAGS = "-lgio-2.0";
 
   preFixup = ''
