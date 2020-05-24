@@ -46,6 +46,12 @@ class TestCasePython(unittest.TestCase):
     def test_python_version(self):
         self.assertTrue(platform.python_version().startswith(PYTHON_VERSION))
 
+    @unittest.skipIf(IS_NIXENV and IS_VENV, "TODO: Import from site-package does not work in nixenv-venv.")
+    @unittest.skipIf(IS_NIXENV and IS_VIRTUALENV, "TODO: Import from site-package does not work in nixenv-virtualenv.")
+    @unittest.skipUnless(IS_NIXENV, "Plain python has no site-packages.")
+    def test_site_package_import(self):
+        from site_pkg_python import success
+        self.assertTrue(success)
 
 if __name__ == "__main__":
     unittest.main()
