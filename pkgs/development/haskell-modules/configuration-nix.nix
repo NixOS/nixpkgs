@@ -761,4 +761,12 @@ self: super: builtins.intersectAttrs super {
   rebase_1_6_1 = super.rebase_1_6_1.override {
     selective = super.selective_0_4_1;
   };
+
+  # Fix compilation of Setup.hs by removing the module declaration.
+  # See: https://github.com/tippenein/guid/issues/1
+  guid = overrideCabal (super.guid) (drv: {
+    prePatch = "sed -i '1d' Setup.hs"; # 1st line is module declaration, remove it
+    doCheck = false;
+  });
+
 }
