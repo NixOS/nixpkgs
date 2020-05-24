@@ -5209,6 +5209,8 @@ in
 
   minetime = callPackage ../applications/office/minetime { };
 
+  mini-graph-card = callPackage ../servers/home-assistant/lovelaceModules/mini-graph-card {};
+
   minio-client = callPackage ../tools/networking/minio-client { };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
