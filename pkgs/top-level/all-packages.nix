@@ -1618,6 +1618,8 @@ in
 
   dconf = callPackage ../development/libraries/dconf { };
 
+  dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
+
   ddar = callPackage ../tools/backup/ddar { };
 
   ddate = callPackage ../tools/misc/ddate { };
@@ -1882,6 +1884,11 @@ in
 
   gmic-qt-krita = gmic-qt.override {
     variant = "krita";
+  };
+
+  gmt = callPackage ../applications/gis/gmt {
+    inherit (darwin.apple_sdk.frameworks)
+      Accelerate CoreGraphics CoreVideo;
   };
 
   goa = callPackage ../development/tools/goa { };
@@ -23589,6 +23596,8 @@ in
   gscrabble = python3Packages.callPackage ../games/gscrabble {};
 
   gshogi = python3Packages.callPackage ../games/gshogi {};
+
+  gshhg-gmt = callPackage ../applications/gis/gmt/gshhg.nix { };
 
   qtads = qt5.callPackage ../games/qtads { };
 
