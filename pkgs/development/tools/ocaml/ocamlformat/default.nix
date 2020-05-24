@@ -32,6 +32,7 @@ let
     };
 
   post_0_11_buildInputs = [
+    base
     cmdliner
     fpath
     ocaml-migrate-parsetree
@@ -43,6 +44,7 @@ let
   ];
 
   post_0_14_buildInputs = [
+    base
     cmdliner
     fpath
     ocaml-migrate-parsetree
