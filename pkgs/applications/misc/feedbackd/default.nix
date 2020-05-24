@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake
     meson
     ninja
     pkg-config
@@ -41,10 +40,6 @@ stdenv.mkDerivation rec {
     vala
     gobject-introspection
   ];
-
-  configurePhase = "meson build --prefix=$out";
-  buildPhase = "ninja -C build";
-  installPhase = "ninja -C build install";
 
   meta = with stdenv.lib; {
     description = "A daemon to provide haptic (and later more) feedback on events";
