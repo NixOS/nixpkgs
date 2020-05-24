@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
-    rev = "cf51f31039d0781d965e9d57455786e635a0660d";
+    rev = "v${version}";
     sha256 = "07fw1310y5r3kgcry6ac1j2p4v2lkjy3pwxw2hkaqf67whnsh95i";
   };
 

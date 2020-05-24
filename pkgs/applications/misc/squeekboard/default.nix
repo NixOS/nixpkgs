@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
-    rev = "334898c5a5d45a5883654b4f2f07f28ac8f2bfc4";
+    rev = "v${version}";
     sha256 = "1nrihpffr91p3ipif5k5z9vcvkwxk6qy8hp93w13s7gnwl2g93hx";
   };
 
