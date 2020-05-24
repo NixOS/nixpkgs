@@ -5324,7 +5324,6 @@ broken-packages:
   - gtksourceview3
   - guarded-rewriting
   - guess-combinator
-  - guid
   - GuiHaskell
   - GuiTV
   - gulcii
