@@ -2,7 +2,7 @@
 , fetchFromGitLab
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , cmake
 , wrapGAppsHook
 , glib
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cmake
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
