@@ -1,7 +1,5 @@
 { stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
+, fetchurl
 , apple_sdk ? null
 , libbsd
 , libressl
@@ -14,20 +12,18 @@ stdenv.mkDerivation rec {
   pname = "acme-client";
   version = "1.0.1";
 
-  src = fetchFromGitHub {
-    owner = "graywolf";
-    repo = "acme-client-portable";
-    rev = "v${version}";
-    sha256 = "0ds7lxn08yiq7hap1xh014smjhd4gf9lv9ypfrf1ahqna3s2w7k8";
+  src = fetchurl {
+    url = "https://data.wolfsden.cz/sources/acme-client-${version}.tar.xz";
+    sha256 = "0gmdvmyw8a61w08hrxllypf7rpnqg0fxipbk3zmvsxj7m5i6iysj";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libbsd libressl ] ++ optional stdenv.isDarwin apple_sdk.sdk;
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
-    homepage = "https://github.com/graywolf/acme-client-portable";
+    homepage = "https://sr.ht/~graywolf/acme-client-portable/";
     description = "Secure ACME/Let's Encrypt client";
     platforms = platforms.unix;
     license = licenses.isc;
