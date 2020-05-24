@@ -6759,6 +6759,8 @@ in
 
   squashfuse = callPackage ../tools/filesystems/squashfuse { };
 
+  squeekboard = callPackage ../applications/misc/squeekboard { };
+
   srcml = callPackage ../applications/version-management/srcml { };
 
   srt-to-vtt-cl = callPackage ../tools/cd-dvd/srt-to-vtt-cl { };
