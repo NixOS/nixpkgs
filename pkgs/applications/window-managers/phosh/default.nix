@@ -39,6 +39,7 @@ let
     sha256 = "0a4qh5pgyjki904qf7qmvqz2ksxb0p8xhgl2aixfbhixn0pw6saw";
   };
 
+  # The upstream desktop file in phosh repo points to a stub executable
   oskDesktop = makeDesktopItem {
     name = "sm.puri.OSK0";
     type = "Application";
