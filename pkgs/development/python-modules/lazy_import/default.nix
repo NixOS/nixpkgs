@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi,
+{ stdenv, buildPythonPackage, fetchPypi
 , pytest
 , pytest_xdist
 , six }:
