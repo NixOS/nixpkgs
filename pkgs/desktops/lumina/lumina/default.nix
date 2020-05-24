@@ -79,6 +79,8 @@ mkDerivation rec {
     "LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
   ];
 
+  passthru.providedSessions = [ "Lumina-DE" ];
+
   meta = with stdenv.lib; {
     description = "A lightweight, portable desktop environment";
     longDescription = ''
