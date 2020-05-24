@@ -2508,6 +2508,15 @@ package-maintainers:
     - icepeak
   terlar:
     - nix-diff
+  maralorn:
+    - ghcide
+    - cabal-fmt
+    - neuron
+    - shh
+    - brittany
+    - hlint
+    - releaser
+    - taskwarrior
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
