@@ -1,14 +1,12 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ stdenv, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
-  version = "1.1";
+  version = "1.2";
 
-  src = fetchFromGitHub {
-    owner = "gauteh";
-    repo = "lieer";
-    rev = "v${version}";
-    sha256 = "19jx3sm925nrzl26km1bxbp6y5gk1mzwadd79vip2jl70b3xk9f8";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "1cz0zi85sm3ffbrfn3nap3ad9krfwb1a9apfn0cb6fp2w0kcqrda";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -30,6 +28,6 @@ python3Packages.buildPythonApplication rec {
     homepage         = "https://lieer.gaute.vetsj.com/";
     repositories.git = "https://github.com/gauteh/lieer.git";
     license          = licenses.gpl3Plus;
-    maintainers      = with maintainers; [ kaiha ];
+    maintainers      = with maintainers; [ flokli kaiha ];
   };
 }
