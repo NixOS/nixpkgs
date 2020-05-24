@@ -17,6 +17,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
+    installManPage doc/cheat.1
     installShellCompletion scripts/cheat.{bash,fish,zsh}
   '';
 
