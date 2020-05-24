@@ -1,4 +1,4 @@
-{ lib, python3Packages, ffmpeg_3 }:
+{ lib, python3Packages, pythonAtLeast, ffmpeg }:
 
 python3Packages.buildPythonApplication rec {
   version = "2.0";
@@ -8,6 +8,8 @@ python3Packages.buildPythonApplication rec {
     inherit version pname;
     sha256 = "0ff8hpihbd30xjy155ksfpypjskilqg4zmyavgvpri8jaf1qpv89";
   };
+
+  disabled = pythonAtLeast "3.6.0";
 
   checkInputs = with python3Packages; [ pytest ];
   propagatedBuildInputs = with python3Packages; [
