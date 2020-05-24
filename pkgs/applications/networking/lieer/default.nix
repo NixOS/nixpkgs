@@ -1,12 +1,14 @@
-{ stdenv, python3Packages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
   version = "1.2";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "1cz0zi85sm3ffbrfn3nap3ad9krfwb1a9apfn0cb6fp2w0kcqrda";
+  src = fetchFromGitHub {
+    owner = "gauteh";
+    repo = "lieer";
+    rev = "v${version}";
+    sha256 = "0qp8sycclzagkiszqk1pw2fr8s8s195bzy8r27dj7f5zx350nxk5";
   };
 
   propagatedBuildInputs = with python3Packages; [
