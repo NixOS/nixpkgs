@@ -5,9 +5,13 @@
 , utillinux
 , libuuid
 , thin-provisioning-tools, libaio
+, enable_cmdlib ? false
 , enable_dmeventd ? false
 , udev ? null
 }:
+
+# configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
+assert enable_dmeventd -> enable_cmdlib;
 
 stdenv.mkDerivation rec {
   pname = "lvm2" + stdenv.lib.optionalString enable_dmeventd "with-dmeventd";
@@ -24,8 +28,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-readline"
     "--enable-pkgconfig"
-    "--enable-cmdlib"
   ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd"
+  ++ stdenv.lib.optional enable_cmdlib "--enable-cmdlib"
   ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
