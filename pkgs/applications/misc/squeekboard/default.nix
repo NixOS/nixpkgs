@@ -50,9 +50,12 @@ rustPlatform.buildRustPackage rec {
     gnome3.gnome-desktop
     wayland
     wayland-protocols
-    libcroco
     libxml2
     libxkbcommon
+  ];
+
+  patches = [
+    ./rm-dep-libcroco.patch
   ];
 
   cargoSha256 = "1fkhj4i2l2hdk9wvld6ryvnm1mxfwx3s555r7n42pg9f5namn1sr";

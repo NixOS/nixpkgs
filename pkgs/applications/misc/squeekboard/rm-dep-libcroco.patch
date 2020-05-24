@@ -1,0 +1,10 @@
+--- a/src/meson.build	2020-05-24 15:53:24.899954937 +0200
++++ b/src/meson.build"	2020-05-24 15:54:25.666123150 +0200
+@@ -38,7 +38,6 @@
+   dependency('gio-2.0', version: '>=2.26.0'),
+   dependency('gnome-desktop-3.0', version: '>=3.0'),
+   dependency('gtk+-3.0', version: '>=3.0'),
+-  dependency('libcroco-0.6'),
+   dependency('wayland-client', version: '>=1.14'),
+   dependency('xkbcommon'),
+   cc.find_library('m'),
