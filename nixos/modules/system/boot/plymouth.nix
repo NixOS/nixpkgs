@@ -111,7 +111,7 @@ in
 
       mkdir -p $out/lib/plymouth/renderers
       # module might come from a theme
-      cp ${themesEnv}/lib/plymouth/{text,details,$moduleName}.so $out/lib/plymouth
+      cp ${themesEnv}/lib/plymouth/{text,details,label,$moduleName}.so $out/lib/plymouth
       cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/lib/plymouth/renderers
 
       mkdir -p $out/share/plymouth/themes
@@ -120,7 +120,7 @@ in
       # copy themes into working directory for patching
       mkdir themes
       # use -L to copy the directories proper, not the symlinks to them
-      cp -r -L ${themesEnv}/share/plymouth/themes/{text,details,${cfg.theme}} themes
+      cp -r -L ${themesEnv}/share/plymouth/themes/{text,details,spinner,${cfg.theme}} themes
 
       # patch out any attempted references to the theme or plymouth's themes directory
       chmod -R +w themes
@@ -131,6 +131,15 @@ in
 
       cp -r themes/* $out/share/plymouth/themes
       cp ${cfg.logo} $out/share/plymouth/logo.png
+
+      mkdir -p $out/usr/share/fonts/truetype
+      mkdir -p $out/etc/fonts/2.11/conf.d
+      cp -r ${pkgs.cantarell-fonts}/share/fonts/cantarell/Cantarell-{Thin,Regular}.otf $out/usr/share/fonts/truetype
+      cp -r ${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf $out/usr/share/fonts/truetype
+
+      cp ${pkgs.fontconfig.out}/share/fontconfig/conf.avail/60-latin.conf $out/etc/fonts/2.11/conf.d
+      cp ${pkgs.fontconfig.out}/etc/fonts/fonts.conf $out/etc/fonts/2.11
+      sed -i 's@<dir>${pkgs.dejavu_fonts.minimal}</dir>@<dir>/usr/share/fonts</dir>@g' $out/etc/fonts/2.11/fonts.conf
     '';
 
     boot.initrd.extraUtilsCommandsTest = ''
@@ -144,12 +153,14 @@ in
     '';
 
     boot.initrd.preLogCommands = ''
-      mkdir -p /etc/plymouth
+      mkdir -p /etc/plymouth /usr/share
       ln -s ${configFile} /etc/plymouth/plymouthd.conf
       ln -s $extraUtils/share/plymouth/plymouthd.defaults /etc/plymouth/plymouthd.defaults
       ln -s $extraUtils/share/plymouth/logo.png /etc/plymouth/logo.png
       ln -s $extraUtils/share/plymouth/themes /etc/plymouth/themes
       ln -s $extraUtils/lib/plymouth /etc/plymouth/plugins
+      ln -s $extraUtils/etc/fonts /etc/fonts
+      ln -s $extraUtils/usr/share/fonts /usr/share/fonts
 
       plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
       plymouth show-splash
