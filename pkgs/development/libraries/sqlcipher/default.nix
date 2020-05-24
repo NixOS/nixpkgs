@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://sqlcipher.net/";
-    description = "Full Database Encryption for SQLite";
+    homepage = "https://www.zetetic.net/sqlcipher/";
+    description = "SQLite extension that provides 256 bit AES encryption of database files";
     platforms = platforms.unix;
     license = licenses.bsd3;
   };
