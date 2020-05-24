@@ -189,25 +189,32 @@ services.httpd = {
    ACME servers will only hand out wildcard certs over DNS validation.
    There a number of supported DNS providers and servers you can utilise,
    see the <link xlink:href="https://go-acme.github.io/lego/dns/">lego docs</link>
-   for provider/server specific configuration values. For the sake of these
-   docs, we will provide a fully self-hosted example using bind.
+   for provider/server specific configuration values. For the sake of
+   this documentation, we will provide an example using
+   <link xlink:href="https://github.com/joohoi/acme-dns">acme-dns</link>,
+   which lets you host ACME DNS challenges on a separate DNS server for
+   simplicity and security. For single-machine setups, like shown here,
+   you can run acme-dns on the same machine that requests
+   the certificates.
   </para>
 
 <programlisting>
-services.bind = {
-  <link linkend="opt-services.bind.enable">enable</link> = true;
-  <link linkend="opt-services.bind.extraConfig">extraConfig</link> = ''
-    include "/var/lib/secrets/dnskeys.conf";
-  '';
-  <link linkend="opt-services.bind.zones">zones</link> = [
-    rec {
-      name = "example.com";
-      file = "/var/db/bind/${name}";
-      master = true;
-      extraConfig = "allow-update { key rfc2136key.example.com.; };";
-    }
-  ];
-}
+services.acme-dns = {
+  <link linkend="opt-services.acme-dns.enable">enable</link> = true;
+  <link linkend="opt-services.acme-dns.general">general</link> = {
+    <link linkend="opt-services.acme-dns.general.domain">domain</link> = "acme-dns.example.com";
+
+    # Email address in DNS SOA RNAME format; see the option
+    # documentation for details.
+    <link linkend="opt-services.acme-dns.general.nsadmin">nsadmin</link> = "admin+acme-dns.example.com";
+
+    <link linkend="opt-services.acme-dns.general.records">records</link> = [
+      "acme-dns.example.com. A your.ip.v4.address"
+      "acme-dns.example.com. AAAA your:ip:v6::address"
+      "acme-dns.example.com. NS acme-dns.example.com."
+    ];
+  };
+};
 
 # Now we can configure ACME
 <xref linkend="opt-security.acme.acceptTerms" /> = true;
@@ -215,35 +222,46 @@ services.bind = {
 <xref linkend="opt-security.acme.certs" />."example.com" = {
   <link linkend="opt-security.acme.certs._name_.domain">domain</link> = "*.example.com";
   <link linkend="opt-security.acme.certs._name_.dnsProvider">dnsProvider</link> = "rfc2136";
-  <link linkend="opt-security.acme.certs._name_.credentialsFile">credentialsFile</link> = "/var/lib/secrets/certs.secret";
-  # We don't need to wait for propagation since this is a local DNS server
-  <link linkend="opt-security.acme.certs._name_.dnsPropagationCheck">dnsPropagationCheck</link> = false;
+  <link linkend="opt-security.acme.certs._name_.credentialsFile">credentialsFile</link> = pkgs.writeText "lego-example.com.env" ''
+    ACME_DNS_API_BASE=http://localhost:8053
+    ACME_DNS_STORAGE_PATH=/var/lib/acme/example.com/acme-dns.json
+  '';
 };
 </programlisting>
 
   <para>
-   The <filename>dnskeys.conf</filename> and <filename>certs.secret</filename>
-   must be kept secure and thus you should not keep their contents in your
-   Nix config. Instead, generate them one time with these commands:
+   You'll need to mirror the <literal>A</literal>,
+   <literal>AAAA</literal> and <literal>NS</literal> records with the
+   upstream DNS provider for your domain (here
+   <literal>example.com</literal>) so that the ACME provider can resolve
+   the acme-dns domain. Note that if your DNS provider doesn't support
+   glue records (having both
+   <literal>A</literal>/<literal>AAAA</literal> and
+   <literal>NS</literal> records for the same zone), you'll need to set
+   <xref linkend="opt-services.acme-dns.general.nsname" /> to a
+   different domain name (hereafter
+   <literal>acme-dns-ns.example.com</literal>), add the upstream
+   <literal>A</literal>/<literal>AAAA</literal> records to that zone
+   instead, and adjust the <literal>NS</literal> record to
+   <literal>acme-dns.example.com. NS acme-dns-ns.example.com.</literal>
+   both upstream and in the acme-dns configuration. (You should
+   keep the records for <literal>acme-dns.example.com</literal> in
+   <xref linkend="opt-services.acme-dns.general.records" />;
+   <literal>acme-dns-ns.example.com</literal> will be the authoritative
+   nameserver for <literal>acme-dns.example.com</literal>, so acme-dns
+   must return records for that domain.)
+   </para>
+
+  <para>
+   Once that's set up, you'll need to add <literal>CNAME</literal>
+   records for the <literal>_acme-challenge</literal>
+   subdomains of each domain you're issuing certificates for to delegate
+   challenges to acme-dns. The required records are printed in the logs
+   of the <literal>acme-dns-*.service</literal> units; after the first
+   issuance attempt, you can run <command>journalctl
+   --unit='acme-dns-*.service'</command> for a list of records to add to
+   your upstream DNS provider.
   </para>
-
-<programlisting>
-mkdir -p /var/lib/secrets
-tsig-keygen rfc2136key.example.com &gt; /var/lib/secrets/dnskeys.conf
-chown named:root /var/lib/secrets/dnskeys.conf
-chmod 400 /var/lib/secrets/dnskeys.conf
-
-# Copy the secret value from the dnskeys.conf, and put it in
-# RFC2136_TSIG_SECRET below
-
-cat &gt; /var/lib/secrets/certs.secret &lt;&lt; EOF
-RFC2136_NAMESERVER='127.0.0.1:53'
-RFC2136_TSIG_ALGORITHM='hmac-sha256.'
-RFC2136_TSIG_KEY='rfc2136key.example.com'
-RFC2136_TSIG_SECRET='your secret key'
-EOF
-chmod 400 /var/lib/secrets/certs.secret
-</programlisting>
 
   <para>
    Now you're all set to generate certs! You should monitor the first invokation
