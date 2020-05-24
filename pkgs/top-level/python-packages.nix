@@ -3424,6 +3424,8 @@ in {
 
   samplerate = callPackage ../development/python-modules/samplerate { };
 
+  soundcard = callPackage ../development/python-modules/soundcard { };
+
   ssdeep = callPackage ../development/python-modules/ssdeep { };
 
   ssdp = callPackage ../development/python-modules/ssdp { };
