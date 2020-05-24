@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, openssl, tcl, readline ? null, ncurses ? null }:
+{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, readline ? null, ncurses ? null }:
 
 assert readline != null -> ncurses != null;
 
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mx0n5n3s39r25b31sdkrd4psxjqqgcv6rpm9d57w5rlk75g2fiv";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = [ readline ncurses openssl tcl ];
 
   configureFlags = [ "--enable-threadsafe" "--disable-tcl" ];
@@ -21,6 +23,10 @@ stdenv.mkDerivation rec {
   LDFLAGS = lib.optional (readline != null) "-lncurses";
 
   doCheck = false; # fails. requires tcl?
+
+  postInstall = ''
+    installManPage sqlcipher.1
+  '';
 
   meta = with stdenv.lib; {
     homepage = "http://sqlcipher.net/";
