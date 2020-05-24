@@ -1,15 +1,15 @@
 { lib, python3Packages, pythonAtLeast, ffmpeg }:
 
 python3Packages.buildPythonApplication rec {
-  version = "2.0";
+  version = "2.1";
   pname   = "sigal";
 
   src = python3Packages.fetchPypi {
     inherit version pname;
-    sha256 = "0ff8hpihbd30xjy155ksfpypjskilqg4zmyavgvpri8jaf1qpv89";
+    sha256 = "1ddjijpdg0hk8xzqsgnxicivscyh9lz9cxikkxi8yr9hw2wgwjnm";
   };
 
-  disabled = pythonAtLeast "3.6.0";
+  disabled = python3Packages.pythonAtLeast "3.6.0";
 
   checkInputs = with python3Packages; [ pytest ];
   propagatedBuildInputs = with python3Packages; [
@@ -20,6 +20,8 @@ python3Packages.buildPythonApplication rec {
     clint
     click
     blinker
+    natsort
+    setuptools_scm
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${ffmpeg_3}/bin" ];

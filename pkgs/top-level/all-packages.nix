@@ -6947,9 +6947,7 @@ in
 
   sieve-connect = callPackage ../applications/networking/sieve-connect {};
 
-  sigal = callPackage ../applications/misc/sigal {
-    inherit (python.passthru) pythonAtLeast;
-  };
+  sigal = callPackage ../applications/misc/sigal { };
 
   sigil = libsForQt514.callPackage ../applications/editors/sigil { };
 
