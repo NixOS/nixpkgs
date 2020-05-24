@@ -8,6 +8,7 @@
 , w3lib
 , lxml
 , cssselect
+, isPy27
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ functools32 six w3lib lxml cssselect ];
+  propagatedBuildInputs = [ six w3lib lxml cssselect ] ++ lib.optionals isPy27 [ functools32 ];
 
   checkPhase = ''
     py.test
