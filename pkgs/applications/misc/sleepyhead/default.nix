@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, qt5, zlib, libGLU, libX11, wrapQtAppsHook }:
+{ lib, stdenv, mkDerivation, fetchgit, zlib, libGLU, libX11, qtbase, qtwebkit, qtserialport, wrapQtAppsHook }:
 
 let
   name = "sleepyhead-${version}";
   version = "1.0.0-beta-git";
-in qt5.mkDerivation {
+in mkDerivation {
   inherit name;
 
   src = fetchgit {
@@ -13,7 +13,7 @@ in qt5.mkDerivation {
   };
 
   buildInputs = [
-    qt5.qtbase qt5.qtwebkit qt5.qtserialport
+    qtbase qtwebkit qtserialport
     zlib
     libGLU
     libX11
