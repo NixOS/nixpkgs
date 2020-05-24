@@ -15987,6 +15987,8 @@ in
 
   mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
 
+  mssql-server = callPackage ../servers/sql/mssql/server { };
+  
   miniflux = callPackage ../servers/miniflux { };
 
   nagios = callPackage ../servers/monitoring/nagios { };
