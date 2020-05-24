@@ -130,7 +130,7 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     mkdir -p $out/share/wayland-sessions
     ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
-    cp -r ${oskDesktop} $out/share/applications/sm.puri.OSK0.desktop
+    cp -r ${oskDesktop}/share/applications/sm.puri.OSK0.desktop $out/share/applications/sm.puri.OSK0.desktop
     cp -r $out/share/gsettings-schemas/phosh-${version}/glib-2.0/schemas $out/share/glib-2.0/
   '';
 
