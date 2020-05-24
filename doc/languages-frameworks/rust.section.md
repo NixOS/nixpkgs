@@ -75,6 +75,72 @@ pkgs.rustPlatform.buildRustPackage {
 }
 ```
 
+### Running package tests
+
+When using `buildRustPackage`, the `checkPhase` is enabled by default and runs
+`cargo test` on the package to build. To make sure that we don't compile the
+sources twice and to actually test the artifacts that will be used after that, 
+the tests will be ran in the `release`-mode by default.
+
+However, in some cases the test-suite of a package doesn't work properly in the
+`release` mode. In that case, the mode for `checkPhase` can be changed like this:
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  checkType = "debug";
+}
+```
+
+#### Tests relying on the structure of the `target/`-directory
+
+Some tests may rely on the structure of the `target/`-directory. Those tests
+are likely to fail since we use `cargo --target` during build. This means that
+the artifacts
+[are stored in `target/<architecture>/release/`](https://doc.rust-lang.org/cargo/guide/build-cache.html)
+rather than `target/release/`.
+
+This can only be circumvented by patching the affected tests accordingly.
+
+#### Disabling package-tests
+
+In some cases it's necessary to disable the tests (which can be done by declaring
+`doCheck = false;`) which is fine in the following cases:
+
+* If no tests exist, the `checkPhase` should be explicitly disabled to skip
+  unnecessary build-steps to speed-up the build.
+
+* If tests are highly impure (e.g. due to heavy network usage), it's also fine
+  disable tests.
+
+There are obviously some other corner-cases where it's sensible to disable tests,
+those aren't hard-rules, in the end this is a case-by-case decision.
+
+Please check however if it's possible to disable a problematic subset of the
+test-suite and leave comment which explains why that's needed.
+
+### Building a package in the `debug` mode
+
+By default, `buildRustPackage` will use the `release`-mode for building. If a package
+should be built in the `debug`-mode however, it can be configured like this:
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  buildType = "debug";
+}
+```
+
+Obviously, the `checkPhase` will be ran in `debug`-mode as well in this case.
+
+### Custom `build`/`install`-procedures
+
+Some packages may use custom scripts for building/installing, e.g. with a `Makefile`.
+In that case it's recommended to always override the `build-`/`install-`/`checkPhase`.
+
+Otherwise, it may be possible that one of the internal steps fails because of the
+modified directory structure of `target/`.
+
 ## Compiling Rust crates using Nix instead of Cargo
 
 ### Simple operation
