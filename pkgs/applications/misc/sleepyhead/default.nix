@@ -3,7 +3,7 @@
 let
   name = "sleepyhead-${version}";
   version = "1.0.0-beta-git";
-in stdenv.mkDerivation {
+in qt5.mkDerivation {
   inherit name;
 
   src = fetchgit {
@@ -22,10 +22,17 @@ in stdenv.mkDerivation {
   patchPhase = ''
     patchShebangs configure
   '';
-
-  installPhase = ''
+  
+  installPhase = if stdenv.isDarwin then ''
+    mkdir -p $out/Applications
+    cp -r sleepyhead/SleepyHead.app $out/Applications
+  '' else ''
     mkdir -p $out/bin
     cp sleepyhead/SleepyHead $out/bin
+  '';
+
+  postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+    wrapQtApp "$out/Applications/SleepyHead.app/Contents/MacOS/SleepyHead"
   '';
 
   meta = with stdenv.lib; {
@@ -37,7 +44,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = [ maintainers.krav ];
-    broken = true;
   };
 
 }
