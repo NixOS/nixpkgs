@@ -5211,6 +5211,8 @@ in
 
   mini-graph-card = callPackage ../servers/home-assistant/lovelaceModules/mini-graph-card {};
 
+  mini-media-player = callPackage ../servers/home-assistant/lovelaceModules/mini-media-player {};
+
   minio-client = callPackage ../tools/networking/minio-client { };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
