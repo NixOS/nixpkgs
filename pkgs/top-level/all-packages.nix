@@ -5935,6 +5935,8 @@ in
 
   phodav = callPackage ../tools/networking/phodav { };
 
+  phoc = callPackage ../applications/misc/phoc { };
+
   pinentry = libsForQt5.callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
   };
