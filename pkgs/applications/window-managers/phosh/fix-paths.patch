@@ -1,0 +1,10 @@
+--- a/data/phosh.in
++++ b/data/phosh.in
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+
+-COMPOSITOR="/usr/bin/phoc"
++COMPOSITOR="@phoc@/bin/phoc"
+ PHOC_INI="@pkgdatadir@/phoc.ini"
+
+ gnome_session_args()

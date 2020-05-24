@@ -5937,6 +5937,8 @@ in
 
   phoc = callPackage ../applications/misc/phoc { };
 
+  phosh = callPackage ../applications/window-managers/phosh { };
+
   pinentry = libsForQt5.callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
   };
