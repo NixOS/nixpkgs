@@ -9,8 +9,16 @@ let
   cfg = config.services.pdns-recursor;
 
   oneOrMore  = type: with types; either type (listOf type);
-  valueType  = with types; oneOf [ int str bool path ];
-  configType = with types; attrsOf (nullOr (oneOrMore valueType));
+  valueType  = with types; oneOf [ int str bool path ]
+    // { description = "setting type (integer, string, bool or path)"; };
+  configType = with types; attrsOf (nullOr (oneOrMore valueType))
+    // { description = ''
+          recursor.conf configuration type. The format consists of an
+          attribute set of settings. Each setting can be either `null`,
+          one value or a list of values. The allowed values are integers,
+          strings, booleans or paths.
+         '';
+       };
 
   toBool    = val: if val then "yes" else "no";
   serialize = val: with types;
@@ -149,7 +157,7 @@ in {
       type = types.lines;
       default = "";
       description = ''
-        The content Lua configuration file for PowerDNS Recursor. See
+        The content of the Lua configuration file for PowerDNS Recursor. See
         <link xlink:href="https://doc.powerdns.com/recursor/lua-config/index.html"/>.
       '';
     };
