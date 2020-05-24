@@ -750,4 +750,15 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
+  postgresql-syntax = super.postgresql-syntax.override {
+    rerebase = self.rerebase_1_6_1;
+  };
+
+  rerebase_1_6_1 = super.rerebase_1_6_1.override {
+    rebase = self.rebase_1_6_1;
+  };
+
+  rebase_1_6_1 = super.rebase_1_6_1.override {
+    selective = super.selective_0_4_1;
+  };
 }
