@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -Dm755 systembus-notify -t $out/bin
-    install -Dm644 systembus-notify.desktop -t $out/share/applications
+    install -Dm644 systembus-notify.desktop -t $out/etc/xdg/autostart
     runHook postInstall
   '';
 
