@@ -143,8 +143,7 @@ in
       sed -i '/loginctl/d' $out/71-seat.rules
     '';
 
-    # We use `mkAfter` to ensure that LUKS password prompt would be shown earlier than the splash screen.
-    boot.initrd.preLVMCommands = mkAfter ''
+    boot.initrd.preLogCommands = ''
       mkdir -p /etc/plymouth
       ln -s ${configFile} /etc/plymouth/plymouthd.conf
       ln -s $extraUtils/share/plymouth/plymouthd.defaults /etc/plymouth/plymouthd.defaults
@@ -154,6 +153,10 @@ in
 
       plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
       plymouth show-splash
+
+      askPassword() {
+          plymouth ask-for-password --prompt="$1"
+      }
     '';
 
     boot.initrd.postMountCommands = ''
