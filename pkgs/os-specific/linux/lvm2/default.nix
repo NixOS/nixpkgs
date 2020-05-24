@@ -49,6 +49,11 @@ stdenv.mkDerivation rec {
     substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
   '';
 
+  postConfigure = ''
+    sed -i 's|^#define LVM_CONFIGURE_LINE.*$|#define LVM_CONFIGURE_LINE "<removed>"|g' ./include/configure.h
+  '';
+
+
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       name = "fix-stdio-usage.patch";
