@@ -43,6 +43,10 @@ class TestCasePython(unittest.TestCase):
         else:
             self.assertEqual(sys.prefix, sys.base_prefix)
 
+    @unittest.skipIf(sys.version_info.major==3, "sys.real_prefix is only set by virtualenv in case of Python 2.")
+    def test_real_prefix(self):
+        self.assertTrue(hasattr(sys, "real_prefix") == IS_VIRTUALENV)
+
     def test_python_version(self):
         self.assertTrue(platform.python_version().startswith(PYTHON_VERSION))
 

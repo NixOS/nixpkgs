@@ -19,10 +19,8 @@ let
       is_nixenv = "False";
       is_virtualenv = "False";
     };
-  } // lib.optionalAttrs (python.isPy3k && !python.isPyPy) {
+  } // lib.optionalAttrs (!python.isPyPy) {
     # Use virtualenv from a Nix env.
-    # Does not function with Python 2
-    # ValueError: source and destination is the same /nix/store/38kz3j1a87cq5y59k5w7k9yk4cqgc5b2-python-2.7.18/lib/python2.7/os.py
     nixenv-virtualenv = rec {
       env = runCommand "${python.name}-virtualenv" {} ''
         ${pythonVirtualEnv.interpreter} -m virtualenv $out
