@@ -6134,11 +6134,11 @@
       fingerprint = "B573 5118 0375 A872 FBBF  7770 B629 036B E399 EEE9";
     }];
   };
-  mausch = {
-    email = "mauricioscheffer@gmail.com";
-    github = "mausch";
-    githubId = 95194;
-    name = "Mauricio Scheffer";
+  masipcat = {
+    email = "jordi@masip.cat";
+    github = "masipcat";
+    githubId = 775189;
+    name = "Jordi Masip";
   };
   matejc = {
     email = "cotman.matej@gmail.com";
@@ -6193,6 +6193,12 @@
     github = "maurer";
     githubId = 136037;
     name = "Matthew Maurer";
+  };
+  mausch = {
+    email = "mauricioscheffer@gmail.com";
+    github = "mausch";
+    githubId = 95194;
+    name = "Mauricio Scheffer";
   };
   maxdamantus = {
     email = "maxdamantus@gmail.com";
