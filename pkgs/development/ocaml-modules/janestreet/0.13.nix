@@ -557,6 +557,13 @@ rec {
     meta.description = "Core-flavoured wrapper around zarith's arbitrary-precision rationals";
   };
 
+  delimited_parsing = janePackage {
+    pname = "delimited_parsing";
+    hash = "0siz746q28241wk0sv435lfvvips7sl151z5a1sbqanr3lm4s17w";
+    propagatedBuildInputs = [ async core_extended ];
+    meta.description = "Parsing of character (e.g., comma) separated and fixed-width values";
+  };
+
   ### Packages at version 0.11, with dependencies at version 0.12
 
   configurator = janePackage {
