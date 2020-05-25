@@ -64,6 +64,47 @@ let
     fi
   '';
 
+
+  # This is the fork of the original dnscrypt-proxy maintained by Dyne.org.
+  # dnscrypt-proxy2 doesn't provide the `--test` feature that is needed to
+  # correctly implement key rotation of dnscrypt-wrapper ephemeral keys.
+  dnscrypt-proxy1 = pkgs.callPackage
+    ({ stdenv, fetchFromGitHub, autoreconfHook
+    , pkgconfig, libsodium, ldns, openssl, systemd }:
+
+    stdenv.mkDerivation rec {
+      pname = "dnscrypt-proxy";
+      version = "2019-08-20";
+
+      src = fetchFromGitHub {
+        owner = "dyne";
+        repo = "dnscrypt-proxy";
+        rev = "07ac3825b5069adc28e2547c16b1d983a8ed8d80";
+        sha256 = "0c4mq741q4rpmdn09agwmxap32kf0vgfz7pkhcdc5h54chc3g3xy";
+      };
+
+      configureFlags = optional stdenv.isLinux "--with-systemd";
+
+      nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+      # <ldns/ldns.h> depends on <openssl/ssl.h>
+      buildInputs = [ libsodium openssl.dev ldns ] ++ optional stdenv.isLinux systemd;
+
+      postInstall = ''
+        # Previous versions required libtool files to load plugins; they are
+        # now strictly optional.
+        rm $out/lib/dnscrypt-proxy/*.la
+      '';
+
+      meta = {
+        description = "A tool for securing communications between a client and a DNS resolver";
+        homepage = "https://github.com/dyne/dnscrypt-proxy";
+        license = licenses.isc;
+        maintainers = with maintainers; [ rnhmjoj ];
+        platforms = platforms.linux;
+      };
+    }) { };
+
 in {
 
 
@@ -179,7 +220,7 @@ in {
       requires = [ "dnscrypt-wrapper.service" ];
       description = "Rotates DNSCrypt wrapper keys if soon to expire";
 
-      path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy gawk ];
+      path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy1 gawk ];
       script = rotateKeys;
       serviceConfig.User = "dnscrypt-wrapper";
     };
