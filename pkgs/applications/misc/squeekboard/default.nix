@@ -12,11 +12,11 @@
 , wayland-protocols
 , rustc
 , cargo
-, libcroco
 , libxml2
 , libxkbcommon
 , rustPlatform
 , makeWrapper
+, substituteAll
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -56,6 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   patches = [
     ./rm-dep-libcroco.patch
+    ./desktop-in.patch
   ];
 
   cargoSha256 = "1fkhj4i2l2hdk9wvld6ryvnm1mxfwx3s555r7n42pg9f5namn1sr";
@@ -71,8 +72,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = ''
-    mkdir -p $out/bin
-    cp _build/src/squeekboard $out/bin/
+    mkdir -p $out/bin $out/share/applications/
+    substituteInPlace "$out/usr/local/share/applications/sm.puri.Squeekboard.desktop" \
+        --replace "@squeekboard@" "$out"
+    cp -r $out/usr/local/share/applications/ $out/share/
+    cp $out/usr/local/bin/squeekboard $out/bin/
+    rm -r $out/usr
   '';
 
   check = false;

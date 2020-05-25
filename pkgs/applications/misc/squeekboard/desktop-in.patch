@@ -1,0 +1,11 @@
+--- a/data/sm.puri.Squeekboard.desktop.in	2020-05-24 20:47:02.034168109 +0200
++++ b/data/sm.puri.Squeekboard.desktop.in	2020-05-24 20:47:36.317506736 +0200
+@@ -2,7 +2,7 @@
+ Name=Squeekboard
+ GenericName=Squeekboard Virtual Keyboard
+ Comment=Virtual Keyboard
+-Exec=squeekboard
++Exec=@squeekboard@/bin/squeekboard
+ Terminal=false
+ Type=Application
+ NoDisplay=true

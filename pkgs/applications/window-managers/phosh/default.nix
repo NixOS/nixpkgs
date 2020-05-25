@@ -35,8 +35,8 @@ let
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libgnome-volume-control";
-    rev = "ae1a34aafce7026b8c0f65a43c9192d756fe1057";
-    sha256 = "0a4qh5pgyjki904qf7qmvqz2ksxb0p8xhgl2aixfbhixn0pw6saw";
+    rev = "e2be83ee4a47da9c4c4fbf302a63f04b8d5683b9";
+    sha256 = "00sa48nzv15p2l4brh9ng06bzp1q8sw5v1srkz4s3kc4k42sl9vy";
   };
 
   # The upstream desktop file in phosh repo points to a stub executable

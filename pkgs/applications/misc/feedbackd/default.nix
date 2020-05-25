@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook
+    vala
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -37,8 +39,6 @@ stdenv.mkDerivation rec {
     gsound
     libgudev
     json-glib
-    vala
-    gobject-introspection
   ];
 
   meta = with stdenv.lib; {
