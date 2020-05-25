@@ -18664,6 +18664,8 @@ in
 
   autokey = callPackage ../applications/office/autokey { };
 
+  autotalent = callPackage ../applications/audio/autotalent { };
+
   autotrace = callPackage ../applications/graphics/autotrace {};
 
   avocode = callPackage ../applications/graphics/avocode {};
