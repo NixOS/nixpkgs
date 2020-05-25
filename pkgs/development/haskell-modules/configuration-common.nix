@@ -1509,9 +1509,9 @@ self: super: {
   hlint = super.hlint.override {
     ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_11;
-    extra = self.extra_1_7_1;
+    extra = self.extra_1_7_2;
     filepattern = self.filepattern.override {
-      extra = self.extra_1_7_1;
+      extra = self.extra_1_7_2;
     };
   };
 
