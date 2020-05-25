@@ -134,6 +134,7 @@ in
   hitch = handleTest ./hitch {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
   home-assistant = handleTest ./home-assistant.nix {};
+  hostname = handleTest ./hostname.nix {};
   hound = handleTest ./hound.nix {};
   hydra = handleTest ./hydra {};
   hydra-db-migration = handleTest ./hydra/db-migration.nix {};
