@@ -53,11 +53,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1xsbz5kl74cgzyzwmjy3p50m0iigvi53lklkp92v49k4j99zpak7";
+    sha256 = "0w3srvigg4kfi7xq76c7y4hnq5yr2gxrrsvlyj1g2wc1igz1vyg1";
   };
 
   nativeBuildInputs = [
