@@ -15,7 +15,7 @@
 , xmlto
 
 , acl
-, bazaar
+, breezy
 , binutils
 , bzip2
 , coreutils
@@ -89,7 +89,7 @@ in stdenv.mkDerivation rec {
     ./respect-xml-catalog-files-var.patch
     (substituteAll {
       src = ./fix-paths.patch;
-      bzr = "${bazaar}/bin/bzr";
+      bzr = "${breezy}/bin/bzr";
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
       tar = "${gnutar}/bin/tar";
