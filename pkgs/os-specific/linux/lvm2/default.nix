@@ -9,17 +9,13 @@
 , udev ? null
 }:
 
-let
-  version = "2.03.01";
-in
-
-{
+stdenv.mkDerivation rec {
   pname = "lvm2" + stdenv.lib.optionalString enable_dmeventd "with-dmeventd";
-  inherit version;
+  version = "2.03.09";
 
   src = fetchurl {
     url = "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz";
-    sha256 = "02sk6p8w3f6fpm1mrsisqfc0jnah4pzimyhm0f7c0phrfjq5hkj2";
+    sha256 = "0xdr9qbqw6kja267wmx6ajnfv1nhw056gpxx9v2qmfh3bj6qnfn0";
   };
 
   nativeBuildInputs = [ pkgconfig ];
