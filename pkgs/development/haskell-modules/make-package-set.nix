@@ -25,10 +25,6 @@
 , # A function that takes `{ pkgs, stdenv, callPackage }` as the first arg and
   # `self` as second, and returns a set of haskell packages
   package-set
-
-, # The final, fully overriden package set usable with the nixpkgs fixpoint
-  # overriding functionality
-  extensible-self
 }:
 
 # return value: a function from self to the package set
@@ -235,12 +231,14 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
       , overrides ? self: super: {}
       , modifier ? drv: drv
       , returnShellEnv ? pkgs.lib.inNixShell }:
-      let drv =
-        (extensible-self.extend
-           (pkgs.lib.composeExtensions
-              (self.packageSourceOverrides source-overrides)
-              overrides))
-        .callCabal2nix name root {};
+      let
+        extendFix' = f: fixed: fix' (extends f fixed.__unfix__);
+        drv = (extendFix'
+                 (pkgs.lib.composeExtensions
+                    (self.packageSourceOverrides source-overrides)
+                    overrides)
+                 self)
+              .callCabal2nix name root {};
       in if returnShellEnv then (modifier drv).env else modifier drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);

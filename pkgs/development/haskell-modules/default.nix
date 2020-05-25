@@ -16,21 +16,19 @@ let
 
   haskellPackages = pkgs.callPackage makePackageSet {
     package-set = initialPackages;
-    inherit stdenv haskellLib ghc buildHaskellPackages extensible-self all-cabal-hashes;
+    inherit stdenv haskellLib ghc buildHaskellPackages all-cabal-hashes;
   };
 
   commonConfiguration = configurationCommon { inherit pkgs haskellLib; };
   nixConfiguration = configurationNix { inherit pkgs haskellLib; };
 
-  extensible-self = makeExtensible
-    (extends overrides
-      (extends packageSetConfig
-        (extends compilerConfig
-          (extends commonConfiguration
-            (extends nixConfiguration
-              (extends nonHackagePackages
-                haskellPackages))))));
-
 in
 
-  extensible-self
+  makeExtensible
+   (extends overrides
+     (extends packageSetConfig
+       (extends compilerConfig
+         (extends commonConfiguration
+           (extends nixConfiguration
+             (extends nonHackagePackages
+               haskellPackages))))))
