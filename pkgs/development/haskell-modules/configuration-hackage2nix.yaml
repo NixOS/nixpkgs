@@ -9280,8 +9280,6 @@ broken-packages:
   - shellish
   - shellmate
   - shellmate-extras
-  - shh
-  - shh-extras
   - shimmer
   - shine-examples
   - shivers-cfg
