@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   pname = "biblesync";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "karlkleinpaste";
     repo = "biblesync";
     rev = version;
-    sha256 = "1baq2fwf6132i514xrvq05p2gy98mkg1rn5whf9q5k475q81nrlr";
+    sha256 = "0prmd12jq2cjdhsph5v89y38j7hhd51dr3r1hivgkhczr3m5hf4s";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
