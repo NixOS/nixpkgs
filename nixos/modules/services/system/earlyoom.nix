@@ -118,5 +118,7 @@ in
         '';
       };
     };
+
+    environment.systemPackages = optional ecfg.enableNotifications pkgs.systembus-notify;
   };
 }
