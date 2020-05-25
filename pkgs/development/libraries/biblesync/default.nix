@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.crosswire.org/wiki/BibleSync";
+    homepage = "https://wiki.crosswire.org/BibleSync";
     description = "A multicast protocol to Bible software shared conavigation";
     longDescription = ''
       BibleSync is a multicast protocol to support Bible software shared
