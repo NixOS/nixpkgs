@@ -466,7 +466,7 @@ in {
           environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
+          serviceConfig.ExecStart = "${phpPackage}/bin/php -c ${config.services.phpfpm.pools.nextcloud.phpIni} -f ${cfg.package}/cron.php";
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           serviceConfig.Type = "oneshot";
