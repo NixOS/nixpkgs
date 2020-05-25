@@ -64,7 +64,7 @@ let
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
   testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
-                  , grubIdentifier, preBootCommands, extraConfig
+                  , grubIdentifier, preBootCommands, postBootCommands, extraConfig
                   , testSpecialisationConfig
                   }:
     let iface = if grubVersion == 1 then "ide" else "virtio";
@@ -216,6 +216,7 @@ let
       machine = create_machine_named("boot-after-rebuild-switch")
       ${preBootCommands}
       machine.wait_for_unit("network.target")
+      ${postBootCommands}
       machine.shutdown()
 
       # Tests for validating clone configuration entries in grub menu
@@ -238,6 +239,7 @@ let
       with subtest("Set grub to boot the second configuration"):
           machine.succeed("grub-reboot 1")
 
+      ${postBootCommands}
       machine.shutdown()
 
       # Reboot Machine
@@ -252,12 +254,13 @@ let
       with subtest("We should find a file named /etc/gitconfig"):
           machine.succeed("test -e /etc/gitconfig")
 
+      ${postBootCommands}
       machine.shutdown()
     '';
 
 
   makeInstallerTest = name:
-    { createPartitions, preBootCommands ? "", extraConfig ? ""
+    { createPartitions, preBootCommands ? "", postBootCommands ? "", extraConfig ? ""
     , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
@@ -335,7 +338,7 @@ let
       };
 
       testScript = testScriptFun {
-        inherit bootLoader createPartitions preBootCommands
+        inherit bootLoader createPartitions preBootCommands postBootCommands
                 grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
                 testSpecialisationConfig;
       };
