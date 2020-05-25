@@ -1502,13 +1502,13 @@ self: super: {
   });
 
   # stackage right now is not new enough for hlint-3.0
-  ghc-lib-parser-ex_8_10_0_8 = super.ghc-lib-parser-ex_8_10_0_8.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
+  ghc-lib-parser-ex_8_10_0_11 = super.ghc-lib-parser-ex_8_10_0_11.override {
+    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
   };
 
   hlint = super.hlint.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_8;
+    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_11;
     extra = self.extra_1_7_1;
     filepattern = self.filepattern.override {
       extra = self.extra_1_7_1;
