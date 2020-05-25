@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "1.13";
+  version = "1.15";
 in stdenv.mkDerivation {
   pname = "libxsmm";
   inherit version;
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "hfp";
     repo = "libxsmm";
     rev = "refs/tags/${version}";
-    sha256 = "1c15ccy7vbmvxkfnc7sn26wnf6gr6gxgkmilpgpycm1fhi8ikd6w";
+    sha256 = "1406qk7k2k4qfqy4psqk55iihsrx91w8kjgsa82jxj50nl9nw5nj";
   };
 
   buildInputs = [
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Library targeting Intel Architecture for specialized dense and sparse matrix operations, and deep learning primitives";
     license = licenses.bsd3;
-    homepage = https://github.com/hfp/libxsmm ;
+    homepage = "https://github.com/hfp/libxsmm";
     platforms = platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ chessai ];
     inherit version;
