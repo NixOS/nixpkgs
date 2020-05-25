@@ -53,7 +53,6 @@ let
     go-dbus-generator = callPackage ./go-dbus-generator { };
     go-gir-generator = callPackage ./go-gir-generator { };
     go-lib = callPackage ./go-lib { };
-    qcef = callPackage ./qcef { };
     qt5dxcb-plugin = callPackage ./qt5dxcb-plugin { };
     qt5integration = callPackage ./qt5integration { };
     startdde = callPackage ./startdde { };
