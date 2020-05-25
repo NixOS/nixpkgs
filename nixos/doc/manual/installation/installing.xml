@@ -42,7 +42,7 @@
   </para>
 
   <para>
-   If the text is too small to be legible, try <command>setfont ter-132n</command>
+   If the text is too small to be legible, try <command>setfont ter-v32n</command>
    to increase the font size.
   </para>
 
