@@ -9,6 +9,7 @@ else
 
 	buildDunePackage {
 		pname = "cohttp-async";
+		useDune2 = true;
 		inherit (cohttp) version src;
 
 		buildInputs = [ ppx_sexp_conv ];
