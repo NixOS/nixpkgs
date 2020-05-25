@@ -3402,7 +3402,6 @@ broken-packages:
   - cabal-dependency-licenses
   - cabal-dev
   - cabal-dir
-  - cabal-fmt
   - cabal-ghc-dynflags
   - cabal-ghci
   - cabal-graphdeps
