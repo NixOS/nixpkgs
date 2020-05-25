@@ -22191,6 +22191,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  talentedhack = callPackage ../applications/audio/talentedhack { };
+
   tambura = callPackage ../applications/audio/tambura { };
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
