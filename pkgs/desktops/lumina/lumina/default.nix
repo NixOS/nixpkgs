@@ -67,6 +67,12 @@ mkDerivation rec {
     # Fix location of fluxbox styles
     substituteInPlace src-qt5/core-utils/lumina-config/pages/page_fluxbox_settings.cpp \
       --replace 'LOS::AppPrefix()+"share/fluxbox' "\"${fluxbox}/share/fluxbox"
+
+    # Fix desktop files
+    for i in $(grep -lir 'OnlyShowIn=Lumina' src-qt5); do
+      echo ===== $i
+      substituteInPlace $i --replace 'OnlyShowIn=Lumina' 'OnlyShowIn=X-Lumina'
+    done
   '';
 
   qmakeFlags = [
