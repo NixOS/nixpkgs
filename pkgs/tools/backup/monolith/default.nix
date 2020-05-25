@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,10 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1plx9p265jcc6wg3bhcdk1f77md8ann08kkv3g2706d82kxy2c1i";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ openssl ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
-  checkPhase = "cargo test -- --skip tests::cli";
+  checkFlagsArray = [ "--skip=tests::cli" ];
 
   meta = with stdenv.lib; {
     description = "Bundle any web page into a single HTML file";
