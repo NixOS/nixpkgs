@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
 
   # Disable install stripping as it breaks cross-compiling.
   # We strip binaries anyway in fixupPhase.
-  makeFlags= [ "STRIP=" ];
+  makeFlags= [
+    "STRIP="
+    "prefix=$(out)"
+    "moduledir=$(out)/lib/modules"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ "CC=cc" ];
 
   configureFlags = [
     "--enable-overlays"
@@ -35,9 +39,18 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
     ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
+  postBuild = ''
+    make $makeFlags -C contrib/slapd-modules/passwd/sha2
+    make $makeFlags -C contrib/slapd-modules/passwd/pbkdf2
+  '';
+
   doCheck = false; # needs a running LDAP server
 
-  installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(out)/var" ];
+  installFlags = [
+    "sysconfdir=$(out)/etc"
+    "localstatedir=$(out)/var"
+    "moduledir=$(out)/lib/modules"
+  ];
 
   # 1. Fixup broken libtool
   # 2. Libraries left in the build location confuse `patchelf --shrink-rpath`
@@ -51,9 +64,12 @@ stdenv.mkDerivation rec {
 
     rm -rf $out/var
     rm -r libraries/*/.libs
+    rm -r contrib/slapd-modules/passwd/*/.libs
   '';
 
   postInstall = ''
+    make $installFlags install -C contrib/slapd-modules/passwd/sha2
+    make $installFlags install -C contrib/slapd-modules/passwd/pbkdf2
     chmod +x "$out"/lib/*.{so,dylib}
   '';
 

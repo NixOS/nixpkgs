@@ -57,12 +57,12 @@ in
     };
 
     composer = mkDerivation rec {
-      version = "1.10.5";
+      version = "1.10.6";
       pname = "composer";
 
       src = pkgs.fetchurl {
         url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "0a9iwhd7ijm8gkp3zadxza0xb6xwa5ps0d16pz4mz2p21gfzvwym";
+        sha256 = "0yzfzgg9qlc388g91bdg7y7rp1q8vqb5hkwykwmr1n1lv8dsrg99";
       };
 
       dontUnpack = true;
@@ -202,7 +202,7 @@ in
         maintainers = with maintainers; [ javaguirre ] ++ teams.php.members;
       };
     };
- 
+
     phpmd = mkDerivation rec {
       version = "2.8.2";
       pname = "phpmd";
@@ -230,14 +230,14 @@ in
         broken = !isPhp74;
       };
     };
- 
+
     phpstan = mkDerivation rec {
-      version = "0.12.19";
+      version = "0.12.25";
       pname = "phpstan";
 
       src = pkgs.fetchurl {
         url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "15fz7rixi9s46qqxpj26349aky7wxqnzmfsnwlh1f2p4jsfd85ki";
+        sha256 = "1a864v7fxpv5kp24nkvczrir3ldl6wxvaq85rd391ppa8ahdhvdd";
       };
 
       phases = [ "installPhase" ];
@@ -707,6 +707,26 @@ in
       buildInputs = [ pcre'.dev ];
 
       meta.broken = isPhp74;
+    };
+
+    rdkafka = buildPecl {
+      version = "4.0.3";
+      pname = "rdkafka";
+
+      sha256 = "1g00p911raxcc7n2w9pzadxaggw5c564md6hjvqfs9ip550y5x16";
+
+      buildInputs = with pkgs; [ rdkafka pcre' ];
+
+      postPhpize = ''
+        substituteInPlace configure \
+          --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${pkgs.rdkafka}'
+      '';
+
+      meta = {
+        description = "Kafka client based on librdkafka";
+        homepage = "https://github.com/arnaud-lb/php-rdkafka";
+        maintainers = lib.teams.php.members;
+      };
     };
 
     redis = buildPecl {

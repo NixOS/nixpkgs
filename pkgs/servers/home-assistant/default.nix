@@ -67,7 +67,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.109.6";
+  hassVersion = "0.110.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -84,9 +84,9 @@ in with py.pkgs; buildPythonApplication rec {
   # PyPI tarball is missing tests/ directory
   src = fetchFromGitHub {
     owner = "home-assistant";
-    repo = "home-assistant";
+    repo = "core";
     rev = version;
-    sha256 = "133l6n165yivnc9qmrahk423hmns0hn0dbnx4ys7yaw3x5hqwyns";
+    sha256 = "1495kl997mvk9k11lk1ahv5w0yc0185qmxwa1h51j6d0zyqwz749";
   };
 
   propagatedBuildInputs = [

@@ -738,8 +738,6 @@ in {
 
   flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
 
-  fluidasserts = callPackage ../development/python-modules/fluidasserts { };
-
   foxdot = callPackage ../development/python-modules/foxdot { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
@@ -1607,6 +1605,13 @@ in {
 
   vdf = callPackage ../development/python-modules/vdf { };
 
+  vdirsyncer = callPackage ../development/python-modules/vdirsyncer {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices Security;
+    inherit (pkgs) pkg-config openssl rustPlatform;
+  };
+
+  vdirsyncerStable = callPackage ../development/python-modules/vdirsyncer/stable.nix { };
+
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
@@ -2094,6 +2099,8 @@ in {
   httpserver = callPackage ../development/python-modules/httpserver {};
 
   bleach = callPackage ../development/python-modules/bleach { };
+
+  bleak = callPackage ../development/python-modules/bleak { };
 
   blinker = callPackage ../development/python-modules/blinker { };
 
@@ -3029,6 +3036,10 @@ in {
 
   jsonwatch = callPackage ../development/python-modules/jsonwatch { };
 
+  kicad = disabledIf isPy27 (toPythonModule (pkgs.kicad.override {
+    python3 = python;
+  }).src);
+
   latexcodec = callPackage ../development/python-modules/latexcodec {};
 
   libmodulemd = pipe pkgs.libmodulemd [
@@ -3261,7 +3272,7 @@ in {
   pycares = callPackage ../development/python-modules/pycares { };
 
   pycuda = callPackage ../development/python-modules/pycuda {
-    cudatoolkit = pkgs.cudatoolkit_7_5;
+    cudatoolkit = pkgs.cudatoolkit;
     inherit (pkgs.stdenv) mkDerivation;
   };
 
@@ -4253,6 +4264,8 @@ in {
   kerberos = callPackage ../development/python-modules/kerberos {
     inherit (pkgs) kerberos;
   };
+
+  lazy_import = callPackage ../development/python-modules/lazy_import { };
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
@@ -5461,21 +5474,6 @@ in {
 
   pyyaml = callPackage ../development/python-modules/pyyaml { };
 
-  pyyaml_3 = (callPackage ../development/python-modules/pyyaml { }).overridePythonAttrs (oldAttrs: rec {
-    version = "3.13";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
-    };
-    # https://github.com/yaml/pyyaml/issues/298#issuecomment-511990948
-    patches = singleton (pkgs.fetchpatch {
-      url = "https://github.com/yaml/pyyaml/commit/c5b135fe39d41cffbdc006f28ccb2032df6005e0.patch";
-      sha256 = "0x1v45rkmj194c41d1nqi3ihj9z4rsy8zvpfcd8p960g1fia7fhn";
-    });
-    # https://github.com/yaml/pyyaml/issues/298#issuecomment-511990948
-    doCheck = false;
-  });
-
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
   rasterio = callPackage ../development/python-modules/rasterio {
@@ -5944,6 +5942,8 @@ in {
   twisted = callPackage ../development/python-modules/twisted { };
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
+
+  txdbus = callPackage ../development/python-modules/txdbus { };
 
   tzlocal = callPackage ../development/python-modules/tzlocal { };
 
@@ -7041,6 +7041,11 @@ in {
   prison = callPackage ../development/python-modules/prison { };
 
   pytoml = callPackage ../development/python-modules/pytoml { };
+
+  pypamtest = pkgs.libpam-wrapper.override {
+    enablePython = true;
+    inherit python;
+  };
 
   pypandoc = callPackage ../development/python-modules/pypandoc { };
 

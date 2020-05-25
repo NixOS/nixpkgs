@@ -28,6 +28,12 @@
    </listitem>
    <listitem>
     <para>
+    <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
+    Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      We now distribute a GNOME ISO.
     </para>
    </listitem>
@@ -122,8 +128,16 @@ services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
   <itemizedlist>
    <listitem>
     <para>
-     The go-modules builder now uses vendorSha256 instead of modSha256 to pin
-     fetched version data. This is currently a warning, but will be removed in the next release.
+     <literal>buildGoModule</literal> now internally creates a vendor directory
+     in the source tree for downloaded modules instead of using go's <link
+     xlink:href="https://golang.org/cmd/go/#hdr-Module_proxy_protocol">module
+     proxy protocol</link>. This storage format is simpler and therefore less
+     likekly to break with future versions of go. As a result
+     <literal>buildGoModule</literal> switched from
+     <literal>modSha256</literal> to the <literal>vendorSha256</literal>
+     attribute to pin fetched version data. <literal>buildGoModule</literal>
+     still accepts <literal>modSha256</literal> with a warning, but support will
+     be removed in the next release.
     </para>
    </listitem>
    <listitem>
@@ -381,6 +395,26 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
       will have changed.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The rkt module has been removed, it was archived by upstream.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <link xlink:href="https://bazaar.canonical.com">Bazaar</link> VCS is
+      unmaintained and, as consequence of the Python 2 EOL, the packages
+      <literal>bazaar</literal> and <literal>bazaarTools</literal> were
+      removed. Breezy, the backward compatible fork of Bazaar (see the
+      <link xlink:href="https://www.jelmer.uk/breezy-intro.html">announcement</link>),
+      was packaged as <literal>breezy</literal> and can be used instead.
+    </para>
+    <para>
+      Regarding Nixpkgs, <literal>fetchbzr</literal>,
+      <literal>nix-prefetch-bzr</literal> and Bazaar support in Hydra will
+      continue to work through Breezy.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -412,6 +446,34 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <para>
      The default output of <literal>buildGoPackage</literal> is now <literal>$out</literal> instead of <literal>$bin</literal>.
    </para>
+   </listitem>
+   <listitem>
+   <para>
+     Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
+   </para>
+   </listitem>
+   <listitem>
+    <para>
+     The scripted networking system now uses <literal>.link</literal> files in
+     <literal>/etc/systemd/network</literal> to configure mac address and link MTU,
+     instead of the sometimes buggy <literal>network-link-*</literal> units, which
+     have been removed.
+     Bringing the interface up has been moved to the beginning of the
+     <literal>network-addresses-*</literal> unit.
+     Note this doesn't require <command>systemd-networkd</command> - it's udev that
+     parses <literal>.link</literal> files.
+     Extra care needs to be taken in the presence of <link xlink:href="https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME">legacy udev rules</link>
+     to rename interfaces, as MAC Address and MTU defined in these options can only match on the original link name.
+     In such cases, you most likely want to create a <literal>10-*.link</literal> file through <xref linkend="opt-systemd.network.links"/> and set both name and MAC Address / MTU there.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Grafana received a major update to version 7.x. A plugin is now needed for
+     image rendering support, and plugins must now be signed by default. More
+     information can be found
+     <link xlink:href="https://grafana.com/docs/grafana/latest/installation/upgrading/#upgrading-to-v7-0">in the Grafana documentation</link>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

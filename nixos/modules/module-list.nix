@@ -415,6 +415,7 @@
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
+  ./services/misc/bazarr.nix
   ./services/misc/beanstalkd.nix
   ./services/misc/bees.nix
   ./services/misc/bepasty.nix
@@ -816,6 +817,7 @@
   ./services/torrent/magnetico.nix
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix
+  ./services/torrent/rtorrent.nix
   ./services/torrent/transmission.nix
   ./services/ttys/agetty.nix
   ./services/ttys/gpm.nix
@@ -828,6 +830,7 @@
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
+  ./services/web-apps/engelsystem.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
@@ -847,6 +850,7 @@
   ./services/web-apps/matomo.nix
   ./services/web-apps/moinmoin.nix
   ./services/web-apps/restya-board.nix
+  ./services/web-apps/sogo.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/trac.nix
   ./services/web-apps/trilium.nix
@@ -1002,7 +1006,6 @@
   ./virtualisation/podman.nix
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/railcar.nix
-  ./virtualisation/rkt.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix

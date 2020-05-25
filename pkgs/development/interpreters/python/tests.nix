@@ -9,6 +9,7 @@ let
   envs = let
     inherit python;
     pythonEnv = python.withPackages(ps: with ps; [ ]);
+    pythonVirtualEnv = python.withPackages(ps: with ps; [ virtualenv ]);
   in {
     # Plain Python interpreter
     plain = rec {
@@ -16,6 +17,20 @@ let
       interpreter = env.interpreter;
       is_venv = "False";
       is_nixenv = "False";
+      is_virtualenv = "False";
+    };
+  } // lib.optionalAttrs (python.isPy3k && !python.isPyPy) {
+    # Use virtualenv from a Nix env.
+    # Does not function with Python 2
+    # ValueError: source and destination is the same /nix/store/38kz3j1a87cq5y59k5w7k9yk4cqgc5b2-python-2.7.18/lib/python2.7/os.py
+    nixenv-virtualenv = rec {
+      env = runCommand "${python.name}-virtualenv" {} ''
+        ${pythonVirtualEnv.interpreter} -m virtualenv $out
+      '';
+      interpreter = "${env}/bin/${python.executable}";
+      is_venv = "False";
+      is_nixenv = "True";
+      is_virtualenv = "True";
     };
   } // lib.optionalAttrs (python.implementation != "graal") {
     # Python Nix environment (python.buildEnv)
@@ -24,6 +39,7 @@ let
       interpreter = env.interpreter;
       is_venv = "False";
       is_nixenv = "True";
+      is_virtualenv = "True";
     };
   } // lib.optionalAttrs (python.isPy3k && (!python.isPyPy)) rec {
     # Venv built using plain Python
@@ -36,6 +52,7 @@ let
       interpreter = "${env}/bin/${python.executable}";
       is_venv = "True";
       is_nixenv = "False";
+      is_virtualenv = "True";
     };
 
   } // lib.optionalAttrs (python.pythonAtLeast "3.8") {
@@ -49,6 +66,7 @@ let
       interpreter = "${env}/bin/${pythonEnv.executable}";
       is_venv = "True";
       is_nixenv = "True";
+      is_virtualenv = "True";
     };
   };
 

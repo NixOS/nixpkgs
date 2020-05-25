@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.9.13";
+  version = "1.9.14";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1yqqflp73yvjy6bp05xd1nv5fc6p1nx7g4spbssxf3ws96pdh425";
+    sha256 = "0vqsx4q7jn6vhmrm9kkk810d5nvnmyb6bni38ynkxcwlrp3qs6v2";
   };
 
   usb = fetchFromGitHub {
@@ -18,7 +18,7 @@ buildGoModule rec {
     sha256 = "0asd5fz2rhzkjmd8wjgmla5qmqyz4jaa6qf0n2ycia16jsck6wc2";
   };
 
-  vendorSha256 = "12aw8b8ci7nssidh1yz8d2hk43csdacq5jca9y70rjakpl3zndsz";
+  vendorSha256 = "01mbmc8qlp08127dlmcqz0viasmg7mrzqzmyw21an69sabcr112n";
 
   overrideModAttrs = (_: {
       postBuild = ''

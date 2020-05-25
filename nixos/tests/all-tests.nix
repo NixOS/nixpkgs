@@ -27,6 +27,7 @@ in
   atd = handleTest ./atd.nix {};
   avahi = handleTest ./avahi.nix {};
   babeld = handleTest ./babeld.nix {};
+  bazarr = handleTest ./bazarr.nix {};
   bcachefs = handleTestOn ["x86_64-linux"] ./bcachefs.nix {}; # linux-4.18.2018.10.12 is unsupported on aarch64
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
@@ -86,6 +87,7 @@ in
   ecryptfs = handleTest ./ecryptfs.nix {};
   ejabberd = handleTest ./xmpp/ejabberd.nix {};
   elk = handleTestOn ["x86_64-linux"] ./elk.nix {};
+  engelsystem = handleTest ./engelsystem.nix {};
   enlightenment = handleTest ./enlightenment.nix {};
   env = handleTest ./env.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
@@ -292,6 +294,7 @@ in
   slurm = handleTest ./slurm.nix {};
   smokeping = handleTest ./smokeping.nix {};
   snapper = handleTest ./snapper.nix {};
+  sogo = handleTest ./sogo.nix {};
   solr = handleTest ./solr.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
   spike = handleTest ./spike.nix {};
@@ -304,6 +307,7 @@ in
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
   systemd-analyze = handleTest ./systemd-analyze.nix {};
+  systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
   systemd-boot = handleTestOn ["x86_64-linux"] ./systemd-boot.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
@@ -348,6 +352,7 @@ in
   yabar = handleTest ./yabar.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
   zfs = handleTest ./zfs.nix {};
-  zsh-history = handleTest ./zsh-history.nix {};
+  zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
+  zsh-history = handleTest ./zsh-history.nix {};
 }

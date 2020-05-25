@@ -17,6 +17,10 @@ buildGoPackage rec {
 
   passthru.updateScript = ./update.sh;
 
+  postInstall = ''
+    mv $out/bin/wireguard $out/bin/wireguard-go
+  '';
+
   meta = with stdenv.lib; {
     description = "Userspace Go implementation of WireGuard";
     homepage = "https://git.zx2c4.com/wireguard-go/about/";

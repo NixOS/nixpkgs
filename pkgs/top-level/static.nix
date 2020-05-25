@@ -166,7 +166,6 @@ in {
   });
   arrow-cpp = super.arrow-cpp.override {
     enableShared = false;
-    python = { pkgs = { python = null; numpy = null; }; };
   };
   boost = super.boost.override {
     enableStatic = true;
