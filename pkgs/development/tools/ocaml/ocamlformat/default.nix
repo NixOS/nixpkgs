@@ -24,7 +24,7 @@ let
       inherit version useDune2 buildInputs;
 
       meta = {
-        inherit (src.meta) homepage;
+        homepage = "https://github.com/ocaml-ppx/ocamlformat";
         description = "Auto-formatter for OCaml code";
         maintainers = [ lib.maintainers.Zimmi48 lib.maintainers.marsam ];
         license = lib.licenses.mit;
