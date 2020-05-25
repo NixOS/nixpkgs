@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
   buildFlags = stdenv.lib.optional stdenv.isDarwin "LDFLAGS= CFLAGS_EXTRA=";
 
   installFlags = [ "PREFIX=$(out)" ];
-  installTargets = if stdenv.isDarwin then "install-osx" else "install";
+  installTargets = stdenv.lib.optional stdenv.isDarwin "install-osx";
 
   doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Shared library that implements scrypt() functionality";
-    homepage = https://lolware.net/2014/04/29/libscrypt.html;
+    homepage = "https://lolware.net/2014/04/29/libscrypt.html";
     license = licenses.bsd2;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.unix;

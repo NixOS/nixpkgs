@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A bittorrent filesystem based on FUSE";
-    homepage    = https://github.com/johang/btfs;
+    homepage    = "https://github.com/johang/btfs";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms   = platforms.linux;

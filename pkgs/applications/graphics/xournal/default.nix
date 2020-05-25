@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
-  NIX_LDFLAGS = [ "-lz" ]
-    ++ stdenv.lib.optionals (!isGdkQuartzBackend) [ "-lX11" ];
+  NIX_LDFLAGS = "-lz"
+    + stdenv.lib.optionalString (!isGdkQuartzBackend) " -lX11";
 
   desktopItem = makeDesktopItem {
     name = name;
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://xournal.sourceforge.net/;
+    homepage = "http://xournal.sourceforge.net/";
     description = "Note-taking application (supposes stylus)";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl2;

@@ -24,7 +24,7 @@ pythonPackages.buildPythonApplication rec {
     pyzmq
     requests
     tornado_4
-  ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) [
+  ] ++ stdenv.lib.optionals (!pythonPackages.isPy3k) [
     futures
   ] ++ extraInputs;
 
@@ -41,7 +41,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://saltstack.com/;
+    homepage = "https://saltstack.com/";
     description = "Portable, distributed, remote execution and configuration management system";
     maintainers = with maintainers; [ aneeshusa ];
     license = licenses.asl20;

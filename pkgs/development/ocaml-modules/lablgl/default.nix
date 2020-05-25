@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildFlags = "lib libopt glut glutopt";
+  buildFlags = [ "lib" "libopt" "glut" "glutopt" ];
 
   postInstall = ''
     cp ./META $out/lib/ocaml/${ocaml.version}/site-lib/lablgl
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html;
+    homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html";
     description = "OpenGL bindings for ocaml";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub vbgl ];

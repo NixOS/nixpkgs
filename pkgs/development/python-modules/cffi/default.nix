@@ -2,11 +2,11 @@
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
-  version = "1.13.2";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "599a1e8ff057ac530c9ad1778293c665cb81a791421f46922d80a86473c13346";
+    sha256 = "1dn279gw5ql8i5n3s5v4rnv96rhhjjfn7xq729qbl5bs2954yf1d";
   };
 
   outputs = [ "out" "dev" ];
@@ -29,7 +29,8 @@ if isPyPy then null else buildPythonPackage rec {
   '';
 
   # The tests use -Werror but with python3.6 clang detects some unreachable code.
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.cc.isClang [ "-Wno-unused-command-line-argument" "-Wno-unreachable-code" ];
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+    "-Wno-unused-command-line-argument -Wno-unreachable-code";
 
   doCheck = !stdenv.hostPlatform.isMusl && !stdenv.isDarwin; # TODO: Investigate
   checkPhase = ''
@@ -38,7 +39,7 @@ if isPyPy then null else buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ domenkozar lnl7 ];
-    homepage = https://cffi.readthedocs.org/;
+    homepage = "https://cffi.readthedocs.org/";
     license = with licenses; [ mit ];
     description = "Foreign Function Interface for Python calling C code";
   };

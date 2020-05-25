@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A temporary convenience package for changes waiting to be merged into the primary rdflib repo";
-    homepage = https://pypi.org/project/neurdflib;
+    homepage = "https://pypi.org/project/neurdflib";
     license = licenses.bsd3;
   };
 }

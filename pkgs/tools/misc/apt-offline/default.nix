@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Offline APT package manager";
     license = licenses.gpl3;
-    maintainers = [ maintainers.falsifian ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

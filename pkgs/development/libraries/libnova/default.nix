@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Celestial Mechanics, Astrometry and Astrodynamics Library";
-    homepage = http://libnova.sf.net;
+    homepage = "http://libnova.sf.net";
     platforms = platforms.unix;
     license = licenses.gpl2;
   };

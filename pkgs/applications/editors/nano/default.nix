@@ -20,11 +20,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "nano";
-  version = "4.6";
+  version = "4.9.1";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    sha256 = "1s98jsvkfar6qmd5n5l1n1k59623dnc93ciyvlhxjkvpad0kmb4v";
+    sha256 = "0v5s58j3lbg5s6gapl9kjmzph7zgwaam53qspycy2sxaxw65mkaj";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -38,15 +38,6 @@ in stdenv.mkDerivation rec {
     (stdenv.lib.enableFeature enableTiny "tiny")
   ];
 
-    patches = [
-      (fetchurl {
-        # fix compilation on macOS, where 'st_mtim' is unknown
-        # upstream patch not in 4.6
-        url = "https://git.savannah.gnu.org/cgit/nano.git/patch/?id=f516cddce749c3bf938271ef3182b9169ac8cbcc";
-        sha256 = "0gqymvr5vxxypr7y3sm252rsi4gjqp597l01x0lkxyvxsn45a4sx";
-      })
-  ];
-
   postInstall = ''
     cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
   '';
@@ -54,7 +45,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://www.nano-editor.org/;
+    homepage = "https://www.nano-editor.org/";
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [

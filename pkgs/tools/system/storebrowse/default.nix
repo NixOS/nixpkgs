@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://viric.name/cgi-bin/storebrowse;
+    homepage = "http://viric.name/cgi-bin/storebrowse";
     license = stdenv.lib.licenses.agpl3Plus;
     broken = true;
   };

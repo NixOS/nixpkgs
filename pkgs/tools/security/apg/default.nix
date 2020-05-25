@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
        * Ability to enforce remote users to use only allowed type of
          password generation
     '';
-    homepage = http://www.adel.nursat.kz/apg/;
+    homepage = "http://www.adel.nursat.kz/apg/";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = stdenv.lib.platforms.unix;

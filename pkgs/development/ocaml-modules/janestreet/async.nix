@@ -8,7 +8,7 @@ buildOcamlJane {
   propagatedBuildInputs = [ async_kernel async_unix async_extra ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/async;
+    homepage = "https://github.com/janestreet/async";
     description = "Jane Street Capital's asynchronous execution library";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer maintainers.ericbmerritt ];

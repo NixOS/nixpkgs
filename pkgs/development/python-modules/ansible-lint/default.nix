@@ -1,25 +1,32 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, isPy27
 , ansible
 , pyyaml
 , six
 , nose
 , setuptools_scm
 , ruamel_yaml
+, pathlib2
 }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "4.1.1a0";
+  version = "4.2.0";
+  # pip is not able to import version info on raumel.yaml
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00mw56a3lmdb5xvrzhahrzqv3wvxfz0mxl4n0qbkxzggf2pg0i8d";
+    sha256 = "eb925d8682d70563ccb80e2aca7b3edf84fb0b768cea3edc6846aac7abdc414a";
   };
 
+  format = "pyproject";
+
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ pyyaml six ansible ruamel_yaml ];
+  propagatedBuildInputs = [ pyyaml six ansible ruamel_yaml ]
+    ++ lib.optionals isPy27 [ pathlib2 ];
   checkInputs = [ nose ];
 
   postPatch = ''
@@ -31,10 +38,11 @@ buildPythonPackage rec {
   # give a hint to setuptools_scm on package version
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
+    export HOME=$(mktemp -d)
   '';
 
   checkPhase = ''
-    PATH=$out/bin:$PATH HOME=$(mktemp -d) nosetests test
+    PATH=$out/bin:$PATH nosetests test
   '';
 
   meta = with lib; {

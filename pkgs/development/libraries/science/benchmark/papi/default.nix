@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "13mngf9kl0y2wfxqvkad0smdaag7k8fvw82b4312gx62nwhc1i6r";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
   preConfigure = ''
     cd src
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   meta = with stdenv.lib; {
-    homepage = https://icl.utk.edu/papi/;
+    homepage = "https://icl.utk.edu/papi/";
     description = "PAPI provides the tool designer and application engineer with a consistent interface and methodology for use of the performance counter hardware found in most major microprocessors";
     license = licenses.bsdOriginal;
     platforms = platforms.linux;

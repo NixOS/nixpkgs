@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Scrolling tile-based arcade style puzzle game";
-    homepage = https://www.artsoft.org/rocksndiamonds/;
+    homepage = "https://www.artsoft.org/rocksndiamonds/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];

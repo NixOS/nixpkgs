@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     install -Dm644 -t $out/share/zsh/site-functions contrib/_mblaze
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/chneukirchen/mblaze;
+    homepage = "https://github.com/chneukirchen/mblaze";
     description = "Unix utilities to deal with Maildir";
     license = licenses.cc0;
     platforms = platforms.all;

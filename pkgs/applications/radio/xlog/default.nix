@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   buildInputs = [ glib pkgconfig gtk2 hamlib ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
          location in latitude and longitude and distance and heading in kilometers or miles,
          both for short and long path.
       '';
-    homepage = https://www.nongnu.org/xlog;
+    homepage = "https://www.nongnu.org/xlog";
     maintainers = [ maintainers.mafo ];
     license = licenses.gpl3;
     platforms = platforms.unix;

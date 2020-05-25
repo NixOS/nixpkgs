@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A Glorified WM-Independent Dropdown Creator";
-    homepage = https://github.com/noctuid/tdrop;
+    homepage = "https://github.com/noctuid/tdrop";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wedens ];

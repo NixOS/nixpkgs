@@ -26,10 +26,7 @@ let
       sha256 = "1dfps39q6bdr1zsbp9p74mvalmy3bycihv19sb9c6kg30kprz8nj";
     };
 
-    patches = [
-    ];
-
-    postPatch = let
+    prePatch = let
       # The source compatible with Poppler ${popplerVersion} not yet available in TeXLive ${year}
       # so we need to use files introduced in https://www.tug.org/svn/texlive?view=revision&revision=52959
       popplerVersion = "0.83.0";
@@ -70,6 +67,17 @@ let
       cp -pv ${pdftosrc} texk/web2c/pdftexdir/pdftosrc.cc
     '';
 
+    patches = [
+      # poppler 0.84 compat fixups, use 0.83 files otherwise
+      ./poppler84.patch
+
+      (fetchpatch {
+        name = "texlive-poppler-0.86.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.86.patch?h=packages/texlive-bin&id=60244e41bb6f1501e8ed1fc9e6b7ba8d3f283398";
+        sha256 = "0pdvhaqc3zgz7hp0x3a4qs0nh26fkvgmr6w1cjljqhp1nyiw2f1l";
+      })
+    ];
+
     # remove when removing synctex-missing-header.patch
     preAutoreconf = "pushd texk/web2c";
     postAutoreconf = "popd";
@@ -105,7 +113,7 @@ core = stdenv.mkDerivation rec {
   pname = "texlive-bin";
   inherit version;
 
-  inherit (common) src patches postPatch preAutoreconf postAutoreconf;
+  inherit (common) src patches prePatch preAutoreconf postAutoreconf;
 
   outputs = [ "out" "doc" ];
 
@@ -185,7 +193,7 @@ core = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Basic binaries for TeX Live";
-    homepage    = http://www.tug.org/texlive;
+    homepage    = "http://www.tug.org/texlive";
     license     = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ vcunat veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
@@ -198,7 +206,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   pname = "texlive-core-big.bin";
   inherit version;
 
-  inherit (common) src patches postPatch preAutoreconf postAutoreconf;
+  inherit (common) src patches prePatch preAutoreconf postAutoreconf;
 
   hardeningDisable = [ "format" ];
 
@@ -380,7 +388,7 @@ pygmentex = python2Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.ctan.org/pkg/pygmentex;
+    homepage = "https://www.ctan.org/pkg/pygmentex";
     description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
     longDescription = ''
       PygmenTeX is a Python-based LaTeX package that can be used for
@@ -393,6 +401,27 @@ pygmentex = python2Packages.buildPythonApplication rec {
     license = licenses.lppl13c;
     maintainers = with maintainers; [ romildo ];
   };
+};
+
+
+texlinks = stdenv.mkDerivation rec {
+  name = "texlinks.sh";
+
+  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs);
+
+  dontBuild = true;
+  doCheck = false;
+
+  installPhase = ''
+    runHook preInstall
+
+    # Patch texlinks.sh back to 2015 version;
+    # otherwise some bin/ links break, e.g. xe(la)tex.
+    patch --verbose -R scripts/texlive-extra/texlinks.sh < '${./texlinks.diff}'
+    install -Dm555 scripts/texlive-extra/texlinks.sh "$out"
+
+    runHook postInstall
+  '';
 };
 
 

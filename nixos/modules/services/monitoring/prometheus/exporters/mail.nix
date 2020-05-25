@@ -90,7 +90,7 @@ let
         Timeout until mails are considered "didn't make it".
       '';
     };
-    disableFileDelition = mkOption {
+    disableFileDeletion = mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -127,8 +127,8 @@ in
       '';
     };
     configuration = mkOption {
-      type = types.submodule exporterOptions;
-      default = {};
+      type = types.nullOr (types.submodule exporterOptions);
+      default = null;
       description = ''
         Specify the mailexporter configuration file to use.
       '';
@@ -147,8 +147,9 @@ in
       ExecStart = ''
         ${pkgs.prometheus-mail-exporter}/bin/mailexporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+          --web.telemetry-path ${cfg.telemetryPath} \
           --config.file ${
-            if cfg.configuration != {} then configurationFile else cfg.configFile
+            if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile)
           } \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';

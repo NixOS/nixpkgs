@@ -4,13 +4,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.2.3";
+  version = "3.2.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wgjwjh6296vs8awl4rylb5nshj9q9kzxv7j4vlmiabll06mx6gi";
+    sha256 = "0gzvdgg5l4j0wgkh7lp4wjabrpxvvs5m7mnpszqixxijdffjd4cj";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -45,7 +45,7 @@ buildPythonApplication rec {
       evaluation, detailed visualization of the call stack and a mode
       for explaining the concepts of references and heap.
     '';
-    homepage = https://www.thonny.org/;
+    homepage = "https://www.thonny.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;

@@ -1,6 +1,16 @@
-{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook }:
 
-{ category, pname, version, rev ? "${pname}-${version}", sha256, ... } @ args:
+{ category
+, pname
+, version
+, attrPath ? "xfce.${pname}"
+, rev-prefix ? "${pname}-"
+, rev ? "${rev-prefix}${version}"
+, sha256
+, odd-unstable ? true
+, patchlevel-unstable ? true
+, ...
+} @ args:
 
 let
   inherit (builtins) filter getAttr head isList;
@@ -12,7 +22,7 @@ let
   concatAttrLists = attrsets:
     zipAttrsWithNames (filterAttrNames isList (head attrsets)) (_: concatLists) attrsets;
 
-  template = {
+  template = rec {
     name = "${pname}-${version}";
 
     nativeBuildInputs = [ pkgconfig xfce4-dev-tools wrapGAppsHook ];
@@ -26,6 +36,13 @@ let
 
     enableParallelBuilding = true;
     outputs = [ "out" "dev" ];
+
+    pos = builtins.unsafeGetAttrPos "pname" args;
+
+    passthru.updateScript = xfce.updateScript {
+      inherit pname version attrPath rev-prefix odd-unstable patchlevel-unstable;
+      versionLister = xfce.gitLister src.url;
+    };
 
     meta = with stdenv.lib; {
       homepage = "https://git.xfce.org/${category}/${pname}/about";

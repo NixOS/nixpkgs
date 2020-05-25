@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   machine = { pkgs, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
-    services.xserver.displayManager.auto.user = "alice";
+    test-support.displayManager.auto.user = "alice";
     services.xserver.displayManager.defaultSession = "none+xmonad";
     services.xserver.windowManager.xmonad = {
       enable = true;

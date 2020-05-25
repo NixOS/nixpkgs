@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical user interface for the GnuPG";
-    homepage = https://www.gnupg.org/related_software/gpa/;
+    homepage = "https://www.gnupg.org/related_software/gpa/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

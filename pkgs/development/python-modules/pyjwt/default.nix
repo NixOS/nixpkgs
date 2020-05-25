@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "JSON Web Token implementation in Python";
-    homepage = https://github.com/jpadilla/pyjwt;
+    homepage = "https://github.com/jpadilla/pyjwt";
     license = licenses.mit;
     maintainers = with maintainers; [ prikhi ];
   };

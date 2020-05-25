@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.github.com/Juniper/py-junos-eznc;
+    homepage = "http://www.github.com/Juniper/py-junos-eznc";
     description = "Junos 'EZ' automation for non-programmers";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];

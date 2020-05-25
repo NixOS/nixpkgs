@@ -17,7 +17,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/pybase64;
+    homepage = "https://pypi.python.org/pypi/pybase64";
     description = "Fast Base64 encoding/decoding";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ma27 ];

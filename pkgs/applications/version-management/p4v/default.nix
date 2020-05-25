@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Perforce Visual Client";
-    homepage = https://www.perforce.com;
+    homepage = "https://www.perforce.com";
     license = stdenv.lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ nathyong nioncode ];

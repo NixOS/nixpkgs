@@ -59,7 +59,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
     license = licenses.asl20;
-    homepage = https://dvc.org;
+    homepage = "https://dvc.org";
     maintainers = with maintainers; [ cmcdragonkai ];
   };
 }

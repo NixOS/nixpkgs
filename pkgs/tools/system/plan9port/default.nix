@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     xorgproto libX11 libXext libXt fontconfig
     freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
   ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    darwin.cf-private Carbon Cocoa IOKit Metal QuartzCore
+    Carbon Cocoa IOKit Metal QuartzCore
   ]);
 
   builder = ./builder.sh;
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://9fans.github.io/plan9port/;
+    homepage = "https://9fans.github.io/plan9port/";
     description = "Plan 9 from User Space";
     longDescription = ''
       Plan 9 from User Space (aka plan9port) is a port of many Plan 9 programs

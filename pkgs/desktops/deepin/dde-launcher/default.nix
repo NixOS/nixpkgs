@@ -1,7 +1,7 @@
 { stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, dde-qt-dbus-factory,
   dde-session-ui, deepin, deepin-desktop-schemas, deepin-wallpapers,
   dtkcore, dtkwidget, gsettings-qt, qtsvg, qttools, qtx11extras,
-  which, xdg_utils, wrapGAppsHook }:
+  which, xdg_utils, wrapGAppsHook, glib }:
 
 mkDerivation rec {
   pname = "dde-launcher";
@@ -29,6 +29,7 @@ mkDerivation rec {
     deepin-wallpapers
     dtkcore
     dtkwidget
+    glib
     gsettings-qt
     qtsvg
     qtx11extras
@@ -58,6 +59,14 @@ mkDerivation rec {
     # note: `dbus-send` path does not need to be hard coded because it is not used for dtkcore >= 2.0.8.0
   '';
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
   postFixup = ''
     # debugging
     searchHardCodedPaths $out
@@ -67,7 +76,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Deepin Desktop Environment launcher module";
-    homepage = https://github.com/linuxdeepin/dde-launcher;
+    homepage = "https://github.com/linuxdeepin/dde-launcher";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

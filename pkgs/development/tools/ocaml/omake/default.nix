@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A build system designed for scalability and portability";
-    homepage = http://projects.camlcity.org/projects/omake.html;
+    homepage = "http://projects.camlcity.org/projects/omake.html";
     license = with stdenv.lib.licenses; [
       mit /* scripts */
       gpl2 /* program */

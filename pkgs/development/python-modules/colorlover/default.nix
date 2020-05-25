@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/jackparmer/colorlover;
+    homepage = "https://github.com/jackparmer/colorlover";
     description = "Color scales in Python for humans";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ globin ];

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://liw.fi/cmdtest/;
+    homepage = "http://liw.fi/cmdtest/";
     description = "Black box tests Unix command line tools";
     license = licenses.gpl3;
   };

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "markdown-based tool for building manpages";
-    homepage = https://rtomayko.github.io/ronn/;
+    homepage = "https://rtomayko.github.io/ronn/";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm nicknovitski ];
     platforms = env.ruby.meta.platforms;

@@ -38,7 +38,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "The official command line client for Cloud Foundry";
-    homepage = https://github.com/cloudfoundry/cli;
+    homepage = "https://github.com/cloudfoundry/cli";
     maintainers = with maintainers; [ ris ];
     license = licenses.asl20;
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];

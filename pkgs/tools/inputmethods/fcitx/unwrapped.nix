@@ -19,7 +19,7 @@ let
       sha256 = "1svcb97sq7nrywp5f2ws57cqvlic8j6p811d9ngflplj8xw5sjn4";
   };
   table = fetchurl {
-      url = http://download.fcitx-im.org/data/table.tar.gz;
+      url = "http://download.fcitx-im.org/data/table.tar.gz";
       sha256 = "1dw7mgbaidv3vqy0sh8dbfv8631d2zwv5mlb7npf69a1f8y0b5k1";
   };
   pystroke-data = let PY_STROKE_VER="20121124"; in fetchurl {
@@ -31,7 +31,7 @@ let
       sha256 = "011cg7wssssm6hm564cwkrrnck2zj5rxi7p9z5akvhg6gp4nl522";
   };
   pinyin-data = fetchurl {
-      url = http://download.fcitx-im.org/data/pinyin.tar.gz;
+      url = "http://download.fcitx-im.org/data/pinyin.tar.gz";
       sha256 = "1qfq5dy4czvd1lvdnxzyaiir9x8b1m46jjny11y0i33m9ar2jf2q";
   };
 in
@@ -75,23 +75,23 @@ stdenv.mkDerivation rec {
     libxkbcommon libxml2 dbus cairo gtk2 gtk3 pango qt4 libuuid
   ];
 
-  cmakeFlags = ''
-    -DENABLE_QT_IM_MODULE=ON
-    -DENABLE_GTK2_IM_MODULE=ON
-    -DENABLE_GTK3_IM_MODULE=ON
-    -DENABLE_GIR=OFF
-    -DENABLE_OPENCC=OFF
-    -DENABLE_PRESAGE=OFF
-    -DENABLE_XDGAUTOSTART=OFF
-    -DENABLE_PINYIN=${if withPinyin then "ON" else "OFF"}
-    -DENABLE_TABLE=ON
-    -DENABLE_SPELL=ON
-    -DENABLE_QT_GUI=ON
-    -DXKB_RULES_XML_FILE='${xkeyboard_config}/share/X11/xkb/rules/evdev.xml'
-    '';
+  cmakeFlags = [
+    "-DENABLE_QT_IM_MODULE=ON"
+    "-DENABLE_GTK2_IM_MODULE=ON"
+    "-DENABLE_GTK3_IM_MODULE=ON"
+    "-DENABLE_GIR=OFF"
+    "-DENABLE_OPENCC=OFF"
+    "-DENABLE_PRESAGE=OFF"
+    "-DENABLE_XDGAUTOSTART=OFF"
+    "-DENABLE_PINYIN=${if withPinyin then "ON" else "OFF"}"
+    "-DENABLE_TABLE=ON"
+    "-DENABLE_SPELL=ON"
+    "-DENABLE_QT_GUI=ON"
+    "-DXKB_RULES_XML_FILE='${xkeyboard_config}/share/X11/xkb/rules/evdev.xml'"
+  ];
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/fcitx/fcitx;
+    homepage    = "https://github.com/fcitx/fcitx";
     description = "A Flexible Input Method Framework";
     license     = licenses.gpl2;
     platforms   = platforms.linux;

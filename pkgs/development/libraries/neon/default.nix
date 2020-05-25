@@ -14,12 +14,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.30.2";
+  version = "0.31.0";
   pname = "neon";
 
   src = fetchurl {
     url = "http://www.webdav.org/neon/${pname}-${version}.tar.gz";
-    sha256 = "1jpvczcx658vimqm7c8my2q41fnmjaf1j03g7bsli6rjxk6xh2yv";
+    sha256 = "19dx4rsqrck9jl59y4ad9jf115hzh6pz1hcl2dnlfc84hc86ymc0";
   };
 
   patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An HTTP and WebDAV client library";
-    homepage = http://www.webdav.org/neon/;
+    homepage = "http://www.webdav.org/neon/";
     platforms = platforms.unix;
     license = licenses.lgpl2;
   };

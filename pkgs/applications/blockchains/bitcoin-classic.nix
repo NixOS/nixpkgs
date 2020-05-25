@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       will continue to release updates that are in line with Satoshi’s whitepaper &
       vision, and are agreed upon by the community.
     '';
-    homepage = https://bitcoinclassic.com/;
+    homepage = "https://bitcoinclassic.com/";
     maintainers = with maintainers; [ jefdaj ];
     license = licenses.mit;
     broken = stdenv.isDarwin;

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Precision colors for machines and people";
-    homepage = http://ethanschoonover.com/solarized;
+    homepage = "http://ethanschoonover.com/solarized";
     maintainers = [ maintainers.samuelrivas ];
     license = licenses.mit;
     platforms = platforms.all;

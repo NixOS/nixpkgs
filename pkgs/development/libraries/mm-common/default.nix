@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gtkmm.org";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

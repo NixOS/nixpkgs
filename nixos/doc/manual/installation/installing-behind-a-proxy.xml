@@ -40,7 +40,7 @@ networking.proxy.noProxy = &quot;127.0.0.1,localhost,internal.domain&quot;;
  <note>
   <para>
    If you are switching networks with different proxy configurations, use the
-   <literal>nesting.clone</literal> option in
+   <literal>specialisation</literal> option in
    <literal>configuration.nix</literal> to switch proxies at runtime. Refer to
    <xref linkend="ch-options" /> for more information.
   </para>

@@ -15,7 +15,7 @@ rec {
 
   meta = with stdenv.lib; {
     description = "Fast incremental file transfer utility";
-    homepage = https://rsync.samba.org/;
+    homepage = "https://rsync.samba.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Karabiner configurator";
-    homepage = https://github.com/yqrashawn/GokuRakuJoudo;
+    homepage = "https://github.com/yqrashawn/GokuRakuJoudo";
     license = licenses.gpl3;
     maintainers = [ maintainers.nikitavoloboev ];
     platforms = platforms.darwin;

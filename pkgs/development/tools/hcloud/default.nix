@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "hcloud";
-  version = "1.14.0";
+  version = "1.16.2";
 
   goPackagePath = "github.com/hetznercloud/cli";
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "hetznercloud";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "167x64ni4xm0d9b02gy8zvc8knhsvb1c9jhysw7svi7iaw5f2ds5";
+    sha256 = "0cxh92df8gdl4bmr22pdvdxdkdjyfy0jv48y0k6awy1xz61r94ap";
   };
 
-  modSha256 = "1g81szkrkxmv51l78v0d39i8dvrrdhf8wh38rwxvnay3iajgrnqk";
+  modSha256 = "1sdp62q4rnx7dp4i0dhnc8kzi8h6zzjdy7ym0mk9r7xkxxx0s3ds";
 
   buildFlagsArray = [ "-ldflags=" "-w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
 

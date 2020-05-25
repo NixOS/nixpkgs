@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       Config
     sed -i -e s,/usr/bin/perl,${perl}/bin/perl, \
       templates/src/*.pl
+    sed -i -e '/<stropts.h>/d' lib/os_linux.h
   '' + /* html-tidy updates */ ''
     substituteInPlace ./session/html_secure_tidy.c \
       --replace buffio.h tidybuffio.h
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lpam";
 
   meta = {
-    homepage = http://www-uxsup.csx.cam.ac.uk/~dpc22/prayer/;
+    homepage = "http://www-uxsup.csx.cam.ac.uk/~dpc22/prayer/";
     description = "Yet another Webmail interface for IMAP servers on Unix systems written in C";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

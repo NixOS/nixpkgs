@@ -90,16 +90,16 @@ in {
 
     services.postsrsd.domain = mkDefault config.networking.hostName;
 
-    users.users = optionalAttrs (cfg.user == "postsrsd") (singleton
-      { name = "postsrsd";
+    users.users = optionalAttrs (cfg.user == "postsrsd") {
+      postsrsd = {
         group = cfg.group;
         uid = config.ids.uids.postsrsd;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "postsrsd") (singleton
-      { name = "postsrsd";
-        gid = config.ids.gids.postsrsd;
-      });
+    users.groups = optionalAttrs (cfg.group == "postsrsd") {
+      postsrsd.gid = config.ids.gids.postsrsd;
+    };
 
     systemd.services.postsrsd = {
       description = "PostSRSd SRS rewriting server";

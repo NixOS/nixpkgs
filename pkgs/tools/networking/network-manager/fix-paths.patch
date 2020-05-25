@@ -1,8 +1,8 @@
 diff --git a/clients/common/nm-vpn-helpers.c b/clients/common/nm-vpn-helpers.c
-index 204b7c286..8bdb734c2 100644
+index ffae5f553..ba1093e4d 100644
 --- a/clients/common/nm-vpn-helpers.c
 +++ b/clients/common/nm-vpn-helpers.c
-@@ -215,10 +215,7 @@ nm_vpn_openconnect_authenticate_helper (const char *host,
+@@ -203,10 +203,7 @@ nm_vpn_openconnect_authenticate_helper (const char *host,
  		NULL,
  	};
  
@@ -15,7 +15,7 @@ index 204b7c286..8bdb734c2 100644
  	if (!g_spawn_sync (NULL,
  	                   (char **) NM_MAKE_STRV (path, "--authenticate", host),
 diff --git a/data/84-nm-drivers.rules b/data/84-nm-drivers.rules
-index e398cb9f2..31c56596a 100644
+index e398cb9f2..a43d61864 100644
 --- a/data/84-nm-drivers.rules
 +++ b/data/84-nm-drivers.rules
 @@ -7,6 +7,6 @@ ACTION!="add|change", GOTO="nm_drivers_end"
@@ -23,27 +23,27 @@ index e398cb9f2..31c56596a 100644
  ENV{ID_NET_DRIVER}=="?*", GOTO="nm_drivers_end"
  DRIVERS=="?*", GOTO="nm_drivers_end"
 -PROGRAM="/bin/sh -c '/usr/sbin/ethtool -i $$1 |/usr/bin/sed -n s/^driver:\ //p' -- $env{INTERFACE}", ENV{ID_NET_DRIVER}="%c"
-+PROGRAM="@shell@ -c '@ethtool@/bin/ethtool -i $$1 |@gnused@/bin/sed -n s/^driver:\ //p' -- $env{INTERFACE}", ENV{ID_NET_DRIVER}="%c"
++PROGRAM="@runtimeShell@ -c '@ethtool@/bin/ethtool -i $$1 |@gnused@/bin/sed -n s/^driver:\ //p' -- $env{INTERFACE}", ENV{ID_NET_DRIVER}="%c"
  
  LABEL="nm_drivers_end"
 diff --git a/data/NetworkManager.service.in b/data/NetworkManager.service.in
-index 2f442bf23..c3e797bf4 100644
+index 91ebd9a36..5201a56c3 100644
 --- a/data/NetworkManager.service.in
 +++ b/data/NetworkManager.service.in
 @@ -8,7 +8,7 @@ Before=network.target @DISTRO_NETWORK_SERVICE@
  [Service]
  Type=dbus
  BusName=org.freedesktop.NetworkManager
--ExecReload=/usr/bin/dbus-send --print-reply --system --type=method_call --dest=org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager.Reload uint32:0
-+ExecReload=@dbus@/bin/dbus-send --print-reply --system --type=method_call --dest=org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager.Reload uint32:0
+-ExecReload=/usr/bin/busctl call org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Reload u 0
++ExecReload=@systemd@/bin/busctl call org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Reload u 0
  #ExecReload=/bin/kill -HUP $MAINPID
  ExecStart=@sbindir@/NetworkManager --no-daemon
  Restart=on-failure
 diff --git a/libnm/meson.build b/libnm/meson.build
-index 710ef181d..3aa182dd4 100644
+index 51ca46d2b..0c04cc216 100644
 --- a/libnm/meson.build
 +++ b/libnm/meson.build
-@@ -280,7 +280,7 @@ if enable_introspection
+@@ -261,7 +261,7 @@ if enable_introspection
      name,
      input: libnm_gir[0],
      output: name,
@@ -52,20 +52,20 @@ index 710ef181d..3aa182dd4 100644
      depends: libnm_gir,
    )
  
-@@ -289,7 +289,7 @@ if enable_introspection
+@@ -270,7 +270,7 @@ if enable_introspection
      name,
-     input: libnm_gir[0],
+     input: [libnm_gir[0], nm_settings_docs_overrides],
      output: name,
--    command: [generate_setting_docs_env, python.path(), generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--overrides', nm_settings_docs_overrides, '--output', '@OUTPUT@'],
-+    command: [generate_setting_docs_env, generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--overrides', nm_settings_docs_overrides, '--output', '@OUTPUT@'],
+-    command: [generate_setting_docs_env, python.path(), generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT0@', '--overrides', '@INPUT1@', '--output', '@OUTPUT@'],
++    command: [generate_setting_docs_env, generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT0@', '--overrides', '@INPUT1@', '--output', '@OUTPUT@'],
      depends: libnm_gir,
    )
  endif
 diff --git a/src/devices/nm-device.c b/src/devices/nm-device.c
-index 67e23b8f9..b0ce52711 100644
+index e7a4a059a..0a8f8b7c6 100644
 --- a/src/devices/nm-device.c
 +++ b/src/devices/nm-device.c
-@@ -12840,14 +12840,14 @@ nm_device_start_ip_check (NMDevice *self)
+@@ -13179,14 +13179,14 @@ nm_device_start_ip_check (NMDevice *self)
  			gw = nm_ip4_config_best_default_route_get (priv->ip_config_4);
  			if (gw) {
  				nm_utils_inet4_ntop (NMP_OBJECT_CAST_IP4_ROUTE (gw)->gateway, buf);
@@ -83,10 +83,10 @@ index 67e23b8f9..b0ce52711 100644
  			}
  		}
 diff --git a/src/nm-core-utils.c b/src/nm-core-utils.c
-index d896d4d33..4cacb5cb6 100644
+index fb92289f0..c91b27b09 100644
 --- a/src/nm-core-utils.c
 +++ b/src/nm-core-utils.c
-@@ -446,7 +446,7 @@ nm_utils_modprobe (GError **error, gboolean suppress_error_logging, const char *
+@@ -336,7 +336,7 @@ nm_utils_modprobe (GError **error, gboolean suppress_error_logging, const char *
  
  	/* construct the argument list */
  	argv = g_ptr_array_sized_new (4);

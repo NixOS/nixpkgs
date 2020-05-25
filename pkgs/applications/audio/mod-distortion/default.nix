@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   installFlags = [ "INSTALL_PATH=$(out)/lib/lv2" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/portalmod/mod-distortion;
+    homepage = "https://github.com/portalmod/mod-distortion";
     description = "Analog distortion emulation lv2 plugins";
     license = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];

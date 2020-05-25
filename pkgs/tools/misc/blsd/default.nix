@@ -19,10 +19,11 @@ buildGoPackage {
   buildInputs = [ libgit2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/junegunn/blsd;
+    homepage = "https://github.com/junegunn/blsd";
     description = "List directories in breadth-first order";
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;
+    broken = true; # since 2020-02-08, libgit2 is incompatible upstream is dead.
   };
 }

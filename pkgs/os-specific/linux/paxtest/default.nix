@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   makefile     = "Makefile.psm";
   makeFlags    = [ "PAXBIN=${paxctl}/bin/paxctl" "BINDIR=$(out)/bin" "RUNDIR=$(out)/lib/paxtest" ];
-  installFlags = ''DESTDIR=""'';
+  installFlags = [ "DESTDIR=\"\"" ];
 
   meta = with stdenv.lib; {
     description = "Test various memory protection measures";

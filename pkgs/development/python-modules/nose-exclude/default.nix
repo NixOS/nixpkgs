@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     license = lib.licenses.lgpl21;
     description = "Exclude specific directories from nosetests runs";
-    homepage = https://github.com/kgrandis/nose-exclude;
+    homepage = "https://github.com/kgrandis/nose-exclude";
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

@@ -25,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "3.7";
+  version = "3.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "1d2qi3ny0bxa16ifh3465z1jgn1l0fmqk9dkph4ialw076gv13kb";
+    sha256 = "1zxrgrjbs13vgr002rvl734w9f7zzxfq4xxmyhj777dwgkfds0ld";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ dconf ];
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   patches = [ ./cmake_check_symbol_exists.patch ];
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   #   80 - test-gnc-module-scm-module (Failed)
   #   81 - test-gnc-module-scm-multi (Failed)
   preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
     export NIX_CFLAGS_LINK="-lgtest -lgtest_main"
   '';
   doCheck = false;
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = http://www.gnucash.org/;
+    homepage = "http://www.gnucash.org/";
 
     maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;

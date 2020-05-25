@@ -25,7 +25,7 @@ commitDateStrict8601=
 if test -n "$deepClone"; then
     deepClone=true
 else
-    deepClone=false
+    deepClone=
 fi
 
 if test "$leaveDotGit" != 1; then
@@ -53,6 +53,11 @@ Options:
     exit 1
 }
 
+# some git commands print to stdout, which would contaminate our JSON output
+clean_git(){
+    git "$@" >&2
+}
+
 argi=0
 argfun=""
 for arg; do
@@ -65,7 +70,7 @@ for arg; do
             --branch-name) argfun=set_branchName;;
             --deepClone) deepClone=true;;
             --quiet) QUIET=true;;
-            --no-deepClone) deepClone=false;;
+            --no-deepClone) deepClone=;;
             --leave-dotGit) leaveDotGit=true;;
             --fetch-submodules) fetchSubmodules=true;;
             --builder) builder=true;;
@@ -98,9 +103,9 @@ fi
 
 init_remote(){
     local url=$1
-    git init
-    git remote add origin "$url"
-    ( [ -n "$http_proxy" ] && git config http.proxy "$http_proxy" ) || true
+    clean_git init
+    clean_git remote add origin "$url"
+    ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
 }
 
 # Return the reference of an hash if it exists on the remote repository.
@@ -141,8 +146,8 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
-    git fetch -t ${builder:+--progress} origin || return 1
-    git checkout -b "$branchName" "$hash" || return 1
+    clean_git fetch -t ${builder:+--progress} origin || return 1
+    clean_git checkout -b "$branchName" "$hash" || return 1
 }
 
 # Fetch only a branch/tag and checkout it.
@@ -150,7 +155,7 @@ checkout_ref(){
     local hash="$1"
     local ref="$2"
 
-    if "$deepClone"; then
+    if [[ -n "$deepClone" ]]; then
         # The caller explicitly asked for a deep clone.  Deep clones
         # allow "git describe" and similar tools to work.  See
         # https://marc.info/?l=nix-dev&m=139641582514772
@@ -164,8 +169,8 @@ checkout_ref(){
 
     if test -n "$ref"; then
         # --depth option is ignored on http repository.
-        git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
-        git checkout -b "$branchName" FETCH_HEAD || return 1
+        clean_git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
+        clean_git checkout -b "$branchName" FETCH_HEAD || return 1
     else
         return 1
     fi
@@ -174,7 +179,7 @@ checkout_ref(){
 # Update submodules
 init_submodules(){
     # Add urls into .git/config file
-    git submodule init
+    clean_git submodule init
 
     # list submodule directories and their hashes
     git submodule status |
@@ -248,7 +253,7 @@ make_deterministic_repo(){
 
     # Remove all remote branches.
     git branch -r | while read -r branch; do
-        git branch -rD "$branch" >&2
+        clean_git branch -rD "$branch"
     done
 
     # Remove tags not reachable from HEAD. If we're exactly on a tag, don't
@@ -256,19 +261,19 @@ make_deterministic_repo(){
     maybe_tag=$(git tag --points-at HEAD)
     git tag --contains HEAD | while read -r tag; do
         if [ "$tag" != "$maybe_tag" ]; then
-            git tag -d "$tag" >&2
+            clean_git tag -d "$tag"
         fi
     done
 
     # Do a full repack. Must run single-threaded, or else we lose determinism.
-    git config pack.threads 1
-    git repack -A -d -f
+    clean_git config pack.threads 1
+    clean_git repack -A -d -f
     rm -f .git/config
 
     # Garbage collect unreferenced objects.
     # Note: --keep-largest-pack prevents non-deterministic ordering of packs
     #   listed in .git/objects/info/packs by only using a single pack
-    git gc --prune=all --keep-largest-pack
+    clean_git gc --prune=all --keep-largest-pack
     )
 }
 
@@ -369,7 +374,9 @@ print_results() {
   "rev": "$(json_escape "$fullRev")",
   "date": "$(json_escape "$commitDateStrict8601")",
   "$(json_escape "$hashType")": "$(json_escape "$hash")",
-  "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false)
+  "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
+  "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
+  "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false)
 }
 EOF
     fi

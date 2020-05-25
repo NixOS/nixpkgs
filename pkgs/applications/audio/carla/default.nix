@@ -15,13 +15,13 @@ assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.0.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fqgncqlr86n38yy7pa118mswfacmfczj7w9xx6c6k0jav3wk29k";
+    sha256 = "074y40yrgl3qrdr3a5vn0scsw0qv77r5p5m6gc89zhf20ic8ajzc";
   };
 
   nativeBuildInputs = [
@@ -39,12 +39,15 @@ stdenv.mkDerivation rec {
     ++ optional withGtk2 gtk2
     ++ optional withGtk3 gtk3;
 
+  enableParallelBuilding = true;
+
   installFlags = [ "PREFIX=$(out)" ];
 
   dontWrapQtApps = true;
   postFixup = ''
     # Also sets program_PYTHONPATH and program_PATH variables
     wrapPythonPrograms
+    wrapPythonProgramsIn "$out/share/carla/resources" "$out $pythonPath"
 
     find "$out/share/carla" -maxdepth 1 -type f -not -name "*.py" -print0 | while read -d "" f; do
       patchPythonScript "$f"
@@ -56,10 +59,16 @@ stdenv.mkDerivation rec {
         --prefix PATH : "$program_PATH:${which}/bin" \
         --set PYTHONNOUSERSITE true
     done
+
+    find "$out/share/carla/resources" -maxdepth 1 -type f -not -name "*.py" -print0 | while read -d "" f; do
+      wrapQtApp "$f" \
+        --prefix PATH : "$program_PATH:${which}/bin" \
+        --set PYTHONNOUSERSITE true
+    done
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://kxstudio.sf.net/carla;
+    homepage = "http://kxstudio.sf.net/carla";
     description = "An audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3

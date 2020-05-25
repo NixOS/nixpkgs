@@ -7,11 +7,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "caja-dropbox";
-  version = "1.22.1";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "18cnd3yw2ingvl38mhmfbl5k0kfg8pzcf2649j00i6v90cwiril5";
+    sha256 = "1rcn82q58mv9hn5xamvzay2pw1szfk6zns94362476fcp786lji2";
   };
 
   patches = [
@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [ "--with-caja-extension-dir=$$out/lib/caja/extensions-2.0" ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Dropbox extension for Caja file manager";

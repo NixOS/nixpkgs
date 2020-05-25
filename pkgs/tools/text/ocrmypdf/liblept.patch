@@ -1,0 +1,13 @@
+diff --git a/src/ocrmypdf/leptonica.py b/src/ocrmypdf/leptonica.py
+index 328b063..b993cc9 100644
+--- a/src/ocrmypdf/leptonica.py
++++ b/src/ocrmypdf/leptonica.py
+@@ -46,7 +46,7 @@ if os.name == 'nt':
+     os.environ['PATH'] = shim_paths_with_program_files()
+ else:
+     libname = 'lept'
+-_libpath = find_library(libname)
++_libpath = '@liblept@'
+ if not _libpath:
+     raise MissingDependencyError(
+         """

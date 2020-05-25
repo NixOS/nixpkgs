@@ -7,14 +7,14 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "geoclue";
-  version = "2.5.5";
+  version = "2.5.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0a8wmf5v3x4035ixz9jypj7c6qknvs6gjv2zawa3msq1j75rf2r5";
+    sha256 = "13fk6n4j74lvcsrg3kwbw1mkxgcr3iy9dnysmy0pclfsym8z5m5m";
   };
 
   patches = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Geolocation framework and some data providers";
-    homepage = https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home;
+    homepage = "https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home";
     maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl2;

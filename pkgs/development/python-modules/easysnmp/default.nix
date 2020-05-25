@@ -3,7 +3,7 @@
 , buildPythonPackage
 , pythonAtLeast
 , fetchFromGitHub
-, net_snmp
+, net-snmp
 , openssl
 , pytest
 , pytestcov
@@ -35,12 +35,12 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    net_snmp
+    net-snmp
     openssl
   ];
 
   buildPhase = ''
-    python setup.py build bdist_wheel --basedir=${net_snmp}/bin
+    python setup.py build bdist_wheel --basedir=${lib.getBin net-snmp}/bin
   '';
 
   # Unable to get tests to pass, even running by hand. The pytest tests have
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A blazingly fast and Pythonic SNMP library based on the official Net-SNMP bindings";
-    homepage = https://easysnmp.readthedocs.io/en/latest/;
+    homepage = "https://easysnmp.readthedocs.io/en/latest/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ WhittlesJr ];
   };

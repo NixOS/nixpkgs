@@ -72,24 +72,24 @@ let
 
     meta = with stdenv.lib; {
       description = "Software implementation of a telephone private branch exchange (PBX)";
-      homepage = https://www.asterisk.org/;
+      homepage = "https://www.asterisk.org/";
       license = licenses.gpl2;
       maintainers = with maintainers; [ auntie DerTim1 yorickvp ];
     };
   };
 
   pjproject_2_7_1 = fetchurl {
-    url = https://www.pjsip.org/release/2.7.1/pjproject-2.7.1.tar.bz2;
+    url = "https://www.pjsip.org/release/2.7.1/pjproject-2.7.1.tar.bz2";
     sha256 = "09ii5hgl5s7grx4fiimcl3s77i385h7b3kwpfa2q0arbl1ibryjr";
   };
 
   pjproject_2_8 = fetchurl {
-    url = https://www.pjsip.org/release/2.8/pjproject-2.8.tar.bz2;
+    url = "https://www.pjsip.org/release/2.8/pjproject-2.8.tar.bz2";
     sha256 = "0ybg0113rp3fk49rm2v0pcgqb28h3dv1pdy9594w2ggiz7bhngah";
   };
 
   mp3-202 = fetchsvn {
-    url = http://svn.digium.com/svn/thirdparty/mp3/trunk;
+    url = "http://svn.digium.com/svn/thirdparty/mp3/trunk";
     rev = "202";
     sha256 = "1s9idx2miwk178sa731ig9r4fzx4gy1q8xazfqyd7q4lfd70s1cy";
   };
@@ -141,11 +141,11 @@ in rec {
   #    # provided here verbatim for the convenience of anyone wanting to build
   #    # Asterisk from other sources. Include in externals.
   #    "sounds/asterisk-core-sounds-en-gsm-1.5.tar.gz" = fetchurl {
-  #      url = http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.5.tar.gz;
+  #      url = "http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.5.tar.gz";
   #      sha256 = "01xzbg7xy0c5zg7sixjw5025pvr4z64kfzi9zvx19im0w331h4cd";
   #    };
   #    "sounds/asterisk-moh-opsound-wav-2.03.tar.gz" = fetchurl {
-  #      url = http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-moh-opsound-wav-2.03.tar.gz;
+  #      url = "http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-moh-opsound-wav-2.03.tar.gz";
   #      sha256 = "449fb810d16502c3052fedf02f7e77b36206ac5a145f3dacf4177843a2fcb538";
   #    };
   #    # TODO: Sounds for other languages could be added here

@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, pkgconfig, ffmpeg, glew, libass, openal, qtbase }:
+{ mkDerivation, lib, fetchurl, pkgconfig, ffmpeg, glew, libass, openal, qtbase }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "bino";
   version = "1.6.7";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Stereoscopic 3D and multi-display video player";
-    homepage = https://bino3d.org/;
+    homepage = "https://bino3d.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

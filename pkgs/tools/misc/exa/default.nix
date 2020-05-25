@@ -8,7 +8,7 @@ buildRustPackage rec {
   pname = "exa";
   version = "0.9.0";
 
-  cargoSha256 = "1hgjp23rjd90wyf0nq6d5akjxdfjlaps54dv23zgwjvkhw24fidf";
+  cargoSha256 = "0nl106jlbr8gnnlbi20mrc6zyww7vxgmw6w34ibndxqh9ggxwfvr";
 
   src = fetchFromGitHub {
     owner = "ogham";
@@ -55,7 +55,7 @@ buildRustPackage rec {
       for a directory, or recursing into directories with a tree view. exa is
       written in Rust, so it’s small, fast, and portable.
     '';
-    homepage = https://the.exa.website;
+    homepage = "https://the.exa.website";
     license = licenses.mit;
     maintainers = with maintainers; [ ehegnes lilyball globin ];
   };

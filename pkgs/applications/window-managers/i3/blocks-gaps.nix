@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "0v9307ij8xzwdaxay3r75sd2cp453s3qb6q7dy9fks2p6wwqpazi";
   };
 
-  makeFlags = "all";
-  installFlags = "PREFIX=\${out} VERSION=${version}";
+  makeFlags = [ "all" ];
+  installFlags = [ "PREFIX=\${out}" "VERSION=${version}" ];
 
   buildInputs = optional (contains_any scripts perlscripts) perl;
   nativeBuildInputs = [ makeWrapper ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A flexible scheduler for your i3bar blocks -- this is a fork to use with i3-gaps";
-    homepage = https://github.com/Airblader/i3blocks-gaps;
+    homepage = "https://github.com/Airblader/i3blocks-gaps";
     license = licenses.gpl3;
     maintainers = with maintainers; [ carlsverre ];
     platforms = platforms.linux;

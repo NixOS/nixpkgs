@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "volctl";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "buzz";
     repo = pname;
     rev = version;
-    sha256 = "1bqq5mrpi7qxzl37z6fj67pqappjmwhi8d8db95j3lmf16svm2xk";
+    sha256 = "0rppqc5wiqxd83z2mgvhi6gdx7yhy9wnav1dbbi1wvm7lzw6fnil";
   };
 
   nativeBuildInputs = [
@@ -28,14 +28,6 @@ pythonPackages.buildPythonApplication rec {
 
   strictDeps = false;
 
-  postPatch = ''
-    # The user can set a mixer application in the preferences. The
-    # default is pavucontrol. Do not hard code its path and hope it
-    # can be found in $PATH.
-
-    substituteInPlace volctl/app.py --replace /usr/bin/pavucontrol pavucontrol
-  '';
-
   preBuild = ''
     export LD_LIBRARY_PATH=${libpulseaudio}/lib
   '';
@@ -50,7 +42,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "PulseAudio enabled volume control featuring per-app sliders";
-    homepage = https://buzz.github.io/volctl/;
+    homepage = "https://buzz.github.io/volctl/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

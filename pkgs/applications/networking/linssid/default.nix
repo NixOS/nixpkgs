@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical wireless scanning for Linux";
-    homepage = https://sourceforge.net/projects/linssid/;
+    homepage = "https://sourceforge.net/projects/linssid/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

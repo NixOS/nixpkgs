@@ -1,6 +1,8 @@
 { mkDerivation, stdenv, lib, fetchFromGitHub, cmake
 , qtbase, qtquickcontrols, qtkeychain, qtmultimedia, qttools
-, libqmatrixclient_0_5 }:
+, libqmatrixclient_0_5
+, libsecret
+}:
 
 let
   generic = version: sha256: prefix: library: mkDerivation {
@@ -14,7 +16,7 @@ let
       inherit sha256;
     };
 
-    buildInputs = [ qtbase qtmultimedia qtquickcontrols qtkeychain library ];
+    buildInputs = [ qtbase qtmultimedia qtquickcontrols qtkeychain library libsecret ];
 
     nativeBuildInputs = [ cmake qttools ];
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mahatma-kaganovich/xkbd;
+    homepage = "https://github.com/mahatma-kaganovich/xkbd";
     description = "onscreen soft keyboard for X11";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.genesis ];

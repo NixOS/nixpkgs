@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = ''
-    export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=`pwd`''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
   outputs = [ "dev" "out" ];

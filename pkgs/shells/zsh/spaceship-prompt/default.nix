@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Zsh prompt for Astronauts";
-    homepage = https://github.com/denysdovhan/spaceship-prompt/;
+    homepage = "https://github.com/denysdovhan/spaceship-prompt/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nyanloutre ];

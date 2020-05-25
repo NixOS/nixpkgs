@@ -2,20 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "iconpack-obsidian";
-  version = "4.9";
+  version = "4.11";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1w0lnr08gd0cnzv3n5094jqb7dpbpwwizfhvifdir0xsls1sf129";
+    sha256 = "18sqnrvh4bbmg3zzm78n4s2hvv8a77ilg7xa3hl94mp9qla6gasn";
   };
 
   nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs = [ hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 
@@ -31,8 +29,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Gnome Icon Pack based upon Faenza";
-    homepage = https://github.com/madmaxms/iconpack-obsidian;
+    description = "Gnome icon pack based upon Faenza";
+    homepage = "https://github.com/madmaxms/iconpack-obsidian";
     license = licenses.lgpl3;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;

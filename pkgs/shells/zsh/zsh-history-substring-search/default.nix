@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fish shell history-substring-search for Zsh";
-    homepage = https://github.com/zsh-users/zsh-history-substring-search;
+    homepage = "https://github.com/zsh-users/zsh-history-substring-search";
     license = licenses.bsd3;
     maintainers = with maintainers; [ qyliss ];
     platforms = platforms.unix;

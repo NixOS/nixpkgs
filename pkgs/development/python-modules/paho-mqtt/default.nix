@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    homepage = https://eclipse.org/paho;
+    homepage = "https://eclipse.org/paho";
     description = "MQTT version 3.1.1 client class";
     license = licenses.epl10;
     maintainers = with maintainers; [ mog dotlambda ];

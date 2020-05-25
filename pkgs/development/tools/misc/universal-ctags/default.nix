@@ -33,11 +33,11 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  checkFlags = "units";
+  checkFlags = [ "units" ];
 
   meta = with stdenv.lib; {
     description = "A maintained ctags implementation";
-    homepage = https://ctags.io/;
+    homepage = "https://ctags.io/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     # universal-ctags is preferred over emacs's ctags

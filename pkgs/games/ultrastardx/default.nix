@@ -12,21 +12,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2017.8.0";
+  version = "unstable-2019-01-07";
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "v${version}";
-    sha256 = "1zp0xfwzci3cjmwx3cprcxvm60cik5cvhvrz9n4d6yb8dv38nqzm";
+    rev = "3df142590f29db1505cc58746af9f8cf7cb4a6a5";
+    sha256 = "EpwGKK9B8seF7gRwo3kCeSzFQQW1p8rP4HXeu8/LoyA=";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ fpc libpng ] ++ sharedLibs;
 
-  # https://github.com/UltraStar-Deluxe/USDX/issues/462
   postPatch = ''
     substituteInPlace src/config.inc.in \
-      --subst-var-by lua_LIB_NAME liblua.so \
       --subst-var-by libpcre_LIBNAME libpcre.so.1
   '';
 
@@ -40,7 +38,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    homepage = http://ultrastardx.sourceforge.net/;
+    homepage = "http://ultrastardx.sourceforge.net/";
     description = "Free and open source karaoke game";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch ];

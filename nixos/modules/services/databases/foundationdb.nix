@@ -341,17 +341,17 @@ in
 
     environment.systemPackages = [ pkg ];
 
-    users.users = optionalAttrs (cfg.user == "foundationdb") (singleton
-      { name        = "foundationdb";
+    users.users = optionalAttrs (cfg.user == "foundationdb") {
+      foundationdb = {
         description = "FoundationDB User";
         uid         = config.ids.uids.foundationdb;
         group       = cfg.group;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "foundationdb") (singleton
-      { name = "foundationdb";
-        gid  = config.ids.gids.foundationdb;
-      });
+    users.groups = optionalAttrs (cfg.group == "foundationdb") {
+      foundationdb.gid = config.ids.gids.foundationdb;
+    };
 
     networking.firewall.allowedTCPPortRanges = mkIf cfg.openFirewall
       [ { from = cfg.listenPortStart;

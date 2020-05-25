@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://howl.io/;
+    homepage = "https://howl.io/";
     description = "A general purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
     license = licenses.mit;
     maintainers = with maintainers; [ pacien ];

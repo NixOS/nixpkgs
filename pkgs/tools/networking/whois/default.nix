@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, perl, gettext, pkgconfig, libidn2, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "5.5.3";
+  version = "5.5.6";
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    sha256 = "099yvqng085f69k815961jnwk50nzmiknvhl1wwmji2hl36r160g";
+    sha256 = "0iqbn2ky9j7qdpv5hycy56knnfhl8nz4l4905rnr0p703lvxxx8d";
   };
 
   nativeBuildInputs = [ perl gettext pkgconfig ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       select the appropriate WHOIS server for most queries.
     '';
 
-    homepage = https://packages.qa.debian.org/w/whois.html;
+    homepage = "https://packages.qa.debian.org/w/whois.html";
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;

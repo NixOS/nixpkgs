@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An analysis and visualization toolkit for volumetric data";
-    homepage = https://github.com/yt-project/yt;
+    homepage = "https://github.com/yt-project/yt";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

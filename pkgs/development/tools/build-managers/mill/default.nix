@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mill";
-  version = "0.5.3";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "https://github.com/lihaoyi/mill/releases/download/${version}/${version}";
-    sha256 = "1m4p0d15qgayfnknvl99sd1kpgrqfaj1yczvwh7ip0gxcladn1wv";
+    sha256 = "1blar5dxhmxlwxhmq8wv0xvhy200qks6xj12n54qx9d5qp300ncw";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.lihaoyi.com/mill;
+    homepage = "https://www.lihaoyi.com/mill";
     license = licenses.mit;
     description = "A build tool for Scala, Java and more";
     longDescription = ''

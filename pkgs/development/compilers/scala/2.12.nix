@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     # put docs in correct subdirectory
     mkdir -p $out/share/doc
     mv $out/doc $out/share/doc/scala
+    mv $out/{LICENSE,NOTICE} $out/share/doc/scala
 
     for p in $(ls $out/bin/) ; do
       wrapProgram $out/bin/$p \
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
       Code sizes are typically reduced by a factor of two to three when
       compared to an equivalent Java application.
     '';
-    homepage = https://www.scala-lang.org/;
+    homepage = "https://www.scala-lang.org/";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
   };

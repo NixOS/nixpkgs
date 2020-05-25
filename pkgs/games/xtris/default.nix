@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A multi-player version of the classical game of Tetris, for the X Window system";
-    homepage = https://web.archive.org/web/20120315061213/http://www.iagora.com/~espel/xtris/xtris.html;
+    homepage = "https://web.archive.org/web/20120315061213/http://www.iagora.com/~espel/xtris/xtris.html";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -11,7 +11,7 @@
 , tqdm
 # Advanced image processing (triples size of output)
 , advancedProcessing ? false
-, opencv ? null
+, opencv3 ? null
 , scikitimage ? null
 , scikitlearn ? null
 , scipy ? null
@@ -20,18 +20,18 @@
 }:
 
 assert advancedProcessing -> (
-  opencv != null && scikitimage != null && scikitlearn != null
+  opencv3 != null && scikitimage != null && scikitlearn != null
   && scipy != null && matplotlib != null && youtube-dl != null);
 
 buildPythonPackage rec {
   pname = "moviepy";
-  version = "1.0.1";
+  version = "1.0.2";
 
   disabled = !(pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vgi9k1r4f5s9hzfzlhmmc574n80aq713ahv8cnbj3jci070lnwx";
+    sha256 = "0ajw2xmcd962qw2kxxnbp08l5vgk5k78sls9bb227lw8aa51ln80";
   };
 
   # No tests, require network connection
@@ -40,12 +40,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy decorator imageio imageio-ffmpeg tqdm requests proglog
   ] ++ (stdenv.lib.optionals advancedProcessing [
-    opencv scikitimage scikitlearn scipy matplotlib youtube-dl
+    opencv3 scikitimage scikitlearn scipy matplotlib youtube-dl
   ]);
 
   meta = with stdenv.lib; {
     description = "Video editing with Python";
-    homepage = http://zulko.github.io/moviepy/;
+    homepage = "https://zulko.github.io/moviepy/";
     license = licenses.mit;
   };
 

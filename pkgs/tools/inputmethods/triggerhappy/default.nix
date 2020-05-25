@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       interprets the event data received and executes scripts configured in its
       configuration.
     '';
-    homepage = https://github.com/wertarbyte/triggerhappy/;
+    homepage = "https://github.com/wertarbyte/triggerhappy/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau taha ];

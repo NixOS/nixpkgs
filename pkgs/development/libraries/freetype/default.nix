@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
       autofit which can be used instead of hinting instructions included in
       fonts.
     '';
-    homepage = https://www.freetype.org/;
+    homepage = "https://www.freetype.org/";
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A fast implementation of the Cassowary constraint solver";
-    homepage = https://github.com/nucleic/kiwi;
+    homepage = "https://github.com/nucleic/kiwi";
     license = lib.licenses.bsd3;
   };
 

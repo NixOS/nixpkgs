@@ -14,13 +14,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";
-  version = "6.8";
+  version = "6.9";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = "rng-tools";
     rev = "v${version}";
-    sha256 = "1clm9i9xg3j79q0d6vinn6dx0nwh1fvzcmkqpcbay7mwsgkknvw2";
+    sha256 = "065jf26s8zkicb95zc9ilksjdq9gqrh5vcx3mhi6mypbnamn6w98";
   };
 
   postPatch = ''
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A random number generator daemon";
-    homepage = https://github.com/nhorman/rng-tools;
+    homepage = "https://github.com/nhorman/rng-tools";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ johnazoidberg c0bw3b ];

@@ -16,6 +16,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   options = {
 
     programs.bash.vteIntegration = mkOption {

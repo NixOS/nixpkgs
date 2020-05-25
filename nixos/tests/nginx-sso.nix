@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "nginx-sso";
   meta = {
     maintainers = with pkgs.stdenv.lib.maintainers; [ delroth ];
@@ -27,18 +27,22 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $machine->waitForUnit("nginx-sso.service");
-    $machine->waitForOpenPort(8080);
+    machine.wait_for_unit("nginx-sso.service")
+    machine.wait_for_open_port(8080)
 
-    # No valid user -> 401.
-    $machine->fail("curl -sSf http://localhost:8080/auth");
+    with subtest("No valid user -> 401"):
+        machine.fail("curl -sSf http://localhost:8080/auth")
 
-    # Valid user but no matching ACL -> 403.
-    $machine->fail("curl -sSf -H 'Authorization: Token MyToken' http://localhost:8080/auth");
+    with subtest("Valid user but no matching ACL -> 403"):
+        machine.fail(
+            "curl -sSf -H 'Authorization: Token MyToken' http://localhost:8080/auth"
+        )
 
-    # Valid user and matching ACL -> 200.
-    $machine->succeed("curl -sSf -H 'Authorization: Token MyToken' -H 'X-Application: MyApp' http://localhost:8080/auth");
+    with subtest("Valid user and matching ACL -> 200"):
+        machine.succeed(
+            "curl -sSf -H 'Authorization: Token MyToken' -H 'X-Application: MyApp' http://localhost:8080/auth"
+        )
   '';
 })

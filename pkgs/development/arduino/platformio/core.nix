@@ -1,8 +1,9 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub
-, bottle, click, colorama
+{ stdenv, lib, buildPythonApplication, fetchFromGitHub, fetchpatch
+, bottle, click, colorama, semantic-version
 , lockfile, pyserial, requests
-, pytest, semantic-version, tox, tabulate
-, git
+, tabulate, pyelftools, marshmallow
+, pytest, tox, jsondiff
+, git, spdx-license-list-data
 }:
 
 let
@@ -33,12 +34,15 @@ let
     "commands/test_test.py::test_local_env"
     "test_builder.py::test_build_flags"
     "test_builder.py::test_build_unflags"
+    "test_builder.py::test_debug_default_build_flags"
+    "test_builder.py::test_debug_custom_build_flags"
     "test_misc.py::test_api_cache"
     "test_misc.py::test_ping_internet_ips"
     "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
   ]) ++ (map (e: "--ignore=tests/${e}") [
     "commands/test_boards.py"
+    "commands/test_check.py"
     "commands/test_platform.py"
     "commands/test_update.py"
     "test_maintenance.py"
@@ -47,25 +51,25 @@ let
 
 in buildPythonApplication rec {
   pname = "platformio";
-  version = "4.0.3";
+  version = "4.3.1";
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    sha256 = "1naaa53cc7n7zyqggqjvvgkcq8cyzngdf904y9ag0x1vvb70f8j9";
+    sha256 = "1dxnjy60zpkgyrbvbf6b9qi6m37gm8gwjmxwfj30npr1y7rvxwrw";
   };
 
   propagatedBuildInputs =  [
     bottle click colorama git lockfile
     pyserial requests semantic-version
-    tabulate
+    tabulate pyelftools marshmallow
   ];
 
   HOME = "/tmp";
 
-  checkInputs = [ pytest tox ];
+  checkInputs = [ pytest tox jsondiff ];
 
   checkPhase = ''
     runHook preCheck
@@ -75,12 +79,20 @@ in buildPythonApplication rec {
     runHook postCheck
   '';
 
-  patches = [ ./fix-searchpath.patch ];
+  patches = [
+    ./fix-searchpath.patch
+    ./use-local-spdx-license-list.patch
+  ];
+
+  postPatch = ''
+    substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
+      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
+  '';
 
   meta = with stdenv.lib; {
     broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
-    homepage = http://platformio.org;
+    homepage = "http://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
   };

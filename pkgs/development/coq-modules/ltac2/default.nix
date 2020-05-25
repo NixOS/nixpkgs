@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
      coq.ocamlPackages.camlp5
   ;
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = {
     description = "A robust and expressive tactic language for Coq";

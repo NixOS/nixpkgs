@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Quartz Event Synthesizer";
-    homepage = https://github.com/koekeishiya/qes;
+    homepage = "https://github.com/koekeishiya/qes";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ lnl7 ];
     license = licenses.mit;

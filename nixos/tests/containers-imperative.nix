@@ -46,6 +46,15 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           };
         }
       '';
+      brokenCfg = pkgs.writeText "broken.nix" ''
+        {
+          assertions = [
+            { assertion = false;
+              message = "I never evaluate";
+            }
+          ];
+        }
+      '';
     in ''
       with subtest("Make sure we have a NixOS tree (required by ‘nixos-container create’)"):
           machine.succeed("PAGER=cat nix-env -qa -A nixos.hello >&2")
@@ -130,5 +139,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       with subtest("Ensure that the container path is gone"):
           print(machine.succeed("ls -lsa /var/lib/containers"))
           machine.succeed(f"test ! -e /var/lib/containers/{id1}")
+
+      with subtest("Ensure that a failed container creation doesn'leave any state"):
+          machine.fail(
+              "nixos-container create b0rk --config-file ${brokenCfg}"
+          )
+          machine.succeed(f"test ! -e /var/lib/containers/b0rk")
     '';
 })

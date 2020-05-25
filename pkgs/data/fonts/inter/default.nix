@@ -15,7 +15,7 @@ in fetchzip {
   sha256 = "1bk4q478jy84ylgm1mmh23n8cw1cd3k7gvfih77sd7ya1zv26vl1";
 
   meta = with lib; {
-    homepage = https://rsms.me/inter/;
+    homepage = "https://rsms.me/inter/";
     description = "A typeface specially designed for user interfaces";
     license = licenses.ofl;
     platforms = platforms.all;

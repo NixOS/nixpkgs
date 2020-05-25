@@ -1,8 +1,8 @@
-{ pkgs ? import ((import ../.).cleanSource ../..) {} }:
+{ pkgs ? import ../.. {} }:
 
 pkgs.runCommandNoCC "nixpkgs-lib-tests" {
-  buildInputs = [ pkgs.nix (import ./check-eval.nix) ];
-  NIX_PATH="nixpkgs=${pkgs.path}";
+  buildInputs = [ pkgs.nix (import ./check-eval.nix) (import ./maintainers.nix { inherit pkgs; }) ];
+  NIX_PATH = "nixpkgs=${toString pkgs.path}";
 } ''
     datadir="${pkgs.nix}/share"
     export TEST_ROOT=$(pwd)/test-tmp
@@ -17,8 +17,8 @@ pkgs.runCommandNoCC "nixpkgs-lib-tests" {
     cacheDir=$TEST_ROOT/binary-cache
     nix-store --init
 
-    cd ${pkgs.path}/lib/tests
-    bash ./modules.sh
+    cp -r ${../.} lib
+    bash lib/tests/modules.sh
 
     touch $out
 ''

@@ -15,7 +15,7 @@ buildOcaml rec {
   propagatedBuildInputs = [ core_p4 pa_ounit sexplib_p4 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/textutils;
+    homepage = "https://github.com/janestreet/textutils";
     description = "";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

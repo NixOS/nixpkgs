@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "kd-tree implementation for fast nearest neighbour search in Python";
-    homepage = https://github.com/storpipfugl/pykdtree;
+    homepage = "https://github.com/storpipfugl/pykdtree";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ psyanticy ];
   };

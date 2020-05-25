@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python-based build/distribution/deployment scripting tool";
-    homepage    = https://github.com/paver/paver;
+    homepage    = "https://github.com/paver/paver";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
   };

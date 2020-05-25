@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1w1x5mrgly2ldiw3q2r6y620zgd89gk7n90ja46775lhaswxzv7a";
   };
 
+  patches = [ ./honor-XKB_CONFIG_ROOT.patch ];
+
   outputs = [ "out" "dev" "devdoc" ];
 
   # TODO: enable xmodmap support, needs xmodmap DB
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library providing high-level API for X Keyboard Extension known as XKB";
-    homepage = http://freedesktop.org/wiki/Software/LibXklavier;
+    homepage = "http://freedesktop.org/wiki/Software/LibXklavier";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

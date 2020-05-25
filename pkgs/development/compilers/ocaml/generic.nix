@@ -11,7 +11,7 @@ let
 in
 
 { stdenv, fetchurl, ncurses, buildEnv
-, libX11, xorgproto, useX11 ? safeX11 stdenv
+, libX11, xorgproto, useX11 ? safeX11 stdenv && !stdenv.lib.versionAtLeast version "4.09"
 , aflSupport ? false
 , flambdaSupport ? false
 }:
@@ -55,10 +55,10 @@ stdenv.mkDerivation (args // {
   ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
   ;
 
-  buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
+  buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
   buildInputs = optional (!stdenv.lib.versionAtLeast version "4.07") ncurses
     ++ optionals useX11 [ libX11 xorgproto ];
-  installTargets = "install" + optionalString useNativeCompilers " installopt";
+  installTargets = [ "install" ] ++ optional useNativeCompilers "installopt";
   preConfigure = optionalString (!stdenv.lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
@@ -73,7 +73,7 @@ stdenv.mkDerivation (args // {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://caml.inria.fr/ocaml;
+    homepage = "http://caml.inria.fr/ocaml";
     branch = versionNoPatch;
     license = with licenses; [
       qpl /* compiler */

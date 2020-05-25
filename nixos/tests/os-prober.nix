@@ -51,6 +51,8 @@ let
       hashed-mirrors =
       connect-timeout = 1
     '';
+    # save some memory
+    documentation.enable = false;
   };
   # /etc/nixos/configuration.nix for the vm
   configFile = pkgs.writeText "configuration.nix"  ''

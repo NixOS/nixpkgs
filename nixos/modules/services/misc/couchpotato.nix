@@ -29,17 +29,14 @@ in
       };
     };
 
-    users.users = singleton
-      { name = "couchpotato";
-        group = "couchpotato";
+    users.users.couchpotato =
+      { group = "couchpotato";
         home = "/var/lib/couchpotato/";
         description = "CouchPotato daemon user";
         uid = config.ids.uids.couchpotato;
       };
 
-    users.groups = singleton
-      { name = "couchpotato";
-        gid = config.ids.gids.couchpotato;
-      };
+    users.groups.couchpotato =
+      { gid = config.ids.gids.couchpotato; };
   };
 }

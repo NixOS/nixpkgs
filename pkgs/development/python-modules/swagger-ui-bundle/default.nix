@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "swagger-ui-bundle";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchPypi {
     pname = "swagger_ui_bundle";
     inherit version;
-    sha256 = "0v69v94mzzb63ciwpz3n8jwxqcyll3fsyx087s9k9q543zdqzbh1";
+    sha256 = "1lqxz7q9l2iwf7w11nhw5lnglsh1lgcvq8ydvhabkcc76il3ndy5";
   };
 
   # patch away unused test requirements since package contains no tests
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "bundled swagger-ui pip package";
-    homepage = https://github.com/dtkav/swagger_ui_bundle;
+    homepage = "https://github.com/dtkav/swagger_ui_bundle";
     license = licenses.asl20;
     maintainers = with maintainers; [ elohmeier ];
   };

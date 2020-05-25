@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     systemd fuse yajl libvirt gmp readline file hivex
     numactl xen libapparmor getopt perlPackages.ModuleBuild
   ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
-    ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ])
+    ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
     ++ stdenv.lib.optional javaSupport jdk;
 
   prePatch = ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
   patches = [ ./libguestfs-syms.patch ];
   NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
-  installFlags = "REALLY_INSTALL=yes";
+  installFlags = [ "REALLY_INSTALL=yes" ];
   enableParallelBuilding = true;
 
   postInstall = ''

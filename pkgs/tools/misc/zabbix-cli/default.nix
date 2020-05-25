@@ -4,7 +4,7 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   pname = "zabbix-cli";
-  version = "2.1.1";
+  version = "2.2.1";
 
   propagatedBuildInputs = with pythonPackages; [ ipaddr requests ];
 
@@ -17,7 +17,7 @@ in pythonPackages.buildPythonApplication rec {
     owner = "usit-gd";
     repo = "zabbix-cli";
     rev = version;
-    sha256 = "10a1cvjqwlqqfz52ajv9i53h6v95w8y7xmgqr79q2c4v1nz5bfks";
+    sha256 = "0wzmrn8p09ksqhhgawr179c4az7p2liqr0l4q2dra62bxliawyqz";
   };
 
   meta = with lib; {

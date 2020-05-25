@@ -1,20 +1,39 @@
-{ stdenv, fetchurl, cmake, boost, mysql }:
+{ stdenv
+, fetchurl
+, cmake
+, boost
+, openssl
+, mysql80
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmysqlconnectorcpp";
-  version = "1.1.9";
+  version = "8.0.19";
 
   src = fetchurl {
-    url = "https://cdn.mysql.com/Downloads/Connector-C++/mysql-connector-c++-${version}.tar.gz";
-    sha256 = "1r6j17sy5816a2ld759iis2k6igc2w9p70y4nw9w3rd4d5x88c9y";
+    url = "https://cdn.mysql.com/Downloads/Connector-C++/mysql-connector-c++-${version}-src.tar.gz";
+    sha256 = "fDvXTOZKkwDn1IG3aziK2VAXpSSAxpi3VVea7GLUoh4=";
   };
 
-  buildInputs = [ cmake boost mysql ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  cmakeFlags = [ "-DMYSQL_LIB_DIR=${mysql}/lib" ];
+  buildInputs = [
+    boost
+    openssl
+    mysql80
+  ];
+
+  cmakeFlags = [
+    # libmysqlclient is shared library
+    "-DMYSQLCLIENT_STATIC_LINKING=false"
+    # still needed for mysql-workbench
+    "-DWITH_JDBC=true"
+  ];
 
   meta = {
-    homepage = https://dev.mysql.com/downloads/connector/cpp/;
+    homepage = "https://dev.mysql.com/downloads/connector/cpp/";
     description = "C++ library for connecting to mysql servers.";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

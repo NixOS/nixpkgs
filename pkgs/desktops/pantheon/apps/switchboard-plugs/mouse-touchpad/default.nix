@@ -15,18 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "2.3.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1974zdr5w3xd882gi95fp7axgilfni1sclsr750qm32yhl7d9bfn";
+    sha256 = "19y1n05pc3j0px5pql5338vzrq6hjw209s8l2l70ha4i4r978qir";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Mouse & Touchpad Plug";
-    homepage = https://github.com/elementary/switchboard-plug-mouse-touchpad;
+    homepage = "https://github.com/elementary/switchboard-plug-mouse-touchpad";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

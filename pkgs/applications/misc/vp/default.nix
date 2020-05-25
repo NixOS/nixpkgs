@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE="-I${SDL}/include/SDL -I${SDL_image}/include/SDL";
 
   meta = with stdenv.lib; {
-    homepage = http://brlcad.org/~erik/;
+    homepage = "http://brlcad.org/~erik/";
     description = "SDL based picture viewer/slideshow";
     platforms = platforms.unix;
     license  = licenses.gpl3;

@@ -22,10 +22,10 @@ assert enableMongoDatabase -> (mongodb != null && mongodb-tools != null);
 assert enableInfluxDatabase -> influxdb != null;
 
 stdenv.mkDerivation {
-  name = "dysnomia-0.9";
+  name = "dysnomia-0.9.1";
   src = fetchurl {
-    url = https://github.com/svanderburg/dysnomia/releases/download/dysnomia-0.9/dysnomia-0.9.tar.gz;
-    sha256 = "09pk2l3pss48kvm5wvskh842vakbzmjzxzfzyw1nkqnvni130ikl";
+    url = "https://github.com/svanderburg/dysnomia/releases/download/dysnomia-0.9.1/dysnomia-0.9.1.tar.gz";
+    sha256 = "1rrq9jnmpsjg1rrjbnq7znm4gma2ga5j4nlykvxwkylp72dq12ks";
   };
 
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";

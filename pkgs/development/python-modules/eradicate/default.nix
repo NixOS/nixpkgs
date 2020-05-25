@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "eradicate removes commented-out code from Python files.";
-    homepage = https://github.com/myint/eradicate;
+    homepage = "https://github.com/myint/eradicate";
     license = [ licenses.mit ];
 
     maintainers = [ maintainers.mmlb ];

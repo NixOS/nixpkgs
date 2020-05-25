@@ -103,7 +103,7 @@ let
     setOutputFlags = false;
 
     # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.
-    buildFlags = "all alltools install-man";
+    buildFlags = [ "all" "alltools" "install-man" ];
 
 
     postInstall = ''
@@ -121,7 +121,7 @@ let
     passthru = { inherit vdpauSupport; };
 
     meta = with stdenv.lib; {
-      homepage = https://libav.org/;
+      homepage = "https://libav.org/";
       description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;

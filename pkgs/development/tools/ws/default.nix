@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "websocket command line tool";
-    homepage    = https://github.com/hashrocket/ws;
+    homepage    = "https://github.com/hashrocket/ws";
     license     = licenses.mit;
     maintainers = [ maintainers.the-kenny ];
     platforms   = platforms.unix;

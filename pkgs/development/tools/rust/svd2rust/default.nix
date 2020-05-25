@@ -14,14 +14,14 @@ buildRustPackage rec {
   };
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "03rfb8swxbcc9qm4mhxz5nm4b1gw7g7389wrdc91abxl4mw733ac";
+  cargoSha256 = "0n0xc8b982ra007l6gygssf1n60gfc2rphwyi7n95dbys1chciyg";
 
   # doc tests fail due to missing dependency
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Generate Rust register maps (`struct`s) from SVD files";
-    homepage = https://github.com/rust-embedded/svd2rust;
+    homepage = "https://github.com/rust-embedded/svd2rust";
     license = with licenses; [ mit asl20 ];
     platforms = platforms.all;
   };

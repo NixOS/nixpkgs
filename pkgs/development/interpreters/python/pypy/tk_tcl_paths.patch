@@ -1,6 +1,13 @@
 --- pypy-pypy-84a2f3e6a7f8.org/lib_pypy/_tkinter/tklib_build.py	2017-10-03 11:49:20.000000000 +0100
 +++ pypy-pypy-84a2f3e6a7f8/lib_pypy/_tkinter/tklib_build.py	2017-11-21 13:20:51.398607530 +0000
-@@ -24,11 +24,11 @@
+@@ -17,18 +17,14 @@
+     incdirs = []
+     linklibs = ['tcl85', 'tk85']
+     libdirs = []
+-elif sys.platform == 'darwin':
+-    incdirs = ['/System/Library/Frameworks/Tk.framework/Versions/Current/Headers/']
+-    linklibs = ['tcl', 'tk']
+-    libdirs = []
  else:
      # On some Linux distributions, the tcl and tk libraries are
      # stored in /usr/include, so we must check this case also

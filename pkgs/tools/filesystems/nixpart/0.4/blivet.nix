@@ -35,14 +35,14 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    pykickstart pyparted pyblock libselinux.py cryptsetup
+    pykickstart pyparted pyblock libselinux cryptsetup
   ] ++ stdenv.lib.optional useNixUdev systemd;
 
   # tests are currently _heavily_ broken upstream
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://fedoraproject.org/wiki/Blivet;
+    homepage = "https://fedoraproject.org/wiki/Blivet";
     description = "Module for management of a system's storage configuration";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     platforms = platforms.linux;

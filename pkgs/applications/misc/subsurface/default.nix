@@ -4,16 +4,22 @@
 }:
 
 let
-  version = "4.8.2";
+  version = "4.9.3";
+
+  subsurfaceSrc = (fetchFromGitHub {
+    owner = "Subsurface-divelog";
+    repo = "subsurface";
+    rev = "v${version}";
+    sha256 = "1i07f7appifx9j205x5a7ng01wsipxr6n9a3692pm60jli2nsir5";
+    fetchSubmodules = true;
+  });
 
   libdc = stdenv.mkDerivation {
     pname = "libdivecomputer-ssrf";
     inherit version;
 
-    src = fetchurl {
-      url = "https://subsurface-divelog.org/downloads/libdivecomputer-subsurface-branch-${version}.tgz";
-      sha256 = "167qan59raibmilkc574gdqxfjg2f5ww2frn86xzk2kn4qg8190w";
-    };
+    src = subsurfaceSrc;
+    sourceRoot = "source/libdivecomputer";
 
     nativeBuildInputs = [ autoreconfHook ];
 
@@ -22,7 +28,7 @@ let
     enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
-      homepage = http://www.libdivecomputer.org;
+      homepage = "http://www.libdivecomputer.org";
       description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
       maintainers = with maintainers; [ mguentner ];
       license = licenses.lgpl21;
@@ -70,10 +76,10 @@ in stdenv.mkDerivation {
   pname = "subsurface";
   inherit version;
 
-  src = fetchurl {
-    url = "https://subsurface-divelog.org/downloads/Subsurface-${version}.tgz";
-    sha256 = "1fzrq6rqb6pzs36wxar2453cl509dqpcy9w7nq4gw7b1v2331wfy";
-  };
+  src = subsurfaceSrc;
+
+  # remove with the 4.10 release
+  patches = [ ./0001-core-fix-libgit-ifdef-to-handle-libgit2-v1.0-and-onw.patch ];
 
   buildInputs = [
     libdc googlemaps
@@ -100,7 +106,7 @@ in stdenv.mkDerivation {
       conveniently be entered using a map interface), logging of equipment used and
       names of other divers, and lets users rate dives and provide additional notes.
     '';
-    homepage = https://subsurface-divelog.org;
+    homepage = "https://subsurface-divelog.org";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;

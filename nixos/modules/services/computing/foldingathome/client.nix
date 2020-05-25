@@ -1,0 +1,81 @@
+{ config, lib, pkgs, ... }:
+with lib;
+let
+  cfg = config.services.foldingathome;
+
+  args =
+    ["--team" "${toString cfg.team}"]
+    ++ lib.optionals (cfg.user != null) ["--user" cfg.user]
+    ++ cfg.extraArgs
+    ;
+in
+{
+  imports = [
+    (mkRenamedOptionModule [ "services" "foldingAtHome" ] [ "services" "foldingathome" ])
+    (mkRenamedOptionModule [ "services" "foldingathome" "nickname" ] [ "services" "foldingathome" "user" ])
+    (mkRemovedOptionModule [ "services" "foldingathome" "config" ] ''
+      Use <literal>services.foldingathome.extraArgs instead<literal>
+    '')
+  ];
+  options.services.foldingathome = {
+    enable = mkEnableOption "Enable the Folding@home client";
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.fahclient;
+      defaultText = "pkgs.fahclient";
+      description = ''
+        Which Folding@home client to use.
+      '';
+    };
+
+    user = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        The user associated with the reported computation results. This will
+        be used in the ranking statistics.
+      '';
+    };
+
+    team = mkOption {
+      type = types.int;
+      default = 236565;
+      description = ''
+        The team ID associated with the reported computation results. This
+        will be used in the ranking statistics.
+
+        By default, use the NixOS folding@home team ID is being used.
+      '';
+    };
+
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+        Extra startup options for the FAHClient. Run
+        <literal>FAHClient --help</literal> to find all the available options.
+      '';
+    };
+  };
+
+  config = mkIf cfg.enable {
+    systemd.services.foldingathome = {
+      description = "Folding@home client";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      script = ''
+        exec ${cfg.package}/bin/FAHClient ${lib.escapeShellArgs args}
+      '';
+      serviceConfig = {
+        DynamicUser = true;
+        StateDirectory = "foldingathome";
+        WorkingDirectory = "%S/foldingathome";
+      };
+    };
+  };
+
+  meta = {
+    maintainers = with lib.maintainers; [ zimbatm ];
+  };
+}

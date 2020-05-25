@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Automation Controller for the Trader Work Station of Interactive Brokers";
-    homepage = https://github.com/ib-controller/ib-controller;
+    homepage = "https://github.com/ib-controller/ib-controller";
     license = licenses.gpl3;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;

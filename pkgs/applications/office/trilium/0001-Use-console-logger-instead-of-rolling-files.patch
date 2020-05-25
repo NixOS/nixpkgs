@@ -1,0 +1,69 @@
+From 5be803a1171855f976a5b607970fa3949db72181 Mon Sep 17 00:00:00 2001
+From: Christian Kampka <christian@kampka.net>
+Date: Mon, 9 Dec 2019 19:40:27 +0100
+Subject: [PATCH] Use console logger instead of rolling files
+
+---
+ src/services/log.js | 26 +++-----------------------
+ 1 file changed, 3 insertions(+), 23 deletions(-)
+
+diff --git a/src/services/log.js b/src/services/log.js
+index 1514c209..456c3749 100644
+--- a/src/services/log.js
++++ b/src/services/log.js
+@@ -1,35 +1,15 @@
+ "use strict";
+ 
+-const fs = require('fs');
+-const dataDir = require('./data_dir');
+-
+-if (!fs.existsSync(dataDir.LOG_DIR)) {
+-    fs.mkdirSync(dataDir.LOG_DIR, 0o700);
+-}
+-
+-const logger = require('simple-node-logger').createRollingFileLogger({
+-    errorEventName: 'error',
+-    logDirectory: dataDir.LOG_DIR,
+-    fileNamePattern: 'trilium-<DATE>.log',
+-    dateFormat:'YYYY-MM-DD'
+-});
+-
+ function info(message) {
+     // info messages are logged asynchronously
+     setTimeout(() => {
+         console.log(message);
+-
+-        logger.info(message);
+     }, 0);
+ }
+ 
+ function error(message) {
+     message = "ERROR: " + message;
+ 
+-    // we're using .info() instead of .error() because simple-node-logger emits weird error for showError()
+-    // errors are logged synchronously to make sure it doesn't get lost in case of crash
+-    logger.info(message);
+-
+     console.trace(message);
+ }
+ 
+@@ -45,12 +25,12 @@ function request(req) {
+     if (req.url.includes(".js.map") || req.url.includes(".css.map")) {
+         return;
+     }
+-
+-    logger.info(req.method + " " + req.url);
++    if(process.env.DEBUG)
++        console.log(req.method + " " + req.url);
+ }
+ 
+ module.exports = {
+     info,
+     error,
+     request
+-};
+\ No newline at end of file
++};
+-- 
+2.23.0
+

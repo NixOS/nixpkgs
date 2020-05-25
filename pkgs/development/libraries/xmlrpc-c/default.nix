@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A lightweight RPC library based on XML and HTTP";
-    homepage = http://xmlrpc-c.sourceforge.net/;
+    homepage = "http://xmlrpc-c.sourceforge.net/";
     # <xmlrpc-c>/doc/COPYING also lists "Expat license",
     # "ABYSS Web Server License" and "Python 1.5.2 License"
     license = licenses.bsd3;

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scream-receivers";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "duncanthrax";
     repo = "scream";
     rev = version;
-    sha256 = "1iqhs7m0fv3vfld7h288j5j0jc5xdihaghd0jd9qrk68mj2g6g9w";
+    sha256 = "1ig89bmzfrm57nd8lamzsdz5z81ks5vjvq3f0xhgm2dk2mrgjsj3";
   };
 
   buildInputs = [ alsaLib ] ++ lib.optional pulseSupport libpulseaudio;
@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/duncanthrax/scream";
     license = licenses.mspl;
     platforms = platforms.linux;
-    maintainers = [ maintainers.ivan ];
+    maintainers = with maintainers; [ ];
   };
 }

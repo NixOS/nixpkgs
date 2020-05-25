@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     substituteInPlace po/Makefile \
        --replace /usr/bin/install install --replace /usr/share /share
     substituteInPlace newrole/Makefile --replace /usr/share /share
+
+    sed -i -e '39i#include <crypt.h>' run_init/run_init.c
   '';
 
   nativeBuildInputs = [ gettext ];

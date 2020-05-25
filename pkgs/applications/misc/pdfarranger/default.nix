@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.3.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "jeromerobert";
     repo = pname;
     rev = version;
-    sha256 = "1f8m8r81322i97wkqpmf7a4kiwnq244n6cnbldh03jc49vwq2kxx";
+    sha256 = "11q14pxyp5z4y3gabjnis3ip3xss6n94zjl42akwf27dxgxlpcjk";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,8 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pygobject3
-    pypdf2
+    pikepdf
+    setuptools
   ];
 
   # incompatible with wrapGAppsHook

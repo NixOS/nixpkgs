@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  configureFlags = stdenv.lib.optionalString stdenv.cc.isClang "--host=${stdenv.hostPlatform.system}";
+  configureFlags = stdenv.lib.optional stdenv.cc.isClang "--host=${stdenv.hostPlatform.system}";
 
   buildInputs =
     [ glib cairo fontconfig libtiff giflib
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
-    homepage = https://www.mono-project.com/docs/gui/libgdiplus/;
+    homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
     platforms = platforms.unix;
     license = licenses.mit;
   };

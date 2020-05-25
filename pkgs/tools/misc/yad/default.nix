@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yad";
-  version = "5.0";
+  version = "6.0";
 
   src = fetchFromGitHub {
     owner = "v1cont";
     repo = "yad";
     rev = "v${version}";
-    sha256 = "07rd61hvilsxxrj7lf8c9k0a8glj07s48m7ya8d45030r90g3lvc";
+    sha256 = "07myjv0g0iwgclc6q9wkj25myhlc86ahy2lqma8vgv9i3rgy03p7";
   };
 
   configureFlags = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -i src/form.c -e '21i#include <stdlib.h>'
 
     # there is no point to bring in the whole netpbm package just for this file
-    install -Dm644 ${netpbm}/share/netpbm/misc/rgb.txt $out/share/yad/rgb.txt
+    install -Dm644 ${netpbm.out}/share/netpbm/misc/rgb.txt $out/share/yad/rgb.txt
   '';
 
   postAutoreconf = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/yad-dialog/;
+    homepage = "https://sourceforge.net/projects/yad-dialog/";
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
       Yad (yet another dialog) is a GUI dialog tool for shell scripts. It is a

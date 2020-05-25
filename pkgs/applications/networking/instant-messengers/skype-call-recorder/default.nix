@@ -16,10 +16,10 @@ stdenv.mkDerivation {
   patches = [ ./conference.patch ];
 
   buildInputs = [ cmake lame id3lib libvorbis qt4 libogg ];
-  NIX_LDFLAGS = [ "-lvorbis" ];
+  NIX_LDFLAGS = "-lvorbis";
 
   meta = {
-    homepage = http://atdot.ch/scr/;
+    homepage = "http://atdot.ch/scr/";
     description = "Open source tool to record your Skype calls on Linux";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; linux;

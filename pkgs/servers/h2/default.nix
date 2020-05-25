@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The Java SQL database";
-    homepage = http://www.h2database.com/html/main.html;
+    homepage = "http://www.h2database.com/html/main.html";
     license = licenses.mpl20;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with maintainers; [ mahe ];

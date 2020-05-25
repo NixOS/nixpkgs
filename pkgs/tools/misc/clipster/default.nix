@@ -43,7 +43,7 @@ stdenv.mkDerivation  rec {
       - Ability to delete items in clipboard history.
     '';
     license = licenses.agpl3;
-    homepage = https://github.com/mrichar1/clipster;
+    homepage = "https://github.com/mrichar1/clipster";
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];
   };

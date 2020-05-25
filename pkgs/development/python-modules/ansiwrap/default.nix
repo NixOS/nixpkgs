@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Textwrap, but savvy to ANSI colors and styles";
-    homepage = https://github.com/jonathaneunice/ansiwrap;
+    homepage = "https://github.com/jonathaneunice/ansiwrap";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

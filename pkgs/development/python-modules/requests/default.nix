@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An Apache2 licensed HTTP library, written in Python, for human beings";
-    homepage = http://docs.python-requests.org/en/latest/;
+    homepage = "http://docs.python-requests.org/en/latest/";
     license = licenses.asl20;
   };
 }

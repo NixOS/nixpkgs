@@ -12,13 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "acme-client";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "graywolf";
     repo = "acme-client-portable";
     rev = "v${version}";
-    sha256 = "1yq2lkrnjwjs0h9mijqysnjmr7kp4zcq1f4cxr9n1db7pw8446xb";
+    sha256 = "1d9yk87nj5gizkq26m4wqfh4xhlrn5xlfj7mfgvrpsdiwibqxrrw";
   };
 
   nativeBuildInputs = [ autoreconfHook bison pkgconfig ];

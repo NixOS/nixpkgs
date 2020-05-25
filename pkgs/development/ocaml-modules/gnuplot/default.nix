@@ -1,19 +1,21 @@
-{ stdenv, buildDunePackage, fetchFromBitbucket, gnuplot, core }:
+{ lib, buildDunePackage, fetchFromGitHub, gnuplot, iso8601 }:
 
 buildDunePackage rec {
   pname = "gnuplot";
-  version = "0.5.3";
+  version = "0.7";
 
-  src = fetchFromBitbucket {
-    owner  = "ogu";
-    repo   = "${pname}-ocaml";
-    rev    = "release-${version}";
-    sha256 = "00sn9g46pj8pfh7faiyxg3pfhq7w9knafyabjr464bh6qz5kiin3";
+  minimumOCamlVersion = "4.03";
+
+  src = fetchFromGitHub {
+    owner  = "c-cube";
+    repo   = "ocaml-${pname}";
+    rev    = "v${version}";
+    sha256 = "02pzi3lb57ysrdsba743s3vmnapjbxgq8ynlzpxbbs6cn1jj6ch9";
   };
 
-  propagatedBuildInputs = [ core gnuplot ];
+  propagatedBuildInputs = [ gnuplot iso8601 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Ocaml bindings to Gnuplot";
     maintainers = [ maintainers.bcdarwin ];

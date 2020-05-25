@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";
-    homepage = https://github.com/tcatm/ecdsautils/;
+    homepage = "https://github.com/tcatm/ecdsautils/";
     license = with licenses; [ mit bsd2 ];
     maintainers = with maintainers; [ andir ];
     platforms = platforms.unix;

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0nn036in5j1h0vxkwif0lf7fn900zy4f4kxlzy6qdx3jakgmxvwh";
   };
 
-  cargoSha256 = "0h41ws3jcxb90mhnznckfkfv0mpx6ykga7087bipbaw2fqhr7izd";
+  cargoSha256 = "0v1hx6kjsmydx6ckjqj31y2gcpvax4mshwrniicplkka3q6hx9ra";
 
   meta = with stdenv.lib; {
     description = "DNS tool that aims to replace dig and nsupdate";

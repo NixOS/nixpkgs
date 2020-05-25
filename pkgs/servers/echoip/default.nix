@@ -21,7 +21,7 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/mpolden/echoip;
+    homepage = "https://github.com/mpolden/echoip";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rvolosatovs ];
   };

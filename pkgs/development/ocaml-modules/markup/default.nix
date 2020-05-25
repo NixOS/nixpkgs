@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/aantron/markup.ml/;
+    homepage = "https://github.com/aantron/markup.ml/";
     description = "A pair of best-effort parsers implementing the HTML5 and XML specifications";
     license = licenses.bsd2;
     platforms = ocaml.meta.platforms or [];

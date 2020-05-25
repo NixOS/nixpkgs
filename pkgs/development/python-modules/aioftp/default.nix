@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Ftp client/server for asyncio";
-    homepage = https://github.com/aio-libs/aioftp;
+    homepage = "https://github.com/aio-libs/aioftp";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

@@ -39,7 +39,7 @@ in python.pkgs.buildPythonPackage rec {
 
   meta = with lib; {
     description = "Run-Your-Own Firefox Sync Server";
-    homepage = https://github.com/mozilla-services/syncserver;
+    homepage = "https://github.com/mozilla-services/syncserver";
     platforms = platforms.unix;
     license = licenses.mpl20;
     maintainers = with maintainers; [ nadrieril ];

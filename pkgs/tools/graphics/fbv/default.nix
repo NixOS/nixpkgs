@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "View pictures on a linux framebuffer device";
-    homepage = http://s-tech.elsat.net.pl/fbv/;
+    homepage = "http://s-tech.elsat.net.pl/fbv/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };

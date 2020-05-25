@@ -2,6 +2,10 @@
 
 with lib;
 {
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   options = {
     xdg.icons.enable = mkOption {
       type = types.bool;

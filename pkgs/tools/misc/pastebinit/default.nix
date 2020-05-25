@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://launchpad.net/pastebinit;
+    homepage = "https://launchpad.net/pastebinit";
     description = "A software that lets you send anything you want directly to a pastebin from the command line";
     maintainers = with maintainers; [ lethalman ];
     license = licenses.gpl2;

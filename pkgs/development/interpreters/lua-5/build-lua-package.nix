@@ -56,7 +56,7 @@ name ? "${attrs.pname}-${attrs.version}"
 # Appended to the generated luarocks config
 , extraConfig ? ""
 # Inserted into the generated luarocks config in the "variables" table
-, extraVariables ? ""
+, extraVariables ? {}
 # The two above arguments have access to builder variables -- e.g. to $out
 
 # relative to srcRoot, path to the rockspec to use when using rocks
@@ -77,7 +77,10 @@ let
   # luarocks only looks for rockspecs in the default/system tree instead of all
   # configured trees)
   luarocks_config = "luarocks-config.lua";
-  luarocks_content = ''
+  luarocks_content = let
+    extraVariablesStr = lib.concatStringsSep "\n "
+      (lib.mapAttrsToList (k: v: "${k}='${v}';") extraVariables);
+  in ''
     local_cache = ""
     -- To prevent collisions when creating environments, we install the rock
     -- files into per-package subdirectories
@@ -105,8 +108,8 @@ let
       -- Some needed machinery to handle multiple-output external dependencies,
       -- as per https://github.com/luarocks/luarocks/issues/766
       ${lib.optionalString (lib.length depVariables > 0) ''
-      ${lib.concatStringsSep "\n  " depVariables}''}
-      ${extraVariables}
+        ${lib.concatStringsSep "\n  " depVariables}''}
+      ${extraVariablesStr}
     }
     ${extraConfig}
   '';
@@ -139,7 +142,7 @@ let
   externalDeps' = lib.filter (dep: !lib.isDerivation dep) externalDeps;
 in
 toLuaModule ( lua.stdenv.mkDerivation (
-builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps"] // {
+builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariables"] // {
 
   name = namePrefix + name;
 
@@ -199,8 +202,6 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps"] // {
         LUAROCKS="$LUAROCKS --verbose"
     fi
 
-    patchShebangs .
-
     runHook postBuild
   '';
 
@@ -227,6 +228,13 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps"] // {
     $LUAROCKS make --deps-mode=all --tree=$out ''${rockspecFilename}
 
     runHook postInstall
+  '';
+
+
+  checkPhase = attrs.checkPhase or ''
+    runHook preCheck
+    $LUAROCKS test
+    runHook postCheck
   '';
 
   passthru = {

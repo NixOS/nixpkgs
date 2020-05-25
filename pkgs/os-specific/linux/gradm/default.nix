@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gradm";
-  version = "3.1-201608131257";
+  version = "3.1-201903191516";
 
   src  = fetchurl {
     url    = "http://grsecurity.net/stable/${pname}-${version}.tar.gz";
-    sha256 = "0y5565rhil5ciprwz7nx4s4ah7dsxx7zrkg42dbq0mcg8m316xrb";
+    sha256 = "1wszqwaswcf08s9zbvnqzmmfdykyfcy16w8xjia20ypr7wwbd86k";
   };
 
   nativeBuildInputs = [ bison flex ];

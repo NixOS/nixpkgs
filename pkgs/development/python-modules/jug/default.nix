@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "Jug";
-  version = "1.6.9";
+  version = "2.0.0";
   buildInputs = [ nose numpy ];
   propagatedBuildInputs = [
     bottle
@@ -18,13 +18,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0193hp8ap6caw57jdch3vw0hl5m8942lxhjdsfaxk4bfb239l5kz";
+    sha256 = "1am73pis8qrbgmpwrkja2qr0n9an6qha1k1yp87nx6iq28w5h7cv";
   };
 
   meta = with stdenv.lib; {
     description = "A Task-Based Parallelization Framework";
     license = licenses.mit;
-    homepage = https://jug.readthedocs.io/;
+    homepage = "https://jug.readthedocs.io/";
     maintainers = with maintainers; [ luispedro ];
   };
 }

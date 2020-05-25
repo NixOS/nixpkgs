@@ -48,22 +48,18 @@ in {
     services.fprot.updater.licenseKeyfile = mkDefault "${pkgs.fprot}/opt/f-prot/license.key";
 
     environment.systemPackages = [ pkgs.fprot ];
-    environment.etc = singleton {
+    environment.etc."f-prot.conf" = {
       source = "${pkgs.fprot}/opt/f-prot/f-prot.conf";
-      target = "f-prot.conf";
     };
 
-    users.users = singleton
-      { name = fprotUser;
-        uid = config.ids.uids.fprot;
+    users.users.${fprotUser} =
+      { uid = config.ids.uids.fprot;
         description = "F-Prot daemon user";
         home = stateDir;
       };
 
-    users.groups = singleton
-      { name = fprotGroup;
-        gid = config.ids.gids.fprot;
-      };
+    users.groups.${fprotGroup} =
+      { gid = config.ids.gids.fprot; };
 
     services.cron.systemCronJobs = [ "*/${toString cfg.updater.frequency} * * * * root start fprot-updater" ];
 

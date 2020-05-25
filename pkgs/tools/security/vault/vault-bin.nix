@@ -45,7 +45,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.vaultproject.io;
+    homepage = "https://www.vaultproject.io";
     description = "A tool for managing secrets, this binary includes the UI";
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "i686-darwin" ];
     license = licenses.mpl20;

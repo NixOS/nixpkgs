@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.ccp5.ac.uk/DL_POLY_C;
+    homepage = "https://www.ccp5.ac.uk/DL_POLY_C";
     description = "DL_POLY Classic is a general purpose molecular dynamics simulation package";
     license = licenses.bsdOriginal;
     platforms = [ "x86_64-linux" ];

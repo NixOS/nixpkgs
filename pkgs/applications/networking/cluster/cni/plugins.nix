@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub, go, removeReferencesTo, buildGoPackage }:
 buildGoPackage rec {
   pname = "cni-plugins";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    sha256 = "0dc4fs08x4x518yhgvq3drjvansnc0cb8rm4h5wiw7k3whjii3cd";
+    sha256 = "02kz6y3klhbriybsskn4hmldwli28cycnp2klsm2x0y9c73iczdp";
   };
 
   goDeps = ./plugins-deps.nix;
@@ -32,7 +32,7 @@ buildGoPackage rec {
   ];
   meta = with lib; {
     description = "Some standard networking plugins, maintained by the CNI team";
-    homepage = https://github.com/containernetworking/plugins;
+    homepage = "https://github.com/containernetworking/plugins";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan saschagrunert ];

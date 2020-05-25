@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description  = "Brother MFC-J6510DW LPR driver";
-    downloadPage = http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128;
-    homepage     = http://www.brother.com/;
+    downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128";
+    homepage     = "http://www.brother.com/";
     license      = with licenses; unfree;
     maintainers  = with maintainers; [ ramkromberg ];
     platforms    = with platforms; linux;

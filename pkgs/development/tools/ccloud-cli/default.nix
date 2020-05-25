@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Confluent Cloud CLI";
-    homepage = https://docs.confluent.io/current/cloud/cli/index.html;
+    homepage = "https://docs.confluent.io/current/cloud/cli/index.html";
     license = licenses.unfree;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

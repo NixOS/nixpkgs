@@ -30,7 +30,7 @@ in
     doCheck = false;
 
     meta = {
-      homepage = https://github.com/dxa4481/truffleHog;
+      homepage = "https://github.com/dxa4481/truffleHog";
       description = "Searches through git repositories for high entropy strings and secrets, digging deep into commit history";
       license = with lib.licenses; [ gpl2 ];
       maintainers = with lib.maintainers; [ bhipple ];

@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "ProtonVPN Command-Line Tool";
-    homepage = https://github.com/ProtonVPN/protonvpn-cli;
+    homepage = "https://github.com/ProtonVPN/protonvpn-cli";
     maintainers = with maintainers; [ caugner ];
     license = licenses.mit;
     platforms = platforms.unix;

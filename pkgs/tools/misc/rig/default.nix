@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patches = [ ./rig_1.11-1.diff ];
 
   meta = {
-    homepage = http://rig.sourceforge.net/; 
+    homepage = "http://rig.sourceforge.net/"; 
     description = "Random identity generator";
     longDescription = ''
       RIG (Random Identity Generator) is a free replacement for a shareware

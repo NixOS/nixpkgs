@@ -8,7 +8,8 @@
 }:
 
 buildPythonPackage {
-  name = "gateone-1.2-0d57c3";
+  pname = "gateone";
+  version = "1.2-0d57c3";
   disabled = isPy3k;
 
   src = pkgs.fetchFromGitHub {

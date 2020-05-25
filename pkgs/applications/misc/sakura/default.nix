@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A terminal emulator based on GTK and VTE";
-    homepage    = http://www.pleyades.net/david/projects/sakura;
+    homepage    = "http://www.pleyades.net/david/projects/sakura";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ astsmtl codyopel ];
     platforms   = platforms.linux;

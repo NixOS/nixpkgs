@@ -44,7 +44,7 @@ let self = stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://gmplib.org/;
+    homepage = "https://gmplib.org/";
     description = "GNU multiple precision arithmetic library";
     license = licenses.gpl3Plus;
 

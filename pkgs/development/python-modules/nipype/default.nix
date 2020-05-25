@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, isPy38
 # python dependencies
 , click
 , configparser ? null
@@ -48,11 +49,11 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.2.3";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a79c7a72897d81985d20a8c805465285400b59a45ddc527cda44026795fd1c47";
+    sha256 = "bb190964b568d64b04b73d2aa7eae31061fdbc3051d8c27bb34b1632db07ec71";
   };
 
   postPatch = ''
@@ -79,7 +80,7 @@ buildPythonPackage rec {
     simplejson
     traits
     xvfbwrapper
-  ] ++ stdenv.lib.optional (!isPy3k) [
+  ] ++ stdenv.lib.optionals (!isPy3k) [
     configparser
     futures
     pathlib2 # darwin doesn't receive this transitively, but it is in install_requires
@@ -105,9 +106,11 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://nipy.org/nipype/;
+    homepage = "https://nipy.org/nipype/";
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];
+    # tests hang, blocking reviews of other packages
+    broken = isPy38;
   };
 }

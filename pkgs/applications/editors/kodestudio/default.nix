@@ -125,8 +125,8 @@ in
         (with JavaScript coming soon). Using Kha or Kore you can access all
         hardware at the lowest possible level in a completely portable way.
       '';
-      homepage = http://kode.tech/;
-      downloadPage = https://github.com/Kode/KodeStudio/releases;
+      homepage = "http://kode.tech/";
+      downloadPage = "https://github.com/Kode/KodeStudio/releases";
       license = licenses.mit;
       maintainers = [ maintainers.patternspandemic ];
       platforms = [ "x86_64-linux" "i686-cygwin" ];

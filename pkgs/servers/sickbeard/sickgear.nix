@@ -4,13 +4,13 @@ let
   pythonEnv = python2.withPackages(ps: with ps; [ cheetah ]);
 in stdenv.mkDerivation rec {
   pname = "sickgear";
-  version = "0.20.0";
+  version = "0.21.22";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
     rev = "release_${version}";
-    sha256 = "1zg95szvfbmwinx1z5nlbmyck7ximvyna0x71yflmadkgf88nv0k";
+    sha256 = "16jwvg9mcv0yr94ldncfs6bczyv4n3q9v7g7v0ssrkrnkxh722zx";
   };
 
   dontBuild = true;

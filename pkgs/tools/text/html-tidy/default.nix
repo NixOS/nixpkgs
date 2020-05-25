@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       used to validate and fix HTML data.
     '';
     license = licenses.libpng; # very close to it - the 3 clauses are identical
-    homepage = http://html-tidy.org;
+    homepage = "http://html-tidy.org";
     platforms = platforms.all;
     maintainers = with maintainers; [ edwtjo ];
   };

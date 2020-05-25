@@ -1,4 +1,6 @@
-{ ruby, lib, callPackage, defaultGemConfig, buildEnv, bundler }@defs:
+{ ruby, lib, callPackage, defaultGemConfig, buildEnv, runCommand
+, bundler, rsync
+}@defs:
 
 { name ? null
 , pname ? null
@@ -8,6 +10,7 @@
 , gemset ? null
 , groups ? ["default"]
 , ruby ? defs.ruby
+, copyGemFiles ? false # Copy gem files instead of symlinking
 , gemConfig ? defaultGemConfig
 , postBuild ? null
 , document ? []
@@ -38,23 +41,35 @@ in
   if pname == null then
     basicEnv // { inherit name basicEnv; }
   else
-    (buildEnv {
-      inherit ignoreCollisions;
+    let
+      bundlerEnvArgs = {
+        inherit ignoreCollisions;
 
-      name = basicEnv.name;
+        name = basicEnv.name;
 
-      paths = envPaths;
-      pathsToLink = [ "/lib" ];
+        paths = envPaths;
+        pathsToLink = [ "/lib" ];
 
-      postBuild = genStubsScript {
-        inherit lib ruby bundler groups;
-        confFiles = basicEnv.confFiles;
-        binPaths = [ basicEnv.gems.${pname} ];
-      } + lib.optionalString (postBuild != null) postBuild;
+        postBuild = genStubsScript {
+          inherit lib ruby bundler groups;
+          confFiles = basicEnv.confFiles;
+          binPaths = [ basicEnv.gems.${pname} ];
+        } + lib.optionalString (postBuild != null) postBuild;
 
-      meta = { platforms = ruby.meta.platforms; } // meta;
-      passthru = basicEnv.passthru // {
-        inherit basicEnv;
-        inherit (basicEnv) env;
-      } // passthru;
-    })
+        meta = { platforms = ruby.meta.platforms; } // meta;
+        passthru = basicEnv.passthru // {
+          inherit basicEnv;
+          inherit (basicEnv) env;
+        } // passthru;
+      };
+    in
+      if copyGemFiles then
+        runCommand basicEnv.name bundlerEnvArgs ''
+          mkdir -p $out
+          for i in $paths; do
+            ${rsync}/bin/rsync -a $i/lib $out/
+          done
+          eval "$postBuild"
+        ''
+      else
+        buildEnv bundlerEnvArgs

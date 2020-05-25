@@ -304,6 +304,11 @@ in
 
       in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
 
+    systemd.tmpfiles.rules = [
+      "d /run/keys 0750 root ${toString config.ids.gids.keys}"
+      "z /run/keys 0750 root ${toString config.ids.gids.keys}"
+    ];
+
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
     boot.specialFileSystems = {
       "/proc" = { fsType = "proc"; options = [ "nosuid" "noexec" "nodev" ]; };
@@ -312,8 +317,8 @@ in
       "/dev/shm" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=1777" "size=${config.boot.devShmSize}" ]; };
       "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "ptmxmode=0666" "gid=${toString config.ids.gids.tty}" ]; };
 
-      # To hold secrets that shouldn't be written to disk (generally used for NixOps, harmless elsewhere)
-      "/run/keys" = { fsType = "ramfs"; options = [ "nosuid" "nodev" "mode=750" "gid=${toString config.ids.gids.keys}" ]; };
+      # To hold secrets that shouldn't be written to disk
+      "/run/keys" = { fsType = "ramfs"; options = [ "nosuid" "nodev" "mode=750" ]; };
     } // optionalAttrs (!config.boot.isContainer) {
       # systemd-nspawn populates /sys by itself, and remounting it causes all
       # kinds of weird issues (most noticeably, waiting for host disk device

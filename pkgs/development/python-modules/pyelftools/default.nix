@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyelftools";
-  version = "0.25";
+  version = "0.26";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "89c6da6f56280c37a5ff33468591ba9a124e17d71fe42de971818cbff46c1b24";
+    sha256 = "86ac6cee19f6c945e8dedf78c6ee74f1112bd14da5a658d8c9d4103aed5756a2";
   };
 
   checkPhase = ''
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A library for analyzing ELF files and DWARF debugging information";
-    homepage = https://github.com/eliben/pyelftools;
+    homepage = "https://github.com/eliben/pyelftools";
     license = licenses.publicDomain;
     maintainers = [ maintainers.igsha ];
   };

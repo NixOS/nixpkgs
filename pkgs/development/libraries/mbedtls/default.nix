@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DUSE_SHARED_MBEDTLS_LIBRARY=on" ];
 
   meta = with stdenv.lib; {
-    homepage = https://tls.mbed.org/;
+    homepage = "https://tls.mbed.org/";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
     license = licenses.asl20;
     platforms = platforms.all;

@@ -9,7 +9,7 @@ let
   cfg = config.services.openafsClient;
 
   cellServDB = pkgs.fetchurl {
-    url = http://dl.central.org/dl/cellservdb/CellServDB.2018-05-14;
+    url = "http://dl.central.org/dl/cellservdb/CellServDB.2018-05-14";
     sha256 = "1wmjn6mmyy2r8p10nlbdzs4nrqxy8a9pjyrdciy5nmppg4053rk2";
   };
 

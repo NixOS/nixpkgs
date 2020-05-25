@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       programs to output audio using a simple API on a wide variety of
       platforms.
     '';
-    homepage = https://xiph.org/ao/;
+    homepage = "https://xiph.org/ao/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms = with platforms; unix;

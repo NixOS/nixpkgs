@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ python ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/jarun/googler";

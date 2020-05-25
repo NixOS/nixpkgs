@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A launcher for the Java Virtual Machine intended to be a drop-in replacement for the java command, only faster";
     license = licenses.epl10;
-    homepage = https://github.com/ninjudd/drip;
+    homepage = "https://github.com/ninjudd/drip";
     platforms = platforms.linux;
     maintainers = [ maintainers.rybern ];
   };

@@ -24,7 +24,7 @@ buildOcaml rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mirage/ocaml-ipaddr;
+    homepage = "https://github.com/mirage/ocaml-ipaddr";
     description = "A library for manipulation of IP (and MAC) address representations ";
     license = licenses.mit;
     maintainers = [ maintainers.ericbmerritt ];

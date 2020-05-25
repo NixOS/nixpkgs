@@ -1,17 +1,44 @@
-{ stdenv, lib, fetchpatch, pkgconfig, cmake, bluez, ffmpeg, libao, gtk2, glib
-, libGLU, libGL , gettext, libpthreadstubs, libXrandr, libXext, readline
-, openal , libXdmcp, portaudio, fetchFromGitHub, libusb, libevdev
-, wxGTK30, soundtouch, miniupnpc, mbedtls, curl, lzo, sfml
-, libpulseaudio ? null }:
+{ stdenv
+, lib
+, fetchpatch
+, pkgconfig
+, cmake
+, bluez
+, ffmpeg
+, libao
+, gtk2
+, glib
+, libGLU
+, libGL
+, gettext
+, libpthreadstubs
+, libXrandr
+, libXext
+, readline
+, openal
+, libXdmcp
+, portaudio
+, fetchFromGitHub
+, libusb1
+, libevdev
+, wxGTK30
+, soundtouch
+, miniupnpc
+, mbedtls
+, curl
+, lzo
+, sfml
+, libpulseaudio ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
   version = "5.0";
 
   src = fetchFromGitHub {
-    owner  = "dolphin-emu";
-    repo   = "dolphin";
-    rev    = version;
+    owner = "dolphin-emu";
+    repo = "dolphin";
+    rev = version;
     sha256 = "07mlfnh0hwvk6xarcg315x7z2j0qbg9g7cm040df9c8psiahc3g6";
   };
 
@@ -44,15 +71,45 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake bluez ffmpeg libao libGLU libGL gtk2 glib
-                  gettext libpthreadstubs libXrandr libXext readline openal
-                  libevdev libXdmcp portaudio libusb libpulseaudio
-                  libevdev libXdmcp portaudio libusb libpulseaudio
-                  wxGTK30 soundtouch miniupnpc mbedtls curl lzo sfml ];
+  nativeBuildInputs = [
+    pkgconfig
+    cmake
+  ];
+
+  buildInputs = [
+    bluez
+    ffmpeg
+    libao
+    libGLU
+    libGL
+    gtk2
+    glib
+    gettext
+    libpthreadstubs
+    libXrandr
+    libXext
+    readline
+    openal
+    libevdev
+    libXdmcp
+    portaudio
+    libpulseaudio
+    libevdev
+    libXdmcp
+    portaudio
+    libusb1
+    libpulseaudio
+    wxGTK30
+    soundtouch
+    miniupnpc
+    mbedtls
+    curl
+    lzo
+    sfml
+  ];
 
   meta = with lib; {
-    homepage = https://dolphin-emu.org/;
+    homepage = "https://dolphin-emu.org/";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MP2E ashkitten ];

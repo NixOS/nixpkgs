@@ -40,7 +40,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Easy to use calculator for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-calculator;
+    homepage = "https://github.com/linuxdeepin/deepin-calculator";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

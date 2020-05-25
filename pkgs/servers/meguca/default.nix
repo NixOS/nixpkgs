@@ -17,10 +17,10 @@ buildGoPackage {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkgconfig cmake go-bindata ];
 
   buildInputs = [
-    ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata
+    ffmpeg-full graphicsmagick ghostscript quicktemplate
     easyjson emscripten opencv statik
   ];
 

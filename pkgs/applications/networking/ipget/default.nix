@@ -25,7 +25,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Retrieve files over IPFS and save them locally";
-    homepage = https://ipfs.io/;
+    homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;
   };

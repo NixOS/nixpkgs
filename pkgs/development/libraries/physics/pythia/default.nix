@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A program for the generation of high-energy physics events";
     license     = stdenv.lib.licenses.gpl2;
-    homepage    = http://home.thep.lu.se/~torbjorn/Pythia.html;
+    homepage    = "http://home.thep.lu.se/~torbjorn/Pythia.html";
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };

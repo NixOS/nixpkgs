@@ -23,12 +23,14 @@ import ./make-test-python.nix ({ pkgs, ...}: {
       };
       services.httpd = {
         enable = true;
-        documentRoot = pkgs.writeTextDir "index.txt" "We are all good!";
-        adminAddr = "notme@yourhost.local";
-        listen = [{
-          ip = "::1";
-          port = 8000;
-        }];
+        virtualHosts.localhost = {
+          documentRoot = pkgs.writeTextDir "index.txt" "We are all good!";
+          adminAddr = "notme@yourhost.local";
+          listen = [{
+            ip = "::1";
+            port = 8000;
+          }];
+        };
       };
     };
   };

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library for parsing Dockerfile files";
-    homepage = https://github.com/DBuildService/dockerfile-parse;
+    homepage = "https://github.com/DBuildService/dockerfile-parse";
     license = licenses.bsd3;
     maintainers = with maintainers; [ leenaars ];
   };

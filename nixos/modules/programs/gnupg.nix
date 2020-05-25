@@ -96,7 +96,7 @@ in
     # This overrides the systemd user unit shipped with the gnupg package
     systemd.user.services.gpg-agent = mkIf (cfg.agent.pinentryFlavor != null) {
       serviceConfig.ExecStart = [ "" ''
-        ${pkgs.gnupg}/bin/gpg-agent --supervised \
+        ${cfg.package}/bin/gpg-agent --supervised \
           --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
       '' ];
     };

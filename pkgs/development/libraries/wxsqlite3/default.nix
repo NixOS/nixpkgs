@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa darwin.stubs.setfile darwin.stubs.rez darwin.stubs.derez ];
 
   meta = with stdenv.lib; {
-    homepage = https://utelle.github.io/wxsqlite3/ ;
+    homepage = "https://utelle.github.io/wxsqlite3/";
     description = "A C++ wrapper around the public domain SQLite 3.x for wxWidgets";
     platforms = platforms.unix;
     maintainers = with maintainers; [ vrthra ];

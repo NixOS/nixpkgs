@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   versionMajor = "12.10";
   versionMinor = "0";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "${meta.homepage}/${versionMajor}/${version}/+download/libappindicator-${version}.tar.gz";
     sha256 = "17xlqd60v0zllrxp8bgq3k5a1jkj0svkqn8rzllcyjh8k0gpr46m";
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library to allow applications to export a menu into the Unity Menu bar";
-    homepage = https://launchpad.net/libappindicator;
+    homepage = "https://launchpad.net/libappindicator";
     license = with licenses; [ lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

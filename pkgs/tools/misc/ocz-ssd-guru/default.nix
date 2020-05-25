@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = {
-    homepage = http://ocz.com/ssd-guru;
+    homepage = "http://ocz.com/ssd-guru";
     description = "SSD Management Tool for OCZ disks";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;

@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     cat > "$out/bin/${cmd}" <<EOF
     #!${runtimeShell}
     set -f
-    LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:$libs" exec $out/pharo "\$@"
+    LD_LIBRARY_PATH="\$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$libs" exec $out/pharo "\$@"
     EOF
     chmod +x "$out/bin/${cmd}"
     ln -s ${libgit2}/lib/libgit2.so* "$out/"
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
       Please fill bug reports on http://bugs.pharo.org under the 'Ubuntu
       packaging (ppa:pharo/stable)' project.
     '';
-    homepage = http://pharo.org;
+    homepage = "http://pharo.org";
     license = licenses.mit;
     maintainers = [ maintainers.lukego ];
     platforms = [ "i686-linux" "x86_64-linux" ];

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   checkInputs = [ dpkt ];
 
   meta = with lib; {
-    homepage = https://github.com/pynetwork/pypcap;
+    homepage = "https://github.com/pynetwork/pypcap";
     description = "Simplified object-oriented Python wrapper for libpcap";
     license = licenses.bsd3;
     maintainers = with maintainers; [ geistesk ];

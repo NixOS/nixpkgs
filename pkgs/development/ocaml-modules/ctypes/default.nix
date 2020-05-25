@@ -6,11 +6,11 @@ else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ctypes-${version}";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchzip {
     url = "https://github.com/ocamllabs/ocaml-ctypes/archive/${version}.tar.gz";
-    sha256 = "0adas974bwinn8jidb6chljkpd70s041h2a969dicsj0xsg6wys6";
+    sha256 = "0qh2gfx5682wkk2nm1ybspzz9c2xvlnnf6iv08a89kbwa1hvdqrg";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ocamllabs/ocaml-ctypes;
+    homepage = "https://github.com/ocamllabs/ocaml-ctypes";
     description = "Library for binding to C libraries using pure OCaml";
     license = licenses.mit;
     maintainers = [ maintainers.ericbmerritt ];

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A hash table for C structures";
-    homepage    = http://troydhanson.github.io/uthash;
+    homepage    = "http://troydhanson.github.io/uthash";
     license     = licenses.bsd2; # it's one-clause, actually, as it's source-only
     platforms   = platforms.all;
   };

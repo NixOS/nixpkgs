@@ -25,7 +25,7 @@ buildPythonPackage rec {
       sha256 = "0z5qnkndg6ma5f5qqrid5m95i9kybsr000v3fdy1ab562kf65a27";
     })
   ];
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   nativeBuildInputs = [ swig2 ];
   buildInputs = [ swig2 openssl ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python crypto and SSL toolkit";
-    homepage = https://gitlab.com/m2crypto/m2crypto;
+    homepage = "https://gitlab.com/m2crypto/m2crypto";
     license = licenses.mit;
     maintainers = with maintainers; [ andrew-d ];
   };

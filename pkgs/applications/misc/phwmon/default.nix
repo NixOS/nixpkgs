@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://gitlab.com/o9000/phwmon;
+    homepage = "https://gitlab.com/o9000/phwmon";
     description = "Hardware monitor (CPU, memory, network and disk I/O) for the system tray";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "The Giant Swarm command line interface";
-    homepage = https://github.com/giantswarm/gsctl;
+    homepage = "https://github.com/giantswarm/gsctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ joesalisbury ];
   };

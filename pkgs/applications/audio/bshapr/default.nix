@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "BShapr";
-  version = "0.6";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mi8f0svq1h9cmmxyskcazr5x2q4dls3j9jc6ahi5rlk7i0bpa74";
+    sha256 = "0jlq5rjicc4fxlpk869dg0l5bwwz8k9aj2wfk9v89b0qw8l8kaxl";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sjaehn/BShapr;
+    homepage = "https://github.com/sjaehn/BShapr";
     description = "Beat / envelope shaper LV2 plugin";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;

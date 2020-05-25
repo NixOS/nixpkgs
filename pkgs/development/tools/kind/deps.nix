@@ -374,8 +374,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-isatty";
-      rev = "v0.0.10";
-      sha256 = "0jf4hwfwd2cpxrlyv0jzcia809q2bjw7y1m3ciaj2s8lj2jqyf6r";
+      rev = "v0.0.11";
+      sha256 = "0h671sv7hfprja495kavazkalkx7xzaqksjh13brcnwq67ijrali";
     };
   }
   {
@@ -455,8 +455,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/pelletier/go-toml";
-      rev = "v1.2.0";
-      sha256 = "1fjzpcjng60mc3a4b2ql5a00d5gah84wj740dabv9kq67mpg8fxy";
+      rev = "v1.6.0";
+      sha256 = "0l2830pi64fg0bdsyd5afkbw0p7879pppzdqqk3c7vjrjfmi5xbq";
     };
   }
   {
@@ -464,8 +464,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/pkg/errors";
-      rev = "v0.8.1";
-      sha256 = "0g5qcb4d4fd96midz0zdk8b9kz8xkzwfa8kr1cliqbg8sxsy5vd1";
+      rev = "v0.9.0";
+      sha256 = "1hlivqlcnm9wrj0v7h43gamw7mvg6svz9sm31fx28zn4ll25ablh";
     };
   }
   {
@@ -608,8 +608,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "c1f44814a5cd";
-      sha256 = "1a6hb4326hk8hvcbs0pqypalsxzqc8xasnglrrwd6ai0njgh18pg";
+      rev = "86b910548bc1";
+      sha256 = "1z8l2wp27q0bd4nc46j31lc7cr6kiw52zi6ix3i121pd3rcyrw44";
     };
   }
   {
@@ -671,8 +671,8 @@
     fetch = {
       type = "git";
       url = "https://gopkg.in/yaml.v2";
-      rev = "v2.2.5";
-      sha256 = "08smz8dfyxp02ha74my9iszqa5qzgl3ksi28ilyp8lqipssiq6fg";
+      rev = "v2.2.7";
+      sha256 = "0k5xcwkd3wmcx54isk7ck9cwp8fapfhyqdz3f13kxp77cxqizazj";
     };
   }
   {
@@ -680,8 +680,8 @@
     fetch = {
       type = "git";
       url = "https://gopkg.in/yaml.v3";
-      rev = "e228e37189d3";
-      sha256 = "06sc63lqhkqjh188md1cywvscxq40cqgmdl8ccd3q891b1xpajl4";
+      rev = "4206685974f2";
+      sha256 = "1ff5fd8x45cay9100ds63hxd32s7czsrric0ql6a1jrxczsgqk1g";
     };
   }
   {

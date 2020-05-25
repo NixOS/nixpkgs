@@ -1,14 +1,14 @@
 { stdenv, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "4.2.2";
+  version = "4.3";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1wy5i1av1s98yr56ybiq66kv0vg48zci3fp91zfgj04nh2966w1w";
+    sha256 = "1cq508ymak3g5fhi1n4bdiiqkc86s2l3k4dvzw842vv2x0441cac";
   };
 
   checkInputs = [
@@ -31,6 +31,7 @@ with python3.pkgs; buildPythonApplication rec {
     flask-api
     flask-bootstrap
     flask-paginate
+    flask-reverse-proxy-fix
     flask_wtf
     arrow
     werkzeug
@@ -70,7 +71,7 @@ with python3.pkgs; buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Private cmdline bookmark manager";
-    homepage = https://github.com/jarun/Buku;
+    homepage = "https://github.com/jarun/Buku";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ matthiasbeyer infinisil ];

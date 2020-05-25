@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "X utility for querying xrdb";
-    homepage = https://github.com/arianon/xrq;
+    homepage = "https://github.com/arianon/xrq";
     license = stdenv.lib.licenses.mit;
     platforms = with stdenv.lib.platforms; unix;
   };

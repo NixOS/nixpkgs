@@ -13,7 +13,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cstruct ];
 
   meta = {
-    homepage = https://github.com/mirage/io-page;
+    homepage = "https://github.com/mirage/io-page";
     license = stdenv.lib.licenses.isc;
     description = "IO memory page library for Mirage backends";
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

@@ -113,7 +113,7 @@ in
         otherCert = "/var/certmgr/specs/other-cert.json";
       }
       '';
-      type = with types; attrsOf (either (submodule {
+      type = with types; attrsOf (either path (submodule {
         options = {
           service = mkOption {
             type = nullOr str;
@@ -148,7 +148,7 @@ in
             description = "certmgr spec request object.";
           };
         };
-    }) path);
+    }));
       description = ''
         Certificate specs as described by:
         <link xlink:href="https://github.com/cloudflare/certmgr#certificate-specs" />

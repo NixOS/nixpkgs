@@ -135,6 +135,7 @@ in
         User = "vault";
         Group = "vault";
         ExecStart = "${cfg.package}/bin/vault server -config ${configFile}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         PrivateDevices = true;
         PrivateTmp = true;
         ProtectSystem = "full";

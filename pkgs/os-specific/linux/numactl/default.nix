@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
-    homepage = https://github.com/numactl/numactl;
+    homepage = "https://github.com/numactl/numactl";
     license = with licenses; [ gpl2 lgpl21 ]; # libnuma is lgpl21
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };

@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A vim like editor";
-    homepage = https://github.com/martanne/vis;
+    homepage = "https://github.com/martanne/vis";
     license = licenses.isc;
     maintainers = with maintainers; [ vrthra ramkromberg ];
     platforms = platforms.unix;

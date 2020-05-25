@@ -2,12 +2,12 @@
 
 let
   pname = "ssb-patchwork";
-  version = "3.17.1";
+  version = "3.17.6";
   name = "Patchwork-${version}";
 
   src = fetchurl {
     url = "https://github.com/ssbc/patchwork/releases/download/v${version}/${name}.AppImage";
-    sha256 = "06wcgdcagmh80nr8nyrnz83wgq7j8r96hn3ccka7nmn02pdgvp3k";
+    sha256 = "0bq4pi0rmfsyiiapnhkkhikg2a2jzqlna4gvk6gw7wl0r8a111cs";
   };
 
   binary = appimageTools.wrapType2 {
@@ -23,7 +23,7 @@ let
     name = "ssb-patchwork";
     exec = "${binary}/bin/ssb-patchwork";
     icon = "ssb-patchwork.png";
-    comment = "Decentralized messaging and sharing app";
+    comment = "Client for the decentralized social network Secure Scuttlebutt";
     desktopName = "Patchwork";
     genericName = "Patchwork";
     categories = "Network;";
@@ -45,9 +45,9 @@ in
     longDescription = ''
       sea-slang for gossip - a scuttlebutt is basically a watercooler on a ship.
     '';
-    homepage = https://www.scuttlebutt.nz/;
+    homepage = "https://www.scuttlebutt.nz/";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ thedavidmeister ninjatrappeur flokli ];
+    maintainers = with maintainers; [ asymmetric ninjatrappeur thedavidmeister ];
     platforms = [ "x86_64-linux" ];
   };
 }

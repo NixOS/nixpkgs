@@ -66,7 +66,7 @@ in
         type = types.package;
         default = pkgs.redmine;
         description = "Which Redmine package to use.";
-        example = "pkgs.redmine.override { ruby = pkgs.ruby_2_4; }";
+        example = "pkgs.redmine.override { ruby = pkgs.ruby_2_7; }";
       };
 
       user = mkOption {
@@ -132,7 +132,7 @@ in
         example = literalExample ''
           {
             dkuk-redmine_alex_skin = builtins.fetchurl {
-              url = https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip;
+              url = "https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip";
               sha256 = "0hrin9lzyi50k4w2bd2b30vrf1i4fi1c0gyas5801wn8i7kpm9yl";
             };
           }
@@ -146,7 +146,7 @@ in
         example = literalExample ''
           {
             redmine_env_auth = builtins.fetchurl {
-              url = https://github.com/Intera/redmine_env_auth/archive/0.6.zip;
+              url = "https://github.com/Intera/redmine_env_auth/archive/0.6.zip";
               sha256 = "0yyr1yjd8gvvh832wdc8m3xfnhhxzk2pk3gm2psg5w9jdvd6skak";
             };
           }
@@ -367,17 +367,17 @@ in
 
     };
 
-    users.users = optionalAttrs (cfg.user == "redmine") (singleton
-      { name = "redmine";
+    users.users = optionalAttrs (cfg.user == "redmine") {
+      redmine = {
         group = cfg.group;
         home = cfg.stateDir;
         uid = config.ids.uids.redmine;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "redmine") (singleton
-      { name = "redmine";
-        gid = config.ids.gids.redmine;
-      });
+    users.groups = optionalAttrs (cfg.group == "redmine") {
+      redmine.gid = config.ids.gids.redmine;
+    };
 
     warnings = optional (cfg.database.password != "")
       ''config.services.redmine.database.password will be stored as plaintext

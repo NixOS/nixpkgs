@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gnome3 }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-clipboard-indicator";
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ jonafato ];
     platforms = platforms.linux;
-    homepage = https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator;
-    broken = versionAtLeast gnome3.gnome-shell.version "3.26";
+    homepage = "https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator";
   };
 }

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
-  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) [ enum34 ];
+  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) enum34;
 
   checkInputs = [ pytest pytest_xdist flaky mock pexpect ];
   inherit doCheck;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library for property based testing";
-    homepage = https://github.com/HypothesisWorks/hypothesis;
+    homepage = "https://github.com/HypothesisWorks/hypothesis";
     license = licenses.mpl20;
   };
 }

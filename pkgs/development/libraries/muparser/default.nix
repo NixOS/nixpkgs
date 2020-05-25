@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [setfile];
 
   meta = {
-    homepage = http://muparser.sourceforge.net;
+    homepage = "http://muparser.sourceforge.net";
     description = "An extensible high performance math expression parser library written in C++";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

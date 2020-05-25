@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
   ];
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   preConfigure = ''./autogen.sh'';
   configureFlags = [
@@ -57,7 +57,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Planner;
+    homepage = "https://wiki.gnome.org/Apps/Planner";
     description = "Project management application for GNOME";
     longDescription = ''
       Planner is the GNOME project management tool.

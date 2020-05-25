@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl, meson, ninja, pkgconfig, zathura_core, girara, poppler }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.9";
   pname = "zathura-pdf-poppler";
+  version = "0.3.0";
 
   src = fetchurl {
-    url = "https://git.pwmt.org/pwmt/zathura-pdf-poppler/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0c15rnwh42m3ybrhax01bl36w0iynaq8xg6l08riml3cyljypi9l";
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "1vfl4vkyy3rf39r1sqaa7y8113bgkh2bkfq3nn2inis9mrykmk6m";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig zathura_core ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
   meta = with lib; {
-    homepage = https://pwmt.org/projects/zathura-pdf-poppler/;
+    homepage = "https://pwmt.org/projects/zathura-pdf-poppler/";
     description = "A zathura PDF plugin (poppler)";
     longDescription = ''
       The zathura-pdf-poppler plugin adds PDF support to zathura by

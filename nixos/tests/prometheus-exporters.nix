@@ -224,7 +224,7 @@ let
           after = [ "postfix.service" ];
           requires = [ "postfix.service" ];
           preStart = ''
-            mkdir -p 0600 mail-exporter/new
+            mkdir -p -m 0700 mail-exporter/new
           '';
           serviceConfig = {
             ProtectHome = true;
@@ -241,6 +241,46 @@ let
         wait_for_open_port(9225)
         wait_until_succeeds(
             "curl -sSf http://localhost:9225/metrics | grep -q 'mail_deliver_success{configname=\"testserver\"} 1'"
+        )
+      '';
+    };
+
+    mikrotik = {
+      exporterConfig = {
+        enable = true;
+        extraFlags = [ "-timeout=1s" ];
+        configuration = {
+          devices = [
+            {
+              name = "router";
+              address = "192.168.42.48";
+              user = "prometheus";
+              password = "shh";
+            }
+          ];
+          features = {
+            bgp = true;
+            dhcp = true;
+            dhcpl = true;
+            dhcpv6 = true;
+            health = true;
+            routes = true;
+            poe = true;
+            pools = true;
+            optics = true;
+            w60g = true;
+            wlansta = true;
+            wlanif = true;
+            monitor = true;
+            ipsec = true;
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-mikrotik-exporter.service")
+        wait_for_open_port(9436)
+        succeed(
+            "curl -sSf http://localhost:9436/metrics | grep -q 'mikrotik_scrape_collector_success{device=\"router\"} 0'"
         )
       '';
     };
@@ -287,7 +327,7 @@ let
         services.nginx = {
           enable = true;
           statusPage = true;
-          virtualHosts."/".extraConfig = "return 204;";
+          virtualHosts."test".extraConfig = "return 204;";
         };
       };
       exporterTest = ''
@@ -363,6 +403,7 @@ let
       };
       metricProvider = {
         services.rspamd.enable = true;
+        virtualisation.memorySize = 1024;
       };
       exporterTest = ''
         wait_for_unit("rspamd.service")

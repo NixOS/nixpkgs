@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, lvm2, systemd
-, btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
+, btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
 , procps, libseccomp
 }:
 
@@ -53,9 +53,7 @@ rec {
       patchPhase = ''
       '';
 
-      NIX_CFLAGS_COMPILE = [
-        "-DMINIMAL=ON"
-      ];
+      NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
   in
     stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) {
@@ -125,7 +123,7 @@ rec {
 
     outputs = ["out" "man"];
 
-    extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux ]);
+    extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux git ]);
 
     installPhase = optionalString (stdenv.isLinux) ''
       install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
@@ -184,7 +182,7 @@ rec {
     '';
 
     meta = {
-      homepage = https://www.docker.com/;
+      homepage = "https://www.docker.com/";
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
       maintainers = with maintainers; [ nequissimus offline tailhook vdemeester periklis ];
@@ -208,14 +206,14 @@ rec {
   };
 
   docker_19_03 = makeOverridable dockerGen {
-    version = "19.03.4";
-    rev = "9013bf583a215dc1488d941f9b6f7f11e1ea899f";
-    sha256 = "094d6d93jd7g1vw362cqbv9qbyv8h6pb6dj750pgqvnf1bn1mffb";
-    runcRev = "3e425f80a8c931f88e6d94a8c831b9d5aa481657";
-    runcSha256 = "18psc830b2rkwml1x6vxngam5b5wi3pj14mw817rshpzy87prspj";
-    containerdRev = "b34a5c8af56e510852c35414db4c1f4fa6172339";
-    containerdSha256 = "1kddhkd93wkrimk0yjcqiavdrqc818nd39rf3wrgxyilx1mfnrwb";
-    tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";
+    version = "19.03.8";
+    rev = "afacb8b7f0d8d4f9d2a8e8736e9c993e672b41f3";
+    sha256 = "15iq16rlnkw78lvapcfpbnsnxhdjbvfvgzg3xzxhpdg1dmq40b6j";
+    runcRev = "dc9208a3303feef5b3839f4323d9beb36df0a9dd"; # v1.0.0-rc10
+    runcSha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
+    containerdRev = "7ad184331fa3e55e52b890ea95e65ba581ae3429"; # v1.2.13
+    containerdSha256 = "1rac3iak3jpz57yarxc72bxgxvravwrl0j6s6w2nxrmh2m3kxqzn";
+    tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662"; # v0.18.0
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 }

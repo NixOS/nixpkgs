@@ -1,39 +1,83 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, doxygen, graphviz, valgrind
-, glib, dbus, gst_all_1, alsaLib, ffmpeg, libjack2, udev, libva, xorg
-, sbc, SDL2, makeFontsConf
+{ stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkgconfig
+, doxygen
+, graphviz
+, valgrind
+, glib
+, dbus
+, gst_all_1
+, alsaLib
+, ffmpeg
+, libjack2
+, udev
+, libva
+, xorg
+, sbc
+, SDL2
+, libsndfile
+, bluez
+, vulkan-headers
+, vulkan-loader
+, libpulseaudio
+, makeFontsConf
 }:
 
 let
   fontsConf = makeFontsConf {
-    fontDirectories = [ ];
+    fontDirectories = [];
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.2.7";
-
-  src = fetchFromGitHub {
-    owner = "PipeWire";
-    repo = "pipewire";
-    rev = version;
-    sha256 = "1q5wrqnhhs6r49p8yvkw1pl0cnsd4rndxy4h5lvdydwgf1civcwc";
-  };
+  version = "0.3.2";
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pipewire";
+    repo = "pipewire";
+    rev = version;
+    sha256 = "U7lqvn2vMIxARNplzNX9H3Ztlfv1IH8LozJsq7JSEKs=";
+  };
+
   nativeBuildInputs = [
-    meson ninja pkgconfig doxygen graphviz valgrind
+    doxygen
+    graphviz
+    meson
+    ninja
+    pkgconfig
+    valgrind
   ];
+
   buildInputs = [
-    glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer
-    alsaLib ffmpeg libjack2 udev libva xorg.libX11 sbc SDL2
+    SDL2
+    alsaLib
+    bluez
+    dbus
+    ffmpeg
+    glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    libjack2
+    libpulseaudio
+    libsndfile
+    libva
+    sbc
+    udev
+    vulkan-headers
+    vulkan-loader
+    xorg.libX11
   ];
 
   mesonFlags = [
     "-Ddocs=true"
-    "-Dgstreamer=enabled"
+    "-Dman=false" # we don't have xmltoman
+    "-Dgstreamer=true"
   ];
-
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 
@@ -41,8 +85,8 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Server and user space API to deal with multimedia pipelines";
-    homepage = https://pipewire.org/;
-    license = licenses.lgpl21;
+    homepage = "https://pipewire.org/";
+    license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jtojnar ];
   };

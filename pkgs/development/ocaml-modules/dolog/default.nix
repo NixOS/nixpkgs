@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   meta = {
-    homepage = https://github.com/UnixJunkie/dolog;
+    homepage = "https://github.com/UnixJunkie/dolog";
     description = "Minimalistic lazy logger in OCaml";
     platforms = ocaml.meta.platforms or [];
     license = stdenv.lib.licenses.bsd3;

@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/amelchio/pysonos;
+    homepage = "https://github.com/amelchio/pysonos";
     description = "A SoCo fork with fixes for Home Assistant";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ juaningan ];

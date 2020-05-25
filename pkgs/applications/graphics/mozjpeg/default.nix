@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
       The idea is to reduce transfer times for JPEGs on the Web, thus reducing page load times.
     '';
-    homepage = https://github.com/mozilla/mozjpeg ;
+    homepage = "https://github.com/mozilla/mozjpeg";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.aristid ];
     platforms = stdenv.lib.platforms.all;

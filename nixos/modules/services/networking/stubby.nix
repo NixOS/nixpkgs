@@ -72,6 +72,7 @@ let
     resolution_type: GETDNS_RESOLUTION_STUB
     dns_transport_list:
       ${fallbacks}
+    appdata_dir: "/var/cache/stubby"
     tls_authentication: ${cfg.authenticationMode}
     tls_query_padding_blocksize: ${toString cfg.queryPaddingBlocksize}
     edns_client_subnet_private: ${if cfg.subnetPrivate then "1" else "0"}
@@ -204,10 +205,12 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+        Type = "notify";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${optionalString cfg.debugLogging "-l"}";
         DynamicUser = true;
+        CacheDirectory = "stubby";
       };
     };
   };

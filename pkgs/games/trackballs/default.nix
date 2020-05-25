@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake zlib SDL2 SDL2_ttf SDL2_mixer SDL2_image guile gettext libGLU libGL ];
 
   meta = {
-    homepage = https://trackballs.github.io/;
+    homepage = "https://trackballs.github.io/";
     description = "3D Marble Madness clone";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;

@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen, suitesparse, libGLU, qt5
-, libsForQt5, makeWrapper }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, eigen, suitesparse, libGLU
+, qtbase, libqglviewer, makeWrapper }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "g2o";
-  version = "unstable-2019-04-07";
+  version = "20200410";
 
   src = fetchFromGitHub {
     owner = "RainerKuemmerle";
     repo = pname;
-    rev = "9b41a4ea5ade8e1250b9c1b279f3a9c098811b5a";
-    sha256 = "1rgrz6zxiinrik3lgwgvsmlww1m2fnpjmvcx1mf62xi1s2ma5w2i";
+    rev = "${version}_git";
+    sha256 = "11rgj2g9mmwajlr69pjkjvxjyn88afa0r4bchjyvmxswjccizlg2";
   };
 
   # Removes a reference to gcc that is only used in a debug message
@@ -18,11 +18,14 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ eigen suitesparse libGLU qt5.qtbase libsForQt5.libqglviewer ];
+  buildInputs = [ eigen suitesparse libGLU qtbase libqglviewer ];
+
+  # Silence noisy warning
+  CXXFLAGS = "-Wno-deprecated-copy";
 
   cmakeFlags = [
     # Detection script is broken
-    "-DQGLVIEWER_INCLUDE_DIR=${libsForQt5.libqglviewer}/include/QGLViewer"
+    "-DQGLVIEWER_INCLUDE_DIR=${libqglviewer}/include/QGLViewer"
     "-DG2O_BUILD_EXAMPLES=OFF"
   ] ++ lib.optionals stdenv.isx86_64 ([ "-DDO_SSE_AUTODETECT=OFF" ] ++ {
     default        = [ "-DDISABLE_SSE3=ON" "-DDISABLE_SSE4_1=ON" "-DDISABLE_SSE4_2=ON" "-DDISABLE_SSE4_A=ON" ];
@@ -35,16 +38,11 @@ stdenv.mkDerivation rec {
     skylake-avx512 = [                                                                 "-DDISABLE_SSE4_A=ON" ];
   }.${stdenv.hostPlatform.platform.gcc.arch or "default"});
 
-  postInstall = ''
-    wrapProgram $out/bin/g2o_viewer \
-      --prefix QT_PLUGIN_PATH : "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "A General Framework for Graph Optimization";
     homepage = "https://github.com/RainerKuemmerle/g2o";
-    license = with lib.licenses; [ bsd3 lgpl3 gpl3 ];
-    maintainers = with lib.maintainers; [ lopsided98 ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ bsd3 lgpl3 gpl3 ];
+    maintainers = with maintainers; [ lopsided98 ];
+    platforms = platforms.all;
   };
 }

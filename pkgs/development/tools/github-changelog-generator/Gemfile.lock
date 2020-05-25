@@ -46,4 +46,4 @@ DEPENDENCIES
   github_changelog_generator (= 1.14.3)
 
 BUNDLED WITH
-   1.16.3
+   2.1.4

@@ -6,11 +6,11 @@ assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
   pname = "yoshimi";
-  version = "1.6.0.3";
+  version = "1.7.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/yoshimi/${pname}-${version}.tar.bz2";
-    sha256 = "1z2mnmm299ng6jcwa61dzr1ilwa5fjgsggxl2wa5smji6b4npmx7";
+    sha256 = "1pkqrrr51vlxh96vy0c0rf5ijjvymys4brsw9rv1bdp1bb8izw6c";
   };
 
   buildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation  rec {
       ZynAddSubFX along with very good Jack and Alsa midi/audio
       functionality on Linux
     '';
-    homepage = http://yoshimi.sourceforge.net;
+    homepage = "http://yoshimi.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hstr";
-  version = "2.0";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner  = "dvorka";
     repo   = "hstr";
     rev    = version;
-    sha256 = "1y9vsfbg07gbic0daqy569d9pb9i1d07fym3q7a0a99hbng85s20";
+    sha256 = "07fkilqlkpygvf9kvxyvl58g3lfq0bwwdp3wczy4hk8qlbhmgihn";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/dvorka/hstr;
+    homepage = "https://github.com/dvorka/hstr";
     description = "Shell history suggest box - easily view, navigate, search and use your command history";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];

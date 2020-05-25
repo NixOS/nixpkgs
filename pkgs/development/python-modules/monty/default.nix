@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, isPy27
 , nose
 , numpy
 , six
@@ -15,6 +16,7 @@
 buildPythonPackage rec {
   pname = "monty";
   version = "3.0.2";
+  disabled = isPy27; # uses type annotations
 
   # No tests in Pypi
   src = fetchFromGitHub {
@@ -26,6 +28,13 @@ buildPythonPackage rec {
 
   checkInputs = [ lsof nose numpy msgpack coverage coveralls pymongo];
   propagatedBuildInputs = [ six ruamel_yaml ];
+
+  # test suite tries to decode bytes, but msgpack now returns a str
+  # https://github.com/materialsvirtuallab/monty/pull/121
+  postPatch = ''
+    substituteInPlace tests/test_serialization.py \
+      --replace ".decode('utf-8')" ""
+  '';
 
   preCheck = ''
     substituteInPlace tests/test_os.py \
@@ -39,7 +48,7 @@ buildPythonPackage rec {
       standard library. Examples include useful utilities like transparent support for zipped files, useful design
       patterns such as singleton and cached_class, and many more.
     ";
-    homepage = https://github.com/materialsvirtuallab/monty;
+    homepage = "https://github.com/materialsvirtuallab/monty";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

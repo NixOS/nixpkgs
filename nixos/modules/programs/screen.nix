@@ -27,6 +27,7 @@ in
     environment.etc.screenrc.text = cfg.screenrc;
 
     environment.systemPackages = [ pkgs.screen ];
+    security.pam.services.screen = {};
   };
 
 }

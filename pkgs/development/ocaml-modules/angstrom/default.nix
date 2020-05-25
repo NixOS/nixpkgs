@@ -18,7 +18,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    homepage = https://github.com/inhabitedtype/angstrom;
+    homepage = "https://github.com/inhabitedtype/angstrom";
     description = "OCaml parser combinators built for speed and memory efficiency";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ sternenseemann ];

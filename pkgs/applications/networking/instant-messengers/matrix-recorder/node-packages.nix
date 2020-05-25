@@ -784,7 +784,7 @@ let
       version = "2.3.0";
       src = fetchurl {
         name = "olm-2.3.0.tar.gz";
-        url = https://packages.matrix.org/npm/olm/olm-2.3.0.tgz;
+        url = "https://packages.matrix.org/npm/olm/olm-2.3.0.tgz";
         sha256 = "1f0f037a025a44509646cb849ded7c1a1f55e7bfed240fad19676c002fcd953a";
       };
     };

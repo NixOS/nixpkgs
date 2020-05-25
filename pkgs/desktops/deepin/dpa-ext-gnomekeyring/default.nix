@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME keyring extension for dde-polkit-agent";
-    homepage = https://github.com/linuxdeepin/dpa-ext-gnomekeyring;
+    homepage = "https://github.com/linuxdeepin/dpa-ext-gnomekeyring";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

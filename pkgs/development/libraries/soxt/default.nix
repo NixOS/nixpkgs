@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [ coin3d motif xlibsWrapper libGLU libGL libXmu ];
 
   meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/Coin3D/coin/wiki/Home;
+    homepage = "https://bitbucket.org/Coin3D/coin/wiki/Home";
     license = licenses.bsd3;
     description = "A GUI binding for using Open Inventor with Xt/Motif";
     maintainers = with maintainers; [ tmplt ];

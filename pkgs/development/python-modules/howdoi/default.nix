@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Instant coding answers via the command line";
-    homepage = https://pypi.python.org/pypi/howdoi;
+    homepage = "https://pypi.python.org/pypi/howdoi";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

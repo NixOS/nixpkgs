@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Nose plugin providing BDD dsl for python";
-    homepage = https://github.com/delfick/nose-of-yeti;
+    homepage = "https://github.com/delfick/nose-of-yeti";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
   };

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
-    homepage = https://github.com/swagger-api/swagger-codegen;
+    homepage = "https://github.com/swagger-api/swagger-codegen";
     license = licenses.asl20;
     maintainers = [ maintainers.jraygauthier ];
   };

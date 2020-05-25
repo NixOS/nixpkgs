@@ -38,7 +38,7 @@ buildGoPackage {
       build jobs, reporting back the status code and output log of the job,
       and uploading the job's artifacts.
     '';
-    homepage = https://buildkite.com/docs/agent;
+    homepage = "https://buildkite.com/docs/agent";
     license = licenses.mit;
     maintainers = with maintainers; [ pawelpacana zimbatm rvl ];
     platforms = platforms.unix;

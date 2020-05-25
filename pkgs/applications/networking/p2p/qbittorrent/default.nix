@@ -10,13 +10,13 @@ with lib;
 
 mkDerivation rec {
   pname = "qbittorrent";
-  version = "4.2.0";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qbittorrent";
     rev = "release-${version}";
-    sha256 = "17vm6aa2k8k1q14z9r2r06c794bcr4m0l0fdsn08wid6mj1zjsbx";
+    sha256 = "1iqgwhgwa2kx85zj1rwfnnclr1433a7m2gbs3j7w6rx39vxnzhcc";
   };
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported
@@ -39,7 +39,7 @@ mkDerivation rec {
 
   meta = {
     description = "Featureful free software BitTorrent client";
-    homepage    = https://www.qbittorrent.org/;
+    homepage    = "https://www.qbittorrent.org/";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ Anton-Latukha ];

@@ -17,7 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Simple command-line snippet manager, written in Go";
-    homepage = https://github.com/knqyf263/pet;
+    homepage = "https://github.com/knqyf263/pet";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

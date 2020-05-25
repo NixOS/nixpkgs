@@ -24,8 +24,8 @@ buildPythonPackage rec {
       with Django 1.1 - grappelli_safe was therefore created to
       address these specific issues.
     '';
-    homepage = https://github.com/stephenmcd/grappelli-safe;
-    downloadPage = http://pypi.python.org/pypi/grappelli_safe/;
+    homepage = "https://github.com/stephenmcd/grappelli-safe";
+    downloadPage = "http://pypi.python.org/pypi/grappelli_safe/";
     license = licenses.free;
     maintainers = with maintainers; [ prikhi ];
     platforms = platforms.unix;

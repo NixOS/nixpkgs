@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "py.test plugin for efficiently checking PEP8 compliance";
-    homepage = https://github.com/tholo/pytest-flake8;
+    homepage = "https://github.com/tholo/pytest-flake8";
     maintainers = with lib.maintainers; [ jluttine ];
     license = lib.licenses.bsd2;
   };

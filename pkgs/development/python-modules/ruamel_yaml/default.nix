@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
-    homepage = https://bitbucket.org/ruamel/yaml;
+    homepage = "https://sourceforge.net/projects/ruamel-yaml/";
     license = licenses.mit;
   };
 

@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An app runtime based on Chromium and node.js";
-    homepage = https://nwjs.io/;
+    homepage = "https://nwjs.io/";
     platforms = ["i686-linux" "x86_64-linux"];
     maintainers = [ maintainers.offline ];
     license = licenses.bsd3;

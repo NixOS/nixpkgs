@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     "MANDIR=${placeholder "man"}/share/man"
   ];
 
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = {
     description = "A keyboard layout indicator and switcher";
-    homepage = http://xxkb.sourceforge.net/;
+    homepage = "http://xxkb.sourceforge.net/";
     license = stdenv.lib.licenses.artistic2;
     maintainers = with stdenv.lib.maintainers; [ rasendubi ];
     platforms = stdenv.lib.platforms.linux;

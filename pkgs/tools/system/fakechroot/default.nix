@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dex4er/fakechroot;
+    homepage = "https://github.com/dex4er/fakechroot";
     description = "Give a fake chroot environment through LD_PRELOAD";
     license = licenses.lgpl21;
     maintainers = with maintainers; [offline];

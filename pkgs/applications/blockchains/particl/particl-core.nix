@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       An open source, decentralized privacy platform built for global person to person eCommerce.
       RPC daemon and CLI client only.
     '';
-    homepage = https://particl.io/;
+    homepage = "https://particl.io/";
     maintainers = with maintainers; [ demyanrogozhin ];
     license = licenses.mit;
     platforms = platforms.unix;

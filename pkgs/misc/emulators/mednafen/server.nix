@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Netplay server for Mednafen";
-    homepage = https://mednafen.github.io/;
+    homepage = "https://mednafen.github.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;

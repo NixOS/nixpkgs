@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     client = { pkgs, ... }: {
       imports = [ ./common/x11.nix ./common/user-account.nix ];
-      services.xserver.displayManager.auto.user = "alice";
+      test-support.displayManager.auto.user = "alice";
       environment.systemPackages = [ pkgs.freerdp ];
       services.xrdp.enable = true;
       services.xrdp.defaultWindowManager = "${pkgs.icewm}/bin/icewm";

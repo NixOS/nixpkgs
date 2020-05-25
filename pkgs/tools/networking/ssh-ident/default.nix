@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/ccontavalli/ssh-ident;
+    homepage = "https://github.com/ccontavalli/ssh-ident";
     description = "Start and use ssh-agent and load identities as necessary";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ telotortium ];

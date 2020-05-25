@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
       To be able to use it, make sure you have access to /dev/hidraw* files.
     '';
     license = licenses.gpl2;
-    homepage = https://pwr-solaar.github.io/Solaar/;
+    homepage = "https://pwr-solaar.github.io/Solaar/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ spinus ysndr ];
   };

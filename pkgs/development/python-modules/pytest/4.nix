@@ -3,7 +3,7 @@
 , atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
 }:
 buildPythonPackage rec {
-  version = "4.6.7";
+  version = "4.6.8";
   pname = "pytest";
 
   preCheck = ''
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ea149066f566c943d3122f4b1cf1b577cab73189d11f490b54703fa5fa9df50";
+    sha256 = "6192875be8af57b694b7c4904e909680102befcb99e610ef3d9f786952f795aa";
   };
 
   checkInputs = [ hypothesis mock ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://docs.pytest.org;
+    homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
     license = licenses.mit;

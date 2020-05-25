@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcap, libnl, readline, net_snmp, less, perl, texinfo,
+{ stdenv, fetchurl, libcap, libnl, readline, net-snmp, less, perl, texinfo,
   pkgconfig, c-ares }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ readline net_snmp c-ares ]
+    [ readline net-snmp c-ares ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libcap libnl ];
 
   nativeBuildInputs = [ pkgconfig perl texinfo ];
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       It is more than a routed replacement, it can be used as a Route Server and
       a Route Reflector.
     '';
-    homepage = https://www.nongnu.org/quagga/;
+    homepage = "https://www.nongnu.org/quagga/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ tavyc ];

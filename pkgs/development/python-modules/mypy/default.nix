@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.750";
+  version = "0.770";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k0l74g3jcq7ppzn234sffsaacn6qaq242famckk0cviwgld1jvf";
+    sha256 = "1bm40nx9g1n4nj1309cijnh0ns4qbhym3agyl537nc4vxw3paqla";
   };
 
   propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions ];

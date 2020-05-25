@@ -15,6 +15,8 @@ buildPythonPackage rec {
   checkInputs = [ mock pytest coverage tox ];
   propagatedBuildInputs = [ urwid tweepy future ];
 
+  LC_ALL = "en_US.UTF-8";
+
   patches = [
     (fetchpatch {
       url = "https://github.com/louipc/turses/commit/be0961b51f502d49fd9e2e5253ac130e543a31c7.patch";
@@ -43,7 +45,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/louipc/turses;
+    homepage = "https://github.com/louipc/turses";
     description = "A Twitter client for the console";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];

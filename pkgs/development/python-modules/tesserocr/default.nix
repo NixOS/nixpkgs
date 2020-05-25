@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "tesserocr";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nj33mwvppacy6p5mqk9a4x26hx9ailshgad84ks60wyms6rgjiv";
+    sha256 = "0cc7d4r11z26rhcwpmcc42fi9kr3f20nq5pk84jrczr18i0g99mh";
   };
 
   nativeBuildInputs = [ cython pkg-config ];

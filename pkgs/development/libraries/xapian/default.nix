@@ -30,12 +30,12 @@ let
 
     meta = with stdenv.lib; {
       description = "Search engine library";
-      homepage = https://xapian.org/;
+      homepage = "https://xapian.org/";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ ];
       platforms = platforms.unix;
     };
   };
 in {
-  xapian_1_4 = generic "1.4.14" "0ja95vn0lkf6qkjhg2blkx306i10hg4fr8wlrhalmly93307lnlp";
+  xapian_1_4 = generic "1.4.15" "1sjhz6vgql801rdgl6vrsjj0vy1mwlkcxjx6nr7h27m031cyjs5i";
 }

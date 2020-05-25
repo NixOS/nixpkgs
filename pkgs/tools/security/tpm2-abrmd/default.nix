@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "TPM2 resource manager, accessible via D-Bus";
-    homepage = https://github.com/tpm2-software/tpm2-tools;
+    homepage = "https://github.com/tpm2-software/tpm2-tools";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lschuermann ];

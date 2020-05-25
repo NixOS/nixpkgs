@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/coq-community/coq-bits;
+    homepage = "https://github.com/coq-community/coq-bits";
     description = "A formalization of bitset operations in Coq";
     license = licenses.asl20;
     maintainers = with maintainers; [ ptival ];

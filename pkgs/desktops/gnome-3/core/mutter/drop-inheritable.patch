@@ -41,12 +41,12 @@ index 3322bd3b1..01c8020fa 100644
  
  # optional version requirements
  udev_req = '>= 228'
-@@ -125,6 +126,7 @@ xau_dep = dependency('xau')
- ice_dep = dependency('ice')
+@@ -131,6 +131,7 @@ ice_dep = dependency('ice')
  atk_dep = dependency('atk', version: atk_req)
  libcanberra_dep = dependency('libcanberra', version: libcanberra_req)
+ dbus_dep = dependency('dbus-1')
 +libcapng_dep = dependency('libcap-ng', required: get_option('libcapng'))
- 
+
  # For now always require X11 support
  have_x11 = true
 @@ -256,6 +258,7 @@ have_core_tests = false
@@ -65,10 +65,10 @@ index 3322bd3b1..01c8020fa 100644
  cdata.set('HAVE_PROFILER', have_profiler)
  
  xkb_base = xkeyboard_config_dep.get_pkgconfig_variable('xkb_base')
-@@ -443,6 +447,7 @@ output = [
-   '        Startup notification..... ' + have_startup_notification.to_string(),
+@@ -465,6 +465,7 @@ output = [
    '        Introspection............ ' + have_introspection.to_string(),
    '        Profiler................. ' + have_profiler.to_string(),
+   '        Xwayland initfd.......... ' + have_xwayland_initfd.to_string(),
 +  '        libcap-ng................ ' + have_libcapng.to_string(),
    '',
    '    Tests:',

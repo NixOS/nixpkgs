@@ -1,0 +1,34 @@
+From a6a61d0dc018101a9a8d0a664f31140d7e38db0e Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Fri, 17 Jan 2020 01:42:40 +0100
+Subject: [PATCH] Fix build with glibc 2.30
+
+https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1842923
+---
+ src/dns/dns_str_resflags.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/dns/dns_str_resflags.c b/src/dns/dns_str_resflags.c
+index 5f2cce5..df32345 100644
+--- a/src/dns/dns_str_resflags.c
++++ b/src/dns/dns_str_resflags.c
+@@ -60,10 +60,16 @@ static const LONG_NAME_MASK resflag_table[] = {
+     "RES_DEFNAMES", RES_DEFNAMES,
+     "RES_STAYOPEN", RES_STAYOPEN,
+     "RES_DNSRCH", RES_DNSRCH,
++#ifdef RES_INSECURE1
+     "RES_INSECURE1", RES_INSECURE1,
++#endif
++#ifdef RES_INSECURE2
+     "RES_INSECURE2", RES_INSECURE2,
++#endif
+     "RES_NOALIASES", RES_NOALIASES,
++#ifdef RES_USE_INET6
+     "RES_USE_INET6", RES_USE_INET6,
++#endif
+ #ifdef RES_ROTATE
+     "RES_ROTATE", RES_ROTATE,
+ #endif
+-- 
+2.23.1
+

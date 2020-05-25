@@ -32,7 +32,7 @@ in {
 
   testScript = let
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
-      #!${pkgs.stdenv.shell}
+      #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
       export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
@@ -41,12 +41,12 @@ in {
       "''${@}"
     '';
     copySharedFile = pkgs.writeScript "copy-shared-file" ''
-      #!${pkgs.stdenv.shell}
+      #!${pkgs.runtimeShell}
       echo 'hi' | ${withRcloneEnv} ${pkgs.rclone}/bin/rclone rcat nextcloud:test-shared-file
     '';
 
     diffSharedFile = pkgs.writeScript "diff-shared-file" ''
-      #!${pkgs.stdenv.shell}
+      #!${pkgs.runtimeShell}
       diff <(echo 'hi') <(${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file)
     '';
   in ''

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
   # (setting it to an absolute path causes include files to go to $out/$out/include,
   #  because the absolute path is interpreted with root at $out).
-  cmakeFlags = "-DCMAKE_INSTALL_INCLUDEDIR=include";
+  cmakeFlags = [ "-DCMAKE_INSTALL_INCLUDEDIR=include" ];
 
   prePatch = ''
     substituteInPlace ./configure \

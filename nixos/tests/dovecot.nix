@@ -8,7 +8,7 @@ import ./make-test-python.nix {
     services.dovecot2.protocols = [ "imap" "pop3" ];
     environment.systemPackages = let
       sendTestMail = pkgs.writeScriptBin "send-testmail" ''
-        #!${pkgs.stdenv.shell}
+        #!${pkgs.runtimeShell}
         exec sendmail -vt <<MAIL
         From: root@localhost
         To: alice@localhost
@@ -19,7 +19,7 @@ import ./make-test-python.nix {
       '';
 
       sendTestMailViaDeliveryAgent = pkgs.writeScriptBin "send-lda" ''
-        #!${pkgs.stdenv.shell}
+        #!${pkgs.runtimeShell}
 
         exec ${pkgs.dovecot}/libexec/dovecot/deliver -d bob <<MAIL
         From: root@localhost

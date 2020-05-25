@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # Shared-only build
-  buildFlags = "shared";
+  buildFlags = [ "shared" ];
   postPatch = '' sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
    '';
 
   meta = with stdenv.lib; {
-    homepage = https://heasarc.gsfc.nasa.gov/fitsio/;
+    homepage = "https://heasarc.gsfc.nasa.gov/fitsio/";
     description = "Library for reading and writing FITS data files";
     longDescription =
       '' CFITSIO is a library of C and Fortran subroutines for reading and

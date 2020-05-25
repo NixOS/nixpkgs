@@ -46,6 +46,18 @@ let
       xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd5094";
       prerelease = false;
     };
+    "0.47.02" = {
+      dfHackRelease = "0.47.02-alpha0";
+      sha256 = "19lgykgqm0si9vd9hx4zw8b5m9188gg8r1a6h25np2m2ziqwbjj9";
+      xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd509a";
+      prerelease = true;
+    };
+    "0.47.04" = {
+      dfHackRelease = "0.47.04-alpha0";
+      sha256 = "07056k6717mqim9skwjprqplj8jmmli6g4p2c72c8000jwnn2hjy";
+      xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd50aa";
+      prerelease = true;
+    };
   };
 
   release = if hasAttr dfVersion dfhack-releases
@@ -109,7 +121,7 @@ let
     '';
 
     preBuild = ''
-      export LD_LIBRARY_PATH="$PWD/depends/protobuf:$LD_LIBRARY_PATH"
+      export LD_LIBRARY_PATH="$PWD/depends/protobuf''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     '';
 
     cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
@@ -128,7 +140,7 @@ buildEnv {
 
   meta = with stdenv.lib; {
     description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
-    homepage = https://github.com/DFHack/dfhack/;
+    homepage = "https://github.com/DFHack/dfhack/";
     license = licenses.zlib;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ robbinch a1russell abbradar numinit ];

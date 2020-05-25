@@ -3,27 +3,26 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409";
-        };
-      });
       protobuf = super.protobuf.override {
         protobuf = protobuf3_10;
       };
-
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1r5faspz73477hlbjgilw05xsms0glmsa371yqdd26znqsvg1b81";
+        };
+      });
     };
   };
 
 in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.14.1";
+  version = "1.14.3";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1hw1q2fck9429077w207rk65a1krzyi6qya5pzjkpw4av5s0v0g3";
+    sha256 = "0xnsl000c5a2li9qw9anrzzq437qn1n4hcfc24i4rfq37awzmig7";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
@@ -34,11 +33,9 @@ in python.pkgs.buildPythonApplication rec {
     protobuf
   ];
 
+  # remove all version pinning (E.g tornado==5.1.1 -> tornado)
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "protobuf==3.10.0" "protobuf~=3.10" \
-      --replace "paho-mqtt==1.4.0" "paho-mqtt~=1.4" \
-      --replace "tornado==5.1.1" "tornado~=5.1"
+    sed -i -e "s/==[0-9.]*//" setup.py
   '';
 
   makeWrapperArgs = [
@@ -50,11 +47,14 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   # Platformio will try to access the network
-  doCheck = false;
+  # Instead, run the executable
+  checkPhase = ''
+    $out/bin/esphome --help > /dev/null
+  '';
 
   meta = with lib; {
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
-    homepage = https://esphome.io/;
+    homepage = "https://esphome.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda globin ];
   };

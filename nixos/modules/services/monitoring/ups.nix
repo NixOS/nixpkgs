@@ -214,14 +214,12 @@ in
       environment.NUT_STATEPATH = "/var/lib/nut/";
     };
 
-    environment.etc = [
-      { source = pkgs.writeText "nut.conf"
+    environment.etc = {
+      "nut/nut.conf".source = pkgs.writeText "nut.conf"
         ''
           MODE = ${cfg.mode}
         '';
-        target = "nut/nut.conf";
-      }
-      { source = pkgs.writeText "ups.conf"
+      "nut/ups.conf".source = pkgs.writeText "ups.conf"
         ''
           maxstartdelay = ${toString cfg.maxStartDelay}
 
@@ -229,25 +227,15 @@ in
 
           "}
         '';
-        target = "nut/ups.conf";
-      }
-      { source = cfg.schedulerRules;
-        target = "nut/upssched.conf";
-      }
+      "nut/upssched.conf".source = cfg.schedulerRules;
       # These file are containing private informations and thus should not
       # be stored inside the Nix store.
       /*
-      { source = ;
-        target = "nut/upsd.conf";
-      }
-      { source = ;
-        target = "nut/upsd.users";
-      }
-      { source = ;
-        target = "nut/upsmon.conf;
-      }
+      "nut/upsd.conf".source = "";
+      "nut/upsd.users".source = "";
+      "nut/upsmon.conf".source = "";
       */
-    ];
+    };
 
     power.ups.schedulerRules = mkDefault "${pkgs.nut}/etc/upssched.conf.sample";
 
@@ -259,21 +247,16 @@ in
 
 
 /*
-    users.users = [
-      { name = "nut";
-        uid = 84;
+    users.users.nut =
+      { uid = 84;
         home = "/var/lib/nut";
         createHome = true;
         group = "nut";
         description = "UPnP A/V Media Server user";
-      }
-    ];
+      };
 
-    users.groups = [
-      { name = "nut";
-        gid = 84;
-      }
-    ];
+    users.groups."nut" =
+      { gid = 84; };
 */
 
   };

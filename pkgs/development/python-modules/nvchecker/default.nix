@@ -20,7 +20,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.5";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/lilydjwg/nvchecker;
+    homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];

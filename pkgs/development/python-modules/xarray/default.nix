@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04b2f4d24707b8871a7ffa37328d0a2de74e81bd30791c9608712612601abd23";
+    sha256 = "c72d160c970725201f769e80fb91cbad68d6ebf21d68fcc371385a6c950459c3";
   };
 
   checkInputs = [ pytest ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "N-D labeled arrays and datasets in Python";
-    homepage = https://github.com/pydata/xarray;
+    homepage = "https://github.com/pydata/xarray";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fridh ];
   };

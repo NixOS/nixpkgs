@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools to manipulate patch files";
-    homepage = http://cyberelk.net/tim/software/patchutils;
+    homepage = "http://cyberelk.net/tim/software/patchutils";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     executables = [ "combinediff" "dehtmldiff" "editdiff" "espdiff"

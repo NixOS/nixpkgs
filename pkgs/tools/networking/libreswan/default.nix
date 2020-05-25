@@ -6,7 +6,7 @@
 
 let
   optional = stdenv.lib.optional;
-  version = "3.29";
+  version = "3.31";
   name = "libreswan-${version}";
   binPath = stdenv.lib.makeBinPath [
     bash iproute iptables procps coreutils gnused gawk nss.tools which python
@@ -22,15 +22,16 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.libreswan.org/${name}.tar.gz";
-    sha256 = "0gmbb1m5in5dvnbk1n31r8myrdankzvi6yk9gcqbcwijyih423nn";
+    sha256 = "1wxqsv11nqgfj5and5xzfgh6ayqvl47midcghd5ryynh60mp7naa";
   };
 
   # These flags were added to compile v3.18. Try to lift them when updating.
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-decls" "-Wno-error=format-nonliteral"
+  NIX_CFLAGS_COMPILE = toString [ "-Wno-error=redundant-decls" "-Wno-error=format-nonliteral"
     # these flags were added to build with gcc7
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=format-truncation"
     "-Wno-error=pointer-compare"
+    "-Wno-error=stringop-truncation"
   ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
@@ -82,7 +83,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://libreswan.org;
+    homepage = "https://libreswan.org";
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
     platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
     license = licenses.gpl2;

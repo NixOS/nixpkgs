@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Font for concealing text";
-    homepage = https://github.com/png2378/redacted-elementary;
+    homepage = "https://github.com/png2378/redacted-elementary";
     license = licenses.ofl;
     maintainers = pantheon.maintainers;
     platforms = platforms.linux;

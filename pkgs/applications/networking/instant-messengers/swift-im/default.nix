@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./qt-5.11.patch ./scons.patch ];
 
-  nativeBuildInputs = [ pkgconfig qttools scons ];
+  nativeBuildInputs = [ pkgconfig qttools scons.py2 ];
 
   buildInputs = [
     GConf avahi boost hunspell libXScrnSaver libedit libidn libnatpmp libxml2
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ GConf ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-I${libxml2.dev}/include/libxml2"
     "-I${miniupnpc}/include/miniupnpc"
     "-I${qtwebkit.dev}/include/QtWebKit"
@@ -31,13 +31,11 @@ stdenv.mkDerivation rec {
     "-fpermissive"
   ];
 
-  preInstall = ''
-    installTargets="$out"
-    installFlags+=" SWIFT_INSTALLDIR=$out"
-  '';
+  installTargets = [ (placeholder "out") ];
+  installFlags = [ "SWIFT_INSTALLDIR=${placeholder "out"}" ];
 
   meta = with stdenv.lib; {
-    homepage = https://swift.im/;
+    homepage = "https://swift.im/";
     description = "Qt XMPP client";
     license = licenses.gpl3;
     maintainers = with maintainers; [ orivej ];

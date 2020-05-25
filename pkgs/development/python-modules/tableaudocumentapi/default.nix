@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python module for working with Tableau files";
-    homepage = https://github.com/tableau/document-api-python;
+    homepage = "https://github.com/tableau/document-api-python";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

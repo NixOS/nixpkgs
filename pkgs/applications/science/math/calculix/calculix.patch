@@ -15,7 +15,7 @@ index 9cab2fc..6e977b8 100755
  OCCXMAIN = $(SCCXMAIN:.c=.o)
  
 -DIR=../../../SPOOLES.2.2
-+LIBS = -lpthread -lm -lc -lspooles -larpack -lopenblas
++LIBS = -lpthread -lm -lc -lspooles -larpack -lblas -llapack
  
 -LIBS = \
 -       $(DIR)/spooles.a \

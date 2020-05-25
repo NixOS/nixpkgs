@@ -15,7 +15,7 @@ bundlerApp {
 
   meta = with lib; {
     description = "A web frontend to the Ledger CLI tool";
-    homepage = https://github.com/peterkeen/ledger-web;
+    homepage = "https://github.com/peterkeen/ledger-web";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg manveru nicknovitski ];
     platforms = platforms.linux;

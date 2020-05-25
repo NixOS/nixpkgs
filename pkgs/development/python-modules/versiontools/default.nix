@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = (!isPy3k);
 
   meta = with stdenv.lib; {
-    homepage = https://launchpad.net/versiontools;
+    homepage = "https://launchpad.net/versiontools";
     description = "Smart replacement for plain tuple used in __version__";
     license = licenses.lgpl2;
   };

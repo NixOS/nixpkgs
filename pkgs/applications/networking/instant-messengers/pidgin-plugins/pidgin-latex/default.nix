@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [pkgconfig];
   buildInputs = [gtk2 glib pidgin];
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postPatch = ''
     sed -e 's/-Wl,-soname//' -i Makefile
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/pidgin-latex/;
+    homepage = "https://sourceforge.net/projects/pidgin-latex/";
     description = "LaTeX rendering plugin for Pidgin IM";
     license = licenses.gpl2;
     platforms = platforms.linux;

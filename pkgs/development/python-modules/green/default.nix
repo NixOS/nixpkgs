@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python test runner";
-    homepage = https://github.com/CleanCut/green;
+    homepage = "https://github.com/CleanCut/green";
     license = licenses.mit;
   };
 }

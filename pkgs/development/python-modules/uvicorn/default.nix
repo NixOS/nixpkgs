@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.10.4";
+  version = "0.11.2";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "0z4h04mbkzqgpk698bac6f50jxkf02ils6khzl7zbw7yvi6gkkc8";
+    sha256 = "145c569j4511zw3wglyv9qgd7g1757ypi2blcckpcmahqw11l5p2";
   };
 
   propagatedBuildInputs = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://www.uvicorn.org/;
+    homepage = "https://www.uvicorn.org/";
     description = "The lightning-fast ASGI server";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

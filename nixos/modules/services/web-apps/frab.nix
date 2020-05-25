@@ -173,15 +173,13 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ frab-rake ];
 
-    users.users = [
-      { name = cfg.user;
-        group = cfg.group;
+    users.users.${cfg.user} =
+      { group = cfg.group;
         home = "${cfg.statePath}";
         isSystemUser = true;
-      }
-    ];
+      };
 
-    users.groups = [ { name = cfg.group; } ];
+    users.groups.${cfg.group} = { };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.statePath}/system/attachments' - ${cfg.user} ${cfg.group} - -"

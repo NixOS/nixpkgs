@@ -6,15 +6,16 @@
 , libpthreadstubs, pcre, libXdamage, libXcomposite, libXfixes
 , libsndfile, fribidi }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "1.6.3";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner  = "bbidulock";
     repo   = "icewm";
     rev    = version;
-    sha256 = "0h3w718x28fd4sz36ka9wpgcb98scna6qpycxzls4cjji3rjgm0l";
+    sha256 = "1glzpkpl0vl5sjn1d9jlvwd9ch16dvxvsf2n310kb0ycpfkl84vs";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl asciidoc ];
@@ -34,13 +35,13 @@ stdenv.mkDerivation rec {
     cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} $out/share/icewm/themes/
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A simple, lightweight X window manager";
     longDescription = ''
       IceWM is a window manager for the X Window System. The goal of
       IceWM is speed, simplicity, and not getting in the user's way.
     '';
-    homepage = http://www.icewm.org/;
+    homepage = "https://www.ice-wm.org/";
     license = licenses.lgpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

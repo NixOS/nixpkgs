@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-blockdiag";
-  version = "1.5.5";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w7q2hhpzk159wd35hlbwkh80hnglqa475blcd9vjwpkv1kgkpvw";
+    sha256 = "91fd35b64f1f25db59d80b8a5196ed4ffadf57a81f63ee207e34d53ec36d8f97";
   };
 
   buildInputs = [ mock sphinx-testing ];

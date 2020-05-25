@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ephemeral";
-  version = "6.1.1";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "ephemeral";
     rev = version;
-    sha256 = "1i77chbjjg8zda5bnn1wj4h00a88awfls5b3i3dqwgsi356hv4wb";
+    sha256 = "093bqc40p4s8jc1s5rg49363x24vnwwjayvgzmi4xag28f1x6kn8";
   };
 
   nativeBuildInputs = [
@@ -54,9 +54,15 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "The always-incognito web browser";
-    homepage = https://github.com/cassidyjames/ephemeral;
+    homepage = "https://github.com/cassidyjames/ephemeral";
     maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;

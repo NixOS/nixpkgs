@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   pname = "nova-filters";
 
   src = fetchurl {
-    url = https://klingt.org/~tim/nova-filters/nova-filters_0.2-2.tar.gz;
+    url = "https://klingt.org/~tim/nova-filters/nova-filters_0.2-2.tar.gz";
     sha256 = "16064vvl2w5lz4xi3lyjk4xx7fphwsxc14ajykvndiz170q32s6i";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "LADSPA plugins based on filters of nova";
-    homepage = http://klingt.org/~tim/nova-filters/;
+    homepage = "http://klingt.org/~tim/nova-filters/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;

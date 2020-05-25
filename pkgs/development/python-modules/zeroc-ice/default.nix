@@ -12,7 +12,7 @@ buildPythonPackage rec {
   buildInputs = [ openssl bzip2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://zeroc.com/;
+    homepage = "https://zeroc.com/";
     license = licenses.gpl2;
     description = "Comprehensive RPC framework with support for Python, C++, .NET, Java, JavaScript and more.";
     maintainers = with maintainers; [ abbradar ];

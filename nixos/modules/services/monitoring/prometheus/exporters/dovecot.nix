@@ -64,7 +64,7 @@ in
         ${pkgs.prometheus-dovecot-exporter}/bin/dovecot_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
-          --dovecot.socket-path ${cfg.socketPath} \
+          --dovecot.socket-path ${escapeShellArg cfg.socketPath} \
           --dovecot.scopes ${concatStringsSep "," cfg.scopes} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A reusable Django application for allowing users to filter querysets dynamically.";
-    homepage = https://github.com/carltongibson/django-filter;
+    homepage = "https://github.com/carltongibson/django-filter";
     license = licenses.bsd3;
     maintainers = with maintainers; [ earvstedt ];
   };

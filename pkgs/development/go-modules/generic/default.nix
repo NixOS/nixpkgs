@@ -14,6 +14,10 @@
 , modRoot ? "./"
 
 # modSha256 is the sha256 of the vendored dependencies
+#
+# CAUTION: if `null` is used as a value, the derivation won't be a
+# fixed-output derivation but disable the build sandbox instead. Don't use
+# this in nixpkgs as Hydra won't build those packages.
 , modSha256
 
 # We want parallel builds by default
@@ -84,10 +88,16 @@ let
     '';
 
     dontFixup = true;
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = modSha256;
-  }; in modArgs // overrideModAttrs modArgs);
+  }; in modArgs // (
+    if modSha256 == null then
+      { __noChroot = true; }
+    else
+      {
+        outputHashMode = "recursive";
+        outputHashAlgo = "sha256";
+        outputHash = modSha256;
+      }
+  ) // overrideModAttrs modArgs);
 
   package = go.stdenv.mkDerivation (args // {
     nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;
@@ -198,9 +208,11 @@ let
       find $out/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
     '';
 
+    strictDeps = true;
+
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go go-modules; };
+    passthru = passthru // { inherit go go-modules modSha256; };
 
     meta = {
       # Add default meta information

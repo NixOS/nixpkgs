@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "AOSP libldac dispatcher";
-    homepage    = https://github.com/EHfive/ldacBT;
+    homepage    = "https://github.com/EHfive/ldacBT";
     license     = licenses.asl20;
     platforms   = platforms.all;
     maintainers = with maintainers; [ adisbladis ];

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Console progress bar";
-    homepage = http://clpbar.sourceforge.net/;
+    homepage = "http://clpbar.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.rdnetto ];
     platforms = stdenv.lib.platforms.all;

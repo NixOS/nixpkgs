@@ -25,7 +25,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Minimalist and opinionated feed reader";
-    homepage = https://miniflux.app/;
+    homepage = "https://miniflux.app/";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvolosatovs benpye ];
   };

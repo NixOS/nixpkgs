@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
   meta = with stdenv.lib; {
     description = "Prezto is the configuration framework for Zsh; it enriches the command line interface environment with sane defaults, aliases, functions, auto completion, and prompt themes.";
-    homepage = https://github.com/sorin-ionescu/prezto;
+    homepage = "https://github.com/sorin-ionescu/prezto";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = with platforms; unix;

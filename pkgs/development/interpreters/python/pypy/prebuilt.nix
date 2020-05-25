@@ -117,7 +117,7 @@ in with passthru; stdenv.mkDerivation {
   inherit passthru;
 
   meta = with stdenv.lib; {
-    homepage = http://pypy.org/;
+    homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];

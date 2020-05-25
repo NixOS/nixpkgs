@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-table";
-  version = "1.9.21";
+  version = "1.9.25";
 
   src = fetchFromGitHub {
     owner  = "kaio";
     repo   = "ibus-table";
     rev    = version;
-    sha256 = "1rswbhbfvir443mw3p7xw6calkpfss4fcgn8nhfnrbin49q6w1vm";
+    sha256 = "0v570qpnb2q79aqr9f0xnska34y7hw34ibiwsf7ybcw69fhi1zkg";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     isIbusEngine = true;
     description  = "An IBus framework for table-based input methods";
-    homepage     = https://github.com/kaio/ibus-table/wiki;
+    homepage     = "https://github.com/kaio/ibus-table/wiki";
     license      = licenses.lgpl21;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ mudri ];

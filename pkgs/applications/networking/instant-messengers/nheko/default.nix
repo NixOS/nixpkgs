@@ -71,7 +71,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Desktop client for the Matrix protocol";
-    homepage = https://github.com/Nheko-Reborn/nheko;
+    homepage = "https://github.com/Nheko-Reborn/nheko";
     maintainers = with maintainers; [ ekleog fpletz ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;

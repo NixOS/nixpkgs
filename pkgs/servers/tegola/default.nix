@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.tegola.io/;
+    homepage = "https://www.tegola.io/";
     description = "Mapbox Vector Tile server";
     maintainers = with maintainers; [ ingenieroariel ];
     platforms = platforms.unix;

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
       Autojump supports tab-completion.
     '';
-    homepage = https://github.com/wting/autojump;
+    homepage = "https://github.com/wting/autojump";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ domenkozar yurrriq ];

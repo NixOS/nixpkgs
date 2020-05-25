@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Package compiler and linker metadata toolkit";
-    homepage = https://git.dereferenced.org/pkgconf/pkgconf;
+    homepage = "https://git.dereferenced.org/pkgconf/pkgconf";
     platforms = platforms.all;
     license = licenses.isc;
     maintainers = with maintainers; [ zaninime ];

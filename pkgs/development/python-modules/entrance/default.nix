@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A server framework for web apps with an Elm frontend";
-    homepage = https://github.com/ensoft/entrance;
+    homepage = "https://github.com/ensoft/entrance";
     license = licenses.mit;
     maintainers = with maintainers; [ simonchatts ];
   };

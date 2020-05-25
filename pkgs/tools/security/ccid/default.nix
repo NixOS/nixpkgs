@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "ccid drivers for pcsclite";
-    homepage = https://ccid.apdu.fr/;
+    homepage = "https://ccid.apdu.fr/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

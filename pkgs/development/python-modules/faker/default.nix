@@ -17,11 +17,11 @@ assert pythonOlder "3.3" -> ipaddress != null;
 
 buildPythonPackage rec {
   pname = "Faker";
-  version = "2.0.5";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "29093e61f12745150774fd05ab499e87252a4fa51ed51e45c40179e854f87925";
+    sha256 = "92c84a10bec81217d9cb554ee12b3838c8986ce0b5d45f72f769da22e4bb5432";
   };
 
   nativeBuildInputs = [ pytestrunner ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library for generating fake user data";
-    homepage    = http://faker.rtfd.org;
+    homepage    = "http://faker.rtfd.org";
     license     = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

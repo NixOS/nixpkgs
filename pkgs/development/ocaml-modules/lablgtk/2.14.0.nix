@@ -20,7 +20,7 @@ stdenv.mkDerivation (rec {
   buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview camlp4 ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
-  buildFlags = "world";
+  buildFlags = [ "world" ];
 
   preInstall = ''
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib
@@ -34,7 +34,7 @@ stdenv.mkDerivation (rec {
       stdenv.lib.maintainers.maggesi
       stdenv.lib.maintainers.roconnor
     ];
-    homepage = http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgtk.html;
+    homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgtk.html";
     description = "LablGTK is is an Objective Caml interface to GTK";
     license = stdenv.lib.licenses.lgpl21Plus;
   };

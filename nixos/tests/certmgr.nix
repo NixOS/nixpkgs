@@ -9,8 +9,8 @@ let
     inherit action;
     authority = {
       file = {
-        group = "nobody";
-        owner = "nobody";
+        group = "nginx";
+        owner = "nginx";
         path = "/tmp/${host}-ca.pem";
       };
       label = "www_ca";
@@ -18,14 +18,14 @@ let
       remote = "localhost:8888";
     };
     certificate = {
-      group = "nobody";
-      owner = "nobody";
+      group = "nginx";
+      owner = "nginx";
       path = "/tmp/${host}-cert.pem";
     };
     private_key = {
-      group = "nobody";
+      group = "nginx";
       mode = "0600";
-      owner = "nobody";
+      owner = "nginx";
       path = "/tmp/${host}-key.pem";
     };
     request = {

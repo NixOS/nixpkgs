@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "Quake3e";
-  version = "2019-11-29";
+  version = "2020-04-04";
 
   src = fetchFromGitHub {
     owner = "ec-";
     repo = pname;
     rev = version;
-    sha256 = "1gpfl72rzwiawhcj3ir38sqdb95y7w7lm7wgj44lbn99z7bvkcn3";
+    sha256 = "1jvk8qd0mi0x8lslknhkfd8h6ridwca34c6qahsbmmpcgsvdv16s";
   };
 
   buildInputs = [ curl libGL libX11 libXxf86dga alsaLib libXrandr libXxf86vm libXext ];
@@ -28,10 +28,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ec-/Quake3e;
+    homepage = "https://github.com/ec-/Quake3e";
     description = "Improved Quake III Arena engine";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pmiddend ];
-  };  
+    badPlatforms = [ platforms.aarch64 ];
+  };
 }

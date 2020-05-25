@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "opensp-1.5.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/openjade/OpenSP-1.5.2.tar.gz;
+    url = "mirror://sourceforge/openjade/OpenSP-1.5.2.tar.gz";
     sha256 = "1khpasr6l0a8nfz6kcf3s81vgdab8fm2dj291n5r2s53k228kx2p";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A suite of SGML/XML processing tools";
     license = stdenv.lib.licenses.mit;
-    homepage = http://openjade.sourceforge.net/;
+    homepage = "http://openjade.sourceforge.net/";
     platforms = stdenv.lib.platforms.unix;
   };
 }

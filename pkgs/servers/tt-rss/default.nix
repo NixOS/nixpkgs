@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
     license = licenses.gpl2Plus;
-    homepage = https://tt-rss.org;
+    homepage = "https://tt-rss.org";
     maintainers = with maintainers; [ globin zohl ];
     platforms = platforms.all;
   };

@@ -31,11 +31,11 @@ buildRustPackage rec {
 
   doCheck = false;
 
-  cargoSha256 = "1nv0630yb8k857n7km4bbgf41j747xdxv7xnc6a9746qpggmdbkh";
+  cargoSha256 = "1ka22krw8s05vpamg9naqqf7vv5h8dkpfdik0wy8nispkrxzgb92";
 
   meta = with stdenv.lib; {
     description = "A server application to run tox node written in pure Rust";
-    homepage = https://github.com/tox-rs/tox-node;
+    homepage = "https://github.com/tox-rs/tox-node";
     license = [ licenses.mit ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ suhr ];

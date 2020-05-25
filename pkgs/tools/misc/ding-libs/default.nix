@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "'D is not GLib' utility libraries";
-    homepage = https://fedorahosted.org/sssd/;
+    homepage = "https://fedorahosted.org/sssd/";
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [ e-user ];
     license = [ stdenv.lib.licenses.gpl3 stdenv.lib.licenses.lgpl3 ];

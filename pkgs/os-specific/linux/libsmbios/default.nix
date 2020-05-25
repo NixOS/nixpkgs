@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsmbios";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "dell";
     repo = "libsmbios";
     rev = "v${version}";
-    sha256 = "0bck3byk62a69ngyj0zjpzf4wxwjmkhwhvsqb8z24dww9wz41l9k";
+    sha256 = "0krwwydyvb9224r884y1mlmzyxhlfrcqw73vi1j8787rl0gl5a2i";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen gettext libxml2 help2man perl pkgconfig ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   preFixup = ''rm -rf "$(pwd)" ''; # Hack to avoid TMPDIR in RPATHs
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dell/libsmbios;
+    homepage = "https://github.com/dell/libsmbios";
     description = "A library to obtain BIOS information";
     license = with licenses; [ osl21 gpl2Plus ];
     maintainers = with maintainers; [ ];

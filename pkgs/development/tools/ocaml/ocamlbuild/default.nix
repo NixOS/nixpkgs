@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ocaml/ocamlbuild/;
+    homepage = "https://github.com/ocaml/ocamlbuild/";
     description = "A build system with builtin rules to easily build most OCaml projects";
     license = licenses.lgpl2;
     inherit (ocaml.meta) platforms;

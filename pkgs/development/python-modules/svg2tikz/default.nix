@@ -19,7 +19,7 @@ buildPythonPackage {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kjellmf/svg2tikz;
+    homepage = "https://github.com/kjellmf/svg2tikz";
     description = "An SVG to TikZ converter";
     license = licenses.gpl2Plus;
     maintainers =  with maintainers; [ gal_bolle ];

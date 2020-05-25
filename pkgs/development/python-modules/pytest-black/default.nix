@@ -7,14 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-black";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03gwwy1h3qnfh6vpfhgsa5ag53a9sw1g42sc2s8a2hilwb7yrfvm";
+    sha256 = "04lppqydxm0f3f3x0l8hj7v0j6d8syj34jc37yzqwqcyqsnaga81";
   };
 
-  patches = [ ./black-version.patch ];
   nativeBuildInputs = [ setuptools_scm ];
 
   propagatedBuildInputs = [ black pytest toml ];

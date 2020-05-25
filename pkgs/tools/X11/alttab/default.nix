@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   enableParallelBuild = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sagb/alttab;
+    homepage = "https://github.com/sagb/alttab";
     description = "X11 window switcher designed for minimalistic window managers or standalone X11 session";
     license = licenses.gpl3;
     platforms = platforms.all;

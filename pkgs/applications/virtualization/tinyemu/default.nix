@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
   '';
   meta = {
-    homepage = https://bellard.org/tinyemu/;
+    homepage = "https://bellard.org/tinyemu/";
     description = "A system emulator for the RISC-V and x86 architectures";
     longDescription = "TinyEMU is a system emulator for the RISC-V and x86 architectures. Its purpose is to be small and simple while being complete.";
     license = with stdenv.lib.licenses; [ mit bsd2 ];

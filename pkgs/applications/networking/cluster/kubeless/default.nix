@@ -23,7 +23,7 @@ buildGoPackage rec {
     homepage = "https://kubeless.io";
     description = "The Kubernetes Native Serverless Framework";
     license = licenses.asl20;
-    maintainers = with maintainers; [ "00-matt" ];
+    maintainers = with maintainers; [];
     platforms = platforms.unix;
   };
 }

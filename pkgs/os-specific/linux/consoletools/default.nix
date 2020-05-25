@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)"];
 
-  installFlags = ''PREFIX=""'';
+  installFlags = [ "PREFIX=\"\"" ];
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/linuxconsole/;
+    homepage = "https://sourceforge.net/projects/linuxconsole/";
     description = "A set of tools for joysticks and serial peripherals";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

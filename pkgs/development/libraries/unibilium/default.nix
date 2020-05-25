@@ -1,15 +1,15 @@
 { stdenv, lib, fetchFromGitHub, libtool, pkgconfig, perl, ncurses }:
 
 stdenv.mkDerivation rec {
-  pname = "unibilium";
+  pname = "unibilium-unstable";
 
-  version = "2.0.0";
+  version = "20190811";
 
   src = fetchFromGitHub {
-    owner = "mauke";
+    owner = "neovim";
     repo = "unibilium";
-    rev = "v${version}";
-    sha256 = "1wa9a32wzqnxqh1jh554afj13dzjr6mw2wzqzw8d08nza9pg2ra2";
+    rev = "92d929fabaf94ea4feb48149bbc3bbea77c4fab0";
+    sha256 = "1l8p3fpdymba62x1f5d990v72z3m5f5g2yf505g0rlf2ysc5r1di";
   };
 
   makeFlags = [ "PREFIX=$(out)" ]

@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open source model checker for verifying safety properties of array-based systems";
-    homepage = http://cubicle.lri.fr/;
+    homepage = "http://cubicle.lri.fr/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lucas8 ];
+    maintainers = with maintainers; [ dwarfmaster ];
   };
 }

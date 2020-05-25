@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Export Skype history to HTML";
-    homepage = https://github.com/Temptin/SkypeExport;
+    homepage = "https://github.com/Temptin/SkypeExport";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ yegortimoshenko ];

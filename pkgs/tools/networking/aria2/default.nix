@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://aria2.github.io;
+    homepage = "https://aria2.github.io";
     description = "A lightweight, multi-protocol, multi-source, command-line download utility";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

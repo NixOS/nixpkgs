@@ -234,17 +234,48 @@ rec {
     '';
 
   /*
-  * Create a forest of symlinks to the files in `paths'.
-  *
-  * Examples:
-  * # adds symlinks of hello to current build.
-  * { symlinkJoin, hello }:
-  * symlinkJoin { name = "myhello"; paths = [ hello ]; }
-  *
-  * # adds symlinks of hello to current build and prints "links added"
-  * { symlinkJoin, hello }:
-  * symlinkJoin { name = "myhello"; paths = [ hello ]; postBuild = "echo links added"; }
-  */
+   * Create a forest of symlinks to the files in `paths'.
+   *
+   * This creates a single derivation that replicates the directory structure
+   * of all the input paths.
+   *
+   * Examples:
+   * # adds symlinks of hello to current build.
+   * symlinkJoin { name = "myhello"; paths = [ pkgs.hello ]; }
+   *
+   * # adds symlinks of hello and stack to current build and prints "links added"
+   * symlinkJoin { name = "myexample"; paths = [ pkgs.hello pkgs.stack ]; postBuild = "echo links added"; }
+   *
+   * This creates a derivation with a directory structure like the following:
+   *
+   * /nix/store/sglsr5g079a5235hy29da3mq3hv8sjmm-myexample
+   * |-- bin
+   * |   |-- hello -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10/bin/hello
+   * |   `-- stack -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/bin/stack
+   * `-- share
+   *     |-- bash-completion
+   *     |   `-- completions
+   *     |       `-- stack -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/bash-completion/completions/stack
+   *     |-- fish
+   *     |   `-- vendor_completions.d
+   *     |       `-- stack.fish -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/fish/vendor_completions.d/stack.fish
+   * ...
+   *
+   * symlinkJoin and linkFarm are similar functions, but they output
+   * derivations with different structure.
+   *
+   * symlinkJoin is used to create a derivation with a familiar directory
+   * structure (top-level bin/, share/, etc), but with all actual files being symlinks to
+   * the files in the input derivations.
+   *
+   * symlinkJoin is used many places in nixpkgs to create a single derivation
+   * that appears to contain binaries, libraries, documentation, etc from
+   * multiple input derivations.
+   *
+   * linkFarm is instead used to create a simple derivation with symlinks to
+   * other derivations.  A derivation created with linkFarm is often used in CI
+   * as a easy way to build multiple derivations at once.
+   */
   symlinkJoin =
     args_@{ name
          , paths
@@ -255,15 +286,72 @@ rec {
          }:
     let
       args = removeAttrs args_ [ "name" "postBuild" ]
-        // { inherit preferLocalBuild allowSubstitutes; }; # pass the defaults
+        // {
+          inherit preferLocalBuild allowSubstitutes;
+          passAsFile = [ "paths" ];
+        }; # pass the defaults
     in runCommand name args
       ''
         mkdir -p $out
-        for i in $paths; do
+        for i in $(cat $pathsPath); do
           ${lndir}/bin/lndir -silent $i $out
         done
         ${postBuild}
       '';
+
+  /*
+   * Quickly create a set of symlinks to derivations.
+   *
+   * This creates a simple derivation with symlinks to all inputs.
+   *
+   * entries is a list of attribute sets like
+   * { name = "name" ; path = "/nix/store/..."; }
+   *
+   * Example:
+   *
+   * # Symlinks hello and stack paths in store to current $out/hello-test and
+   * # $out/foobar.
+   * linkFarm "myexample" [ { name = "hello-test"; path = pkgs.hello; } { name = "foobar"; path = pkgs.stack; } ]
+   *
+   * This creates a derivation with a directory structure like the following:
+   *
+   * /nix/store/qc5728m4sa344mbks99r3q05mymwm4rw-myexample
+   * |-- foobar -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1
+   * `-- hello-test -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10
+   *
+   * See the note on symlinkJoin for the difference between linkFarm and symlinkJoin.
+   */
+  linkFarm = name: entries: runCommand name { preferLocalBuild = true; allowSubstitutes = false; }
+    ''mkdir -p $out
+      cd $out
+      ${lib.concatMapStrings (x: ''
+          mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
+          ln -s ${lib.escapeShellArg x.path} ${lib.escapeShellArg x.name}
+      '') entries}
+    '';
+
+  /*
+   * Easily create a linkFarm from a set of derivations.
+   *
+   * This calls linkFarm with a list of entries created from the list of input
+   * derivations.  It turns each input derivation into an attribute set
+   * like { name = drv.name ; path = drv }, and passes this to linkFarm.
+   *
+   * Example:
+   *
+   * # Symlinks the hello, gcc, and ghc derivations in $out
+   * linkFarmFromDrvs "myexample" [ pkgs.hello pkgs.gcc pkgs.ghc ]
+   *
+   * This creates a derivation with a directory structure like the following:
+   *
+   * /nix/store/m3s6wkjy9c3wy830201bqsb91nk2yj8c-myexample
+   * |-- gcc-wrapper-9.2.0 -> /nix/store/fqhjxf9ii4w4gqcsx59fyw2vvj91486a-gcc-wrapper-9.2.0
+   * |-- ghc-8.6.5 -> /nix/store/gnf3s07bglhbbk4y6m76sbh42siym0s6-ghc-8.6.5
+   * `-- hello-2.10 -> /nix/store/k0ll91c4npk4lg8lqhx00glg2m735g74-hello-2.10
+   */
+  linkFarmFromDrvs = name: drvs:
+    let mkEntryFromDrv = drv: { name = drv.name; path = drv; };
+    in linkFarm name (map mkEntryFromDrv drvs);
 
 
   /*
@@ -309,27 +397,6 @@ rec {
         read nrRefs
         for ((i = 0; i < nrRefs; i++)); do read ref; done
       done < graph
-    '';
-
-
-  /*
-   * Quickly create a set of symlinks to derivations.
-   * entries is a list of attribute sets like
-   * { name = "name" ; path = "/nix/store/..."; }
-   *
-   * Example:
-   *
-   * # Symlinks hello path in store to current $out/hello
-   * linkFarm "hello" [ { name = "hello"; path = pkgs.hello; } ];
-   *
-   */
-  linkFarm = name: entries: runCommand name { preferLocalBuild = true; allowSubstitutes = false; }
-    ''mkdir -p $out
-      cd $out
-      ${lib.concatMapStrings (x: ''
-          mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
-          ln -s ${lib.escapeShellArg x.path} ${lib.escapeShellArg x.name}
-      '') entries}
     '';
 
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Stubbed XMPP Server";
-    homepage = https://github.com/boothj5/stabber;
+    homepage = "https://github.com/boothj5/stabber";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ hschaeidt ];

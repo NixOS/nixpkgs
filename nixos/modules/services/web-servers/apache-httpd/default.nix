@@ -4,36 +4,34 @@ with lib;
 
 let
 
-  mainCfg = config.services.httpd;
+  cfg = config.services.httpd;
 
   runtimeDir = "/run/httpd";
 
-  httpd = mainCfg.package.out;
+  pkg = cfg.package.out;
 
-  httpdConf = mainCfg.configFile;
+  httpdConf = cfg.configFile;
 
-  php = mainCfg.phpPackage.override { apacheHttpd = httpd.dev; /* otherwise it only gets .out */ };
+  php = cfg.phpPackage.override { apacheHttpd = pkg.dev; /* otherwise it only gets .out */ };
 
   phpMajorVersion = lib.versions.major (lib.getVersion php);
 
-  mod_perl = pkgs.apacheHttpdPackages.mod_perl.override { apacheHttpd = httpd; };
+  mod_perl = pkgs.apacheHttpdPackages.mod_perl.override { apacheHttpd = pkg; };
 
-  defaultListen = cfg: if cfg.enableSSL
-    then [{ip = "*"; port = 443;}]
-    else [{ip = "*"; port = 80;}];
+  vhosts = attrValues cfg.virtualHosts;
 
-  getListen = cfg:
-    if cfg.listen == []
-      then defaultListen cfg
-      else cfg.listen;
+  mkListenInfo = hostOpts:
+    if hostOpts.listen != [] then hostOpts.listen
+    else (
+      optional (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) { ip = "*"; port = 443; ssl = true; } ++
+      optional (!hostOpts.onlySSL) { ip = "*"; port = 80; ssl = false; }
+    );
 
-  listenToString = l: "${l.ip}:${toString l.port}";
+  listenInfo = unique (concatMap mkListenInfo vhosts);
 
-  allHosts = [mainCfg] ++ mainCfg.virtualHosts;
-
-  enableSSL = any (vhost: vhost.enableSSL) allHosts;
-
-  enableUserDir = any (vhost: vhost.enableUserDir) allHosts;
+  enableHttp2 = any (vhost: vhost.http2) vhosts;
+  enableSSL = any (listen: listen.ssl) listenInfo;
+  enableUserDir = any (vhost: vhost.enableUserDir) vhosts;
 
   # NOTE: generally speaking order of modules is very important
   modules =
@@ -43,23 +41,19 @@ let
       "mime" "autoindex" "negotiation" "dir"
       "alias" "rewrite"
       "unixd" "slotmem_shm" "socache_shmcb"
-      "mpm_${mainCfg.multiProcessingModule}"
+      "mpm_${cfg.multiProcessingModule}"
     ]
-    ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
+    ++ (if cfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
+    ++ optional enableHttp2 "http2"
     ++ optional enableSSL "ssl"
     ++ optional enableUserDir "userdir"
-    ++ optional mainCfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
-    ++ optional mainCfg.enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
-    ++ optional mainCfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
-    ++ mainCfg.extraModules;
+    ++ optional cfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
+    ++ optional cfg.enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
+    ++ optional cfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
+    ++ cfg.extraModules;
 
-
-  allDenied = "Require all denied";
-  allGranted = "Require all granted";
-
-
-  loggingConf = (if mainCfg.logFormat != "none" then ''
-    ErrorLog ${mainCfg.logDir}/error.log
+  loggingConf = (if cfg.logFormat != "none" then ''
+    ErrorLog ${cfg.logDir}/error.log
 
     LogLevel notice
 
@@ -68,7 +62,7 @@ let
     LogFormat "%{Referer}i -> %U" referer
     LogFormat "%{User-agent}i" agent
 
-    CustomLog ${mainCfg.logDir}/access.log ${mainCfg.logFormat}
+    CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
   '' else ''
     ErrorLog /dev/null
   '');
@@ -90,174 +84,208 @@ let
 
 
   sslConf = ''
-    SSLSessionCache shmcb:${runtimeDir}/ssl_scache(512000)
+    <IfModule mod_ssl.c>
+        SSLSessionCache shmcb:${runtimeDir}/ssl_scache(512000)
 
-    Mutex posixsem
+        Mutex posixsem
 
-    SSLRandomSeed startup builtin
-    SSLRandomSeed connect builtin
+        SSLRandomSeed startup builtin
+        SSLRandomSeed connect builtin
 
-    SSLProtocol ${mainCfg.sslProtocols}
-    SSLCipherSuite ${mainCfg.sslCiphers}
-    SSLHonorCipherOrder on
+        SSLProtocol ${cfg.sslProtocols}
+        SSLCipherSuite ${cfg.sslCiphers}
+        SSLHonorCipherOrder on
+    </IfModule>
   '';
 
 
   mimeConf = ''
-    TypesConfig ${httpd}/conf/mime.types
+    TypesConfig ${pkg}/conf/mime.types
 
     AddType application/x-x509-ca-cert .crt
     AddType application/x-pkcs7-crl    .crl
     AddType application/x-httpd-php    .php .phtml
 
     <IfModule mod_mime_magic.c>
-        MIMEMagicFile ${httpd}/conf/magic
+        MIMEMagicFile ${pkg}/conf/magic
     </IfModule>
   '';
 
+  mkVHostConf = hostOpts:
+    let
+      adminAddr = if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr;
+      listen = filter (listen: !listen.ssl) (mkListenInfo hostOpts);
+      listenSSL = filter (listen: listen.ssl) (mkListenInfo hostOpts);
 
-  perServerConf = isMainServer: cfg: let
+      useACME = hostOpts.enableACME || hostOpts.useACMEHost != null;
+      sslCertDir =
+        if hostOpts.enableACME then config.security.acme.certs.${hostOpts.hostName}.directory
+        else if hostOpts.useACMEHost != null then config.security.acme.certs.${hostOpts.useACMEHost}.directory
+        else abort "This case should never happen.";
 
-    # Canonical name must not include a trailing slash.
-    canonicalNames =
-      let defaultPort = (head (defaultListen cfg)).port; in
-      map (port:
-        (if cfg.enableSSL then "https" else "http") + "://" +
-        cfg.hostName +
-        (if port != defaultPort then ":${toString port}" else "")
-        ) (map (x: x.port) (getListen cfg));
+      sslServerCert = if useACME then "${sslCertDir}/full.pem" else hostOpts.sslServerCert;
+      sslServerKey = if useACME then "${sslCertDir}/key.pem" else hostOpts.sslServerKey;
+      sslServerChain = if useACME then "${sslCertDir}/fullchain.pem" else hostOpts.sslServerChain;
 
-    maybeDocumentRoot = fold (svc: acc:
-      if acc == null then svc.documentRoot else assert svc.documentRoot == null; acc
-    ) null ([ cfg ]);
+      acmeChallenge = optionalString useACME ''
+        Alias /.well-known/acme-challenge/ "${hostOpts.acmeRoot}/.well-known/acme-challenge/"
+        <Directory "${hostOpts.acmeRoot}">
+            AllowOverride None
+            Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+            Require method GET POST OPTIONS
+            Require all granted
+        </Directory>
+      '';
+    in
+      optionalString (listen != []) ''
+        <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listen}>
+            ServerName ${hostOpts.hostName}
+            ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
+            ServerAdmin ${adminAddr}
+            <IfModule mod_ssl.c>
+                SSLEngine off
+            </IfModule>
+            ${acmeChallenge}
+            ${if hostOpts.forceSSL then ''
+              <IfModule mod_rewrite.c>
+                  RewriteEngine on
+                  RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge [NC]
+                  RewriteCond %{HTTPS} off
+                  RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+              </IfModule>
+            '' else mkVHostCommonConf hostOpts}
+        </VirtualHost>
+      '' +
+      optionalString (listenSSL != []) ''
+        <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listenSSL}>
+            ServerName ${hostOpts.hostName}
+            ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
+            ServerAdmin ${adminAddr}
+            SSLEngine on
+            SSLCertificateFile ${sslServerCert}
+            SSLCertificateKeyFile ${sslServerKey}
+            ${optionalString (sslServerChain != null) "SSLCertificateChainFile ${sslServerChain}"}
+            ${optionalString hostOpts.http2 "Protocols h2 h2c http/1.1"}
+            ${acmeChallenge}
+            ${mkVHostCommonConf hostOpts}
+        </VirtualHost>
+      ''
+  ;
 
-    documentRoot = if maybeDocumentRoot != null then maybeDocumentRoot else
-      pkgs.runCommand "empty" { preferLocalBuild = true; } "mkdir -p $out";
+  mkVHostCommonConf = hostOpts:
+    let
+      documentRoot = if hostOpts.documentRoot != null
+        then hostOpts.documentRoot
+        else pkgs.runCommand "empty" { preferLocalBuild = true; } "mkdir -p $out"
+      ;
 
-    documentRootConf = ''
-      DocumentRoot "${documentRoot}"
+      mkLocations = locations: concatStringsSep "\n" (map (config: ''
+        <Location ${config.location}>
+          ${optionalString (config.proxyPass != null) ''
+            <IfModule mod_proxy.c>
+                ProxyPass ${config.proxyPass}
+                ProxyPassReverse ${config.proxyPass}
+            </IfModule>
+          ''}
+          ${optionalString (config.index != null) ''
+            <IfModule mod_dir.c>
+                DirectoryIndex ${config.index}
+            </IfModule>
+          ''}
+          ${optionalString (config.alias != null) ''
+            <IfModule mod_alias.c>
+                Alias "${config.alias}"
+            </IfModule>
+          ''}
+          ${config.extraConfig}
+        </Location>
+      '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
+    in
+      ''
+        ${optionalString cfg.logPerVirtualHost ''
+          ErrorLog ${cfg.logDir}/error-${hostOpts.hostName}.log
+          CustomLog ${cfg.logDir}/access-${hostOpts.hostName}.log ${hostOpts.logFormat}
+        ''}
 
-      <Directory "${documentRoot}">
-          Options Indexes FollowSymLinks
-          AllowOverride None
-          ${allGranted}
-      </Directory>
-    '';
+        ${optionalString (hostOpts.robotsEntries != "") ''
+          Alias /robots.txt ${pkgs.writeText "robots.txt" hostOpts.robotsEntries}
+        ''}
 
-    # If this is a vhost, the include the entries for the main server as well.
-    robotsTxt = concatStringsSep "\n" (filter (x: x != "") ([ cfg.robotsEntries ] ++ lib.optional (!isMainServer) mainCfg.robotsEntries));
+        DocumentRoot "${documentRoot}"
 
-  in ''
-    ${concatStringsSep "\n" (map (n: "ServerName ${n}") canonicalNames)}
+        <Directory "${documentRoot}">
+            Options Indexes FollowSymLinks
+            AllowOverride None
+            Require all granted
+        </Directory>
 
-    ${concatMapStrings (alias: "ServerAlias ${alias}\n") cfg.serverAliases}
+        ${optionalString hostOpts.enableUserDir ''
+          UserDir public_html
+          UserDir disabled root
+          <Directory "/home/*/public_html">
+              AllowOverride FileInfo AuthConfig Limit Indexes
+              Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+              <Limit GET POST OPTIONS>
+                  Require all granted
+              </Limit>
+              <LimitExcept GET POST OPTIONS>
+                  Require all denied
+              </LimitExcept>
+          </Directory>
+        ''}
 
-    ${if cfg.sslServerCert != null then ''
-      SSLCertificateFile ${cfg.sslServerCert}
-      SSLCertificateKeyFile ${cfg.sslServerKey}
-      ${if cfg.sslServerChain != null then ''
-        SSLCertificateChainFile ${cfg.sslServerChain}
-      '' else ""}
-    '' else ""}
+        ${optionalString (hostOpts.globalRedirect != null && hostOpts.globalRedirect != "") ''
+          RedirectPermanent / ${hostOpts.globalRedirect}
+        ''}
 
-    ${if cfg.enableSSL then ''
-      SSLEngine on
-    '' else if enableSSL then /* i.e., SSL is enabled for some host, but not this one */
-    ''
-      SSLEngine off
-    '' else ""}
+        ${
+          let makeDirConf = elem: ''
+                Alias ${elem.urlPath} ${elem.dir}/
+                <Directory ${elem.dir}>
+                    Options +Indexes
+                    Require all granted
+                    AllowOverride All
+                </Directory>
+              '';
+          in concatMapStrings makeDirConf hostOpts.servedDirs
+        }
 
-    ${if isMainServer || cfg.adminAddr != null then ''
-      ServerAdmin ${cfg.adminAddr}
-    '' else ""}
-
-    ${if !isMainServer && mainCfg.logPerVirtualHost then ''
-      ErrorLog ${mainCfg.logDir}/error-${cfg.hostName}.log
-      CustomLog ${mainCfg.logDir}/access-${cfg.hostName}.log ${cfg.logFormat}
-    '' else ""}
-
-    ${optionalString (robotsTxt != "") ''
-      Alias /robots.txt ${pkgs.writeText "robots.txt" robotsTxt}
-    ''}
-
-    ${if isMainServer || maybeDocumentRoot != null then documentRootConf else ""}
-
-    ${if cfg.enableUserDir then ''
-
-      UserDir public_html
-      UserDir disabled root
-
-      <Directory "/home/*/public_html">
-          AllowOverride FileInfo AuthConfig Limit Indexes
-          Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
-          <Limit GET POST OPTIONS>
-              ${allGranted}
-          </Limit>
-          <LimitExcept GET POST OPTIONS>
-              ${allDenied}
-          </LimitExcept>
-      </Directory>
-
-    '' else ""}
-
-    ${if cfg.globalRedirect != null && cfg.globalRedirect != "" then ''
-      RedirectPermanent / ${cfg.globalRedirect}
-    '' else ""}
-
-    ${
-      let makeFileConf = elem: ''
-            Alias ${elem.urlPath} ${elem.file}
-          '';
-      in concatMapStrings makeFileConf cfg.servedFiles
-    }
-
-    ${
-      let makeDirConf = elem: ''
-            Alias ${elem.urlPath} ${elem.dir}/
-            <Directory ${elem.dir}>
-                Options +Indexes
-                ${allGranted}
-                AllowOverride All
-            </Directory>
-          '';
-      in concatMapStrings makeDirConf cfg.servedDirs
-    }
-
-    ${cfg.extraConfig}
-  '';
+        ${mkLocations hostOpts.locations}
+        ${hostOpts.extraConfig}
+      ''
+  ;
 
 
   confFile = pkgs.writeText "httpd.conf" ''
 
-    ServerRoot ${httpd}
-
+    ServerRoot ${pkg}
+    ServerName ${config.networking.hostName}
     DefaultRuntimeDir ${runtimeDir}/runtime
 
     PidFile ${runtimeDir}/httpd.pid
 
-    ${optionalString (mainCfg.multiProcessingModule != "prefork") ''
+    ${optionalString (cfg.multiProcessingModule != "prefork") ''
       # mod_cgid requires this.
       ScriptSock ${runtimeDir}/cgisock
     ''}
 
     <IfModule prefork.c>
-        MaxClients           ${toString mainCfg.maxClients}
-        MaxRequestsPerChild  ${toString mainCfg.maxRequestsPerChild}
+        MaxClients           ${toString cfg.maxClients}
+        MaxRequestsPerChild  ${toString cfg.maxRequestsPerChild}
     </IfModule>
 
     ${let
-        listen = concatMap getListen allHosts;
-        toStr = listen: "Listen ${listenToString listen}\n";
-        uniqueListen = uniqList {inputList = map toStr listen;};
-      in concatStrings uniqueListen
+        toStr = listen: "Listen ${listen.ip}:${toString listen.port} ${if listen.ssl then "https" else "http"}";
+        uniqueListen = uniqList {inputList = map toStr listenInfo;};
+      in concatStringsSep "\n" uniqueListen
     }
 
-    User ${mainCfg.user}
-    Group ${mainCfg.group}
+    User ${cfg.user}
+    Group ${cfg.group}
 
     ${let
         mkModule = module:
-          if isString module then { name = module; path = "${httpd}/modules/mod_${module}.so"; }
+          if isString module then { name = module; path = "${pkg}/modules/mod_${module}.so"; }
           else if isAttrs module then { inherit (module) name path; }
           else throw "Expecting either a string or attribute set including a name and path.";
       in
@@ -267,53 +295,45 @@ let
     AddHandler type-map var
 
     <Files ~ "^\.ht">
-        ${allDenied}
+        Require all denied
     </Files>
 
     ${mimeConf}
     ${loggingConf}
     ${browserHacks}
 
-    Include ${httpd}/conf/extra/httpd-default.conf
-    Include ${httpd}/conf/extra/httpd-autoindex.conf
-    Include ${httpd}/conf/extra/httpd-multilang-errordoc.conf
-    Include ${httpd}/conf/extra/httpd-languages.conf
+    Include ${pkg}/conf/extra/httpd-default.conf
+    Include ${pkg}/conf/extra/httpd-autoindex.conf
+    Include ${pkg}/conf/extra/httpd-multilang-errordoc.conf
+    Include ${pkg}/conf/extra/httpd-languages.conf
 
     TraceEnable off
 
-    ${if enableSSL then sslConf else ""}
+    ${sslConf}
 
     # Fascist default - deny access to everything.
     <Directory />
         Options FollowSymLinks
         AllowOverride None
-        ${allDenied}
+        Require all denied
     </Directory>
 
     # But do allow access to files in the store so that we don't have
     # to generate <Directory> clauses for every generated file that we
     # want to serve.
     <Directory /nix/store>
-        ${allGranted}
+        Require all granted
     </Directory>
 
-    # Generate directives for the main server.
-    ${perServerConf true mainCfg}
+    ${cfg.extraConfig}
 
-    ${let
-        makeVirtualHost = vhost: ''
-          <VirtualHost ${concatStringsSep " " (map listenToString (getListen vhost))}>
-              ${perServerConf false vhost}
-          </VirtualHost>
-        '';
-      in concatMapStrings makeVirtualHost mainCfg.virtualHosts
-    }
+    ${concatMapStringsSep "\n" mkVHostConf vhosts}
   '';
 
   # Generate the PHP configuration file.  Should probably be factored
   # out into a separate module.
   phpIni = pkgs.runCommand "php.ini"
-    { options = mainCfg.phpOptions;
+    { options = cfg.phpOptions;
       preferLocalBuild = true;
     }
     ''
@@ -329,19 +349,30 @@ in
   imports = [
     (mkRemovedOptionModule [ "services" "httpd" "extraSubservices" ] "Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.")
     (mkRemovedOptionModule [ "services" "httpd" "stateDir" ] "The httpd module now uses /run/httpd as a runtime directory.")
+
+    # virtualHosts options
+    (mkRemovedOptionModule [ "services" "httpd" "documentRoot" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "enableSSL" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "enableUserDir" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "globalRedirect" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "hostName" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "listen" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "robotsEntries" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "servedDirs" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "servedFiles" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "serverAliases" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "sslServerCert" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "sslServerChain" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
+    (mkRemovedOptionModule [ "services" "httpd" "sslServerKey" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
   ];
 
-  ###### interface
+  # interface
 
   options = {
 
     services.httpd = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the Apache HTTP Server.";
-      };
+      enable = mkEnableOption "the Apache HTTP Server";
 
       package = mkOption {
         type = types.package;
@@ -368,7 +399,7 @@ in
         default = "";
         description = ''
           Configuration lines appended to the generated Apache
-          configuration file. Note that this mechanism may not work
+          configuration file. Note that this mechanism will not work
           when <option>configFile</option> is overridden.
         '';
       };
@@ -383,7 +414,7 @@ in
           ]
         '';
         description = ''
-          Additional Apache modules to be used.  These can be
+          Additional Apache modules to be used. These can be
           specified as a string in the case of modules distributed
           with Apache, or as an attribute set specifying the
           <varname>name</varname> and <varname>path</varname> of the
@@ -391,9 +422,25 @@ in
         '';
       };
 
+      adminAddr = mkOption {
+        type = types.str;
+        example = "admin@example.org";
+        description = "E-mail address of the server administrator.";
+      };
+
+      logFormat = mkOption {
+        type = types.str;
+        default = "common";
+        example = "combined";
+        description = ''
+          Log format for log files. Possible values are: combined, common, referer, agent.
+          See <link xlink:href="https://httpd.apache.org/docs/2.4/logs.html"/> for more details.
+        '';
+      };
+
       logPerVirtualHost = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           If enabled, each virtual host gets its own
           <filename>access.log</filename> and
@@ -406,8 +453,7 @@ in
         type = types.str;
         default = "wwwrun";
         description = ''
-          User account under which httpd runs.  The account is created
-          automatically if it doesn't exist.
+          User account under which httpd runs.
         '';
       };
 
@@ -415,8 +461,7 @@ in
         type = types.str;
         default = "wwwrun";
         description = ''
-          Group under which httpd runs.  The account is created
-          automatically if it doesn't exist.
+          Group under which httpd runs.
         '';
       };
 
@@ -424,31 +469,33 @@ in
         type = types.path;
         default = "/var/log/httpd";
         description = ''
-          Directory for Apache's log files.  It is created automatically.
+          Directory for Apache's log files. It is created automatically.
         '';
       };
 
       virtualHosts = mkOption {
-        type = types.listOf (types.submodule (
-          { options = import ./per-server-options.nix {
-              inherit lib;
-              forMainServer = false;
+        type = with types; attrsOf (submodule (import ./vhost-options.nix));
+        default = {
+          localhost = {
+            documentRoot = "${pkg}/htdocs";
+          };
+        };
+        example = literalExample ''
+          {
+            "foo.example.com" = {
+              forceSSL = true;
+              documentRoot = "/var/www/foo.example.com"
             };
-          }));
-        default = [];
-        example = [
-          { hostName = "foo";
-            documentRoot = "/data/webroot-foo";
+            "bar.example.com" = {
+              addSSL = true;
+              documentRoot = "/var/www/bar.example.com";
+            };
           }
-          { hostName = "bar";
-            documentRoot = "/data/webroot-bar";
-          }
-        ];
+        '';
         description = ''
-          Specification of the virtual hosts served by Apache.  Each
+          Specification of the virtual hosts served by Apache. Each
           element should be an attribute set specifying the
-          configuration of the virtual host.  The available options
-          are the non-global options permissible for the main host.
+          configuration of the virtual host.
         '';
       };
 
@@ -486,17 +533,18 @@ in
           ''
             date.timezone = "CET"
           '';
-        description =
-          "Options appended to the PHP configuration file <filename>php.ini</filename>.";
+        description = ''
+          Options appended to the PHP configuration file <filename>php.ini</filename>.
+        '';
       };
 
       multiProcessingModule = mkOption {
-        type = types.str;
+        type = types.enum [ "event" "prefork" "worker" ];
         default = "prefork";
         example = "worker";
         description =
           ''
-            Multi-processing module to be used by Apache.  Available
+            Multi-processing module to be used by Apache. Available
             modules are <literal>prefork</literal> (the default;
             handles each request in a separate child process),
             <literal>worker</literal> (hybrid approach that starts a
@@ -518,8 +566,9 @@ in
         type = types.int;
         default = 0;
         example = 500;
-        description =
-          "Maximum number of httpd requests answered per httpd child (prefork), 0 means unlimited";
+        description = ''
+          Maximum number of httpd requests answered per httpd child (prefork), 0 means unlimited.
+        '';
       };
 
       sslCiphers = mkOption {
@@ -530,44 +579,74 @@ in
 
       sslProtocols = mkOption {
         type = types.str;
-        default = "All -SSLv2 -SSLv3 -TLSv1";
+        default = "All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1";
         example = "All -SSLv2 -SSLv3";
         description = "Allowed SSL/TLS protocol versions.";
       };
-    }
-
-    # Include the options shared between the main server and virtual hosts.
-    // (import ./per-server-options.nix {
-      inherit lib;
-      forMainServer = true;
-    });
+    };
 
   };
 
+  # implementation
 
-  ###### implementation
+  config = mkIf cfg.enable {
 
-  config = mkIf config.services.httpd.enable {
+    assertions = [
+      {
+        assertion = all (hostOpts: !hostOpts.enableSSL) vhosts;
+        message = ''
+          The option `services.httpd.virtualHosts.<name>.enableSSL` no longer has any effect; please remove it.
+          Select one of `services.httpd.virtualHosts.<name>.addSSL`, `services.httpd.virtualHosts.<name>.forceSSL`,
+          or `services.httpd.virtualHosts.<name>.onlySSL`.
+        '';
+      }
+      {
+        assertion = all (hostOpts: with hostOpts; !(addSSL && onlySSL) && !(forceSSL && onlySSL) && !(addSSL && forceSSL)) vhosts;
+        message = ''
+          Options `services.httpd.virtualHosts.<name>.addSSL`,
+          `services.httpd.virtualHosts.<name>.onlySSL` and `services.httpd.virtualHosts.<name>.forceSSL`
+          are mutually exclusive.
+        '';
+      }
+      {
+        assertion = all (hostOpts: !(hostOpts.enableACME && hostOpts.useACMEHost != null)) vhosts;
+        message = ''
+          Options `services.httpd.virtualHosts.<name>.enableACME` and
+          `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
+        '';
+      }
+    ];
 
-    assertions = [ { assertion = mainCfg.enableSSL == true
-                               -> mainCfg.sslServerCert != null
-                                    && mainCfg.sslServerKey != null;
-                     message = "SSL is enabled for httpd, but sslServerCert and/or sslServerKey haven't been specified."; }
-                 ];
+    warnings =
+      mapAttrsToList (name: hostOpts: ''
+        Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
+      '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != []) cfg.virtualHosts);
 
-    users.users = optionalAttrs (mainCfg.user == "wwwrun") (singleton
-      { name = "wwwrun";
-        group = mainCfg.group;
+    users.users = optionalAttrs (cfg.user == "wwwrun") {
+      wwwrun = {
+        group = cfg.group;
         description = "Apache httpd user";
         uid = config.ids.uids.wwwrun;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (mainCfg.group == "wwwrun") (singleton
-      { name = "wwwrun";
-        gid = config.ids.gids.wwwrun;
-      });
+    users.groups = optionalAttrs (cfg.group == "wwwrun") {
+      wwwrun.gid = config.ids.gids.wwwrun;
+    };
 
-    environment.systemPackages = [httpd];
+    security.acme.certs = mapAttrs (name: hostOpts: {
+      user = cfg.user;
+      group = mkDefault cfg.group;
+      email = if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr;
+      webroot = hostOpts.acmeRoot;
+      extraDomains = genAttrs hostOpts.serverAliases (alias: null);
+      postRun = "systemctl reload httpd.service";
+    }) (filterAttrs (name: hostOpts: hostOpts.enableACME) cfg.virtualHosts);
+
+    environment.systemPackages = [ pkg ];
+
+    # required for "apachectl configtest"
+    environment.etc."httpd/httpd.conf".source = httpdConf;
 
     services.httpd.phpOptions =
       ''
@@ -604,42 +683,56 @@ in
       "access_compat"
     ];
 
+    systemd.tmpfiles.rules =
+      let
+        svc = config.systemd.services.httpd.serviceConfig;
+      in
+        [
+          "d '${cfg.logDir}' 0700 ${svc.User} ${svc.Group}"
+          "Z '${cfg.logDir}' - ${svc.User} ${svc.Group}"
+        ];
+
     systemd.services.httpd =
+      let
+        vhostsACME = filter (hostOpts: hostOpts.enableACME) vhosts;
+      in
       { description = "Apache HTTPD";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" "fs.target" ];
+        wants = concatLists (map (hostOpts: [ "acme-${hostOpts.hostName}.service" "acme-selfsigned-${hostOpts.hostName}.service" ]) vhostsACME);
+        after = [ "network.target" "fs.target" ] ++ map (hostOpts: "acme-selfsigned-${hostOpts.hostName}.service") vhostsACME;
 
         path =
-          [ httpd pkgs.coreutils pkgs.gnugrep ]
-          ++ optional mainCfg.enablePHP pkgs.system-sendmail; # Needed for PHP's mail() function.
+          [ pkg pkgs.coreutils pkgs.gnugrep ]
+          ++ optional cfg.enablePHP pkgs.system-sendmail; # Needed for PHP's mail() function.
 
         environment =
-          optionalAttrs mainCfg.enablePHP { PHPRC = phpIni; }
-          // optionalAttrs mainCfg.enableMellon { LD_LIBRARY_PATH  = "${pkgs.xmlsec}/lib"; };
+          optionalAttrs cfg.enablePHP { PHPRC = phpIni; }
+          // optionalAttrs cfg.enableMellon { LD_LIBRARY_PATH  = "${pkgs.xmlsec}/lib"; };
 
         preStart =
           ''
-            mkdir -m 0700 -p ${mainCfg.logDir}
-
             # Get rid of old semaphores.  These tend to accumulate across
             # server restarts, eventually preventing it from restarting
             # successfully.
-            for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${mainCfg.user} ' | cut -f2 -d ' '); do
+            for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${cfg.user} ' | cut -f2 -d ' '); do
                 ${pkgs.utillinux}/bin/ipcrm -s $i
             done
           '';
 
-        serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf}";
-        serviceConfig.ExecStop = "${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop";
-        serviceConfig.ExecReload = "${httpd}/bin/httpd -f ${httpdConf} -k graceful";
-        serviceConfig.Group = mainCfg.group;
-        serviceConfig.Type = "forking";
-        serviceConfig.PIDFile = "${runtimeDir}/httpd.pid";
-        serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "5s";
-        serviceConfig.RuntimeDirectory = "httpd httpd/runtime";
-        serviceConfig.RuntimeDirectoryMode = "0750";
+        serviceConfig = {
+          ExecStart = "@${pkg}/bin/httpd httpd -f ${httpdConf}";
+          ExecStop = "${pkg}/bin/httpd -f ${httpdConf} -k graceful-stop";
+          ExecReload = "${pkg}/bin/httpd -f ${httpdConf} -k graceful";
+          User = "root";
+          Group = cfg.group;
+          Type = "forking";
+          PIDFile = "${runtimeDir}/httpd.pid";
+          Restart = "always";
+          RestartSec = "5s";
+          RuntimeDirectory = "httpd httpd/runtime";
+          RuntimeDirectoryMode = "0750";
+        };
       };
 
   };

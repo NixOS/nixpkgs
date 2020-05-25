@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "portaudio-190600-20161030";
 
   src = fetchurl {
-    url = http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz;
+    url = "http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz";
     sha256 = "04qmin6nj144b8qb9kkd9a52xfvm0qdgm8bg8jbl7s3frmyiv8pm";
   };
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ libjack2 ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
-  configureFlags = [ "--disable-mac-universal --enable-cxx" ];
+  configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays";
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Portable cross-platform Audio API";
-    homepage    = http://www.portaudio.com/;
+    homepage    = "http://www.portaudio.com/";
     # Not exactly a bsd license, but alike
     license     = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];

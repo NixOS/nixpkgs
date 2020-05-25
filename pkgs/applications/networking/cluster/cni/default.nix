@@ -15,7 +15,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Container Network Interface - networking for Linux containers";
     license = licenses.asl20;
-    homepage = https://github.com/containernetworking/cni;
+    homepage = "https://github.com/containernetworking/cni";
     maintainers = with maintainers; [ offline vdemeester ];
     platforms = [ "x86_64-linux" ];
   };

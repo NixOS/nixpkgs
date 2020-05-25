@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Standalone version of django.utils.feedgenerator, compatible with Py3k";
-    homepage = https://github.com/dmdm/feedgenerator-py3k.git;
+    homepage = "https://github.com/dmdm/feedgenerator-py3k.git";
     maintainers = with maintainers; [ ];
   };
 }

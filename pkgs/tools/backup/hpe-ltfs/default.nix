@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "HPE's implementation of the open-source tape filesystem standard ltfs";
-    homepage = https://support.hpe.com/hpesc/public/km/product/1009214665/Product;
+    homepage = "https://support.hpe.com/hpesc/public/km/product/1009214665/Product";
     license = licenses.lgpl21;
     maintainers = [ maintainers.redvers ];
     platforms = platforms.linux;
-    downloadPage = https://github.com/nix-community/hpe-ltfs;
+    downloadPage = "https://github.com/nix-community/hpe-ltfs";
   };
 }

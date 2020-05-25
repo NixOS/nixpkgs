@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./darwin-limits.patch ];
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-Wno-missing-sysroot";
-  NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework MultitouchSupport";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-missing-sysroot";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework MultitouchSupport";
 
   postPatch = ''
     substituteInPlace src/core/makefile.x/makefile.osx \
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Programming language for real-time sound synthesis and music creation";
-    homepage = http://chuck.cs.princeton.edu;
+    homepage = "http://chuck.cs.princeton.edu";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ftrvxmtrx ];

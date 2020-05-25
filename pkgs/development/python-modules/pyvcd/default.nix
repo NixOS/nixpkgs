@@ -3,15 +3,16 @@
 , fetchPypi
 , setuptools_scm
 , six
-, pytest }:
+, pytest
+}:
 
 buildPythonPackage rec {
-  version = "0.1.5";
+  version = "0.1.7";
   pname = "pyvcd";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e796f8d00d8392716bef9759f118231f5d77d2fff79d8a32151e3bb5579ff25";
+    sha256 = "1ixpdl0qiads81h8s9h9r9z0cyc9dlmvi01nfjggxixvbb17305y";
   };
 
   buildInputs = [ setuptools_scm ];
@@ -25,8 +26,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python package for writing Value Change Dump (VCD) files";
-    homepage = https://github.com/SanDisk-Open-Source/pyvcd;
+    homepage = "https://github.com/SanDisk-Open-Source/pyvcd";
+    changelog = "https://github.com/SanDisk-Open-Source/pyvcd/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = [ maintainers.sb0 ];
+    maintainers = [ maintainers.sb0 maintainers.emily ];
   };
 }

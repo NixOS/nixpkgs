@@ -46,7 +46,7 @@ in bundlerApp {
       web server. Jekyll is the engine behind GitHub Pages, which you can use to
       host sites right from your GitHub repositories.
     '';
-    homepage    = https://jekyllrb.com/;
+    homepage    = "https://jekyllrb.com/";
     license     = licenses.mit;
     maintainers = with maintainers; [ primeos pesterhazy ];
     platforms   = platforms.unix;
