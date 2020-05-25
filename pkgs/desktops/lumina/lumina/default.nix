@@ -1,7 +1,6 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, desktop-file-utils
 , fluxbox
 , numlockx
 , qmake
@@ -33,7 +32,6 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    desktop-file-utils
     fluxbox # window manager for Lumina DE
     numlockx # required for changing state of numlock at login
     qtbase
