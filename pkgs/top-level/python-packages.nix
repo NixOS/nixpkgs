@@ -7040,6 +7040,11 @@ in {
 
   pytoml = callPackage ../development/python-modules/pytoml { };
 
+  pypamtest = pkgs.libpam-wrapper.override {
+    enablePython = true;
+    inherit python;
+  };
+
   pypandoc = callPackage ../development/python-modules/pypandoc { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
