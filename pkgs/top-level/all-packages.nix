@@ -2782,6 +2782,8 @@ in
 
   ryujinx = callPackage ../misc/emulators/ryujinx { };
 
+  relpipe = callPackage ../tools/text/relpipe {};
+
   scour = with python3Packages; toPythonApplication scour;
 
   s2png = callPackage ../tools/graphics/s2png { };
