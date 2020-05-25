@@ -5266,7 +5266,9 @@ in
 
   monit = callPackage ../tools/system/monit { };
 
-  monolith = callPackage ../tools/backup/monolith { };
+  monolith = callPackage ../tools/backup/monolith {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   moreutils = callPackage ../tools/misc/moreutils {
     docbook-xsl = docbook_xsl;
