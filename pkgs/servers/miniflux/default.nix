@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "miniflux";
@@ -13,14 +13,17 @@ buildGoPackage rec {
 
   goPackagePath = "miniflux.app";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   doCheck = true;
 
   buildFlagsArray = ''
-    -ldflags=-X miniflux.app/version.Version=${version}
+    -ldflags=-s -w -X miniflux.app/version.Version=${version}
   '';
 
   postInstall = ''
     mv $out/bin/miniflux.app $out/bin/miniflux
+    installManPage go/src/${goPackagePath}/miniflux.1
   '';
 
   meta = with stdenv.lib; {
