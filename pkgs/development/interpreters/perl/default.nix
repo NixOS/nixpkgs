@@ -1,20 +1,8 @@
 { config, lib, stdenv, fetchurl, pkgs, buildPackages, callPackage
-, enableThreading ? stdenv ? glibc, coreutils, makeWrapper
+, enableThreading ? true, coreutils, makeWrapper
 }:
 
 with lib;
-
-# We can only compile perl with threading on platforms where we have a
-# real glibc in the stdenv.
-#
-# Instead of silently building an unthreaded perl if this is not the
-# case, we force callers to disableThreading explicitly, therefore
-# documenting the platforms where the perl is not threaded.
-#
-# In the case of stdenv linux boot stage1 it's not possible to use
-# threading because of the simpleness of the bootstrap glibc, so we
-# use enableThreading = false there.
-assert enableThreading -> (stdenv ? glibc);
 
 let
 
@@ -91,7 +79,12 @@ let
       ]
       ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
-      ++ optional enableThreading "-Dusethreads";
+      ++ optional enableThreading "-Dusethreads"
+      ++ optionals (!crossCompiling) [
+        "-Dprefix=${placeholder "out"}"
+        "-Dman1dir=${placeholder "out"}/share/man/man1"
+        "-Dman3dir=${placeholder "out"}/share/man/man3"
+      ];
 
     configureScript = optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
@@ -102,10 +95,6 @@ let
     preConfigure = ''
         substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
         substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
-      '' + optionalString (!crossCompiling) ''
-        configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
-      '' + optionalString (stdenv.isAarch32 || stdenv.isMips) ''
-        configureFlagsArray=(-Dldflags="-lm -lrt")
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
       '' + optionalString (!enableThreading) ''
@@ -144,7 +133,7 @@ let
         substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
           --replace "${libcInc}" /no-such-path \
           --replace "${
-              if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
+              if stdenv.hasCC then stdenv.cc.cc else "/no-such-path"
             }" /no-such-path \
           --replace "${stdenv.cc}" /no-such-path \
           --replace "$man" /no-such-path
@@ -173,7 +162,7 @@ let
       ''; # */
 
     meta = {
-      homepage = https://www.perl.org/;
+      homepage = "https://www.perl.org/";
       description = "The standard implementation of the Perl 5 programmming language";
       license = licenses.artistic1;
       maintainers = [ maintainers.eelco ];
@@ -181,11 +170,11 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "ba90816ef2c24dc06fd6cd2c854abcfa1aae00a3"; # Nov 22, 2019
+    crossVersion = "1.3.2"; # Mar 21, 2020
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "19jq5fz6l64s0v6j64n5mkk5v2srpyfn9sc09hwbpkp9n74q82j4";
+      sha256 = "1283crdjsyi45mgdiak4jmy907mqn09frxzxp21b18hvxmfn4smq";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -213,15 +202,15 @@ in {
   perl530 = common {
     perl = pkgs.perl530;
     buildPerl = buildPackages.perl530;
-    version = "5.30.1";
-    sha256 = "0r7r8a7pkgxp3w5lza559ahxczw6hzpwvhkpc4c99vpi3xbjagdz";
+    version = "5.30.2";
+    sha256 = "128nfdxcvxfn5kq55qcfrx2851ys8hv794dcdxbyny8rm7w7vnv6";
   };
 
   # the latest Devel version
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.31.6";
-    sha256 = "08n3c8xm1brxpckqy8i1xgjrpl4afrhcva9bhxswr938n675x71k";
+    version = "5.31.10";
+    sha256 = "1gvv5zs54gzb947x7ryjkaalm9rbqf8l8hwjwdm9lbfgkpg07kny";
   };
 }

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Fork of FLTK 1.3.0 with additional functionality";
     version = version;
-    homepage = http://non.tuxfamily.org/;
+    homepage = "http://non.tuxfamily.org/";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ magnetophon nico202 ];
     platforms = stdenv.lib.platforms.linux;

@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "slicedimage";
-  version = "4.0.5";
+  version = "4.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8e8759a013a0936ec9f7ffcd37fc64df69af913b4f26342c2501b8c3663d9bb";
+    sha256 = "7369f1d7fa09f6c9969625c4b76a8a63d2507a94c6fc257183da1c10261703e9";
   };
 
   propagatedBuildInputs = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to access sliced imaging data";
-    homepage = https://github.com/spacetx/slicedimage;
+    homepage = "https://github.com/spacetx/slicedimage";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

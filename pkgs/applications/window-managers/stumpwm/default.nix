@@ -95,7 +95,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A tiling window manager for X11";
-    homepage    = https://github.com/stumpwm/;
+    homepage    = "https://github.com/stumpwm/";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ the-kenny ];
     platforms   = platforms.linux;

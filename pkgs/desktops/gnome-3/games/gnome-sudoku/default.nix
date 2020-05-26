@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sudoku";
-  version = "3.34.1";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-sudoku/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "025y85r4qqardivvwiwhbmgarziykdy224m8zlrq8b79zv82793b";
+    sha256 = "17a1r2jk5yygrxil1dycmamxyvyi64mr29mbyfgcx5hm2fylxxwm";
   };
 
   nativeBuildInputs = [ meson ninja vala pkgconfig gobject-introspection gettext itstool libxml2 python3 desktop-file-utils wrapGAppsHook ];
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Sudoku;
+    homepage = "https://wiki.gnome.org/Apps/Sudoku";
     description = "Test your logic skills in this number grid puzzle";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

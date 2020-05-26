@@ -37,15 +37,15 @@ assert enableQt -> qwt != null;
   ]
   ++ stdenv.lib.optional enableNtfs ntfs3g
   ++ stdenv.lib.optional enableExtFs e2fsprogs
-  ++ stdenv.lib.optional enableQt [ qtbase qttools qwt ];
+  ++ stdenv.lib.optionals enableQt [ qtbase qttools qwt ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   NIX_CFLAGS_COMPILE="-Wno-unused";
 
   meta = with stdenv.lib; {
-    homepage = https://www.cgsecurity.org/wiki/Main_Page;
-    downloadPage = https://www.cgsecurity.org/wiki/TestDisk_Download;
+    homepage = "https://www.cgsecurity.org/wiki/Main_Page";
+    downloadPage = "https://www.cgsecurity.org/wiki/TestDisk_Download";
     description = "Testdisk / Photorec - Data recovery utilities";
     longDescription = ''
       TestDisk is a powerful free data recovery software. It was primarily

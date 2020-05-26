@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "ParMETIS is an MPI-based parallel library that implements a variety of algorithms for partitioning unstructured graphs, meshes, and for computing fill-reducing orderings of sparse matrices";
-    homepage = http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview;
+    homepage = "http://glaros.dtc.umn.edu/gkhome/metis/parmetis/overview";
     platforms = platforms.all;
     license = licenses.unfree;
     maintainers = [ maintainers.costrouc ];

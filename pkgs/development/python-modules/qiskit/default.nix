@@ -1,65 +1,49 @@
-{ stdenv
-, isPy3k
+{ lib
+, pythonOlder
 , buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, sympy
-, matplotlib
-, networkx
-, ply
-, pillow
-, cffi
-, requests
-, requests_ntlm
-, IBMQuantumExperience
-, jsonschema
-, psutil
-, cmake
-, llvmPackages 
+, fetchFromGitHub
+  # Python Inputs
+, qiskit-aer
+, qiskit-aqua
+, qiskit-ibmq-provider
+, qiskit-ignis
+, qiskit-terra
+  # Check Inputs
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "qiskit";
-  version = "0.13.0";
+  # NOTE: This version denotes a specific set of subpackages. See https://qiskit.org/documentation/release_notes.html#version-history
+  version = "0.17.0";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e9c0f23dddb0af27e2bfb920f6ea8600516fa68ec9ae97639faf858ba5d28020";
+  src = fetchFromGitHub {
+    owner = "Qiskit";
+    repo = "qiskit";
+    rev = version;
+    sha256 = "1cnjcvvzklyq102fipqnwd5ham0sp0451gp7j79cwwsxzvji6pcc";
   };
 
-  buildInputs = [ cmake ]
-    ++ stdenv.lib.optional stdenv.isDarwin llvmPackages.openmp;
-
   propagatedBuildInputs = [
-    numpy
-    matplotlib
-    networkx
-    ply
-    scipy
-    sympy
-    pillow
-    cffi
-    requests
-    requests_ntlm
-    IBMQuantumExperience
-    jsonschema
-    psutil
+    qiskit-aer
+    qiskit-aqua
+    qiskit-ibmq-provider
+    qiskit-ignis
+    qiskit-terra
   ];
 
-  # Pypi's tarball doesn't contain tests
-  doCheck = false;
+  checkInputs = [ pytestCheckHook ];
+  dontUseSetuptoolsCheck = true;
+  # following doesn't work b/c they are distributed across different nix sitePackages dirs. Tested with pytest though.
+  # pythonImportsCheck = [ "qiskit" "qiskit.terra" "qiskit.ignis" "qiskit.aer" "qiskit.aqua" ];
 
   meta = {
-    description = "Quantum Software Development Kit for writing quantum computing experiments, programs, and applications";
-    homepage    = https://github.com/QISKit/qiskit-terra;
-    license     = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [
-      pandaman
-    ];
-    # Needs to be updated and have its new dependencies added
-    broken = true;
+    description = "Software for developing quantum computing programs";
+    homepage = "https://qiskit.org";
+    downloadPage = "https://github.com/QISKit/qiskit/releases";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ drewrisinger pandaman ];
   };
 }

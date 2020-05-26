@@ -1,17 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "terraform-lsp";
-  version = "0.0.9";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "juliosueiras";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1m133fznf58fkjl5yx0gxa3cjfb0h8f9fv760c9h1d5cg279bghk";
+    sha256 = "1j69j1pkd0q6bds1c6pcaars5hl3hk93q2p31mymkzmy640k8zfn";
   };
 
-  modSha256 = "1mb3169vdlv4h10k15pg88s48s2b6y7v5frk9j9ahg52grygcqb2";
+  goPackagePath = "github.com/juliosueiras/terraform-lsp";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version} -X main.GitCommit=${src.rev}" ];
 
   meta = with lib; {
     description = "Language Server Protocol for Terraform";

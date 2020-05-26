@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A full-featured & carefully designed adaptive prompt for Bash & Zsh";
-    homepage = https://github.com/nojhan/liquidprompt;
+    homepage = "https://github.com/nojhan/liquidprompt";
     license = licenses.agpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ gerschtli ];

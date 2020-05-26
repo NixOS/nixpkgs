@@ -1,18 +1,16 @@
-{ stdenv, fetchurl
-, ncurses, gpm
-}:
+{ stdenv, fetchurl, ncurses, gpm }:
 
 stdenv.mkDerivation rec {
 
   pname = "jupp";
-  version = "3.1";
-  srcName = "joe-3.1jupp31";
+  version = "39";
+  srcName = "joe-3.1${pname}${version}";
 
   src = fetchurl {
     urls = [
       "https://www.mirbsd.org/MirOS/dist/jupp/${srcName}.tgz"
       "https://pub.allbsd.org/MirOS/dist/jupp/${srcName}.tgz" ];
-    sha256 = "1fnf9jsd6p4jyybkhjjs328qx38ywy8w029ngc7j7kqp0ixn0l0s";
+    sha256 = "14gys92dy3kq9ikigry7q2x4w5v2z76d97vp212bddrxiqy5np8d";
   };
 
   preConfigure = "chmod +x ./configure";
@@ -37,7 +35,7 @@ stdenv.mkDerivation rec {
       and has a lot of bugs fixed. It is based upon an older version of joe
       because these behave better overall.
     '';
-    homepage = http://mirbsd.de/jupp;
+    homepage = "http://www.mirbsd.org/jupp.htm";
     license = licenses.gpl1;
     maintainers = with maintainers; [ AndersonTorres ];
   };

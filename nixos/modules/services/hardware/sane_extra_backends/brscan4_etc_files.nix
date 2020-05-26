@@ -63,7 +63,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Brother brscan4 sane backend driver etc files";
-    homepage = http://www.brother.com;
+    homepage = "http://www.brother.com";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ jraygauthier ];

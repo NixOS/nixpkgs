@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     (fetchpatch {
-      url = https://repo.or.cz/iotop.git/patch/99c8d7cedce81f17b851954d94bfa73787300599;
+      url = "https://repo.or.cz/iotop.git/patch/99c8d7cedce81f17b851954d94bfa73787300599";
       sha256 = "0rdgz6xpmbx77lkr1ixklliy1aavdsjmfdqvzwrjylbv0xh5wc8z";
     })
   ];
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A tool to find out the processes doing the most IO";
-    homepage = http://guichaz.free.fr/iotop;
+    homepage = "http://guichaz.free.fr/iotop";
     license = licenses.gpl2;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

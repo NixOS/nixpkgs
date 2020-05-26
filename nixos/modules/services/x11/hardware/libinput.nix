@@ -184,7 +184,11 @@ in {
         ''
           Option "DragLockButtons" "L1 B1 L2 B2"
         '';
-        description = "Additional options for libinput touchpad driver.";
+        description = ''
+          Additional options for libinput touchpad driver. See
+          <citerefentry><refentrytitle>libinput</refentrytitle><manvolnum>4</manvolnum></citerefentry>
+          for available options.";
+        '';
       };
 
     };
@@ -198,12 +202,13 @@ in {
 
     environment.systemPackages = [ pkgs.xorg.xf86inputlibinput ];
 
-    environment.etc = [
-      (let cfgPath = "X11/xorg.conf.d/40-libinput.conf"; in {
-        source = pkgs.xorg.xf86inputlibinput.out + "/share/" + cfgPath;
-        target = cfgPath;
-      })
-    ];
+    environment.etc =
+      let cfgPath = "X11/xorg.conf.d/40-libinput.conf";
+      in {
+        ${cfgPath} = {
+          source = pkgs.xorg.xf86inputlibinput.out + "/share/" + cfgPath;
+        };
+      };
 
     services.udev.packages = [ pkgs.libinput.out ];
 

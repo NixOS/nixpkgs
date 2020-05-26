@@ -23,7 +23,7 @@ in fetchzip {
       The face has been re-designed with a larger glyph set, modifications of
       the original glyph shapes, and meticulous attention to metrics.
     '';
-    homepage = https://sourcefoundry.org/hack/;
+    homepage = "https://sourcefoundry.org/hack/";
 
     /*
      "The font binaries are released under a license that permits unlimited

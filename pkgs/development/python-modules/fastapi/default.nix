@@ -1,22 +1,30 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , uvicorn
 , starlette
 , pydantic
-, python
 , isPy3k
-, which
+, pytest
+, pytestcov
+, pyjwt
+, passlib
+, aiosqlite
+, peewee
+, flask
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.42.0";
+  version = "0.54.0";
+  format = "flit";
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "48cb522c1c993e238bfe272fbb18049cbd4bf5b9d6c0d4a4fa113cc790e8196c";
+  src = fetchFromGitHub {
+    owner = "tiangolo";
+    repo = "fastapi";
+    rev = version;
+    sha256 = "17bicrpr801z71wrn9iimvh7qk6iwyxvr89ialf0s2rxxa2s0yb5";
   };
 
   propagatedBuildInputs = [
@@ -25,10 +33,23 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  patches = [ ./setup.py.patch ];
+  checkInputs = [
+    pytest
+    pytestcov
+    pyjwt
+    passlib
+    aiosqlite
+    peewee
+    flask
+  ];
 
+  # test_default_response_class.py: requires orjson, which requires rust toolchain
+  # test_custom_response/test_tutorial001b.py: requires orjson
+  # tests/test_tutorial/test_sql_databases/test_testing_databases.py: just broken, don't know why
   checkPhase = ''
-    ${python.interpreter} -c "from fastapi import FastAPI; app = FastAPI()"
+    pytest --ignore=tests/test_default_response_class.py \
+           --ignore=tests/test_tutorial/test_custom_response/test_tutorial001b.py \
+           --ignore=tests/test_tutorial/test_sql_databases/test_testing_databases.py
   '';
 
   meta = with lib; {

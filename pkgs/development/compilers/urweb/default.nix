@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "urweb";
-  version = "20190217";
+  version = "20200209";
 
   src = fetchurl {
     url = "https://github.com/urweb/urweb/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1cl0x0sy7w1lazszc8q06q3wx0x0rczxh27vimrsw54s6s9y096s";
+    sha256 = "0qh6wcxfk5kf735i5gqwnkdirnnmqhnnpkfz96gz144dgz2i0c5c";
   };
 
   buildInputs = [ openssl mlton libmysqlclient postgresql sqlite icu ];
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     export PGHEADER="${postgresql}/include/libpq-fe.h";
     export MSHEADER="${libmysqlclient}/include/mysql/mysql.h";
     export SQHEADER="${sqlite.dev}/include/sqlite3.h";
+    export ICU_INCLUDES="-I${icu.dev}/include";
 
     export CC="${gcc}/bin/gcc";
     export CCARGS="-I$out/include \

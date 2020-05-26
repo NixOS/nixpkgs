@@ -96,7 +96,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.scilab.org/;
+    homepage = "http://www.scilab.org/";
     description = "Scientific software package for numerical computations (Matlab lookalike)";
     # see http://www.scilab.org/legal_notice
     license = "Scilab";

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "FoxDot";
-  version = "0.8.4";
+  version = "0.8.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b6d810f5389692c45d236dec89cecc4ff32ad053e4c878c91363acfa4508639";
+    sha256 = "0c5iqdn17ip6lkf26xb1cwjvcly0448gvqmkbkvhnqy4birc8cf5";
   };
 
   propagatedBuildInputs = [ tkinter supercollider ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Live coding music with SuperCollider";
-    homepage = https://foxdot.org/;
+    homepage = "https://foxdot.org/";
     license = licenses.cc-by-sa-40;
     maintainers = with maintainers; [ mrmebelman ];
   };

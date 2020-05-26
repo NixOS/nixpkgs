@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "cherry font";
-    homepage = https://github.com/turquoise-hexagon/cherry;
+    homepage = "https://github.com/turquoise-hexagon/cherry";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

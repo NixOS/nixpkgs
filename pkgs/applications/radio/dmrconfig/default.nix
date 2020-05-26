@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig
   '';
 
-  makeFlags = "VERSION=${version} GITCOUNT=0";
+  makeFlags = [ "VERSION=${version}" "GITCOUNT=0" ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/udev/rules.d
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       DMRconfig is a utility for programming digital radios via USB programming cable.
     '';
-    homepage = https://github.com/sergev/dmrconfig;
+    homepage = "https://github.com/sergev/dmrconfig";
     license = licenses.asl20;
     maintainers = [ maintainers.etu ];
     platforms = platforms.linux;

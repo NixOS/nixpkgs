@@ -11,7 +11,7 @@ let
         rev = "244f8bbbdf64ae603f9f6c09a3067943837459ec";
         sha256 = "0x4y5q7ygxfjfy2wxijkps9khsjjfb169sbda410vaw0m88wqj5p";
       };
-      makeFlags = "CPU=m68k SYNTAX=mot";
+      makeFlags = [ "CPU=m68k" "SYNTAX=mot" ];
       installPhase = ''
         mkdir -p $out/bin
         cp vasmm68k_mot $out/bin
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://www.retrodev.com/blastem/;
+    homepage = "https://www.retrodev.com/blastem/";
     description = "The fast and accurate Genesis emulator";
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     license = stdenv.lib.licenses.gpl3;

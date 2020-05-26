@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     # Fix crash in GNOME Flashback
     # https://bugzilla.gnome.org/show_bug.cgi?id=791001
     (fetchurl {
-      url = https://bugzilla.gnome.org/attachment.cgi?id=364774;
+      url = "https://bugzilla.gnome.org/attachment.cgi?id=364774";
       sha256 = "15k1455grf6knlrxqbjnk7sals1730b0whj30451scp46wyvykvd";
     })
   ];
@@ -46,9 +46,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An input assistive technology intended for switch and pointer users";
-    homepage = https://wiki.gnome.org/Projects/Caribou;
+    homepage = "https://wiki.gnome.org/Projects/Caribou";
     license = licenses.lgpl21;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = http://gajim.org/;
+    homepage = "http://gajim.org/";
     description = "Jabber client written in PyGTK";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin aszlig abbradar ];

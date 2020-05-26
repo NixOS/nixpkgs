@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Closed caption converter";
-    homepage = https://github.com/pbs/pycaption;
+    homepage = "https://github.com/pbs/pycaption";
     license = with licenses; [ asl20 ];
   };
 }

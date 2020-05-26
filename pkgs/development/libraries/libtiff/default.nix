@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library and utilities for working with the TIFF image file format";
-    homepage = http://download.osgeo.org/libtiff;
+    homepage = "http://download.osgeo.org/libtiff";
     license = licenses.libtiff;
     platforms = platforms.unix;
   };

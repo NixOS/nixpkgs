@@ -40,7 +40,7 @@ let
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
   # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
   # this.
-  latestVersion = "0.44.12";
+  latestVersion = "0.47.04";
 
   # Converts a version to a package name.
   versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";
@@ -101,7 +101,7 @@ let
     dwarf-fortress-full = callPackage ./lazy-pack.nix {
       inherit df-games versionToName latestVersion;
     };
-    
+
     soundSense = callPackage ./soundsense.nix { };
 
     legends-browser = callPackage ./legends-browser {};

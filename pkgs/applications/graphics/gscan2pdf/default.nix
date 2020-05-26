@@ -10,11 +10,11 @@ with stdenv.lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.6.2";
+  version = "2.6.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0z35lglf4anfczizynjp8sd1jpix5mkmm1nh39n1v94l7ahjxsww";
+    sha256 = "0x8931i5zs4zl3iqjhlp7h8y6ssklxiqsddz5kh84nl3p0izbg0y";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -100,7 +100,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = {
     description = "A GUI to produce PDFs or DjVus from scanned documents";
-    homepage = http://gscan2pdf.sourceforge.net/;
+    homepage = "http://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pacien ];
   };

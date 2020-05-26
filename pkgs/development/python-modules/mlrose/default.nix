@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "mlrose";
-  version = "1.2.0";
+  version = "1.3.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vsvqrf1wbbj8i198rqd87hf8rlq7fmv8mmibv8f9rhj0w8729p5";
+    sha256 = "cec83253bf6da67a7fb32b2c9ae13e9dbc6cfbcaae2aa3107993e69e9788f15e";
   };
 
   propagatedBuildInputs = [ scikitlearn ];

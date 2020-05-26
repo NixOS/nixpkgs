@@ -4,12 +4,12 @@ stdenv.mkDerivation {
   name = "tetex-3.0";
 
   src = fetchurl {
-    url = http://mirrors.ctan.org/obsolete/systems/unix/teTeX/3.0/distrib/tetex-src-3.0.tar.gz;
+    url = "http://mirrors.ctan.org/obsolete/systems/unix/teTeX/3.0/distrib/tetex-src-3.0.tar.gz";
     sha256 = "16v44465ipd9yyqri9rgxp6rbgs194k4sh1kckvccvdsnnp7w3ww";
   };
 
   texmf = fetchurl {
-    url = http://mirrors.ctan.org/obsolete/systems/unix/teTeX/3.0/distrib/tetex-texmf-3.0.tar.gz;
+    url = "http://mirrors.ctan.org/obsolete/systems/unix/teTeX/3.0/distrib/tetex-texmf-3.0.tar.gz";
     sha256 = "1hj06qvm02a2hx1a67igp45kxlbkczjlg20gr8lbp73l36k8yfvc";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description  = "A full-featured (La)TeX distribution";
-    homepage     = http://www.tug.org/tetex/;
+    homepage     = "http://www.tug.org/tetex/";
     maintainers  = with maintainers; [ lovek323 ];
     platforms    = platforms.unix;
     hydraPlatforms = [];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python, pkgconfig, glib }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, glib }:
 
 stdenv.mkDerivation (rec {
   name = "gamin-0.1.10";
@@ -10,13 +10,13 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ python glib ];
+  buildInputs = [ glib ];
 
   # `_GNU_SOURCE' is needed, e.g., to get `struct ucred' from
   # <sys/socket.h> with Glibc 2.9.
   configureFlags = [
     "--disable-debug"
-    "--with-python=${python}"
+    "--without-python" # python3 not supported
     "CPPFLAGS=-D_GNU_SOURCE"
   ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (rec {
 
 
   meta = with stdenv.lib; {
-    homepage    = https://people.gnome.org/~veillard/gamin/;
+    homepage    = "https://people.gnome.org/~veillard/gamin/";
     description = "A file and directory monitoring system";
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.gpl2;
@@ -44,4 +44,3 @@ stdenv.mkDerivation (rec {
     sed -i 's/,--version-script=.*$/\\/' libgamin/Makefile
   '';
 })
-

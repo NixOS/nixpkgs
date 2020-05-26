@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://erdgeist.org/arts/software/opentracker/;
+    homepage = "https://erdgeist.org/arts/software/opentracker/";
     license = licenses.beerware;
     platforms = platforms.linux;
     description = "Bittorrent tracker project which aims for minimal resource usage and is intended to run at your wlan router.";

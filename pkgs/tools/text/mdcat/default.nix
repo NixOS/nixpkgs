@@ -2,31 +2,33 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
     repo = pname;
     rev = "mdcat-${version}";
-    sha256 = "1q8h6pc1i89j1zl4s234inl9v95vsdrry1fzlis89sl2mnbv8ywy";
+    sha256 = "10svzq7656lynfcgnbyaibfvv48i4289ymxfc0bn0212biyrl1zb";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ (stdenv.lib.optional stdenv.isDarwin Security) openssl ];
+  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "1hxsfls6fpllc9yg5ib3qz6pa62j1y1va8a6356j6812csk4ifnn";
+  cargoSha256 = "05nh3dfr7mdw21sdavyyjhr8sa4jcfqzwizbgg92ib7r834ir3m0";
 
   checkInputs = [ ansi2html ];
   checkPhase = ''
     # Skip tests that use the network and that include files.
-    cargo test -- --skip terminal::iterm2 --skip terminal::resources::tests::remote \
+    cargo test -- --skip terminal::iterm2 \
       --skip magic::tests::detect_mimetype_of_svg_image \
-      --skip magic::tests::detect_mimetype_of_png_image
+      --skip magic::tests::detect_mimetype_of_png_image \
+      --skip resources::tests::read_url_with_http_url_fails_when_status_404 \
+      --skip resources::tests::read_url_with_http_url_returns_content_when_status_200
   '';
 
   meta = with stdenv.lib; {
     description = "cat for markdown";
-    homepage = https://github.com/lunaryorn/mdcat;
+    homepage = "https://github.com/lunaryorn/mdcat";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ davidtwco ];
     platforms = platforms.all;

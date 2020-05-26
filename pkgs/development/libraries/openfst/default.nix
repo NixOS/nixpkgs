@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       FSTs have key applications in speech recognition and synthesis, machine translation, optical character recognition,
       pattern matching, string processing, machine learning, information extraction and retrieval among others
     '';
-    homepage = http://www.openfst.org/twiki/bin/view/FST/WebHome;
+    homepage = "http://www.openfst.org/twiki/bin/view/FST/WebHome";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.dfordivam ];
     platforms = stdenv.lib.platforms.unix;

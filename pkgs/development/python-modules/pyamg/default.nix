@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Algebraic Multigrid Solvers in Python";
-    homepage = https://github.com/pyamg/pyamg;
+    homepage = "https://github.com/pyamg/pyamg";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

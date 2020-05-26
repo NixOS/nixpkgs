@@ -112,12 +112,12 @@ in {
               addresses = [ "tcp://192.168.0.10:51820" ];
             };
           };
-          type = types.attrsOf (types.submodule ({ config, ... }: {
+          type = types.attrsOf (types.submodule ({ name, ... }: {
             options = {
 
               name = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   Name of the device
                 '';
@@ -169,13 +169,15 @@ in {
           description = ''
             folders which should be shared by syncthing.
           '';
-          example = {
-            "/home/user/sync" = {
-              id = "syncme";
-              devices = [ "bigbox" ];
-            };
-          };
-          type = types.attrsOf (types.submodule ({ config, ... }: {
+          example = literalExample ''
+            {
+              "/home/user/sync" = {
+                id = "syncme";
+                devices = [ "bigbox" ];
+              };
+            }
+          '';
+          type = types.attrsOf (types.submodule ({ name, ... }: {
             options = {
 
               enable = mkOption {
@@ -190,7 +192,7 @@ in {
 
               path = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   The path to the folder which should be shared.
                 '';
@@ -198,7 +200,7 @@ in {
 
               id = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   The id of the folder. Must be the same on all devices.
                 '';
@@ -206,7 +208,7 @@ in {
 
               label = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   The label of the folder.
                 '';
@@ -484,6 +486,24 @@ in {
               -gui-address=${cfg.guiAddress} \
               -home=${cfg.configDir}
           '';
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProtectControlGroups = true;
+          ProtectHostname = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          CapabilityBoundingSet = [
+            "~CAP_SYS_PTRACE" "~CAP_SYS_ADMIN"
+            "~CAP_SETGID" "~CAP_SETUID" "~CAP_SETPCAP"
+            "~CAP_SYS_TIME" "~CAP_KILL"
+          ];
         };
       };
       syncthing-init = mkIf (

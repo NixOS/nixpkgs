@@ -1,4 +1,4 @@
-{ stdenv, writeScript, fetchurl, requireFile, unzip, clang_35, mono, which,
+{ stdenv, writeScript, fetchurl, requireFile, unzip, clang, mono, which,
   xorg, xdg-user-dirs }:
 
 let
@@ -70,11 +70,11 @@ stdenv.mkDerivation rec {
 
     cp -r . "$sharedir"
   '';
-  buildInputs = [ clang_35 mono which xdg-user-dirs ];
+  buildInputs = [ clang mono which xdg-user-dirs ];
 
   meta = {
     description = "A suite of integrated tools for game developers to design and build games, simulations, and visualizations";
-    homepage = https://www.unrealengine.com/what-is-unreal-engine-4;
+    homepage = "https://www.unrealengine.com/what-is-unreal-engine-4";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.puffnfresh ];

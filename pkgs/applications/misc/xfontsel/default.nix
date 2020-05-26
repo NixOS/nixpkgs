@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://www.x.org/;
+    homepage = "https://www.x.org/";
     description = "Allows testing the fonts available in an X server";
     license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [viric];

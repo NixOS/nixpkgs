@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gemrb";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner  = "gemrb";
     repo   = "gemrb";
     rev    = "v${version}";
-    sha256 = "0xkjsiawxz53rac26vqz9sfgva0syff8x8crabrpbpxgmbacih7a";
+    sha256 = "0vsr3fsqmv9b7s5l0cwhpq2pf7ah2wvgmcn9y8asj6w8hprp17d4";
   };
 
   # TODO: make libpng, libvorbis, sdl_mixer, freetype, vlc, glew (and other gl reqs) optional
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       support pseudo-3D role playing games based on the Dungeons & Dragons
       ruleset (Baldur's Gate and Icewind Dale series, Planescape: Torment).
     '';
-    homepage = http://gemrb.org/;
+    homepage = "http://gemrb.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;

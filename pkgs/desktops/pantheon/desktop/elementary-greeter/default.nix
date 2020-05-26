@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "5.0.1";
+  version = "5.0.3";
 
   repoName = "greeter";
 
@@ -36,13 +36,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0qy6iw71p8hv6fpcr7p3hqbzlcpxrz18qdm1inannq68d0pxfx76";
+    sha256 = "1zbfcdgjn57r8pz01xrz6kk8rmviq133snz9f1vqhjdsznk82w5i";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
 
     xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
@@ -119,7 +118,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LightDM Greeter for Pantheon";
-    homepage = https://github.com/elementary/greeter;
+    homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

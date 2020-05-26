@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   # audacity only looks for lame and ffmpeg at runtime, so we need to link them in manually
-  NIX_LDFLAGS = [
+  NIX_LDFLAGS = toString [
     # LAME
     "-lmp3lame"
     # ffmpeg
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Sound editor with graphical UI";
-    homepage = http://audacityteam.org/;
+    homepage = "http://audacityteam.org/";
     license = licenses.gpl2Plus;
     platforms = intersectLists platforms.linux platforms.x86; # fails on ARM
     maintainers = with maintainers; [ the-kenny ];

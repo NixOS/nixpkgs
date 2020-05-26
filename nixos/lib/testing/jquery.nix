@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "JavaScript library designed to simplify the client-side scripting of HTML";
-    homepage = http://jquery.com/;
+    homepage = "http://jquery.com/";
     license = licenses.mit;
     platforms = platforms.all;
   };

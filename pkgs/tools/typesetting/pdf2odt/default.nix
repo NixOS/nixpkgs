@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PDF to ODT format converter";
-    homepage    = https://github.com/gutschke/pdf2odt;
+    homepage    = "https://github.com/gutschke/pdf2odt";
     license     = licenses.mit;
     platforms   = platforms.all;
     maintainers = with maintainers; [ peterhoeg ];

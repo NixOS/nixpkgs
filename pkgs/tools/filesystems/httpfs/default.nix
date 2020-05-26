@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "HTTPFS2, a FUSE-based HTTP file system for Linux";
 
-    homepage = http://httpfs.sourceforge.net/;
+    homepage = "http://httpfs.sourceforge.net/";
 
     license = stdenv.lib.licenses.gpl2Plus;
 

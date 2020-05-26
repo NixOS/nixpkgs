@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pcb";
-  version = "4.2.0";
+  version = "4.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/pcb/${pname}-${version}.tar.gz";
-    sha256 = "0hwsqmcrnk4wipbmfqx1yckmmgfn8vr37d1gh5srfy27czgkcjyd";
+    sha256 = "0pbfyfadbia1jf9ywkf02j8mfdh8c3mj390c2jdqnl70vcdszvhw";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Printed Circuit Board editor";
-    homepage = http://pcb.geda-project.org/;
+    homepage = "http://pcb.geda-project.org/";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;
     license = licenses.gpl2;

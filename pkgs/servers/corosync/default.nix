@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, nss, nspr, libqb
-, dbus, rdma-core, libstatgrab, net_snmp
+, dbus, rdma-core, libstatgrab, net-snmp
 , enableDbus ? false
 , enableInfiniBandRdma ? false
 , enableMonitoring ? false
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ] ++ optional enableDbus dbus
     ++ optional enableInfiniBandRdma rdma-core
     ++ optional enableMonitoring libstatgrab
-    ++ optional enableSnmp net_snmp;
+    ++ optional enableSnmp net-snmp;
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://corosync.org/;
+    homepage = "http://corosync.org/";
     description = "A Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.linux;

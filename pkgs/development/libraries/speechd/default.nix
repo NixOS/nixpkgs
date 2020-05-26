@@ -1,6 +1,17 @@
-{ stdenv, pkgconfig, fetchurl, python3Packages
-, intltool, itstool, libtool, texinfo, autoreconfHook
-, glib, dotconf, libsndfile
+{ stdenv
+, substituteAll
+, pkgconfig
+, fetchurl
+, python3Packages
+, gettext
+, itstool
+, libtool
+, texinfo
+, utillinux
+, autoreconfHook
+, glib
+, dotconf
+, libsndfile
 , withLibao ? true, libao
 , withPulse ? false, libpulseaudio
 , withAlsa ? false, alsaLib
@@ -28,18 +39,43 @@ let
       throw "You need to enable at least one output module.";
 in stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
-  version = "0.8.8";
+  version = "0.9.1";
 
   src = fetchurl {
-    url = "http://www.freebsoft.org/pub/projects/speechd/${pname}-${version}.tar.gz";
-    sha256 = "1wvck00w9ixildaq6hlhnf6wa576y02ac96lp6932h3k1n08jaiw";
+    url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256:16bg52hnkrsrs7kgbzanb34b9zb6fqxwj0a9bmsxmj1skkil1h1p";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook intltool libtool itstool texinfo wrapPython ];
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit utillinux;
+    })
+  ];
 
-  buildInputs = [ glib dotconf libsndfile libao libpulseaudio alsaLib python ]
-    ++ optionals withEspeak [ espeak sonic pcaudiolib ]
-    ++ optional withFlite flite
+  nativeBuildInputs = [
+    pkgconfig
+    autoreconfHook
+    gettext
+    libtool
+    itstool
+    texinfo
+    wrapPython
+  ];
+
+  buildInputs = [
+    glib
+    dotconf
+    libsndfile
+    libao
+    libpulseaudio
+    alsaLib
+    python
+  ] ++ optionals withEspeak [
+    espeak
+    sonic
+    pcaudiolib
+  ] ++ optional withFlite flite
     ++ optional withPico svox
     # TODO: add flint/festival support with festival-freebsoft-utils package
     # ++ optional withFestival festival-freebsoft-utils
@@ -52,6 +88,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
+    "--with-systemdsystemunitdir=${placeholder ''out''}/lib/systemd/system"
   ] ++ optional withPulse "--with-pulse"
     ++ optional withAlsa "--with-alsa"
     ++ optional withLibao "--with-libao"
@@ -71,9 +108,11 @@ in stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Common interface to speech synthesis";
-    homepage = https://devel.freebsoft.org/speechd;
+    homepage = "https://devel.freebsoft.org/speechd";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ berce ];
     platforms = platforms.linux;

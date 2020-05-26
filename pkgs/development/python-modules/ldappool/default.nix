@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A simple connector pool for python-ldap";
-    homepage = https://git.openstack.org/cgit/openstack/ldappool;
+    homepage = "https://git.openstack.org/cgit/openstack/ldappool";
     license = licenses.mpl20;
   };
 }

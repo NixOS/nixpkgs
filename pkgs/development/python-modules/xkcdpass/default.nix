@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/xkcdpass/;
+    homepage = "https://pypi.python.org/pypi/xkcdpass/";
     description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
     license = licenses.bsd3;
   };

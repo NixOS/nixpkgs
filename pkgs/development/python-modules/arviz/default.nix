@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, bokeh
 , emcee
 , matplotlib
 , netcdf4
@@ -21,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.5.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     rev = version;
-    sha256 = "0p600cakix24wz2ridnzy6sp3l1p2kr5s60qc7s82wpv7fw0i9ry";
+    sha256 = "03hj7bkkj6kfqdk6ri2mp53wk4k7xpafxk01vgs6k9zg3rlnq7ny";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    bokeh
     emcee
     numba
     pytest
@@ -67,8 +69,18 @@ buildPythonPackage rec {
   # data_numpyro, data_pyro, data_pystan, and plots.
   checkPhase = ''
     cd arviz/tests/
-    HOME=$TMPDIR pytest test_{data_cmdstan,data_emcee,data,data_tfp,\
-    diagnostics,plot_utils,rcparams,stats,stats_utils,utils}.py
+    export HOME=$TMPDIR
+    pytest \
+      base_tests/test_data.py \
+      base_tests/test_diagnostics.py \
+      base_tests/test_plot_utils.py \
+      base_tests/test_rcparams.py \
+      base_tests/test_stats.py \
+      base_tests/test_stats_utils.py \
+      base_tests/test_utils.py \
+      external_tests/test_data_cmdstan.py \
+      external_tests/test_data_emcee.py \
+      external_tests/test_data_tfp.py
   '';
 
   meta = with lib; {

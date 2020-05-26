@@ -1,23 +1,26 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, llvmPackages }:
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.0.15";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = pname;
     rev = version;
-    sha256 = "1c2zqvkzkrj8rcz226vfk43yw113b1fdcz2gx0xh8fs72arqx6wh";
+    sha256 = "0cpd60861k9nd2gbzyb2hg5npnkgvsnyrvv7mlm30vb1833gz94z";
   };
 
-  cargoSha256 = "1888bvkpalfcw9bc9zmf9bmil6x35l9ia31x6mx1h2dvrfpw3bb1";
+  LLVM_CONFIG_PATH = "${llvmPackages.llvm}/bin/llvm-config";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+  cargoSha256 = "12gl50q5hf6nq571fqxfv61z4mwfjyw4jb2yqyqbsinwj2frwaxn";
 
   meta = with lib; {
     homepage = "https://github.com/dandavison/delta";
     description = "A syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ma27 ];
   };
 }

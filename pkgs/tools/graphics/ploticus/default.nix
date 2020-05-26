@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = mirror://sourceforge/ploticus/ploticus/2.41/pl241src.tar.gz;
+    url = "mirror://sourceforge/ploticus/ploticus/2.41/pl241src.tar.gz";
     sha256 = "1065r0nizjixi9sxxfxrnwg10r458i6fgsd23nrxa200rypvdk7c";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       over colors, styles, options and details.'';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
-    homepage = http://ploticus.sourceforge.net/;
+    homepage = "http://ploticus.sourceforge.net/";
     platforms = with platforms; linux;
   };
 }

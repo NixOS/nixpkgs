@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A sexy and modern icon theme with Tango influences";
-    homepage = https://snwh.org/moka;
+    homepage = "https://snwh.org/moka";
     license = with licenses; [ cc-by-sa-40 gpl3 ];
     platforms = platforms.all;
     maintainers = with maintainers; [ romildo ];

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/simon-v/bean-add/;
+    homepage = "https://github.com/simon-v/bean-add/";
     description = "beancount transaction entry assistant";
 
     # The (only) source file states:

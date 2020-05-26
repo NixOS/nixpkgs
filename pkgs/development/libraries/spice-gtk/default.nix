@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
       Python bindings are available too.
     '';
 
-    homepage = https://www.spice-space.org/;
+    homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.xeji ];
     platforms = platforms.linux;

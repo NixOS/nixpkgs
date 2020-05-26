@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     sed -e "s|^#\!\(.*/perl.*\)$|#\!\1$perlFlags|" -i perl.d/imap-proxy
   '';
 
-  buildFlags = if debugBuild then "lumail2-debug" else "";
+  buildFlags = stdenv.lib.optional debugBuild "lumail2-debug";
 
   installPhase = ''
     mkdir -p $out/bin || true
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Console-based email client";
-    homepage = https://lumail.org/;
+    homepage = "https://lumail.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [orivej];

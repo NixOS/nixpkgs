@@ -1,15 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, runtimeShell,
+{ lib, buildPythonPackage, fetchFromGitHub, runtimeShell,
   nose, dbus, dbus-python, pygobject3,
   which, pyflakes, pycodestyle, bluez, networkmanager
 }:
 
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.18.3";
+  version = "0.19";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "994a178268b6d74aeb158c0f155cd141e9a0cfae14226a764cd022c4949fe242";
+  src = fetchFromGitHub {
+    owner = "martinpitt";
+    repo = pname;
+    rev = version;
+    sha256 = "09j338lmrjabbd3fpajr4piz4r20sl33030szfsqfzlwrrmvkyi0";
   };
 
   prePatch = ''
@@ -54,7 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Mock D-Bus objects for tests";
-    homepage = https://github.com/martinpitt/python-dbusmock;
+    homepage = "https://github.com/martinpitt/python-dbusmock";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ callahad ];
     platforms = platforms.linux;

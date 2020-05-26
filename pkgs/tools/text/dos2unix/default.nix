@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = "https://waterlan.home.xs4all.nl/dos2unix.html";
     changelog = "https://sourceforge.net/p/dos2unix/dos2unix/ci/dos2unix-${version}/tree/dos2unix/NEWS.txt?format=raw";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ c0bw3b ndowens ];
+    maintainers = with maintainers; [ c0bw3b ];
   };
 }

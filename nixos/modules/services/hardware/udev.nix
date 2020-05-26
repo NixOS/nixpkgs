@@ -221,8 +221,8 @@ in
         type = types.lines;
         description = ''
           Additional <command>hwdb</command> files. They'll be written
-          into file <filename>10-local.hwdb</filename>. Thus they are
-          read before all other files.
+          into file <filename>99-local.hwdb</filename>. Thus they are
+          read after all other files.
         '';
       };
 
@@ -281,13 +281,10 @@ in
     boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
     environment.etc =
-      [ { source = udevRules;
-          target = "udev/rules.d";
-        }
-        { source = hwdbBin;
-          target = "udev/hwdb.bin";
-        }
-      ];
+      {
+        "udev/rules.d".source = udevRules;
+        "udev/hwdb.bin".source = hwdbBin;
+      };
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isEnabled "UNIX")

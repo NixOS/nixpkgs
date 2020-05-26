@@ -10,7 +10,7 @@
 } @ args:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast;
+  inherit (stdenv.lib) getVersion versionAtLeast optional;
 
 in
   assert versionAtLeast (getVersion erlang) minimumOTPVersion;
@@ -29,9 +29,7 @@ in
 
     inherit debugInfo;
 
-    buildFlags = if debugInfo
-      then "ERL_COMPILER_OPTIONS=debug_info"
-      else "";
+    buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
 
     preBuild = ''
       # The build process uses ./rebar. Link it to the nixpkgs rebar
@@ -62,7 +60,7 @@ in
 
     pos = builtins.unsafeGetAttrPos "sha256" args;
     meta = with stdenv.lib; {
-      homepage = https://elixir-lang.org/;
+      homepage = "https://elixir-lang.org/";
       description = "A functional, meta-programming aware language built on top of the Erlang VM";
 
       longDescription = ''
@@ -75,6 +73,6 @@ in
 
       license = licenses.epl10;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ the-kenny havvy couchemar ankhers ];
+      maintainers = with maintainers; [ the-kenny havvy couchemar ankhers filalex77 ];
     };
   })

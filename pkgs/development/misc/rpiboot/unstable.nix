@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/raspberrypi/usbboot;
+    homepage = "https://github.com/raspberrypi/usbboot";
     description = "Utility to boot a Raspberry Pi CM/CM3/Zero over USB";
     maintainers = [ stdenv.lib.maintainers.cartr ];
     license = stdenv.lib.licenses.asl20;

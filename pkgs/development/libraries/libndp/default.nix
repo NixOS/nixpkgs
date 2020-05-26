@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://libndp.org/;
+    homepage = "http://libndp.org/";
     description = "Library for Neighbor Discovery Protocol";
     platforms = platforms.linux;
     maintainers = [ maintainers.lethalman ];

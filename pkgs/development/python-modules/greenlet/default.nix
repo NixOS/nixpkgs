@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://pypi.python.org/pypi/greenlet;
+    homepage = "https://pypi.python.org/pypi/greenlet";
     description = "Module for lightweight in-process concurrent programming";
     license = lib.licenses.lgpl2;
   };

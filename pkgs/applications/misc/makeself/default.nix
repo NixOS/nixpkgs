@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://megastep.org/makeself;
+    homepage = "http://megastep.org/makeself";
     description = "Utility to create self-extracting packages";
     license = licenses.gpl2;
     maintainers = [ maintainers.wmertens ];

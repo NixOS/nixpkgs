@@ -16,10 +16,15 @@
 , pipInstallHook
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
+, pythonNamespacesHook
 , pythonRemoveBinBytecodeHook
+, pythonRemoveTestsDirHook
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
+, eggUnpackHook
+, eggBuildHook
+, eggInstallHook
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -105,6 +110,7 @@ let
     python
     wrapPython
     ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
+    pythonRemoveTestsDirHook
   ] ++ lib.optionals catchConflicts [
     setuptools pythonCatchConflictsHook
   ] ++ lib.optionals removeBinBytecode [
@@ -119,11 +125,16 @@ let
     pipBuildHook
   ] ++ lib.optionals (format == "wheel") [
     wheelUnpackHook
+  ] ++ lib.optionals (format == "egg") [
+    eggUnpackHook eggBuildHook eggInstallHook
   ] ++ lib.optionals (!(format == "other") || dontUsePipInstall) [
     pipInstallHook
   ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     # This is a test, however, it should be ran independent of the checkPhase and checkInputs
     pythonImportsCheckHook
+  ] ++ lib.optionals (python.pythonAtLeast "3.3") [
+    # Optionally enforce PEP420 for python3
+    pythonNamespacesHook
   ] ++ nativeBuildInputs;
 
   buildInputs = buildInputs ++ pythonPath;

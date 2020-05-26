@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl, stdenv }:
+{ lib, callPackage, fetchpatch, fetchurl, stdenv }:
 
 let
 
@@ -22,10 +22,10 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "440.44";
-      sha256_64bit = "057wq9p2vl87gy61f079b6d7clw2vhw3kq7rj411brhrnvr7shmd";
-      settingsSha256 = "1hr1n78c92zksnnryrcz4b8kxvi6kz4yp801ks85hq4a3rryj4vg";
-      persistencedSha256 = "050znx2scm7x3r7czsz77ddjh4bs18hdd3k3shwpi3zflkmnhnvj";
+      version = "440.82";
+      sha256_64bit = "13km9800skyraa0s312fc4hwyw5pzb0jfkrv1yg6anppyan1bm7d";
+      settingsSha256 = "15psxvd65wi6hmxmd2vvsp2v0m07axw613hb355nh15r1dpkr3ma";
+      persistencedSha256 = "13izz9p2kg9g38gf57g3s2sw7wshp1i9m5pzljh9v82c4c22x1fw";
     }
     else legacy_390;
 

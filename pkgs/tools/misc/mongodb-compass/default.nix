@@ -81,7 +81,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "The GUI for MongoDB";
-    homepage = https://www.mongodb.com/products/compass;
+    homepage = "https://www.mongodb.com/products/compass";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
 
   patches = stdenv.lib.attrByPath [version "patches"] [] src_info;
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   buildInputs = [ makeWrapper perl libGLU libGL xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
   propagatedBuildInputs = [ stdenv.cc ];
   NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi -lXxf86vm";
@@ -100,7 +100,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "AMD Accelerated Parallel Processing (APP) SDK, with OpenCL 1.2 support";
-    homepage = https://developer.amd.com/amd-accelerated-parallel-processing-app-sdk/;
+    homepage = "https://developer.amd.com/amd-accelerated-parallel-processing-app-sdk/";
     license = licenses.amd;
     maintainers = [ maintainers.offline ];
     platforms = [ "i686-linux" "x86_64-linux" ];

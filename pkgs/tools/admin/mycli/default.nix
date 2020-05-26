@@ -15,7 +15,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
+    paramiko pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
   ];
 
   checkInputs = [ pytest mock glibcLocales ];
@@ -34,7 +34,7 @@ buildPythonApplication rec {
       Rich command-line interface for MySQL with auto-completion and
       syntax highlighting.
     '';
-    homepage = http://mycli.net;
+    homepage = "http://mycli.net";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.jojosch ];
   };

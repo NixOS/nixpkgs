@@ -105,5 +105,7 @@ mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Phlogistique kamilchm ];
     platforms = lib.platforms.linux;
+    # sonic-pi depends on ruby 2.4 which we don't support anymore
+    broken = true;
   };
 }

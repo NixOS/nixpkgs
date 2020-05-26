@@ -13,11 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =  stdenv.lib.optional stdenv.isDarwin [ darwin.Security ];
 
-  cargoSha256 = "1hy8w73fir4wnqx7zfvfqh7s24w95x9nkw55kmizvrwf0glw9m4n";
+  cargoSha256 = "1vamwynkbnffs8ryr2zb1a41cymjvr8zzh1bifyh9hpkx2k11rs3";
 
   meta = with stdenv.lib; {
     description = "Generate documentation for Nix functions";
-    homepage    = https://github.com/tazjin/nixdoc;
+    homepage    = "https://github.com/tazjin/nixdoc";
     license     = [ licenses.gpl3 ];
     maintainers = [ maintainers.tazjin ];
     platforms   = platforms.unix;

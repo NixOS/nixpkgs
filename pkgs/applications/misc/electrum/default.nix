@@ -90,6 +90,7 @@ python3Packages.buildPythonApplication {
   '' + (if enableQt then ''
     substituteInPlace ./electrum/qrscanner.py \
       --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+    sed -i 's/qdarkstyle<2.7/qdarkstyle<3.0/' contrib/requirements/requirements.txt
   '' else ''
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');
@@ -142,7 +143,7 @@ python3Packages.buildPythonApplication {
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
-    homepage = https://electrum.org/;
+    homepage = "https://electrum.org/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ ehmry joachifm np ];

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   buildInputs = [fuse glib neon];
 
   meta = with stdenv.lib; {
-    homepage = http://noedler.de/projekte/wdfs/;
+    homepage = "http://noedler.de/projekte/wdfs/";
     license = licenses.gpl2;
     description = "User-space filesystem that allows to mount a webdav share";
     platforms = platforms.linux;

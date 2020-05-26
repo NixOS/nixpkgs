@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-     homepage = https://github.com/GoogleChromeLabs/simplehttp2server;
+     homepage = "https://github.com/GoogleChromeLabs/simplehttp2server";
      description = "HTTP/2 server for development purposes";
      license = licenses.asl20;
      maintainers = with maintainers; [ yrashk ];

@@ -398,6 +398,10 @@ rec {
     hash = "1sw32lb0y501y971ij7287796lvfhs0nfgla895r74ymfks2rcjb";
     meta.description = "OCaml bindings for RE2, Google's regular expression library";
     propagatedBuildInputs = [ core_kernel ];
+    prePatch = ''
+      substituteInPlace src/re2_c/dune --replace 'CXX=g++' 'CXX=c++'
+      substituteInPlace src/dune --replace '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2))' '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2) (-x c++))'
+    '';
   };
 
   shell = janePackage {

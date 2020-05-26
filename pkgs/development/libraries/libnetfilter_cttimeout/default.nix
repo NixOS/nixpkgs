@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       With this library, you can create, update and delete timeout policies that can
       be attached to traffic flows. This library is used by conntrack-tools.
     '';
-    homepage = https://netfilter.org/projects/libnetfilter_cttimeout/;
+    homepage = "https://netfilter.org/projects/libnetfilter_cttimeout/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
   };

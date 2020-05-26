@@ -1,4 +1,4 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper
+{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils
 , runCommand, writeText, terraform-providers }:
 
 let
@@ -17,6 +17,12 @@ let
         rev = "v${version}";
         inherit sha256;
       };
+
+      postPatch = ''
+        # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
+        substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
+          --replace "/bin/stty" "${coreutils}/bin/stty"
+      '';
 
       postInstall = ''
         # remove all plugins, they are part of the main binary now
@@ -112,8 +118,8 @@ in rec {
   terraform_0_11-full = terraform_0_11.full;
 
   terraform_0_12 = pluggable (generic {
-    version = "0.12.18";
-    sha256 = "1p2rvs9dw2rzzggf3q2lifwbd82b7xb3jpb4yz5nmggn5g22qlc1";
+    version = "0.12.24";
+    sha256 = "1rjihp6qcaizp2nnv4z20kpmjnqcw95pq5rnhq381a3pdzr0cd0z";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });

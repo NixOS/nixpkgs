@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.tcpdump.org;
+    homepage = "https://www.tcpdump.org";
     description = "Packet Capture Library";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];

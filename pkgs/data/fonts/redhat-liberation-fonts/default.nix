@@ -42,7 +42,7 @@ let
         '';
 
         license = licenses.ofl;
-        homepage = https://github.com/liberationfonts;
+        homepage = "https://github.com/liberationfonts";
         maintainers = [
           maintainers.raskin
         ];

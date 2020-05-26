@@ -69,8 +69,7 @@
       <listitem>
        <para>
         JDiskReport, a Java utility: <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/jdiskreport/default.nix"><filename>pkgs/tools/misc/jdiskreport/default.nix</filename></link> (and the <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/jdiskreport/builder.sh">builder</link>). Nixpkgs doesn’t have a decent <varname>stdenv</varname> for Java yet so this is pretty ad-hoc.
+          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/jdiskreport/default.nix"><filename>pkgs/tools/misc/jdiskreport/default.nix</filename></link>. Nixpkgs doesn’t have a decent <varname>stdenv</varname> for Java yet so this is pretty ad-hoc.
        </para>
       </listitem>
       <listitem>

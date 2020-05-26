@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.28";
+  version = "0.0.30";
 
   nativeBuildInputs = [ pytest ];
   buildInputs = [ aiohttp zigpy ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "021z5f5dm74amxkqnz4s1690ydprciqg23jz3n4mpjlxyxbdfj73";
+    sha256 = "00731a9b9c58c4e59f6765ac0cec5e2301bdda28ef19e00e2ba752be457a61b9";
   };
 
   meta = with stdenv.lib; {

@@ -6,7 +6,8 @@
 }:
 
 buildPythonPackage {
-  name = "tkinter-${python.version}";
+  pname = "tkinter";
+  version = python.version;
   src = py;
   format = "other";
 

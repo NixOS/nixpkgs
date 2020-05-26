@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The Mozilla Token Server";
-    homepage = https://github.com/mozilla-services/tokenserver;
+    homepage = "https://github.com/mozilla-services/tokenserver";
     license = licenses.mpl20;
     maintainers = with maintainers; [ nadrieril ];
   };

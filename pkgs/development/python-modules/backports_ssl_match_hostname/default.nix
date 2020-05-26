@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The Secure Sockets layer is only actually *secure*";
-    homepage = https://bitbucket.org/brandon/backports.ssl_match_hostname;
+    homepage = "https://bitbucket.org/brandon/backports.ssl_match_hostname";
     license = licenses.psfl;
   };
 }

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     standard FSK protocols such as Bell103, Bell202, RTTY, NOAA SAME, and
     Caller-ID.
     '';
-    homepage = http://www.whence.com/minimodem/;
+    homepage = "http://www.whence.com/minimodem/";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [ relrod ];

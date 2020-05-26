@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An adaptive GTK theme based on Material Design Guidelines";
-    homepage = https://github.com/adapta-project/adapta-gtk-theme;
+    homepage = "https://github.com/adapta-project/adapta-gtk-theme";
     license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

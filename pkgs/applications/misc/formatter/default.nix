@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "formatter";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Djaler";
     repo = "Formatter";
     rev = version;
-    sha256 = "1ghxd2h0pklhlrjslfr46vza1kjsm3mr0sdzzjiqi9jd6hddnk7i";
+    sha256 = "0da1dvzsvbwg1ys19yf0n080xc0hjwin9zacjndb24jvphy3bxql";
   };
 
   patches = [
@@ -60,6 +60,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A simple formatter designed for elementary OS";

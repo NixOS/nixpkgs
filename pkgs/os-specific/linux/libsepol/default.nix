@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
     "SHLIBDIR=$(out)/lib"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   passthru = { inherit se_release se_url; };
 
   meta = with stdenv.lib; {
     description = "SELinux binary policy manipulation library";
-    homepage = http://userspace.selinuxproject.org;
+    homepage = "http://userspace.selinuxproject.org";
     platforms = platforms.linux;
     maintainers = [ maintainers.phreedom ];
     license = stdenv.lib.licenses.gpl2;

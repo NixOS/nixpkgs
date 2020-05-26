@@ -45,7 +45,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/microsoft/knack;
+    homepage = "https://github.com/microsoft/knack";
     description = "A Command-Line Interface framework";
     platforms = platforms.all;
     license = licenses.mit;

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Morse code training program";
-    homepage = http://aldo.nongnu.org/;
+    homepage = "http://aldo.nongnu.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ etu ];
     platforms = platforms.linux;

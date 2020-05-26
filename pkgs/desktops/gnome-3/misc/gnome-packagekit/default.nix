@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.freedesktop.org/software/PackageKit/;
+    homepage = "https://www.freedesktop.org/software/PackageKit/";
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     description = "Tools for installing software on the GNOME desktop using PackageKit";
   };

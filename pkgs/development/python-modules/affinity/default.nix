@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "control processor affinity on windows and linux";
-    homepage    = http://cheeseshop.python.org/pypi/affinity;
+    homepage    = "http://cheeseshop.python.org/pypi/affinity";
     license     = with lib.licenses; [ psfl ];
   };
 }

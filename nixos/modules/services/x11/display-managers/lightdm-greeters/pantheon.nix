@@ -10,6 +10,10 @@ let
 
 in
 {
+  meta = {
+    maintainers = with maintainers; [ worldofpeace ];
+  };
+
   options = {
 
     services.xserver.displayManager.lightdm.greeters.pantheon = {

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to handle RPG Maker 2000/2003 and EasyRPG projects";
-    homepage = https://github.com/EasyRPG/liblcf;
+    homepage = "https://github.com/EasyRPG/liblcf";
     license = licenses.mit;
     maintainers = with maintainers; [ yegortimoshenko ];
     platforms = platforms.linux;

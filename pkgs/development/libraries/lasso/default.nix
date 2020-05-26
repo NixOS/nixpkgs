@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://lasso.entrouvert.org/;
+    homepage = "https://lasso.entrouvert.org/";
     description = "Liberty Alliance Single Sign-On library";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

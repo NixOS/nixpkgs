@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python wrapper for the GnuTLS library";
-    homepage = https://github.com/AGProjects/python-gnutls;
+    homepage = "https://github.com/AGProjects/python-gnutls";
     license = licenses.lgpl2;
   };
 

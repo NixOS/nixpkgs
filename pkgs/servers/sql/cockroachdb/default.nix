@@ -13,14 +13,16 @@ let
 in
 buildGoPackage rec {
   pname = "cockroach";
-  version = "19.1.4";
+  version = "19.1.5";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
-    sha256 = "1bqzs844ildvyh4332vapsqhfkwcvjmgkkmn3i8ndd89q5yic6fq";
+    sha256 = "1pnzzmxxb7qxiiy8qpl2sifk4qrijjbhmzy47bnjj5ssdsjjjcqy";
   };
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.cc.isGNU [ "-Wno-error=deprecated-copy" "-Wno-error=redundant-move" "-Wno-error=pessimizing-move" ];
 
   inherit nativeBuildInputs buildInputs;
 
@@ -55,7 +57,7 @@ buildGoPackage rec {
   outputs = [ "bin" "man" "out" ];
 
   meta = with stdenv.lib; {
-    homepage    = https://www.cockroachlabs.com;
+    homepage    = "https://www.cockroachlabs.com";
     description = "A scalable, survivable, strongly-consistent SQL database";
     license     = licenses.asl20;
     platforms   = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];

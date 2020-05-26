@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     ln -sf ${configOpts} ./config/config.opts'')
   ;
 
-  makeFlags = "LEX=flex";
-  installFlags = ''INSTALL=install DESTDIR=''${out}'';
+  makeFlags = [ "LEX=flex" ];
+  installFlags = [ "INSTALL=install" "DESTDIR=${placeholder "out"}" ];
   postInstall =
     lib.concatMapStrings (path: ''
       for f in : $(find ${path} -type f); do
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     '') firmware;
 
   meta = {
-    homepage = https://www.kernel.org/pub/linux/utils/kernel/pcmcia/;
+    homepage = "https://www.kernel.org/pub/linux/utils/kernel/pcmcia/";
     longDescription = "
       PCMCIAutils contains the initialization tools necessary to allow
       the PCMCIA subsystem to behave (almost) as every other

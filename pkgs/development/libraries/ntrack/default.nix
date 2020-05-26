@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig python ];
 
   # error: ISO C does not support '__FUNCTION__' predefined identifier [-Werror=pedantic]
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   configureFlags = [ "--without-gobject" "CFLAGS=--std=gnu99" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Network Connectivity Tracking library for Desktop Applications";
-    homepage = https://launchpad.net/ntrack;
+    homepage = "https://launchpad.net/ntrack";
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;
   };

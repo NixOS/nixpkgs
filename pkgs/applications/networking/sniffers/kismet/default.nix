@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Wireless network sniffer";
-    homepage = https://www.kismetwireless.net/;
+    homepage = "https://www.kismetwireless.net/";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

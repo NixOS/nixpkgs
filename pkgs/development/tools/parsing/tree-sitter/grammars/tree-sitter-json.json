@@ -1,7 +1,7 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-json",
-  "rev": "337f55be9b9b1ccb0baa7763bfe014a94acea7ea",
-  "date": "2019-05-23T11:02:26-04:00",
-  "sha256": "0amh4qrjj3fli9c0z6p61z9d7496sqq54i1gh2vrghgnbbyaa6mz",
+  "rev": "7b6a33f300e3e88c3017e0a9d88c77b50ea6d149",
+  "date": "2019-12-10T10:27:22-08:00",
+  "sha256": "17yc7spn8v64ll684634zmjq3130yxvb5bfgjwg0agcaklpx71dp",
   "fetchSubmodules": false
 }

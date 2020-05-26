@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       of the Linux kernel, so it can be used on a wide variety of supported
       network cards.
     '';
-    homepage = https://fedorahosted.org/iptraf-ng/;
+    homepage = "https://fedorahosted.org/iptraf-ng/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];

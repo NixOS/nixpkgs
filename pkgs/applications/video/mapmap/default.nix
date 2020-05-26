@@ -53,7 +53,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source video mapping software";
-    homepage = https://github.com/mapmapteam/mapmap;
+    homepage = "https://github.com/mapmapteam/mapmap";
     license = licenses.gpl3;
     maintainers = [ maintainers.erictapen ];
     platforms = platforms.linux;

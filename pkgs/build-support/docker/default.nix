@@ -315,28 +315,29 @@ rec {
     runCommand "${name}-granular-docker-layers" {
       inherit maxLayers;
       paths = referencesByPopularity overallClosure;
-      nativeBuildInputs = [ jshon rsync tarsum ];
+      nativeBuildInputs = [ jshon rsync tarsum moreutils ];
       enableParallelBuilding = true;
     }
     ''
+      mkdir layers
+
       # Delete impurities for store path layers, so they don't get
       # shared and taint other projects.
       cat ${configJson} \
         | jshon -d config \
         | jshon -s "1970-01-01T00:00:01Z" -i created > generic.json
 
-
       # WARNING!
       # The following code is fiddly w.r.t. ensuring every layer is
       # created, and that no paths are missed. If you change the
       # following head and tail call lines, double-check that your
       # code behaves properly when the number of layers equals:
-      #      maxLayers-1, maxLayers, and maxLayers+1
+      #      maxLayers-1, maxLayers, and maxLayers+1, 0
       paths() {
-        cat $paths ${lib.concatMapStringsSep " " (path: "| grep -v ${path}") (closures ++ [ overallClosure ])}
+        cat $paths ${lib.concatMapStringsSep " " (path: "| (grep -v ${path} || true)") (closures ++ [ overallClosure ])}
       }
 
-      paths | head -n $((maxLayers - 1)) | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
+      paths | head -n $((maxLayers - 1)) | cat -n | xargs -r -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
       if [ $(paths | wc -l) -ge $maxLayers ]; then
         paths | tail -n+$maxLayers | xargs ${storePathToLayer} $maxLayers
       fi
@@ -545,6 +546,9 @@ rec {
     # believe the actual maximum is 128.
     maxLayers ? 100
   }:
+    assert
+      (lib.assertMsg (maxLayers > 1)
+      "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
     let
       baseName = baseNameOf name;
       contentsEnv = symlinkJoin {
@@ -590,6 +594,8 @@ rec {
           if tag == null
           then lib.head (lib.splitString "-" (lib.last (lib.splitString "/" result)))
           else lib.toLower tag;
+        # Docker can't be made to run darwin binaries
+        meta.badPlatforms = lib.platforms.darwin;
       } ''
         ${if (tag == null) then ''
           outName="$(basename "$out")"
@@ -625,7 +631,22 @@ rec {
           -i "$imageName" > image/repositories
 
         echo "Cooking the image..."
-        tar -C image --dereference --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0  --mode=a-w --xform s:'^./':: -c . | pigz -nT > $out
+        # tar exits with an exit code of 1 if files changed while it was
+        # reading them. It considers a change in the number of hard links
+        # to be a "change", which can cause this to fail if images are being
+        # built concurrently and the auto-optimise-store nix option is turned on.
+        # Since the contents of these files will not change, we can reasonably
+        # ignore this exit code.
+        set +e
+        tar -C image --dereference --hard-dereference --sort=name \
+          --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0  \
+          --mode=a-w --xform s:'^./':: --use-compress-program='pigz -nT' \
+          --warning=no-file-changed -cf $out .
+        RET=$?
+        if [ $RET -ne 0 ] && [ $RET -ne 1 ]; then
+          exit $RET
+        fi
+        set -e
 
         echo "Finished."
       '';
@@ -705,6 +726,8 @@ rec {
         layerClosure = writeReferencesToFile layer;
         passthru.buildArgs = args;
         passthru.layer = layer;
+        # Docker can't be made to run darwin binaries
+        meta.badPlatforms = lib.platforms.darwin;
       } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"

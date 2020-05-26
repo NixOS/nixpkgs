@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "alertmanager";
-  version = "0.19.0";
+  version = "0.20.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/alertmanager";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    sha256 = "08k898x9ks5rzcmb7ps1rnxv36ynv64x8yq2ahpwmfkmv6nw1ylh";
+    sha256 = "1bq6vbpy25k7apvs2ga3fbp1cbnv9j0y1g1khvz2qgz6a2zvhgg3";
   };
 
   buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''
@@ -31,7 +31,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";
-    homepage = https://github.com/prometheus/alertmanager;
+    homepage = "https://github.com/prometheus/alertmanager";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin ];
     platforms = platforms.unix;

@@ -23,7 +23,7 @@ let
 
     meta = with stdenv.lib; {
       description= "A Qt5 library to write cross-platfrom clients for Matrix";
-      homepage = https://matrix.org/docs/projects/sdk/libqmatrixclient.html;
+      homepage = "https://matrix.org/docs/projects/sdk/libqmatrixclient.html";
       license = licenses.lgpl21;
       platforms = with platforms; linux ++ darwin;
       maintainers = with maintainers; [ peterhoeg ];

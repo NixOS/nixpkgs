@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Select a region with mouse and prints geometry information (x/y/w/h)";
-    homepage    = https://bbs.archlinux.org/viewtopic.php?pid=660837;
+    homepage    = "https://bbs.archlinux.org/viewtopic.php?pid=660837";
     maintainers = with maintainers; [ obadz ];
     platforms   = platforms.linux;
   };

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ancillary tools for the D programming language compiler";
-    homepage = https://github.com/dlang/tools;
+    homepage = "https://github.com/dlang/tools";
     license = lib.licenses.boost;
     maintainers = with maintainers; [ ThomasMader ];
     platforms = stdenv.lib.platforms.unix;

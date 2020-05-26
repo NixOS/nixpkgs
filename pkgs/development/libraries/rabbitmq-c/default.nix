@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "RabbitMQ C AMQP client library";
-    homepage = https://github.com/alanxz/rabbitmq-c;
+    homepage = "https://github.com/alanxz/rabbitmq-c";
     license = licenses.mit;
     platforms = platforms.unix;
   };

@@ -1,13 +1,17 @@
 { stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
-, python, pkgconfig, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama }:
+, python, pkgconfig, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
+, libpcap, CoreAudioKit, ForceFeedback
+, installShellFiles }:
+
+with stdenv;
 
 let
   majorVersion = "0";
-  minorVersion = "216";
+  minorVersion = "220";
 
   desktopItem = makeDesktopItem {
     name = "MAME";
-    exec = "mame${stdenv.lib.optionalString stdenv.is64bit "64"}";
+    exec = "mame${lib.optionalString stdenv.is64bit "64"}";
     desktopName = "MAME";
     genericName = "MAME is a multi-purpose emulation framework";
     categories = "System;Emulator;";
@@ -22,18 +26,27 @@ in mkDerivation {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${majorVersion}${minorVersion}";
-    sha256 = "0dmmw08pxxznvadrc51zg27jc9fjh688355w8kxkmi7k8qa367r0";
+    sha256 = "0ddmq3lagk7f1wkgybckcci4sigcqn1gzafggnnqjzq2q8viww0c";
   };
 
   hardeningDisable = [ "fortify" ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" "-Wno-error=missing-braces" ];
 
-  makeFlags = [ "TOOLS=1" ];
+  makeFlags = [
+    "TOOLS=1"
+    "USE_LIBSDL=1"
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ "CC=clang" "CXX=clang++" ]
+  ;
 
   dontWrapQtApps = true;
 
-  buildInputs = [ SDL2 SDL2_ttf alsaLib qtbase libXinerama ];
-  nativeBuildInputs = [ python pkgconfig which makeWrapper ];
+  buildInputs =
+    [ SDL2 SDL2_ttf qtbase libXinerama ]
+    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ]
+    ;
+  nativeBuildInputs = [ python pkgconfig which makeWrapper installShellFiles ];
 
   # by default MAME assumes that paths with stock resources
   # are relative and that you run MAME changing to
@@ -54,21 +67,21 @@ in mkDerivation {
     find ${dest} -maxdepth 1 -executable -type f -exec mv -t $out/bin {} \;
     install -Dm755 src/osd/sdl/taputil.sh $out/bin/taputil.sh
 
-    mkdir -p $out/share/man/man{1,6}
-    mv ${dest}/docs/man/*.1 $out/share/man/man1
-    mv ${dest}/docs/man/*.6 $out/share/man/man6
+    installManPage ${dest}/docs/man/*.1 ${dest}/docs/man/*.6
 
     mv artwork plugins samples ${dest}
-
+  '' + lib.optionalString stdenv.isLinux ''
     mkdir -p $out/share
     ln -s ${desktopItem}/share/applications $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Is a multi-purpose emulation framework";
-    homepage = https://www.mamedev.org/;
+    homepage = "https://www.mamedev.org/";
     license = with licenses; [ bsd3 gpl2Plus ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.unix;
+    # makefile needs fixes for install target
+    badPlatforms = [ "aarch64-linux" ];
     maintainers = with maintainers; [ gnidorah ];
   };
 }

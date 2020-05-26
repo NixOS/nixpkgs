@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.2.4";
+  version = "1.2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "efb53d244bbe336557bad206f9e48159661934baeb0bfe0addfadc1f69796137";
+    sha256 = "1pzgj85c6g8vr3dq215cd1y2pn8pxc6wa7mjd9m0zrglr1qwwhdz";
   };
 
   buildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An AMQP 1.0 client library for Python";
-    homepage = https://github.com/Azure/azure-uamqp-python;
+    homepage = "https://github.com/Azure/azure-uamqp-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

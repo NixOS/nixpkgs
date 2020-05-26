@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, xz }:
+{ stdenv, lib, fetchurl, autoreconfHook, xz }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./backtrace-only-with-glibc.patch ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
+  '';
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with stdenv.lib; {
-    homepage = https://www.nongnu.org/libunwind;
+    homepage = "https://www.nongnu.org/libunwind";
     description = "A portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

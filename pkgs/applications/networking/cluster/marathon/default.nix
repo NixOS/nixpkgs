@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://mesosphere.github.io/marathon;
+    homepage = "https://mesosphere.github.io/marathon";
     description = "Cluster-wide init and control system for services in cgroups or Docker containers";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kamilchm kevincox pradeepchhetri ];
+    maintainers = with maintainers; [ kamilchm pradeepchhetri ];
     platforms = platforms.linux;
   };
 }

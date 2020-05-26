@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
      description = "An evolutionary simulation framework";
-     homepage = https://messerlab.org/slim/;
+     homepage = "https://messerlab.org/slim/";
      license = with stdenv.lib.licenses; [ gpl3 ];
      maintainers = with stdenv.lib.maintainers; [ bzizou ];
      platforms = stdenv.lib.platforms.all;

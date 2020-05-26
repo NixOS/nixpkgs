@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
       sha256 = "1hnixij3jp1p6zc3bx2dr92yyf9jp1ahhl9hiiq7bkbhbrw6mbic";
     })
   ];
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+    sed '1i#include <linux/sockios.h>' -i src/dhcp.c
+  '';
 
   preBuild = ''
     makeFlagsArray=("COPTS=${copts}")
@@ -76,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";
-    homepage = http://www.thekelleys.org.uk/dnsmasq/doc.html;
+    homepage = "http://www.thekelleys.org.uk/dnsmasq/doc.html";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ eelco fpletz globin ];

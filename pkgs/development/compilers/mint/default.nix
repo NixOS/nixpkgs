@@ -1,15 +1,15 @@
-{ lib, fetchFromGitHub, crystal, zlib, openssl_1_0_2, duktape, which, libyaml }:
+{ lib, fetchFromGitHub, crystal, zlib, openssl, duktape, which, libyaml }:
 crystal.buildCrystalPackage rec {
-  version = "0.5.0";
+  version = "0.7.1";
   pname = "mint";
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
     rev = version;
-    sha256 = "0vxbx38c390rd2ysvbwgh89v2232sh5rbsp3nk9wzb70jybpslvl";
+    sha256 = "18cg96kl4dn89bj6fm3080zzyd1r7rsfi17agdjjayd2v9fgs95l";
   };
 
-  buildInputs = [ openssl_1_0_2 ];
+  buildInputs = [ openssl ];
 
   # Update with
   #   nix-shell -p crystal2nix --run crystal2nix
@@ -19,7 +19,7 @@ crystal.buildCrystalPackage rec {
 
   meta = {
     description = "A refreshing language for the front-end web";
-    homepage = https://mint-lang.com/;
+    homepage = "https://mint-lang.com/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ manveru ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];

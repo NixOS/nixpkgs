@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ELF object file access library";
 
-    homepage = https://github.com/Distrotech/libelf;
+    homepage = "https://github.com/Distrotech/libelf";
 
     license = stdenv.lib.licenses.lgpl2Plus;
 

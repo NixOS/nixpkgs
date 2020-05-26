@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
     ++ optional pulseSupport libpulseaudio
     ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
-  NIX_LDFLAGS = []
+  NIX_LDFLAGS = toString ([]
     ++ optional alsaSupport "-lasound"
-    ++ optional pulseSupport "-lpulse";
+    ++ optional pulseSupport "-lpulse");
 
   meta = {
     description = "OpenAL alternative";
-    homepage = https://kcat.strangesoft.net/openal.html;
+    homepage = "https://kcat.strangesoft.net/openal.html";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ftrvxmtrx];
     platforms = platforms.unix;

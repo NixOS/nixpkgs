@@ -1,19 +1,26 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
-  version = "1.3.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = version;
-    sha256 = "1s59ra99wcyyqz8gzly4qmcq5rh22c50c75cdi2kyajm7ghgryy9";
+    sha256 = "1fjqm4qr85wb0i3vazp0w74izfzvkycdii7dlpdp5zs8jgb35pdh";
   };
 
-  cargoSha256 = "0s4p4mpz1p5v9hr4flxlzqvc1b3zbqr3nxp1nxjw39ng9g3hplpg";
+  cargoSha256 = "1n8qh730nhdmpm08mm2ppcl3nkcgm50cyz9q5h6dlzq4bv4rijp4";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  postInstall = ''
+    installManPage man/man1/shadowenv.1
+    installManPage man/man5/shadowlisp.5
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://shopify.github.io/shadowenv/";

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A functional language for reasoning about formal systems";
-    homepage    = http://complogic.cs.mcgill.ca/beluga/;
+    homepage    = "http://complogic.cs.mcgill.ca/beluga/";
     license     = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.bcdarwin ];
     platforms   = stdenv.lib.platforms.unix;

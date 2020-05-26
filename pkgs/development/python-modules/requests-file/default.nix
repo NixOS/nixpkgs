@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests six ];
 
   meta = {
-    homepage = https://github.com/dashea/requests-file;
+    homepage = "https://github.com/dashea/requests-file";
     description = "Transport adapter for fetching file:// URLs with the requests python library";
     license = lib.licenses.asl20;
   };

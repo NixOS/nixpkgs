@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://dev.zuckschwerdt.org/openobex/;
+    homepage = "http://dev.zuckschwerdt.org/openobex/";
     description = "An open source implementation of the Object Exchange (OBEX) protocol";
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;

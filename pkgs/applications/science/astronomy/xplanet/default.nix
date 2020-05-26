@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Renders an image of the earth or other planets into the X root window";
-    homepage = http://xplanet.sourceforge.net;
+    homepage = "http://xplanet.sourceforge.net";
     license = licenses.gpl2;
     maintainers = with maintainers; [ lassulus sander ];
     platforms = platforms.all;

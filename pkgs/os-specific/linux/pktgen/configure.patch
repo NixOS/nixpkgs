@@ -1,0 +1,17 @@
+1. librte_process_info does not exist.
+2. lua5.3 library is liblua.
+3. app/meson.build uses undeclared drivers_install_subdir.
+--- a/lib/common/meson.build
++++ b/lib/common/meson.build
+@@ -34,1 +34,1 @@
+-libs = ['eal', 'kvargs', 'cmdline', 'process_info']
++libs = ['eal', 'kvargs', 'cmdline']
+--- a/lib/lua/meson.build
++++ b/lib/lua/meson.build
+@@ -31 +31 @@ endforeach
+-ext_deps += cc.find_library('lua5.3', required: true)
++ext_deps += cc.find_library('lua', required: true)
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -0,0 +1,1 @@
++option('drivers_install_subdir', type: 'string', value: '')

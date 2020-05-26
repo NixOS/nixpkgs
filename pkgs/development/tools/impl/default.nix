@@ -22,7 +22,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "impl generates method stubs for implementing an interface.";
-    homepage = https://github.com/josharian/impl;
+    homepage = "https://github.com/josharian/impl";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

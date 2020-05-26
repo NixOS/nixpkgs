@@ -15,7 +15,7 @@ build-idris-package  {
 
   meta = {
     description = "FFI-based byte buffers for Idris";
-    homepage = https://github.com/ziman/idris-bytes;
+    homepage = "https://github.com/ziman/idris-bytes";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

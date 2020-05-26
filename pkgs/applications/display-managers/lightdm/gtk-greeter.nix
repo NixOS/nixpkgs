@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=( --enable-at-spi-command="${at-spi2-core}/libexec/at-spi-bus-launcher --launch-immediately" )
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installFlags = [
     "localstatedir=\${TMPDIR}"
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   }];
 
   meta = with stdenv.lib; {
-    homepage = https://launchpad.net/lightdm-gtk-greeter;
+    homepage = "https://launchpad.net/lightdm-gtk-greeter";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ocharles ];

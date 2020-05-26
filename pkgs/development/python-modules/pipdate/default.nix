@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pipdate";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "26bd12075e63ef7f8094da36c27bf5539d298f4ef2af6acba20e98b502439d6d";
+    sha256 = "240c0f270ddb7470ad7b8c8fba4106e3dbd8817a370624fd8c32cf19155c9547";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "pip update helpers";
-    homepage = https://github.com/nschloe/pipdate;
+    homepage = "https://github.com/nschloe/pipdate";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

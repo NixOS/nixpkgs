@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Data model, library, and file format for storing and managing data";
-    homepage = https://support.hdfgroup.org/products/hdf4/;
+    homepage = "https://support.hdfgroup.org/products/hdf4/";
     maintainers = with stdenv.lib.maintainers; [ knedlsepp ];
     platforms = stdenv.lib.platforms.unix;
   };

@@ -30,7 +30,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://wkhtmltopdf.org/;
+    homepage = "https://wkhtmltopdf.org/";
     description = "Tools for rendering web pages to PDF or images";
     longDescription = ''
       wkhtmltopdf and wkhtmltoimage are open source (LGPL) command line tools

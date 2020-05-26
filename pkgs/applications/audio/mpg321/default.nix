@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   buildInputs = [libao libid3tag libmad zlib]
     ++ stdenv.lib.optional stdenv.isLinux alsaLib;
 
-  installTargets = "install install-man";
+  installTargets = [ "install" "install-man" ];
 
   meta = with stdenv.lib; {
     description = "Command-line MP3 player";
-    homepage = http://mpg321.sourceforge.net/;
+    homepage = "http://mpg321.sourceforge.net/";
     license = licenses.gpl2;
     maintainers = [ maintainers.rycee ];
     platforms = platforms.gnu ++ platforms.linux;

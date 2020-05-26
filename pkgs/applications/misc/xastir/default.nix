@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical APRS client";
-    homepage = https://xastir.org;
+    homepage = "https://xastir.org";
     license = licenses.gpl2;
     maintainers = [ maintainers.ehmry ];
     platforms   = platforms.linux;

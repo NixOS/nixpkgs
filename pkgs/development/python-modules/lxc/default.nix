@@ -21,7 +21,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Out of tree python 2.7 binding for liblxc";
-    homepage = https://github.com/lxc/python2-lxc;
+    homepage = "https://github.com/lxc/python2-lxc";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ mic92 ];
   };

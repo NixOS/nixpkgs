@@ -1,12 +1,12 @@
 diff --git a/kde-modules/KDEInstallDirs.cmake b/kde-modules/KDEInstallDirs.cmake
-index 0acd33f..c04b0a5 100644
+index c1d056b..d9e19f0 100644
 --- a/kde-modules/KDEInstallDirs.cmake
 +++ b/kde-modules/KDEInstallDirs.cmake
-@@ -236,35 +236,6 @@
+@@ -242,35 +242,6 @@
  # GNUInstallDirs code deals with re-configuring, but that is dealt with
  # by the _define_* macros in this module).
  set(_LIBDIR_DEFAULT "lib")
--# Override this default 'lib' with 'lib64' iff:
+-# Override this default 'lib' with 'lib64' if:
 -#  - we are on a Linux, kFreeBSD or Hurd system but NOT cross-compiling
 -#  - we are NOT on debian
 -#  - we are NOT on flatpak

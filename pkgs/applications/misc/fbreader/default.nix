@@ -59,13 +59,13 @@ stdenv.mkDerivation {
   ++ optional (uiType == "gtk") gtk2
   ++ optionals (uiType == "cocoa") [ AppKit Cocoa ];
 
-  makeFlags = "INSTALLDIR=$(out)";
+  makeFlags = [ "INSTALLDIR=$(out)" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=narrowing" ]; # since gcc-6
+  NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
 
   meta = with stdenv.lib; {
     description = "An e-book reader for Linux";
-    homepage = http://www.fbreader.org/;
+    homepage = "http://www.fbreader.org/";
     license = licenses.gpl3;
     broken = stdenv.isDarwin  # untested, might work
           || uiType == "gtk"; # builds, but the result is unusable, hangs a lot

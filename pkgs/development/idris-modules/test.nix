@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Testing Utilities for Idris programs";
-    homepage = https://github.com/jfdm/idris-testing;
+    homepage = "https://github.com/jfdm/idris-testing";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

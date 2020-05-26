@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       that they properly report the MChanger bit as required by the SCSI T-10 SMC
       specification.
     '';
-    homepage = https://sourceforge.net/projects/mtx/;
+    homepage = "https://sourceforge.net/projects/mtx/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.redvers ];
     platforms = stdenv.lib.platforms.linux;

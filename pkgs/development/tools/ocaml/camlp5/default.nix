@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
 
-  name = "camlp5-7.10";
+  name = "camlp5-7.11";
 
   src = fetchzip {
-    url = "https://github.com/camlp5/camlp5/archive/rel710.tar.gz";
-    sha256 = "1a1lgsc8350afdwmsznsys7m0c0cks4nw6irqz2f92g8g4vkk9b7";
+    url = "https://github.com/camlp5/camlp5/archive/rel711.tar.gz";
+    sha256 = "1s1f9i0r0czxlbnsaz4kvs2ahknmqxcm5ypl75g7scjcbl0an2x4";
   };
 
   buildInputs = [ ocaml ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   preConfigure = "configureFlagsArray=(--strict" +
                   " --libdir $out/lib/ocaml/${ocaml.version}/site-lib)";
 
-  buildFlags = "world.opt";
+  buildFlags = [ "world.opt" ];
 
   dontStrip = true;
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       Camlp5 is a preprocessor and pretty-printer for OCaml programs.
       It also provides parsing and printing tools.
     '';
-    homepage = https://camlp5.github.io/;
+    homepage = "https://camlp5.github.io/";
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [

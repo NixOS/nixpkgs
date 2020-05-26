@@ -27,7 +27,7 @@ in
       ExecStart = ''
         ${pkgs.prometheus-json-exporter}/bin/prometheus-json-exporter \
           --port ${toString cfg.port} \
-          ${cfg.url} ${cfg.configFile} \
+          ${cfg.url} ${escapeShellArg cfg.configFile} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

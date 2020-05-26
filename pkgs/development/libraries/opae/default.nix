@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=format-truncation"
+    "-Wno-error=address-of-packed-member"
+  ];
+
   nativeBuildInputs = [ cmake doxygen perl python2Packages.sphinx ];
   buildInputs = [ libuuid json_c python2 ];
 
@@ -36,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open Programmable Acceleration Engine SDK";
-    homepage    = https://01.org/opae;
+    homepage    = "https://01.org/opae";
     license     = licenses.bsd3;
     platforms   = [ "x86_64-linux" ];
     maintainers = with maintainers; [ thoughtpolice ];

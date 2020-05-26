@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Tools for Beam IO and Manipulation";
-    homepage = http://radio-astro-tools.github.io;
+    homepage = "http://radio-astro-tools.github.io";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ smaret ];

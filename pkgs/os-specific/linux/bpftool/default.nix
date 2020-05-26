@@ -1,15 +1,19 @@
 { stdenv
 , libopcodes, libbfd, libelf
-, linuxPackages_latest
+, linuxPackages_latest, zlib
+, python3
 }:
 
 stdenv.mkDerivation {
   pname = "bpftool";
   inherit (linuxPackages_latest.kernel) version src;
 
-  buildInputs = [ libopcodes libbfd libelf ];
+  nativeBuildInputs = [ python3 ];
+  buildInputs = [ libopcodes libbfd libelf zlib ];
 
   preConfigure = ''
+    patchShebangs scripts/bpf_helpers_doc.py
+
     cd tools/bpf/bpftool
     substituteInPlace ./Makefile \
       --replace '/usr/local' "$out" \

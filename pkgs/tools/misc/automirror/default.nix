@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ git ronn ];
 
-  installFlags = "DESTDIR=$(out)";
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/schlomo/automirror;
+    homepage = "https://github.com/schlomo/automirror";
     description = "Automatic Display Mirror";
     license = licenses.gpl3;
     platforms = platforms.all;

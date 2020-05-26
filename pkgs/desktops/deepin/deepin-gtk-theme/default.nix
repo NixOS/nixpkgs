@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Deepin GTK Theme";
-    homepage = https://github.com/linuxdeepin/deepin-gtk-theme;
+    homepage = "https://github.com/linuxdeepin/deepin-gtk-theme";
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionals (!enableCairo) [ "--disable-x11" "--disable-cairo" ];
 
   meta = with stdenv.lib; {
-    homepage = http://duc.zevv.nl/;
+    homepage = "http://duc.zevv.nl/";
     description = "Collection of tools for inspecting and visualizing disk usage";
     license = licenses.gpl2;
 

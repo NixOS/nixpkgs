@@ -1,7 +1,7 @@
-diff --git a/go/internal/config/config.go b/go/internal/config/config.go
+diff --git a/internal/config/config.go b/internal/config/config.go
 index 2231851..c869930 100644
---- a/go/internal/config/config.go
-+++ b/go/internal/config/config.go
+--- a/internal/config/config.go
++++ b/internal/config/config.go
 @@ -3,7 +3,6 @@ package config
  import (
  	"io/ioutil"
@@ -29,10 +29,10 @@ index 2231851..c869930 100644
  }
  
  func newFromFile(filename string) (*Config, error) {
-diff --git a/go/internal/keyline/key_line.go b/go/internal/keyline/key_line.go
-index f92f50b..160e287 100644
---- a/go/internal/keyline/key_line.go
-+++ b/go/internal/keyline/key_line.go
+diff --git a/internal/keyline/key_line.go b/internal/keyline/key_line.go
+index c29a320..c44b701 100644
+--- a/internal/keyline/key_line.go
++++ b/internal/keyline/key_line.go
 @@ -36,7 +36,7 @@ func NewPrincipalKeyLine(keyId string, principal string, rootDir string) (*KeyLi
  }
  
@@ -43,10 +43,10 @@ index f92f50b..160e287 100644
  	return fmt.Sprintf(`command="%s",%s %s`, command, SshOptions, k.Value)
  }
 diff --git a/support/gitlab_config.rb b/support/gitlab_config.rb
-index 1416488..90a5f79 100644
+index 52ac5ee..d96baa3 100644
 --- a/support/gitlab_config.rb
 +++ b/support/gitlab_config.rb
-@@ -4,7 +4,7 @@ class GitlabConfig
+@@ -7,7 +7,7 @@ class GitlabConfig
    attr_reader :config
  
    def initialize

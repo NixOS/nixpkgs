@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "MS-Word/Excel/PowerPoint to text converter";
     platforms = platforms.all;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ndowens ];
+    maintainers = with maintainers; [];
   };
 }

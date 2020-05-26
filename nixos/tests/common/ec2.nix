@@ -25,7 +25,7 @@ with pkgs.lib;
           my $imageDir = ($ENV{'TMPDIR'} // "/tmp") . "/vm-state-machine";
           mkdir $imageDir, 0700;
           my $diskImage = "$imageDir/machine.qcow2";
-          system("qemu-img create -f qcow2 -o backing_file=${image}/nixos.qcow2 $diskImage") == 0 or die;
+          system("qemu-img create -f qcow2 -o backing_file=${image} $diskImage") == 0 or die;
           system("qemu-img resize $diskImage 10G") == 0 or die;
 
           # Note: we use net=169.0.0.0/8 rather than
@@ -35,7 +35,7 @@ with pkgs.lib;
           # again when it deletes link-local addresses.) Ideally we'd
           # turn off the DHCP server, but qemu does not have an option
           # to do that.
-          my $startCommand = "qemu-kvm -m 768";
+          my $startCommand = "qemu-kvm -m 1024";
           $startCommand .= " -device virtio-net-pci,netdev=vlan0";
           $startCommand .= " -netdev 'user,id=vlan0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd ${metaData}'";
           $startCommand .= " -drive file=$diskImage,if=virtio,werror=report";

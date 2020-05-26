@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "schroedinger-1.0.11";
 
   src = fetchurl {
-    url = https://download.videolan.org/contrib/schroedinger-1.0.11.tar.gz;
+    url = "https://download.videolan.org/contrib/schroedinger-1.0.11.tar.gz";
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   doCheck = (!stdenv.isDarwin);
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   patches = [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/macports/macports-ports/master/multimedia/schroedinger/files/patch-testsuite-Makefile.am.diff";

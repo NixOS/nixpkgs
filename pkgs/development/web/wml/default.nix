@@ -53,7 +53,7 @@ perlPackages.buildPerlPackage {
 
   enableParallelBuilding = false;
 
-  installTargets = "install";
+  installTargets = [ "install" ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.shlomifish.org/open-source/projects/website-meta-language/";

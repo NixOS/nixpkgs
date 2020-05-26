@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.libtom.net/LibTomMath/;
+    homepage = "https://www.libtom.net/LibTomMath/";
     description = "A library for integer-based number-theoretic applications";
     license = with licenses; [ publicDomain wtfpl ];
     platforms = platforms.unix;

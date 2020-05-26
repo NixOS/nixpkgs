@@ -7,18 +7,18 @@
 , coreutils
 , docutils
 , readline
+, openssl
 , python3Packages
-, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.2";
+  version = "1.6";
 
   src = fetchgit {
-    url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
+    url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "10fwi31ym6hvn0vvh9fy0swzs3mfnpcwg95np4i5ksmw8k0kj0hf";
+    sha256 = "0c38c7a234cwdd5y1brq4w56xszs8zlp57rr3nvgp8z8djcy1qvx";
   };
 
   nativeBuildInputs = [
@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
     ell
     python3Packages.python
     readline
-    systemd
   ];
+
+  checkInputs = [ openssl ];
 
   pythonPath = [
     python3Packages.dbus-python
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     patchShebangs .
   '';
+
+  doCheck = true;
 
   postInstall = ''
     cp -a test/* $out/bin/
@@ -76,7 +79,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
+    homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21;
     platforms = platforms.linux;

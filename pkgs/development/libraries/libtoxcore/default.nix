@@ -33,9 +33,15 @@ let
     doCheck = false; # hangs, tries to access the net?
     checkInputs = [ check ];
 
+    postFixup =''
+      sed -i $out/lib/pkgconfig/*.pc \
+        -e "s|^libdir=.*|libdir=$out/lib|" \
+        -e "s|^includedir=.*|includedir=$out/include|"
+    '';
+
     meta = with stdenv.lib; {
       description = "P2P FOSS instant messaging application aimed to replace Skype";
-      homepage = https://tox.chat;
+      homepage = "https://tox.chat";
       license = licenses.gpl3Plus;
       maintainers = with maintainers; [ peterhoeg ];
       platforms = platforms.all;

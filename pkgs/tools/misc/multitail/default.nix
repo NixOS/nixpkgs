@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  makeFlags = stdenv.lib.optionalString stdenv.isDarwin "-f makefile.macosx";
+  makeFlags = stdenv.lib.optionals stdenv.isDarwin [ "-f" "makefile.macosx" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.vanheusden.com/multitail/;
+    homepage = "http://www.vanheusden.com/multitail/";
     description = "tail on Steroids";
     maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
     platforms = stdenv.lib.platforms.unix;

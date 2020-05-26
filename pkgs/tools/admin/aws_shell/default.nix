@@ -23,6 +23,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+     --replace "prompt-toolkit>=1.0.0,<1.1.0" "prompt-toolkit"
+  '';
+
   #Checks are failing due to missing TTY, which won't exist.
   doCheck = false;
   preCheck = ''
@@ -31,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/awslabs/aws-shell;
+    homepage = "https://github.com/awslabs/aws-shell";
     description = "An integrated shell for working with the AWS CLI";
     license = licenses.asl20;
     maintainers = [ ];

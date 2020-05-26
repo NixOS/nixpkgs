@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A self-contained cryptographic library for Python";
-    homepage = https://www.pycryptodome.org;
+    homepage = "https://www.pycryptodome.org";
     license = lib.licenses.bsd2;
   };
 

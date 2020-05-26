@@ -3,36 +3,43 @@
 let params =
   {
     "8.7" = {
-      version = "1.1.1+coq8.7";
-      sha256 = "1i7b5pkx46zf9il2xikbp3rhpnh3wdfbhw5yxcf9yk28ky9s0a0l";
+      sha256 = "09n0ky7ldb24by7yf5j3hv410h85x50ksilf7qacl7xglj4gy5hj";
+      buildInputs = [ coq.ocamlPackages.camlp5 ];
     };
     "8.8" = {
-      version = "1.1.1";
-      sha256 = "0b07zvgm9cx6j2d9631zmqjs6sf30kiqg6k15xk3km7n80d53wfh";
+      sha256 = "0rc4lshqvnfdsph98gnscvpmlirs9wx91qcvffggg73xw0p1g9s0";
+      buildInputs = [ coq.ocamlPackages.camlp5 ];
     };
     "8.9" = {
-      version = "1.1.1+coq8.9";
-      sha256 = "002xabhjlph394vydw3dx8ipv5ry2nq3py4440bk9a18ljx0w6ll";
+      sha256 = "1jjzgpff09xjn9kgp7w69r096jkj0x2ksng3pawrmhmn7clwivbk";
+      buildInputs = [ coq.ocamlPackages.camlp5 ];
+    };
+    "8.10" = {
+      sha256 = "1lq1mw15w4yky79qg3rm0mpzqi2ir51b6ak04ismrdr7ixky49y8";
+    };
+    "8.11" = {
+      sha256 = "09c6813988nvq4fpa45s33k70plnhxsblhm7cxxkg0i37mhvigsa";
     };
   };
   param = params.${coq.coq-version};
 in
 
 stdenv.mkDerivation rec {
-  inherit (param) version;
+  version = "1.1.2";
   name = "coq${coq.coq-version}-paramcoq-${version}";
   src = fetchFromGitHub {
     owner = "coq-community";
     repo = "paramcoq";
-    rev = "v${version}";
+    rev = "v${version}+coq${coq.coq-version}";
     inherit (param) sha256;
   };
 
   buildInputs = [ coq ]
-  ++ (with coq.ocamlPackages; [ ocaml findlib camlp5 ])
+  ++ (with coq.ocamlPackages; [ ocaml findlib ])
+  ++ (param.buildInputs or [])
   ;
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   passthru = {
     compatibleCoqVersions = v: builtins.hasAttr v params;

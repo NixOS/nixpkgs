@@ -21,7 +21,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    homepage = https://golang.org;
+    homepage = "https://golang.org";
     description = "Linter for Go source code";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jhillyerd ];

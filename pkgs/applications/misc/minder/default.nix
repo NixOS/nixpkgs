@@ -2,22 +2,23 @@
 , pkgconfig, meson, ninja, python3
 , wrapGAppsHook, vala, shared-mime-info
 , cairo, pantheon, glib, gtk3, libxml2, libgee, libarchive
+, discount, gtksourceview3
 , hicolor-icon-theme # for setup-hook
 }:
 
 stdenv.mkDerivation rec {
   pname = "minder";
-  version = "1.5.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = pname;
     rev = version;
-    sha256 = "1z3if8bbiigb3m5py641y0j8d9z0s6kbb325waxbqs240pcxipml";
+    sha256 = "0pfp0dglj2ig2p1h000137dxw777mjvzzqj3gcnbxjxqz3m6fzc0";
   };
 
   nativeBuildInputs = [ pkgconfig meson ninja python3 wrapGAppsHook vala shared-mime-info ];
-  buildInputs = [ cairo pantheon.granite glib gtk3 libxml2 libgee libarchive hicolor-icon-theme ];
+  buildInputs = [ cairo pantheon.granite glib gtk3 libxml2 libgee libarchive hicolor-icon-theme discount gtksourceview3 ];
 
   postPatch = ''
     chmod +x meson/post_install.py

@@ -62,8 +62,8 @@ in stdenv.mkDerivation rec {
       ACL2 have been removed because it is not currently possible to
       build them with Nix.
     '';
-    homepage = http://www.cs.utexas.edu/users/moore/acl2/;
-    downloadPage = https://github.com/acl2-devel/acl2-devel/releases;
+    homepage = "http://www.cs.utexas.edu/users/moore/acl2/";
+    downloadPage = "https://github.com/acl2-devel/acl2-devel/releases";
     # There are a bunch of licenses in the community books, but since
     # they currently get deleted during the build, we don't mention
     # their licenses here.  ACL2 proper is released under a BSD

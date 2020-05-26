@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A more featureful runner for sbt, the simple/scala/standard build tool";
-    homepage = https://github.com/paulp/sbt-extras;
+    homepage = "https://github.com/paulp/sbt-extras";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     platforms = stdenv.lib.platforms.unix;

@@ -21,11 +21,14 @@ mkDerivation {
 
   cmakeFlags = [
     "-DDISABLE_FRONTEND=${if enableGUI then "OFF" else "ON"}"
+    "-DLIBUSB_LIBRARY=${libusb1}"
   ];
 
   preConfigure = ''
     # Give ownership of the Galaxy S USB device to the logged in user.
     substituteInPlace heimdall/60-heimdall.rules --replace 'MODE="0666"' 'TAG+="uaccess"'
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
   '';
 
   installPhase = ''
@@ -39,7 +42,7 @@ mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage    = http://www.glassechidna.com.au/products/heimdall/;
+    homepage    = "http://www.glassechidna.com.au/products/heimdall/";
     description = "A cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

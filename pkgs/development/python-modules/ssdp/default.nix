@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = !isPy27;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/codingjoe/ssdp;
+    homepage = "https://github.com/codingjoe/ssdp";
     description = "Python asyncio library for Simple Service Discovery Protocol (SSDP).";
     license = licenses.mit;
   };

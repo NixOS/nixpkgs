@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python re-implementation of the Rails routes system for mapping URLs to application actions";
-    homepage = http://routes.groovie.org/;
+    homepage = "http://routes.groovie.org/";
     license = licenses.mit;
   };
 

@@ -26,10 +26,8 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
-  postInstall = lib.optionalString isPy3k ''
-    rm $out/${python.sitePackages}/azure/__init__.py
-    rm $out/${python.sitePackages}/azure/mgmt/__init__.py
-  '';
+  # this is still needed for when the version is overrided
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # has no tests
   doCheck = false;

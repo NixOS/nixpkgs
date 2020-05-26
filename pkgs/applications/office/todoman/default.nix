@@ -1,4 +1,4 @@
-{ stdenv, python3, glibcLocales }:
+{ stdenv, python3, glibcLocales, installShellFiles, jq }:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
@@ -17,6 +17,7 @@ buildPythonApplication rec {
     LANG = "en_US.UTF-8";
     LC_TYPE = "en_US.UTF-8";
 
+  nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ glibcLocales ];
   propagatedBuildInputs = with python3.pkgs;
     [ atomicwrites click click-log click-repl configobj humanize icalendar parsedatetime
@@ -28,6 +29,12 @@ buildPythonApplication rec {
   makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
                       "--set CHARSET en_us.UTF-8" ];
 
+  postInstall = ''
+    installShellCompletion --bash contrib/completion/bash/_todo
+    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${jq}/bin/jq "
+    installShellCompletion --zsh contrib/completion/zsh/_todo
+  '';
+
   preCheck = ''
     # Remove one failing test that only checks whether the command line works
     rm tests/test_main.py
@@ -35,7 +42,7 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pimutils/todoman;
+    homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
       Todoman is a simple, standards-based, cli todo (aka: task) manager. Todos

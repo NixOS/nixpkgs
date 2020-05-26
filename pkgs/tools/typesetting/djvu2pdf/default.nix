@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Convert DjVu files to PDF files";
-    homepage = https://0x2a.at/s/projects/djvu2pdf;
+    homepage = "https://0x2a.at/s/projects/djvu2pdf";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
     inherit version;

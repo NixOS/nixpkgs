@@ -27,7 +27,7 @@ stdenv.mkDerivation {
       CTorrent, a BitTorrent client implemented in C++, with bugfixes and
       performance enhancements.
     '';
-    homepage = http://www.rahul.net/dholmes/ctorrent/;
+    homepage = "http://www.rahul.net/dholmes/ctorrent/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.devhell ];

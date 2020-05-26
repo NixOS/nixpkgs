@@ -1,7 +1,7 @@
-{ buildPythonApplication, lib, fetchFromGitHub
+{ buildPythonApplication, lib, fetchFromGitHub, fetchpatch
 , wrapGAppsHook, gobject-introspection, gnome-desktop, libnotify, libgnome-keyring, pango
 , gdk-pixbuf, atk, webkitgtk, gst_all_1
-, evdev, pyyaml, pygobject3, requests, pillow
+, dbus-python, evdev, pyyaml, pygobject3, requests, pillow
 , xrandr, pciutils, psmisc, glxinfo, vulkan-tools, xboxdrv, pulseaudio, p7zip, xgamma
 , libstrangle, wine, fluidsynth, xorgserver
 }:
@@ -31,13 +31,13 @@ let
 
 in buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    sha256 = "0n6xa3pnwvsvfipinrkbhxwjzfbw2cjpc9igv97nffcmpydmn5xv";
+    sha256 = "1g093g0difnkjmnm91p20issdsxn9ri4c56zzddj5wfrbmhwdfag";
   };
 
   buildInputs = [
@@ -50,7 +50,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    evdev pyyaml pygobject3 requests pillow
+    evdev pyyaml pygobject3 requests pillow dbus-python
   ];
 
   preCheck = "export HOME=$PWD";
@@ -63,4 +63,3 @@ in buildPythonApplication rec {
     platforms = platforms.linux;
   };
 }
-

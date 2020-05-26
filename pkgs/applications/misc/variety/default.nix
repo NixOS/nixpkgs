@@ -66,7 +66,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A wallpaper manager for Linux systems. It supports numerous desktops and wallpaper sources, including local files and online services: Flickr, Wallhaven, Unsplash, and more";
-    homepage = https://github.com/varietywalls/variety;
+    homepage = "https://github.com/varietywalls/variety";
     license = licenses.gpl3;
     maintainers = [ maintainers.zfnmxt ];
   };

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "The libfreefare project aims to provide a convenient API for MIFARE card manipulations";
     license = licenses.lgpl3;
-    homepage = https://github.com/nfc-tools/libfreefare;
+    homepage = "https://github.com/nfc-tools/libfreefare";
     maintainers = with maintainers; [bobvanderlinden];
     platforms = platforms.unix;
   };

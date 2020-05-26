@@ -3,7 +3,7 @@ import ../make-test-python.nix ({ lib, ... }:
 {
   name = "initrd-network-ssh";
   meta = with lib.maintainers; {
-    maintainers = [ willibutz ];
+    maintainers = [ willibutz emily ];
   };
 
   nodes = with lib; {
@@ -17,9 +17,9 @@ import ../make-test-python.nix ({ lib, ... }:
           enable = true;
           ssh = {
             enable = true;
-            authorizedKeys = [ "${readFile ./openssh.pub}" ];
+            authorizedKeys = [ (readFile ./id_ed25519.pub) ];
             port = 22;
-            hostRSAKey = ./dropbear.priv;
+            hostKeys = [ ./ssh_host_ed25519_key ];
           };
         };
         boot.initrd.preLVMCommands = ''
@@ -42,11 +42,11 @@ import ../make-test-python.nix ({ lib, ... }:
               "${toString (head (splitString " " (
                 toString (elemAt (splitString "\n" config.networking.extraHosts) 2)
               )))} "
-              "${readFile ./dropbear.pub}"
+              "${readFile ./ssh_host_ed25519_key.pub}"
             ];
           };
           sshKey = {
-            source = ./openssh.priv; # dont use this anywhere else
+            source = ./id_ed25519;
             mode = "0600";
           };
         };
@@ -56,7 +56,17 @@ import ../make-test-python.nix ({ lib, ... }:
   testScript = ''
     start_all()
     client.wait_for_unit("network.target")
-    client.wait_until_succeeds("ping -c 1 server")
+
+
+    def ssh_is_up(_) -> bool:
+        status, _ = client.execute("nc -z server 22")
+        return status == 0
+
+
+    with client.nested("waiting for SSH server to come up"):
+        retry(ssh_is_up)
+
+
     client.succeed(
         "ssh -i /etc/sshKey -o UserKnownHostsFile=/etc/knownHosts server 'touch /fnord'"
     )

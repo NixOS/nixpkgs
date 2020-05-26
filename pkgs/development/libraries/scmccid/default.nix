@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.scmmicro.com/support/pc-security-support/downloads.html;
+    homepage = "http://www.scmmicro.com/support/pc-security-support/downloads.html";
     description = "PCSC drivers for linux, for the SCM SCR3310 v2.0 card and others";
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [viric];

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Parser Generator for Python";
-    homepage = https://pypi.python.org/pypi/SimpleParse;
+    homepage = "https://pypi.python.org/pypi/SimpleParse";
     license = licenses.bsd0;
   };
 

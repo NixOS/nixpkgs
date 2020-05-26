@@ -34,7 +34,7 @@ in buildEnv {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://frogatto.com;
+    homepage = "https://frogatto.com";
     description = description;
     license = with licenses; [ cc-by-30 unfree ];
     platforms = platforms.linux;

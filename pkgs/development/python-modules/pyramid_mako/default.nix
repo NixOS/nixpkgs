@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyramid Mako ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Pylons/pyramid_mako;
+    homepage = "https://github.com/Pylons/pyramid_mako";
     description = "Mako template bindings for the Pyramid web framework";
     license = licenses.bsd0;
   };

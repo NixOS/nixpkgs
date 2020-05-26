@@ -112,9 +112,8 @@ in
 
   config = mkIf config.services.ircdHybrid.enable {
 
-    users.users = singleton
-      { name = "ircd";
-        description = "IRCD owner";
+    users.users.ircd =
+      { description = "IRCD owner";
         group = "ircd";
         uid = config.ids.uids.ircd;
       };

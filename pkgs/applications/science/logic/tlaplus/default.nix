@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An algorithm specification language with model checking tools";
-    homepage    = http://lamport.azurewebsites.net/tla/tla.html;
+    homepage    = "http://lamport.azurewebsites.net/tla/tla.html";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Deepin sound theme";
-    homepage = https://github.com/linuxdeepin/deepin-sound-theme;
+    homepage = "https://github.com/linuxdeepin/deepin-sound-theme";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

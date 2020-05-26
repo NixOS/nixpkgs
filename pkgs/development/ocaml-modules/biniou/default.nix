@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "biniou";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
-    owner = "mjambon";
+    owner = "ocaml-community";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0mjpgwyfq2b2izjw0flmlpvdjgqpq8shs89hxj1np2r50csr8dcb";
+    rev = version;
+    sha256 = "0x2kiy809n1j0yf32l7hj102y628jp5jdrkbi3z7ld8jq04h1790";
   };
 
   propagatedBuildInputs = [ easy-format ];

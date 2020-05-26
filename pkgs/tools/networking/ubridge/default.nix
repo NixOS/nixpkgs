@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ubridge";
-  version = "0.9.16";
+  version = "0.9.18";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "ubridge";
     rev = "v${version}";
-    sha256 = "1bind7ylgxs743vfdmpdrpp4iamy461bc3i7nxza91kj7hyyjz6h";
+    sha256 = "0jg66jhhpv4c9340fsdp64hf9h253i8r81fknxa0gq241ripp3jn";
   };
 
   postPatch = ''
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
       and TAP interfaces is supported. Packet capture is also supported.
     '';
     inherit (src.meta) homepage;
+    changelog = "https://github.com/GNS3/ubridge/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

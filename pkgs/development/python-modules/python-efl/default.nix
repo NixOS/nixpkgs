@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python bindings for EFL and Elementary";
-    homepage = https://phab.enlightenment.org/w/projects/python_bindings_for_efl/;
+    homepage = "https://phab.enlightenment.org/w/projects/python_bindings_for_efl/";
     platforms = platforms.linux;
     license = with licenses; [ gpl3 lgpl3 ];
     maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];

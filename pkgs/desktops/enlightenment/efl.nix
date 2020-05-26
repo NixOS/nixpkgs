@@ -123,12 +123,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     # allow ecore_con to find libcurl.so, which is a runtime dependency (it is dlopened)
-    export LD_LIBRARY_PATH="${curl.out}/lib:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="${curl.out}/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
 
     source "$setupHook"
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
   postInstall = ''
     # fix use of $out variable
@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Enlightenment foundation libraries";
-    homepage = https://enlightenment.org/;
+    homepage = "https://enlightenment.org/";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];

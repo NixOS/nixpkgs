@@ -9,18 +9,24 @@ assert ncursesSupport -> ncurses != null;
 assert waylandSupport -> wayland != null;
 assert x11Support -> xlibs != null && xorg != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bemenu";
-  version = "0.1.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
-    repo = "bemenu";
-    rev = "33e540a2b04ce78f5c7ab4a60b899c67f586cc32";
-    sha256 = "11h55m9dx6ai12pqij52ydjm36dvrcc856pa834njihrp626pl4w";
+    repo = pname;
+    rev = version;
+    sha256 = "03k8wijdgj5nwmvgjhsrlh918n719789fhs4dqm23pd00rapxipk";
   };
 
   nativeBuildInputs = [ cmake pkgconfig pcre ];
+
+  cmakeFlags =  [
+    "-DBEMENU_CURSES_RENDERER=${if ncursesSupport then "ON" else "OFF"}"
+    "-DBEMENU_WAYLAND_RENDERER=${if waylandSupport then "ON" else "OFF"}"
+    "-DBEMENU_X11_RENDERER=${if x11Support then "ON" else "OFF"}"
+  ];
 
   buildInputs = with stdenv.lib; [
     cairo

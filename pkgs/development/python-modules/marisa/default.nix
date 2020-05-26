@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python binding for marisa package (do not confuse with marisa-trie python bindings)";
-    homepage    = https://github.com/s-yata/marisa-trie;
+    homepage    = "https://github.com/s-yata/marisa-trie";
     license     = with licenses; [ bsd2 lgpl2 ];
     maintainers = with maintainers; [ vanzef ];
   };

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/flyingcircus/pycountry;
+    homepage = "https://bitbucket.org/flyingcircus/pycountry";
     description = "ISO country, subdivision, language, currency and script definitions and their translations";
     license = licenses.lgpl2;
   };

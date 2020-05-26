@@ -1,24 +1,41 @@
-{ stdenv, lib, python3Packages, fetchFromGitHub
-, withGui ? false, wrapQtAppsHook ? null }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3
+, withGui ? false
+, wrapQtAppsHook ? null
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "maestral${lib.optionalString withGui "-gui"}";
-  version = "0.4.2";
+  version = "0.6.3";
+
+  disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-dropbox";
     rev = "v${version}";
-    sha256 = "0xis0cqfp3wgajwk44dmi2gbfirmz0a0zi25qxdzpdn0z19hp88m";
+    sha256 = "0h1vbx00mps2msdhsab1yz64c8sprwrg38nkqyj86mkb6jkirq92";
   };
 
-  disabled = python3Packages.pythonOlder "3.6";
-
-  propagatedBuildInputs = (with python3Packages; [
-    blinker click dropbox keyring keyrings-alt Pyro4 requests u-msgpack-python watchdog
+  propagatedBuildInputs = with python3.pkgs; [
+    blinker
+    bugsnag
+    click
+    dropbox
+    keyring
+    keyrings-alt
+    lockfile
+    pathspec
+    Pyro5
+    requests
+    u-msgpack-python
+    watchdog
   ] ++ lib.optionals stdenv.isLinux [
-    sdnotify systemd
-  ] ++ lib.optional withGui pyqt5);
+    sdnotify
+    systemd
+  ] ++ lib.optional withGui pyqt5;
 
   nativeBuildInputs = lib.optional withGui wrapQtAppsHook;
 

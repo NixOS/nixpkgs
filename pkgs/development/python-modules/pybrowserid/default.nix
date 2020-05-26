@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library for the BrowserID Protocol";
-    homepage    = https://github.com/mozilla/PyBrowserID;
+    homepage    = "https://github.com/mozilla/PyBrowserID";
     license     = licenses.mpl20;
     maintainers = with maintainers; [ worldofpeace ];
   };

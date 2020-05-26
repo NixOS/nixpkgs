@@ -16,10 +16,10 @@ assert vorbisSupport -> vorbisTools != null;
 
 let
   zeroconf = pythonPackages.callPackage ./zeroconf.nix { };
-
-in pythonPackages.buildPythonApplication {
+in
+pythonPackages.buildPythonApplication {
   pname = "pulseaudio-dlna";
-  version = "2017-11-01";
+  version = "unstable-2017-11-01";
 
   src = fetchFromGitHub {
     owner = "masmu";
@@ -28,12 +28,9 @@ in pythonPackages.buildPythonApplication {
     sha256 = "1dfn7036vrq49kxv4an7rayypnm5dlawsf02pfsldw877hzdamqk";
   };
 
-  # pulseaudio-dlna has no tests
-  doCheck = false;
-
   propagatedBuildInputs = with pythonPackages; [
     dbus-python docopt requests setproctitle protobuf psutil futures
-    chardet notify2 netifaces pyroute2 pygobject2 lxml ]
+    chardet notify2 netifaces pyroute2 pygobject2 lxml setuptools ]
     ++ [ zeroconf ]
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional opusSupport opusTools
@@ -42,12 +39,15 @@ in pythonPackages.buildPythonApplication {
     ++ stdenv.lib.optional soxSupport sox
     ++ stdenv.lib.optional vorbisSupport vorbisTools;
 
+  # upstream has no tests
+  checkPhase = ''
+    $out/bin/pulseaudio-dlna --help > /dev/null
+  '';
+
   meta = with stdenv.lib; {
     description = "A lightweight streaming server which brings DLNA / UPNP and Chromecast support to PulseAudio and Linux";
-    homepage = https://github.com/masmu/pulseaudio-dlna;
-
+    homepage = "https://github.com/masmu/pulseaudio-dlna";
     license = licenses.gpl3Plus;
-
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;
   };

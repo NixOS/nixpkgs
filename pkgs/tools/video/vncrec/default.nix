@@ -22,11 +22,11 @@ stdenv.mkDerivation {
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/share/man"
   ];
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = {
     description = "VNC recorder";
-    homepage = http://ronja.twibright.com/utils/vncrec/;
+    homepage = "http://ronja.twibright.com/utils/vncrec/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;
   };

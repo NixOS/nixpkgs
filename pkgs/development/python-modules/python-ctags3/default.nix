@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Ctags indexing python bindings";
-    homepage = https://github.com/jonashaag/python-ctags3;
+    homepage = "https://github.com/jonashaag/python-ctags3";
     license = licenses.lgpl3Plus;
   };
 }

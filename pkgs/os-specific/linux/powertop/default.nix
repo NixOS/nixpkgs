@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Analyze power consumption on Intel-based laptops";
-    homepage = https://01.org/powertop;
+    homepage = "https://01.org/powertop";
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;

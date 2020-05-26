@@ -9,6 +9,8 @@ mkXfceDerivation {
 
   sha256 = "1qrlpn0q5g9psd41l6y80r3bvbg8jaic92m6r400zzwcvivf95z0";
 
+  odd-unstable = false;
+
   meta = {
     description = "Thunar extension for automatic management of removable drives and media";
   };

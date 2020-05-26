@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mirage/alcotest;
+    homepage = "https://github.com/mirage/alcotest";
     description = "A lightweight and colourful test framework";
     license = stdenv.lib.licenses.isc;
     maintainers = [ maintainers.ericbmerritt ];

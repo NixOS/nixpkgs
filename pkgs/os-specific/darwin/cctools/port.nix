@@ -96,7 +96,7 @@ let
 
     meta = {
       broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
-      homepage = http://www.opensource.apple.com/source/cctools/;
+      homepage = "http://www.opensource.apple.com/source/cctools/";
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
       maintainers = with stdenv.lib.maintainers; [ matthewbauer ];

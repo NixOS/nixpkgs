@@ -899,7 +899,7 @@ in rec {
     fullName = "English Computer Jargon";
 
     src = fetchurl {
-      url = https://mrsatterly.com/computer.dic;
+      url = "https://mrsatterly.com/computer.dic";
       sha256 = "1vzk7cdvcm9r1c6mgxpabrdcpvghdv9mjmnf6iq5wllcif5nsw2b";
     };
 
@@ -909,7 +909,7 @@ in rec {
     installPhase = "aspell-install en-computers";
 
     meta = {
-      homepage = https://mrsatterly.com/spelling.html;
+      homepage = "https://mrsatterly.com/spelling.html";
     };
   };
 
@@ -918,12 +918,12 @@ in rec {
     fullName = "English Scientific Jargon";
 
     src1 = fetchurl {
-      url = http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt;
+      url = "http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt";
       sha256 = "1nf4py2mg0mlv9s5a7had2wn29z2v6bcca0fs6rbpdn4nqc4s7dm";
     };
 
     src2 = fetchurl {
-      url = http://jpetrie.net/wp-content/uploads/custom_scientific_UK.txt;
+      url = "http://jpetrie.net/wp-content/uploads/custom_scientific_UK.txt";
       sha256 = "0f88il1ds6qazy1ghxviqcwsywrbf6pzl2lmzf4f3qvhdfb6f1y0";
     };
 
@@ -936,7 +936,7 @@ in rec {
     installPhase = "aspell-install en_US-science en_GB-science";
 
     meta = {
-      homepage = http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/;
+      homepage = "http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";
     };
 
   };

@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The selenium package is used to automate web browser interaction from Python";
-    homepage = http://www.seleniumhq.org;
+    homepage = "http://www.seleniumhq.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ jraygauthier ];
   };

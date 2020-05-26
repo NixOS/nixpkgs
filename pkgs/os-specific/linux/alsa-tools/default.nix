@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-tools";
-  version = "1.1.7";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "mirror://alsa/tools/${pname}-${version}.tar.bz2";
-    sha256 = "1xjfghr9s0j6n91kgs95cc4r6qrjsgc4yj2w0nir3xpnm0l36950";
+    sha256 = "0jbkjmq038zapj66a7nkppdf644v2mwj581xbmh6k4i8w6mcglxz";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+    homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture tools";
 
     longDescription = ''

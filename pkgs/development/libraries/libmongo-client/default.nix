@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://algernon.github.io/libmongo-client/;
+    homepage = "http://algernon.github.io/libmongo-client/";
     description = "An alternative C driver for MongoDB";
     license = licenses.asl20;
     platforms = platforms.all;

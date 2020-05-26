@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub
-, pythonPackages
+, python2Packages
 }:
-pythonPackages.buildPythonPackage {
+python2Packages.buildPythonPackage {
   pname = "vncdo";
   version = "0.11.2";
 
@@ -12,7 +12,7 @@ pythonPackages.buildPythonPackage {
     sha256 = "0k03b09ipsz8vp362x7sx7z68mxgqw9qzvkii2f8j9vx2y79rjsh";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     pillow
     twisted
     pexpect
@@ -20,8 +20,10 @@ pythonPackages.buildPythonPackage {
     ptyprocess
   ];
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/sibson/vncdotool;
+    homepage = "https://github.com/sibson/vncdotool";
     description = "A command line VNC client and python library";
     license = licenses.mit;
     maintainers = with maintainers; [ elitak ];

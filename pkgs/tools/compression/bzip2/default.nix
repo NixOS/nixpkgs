@@ -1,5 +1,6 @@
 { stdenv, fetchurl
 , linkStatic ? (stdenv.hostPlatform.system == "i686-cygwin")
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,8 @@ stdenv.mkDerivation rec {
       ];
     sha256 = "0b5b5p8c7bslc6fslcr1nj9136412v3qcvbg6yxi9argq9g72v8c";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   patches = [
     ./CVE-2016-3189.patch

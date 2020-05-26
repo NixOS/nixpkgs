@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
         * Bluetack (PeerGuardian) blocklists with automatic updates
         * Full encryption, DHT, and PEX support
     '';
-    homepage = http://www.transmissionbt.com/;
+    homepage = "http://www.transmissionbt.com/";
     license = licenses.gpl2; # parts are under MIT
     maintainers = with maintainers; [ astsmtl vcunat wizeman ];
     platforms = platforms.unix;

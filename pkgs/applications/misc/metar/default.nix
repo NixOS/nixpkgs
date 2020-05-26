@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ curl ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/keesL/metar;
+    homepage = "https://github.com/keesL/metar";
     license = licenses.gpl2;
     maintainers = [ maintainers.zalakain ];
     description = "Downloads weather reports and optionally decodes them";

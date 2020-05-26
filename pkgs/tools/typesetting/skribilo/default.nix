@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       outline mode and from other conventions used in emails, Usenet
       and text.
     '';
-    homepage = https://www.nongnu.org/skribilo/;
+    homepage = "https://www.nongnu.org/skribilo/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

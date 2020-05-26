@@ -17,7 +17,7 @@ in fetchzip rec {
   sha256 = "1my1symb7k80ys33iphsxvmf6432wx6vjdnxhzhkgrang1rhx1h8";
 
   meta = with lib; {
-    homepage = https://github.com/akryukov/theano;
+    homepage = "https://github.com/akryukov/theano";
     description = "An old-style font designed from historic samples";
     maintainers = with maintainers; [ raskin rycee ];
     license = licenses.ofl;

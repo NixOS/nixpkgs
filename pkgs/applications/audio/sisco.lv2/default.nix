@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple audio oscilloscope with variable time scale, triggering, cursors and numeric readout in LV2 plugin format";
-    homepage = http://x42.github.io/sisco.lv2/;
+    homepage = "http://x42.github.io/sisco.lv2/";
     license = licenses.gpl2;
     maintainers = [ maintainers.e-user ];
     platforms = platforms.linux;

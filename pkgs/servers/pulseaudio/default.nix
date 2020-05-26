@@ -17,7 +17,7 @@
 
 , airtunesSupport ? false
 
-, bluetoothSupport ? false
+, bluetoothSupport ? true
 
 , remoteControlSupport ? false
 
@@ -108,7 +108,10 @@ stdenv.mkDerivation rec {
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
     sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
   ''
-    + ''moveToOutput lib/cmake "$dev" '';
+    + ''
+    moveToOutput lib/cmake "$dev"
+    rm -f $out/bin/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
+  '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
@@ -118,7 +121,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";
-    homepage    = http://www.pulseaudio.org/;
+    homepage    = "http://www.pulseaudio.org/";
     license     = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms   = lib.platforms.unix;

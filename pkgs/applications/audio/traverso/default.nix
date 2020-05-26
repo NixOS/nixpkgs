@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   version = "0.49.6";
 
   src = fetchurl {
-    url = "http://traverso-daw.org/traverso-0.49.6.tar.gz";
+    url = "https://traverso-daw.org/traverso-0.49.6.tar.gz";
     sha256 = "12f7x8kw4fw1j0xkwjrp54cy4cv1ql0zwz2ba5arclk4pf6bhl7q";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Cross-platform multitrack audio recording and audio editing suite";
-    homepage = http://traverso-daw.org/;
+    homepage = "https://traverso-daw.org/";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     platforms = platforms.all;
     maintainers = with maintainers; [ coconnor ];

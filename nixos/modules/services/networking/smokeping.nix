@@ -280,8 +280,7 @@ in
       fping6.source = "${pkgs.fping}/bin/fping6";
     };
     environment.systemPackages = [ pkgs.fping ];
-    users.users = singleton {
-      name = cfg.user;
+    users.users.${cfg.user} = {
       isNormalUser = false;
       isSystemUser = true;
       uid = config.ids.uids.smokeping;

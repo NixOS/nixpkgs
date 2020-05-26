@@ -6,11 +6,11 @@
 
 buildPythonApplication rec {
   pname = "pyznap";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00xpw6rmkq5cfjfw23mv0917wfzvb5zxj420p6yh0rnl3swh7gi8";
+    sha256 = "0s8glb6kbwwha6zgzfrf195r1qkrv1a9wagyhhm3kryv7c88mqnp";
   };
 
   propagatedBuildInputs = [

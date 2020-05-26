@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     longDescription = ''
       Brigand is a light-weight, fully functional, instant-compile time C++ 11 meta-programming library.
       Everything you were doing with Boost.MPL can be done with Brigand. And if that's not the case, open an issue!'';
-    homepage = https://github.com/edouarda/brigand;
+    homepage = "https://github.com/edouarda/brigand";
     license = licenses.boost;
     maintainers = with maintainers; [ pmiddend ];
     platforms = platforms.linux;

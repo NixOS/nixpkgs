@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://www.mpfr.org/;
+    homepage = "https://www.mpfr.org/";
     description = "Library for multiple-precision floating-point arithmetic";
 
     longDescription = ''

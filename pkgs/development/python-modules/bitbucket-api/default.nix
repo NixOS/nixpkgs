@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Sheeprider/BitBucket-api;
+    homepage = "https://github.com/Sheeprider/BitBucket-api";
     description = "Python library to interact with BitBucket REST API";
     license = licenses.mit;
   };

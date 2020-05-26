@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google's i18n address data packaged for Python";
-    homepage = https://pypi.org/project/google-i18n-address/;
-    maintainers = with maintainers; [ ma27 ];
+    homepage = "https://pypi.org/project/google-i18n-address/";
+    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
   };
 }

@@ -54,9 +54,8 @@ with lib;
 
   config = mkIf cfg.enable {
 
-    users.users = singleton
-      { name = virtuosoUser;
-        uid = config.ids.uids.virtuoso;
+    users.users.${virtuosoUser} =
+      { uid = config.ids.uids.virtuoso;
         description = "virtuoso user";
         home = stateDir;
       };

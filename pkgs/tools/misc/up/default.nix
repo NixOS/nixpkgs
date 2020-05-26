@@ -15,7 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Ultimate Plumber is a tool for writing Linux pipes with instant live preview";
-    homepage = https://github.com/akavel/up;
+    homepage = "https://github.com/akavel/up";
     maintainers = with maintainers; [ ma27 ];
     license = licenses.asl20;
   };

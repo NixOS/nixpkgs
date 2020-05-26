@@ -8,10 +8,15 @@ in {
 
   imports = [ ../../../modules/virtualisation/amazon-image.nix ];
 
-  # Required to provide good EBS experience,
+  # Amazon recomments setting this to the highest possible value for a good EBS
+  # experience, which prior to 4.15 was 255.
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#timeout-nvme-ebs-volumes
-  # TODO change value to 4294967295 when kernel is updated to 4.15 or later
-  config.boot.kernelParams = [ "nvme_core.io_timeout=255" ];
+  config.boot.kernelParams =
+    let timeout =
+      if pkgs.lib.versionAtLeast config.boot.kernelPackages.kernel.version "4.15"
+      then "4294967295"
+      else  "255";
+    in [ "nvme_core.io_timeout=${timeout}" ];
 
   options.amazonImage = {
     name = mkOption {

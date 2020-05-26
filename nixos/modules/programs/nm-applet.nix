@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
+  meta = {
+    maintainers = lib.teams.freedesktop.members;
+  };
+
   options.programs.nm-applet.enable = lib.mkEnableOption "nm-applet";
 
   config = lib.mkIf config.programs.nm-applet.enable {
@@ -10,5 +14,7 @@
       partOf = [ "graphical-session.target" ];
       serviceConfig.ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet";
     };
+
+    services.dbus.packages = [ pkgs.gcr ];
   };
 }

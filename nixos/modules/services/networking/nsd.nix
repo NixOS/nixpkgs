@@ -244,7 +244,7 @@ let
       };
 
       data = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         example = "";
         description = ''
@@ -484,7 +484,7 @@ in
     };
 
     extraConfig = mkOption {
-      type = types.str;
+      type = types.lines;
       default = "";
       description = ''
         Extra nsd config.
@@ -899,13 +899,9 @@ in
 
     environment.systemPackages = [ nsdPkg ];
 
-    users.groups = singleton {
-      name = username;
-      gid = config.ids.gids.nsd;
-    };
+    users.groups.${username}.gid = config.ids.gids.nsd;
 
-    users.users = singleton {
-      name = username;
+    users.users.${username} = {
       description = "NSD service user";
       home = stateDir;
       createHome  = true;

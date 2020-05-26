@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.perforce.com/resources/documentation/jam;
+    homepage = "https://www.perforce.com/resources/documentation/jam";
     license = licenses.free;
     description = "Just Another Make";
     maintainers = with maintainers; [ orivej ];

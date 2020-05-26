@@ -2,17 +2,17 @@
     
 stdenv.mkDerivation rec {
   pname = "stacks";
-  version = "2.41";
+  version = "2.52";
   src = fetchurl {
     url = "http://catchenlab.life.illinois.edu/stacks/source/${pname}-${version}.tar.gz";
-    sha256 = "0q420rzjb05jfchcls3pysm4hxfgs6xj2jw246isx0il10g93gkq";
+    sha256 = "0gq3kbj910jsq591wylzjmd23srjlsssmrckmf46m4ysjqdqd8vm";
   };
 
   buildInputs = [ zlib ];
 
   meta = {
     description = "Software pipeline for building loci from short-read sequences";
-    homepage = http://catchenlab.life.illinois.edu/stacks/;
+    homepage = "http://catchenlab.life.illinois.edu/stacks/";
     maintainers = [ stdenv.lib.maintainers.bzizou ];
     license = stdenv.lib.licenses.gpl3;
   };

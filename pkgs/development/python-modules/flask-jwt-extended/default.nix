@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "JWT extension for Flask";
-    homepage = https://flask-jwt-extended.readthedocs.io/;
+    homepage = "https://flask-jwt-extended.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ gerschtli ];
   };

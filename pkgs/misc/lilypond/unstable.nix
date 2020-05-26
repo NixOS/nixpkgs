@@ -1,4 +1,4 @@
-{ fetchgit, lilypond, ghostscript, gyre-fonts }:
+{ stdenv, fetchgit, lilypond, ghostscript, gyre-fonts }:
 
 let
 
@@ -15,9 +15,7 @@ lilypond.overrideAttrs (oldAttrs: {
     sha256 = "1ycyx9x76d79jh7wlwyyhdjkyrwnhzqpw006xn2fk35s0jrm2iz0";
   };
 
-  configureFlags = [
-    "--disable-documentation"
-    "--with-urwotf-dir=${ghostscript}/share/ghostscript/fonts"
-    "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
-  ];
+  meta = oldAttrs.meta // {
+    broken = stdenv.isDarwin;
+  };
 })

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Minor mode provides useful features for editing perl codes";
-    homepage = http://emacswiki.org/emacs/PerlCompletion;
+    homepage = "http://emacswiki.org/emacs/PerlCompletion";
     platforms = stdenv.lib.platforms.all;
   };
 }

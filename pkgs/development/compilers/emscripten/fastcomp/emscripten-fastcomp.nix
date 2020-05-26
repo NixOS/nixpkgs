@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/emscripten-core/emscripten-fastcomp;
+    homepage = "https://github.com/emscripten-core/emscripten-fastcomp";
     description = "Emscripten LLVM";
     platforms = platforms.all;
     maintainers = with maintainers; [ qknight matthewbauer ];

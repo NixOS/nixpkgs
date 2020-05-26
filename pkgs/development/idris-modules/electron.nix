@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Electron bindings for Idris";
-    homepage = https://github.com/jheiling/idris-electron;
+    homepage = "https://github.com/jheiling/idris-electron";
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.brainrape ];
   };

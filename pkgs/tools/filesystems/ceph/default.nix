@@ -10,6 +10,7 @@
 , cunit, snappy
 , rocksdb, makeWrapper
 , leveldb, oathToolkit
+, libnl, libcap_ng
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -88,9 +89,11 @@ let
     ps.webob
     ps.bcrypt
     ps.six
+    ps.pyyaml
   ]);
+  sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "14.2.4";
+  version = "14.2.8";
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
@@ -98,12 +101,11 @@ in rec {
 
     src = fetchurl {
       url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "1y6hixh6srd5aswhzq0sf0dbygwhx0ardx3w3f7qazf5rapvd03i";
+      sha256 = "0p7pjycqhxqg1mmix8ykx3xqq01d560p54iiidxps0rcvwfkyyki";
     };
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
-      ./0000-dont-check-cherrypy-version.patch
     ];
 
     nativeBuildInputs = [
@@ -116,7 +118,7 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb
+      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng
     ] ++ optionals stdenv.isLinux [
       linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
@@ -132,9 +134,10 @@ in rec {
       substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
 
       # for pybind/rgw to find internal dep
-      export LD_LIBRARY_PATH="$PWD/build/lib:$LD_LIBRARY_PATH"
+      export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
-
+      # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
+      export PYTHONPATH=${ceph-python-env}/${sitePackages}:$lib/${sitePackages}:$out/${sitePackages}
       patchShebangs src/script src/spdk src/test src/tools
     '';
 
@@ -157,6 +160,10 @@ in rec {
     postFixup = ''
       wrapPythonPrograms
       wrapProgram $out/bin/ceph-mgr --prefix PYTHONPATH ":" "$(toPythonPath ${placeholder "out"}):$(toPythonPath ${ceph-python-env})"
+
+      # Test that ceph-volume exists since the build system has a tendency to
+      # silently drop it with misconfigurations.
+      test -f $out/bin/ceph-volume
     '';
 
     enableParallelBuilding = true;
@@ -166,7 +173,7 @@ in rec {
     doCheck = false; # uses pip to install things from the internet
 
     meta = {
-      homepage = https://ceph.com/;
+      homepage = "https://ceph.com/";
       description = "Distributed storage system";
       license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
       maintainers = with maintainers; [ adev ak krav johanot ];
@@ -178,18 +185,18 @@ in rec {
 
   ceph-client = runCommand "ceph-client-${version}" {
      meta = {
-        homepage = https://ceph.com/;
+        homepage = "https://ceph.com/";
         description = "Tools needed to mount Ceph's RADOS Block Devices";
         license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
         maintainers = with maintainers; [ adev ak johanot krav ];
         platforms = [ "x86_64-linux" ];
       };
     } ''
-      mkdir -p $out/{bin,etc,lib/python3.7/site-packages}
+      mkdir -p $out/{bin,etc,${sitePackages}}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
       cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
       cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/lib/python3.7/site-packages $out/lib/python3.7/
+      cp -r ${ceph}/${sitePackages} $out/${sitePackages}
       cp -r ${ceph}/etc/bash_completion.d $out/etc
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out

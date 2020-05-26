@@ -88,19 +88,19 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = optional (cfg.group == "hound") {
-      name = "hound";
-      gid = config.ids.gids.hound;
+    users.groups = optionalAttrs (cfg.group == "hound") {
+      hound.gid = config.ids.gids.hound;
     };
 
-    users.users = optional (cfg.user == "hound") {
-      name = "hound";
-      description = "hound code search";
-      createHome = true;
-      home = cfg.home;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      uid = config.ids.uids.hound;
+    users.users = optionalAttrs (cfg.user == "hound") {
+      hound = {
+        description = "hound code search";
+        createHome = true;
+        home = cfg.home;
+        group = cfg.group;
+        extraGroups = cfg.extraGroups;
+        uid = config.ids.uids.hound;
+      };
     };
 
     systemd.services.hound = {

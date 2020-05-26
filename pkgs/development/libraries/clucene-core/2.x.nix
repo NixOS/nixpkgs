@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
       CLucene is a port of the very popular Java Lucene text search engine API.
     '';
-    homepage = http://clucene.sourceforge.net;
+    homepage = "http://clucene.sourceforge.net";
     platforms = platforms.unix;
     license = with licenses; [ asl20 lgpl2 ];
   };

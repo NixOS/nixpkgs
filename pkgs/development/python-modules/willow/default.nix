@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python image library that sits on top of Pillow, Wand and OpenCV";
-    homepage = https://github.com/torchbox/Willow/;
+    homepage = "https://github.com/torchbox/Willow/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
   };

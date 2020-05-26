@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1vq1cnrkvrvbfl40j6ajc60jdrjcxag1fi6kff5pqmadfdz9564j";
   };
 
-  buildFlags = "build";
+  buildFlags = [ "build" ];
   enableParallelBuilding = true;
 
   doCheck = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       inference with Variational inference (ADVI) and penalized maximum
       likelihood estimation with Optimization (L-BFGS).
     '';
-    homepage = https://mc-stan.org/interfaces/cmdstan.html;
+    homepage = "https://mc-stan.org/interfaces/cmdstan.html";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
   };

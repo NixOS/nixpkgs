@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Readline wrapper for console programs";
-    homepage = https://github.com/hanslub42/rlwrap;
+    homepage = "https://github.com/hanslub42/rlwrap";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "TUI display manager";
     license = licenses.wtfpl;
-    homepage = https://github.com/cylgom/ly;
+    homepage = "https://github.com/cylgom/ly";
     maintainers = [ maintainers.spacekookie ];
   };
 }

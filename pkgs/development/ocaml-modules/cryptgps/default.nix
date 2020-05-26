@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://projects.camlcity.org/projects/cryptgps.html;
+    homepage = "http://projects.camlcity.org/projects/cryptgps.html";
     description = "Cryptographic functions for OCaml";
     longDescription = ''
       This library implements the symmetric cryptographic algorithms

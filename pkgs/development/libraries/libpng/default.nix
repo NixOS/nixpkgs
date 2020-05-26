@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The official reference implementation for the PNG file format" + whenPatched " with animation patch";
-    homepage = http://www.libpng.org/pub/png/libpng.html;
+    homepage = "http://www.libpng.org/pub/png/libpng.html";
     license = licenses.libpng2;
     platforms = platforms.all;
     maintainers = [ maintainers.vcunat ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       The ladspa.h API header file from the LADSPA SDK.
       For the full SDK, use the ladspa-sdk package.
     '';
-    homepage = http://www.ladspa.org/ladspa_sdk/overview.html;
+    homepage = "http://www.ladspa.org/ladspa_sdk/overview.html";
     license = stdenv.lib.licenses.lgpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.all;

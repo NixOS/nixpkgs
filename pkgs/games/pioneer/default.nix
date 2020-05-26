@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pioneer";
-  version = "20191117";
+  version = "20200203";
 
   src = fetchFromGitHub{
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    sha256 = "0ka5w1sfp56bs3njiwyr6ffy34qvqbzcvmra9cqwyvi7famn8b49";
+    sha256 = "1011xsi94jhw98mhm8kryq8ajig0qfbrdx5xdasi92bd4nk7lcp8";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A space adventure game set in the Milky Way galaxy at the turn of the 31st century";
-    homepage = https://pioneerspacesim.net;
+    homepage = "https://pioneerspacesim.net";
     license = with licenses; [
         gpl3 cc-by-sa-30
     ];

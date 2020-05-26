@@ -9,7 +9,7 @@ buildOcamlJane {
   propagatedBuildInputs = [ ctypes async comparelib core fieldslib
                             herelib pipebang sexplib openssl ocaml_oasis ];
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/async_ssl;
+    homepage = "https://github.com/janestreet/async_ssl";
     description = "Async wrappers for ssl";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

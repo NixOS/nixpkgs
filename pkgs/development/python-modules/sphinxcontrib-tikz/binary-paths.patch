@@ -1,0 +1,22 @@
+diff --git a/sphinxcontrib/tikz.py b/sphinxcontrib/tikz.py
+index ee21113..a4f4589 100644
+--- a/sphinxcontrib/tikz.py
++++ b/sphinxcontrib/tikz.py
+@@ -242,7 +242,7 @@ def render_tikz(self, node, libs='', stringsubst=False):
+         tf.write(latex)
+         tf.close()
+ 
+-        system([self.builder.config.latex_engine, '--interaction=nonstopmode',
++        system(['@texLive@/bin/pdflatex', '--interaction=nonstopmode',
+                 'tikz-%s.tex' % shasum],
+                self.builder)
+ 
+@@ -281,7 +281,7 @@ def render_tikz(self, node, libs='', stringsubst=False):
+                     '-sOutputFile=%s' % outfn, '-r' + resolution + 'x' + resolution,
+                     '-f', 'tikz-%s.pdf' % shasum], self.builder)
+         elif self.builder.config.tikz_proc_suite == "pdf2svg":
+-            system(['pdf2svg', 'tikz-%s.pdf' % shasum, outfn], self.builder)
++            system(['@pdf2svg@/bin/pdf2svg', 'tikz-%s.pdf' % shasum, outfn], self.builder)
+         else:
+             self.builder._tikz_warned = True
+             raise TikzExtError('Error (tikz extension): Invalid configuration '

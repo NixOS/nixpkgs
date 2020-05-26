@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://asynk.io/;
+    homepage = "http://asynk.io/";
     description = "Flexible contacts synchronization program";
     license = licenses.agpl3;
     maintainers = [ ];

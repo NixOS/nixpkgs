@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.curlpp.org/;
+    homepage = "https://www.curlpp.org/";
     description = "C++ wrapper around libcURL";
     license = licenses.mit;
     maintainers = with maintainers; [ CrazedProgrammer ];

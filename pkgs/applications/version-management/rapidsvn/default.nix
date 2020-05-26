@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Multi-platform GUI front-end for the Subversion revision system";
-    homepage = http://rapidsvn.tigris.org/;
+    homepage = "http://rapidsvn.tigris.org/";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.viric ];
   };

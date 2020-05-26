@@ -7,6 +7,7 @@ with lib;
 let
 
   cfg = config.virtualisation.lxd;
+  zfsCfg = config.boot.zfs;
 
 in
 
@@ -26,11 +27,40 @@ in
           <command>lxc</command> command line tool, among others.
         '';
       };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.lxd;
+        defaultText = "pkgs.lxd";
+        description = ''
+          The LXD package to use.
+        '';
+      };
+
+      lxcPackage = mkOption {
+        type = types.package;
+        default = pkgs.lxc;
+        defaultText = "pkgs.lxc";
+        description = ''
+          The LXC package to use with LXD (required for AppArmor profiles).
+        '';
+      };
+
+      zfsPackage = mkOption {
+        type = types.package;
+        default = with pkgs; if zfsCfg.enableUnstable then zfsUnstable else zfs;
+        defaultText = "pkgs.zfs";
+        description = ''
+          The ZFS package to use with LXD.
+        '';
+      };
+
       zfsSupport = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          enables lxd to use zfs as a storage for containers.
+          Enables lxd to use zfs as a storage for containers.
+
           This option is enabled by default if a zfs pool is configured
           with nixos.
         '';
@@ -54,15 +84,15 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.lxd ];
+    environment.systemPackages = [ cfg.package ];
 
     security.apparmor = {
       enable = true;
       profiles = [
-        "${pkgs.lxc}/etc/apparmor.d/usr.bin.lxc-start"
-        "${pkgs.lxc}/etc/apparmor.d/lxc-containers"
+        "${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start"
+        "${cfg.lxcPackage}/etc/apparmor.d/lxc-containers"
       ];
-      packages = [ pkgs.lxc ];
+      packages = [ cfg.lxcPackage ];
     };
 
     systemd.services.lxd = {
@@ -71,14 +101,14 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ];
 
-      path = lib.optional cfg.zfsSupport pkgs.zfs;
+      path = lib.optional cfg.zfsSupport cfg.zfsPackage;
 
       preStart = ''
         mkdir -m 0755 -p /var/lib/lxc/rootfs
       '';
 
       serviceConfig = {
-        ExecStart = "@${pkgs.lxd.bin}/bin/lxd lxd --group lxd";
+        ExecStart = "@${cfg.package.bin}/bin/lxd lxd --group lxd";
         Type = "simple";
         KillMode = "process"; # when stopping, leave the containers alone
         LimitMEMLOCK = "infinity";

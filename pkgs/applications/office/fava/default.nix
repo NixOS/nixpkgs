@@ -5,11 +5,11 @@ let
 in
 buildPythonApplication rec {
   pname = "fava";
-  version = "1.12";
+  version = "1.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0309y25l7aijk7il9hpjia23yc5dfac0h78xdmzb0w0ynxbjsmi6";
+    sha256 = "181ypq2p7aaq2b76s55hxxbm1hykzf45mjjgm500h4dsaa167dqy";
   };
 
   checkInputs = [ python3.pkgs.pytest ];
@@ -35,7 +35,7 @@ buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = https://beancount.github.io/fava;
+    homepage = "https://beancount.github.io/fava";
     description = "Web interface for beancount";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];

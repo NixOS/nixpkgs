@@ -54,14 +54,6 @@ let
         exec &> >(tee ~/.xsession-errors)
       ''}
 
-      # Start PulseAudio if enabled.
-      ${optionalString (config.hardware.pulseaudio.enable) ''
-        # Publish access credentials in the root window.
-        if ${config.hardware.pulseaudio.package.out}/bin/pulseaudio --dump-modules | grep module-x11-publish &> /dev/null; then
-          ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
-        fi
-      ''}
-
       # Tell systemd about our $DISPLAY and $XAUTHORITY.
       # This is needed by the ssh-agent unit.
       #
@@ -141,9 +133,11 @@ let
     '';
 
   dmDefault = cfg.desktopManager.default;
+  # fallback default for cases when only default wm is set
+  dmFallbackDefault = if dmDefault != null then dmDefault else "none";
   wmDefault = cfg.windowManager.default;
 
-  defaultSessionFromLegacyOptions = concatStringsSep "+" (filter (s: s != null) ([ dmDefault ] ++ optional (wmDefault != "none") wmDefault));
+  defaultSessionFromLegacyOptions = dmFallbackDefault + optionalString (wmDefault != null && wmDefault != "none") "+${wmDefault}";
 
 in
 
@@ -358,7 +352,7 @@ in
             { c = wmDefault; t = "- services.xserver.windowManager.default"; }
             ]))}
           Please use
-            services.xserver.displayManager.defaultSession = "${concatStringsSep "+" (filter (s: s != null) [ dmDefault wmDefault ])}";
+            services.xserver.displayManager.defaultSession = "${defaultSessionFromLegacyOptions}";
           instead.
         ''
       ];
@@ -380,7 +374,7 @@ in
         wms = filter (s: s.manage == "window") cfg.displayManager.session;
 
         # Script responsible for starting the window manager and the desktop manager.
-        xsession = wm: dm: pkgs.writeScript "xsession" ''
+        xsession = dm: wm: pkgs.writeScript "xsession" ''
           #! ${pkgs.bash}/bin/bash
 
           # Legacy session script used to construct .desktop files from
@@ -410,6 +404,9 @@ in
             (dm: wm: let
               sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
               script = xsession dm wm;
+              desktopNames = if dm ? desktopNames
+                             then concatStringsSep ";" dm.desktopNames
+                             else sessionName;
             in
               optional (dm.name != "none" || wm.name != "none")
                 (pkgs.writeTextFile {
@@ -425,6 +422,7 @@ in
                     TryExec=${script}
                     Exec=${script}
                     Name=${sessionName}
+                    DesktopNames=${desktopNames}
                   '';
                 } // {
                   providedSessions = [ sessionName ];

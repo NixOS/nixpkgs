@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Collection of Varnish Cache modules (vmods) by Varnish Software";
-    homepage = https://github.com/varnish/varnish-modules;
+    homepage = "https://github.com/varnish/varnish-modules";
     inherit (varnish.meta) license platforms maintainers;
   };
 }

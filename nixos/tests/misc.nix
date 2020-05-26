@@ -1,6 +1,6 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test.nix ({ pkgs, ...} : rec {
+import ./make-test-python.nix ({ pkgs, ...} : rec {
   name = "misc";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco ];
@@ -34,109 +34,97 @@ import ./make-test.nix ({ pkgs, ...} : rec {
 
   testScript =
     ''
-      subtest "nix-db", sub {
-          my $json = $machine->succeed("nix path-info --json ${foo}");
-          $json =~ /"narHash":"sha256:0afw0d9j1hvwiz066z93jiddc33nxg6i6qyp26vnqyglpyfivlq5"/ or die "narHash not set";
-          $json =~ /"narSize":128/ or die "narSize not set";
-      };
+      import json
 
-      subtest "nixos-version", sub {
-          $machine->succeed("[ `nixos-version | wc -w` = 2 ]");
-      };
 
-      subtest "nixos-rebuild", sub {
-          $machine->succeed("nixos-rebuild --help | grep 'NixOS module' ");
-      };
+      def get_path_info(path):
+          result = machine.succeed(f"nix path-info --json {path}")
+          parsed = json.loads(result)
+          return parsed
 
-      # Sanity check for uid/gid assignment.
-      subtest "users-groups", sub {
-          $machine->succeed("[ `id -u messagebus` = 4 ]");
-          $machine->succeed("[ `id -g messagebus` = 4 ]");
-          $machine->succeed("[ `getent group users` = 'users:x:100:' ]");
-      };
 
-      # Regression test for GMP aborts on QEMU.
-      subtest "gmp", sub {
-          $machine->succeed("expr 1 + 2");
-      };
+      with subtest("nix-db"):
+          info = get_path_info("${foo}")
 
-      # Test that the swap file got created.
-      subtest "swapfile", sub {
-          $machine->waitForUnit("root-swapfile.swap");
-          $machine->succeed("ls -l /root/swapfile | grep 134217728");
-      };
+          if (
+              info[0]["narHash"]
+              != "sha256:0afw0d9j1hvwiz066z93jiddc33nxg6i6qyp26vnqyglpyfivlq5"
+          ):
+              raise Exception("narHash not set")
 
-      # Test whether kernel.poweroff_cmd is set.
-      subtest "poweroff_cmd", sub {
-          $machine->succeed("[ -x \"\$(cat /proc/sys/kernel/poweroff_cmd)\" ]")
-      };
+          if info[0]["narSize"] != 128:
+              raise Exception("narSize not set")
 
-      # Test whether the blkio controller is properly enabled.
-      subtest "blkio-cgroup", sub {
-          $machine->succeed("[ -n \"\$(cat /sys/fs/cgroup/blkio/blkio.sectors)\" ]")
-      };
+      with subtest("nixos-version"):
+          machine.succeed("[ `nixos-version | wc -w` = 2 ]")
 
-      # Test whether we have a reboot record in wtmp.
-      subtest "reboot-wtmp", sub {
-          $machine->shutdown;
-          $machine->waitForUnit('multi-user.target');
-          $machine->succeed("last | grep reboot >&2");
-      };
+      with subtest("nixos-rebuild"):
+          assert "NixOS module" in machine.succeed("nixos-rebuild --help")
 
-      # Test whether we can override environment variables.
-      subtest "override-env-var", sub {
-          $machine->succeed('[ "$EDITOR" = emacs ]');
-      };
+      with subtest("Sanity check for uid/gid assignment"):
+          assert "4" == machine.succeed("id -u messagebus").strip()
+          assert "4" == machine.succeed("id -g messagebus").strip()
+          assert "users:x:100:" == machine.succeed("getent group users").strip()
 
-      # Test whether hostname (and by extension nss_myhostname) works.
-      subtest "hostname", sub {
-          $machine->succeed('[ "`hostname`" = machine ]');
-          #$machine->succeed('[ "`hostname -s`" = machine ]');
-      };
+      with subtest("Regression test for GMP aborts on QEMU."):
+          machine.succeed("expr 1 + 2")
 
-      # Test whether systemd-udevd automatically loads modules for our hardware.
-      $machine->succeed("systemctl start systemd-udev-settle.service");
-      subtest "udev-auto-load", sub {
-          $machine->waitForUnit('systemd-udev-settle.service');
-          $machine->succeed('lsmod | grep mousedev');
-      };
+      with subtest("the swap file got created"):
+          machine.wait_for_unit("root-swapfile.swap")
+          machine.succeed("ls -l /root/swapfile | grep 134217728")
 
-      # Test whether systemd-tmpfiles-clean works.
-      subtest "tmpfiles", sub {
-          $machine->succeed('touch /tmp/foo');
-          $machine->succeed('systemctl start systemd-tmpfiles-clean');
-          $machine->succeed('[ -e /tmp/foo ]');
-          $machine->succeed('date -s "@$(($(date +%s) + 1000000))"'); # move into the future
-          $machine->succeed('systemctl start systemd-tmpfiles-clean');
-          $machine->fail('[ -e /tmp/foo ]');
-      };
+      with subtest("whether kernel.poweroff_cmd is set"):
+          machine.succeed('[ -x "$(cat /proc/sys/kernel/poweroff_cmd)" ]')
 
-      # Test whether automounting works.
-      subtest "automount", sub {
-          $machine->fail("grep '/tmp2 tmpfs' /proc/mounts");
-          $machine->succeed("touch /tmp2/x");
-          $machine->succeed("grep '/tmp2 tmpfs' /proc/mounts");
-      };
+      with subtest("whether the blkio controller is properly enabled"):
+          machine.succeed("[ -e /sys/fs/cgroup/blkio/blkio.reset_stats ]")
 
-      subtest "shell-vars", sub {
-          $machine->succeed('[ -n "$NIX_PATH" ]');
-      };
+      with subtest("whether we have a reboot record in wtmp"):
+          machine.shutdown
+          machine.wait_for_unit("multi-user.target")
+          machine.succeed("last | grep reboot >&2")
 
-      subtest "nix-db", sub {
-          $machine->succeed("nix-store -qR /run/current-system | grep nixos-");
-      };
+      with subtest("whether we can override environment variables"):
+          machine.succeed('[ "$EDITOR" = emacs ]')
 
-      # Test sysctl
-      subtest "sysctl", sub {
-          $machine->waitForUnit("systemd-sysctl.service");
-          $machine->succeed('[ `sysctl -ne vm.swappiness` = 1 ]');
-          $machine->execute('sysctl vm.swappiness=60');
-          $machine->succeed('[ `sysctl -ne vm.swappiness` = 60 ]');
-      };
+      with subtest("whether hostname (and by extension nss_myhostname) works"):
+          assert "machine" == machine.succeed("hostname").strip()
+          assert "machine" == machine.succeed("hostname -s").strip()
 
-      # Test boot parameters
-      subtest "bootparam", sub {
-          $machine->succeed('grep -Fq vsyscall=emulate /proc/cmdline');
-      };
+      with subtest("whether systemd-udevd automatically loads modules for our hardware"):
+          machine.succeed("systemctl start systemd-udev-settle.service")
+          machine.wait_for_unit("systemd-udev-settle.service")
+          assert "mousedev" in machine.succeed("lsmod")
+
+      with subtest("whether systemd-tmpfiles-clean works"):
+          machine.succeed(
+              "touch /tmp/foo", "systemctl start systemd-tmpfiles-clean", "[ -e /tmp/foo ]"
+          )
+          # move into the future
+          machine.succeed(
+              'date -s "@$(($(date +%s) + 1000000))"',
+              "systemctl start systemd-tmpfiles-clean",
+          )
+          machine.fail("[ -e /tmp/foo ]")
+
+      with subtest("whether automounting works"):
+          machine.fail("grep '/tmp2 tmpfs' /proc/mounts")
+          machine.succeed("touch /tmp2/x")
+          machine.succeed("grep '/tmp2 tmpfs' /proc/mounts")
+
+      with subtest("shell-vars"):
+          machine.succeed('[ -n "$NIX_PATH" ]')
+
+      with subtest("nix-db"):
+          machine.succeed("nix-store -qR /run/current-system | grep nixos-")
+
+      with subtest("Test sysctl"):
+          machine.wait_for_unit("systemd-sysctl.service")
+          assert "1" == machine.succeed("sysctl -ne vm.swappiness").strip()
+          machine.execute("sysctl vm.swappiness=60")
+          assert "60" == machine.succeed("sysctl -ne vm.swappiness").strip()
+
+      with subtest("Test boot parameters"):
+          assert "vsyscall=emulate" in machine.succeed("cat /proc/cmdline")
     '';
 })

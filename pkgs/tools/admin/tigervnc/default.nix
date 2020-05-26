@@ -11,17 +11,19 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.10.0";
+  version = "1.10.1";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
-    rev = "v1.10.0";
-    sha256 = "0l0x7cq65wv9n93r952qsikwzcls1sq3r32mx0c4wg19dha0x1m4";
+    rev = "v1.10.1";
+    sha256 = "001n189d2f3psn7nxgl8188ml6f7jbk26cxn2835y3mnlk5lmhgr";
   };
 
   inherit fontDirectories;
+
+  patches = [ ./u_xorg-server-1.20.7-ddxInputThreadInit.patch ];
 
   postPatch = ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver

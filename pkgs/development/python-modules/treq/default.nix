@@ -17,9 +17,9 @@ buildPythonPackage rec {
     incremental
     service-identity
     twisted
+  ]
     # twisted [tls] requirements (we should find a way to list "extras")
-    twisted.extras.tls
-  ];
+    ++ twisted.extras.tls;
 
   checkInputs = [
     pep8
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/twisted/treq;
+    homepage = "https://github.com/twisted/treq";
     description = "A requests-like API built on top of twisted.web's Agent";
     license = licenses.mit;
     maintainers = with maintainers; [ nand0p ];

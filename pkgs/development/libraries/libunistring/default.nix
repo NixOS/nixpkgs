@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "--with-libiconv-prefix=${libiconv}"
   ];
 
-  doCheck = true;
+  doCheck = false;
 
   /* This seems to cause several random failures like these, which I assume
      is because of bad or missing target dependencies in their build system:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = {
-    homepage = https://www.gnu.org/software/libunistring/;
+    homepage = "https://www.gnu.org/software/libunistring/";
 
     description = "Unicode string library";
 

@@ -74,13 +74,14 @@ in
             See <command>man rsyncd.conf</command> for options.
           '';
         type = types.attrsOf (types.attrsOf types.str);
-        example =
+        example = literalExample ''
           { srv =
              { path = "/srv";
                "read only" = "yes";
                comment = "Public rsync share.";
              };
-          };
+          }
+        '';
       };
 
       user = mkOption {

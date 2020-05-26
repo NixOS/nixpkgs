@@ -18,6 +18,7 @@
 , netsurf
 , pango
 , poly2tri-c
+, poppler
 , bzip2
 , json-glib
 , gettext
@@ -29,34 +30,24 @@
 , luajit
 , openexr
 , OpenCL
+, suitesparse
 }:
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.18";
+  version = "0.4.22";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0r6akqnrkvxizyhyi8sv40mxm7j4bcwjb6mqjpxy0zzbbfsdyin9";
+    sha256 = "0q9cckf90fb82qc5d496fjz459f1xw4j4p3rff1f57yivx0yr20q";
   };
 
   patches = [
-    # Fix arch detection.
-    # https://gitlab.gnome.org/GNOME/gegl/merge_requests/53
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gegl/commit/6bcf95fd0f32cf5e8b1ddbe17b14d9ad049bded8.patch";
-      sha256 = "0aqdr3y5mr47wq44jnhp97188bvpjlf56zrlmn8aazdf07r2apma";
-    })
-
-    # Fix Darwin build.
-    # https://gitlab.gnome.org/GNOME/gegl/merge_requests/54
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gegl/commit/2bc06bfedee4fb25f6a966c8235b75292e24e55f.patch";
-      sha256 = "1psls61wsrdq5pzpvj22mrm46lpzrw3wkx6li7dv6fyb65wz2n4d";
-    })
+    # Remove gegl:simple / backend-file test that times out frequently
+    ./patches/no-simple-backend-file-test.patch
   ];
 
   nativeBuildInputs = [
@@ -81,12 +72,14 @@ stdenv.mkDerivation rec {
     netsurf.libnsgif
     pango
     poly2tri-c
+    poppler
     bzip2
     libraw
     libwebp
     gexiv2
     luajit
     openexr
+    suitesparse
   ] ++ stdenv.lib.optional stdenv.isDarwin OpenCL;
 
   # for gegl-4.0.pc
@@ -104,7 +97,6 @@ stdenv.mkDerivation rec {
     "-Dlibav=disabled"
     "-Dlibv4l=disabled"
     "-Dlibv4l2=disabled"
-    "-Dumfpack=disabled"
     # Disabled due to multiple vulnerabilities, see
     # https://github.com/NixOS/nixpkgs/pull/73586
     "-Djasper=disabled"
@@ -112,7 +104,7 @@ stdenv.mkDerivation rec {
 
   # TODO: Fix missing math symbols in gegl seamless clone.
   # It only appears when we use packaged poly2tri-c instead of vendored one.
-  NIX_CFLAGS_COMPILE = [ "-lm" ];
+  NIX_CFLAGS_COMPILE = "-lm";
 
   postPatch = ''
     chmod +x tests/opencl/opencl_test.sh tests/buffer/buffer-tests-run.sh
@@ -124,7 +116,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graph-based image processing framework";
-    homepage = http://www.gegl.org;
+    homepage = "http://www.gegl.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

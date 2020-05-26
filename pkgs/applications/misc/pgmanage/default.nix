@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       PostgreSQL interface can hope to be. (Note: pgManage replaces Postage,
       which is no longer maintained.)
     '';
-    homepage = https://github.com/pgManage/pgManage;
+    homepage = "https://github.com/pgManage/pgManage";
     license = licenses.postgresql;
     maintainers = [ maintainers.basvandijk ];
   };

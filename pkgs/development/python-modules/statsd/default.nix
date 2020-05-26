@@ -27,7 +27,7 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ domenkozar ];
     description = "A simple statsd client";
     license = licenses.mit;
-    homepage = https://github.com/jsocol/pystatsd;
+    homepage = "https://github.com/jsocol/pystatsd";
   };
 
 }

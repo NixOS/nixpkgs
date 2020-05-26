@@ -30,7 +30,7 @@ buildPythonPackage rec {
     state name lookup, is contiguous or continental, URLs to shapefiles for state,
     census, congressional districts, counties, and census tracts
     '';
-    homepage = https://github.com/unitedstates/python-us/;
+    homepage = "https://github.com/unitedstates/python-us/";
     license = lib.licenses.bsd3;
   };
 }

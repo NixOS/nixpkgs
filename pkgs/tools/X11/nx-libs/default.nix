@@ -2,12 +2,12 @@
   libpng, libtool, libxml2, pkgconfig, which, xorg }:
 stdenv.mkDerivation rec {
   pname = "nx-libs";
-  version = "3.5.99.22";
+  version = "3.5.99.23";
   src = fetchFromGitHub {
     owner = "ArcticaProject";
     repo = "nx-libs";
     rev = version;
-    sha256 = "0ipq93s2knv2xbb919d777mrc7v4k9l5bk0d4x6ji1bgispfa7jl";
+    sha256 = "0hcsic9bf8w4ja3xy2nka8hcjvidqzjafn1bwr34l5l47h0kbyqz";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig which
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "NX X server based on Xnest";
-    homepage = https://github.com/ArcticaProject/nx-libs;
+    homepage = "https://github.com/ArcticaProject/nx-libs";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ jD91mZM2 ];
     platforms = stdenv.lib.platforms.linux;

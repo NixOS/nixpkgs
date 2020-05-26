@@ -16,6 +16,8 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
+  configureFlags = [ "--enable-fat" ]; # runtime selection of HW-accelerated code
+
   doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.isDarwin);
 
   enableParallelBuilding = true;
@@ -51,7 +53,7 @@ stdenv.mkDerivation ({
 
      license = licenses.gpl2Plus;
 
-     homepage = http://www.lysator.liu.se/~nisse/nettle/;
+     homepage = "http://www.lysator.liu.se/~nisse/nettle/";
 
      platforms = platforms.all;
   };

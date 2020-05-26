@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Formal verification tool for distributed software systems";
-    homepage = http://spinroot.com/;
+    homepage = "http://spinroot.com/";
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

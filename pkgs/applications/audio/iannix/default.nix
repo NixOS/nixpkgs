@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Graphical open-source sequencer,";
-    homepage = https://www.iannix.org/;
+    homepage = "https://www.iannix.org/";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nico202 ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://www.urbanophile.com/arenn/hacking/gzrt/;
+    homepage = "https://www.urbanophile.com/arenn/hacking/gzrt/";
     description = "The gzip Recovery Toolkit";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

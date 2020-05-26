@@ -32,7 +32,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "An alternative session manager ported from the original razor-session";
-    homepage = https://github.com/lxqt/lxqt-session;
+    homepage = "https://github.com/lxqt/lxqt-session";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

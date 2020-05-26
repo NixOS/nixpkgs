@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Small ncurses-based file browser";
-    homepage = https://git.2f30.org/noice/;
+    homepage = "https://git.2f30.org/noice/";
     license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau ];

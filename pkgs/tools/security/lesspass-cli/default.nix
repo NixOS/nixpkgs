@@ -32,7 +32,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Stateless password manager";
-    homepage = https://lesspass.com;
+    homepage = "https://lesspass.com";
     maintainers = with maintainers; [ jasoncarr ];
     license = licenses.gpl3;
   };

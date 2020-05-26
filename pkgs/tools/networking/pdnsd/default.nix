@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "pdnsd-1.2.9a-par";
 
   src = fetchurl {
-    url = http://members.home.nl/p.a.rombouts/pdnsd/releases/pdnsd-1.2.9a-par.tar.gz;
+    url = "http://members.home.nl/p.a.rombouts/pdnsd/releases/pdnsd-1.2.9a-par.tar.gz";
     sha256 = "0yragv5zk77a1hfkpnsh17vvsw8b14d6mzfng4bb7i58rb83an5v";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Permanent DNS caching";
-    homepage = http://members.home.nl/p.a.rombouts/pdnsd;
+    homepage = "http://members.home.nl/p.a.rombouts/pdnsd";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [viric];

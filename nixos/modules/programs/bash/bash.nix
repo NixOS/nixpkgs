@@ -32,6 +32,10 @@ let
     fi
   '';
 
+  lsColors = optionalString cfg.enableLsColors ''
+    eval "$(${pkgs.coreutils}/bin/dircolors -b)"
+  '';
+
   bashAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
       (filterAttrs (k: v: v != null) cfg.shellAliases)
@@ -127,6 +131,14 @@ in
         type = types.bool;
       };
 
+      enableLsColors = mkOption {
+        default = true;
+        description = ''
+          Enable extra colors in directory listings.
+        '';
+        type = types.bool;
+      };
+
     };
 
   };
@@ -156,6 +168,7 @@ in
 
         ${cfg.promptInit}
         ${bashCompletion}
+        ${lsColors}
         ${bashAliases}
 
         ${cfge.interactiveShellInit}

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ];
 
   # Fix build for recent ncurses versions
-  NIX_CFLAGS_COMPILE = [ "-DNCURSES_INTERNALS=1" ];
+  NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
 
   createFindlibDestdir = true;
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "OCaml Bindings to curses/ncurses";
-    homepage = https://opam.ocaml.org/packages/curses/curses.1.0.4/;
+    homepage = "https://opam.ocaml.org/packages/curses/curses.1.0.4/";
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = ocaml.meta.platforms or [];

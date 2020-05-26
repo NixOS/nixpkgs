@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A simple alerting application for Graphite metrics";
-    homepage = https://github.com/klen/graphite-beacon;
+    homepage = "https://github.com/klen/graphite-beacon";
     maintainers = [ maintainers.offline ];
     license = licenses.mit;
   };

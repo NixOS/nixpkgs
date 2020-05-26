@@ -1,5 +1,4 @@
-{ stdenv, lib, buildEnv, writeShellScriptBin, fetchurl, vscode, unzip }:
-
+{ stdenv, lib, buildEnv, writeShellScriptBin, fetchurl, vscode, unzip, jq }:
 let
   extendedPkgVersion = lib.getVersion vscode;
   extendedPkgName = lib.removeSuffix "-${extendedPkgVersion}" vscode.name;
@@ -48,12 +47,15 @@ let
   buildVscodeMarketplaceExtension = a@{
     name ? "",
     src ? null,
+    vsix ? null,
     mktplcRef,
     ...
   }: assert "" == name; assert null == src;
-  buildVscodeExtension ((removeAttrs a [ "mktplcRef" ]) // {
+  buildVscodeExtension ((removeAttrs a [ "mktplcRef" "vsix" ]) // {
     name = "${mktplcRef.publisher}-${mktplcRef.name}-${mktplcRef.version}";
-    src = fetchVsixFromVscodeMarketplace mktplcRef;
+    src = if (vsix != null)
+      then vsix
+      else fetchVsixFromVscodeMarketplace mktplcRef;
     vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
   });
 
@@ -85,7 +87,7 @@ let
   };
 
   vscodeEnv = import ./vscodeEnv.nix {
-    inherit lib buildEnv writeShellScriptBin extensionsFromVscodeMarketplace;
+    inherit lib buildEnv writeShellScriptBin extensionsFromVscodeMarketplace jq;
     vscodeDefault = vscode;
   };
 in 

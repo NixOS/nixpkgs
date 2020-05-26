@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description    = "Header only C++ library for pretty printing standard containers";
-    homepage       = https://github.com/louisdx/cxx-prettyprint;
+    homepage       = "https://github.com/louisdx/cxx-prettyprint";
     license        = stdenv.lib.licenses.boost;
     platforms      = platforms.all;
 

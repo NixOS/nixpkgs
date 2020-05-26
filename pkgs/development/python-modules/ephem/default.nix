@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0dj4kk325b01s7q1zkwpm9rrzl7n1jf7fr92wcajjhc5kx14hwb0";
   };
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   checkInputs = [ pytest glibcLocales ];
   # JPLTest uses assets not distributed in package
   checkPhase = ''
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Compute positions of the planets and stars";
-    homepage = https://pypi.python.org/pypi/ephem/;
+    homepage = "https://pypi.python.org/pypi/ephem/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ chrisrosset ];
   };

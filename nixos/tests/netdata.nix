@@ -25,6 +25,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     # check if the netdata main page loads.
     netdata.succeed("curl --fail http://localhost:19999/")
+    netdata.succeed("sleep 4")
 
     # check if netdata can read disk ops for root owned processes.
     # if > 0, successful. verifies both netdata working and

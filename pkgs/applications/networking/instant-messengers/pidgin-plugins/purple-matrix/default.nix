@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gjm0z4wa5vi9x1xk43rany5pffrwg958n180ahdj9a7sa8a4hpm";
   };
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = builtins.toString [
     # glib-2.62 deprecations
     "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
     # override "-O0 -Werror" set by build system
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/matrix-org/purple-matrix;
+    homepage = "https://github.com/matrix-org/purple-matrix";
     description = "Matrix support for Pidgin / libpurple";
     license = licenses.gpl2;
     maintainers = with maintainers; [ symphorien ];

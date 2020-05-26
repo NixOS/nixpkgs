@@ -17,7 +17,7 @@ in fetchFromGitHub {
   sha256 = "0wrwcyycyzvgvgnlmwi1ncdvwb8f6bbclynd1105rsyxgrz5dd70";
 
   meta = with lib; {
-    homepage = https://black-foundry.com/work/inria;
+    homepage = "https://black-foundry.com/work/inria";
     description = "Inria Sans and Inria Serif";
     longDescription = ''
       Inria Sans and Inria Serif are the two members of a type family

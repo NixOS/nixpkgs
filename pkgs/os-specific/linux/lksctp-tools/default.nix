@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Linux Kernel Stream Control Transmission Protocol Tools.";
-    homepage = http://lksctp.sourceforge.net/;
+    homepage = "http://lksctp.sourceforge.net/";
     license = with licenses; [ gpl2 lgpl21 ]; # library is lgpl21
     platforms = platforms.linux;
   };

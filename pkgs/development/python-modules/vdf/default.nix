@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Library for working with Valve's VDF text format";
-    homepage = https://github.com/ValvePython/vdf;
+    homepage = "https://github.com/ValvePython/vdf";
     license = licenses.mit;
     maintainers = with maintainers; [ metadark ];
   };

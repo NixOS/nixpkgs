@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
 , cups, libjpeg, libusb1, python2Packages, sane-backends, dbus, usbutils
-, net_snmp, openssl, nettools
+, net-snmp, openssl, nettools
 , bash, coreutils, utillinux
 , qtSupport ? true
 , withPlugin ? false
@@ -55,7 +55,7 @@ python2Packages.buildPythonApplication {
     libusb1
     sane-backends
     dbus
-    net_snmp
+    net-snmp
     openssl
   ];
 
@@ -181,8 +181,8 @@ python2Packages.buildPythonApplication {
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
-    homepage = http://hplipopensource.com/;
-    downloadPage = https://sourceforge.net/projects/hplip/files/hplip/;
+    homepage = "http://hplipopensource.com/";
+    downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];

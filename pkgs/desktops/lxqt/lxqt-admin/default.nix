@@ -33,7 +33,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "LXQt system administration tool";
-    homepage = https://github.com/lxqt/lxqt-admin;
+    homepage = "https://github.com/lxqt/lxqt-admin";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

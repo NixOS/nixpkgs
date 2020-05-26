@@ -4,12 +4,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "marvin";
-  version = "19.23.0";
+  version = "20.9.0";
 
   src = fetchurl {
     name = "marvin-${version}.deb";
     url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${versions.majorMinor version}.deb";
-    sha256 = "1m28jki2qan6gdzs544y1v72ybp4vyj66ri5sy44jqi94xg1mb5f";
+    sha256 = "1c6q1vb96jsb37g5qbhzcnasd5pdqjyc190yg3caw3gwrd97889q";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A chemical modelling, analysis and structure drawing program";
-    homepage = https://chemaxon.com/products/marvin;
+    homepage = "https://chemaxon.com/products/marvin";
     maintainers = with maintainers; [ fusion809 ];
     license = licenses.unfree;
     platforms = platforms.linux;

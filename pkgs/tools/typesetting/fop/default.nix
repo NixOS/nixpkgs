@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
 
       This package contains the fop command line tool.
     '';
-    homepage = https://xmlgraphics.apache.org/fop/;
+    homepage = "https://xmlgraphics.apache.org/fop/";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ bjornfor ndowens ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

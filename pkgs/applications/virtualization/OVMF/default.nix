@@ -55,7 +55,7 @@ edk2.mkDerivation projectDscPath {
 
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";
-    homepage = https://github.com/tianocore/tianocore.github.io/wiki/OVMF;
+    homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = stdenv.lib.licenses.bsd2;
     platforms = ["x86_64-linux" "i686-linux" "aarch64-linux"];
   };

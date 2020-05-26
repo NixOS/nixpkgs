@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Multiplayer 3D Tank game";
-    homepage = https://bzflag.org/;
+    homepage = "https://bzflag.org/";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];

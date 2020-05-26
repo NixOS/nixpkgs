@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python wrapper for HTML Tidy (tidylib) on Python 2 and 3";
-    homepage = https://countergram.github.io/pytidylib/;
+    homepage = "https://countergram.github.io/pytidylib/";
     license = licenses.mit;
     maintainers = with maintainers; [ layus ];
   };

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex bison pkgconfig ];
 
   meta = with stdenv.lib; {
-    homepage = http://conntrack-tools.netfilter.org/;
+    homepage = "http://conntrack-tools.netfilter.org/";
     description = "Connection tracking userspace tools";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

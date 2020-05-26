@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "2.68.3";
+  version = "2.70.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1yxs0ax4rq3g0lgkbv7mz497rqj16iyyizddyc13gzxh6n7b0jsk";
+    sha256 = "0hjk9lgppc5435my0lyywbpmj7ib5vvcylwfin8ki97g9bvj1c2l";
   };
 
   postPatch = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = [ python3 sqlite libpsl brotli ];
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala glib ];
   propagatedBuildInputs = [ glib libxml2 ];
 
   mesonFlags = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "HTTP client/server library for GNOME";
-    homepage = https://wiki.gnome.org/Projects/libsoup;
+    homepage = "https://wiki.gnome.org/Projects/libsoup";
     license = stdenv.lib.licenses.gpl2;
     inherit (glib.meta) maintainers platforms;
   };

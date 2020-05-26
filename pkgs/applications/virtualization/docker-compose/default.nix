@@ -7,12 +7,12 @@
 }:
 
 buildPythonApplication rec {
-  version = "1.25.0";
+  version = "1.25.5";
   pname = "docker-compose";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zlprmsgmj4z627snsl0qmq8y7ggcyqrqm5vxvrvcigl7zywnprc";
+    sha256 = "1ijhg93zs3lswkljnm0rhww7gdy0g94psvsya2741prz2zcbcbks";
   };
 
   # lots of networking and other fails
@@ -41,9 +41,9 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://docs.docker.com/compose/;
+    homepage = "https://docs.docker.com/compose/";
     description = "Multi-container orchestration for Docker";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ Frostman ];
   };
 }

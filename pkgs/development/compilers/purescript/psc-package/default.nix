@@ -1,27 +1,61 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, lib }:
+# Based on https://github.com/justinwoo/easy-purescript-nix/blob/master/psc-package-simple.nix
+{ stdenv, lib, fetchurl, gmp, zlib, libiconv, darwin, installShellFiles }:
 
-with lib;
+let
+  dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 
-mkDerivation rec {
-  pname = "psc-package";
-  version = "0.5.1";
+in
+stdenv.mkDerivation rec {
+  pname = "psc-package-simple";
 
-  src = fetchFromGitHub {
-    owner = "purescript";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1zadbph1vha3b5hvmjvs138dcwbab49f3v63air1l6r4cvpb6831";
+  version = "0.6.2";
+
+  src = if stdenv.isDarwin
+  then fetchurl {
+    url = "https://github.com/purescript/psc-package/releases/download/v0.6.2/macos.tar.gz";
+    sha256 = "17dh3bc5b6ahfyx0pi6n9qnrhsyi83qdynnca6k1kamxwjimpcq1";
+  }
+  else fetchurl {
+    url = "https://github.com/purescript/psc-package/releases/download/v0.6.2/linux64.tar.gz";
+    sha256 = "1zvay9q3xj6yd76w6qyb9la4jaj9zvpf4dp78xcznfqbnbhm1a54";
   };
 
-  isLibrary = false;
-  isExecutable = true;
+  buildInputs = [ gmp zlib ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  executableHaskellDepends = with haskellPackages; [
-    aeson aeson-pretty either errors optparse-applicative
-    system-filepath turtle
-  ];
+  libPath = lib.makeLibraryPath buildInputs;
 
-  description = "A package manager for PureScript based on package sets";
-  license = licenses.bsd3;
-  maintainers = with lib.maintainers; [ Profpatsch ];
+  dontStrip = true;
+
+  installPhase = ''
+    mkdir -p $out/bin
+
+    PSC_PACKAGE=$out/bin/psc-package
+
+    install -D -m555 -T psc-package $PSC_PACKAGE
+    chmod u+w $PSC_PACKAGE
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool \
+      -change /usr/lib/libSystem.B.dylib ${darwin.Libsystem}/lib/libSystem.B.dylib \
+      -change /usr/lib/libiconv.2.dylib ${libiconv}/libiconv.2.dylib \
+      $PSC_PACKAGE
+  '' + lib.optionalString (!stdenv.isDarwin) ''
+    patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PSC_PACKAGE
+  '' + ''
+    chmod u-w $PSC_PACKAGE
+
+    $PSC_PACKAGE --bash-completion-script $PSC_PACKAGE > psc-package.bash
+    $PSC_PACKAGE --fish-completion-script $PSC_PACKAGE > psc-package.fish
+    $PSC_PACKAGE --zsh-completion-script $PSC_PACKAGE > _psc-package
+    installShellCompletion \
+      psc-package.{bash,fish} \
+      --zsh _psc-package
+  '';
+
+  meta = with lib; {
+    description = "A package manager for PureScript based on package sets";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ Profpatsch ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+  };
 }

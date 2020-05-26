@@ -3,7 +3,8 @@
 , withGui ? false, gtk2 ? null, withTeensyduino ? false
   /* Packages needed for Teensyduino */
 , upx, fontconfig, xorg, gcc
-, atk, glib, pango, gdk-pixbuf, libpng12, expat, freetype,
+, atk, glib, pango, gdk-pixbuf, libpng12, expat, freetype
+, cairo, udev
 }:
 
 assert withGui -> gtk2 != null;
@@ -32,6 +33,7 @@ let
 
   teensy_libpath = stdenv.lib.makeLibraryPath [
     atk
+    cairo
     expat
     fontconfig
     freetype
@@ -42,11 +44,13 @@ let
     libpng12
     libusb
     pango
+    udev
     xorg.libSM
     xorg.libX11
     xorg.libXext
     xorg.libXft
     xorg.libXinerama
+    xorg.libXxf86vm
     zlib
   ];
   teensy_architecture =
@@ -213,7 +217,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open-source electronics prototyping platform";
-    homepage = http://arduino.cc/;
+    homepage = "http://arduino.cc/";
     license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ antono auntie robberer bjornfor bergey ];

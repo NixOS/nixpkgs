@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     ./1.8.5-arm-flags.patch
   ];
 
-  patchFlags = "-p3";
+  patchFlags = [ "-p3" ];
 
   # fixes build on gcc8
   postPatch = ''
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
-    homepage = https://developer.mozilla.org/en/SpiderMonkey;
+    homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

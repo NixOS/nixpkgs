@@ -11,13 +11,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 libXi libXtst xorgproto ];
-  NIX_LDFLAGS = [
-    "-lX11"
-  ];
+  NIX_LDFLAGS = "-lX11";
 
   meta = with stdenv.lib; {
     description = "X virtual keyboard library";
-    homepage = https://www.yoctoproject.org/tools-resources/projects/matchbox;
+    homepage = "https://www.yoctoproject.org/tools-resources/projects/matchbox";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

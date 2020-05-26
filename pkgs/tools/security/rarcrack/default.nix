@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ libxml2 file p7zip unrar unzip ];
-  buildFlags = if stdenv.cc.isClang then [ "CC=clang" ] else null;
-  installFlags = "PREFIX=\${out}";
+  buildFlags = stdenv.lib.optional stdenv.cc.isClang "CC=clang";
+  installFlags = [ "PREFIX=\${out}" ];
 
   patchPhase = ''
    substituteInPlace rarcrack.c --replace "file -i" "${file}/bin/file -i"
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     This program uses bruteforce algorithm to find correct password. You can specify wich characters will be used in password generations.
     Warning: Please don't use this program for any illegal things!
     '';
-    homepage = https://github.com/jaredsburrows/Rarcrack;
+    homepage = "https://github.com/jaredsburrows/Rarcrack";
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak ];
     platforms = with platforms; unix;

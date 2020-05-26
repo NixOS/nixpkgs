@@ -15,7 +15,7 @@ buildGoPackage rec{
 
   meta = with stdenv.lib; {
     description = "Interact with Scaleway API from the command line";
-    homepage = https://github.com/scaleway/scaleway-cli;
+    homepage = "https://github.com/scaleway/scaleway-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ nickhu ];
     platforms = platforms.all;
