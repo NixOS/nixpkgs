@@ -21,7 +21,7 @@ buildGoPackage rec {
     description = "SNMP Exporter for Prometheus";
     homepage = "https://github.com/prometheus/snmp_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ oida willibutz ];
+    maintainers = with maintainers; [ oida willibutz Frostman ];
     platforms = platforms.unix;
   };
 }
