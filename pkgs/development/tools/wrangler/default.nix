@@ -13,14 +13,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0c2ss3j53vra1b4m3jsy2w2gdf6k1hw3qf6sd4qlg2ybk4k83g3b";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [
-                  curl
-                  darwin.apple_sdk.frameworks.Security
-                  darwin.apple_sdk.frameworks.CoreServices
-                  darwin.apple_sdk.frameworks.CoreFoundation
-                ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ openssl ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [
+      curl
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.CoreFoundation
+    ];
 
   # tries to use "/homeless-shelter" and fails
   doCheck = false;
