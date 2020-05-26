@@ -6587,6 +6587,8 @@ in
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
 
+  shen-sbcl = callPackage ../development/interpreters/shen-sbcl { };
+
   shen-sources = callPackage ../development/interpreters/shen-sources { };
 
   shocco = callPackage ../tools/text/shocco { };
