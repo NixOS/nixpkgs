@@ -1,4 +1,4 @@
-{ lib, fetchurl, ocamlPackages }:
+{ lib, fetchurl, fetchzip, ocamlPackages }:
 
 with ocamlPackages;
 
@@ -9,19 +9,18 @@ let
       buildInputs,
       useDune2 ? true,
       tarballName ? "ocamlformat-${version}.tbz",
-      # The 'url' argument can be removed when 0.11.0 is pruned
-      url ? "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/${tarballName}"
+      # The 'src' argument can be removed when 0.11.0 is pruned
+      src ? fetchurl {
+          url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/${tarballName}";
+          inherit sha256;
+        }
     }:
     buildDunePackage rec {
       pname = "ocamlformat";
 
       minimumOCamlVersion = "4.06";
 
-      src = fetchurl {
-        inherit url sha256;
-      };
-
-      inherit version useDune2 buildInputs;
+      inherit src version useDune2 buildInputs;
 
       meta = {
         homepage = "https://github.com/ocaml-ppx/ocamlformat";
@@ -59,10 +58,13 @@ let
 in
 
 rec {
-  ocamlformat_0_11_0 = mkOCamlformat {
+  ocamlformat_0_11_0 = mkOCamlformat rec {
     version = "0.11.0";
-    url = "https://github.com/ocaml-ppx/ocamlformat/archive/0.11.0.tar.gz";
-    sha256 = "0bl3c7b40wz5slnzcbbjimrnphhgk03vvm8bbb60ybp1k1jyr5lw";
+    src = fetchzip {
+      url = "https://github.com/ocaml-ppx/ocamlformat/archive/0.11.0.tar.gz";
+      inherit sha256;
+    };
+    sha256 = "0zvjn71jd4d3znnpgh0yphb2w8ggs457b6bl6cg1fmpdgxnds6yx";
     useDune2 = false;
     buildInputs = post_0_11_buildInputs;
   };
