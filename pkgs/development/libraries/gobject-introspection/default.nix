@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   LC_ALL = "en_US.UTF-8"; # for tests
 
-  nativeBuildInputs = [ meson ninja pkgconfig libintl glibcLocales ];
-  buildInputs = [ flex bison python3 setupHook/*move .gir*/ ]
+  nativeBuildInputs = [ flex bison meson ninja python3 pkgconfig libintl glibcLocales ];
+  buildInputs = [ setupHook/*move .gir*/ ]
     ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];
 
