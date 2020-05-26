@@ -15000,6 +15000,14 @@ in
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
   vtk = callPackage ../development/libraries/vtk {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.libs) xpc;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
+                                          IOKit CFNetwork Security ApplicationServices
+                                          CoreText IOSurface ImageIO OpenGL GLUT;
+  };
+
+  vtk_7 = callPackage ../development/libraries/vtk/7.x.nix {
     stdenv = if stdenv.isDarwin then stdenv else gcc8Stdenv;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
@@ -15039,7 +15047,7 @@ in
     });
   };
 
-  vtkWithQt4 = vtk.override { qtLib = qt4; };
+  vtkWithQt5 = vtk.override { qtLib = qt5; };
 
   vxl = callPackage ../development/libraries/vxl {
     libpng = libpng12;

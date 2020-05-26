@@ -7089,7 +7089,7 @@ in {
 
   visitor = callPackage ../development/python-modules/visitor { };
 
-  vtk = toPythonModule (pkgs.vtk.override {
+  vtk = toPythonModule (pkgs.vtk_7.override {
     inherit (self) python;
     enablePython = true;
   });
