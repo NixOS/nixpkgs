@@ -1,5 +1,5 @@
 { lib, stdenv, gnome3, wxGTK30, wxGTK31
-, makeWrapper
+, makeWrapper, lndir
 , gsettings-desktop-schemas, hicolor-icon-theme
 , callPackage, callPackages
 , librsvg, cups
@@ -39,6 +39,8 @@ in
 stdenv.mkDerivation rec {
 
   passthru.libraries = callPackages ./libraries.nix versionConfig.libVersion;
+  # a link to this exists as python3.pkgs.[kicad|kicad-unstable]
+  passthru.py = python.pkgs.toPythonModule base;
   base = callPackage ./base.nix {
     inherit versions stable baseName;
     inherit wxGTK python wxPython;
@@ -52,12 +54,11 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
-  dontFixup = true;
 
   pythonPath = optionals (scriptingSupport)
     [ wxPython python.pkgs.six ];
 
-  nativeBuildInputs = [ makeWrapper ]
+  nativeBuildInputs = [ makeWrapper lndir ]
     ++ optionals (scriptingSupport)
       [ python.pkgs.wrapPython ];
 
@@ -108,6 +109,13 @@ stdenv.mkDerivation rec {
       ])
     )
   ;
+
+  # this should be in installPhase or postInstall...
+  fixupPhase = ''
+    mkdir -p $out/lib $out/share
+    lndir ${base}/lib $out/lib
+    lndir ${base}/share $out/share
+  '';
 
   # can't run this for each pname
   # stable and unstable are in the same versions.nix
