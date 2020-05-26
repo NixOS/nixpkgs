@@ -5576,8 +5576,8 @@ in {
 
   retworkx = callPackage ../development/python-modules/retworkx { };
 
-  rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
-    python2 = python;
+  rivet = disabledIf (!isPy3k) (toPythonModule (pkgs.rivet.override {
+    python3 = python;
   }));
 
   ripser = callPackage ../development/python-modules/ripser { };
