@@ -4,7 +4,7 @@
 , cmake
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gnome3
 , glib
 , gtk3
@@ -17,6 +17,7 @@
 , rustPlatform
 , makeWrapper
 , substituteAll
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     rustc
     cargo
     glib.dev
@@ -55,29 +56,27 @@ rustPlatform.buildRustPackage rec {
   ];
 
   patches = [
-    ./rm-dep-libcroco.patch
     ./desktop-in.patch
+    # This patch removes the unused dependency 'libcroco' the from meson.build
+    ( fetchpatch {
+      url = "https://source.puri.sm/Librem5/squeekboard/commit/f473a47eb8f394ab6f36704850e7e2bfa74ce8a1.patch";
+      sha256 = "0mlp8c38s4mbza8czf4kdg86kvqw294nbpqfk9apbl92nq0a26zr";
+    })
   ];
 
   cargoSha256 = "1fkhj4i2l2hdk9wvld6ryvnm1mxfwx3s555r7n42pg9f5namn1sr";
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  configurePhase = "meson . _build/";
-  buildPhase = ''
-    ninja -C _build test
-  '';
-  installPhase = ''
-    runHook preInstall && DESTDIR="$out" ninja -C _build install && runHook postInstall
-  '';
+  # Don't use buildRustPackage phases, only use it for rust deps setup
+  configurePhase = null;
+  buildPhase = null;
+  checkPhase = null;
+  installPhase = null;
 
   postFixup = ''
-    mkdir -p $out/bin $out/share/applications/
-    substituteInPlace "$out/usr/local/share/applications/sm.puri.Squeekboard.desktop" \
-        --replace "@squeekboard@" "$out"
-    cp -r $out/usr/local/share/applications/ $out/share/
-    cp $out/usr/local/bin/squeekboard $out/bin/
-    rm -r $out/usr
+    substituteInPlace "$out/share/applications/sm.puri.Squeekboard.desktop" \
+        --replace "@bindir@" "$out/bin"
   '';
 
   check = false;
