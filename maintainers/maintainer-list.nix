@@ -2564,6 +2564,12 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  felixsinger = {
+    email = "felixsinger@posteo.net";
+    github = "felixsinger";
+    githubId = 628359;
+    name = "Felix Singer";
+  };
   ffinkdevs = {
     email = "fink@h0st.space";
     github = "ffinkdevs";
