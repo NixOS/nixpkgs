@@ -3181,9 +3181,13 @@ in {
 
   jsonwatch = callPackage ../development/python-modules/jsonwatch { };
 
-  # kicad's built with python3 only
-  kicad = disabledIf isPy27 pkgs.kicad.py;
-  kicad-unstable = disabledIf isPy27 pkgs.kicad-unstable.py;
+  kicad = disabledIf isPy27 (toPythonModule (pkgs.kicad.override {
+    python3 = python;
+  }).src);
+  kicad-unstable = disabledIf isPy27
+    (toPythonModule (pkgs.kicad-unstable.override {
+      python3 = python;
+    }).src);
 
   latexcodec = callPackage ../development/python-modules/latexcodec {};
 

@@ -39,8 +39,6 @@ in
 stdenv.mkDerivation rec {
 
   passthru.libraries = callPackages ./libraries.nix versionConfig.libVersion;
-  # a link to this exists as python3.pkgs.[kicad|kicad-unstable]
-  passthru.py = python.pkgs.toPythonModule base;
   base = callPackage ./base.nix {
     inherit versions stable baseName;
     inherit wxGTK python wxPython;
