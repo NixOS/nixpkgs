@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitLab, pkgconfig
 , qmake, qtbase, qtdeclarative, wrapQtAppsHook
 , glib, gobject-introspection
+, genericUpdater, common-updater-scripts
 }:
 
 stdenv.mkDerivation rec {
@@ -53,6 +54,12 @@ stdenv.mkDerivation rec {
         --replace "install: install_target" "install: "
     done
   '';
+
+  passthru.updateScript = genericUpdater {
+    inherit pname version;
+    rev-prefix = "v";
+    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+  };
 
   meta = with stdenv.lib; {
     description = "Library to access GSettings from Qt";
