@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pkgconf";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://distfiles.dereferenced.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "04525vv0y849vvc2pi60g5wd9fjp1wbhra2lniifi82y1ldv7w31";
+    sha256 = "0sb1a2lgiqaninv5s3zq09ilrkpsamcl68dyhqyz7yi9vsgb0vhy";
   };
 
   meta = with stdenv.lib; {
