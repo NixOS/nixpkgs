@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.71.0";
+  version = "0.71.1";
 
   buildInputs = [ libsass ];
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "gohugoio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cjf69y8wvjq7kpncvqzmhc03pmf21nfxqpdnh64v34d14gpa1aa";
+    sha256 = "0kx3q2i5p8k1dfkh02ns5ns97aqqvdcs0kx4bl9d38jk3lw3jrgh";
   };
 
   golibsass = fetchFromGitHub {
