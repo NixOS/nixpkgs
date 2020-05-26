@@ -18,7 +18,11 @@ let
 
   #removed not defined extensions
   rmExtensions =  lib.optionalString (nixExtensions++mutableExtensions != []) ''
-    find ${vscodeExtsFolderName} -mindepth 1 -maxdepth 1 ${lib.concatMapStringsSep " " (e : ''! -iname ${e.publisher}.${e.name}'') (nixExtensions++mutableExtensions)} -exec sudo rm -rf {} \;
+    find ${vscodeExtsFolderName} -mindepth 1 -maxdepth 1 ${
+        lib.concatMapStringsSep " " (e : ''! -iname ${e.publisher}.${e.name} '') nixExtensions
+        +
+        lib.concatMapStringsSep " " (e : ''! -iname ${e.publisher}.${e.name}-${e.version} '') mutableExtensions
+      } -exec rm -rf {} \;
   '';
   #copy mutable extension out of the nix store
   cpExtensions = ''
