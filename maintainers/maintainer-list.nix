@@ -1200,6 +1200,12 @@
     githubId = 5525646;
     name = "Brice Waegeneire";
   };
+  bsima = {
+    email = "ben@bsima.me";
+    github = "bsima";
+    githubId = 200617;
+    name = "Ben Sima";
+  };
   bstrik = {
     email = "dutchman55@gmx.com";
     github = "bstrik";
