@@ -2,7 +2,7 @@
 , pytest, aiodns, slixmpp, pyinotify, potr, mpd2, cffi, pkgconfig }:
 buildPythonApplication rec {
     pname = "poezio";
-    version = "0.12.1";
+    version = "0.13";
 
     disabled = pythonOlder "3.4";
 
@@ -14,7 +14,7 @@ buildPythonApplication rec {
       owner = pname;
       repo = pname;
       rev = "v${version}";
-      sha256 = "04qnsr0l12i55k6xl4q4akx317gai9wv5f1wpkfkq01wp181i5ll";
+      sha256 = "14ig7va0yf5wdhi8hk00f1wni8pj37agggdnvsicvcw2rz1cdw0x";
     };
 
     checkPhase = ''
