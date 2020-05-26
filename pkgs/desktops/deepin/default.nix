@@ -12,7 +12,6 @@ let
         ignoredVersions = "^2014(\\.|rc)|^v[0-9]+";
       };
 
-    dbus-factory = callPackage ./dbus-factory { };
     dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
     dde-control-center = callPackage ./dde-control-center { };
