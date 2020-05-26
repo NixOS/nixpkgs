@@ -1455,6 +1455,8 @@ in {
 
   rq = callPackage ../development/python-modules/rq { };
 
+  django-rq = callPackage ../development/python-modules/django-rq { };
+
   rx = callPackage ../development/python-modules/rx { };
 
   sabyenc = callPackage ../development/python-modules/sabyenc { };
