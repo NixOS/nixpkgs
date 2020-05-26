@@ -20,7 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/aaronjanse/3mux";
     license = licenses.mit;
     maintainers = with maintainers; [ aaronjanse filalex77 ];
-    # TODO: fix modules build on darwin
-    broken = stdenv.isDarwin;
   };
 }
