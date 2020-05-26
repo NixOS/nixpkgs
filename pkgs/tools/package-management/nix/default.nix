@@ -210,13 +210,13 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20200501_941f952";
+    suffix = "pre20200521_00b562c";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "941f95284ab57e9baa317791327cf1715d8564b5";
-      sha256 = "0d99jl5baxji5dmqb4fwmbffx0z04k0naanms5zzbwvxdmzn3yhs";
+      rev = "00b562c87ec4c3bbe514f5dc1f4d1c41f66f66bf";
+      hash = "sha256-GqTFh4wBfkKapixKyd3gA9C1tF0PSzZDD5LN+5nQEWk=";
     };
 
     crates = fetchurl {
