@@ -51,8 +51,6 @@ mkDerivation rec {
     "INSTALL_PATH=${placeholder "out"}/${qtbase.qtPluginPrefix}/platforms"
   ];
 
-  enableParallelBuilding = true;
-
   passthru.updateScript = deepin.updateScript { inherit pname version; src = (builtins.head srcs); };
 
   meta = with stdenv.lib; {
