@@ -9323,6 +9323,8 @@ in
 
   urweb = callPackage ../development/compilers/urweb { };
 
+  usql = callPackage ../tools/admin/usql {};
+
   vlang = callPackage ../development/compilers/vlang { };
 
   vala-lint = callPackage ../development/tools/vala-lint { };
