@@ -8,8 +8,14 @@
 let
   envs = let
     inherit python;
-    pythonEnv = python.withPackages(ps: with ps; [ ]);
-    pythonVirtualEnv = python.withPackages(ps: with ps; [ virtualenv ]);
+    pythonWithSitePackage = python.override {
+      packageOverrides = (self: super: {
+        site-pkg-python = super.callPackage ./tests/site-pkg-python {};
+      });
+      self = python;
+    };
+    pythonEnv = pythonWithSitePackage.withPackages(ps: with ps; [ site-pkg-python ]);
+    pythonVirtualEnv = pythonWithSitePackage.withPackages(ps: with ps; [ site-pkg-python virtualenv ]);
   in {
     # Plain Python interpreter
     plain = rec {
@@ -25,7 +31,7 @@ let
       env = runCommand "${python.name}-virtualenv" {} ''
         ${pythonVirtualEnv.interpreter} -m virtualenv $out
       '';
-      interpreter = "${env}/bin/${python.executable}";
+      interpreter = "${env}/bin/${pythonVirtualEnv.executable}";
       is_venv = "False";
       is_nixenv = "True";
       is_virtualenv = "True";
