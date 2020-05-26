@@ -247,12 +247,6 @@
     githubId = 732652;
     name = "Andreas Herrmann";
   };
-  ahmedtd = {
-    email = "ahmed.taahir@gmail.com";
-    github = "ahmedtd";
-    githubId = 1017202;
-    name = "Taahir Ahmed";
-  };
   ahuzik = {
     email = "ales.guzik@gmail.com";
     github = "alesguzik";
