@@ -50,7 +50,6 @@ let
     dtkwidget = callPackage ./dtkwidget { };
     dtkwm = callPackage ./dtkwm { };
     go-dbus-factory = callPackage ./go-dbus-factory { };
-    go-dbus-generator = callPackage ./go-dbus-generator { };
     go-gir-generator = callPackage ./go-gir-generator { };
     go-lib = callPackage ./go-lib { };
     qcef = callPackage ./qcef { };
