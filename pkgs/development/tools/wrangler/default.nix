@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, darwin }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "cloudflare-wrangler";
+  pname = "wrangler";
   version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
-    repo = "wrangler";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0i3fhdq8v9459mlnazkv9bpkcv01rdy5rk149lhpsan76zlyzzwr";
   };
