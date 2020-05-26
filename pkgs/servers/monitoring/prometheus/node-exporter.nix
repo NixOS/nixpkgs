@@ -27,7 +27,7 @@ buildGoPackage rec {
     description = "Prometheus exporter for machine metrics";
     homepage = "https://github.com/prometheus/node_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz globin ];
+    maintainers = with maintainers; [ benley fpletz globin Frostman ];
     platforms = platforms.unix;
   };
 }
