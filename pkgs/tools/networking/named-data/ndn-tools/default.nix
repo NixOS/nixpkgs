@@ -12,7 +12,9 @@ in stdenv.mkDerivation {
     sha256 = "1sjhyhc9ww38vyf3qmjzh5c4c0jc43ypzjmpqwsbq8y5zzln0gfx";
   };
 
-  buildInputs = [ wafHook libpcap openssl boost pkgconfig python pythonPackages.sphinx git ndn-cxx ];
+  nativeBuildInputs = [ wafHook pkgconfig python pythonPackages.sphinx ];
+  buildInputs = [ libpcap openssl boost ndn-cxx ];
+
   wafConfigureFlags = [
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"

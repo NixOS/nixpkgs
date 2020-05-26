@@ -11,9 +11,12 @@ stdenv.mkDerivation {
     rev = "NFD-${version}";
     sha256 = "0y86x9h6wk2n9cfxgnmm0h89kjdv01i7pbf189354yc2ylndmbgh";
   };
-  buildInputs = [ wafHook
-                  libpcap doxygen boost pkgconfig python pythonPackages.sphinx
-                  openssl ndn-cxx ];
+
+  nativeBuildInputs = [
+    wafHook doxygen pkgconfig python pythonPackages.sphinx
+  ];
+  buildInputs = [ libpcap boost openssl ndn-cxx ];
+
   wafConfigureFlags = [
      "--boost-includes=${boost.dev}/include"
      "--boost-libs=${boost.out}/lib"

@@ -11,8 +11,10 @@ stdenv.mkDerivation {
     rev = "3c843162f812ea22972d82fe7a834fac3f3ae2d5";
     sha256 = "0pdinvq3cf458bmm2mxdlidrmmr38in1563ra8q0ch3wp45va2di";
   };
-  buildInputs = [ wafHook libpcap openssl doxygen boost sqlite pkgconfig
-                  python pythonPackages.sphinx ndn-cxx ];
+
+  nativeBuildInputs = [ wafHook doxygen pkgconfig python pythonPackages.sphinx ];
+  buildInputs = [ libpcap openssl boost sqlite ndn-cxx ];
+
   wafConfigureFlags = [
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"

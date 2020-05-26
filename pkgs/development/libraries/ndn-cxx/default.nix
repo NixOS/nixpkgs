@@ -13,8 +13,9 @@ stdenv.mkDerivation {
     sha256 = "06q4bsl63bn5h9csdyz883qpak67511w5d7xl3z5364pmjfwvji2";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
-  buildInputs = [ openssl doxygen boost sqlite python pythonPackages.sphinx];
+  nativeBuildInputs = [ pkgconfig wafHook doxygen python pythonPackages.sphinx ];
+  buildInputs = [ openssl boost sqlite ];
+
   wafConfigureFlags = [
     "--with-openssl=${openssl.dev}"
     "--boost-includes=${boost.dev}/include"
