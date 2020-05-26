@@ -6891,6 +6891,8 @@ in
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
 
+  shen-sources = callPackage ../development/interpreters/shen-sources { };
+
   shocco = callPackage ../tools/text/shocco { };
 
   shopify-themekit = callPackage ../development/web/shopify-themekit { };
