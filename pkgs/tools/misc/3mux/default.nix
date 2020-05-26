@@ -13,6 +13,10 @@ buildGoModule rec {
 
   vendorSha256 = "1pyik8d1syjvwvkp7i94z1jmflw01wqpafmn1hsnbn034z4ygimd";
 
+  preBuild = ''
+    export CGO_ENABLED=${if stdenv.isLinux then "1" else "0"}
+  '';
+
   excludedPackages = [ "fuzz" ];
 
   meta = with stdenv.lib; {
