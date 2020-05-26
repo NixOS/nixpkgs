@@ -29,6 +29,10 @@ let
         level = "INFO";
       };
     };
+    HAYSTACK_CONNECTIONS.default = {
+      ENGINE = "haystack.backends.whoosh_backend.WhooshEngine";
+      PATH = "/var/lib/mailman-web/fulltext-index";
+    };
   } // cfg.webSettings;
 
   webSettingsJSON = pkgs.writeText "settings.json" (builtins.toJSON webSettings);
