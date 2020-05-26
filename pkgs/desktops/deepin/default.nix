@@ -54,8 +54,8 @@ let
     go-gir-generator = callPackage ./go-gir-generator { };
     go-lib = callPackage ./go-lib { };
     qcef = callPackage ./qcef { };
-    qt5dxcb-plugin = callPackage ./qt5dxcb-plugin { };
     qt5integration = callPackage ./qt5integration { };
+    qt5platform-plugins = callPackage ./qt5platform-plugins { };
     startdde = callPackage ./startdde { };
     udisks2-qt5 = callPackage ./udisks2-qt5 { };
 
