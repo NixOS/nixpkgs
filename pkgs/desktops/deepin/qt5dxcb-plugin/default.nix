@@ -13,14 +13,14 @@
 
 mkDerivation rec {
   pname = "qt5dxcb-plugin";
-  version = "5.0.1";
+  version = "5.0.11";
 
   srcs = [
     (fetchFromGitHub {
       owner = "linuxdeepin";
       repo = pname;
       rev = version;
-      sha256 = "1pkhbx4hzjv7n4mscv7dng9ymjcc1csdc82iy62yxshhq32bcfja";
+      sha256 = "14xkr3p49716jc9v7ksj6jgcmfa65qicqrmablizfi71srg3z2pr";
     })
     qtbase.src
   ];
