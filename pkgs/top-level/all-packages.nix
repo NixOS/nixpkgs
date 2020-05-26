@@ -9514,7 +9514,7 @@ in
   ocaml-crunch = ocamlPackages.crunch.bin;
 
   inherit (callPackage ../development/tools/ocaml/ocamlformat { })
-    ocamlformat # lastest version
+    ocamlformat # latest version
     ocamlformat_0_11_0 ocamlformat_0_12 ocamlformat_0_13_0 ocamlformat_0_14_0
     ocamlformat_0_14_1 ocamlformat_0_14_2 ocamlformat_0_15_0;
 
