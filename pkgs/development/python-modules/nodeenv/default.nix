@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, setuptools }:
 
 buildPythonPackage rec {
   pname = "nodeenv";
@@ -8,6 +8,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "ad8259494cf1c9034539f6cced78a1da4840a4b157e23640bc4a0c0546b0cb7a";
   };
+
+  propagatedBuildInputs = [
+    setuptools
+  ];
 
   # Tests not included in PyPI tarball
   doCheck = false;
