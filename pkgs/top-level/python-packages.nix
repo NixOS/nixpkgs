@@ -2484,6 +2484,8 @@ in {
 
   pytest-cram = callPackage ../development/python-modules/pytest-cram { };
 
+  pytest-datadir = callPackage ../development/python-modules/pytest-datadir { };
+
   pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
 
   pytest-dependency = callPackage ../development/python-modules/pytest-dependency { };
