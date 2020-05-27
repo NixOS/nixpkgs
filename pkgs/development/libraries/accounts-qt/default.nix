@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qtbase, qmake }:
+{ stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qtbase, qmake, graphviz }:
 
 stdenv.mkDerivation rec {
   pname = "accounts-qt";
@@ -12,11 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib libaccounts-glib qtbase ];
-  nativeBuildInputs = [ doxygen pkgconfig qmake ];
+  nativeBuildInputs = [ doxygen pkgconfig qmake graphviz ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake"
-  '';
+# Commented due to error 'accounts-qt5 development package not found' when tried to build oauth2 plugin for signon
+# It seems like this options do something wrong
+#  preConfigure = ''
+#    qmakeFlags="$qmakeFlags LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake"
+#  '';
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';

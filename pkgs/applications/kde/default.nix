@@ -87,6 +87,8 @@ let
       incidenceeditor = callPackage ./incidenceeditor.nix {};
       k3b = callPackage ./k3b.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
+      kaccounts-providers = callPackage ./kaccounts-providers.nix {};
+      kaccounts-integration = callPackage ./kaccounts-integration.nix {};
       kalarm = callPackage ./kalarm.nix {};
       kalarmcal = callPackage ./kalarmcal.nix {};
       kate = callPackage ./kate.nix {};
@@ -142,6 +144,7 @@ let
       kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};
+      ktp-accounts-kcm = callPackage ./ktp-accounts-kcm.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
       krdc = callPackage ./krdc.nix {};
@@ -178,6 +181,7 @@ let
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
       rocs = callPackage ./rocs.nix {};
+      signon-kwallet-extension = callPackage ./signon-kwallet-extension.nix {};
       spectacle = callPackage ./spectacle.nix {};
       yakuake = callPackage ./yakuake.nix {};
       # Okteta was removed from kde applications and will now be released independently

@@ -14277,6 +14277,8 @@ in
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
+    accounts-qml-module = libsForQt5.callPackage ../development/libraries/accounts-qml-module { };
+
     alkimia = callPackage ../development/libraries/alkimia { };
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
@@ -14332,6 +14334,12 @@ in
       qt5Support = true;
       suffix = "qt5";
     };
+
+    signond = libsForQt5.callPackage ../development/libraries/signond { };
+
+    signon-ui = libsForQt5.callPackage ../development/libraries/signon-ui { };
+
+    signon-plugin-oauth2 = libsForQt5.callPackage ../development/libraries/signond/extensions/oauth2.nix { };
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
@@ -20414,6 +20422,11 @@ in
   khard = callPackage ../applications/misc/khard { };
 
   kid3 = libsForQt5.callPackage ../applications/audio/kid3 { };
+
+  kio-gdrive = libsForQt5.callPackage ../applications/misc/kio-gdrive {
+    inherit (kdeApplications) libkgapi kaccounts-integration kaccounts-providers;
+    inherit (kdeFrameworks) kcalendarcore;
+  };
 
   kile = libsForQt5.callPackage ../applications/editors/kile { };
 
