@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, fetchFromGitHub, buildGoPackage, ruby,
-  bundlerEnv, pkgconfig, libgit2 }:
+  bundlerEnv, pkgconfig, libgit2_0_27 }:
 
 let
   rubyEnv = bundlerEnv rec {
@@ -18,15 +18,6 @@ let
         };
       };
   };
-  libgit2_0_27 = libgit2.overrideAttrs (oldAttrs: rec {
-    version = "0.27.8";
-    src = fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "v${version}";
-      sha256 = "0wzx8nkyy9m7mx6cks58chjd4289vjsw97mxm9w6f1ggqsfnmbr9";
-    };
-  });
 in buildGoPackage rec {
   version = "12.8.10";
   pname = "gitaly";

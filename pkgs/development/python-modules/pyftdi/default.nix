@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "pyftdi";
-  version = "0.49.0";
+  version = "0.51.2";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "eblot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "063kwvgw7g4nn09pyqwqy72vnhzw0aajg23bi32vr0k49g8fx27s";
+    sha256 = "14mkwk44bgm6s4kqagz7nm6p6gsygmksl2628jaqh7ppblxca9as";
   };
 
   propagatedBuildInputs = [ pyusb pyserial ];

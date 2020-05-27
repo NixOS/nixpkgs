@@ -344,6 +344,40 @@ let
         buildTests = true;
         expectedTestOutputs = [ "test baz_false ... ok" ];
       };
+      # Regression test for https://github.com/NixOS/nixpkgs/pull/88054
+      # Build script output should be rewritten as valid env vars.
+      buildScriptIncludeDirDeps = let
+        depCrate = mkCrate {
+          crateName = "bar";
+          src = symlinkJoin {
+            name = "build-script-and-include-dir-bar";
+            paths = [
+              (mkFile  "src/lib.rs" ''
+                fn main() { }
+              '')
+              (mkFile  "build.rs" ''
+                use std::path::PathBuf;
+                fn main() { println!("cargo:include-dir={}/src", std::env::current_dir().unwrap_or(PathBuf::from(".")).to_str().unwrap()); }
+              '')
+            ];
+          };
+        };
+      in {
+        crateName = "foo";
+        src = symlinkJoin {
+          name = "build-script-and-include-dir-foo";
+          paths = [
+            (mkFile  "src/main.rs" ''
+              fn main() { }
+            '')
+            (mkFile  "build.rs" ''
+              fn main() { assert!(std::env::var_os("DEP_BAR_INCLUDE_DIR").is_some()); }
+            '')
+          ];
+        };
+        buildDependencies = [ depCrate ];
+        dependencies = [ depCrate ];
+      };
       # Regression test for https://github.com/NixOS/nixpkgs/issues/74071
       # Whenevever a build.rs file is generating files those should not be overlayed onto the actual source dir
       buildRsOutDirOverlay = {

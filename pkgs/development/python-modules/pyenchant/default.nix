@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyenchant";
-  version = "3.0.1";
+  version = "3.1.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nfmckqm45fbfz795qw5hgvygdxgxchdiwp3kmm1k05z99j6mlhv";
+    sha256 = "14is5p40f516plzccwg6yf51zkja38abw46kybzwgyy94phr8i9b";
   };
 
   propagatedBuildInputs = [ enchant2 ];

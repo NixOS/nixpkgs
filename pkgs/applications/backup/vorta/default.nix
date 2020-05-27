@@ -5,13 +5,13 @@
 
 buildPythonApplication rec {
   pname = "vorta";
-  version = "0.6.24";
+  version = "0.6.26";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     rev = "v${version}";
-    sha256 = "1xc4cng4npc7g739qd909a8wim6s6sn8h8bb1wpxzg4gcnfyin8z";
+    sha256 = "189kzwdmissg9142cd7wvxa1rvc2y7lysgr7if99zc7ks59mv6dq";
   };
 
   postPatch = ''
