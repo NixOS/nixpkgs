@@ -566,6 +566,38 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      was removed, as udev gained native support to handle FIDO security tokens.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     With this release <literal>systemd-networkd</literal> (when enabled through <xref linkend="opt-networking.useNetworkd"/>)
+     has it's netlink socket created through a <literal>systemd.socket</literal> unit. This gives us control over
+     socket buffer sizes and other parameters. For larger setups where networkd has to create a lot of (virtual)
+     devices the default buffer size (currently 128MB) is not enough.
+    </para>
+    <para>
+     On a machine with &gt;100 virtual interfaces (e.g., wireguard tunnels, VLANs, …), that all have to
+     be brought up during system startup, the receive buffer size will spike for a brief period.
+     Eventually some of the message will be dropped since there is not enough (permitted) buffer
+     space available.
+    </para>
+    <para>
+     By having <literal>systemd-networkd</literal> start with a netlink socket created by
+     <literal>systemd</literal> we can configure the <literal>ReceiveBufferSize=</literal> parameter
+     in the socket options (i.e. <literal>systemd.sockets.systemd-networkd.socketOptions.ReceiveBufferSize</literal>)
+     without recompiling <literal>systemd-networkd</literal>.
+    </para>
+    <para>
+     Since the actual memory requirements depend on hardware, timing, exact
+     configurations etc. it isn't currently possible to infer a good default
+     from within the NixOS module system. Administrators are advised to
+     monitor the logs of <literal>systemd-networkd</literal> for <literal>rtnl: kernel receive buffer
+     overrun</literal> spam and increase the memory limit as they see fit.
+    </para>
+    <para>
+     Note: Increasing the <literal>ReceiveBufferSize=</literal> doesn't allocate any memory. It just increases
+     the upper bound on the kernel side. The memory allocation depends on the amount of messages that are
+     queued on the kernel side of the netlink socket.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
