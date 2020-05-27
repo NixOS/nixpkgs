@@ -4,17 +4,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname   = "bat";
-  version = "0.15.3";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0893xjnrjmhhzccfb57w5s7wlf6z4cwxvrxj8qb5jnmrgkfaw86b";
+    sha256 = "1pjdvhldmjpy8ymb7r91y18hj5dx1iygszsfwkd66v9rncjigd07";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0mcff6nsd9g39xdhsf06zxs7pmq27nqfxdk0lwh83lqmnzdp01sf";
+  cargoSha256 = "0myz06hjv4hwzmyqa9l36i9j9d213a0mnq8rvx6wyff7mr9zk99i";
 
   nativeBuildInputs = [ pkgconfig installShellFiles makeWrapper ];
 
