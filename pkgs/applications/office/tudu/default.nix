@@ -2,11 +2,11 @@
 stdenv.mkDerivation rec {
 
   pname = "tudu";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchurl {
     url = "https://code.meskio.net/tudu/${pname}-${version}.tar.gz";
-    sha256 = "0140pw457cd05ysws998yhd3b087j98q8m0g3s4br942l65b8n2y";
+    sha256 = "14srqn968ii3sr4v6xc5zzs50dmm9am22lrm57j7n0rhjclwbssy";
   };
 
   buildInputs = [ ncurses ];
