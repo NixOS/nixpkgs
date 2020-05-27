@@ -15198,6 +15198,8 @@ in
 
   swiftclient = python3.pkgs.callPackage ../tools/admin/swiftclient { };
 
+  swtpm = callPackage ../applications/virtualization/swtpm { };
+
   sword = callPackage ../development/libraries/sword { };
 
   biblesync = callPackage ../development/libraries/biblesync { };
