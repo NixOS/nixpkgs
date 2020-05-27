@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A HTTP and FTP parallel file downloader";
-    homepage = https://parfive.readthedocs.io/;
+    homepage = "https://parfive.readthedocs.io/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Performance monitoring tool for Linux";
-    homepage = http://tiptop.gforge.inria.fr;
+    homepage = "http://tiptop.gforge.inria.fr";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.vcunat ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
+{ stdenv, fetchurl, fetchpatch, pkgconfig, makeWrapper
 , iproute, lzo, openssl, pam
 , useSystemd ? stdenv.isLinux, systemd ? null, utillinux ? null
 , pkcs11Support ? false, pkcs11helper ? null,
@@ -10,35 +10,27 @@ assert pkcs11Support -> (pkcs11helper != null);
 with stdenv.lib;
 
 let
-  # There is some fairly brittle string substitutions going on to replace paths,
-  # so please verify this script in case you are upgrading it
+  # Check if the script needs to have other binaries wrapped when changing this.
   update-resolved = fetchurl {
-    url = "https://raw.githubusercontent.com/jonathanio/update-systemd-resolved/v1.2.7/update-systemd-resolved";
-    sha256 = "12zfzh42apwbj7ks5kfxf3far7kaghlby4yapbhn00q8pbdlw7pq";
+    url = "https://raw.githubusercontent.com/jonathanio/update-systemd-resolved/v1.3.0/update-systemd-resolved";
+    sha256 = "021qzv1k0zxgv1rmyfpqj3zlzqr28xa7zff1n7vrbjk36ijylpsc";
   };
 
 in stdenv.mkDerivation rec {
   pname = "openvpn";
-  version = "2.4.7";
+  version = "2.4.9";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/${pname}-${version}.tar.xz";
-    sha256 = "0j7na936isk9j8nsdrrbw7wmy09inmjqvsb8mw8az7k61xbm6bx4";
+    sha256 = "1qpbllwlha7cffsd5dlddb8rl22g9rar5zflkz1wrcllhvfkl7v4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   buildInputs = [ lzo openssl ]
                   ++ optionals stdenv.isLinux [ pam iproute ]
                   ++ optional useSystemd systemd
                   ++ optional pkcs11Support pkcs11helper;
-
-  patches = [
-    ( fetchpatch {
-      url = "https://sources.debian.org/data/main/o/openvpn/2.4.7-1/debian/patches/fix-pkcs11-helper-hang.patch";
-      sha256 = "0c8jzbfsmb0mm9f7kkjxac1hk8q6igm267s687vx3mdqs1wys6bm";
-    })
-  ];
 
   configureFlags = optionals stdenv.isLinux [
     "--enable-iproute2"
@@ -52,24 +44,18 @@ in stdenv.mkDerivation rec {
     cp -r sample/sample-config-files/ $out/share/doc/openvpn/examples
     cp -r sample/sample-keys/ $out/share/doc/openvpn/examples
     cp -r sample/sample-scripts/ $out/share/doc/openvpn/examples
-
-    ${optionalString useSystemd ''
-      install -Dm755 ${update-resolved} $out/libexec/update-systemd-resolved
-
-      substituteInPlace $out/libexec/update-systemd-resolved \
-        --replace '/usr/bin/env bash' '${stdenv.shell} -e' \
-        --replace 'busctl call'       '${getBin systemd}/bin/busctl call' \
-        --replace '(ip '              '(${getBin iproute}/bin/ip ' \
-        --replace 'logger '           '${getBin utillinux}/bin/logger '
-    ''}
+  '' + optionalString useSystemd ''
+    install -Dm555 ${update-resolved} $out/libexec/update-systemd-resolved
+    wrapProgram $out/libexec/update-systemd-resolved \
+      --prefix PATH : ${makeBinPath [ stdenv.shell iproute systemd utillinux ]}
   '';
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A robust and highly flexible tunneling application";
-    downloadPage = "https://openvpn.net/index.php/open-source/downloads.html";
-    homepage = https://openvpn.net/;
+    downloadPage = "https://openvpn.net/community-downloads/";
+    homepage = "https://openvpn.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;

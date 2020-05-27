@@ -9,9 +9,9 @@ if [ "$#" -ne 1 ] || [[ "$1" == -* ]]; then
 	exit 1
 fi
 
-RIOT_WEB_SRC="https://raw.githubusercontent.com/vector-im/riot-web/$1"
+RIOT_WEB_SRC="https://raw.githubusercontent.com/vector-im/riot-desktop/$1"
 
-wget "$RIOT_WEB_SRC/electron_app/package.json" -O riot-desktop-package.json
-wget "$RIOT_WEB_SRC/electron_app/yarn.lock" -O riot-desktop-yarndeps.lock
+wget "$RIOT_WEB_SRC/package.json" -O riot-desktop-package.json
+wget "$RIOT_WEB_SRC/yarn.lock" -O riot-desktop-yarndeps.lock
 yarn2nix --lockfile=riot-desktop-yarndeps.lock > riot-desktop-yarndeps.nix
 rm riot-desktop-yarndeps.lock

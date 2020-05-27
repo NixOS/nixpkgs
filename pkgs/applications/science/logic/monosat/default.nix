@@ -23,7 +23,7 @@ let
   patches = [
     # Python 3.8 compatibility
     (fetchpatch {
-      url = https://github.com/sambayless/monosat/commit/a5079711d0df0451f9840f3a41248e56dbb03967.patch;
+      url = "https://github.com/sambayless/monosat/commit/a5079711d0df0451f9840f3a41248e56dbb03967.patch";
       sha256 = "1p2y0jw8hb9c90nbffhn86k1dxd6f6hk5v70dfmpzka3y6g1ksal";
     })
   ];
@@ -50,7 +50,7 @@ let
       description = "SMT solver for Monotonic Theories";
       platforms   = platforms.unix;
       license     = if includeGplCode then licenses.gpl2 else licenses.mit;
-      homepage    = https://github.com/sambayless/monosat;
+      homepage    = "https://github.com/sambayless/monosat";
       maintainers = [ maintainers.acairncross ];
     };
   };

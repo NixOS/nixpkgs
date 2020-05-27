@@ -29,9 +29,7 @@
 , mpg123
 , twolame
 , gtkSupport ? false, gtk3 ? null
-  # As of writing, jack2 incurs a Qt dependency (big!) via `ffado`.
-  # In the future we should probably split `ffado`.
-, enableJack ? false, jack2
+, enableJack ? true, libjack2
 , libXdamage
 , libXext
 , libXfixes
@@ -104,8 +102,8 @@ stdenv.mkDerivation rec {
     libavc1394
     libiec61883
     libgudev
-  ] ++ optionals (stdenv.isLinux && enableJack) [
-    jack2
+  ] ++ optionals enableJack [
+    libjack2
   ];
 
   mesonFlags = [
@@ -113,8 +111,8 @@ stdenv.mkDerivation rec {
     "-Dqt5=disabled" # not clear as of writing how to correctly pass in the required qt5 deps
   ] ++ optionals (!gtkSupport) [
     "-Dgtk3=disabled"
-  ] ++ optionals (!stdenv.isLinux || !enableJack) [
-    "-Djack=disabled" # unclear whether Jack works on Darwin
+  ] ++ optionals (!enableJack) [
+    "-Djack=disabled"
   ] ++ optionals (!stdenv.isLinux) [
     "-Ddv1394=disabled" # Linux only
     "-Doss4=disabled" # Linux only

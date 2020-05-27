@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "TransIP API Connector";
-    homepage = https://github.com/benkonrath/transip-api;
+    homepage = "https://github.com/benkonrath/transip-api";
     license = licenses.mit;
     maintainers = with maintainers; [ flyfloh ];
   };

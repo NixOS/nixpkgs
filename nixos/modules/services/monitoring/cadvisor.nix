@@ -135,7 +135,6 @@ in {
 
         serviceConfig.TimeoutStartSec=300;
       };
-      virtualisation.docker.enable = mkDefault true;
     })
   ];
 }

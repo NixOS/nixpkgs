@@ -57,7 +57,7 @@ buildPythonApplication rec {
       create precise animations programmatically, as seen in the videos of
       3Blue1Brown on YouTube.
     '';
-    homepage = https://github.com/3b1b/manim;
+    homepage = "https://github.com/3b1b/manim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ johnazoidberg ];
   };

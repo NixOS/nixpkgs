@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Multidict implementation";
-    homepage = https://github.com/aio-libs/multidict/;
+    homepage = "https://github.com/aio-libs/multidict/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

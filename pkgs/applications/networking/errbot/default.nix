@@ -67,7 +67,7 @@ py.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Chatbot designed to be simple to extend with plugins written in Python";
-    homepage = http://errbot.io/;
+    homepage = "http://errbot.io/";
     maintainers = with maintainers; [ fpletz globin ];
     license = licenses.gpl3;
     platforms = platforms.linux;

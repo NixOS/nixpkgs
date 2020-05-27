@@ -7,23 +7,20 @@
 }:
 
 buildPythonPackage rec {
-  version = "10.0.0";
+  version = "12.0.0";
   pname = "azure-mgmt-compute";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1s3bx6knxw5dxycp43yimvgrh0i19drzd09asglcwz2x5mr3bpyg";
+    sha256 = "0vzq93g2fpnij4rykkk3391xq2knhlbz87vhim4zvj8s45sx6z8q";
   };
-
-  postInstall = if isPy3k then "" else ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-  '';
 
   propagatedBuildInputs = [
     azure-mgmt-common
   ];
+
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # has no tests
   doCheck = false;

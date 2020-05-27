@@ -15,7 +15,7 @@ build-idris-package {
 
   meta = {
     description = "Wadler-Leijen pretty-printing library";
-    homepage = https://github.com/shayan-najd/wl-pprint;
+    homepage = "https://github.com/shayan-najd/wl-pprint";
     license = lib.licenses.bsd2;
   };
 }

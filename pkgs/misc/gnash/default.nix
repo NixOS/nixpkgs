@@ -122,7 +122,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    homepage    = https://savannah.gnu.org/projects/gnash;
+    homepage    = "https://savannah.gnu.org/projects/gnash";
     description = "A flash (SWF) player and browser plugin";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ rnhmjoj ];

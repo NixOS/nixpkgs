@@ -124,6 +124,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 f"docker run --rm  ${examples.layersOrder.imageName} cat /tmp/layer{index}"
             )
 
+    with subtest("Ensure environment variables are correctly inherited"):
+        docker.succeed(
+            "docker load --input='${examples.environmentVariables}'"
+        )
+        out = docker.succeed("docker run --rm ${examples.environmentVariables.imageName} env")
+        env = out.splitlines()
+        assert "FROM_PARENT=true" in env, "envvars from the parent should be preserved"
+        assert "FROM_CHILD=true" in env, "envvars from the child should be preserved"
+        assert "LAST_LAYER=child" in env, "envvars from the child should take priority"
+
     with subtest("Ensure image with only 2 layers can be loaded"):
         docker.succeed(
             "docker load --input='${examples.two-layered-image}'"

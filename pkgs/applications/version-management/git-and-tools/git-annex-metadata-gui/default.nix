@@ -18,7 +18,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ pyqt5 git-annex-adapter ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/alpernebbi/git-annex-metadata-gui;
+    homepage = "https://github.com/alpernebbi/git-annex-metadata-gui";
     description = "Graphical interface for git-annex metadata commands";
     maintainers = with maintainers; [ dotlambda ];
     license = licenses.gpl3Plus;

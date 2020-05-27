@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     supported sample rates in the standard NXT firmware).
     You can then upload these with e.g. nxt-python.
     '';
-    homepage = http://bricxcc.sourceforge.net/;
+    homepage = "http://bricxcc.sourceforge.net/";
     license = licenses.mpl11;
     maintainers = with maintainers; [ leenaars ];
     platforms = with platforms; linux;

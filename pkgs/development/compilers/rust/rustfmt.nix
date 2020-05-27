@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tool for formatting Rust code according to style guidelines";
-    homepage = https://github.com/rust-lang-nursery/rustfmt;
+    homepage = "https://github.com/rust-lang-nursery/rustfmt";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ globin basvandijk ];
     platforms = platforms.all;

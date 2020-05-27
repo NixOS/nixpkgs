@@ -1,10 +1,18 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, deepin,
-  dtkcore, dtkwidget, kcodecs, qttools, syntax-highlighting,
-  wrapQtAppsHook
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, deepin
+, dtkcore
+, dtkwidget
+, kcodecs
+, qttools
+, syntax-highlighting
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-editor";
   version = "1.2.9.1";
 
@@ -52,11 +60,11 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Simple editor for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-editor;
+    homepage = "https://github.com/linuxdeepin/deepin-editor";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo worldofpeace ];

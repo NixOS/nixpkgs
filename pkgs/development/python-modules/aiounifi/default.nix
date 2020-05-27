@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An asynchronous Python library for communicating with Unifi Controller API";
-    homepage    = https://pypi.python.org/pypi/aiounifi/;
+    homepage    = "https://pypi.python.org/pypi/aiounifi/";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A cron like daemon for mpd";
-    homepage    = http://alip.github.io/mpdcron/;
+    homepage    = "http://alip.github.io/mpdcron/";
     license     = licenses.gpl2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ lovek323 manveru ];

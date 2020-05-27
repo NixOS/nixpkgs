@@ -10,7 +10,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "03wxlras2akk2ig8sxzs89nvbc6zr2kbcmjlqldjdfhs1rcg82ra";
   };
-  modSha256 = "157dpalfz3z1s3mxq63xy6lrkwzyy9xzmvn7wsxkwznjq4djv1a1";
+  vendorSha256 = "1nwrzbpqycr4ixk8a90pgaxcwakv5nlfnql6hmcc518qrva198wp";
 
   meta = with lib; {
     description = "The RPKI-to-Router server used at Cloudflare";

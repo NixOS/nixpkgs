@@ -3,12 +3,12 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "bitlbee-mastodon";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchgit {
     url = "https://alexschroeder.ch/cgit/bitlbee-mastodon";
     rev = "v${version}";
-    sha256 = "04rakgr1pfsg1vhfwlfbggbzw249j7dmk88xrsnf3n84c5ccdyas";
+    sha256 = "1k9j4403w6x93f4ls3xj8nrabz8ynjby6sigqdmhb7cqv26l987p";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

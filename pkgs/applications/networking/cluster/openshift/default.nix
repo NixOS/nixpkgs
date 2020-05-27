@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, buildGoPackage, which, go-bindata, rsync, utillinux
-, coreutils, kerberos, clang
+, coreutils, kerberos, ncurses, clang, installShellFiles
 , components ? [
   "cmd/oc"
   "cmd/openshift"
@@ -9,12 +9,12 @@
 with lib;
 
 let
-  version = "3.11.0";
+  version = "4.1.0";
   ver = stdenv.lib.elemAt (stdenv.lib.splitVersion version);
   versionMajor = ver 0;
   versionMinor = ver 1;
   versionPatch = ver 2;
-  gitCommit = "0cbc58b";
+  gitCommit = "b4261e0";
   # version is in vendor/k8s.io/kubernetes/pkg/version/base.go
   k8sversion = "v1.11.1";
   k8sgitcommit = "b1b2997";
@@ -28,27 +28,17 @@ in buildGoPackage rec {
     owner = "openshift";
     repo = "origin";
     rev = "v${version}";
-    sha256 = "06q4v2a1mm6c659ab0rzkqz6b66vx4avqfg0s9xckwhq420lzgka";
+    sha256 = "16bc6ljm418kxz92gz8ldm82491mvlqamrvigyr6ff72rf7ml7ba";
   };
 
   goPackagePath = "github.com/openshift/origin";
 
-  buildInputs = [ which rsync go-bindata kerberos clang ];
+  buildInputs = [ kerberos ncurses ];
+
+  nativeBuildInputs = [ which rsync go-bindata clang installShellFiles ];
 
   patchPhase = ''
     patchShebangs ./hack
-
-    substituteInPlace pkg/oc/clusterup/docker/host/host.go  \
-      --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt findmnt' \
-      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/findmnt'
-
-    substituteInPlace pkg/oc/clusterup/docker/host/host.go  \
-      --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mount' \
-      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/mount'
-
-    substituteInPlace pkg/oc/clusterup/docker/host/host.go  \
-      --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mkdir' \
-      'nsenter --mount=/rootfs/proc/1/ns/mnt ${coreutils}/bin/mkdir'
   '';
 
   buildPhase = ''
@@ -56,6 +46,7 @@ in buildGoPackage rec {
     # Openshift build require this variables to be set
     # unless there is a .git folder which is not the case with fetchFromGitHub
     echo "OS_GIT_VERSION=v${version}" >> os-version-defs
+    echo "OS_GIT_TREE_STATE=clean" >> os-version-defs
     echo "OS_GIT_MAJOR=${versionMajor}" >> os-version-defs
     echo "OS_GIT_MINOR=${versionMinor}" >> os-version-defs
     echo "OS_GIT_PATCH=${versionPatch}" >> os-version-defs
@@ -70,16 +61,16 @@ in buildGoPackage rec {
   '';
 
   installPhase = ''
-    mkdir -p $bin/bin
-    cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$bin/bin/"
-    install -D -t "$bin/etc/bash_completion.d" contrib/completions/bash/*
-    install -D -t "$bin/share/zsh/site-functions" contrib/completions/zsh/*
+    mkdir -p $out/bin
+    cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$out/bin/"
+    installShellCompletion --bash contrib/completions/bash/*
+    installShellCompletion --zsh contrib/completions/zsh/*
   '';
 
   meta = with stdenv.lib; {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
     license = licenses.asl20;
-    homepage = http://www.openshift.org;
+    homepage = "http://www.openshift.org";
     maintainers = with maintainers; [offline bachp moretea];
     platforms = platforms.unix;
   };

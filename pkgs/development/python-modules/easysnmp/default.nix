@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A blazingly fast and Pythonic SNMP library based on the official Net-SNMP bindings";
-    homepage = https://easysnmp.readthedocs.io/en/latest/;
+    homepage = "https://easysnmp.readthedocs.io/en/latest/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ WhittlesJr ];
   };

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A specification that python filesystems should adhere to";
-    homepage = https://github.com/intake/filesystem_spec;
+    homepage = "https://github.com/intake/filesystem_spec";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

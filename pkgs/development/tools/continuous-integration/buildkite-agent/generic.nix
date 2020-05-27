@@ -15,17 +15,17 @@ buildGoPackage {
   postInstall = ''
     ${stdenv.lib.optionalString hasBootstrapScript ''
     # Install bootstrap.sh
-    mkdir -p $bin/libexec/buildkite-agent
-    cp $NIX_BUILD_TOP/go/src/${goPackagePath}/templates/bootstrap.sh $bin/libexec/buildkite-agent
-    sed -e "s|#!/bin/bash|#!${bash}/bin/bash|g" -i $bin/libexec/buildkite-agent/bootstrap.sh
+    mkdir -p $out/libexec/buildkite-agent
+    cp $NIX_BUILD_TOP/go/src/${goPackagePath}/templates/bootstrap.sh $out/libexec/buildkite-agent
+    sed -e "s|#!/bin/bash|#!${bash}/bin/bash|g" -i $out/libexec/buildkite-agent/bootstrap.sh
     ''}
 
     # Fix binary name
-    mv $bin/bin/{agent,buildkite-agent}
+    mv $out/bin/{agent,buildkite-agent}
 
     # These are runtime dependencies
-    wrapProgram $bin/bin/buildkite-agent \
-      ${stdenv.lib.optionalString hasBootstrapScript "--set BUILDKITE_BOOTSTRAP_SCRIPT_PATH $bin/libexec/buildkite-agent/bootstrap.sh"} \
+    wrapProgram $out/bin/buildkite-agent \
+      ${stdenv.lib.optionalString hasBootstrapScript "--set BUILDKITE_BOOTSTRAP_SCRIPT_PATH $out/libexec/buildkite-agent/bootstrap.sh"} \
       --prefix PATH : '${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
   '';
 
@@ -38,7 +38,7 @@ buildGoPackage {
       build jobs, reporting back the status code and output log of the job,
       and uploading the job's artifacts.
     '';
-    homepage = https://buildkite.com/docs/agent;
+    homepage = "https://buildkite.com/docs/agent";
     license = licenses.mit;
     maintainers = with maintainers; [ pawelpacana zimbatm rvl ];
     platforms = platforms.unix;

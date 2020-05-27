@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1rjp4lhxs6g5yw99rrdg5v98vcvagsabkqf51k1fhhsmbj47mdsm";
+    sha256 = "1r0d52rlhg7dz6hziplzy7ypsfx9lgbs76j3ylinh2csplwkzv69";
   };
 
   propagatedBuildInputs = with python3Packages; [

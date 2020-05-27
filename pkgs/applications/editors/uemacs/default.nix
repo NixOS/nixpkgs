@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "2014-12-08";
 
   src = fetchgit {
-    url = git://git.kernel.org/pub/scm/editors/uemacs/uemacs.git;
+    url = "git://git.kernel.org/pub/scm/editors/uemacs/uemacs.git";
     rev = "8841922689769960fa074fbb053cb8507f2f3ed9";
     sha256 = "14yq7kpkax111cg6k7i3mnqk7sq7a65krq6qizzj7vvnm7bsj3sd";
   };
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
 
   meta = with stdenv.lib; {
-    homepage = https://git.kernel.org/cgit/editors/uemacs/uemacs.git;
+    homepage = "https://git.kernel.org/cgit/editors/uemacs/uemacs.git";
     description = "Torvalds Micro-emacs fork";
     longDescription = ''
       uEmacs/PK 4.0 is a full screen editor based on MicroEMACS 3.9e

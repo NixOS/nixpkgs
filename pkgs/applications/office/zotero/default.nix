@@ -35,17 +35,18 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "5.0.83";
+  version = "5.0.85";
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "1abkwxdi154hnry8nsvxbklvbsnvd7cs2as0041h2kbiz824pv31";
+    sha256 = "0zqc27kld7rm3akmrnf9ba1x2hb9838cbv6i3nkqvg81ly5gfbxs";
   };
 
-  buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme dconf ];
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs= [ gsettings-desktop-schemas glib gtk3 gnome3.adwaita-icon-theme dconf ];
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
-
+  dontConfigure = true;
+  dontBuild = true;
   dontStrip = true;
   dontPatchELF = true;
 

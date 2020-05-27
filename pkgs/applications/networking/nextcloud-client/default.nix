@@ -58,7 +58,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Nextcloud themed desktop client";
-    homepage = https://nextcloud.com;
+    homepage = "https://nextcloud.com";
     license = licenses.gpl2;
     maintainers = with maintainers; [ caugner ma27 ];
     platforms = platforms.linux;

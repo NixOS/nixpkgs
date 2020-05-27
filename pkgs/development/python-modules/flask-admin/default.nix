@@ -64,7 +64,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple and extensible admin interface framework for Flask";
-    homepage = https://github.com/flask-admin/flask-admin/;
+    homepage = "https://github.com/flask-admin/flask-admin/";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python packages and modules used by Logilab ";
-    homepage = https://www.logilab.org/project/logilab-common;
+    homepage = "https://www.logilab.org/project/logilab-common";
     license = licenses.lgpl21;
   };
 }

@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://wireless.kernel.org/en/users/Documentation/rfkill;
+    homepage = "http://wireless.kernel.org/en/users/Documentation/rfkill";
     description = "Rules+hook for udev to catch rfkill state changes";
     platforms = stdenv.lib.platforms.linux;
   };

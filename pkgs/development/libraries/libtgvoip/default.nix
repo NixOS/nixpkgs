@@ -6,13 +6,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libtgvoip";
-  version = "unstable-2020-01-21";
+  version = "unstable-2020-03-02";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "libtgvoip";
-    rev = "ade4434f1c6efabecc3b548ca1f692f8d103d22a";
-    sha256 = "1bhnx3sknadx7a4qk9flh356kffb02xx32grj7cj7ik4rarccgp0";
+    rev = "e422d2a80546a32ab7166a9b1058bacfc5daeefc";
+    sha256 = "0n6f7215k74039j0zmicjzhj6f45mq6fvkrwzyzibcrv87ib17fc";
   };
 
   outputs = [ "out" "dev" ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "VoIP library for Telegram clients";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    homepage = https://github.com/telegramdesktop/libtgvoip;
+    homepage = "https://github.com/telegramdesktop/libtgvoip";
     maintainers = with maintainers; [ ilya-fedin ];
   };
 }

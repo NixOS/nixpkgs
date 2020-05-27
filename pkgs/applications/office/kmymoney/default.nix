@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Personal finance manager for KDE";
-    homepage = https://kmymoney.org/;
+    homepage = "https://kmymoney.org/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };

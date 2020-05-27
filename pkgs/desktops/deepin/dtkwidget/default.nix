@@ -1,6 +1,19 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, qtmultimedia,
-  qtsvg, qtx11extras, librsvg, libstartup_notification, gsettings-qt,
-  dde-qt-dbus-factory, dtkcore, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, qttools
+, qtmultimedia
+, qtsvg
+, qtx11extras
+, librsvg
+, libstartup_notification
+, gsettings-qt
+, dde-qt-dbus-factory
+, dtkcore
+, deepin
+}:
 
 mkDerivation rec {
   pname = "dtkwidget";
@@ -40,11 +53,11 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin graphical user interface library";
-    homepage = https://github.com/linuxdeepin/dtkwidget;
+    homepage = "https://github.com/linuxdeepin/dtkwidget";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

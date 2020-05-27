@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1al8jzjxjhxwb5n1d52pvl59d11g0bdg2dcw8ir2nclya1w68f2w";
-  buildInputs = [ openssl pkg-config protobuf rdkafka ]
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl protobuf rdkafka ]
                 ++ stdenv.lib.optional stdenv.isDarwin [ Security libiconv ];
 
   # needed for internal protobuf c wrapper library

@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "jupyter_core";
-  version = "4.6.1";
+  version = "4.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a183e0ec2e8f6adddf62b0a3fc6a2237e3e0056d381e536d3e7c7ecc3067e244";
+    sha256 = "394fd5dd787e7c8861741880bdf8a00ce39f95de5d18e579c74b882522219e7e";
   };
 
   checkInputs = [ pytest mock glibcLocales nose ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter core package. A base package on which Jupyter projects rely";
-    homepage = https://jupyter.org/;
+    homepage = "https://jupyter.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
   };

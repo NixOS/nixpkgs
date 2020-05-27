@@ -6,7 +6,6 @@
 , fwupd
 , gettext
 , glib
-, gnome3
 , gtk3
 , libsoup
 , libxmlb
@@ -70,7 +69,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/hughsie/gnome-firmware-updater";
     description = "Tool for installing firmware on devices";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

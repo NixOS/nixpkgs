@@ -14,7 +14,7 @@ buildDunePackage rec {
   buildInputs = [ ocaml-migrate-parsetree ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/flowtype/ocaml-ppx_gen_rec;
+    homepage = "https://github.com/flowtype/ocaml-ppx_gen_rec";
     description = "ocaml preprocessor that generates a recursive module";
     license = licenses.mit;
     maintainers = [ maintainers.frontsideair ];

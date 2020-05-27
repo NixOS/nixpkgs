@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches =
     let fetchAlpinePatch = name: sha256: fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/main/net-snmp/${name}?id=f25d3fb08341b60b6ccef424399f060dfcf3f1a5";
+      url = "https://git.alpinelinux.org/aports/plain/main/net-snmp/${name}?id=f25d3fb08341b60b6ccef424399f060dfcf3f1a5";
       inherit name sha256;
     };
   in [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Clients and server for the SNMP network monitoring protocol";
-    homepage = http://net-snmp.sourceforge.net/;
+    homepage = "http://net-snmp.sourceforge.net/";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

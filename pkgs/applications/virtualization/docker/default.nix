@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
+{ stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, installShellFiles, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, lvm2, systemd
-, btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
+, btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
 , procps, libseccomp
 }:
 
@@ -78,7 +78,7 @@ rec {
       sha256 = sha256;
     };
 
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ installShellFiles pkgconfig ];
     buildInputs = [
       makeWrapper removeReferencesTo go-md2man go libtool
     ] ++ optionals (stdenv.isLinux) [
@@ -123,7 +123,7 @@ rec {
 
     outputs = ["out" "man"];
 
-    extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux ]);
+    extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux git ]);
 
     installPhase = optionalString (stdenv.isLinux) ''
       install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
@@ -147,9 +147,9 @@ rec {
         --prefix PATH : "$out/libexec/docker:$extraPath"
 
       # completion (cli)
-      install -Dm644 ./components/cli/contrib/completion/bash/docker $out/share/bash-completion/completions/docker
-      install -Dm644 ./components/cli/contrib/completion/fish/docker.fish $out/share/fish/vendor_completions.d/docker.fish
-      install -Dm644 ./components/cli/contrib/completion/zsh/_docker $out/share/zsh/site-functions/_docker
+      installShellCompletion --bash ./components/cli/contrib/completion/bash/docker
+      installShellCompletion --fish ./components/cli/contrib/completion/fish/docker.fish
+      installShellCompletion --zsh ./components/cli/contrib/completion/zsh/_docker
 
       # Include contributed man pages (cli)
       # Generate man pages from cobra commands
@@ -163,16 +163,7 @@ rec {
       echo "Generate legacy manpages"
       ./man/md2man-all.sh -q
 
-      manRoot="$man/share/man"
-      mkdir -p "$manRoot"
-      for manDir in ./man/man?; do
-        manBase="$(basename "$manDir")" # "man1"
-        for manFile in "$manDir"/*; do
-          manName="$(basename "$manFile")" # "docker-build.1"
-          mkdir -p "$manRoot/$manBase"
-          gzip -c "$manFile" > "$manRoot/$manBase/$manName.gz"
-        done
-      done
+      installManPage man/*/*.[1-9]
     '';
 
     preFixup = ''
@@ -182,7 +173,7 @@ rec {
     '';
 
     meta = {
-      homepage = https://www.docker.com/;
+      homepage = "https://www.docker.com/";
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
       maintainers = with maintainers; [ nequissimus offline tailhook vdemeester periklis ];
@@ -206,9 +197,9 @@ rec {
   };
 
   docker_19_03 = makeOverridable dockerGen {
-    version = "19.03.7";
-    rev = "7141c199a2edb2a90b778175f836f9dd2a22c95a";
-    sha256 = "1h1hrp6cw3ah2gaq2vfdd1d9vh7gyf7rs6bdxwpxk9ixc19fxsm4";
+    version = "19.03.9";
+    rev = "9d988398e765e4b97f27f93c4d04b272ac64c9c7";
+    sha256 = "0g2jpmqryfpvhdkapl8syi4hccx6czpihp1p1gsp1mfwz9aycsqv";
     runcRev = "dc9208a3303feef5b3839f4323d9beb36df0a9dd"; # v1.0.0-rc10
     runcSha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
     containerdRev = "7ad184331fa3e55e52b890ea95e65ba581ae3429"; # v1.2.13

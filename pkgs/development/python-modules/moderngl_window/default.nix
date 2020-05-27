@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "moderngl_window";
-  version = "1.2.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = pname;
     rev = version;
-    sha256 = "054w77lyc2nc0dyx76zsrbq2b3xbywdijhb62b2qqm99ldr1k1x5";
+    sha256 = "1p03j91pk2bwycd13p0qi8kns1sf357180hd2mkaip8mfaf33x3q";
   };
 
   propagatedBuildInputs = [ numpy moderngl pyglet pillow pyrr ];

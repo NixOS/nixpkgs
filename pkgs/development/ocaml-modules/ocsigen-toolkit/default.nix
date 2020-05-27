@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://ocsigen.org/ocsigen-toolkit/;
+    homepage = "http://ocsigen.org/ocsigen-toolkit/";
     description = " User interface widgets for Ocsigen applications";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];

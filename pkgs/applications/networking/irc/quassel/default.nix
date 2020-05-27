@@ -80,7 +80,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://quassel-irc.org/;
+    homepage = "https://quassel-irc.org/";
     description = "Qt/KDE distributed IRC client suppporting a remote daemon";
     longDescription = ''
       Quassel IRC is a cross-platform, distributed IRC client,
@@ -91,7 +91,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
     '';
     license = licenses.gpl3;
     maintainers = with maintainers; [ phreedom ttuegel ];
-    repositories.git = https://github.com/quassel/quassel.git;
+    repositories.git = "https://github.com/quassel/quassel.git";
     inherit (qtbase.meta) platforms;
   };
 }

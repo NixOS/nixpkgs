@@ -1,23 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, pythonPackages, gettext, texinfo
-, ghostscript, librsvg, gdk-pixbuf, txt2man, timidity, mpg123
-, alsaUtils, vorbis-tools, csound, lilypond
-, makeWrapper
+{ lib, fetchurl, gettext, pkgconfig, texinfo, wrapGAppsHook
+, buildPythonApplication, pycairo, pygobject3
+, gobject-introspection, gtk3, librsvg
+, alsaUtils, timidity, mpg123, vorbis-tools, csound, lilypond
 }:
 
-let
-  inherit (pythonPackages) python pygtk;
-in stdenv.mkDerivation rec {
-  name = "solfege-3.22.2";
+buildPythonApplication rec {
+  name = "solfege-3.23.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/solfege/${name}.tar.gz";
-    sha256 = "1r4g93ka7i8jh5glii5nza0zq0wy4sw0gfzpvkcrhj9yr1h0jsp4";
+    sha256 = "0sc17vf4xz6gy0s0z9ghi68yskikdmyb4gdaxx6imrm40734k8mp";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python pygtk gettext texinfo
-    ghostscript librsvg gdk-pixbuf txt2man makeWrapper
+  patches = [
+    ./css.patch
+    ./menubar.patch
+    ./webbrowser.patch
   ];
+
+  nativeBuildInputs = [ gettext pkgconfig texinfo wrapGAppsHook ];
+  buildInputs = [ gobject-introspection gtk3 librsvg ];
+  propagatedBuildInputs = [ pycairo pygobject3 ];
 
   preBuild = ''
     sed -i -e 's|wav_player=.*|wav_player=${alsaUtils}/bin/aplay|' \
@@ -29,18 +32,15 @@ in stdenv.mkDerivation rec {
            default.config
   '';
 
-  postInstall = ''
-      set -x
-      wrapProgram "$out/bin/solfege" \
-          --prefix PYTHONPATH ':' "$PYTHONPATH" \
-          --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-  '';
+  format = "other";
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Ear training program";
-    homepage = http://www.solfege.org/;
+    homepage = "http://www.solfege.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor orivej ];
   };
 }

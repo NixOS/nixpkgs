@@ -2,9 +2,8 @@
 , python3Packages, substituteAll }:
 
 python3Packages.buildPythonApplication rec {
-  name = "trash-cli-${version}";
+  pname = "trash-cli";
   version = "0.17.1.14";
-  namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
@@ -41,7 +40,7 @@ python3Packages.buildPythonApplication rec {
   checkPhase = "nosetests";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/andreafrancia/trash-cli;
+    homepage = "https://github.com/andreafrancia/trash-cli";
     description = "Command line tool for the desktop trash can";
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;

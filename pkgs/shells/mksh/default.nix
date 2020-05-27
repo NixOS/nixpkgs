@@ -2,17 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mksh";
-  version = "57";
+  version = "59b";
 
   src = fetchurl {
     urls = [
       "https://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
       "http://pub.allbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
     ];
-    sha256 = "0xdykm1z710wriwd6nc8s8lwk2dwjl63dq96xxaawlid31a1241x";
+    sha256 = "1rp0farbylypyiaald2hw5avg5w3m8x7cjnxxyyihzvfb2lx2zlh";
   };
 
-  buildPhase = ''sh ./Build.sh -r -c lto'';
+  dontConfigure = true;
+
+  buildPhase = ''sh ./Build.sh -r'';
 
   installPhase = ''
     install -D -m 755 mksh $out/bin/mksh
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
       also to be readily available under other UNIX(R)-like operating
       systems.
     '';
-    homepage = https://www.mirbsd.org/mksh.htm;
+    homepage = "https://www.mirbsd.org/mksh.htm";
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres joachifm ];
     platforms = platforms.unix;

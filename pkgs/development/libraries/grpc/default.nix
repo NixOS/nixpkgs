@@ -1,25 +1,25 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags, abseil-cpp }:
 
 stdenv.mkDerivation rec {
-  version = "1.27.1"; # N.B: if you change this, change pythonPackages.grpcio and pythonPackages.grpcio-tools to a matching version too
+  version = "1.29.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "1yvmqxv6pwzbxw3si47x3anvl2pp3qy1acspmz4v60pd188c1fnc";
+    sha256 = "1n604grkf2amzrmwcz6am0rpbp3yfb062lpgmhv943hj8wk7xw27";
     fetchSubmodules = true;
   };
   patches = [
     # Fix build on armv6l (https://github.com/grpc/grpc/pull/21341)
     (fetchpatch {
-      url = "https://github.com/grpc/grpc/commit/198d221e775cf73455eeb863672e7a6274d217f1.patch";
-      sha256 = "11k35w6ffvl192rgzzj2hzyzjhizdgk7i56zdkx6v60zxnyfn7yq";
+      url = "https://github.com/grpc/grpc/commit/2f4cf1d9265c8e10fb834f0794d0e4f3ec5ae10e.patch";
+      sha256 = "0ams3jmgh9yzwmxcg4ifb34znamr7pb4qm0609kvil9xqvkqz963";
     })
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags ];
+  buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags abseil-cpp ];
 
   cmakeFlags =
     [ "-DgRPC_ZLIB_PROVIDER=package"
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       "-DgRPC_SSL_PROVIDER=package"
       "-DgRPC_PROTOBUF_PROVIDER=package"
       "-DgRPC_GFLAGS_PROVIDER=package"
+      "-DgRPC_ABSL_PROVIDER=package"
       "-DBUILD_SHARED_LIBS=ON"
       "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     ];
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
     maintainers = [ maintainers.lnl7 maintainers.marsam ];
-    homepage = https://grpc.io/;
+    homepage = "https://grpc.io/";
+    platforms = platforms.all;
+    changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
   };
 }

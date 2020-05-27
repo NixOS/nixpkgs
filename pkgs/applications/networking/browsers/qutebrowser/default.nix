@@ -21,12 +21,12 @@ let
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.10.1";
+  version = "1.11.1";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "06bcnsfb4kz92bh8xjxwaghhy9x2mmcb76wk3fv868jb1ga75vd8";
+    sha256 = "0cxmmw002f5rvxzyhlhzqm2ipf64w4vspf298p6c5kpg535m8cvs";
   };
 
   # Needs tox
@@ -105,7 +105,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/The-Compiler/qutebrowser;
+    homepage    = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry ];

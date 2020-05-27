@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/anura-engine/anura;
+    homepage = "https://github.com/anura-engine/anura";
     description = "Game engine used by Frogatto";
     license = licenses.zlib;
     platforms = platforms.linux;

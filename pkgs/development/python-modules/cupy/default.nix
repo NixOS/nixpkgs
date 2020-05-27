@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A NumPy-compatible matrix library accelerated by CUDA";
-    homepage = https://cupy.chainer.org/;
+    homepage = "https://cupy.chainer.org/";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ hyphon81 ];

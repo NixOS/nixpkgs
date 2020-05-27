@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, itk4, vtk }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, itk4, vtk_7 }:
 
 stdenv.mkDerivation rec {
   pname    = "ANTs";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ itk4 vtk ];
+  buildInputs = [ itk4 vtk_7 ];
 
   cmakeFlags = [ "-DANTS_SUPERBUILD=FALSE" "-DUSE_VTK=TRUE" ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ANTsX/ANTs;
+    homepage = "https://github.com/ANTsX/ANTs";
     description = "Advanced normalization toolkit for medical image registration and other processing";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;

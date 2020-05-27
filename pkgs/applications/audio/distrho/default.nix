@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://distrho.sourceforge.net;
+    homepage = "http://distrho.sourceforge.net";
     description = "A collection of cross-platform audio effects and plugins";
     longDescription = ''
       Includes:

@@ -39,7 +39,8 @@ let
 
       ${optionalString cfg.startDbusSession ''
         if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-          exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$@"
+          /run/current-system/systemd/bin/systemctl --user start dbus.socket
+          export `/run/current-system/systemd/bin/systemctl --user show-environment | grep '^DBUS_SESSION_BUS_ADDRESS'`
         fi
       ''}
 
@@ -54,20 +55,12 @@ let
         exec &> >(tee ~/.xsession-errors)
       ''}
 
-      # Start PulseAudio if enabled.
-      ${optionalString (config.hardware.pulseaudio.enable) ''
-        # Publish access credentials in the root window.
-        if ${config.hardware.pulseaudio.package.out}/bin/pulseaudio --dump-modules | grep module-x11-publish &> /dev/null; then
-          ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
-        fi
-      ''}
-
       # Tell systemd about our $DISPLAY and $XAUTHORITY.
       # This is needed by the ssh-agent unit.
       #
       # Also tell systemd about the dbus session bus address.
       # This is required by user units using the session bus.
-      ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
+      /run/current-system/systemd/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
 
       # Load X defaults. This should probably be safe on wayland too.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
@@ -96,7 +89,7 @@ let
       fi
 
       # Start systemd user services for graphical sessions
-      ${config.systemd.package}/bin/systemctl --user start graphical-session.target
+      /run/current-system/systemd/bin/systemctl --user start graphical-session.target
 
       # Allow the user to setup a custom session type.
       if test -x ~/.xsession; then
@@ -401,7 +394,7 @@ in
 
           test -n "$waitPID" && wait "$waitPID"
 
-          ${config.systemd.package}/bin/systemctl --user stop graphical-session.target
+          /run/current-system/systemd/bin/systemctl --user stop graphical-session.target
 
           exit 0
         '';
@@ -412,6 +405,9 @@ in
             (dm: wm: let
               sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
               script = xsession dm wm;
+              desktopNames = if dm ? desktopNames
+                             then concatStringsSep ";" dm.desktopNames
+                             else sessionName;
             in
               optional (dm.name != "none" || wm.name != "none")
                 (pkgs.writeTextFile {
@@ -427,7 +423,7 @@ in
                     TryExec=${script}
                     Exec=${script}
                     Name=${sessionName}
-                    DesktopNames=${sessionName}
+                    DesktopNames=${desktopNames}
                   '';
                 } // {
                   providedSessions = [ sessionName ];

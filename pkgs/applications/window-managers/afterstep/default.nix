@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       for flexibility of desktop configuration, improving aestetics,
       and efficient use of system resources.
     '';
-    homepage = http://www.afterstep.org/;
+    homepage = "http://www.afterstep.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

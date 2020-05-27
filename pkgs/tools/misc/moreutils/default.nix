@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
-    homepage = https://joeyh.name/code/moreutils/;
+    homepage = "https://joeyh.name/code/moreutils/";
     maintainers = with maintainers; [ koral pSub ];
     platforms = platforms.all;
     license = licenses.gpl2Plus;

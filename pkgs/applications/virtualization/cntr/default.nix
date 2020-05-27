@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A container debugging tool based on FUSE";
-    homepage = https://github.com/Mic92/cntr;
+    homepage = "https://github.com/Mic92/cntr";
     license = licenses.mit;
     # aarch64 support will be fixed soon
     platforms = [ "x86_64-linux" ];

@@ -31,7 +31,7 @@ let
       # no redistribution, "a single instantiation and no
       # network installation"
       license = lib.licenses.unfree;
-      homepage = http://users.teilar.gr/~g1951d/;
+      homepage = "http://users.teilar.gr/~g1951d/";
     };
   };
 in

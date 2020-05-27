@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "KeepKey Python client";
-    homepage = https://github.com/keepkey/python-keepkey;
+    homepage = "https://github.com/keepkey/python-keepkey";
     license = licenses.gpl3;
     maintainers = with maintainers; [ np ];
   };

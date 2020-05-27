@@ -87,19 +87,19 @@ let
         default = {};
         example = literalExample ''
           {
-            "example.org" = "/srv/http/nginx";
+            "example.org" = null;
             "mydomain.org" = null;
           }
         '';
         description = ''
-          A list of extra domain names, which are included in the one certificate to be issued, with their
-          own server roots if needed.
+          A list of extra domain names, which are included in the one certificate to be issued.
+          Setting a distinct server root is deprecated and not functional in 20.03+
         '';
       };
 
       keyType = mkOption {
         type = types.str;
-        default = "ec384";
+        default = "ec256";
         description = ''
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
@@ -250,7 +250,7 @@ in
             "example.com" = {
               webroot = "/var/www/challenges/";
               email = "foo@example.com";
-              extraDomains = { "www.example.com" = null; "foo.example.com" = "/var/www/foo/"; };
+              extraDomains = { "www.example.com" = null; "foo.example.com" = null; };
             };
             "bar.example.com" = {
               webroot = "/var/www/challenges/";
@@ -301,7 +301,7 @@ in
                 # StateDirectory must be relative, and will be created under /var/lib by systemd
                 lpath = "acme/${cert}";
                 apath = "/var/lib/${lpath}";
-                spath = "/var/lib/acme/.lego";
+                spath = "/var/lib/acme/.lego/${cert}";
                 fileMode = if data.allowKeysForGroup then "640" else "600";
                 globalOpts = [ "-d" data.domain "--email" data.email "--path" "." "--key-type" data.keyType ]
                           ++ optionals (cfg.acceptTerms) [ "--accept-tos" ]
@@ -318,25 +318,20 @@ in
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];
                   wants = [ "network-online.target" ];
-                  wantedBy = [ "multi-user.target" ];
+                  wantedBy = mkIf (!config.boot.isContainer) [ "multi-user.target" ];
                   serviceConfig = {
                     Type = "oneshot";
-                    # With RemainAfterExit the service is considered active even
-                    # after the main process having exited, which means when it
-                    # gets changed, the activation phase restarts it, meaning
-                    # the permissions of the StateDirectory get adjusted
-                    # according to the specified group
-                    RemainAfterExit = true;
                     User = data.user;
                     Group = data.group;
                     PrivateTmp = true;
-                    StateDirectory = "acme/.lego ${lpath}";
+                    StateDirectory = "acme/.lego/${cert} acme/.lego/accounts ${lpath}";
                     StateDirectoryMode = if data.allowKeysForGroup then "750" else "700";
                     WorkingDirectory = spath;
                     # Only try loading the credentialsFile if the dns challenge is enabled
                     EnvironmentFile = if data.dnsProvider != null then data.credentialsFile else null;
                     ExecStart = pkgs.writeScript "acme-start" ''
                       #!${pkgs.runtimeShell} -e
+                      test -L ${spath}/accounts -o -d ${spath}/accounts || ln -s ../accounts ${spath}/accounts
                       ${pkgs.lego}/bin/lego ${renewOpts} || ${pkgs.lego}/bin/lego ${runOpts}
                     '';
                     ExecStartPost =
@@ -348,7 +343,9 @@ in
 
                           # Test that existing cert is older than new cert
                           KEY=${spath}/certificates/${keyName}.key
+                          KEY_CHANGED=no
                           if [ -e $KEY -a $KEY -nt key.pem ]; then
+                            KEY_CHANGED=yes
                             cp -p ${spath}/certificates/${keyName}.key key.pem
                             cp -p ${spath}/certificates/${keyName}.crt fullchain.pem
                             cp -p ${spath}/certificates/${keyName}.issuer.crt chain.pem
@@ -359,7 +356,10 @@ in
                           chmod ${fileMode} *.pem
                           chown '${data.user}:${data.group}' *.pem
 
-                          ${data.postRun}
+                          if [ "$KEY_CHANGED" = "yes" ]; then
+                            : # noop in case postRun is empty
+                            ${data.postRun}
+                          fi
                         '';
                       in
                         "+${script}";
@@ -458,7 +458,7 @@ in
   ];
 
   meta = {
-    maintainers = with lib.maintainers; [ abbradar fpletz globin m1cr0man ];
+    maintainers = lib.teams.acme.members;
     doc = ./acme.xml;
   };
 }

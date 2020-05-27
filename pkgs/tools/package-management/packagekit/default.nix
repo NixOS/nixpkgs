@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, lib
 , intltool, glib, pkgconfig, polkit, python3, sqlite
 , gobject-introspection, vala, gtk-doc, autoreconfHook, autoconf-archive
-# TODO: set enableNixBackend to true, as soon as it builds
 , nix, enableNixBackend ? false, boost
 , enableCommandNotFound ? false
 , enableBashCompletion ? false, bash-completion ? null
@@ -23,7 +22,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib polkit python3 gobject-introspection ]
                   ++ lib.optional enableSystemd systemd
                   ++ lib.optional enableBashCompletion bash-completion;
-  propagatedBuildInputs = [ sqlite nix boost ];
+  propagatedBuildInputs =
+    [ sqlite boost ]
+    ++ lib.optional enableNixBackend nix;
   nativeBuildInputs = [ vala intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
 
   preAutoreconf = ''
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
       a common set of abstractions that can be used by standard GUI and text
       mode package managers.
     '';
-    homepage = http://www.packagekit.org/;
+    homepage = "http://www.packagekit.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];

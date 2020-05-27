@@ -13,7 +13,7 @@ buildPythonApplication {
 
   meta = with stdenv.lib; {
     description = "An ASCII Header Generator for Network Protocols";
-    homepage = https://github.com/luismartingarcia/protocol;
+    homepage = "https://github.com/luismartingarcia/protocol";
     license = licenses.gpl3;
     maintainers = with maintainers; [ teto ];
   };

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Test utilities for OpenGL";
-    homepage = https://www.mesa3d.org/;
+    homepage = "https://www.mesa3d.org/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

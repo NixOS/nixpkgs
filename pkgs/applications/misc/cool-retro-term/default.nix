@@ -38,7 +38,7 @@ mkDerivation rec {
       feel of the old cathode tube screens. It has been designed to be
       eye-candy, customizable, and reasonably lightweight.
     '';
-    homepage = https://github.com/Swordfish90/cool-retro-term;
+    homepage = "https://github.com/Swordfish90/cool-retro-term";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];

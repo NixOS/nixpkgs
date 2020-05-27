@@ -22,7 +22,7 @@ stdenv.mkDerivation  rec {
 
   meta = with stdenv.lib; {
     description = "Wordlist generator";
-    homepage = https://sourceforge.net/projects/crunch-wordlist/;
+    homepage = "https://sourceforge.net/projects/crunch-wordlist/";
     platforms = platforms.unix;
     maintainers = with maintainers; [ lethalman lnl7 ];
   };

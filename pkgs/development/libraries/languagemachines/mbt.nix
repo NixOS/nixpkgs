@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Memory Based Tagger";
-    homepage    = https://languagemachines.github.io/mbt/;
+    homepage    = "https://languagemachines.github.io/mbt/";
     license     = licenses.gpl3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ roberth ];

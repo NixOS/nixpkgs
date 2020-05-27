@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Rust implementation of the Open Containers Initiative oci-runtime";
-    homepage = https://github.com/oracle/railcar;
+    homepage = "https://github.com/oracle/railcar";
     license = with licenses; [ asl20 /* or */ upl ];
     maintainers = [ maintainers.spacekookie ];
     platforms = platforms.all;

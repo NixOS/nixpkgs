@@ -6,6 +6,11 @@ import ../make-test-python.nix {
       environment.systemPackages = [
         (pkgs.callPackage ./xmpp-sendmessage.nix { connectTo = nodes.server.config.networking.primaryIPAddress; })
       ];
+      networking.extraHosts = ''
+        ${nodes.server.config.networking.primaryIPAddress} example.com
+        ${nodes.server.config.networking.primaryIPAddress} conference.example.com
+        ${nodes.server.config.networking.primaryIPAddress} uploads.example.com
+      '';
     };
     server = { config, pkgs, ... }: {
       nixpkgs.overlays = [
@@ -18,6 +23,8 @@ import ../make-test-python.nix {
       ];
       networking.extraHosts = ''
         ${config.networking.primaryIPAddress} example.com
+        ${config.networking.primaryIPAddress} conference.example.com
+        ${config.networking.primaryIPAddress} uploads.example.com
       '';
       networking.firewall.enable = false;
       services.prosody = {
@@ -38,6 +45,14 @@ import ../make-test-python.nix {
         virtualHosts.test = {
           domain = "example.com";
           enabled = true;
+        };
+        muc = [
+          {
+            domain = "conference.example.com";
+          }
+        ];
+        uploadHttp = {
+          domain = "uploads.example.com";
         };
       };
     };

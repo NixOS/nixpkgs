@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C/C++ library for numbers, a part of GiNaC";
-    homepage = https://www.ginac.de/CLN/;
+    homepage = "https://www.ginac.de/CLN/";
     license = licenses.gpl2;
     platforms = platforms.unix; # Once had cygwin problems
   };

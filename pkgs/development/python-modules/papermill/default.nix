@@ -63,7 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parametrize and run Jupyter and nteract Notebooks";
-    homepage = https://github.com/nteract/papermill;
+    homepage = "https://github.com/nteract/papermill";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

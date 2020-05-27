@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, openssl, flex, bison, pkgconfig, groff, libxml2, utillinux
-, file, libtool, which, boost, autoreconfHook
+, coreutils, file, libtool, which, boost, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
       --replace "contrib/init.d contrib/systemd" ""
     substituteInPlace src/cmds/Makefile.am \
       --replace "/etc/" "$out/etc/"
+    substituteInPlace src/mom_rcp/pathnames.h \
+      --replace /bin/cp ${coreutils}/bin/cp
+    substituteInPlace src/resmom/requests.c \
+      --replace /bin/cp ${coreutils}/bin/cp
   '';
 
   preConfigure = ''
@@ -61,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.adaptivecomputing.com/products/open-source/torque;
+    homepage = "http://www.adaptivecomputing.com/products/open-source/torque";
     description = "Resource management system for submitting and controlling jobs on supercomputers, clusters, and grids";
     platforms = platforms.linux;
     license = "TORQUEv1.1";

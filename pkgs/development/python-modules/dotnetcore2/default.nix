@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "dotnetcore2";
-  version = "2.1.11";
+  version = "2.1.14";
   format = "wheel";
   disabled = isPy27;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     inherit pname version format;
     python = "py3";
     platform = "manylinux1_x86_64";
-    sha256 = "0qhp94bjz4icz2f0fnhgck875chiqzy4lvsp6lwhj5jd0zsv2bb3";
+    sha256 = "0dxp9a73ncjylc09bjwq81fgj5ysk1yi27l8ka5f98121k1kmn6q";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -35,18 +35,18 @@ buildPythonPackage rec {
     )
   ];
 
-  # unfortunately the noraml pip install fails because the manylinux1 format check fails with NixOS
+  # remove bin, which has a broken dotnetcore installation
   installPhase = ''
-    mkdir -p $out/${python.sitePackages}/${pname}
-    # copy metadata
-    cp -r dotnetcore2-2* $out/${python.sitePackages}
-    # copy non-dotnetcore related files
-    cp -r dotnetcore2/{__init__.py,runtime.py} $out/${python.sitePackages}/${pname}
+    rm -rf dotnetcore2/bin
+    mkdir -p $out/${python.sitePackages}/
+    cp -r dotnetcore2 $out/${python.sitePackages}/
   '';
 
   # no tests, ensure it's one useful function works
   checkPhase = ''
-    ${python.interpreter} -c 'from dotnetcore2 import runtime; print(runtime.get_runtime_path())'
+    rm -r dotnetcore2 # avoid importing local directory
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+    ${python.interpreter} -c 'from dotnetcore2 import runtime; print(runtime.get_runtime_path()); runtime.ensure_dependencies()'
   '';
 
   meta = with lib; {

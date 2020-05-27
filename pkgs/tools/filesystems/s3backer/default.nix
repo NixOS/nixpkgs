@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/archiecobbs/s3backer;
+    homepage = "https://github.com/archiecobbs/s3backer";
     description = "FUSE-based single file backing store via Amazon S3";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux;

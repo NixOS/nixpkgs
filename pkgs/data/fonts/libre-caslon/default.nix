@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Caslon fonts based on hand-lettered American Caslons of 1960s";
-    homepage = http://www.impallari.com/librecaslon;
+    homepage = "http://www.impallari.com/librecaslon";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;

@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonApplication, pythonOlder
+{ lib, fetchPypi, buildPythonPackage, pythonOlder
 , aspy-yaml
 , cached-property
 , cfgv
@@ -13,7 +13,7 @@
 , virtualenv
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "pre-commit";
   version = "1.21.0";
 
@@ -50,7 +50,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A framework for managing and maintaining multi-language pre-commit hooks";
-    homepage = https://pre-commit.com/;
+    homepage = "https://pre-commit.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ borisbabic ];
   };

@@ -7,9 +7,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "parole";
-  version = "1.0.4";
+  version = "1.0.5";
 
-  sha256 = "18j4bmny37crryh4pvxcjjvj99mln6ljq2vy69awxhvrjx9ljv13";
+  sha256 = "0qgis2gnkcvg7xwp76cbi0ihqdjprvvw2d66hk7klhrafp7c0v13";
 
   postPatch = ''
     substituteInPlace src/plugins/mpris2/Makefile.am \

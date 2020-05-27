@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python package for offline access to vega datasets";
-    homepage = https://github.com/altair-viz/vega_datasets;
+    homepage = "https://github.com/altair-viz/vega_datasets";
     license = licenses.mit;
   };
 }

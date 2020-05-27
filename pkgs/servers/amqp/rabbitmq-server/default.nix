@@ -2,17 +2,18 @@
 , docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync, getconf, socat
 , procps, coreutils, gnused, systemd, glibcLocales
 , AppKit, Carbon, Cocoa
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
 
-  version = "3.8.2";
+  version = "3.8.3";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "17gixahxass9n4d697my8sq4an51rw3cicb36fqvl8fbhnwjjrwc";
+    sha256 = "1fhs3g2pgrq2xi4hnlc437hkv3261l4i134m6mxid00sf1c89p5f";
   };
 
   buildInputs =
@@ -59,10 +60,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://www.rabbitmq.com/;
+    homepage = "https://www.rabbitmq.com/";
     description = "An implementation of the AMQP messaging protocol";
     license = stdenv.lib.licenses.mpl11;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
+  };
+
+  passthru.tests = {
+    vm-test = nixosTests.rabbitmq;
   };
 }

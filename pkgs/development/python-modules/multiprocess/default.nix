@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Better multiprocessing and multithreading in python";
-    homepage = https://github.com/uqfoundation/multiprocess;
+    homepage = "https://github.com/uqfoundation/multiprocess";
     license = licenses.bsd3;
   };
 }

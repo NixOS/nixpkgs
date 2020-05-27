@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Interface Python with pkg-config";
-    homepage = https://github.com/matze/pkgconfig;
+    homepage = "https://github.com/matze/pkgconfig";
     license = licenses.mit;
   };
 }

@@ -143,7 +143,7 @@ python3Packages.buildPythonApplication {
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
-    homepage = https://electrum.org/;
+    homepage = "https://electrum.org/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ ehmry joachifm np ];

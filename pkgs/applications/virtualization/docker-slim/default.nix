@@ -6,7 +6,7 @@
 
 buildGoPackage rec {
   pname = "docker-slim";
-  version = "1.28.0";
+  version = "1.29.0";
 
   goPackagePath = "github.com/docker-slim/docker-slim";
 
@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "docker-slim";
     repo = "docker-slim";
     rev = version;
-    sha256 = "1yqg7ngrgq1382clyaal40v7rg9p54hyf78mdrzql454yzxfa819";
+    sha256 = "0qfjmwqxgghp9pqj4s2z71cmn8mi1l6655z6nbhh72yqaxh5a6ia";
   };
 
   subPackages = [ "cmd/docker-slim" "cmd/docker-slim-sensor" ];
@@ -33,7 +33,7 @@ buildGoPackage rec {
   # docker-slim tries to create its state dir next to the binary (inside the nix
   # store), so we set it to use the working directory at the time of invocation
   postInstall = ''
-    wrapProgram "$bin/bin/docker-slim" --add-flags '--state-path "$(pwd)"'
+    wrapProgram "$out/bin/docker-slim" --add-flags '--state-path "$(pwd)"'
   '';
 
   meta = with stdenv.lib; {

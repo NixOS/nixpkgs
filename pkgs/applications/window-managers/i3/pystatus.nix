@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/enkore/i3pystatus;
+    homepage = "https://github.com/enkore/i3pystatus";
     description = "A complete replacement for i3status";
     longDescription = ''
       i3pystatus is a growing collection of python scripts for status output compatible

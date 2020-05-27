@@ -16,12 +16,12 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace "gcc" "cc"
   '';
 
-  patches = [ ./10_fix_buffer_overflow_wordole_c.patch ];
+  patches = [ ./10_fix_buffer_overflow_wordole_c_CVE-2014-8123.patch ];
 
   installTargets = [ "global_install" ];
 
   meta = {
-    homepage = http://www.winfield.demon.nl/;
+    homepage = "http://www.winfield.demon.nl/";
     description = "Convert MS Word documents to plain text or PostScript";
     license = stdenv.lib.licenses.gpl2;
 

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://ocaml-mysql.forge.ocamlcore.org;
+    homepage = "http://ocaml-mysql.forge.ocamlcore.org";
     description = "Bindings for interacting with MySQL databases from ocaml";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.roconnor ];

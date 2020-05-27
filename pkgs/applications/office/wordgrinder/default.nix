@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Text-based word processor";
-    homepage = https://cowlark.com/wordgrinder;
+    homepage = "https://cowlark.com/wordgrinder";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

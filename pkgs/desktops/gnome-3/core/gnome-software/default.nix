@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
-  version = "3.34.2";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1zhi6zkphq0wfm9z2d1rp1ym8x52c7as4r8h2nrcd34mmv02xnm7";
+    sha256 = "0vkgpy2afb33rrk94zqlm2q728xhzjj8s24n9wh9ylw00z3nckad";
   };
 
   patches = [
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dubuntu_reviews=false"
     "-Dgudev=false"
+    # FIXME: package malcontent parental controls
+    "-Dmalcontent=false"
   ] ++ stdenv.lib.optionals (!withFwupd) [
     "-Dfwupd=false"
   ];
@@ -55,9 +57,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Software store that lets you install and update applications and system extensions";
-    homepage = https://wiki.gnome.org/Apps/Software;
+    homepage = "https://wiki.gnome.org/Apps/Software";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

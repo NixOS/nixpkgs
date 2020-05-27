@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = https://www.jbig2dec.com/;
+    homepage = "https://www.jbig2dec.com/";
     description = "Decoder implementation of the JBIG2 image compression format";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

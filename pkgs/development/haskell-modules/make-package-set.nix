@@ -124,7 +124,7 @@ let
       sha256Arg = if sha256 == null then "--sha256=" else ''--sha256="${sha256}"'';
     in buildPackages.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
-      nativeBuildInputs = [ buildPackages.cabal2nix ];
+      nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
       preferLocalBuild = true;
       allowSubstitutes = false;
       phases = ["installPhase"];

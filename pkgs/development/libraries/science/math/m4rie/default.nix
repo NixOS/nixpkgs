@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://malb.bitbucket.io/m4rie/;
+    homepage = "https://malb.bitbucket.io/m4rie/";
     description = "Library for matrix multiplication, reduction and inversion over GF(2^k) for 2 <= k <= 10";
     longDescription = ''
       M4RIE is a library for fast arithmetic with dense matrices over small finite fields of even characteristic.

@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+set -e
+
+scriptName=mark-broken # do not use the .wrapped name
+
+die() {
+    echo "$scriptName: error: $1" >&2
+    exit 1
+}
+
+usage() {
+    echo "Usage: $scriptName <attr> [--new-value=<new-value>]"
+}
+
+args=()
+
+for arg in "$@"; do
+    case $arg in
+        --new-value=*)
+            newValue="${arg#*=}"
+        ;;
+        --help)
+            usage
+            exit 0
+        ;;
+        --*)
+            echo "$scriptName: Unknown argument: $arg"
+            usage
+            exit 1
+        ;;
+        *)
+            args["${#args[*]}"]=$arg
+        ;;
+    esac
+done
+
+attr=${args[0]}
+
+if (( "${#args[*]}" < 1 )); then
+    echo "$scriptName: Too few arguments"
+    usage
+    exit 1
+fi
+
+if (( "${#args[*]}" > 1 )); then
+    echo "$scriptName: Too many arguments"
+    usage
+    exit 1
+fi
+
+if [ -z $newValue ]; then
+  newValue="true"
+fi
+
+nixFile=$(nix-instantiate --eval --json -E "with import ./. {}; (builtins.unsafeGetAttrPos \"description\" $attr.meta).file" | jq -r .)
+if [[ ! -f "$nixFile" ]]; then
+    die "Couldn't evaluate 'builtins.unsafeGetAttrPos \"description\" $attr.meta' to locate the .nix file!"
+fi
+
+# Insert broken attribute
+sed -i.bak "$nixFile" -r \
+  -e "/^\s*broken\s*=.*$/d" \
+  -e "s/(\s*)meta\s*=.*\{/&\n\1  broken = $newValue;/"
+
+if cmp -s "$nixFile" "$nixFile.bak"; then
+    mv "$nixFile.bak" "$nixFile"
+    die "Failed to mark the package as broken! Does it have a meta attribute?"
+fi
+
+if [[ "$newValue" == "true" ]]; then
+    # broken should evaluate to true in any case now
+    markedSuccessfully=$(nix-instantiate --eval -E "with import ./. {}; $attr.meta.broken" || true)
+    if [[ ! "$markedSuccessfully" == "true" ]]; then
+        mv "$nixFile.bak" "$nixFile"
+        die "Couldn't verify the broken attribute to be set correctly, restoring backup!"
+    fi
+else
+    # we can not check if broken evaluates to the correct value, but we can check that it does evaluate
+    if ! nix-instantiate --eval -E "with import ./. {}; $attr.meta.broken" >/dev/null; then
+        mv "$nixFile.bak" "$nixFile"
+        die "Couldn't verify the broken attribute to be set correctly, restoring backup!"
+    fi
+fi
+
+rm -f "$nixFile.bak"
+rm -f "$attr.fetchlog"

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-loganalytics";
-  version = "0.2.0";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c7315ff0ee4d618fb38dca68548ef4023a7a20ce00efe27eb2105a5426237d86";
+    sha256 = "16f4c4f676ea718b7e1c59bd9a516fcfc796f1aff844b183a7ce9afe69fb214d";
   };
 
   propagatedBuildInputs = [
@@ -26,10 +26,7 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
-  postInstall = lib.optionalString isPy3k ''
-    rm $out/${python.sitePackages}/azure/__init__.py
-    rm $out/${python.sitePackages}/azure/mgmt/__init__.py
-  '';
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # has no tests
   doCheck = false;

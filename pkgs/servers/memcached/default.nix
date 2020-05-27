@@ -1,23 +1,13 @@
-{stdenv, fetchurl, fetchpatch, cyrus_sasl, libevent}:
+{stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
 
 stdenv.mkDerivation rec {
-  version = "1.5.22";
+  version = "1.6.6";
   pname = "memcached";
 
   src = fetchurl {
     url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "14qzbxgz40j4yhi3lzrsdjd6kyy3zwv9c8kw11kj6njp42fpxd62";
+    sha256 = "1xrj7vy05nc6bky4wnrmrbxfibvk5vq4dp2fwk4jk4amzbn0x3wh";
   };
-
-  patches = [
-    # Fixes compilation error on Darwin due to redeclaration of
-    # htonll. The fix should appear in 1.5.23.
-    # https://github.com/memcached/memcached/issues/598
-    (fetchpatch {
-      url = "https://github.com/memcached/memcached/commit/95c67710aaf5cfe188d94b510faef8c66d6f5604.diff";
-      sha256 = "0ab5l24p4n4fpx78ilmg7jvs9nl84pdza90jbpbx3ns5n23pqbfs";
-    })
-  ];
 
   configureFlags = [
      "ac_cv_c_endian=${if stdenv.hostPlatform.isBigEndian then "big" else "little"}"
@@ -31,10 +21,13 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A distributed memory object caching system";
-    repositories.git = https://github.com/memcached/memcached.git;
-    homepage = http://memcached.org/;
+    repositories.git = "https://github.com/memcached/memcached.git";
+    homepage = "http://memcached.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.coconnor ];
     platforms = platforms.linux ++ platforms.darwin;
+  };
+  passthru.tests = {
+    smoke-tests = nixosTests.memcached;
   };
 }

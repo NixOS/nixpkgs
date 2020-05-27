@@ -1,32 +1,23 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchgx }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "ipget";
-  version = "0.3.2";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/ipfs/ipget";
-
-  extraSrcPaths = [
-    (fetchgx {
-      inherit  src;name = "${pname}-${version}";
-      sha256 = "07l9hpkhk5phr95zp1l5wd3ii38bw91hy4dlw2rsfbzcsc8bq4s8";
-    })
-  ];
-
-  goDeps = ../../../tools/package-management/gx/deps.nix;
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "ipget";
-    inherit rev;
-    sha256 = "1ljf5ddvc1p5swmgn4m1ivfj74fykk56myk2r9c4grdjzksf4a15";
+    rev = "v${version}";
+    sha256 = "14ygij6hj6bd4g4aw6jgfbi1fgpal0jgf1hr22zxm16dpx3vva6b";
   };
+
+  vendorSha256 = "0vy21pdqk6q5fw7wlcv51myhh9y79n2qhvy61rmblwhxlrkh6sdv";
 
   meta = with stdenv.lib; {
     description = "Retrieve files over IPFS and save them locally";
-    homepage = https://ipfs.io/;
+    homepage = "https://ipfs.io/";
     license = licenses.mit;
+    maintainers = with maintainers; [ Luflosi ];
     platforms = platforms.unix;
   };
 }

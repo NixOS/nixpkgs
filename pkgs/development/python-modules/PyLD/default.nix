@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python implementation of the JSON-LD API";
-    homepage = https://github.com/digitalbazaar/pyld;
+    homepage = "https://github.com/digitalbazaar/pyld";
     license = licenses.bsd3;
     maintainers = with maintainers; [ apeschar ];
   };

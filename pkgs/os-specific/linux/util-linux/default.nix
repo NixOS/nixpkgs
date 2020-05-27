@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "util-linux";
-  version = "2.33.2";
+  version = "2.35.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15yf2dh4jd1kg6066hydlgdhhs2j3na13qld8yx30qngqvmfh6v3";
+    sha256 = "1yfpy6bkab4jw61mpx48gfy24yrqp4a7arvpis8csrkk53fkxpnr";
   };
 
   patches = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://www.kernel.org/pub/linux/utils/util-linux/;
+    homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "A set of system utilities for Linux";
     license = licenses.gpl2; # also contains parts under more permissive licenses
     platforms = platforms.linux;

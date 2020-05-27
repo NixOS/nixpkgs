@@ -76,7 +76,7 @@ in buildBazelPackage rec {
       rm -f "$bazelOut"/java.log "$bazelOut"/java.log.*
     '';
 
-    sha256 = "1bn7nhv5pag8fdm8l8nvgg3fzvhpy2yv9yl2slrb16lckxzha3v6";
+    sha256 = "0r11kbyp1ambgcj35gvjjmxrsrdg7b9jb9sq3kih4lik7zyljp25";
   };
 
   buildAttrs = {
@@ -93,7 +93,7 @@ in buildBazelPackage rec {
 
   meta = with stdenv.lib; {
     description = "Container Runtime Sandbox";
-    homepage = https://github.com/google/gvisor;
+    homepage = "https://github.com/google/gvisor";
     license = licenses.asl20;
     maintainers = with maintainers; [ andrew-d ];
     platforms = [ "x86_64-linux" ];

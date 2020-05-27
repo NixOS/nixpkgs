@@ -73,7 +73,7 @@ perlPackages.buildPerlPackage {
   doCheck = false;
 
   meta = {
-    homepage = http://www.openxpki.org;
+    homepage = "http://www.openxpki.org";
     description = "Enterprise-grade PKI/Trustcenter software";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];

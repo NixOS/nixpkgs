@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.12.0";
+  version = "0.12.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0slj5yj8c90l9pp5i3z74x5r3r4da0xfmbzkfq5k0dkg72q3kxaq";
+    sha256 = "0xxxq8xdkgkn146my307jgws4qgxx477h0ybg1mqza1ycmczvsla";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_43 ];
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/gexiv2;
+    homepage = "https://wiki.gnome.org/Projects/gexiv2";
     description = "GObject wrapper around the Exiv2 photo metadata library";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

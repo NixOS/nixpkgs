@@ -2,35 +2,41 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+  # Python requirements
 , cython
 , dill
+, fastjsonschema
 , jsonschema
 , numpy
 , marshmallow
 , marshmallow-polyfield
-, matplotlib
 , networkx
 , ply
 , psutil
+, python-constraint
+, retworkx
 , scipy
 , sympy
+  # Python visualization requirements, semi-optional
+, ipywidgets
+, matplotlib
+, pillow
+, pydot
+, pygments
+, pylatexenc
+, seaborn
   # test requirements
 , ddt
 , hypothesis
-, ipywidgets
 , nbformat
 , nbconvert
-, pillow
-, pydot
-, python
-, pygraphviz
-, pylatexenc
 , pytestCheckHook
+, python
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.12.0";
+  version = "0.14.1";
 
   disabled = pythonOlder "3.5";
 
@@ -38,13 +44,14 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "1yarfziy2w8n1d7zyyxykfs68608j8md4kwfyhbyc6wy483fk9sy";
+    sha256 = "0pd7x2jrqy7q1s38ychqw9bayjn2rvi6rq7c2c0kd160rwj1l2sc";
   };
 
   nativeBuildInputs = [ cython ];
 
   propagatedBuildInputs = [
     dill
+    fastjsonschema
     jsonschema
     numpy
     marshmallow
@@ -53,35 +60,38 @@ buildPythonPackage rec {
     networkx
     ply
     psutil
+    python-constraint
+    retworkx
     scipy
     sympy
+    # Optional/visualization inputs
+    ipywidgets
+    matplotlib
+    pillow
+    pydot
+    pygments
+    pylatexenc
+    seaborn
   ];
 
+  postPatch = ''
+    # Fix relative imports in tests
+    touch test/python/dagcircuit/__init__.py
+  '';
 
   # *** Tests ***
   checkInputs = [
     ddt
     hypothesis
-    ipywidgets
     nbformat
     nbconvert
-    pillow
-    pydot
-    pygraphviz
-    pylatexenc
     pytestCheckHook
   ];
+  dontUseSetuptoolsCheck = true;  # can't find setup.py, so fails. tested by pytest
 
   pythonImportsCheck = [
     "qiskit"
     "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial"
-  ];
-
-  dontUseSetuptoolsCheck = true;  # can't find setup.py, so fails. tested by pytest
-
-  disabledTests = [
-    "test_long_name"  # generated circuit images differ for some reason
-    "test_jupyter_jobs_pbars" # needs IBMQ provider package (qiskit-ibmq-provider), circular dependency
   ];
 
   pytestFlagsArray = [
@@ -112,7 +122,8 @@ buildPythonPackage rec {
     longDescription = ''
       Allows the user to write quantum circuits easily, and takes care of the constraints of real hardware.
     '';
-    homepage = "https://github.com/QISKit/qiskit-terra";
+    homepage = "https://qiskit.org/terra";
+    downloadPage = "https://github.com/QISKit/qiskit-terra/releases";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

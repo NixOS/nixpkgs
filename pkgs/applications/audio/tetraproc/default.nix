@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Converts the A-format signals from a tetrahedral Ambisonic microphone into B-format signals ready for recording";
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

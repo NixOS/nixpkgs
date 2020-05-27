@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pgspecial";
-  version = "1.11.9";
+  version = "1.11.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "77f8651450ccbde7d3036cfe93486a4eeeb5ade28d1ebc4b2ba186fea0023c56";
+    sha256 = "1jrq6bhzwvz6db8ays8zff15hbk1iazs2qxrzvrnlkgxxjkp8p7n";
   };
 
   checkInputs = [ pytest ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Meta-commands handler for Postgres Database";
-    homepage = https://pypi.python.org/pypi/pgspecial;
+    homepage = "https://pypi.python.org/pypi/pgspecial";
     license = licenses.bsd3;
   };
 }

@@ -10,14 +10,6 @@ let
 
   videoDrivers = config.services.xserver.videoDrivers;
 
-  makePackage = p: pkgs.buildEnv {
-    name = "mesa-drivers+txc-${p.mesa.version}";
-    paths =
-      [ p.mesa.drivers
-        (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
-      ];
-  };
-
   package = pkgs.buildEnv {
     name = "opengl-drivers";
     paths = [ cfg.package ] ++ cfg.extraPackages;
@@ -34,6 +26,9 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "opengl" "extraPackages" ])
+    (mkRemovedOptionModule [ "hardware" "opengl" "s3tcSupport" ] ''
+      S3TC support is now always enabled in Mesa.
+    '')
   ];
 
   options = {
@@ -71,17 +66,6 @@ in
           supported for the <literal>nvidia</literal> and
           <literal>ati_unfree</literal> drivers, as well as
           <literal>Mesa</literal>.
-        '';
-      };
-
-      s3tcSupport = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Make S3TC(S3 Texture Compression) via libtxc_dxtn available
-          to OpenGL drivers instead of the patent-free S2TC replacement.
-
-          Using this library may require a patent license depending on your location.
         '';
       };
 
@@ -166,8 +150,8 @@ in
     environment.sessionVariables.LD_LIBRARY_PATH = mkIf cfg.setLdLibraryPath
       ([ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib");
 
-    hardware.opengl.package = mkDefault (makePackage pkgs);
-    hardware.opengl.package32 = mkDefault (makePackage pkgs.pkgsi686Linux);
+    hardware.opengl.package = mkDefault pkgs.mesa.drivers;
+    hardware.opengl.package32 = mkDefault pkgs.pkgsi686Linux.mesa.drivers;
 
     boot.extraModulePackages = optional (elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions;
   };

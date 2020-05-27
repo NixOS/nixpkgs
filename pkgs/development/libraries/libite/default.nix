@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libite";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "libite";
     rev = "v${version}";
-    sha256 = "0pvki6cm3ia27nsd6dljddjgz1bd6avf6c0ppj63fa3sz52lfmga";
+    sha256 = "0kad501mrvn0s0sw9pz5spjq7ymk117hnff249z6026gswrxv1mh";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

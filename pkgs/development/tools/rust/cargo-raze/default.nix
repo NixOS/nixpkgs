@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Generate Bazel BUILD files from Cargo dependencies";
-    homepage = https://github.com/google/cargo-raze;
+    homepage = "https://github.com/google/cargo-raze";
     license = licenses.asl20;
     maintainers = with maintainers; [ elasticdog ];
     platforms = platforms.all;

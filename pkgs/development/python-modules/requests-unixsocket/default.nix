@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Use requests to talk HTTP via a UNIX domain socket";
-    homepage = https://github.com/msabramo/requests-unixsocket;
+    homepage = "https://github.com/msabramo/requests-unixsocket";
     license = licenses.asl20;
     maintainers = [ maintainers.catern ];
   };

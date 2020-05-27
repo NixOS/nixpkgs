@@ -17,12 +17,12 @@ buildGoPackage rec {
   buildInputs = [ makeWrapper ];
 
   preFixup = ''
-    wrapProgram "$bin/bin/diskrsync" --argv0 diskrsync --prefix PATH : ${openssh}/bin
+    wrapProgram "$out/bin/diskrsync" --argv0 diskrsync --prefix PATH : ${openssh}/bin
   '';
 
   meta = with stdenv.lib; {
     description = "Rsync for block devices and disk images";
-    homepage = https://github.com/dop251/diskrsync;
+    homepage = "https://github.com/dop251/diskrsync";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];

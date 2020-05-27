@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "A dot-accessible dictionary (a la JavaScript objects)";
     license = licenses.mit;
-    homepage = https://github.com/Infinidat/munch;
+    homepage = "https://github.com/Infinidat/munch";
   };
 
 }

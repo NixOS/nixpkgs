@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source implementation of NVIDIA's GameStream";
-    homepage = https://github.com/irtimmer/moonlight-embedded;
+    homepage = "https://github.com/irtimmer/moonlight-embedded";
     license = licenses.gpl3;
     maintainers = [ maintainers.globin ];
     platforms = platforms.linux;

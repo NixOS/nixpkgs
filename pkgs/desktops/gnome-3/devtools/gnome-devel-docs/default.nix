@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool itstool libxml2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/GNOME/gnome-devel-docs;
+    homepage = "https://github.com/GNOME/gnome-devel-docs";
     description = "Developer documentation for GNOME";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.fdl12;
     platforms = platforms.linux;
   };

@@ -66,7 +66,7 @@ in buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";
-    homepage = https://pypi.python.org/pypi/setuptools;
+    homepage = "https://pypi.python.org/pypi/setuptools";
     license = with licenses; [ psfl zpl20 ];
     platforms = python.meta.platforms;
     priority = 10;

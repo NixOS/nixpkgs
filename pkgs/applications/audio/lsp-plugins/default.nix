@@ -1,24 +1,35 @@
-{ stdenv, fetchFromGitHub, pkgconfig, makeWrapper
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, makeWrapper
 , libsndfile, jack2Full
 , libGLU, libGL, lv2, cairo
 , ladspaH, php }:
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.1.13";
+  version = "1.1.19";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "00mhrr873kgcnqy3q0yi1r5zacfcvz7fqpzsmfhw5d095jm970al";
+    sha256 = "1wiph3vxhydc6mr9hn2c6crd4cx592l2zv0wrzgmpnlm1lflzpbg";
   };
+
+  patches = [
+    # Fix build
+    # https://github.com/sadko4u/lsp-plugins/issues/104
+    (fetchpatch {
+      url = "https://github.com/sadko4u/lsp-plugins/commit/4d901135fb82fa95e668b4d55d05e405f5e620d2.patch";
+      excludes = [ "TODO.txt" ];
+      sha256 = "wR2B6XnDXT2BGwmrsL72PH/BM1e9d9JvqHxDtfFDAug=";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig php makeWrapper ];
   buildInputs = [ jack2Full libsndfile libGLU libGL lv2 cairo ladspaH ];
 
   makeFlags = [
     "PREFIX=${placeholder ''out''}"
+    "ETC_PATH=$(out)/etc"
   ];
 
   NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
@@ -139,7 +150,7 @@ stdenv.mkDerivation rec {
         - Delay Compensator Stereo - Verzögerungsausgleicher Stereo
         - Delay Compensator x2 Stereo - Verzögerungsausgleicher x2 Stereo
       '';
-      homepage = https://lsp-plug.in;
+      homepage = "https://lsp-plug.in";
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
       platforms = platforms.linux;

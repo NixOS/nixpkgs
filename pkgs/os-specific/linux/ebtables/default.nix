@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A filtering tool for Linux-based bridging firewalls";
-    homepage = http://ebtables.sourceforge.net/;
+    homepage = "http://ebtables.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

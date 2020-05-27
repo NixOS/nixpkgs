@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [autoconf automake libtool gmpxx];
+  buildInputs = [autoconf automake libtool];
+  propagatedBuildInputs = [ gmpxx ];
 
   configureFlags = [
     "--disable-optimization"

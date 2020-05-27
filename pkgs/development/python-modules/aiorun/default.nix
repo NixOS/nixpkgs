@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Boilerplate for asyncio applications";
-    homepage = https://github.com/cjrh/aiorun;
+    homepage = "https://github.com/cjrh/aiorun";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "390";
 
   src = fetchsvn {
-    url = svn://svn.icculus.org/smpeg/trunk;
+    url = "svn://svn.icculus.org/smpeg/trunk";
     rev = version;
     sha256 = "0ynwn7ih5l2b1kpzpibns9bb9wzfjak7mgrb1ji0dkn2q5pv6lr0";
   };
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lX11";
 
   meta = {
-    homepage = http://icculus.org/smpeg/;
+    homepage = "http://icculus.org/smpeg/";
     description = "MPEG decoding library";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

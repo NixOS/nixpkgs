@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://sortix.org/rw;
+    homepage = "https://sortix.org/rw";
     description = "Block device and byte copying program similar to dd";
     longDescription = ''
       rw is a command line program which copies information between files

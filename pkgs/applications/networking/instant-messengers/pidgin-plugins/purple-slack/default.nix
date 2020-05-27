@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   PKG_CONFIG_PURPLE_DATAROOTDIR = "${placeholder "out"}/share";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dylex/slack-libpurple;
+    homepage = "https://github.com/dylex/slack-libpurple";
     description = "Slack plugin for Pidgin";
     license = licenses.gpl2;
     platforms = platforms.linux;

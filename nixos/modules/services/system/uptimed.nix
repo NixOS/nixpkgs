@@ -10,6 +10,7 @@ in
   options = {
     services.uptimed = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable <literal>uptimed</literal>, allowing you to track

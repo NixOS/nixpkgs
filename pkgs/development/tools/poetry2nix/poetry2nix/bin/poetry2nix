@@ -8,11 +8,16 @@ import json
 import sys
 
 
-argparser = argparse.ArgumentParser(description="Generate overrides for git hashes",)
-argparser.add_argument(
+argparser = argparse.ArgumentParser(description="Poetry2nix CLI")
+
+subparsers = argparser.add_subparsers(dest="subcommand")
+subparsers.required = True
+
+parser_lock = subparsers.add_parser("lock", help="Generate overrides for git hashes",)
+parser_lock.add_argument(
     "--lock", default="poetry.lock", help="Path to input poetry.lock",
 )
-argparser.add_argument(
+parser_lock.add_argument(
     "--out", default="poetry-git-overlay.nix", help="Output file",
 )
 
@@ -74,7 +79,7 @@ if __name__ == "__main__":
                 indent(
                     textwrap.dedent(
                         """
-              %s = super.%s.overrideAttrs (
+              %s = super.%s.overridePythonAttrs (
                 _: {
                   src = pkgs.fetchgit {
                     url = "%s";
@@ -92,7 +97,7 @@ if __name__ == "__main__":
 
         expr = "\n".join(lines)
 
-    with open(args.out, "w") as f:
-        f.write(expr)
+    with open(args.out, "w") as fout:
+        fout.write(expr)
 
     print(f"Wrote {args.out}")

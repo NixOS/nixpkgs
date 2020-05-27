@@ -45,8 +45,8 @@ in stdenv.mkDerivation {
     font was further inspired by Gohufont, Terminus, Dina, Proggy, Fixedsys, and
     Consolas.
     '';
-    homepage = http://www.fial.com/~scott/tamsyn-font/;
-    downloadPage = http://www.fial.com/~scott/tamsyn-font/download;
+    homepage = "http://www.fial.com/~scott/tamsyn-font/";
+    downloadPage = "http://www.fial.com/~scott/tamsyn-font/download";
     license = licenses.free;
     maintainers = [ maintainers.rps ];
   };

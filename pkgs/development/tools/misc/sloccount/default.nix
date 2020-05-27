@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = https://www.dwheeler.com/sloccount/;
+    homepage = "https://www.dwheeler.com/sloccount/";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

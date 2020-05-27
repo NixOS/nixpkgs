@@ -1,5 +1,6 @@
 { stdenv, targetPackages, fetchurl, fetchpatch, fetchFromGitHub, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
+, langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langJava ? false
@@ -15,6 +16,7 @@
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
+, gnatboot ? null
 , zip ? null, unzip ? null, pkgconfig ? null
 , gtk2 ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
@@ -48,6 +50,8 @@ assert stdenv.hostPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 
+assert langAda -> gnatboot != null;
+
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
@@ -63,6 +67,7 @@ let majorVersion = "6";
       [ ../use-source-date-epoch.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
+      ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
@@ -82,7 +87,7 @@ let majorVersion = "6";
     # Antlr (optional) allows the Java `gjdoc' tool to be built.  We want a
     # binary distribution here to allow the whole chain to be bootstrapped.
     javaAntlr = fetchurl {
-      url = https://www.antlr.org/download/antlr-4.4-complete.jar;
+      url = "https://www.antlr.org/download/antlr-4.4-complete.jar";
       sha256 = "02lda2imivsvsis8rnzmbrbp8rh1kb8vmq4i67pqhkwz7lf8y6dz";
     };
 
@@ -200,6 +205,7 @@ stdenv.mkDerivation ({
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
+    ++ (optional langAda gnatboot)
     ;
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
@@ -208,7 +214,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit (stdenv) lib;
-    inherit version hostPlatform langJava langGo;
+    inherit version hostPlatform gnatboot langJava langAda langGo;
   };
 
   dontDisableStatic = true;
@@ -234,6 +240,7 @@ stdenv.mkDerivation ({
       langCC
       langFortran
       langJava javaAwtGtk javaAntlr javaEcj
+      langAda
       langGo
       langObjC
       langObjCpp
@@ -292,7 +299,7 @@ stdenv.mkDerivation ({
     ;
 
   passthru = {
-    inherit langC langCC langObjC langObjCpp langFortran langGo version;
+    inherit langC langCC langObjC langObjCpp langFortran langAda langGo version;
     isGNU = true;
   };
 
@@ -302,7 +309,7 @@ stdenv.mkDerivation ({
   inherit (stdenv) is64bit;
 
   meta = {
-    homepage = https://gcc.gnu.org/;
+    homepage = "https://gcc.gnu.org/";
     license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");

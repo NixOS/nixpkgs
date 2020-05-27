@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Littlewood-Richardson calculator";
-    homepage = http://math.rutgers.edu/~asbuch/lrcalc/;
+    homepage = "http://math.rutgers.edu/~asbuch/lrcalc/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ timokau ];
     platforms = platforms.unix;

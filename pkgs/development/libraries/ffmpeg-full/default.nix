@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
+{ stdenv, addOpenGLRunpath, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -416,7 +416,7 @@ stdenv.mkDerivation rec {
     "--enable-cross-compile"
   ];
 
-  nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
 
   buildInputs = [
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
@@ -444,11 +444,18 @@ stdenv.mkDerivation rec {
     cp -a tools/qt-faststart $out/bin/
   '';
 
+  postFixup = optionalString stdenv.isLinux ''
+    # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
+    # See the explanation in addOpenGLRunpath.
+    addOpenGLRunpath $out/lib/libavcodec.so
+    addOpenGLRunpath $out/lib/libavutil.so
+  '';
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
-    homepage = https://www.ffmpeg.org/;
+    homepage = "https://www.ffmpeg.org/";
     longDescription = ''
       FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
       mux, demux, stream, filter and play pretty much anything that humans and machines

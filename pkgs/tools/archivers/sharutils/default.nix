@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
          by a copy of the shell. unshar may also process files containing
          concatenated shell archives.
       '';
-    homepage = https://www.gnu.org/software/sharutils/;
+    homepage = "https://www.gnu.org/software/sharutils/";
     license = licenses.gpl3Plus;
     maintainers = [];
     platforms = platforms.all;

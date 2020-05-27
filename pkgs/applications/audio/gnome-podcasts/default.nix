@@ -9,7 +9,6 @@
 , rustc
 , python3
 , pkgconfig
-, gnome3
 , glib
 , libhandy
 , gtk3
@@ -43,6 +42,7 @@ rustPlatform.buildRustPackage rec {
     rustc
     python3
     wrapGAppsHook
+    glib
   ];
 
   buildInputs = [
@@ -73,9 +73,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Listen to your favorite podcasts";
-    homepage = https://wiki.gnome.org/Apps/Podcasts;
+    homepage = "https://wiki.gnome.org/Apps/Podcasts";
     license = licenses.gpl3;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

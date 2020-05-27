@@ -17,7 +17,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = https://github.com/MagicStack/asyncpg;
+    homepage = "https://github.com/MagicStack/asyncpg";
     description = "An asyncio PosgtreSQL driver";
     longDescription = ''
       Asyncpg is a database interface library designed specifically for

@@ -2,12 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "jackett";
-  version = "0.13.467";
+  version = "0.16.175";
 
-  src = fetchurl {
-    url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxAMDx64.tar.gz";
-    sha256 = "1hjihafb8w9gcqdi2i8dmimbbg17c5hwwqhav3avfizq2drsrv5c";
-  };
+  src = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxAMDx64.tar.gz";
+      sha512 = "269n84qc8sfrmnidgrjywanbqr65mhkmk24dlqfi17pi0l27wi4fc4qmnjj683xwprz5hqjsmkqf963pbx4k3jaz0rp0jnizan91wij";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxARM64.tar.gz";
+      sha512 = "0dmyhprd2vi2z9q5g79psqgsc3w0zdac4s6k20rngi8jxm5jgphzrzcic4rgdijyryap99my619k447w701a08vh9sfcfk0fjg9pgwb";
+    };
+  }."${stdenv.targetPlatform.system}" or (throw "Missing hash for host system: ${stdenv.targetPlatform.system}");
 
   buildInputs = [ makeWrapper ];
 
@@ -35,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Jackett/Jackett/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo nyanloutre ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

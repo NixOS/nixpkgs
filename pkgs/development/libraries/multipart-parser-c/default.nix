@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Http multipart parser implemented in C ";
-    homepage = https://github.com/iafonov/multipart-parser-c;
+    homepage = "https://github.com/iafonov/multipart-parser-c";
     license = [ stdenv.lib.licenses.mit ];
   };
 

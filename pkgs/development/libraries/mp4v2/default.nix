@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       as defined by ISO-IEC:14496-1:2001 MPEG-4 Systems.
       This container format is derived from Apple's QuickTime format.
     '';
-    homepage = https://code.google.com/archive/p/mp4v2/;
+    homepage = "https://code.google.com/archive/p/mp4v2/";
     maintainers = [ lib.maintainers.Anton-Latukha ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mpl11;

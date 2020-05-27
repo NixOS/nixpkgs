@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.0";
+  version = "3.0.2";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "7195a5ff7ee95ab7c5a57e4e84f8c90cc4728b2c917359203c21293ab754c0db";
+    sha256 = "1yrnkw8c47kmy2x6m1xp69hwyk02xyc8pd9kvcmyj54lzrhzdfka";
   };
 
   nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     "-DUSE_KWALLET=OFF"
   ];
 
+  # Reduce the risk of collisions
+  postInstall = "rm -r $out/share/doc";
 
   # darktable changed its rpath handling in commit
   # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Virtual lighttable and darkroom for photographers";
-    homepage = https://www.darktable.org;
+    homepage = "https://www.darktable.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ goibhniu flosse mrVanDalo ];

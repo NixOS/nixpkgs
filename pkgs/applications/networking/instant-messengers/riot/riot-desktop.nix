@@ -1,25 +1,25 @@
-{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_7, riot-web, mkYarnPackage }:
-
+{ stdenv, fetchFromGitHub
+, makeWrapper, makeDesktopItem, mkYarnPackage
+, electron_7, riot-web
+}:
 # Notes for maintainers:
 # * versions of `riot-web` and `riot-desktop` should be kept in sync.
 # * the Yarn dependency expression must be updated with `./update-riot-desktop.sh <git release tag>`
 
 let
   executableName = "riot-desktop";
-  version = "1.5.12";
-  riot-web-src = fetchFromGitHub {
+  version = "1.6.2";
+  src = fetchFromGitHub {
     owner = "vector-im";
-    repo = "riot-web";
+    repo = "riot-desktop";
     rev = "v${version}";
-    sha256 = "1qz3n2dlklhbi6rbhv2v769xbr4rcp9s6pm2cc9r33ak6axn4aym";
+    sha256 = "1anmch9z3na7rphxb0p9cnk55388z22iwfnfjhmjps1ii5wx4rls";
   };
   electron = electron_7;
 
 in mkYarnPackage rec {
   name = "riot-desktop-${version}";
-  inherit version;
-
-  src = "${riot-web-src}/electron_app";
+  inherit version src;
 
   packageJSON = ./riot-desktop-package.json;
   yarnNix = ./riot-desktop-yarndeps.nix;
@@ -30,8 +30,8 @@ in mkYarnPackage rec {
     # resources
     mkdir -p "$out/share/riot"
     ln -s '${riot-web}' "$out/share/riot/webapp"
-    cp -r './deps/riot-web' "$out/share/riot/electron"
-    cp -r './deps/riot-web/img' "$out/share/riot"
+    cp -r './deps/riot-desktop' "$out/share/riot/electron"
+    cp -r './deps/riot-desktop/res/img' "$out/share/riot"
     rm "$out/share/riot/electron/node_modules"
     cp -r './node_modules' "$out/share/riot/electron"
 
@@ -70,15 +70,15 @@ in mkYarnPackage rec {
     comment = meta.description;
     categories = "Network;InstantMessaging;Chat;";
     extraEntries = ''
-      StartupWMClass="riot"
+      StartupWMClass=riot
     '';
   };
 
   meta = with stdenv.lib; {
     description = "A feature-rich client for Matrix.org";
-    homepage = https://about.riot.im/;
+    homepage = "https://about.riot.im/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pacien worldofpeace ];
+    maintainers = with maintainers; [ pacien worldofpeace ma27 ];
     inherit (electron.meta) platforms;
   };
 }

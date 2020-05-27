@@ -588,7 +588,7 @@ in
 
     { boot.loader.grub.splashImage = mkDefault (
         if cfg.version == 1 then pkgs.fetchurl {
-          url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
+          url = "http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz";
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.

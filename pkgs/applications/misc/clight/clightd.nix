@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clightd";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clightd";
     rev = version;
-    sha256 = "0cskxy3xsy187in5vg8xcs3kwcx2s160qv009v0ahkcalp29ghz4";
+    sha256 = "0pqnn52nn22k49f5cw4jcr8vcbff28n56i8fizg1mmfshy8pn891";
   };
 
   # dbus-1.pc has datadir=/etc
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux bus interface that changes screen brightness/temperature";
-    homepage = https://github.com/FedeDP/Clightd;
+    homepage = "https://github.com/FedeDP/Clightd";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [

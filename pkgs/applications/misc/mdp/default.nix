@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/visit1985/mdp;
+    homepage = "https://github.com/visit1985/mdp";
     description = "A command-line based markdown presentation tool";
     maintainers = with maintainers; [ matthiasbeyer vrthra ];
     license = licenses.gpl3;

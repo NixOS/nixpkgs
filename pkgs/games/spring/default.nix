@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, lzma, boost, libdevil, zlib, p7zip
+{ stdenv, fetchFromGitHub, cmake, lzma, boost, libdevil, zlib, p7zip
 , openal, libvorbis, glew, freetype, xorg, SDL2, libGLU, libGL
 , asciidoc, libxslt, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
 , jdk ? null, python ? null, systemd, libunwind, which, minizip
@@ -6,13 +6,20 @@
 }:
 
 stdenv.mkDerivation rec {
-
   pname = "spring";
-  version = "104.0";
+  version = "104.0.1-${buildId}-g${shortRev}";
+  # usually the latest in https://github.com/spring/spring/commits/maintenance
+  rev = "f266c8107b3e5dda5a78061ef00ca0ed8736d6f2";
+  shortRev = builtins.substring 0 7 rev;
+  buildId = "1486";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/springrts/spring_${version}_src.tar.lzma";
-    sha256 = "05pclcbw7v481pqz7bgirlk37494hy4hx4jghhnlzhdaz1cvzc6f";
+  # taken from https://github.com/spring/spring/commits/maintenance
+  src = fetchFromGitHub {
+    owner = "spring";
+    repo = "spring";
+    inherit rev;
+    sha256 = "1nx68d894yfmqc6df72hmk75ph26fqdvlmmq58cca0vbwpz9hf5v";
+    fetchSubmodules = true;
   };
 
   # The cmake included module correcly finds nix's glew, however
@@ -21,8 +28,12 @@ stdenv.mkDerivation rec {
     substituteInPlace ./rts/build/cmake/FindAsciiDoc.cmake \
       --replace "PATHS /usr /usr/share /usr/local /usr/local/share" "PATHS ${docbook_xsl}"\
       --replace "xsl/docbook/manpages" "share/xml/docbook-xsl/manpages"
+    substituteInPlace ./rts/Rendering/GL/myGL.cpp \
+      --replace "static constexpr const GLubyte* qcriProcName" "static const GLubyte* qcriProcName"
     patchShebangs .
     rm rts/build/cmake/FindGLEW.cmake
+
+    echo "${version} maintenance" > VERSION
   '';
 
   cmakeFlags = ["-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"
@@ -45,11 +56,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://springrts.com/;
+    homepage = "https://springrts.com/";
     description = "A powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.qknight maintainers.domenkozar ];
+    maintainers = [ maintainers.phreedom maintainers.qknight maintainers.domenkozar maintainers.sorki ];
     platforms = platforms.linux;
-    broken = true;
   };
 }

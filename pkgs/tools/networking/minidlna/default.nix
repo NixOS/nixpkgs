@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       MiniDLNA (aka ReadyDLNA) is server software with the aim of being fully
       compliant with DLNA/UPnP-AV clients.
     '';
-    homepage = https://sourceforge.net/projects/minidlna/;
+    homepage = "https://sourceforge.net/projects/minidlna/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

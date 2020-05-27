@@ -12,6 +12,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   # Added 2019-08-19
   imports = [
     (mkRenamedOptionModule
@@ -20,9 +24,7 @@ in
   ];
 
   options = {
-
     programs.gnome-terminal.enable = mkEnableOption "GNOME Terminal";
-
   };
 
   config = mkIf cfg.enable {

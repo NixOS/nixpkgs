@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_LINK = "-lgcc_s"; # to avoid occasional runtime error in finding libgcc_s.so.1
 
   meta = {
-    homepage = http://ufoai.org;
+    homepage = "http://ufoai.org";
     description = "A squad-based tactical strategy game in the tradition of X-Com";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];

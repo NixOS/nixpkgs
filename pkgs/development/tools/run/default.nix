@@ -1,20 +1,20 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "run";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "TekWizely";
     repo = "run";
     rev = "v${version}";
-    sha256 = "0q9f8lzrzybdablqph5wihqhfbfzb3bbnnxvhy7g5ccg1kzy7mgp";
+    sha256 = "17n11lqhywq4z62w2rakdq80v7mxf83rgln19vj4v4nxpwd2hjjw";
   };
 
-  modSha256 = "0s2lw9q5jskj41jqr8bv5w45pkrp2s0yfd2hgjgsd0q4ifm07k7s";
+  vendorSha256 = "1g5rmiiwqpm8gky9yr5f2a7zsjjmm9i12r7yxj9cz7y3rmw9sw8c";
 
   meta = with stdenv.lib; {
     description = "Easily manage and invoke small scripts and wrappers";
-    homepage    = https://github.com/TekWizely/run;
+    homepage    = "https://github.com/TekWizely/run";
     license     = licenses.mit;
     maintainers = with maintainers; [ rawkode filalex77 ];
     platforms   = platforms.unix;

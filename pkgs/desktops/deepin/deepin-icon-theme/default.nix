@@ -1,49 +1,65 @@
-{ stdenv, fetchFromGitHub, gtk3, xcursorgen, papirus-icon-theme, deepin, hicolor-icon-theme }:
+{ stdenv
+, fetchFromGitHub
+, gtk3
+, xcursorgen
+, papirus-icon-theme
+, hicolor-icon-theme
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-icon-theme";
-  version = "15.12.71";
+  version = "2020.05.21";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "12rzzjp906np95ckbxrd4mb345lm198wz69kxy48f8q1zg78q8iw";
+    sha256 = "0b1s6kf0q804zbbghly981wzacy1spi8168shf3x8w95rqj6463p";
   };
 
-  nativeBuildInputs = [ gtk3 xcursorgen ];
-
-  buildInputs = [ papirus-icon-theme ];
+  nativeBuildInputs = [
+    gtk3
+    xcursorgen
+  ];
 
   propagatedBuildInputs = [
+    papirus-icon-theme
     hicolor-icon-theme
   ];
 
   dontDropIconThemeCache = true;
 
-  postPatch = ''
-    patchShebangs tools/hicolor.links
-    patchShebangs tools/display_unused_links.sh
-    patchShebangs cursors-src/cursors/bitmaps/make.sh
-    patchShebangs cursors-src/render-cursors.sh
-
-    # keep icon-theme.cache
-    sed -i -e 's|\(-rm -f .*/icon-theme.cache\)|# \1|g' Makefile
-  '';
-
   buildTargets = "all hicolor-links";
-  installTargets = [ "install-icons" "install-cursors" ];
-  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  postInstall = ''
-    cp -a ./Sea ./usr/share/icons/hicolor "$out"/share/icons/
+  postPatch = ''
+    # fix: hicolor links should follow the deepin -> bloom naming change
+    # https://github.com/linuxdeepin/deepin-icon-theme/pull/24
+    substituteInPlace tools/hicolor.links --replace deepin bloom
+
+    substituteInPlace Sea/index.theme --replace Inherits=deepin Inherits=bloom
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/icons
+    cp -vai bloom* Sea $out/share/icons
+
+    for theme in $out/share/icons/*; do
+      gtk-update-icon-cache $theme
+    done
+
+    cp -vai usr/share/icons/hicolor $out/share/icons
+
+    runHook postInstall
+  '';
+
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Icons for the Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-icon-theme;
+    homepage = "https://github.com/linuxdeepin/deepin-icon-theme";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];

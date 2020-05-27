@@ -22,7 +22,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.5";
 
   meta = with lib; {
-    homepage = https://github.com/LonamiWebs/Telethon;
+    homepage = "https://github.com/LonamiWebs/Telethon";
     description = "Full-featured Telegram client library for Python 3";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];

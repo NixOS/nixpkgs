@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple X background setter inspired by imlibsetroot and feh";
-    homepage = https://github.com/ttzhou/setroot;
+    homepage = "https://github.com/ttzhou/setroot";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vyp ];
     platforms = platforms.unix;

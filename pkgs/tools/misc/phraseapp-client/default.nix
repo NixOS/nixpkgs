@@ -15,11 +15,11 @@ buildGoPackage rec {
   };
 
   postInstall = ''
-    ln -s $bin/bin/phraseapp-client $bin/bin/phraseapp
+    ln -s $out/bin/phraseapp-client $out/bin/phraseapp
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://docs.phraseapp.com;
+    homepage = "http://docs.phraseapp.com";
     description = "PhraseApp API v2 Command Line Client";
     platforms = platforms.all;
     license = licenses.mit;

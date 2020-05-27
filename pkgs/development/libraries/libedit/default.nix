@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.thrysoee.dk/editline/;
+    homepage = "http://www.thrysoee.dk/editline/";
     description = "A port of the NetBSD Editline library (libedit)";
     license = licenses.bsd3;
     platforms = platforms.all;

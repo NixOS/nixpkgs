@@ -53,6 +53,10 @@ in with passthru; stdenv.mkDerivation rec {
 
   hardeningDisable = optional stdenv.isi686 "pic";
 
+  # Remove bootstrap python from closure
+  dontPatchShebangs = true;
+  disallowedReferences = [ python ];
+
   C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" buildInputs;
   LIBRARY_PATH = makeLibraryPath buildInputs;
   LD_LIBRARY_PATH = makeLibraryPath (filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
@@ -151,7 +155,7 @@ in with passthru; stdenv.mkDerivation rec {
   enableParallelBuilding = true;  # almost no parallelization without STM
 
   meta = with stdenv.lib; {
-    homepage = http://pypy.org/;
+    homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];

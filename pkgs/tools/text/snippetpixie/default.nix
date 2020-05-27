@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snippetpixie";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "bytepixie";
     repo = pname;
     rev = version;
-    sha256 = "0cnx7snw3h7p77fhihvqxb6bgg4s2ffvjr8nbymb4bnqlg2a7v97";
+    sha256 = "0jhc47g5x34c36y4d32lcn32bpw4axxf1sydawgy4886hmkvb6kf";
   };
 
   nativeBuildInputs = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
       For example:- "spr`" expands to "Snippet Pixie rules!"
     '';
-    homepage = https://www.snippetpixie.com;
+    homepage = "https://www.snippetpixie.com";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       ianmjones

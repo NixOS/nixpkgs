@@ -125,8 +125,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Photo Management Program";
     license = licenses.gpl2;
-    homepage = https://www.digikam.org;
-    maintainers = with maintainers; [ the-kenny ];
+    homepage = "https://www.digikam.org";
     platforms = platforms.linux;
   };
 }

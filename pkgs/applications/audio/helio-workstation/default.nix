@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "One music sequencer for all major platforms, both desktop and mobile";
-    homepage = https://helio.fm/;
+    homepage = "https://helio.fm/";
     license = licenses.gpl3;
     maintainers = [ maintainers.suhr ];
     platforms = [ "x86_64-linux" ];

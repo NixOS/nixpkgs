@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.11.1";
 
   meta = with stdenv.lib; {
-    homepage = https://phonon.kde.org/;
+    homepage = "https://phonon.kde.org/";
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
     license = with licenses; [ bsd3 lgpl2Plus ];

@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.2.2";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0aqslkig7vs95z719mp3xrl1zp65ypp2lq9aikvsis6nssadn2cd";
+    sha256 = "0nhgf5lgy74liml3kzijldan3qgrxh2721yvjdk4jf83b0g1b7yb";
   };
 
   passthru = {
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/elementary/appcenter;
+    homepage = "https://github.com/elementary/appcenter";
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

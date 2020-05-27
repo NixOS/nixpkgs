@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dstufft/dj-search-url;
+    homepage = "https://github.com/dstufft/dj-search-url";
     description = "Use Search URLs in your Django Haystack Application";
     license = licenses.bsd0;
     maintainers = [ maintainers.costrouc ];

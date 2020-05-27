@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     comment = "Query GUI for mongodb";
     desktopName = "Robo3T";
     genericName = "MongoDB management tool";
-    categories = "Development;IDE;mongodb;";
+    categories = "Development;IDE;";
   };
 
   nativeBuildInputs = [makeWrapper];
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://robomongo.org/;
+    homepage = "https://robomongo.org/";
     description = "Query GUI for mongodb";
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl3;

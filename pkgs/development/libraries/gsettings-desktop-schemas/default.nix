@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
-  version = "3.34.0";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gsettings-desktop-schemas/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1bayr76aylawf2fhyjhv9zgk4kpv7ivrrmd80khb0h3h1wk092r8";
+    sha256 = "1nf97vq07gadwdla6kws8z510xlmv0a7wlyqwwnhyagq7kjdnjq0";
   };
 
   passthru = {
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib gobject-introspection ];
 
-  nativeBuildInputs = [ pkgconfig python3 meson ninja ];
+  nativeBuildInputs = [ pkgconfig python3 meson ninja glib ];
 
   meta = with stdenv.lib; {
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

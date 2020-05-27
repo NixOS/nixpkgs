@@ -16,6 +16,7 @@
 , enableSharedLibraries ? true
 , enablePFM ? !(stdenv.isDarwin
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+  || stdenv.isAarch32 # broken for the armv7l builder
 )
 , enablePolly ? false
 }:
@@ -143,9 +144,10 @@ in stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
+  requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = http://llvm.org/;
+    homepage    = "https://llvm.org/";
     license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;

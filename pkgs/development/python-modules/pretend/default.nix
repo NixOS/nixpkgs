@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/alex/pretend;
+    homepage = "https://github.com/alex/pretend";
     license = licenses.bsd3;
   };
 }

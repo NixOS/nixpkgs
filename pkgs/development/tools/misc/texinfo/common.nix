@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     && !stdenv.isSunOS; # flaky
 
   meta = {
-    homepage = https://www.gnu.org/software/texinfo/;
+    homepage = "https://www.gnu.org/software/texinfo/";
     description = "The GNU documentation system";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

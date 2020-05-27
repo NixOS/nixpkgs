@@ -28,7 +28,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = {
     description = "Quick access to Zotero references";
-    homepage = http://www.cogsci.nl/software/qnotero;
+    homepage = "http://www.cogsci.nl/software/qnotero";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.nico202 ];

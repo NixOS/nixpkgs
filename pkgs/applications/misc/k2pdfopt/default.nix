@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optimizes PDF/DJVU files for mobile e-readers (e.g. the Kindle) and smartphones";
-    homepage = http://www.willus.com/k2pdfopt;
+    homepage = "http://www.willus.com/k2pdfopt";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bosu danielfullmer ];

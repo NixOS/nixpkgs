@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       repository. This is useful for commands like log, diff, etc; however it cannot
       be used for commits (that's what cvsq is for).
     '';
-    homepage = https://www.linta.de/~aehlig/cvsq/;
+    homepage = "https://www.linta.de/~aehlig/cvsq/";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ clkamp ];
     platforms = stdenv.lib.platforms.all;

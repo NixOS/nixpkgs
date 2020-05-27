@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight high-performance web server";
-    homepage = http://www.lighttpd.net/;
+    homepage = "http://www.lighttpd.net/";
     license = stdenv.lib.licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];

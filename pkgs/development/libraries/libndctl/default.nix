@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libndctl";
-  version = "67";
+  version = "68";
 
   src = fetchFromGitHub {
     owner  = "pmem";
     repo   = "ndctl";
     rev    = "v${version}";
-    sha256 = "076jgw1g2aafqgnq705in0wnabysqk46dq5yxdv1qzgjmyhka39n";
+    sha256 = "0xmim7z4qp6x2ggndnbwd940c73pa1qlf3hxyn3qh5pyr69nh9y8";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools for managing the Linux Non-Volatile Memory Device sub-system";
-    homepage    = https://github.com/pmem/ndctl;
+    homepage    = "https://github.com/pmem/ndctl";
     license     = licenses.lgpl21;
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = platforms.linux;

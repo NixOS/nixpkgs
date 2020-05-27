@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://blog.neil.brown.name/category/wiggle/;
+    homepage = "http://blog.neil.brown.name/category/wiggle/";
     description = "Tool for applying patches with conflicts";
 
     longDescription = ''

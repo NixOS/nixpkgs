@@ -4,11 +4,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "glew-2.1.0";
+  name = "glew-2.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/glew/${name}.tgz";
-    sha256 = "159wk5dc0ykjbxvag5i1m2mhp23zkk6ra04l26y3jc3nwvkr3ph4";
+    sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An OpenGL extension loading library for C(++)";
-    homepage = http://glew.sourceforge.net/;
+    homepage = "http://glew.sourceforge.net/";
     license = licenses.free; # different files under different licenses
       #["BSD" "GLX" "SGI-B" "GPL2"]
     platforms = platforms.mesaPlatforms;

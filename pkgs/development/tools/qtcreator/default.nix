@@ -88,7 +88,7 @@ mkDerivation rec {
       tailored to the needs of Qt developers. It includes features such as an
       advanced code editor, a visual debugger and a GUI designer.
     '';
-    homepage = https://wiki.qt.io/Category:Tools::QtCreator;
+    homepage = "https://wiki.qt.io/Category:Tools::QtCreator";
     license = "LGPL";
     maintainers = [ maintainers.akaWolf ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" ];

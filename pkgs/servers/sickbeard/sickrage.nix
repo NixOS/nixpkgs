@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2, makeWrapper }:
 
 python2.pkgs.buildPythonApplication rec {
-  name = "sickrage-${version}";
+  pname = "sickrage";
   version = "v2018.07.21-1";
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ python2.pkgs.buildPythonApplication rec {
     description = "Automatic Video Library Manager for TV Shows";
     longDescription = "It watches for new episodes of your favorite shows, and when they are posted it does its magic.";
     license     = licenses.gpl3;
-    homepage    = https://sickrage.github.io;
+    homepage    = "https://sickrage.github.io";
     maintainers = with maintainers; [ sterfield ];
   };
 }

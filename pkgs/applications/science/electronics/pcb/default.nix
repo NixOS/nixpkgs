@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Printed Circuit Board editor";
-    homepage = http://pcb.geda-project.org/;
+    homepage = "http://pcb.geda-project.org/";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;
     license = licenses.gpl2;

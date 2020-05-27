@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       that can be used for modelling, validation and verification of
       concurrent systems and protocols
     '';
-    homepage = https://www.mcrl2.org/;
+    homepage = "https://www.mcrl2.org/";
     license = licenses.boost;
     maintainers = with maintainers; [ moretea ];
     platforms = platforms.unix;

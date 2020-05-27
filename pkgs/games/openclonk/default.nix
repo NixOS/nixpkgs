@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Free multiplayer action game in which you control clonks, small but witty and nimble humanoid beings";
-    homepage = https://www.openclonk.org;
+    homepage = "https://www.openclonk.org";
     license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
     maintainers = with maintainers; [ lheckemann ];
     platforms = [ "x86_64-linux" "i686-linux" ];

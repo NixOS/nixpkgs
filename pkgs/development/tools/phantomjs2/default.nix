@@ -37,27 +37,27 @@ in stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-hardening.patch;
+      url = "https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-hardening.patch";
       sha256 = "1qs1r76w90qgpw742i7lf0y3b7m9zh5wxcbrhrak6mq1kqaphqb5";
     })
     (fetchpatch {
-      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt-components.patch;
+      url = "https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt-components.patch";
       sha256 = "1fw2q59aqcks3abvwkqg9903yif6aivdsznc0h6frhhjvpp19vsb";
     })
     (fetchpatch {
-      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt55-evaluateJavaScript.patch;
+      url = "https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt55-evaluateJavaScript.patch";
       sha256 = "1avig9cfny8kv3s4mf3mdzvf3xlzgyh351yzwc4bkpnjvzv4fmq6";
     })
     (fetchpatch {
-      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt55-no-websecurity.patch;
+      url = "https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt55-no-websecurity.patch";
       sha256 = "1nykqpxa7lcf9iarz5lywgg3v3b1h19iwvjdg4kgq0ai6idhcab8";
     })
     (fetchpatch {
-      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt55-print.patch;
+      url = "https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/build-qt55-print.patch";
       sha256 = "1fydmdjxnplglpbd3ypaih5l237jkxjirpdhzz92mcpy29yla6jw";
     })
     (fetchpatch {
-      url = https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/unlock-qt.patch;
+      url = "https://salsa.debian.org/debian/phantomjs/raw/0b20f0dd/debian/patches/unlock-qt.patch";
       sha256 = "13bwz4iw17d6hq5pwkbpcckqyw7fhc6648lvs26m39pp31zwyp03";
     })
     ./system-qtbase.patch
@@ -109,7 +109,7 @@ in stdenv.mkDerivation rec {
       - Network Monitoring
     '';
 
-    homepage = https://phantomjs.org/;
+    homepage = "https://phantomjs.org/";
     license = licenses.bsd3;
 
     maintainers = [ maintainers.aflatter ];

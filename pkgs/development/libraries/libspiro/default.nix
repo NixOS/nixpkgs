@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libspiro";
-  version = "20190731";
+  version = "20200505";
 
   src = fetchFromGitHub {
     owner = "fontforge";
     repo = pname;
     rev = version;
-    sha256 = "sha256:1wc6ikjrvcq05jki0ligmxyplgb4nzx6qb5va277qiin8vad9b1v";
+    sha256 = "1b5bw5qxqlral96y1n5f3sh9yxm2yij3zkqjmlgd8r1k4j0d3nqw";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
   meta = with stdenv.lib; {
     description = "A library that simplifies the drawing of beautiful curves";
-    homepage = https://github.com/fontforge/libspiro;
+    homepage = "https://github.com/fontforge/libspiro";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.erictapen ];
   };

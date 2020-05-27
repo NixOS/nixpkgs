@@ -1,17 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, openssl, tcl, readline ? null, ncurses ? null }:
+{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, readline ? null, ncurses ? null }:
 
 assert readline != null -> ncurses != null;
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
     rev = "v${version}";
-    sha256 = "0s1aiwl61nl3b4ym4v050wlbbx0iypknqsj3ar12dw5hljlzx6f8";
+    sha256 = "0mx0n5n3s39r25b31sdkrd4psxjqqgcv6rpm9d57w5rlk75g2fiv";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ readline ncurses openssl tcl ];
 
@@ -22,9 +24,13 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails. requires tcl?
 
+  postInstall = ''
+    installManPage sqlcipher.1
+  '';
+
   meta = with stdenv.lib; {
-    homepage = http://sqlcipher.net/;
-    description = "Full Database Encryption for SQLite";
+    homepage = "https://www.zetetic.net/sqlcipher/";
+    description = "SQLite extension that provides 256 bit AES encryption of database files";
     platforms = platforms.unix;
     license = licenses.bsd3;
   };

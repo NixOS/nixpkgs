@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE="-Wno-error=attributes";
 
   meta = with stdenv.lib; {
-    homepage = https://www.nasm.us/;
+    homepage = "https://www.nasm.us/";
     description = "An 80x86 and x86-64 assembler designed for portability and modularity";
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub willibutz ];

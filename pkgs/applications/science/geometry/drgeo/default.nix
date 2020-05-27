@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Interactive geometry program";
-    homepage = https://sourceforge.net/projects/ofset;
+    homepage = "https://sourceforge.net/projects/ofset";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

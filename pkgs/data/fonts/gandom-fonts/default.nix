@@ -16,7 +16,7 @@ in fetchFromGitHub {
   sha256 = "0zsq6s9ziyb5jz0v8aj00dlxd1aly0ibxgszd05dfvykmgz051lc";
 
   meta = with lib; {
-    homepage = https://github.com/rastikerdar/gandom-font;
+    homepage = "https://github.com/rastikerdar/gandom-font";
     description = "A Persian (Farsi) Font - فونت (قلم) فارسی گندم";
     license = licenses.ofl;
     platforms = platforms.all;

@@ -1,12 +1,14 @@
-{ buildGoPackage
+{ buildGoModule
 , lib
 , fetchFromGitHub
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "reftools-unstable";
-  version = "2018-09-14";
-  rev = "654d0ba4f96d62286ca33cd46f7674b84f76d399";
+  version = "2019-12-21";
+  rev = "65925cf013156409e591f7a1be4df96f640d02f4";
+
+  vendorSha256 = null;
 
   goPackagePath = "github.com/davidrjenni/reftools";
   excludedPackages = "\\(cmd/fillswitch/test-fixtures\\)";
@@ -16,12 +18,12 @@ buildGoPackage rec {
 
     owner = "davidrjenni";
     repo = "reftools";
-    sha256 = "12y2h1h15xadc8pa3xsj11hpdxz5dss6k7xaa4h1ifkvnasjp5w2";
+    sha256 = "18jg13skqi2v2vh2k6jvazv6ymhhybangjd23xn2asfk9g6cvnjs";
   };
 
   meta = with lib; {
     description = "reftools - refactoring tools for Go";
-    homepage = https://github.com/davidrjenni/reftools;
+    homepage = "https://github.com/davidrjenni/reftools";
     license = licenses.bsd2;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

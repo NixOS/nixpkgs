@@ -10,7 +10,7 @@ python3Packages.buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/thiderman/doge;
+    homepage = "https://github.com/thiderman/doge";
     description = "wow very terminal doge";
     license = licenses.mit;
     maintainers = with maintainers; [ Gonzih ];

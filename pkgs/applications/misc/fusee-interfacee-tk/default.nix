@@ -3,13 +3,13 @@
 let pythonEnv = python3.withPackages(ps: [ ps.tkinter ps.pyusb ]); 
 in stdenv.mkDerivation rec { 
   pname = "fusee-interfacee-tk";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub { 
     owner = "nh-server";
     repo = pname;
     rev = "V${version}"; 
-    sha256 = "0ycsxv71b5yvkcawxmcnmywxfvn8fdg1lyq71xdw7qrskxv5fgq7";
+    sha256 = "0ngwbwsj999flprv14xvhk7lp51nprrvcnlbnbk6y4qx5casm5md";
   };
 
   nativeBuildInputs = [ makeWrapper ];

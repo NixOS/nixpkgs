@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   version = "0.1.1";
 
   src = fetchurl {
-    url = http://www.galago-project.org/files/releases/source/notify-python/notify-python-0.1.1.tar.bz2;
+    url = "http://www.galago-project.org/files/releases/source/notify-python/notify-python-0.1.1.tar.bz2";
     sha256 = "1kh4spwgqxm534qlzzf2ijchckvs0pwjxl1irhicjmlg7mybnfvx";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Python bindings for libnotify";
-    homepage = http://www.galago-project.org/;
+    homepage = "http://www.galago-project.org/";
     license = licenses.lgpl3;
   };
 

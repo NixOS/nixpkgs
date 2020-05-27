@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , gettext
@@ -9,14 +10,14 @@
 , gst-plugins-base
 , orc
 , gobject-introspection
-, enableZbar ? true
+, enableZbar ? false
 , faacSupport ? false
 , faac ? null
 , faad2
 , libass
 , libkate
 , libmms
-, librdf
+, lrdf
 , ladspaH
 , libnice
 , webrtc-audio-processing
@@ -96,7 +97,15 @@ in stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix build with neon 0.31
+    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/1165
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/f10b424418e448211e3427a76fcd046e157ef0b7.patch";
+      sha256 = "0l1f6kqcl04q7w12a2b4qibcvjz6gqhs0csdv2wbvfd6zndpjm6p";
+    })
     ./fix_pkgconfig_includedir.patch
+    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/1235
+    ./opencv-4.3.patch
   ];
 
   nativeBuildInputs = [
@@ -178,13 +187,12 @@ in stdenv.mkDerivation rec {
     libgudev
     libnice
     libofa
-    librdf
     sbc
     spandsp
 
     # ladspa plug-in
     ladspaH
-    librdf # TODO: make build on Darwin
+    lrdf # TODO: make build on Darwin
 
     # lv2 plug-in
     lilv

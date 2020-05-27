@@ -21,7 +21,7 @@ stdenv.mkDerivation {
       SOIL is a tiny C library used primarily for uploading textures
       into OpenGL.
     '';
-    homepage  = https://www.lonesock.net/soil.html;
+    homepage  = "https://www.lonesock.net/soil.html";
     license   = stdenv.lib.licenses.publicDomain;
     platforms = stdenv.lib.platforms.linux;
   };

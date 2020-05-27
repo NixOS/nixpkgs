@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "httpie";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "jakubroztocil";
     repo = "httpie";
     rev = version;
-    sha256 = "0d0rsn5i973l9y0ws3xmnzaw4jwxdlryyjbasnlddph5mvkf7dq0";
+    sha256 = "1vwjlzx830q4dcm3r7j9cl8yzka37dw42rl1r05m5ysb1081cbj2";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -87,7 +87,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";
-    homepage = https://httpie.org/;
+    homepage = "https://httpie.org/";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ antono relrod schneefux ];
   };

@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage        = https://github.com/DelusionalLogic/NeoComp;
+    homepage        = "https://github.com/DelusionalLogic/NeoComp";
     license         = licenses.gpl3;
     maintainers     = with maintainers; [ twey ];
     platforms       = platforms.linux;

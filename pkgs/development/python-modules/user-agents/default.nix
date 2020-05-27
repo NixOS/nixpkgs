@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python library to identify devices by parsing user agent strings";
-    homepage = https://github.com/selwin/python-user-agents;
+    homepage = "https://github.com/selwin/python-user-agents";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];

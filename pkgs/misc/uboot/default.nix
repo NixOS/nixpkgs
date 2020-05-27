@@ -1,15 +1,27 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitHub, bc, bison, dtc, flex
-, openssl, swig, meson-tools, armTrustedFirmwareAllwinner
-, armTrustedFirmwareRK3328, armTrustedFirmwareRK3399
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, fetchFromGitHub
+, bc
+, bison
+, dtc
+, flex
+, openssl
+, swig
+, meson-tools
+, armTrustedFirmwareAllwinner
+, armTrustedFirmwareRK3328
+, armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
 , buildPackages
 }:
 
 let
-  defaultVersion = "2020.01";
+  defaultVersion = "2020.04";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "1w9ml4jl15q6ixpdqzspxjnl7d3rgxd7f99ms1xv5c8869h3qida";
+    sha256 = "0wjkasnz87q86hx93inspdjfjsinmxi87bcvj30c773x0fpjlwzy";
   };
   buildUBoot = {
     version ? null
@@ -80,7 +92,7 @@ let
     dontStrip = true;
 
     meta = with lib; {
-      homepage = http://www.denx.de/wiki/U-Boot/;
+      homepage = "http://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
       maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];

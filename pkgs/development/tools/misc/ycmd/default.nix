@@ -2,6 +2,7 @@
 , gocode ? null
 , godef ? null
 , gotools ? null
+, nodePackages ? null
 , rustracerd ? null
 , fixDarwinDylibNames, Cocoa ? null
 }:
@@ -69,6 +70,9 @@ stdenv.mkDerivation {
     TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
     mkdir -p $TARGET
     ln -sf ${gotools}/bin/gopls $TARGET
+  '' + lib.optionalString (nodePackages != null) ''
+    TARGET=$out/lib/ycmd/third_party/tsserver
+    ln -sf ${nodePackages.typescript} $TARGET
   '' + lib.optionalString (rustracerd != null) ''
     TARGET=$out/lib/ycmd/third_party/racerd/target/release
     mkdir -p $TARGET
@@ -87,7 +91,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A code-completion and comprehension server";
-    homepage = https://github.com/Valloric/ycmd;
+    homepage = "https://github.com/Valloric/ycmd";
     license = licenses.gpl3;
     maintainers = with maintainers; [ rasendubi cstrahan lnl7 ];
     platforms = platforms.all;

@@ -42,7 +42,7 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pimutils/todoman;
+    homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
       Todoman is a simple, standards-based, cli todo (aka: task) manager. Todos

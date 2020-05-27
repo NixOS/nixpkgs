@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library that lets you schedule your Python code to be executed";
-    homepage = https://pypi.python.org/pypi/APScheduler/;
+    homepage = "https://pypi.python.org/pypi/APScheduler/";
     license = licenses.mit;
   };
 }

@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 let
 
   stick = pkgs.fetchurl {
-    url = http://nixos.org/~eelco/nix/udisks-test.img.xz;
+    url = "https://nixos.org/~eelco/nix/udisks-test.img.xz";
     sha256 = "0was1xgjkjad91nipzclaz5biv3m4b2nk029ga6nk7iklwi19l8b";
   };
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qtbase, qttools, xz, boost, qmake, pkgconfig }:
+{ mkDerivation, stdenv, fetchFromGitHub, qtbase, qttools, xz, boost, qmake, pkgconfig }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "QMediathekView";
   version = "2019-01-06";
 

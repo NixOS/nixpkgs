@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A suite of integrated tools for game developers to design and build games, simulations, and visualizations";
-    homepage = https://www.unrealengine.com/what-is-unreal-engine-4;
+    homepage = "https://www.unrealengine.com/what-is-unreal-engine-4";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.puffnfresh ];

@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
     license = licenses.gpl2;
-    homepage = http://unicon.org;
+    homepage = "http://unicon.org";
   };
 }
 

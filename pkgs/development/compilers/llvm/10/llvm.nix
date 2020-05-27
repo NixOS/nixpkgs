@@ -16,8 +16,9 @@
 , enableSharedLibraries ? true
 , enablePFM ? !(stdenv.isDarwin
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+  || stdenv.isAarch32 # broken for the armv7l builder
 )
-, enablePolly ? false
+, enablePolly ? true
 }:
 
 let
@@ -31,8 +32,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "01azqqygm83s6l1g35kqkc7da06dkc8jxpb4zsd420lmhfhw4gws";
-  polly_src = fetch "polly" "00nvnh0jhi1s5gcyfnb30h9g2j18z79kipiy878bkawg53f4z2xf";
+  src = fetch pname "1pwgm6cr0xr5a0hrbqs1zvsvvjvy0yq1y47c96804wcs795s90yz";
+  polly_src = fetch "polly" "15sd3dq0w60jsb76pis09lkagj5iy43h9hg4kd9gx5l8cbnsdyrm";
 
   unpackPhase = ''
     unpackFile $src
@@ -53,6 +54,11 @@ in stdenv.mkDerivation (rec {
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = [
+    # 10.0.0rc3-only
+    ./llvm-extension-handling.patch
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
@@ -154,9 +160,10 @@ in stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
+  requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = http://llvm.org/;
+    homepage    = "https://llvm.org/";
     license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;

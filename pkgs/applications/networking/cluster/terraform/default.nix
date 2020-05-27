@@ -1,5 +1,5 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper
-, runCommand, writeText, terraform-providers }:
+{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils
+, runCommand, writeText, terraform-providers, fetchpatch }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -18,9 +18,15 @@ let
         inherit sha256;
       };
 
+      postPatch = ''
+        # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
+        substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
+          --replace "/bin/stty" "${coreutils}/bin/stty"
+      '';
+
       postInstall = ''
         # remove all plugins, they are part of the main binary now
-        for i in $bin/bin/*; do
+        for i in $out/bin/*; do
           if [[ $(basename $i) != terraform ]]; then
             rm "$i"
           fi
@@ -82,7 +88,7 @@ let
 
             buildCommand = ''
               mkdir -p $out/bin/
-              makeWrapper "${terraform.bin}/bin/terraform" "$out/bin/terraform" \
+              makeWrapper "${terraform}/bin/terraform" "$out/bin/terraform" \
                 --set NIX_TERRAFORM_PLUGIN_DIR "${
                   buildEnv {
                     name = "tf-plugin-env";
@@ -112,9 +118,15 @@ in rec {
   terraform_0_11-full = terraform_0_11.full;
 
   terraform_0_12 = pluggable (generic {
-    version = "0.12.23";
-    sha256 = "1lr2gfk5dmj6rhv5rvzn3fggb34za73ryjy0vdzx4kf3qj12r0wz";
-    patches = [ ./provider-path.patch ];
+    version = "0.12.25";
+    sha256 = "0xq4327386x6isw82d4xyq70pw7xxlh4sgmqas0b2pvyz85jxdch";
+    patches = [
+        ./provider-path.patch
+        (fetchpatch {
+            name = "fix-mac-mojave-crashes.patch";
+            url = "https://github.com/hashicorp/terraform/pull/24562.patch";
+            sha256 = "1k70kk4hli72x8gza6fy3vpckdm3sf881w61fmssrah3hgmfmbrs";
+        }) ];
     passthru = { inherit plugins; };
   });
 

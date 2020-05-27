@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
 
-    homepage = http://geeqie.sourceforge.net;
+    homepage = "http://geeqie.sourceforge.net";
 
     maintainers = with maintainers; [ jfrankenau pSub ];
     platforms = platforms.gnu ++ platforms.linux;

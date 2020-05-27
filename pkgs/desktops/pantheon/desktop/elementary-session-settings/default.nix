@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , writeScript
 , pantheon
@@ -15,7 +16,7 @@
 , writeText
 , meson
 , ninja
-, git
+, pkg-config
 }:
 
 let
@@ -69,24 +70,34 @@ in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "5.0.3";
+  version = "unstable-2019-11-12";
 
   repoName = "session-settings";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = version;
-    sha256 = "1vrjm7bklkfv0dyafm312v4hxzy6lb7p1ny4ijkn48kr719gc71k";
+    rev = "f9d5afed16ce447cf6ae3c2d1c1db5eece84daca";
+    sha256 = "0n1m41aapr58rb1ffvfkjq6c6w3f0ynjzzhja50s4di98p4m7y0q";
   };
 
-  postPatch = ''
-    ${git}/bin/git apply --verbose ${./meson.patch}
-  '';
+  patches = [
+    # Map Pantheon required components by g-s-d versions
+    # https://github.com/elementary/session-settings/pull/23
+    (fetchpatch {
+      url = "https://github.com/elementary/session-settings/commit/39918f4ec64fa9ed5affa109d6a692b97ae4ff01.patch";
+      sha256 = "0v2kqcsibymnslnnw4v67yh098znsrhrcycgxkw8vymvwlinc502";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    elementary-settings-daemon
   ];
 
   mesonFlags = [
@@ -135,7 +146,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Session settings for elementary";
-    homepage = https://github.com/elementary/session-settings;
+    homepage = "https://github.com/elementary/session-settings";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

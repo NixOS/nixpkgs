@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "ipdb";
-  version = "0.13.0";
+  version = "0.13.2";
   disabled = isPyPy;  # setupterm: could not find terminfo database
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nbs9m2pqg4j10m7c31vyb8h7wy29d9s8kiv0k2igbr821k1y3xr";
+    sha256 = "0jcd849rx30y3wcgzsqbn06v0yjlzvb9x3076q0yxpycdwm1ryvp";
   };
 
   propagatedBuildInputs = [ ipython ];

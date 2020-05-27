@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       actually needed for this file (for both .cc and .h files), and by
       replacing #includes with forward-declares when possible.
     '';
-    homepage = https://include-what-you-use.org;
+    homepage = "https://include-what-you-use.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
   };

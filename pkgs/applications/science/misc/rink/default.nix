@@ -16,15 +16,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0shlh0m9k0iqxpv9zmiw7a6v197swrvpz9x6qzhximzkdwni9gz9";
 
-  buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ openssl gmp ncurses ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl gmp ncurses ];
 
   # Some tests fail and/or attempt to use internet servers.
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Unit-aware calculator";
-    homepage = "http://rink.tiffnix.com";
+    homepage = "https://rink.tiffnix.com";
     license = with licenses; [ mpl20 gpl3 ];
     maintainers = with maintainers; [ sb0 filalex77 ];
   };

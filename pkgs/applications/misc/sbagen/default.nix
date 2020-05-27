@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Binaural sound generator";
-    homepage = http://uazu.net/sbagen;
+    homepage = "http://uazu.net/sbagen";
     license = "GPL";
     platforms = [ "i686-linux" ];
   };

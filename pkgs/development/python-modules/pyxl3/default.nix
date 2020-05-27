@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python 3 port of pyxl for writing structured and reusable inline HTML";
-    homepage = https://github.com/gvanrossum/pyxl3;
+    homepage = "https://github.com/gvanrossum/pyxl3";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

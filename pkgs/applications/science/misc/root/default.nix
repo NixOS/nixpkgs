@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
-    homepage = https://root.cern.ch/;
+    homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = platforms.unix;
     maintainers = [ maintainers.veprbl ];

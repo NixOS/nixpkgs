@@ -3,6 +3,7 @@
 
   # see http://dlib.net/compile.html
 , avxSupport ? true
+, cudaSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,9 @@ stdenv.mkDerivation rec {
     rm -rf dlib/external
   '';
 
-  cmakeFlags = [ "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
+  cmakeFlags = [ 
+    "-DUSE_DLIB_USE_CUDA=${if cudaSupport then "1" else "0"}"
+    "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A general purpose cross-platform C++ machine learning library";
-    homepage = http://www.dlib.net;
+    homepage = "http://www.dlib.net";
     license = licenses.boost;
     maintainers = with maintainers; [ christopherpoole ma27 ];
     platforms = platforms.linux;

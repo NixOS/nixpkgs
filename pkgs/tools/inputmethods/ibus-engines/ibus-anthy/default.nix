@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     isIbusEngine = true;
     description = "IBus interface to the anthy input method";
-    homepage = https://github.com/fujiwarat/ibus-anthy;
+    homepage = "https://github.com/fujiwarat/ibus-anthy";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gebner ericsagnes ];

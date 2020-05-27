@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Tool and python library to interact with Android Files";
-    homepage = https://github.com/androguard/androguard;
+    homepage = "https://github.com/androguard/androguard";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.pmiddend ];
   };

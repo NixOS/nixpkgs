@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Virtualenv-based automation of test activities";
-    homepage = https://tox.readthedocs.io/;
+    homepage = "https://tox.readthedocs.io/";
     license = licenses.mit;
   };
 }

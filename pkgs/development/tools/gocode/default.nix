@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   pname = "gocode-unstable";
-  version = "2018-11-05";
-  rev = "0af7a86943a6e0237c90f8aeb74a882e1862c898";
+  version = "2020-04-06";
+  rev = "4acdcbdea79de6b3dee1c637eca5cbea0fdbe37c";
 
   goPackagePath = "github.com/mdempsky/gocode";
   excludedPackages = ''internal/suggest/testdata'';
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
     owner = "mdempsky";
     repo = "gocode";
-    sha256 = "0fxqn0v6dbwarn444lc1xrx5vfkcidi73f4ba7l4clsb9qdqgyam";
+    sha256 = "0i1hc089gb6a4mcgg56vn5l0q96wrlza2n08l4349s3dc2j559fb";
   };
 
   goDeps = ./deps.nix;
@@ -37,7 +37,7 @@ buildGoPackage rec {
       Typical autocompletion time with warm cache is 30ms, which is barely
       noticeable.
     '';
-    homepage = https://github.com/mdempsky/gocode;
+    homepage = "https://github.com/mdempsky/gocode";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ kalbasit ];

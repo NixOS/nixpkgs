@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--localstatedir=/var" "--enable-lvm2" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/udisks;
+    homepage = "http://www.freedesktop.org/wiki/Software/udisks";
     description = "A daemon and command-line utility for querying and manipulating storage devices";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2Plus ];

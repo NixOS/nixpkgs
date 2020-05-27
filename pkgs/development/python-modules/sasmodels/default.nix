@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library of small angle scattering models";
-    homepage = http://sasview.org;
+    homepage = "http://sasview.org";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rprospero ];
   };

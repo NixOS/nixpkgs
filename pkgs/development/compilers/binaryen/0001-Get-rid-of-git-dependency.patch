@@ -1,0 +1,38 @@
+From 1c6af6c68ba3f49ae9e942844c739e934339d3b9 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sat, 14 Mar 2020 00:37:31 +0100
+Subject: [PATCH] Get rid of git dependency
+
+---
+ CMakeLists.txt | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4acf703e1..4e9bd60b5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -7,20 +7,7 @@ IF(NOT CMAKE_BUILD_TYPE)
+   SET(CMAKE_BUILD_TYPE "Release")
+ ENDIF()
+ 
+-FIND_PACKAGE(Git QUIET REQUIRED)
+-EXECUTE_PROCESS(COMMAND
+-             "${GIT_EXECUTABLE}" --git-dir=${CMAKE_CURRENT_SOURCE_DIR}/.git describe --tags
+-         RESULT_VARIABLE
+-             GIT_HASH_RESULT
+-         OUTPUT_VARIABLE
+-             GIT_HASH
+-         OUTPUT_STRIP_TRAILING_WHITESPACE)
+-IF(${GIT_HASH_RESULT})
+-  MESSAGE(WARNING "Error running git describe to determine version")
+-  SET(BINARYEN_VERSION_INFO "(unable to determine version)")
+-ELSE()
+-  SET(BINARYEN_VERSION_INFO "${GIT_HASH}")
+-ENDIF()
++SET(BINARYEN_VERSION_INFO "@emscriptenv@")
+ CONFIGURE_FILE(config.h.in config.h)
+ 
+ OPTION(BUILD_STATIC_LIB "Build as a static library" OFF)
+-- 
+2.25.0
+

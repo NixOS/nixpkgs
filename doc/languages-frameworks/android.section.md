@@ -167,7 +167,7 @@ parameters that the SDK composition function (the function shown in the
 previous section) supports.
 
 This build function is particularly useful when it is desired to use
-[Hydra](http://nixos.org/hydra): the Nix-based continuous integration solution
+[Hydra](https://nixos.org/hydra): the Nix-based continuous integration solution
 to build Android apps. An Android APK gets exposed as a build product and can be
 installed on any Android device with a web browser by navigating to the build
 result page.
@@ -186,7 +186,7 @@ with import <nixpkgs> {};
 androidenv.emulateApp {
   name = "emulate-MyAndroidApp";
   platformVersion = "28";
-  abiVersion = "x86_64"; # armeabi-v7a, mips, x86
+  abiVersion = "x86"; # armeabi-v7a, mips, x86_64
   systemImageType = "google_apis_playstore";
 }
 ```
@@ -235,5 +235,5 @@ package manager uses. To update the expressions run the `generate.sh` script
 that is stored in the `pkgs/development/mobile/androidenv/` sub directory:
 
 ```bash
-sh ./generate.sh
+./generate.sh
 ```

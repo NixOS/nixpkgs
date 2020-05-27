@@ -21,7 +21,7 @@
 , zlib
 , curl
 , qrupdate
-, openblas
+, blas, lapack
 , arpack
 , libwebp
 , gl2ps
@@ -49,19 +49,11 @@
 # - JIT compiler for loops:
 , enableJIT ? false
 , llvm ? null
+, libiconv
+, darwin
 }:
 
-let
-  suitesparseOrig = suitesparse;
-  qrupdateOrig = qrupdate;
-in
-# integer width is determined by openblas, so all dependencies must be built
-# with exactly the same openblas
-let
-  suitesparse =
-    if suitesparseOrig != null then suitesparseOrig.override { inherit openblas; } else null;
-  qrupdate = if qrupdateOrig != null then qrupdateOrig.override { inherit openblas; } else null;
-in
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   version = "5.2.0";
@@ -83,7 +75,8 @@ stdenv.mkDerivation rec {
     fltk
     zlib
     curl
-    openblas
+    blas
+    lapack
     libsndfile
     fftw
     fftwSinglePrec
@@ -107,10 +100,13 @@ stdenv.mkDerivation rec {
   ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
   ++ (stdenv.lib.optional (python != null) python)
   ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ])
+  ++ (stdenv.lib.optionals (stdenv.isDarwin) [ libiconv
+                                               darwin.apple_sdk.frameworks.Accelerate
+                                               darwin.apple_sdk.frameworks.Cocoa ])
   ;
   nativeBuildInputs = [
     pkgconfig
-    gfortran 
+    gfortran
     # Listed here as well because it's outputs are split
     fftw
     fftwSinglePrec
@@ -129,14 +125,15 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # See https://savannah.gnu.org/bugs/?50339
-  F77_INTEGER_8_FLAG = if openblas.blas64 then "-fdefault-integer-8" else "";
+  F77_INTEGER_8_FLAG = if blas.isILP64 then "-fdefault-integer-8" else "";
 
   configureFlags = [
-    "--with-blas=openblas"
-    "--with-lapack=openblas"
+    "--with-blas=blas"
+    "--with-lapack=lapack"
+    (if blas.isILP64 then "--enable-64" else "--disable-64")
   ]
+    ++ (if stdenv.isDarwin then [ "--enable-link-all-dependencies" ] else [ ])
     ++ stdenv.lib.optionals enableReadline [ "--enable-readline" ]
-    ++ stdenv.lib.optionals openblas.blas64 [ "--enable-64" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ "--with-x=no" ]
     ++ stdenv.lib.optionals enableQt [ "--with-qt=5" ]
     ++ stdenv.lib.optionals enableJIT [ "--enable-jit" ]
@@ -161,7 +158,7 @@ stdenv.mkDerivation rec {
     # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
     broken = enableJIT;
     platforms = if overridePlatforms == null then
-      (with stdenv.lib.platforms; linux ++ darwin)
+      (with stdenv.lib; platforms.linux ++ platforms.darwin)
     else overridePlatforms;
   };
 }

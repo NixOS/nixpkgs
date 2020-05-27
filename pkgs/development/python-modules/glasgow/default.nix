@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Software for Glasgow, a digital interface multitool";
-    homepage = https://github.com/GlasgowEmbedded/Glasgow;
+    homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
     maintainers = with maintainers; [ emily ];
   };

@@ -2,7 +2,7 @@
 
 let
   baseName = "metals";
-  version = "0.7.6";
+  version = "0.9.0";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -15,7 +15,7 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "03vx8n77mndpqbvq14cy3k9r4jwgjacrv56v5n87da8rqiclx37j";
+    outputHash     = "116q2jzqlmdhkqvjg31b9ib8w1k7rlr8gmjcr7z32idpn16hqg59";
   };
 in
 stdenv.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://scalameta.org/metals/;
+    homepage = "https://scalameta.org/metals/";
     license = licenses.asl20;
     description = "Work-in-progress language server for Scala";
     maintainers = with maintainers; [ ceedubs tomahna ];

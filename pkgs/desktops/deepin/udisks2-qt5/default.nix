@@ -1,14 +1,20 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, qtbase
+, deepin
+}:
 
 mkDerivation rec {
   pname = "udisks2-qt5";
-  version = "5.0.0";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0mqxm6ixzpbg0rr6ly2kvnkpag8gjza67ya7jv4i4rihbq1d0wzi";
+    sha256 = "0c87ks9glwhk4m2s7kf7mb43q011yi6l3qjq2ammmfqwl8xal69a";
   };
 
   nativeBuildInputs = [
@@ -21,18 +27,22 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-    searchHardCodedPaths
+    searchHardCodedPaths # debugging
   '';
+
+  qmakeFlags = [
+    "QMAKE_PKGCONFIG_PREFIX=${placeholder "out"}"
+  ];
 
   postFixup = ''
-    searchHardCodedPaths $out
+    searchHardCodedPaths $out # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "UDisks2 D-Bus interfaces binding for Qt5";
-    homepage = https://github.com/linuxdeepin/udisks2-qt5;
+    homepage = "https://github.com/linuxdeepin/udisks2-qt5";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

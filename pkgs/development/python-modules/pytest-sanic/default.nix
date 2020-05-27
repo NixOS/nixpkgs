@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A pytest plugin for Sanic";
-    homepage = https://github.com/yunstanford/pytest-sanic/;
+    homepage = "https://github.com/yunstanford/pytest-sanic/";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

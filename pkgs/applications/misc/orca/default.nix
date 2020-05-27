@@ -35,13 +35,13 @@
 
 buildPythonApplication rec {
   pname = "orca";
-  version = "3.34.2";
+  version = "3.36.2";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0aaagz8mxvfigrsdbmg22q44vf5yhkbw4rh4cnizysbfvijk4dan";
+    sha256 = "0hxz8wlyjn6w3zqg1p56pwdj0p23d6vynzczklyc6n91dyvma06g";
   };
 
   patches = [
@@ -110,7 +110,7 @@ buildPythonApplication rec {
 
       Needs `services.gnome3.at-spi2-core.enable = true;` in `configuration.nix`.
     '';
-    maintainers = with maintainers; [ berce ] ++ gnome3.maintainers;
+    maintainers = with maintainers; [ berce ] ++ teams.gnome.members;
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

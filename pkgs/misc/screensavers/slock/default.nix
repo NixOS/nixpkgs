@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://tools.suckless.org/slock;
+    homepage = "https://tools.suckless.org/slock";
     description = "Simple X display locker";
     longDescription = ''
       Simple X display locker. This is the simplest X screen locker.

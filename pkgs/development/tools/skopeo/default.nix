@@ -1,58 +1,60 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
-, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, libselinux
-, go-md2man }:
+{ stdenv
+, buildGoModule
+, fetchFromGitHub
+, runCommand
+, gpgme
+, lvm2
+, btrfs-progs
+, pkg-config
+, go-md2man
+, installShellFiles
+, makeWrapper
+, fuse-overlayfs
+, nixosTests
+}:
 
-with stdenv.lib;
-
-let
-  version = "0.1.41";
+buildGoModule rec {
+  pname = "skopeo";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "0aqw17irj2wn4a8g9hzfm5z5azqq33z6r1dbg1gyn2c8qxy1vfxs";
+    sha256 = "1zg0agf8x7fa8zdzfzgncm64j363lmxrqjhdzsx6mlig87k17p05";
   };
 
-  defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
+  outputs = [ "out" "man" ];
 
-  goPackagePath = "github.com/containers/skopeo";
+  vendorSha256 = null;
 
-in
-buildGoPackage {
-  pname = "skopeo";
-  inherit version;
-  inherit src goPackagePath;
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
-  outputs = [ "bin" "man" "out" ];
+  buildInputs = [ gpgme ]
+  ++ stdenv.lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
-  excludedPackages = "integration";
-
-  nativeBuildInputs = [ pkgconfig (lib.getBin go-md2man) ];
-  buildInputs = [ gpgme ] ++ lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs libselinux ];
-
-  buildFlagsArray = ''
-    -ldflags=
-    -X github.com/containers/skopeo/vendor/github.com/containers/image/v5/signature.systemDefaultPolicyPath=${defaultPolicyFile}
-    -X github.com/containers/skopeo/vendor/github.com/containers/image/v5/internal/tmpdir.unixTempDirForBigFiles=/tmp
+  buildPhase = ''
+    patchShebangs .
+    make binary-local
   '';
 
-  preBuild = ''
-    export CGO_CFLAGS="$CFLAGS"
-    export CGO_LDFLAGS="$LDFLAGS"
-  '';
-
-  postBuild = ''
-    # depends on buildGoPackage not changing …
-    pushd ./go/src/${goPackagePath}
+  installPhase = ''
+    make install-binary PREFIX=$out
     make install-docs MANINSTALLDIR="$man/share/man"
-    popd
+    installShellCompletion --bash completions/bash/skopeo
   '';
 
-  meta = {
+  postInstall = stdenv.lib.optionals stdenv.isLinux ''
+    wrapProgram $out/bin/skopeo \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
+  '';
+
+  passthru.tests.docker-tools = nixosTests.docker-tools;
+
+  meta = with stdenv.lib; {
     description = "A command line utility for various operations on container images and image repositories";
     homepage = "https://github.com/containers/skopeo";
-    maintainers = with stdenv.lib.maintainers; [ vdemeester lewo ];
-    license = stdenv.lib.licenses.asl20;
+    maintainers = with maintainers; [ lewo ] ++ teams.podman.members;
+    license = licenses.asl20;
   };
 }

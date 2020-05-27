@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "XML documents and web site compiler";
-    homepage = https://www.good-eris.net/stog;
+    homepage = "https://www.good-eris.net/stog";
     license = licenses.lgpl3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];

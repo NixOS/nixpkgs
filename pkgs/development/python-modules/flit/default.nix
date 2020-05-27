@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A simple packaging tool for simple packages";
-    homepage = https://github.com/takluyver/flit;
+    homepage = "https://github.com/takluyver/flit";
     license = licenses.bsd3;
     maintainers = [ maintainers.fridh ];
   };

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-keyring";
-  version = "3.34.0";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-keyring/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hqrsh5g9q9lm190f0m85q4nki8k4ng7wphl6qbccdry59aakkg9";
+    sha256 = "11sgffrrpss5cmv3b717pqlbhgq17l1xd33fsvqgsw8simxbar52";
   };
 
   outputs = [ "out" "dev" ];
@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
-    homepage = https://wiki.gnome.org/Projects/GnomeKeyring;
+    homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

@@ -26,7 +26,7 @@ buildGoPackage rec {
     license = licenses.mit;
     maintainers = [maintainers.imalsogreg];
     platforms = platforms.all;
-    homepage = https://github.com/segmentio/aws-okta;
+    homepage = "https://github.com/segmentio/aws-okta";
     downloadPage = "https://github.com/segmentio/aws-okta";
   };
 }

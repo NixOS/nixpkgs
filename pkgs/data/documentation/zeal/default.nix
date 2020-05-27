@@ -32,7 +32,7 @@ mkDerivation rec {
       Zeal is a simple offline API documentation browser inspired by Dash (macOS
       app), available for Linux and Windows.
     '';
-    homepage    = https://zealdocs.org/;
+    homepage    = "https://zealdocs.org/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ skeidel peterhoeg ];
     platforms   = platforms.linux;

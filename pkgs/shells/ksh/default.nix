@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       provides access to the UNIX system and to many other systems, on the
       many different computers and workstations on which it is implemented.
     '';
-    homepage = https://github.com/att/ast;
+    homepage = "https://github.com/att/ast";
     license = licenses.cpl10;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;

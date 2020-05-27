@@ -1,13 +1,13 @@
 { lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage }:
 
 let
-  version = "2.16.0";
+  version = "2.18.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "1bfcl3bvjb991ic8jw6y6i9pn7y03v8gwzzc78j1k5lhpqzbxkzd";
+    sha256 = "0ixgjp3j9dkdb0vv5n83h8w48xgi70m83im660z97y7mflr5s2cf";
   };
 
   webui = mkYarnPackage {
@@ -54,9 +54,9 @@ in buildGoPackage rec {
   '';
 
   preInstall = ''
-    mkdir -p "$bin/share/doc/prometheus" "$bin/etc/prometheus"
-    cp -a $src/documentation/* $bin/share/doc/prometheus
-    cp -a $src/console_libraries $src/consoles $bin/etc/prometheus
+    mkdir -p "$out/share/doc/prometheus" "$out/etc/prometheus"
+    cp -a $src/documentation/* $out/share/doc/prometheus
+    cp -a $src/console_libraries $src/consoles $out/etc/prometheus
   '';
 
   doCheck = true;

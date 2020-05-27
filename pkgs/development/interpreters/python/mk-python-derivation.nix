@@ -16,6 +16,7 @@
 , pipInstallHook
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
+, pythonNamespacesHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
 , setuptoolsBuildHook
@@ -131,6 +132,9 @@ let
   ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     # This is a test, however, it should be ran independent of the checkPhase and checkInputs
     pythonImportsCheckHook
+  ] ++ lib.optionals (python.pythonAtLeast "3.3") [
+    # Optionally enforce PEP420 for python3
+    pythonNamespacesHook
   ] ++ nativeBuildInputs;
 
   buildInputs = buildInputs ++ pythonPath;

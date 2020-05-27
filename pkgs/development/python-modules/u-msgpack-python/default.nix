@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A portable, lightweight MessagePack serializer and deserializer written in pure Python";
-    homepage = https://github.com/vsergeev/u-msgpack-python;
+    homepage = "https://github.com/vsergeev/u-msgpack-python";
     license = lib.licenses.mit;
   };
 

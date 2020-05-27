@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://corosync.org/;
+    homepage = "http://corosync.org/";
     description = "A Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.linux;

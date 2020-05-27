@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A script to run daily, weekly and monthly backups for your MySQL database";
-    homepage = https://sourceforge.net/projects/automysqlbackup/;
+    homepage = "https://sourceforge.net/projects/automysqlbackup/";
     platforms = platforms.linux;
     maintainers = [ maintainers.aanderse ];
     license = licenses.gpl2Plus;

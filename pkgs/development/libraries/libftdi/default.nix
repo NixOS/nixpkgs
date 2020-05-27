@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libusb}:
+{stdenv, fetchurl, libusb-compat-0_1}:
 
 with stdenv; mkDerivation rec {
   name = "libftdi-0.20";
@@ -8,9 +8,9 @@ with stdenv; mkDerivation rec {
     sha256 = "13l39f6k6gff30hsgh0wa2z422g9pyl91rh8a8zz6f34k2sxaxii";
   };
 
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb-compat-0_1 ];
 
-  propagatedBuildInputs = [ libusb ];
+  propagatedBuildInputs = [ libusb-compat-0_1 ];
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';
@@ -25,7 +25,7 @@ with stdenv; mkDerivation rec {
 
   meta = {
     description = "A library to talk to FTDI chips using libusb";
-    homepage = https://www.intra2net.com/en/developer/libftdi/;
+    homepage = "https://www.intra2net.com/en/developer/libftdi/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
   };

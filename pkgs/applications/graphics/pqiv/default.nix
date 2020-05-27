@@ -20,7 +20,7 @@ stdenv.mkDerivation (rec {
 
   meta = with stdenv.lib; {
     description = "Powerful image viewer with minimal UI";
-    homepage = http://www.pberndt.com/Programme/Linux/pqiv;
+    homepage = "http://www.pberndt.com/Programme/Linux/pqiv";
     license = licenses.gpl3;
     maintainers = [];
     platforms = platforms.linux;

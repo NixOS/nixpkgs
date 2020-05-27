@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "Network latency collector";
-    homepage = http://oss.oetiker.ch/smokeping;
+    homepage = "http://oss.oetiker.ch/smokeping";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.erictapen ];

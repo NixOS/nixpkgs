@@ -44,19 +44,19 @@ buildPythonPackage rec {
 
   checkInputs = [
     nose dbus dbus-python which pycodestyle pyflakes
-    pygobject3 bluez bluez.test networkmanager
+    pygobject3 bluez (lib.getOutput "test" bluez) networkmanager
   ];
 
   checkPhase = ''
     runHook preCheck
-    export PATH="$PATH:${bluez.test}/test";
+    export PATH="$PATH:${lib.getOutput "test" bluez}/test";
     nosetests -v
     runHook postCheck
   '';
 
   meta = with lib; {
     description = "Mock D-Bus objects for tests";
-    homepage = https://github.com/martinpitt/python-dbusmock;
+    homepage = "https://github.com/martinpitt/python-dbusmock";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ callahad ];
     platforms = platforms.linux;

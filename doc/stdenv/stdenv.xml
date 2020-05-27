@@ -14,7 +14,7 @@
 stdenv.mkDerivation {
   name = "libfoo-1.2.3";
   src = fetchurl {
-    url = http://example.org/libfoo-1.2.3.tar.bz2;
+    url = "http://example.org/libfoo-1.2.3.tar.bz2";
     sha256 = "0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m";
   };
 }</programlisting>
@@ -145,7 +145,7 @@ genericBuild
     </listitem>
     <listitem>
      <para>
-      GNU Make. It has been patched to provide <quote>nested</quote> output that can be fed into the <command>nix-log2xml</command> command and <command>log2html</command> stylesheet to create a structured, readable output of the build steps performed by Make.
+      GNU Make.
      </para>
     </listitem>
     <listitem>
@@ -729,6 +729,16 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
     <title>Variables controlling the patch phase</title>
     <varlistentry>
      <term>
+      <varname>dontPatch</varname>
+     </term>
+     <listitem>
+      <para>
+       Set to true to skip the patch phase.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <varname>patches</varname>
      </term>
      <listitem>
@@ -1295,7 +1305,7 @@ installTargets = "install-bin install-doc";</programlisting>
      </term>
      <listitem>
       <para>
-       List of directories to search for libraries and executables from which only debugging-related symbols should be stripped. It defaults to <literal>lib bin sbin</literal>.
+       List of directories to search for libraries and executables from which only debugging-related symbols should be stripped. It defaults to <literal>lib lib32 lib64 libexec bin sbin</literal>.
       </para>
      </listitem>
     </varlistentry>

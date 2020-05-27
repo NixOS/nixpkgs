@@ -137,12 +137,17 @@ let
       ''}
 
       # Copy secrets if needed.
+      #
+      # TODO: move out to a separate script; see #85000.
       ${optionalString (!config.boot.loader.supportsInitrdSecrets)
           (concatStringsSep "\n" (mapAttrsToList (dest: source:
              let source' = if source == null then dest else source; in
                ''
                   mkdir -p $(dirname "$out/secrets/${dest}")
-                  cp -a ${source'} "$out/secrets/${dest}"
+                  # Some programs (e.g. ssh) doesn't like secrets to be
+                  # symlinks, so we use `cp -L` here to match the
+                  # behaviour when secrets are natively supported.
+                  cp -Lr ${source'} "$out/secrets/${dest}"
                 ''
           ) config.boot.initrd.secrets))
        }
@@ -390,6 +395,17 @@ in
       '';
     };
 
+    boot.initrd.enable = mkOption {
+      type = types.bool;
+      default = !config.boot.isContainer;
+      defaultText = "!config.boot.isContainer";
+      description = ''
+        Whether to enable the NixOS initial RAM disk (initrd). This may be
+        needed to perform some initialisation tasks (like mounting
+        network/encrypted file systems) before continuing the boot process.
+      '';
+    };
+
     boot.initrd.prepend = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -555,7 +571,7 @@ in
 
   };
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf config.boot.initrd.enable {
     assertions = [
       { assertion = any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";
@@ -564,6 +580,25 @@ in
           resumeDevice == "" || builtins.substring 0 1 resumeDevice == "/";
         message = "boot.resumeDevice has to be an absolute path."
           + " Old \"x:y\" style is no longer supported.";
+      }
+      # TODO: remove when #85000 is fixed
+      { assertion = !config.boot.loader.supportsInitrdSecrets ->
+          all (source:
+            builtins.isPath source ||
+            (builtins.isString source && hasPrefix source builtins.storeDir))
+          (attrValues config.boot.initrd.secrets);
+        message = ''
+          boot.loader.initrd.secrets values must be unquoted paths when
+          using a bootloader that doesn't natively support initrd
+          secrets, e.g.:
+
+            boot.initrd.secrets = {
+              "/etc/secret" = /path/to/secret;
+            };
+
+          Note that this will result in all secrets being stored
+          world-readable in the Nix store!
+        '';
       }
     ];
 

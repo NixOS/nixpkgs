@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A type system library for Python";
-    homepage = https://github.com/encode/typesystem;
+    homepage = "https://github.com/encode/typesystem";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

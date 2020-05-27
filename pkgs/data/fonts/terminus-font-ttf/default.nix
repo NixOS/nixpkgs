@@ -26,7 +26,7 @@ in fetchzip {
       Monospaced bitmap font designed for long work with computers
       (TTF version, mainly for Java applications)
     '';
-    homepage = http://files.ax86.net/terminus-ttf;
+    homepage = "http://files.ax86.net/terminus-ttf";
     license = licenses.ofl;
     maintainers = with maintainers; [ okasu ];
   };

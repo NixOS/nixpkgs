@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Efficient tree implementations for Django 1.6+";
-    homepage = https://tabo.pe/projects/django-treebeard/;
+    homepage = "https://tabo.pe/projects/django-treebeard/";
     maintainers = with maintainers; [ desiderius ];
     license = licenses.asl20;
   };

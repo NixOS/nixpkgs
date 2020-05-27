@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , botocore
 , boto3
 , docutils
@@ -11,6 +12,7 @@
 buildPythonPackage rec {
   pname = "flowlogs_reader";
   version = "2.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

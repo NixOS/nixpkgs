@@ -25,7 +25,7 @@ in fetchFromGitHub {
       developers targeting various platforms to download icons in the format,
       color and size they need for any project.
     '';
-    homepage = https://materialdesignicons.com;
+    homepage = "https://materialdesignicons.com";
     license = with licenses; [
       asl20  # for icons from: https://github.com/google/material-design-icons
       ofl

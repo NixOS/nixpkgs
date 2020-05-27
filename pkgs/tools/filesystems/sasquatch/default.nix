@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "4.3";
 
   src = fetchurl {
-    url = mirror://sourceforge/squashfs/squashfs4.3.tar.gz;
+    url = "mirror://sourceforge/squashfs/squashfs4.3.tar.gz";
     sha256 = "1xpklm0y43nd9i6jw43y2xh5zvlmj9ar2rvknh0bh7kv8c95aq0d";
   };
 

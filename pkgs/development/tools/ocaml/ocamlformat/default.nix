@@ -2,13 +2,15 @@
 
 with ocamlPackages; buildDunePackage rec {
   pname = "ocamlformat";
-  version = "0.13.0";
+  version = "0.14.2";
 
   minimumOCamlVersion = "4.06";
 
+  useDune2 = true;
+
   src = fetchurl {
-    url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}-2.tbz";
-    sha256 = "0ki2flqi3xkhw9mfridivb6laxm7gml8rj9qz42vqmy9yx76jjxq";
+    url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}.tbz";
+    sha256 = "16phz1sg9b070p6fm8d42j0piizg05vghdjmw8aj7xm82b1pm7sz";
   };
 
   buildInputs = [
@@ -20,6 +22,8 @@ with ocamlPackages; buildDunePackage rec {
     stdio
     uuseg
     uutf
+    fix
+    menhir
   ];
 
   meta = {

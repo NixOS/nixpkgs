@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       web applications using a single technology. Among the the many features of Opa are these:
       Opa is concise, simple, concurrent, dynamically distributed, and secure.
     '';
-    homepage = http://opalang.org/;
+    homepage = "http://opalang.org/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.kkallio ];
     platforms = with stdenv.lib.platforms; unix;

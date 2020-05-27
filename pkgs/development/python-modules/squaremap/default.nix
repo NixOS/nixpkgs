@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Hierarchic visualization control for wxPython";
-    homepage = https://launchpad.net/squaremap;
+    homepage = "https://launchpad.net/squaremap";
     license = licenses.bsd3;
     broken = true; # wxPython doesn't seem to be able to be detected by pip
   };

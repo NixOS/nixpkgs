@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll, openfortivpn, intltool, pkgconfig, file, gtk3,
-networkmanager, ppp, libsecret, withGnome ? true, gnome3, fetchpatch, networkmanagerapplet }:
+networkmanager, ppp, libsecret, withGnome ? true, gnome3, fetchpatch, libnma }:
 
 let
   pname = "NetworkManager-fortisslvpn";
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [ openfortivpn networkmanager ppp ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
 
   nativeBuildInputs = [ intltool pkgconfig file ];
 

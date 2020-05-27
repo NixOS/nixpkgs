@@ -45,7 +45,7 @@ in pythonPackages.buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://www.telepresence.io/;
+    homepage = "https://www.telepresence.io/";
     description = "Local development against a remote Kubernetes or OpenShift cluster";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ offline ];

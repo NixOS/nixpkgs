@@ -17,7 +17,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "drawing";
-  version = "0.4.11";
+  version = "0.4.13";
 
   format = "other";
   
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "maoschanz";
     repo = pname;
     rev = version;
-    sha256 = "00c1h6jns11rmsg35gy40fb6ahvik80wpbm2133bjcqxfwwnlal6";
+    sha256 = "0mj2nmfrckv89srgkn16fnbrb35f5a655ak8bb3rd9na3hd5bq53";
   };
 
   nativeBuildInputs = [

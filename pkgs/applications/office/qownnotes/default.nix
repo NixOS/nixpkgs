@@ -19,7 +19,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Plain-text file notepad and todo-list manager with markdown support and ownCloud / Nextcloud integration";
 
-    homepage = https://www.qownnotes.org/;
+    homepage = "https://www.qownnotes.org/";
     platforms = platforms.all;
     license = licenses.gpl2;
     maintainers = with maintainers; [ dtzWill ];

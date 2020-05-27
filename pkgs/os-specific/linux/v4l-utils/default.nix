@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
-    homepage = https://linuxtv.org/projects.php;
+    homepage = "https://linuxtv.org/projects.php";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ codyopel ];
     platforms = platforms.linux;

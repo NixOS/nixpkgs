@@ -1,5 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, callPackage
-, isPy27, isPy34, pythonOlder
+, isPy27
+, pythonOlder
 , cleo
 , requests
 , cachy
@@ -31,12 +32,12 @@ let
 
 in buildPythonPackage rec {
   pname = "poetry";
-  version = "1.0.3";
+  version = "1.0.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fx1ilgkrsqjjnpgv5zljsp0wpcsywdqvvi8im9z396qq6qpk830";
+    sha256 = "02h387k0xssvv78yy82pcpknpq4w5ym2in1zl8cg9r5wljl5w6cf";
   };
 
   postPatch = ''
@@ -66,8 +67,7 @@ in buildPythonPackage rec {
     pexpect
     keyring
     lockfile
-  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
-    ++ lib.optionals isPy27 [ virtualenv functools32 subprocess32 ]
+  ] ++ lib.optionals isPy27 [ typing pathlib2 glob2 virtualenv functools32 subprocess32 ]
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   postInstall = ''

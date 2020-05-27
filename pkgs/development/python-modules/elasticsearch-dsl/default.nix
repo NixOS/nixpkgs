@@ -31,7 +31,7 @@ buildPythonPackage rec {
       writing and running queries against Elasticsearch. It is built on top of
       the official low-level client (elasticsearch-py).
     '';
-    homepage = https://github.com/elasticsearch/elasticsearch-dsl-py;
+    homepage = "https://github.com/elasticsearch/elasticsearch-dsl-py";
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];
   };

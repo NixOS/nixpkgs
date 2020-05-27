@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   name = "sfepy_${version}";
-  version = "2019.2";
+  version = "2019.4";
 
   src = fetchurl {
     url="https://github.com/sfepy/sfepy/archive/release_${version}.tar.gz";
-    sha256 = "17dj0wbchcfa6x27yx4d4jix4z4nk6r2640xkqcsw0mf62x5l1pj";
+    sha256 = "1l9vgcw09l6bwhgfzlbn68fzpvns25r6nkd1pcp7hz5165hs6zzn";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   postPatch = ''
     # broken test
     rm tests/test_homogenization_perfusion.py
+    rm tests/test_splinebox.py
 
     # slow tests
     rm tests/test_input_*.py
@@ -54,7 +55,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://sfepy.org/;
+    homepage = "https://sfepy.org/";
     description = "Simple Finite Elements in Python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

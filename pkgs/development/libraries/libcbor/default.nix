@@ -16,11 +16,13 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # needs "-DWITH_TESTS=ON", but fails w/compilation error
 
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
+
   NIX_CFLAGS_COMPILE = "-fno-lto";
 
   meta = with stdenv.lib; {
     description = "CBOR protocol implementation for C and others";
-    homepage = https://github.com/PJK/libcbor;
+    homepage = "https://github.com/PJK/libcbor";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };

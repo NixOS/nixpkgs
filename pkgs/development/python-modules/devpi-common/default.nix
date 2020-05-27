@@ -22,7 +22,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/devpi/devpi;
+    homepage = "https://github.com/devpi/devpi";
     description = "Utilities jointly used by devpi-server and devpi-client";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];

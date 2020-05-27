@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "librealsense";
-  version = "2.32.1";
+  version = "2.34.0";
 
   outputs = [ "out" "dev" ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "IntelRealSense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1l45hrb3lgjh1kdi4khqhljndc434zf9llzbii6dcv911gxkipjr";
+    sha256 = "0bi7pszrryz18aqna0z73mb1hzz2vqdb0m00pf93hnwc2hba7hwm";
   };
 
   buildInputs = [

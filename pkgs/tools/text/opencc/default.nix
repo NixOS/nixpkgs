@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencc";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "BYVoid";
     repo = "OpenCC";
     rev = "ver.${version}";
-    sha256 = "1pv5md225qwhbn8ql932zdg6gh1qlx3paiajaks8gfsa07yzvhr4";
+    sha256 = "1ygj2ygxsva72hs6cm0a6wdd2rp71k4nm0pd7cb20y2srdlzvdqk";
   };
 
   nativeBuildInputs = [ cmake python ];

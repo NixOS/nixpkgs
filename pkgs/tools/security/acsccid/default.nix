@@ -1,4 +1,16 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, flex, perl, pkgconfig, pcsclite, libusb, libiconv }:
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, gettext
+, flex
+, perl
+, pkgconfig
+, pcsclite
+, libusb1
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   version = "1.1.8";
@@ -11,11 +23,28 @@ stdenv.mkDerivation rec {
     sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
   };
 
-  doCheck = true;
+  nativeBuildInputs = [
+    pkgconfig
+    autoconf
+    automake
+    libtool
+    gettext
+    flex
+    perl
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pcsclite libusb autoconf automake libtool gettext flex perl ]
-                ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [
+    pcsclite
+    libusb1
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
+
+  configureFlags = [
+    "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"
+  ];
+
+  doCheck = true;
 
   postPatch = ''
     sed -e s_/bin/echo_echo_g -i src/Makefile.am
@@ -29,7 +58,6 @@ stdenv.mkDerivation rec {
     autoheader
     automake --force-missing --add-missing
     autoconf
-    configureFlags="$configureFlags --enable-usbdropdir=$out/pcsc/drivers"
   '';
 
   meta = with stdenv.lib; {

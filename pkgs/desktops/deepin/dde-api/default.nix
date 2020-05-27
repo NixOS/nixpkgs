@@ -1,25 +1,28 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig,
-  alsaLib,
-  bc,
-  blur-effect,
-  coreutils,
-  dbus-factory,
-  deepin,
-  deepin-gettext-tools,
-  fontconfig,
-  go,
-  go-dbus-factory,
-  go-gir-generator,
-  go-lib,
-  grub2,
-  gtk3,
-  libcanberra,
-  libgudev,
-  librsvg,
-  poppler,
-  pulseaudio,
-  rfkill,
-  xcur2png
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, pkgconfig
+, alsaLib
+, bc
+, blur-effect
+, coreutils
+, dbus-factory
+, deepin
+, deepin-gettext-tools
+, fontconfig
+, go
+, go-dbus-factory
+, go-gir-generator
+, go-lib
+, grub2
+, gtk3
+, libcanberra
+, libgudev
+, librsvg
+, poppler
+, pulseaudio
+, rfkill
+, xcur2png
 }:
 
 buildGoPackage rec {
@@ -37,34 +40,35 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  outputs = [ "out" ];
-
   nativeBuildInputs = [
     pkgconfig
     deepin-gettext-tools # build
     dbus-factory         # build
-    go-dbus-factory      # needed
-    go-gir-generator     # needed
-    go-lib               # build
     deepin.setupHook
-  ];
 
-  buildInputs = [
-    alsaLib     # needed
+    # TODO: using $PATH to find run time executable does not work with cross compiling
     bc          # run (to adjust grub theme?)
     blur-effect # run (is it really needed?)
     coreutils   # run (is it really needed?)
     fontconfig  # run (is it really needed?)
-    #glib        # ? arch
+    rfkill      # run
+    xcur2png    # run
     grub2       # run (is it really needed?)
+  ];
+
+  buildInputs = [
+    go-dbus-factory      # needed
+    go-gir-generator     # needed
+    go-lib               # build
+
+    alsaLib     # needed
+    #glib        # ? arch
     gtk3        # build run
     libcanberra # build run
     libgudev    # needed
     librsvg     # build run
     poppler     # build run
     pulseaudio  # needed
-    rfkill      # run
-    xcur2png    # run
     #locales     # run (locale-helper needs locale-gen, which is unavailable on NixOS?)
   ];
 
@@ -106,18 +110,18 @@ buildGoPackage rec {
   installPhase = ''
     make install PREFIX="$out" SYSTEMD_LIB_DIR="$out/lib" -C go/src/${goPackagePath}
     mv $out/share/gocode $out/share/go
-    remove-references-to -t ${go} $out/bin/* $out/lib/deepin-api/*
+    remove-references-to -t ${go} $out/lib/deepin-api/*
   '';
 
   postFixup = ''
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Go-lang bindings for dde-daemon";
-    homepage = https://github.com/linuxdeepin/dde-api;
+    homepage = "https://github.com/linuxdeepin/dde-api";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A high-performance path dispatching library";
-    homepage = https://github.com/c9s/r3;
+    homepage = "https://github.com/c9s/r3";
     license = [ stdenv.lib.licenses.mit ];
   };
 

@@ -8,13 +8,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "7.5";
+  version = "7.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = "v${version}";
-    sha256 = "1p9jwdwzcsaa58ap912hdf2w27vna3xl9g4lh6kjskddwi8l3wac";
+    sha256 = "0605q3y7vh7x7m9azrbkx44blq12zrab6v28b9wmpcn1lmykbw1b";
   };
 
   # The original build system uses cmake which does things like pull
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "python" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/google/or-tools;
+    homepage = "https://github.com/google/or-tools";
     license = licenses.asl20;
     description = ''
       Google's software suite for combinatorial optimization.

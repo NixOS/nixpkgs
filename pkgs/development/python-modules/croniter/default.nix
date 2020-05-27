@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "croniter provides iteration for datetime object with cron like format";
-    homepage = https://github.com/kiorky/croniter;
+    homepage = "https://github.com/kiorky/croniter";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

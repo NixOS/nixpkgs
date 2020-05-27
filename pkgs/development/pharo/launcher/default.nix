@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       access it very rapidly from your OS application launcher. As a
       result, launching any image is never more than 3 clicks away.
     '';
-    homepage = http://pharo.org;
+    homepage = "http://pharo.org";
     license = stdenv.lib.licenses.mit;
     maintainers = [ ];
     platforms = pharo.meta.platforms;

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Assertion/verification library to aid testing";
-    homepage = https://github.com/approvals/ApprovalTests.Python;
+    homepage = "https://github.com/approvals/ApprovalTests.Python";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

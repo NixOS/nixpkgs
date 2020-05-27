@@ -50,6 +50,12 @@ in openmw.overrideAttrs (oldAttrs: rec {
     "-DRakNet_LIBRARY_DEBUG=${rakNetLibrary}/lib/libRakNetLibStatic.a"
   ];
 
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=95175
+  patches = [
+    ./tes3mp.patch
+  ];
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
   preConfigure = ''
     substituteInPlace files/version.in \
       --subst-var-by OPENMW_VERSION_COMMITHASH ${compatHash}
@@ -69,7 +75,7 @@ in openmw.overrideAttrs (oldAttrs: rec {
 
   meta = with stdenv.lib; {
     description = "Multiplayer for TES3:Morrowind based on OpenMW";
-    homepage = https://tes3mp.com/;
+    homepage = "https://tes3mp.com/";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ gnidorah ];

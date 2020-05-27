@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/BIC-MNI/mni_autoreg;
+    homepage = "https://github.com/BIC-MNI/mni_autoreg";
     description = "Tools for automated registration using the MINC image format";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;

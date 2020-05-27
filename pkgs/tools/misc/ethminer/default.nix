@@ -67,10 +67,12 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ethereum miner with OpenCL, CUDA and stratum support";
-    homepage = https://github.com/ethereum-mining/ethminer;
+    homepage = "https://github.com/ethereum-mining/ethminer";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nand0p ];
     license = licenses.gpl2;
+    # Doesn't build with gcc9, and if overlayed to use gcc8 stdenv fails on CUDA issues.
+    broken = true;
   };
 
 }

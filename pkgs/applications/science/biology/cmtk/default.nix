@@ -21,6 +21,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ tbenst ];
     platforms = platforms.all;
     license     = licenses.gpl3;
-    homepage    = https://www.nitrc.org/projects/cmtk/;
+    homepage    = "https://www.nitrc.org/projects/cmtk/";
   };
 }

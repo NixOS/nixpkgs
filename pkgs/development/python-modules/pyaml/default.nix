@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "PyYAML-based module to produce pretty and readable YAML-serialized data";
-    homepage = https://github.com/mk-fg/pretty-yaml;
+    homepage = "https://github.com/mk-fg/pretty-yaml";
     license = lib.licenses.wtfpl;
   };
 }

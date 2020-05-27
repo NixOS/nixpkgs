@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1k47gbgpp52049andr28y28nbwh9m36bbb0g8p0aka3pqlhjv72l";
   };
 
-  nativeBuildInputs = [ pkgconfig scons ];
+  nativeBuildInputs = [ pkgconfig scons.py2 ];
   buildInputs = [ apr openssl aprutil zlib libiconv ]
     ++ stdenv.lib.optional (!stdenv.isCygwin) kerberos;
 

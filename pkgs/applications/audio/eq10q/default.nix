@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       # glibc 2.27 compatibility
-      url = https://sources.debian.org/data/main/e/eq10q/2.2~repack0-2.1/debian/patches/05-pow10.patch;
+      url = "https://sources.debian.org/data/main/e/eq10q/2.2~repack0-2.1/debian/patches/05-pow10.patch";
       sha256 = "07b0wf6k4xqgigv4h095bzfaw8r218wa36r9w1817jcys13r6c5r";
     })
   ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       64 bits floating point internal audio processing.
       Nice GUI with powerful metering for every plugin.
     '';
-    homepage = http://eq10q.sourceforge.net/;
+    homepage = "http://eq10q.sourceforge.net/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

@@ -48,7 +48,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = with stdenv.lib; {
     description = "General purpose pipe-oriented plotting tool";
-    homepage = https://github.com/dkogan/feedgnuplot/;
+    homepage = "https://github.com/dkogan/feedgnuplot/";
     license = with licenses; [ artistic1 gpl1Plus ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ mnacamura ];

@@ -433,6 +433,16 @@ in
 
       services.zfs.zed.settings = {
         ZED_EMAIL_PROG = mkDefault "${pkgs.mailutils}/bin/mail";
+        PATH = lib.makeBinPath [
+          packages.zfsUser
+          pkgs.coreutils
+          pkgs.curl
+          pkgs.gawk
+          pkgs.gnugrep
+          pkgs.gnused
+          pkgs.nettools
+          pkgs.utillinux
+        ];
       };
 
       environment.etc = genAttrs
@@ -478,6 +488,7 @@ in
         createImportService = pool:
           nameValuePair "zfs-import-${pool}" {
             description = "Import ZFS pool \"${pool}\"";
+            # we need systemd-udev-settle until https://github.com/zfsonlinux/zfs/pull/4943 is merged
             requires = [ "systemd-udev-settle.service" ];
             after = [ "systemd-udev-settle.service" "systemd-modules-load.service" ];
             wantedBy = (getPoolMounts pool) ++ [ "local-fs.target" ];

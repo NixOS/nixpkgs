@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "DirectFB VNC client";
-    homepage = http://drinkmilk.github.io/directvnc/;
+    homepage = "http://drinkmilk.github.io/directvnc/";
     license = licenses.gpl2;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

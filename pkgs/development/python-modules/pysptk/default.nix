@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python wrapper for Speech Signal Processing Toolkit (SPTK)";
-    homepage = https://pysptk.readthedocs.io/en/latest/;
+    homepage = "https://pysptk.readthedocs.io/en/latest/";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];
   };

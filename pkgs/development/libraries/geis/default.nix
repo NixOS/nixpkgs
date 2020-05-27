@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for input gesture recognition";
-    homepage = https://launchpad.net/geis;
+    homepage = "https://launchpad.net/geis";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

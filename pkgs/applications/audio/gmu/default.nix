@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://wejp.k.vu/projects/gmu;
+    homepage = "http://wejp.k.vu/projects/gmu";
     description = "Open source music player for portable gaming consoles and handhelds";
     license = stdenv.lib.licenses.gpl2;
   };

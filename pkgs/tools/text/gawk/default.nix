@@ -19,11 +19,11 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = "gawk-5.0.1";
+  name = "gawk-5.1.0";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "15570p7g2x54asvr2fsc56sxzmm08fbk4mzpcs5n92fp9vq8cklf";
+    sha256 = "1gc2cccqy1x1bf6rhwlmd8q7dz7gnam6nwgl38bxapv6qm5flpyg";
   };
 
   # When we do build separate interactive version, it makes sense to always include man.
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/gawk/;
+    homepage = "https://www.gnu.org/software/gawk/";
     description = "GNU implementation of the Awk programming language";
 
     longDescription = ''

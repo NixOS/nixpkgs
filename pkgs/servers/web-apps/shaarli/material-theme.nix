@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     broken = true;
     description = "A theme base on Google's Material Design for Shaarli, the superfast delicious clone";
     license = licenses.mit;
-    homepage = https://github.com/kalvn/Shaarli-Material;
+    homepage = "https://github.com/kalvn/Shaarli-Material";
     maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };

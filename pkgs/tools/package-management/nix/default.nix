@@ -1,4 +1,4 @@
-{ lib, fetchurl, callPackage
+{ lib, fetchurl, fetchFromGitHub, callPackage
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -12,7 +12,10 @@ common =
   { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
   , bash, coreutils, gzip, gnutar
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
+  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
   , jq, libarchive, rustc, cargo
+  # Used by tests
+  , gmock
   , busybox-sandbox-shell
   , storeDir
   , stateDir
@@ -20,7 +23,7 @@ common =
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
   , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
 
-  , name, suffix ? "", src, includesPerl ? false
+  , name, suffix ? "", src, crates ? null
 
   }:
   let
@@ -29,7 +32,6 @@ common =
       inherit name src;
       version = lib.getVersion name;
 
-      is20 = lib.versionAtLeast version "2.0pre";
       is24 = lib.versionAtLeast version "2.4pre";
       isExactly23 = lib.versionAtLeast version "2.3" && lib.versionOlder version "2.4";
 
@@ -39,21 +41,23 @@ common =
 
       nativeBuildInputs =
         [ pkgconfig ]
-        ++ lib.optionals (!is20) [ curl perl ]
-        ++ lib.optionals is24 [ jq ];
+        ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt
+                                docbook5 docbook_xsl_ns jq gmock ];
 
-      buildInputs = [ curl openssl sqlite xz bzip2 nlohmann_json ]
+      buildInputs =
+        [ curl openssl sqlite xz bzip2 nlohmann_json
+          brotli boost editline
+        ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is20 [ brotli boost editline ]
         ++ lib.optionals is24 [ libarchive rustc cargo ]
         ++ lib.optional withLibseccomp libseccomp
-        ++ lib.optional (withAWS && is20)
+        ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
               apis = ["s3" "transfer"];
               customMemoryManagement = false;
             }).overrideDerivation (args: {
               patches = args.patches or [] ++ [(fetchpatch {
-                url = https://github.com/edolstra/aws-sdk-cpp/commit/7d58e303159b2fb343af9a1ec4512238efa147c7.patch;
+                url = "https://github.com/edolstra/aws-sdk-cpp/commit/7d58e303159b2fb343af9a1ec4512238efa147c7.patch";
                 sha256 = "103phn6kyvs1yc7fibyin3lgxz699qakhw671kl207484im55id1";
               })];
             }));
@@ -66,7 +70,7 @@ common =
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
         # https://github.com/NixOS/nixpkgs/issues/45462
-        lib.optionalString is20 ''
+        ''
           mkdir -p $out/lib
           cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
           rm -f $out/lib/*.a
@@ -74,6 +78,11 @@ common =
             chmod u+w $out/lib/*.so.*
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
+        '' +
+        # Unpack the Rust crates.
+        lib.optionalString is24 ''
+          tar xvf ${crates} -C nix-rust/
+          mv nix-rust/nix-vendored-crates* nix-rust/vendor
         '' +
         # For Nix-2.3, patch around an issue where the Nix configure step pulls in the
         # build system's bash and other utilities when cross-compiling
@@ -97,12 +106,7 @@ common =
           "--disable-init-state"
           "--enable-gc"
         ]
-        ++ lib.optionals (!is20) [
-          "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
-          "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
-          "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
-          "BDW_GC_LIBS=\"-lgc -lgccpp\""
-        ] ++ lib.optionals (is20 && stdenv.isLinux) [
+        ++ lib.optionals stdenv.isLinux [
           "--with-sandbox-shell=${sh}/bin/busybox"
         ]
         ++ lib.optional (
@@ -135,7 +139,7 @@ common =
           a package, multi-user package management and easy setup of build
           environments.
         '';
-        homepage = https://nixos.org/;
+        homepage = "https://nixos.org/";
         license = stdenv.lib.licenses.lgpl2Plus;
         maintainers = [ stdenv.lib.maintainers.eelco ];
         platforms = stdenv.lib.platforms.unix;
@@ -143,7 +147,7 @@ common =
       };
 
       passthru = {
-        perl-bindings = if includesPerl then nix else stdenv.mkDerivation {
+        perl-bindings = stdenv.mkDerivation {
           pname = "nix-perl";
           inherit version;
 
@@ -154,8 +158,7 @@ common =
           # This is not cross-compile safe, don't have time to fix right now
           # but noting for future travellers.
           nativeBuildInputs =
-            [ perl pkgconfig curl nix libsodium ]
-            ++ lib.optional is20 boost;
+            [ perl pkgconfig curl nix libsodium boost autoreconfHook autoconf-archive ];
 
           configureFlags =
             [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
@@ -174,24 +177,11 @@ in rec {
 
   nix = nixStable;
 
-  nix1 = callPackage common rec {
-    name = "nix-1.11.16";
-    src = fetchurl {
-      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
-    };
-
-    # Nix1 has the perl bindings by default, so no need to build the manually.
-    includesPerl = true;
-
-    inherit storeDir stateDir confDir boehmgc;
-  };
-
   nixStable = callPackage common (rec {
-    name = "nix-2.3.3";
+    name = "nix-2.3.4";
     src = fetchurl {
-      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "332fffb8dfc33eab854c136ef162a88cec15b701def71fa63714d160831ba224";
+      url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      sha256 = "1c626a0de0acc69830b1891ec4d3c96aabe673b2a9fd04cef84f2304d05ad00d";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -201,10 +191,18 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre7250_94c93437";
-    src = fetchurl {
-      url = "https://hydra.nixos.org/build/112193977/download/3/nix-2.4${suffix}.tar.xz";
-      sha256 = "f9baf241c9449c1e3e5c9610adbcd2ce9e5fbcab16aff3ba3030d2fad7b34d7b";
+    suffix = "pre7534_b92f58f6";
+
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "b92f58f6d9e44f97002d1722bd77bad939824c1c";
+      sha256 = "1p791961y5v04kpz37g6hm98f1ig7i34inxl9dcj3pbqhf5kicxg";
+    };
+
+    crates = fetchurl {
+      url = "https://hydra.nixos.org/build/118797694/download/1/nix-vendored-crates-2.4pre7534_b92f58f6.tar.xz";
+      sha256 = "a4c2612bbd81732bbb899bc0c230e07b16f6b6150ffbb19c4907dedbbc2bf9fc";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -212,10 +210,18 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20200220_4a4521f";
-    src = fetchurl {
-      url = "https://hydra.nixos.org/build/113373394/download/3/nix-2.4${suffix}.tar.xz";
-      sha256 = "31fe87c40f40a590bc8f575283725d5f04ecb9aebb6b404f679d77438d75265d";
+    suffix = "pre20200521_00b562c";
+
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "00b562c87ec4c3bbe514f5dc1f4d1c41f66f66bf";
+      hash = "sha256-GqTFh4wBfkKapixKyd3gA9C1tF0PSzZDD5LN+5nQEWk=";
+    };
+
+    crates = fetchurl {
+      url = "https://hydra.nixos.org/build/118093786/download/1/nix-vendored-crates-2.4pre20200501_941f952.tar.xz";
+      sha256 = "060f4n5srdbb8vsj0m14aqch7im79a4h5g3nrs41p1xc602vhcdl";
     };
 
     inherit storeDir stateDir confDir boehmgc;

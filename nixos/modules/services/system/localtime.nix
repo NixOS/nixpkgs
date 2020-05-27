@@ -8,6 +8,7 @@ in {
   options = {
     services.localtime = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable <literal>localtime</literal>, simple daemon for keeping the system

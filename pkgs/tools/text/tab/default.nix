@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Programming language/shell calculator";
-    homepage    = https://tkatchev.bitbucket.io/tab/;
+    homepage    = "https://tkatchev.bitbucket.io/tab/";
     license     = licenses.boost;
     maintainers = with maintainers; [ mstarzyk ];
     platforms   = with platforms; linux;

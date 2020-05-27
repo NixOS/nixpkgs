@@ -1,11 +1,13 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
-  name = "zsh-prezto-2019-03-18";
-  src = fetchgit {
-    url = "https://github.com/sorin-ionescu/prezto";
-    rev = "1f4601e44c989b90dc7314b151891fa60a101251";
-    sha256 = "1dcd5r7pc4biiplm0lh7yca0h6hs0xpaq9dwaarmfsh9wrd68350";
+stdenv.mkDerivation rec {
+  pname = "zsh-prezto";
+  version = "2020-05-20";
+  src = fetchFromGitHub {
+    owner = "sorin-ionescu";
+    repo = "prezto";
+    rev = "793f239a5e38ef2c4b76a4955bb734520303e8c4";
+    sha256 = "0xhdl1g0rvlikq6qxh6cwp6wsrgmw4l1rmmq5xpc7wl6dyh35yri";
     fetchSubmodules = true;
   };
   buildPhase = ''
@@ -24,7 +26,7 @@ stdenv.mkDerivation {
   '';
   meta = with stdenv.lib; {
     description = "Prezto is the configuration framework for Zsh; it enriches the command line interface environment with sane defaults, aliases, functions, auto completion, and prompt themes.";
-    homepage = https://github.com/sorin-ionescu/prezto;
+    homepage = "https://github.com/sorin-ionescu/prezto";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = with platforms; unix;

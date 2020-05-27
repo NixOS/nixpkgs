@@ -43,7 +43,7 @@ in stdenvNoCC.mkDerivation rec {
 
   meta = with stdenvNoCC.lib; {
     description = "Material Based Cursor";
-    homepage = https://github.com/KaizIqbal/Bibata_Cursor;
+    homepage = "https://github.com/KaizIqbal/Bibata_Cursor";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rawkode ];

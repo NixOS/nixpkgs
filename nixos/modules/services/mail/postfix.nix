@@ -269,6 +269,7 @@ in
       };
 
       enableSmtp = mkOption {
+        type = types.bool;
         default = true;
         description = "Whether to enable smtp in master.cf.";
       };

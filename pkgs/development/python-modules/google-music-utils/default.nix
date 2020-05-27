@@ -27,7 +27,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   meta = with lib; {
-    homepage = https://github.com/thebigmunch/google-music-utils;
+    homepage = "https://github.com/thebigmunch/google-music-utils";
     description = "A set of utility functionality for google-music and related projects";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

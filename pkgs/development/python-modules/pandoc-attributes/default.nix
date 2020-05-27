@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/aaren/pandoc-attributes;
+    homepage = "https://github.com/aaren/pandoc-attributes";
     description = "An Attribute class to be used with pandocfilters";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ vcanadi ];

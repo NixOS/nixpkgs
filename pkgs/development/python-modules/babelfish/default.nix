@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ setuptools ];
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/babelfish;
+    homepage = "https://pypi.python.org/pypi/babelfish";
     description = "A module to work with countries and languages";
     license = licenses.bsd3;
   };

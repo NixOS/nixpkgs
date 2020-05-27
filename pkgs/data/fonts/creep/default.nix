@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A pretty sweet 4px wide pixel font";
-    homepage = https://github.com/romeovs/creep;
+    homepage = "https://github.com/romeovs/creep";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ buffet ];

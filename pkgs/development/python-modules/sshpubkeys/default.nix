@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "OpenSSH Public Key Parser for Python";
-    homepage = https://github.com/ojarva/python-sshpubkeys;
+    homepage = "https://github.com/ojarva/python-sshpubkeys";
     license = licenses.bsd3;
     maintainers = [ ];
   };

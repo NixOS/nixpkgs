@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "2.1.0";
+  version = "2.1.1";
   disabled = isPy27;
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5f48232c85ddfa33e3573153e6080526ac2eef5e7ec9cf42b5c4ba3c62afb96d";
+    sha256 = "1j1fwinbkr4khn9i869r22jfdgw2kli0jqrz5shyd36jllsvrfzs";
   };
 
   propagatedBuildInputs = [ ldap django ]; 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Django authentication backend that authenticates against an LDAP service";
-    homepage = https://github.com/django-auth-ldap/django-auth-ldap;
+    homepage = "https://github.com/django-auth-ldap/django-auth-ldap";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mmai ];
     platforms = platforms.linux;

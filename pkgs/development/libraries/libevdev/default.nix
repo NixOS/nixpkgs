@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "17pb5375njb1r05xmk0r57a2j986ihglh2n5nqcylbag4rj8mqg7";
   };
 
-  buildInputs = [ python3 ];
+  nativeBuildInputs = [ python3 ];
 
   meta = with stdenv.lib; {
     description = "Wrapper library for evdev devices";

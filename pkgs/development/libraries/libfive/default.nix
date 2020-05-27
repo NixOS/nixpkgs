@@ -1,30 +1,41 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, eigen,
-zlib, libpng, boost, qt5, guile
+{ lib
+, mkDerivation
+, wrapQtAppsHook
+, fetchFromGitHub
+, cmake
+, ninja
+, pkgconfig
+, eigen
+, zlib
+, libpng
+, boost
+, guile
 }:
 
-stdenv.mkDerivation {
-  pname = "libfive";
-  version = "2018-07-01";
+mkDerivation {
+  pname = "libfive-unstable";
+  version = "2020-02-15";
 
   src = fetchFromGitHub {
-    owner  = "libfive";
-    repo   = "libfive";
-    rev    = "0f517dde9521d751310a22f85ee69b2c84690267";
-    sha256 = "0bfxysf5f4ripgcv546il8wnw5p0d4s75kdjlwvj32549537hlz0";
+    owner = "libfive";
+    repo = "libfive";
+    rev = "5b7717a25064478cd6bdb190683566eaf4c7afdd";
+    sha256 = "102zw2n3vzv84i323is4qrwwqqha8v1cniw54ss8f4bq6dmic0bg";
   };
-  nativeBuildInputs = [ cmake ninja pkgconfig ];
-  buildInputs = [ eigen zlib libpng boost qt5.qtimageformats guile ];
+
+  nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkgconfig ];
+  buildInputs = [ eigen zlib libpng boost guile ];
 
   # Link "Studio" binary to "libfive-studio" to be more obvious:
   postFixup = ''
     ln -s "$out/bin/Studio" "$out/bin/libfive-studio"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";
-    homepage = https://libfive.com/;
-    maintainers = with maintainers; [ hodapp ];
-    license = licenses.lgpl2;
-    platforms = platforms.linux;
+    homepage = "https://libfive.com/";
+    maintainers = with maintainers; [ hodapp kovirobi ];
+    license = with licenses; [ mpl20 gpl2Plus ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

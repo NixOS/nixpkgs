@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/pypa/setuptools_scm/;
+    homepage = "https://bitbucket.org/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

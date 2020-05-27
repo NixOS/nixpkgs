@@ -29,7 +29,7 @@ buildPythonApplication rec {
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
       substituteInPlace "$file" \
-        --replace /bin/systemctl "/run/current-system/sw/bin/systemctl" \
+        --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl" \
         --replace /bin/bash "${bashInteractive}/bin/bash" \
         --replace /sbin/hwclock "${utillinux}/bin/hwclock"
       # SELinux tool ???  /sbin/restorecon

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       bitstream format. Kate is a karaoke and text codec meant for encapsulation
       in an Ogg container. It can carry Unicode text, images, and animate
       them.'';
-    homepage = https://code.google.com/archive/p/libkate/;
+    homepage = "https://code.google.com/archive/p/libkate/";
     platforms = platforms.unix;
     license = licenses.bsd3;
   };

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://software.cedar-solutions.com/utilities.html;
+    homepage = "http://software.cedar-solutions.com/utilities.html";
     description = "Print large banners to ASCII terminals";
     license = licenses.gpl2;
 

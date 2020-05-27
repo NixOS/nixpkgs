@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Executes commands in response to file modifications";
-    homepage = https://github.com/watchexec/watchexec;
+    homepage = "https://github.com/watchexec/watchexec";
     license = with licenses; [ asl20 ];
     maintainers = [ maintainers.michalrus ];
     platforms = platforms.linux ++ platforms.darwin;

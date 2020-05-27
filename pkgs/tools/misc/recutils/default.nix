@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
          number of named fields.
       '';
 
-    homepage = https://www.gnu.org/software/recutils/;
+    homepage = "https://www.gnu.org/software/recutils/";
 
     license = stdenv.lib.licenses.gpl3Plus;
 

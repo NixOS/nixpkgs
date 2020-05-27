@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
-    homepage = https://github.com/jfinkhaeuser/prance;
+    homepage = "https://github.com/jfinkhaeuser/prance";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

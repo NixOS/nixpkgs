@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "hg-evolve";
-  version = "9.2.2";
+  version = "9.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08bjrgxv8zrrz5xxydzkjl4a8cw3g62nmzfnvdzxxcrf1c96qw76";
+    sha256 = "0d3gd8k0p6n2flcf7kny1zjvrbbrwbbq4lq82ah6gvnbvllxm4hj";
   };
 
   doCheck = false;

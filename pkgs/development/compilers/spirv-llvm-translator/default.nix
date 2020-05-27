@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/KhronosGroup/SPIRV-LLVM-Translator;
+    homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
     license     = licenses.ncsa;
     platforms   = platforms.all;

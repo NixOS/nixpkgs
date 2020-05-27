@@ -4,7 +4,7 @@ assert mountPath != "";
 
 let
   version = "0.5";
-  git = https://github.com/LemonBoy/ldm.git;
+  git = "https://github.com/LemonBoy/ldm.git";
 in
 stdenv.mkDerivation rec {
   pname = "ldm";
@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.the-kenny ];
     repositories.git = git;
   };
 }

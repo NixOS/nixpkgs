@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ Babel ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/wtforms/wtforms;
+    homepage = "https://github.com/wtforms/wtforms";
     description = "A flexible forms validation and rendering library for Python";
     license = licenses.bsd3;
   };

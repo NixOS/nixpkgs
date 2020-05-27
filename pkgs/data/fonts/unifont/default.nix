@@ -4,16 +4,16 @@
 
 stdenv.mkDerivation rec {
   pname = "unifont";
-  version = "12.1.03";
+  version = "13.0.01";
 
   ttf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.ttf";
-    sha256 = "10igjlf05d97h3vcggr2ahxmq9ljby4ypja2g4s9bvxs2w1si51p";
+    sha256 = "0y5bd7i5hp9ks6d3qq0bshywba7g90i3074wckpn9m8shh98ngcg";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.pcf.gz";
-    sha256 = "1cd1fnk3m7giqp099kynnjj4m7q00lqm4ybqb1vzd2wi3j4a1awf";
+    sha256 = "05zgz00n514cijqh9qcvr4iz0bla4hd028cvi1jlh0ic6fkafix8";
   };
 
   nativeBuildInputs = [ libfaketime fonttosfnt mkfontscale ];
@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Unicode font for Base Multilingual Plane";
-    homepage = http://unifoundry.com/unifont.html;
+    homepage = "http://unifoundry.com/unifont.html";
 
     # Basically GPL2+ with font exception.
-    license = http://unifoundry.com/LICENSE.txt;
+    license = "http://unifoundry.com/LICENSE.txt";
     maintainers = [ maintainers.rycee maintainers.vrthra ];
     platforms = platforms.all;
   };

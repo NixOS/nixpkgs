@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
-    homepage = http://www.gupnp.org/;
+    homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
   };

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An alerting dashboard for Graphite";
-    homepage = https://github.com/scobal/seyren;
+    homepage = "https://github.com/scobal/seyren";
     license = licenses.asl20;
     maintainers = [ maintainers.offline ];
     platforms = platforms.all;

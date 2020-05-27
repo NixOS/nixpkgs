@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       generous spacing, large punctuation, and easily distinguishable
       characters — but without the limitations of a fixed width.
     '';
-    homepage = https://input.fontbureau.com;
+    homepage = "https://input.fontbureau.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ romildo ];
     platforms = platforms.all;

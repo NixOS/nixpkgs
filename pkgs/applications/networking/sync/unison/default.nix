@@ -1,5 +1,7 @@
-{stdenv, fetchFromGitHub, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper, ncurses
+{stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses, gnugrep
 , enableX11 ? true}:
+
+let inherit (ocamlPackages) ocaml lablgtk; in
 
 stdenv.mkDerivation (rec {
 
@@ -25,19 +27,25 @@ stdenv.mkDerivation (rec {
     "UISTYLE=${if enableX11 then "gtk2" else "text"}"
   ] ++ stdenv.lib.optional (!ocaml.nativeCompilers) "NATIVE=false";
 
+  patches = [
+    # NOTE: Only needed until Unison 2.51.3 is released!
+    ./4.08-compatibility.patch
+    ./lablgtk.patch
+  ];
+
   preInstall = "mkdir -p $out/bin";
 
   postInstall = if enableX11 then ''
     for i in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$i \
-        --run "[ -n \"\$DISPLAY\" ] && (${xset}/bin/xset q | grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\")"
+        --run "[ -n \"\$DISPLAY\" ] && (${xset}/bin/xset q | ${gnugrep}/bin/grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\")"
     done
   '' else "";
 
   dontStrip = !ocaml.nativeCompilers;
 
   meta = {
-    homepage = https://www.cis.upenn.edu/~bcpierce/unison/;
+    homepage = "https://www.cis.upenn.edu/~bcpierce/unison/";
     description = "Bidirectional file synchronizer";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];

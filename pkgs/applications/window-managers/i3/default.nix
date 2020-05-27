@@ -1,18 +1,18 @@
-{ fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
+{ fetchurl, stdenv, which, pkgconfig, makeWrapper, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
 , xorgserver, xvfb_run }:
 
 stdenv.mkDerivation rec {
   pname = "i3";
-  version = "4.18";
+  version = "4.18.1";
 
   src = fetchurl {
     url = "https://i3wm.org/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "0dv5g8ycfmijxfjyw8hzsxaf80v09lb73zh7x2vszy78h3amifqz";
+    sha256 = "0z709cianlzw0x0qwq4361347354xd9ckj1v7vjvhb1zh3x91gws";
   };
 
-  nativeBuildInputs = [ which pkgconfig makeWrapper ];
+  nativeBuildInputs = [ which pkgconfig makeWrapper installShellFiles ];
 
   buildInputs = [
     libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       sed -i 's/which/command -v/' $program
     done
 
-    install -vD -t $out/share/man/man1 man/*.{1,man}
+    installManPage man/*.1
   '';
 
   separateDebugInfo = true;

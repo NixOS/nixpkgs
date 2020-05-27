@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
 
   patches =
     [ (fetchpatch {
-        url = https://github.com/linux-test-project/lcov/commit/ebfeb3e179e450c69c3532f98cd5ea1fbf6ccba7.patch;
+        url = "https://github.com/linux-test-project/lcov/commit/ebfeb3e179e450c69c3532f98cd5ea1fbf6ccba7.patch";
         sha256 = "0dalkqbjb6a4vp1lcsxd39dpn5fzdf7ihsjbiviq285s15nxdj1j";
       })
       (fetchpatch {
-        url = https://github.com/linux-test-project/lcov/commit/75fbae1cfc5027f818a0bb865bf6f96fab3202da.patch;
+        url = "https://github.com/linux-test-project/lcov/commit/75fbae1cfc5027f818a0bb865bf6f96fab3202da.patch";
         sha256 = "0v1hn0511dxqbf50ppwasc6vmg0m6rns7ydbdy2rdbn0j7gxw30x";
       })
     ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
          HTML output.
       '';
 
-    homepage = http://ltp.sourceforge.net/coverage/lcov.php;
+    homepage = "http://ltp.sourceforge.net/coverage/lcov.php";
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = with maintainers; [ dezgeg ];

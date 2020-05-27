@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   pname = "patchage";
   version = "1.0.1";
   src = fetchsvn {
-    url = http://svn.drobilla.net/lad/trunk/patchage/;
+    url = "http://svn.drobilla.net/lad/trunk/patchage/";
     rev = "5821";
     sha256 = "1ar64l0sg468qzxj7i6ppgfqjpm92awcp5lzskamrf3ln17lrgj7";
   };
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Modular patch bay for Jack and ALSA systems";
-    homepage = http://non.tuxfamily.org;
+    homepage = "http://non.tuxfamily.org";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nico202 ];

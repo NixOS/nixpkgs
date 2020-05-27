@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Fake file system that mocks the Python file system modules";
     license     = licenses.asl20;
-    homepage    = http://pyfakefs.org/;
+    homepage    = "http://pyfakefs.org/";
     maintainers = with maintainers; [ gebner ];
   };
 }

@@ -56,6 +56,9 @@ let
     # back-compat aliases
     platforms = systems.doubles;
 
+    # linux kernel configuration
+    kernel = callLibs ./kernel.nix;
+
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isString length
@@ -138,7 +141,7 @@ let
       mergeAttrsWithFunc mergeAttrsConcatenateValues
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
       mergeAttrsByFuncDefaultsClean mergeAttrBy
-      fakeSha256 fakeSha512
+      fakeHash fakeSha256 fakeSha512
       nixType imap;
     inherit (versions)
       splitVersion;

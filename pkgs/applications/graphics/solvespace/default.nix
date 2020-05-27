@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "solvespace-2.3-20190501";
   rev = "e7b75f19c34c923780db776592b47152650d8f22";
   src = fetchgit {
-    url = https://github.com/solvespace/solvespace;
+    url = "https://github.com/solvespace/solvespace";
     inherit rev;
     sha256 = "07k4mbzxf0dmzwdhjx5nc09y7rn1schkaypsw9kz0l7ppylprpp2";
     fetchSubmodules = true;
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.edef ];
     platforms = platforms.linux;
-    homepage = http://solvespace.com;
+    homepage = "http://solvespace.com";
   };
 }

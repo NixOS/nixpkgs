@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "VCD/Waveform viewer for Unix and Win32";
-    homepage    = http://gtkwave.sourceforge.net;
+    homepage    = "http://gtkwave.sourceforge.net";
     license     = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
     platforms   = stdenv.lib.platforms.linux;

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "gl_cv_func_getopt_gnu=yes";
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/diffutils/diffutils.html;
+    homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
     license = licenses.gpl3;
     platforms = platforms.unix;

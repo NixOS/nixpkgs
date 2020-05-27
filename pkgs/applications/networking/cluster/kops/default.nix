@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
 
 let
   goPackagePath = "k8s.io/kops";
@@ -18,8 +18,8 @@ let
           inherit sha256;
         };
 
-        buildInputs = [go-bindata];
-        subPackages = ["cmd/kops"];
+        nativeBuildInputs = [ go-bindata installShellFiles ];
+        subPackages = [ "cmd/kops" ];
 
         buildFlagsArray = ''
           -ldflags=
@@ -33,17 +33,17 @@ let
         '';
 
         postInstall = ''
-          mkdir -p $bin/share/bash-completion/completions
-          mkdir -p $bin/share/zsh/site-functions
-          $bin/bin/kops completion bash > $bin/share/bash-completion/completions/kops
-          $bin/bin/kops completion zsh > $bin/share/zsh/site-functions/_kops
+          for shell in bash zsh; do
+            $out/bin/kops completion $shell > kops.$shell
+            installShellCompletion kops.$shell
+          done
         '';
 
         meta = with stdenv.lib; {
           description = "Easiest way to get a production Kubernetes up and running";
-          homepage = https://github.com/kubernetes/kops;
+          homepage = "https://github.com/kubernetes/kops";
           license = licenses.asl20;
-          maintainers = with maintainers; [offline zimbatm kampka];
+          maintainers = with maintainers; [ offline zimbatm kampka ];
           platforms = platforms.unix;
         };
       } // attrs';
@@ -51,23 +51,13 @@ in rec {
 
   mkKops = generic;
 
-  kops_1_12 = mkKops {
-    version = "1.12.3";
-    sha256 = "0rpbaz54l5v1z7ab5kpxcb4jyakkl5ysgz1sxajqmw2d6dvf7xly";
-  };
-
-  kops_1_13 = mkKops {
-    version = "1.13.2";
-    sha256 = "0lkkg34vn020r62ga8vg5d3a8jwvq00xlv3p1s01nkz33f6salng";
-  };
-  
-  kops_1_14 = mkKops {
-    version = "1.14.1";
-    sha256 = "0ikd8qwrjh8s1sc95g18sm0q6p33swz2m1rjd8zw34mb2w9jv76n";
-  };
-
   kops_1_15 = mkKops {
-    version = "1.15.2";
-    sha256 = "1sjfd7pfi81ccq1dkgkh9xx6y94bqzlp727pvyf7l01x3d14z2b3";
+    version = "1.15.3";
+    sha256 = "0pzgrsl61nw8pm3s032lj020fw13x3fpzlj7lknsnd581f0gg4df";
+  };
+
+  kops_1_16 = mkKops {
+    version = "1.16.2";
+    sha256 = "1vhkjhx1n3f6ggw5cy1avs3sbqb2da6khck9zqd4s7almjbpc2h2";
   };
 }

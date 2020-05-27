@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The Next Generation Spice (Electronic Circuit Simulator)";
-    homepage = http://ngspice.sourceforge.net;
+    homepage = "http://ngspice.sourceforge.net";
     license = with licenses; [ bsd3 gpl2Plus lgpl2Plus ]; # See https://sourceforge.net/p/ngspice/ngspice/ci/master/tree/COPYING
     maintainers = with maintainers; [ bgamari ];
     platforms = platforms.linux;

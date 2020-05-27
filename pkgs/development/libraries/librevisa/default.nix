@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       We currently support targets connected via USB, exposing the USBTMC
       interface, and VXI-11 devices.
     '';
-    homepage = http://www.librevisa.org/;
+    homepage = "http://www.librevisa.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];

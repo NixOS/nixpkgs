@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       structure is tuned for fast reading.
       '';
 
-    homepage = https://www.corpit.ru/mjt/tinycdb.html;
+    homepage = "https://www.corpit.ru/mjt/tinycdb.html";
     license = licenses.publicDomain;
     platforms = platforms.linux;
   };

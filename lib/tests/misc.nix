@@ -3,6 +3,23 @@
 # if the resulting list is empty, all tests passed
 with import ../default.nix;
 
+let
+
+  testSanitizeDerivationName = { name, expected }:
+  let
+    drv = derivation {
+      name = strings.sanitizeDerivationName name;
+      builder = "x";
+      system = "x";
+    };
+  in {
+    # Evaluate the derivation so an invalid name would be caught
+    expr = builtins.seq drv.drvPath drv.name;
+    inherit expected;
+  };
+
+in
+
 runTests {
 
 
@@ -489,5 +506,30 @@ runTests {
     };
 
     expected = "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+  };
+
+  testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
+    name = "..foo";
+    expected = "foo";
+  };
+
+  testSanitizeDerivationNameAscii = testSanitizeDerivationName {
+    name = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    expected = "-+--.-0123456789-=-?-ABCDEFGHIJKLMNOPQRSTUVWXYZ-_-abcdefghijklmnopqrstuvwxyz-";
+  };
+
+  testSanitizeDerivationNameTooLong = testSanitizeDerivationName {
+    name = "This string is loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong";
+    expected = "loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong";
+  };
+
+  testSanitizeDerivationNameTooLongWithInvalid = testSanitizeDerivationName {
+    name = "Hello there aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa &&&&&&&&";
+    expected = "there-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-";
+  };
+
+  testSanitizeDerivationNameEmpty = testSanitizeDerivationName {
+    name = "";
+    expected = "unknown";
   };
 }

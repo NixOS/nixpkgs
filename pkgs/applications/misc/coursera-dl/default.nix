@@ -38,7 +38,7 @@ in pythonPackages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "CLI for downloading Coursera.org videos and naming them";
-    homepage = https://github.com/coursera-dl/coursera-dl;
+    homepage = "https://github.com/coursera-dl/coursera-dl";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ alexfmpe ];
     platforms = platforms.darwin ++ platforms.linux;

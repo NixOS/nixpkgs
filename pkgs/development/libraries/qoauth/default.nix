@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "qoauth-2.0.0";
 
   src = fetchurl {
-    url = https://github.com/ayoy/qoauth/archive/v2.0.0.tar.gz;
+    url = "https://github.com/ayoy/qoauth/archive/v2.0.0.tar.gz";
     name = "qoauth-2.0.0.tar.gz";
     sha256 = "a28005986410d333e03d077679cdf6c504ec5a33342867dc0f9fb0b74285e333";
   };

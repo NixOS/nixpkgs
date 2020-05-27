@@ -38,6 +38,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   ###### interface
 
   options = {
@@ -89,16 +93,17 @@ in
       };
 
       wayland = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Allow GDM to run on Wayland instead of Xserver.
           Note to enable Wayland with Nvidia you need to
           enable the <option>nvidiaWayland</option>.
         '';
-        type = types.bool;
       };
 
       nvidiaWayland = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to allow wayland to be used with the proprietary
@@ -184,6 +189,9 @@ in
       "systemd-machined.service"
       # setSessionScript wants AccountsService
       "accounts-daemon.service"
+      # Failed to open gpu '/dev/dri/card0': GDBus.Error:org.freedesktop.DBus.Error.AccessDenied: Operation not permitted
+      # https://github.com/NixOS/nixpkgs/pull/25311#issuecomment-609417621
+      "systemd-udev-settle.service"
     ];
 
     systemd.services.display-manager.after = [
@@ -193,6 +201,7 @@ in
       "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
       "plymouth-start.service"
+      "systemd-udev-settle.service"
     ];
     systemd.services.display-manager.conflicts = [
        "getty@tty${gdm.initialVT}.service"

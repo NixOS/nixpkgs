@@ -17,13 +17,13 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   postFixup = ''
-    wrapProgram $bin/bin/out-of-tree \
+    wrapProgram $out/bin/out-of-tree \
       --prefix PATH : "${stdenv.lib.makeBinPath [ qemu docker which ]}"
   '';
 
   meta = with stdenv.lib; {
     description = "kernel {module, exploit} development tool";
-    homepage = https://out-of-tree.io;
+    homepage = "https://out-of-tree.io";
     maintainers = [ maintainers.dump_stack ];
     license = licenses.agpl3Plus;
   };

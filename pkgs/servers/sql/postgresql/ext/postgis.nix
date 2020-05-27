@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Geographic Objects for PostgreSQL";
-    homepage = https://postgis.net/;
+    homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];

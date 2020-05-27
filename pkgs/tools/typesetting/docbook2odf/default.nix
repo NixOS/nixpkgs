@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       makes it easy to convert DocBook->ODF, ODT, ODS and ODP as all these
       documents are XML based.
     '';
-    homepage = http://open.comsultia.com/docbook2odf/;
+    homepage = "http://open.comsultia.com/docbook2odf/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

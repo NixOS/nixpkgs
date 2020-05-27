@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 # configureFlags = optional static "--enable-static --disable-shared";
 
   meta = {
-    homepage = http://www.libpgf.org/;
+    homepage = "https://www.libpgf.org/";
     description = "Progressive Graphics Format";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.unix;

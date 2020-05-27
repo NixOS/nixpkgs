@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
             computations and frustum culling classes, and spatial data structures'';
 
     license     = licenses.bsd2;
-    homepage    = https://github.com/VMML/vmmlib/;
+    homepage    = "https://github.com/VMML/vmmlib/";
     maintainers = [ maintainers.adev ];
     platforms   = platforms.all;
   };

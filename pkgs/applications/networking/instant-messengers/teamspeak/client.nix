@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
-, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, xkeyboard_config, alsaLib
-, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
+, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, qtwebsockets, xkeyboard_config
+, alsaLib, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
 }:
 
 let
@@ -13,7 +13,7 @@ let
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
       xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase qtwebengine qtwebchannel qtsvg
-      libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
+      qtwebsockets libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
     ];
 
   desktopItem = makeDesktopItem {
@@ -33,13 +33,13 @@ in
 stdenv.mkDerivation rec {
   pname = "teamspeak-client";
 
-  version = "3.3.2";
+  version = "3.5.3";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
     sha256 = if stdenv.is64bit
-                then "1n916ds67dxj5bfgc5zm9nz2xh2914k85pzzspzvfyr7njcw7hpi"
-                else "0csl5xklcb4v8bzwvby5m2n38zjrnaw8dcvha7qvfbjllxr75yn2";
+                then "0fp9v2rkxf0zgvf3wcx8nsmf93bzdc22xlqxk3r8cb0415adp76a"
+                else "0ni7hijprc8xygyz41568f1m9wwhl8lk5c3q28bm9m5r6qym39l6";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -101,10 +101,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The TeamSpeak voice communication tool";
-    homepage = https://teamspeak.com/;
+    homepage = "https://teamspeak.com/";
     license = {
       fullName = "Teamspeak client license";
-      url = http://sales.teamspeakusa.com/licensing.php;
+      url = "http://sales.teamspeakusa.com/licensing.php";
       free = false;
     };
     maintainers = [ stdenv.lib.maintainers.lhvwb ];

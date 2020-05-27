@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/libchamplain;
+    homepage = "https://wiki.gnome.org/Projects/libchamplain";
     license = licenses.lgpl2Plus;
 
     description = "C library providing a ClutterActor to display maps";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-     maintainers = gnome3.maintainers;
+     maintainers = teams.gnome.members;
      platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

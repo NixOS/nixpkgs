@@ -1,4 +1,4 @@
-{stdenv, gcc, glibc, fetchurl, fetchgit, libtool, autoconf, automake, file, gnumake, which, zsh, m4, pkgconfig, perl, gnome2, pango, sqlite, libxml2, zlib, gmp, smlnj }:
+{stdenv, gcc, glibc, fetchurl, fetchgit, libtool, autoconf, automake, file, gnumake, which, zsh, m4, pkg-config, perl, gnome2, gtk2, pango, sqlite, libxml2, zlib, gmp, smlnj }:
 
 stdenv.mkDerivation {
   name = "aliceml-1.4-7d44dc8e";
@@ -11,16 +11,16 @@ stdenv.mkDerivation {
   };
 
   gecodeSrc = fetchurl {
-    url = http://www.gecode.org/download/gecode-1.3.1.tar.gz;
+    url = "http://www.gecode.org/download/gecode-1.3.1.tar.gz";
     sha256 = "0mgc6llbq166jmlq3alvagqsg3730670zvbwwkdgsqklw70v9355";
   };
 
   buildInputs = [
     stdenv gcc glibc
     libtool gnumake autoconf automake
-    file which zsh m4 gnome2.gtk zlib gmp
+    file which zsh m4 gtk2 zlib gmp
     gnome2.libgnomecanvas pango sqlite
-    libxml2 pkgconfig perl smlnj
+    libxml2 pkg-config perl smlnj
   ];
 
   makePatch = ./make.patch;
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
       extended with rich support for concurrent, distributed, and constraint
       programming.
     '';
-    homepage = https://www.ps.uni-saarland.de/alice/;
+    homepage = "https://www.ps.uni-saarland.de/alice/";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.doublec ];
     broken = true;

@@ -1,19 +1,26 @@
-{ stdenv, fetchurl, zlib, libibmad }:
+{ stdenv, autoreconfHook, fetchFromGitHub, zlib, libibmad, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "mstflint-4.4.0-1.12.gd1edd58";
+  pname = "mstflint";
+  version = "4.14.0-1";
 
-  src = fetchurl {
-    url = "https://www.openfabrics.org/downloads/mstflint/${name}.tar.gz";
-    sha256 = "0kg33i5s5zdc7kigww62r0b824zfw06r757fl6jwrq7lj91j0380";
+  src = fetchFromGitHub {
+    owner = "Mellanox";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0xrwx623vl17cqzpacil74m2fi4xrshgvvzxiplz1wq47gq7wp1i";
   };
 
-  buildInputs = [ zlib libibmad ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ zlib libibmad openssl ];
+
+  hardeningDisable = [ "format" ];
+
+  dontDisableStatic = true;  # the build fails without this. should probably be reported upstream
 
   meta = with stdenv.lib; {
-    homepage = https://www.openfabrics.org/;
-    license = licenses.gpl2;
+    homepage = "https://github.com/Mellanox/mstflint";
+    license = with licenses; [ gpl2 bsd2 ];
     platforms = platforms.linux;
-    broken = true; # 2018-04-11
   };
 }

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   checkPhase = "pytest";
 
   meta = {
-    homepage = https://github.com/Knio/pynmea2;
+    homepage = "https://github.com/Knio/pynmea2";
     description = "Python library for the NMEA 0183 protcol";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ geistesk ];

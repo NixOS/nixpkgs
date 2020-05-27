@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''serapeum'';
-  version = ''20190710-git'';
+  version = ''20191227-git'';
 
   description = ''Utilities beyond Alexandria.'';
 
   deps = [ args."alexandria" args."bordeaux-threads" args."closer-mop" args."fare-quasiquote" args."fare-quasiquote-extras" args."fare-quasiquote-optima" args."fare-quasiquote-readtable" args."fare-utils" args."global-vars" args."introspect-environment" args."iterate" args."lisp-namespace" args."named-readtables" args."optima" args."parse-declarations-1_dot_0" args."parse-number" args."split-sequence" args."string-case" args."trivia" args."trivia_dot_balland2006" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_quasiquote" args."trivia_dot_trivial" args."trivial-cltl2" args."trivial-file-size" args."trivial-garbage" args."trivial-macroexpand-all" args."type-i" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/serapeum/2019-07-10/serapeum-20190710-git.tgz'';
-    sha256 = ''1yvpv8808q24r4fbi2apks12b94az41if2ny1i1ddv9h00vzvpy5'';
+    url = ''http://beta.quicklisp.org/archive/serapeum/2019-12-27/serapeum-20191227-git.tgz'';
+    sha256 = ''1d1yyzj1m0fqlr6dvq7njmkl1zdkj00jbd09l281971qwhfhmarr'';
   };
 
   packageName = "serapeum";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM serapeum DESCRIPTION Utilities beyond Alexandria. SHA256
-    1yvpv8808q24r4fbi2apks12b94az41if2ny1i1ddv9h00vzvpy5 URL
-    http://beta.quicklisp.org/archive/serapeum/2019-07-10/serapeum-20190710-git.tgz
-    MD5 60e2073fccc750d5b56a7e0814756e1c NAME serapeum FILENAME serapeum DEPS
+    1d1yyzj1m0fqlr6dvq7njmkl1zdkj00jbd09l281971qwhfhmarr URL
+    http://beta.quicklisp.org/archive/serapeum/2019-12-27/serapeum-20191227-git.tgz
+    MD5 dabf40eb6c6af7509da66450790cbf4e NAME serapeum FILENAME serapeum DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME closer-mop FILENAME closer-mop)
@@ -58,4 +58,4 @@ rec {
      string-case trivia trivia.balland2006 trivia.level0 trivia.level1
      trivia.level2 trivia.quasiquote trivia.trivial trivial-cltl2
      trivial-file-size trivial-garbage trivial-macroexpand-all type-i uiop)
-    VERSION 20190710-git SIBLINGS NIL PARASITES NIL) */
+    VERSION 20191227-git SIBLINGS NIL PARASITES NIL) */

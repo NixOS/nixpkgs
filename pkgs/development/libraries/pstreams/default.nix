@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "1.0.1";
 
   src = fetchgit {
-    url = https://git.code.sf.net/p/pstreams/code;
+    url = "https://git.code.sf.net/p/pstreams/code";
     rev = let dot2Underscore = stdenv.lib.strings.stringAsChars (c: if c == "." then "_" else c);
           in "RELEASE_${dot2Underscore version}";
     sha256 = "0r8aj0nh5mkf8cvnzl8bdy4nm7i74vs83axxfimcd74kjfn0irys";
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
       POSIX.2 functions popen(3) and pclose(3), using C++ iostreams instead of
       C's stdio library.
     '';
-    homepage = http://pstreams.sourceforge.net/;
-    downloadPage = http://pstreams.sourceforge.net/download/;
+    homepage = "http://pstreams.sourceforge.net/";
+    downloadPage = "http://pstreams.sourceforge.net/download/";
     maintainers = with maintainers; [ arthur ];
     license = licenses.boost;
     platforms = platforms.all;

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for the NVIDIA Management Library";
-    homepage = https://www.nvidia.com;
+    homepage = "https://www.nvidia.com";
     license = licenses.bsd3;
     maintainers = [ maintainers.bcdarwin ];
   };

@@ -44,7 +44,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Video Editor";
-    homepage = http://www.cinelerra.org;
+    homepage = "http://www.cinelerra.org";
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     license = stdenv.lib.licenses.gpl2;
   };

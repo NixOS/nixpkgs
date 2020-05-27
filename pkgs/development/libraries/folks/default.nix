@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.13.2";
+  version = "0.14.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0wq14yjs7m3axziy679a854vc7r7fj1l38p9jnyapb21vswdcqq2";
+    sha256 = "1f9b52vmwnq7s51vj26w2618dn2ph5g12ibbkbyk6fvxcgd7iryn";
   };
 
   mesonFlags = [
@@ -106,9 +106,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library that aggregates people from multiple sources to create metacontacts";
-    homepage = https://wiki.gnome.org/Projects/Folks;
+    homepage = "https://wiki.gnome.org/Projects/Folks";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

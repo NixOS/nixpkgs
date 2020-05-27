@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, gtk-engine-murrine, deepin }:
+{ stdenv
+, fetchFromGitHub
+, gtk-engine-murrine
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-gtk-theme";
@@ -11,15 +15,19 @@ stdenv.mkDerivation rec {
     sha256 = "0zs6mq70yd1k3d9zm3q6zxnw1md56r4imad5imdxwx58yxdx47fw";
   };
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin GTK Theme";
-    homepage = https://github.com/linuxdeepin/deepin-gtk-theme;
+    homepage = "https://github.com/linuxdeepin/deepin-gtk-theme";
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

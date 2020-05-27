@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A new GNOME web browser";
-    homepage = https://wiki.gnome.org/Apps/Eolie;
+    homepage = "https://wiki.gnome.org/Apps/Eolie";
     license  = licenses.gpl3Plus;
     maintainers = with maintainers; [ samdroid-apps worldofpeace ];
     platforms = platforms.linux;

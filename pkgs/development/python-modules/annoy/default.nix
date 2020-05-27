@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Approximate Nearest Neighbors in C++/Python optimized for memory usage and loading/saving to disk";
-    homepage = https://github.com/spotify/annoy;
+    homepage = "https://github.com/spotify/annoy";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
   };

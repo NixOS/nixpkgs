@@ -1,14 +1,14 @@
-{ stdenv, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
+{ stdenv, mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "citra";
-  version = "2019-10-05";
+  version = "2020-03-21";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/citra-emu/citra";
-    rev = "35690e3ac7a340d941d3bf56080cf5aa6187c5c3";
-    sha256 = "11a4mdjabn3qrh0nn4pjl5fxs9nhf1k27wd486csfx88q2q9jvq8";
+    rev = "8722b970c52f2c0d8e82561477edb62a53ae9dbb";
+    sha256 = "0c1zn1f84h4f6n6p0aqz905yvv5qpdmkj2z58yla6bfgbzabfyrj";
   };
 
   enableParallelBuilding = true;

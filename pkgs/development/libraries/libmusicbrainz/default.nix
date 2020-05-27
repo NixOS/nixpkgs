@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://musicbrainz.org/doc/libmusicbrainz;
+    homepage = "http://musicbrainz.org/doc/libmusicbrainz";
     description = "MusicBrainz Client Library (3.x version)";
     longDescription = ''
       The libmusicbrainz (also known as mb_client or MusicBrainz Client

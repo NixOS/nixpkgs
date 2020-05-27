@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Services plugin for pytest testing framework";
-    homepage = https://github.com/pytest-dev/pytest-services;
+    homepage = "https://github.com/pytest-dev/pytest-services";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

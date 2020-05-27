@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.16.4";
+  version = "3.17.2";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "0b5c77lqzfk5l7mnnih5c78i36d3skbkw20jjnph79lx9l8qrk4v";
+    sha256 = "199srp8yfai51pcbpmfyc4s8vzrmh2dm91bp582hj2l29x634xzw";
   };
 
   patches = [
@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ lib.optional (useQt4 || withQt5) "--qt-gui"
+    # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
+      "CFLAGS=-D_FILE_OFFSET_BITS=64"
+      "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
+    ]
     ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
@@ -103,7 +108,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with lib; {
-    homepage = http://www.cmake.org/;
+    homepage = "http://www.cmake.org/";
     description = "Cross-Platform Makefile Generator";
     platforms = if useQt4 then qt4.meta.platforms else platforms.all;
     maintainers = with maintainers; [ ttuegel lnl7 ];

@@ -1,44 +1,45 @@
-{ stdenv, fetchFromGitHub, python3Packages, wrapGAppsHook
-, gst_all_1, glib-networking, gobject-introspection
-}:
+{ newScope, python }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "mopidy";
-  version = "3.0.1";
+# Create a custom scope so we are consistent in which python version is used
 
-  src = fetchFromGitHub {
-    owner = "mopidy";
-    repo = "mopidy";
-    rev = "v${version}";
-    sha256 = "0fpjprjw143ixak68iwxjpscdjgyb7rsr1cxj7fsdrw6hc83nq4z";
+let
+  callPackage = newScope self;
+
+  self = {
+
+    inherit python;
+    pythonPackages = python.pkgs;
+
+    mopidy = callPackage ./mopidy.nix { };
+
+    mopidy-gmusic = callPackage ./gmusic.nix { };
+
+    mopidy-local-images = callPackage ./local-images.nix { };
+
+    mopidy-local-sqlite = callPackage ./local-sqlite.nix { };
+
+    mopidy-spotify = callPackage ./spotify.nix { };
+
+    mopidy-moped = callPackage ./moped.nix { };
+
+    mopidy-mopify = callPackage ./mopify.nix { };
+
+    mopidy-mpd = callPackage ./mpd.nix { };
+
+    mopidy-mpris = callPackage ./mpris.nix { };
+
+    mopidy-somafm = callPackage ./somafm.nix { };
+
+    mopidy-spotify-tunigo = callPackage ./spotify-tunigo.nix { };
+
+    mopidy-youtube = callPackage ./youtube.nix { };
+
+    mopidy-soundcloud = callPackage ./soundcloud.nix { };
+
+    mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
+
+    mopidy-iris = callPackage ./iris.nix { };
+
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
-
-  buildInputs = with gst_all_1; [
-    gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    glib-networking gobject-introspection
-  ];
-
-  propagatedBuildInputs = with python3Packages; [
-    gst-python pygobject3 pykka tornado_4 requests setuptools
-  ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python;
-
-  # There are no tests
-  doCheck = false;
-
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://www.mopidy.com/;
-    description = ''
-      An extensible music server that plays music from local disk, Spotify,
-      SoundCloud, Google Play Music, and more
-    '';
-    license = licenses.asl20;
-    maintainers = [ maintainers.fpletz ];
-    hydraPlatforms = [];
-  };
-}
+in self

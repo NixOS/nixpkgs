@@ -3,11 +3,11 @@
 
 mkDerivation rec {
   pname = "latte-dock";
-  version = "0.9.9";
+  version = "0.9.11";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "01b2zr2x5hnadkvj687lwi3l6dwq3kdn5y9k4qf1bv0sa4vw6hn9";
+    sha256 = "0x7a93a7axsa0fzpbkkv1z722k9za4p51xcpzdpnh5ih1zij0csi";
     name = "${pname}-${version}.tar.xz";
   };
 

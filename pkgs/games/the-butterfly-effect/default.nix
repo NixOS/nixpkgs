@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, qt5, box2d, which, cmake, gettext }:
+{ stdenv, mkDerivation, fetchgit, qt5, box2d, which, cmake, gettext }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "tbe";
   version = "0.9.3.1";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A physics-based game vaguely similar to Incredible Machine";
-    homepage = http://the-butterfly-effect.org/;
+    homepage = "http://the-butterfly-effect.org/";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;

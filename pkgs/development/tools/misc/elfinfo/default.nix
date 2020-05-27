@@ -14,7 +14,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Small utility for showing information about ELF files";
-    homepage = https://elfinfo.roboticoverlords.org/;
+    homepage = "https://elfinfo.roboticoverlords.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };

@@ -131,6 +131,10 @@ let
 
 in {
 
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   ###### interface
 
   options = {
@@ -444,6 +448,13 @@ in {
     };
 
     systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+
+    # override unit as recommended by upstream - see https://github.com/NixOS/nixpkgs/issues/88089
+    # TODO: keep an eye on modem-manager releases as this will eventually be added to the upstream unit
+    systemd.services.ModemManager.serviceConfig.ExecStart = [
+      ""
+      "${pkgs.modemmanager}/sbin/ModemManager --filter-policy=STRICT"
+    ];
 
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];

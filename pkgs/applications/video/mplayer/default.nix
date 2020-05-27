@@ -58,7 +58,7 @@ let
 
   codecs_src =
     let
-      dir = http://www.mplayerhq.hu/MPlayer/releases/codecs/;
+      dir = "http://www.mplayerhq.hu/MPlayer/releases/codecs/";
       version = "20071007";
     in
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
@@ -217,7 +217,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A movie player that supports many video formats";
-    homepage = http://mplayerhq.hu;
+    homepage = "http://mplayerhq.hu";
     license = "GPL";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];

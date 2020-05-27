@@ -2,17 +2,19 @@
 
 buildGoModule rec {
   pname = "shfmt";
-  version = "3.0.2";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
     rev = "v${version}";
-    sha256 = "1q0gazh87y7sl5sl5m046a83d64aas9xnbg2d1d1h2vwcqdaccp2";
+    sha256 = "0zlk1jjk65jwd9cx0xarz4yg2r2h86kd5g00gcnsav6dp6rx3aw8";
   };
 
-  modSha256 = "1ll2cxhgf8hh19wzdykgc81c4yfcp8bzmfaif08nvvb63rhjdb5y";
+  vendorSha256 = "1jq2x4yxshsy4ahp7nrry8dc9cyjj46mljs447rq57sgix4ndpq8";
   subPackages = ["cmd/shfmt"];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   meta = with lib; {
     homepage = "https://github.com/mvdan/sh";

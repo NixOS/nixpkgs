@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Full GPL'd suite of Electronic Design Automation tools";
-    homepage = http://www.geda-project.org/;
+    homepage = "http://www.geda-project.org/";
     maintainers = with maintainers; [ pjones ];
     platforms = platforms.linux;
     license = licenses.gpl2;

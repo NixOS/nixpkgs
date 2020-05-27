@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   doCheck = false; # fails with "setlocale: LC_ALL: cannot change locale (en_US.UTF-8)"
 
   meta = with stdenv.lib; {
-    homepage = http://www.courier-mta.org/maildrop/;
+    homepage = "http://www.courier-mta.org/maildrop/";
     description = "Mail filter/mail delivery agent that is used by the Courier Mail Server";
     license = licenses.gpl3;
     platforms = platforms.linux;

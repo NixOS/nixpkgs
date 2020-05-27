@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.5";
+  version = "1.7";
 
   src = fetchgit {
-    url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
+    url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "09viyfv5j2rl6ly52b2xlc2zbmb6i22dv89jc6823bzdjjimkrg6";
+    sha256 = "1qi25qav1rv8gm5lbrip8ayq5vwynmyv2q4ar7bbmnjh6cglvyh2";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
+    homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21;
     platforms = platforms.linux;

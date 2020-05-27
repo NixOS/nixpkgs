@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An encrypted container manager for Linux using cryptsetup";
-    homepage = https://git.zx2c4.com/ctmg/about/;
+    homepage = "https://git.zx2c4.com/ctmg/about/";
     license = licenses.isc;
     maintainers = with maintainers; [ mrVanDalo ];
     platforms = platforms.linux;

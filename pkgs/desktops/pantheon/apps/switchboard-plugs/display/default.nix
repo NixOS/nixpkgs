@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0mr89kyq034wffzixqlq6lmhyc4jry3dcgxrk306dhks2myindqh";
+    sha256 = "1racp0mxiaix9afx25ryskdcyi335fz8yh8nwgdxbqbm6jpyq4zs";
   };
 
   passthru = {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Displays Plug";
-    homepage = https://github.com/elementary/switchboard-plug-display;
+    homepage = "https://github.com/elementary/switchboard-plug-display";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

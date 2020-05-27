@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib;{
-    homepage = https://bitbucket.org/thomaswaldmann/xstatic;
+    homepage = "https://bitbucket.org/thomaswaldmann/xstatic";
     description = "Base packaged static files for python";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];

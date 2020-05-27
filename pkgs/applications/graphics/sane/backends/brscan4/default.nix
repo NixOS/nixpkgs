@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb }:
+{ stdenv, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb-compat-0_1 }:
 
 let
   myPatchElf = file: with stdenv.lib; ''
@@ -30,13 +30,13 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ makeWrapper patchelf coreutils udevRules ];
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb-compat-0_1 ];
   dontBuild = true;
 
   patchPhase = ''
     ${myPatchElf "opt/brother/scanner/brscan4/brsaneconfig4"}
 
-    RPATH=${libusb.out}/lib
+    RPATH=${libusb-compat-0_1.out}/lib
     for a in usr/lib64/sane/*.so*; do
       if ! test -L $a; then
         patchelf --set-rpath $RPATH $a
@@ -86,7 +86,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother brscan4 sane backend driver";
-    homepage = http://www.brother.com;
+    homepage = "http://www.brother.com";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ jraygauthier ];

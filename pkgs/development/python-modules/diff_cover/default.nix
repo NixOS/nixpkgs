@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "diff_cover";
-  version = "2.6.0";
+  version = "2.6.1";
 
   preCheck = ''
     export LC_ALL=en_US.UTF-8;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bsxc9x3yx5dy2r3b3lzi97wz0ma3ncd14jr27n6lbqvl20w92mm";
+    sha256 = "0a6ylkfqr95awp6za0var0nysmnbgwn46np8cmi1bkldil2407lz";
   };
 
   propagatedBuildInputs = [ jinja2 jinja2_pluralize pygments six inflect ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Automatically find diff lines that need test coverage";
-    homepage = https://github.com/Bachmann1234/diff-cover;
+    homepage = "https://github.com/Bachmann1234/diff-cover";
     license = licenses.asl20;
     maintainers = with maintainers; [ dzabraev ];
   };

@@ -13,10 +13,10 @@ in fetchzip rec {
 
   meta = with lib; {
     description = "Unicode font for glyphs above the Unicode Basic Multilingual Plane";
-    homepage = http://unifoundry.com/unifont.html;
+    homepage = "http://unifoundry.com/unifont.html";
 
     # Basically GPL2+ with font exception.
-    license = http://unifoundry.com/LICENSE.txt;
+    license = "http://unifoundry.com/LICENSE.txt";
     maintainers = [ maintainers.mathnerd314 maintainers.vrthra ];
     platforms = platforms.all;
   };

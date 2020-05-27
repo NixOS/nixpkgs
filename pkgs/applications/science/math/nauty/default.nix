@@ -4,10 +4,10 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nauty";
-  version = "26r12";
+  version = "27r1";
   src = fetchurl {
     url = "http://pallini.di.uniroma1.it/nauty${version}.tar.gz";
-    sha256 = "1p4mxf8q5wm47nxyskxbqwa5p1vvkycv1zgswvnk9nsn6vff0al6";
+    sha256 = "1nym0p2djws8ylkpr0kgpxfa6fxdlh46cmvz0gn5vd02jzgs0aww";
   };
   outputs = [ "out" "dev" ];
   configureFlags = {
@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin timokau ];
     platforms = platforms.unix;
-    homepage = http://pallini.di.uniroma1.it/;
+    # I'm not sure if the filename will remain the same for future changelog or
+    # if it will track changes to minor releases. Lets see. Better than nothing
+    # in any case.
+    changelog = "http://pallini.di.uniroma1.it/changes24-27.txt";
+    homepage = "http://pallini.di.uniroma1.it/";
   };
 }

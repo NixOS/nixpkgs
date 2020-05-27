@@ -10,12 +10,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0f65sg6hhv6778fxwsz4hvarbm97dsb8jj0mg7a9qs273r35pqck";
   };
+  makeFlags = [
+    "SSLCAFILE=/etc/ssl/certs/ca-bundle.crt"
+    "PREFIX=$(out)"
+  ];
 
-  makeFlagsArray = "PREFIX=$(out)";
   propagatedBuildInputs = [ openssl pcre lua ];
 
   meta = {
-    homepage = https://github.com/lefcha/imapfilter;
+    homepage = "https://github.com/lefcha/imapfilter";
     description = "Mail filtering utility";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;

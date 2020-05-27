@@ -24,11 +24,15 @@ python3Packages.buildPythonApplication rec {
    "\${qtWrapperArgs[@]}"
   ];
 
+  postInstall = ''
+    install -m666 -Dt $out/share/applications krop.desktop
+  '';
+
   # Disable checks because of interference with older Qt versions // xcb
   doCheck = false;
 
   meta = {
-    homepage = http://arminstraub.com/software/krop;
+    homepage = "http://arminstraub.com/software/krop";
     description = "Graphical tool to crop the pages of PDF files";
     longDescription = ''
     Krop is a tool that allows you to optimise your PDF files, and remove

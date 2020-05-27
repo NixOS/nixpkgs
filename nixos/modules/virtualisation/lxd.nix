@@ -108,7 +108,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "@${cfg.package.bin}/bin/lxd lxd --group lxd";
+        ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";
         Type = "simple";
         KillMode = "process"; # when stopping, leave the containers alone
         LimitMEMLOCK = "infinity";

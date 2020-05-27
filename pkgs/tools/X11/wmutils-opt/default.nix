@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optional addons to wmutils";
-    homepage = https://github.com/wmutils/opt;
+    homepage = "https://github.com/wmutils/opt";
     license = licenses.isc;
     maintainers = with maintainers; [ vifino ];
     platforms = platforms.unix;
