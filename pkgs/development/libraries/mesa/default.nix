@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch
+{ stdenv, lib, fetchurl, fetchpatch, buildPackages
 , pkgconfig, intltool, ninja, meson
 , file, flex, bison, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
@@ -73,6 +73,12 @@ stdenv.mkDerivation {
       })
     ];
 
+  postPatch = ''
+    substituteInPlace meson.build --replace \
+      "find_program('pkg-config')" \
+      "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
+  '';
+
   outputs = [ "out" "dev" "drivers" "osmesa" ];
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
@@ -112,10 +118,14 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optional withValgrind valgrind-light;
 
+  depsBuildBuild = [ pkgconfig ];
+
   nativeBuildInputs = [
     pkgconfig meson ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
+  ] ++ lib.optionals (elem "wayland" eglPlatforms) [
+    wayland # For wayland-scanner during the build
   ];
 
   propagatedBuildInputs = with xorg; [
