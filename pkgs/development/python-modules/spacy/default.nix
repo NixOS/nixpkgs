@@ -53,6 +53,10 @@ buildPythonPackage rec {
   #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   # '';
 
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "thinc==7.4.0" "thinc>=7.4.0,<8"
+  '';
+
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = "https://github.com/explosion/spaCy";
