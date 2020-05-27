@@ -1,0 +1,11 @@
+--- a/src/top10.c
++++ b/src/top10.c
+@@ -845,7 +845,7 @@
+ 		curl_easy_setopt (curl, CURLOPT_WRITEDATA, fh);
+ 		curl_easy_setopt (curl, CURLOPT_SSL_VERIFYPEER, 0L);
+ 		fail = curl_easy_perform (curl);
+-		if (fail) g_message (curl_easy_strerror (fail));
++		if (fail) g_message ("%s", curl_easy_strerror (fail));
+ 		fclose (fh);
+ 	}
+ 	curl_easy_cleanup (curl);
