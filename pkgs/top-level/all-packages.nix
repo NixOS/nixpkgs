@@ -24495,6 +24495,16 @@ in
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+  bpp-core = callPackage ../development/libraries/science/biology/bpp-core { };
+
+  bpp-phyl = callPackage ../development/libraries/science/biology/bpp-phyl { };
+
+  bpp-popgen = callPackage ../development/libraries/science/biology/bpp-popgen { };
+
+  bpp-seq = callPackage ../development/libraries/science/biology/bpp-seq { };
+
+  bppsuite = callPackage ../applications/science/biology/bppsuite { };
+
   cd-hit = callPackage ../applications/science/biology/cd-hit { };
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
