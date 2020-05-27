@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${libdrm.dev}/include/libdrm/";
 
-  configurePhase = "meson build --prefix=$out";
-  buildPhase = "ninja -C build";
-  installPhase = "runHook preInstall && ninja -C build install && runHook postInstall";
+  dontUseCmakeConfigure = true;
+
+  mesonFlags = ["-Dembed-wlroots=disabled"];
 
   postInstall = ''
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
