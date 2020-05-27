@@ -1,9 +1,10 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , qmake
 , dtkcore
+, dtkgui
 , dtkwidget
 , qt5integration
 , deepin
@@ -11,27 +12,35 @@
 
 mkDerivation rec {
   pname = "deepin-shortcut-viewer";
-  version = "5.0.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "13vz8kjdqkrhgpvdgrvwn62vwzbyqp88hjm5m4rcqg3bh56709ma";
+    sha256 = "0wgfbpf90xgl78q526gdn6cpnrkkr6a2d0axgabnijs608i9wfpc";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
+    deepin.setupHook
   ];
 
   buildInputs = [
     dtkcore
+    dtkgui
     dtkwidget
     qt5integration
   ];
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    searchHardCodedPaths # debugging
+  '' ;
+
+  postFixup = ''
+    searchHardCodedPaths $out # debugging
+  '' ;
 
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
