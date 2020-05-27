@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/palp-${version}.tar.gz";
-    sha256 = "0pv3rmgk8xc8z98w173f1jxc1cd67cdl8mjjgmgp3mcvifcfsrjl";
+    sha256 = "00jpm73fw9jjq58z6rysr1mwv489j6rpfqqlhm9ab0dln4kyhh05";
   };
 
   hardeningDisable = [
