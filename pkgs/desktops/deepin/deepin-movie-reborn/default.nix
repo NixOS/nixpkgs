@@ -3,46 +3,52 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, pkgconfig
+, pkg-config
 , qttools
 , qtx11extras
-, dtkcore
 , dtkwidget
+, qt5integration
+, glib
 , ffmpeg_3
 , ffmpegthumbnailer
+, gsettings-qt
 , mpv
 , pulseaudio
 , libdvdnav
 , libdvdread
 , xorg
 , deepin
+, wrapGAppsHook
 }:
 
 mkDerivation rec {
   pname = "deepin-movie-reborn";
-  version = "5.0.0";
+  version = "5.7.6.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0cly8q0514a58s3h3wsvx9yxar7flz6i2q8xkrkfjias22b3z7b0";
+    sha256 = "1780hazkgz4imiy3d8pl22laasvys46rddh7ijzwsvi8b5dx02wm";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     qttools
+    glib
+    wrapGAppsHook
     deepin.setupHook
   ];
 
   buildInputs = [
-    dtkcore
     dtkwidget
+    qt5integration
     ffmpeg_3
     ffmpegthumbnailer
+    gsettings-qt
     libdvdnav
     libdvdread
     mpv
@@ -54,23 +60,35 @@ mkDerivation rec {
     xorg.xcbproto
   ];
 
-  patches = [
-    # fix: build failed if cannot find dtk-settings tool
-    (fetchpatch {
-      url = "https://github.com/linuxdeepin/deepin-movie-reborn/commit/fbb307b.patch";
-      sha256 = "0915za0khki0729rvcfpxkh6vxhqwc47cgcmjc90kfq1004221vx";
-    })
-  ];
-
   NIX_LDFLAGS = "-ldvdnav";
 
   postPatch = ''
     searchHardCodedPaths  # debugging
 
-    sed -i src/libdmr/libdmr.pc.in -e "s,/usr,$out," -e 's,libdir=''${prefix}/,libdir=,'
+    substituteInPlace src/libdmr/libdmr.pc.in \
+      --replace /usr $out \
+      --replace 'libdir=''${prefix}/' 'libdir='
+
+    substituteInPlace src/CMakeLists.txt \
+      --replace /usr $out
 
     substituteInPlace src/deepin-movie.desktop \
       --replace "Exec=deepin-movie" "Exec=$out/bin/deepin-movie"
+  '';
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
+  postFixup = ''
+    searchHardCodedPaths $out  # debugging
+    searchHardCodedPaths $dev  # debugging
   '';
 
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
