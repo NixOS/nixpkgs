@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-qt-dbus-factory";
-  version = "5.0.1";
+  version = "5.1.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1wbh4jgvy3c09ivy0vvfk0azkg4d2sv37y23c9rq49jb3sakcjgm";
+    sha256 = "1bfl8dhm5ms93kxlfdvn08ax8h7ab64z8hsdfdrn86mwhlkvm1lq";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
       libdframeworkdbus/DFrameworkdbusConfig.in \
       libdframeworkdbus/libdframeworkdbus.pro
   '';
+
+  qmakeFlags = [
+    "QMAKE_PKGCONFIG_PREFIX=${placeholder "out"}"
+  ];
 
   enableParallelBuilding = true;
 
