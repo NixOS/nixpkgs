@@ -46,6 +46,7 @@ let
     disomaster = callPackage ./disomaster { };
     dpa-ext-gnomekeyring = callPackage ./dpa-ext-gnomekeyring { };
     dtkcore = callPackage ./dtkcore { };
+    dtkgui = callPackage ./dtkgui { };
     dtkwidget = callPackage ./dtkwidget { };
     dtkwm = callPackage ./dtkwm { };
     gio-qt = callPackage ./gio-qt { };
