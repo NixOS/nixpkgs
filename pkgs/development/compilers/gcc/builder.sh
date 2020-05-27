@@ -241,7 +241,7 @@ postInstall() {
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
 
-    if type "patchelf"; then
+    if [ -n "${dontPatchELF}" ] && type "patchelf"; then
         # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
         for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
             PREV_RPATH=`patchelf --print-rpath "$i"`

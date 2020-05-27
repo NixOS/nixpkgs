@@ -144,6 +144,10 @@ stdenv.mkDerivation ({
   inherit noSysDirs staticCompiler crossStageStatic
     libcCross crossMingw;
 
+  # If GDB has been built as a static executable, running patchelf produces an
+  # error "cannot find section .dynamic".
+  dontPatchELF = staticCompiler;
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl);
