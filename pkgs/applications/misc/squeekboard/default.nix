@@ -32,6 +32,15 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1nrihpffr91p3ipif5k5z9vcvkwxk6qy8hp93w13s7gnwl2g93hx";
   };
 
+  patches = [
+    ./desktop-in.patch
+    # This patch removes the unused dependency 'libcroco' the from meson.build
+    ( fetchpatch {
+      url = "https://source.puri.sm/Librem5/squeekboard/commit/f473a47eb8f394ab6f36704850e7e2bfa74ce8a1.patch";
+      sha256 = "0mlp8c38s4mbza8czf4kdg86kvqw294nbpqfk9apbl92nq0a26zr";
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -55,18 +64,11 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  patches = [
-    ./desktop-in.patch
-    # This patch removes the unused dependency 'libcroco' the from meson.build
-    ( fetchpatch {
-      url = "https://source.puri.sm/Librem5/squeekboard/commit/f473a47eb8f394ab6f36704850e7e2bfa74ce8a1.patch";
-      sha256 = "0mlp8c38s4mbza8czf4kdg86kvqw294nbpqfk9apbl92nq0a26zr";
-    })
-  ];
-
   cargoSha256 = "1fkhj4i2l2hdk9wvld6ryvnm1mxfwx3s555r7n42pg9f5namn1sr";
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
+  mesonFlags = [ "-Ddepdatadir=${placeholder "out"}/usr/share" ];
 
   # Don't use buildRustPackage phases, only use it for rust deps setup
   configurePhase = null;
@@ -78,8 +80,6 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace "$out/share/applications/sm.puri.Squeekboard.desktop" \
         --replace "@bindir@" "$out/bin"
   '';
-
-  check = false;
 
   meta = with stdenv.lib; {
     description = "Squeekboard is a virtual keyboard supporting Wayland";
