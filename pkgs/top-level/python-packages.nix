@@ -6973,6 +6973,8 @@ in {
 
   ansi = callPackage ../development/python-modules/ansi { };
 
+  pygments-better-html = callPackage ../development/python-modules/pygments-better-html { };
+
   pygments-markdown-lexer = callPackage ../development/python-modules/pygments-markdown-lexer { };
 
   telegram = callPackage ../development/python-modules/telegram { };
