@@ -606,6 +606,7 @@
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
   ./services/networking/epmd.nix
+  ./services/networking/ergo.nix
   ./services/networking/eternal-terminal.nix
   ./services/networking/fakeroute.nix
   ./services/networking/ferm.nix
@@ -817,6 +818,7 @@
   ./services/torrent/magnetico.nix
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix
+  ./services/torrent/rtorrent.nix
   ./services/torrent/transmission.nix
   ./services/ttys/agetty.nix
   ./services/ttys/gpm.nix
@@ -829,6 +831,7 @@
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
+  ./services/web-apps/engelsystem.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix

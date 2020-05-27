@@ -87,8 +87,10 @@ in
   ecryptfs = handleTest ./ecryptfs.nix {};
   ejabberd = handleTest ./xmpp/ejabberd.nix {};
   elk = handleTestOn ["x86_64-linux"] ./elk.nix {};
+  engelsystem = handleTest ./engelsystem.nix {};
   enlightenment = handleTest ./enlightenment.nix {};
   env = handleTest ./env.nix {};
+  ergo = handleTest ./ergo.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
@@ -133,6 +135,7 @@ in
   hitch = handleTest ./hitch {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
   home-assistant = handleTest ./home-assistant.nix {};
+  hostname = handleTest ./hostname.nix {};
   hound = handleTest ./hound.nix {};
   hydra = handleTest ./hydra {};
   hydra-db-migration = handleTest ./hydra/db-migration.nix {};

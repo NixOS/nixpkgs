@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "ssldump";
-  version = "0.9b3";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "adulau";
     repo = "ssldump";
-    rev = "4529d03a50d39d3697c3e39a3d6f6c9b29448aa0";
-    sha256 = "0wwsamzxabfxcil5y2g4v2261vdspxlp12wz4xhji8607jbyjwr1";
+    rev = "7491b9851505acff95b2c68097e9b9f630d418dc";
+    sha256 = "1j3rln86khdnc98v50hclvqaq83a24c1rfzbcbajkbfpr4yxpnpd";
   };
 
   buildInputs = [ libpcap openssl ];

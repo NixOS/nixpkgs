@@ -799,6 +799,8 @@ in {
     hdf5 = pkgs.hdf5-mpi;
   };
 
+  h5netcdf = callPackage ../development/python-modules/h5netcdf { };
+
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
   habanero = callPackage ../development/python-modules/habanero { };
@@ -888,6 +890,8 @@ in {
   libmr = callPackage ../development/python-modules/libmr { };
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
+
+  livelossplot = callPackage ../development/python-modules/livelossplot { };
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
@@ -1502,6 +1506,8 @@ in {
   sortedcontainers = callPackage ../development/python-modules/sortedcontainers { };
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
+
+  skorch = callPackage ../development/python-modules/skorch { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
 
@@ -3808,6 +3814,8 @@ in {
     cudaSupport = false;
   };
 
+  pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
+
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   python2-pythondialog = callPackage ../development/python-modules/python2-pythondialog { };
@@ -4272,6 +4280,8 @@ in {
   kerberos = callPackage ../development/python-modules/kerberos {
     inherit (pkgs) kerberos;
   };
+
+  lazy_import = callPackage ../development/python-modules/lazy_import { };
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
@@ -5486,21 +5496,6 @@ in {
 
   pyyaml = callPackage ../development/python-modules/pyyaml { };
 
-  pyyaml_3 = (callPackage ../development/python-modules/pyyaml { }).overridePythonAttrs (oldAttrs: rec {
-    version = "3.13";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
-    };
-    # https://github.com/yaml/pyyaml/issues/298#issuecomment-511990948
-    patches = singleton (pkgs.fetchpatch {
-      url = "https://github.com/yaml/pyyaml/commit/c5b135fe39d41cffbdc006f28ccb2032df6005e0.patch";
-      sha256 = "0x1v45rkmj194c41d1nqi3ihj9z4rsy8zvpfcd8p960g1fia7fhn";
-    });
-    # https://github.com/yaml/pyyaml/issues/298#issuecomment-511990948
-    doCheck = false;
-  });
-
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
   rasterio = callPackage ../development/python-modules/rasterio {
@@ -5597,8 +5592,8 @@ in {
 
   retworkx = callPackage ../development/python-modules/retworkx { };
 
-  rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
-    python2 = python;
+  rivet = disabledIf (!isPy3k) (toPythonModule (pkgs.rivet.override {
+    python3 = python;
   }));
 
   ripser = callPackage ../development/python-modules/ripser { };
@@ -7069,6 +7064,11 @@ in {
 
   pytoml = callPackage ../development/python-modules/pytoml { };
 
+  pypamtest = pkgs.libpam-wrapper.override {
+    enablePython = true;
+    inherit python;
+  };
+
   pypandoc = callPackage ../development/python-modules/pypandoc { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
@@ -7105,7 +7105,7 @@ in {
 
   visitor = callPackage ../development/python-modules/visitor { };
 
-  vtk = toPythonModule (pkgs.vtk.override {
+  vtk = toPythonModule (pkgs.vtk_7.override {
     inherit (self) python;
     enablePython = true;
   });

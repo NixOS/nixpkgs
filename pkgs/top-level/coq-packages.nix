@@ -1,4 +1,4 @@
-{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05 }:
+{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09 }:
 
 let
   mkCoqPackages' = self: coq:
@@ -100,15 +100,19 @@ in rec {
     version = "8.6.1";
   };
   coq_8_7 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.7.2";
   };
   coq_8_8 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.8.2";
   };
   coq_8_9 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.9.1";
   };
   coq_8_10 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.10.2";
   };
   coq_8_11 = callPackage ../applications/science/logic/coq {

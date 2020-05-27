@@ -42,7 +42,7 @@ $ agda -l standard-library -i . MyFile.agda
 ```
 name: my-library
 include: .
-depends: standard-library
+depend: standard-library
 ```
 - Create the file `~/.agda/defaults` and add any libraries you want to use by default.
 
