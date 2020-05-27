@@ -1,0 +1,32 @@
+From d6817dbaf407f65dd4af12c51736153fae8b217f Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Sat, 21 Dec 2019 08:36:11 -0800
+Subject: [PATCH] dvbdate: Remove Obsoleted stime API calls
+
+stime() has been deprecated in glibc 2.31+ its recommended to
+replaced with clock_settime()
+
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ util/dvbdate/dvbdate.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/util/dvbdate/dvbdate.c b/util/dvbdate/dvbdate.c
+index f0df437..492ed79 100644
+--- a/util/dvbdate/dvbdate.c
++++ b/util/dvbdate/dvbdate.c
+@@ -309,7 +309,10 @@ int atsc_scan_date(time_t *rx_time, unsigned int to)
+  */
+ int set_time(time_t * new_time)
+ {
+-	if (stime(new_time)) {
++	struct timespec ts;
++	ts.tv_sec = &new_time;
++	ts.tv_nsec = 0;
++	if (clock_settime(CLOCK_REALTIME, &ts)) {
+ 		perror("Unable to set time");
+ 		return -1;
+ 	}
+-- 
+2.24.1
+

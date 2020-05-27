@@ -1,0 +1,12 @@
+diff -ruN linuxtv-dvb-apps-1.1.1.20100223.orig/util/scan/section_generate.pl linuxtv-dvb-apps-1.1.1.20100223/util/scan/section_generate.pl
+--- linuxtv-dvb-apps-1.1.1.20100223.orig/util/scan/section_generate.pl	2010-02-14 12:21:19.000000000 -0000
++++ linuxtv-dvb-apps-1.1.1.20100223/util/scan/section_generate.pl	2017-08-06 08:35:19.625688435 -0000
+@@ -4,7 +4,7 @@
+ 
+ die "no section perl file given" unless @ARGV;
+ 
+-my $h = require($ARGV[0]);
++my $h = require("./".$ARGV[0]);
+ 
+ our $basename;
+ our $debug = $ARGV[1];

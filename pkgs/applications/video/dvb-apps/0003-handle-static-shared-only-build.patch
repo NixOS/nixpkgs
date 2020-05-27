@@ -1,0 +1,44 @@
+From a826c7c722db40bfedf00e51ce38411550ae8216 Mon Sep 17 00:00:00 2001
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 25 Dec 2014 19:22:16 +0100
+Subject: [PATCH] Make.rules: Handle static/shared only build
+
+Do not build .a library when enable_static is set to "no"
+Do not build .so library when enable_shared is set to "no"
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ Make.rules | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/Make.rules b/Make.rules
+index 3410d7b..d274e16 100644
+--- a/Make.rules
++++ b/Make.rules
+@@ -9,7 +9,13 @@ ifneq ($(lib_name),)
+ CFLAGS_LIB ?= -fPIC
+ CFLAGS += $(CFLAGS_LIB)
+ 
+-libraries = $(lib_name).so $(lib_name).a
++ifneq ($(enable_static),no)
++libraries += $(lib_name).a
++endif
++
++ifneq ($(enable_shared),no)
++libraries += $(lib_name).so
++endif
+ 
+ .PHONY: library
+ 
+@@ -23,7 +29,7 @@ prerequisites = $(subst .o,.d,$(objects)) $(addsuffix .d,$(binaries))
+ 
+ .PHONY: clean install
+ 
+-ifeq ($(static),1)
++ifneq ($(enable_static),no)
+ LDFLAGS += -static
+ endif
+ 
+-- 
+1.9.3
+
