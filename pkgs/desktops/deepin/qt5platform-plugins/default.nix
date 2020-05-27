@@ -12,15 +12,15 @@
 }:
 
 mkDerivation rec {
-  pname = "qt5dxcb-plugin";
-  version = "5.0.1";
+  pname = "qt5platform-plugins";
+  version = "5.0.11";
 
   srcs = [
     (fetchFromGitHub {
       owner = "linuxdeepin";
       repo = pname;
       rev = version;
-      sha256 = "1pkhbx4hzjv7n4mscv7dng9ymjcc1csdc82iy62yxshhq32bcfja";
+      sha256 = "14xkr3p49716jc9v7ksj6jgcmfa65qicqrmablizfi71srg3z2pr";
     })
     qtbase.src
   ];
@@ -51,13 +51,11 @@ mkDerivation rec {
     "INSTALL_PATH=${placeholder "out"}/${qtbase.qtPluginPrefix}/platforms"
   ];
 
-  enableParallelBuilding = true;
-
   passthru.updateScript = deepin.updateScript { inherit pname version; src = (builtins.head srcs); };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugin for DDE";
-    homepage = "https://github.com/linuxdeepin/qt5dxcb-plugin";
+    homepage = "https://github.com/linuxdeepin/qt5platform-plugins";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
