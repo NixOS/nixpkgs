@@ -3286,6 +3286,8 @@ in {
 
   pyfxa = callPackage ../development/python-modules/pyfxa { };
 
+  pygls = callPackage ../development/python-modules/pygls {};
+
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
 
   pylama = callPackage ../development/python-modules/pylama { };
