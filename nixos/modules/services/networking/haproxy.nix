@@ -7,6 +7,7 @@ let
     global
       # needed for hot-reload to work without dropping packets in multi-worker mode
       stats socket /run/haproxy/haproxy.sock mode 600 expose-fd listeners level user
+      pidfile /run/haproxy/haproxy.pid
 
     ${cfg.config}
   '';
@@ -63,15 +64,21 @@ with lib;
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        Type = "notify";
+        Type = "forking";
+        PIDFile = "/run/haproxy/haproxy.pid";
         # when running the config test, don't be quiet so we can see what goes wrong
         ExecStartPre = "${pkgs.haproxy}/sbin/haproxy -c -f ${haproxyCfg}";
-        ExecStart = "${pkgs.haproxy}/sbin/haproxy -Ws -f ${haproxyCfg}";
+        ExecStart = "${pkgs.haproxy}/sbin/haproxy -W -D -f ${haproxyCfg}";
         Restart = "on-failure";
         RuntimeDirectory = "haproxy";
         # needed in case we bind to port < 1024
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
       };
+      reload = ''
+        ${pkgs.haproxy}/sbin/haproxy -c -f ${haproxyCfg}
+        exec ${pkgs.haproxy}/sbin/haproxy -W -D -f ${haproxyCfg} -x /run/haproxy/haproxy.sock -sf $MAINPID
+      '';
+      reloadIfChanged = true;
     };
 
     users.users = optionalAttrs (cfg.user == "haproxy") {
