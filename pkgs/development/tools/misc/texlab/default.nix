@@ -1,6 +1,7 @@
 { stdenv
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , Security
 }:
 
@@ -17,7 +18,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0iibjh2ll181j69vld1awvjgyv3xwmq0abh10651la4k4jpppx46";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  postInstall = ''
+    installManPage texlab.1
+  '';
 
   meta = with stdenv.lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";
