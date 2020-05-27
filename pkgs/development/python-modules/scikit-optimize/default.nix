@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, isPy27
+, matplotlib
 , numpy
 , scipy
 , scikitlearn
@@ -10,16 +12,18 @@
 
 buildPythonPackage rec {
   pname = "scikit-optimize";
-  version = "0.6";
+  version = "0.7.4";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "scikit-optimize";
     repo = "scikit-optimize";
     rev = "v${version}";
-    sha256 = "1srbb20k8ddhpcfxwdflapfh6xfyrd3dnclcg3bsfq1byrcmv0d4";
+    sha256 = "1wjvcvlgan9gps70ghgj42y4v3lhp0r65rwpp1fs4impzqkaxsia";
   };
 
   propagatedBuildInputs = [
+    matplotlib
     numpy
     scipy
     scikitlearn
@@ -30,9 +34,8 @@ buildPythonPackage rec {
     pytest
   ];
 
-  # remove --ignore at next release > 0.6
   checkPhase = ''
-    pytest skopt --ignore skopt/tests/test_searchcv.py
+    pytest skopt
   '';
 
   meta = with lib; {
