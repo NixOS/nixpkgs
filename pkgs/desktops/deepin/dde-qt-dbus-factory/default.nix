@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     "QMAKE_PKGCONFIG_PREFIX=${placeholder "out"}"
   ];
 
-  enableParallelBuilding = true;
-
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
