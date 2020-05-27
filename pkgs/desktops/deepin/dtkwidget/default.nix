@@ -1,7 +1,7 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , qmake
 , qttools
 , qtmultimedia
@@ -11,25 +11,26 @@
 , libstartup_notification
 , gsettings-qt
 , dde-qt-dbus-factory
-, dtkcore
+, dtkgui
 , deepin
 }:
 
 mkDerivation rec {
   pname = "dtkwidget";
-  version = "2.1.1";
+  version = "5.2.2.3";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0yqrm1p0k1843ldvcd79dxl26ybyl5kljl6vwhzc58sx7pw4qmvh";
+    sha256 = "02p6dd3skwflbmcw2qbfm2y597h7pdnknhsqj3k840isx7hi8hbv";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
     qttools
+    deepin.setupHook
   ];
 
   buildInputs = [
@@ -40,18 +41,25 @@ mkDerivation rec {
     libstartup_notification
     gsettings-qt
     dde-qt-dbus-factory
-    dtkcore
   ];
 
-  outRef = placeholder "out";
+  propagatedBuildInputs = [
+    dtkgui
+  ];
 
   qmakeFlags = [
-    "INCLUDE_INSTALL_DIR=${outRef}/include"
-    "LIB_INSTALL_DIR=${outRef}/lib"
-    "QT_HOST_DATA=${outRef}"
+    "MKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs"
+    "QMAKE_PKGCONFIG_PREFIX=${placeholder "out"}"
   ];
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    searchHardCodedPaths  # debugging
+  '';
+
+  postFixup = ''
+    wrapQtApp $out/lib/libdtk-*/DWidget/bin/dtk-svgc
+    searchHardCodedPaths $out  # debugging
+  '';
 
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
