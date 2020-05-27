@@ -13813,6 +13813,8 @@ in
 
   libtgvoip = callPackage ../development/libraries/libtgvoip { };
 
+  libtpms = callPackage ../development/libraries/libtpms { };
+
   libtsm = callPackage ../development/libraries/libtsm { };
 
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
