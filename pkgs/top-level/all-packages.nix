@@ -10228,6 +10228,8 @@ in
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
 
+  cmake-language-server = python3Packages.callPackage ../development/tools/cmake-language-server { };
+
   # Does not actually depend on Qt 5
   inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
 
