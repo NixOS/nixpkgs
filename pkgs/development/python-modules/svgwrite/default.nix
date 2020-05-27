@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , isPy3k
 , pythonOlder
-, pyparsing
 , pytest
 }:
 
@@ -19,11 +18,7 @@ buildPythonPackage rec {
   };
 
   # svgwrite requires Python 3.6 or newer
-  disabled = !isPy3k || pythonOlder "3.6";
-
-  propagatedBuildInputs = [
-    pyparsing
-  ];
+  disabled = pythonOlder "3.6";
 
   checkInputs = [
     pytest
