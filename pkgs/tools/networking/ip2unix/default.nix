@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ip2unix";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
     rev = "v${version}";
-    sha256 = "121ygj50i7ja9bv76y51qsjbjmmydhpi0sd3xb6pysmlzv0bxn17";
+    sha256 = "1ci0k3zy3hjkg65ah5h75mfvrd578xf2z1449xmgjm3iz3d6kqs2";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;
     maintainers = [ stdenv.lib.maintainers.aszlig ];
-    broken = true;
   };
 }
