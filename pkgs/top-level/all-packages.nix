@@ -20184,6 +20184,10 @@ in
 
   iksemel = callPackage ../development/libraries/iksemel { };
 
+  imag = callPackage ../applications/misc/imag {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   imagej = callPackage ../applications/graphics/imagej { };
 
   imagemagick_light = imagemagick.override {
