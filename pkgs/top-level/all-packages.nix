@@ -11587,6 +11587,8 @@ in
 
   dssi = callPackage ../development/libraries/dssi {};
 
+  duckdb = callPackage ../development/libraries/duckdb {};
+
   dxflib = callPackage ../development/libraries/dxflib {};
 
   easyloggingpp = callPackage ../development/libraries/easyloggingpp {};
