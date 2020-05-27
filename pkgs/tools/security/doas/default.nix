@@ -26,6 +26,12 @@ stdenv.mkDerivation rec {
     "--pamdir=${placeholder "out"}/etc/pam.d"
   ];
 
+  patches = [
+    # Allow doas to discover binaries in /run/current-system/sw/{s,}bin and
+    # /run/wrappers/bin
+    ./0001-add-NixOS-specific-dirs-to-safe-PATH.patch
+  ];
+
   postPatch = ''
     sed -i '/\(chown\|chmod\)/d' bsd.prog.mk
   '';
