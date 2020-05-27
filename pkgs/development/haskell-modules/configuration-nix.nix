@@ -769,4 +769,7 @@ self: super: builtins.intersectAttrs super {
     doCheck = false;
   });
 
+  # Tests disabled as recommended at https://github.com/luke-clifton/shh/issues/39
+  shh = dontCheck super.shh;
+
 }
