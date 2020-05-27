@@ -1,10 +1,11 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
+, dbus
 , deepin
-, dtkcore
+, deepin-shortcut-viewer
 , dtkwidget
 , kcodecs
 , qttools
@@ -14,25 +15,26 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-editor";
-  version = "1.2.9.1";
+  version = "5.6.28";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0g7c3adqwn8i4ndxdrzibahr75dddz1fiqnsh3bjj1jjr86rv4ks";
+    sha256 = "1cvflsg56m3m699ihd3bkw4g5bcr8cky4ffyqv1f5vrmvgqw51zx";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     qttools
     wrapQtAppsHook
     deepin.setupHook
   ];
 
   buildInputs = [
-    dtkcore
+    dbus
+    deepin-shortcut-viewer
     dtkwidget
     kcodecs
     syntax-highlighting
@@ -47,17 +49,22 @@ stdenv.mkDerivation rec {
       CMakeLists.txt \
       dedit/main.cpp \
       src/resources/settings.json \
-      src/thememodule/themelistmodel.cpp
+      src/thememodule/themelistmodel.cpp \
+      src/window.cpp
 
     substituteInPlace deepin-editor.desktop \
       --replace "Exec=deepin-editor" "Exec=$out/bin/deepin-editor"
 
     substituteInPlace src/editwrapper.cpp \
       --replace "appExec = \"deepin-editor\"" "appExec = \"$out/bin/deepin-editor\""
+
+    substituteInPlace src/dtextedit.cpp --replace dbus-send              ${dbus}/bin/dbus-send
+    substituteInPlace src/window.cpp    --replace dbus-send              ${dbus}/bin/dbus-send
+    substituteInPlace src/window.cpp    --replace deepin-shortcut-viewer ${deepin-shortcut-viewer}/bin/deepin-shortcut-viewer
   '';
 
   postFixup = ''
-    searchHardCodedPaths $out  # debugging
+    searchHardCodedPaths -a $out  # debugging
   '';
 
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
