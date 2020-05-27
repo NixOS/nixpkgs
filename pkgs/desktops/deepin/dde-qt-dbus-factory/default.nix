@@ -7,19 +7,23 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-qt-dbus-factory";
-  version = "5.0.1";
+  version = "5.3.0.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1wbh4jgvy3c09ivy0vvfk0azkg4d2sv37y23c9rq49jb3sakcjgm";
+    sha256 = "0x45d44i08nvqps299c1hw36qv849g7nks52ggwmk3hg01p7iav2";
   };
 
   nativeBuildInputs = [
     qmake
     python3
     deepin.setupHook
+  ];
+
+  qmakeFlags = [
+    "QMAKE_PKGCONFIG_PREFIX=${placeholder "out"}"
   ];
 
   postPatch = ''
@@ -29,7 +33,9 @@ stdenv.mkDerivation rec {
       libdframeworkdbus/libdframeworkdbus.pro
   '';
 
-  enableParallelBuilding = true;
+  postFixup = ''
+    searchHardCodedPaths $out
+  '';
 
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
