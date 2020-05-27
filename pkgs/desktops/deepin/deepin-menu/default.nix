@@ -1,35 +1,41 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , qmake
 , dtkcore
+, dtkgui
 , dtkwidget
 , qt5integration
+, qtmultimedia
+, qtx11extras
 , deepin
 }:
 
 mkDerivation rec {
   pname = "deepin-menu";
-  version = "3.4.8";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "09i0ybllymlj7s46pxma5py6x8nknfja4gxn5gj9kpf2c37qsqjc";
+    sha256 = "0fqby41s0jph31g1hhq7v006k37z9q3q2xnd8aiy0rkriph7z5xd";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
     deepin.setupHook
   ];
 
   buildInputs = [
     dtkcore
+    dtkgui
     dtkwidget
     qt5integration
+    qtmultimedia
+    qtx11extras
   ];
 
   postPatch = ''
@@ -39,8 +45,6 @@ mkDerivation rec {
       deepin-menu.desktop \
       deepin-menu.pro
   '';
-
-  enableParallelBuilding = true;
 
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
