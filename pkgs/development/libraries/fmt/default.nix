@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fmt";
-  version = "6.2.0";
+  version = "6.2.1";
 
   outputs = [ "out" "dev" ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "fmtlib";
     repo = "fmt";
     rev = version;
-    sha256 = "1vr08a8q94j66gas7ddbpdbq72b2ikd0mkgd5zd3l63610n8qajs";
+    sha256 = "1i6nfxazq4d05r3sxyc3ziwkqq7s8rdbv9p16afv66aqmsbqqqic";
   };
 
   patches = [
@@ -27,6 +27,12 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/fmtlib/fmt/commit/78f041ab5b40a1145ba686aeb8013e8788b08cd2.patch";
       sha256 = "hjE6Q/ubA4UhvuJXgcsA3wiGoDK031P19njQRL9JF8M=";
+    })
+
+    # Fix cmake config paths.
+    (fetchpatch {
+      url = "https://github.com/fmtlib/fmt/pull/1702.patch";
+      sha256 = "18cadqi7nac37ymaz3ykxjqs46rvki396g6qkqwp4k00cmic23y3";
     })
   ];
 
