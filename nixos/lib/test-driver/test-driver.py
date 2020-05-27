@@ -596,11 +596,8 @@ class Machine:
                 shutil.copytree(host_src, host_intermediate)
             else:
                 shutil.copy(host_src, host_intermediate)
-            self.succeed("sync")
             self.succeed(make_command(["mkdir", "-p", vm_target.parent]))
             self.succeed(make_command(["cp", "-r", vm_intermediate, vm_target]))
-        # Make sure the cleanup is synced into VM
-        self.succeed("sync")
 
     def copy_from_vm(self, source: str, target_dir: str = "") -> None:
         """Copy a file from the VM (specified by an in-VM source path) to a path
@@ -626,8 +623,6 @@ class Machine:
                 shutil.copytree(intermediate, abs_target)
             else:
                 shutil.copy(intermediate, abs_target)
-        # Make sure the cleanup is synced into VM
-        self.succeed("sync")
 
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>
