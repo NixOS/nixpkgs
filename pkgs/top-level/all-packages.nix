@@ -5974,6 +5974,8 @@ in
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
+  pinnwand = callPackage ../servers/pinnwand { };
+
   pirate-get = callPackage ../tools/networking/pirate-get { };
 
   pipreqs = callPackage ../tools/misc/pipreqs { };
