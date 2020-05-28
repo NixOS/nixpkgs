@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   version = "4.10.2";
 
   src = fetchurl {
-    url = "https://www.gap-system.org/pub/gap/gap-${lib.versions.major version}.${lib.versions.minor version}/tar.bz2/gap-${version}.tar.bz2";
+    url = "https://files.gap-system.org/gap-${lib.versions.major version}.${lib.versions.minor version}/tar.bz2/gap-${version}.tar.bz2";
     sha256 = "0cp6ddk0469zzv1m1vair6gm27ic6c5m77ri8rn0znq3gaps6x94";
   };
 
