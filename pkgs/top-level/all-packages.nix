@@ -17030,6 +17030,8 @@ in
 
     rtl8814au = callPackage ../os-specific/linux/rtl8814au { };
 
+    rtl88xxau-aircrack = callPackage ../os-specific/linux/rtl88xxau-aircrack { };
+
     rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
 
     rtl8821ce = callPackage ../os-specific/linux/rtl8821ce { };
