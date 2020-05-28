@@ -4735,6 +4735,12 @@
     githubId = 3507;
     name = "Michael Fellinger";
   };
+  maralorn = {
+    email = "malte.brandy@maralorn.de";
+    github = "maralorn";
+    githubId = 1651325;
+    name = "Malte Brandy";
+  };
   marcweber = {
     email = "marco-oweber@gmx.de";
     github = "marcweber";
