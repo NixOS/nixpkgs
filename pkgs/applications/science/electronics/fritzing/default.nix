@@ -1,8 +1,8 @@
-{ stdenv, fetchpatch, fetchFromGitHub, qmake, pkgconfig
+{ mkDerivation, stdenv, fetchpatch, fetchFromGitHub, qmake, pkgconfig
 , qtbase, qtsvg, qtserialport, boost, libgit2
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "fritzing";
   version = "0.9.3b";
 
