@@ -5758,6 +5758,8 @@ in
 
   matrix-synapse-tools = recurseIntoAttrs matrix-synapse.tools;
 
+  matrix-appservice-irc = callPackage ../servers/matrix-synapse/matrix-appservice-irc { };
+
   matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {};
 
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
