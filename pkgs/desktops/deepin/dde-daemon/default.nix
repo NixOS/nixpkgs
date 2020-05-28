@@ -2,35 +2,35 @@
 , buildGoPackage
 , fetchFromGitHub
 , fetchpatch
-, pkgconfig
+, alsaLib
+, dde-api
+, deepin
+, deepin-desktop-base
+, deepin-desktop-schemas
+, deepin-gettext-tools
+, deepin-wallpapers
+, gettext
+, glib
+, glibc
+, go
 , go-dbus-factory
 , go-gir-generator
 , go-lib
-, deepin-gettext-tools
-, gettext
-, dde-api
-, deepin-desktop-schemas
-, deepin-wallpapers
-, deepin-desktop-base
-, alsaLib
-, glib
 , gtk3
+, hicolor-icon-theme
 , libgudev
 , libinput
 , libnl
 , librsvg
 , linux-pam
+, makeWrapper
 , networkmanager
+, pkg-config
 , pulseaudio
 , python3
-, hicolor-icon-theme
-, glibc
 , tzdata
-, go
-, deepin
-, makeWrapper
-, xkeyboard_config
 , wrapGAppsHook
+, xkeyboard_config
 }:
 
 buildGoPackage rec {
@@ -57,35 +57,34 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   nativeBuildInputs = [
-    pkgconfig
     deepin-gettext-tools
+    deepin.setupHook
     gettext
+    makeWrapper
     networkmanager
     networkmanager.dev
+    pkg-config
     python3
-    makeWrapper
     wrapGAppsHook
-    deepin.setupHook
   ];
 
   buildInputs = [
-    go-dbus-factory
-    go-gir-generator
-    go-lib
-    linux-pam
-
     alsaLib
     dde-api
     deepin-desktop-base
     deepin-desktop-schemas
     deepin-wallpapers
     glib
-    libgudev
+    go-dbus-factory
+    go-gir-generator
+    go-lib
     gtk3
     hicolor-icon-theme
+    libgudev
     libinput
     libnl
     librsvg
+    linux-pam
     pulseaudio
     tzdata
     xkeyboard_config
