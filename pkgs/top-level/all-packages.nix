@@ -15583,6 +15583,8 @@ in
 
   dex-oidc = callPackage ../servers/dex { };
 
+  dex2jar = callPackage ../development/tools/java/dex2jar { };
+
   doh-proxy = callPackage ../servers/dns/doh-proxy {
     python3Packages = python36Packages;
   };
