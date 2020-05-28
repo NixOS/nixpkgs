@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libratbag";
-  version = "0.13";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner  = "libratbag";
     repo   = "libratbag";
     rev    = "v${version}";
-    sha256 = "18y8mfr63d91278m1kcid0wvrxa1sgjs8na9af1ks2n28ssvciwq";
+    sha256 = "1fpwp2sj8mf98bqasq2h8qwgprxi7k3iw33gcfid3d1lbyiacw0x";
   };
 
   nativeBuildInputs = [

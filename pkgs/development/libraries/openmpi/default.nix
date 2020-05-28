@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
-, rdma-core, zlib, numactl, libevent, hwloc, pkgsTargetTarget, symlinkJoin
+, rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
 , libpsm2, libfabric
 
 # Enable CUDA support
@@ -75,16 +75,16 @@ in stdenv.mkDerivation rec {
     # default compilers should be indentical to the
     # compilers at build time
 
-    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc:' \
+    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
       $out/share/openmpi/mpicc-wrapper-data.txt
 
-    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc:' \
+    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
        $out/share/openmpi/ortecc-wrapper-data.txt
 
-    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++:' \
+    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' \
        $out/share/openmpi/mpic++-wrapper-data.txt
 
-    sed -i 's:compiler=.*:compiler=${pkgsTargetTarget.gfortran}/bin/${pkgsTargetTarget.gfortran.targetPrefix}gfortran:'  \
+    sed -i 's:compiler=.*:compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran:'  \
        $out/share/openmpi/mpifort-wrapper-data.txt
   '';
 
