@@ -1,26 +1,29 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , qmake
 , dbus
 , dde-daemon
+, dde-dock
 , dde-qt-dbus-factory
 , deepin
+, deepin-desktop-base
 , deepin-desktop-schemas
 , deepin-gettext-tools
 , deepin-icon-theme
 , deepin-wallpapers
-, dtkcore
 , dtkwidget
+, glib
 , gnugrep
 , gsettings-qt
 , lightdm_qt
-, onboard
+#, onboard
+, qtmultimedia
 , qtsvg
 , qttools
 , qtx11extras
-, setxkbmap
+#, setxkbmap
 , utillinux
 , which
 , xkeyboard_config
@@ -31,18 +34,18 @@
 
 mkDerivation rec {
   pname = "dde-session-ui";
-  version = "5.0.0";
+  version = "5.3.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1gy9nlpkr9ayrs1z2dvd7h0dqlw6fq2m66d9cs48qyfkr6c8l9jj";
+    sha256 = "0n60jr7ivjh1h8h4jlk7wg9mjimsh4di1sr32z1j9n70y8vmvgx2";
   };
 
   nativeBuildInputs = [
-    pkgconfig
     qmake
+    pkg-config
     qttools
     deepin-gettext-tools
     wrapGAppsHook
@@ -52,19 +55,21 @@ mkDerivation rec {
   buildInputs = [
     dbus
     dde-daemon
+    dde-dock
     dde-qt-dbus-factory
+    deepin-desktop-base
     deepin-desktop-schemas
     deepin-icon-theme
     deepin-wallpapers
-    dtkcore
     dtkwidget
     gnugrep
     gsettings-qt
     lightdm_qt
-    onboard
+    #onboard
+    qtmultimedia
     qtsvg
     qtx11extras
-    setxkbmap
+    #setxkbmap
     utillinux
     which
     xkeyboard_config
@@ -81,9 +86,16 @@ mkDerivation rec {
 
     substituteInPlace translate_desktop.sh --replace "/usr/bin/deepin-desktop-ts-convert" "deepin-desktop-ts-convert"
 
+    fixPath ${deepin-desktop-base} /etc/deepin-version dde-welcome/utils.cpp
+    fixPath ${deepin-desktop-base} /etc/deepin-version lightdm-deepin-greeter/view/logowidget.cpp
+
+    # ??????????????????????????
     find -type f -exec sed -i -e "s,path = /etc,path = $out/etc," {} +
     find -type f -exec sed -i -e "s,path = /usr,path = $out," {} +
+
     find -type f -exec sed -i -e "s,/usr/share/dde-session-ui,$out/share/dde-session-ui," {} +
+
+    substituteInPlace dde-notification-plugin/notifications/notifications.pro --replace /usr/include/dde-dock ${dde-dock}/include/dde-dock
 
     substituteInPlace dde-osd/dde-osd_autostart.desktop --replace "Exec=/usr/lib/deepin-daemon/dde-osd" "Exec=$out/lib/deepin-daemon/dde-osd"
     substituteInPlace dde-osd/com.deepin.dde.osd.service --replace "Exec=/usr/lib/deepin-daemon/dde-osd" "Exec=$out/lib/deepin-daemon/dde-osd"
@@ -106,7 +118,6 @@ mkDerivation rec {
     substituteInPlace dmemory-warning-dialog/src/buttondelegate.cpp --replace "dbus-send" "${dbus}/bin/dbus-send"
     substituteInPlace dmemory-warning-dialog/src/buttondelegate.cpp --replace "kill" "${utillinux}/bin/dbus-send"
     substituteInPlace global_util/xkbparser.h --replace "/usr/share/X11/xkb/rules/base.xml" "${xkeyboard_config}/share/X11/xkb/rules/base.xml"
-    substituteInPlace lightdm-deepin-greeter/deepin-greeter --replace "/etc/deepin/greeters.d" "$out/etc/deepin/greeters.d"
     substituteInPlace lightdm-deepin-greeter/main.cpp --replace "/usr/share/icons/deepin" "${deepin-icon-theme}/share/icons/deepin"
     substituteInPlace lightdm-deepin-greeter/scripts/00-xrandr --replace "egrep" "${gnugrep}/bin/egrep"
     substituteInPlace lightdm-deepin-greeter/scripts/00-xrandr --replace "xrandr" "${xrandr}/bin/xrandr"
@@ -115,10 +126,7 @@ mkDerivation rec {
     substituteInPlace session-ui-guardien/guardien.cpp --replace "dde-shutdown" "$out/bin/dde-shutdown"
     substituteInPlace dde-lock/lockworker.cpp --replace "dde-switchtogreeter" "$out/bin/dde-switchtogreeter"
     substituteInPlace dde-lock/lockworker.cpp --replace "which" "${which}/bin/which"
-    substituteInPlace session-widgets/userinfo.cpp --replace "/usr/share/wallpapers/deepin" "${deepin-wallpapers}/share/wallpapers/deepin"
     substituteInPlace widgets/fullscreenbackground.cpp --replace "/usr/share/wallpapers/deepin" "${deepin-wallpapers}/share/wallpapers/deepin"
-    substituteInPlace widgets/kblayoutwidget.cpp --replace "setxkbmap" "${setxkbmap}/bin/setxkbmap"
-    substituteInPlace widgets/virtualkbinstance.cpp --replace "onboard" "${onboard}/bin/onboard"
 
     # fix default background url
     substituteInPlace widgets/fullscreenbackground.cpp --replace "/usr/share/backgrounds/default_background.jpg" "${deepin-wallpapers}/share/backgrounds/deepin/desktop.jpg"
@@ -131,6 +139,8 @@ mkDerivation rec {
   dontWrapQtApps = true;
 
   preFixup = ''
+    glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+
     gappsWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
     )
