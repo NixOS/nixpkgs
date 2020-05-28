@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dump1090";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0c30x56h79hza9m6b9zp5y28jxx4f4n5xgaaw597l8agcm5iia0p";
+    sha256 = "0xg8rzrxqklx1m9ncxsd96dlkbjcsxfi2mrb859v50f07xysdyd8";
   };
 
   nativeBuildInputs = [ pkgconfig ];
