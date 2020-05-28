@@ -47,6 +47,7 @@ let
     dtkcore = callPackage ./dtkcore { };
     dtkwidget = callPackage ./dtkwidget { };
     dtkwm = callPackage ./dtkwm { };
+    gio-qt = callPackage ./gio-qt { };
     go-dbus-factory = callPackage ./go-dbus-factory { };
     go-gir-generator = callPackage ./go-gir-generator { };
     go-lib = callPackage ./go-lib { };
