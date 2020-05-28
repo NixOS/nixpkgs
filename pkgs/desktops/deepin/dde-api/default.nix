@@ -1,14 +1,16 @@
 { stdenv
 , buildGoPackage
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , alsaLib
 , bc
 , blur-effect
 , coreutils
+, dbus
 , deepin
 , deepin-gettext-tools
 , fontconfig
+, gdk-pixbuf-xlib
 , go
 , go-dbus-factory
 , go-gir-generator
@@ -26,7 +28,7 @@
 
 buildGoPackage rec {
   pname = "dde-api";
-  version = "5.0.0";
+  version = "5.3.0.4";
 
   goPackagePath = "pkg.deepin.io/dde/api";
 
@@ -34,20 +36,22 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0iv4krj6dqdknwvmax7aj40k1h96259kqcfnljadrwpl7cvsvp5p";
+    sha256 = "1fh2g4alskd8h80d19r7h9hi26dz8cl7hmy2l75x95ni22z180zf";
   };
 
   goDeps = ./deps.nix;
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
+    go-dbus-factory
+    go-gir-generator
+    go-lib
     deepin-gettext-tools # build
     deepin.setupHook
 
     # TODO: using $PATH to find run time executable does not work with cross compiling
     bc          # run (to adjust grub theme?)
     blur-effect # run (is it really needed?)
-    coreutils   # run (is it really needed?)
     fontconfig  # run (is it really needed?)
     rfkill      # run
     xcur2png    # run
@@ -55,12 +59,11 @@ buildGoPackage rec {
   ];
 
   buildInputs = [
-    go-dbus-factory      # needed
-    go-gir-generator     # needed
-    go-lib               # build
-
     alsaLib     # needed
+    coreutils
+    dbus
     #glib        # ? arch
+    gdk-pixbuf-xlib  # needed
     gtk3        # build run
     libcanberra # build run
     libgudev    # needed
@@ -85,8 +88,19 @@ buildGoPackage rec {
       misc/systemd/system/deepin-shutdown-sound.service \
       theme_thumb/gtk/gtk.go \
       thumbnails/gtk/gtk.go
-    fixPath $out /boot/grub Makefile     # TODO: confirm where to install grub themes
-    fixPath $out /var Makefile
+
+    fixPath $out /usr/share/dde-api \
+      adjust-grub-theme/main.go \
+      language_support/lang_support.go \
+      lunar-calendar/huangli.go
+
+    fixPath $out /boot/grub adjust-grub-theme/main.go  # TODO: confirm where to install grub themes
+
+    fixPath ${dbus} /usr/bin/dbus-send misc/systemd/system/deepin-login-sound.service
+    fixPath ${coreutils} /usr/bin/true misc/systemd/system/deepin-shutdown-sound.service
+
+    # TODO: consider XDG_DATA_DIRS and XDG_DATA_HOME
+    substituteInPlace themes/theme.go --replace /usr/share /run/current-system/sw/share
 
     # This package wants to install polkit local authority files into
     # /var/lib. Nix does not allow a package to install files into /var/lib
@@ -96,12 +110,17 @@ buildGoPackage rec {
     # /var/lib/polkit-1 (with /etc having priority over /var/lib). An
     # work around is to install them to $out/etc and simlnk them to
     # /etc in the deepin module.
-
-    sed -i -e "s,/var/lib/polkit-1,/etc/polkit-1," Makefile
+    #
+    sed -i -e "s,/var/lib/polkit-1,$out/etc/polkit-1," Makefile
   '';
 
   buildPhase = ''
+    export GOPATH="$GOPATH:${go-dbus-factory}/share/go"
+    export GOPATH="$GOPATH:${go-lib}/share/go"
+    export GOPATH="$GOPATH:${go-gir-generator}/share/go"
+
     export GOCACHE="$TMPDIR/go-cache";
+
     make -C go/src/${goPackagePath}
   '';
 
@@ -123,6 +142,5 @@ buildGoPackage rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
-    broken = true; # 2020-08-22 https://hydra.nixos.org/build/125354866/nixlog/2
   };
 }
