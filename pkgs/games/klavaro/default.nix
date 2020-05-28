@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, intltool, curl, gtk3 }:
+{ stdenv, fetchurl, makeWrapper, pkgconfig, intltool, curl, file, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "klavaro";
@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/klavaro \
       --prefix LD_LIBRARY_PATH : $out/lib
+  '';
+
+  preConfigure = ''
+    substituteInPlace configure \
+      --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
   # Hack to avoid TMPDIR in RPATHs.
