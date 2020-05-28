@@ -10436,6 +10436,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  nix-build-uncached = callPackage ../development/tools/misc/nix-build-uncached { };
+
   nexus = callPackage ../development/tools/repository-managers/nexus { };
 
   nwjs = callPackage ../development/tools/nwjs {
