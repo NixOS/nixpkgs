@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperfine";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = pname;
     rev    = "refs/tags/v${version}";
-    sha256 = "0jx2lqhayp14c51dfvgmqrmmadyvxf0p4dsn770ndqpzv66rh6zb";
+    sha256 = "0389lmyipmm4irrl39zw2748f2sdddfzwms4i4763xdykdvi8b57";
   };
 
-  cargoSha256 = "0n0hizldhr026mrzzz1wlw4g0b1z6ybxarybq3fzchs722iqpsis";
+  cargoSha256 = "06scvp7x1yixdadarsm461hbc256spx4aqhmjjn72x7hxn22h9cg";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
