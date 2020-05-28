@@ -3,9 +3,10 @@
 , fetchFromGitHub
 , substituteAll
 , qmake
-, pkgconfig
+, pkg-config
 , qttools
 , dde-qt-dbus-factory
+, gsettings-qt
 , proxychains
 , which
 , deepin
@@ -13,24 +14,25 @@
 
 mkDerivation rec {
   pname = "dde-network-utils";
-  version = "5.0.1";
+  version = "6.1.0101.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0670kfnkplf7skkd1ql6y9x15kmrcbdv1005qwkg4vn8hic6s0z3";
+    sha256 = "11vllzq0v8nns6lzi44b4318m5jwcgahhv7hfap56zjiibqyzfwm";
   };
 
   nativeBuildInputs = [
     qmake
-    pkgconfig
+    pkg-config
     qttools
     deepin.setupHook
   ];
 
   buildInputs = [
     dde-qt-dbus-factory
+    gsettings-qt
     proxychains
     which
   ];
