@@ -2,43 +2,44 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
+, dde-daemon
+, dde-network-utils
+, dde-qt-dbus-factory
+, deepin
+, deepin-desktop-schemas
+, dtkcore
+, dtkgui
+, dtkwidget
+, glib
+, gsettings-qt
+, libdbusmenu
+, makeWrapper
+, plugins ? [ ]
+, polkit
+, qtsvg
 , qttools
 , qtx11extras
-, qtsvg
-, polkit
-, gsettings-qt
-, dtkcore
-, dtkwidget
-, dde-qt-dbus-factory
-, dde-network-utils
-, dde-daemon
-, deepin-desktop-schemas
-, xorg
-, glib
-, wrapGAppsHook
-, deepin
-, plugins ? [ ]
 , symlinkJoin
-, makeWrapper
-, libdbusmenu
+, wrapGAppsHook
+, xorg
 }:
 
 let
   unwrapped = mkDerivation rec {
     pname = "dde-dock";
-    version = "5.0.0";
+    version = "5.1.0.11";
 
     src = fetchFromGitHub {
       owner = "linuxdeepin";
       repo = pname;
       rev = version;
-      sha256 = "12dshsqhzajnxm7r53qg0c84b6xlj313qnssnx2m25z4jdp5i7pr";
+      sha256 = "0ksrilmjypm5b069ra51i0dwr818h6ddsnhp9h5h47mpwg74kx7c";
     };
 
     nativeBuildInputs = [
       cmake
-      pkgconfig
+      pkg-config
       qttools
       wrapGAppsHook
       deepin.setupHook
@@ -50,6 +51,7 @@ let
       dde-qt-dbus-factory
       deepin-desktop-schemas
       dtkcore
+      dtkgui
       dtkwidget
       glib
       gsettings-qt
@@ -57,9 +59,7 @@ let
       polkit
       qtsvg
       qtx11extras
-      xorg.libXdmcp
       xorg.libXtst
-      xorg.libpthreadstubs
     ];
 
     patches = [
@@ -74,7 +74,8 @@ let
       fixPath $out                 /usr                         dde-dock.pc
       fixPath $out                 /usr/bin/dde-dock            frame/com.deepin.dde.Dock.service
       fixPath $out                 /usr/share/dbus-1            CMakeLists.txt
-      fixPath ${dde-daemon}        /usr/lib/deepin-daemon       frame/item/showdesktopitem.cpp
+      fixPath ${dde-daemon}        /usr/lib/deepin-daemon       plugins/show-desktop/showdesktopplugin.cpp
+      fixPath ${dde-daemon}        /usr/lib/deepin-daemon       frame/panel/mainpanelcontrol.cpp
       fixPath ${dde-network-utils} /usr/share/dde-network-utils frame/main.cpp
       fixPath ${polkit}            /usr/bin/pkexec              plugins/overlay-warning/overlay-warning-plugin.cpp
 
@@ -87,6 +88,8 @@ let
     dontWrapQtApps = true;
 
     preFixup = ''
+      glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+
       gappsWrapperArgs+=(
         "''${qtWrapperArgs[@]}"
       )
