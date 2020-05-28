@@ -1,19 +1,19 @@
 { lib, rustPlatform, fetchFromGitHub, makeWrapper, z3 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "zz-unstable";
-  version = "2020-03-02";
+  pname = "zz";
+  version = "0.1";
 
   src = fetchFromGitHub {
     owner = "aep";
     repo = "zz";
-    rev = "2dd92b959f7c34bf99af84b263e3864a5c41a0fe";
-    sha256 = "14ch5qgga2vpxvb53v4v4y6cwy3kkm10x1vbfpyfa7im57syib85";
+    rev = version;
+    sha256 = "0kqrfm2r9wn0p2c3lcprsy03p9qhrwjs990va8qi59jp704l84ad";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  cargoSha256 = "1m9az3adbkx2ab6fkg64cr7f9d73jbx8kx2pmgpw29csmh9hzqjy";
+  cargoSha256 = "0yllcqxyyhwr9h0z8q84l0ms8x6jrqhpg79ik4xng6h5yf4ab0pq";
 
   postInstall = ''
     wrapProgram $out/bin/zz --prefix PATH ":" "${lib.getBin z3}/bin"
