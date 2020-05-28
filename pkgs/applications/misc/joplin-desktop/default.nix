@@ -42,7 +42,7 @@ in appimageTools.wrapType2 rec {
     '';
     homepage = "https://joplinapp.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ hugoreeves rafaelgg raquelgb ];
+    maintainers = with maintainers; [ hugoreeves ];
     platforms = [ "x86_64-linux" ];
   };
 }
