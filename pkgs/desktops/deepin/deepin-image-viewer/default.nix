@@ -1,56 +1,69 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , qmake
-, qttools
-, qtsvg
-, qtx11extras
 , dtkcore
+, dtkgui
 , dtkwidget
-, qt5integration
 , freeimage
-, libraw
+, gio-qt
 , libexif
+, libraw
+, qtmultimedia
+, qtsvg
+, qttools
+, qtx11extras
+, udisks2-qt5
 , deepin
 }:
 
 mkDerivation rec {
   pname = "deepin-image-viewer";
-  version = "5.0.0";
+  version = "5.6.3.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "01524hfdy3wvdf07n9b3qb8jdpxzg2hwjpl4gxvr68qws5nbnb3c";
+    sha256 = "02b5dkm9hcjhafvp0s7ssr7zal63xy8z0b8ax466b3dpsmrps851";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
     qttools
     deepin.setupHook
   ];
 
   buildInputs = [
+    dtkcore
+    dtkgui
+    dtkwidget
+    freeimage
+    gio-qt
+    libexif
+    libraw
+    qtmultimedia
     qtsvg
     qtx11extras
-    dtkcore
-    dtkwidget
-    qt5integration
-    freeimage
-    libraw
-    libexif
+    udisks2-qt5
   ];
 
   postPatch = ''
-    searchHardCodedPaths
+    searchHardCodedPaths  # debugging
+
     patchShebangs viewer/generate_translations.sh
+
     fixPath $out /usr viewer/com.deepin.ImageViewer.service
+
     sed -i qimage-plugins/freeimage/freeimage.pro \
            qimage-plugins/libraw/libraw.pro \
       -e "s,\$\$\[QT_INSTALL_PLUGINS\],$out/$qtPluginPrefix,"
+  '';
+
+  postFixup = ''
+    searchHardCodedPaths $out  # debugging
   '';
 
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
