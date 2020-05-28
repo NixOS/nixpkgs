@@ -17389,6 +17389,8 @@ in
 
   gotop = callPackage ../tools/system/gotop { };
 
+  go-migrate = callPackage ../development/tools/go-migrate { };
+
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
   go-langserver = callPackage ../development/tools/go-langserver { };
