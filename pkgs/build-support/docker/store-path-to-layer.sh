@@ -39,6 +39,7 @@ tarhash=$(
       --transform 's,^nix/store$,/\0,' \
       --transform 's,^[^/],/nix/store/\0,rS' |
     tee "$layerPath/layer.tar" |
+    tee >(sha256sum | cut -d ' ' -f 1 > $layerPath/sha256) |
     tarsum
 )
 

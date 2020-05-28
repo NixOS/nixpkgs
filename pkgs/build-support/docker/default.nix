@@ -395,7 +395,13 @@ rec {
       # Tar up the layer and throw it into 'layer.tar', while calculating its checksum.
       echo "Packing layer..."
       mkdir $out
-      tarhash=$(tar --transform='s|^\./||' -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf - . | tee $out/layer.tar | tarsum)
+      tarhash=$(
+        tar --transform='s|^\./||' -C layer \
+            --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
+            --owner=${toString uid} --group=${toString gid} -cf - . |
+          tee $out/layer.tar |
+          tee >(sha256sum | cut -d ' ' -f 1 > "$out/sha256") |
+          tarsum)
 
       # Add a 'checksum' field to the JSON, with the value set to the
       # checksum of the tarball.
@@ -626,9 +632,11 @@ rec {
         imageJson=$(cat ${configJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
         for layer in $(cat layer-list); do
-          layerChecksum=$(sha256sum $layer/layer.tar | cut -d ' ' -f1)
+          layerChecksum=$(cat $layer/sha256)
           layerID=$(sha256sum "$layer/json" | cut -d ' ' -f 1)
-          ln -s "$layer" "./image/$layerID"
+
+          mkdir "./image/$layerID"
+          ln -s -t "./image/$layerID" "$layer/"{layer.tar,json,VERSION}
 
           manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= . + [\"$layerID/layer.tar\"]")
           imageJson=$(echo "$imageJson" | jq ".history |= . + [{\"created\": \"$(jq -r .created ${configJson})\"}]")
