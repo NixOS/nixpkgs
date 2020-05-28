@@ -73,8 +73,6 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = [ "--with-gmp=system" ];
-
   buildInputs = [
     readline
     gmp
