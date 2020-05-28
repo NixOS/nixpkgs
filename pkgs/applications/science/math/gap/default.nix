@@ -3,6 +3,7 @@
 , fetchurl
 , fetchpatch
 , makeWrapper
+, readline
 , gmp
 # one of
 # - "minimal" (~400M):
@@ -75,6 +76,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-gmp=system" ];
 
   buildInputs = [
+    readline
     gmp
   ];
 
