@@ -1,44 +1,40 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
-, qmake
-, qttools
-, qtsvg
-, dtkcore
+, pkg-config
+, cmake
 , dtkwidget
+, qttools
 , deepin
 }:
 
 mkDerivation rec {
   pname = "deepin-calculator";
-  version = "5.0.1";
+  version = "5.5.28";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0f26y7b3giybybhvlzbnwcw8kidzvhq66h0c15n9ww81gnlqf7v5";
+    sha256 = "00ld72rrfijhiqzhvhy2lyn7x2hmlmpdf7kksxajy2c7kzv3h0jp";
   };
 
   nativeBuildInputs = [
-    qmake
-    pkgconfig
+    cmake
+    pkg-config
     qttools
     deepin.setupHook
   ];
 
   buildInputs = [
-    dtkcore
     dtkwidget
-    qtsvg
   ];
 
   postPatch = ''
     searchHardCodedPaths  # debugging
     patchShebangs translate_generation.sh
-    fixPath $out /usr deepin-calculator.pro
-    substituteInPlace deepin-calculator.desktop --replace "Exec=deepin-calculator" "Exec=$out/bin/deepin-calculator"
+    fixPath $out /usr CMakeLists.txt
+    substituteInPlace deepin-calculator.desktop --replace Exec=deepin-calculator Exec=$out/bin/deepin-calculator
   '';
 
   postFixup = ''
