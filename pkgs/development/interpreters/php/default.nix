@@ -42,7 +42,7 @@ let
         # consecutive calls to buildEnv and overrides to work as
         # expected.
         mkBuildEnv = prevArgs: prevExtensionFunctions: lib.makeOverridable (
-          { extensions ? ({...}: []), extraConfig ? "", ... }@innerArgs:
+          { extensions ? ({ enabled, ... }: enabled), extraConfig ? "", ... }@innerArgs:
             let
               allArgs = args // prevArgs // innerArgs;
               filteredArgs = builtins.removeAttrs allArgs [ "extensions" "extraConfig" ];
@@ -55,8 +55,8 @@ let
               allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
               enabledExtensions =
                 builtins.foldl'
-                  (state: f:
-                    f { enabled = state; all = php-packages.extensions; })
+                  (enabled: f:
+                    f { inherit enabled; all = php-packages.extensions; })
                   []
                   allExtensionFunctions;
 
