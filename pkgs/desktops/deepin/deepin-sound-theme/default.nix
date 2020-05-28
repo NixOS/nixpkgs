@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-sound-theme";
-  version = "15.10.3";
+  version = "15.10.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-sound-theme";
     rev = version;
-    sha256 = "1sw4nrn7q7wk1hpicm05apyc0mihaw42iqm52wb8ib8gm1qiylr9";
+    sha256 = "1rgcfnynwdwqjsms80yvyr7wcdfc0an05crlp01sncsz0v5bzw86";
   };
 
   makeFlags = [
