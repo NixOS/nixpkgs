@@ -1,104 +1,94 @@
 { stdenv
+, mkDerivation
 , fetchFromGitHub
-, pkgconfig
 , cmake
-, ninja
-, vala_0_40
-, fetchpatch
-, gettext
+, pkg-config
 , at-spi2-core
-, dbus
-, epoxy
-, expect
-, gtk3
-, json-glib
-, libXdmcp
-, libgee
-, libpthreadstubs
-, librsvg
-, libsecret
-, libtasn1
-, libxcb
-, libxkbcommon
-, p11-kit
-, pcre
-, vte
-, wnck
-, libselinux
-, gnutls
-, pcre2
-, libsepol
-, utillinux
-, deepin-menu
+, dde-qt-dbus-factory
 , deepin-shortcut-viewer
+, dtkcore
+, dtkwidget
+, expect
+, lxqt
+, qtbase
+, qttools
 , deepin
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "deepin-terminal";
-  version = "5.0.0";
+  version = "5.2.22";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-terminal";
     rev = version;
-    sha256 = "1929saj828b438d07caw3cjhqq60v6gni7mi3fqrg9wdjz81xwv7";
+    sha256 = "17ljkb3a03yh9gkhzy9rd4ajf6k5wh507wj1cxlgaakbv01qhx3n";
   };
 
-  patches = [
-    # Fix build with VTE 0.60
-    (fetchpatch {
-      url = "https://github.com/linuxdeepin/deepin-terminal/commit/542d1035b609698ee81aa7971d20ca8e5930743d.patch";
-      sha256 = "1pihiy70yc25fm5fx7i7v9gmi65v4mhldvi7xwv8rgr2z6hbfj41";
-    })
-  ];
-
   nativeBuildInputs = [
-    pkgconfig
     cmake
-    ninja
-    vala_0_40 # xcb.vapi:411.3-411.48: error: missing return statement at end of subroutine body
-    gettext
-    libselinux libsepol utillinux # required by gio
+    pkg-config
+    qttools
+    lxqt.lxqt-build-tools
     deepin.setupHook
     wrapGAppsHook
   ];
 
   buildInputs = [
     at-spi2-core
-    dbus
-    deepin-menu
+    dde-qt-dbus-factory
     deepin-shortcut-viewer
-    epoxy
+    dtkcore
     expect
-    gtk3
-    json-glib
-    libXdmcp
-    libgee
-    libpthreadstubs
-    librsvg
-    libsecret
-    libtasn1
-    libxcb
-    libxkbcommon
-    p11-kit
-    pcre
-    vte
-    wnck
-    gnutls
-    pcre2
+    qtbase
+  ];
+
+  propagatedBuildInputs = [
+    dtkwidget
+  ];
+
+  cmakeFlags = [
+    # to be able to find dtk-settings-tools
+    "-DDTKCORE_TOOL_DIR=${dtkcore}/lib/libdtk-${dtkcore.version}/DCore/bin"
   ];
 
   postPatch = ''
     searchHardCodedPaths
+
+    fixPath $out /usr 3rdparty/terminalwidget/CMakeLists.txt
+
+    fixPath $out /usr/bin/deepin-terminal 3rdparty/terminalwidget/lib/Pty.cpp
+
+    fixPath ${expect} /usr/bin/expect src/assets/other/ssh_login.sh
+
+    substituteInPlace src/deepin-terminal.desktop --replace "Exec=deepin-terminal" "Exec=$out/bin/deepin-terminal"
+
+    substituteInPlace src/main/mainwindow.cpp --replace "deepin-shortcut-viewer" "${deepin-shortcut-viewer}/bin/deepin-shortcut-viewer"
+
+    substituteInPlace src/views/termwidget.cpp --replace "/bin/bash" "${stdenv.shell}"
+
+    # from archlinux
+    sed -i '/LXQtCompilerSettings/a remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)' 3rdparty/terminalwidget/CMakeLists.txt
+    sed -i 's|default-config.json|src/assets/other/default-config.json|' CMakeLists.txt
+
+    # avoid error:
+    # file cannot create directory: /homeless-shelter/.config/deepin/deepin-terminal
+    export HOME=$TMP
   '';
 
-  cmakeFlags = [
-    "-DTEST_BUILD=OFF"
-    "-DUSE_VENDOR_LIB=OFF"
-    "-DVERSION=${version}"
-  ];
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
+  postFixup = ''
+    searchHardCodedPaths $out
+  '';
 
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
 

@@ -39,9 +39,7 @@ let
     deepin-screen-recorder = callPackage ./deepin-screen-recorder { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-sound-theme = callPackage ./deepin-sound-theme { };
-    deepin-terminal = callPackage ./deepin-terminal {
-      wnck = pkgs.libwnck3;
-    };
+    deepin-terminal = callPackage ./deepin-terminal { };
     deepin-turbo = callPackage ./deepin-turbo { };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
     disomaster = callPackage ./disomaster { };
