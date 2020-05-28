@@ -6,12 +6,12 @@
 }:
 
 buildPythonApplication rec {
-  version = "0.10.5";
+  version = "0.10.9";
   pname = "gita";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xggslmrrfszpl190klkc97fnl88gml1bnkmkzp6aimdch66g4jg";
+    sha256 = "0fbzk9rj895s5fpbnsyy3gxwbf5spqycisx5cqwzxgm0n5qkz9dk";
   };
 
   propagatedBuildInputs = [
