@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ncurses }:
-stdenv.mkDerivation rec {
 
+stdenv.mkDerivation rec {
   pname = "tudu";
   version = "0.10.4";
 
@@ -11,10 +11,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = {
+  preConfigure = stdenv.lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace configure \
+      --replace 'echo "main()' 'echo "int main()'
+  '';
+
+  meta = with stdenv.lib; {
     description = "ncurses-based hierarchical todo list manager with vim-like keybindings";
     homepage = "https://code.meskio.net/tudu/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.unix;
   };
 }
