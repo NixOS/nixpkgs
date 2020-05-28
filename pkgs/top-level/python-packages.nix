@@ -5073,6 +5073,8 @@ in {
 
   polib = callPackage ../development/python-modules/polib {};
 
+  ponywhoosh = callPackage ../development/python-modules/ponywhoosh { };
+
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
 
   portend = callPackage ../development/python-modules/portend { };
