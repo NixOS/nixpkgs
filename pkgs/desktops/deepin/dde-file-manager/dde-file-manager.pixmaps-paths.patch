@@ -1,4 +1,4 @@
-From 084c3cfcf4995c109ca2e96f042fe341f925b0b4 Mon Sep 17 00:00:00 2001
+From e4d6d51646c00ef74080d2b0e7027610a34278a9 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
 Date: Thu, 16 May 2019 19:00:52 -0300
 Subject: [PATCH 4/4] Use xdg to look for pixmap icons
@@ -8,10 +8,10 @@ Subject: [PATCH 4/4] Use xdg to look for pixmap icons
  1 file changed, 10 insertions(+), 5 deletions(-)
 
 diff --git a/dde-file-manager-lib/shutil/fileutils.cpp b/dde-file-manager-lib/shutil/fileutils.cpp
-index d6a0573a..e912e7c2 100644
+index be6aa181..ef058843 100644
 --- a/dde-file-manager-lib/shutil/fileutils.cpp
 +++ b/dde-file-manager-lib/shutil/fileutils.cpp
-@@ -362,11 +362,16 @@ QIcon FileUtils::searchAppIcon(const DesktopFile &app,
+@@ -343,11 +343,16 @@ QIcon FileUtils::searchAppIcon(const DesktopFile &app,
    }
  
    // Last chance
@@ -34,5 +34,5 @@ index d6a0573a..e912e7c2 100644
  
    // Default icon
 -- 
-2.21.0
+2.26.2
 

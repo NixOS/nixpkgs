@@ -1,7 +1,7 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , avfs
 , dde-daemon
 , dde-dock
@@ -15,10 +15,10 @@
 , deepin-shortcut-viewer
 , deepin-terminal
 , disomaster
-, dtkcore
 , dtkwidget
 , ffmpegthumbnailer
 , file
+, gio-qt
 , glib
 , gnugrep
 , gsettings-qt
@@ -26,7 +26,9 @@
 , jemalloc
 , kcodecs
 , libX11
+, libmediainfo, libzen
 , libsecret
+, lxqt
 , polkit
 , polkit-qt
 , poppler
@@ -50,20 +52,20 @@
 
 mkDerivation rec {
   pname = "dde-file-manager";
-  version = "5.0.0";
+  version = "5.1.1.25";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0n2nl09anqdq0n5yn688n385rn81lcpybs0sa8m311k3k9ndkkyr";
+    sha256 = "1p79g709cicz2bjqp96qij3glhs5chgvx5ch0175r31a66bkmsg7";
   };
 
   nativeBuildInputs = [
     deepin.setupHook
     qmake
     qttools
-    pkgconfig
+    pkg-config
     deepin-gettext-tools
     wrapGAppsHook
   ];
@@ -80,17 +82,19 @@ mkDerivation rec {
     deepin-shortcut-viewer
     deepin-terminal
     disomaster
-    dtkcore
     dtkwidget
     ffmpegthumbnailer
     file
+    gio-qt
     glib
     gnugrep
     gsettings-qt
     gvfs
     jemalloc
     kcodecs
+    libmediainfo libzen
     libsecret
+    lxqt.libqtxdg
     polkit
     polkit-qt
     poppler
@@ -123,10 +127,11 @@ mkDerivation rec {
     patchShebangs dde-desktop/translate_generation.sh
     patchShebangs dde-desktop/translate_ts2desktop.sh
     patchShebangs dde-file-manager-lib/generate_translations.sh
+    patchShebangs dde-file-manager-lib/update_translations.sh
+    patchShebangs dde-file-manager-plugins/generate_translations.sh
+    patchShebangs dde-file-manager-plugins/update_translations.sh
     patchShebangs dde-file-manager/generate_translations.sh
     patchShebangs dde-file-manager/translate_ts2desktop.sh
-    patchShebangs usb-device-formatter/generate_translations.sh
-    patchShebangs usb-device-formatter/translate_ts2desktop.sh
 
     # x-terminal-emulator is a virtual package in Debian systems. The
     # terminal emulator is configured by Debian's alternative system.
@@ -162,22 +167,13 @@ mkDerivation rec {
       dde-desktop/translate_desktop2ts.sh \
       dde-desktop/translate_ts2desktop.sh \
       dde-file-manager/translate_desktop2ts.sh \
-      dde-file-manager/translate_ts2desktop.sh \
-      usb-device-formatter/translate_desktop2ts.sh \
-      usb-device-formatter/translate_ts2desktop.sh
+      dde-file-manager/translate_ts2desktop.sh
 
     fixPath ${avfs} /usr/bin/mountavfs dde-file-manager-lib/shutil/fileutils.cpp
     fixPath ${avfs} /usr/bin/umountavfs dde-file-manager-lib/shutil/fileutils.cpp
 
     fixPath ${deepin-terminal} /usr/bin/deepin-terminal \
       dde-file-manager-lib/shutil/fileutils.cpp
-
-    fixPath $out /usr/share/dde-file-manager \
-      dde-sharefiles/appbase.pri \
-      dde-sharefiles/dde-sharefiles.pro
-
-    fixPath $out /usr/share/usb-device-formatter \
-      usb-device-formatter/main.cpp
 
     fixPath $out /usr/share/applications \
       dde-file-manager/mips/dde-file-manager-autostart.desktop \
@@ -193,16 +189,13 @@ mkDerivation rec {
       dde-file-manager-daemon/dde-file-manager-daemon.pro \
       dde-file-manager-lib/dde-file-manager-lib.pro \
       dde-file-manager-lib/pkexec/com.deepin.pkexec.dde-file-manager.policy \
-      dde-file-manager/dde-file-manager-xdg-autostart.desktop \
       dde-file-manager/dde-file-manager.desktop \
       dde-file-manager/dde-file-manager.pro \
       dde-file-manager/mips/dde-file-manager-autostart.desktop \
       dde-file-manager/mips/dde-file-manager.desktop \
-      dde-file-manager/pkexec/com.deepin.pkexec.dde-file-manager.policy \
-      usb-device-formatter/pkexec/com.deepin.pkexec.usb-device-formatter.policy \
-      usb-device-formatter/usb-device-formatter.desktop \
-      usb-device-formatter/usb-device-formatter.pro
-      fixPath $out /etc \
+      dde-file-manager/pkexec/com.deepin.pkexec.dde-file-manager.policy
+
+    fixPath $out /etc \
       dde-file-manager/dde-file-manager.pro \
       dde-file-manager-daemon/dde-file-manager-daemon.pro
 
@@ -213,10 +206,7 @@ mkDerivation rec {
       dde-desktop/development.pri \
       dde-dock-plugins/disk-mount/disk-mount.pro \
       dde-file-manager-daemon/dde-file-manager-daemon.pro \
-      usb-device-formatter/usb-device-formatter.pro
-
-    sed -i -e "s,xdg-user-dir,${xdg-user-dirs}/bin/xdg-user-dir," \
-      dde-file-manager/dde-xdg-user-dirs-update
+      gschema/gschema.pro
 
     sed -i -e "s,Exec=dde-file-manager,Exec=$out/bin/dde-file-manager," \
       dde-file-manager/dde-file-manager.desktop
@@ -266,14 +256,11 @@ mkDerivation rec {
     "CONFIG+=DISABLE_FFMPEG"
   ];
 
-  preBuild = ''
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${zlib}/lib";
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libX11}/lib";
-  '';
-
   dontWrapQtApps = true;
 
   preFixup = ''
+    glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+
     gappsWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
     )
@@ -281,7 +268,6 @@ mkDerivation rec {
 
   postFixup = ''
     # debuging
-    unset LD_LIBRARY_PATH
     searchForUnresolvedDLL $out
     searchHardCodedPaths $out
   '';

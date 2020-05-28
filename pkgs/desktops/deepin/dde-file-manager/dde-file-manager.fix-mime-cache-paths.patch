@@ -1,7 +1,7 @@
-From 29f4ad88e2294ae70b10180e7361d135c4e5c896 Mon Sep 17 00:00:00 2001
+From 5b46017fbca78f8229f0426fecb57b5620c80028 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
 Date: Mon, 13 May 2019 00:09:42 -0300
-Subject: [PATCH 2/2] Use XDG to look for mime cache
+Subject: [PATCH 2/4] Use XDG to look for mime cache
 
 ---
  .../shutil/mimesappsmanager.cpp               | 230 ++++++++++--------
@@ -9,10 +9,10 @@ Subject: [PATCH 2/2] Use XDG to look for mime cache
  2 files changed, 125 insertions(+), 111 deletions(-)
 
 diff --git a/dde-file-manager-lib/shutil/mimesappsmanager.cpp b/dde-file-manager-lib/shutil/mimesappsmanager.cpp
-index c9e53630..7a21df51 100644
+index ce14ecc1..e9796631 100644
 --- a/dde-file-manager-lib/shutil/mimesappsmanager.cpp
 +++ b/dde-file-manager-lib/shutil/mimesappsmanager.cpp
-@@ -552,14 +552,20 @@ QString MimesAppsManager::getMimeAppsCacheFile()
+@@ -558,14 +558,20 @@ QString MimesAppsManager::getMimeAppsCacheFile()
      return QString("%1/%2").arg(DFMStandardPaths::location(DFMStandardPaths::CachePath), "MimeApps.json");
  }
  
@@ -37,7 +37,7 @@ index c9e53630..7a21df51 100644
  }
  
  QString MimesAppsManager::getDesktopFilesCacheFile()
-@@ -574,23 +580,27 @@ QString MimesAppsManager::getDesktopIconsCacheFile()
+@@ -580,23 +586,27 @@ QString MimesAppsManager::getDesktopIconsCacheFile()
  
  QStringList MimesAppsManager::getDesktopFiles()
  {
@@ -78,7 +78,7 @@ index c9e53630..7a21df51 100644
  }
  
  QMap<QString, DesktopFile> MimesAppsManager::getDesktopObjs()
-@@ -663,124 +673,128 @@ void MimesAppsManager::initMimeTypeApps()
+@@ -669,124 +679,128 @@ void MimesAppsManager::initMimeTypeApps()
          MimeApps.insert(key, orderApps);
      }
  
@@ -319,5 +319,5 @@ index 223c80aa..00a61302 100644
      static void initMimeTypeApps();
      static void loadDDEMimeTypes();
 -- 
-2.21.0
+2.26.2
 
