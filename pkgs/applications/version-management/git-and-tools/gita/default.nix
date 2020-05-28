@@ -1,23 +1,32 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromGitHub
 , pyyaml
 , setuptools
+, installShellFiles
 }:
 
 buildPythonApplication rec {
   version = "0.10.9";
   pname = "gita";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0fbzk9rj895s5fpbnsyy3gxwbf5spqycisx5cqwzxgm0n5qkz9dk";
+  src = fetchFromGitHub {
+    sha256 = "0wilyf4nnn2jyxrfqs8krya3zvhj6x36szsp9xhb6h08g1ihzp5i";
+    rev = "v${version}";
+    repo = "gita";
+    owner = "nosarthur";
   };
 
   propagatedBuildInputs = [
     pyyaml
     setuptools
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --bash --name gita ${src}/.gita-completion.bash
+  '';
 
   meta = with lib; {
     description = "A command-line tool to manage multiple git repos";
