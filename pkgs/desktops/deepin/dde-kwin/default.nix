@@ -1,6 +1,6 @@
 { stdenv
 , mkDerivation
-, pkgconfig
+, pkg-config
 , fetchFromGitHub
 , deepin
 , cmake
@@ -11,10 +11,11 @@
 , kwindowsystem
 , kcoreaddons
 , kwin
-, dtkcore
+, dtkgui
 , gsettings-qt
 , fontconfig
 , deepin-desktop-schemas
+, deepin-wallpapers
 , glib
 , libXrender
 , mtdev
@@ -26,19 +27,18 @@
 , epoxy
 , qt5integration
 , dde-session-ui
-, dbus
 , wrapGAppsHook
 }:
 
 mkDerivation rec {
   pname = "dde-kwin";
-  version = "5.0.0";
+  version = "5.1.0.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0bvkx9h5ygj46a0j76kfyq3gvk6zn4fx6clhrmcr40hbi2k33cbl";
+    sha256 = "0jxa2r3ksgcfkwqwks3ylc61cip8659raq3bjn4p6prvnixww9ql";
   };
 
   nativeBuildInputs = [
@@ -46,13 +46,14 @@ mkDerivation rec {
     deepin-gettext-tools
     deepin.setupHook
     extra-cmake-modules
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = [
     deepin-desktop-schemas
-    dtkcore
+    deepin-wallpapers
+    dtkgui
     epoxy
     fontconfig
     glib
@@ -97,19 +98,14 @@ mkDerivation rec {
 
     fixPath ${deepin-gettext-tools} /usr/bin/deepin-desktop-ts-convert translate_desktop2ts.sh translate_ts2desktop.sh
 
-    fixPath $out /etc/xdg configures/CMakeLists.txt deepin-wm-dbus/deepinwmfaker.cpp
-
-    # TODO: Need environmental patch
-    fixPath /run/current-system/sw /usr/lib plugins/kwin-xcb/plugin/main.cpp
-
-    substituteInPlace configures/kwin-wm-multitaskingview.desktop \
-      --replace "dbus-send" "${dbus}/bin/dbus-send"
+    fixPath $out /etc/xdg configures/CMakeLists.txt configures/kwin_no_scale.in deepin-wm-dbus/deepinwmfaker.cpp
 
     fixPath ${dde-session-ui} /usr/lib/deepin-daemon/dde-warning-dialog deepin-wm-dbus/deepinwmfaker.cpp
 
-    # Correct qt plugin installation path to be within dde-kwin prefix.
-    substituteInPlace CMakeLists.txt \
-      --subst-var-by plugin_path "$out/$qtPluginPrefix"
+    substituteInPlace plugins/kwineffects/multitasking/background.cpp --replace "/usr/share/backgrounds/default_background.jpg" "${deepin-wallpapers}/share/backgrounds/deepin/desktop.jpg"
+
+    # Correct qt plugin installation path to be within dde-kwin prefix
+    substituteInPlace CMakeLists.txt --subst-var-by plugin_path "$out/$qtPluginPrefix"
   '';
 
   postInstall = ''
@@ -128,7 +124,9 @@ mkDerivation rec {
     )
   '';
 
-  enableParallelBuilding = true;
+  postFixup = ''
+    searchHardCodedPaths $out  # debugging
+  '';
 
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
