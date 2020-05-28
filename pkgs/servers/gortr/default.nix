@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gortr";
-  version = "0.14.1";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03wxlras2akk2ig8sxzs89nvbc6zr2kbcmjlqldjdfhs1rcg82ra";
+    sha256 = "1srwlpl8g0pzrxb2nyp6xvg10cidm2i6qb9m08k2g296hfgdqqq3";
   };
   vendorSha256 = "1nwrzbpqycr4ixk8a90pgaxcwakv5nlfnql6hmcc518qrva198wp";
 

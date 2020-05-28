@@ -1509,6 +1509,17 @@ let
     meta.homepage = "https://github.com/megaannum/forms/";
   };
 
+  fruzzy = buildVimPluginFrom2Nix {
+    pname = "fruzzy";
+    version = "2019-10-28";
+    src = fetchFromGitHub {
+      owner = "raghur";
+      repo = "fruzzy";
+      rev = "b312ae79db98cf6939c8319f2511efa06889e8e3";
+      sha256 = "01iisbawq2w7yw866qvv109amnvyaymzyz9nqal3cjrrcwk6mmdk";
+    };
+  };
+
   fugitive-gitlab-vim = buildVimPluginFrom2Nix {
     pname = "fugitive-gitlab-vim";
     version = "2019-10-24";

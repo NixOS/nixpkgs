@@ -3621,6 +3621,10 @@ in {
 
   SPARQLWrapper = callPackage ../development/python-modules/sparqlwrapper { };
 
+  duckdb = callPackage ../development/python-modules/duckdb {
+    duckdb = pkgs.duckdb;
+  };
+
   dulwich = callPackage ../development/python-modules/dulwich {
     inherit (pkgs) git glibcLocales;
   };
@@ -5082,6 +5086,8 @@ in {
   plumbum = callPackage ../development/python-modules/plumbum { };
 
   polib = callPackage ../development/python-modules/polib {};
+
+  ponywhoosh = callPackage ../development/python-modules/ponywhoosh { };
 
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
 
@@ -6982,6 +6988,8 @@ in {
   Yapsy = callPackage ../development/python-modules/yapsy { };
 
   ansi = callPackage ../development/python-modules/ansi { };
+
+  pygments-better-html = callPackage ../development/python-modules/pygments-better-html { };
 
   pygments-markdown-lexer = callPackage ../development/python-modules/pygments-markdown-lexer { };
 

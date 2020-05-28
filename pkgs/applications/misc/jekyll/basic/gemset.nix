@@ -130,10 +130,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1gw05bh9iidnx2lxw0h5aiknbly818cmndc4a9nhq28fiafizi82";
+      sha256 = "0v01g9cwn4v7rnpsl9yvscjzvah3p4xwh03zp37zxkvw5kv004n8";
       type = "gem";
     };
-    version = "4.0.1";
+    version = "4.1.0";
   };
   jekyll-avatar = {
     dependencies = ["jekyll"];
@@ -260,10 +260,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "10la0xw82dh5mqab8bl0dk21zld63cqxb1g16fk8cb39ylc4n21a";
+      sha256 = "0f2i827w4lmsizrxixsrv2ssa3gk1b7lmqh8brk8ijmdb551wnmj";
       type = "gem";
     };
-    version = "0.3.6";
+    version = "0.4.0";
   };
   mini_portile2 = {
     groups = ["default"];

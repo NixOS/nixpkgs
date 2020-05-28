@@ -605,6 +605,8 @@ in
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
 
+  agda-pkg = callPackage ../development/tools/agda-pkg { };
+
   agrep = callPackage ../tools/text/agrep { };
 
   aha = callPackage ../tools/text/aha { };
@@ -5977,6 +5979,8 @@ in
   };
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
+
+  pinnwand = callPackage ../servers/pinnwand { };
 
   pirate-get = callPackage ../tools/networking/pirate-get { };
 
@@ -11616,6 +11620,8 @@ in
 
   dssi = callPackage ../development/libraries/dssi {};
 
+  duckdb = callPackage ../development/libraries/duckdb {};
+
   dxflib = callPackage ../development/libraries/dxflib {};
 
   easyloggingpp = callPackage ../development/libraries/easyloggingpp {};
@@ -15610,6 +15616,8 @@ in
 
   dex-oidc = callPackage ../servers/dex { };
 
+  dex2jar = callPackage ../development/tools/java/dex2jar { };
+
   doh-proxy = callPackage ../servers/dns/doh-proxy {
     python3Packages = python36Packages;
   };
@@ -17052,6 +17060,8 @@ in
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
     rtl8814au = callPackage ../os-specific/linux/rtl8814au { };
+
+    rtl88xxau-aircrack = callPackage ../os-specific/linux/rtl88xxau-aircrack { };
 
     rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
 
