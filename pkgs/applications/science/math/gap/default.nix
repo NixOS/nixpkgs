@@ -180,6 +180,6 @@ stdenv.mkDerivation rec {
     # reasonable and that way the binary cache doesn't get overloaded.
     hydraPlatforms = lib.optionals (!keepAllPackages) meta.platforms;
     license = licenses.gpl2;
-    homepage = "http://gap-system.org/";
+    homepage = "https://www.gap-system.org";
   };
 }
