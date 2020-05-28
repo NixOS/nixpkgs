@@ -1,14 +1,13 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
 , dde-qt-dbus-factory
 , dde-session-ui
 , deepin
 , deepin-desktop-schemas
 , deepin-wallpapers
-, dtkcore
 , dtkwidget
 , gsettings-qt
 , qtsvg
@@ -22,18 +21,18 @@
 
 mkDerivation rec {
   pname = "dde-launcher";
-  version = "5.0.0";
+  version = "5.3.0.5";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0zh6bb0r3pgjrnw9rba46ghdzza1ka1mv7r1znf8gw24wsjgjcpn";
+    sha256 = "1szdbrkzxmq7ibmmfl75jl3b1dkysbi79hrrrkahn70ik8dj0n3p";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     qttools
     wrapGAppsHook
     deepin.setupHook
@@ -44,7 +43,6 @@ mkDerivation rec {
     dde-session-ui
     deepin-desktop-schemas
     deepin-wallpapers
-    dtkcore
     dtkwidget
     glib
     gsettings-qt
@@ -63,7 +61,7 @@ mkDerivation rec {
     substituteInPlace src/dbusservices/com.deepin.dde.Launcher.service --replace "/usr" "$out"
 
     substituteInPlace src/historywidget.cpp --replace "xdg-open" "${xdg_utils}/bin/xdg-open"
-    substituteInPlace src/widgets/miniframebottombar.cpp --replace "dde-shutdown" "${dde-session-ui}/bin/dde-shutdown"
+    substituteInPlace src/widgets/miniframerightbar.cpp --replace "dde-shutdown" "${dde-session-ui}/bin/dde-shutdown"
     substituteInPlace src/widgets/miniframerightbar.cpp --replace "which" "${which}/bin/which"
 
     # Uncomment (and remove space after $) after packaging deepin-manual
