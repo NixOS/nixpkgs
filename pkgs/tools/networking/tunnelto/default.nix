@@ -7,7 +7,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "wormhole";
+  pname = "tunnelto";
   version = "0.1.5";
 
   src = fetchFromGitHub {
