@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wormhole";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "agrinman";
     repo = pname;
     rev = version;
-    sha256 = "0aq2myzqd9xqz4zdl03jhdd7f22y9k39xdhiark6ymhwcxijsq8y";
+    sha256 = "0yigjg8kjl8v0636hjr3sg33p4v963vzq7wbfi986ymxfx47jqp7";
   };
 
-  cargoSha256 = "1gjqiv8sgdab0i461v72zcvh91cpqmmpcc3qyx3svq0391rwzp46";
+  cargoSha256 = "08c3bydhn3fz1qhzqqkxgr8rhljm8isjx3nx3gnq0fdjah9jl2i1";
 
   nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs = [ ]
