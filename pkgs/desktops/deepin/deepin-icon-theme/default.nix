@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-icon-theme";
-  version = "2020.05.21";
+  version = "2020.07.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0b1s6kf0q804zbbghly981wzacy1spi8168shf3x8w95rqj6463p";
+    sha256 = "1549h0jj7l32v1cn1xjxniir52qn2ssi5lnq8pm5k3x8qclihzhq";
   };
 
   nativeBuildInputs = [
@@ -30,27 +30,33 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  buildTargets = "all hicolor-links";
-
   postPatch = ''
     # fix: hicolor links should follow the deepin -> bloom naming change
     # https://github.com/linuxdeepin/deepin-icon-theme/pull/24
     substituteInPlace tools/hicolor.links --replace deepin bloom
 
-    substituteInPlace Sea/index.theme --replace Inherits=deepin Inherits=bloom
+    # fix: update the parent theme name
+    for f in Sea/index.theme bloom-{dark,fantacy}/cursor.theme ; do
+      substituteInPlace $f --replace Inherits=deepin Inherits=bloom
+    done
   '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/icons
-    cp -vai bloom* Sea $out/share/icons
+    cp -a bloom* Sea $out/share/icons
 
-    for theme in $out/share/icons/*; do
+    # TODO: bloom-classic fails building the cache
+    rm -rf $out/share/icons/bloom-classic
+
+    #for theme in $out/share/icons/{bloom{,-dark,-classic,-classic-dark},Sea}; do
+    for theme in $out/share/icons/{bloom{,-dark,-classic-dark},Sea}; do
+      echo ========= $theme
       gtk-update-icon-cache $theme
     done
 
-    cp -vai usr/share/icons/hicolor $out/share/icons
+    cp -a usr/share/icons/hicolor $out/share/icons
 
     runHook postInstall
   '';
