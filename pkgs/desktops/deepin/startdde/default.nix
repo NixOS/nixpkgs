@@ -1,7 +1,7 @@
 { stdenv
 , buildGoPackage
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , alsaLib
 , coreutils
 , dde-api
@@ -26,10 +26,11 @@
 , kmod
 , libX11
 , libXi
+, libgudev
+, libpulseaudio
 , libcgroup
 , pciutils
 , psmisc
-, pulseaudio
 , systemd
 , xorg
 , wrapGAppsHook
@@ -37,7 +38,7 @@
 
 buildGoPackage rec {
   pname = "startdde";
-  version = "5.0.1";
+  version = "5.5.0.13";
 
   goPackagePath = "pkg.deepin.io/dde/startdde";
 
@@ -45,13 +46,13 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1xydmglydksy7hjlavf5pbfy0s0lndgavh8x3kg2mg7d36mbra43";
+    sha256 = "05717npmgzhrylq5v6s5rpnj4n6lyryn15s1kygcmy834qg0j3jz";
   };
 
   goDeps = ./deps.nix;
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     jq
     wrapGAppsHook
     deepin.setupHook
@@ -79,10 +80,11 @@ buildGoPackage rec {
     kmod
     libX11
     libXi
+    libgudev
+    libpulseaudio
     libcgroup
     pciutils
     psmisc
-    pulseaudio
     systemd
     xorg.xdriinfo
   ];
@@ -93,31 +95,30 @@ buildGoPackage rec {
     # Commented lines below indicates a doubt about how to fix the hard coded path
 
      fixPath $out                    /etc/X11                                  Makefile
+     fixPath $out                    /etc/profile.d                            Makefile
     #fixPath ?                       /etc/xdg/autostop                         autostop/autostop.go
      fixPath ${coreutils}            /bin/ls                                   copyfile_test.go
      fixPath $out                    /usr/share/startdde/auto_launch.json      launch_group.go
-    #fixPath ?                       /usr/bin/kwin_no_scale                    main.go  # not found on deepin linux and archlinux
+     fixPath ${dde-kwin}             /usr/bin/kwin_no_scale                    main.go
      fixPath $out                    /usr/share/startdde/memchecker.json       memchecker/config.go
-     fixPath $out                    /usr/bin/startdde                         misc/00deepin-dde-env
+     fixPath $out                    /usr/bin/startdde                         misc/Xsession.d/00deepin-dde-env
      fixPath ${dde-file-manager}     /usr/bin/dde-file-manager                 misc/auto_launch/chinese.json
      fixPath ${deepin-turbo}         /usr/lib/deepin-turbo/booster-dtkwidget   misc/auto_launch/chinese.json
      fixPath ${dde-daemon}           /usr/lib/deepin-daemon/dde-session-daemon misc/auto_launch/chinese.json misc/auto_launch/default.json
      fixPath ${dde-dock}             /usr/bin/dde-dock                         misc/auto_launch/chinese.json misc/auto_launch/default.json
      fixPath ${dde-file-manager}     /usr/bin/dde-desktop                      misc/auto_launch/chinese.json misc/auto_launch/default.json
-     fixPath $out                    /usr/bin/startdde                         misc/deepin-session
-    #fixPath ?                       /usr/lib/lightdm/config-error-dialog.sh   misc/deepin-session  # provided by lightdm on deepin linux
-    #fixPath ?                       /usr/sbin/lightdm-session                 misc/deepin-session  # provided by lightdm on deepin linux
+     fixPath $out                    /usr/sbin/deepin-fix-xauthority-perm      misc/lightdm.conf
      fixPath ${dde-session-ui}       /usr/bin/dde-lock                         session.go
      fixPath ${dde-session-ui}       /usr/bin/dde-shutdown                     session.go
      fixPath ${dde-session-ui}       /usr/lib/deepin-daemon/dde-osd            session.go
      fixPath ${deepin-desktop-base}  /etc/deepin-version                       session.go
      fixPath ${gnome3.gnome-keyring} /usr/bin/gnome-keyring-daemon             session.go
-     fixPath ${pulseaudio}           /usr/bin/pulseaudio                       sound_effect.go
-    #fixPath ?                       /usr/lib/UIAppSched.hooks                 startmanager.go  # not found anything about this
+    #fixPath ?                       /usr/lib/UIAppSched.hooks                 startmanager.go  # found nothing about this
      fixPath ${dde-session-ui}       /usr/lib/deepin-daemon/dde-welcome        utils.go
      fixPath ${dde-polkit-agent}     /usr/lib/polkit-1-dde/dde-polkit-agent    watchdog/dde_polkit_agent.go
-    #fixPath ?                       /var/log/Xorg.0.log                       wm/driver.go
-    #fixPath ?                       /etc/deepin-wm-switcher/config.json       wm/switcher_config.go  # not present on nixos, deepin linux and archlinux
+
+    substituteInPlace session.go           --replace '"kwin_no_scale"' '"${dde-kwin}/bin/kwin_no_scale"'
+    substituteInPlace watchdog/dde_kwin.go --replace '"kwin_no_scale"' '"${dde-kwin}/bin/kwin_no_scale"'
 
     substituteInPlace wm/driver.go      --replace '/sbin/lsmod'                   "${kmod}/bin/lsmod"
 
@@ -133,13 +134,18 @@ buildGoPackage rec {
   '';
 
   buildPhase = ''
+    GOPATH="$GOPATH:${go-dbus-factory}/share/go"
+    GOPATH="$GOPATH:${go-gir-generator}/share/go"
+    GOPATH="$GOPATH:${go-lib}/share/go"
+    GOPATH="$GOPATH:${dde-api}/share/go"
+
     make -C go/src/${goPackagePath}
   '';
 
   installPhase = ''
     make install PREFIX="$out" -C go/src/${goPackagePath}
     rm -rf $out/share/lightdm  # this is uselesss for NixOS
-    remove-references-to -t ${go} $out/sbin/*
+    remove-references-to -t ${go} $out/bin/* $out/sbin/* $out/lib/deepin-daemon/*
   '';
 
   postFixup = ''

@@ -10,12 +10,21 @@
     };
   }
   {
+    goPackagePath = "github.com/davecgh/go-spew";
+    fetch = {
+      type = "git";
+      url = "https://github.com/davecgh/go-spew";
+      rev = "d8f796af33cc11cb798c1aaeb27a4ebc5099927d";
+      sha256 = "19z27f306fpsrjdvkzd61w1bdazcdbczjyjck177g33iklinhpvx";
+    };
+  }
+  {
     goPackagePath = "github.com/linuxdeepin/go-x11-client";
     fetch = {
       type = "git";
       url = "https://github.com/linuxdeepin/go-x11-client";
-      rev = "b5b01565d224d5ccd5a4143d9099acceb23e182a";
-      sha256 = "1lnffjp8bqy6f8caw6drg1js6hny5w7432riqchcrcd4q85d94rs";
+      rev = "ace666086b736674685a56d457a1426eecf16782";
+      sha256 = "1mnsgshg9y7c8qsqkhqassxf6j8xd1xp4frh92ihbqmsk7c4v1j2";
     };
   }
   {
@@ -23,8 +32,17 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "daa7c04131f568e31c51927b359a2d197a357058";
-      sha256 = "17gbfvb5iqyayzw0zd6q218zsbf7x74rflvn18wkxvsw95n1y54h";
+      rev = "3edf25e44fccea9e11b919341e952fca722ef460";
+      sha256 = "01iyxw6r5gb5lgdzs5sdkw4p31rjf2b14vvy45gryhjrcbg13r1a";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/xerrors";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/xerrors";
+      rev = "5ec99f83aff198f5fbd629d6c8d8eb38a04218ca";
+      sha256 = "1dbzc3gmf2haazpv7cgmv97rq40g2xzwbglc17vas8dwhgwgwrzb";
     };
   }
 ]
