@@ -12965,6 +12965,8 @@ in
 
   libftdi1 = callPackage ../development/libraries/libftdi/1.x.nix { };
 
+  libfyaml = callPackage ../development/libraries/libfyaml { };
+
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
   libgcrypt_1_5 = callPackage ../development/libraries/libgcrypt/1.5.nix { };
