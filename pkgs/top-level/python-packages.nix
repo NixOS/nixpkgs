@@ -813,6 +813,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  hiyapyco = callPackage ../development/python-modules/hiyapyco { };
+
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
 
   holidays = callPackage ../development/python-modules/holidays { };
@@ -2482,6 +2484,8 @@ in {
 
   pytest-cram = callPackage ../development/python-modules/pytest-cram { };
 
+  pytest-datadir = callPackage ../development/python-modules/pytest-datadir { };
+
   pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
 
   pytest-dependency = callPackage ../development/python-modules/pytest-dependency { };
@@ -3287,6 +3291,8 @@ in {
   pydotplus = callPackage ../development/python-modules/pydotplus { };
 
   pyfxa = callPackage ../development/python-modules/pyfxa { };
+
+  pygls = callPackage ../development/python-modules/pygls {};
 
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
 

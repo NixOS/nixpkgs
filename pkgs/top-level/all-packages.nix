@@ -1859,6 +1859,8 @@ in
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
 
+  go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
+
   geckodriver = callPackage ../development/tools/geckodriver { };
 
   geekbench = callPackage ../tools/misc/geekbench { };
@@ -7200,6 +7202,10 @@ in
 
   tuir = callPackage ../applications/misc/tuir { };
 
+  tunnelto = callPackage ../tools/networking/tunnelto {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tuptime = callPackage ../tools/system/tuptime { };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
@@ -7452,10 +7458,6 @@ in
   woof = callPackage ../tools/misc/woof { };
 
   wootility = callPackage ../tools/misc/wootility { };
-
-  wormhole = callPackage ../tools/networking/wormhole {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   wpscan = callPackage ../tools/security/wpscan { };
 
@@ -10042,7 +10044,7 @@ in
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  bazel = bazel_2;
+  bazel = bazel_3;
 
   bazel_0 = bazel_0_26;
 
@@ -10075,14 +10077,14 @@ in
     bazel_self = bazel_1;
   };
 
-  bazel_2 = callPackage ../development/tools/build-managers/bazel/bazel_2 {
+  bazel_3 = callPackage ../development/tools/build-managers/bazel/bazel_3 {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk8;
     buildJdkName = "jdk8";
     runJdk = jdk11_headless;
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-    bazel_self = bazel_2;
+    bazel_self = bazel_3;
   };
 
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
@@ -10247,6 +10249,8 @@ in
   cmakeWithQt4Gui = cmakeCurses.override { useQt4 = true; };
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
+
+  cmake-language-server = python3Packages.callPackage ../development/tools/cmake-language-server { };
 
   # Does not actually depend on Qt 5
   inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
@@ -12995,6 +12999,8 @@ in
   libftdi = callPackage ../development/libraries/libftdi { };
 
   libftdi1 = callPackage ../development/libraries/libftdi/1.x.nix { };
+
+  libfyaml = callPackage ../development/libraries/libfyaml { };
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 

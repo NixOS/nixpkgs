@@ -2917,10 +2917,10 @@
     name = "Robin Gloster";
   };
   gnidorah = {
-    email = "gnidorah@yandex.com";
+    email = "gnidorah@users.noreply.github.com";
     github = "gnidorah";
     githubId = 12064730;
-    name = "Alex Ivanov";
+    name = "gnidorah";
   };
   gnxlxnxx = {
     email = "gnxlxnxx@web.de";
@@ -4734,6 +4734,12 @@
     github = "manveru";
     githubId = 3507;
     name = "Michael Fellinger";
+  };
+  maralorn = {
+    email = "malte.brandy@maralorn.de";
+    github = "maralorn";
+    githubId = 1651325;
+    name = "Malte Brandy";
   };
   marcweber = {
     email = "marco-oweber@gmx.de";
@@ -8170,6 +8176,16 @@
     github = "vdemeester";
     githubId = 6508;
     name = "Vincent Demeester";
+  };
+  veehaitch = {
+    name = "Vincent Haupert";
+    email = "mail@vincent-haupert.de";
+    github = "veehaitch";
+    githubId = 15069839;
+    keys = [{
+      longkeyid = "rsa4096/0x874BD6F916FAA742";
+      fingerprint = "4D23 ECDF 880D CADF 5ECA  4458 874B D6F9 16FA A742";
+    }];
   };
   velovix = {
     email = "xaviosx@gmail.com";

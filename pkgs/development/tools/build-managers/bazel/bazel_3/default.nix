@@ -25,11 +25,11 @@
 }:
 
 let
-  version = "2.1.0";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0ijz9lxralyw18r5ra2h79jnafk5521ncr3knaip74cqa28csw9k";
+    sha256 = "1ylbfdcb6rhnc3sr292c6shl754i0h0i050f4gr4bppn6sa15v24";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -49,12 +49,12 @@ let
       srcs.io_bazel_rules_sass
       srcs.platforms
       (if stdenv.hostPlatform.isDarwin
-       then srcs."java_tools_javac11_darwin-v7.0.zip"
-       else srcs."java_tools_javac11_linux-v7.0.zip")
+       then srcs."java_tools_javac11_darwin-v8.0.zip"
+       else srcs."java_tools_javac11_linux-v8.0.zip")
       srcs."coverage_output_generator-v2.1.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.13.tar.gz"
-      srcs."0.28.3.tar.gz"
+      srcs."android_tools_pkg-0.16.0.tar.gz"
+      srcs."3.1.0.tar.gz"
       srcs.rules_pkg
       srcs.rules_cc
       srcs.rules_java
@@ -111,7 +111,7 @@ let
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
-    src = srcDepsSet."java_tools_javac11_${system}-v7.0.zip";
+    src = srcDepsSet."java_tools_javac11_${system}-v8.0.zip";
 
     nativeBuildInputs = [ autoPatchelfHook unzip ];
     buildInputs = [ gcc-unwrapped ];
@@ -157,6 +157,8 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   patches = [
+    ./python-shebang.patch
+
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
@@ -382,6 +384,10 @@ stdenv.mkDerivation rec {
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|' \
         src/BUILD
+
+      # replace initial value of pythonShebang variable in BazelPythonSemantics.java
+      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/BazelPythonSemantics.java \
+        --replace '"#!/usr/bin/env " + pythonExecutableName' "\"#!${python3}/bin/python\""
 
       # substituteInPlace is rather slow, so prefilter the files with grep
       grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
