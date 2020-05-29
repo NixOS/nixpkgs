@@ -6210,12 +6210,12 @@ let
     pname = "vim-test";
     version = "2020-05-26";
     src = fetchFromGitHub {
-      owner = "janko";
+      owner = "vim-test";
       repo = "vim-test";
       rev = "b882783760b954144dda5be7ad6cd4bdefd013fb";
       sha256 = "0s0dlgjkkxajkfnpihc09py0qbbamibhalsv2vdvwcqva02xrylx";
     };
-    meta.homepage = "https://github.com/janko/vim-test/";
+    meta.homepage = "https://github.com/vim-test/vim-test/";
   };
 
   vim-textobj-comment = buildVimPluginFrom2Nix {
