@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, systemd, boost, darwin, installShellFiles
 # Inputs
 , curl, libmms, libnfs, samba
 # Archive support
@@ -116,7 +116,7 @@ let
         ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
         ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
 
-      nativeBuildInputs = [ meson ninja pkgconfig ];
+      nativeBuildInputs = [ meson ninja pkgconfig installShellFiles ];
 
       enableParallelBuilding = true;
 
@@ -128,6 +128,10 @@ let
           "-Dzeroconf=avahi"
         ++ lib.optional (builtins.elem "systemd" features_)
           "-Dsystemd_system_unit_dir=etc/systemd/system";
+
+      postInstall = ''
+        installManPage $src/doc/mpd.1 $src/doc/mpd.conf.5
+      '';
 
       passthru.tests.nixos = nixosTests.mpd;
 
