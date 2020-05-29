@@ -6797,8 +6797,10 @@ broken-packages:
   - keera-hails-mvc-model-lightmodel
   - keera-hails-mvc-model-protectedmodel
   - keera-hails-mvc-solutions-gtk
+  - keera-hails-reactive-cbmvar
   - keera-hails-reactive-fs
   - keera-hails-reactive-gtk
+  - keera-hails-reactive-htmldom
   - keera-hails-reactive-network
   - keera-hails-reactive-polling
   - keera-hails-reactive-wx
@@ -7999,6 +8001,7 @@ broken-packages:
   - optparse-applicative-simple
   - optparse-enum
   - optparse-helper
+  - orbits
   - orc
   - orchestrate
   - OrchestrateDB
@@ -10499,7 +10502,6 @@ broken-packages:
   - vty-menu
   - vty-ui
   - vty-ui-extras
-  - VulkanMemoryAllocator
   - waargonaut
   - wacom-daemon
   - waddle
