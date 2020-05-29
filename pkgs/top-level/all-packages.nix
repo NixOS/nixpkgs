@@ -23143,6 +23143,8 @@ in
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
+  uhhyou.lv2 = callPackage ../applications/audio/uhhyou.lv2 { };
+
   umurmur = callPackage ../applications/networking/umurmur { };
 
   udocker = pythonPackages.callPackage ../tools/virtualization/udocker { };
