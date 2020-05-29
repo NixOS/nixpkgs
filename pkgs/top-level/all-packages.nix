@@ -986,6 +986,8 @@ in
 
   gomatrix = callPackage ../applications/misc/gomatrix { };
 
+  gopacked = callPackage ../applications/misc/gopacked { };
+
   gucci = callPackage ../tools/text/gucci { };
 
   grc = callPackage ../tools/misc/grc { };
