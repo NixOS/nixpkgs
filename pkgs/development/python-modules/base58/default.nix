@@ -1,18 +1,20 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest, pyhamcrest }:
+{ stdenv, fetchPypi, isPy27, buildPythonPackage, pytest, pyhamcrest }:
 
 buildPythonPackage rec {
   pname = "base58";
-  version = "1.0.3";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9a793c599979c497800eb414c852b80866f28daaed5494703fc129592cc83e60";
+    sha256 = "0zhp8iwgiapaqwpy67agzfg1lwnj59zi61s3cgfm5p0pp6l88df8";
   };
 
   checkInputs = [ pytest pyhamcrest ];
   checkPhase = ''
     pytest
   '';
+
+  disabled = isPy27;
 
   meta = with stdenv.lib; {
     description = "Base58 and Base58Check implementation";
