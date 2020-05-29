@@ -313,6 +313,12 @@
     githubId = 2387841;
     name = "Alexander Bakker";
   };
+  alexbiehl = {
+    email = "alexbiehl@gmail.com";
+    github = "alexbiehl";
+    githubId = 1876617;
+    name = "Alex Biehl";
+  };
   alexchapman = {
     email = "alex@farfromthere.net";
     github = "AJChapman";
