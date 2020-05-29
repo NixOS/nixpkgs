@@ -763,6 +763,8 @@ in
 
   asciiquarium = callPackage ../applications/misc/asciiquarium {};
 
+  ashuffle = callPackage ../applications/audio/ashuffle {};
+
   asls = callPackage ../development/tools/misc/asls { };
 
   asymptote = callPackage ../tools/graphics/asymptote {
