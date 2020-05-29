@@ -797,8 +797,6 @@ let
 
     pa_bench = callPackage ../development/ocaml-modules/pa_bench { };
 
-    pa_test = callPackage ../development/ocaml-modules/pa_test { };
-
     parany = callPackage ../development/ocaml-modules/parany { };
 
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
