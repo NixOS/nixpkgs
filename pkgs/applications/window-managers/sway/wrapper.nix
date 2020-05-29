@@ -45,6 +45,11 @@ in symlinkJoin {
       --prefix PATH : "${swaybg}/bin" \
       ${optionalString withGtkWrapper ''"''${gappsWrapperArgs[@]}"''} \
       ${optionalString (extraOptions != []) "${concatMapStrings (x: " --add-flags " + x) extraOptions}"}
+
+    # Not possible to use substituteInPlace because is a symlink to the unwrapped derivation
+    substitute $out/share/wayland-sessions/sway.desktop $out/sway-tmp.desktop \
+      --replace "Exec=sway" "Exec=$out/bin/sway"
+    mv $out/sway-tmp.desktop $out/share/wayland-sessions/sway.desktop
   '';
 
   passthru.providedSessions = [ "sway" ];
