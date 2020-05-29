@@ -6440,6 +6440,12 @@
     githubId = 1973389;
     name = "Reuben D'Netto";
   };
+  reardencode = {
+    email = "freedom@reardencode.com";
+    github = "reardencode";
+    githubId = 730881;
+    name = "Brandon Black";
+  };
   redbaron = {
     email = "ivanov.maxim@gmail.com";
     github = "redbaron";
