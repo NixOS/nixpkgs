@@ -17,17 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.90.1";
+  version = "0.92.1";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "1ff2cgbllrl2pl5zfbf0cd9qbf6hqpwr395sa1k245ar4f1rfwpg";
+    sha256 = "0l4ncxqxvp5m014j7vlglhzxhhrxl0c2m71xn0i0a27hn4nc72mr";
   };
-
-  # https://github.com/clangen/musikcube/issues/339
-  patches = [ ./dont-strip.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -45,6 +42,10 @@ stdenv.mkDerivation rec {
     pulseaudio
     taglib
   ] ++ stdenv.lib.optional systemdSupport systemd;
+
+  cmakeFlags = [
+    "-DDISABLE_STRIP=true"
+  ];
 
   meta = with stdenv.lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";
