@@ -62,6 +62,17 @@ let
     lovelace.mode = "yaml";
   };
 
+  #pythonScripts = pkgs.runCommand "python_scripts" {
+  #  nativeBuildInputs = [ pkgs.python3 ];
+  #  scripts = cfg.pythonScripts;
+  #} ''
+  #  mkdir $out
+  #  for s in $scripts; do
+  #    echo "checking syntax of $s"
+  #    python -m py_compile "$s"
+  #    ln -s "$s" "$out/$(basename $s"
+  #  done
+  #'';
 in {
   meta.maintainers = with maintainers; [ dotlambda ];
 
@@ -214,6 +225,17 @@ in {
       '';
     };
 
+    pythonScripts = mkOption {
+      #default = [];
+      #type = types.listOf types.path;
+      default = null;
+      type = types.nullOr types.path;
+      description = ''
+        List of python scripts to use in the <literal>python_scripts</literal> integration.
+        Also see in the <link xlink:href="https://www.home-assistant.io/integrations/python_script">Homeassistant documentation</link>
+      '';
+    };
+
     openFirewall = mkOption {
       default = false;
       type = types.bool;
@@ -223,6 +245,12 @@ in {
 
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+
+    systemd.tmpfiles.rules = mkIf (cfg.pythonScripts != null) [
+      "L+ ${cfg.configDir}/python_scripts - - - - ${cfg.pythonScripts}"
+    ];
+
+    services.home-assistant.config.python_script = mkIf (cfg.pythonScripts != null) {};
 
     systemd.services.home-assistant = {
       description = "Home Assistant";
