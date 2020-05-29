@@ -67,6 +67,11 @@ let
         ./qtbase.patch.d/0010-qtbase-qtpluginpath.patch
         ./qtbase.patch.d/0011-qtbase-assert.patch
         ./qtbase.patch.d/0012-fix-header_module.patch
+
+        # Ensure -I${includedir} is added to Cflags in pkg-config files.
+        # See https://github.com/NixOS/nixpkgs/issues/52457
+        ./qtbase.patch.d/0014-qtbase-pkg-config.patch
+
         # https://bugreports.qt.io/browse/QTBUG-81715
         # remove after updating to qt > 5.12.7
         (fetchpatch {
