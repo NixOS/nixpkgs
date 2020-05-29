@@ -4,7 +4,13 @@ buildPythonPackage rec {
   pname = "pkgconfig";
   version = "1.5.1";
 
-  setupHooks = pkgconfig.setupHooks;
+  inherit (pkgconfig)
+    setupHooks
+    wrapperName
+    suffixSalt
+    targetPrefix
+    baseBinName
+  ;
 
   src = fetchPypi {
     inherit pname version;
