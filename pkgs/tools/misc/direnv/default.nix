@@ -14,9 +14,14 @@ buildGoModule rec {
   };
 
   # we have no bash at the moment for windows
-  makeFlags = stdenv.lib.optional (!stdenv.hostPlatform.isWindows) [
-    "BASH_PATH=${bash}/bin/bash"
-  ];
+  BASH_PATH =
+    stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    "${bash}/bin/bash";
+
+  # replace the build phase to use the GNUMakefile instead
+  buildPhase = ''
+    make BASH_PATH=$BASH_PATH
+  '';
 
   installPhase = ''
     make install DESTDIR=$out

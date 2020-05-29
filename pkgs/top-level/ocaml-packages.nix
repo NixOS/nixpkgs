@@ -589,8 +589,6 @@ let
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
-    core_kernel_p4 = callPackage ../development/ocaml-modules/core_kernel { };
-
     ocamlbuild =
     if lib.versionOlder "4.03" ocaml.version then
     callPackage ../development/tools/ocaml/ocamlbuild { }
@@ -1159,13 +1157,6 @@ let
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.core_bench else
       callPackage ../development/ocaml-modules/janestreet/core_bench.nix {};
-
-    core_kernel =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.core_kernel
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/core_kernel.nix {}
-      else core_kernel_p4;
 
     async_rpc_kernel =
       if lib.versionOlder "4.03" ocaml.version
