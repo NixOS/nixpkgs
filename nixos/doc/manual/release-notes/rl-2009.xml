@@ -20,6 +20,25 @@
   <itemizedlist>
    <listitem>
     <para>
+     <varname>services.postfix.sslCACert</varname>, <varname>services.postfix.sslCert</varname> and <varname>services.postfix.sslKey</varname> were deprecated since
+     they were used to configure tls for incoming as well as outgoing traffic which is most likely not intended.
+    </para>
+    <para>
+     <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.clientTlsCAFile</varname> which now defaults to system certifcate authorities.
+     In addition opportunistic tls was enabled for outgoing mail traffic.
+    </para>
+    <para>
+     <varname>services.postfix.sslCert</varname> was replaced by <varname>services.postfix.tlsChainFiles</varname> to configure server tls certifcates. Note in case certifcate and key are seperate files list key file first.
+    </para>
+    <para>
+     <varname>services.postfix.sslKey</varname> was replaced by <varname>services.postfix.tlsChainFiles</varname> to configure server tls key. Note in case certifcate and key are seperate files list key file first.
+    </para>
+    <para>
+     Note: Client certificates were not replaced since this kind of configuration is rarely used. If there's a need to configure client certifactes use <varname>services.postfix.extraConfig</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Support is planned until the end of April 2021, handing over to 21.03.
     </para>
    </listitem>
