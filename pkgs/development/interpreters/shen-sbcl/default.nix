@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://shenlanguage.org;
     description = "Port of Shen running on Steel Bank Common Lisp";
-    platforms = platforms.linux;
+    platforms = sbcl.meta.platforms;
     maintainers = with maintainers; [ bsima ];
     license = licenses.bsd3;
   };
