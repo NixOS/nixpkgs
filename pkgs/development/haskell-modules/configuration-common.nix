@@ -1007,6 +1007,9 @@ self: super: {
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
+  # Compiles some C++ source which requires these headers
+  VulkanMemoryAllocator = addExtraLibrary super.VulkanMemoryAllocator pkgs.vulkan-headers;
+
   # # Builds only with the latest version of indexed-list-literals.
   # vector-sized_1_0_3_0 = super.vector-sized_1_0_3_0.override {
   #   indexed-list-literals = self.indexed-list-literals_0_2_1_1;
