@@ -2828,6 +2828,8 @@ in {
 
   flit = callPackage ../development/python-modules/flit { };
 
+  flit-core = callPackage ../development/python-modules/flit-core { };
+
   flowlogs_reader = callPackage ../development/python-modules/flowlogs_reader { };
 
   fluent-logger = callPackage ../development/python-modules/fluent-logger {};
@@ -4090,7 +4092,13 @@ in {
 
   hydra = callPackage ../development/python-modules/hydra { };
 
-  hypothesis = callPackage ../development/python-modules/hypothesis { };
+  # File name is called 2.nix because this one will need to remain for Python 2.
+  hypothesis_4 = callPackage ../development/python-modules/hypothesis/2.nix { };
+
+  hypothesis = if isPy3k then
+    callPackage ../development/python-modules/hypothesis { }
+  else
+    self.hypothesis_4;
 
   hydra-check = callPackage ../development/python-modules/hydra-check { };
 
@@ -4540,7 +4548,10 @@ in {
 
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
-  mock = callPackage ../development/python-modules/mock { };
+  mock = if pythonOlder "3.6" then
+    callPackage ../development/python-modules/mock/2.nix { }
+  else
+    callPackage ../development/python-modules/mock { };
 
   mock-open = callPackage ../development/python-modules/mock-open { };
 
@@ -4791,7 +4802,10 @@ in {
 
   oauth2client = callPackage ../development/python-modules/oauth2client { };
 
-  oauthlib = callPackage ../development/python-modules/oauthlib { };
+  oauthlib = if isPy27 then
+      callPackage ../development/python-modules/oauthlib/3.1.nix { }
+    else
+      callPackage ../development/python-modules/oauthlib { };
 
   obfsproxy = callPackage ../development/python-modules/obfsproxy { };
 

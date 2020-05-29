@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "pyperf";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d214aa65e085d3e4108a36152cb12f7cd0f4e7fda93b5134b43a9687c975786";
+    sha256 = "c37690e810116a83a244dfeec47885e2f0475b4c450313904be3bc2cdaf6d50a";
   };
 
   checkInputs = [ nose psutil ] ++
