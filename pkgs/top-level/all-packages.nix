@@ -4827,7 +4827,7 @@ in
 
   nodejs = hiPrio nodejs-12_x;
 
-  nodejs-slim = nodejs-slim-10_x;
+  nodejs-slim = nodejs-slim-12_x;
 
 
   nodejs-10_x = callPackage ../development/web/nodejs/v10.nix { };
@@ -4851,15 +4851,13 @@ in
   nodejs_latest = nodejs-14_x;
   nodejs-slim_latest = nodejs-slim-14_x;
 
-  nodePackages_13_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v13.nix {
-    nodejs = pkgs.nodejs-13_x;
+  nodePackages_latest = dontRecurseIntoAttrs (callPackage ../development/node-packages/default.nix {
+    nodejs = pkgs.nodejs_latest;
   });
 
-  nodePackages_12_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v12.nix {
-    nodejs = pkgs.nodejs-12_x;
+  nodePackages = dontRecurseIntoAttrs (callPackage ../development/node-packages/default.nix {
+    nodejs = pkgs.nodejs;
   });
-
-  nodePackages = nodePackages_12_x;
 
   now-cli = callPackage ../development/web/now-cli {};
 
