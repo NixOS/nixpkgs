@@ -7,20 +7,20 @@
             "https://github.com/bazelbuild/rules_sass/archive/1.25.0.zip"
         ]
     },
-    "2.1.0.tar.gz": {
-        "name": "2.1.0.tar.gz",
-        "sha256": "4d348abfaddbcee0c077fc51bb1177065c3663191588ab3d958f027cbfe1818b",
-        "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/2.1.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-toolchains/releases/download/2.1.0/bazel-toolchains-2.1.0.tar.gz"
-        ]
-    },
     "2d4c9528e0f453b5950eeaeac11d8d09f5a504d4.tar.gz": {
         "name": "2d4c9528e0f453b5950eeaeac11d8d09f5a504d4.tar.gz",
         "sha256": "c00ceec469dbcf7929972e3c79f20c14033824538038a554952f5c31d8832f96",
         "urls": [
             "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/2d4c9528e0f453b5950eeaeac11d8d09f5a504d4.tar.gz",
             "https://github.com/bazelbuild/bazel-skylib/archive/2d4c9528e0f453b5950eeaeac11d8d09f5a504d4.tar.gz"
+        ]
+    },
+    "3.1.0.tar.gz": {
+        "name": "3.1.0.tar.gz",
+        "sha256": "726b5423e1c7a3866a3a6d68e7123b4a955e9fcbe912a51e0f737e6dab1d0af2",
+        "urls": [
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/3.1.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-toolchains/releases/download/3.1.0/bazel-toolchains-3.1.0.tar.gz"
         ]
     },
     "46993efdd33b73649796c5fc5c9efb193ae19d51.zip": {
@@ -111,11 +111,11 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "4d348abfaddbcee0c077fc51bb1177065c3663191588ab3d958f027cbfe1818b",
-        "strip_prefix": "bazel-toolchains-2.1.0",
+        "sha256": "726b5423e1c7a3866a3a6d68e7123b4a955e9fcbe912a51e0f737e6dab1d0af2",
+        "strip_prefix": "bazel-toolchains-3.1.0",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/2.1.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-toolchains/releases/download/2.1.0/bazel-toolchains-2.1.0.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/3.1.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-toolchains/releases/download/3.1.0/bazel-toolchains-3.1.0.tar.gz"
         ]
     },
     "build_bazel_rules_nodejs": {
@@ -157,7 +157,7 @@
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
         "patches": [
-            "@io_bazel//third_party/protobuf:3.11.3.patch"
+            "//third_party/protobuf:3.11.3.patch"
         ],
         "sha256": "cf754718b0aa945b00550ed7962ddc167167bd922b842199eeb6505e6f344852",
         "strip_prefix": "protobuf-3.11.3",
@@ -661,8 +661,8 @@
         "name": "rules_nodejs-1.3.0.tar.gz",
         "sha256": "b6670f9f43faa66e3009488bbd909bc7bc46a5a9661a33f6bc578068d1837f37",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_nodejs/archive/rules_nodejs-1.3.0.tar.gz",
-            "https://github.com/bazelbuild/rules_nodejs/archive/rules_nodejs-1.3.0.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_nodejs/releases/download/1.3.0/rules_nodejs-1.3.0.tar.gz",
+            "https://github.com/bazelbuild/rules_nodejs/releases/download/1.3.0/rules_nodejs-1.3.0.tar.gz"
         ]
     },
     "rules_pkg": {
