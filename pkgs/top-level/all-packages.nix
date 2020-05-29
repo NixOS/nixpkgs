@@ -22072,6 +22072,8 @@ in
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 
+  dstask = callPackage ../applications/misc/dstask { };
+
   tasksh = callPackage ../applications/misc/tasksh { };
 
   taskserver = callPackage ../servers/misc/taskserver { };
