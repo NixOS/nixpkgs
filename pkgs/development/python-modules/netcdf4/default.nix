@@ -40,7 +40,7 @@ in
 
     patches=[./skipDapTest.patch];
   
-    preBuild= if mpiSupport then ''
+    makeFlags = lib.optionals mpiSupport [ "CC=mpicc" "CXX=mpicxx" ];
       makeFlagsArray+=( CC=mpicc CXX=mpicxx )
     '' else "";
 
