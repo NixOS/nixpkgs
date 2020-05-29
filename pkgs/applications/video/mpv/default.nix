@@ -39,6 +39,9 @@
 , libpngSupport      ? true,           libpng        ? null
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
+# NOTE: samba support should be removed on the next mpv release, see also:
+# https://github.com/NixOS/nixpkgs/pull/89145#issuecomment-636424362
+# Please remove this line on the next mpv release.
 , sambaSupport       ? false,          samba         ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
