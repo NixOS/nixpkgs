@@ -9,7 +9,13 @@
 , Nuget
 }:
 
-let deps = import ./deps.nix { inherit fetchurl; };
+let 
+    platform =
+      if stdenv.isLinux then "linux" else
+      if stdenv.isDarwin then "osx" else throw "add your platform";
+in
+  let 
+    deps = import (./. + "/deps_${platform}-x64.nix") { inherit fetchurl; };
 
     version = "2020-04-24";
 
@@ -69,23 +75,23 @@ stdenv.mkDerivation {
 
     pushd src
     nuget sources Disable -Name "nuget.org"
-    dotnet restore --source ${nugetSource}/lib -r linux-x64
+    dotnet restore --source ${nugetSource}/lib -r ${platform}-x64
     popd
 
     pushd src/LanguageServer/Impl
-    dotnet publish --no-restore -c Release -r linux-x64
+    dotnet publish --no-restore -c Release -r ${platform}-x64
     popd
   '';
 
   installPhase = ''
     mkdir -p $out
-    cp -r output/bin/Release/linux-x64/publish $out/lib
+    cp -r output/bin/Release/${platform}-x64/publish $out/lib
 
     mkdir $out/bin
     makeWrapper $out/lib/Microsoft.Python.LanguageServer $out/bin/python-language-server
   '';
 
-  postFixup = ''
+  postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     patchelf --set-rpath ${icu}/lib $out/lib/System.Globalization.Native.so
     patchelf --set-rpath ${openssl.out}/lib $out/lib/System.Security.Cryptography.Native.OpenSsl.so
   '';
@@ -99,6 +105,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/microsoft/python-language-server";
     license = licenses.asl20;
     maintainers = with maintainers; [ thomasjm ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
   };
 }

@@ -13,10 +13,17 @@ else
     exit 1
 fi
 
+supportedPlatforms=("osx-x64" "linux-x64")
+
+if [[ ! " ${supportedPlatforms[@]} " =~ " $2 " ]]; then
+    echo "$2 is not a valid platform; please select linux-x64 or osx-x64"
+    exit 1
+fi
+
 # Generate lockfiles in source checkout
 cd $CHECKOUT_PATH/src
 dotnet nuget locals all --clear
-dotnet restore -v normal --no-cache PLS.sln --use-lock-file -r linux-x64
+dotnet restore -v normal --no-cache PLS.sln --use-lock-file -r $2
 
 # Use the lockfiles to make a file with two columns: name and version number
 # for all possible package dependencies
@@ -27,10 +34,10 @@ for lockfile in $(find "$CHECKOUT_PATH" -name packages.lock.json); do
     python ./process_lockfile.py "$lockfile" >> all_versions.txt
 done
 # Add extra manually added packages
-cat ./manual_deps.txt >> all_versions.txt
+cat ./manual_deps_$2.txt >> all_versions.txt
 cat all_versions.txt | sed '/^$/d' | sort | uniq > tmp
 mv tmp all_versions.txt
 
 # Retrieve sha256 hashes for each dependency and format fetchNuGet calls into deps.nix
-./format-deps.sh all_versions.txt > deps.nix
+./format-deps.sh all_versions.txt > deps_$2.nix
 rm all_versions.txt
