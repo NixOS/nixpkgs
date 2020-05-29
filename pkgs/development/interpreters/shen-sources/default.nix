@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://shenlanguage.org;
     description = "Source code for the Shen Language";
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ bsima ];
     license = licenses.bsd3;
   };
