@@ -153,7 +153,6 @@ itchyny/vim-cursorword
 itchyny/vim-gitbranch
 ivanov/vim-ipython
 jacoborus/tender.vim
-janko/vim-test
 jaredgorski/SpaceCamp
 JazzCore/ctrlp-cmatcher
 jceb/vim-hier
@@ -550,6 +549,7 @@ vim-scripts/utl.vim
 vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
 vim-syntastic/syntastic
+vim-test/vim-test
 vim-utils/vim-husk
 Vimjas/vim-python-pep8-indent
 vimlab/split-term.vim
