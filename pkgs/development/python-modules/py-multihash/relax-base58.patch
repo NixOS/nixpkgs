@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 8fbacf8..bb1affd 100644
+--- a/setup.py
++++ b/setup.py
+@@ -15,7 +15,7 @@ requirements = [
+     'varint>=1.0.2,<2.0',
+     'six>=1.10.0,<2.0',
+     'morphys>=1.0,<2.0',
+-    'base58>=1.0.2,<2.0',
++    'base58>=1.0.2,<3.0',
+ ]
+ 
+ setup_requirements = ['pytest-runner', ]

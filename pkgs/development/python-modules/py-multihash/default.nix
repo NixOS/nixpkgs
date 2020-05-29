@@ -21,6 +21,8 @@ buildPythonPackage rec {
     sha256 = "f0ade4de820afdc4b4aaa40464ec86c9da5cae3a4578cda2daab4b0eb7e5b18d";
   };
 
+  patches = [ ./relax-base58.patch ];
+
   nativeBuildInputs = [
     pytestrunner
   ];
