@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DZSTD_BUILD_SHARED:BOOL=${if enableShared then "ON" else "OFF"}"
+    # They require STATIC for bin/zstd and tests.
     "-DZSTD_LEGACY_SUPPORT:BOOL=${if legacySupport then "ON" else "OFF"}"
     "-DZSTD_BUILD_TESTS:BOOL=ON"
   ];
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ../programs/zstdless \
       --replace "zstdcat" "$bin/bin/zstdcat"
   '';
+  # Don't duplicate the library code in runtime closures.
+  postInstall = stdenv.lib.optionalString enableShared ''rm "$out"/lib/libzstd.a'';
 
   outputs = [ "bin" "dev" "man" "out" ];
 
