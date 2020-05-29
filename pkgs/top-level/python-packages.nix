@@ -4716,6 +4716,8 @@ in {
 
   nodeenv = callPackage ../development/python-modules/nodeenv { };
 
+  noiseprotocol = callPackage ../development/python-modules/noiseprotocol { };
+
   nose = callPackage ../development/python-modules/nose { };
 
   nose-cov = callPackage ../development/python-modules/nose-cov { };
