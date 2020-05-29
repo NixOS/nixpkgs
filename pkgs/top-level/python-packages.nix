@@ -518,6 +518,8 @@ in {
 
   bitarray = callPackage ../development/python-modules/bitarray { };
 
+  bitbox02 = callPackage ../development/python-modules/bitbox02 { };
+
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
