@@ -12,9 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "5f1786c94797a0f8973597796e22545849dc214805cf1962ef76969e0b7d495b";
   };
 
-  # Don't make V8 snapshots, as those segfault.
-  patches = [ ./v8-no-snapshot.patch ];
-
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' external/v8_3.30.33.16/build/gyp/pylib/gyp/xcode_emulation.py
 
