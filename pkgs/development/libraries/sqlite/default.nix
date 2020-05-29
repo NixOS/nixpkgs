@@ -10,12 +10,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite";
-  version = "3.32.0";
+  version = "3.32.1";
 
   # NB! Make sure to update analyzer.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2020/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "195x23f083s38gla4id4qvcx04p5p5jpdi29369cip7mfkyig0sr";
+    sha256 = "043xzxpvyi3n2lp9831bd0jg3r98n81myfjfcspxiaqnzfmlhrs8";
   };
 
   outputs = [ "bin" "dev" "out" ];
