@@ -7198,6 +7198,10 @@ in
 
   tuir = callPackage ../applications/misc/tuir { };
 
+  tunnelto = callPackage ../tools/networking/tunnelto {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tuptime = callPackage ../tools/system/tuptime { };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
@@ -7450,10 +7454,6 @@ in
   woof = callPackage ../tools/misc/woof { };
 
   wootility = callPackage ../tools/misc/wootility { };
-
-  wormhole = callPackage ../tools/networking/wormhole {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   wpscan = callPackage ../tools/security/wpscan { };
 
