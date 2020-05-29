@@ -191,8 +191,6 @@ let
 
     curses = callPackage ../development/ocaml-modules/curses { };
 
-    custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
-
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
