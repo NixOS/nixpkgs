@@ -7918,7 +7918,11 @@ in
 
   zssh = callPackage ../tools/networking/zssh { };
 
-  zstd = callPackage ../tools/compression/zstd { };
+  zstd = callPackage ../tools/compression/zstd {
+    cmake = cmake.override {
+      libarchive = libarchive.override { zstd = null; };
+    };
+  };
 
   zsync = callPackage ../tools/compression/zsync { };
 
