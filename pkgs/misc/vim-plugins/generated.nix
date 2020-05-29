@@ -856,6 +856,18 @@ let
     meta.homepage = "https://github.com/chikatoike/concealedyank.vim/";
   };
 
+  conjure = buildVimPluginFrom2Nix {
+    pname = "conjure";
+    version = "2020-05-26";
+    src = fetchFromGitHub {
+      owner = "Olical";
+      repo = "conjure";
+      rev = "5cb5e37913fa6fe410ee150f5cd8c75e34b060c4";
+      sha256 = "1h23qf0i97lcng1llc0q80jizsv7hkpnyvaj5dr3kfbwi84nfkmp";
+    };
+    meta.homepage = "https://github.com/Olical/conjure/";
+  };
+
   context_filetype-vim = buildVimPluginFrom2Nix {
     pname = "context_filetype-vim";
     version = "2020-04-27";
