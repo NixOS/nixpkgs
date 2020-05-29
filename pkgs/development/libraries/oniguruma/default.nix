@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "onig";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sx683hbb58gbjvla69n5vxdzwqhjqisqbfkf9xi95wr7p9ycjhl";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/kkos/oniguruma";
