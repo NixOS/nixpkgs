@@ -1,5 +1,5 @@
 { stdenv, fetchzip, wrapGAppsHook, alsaLib, atk, cairo, gdk-pixbuf
-, glib, gst_all_1,  gtk3, libSM, libX11, libpng12, pango, zlib }:
+, glib, gst_all_1,  gtk3, libSM, libX11, libXxf86vm, libpng12, pango, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
@@ -7,13 +7,13 @@ stdenv.mkDerivation rec {
 
   src = if stdenv.hostPlatform.system == "i686-linux" then
     fetchzip {
-      url = "https://www.seventhstring.com/xscribe/downlinux32/xscsetup.tar.gz";
-      sha256 = "1h5l7ry9c9awpxfnd29b0wm973ifrhj17xl5d2fdsclw2swsickb";
+      url = "https://www.seventhstring.com/xscribe/xsc32setup.tar.gz";
+      sha256 = "02z244mvwd8fdcdj62pzv34i2q7yr77z7jh9i5gn1fp3q6g9x2gc";
     }
   else if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchzip {
-      url = "https://www.seventhstring.com/xscribe/downlinux64/xsc64setup.tar.gz";
-      sha256 = "1rpd3ppnx5i5yrnfbjrx7h7dk48kwl99i9lnpa75ap7nxvbiznm0";
+      url = "https://www.seventhstring.com/xscribe/xsc64setup.tar.gz";
+      sha256 = "01vysym52vbly7rss9c6i6wac4lbnfgz37xa5nz8ikqvwnmn34c3";
     }
   else throw "Platform not supported";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   libPath = with gst_all_1; stdenv.lib.makeLibraryPath [
     stdenv.cc.cc glib gtk3 atk pango cairo gdk-pixbuf alsaLib
-    libX11 libSM libpng12 gstreamer gst-plugins-base zlib
+    libX11 libXxf86vm libSM libpng12 gstreamer gst-plugins-base zlib
   ];
 
   installPhase = ''
@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ michalrus ];
-    broken = true;
+    broken = false;
   };
 }
