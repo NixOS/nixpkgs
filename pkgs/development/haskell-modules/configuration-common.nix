@@ -710,18 +710,7 @@ self: super: {
   });
 
   # The standard libraries are compiled separately.
-  # The megaparsec-7 override is needed because https://github.com/idris-lang/Idris-dev/issues/4826 declares that
-  # idris1 has no plans to migrate to megaparsec-8.
-  # The idris-lang/Idris-dev#4808 patch is for GHC 8.8 compatibility, and can likely be removed with the next release.
-  idris = generateOptparseApplicativeCompletion "idris" (doJailbreak (dontCheck
-    (appendPatches
-      (super.idris.override { megaparsec = self.megaparsec_7_0_5; }) [
-        (pkgs.fetchpatch {
-          url = "https://github.com/idris-lang/Idris-dev/pull/4808.diff";
-          sha256 = "060ib1rczy34ip8xf3bv1pf28655f6s0bvvij19jhh5dpcr0pf71";
-          excludes = [ ".travis.yml" "Makefile" "appveyor.yml" ];
-        })
-      ])));
+  idris = generateOptparseApplicativeCompletion "idris" (dontCheck super.idris);
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
