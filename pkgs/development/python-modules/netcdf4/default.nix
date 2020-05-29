@@ -21,13 +21,16 @@ in
       sha256 = "2a3ca855848f4bbf07fac366da77a681fcead18c0a8813d91d46302f562dc3be";
     };
   
-    checkInputs = [ netcdf numpy ] ++(if mpiSupport then [ mpi4py openssh mpi] else []);
+    checkInputs = [ netcdf numpy ] ++(if mpiSupport then [ mpi4py openssh ] else []);
   
-    buildInputs = [
+    nativeBuildInputs = [
       cython 
-      mpi 
     ];
   
+    buildInputs = [
+      mpi 
+    ];
+
     propagatedBuildInputs = [
       cftime
       numpy
@@ -38,14 +41,13 @@ in
       libjpeg
     ] ++ (if mpiSupport then [mpi4py mpi openssh] else []);
 
-    patches=[./skipDapTest.patch];
+    #patches=[./skipDapTest.patch];
   
     makeFlags = lib.optionals mpiSupport [ "CC=mpicc" "CXX=mpicxx" ];
-      makeFlagsArray+=( CC=mpicc CXX=mpicxx )
-    '' else "";
 
     checkPhase= ''
       cd test
+      rm tst_dap.py # does not fail in the nix-shell  
       python -m unittest tst_*.py
     '';
   
@@ -56,14 +58,12 @@ in
     NETCDF4_DIR="${netcdf}";
     CURL_DIR="${curl.dev}";
     JPEG_DIR="${libjpeg.dev}";
-    #  test for mpi first and then set
-    # MPI_INCDIR="${mpi}/include" ;
-    # is not necessary
     
     passthru = {
       mpiSupport = mpiSupport;
       inherit mpi;
     }; 
+
     meta = with stdenv.lib; {
       description = "Interface to netCDF library (versions 3 and 4)";
       homepage = https://pypi.python.org/pypi/netCDF4;
