@@ -67,6 +67,8 @@ core-packages:
 # comment saying "# LTS Haskell x.y". Any changes after that commend will be
 # lost the next time `update-stackage.sh` runs.
 default-package-overrides:
+  # Newer versions have test suite failures.
+  - git-annex < 8.20200522
   # This was only intended for ghc-7.0.4, and has very old deps, one hidden behind a flag
   - MissingH ==1.4.2.0
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
