@@ -50,13 +50,11 @@ stdenv.mkDerivation rec {
   preInstall = ''
     substituteInPlace ../programs/zstdgrep \
       --replace ":-grep" ":-${gnugrep}/bin/grep" \
-      --replace ":-zstdcat" ":-$bin/bin/zstdcat"
+      --replace ":-zstdcat" ":-$out/bin/zstdcat"
 
     substituteInPlace ../programs/zstdless \
-      --replace "zstdcat" "$bin/bin/zstdcat"
+      --replace "zstdcat" "$out/bin/zstdcat"
   '';
-
-  outputs = [ "bin" "dev" "man" "out" ];
 
   meta = with stdenv.lib; {
     description = "Zstandard real-time compression algorithm";

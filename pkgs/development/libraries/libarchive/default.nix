@@ -1,6 +1,6 @@
 {
   fetchFromGitHub, stdenv, pkgconfig, autoreconfHook,
-  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
+  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
 
   # Optional but increases closure only negligibly.
   xarSupport ? true,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ sharutils zlib bzip2 openssl xz lzo zstd ]
+  buildInputs = [ sharutils zlib bzip2 openssl xz lzo ]
     ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
     ++ stdenv.lib.optional xarSupport libxml2;
 
