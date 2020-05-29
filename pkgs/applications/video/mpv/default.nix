@@ -93,7 +93,7 @@ assert xvSupport          -> x11Support && available libXv;
 assert zimgSupport        -> available zimg;
 
 let
-  luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
+  luaEnv = lua.withPackages (ps: with ps; [ luasocket-git ]);
 
 in stdenv.mkDerivation rec {
   pname = "mpv";

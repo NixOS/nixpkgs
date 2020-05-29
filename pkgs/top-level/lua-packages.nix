@@ -99,6 +99,45 @@ with self; {
 
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
+  luasocket-git = buildLuaPackage rec {
+    name = "socket-${version}";
+    version = "3.0-rc1";
+
+    src = fetchFromGitHub {
+      owner = "diegonehab";
+      repo = "luasocket";
+      rev = "v${version}";
+      sha256 = "1chs7z7a3i3lck4x7rz60ziwbf793gw169hpjdfca8y4yf1hzsxk";
+    };
+
+    patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/makefile \
+        --replace 10.3 10.5
+    '';
+
+    preBuild = ''
+      makeFlagsArray=(
+        LUAV=${lua.luaversion}
+        PLAT=${platformString}
+        CC=''${CC}
+        LD=''${CC}
+        prefix=$out
+      );
+    '';
+
+    doCheck = false; # fails to find itself
+
+    installTargets = [ "install" "install-unix" ];
+
+    meta = with stdenv.lib; {
+      description = "Network support for Lua";
+      homepage = "http://w3.impa.br/~diego/software/luasocket/";
+      license = licenses.mit;
+      maintainers = with maintainers; [ ];
+      platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
+    };
+  };
+
   luxio = buildLuaPackage rec {
     name = "luxio-${version}";
     version = "13";
