@@ -28,6 +28,12 @@
    </listitem>
    <listitem>
     <para>
+    <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
+    Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      We now distribute a GNOME ISO.
     </para>
    </listitem>
@@ -61,6 +67,28 @@
       This is to make it possible to use <literal>podman</literal> instead of <literal>docker</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      MariaDB has been updated to 10.4, MariaDB Galera to 26.4.
+      Before you upgrade, it would be best to take a backup of your database.
+      For MariaDB Galera Cluster, see <link xlink:href="https://mariadb.com/kb/en/upgrading-from-mariadb-103-to-mariadb-104-with-galera-cluster/">Upgrading
+      from MariaDB 10.3 to MariaDB 10.4 with Galera Cluster</link> instead.
+      Before doing the upgrade read <link xlink:href="https://mariadb.com/kb/en/upgrading-from-mariadb-103-to-mariadb-104/#incompatible-changes-between-103-and-104">Incompatible
+      Changes Between 10.3 and 10.4</link>.
+      After the upgrade you will need to run <literal>mysql_upgrade</literal>.
+      MariaDB 10.4 introduces a number of changes to the authentication process, intended to make things easier and more
+      intuitive. See <link xlink:href="https://mariadb.com/kb/en/authentication-from-mariadb-104/">Authentication from MariaDB 10.4</link>.
+      unix_socket auth plugin does not use a password, and uses the connecting user's UID instead. When a new MariaDB data directory is initialized, two MariaDB users are
+      created and can be used with new unix_socket auth plugin, as well as traditional mysql_native_password plugin: root@localhost and mysql@localhost. To actually use
+      the traditional mysql_native_password plugin method, one must run the following:
+<programlisting>
+services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
+  ALTER USER root@localhost IDENTIFIED VIA mysql_native_password USING PASSWORD("verysecret");
+'';
+</programlisting>
+      When MariaDB data directory is just upgraded (not initialized), the users are not created or modified.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -77,7 +105,9 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+      There is a new <xref linkend="opt-security.doas.enable"/> module that provides <command>doas</command>, a lighter alternative to <command>sudo</command> with many of the same features.
+    </para>
    </listitem>
   </itemizedlist>
 
@@ -96,6 +126,20 @@
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     <literal>buildGoModule</literal> now internally creates a vendor directory
+     in the source tree for downloaded modules instead of using go's <link
+     xlink:href="https://golang.org/cmd/go/#hdr-Module_proxy_protocol">module
+     proxy protocol</link>. This storage format is simpler and therefore less
+     likekly to break with future versions of go. As a result
+     <literal>buildGoModule</literal> switched from
+     <literal>modSha256</literal> to the <literal>vendorSha256</literal>
+     attribute to pin fetched version data. <literal>buildGoModule</literal>
+     still accepts <literal>modSha256</literal> with a warning, but support will
+     be removed in the next release.
+    </para>
+   </listitem>
    <listitem>
     <para>
      Grafana is now built without support for phantomjs by default. Phantomjs support has been
@@ -187,13 +231,13 @@ environment.systemPackages = [
              customizable to your liking by using
              <literal>php.withExtensions</literal> or
              <literal>php.buildEnv</literal> instead of writing config files
-             or changing configure flags.             
+             or changing configure flags.
            </para>
          </listitem>
          <listitem>
            <para>
              The remaining configuration flags can now be set directly on
-             the <literal>php</literal> attribute. For example, instead of 
+             the <literal>php</literal> attribute. For example, instead of
 
              <programlisting>
 php.override {
@@ -233,7 +277,16 @@ php.override {
        Be aware that backwards state migrations are not supported by Deluge.
      </para>
    </listitem>
-
+   <listitem>
+     <para>
+       Add option <literal>services.nginx.enableSandbox</literal> to starting Nginx web server with additional sandbox/hardening options.
+       By default, write access to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
+       use <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
+       <programlisting>
+systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
+       </programlisting>
+     </para>
+   </listitem>
    <listitem>
     <para>
       The NixOS options <literal>nesting.clone</literal> and
@@ -275,6 +328,13 @@ php.override {
 <programlisting>
 # sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
 </programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The Nginx log directory has been moved to <literal>/var/log/nginx</literal>, the cache directory
+      to <literal>/var/cache/nginx</literal>. The option <literal>services.nginx.stateDir</literal> has
+      been removed.
     </para>
    </listitem>
    <listitem>
@@ -326,6 +386,61 @@ php.override {
       your configuration simply remove the quotes around the numbers.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      When using <literal>buildBazelPackage</literal> from Nixpkgs,
+      <literal>flat</literal> hash mode is now used for dependencies
+      instead of <literal>recursive</literal>. This is to better allow
+      using hashed mirrors where needed. As a result, these hashes
+      will have changed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The rkt module has been removed, it was archived by upstream.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <link xlink:href="https://bazaar.canonical.com">Bazaar</link> VCS is
+      unmaintained and, as consequence of the Python 2 EOL, the packages
+      <literal>bazaar</literal> and <literal>bazaarTools</literal> were
+      removed. Breezy, the backward compatible fork of Bazaar (see the
+      <link xlink:href="https://www.jelmer.uk/breezy-intro.html">announcement</link>),
+      was packaged as <literal>breezy</literal> and can be used instead.
+    </para>
+    <para>
+      Regarding Nixpkgs, <literal>fetchbzr</literal>,
+      <literal>nix-prefetch-bzr</literal> and Bazaar support in Hydra will
+      continue to work through Breezy.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       In addition to the hostname, the fully qualified domain name (FQDN),
+       which consists of <literal>${cfg.hostName}</literal> and
+       <literal>${cfg.domain}</literal> is now added to
+       <literal>/etc/hosts</literal>, to allow local FQDN resolution, as used by the
+       <literal>hostname --fqdn</literal> command and other applications that
+       try to determine the FQDN. These new entries take precedence over entries
+       from the DNS which could cause regressions in some very specific setups.
+       Additionally the hostname is now resolved to <literal>127.0.0.2</literal>
+       instead of <literal>127.0.1.1</literal> to be consistent with what
+       <literal>nss-myhostname</literal> (from systemd) returns.
+       The old behaviour can e.g. be restored by using
+       <literal>networking.hosts = lib.mkForce { "127.0.1.1" = [ config.networking.hostName ]; };</literal>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The hostname (<literal>networking.hostName</literal>) must now be a valid
+       DNS label (see RFC 1035) and as such must not contain the domain part.
+       This means that the hostname must start with a letter, end with a letter
+       or digit, and have as interior characters only letters, digits, and
+       hyphen. The maximum length is 63 characters. Additionally it is
+       recommended to only use lower-case characters.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -357,6 +472,45 @@ php.override {
    <para>
      The default output of <literal>buildGoPackage</literal> is now <literal>$out</literal> instead of <literal>$bin</literal>.
    </para>
+   </listitem>
+   <listitem>
+   <para>
+     The cc- and binutils-wrapper's "infix salt" and <literal>_BUILD_</literal> and <literal>_TARGET_</literal> user infixes have been replaced with with a "suffix salt" and suffixes and <literal>_FOR_BUILD</literal> and <literal>_FOR_TARGET</literal>.
+      This matches the autotools convention for env vars which standard for these things, making interfacing with other tools easier.
+   </para>
+   </listitem>
+   <listitem>
+   <para>
+     Additional Git documentation (HTML and text files) is now available via the <literal>git-doc</literal> package.
+   </para>
+   </listitem>
+   <listitem>
+   <para>
+     Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
+   </para>
+   </listitem>
+   <listitem>
+    <para>
+     The scripted networking system now uses <literal>.link</literal> files in
+     <literal>/etc/systemd/network</literal> to configure mac address and link MTU,
+     instead of the sometimes buggy <literal>network-link-*</literal> units, which
+     have been removed.
+     Bringing the interface up has been moved to the beginning of the
+     <literal>network-addresses-*</literal> unit.
+     Note this doesn't require <command>systemd-networkd</command> - it's udev that
+     parses <literal>.link</literal> files.
+     Extra care needs to be taken in the presence of <link xlink:href="https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME">legacy udev rules</link>
+     to rename interfaces, as MAC Address and MTU defined in these options can only match on the original link name.
+     In such cases, you most likely want to create a <literal>10-*.link</literal> file through <xref linkend="opt-systemd.network.links"/> and set both name and MAC Address / MTU there.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Grafana received a major update to version 7.x. A plugin is now needed for
+     image rendering support, and plugins must now be signed by default. More
+     information can be found
+     <link xlink:href="https://grafana.com/docs/grafana/latest/installation/upgrading/#upgrading-to-v7-0">in the Grafana documentation</link>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

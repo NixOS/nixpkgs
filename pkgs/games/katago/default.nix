@@ -6,6 +6,7 @@
 , cmake
 , makeWrapper
 , fetchFromGitHub
+, fetchpatch
 , cudnn ? null
 , cudatoolkit ? null
 , libGL_driver ? null
@@ -34,14 +35,29 @@ let
 
 in env.mkDerivation rec {
   pname = "katago";
-  version = "1.3.5";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "1625s3fh0xc2ldgyl6sjdjmpliyys7rzzkcys6h9x6k828g8n0lq";
+    sha256 = "0qdc9hgbzd175b2xkjs62dy6gyybcn9lf1mifiyhjbzjpgv192h4";
   };
+
+  # To workaround CMake 3.17.0's new buggy behavior wrt CUDA Compiler testing
+  # See the following tracking issues:
+  # KataGo:
+  #  - Issue #225: https://github.com/lightvector/KataGo/issues/225
+  #  - PR #227: https://github.com/lightvector/KataGo/pull/227
+  # CMake:
+  #  - Issue #20708: https://gitlab.kitware.com/cmake/cmake/-/issues/20708
+  patches = [
+    (fetchpatch {
+      name = "227.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/lightvector/KataGo/pull/227.patch";
+      sha256 = "03f1vmdjhb79mpj95sijcwla8acy32clrjgrn4xqw5h90zdgj511";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

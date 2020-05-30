@@ -1,23 +1,30 @@
 { stdenv
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0y8cv8y92a4nqwrvqk2cxgs6nspqjk8jm4spr8rgkwlpfbrg74xn";
+    sha256 = "0iydkbmx9z7xpwaif0han5jvy9xh1afmfyldl7fcyy4r906dsmhx";
   };
 
-  cargoSha256 = "1qi1c4v5d5a4xcf1bjbdicrv35w6chl5swlm96c1h3pr9s09lqy7";
+  cargoSha256 = "0iibjh2ll181j69vld1awvjgyv3xwmq0abh10651la4k4jpppx46";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  postInstall = ''
+    installManPage texlab.1
+  '';
 
   meta = with stdenv.lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";

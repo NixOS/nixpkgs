@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07eb764f2b7b39b487f806a067e394d8ebffff21f57cd1ecdb5c4030b7210210";
+    sha256 = "cfc6cfda59a6f4247189f8ccf92e364de450460a15c0ec21bdb857c420dd198c";
   };
 
   postPatch = ''

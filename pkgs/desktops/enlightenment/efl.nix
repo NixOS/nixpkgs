@@ -3,10 +3,8 @@
 , meson
 , ninja
 , pkgconfig
-, SDL
 , SDL2
 , alsaLib
-, avahi
 , bullet
 , check
 , curl
@@ -55,11 +53,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.24.0";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1yhck2g4rwlzgnzqa4wjxw3lf6k6rd730hz4bwzajdjy7i26xfdk";
+    sha256 = "0w3srvigg4kfi7xq76c7y4hnq5yr2gxrrsvlyj1g2wc1igz1vyg1";
   };
 
   nativeBuildInputs = [
@@ -71,8 +69,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL
-    avahi
     fontconfig
     freetype
     giflib
@@ -123,7 +119,6 @@ stdenv.mkDerivation rec {
     luajit
     openjpeg
     poppler
-    python3Packages.dbus-python
     utillinux
     xorg.libXScrnSaver
     xorg.libXcomposite
@@ -132,13 +127,10 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXi
     xorg.libXinerama
-    xorg.libXp
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
-    xorg.libxkbfile
-    xorg.xcbutilkeysyms
   ];
 
   dontDropIconThemeCache = true;
@@ -147,11 +139,10 @@ stdenv.mkDerivation rec {
     "--buildtype=release"
     "-D build-tests=false" # disable build tests, which are not working
     "-D drm=true"
-    "-D embedded-lz4=false"
     "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disalbed by default, scim is not availabe in nixpkgs
-    "-D evas-loaders-disabler=json"
+    "-D embedded-lz4=false"
     "-D fb=true"
-    "-D opengl=full"
+    "-D network-backend=connman"
     "-D sdl=true"
   ];
 

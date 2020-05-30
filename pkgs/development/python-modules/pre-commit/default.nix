@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonApplication, pythonOlder
+{ lib, fetchPypi, buildPythonPackage, pythonOlder
 , aspy-yaml
 , cached-property
 , cfgv
@@ -13,7 +13,7 @@
 , virtualenv
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "pre-commit";
   version = "1.21.0";
 

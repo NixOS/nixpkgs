@@ -1,18 +1,32 @@
 { lib, buildGoModule, fetchFromGitHub, llvm, clang-unwrapped, lld, avrgcc
-, avrdude, openocd, gcc-arm-embedded, makeWrapper }:
+, avrdude, openocd, gcc-arm-embedded, makeWrapper, fetchurl }:
 
+let main = ./main.go;
+    gomod = ./go.mod;
+in
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "0x59j56y704m2hfkg78illgw9f6czrx265x887jfd989lnxphyqa";
+    sha256 = "0das5z5y2x1970yi9c4yssxvwrrjhdmsj495q0r5mb02amvc954v";
   };
+ 
+  overrideModAttrs = (_: {
+      patches = [];
+      preBuild = ''
+      rm -rf *
+      cp ${main} main.go
+      cp ${gomod} go.mod
+      '';
+  });
 
-  modSha256 = "0y8n4mcr4jhas29ahvk8k4zbj1iz65fdpsgq61qa8kcsm8m5kqa6";
+  preBuild = "cp ${gomod} go.mod";
+
+  vendorSha256 = "19194dlzpl6zzw2gqybma5pwip71rw8z937f104k6c158qzzgy62";
   enableParallelBuilding = true;
   subPackages = [ "." ];
   buildInputs = [ llvm clang-unwrapped makeWrapper ];

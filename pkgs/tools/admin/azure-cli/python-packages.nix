@@ -61,6 +61,8 @@ let
           humanfriendly
           jmespath
           knack
+          msal
+          msal-extensions
           msrest
           msrestazure
           paramiko
@@ -119,6 +121,9 @@ let
       azure-mgmt-apimanagement = overrideAzureMgmtPackage super.azure-mgmt-apimanagement "0.1.0" "zip"
         "06bqqkn5mx127x1z7ycm6rl8ajxlrmrm2kcdpgkbl4baii1x6iax";
 
+      azure-mgmt-batch = overrideAzureMgmtPackage super.azure-mgmt-batch "7.0.0" "zip"
+        "18dwgbwk1kc0pdqa85hbsm9312l50rf8ymb60fia1c9rni9bdi8n";
+
       azure-mgmt-policyinsights = overrideAzureMgmtPackage super.azure-mgmt-policyinsights "0.4.0" "zip"
         "1b69rz9wm0jvc54vx3b7h633x8gags51xwxrkp6myar40jggxw6g";
 
@@ -149,8 +154,11 @@ let
       azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "9.0.1" "zip"
         "11nqjpi9qypb0xvfy63l98q5m5jfv5iqx15mliksm96vkdkmji3y";
 
-      azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "0.12.0" "zip"
-        "07c0hr7nha9789x1wz0ndca0sr0zscq63m9vd8pm1c6y0ss4iyn5";
+      azure-mgmt-core = overrideAzureMgmtPackage super.azure-mgmt-core "1.0.0" "zip"
+        "0pm565v05480f672l0n8z2sg6zk6iqyi91n0dhscibhdl54sy3si";
+
+      azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "0.13.0" "zip"
+        "160cn4arl4dy6ax1zb64bzw0ygmpg8jc942m1zlh4nwx5x322gg8";
 
       azure-mgmt-deploymentmanager = overrideAzureMgmtPackage super.azure-mgmt-deploymentmanager "0.2.0" "zip"
         "0c6pyr36n9snx879vas5r6l25db6nlp2z96xn759mz4kg4i45qs6";
@@ -176,8 +184,8 @@ let
       azure-mgmt-dns = overrideAzureMgmtPackage super.azure-mgmt-dns "2.1.0" "zip"
         "1l55py4fzzwhxlmnwa41gpmqk9v2ncc79w7zq11sm9a5ynrv2c1p";
 
-      azure-mgmt-loganalytics = overrideAzureMgmtPackage super.azure-mgmt-loganalytics "0.2.0" "zip"
-        "11kx4ck58nhhn9zf5vq0rqh7lfh2yj758s6ainrqyqadxvq5ycf7";
+      azure-mgmt-loganalytics = overrideAzureMgmtPackage super.azure-mgmt-loganalytics "0.5.0" "zip"
+        "0k91zdlzx6nfly1v2i7qmzqrdiygdx8rmgar3iz8nwgafvvc9x0n";
 
       azure-mgmt-network = overrideAzureMgmtPackage super.azure-mgmt-network "10.1.0" "zip"
         "0fmsdwzyn167lwh87yyadq1bdc4q6rfz3gj5bh1mgavi9ghhxb75";
@@ -312,12 +320,22 @@ let
       });
 
       knack = super.knack.overridePythonAttrs(oldAttrs: rec {
-        version = "0.7.0rc3";
+        version = "0.7.0rc4";
 
         src = super.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "1mazy5a3505wqa68fxq7h55m0vbmjygv2wbgmxmrrrgw3w84q5r7";
+          sha256 = "10v6qjpr7sbq5irq3kz24jiivpfm0f7jbj9iyx4dm8fgkrhgzlb6";
+        };
+      });
+
+      msal = super.msal.overridePythonAttrs(oldAttrs: rec {
+        version = "1.0.0";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "0h33wayvakggr684spdyhiqvrwraavcbk3phmcbavb3zqxd3zgpc";
         };
       });
 

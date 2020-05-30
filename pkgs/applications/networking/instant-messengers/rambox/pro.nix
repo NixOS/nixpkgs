@@ -16,22 +16,31 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/bin $out/opt/RamboxPro $out/share/applications
-    asar e resources/app.asar $out/opt/RamboxPro/resources/app.asar.unpacked   
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
+    mkdir -p $out/{bin,resources/dist/renderer/assets/images/app,share/applications,share/icons/hicolor/256x256/apps}
+
+    asar e resources/app.asar $out/resources
+
+    substituteInPlace "$out/resources/dist/electron/main.js" \
+      --replace ",isHidden:" ",path:\"$out/bin/ramboxpro\",isHidden:"
+
+    cp $desktopItem/share/applications/* $out/share/applications
+    cp $out/resources/dist/electron/imgs/256x256.png $out/share/icons/hicolor/256x256/apps/ramboxpro.png
+    cp $out/resources/dist/electron/imgs/256x256.png $out/resources/dist/renderer/assets/images/app/icon.png
   '';
 
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/ramboxpro \
-      --add-flags "$out/opt/RamboxPro/resources/app.asar.unpacked --without-update" \
+      --add-flags "$out/resources --without-update" \
       --prefix PATH : ${xdg_utils}/bin
   '';
 
   desktopItem = makeDesktopItem {
     name = "rambox-pro";
     exec = "ramboxpro";
+    icon = "ramboxpro";
     type = "Application";
     desktopName = "Rambox Pro";
+    categories = "Network;";
   };
 
   meta = with stdenv.lib; {

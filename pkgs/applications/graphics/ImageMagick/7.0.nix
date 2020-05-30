@@ -13,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.9-0";
-    sha256 = "1w7ci7v5qlayd7a5z69px94fz3fshvn1diqw7k1ymsyvz5888d39";
+    version = "7.0.10-14";
+    sha256 = "1qcsq5884iqis1adpfbx3cwki8v4q9wwh70fpcaqnwwmznmqfq4j";
     patches = [];
   };
 in
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
     moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/pkg-config'"
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config'"
     done
   '' + lib.optionalString (ghostscript != null) ''
     for la in $out/lib/*.la; do

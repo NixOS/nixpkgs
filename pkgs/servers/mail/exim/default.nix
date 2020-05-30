@@ -7,11 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "exim-4.92.3";
+  pname = "exim";
+  version = "4.93.0.4";
 
   src = fetchurl {
-    url = "https://ftp.exim.org/pub/exim/exim4/${name}.tar.xz";
-    sha256 = "1zfj4zblv5881qxpzkrg3f6a96pbcq270s9p6p1w85lfxjsknif4";
+    url = "https://ftp.exim.org/pub/exim/exim4/fixes/${pname}-${version}.tar.xz";
+    sha256 = "01g4sfycv13glnmfrapwhjbdw6z1z7w5bwjldxjmglwfw5p3czak";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
       s:^\(FIXED_NEVER_USERS\)=root$:\1=0:
       s:^# \(WITH_CONTENT_SCAN\)=.*:\1=yes:
       s:^# \(AUTH_PLAINTEXT\)=.*:\1=yes:
-      s:^# \(SUPPORT_TLS\)=.*:\1=yes:
+      s:^# \(USE_OPENSSL\)=.*:\1=yes:
       s:^# \(USE_OPENSSL_PC=openssl\)$:\1:
       s:^# \(LOG_FILE_PATH=syslog\)$:\1:
       s:^# \(HAVE_IPV6=yes\)$:\1:

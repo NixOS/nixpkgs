@@ -11,9 +11,9 @@ echo got version $version
 echo \""${version#v}"\" > "$dirname/version.nix"
 printf '%s' $(nix-prefetch-git --quiet --rev ${version} https://github.com/gotify/server | jq .sha256) > $dirname/source-sha.nix
 tput setaf 1
-echo zeroing modSha256 in $dirname/mod-sha.nix
+echo zeroing vendorSha256 in $dirname/vendor-sha.nix
 tput sgr0
-printf '"%s"' "0000000000000000000000000000000000000000000000000000" > $dirname/mod-sha.nix
+printf '"%s"' "0000000000000000000000000000000000000000000000000000" > $dirname/vendor-sha.nix
 
 GOTIFY_WEB_SRC="https://raw.githubusercontent.com/gotify/server/$version"
 
@@ -28,13 +28,13 @@ echo removed yarn.lock
 
 echo running nix-build for ui
 nix-build -A gotify-server.ui
-echo running nix-build for gotify itself in order to get modSha256
+echo running nix-build for gotify itself in order to get vendorSha256
 set +e
-modSha256="$(nix-build -A gotify-server 2>&1 | grep "got:" | cut -d':' -f3)"
+vendorSha256="$(nix-build -A gotify-server 2>&1 | grep "got:" | cut -d':' -f3)"
 set -e
-printf '"%s"' "$modSha256" > $dirname/mod-sha.nix
+printf '"%s"' "$vendorSha256" > $dirname/vendor-sha.nix
 tput setaf 2
-echo got modSha256 of: $modSha256
+echo got vendorSha256 of: $vendorSha256
 tput sgr0
 echo running nix-build -A gotify-server which should build gotify-server normally
 nix-build -A gotify-server

@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "premailer";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08pshx7a110k4ll20x0xhpvyn3kkipkrbgxjjn7ncdxs54ihdhgw";
+    sha256 = "8240bfb8ff94db3ae581d8434b7eea5005872d5779394ed8f4223dfb0f58afd2";
   };
 
   buildInputs = [ mock nose ];

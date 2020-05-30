@@ -1,18 +1,14 @@
-From 55cb3ba4458bd43588e7921906d091d001130ab0 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
-Date: Thu, 9 Apr 2020 07:20:46 +0100
+From 9d730514540929dc95a7313bdb385bab95d9a28c Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Wed, 20 May 2020 23:23:23 +0200
 Subject: [PATCH] setup.py: relax dependencies
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
 ---
- setup.py | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ setup.py | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/setup.py b/setup.py
-index 0c56e89b67..ba04546130 100755
+index 1473fd1f5f..149af58b3a 100755
 --- a/setup.py
 +++ b/setup.py
 @@ -32,24 +32,24 @@ PROJECT_URLS = {
@@ -23,25 +19,24 @@ index 0c56e89b67..ba04546130 100755
 +    "aiohttp>=3.6.1",
      "astral==1.10.1",
      "async_timeout==3.0.1",
--    "attrs==19.3.0",
-+    "attrs>=19.3.0",
+     "attrs==19.3.0",
      "bcrypt==3.1.7",
--    "certifi>=2020.4.5.1",
-+    "certifi>=2019.11.28",
+     "certifi>=2020.4.5.1",
      "ciso8601==2.1.3",
 -    "importlib-metadata==1.6.0",
 +    "importlib-metadata>=1.5.0",
      "jinja2>=2.11.1",
      "PyJWT==1.7.1",
      # PyJWT has loose dependency. We want the latest one.
--    "cryptography==2.9",
+-    "cryptography==2.9.2",
 +    "cryptography>=2.9",
      "pip>=8.0.3",
      "python-slugify==4.0.0",
-     "pytz>=2019.03",
+-    "pytz>=2020.1",
 -    "pyyaml==5.3.1",
 -    "requests==2.23.0",
 -    "ruamel.yaml==0.15.100",
++    "pytz>=2019.03",
 +    "pyyaml>=5.2",
 +    "requests>=2.22",
 +    "ruamel.yaml>=0.15.100",
@@ -49,5 +44,5 @@ index 0c56e89b67..ba04546130 100755
      "voluptuous-serialize==2.3.0",
  ]
 -- 
-2.26.1
+2.26.2
 

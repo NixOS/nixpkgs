@@ -153,7 +153,6 @@ itchyny/vim-cursorword
 itchyny/vim-gitbranch
 ivanov/vim-ipython
 jacoborus/tender.vim
-janko/vim-test
 jaredgorski/SpaceCamp
 JazzCore/ctrlp-cmatcher
 jceb/vim-hier
@@ -175,6 +174,7 @@ jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 josa42/coc-go
 jpalardy/vim-slime
+jparise/vim-graphql
 jparise/vim-phabricator
 jreybert/vimagit
 jsfaint/gen_tags.vim
@@ -360,6 +360,7 @@ ntpeters/vim-better-whitespace
 numirias/semshi
 nvie/vim-flake8
 octol/vim-cpp-enhanced-highlight
+Olical/conjure
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
@@ -387,6 +388,7 @@ Quramy/tsuquyomi
 racer-rust/vim-racer
 rafaqz/ranger.vim
 rafi/awesome-vim-colorschemes
+raghur/fruzzy
 raghur/vim-ghost
 Raimondi/delimitMate
 rakr/vim-one
@@ -548,6 +550,7 @@ vim-scripts/utl.vim
 vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
 vim-syntastic/syntastic
+vim-test/vim-test
 vim-utils/vim-husk
 Vimjas/vim-python-pep8-indent
 vimlab/split-term.vim

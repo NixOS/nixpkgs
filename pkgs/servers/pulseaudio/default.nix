@@ -3,7 +3,7 @@
 , xorg, libcap, alsaLib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
-, speexdsp, systemd, webrtc-audio-processing
+, soxr, speexdsp, systemd, webrtc-audio-processing
 
 , x11Support ? false
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libtool libsndfile speexdsp fftwFloat ]
+    [ libtool libsndfile soxr speexdsp fftwFloat ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
     ++ lib.optionals (!libOnly) (

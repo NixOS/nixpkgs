@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # Allow other ncurses versions on Darwin
     substituteInPlace config.sh \
       --replace "ncurses5.4" "ncurses"
@@ -25,13 +26,13 @@ rustPlatform.buildRustPackage rec {
     pkgconfig
     asciidoctor
     gettext
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper libiconv ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ncurses ];
 
   buildInputs = [ stfl sqlite curl libxml2 json_c ncurses ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Security libiconv gettext ];
 
   postBuild = ''
-    make
+    make prefix="$out"
   '';
 
   # TODO: Check if that's still needed

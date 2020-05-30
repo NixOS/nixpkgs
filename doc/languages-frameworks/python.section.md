@@ -9,7 +9,7 @@
 Several versions of the Python interpreter are available on Nix, as well as a
 high amount of packages. The attribute `python` refers to the default
 interpreter, which is currently CPython 2.7. It is also possible to refer to
-specific versions, e.g. `python35` refers to CPython 3.5, and `pypy` refers to
+specific versions, e.g. `python38` refers to CPython 3.8, and `pypy` refers to
 the default PyPy interpreter.
 
 Python is used a lot, and in different ways. This affects also how it is
@@ -25,10 +25,10 @@ however, are in separate sets, with one set per interpreter version.
 The interpreters have several common attributes. One of these attributes is
 `pkgs`, which is a package set of Python libraries for this specific
 interpreter. E.g., the `toolz` package corresponding to the default interpreter
-is `python.pkgs.toolz`, and the CPython 3.5 version is `python35.pkgs.toolz`.
+is `python.pkgs.toolz`, and the CPython 3.8 version is `python38.pkgs.toolz`.
 The main package set contains aliases to these package sets, e.g.
-`pythonPackages` refers to `python.pkgs` and `python35Packages` to
-`python35.pkgs`.
+`pythonPackages` refers to `python.pkgs` and `python38Packages` to
+`python38.pkgs`.
 
 #### Installing Python and packages
 
@@ -36,121 +36,191 @@ The Nix and NixOS manuals explain how packages are generally installed. In the
 case of Python and Nix, it is important to make a distinction between whether the
 package is considered an application or a library.
 
-Applications on Nix are typically installed into your user
-profile imperatively using `nix-env -i`, and on NixOS declaratively by adding the
-package name to `environment.systemPackages` in `/etc/nixos/configuration.nix`.
-Dependencies such as libraries are automatically installed and should not be
-installed explicitly.
+Applications on Nix are typically installed into your user profile imperatively
+using `nix-env -i`, and on NixOS declaratively by adding the package name to
+`environment.systemPackages` in `/etc/nixos/configuration.nix`. Dependencies
+such as libraries are automatically installed and should not be installed
+explicitly.
 
-The same goes for Python applications and libraries. Python applications can be
-installed in your profile. But Python libraries you would like to use for
-development cannot be installed, at least not individually, because they won't
-be able to find each other resulting in import errors. Instead, it is possible
-to create an environment with `python.buildEnv` or `python.withPackages` where
-the interpreter and other executables are able to find each other and all of the
-modules.
+The same goes for Python applications. Python applications can be installed in
+your profile, and will be wrapped to find their exact library dependencies,
+without impacting other applications or polluting your user environment.
 
-In the following examples we create an environment with Python 3.5, `numpy` and
-`toolz`. As you may imagine, there is one limitation here, and that's that
-you can install only one environment at a time. You will notice the complaints
-about collisions when you try to install a second environment.
+But Python libraries you would like to use for development cannot be installed,
+at least not individually, because they won't be able to find each other
+resulting in import errors. Instead, it is possible to create an environment
+with `python.buildEnv` or `python.withPackages` where the interpreter and other
+executables are wrapped to be able to find each other and all of the modules.
 
-##### Environment defined in separate `.nix` file
+In the following examples we will start by creating a simple, ad-hoc environment
+with a nix-shell that has `numpy` and `toolz` in Python 3.8; then we will create
+a re-usable environment in a single-file Python script; then we will create a
+full Python environment for development with this same environment.
 
-Create a file, e.g. `build.nix`, with the following expression
-```nix
-with import <nixpkgs> {};
+Philosphically, this should be familiar to users who are used to a `venv` style
+of development: individual projects create their own Python environments without
+impacting the global environment or each other.
 
-python35.withPackages (ps: with ps; [ numpy toolz ])
-```
-and install it in your profile with
-```shell
-nix-env -if build.nix
-```
-Now you can use the Python interpreter, as well as the extra packages (`numpy`,
-`toolz`) that you added to the environment.
+#### Ad-hoc temporary Python environment with `nix-shell`
 
-##### Environment defined in `~/.config/nixpkgs/config.nix`
+The simplest way to start playing with the way nix wraps and sets up Python
+environments is with `nix-shell` at the cmdline. These environments create a
+temporary shell session with a Python and a *precise* list of packages (plus
+their runtime dependencies), with no other Python packages in the Python
+interpreter's scope.
 
-If you prefer you could also add the environment as a package override to the
-Nixpkgs set, e.g. using `config.nix`,
-
-```nix
-{ # ...
-
-  packageOverrides = pkgs: with pkgs; {
-    myEnv = python35.withPackages (ps: with ps; [ numpy toolz ]);
-  };
-}
-```
-and install it in your profile with
-
-```shell
-nix-env -iA nixpkgs.myEnv
-```
-
-The environment is is installed by referring to the attribute, and considering
-the `nixpkgs` channel was used.
-
-##### Environment defined in `/etc/nixos/configuration.nix`
-
-For the sake of completeness, here's another example how to install the
-environment system-wide.
-
-```nix
-{ # ...
-
-  environment.systemPackages = with pkgs; [
-    (python35.withPackages(ps: with ps; [ numpy toolz ]))
-  ];
-}
-```
-
-#### Temporary Python environment with `nix-shell`
-
-The examples in the previous section showed how to install a Python environment
-into a profile. For development you may need to use multiple environments.
-`nix-shell` gives the possibility to temporarily load another environment, akin
-to `virtualenv`.
-
-There are two methods for loading a shell with Python packages. The first and
-recommended method is to create an environment with `python.buildEnv` or
-`python.withPackages` and load that. E.g.
+To create a Python 3.8 session with `numpy` and `toolz` available, run:
 
 ```sh
-$ nix-shell -p 'python35.withPackages(ps: with ps; [ numpy toolz ])'
+$ nix-shell -p 'python38.withPackages(ps: with ps; [ numpy toolz ])'
 ```
 
-opens a shell from which you can launch the interpreter
+By default `nix-shell` will start a `bash` session with this interpreter in our
+`PATH`, so if we then run:
+
+```
+[nix-shell:~/src/nixpkgs]$ python3
+Python 3.8.1 (default, Dec 18 2019, 19:06:26)
+[GCC 9.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import numpy; import toolz
+```
+
+Note that no other modules are in scope, even if they were imperatively
+installed into our user environment as a dependency of a Python application:
+
+```
+>>> import requests
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ModuleNotFoundError: No module named 'requests'
+```
+
+We can add as many additional modules onto the `nix-shell` as we need, and we
+will still get 1 wrapped Python interpreter. We can start the interpreter
+directly like so:
 
 ```sh
-[nix-shell:~] python3
+$ nix-shell -p 'python38.withPackages(ps: with ps; [ numpy toolz requests ])' --run python3
+these derivations will be built:
+  /nix/store/xbdsrqrsfa1yva5s7pzsra8k08gxlbz1-python3-3.8.1-env.drv
+building '/nix/store/xbdsrqrsfa1yva5s7pzsra8k08gxlbz1-python3-3.8.1-env.drv'...
+created 277 symlinks in user environment
+Python 3.8.1 (default, Dec 18 2019, 19:06:26)
+[GCC 9.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import requests
+>>>
 ```
 
-The other method, which is not recommended, does not create an environment and
-requires you to list the packages directly,
+Notice that this time it built a new Python environment, which now includes
+`requests`. Building an environment just creates wrapper scripts that expose the
+selected dependencies to the interpreter while re-using the actual modules. This
+means if any other env has installed `requests` or `numpy` in a different
+context, we don't need to recompile them -- we just recompile the wrapper script
+that sets up an interpreter pointing to them. This matters much more for "big"
+modules like `pytorch` or `tensorflow`.
+
+Module names usually match their names on [pypi.org](https://pypi.org/), but
+you can use the [Nixpkgs search website](https://nixos.org/nixos/packages.html)
+to find them as well (along with non-python packages).
+
+At this point we can create throwaway experimental Python environments with
+arbitrary dependencies. This is a good way to get a feel for how the Python
+interpreter and dependencies work in Nix and NixOS, but to do some actual
+development, we'll want to make it a bit more persistent.
+
+##### Running Python scripts and using `nix-shell` as shebang
+
+Sometimes, we have a script whose header looks like this:
+
+```python
+#!/usr/bin/env python3
+import numpy as np
+a = np.array([1,2])
+b = np.array([3,4])
+print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
+```
+
+Executing this script requires a `python3` that has `numpy`. Using what we learned
+in the previous section, we could startup a shell and just run it like so:
+
+```
+nix-shell -p 'python38.withPackages(ps: with ps; [ numpy ])' --run 'python3 foo.py'
+The dot product of [1 2] and [3 4] is: 11
+```
+
+But if we maintain the script ourselves, and if there are more dependencies, it
+may be nice to encode those dependencies in source to make the script re-usable
+without that bit of knowledge. That can be done by using `nix-shell` as a
+[shebang](https://en.wikipedia.org/wiki/Shebang_(Unix), like so:
+
+```python
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p "python3.withPackages(ps: [ ps.numpy ])"
+import numpy as np
+a = np.array([1,2])
+b = np.array([3,4])
+print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
+```
+
+Then we simply execute it, without requiring any environment setup at all!
 
 ```sh
-$ nix-shell -p python35.pkgs.numpy python35.pkgs.toolz
+$ ./foo.py
+The dot product of [1 2] and [3 4] is: 11
 ```
 
-Again, it is possible to launch the interpreter from the shell. The Python
-interpreter has the attribute `pkgs` which contains all Python libraries for
-that specific interpreter.
+If the dependencies are not available on the host where `foo.py` is executed, it
+will build or download them from a Nix binary cache prior to starting up, prior
+that it is executed on a machine with a multi-user nix installation.
+
+This provides a way to ship a self bootstrapping Python script, akin to a
+statically linked binary, where it can be run on any machine (provided nix is
+installed) without having to assume that `numpy` is installed globally on the
+system.
+
+By default it is pulling the import checkout of Nixpkgs itself from our nix
+channel, which is nice as it cache aligns with our other package builds, but we
+can make it fully reproducible by pinning the `nixpkgs` import:
+
+```python
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p "python3.withPackages(ps: [ ps.numpy ])"
+#!nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/d373d80b1207d52621961b16aa4a3438e4f98167.tar.gz
+import numpy as np
+a = np.array([1,2])
+b = np.array([3,4])
+print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
+```
+
+This will execute with the exact same versions of Python 3.8, numpy, and system
+dependencies a year from now as it does today, because it will always use
+exactly git commit `d373d80b1207d52621961b16aa4a3438e4f98167` of Nixpkgs for all
+of the package versions.
+
+This is also a great way to ensure the script executes identically on different
+servers.
 
 ##### Load environment from `.nix` expression
-As explained in the Nix manual, `nix-shell` can also load an
-expression from a `.nix` file. Say we want to have Python 3.5, `numpy`
-and `toolz`, like before, in an environment. Consider a `shell.nix` file
-with
+
+We've now seen how to create an ad-hoc temporary shell session, and how to
+create a single script with Python dependencies, but in the course of normal
+development we're usually working in an entire package repository.
+
+As explained in the Nix manual, `nix-shell` can also load an expression from a
+`.nix` file. Say we want to have Python 3.8, `numpy` and `toolz`, like before,
+in an environment. We can add a `shell.nix` file describing our dependencies:
 
 ```nix
 with import <nixpkgs> {};
-
-(python35.withPackages (ps: [ps.numpy ps.toolz])).env
+(python38.withPackages (ps: [ps.numpy ps.toolz])).env
 ```
 
-Executing `nix-shell` gives you again a Nix shell from which you can run Python.
+And then at the command line, just typing `nix-shell` produces the same
+environment as before. In a normal project, we'll likely have many more
+dependencies; this can provide a way for developers to share the environments
+with each other and with CI builders.
 
 What's happening here?
 
@@ -158,9 +228,9 @@ What's happening here?
    imports the `<nixpkgs>` function, `{}` calls it and the `with` statement
    brings all attributes of `nixpkgs` in the local scope. These attributes form
    the main package set.
-2. Then we create a Python 3.5 environment with the `withPackages` function.
+2. Then we create a Python 3.8 environment with the `withPackages` function, as before.
 3. The `withPackages` function expects us to provide a function as an argument
-   that takes the set of all python packages and returns a list of packages to
+   that takes the set of all Python packages and returns a list of packages to
    include in the environment. Here, we select the packages `numpy` and `toolz`
    from the package set.
 
@@ -168,59 +238,106 @@ To combine this with `mkShell` you can:
 
 ```nix
 with import <nixpkgs> {};
-
 let
-  pythonEnv = python35.withPackages (ps: [
+  pythonEnv = python38.withPackages (ps: [
     ps.numpy
     ps.toolz
   ]);
 in mkShell {
   buildInputs = [
     pythonEnv
-    hello
+
+    black
+    mypy
+
+    libffi
+    openssl
   ];
 }
 ```
 
-##### Execute command with `--run`
-A convenient option with `nix-shell` is the `--run`
-option, with which you can execute a command in the `nix-shell`. We can
-e.g. directly open a Python shell
+This will create a unified environment that has not just our Python interpreter
+and its Python dependencies, but also tools like `black` or `mypy` and libraries
+like `libffi` the `openssl` in scope. This is generic and can span any number of
+tools or languages across the Nixpkgs ecosystem.
 
-```sh
-$ nix-shell -p python35Packages.numpy python35Packages.toolz --run "python3"
+##### Installing environments globally on the system
+
+Up to now, we've been creating environments scoped to an ad-hoc shell session,
+or a single script, or a single project. This is generally advisable, as it
+avoids pollution across contexts.
+
+However, sometimes we know we will often want a Python with some basic packages,
+and want this available without having to enter into a shell or build context.
+This can be useful to have things like vim/emacs editors and plugins or shell
+tools "just work" without having to set them up, or when running other software
+that expects packages to be installed globally.
+
+To create your own custom environment, create a file in `~/.config/nixpkgs/overlays/`
+that looks like this:
+
+```nix
+# ~/.config/nixpkgs/overlays/myEnv.nix
+self: super: {
+  myEnv = super.buildEnv {
+    name = "myEnv";
+    paths = [
+      # A Python 3 interpreter with some packages
+      (self.python3.withPackages (
+        ps: with ps; [
+          pyflakes
+          pytest
+          python-language-server
+        ]
+      ))
+
+      # Some other packages we'd like as part of this env
+      self.mypy
+      self.black
+      self.ripgrep
+      self.tmux
+    ];
+  };
+}
 ```
 
-or run a script
+You can then build and install this to your profile with:
 
 ```sh
-$ nix-shell -p python35Packages.numpy python35Packages.toolz --run "python3 myscript.py"
+nix-env -iA myEnv
 ```
 
-##### `nix-shell` as shebang
-In fact, for the second use case, there is a more convenient method. You can add
-a [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) to your script
-specifying which dependencies `nix-shell` needs. With the following shebang, you
-can just execute `./myscript.py`, and it will make available all dependencies
-and run the script in the `python3` shell.
+One limitation of this is that you can only have 1 Python env installed
+globally, since they conflict on the `python` to load out of your `PATH`.
 
-```py
-#! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages(ps: [ps.numpy])"
+If you get a conflict or prefer to keep the setup clean, you can have `nix-env`
+atomically *uninstall* all other imperatively installed packages and replace
+your profile with just `myEnv` by using the `--replace` flag.
 
-import numpy
+##### Environment defined in `/etc/nixos/configuration.nix`
 
-print(numpy.__version__)
+For the sake of completeness, here's how to install the environment system-wide
+on NixOS.
+
+```nix
+{ # ...
+
+  environment.systemPackages = with pkgs; [
+    (python38.withPackages(ps: with ps; [ numpy toolz ]))
+  ];
+}
 ```
 
 ### Developing with Python
 
-Now that you know how to get a working Python environment with Nix, it is time
-to go forward and start actually developing with Python. We will first have a
-look at how Python packages are packaged on Nix. Then, we will look at how you
-can use development mode with your code.
+Above, we were mostly just focused on use cases and what to do to get started
+creating working Python environments in nix.
 
-#### Packaging a library
+Now that you know the basics to be up and running, it is time to take a step
+back and take a deeper look at at how Python packages are packaged on Nix. Then,
+we will look at how you can use development mode with your code.
+
+#### Python library packages in Nixpkgs
 
 With Nix all packages are built by functions. The main function in Nix for
 building Python libraries is `buildPythonPackage`. Let's see how we can build the
@@ -231,11 +348,11 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "0.7.4";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
+    sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
   };
 
   doCheck = false;
@@ -260,8 +377,9 @@ information. The output of the function is a derivation.
 
 An expression for `toolz` can be found in the Nixpkgs repository. As explained
 in the introduction of this Python section, a derivation of `toolz` is available
-for each interpreter version, e.g. `python35.pkgs.toolz` refers to the `toolz`
-derivation corresponding to the CPython 3.5 interpreter.
+for each interpreter version, e.g. `python38.pkgs.toolz` refers to the `toolz`
+derivation corresponding to the CPython 3.8 interpreter.
+
 The above example works when you're directly working on
 `pkgs/top-level/python-packages.nix` in the Nixpkgs repository. Often though,
 you will want to test a Nix expression outside of the Nixpkgs tree.
@@ -273,13 +391,13 @@ and adds it along with a `numpy` package to a Python environment.
 with import <nixpkgs> {};
 
 ( let
-    my_toolz = python35.pkgs.buildPythonPackage rec {
+    my_toolz = python38.pkgs.buildPythonPackage rec {
       pname = "toolz";
-      version = "0.7.4";
+      version = "0.10.0";
 
-      src = python35.pkgs.fetchPypi {
+      src = python38.pkgs.fetchPypi {
         inherit pname version;
-        sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
+        sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
       };
 
       doCheck = false;
@@ -290,12 +408,12 @@ with import <nixpkgs> {};
       };
     };
 
-  in python35.withPackages (ps: [ps.numpy my_toolz])
+  in python38.withPackages (ps: [ps.numpy my_toolz])
 ).env
 ```
 
 Executing `nix-shell` will result in an environment in which you can use
-Python 3.5 and the `toolz` package. As you can see we had to explicitly mention
+Python 3.8 and the `toolz` package. As you can see we had to explicitly mention
 for which Python version we want to build a package.
 
 So, what did we do here? Well, we took the Nix expression that we used earlier
@@ -312,7 +430,7 @@ Our example, `toolz`, does not have any dependencies on other Python packages or
 system libraries. According to the manual, `buildPythonPackage` uses the
 arguments `buildInputs` and `propagatedBuildInputs` to specify dependencies. If
 something is exclusively a build-time dependency, then the dependency should be
-included as a `buildInput`, but if it is (also) a runtime dependency, then it
+included in `buildInputs`, but if it is (also) a runtime dependency, then it
 should be added to `propagatedBuildInputs`. Test dependencies are considered
 build-time dependencies and passed to `checkInputs`.
 
@@ -423,10 +541,11 @@ Note also the line `doCheck = false;`, we explicitly disabled running the test-s
 
 #### Develop local package
 
-As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode) (`python setup.py develop`);
-instead of installing the package this command creates a special link to the project code.
-That way, you can run updated code without having to reinstall after each and every change you make.
-Development mode is also available. Let's see how you can use it.
+As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode)
+(`python setup.py develop`); instead of installing the package this command
+creates a special link to the project code. That way, you can run updated code
+without having to reinstall after each and every change you make. Development
+mode is also available. Let's see how you can use it.
 
 In the previous Nix expression the source was fetched from an url. We can also
 refer to a local source instead using `src = ./path/to/source/tree;`
@@ -435,7 +554,7 @@ If we create a `shell.nix` file which calls `buildPythonPackage`, and if `src`
 is a local source, and if the local source has a `setup.py`, then development
 mode is activated.
 
-In the following example we create a simple environment that has a Python 3.5
+In the following example we create a simple environment that has a Python 3.8
 version of our package in it, as well as its dependencies and other packages we
 like to have in the environment, all specified with `propagatedBuildInputs`.
 Indeed, we can just add any package we like to have in our environment to
@@ -443,7 +562,7 @@ Indeed, we can just add any package we like to have in our environment to
 
 ```nix
 with import <nixpkgs> {};
-with python35Packages;
+with python38Packages;
 
 buildPythonPackage rec {
   name = "mypackage";
@@ -454,7 +573,6 @@ buildPythonPackage rec {
 
 It is important to note that due to how development mode is implemented on Nix
 it is not possible to have multiple packages simultaneously in development mode.
-
 
 ### Organising your packages
 
@@ -481,11 +599,11 @@ We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "0.7.4";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
+    sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
   };
 
   meta = with lib; {
@@ -497,17 +615,17 @@ buildPythonPackage rec {
 }
 ```
 
-It takes an argument `buildPythonPackage`.
-We now call this function using `callPackage` in the definition of our environment
+It takes an argument `buildPythonPackage`. We now call this function using
+`callPackage` in the definition of our environment
 
 ```nix
 with import <nixpkgs> {};
 
 ( let
     toolz = callPackage /path/to/toolz/release.nix {
-      buildPythonPackage = python35Packages.buildPythonPackage;
+      buildPythonPackage = python38Packages.buildPythonPackage;
     };
-  in python35.withPackages (ps: [ ps.numpy toolz ])
+  in python38.withPackages (ps: [ ps.numpy toolz ])
 ).env
 ```
 
@@ -515,8 +633,8 @@ Important to remember is that the Python version for which the package is made
 depends on the `python` derivation that is passed to `buildPythonPackage`. Nix
 tries to automatically pass arguments when possible, which is why generally you
 don't explicitly define which `python` derivation should be used. In the above
-example we use `buildPythonPackage` that is part of the set `python35Packages`,
-and in this case the `python35` interpreter is automatically used.
+example we use `buildPythonPackage` that is part of the set `python38Packages`,
+and in this case the `python38` interpreter is automatically used.
 
 ## Reference
 
@@ -548,7 +666,7 @@ Each interpreter has the following attributes:
 - `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See section *python.buildEnv function* for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
-- `executable`. Name of the interpreter executable, e.g. `python3.7`.
+- `executable`. Name of the interpreter executable, e.g. `python3.8`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
 ### Building packages and applications
@@ -643,7 +761,7 @@ following are specific to `buildPythonPackage`:
   appears more than once in dependency tree. Default is `true`.
 * `disabled` ? false: If `true`, package is not built for the particular Python
   interpreter version.
-* `dontWrapPythonPrograms ? false`: Skip wrapping of python programs.
+* `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
 * `installFlags ? []`: A list of strings. Arguments to be passed to `pip
@@ -662,7 +780,7 @@ following are specific to `buildPythonPackage`:
   variables which will be available when the binary is run. For example,
   `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
-  defaults to `"python3.5-"` for Python 3.5, etc., and in case of applications
+  defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications
   to `""`.
 * `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages
   in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
@@ -730,7 +848,7 @@ Another difference is that `buildPythonPackage` by default prefixes the names of
 the packages with the version of the interpreter. Because this is irrelevant for
 applications, the prefix is omitted.
 
-When packaging a python application with `buildPythonApplication`, it should be
+When packaging a Python application with `buildPythonApplication`, it should be
 called with `callPackage` and passed `python` or `pythonPackages` (possibly
 specifying an interpreter version), like this:
 
@@ -761,7 +879,7 @@ luigi = callPackage ../applications/networking/cluster/luigi { };
 ```
 
 Since the package is an application, a consumer doesn't need to care about
-python versions or modules, which is why they don't go in `pythonPackages`.
+Python versions or modules, which is why they don't go in `pythonPackages`.
 
 #### `toPythonApplication` function
 
@@ -875,7 +993,7 @@ thus be also written like this:
 ```nix
 with import <nixpkgs> {};
 
-(python36.withPackages (ps: [ps.numpy ps.requests])).env
+(python38.withPackages (ps: [ps.numpy ps.requests])).env
 ```
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the
@@ -905,7 +1023,8 @@ are used in `buildPythonPackage`.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
-  `venv` is created if it does not yet exist.
+  `venv` is created if it does not yet exist. `postVenvCreation` can be used to
+  to run commands only after venv is first created.
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
 
@@ -932,7 +1051,7 @@ pythonPackages.buildPythonPackage {
 Running `nix-shell` with no arguments should give you the environment in which
 the package would be built with `nix-build`.
 
-Shortcut to setup environments with C headers/libraries and python packages:
+Shortcut to setup environments with C headers/libraries and Python packages:
 
 ```shell
 nix-shell -p pythonPackages.pyramid zlib libjpeg git
@@ -960,9 +1079,8 @@ has security implications and is relevant for those using Python in a
 
 When the environment variable `DETERMINISTIC_BUILD` is set, all bytecode will
 have timestamp 1. The `buildPythonPackage` function sets `DETERMINISTIC_BUILD=1`
-and [PYTHONHASHSEED=0](https://docs.python.org/3.5/using/cmdline.html#envvar-PYTHONHASHSEED).
+and [PYTHONHASHSEED=0](https://docs.python.org/3.8/using/cmdline.html#envvar-PYTHONHASHSEED).
 Both are also exported in `nix-shell`.
-
 
 ### Automatic tests
 
@@ -976,7 +1094,7 @@ example of such a situation is when `py.test` is used.
 #### Common issues
 
 * Non-working tests can often be deselected. By default `buildPythonPackage`
-  runs `python setup.py test`. Most python modules follows the standard test
+  runs `python setup.py test`. Most Python modules follows the standard test
   protocol where the pytest runner can be used instead. `py.test` supports a
   `-k` parameter to ignore test methods or classes:
 
@@ -1014,7 +1132,7 @@ with import <nixpkgs> {};
     packageOverrides = self: super: {
       pandas = super.pandas.overridePythonAttrs(old: {name="foo";});
     };
-  in pkgs.python35.override {inherit packageOverrides;};
+  in pkgs.python38.override {inherit packageOverrides;};
 
 in python.withPackages(ps: [ps.pandas])).env
 ```
@@ -1036,7 +1154,7 @@ with import <nixpkgs> {};
     packageOverrides = self: super: {
       scipy = super.scipy_0_17;
     };
-  in (pkgs.python35.override {inherit packageOverrides;}).withPackages (ps: [ps.blaze])
+  in (pkgs.python38.override {inherit packageOverrides;}).withPackages (ps: [ps.blaze])
 ).env
 ```
 
@@ -1049,12 +1167,12 @@ If you want the whole of Nixpkgs to use your modifications, then you can use
 ```nix
 let
   pkgs = import <nixpkgs> {};
-  newpkgs = import pkgs.path { overlays = [ (pkgsself: pkgssuper: {
-    python27 = let
-      packageOverrides = self: super: {
-        numpy = super.numpy_1_10;
+  newpkgs = import pkgs.path { overlays = [ (self: super: {
+    python38 = let
+      packageOverrides = python-self: python-super: {
+        numpy = python-super.numpy_1_18;
       };
-    in pkgssuper.python27.override {inherit packageOverrides;};
+    in super.python38.override {inherit packageOverrides;};
   } ) ]; };
 in newpkgs.inkscape
 ```
@@ -1127,14 +1245,14 @@ If you want to create a Python environment for development, then the recommended
 method is to use `nix-shell`, either with or without the `python.buildEnv`
 function.
 
-### How to consume python modules using pip in a virtual environment like I am used to on other Operating Systems?
+### How to consume Python modules using pip in a virtual environment like I am used to on other Operating Systems?
 
 While this approach is not very idiomatic from Nix perspective, it can still be
 useful when dealing with pre-existing projects or in situations where it's not
 feasible or desired to write derivations for all required dependencies.
 
 This is an example of a `default.nix` for a `nix-shell`, which allows to consume
-a virtual environment created by `venv`, and install python modules through
+a virtual environment created by `venv`, and install Python modules through
 `pip` the traditional way.
 
 Create this `default.nix` file, together with a `requirements.txt` and simply
@@ -1149,7 +1267,7 @@ in pkgs.mkShell rec {
   name = "impurePythonEnv";
   venvDir = "./.venv";
   buildInputs = [
-    # A python interpreter including the 'venv' module is required to bootstrap
+    # A Python interpreter including the 'venv' module is required to bootstrap
     # the environment.
     pythonPackages.python
 
@@ -1163,7 +1281,7 @@ in pkgs.mkShell rec {
     pythonPackages.requests
 
     # In this particular example, in order to compile any binary extensions they may
-    # require, the python modules listed in the hypothetical requirements.txt need
+    # require, the Python modules listed in the hypothetical requirements.txt need
     # the following packages to be installed locally:
     taglib
     openssl
@@ -1174,16 +1292,23 @@ in pkgs.mkShell rec {
     zlib
   ];
 
+  # Run this command, only after creating the virtual environment
+  postVenvCreation = ''
+    unset SOURCE_DATE_EPOCH
+    pip install -r requirements.txt
+  '';
+
   # Now we can execute any commands within the virtual environment.
   # This is optional and can be left out to run pip manually.
   postShellHook = ''
-    pip install -r requirements.txt
+    # allow pip to install wheels
+    unset SOURCE_DATE_EPOCH
   '';
 
 }
 ```
 
-In case the supplied venvShellHook is insufficient, or when python 2 support is
+In case the supplied venvShellHook is insufficient, or when Python 2 support is
 needed, you can define your own shell hook and adapt to your needs like in the
 following example:
 
@@ -1229,7 +1354,7 @@ in pkgs.mkShell rec {
 ```
 
 Note that the `pip install` is an imperative action. So every time `nix-shell`
-is executed it will attempt to download the python modules listed in
+is executed it will attempt to download the Python modules listed in
 requirements.txt. However these will be cached locally within the `virtualenv`
 folder and not downloaded again.
 
@@ -1290,9 +1415,8 @@ self: super: {
 
 ### How to use Intel's MKL with numpy and scipy?
 
-MKL can be configured using an overlay. See the section “[Using
-overlays to configure
-alternatives](#sec-overlays-alternatives-blas-lapack)”.
+MKL can be configured using an overlay. See the section "[Using overlays to
+configure alternatives](#sec-overlays-alternatives-blas-lapack)".
 
 ### What inputs do `setup_requires`, `install_requires` and `tests_require` map to?
 

@@ -3,8 +3,10 @@
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
+, langD ? false
 , langGo ? false
 , profiledCompiler ? false
+, langJit ? false
 , staticCompiler ? false
 , enableShared ? true
 , enableLTO ? true
@@ -58,6 +60,7 @@ let majorVersion = "9";
         sha256 = ""; # TODO: uncomment and check hash when available.
       }) */
       ++ optional langAda ../gnat-cflags.patch
+      ++ optional langD ../libphobos.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
@@ -85,7 +88,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "lib" "man" "info" ];
+  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional (!langJit) "lib";
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -100,10 +103,10 @@ stdenv.mkDerivation ({
       --replace 'if (stdinc)' 'if (0)'
 
     substituteInPlace libgcc/config/t-slibgcc-darwin \
-      --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+      --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"
 
     substituteInPlace libgfortran/configure \
-      --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
+      --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
   '';
 
   postPatch = ''
@@ -136,10 +139,10 @@ stdenv.mkDerivation ({
         )
     else "")
       + stdenv.lib.optionalString targetPlatform.isAvr ''
-	        makeFlagsArray+=(
-	           'LIMITS_H_TEST=false'
-	        )
-	      '';
+          makeFlagsArray+=(
+             'LIMITS_H_TEST=false'
+          )
+        '';
 
   inherit noSysDirs staticCompiler crossStageStatic
     libcCross crossMingw;
@@ -196,12 +199,14 @@ stdenv.mkDerivation ({
       enableShared
 
       langC
+      langD
       langCC
       langFortran
       langAda
       langGo
       langObjC
       langObjCpp
+      langJit
       ;
   };
 
@@ -235,14 +240,14 @@ stdenv.mkDerivation ({
 
   inherit
     (import ../common/extra-target-flags.nix {
-      inherit stdenv crossStageStatic libcCross threadsCross;
+      inherit stdenv crossStageStatic langD libcCross threadsCross;
     })
-    EXTRA_TARGET_FLAGS
-    EXTRA_TARGET_LDFLAGS
+    EXTRA_FLAGS_FOR_TARGET
+    EXTRA_LDFLAGS_FOR_TARGET
     ;
 
   passthru = {
-    inherit langC langCC langObjC langObjCpp langAda langFortran langGo version;
+    inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
   };
 

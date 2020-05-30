@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "04hzr0cw0dq7hmqvp1lhm5wl239yrxmcpsl25sqk74wy06cgrrqd";
   };
 
-  modSha256 = "0h3q1qd9a01wlfkk0yv74a4bk5nilpsppq522cv7kl8ysnrjh5yi";
+  vendorSha256 = "1km3ldqz35lpkglp9n332vxr38xxfqyij1fi2qq0agyyydbvakj5";
   subPackages = [ "cmd/mtail" ];
 
   preBuild = ''

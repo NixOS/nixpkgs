@@ -55,9 +55,9 @@ in {
           };
           galera = {
             wsrep_on = "ON";
-            wsrep_debug = "OFF";
+            wsrep_debug = "NONE";
             wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera_25}/lib/galera/libgalera_smm.so";
+            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
             wsrep_cluster_address = "gcomm://";
             wsrep_cluster_name = "galera";
             wsrep_node_address = "192.168.1.1";
@@ -102,9 +102,9 @@ in {
           };
           galera = {
             wsrep_on = "ON";
-            wsrep_debug = "OFF";
+            wsrep_debug = "NONE";
             wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera_25}/lib/galera/libgalera_smm.so";
+            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
             wsrep_cluster_address = "gcomm://galera_01,galera_02,galera_03";
             wsrep_cluster_name = "galera";
             wsrep_node_address = "192.168.1.2";
@@ -149,9 +149,9 @@ in {
           };
           galera = {
             wsrep_on = "ON";
-            wsrep_debug = "OFF";
+            wsrep_debug = "NONE";
             wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera_25}/lib/galera/libgalera_smm.so";
+            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
             wsrep_cluster_address = "gcomm://galera_01,galera_02,galera_03";
             wsrep_cluster_name = "galera";
             wsrep_node_address = "192.168.1.3";
@@ -184,17 +184,17 @@ in {
     galera_03.wait_for_unit("mysql")
     galera_03.wait_for_open_port(3306)
     galera_02.succeed(
-        "sudo -u testuser mysql -u root -e 'use testdb; select test_id from db1;' -N | grep 37"
+        "sudo -u testuser mysql -u testuser -e 'use testdb; select test_id from db1;' -N | grep 37"
     )
     galera_02.succeed(
-        "sudo -u testuser mysql -u root -e 'use testdb; create table db2 (test_id INT, PRIMARY KEY (test_id)) ENGINE = InnoDB;'"
+        "sudo -u testuser mysql -u testuser -e 'use testdb; create table db2 (test_id INT, PRIMARY KEY (test_id)) ENGINE = InnoDB;'"
     )
     galera_02.succeed("systemctl stop mysql")
     galera_01.succeed(
         "sudo -u testuser mysql -u testuser -e 'use testdb; insert into db2 values (38);'"
     )
     galera_03.succeed(
-        "sudo -u testuser mysql -u root -e 'use testdb; create table db3 (test_id INT, PRIMARY KEY (test_id)) ENGINE = InnoDB;'"
+        "sudo -u testuser mysql -u testuser -e 'use testdb; create table db3 (test_id INT, PRIMARY KEY (test_id)) ENGINE = InnoDB;'"
     )
     galera_01.succeed(
         "sudo -u testuser mysql -u testuser -e 'use testdb; insert into db3 values (39);'"
@@ -202,22 +202,22 @@ in {
     galera_02.succeed("systemctl start mysql")
     galera_02.wait_for_open_port(3306)
     galera_02.succeed(
-        "sudo -u testuser mysql -u root -e 'show status' -N | grep 'wsrep_cluster_size.*3'"
+        "sudo -u testuser mysql -u testuser -e 'show status' -N | grep 'wsrep_cluster_size.*3'"
     )
     galera_03.succeed(
-        "sudo -u testuser mysql -u root -e 'show status' -N | grep 'wsrep_local_state_comment.*Synced'"
+        "sudo -u testuser mysql -u testuser -e 'show status' -N | grep 'wsrep_local_state_comment.*Synced'"
     )
     galera_01.succeed(
-        "sudo -u testuser mysql -u root -e 'use testdb; select test_id from db3;' -N | grep 39"
+        "sudo -u testuser mysql -u testuser -e 'use testdb; select test_id from db3;' -N | grep 39"
     )
     galera_02.succeed(
-        "sudo -u testuser mysql -u root -e 'use testdb; select test_id from db2;' -N | grep 38"
+        "sudo -u testuser mysql -u testuser -e 'use testdb; select test_id from db2;' -N | grep 38"
     )
     galera_03.succeed(
-        "sudo -u testuser mysql -u root -e 'use testdb; select test_id from db1;' -N | grep 37"
+        "sudo -u testuser mysql -u testuser -e 'use testdb; select test_id from db1;' -N | grep 37"
     )
     galera_01.succeed("sudo -u testuser mysql -u testuser -e 'use testdb; drop table db3;'")
-    galera_02.succeed("sudo -u testuser mysql -u root -e 'use testdb; drop table db2;'")
-    galera_03.succeed("sudo -u testuser mysql -u root -e 'use testdb; drop table db1;'")
+    galera_02.succeed("sudo -u testuser mysql -u testuser -e 'use testdb; drop table db2;'")
+    galera_03.succeed("sudo -u testuser mysql -u testuser -e 'use testdb; drop table db1;'")
   '';
 })

@@ -13,7 +13,7 @@ buildGoModule rec {
     sha256 = "0cxh92df8gdl4bmr22pdvdxdkdjyfy0jv48y0k6awy1xz61r94ap";
   };
 
-  modSha256 = "1sdp62q4rnx7dp4i0dhnc8kzi8h6zzjdy7ym0mk9r7xkxxx0s3ds";
+  vendorSha256 = "1iiqmdnjnrsqgjisb5j5casa2hmqmafn79157skl5zxawndvc2rj";
 
   buildFlagsArray = [ "-ldflags=" "-w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
 

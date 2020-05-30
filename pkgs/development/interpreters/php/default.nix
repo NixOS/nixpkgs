@@ -42,7 +42,7 @@ let
         # consecutive calls to buildEnv and overrides to work as
         # expected.
         mkBuildEnv = prevArgs: prevExtensionFunctions: lib.makeOverridable (
-          { extensions ? ({...}: []), extraConfig ? "", ... }@innerArgs:
+          { extensions ? ({ enabled, ... }: enabled), extraConfig ? "", ... }@innerArgs:
             let
               allArgs = args // prevArgs // innerArgs;
               filteredArgs = builtins.removeAttrs allArgs [ "extensions" "extraConfig" ];
@@ -55,8 +55,8 @@ let
               allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
               enabledExtensions =
                 builtins.foldl'
-                  (state: f:
-                    f { enabled = state; all = php-packages.extensions; })
+                  (enabled: f:
+                    f { inherit enabled; all = php-packages.extensions; })
                   []
                   allExtensionFunctions;
 
@@ -67,7 +67,7 @@ let
               getDepsRecursively = extensions:
                 let
                   deps = lib.concatMap
-                           (ext: ext.internalDeps or [])
+                           (ext: (ext.internalDeps or []) ++ (ext.peclDeps or []))
                            extensions;
                 in
                   if ! (deps == []) then
@@ -86,12 +86,12 @@ let
                   (map (ext:
                     let
                       extName = getExtName ext;
+                      phpDeps = (ext.internalDeps or []) ++ (ext.peclDeps or []);
                       type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
                     in
                       lib.nameValuePair extName {
                         text = "${type}=${ext}/lib/php/extensions/${extName}.so";
-                        deps = lib.optionals (ext ? internalDeps)
-                          (map getExtName ext.internalDeps);
+                        deps = map getExtName phpDeps;
                       })
                     (enabledExtensions ++ (getDepsRecursively enabledExtensions)));
 
@@ -112,7 +112,7 @@ let
                   phpIni = "${phpWithExtensions}/lib/php.ini";
                   unwrapped = php;
                   tests = nixosTests.php;
-                  inherit (php-packages) packages extensions;
+                  inherit (php-packages) packages extensions buildPecl;
                   meta = php.meta // {
                     outputsToInstall = [ "out" ];
                   };
@@ -272,8 +272,8 @@ let
   });
 
   php74base = callPackage generic (_args // {
-    version = "7.4.4";
-    sha256 = "17w2m4phhpj76x5fx67vgjrlkcczqvky3f5in1kjg2pch90qz3ih";
+    version = "7.4.6";
+    sha256 = "0j133pfwa823d4jhx2hkrrzjl4hswvz00b1z58r5c82xd5sr9vd6";
   });
 
   defaultPhpExtensions = { all, ... }: with all; ([

@@ -6,6 +6,7 @@
 , libcap
 , libseccomp
 , libslirp
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libcap libseccomp libslirp ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.podman = nixosTests.podman;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/rootless-containers/slirp4netns";

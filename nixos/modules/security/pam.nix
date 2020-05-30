@@ -54,7 +54,7 @@ let
         description = ''
           If set, users listed in
           <filename>~/.yubico/authorized_yubikeys</filename>
-          are able to log in with the asociated Yubikey tokens.
+          are able to log in with the associated Yubikey tokens.
         '';
       };
 

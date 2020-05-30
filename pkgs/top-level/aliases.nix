@@ -50,6 +50,8 @@ mapAliases ({
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
+  bazaar = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
+  bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   beegfs = throw "beegfs has been removed."; # added 2019-11-24
   bluezFull = bluez; # Added 2019-12-03
   bridge_utils = bridge-utils;  # added 2015-02-20
@@ -149,6 +151,7 @@ mapAliases ({
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
   fusesmb = throw "fusesmb is abandoned by upstream"; # added 2019-10-15
+  fwupdate = throw "fwupdate was merged into fwupd"; # added 2020-05-19
   gccApple = throw "gccApple is no longer supported"; # added 2018-04-25
   gdb-multitarget = gdb; # added 2017-11-13
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
@@ -265,6 +268,7 @@ mapAliases ({
   linuxPackages_testing_hardened = throw "linuxPackages_testing_hardened has been removed, please use linuxPackages_latest_hardened";
   linux_testing_hardened = throw "linux_testing_hardened has been removed, please use linux_latest_hardened";
 
+  linux-steam-integration = throw "linux-steam-integration has been removed, as the upstream project has been abandoned"; # added 2020-05-22
   loadcaffe = throw "loadcaffe has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
@@ -279,6 +283,7 @@ mapAliases ({
   matrique = spectral; # added 2020-01-27
   mbedtls_1_3 = throw "mbedtls_1_3 is end of life, see https://tls.mbed.org/kb/how-to/upgrade-2.0"; # added 2019-12-08
   mess = mame; # added 2019-10-30
+  mcgrid = throw "mcgrid has been removed from nixpkgs, as it's not compatible with rivet 3"; # added 2020-05-23
   mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained"; # added 2019-12-10
   mirage = throw "mirage has been femoved from nixpkgs, as it's unmaintained"; # added 2019-12-10
   mysql-client = hiPrio mariadb.client;
@@ -301,6 +306,7 @@ mapAliases ({
   msf = metasploit; # added 2018-04-25
   libmsgpack = msgpack; # added 2018-08-17
   mssys = ms-sys; # added 2015-12-13
+  mpv-with-scripts = throw "Use wrapMpv for editing the environment of mpv"; # added 2012-05-22
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   mysqlWorkbench = mysql-workbench; # added 2017-01-19
@@ -453,6 +459,7 @@ mapAliases ({
   recordmydesktop = throw "recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   gtk-recordmydesktop = throw "gtk-recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   qt-recordmydesktop = throw "qt-recordmydesktop has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
+  rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   ruby_2_0_0 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_1_0 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_2_9 = throw "deprecated 2018-0213: use a newer version of ruby";

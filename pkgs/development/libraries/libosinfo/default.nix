@@ -68,10 +68,11 @@ stdenv.mkDerivation rec {
     "-Denable-gtk-doc=true"
   ];
 
-  # FIXME: fails two new tests added in 1.7.1:
-  # libosinfo:symbols / check-symfile
-  # 3/24 libosinfo:symbols / check-symsorting
-  doCheck = false;
+  preCheck = ''
+    patchShebangs ../osinfo/check-symfile.pl ../osinfo/check-symsorting.pl
+  '';
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support";

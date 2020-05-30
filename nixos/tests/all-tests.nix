@@ -23,9 +23,11 @@ in
 {
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
+  agda = handleTest ./agda.nix {};
   atd = handleTest ./atd.nix {};
   avahi = handleTest ./avahi.nix {};
   babeld = handleTest ./babeld.nix {};
+  bazarr = handleTest ./bazarr.nix {};
   bcachefs = handleTestOn ["x86_64-linux"] ./bcachefs.nix {}; # linux-4.18.2018.10.12 is unsupported on aarch64
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
@@ -68,6 +70,8 @@ in
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
+  dnscrypt-wrapper = handleTestOn ["x86_64-linux"] ./dnscrypt-wrapper {};
+  doas = handleTest ./doas.nix {};
   docker = handleTestOn ["x86_64-linux"] ./docker.nix {};
   oci-containers = handleTestOn ["x86_64-linux"] ./oci-containers.nix {};
   docker-edge = handleTestOn ["x86_64-linux"] ./docker-edge.nix {};
@@ -84,8 +88,10 @@ in
   ecryptfs = handleTest ./ecryptfs.nix {};
   ejabberd = handleTest ./xmpp/ejabberd.nix {};
   elk = handleTestOn ["x86_64-linux"] ./elk.nix {};
+  engelsystem = handleTest ./engelsystem.nix {};
   enlightenment = handleTest ./enlightenment.nix {};
   env = handleTest ./env.nix {};
+  ergo = handleTest ./ergo.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
@@ -130,6 +136,7 @@ in
   hitch = handleTest ./hitch {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
   home-assistant = handleTest ./home-assistant.nix {};
+  hostname = handleTest ./hostname.nix {};
   hound = handleTest ./hound.nix {};
   hydra = handleTest ./hydra {};
   hydra-db-migration = handleTest ./hydra/db-migration.nix {};
@@ -224,6 +231,7 @@ in
   nginx = handleTest ./nginx.nix {};
   nginx-etag = handleTest ./nginx-etag.nix {};
   nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
+  nginx-sandbox = handleTestOn ["x86_64-linux"] ./nginx-sandbox.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
@@ -259,6 +267,7 @@ in
   pppd = handleTest ./pppd.nix {};
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
   printing = handleTest ./printing.nix {};
+  privacyidea = handleTest ./privacyidea.nix {};
   prometheus = handleTest ./prometheus.nix {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
   prosody = handleTest ./xmpp/prosody.nix {};
@@ -288,6 +297,7 @@ in
   slurm = handleTest ./slurm.nix {};
   smokeping = handleTest ./smokeping.nix {};
   snapper = handleTest ./snapper.nix {};
+  sogo = handleTest ./sogo.nix {};
   solr = handleTest ./solr.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
   spike = handleTest ./spike.nix {};
@@ -300,6 +310,7 @@ in
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
   systemd-analyze = handleTest ./systemd-analyze.nix {};
+  systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
   systemd-boot = handleTestOn ["x86_64-linux"] ./systemd-boot.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
@@ -330,10 +341,7 @@ in
   vault = handleTest ./vault.nix {};
   victoriametrics = handleTest ./victoriametrics.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
-  wg-quick = handleTest ./wireguard/wg-quick.nix {};
   wireguard = handleTest ./wireguard {};
-  wireguard-generated = handleTest ./wireguard/generated.nix {};
-  wireguard-namespaces = handleTest ./wireguard/namespaces.nix {};
   wordpress = handleTest ./wordpress.nix {};
   xandikos = handleTest ./xandikos.nix {};
   xautolock = handleTest ./xautolock.nix {};
@@ -344,6 +352,7 @@ in
   yabar = handleTest ./yabar.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
   zfs = handleTest ./zfs.nix {};
-  zsh-history = handleTest ./zsh-history.nix {};
+  zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
+  zsh-history = handleTest ./zsh-history.nix {};
 }

@@ -1,12 +1,12 @@
-{ autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, gnome2, gtk2, kcoreaddons, ki18n, kio, kservice, lib, qt4, qtbase, stdenv, runtimeShell }:
+{ autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, pango, gtk2, kcoreaddons, ki18n, kio, kservice, lib, qt4, qtbase, stdenv, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "bcompare";
-  version = "4.3.2.24472";
+  version = "4.3.4.24657";
 
   src = fetchurl {
     url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
-    sha256 = "1msygg01yi0n8lpk8sl226p09ls7wvd3z3k067mdgrss8rjy5va5";
+    sha256 = "031ivmpy0mk43skb30r7p5zwf0m90pmsqhaq5kc08gzy6g4s0wd0";
   };
 
   unpackPhase = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc.lib
     gtk2
-    gnome2.pango
+    pango
     cairo
     kio
     kservice

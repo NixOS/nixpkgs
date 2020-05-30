@@ -1,45 +1,51 @@
 { stdenv
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , pkg-config
 , gpgme
-, libgpgerror
 , lvm2
 , btrfs-progs
+, libapparmor
 , libselinux
 , libseccomp
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "buildah";
-  version = "1.14.8";
+  version = "1.14.9";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    sha256 = "187cvb3i5cwm7cwxmzpl2ca7900yb6v6b6cybyz5mnd5ccy5ff1q";
+    sha256 = "1vp59xp374wr7sbx89aikz4rv8fdg0a40v06saryxww9iqyvk8wp";
   };
 
   outputs = [ "out" "man" ];
 
-  goPackagePath = "github.com/containers/buildah";
-  excludedPackages = [ "tests" ];
+  vendorSha256 = null;
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
-  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs libselinux libseccomp ];
 
-  patches = [ ./disable-go-module-mode.patch ];
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ];
 
   buildPhase = ''
-    pushd go/src/${goPackagePath}
+    patchShebangs .
     make GIT_COMMIT="unknown"
-    install -Dm755 buildah $out/bin/buildah
-    installShellCompletion --bash contrib/completions/bash/buildah
+    make -C docs
   '';
 
-  postBuild = ''
+  installPhase = ''
+    install -Dm755 buildah $out/bin/buildah
+    installShellCompletion --bash contrib/completions/bash/buildah
     make -C docs install PREFIX="$man"
   '';
 
@@ -49,5 +55,6 @@ buildGoPackage rec {
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
+    platforms = platforms.linux;
   };
 }

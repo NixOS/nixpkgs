@@ -13,11 +13,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";
-  version = "1.0.20200319";
+  version = "1.0.20200513";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
-    sha256 = "0g9vlngg9dnh7qqfhaycw35fq8ij5hfz6p1cykh4ncjgr93i7rbx";
+    sha256 = "1rvnr4hk17xa2sp48icbhdnd3l69fiwwlxnn3587p1slrlms808l";
   };
 
   outputs = [ "out" "man" ];
@@ -49,9 +49,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests = {
-      inherit (nixosTests) wireguard wg-quick wireguard-generated wireguard-namespaces;
-    };
+    tests = nixosTests.wireguard;
   };
 
   meta = {

@@ -13,12 +13,15 @@
 # path to go.mod and go.sum directory
 , modRoot ? "./"
 
-# modSha256 is the sha256 of the vendored dependencies
+# vendorSha256 is the sha256 of the vendored dependencies
 #
-# CAUTION: if `null` is used as a value, the derivation won't be a
-# fixed-output derivation but disable the build sandbox instead. Don't use
-# this in nixpkgs as Hydra won't build those packages.
-, modSha256
+# if vendorSha256 is null, then we won't fetch any dependencies and
+# rely on the vendor folder within the source.
+, vendorSha256 ? null
+# Whether to delete the vendor folder supplied with the source.
+, deleteVendor ? false
+
+, modSha256 ? null
 
 # We want parallel builds by default
 , enableParallelBuilding ? true
@@ -37,21 +40,26 @@
 with builtins;
 
 let
-  args = removeAttrs args' [ "overrideModAttrs" "modSha256" "disabled" ];
+  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "disabled" ];
 
   removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
-  go-modules = go.stdenv.mkDerivation (let modArgs = {
+  deleteFlag = if deleteVendor then "true" else "false";
+
+  go-modules = if vendorSha256 != null then go.stdenv.mkDerivation (let modArgs = {
+
     name = "${name}-go-modules";
 
-    nativeBuildInputs = [ go git cacert ];
+    nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ go git cacert ];
 
     inherit (args) src;
     inherit (go) GOOS GOARCH;
 
     patches = args.patches or [];
+    preBuild = args.preBuild or "";
+    sourceRoot = args.sourceRoot or "";
 
     GO111MODULE = "on";
 
@@ -64,7 +72,6 @@ let
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
-      mkdir -p "''${GOPATH}/pkg/mod/cache/download"
       cd "${modRoot}"
       runHook postConfigure
     '';
@@ -72,7 +79,16 @@ let
     buildPhase = args.modBuildPhase or ''
       runHook preBuild
 
-      go mod download
+      if [ ${deleteFlag} == "true" ]; then
+        rm -rf vendor
+      fi
+
+      if [ -e vendor ]; then
+        echo "vendor folder exists, please set 'vendorSha256=null;' or 'deleteVendor=true;' in your expression"
+        exit 10
+      fi
+      go mod vendor
+      mkdir -p vendor
 
       runHook postBuild
     '';
@@ -81,23 +97,19 @@ let
       runHook preInstall
 
       # remove cached lookup results and tiles
-      rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
-      cp -r "''${GOPATH}/pkg/mod/cache/download" $out
+      cp -r --reflink=auto vendor $out
 
       runHook postInstall
     '';
 
     dontFixup = true;
   }; in modArgs // (
-    if modSha256 == null then
-      { __noChroot = true; }
-    else
       {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = modSha256;
+        outputHash = vendorSha256;
       }
-  ) // overrideModAttrs modArgs);
+  ) // overrideModAttrs modArgs) else "";
 
   package = go.stdenv.mkDerivation (args // {
     nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;
@@ -105,6 +117,7 @@ let
     inherit (go) GOOS GOARCH;
 
     GO111MODULE = "on";
+    GOFLAGS = "-mod=vendor";
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -112,9 +125,12 @@ let
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
       export GOSUMDB=off
-      export GOPROXY=file://${go-modules}
-
+      export GOPROXY=off
       cd "$modRoot"
+      if [ -n "${go-modules}" ]; then 
+          rm -rf vendor
+          ln -s ${go-modules} vendor
+      fi
 
       runHook postConfigure
     '';
@@ -212,7 +228,7 @@ let
 
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go go-modules modSha256; };
+    passthru = passthru // { inherit go go-modules vendorSha256 ; };
 
     meta = {
       # Add default meta information
@@ -225,5 +241,8 @@ let
   });
 in if disabled then
   throw "${package.name} not supported for go ${go.meta.branch}"
+else if modSha256 != null then
+  lib.warn "modSha256 is deprecated and will be removed in the next release (20.09), use vendorSha256 instead" (
+    import ./old.nix { inherit go cacert git lib removeReferencesTo stdenv; } args')
 else
   package

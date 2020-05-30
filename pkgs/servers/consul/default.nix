@@ -26,7 +26,8 @@ buildGoModule rec {
   # has a split module structure in one repo
   subPackages = ["." "connect/certgen"];
 
-  modSha256 = "01vyamfy9lcljzy99jmr48x0ypb12wab66n9kmj71mrvl50v8rzr";
+  vendorSha256 = "1lcpldkssbq6qkkq22bvx9jb5klcxr8422mpx47wz39pry8vy9b6";
+  deleteVendor = true;
 
   preBuild = ''
     buildFlagsArray+=("-ldflags"

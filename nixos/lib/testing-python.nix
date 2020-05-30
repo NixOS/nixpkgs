@@ -10,11 +10,7 @@
 with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;
 
-let
-  jquery-ui = callPackage ./testing/jquery-ui.nix { };
-  jquery = callPackage ./testing/jquery.nix { };
-
-in rec {
+rec {
 
   inherit pkgs;
 

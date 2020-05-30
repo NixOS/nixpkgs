@@ -2,7 +2,7 @@
 
 with ocamlPackages; buildDunePackage rec {
   pname = "ocamlformat";
-  version = "0.14.1";
+  version = "0.14.2";
 
   minimumOCamlVersion = "4.06";
 
@@ -10,7 +10,7 @@ with ocamlPackages; buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}.tbz";
-    sha256 = "03wn46xib63748157xchj7gflkw5000fcjw6n89h9g82q9slazaa";
+    sha256 = "16phz1sg9b070p6fm8d42j0piizg05vghdjmw8aj7xm82b1pm7sz";
   };
 
   buildInputs = [

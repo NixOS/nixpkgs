@@ -29,7 +29,6 @@ in
         type = types.package;
         default = pkgs.fprintd;
         defaultText = "pkgs.fprintd";
-        example = "pkgs.fprintd-thinkpad";
         description = ''
           fprintd package to use.
         '';

@@ -18,7 +18,7 @@ buildGoModule rec {
       -X github.com/derailed/k9s/cmd.commit=${src.rev}
   '';
 
-  modSha256 = "11jxyzajlk6b5j19sg1kjr7qdzpxkwjwrvyhx9mwy6jb5sgqbzv8";
+  vendorSha256 = "0vvzv5v7j77v809h2ial9n23244j1sy3xhkarsv0wwkifc3swvq5";
 
   meta = with stdenv.lib; {
     description = "Kubernetes CLI To Manage Your Clusters In Style.";

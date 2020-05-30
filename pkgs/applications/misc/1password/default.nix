@@ -34,7 +34,15 @@ stdenv.mkDerivation rec {
     install -D op $out/bin/op
   '';
 
+  dontStrip = stdenv.isDarwin;
+
   nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/op --version
+  '';
 
   meta = with stdenv.lib; {
     description  = "1Password command-line tool";

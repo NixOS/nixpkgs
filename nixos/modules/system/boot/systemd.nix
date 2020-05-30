@@ -164,7 +164,6 @@ let
       "systemd-timedated.service"
       "systemd-localed.service"
       "systemd-hostnamed.service"
-      "systemd-binfmt.service"
       "systemd-exit.service"
       "systemd-update-done.service"
     ] ++ optionals config.services.journald.enableHttpGateway [
@@ -201,8 +200,23 @@ let
     ];
 
   makeJobScript = name: text:
-    let mkScriptName =  s: "unit-script-" + (replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape s) );
-    in  pkgs.writeTextFile { name = mkScriptName name; executable = true; inherit text; };
+    let
+      scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
+      out = pkgs.writeTextFile {
+        # The derivation name is different from the script file name
+        # to keep the script file name short to avoid cluttering logs.
+        name = "unit-script-${scriptName}";
+        executable = true;
+        destination = "/bin/${scriptName}";
+        text = ''
+          #!${pkgs.runtimeShell} -e
+          ${text}
+        '';
+        checkPhase = ''
+          ${pkgs.stdenv.shell} -n "$out/bin/${scriptName}"
+        '';
+      };
+    in "${out}/bin/${scriptName}";
 
   unitConfig = { config, options, ... }: {
     config = {
@@ -250,40 +264,28 @@ let
           environment.PATH = config.path;
         }
         (mkIf (config.preStart != "")
-          { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.preStart}
-            '';
+          { serviceConfig.ExecStartPre =
+              makeJobScript "${name}-pre-start" config.preStart;
           })
         (mkIf (config.script != "")
-          { serviceConfig.ExecStart = makeJobScript "${name}-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.script}
-            '' + " " + config.scriptArgs;
+          { serviceConfig.ExecStart =
+              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
           })
         (mkIf (config.postStart != "")
-          { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.postStart}
-            '';
+          { serviceConfig.ExecStartPost =
+              makeJobScript "${name}-post-start" config.postStart;
           })
         (mkIf (config.reload != "")
-          { serviceConfig.ExecReload = makeJobScript "${name}-reload" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.reload}
-            '';
+          { serviceConfig.ExecReload =
+              makeJobScript "${name}-reload" config.reload;
           })
         (mkIf (config.preStop != "")
-          { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.preStop}
-            '';
+          { serviceConfig.ExecStop =
+              makeJobScript "${name}-pre-stop" config.preStop;
           })
         (mkIf (config.postStop != "")
-          { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
-              #! ${pkgs.runtimeShell} -e
-              ${config.postStop}
-            '';
+          { serviceConfig.ExecStopPost =
+              makeJobScript "${name}-post-stop" config.postStop;
           })
       ];
   };
@@ -829,22 +831,18 @@ in
 
     system.build.units = cfg.units;
 
-    # Systemd provides various NSS modules to look up dynamic users, locally
-    # configured IP adresses and local container hostnames.
-    # On NixOS, these can only be passed to the NSS system via nscd (and its
-    # LD_LIBRARY_PATH), which is why it's usually a very good idea to have nscd
-    # enabled (also see the config.nscd.enable description).
-    # While there is already an assertion in place complaining loudly about
-    # having nssModules configured and nscd disabled, for some reason we still
-    # check for nscd being enabled before adding to nssModules.
-    system.nssModules = optional config.services.nscd.enable systemd.out;
-    system.nssDatabases = mkIf config.services.nscd.enable {
+    system.nssModules = [ systemd.out ];
+    system.nssDatabases = {
       hosts = (mkMerge [
         [ "mymachines" ]
         (mkOrder 1600 [ "myhostname" ] # 1600 to ensure it's always the last
       )
       ]);
       passwd = (mkMerge [
+        [ "mymachines" ]
+        (mkAfter [ "systemd" ])
+      ]);
+      group = (mkMerge [
         [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
@@ -1057,7 +1055,6 @@ in
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
-    systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.mount" ];
     systemd.services.systemd-importd.environment = proxy_env;
 
     # Don't bother with certain units in containers.

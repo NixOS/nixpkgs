@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0d8wjyzmw89yhrszz487f7i19rcz7xlx4w2wd4c69k5nsdrs6dys";
   };
 
-  modSha256 = "0888ikywclhjb4n7xqxc7hvzlhx1qhf4c3skaddqs3nrxm171jwn";
+  vendorSha256 = "0d8yfmsl8rycbq8gjnvc657j14644lq0zmr9l88ik360szw6v6gc";
 
   subPackages = [ "cmd/hydroxide" ];
 

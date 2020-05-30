@@ -59,7 +59,7 @@ in
     master.wait_for_open_port(3306)
     # Wait for testdb to be fully populated (5 rows).
     master.wait_until_succeeds(
-        "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+        "sudo -u mysql mysql -u mysql -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
     )
 
     slave1.start()
@@ -71,19 +71,21 @@ in
 
     # wait for replications to finish
     slave1.wait_until_succeeds(
-        "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+        "sudo -u mysql mysql -u mysql -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
     )
     slave2.wait_until_succeeds(
-        "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+        "sudo -u mysql mysql -u mysql -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
     )
 
     slave2.succeed("systemctl stop mysql")
-    master.succeed("echo 'insert into testdb.tests values (123, 456);' | mysql -u root -N")
+    master.succeed(
+        "echo 'insert into testdb.tests values (123, 456);' | sudo -u mysql mysql -u mysql -N"
+    )
     slave2.succeed("systemctl start mysql")
     slave2.wait_for_unit("mysql")
     slave2.wait_for_open_port(3306)
     slave2.wait_until_succeeds(
-        "echo 'select * from testdb.tests where Id = 123;' | mysql -u root -N | grep 456"
+        "echo 'select * from testdb.tests where Id = 123;' | sudo -u mysql mysql -u mysql -N | grep 456"
     )
   '';
 })

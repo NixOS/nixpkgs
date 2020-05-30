@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkgconfig
@@ -33,7 +32,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.2";
+  version = "0.3.5";
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "U7lqvn2vMIxARNplzNX9H3Ztlfv1IH8LozJsq7JSEKs=";
+    sha256 = "mgfhfKpUtHycXCUVKFs9A58E1D1pPKHvSoPqjQzWGfQ=";
   };
 
   nativeBuildInputs = [
@@ -72,13 +71,6 @@ stdenv.mkDerivation rec {
     vulkan-headers
     vulkan-loader
     xorg.libX11
-  ];
-  patches = [
-      # fix SIGILL in fmt-ops: https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/227
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/1b3aaba206f48e75bb34ff0cd00321bd3d6db2b4.patch";
-        sha256 = "08bmr9k2r0q4r7vhhm28k558nk3mz3jfnqswvq9mcj7p0srmfb4x";
-      })
   ];
 
   mesonFlags = [

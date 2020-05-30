@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "parity";
-  version = "2.7.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "parity-ethereum";
     rev = "v${version}";
-    sha256 = "09cvqk0h9c26famh3f1nc3g74cd0zk6klys977yr1f13bgqmzx0x";
+    sha256 = "124km8c2d7877yzd885wzlcl3gky15isx0z2l1qg1q3cqdsb5mjf";
   };
 
-  cargoSha256 = "1fdymy8hvn137i5y4flyhlxwjxkd2cd6gq81i1429gk7j3h085ig";
+  cargoSha256 = "0m4pms7agfyqk6gz6fwxdl8jmcyhphhzh3x4vykbi6186y7a8ihq";
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
   nativeBuildInputs = [

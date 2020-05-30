@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lv2";
-  version = "1.16.0";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "https://lv2plug.in/spec/${pname}-${version}.tar.bz2";
-    sha256 = "1ppippbpdpv13ibs06b0bixnazwfhiw0d0ja6hx42jnkgdyp5hyy";
+    sha256 = "0gs7401xz23q9vajqr31aa2db8dvssgyh5zrvr4ipa6wig7yb8wh";
   };
 
   nativeBuildInputs = [ pkgconfig wafHook ];

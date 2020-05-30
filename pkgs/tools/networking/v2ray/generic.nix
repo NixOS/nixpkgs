@@ -13,7 +13,7 @@ let
     pname = "v2ray-core";
     inherit version src;
 
-    modSha256 = "11gsncy3449a7y6w6pr7acqabyj2q2a1q52f8fcl5cdz1vjbmmxi";
+  vendorSha256 = "1lh8382gyss01frq4gxyx9p26p5m8f158qfw55sy5wb7ddrafcc2";
 
     buildPhase = ''
       runHook preBuild

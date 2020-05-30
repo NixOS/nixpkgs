@@ -187,7 +187,7 @@ let
     then "/etc/nginx/nginx.conf"
     else configFile;
 
-  execCommand = "${cfg.package}/bin/nginx -c '${configPath}' -p '${cfg.stateDir}'";
+  execCommand = "${cfg.package}/bin/nginx -c '${configPath}'";
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
@@ -463,11 +463,12 @@ in
         '';
       };
 
-      stateDir = mkOption {
-        default = "/var/spool/nginx";
-        description = "
-          Directory holding all state for nginx to run.
-        ";
+      enableSandbox = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Starting Nginx web server with additional sandbox/hardening options.
+        '';
       };
 
       user = mkOption {
@@ -636,6 +637,13 @@ in
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "nginx" "stateDir" ] ''
+      The Nginx log directory has been moved to /var/log/nginx, the cache directory
+      to /var/cache/nginx. The option services.nginx.stateDir has been removed.
+    '')
+  ];
+
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
 
@@ -680,12 +688,6 @@ in
       }
     ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/logs' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
-    ];
-
     systemd.services.nginx = {
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];
@@ -708,8 +710,35 @@ in
         # Runtime directory and mode
         RuntimeDirectory = "nginx";
         RuntimeDirectoryMode = "0750";
+        # Cache directory and mode
+        CacheDirectory = "nginx";
+        CacheDirectoryMode = "0750";
+        # Logs directory and mode
+        LogsDirectory = "nginx";
+        LogsDirectoryMode = "0750";
         # Capabilities
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
+        # Security
+        NoNewPrivileges = true;
+      } // optionalAttrs cfg.enableSandbox {
+        # Sandboxing
+        ProtectSystem = "strict";
+        ProtectHome = mkDefault true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) pkgs.nginx.modules);
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
       };
     };
 
@@ -727,9 +756,9 @@ in
       serviceConfig.Type = "oneshot";
       serviceConfig.TimeoutSec = 60;
       script = ''
-        if ${pkgs.systemd}/bin/systemctl -q is-active nginx.service ; then
+        if /run/current-system/systemd/bin/systemctl -q is-active nginx.service ; then
           ${execCommand} -t && \
-            ${pkgs.systemd}/bin/systemctl reload nginx.service
+            /run/current-system/systemd/bin/systemctl reload nginx.service
         fi
       '';
       serviceConfig.RemainAfterExit = true;
@@ -743,7 +772,7 @@ in
             webroot = vhostConfig.acmeRoot;
             extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
             postRun = ''
-              systemctl reload nginx
+              /run/current-system/systemd/bin/systemctl reload nginx
             '';
           }; }) acmeEnabledVhosts;
       in

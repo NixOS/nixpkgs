@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "antibody";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "getantibody";
     repo = "antibody";
     rev = "v${version}";
-    sha256 = "0m7c879b3f402av20jsybq2dhhckbknlvn2n1csp7xmcz4zcyn1n";
+    sha256 = "0ix2liy8h48s3n7ykr85ik03kwj45iqwhwn79ap8y21bar00gybs";
   };
 
-  modSha256 = "0yny1p8vll1wdqdlwyxf9m4kd5njdm7nq527blqqa680zf2k4h8b";
+  vendorSha256 = "072kxr68p9f58w2q98fjcn4wzd5szy5l5sz8sh4ssapljvic2lam";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 

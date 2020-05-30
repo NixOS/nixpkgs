@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "08q4yjfbwlldirf3j5db18l8kn6sf288wd364s50jlcx2ka8w50j";
   };
 
-  modSha256 = "1c7dk6l8lkq2j04cp5g97hwkwfmmyn5r0vpr5zpavvalxgjidsf4";
+  vendorSha256 = "0qp8n7z3vcsbc6safp7i18i0i3r4hy4nidzwl85i981sg12vcg6b";
 
   meta = with stdenv.lib; {
     description = "Declarative configuration for Gmail filters";
@@ -24,4 +24,3 @@ buildGoModule rec {
     platforms = platforms.unix;
   };
 }
-

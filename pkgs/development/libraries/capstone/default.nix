@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "capstone";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchurl {
     url    = "https://github.com/aquynh/capstone/archive/${version}.tar.gz";
-    sha256 = "1isxw2qwy1fi3m3w7igsr5klzczxc5cxndz0a78dfss6ps6ymfvr";
+    sha256 = "0sjjbqps48az4map0kmai7j7dak3gy0xcq0sgx8fg09g0acdg0bw";
   };
 
   # replace faulty macos detection

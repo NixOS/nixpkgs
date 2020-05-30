@@ -24,6 +24,10 @@ python3Packages.buildPythonApplication rec {
    "\${qtWrapperArgs[@]}"
   ];
 
+  postInstall = ''
+    install -m666 -Dt $out/share/applications krop.desktop
+  '';
+
   # Disable checks because of interference with older Qt versions // xcb
   doCheck = false;
 

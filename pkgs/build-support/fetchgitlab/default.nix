@@ -12,10 +12,11 @@ let
     ((optional (group != null) group) ++ [ owner repo ]);
 
   escapedSlug = replaceStrings ["." "/"] ["%2E" "%2F"] slug;
+  escapedRev = replaceStrings ["+"] ["%2B"] rev;
 in
 
 fetchzip ({
   inherit name;
-  url = "https://${domain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${rev}";
+  url = "https://${domain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${escapedRev}";
   meta.homepage = "https://${domain}/${slug}/";
 } // removeAttrs args [ "domain" "owner" "group" "repo" "rev" ]) // { inherit rev; }

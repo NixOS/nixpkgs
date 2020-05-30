@@ -67,6 +67,11 @@ let
         ./qtbase.patch.d/0010-qtbase-qtpluginpath.patch
         ./qtbase.patch.d/0011-qtbase-assert.patch
         ./qtbase.patch.d/0012-fix-header_module.patch
+
+        # Ensure -I${includedir} is added to Cflags in pkg-config files.
+        # See https://github.com/NixOS/nixpkgs/issues/52457
+        ./qtbase.patch.d/0014-qtbase-pkg-config.patch
+
         # https://bugreports.qt.io/browse/QTBUG-81715
         # remove after updating to qt > 5.12.7
         (fetchpatch {
@@ -139,6 +144,7 @@ let
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
+      qtgamepad = callPackage ../modules/qtgamepad.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
@@ -171,7 +177,7 @@ let
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-full-${qtbase.version}" ([
-        qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
+        qtcharts qtconnectivity qtdeclarative qtdoc qtgamepad qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets

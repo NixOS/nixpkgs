@@ -1,28 +1,30 @@
-{ stdenv, fetchurl, buildDunePackage, ppx_sexp_conv, ppx_cstruct, cstruct
+{ lib, fetchurl, buildDunePackage, ppx_sexp_conv, ppx_cstruct, cstruct
 , cstruct-sexp, sexplib, mirage-crypto, mirage-crypto-pk, mirage-crypto-rng
-, x509, domain-name, fmt, cstruct-unix, ounit2, ocaml_lwt, ptime }:
+, x509, domain-name, fmt, cstruct-unix, ounit2, ocaml_lwt, ptime
+, hacl_x25519, fiat-p256, hkdf, logs, alcotest }:
 
 buildDunePackage rec {
   minimumOCamlVersion = "4.07";
 
-  version = "0.11.1";
+  version = "0.12.0";
   pname = "tls";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-v${version}.tbz";
-    sha256 = "0ms13fbaxgmpbviazlfa4hb7nmi7s22nklc7ns926b0rr1aq1069";
+    sha256 = "0fy38qmy7rcld1b4qzz4ycl1fr0v1wa7qd24125lpd6hly86fn57";
   };
 
   useDune2 = true;
 
   doCheck = true;
-  buildInputs = [ cstruct-unix ounit2 ];
+  checkInputs = [ cstruct-unix ounit2 alcotest ];
 
   propagatedBuildInputs = [ ppx_sexp_conv ppx_cstruct cstruct cstruct-sexp
                             sexplib mirage-crypto mirage-crypto-pk mirage-crypto-rng
-                            x509 domain-name fmt ocaml_lwt ptime ];
+                            x509 domain-name fmt ocaml_lwt ptime hacl_x25519 fiat-p256
+                            hkdf logs ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mirleft/ocaml-tls";
     description = "TLS in pure OCaml";
     license = licenses.bsd2;

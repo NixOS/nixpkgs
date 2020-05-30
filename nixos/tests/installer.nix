@@ -97,7 +97,7 @@ let
 
 
       def create_machine_named(name):
-          return create_machine({**default_flags, "name": "boot-after-install"})
+          return create_machine({**default_flags, "name": name})
 
 
       machine.start()
@@ -647,6 +647,32 @@ in {
     preBootCommands = ''
       machine.start()
       machine.fail("dmesg | grep 'immediate safe mode'")
+    '';
+  };
+
+  bcache = makeInstallerTest "bcache" {
+    createPartitions = ''
+      machine.succeed(
+          "flock /dev/vda parted --script /dev/vda --"
+          + " mklabel msdos"
+          + " mkpart primary ext2 1M 50MB"  # /boot
+          + " mkpart primary 50MB 512MB  "  # swap
+          + " mkpart primary 512MB 1024MB"  # Cache (typically SSD)
+          + " mkpart primary 1024MB -1s ",  # Backing device (typically HDD)
+          "modprobe bcache",
+          "udevadm settle",
+          "make-bcache -B /dev/vda4 -C /dev/vda3",
+          "echo /dev/vda3 > /sys/fs/bcache/register",
+          "echo /dev/vda4 > /sys/fs/bcache/register",
+          "udevadm settle",
+          "mkfs.ext3 -L nixos /dev/bcache0",
+          "mount LABEL=nixos /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
+          "mkswap -f /dev/vda2 -L swap",
+          "swapon -L swap",
+      )
     '';
   };
 

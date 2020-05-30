@@ -1,4 +1,12 @@
-{ stdenvNoCC, fetchurl, rpmextract, undmg, darwin, enableStatic ? false }:
+{ stdenvNoCC
+, fetchurl
+, pkgconfig
+, rpmextract
+, undmg
+, darwin
+, enableStatic ? false
+}:
+
 /*
   For details on using mkl as a blas provider for python packages such as numpy,
   numexpr, scipy, etc., see the Python section of the NixPkgs manual.
@@ -19,6 +27,8 @@ let
   # Intel openmp uses its own versioning, but shares the spot release patch.
   openmp = if stdenvNoCC.isDarwin then "19.0" else "19.1";
   openmp-ver = "${openmp}.${spot}-${rel}-${openmp}.${spot}-${rel}";
+
+  shlibExt = stdenvNoCC.hostPlatform.extensions.sharedLibrary;
 
 in stdenvNoCC.mkDerivation {
   pname = "mkl";
@@ -41,6 +51,10 @@ in stdenvNoCC.mkDerivation {
       [ undmg darwin.cctools ]
     else
       [ rpmextract ];
+
+  installCheckInputs = [ pkgconfig ];
+
+  doInstallCheck = true;
 
   buildPhase = if stdenvNoCC.isDarwin then ''
     for f in Contents/Resources/pkg/*.tgz; do
@@ -75,6 +89,7 @@ in stdenvNoCC.mkDerivation {
       bn=$(basename $f)
       substituteInPlace $f \
         --replace "prefix=<INSTALLDIR>/mkl" "prefix=$out" \
+        --replace $\{MKLROOT} "$out" \
         --replace "lib/intel64_lin" "lib"
     done
 
@@ -114,10 +129,15 @@ in stdenvNoCC.mkDerivation {
     '') + ''
 
     # Setup symlinks for blas / lapack
-    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/libblas${stdenvNoCC.hostPlatform.extensions.sharedLibrary}${stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ".3"}
-    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/libcblas${stdenvNoCC.hostPlatform.extensions.sharedLibrary}${stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ".3"}
-    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/liblapack${stdenvNoCC.hostPlatform.extensions.sharedLibrary}${stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ".3"}
-    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/liblapacke${stdenvNoCC.hostPlatform.extensions.sharedLibrary}${stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ".3"}
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}
+  '' + stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}".3"
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}".3"
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}".3"
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}".3"
   '';
 
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the
@@ -130,6 +150,11 @@ in stdenvNoCC.mkDerivation {
     install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libmkl_intel_thread.dylib
     install_name_tool -change @rpath/libtbb.dylib $out/lib/libtbb.dylib $out/lib/libmkl_tbb_thread.dylib
     install_name_tool -change @rpath/libtbbmalloc.dylib $out/lib/libtbbmalloc.dylib $out/lib/libtbbmalloc_proxy.dylib
+  '';
+
+  # Validate pkgconfig files, since they break often on updates.
+  installCheckPhase = ''
+    pkg-config --validate $out/lib/pkgconfig/*.pc
   '';
 
   # Per license agreement, do not modify the binary

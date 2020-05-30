@@ -8,7 +8,7 @@
 }:
 let
   majMin = stdenv.lib.versions.majorMinor version;
-  version = "7.6.9";
+  version = "7.6.13";
 
   python = python2.withPackages
     (
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.foldingathome.org/releases/public/release/fahcontrol/debian-stable-64bit/v${majMin}/fahcontrol_${version}-1_all.deb";
-    sha256 = "1fh7ybbp3qlqzh18c4gva3aaymv7d31mqchrv235a1axldha1s9s";
+    sha256 = "0qfvhwc29cgqkwf2bkhq4gr2d1c4jgccfs58916ss03n4rwz9gng";
   };
 
   nativeBuildInputs = [

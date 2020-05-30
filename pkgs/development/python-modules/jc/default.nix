@@ -1,6 +1,6 @@
 { stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ruamel_yaml
 , xmltodict
 , pygments
@@ -9,12 +9,14 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.10.7";
+  version = "1.10.12";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "198vsnh6j0nv9d7msnvw6qr1bzf0nffjsz7clm11bs7fh3ri3qxp";
+  src = fetchFromGitHub {
+    owner = "kellyjonbrazil";
+    repo = "jc";
+    rev = "v${version}";
+    sha256 = "04gggx47acckyd96cginrw7ldw7fqgkiggk9fxdij2hwi03mk4n4";
   };
 
   propagatedBuildInputs = [ ruamel_yaml xmltodict pygments ];

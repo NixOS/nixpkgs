@@ -105,6 +105,9 @@ in buildFHSUserEnv {
     cups lcms2 mpg123 cairo unixODBC samba4 sane-backends openldap
     ocl-icd utillinux libkrb5
 
+    # Proton
+    libselinux
+
     # Winetricks
     fribidi
   ] ++ xorgDeps pkgs;

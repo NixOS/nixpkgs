@@ -24,6 +24,7 @@
 , libtasn1
 , tdb
 , cmocka
+, nixosTests
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
@@ -42,11 +43,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.12.2";
+  version = "4.12.3";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "0l514s2xhsy1lspzgvibbzs80zi84zxr2wx4d40hq85yb2lg5434";
+    sha256 = "09w7aap1cjc41ayhaksm1igc7p7gl40fad4a1l6q4ds9a2jbrb9z";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -147,6 +148,10 @@ stdenv.mkDerivation rec {
     EOF
     find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
   '';
+
+  passthru = {
+    tests.samba = nixosTests.samba;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://www.samba.org";

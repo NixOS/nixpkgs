@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   ++ optional aacSupport fdk_aac;
 
   configureFlags = [
-    "--with-alsaplugindir=\$out/lib/alsa-lib"
-    "--with-dbusconfdir=\$out/etc/dbus-1"
+    "--with-alsaplugindir=${placeholder "out"}/lib/alsa-lib"
+    "--with-dbusconfdir=${placeholder "out"}/share/dbus-1/system.d"
     "--enable-rfcomm"
     "--enable-hcitop"
   ]

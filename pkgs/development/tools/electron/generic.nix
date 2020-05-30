@@ -8,7 +8,7 @@ let
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
-    maintainers = with maintainers; [ travisbhartwell manveru ];
+    maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
   };
 

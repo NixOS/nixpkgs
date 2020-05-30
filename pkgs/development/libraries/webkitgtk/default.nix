@@ -178,7 +178,6 @@ stdenv.mkDerivation rec {
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    hydraPlatforms = [];
     maintainers = teams.gnome.members;
   };
 }

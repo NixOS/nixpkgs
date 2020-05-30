@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, runCommand }:
 
 buildGoModule rec {
   pname = "cloudflared";
@@ -11,7 +11,8 @@ buildGoModule rec {
     sha256 = "1vbxm5z72y9zfg4carmja3fc1vhkanmc25pgnlw550p1l14y6404";
   };
 
-  modSha256 = "1mnfp8nhbllv8msglci1hq4026rqsc1yibrh2xnwwbf2f3yqx8h0";
+  vendorSha256 = "14w2iz3ycbzfvlr8a6qn86aaa8687cm203d73wpfkfskp277hwz0";
+  deleteVendor = true;
 
   buildFlagsArray = "-ldflags=-X main.Version=${version}";
 

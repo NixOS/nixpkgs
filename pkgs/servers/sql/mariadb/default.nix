@@ -23,14 +23,14 @@ mariadb = server // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.3.22";
+  version = "10.4.12";
 
   src = fetchurl {
     urls = [
       "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
       "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
     ];
-    sha256 = "1iyf1hl82nqsci5h327a537rvdrc5qcbrd1v3fc4cxy2pmfha01j";
+    sha256 = "0252b9rxxz1ljjv6ni0wwgy14j8qmmdd2sq0a65dslx2ib9y3wgy";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -111,7 +111,6 @@ common = rec { # attributes common to both builds
   };
 
   meta = {
-
     description = "An enhanced, drop-in replacement for MySQL";
     homepage    = "https://mariadb.org/";
     license     = licenses.gpl2;
@@ -161,7 +160,10 @@ server = stdenv.mkDerivation (common // {
     ++ optional stdenv.hostPlatform.isLinux linux-pam
     ++ optional (!stdenv.hostPlatform.isDarwin) mytopEnv;
 
-  patches = common.patches ++ optionals stdenv.hostPlatform.isDarwin [
+  patches = common.patches ++ [
+    # Disable build unused plugin pam_mariadb_mtr.so. See https://jira.mariadb.org/browse/MDEV-21654
+    ./cmake-disable-auth-pam-testing.patch
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     ./cmake-without-plugin-auth-pam.patch
   ];
 
@@ -198,7 +200,7 @@ server = stdenv.mkDerivation (common // {
 
   postInstall = common.postInstall + ''
     chmod +x "$out"/bin/wsrep_sst_common
-    rm "$out"/bin/{mysql_client_test,mysqltest}
+    rm "$out"/bin/{mariadb-client-test,mariadb-test,mysql_client_test,mysqltest}
     rm -r "$out"/data # Don't need testing data
   '' + optionalString withStorageMroonga ''
     mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql

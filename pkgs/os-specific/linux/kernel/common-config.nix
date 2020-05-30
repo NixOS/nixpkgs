@@ -42,7 +42,7 @@ let
       TIMER_STATS               = whenOlder "4.11" yes;
       DEBUG_NX_TEST             = whenOlder "4.11" no;
       DEBUG_STACK_USAGE         = no;
-      DEBUG_STACKOVERFLOW       = mkIf (!features.grsecurity) no;
+      DEBUG_STACKOVERFLOW       = mkIf (!features.grsecurity) (option no);
       RCU_TORTURE_TEST          = no;
       SCHEDSTATS                = no;
       DETECT_HUNG_TASK          = yes;
@@ -184,7 +184,6 @@ let
 
       # needed for ss
       INET_DIAG         = yes;
-      INET_TCP_DIAG     = module;
       INET_UDP_DIAG     = module;
       INET_RAW_DIAG     = whenAtLeast "4.14" module;
       INET_DIAG_DESTROY = whenAtLeast "4.9" yes;
@@ -219,6 +218,7 @@ let
       FB_3DFX_ACCEL       = yes;
       FB_VESA             = yes;
       FRAMEBUFFER_CONSOLE = yes;
+      FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER = whenAtLeast "4.19" yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
       FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
     };
@@ -364,7 +364,7 @@ let
       CIFS_STATS        = whenOlder "4.19" yes;
       CIFS_WEAK_PW_HASH = yes;
       CIFS_UPCALL       = yes;
-      CIFS_ACL          = yes;
+      CIFS_ACL          = option yes;
       CIFS_DFS_UPCALL   = yes;
       CIFS_SMB2         = whenOlder "4.13" yes;
 
@@ -395,7 +395,7 @@ let
       DEBUG_SET_MODULE_RONX            = { optional = true; tristate = whenOlder "4.11" "y"; };
       RANDOMIZE_BASE                   = option yes;
       STRICT_DEVMEM                    = option yes; # Filter access to /dev/mem
-      SECURITY_SELINUX_BOOTPARAM_VALUE = freeform "0"; # Disable SELinux by default
+      SECURITY_SELINUX_BOOTPARAM_VALUE = option (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
       DEVKMEM                          = mkIf (!features.grsecurity) no; # Disable /dev/kmem
@@ -708,7 +708,7 @@ let
       KEXEC_JUMP      = option yes;
 
       # Windows Logical Disk Manager (Dynamic Disk) support
-      LDM_PARTITION         = yes;
+      LDM_PARTITION         = option yes;
       LOGIRUMBLEPAD2_FF     = yes; # Logitech Rumblepad 2 force feedback
       LOGO                  = no; # not needed
       MEDIA_ATTACH          = yes;

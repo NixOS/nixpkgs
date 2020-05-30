@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1jll5nmskvs61031h3sizhv3scv8znrr9apyc4qlxcp4jiv7xpmp";
   };
 
-  modSha256 = "1m7sha6kwis1a00il1iigb9lxxh5m2myj9ps20s816m0b9bhd43v";
+  vendorSha256 = "0rlvbyhl53x1bhwr7f7zs4swa580saak19z3d3g58srq3jyw6zlc";
 
   meta = with lib; {
     description = "Portable command-line YAML processor";

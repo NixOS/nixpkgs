@@ -8,6 +8,7 @@
 { name ? ""
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
@@ -53,12 +54,12 @@ let
     "-isystem ${libcxx}/include/c++/v1"
   else "";
 
-  # The "infix salt" is a arbitrary string added in the middle of env vars
+  # The "suffix salt" is a arbitrary string added in the end of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
   # without interfering. For the moment, it is defined as the target triple,
   # adjusted to be a valid bash identifier. This should be considered an
   # unstable implementation detail, however.
-  infixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
     if buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
@@ -105,7 +106,7 @@ stdenv.mkDerivation {
   shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
-  inherit targetPrefix infixSalt;
+  inherit targetPrefix suffixSalt;
 
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
@@ -122,7 +123,7 @@ stdenv.mkDerivation {
       (mapc
         (lambda (arg)
           (when (file-directory-p (concat arg "/include"))
-            (setenv "NIX_${infixSalt}_CFLAGS_COMPILE" (concat (getenv "NIX_${infixSalt}_CFLAGS_COMPILE") " -isystem " arg "/include"))))
+            (setenv "NIX_CFLAGS_COMPILE_${suffixSalt}" (concat (getenv "NIX_CFLAGS_COMPILE_${suffixSalt}") " -isystem " arg "/include"))))
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
   };
@@ -205,6 +206,10 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gnatlink ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatlink
     ''
 
+    + optionalString cc.langD or false ''
+      wrap ${targetPrefix}gdc $wrapper $ccPath/${targetPrefix}gdc
+    ''
+
     + optionalString cc.langFortran or false ''
       wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
@@ -220,7 +225,7 @@ stdenv.mkDerivation {
     '';
 
   strictDeps = true;
-  propagatedBuildInputs = [ bintools ] ++ extraTools;
+  propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or false [ zlib ];
   depsTargetTargetPropagated = extraPackages;
 
   wrapperName = "CC_WRAPPER";
@@ -262,8 +267,9 @@ stdenv.mkDerivation {
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
       echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
+    '' + optionalString (!(cc.langD or false)) ''
       echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
-    '' + optionalString isGNU ''
+    '' + optionalString (isGNU && (!(cc.langD or false))) ''
       for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
         echo '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
       done
@@ -307,6 +313,8 @@ stdenv.mkDerivation {
 
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
+    '' + optionalString (cc.langD or false) ''
+      echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     ''
 
     + ''
@@ -366,9 +374,9 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString cc.langAda or false ''
       hardening_unsupported_flags+=" stackprotector strictoverflow"
-    ''
-
-    + optionalString targetPlatform.isWasm ''
+    '' + optionalString cc.langD or false ''
+      hardening_unsupported_flags+=" format"
+    '' + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     ''
 

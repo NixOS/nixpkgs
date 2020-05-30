@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mednafen";
-  version = "1.24.2";
+  version = "1.24.3";
 
   src = fetchurl {
     url = "https://mednafen.github.io/releases/files/${pname}-${version}.tar.xz";
-    sha256 = "0v3w0miyz86ihcir7ab82zjfklp550pk6g9xjxcx6mmvhp9dws8i";
+    sha256 = "03zplcfvmnnv7grhacmr1zy789pb2wda36wylmzmar23g0zqbsix";
   };
 
   nativeBuildInputs = [ pkgconfig ];

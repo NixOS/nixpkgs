@@ -5,12 +5,20 @@ let
   cfg     = config.services.dnscrypt-wrapper;
   dataDir = "/var/lib/dnscrypt-wrapper";
 
+  mkPath = path: default:
+    if path != null
+      then toString path
+      else default;
+
+  publicKey = mkPath cfg.providerKey.public "${dataDir}/public.key";
+  secretKey = mkPath cfg.providerKey.secret "${dataDir}/secret.key";
+
   daemonArgs = with cfg; [
     "--listen-address=${address}:${toString port}"
     "--resolver-address=${upstream.address}:${toString upstream.port}"
     "--provider-name=${providerName}"
-    "--provider-publickey-file=public.key"
-    "--provider-secretkey-file=secret.key"
+    "--provider-publickey-file=${publicKey}"
+    "--provider-secretkey-file=${secretKey}"
     "--provider-cert-file=${providerName}.crt"
     "--crypt-secretkey-file=${providerName}.key"
   ];
@@ -24,17 +32,19 @@ let
       dnscrypt-wrapper --gen-cert-file \
         --crypt-secretkey-file=${cfg.providerName}.key \
         --provider-cert-file=${cfg.providerName}.crt \
-        --provider-publickey-file=public.key \
-        --provider-secretkey-file=secret.key \
+        --provider-publickey-file=${publicKey} \
+        --provider-secretkey-file=${secretKey} \
         --cert-file-expire-days=${toString cfg.keys.expiration}
     }
 
     cd ${dataDir}
 
     # generate provider keypair (first run only)
-    if [ ! -f public.key ] || [ ! -f secret.key ]; then
-      dnscrypt-wrapper --gen-provider-keypair
-    fi
+    ${optionalString (cfg.providerKey.public == null || cfg.providerKey.secret == null) ''
+      if [ ! -f ${publicKey} ] || [ ! -f ${secretKey} ]; then
+        dnscrypt-wrapper --gen-provider-keypair
+      fi
+    ''}
 
     # generate new keys for rotation
     if [ ! -f ${cfg.providerName}.key ] || [ ! -f ${cfg.providerName}.crt ]; then
@@ -63,6 +73,47 @@ let
       systemctl restart dnscrypt-wrapper
     fi
   '';
+
+
+  # This is the fork of the original dnscrypt-proxy maintained by Dyne.org.
+  # dnscrypt-proxy2 doesn't provide the `--test` feature that is needed to
+  # correctly implement key rotation of dnscrypt-wrapper ephemeral keys.
+  dnscrypt-proxy1 = pkgs.callPackage
+    ({ stdenv, fetchFromGitHub, autoreconfHook
+    , pkgconfig, libsodium, ldns, openssl, systemd }:
+
+    stdenv.mkDerivation rec {
+      pname = "dnscrypt-proxy";
+      version = "2019-08-20";
+
+      src = fetchFromGitHub {
+        owner = "dyne";
+        repo = "dnscrypt-proxy";
+        rev = "07ac3825b5069adc28e2547c16b1d983a8ed8d80";
+        sha256 = "0c4mq741q4rpmdn09agwmxap32kf0vgfz7pkhcdc5h54chc3g3xy";
+      };
+
+      configureFlags = optional stdenv.isLinux "--with-systemd";
+
+      nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+      # <ldns/ldns.h> depends on <openssl/ssl.h>
+      buildInputs = [ libsodium openssl.dev ldns ] ++ optional stdenv.isLinux systemd;
+
+      postInstall = ''
+        # Previous versions required libtool files to load plugins; they are
+        # now strictly optional.
+        rm $out/lib/dnscrypt-proxy/*.la
+      '';
+
+      meta = {
+        description = "A tool for securing communications between a client and a DNS resolver";
+        homepage = "https://github.com/dyne/dnscrypt-proxy";
+        license = licenses.isc;
+        maintainers = with maintainers; [ rnhmjoj ];
+        platforms = platforms.linux;
+      };
+    }) { };
 
 in {
 
@@ -95,6 +146,26 @@ in {
       description = ''
         The name that will be given to this DNSCrypt resolver.
         Note: the resolver name must start with <literal>2.dnscrypt-cert.</literal>.
+      '';
+    };
+
+    providerKey.public = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/etc/secrets/public.key";
+      description = ''
+        The filepath to the provider public key. If not given a new
+        provider key pair will be generated on the first run.
+      '';
+    };
+
+    providerKey.secret = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/etc/secrets/secret.key";
+      description = ''
+        The filepath to the provider secret key. If not given a new
+        provider key pair will be generated on the first run.
       '';
     };
 
@@ -179,7 +250,7 @@ in {
       requires = [ "dnscrypt-wrapper.service" ];
       description = "Rotates DNSCrypt wrapper keys if soon to expire";
 
-      path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy gawk ];
+      path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy1 gawk ];
       script = rotateKeys;
       serviceConfig.User = "dnscrypt-wrapper";
     };
@@ -195,6 +266,13 @@ in {
         OnUnitActiveSec = cfg.keys.checkInterval * 60;
       };
     };
+
+    assertions = with cfg; [
+      { assertion = (providerKey.public == null && providerKey.secret == null) ||
+                    (providerKey.secret != null && providerKey.public != null);
+        message = "The secret and public provider key must be set together.";
+      }
+    ];
 
   };
 
