@@ -18,7 +18,7 @@ let
     buildInputs ? [],
     ...
   }:
-  stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) //  {
+  stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) // {
 
     name = namePrefix + name;
 
@@ -80,7 +80,7 @@ let
    vscodeDefault = vscode;
   };
 
-  
+
   vscodeExts2nix = import ./vscodeExts2nix.nix {
     inherit lib writeShellScriptBin;
     vscodeDefault = vscode;
@@ -90,7 +90,7 @@ let
     inherit lib buildEnv writeShellScriptBin extensionsFromVscodeMarketplace jq;
     vscodeDefault = vscode;
   };
-in 
+in
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
           buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
