@@ -21496,6 +21496,10 @@ in
 
   xmrig-proxy = callPackage ../applications/misc/xmrig/proxy.nix { };
 
+  molot-lite = callPackage ../applications/audio/molot-lite { };
+  molot-mono-lite = callPackage ../applications/audio/molot-lite/mono.nix { };
+  molot-stereo-lite = callPackage ../applications/audio/molot-lite/stereo.nix { };
+
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
   monkeysphere = callPackage ../tools/security/monkeysphere { };
