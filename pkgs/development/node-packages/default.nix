@@ -1,7 +1,9 @@
 { pkgs, nodejs, stdenv }:
 
 let
-  nodePackages = import ./composition-v10.nix {
+  since = (version: pkgs.lib.versionAtLeast nodejs.version version);
+  before = (version: pkgs.lib.versionOlder nodejs.version version);
+  nodePackages = import ./composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
@@ -21,12 +23,21 @@ nodePackages // {
     '';
   };
 
+  coc-imselect = nodePackages.coc-imselect.override {
+    meta.broken = since "10";
+  };
+
+  "fast-cli-1.x" = nodePackages."fast-cli-1.x".override {
+    meta.broken = since "10";
+  };
+
   jshint = nodePackages.jshint.override {
     buildInputs = [ pkgs.phantomjs2 ];
   };
 
   dat = nodePackages.dat.override {
     buildInputs = [ nodePackages.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
+    meta.broken = since "12";
   };
 
   dnschain = nodePackages.dnschain.override {
@@ -34,6 +45,7 @@ nodePackages // {
     postInstall = ''
       wrapProgram $out/bin/dnschain --suffix PATH : ${pkgs.openssl.bin}/bin
     '';
+    meta.broken = since "14";
   };
 
   bitwarden-cli = pkgs.lib.overrideDerivation nodePackages."@bitwarden/cli" (drv: {
@@ -48,6 +60,7 @@ nodePackages // {
       ln -s /usr/bin/xcodebuild $tmp
       export PATH="$PATH:$tmp"
     '';
+    meta.platforms = [ pkgs.lib.platforms.darwin ];
   });
 
   fast-cli = nodePackages."fast-cli-1.x".override {
@@ -60,14 +73,17 @@ nodePackages // {
 
   git-ssb = nodePackages.git-ssb.override {
     buildInputs = [ nodePackages.node-gyp-build ];
+    meta.broken = since "10";
   };
 
   insect = nodePackages.insect.override (drv: {
     nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package pkgs.purescript nodePackages.pulp ];
+    meta.broken = since "10";
   });
 
   node-inspector = nodePackages.node-inspector.override {
     buildInputs = [ nodePackages.node-pre-gyp ];
+    meta.broken = since "10";
   };
 
   node2nix =  nodePackages.node2nix.override {
@@ -75,6 +91,10 @@ nodePackages // {
     postInstall = ''
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nix ]}
     '';
+  };
+
+  node-red = nodePackages.node-red.override {
+    meta.broken = since "10";
   };
 
   pnpm = nodePackages.pnpm.override {
@@ -96,8 +116,13 @@ nodePackages // {
     '';
   };
 
+  pulp = nodePackages.pulp.override {
+    meta.broken = since "10";
+  };
+
   ssb-server = nodePackages.ssb-server.override {
     buildInputs = [ pkgs.automake pkgs.autoconf nodePackages.node-gyp-build ];
+    meta.broken = since "10";
   };
 
   tedicross = nodePackages."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
@@ -106,6 +131,10 @@ nodePackages // {
       makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
         --add-flags "$out/lib/node_modules/tedicross/main.js"
     '';
+  };
+
+  stf = nodePackages.stf.override {
+    meta.broken = since "10";
   };
 
   webtorrent-cli = nodePackages.webtorrent-cli.override {
@@ -125,8 +154,5 @@ nodePackages // {
 
   thelounge = nodePackages.thelounge.override {
     buildInputs = [ nodePackages.node-pre-gyp ];
-    postInstall = ''
-      echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
-    '';
   };
 }
