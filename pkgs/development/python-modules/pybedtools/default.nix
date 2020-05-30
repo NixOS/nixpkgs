@@ -1,5 +1,5 @@
 { bash, stdenv, buildPythonPackage, fetchPypi, numpy, pandas, pysam, six,
-  pytest, numpydoc, psutil, pyyaml, sphinx, zlib, python
+  pytest, numpydoc, psutil, pyyaml, sphinx, zlib, bedtools, python
 }:
 buildPythonPackage rec {
   version = "0.8.1";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest numpydoc psutil pyyaml sphinx ];
-  propagatedBuildInputs = [ numpy pandas pysam six zlib bash ];
+  propagatedBuildInputs = [ numpy pandas pysam six zlib bash bedtools ];
 
   checkPhase = ''
     # pytest -v --doctest-modules
