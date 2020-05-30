@@ -8035,6 +8035,12 @@
     githubId = 65870;
     name = "Сухарик";
   };
+  superbo = {
+    email = "supernbo@gmail.com";
+    github = "SuperBo";
+    githubId = 2666479;
+    name = "Y Nguyen";
+  };
   SuperSandro2000 = {
     email = "sandro.jaeckel@gmail.com";
     github = "SuperSandro2000";
