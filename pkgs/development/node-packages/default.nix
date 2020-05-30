@@ -189,6 +189,10 @@ let
       meta.broken = since "10";
     };
 
+    stf = super.stf.override {
+      meta.broken = since "10";
+    };
+
     tedicross = super."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -205,8 +209,12 @@ let
       '';
     });
 
-    stf = super.stf.override {
-      meta.broken = since "10";
+    typescript-language-server = super.typescript-language-server.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/typescript-language-server" \
+          --prefix PATH : ${stdenv.lib.makeBinPath [ self.typescript ]}
+      '';
     };
 
     vega-cli = super.vega-cli.override {
