@@ -115,15 +115,6 @@ in rec {
         else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
-    in if builtins.length erroneousHardeningFlags != 0
-    then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
-      inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
-    })
-    else let
-      doCheck = doCheck';
-      doInstallCheck = doInstallCheck';
-
-      outputs = outputs';
 
       references = nativeBuildInputs ++ buildInputs
                 ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
@@ -134,7 +125,7 @@ in rec {
           (map (drv: drv.nativeDrv or drv) nativeBuildInputs
              ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
              ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
-             ++ lib.optionals doCheck checkInputs
+             ++ lib.optionals doCheck' checkInputs
              ++ lib.optionals doInstallCheck' installCheckInputs)
           (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
         ]
@@ -188,9 +179,9 @@ in rec {
            "__darwinAllowLocalNetworking"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
-        // (lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version)) {
+        // lib.optionalAttrs (!(attrs ? name) && attrs ? pname && attrs ? version) {
           name = "${attrs.pname}-${attrs.version}";
-        } // (lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version)))) {
+        } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix && (attrs ? name || (attrs ? pname && attrs ? version))) {
           # Fixed-output derivations like source tarballs shouldn't get a host
           # suffix. But we have some weird ones with run-time deps that are
           # just used for their side-affects. Those might as well since the
@@ -237,11 +228,11 @@ in rec {
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
+          doCheck = doCheck';
+          doInstallCheck = doInstallCheck';
+          outputs = outputs';
+
           inherit patches;
-
-          inherit doCheck doInstallCheck;
-
-          inherit outputs;
         } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
           cmakeFlags =
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
@@ -285,7 +276,7 @@ in rec {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
         } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? platform.gcc.arch) {
           requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch}" ];
-        } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
+        } // lib.optionalAttrs stdenv.buildPlatform.isDarwin {
           inherit __darwinAllowLocalNetworking;
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
@@ -321,8 +312,8 @@ in rec {
           #   unless they are comfortable with this default.
           outputsToInstall =
             let
-              hasOutput = out: builtins.elem out outputs;
-            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )]
+              hasOutput = out: builtins.elem out outputs';
+            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs') )]
               ++ lib.optional (hasOutput "man") "man";
         }
         // attrs.meta or {}
