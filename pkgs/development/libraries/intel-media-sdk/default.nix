@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, autoPatchelfHook, cmake, pkgconfig, libdrm, libpciaccess
-, libva , libX11, libXau, libXdmcp, libpthreadstubs
-}:
+{ stdenv, fetchurl, cmake, pkgconfig, libdrm, libpciaccess, libva
+, libX11 , libXau, libXdmcp, libpthreadstubs }:
 
 stdenv.mkDerivation rec {
   pname = "intel-media-sdk";
@@ -11,10 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1p13b4abslq31pbgqf0bzs2ixns85yfdsm94326h2vcg0q7hqc24";
   };
 
-  # patchelf is needed for binaries in $out/share/samples
-  nativeBuildInputs = [ autoPatchelfHook cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
     libdrm libva libpciaccess libX11 libXau libXdmcp libpthreadstubs
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_SAMPLES=OFF"
   ];
 
   enableParallelBuild = true;
