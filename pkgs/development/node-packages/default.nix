@@ -117,7 +117,7 @@ nodePackages // {
   };
 
   pulp = nodePackages.pulp.override {
-    meta.broken = since "10";
+    npmFlags = "--ignore-scripts";
   };
 
   ssb-server = nodePackages.ssb-server.override {
