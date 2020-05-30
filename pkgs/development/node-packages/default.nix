@@ -76,7 +76,7 @@ let
     };
 
     insect = super.insect.override (drv: {
-      nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package pkgs.purescript self.pulp ];
+      nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
 
     node-inspector = super.node-inspector.override {
@@ -117,6 +117,13 @@ let
     pulp = super.pulp.override {
       # tries to install purescript
       npmFlags = "--ignore-scripts";
+
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall =  ''
+        wrapProgram "$out/bin/pulp" --suffix PATH : ${stdenv.lib.makeBinPath [
+          pkgs.purescript
+        ]}
+      '';
     };
 
     ssb-server = super.ssb-server.override {
