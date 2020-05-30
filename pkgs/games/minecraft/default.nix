@@ -24,11 +24,11 @@
 , curl
 , freetype
 , libpulseaudio
+, libuuid
 , systemd
 , flite ? null
 , libXxf86vm ? null
 }:
-
 let
   desktopItem = makeDesktopItem {
     name = "minecraft-launcher";
@@ -40,13 +40,13 @@ let
   };
 
   envLibPath = stdenv.lib.makeLibraryPath [
-      curl
-      libpulseaudio
-      systemd
-      alsaLib # needed for narrator
-      flite # needed for narrator
-      libXxf86vm # needed only for versions <1.13
-    ];
+    curl
+    libpulseaudio
+    systemd
+    alsaLib # needed for narrator
+    flite # needed for narrator
+    libXxf86vm # needed only for versions <1.13
+  ];
 
   libPath = stdenv.lib.makeLibraryPath ([
     alsaLib
@@ -67,6 +67,7 @@ let
     nss
     stdenv.cc.cc
     zlib
+    libuuid
   ] ++
   (with xorg; [
     libX11
@@ -83,14 +84,14 @@ let
     libXScrnSaver
   ]));
 in
- stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
-  version = "2.1.14403";
+  version = "2.1.14947";
 
   src = fetchurl {
     url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "086c8rqica0wrin7kj8mj6vqxyyx1gzq31a0hz4lhg0k4fs8z21g";
+    sha256 = "1lsc39n1kq08sssnpr6kf4lfpy01a7i7rgvi298mmxsprjmc7a9q";
   };
 
   icon = fetchurl {
