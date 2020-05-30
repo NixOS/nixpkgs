@@ -955,6 +955,8 @@ let
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
 
+    webbrowser = callPackage ../development/ocaml-modules/webbrowser { };
+
     webmachine = callPackage ../development/ocaml-modules/webmachine { };
 
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
