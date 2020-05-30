@@ -36,6 +36,17 @@ let
         '';
       };
 
+      p11Auth = mkOption {
+        default = config.security.pam.p11.enable;
+        type = types.bool;
+        description = ''
+          If set, keys listed in
+          <filename>~/.ssh/authorized_keys</filename> and
+          <filename>~/.eid/authorized_certificates</filename>
+          can be used to log in with the associated PKCS#11 tokens.
+        '';
+      };
+
       u2fAuth = mkOption {
         default = config.security.pam.u2f.enable;
         type = types.bool;
@@ -352,6 +363,8 @@ let
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString cfg.fprintAuth
               "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
+          ${let p11 = config.security.pam.p11; in optionalString cfg.p11Auth
+              "auth ${p11.control} ${pkgs.pam_p11}/lib/security/pam_p11.so ${pkgs.opensc}/lib/opensc-pkcs11.so"}
           ${let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth
               "auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"}"}
           ${optionalString cfg.usbAuth
@@ -566,6 +579,39 @@ in
 
     security.pam.enableOTPW = mkEnableOption "the OTPW (one-time password) PAM module";
 
+    security.pam.p11 = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enables P11 PAM (<literal>pam_p11</literal>) module.
+
+          If set, users can log in with SSH keys and PKCS#11 tokens.
+
+          More information can be found <link
+          xlink:href="https://github.com/OpenSC/pam_p11">here</link>.
+        '';
+      };
+
+      control = mkOption {
+        default = "sufficient";
+        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        description = ''
+          This option sets pam "control".
+          If you want to have multi factor authentication, use "required".
+          If you want to use the PKCS#11 device instead of the regular password,
+          use "sufficient".
+
+          Read
+          <citerefentry>
+            <refentrytitle>pam.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for better understanding of this option.
+        '';
+      };
+    };
+
     security.pam.u2f = {
       enable = mkOption {
         default = false;
@@ -747,6 +793,7 @@ in
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
+      ++ optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
       ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
     boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
