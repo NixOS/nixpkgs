@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cmake, pkgconfig, libdrm, libpciaccess, libva
-, libX11 , libXau, libXdmcp, libpthreadstubs }:
+{ stdenv, fetchurl, cmake, pkgconfig, gtest, libdrm, libpciaccess, libva, libX11
+, libXau, libXdmcp, libpthreadstubs }:
 
 stdenv.mkDerivation rec {
   pname = "intel-media-sdk";
@@ -14,11 +14,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libdrm libva libpciaccess libX11 libXau libXdmcp libpthreadstubs
   ];
+  checkInputs = [ gtest ];
 
   cmakeFlags = [
     "-DBUILD_SAMPLES=OFF"
+    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DUSE_SYSTEM_GTEST=ON"
   ];
 
+  doCheck = true;
   enableParallelBuild = true;
 
   meta = with stdenv.lib; {
