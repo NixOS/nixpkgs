@@ -7362,6 +7362,8 @@ in {
   scikit-plot = callPackage ../development/python-modules/scikit-plot { };
 
   pybedtools = callPackage ../development/python-modules/pybedtools { };
+
+  pyBigWig = callPackage ../development/python-modules/pyBigWig { };
 });
 
 in fix' (extends overrides packages)
