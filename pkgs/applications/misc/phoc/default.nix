@@ -49,8 +49,6 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${libdrm.dev}/include/libdrm/";
 
-  dontUseCmakeConfigure = true;
-
   mesonFlags = ["-Dembed-wlroots=disabled"];
 
   postInstall = ''
