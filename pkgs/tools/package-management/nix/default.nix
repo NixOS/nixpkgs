@@ -178,10 +178,10 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.4";
+    name = "nix-2.3.5";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "1c626a0de0acc69830b1891ec4d3c96aabe673b2a9fd04cef84f2304d05ad00d";
+      sha256 = "25445353c27d7c2703cd74216bce6458a02068965055d111765ac4186ed678c1";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -210,13 +210,13 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20200501_941f952";
+    suffix = "pre20200521_00b562c";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "941f95284ab57e9baa317791327cf1715d8564b5";
-      sha256 = "0d99jl5baxji5dmqb4fwmbffx0z04k0naanms5zzbwvxdmzn3yhs";
+      rev = "00b562c87ec4c3bbe514f5dc1f4d1c41f66f66bf";
+      hash = "sha256-GqTFh4wBfkKapixKyd3gA9C1tF0PSzZDD5LN+5nQEWk=";
     };
 
     crates = fetchurl {

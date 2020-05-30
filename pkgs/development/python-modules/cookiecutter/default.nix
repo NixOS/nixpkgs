@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "cookiecutter";
-  version = "1.7.0";
+  version = "1.7.2";
 
   # not sure why this is broken
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bh4vf45q9nanmgwnw7m0gxirndih9yyz5s0y2xbnlbcqbhrg6a7";
+    sha256 = "efb6b2d4780feda8908a873e38f0e61778c23f6a2ea58215723bcceb5b515dac";
   };
 
   checkInputs = [ pytest pytestcov pytest-mock freezegun ];

@@ -1,11 +1,11 @@
 { lib, buildPythonApplication, fetchPypi, pytest, chardet }:
 buildPythonApplication rec {
   pname = "codespell";
-  version = "1.16.0";
+  version = "1.17.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s9dl07ib77gq0iq26mrdpl1c46nkfm7nlhqwxpx5vvs6a1pqfxz";
+    sha256 = "08ydpw8pim7rhg1x2n711hxf2y6553nx0c0aqhfi3p4wdgcfr8i5";
   };
 
   checkInputs = [ pytest chardet ];

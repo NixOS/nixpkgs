@@ -400,6 +400,47 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
       The rkt module has been removed, it was archived by upstream.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <link xlink:href="https://bazaar.canonical.com">Bazaar</link> VCS is
+      unmaintained and, as consequence of the Python 2 EOL, the packages
+      <literal>bazaar</literal> and <literal>bazaarTools</literal> were
+      removed. Breezy, the backward compatible fork of Bazaar (see the
+      <link xlink:href="https://www.jelmer.uk/breezy-intro.html">announcement</link>),
+      was packaged as <literal>breezy</literal> and can be used instead.
+    </para>
+    <para>
+      Regarding Nixpkgs, <literal>fetchbzr</literal>,
+      <literal>nix-prefetch-bzr</literal> and Bazaar support in Hydra will
+      continue to work through Breezy.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       In addition to the hostname, the fully qualified domain name (FQDN),
+       which consists of <literal>${cfg.hostName}</literal> and
+       <literal>${cfg.domain}</literal> is now added to
+       <literal>/etc/hosts</literal>, to allow local FQDN resolution, as used by the
+       <literal>hostname --fqdn</literal> command and other applications that
+       try to determine the FQDN. These new entries take precedence over entries
+       from the DNS which could cause regressions in some very specific setups.
+       Additionally the hostname is now resolved to <literal>127.0.0.2</literal>
+       instead of <literal>127.0.1.1</literal> to be consistent with what
+       <literal>nss-myhostname</literal> (from systemd) returns.
+       The old behaviour can e.g. be restored by using
+       <literal>networking.hosts = lib.mkForce { "127.0.1.1" = [ config.networking.hostName ]; };</literal>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The hostname (<literal>networking.hostName</literal>) must now be a valid
+       DNS label (see RFC 1035) and as such must not contain the domain part.
+       This means that the hostname must start with a letter, end with a letter
+       or digit, and have as interior characters only letters, digits, and
+       hyphen. The maximum length is 63 characters. Additionally it is
+       recommended to only use lower-case characters.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 

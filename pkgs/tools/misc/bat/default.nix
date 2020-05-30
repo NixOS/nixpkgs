@@ -1,31 +1,24 @@
-{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, pkgconfig, less
+{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, less
 , Security, libiconv, installShellFiles, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
   pname   = "bat";
-  version = "0.15.1";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "10cs94ja1dmn0f24gqkcy8rf68b3b43k6qpbb5njbg0hcx3x6cyj";
+    sha256 = "1pjdvhldmjpy8ymb7r91y18hj5dx1iygszsfwkd66v9rncjigd07";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "13cphi08bp6lg054acgliir8dx2jajll4m3c4xxy04skmx555zr8";
+  cargoSha256 = "0myz06hjv4hwzmyqa9l36i9j9d213a0mnq8rvx6wyff7mr9zk99i";
 
-  # Disable test that's broken on macOS.
-  # This should probably be removed on the next release.
-  # https://github.com/sharkdp/bat/issues/983
-  patches = [ ./macos.patch ];
-
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang installShellFiles makeWrapper ];
+  nativeBuildInputs = [ pkgconfig installShellFiles makeWrapper ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1

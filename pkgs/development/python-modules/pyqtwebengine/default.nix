@@ -1,4 +1,4 @@
-{ lib, fetchurl, pythonPackages, pkgconfig
+{ lib, pythonPackages, pkgconfig
 , qmake, qtbase, qtsvg, qtwebengine
 , wrapQtAppsHook
 }:
@@ -9,13 +9,13 @@ let
   inherit (pyqt5) sip;
 
 in buildPythonPackage rec {
-  pname = "pyqtwebengine";
-  version = "5.12.1";
+  pname = "PyQtWebEngine";
+  version = "5.14.0";
   format = "other";
 
-  src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/PyQtWebEngine/${version}/PyQtWebEngine_gpl-${version}.tar.gz";
-    sha256 = "0wylkd7fh2g27y3710rpxmj9wx0wpi3z7qbv6khiddm15rkh81w6";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "14hw49akb35n9pgiw564x8ykmsifihn9p2ax2x4zmywb3w2ra5g1";
   };
 
   outputs = [ "out" "dev" ];

@@ -50,6 +50,8 @@ mapAliases ({
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
+  bazaar = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
+  bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   beegfs = throw "beegfs has been removed."; # added 2019-11-24
   bluezFull = bluez; # Added 2019-12-03
   bridge_utils = bridge-utils;  # added 2015-02-20
@@ -281,6 +283,7 @@ mapAliases ({
   matrique = spectral; # added 2020-01-27
   mbedtls_1_3 = throw "mbedtls_1_3 is end of life, see https://tls.mbed.org/kb/how-to/upgrade-2.0"; # added 2019-12-08
   mess = mame; # added 2019-10-30
+  mcgrid = throw "mcgrid has been removed from nixpkgs, as it's not compatible with rivet 3"; # added 2020-05-23
   mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained"; # added 2019-12-10
   mirage = throw "mirage has been femoved from nixpkgs, as it's unmaintained"; # added 2019-12-10
   mysql-client = hiPrio mariadb.client;
@@ -303,6 +306,7 @@ mapAliases ({
   msf = metasploit; # added 2018-04-25
   libmsgpack = msgpack; # added 2018-08-17
   mssys = ms-sys; # added 2015-12-13
+  mpv-with-scripts = throw "Use wrapMpv for editing the environment of mpv"; # added 2012-05-22
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   mysqlWorkbench = mysql-workbench; # added 2017-01-19

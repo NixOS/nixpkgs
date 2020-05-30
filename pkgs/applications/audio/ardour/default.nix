@@ -4,75 +4,79 @@
 , aubio
 , boost
 , cairomm
+, cppunit
 , curl
+, dbus
 , doxygen
+, ffmpeg
+, fftw
 , fftwSinglePrec
 , flac
+, fluidsynth
 , glibc
 , glibmm
 , graphviz
 , gtkmm2
+, hidapi
+, itstool
+, libarchive
 , libjack2
 , liblo
+, libltc
 , libogg
+, libpulseaudio
+, librdf_raptor
+, librdf_rasqal
 , libsamplerate
 , libsigcxx
 , libsndfile
 , libusb1
-, fluidsynth_1
-, hidapi
-, libltc
-, qm-dsp
+, libuv
+, libwebsockets
 , libxml2
+, libxslt
 , lilv
 , lrdf
 , lv2
-, makeWrapper
+, pango
 , perl
 , pkg-config
-, itstool
-, python2
+, python3
+, qm-dsp
+, readline
 , rubberband
 , serd
 , sord
 , sratom
+, suil
 , taglib
 , vamp-plugin-sdk
-, dbus
-, fftw
-, pango
-, suil
-, libarchive
 , wafHook
 }:
-let
-  # Ardour git repo uses a mix of annotated and lightweight tags. Annotated
-  # tags are used for MAJOR.MINOR versioning, and lightweight tags are used
-  # in-between; MAJOR.MINOR.REV where REV is the number of commits since the
-  # last annotated tag. A slightly different version string format is needed
-  # for the 'revision' info that is built into the binary; it is the format of
-  # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
+stdenv.mkDerivation rec {
+  pname = "ardour";
+  version = "6.0";
 
-  # Version to build.
-  tag = "5.12";
-in stdenv.mkDerivation rec {
-  name = "ardour-${tag}";
-
+  # don't fetch releases from the GitHub mirror, they are broken
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
-    rev = "ae0dcdc0c5d13483271065c360e378202d20170a";
-    sha256 = "0mla5lm51ryikc2rrk53max2m7a5ds6i1ai921l2h95wrha45nkr";
+    rev = version;
+    sha256 = "162jd96zahl05fdmjwvpdfjxbhd6ifbav6xqa0vv6rsdl4zk395q";
   };
 
+  patches = [
+    # AS=as in the environment causes build failure https://tracker.ardour.org/view.php?id=8096
+    ./as-flags.patch
+  ];
+
   nativeBuildInputs = [
-    wafHook
-    makeWrapper
-    pkg-config
-    itstool
     doxygen
     graphviz # for dot
+    itstool
     perl
-    python2
+    pkg-config
+    python3
+    wafHook
   ];
 
   buildInputs = [
@@ -80,29 +84,42 @@ in stdenv.mkDerivation rec {
     aubio
     boost
     cairomm
+    cppunit
     curl
     dbus
+    ffmpeg
     fftw
     fftwSinglePrec
     flac
+    fluidsynth
     glibmm
     gtkmm2
+    hidapi
+    itstool
+    libarchive
     libjack2
     liblo
+    libltc
     libogg
+    libpulseaudio
+    librdf_raptor
+    librdf_rasqal
     libsamplerate
     libsigcxx
     libsndfile
     libusb1
-    fluidsynth_1
-    hidapi
-    libltc
-    qm-dsp
+    libuv
+    libwebsockets
     libxml2
+    libxslt
     lilv
     lrdf
     lv2
     pango
+    perl
+    python3
+    qm-dsp
+    readline
     rubberband
     serd
     sord
@@ -110,39 +127,46 @@ in stdenv.mkDerivation rec {
     suil
     taglib
     vamp-plugin-sdk
-    libarchive
   ];
 
   wafConfigureFlags = [
-    "--optimize"
+    "--cxx11"
     "--docs"
-    "--use-external-libs"
     "--freedesktop"
-    "--with-backends=jack,alsa,dummy"
+    "--no-phone-home"
+    "--optimize"
+    "--ptformat"
+    "--qm-dsp-include=${qm-dsp}/include/qm-dsp"
+    "--run-tests"
+    "--test"
+    "--use-external-libs"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${qm-dsp}/include/qm-dsp";
-
-  # ardour's wscript has a "tarball" target but that required the git revision
-  # be available. Since this is an unzipped tarball fetched from github we
-  # have to do that ourself.
+  # Ardour's wscript requires git revision and date to be available.
+  # Since they are not, let's generate the file manually.
   postPatch = ''
-    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-${builtins.substring 0 8 src.rev}\"; }\n' > libs/ardour/revision.cc
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
+    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
     patchShebangs ./tools/
+    substituteInPlace libs/ardour/video_tools_paths.cc \
+      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
+      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
   '';
 
   postInstall = ''
     # wscript does not install these for some reason
     install -vDm 644 "build/gtk2_ardour/ardour.xml" \
       -t "$out/share/mime/packages"
-    install -vDm 644 "build/gtk2_ardour/ardour5.desktop" \
+    install -vDm 644 "build/gtk2_ardour/ardour6.desktop" \
       -t "$out/share/applications"
     for size in 16 22 32 48 256 512; do
       install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
-        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour5.png"
+        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour6.png"
     done
     install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
   '';
+
+  LINKFLAGS = "-lpthread";
 
   meta = with stdenv.lib; {
     description = "Multi-track hard disk recording software";
@@ -153,11 +177,11 @@ in stdenv.mkDerivation rec {
       music and sound.
 
       Please consider supporting the ardour project financially:
-      https://community.ardour.org/node/8288
+      https://community.ardour.org/donate
     '';
-    homepage = "http://ardour.org/";
+    homepage = "https://ardour.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu maintainers.fps ];
+    maintainers = with maintainers; [ goibhniu magnetophon ];
   };
 }

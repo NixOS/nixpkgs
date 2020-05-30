@@ -1,21 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, python, root, makeWrapper, zlib, withRootSupport ? false }:
+{ stdenv, fetchurl, python, root, makeWrapper, zlib, withRootSupport ? false }:
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.7.7";
+  version = "1.8.2";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    sha256 = "1ki88rscnym0vjxpfgql8m1lrc7vm1jb9w4jhw9lvv3rk84lpdng";
+    sha256 = "1nqbv334iwdvbsc5bw8g936cxzc1hyzv9r8kjy4v124vrw8qqmc9";
   };
-
-  patches = [
-    # fixes "TypeError: expected bytes, str found" in writeYODA()
-    (fetchpatch {
-      url = "https://gitlab.com/hepcedar/yoda/commit/d2bbbe92912457f8a29b440cbfa0b39daf28ec34.diff";
-      sha256 = "1x60piswpxwak61r2sdclsc8pzi1fshpkjnxlyflsa1iap77vkq8";
-    })
-  ];
 
   nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
   buildInputs = [ python ]
@@ -27,6 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     touch pyext/yoda/*.{pyx,pxd}
+    patchShebangs .
   '';
 
   postInstall = ''
@@ -36,6 +29,9 @@ stdenv.mkDerivation rec {
   '';
 
   hardeningDisable = [ "format" ];
+
+  doInstallCheck = true;
+  installCheckTarget = "check";
 
   meta = {
     description = "Provides small set of data analysis (specifically histogramming) classes";

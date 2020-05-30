@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchurl {
     url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0mg9divpysr42sp0m693a70693dp8025v6c9dv1yabr4g1jlhbqm";
+    sha256 = "0dnmh9jjh2v274f0hl31bgv40pl77mmfgky8bkqr5kvi3b17fdmp";
   };
 
   # https://github.com/NLnetLabs/unbound/pull/90

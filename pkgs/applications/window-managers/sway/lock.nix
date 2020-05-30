@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     description = "Screen locker for Wayland";
     longDescription = ''
       swaylock is a screen locking utility for Wayland compositors.
+      Important note: If you don't use the Sway module (programs.sway.enable)
+      you need to set "security.pam.services.swaylock = {};" manually.
     '';
     inherit (src.meta) homepage;
     license = licenses.mit;
