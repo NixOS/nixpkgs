@@ -1,12 +1,7 @@
 { stdenv, lib, buildEnv, writeShellScriptBin, fetchurl, vscode, unzip, jq }:
 let
-  extendedPkgVersion = lib.getVersion vscode;
-  extendedPkgName = lib.removeSuffix "-${extendedPkgVersion}" vscode.name;
-
-
   buildVscodeExtension = a@{
     name,
-    namePrefix ? "${extendedPkgName}-extension-",
     src,
     # Same as "Unique Identifier" on the extension's web page.
     # For the moment, only serve as unique extension dir.
@@ -20,12 +15,12 @@ let
   }:
   stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) // {
 
-    name = namePrefix + name;
+    name = "vscode-extension-${name}";
 
     inherit vscodeExtUniqueId;
     inherit configurePhase buildPhase dontPatchELF dontStrip;
 
-    installPrefix = "share/${extendedPkgName}/extensions/${vscodeExtUniqueId}";
+    installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
     buildInputs = [ unzip ] ++ buildInputs;
 
