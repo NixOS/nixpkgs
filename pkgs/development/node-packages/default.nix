@@ -133,6 +133,14 @@ nodePackages // {
     '';
   };
 
+  typescript-language-server = nodePackages.typescript-language-server.override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      wrapProgram "$out/bin/typescript-language-server" \
+        --prefix PATH : ${stdenv.lib.makeBinPath [ nodePackages.typescript ]}
+    '';
+  };
+
   stf = nodePackages.stf.override {
     meta.broken = since "10";
   };
