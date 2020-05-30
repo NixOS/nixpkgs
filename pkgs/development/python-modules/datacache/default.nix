@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ python, stdenv, buildPythonPackage, fetchPypi
 , pandas, appdirs, progressbar33, requests, typechecks, nose, mock}:
 
 buildPythonPackage rec {
@@ -14,10 +14,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pandas appdirs progressbar33 requests typechecks nose mock ];
 
   checkPhase = ''
+      ${python.interpreter} -c 'import datacache'
   '';
 
-  # Tests require extra dependencies
-  doCheck = false;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/openvax/datacache";

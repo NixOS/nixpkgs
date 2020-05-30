@@ -5,7 +5,7 @@
 , scipy
 , scikitlearn
 , joblib
-, pytest
+, nose
 , python
 }:
 
@@ -19,13 +19,13 @@ buildPythonPackage rec {
   };
 
   buildInputs = [  ];
-  checkInputs = [ pytest ];
+  checkInputs = [ nose ];
   propagatedBuildInputs = [ matplotlib scikitlearn scipy joblib ];
 
-  doCheck = false;
+  doCheck = true;
 
   checkPhase = ''
-    pytest scikitplot/tests
+    nosetests
   '';
 
   meta = with stdenv.lib; {

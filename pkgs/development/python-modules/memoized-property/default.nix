@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ python, stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   version = "1.0.3";
@@ -13,10 +13,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ];
 
   checkPhase = ''
+      ${python.interpreter} -c 'import memoized_property'
   '';
 
-  # Tests require extra dependencies
-  doCheck = false;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/estebistec/python-memoized-property";

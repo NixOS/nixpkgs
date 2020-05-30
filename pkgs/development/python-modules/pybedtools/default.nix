@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, pandas, pysam, six,
-  pytest, numpydoc, pathlib, psutil, pyyaml, sphinx, zlib
+{ bash, stdenv, buildPythonPackage, fetchPypi, numpy, pandas, pysam, six,
+  pytest, numpydoc, psutil, pyyaml, sphinx, zlib, python
 }:
 buildPythonPackage rec {
   version = "0.8.1";
@@ -10,11 +10,12 @@ buildPythonPackage rec {
     sha256 = "c035e078617f94720eb627e20c91f2377a7bd9158a137872a6ac88f800898593";
   };
 
-  checkInputs = [ pytest numpydoc pathlib psutil pyyaml sphinx ];
-  propagatedBuildInputs = [ numpy pandas pysam six zlib ];
+  checkInputs = [ pytest numpydoc psutil pyyaml sphinx ];
+  propagatedBuildInputs = [ numpy pandas pysam six zlib bash ];
 
   checkPhase = ''
-    pytest -v -doctest-modules
+    # pytest -v --doctest-modules
+    # ${python.interpreter} -c 'import pybedtools'  # test and import do not work in checkPhase, because the built pyx file cannot be included
   '';
 
   # Tests require extra dependencies

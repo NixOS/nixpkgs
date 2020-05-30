@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ python, stdenv, buildPythonPackage, fetchPypi
 , numpy, pandas, datacache, six, memoized-property, gtfparse, serializable, tinytimer, setuptools }:
 
 buildPythonPackage rec {
@@ -14,6 +14,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy pandas datacache six memoized-property gtfparse serializable tinytimer serializable ];
 
   checkPhase = ''
+    ${python.interpreter} -c 'import pyensembl'  # fails only in build environment because pyensembl creates a file in root directory
   '';
 
   # Tests require extra dependencies

@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, numpy, pandas }:
+{ python, stdenv, buildPythonPackage, fetchPypi
+, numpy, pandas, nose, six }:
 
 buildPythonPackage rec {
   version = "1.2.0";
@@ -10,14 +10,16 @@ buildPythonPackage rec {
     sha256 = "2f27aa2b87eb43d613edabf27f9c11147dc595c8683b440ac1d88e9acdb85873";
   };
 
-  checkInputs = [ ];
-  propagatedBuildInputs = [ numpy pandas];
+  checkInputs = [ nose six ];
+  propagatedBuildInputs = [ numpy pandas ];
 
   checkPhase = ''
+    # PYTHONPATH='test' nosetests # fails because six is not found
+    ${python.interpreter} -c 'import gtfparse'
   '';
 
   # Tests require extra dependencies
-  doCheck = false;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/openvax/gtfparse";

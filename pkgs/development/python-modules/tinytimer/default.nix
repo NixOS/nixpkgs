@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ python, stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   version = "0.0.0";
@@ -13,10 +13,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ];
 
   checkPhase = ''
+    ${python.interpreter} -c 'import tinytimer'
   '';
 
   # Tests require extra dependencies
-  doCheck = false;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/iskandr/tinytimer";
