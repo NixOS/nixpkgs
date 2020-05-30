@@ -143,6 +143,7 @@ stdenv.mkDerivation rec {
     homepage = "https://minecraft.net";
     maintainers = with maintainers; [ cpages ryantm infinisil ];
     license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
 
   passthru.updateScript = ./update.sh;
