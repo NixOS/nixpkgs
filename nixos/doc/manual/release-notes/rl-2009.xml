@@ -156,6 +156,11 @@ services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
    </listitem>
    <listitem>
     <para>
+      The package <package>onedrive</package> needs the end user to reauthorize the client for all the accounts. Details can be found in the upstream package's <link xlink:href="https://github.com/abraunegg/onedrive/issues/835">issue #835</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The <link linkend="opt-services.supybot.enable">supybot</link> module now uses <literal>/var/lib/supybot</literal>
       as its default <link linkend="opt-services.supybot.stateDir">stateDir</link> path if <literal>stateVersion</literal>
       is 20.09 or higher. It also enables number of

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "onedrive";
-  version = "2.3.13";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bcsrfh1g7bdlcp0zjn6np88qzpn5frv61lzxz9b2ayxf7wyybvi";
+    sha256 = "10s33p1xzq9c5n1bxv9n7n31afxgx9i6c17w0xgxdrma75micm3a";
   };
 
   nativeBuildInputs = [ dmd pkgconfig ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "A complete tool to interact with OneDrive on Linux";
     homepage = "https://github.com/abraunegg/onedrive";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ srgom ianmjones ];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }
