@@ -6302,10 +6302,6 @@
     githubId = 23097564;
     name = "Nora Widdecke";
   };
-  pxc = {
-    email = "patrick.callahan@latitudeengineering.com";
-    name = "Patrick Callahan";
-  };
   pyrolagus = {
     email = "pyrolagus@gmail.com";
     github = "PyroLagus";
