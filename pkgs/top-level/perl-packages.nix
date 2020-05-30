@@ -4391,6 +4391,22 @@ let
     buildInputs = [ DebugShowStuff ];
   };
 
+  DataULID = buildPerlPackage {
+    pname = "Data-ULID";
+    version = "1.0.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BA/BALDUR/Data-ULID-1.0.0.tar.gz";
+      sha256 = "4d757475893dbad5165f0a65c446d38b47f39019d36f77da9d29c98cbf27206f";
+    };
+    propagatedBuildInputs = [ DateTime EncodeBase32GMP MathRandomSecure MathBigIntGMP ];
+    meta = {
+      homepage = "https://metacpan.org/release/Data-ULID";
+      description = "Universally Unique Lexicographically Sortable Identifier";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
   DataUniqid = buildPerlPackage {
     pname = "Data-Uniqid";
     version = "0.12";
@@ -6389,6 +6405,23 @@ let
     meta = {
       description = "Character encodings in Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  EncodeBase32GMP = buildPerlPackage {
+    pname = "Encode-Base32-GMP";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JW/JWANG/Encode-Base32-GMP-0.02.tar.gz";
+      sha256 = "454206fa7d82e55e03274698732341b607150f00e8e2aec58f35326a030832dc";
+    };
+    buildInputs = [ TestBase ];
+    propagatedBuildInputs = [ MathGMPz ];
+    meta = {
+      homepage = "https://metacpan.org/release/Encode-Base32-GMP";
+      description = "High speed Base32 encoding using GMP with BigInt and MD5 support";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with maintainers; [ sgo ];
     };
   };
 
@@ -11331,6 +11364,23 @@ let
     meta = {
       description = "High speed arbitrary size integer math";
       license = with stdenv.lib.licenses; [ lgpl21Plus ];
+    };
+  };
+
+  MathGMPz = buildPerlPackage {
+    pname = "Math-GMPz";
+    version = "0.48";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SI/SISYPHUS/Math-GMPz-0.48.tar.gz";
+      sha256 = "f4459ed32fb9bb793e2504fd442c515fd468a4a34d2a1f98e46ca41e275c73cb";
+    };
+    buildInputs = [ pkgs.gmp ];
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    meta = {
+      homepage = "https://github.com/sisyphus/math-gmpz";
+      description = "Perl interface to the GMP integer functions";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
     };
   };
 
