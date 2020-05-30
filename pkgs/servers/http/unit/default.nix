@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     ++ optionals withPython3 [ python3 ncurses ]
     ++ optional withPHP72 php72-unit
     ++ optional withPHP73 php73-unit
-    ++ optional withPHP73 php74-unit
+    ++ optional withPHP74 php74-unit
     ++ optional withPerl528 perl528
     ++ optional withPerl530 perl530
     ++ optional withPerldevel perldevel
@@ -66,6 +66,11 @@ in stdenv.mkDerivation rec {
   ] ++ optional withSSL     "--openssl"
     ++ optional (!withIPv6) "--no-ipv6"
     ++ optional withDebug   "--debug";
+
+  # Optionally add the PHP derivations used so they can be addressed in the configs
+  usedPhp72 = optionals withPHP72 php72-unit;
+  usedPhp73 = optionals withPHP73 php73-unit;
+  usedPhp74 = optionals withPHP74 php74-unit;
 
   postConfigure = ''
     ${optionalString withPython2    "./configure python --module=python2  --config=${python2}/bin/python2-config  --lib-path=${python2}/lib"}
