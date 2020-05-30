@@ -313,17 +313,14 @@ in rec {
           # lets have a clean always accessible version here.
           name = attrs.name or "${attrs.pname}-${attrs.version}";
 
-          # If the packager hasn't specified `outputsToInstall`, choose a default,
-          # which is the name of `p.bin or p.out or p`;
-          # if he has specified it, it will be overridden below in `// meta`.
-          #   Note: This default probably shouldn't be globally configurable.
-          #   Services and users should specify outputs explicitly,
-          #   unless they are comfortable with this default.
-          outputsToInstall =
-            let
-              hasOutput = out: builtins.elem out outputs;
-            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )]
-              ++ lib.optional (hasOutput "man") "man";
+          # By default, just install all outputs. This would
+          # previously only install one output, but this led to much
+          # confusion from users expecting all of the outputs to be
+          # available. If you do not wants to make every output
+          # available, individual packages can still specify a
+          # default. Notice that this will only affect “nix-env -i”
+          # and not normal Nixpkgs dependency behavior.
+          outputsToInstall = outputs';
         }
         // attrs.meta or {}
         # Fill `meta.position` to identify the source location of the package.

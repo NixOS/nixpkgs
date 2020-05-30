@@ -56,13 +56,15 @@ runCommand name
             meta pathsToLink extraPrefix postBuild buildInputs;
     pkgs = builtins.toJSON (map (drv: {
       paths =
-        # First add the usual output(s): respect if user has chosen explicitly,
-        # and otherwise use `meta.outputsToInstall`. The attribute is guaranteed
-        # to exist in mkDerivation-created cases. The other cases (e.g. runCommand)
-        # aren't expected to have multiple outputs.
+        # First add the usual output(s): respect if user has chosen
+        # explicitly, and otherwise use a default. Default is chosen
+        # from drv, by the existence of outputs based on the expression
+        # `drv.bin or drv.out or drv`;
         (if drv.outputUnspecified or false
-            && drv.meta.outputsToInstall or null != null
-          then map (outName: drv.${outName}) drv.meta.outputsToInstall
+            && drv ? outputs
+          then map (outName: drv.${outName}) (
+            [ (lib.findFirst (out: builtins.elem out drv.outputs) null
+                             (["bin" "out"] ++ drv.outputs)) ] )
           else [ drv ])
         # Add any extra outputs specified by the caller of `buildEnv`.
         ++ lib.filter (p: p!=null)
