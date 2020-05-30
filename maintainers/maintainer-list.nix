@@ -7426,6 +7426,12 @@
     githubId = 1181362;
     name = "Stefan Junker";
   };
+  stianlagstad = {
+    email = "stianlagstad@gmail.com";
+    github = "stianlagstad";
+    githubId = 4340859;
+    name = "Stian Lågstad";
+  };
   StijnDW = {
     email = "stekke@airmail.cc";
     github = "StijnDW";
