@@ -6,4 +6,4 @@ node2nix=$(nix-build ../../.. --no-out-link -A nodePackages.node2nix)
 
 cd ${DIR}
 rm -f ./node-env.nix
-${node2nix}/bin/node2nix -i node-packages.json -o node-packages.nix -c composition.nix
+${node2nix}/bin/node2nix --include-peer-dependencies -i node-packages.json -o node-packages.nix -c composition.nix
