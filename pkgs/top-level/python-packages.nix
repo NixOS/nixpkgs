@@ -1343,6 +1343,8 @@ in {
 
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 
+  pytest-factoryboy = callPackage ../development/python-modules/pytest-factoryboy { };
+
   pytest-flask = callPackage ../development/python-modules/pytest-flask { };
 
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
