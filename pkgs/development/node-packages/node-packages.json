@@ -16,7 +16,7 @@
 , "bower2nix"
 , "browserify"
 , "castnow"
-, "clean-css"
+, "clean-css-cli"
 , "coc-css"
 , "coc-emmet"
 , "coc-eslint"
