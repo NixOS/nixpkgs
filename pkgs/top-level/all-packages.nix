@@ -13785,6 +13785,8 @@ in
 
   mlt = callPackage ../development/libraries/mlt { ffmpeg = ffmpeg_4; };
 
+  mlv-app = libsForQt5.callPackage ../applications/video/mlv-app { };
+
   mono-addins = callPackage ../development/libraries/mono-addins { };
 
   movit = callPackage ../development/libraries/movit { };
