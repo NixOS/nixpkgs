@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation,
+{ stdenv, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation, patchDesktopFileExecHook,
   openssl, wrapGAppsHook,
   avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; }
 }:
@@ -15,11 +15,7 @@ mkDerivation rec {
   };
 
   buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
-  nativeBuildInputs = [ cmake wrapGAppsHook ];
-
-  postFixup = ''
-    substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"
-  '';
+  nativeBuildInputs = [ patchDesktopFileExecHook cmake wrapGAppsHook ];
 
   qtWrapperArgs = [
     ''--prefix PATH : ${stdenv.lib.makeBinPath [ openssl ]}''

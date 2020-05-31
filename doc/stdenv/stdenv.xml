@@ -2181,6 +2181,47 @@ postInstall = ''
     </varlistentry>
     <varlistentry>
      <term>
+      patchDesktopFileExecHook
+     </term>
+     <listitem>
+      <para>
+       This setup hook patches the <literal>Exec=</literal> clauses of all desktop files in <literal>$out/share/applications</literal> to fix inexistant paths and make them compatible with desktop environments which copy desktop files outside of the store.
+      </para>
+      <para>
+       More specifically, if
+       <itemizedlist>
+        <listitem>
+         <para>
+          the desktop file was originally executing a command <command>foo</command> (at any path: <command>/usr/bin/foo</command>, or just <command>foo</command>); and
+         </para>
+        </listitem>
+        <listitem>
+         <para>
+          <command>$out/bin/foo</command> exists and is executable or <command>foo</command> is provided by one of the <envar>buildInputs</envar>
+         </para>
+        </listitem>
+       </itemizedlist>
+       then the patched desktop file satifisfies the following properties:
+       <itemizedlist>
+        <listitem>
+         <para>
+          If the desktop file is copied outside of the store (for example by a desktop environment) and that the original store path is garbage collected, launching the desktop file lauches <command>foo</command> from the <envar>PATH</envar>.
+         </para>
+        </listitem>
+        <listitem>
+         <para>
+          As long as the store path is not garbage-collected, whatever the value of <envar>PATH</envar>, the desktop file launches <command>$out/bin/foo</command> or <command>foo</command> as provided by one of the <envar>buildInputs</envar>.
+         </para>
+        </listitem>
+       </itemizedlist>
+      </para>
+      <para>
+       If the package provides desktop files in a non-standard location, you can call <command>patchDesktopFileExecIn</command> with the folder where they are located as an argument.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       unzip
      </term>
      <listitem>
