@@ -11707,7 +11707,9 @@ in
   # Aliases
   ffmpeg_2 = ffmpeg_2_8;
   ffmpeg_3 = ffmpeg_3_4;
-  ffmpeg = ffmpeg_3;
+  # Please make sure this is updated to the latest version on the next major
+  # update to ffmpeg
+  ffmpeg = ffmpeg_4;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     ffmpeg = ffmpeg_4;
