@@ -2,15 +2,15 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, lxqt-build-tools
-, qtbase
-, qtx11extras
-, qttools
-, qtsvg
 , libdbusmenu
-, libqtxdg
 , libfm-qt
+, libqtxdg
+, lxqt-build-tools
 , lxqtUpdateScript
+, qtbase
+, qtsvg
+, qttools
+, qtx11extras
 }:
 
 mkDerivation rec {
@@ -30,13 +30,13 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    qttools
-    qtsvg
     libdbusmenu
-    libqtxdg
     libfm-qt
+    libqtxdg
+    qtbase
+    qtsvg
+    qttools
+    qtx11extras
   ];
 
   postPatch = ''
