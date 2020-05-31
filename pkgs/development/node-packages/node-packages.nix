@@ -53570,21 +53570,34 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  clean-css = nodeEnv.buildNodePackage {
-    name = "clean-css";
-    packageName = "clean-css";
-    version = "4.2.3";
+  clean-css-cli = nodeEnv.buildNodePackage {
+    name = "clean-css-cli";
+    packageName = "clean-css-cli";
+    version = "4.3.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/clean-css/-/clean-css-4.2.3.tgz";
-      sha512 = "0ad50l577m99sgpcdd49zspq8h9n9i3hhngapg9y5q76s7zwdz3hmaw2kc2jg30lk4z3wlyp9kgiyg71dvg0fg89g1xyr3qvq61dhsm";
+      url = "https://registry.npmjs.org/clean-css-cli/-/clean-css-cli-4.3.0.tgz";
+      sha512 = "8GHZfr+mG3zB/Lgqrr27qHBFsPSn0fyEI3f2rIZpxPxUbn2J6A8xyyeBRVTW8duDuXigN0s80vsXiXJOEFIO5Q==";
     };
     dependencies = [
+      sources."balanced-match-1.0.0"
+      sources."brace-expansion-1.1.11"
+      sources."clean-css-4.2.3"
+      sources."commander-2.20.3"
+      sources."concat-map-0.0.1"
+      sources."fs.realpath-1.0.0"
+      sources."glob-7.1.6"
+      sources."inflight-1.0.6"
+      sources."inherits-2.0.4"
+      sources."minimatch-3.0.4"
+      sources."once-1.4.0"
+      sources."path-is-absolute-1.0.1"
       sources."source-map-0.6.1"
+      sources."wrappy-1.0.2"
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A well-tested CSS minifier";
-      homepage = https://github.com/jakubpawlowicz/clean-css;
+      description = "A command-line interface to clean-css CSS optimization library";
+      homepage = "https://github.com/jakubpawlowicz/clean-css-cli#readme";
       license = "MIT";
     };
     production = true;
