@@ -42,7 +42,6 @@ in buildGoPackage rec {
   # owner.
   patches = [
     ./fix-executable-check.patch
-    ./0001-Revert-Allow-gitlabshell-config-to-be-passed-in-thro.patch
   ];
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";
@@ -64,8 +63,8 @@ in buildGoPackage rec {
     # code by default which doesn't work in nixos because it's a
     # read-only filesystem
     substituteInPlace $ruby/gitlab-shell/lib/gitlab_config.rb --replace \
-       "File.join(ROOT_PATH, 'config.yml')" \
-       "'/run/gitlab/shell-config.yml'"
+       "ROOT_PATH.join('config.yml')" \
+       "Pathname.new('/run/gitlab/shell-config.yml')"
   '';
 
   outputs = [ "out" "ruby" ];
