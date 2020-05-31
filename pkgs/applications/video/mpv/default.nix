@@ -39,7 +39,7 @@
 , libpngSupport      ? true,           libpng        ? null
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
-, sambaSupport       ? stdenv.isLinux, samba         ? null
+, sambaSupport       ? false,          samba         ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
 , sndioSupport       ? true,           sndio         ? null
