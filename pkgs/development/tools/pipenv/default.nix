@@ -6,7 +6,7 @@ with python3.pkgs;
 
 let
 
-  runtimeDeps = [
+  runtimeDeps = ps: with ps; [
     certifi
     setuptools
     pip
@@ -14,7 +14,7 @@ let
     virtualenv-clone
   ];
 
-  pythonEnv = python3.withPackages(ps: with ps; runtimeDeps);
+  pythonEnv = python3.withPackages runtimeDeps;
 
 in buildPythonApplication rec {
   pname = "pipenv";
@@ -36,7 +36,7 @@ in buildPythonApplication rec {
       --replace "sys.executable" "'${pythonEnv.interpreter}'"
   '';
 
-  propagatedBuildInputs = runtimeDeps;
+  propagatedBuildInputs = runtimeDeps python3.pkgs;
 
   doCheck = true;
   checkPhase = ''
