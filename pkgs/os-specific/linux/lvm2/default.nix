@@ -10,6 +10,9 @@
 , udev ? null
 }:
 
+# configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
+assert enable_dmeventd -> enable_cmdlib;
+
 stdenv.mkDerivation rec {
   pname = "lvm2";
   version = "2.03.09";
