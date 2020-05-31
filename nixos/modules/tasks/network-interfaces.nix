@@ -283,7 +283,7 @@ let
         default = false;
         type = types.bool;
         description = ''
-          Turn on proxy_arp for this device (and proxy_ndp for ipv6).
+          Turn on proxy_arp for this device.
           This is mainly useful for creating pseudo-bridges between a real
           interface and a virtual network such as VPN or a virtual machine for
           interfaces that don't support real bridging (most wlan interfaces).
@@ -1065,11 +1065,11 @@ in
       optionalString hasBonds "options bonding max_bonds=0";
 
     boot.kernel.sysctl = {
+      "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
-      "net.ipv6.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
     } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
-        (i: forEach [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)))
+        (i: [(nameValuePair "net.ipv4.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)]))
       // listToAttrs (forEach interfaces
         (i: let
           opt = i.tempAddress;
