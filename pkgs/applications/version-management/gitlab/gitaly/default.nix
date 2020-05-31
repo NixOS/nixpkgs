@@ -28,14 +28,14 @@ let
     };
   });
 in buildGoPackage rec {
-  version = "12.10.6";
+  version = "12.10.8";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "1gpvay4ah239zp1k8zb9mg9nysb7d0wdr4rf3x9n1a2arfbbldsa";
+    sha256 = "02dih35j97q80kzi46pkf9f9r1sffw11i5zmpjs2rr96al426g8q";
   };
 
   # Fix a check which assumes that hook files are writeable by their
