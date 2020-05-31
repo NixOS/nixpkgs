@@ -8809,6 +8809,12 @@
     github = "ngerstle";
     githubId = 1023752;
   };
+  shardy = {
+    email = "shardul@baral.ca";
+    github = "shardulbee";
+    githubId = 16765155;
+    name = "Shardul Baral";
+  };
   xavierzwirtz = {
     email = "me@xavierzwirtz.com";
     github = "xavierzwirtz";
