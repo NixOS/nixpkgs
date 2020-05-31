@@ -114,7 +114,7 @@ in {
         Specifies the action to be done to / on the guests when the host boots.
         The "start" option starts all guests that were running prior to shutdown
         regardless of their autostart settings. The "ignore" option will not
-        start the formally running guest on boot. However, any guest marked as
+        start the formerly running guest on boot. However, any guest marked as
         autostart will still be automatically started by libvirtd.
       '';
     };
