@@ -63,7 +63,7 @@ trim_trailing_whitespace = unset
 [pkgs/development/mobile/androidenv/generated/{addons,packages}.nix]
 trim_trailing_whitespace = unset
 
-[pkgs/development/node-packages/*-v*.nix]
+[pkgs/development/node-packages/node-packages.nix]
 insert_final_newline = unset
 
 [pkgs/servers/dict/wordnet_structures.py]
