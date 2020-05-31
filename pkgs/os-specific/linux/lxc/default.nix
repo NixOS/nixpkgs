@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./support-db2x.patch
+    (fetchurl {
+      url = https://github.com/lxc/lxc/commit/b31d62b847a3ee013613795094cce4acc12345ef.patch;
+      sha256 = "0j4ch22l81b20m03l818442ra47hw4k6zyizsn3a0q3gv6mq5h7x";
+    })
   ];
 
   postPatch = ''

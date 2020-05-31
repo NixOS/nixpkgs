@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "documize-community";
-  version = "3.7.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "documize";
     repo = "community";
     rev = "v${version}";
-    sha256 = "1pcldf9lqvpb2h2a3kr3mahj2v1jasjwrszj6czjmkyml7x2sz7c";
+    sha256 = "0jrqab0c2nnw8632g1f6zll3dycn7xyk01ycmn969i5qxx70am50";
   };
 
-  modSha256 = "1z0v7n8klaxcqv7mvzf3jzgrp78zb4yiibx899ppk6i5qnj4xiv0";
+  modSha256 = "0f66z6cr0d8f6cxbkjsnsn6cwwx8qjn2w0i6ag8j874gbxjgycr8";
 
   buildInputs = [ go-bindata-assetfs go-bindata ];
 
