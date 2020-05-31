@@ -136,6 +136,24 @@ let
       '';
     };
 
+    bitcoin = {
+      exporterConfig = {
+        enable = true;
+        rpcUser = "bitcoinrpc";
+        rpcPasswordFile = pkgs.writeText "password" "hunter2";
+      };
+      metricProvider = {
+        services.bitcoind.default.enable = true;
+        services.bitcoind.default.rpc.users.bitcoinrpc.passwordHMAC = "e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-bitcoin-exporter.service")
+        wait_for_unit("bitcoind-default.service")
+        wait_for_open_port(9332)
+        succeed("curl -sSf http://localhost:9332/metrics | grep -q '^bitcoin_blocks '")
+      '';
+    };
+
     blackbox = {
       exporterConfig = {
         enable = true;

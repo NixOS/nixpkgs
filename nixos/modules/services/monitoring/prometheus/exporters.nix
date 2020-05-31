@@ -25,6 +25,7 @@ let
     "artifactory"
     "bind"
     "bird"
+    "bitcoin"
     "blackbox"
     "collectd"
     "dnsmasq"
