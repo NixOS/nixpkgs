@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage rec {
     glib.dev
     gtk3.dev
     wayland
-    gnome3.gnome-desktop
     makeWrapper
   ];
 
