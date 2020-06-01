@@ -42,9 +42,6 @@ in
     # https://source.puri.sm/Librem5/phosh/-/issues/303
     security.pam.services.phosh = {
       text = ''
-        #
-        # /etc/pam.d/phosh - Phosh login
-        #
         auth    requisite       pam_nologin.so
         auth    required        pam_succeed_if.so user != root quiet_success
         auth    required        pam_securetty.so

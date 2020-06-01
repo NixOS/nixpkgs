@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gnome3.gnome-desktop
+    # For keybindings settings schemas
     gnome3.mutter
     wayland
     wlroots
