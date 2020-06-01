@@ -35,7 +35,16 @@
   rec { sha1 = "53acc3692e0f67f3b4a4e5fa5b4a5a1de1aa7947"; name = "LLVM_PLATFORM_SPECIFIC_SHADOWED_${sha1}/llvm-platform-specific-shadowed.jar"; url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/native-image/llvm-shadowed-9.0.0-1.5.2-linux-x86_64.jar; }
   rec { sha1 = "f2d365a8d432d6b2127acda19c5d3418126db9b0"; name = "LLVM_WRAPPER_SHADOWED_${sha1}/llvm-wrapper-shadowed.jar"; url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/native-image/llvm-shadowed-9.0.0-1.5.2.jar; }
   rec { sha1 = "0801daf22b189bbd9d515614a2b79c92af225d56"; name = "LLVM_WRAPPER_SHADOWED_${sha1}/llvm-wrapper-shadowed.sources.jar"; url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/native-image/llvm-shadowed-9.0.0-1.5.2-sources.jar; }
+  rec { sha1 = "c556821b83878d3a327bc07dedc1bf2998f99a8f"; name = "TruffleJSON_${sha1}/trufflejson.jar"; url = "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/trufflejson-20180813.jar"; }
+  rec { sha1 = "7d28e2828bfe2ac04dcb8779aded934ac7dc1e52"; name = "NanoHTTPD_${sha1}/nanohttpd.jar"; url = "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/nanohttpd-2.3.2-efb2ebf85a2b06f7c508aba9eaad5377e3a01e81.jar"; }
+  rec { sha1 = "a8f5b9e7387e00a57d31be320a8246a7c8128aa4"; name = "NanoHTTPD-WebSocket_${sha1}/nanohttpd-websocket.jar"; url = "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/nanohttpd-websocket-2.3.2-efb2ebf85a2b06f7c508aba9eaad5377e3a01e81.jar"; }
+  rec { sha1 = "e6e60889b7211a80b21052a249bd7e0f88f79fee"; name = "Java-WebSocket_${sha1}/java-websocket.jar"; url = "https://repo1.maven.org/maven2/org/java-websocket/Java-WebSocket/1.3.9/Java-WebSocket-1.3.9.jar"; }
+  rec { sha1 = "d67fe31e2dbed0ef912edf57274b89cc1145f376"; name = "VISUALVM_COMMON_${sha1}/visualvm-common.tar.gz"; url = "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm/visualvm-20-6.tar.gz"; }
+  rec { sha1 = "59082db9e4c5a3e1fff58c9c4d7870ace5410bdb"; name = "JDK11_LIBMUSL_STATIC_LIBS_${sha1}/jdk11-libmusl-static-libs.tar.gz"; url = "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/jdk-static-libs/labsjdk-ce-11.0.6-jvmci-20.0-b02-musl-static-libs.tar.gz"; }
+
+
 ] ++ lib.optionals stdenv.isLinux [
   rec { sha1 = "99376a9944e2dfac27087df54c31915f29c6d47e"; name = "LLVM_ORG_${sha1}/llvm-org.tar.gz"; url = https://lafo.ssw.uni-linz.ac.at/pub/llvm-org/llvm-llvmorg-9.0.0-4-g9cf46c329d-bgf06552bd84-linux-amd64.tar.gz; }
   rec { sha1 = "d585d7165e658eade76c384d3bf0695560c2bf3a"; name = "LLVM_ORG_COMPILER_RT_LINUX_${sha1}/llvm-org-compiler-rt-linux.tar.gz"; url = https://lafo.ssw.uni-linz.ac.at/pub/llvm-org/compiler-rt-llvmorg-9.0.0-4-g9cf46c329d-bgf06552bd84-linux-amd64.tar.gz; }
+  rec { sha1 = "9f137c26eeacf49aaf9abac5303cb4cb285c5e32"; name = "VISUALVM_PLATFORM_SPECIFIC_${sha1}/visualvm-platform-specific.tar.gz"; url = "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm/visualvm-20-6-linux-amd64.tar.gz"; }
 ]

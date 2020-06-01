@@ -49,6 +49,7 @@ let
 in
 rec {
   graalvm8Packages = rec {
+    majorVersion = 8;
     mx = callPackage ./ce/mx.nix { inherit python27withPackages; };
     jvmci8 = callPackage ./ce/jvmci8.nix {
       openjdk = openjdk8Static;
@@ -67,11 +68,13 @@ rec {
       inherit mx sdkVersion graalVMSource makeMxCache python27withPackages;
       jvmci = jvmci8;
     };
-
     graalpython = callPackage ./suites/graalpython/graalpython.nix {
       inherit sdkVersion;
       graalvm = sdk;
     };
+    graaljs = callPackage ./suites/graaljs/graaljs.nix {
+      inherit sdkVersion mx;
+      graalvm = sdk;
+    };
   };
 }
-

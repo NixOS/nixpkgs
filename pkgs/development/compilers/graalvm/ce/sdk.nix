@@ -64,6 +64,9 @@ result = stdenv.mkDerivation rec {
       --replace "exec \"\''${location}/<jre_bin>/java\"" \
                 "exec \''${location}/../../../../bin/java"
 
+    substituteInPlace sdk/mx.sdk/mx_sdk_vm_impl.py \
+      --replace 'use_relpath=True' 'use_relpath=False'
+
     substituteInPlace truffle/mx.truffle/macro-truffle.properties \
       --replace '-H:MaxRuntimeCompileMethods=1400' \
                 '-H:MaxRuntimeCompileMethods=2800'
@@ -103,17 +106,8 @@ result = stdenv.mkDerivation rec {
     export JAVA_HOME=$NIX_BUILD_TOP/jvmci
 
     ( cd vm
-      mx-internal \
-       --max-cpus 1 \
-       --dynamicimports substratevm,sulong,vm,regex \
-       --suite compiler \
-       --suite sdk \
-       --suite vm \
-       --suite tools \
-       --suite regex \
-       --suite truffle \
-       --suite sulong \
-       build )
+      mx-internal --max-cpus 1 --dynamicimports compiler,vm,regex,tools,truffle,sdk,substratevm,sulong build
+    )
   '';
 
   installPhase = ''
@@ -185,4 +179,3 @@ result = stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "x86_64-darwin" /*"aarch64-linux"*/ ];
   };
 }; in result
-

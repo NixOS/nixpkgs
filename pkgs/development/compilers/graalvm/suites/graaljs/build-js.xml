@@ -1,0 +1,112 @@
+<project>
+    <property name="ant.build.javac.source" value="1.8"/>
+    <property name="ant.build.javac.target" value="1.8"/>
+    <target name="js-launcher">
+        <mkdir dir="target/classes"/>
+        <javac srcdir="src/com.oracle.truffle.js.shell/src"
+               destdir="target/classes"
+               classpath="${java.class.path}:src/com.oracle.truffle.js.shell/src"
+               encoding="UTF-8"
+               includeantruntime="false"
+               fork="true"
+               debug="true" />
+        <mkdir dir="target/jar"/>
+        <jar destfile="target/jar/graaljs-launcher.jar" basedir="target/classes">
+            <manifest>
+                <attribute name="Main-Class" value="com.oracle.truffle.js.shell.JSLauncher"/>
+            </manifest>
+        </jar>
+    </target>
+    <target name="js-factory">
+        <delete dir="target/classes"/>
+        <mkdir dir="target/classes"/>
+        <javac srcdir="src/com.oracle.truffle.js.factory.processor/src"
+               destdir="target/classes"
+               classpath="${java.class.path}"
+               encoding="UTF-8"
+               includeantruntime="false"
+               fork="true"
+               debug="true" >
+            <src path="src/com.oracle.truffle.js.annotations/src"/>
+            <src path="src/com.oracle.truffle.js.codec/src"/>
+        </javac>
+        <mkdir dir="target/jar"/>
+        <mkdir dir="target/classes/META-INF/services"/>
+        <copy file="src/com.oracle.truffle.js.factory.processor/src/META-INF/services/javax.annotation.processing.Processor"
+              todir="target/classes/META-INF/services" />
+        <jar destfile="target/jar/graaljs-factory-processor.jar" basedir="target/classes" />
+    </target>
+    <target name="js-scriptengine">
+        <delete dir="target/classes"/>
+        <mkdir dir="target/classes"/>
+        <javac srcdir="src/com.oracle.truffle.js.scriptengine/src"
+               destdir="target/classes"
+               classpath="${java.class.path}"
+               encoding="UTF-8"
+               includeantruntime="false"
+               fork="true"
+               debug="true" />
+        <mkdir dir="target/classes/META-INF/services"/>
+        <echo file="target/classes/META-INF/services/javax.script.ScriptEngineFactory"
+              append="true"
+              message="com.oracle.truffle.js.scriptengine.GraalJSEngineFactory" />
+        <jar
+            destfile="target/jar/graaljs-scriptengine.jar"
+            basedir="target/classes"
+            />
+    </target>
+    <target name="js-graaljs">
+        <delete dir="target/classes"/>
+        <mkdir dir="target/classes"/>
+        <javac
+            destdir="target/classes"
+            classpath="${java.class.path}:target/classes:target/jar/graaljs-scriptengine.jar:target/jar/graaljs-factory-processor.jar"
+            includeantruntime="false"
+            fork="true"
+            debug="true">
+            <src path="src/com.oracle.truffle.js/src"/>
+            <src path="src/com.oracle.js.parser/src"/>
+            <src path="src/com.oracle.truffle.js.parser/src"/>
+            <src path="src/com.oracle.truffle.js.runtime.doubleconv/src"/>
+            <src path="src/com.oracle.truffle.regex.nashorn/src"/>
+            <src path="src/com.oracle.truffle.js.runtime.doubleconv/src" />
+            <compilerarg line="-J-Xms2g -J-Xmx2g" />
+            <compilerarg line="-Xmaxerrs 10000" />
+        </javac>
+        <echo file="target/classes/META-INF/services/com.oracle.truffle.js.runtime.Evaluator"
+              append="true"
+              message="com.oracle.truffle.js.parser.GraalJSEvaluator" />
+        <jar destfile="target/jar/graaljs.jar" basedir="target/classes" />
+    </target>
+    <target name="truffle-js-jdk8">
+        <delete dir="target/classes"/>
+        <mkdir dir="target/classes"/>
+        <javac srcdir="src/com.oracle.truffle.js.jdk8/src"
+               destdir="target/classes"
+               classpath="${java.class.path}:target/jar/graaljs.jar:target/jar/graaljs-scriptengine.jar:target/jar/graaljs-factory-processor.jar:"
+               encoding="UTF-8"
+               includeantruntime="false"
+               fork="true"
+               debug="true" />
+        <jar
+            destfile="target/jar/truffle-js-jdk8.jar"
+            basedir="target/classes"
+            />
+    </target>
+
+    <target name="truffle-js-snapshot-tool">
+        <delete dir="target/classes"/>
+        <mkdir dir="target/classes"/>
+        <javac srcdir="src/com.oracle.truffle.js.snapshot/src"
+               destdir="target/classes"
+               classpath="${java.class.path}:target/jar/graaljs.jar:target/jar/graaljs-scriptengine.jar:target/jar/graaljs-factory-processor.jar:"
+               encoding="UTF-8"
+               includeantruntime="false"
+               fork="true"
+               debug="true" />
+        <jar
+            destfile="target/jar/truffle-js-snapshot-tool.jar"
+            basedir="target/classes"
+            />
+    </target>
+</project>
