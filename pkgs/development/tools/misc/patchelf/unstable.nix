@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ stdenv, fetchurl, autoreconfHook, lib }:
 
 stdenv.mkDerivation rec {
   name = "patchelf-${version}";
@@ -14,6 +14,15 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/Makefile.am \
       --replace "set-rpath-library.sh" ""
   '';
+
+  # Aarch64 supports page sizes up to 64K. GCC, binutils, etc. generate ELF
+  # files with segments aligned to 64K so that the generated binaries can run
+  # on systems with any page size configuration. However, patchelf defaults to
+  # "whatever the builder's kernel is using", which is currently 4K.
+  #
+  # Match the default from the rest of the toolchain ecosystem to support
+  # kernels with larger page sizes.
+  configureFlags = lib.optional stdenv.isAarch64 "--with-page-size=65536";
 
   setupHook = [ ./setup-hook.sh ];
 
