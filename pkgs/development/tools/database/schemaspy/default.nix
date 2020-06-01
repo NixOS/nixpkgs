@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, graphviz }:
+{ lib, stdenv, fetchurl, jre8, makeWrapper, graphviz }:
 
 stdenv.mkDerivation rec {
   version = "6.1.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   buildInputs = [
-    jre
+    jre8
   ];
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D ${src} "$out/share/java/${pname}-${version}.jar"
 
-    makeWrapper ${jre}/bin/java $out/bin/schemaspy \
+    makeWrapper ${jre8}/bin/java $out/bin/schemaspy \
       --add-flags "-jar $out/share/java/${pname}-${version}.jar" \
       --prefix PATH : "$wrappedPath"
   '';

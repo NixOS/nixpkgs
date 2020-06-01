@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ant, jdk, jre, python, makeWrapper }:
+{ fetchurl, stdenv, ant, jdk8, jre8, python, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "rabbitmq-java-client-3.3.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "03kspkgzzjsbq6f8yl2zj5m30qwgxv3l58hrbf6gcgxb5rpfk6sh";
   };
 
-  buildInputs = [ ant jdk python makeWrapper ];
+  buildInputs = [ ant jdk8 python makeWrapper ];
 
   buildPhase = "ant dist";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     cp build/lib/*.jar lib/*.jar $out/share/java
 
     # There is a script in the source archive, but ours is cleaner
-    makeWrapper ${jre}/bin/java $out/bin/PerfTest \
+    makeWrapper ${jre8}/bin/java $out/bin/PerfTest \
       --add-flags "-Djava.awt.headless=true -cp $out/share/java/\* com.rabbitmq.examples.PerfTest"
   '';
 

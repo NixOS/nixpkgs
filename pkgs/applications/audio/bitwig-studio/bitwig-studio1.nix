@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, freetype, gdk-pixbuf
-, wrapGAppsHook, gtk2, gtk3, harfbuzz, jdk, lib, xorg
+, wrapGAppsHook, gtk2, gtk3, harfbuzz, jdk8, lib, xorg
 , libbsd, libjack2, libpng, ffmpeg
 , libxkbcommon
 , makeWrapper, pixman, autoPatchelfHook
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     )
 
     # Use our OpenJDK instead of Bitwig’s bundled—and commercial!—one.
-    rm -rf $out/libexec/lib/jre
-    ln -s ${jdk.home}/jre $out/libexec/lib/jre
+    rm -rf $out/libexec/lib/jre8
+    ln -s ${jdk8.home}/jre8 $out/libexec/lib/jre8
 
     mkdir -p $out/bin
     ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio

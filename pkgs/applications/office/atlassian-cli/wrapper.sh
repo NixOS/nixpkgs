@@ -12,7 +12,7 @@ then
     exit 1
 fi
 
-@jre@/bin/java \
+@jre8@/bin/java \
     -jar @out@/share/java/@tool@-cli-* \
     --server "${!host}" \
     --user "${!user}" \

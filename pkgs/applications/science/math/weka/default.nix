@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, unzip, makeWrapper }:
+{ stdenv, fetchurl, jre8, unzip, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "weka";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -pv $out/share/weka
     cp -Rv * $out/share/weka
 
-    makeWrapper ${jre}/bin/java $out/bin/weka \
+    makeWrapper ${jre8}/bin/java $out/bin/weka \
       --add-flags "-Xmx1000M -jar $out/share/weka/weka.jar"
   '';
 

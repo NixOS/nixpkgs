@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jre }:
+{ stdenv, fetchzip, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "atlassian-cli";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     do
       substitute ${./wrapper.sh} $out/bin/$tool \
         --subst-var out \
-        --subst-var-by jre ${jre} \
+        --subst-var-by jre8 ${jre8} \
         --subst-var-by tool $tool
       chmod +x $out/bin/$tool
     done
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://bobswift.atlassian.net/wiki/spaces/ACLI/overview";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ twey ];
-    inherit (jre.meta) platforms;
+    inherit (jre8.meta) platforms;
   };
 }

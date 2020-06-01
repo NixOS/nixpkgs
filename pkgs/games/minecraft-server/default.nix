@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre_headless }:
+{ stdenv, fetchurl, jre8_headless }:
 stdenv.mkDerivation {
   pname = "minecraft-server";
   version = "1.15.2";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
     cat > $out/bin/minecraft-server << EOF
     #!/bin/sh
-    exec ${jre_headless}/bin/java \$@ -jar $out/lib/minecraft/server.jar nogui
+    exec ${jre8_headless}/bin/java \$@ -jar $out/lib/minecraft/server.jar nogui
     EOF
 
     chmod +x $out/bin/minecraft-server

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchurl, makeWrapper, unzip
 , gnumake, gcc-arm-embedded, binutils-arm-embedded
-, dfu-util-axoloti, jdk, ant, libfaketime }:
+, dfu-util-axoloti, jdk8, ant, libfaketime }:
 
 stdenv.mkDerivation rec {
   version = "1.0.12-2";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     dfu-util-axoloti
     ant
   ];
-  buildInputs = [jdk libfaketime ];
+  buildInputs = [jdk8 libfaketime ];
 
   patchPhase = ''
     unzip ${chibios}
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     cp -r doc firmware chibios platform_linux CMSIS *.txt $out/share/axoloti/
     install -vD dist/Axoloti.jar $out/share/axoloti/
 
-    makeWrapper ${jdk}/bin/java $out/bin/axoloti --add-flags "-Daxoloti_release=$out/share/axoloti -Daxoloti_runtime=$out/share/axoloti -jar $out/share/axoloti/Axoloti.jar"
+    makeWrapper ${jdk8}/bin/java $out/bin/axoloti --add-flags "-Daxoloti_release=$out/share/axoloti -Daxoloti_runtime=$out/share/axoloti -jar $out/share/axoloti/Axoloti.jar"
   '';
 
   meta = with stdenv.lib; {

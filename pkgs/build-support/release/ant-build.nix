@@ -9,7 +9,7 @@
 , antBuildInputs ? []
 , buildfile ? "build.xml"
 , ant ? pkgs.ant
-, jre ? pkgs.jdk
+, jre8 ? pkgs.jdk8
 , hydraAntLogger ? pkgs.hydraAntLogger
 , zip ? pkgs.zip
 , unzip ? pkgs.unzip
@@ -22,7 +22,7 @@ in
 stdenv.mkDerivation (
 
   {
-    inherit jre ant;
+    inherit jre8 ant;
     showBuildStats = true;
 
     postPhases =
@@ -70,8 +70,8 @@ stdenv.mkDerivation (
       mkdir -p $out/bin
       cat >> $out/bin/${w.name} <<EOF
       #!${pkgs.runtimeShell}
-      export JAVA_HOME=$jre
-      $jre/bin/java ${cp w} ${if w ? mainClass then w.mainClass else "-jar ${w.jar}"} \$@
+      export JAVA_HOME=$jre8
+      $jre8/bin/java ${cp w} ${if w ? mainClass then w.mainClass else "-jar ${w.jar}"} \$@
       EOF
 
       chmod a+x $out/bin/${w.name} || exit 1
@@ -108,7 +108,7 @@ stdenv.mkDerivation (
   {
     name = name + (if src ? version then "-" + src.version else "");
 
-    buildInputs = [ant jre zip unzip] ++ stdenv.lib.optional (args ? buildInputs) args.buildInputs ;
+    buildInputs = [ant jre8 zip unzip] ++ stdenv.lib.optional (args ? buildInputs) args.buildInputs ;
 
     postHook = ''
       mkdir -p $out/nix-support

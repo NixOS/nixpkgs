@@ -9,5 +9,5 @@ chmod -v 755 $boot_bin
 patchShebangs $boot_bin
 
 sed -i \
-    -e "s;\${BOOT_JAVA_COMMAND:-java};\${BOOT_JAVA_COMMAND:-${jdk}/bin/java};g" \
+    -e "s;\${BOOT_JAVA_COMMAND:-java};\${BOOT_JAVA_COMMAND:-${jdk8}/bin/java};g" \
     $boot_bin

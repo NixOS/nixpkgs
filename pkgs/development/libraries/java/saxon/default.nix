@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jre }:
+{ stdenv, fetchurl, unzip, jre8 }:
 
 let
   common = { pname, version, src, description
@@ -20,8 +20,8 @@ let
         mv $out/doc $out/share
         cat > $out/bin/${prog'} <<EOF
         #! $shell
-        export JAVA_HOME=${jre}
-        exec ${jre}/bin/java -jar $out/${jar'}.jar "\$@"
+        export JAVA_HOME=${jre8}
+        exec ${jre8}/bin/java -jar $out/${jar'}.jar "\$@"
         EOF
         chmod a+x $out/bin/${prog'}
       '';

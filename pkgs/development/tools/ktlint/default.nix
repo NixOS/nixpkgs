@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = [ jre ];
+  propagatedBuildInputs = [ jre8 ];
 
   unpackCmd = ''
     mkdir -p ${pname}-${version}
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/ktlint --prefix PATH : "${jre}/bin"
+    wrapProgram $out/bin/ktlint --prefix PATH : "${jre8}/bin"
   '';
 
   meta = with stdenv.lib; {

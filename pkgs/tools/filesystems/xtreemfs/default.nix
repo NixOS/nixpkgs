@@ -1,4 +1,4 @@
-{ stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python
+{ stdenv, boost, fuse, openssl, cmake, attr, jdk8, ant, which, file, python
 , lib, valgrind, makeWrapper, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation {
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   ];
 
   preConfigure = ''
-    export JAVA_HOME=${jdk}
+    export JAVA_HOME=${jdk8}
     export ANT_HOME=${ant}
 
     export BOOST_INCLUDEDIR=${boost.dev}/include

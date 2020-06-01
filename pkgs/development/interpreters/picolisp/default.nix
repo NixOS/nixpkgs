@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, w3m, openssl, makeWrapper }:
+{ stdenv, fetchurl, jdk8, w3m, openssl, makeWrapper }:
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "https://www.software-lab.de/${pname}-${version}.tgz";
     sha256 = "10np0mhihr47r3201617zccrvzpkhdl1jwvz7zimk8kxpriydq2j";
   };
-  buildInputs = [makeWrapper openssl] ++ optional stdenv.is64bit jdk;
+  buildInputs = [makeWrapper openssl] ++ optional stdenv.is64bit jdk8;
   patchPhase = ''
     sed -i "s/which java/command -v java/g" mkAsm
 

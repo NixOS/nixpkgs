@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, jdk, ant, makeWrapper, jre }:
+{ stdenv, fetchFromGitHub, jdk8, ant, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "ili2c";
   version = "5.0.8";
 
-  nativeBuildInputs = [ ant jdk makeWrapper ];
+  nativeBuildInputs = [ ant jdk8 makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "claeis";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       cp $build/build/source/build/jar/ili2c.jar $out/share/${pname}
 
       mkdir -p $out/bin
-      makeWrapper ${jre}/bin/java $out/bin/ili2c \
+      makeWrapper ${jre8}/bin/java $out/bin/ili2c \
         --add-flags "-jar $out/share/${pname}/ili2c.jar"
     '';
 

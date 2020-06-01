@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, jdk
+{ stdenv, fetchFromGitHub, autoreconfHook, jdk8
 
 # Enable ECDSA pubkey recovery module
 , enableRecovery ? true
@@ -7,7 +7,7 @@
 # experimental)
 , enableECDH ? false
 
-# Enable libsecp256k1_jni (disabled by default because it requires a jdk,
+# Enable libsecp256k1_jni (disabled by default because it requires a jdk8,
 # which is a large dependency)
 , enableJNI ? false
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     sha256 = "0bxqmimm627g9klalg1vdbspmn52588v4a6cli3p8bn84ibsnzbm";
   };
 
-  buildInputs = optionals enableJNI [ jdk ];
+  buildInputs = optionals enableJNI [ jdk8 ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

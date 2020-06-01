@@ -35,7 +35,7 @@ let
       # Steam VR
       procps
       usbutils
-    ] ++ lib.optional withJava jdk
+    ] ++ lib.optional withJava jdk8
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
 

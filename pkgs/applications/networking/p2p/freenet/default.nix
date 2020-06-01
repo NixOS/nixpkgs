@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, ant, jdk, bash, coreutils, substituteAll }:
+{ stdenv, fetchurl, fetchFromGitHub, ant, jdk8, bash, coreutils, substituteAll }:
 
 let
   freenet_ext = fetchurl {
@@ -36,7 +36,7 @@ let
       sed 's/@unknown@/${version}/g' -i build-clean.xml
     '';
 
-    buildInputs = [ ant jdk ];
+    buildInputs = [ ant jdk8 ];
 
     buildPhase = "ant package-only";
 
@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
     src = ./freenetWrapper;
     inherit bash coreutils seednodes bcprov_version;
     freenet = freenet-jars;
-    jre = jdk.jre;
+    jre8 = jdk8.jre;
   };
 
   jars = freenet-jars;

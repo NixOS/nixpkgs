@@ -226,7 +226,7 @@ in {
 
       dd-jmxfetch = lib.mkIf (cfg.jmxConfig != null) {
         description = "Datadog JMX Fetcher";
-        path = [ pkgs.dd-agent pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
+        path = [ pkgs.dd-agent pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk8 ];
         serviceConfig.ExecStart = "${pkgs.dd-agent}/bin/dd-jmxfetch";
       };
     };

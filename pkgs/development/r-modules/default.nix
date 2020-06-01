@@ -269,7 +269,7 @@ let
     imager = [ pkgs.x11 ];
     iBMQ = [ pkgs.gsl_1 ];
     igraph = [ pkgs.gmp pkgs.libxml2.dev ];
-    JavaGD = [ pkgs.jdk ];
+    JavaGD = [ pkgs.jdk8 ];
     jpeg = [ pkgs.libjpeg.dev ];
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
@@ -315,7 +315,7 @@ let
     Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.openmpi pkgs.pcre.dev ];
     Rhtslib = [ pkgs.zlib.dev pkgs.automake pkgs.autoconf ];
     rjags = [ pkgs.jags ];
-    rJava = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.jdk pkgs.libzip ];
+    rJava = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.jdk8 pkgs.libzip ];
     Rlibeemd = [ pkgs.gsl_1 ];
     rmatio = [ pkgs.zlib.dev ];
     Rmpfr = [ pkgs.gmp pkgs.mpfr.dev ];
@@ -742,15 +742,15 @@ let
 
     rJava = old.rJava.overrideDerivation (attrs: {
       preConfigure = ''
-        export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
-        export JAVA_HOME=${pkgs.jdk}
+        export JAVA_CPPFLAGS=-I${pkgs.jdk8}/include/
+        export JAVA_HOME=${pkgs.jdk8}
       '';
     });
 
     JavaGD = old.JavaGD.overrideDerivation (attrs: {
       preConfigure = ''
-        export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
-        export JAVA_HOME=${pkgs.jdk}
+        export JAVA_CPPFLAGS=-I${pkgs.jdk8}/include/
+        export JAVA_HOME=${pkgs.jdk8}
       '';
     });
 

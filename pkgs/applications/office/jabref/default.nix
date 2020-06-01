@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, jdk, jre, wrapGAppsHook, gtk3, gsettings-desktop-schemas }:
+{ stdenv, fetchurl, makeWrapper, makeDesktopItem, jdk8, jre8, wrapGAppsHook, gtk3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   version = "3.8.1";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     exec = "jabref";
   };
 
-  buildInputs = [ makeWrapper jdk wrapGAppsHook gtk3 gsettings-desktop-schemas ];
+  buildInputs = [ makeWrapper jdk8 wrapGAppsHook gtk3 gsettings-desktop-schemas ];
 
   dontUnpack = true;
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     cp images/icons/JabRef-icon-mac.svg $out/share/icons/jabref.svg
 
     ln -s $src $out/share/java/jabref-${version}.jar
-    makeWrapper ${jre}/bin/java $out/bin/jabref \
+    makeWrapper ${jre8}/bin/java $out/bin/jabref \
       --add-flags "-jar $out/share/java/jabref-${version}.jar"
   '';
 

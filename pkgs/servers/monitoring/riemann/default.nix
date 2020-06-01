@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "riemann";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     mv bin/riemann $out/bin/
     mv etc/riemann.config $out/etc/
 
-    wrapProgram "$out/bin/riemann" --prefix PATH : "${jre}/bin"
+    wrapProgram "$out/bin/riemann" --prefix PATH : "${jre8}/bin"
   '';
 
   meta = with stdenv.lib; {

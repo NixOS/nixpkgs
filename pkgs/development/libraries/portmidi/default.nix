@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, cmake, /*jdk,*/ alsaLib }:
+{ stdenv, fetchurl, unzip, cmake, /*jdk8,*/ alsaLib }:
 
 stdenv.mkDerivation rec {
   pname = "portmidi";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = let
-    #base = "${jdk}/jre/lib/${jdk.architecture}";
+    #base = "${jdk8}/jre8/lib/${jdk8.architecture}";
   in [
     "-DPORTMIDI_ENABLE_JAVA=0"
     /* TODO: Fix Java support.
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ln -s libportmidi.so "$out/lib/libporttime.so"
   '';
 
-  buildInputs = [ unzip cmake /*jdk*/ alsaLib ];
+  buildInputs = [ unzip cmake /*jdk8*/ alsaLib ];
 
   hardeningDisable = [ "format" ];
 

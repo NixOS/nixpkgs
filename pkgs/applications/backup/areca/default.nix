@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ant, jre, jdk, swt, acl, attr }:
+{ stdenv, fetchurl, ant, jre8, jdk8, swt, acl, attr }:
 
 stdenv.mkDerivation {
   name = "areca-7.5";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  buildInputs = [ jdk ant acl attr ];
+  buildInputs = [ jdk8 ant acl attr ];
 
   patches = [ ./fix-javah-bug.diff ];
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     substituteInPlace build.xml --replace "/usr/lib/java/swt.jar" "${swt}/jars/swt.jar"
     substituteInPlace build.xml --replace "gcc" "${stdenv.cc}/bin/gcc"
     substituteInPlace areca.sh --replace "bin/" ""
-    substituteInPlace bin/areca_run.sh --replace "/usr/java" "${jre}/lib/openjdk"
+    substituteInPlace bin/areca_run.sh --replace "/usr/java" "${jre8}/lib/openjdk"
     substituteInPlace bin/areca_run.sh --replace "/usr/lib/java/swt.jar" "${swt}/jars/swt.jar"
 
     # Fix for NixOS/nixpkgs/issues/53716

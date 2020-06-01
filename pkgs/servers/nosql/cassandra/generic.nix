@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, makeWrapper, gawk, bash, getopt, procps
-, which, jre, version, sha256, coreutils, ...
+, which, jre8, version, sha256, coreutils, ...
 }:
 
 let
@@ -9,7 +9,7 @@ let
     getopt
     gawk
     which
-    jre
+    jre8
     procps
   ]);
 in
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
         wrapProgram $out/bin/$(basename "$cmd") \
           --suffix-each LD_LIBRARY_PATH : ${libPath} \
           --prefix PATH : ${binPath} \
-          --set JAVA_HOME ${jre}
+          --set JAVA_HOME ${jre8}
       fi
     done
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
         makeWrapper $out/$cmd $out/bin/$(basename "$cmd") \
           --suffix-each LD_LIBRARY_PATH : ${libPath} \
           --prefix PATH : ${binPath} \
-          --set JAVA_HOME ${jre}
+          --set JAVA_HOME ${jre8}
       fi
     done
 

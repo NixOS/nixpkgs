@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper
+{ stdenv, fetchurl, jre8, makeWrapper
 , mysqlSupport ? true, mysql_jdbc ? null }:
 
 assert mysqlSupport -> mysql_jdbc != null;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qasiggaxix3gmmvax00k83q4pd1c1b5wx8ayyplaszkgr9advb8";
   };
 
-  buildInputs = [ jre makeWrapper ];
+  buildInputs = [ jre8 makeWrapper ];
 
   unpackPhase = ''
     tar xfz ${src}
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       ${addJars "$out/lib"}
       ${concatStringsSep "\n" (map (p: addJars "${p}/share/java") extraJars)}
 
-      ${getBin jre}/bin/java -cp "\$CP" \$JAVA_OPTS \
+      ${getBin jre8}/bin/java -cp "\$CP" \$JAVA_OPTS \
         liquibase.integration.commandline.Main \''${1+"\$@"}
       EOF
       chmod +x $out/bin/liquibase

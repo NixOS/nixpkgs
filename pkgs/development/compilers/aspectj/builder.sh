@@ -1,14 +1,14 @@
 source $stdenv/setup
 
-export JAVA_HOME=$jre
+export JAVA_HOME=$jre8
 
 cat >> props <<EOF
 output.dir=$out
-context.javaPath=$jre
+context.javaPath=$jre8
 EOF
 
 mkdir -p $out
-$jre/bin/java -jar $src -text props
+$jre8/bin/java -jar $src -text props
 
 echo "Removing files at top level"
 for file in $out/*

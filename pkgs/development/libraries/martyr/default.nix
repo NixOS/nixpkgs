@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ant, jdk}:
+{stdenv, fetchurl, ant, jdk8}:
 
 stdenv.mkDerivation rec {
 	pname = "martyr";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 		sha256 = "1ks8j413bcby345kmq1i7av8kwjvz5vxdn1zpv0p7ywxq54i4z59";
 	};
 
-  buildInputs = [ ant jdk ];
+  buildInputs = [ ant jdk8 ];
 
   buildPhase = "ant";
 

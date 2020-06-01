@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre_headless, libmatthew_java, dbus, dbus_java }:
+{ stdenv, lib, fetchurl, makeWrapper, jre8_headless, libmatthew_java, dbus, dbus_java }:
 
 stdenv.mkDerivation rec {
   pname = "signal-cli";
@@ -18,15 +18,15 @@ stdenv.mkDerivation rec {
     cp -r lib $out/lib
     cp bin/signal-cli $out/bin/signal-cli
   '' + (if stdenv.isLinux then ''
-    makeWrapper ${jre_headless}/bin/java $out/bin/signal-cli \
-      --set JAVA_HOME "${jre_headless}" \
+    makeWrapper ${jre8_headless}/bin/java $out/bin/signal-cli \
+      --set JAVA_HOME "${jre8_headless}" \
       --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
       --add-flags "-Djava.library.path=${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus:$out/lib" \
       --add-flags "org.asamk.signal.Main"
   '' else ''
     wrapProgram $out/bin/signal-cli \
-      --prefix PATH : ${lib.makeBinPath [ jre_headless ]} \
-      --set JAVA_HOME ${jre_headless}
+      --prefix PATH : ${lib.makeBinPath [ jre8_headless ]} \
+      --set JAVA_HOME ${jre8_headless}
   '');
 
   # Execution in the macOS (10.13) sandbox fails with

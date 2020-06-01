@@ -1,9 +1,9 @@
 { libreoffice, runCommand, dbus, bash }:
 let
-  jdk = libreoffice.jdk;
+  jdk8 = libreoffice.jdk8;
 in
 (runCommand libreoffice.name {
-  inherit dbus libreoffice jdk bash;
+  inherit dbus libreoffice jdk8 bash;
 } ''
   mkdir -p "$out/bin"
   ln -s "${libreoffice}/share" "$out/share"

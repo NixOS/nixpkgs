@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, jdk, ant
+{ stdenv, lib, fetchFromGitHub, fetchurl, jdk8, ant
 , libusb-compat-0_1, libusb1, unzip, zlib, ncurses, readline
 , withGui ? false, gtk2 ? null, withTeensyduino ? false
   /* Packages needed for Teensyduino */
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  buildInputs = [ jdk ant libusb-compat-0_1 libusb1 unzip zlib ncurses5 readline
+  buildInputs = [ jdk8 ant libusb-compat-0_1 libusb1 unzip zlib ncurses5 readline
   ] ++ stdenv.lib.optionals withTeensyduino [ upx ];
   downloadSrcList = builtins.attrValues externalDownloads;
   downloadDstList = builtins.attrNames externalDownloads;
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
   # This will be patched into `arduino` wrapper script
   # Java loads gtk dynamically, so we need to provide it using LD_LIBRARY_PATH
   dynamicLibraryPath = lib.makeLibraryPath [gtk2];
-  javaPath = lib.makeBinPath [jdk];
+  javaPath = lib.makeBinPath [jdk8];
 
   # Everything else will be patched into rpath
   rpath = (lib.makeLibraryPath [zlib libusb-compat-0_1 libusb1 readline ncurses5 stdenv.cc.cc]);

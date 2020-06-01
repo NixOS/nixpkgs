@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, unzip, jre }:
+{ stdenv, fetchzip, makeWrapper, unzip, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "yEd";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp -r * $out/yed
     mkdir -p $out/bin
 
-    makeWrapper ${jre}/bin/java $out/bin/yed \
+    makeWrapper ${jre8}/bin/java $out/bin/yed \
       --add-flags "-jar $out/yed/yed.jar --"
   '';
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     homepage = "https://www.yworks.com/products/yed";
     description = "A powerful desktop application that can be used to quickly and effectively generate high-quality diagrams";
-    platforms = jre.meta.platforms;
+    platforms = jre8.meta.platforms;
     maintainers = with maintainers; [ abbradar ];
   };
 }

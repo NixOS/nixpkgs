@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase }:
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, jdk8, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase }:
 
 let
   libpath = with xorg; stdenv.lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
@@ -13,7 +13,7 @@ in mkDerivation rec {
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake file makeWrapper ];
-  buildInputs = [ qtbase jdk zlib ];
+  buildInputs = [ qtbase jdk8 zlib ];
 
   enableParallelBuilding = true;
 
@@ -24,7 +24,7 @@ in mkDerivation rec {
     install -Dm755 ../application/package/linux/multimc.desktop $out/share/applications/multimc.desktop
 
     # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
-    wrapProgram $out/bin/multimc --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} --prefix PATH : ${jdk}/bin/:${xorg.xrandr}/bin/
+    wrapProgram $out/bin/multimc --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} --prefix PATH : ${jdk8}/bin/:${xorg.xrandr}/bin/
   '';
 
   meta = with stdenv.lib; {

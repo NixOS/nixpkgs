@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , gradle_5
 , perl
-, jre
+, jre8
 , libpulseaudio
 
 # Make the build version easily overridable.
@@ -83,7 +83,7 @@ let
   installClient = ''
     install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/mindustry \
+    makeWrapper ${jre8}/bin/java $out/bin/mindustry \
       --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
       --add-flags "-jar $out/share/mindustry.jar"
     install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
@@ -92,7 +92,7 @@ let
   installServer = ''
     install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/mindustry-server \
+    makeWrapper ${jre8}/bin/java $out/bin/mindustry-server \
       --add-flags "-jar $out/share/mindustry-server.jar"
   '';
 

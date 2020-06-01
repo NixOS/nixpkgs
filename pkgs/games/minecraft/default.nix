@@ -4,7 +4,7 @@
 , makeWrapper
 , wrapGAppsHook
 , gobject-introspection
-, jre # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
+, jre8 # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
 , xorg
 , zlib
 , nss
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
     # Do not create `GPUCache` in current directory
     makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ jre8 ]} \
       --run "cd /tmp" \
       "''${gappsWrapperArgs[@]}"
   '';

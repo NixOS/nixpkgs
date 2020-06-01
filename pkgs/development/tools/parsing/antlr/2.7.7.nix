@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, python2 }:
+{ stdenv, fetchurl, jdk8, python2 }:
 
 stdenv.mkDerivation {
   name = "antlr-2.7.7";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1ffvcwdw73id0dk6pj2mlxjvbg0662qacx4ylayqcxgg381fnfl5";
   };
   patches = [ ./2.7.7-fixes.patch ];
-  buildInputs = [ jdk ];
+  buildInputs = [ jdk8 ];
   nativeBuildInputs = [ python2 ];
 
   meta = with stdenv.lib; {

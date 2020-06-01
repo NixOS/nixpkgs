@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
+{ stdenv, fetchFromGitHub, gradle, perl, jre8, makeWrapper, makeDesktopItem, mplayer }:
 
 let
   version = "6.6.7-build-529";
@@ -80,7 +80,7 @@ in stdenv.mkDerivation {
 
     cp -dpR ${desktopItem}/share $out
 
-    makeWrapper ${jre}/bin/java $out/bin/frostwire \
+    makeWrapper ${jre8}/bin/java $out/bin/frostwire \
       --add-flags "-Djava.library.path=$out/lib -jar $out/share/java/frostwire.jar"
   '';
 

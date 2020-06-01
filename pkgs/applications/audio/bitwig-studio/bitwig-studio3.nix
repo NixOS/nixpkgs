@@ -16,8 +16,8 @@ bitwig-studio1.overrideAttrs (oldAttrs: rec {
   installPhase = ''
     ${oldAttrs.installPhase}
 
-    # recover commercial jre
-    rm -f $out/libexec/lib/jre
-    cp -r opt/bitwig-studio/lib/jre $out/libexec/lib
+    # recover commercial jre8
+    rm -f $out/libexec/lib/jre8
+    cp -r opt/bitwig-studio/lib/jre8 $out/libexec/lib
   '';
 })

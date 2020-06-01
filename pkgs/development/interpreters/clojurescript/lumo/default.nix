@@ -4,7 +4,7 @@
 , clojure
 , gnutar
 , nodejs
-, jre
+, jre8
 , unzip
 , nodePackages
 , xcbuild
@@ -152,7 +152,7 @@ stdenv.mkDerivation {
   buildInputs = [
     nodejs
     clojure
-    jre
+    jre8
     unzip
     python
     openssl

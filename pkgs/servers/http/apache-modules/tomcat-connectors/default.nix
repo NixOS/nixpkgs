@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apacheHttpd, jdk }:
+{ stdenv, fetchurl, apacheHttpd, jdk8 }:
 
 stdenv.mkDerivation rec {
   name = "tomcat-connectors-1.2.48";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-apxs=${apacheHttpd.dev}/bin/apxs"
-    "--with-java-home=${jdk}"
+    "--with-java-home=${jdk8}"
   ];
 
   setSourceRoot = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cp apache-2.0/mod_jk.so $out/modules
   '';
 
-  buildInputs = [ apacheHttpd jdk ];
+  buildInputs = [ apacheHttpd jdk8 ];
 
   meta = with stdenv.lib; {
     description = "Provides web server plugins to connect web servers with Tomcat";

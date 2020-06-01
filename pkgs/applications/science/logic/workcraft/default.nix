@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "workcraft";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   cp -r * $out/share
   mkdir $out/bin
   makeWrapper $out/share/workcraft $out/bin/workcraft \
-    --set JAVA_HOME "${jre}" \
+    --set JAVA_HOME "${jre8}" \
     --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
   '';
 

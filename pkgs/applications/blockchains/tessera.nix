@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "tessera";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/tessera --add-flags "-jar $src"
+    makeWrapper ${jre8}/bin/java $out/bin/tessera --add-flags "-jar $src"
   '';
 
   meta = with stdenv.lib; {

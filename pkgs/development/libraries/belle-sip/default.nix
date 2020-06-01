@@ -2,7 +2,7 @@
 , bctoolbox
 , cmake
 , fetchFromGitLab
-, jre
+, jre8
 , libantlr3c
 , mbedtls
 , stdenv
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pzxk8mkkg6zsnmj1bwggbdjv864psx89gglfm51h8s501kg11fv";
   };
 
-  nativeBuildInputs = [ jre cmake ];
+  nativeBuildInputs = [ jre8 cmake ];
 
   buildInputs = [ zlib ];
 

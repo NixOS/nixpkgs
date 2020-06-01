@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, maven, makeWrapper, jre_headless, pcsclite }:
+{ stdenv, fetchFromGitHub, jdk8, maven, makeWrapper, jre8_headless, pcsclite }:
 
 # TODO: This is quite a bit of duplicated logic with gephi. Factor it out?
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   deps = stdenv.mkDerivation {
     name = "${pname}-${version}-deps";
     inherit src;
-    nativeBuildInputs = [ jdk maven ];
+    nativeBuildInputs = [ jdk8 maven ];
     installPhase = ''
       # Download the dependencies
       while ! mvn package "-Dmaven.repo.local=$out/.m2" -Dmaven.wagon.rto=5000; do
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     outputHash = "1qwgvz6l5wia8q5824c9f3iwyapfskljhqf1z09fw6jjj1jy3b15";
   };
 
-  nativeBuildInputs = [ jdk maven makeWrapper ];
+  nativeBuildInputs = [ jdk8 maven makeWrapper ];
 
   buildPhase = ''
     cp -dpR "${deps}/.m2" ./
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/lib/java" "$out/share/java"
     cp target/gp.jar "$out/share/java"
-    makeWrapper "${jre_headless}/bin/java" "$out/bin/gp" \
+    makeWrapper "${jre8_headless}/bin/java" "$out/bin/gp" \
       --add-flags "-jar '$out/share/java/gp.jar'" \
       --prefix LD_LIBRARY_PATH : "${pcsclite.out}/lib"
   '';

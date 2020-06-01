@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, ant, runtimeShell }:
+{ stdenv, fetchFromGitHub, jdk8, ant, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "zap";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bz4pgq66v6kxmgj99llacm1d85vj8z78jlgc2z9hv0ha5i57y32";
   };
 
-  buildInputs = [ jdk ant ];
+  buildInputs = [ jdk8 ant ];
 
   buildPhase = ''
     cd build

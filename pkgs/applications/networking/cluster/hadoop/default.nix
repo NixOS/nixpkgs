@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash
+{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre8, bash
 , coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2
 }:
 
@@ -58,7 +58,7 @@ let
         buildPhase = ''
           # 'maven.repo.local' must be writable
           mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetched-maven-deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2 ${mavenFlags}
-          # remove runtime dependency on $jdk/jre/lib/amd64/server/libjvm.so
+          # remove runtime dependency on $jdk8.jre/lib/amd64/server/libjvm.so
           patchelf --set-rpath ${stdenv.lib.makeLibraryPath [glibc]} hadoop-dist/target/hadoop-${version}/lib/native/libhadoop.so.1.0.0
           patchelf --set-rpath ${stdenv.lib.makeLibraryPath [glibc]} hadoop-dist/target/hadoop-${version}/lib/native/libhdfs.so.0.0.0
         '';
@@ -86,9 +86,9 @@ let
             if [ -f "$n" ]; then # only regular files
               mv $n $out/bin.wrapped/
               makeWrapper $out/bin.wrapped/$(basename $n) $n \
-                --prefix PATH : "${stdenv.lib.makeBinPath [ which jre bash coreutils ]}" \
+                --prefix PATH : "${stdenv.lib.makeBinPath [ which jre8 bash coreutils ]}" \
                 --prefix JAVA_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ opensslPkg snappy zlib bzip2 ]}" \
-                --set JAVA_HOME "${jre}" \
+                --set JAVA_HOME "${jre8}" \
                 --set HADOOP_PREFIX "$out"
             fi
           done

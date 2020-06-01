@@ -1,4 +1,4 @@
-{ stdenv, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
+{ stdenv, fetchcvs, makeWrapper, makeDesktopItem, jdk8, jre8, ant
 , gtk3, gsettings-desktop-schemas, sweethome3dApp }:
 
 let
@@ -23,7 +23,7 @@ let
       categories = "Application;Graphics;2DGraphics;3DGraphics;";
     };
 
-    buildInputs = [ ant jre jdk makeWrapper gtk3 gsettings-desktop-schemas ];
+    buildInputs = [ ant jre8 jdk8 makeWrapper gtk3 gsettings-desktop-schemas ];
 
     patchPhase = ''
       sed -i -e 's,../SweetHome3D,${application.src},g' build.xml
@@ -31,7 +31,7 @@ let
     '';
 
     buildPhase = ''
-      ant -lib ${application.src}/libtest -lib ${application.src}/lib -lib ${jdk}/lib
+      ant -lib ${application.src}/libtest -lib ${application.src}/lib -lib ${jdk8}/lib
     '';
 
     installPhase = ''
@@ -39,7 +39,7 @@ let
       mkdir -p $out/share/{java,applications}
       cp ${module}-${version}.jar $out/share/java/.
       cp "${editorItem}/share/applications/"* $out/share/applications
-      makeWrapper ${jre}/bin/java $out/bin/$exec \
+      makeWrapper ${jre8}/bin/java $out/bin/$exec \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-jar $out/share/java/${module}-${version}.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
     '';

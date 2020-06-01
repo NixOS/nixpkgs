@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
+{ stdenv, fetchFromGitHub, jdk8, gmp, readline, openssl, unixODBC, zlib
 , libarchive, db, pcre, libedit, libossp_uuid, libXpm
 , libSM, libXt, freetype, pkgconfig, fontconfig
 , cmake, libyaml, Security
 , libjpeg, libX11, libXext, libXft, libXinerama
-, extraLibraries ? [ jdk unixODBC libXpm libSM libXt freetype fontconfig ]
+, extraLibraries ? [ jdk8 unixODBC libXpm libSM libXt freetype fontconfig ]
 , extraPacks     ? []
 , withGui ? false
 }:

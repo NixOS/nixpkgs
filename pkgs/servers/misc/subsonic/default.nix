@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "subsonic";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "180qdk8mnc147az8v9rmc1kgf8b13mmq88l195gjdwiqpflqzdyz";
   };
 
-  inherit jre;
+  inherit jre8;
 
   # Create temporary directory to extract tarball into to satisfy Nix's need
   # for a directory to be created in the unpack phase.

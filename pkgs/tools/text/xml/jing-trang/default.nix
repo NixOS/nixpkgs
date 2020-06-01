@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre_headless, jdk, ant, saxon }:
+{ stdenv, fetchFromGitHub, jre8_headless, jdk8, ant, saxon }:
 
 stdenv.mkDerivation {
   pname = "jing-trang";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1hhn52z9mv1x9nyvyqnmzg5yrs2lzm9xac7i15izppv02wp32qha";
   };
 
-  buildInputs = [ jdk ant saxon ];
+  buildInputs = [ jdk8 ant saxon ];
 
   CLASSPATH = "lib/saxon.jar";
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation {
     for tool in jing trang; do
     cat > "$out/bin/$tool" <<EOF
     #! $SHELL
-    export JAVA_HOME='${jre_headless}'
-    exec '${jre_headless}/bin/java' -jar '$out/share/java/$tool.jar' "\$@"
+    export JAVA_HOME='${jre8_headless}'
+    exec '${jre8_headless}/bin/java' -jar '$out/share/java/$tool.jar' "\$@"
     EOF
     done
 

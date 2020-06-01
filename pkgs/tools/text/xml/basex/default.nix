@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem }:
+{ stdenv, fetchurl, unzip, jre8, coreutils, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "basex";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kws6swisdaa17yhijjvkh2ikwz9rd5cw8mdjvkqw6vlcp1nq6m4";
   };
 
-  buildInputs = [ unzip jre ];
+  buildInputs = [ unzip jre8 ];
 
   desktopItem = makeDesktopItem {
     name = "basex";
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     # Use substitutions instead of wrapper scripts
     for file in "$out"/bin/*; do
         sed -i -e "s|/usr/bin/env bash|${stdenv.shell}|" \
-               -e "s|java|${jre}/bin/java|" \
+               -e "s|java|${jre8}/bin/java|" \
                -e "s|readlink|${coreutils}/bin/readlink|" \
                -e "s|dirname|${coreutils}/bin/dirname|" \
                -e "s|basename|${coreutils}/bin/basename|" \

@@ -1,4 +1,4 @@
-{ stdenv, jdk, jre, coursier, makeWrapper }:
+{ stdenv, jdk8, jre8, coursier, makeWrapper }:
 
 let
   baseName = "scalafix";
@@ -19,14 +19,14 @@ in
 stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
-  buildInputs = [ jdk makeWrapper deps ];
+  buildInputs = [ jdk8 makeWrapper deps ];
 
   doCheck = true;
 
   phases = [ "installPhase" "checkPhase" ];
 
   installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/${baseName} \
+    makeWrapper ${jre8}/bin/java $out/bin/${baseName} \
       --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
   '';
 

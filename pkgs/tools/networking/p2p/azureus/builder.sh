@@ -10,7 +10,7 @@ azureusHome=$out
 if test -n "\$HOME"; then
     azureusHome=\$HOME/.Azureus
 fi
-exec $jdk/bin/java -Xms16m -Xmx128m \
+exec $jdk8/bin/java -Xms16m -Xmx128m \
   -cp $out/jars/azureus.jar:$swt/jars/swt.jar \
   -Djava.library.path=$swt/lib \
   -Dazureus.install.path=\$azureusHome \

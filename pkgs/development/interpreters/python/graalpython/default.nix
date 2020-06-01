@@ -13,7 +13,7 @@ let
     sourceVersion = graalvm8.version;
     pythonVersion = "3.7";
     libPrefix = "graalvm";
-    sitePackages = "jre/languages/python/lib-python/3/site-packages";
+    sitePackages = "jre8/languages/python/lib-python/3/site-packages";
     executable = "graalpython";
     hasDistutilsCxxPatch = false;
     pythonForBuild = pkgs.buildPackages.pythonInterpreters.graalpython37;

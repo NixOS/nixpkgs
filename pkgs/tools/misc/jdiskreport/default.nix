@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jre, makeDesktopItem }:
+{ stdenv, fetchurl, unzip, jre8, makeDesktopItem }:
 
 let
   desktopItem = makeDesktopItem {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ unzip ];
-  inherit jre;
+  inherit jre8;
 
   installPhase = ''
     source $stdenv/setup
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cat > $out/bin/jdiskreport <<EOF
     #! $SHELL -e
-    exec $jre/bin/java -jar $out/share/java/$(basename $jar)
+    exec $jre8/bin/java -jar $out/share/java/$(basename $jar)
     EOF
     chmod +x $out/bin/jdiskreport
 

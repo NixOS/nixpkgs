@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, jre, ant }:
+{ stdenv, fetchurl, jdk8, jre8, ant }:
 
 stdenv.mkDerivation rec {
   pname = "freemind";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "06c6pm7hpwh9hbmyah3lj2wp1g957x8znfwc5cwygsi7dc98b0h1";
   };
 
-  buildInputs = [ jdk ant ];
+  buildInputs = [ jdk8 ant ];
 
   preConfigure = ''
     chmod +x check_for_duplicate_resources.sh
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
     cat >$out/bin/freemind <<EOF
     #! ${stdenv.shell}
-    JAVA_HOME=${jre} $out/nix-support/dist/freemind.sh
+    JAVA_HOME=${jre8} $out/nix-support/dist/freemind.sh
     EOF
     chmod +x $out/{bin/freemind,nix-support/dist/freemind.sh}
   '';

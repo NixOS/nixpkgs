@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ stdenv, fetchurl, jre8, runtimeShell }:
 
 let
   version = "2020.1";
@@ -9,7 +9,7 @@ let
   };
   launcher = ''
     #!${runtimeShell}
-    exec ${jre}/bin/java -jar ${jar} "$@"
+    exec ${jre8}/bin/java -jar ${jar} "$@"
   '';
 in stdenv.mkDerivation {
   pname = "burpsuite";
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
     homepage = "https://portswigger.net/burp/";
     downloadPage = "https://portswigger.net/burp/freedownload";
     license = [ stdenv.lib.licenses.unfree ];
-    platforms = jre.meta.platforms;
+    platforms = jre8.meta.platforms;
     hydraPlatforms = [];
     maintainers = with stdenv.lib.maintainers; [ bennofs ];
   };

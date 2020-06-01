@@ -133,7 +133,7 @@ in rec {
         (onFullSupported "nixos.tests.xfce")
         (onSystems ["i686-linux"] "nixos.tests.zfs.installer")
         (onFullSupported "nixpkgs.emacs")
-        (onFullSupported "nixpkgs.jdk")
+        (onFullSupported "nixpkgs.jdk8")
         ["nixpkgs.tarball"]
       ];
     };

@@ -1,4 +1,4 @@
-{ jre, stdenv, fetchurl, makeWrapper, makeDesktopItem }:
+{ jre8, stdenv, fetchurl, makeWrapper, makeDesktopItem }:
 
 let
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cp -v readme.md $out/share/doc/
 
     # launcher with `cd` is required b/c otherwise the model library isn't usable
-    makeWrapper "${jre}/bin/java" "$out/bin/netlogo" \
+    makeWrapper "${jre8}/bin/java" "$out/bin/netlogo" \
       --run "cd $out/share/netlogo/app" \
       --add-flags "-jar netlogo-${version}.jar"
 

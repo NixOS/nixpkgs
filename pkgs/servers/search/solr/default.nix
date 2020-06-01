@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, nixosTests }:
+{ stdenv, fetchurl, jre8, makeWrapper, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "solr";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     cp -r example $out/
     cp -r server $out/
 
-    wrapProgram $out/bin/solr --set JAVA_HOME "${jre}"
-    wrapProgram $out/bin/post --set JAVA_HOME "${jre}"
+    wrapProgram $out/bin/solr --set JAVA_HOME "${jre8}"
+    wrapProgram $out/bin/post --set JAVA_HOME "${jre8}"
   '';
 
   passthru.tests = {

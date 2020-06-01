@@ -7,4 +7,4 @@ for p in soundsense/*; do
 done
 
 cd "$DF_DIR"
-PATH=@jre@/bin exec $DF_DIR/soundsense/soundSense.sh
+PATH=@jre8@/bin exec $DF_DIR/soundsense/soundSense.sh

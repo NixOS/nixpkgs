@@ -4,10 +4,10 @@
 , gmp, readline, file, numactl, xen, libapparmor, jansson
 , getopt, perlPackages, ocamlPackages
 , appliance ? null
-, javaSupport ? false, jdk ? null }:
+, javaSupport ? false, jdk8 ? null }:
 
 assert appliance == null || stdenv.lib.isDerivation appliance;
-assert javaSupport -> jdk != null;
+assert javaSupport -> jdk8 != null;
 
 stdenv.mkDerivation rec {
   pname = "libguestfs";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     numactl xen libapparmor getopt perlPackages.ModuleBuild
   ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
     ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
-    ++ stdenv.lib.optional javaSupport jdk;
+    ++ stdenv.lib.optional javaSupport jdk8;
 
   prePatch = ''
     # build-time scripts

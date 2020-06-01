@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gradle_4_10, perl, makeWrapper, jre, gsettings-desktop-schemas }:
+{ stdenv, fetchFromGitHub, gradle_4_10, perl, makeWrapper, jre8, gsettings-desktop-schemas }:
 
 let
   version = "0.9.3-3";
@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
     tar xvf build/distributions/mucommander-${version}.tar --directory=$out --strip=1
     wrapProgram $out/bin/mucommander \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
-      --set JAVA_HOME ${jre}
+      --set JAVA_HOME ${jre8}
   '';
 
   meta = with stdenv.lib; {

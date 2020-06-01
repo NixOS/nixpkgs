@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre
+{ stdenv, fetchurl, makeWrapper, jre8
 , version ? "1.6" }:
 
 let
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   installPhase = ''
     rm bin/*.bat
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/opt/flink
     mv * $out/opt/flink/
     makeWrapper $out/opt/flink/bin/flink $out/bin/flink \
-      --prefix PATH : ${jre}/bin
+      --prefix PATH : ${jre8}/bin
 
     cat <<EOF >> $out/opt/flink/conf/flink-conf.yaml
-    env.java.home: ${jre}"
+    env.java.home: ${jre8}"
     env.log.dir: /tmp/flink-logs
     EOF
   '';

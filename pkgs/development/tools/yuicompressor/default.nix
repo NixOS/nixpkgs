@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "yuicompressor";
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   buildCommand = ''
     mkdir -p $out/{bin,lib}
     ln -s $src $out/lib/yuicompressor.jar
-    makeWrapper ${jre}/bin/java $out/bin/yuicompressor --add-flags \
+    makeWrapper ${jre8}/bin/java $out/bin/yuicompressor --add-flags \
      "-cp $out/lib/yuicompressor.jar com.yahoo.platform.yui.compressor.YUICompressor"
   '';
   

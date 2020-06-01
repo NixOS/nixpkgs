@@ -938,8 +938,6 @@ in
 
   enpass = callPackage ../tools/security/enpass { };
 
-  essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
-
   esh = callPackage ../tools/text/esh { };
 
   ezstream = callPackage ../tools/audio/ezstream { };
@@ -8206,7 +8204,7 @@ in
 
   devpi-server = callPackage ../development/tools/devpi-server {};
 
-  dotty = callPackage ../development/compilers/scala/dotty.nix { jre = jre8;};
+  dotty = callPackage ../development/compilers/scala/dotty.nix { jre = jre8; };
 
   drumstick = callPackage ../development/libraries/drumstick { };
 
@@ -8833,8 +8831,8 @@ in
     else
       openjdk14.override { headless = true; };
 
-  openjdk = openjdk8;
-  openjdk_headless = openjdk8_headless;
+  openjdk = openjdk14;
+  openjdk_headless = openjdk14_headless;
 
   jdk8 = openjdk8;
   jre8 = openjdk8.jre;
@@ -8845,10 +8843,8 @@ in
 
   jdk14 = openjdk14;
   jdk14_headless = openjdk14_headless;
-
-  jdk = jdk8;
-  jre = jre8;
-  jre_headless = jre8_headless;
+  # attribute without version suffix should always point to the Latest version
+  jdk = jdk14;
 
   inherit (callPackages ../development/compilers/graalvm {
     gcc = if stdenv.targetPlatform.isDarwin then gcc8 else gcc;
@@ -9258,8 +9254,8 @@ in
   sbcl_2_0_2 = callPackage ../development/compilers/sbcl {};
   sbcl = callPackage ../development/compilers/sbcl/2.0.0.nix {};
 
-  scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
-  scala_2_11 = callPackage ../development/compilers/scala/2.11.nix { };
+  scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { jre = jre8; };
+  scala_2_11 = callPackage ../development/compilers/scala/2.11.nix { jre = jre8; };
   scala_2_12 = callPackage ../development/compilers/scala/2.12.nix { jre = jre8; };
   scala_2_13 = callPackage ../development/compilers/scala/2.13.nix { jre = jre8; };
   scala = scala_2_13;
@@ -14487,8 +14483,8 @@ in
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
   rhino = callPackage ../development/libraries/java/rhino {
-    javac = jdk;
-    jvm = jre;
+    javac = jdk8;
+    jvm = jre8;
   };
 
   rlog = callPackage ../development/libraries/rlog { };
@@ -19250,9 +19246,7 @@ in
 
   echoip = callPackage ../servers/echoip { };
 
-  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
-    jdk = jdk11;
-  });
+  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
@@ -19914,7 +19908,7 @@ in
   gtkpod = callPackage ../applications/audio/gtkpod { };
 
   jbidwatcher = callPackage ../applications/misc/jbidwatcher {
-    java = if stdenv.isLinux then jre else jdk;
+    java = if stdenv.isLinux then jre8 else jdk8;
   };
 
   qrencode = callPackage ../development/libraries/qrencode { };
@@ -24989,7 +24983,7 @@ in
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
     });
 
-    java = if stdenv.isLinux then jre else jdk;
+    java = if stdenv.isLinux then jre8 else jdk8;
   };
 
   iprover = callPackage ../applications/science/logic/iprover { };

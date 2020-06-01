@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, jdk, makeWrapper }:
+{ stdenv, fetchurl, jdk8, makeWrapper }:
 
-assert jdk != null;
+assert jdk8 != null;
 
 let version = "3.6.3"; in
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  inherit jdk;
+  inherit jdk8;
 
   meta = with stdenv.lib; {
     description = "Build automation tool (used primarily for Java projects)";

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, unzip, which, makeWrapper, jdk }:
+{ stdenv, fetchurl, unzip, which, makeWrapper, jdk8 }:
 
-# at runtime, need jdk
+# at runtime, need jdk8
 
 stdenv.mkDerivation rec {
   pname = "groovy";
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
     for p in grape java2groovy groovy{,doc,c,sh,Console}; do
       wrapProgram $out/bin/$p \
-            --set JAVA_HOME "${jdk}" \
-            --prefix PATH ":" "${jdk}/bin"
+            --set JAVA_HOME "${jdk8}" \
+            --prefix PATH ":" "${jdk8}/bin"
     done
   '';
 

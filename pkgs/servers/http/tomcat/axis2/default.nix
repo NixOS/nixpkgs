@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apacheAnt, jdk, unzip }:
+{ stdenv, fetchurl, apacheAnt, jdk8, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "axis2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dh0s9bfh95wmmw8nyf2yw95biq7d9zmrbg8k4vzcyz1if228lac";
   };
 
-  buildInputs = [ unzip apacheAnt jdk ];
+  buildInputs = [ unzip apacheAnt jdk8 ];
   builder = ./builder.sh;
 
   meta = {

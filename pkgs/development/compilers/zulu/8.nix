@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   pname = "zulu";
 
   src = fetchurl {
-    url = "https://cdn.azul.com/zulu/bin/zulu${version}-jdk${openjdk}-${platform}_x64.${extension}";
+    url = "https://cdn.azul.com/zulu/bin/zulu${version}-jdk8${openjdk}-${platform}_x64.${extension}";
     sha256 = hash;
   };
 
@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
     mkdir -p $out
     cp -r ./* "$out/"
 
-    jrePath="$out/jre"
+    jrePath="$out/jre8"
 
     rpath=$rpath''${rpath:+:}$jrePath/lib/amd64/jli
     rpath=$rpath''${rpath:+:}$jrePath/lib/amd64/server

@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
         --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
     done
 
-    for pgm in $out/cplex/bin/x86-64_linux/cplex $out/cpoptimizer/bin/x86-64_linux/cpoptimizer $out/opl/oplide/jre/bin/*; 
+    for pgm in $out/cplex/bin/x86-64_linux/cplex $out/cpoptimizer/bin/x86-64_linux/cpoptimizer $out/opl/oplide/jre8/bin/*; 
     do
       if grep ELF $pgm > /dev/null;
       then

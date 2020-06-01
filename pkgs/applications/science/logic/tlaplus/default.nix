@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, adoptopenjdk-bin, jre, ant
+, adoptopenjdk-bin, jre8, ant
 }:
 
 stdenv.mkDerivation rec {
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/java $out/bin
     cp tlatools/org.lamport.tlatools/dist/*.jar $out/share/java
 
-    makeWrapper ${jre}/bin/java $out/bin/tlc2 \
+    makeWrapper ${jre8}/bin/java $out/bin/tlc2 \
       --add-flags "-cp $out/share/java/tla2tools.jar tlc2.TLC"
-    makeWrapper ${jre}/bin/java $out/bin/tla2sany \
+    makeWrapper ${jre8}/bin/java $out/bin/tla2sany \
       --add-flags "-cp $out/share/java/tla2tools.jar tla2sany.SANY"
-    makeWrapper ${jre}/bin/java $out/bin/pcal \
+    makeWrapper ${jre8}/bin/java $out/bin/pcal \
       --add-flags "-cp $out/share/java/tla2tools.jar pcal.trans"
-    makeWrapper ${jre}/bin/java $out/bin/tla2tex \
+    makeWrapper ${jre8}/bin/java $out/bin/tla2tex \
       --add-flags "-cp $out/share/java/tla2tools.jar tla2tex.TLA"
   '';
 

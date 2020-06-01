@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, jre }:
+{ stdenv, fetchzip, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   pname   = "keycloak";
@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
 
     chmod +x $out/bin/standalone.sh
     wrapProgram $out/bin/standalone.sh \
-      --prefix PATH ":" ${jre}/bin ;
+      --prefix PATH ":" ${jre8}/bin ;
   '';
 
   meta = with stdenv.lib; {
     homepage    = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
     license     = licenses.asl20;
-    platforms   = jre.meta.platforms;
+    platforms   = jre8.meta.platforms;
     maintainers = [ maintainers.ngerstle ];
   };
 

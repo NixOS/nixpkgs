@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, unzip, runtimeShell }:
+{ stdenv, fetchurl, jre8, unzip, runtimeShell }:
 
 stdenv.mkDerivation rec {
   major = "14";
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     programDir="$out/lib"
     cd "\$programDir"
     if [ \$# -eq 1 ]
-     then "${jre}/bin/java" -jar "\$programDir/umlet.jar" -filename="\$1"
-     else "${jre}/bin/java" -jar "\$programDir/umlet.jar" "\$@"
+     then "${jre8}/bin/java" -jar "\$programDir/umlet.jar" -filename="\$1"
+     else "${jre8}/bin/java" -jar "\$programDir/umlet.jar" "\$@"
     fi
 
     EOF

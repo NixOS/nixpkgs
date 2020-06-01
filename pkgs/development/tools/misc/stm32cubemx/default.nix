@@ -1,4 +1,4 @@
-{ stdenv, requireFile, makeDesktopItem, libicns, imagemagick, zstd, jre }:
+{ stdenv, requireFile, makeDesktopItem, libicns, imagemagick, zstd, jre8 }:
 
 let
   version = "5.3.0";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
     cat << EOF > $out/bin/${pname}
     #!${stdenv.shell}
-    ${jre}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX.exe
+    ${jre8}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX.exe
     EOF
     chmod +x $out/bin/${pname}
 

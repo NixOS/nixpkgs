@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, jre
+, jre8
 , makeWrapper
 , unzip
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     mv * $f
     for i in $f/*.sh; do
       n=$(basename ''${i%.sh})
-      makeWrapper $i $out/bin/$n --prefix PATH : ${lib.makeBinPath [ jre ] }
+      makeWrapper $i $out/bin/$n --prefix PATH : ${lib.makeBinPath [ jre8 ] }
     done
   '';
 

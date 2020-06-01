@@ -1,4 +1,4 @@
-{stdenv, composeAndroidPackages, composeXcodeWrapper, titaniumsdk, titanium, alloy, jdk, python, nodejs, which, file}:
+{stdenv, composeAndroidPackages, composeXcodeWrapper, titaniumsdk, titanium, alloy, jdk8, python, nodejs, which, file}:
 { name, src, preBuild ? "", target, tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
 , iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "12.1", iosBuildStore ? false
@@ -36,7 +36,7 @@ in
 stdenv.mkDerivation ({
   name = stdenv.lib.replaceChars [" "] [""] name;
 
-  buildInputs = [ nodejs titanium alloy python which file jdk ];
+  buildInputs = [ nodejs titanium alloy python which file jdk8 ];
 
   buildPhase = ''
     ${preBuild}

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, pcsclite, makeDesktopItem, makeWrapper }:
+{ stdenv, fetchurl, jre8, pcsclite, makeDesktopItem, makeWrapper }:
 
 let
   version = "1.2.4";
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
     cp ${srcs.logo} $out/share/pixmaps/oec_logo_bg-transparent.svg
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/${appName} \
+    makeWrapper ${jre8}/bin/java $out/bin/${appName} \
       --add-flags "-cp $out/share/java/cifs-${version}.jar" \
       --add-flags "-jar $out/share/java/richclient-${version}.jar" \
       --suffix LD_LIBRARY_PATH ':' ${stdenv.lib.getLib pcsclite}/lib

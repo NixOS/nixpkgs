@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "closure-compiler";
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   installPhase = ''
     mkdir -p $out/share/java $out/bin
     cp closure-compiler-v${version}.jar $out/share/java
-    makeWrapper ${jre}/bin/java $out/bin/closure-compiler \
+    makeWrapper ${jre8}/bin/java $out/bin/closure-compiler \
       --add-flags "-jar $out/share/java/closure-compiler-v${version}.jar"
   '';
 

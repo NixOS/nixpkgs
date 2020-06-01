@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gcc, flex, bison, texinfo, jdk, erlang, makeWrapper
+{ stdenv, fetchurl, gcc, flex, bison, texinfo, jdk8, erlang, makeWrapper
 , readline }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "084ml6kswgaqjgmib3gq7zjnqsimz3f35w13ff6z0dv4d9csmq4m";
   };
 
-  buildInputs = [ gcc flex bison texinfo jdk erlang makeWrapper
+  buildInputs = [ gcc flex bison texinfo jdk8 erlang makeWrapper
                   readline ];
 
   patchPhase = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     for e in $(ls $out/bin) ; do
       wrapProgram $out/bin/$e \
         --prefix PATH ":" "${gcc}/bin" \
-        --prefix PATH ":" "${jdk}/bin" \
+        --prefix PATH ":" "${jdk8}/bin" \
         --prefix PATH ":" "${erlang}/bin"
     done
   '';

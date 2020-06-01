@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, jdk
+, jdk8
 , ant, cunit, ncurses
 }:
 
@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "19cx3854rk7b2056z8pvxnf4simsg5js7czsy2bys7jl6vh2x02b";
   };
 
-  buildInputs = [ jdk ];
+  buildInputs = [ jdk8 ];
   nativeBuildInputs = [ ant cunit ncurses ];
 
   buildPhase = ''
     export ANT_HOME=${ant}
-    export JAVA_HOME=${jdk}/lib/openjdk/jre/
+    export JAVA_HOME=${jdk8}/lib/openjdk/jre8/
     export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
-    export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
+    export CLASSPATH=${jdk8}/lib/openjdk/lib/tools.jar
 
     ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
   '';

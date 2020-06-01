@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, jre, makeWrapper }:
+{ stdenv, fetchurl, jdk8, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "elasticmq-server";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # don't do anything?
-  unpackPhase = "${jdk}/bin/jar xf $src favicon.png";
+  unpackPhase = "${jdk8}/bin/jar xf $src favicon.png";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp $src $out/share/elasticmq-server/elasticmq-server.jar
 
     # TODO: how to add extraArgs? current workaround is to use JAVA_TOOL_OPTIONS environment to specify properties
-    makeWrapper ${jre}/bin/java $out/bin/elasticmq-server \
+    makeWrapper ${jre8}/bin/java $out/bin/elasticmq-server \
       --add-flags "-jar $out/share/elasticmq-server/elasticmq-server.jar"
   '';
 

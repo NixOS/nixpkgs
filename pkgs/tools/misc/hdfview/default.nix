@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    # exclude jre
+    # exclude jre8
     cp -r build/HDF_Group/HDFView/*/{lib,share} $out/
     mkdir $out/bin
     cp -r build/HDF_Group/HDFView/*/hdfview.sh $out/bin/hdfview

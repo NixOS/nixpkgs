@@ -1,4 +1,4 @@
-{ composeAndroidPackages, stdenv, lib, ant, jdk, gnumake, gawk }:
+{ composeAndroidPackages, stdenv, lib, ant, jdk8, gnumake, gawk }:
 
 { name
 , release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
@@ -18,7 +18,7 @@ in
 stdenv.mkDerivation ({
   name = lib.replaceChars [" "] [""] name; # Android APKs may contain white spaces in their names, but Nix store paths cannot
   ANDROID_HOME = "${androidsdk}/libexec/android-sdk";
-  buildInputs = [ jdk ant ];
+  buildInputs = [ jdk8 ant ];
   buildPhase = ''
     ${lib.optionalString release ''
       # Provide key singing attributes

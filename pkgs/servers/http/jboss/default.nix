@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk }:
+{ stdenv, fetchurl, unzip, jdk8 }:
 
 stdenv.mkDerivation {
   name = "jboss-as-7.1.1.Final";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   
   installPhase = ''
     mv $PWD $out
-    find $out/bin -name \*.sh -print0 | xargs -0 sed -i -e '/#!\/bin\/sh/aJAVA_HOME=${jdk}'
+    find $out/bin -name \*.sh -print0 | xargs -0 sed -i -e '/#!\/bin\/sh/aJAVA_HOME=${jdk8}'
   '';
   
   meta = with stdenv.lib; {

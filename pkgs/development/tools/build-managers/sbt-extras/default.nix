@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk }:
+{ stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk8 }:
 
 let
   rev = "f0669e9b6745b65fae3ec58c2d6a2bef133db456";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
 
-    substituteInPlace bin/sbt --replace 'declare java_cmd="java"' 'declare java_cmd="${jdk}/bin/java"'
+    substituteInPlace bin/sbt --replace 'declare java_cmd="java"' 'declare java_cmd="${jdk8}/bin/java"'
 
     install bin/sbt $out/bin
 

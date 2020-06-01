@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, jdk }:
+{ stdenv, fetchurl, jdk8 }:
 
 stdenv.mkDerivation rec {
   pname = "emem";
   version = "0.2.50";
 
-  inherit jdk;
+  inherit jdk8;
 
   src = fetchurl {
     url = "https://github.com/ebzzry/${pname}/releases/download/v${version}/${pname}.jar";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     cat > $out/bin/${pname} << EOF
 #! $SHELL
-$jdk/bin/java -jar $out/share/java/${pname}.jar "\$@"
+$jdk8/bin/java -jar $out/share/java/${pname}.jar "\$@"
 EOF
 
     chmod +x $out/bin/${pname}

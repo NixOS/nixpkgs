@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging, bsh }:
+{ stdenv, fetchurl, ant, jdk8, commonsBsf, commonsLogging, bsh }:
 
 let
   version = "5.2.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sha256 = "03wmbh90rl5lsc35d7jwcp9j5qyyzq1nccxf4fal8bmnx8n4si0x";
   };
 
-  buildInputs = [ ant jdk commonsBsf commonsLogging ];
+  buildInputs = [ ant jdk8 commonsBsf commonsLogging ];
 
   # This patch removes from the build process:
   #  - the automatic download of dependencies (see configurePhase);
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     patch package-files/linux/jedit << EOF
     5a6,8
     > # specify the correct JAVA_HOME
-    > JAVA_HOME=${jdk.jre.home}/jre
+    > JAVA_HOME=${jdk8.jre.home}/jre8
     > 
     EOF
     sed -i "s|/usr/share/jEdit/@jar.filename@|$out/share/jEdit/jedit.jar|g" package-files/linux/jedit

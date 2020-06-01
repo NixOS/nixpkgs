@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, runtimeShell }:
+{ stdenv, fetchurl, jre8, makeWrapper, bash, coreutils, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "zookeeper";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0karf13zks3ba2rdmma2lyabvmasc04cjmgxp227f0nj8677kvbw";
   };
 
-  buildInputs = [ makeWrapper jre ];
+  buildInputs = [ makeWrapper jre8 ];
 
   phases = ["unpackPhase" "installPhase"];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
         --replace /bin/echo ${coreutils}/bin/echo
     for i in $out/bin/{zkCli,zkCleanup,zkServer}.sh; do
       wrapProgram $i \
-        --set JAVA_HOME "${jre}" \
+        --set JAVA_HOME "${jre8}" \
         --prefix PATH : "${bash}/bin"
     done
     chmod -x $out/bin/zkEnv.sh
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     cat << EOF > $out/bin/zooInspector.sh
     #!${runtimeShell}
     cd $out/share/zooinspector
-    exec ${jre}/bin/java -cp $classpath org.apache.zookeeper.inspector.ZooInspector
+    exec ${jre8}/bin/java -cp $classpath org.apache.zookeeper.inspector.ZooInspector
     EOF
     chmod +x $out/bin/zooInspector.sh
   '';

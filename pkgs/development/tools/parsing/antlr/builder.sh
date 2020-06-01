@@ -17,7 +17,7 @@ done
 cat > $out/bin/antlr <<EOF
 #! $SHELL
 
-$jre/bin/java -cp $classpath -Xms200M -Xmx400M org.antlr.Tool \$*
+$jre8/bin/java -cp $classpath -Xms200M -Xmx400M org.antlr.Tool \$*
 EOF
 
 chmod u+x $out/bin/antlr

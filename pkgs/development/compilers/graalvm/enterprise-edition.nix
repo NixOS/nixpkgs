@@ -75,17 +75,17 @@ let
         installPhase = {
           "8" = ''
             # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
-            substituteInPlace $out/jre/lib/security/java.security \
+            substituteInPlace $out/jre8/lib/security/java.security \
               --replace file:/dev/random    file:/dev/./urandom \
               --replace NativePRNGBlocking  SHA1PRNG
 
             # provide libraries needed for static compilation
             for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do
-              ln -s $f $out/jre/lib/svm/clibraries/linux-amd64/$(basename $f)
+              ln -s $f $out/jre8/lib/svm/clibraries/linux-amd64/$(basename $f)
             done
 
             # allow using external truffle-api.jar and languages not included in the distrubution
-            rm $out/jre/lib/jvmci/parentClassLoader.classpath
+            rm $out/jre8/lib/jvmci/parentClassLoader.classpath
           '';
           "11" = ''
             # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
@@ -112,7 +112,7 @@ let
         '';
 
         postFixup = ''
-          rpath="${ {  "8" = "$out/jre/lib/amd64/jli:$out/jre/lib/amd64/server:$out/jre/lib/amd64";
+          rpath="${ {  "8" = "$out/jre8/lib/amd64/jli:$out/jre8/lib/amd64/server:$out/jre8/lib/amd64";
                       "11" = "$out/lib/jli:$out/lib/server:$out/lib";
                     }.${javaVersion}
                  }:${

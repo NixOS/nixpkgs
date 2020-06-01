@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, fetchgit, curl, jdk, maven, nodejs, mesos }:
+{ stdenv, lib, makeWrapper, fetchgit, curl, jdk8, maven, nodejs, mesos }:
 
 stdenv.mkDerivation rec {
   pname = "chronos";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hrln3ad2g2cq2xqmy5mq32cdxxb9vb6v6jp6kcq03f8km6v3g9c";
   };
 
-  buildInputs = [ makeWrapper curl jdk maven nodejs mesos ];
+  buildInputs = [ makeWrapper curl jdk8 maven nodejs mesos ];
 
   mavenRepo = import ./chronos-deps.nix { inherit stdenv curl; };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,libexec/chronos}
     cp target/chronos*.jar $out/libexec/chronos/${pname}-${version}.jar
 
-    makeWrapper ${jdk.jre}/bin/java $out/bin/chronos \
+    makeWrapper ${jdk8.jre}/bin/java $out/bin/chronos \
       --add-flags "-Xmx384m -Xms384m -cp $out/libexec/chronos/${pname}-${version}.jar com.airbnb.scheduler.Main" \
       --prefix "MESOS_NATIVE_LIBRARY" : "$MESOS_NATIVE_LIBRARY"
   '';

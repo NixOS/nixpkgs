@@ -1,11 +1,11 @@
-{ stdenv, jasmin, jre }:
+{ stdenv, jasmin, jre8 }:
 
 stdenv.mkDerivation {
   name = "jasmin-test-assemble-hello-world";
   meta.timeout = 60;
   buildCommand = ''
     ${jasmin}/bin/jasmin ${./HelloWorld.j}
-    ${jre}/bin/java HelloWorld | grep "Hello World"
+    ${jre8}/bin/java HelloWorld | grep "Hello World"
     touch $out
   '';
 }

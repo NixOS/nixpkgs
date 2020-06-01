@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre
+{ stdenv, fetchurl, jre8
 , fetchFromGitHub, cmake, ninja, pkgconfig, libuuid, darwin }:
 
 let
@@ -51,16 +51,16 @@ let
       cp "$src" "$out/share/java/antlr-${version}-complete.jar"
 
       echo "#! ${stdenv.shell}" >> "$out/bin/antlr"
-      echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.Tool \"\$@\"" >> "$out/bin/antlr"
+      echo "'${jre8}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.Tool \"\$@\"" >> "$out/bin/antlr"
 
       echo "#! ${stdenv.shell}" >> "$out/bin/grun"
-      echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' org.antlr.v4.gui.TestRig \"\$@\"" >> "$out/bin/grun"
+      echo "'${jre8}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' org.antlr.v4.gui.TestRig \"\$@\"" >> "$out/bin/grun"
 
       chmod a+x "$out/bin/antlr" "$out/bin/grun"
       ln -s "$out/bin/antlr"{,4}
     '';
 
-    inherit jre;
+    inherit jre8;
 
     passthru = {
       inherit runtime;

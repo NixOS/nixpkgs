@@ -164,8 +164,8 @@ in
 
       jdk = mkOption {
         type = types.package;
-        default = pkgs.jdk;
-        defaultText = "pkgs.jdk";
+        default = pkgs.jdk8;
+        defaultText = "pkgs.jdk8";
         description = "Which JDK to use.";
       };
 
@@ -409,7 +409,7 @@ in
         Environment=[
           "CATALINA_BASE=${cfg.baseDir}"
           "CATALINA_PID=/run/tomcat/tomcat.pid"
-          "JAVA_HOME='${cfg.jdk}'"
+          "JAVA_HOME='${cfg.jdk8}'"
           "JAVA_OPTS='${builtins.toString cfg.javaOpts}'"
           "CATALINA_OPTS='${builtins.toString cfg.catalinaOpts}'"
         ] ++ cfg.extraEnvironment;

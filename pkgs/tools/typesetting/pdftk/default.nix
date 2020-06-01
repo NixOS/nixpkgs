@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, gradle_5, jre, perl, writeText, runtimeShell }:
+{ stdenv, fetchFromGitLab, gradle_5, jre8, perl, writeText, runtimeShell }:
 
 let
   pname = "pdftk";
@@ -78,7 +78,7 @@ in stdenv.mkDerivation rec {
 
     cat  << EOF > $out/bin/pdftk
     #!${runtimeShell}
-    exec ${jre}/bin/java -jar "$out/share/pdftk/pdftk.jar" "\$@"
+    exec ${jre8}/bin/java -jar "$out/share/pdftk/pdftk.jar" "\$@"
     EOF
     chmod a+x "$out/bin/pdftk"
 

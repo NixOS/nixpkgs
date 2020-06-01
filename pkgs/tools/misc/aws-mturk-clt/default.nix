@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre8 }:
 
 stdenv.mkDerivation rec {
   name = "aws-mturk-clt-1.3.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
       cp -prvd bin $out/
 
       for i in $out/bin/*.sh; do
-        sed -i "$i" -e "s|^MTURK_CMD_HOME=.*|MTURK_CMD_HOME=$out\nexport JAVA_HOME=${jre}|"
+        sed -i "$i" -e "s|^MTURK_CMD_HOME=.*|MTURK_CMD_HOME=$out\nexport JAVA_HOME=${jre8}|"
       done
 
       mkdir -p $out/lib

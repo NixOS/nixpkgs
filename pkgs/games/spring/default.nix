@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, lzma, boost, libdevil, zlib, p7zip
 , openal, libvorbis, glew, freetype, xorg, SDL2, libGLU, libGL
 , asciidoc, libxslt, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
-, jdk ? null, python ? null, systemd, libunwind, which, minizip
+, jdk8 ? null, python ? null, systemd, libunwind, which, minizip
 , withAI ? true # support for AI Interfaces and Skirmish AIs
 }:
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL2
     xorg.libX11 xorg.libXcursor libGLU libGL glew asciidoc libxslt docbook_xsl curl makeWrapper
     docbook_xsl_ns systemd libunwind which minizip ]
-    ++ stdenv.lib.optional withAI jdk
+    ++ stdenv.lib.optional withAI jdk8
     ++ stdenv.lib.optional withAI python;
 
   enableParallelBuilding = true;

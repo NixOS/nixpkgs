@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
-, jdk, perl, python
+, jdk8, perl, python
 }:
 
 let
@@ -32,9 +32,9 @@ stdenv.mkDerivation {
     mkdir -pv $out/bin
     cp -a netbeans $out
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ jdk which ]} \
-      --prefix JAVA_HOME : ${jdk.home} \
-      --add-flags "--jdkhome ${jdk.home}"
+      --prefix PATH : ${stdenv.lib.makeBinPath [ jdk8 which ]} \
+      --prefix JAVA_HOME : ${jdk8.home} \
+      --add-flags "--jdkhome ${jdk8.home}"
 
     # Extract pngs from the Apple icon image and create
     # the missing ones from the 1024x1024 image.

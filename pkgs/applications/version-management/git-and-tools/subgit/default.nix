@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, jre }:
+{ stdenv, fetchurl, unzip, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   name = "subgit-3.3.9";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir $out;
     cp -r bin lib $out;
-    wrapProgram $out/bin/subgit --set JAVA_HOME ${jre};
+    wrapProgram $out/bin/subgit --set JAVA_HOME ${jre8};
   '';
 
   src = fetchurl {

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, jre }:
+{ stdenv, fetchzip, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   version = "2.6.5";
@@ -9,18 +9,18 @@ stdenv.mkDerivation rec {
     sha256 = "0ripayv1vf4f4ylxr7h9kad2xhy3y98ca8s4p38z7dn8l47zg0qw";
   };
 
-  buildInputs = [ makeWrapper jre ];
+  buildInputs = [ makeWrapper jre8 ];
 
   postPatch = "patchShebangs .";
 
   installPhase = ''
     mkdir -p $out
     cp -vr * $out
-    wrapProgram $out/bin/jbake --set JAVA_HOME "${jre}"
+    wrapProgram $out/bin/jbake --set JAVA_HOME "${jre8}"
   '';
 
   checkPhase = ''
-    export JAVA_HOME=${jre}
+    export JAVA_HOME=${jre8}
     bin/jbake | grep -q "${version}" || (echo "jbake did not return correct version"; exit 1)
   '';
   doCheck = true;

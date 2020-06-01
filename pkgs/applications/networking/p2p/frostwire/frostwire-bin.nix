@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 with stdenv.lib;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mv $(ls */*.jar) $out/share/java
 
     makeWrapper $out/share/java/frostwire $out/bin/frostwire \
-      --prefix PATH : ${jre}/bin/
+      --prefix PATH : ${jre8}/bin/
   '';
 
   meta = with stdenv.lib; {

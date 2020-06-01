@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, jdk, pkgconfig, gtk2
+{ stdenv, lib, fetchurl, unzip, jdk8, pkgconfig, gtk2
 , libXt, libXtst, libXi, libGLU, libGL, webkitgtk, libsoup, xorg
 , pango, gdk-pixbuf, glib
 }:
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   nativeBuildInputs = [ unzip pkgconfig ];
-  buildInputs = [ jdk gtk2 libXt libXtst libXi libGLU libGL webkitgtk libsoup ];
+  buildInputs = [ jdk8 gtk2 libXt libXtst libXi libGLU libGL webkitgtk libsoup ];
 
   NIX_LFLAGS = toString (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk-pixbuf glib ]) +
     " -lX11 -lpango-1.0 -lgdk_pixbuf-2.0 -lglib-2.0";
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
 
     cd src
     sed -i "s#^LFLAGS =#LFLAGS = $NIX_LFLAGS #g"  *.mak
-    export JAVA_HOME=${jdk}
+    export JAVA_HOME=${jdk8}
 
     sh ./build.sh
 

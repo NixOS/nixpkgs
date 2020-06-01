@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh
-, unzip, gnutar, jdk, python, wrapPython
+, unzip, gnutar, jdk8, python, wrapPython
 , setuptools, boto, pythonProtobuf, apr, subversion, gzip
 , leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
 , ethtool, coreutils, which, iptables, maven
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     libnl
   ] ++ lib.optionals withJava [
-    jdk maven
+    jdk8 maven
   ];
 
   propagatedBuildInputs = [

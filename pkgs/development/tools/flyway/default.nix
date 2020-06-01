@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre_headless, makeWrapper }:
+{ stdenv, fetchurl, jre8_headless, makeWrapper }:
   let
     version = "6.4.2";
   in
@@ -16,7 +16,7 @@
         mkdir -p $out/bin $out/share/flyway
         cp -r sql jars drivers conf $out/share/flyway
         install -Dt $out/share/flyway/lib lib/community/*.jar lib/*.jar
-        makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
+        makeWrapper "${jre8_headless}/bin/java" $out/bin/flyway \
           --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
           --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
           --add-flags "org.flywaydb.commandline.Main" \

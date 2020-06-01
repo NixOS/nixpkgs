@@ -1,10 +1,10 @@
 { stdenv
 , fetchurl
 , unzip
-, jdk
+, jdk8
 , ant
 , makeWrapper
-, jre
+, jre8
 , callPackage
 }:
 
@@ -17,14 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "17a41vr96glcdrdbk88805wwvv1r6w8wg7if23yhd0n6rrl0r8ga";
   };
 
-  nativeBuildInputs = [ unzip jdk ant makeWrapper ];
+  nativeBuildInputs = [ unzip jdk8 ant makeWrapper ];
 
   buildPhase = "ant all";
   installPhase =
   ''
     install -Dm644 jasmin.jar $out/share/java/jasmin.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/jasmin \
+    makeWrapper ${jre8}/bin/java $out/bin/jasmin \
       --add-flags "-jar $out/share/java/jasmin.jar"
   '';
 

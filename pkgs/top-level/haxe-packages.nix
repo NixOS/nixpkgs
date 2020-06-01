@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fetchFromGitHub, haxe, neko, jdk, mono }:
+{ stdenv, fetchzip, fetchFromGitHub, haxe, neko, jdk8, mono }:
 
 let
   self = haxePackages;
@@ -78,7 +78,7 @@ let
       version = "3.2.0";
       sha256 = "1vgd7qvsdxlscl3wmrrfi5ipldmr4xlsiwnj46jz7n6izff5261z";
       meta.description = "Support library for the Java backend of the Haxe compiler";
-      propagatedBuildInputs = [ jdk ];
+      propagatedBuildInputs = [ jdk8 ];
     };
 
     hxcs = buildHaxeLib {

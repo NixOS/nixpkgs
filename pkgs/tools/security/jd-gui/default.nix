@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, jdk, gradle, makeDesktopItem, perl, writeText, runtimeShell }:
+{ stdenv, fetchFromGitHub, jre8, jdk8, gradle, makeDesktopItem, perl, writeText, runtimeShell }:
 
 let
   pname = "jd-gui";
@@ -15,7 +15,7 @@ let
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk perl gradle ];
+    nativeBuildInputs = [ jdk8 perl gradle ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
   inherit pname version src;
   name = "${pname}-${version}";
 
-  nativeBuildInputs = [ jdk gradle ];
+  nativeBuildInputs = [ jdk8 gradle ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
@@ -87,8 +87,8 @@ in stdenv.mkDerivation rec {
 
     cat > $out/bin/jd-gui <<EOF
     #!${runtimeShell}
-    export JAVA_HOME=${jre}
-    exec ${jre}/bin/java -jar ${jar} "\$@"
+    export JAVA_HOME=${jre8}
+    exec ${jre8}/bin/java -jar ${jar} "\$@"
     EOF
     chmod +x $out/bin/jd-gui
 

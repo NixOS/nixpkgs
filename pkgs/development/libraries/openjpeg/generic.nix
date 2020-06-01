@@ -9,14 +9,14 @@
 , jp3dSupport ? true # # JP3D comp
 , thirdPartySupport ? false # Third party libraries - OFF: only build when found, ON: always build
 , testsSupport ? true
-, jdk ? null
+, jdk8 ? null
 # Inherit generics
 , branch, version, revision, sha256, patches ? [], extraFlags ? [], ...
 }:
 
 assert jpipServerSupport -> jpipLibSupport && curl != null && fcgi != null;
 #assert opjViewerSupport -> (wxGTK != null);
-assert (openjpegJarSupport || jpipLibSupport) -> jdk != null;
+assert (openjpegJarSupport || jpipLibSupport) -> jdk8 != null;
 
 let
   inherit (stdenv.lib) optional optionals;
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   buildInputs = [ ]
     ++ optionals jpipServerSupport [ curl fcgi ]
     #++ optional opjViewerSupport wxGTK
-    ++ optional (openjpegJarSupport || jpipLibSupport) jdk;
+    ++ optional (openjpegJarSupport || jpipLibSupport) jdk8;
 
   propagatedBuildInputs = [ libpng libtiff lcms2 ];
 

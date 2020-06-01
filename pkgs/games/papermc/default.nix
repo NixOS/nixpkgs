@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre8 }:
 let
   mcVersion = "1.15.2";
   buildNum = "161";
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
     cp ${jar} $out/papermc.jar
     cat > $out/bin/minecraft-server << EOF
     #!/bin/sh
-    exec ${jre}/bin/java \$@ -jar $out/papermc.jar nogui
+    exec ${jre8}/bin/java \$@ -jar $out/papermc.jar nogui
     EOF
     chmod +x $out/bin/minecraft-server
   '';

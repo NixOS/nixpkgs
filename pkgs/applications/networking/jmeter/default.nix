@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, jre, makeWrapper, coreutils }:
+{ fetchurl, stdenv, jre8, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "jmeter";
@@ -19,17 +19,17 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/bin/create-rmi-keystore.sh --replace \
       "keytool -genkey" \
-      "${jre}/lib/openjdk/jre/bin/keytool -genkey"
+      "${jre8}/lib/openjdk/jre8/bin/keytool -genkey"
 
     # Prefix some scripts with jmeter to avoid clobbering the namespace
     for i in heapdump.sh mirror-server mirror-server.sh shutdown.sh stoptest.sh create-rmi-keystore.sh; do
       mv $out/bin/$i $out/bin/jmeter-$i
       wrapProgram $out/bin/jmeter-$i \
-        --prefix PATH : "${jre}/bin"
+        --prefix PATH : "${jre8}/bin"
     done
 
-    wrapProgram $out/bin/jmeter --set JAVA_HOME "${jre}"
-    wrapProgram $out/bin/jmeter.sh --set JAVA_HOME "${jre}"
+    wrapProgram $out/bin/jmeter --set JAVA_HOME "${jre8}"
+    wrapProgram $out/bin/jmeter.sh --set JAVA_HOME "${jre8}"
   '';
 
   doInstallCheck = true;

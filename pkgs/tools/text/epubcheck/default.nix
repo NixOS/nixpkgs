@@ -1,5 +1,5 @@
 { stdenv, fetchzip
-, jre, makeWrapper }:
+, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "epubcheck";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     done
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/epubcheck \
+    makeWrapper ${jre8}/bin/java $out/bin/epubcheck \
       --add-flags "-classpath $classpath com.adobe.epubcheck.tool.Checker"
   '';
 

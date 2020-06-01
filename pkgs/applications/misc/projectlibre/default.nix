@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ant, jdk, makeWrapper, jre, coreutils, which }:
+{ stdenv, fetchgit, ant, jdk8, makeWrapper, jre8, coreutils, which }:
 
 stdenv.mkDerivation rec {
   pname = "projectlibre";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vy5vgbp45ai957gaby2dj1hvmbxfdlfnwcanwqm9f8q16qipdbq";
   };
 
-  buildInputs = [ ant jdk makeWrapper ];
+  buildInputs = [ ant jdk8 makeWrapper ];
   buildPhase = ''
     export ANT_OPTS=-Dbuild.sysclasspath=ignore
     ${ant}/bin/ant -f openproj_build/build.xml
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace "\"/usr/share/projectlibre\"" "\"$out/share/projectlibre\""
     chmod +x $out/bin/projectlibre
     wrapProgram $out/bin/projectlibre \
-     --prefix PATH : "${jre}/bin:${coreutils}/bin:${which}/bin"
+     --prefix PATH : "${jre8}/bin:${coreutils}/bin:${which}/bin"
 
     cp -R openproj_build/dist/* $out/share/projectlibre
     cp -R openproj_build/license $out/share/doc/projectlibre

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, maven, javaPackages }:
+{ stdenv, fetchFromGitHub, jdk8, maven, javaPackages }:
 
 let
   version = "0.9.2";
@@ -14,7 +14,7 @@ let
   deps = stdenv.mkDerivation {
     name = "gephi-${version}-deps";
     inherit src;
-    buildInputs = [ jdk maven ];
+    buildInputs = [ jdk8 maven ];
     buildPhase = ''
       while mvn package -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
         echo "timeout, restart maven to continue downloading"
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   inherit src;
 
-  buildInputs = [ jdk maven ];
+  buildInputs = [ jdk8 maven ];
 
   buildPhase = ''
     # 'maven.repo.local' must be writable so copy it out of nix store
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     cp ${javaPackages.jogl_2_3_2}/share/java/jogl*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-jogl/
     cp ${javaPackages.jogl_2_3_2}/share/java/glue*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-gluegen/
 
-    echo "jdkhome=${jdk}" >> $out/etc/gephi.conf
+    echo "jdkhome=${jdk8}" >> $out/etc/gephi.conf
   '';
 
   meta = with stdenv.lib; {

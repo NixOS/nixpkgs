@@ -1,4 +1,4 @@
-{ stdenvNoCC, buildEnv, writeShellScriptBin, fetchurl, jre }:
+{ stdenvNoCC, buildEnv, writeShellScriptBin, fetchurl, jre8 }:
 
 let
   name = "legends-browser-${version}";
@@ -18,7 +18,7 @@ let
       echo 'Creating initial configuration for legends-browser'
       echo "last=$(cd ..; pwd)" > legendsbrowser.properties
     fi
-    ${jre}/bin/java -jar ${jar}
+    ${jre8}/bin/java -jar ${jar}
   '';
 in
 

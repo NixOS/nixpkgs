@@ -1,4 +1,4 @@
-{ stdenv, requireFile, p7zip, jre, libusb1, platform-tools, gtk2, glib, libXtst }:
+{ stdenv, requireFile, p7zip, jre8, libusb1, platform-tools, gtk2, glib, libXtst }:
 
 # TODO:
 #
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mfjdjj7clz2dhkg7lzy1m8hk8ngla7zgcryf51aki1gnpbb2zc1";
   };
 
-  buildInputs = [ p7zip jre ];
+  buildInputs = [ p7zip jre8 ];
 
   unpackPhase = ''
     7z e ${src}
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     sed -i \
       -e 's|$(uname -m)|i686|' \
-      -e 's|export JAVA_HOME=.*|export JAVA_HOME=${jre}|' \
+      -e 's|export JAVA_HOME=.*|export JAVA_HOME=${jre8}|' \
       -e 's|export LD_LIBRARY_PATH=.*|export LD_LIBRARY_PATH=${stdenv.lib.makeLibraryPath [ libXtst glib gtk2 ]}:./x10flasher_lib/linux/lib32|' \
       FlashTool FlashToolConsole
   '';

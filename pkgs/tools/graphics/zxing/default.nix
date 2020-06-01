@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre8 }:
 stdenv.mkDerivation rec {
   pname = "zxing";
   version = "3.1.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     url = "http://repo1.maven.org/maven2/com/google/zxing/javase/${version}/javase-${version}.jar";
     sha256 = "0fzxvvf5dqyrs5m9rqw4ffm9h1s27bi7q3jb1dam34s80q2rp2zq";
   };
-  inherit jre;
+  inherit jre8;
   dontUnpack = true;
   installPhase = ''
     mkdir -p "$out/lib/java" "$out/bin"

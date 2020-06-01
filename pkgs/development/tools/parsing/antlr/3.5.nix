@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchFromGitHub, jre}:
+{stdenv, fetchurl, fetchFromGitHub, jre8}:
 
 stdenv.mkDerivation rec {
   pname = "antlr";
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
     cp runtime/Cpp/include/* $out/include/
 
     echo "#! ${stdenv.shell}" >> "$out/bin/antlr"
-    echo "'${jre}/bin/java' -cp '$out/lib/antlr/antlr-${version}-complete.jar' -Xms200M -Xmx400M org.antlr.Tool \"\$@\"" >> "$out/bin/antlr"
+    echo "'${jre8}/bin/java' -cp '$out/lib/antlr/antlr-${version}-complete.jar' -Xms200M -Xmx400M org.antlr.Tool \"\$@\"" >> "$out/bin/antlr"
 
     chmod a+x "$out/bin/antlr"
     ln -s "$out/bin/antlr"{,3}
   '';
 
-  inherit jre;
+  inherit jre8;
 
   meta = with stdenv.lib; {
     description = "Powerful parser generator";

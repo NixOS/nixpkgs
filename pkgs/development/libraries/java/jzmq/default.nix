@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zeromq3, jdk }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zeromq3, jdk8 }:
 
 stdenv.mkDerivation rec {
   pname = "jzmq";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ zeromq3 jdk ];
+  buildInputs = [ zeromq3 jdk8 ];
 
   preConfigure = ''
     ${if stdenv.hostPlatform.system == "x86_64-darwin" then

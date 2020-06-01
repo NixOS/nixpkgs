@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, jre, glib, libXtst, gtk2, makeWrapper, unzip }:
+{ fetchurl, stdenv, jre8, glib, libXtst, gtk2, makeWrapper, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "davmail";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/davmail
     cp -vR ./* $out/share/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
-      --prefix PATH : ${jre}/bin \
+      --prefix PATH : ${jre8}/bin \
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
   '';
 

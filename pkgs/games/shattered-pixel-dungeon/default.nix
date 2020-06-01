@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , gradle_5
 , perl
-, jre
+, jre8
 , xorg
 , openal
 }:
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm644 desktop/build/libs/desktop-${version}.jar $out/share/shattered-pixel-dungeon.jar
     mkdir $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/shattered-pixel-dungeon \
+    makeWrapper ${jre8}/bin/java $out/bin/shattered-pixel-dungeon \
       --prefix LD_LIBRARY_PATH : ${xorg.libXxf86vm}/lib:${openal}/lib \
       --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
   '';

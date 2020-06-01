@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jdk, swt}:
+{stdenv, fetchurl, jdk8, swt}:
 
 stdenv.mkDerivation {
   name = "azureus-2.3.0.6";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1hwrh3n0b0jbpsdk15zrs7pw175418phhmg6pn4xi1bvilxq1wrd";
   };
 #  buildInputs = [unzip];
-  inherit jdk swt;
+  inherit jdk8 swt;
 
   meta = {
     platforms = stdenv.lib.platforms.linux;

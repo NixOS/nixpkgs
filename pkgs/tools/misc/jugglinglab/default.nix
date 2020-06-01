@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, makeWrapper, ant, jdk }:
+{ stdenv, fetchFromGitHub, jre8, makeWrapper, ant, jdk8 }:
 stdenv.mkDerivation rec {
   version = "1.2.1";
   name = "jugglinglab";
@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     rev = "1908012682d8c39a9b92248a20f285455104c510"; # v1.2.1 does not have a tag on Github
     sha256 = "0dvcyjwynvapqbjchrln59vdskrm3w6kh0knxcn4bx61vcz3171z";
   };
-  buildInputs = [ jre ];
-  nativeBuildInputs = [ ant jdk makeWrapper ];
+  buildInputs = [ jre8 ];
+  nativeBuildInputs = [ ant jdk8 makeWrapper ];
   buildPhase = "ant";
 
   installPhase = ''
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib"
     cp bin/JugglingLab.jar $out/lib/
 
-    makeWrapper ${jre}/bin/java $out/bin/jugglinglab \
+    makeWrapper ${jre8}/bin/java $out/bin/jugglinglab \
       --add-flags "-jar $out/lib/JugglingLab.jar"
   '';
 

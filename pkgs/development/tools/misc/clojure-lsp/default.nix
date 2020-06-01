@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 $src $out/bin/clojure-lsp
-    sed -i -e '1 s!java!${jre}/bin/java!' $out/bin/clojure-lsp
+    sed -i -e '1 s!java!${jre8}/bin/java!' $out/bin/clojure-lsp
   '';
 
   # verify shebang patch
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/snoe/clojure-lsp";
     license = licenses.mit;
     maintainers = [ maintainers.ericdallo ];
-    platforms = jre.meta.platforms;
+    platforms = jre8.meta.platforms;
   };
 
 }

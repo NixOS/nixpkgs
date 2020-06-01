@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jdk, selenium-server-standalone }:
+{ stdenv, fetchurl, makeWrapper, jdk8, selenium-server-standalone }:
 
 with stdenv.lib;
 let
@@ -23,16 +23,16 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  buildInputs = [ jdk makeWrapper ];
+  buildInputs = [ jdk8 makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/share/lib/selendroid
     cp ${srcs.jar} $out/share/lib/selendroid/${name}.jar
     cp ${srcs.gridPlugin} $out/share/lib/selendroid/${pluginName}.jar
 
-    makeWrapper ${jdk}/bin/java $out/bin/selendroid \
+    makeWrapper ${jdk8}/bin/java $out/bin/selendroid \
       --add-flags "-jar $out/share/lib/selendroid/${name}.jar"
-    makeWrapper ${jdk}/bin/java $out/bin/selendroid-selenium \
+    makeWrapper ${jdk8}/bin/java $out/bin/selendroid-selenium \
       --add-flags "-Dfile.encoding=UTF-8" \
       --add-flags "-cp ${selenium-server-standalone}/share/lib/${selenium-server-standalone.name}/${selenium-server-standalone.name}.jar:$out/share/lib/selendroid/${pluginName}.jar" \
       --add-flags "org.openqa.grid.selenium.GridLauncherV3" \

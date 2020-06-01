@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, ant } :
+{ stdenv, fetchurl, jdk8, ant } :
 
 stdenv.mkDerivation rec {
   pname = "java-cup";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ jdk ant ];
+  nativeBuildInputs = [ jdk8 ant ];
 
   patches = [ ./javacup-0.11b_beta20160615-build-xml-git.patch ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cp dist/java-cup-11b-runtime.jar $out/share/java/
     cat > $out/bin/javacup <<EOF
     #! $shell
-    exec ${jdk.jre}/bin/java -jar $out/share/java-cup/java-cup-11b.jar "\$@"
+    exec ${jdk8.jre}/bin/java -jar $out/share/java-cup/java-cup-11b.jar "\$@"
     EOF
     chmod a+x $out/bin/javacup
   '';

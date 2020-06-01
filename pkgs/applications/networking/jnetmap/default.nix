@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "jnetmap";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nxsfa600jhazwbabxmr9j37mhwysp0fyrvczhv3f1smiy8rjanl";
   };
 
-  buildInputs = [ jre makeWrapper ];
+  buildInputs = [ jre8 makeWrapper ];
 
   dontUnpack = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib"
 
     cp "${src}" "$out/lib/jnetmap.jar"
-    makeWrapper "${jre}/bin/java" "$out/bin/jnetmap" \
+    makeWrapper "${jre8}/bin/java" "$out/bin/jnetmap" \
         --add-flags "-jar \"$out/lib/jnetmap.jar\""
   '';
 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, jre}:
+{stdenv, fetchurl, makeWrapper, jre8}:
 stdenv.mkDerivation rec {
   version = "1.28.1";
   pname = "zipkin-server";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/java
     cp ${src} $out/share/java/zipkin-server-${version}-exec.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/zipkin-server \
+    makeWrapper ${jre8}/bin/java $out/bin/zipkin-server \
       --add-flags "-cp $out/share/java/zipkin-server-${version}-exec.jar org.springframework.boot.loader.JarLauncher"
   '';
   meta = with stdenv.lib; {

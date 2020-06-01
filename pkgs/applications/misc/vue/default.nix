@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ stdenv, fetchurl, jre8, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "vue";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/{share/vue,bin}
     cp ${src} "$out/share/vue/vue.jar"
     echo '#!${runtimeShell}' >> "$out/bin/vue"
-    echo '${jre}/bin/java -jar "'"$out/share/vue/vue.jar"'" "$@"' >> "$out/bin/vue"
+    echo '${jre8}/bin/java -jar "'"$out/share/vue/vue.jar"'" "$@"' >> "$out/bin/vue"
     chmod a+x "$out/bin/vue"
   '';
 

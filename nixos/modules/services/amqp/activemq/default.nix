@@ -10,7 +10,7 @@ let
   activemqBroker = stdenv.mkDerivation {
     name = "activemq-broker";
     phases = [ "installPhase" ];
-    buildInputs = [ jdk ];
+    buildInputs = [ jdk8 ];
     installPhase = ''
       mkdir -p $out/lib
       source ${activemq}/lib/classpath.env

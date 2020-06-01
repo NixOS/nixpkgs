@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ stdenv, fetchurl, jre8, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "smc-6.6.3";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
     cat > "$out/bin/smc" << EOF
     #!${runtimeShell}
-    ${jre}/bin/java -jar "$out/share/java/Smc.jar" "\$@"
+    ${jre8}/bin/java -jar "$out/share/java/Smc.jar" "\$@"
     EOF
     chmod a+x "$out/bin/smc"
   '';

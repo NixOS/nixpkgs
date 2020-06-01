@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
     # ums >= 9.0.0 ships its own JRE in the package. if we remove it, the `UMS.sh`
     # script will correctly fall back to the JRE specified by JAVA_HOME
-    rm -rf $out/jre
+    rm -rf $out/jre8
 
     makeWrapper "$out/UMS.sh" "$out/bin/ums" \
       --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [ libzen libmediainfo] }" \

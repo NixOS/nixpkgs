@@ -82,7 +82,7 @@ self: super: builtins.intersectAttrs super {
   # jni needs help finding libjvm.so because it's in a weird location.
   jni = overrideCabal super.jni (drv: {
     preConfigure = ''
-      local libdir=( "${pkgs.jdk}/lib/openjdk/jre/lib/"*"/server" )
+      local libdir=( "${pkgs.jdk8}/lib/openjdk/jre8/lib/"*"/server" )
       configureFlags+=" --extra-lib-dir=''${libdir[0]}"
     '';
   });

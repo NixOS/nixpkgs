@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "seyren";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 
   phases = ["installPhase"];
 
-  buildInputs = [ makeWrapper jre ];
+  buildInputs = [ makeWrapper jre8 ];
 
   installPhase = ''
     mkdir -p "$out"/bin
-    makeWrapper "${jre}/bin/java" "$out"/bin/seyren --add-flags "-jar $src"
+    makeWrapper "${jre8}/bin/java" "$out"/bin/seyren --add-flags "-jar $src"
   '';
 
   meta = with stdenv.lib; {

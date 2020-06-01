@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre, makeWrapper}:
+{stdenv, fetchurl, jre8, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "varscan";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cfhshinyqgwc6i7zf8lhbfybyly2x5anrz824zyvdhzz5i69zrl";
   };
 
-  buildInputs = [ jre makeWrapper ];
+  buildInputs = [ jre8 makeWrapper ];
 
   phases = [ "installPhase" ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec/varscan
     cp $src $out/libexec/varscan/varscan.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/varscan --add-flags "-jar $out/libexec/varscan/varscan.jar"
+    makeWrapper ${jre8}/bin/java $out/bin/varscan --add-flags "-jar $out/libexec/varscan/varscan.jar"
   '';
 
   meta = with stdenv.lib; {

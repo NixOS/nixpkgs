@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, unzip }:
+{ stdenv, fetchurl, makeWrapper, jre8, unzip }:
 
 let
   version = "1.3.72";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     sha256 = "0v6c4vjiflwbjjc1lmiyzrilxwbqcz5ll6ls40zhw70zk23xpl6c";
   };
 
-  propagatedBuildInputs = [ jre ] ;
+  propagatedBuildInputs = [ jre8 ] ;
   buildInputs = [ makeWrapper unzip ] ;
 
   installPhase = ''
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
     mv * $out
 
     for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p --prefix PATH ":" ${jre}/bin ;
+      wrapProgram $out/bin/$p --prefix PATH ":" ${jre8}/bin ;
     done
 
     if [ -f $out/LICENSE ]; then

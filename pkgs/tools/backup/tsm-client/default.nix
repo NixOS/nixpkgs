@@ -144,7 +144,7 @@ buildEnv {
   #   to the so-called "installation directories"
   # * Add symlinks to the "installation directories"
   #   that point to the `dsm.sys` configuration files
-  # * Drop the Java GUI executable unless `jdk` is present
+  # * Drop the Java GUI executable unless `jdk8` is present
   # * Create wrappers for the command-line interface to
   #   prepare `PATH` and `DSM_DIR` environment variables
   postBuild = ''

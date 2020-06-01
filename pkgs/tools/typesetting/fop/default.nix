@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ant, jdk, runtimeShell }:
+{ fetchurl, stdenv, ant, jdk8, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "fop";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "165rx13q47l6qc29ppr7sg1z26vw830s3rkklj5ap7wgvy0ivbz5";
   };
 
-  buildInputs = [ ant jdk ];
+  buildInputs = [ ant jdk8 ];
 
   buildPhase = "ant";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cat > "$out/bin/fop" <<EOF
     #!${runtimeShell}
     java_exec_args="-Djava.awt.headless=true"
-    exec ${jdk.jre}/bin/java \$java_exec_args -classpath "$out/lib/*" org.apache.fop.cli.Main "\$@"
+    exec ${jdk8.jre}/bin/java \$java_exec_args -classpath "$out/lib/*" org.apache.fop.cli.Main "\$@"
     EOF
     chmod a+x $out/bin/fop
   '';

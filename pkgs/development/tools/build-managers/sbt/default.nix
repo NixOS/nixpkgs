@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "sbt";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    echo -java-home ${jre.home} >>conf/sbtopts
+    echo -java-home ${jre8.home} >>conf/sbtopts
   '';
 
   installPhase = ''

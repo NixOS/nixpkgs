@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jdk, makeWrapper, installShellFiles, coreutils }:
+{ stdenv, fetchzip, jdk8, makeWrapper, installShellFiles, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "spring-boot-cli";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     rm -r shell-completion
     cp -r . $out
     wrapProgram $out/bin/spring \
-      --set JAVA_HOME ${jdk} \
-      --set PATH /bin:${coreutils}/bin:${jdk}/bin
+      --set JAVA_HOME ${jdk8} \
+      --set PATH /bin:${coreutils}/bin:${jdk8}/bin
     runHook postInstall
   '';
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, coursier, jdk, jre, makeWrapper }:
+{ stdenv, lib, coursier, jdk8, jre8, makeWrapper }:
 
 let
   baseName = "metals";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk deps ];
+  buildInputs = [ jdk8 deps ];
 
   phases = [ "installPhase" ];
 
@@ -33,25 +33,25 @@ stdenv.mkDerivation rec {
 
     # This variant is not targeted at any particular client, clients are
     # expected to declare their supported features in initialization options.
-    makeWrapper ${jre}/bin/java $out/bin/metals \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+    makeWrapper ${jre8}/bin/java $out/bin/metals \
+      --prefix PATH : ${lib.makeBinPath [ jdk8 ]} \
       --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
 
     # Further variants targeted at clients with featuresets pre-set.
-    makeWrapper ${jre}/bin/java $out/bin/metals-emacs \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+    makeWrapper ${jre8}/bin/java $out/bin/metals-emacs \
+      --prefix PATH : ${lib.makeBinPath [ jdk8 ]} \
       --add-flags "${extraJavaOpts} -Dmetals.client=emacs -cp $CLASSPATH scala.meta.metals.Main"
 
-    makeWrapper ${jre}/bin/java $out/bin/metals-vim \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+    makeWrapper ${jre8}/bin/java $out/bin/metals-vim \
+      --prefix PATH : ${lib.makeBinPath [ jdk8 ]} \
       --add-flags "${extraJavaOpts} -Dmetals.client=coc.nvim -cp $CLASSPATH scala.meta.metals.Main"
 
-    makeWrapper ${jre}/bin/java $out/bin/metals-vim-lsc \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+    makeWrapper ${jre8}/bin/java $out/bin/metals-vim-lsc \
+      --prefix PATH : ${lib.makeBinPath [ jdk8 ]} \
       --add-flags "${extraJavaOpts} -Dmetals.client=vim-lsc -cp $CLASSPATH scala.meta.metals.Main"
 
-    makeWrapper ${jre}/bin/java $out/bin/metals-sublime \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+    makeWrapper ${jre8}/bin/java $out/bin/metals-sublime \
+      --prefix PATH : ${lib.makeBinPath [ jdk8 ]} \
       --add-flags "${extraJavaOpts} -Dmetals.client=sublime -cp $CLASSPATH scala.meta.metals.Main"
   '';
 

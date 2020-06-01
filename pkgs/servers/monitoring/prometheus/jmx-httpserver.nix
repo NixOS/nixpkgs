@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 let
   version = "0.10";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     sha256 = "1pvqphrirq48xhmx0aa6vkxz6qy1cx2q6jxsh7rin432iap7j62f";
   };
 
-  buildInputs = [ jre makeWrapper ];
+  buildInputs = [ jre8 makeWrapper ];
 
   phases = "installPhase";
 
@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/libexec
     mkdir -p $out/bin
     cp $src $out/libexec/$jarName
-    makeWrapper "${jre}/bin/java" $out/bin/jmx_prometheus_httpserver --add-flags "-jar $out/libexec/$jarName"
+    makeWrapper "${jre8}/bin/java" $out/bin/jmx_prometheus_httpserver --add-flags "-jar $out/libexec/$jarName"
   '';
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, git, gradle, perl, makeWrapper }:
+{ stdenv, fetchFromGitHub, jre8, git, gradle, perl, makeWrapper }:
 
 let
   name = "mxisd-${version}";
@@ -42,7 +42,7 @@ in
 stdenv.mkDerivation {
   inherit name src version;
   nativeBuildInputs = [ gradle perl makeWrapper ];
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   patches = [ ./0001-gradle.patch ];
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D build/libs/source.jar $out/lib/mxisd.jar
-    makeWrapper ${jre}/bin/java $out/bin/mxisd --add-flags "-jar $out/lib/mxisd.jar"
+    makeWrapper ${jre8}/bin/java $out/bin/mxisd --add-flags "-jar $out/lib/mxisd.jar"
   '';
 
   meta = with stdenv.lib; {

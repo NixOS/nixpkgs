@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, build-tools }:
+{ stdenv, fetchurl, makeWrapper, jre8, build-tools }:
 
 stdenv.mkDerivation rec {
   pname = "apktool";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D ${src} "$out/libexec/apktool/apktool.jar"
     mkdir -p "$out/bin"
-    makeWrapper "${jre}/bin/java" "$out/bin/apktool" \
+    makeWrapper "${jre8}/bin/java" "$out/bin/apktool" \
         --add-flags "-jar $out/libexec/apktool/apktool.jar" \
         --prefix PATH : "${builtins.head build-tools}/libexec/android-sdk/build-tools/28.0.3"
   '';

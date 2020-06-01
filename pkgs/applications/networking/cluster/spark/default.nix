@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, jre, pythonPackages, coreutils, hadoop
+{ stdenv, fetchzip, makeWrapper, jre8, pythonPackages, coreutils, hadoop
 , RSupport? true, R
 , mesosSupport ? true, mesos
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a9w5k0207fysgpxx6db3a00fs5hdc2ncx99x4ccy2s0v5ndc66g"; 
   };
 
-  buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]
+  buildInputs = [ makeWrapper jre8 pythonPackages.python pythonPackages.numpy ]
     ++ optional RSupport R
     ++ optional mesosSupport mesos;
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
        $out/lib/${untarDir}/conf/log4j.properties
 
     cat > $out/lib/${untarDir}/conf/spark-env.sh <<- EOF
-    export JAVA_HOME="${jre}"
+    export JAVA_HOME="${jre8}"
     export SPARK_HOME="$out/lib/${untarDir}"
     export SPARK_DIST_CLASSPATH=$(${hadoop}/bin/hadoop classpath)
     export PYSPARK_PYTHON="${pythonPackages.python}/bin/${pythonPackages.python.executable}"

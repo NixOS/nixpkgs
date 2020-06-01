@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre}:
+{stdenv, fetchurl, jre8}:
 
 stdenv.mkDerivation rec {
   name = "aspectj-1.5.2";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1b3mx248dc1xka1vgsl0jj4sm0nfjsqdcj9r9036mvixj1zj3nmh";
   };
 
-  inherit jre;
-  buildInputs = [jre];
+  inherit jre8;
+  buildInputs = [jre8];
 
   meta = {
     homepage = "http://www.eclipse.org/aspectj/";

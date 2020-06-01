@@ -43,7 +43,7 @@ let
             "enableVLC"
             "enableDjvu"
             "enableMPlayer"
-            "jre"
+            "jre8"
             "icedtea"
             "enableGoogleTalkPlugin"
             "enableFriBIDPlugin"

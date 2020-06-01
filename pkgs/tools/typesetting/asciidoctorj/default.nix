@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jdk, makeWrapper }:
+{ stdenv, fetchzip, jdk8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "asciidoctorj";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     rm bin/asciidoctorj.bat
     cp -r . $out
     wrapProgram $out/bin/asciidoctorj \
-      --prefix JAVA_HOME : ${jdk}
+      --prefix JAVA_HOME : ${jdk8}
   '';
 
   meta = with stdenv.lib; {

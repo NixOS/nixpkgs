@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, jre, gcc, valgrind}:
+{stdenv, fetchurl, makeWrapper, jre8, gcc, valgrind}:
 # gcc and valgrind are not strict dependencies, they could be made
 # optional. They are here because plm can only help you learn C if you
 # have them installed.
@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}.jar";
   };
 
-  buildInputs = [ makeWrapper jre gcc valgrind ];
+  buildInputs = [ makeWrapper jre8 gcc valgrind ];
 
   phases = [ "installPhase" ];
 
   installPhase = ''
     mkdir -p "$prefix/bin"
 
-    makeWrapper ${jre}/bin/java $out/bin/plm \
+    makeWrapper ${jre8}/bin/java $out/bin/plm \
       --add-flags "-jar $src" \
       --prefix PATH : "$PATH"
   '';

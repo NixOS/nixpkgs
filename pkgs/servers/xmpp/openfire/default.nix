@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "openfire";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0ibzhmh9qw4lmx45ir1i280p30npgwnj7vrkl432kj3zi7hp79q2";
   };
 
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   installPhase = ''
-    sed -e 's@\(common_jvm_locations=\).*@\1${jre}@' -i bin/openfire
+    sed -e 's@\(common_jvm_locations=\).*@\1${jre8}@' -i bin/openfire
     cp -r . $out
     rm -r $out/logs
     mv $out/conf $out/conf.inst

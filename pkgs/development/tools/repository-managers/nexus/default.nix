@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre_headless, gawk }:
+{ stdenv, fetchurl, makeWrapper, jre8_headless, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "nexus";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     rm -fv $out/bin/nexus.bat
 
     wrapProgram $out/bin/nexus \
-      --set JAVA_HOME ${jre_headless} \
+      --set JAVA_HOME ${jre8_headless} \
       --set ALTERNATIVE_NAME "nexus" \
       --prefix PATH "${stdenv.lib.makeBinPath [ gawk ]}"
 

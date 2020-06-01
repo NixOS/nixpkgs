@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchurl, jre }:
+{ stdenv, makeWrapper, fetchurl, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "cfr";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     jar=$out/share/java/cfr_${version}.jar
     install -Dm444 $src $jar
-    makeWrapper ${jre}/bin/java $out/bin/cfr --add-flags "-jar $jar"
+    makeWrapper ${jre8}/bin/java $out/bin/cfr --add-flags "-jar $jar"
   '';
 
   meta = with stdenv.lib; {

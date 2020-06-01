@@ -1,5 +1,5 @@
 { stdenv, fetchzip, makeDesktopItem, makeWrapper
-, jre
+, jre8
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
     mkdir -pv "$out/bin"
     wrapProgram "$out/share/ganttproject/ganttproject" \
-      --set JAVA_HOME "${jre}" \
+      --set JAVA_HOME "${jre8}" \
       --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
 
     mv -v "$out/share/ganttproject/ganttproject" "$out/bin"

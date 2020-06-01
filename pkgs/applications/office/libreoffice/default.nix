@@ -2,7 +2,7 @@
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
+, icu, boost, jdk8, ant, cups, xorg, libcmis, fontforge
 , openssl, gperf, cppunit, poppler, utillinux
 , librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
@@ -289,7 +289,7 @@ in (stdenv.mkDerivation rec {
     "--enable-dbus"
     "--enable-release-build"
     "--enable-epm"
-    "--with-jdk-home=${jdk.home}"
+    "--with-jdk8-home=${jdk8.home}"
     "--with-ant-home=${ant}/lib/ant"
     "--with-system-cairo"
     "--with-system-libs"
@@ -353,7 +353,7 @@ in (stdenv.mkDerivation rec {
     [ ant ArchiveZip boost cairo clucene_core
       IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
       freetype getopt gperf gtk3 gtk2
-      hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
+      hunspell icu jdk8 lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs libGLU libGL mythes gst_all_1.gstreamer
@@ -368,7 +368,7 @@ in (stdenv.mkDerivation rec {
     ++ lib.optional kdeIntegration kdelibs4;
 
   passthru = {
-    inherit srcs jdk;
+    inherit srcs jdk8;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];

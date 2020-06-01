@@ -1,5 +1,5 @@
 { emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
-, jre, binaryen, enableWasm ? true ,  cmake
+, jre8, binaryen, enableWasm ? true ,  cmake
 }:
 
 let
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     echo "JS_ENGINES = [NODE_JS]" >> $out/${appdir}/config
     echo "COMPILER_ENGINE = NODE_JS" >> $out/${appdir}/config
     echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> $out/${appdir}/config
-    echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
+    echo "JAVA = '${jre8}/bin/java'" >> $out/${appdir}/config
     # to make the test(s) below work
     echo "SPIDERMONKEY_ENGINE = []" >> $out/${appdir}/config
   ''

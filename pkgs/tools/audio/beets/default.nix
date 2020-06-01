@@ -6,7 +6,6 @@
 # Attributes needed for tests of the external plugins
 , callPackage, beets
 
-, enableAbsubmit       ? stdenv.lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms, essentia-extractor ? null
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
 , enableBadfiles       ? true, flac ? null, mp3val ? null
@@ -35,7 +34,6 @@
 , bashInteractive, bash-completion
 }:
 
-assert enableAbsubmit    -> essentia-extractor            != null;
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
 assert enableCheck       -> flac != null && mp3val != null && liboggz != null;
@@ -55,7 +53,6 @@ with stdenv.lib;
 
 let
   optionalPlugins = {
-    absubmit = enableAbsubmit;
     acousticbrainz = enableAcousticbrainz;
     badfiles = enableBadfiles;
     chroma = enableAcoustid;
@@ -135,7 +132,7 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.gst-python
     pythonPackages.pygobject3
     gobject-introspection
-  ] ++ optional enableAbsubmit      essentia-extractor
+  ]
     ++ optional enableAcoustid      pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate

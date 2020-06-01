@@ -25,16 +25,16 @@ in
             configuration:
           </para>
           <programlisting>
-            environment.variables.JAVA_HOME = ''${pkgs.jdk.home}/lib/openjdk;
-            environment.systemPackages = [ pkgs.jdk ];
+            environment.variables.JAVA_HOME = ''${pkgs.jdk8.home}/lib/openjdk;
+            environment.systemPackages = [ pkgs.jdk8 ];
           </programlisting>
           </note>
         '';
       };
 
       package = mkOption {
-        default = pkgs.jdk;
-        defaultText = "pkgs.jdk";
+        default = pkgs.jdk8;
+        defaultText = "pkgs.jdk8";
         description = ''
           Java package to install. Typical values are pkgs.jdk or pkgs.jre.
         '';

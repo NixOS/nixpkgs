@@ -1,4 +1,4 @@
-{ stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
+{ stdenv, ps, coreutils, fetchurl, jdk8, jre8, ant, gettext, which }:
 
 let wrapper = stdenv.mkDerivation rec {
   pname = "wrapper";
@@ -9,13 +9,13 @@ let wrapper = stdenv.mkDerivation rec {
     sha256 = "0mjyw9ays9v6lnj21pmfd3qdvd9b6rwxfmw3pg6z0kyf2jadixw2";
   };
 
-  buildInputs = [ jdk ];
+  buildInputs = [ jdk8 ];
 
   buildPhase = ''
     export ANT_HOME=${ant}
-    export JAVA_HOME=${jdk}/lib/openjdk/jre/
+    export JAVA_HOME=${jdk8}/lib/openjdk/jre8/
     export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
-    export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
+    export CLASSPATH=${jdk8}/lib/openjdk/lib/tools.jar
     sed 's/ testsuite$//' -i src/c/Makefile-linux-x86-64.make
     ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
   '';
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     sha256 = "04y71hzkdpjzbac569rhyg1zfx37j0alggbl9gnkaqfbprb2nj1h";
   };
 
-  buildInputs = [ jdk ant gettext which ];
+  buildInputs = [ jdk8 ant gettext which ];
   patches = [ ./i2p.patch ];
 
   buildPhase = ''
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       -e "s#%INSTALL_PATH#$out#" \
       -e 's#%USER_HOME#$HOME#' \
       -e "s#%SYSTEM_java_io_tmpdir#/tmp#" \
-      -e "s#%JAVA%#${jre}/bin/java#"
+      -e "s#%JAVA%#${jre8}/bin/java#"
     mv $out/runplain.sh $out/bin/i2prouter-plain
     mv $out/man $out/share/
     chmod +x $out/bin/* $out/i2psvc

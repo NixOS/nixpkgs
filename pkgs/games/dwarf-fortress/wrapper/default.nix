@@ -2,7 +2,7 @@
 , dwarf-fortress
 , dwarf-therapist
 , enableDFHack ? false, dfhack
-, enableSoundSense ? false, soundSense, jdk
+, enableSoundSense ? false, soundSense, jdk8
 , enableStoneSense ? false
 , enableTWBT ? false, twbt
 , themes ? {}
@@ -114,7 +114,7 @@ stdenv.mkDerivation {
   '' + lib.optionalString enableSoundSense ''
     substitute $runSoundSense $out/bin/soundsense \
       --subst-var-by stdenv_shell ${stdenv.shell} \
-      --subst-var-by jre ${jdk.jre} \
+      --subst-var-by jre8 ${jdk8.jre} \
       --subst-var dfInit
     chmod 755 $out/bin/soundsense
   '';

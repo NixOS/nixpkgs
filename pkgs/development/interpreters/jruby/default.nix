@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, makeWrapper, jre }:
+{ stdenv, callPackage, fetchurl, makeWrapper, jre8 }:
 
 let
 # The version number here is whatever is reported by the RUBY_VERSION string
@@ -23,7 +23,7 @@ jruby = stdenv.mkDerivation rec {
 
      for i in $out/bin/jruby{,.bash}; do
        wrapProgram $i \
-         --set JAVA_HOME ${jre}
+         --set JAVA_HOME ${jre8}
      done
 
      ln -s $out/bin/jruby $out/bin/ruby

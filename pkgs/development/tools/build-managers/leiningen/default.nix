@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, coreutils, jdk, rlwrap, gnupg }:
+, coreutils, jdk8, rlwrap, gnupg }:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   buildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ jdk ];
+  propagatedBuildInputs = [ jdk8 ];
 
   # the jar is not in share/java, because it's a standalone jar and should
   # never be picked up by set-java-classpath.sh
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/lein \
       --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap coreutils ]}" \
       --set LEIN_GPG ${gnupg}/bin/gpg \
-      --set JAVA_CMD ${jdk}/bin/java
+      --set JAVA_CMD ${jdk8}/bin/java
   '';
 
   meta = {

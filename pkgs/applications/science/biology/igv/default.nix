@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jre }:
+{ stdenv, fetchurl, unzip, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "igv";
@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "048dgrhxcb854d24kyjkqz12bw04bsv49i5jawb75yzkswwfkb0z";
   };
 
-  buildInputs = [ unzip jre ];
+  buildInputs = [ unzip jre8 ];
 
   installPhase = ''
     mkdir -pv $out/{share,bin}
     cp -Rv * $out/share/
 
     sed -i "s#prefix=.*#prefix=$out/share#g" $out/share/igv.sh
-    sed -i 's#java#${jre}/bin/java#g' $out/share/igv.sh
+    sed -i 's#java#${jre8}/bin/java#g' $out/share/igv.sh
 
     ln -s $out/share/igv.sh $out/bin/igv
 

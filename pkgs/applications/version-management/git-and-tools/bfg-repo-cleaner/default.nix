@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 let
   version = "1.13.0";
@@ -15,7 +15,7 @@ in
       sha256 = "1kn84rsvms1v5l1j2xgrk7dc7mnsmxkc6sqd94mnim22vnwvl8mz";
     };
 
-    buildInputs = [ jre makeWrapper ];
+    buildInputs = [ jre8 makeWrapper ];
 
     phases = "installPhase";
 
@@ -23,7 +23,7 @@ in
       mkdir -p $out/share/java
       mkdir -p $out/bin
       cp $src $out/share/java/$jarName
-      makeWrapper "${jre}/bin/java" $out/bin/bfg --add-flags "-cp $out/share/java/$jarName com.madgag.git.bfg.cli.Main"
+      makeWrapper "${jre8}/bin/java" $out/bin/bfg --add-flags "-cp $out/share/java/$jarName com.madgag.git.bfg.cli.Main"
     '';
 
     meta = with stdenv.lib; {

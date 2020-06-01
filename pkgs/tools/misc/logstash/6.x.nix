@@ -3,7 +3,7 @@
 , stdenv
 , fetchurl
 , makeWrapper
-, jre
+, jre8
 }:
 
 with stdenv.lib;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   buildInputs = [
-    makeWrapper jre
+    makeWrapper jre8
   ];
 
   installPhase = ''
@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/logstash-plugin
 
     wrapProgram $out/bin/logstash \
-       --set JAVA_HOME "${jre}"
+       --set JAVA_HOME "${jre8}"
 
     wrapProgram $out/bin/logstash-plugin \
-       --set JAVA_HOME "${jre}"
+       --set JAVA_HOME "${jre8}"
   '';
 
   meta = with stdenv.lib; {

@@ -156,7 +156,7 @@ let
       # Follow Sun's layout for the convenience of IcedTea/OpenJDK.  See
       # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
       "--enable-java-home"
-      "--with-java-home=\${prefix}/lib/jvm/jre"
+      "--with-java-home=\${prefix}/lib/jvm/jre8"
     ]
     ++ lib.optional javaAwtGtk "--enable-java-awt=gtk"
     ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"

@@ -3,7 +3,7 @@
 , fetchurl
 , unzip
 , makeDesktopItem
-, jre
+, jre8
 }:
 
 let
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    sed -i -e "4s:.*:command=${jre}/bin/java:" -e "10s:.*:jarpath=$out/share/jmol/Jmol.jar:" -e "11,21d" jmol
+    sed -i -e "4s:.*:command=${jre8}/bin/java:" -e "10s:.*:jarpath=$out/share/jmol/Jmol.jar:" -e "11,21d" jmol
   '';
 
   installPhase = ''

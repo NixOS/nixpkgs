@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre8 }:
 
 let
   playerglobal_ver = "27.0";
@@ -17,14 +17,14 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   buildPhase = ":";
 
   postPatch = ''
     shopt -s extglob
     for i in bin/!(aasdoc|acompc|amxmlc); do
-      substituteInPlace $i --replace "java " "${jre}/bin/java "
+      substituteInPlace $i --replace "java " "${jre8}/bin/java "
     done
   '';
 

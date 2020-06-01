@@ -9783,7 +9783,7 @@ let
 
     propagatedBuildInputs = [ Inline ];
 
-    makeMakerFlags = "J2SDK=${pkgs.jdk}";
+    makeMakerFlags = "J2SDK=${pkgs.jdk8}";
 
     # FIXME: Apparently tests want to access the network.
     doCheck = false;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ stdenv, fetchurl, jre8, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "alchemy";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cat >> $out/bin/alchemy << EOF
     #!${runtimeShell}
     cd $out/share/alchemy
-    ${jre}/bin/java -jar Alchemy.jar "$@"
+    ${jre8}/bin/java -jar Alchemy.jar "$@"
     EOF
     chmod +x $out/bin/alchemy
   '';

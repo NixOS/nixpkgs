@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, unzip, makeWrapper }:
+{ stdenv, fetchurl, jre8, unzip, makeWrapper }:
 
 # Note:
 # - User config dir is hard coded by upstream to $HOME/.imagej on linux systems
@@ -16,7 +16,7 @@ let
       sha256 = "97aba6fc5eb908f5160243aebcdc4965726693cb1353d9c0d71b8f5dd832cb7b";
     };
     buildInputs = [ unzip makeWrapper ];
-    inherit jre;
+    inherit jre8;
 
     # JAR files that are intended to be used by other packages
     # should go to $out/share/java.
@@ -28,7 +28,7 @@ let
       cp ij.jar $out/share/java
       cp -dR luts macros plugins $out/share
       mkdir $out/bin
-      makeWrapper ${jre}/bin/java $out/bin/imagej \
+      makeWrapper ${jre8}/bin/java $out/bin/imagej \
         --add-flags "-jar $out/share/java/ij.jar -ijpath $out/share"
     '';
     meta = with stdenv.lib; {

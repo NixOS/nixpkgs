@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
+{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk8, jre8, gtk2, glib, xorg, Cocoa }:
 
 let
   _version = "2.8.6";
@@ -23,7 +23,7 @@ in
 stdenv.mkDerivation rec {
   inherit name version;
 
-  nativeBuildInputs = [ ant jdk makeWrapper ];
+  nativeBuildInputs = [ ant jdk8 makeWrapper ];
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
                 ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
     cp ${desktopItem}/share/applications/* $out/share/applications/
 
-    makeWrapper ${jre}/bin/java $out/bin/jameica \
+    makeWrapper ${jre8}/bin/java $out/bin/jameica \
       --add-flags "-cp $out/share/java/jameica.jar:$out/share/${name}/* ${
         stdenv.lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
       } de.willuhn.jameica.Main" \

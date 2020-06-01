@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk, gawk }:
+{ stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk8, gawk }:
 
 stdenv.mkDerivation rec {
   version = "2.0";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace etc/visualvm.conf \
       --replace "#visualvm_jdkhome=" "visualvm_jdkhome=" \
-      --replace "/path/to/jdk" "${jdk.home}" \
+      --replace "/path/to/jdk8" "${jdk8.home}" \
 
     substituteInPlace platform/lib/nbexec \
       --replace /usr/bin/\''${awk} ${gawk}/bin/awk

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, hadoop, jre, bash }:
+{ stdenv, fetchurl, makeWrapper, hadoop, jre8, bash }:
 
 stdenv.mkDerivation rec {
 
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
     for n in $out/{bin,sbin}"/"*; do
       wrapProgram $n \
-        --prefix PATH : "${stdenv.lib.makeBinPath [ jre bash ]}" \
-        --set JAVA_HOME "${jre}" --set HADOOP_PREFIX "${hadoop}"
+        --prefix PATH : "${stdenv.lib.makeBinPath [ jre8 bash ]}" \
+        --set JAVA_HOME "${jre8}" --set HADOOP_PREFIX "${hadoop}"
     done
   '';
 

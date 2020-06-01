@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
+{ stdenv, fetchFromGitHub, gradle, jdk8, makeWrapper, perl }:
 
 let
   pname = "jadx";
@@ -15,7 +15,7 @@ let
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ gradle jdk perl ];
+    nativeBuildInputs = [ gradle jdk8 perl ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -38,7 +38,7 @@ let
 in stdenv.mkDerivation {
   inherit pname version src;
 
-  nativeBuildInputs = [ gradle jdk makeWrapper ];
+  nativeBuildInputs = [ gradle jdk8 makeWrapper ];
 
   buildPhase = ''
     # The installDist Gradle build phase tries to copy some dependency .jar
@@ -86,7 +86,7 @@ in stdenv.mkDerivation {
     cp -R build/jadx/lib $out
     for prog in jadx jadx-gui; do
       cp build/jadx/bin/$prog $out/bin
-      wrapProgram $out/bin/$prog --set JAVA_HOME ${jdk.home}
+      wrapProgram $out/bin/$prog --set JAVA_HOME ${jdk8.home}
     done
   '';
 

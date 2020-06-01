@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, jre8, makeWrapper, makeDesktopItem }:
 
 let generic = { major, version, src }:
 
@@ -23,7 +23,7 @@ let generic = { major, version, src }:
       install -Dm644 ${src} $jar
 
       mkdir -p $out/bin
-      makeWrapper ${jre}/bin/java $out/bin/${nameMajor} --add-flags \
+      makeWrapper ${jre8}/bin/java $out/bin/${nameMajor} --add-flags \
        "-jar $jar"
 
       install -Dm644 ${./icon.png} $out/share/pixmaps/${nameMajor}.png

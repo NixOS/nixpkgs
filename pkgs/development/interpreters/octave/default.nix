@@ -35,7 +35,7 @@
 , readline ? null
 # - Build Java interface:
 , enableJava ? true
-, jdk ? null
+, jdk8 ? null
 , python ? null
 , overridePlatforms ? null
 , sundials_2 ? null
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   ++ (stdenv.lib.optional (hdf5 != null) hdf5)
   ++ (stdenv.lib.optional (glpk != null) glpk)
   ++ (stdenv.lib.optional (suitesparse != null) suitesparse)
-  ++ (stdenv.lib.optional (enableJava) jdk)
+  ++ (stdenv.lib.optional (enableJava) jdk8)
   ++ (stdenv.lib.optional (sundials_2 != null) sundials_2)
   ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
   ++ (stdenv.lib.optional (python != null) python)

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jre, makeWrapper }:
+{ stdenv, fetchzip, jre8, makeWrapper }:
 stdenv.mkDerivation rec {
   pname = "h2";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
         dir=$(dirname "$0")
 
         if [ -n "$1" ]; then
-          ${jre}/bin/java -cp "$dir/h2-${version}.jar:$H2DRIVERS:$CLASSPATH" $1 "''${@:2}"
+          ${jre8}/bin/java -cp "$dir/h2-${version}.jar:$H2DRIVERS:$CLASSPATH" $1 "''${@:2}"
         else
           echo "You have to provide the full java class path for the h2 tool you want to run. E.g. 'org.h2.tools.Server'"
         fi
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
       echo '${h2ToolScript}' > $out/bin/h2tool.sh
 
-      substituteInPlace $out/bin/h2.sh --replace "java" "${jre}/bin/java"
+      substituteInPlace $out/bin/h2.sh --replace "java" "${jre8}/bin/java"
 
       chmod +x $out/bin/*.sh
     '';

@@ -7,7 +7,7 @@
 # the shipped alternative sources (assembly).
 , open-watcom-bin ? null
 , makeself, perl
-, javaBindings ? true, jdk ? null # Almost doesn't affect closure size
+, javaBindings ? true, jdk8 ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
 , extensionPack ? null, fakeroot ? null
 , pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
     [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 alsaLib curl libvpx pam makeself perl
       libXmu libpng libopus python ]
-    ++ optional javaBindings jdk
+    ++ optional javaBindings jdk8
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr libGL ]
@@ -135,7 +135,7 @@ in stdenv.mkDerivation {
     VBOX_PATH_APP_PRIVATE          := $out/share/virtualbox
     VBOX_PATH_APP_DOCS             := $out/doc
     ${optionalString javaBindings ''
-    VBOX_JAVA_HOME                 := ${jdk}
+    VBOX_JAVA_HOME                 := ${jdk8}
     ''}
     ${optionalString (!headless) ''
     PATH_QT5_X11_EXTRAS_LIB        := ${getLib qtx11extras}/lib

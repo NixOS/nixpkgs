@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
       if [[ $i =~ libcudart ]]; then
         rpath2=
       else
-        rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
+        rpath2=$rpath:$lib/lib:$out/jre8/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
       fi
       patchelf --set-rpath "$rpath2" --force-rpath $i
     done < <(find $out $lib $doc -type f -print0)

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, graphviz }:
+{ stdenv, fetchurl, makeWrapper, jre8, graphviz }:
 
 stdenv.mkDerivation rec {
   version = "1.2020.10";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     install -Dm644 $src $out/lib/plantuml.jar
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/plantuml \
+    makeWrapper ${jre8}/bin/java $out/bin/plantuml \
       --argv0 plantuml \
       --set GRAPHVIZ_DOT ${graphviz}/bin/dot \
       --add-flags "-jar $out/lib/plantuml.jar"

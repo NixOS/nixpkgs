@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 let version = "2.7.1"; in
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -pv $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/logisim --add-flags "-jar $src"
+    makeWrapper ${jre8}/bin/java $out/bin/logisim --add-flags "-jar $src"
   '';
   
   meta = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "quantomatic";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   phases = [ "installPhase" ];
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec/quantomatic
     cp $src $out/libexec/quantomatic/quantomatic.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/quantomatic --add-flags "-jar $out/libexec/quantomatic/quantomatic.jar"
+    makeWrapper ${jre8}/bin/java $out/bin/quantomatic --add-flags "-jar $out/libexec/quantomatic/quantomatic.jar"
   '';
 
   meta = with stdenv.lib; {

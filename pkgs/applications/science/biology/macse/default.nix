@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "macse";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/share/java
     cp -s $src $out/share/java/macse.jar
-    makeWrapper ${jre}/bin/java $out/bin/macse --add-flags "-jar $out/share/java/macse.jar"
+    makeWrapper ${jre8}/bin/java $out/bin/macse --add-flags "-jar $out/share/java/macse.jar"
     runHook postInstall
   '';
 

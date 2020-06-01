@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jre, makeWrapper }:
+{ stdenv, fetchzip, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "LanguageTool";
@@ -9,18 +9,18 @@ stdenv.mkDerivation rec {
     sha256 = "0hvzckb92yijzmp2vphjp1wgql3xqq0xd83v5x6pbhziq9yxc5yh";
   };
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   installPhase = ''
     mkdir -p $out/share
     mv * $out/share/
 
     for lt in languagetool{,-commandline,-server};do
-      makeWrapper ${jre}/bin/java $out/bin/$lt \
+      makeWrapper ${jre8}/bin/java $out/bin/$lt \
         --add-flags "-cp $out/share/ -jar $out/share/$lt.jar"
     done
 
-    makeWrapper ${jre}/bin/java $out/bin/languagetool-http-server \
+    makeWrapper ${jre8}/bin/java $out/bin/languagetool-http-server \
       --add-flags "-cp $out/share/languagetool-server.jar org.languagetool.server.HTTPServer"
   '';
 

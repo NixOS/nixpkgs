@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jdk }:
+{ stdenv, fetchurl, makeWrapper, jdk8 }:
 
 stdenv.mkDerivation rec {
   name = "rascal-0.6.2";
@@ -8,14 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "1z4mwdbdc3r24haljnxng8znlfg2ihm9bf9zq8apd9a32ipcw4i6";
   };
 
-  buildInputs = [ makeWrapper jdk ];
+  buildInputs = [ makeWrapper jdk8 ];
 
   dontUnpack = true;
 
   installPhase =
     ''
       mkdir -p $out/bin
-      makeWrapper ${jdk}/bin/java $out/bin/rascal \
+      makeWrapper ${jdk8}/bin/java $out/bin/rascal \
         --add-flags "-jar ${src}" \
     '';
 

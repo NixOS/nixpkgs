@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, fetchzip, jre }:
+{ stdenv, lib, makeWrapper, fetchzip, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "bftools";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/libexec/bf.sh --prefix PATH : "${lib.makeBinPath [ jre ]}"
+    wrapProgram $out/libexec/bf.sh --prefix PATH : "${lib.makeBinPath [ jre8 ]}"
   '';
 
   nativeBuildInputs = [ makeWrapper ];

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre} :
+{stdenv, fetchurl, jre8} :
 
 stdenv.mkDerivation rec {
   name = "jflex-1.8.2";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/jflex.bat
 
     patchShebangs $out
-    sed -i -e '/^JAVA=java/ s#java#${jre}/bin/java#' $out/bin/jflex
+    sed -i -e '/^JAVA=java/ s#java#${jre8}/bin/java#' $out/bin/jflex
     runHook postInstall
   '';
 

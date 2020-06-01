@@ -1,4 +1,4 @@
-{ stdenv, autoconf, automake, curl, fetchurl, jdk, jre, makeWrapper, nettools
+{ stdenv, autoconf, automake, curl, fetchurl, jdk8, jre8, makeWrapper, nettools
 , python, git
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b0hilqmgz6n1q7irp17h48v8fjpxhjapgw1py8kyav1d51s7mm2";
   };
 
-  buildInputs = [ autoconf automake curl jdk makeWrapper nettools python git ];
+  buildInputs = [ autoconf automake curl jdk8 makeWrapper nettools python git ];
 
   preConfigure = ''
     patchShebangs ./build-aux/
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/tsdb \
-      --set JAVA_HOME "${jre}" \
-      --set JAVA "${jre}/bin/java"
+      --set JAVA_HOME "${jre8}" \
+      --set JAVA "${jre8}/bin/java"
   '';
 
   meta = with stdenv.lib; {

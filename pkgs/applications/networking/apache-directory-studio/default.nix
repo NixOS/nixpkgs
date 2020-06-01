@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, jre, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, xorg, jre8, makeWrapper, makeDesktopItem }:
 
 let
   rpath = stdenv.lib.makeLibraryPath (with xorg; [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
         "$dest/ApacheDirectoryStudio"
     makeWrapper "$dest/ApacheDirectoryStudio" \
         "$out/bin/ApacheDirectoryStudio" \
-        --prefix PATH : "${jre}/bin" \
+        --prefix PATH : "${jre8}/bin" \
         --prefix LD_LIBRARY_PATH : "${rpath}"
     install -D icon.xpm "$out/share/pixmaps/apache-directory-studio.xpm"
     install -D -t "$out/share/applications" ${desktopItem}/share/applications/*

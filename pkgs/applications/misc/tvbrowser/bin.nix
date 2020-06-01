@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, makeDesktopItem }:
+{ stdenv, fetchurl, makeWrapper, jre8, makeDesktopItem }:
 
 let
   desktopItem = makeDesktopItem {
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     done
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${jre8}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${pname}/${pname}.jar" \
       --run "cd $out/share/java/${pname}"
   '';

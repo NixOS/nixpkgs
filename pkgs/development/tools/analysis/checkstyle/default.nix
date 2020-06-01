@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   version = "8.32";
@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
     install -D $src $out/checkstyle/checkstyle-all.jar
-    makeWrapper ${jre}/bin/java $out/bin/checkstyle \
+    makeWrapper ${jre8}/bin/java $out/bin/checkstyle \
       --add-flags "-jar $out/checkstyle/checkstyle-all.jar"
     runHook postInstall
   '';
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "http://checkstyle.sourceforge.net/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ pSub ];
-    platforms = jre.meta.platforms;
+    platforms = jre8.meta.platforms;
   };
 }

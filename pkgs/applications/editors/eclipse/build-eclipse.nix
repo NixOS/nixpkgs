@@ -1,5 +1,5 @@
 { stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
-, zlib, jdk, glib, gtk, libXtst, gsettings-desktop-schemas, webkitgtk
+, zlib, jdk8, glib, gtk, libXtst, gsettings-desktop-schemas, webkitgtk
 , makeWrapper, ... }:
 
 { name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
+    fontconfig freetype glib gsettings-desktop-schemas gtk jdk8 libX11
     libXrender libXtst makeWrapper zlib
   ] ++ stdenv.lib.optional (webkitgtk != null) webkitgtk;
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     productVersion=$(sed 's/version=//; t; d' $out/eclipse/.eclipseproduct)
 
     makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
-      --prefix PATH : ${jdk}/bin \
+      --prefix PATH : ${jdk8}/bin \
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath ([ glib gtk libXtst ] ++ stdenv.lib.optional (webkitgtk != null) webkitgtk)} \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"

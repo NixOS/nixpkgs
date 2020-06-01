@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ant, jre, jdk}:
+{stdenv, fetchurl, ant, jre8, jdk8}:
 stdenv.mkDerivation rec {
   pname = "abcl";
   version = "1.6.1";
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     cp -r dist/*.jar contrib/ "$out/lib/abcl/"
 
     echo "#! ${stdenv.shell}" >> "$out/bin/abcl"
-    echo "${jre}/bin/java -cp \"$out/lib/abcl/abcl.jar:$out/lib/abcl/abcl-contrib.jar:\$CLASSPATH\" org.armedbear.lisp.Main \"\$@\"" >> "$out/bin/abcl"
+    echo "${jre8}/bin/java -cp \"$out/lib/abcl/abcl.jar:$out/lib/abcl/abcl-contrib.jar:\$CLASSPATH\" org.armedbear.lisp.Main \"\$@\"" >> "$out/bin/abcl"
     chmod a+x "$out"/bin/*
   '';
-  buildInputs = [jre ant jdk jre];
+  buildInputs = [jre8 ant jdk8.jre];
   meta = {
     inherit version;
     description = ''A JVM-based Common Lisp implementation'';

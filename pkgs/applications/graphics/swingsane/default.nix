@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, unzip, jre, runtimeShell }:
+{ stdenv, fetchurl, makeDesktopItem, unzip, jre8, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "swingsane";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     execWrapper = ''
       #!${runtimeShell}
-      exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
+      exec ${jre8}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
     '';
 
     desktopItem = makeDesktopItem {

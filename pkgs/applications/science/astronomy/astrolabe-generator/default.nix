@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, unzip }:
+{ stdenv, fetchurl, jre8, makeWrapper, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "astrolabe-generator";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "141gfmrqa1mf2qas87qig4phym9fg9gbrcfl2idzd5gi91824dn9";
   };
 
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
   nativeBuildInputs = [ makeWrapper unzip ];
   sourceRoot = ".";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/java}
     cp AstrolabeGenerator-${version}.jar $out/share/java
 
-    makeWrapper ${jre}/bin/java $out/bin/AstrolabeGenerator \
+    makeWrapper ${jre8}/bin/java $out/bin/AstrolabeGenerator \
       --add-flags "-jar $out/share/java/AstrolabeGenerator-${version}.jar"
   '';
 

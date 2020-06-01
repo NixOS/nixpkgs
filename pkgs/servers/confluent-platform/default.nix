@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchFromGitHub
-, jre, makeWrapper, bash, gnused }:
+, jre8, makeWrapper, bash, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "confluent-platform";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "18yvp56b8l074qfkgr4afirgd43g8b023n9ija6dnk6p6dib1f4j";
   };
 
-  buildInputs = [ jre makeWrapper bash ];
+  buildInputs = [ jre8 makeWrapper bash ];
 
   installPhase = ''
     cp -R $confluentCli confluent-cli
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
 
     for p in $out/bin\/*; do
       wrapProgram $p \
-        --set JAVA_HOME "${jre}" \
+        --set JAVA_HOME "${jre8}" \
         --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
-        --prefix PATH : "${jre}/bin:${bash}/bin:${gnused}/bin"
+        --prefix PATH : "${jre8}/bin:${bash}/bin:${gnused}/bin"
     done
   '';
 

@@ -161,7 +161,7 @@ self: super: {
     '';
   });
 
-  inline-java = addBuildDepend super.inline-java pkgs.jdk;
+  inline-java = addBuildDepend super.inline-java pkgs.jdk8;
 
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;

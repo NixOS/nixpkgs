@@ -1,4 +1,4 @@
-{ stdenv, fetchMavenArtifact, fetchFromGitHub, jre, makeWrapper }:
+{ stdenv, fetchMavenArtifact, fetchFromGitHub, jre8, makeWrapper }:
 
 let
   version = "1.0.0";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    makeWrapper ${jre}/bin/java $out/bin/ng-server \
+    makeWrapper ${jre8}/bin/java $out/bin/ng-server \
       --add-flags '-classpath ${nailgun-server.jar}:$CLASSPATH com.facebook.nailgun.NGServer'
   '';
 

@@ -66,7 +66,7 @@ in rec {
       gettext
       git
       imagemagick
-      jdk
+      jdk8
       linux
       mysql
       nginx

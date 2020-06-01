@@ -5,8 +5,8 @@ unpackPhase
 mkdir -p $out/maven
 cp -r $name/* $out/maven
 
-makeWrapper $out/maven/bin/mvn $out/bin/mvn --set-default JAVA_HOME "$jdk"
-makeWrapper $out/maven/bin/mvnDebug $out/bin/mvnDebug --set-default JAVA_HOME "$jdk"
+makeWrapper $out/maven/bin/mvn $out/bin/mvn --set-default JAVA_HOME "$jdk8"
+makeWrapper $out/maven/bin/mvnDebug $out/bin/mvnDebug --set-default JAVA_HOME "$jdk8"
 
 # Add the maven-axis and JIRA plugin by default when using maven 1.x
 if [ -e $out/maven/bin/maven ]

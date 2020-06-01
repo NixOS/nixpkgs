@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jdk, makeWrapper, installShellFiles }:
+{ stdenv, fetchzip, jdk8, makeWrapper, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "micronaut";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     rm bin/mn.bat
     cp -r . $out
     wrapProgram $out/bin/mn \
-      --prefix JAVA_HOME : ${jdk} 
+      --prefix JAVA_HOME : ${jdk8} 
     installShellCompletion --bash --name mn.bash bin/mn_completion
     runHook postInstall
   '';

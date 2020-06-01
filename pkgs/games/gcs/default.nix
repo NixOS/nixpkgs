@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     cp -r ${library} gcs_library
   '';
 
-  buildInputs = [ jdk8 jre8 ant makeWrapper ];
+  buildInputs = [ jdk8.jre ant makeWrapper ];
   buildPhase = ''
     cd apple_stubs
     ant

@@ -6,14 +6,14 @@ index 9690c0a38f..fa1d36b7e1 100644
        "workingSets" : "JVMCI,HotSpot,SPARC",
      },
  
--    "jdk.vm.ci.hotspot.jfr" : {
+-    "jdk8.vm.ci.hotspot.jfr" : {
 -      "subDir" : "jvmci",
 -      "sourceDirs" : ["src"],
 -      "dependencies" : [
--        "jdk.vm.ci.hotspot",
+-        "jdk8.vm.ci.hotspot",
 -        "JFR",
 -      ],
--      "checkstyle" : "jdk.vm.ci.hotspot",
+-      "checkstyle" : "jdk8.vm.ci.hotspot",
 -      "javaCompliance" : "1.8",
 -      "profile" : "",
 -      "workingSets" : "JVMCI,HotSpot",
@@ -23,10 +23,10 @@ index 9690c0a38f..fa1d36b7e1 100644
      "hotspot" : {
        "native" : True,
 @@ -354,7 +343,7 @@ suite = {
-         "jdk.vm.ci.hotspot.aarch64",
-         "jdk.vm.ci.hotspot.amd64",
-         "jdk.vm.ci.hotspot.sparc",
--        "jdk.vm.ci.hotspot.jfr",
+         "jdk8.vm.ci.hotspot.aarch64",
+         "jdk8.vm.ci.hotspot.amd64",
+         "jdk8.vm.ci.hotspot.sparc",
+-        "jdk8.vm.ci.hotspot.jfr",
 +
        ],
        "distDependencies" : [

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "VASSAL-3.2.17";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp -R lib/* $out/share/vassal
     cp -R doc/* $out/doc
 
-    makeWrapper ${jre}/bin/java $out/bin/vassal \
+    makeWrapper ${jre8}/bin/java $out/bin/vassal \
       --add-flags "-Duser.dir=$out -cp $out/share/vassal/Vengine.jar \
       VASSAL.launch.ModuleManager"
   '';

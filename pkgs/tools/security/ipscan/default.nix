@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg, dpkg }:
+{ stdenv, fetchurl, jdk8, jre8, swt, makeWrapper, xorg, dpkg }:
 
 stdenv.mkDerivation rec {
   pname = "ipscan";
@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $src .";
 
-  buildInputs = [ makeWrapper jdk ];
+  buildInputs = [ makeWrapper jdk8 ];
 
   installPhase = ''
     mkdir -p $out/share
     cp usr/lib/ipscan/ipscan-any-${version}.jar $out/share/${pname}-${version}.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/ipscan \
+    makeWrapper ${jre8}/bin/java $out/bin/ipscan \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${stdenv.lib.makeLibraryPath [ swt xorg.libXtst ]}" \
       --add-flags "-Xmx256m -cp $out/share/${pname}-${version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
 

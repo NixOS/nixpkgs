@@ -1,4 +1,4 @@
-{ fetchFromGitHub, maven, jdk, makeWrapper, stdenv, ... }:
+{ fetchFromGitHub, maven, jdk8, makeWrapper, stdenv, ... }:
 stdenv.mkDerivation rec {
   pname = "exhibitor";
   version = "1.5.6";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/java
     mv target/$name.jar $out/share/java/
-    makeWrapper ${jdk}/bin/java $out/bin/startExhibitor.sh --add-flags "-jar $out/share/java/$name.jar" --suffix PATH : ${stdenv.lib.makeBinPath [ jdk ]}
+    makeWrapper ${jdk8}/bin/java $out/bin/startExhibitor.sh --add-flags "-jar $out/share/java/$name.jar" --suffix PATH : ${stdenv.lib.makeBinPath [ jdk8 ]}
   '';
 
 }

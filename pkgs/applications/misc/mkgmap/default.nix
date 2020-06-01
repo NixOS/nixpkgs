@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchsvn, jdk, jre, ant, makeWrapper }:
+{ stdenv, fetchurl, fetchsvn, jdk8, jre8, ant, makeWrapper }:
 
 let
   fastutil = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   # the automatic download of dependencies (see configurePhase)
   patches = [ ./build.xml.patch ];
 
-  nativeBuildInputs = [ jdk ant makeWrapper ];
+  nativeBuildInputs = [ jdk8 ant makeWrapper ];
 
   configurePhase = ''
     mkdir -p lib/compile
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     install -Dm644 mkgmap.jar $out/share/java/mkgmap/mkgmap.jar
     install -Dm644 doc/mkgmap.1 $out/share/man/man1/mkgmap.1
     cp -r lib/ $out/share/java/mkgmap/
-    makeWrapper ${jre}/bin/java $out/bin/mkgmap \
+    makeWrapper ${jre8}/bin/java $out/bin/mkgmap \
       --add-flags "-jar $out/share/java/mkgmap/mkgmap.jar"
   '';
 

@@ -1,6 +1,6 @@
 { lib, mkDerivation, fetchurl, fetchpatch, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
 , openssl, R, qtbase, qtxmlpatterns, qtsensors, qtwebengine, qtwebchannel
-, libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
+, libuuid, hunspellDicts, unzip, ant, jdk8, gnumake, makeWrapper, pandoc
 , llvmPackages
 }:
 
@@ -17,7 +17,7 @@ mkDerivation rec {
   pname = "RStudio";
   inherit version;
 
-  nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
+  nativeBuildInputs = [ cmake unzip ant jdk8 makeWrapper pandoc ];
 
   buildInputs = [ boost zlib openssl R qtbase qtxmlpatterns qtsensors
                   qtwebengine qtwebchannel libuuid ];

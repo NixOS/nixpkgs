@@ -334,7 +334,7 @@ in rec {
       ${if stdenv.isDarwin
         then "mv openjdk1.8.0_*/darwin-amd64/product/* $out"
         else "mv openjdk1.8.0_*/linux-amd64/product/* $out"}
-      install -v -m0555 -D $MX_CACHE_DIR/hsdis*/hsdis.so $out/jre/lib/amd64/hsdis-amd64.so
+      install -v -m0555 -D $MX_CACHE_DIR/hsdis*/hsdis.so $out/jre8/lib/amd64/hsdis-amd64.so
     '';
     # copy-paste openjdk's preFixup
     preFixup = ''
@@ -485,13 +485,13 @@ in rec {
       cp -rf $MX_ALT_OUTPUT_ROOT/vm/linux-amd64/GRAALVM*/graalvm-unknown-${version}/* $out
 
       # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
-      substituteInPlace $out/jre/lib/security/java.security \
+      substituteInPlace $out/jre8/lib/security/java.security \
         --replace file:/dev/random    file:/dev/./urandom \
         --replace NativePRNGBlocking  SHA1PRNG
       # copy static and dynamic libraries needed for static compilation
-      cp -rf ${glibc}/lib/* $out/jre/lib/svm/clibraries/linux-amd64/
-      cp ${glibc.static}/lib/* $out/jre/lib/svm/clibraries/linux-amd64/
-      cp ${zlib.static}/lib/libz.a $out/jre/lib/svm/clibraries/linux-amd64/libz.a
+      cp -rf ${glibc}/lib/* $out/jre8/lib/svm/clibraries/linux-amd64/
+      cp ${glibc.static}/lib/* $out/jre8/lib/svm/clibraries/linux-amd64/
+      cp ${zlib.static}/lib/libz.a $out/jre8/lib/svm/clibraries/linux-amd64/libz.a
     '');
 
     inherit (jvmci8) preFixup;

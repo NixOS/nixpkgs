@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip
-# If jdk is null, require JAVA_HOME in runtime environment, else store
-# JAVA_HOME=${jdk.home} into grails.
+# If jdk8 is null, require JAVA_HOME in runtime environment, else store
+# JAVA_HOME=${jdk8.home} into grails.
 , jdk ? null
 , coreutils, ncurses, gnused, gnugrep  # for purity
 }:

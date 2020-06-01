@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   pname = "jython";
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
      mkdir -pv $out/bin
      cp $src $out/jython.jar
-     makeWrapper ${jre}/bin/java $out/bin/jython --add-flags "-jar $out/jython.jar"
+     makeWrapper ${jre8}/bin/java $out/bin/jython --add-flags "-jar $out/jython.jar"
   '';
 
   meta = {
     description = "Python interpreter written in Java";
     homepage = "https://jython.org/";
     license = stdenv.lib.licenses.psfl;
-    platforms = jre.meta.platforms;
+    platforms = jre8.meta.platforms;
   };
 }

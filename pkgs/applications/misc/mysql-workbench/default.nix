@@ -24,7 +24,7 @@
 , libsecret
 , libssh
 , python2
-, jre
+, jre8
 , boost
 , libsigcxx
 , libX11
@@ -87,7 +87,7 @@ in stdenv.mkDerivation rec {
     cmake
     ninja
     pkgconfig
-    jre
+    jre8
     swig
     wrapGAppsHook
   ];

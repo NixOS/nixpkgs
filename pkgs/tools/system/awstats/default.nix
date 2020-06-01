@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, jdk }:
+{ stdenv, fetchurl, perlPackages, jdk8 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "awstats";
@@ -29,7 +29,7 @@ perlPackages.buildPerlPackage rec {
     (
       cd wwwroot/classes/src
       rm ../*.jar
-      PATH="${jdk}/bin" "$(type -P perl)" Makefile.pl
+      PATH="${jdk8}/bin" "$(type -P perl)" Makefile.pl
       test -f ../*.jar
     )
   '';

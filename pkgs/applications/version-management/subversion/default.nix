@@ -6,14 +6,14 @@
 , javahlBindings ? false
 , saslSupport ? false
 , stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
-, apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
+, apacheHttpd ? null, expat, swig ? null, jdk8 ? null, python ? null, perl ? null
 , sasl ? null, serf ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
 assert httpServer -> apacheHttpd != null;
 assert pythonBindings -> swig != null && python != null;
-assert javahlBindings -> jdk != null && perl != null;
+assert javahlBindings -> jdk8 != null && perl != null;
 
 let
 
@@ -54,7 +54,7 @@ let
       "--with-sqlite=${sqlite.dev}"
     ] ++ stdenv.lib.optionals javahlBindings [
       "--enable-javahl"
-      "--with-jdk=${jdk}"
+      "--with-jdk8=${jdk8}"
     ];
 
     preBuild = ''

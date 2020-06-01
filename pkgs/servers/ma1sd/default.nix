@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, git, gradle_5, perl, makeWrapper }:
+{ stdenv, fetchFromGitHub, jre8, git, gradle_5, perl, makeWrapper }:
 
 let
   name = "ma1sd-${version}";
@@ -42,7 +42,7 @@ in
 stdenv.mkDerivation {
   inherit name src version;
   nativeBuildInputs = [ gradle_5 perl makeWrapper ];
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
 
   patches = [ ./0001-gradle.patch ];
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D build/libs/source.jar $out/lib/ma1sd.jar
-    makeWrapper ${jre}/bin/java $out/bin/ma1sd --add-flags "-jar $out/lib/ma1sd.jar"
+    makeWrapper ${jre8}/bin/java $out/bin/ma1sd --add-flags "-jar $out/lib/ma1sd.jar"
   '';
 
   meta = with stdenv.lib; {

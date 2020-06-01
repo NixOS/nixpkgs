@@ -1,4 +1,4 @@
-{ stdenv, jdk, jre, coursier, makeWrapper }:
+{ stdenv, jdk8, jre8, coursier, makeWrapper }:
 
 let
   baseName = "scalafmt";
@@ -20,14 +20,14 @@ stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk deps ];
+  buildInputs = [ jdk8 deps ];
 
   doCheck = true;
 
   phases = [ "installPhase" "checkPhase" ];
 
   installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/${baseName} \
+    makeWrapper ${jre8}/bin/java $out/bin/${baseName} \
       --add-flags "-cp $CLASSPATH org.scalafmt.cli.Cli"
   '';
 

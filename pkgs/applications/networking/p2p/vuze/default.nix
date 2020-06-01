@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, jdk, jre, ant, swt, makeWrapper }:
+{ stdenv, fetchsvn, jdk8, jre8, ant, swt, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "vuze";
@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "07w6ipyiy8hi88d6yxbbf3vkv26mj7dcz9yr8141hb2ig03v0h0p";
   };
 
-  buildInputs = [ makeWrapper jdk ant ];
+  buildInputs = [ makeWrapper jdk8 ant ];
 
   buildPhase = "ant";
 
   installPhase = ''
     install -D dist/Vuze_0000-00.jar $out/share/java/Vuze_${version}-00.jar
-    makeWrapper ${jre}/bin/java $out/bin/vuze \
+    makeWrapper ${jre8}/bin/java $out/bin/vuze \
       --add-flags "-Xmx256m -Djava.library.path=${swt}/lib -cp $out/share/java/Vuze_${version}-00.jar:${swt}/jars/swt.jar org.gudy.azureus2.ui.swt.Main"
   '';
 

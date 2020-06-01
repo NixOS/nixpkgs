@@ -1,5 +1,5 @@
 #!@bash@/bin/bash
-export JAVA_HOME="${JAVA_HOME:-@jdk@}"
+export JAVA_HOME="${JAVA_HOME:-@jdk8@}"
 #export SAL_USE_VCLPLUGIN="${SAL_USE_VCLPLUGIN:-gen}"
 
 if uname | grep Linux > /dev/null && 

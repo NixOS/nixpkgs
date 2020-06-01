@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, jdk, CoreServices, Foundation }:
+{ stdenv, fetchFromGitHub, zlib, jdk8, CoreServices, Foundation }:
 
 stdenv.mkDerivation rec {
   pname = "avian";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1j2y45cpqk3x6a743mgpg7z3ivwm7qc9jy6xirvay7ah1qyxmm48";
   };
 
-  buildInputs = [ zlib jdk ]
+  buildInputs = [ zlib jdk8 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Foundation ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error";

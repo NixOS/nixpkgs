@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
+{ stdenv, fetchurl, unzip, jdk8, java ? jdk8, makeWrapper }:
 
 rec {
   gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation {

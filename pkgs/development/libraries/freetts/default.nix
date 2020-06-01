@@ -1,4 +1,4 @@
-{stdenv, fetchurl, apacheAnt, unzip, sharutils, lib, jdk}:
+{stdenv, fetchurl, apacheAnt, unzip, sharutils, lib, jdk8}:
 
 stdenv.mkDerivation {
   name = "freetts-1.2.2";
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/freetts/freetts-1.2.2-src.zip";
     sha256 = "0mnikqhpf4f4jdr0irmibr8yy0dnffx1i257y22iamxi7a6by2r7";
   };
-  buildInputs = [ apacheAnt unzip sharutils jdk ];
+  buildInputs = [ apacheAnt unzip sharutils jdk8 ];
   unpackPhase = ''
     unzip $src -x META-INF/*
   '';

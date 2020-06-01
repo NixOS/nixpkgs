@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "mill";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     install -Dm555 "$src" "$out/bin/.mill-wrapped"
     # can't use wrapProgram because it sets --argv0
     makeWrapper "$out/bin/.mill-wrapped" "$out/bin/mill" \
-      --prefix PATH : "${jre}/bin" \
-      --set JAVA_HOME "${jre}" \
+      --prefix PATH : "${jre8}/bin" \
+      --set JAVA_HOME "${jre8}" \
       --set MILL_VERSION "${version}"
     runHook postInstall
   '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, jre, makeWrapper }:
+{ stdenv, fetchsvn, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "welkin";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "welkin-r9638/tags/${version}";
 
-  buildInputs = [ jre makeWrapper ];
+  buildInputs = [ jre8 makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/{bin,share}
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp $out/share/welkin.sh $out/bin/welkin
     sed -e 's@\./lib/welkin\.jar@'"$out"'/share/lib/welkin.jar@' -i $out/bin/welkin
     wrapProgram $out/bin/welkin \
-      --set JAVA_HOME ${jre}
+      --set JAVA_HOME ${jre8}
     chmod a+x $out/bin/welkin
   '';
 

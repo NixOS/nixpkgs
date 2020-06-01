@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, unzip, ant, jdk
+{ stdenv, lib, fetchurl, makeDesktopItem, unzip, ant, jdk8
 # Optional, Jitsi still runs without, but you may pass null:
 , alsaLib, dbus, gtk2, libpulseaudio, openssl, xorg
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ]);
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [ ant jdk ];
+  buildInputs = [ ant jdk8 ];
 
   buildPhase = ''ant make'';
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     cp resources/install/generic/run.sh $out/bin/jitsi
     chmod +x $out/bin/jitsi
     substituteInPlace $out/bin/jitsi \
-      --subst-var-by JAVA ${jdk}/bin/java \
+      --subst-var-by JAVA ${jdk8}/bin/java \
       --subst-var-by EXTRALIBS ${gtk2.out}/lib
-    sed -e 's,^java\ ,${jdk}/bin/java ,' -i $out/bin/jitsi
+    sed -e 's,^java\ ,${jdk8}/bin/java ,' -i $out/bin/jitsi
     patchShebangs $out
-    libPath="$libPath:${jdk.home}/lib/${jdk.architecture}"
+    libPath="$libPath:${jdk8.home}/lib/${jdk8.architecture}"
     find $out/ -type f -name '*.so' | while read file; do
       patchelf --set-rpath "$libPath" "$file" && \
           patchelf --shrink-rpath "$file"

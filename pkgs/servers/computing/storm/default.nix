@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, zip, unzip
-, jzmq, jdk, python
+, jzmq, jdk8, python
 , confFile ? "", extraLibraryPaths ? [], extraJars ? [] }:
 
 stdenv.mkDerivation rec {
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
       -e "s|STORM_CONF_DIR = .*|STORM_CONF_DIR = os.getenv('STORM_CONF_DIR','$out/conf')|" \
       -e 's|STORM_LOG4J2_CONF_DIR =.*|STORM_LOG4J2_CONF_DIR = os.path.join(STORM_CONF_DIR, "log4j2")|' \
         $out/bin/storm.py
-    # Default jdk location
-    sed -i -e 's|#.*export JAVA_HOME=.*|export JAVA_HOME="${jdk.home}"|' \
+    # Default jdk8 location
+    sed -i -e 's|#.*export JAVA_HOME=.*|export JAVA_HOME="${jdk8.home}"|' \
            $out/conf/storm-env.sh
     unzip  $out/lib/storm-core-${version}.jar defaults.yaml;
     zip -d $out/lib/storm-core-${version}.jar defaults.yaml;

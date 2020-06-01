@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jre, makeWrapper }:
+{ stdenv, fetchzip, jre8, makeWrapper }:
 
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mkdir -pv $out/share/tabula
     cp -v * $out/share/tabula
 
-    makeWrapper ${jre}/bin/java $out/bin/tabula --add-flags "-jar $out/share/tabula/tabula.jar"
+    makeWrapper ${jre8}/bin/java $out/bin/tabula --add-flags "-jar $out/share/tabula/tabula.jar"
   '';
 
 

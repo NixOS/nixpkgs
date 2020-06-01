@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
+{ stdenv, lib, fetchzip, fetchurl, gtk2, jre8, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "xmind";
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x $out/bin/XMind
 
-    ln -s ${jre} $out/libexec/jre
+    ln -s ${jre8} $out/libexec/jre8
   '';
 
   meta = with stdenv.lib; {

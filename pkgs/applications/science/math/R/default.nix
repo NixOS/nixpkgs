@@ -1,6 +1,6 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
-, less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, blas, lapack
+, less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk8, blas, lapack
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which blas lapack curl tcl tk jdk
+    pkgconfig bison imake which blas lapack curl tcl tk jdk8
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       CC=$(type -p cc)
       CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-      JAVA_HOME="${jdk}"
+      JAVA_HOME="${jdk8}"
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''

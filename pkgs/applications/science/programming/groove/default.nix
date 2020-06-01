@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, makeDesktopItem, icoutils, jre }:
+{ stdenv, fetchurl, unzip, makeWrapper, makeDesktopItem, icoutils, jre8 }:
 
 let
   desktopItem = makeDesktopItem {
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     for bin in Generator Imager ModelChecker PrologChecker Simulator Viewer; do
-      makeWrapper ${jre}/bin/java $out/bin/groove-''${bin,,} \
+      makeWrapper ${jre8}/bin/java $out/bin/groove-''${bin,,} \
         --add-flags "-jar $out/share/groove/bin/$bin.jar"
     done
 

@@ -42,14 +42,14 @@ stdenv.mkDerivation rec {
       ML_SOURCES="\$POLYML_HOME/src"
     EOF
 
-    cat >contrib/jdk/etc/settings <<EOF
+    cat >contrib/jdk8/etc/settings <<EOF
       ISABELLE_JAVA_PLATFORM=${stdenv.system}
       ISABELLE_JDK_HOME=${java}
     EOF
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/jdk contrib/polyml-* contrib/z3-*; do
+    for comp in contrib/jdk8 contrib/polyml-* contrib/z3-*; do
       rm -rf $comp/x86*
     done
     '' + (if ! stdenv.isLinux then "" else ''

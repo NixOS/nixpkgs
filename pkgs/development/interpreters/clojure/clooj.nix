@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 let version = "0.4.4"; in
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/share/java
     ln -s $jar $out/share/java/clooj.jar
-    makeWrapper ${jre}/bin/java $out/bin/clooj --add-flags "-jar $out/share/java/clooj.jar"
+    makeWrapper ${jre8}/bin/java $out/bin/clooj --add-flags "-jar $out/share/java/clooj.jar"
   '';
 
   meta = {

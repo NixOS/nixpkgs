@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, lib }:
+{ stdenv, fetchurl, makeWrapper, jre8, lib }:
 
 stdenv.mkDerivation rec {
   pname = "avro-tools";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildInputs = [ jre ];
+  buildInputs = [ jre8 ];
   nativeBuildInputs = [ makeWrapper ];
   sourceRoot = ".";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec/avro-tools
     cp $src $out/libexec/avro-tools/${pname}.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/avro-tools \
+    makeWrapper ${jre8}/bin/java $out/bin/avro-tools \
     --add-flags "-jar $out/libexec/avro-tools/${pname}.jar"
   '';
 

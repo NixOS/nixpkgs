@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "2.3.1";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D "$src" "$out/share/java/${jarfilename}"
 
-    makeWrapper ${jre}/bin/java $out/bin/swagger-codegen \
+    makeWrapper ${jre8}/bin/java $out/bin/swagger-codegen \
       --add-flags "-jar $out/share/java/${jarfilename}"
   '';
 

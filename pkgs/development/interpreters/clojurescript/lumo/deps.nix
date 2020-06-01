@@ -252,7 +252,7 @@ in rec {
       artifactId = "guava";
       groupId = "com.google.guava";
       sha512 = "429ceeec0350ba98e2b089b8b70ded2ec570c3a684894a7545d10592c1c7be42dacd1fad8b2cb9123aa3612575ce1b56e1bb54923443fc293f8e9adeac2762ee";
-      version = "25.1-jre";
+      version = "25.1-jre8";
     };
   }
 

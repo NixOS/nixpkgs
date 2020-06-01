@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre, unzip, makeWrapper}:
+{stdenv, fetchurl, jre8, unzip, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "snpeff";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i12mv93bfv8xjwc3rs2x73d6hkvi7kgbbbx3ry984l3ly4p6nnm";
   };
 
-  buildInputs = [ unzip jre makeWrapper ];
+  buildInputs = [ unzip jre8 makeWrapper ];
 
   sourceRoot = "snpEff";
 
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     cp *.jar *.config $out/libexec/snpeff
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/snpeff --add-flags "-jar $out/libexec/snpeff/snpEff.jar"
-    makeWrapper ${jre}/bin/java $out/bin/snpsift --add-flags "-jar $out/libexec/snpeff/SnpSift.jar"
+    makeWrapper ${jre8}/bin/java $out/bin/snpeff --add-flags "-jar $out/libexec/snpeff/snpEff.jar"
+    makeWrapper ${jre8}/bin/java $out/bin/snpsift --add-flags "-jar $out/libexec/snpeff/SnpSift.jar"
   '';
 
   meta = with stdenv.lib; {

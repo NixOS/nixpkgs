@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
+{ stdenv, fetchurl, jre8, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
   majorVersion ? "1.0" }:
 
 let
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ jre makeWrapper bash gnugrep gnused coreutils ps ];
+  buildInputs = [ jre8 makeWrapper bash gnugrep gnused coreutils ps ];
 
   installPhase = ''
     mkdir -p $out
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
     for p in $out/bin\/*.sh; do
       wrapProgram $p \
-        --set JAVA_HOME "${jre}" \
+        --set JAVA_HOME "${jre8}" \
         --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
         --prefix PATH : "${bash}/bin:${coreutils}/bin:${gnugrep}/bin:${gnused}/bin"
     done

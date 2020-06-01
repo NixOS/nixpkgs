@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk, makeWrapper}:
+{ stdenv, fetchurl, unzip, jdk8, makeWrapper}:
 
 stdenv.mkDerivation {
   version = "4.3.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     cat > $out/bin/omegat <<EOF
     #! $SHELL -e
     CLASSPATH="$out/lib"
-    exec ${jdk}/bin/java -jar -Xmx1024M $out/OmegaT.jar "\$@"
+    exec ${jdk8}/bin/java -jar -Xmx1024M $out/OmegaT.jar "\$@"
     EOF
     chmod +x $out/bin/omegat
   '';

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, fontconfig, autoreconfHook, DiskArbitration
-, withJava ? false, jdk ? null, ant ? null
+, withJava ? false, jdk8 ? null, ant ? null
 , withAACS ? false, libaacs ? null
 , withBDplus ? false, libbdplus ? null
 , withMetadata ? true, libxml2 ? null
@@ -8,7 +8,7 @@
 
 with stdenv.lib;
 
-assert withJava -> jdk != null && ant != null;
+assert withJava -> jdk8 != null && ant != null;
 assert withAACS -> libaacs != null;
 assert withBDplus -> libbdplus != null;
 assert withMetadata -> libxml2 != null;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
                       ;
 
   buildInputs = [ fontconfig ]
-                ++ optional withJava jdk
+                ++ optional withJava jdk8
                 ++ optional withMetadata libxml2
                 ++ optional withFonts freetype
                 ++ optional stdenv.isDarwin DiskArbitration
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    ${optionalString withJava ''export JDK_HOME="${jdk.home}"''}
+    ${optionalString withJava ''export JDK_HOME="${jdk8.home}"''}
   '';
 
   configureFlags =  with stdenv.lib;

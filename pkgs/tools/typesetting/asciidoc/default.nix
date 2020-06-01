@@ -28,7 +28,7 @@
 # unzip is needed to extract filter and backend plugins
 , unzip ? null
 # filters
-, enableDitaaFilter ? false, jre ? null
+, enableDitaaFilter ? false, jre8 ? null
 , enableMscgenFilter ? false, mscgen ? null
 , enableDiagFilter ? false, blockdiag ? null, seqdiag ? null, actdiag ? null, nwdiag ? null
 , enableQrcodeFilter ? false, qrencode ? null
@@ -66,7 +66,7 @@ assert enableStandardFeatures ->
 
 # filters
 assert enableExtraPlugins || enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter -> unzip != null;
-assert (enableExtraPlugins && enableJava) || enableDitaaFilter -> jre != null;
+assert (enableExtraPlugins && enableJava) || enableDitaaFilter -> jre8 != null;
 assert enableExtraPlugins || enableMscgenFilter -> mscgen != null;
 assert enableExtraPlugins || enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
 assert enableExtraPlugins || enableMatplotlibFilter -> matplotlib != null && numpy != null;
@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
   '' + optionalString _enableDitaaFilter ''
     echo "Extracting ditaa filter"
     unzip -d "$out/etc/asciidoc/filters/ditaa" "${ditaaFilterSrc}"
-    sed -i -e "s|java -jar|${jre}/bin/java -jar|" \
+    sed -i -e "s|java -jar|${jre8}/bin/java -jar|" \
         "$out/etc/asciidoc/filters/ditaa/ditaa2img.py"
   '' + optionalString _enableMscgenFilter ''
     echo "Extracting mscgen filter"

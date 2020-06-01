@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --replace 'Messages.showWarning' 'if (false) Messages.showWarning'
 
     ( cd build
-      substituteInPlace build.xml --replace "jre-download," ""  # do not download jre1.8.0_144
+      substituteInPlace build.xml --replace "jre8-download," ""  # do not download jre1.8.0_144
       mkdir -p linux/jre1.8.0_144                               # fake dir to avoid error
       ant build )
   '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, jre }:
+{ stdenv, fetchurl, unzip, makeWrapper, jre8 }:
 
 stdenv.mkDerivation rec {
   name = "ec2-api-tools-1.7.5.1";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
           if [ $b = "ec2-cmd" ]; then continue; fi
           makeWrapper $i $out/bin/$(basename $i) \
             --set EC2_HOME $d \
-            --set JAVA_HOME ${jre}
+            --set JAVA_HOME ${jre8}
       done
     ''; # */
 

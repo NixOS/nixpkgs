@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre_headless }:
+{ stdenv, fetchurl, makeWrapper, jre8_headless }:
 
 stdenv.mkDerivation rec {
   pname = "graylog";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   buildInputs = [ makeWrapper ];
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${jre_headless}/bin" ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${jre8_headless}/bin" ];
 
   installPhase = ''
     mkdir -p $out

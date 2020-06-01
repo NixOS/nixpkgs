@@ -19,7 +19,7 @@ in
   pname = "sqldeveloper";
 
   src = requireFile rec {
-    name = "sqldeveloper-${version}-no-jre.zip";
+    name = "sqldeveloper-${version}-no-jre8.zip";
     url = "https://www.oracle.com/tools/downloads/sqldev-downloads.html";
     message = ''
       This Nix expression requires that ${name} already be part of the store. To

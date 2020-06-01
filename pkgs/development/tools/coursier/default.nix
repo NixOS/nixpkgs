@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre8 }:
 
 let
   zshCompletion = version: fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     install -Dm555 $src $out/bin/coursier
     patchShebangs $out/bin/coursier
-    wrapProgram $out/bin/coursier --prefix PATH ":" ${jre}/bin
+    wrapProgram $out/bin/coursier --prefix PATH ":" ${jre8}/bin
 
     # copy zsh completion
     install -Dm755 ${zshCompletion version} $out/share/zsh/site-functions/_coursier

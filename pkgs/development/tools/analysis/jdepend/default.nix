@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ant, jdk, runtimeShell }:
+{ stdenv, fetchFromGitHub, ant, jdk8, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "jdepend";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lxf3j9vflky7a2py3i59q7cwd1zvjv2b88l3za39vc90s04dz6k";
   };
 
-  nativeBuildInputs = [ ant jdk ];
+  nativeBuildInputs = [ ant jdk8 ];
   buildPhase = "ant jar";
 
   installPhase = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     cat > "$out/bin/jdepend" <<EOF
     #!${runtimeShell}
-    exec ${jdk.jre}/bin/java -classpath "$out/share/*" "\$@"
+    exec ${jdk8.jre}/bin/java -classpath "$out/share/*" "\$@"
     EOF
     chmod a+x $out/bin/jdepend
   '';

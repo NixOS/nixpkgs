@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre8, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "dbvisualizer-9.5.7";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp -a . $out
     ln -sf $out/dbvis $out/bin
-    wrapProgram $out/bin/dbvis --set INSTALL4J_JAVA_HOME ${jre}
+    wrapProgram $out/bin/dbvis --set INSTALL4J_JAVA_HOME ${jre8}
   '';
 
   meta = {

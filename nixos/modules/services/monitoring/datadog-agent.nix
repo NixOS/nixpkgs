@@ -243,7 +243,7 @@ in {
 
       dd-jmxfetch = lib.mkIf (lib.hasAttr "jmx" cfg.checks) (makeService {
         description = "Datadog JMX Fetcher";
-        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
+        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk8 ];
         serviceConfig.ExecStart = "${datadogPkg}/bin/dd-jmxfetch";
       });
 

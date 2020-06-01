@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeTextFile, jre, makeWrapper, fontsConf, licenseAccepted ? false }:
+{ stdenv, fetchurl, writeTextFile, jre8, makeWrapper, fontsConf, licenseAccepted ? false }:
 
 # If you happen to use this software on the XMonad window manager, you will have issues with
 # grey windows, no resizing, menus not showing and other glitches.
@@ -52,23 +52,23 @@ in stdenv.mkDerivation {
     # the installer wants to use its internal JRE
     # disable this. The extra spaces are needed because the installer carries
     # a binary payload, so should not change in size
-    sed -e 's/^if \[ -f jre.tar.gz/if false          /' $src > installer
+    sed -e 's/^if \[ -f jre8.tar.gz/if false          /' $src > installer
     chmod a+x installer
 
-    cp ${dotInstall4j jre} .install4j
+    cp ${dotInstall4j jre8} .install4j
     chmod u+w .install4j
 
     sed -e "s|INSTALLDIR|$out|" ${responseVarfile} > response.varfile
 
     export HOME=`pwd`
-    export INSTALL4J_JAVA_HOME=${jre.home}
+    export INSTALL4J_JAVA_HOME=${jre8.home}
     export FONTCONFIG_FILE=${fontsConf}
     bash -ic './installer -q -varfile response.varfile'
 
     sed -i 's/Xmx450m/Xmx900m/;s/Xss192k/Xss384k/' $out/lib/neoload/conf/agent.properties
 
     for i in $out/bin/*; do
-      wrapProgram $i --run 'cp ${dotInstall4j "${jre.home}/jre"} ~/.install4j' \
+      wrapProgram $i --run 'cp ${dotInstall4j "${jre8.home}/jre8"} ~/.install4j' \
                      --run 'chmod u+w ~/.install4j'
     done
 

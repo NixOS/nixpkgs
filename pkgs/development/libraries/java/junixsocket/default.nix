@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ant, jdk, junit }:
+{ stdenv, fetchurl, ant, jdk8, junit }:
 
 stdenv.mkDerivation rec {
   name = "junixsocket-1.3";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./darwin.patch ];
 
-  buildInputs = [ ant jdk junit ];
+  buildInputs = [ ant jdk8 junit ];
 
   preConfigure =
     ''

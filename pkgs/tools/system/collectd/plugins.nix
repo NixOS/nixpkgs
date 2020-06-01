@@ -3,7 +3,7 @@
 , darwin
 , hiredis
 , iptables
-, jdk
+, jdk8
 , libatasmart
 , libdbi
 , libgcrypt
@@ -133,7 +133,7 @@ let
     ipvs = {};
     irq = {};
     java = {
-      buildInputs = [ jdk libgcrypt libxml2 ];
+      buildInputs = [ jdk8 libgcrypt libxml2 ];
     };
     load = {};
     logfile = {};

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, ctags, makeWrapper, coreutils, git, runtimeShell }:
+{ stdenv, fetchurl, jre8, ctags, makeWrapper, coreutils, git, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "opengrok";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/Messages --replace "#!/bin/ksh" "#!${runtimeShell}"
     wrapProgram $out/bin/OpenGrok \
       --prefix PATH : "${stdenv.lib.makeBinPath [ ctags git ]}" \
-      --set JAVA_HOME "${jre}" \
+      --set JAVA_HOME "${jre8}" \
       --set OPENGROK_TOMCAT_BASE "/var/tomcat"
   '';
 

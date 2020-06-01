@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre
+{ stdenv, fetchurl, makeWrapper, jre8
 , htmlunit-driver, chromedriver, chromeSupport ? true }:
 
 with stdenv.lib;
@@ -18,12 +18,12 @@ in stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildInputs = [ jre makeWrapper ];
+  buildInputs = [ jre8 makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/share/lib/${pname}-${version}
     cp $src $out/share/lib/${pname}-${version}/${pname}-${version}.jar
-    makeWrapper ${jre}/bin/java $out/bin/selenium-server \
+    makeWrapper ${jre8}/bin/java $out/bin/selenium-server \
       --add-flags "-cp $out/share/lib/${pname}-${version}/${pname}-${version}.jar:${htmlunit-driver}/share/lib/${htmlunit-driver.name}/${htmlunit-driver.name}.jar" \
       --add-flags ${optionalString chromeSupport "-Dwebdriver.chrome.driver=${chromedriver}/bin/chromedriver"} \
       --add-flags "org.openqa.grid.selenium.GridLauncherV3"
