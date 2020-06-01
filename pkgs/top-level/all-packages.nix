@@ -26737,4 +26737,6 @@ in
   vpsfree-client = callPackage ../tools/virtualization/vpsfree-client {};
 
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
+
+  mpvmenu = callPackage ../applications/misc/mpvmenu {};
 }
