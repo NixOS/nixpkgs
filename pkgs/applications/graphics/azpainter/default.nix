@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "Symbian9";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-al87Rnf4HkKdmtN3EqxC0zEHgVWwnVi7WttqT/Qxr0Q=";
+    sha256 = "0i5g67s4ysnvbaxmi7dhan0hfcfk8an14xykkafl47pqfx33npva";
   };
 
   buildInputs = [

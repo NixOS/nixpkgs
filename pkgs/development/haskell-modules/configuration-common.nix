@@ -1473,7 +1473,7 @@ self: super: {
   # release of webify is published.
   webify = appendPatch super.webify (pkgs.fetchpatch {
     url = "https://github.com/ananthakumaran/webify/pull/27/commits/6d653e7bdc1ffda75ead46851b5db45e87cb2aa0.patch";
-    sha256 = "sha256:0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
+    sha256 = "0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
   });
 
   # Depends on selective >= 0.4, but the default of selective is 0.3
