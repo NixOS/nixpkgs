@@ -82,7 +82,7 @@ let
     { pname, file, hash, kind }:
       pkgs.fetchurl {
         url = "https://files.pythonhosted.org/packages/${kind}/${lib.toLower (builtins.substring 0 1 file)}/${pname}/${file}";
-        inherit hash;
+        sha256 = builtins.elemAt (builtins.match "sha256:(.*)" hash) 0; # nix 2.0 backwards compatibility.
       }
   );
 
