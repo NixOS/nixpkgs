@@ -75,9 +75,6 @@ in stdenv.mkDerivation rec {
     gnome3.gnome-control-center
     gnome3.gnome-desktop
     gnome3.gnome-session
-    # https://gitlab.alpinelinux.org/alpine/aports/-/issues/11502
-    gnome3.gnome-shell
-    gnome3.mutter
     gtk3
     pam
     upower
@@ -113,6 +110,8 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     mkdir -p $out/share/wayland-sessions
     ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
+    # The OSK0.desktop points to a dummy stub that's not needed
+    rm $out/share/applications/sm.puri.OSK0.desktop
   '';
 
   passthru = {

@@ -141,6 +141,7 @@
   ./programs/npm.nix
   ./programs/oblogout.nix
   ./programs/plotinus.nix
+  ./programs/phosh-ui.nix
   ./programs/qt5ct.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
