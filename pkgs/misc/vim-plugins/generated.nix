@@ -3853,6 +3853,18 @@ let
     meta.homepage = "https://github.com/haya14busa/vim-asterisk/";
   };
 
+  vim-async = buildVimPluginFrom2Nix {
+    pname = "vim-async";
+    version = "2020-03-17";
+    src = fetchFromGitHub {
+      owner = "prabirshrestha";
+      repo = "async.vim";
+      rev = "42371b5fb2cc07254295ff6beb3ca7cf235b7ede";
+      sha256 = "1c6ymxm28hpai1ki5y5a2m6qh5129nqn1fxiq9xnlzfrlbjl8vil";
+    };
+    meta.homepage = "https://github.com/prabirshrestha/async.vim";
+  };
+
   vim-auto-save = buildVimPluginFrom2Nix {
     pname = "vim-auto-save";
     version = "2019-03-19";
