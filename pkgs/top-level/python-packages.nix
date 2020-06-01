@@ -3438,6 +3438,8 @@ in {
 
   samplerate = callPackage ../development/python-modules/samplerate { };
 
+  scalyr = callPackage ../development/python-modules/scalyr { };
+
   ssdeep = callPackage ../development/python-modules/ssdeep { };
 
   ssdp = callPackage ../development/python-modules/ssdp { };
