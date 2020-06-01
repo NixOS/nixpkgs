@@ -441,6 +441,27 @@ in
           '';
       };
 
+    # FIXME: should move this to top-level.nix.
+    system.forbiddenDependencies = mkOption {
+      default = null;
+      example = "-dev$";
+      type = types.nullOr types.str;
+      description = ''
+        An extended regular expression that matches store paths that
+        should not appear in the system closure.
+      '';
+    };
+
+    system.maxClosureSize = mkOption {
+      default = null;
+      example = 512 * 1024 * 1024;
+      type = types.nullOr types.int;
+      description = ''
+        The maximum size of the system closure in bytes (computed as the sum of
+        the NAR serializations of the store paths in the closure).
+      '';
+    };
+
   };
 
   config = {
@@ -608,10 +629,31 @@ in
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
-    system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
+    system.build.vm = pkgs.runCommand "nixos-vm"
+      { preferLocalBuild = true;
+        closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel ]; };
+        inherit (config.system) forbiddenDependencies maxClosureSize;
+        inherit (config.system.build) toplevel;
+      }
       ''
+        if [[ -n $forbiddenDependencies ]]; then
+          if devPaths="$(grep -E -- "$forbiddenDependencies" $closureInfo/store-paths)"; then
+            printf "System closure '%s' contains the following disallowed paths:\n%s" "$toplevel" "$devPaths"
+            exit 1
+          fi
+        fi
+
+        # FIXME: implement using outputChecks.out.maxClosureSize.
+        if [[ -n $maxClosureSize ]]; then
+          closureSize="$(cat $closureInfo/total-nar-size)"
+          if [[ $closureSize -gt $maxClosureSize ]]; then
+            printf "System closure '%s' is %d bytes but only %d are allowed." "$toplevel" "$closureSize" "$maxClosureSize"
+            exit 1
+          fi
+        fi
+
         mkdir -p $out/bin
-        ln -s ${config.system.build.toplevel} $out/system
+        ln -s "$toplevel" $out/system
         ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${vmName}-vm
       '';
 
