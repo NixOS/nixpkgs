@@ -10127,7 +10127,9 @@ in
   aspectj = callPackage ../development/compilers/aspectj { };
 
   ats = callPackage ../development/compilers/ats { };
-  ats2 = callPackage ../development/compilers/ats2 { };
+  ats2 = callPackage ../development/compilers/ats2 {
+    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
+  };
 
   avra = callPackage ../development/compilers/avra { };
 

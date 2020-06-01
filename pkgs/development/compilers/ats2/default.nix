@@ -3,11 +3,11 @@
 , withContrib ? true }:
 
 let
-  versionPkg = "0.4.1" ;
+  versionPkg = "0.4.2" ;
 
   contrib = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-contrib-${versionPkg}.tgz";
-    sha256 = "184m4hz2xszhcfc6w9fw9qibhmcvgjmikwfwkb345xypr59jm93d";
+    sha256 = "19ykjacq1cx04z981p3dd2qr9mb6ps18lp2b4bd24dhspc25yj4v";
   };
 
   postInstallContrib = lib.optionalString withContrib
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-gmp-${version}.tgz";
-    sha256 = "0c4nqp6yzmpj0mcpg7ibmwyqi8hjw3sza8myvy4nzq3fa6wldy5l";
+    sha256 = "100vgrninbshq3rs57psl9aqi2bphrjfbizmmrjhs5yzh0a4zikk";
   };
 
   buildInputs = [ gmp ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Functional programming language with dependent types";
     homepage    = "http://www.ats-lang.org";
     license     = licenses.gpl3Plus;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ttuegel bbarker ];
+    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ thoughtpolice ttuegel bbarker avanov ];
   };
 }
