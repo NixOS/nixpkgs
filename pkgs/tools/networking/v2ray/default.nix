@@ -3,13 +3,13 @@
 , ... } @ args:
 
 callPackage ./generic.nix (rec {
-  version = "4.23.2";
+  version = "4.23.3";
 
   src = fetchFromGitHub {
     owner = "v2ray";
     repo = "v2ray-core";
     rev = "v${version}";
-    sha256 = "073mwl353g90whj0sc1h98nzpwi9ray96ccpz0g85y51779vy1bx";
+    sha256 = "1b0cxrpgkmgas7pwxglsvgcig8rnhffkf990b42z7awji5lw055v";
   };
 
   assets = {
