@@ -6989,6 +6989,8 @@ in
 
   swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
 
+  swapview = callPackage ../os-specific/linux/swapview/default.nix { };
+
   swec = callPackage ../tools/networking/swec { };
 
   swfdec = callPackage ../tools/graphics/swfdec {};
