@@ -55,7 +55,7 @@ in
 
         <screen>
         <prompt># </prompt>ssh-keygen -t rsa -N "" -f /etc/secrets/initrd/ssh_host_rsa_key
-        <prompt># </prompt>ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed_25519_key
+        <prompt># </prompt>ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
         </screen>
 
         <warning>
@@ -82,6 +82,12 @@ in
       description = ''
         Authorized keys for the root user on initrd.
       '';
+    };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = "Verbatim contents of <filename>sshd_config</filename>.";
     };
   };
 
@@ -126,6 +132,8 @@ in
       '' else ''
         UseDNS no
       ''}
+
+      ${cfg.extraConfig}
     '';
   in mkIf (config.boot.initrd.network.enable && cfg.enable) {
     assertions = [

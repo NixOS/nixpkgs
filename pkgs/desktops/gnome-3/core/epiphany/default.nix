@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook
     buildPackages.glib
+    buildPackages.gtk3
   ];
 
   buildInputs = [
@@ -103,7 +104,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Apps/Epiphany";
     description = "WebKit based web browser for GNOME";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

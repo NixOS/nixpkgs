@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wb2osz/direwolf/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.the-kenny ];
   };
 }

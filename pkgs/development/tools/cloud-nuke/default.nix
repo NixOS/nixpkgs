@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "cloud-nuke";
-  version = "0.1.7";
+  version = "0.1.18";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "054z6v13x55x9l5xnixxxszj8k2wa09b5ld2wq4gm4hc273s2m4k";
+    sha256 = "1amk9bjrc9svvgllif2vr6xx7kc3xmwjbyb8prnm5zp82hymk5f1";
   };
 
   goPackagePath = "github.com/gruntwork-io/cloud-nuke";

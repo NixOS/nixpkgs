@@ -1,20 +1,17 @@
-{ stdenv, fetchurl, yacc }:
+{ stdenv, fetchFromGitHub, yacc }:
 
 stdenv.mkDerivation rec {
-  name = "nawk-20121220";
+  pname = "nawk";
+  version = "20180827";
 
-  src = fetchurl {
-    url = "https://www.cs.princeton.edu/~bwk/btl.mirror/awk.tar.gz";
-    sha256 = "10wvdn7xwc5bbp5h7l0b9fxby3bds21n8a34z54i8kjsbhb95h4d";
+  src = fetchFromGitHub {
+    owner = "onetrueawk";
+    repo = "awk";
+    rev = version;
+    sha256 = "0qcsxhcwg6g3c0zxmbipqa8d8d5n8zxrq0hymb8yavsaz103fcl6";
   };
 
   nativeBuildInputs = [ yacc ];
-
-  unpackPhase = ''
-    mkdir build
-    cd build
-    tar xvf ${src}
-  '';
 
   patchPhase = ''
     substituteInPlace ./makefile \

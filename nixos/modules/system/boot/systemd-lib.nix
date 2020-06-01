@@ -114,7 +114,9 @@ in rec {
         (if isList value then value else [value]))
         as));
 
-  generateUnits = type: units: upstreamUnits: upstreamWants:
+  generateUnits = generateUnits' true;
+
+  generateUnits' = allowCollisions: type: units: upstreamUnits: upstreamWants:
     pkgs.runCommand "${type}-units"
       { preferLocalBuild = true;
         allowSubstitutes = false;
@@ -182,8 +184,13 @@ in rec {
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
             ln -sfn /dev/null $out/$fn
           else
-            mkdir -p $out/$fn.d
-            ln -s $i/$fn $out/$fn.d/overrides.conf
+            ${if allowCollisions then ''
+              mkdir -p $out/$fn.d
+              ln -s $i/$fn $out/$fn.d/overrides.conf
+            '' else ''
+              echo "Found multiple derivations configuring $fn!"
+              exit 1
+            ''}
           fi
        else
           ln -fs $i/$fn $out/

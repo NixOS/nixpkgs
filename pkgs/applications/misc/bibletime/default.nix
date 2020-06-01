@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, cmake, pkgconfig, sword, boost, clucene_core
+{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, sword, boost, clucene_core
 , qtbase, qttools, qtsvg, qtwebkit
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
 
   version = "2.11.2";
 

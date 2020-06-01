@@ -58,6 +58,8 @@ mkDerivation rec {
     mv $out/bin/*.app $out/Applications
     rmdir $out/bin || true
 
+    wrapQtApp "$out"/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD
+
     mv --target-directory=$out/Applications/OpenSCAD.app/Contents/Resources \
       $out/share/openscad/{examples,color-schemes,locale,libraries,fonts}
 
@@ -80,7 +82,6 @@ mkDerivation rec {
     homepage = "http://openscad.org/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers;
-      [ bjornfor raskin the-kenny gebner ];
+    maintainers = with stdenv.lib.maintainers; [ bjornfor raskin gebner ];
   };
 }

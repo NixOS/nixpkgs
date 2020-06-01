@@ -19,6 +19,7 @@
 , pytest-click
 , isPy27
 , functools32
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -34,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     click watchdog exifread requests mistune inifile Babel jinja2
-    flask pyopenssl ndg-httpsclient
+    flask pyopenssl ndg-httpsclient setuptools
   ] ++ lib.optionals isPy27 [ functools32 ];
 
   checkInputs = [

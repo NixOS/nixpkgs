@@ -25,6 +25,5 @@ stdenv.mkDerivation {
     homepage = "https://www.gnu.org/software/gforth/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

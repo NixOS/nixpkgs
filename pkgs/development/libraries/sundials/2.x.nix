@@ -4,15 +4,13 @@
 , python
 # GNU Octave needs KLU for ODE solvers
 , suitesparse
-, liblapack
+, blas, lapack
 , gfortran
 , lapackSupport ? true }:
 
-let liblapackShared = liblapack.override {
-  shared = true;
-};
+assert (!blas.isILP64) && (!lapack.isILP64);
 
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "sundials";
   version = "2.7.0";
 
@@ -44,7 +42,7 @@ in stdenv.mkDerivation rec {
     "-DKLU_INCLUDE_DIR=${suitesparse}/include"
     "-DKLU_LIBRARY_DIR=${suitesparse}/lib"
     "-DLAPACK_ENABLE=ON"
-    "-DLAPACK_LIBRARIES=${liblapackShared}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary};${liblapackShared}/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DLAPACK_LIBRARIES=${lapack}/lib/lapack${stdenv.hostPlatform.extensions.sharedLibrary};${blas}/lib/blas${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 
   # flaky tests, and patch in https://github.com/LLNL/sundials/pull/21 doesn't apply cleanly for sundials_3

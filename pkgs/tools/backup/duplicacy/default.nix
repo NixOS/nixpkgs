@@ -19,7 +19,7 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    install -D duplicacy_main $bin/bin/duplicacy
+    install -D duplicacy_main $out/bin/duplicacy
   '';
 
   meta = with lib; {

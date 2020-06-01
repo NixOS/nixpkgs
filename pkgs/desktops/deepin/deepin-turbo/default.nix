@@ -1,4 +1,11 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, qtbase
+, deepin
+}:
 
 mkDerivation rec {
   pname = "deepin-turbo";
@@ -31,7 +38,7 @@ mkDerivation rec {
     searchHardCodedPaths $out  # for debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "A daemon that helps to launch applications faster";

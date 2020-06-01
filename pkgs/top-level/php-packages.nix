@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fetchgit, php, phpWithExtensions, autoconf, pkgconfig, re2c
+{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c
 , gettext, bzip2, curl, libxml2, openssl, gmp, icu, oniguruma, libsodium
 , html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
@@ -8,7 +8,8 @@
 
 let
   buildPecl = import ../build-support/build-pecl.nix {
-    inherit php lib;
+    php = php.unwrapped;
+    inherit lib;
     inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
   };
 
@@ -43,7 +44,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/box/box.phar
-        makeWrapper ${phpWithExtensions}/bin/php $out/bin/box \
+        makeWrapper ${php}/bin/php $out/bin/box \
           --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
       '';
 
@@ -51,17 +52,17 @@ in
         description = "An application for building and managing Phars";
         license = licenses.mit;
         homepage = "https://box-project.github.io/box2/";
-        maintainers = with maintainers; [ jtojnar ];
+        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
       };
     };
 
     composer = mkDerivation rec {
-      version = "1.9.3";
+      version = "1.10.6";
       pname = "composer";
 
       src = pkgs.fetchurl {
         url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "VRZVwvyB9BBlCPQrvEsk6r00sCKxO8Hn2WQr9IPQp9Q=";
+        sha256 = "0yzfzgg9qlc388g91bdg7y7rp1q8vqb5hkwykwmr1n1lv8dsrg99";
       };
 
       dontUnpack = true;
@@ -71,7 +72,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/composer/composer.phar
-        makeWrapper ${phpWithExtensions}/bin/php $out/bin/composer \
+        makeWrapper ${php}/bin/php $out/bin/composer \
           --add-flags "$out/libexec/composer/composer.phar" \
           --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
       '';
@@ -80,17 +81,17 @@ in
         description = "Dependency Manager for PHP";
         license = licenses.mit;
         homepage = "https://getcomposer.org/";
-        maintainers = with maintainers; [ globin offline ];
+        maintainers = with maintainers; [ offline ] ++ teams.php.members;
       };
     };
 
     php-cs-fixer = mkDerivation rec {
-      version = "2.16.1";
+      version = "2.16.3";
       pname = "php-cs-fixer";
 
       src = pkgs.fetchurl {
         url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-        sha256 = "1dq1nhy666zg6d4fkfsjwhj1vwh1ncap2c9ljplxv98a9mm6fk68";
+        sha256 = "195j61qbgbdn5xi0l6030mklji8m7fan2kf3446a1m2n4df3f5hb";
       };
 
       phases = [ "installPhase" ];
@@ -107,7 +108,7 @@ in
         description = "A tool to automatically fix PHP coding standards issues";
         license = licenses.mit;
         homepage = "http://cs.sensiolabs.org/";
-        maintainers = with maintainers; [ jtojnar ];
+        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
       };
     };
 
@@ -144,17 +145,17 @@ in
         description = "This tool check syntax of PHP files faster than serial check with fancier output";
         license = licenses.bsd2;
         homepage = "https://github.com/JakubOnderka/PHP-Parallel-Lint";
-        maintainers = with maintainers; [ jtojnar ];
+        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
       };
     };
 
     phpcbf = mkDerivation rec {
-      version = "3.5.4";
+      version = "3.5.5";
       pname = "phpcbf";
 
       src = pkgs.fetchurl {
         url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-        sha256 = "18x7fk59l821pivw1i2r868y78qgs0qk47b9il1smwi6plwyyflr";
+        sha256 = "0hgagn70gl46migm6zpwcr39dxal07f5cdpnasrafgz5vq0gwr3g";
       };
 
       phases = [ "installPhase" ];
@@ -163,7 +164,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpcbf/phpcbf.phar
-        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpcbf \
+        makeWrapper ${php}/bin/php $out/bin/phpcbf \
           --add-flags "$out/libexec/phpcbf/phpcbf.phar"
       '';
 
@@ -171,17 +172,17 @@ in
         description = "PHP coding standard beautifier and fixer";
         license = licenses.bsd3;
         homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
-        maintainers = with maintainers; [ cmcdragonkai etu ];
+        maintainers = with maintainers; [ cmcdragonkai ] ++ teams.php.members;
       };
     };
 
     phpcs = mkDerivation rec {
-      version = "3.5.4";
+      version = "3.5.5";
       pname = "phpcs";
 
       src = pkgs.fetchurl {
         url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-        sha256 = "1lrybdxxig3yqd3i3nwji5jjn377p50sbpm4s4852dlsxz9qnlgs";
+        sha256 = "0jl038l55cmzn5ml61qkv4z1w4ri0h3v7h00pcb04xhz3gznlbsa";
       };
 
       phases = [ "installPhase" ];
@@ -190,7 +191,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpcs/phpcs.phar
-        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpcs \
+        makeWrapper ${php}/bin/php $out/bin/phpcs \
           --add-flags "$out/libexec/phpcs/phpcs.phar"
       '';
 
@@ -198,17 +199,45 @@ in
         description = "PHP coding standard tool";
         license = licenses.bsd3;
         homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
-        maintainers = with maintainers; [ javaguirre etu ];
+        maintainers = with maintainers; [ javaguirre ] ++ teams.php.members;
+      };
+    };
+
+    phpmd = mkDerivation rec {
+      version = "2.8.2";
+      pname = "phpmd";
+
+      src = pkgs.fetchurl {
+        url = "https://github.com/phpmd/phpmd/releases/download/${version}/phpmd.phar";
+        sha256 = "1i8qgzxniw5d8zjpypalm384y7qfczapfq70xmg129laq6xiqlqb";
+      };
+
+      phases = [ "installPhase" ];
+      buildInputs = [ pkgs.makeWrapper ];
+
+      installPhase = ''
+        mkdir -p $out/bin
+        install -D $src $out/libexec/phpmd/phpmd.phar
+        makeWrapper ${php}/bin/php $out/bin/phpmd \
+          --add-flags "$out/libexec/phpmd/phpmd.phar"
+      '';
+
+      meta = with pkgs.lib; {
+        description = "PHP code quality analyzer";
+        license = licenses.bsd3;
+        homepage = "https://phpmd.org/";
+        maintainers = teams.php.members;
+        broken = !isPhp74;
       };
     };
 
     phpstan = mkDerivation rec {
-      version = "0.12.18";
+      version = "0.12.25";
       pname = "phpstan";
 
       src = pkgs.fetchurl {
         url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "0xf0q2z6rhpnbys53si05mddfyjn3wx5wc8zx5y6dv5fzw6z7rch";
+        sha256 = "1a864v7fxpv5kp24nkvczrir3ldl6wxvaq85rd391ppa8ahdhvdd";
       };
 
       phases = [ "installPhase" ];
@@ -217,32 +246,32 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpstan/phpstan.phar
-        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpstan \
+        makeWrapper ${php}/bin/php $out/bin/phpstan \
           --add-flags "$out/libexec/phpstan/phpstan.phar"
       '';
 
       meta = with pkgs.lib; {
         description = "PHP Static Analysis Tool";
         longDescription = ''
-        PHPStan focuses on finding errors in your code without actually running
-        it. It catches whole classes of bugs even before you write tests for the
-        code. It moves PHP closer to compiled languages in the sense that the
-        correctness of each line of the code can be checked before you run the
-        actual line.
-      '';
+          PHPStan focuses on finding errors in your code without actually
+          running it. It catches whole classes of bugs even before you write
+          tests for the code. It moves PHP closer to compiled languages in the
+          sense that the correctness of each line of the code can be checked
+          before you run the actual line.
+        '';
         license = licenses.mit;
         homepage = "https://github.com/phpstan/phpstan";
-        maintainers = with maintainers; [ etu ];
+        maintainers = teams.php.members;
       };
     };
 
     psalm = mkDerivation rec {
-      version = "3.9.3";
+      version = "3.11.2";
       pname = "psalm";
 
       src = pkgs.fetchurl {
         url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-        sha256 = "KHm2n06y/yxN5B2rCVxT5ja7HxkyxAMsjZ5HLb3xr4M=";
+        sha256 = "1ani0907whqy2ycr01sjlvrmwps4dg5igim8z1qyv8grhwvw6gb0";
       };
 
       phases = [ "installPhase" ];
@@ -259,16 +288,17 @@ in
         description = "A static analysis tool for finding errors in PHP applications";
         license = licenses.mit;
         homepage = "https://github.com/vimeo/psalm";
+        maintainers = teams.php.members;
       };
     };
 
     psysh = mkDerivation rec {
-      version = "0.9.12";
+      version = "0.10.3";
       pname = "psysh";
 
       src = pkgs.fetchurl {
         url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-        sha256 = "0bzmc94li481xk81gv460ipq9zl03skbnq8m3rnw34i2c04hxczc";
+        sha256 = "0glply451fy0g7zbasyp350qvmk2aglrlcrcdd7w0igylgwfkg71";
       };
 
       phases = [ "installPhase" ];
@@ -285,7 +315,7 @@ in
         description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
         license = licenses.mit;
         homepage = "https://psysh.org/";
-        maintainers = with maintainers; [ caugner ];
+        maintainers = with maintainers; [ caugner ] ++ teams.php.members;
       };
     };
   };
@@ -308,6 +338,8 @@ in
       checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
       makeFlags = [ "phpincludedir=$(dev)/include" ];
       outputs = [ "out" "dev" ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     apcu_bc = buildPecl {
@@ -316,10 +348,17 @@ in
 
       sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
 
+      peclDeps = [ php.extensions.apcu ];
+
       buildInputs = [
-        php.extensions.apcu
         pcre'
       ];
+
+      postInstall = ''
+        mv $out/lib/php/extensions/apc.so $out/lib/php/extensions/apcu_bc.so
+      '';
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     ast = buildPecl {
@@ -327,18 +366,13 @@ in
       pname = "ast";
 
       sha256 = "16c5isldm4csjbcvz1qk2mmrhgvh24sxsp6w6f5a37xpa3vciawp";
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     couchbase = buildPecl rec {
       version = "2.6.1";
       pname = "couchbase";
-
-      buildInputs = [
-        pkgs.libcouchbase
-        pkgs.zlib
-        php.extensions.igbinary
-        php.extensions.pcs
-      ];
 
       src = pkgs.fetchFromGitHub {
         owner = "couchbase";
@@ -348,7 +382,14 @@ in
       };
 
       configureFlags = [ "--with-couchbase" ];
+
+      buildInputs = [
+        pkgs.libcouchbase
+        pkgs.zlib
+      ];
       internalDeps = [ php.extensions.json ];
+      peclDeps = [ php.extensions.igbinary ];
+
       patches = [
         (pkgs.writeText "php-couchbase.patch" ''
           --- a/config.m4
@@ -374,7 +415,7 @@ in
         '')
       ];
 
-      meta.broken = isPhp74; # Build error
+      meta.maintainers = lib.teams.php.members;
     };
 
     event = buildPecl {
@@ -406,6 +447,7 @@ in
         '';
         license = licenses.php301;
         homepage = "https://bitbucket.org/osmanov/pecl-event/";
+        maintainers = teams.php.members;
       };
     };
 
@@ -418,6 +460,8 @@ in
       configureFlags = [ "--enable-igbinary" ];
       makeFlags = [ "phpincludedir=$(dev)/include" ];
       outputs = [ "out" "dev" ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     imagick = buildPecl {
@@ -429,6 +473,8 @@ in
       configureFlags = [ "--with-imagick=${pkgs.imagemagick.dev}" ];
       nativeBuildInputs = [ pkgs.pkgconfig ];
       buildInputs = [ pcre' ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     mailparse = buildPecl {
@@ -440,6 +486,8 @@ in
       postConfigure = ''
         echo "#define HAVE_MBSTRING 1" >> config.h
       '';
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     maxminddb = buildPecl rec {
@@ -459,7 +507,7 @@ in
       meta = with pkgs.lib; {
         description = "C extension that is a drop-in replacement for MaxMind\\Db\\Reader";
         license = with licenses; [ asl20 ];
-        maintainers = with maintainers; [ ajs124 das_j ];
+        maintainers = with maintainers; [ ajs124 das_j ] ++ teams.php.members;
       };
     };
 
@@ -486,6 +534,8 @@ in
 
       nativeBuildInputs = [ pkgs.pkgconfig ];
       buildInputs = with pkgs; [ cyrus_sasl zlib ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     mongodb = buildPecl {
@@ -503,6 +553,8 @@ in
         zlib
         pcre'
       ] ++ lib.optional (pkgs.stdenv.isDarwin) pkgs.darwin.apple_sdk.frameworks.Security;
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     oci8 = buildPecl {
@@ -516,6 +568,8 @@ in
       postPatch = ''
         sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
       '';
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     pcov = buildPecl {
@@ -525,6 +579,8 @@ in
       sha256 = "1psfwscrc025z8mziq69pcx60k4fbkqa5g2ia8lplb94mmarj0v1";
 
       buildInputs = [ pcre' ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     pcs = buildPecl {
@@ -533,11 +589,14 @@ in
 
       sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
 
-      meta.broken = isPhp74; # Build error
+      internalDeps = [ php.extensions.tokenizer ];
+
+      meta.maintainers = lib.teams.php.members;
+      meta.broken = isPhp73; # Runtime failure on 7.3, build error on 7.4
     };
 
     pdo_oci = buildPecl rec {
-      inherit (php) src version;
+      inherit (php.unwrapped) src version;
 
       pname = "pdo_oci";
       sourceRoot = "php-${version}/ext/pdo_oci";
@@ -548,19 +607,23 @@ in
       internalDeps = [ php.extensions.pdo ];
 
       postPatch = ''
-      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
-    '';
+        sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+      '';
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     pdo_sqlsrv = buildPecl {
-      version = "5.8.0";
+      version = "5.8.1";
       pname = "pdo_sqlsrv";
 
-      sha256 = "0z4vbyd851b4jr6p69l2ylk91iihndsm2qjb429pxcv8g6dqzqll";
+      sha256 = "06ba4x34fgs092qq9w62y2afsm1nyasqiprirk4951ax9v5vcir0";
 
       internalDeps = [ php.extensions.pdo ];
 
       buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     php_excel = buildPecl rec {
@@ -576,6 +639,8 @@ in
       };
 
       configureFlags = [ "--with-excel" "--with-libxl-incdir=${pkgs.libxl}/include_c" "--with-libxl-libdir=${pkgs.libxl}/lib" ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     pinba = let
@@ -601,6 +666,7 @@ in
           statistics server for PHP using MySQL as a read-only interface.
         '';
         homepage = "http://pinba.org/";
+        maintainers = teams.php.members;
       };
     };
 
@@ -618,6 +684,7 @@ in
         '';
         license = licenses.bsd3;
         homepage = "https://developers.google.com/protocol-buffers/";
+        maintainers = teams.php.members;
       };
     };
 
@@ -642,6 +709,26 @@ in
       meta.broken = isPhp74;
     };
 
+    rdkafka = buildPecl {
+      version = "4.0.3";
+      pname = "rdkafka";
+
+      sha256 = "1g00p911raxcc7n2w9pzadxaggw5c564md6hjvqfs9ip550y5x16";
+
+      buildInputs = with pkgs; [ rdkafka pcre' ];
+
+      postPhpize = ''
+        substituteInPlace configure \
+          --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${pkgs.rdkafka}'
+      '';
+
+      meta = {
+        description = "Kafka client based on librdkafka";
+        homepage = "https://github.com/arnaud-lb/php-rdkafka";
+        maintainers = lib.teams.php.members;
+      };
+    };
+
     redis = buildPecl {
       version = "5.1.1";
       pname = "redis";
@@ -653,15 +740,19 @@ in
         session
       ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
         hash ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     sqlsrv = buildPecl {
-      version = "5.8.0";
+      version = "5.8.1";
       pname = "sqlsrv";
 
-      sha256 = "1kv4krk1w4hri99b0sdgwgy9c4y0yh217wx2y3irhkfi46kdrjnw";
+      sha256 = "0c9a6ghch2537vi0274vx0mn6nb1xg2qv7nprnf3xdfqi5ww1i9r";
 
       buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     v8 = buildPecl {
@@ -672,6 +763,8 @@ in
 
       buildInputs = [ pkgs.v8_6_x ];
       configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
+
+      meta.maintainers = lib.teams.php.members;
       meta.broken = true;
     };
 
@@ -683,6 +776,8 @@ in
 
       buildInputs = [ pkgs.v8_6_x ];
       configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
+
+      meta.maintainers = lib.teams.php.members;
       meta.broken = true;
     };
 
@@ -696,6 +791,8 @@ in
       checkTarget = "test";
 
       zendExtension = true;
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     yaml = buildPecl {
@@ -709,6 +806,8 @@ in
       ];
 
       nativeBuildInputs = [ pkgs.pkgconfig ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     zmq = buildPecl {
@@ -723,6 +822,7 @@ in
 
       nativeBuildInputs = [ pkgs.pkgconfig ];
 
+      meta.maintainers = lib.teams.php.members;
       meta.broken = isPhp73;
     };
   } // (let
@@ -746,11 +846,11 @@ in
       pname = "php-${name}";
       extensionName = name;
 
-      inherit (php) version src;
+      inherit (php.unwrapped) version src;
       sourceRoot = "php-${php.version}/ext/${name}";
 
       enableParallelBuilding = true;
-      nativeBuildInputs = [ php autoconf pkgconfig re2c ];
+      nativeBuildInputs = [ php.unwrapped autoconf pkgconfig re2c ];
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 
@@ -782,6 +882,11 @@ in
                               --prune-empty-dirs \
                               . $dev/include/
       '';
+
+      meta = {
+        description = "PHP upstream extension: ${name}";
+        inherit (php.meta) maintainers homepage license;
+      };
     });
 
     # This list contains build instructions for different modules that one may

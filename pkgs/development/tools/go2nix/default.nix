@@ -17,14 +17,14 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  outputs = [ "bin" "out" "man" ];
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ go-bindata gotools makeWrapper ];
 
   preBuild = ''go generate ./...'';
 
   postInstall = ''
-    wrapProgram $bin/bin/go2nix \
+    wrapProgram $out/bin/go2nix \
       --prefix PATH : ${nix-prefetch-git}/bin \
       --prefix PATH : ${git}/bin
 

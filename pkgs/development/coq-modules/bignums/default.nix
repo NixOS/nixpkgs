@@ -18,8 +18,8 @@ let params = {
         sha256 = "03qz1w2xb2j5p06liz5yyafl0fl9vprcqm6j0iwi7rxwghl00p01";
       };
       "8.10" = {
-        rev = "V8.10+beta1";
-        sha256 = "1slw227idwjw9a21vj3s6kal22mrmvvlpg8r7xk590ml99bn6404";
+        rev = "V8.10.0";
+        sha256 = "0bpb4flckn4nqxbs3wjiznyx1k7r8k93qdigp3qwmikp2lxvcbw5";
       };
       "8.11" = {
         rev = "V8.11.0";

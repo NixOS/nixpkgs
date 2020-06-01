@@ -9,7 +9,6 @@
 { lib, stdenv, callPackage,
   wineRelease ? "stable",
   wineBuild ? if stdenv.hostPlatform.system == "x86_64-linux" then "wineWow" else "wine32",
-  libtxc_dxtn_Name ? "libtxc_dxtn_s2tc",
   pngSupport ? false,
   jpegSupport ? false,
   tiffSupport ? false,
@@ -63,7 +62,6 @@ let wine-build = build: release:
 
 in if wineRelease == "staging" then
   callPackage ./staging.nix {
-    inherit libtxc_dxtn_Name;
     wineUnstable = wine-build wineBuild "unstable";
   }
 else

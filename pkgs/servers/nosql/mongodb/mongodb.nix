@@ -6,7 +6,9 @@
 
 with stdenv.lib;
 
-{ version, sha256, patches ? [] }@args:
+{ version, sha256, patches ? []
+, license ? stdenv.lib.licenses.sspl
+}@args:
 
 let
   python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
@@ -109,7 +111,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "A scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
-    license = licenses.sspl;
+    inherit license;
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;

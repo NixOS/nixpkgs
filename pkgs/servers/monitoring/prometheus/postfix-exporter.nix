@@ -43,7 +43,7 @@ buildGoPackage rec {
   ];
 
   postInstall = optionalString withSystemdSupport ''
-    wrapProgram $bin/bin/postfix_exporter \
+    wrapProgram $out/bin/postfix_exporter \
       --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib"
   '';
 

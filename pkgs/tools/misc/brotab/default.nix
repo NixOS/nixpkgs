@@ -1,14 +1,14 @@
 { lib, fetchFromGitHub, glibcLocales, python }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.2.1";
+  version = "1.2.2";
   pname = "brotab";
 
   src = fetchFromGitHub {
     owner = "balta2ar";
     repo = pname;
     rev = version;
-    sha256 = "14yz0szwzdjvwkw24rma34y6iiwnw9qzsm89gkglc0xxa6msg6j3";
+    sha256 = "1c6npyws705qf9rv70mmh7d0almmpxz87a0n65lhw08lms1h3dl2";
   };
 
   propagatedBuildInputs = with python.pkgs; [

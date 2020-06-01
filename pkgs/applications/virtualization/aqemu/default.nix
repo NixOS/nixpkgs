@@ -1,7 +1,7 @@
-{ cmake, fetchFromGitHub, libvncserver, qemu, qtbase, stdenv
+{ mkDerivation, cmake, fetchFromGitHub, libvncserver, qemu, qtbase, stdenv
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "aqemu";
   version = "0.9.2";
 

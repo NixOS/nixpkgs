@@ -94,6 +94,11 @@ stdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
+    # Fix for NSS 3.52 (add missing CK_GCM_PARMS field)
+    (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/463069687b3d";
+      sha256 = "00yhz67flnkww3rbry0kqn6z6bm7vxfb2sgf7qikgbjcm3ysvpsm";
+    })
   ]
   ++ patches;
 
@@ -180,7 +185,7 @@ stdenv.mkDerivation ({
       $(< ${stdenv.cc}/nix-support/cc-cflags) \
       ${stdenv.cc.default_cxx_stdlib_compile} \
       ${lib.optionalString stdenv.cc.isClang "-idirafter ${stdenv.cc.cc}/lib/clang/${lib.getVersion stdenv.cc.cc}/include"} \
-      ${lib.optionalString stdenv.cc.isGNU "-isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc} -isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/$(cc -dumpmachine)"} \
+      ${lib.optionalString stdenv.cc.isGNU "-isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc} -isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/${stdenv.hostPlatform.config}"} \
       $NIX_CFLAGS_COMPILE"
 
     echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG

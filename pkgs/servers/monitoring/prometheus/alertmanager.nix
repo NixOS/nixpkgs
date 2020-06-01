@@ -1,4 +1,4 @@
-{ stdenv, go, buildGoPackage, fetchFromGitHub }:
+{ stdenv, go, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "alertmanager";
@@ -24,9 +24,11 @@ buildGoPackage rec {
        -X ${t}.GoVersion=${stdenv.lib.getVersion go}
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
-    mkdir -p $bin/etc/bash_completion.d
-    $NIX_BUILD_TOP/go/bin/amtool --completion-script-bash > $bin/etc/bash_completion.d/amtool_completion.sh
+    $out/bin/amtool --completion-script-bash > amtool.bash
+    installShellCompletion amtool.bash
   '';
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, cmake, libusb, libftdi }:
+{ stdenv, fetchsvn, cmake, libusb-compat-0_1, libftdi }:
 
 # The xc3sprog project doesn't seem to make proper releases, they only put out
 # prebuilt binary subversion snapshots on sourceforge.
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     rev = version;
   };
 
-  buildInputs = [ cmake libusb libftdi ];
+  buildInputs = [ cmake libusb-compat-0_1 libftdi ];
 
   meta = with stdenv.lib; {
     description = "Command-line tools for programming FPGAs, microcontrollers and PROMs via JTAG";

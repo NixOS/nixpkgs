@@ -18,6 +18,7 @@
 , aiohttp
 , beautifulsoup4
 , asgiref
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     pint
     pluggy
     uvicorn
+    setuptools
   ];
 
   checkInputs = [

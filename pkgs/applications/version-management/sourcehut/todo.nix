@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.55.3";
+  version = "0.57.14";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/todo.sr.ht";
     rev = version;
-    sha256 = "1j82yxdnag0q6rp0rpiq3ccn5maa1k58j2f1ilcsxf1gr13pycf5";
+    sha256 = "nlTf7KV6vjqqVEXZ6OOZ5dAj1iHTDPYj4DnAD2hGp5c=";
   };
 
   patches = [

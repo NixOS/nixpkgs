@@ -1,8 +1,14 @@
-{ system ? builtins.currentSystem, ... }:
+{ system ? builtins.currentSystem
+, pkgs ? import ../../.. { inherit system; }
+, ...
+}:
 
 let inherit (import ./common.nix { inherit system; }) baseConfig; in
 
-{ mig = import ../make-test-python.nix ({ pkgs, lib, ... }: {
+with import ../../lib/testing-python.nix { inherit system pkgs; };
+with pkgs.lib;
+
+{ mig = makeTest {
     name = "hydra-db-migration";
     meta = with pkgs.stdenv.lib.maintainers; {
       maintainers = [ ma27 ];
@@ -82,5 +88,5 @@ let inherit (import ./common.nix { inherit system; }) baseConfig; in
 
       original.shutdown()
     '';
-  });
+  };
 }

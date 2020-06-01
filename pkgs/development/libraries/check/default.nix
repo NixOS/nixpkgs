@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "02zkfiyklckmivrfvdsrlzvzphkdsgjrz3igncw05dv5pshhq3xx";
   };
 
-  # Test can randomly fail: http://hydra.nixos.org/build/7243912
+  # Test can randomly fail: https://hydra.nixos.org/build/7243912
   doCheck = false;
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin CoreServices;

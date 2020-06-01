@@ -2,12 +2,12 @@
 , zlib, libGL, libGLU, libpng, freeglut }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.1";
+  version = "1.4.2";
   pname = "gl2ps";
 
   src = fetchurl {
     url = "http://geuz.org/gl2ps/src/${pname}-${version}.tgz";
-    sha256 = "0fsx5lh9pz1xswr4yng24j4ngiijnanksbgz05bfzkh07m5h6qkk";
+    sha256 = "1sgzv547h7hrskb9qd0x5yp45kmhvibjwj2mfswv95lg070h074d";
   };
 
   buildInputs = [

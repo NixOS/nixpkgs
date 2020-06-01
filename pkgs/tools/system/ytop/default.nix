@@ -4,18 +4,18 @@ assert stdenv.isDarwin -> IOKit != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "ytop";
-  version = "0.5.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "cjbassi";
     repo = pname;
     rev = version;
-    sha256 = "1wpxn8i5112pzs8b03shl627r2yz70lvzjhd6f5crwhsnir06h5x";
+    sha256 = "02cpn5257yrmbakx3mlqs97kfambbn9ljb60jbqr1b9w24kd6zgf";
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
-  cargoSha256 = "0wmlmkq4y2923i5kjhprw2hd2v5qls49ncs6h8g9rdlmwd7qdl86";
+  cargoSha256 = "0alqzy9gbj9m4l7xj1jsrnl09pv6z7c73gq787cqwn0gj93aaj19";
 
   meta = with stdenv.lib; {
     description = "A TUI system monitor written in Rust";

@@ -17,6 +17,7 @@ in
   options = {
 
     services.rdnssd.enable = mkOption {
+      type = types.bool;
       default = false;
       #default = config.networking.enableIPv6;
       description =

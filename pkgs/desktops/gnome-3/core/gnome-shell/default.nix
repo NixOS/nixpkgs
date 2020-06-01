@@ -17,11 +17,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.36.1";
+  version = "3.36.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0696qw6bmbga30qlvh1k6bkiajl7877j8yis4bwmi1wxkcmkh854";
+    sha256 = "0lqpxhvn073bshnzarnisym3da3k3awsi3h906hm85hz3wm9n4iv";
   };
 
   LANG = "en_US.UTF-8";
@@ -65,7 +65,10 @@ in stdenv.mkDerivation rec {
 
     # Install bash-completions to correct prefix.
     # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1194
-    ./fix-bash-completion.patch
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/9f1ad5d86ddbabaa840eb2860279d53f4e635453.patch";
+      sha256 = "f8MDFbfg9D7ORF84Ld9GIvf0xRCYuSszo3QLMji2VaE=";
+    })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
     # aware of the location to hardcode in the generated GIR file.
@@ -119,7 +122,7 @@ in stdenv.mkDerivation rec {
     description = "Core user interface for the GNOME 3 desktop";
     homepage = "https://wiki.gnome.org/Projects/GnomeShell";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 

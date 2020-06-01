@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "1.6.0";
+  version = "1.7.0";
   k3sVersion = "1.17.3-k3s1";
 
   goPackagePath = "github.com/rancher/k3d";
@@ -11,7 +11,7 @@ buildGoModule rec {
     owner  = "rancher";
     repo   = "k3d";
     rev    = "v${version}";
-    sha256 = "0qjwqqynvgzainq66fpzczgynwk3hv7wzgfy5271fc6mj2k0zz5x";
+    sha256 = "0aij2l7zmg4cxbw7pwf7ddc64di25hpjvbmp1madhz9q28rwfa9w";
   };
 
   buildFlagsArray = ''
@@ -21,7 +21,7 @@ buildGoModule rec {
       -X github.com/rancher/k3d/version.K3sVersion=v${k3sVersion}
   '';
 
-  modSha256 = "0c8bfl0hz5cfhi6jzhhylz051jiix6s7s20fn23w7wri4xaqrjn8";
+  vendorSha256 = null;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/rancher/k3d";

@@ -1,8 +1,8 @@
-{ lib, fetchzip, buildDunePackage, alcotest, bos }:
+{ lib, fetchpatch, fetchzip, buildDunePackage, alcotest, bos }:
 
 let version = "3.2.0"; in
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "base64";
   inherit version;
 
@@ -13,9 +13,16 @@ buildDunePackage {
 
   minimumOCamlVersion = "4.03";
 
-  buildInputs = [ alcotest bos ];
+  buildInputs = [ bos ];
+
+  # Fix test-suite for alcotest ≥ 1.0
+  patches = [(fetchpatch {
+    url = "https://github.com/mirage/ocaml-base64/commit/8d334d02aa52875158fae3e2fb8fe0a5596598d0.patch";
+    sha256 = "0lvqdp98qavpzis1wgwh3ijajq79hq47898gsrk37fpyjbrdzf5q";
+  })];
 
   doCheck = true;
+  checkInputs = [ alcotest ];
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-base64";

@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
     description = "An input assistive technology intended for switch and pointer users";
     homepage = "https://wiki.gnome.org/Projects/Caribou";
     license = licenses.lgpl21;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

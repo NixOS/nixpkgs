@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evcxr";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
-    rev = "239e431c58d04c641da22af791e4d3e1b894365e";
-    sha256 = "0vkcis06gwsqfwvrl8xcf74mfcs6j77b9fhcz5rrh77mwl7ixsdc";
+    rev = "582ce09f216d4812f7d152f6eedf0b034fc4dbbd";
+    sha256 = "12hlqgh74z8vmd7fkxh4vk3dqp8hlhzkxnbyywk6nphi562n6w5w";
   };
 
-  cargoSha256 = "0pamwqhw3sj4anqc1112l5cayhqzibdhqjc28apfrkf2m63cclzi";
+  cargoSha256 = "0yr8vwlpfsg47sg0032yrsdcgxyky0hy4963zkh0pmjykbyqkb3h";
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake ];
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;

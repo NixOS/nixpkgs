@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, runCommand, fetchpatch, patchutils, qmake, qtbase
+{ mkDerivation, stdenv, fetchFromGitHub, runCommand, fetchpatch, patchutils, qmake, qtbase
 , SDL, SDL_mixer, boost, curl, gsasl, libgcrypt, libircclient, protobuf, sqlite
 , wrapQtAppsHook
 , tinyxml2, target ? "client" }:
@@ -16,7 +16,7 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "pokerth-${target}-${version}";
   version = "1.1.2";
 

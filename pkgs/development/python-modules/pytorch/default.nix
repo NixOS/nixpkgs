@@ -1,23 +1,25 @@
-{ stdenv, fetchurl, fetchgit, buildPythonPackage, python, pythonOlder,
+{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
   cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null, magma ? null,
-  mklSupport ? false, mkl ? null,
+  mklDnnSupport ? true, useSystemNccl ? true,
   openMPISupport ? false, openmpi ? null,
-  buildNamedTensor ? false,
-  buildBinaries ? false,
+  buildDocs ? false,
   cudaArchList ? null,
-  fetchFromGitHub, lib, numpy, pyyaml, cffi, click, typing, cmake, hypothesis, numactl,
+  numpy, pyyaml, cffi, click, typing, cmake, oneDNN, hypothesis, numactl, psutil,
   linkFarm, symlinkJoin,
+
+  # virtual pkg that consistently instantiates blas across nixpkgs
+  # See https://github.com/NixOS/nixpkgs/pull/83888
+  blas,
 
   # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
   ninja,
 
   # dependencies for torch.utils.tensorboard
-  tensorboardSupport ? true, pillow, six, future, tensorflow-tensorboard,
+  pillow, six, future, tensorflow-tensorboard, protobuf,
 
   utillinux, which, isPy3k }:
 
 assert !openMPISupport || openmpi != null;
-assert !tensorboardSupport || tensorflow-tensorboard != null;
 
 # assert that everything needed for cuda is present and that the correct cuda versions are used
 assert !cudaSupport || cudatoolkit != null;
@@ -28,16 +30,10 @@ assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
 let
   hasDependency = dep: pkg: lib.lists.any (inp: inp == dep) pkg.buildInputs;
   matchesCudatoolkit = hasDependency cudatoolkit;
-  matchesMkl = hasDependency mkl;
 in
 # confirm that cudatoolkits are sync'd across dependencies
 assert !(openMPISupport && cudaSupport) || matchesCudatoolkit openmpi;
 assert !cudaSupport || matchesCudatoolkit magma;
-
-# confirm that mkl is sync'd across dependencies
-assert !mklSupport || mkl != null;
-assert !(mklSupport && cudaSupport) || matchesMkl magma;
-assert !mklSupport || (numpy.blasImplementation == "mkl" && numpy.blas == mkl);
 
 let
   cudatoolkit_joined = symlinkJoin {
@@ -108,7 +104,7 @@ let
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
 
 in buildPythonPackage rec {
-  version = "1.2.0";
+  version = "1.4.1";
   pname = "pytorch";
   disabled = !isPy3k;
 
@@ -122,16 +118,52 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1biyq2p48chakf2xw7hazzqmr5ps1nx475ql8vkmxjg5zaa071cz";
+    sha256 = "1aa1il4f98pswfj20cv27yfb91l1jcq4515i7mvq7sh5647yzwms";
   };
-
-  dontUseCmakeConfigure = true;
 
   preConfigure = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" final_cudaArchList}"
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
+  '';
+
+  patches = [
+    # Prevents a race condition which would be introduced by pull 30333.
+    # See https://github.com/pytorch/pytorch/issues/32277
+    # Can be removed >1.5.0.
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/pytorch/pytorch/pull/30332.patch";
+      sha256 = "1v9dwbhz3rdxcx6sz8y8j9n3bj6nqs78b1r8yg89yc15n6l4cqx2";
+    })
+
+    # Fixes errors with gcc-9 compilation. Cherry-picked on advice from ezyang.
+    # See https://github.com/pytorch/pytorch/issues/32277
+    # Can be removed >1.5.0.
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/pytorch/pytorch/pull/30333.patch";
+      sha256 = "139413fl37h2fnil0cv99a67mqqnsh02k74b92by1qyr6pcfyg3q";
+    })
+  ];
+
+  # Use pytorch's custom configurations
+  dontUseCmakeConfigure = true;
+
+  BUILD_NAMEDTENSOR = true;
+  BUILD_DOCS = buildDocs;
+
+  USE_MKL = blas.implementation == "mkl";
+
+  # Unlike MKL, MKLDNN is FOSS, so we enable support for it by default. Note
+  # that this was renamed to dnnl and then renamed again to oneDNN upstream, but
+  # pytorch still calls it by the old name mkldnn.
+  USE_MKLDNN = mklDnnSupport;
+  USE_MKLDNN_CBLAS = mklDnnSupport;
+
+  preBuild = ''
+    export MAX_JOBS=$NIX_BUILD_CORES
+    ${python.interpreter} setup.py build --cmake-only
+    ${cmake}/bin/cmake build
   '';
 
   preFixup = ''
@@ -155,8 +187,7 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  BUILD_NAMEDTENSOR = buildNamedTensor;  # experimental feature
-  USE_SYSTEM_NCCL=true;                  # don't build pytorch's third_party NCCL
+  USE_SYSTEM_NCCL=useSystemNccl;                  # don't build pytorch's third_party NCCL
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -165,7 +196,7 @@ in buildPythonPackage rec {
   #
   # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
   # https://github.com/pytorch/pytorch/blob/v1.2.0/setup.py#L17
-  NIX_CFLAGS_COMPILE = lib.optionals (numpy.blas == mkl) [ "-Wno-error=array-bounds" ];
+  NIX_CFLAGS_COMPILE = lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ];
 
   nativeBuildInputs = [
     cmake
@@ -174,9 +205,8 @@ in buildPythonPackage rec {
     ninja
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
-  buildInputs = [
-    numpy.blas
-  ] ++ lib.optionals cudaSupport [ cudnn magma nccl ]
+  buildInputs = [ blas blas.provider oneDNN ]
+    ++ lib.optionals cudaSupport [ cudnn magma nccl ]
     ++ lib.optionals stdenv.isLinux [ numactl ];
 
   propagatedBuildInputs = [
@@ -184,23 +214,37 @@ in buildPythonPackage rec {
     click
     numpy
     pyyaml
-  ] ++ lib.optionals openMPISupport [ openmpi ]
-    ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optionals tensorboardSupport [pillow six future tensorflow-tensorboard];
+    # the following are required for tensorboard support
+    pillow six future tensorflow-tensorboard protobuf
+  ] ++ lib.optionals openMPISupport [ openmpi ];
 
-  checkInputs = [ hypothesis ninja ];
+  checkInputs = [ hypothesis ninja psutil ];
 
-  doCheck = false; # tests take a long time for channel release, so doCheck should be overridden only when developing
-  checkPhase = "${cudaStubEnv}python test/run_test.py"
-    + " --exclude utils" # utils requires git, which is not allowed in the check phase
+  # Tests take a long time and may be flaky, so just sanity-check imports
+  doCheck = false;
+  pythonImportsCheck = [
+    "torch"
+  ];
 
-    # Other tests which have been disabled in previous nix derivations of pytorch.
-    # --exclude dataloader sparse torch utils thd_distributed distributed cpp_extensions
-    ;
+  checkPhase = with lib.versions; with lib.strings; concatStringsSep " " [
+    cudaStubEnv
+    "${python.interpreter} test/run_test.py"
+    "--exclude"
+    (concatStringsSep " " [
+      "utils" # utils requires git, which is not allowed in the check phase
+
+      # "dataloader" # psutils correctly finds and triggers multiprocessing, but is too sandboxed to run -- resulting in numerous errors
+      # ^^^^^^^^^^^^ NOTE: while test_dataloader does return errors, these are acceptable errors and do not interfere with the build
+
+      # tensorboard has acceptable failures for pytorch 1.3.x due to dependencies on tensorboard-plugins
+      (optionalString (majorMinor version == "1.3" ) "tensorboard")
+    ])
+  ];
   postInstall = ''
     mkdir $dev
     cp -r $out/${python.sitePackages}/torch/lib     $dev/lib
     cp -r $out/${python.sitePackages}/torch/include $dev/include
+    cp -r $out/${python.sitePackages}/torch/share   $dev/share
   '';
 
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -233,6 +277,6 @@ in buildPythonPackage rec {
     homepage    = "https://pytorch.org/";
     license     = lib.licenses.bsd3;
     platforms   = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with lib.maintainers; [ teh thoughtpolice stites tscholak ]; # tscholak esp. for darwin-related builds
+    maintainers = with lib.maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
   };
 }

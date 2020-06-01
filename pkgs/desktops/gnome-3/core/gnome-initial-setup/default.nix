@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "3.36.1";
+  version = "3.36.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1sfn6bdz8snc2qmi3nzb07vlkdhy9s1ipwxxj0v2i36a7n0gv6ci";
+    sha256 = "0mjp2j4smikmr4fa0y8wrw2srlfjahiixzphz3dmc30hx8df92sg";
   };
 
   nativeBuildInputs = [
@@ -103,6 +103,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-initial-setup";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Set of utilities and demos to work with UPnP";
     homepage = "https://wiki.gnome.org/Projects/GUPnP";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

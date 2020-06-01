@@ -53,6 +53,8 @@ in buildPythonPackage rec {
 
   setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
 
+  SCIPY_USE_G77_ABI_WRAPPER = 1;
+
   meta = {
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
     homepage = "https://www.scipy.org/";

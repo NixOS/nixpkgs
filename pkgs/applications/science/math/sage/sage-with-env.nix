@@ -2,7 +2,8 @@
 , lib
 , makeWrapper
 , sage-env
-, openblasCompat
+, blas
+, lapack
 , pkg-config
 , three
 , singular
@@ -21,6 +22,9 @@
 , pythonEnv
 }:
 
+# lots of segfaults with (64 bit) blas
+assert (!blas.isILP64) && (!lapack.isILP64);
+
 # Wrapper that combined `sagelib` with `sage-env` to produce an actually
 # executable sage. No tests are run yet and no documentation is built.
 
@@ -29,7 +33,7 @@ let
     pythonEnv # for patchShebangs
     makeWrapper
     pkg-config
-    openblasCompat # lots of segfaults with regular (64 bit) openblas
+    blas lapack
     singular
     three
     pynac

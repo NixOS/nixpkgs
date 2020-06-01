@@ -1,6 +1,22 @@
-{ stdenv, lib, makeWrapper, socat, iptables, iproute, bridge-utils
-, conntrack-tools, buildGoPackage, git, runc, libseccomp, pkgconfig
-, ethtool, utillinux, ipset, fetchFromGitHub, fetchurl, fetchzip
+{ stdenv
+, lib
+, makeWrapper
+, socat
+, iptables
+, iproute
+, bridge-utils
+, conntrack-tools
+, buildGoPackage
+, git
+, runc
+, libseccomp
+, pkgconfig
+, ethtool
+, utillinux
+, ipset
+, fetchFromGitHub
+, fetchurl
+, fetchzip
 , fetchgit
 }:
 
@@ -47,7 +63,7 @@ let
     # Note: marked as apache 2.0 license
     url = "https://github.com/rancher/k3s-root/releases/download/v${k3sRootVersion}/k3s-root-amd64.tar";
     sha256 = "12xafn5jivl8lqdcs25b28xrc4mf7yf1xif5np169nvvxgvmpdxp";
-    stripRoot=false;
+    stripRoot = false;
   };
   k3sPlugins = buildGoPackage rec {
     name = "k3s-cni-plugins";
@@ -126,8 +142,8 @@ let
     installPhase = ''
       pushd go/src/${goPackagePath}
 
-      mkdir -p "$bin/bin"
-      install -m 0755 -t "$bin/bin" ./bin/*
+      mkdir -p "$out/bin"
+      install -m 0755 -t "$out/bin" ./bin/*
 
       popd
     '';
@@ -152,6 +168,12 @@ let
 
     nativeBuildInputs = [ git pkgconfig ];
     buildInputs = [ k3sBuildStage1 k3sPlugins runc ];
+
+    # k3s appends a suffix to the final distribution binary for some arches
+    archSuffix =
+      if stdenv.hostPlatform.system == "x86_64-linux" then ""
+      else if stdenv.hostPlatform.system == "aarch64-linux" then "-arm64"
+      else throw "k3s isn't being built for ${stdenv.hostPlatform.system} yet.";
 
     # In order to build the thick k3s binary (which is what
     # ./scripts/package-cli does), we need to get all the binaries that script
@@ -181,8 +203,8 @@ let
     installPhase = ''
       pushd go/src/${goPackagePath}
 
-      mkdir -p "$bin/bin"
-      install -m 0755 -t "$bin/bin" ./dist/artifacts/k3s
+      mkdir -p "$out/bin"
+      install -m 0755 -T ./dist/artifacts/k3s${archSuffix} "$out/bin/k3s"
 
       popd
     '';
@@ -202,12 +224,20 @@ stdenv.mkDerivation rec {
   # Important utilities used by  the kubelet, see
   # https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-237202494
   # Note the list in that issue is stale and some aren't relevant for k3s.
-  k3sRuntimeDeps = [ 
-    socat iptables iproute bridge-utils ethtool utillinux ipset conntrack-tools
+  k3sRuntimeDeps = [
+    socat
+    iptables
+    iproute
+    bridge-utils
+    ethtool
+    utillinux
+    ipset
+    conntrack-tools
   ];
 
-  buildInputs = [ 
-    k3sBuild makeWrapper
+  buildInputs = [
+    k3sBuild
+    makeWrapper
   ] ++ k3sRuntimeDeps;
 
   unpackPhase = "true";
@@ -225,11 +255,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : "$out/bin"
   '';
 
-    meta = {
-      description = "A lightweight Kubernetes distribution.";
-      license = licenses.asl20;
-      homepage = "https://k3s.io";
-      maintainers = [ maintainers.euank ];
-      platforms = platforms.linux;
-    };
+  meta = {
+    description = "A lightweight Kubernetes distribution.";
+    license = licenses.asl20;
+    homepage = "https://k3s.io";
+    maintainers = [ maintainers.euank ];
+    platforms = platforms.linux;
+  };
 }

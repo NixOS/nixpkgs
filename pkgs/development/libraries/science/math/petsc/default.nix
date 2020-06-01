@@ -1,15 +1,15 @@
-{ stdenv , fetchurl , blas , gfortran , liblapack , python }:
+{ stdenv , fetchurl , blas , gfortran , lapack , python }:
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.13.0";
+  version = "3.13.1";
 
   src = fetchurl {
     url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
-    sha256 = "0943bydmsq3sjwj3rxhb8hx58b1fm8vymny731557fs10g5zfbyz";
+    sha256 = "0pr604b9pnryl9q0q5arlhs0xdx7wslca0sbz0pzs9qylmz775qp";
   };
 
-  nativeBuildInputs = [ blas gfortran.cc.lib liblapack python ];
+  nativeBuildInputs = [ blas gfortran.cc.lib lapack python ];
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/install.py \
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
       "--with-cxx=$CXX"
       "--with-fc=0"
       "--with-mpi=0"
-      "--with-blas-lib=[${blas}/lib/libblas.a,${gfortran.cc.lib}/lib/libgfortran.a]"
-      "--with-lapack-lib=[${liblapack}/lib/liblapack.a,${gfortran.cc.lib}/lib/libgfortran.a]"
+      "--with-blas-lib=[${blas}/lib/libblas.so,${gfortran.cc.lib}/lib/libgfortran.a]"
+      "--with-lapack-lib=[${lapack}/lib/liblapack.so,${gfortran.cc.lib}/lib/libgfortran.a]"
     )
   '';
 

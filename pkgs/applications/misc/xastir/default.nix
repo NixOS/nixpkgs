@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xastir";
-  version = "2.1.4";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Release-${version}";
-    sha256 = "14f908jy5jzvgm1h1sr47hjqjq3q2nq91byhimk84kj044fn21w9";
+    sha256 = "sha256-IdlRScAy7tCyVCElCceY4PvqPXWfZZ35f+MwCo3nO3s=";
   };
 
   buildInputs = [

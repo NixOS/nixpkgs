@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libusb }:
+{ lib, fetchFromGitHub, rustPlatform, libusb-compat-0_1 }:
 
 let
   version = "0.6.9";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   '';
   cargoSha256 = "0d5kcwy0cgxqfxf2xysw65ng84q4knhp4fgvh6dwqhf0nsca9gvs";
 
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   meta = with lib; {
     description = "Manipulate a Wishbone device over some sort of bridge";

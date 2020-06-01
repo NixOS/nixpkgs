@@ -49,15 +49,6 @@
    va_end (ap);
  
    return res;
-@@ -470,7 +470,7 @@ un7z (GFile       *dir,
-       GError     **error)
- {
-   gboolean res;
--  const gchar *argv[] = { "7z",  "x", sevenz_path, NULL };
-+  const gchar *argv[] = { "@sevenz@",  "x", sevenz_path, NULL };
- 
-   res = flatpak_spawnv (dir, NULL, 0, error, argv);
- 
 @@ -483,7 +483,7 @@ unrpm (GFile   *dir,
         GError **error)
  {

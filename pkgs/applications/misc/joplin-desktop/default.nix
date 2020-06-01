@@ -2,7 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "1.0.179";
+  version = "1.0.216";
   desktopItem = makeDesktopItem {
      name = "Joplin";
      exec = "joplin-desktop";
@@ -13,7 +13,7 @@ in appimageTools.wrapType2 rec {
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.AppImage";
-    sha256 = "0v7d5wzwiznl755pl6jfg33g6jxr1cbm9j13jpbmfi497hj8w82k";
+    sha256 = "17rb7h98h9i2p5kw5gznx5swpz6yxqdxwc9x5cgbkc31vk10iszn";
   };
 
 
@@ -40,9 +40,9 @@ in appimageTools.wrapType2 rec {
       applications directly or from your own text editor. The notes are in
       Markdown format.
     '';
-    homepage = "https://joplin.cozic.net/";
+    homepage = "https://joplinapp.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ rafaelgg raquelgb ];
+    maintainers = with maintainers; [ hugoreeves ];
     platforms = [ "x86_64-linux" ];
   };
 }

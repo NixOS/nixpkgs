@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Guide a worm around a maze";
     homepage = "https://wiki.gnome.org/Apps/Nibbles";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

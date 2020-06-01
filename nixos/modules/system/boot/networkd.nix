@@ -205,7 +205,7 @@ let
       "IPv6HopLimit" "IPv4ProxyARP" "IPv6ProxyNDP" "IPv6ProxyNDPAddress"
       "IPv6PrefixDelegation" "IPv6MTUBytes" "Bridge" "Bond" "VRF" "VLAN"
       "IPVLAN" "MACVLAN" "VXLAN" "Tunnel" "ActiveSlave" "PrimarySlave"
-      "ConfigureWithoutCarrier" "Xfrm"
+      "ConfigureWithoutCarrier" "Xfrm" "KeepConfiguration"
     ])
     # Note: For DHCP the values both, none, v4, v6 are deprecated
     (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6" "both" "none" "v4" "v6"])
@@ -228,6 +228,7 @@ let
     (assertValueOneOf "ActiveSlave" boolValues)
     (assertValueOneOf "PrimarySlave" boolValues)
     (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
+    (assertValueOneOf "KeepConfiguration" (boolValues ++ ["static" "dhcp-on-stop" "dhcp"]))
   ];
 
   checkAddress = checkUnitConfig "Address" [
@@ -274,15 +275,16 @@ let
     ])
   ];
 
-  checkDhcp = checkUnitConfig "DHCP" [
+  checkDhcpV4 = checkUnitConfig "DHCPv4" [
     (assertOnlyFields [
-      "UseDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
-      "Hostname" "UseDomains" "UseRoutes" "UseTimezone" "CriticalConnection"
-      "ClientIdentifier" "VendorClassIdentifier" "UserClass" "DUIDType"
-      "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
-      "ListenPort" "RapidCommit"
+      "UseDNS" "RoutesToDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
+      "Hostname" "UseDomains" "UseRoutes" "UseTimezone"
+      "ClientIdentifier" "VendorClassIdentifier" "UserClass" "MaxAttempts"
+      "DUIDType" "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
+      "ListenPort" "SendRelease"
     ])
     (assertValueOneOf "UseDNS" boolValues)
+    (assertValueOneOf "RoutesToDNS" boolValues)
     (assertValueOneOf "UseNTP" boolValues)
     (assertValueOneOf "UseMTU" boolValues)
     (assertValueOneOf "Anonymize" boolValues)
@@ -291,12 +293,49 @@ let
     (assertValueOneOf "UseDomains" ["yes" "no" "route"])
     (assertValueOneOf "UseRoutes" boolValues)
     (assertValueOneOf "UseTimezone" boolValues)
-    (assertValueOneOf "CriticalConnection" boolValues)
+    (assertMinimum "MaxAttempts" 0)
     (assertValueOneOf "RequestBroadcast" boolValues)
     (assertInt "RouteTable")
     (assertMinimum "RouteTable" 0)
-    (assertValueOneOf "RapidCommit" boolValues)
+    (assertValueOneOf "SendRelease" boolValues)
   ];
+
+  checkDhcpV6 = checkUnitConfig "DHCPv6" [
+    (assertOnlyFields [
+      "UseDns" "UseNTP" "RapidCommit" "ForceDHCPv6PDOtherInformation"
+      "PrefixDelegationHint"
+    ])
+    (assertValueOneOf "UseDNS" boolValues)
+    (assertValueOneOf "UseNTP" boolValues)
+    (assertValueOneOf "RapidCommit" boolValues)
+    (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
+  ];
+
+  checkIpv6PrefixDelegation = checkUnitConfig "IPv6PrefixDelegation" [
+    (assertOnlyFields [
+      "Managed"  "OtherInformation"  "RouterLifetimeSec"
+      "RouterPreference"  "EmitDNS"  "DNS"  "EmitDomains"  "Domains"
+      "DNSLifetimeSec"
+    ])
+    (assertValueOneOf "Managed" boolValues)
+    (assertValueOneOf "OtherInformation" boolValues)
+    (assertValueOneOf "RouterPreference" ["high" "medium" "low" "normal" "default"])
+    (assertValueOneOf "EmitDNS" boolValues)
+    (assertValueOneOf "EmitDomains" boolValues)
+    (assertMinimum "DNSLifetimeSec" 0)
+  ];
+
+  checkIpv6Prefix = checkUnitConfig "IPv6Prefix" [
+    (assertOnlyFields [
+      "AddressAutoconfiguration"  "OnLink"  "Prefix"
+      "PreferredLifetimeSec" "ValidLifetimeSec"
+    ])
+    (assertValueOneOf "AddressAutoconfiguration" boolValues)
+    (assertValueOneOf "OnLink" boolValues)
+    (assertMinimum "PreferredLifetimeSec" 0)
+    (assertMinimum "ValidLifetimeSec" 0)
+  ];
+
 
   checkDhcpServer = checkUnitConfig "DHCPServer" [
     (assertOnlyFields [
@@ -621,6 +660,22 @@ let
     };
   };
 
+  ipv6PrefixOptions = {
+    options = {
+      ipv6PrefixConfig = mkOption {
+        default = {};
+        example = { Prefix = "fd00::/64"; };
+        type = types.addCheck (types.attrsOf unitOption) checkIpv6Prefix;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[IPv6Prefix]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
 
   networkOptions = commonNetworkOptions // {
 
@@ -636,13 +691,55 @@ let
       '';
     };
 
+    # systemd.network.networks.*.dhcpConfig has been deprecated in favor of ….dhcpV4Config
+    # Produce a nice warning message so users know it is gone.
     dhcpConfig = mkOption {
+      visible = false;
+      apply = _: throw "The option `systemd.network.networks.*.dhcpConfig` can no longer be used since it's been removed. Please use `systemd.network.networks.*.dhcpV4Config` instead.";
+    };
+
+    dhcpV4Config = mkOption {
       default = {};
       example = { UseDNS = true; UseRoutes = true; };
-      type = types.addCheck (types.attrsOf unitOption) checkDhcp;
+      type = types.addCheck (types.attrsOf unitOption) checkDhcpV4;
       description = ''
         Each attribute in this set specifies an option in the
-        <literal>[DHCP]</literal> section of the unit.  See
+        <literal>[DHCPv4]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dhcpV6Config = mkOption {
+      default = {};
+      example = { UseDNS = true; UseRoutes = true; };
+      type = types.addCheck (types.attrsOf unitOption) checkDhcpV6;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCPv6]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipv6PrefixDelegationConfig = mkOption {
+      default = {};
+      example = { EmitDNS = true; Managed = true; OtherInformation = true; };
+      type = types.addCheck (types.attrsOf unitOption) checkIpv6PrefixDelegation;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPv6PrefixDelegation]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipv6Prefixes = mkOption {
+      default = [];
+      example = { AddressAutoconfiguration = true; OnLink = true; };
+      type = with types; listOf (submodule ipv6PrefixOptions);
+      description = ''
+        A list of ipv6Prefix sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -973,11 +1070,26 @@ let
           ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
           ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
 
-          ${optionalString (def.dhcpConfig != { }) ''
-            [DHCP]
-            ${attrsToSection def.dhcpConfig}
+          ${optionalString (def.dhcpV4Config != { }) ''
+            [DHCPv4]
+            ${attrsToSection def.dhcpV4Config}
 
           ''}
+          ${optionalString (def.dhcpV6Config != {}) ''
+            [DHCPv6]
+            ${attrsToSection def.dhcpV6Config}
+
+          ''}
+          ${optionalString (def.ipv6PrefixDelegationConfig != {}) ''
+            [IPv6PrefixDelegation]
+            ${attrsToSection def.ipv6PrefixDelegationConfig}
+
+          ''}
+          ${flip concatMapStrings def.ipv6Prefixes (x: ''
+            [IPv6Prefix]
+            ${attrsToSection x.ipv6PrefixConfig}
+
+          '')}
           ${optionalString (def.dhcpServerConfig != { }) ''
             [DHCPServer]
             ${attrsToSection def.dhcpServerConfig}
@@ -1054,6 +1166,7 @@ in
   };
 
   config = mkMerge [
+
     # .link units are honored by udev, no matter if systemd-networkd is enabled or not.
     {
       systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links;
@@ -1073,7 +1186,7 @@ in
 
       systemd.services.systemd-networkd = {
         wantedBy = [ "multi-user.target" ];
-        restartTriggers = attrNames unitFiles;
+        restartTriggers = map (x: x.source) (attrValues unitFiles);
         # prevent race condition with interface renaming (#39069)
         requires = [ "systemd-udev-settle.service" ];
         after = [ "systemd-udev-settle.service" ];

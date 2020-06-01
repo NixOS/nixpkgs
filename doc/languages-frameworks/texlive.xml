@@ -149,31 +149,4 @@ EOF
 ]]></programlisting>
   </para>
  </section>
-
- <section xml:id="sec-language-texlive-known-problems">
-  <title>Known problems</title>
-
-  <itemizedlist>
-   <listitem>
-    <para>
-     Some tools are still missing, e.g. luajittex;
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     some apps aren't packaged/tested yet (asymptote, biber, etc.);
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     feature/bug: when a package is rejected by <varname>pkgFilter</varname>, its dependencies are still propagated;
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     in case of any bugs or feature requests, file a github issue or better a pull request and /cc @vcunat.
-    </para>
-   </listitem>
-  </itemizedlist>
- </section>
 </section>

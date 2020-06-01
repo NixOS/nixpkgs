@@ -1,6 +1,8 @@
 { stdenv, fetchFromGitLab, symlinkJoin, gfortran, perl, procps
-, libyaml, libxc, fftw, openblas, gsl, netcdf, arpack, autoreconfHook
+, libyaml, libxc, fftw, blas, lapack, gsl, netcdf, arpack, autoreconfHook
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
@@ -14,12 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl procps autoreconfHook ];
-  buildInputs = [ libyaml gfortran libxc openblas gsl fftw netcdf arpack ];
+  buildInputs = [ libyaml gfortran libxc blas lapack gsl fftw netcdf arpack ];
 
   configureFlags = [
     "--with-yaml-prefix=${libyaml}"
-    "--with-blas=-lopenblas"
-    "--with-lapack=-lopenblas"
+    "--with-blas=-lblas"
+    "--with-lapack=-llapack"
     "--with-fftw-prefix=${fftw.dev}"
     "--with-gsl-prefix=${gsl}"
     "--with-libxc-prefix=${libxc}"

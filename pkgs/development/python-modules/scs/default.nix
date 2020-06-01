@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , blas
-, liblapack
+, lapack
 , numpy
 , scipy
 , scs
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [
-    liblapack
+    lapack
     blas
   ];
 

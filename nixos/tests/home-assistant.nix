@@ -76,7 +76,7 @@ in {
         hass.succeed("test -f ${configDir}/ui-lovelace.yaml")
     with subtest("Check that Home Assistant's web interface and API can be reached"):
         hass.wait_for_open_port(8123)
-        hass.succeed("curl --fail http://localhost:8123/states")
+        hass.succeed("curl --fail http://localhost:8123/lovelace")
         assert "API running" in hass.succeed(
             "curl --fail -H 'x-ha-access: ${apiPassword}' http://localhost:8123/api/"
         )

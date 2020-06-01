@@ -73,6 +73,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  uuid = "gsconnect@andyholmes.github.io";
+
   meta = with stdenv.lib; {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/andyholmes/gnome-shell-extension-gsconnect/wiki";

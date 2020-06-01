@@ -8,19 +8,23 @@
 
 stdenv.mkDerivation rec {
   pname = "libslirp";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "slirp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qk513fgfh4hwb1ajjmvg9m1bl97m3n731ymxqsh1c3fj468a2am";
+    sha256 = "1hajbdwx20a48hp8kv6jqbjvnzjvcdqmbjfsymzy2xa80idqkfab";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [ glib ];
+
+  postPatch = ''
+    echo ${version} > .tarball-version
+  '';
 
   meta = with stdenv.lib; {
     description = "General purpose TCP-IP emulator";

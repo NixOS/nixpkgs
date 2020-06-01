@@ -74,6 +74,7 @@ in stdenv.mkDerivation rec {
     Comment=PDF viewer
     Exec=$bin/bin/mupdf-x11 %f
     Terminal=false
+    MimeType=application/pdf;application/x-pdf;application/x-cbz;application/oxps;application/vnd.ms-xpsdocument;application/epub+zip
     EOF
   '';
 

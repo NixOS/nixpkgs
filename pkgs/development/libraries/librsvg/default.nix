@@ -4,14 +4,14 @@
 
 let
   pname = "librsvg";
-  version = "2.48.0";
+  version = "2.48.4";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "19ndf9l99wcrmkwcrk20vd1ggrwgldksfz1kkj786ljcrxv8nd2a";
+    sha256 = "0vlmgisf87dz4vcl1ypcw7g211wkyvhydv6ksf1p6mgdbkw3mdi8";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     description = "A small library to render SVG images to Cairo surfaces";
     homepage = "https://wiki.gnome.org/Projects/LibRsvg";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

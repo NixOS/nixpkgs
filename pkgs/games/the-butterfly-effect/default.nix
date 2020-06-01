@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, qt5, box2d, which, cmake, gettext }:
+{ stdenv, mkDerivation, fetchgit, qt5, box2d, which, cmake, gettext }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "tbe";
   version = "0.9.3.1";
 

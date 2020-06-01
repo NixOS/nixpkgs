@@ -1,4 +1,4 @@
-{ stdenv, callPackage, wineUnstable, libtxc_dxtn_Name }:
+{ stdenv, callPackage, wineUnstable }:
 
 with callPackage ./util.nix {};
 
@@ -8,7 +8,7 @@ let patch = (callPackage ./sources.nix {}).staging;
 in assert stdenv.lib.getVersion wineUnstable == patch.version;
 
 stdenv.lib.overrideDerivation wineUnstable (self: {
-  buildInputs = build-inputs [ "perl" "utillinux" "autoconf" libtxc_dxtn_Name ] self.buildInputs;
+  buildInputs = build-inputs [ "perl" "utillinux" "autoconf" ] self.buildInputs;
 
   name = "${self.name}-staging";
 

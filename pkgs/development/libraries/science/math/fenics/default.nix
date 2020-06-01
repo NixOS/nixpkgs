@@ -24,6 +24,8 @@
 , suitesparse
 , swig
 , zlib
+, blas
+, lapack
 }:
 let
   version = "2019.1.0";
@@ -176,13 +178,14 @@ let
       hdf5
       mpi
       numpy
-      (numpy.blas)
+      blas
+      lapack
       ply
       python
       scotch
       six
       sphinx
-      (suitesparse.override { openblas = numpy.blas; })
+      suitesparse
       swig
       sympy
       ufl

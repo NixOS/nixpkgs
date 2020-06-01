@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     description = "Puzzle game where you move atoms to build a molecule";
     homepage = "https://wiki.gnome.org/Apps/Atomix";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

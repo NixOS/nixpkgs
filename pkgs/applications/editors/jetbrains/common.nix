@@ -1,4 +1,4 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, patchelf, p7zip
+{ stdenv, lib, makeDesktopItem, makeWrapper, patchelf
 , coreutils, gnugrep, which, git, unzip, libsecret, libnotify
 }:
 
@@ -19,14 +19,14 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
-    categories = "Application;Development;";
+    categories = "Development;";
     icon = execName;
     extraEntries = ''
       StartupWMClass=${wmClass}
     '';
   };
 
-  nativeBuildInputs = [ makeWrapper patchelf p7zip unzip ];
+  nativeBuildInputs = [ makeWrapper patchelf unzip ];
 
   patchPhase = lib.optionalString (!stdenv.isDarwin) ''
       get_file_size() {

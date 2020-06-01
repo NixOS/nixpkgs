@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.1";
+  version = "3.0.2";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "1dvwmgnlfvi1lvdhgyddcp5apwlc8v5gwy9gmfcpra8lv8hkjjy5";
+    sha256 = "1yrnkw8c47kmy2x6m1xp69hwyk02xyc8pd9kvcmyj54lzrhzdfka";
   };
 
   nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     "-DUSE_KWALLET=OFF"
   ];
 
+  # Reduce the risk of collisions
+  postInstall = "rm -r $out/share/doc";
 
   # darktable changed its rpath handling in commit
   # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the

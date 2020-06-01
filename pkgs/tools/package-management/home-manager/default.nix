@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A user environment configurator";
-    maintainers = with maintainers; [ rycee ];
+    homepage = "https://rycee.gitlab.io/home-manager/";
     platforms = platforms.unix;
     license = licenses.mit;
   };

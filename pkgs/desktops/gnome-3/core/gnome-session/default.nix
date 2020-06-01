@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "GNOME session manager";
     homepage = "https://wiki.gnome.org/Projects/SessionManagement";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

@@ -83,7 +83,7 @@ stdenv.mkDerivation {
     description = "Note editor designed to remain simple to use";
     homepage = "https://wiki.gnome.org/Apps/Notes";
     license = licenses.gpl3;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

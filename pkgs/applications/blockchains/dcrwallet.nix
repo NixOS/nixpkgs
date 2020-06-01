@@ -29,8 +29,8 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    mkdir -pv $bin/bin
-    cp -v dcrwallet $bin/bin
+    mkdir -pv $out/bin
+    cp -v dcrwallet $out/bin
   '';
 
 

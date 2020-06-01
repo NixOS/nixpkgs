@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://remarkjs.com";
+    homepage = "https://remarkjs.com";
     description = "A simple, in-browser, markdown-driven slideshow tool";
     maintainers = [];
     platforms = stdenv.lib.platforms.linux;

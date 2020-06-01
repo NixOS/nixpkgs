@@ -21,8 +21,8 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    mkdir -pv $bin/bin
-    cp -v build/bin/geth build/bin/bootnode build/bin/swarm $bin/bin
+    mkdir -pv $out/bin
+    cp -v build/bin/geth build/bin/bootnode build/bin/swarm $out/bin
   '';
 
   meta = with stdenv.lib; {

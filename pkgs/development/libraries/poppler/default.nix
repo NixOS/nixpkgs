@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
-  version = "0.85.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version = "0.88.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0jyr036scdly13hx5dxmsqp2p3jifc29h2by51msw0ih6bmpbj1b";
+    sha256 = "1isns9s484irq9ir4hbhpyqf6af2xzswh2pfrvk1k9d5x423hidl";
   };
 
   outputs = [ "out" "dev" ];
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
   };
 }

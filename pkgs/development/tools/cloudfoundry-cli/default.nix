@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "cloudfoundry-cli";
@@ -14,6 +14,8 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "0dqrkimwhw016icgyf4cyipzy6vdz5jgickm33xxd9018dh3ibwq";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   makeTarget = let hps = stdenv.hostPlatform.system; in
     if hps == "x86_64-darwin" then
@@ -32,8 +34,8 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    install -Dm555 out/cf "$bin/bin/cf"
-    install -Dm444 -t "$bin/share/bash-completion/completions/" "$src/ci/installers/completion/cf"
+    install -Dm555 out/cf "$out/bin/cf"
+    installShellCompletion --bash "$src/ci/installers/completion/cf"
   '';
 
   meta = with stdenv.lib; {

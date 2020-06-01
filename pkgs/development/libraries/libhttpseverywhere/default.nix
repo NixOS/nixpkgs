@@ -44,6 +44,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/libhttpseverywhere";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sternenseemann ] ++ gnome3.maintainers;
+    maintainers = with maintainers; [ sternenseemann ] ++ teams.gnome.members;
   };
 }

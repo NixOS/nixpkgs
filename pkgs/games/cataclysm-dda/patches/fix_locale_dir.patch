@@ -1,15 +1,13 @@
-diff --git a/src/translations.cpp b/src/translations.cpp
-index 2585b7ec56..7bb005823c 100644
 --- a/src/translations.cpp
 +++ b/src/translations.cpp
-@@ -195,14 +195,12 @@ void set_language()
+@@ -212,14 +212,12 @@ void set_language()
      auto env = getenv( "LANGUAGE" );
-     locale_dir = std::string( FILENAMES["base_path"] + "lang/mo/" + ( env ? env : "none" ) +
+     locale_dir = std::string( PATH_INFO::base_path() + "lang/mo/" + ( env ? env : "none" ) +
                                "/LC_MESSAGES/cataclysm-dda.mo" );
--#elif (defined __linux__ || (defined MACOSX && !defined TILES))
+-#elif (defined(__linux__) || (defined(MACOSX) && !defined(TILES)))
 +#else
-     if( !FILENAMES["base_path"].empty() ) {
-         locale_dir = FILENAMES["base_path"] + "share/locale";
+     if( !PATH_INFO::base_path().empty() ) {
+         locale_dir = PATH_INFO::base_path() + "share/locale";
      } else {
          locale_dir = "lang/mo";
      }

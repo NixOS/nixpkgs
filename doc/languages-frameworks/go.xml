@@ -36,7 +36,7 @@ pet = buildGoModule rec {
     sha256 = "0m2fzpqxk7hrbxsgqplkg7h2p7gv6s1miymv3gvw0cz039skag0s";
   };
 
-  modSha256 = "1879j77k96684wi554rkjxydrj8g3hpp0kvxz03sd8dmwr3lh83j"; <co xml:id='ex-buildGoModule-1' />
+  vendorSha256 = "1879j77k96684wi554rkjxydrj8g3hpp0kvxz03sd8dmwr3lh83j"; <co xml:id='ex-buildGoModule-1' />
 
   subPackages = [ "." ]; <co xml:id='ex-buildGoModule-2' />
 
@@ -56,7 +56,7 @@ pet = buildGoModule rec {
    <calloutlist>
     <callout arearefs='ex-buildGoModule-1'>
      <para>
-      <varname>modSha256</varname> is the hash of the output of the intermediate fetcher derivation.
+      <varname>vendorSha256</varname> is the hash of the output of the intermediate fetcher derivation.
      </para>
     </callout>
     <callout arearefs='ex-buildGoModule-2'>
@@ -68,12 +68,12 @@ pet = buildGoModule rec {
   </para>
 
   <para>
-    <varname>modSha256</varname> can also take <varname>null</varname> as an input.
+    <varname>vendorSha256</varname> can also take <varname>null</varname> as an input.
 
-    When `null` is used as a value, the derivation won't be a
-    fixed-output derivation but disable the build sandbox instead. This can be useful outside
-    of nixpkgs where re-generating the modSha256 on each mod.sum changes is cumbersome,
-    but will fail to build by Hydra, as builds with a disabled sandbox are discouraged.
+    When `null` is used as a value, rather than fetching the dependencies
+    and vendoring them, we use the vendoring included within the source repo.
+    If you'd like to not have to update this field on dependency changes, 
+    run `go mod vendor` in your source repo and set 'vendorSha256 = null;'
   </para>
  </section>
 
@@ -189,18 +189,6 @@ deis = buildGoPackage rec {
 
   <para>
    To extract dependency information from a Go package in automated way use <link xlink:href="https://github.com/kamilchm/go2nix">go2nix</link>. It can produce complete derivation and <varname>goDeps</varname> file for Go programs.
-  </para>
-
-  <para>
-   <varname>buildGoPackage</varname> produces <xref linkend='chap-multiple-output' xrefstyle="select: title" /> where <varname>bin</varname> includes program binaries. You can test build a Go binary as follows:
-<screen>
-<prompt>$ </prompt>nix-build -A deis.bin
-</screen>
-   or build all outputs with:
-<screen>
-<prompt>$ </prompt>nix-build -A deis.all
-</screen>
-   <varname>bin</varname> output will be installed by default with <varname>nix-env -i</varname> or <varname>systemPackages</varname>.
   </para>
 
   <para>

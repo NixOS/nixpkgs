@@ -252,7 +252,7 @@ let
           Use imports or pkgs.lib.readFile if you don't want this data in your config file.
         '';
       };
-      
+
       dnssec = mkEnableOption "DNSSEC";
 
       dnssecPolicy = {
@@ -970,7 +970,7 @@ in
       script = signZones;
 
       postStop = ''
-        ${pkgs.systemd}/bin/systemctl kill -s SIGHUP nsd.service
+        /run/current-system/systemd/bin/systemctl kill -s SIGHUP nsd.service
       '';
     };
 

@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
-    installShellCompletion target/release/build/lsd-*/out/{_lsd,lsd.{bash,fish}}
+    installShellCompletion $releaseDir/build/lsd-*/out/{_lsd,lsd.{bash,fish}}
   '';
 
   meta = with stdenv.lib; {

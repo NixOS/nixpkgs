@@ -167,7 +167,7 @@ parameters that the SDK composition function (the function shown in the
 previous section) supports.
 
 This build function is particularly useful when it is desired to use
-[Hydra](http://nixos.org/hydra): the Nix-based continuous integration solution
+[Hydra](https://nixos.org/hydra): the Nix-based continuous integration solution
 to build Android apps. An Android APK gets exposed as a build product and can be
 installed on any Android device with a web browser by navigating to the build
 result page.

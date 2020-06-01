@@ -15,7 +15,7 @@
 , xmlto
 
 , acl
-, bazaar
+, breezy
 , binutils
 , bzip2
 , coreutils
@@ -29,7 +29,6 @@
 , gnumake
 , gnupg
 , gnutar
-, p7zip
 , json-glib
 , libcap
 , libdwarf
@@ -90,7 +89,7 @@ in stdenv.mkDerivation rec {
     ./respect-xml-catalog-files-var.patch
     (substituteAll {
       src = ./fix-paths.patch;
-      bzr = "${bazaar}/bin/bzr";
+      bzr = "${breezy}/bin/bzr";
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
       tar = "${gnutar}/bin/tar";
@@ -99,7 +98,6 @@ in stdenv.mkDerivation rec {
       cpio = "${cpio}/bin/cpio";
       git = "${gitMinimal}/bin/git";
       rofilesfuse = "${ostree}/bin/rofiles-fuse";
-      sevenz = "${p7zip}/bin/7z";
       strip = "${binutils}/bin/strip";
       eustrip = "${elfutils}/bin/eu-strip";
       euelfcompress = "${elfutils}/bin/eu-elfcompress";

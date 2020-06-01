@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.8.0";
+  version = "0.9.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a3dc14ee5314caa2e64331b0b50c8f92e8999d7d275179a804a114e6cb1f8b81";
+    sha256 = "04gfwm1y9knryx992biniqa3978n3chr38iy3y4i2b8wy52fzy3d";
   };
 
   checkInputs = [ pytest ];

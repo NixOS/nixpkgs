@@ -1,21 +1,24 @@
 { stdenv, fetchFromGitHub, meson, sassc, pkg-config, glib, ninja,
-  python3, gtk3, gnome3, gtk-engine-murrine }:
+  python3, gtk3, gnome3, gtk-engine-murrine, humanity-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "yaru";
-  version = "20.04.1";
+  version = "20.04.7";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
     rev = version;
-    sha256 = "0c9az0bmnrnkgxfifp6nkan5bvjrkqrpg38zsp2vg493bm3bpbg1";
+    sha256 = "05fpr928kgyly7ac3zf6hfw9wqgc7fjn6980ih54iqc2qffcglsk";
   };
 
   nativeBuildInputs = [ meson sassc pkg-config glib ninja python3 ];
   buildInputs = [ gtk3 gnome3.gnome-themes-extra ];
+  propagatedBuildInputs = [ humanity-icon-theme hicolor-icon-theme ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+
+  dontDropIconThemeCache = true;
 
   postPatch = "patchShebangs .";
 

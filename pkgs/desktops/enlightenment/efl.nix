@@ -1,20 +1,63 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, SDL, SDL2, alsaLib,
-  avahi, bullet, check, curl, dbus, doxygen, expat, fontconfig,
-  freetype, fribidi, ghostscript, giflib, glib, gst_all_1, gtk3,
-  harfbuzz, ibus, jbig2dec, libGL, libdrm, libinput, libjpeg, libpng,
-  libpulseaudio, libraw, librsvg, libsndfile, libspectre, libtiff,
-  libwebp, libxkbcommon, luajit, lz4, mesa, openjpeg, openssl,
-  poppler, python27Packages, systemd, udev, utillinux, writeText,
-  xorg, zlib
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, SDL2
+, alsaLib
+, bullet
+, check
+, curl
+, dbus
+, doxygen
+, expat
+, fontconfig
+, freetype
+, fribidi
+, ghostscript
+, giflib
+, glib
+, gst_all_1
+, gtk3
+, harfbuzz
+, hicolor-icon-theme
+, ibus
+, jbig2dec
+, libGL
+, libdrm
+, libinput
+, libjpeg
+, libpng
+, libpulseaudio
+, libraw
+, librsvg
+, libsndfile
+, libspectre
+, libtiff
+, libwebp
+, libxkbcommon
+, luajit
+, lz4
+, mesa
+, openjpeg
+, openssl
+, poppler
+, python3Packages
+, systemd
+, udev
+, utillinux
+, writeText
+, xorg
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.23.3";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "00b9lp3h65254kdb1ys15fv7p3ln7qsvf15jkw4kli5ymagadkjk";
+    sha256 = "0w3srvigg4kfi7xq76c7y4hnq5yr2gxrrsvlyj1g2wc1igz1vyg1";
   };
 
   nativeBuildInputs = [
@@ -26,8 +69,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL
-    avahi
     fontconfig
     freetype
     giflib
@@ -51,6 +92,7 @@ stdenv.mkDerivation rec {
     xorg.libXcursor
     xorg.xorgproto
     zlib
+    # still missing parent icon themes: Mint-X, RAVE-X, Faenza
   ];
 
   propagatedBuildInputs = [
@@ -77,7 +119,6 @@ stdenv.mkDerivation rec {
     luajit
     openjpeg
     poppler
-    python27Packages.dbus-python
     utillinux
     xorg.libXScrnSaver
     xorg.libXcomposite
@@ -86,23 +127,22 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXi
     xorg.libXinerama
-    xorg.libXp
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
-    xorg.libxkbfile
-    xorg.xcbutilkeysyms
   ];
+
+  dontDropIconThemeCache = true;
 
   mesonFlags = [
     "--buildtype=release"
     "-D build-tests=false" # disable build tests, which are not working
     "-D drm=true"
+    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disalbed by default, scim is not availabe in nixpkgs
     "-D embedded-lz4=false"
-    "-D evas-loaders-disabler=json"
     "-D fb=true"
-    "-D opengl=full"
+    "-D network-backend=connman"
     "-D sdl=true"
   ];
 

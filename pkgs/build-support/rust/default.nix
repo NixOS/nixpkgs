@@ -1,4 +1,14 @@
-{ stdenv, cacert, git, rust, cargo, rustc, fetchCargoTarball, buildPackages, windows }:
+{ stdenv
+, buildPackages
+, cacert
+, cargo
+, diffutils
+, fetchCargoTarball
+, git
+, rust
+, rustc
+, windows
+}:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
@@ -58,6 +68,10 @@ let
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
   releaseDir = "target/${rustTarget}/${buildType}";
 
+  # Specify the stdenv's `diff` by abspath to ensure that the user's build
+  # inputs do not cause us to find the wrong `diff`.
+  diff = "${diffutils}/bin/diff";
+
 in
 
 stdenv.mkDerivation (args // {
@@ -110,7 +124,7 @@ stdenv.mkDerivation (args // {
     srcLockfile=$NIX_BUILD_TOP/$sourceRoot/Cargo.lock
 
     echo "Validating consistency between $srcLockfile and $cargoDepsLockfile"
-    if ! diff $srcLockfile $cargoDepsLockfile; then
+    if ! ${diff} $srcLockfile $cargoDepsLockfile; then
 
       # If the diff failed, first double-check that the file exists, so we can
       # give a friendlier error msg.

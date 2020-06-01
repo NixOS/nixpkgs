@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, avahi, libsoup, libjpeg
+{ lib, stdenv, fetchFromGitHub, pkg-config, avahi, libsoup, libjpeg, libpng
 , sane-backends, meson, ninja }:
 stdenv.mkDerivation rec {
   pname = "sane-airscan";
-  version = "0.9.17";
+  version = "0.99.0";
 
   nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ avahi libsoup libjpeg sane-backends ];
+  buildInputs = [ avahi libsoup libjpeg libpng sane-backends ];
 
   src = fetchFromGitHub {
     owner = "alexpevzner";
     repo = pname;
     rev = version;
-    sha256 = "03y0c1z5s3wbvxa9nvji62w42cmvcgm2sw72j7wm831995q3abmx";
+    sha256 = "0bbw3s95v5fmkpmmd26v9cf1c40dm85bgxlhs06ski5my803ck0a";
   };
 
   meta = with lib; {

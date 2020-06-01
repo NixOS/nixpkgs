@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '6.0.2'
 
-gem 'bootsnap', '~> 1.4'
+gem 'bootsnap', '~> 1.4.6'
 
 # Improves copy-on-write performance for MRI
 gem 'nakayoshi_fork', '~> 0.0.4'
@@ -58,7 +58,7 @@ gem 'akismet', '~> 3.0'
 gem 'invisible_captcha', '~> 0.12.1'
 
 # Two-factor authentication
-gem 'devise-two-factor', '~> 3.0.0'
+gem 'devise-two-factor', '~> 3.1.0'
 gem 'rqrcode-rails3', '~> 0.1.7'
 gem 'attr_encrypted', '~> 3.1.0'
 gem 'u2f', '~> 0.2.1'
@@ -87,7 +87,7 @@ gem 'grape-entity', '~> 0.7.1'
 gem 'rack-cors', '~> 1.0.6', require: 'rack/cors'
 
 # GraphQL API
-gem 'graphql', '~> 1.9.12'
+gem 'graphql', '~> 1.10.5'
 # NOTE: graphiql-rails v1.5+ doesn't work: https://gitlab.com/gitlab-org/gitlab/issues/31771
 # TODO: remove app/views/graphiql/rails/editors/show.html.erb when https://github.com/rmosolgo/graphiql-rails/pull/71 is released:
 # https://gitlab.com/gitlab-org/gitlab/issues/31747
@@ -149,7 +149,7 @@ gem 'wikicloth', '0.8.1'
 gem 'asciidoctor', '~> 2.0.10'
 gem 'asciidoctor-include-ext', '~> 0.3.1', require: false
 gem 'asciidoctor-plantuml', '0.0.10'
-gem 'rouge', '~> 3.15.0'
+gem 'rouge', '~> 3.18.0'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
 gem 'nokogiri', '~> 1.10.5'
@@ -159,11 +159,11 @@ gem 'escape_utils', '~> 1.1'
 gem 'icalendar'
 
 # Diffs
-gem 'diffy', '~> 3.1.0'
+gem 'diffy', '~> 3.3'
 gem 'diff_match_patch', '~> 0.1.0'
 
 # Application server
-gem 'rack', '~> 2.0.7'
+gem 'rack', '~> 2.0.9'
 
 group :unicorn do
   gem 'unicorn', '~> 5.4.1'
@@ -171,7 +171,7 @@ group :unicorn do
 end
 
 group :puma do
-  gem 'gitlab-puma', '~> 4.3.1.gitlab.2', require: false
+  gem 'gitlab-puma', '~> 4.3.3.gitlab.2', require: false
   gem 'gitlab-puma_worker_killer', '~> 0.1.1.gitlab.1', require: false
   gem 'rack-timeout', require: false
 end
@@ -237,7 +237,7 @@ gem 'atlassian-jwt', '~> 0.2.0'
 gem 'flowdock', '~> 0.7'
 
 # Slack integration
-gem 'slack-notifier', '~> 1.5.1'
+gem 'slack-messenger', '~> 2.3.3'
 
 # Hangouts Chat integration
 gem 'hangouts-chat', '~> 0.0.5'
@@ -301,7 +301,7 @@ gem 'sentry-raven', '~> 2.9'
 gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '0.9.1'
+gem 'gitlab-labkit', '0.12.0'
 
 # I18n
 gem 'ruby_parser', '~> 3.8', require: false
@@ -355,7 +355,7 @@ group :development, :test do
 
   gem 'database_cleaner', '~> 1.7.0'
   gem 'factory_bot_rails', '~> 5.1.0'
-  gem 'rspec-rails', '~> 4.0.0.beta3'
+  gem 'rspec-rails', '~> 4.0.0.beta4'
 
   # Prevent occasions where minitest is not bundled in packaged versions of ruby (see #3826)
   gem 'minitest', '~> 5.11.0'
@@ -366,7 +366,7 @@ group :development, :test do
   gem 'spring', '~> 2.0.0'
   gem 'spring-commands-rspec', '~> 1.0.4'
 
-  gem 'gitlab-styles', '~> 3.1.0', require: false
+  gem 'gitlab-styles', '~> 3.2.0', require: false
   # Pin these dependencies, otherwise a new rule could break the CI pipelines
   gem 'rubocop', '~> 0.74.0'
   gem 'rubocop-performance', '~> 1.4.1'
@@ -374,8 +374,8 @@ group :development, :test do
 
   gem 'scss_lint', '~> 0.56.0', require: false
   gem 'haml_lint', '~> 0.34.0', require: false
-  gem 'simplecov', '~> 0.16.1', require: false
-  gem 'bundler-audit', '~> 0.5.0', require: false
+  gem 'simplecov', '~> 0.18.5', require: false
+  gem 'bundler-audit', '~> 0.6.1', require: false
 
   gem 'benchmark-ips', '~> 2.3.0', require: false
 
@@ -383,7 +383,7 @@ group :development, :test do
 
   gem 'simple_po_parser', '~> 1.1.2', require: false
 
-  gem 'timecop', '~> 0.8.0'
+  gem 'timecop', '~> 0.9.1'
 
   gem 'png_quantizator', '~> 0.2.1', require: false
 
@@ -399,7 +399,6 @@ group :test do
   gem 'fuubar', '~> 2.2.0'
   gem 'rspec-retry', '~> 0.6.1'
   gem 'rspec_profiling', '~> 0.0.5'
-  gem 'rspec-set', '~> 0.1.3'
   gem 'rspec-parameterized', require: false
 
   gem 'capybara', '~> 3.22.0'
@@ -419,12 +418,13 @@ end
 
 gem 'octokit', '~> 4.15'
 
-gem 'mail_room', '~> 0.10.0'
+# https://gitlab.com/gitlab-org/gitlab/issues/207207
+gem 'gitlab-mail_room', '~> 0.0.3', require: 'mail_room'
 
 gem 'email_reply_trimmer', '~> 0.1'
 gem 'html2text'
 
-gem 'ruby-prof', '~> 1.0.0'
+gem 'ruby-prof', '~> 1.3.0'
 gem 'stackprof', '~> 0.2.15', require: false
 gem 'rbtrace', '~> 0.4', require: false
 gem 'memory_profiler', '~> 0.9', require: false
@@ -455,7 +455,7 @@ group :ed25519 do
 end
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 1.86.0'
+gem 'gitaly', '~> 12.9.0.pre.rc4'
 
 gem 'grpc', '~> 1.24.0'
 
@@ -492,3 +492,6 @@ gem 'erubi', '~> 1.9.0'
 # Monkey-patched in `config/initializers/mail_encoding_patch.rb`
 # See https://gitlab.com/gitlab-org/gitlab/issues/197386
 gem 'mail', '= 2.7.1'
+
+# File encryption
+gem 'lockbox', '~> 0.3.3'

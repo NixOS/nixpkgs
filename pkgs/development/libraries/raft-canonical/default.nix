@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
-  version = "0.9.17";
+  version = "0.9.18";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "raft";
     rev = "v${version}";
-    sha256 = "0q444wd6wz85g4zjkdsrf8z7chkjq9rxzq8l6fh37mgf7c23hv09";
+    sha256 = "0f613aiyxqskz9d10f7r37ar9ngqsf9qsyk3jjf7s5l14wh6vl5k";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkgconfig ];

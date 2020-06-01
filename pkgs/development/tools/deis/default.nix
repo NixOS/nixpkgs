@@ -9,8 +9,8 @@ buildGoPackage rec {
   subPackages = [ "client" ];
 
   postInstall = ''
-    if [ -f "$bin/bin/client" ]; then
-      mv "$bin/bin/client" "$bin/bin/deis"
+    if [ -f "$out/bin/client" ]; then
+      mv "$out/bin/client" "$out/bin/deis"
     fi
   '';
 

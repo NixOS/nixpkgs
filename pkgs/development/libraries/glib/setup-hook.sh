@@ -1,4 +1,3 @@
-
 make_glib_find_gsettings_schemas() {
     # For packages that need gschemas of other packages (e.g. empathy)
     for maybe_dir in "$1"/share/gsettings-schemas/*; do
@@ -7,7 +6,7 @@ make_glib_find_gsettings_schemas() {
         fi
     done
 }
-addEnvHooks "$hostOffset" make_glib_find_gsettings_schemas
+addEnvHooks "$targetOffset" make_glib_find_gsettings_schemas
 
 # Install gschemas, if any, in a package-specific directory
 glibPreInstallPhase() {

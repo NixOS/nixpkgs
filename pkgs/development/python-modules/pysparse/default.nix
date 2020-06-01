@@ -3,7 +3,8 @@
 , fetchFromGitHub
 , numpy
 , setuptools
-, liblapack
+, blas
+, lapack
 , isPy27
 , python
 }:
@@ -24,8 +25,8 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     numpy
-    numpy.blas
-    liblapack
+    blas
+    lapack
   ];
 
   # Include patches from working version of PySparse 1.3-dev in

@@ -9,9 +9,9 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "coq-community";
-    repo = "coq-bits";
-    rev = "f74498a6c67e97d9565e139d62be8eaae7111f06";
-    sha256 = "1ibg37qxgkmpbpvc78qcb179bcnzl149z1kzwdm8n98xk5ibavrf";
+    repo = "bits";
+    rev = "1.0.0";
+    sha256 = "0nv5mdgrd075dpd8bc7h0xc5i95v0pkm0bfyq5rj6ii1s54dwcjl";
   };
 
   buildInputs = [ coq ];

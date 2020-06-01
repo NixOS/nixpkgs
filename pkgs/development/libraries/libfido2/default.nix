@@ -3,45 +3,36 @@
 , fetchpatch
 , cmake
 , pkgconfig
+, hidapi
 , libcbor
 , openssl
 , udev
-, IOKit }:
+}:
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.3.1";
+  version = "1.4.0";
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "0hdgxbmjbnm9kjwc07nrl2zy87qclvb3rzvdwr5iw35n2qhf4dds";
+    sha256 = "0v1a3n0qljmrp8y9pmnmbsdsy79l3z84qmhyjx50xdsbgnz1z4md";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ libcbor openssl ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ udev ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = [ hidapi libcbor openssl ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ udev ];
 
   patches = [
-    # fix build on darwin
+    # make build reproducible
     (fetchpatch {
-      url = "https://github.com/Yubico/libfido2/commit/916ebd18a89e4028de203d603726805339be7a5b.patch";
-      sha256 = "07f0xpxnq02cccmqcric87b6pms7k7ssvdw722zr970a6qs8p6i7";
-    })
-    # allow attestation using any supported algorithm
-    (fetchpatch {
-      url = "https://github.com/Yubico/libfido2/commit/f7a9471fa0588cb91cbefffb13c1e4d06c2179b7.patch";
-      sha256 = "02qbw9bqy3sixvwig6az7v3vimgznxnfikn9p1jczm3d7mn8asw2";
-    })
-    # fix EdDSA attestation signature verification bug
-    (fetchpatch {
-      url = "https://github.com/Yubico/libfido2/commit/95126eea52294419515e6540dfd7220f35664c48.patch";
-      sha256 = "076mwpl9xndjhy359jdv2drrwyq7wd3pampkn28mn1rlwxfgf0d0";
+      url = "https://github.com/Yubico/libfido2/commit/e79f7d7996e70d6b2ae9826fce81d61659cab4f6.patch";
+      sha256 = "0jwg69f95qqf0ym24q1ka50d3d3338cyw4fdfzpw4sab0shiaq9v";
     })
   ];
 
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
+    "-DUSE_HIDAPI=1"
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 

@@ -4,11 +4,11 @@
 }:
 python2.pkgs.buildPythonApplication rec {
   pname = "chirp-daily";
-  version = "20200213";
+  version = "20200430";
 
   src = fetchurl {
     url = "https://trac.chirp.danplanet.com/chirp_daily/daily-${version}/${pname}-${version}.tar.gz";
-    sha256 = "189kg3425wggib1cggcj49bk01pq3j4b8mks7najpp1rjsl5f2i1";
+    sha256 = "060fzplgmpfrk6wkfaasx7phpfk90mmylk6drbwzk4f9r1655vda";
   };
 
   propagatedBuildInputs = with python2.pkgs; [
@@ -20,6 +20,5 @@ python2.pkgs.buildPythonApplication rec {
     homepage = "https://chirp.danplanet.com/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.the-kenny ];
   };
 }

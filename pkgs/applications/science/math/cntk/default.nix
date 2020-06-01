@@ -1,11 +1,12 @@
 { lib, stdenv, fetchgit, fetchFromGitHub, cmake
-, openblas, opencv3, libzip, boost, protobuf, openmpi
+, openblas, blas, lapack, opencv3, libzip, boost, protobuf, openmpi
 , onebitSGDSupport ? false
 , cudaSupport ? false, addOpenGLRunpath, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport, cudnn
 }:
 
 assert cudnnSupport -> cudaSupport;
+assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 let
   # Old specific version required for CNTK.

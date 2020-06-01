@@ -19,6 +19,7 @@ in
         '';
       };
       autorun = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to automatically start the tunnel.

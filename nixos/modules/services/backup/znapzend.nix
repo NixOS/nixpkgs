@@ -268,7 +268,8 @@ let
 
   mkSrcAttrs = srcCfg: with srcCfg; {
     enabled = onOff enable;
-    mbuffer = with mbuffer; if enable then "${pkgs.mbuffer}/bin/mbuffer"
+    # mbuffer is not referenced by its full path to accomodate non-NixOS systems or differing mbuffer versions between source and target
+    mbuffer = with mbuffer; if enable then "mbuffer"
         + optionalString (port != null) ":${toString port}" else "off";
     mbuffer_size = mbuffer.size;
     post_znap_cmd = nullOff postsnap;
@@ -357,6 +358,12 @@ in
         default = false;
       };
 
+      features.oracleMode = mkEnableOption ''
+        Destroy snapshots one by one instead of using one long argument list.
+        If source and destination are out of sync for a long time, you may have
+        so many snapshots to destroy that the argument gets is too long and the
+        command fails.
+      '';
       features.recvu = mkEnableOption ''
         recvu feature which uses <literal>-u</literal> on the receiving end to keep the destination
         filesystem unmounted.
@@ -371,6 +378,41 @@ in
         <citerefentry><refentrytitle>znapzend</refentrytitle><manvolnum>1</manvolnum></citerefentry>
         and <citerefentry><refentrytitle>zfs</refentrytitle><manvolnum>8</manvolnum></citerefentry>
         for more info.
+      '';
+      features.sendRaw = mkEnableOption ''
+        sendRaw feature which adds the options <literal>-w</literal> to the
+        <command>zfs send</command> command. For encrypted source datasets this
+        instructs zfs not to decrypt before sending which results in a remote
+        backup that can't be read without the encryption key/passphrase, useful
+        when the remote isn't fully trusted or not physically secure. This
+        option must be used consistently, raw incrementals cannot be based on
+        non-raw snapshots and vice versa.
+      '';
+      features.skipIntermediates = mkEnableOption ''
+        Enable the skipIntermediates feature to send a single increment
+        between latest common snapshot and the newly made one. It may skip
+        several source snaps if the destination was offline for some time, and
+        it should skip snapshots not managed by znapzend. Normally for online
+        destinations, the new snapshot is sent as soon as it is created on the
+        source, so there are no automatic increments to skip.
+      '';
+      features.lowmemRecurse = mkEnableOption ''
+        use lowmemRecurse on systems where you have too many datasets, so a
+        recursive listing of attributes to find backup plans exhausts the
+        memory available to <command>znapzend</command>: instead, go the slower
+        way to first list all impacted dataset names, and then query their
+        configs one by one.
+      '';
+      features.zfsGetType = mkEnableOption ''
+        use zfsGetType if your <command>zfs get</command> supports a
+        <literal>-t</literal> argument for filtering by dataset type at all AND
+        lists properties for snapshots by default when recursing, so that there
+        is too much data to process while searching for backup plans.
+        If these two conditions apply to your system, the time needed for a
+        <literal>--recursive</literal> search for backup plans can literally
+        differ by hundreds of times (depending on the amount of snapshots in
+        that dataset tree... and a decent backup plan will ensure you have a lot
+        of those), so you would benefit from requesting this feature.
       '';
     };
   };
@@ -423,5 +465,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ infinisil ];
+  meta.maintainers = with maintainers; [ infinisil SlothOfAnarchy ];
 }

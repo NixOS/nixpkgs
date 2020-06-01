@@ -1,14 +1,28 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg, sudo }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtbase
+, qttools
+, qtx11extras
+, qtsvg
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, sudo
+, lxqtUpdateScript
+}:
 
 mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1my0wpic20493rdlabp9ghag1g3nhwafk2yklkgczlajmarakgpc";
+    sha256 = "1j8pxqxb2c10hrfq34nfx75pc0cz6044j4w458nnxbgvl5b8cdcb";
   };
 
   nativeBuildInputs = [
@@ -26,6 +40,8 @@ mkDerivation rec {
     libqtxdg
     sudo
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "GUI frontend for sudo/su";

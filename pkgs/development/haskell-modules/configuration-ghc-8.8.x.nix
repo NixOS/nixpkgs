@@ -41,6 +41,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # GHC 8.8.x can build haddock version 2.23.*
+  haddock = self.haddock_2_23_1;
+  haddock-api = self.haddock-api_2_23_1;
+
   # These builds need Cabal 3.2.x.
   cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_0_0; };
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; });
@@ -95,5 +99,14 @@ self: super: {
   # The current version 2.14.2 does not compile with ghc-8.8.x or newer because
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
+
+  # Only 0.7 is compatible with ghc 8.7 https://hackage.haskell.org/package/apply-refact/changelog
+  apply-refact = super.apply-refact_0_7_0_0;
+
+  # The package needs the latest Cabal version.
+  cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; });
+
+  # cabal-fmt requires Cabal3
+  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_0_0; };
 
 }

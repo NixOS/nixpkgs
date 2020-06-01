@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid ];
 
   buildPhase = ''
-    g++ -c guid.cpp -o guid.o $CXXFLAGS -std=c++11 -DGUID_LIBUUID
-    ar rvs libcrossguid.a guid.o
+    $CXX -c guid.cpp -o guid.o $CXXFLAGS -std=c++11 -DGUID_LIBUUID
+    $AR rvs libcrossguid.a guid.o
   '';
   installPhase = ''
     mkdir -p $out/{lib,include}

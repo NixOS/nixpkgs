@@ -9,15 +9,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libfilezilla";
-  version = "0.19.3";
+  version = "0.22.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0fml6whdbfcwc8nfjhvrnidkscv6q2x988zf3alfjl2mdpw4jgd4";
+    sha256 = "0ylgxw1lxdqvayy5285mlfrkr9cvsgasy2zci6g6mv9rng261xn5";
   };
 
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [ gettext gnutls nettle ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = "https://lib.filezilla-project.org/";

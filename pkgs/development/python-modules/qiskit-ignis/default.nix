@@ -3,59 +3,61 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, python
 , numpy
 , qiskit-terra
+, scikitlearn
 , scipy
   # Check Inputs
+, ddt
 , pytestCheckHook
 , qiskit-aer
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-ignis";
-  version = "0.2.0";
+  version = "0.3.0";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   # Pypi's tarball doesn't contain tests
   src = fetchFromGitHub {
     owner = "Qiskit";
-    repo = pname;
+    repo = "qiskit-ignis";
     rev = version;
-    sha256 = "08a60xk5dq5wmqc23r4hr2v2nsf9hs0ybz832vbnd6d80dl6izyc";
+    sha256 = "16h04n9hxw669nq2ii16l6h75x8afisvp3j062n4c62kcqci0x4x";
   };
 
-  patches = [
-    # Update tests for compatibility with qiskit-aer 0.4 (#342). Remove in version > 0.2.0
-    (fetchpatch {
-      url = "https://github.com/Qiskit/qiskit-ignis/commit/d78c494579f370058e68e360f10149db81b52477.patch";
-      sha256 = "0ygkllf95c0jfvjg7gn399a5fd0wshsjpcn279kj7855m8j306h6";
-    })
-    # Fix statevector test over-eager validation (PR #333)
-    (fetchpatch {
-      url = "https://github.com/Qiskit/qiskit-ignis/commit/7cc8eb2e852b383ea429233fa43d3728931f1707.patch";
-      sha256 = "0mdygykilg4qivdaa731z3y56l3ax4jp1sil9npqv0gn4p03c9g5";
-    })
-  ];
+  # Fixed qiskit-ignis PR #385, figured this is easier than fetchpatch
+  postPatch = ''
+    substituteInPlace qiskit/ignis/logging/ignis_logging.py --replace "self.configure_logger" "self._configure_logger"
+  '';
 
   propagatedBuildInputs = [
     numpy
     qiskit-terra
+    scikitlearn
     scipy
   ];
+  postInstall = "rm -rf $out/${python.sitePackages}/docs";  # this dir can create conflicts
 
   # Tests
   pythonImportsCheck = [ "qiskit.ignis" ];
   dontUseSetuptoolsCheck = true;
-  preCheck = ''export HOME=$TMPDIR'';
+  preCheck = "export HOME=$TMPDIR";
   checkInputs = [
+    ddt
     pytestCheckHook
     qiskit-aer
   ];
+  # Test is in test/verification/test_entanglemet.py. test fails due to out-of-date calls & bad logic with this file since qiskit-ignis#328
+  # see qiskit-ignis#386 for all issues. Should be able to re-enable in future.
+  disabledTests = [ "TestEntanglement" ];
 
   meta = with lib; {
     description = "Qiskit tools for quantum hardware verification, noise characterization, and error correction";
-    homepage = "https://github.com/QISKit/qiskit-ignis";
+    homepage = "https://qiskit.org/ignis";
+    downloadPage = "https://github.com/QISKit/qiskit-ignis/releases";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

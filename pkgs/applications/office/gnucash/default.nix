@@ -25,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "3.9";
+  version = "3.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "1zxrgrjbs13vgr002rvl734w9f7zzxfq4xxmyhj777dwgkfds0ld";
+    sha256 = "05kgg7mhizndwn7icnarqk3c19xrzfawf90y9nb3jdm6fv1741xn";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
   '';
 
   # TODO: The following tests FAILED:
-  #   61 - test-gnc-timezone (Failed)
   #   70 - test-load-c (Failed)
   #   71 - test-modsysver (Failed)
   #   72 - test-incompatdep (Failed)

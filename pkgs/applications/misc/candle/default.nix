@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qtbase, qtserialport, qmake }:
+{ mkDerivation, stdenv, fetchFromGitHub, qtbase, qtserialport, qmake }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "candle";
   version = "1.1";
 

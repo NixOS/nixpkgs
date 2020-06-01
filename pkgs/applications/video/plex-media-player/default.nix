@@ -5,45 +5,20 @@ let
   # During compilation, a CMake bundle is downloaded from `artifacts.plex.tv`,
   # which then downloads a handful of web client-related files. To enable
   # sandboxed builds, we manually download them and save them so these files
-  # are fetched ahead-of-time instead of during the CMake build. Whenever
-  # plex-media-player is updated, the versions for these files are changed,
-  # so the build IDs (and SHAs) below will need to be updated!
-  depSrcs = rec {
-    webClientBuildId = "141-4af71961b12c68";
-    webClientDesktopBuildId = "3.104.2-1b12c68";
-    webClientTvBuildId = "4.3.0-4af7196";
-
-    webClient = fetchurl {
-      url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/buildid.cmake";
-      sha256 = "0fpkd1s49dbiqqlijxbillqd71a78p8y2sc23mwp0lvcmxrg265p";
-    };
-    webClientDesktopHash = fetchurl {
-      url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-desktop-${webClientDesktopBuildId}.tar.xz.sha1";
-      sha256 = "0sb0j44lwqz9zbm98nba4x6c1jxdzvs36ynwfg527avkxxna0f8f";
-    };
-    webClientDesktop = fetchurl {
-      url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-desktop-${webClientDesktopBuildId}.tar.xz";
-      sha256 = "0dxa0ka0igfsryzda4r5clwdl47ah78nmlmgj9d5pgsvyvzjp87z";
-    };
-    webClientTvHash = fetchurl {
-      url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-tv-${webClientTvBuildId}.tar.xz.sha1";
-      sha256 = "086w1bavk2aqsyhv9zi5fynk31zf61sl91r6gjrdrz656wfk5bxa";
-    };
-    webClientTv = fetchurl {
-      url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-tv-${webClientTvBuildId}.tar.xz";
-      sha256 = "12vbgsfnj0j2y5jd73dpi08hqsr9888sma41nvd4ydsd7qblm455";
-    };
-  };
+  # are fetched ahead-of-time instead of during the CMake build. To update
+  # plex-media-player use the update.sh script, so the versions and hashes
+  # for these files are are also updated!
+  depSrcs = import ./deps.nix { inherit fetchurl; };
 in mkDerivation rec {
   pname = "plex-media-player";
-  version = "2.40.0.1007";
-  vsnHash = "5482132c";
+  version = "2.55.0.1069";
+  vsnHash = "2369bed9";
 
   src = fetchFromGitHub {
     owner = "plexinc";
     repo = "plex-media-player";
     rev = "v${version}-${vsnHash}";
-    sha256 = "0ibdh5g8x32iy74q97jfsmxd08wnyrzs3gfiwjfgc10vaa1qdhli";
+    sha256 = "1jq4592sgaia0xy2h7n3vh5i7c84sdh4l64fdc774r4i0bmg66qi";
   };
 
   nativeBuildInputs = [ pkgconfig cmake python3 ];
@@ -60,6 +35,8 @@ in mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-DQTROOT=${qtbase}" ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with stdenv.lib; {
     description = "Streaming media player for Plex";

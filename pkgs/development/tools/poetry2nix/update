@@ -14,7 +14,7 @@ curl -L -s https://github.com/nix-community/poetry2nix/archive/master.tar.gz | t
 mv poetry2nix-master/* .
 
 mkdir build
-cp *.nix *.json *.py build/
+cp *.* build/
 cp -r hooks bin build/
 rm build/shell.nix build/generate.py build/overlay.nix build/flake.nix
 

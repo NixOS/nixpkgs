@@ -2,17 +2,18 @@
 , cmake
 , fetchurl
 , python
-, openblas
+, blas
+, lapack
 , gfortran
 , lapackSupport ? true }:
 
-let openblas32 = openblas.override { blas64 = false; };
+assert (!blas.isILP64) && (!lapack.isILP64);
 
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "sundials";
   version = "5.1.0";
 
-  buildInputs = [ python ] ++ stdenv.lib.optionals (lapackSupport) [ gfortran openblas32 ];
+  buildInputs = [ python ] ++ stdenv.lib.optionals (lapackSupport) [ gfortran blas lapack ];
   nativeBuildInputs = [ cmake ];
 
   src = fetchurl {
@@ -33,7 +34,7 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (lapackSupport) [
     "-DSUNDIALS_INDEX_TYPE=int32_t"
     "-DLAPACK_ENABLE=ON"
-    "-DLAPACK_LIBRARIES=${openblas32}/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DLAPACK_LIBRARIES=${lapack}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 
   doCheck = true;

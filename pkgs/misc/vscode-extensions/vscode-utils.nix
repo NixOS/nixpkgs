@@ -1,16 +1,12 @@
-{ stdenv, lib, fetchurl, unzip }:
-
+{ stdenv, lib, buildEnv, writeShellScriptBin, fetchurl, vscode, unzip, jq }:
 let
-  mktplcExtRefToFetchArgs = ext: {
-    url = "https://${ext.publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${ext.publisher}/extension/${ext.name}/${ext.version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage";
-    sha256 = ext.sha256;
-    # The `*.vsix` file is in the end a simple zip file. Change the extension
-    # so that existing `unzip` hooks takes care of the unpacking.
-    name = "${ext.publisher}-${ext.name}.zip";
-  };
+  extendedPkgVersion = lib.getVersion vscode;
+  extendedPkgName = lib.removeSuffix "-${extendedPkgVersion}" vscode.name;
+
 
   buildVscodeExtension = a@{
     name,
+    namePrefix ? "${extendedPkgName}-extension-",
     src,
     # Same as "Unique Identifier" on the extension's web page.
     # For the moment, only serve as unique extension dir.
@@ -24,16 +20,17 @@ let
   }:
   stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) //  {
 
-    name = "vscode-extension-${name}";
+    name = namePrefix + name;
 
     inherit vscodeExtUniqueId;
     inherit configurePhase buildPhase dontPatchELF dontStrip;
 
-    installPrefix = "${vscodeExtUniqueId}";
+    installPrefix = "share/${extendedPkgName}/extensions/${vscodeExtUniqueId}";
 
     buildInputs = [ unzip ] ++ buildInputs;
 
     installPhase = ''
+
       runHook preInstall
 
       mkdir -p "$out/$installPrefix"
@@ -44,9 +41,8 @@ let
 
   });
 
-
   fetchVsixFromVscodeMarketplace = mktplcExtRef:
-    fetchurl((mktplcExtRefToFetchArgs mktplcExtRef));
+    fetchurl((import ./mktplcExtRefToFetchArgs.nix mktplcExtRef));
 
   buildVscodeMarketplaceExtension = a@{
     name ? "",
@@ -79,10 +75,25 @@ let
   extensionsFromVscodeMarketplace = mktplcExtRefList:
     builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
 
-in
+  vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
+   inherit lib extensionsFromVscodeMarketplace writeShellScriptBin;
+   vscodeDefault = vscode;
+  };
 
+  
+  vscodeExts2nix = import ./vscodeExts2nix.nix {
+    inherit lib writeShellScriptBin;
+    vscodeDefault = vscode;
+  };
+
+  vscodeEnv = import ./vscodeEnv.nix {
+    inherit lib buildEnv writeShellScriptBin extensionsFromVscodeMarketplace jq;
+    vscodeDefault = vscode;
+  };
+in 
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
           buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
-          extensionsFromVscodeMarketplace;
+          extensionsFromVscodeMarketplace
+          vscodeWithConfiguration vscodeExts2nix vscodeEnv;
 }

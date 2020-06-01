@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "A minimal Markdown reading & writing app";
     homepage = "https://typora.io";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jensbin worldofpeace ];
+    maintainers = with maintainers; [ jensbin ];
     platforms = [ "x86_64-linux"];
   };
 }

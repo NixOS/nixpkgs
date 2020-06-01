@@ -8,6 +8,7 @@
 , SystemConfiguration
 
 , modules ? null
+, nixosTests
 }:
 
 let
@@ -89,12 +90,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.2";
+  version = "1.10.3";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fmrm51zgrasjbmhs0pzb1lyca3ddx0wd35shvxnkjnifi8qd1h7";
+    sha256 = "0rp4sxqxd2wsb5iyv0mh11l16zxvh7rbgfg0vcgns823gvh8lqai";
   };
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl
@@ -128,6 +129,8 @@ stdenv.mkDerivation rec {
     # include configuration templates
     cp -r conf $out/share/freeswitch/
   '';
+
+  passthru.tests.freeswitch = nixosTests.freeswitch;
 
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";

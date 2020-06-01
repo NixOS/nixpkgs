@@ -15,6 +15,8 @@
 , enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
 , withVulkan ? stdenv.isLinux, vulkan-loader ? null
 , fetchurl
+, wayland
+, libxkbcommon
 }:
 
 with stdenv.lib;
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkgconfig wayland ]
                       ++ optional withVulkan makeWrapper;
 
   buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ]
@@ -38,7 +40,11 @@ stdenv.mkDerivation rec {
                 ++ optional withVulkan vulkan-loader
                 ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
                 ++ optionals stdenv.isLinux [ alsaLib libdrm libpulseaudio libv4l libX11
-                                              libXdmcp libXext libXxf86vm mesa udev ];
+                                              libXdmcp libXext libXxf86vm mesa udev
+                                              wayland libxkbcommon ];
+
+  # we use prefix-less pkg-config
+  PKG_CONF_PATH = "pkg-config";
 
   enableParallelBuilding = true;
 

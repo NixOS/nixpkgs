@@ -1,4 +1,4 @@
-{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05 }:
+{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09 }:
 
 let
   mkCoqPackages' = self: coq:
@@ -39,43 +39,17 @@ let
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
       inherit (callPackage ../development/coq-modules/mathcomp {})
-        mathcompGen mathcompGenSingle ssreflect
-
-        mathcompCorePkgs mathcomp
+        mathcomp_ mathcomp-config
+        mathcomp ssreflect
         mathcomp-ssreflect mathcomp-fingroup mathcomp-algebra
         mathcomp-solvable mathcomp-field mathcomp-character
-
-        mathcompCorePkgs_1_7 mathcomp_1_7
-        mathcomp-ssreflect_1_7 mathcomp-fingroup_1_7 mathcomp-algebra_1_7
-        mathcomp-solvable_1_7 mathcomp-field_1_7 mathcomp-character_1_7
-
-        mathcompCorePkgs_1_8 mathcomp_1_8
-        mathcomp-ssreflect_1_8 mathcomp-fingroup_1_8 mathcomp-algebra_1_8
-        mathcomp-solvable_1_8 mathcomp-field_1_8 mathcomp-character_1_8
-
-        mathcompCorePkgs_1_9 mathcomp_1_9
-        mathcomp-ssreflect_1_9 mathcomp-fingroup_1_9 mathcomp-algebra_1_9
-        mathcomp-solvable_1_9 mathcomp-field_1_9 mathcomp-character_1_9
-
-        mathcompCorePkgs_1_10 mathcomp_1_10
-        mathcomp-ssreflect_1_10 mathcomp-fingroup_1_10 mathcomp-algebra_1_10
-        mathcomp-solvable_1_10 mathcomp-field_1_10 mathcomp-character_1_10
-        ;
+      ;
       inherit (callPackage ../development/coq-modules/mathcomp/extra.nix { })
-        mathcompExtraGen multinomials coqeal
-
-        mathcomp-finmap mathcomp-bigenough mathcomp-analysis
-        mathcomp-multinomials mathcomp-real-closed mathcomp-coqeal
-
-        mathcomp_1_7-finmap mathcomp_1_7-bigenough mathcomp_1_7-analysis
-        mathcomp_1_7-multinomials mathcomp_1_7-real-closed
-        mathcomp_1_7-finmap_1_0
-
-        mathcomp_1_8-finmap mathcomp_1_8-bigenough mathcomp_1_8-analysis
-        mathcomp_1_8-multinomials mathcomp_1_8-real-closed mathcomp_1_8-coqeal
-
-        mathcomp_1_9-finmap mathcomp_1_9-bigenough mathcomp_1_9-analysis
-        mathcomp_1_9-multinomials mathcomp_1_9-real-closed;
+        mathcomp-extra-override mathcomp-extra-config mathcomp-extra
+        current-mathcomp-extra mathcomp-extra-fast mathcomp-extra-all
+        mathcomp-finmap mathcomp-bigenough mathcomp-real-closed
+        mathcomp-analysis multinomials coqeal
+      ;
       metalib = callPackage ../development/coq-modules/metalib { };
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
@@ -86,6 +60,8 @@ let
       tlc = callPackage ../development/coq-modules/tlc {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
+
+      filterPackages = filterCoqPackages;
     };
 
   filterCoqPackages = coq: set:
@@ -113,8 +89,7 @@ in rec {
    */
   mkCoqPackages = coq:
     let self = lib.makeScope newScope (lib.flip mkCoqPackages' coq); in
-    if coq.dontFilter or false then self
-    else filterCoqPackages coq self;
+    if coq.dontFilter or false then self else filterCoqPackages coq self;
 
   coq_8_5 = callPackage ../applications/science/logic/coq {
     ocamlPackages = ocamlPackages_4_05;
@@ -125,19 +100,23 @@ in rec {
     version = "8.6.1";
   };
   coq_8_7 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.7.2";
   };
   coq_8_8 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.8.2";
   };
   coq_8_9 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.9.1";
   };
   coq_8_10 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.10.2";
   };
   coq_8_11 = callPackage ../applications/science/logic/coq {
-    version = "8.11.1";
+    version = "8.11.2";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;

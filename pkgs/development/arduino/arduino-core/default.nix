@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, jdk, ant
-, libusb, libusb1, unzip, zlib, ncurses, readline
+, libusb-compat-0_1, libusb1, unzip, zlib, ncurses, readline
 , withGui ? false, gtk2 ? null, withTeensyduino ? false
   /* Packages needed for Teensyduino */
 , upx, fontconfig, xorg, gcc
@@ -42,7 +42,7 @@ let
     glib
     gtk2
     libpng12
-    libusb
+    libusb-compat-0_1
     pango
     udev
     xorg.libSM
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  buildInputs = [ jdk ant libusb libusb1 unzip zlib ncurses5 readline
+  buildInputs = [ jdk ant libusb-compat-0_1 libusb1 unzip zlib ncurses5 readline
   ] ++ stdenv.lib.optionals withTeensyduino [ upx ];
   downloadSrcList = builtins.attrValues externalDownloads;
   downloadDstList = builtins.attrNames externalDownloads;
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   javaPath = lib.makeBinPath [jdk];
 
   # Everything else will be patched into rpath
-  rpath = (lib.makeLibraryPath [zlib libusb libusb1 readline ncurses5 stdenv.cc.cc]);
+  rpath = (lib.makeLibraryPath [zlib libusb-compat-0_1 libusb1 readline ncurses5 stdenv.cc.cc]);
 
   installPhase = ''
     mkdir -p $out/share/arduino

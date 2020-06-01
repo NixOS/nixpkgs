@@ -1,5 +1,5 @@
 { buildPythonApplication, lib, fetchFromGitHub, fetchpatch
-, wrapGAppsHook, gobject-introspection, gnome-desktop, libnotify, libgnome-keyring, pango
+, wrapGAppsHook, gobject-introspection, glib-networking, gnome-desktop, libnotify, libgnome-keyring, pango
 , gdk-pixbuf, atk, webkitgtk, gst_all_1
 , dbus-python, evdev, pyyaml, pygobject3, requests, pillow
 , xrandr, pciutils, psmisc, glxinfo, vulkan-tools, xboxdrv, pulseaudio, p7zip, xgamma
@@ -40,8 +40,9 @@ in buildPythonApplication rec {
     sha256 = "1g093g0difnkjmnm91p20issdsxn9ri4c56zzddj5wfrbmhwdfag";
   };
 
+  nativeBuildInputs = [ wrapGAppsHook ];
   buildInputs = [
-    wrapGAppsHook gobject-introspection gnome-desktop libnotify libgnome-keyring pango
+    gobject-introspection glib-networking gnome-desktop libnotify libgnome-keyring pango
     gdk-pixbuf atk webkitgtk
   ] ++ gstDeps;
 

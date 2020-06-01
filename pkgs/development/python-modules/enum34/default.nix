@@ -7,11 +7,11 @@
 
 if pythonAtLeast "3.4" then null else buildPythonPackage rec {
   pname = "enum34";
-  version = "1.1.6";
+  version = "1.1.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ad8c4783bf61ded74527bffb48ed9b54166685e4230386a9ed9b1279e2df5b1";
+    sha256 = "cce6a7477ed816bd2542d03d53db9f0db935dd013b70f336a95c73979289f248";
   };
 
   checkPhase = ''

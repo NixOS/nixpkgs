@@ -4,21 +4,20 @@
 }:
 
 let
-  name = "openrct2-${version}";
-  version = "0.2.4";
+  version = "0.2.6";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${version}";
-    sha256 = "1rlw3w20llg36sj3bk50g661qw766ng8ma3p42sdkj8br9dw800h";
+    sha256 = "1vikbkg3wh5ngzdfilb6irbh6nqinf138qpdz8wz9izlvl8s36k4";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
-    rev = "v1.0.12";
-    sha256 = "0vfhyldc8nfvkg4d9kry669haxz2165walbxzgza7pqpnd7aqgrf";
+    rev = "v1.0.14";
+    sha256 = "1bqbia5y73v4r0sv5cvi5729jh2ns7cxn557blh715yxswk91590";
   };
 
   title-sequences-src = fetchFromGitHub {
@@ -29,7 +28,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  inherit name;
+  inherit version;
+  pname = "openrct2";
 
   src = openrct2-src;
 
@@ -61,12 +61,11 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RELWITHDEBINFO"
     "-DDOWNLOAD_OBJECTS=OFF"
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
-  makeFlags = ["all" "g2"];
+  enableParallelBuilding = true;
 
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 

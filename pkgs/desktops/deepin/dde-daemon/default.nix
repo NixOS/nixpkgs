@@ -1,10 +1,37 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch, pkgconfig,
-  dbus-factory, go-dbus-factory, go-gir-generator, go-lib,
-  deepin-gettext-tools, gettext, dde-api, deepin-desktop-schemas,
-  deepin-wallpapers, deepin-desktop-base, alsaLib, glib, gtk3,
-  libgudev, libinput, libnl, librsvg, linux-pam, networkmanager,
-  pulseaudio, python3, hicolor-icon-theme, glibc, tzdata, go,
-  deepin, makeWrapper, xkeyboard_config, wrapGAppsHook }:
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, go-dbus-factory
+, go-gir-generator
+, go-lib
+, deepin-gettext-tools
+, gettext
+, dde-api
+, deepin-desktop-schemas
+, deepin-wallpapers
+, deepin-desktop-base
+, alsaLib
+, glib
+, gtk3
+, libgudev
+, libinput
+, libnl
+, librsvg
+, linux-pam
+, networkmanager
+, pulseaudio
+, python3
+, hicolor-icon-theme
+, glibc
+, tzdata
+, go
+, deepin
+, makeWrapper
+, xkeyboard_config
+, wrapGAppsHook
+}:
 
 buildGoPackage rec {
   pname = "dde-daemon";
@@ -29,11 +56,8 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  outputs = [ "out" ];
-
   nativeBuildInputs = [
     pkgconfig
-    dbus-factory
     deepin-gettext-tools
     gettext
     networkmanager
@@ -123,7 +147,7 @@ buildGoPackage rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Daemon for handling Deepin Desktop Environment session settings";

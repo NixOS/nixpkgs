@@ -1,10 +1,12 @@
 { stdenv, targetPackages, fetchurl, fetchpatch, fetchFromGitHub, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
+, langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langJava ? false
 , langGo ? false
 , profiledCompiler ? false
+, langJit ? false
 , staticCompiler ? false
 , enableShared ? true
 , enableLTO ? true
@@ -15,6 +17,7 @@
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
+, gnatboot ? null
 , zip ? null, unzip ? null, pkgconfig ? null
 , gtk2 ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
@@ -48,6 +51,8 @@ assert stdenv.hostPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 
+assert langAda -> gnatboot != null;
+
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
@@ -63,6 +68,7 @@ let majorVersion = "6";
       [ ../use-source-date-epoch.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
+      ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
@@ -121,7 +127,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = if langJava || langGo then ["out" "man" "info"]
+  outputs = if langJava || langGo || langJit then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
@@ -131,21 +137,17 @@ stdenv.mkDerivation ({
   hardeningDisable = [ "format" "pie" ];
 
   prePatch =
-    (stdenv.lib.optionalString (langJava || langGo) ''
-      export lib=$out
-    '')
-
     # This should kill all the stdinc frameworks that gcc and friends like to
     # insert into default search paths.
-    + stdenv.lib.optionalString hostPlatform.isDarwin ''
+    stdenv.lib.optionalString hostPlatform.isDarwin ''
       substituteInPlace gcc/config/darwin-c.c \
         --replace 'if (stdinc)' 'if (0)'
 
       substituteInPlace libgcc/config/t-slibgcc-darwin \
-        --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+        --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"
 
       substituteInPlace libgfortran/configure \
-        --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
+        --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
     '';
 
   postPatch =
@@ -200,6 +202,7 @@ stdenv.mkDerivation ({
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
+    ++ (optional langAda gnatboot)
     ;
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
@@ -208,7 +211,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit (stdenv) lib;
-    inherit version hostPlatform langJava langGo;
+    inherit version hostPlatform gnatboot langJava langAda langGo;
   };
 
   dontDisableStatic = true;
@@ -234,9 +237,11 @@ stdenv.mkDerivation ({
       langCC
       langFortran
       langJava javaAwtGtk javaAntlr javaEcj
+      langAda
       langGo
       langObjC
       langObjCpp
+      langJit
       ;
   };
 
@@ -292,7 +297,7 @@ stdenv.mkDerivation ({
     ;
 
   passthru = {
-    inherit langC langCC langObjC langObjCpp langFortran langGo version;
+    inherit langC langCC langObjC langObjCpp langFortran langAda langGo version;
     isGNU = true;
   };
 

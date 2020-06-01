@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/Libpeas";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

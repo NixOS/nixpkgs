@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python3Packages, mopidy }:
+{ stdenv, fetchurl, pythonPackages, mopidy }:
 
-python3Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";
   version = "4.0.1";
 
@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1ac8r8050i5r3ag1hlblbcyskqjqz7wgamndbzsmw52qi6hxk44f";
   };
 
-  propagatedBuildInputs = [ mopidy python3Packages.pyspotify ];
+  propagatedBuildInputs = [ mopidy pythonPackages.pyspotify ];
 
   doCheck = false;
 

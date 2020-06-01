@@ -7,28 +7,22 @@
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
-, openblas, arpack
+, blas, lapack, arpack
 # Darwin frameworks
 , CoreServices, ApplicationServices
 }:
 
+assert (!blas.isILP64) && (!lapack.isILP64);
+
 with stdenv.lib;
 
-# All dependencies must use the same OpenBLAS.
 let
-  arpack_ = arpack;
-in
-let
-  arpack = arpack_.override { inherit openblas; };
-in
-
-let 
   majorVersion = "1";
   minorVersion = "3";
   maintenanceVersion = "1";
   src_sha256 = "0q9a7yc3b235psrwl5ghyxgwly25lf8n818l8h6bkf2ymdbsv5p6";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
-in 
+in
 
 stdenv.mkDerivation rec {
   pname = "julia";
@@ -67,7 +61,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
-    pcre2.dev openblas openlibm openspecfun readline utf8proc
+    pcre2.dev blas lapack openlibm openspecfun readline utf8proc
     zlib
   ]
   ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
@@ -94,13 +88,9 @@ stdenv.mkDerivation rec {
       "SHELL=${stdenv.shell}"
 
       "USE_SYSTEM_BLAS=1"
-      "USE_BLAS64=${if openblas.blas64 then "1" else "0"}"
-      "LIBBLAS=-lopenblas"
-      "LIBBLASNAME=libopenblas"
+      "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
 
       "USE_SYSTEM_LAPACK=1"
-      "LIBLAPACK=-lopenblas"
-      "LIBLAPACKNAME=libopenblas"
 
       "USE_SYSTEM_ARPACK=1"
       "USE_SYSTEM_FFTW=1"
@@ -123,7 +113,7 @@ stdenv.mkDerivation rec {
     ];
 
   LD_LIBRARY_PATH = makeLibraryPath [
-    arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
+    arpack fftw fftwSinglePrec gmp libgit2 mpfr blas openlibm
     openspecfun pcre2
   ];
 

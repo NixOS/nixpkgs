@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, exiv2 }:
+{ mkDerivation, stdenv, fetchFromGitHub, qtbase, qmake, exiv2 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "phototonic";
   version = "2.1";
 

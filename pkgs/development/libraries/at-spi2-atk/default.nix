@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "D-Bus bridge for Assistive Technology Service Provider Interface (AT-SPI) and Accessibility Toolkit (ATK)";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-atk";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

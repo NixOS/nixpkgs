@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.0.14";
+  version = "2.0.15";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07fkwb4phfr71dpajnq6l64phjxvljx2nf8ibs12n9gwjdvm9i52";
+    sha256 = "0wpzd3j01njxfclbhxz31s5clc7il67nhm4lz89q2aaj19c0xzsa";
   };
 
   propagatedBuildInputs = [

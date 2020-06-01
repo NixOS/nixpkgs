@@ -4,94 +4,124 @@ with lib;
 
 let
   cfg = config.virtualisation.cri-o;
+
+  crioPackage = (pkgs.cri-o.override { inherit (cfg) extraPackages; });
+
+  # Copy configuration files to avoid having the entire sources in the system closure
+  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
+    cp ${filePath} $out
+  '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "virtualisation" "cri-o" "registries" ] [ "virtualisation" "containers" "registries" "search" ])
+  ];
+
+  meta = {
+    maintainers = lib.teams.podman.members;
+  };
+
   options.virtualisation.cri-o = {
     enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
     storageDriver = mkOption {
-      type = types.enum ["btrfs" "overlay" "vfs"];
+      type = types.enum [ "btrfs" "overlay" "vfs" ];
       default = "overlay";
       description = "Storage driver to be used";
     };
 
     logLevel = mkOption {
-      type = types.enum ["trace" "debug" "info" "warn" "error" "fatal"];
+      type = types.enum [ "trace" "debug" "info" "warn" "error" "fatal" ];
       default = "info";
       description = "Log level to be used";
     };
 
     pauseImage = mkOption {
-      type = types.str;
-      default = "k8s.gcr.io/pause:3.1";
-      description = "Pause image for pod sandboxes to be used";
+      type = types.nullOr types.str;
+      default = null;
+      description = "Override the default pause image for pod sandboxes";
+      example = [ "k8s.gcr.io/pause:3.2" ];
     };
 
     pauseCommand = mkOption {
-      type = types.str;
-      default = "/pause";
-      description = "Pause command to be executed";
+      type = types.nullOr types.str;
+      default = null;
+      description = "Override the default pause command";
+      example = [ "/pause" ];
     };
 
-    registries = mkOption {
-      type = types.listOf types.str;
-      default = [ "docker.io" "quay.io" ];
-      description = "Registries to be configured for unqualified image pull";
+    runtime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Override the default runtime";
+      example = [ "crun" ];
+    };
+
+    extraPackages = mkOption {
+      type = with types; listOf package;
+      default = [ ];
+      example = lib.literalExample ''
+        [
+          pkgs.gvisor
+        ]
+      '';
+      description = ''
+        Extra packages to be installed in the CRI-O wrapper.
+      '';
+    };
+
+    package = lib.mkOption {
+      type = types.package;
+      default = crioPackage;
+      internal = true;
+      description = ''
+        The final CRI-O package (including extra packages).
+      '';
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs;
-      [ cri-o cri-tools conmon cni-plugins iptables runc utillinux ];
-    environment.etc."crictl.yaml".text = ''
-      runtime-endpoint: unix:///var/run/crio/crio.sock
-    '';
+    environment.systemPackages = [ cfg.package pkgs.cri-tools ];
+
+    environment.etc."crictl.yaml".source = copyFile "${pkgs.cri-o-unwrapped.src}/crictl.yaml";
+
     environment.etc."crio/crio.conf".text = ''
       [crio]
       storage_driver = "${cfg.storageDriver}"
 
       [crio.image]
-      pause_image = "${cfg.pauseImage}"
-      pause_command = "${cfg.pauseCommand}"
-      registries = [
-        ${concatMapStringsSep ", " (x: "\"" + x + "\"") cfg.registries}
-      ]
+      ${optionalString (cfg.pauseImage != null) ''pause_image = "${cfg.pauseImage}"''}
+      ${optionalString (cfg.pauseCommand != null) ''pause_command = "${cfg.pauseCommand}"''}
+
+      [crio.network]
+      plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
 
       [crio.runtime]
-      conmon = "${pkgs.conmon}/bin/conmon"
+      cgroup_manager = "systemd"
       log_level = "${cfg.logLevel}"
-      manage_network_ns_lifecycle = true
+      manage_ns_lifecycle = true
+
+      ${optionalString (cfg.runtime != null) ''
+      default_runtime = "${cfg.runtime}"
+      [crio.runtime.runtimes]
+      [crio.runtime.runtimes.${cfg.runtime}]
+      ''}
     '';
-    environment.etc."containers/policy.json".text = ''
-      {"default": [{"type": "insecureAcceptAnything"}]}
-    '';
-    environment.etc."cni/net.d/20-cri-o-bridge.conf".text = ''
-      {
-        "cniVersion": "0.3.1",
-        "name": "crio-bridge",
-        "type": "bridge",
-        "bridge": "cni0",
-        "isGateway": true,
-        "ipMasq": true,
-        "ipam": {
-          "type": "host-local",
-          "subnet": "10.88.0.0/16",
-          "routes": [
-              { "dst": "0.0.0.0/0" }
-          ]
-        }
-      }
-    '';
+
+    environment.etc."cni/net.d/10-crio-bridge.conf".source = copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/10-crio-bridge.conf";
+
+    # Enable common /etc/containers configuration
+    virtualisation.containers.enable = true;
 
     systemd.services.crio = {
       description = "Container Runtime Interface for OCI (CRI-O)";
       documentation = [ "https://github.com/cri-o/cri-o" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.utillinux pkgs.runc pkgs.iptables ];
+      path = [ cfg.package ];
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${pkgs.cri-o}/bin/crio";
+        ExecStart = "${cfg.package}/bin/crio";
         ExecReload = "/bin/kill -s HUP $MAINPID";
         TasksMax = "infinity";
         LimitNOFILE = "1048576";

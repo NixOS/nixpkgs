@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wxmaxima";
-  version = "20.02.4";
+  version = "20.04.0";
 
   src = fetchFromGitHub {
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${version}";
-    sha256 = "106a7jrjwfmymzj70nsv44fm3jbxngr8pmkaghhpwy0ln38lhf54";
+    sha256 = "0vrjxzfgmjdzm1rgl0crz4b4badl14jwh032y3xkcdvjl5j67lp3";
   };
 
   buildInputs = [ wxGTK maxima gnome3.adwaita-icon-theme ];

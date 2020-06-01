@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "luigi";
-  version = "2.8.12";
+  version = "2.8.13";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1p83mxqs7w5v27a58ps7wji5mlyfz66cpkbyrndix0pv9hdyzpxn";
+    sha256 = "0x14549iwj7r1knc0hmic9ny9hp960yjjqi4mxl78jb69gd3bhmf";
   };
 
   propagatedBuildInputs = with python3Packages; [ dateutil tornado_4 python-daemon boto3 ];

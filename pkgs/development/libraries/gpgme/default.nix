@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+{ stdenv, fetchurl, fetchpatch
+, autoreconfHook, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
 , file, which, ncurses
 , texinfo
 , buildPackages
@@ -33,7 +34,14 @@ stdenv.mkDerivation rec {
       url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992";
       sha256 = "pKL1tvUw7PB2w4FHSt2up4SvpFiprBH6TLdgKxYFC3g=";
     })
-  ];
+    # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
+    (fetchpatch {
+      name = "0001-Fix-python-tests-on-non-Linux.patch";
+      url = "https://lists.gnupg.org/pipermail/gnupg-devel/attachments/20200415/f7be62d1/attachment.obj";
+      sha256 = "00d4sxq63601lzdp2ha1i8fvybh7dzih4531jh8bx07fab3sw65g";
+    })
+    # Disable python tests on Darwin as they use gpg (see configureFlags below)
+  ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch;
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
@@ -42,14 +50,10 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ file pkgconfig gnupg texinfo ]
+  nativeBuildInputs = [ pkgconfig gnupg texinfo autoreconfHook ]
   ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-  postPatch =''
-    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
-  '';
 
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"

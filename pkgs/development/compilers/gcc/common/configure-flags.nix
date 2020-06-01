@@ -14,11 +14,14 @@
 
 , langC
 , langCC
+, langD ? false
 , langFortran
 , langJava ? false, javaAwtGtk ? false, javaAntlr ? null, javaEcj ? null
+, langAda ? false
 , langGo
 , langObjC
 , langObjCpp
+, langJit
 }:
 
 assert cloog != null -> stdenv.lib.versionOlder version "5";
@@ -113,12 +116,15 @@ let
         lib.concatStrings (lib.intersperse ","
           (  lib.optional langC        "c"
           ++ lib.optional langCC       "c++"
+          ++ lib.optional langD        "d"
           ++ lib.optional langFortran  "fortran"
           ++ lib.optional langJava     "java"
+          ++ lib.optional langAda      "ada"
           ++ lib.optional langGo       "go"
           ++ lib.optional langObjC     "objc"
           ++ lib.optional langObjCpp   "obj-c++"
           ++ lib.optionals crossDarwin [ "objc" "obj-c++" ]
+          ++ lib.optional langJit      "jit"
           )
         )
       }"
@@ -139,6 +145,9 @@ let
       "--disable-cloog-version-check"
       "--enable-cloog-backend=isl"
     ]
+
+    # Ada options
+    ++ lib.optional langAda "--enable-libada"
 
     # Java options
     ++ lib.optionals langJava [
@@ -168,6 +177,12 @@ let
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
+    ] 
+    ++ lib.optionals langJit [
+      "--enable-host-shared"
+    ] 
+    ++ lib.optionals (langD) [
+      "--with-target-system-zlib=yes"
     ]
   ;
 

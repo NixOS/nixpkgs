@@ -26,7 +26,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
+  version = "2.1.0";
   pname = "Scrapy";
 
   disabled = isPy27;
@@ -78,7 +78,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "85581a01f4160a103ca9906ffa4e44474f4ecd1685f0934728892c58ebf111f6";
+    sha256 = "640aea0f9be9b055f5cfec5ab78ee88bb37a5be3809b138329bd2af51392ec7f";
   };
 
   postInstall = ''

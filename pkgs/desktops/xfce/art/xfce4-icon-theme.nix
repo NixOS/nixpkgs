@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2, xfce }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gnome-icon-theme, tango-icon-theme, hicolor-icon-theme, xfce }:
 
 let
   category = "art";
@@ -13,9 +13,21 @@ stdenv.mkDerivation rec {
     sha256 = "1yk6rx3zr9grm4jwpjvqdkl13pisy7qn1wm5cqzmd2kbsn96cy6l";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gtk2 ];
-  
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+    gtk3
+  ];
+
+  buildInputs = [
+    gnome-icon-theme
+    tango-icon-theme
+    hicolor-icon-theme
+    # missing parent icon theme Industrial
+  ];
+
+  dontDropIconThemeCache = true;
+
   passthru.updateScript = xfce.updateScript {
     inherit pname version;
     attrPath = "xfce.${pname}";
@@ -25,6 +37,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://www.xfce.org/";
     description = "Icons for Xfce";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.eelco ];
   };

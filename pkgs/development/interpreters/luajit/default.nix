@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, buildPackages
+{ stdenv, fetchFromGitHub, buildPackages
 , name ? "luajit-${version}"
 , isStable
 , sha256
+, rev
 , version
 , extraMeta ? {}
 , callPackage
@@ -10,6 +11,7 @@
 , enableFFI ? true
 , enableJIT ? true
 , enableJITDebugModule ? enableJIT
+, enableGC64 ? stdenv.hostPlatform.isAarch64
 , enable52Compat ? false
 , enableValgrindSupport ? false
 , valgrind ? null
@@ -28,6 +30,7 @@ let
      optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
   ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
   ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
+  ++ optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
   ++ optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
   ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
   ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
@@ -37,9 +40,10 @@ let
 in
 stdenv.mkDerivation rec {
   inherit name version;
-  src = fetchurl {
-    url = "http://luajit.org/download/LuaJIT-${version}.tar.gz";
-    inherit sha256;
+  src = fetchFromGitHub {
+    owner  = "LuaJIT";
+    repo   = "LuaJIT";
+    inherit sha256 rev;
   };
 
   luaversion = "5.1";

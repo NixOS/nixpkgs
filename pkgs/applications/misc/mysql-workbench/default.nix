@@ -45,11 +45,11 @@ let
   inherit (python2.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.19";
+  version = "8.0.20";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "unrszSK+tKcARSHxRSAAos+jDtYxdDcSnFENixaDJsw=";
+    sha256 = "0c0ig2fqfpli7fwb4v4iwvfh4szzj3grx8j9rbh40kllkc8v5qh6";
   };
 
   patches = [
@@ -142,7 +142,7 @@ in stdenv.mkDerivation rec {
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
     "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
     "-DWITH_ANTLR_JAR=${antlr4_7.jarLocation}"
-    # mysql-workbench 8.0.19 depends on libmysqlconnectorcpp 1.1.8.
+    # mysql-workbench 8.0.20 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
     "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"

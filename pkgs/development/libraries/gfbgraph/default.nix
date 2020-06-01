@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Projects/GFBGraph";
     description = "GLib/GObject wrapper for the Facebook Graph API";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.lgpl2;
     platforms = platforms.linux;
   };

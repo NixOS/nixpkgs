@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://digint.ch/btrbk";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ asymmetric the-kenny ];
+    maintainers = with maintainers; [ asymmetric ];
     inherit version;
   };
 }

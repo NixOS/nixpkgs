@@ -19,7 +19,7 @@ buildGoPackage rec {
   };
 
   postInstall = ''
-    wrapProgram $bin/bin/grafana-reporter \
+    wrapProgram $out/bin/grafana-reporter \
       --prefix PATH : ${makeBinPath [ tetex ]}
   '';
 

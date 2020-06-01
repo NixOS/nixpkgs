@@ -179,7 +179,7 @@ in import ./make-test-python.nix {
     s3.succeed(
         "mc config host add minio "
         + "http://localhost:${toString minioPort} "
-        + "${s3.accessKey} ${s3.secretKey} S3v4",
+        + "${s3.accessKey} ${s3.secretKey} --api s3v4",
         "mc mb minio/thanos-bucket",
     )
 

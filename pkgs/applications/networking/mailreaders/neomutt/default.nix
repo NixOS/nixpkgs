@@ -1,17 +1,18 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
 , lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell, sqlite, zlib
+, glibcLocales
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200320";
+  version = "20200501";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "06xcl9pr8dna4kqjaqm7ss50gdy185425bwl31i0xs3l11cyjap4";
+    sha256 = "1xrs2bagrcg489zp7g39l3rrpgz8n1ji9cbr21wrnasfbhqcsmnx";
   };
 
   buildInputs = [
@@ -75,7 +76,22 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preCheck = ''
+    cp -r ${fetchFromGitHub {
+      owner = "neomutt";
+      repo = "neomutt-test-files";
+      rev = "1ee274e9ae1330fb901eb7b8275b3079d7869222";
+      sha256 = "0dhilz4rr7616jh8jcvh50a3rr09in43nsv72mm6f3vfklcqincp";
+    }} $(pwd)/test-files
+    (cd test-files && ./setup.sh)
+
+    export NEOMUTT_TEST_DIR=$(pwd)/test-files
+    export LC_ALL="en_US.UTF-8"
+  '';
+
+  checkInputs = [ glibcLocales ];
   checkTarget = "test";
+  postCheck = "unset NEOMUTT_TEST_DIR";
 
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client";

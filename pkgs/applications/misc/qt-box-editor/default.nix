@@ -1,4 +1,5 @@
-{ stdenv
+{ mkDerivation
+, stdenv
 , fetchFromGitHub
 , qtbase
 , qtsvg
@@ -7,7 +8,7 @@
 , tesseract
 }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "qt-box-editor";
   version = "unstable-2019-07-12";
 

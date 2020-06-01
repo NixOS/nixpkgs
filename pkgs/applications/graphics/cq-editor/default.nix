@@ -6,13 +6,13 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "cq-editor";
-  version = "0.1RC1";
+  version = "0.1RC2";
 
   src = fetchFromGitHub {
     owner = "CadQuery";
     repo = "CQ-editor";
     rev = version;
-    sha256 = "0iwcpnj15s64k16948sakvkn1lb4mqwrhmbxk3r03bczs0z33zax";
+    sha256 = "0zima4pmn34s8b2axxwy6qd1f1r5ki34byq4x3rrd7n3g0hagxz5";
   };
 
   propagatedBuildInputs = with python3Packages; [

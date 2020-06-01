@@ -5,6 +5,8 @@
 , requests-cache
 , pygments
 , pyquery
+, cachelib
+, appdirs
 }:
 
 buildPythonPackage rec {
@@ -16,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "3b322668606d29d8a841c3b28c0574851f512b55c33a7ceb982b6a98d82fa3e3";
   };
 
-  propagatedBuildInputs = [ six requests-cache pygments pyquery ];
+  propagatedBuildInputs = [ six requests-cache pygments pyquery cachelib appdirs ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

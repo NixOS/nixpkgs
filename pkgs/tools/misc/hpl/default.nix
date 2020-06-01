@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, openblasCompat, mpi } :
+{ stdenv, fetchurl, blas, lapack, mpi } :
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "hpl";
@@ -18,7 +20,7 @@ stdenv.mkDerivation rec {
     install -D testing/ptest/HPL.dat $out/share/hpl/HPL.dat
   '';
 
-  buildInputs = [ openblasCompat mpi ];
+  buildInputs = [ blas lapack mpi ];
 
   meta = with stdenv.lib; {
     description = "Portable Implementation of the Linpack Benchmark for Distributed-Memory Computers";
@@ -28,4 +30,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.markuskowa ];
   };
 }
-

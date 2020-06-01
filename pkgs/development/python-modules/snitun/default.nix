@@ -1,4 +1,6 @@
-{ lib, stdenv, buildPythonPackage, python, fetchFromGitHub, attrs, cryptography, async-timeout, pytest-aiohttp, pytest }:
+{ lib, stdenv, buildPythonPackage, python, fetchFromGitHub
+, attrs, cryptography, async-timeout, pytest-aiohttp, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "snitun";
@@ -13,12 +15,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ attrs cryptography async-timeout ];
 
-  checkInputs = [ pytest pytest-aiohttp ];
+  checkInputs = [ pytestCheckHook pytest-aiohttp ];
 
-  checkPhase = ''
-    # https://github.com/NabuCasa/snitun/issues/61
-    pytest ${lib.optionalString stdenv.isDarwin "-k 'not test_multiplexer_data_channel_abort_full'"} tests/
-  '';
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_multiplexer_data_channel_abort_full" # https://github.com/NabuCasa/snitun/issues/61
+    # port binding conflicts
+    "test_snitun_single_runner_timeout"
+    "test_snitun_single_runner_throttling"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/nabucasa/snitun";

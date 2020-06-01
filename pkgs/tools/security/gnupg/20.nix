@@ -4,7 +4,7 @@
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
 , pinentry ? null, guiSupport ? false
-, openldap ? null, bzip2 ? null, libusb ? null, curl ? null
+, openldap ? null, bzip2 ? null, libusb-compat-0_1 ? null, curl ? null
 }:
 
 with stdenv.lib;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs
     = [ readline zlib libgpgerror libgcrypt libassuan libksba pth
-        openldap bzip2 libusb curl libiconv ];
+        openldap bzip2 libusb-compat-0_1 curl libiconv ];
 
   patches = [ ./gpgkey2ssh-20.patch ];
 

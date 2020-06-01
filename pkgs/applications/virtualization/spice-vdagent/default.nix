@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0n9k2kna2gd1zi6jv45zsp2jlv439nz5l5jjijirxqaycwi74srf";
   };
   NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
+  patchFlags = [ "-uNp1" ];
+  # included in the next release.
+  patches = [ ./timeout.diff ];
   postPatch = ''
     substituteInPlace data/spice-vdagent.desktop --replace /usr $out
   '';

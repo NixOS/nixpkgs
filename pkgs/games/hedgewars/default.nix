@@ -6,8 +6,9 @@
 }:
 
 let
+  # gameServer/hedgewars-server.cabal depends on network < 3
   ghc = ghcWithPackages (pkgs: with pkgs; [
-          SHA bytestring entropy hslogger network pkgs.zlib random
+          SHA bytestring entropy hslogger network_2_6_3_1 pkgs.zlib random
           regex-tdfa sandi utf8-string vector
         ]);
 
@@ -39,6 +40,15 @@ mkDerivation rec {
     "-DNOVERSIONINFOUPDATE=ON"
     "-DNOSERVER=${if withServer then "OFF" else "ON"}"
   ];
+
+
+  # hslogger brings network-3 and network-bsd which conflict with 
+  # network-2.6.3.1
+  preConfigure = ''
+    substituteInPlace gameServer/CMakeLists.txt \
+      --replace "haskell_flags}" \
+        "haskell_flags} -package network-2.6.3.1 -hide-package network-bsd"
+  '';
 
   NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out

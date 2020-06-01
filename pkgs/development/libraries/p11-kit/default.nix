@@ -26,14 +26,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--without-trust-paths"
-  ]; # TODO: store trust anchors in a directory common to Nix and NixOS
+    "--with-trust-paths=/etc/ssl/certs/ca-certificates.crt"
+  ];
 
   enableParallelBuilding = true;
 
   doCheck = !stdenv.isDarwin;
 
-  installFlags = [ "exampledir=\${out}/etc/pkcs11" ];
+  installFlags = [
+    "exampledir=${placeholder "out"}/etc/pkcs11"
+  ];
 
   meta = with stdenv.lib; {
     description = "Library for loading and sharing PKCS#11 modules";

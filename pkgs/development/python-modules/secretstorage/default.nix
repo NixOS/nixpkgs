@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, cryptography, jeepney, pygobject3 }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, cryptography, jeepney }:
 
 buildPythonPackage rec {
   pname = "secretstorage";
@@ -15,7 +15,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     jeepney
-    pygobject3
   ];
 
   # Needs a D-Bus Sesison

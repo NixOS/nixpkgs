@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gmailctl";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mbrt";
     repo = "gmailctl";
     rev = "v${version}";
-    sha256 = "0g581gdkib7bj86blpm8skjvbnivmzh9ddikxai9hr5qq231j1pb";
+    sha256 = "08q4yjfbwlldirf3j5db18l8kn6sf288wd364s50jlcx2ka8w50j";
   };
 
-  modSha256 = "0pv3lhzl96ygzh9y01hi9klrrk403ii92imr9yrbimaf7rsvyvjp";
+  vendorSha256 = "0qp8n7z3vcsbc6safp7i18i0i3r4hy4nidzwl85i981sg12vcg6b";
 
   meta = with stdenv.lib; {
     description = "Declarative configuration for Gmail filters";
@@ -24,4 +24,3 @@ buildGoModule rec {
     platforms = platforms.unix;
   };
 }
-

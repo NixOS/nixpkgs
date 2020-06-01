@@ -11,17 +11,16 @@
 
 stdenv.mkDerivation {
   pname = "plan9port";
-  version = "2019-02-25";
+  version = "2020-01-08";
 
   src =  fetchFromGitHub {
     owner = "9fans";
     repo = "plan9port";
-    rev = "047fd921744f39a82a86d9370e03f7af511e6e84";
-    sha256 = "1lp17948q7vpl8rc2bf5a45bc8jqyj0s3zffmks9r25ai42vgb43";
+    rev = "cc3d97d52a72d7eaceb5b636bcdf81c3e19f7a2e";
+    sha256 = "0gb55kj0gzx1kdhiwcrbr7xcgz1im21dyxgxhfhh6d0q9rw0c17g";
   };
 
   patches = [
-    ./tmpdir.patch
     ./darwin-sw_vers.patch
     ./darwin-cfframework.patch
   ];
@@ -90,7 +89,7 @@ stdenv.mkDerivation {
     license = licenses.lpl-102;
     maintainers = with maintainers; [ AndersonTorres bbarker
                                       ftrvxmtrx kovirobi ];
-    platforms = platforms.unix;
+    platforms = remove "aarch64-linux" platforms.unix;
   };
 }
 # TODO: investigate the mouse chording support patch

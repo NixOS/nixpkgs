@@ -1,30 +1,36 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , unittest2
 , future
 , numpy
+, pillow
 , scipy
 , scikitlearn
 , scikitimage
 , threadpoolctl
 }:
 
-
 buildPythonPackage rec {
   pname = "batchgenerators";
-  version = "0.19.7";
+  version = "0.20.0";
 
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0qqzwqf5r0q6jh8avz4f9kf8x96crvdnkznhf24pbm0faf8yk67q";
+  src = fetchFromGitHub {
+    owner = "MIC-DKFZ";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0cc3i4wznqb7lk8n6jkprvkpsby6r7khkxqwn75k8f01mxgjfpvf";
+    
   };
 
-  propagatedBuildInputs = [ future numpy scipy scikitlearn scikitimage threadpoolctl ];
+  propagatedBuildInputs = [
+    future numpy pillow scipy scikitlearn scikitimage threadpoolctl
+  ];
+
   checkInputs = [ pytest unittest2 ];
 
   checkPhase = "pytest tests";

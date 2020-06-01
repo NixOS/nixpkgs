@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libusb, pkgconfig, pmutils, udev} :
+{ stdenv, fetchgit, libusb1, pkgconfig, pmutils, udev} :
 
 let
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb pmutils udev ];
+  buildInputs = [ libusb1 pmutils udev ];
 
   # shell thing didn't work so i replaced it using nix
   prePatch = ''

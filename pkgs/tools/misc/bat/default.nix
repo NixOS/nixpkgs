@@ -1,26 +1,24 @@
-{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, pkgconfig, less
+{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, less
 , Security, libiconv, installShellFiles, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
   pname   = "bat";
-  version = "0.13.0";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1kaa6ps6v1wk9qs63h116k4pbz7y9mfbfxfbq7g89yjhzkjmh6xc";
+    sha256 = "1pjdvhldmjpy8ymb7r91y18hj5dx1iygszsfwkd66v9rncjigd07";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "01l1y124gjh6gf9z1jkbpfzh0w92hrgwvsmqkqdw3a9pa4w5f6yg";
+  cargoSha256 = "0myz06hjv4hwzmyqa9l36i9j9d213a0mnq8rvx6wyff7mr9zk99i";
 
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang installShellFiles makeWrapper ];
+  nativeBuildInputs = [ pkgconfig installShellFiles makeWrapper ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1

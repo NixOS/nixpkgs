@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "10.0.0";
+  version = "10.2.0";
   pname = "azure-mgmt-network";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "3978da4641b3396d4a00c7ddd53d87ece7e7d45b5bc41a157639bdd2f2c5b9b3";
+    sha256 = "d50c74cdc1c9be6861ddef9adffd3b05afc5a5092baf0209eea30f4439cba2d9";
   };
 
   postInstall = if isPy3k then "" else ''

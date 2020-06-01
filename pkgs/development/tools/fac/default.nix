@@ -18,7 +18,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram $bin/bin/fac \
+    wrapProgram $out/bin/fac \
       --prefix PATH : ${git}/bin
 
     # Install man page, not installed by default

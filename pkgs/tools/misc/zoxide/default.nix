@@ -1,27 +1,28 @@
-{ lib
+{ stdenv
 , fetchFromGitHub
 , rustPlatform
-, fzf
+, withFzf ? true, fzf
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
-  version = "0.3.1";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
     rev = "v${version}";
-    sha256 = "1sad18d0pxfdy9gvjmixzgdskg1l7djvzp0aipx7pz0lyi6gs23z";
+    sha256 = "1zfk9y5f12h2d5zwf2z8c95xwhbhc6ayv971875fbxgz1nd8vqb6";
   };
 
-  buildInputs = [
-    fzf
-  ];
+  postPatch = stdenv.lib.optionalString withFzf ''
+    substituteInPlace src/fzf.rs \
+      --replace '"fzf"' '"${fzf}/bin/fzf"'
+  '';
 
-  cargoSha256 = "1sx3s1jnfxylbjr3x6v6j8a6zkl7hfyj4alzlyrsw36b1b64pwqm";
+  cargoSha256 = "0z0p3cxxazw19bmk3zw7z2q93p00ywsa2cz1jhy78mn5pq1v95rd";
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "A fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
     license = with licenses; [ mit ];

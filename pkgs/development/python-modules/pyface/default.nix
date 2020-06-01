@@ -1,5 +1,5 @@
 { stdenv, fetchPypi, buildPythonPackage
-, setuptools, six, traits, wxPython
+, setuptools, six, traits
 }:
 
 buildPythonPackage rec {
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1g2g3za64rfffbivlihbf5njrqbv63ln62rv9d8fi1gcrgaw6akw";
   };
 
-  propagatedBuildInputs = [ setuptools six traits wxPython ];
+  propagatedBuildInputs = [ setuptools six traits ];
 
   doCheck = false; # Needs X server
 

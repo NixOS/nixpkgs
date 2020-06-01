@@ -5,7 +5,7 @@ let
     url = "http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz";
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
-  version = "3.51";
+  version = "3.52";
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
 in stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
-    sha256 = "1725d0idf5zzqafdqfdn9vprc7ys2ywhv23sqn328di968xqnd3m";
+    sha256 = "0q8m9jf6zgkbhx71myjb7y0gcl5ib3gj6qkl9yvdqpd6vl6fn2ha";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -27,8 +27,12 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ nspr ];
 
   prePatch = ''
-    # strip the trailing whitespace from the patch line…
-    xz -d < ${nssPEM} | sed -e '/^-DIRS = builtins $/ s/ $//' | patch -p1
+    # strip the trailing whitespace from the patch line and the renamed CKO_NETSCAPE_ enum to CKO_NSS_
+    xz -d < ${nssPEM} | sed \
+       -e '/^-DIRS = builtins $/ s/ $//' \
+       -e 's/CKO_NETSCAPE_/CKO_NSS_/g' \
+       -e 's/CKT_NETSCAPE_/CKT_NSS_/g' \
+       | patch -p1
   '';
 
   patches =

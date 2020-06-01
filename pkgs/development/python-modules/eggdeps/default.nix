@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zope_interface zope_testing ];
 
-  # tests fail, see http://hydra.nixos.org/build/4316603/log/raw
+  # tests fail, see https://hydra.nixos.org/build/4316603/log/raw
   doCheck = false;
 
   meta = with stdenv.lib; {

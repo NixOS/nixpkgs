@@ -181,6 +181,7 @@ let
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       idrisPackages = packagePlatforms pkgs.idrisPackages;
+      agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       tests = packagePlatforms pkgs.tests;
 

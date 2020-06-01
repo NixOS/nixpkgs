@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
+
   meta = {
     description = "An abstraction library for audio visualisations";
     homepage = "https://sourceforge.net/projects/libvisual/";

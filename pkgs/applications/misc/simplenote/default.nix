@@ -16,10 +16,10 @@ let
 
   pname = "simplenote";
 
-  version = "1.15.1";
+  version = "1.16.0";
 
   sha256 = {
-    x86_64-linux = "1q1y5favj2ny0l2iq53vq39ns68zfr2z1plskxdg2d93jarvcr8x";
+    x86_64-linux = "01nk3dbyhs0p7f6b4bkrng95i29g0x7vxj0rx1qb7sm3n11yi091";
   }.${system} or throwSystem;
 
   meta = with stdenv.lib; {

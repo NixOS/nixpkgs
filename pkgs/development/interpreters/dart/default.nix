@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, version ? "2.7.1" }:
+{ stdenv, fetchurl, unzip, version ? "2.7.2" }:
 
 let
 
@@ -24,29 +24,29 @@ let
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
       sha256 = "1p5bn04gr91chcszgmw5ng8mlzgwsrdr2v7k7ppwr1slkx97fsrh";
     };
-    "2.7.1-x86_64-linux" = fetchurl {
+    "2.7.2-x86_64-linux" = fetchurl {
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
-      sha256 = "1zjd9hxxg1dsyzkzgqjvl933kprf8h143z5qi4mj1iczxv7zp27a";
+      sha256 = "0vvsgda1smqdjn35yiq9pxx8f5haxb4hqnspcsfs6sn5c36k854v";
     };
-    "2.7.1-i686-linux" = fetchurl {
+    "2.7.2-i686-linux" = fetchurl {
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
-      sha256 = "0cggr1jbhzahmazlhba0vw2chz9zxd98jgk6zxvxdnw5hvkx8si1";
+      sha256 = "0dj01d2wwrp3cc5x73vs6fzhs6db60gkbjlrw3w9j04wcx69i38m";
     };
-    "2.7.1-aarch64-linux" = fetchurl {
+    "2.7.2-aarch64-linux" = fetchurl {
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
-      sha256 = "0m4qlc3zy87habr61npykvpclggn5k4hadl59v2b0ymvxa4h5zfh";
+      sha256 = "1p66fkdh1kv0ypmadmg67c3y3li3aaf1lahqh2g6r6qrzbh5da2p";
     };
-    "2.8.0-dev.10.0-x86_64-linux" = fetchurl {
+    "2.9.0-4.0.dev-x86_64-linux" = fetchurl {
       url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
-      sha256 = "17x0q94zampm99dd2sn6q1644lfwcl0ig2rdlmfzd9i4llj2ddbl";
+      sha256 = "16d9842fb3qbc0hy0zmimav9zndfkq96glgykj20xssc88qpjk2r";
     };
-    "2.8.0-dev.10.0-i686-linux" = fetchurl {
+    "2.9.0-4.0.dev-i686-linux" = fetchurl {
       url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
-      sha256 = "0hmkg4jrffzh8x2mxn8nbf7dl7k0v2vacbmxgpsl382vw9wwj96j";
+      sha256 = "105wgyxmi491c7qw0z3zhn4lv52h80ngyz4ch9dyj0sq8nndz2rc";
     };
-    "2.8.0-dev.10.0-aarch64-linux" = fetchurl {
+    "2.9.0-4.0.dev-aarch64-linux" = fetchurl {
       url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
-      sha256 = "185ipcmr9h76g44kzlj5pyj99cljlap82rhd1c2larfklyj5ryvv";
+      sha256 = "1x6mlmc4hccmx42k7srhma18faxpxvghjwqahna80508rdpljwgc";
     };
   };
 

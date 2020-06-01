@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral${lib.optionalString withGui "-gui"}";
-  version = "0.6.1";
+  version = "0.6.4";
 
   disabled = python3.pkgs.pythonOlder "3.6";
 
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "SamSchott";
     repo = "maestral-dropbox";
     rev = "v${version}";
-    sha256 = "06i3c7i85x879np158156mba7kxz2cwh75390sc9gwwngc95d9h9";
+    sha256 = "06psbjd205qj6vx7k7ywhclz1bs5zp43xnf275hf0k80h3b064sn";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     keyring
     keyrings-alt
     lockfile
+    pathspec
     Pyro5
     requests
     u-msgpack-python

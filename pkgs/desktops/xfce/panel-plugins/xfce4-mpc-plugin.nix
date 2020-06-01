@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui,
- xfconf, gtk2, exo, xfce }:
+{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel,
+  libxfce4ui, gtk3, exo, xfce }:
 
 let
   category = "panel-plugins";
@@ -7,17 +7,26 @@ in
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-mpc-plugin";
-  version = "0.4.5";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "1kvgq1pq7cykqdc3227dq0izad093ppfw3nfsrcp9i8mi6i5f7z7";
+    sha256 = "0q3pysdp85b3c7g3b59y3c69g4nw6bvbf518lnri4lxrnsvpizpf";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel
-    xfconf gtk2 exo ];
-  
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+  ];
+
+  buildInputs = [
+    libxfce4util
+    libxfce4ui
+    xfce4-panel
+    gtk3
+    exo
+  ];
+
   passthru.updateScript = xfce.updateScript {
     inherit pname version;
     attrPath = "xfce.${pname}";
@@ -25,10 +34,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "https://goodies.xfce.org/projects/panel-plugins/${pname}";
+    homepage = "https://docs.xfce.org/panel-plugins/xfce4-mpc-plugin";
     description = "MPD plugin for Xfce panel";
     platforms = platforms.linux;
+    license = licenses.bsd2;
     maintainers = [ ];
-    broken = true;
   };
 }

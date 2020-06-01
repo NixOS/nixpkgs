@@ -39,6 +39,7 @@
 , nss
 , pciutils
 , pkgsi686Linux
+, ps
 , setxkbmap
 , stdenv
 , systemd
@@ -89,6 +90,7 @@ let
 
           # Runtime stuff
           git
+          ps
         ]}" \
         --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
 

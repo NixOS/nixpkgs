@@ -2,6 +2,7 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , cvxpy
 , cython
@@ -18,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.4.1";
+  version = "0.5.1";
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
-    repo = pname;
+    repo = "qiskit-aer";
     rev = version;
     fetchSubmodules = true; # fetch muparserx and other required libraries
-    sha256 = "1j2pv6jx5dlzanjp1qnf32s53d8jrlpv96nvymznkcnjvqn60gv9";
+    sha256 = "0pbi8ldz8f1zm7pf2n5229g6kccriq21f24q9cb7bd4j5gdky5sk";
   };
 
   nativeBuildInputs = [
@@ -47,9 +48,17 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  prePatch = ''
+  patches = [
+    (fetchpatch{
+      name = "qiskit-aer-pr-727-fix-random-unitary-test.patch";
+      url = "https://github.com/Qiskit/qiskit-aer/commit/09afb3b6b0710042ab65d88e863363f2c843dcb0.patch";
+      sha256 = "0521b7i4fpc5brqs08w381g3c655f9cbn6my1740jnk7dv5lhsv9";
+    })
+  ];
+
+  postPatch = ''
     # remove dependency on PyPi cmake package, which isn't in Nixpkgs
-    substituteInPlace setup.py --replace "'cmake'" ""
+    substituteInPlace setup.py --replace "'cmake!=3.17,!=3.17.0'" ""
   '';
 
   dontUseCmakeConfigure = true;
@@ -81,7 +90,7 @@ buildPythonPackage rec {
     # Tests include a compiled "circuit" which is auto-built in $HOME
     export HOME=$(mktemp -d)
     # move tests b/c by default try to find (missing) cython-ized code in /build/source dir
-    cp -r test $HOME
+    cp -r $TMP/$sourceRoot/test $HOME
 
     # Add qiskit-aer compiled files to cython include search
     pushd $HOME
@@ -92,7 +101,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "High performance simulators for Qiskit";
-    homepage = "https://github.com/QISKit/qiskit-aer";
+    homepage = "https://qiskit.org/aer";
+    downloadPage = "https://github.com/QISKit/qiskit-aer/releases";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
     # Doesn't build on aarch64 (libmuparserx issue).

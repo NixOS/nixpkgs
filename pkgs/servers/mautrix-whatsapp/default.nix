@@ -1,17 +1,31 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, olm }:
 
 buildGoModule {
   pname = "mautrix-whatsapp-unstable";
-  version = "2020-04-02";
+  version = "2020-05-27";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = "mautrix-whatsapp";
-    rev = "064b5b8fedb6896d04509aa0e094a8d9f83426c2";
-    sha256 = "1xky31x5jk7yxh875nk20vvsn9givy6vxdqhqg5qwf4xjj2zqh2p";
+    rev = "7cf19b0908dec6cb8239aebc3f79ee88dccbfc51";
+    sha256 = "14cadqvbcjd9vp6dix3jzn0l071r3i9sz0lwpppgzpid8mg9zbx4";
   };
 
-  modSha256 = "0qcxxhfp3fkx90r3lwhi0lkzg3digwrnxk8cack11k717szg7zrd";
+  buildInputs = [ olm ];
+
+  vendorSha256 = "01psqvxkf13had7gkg1cbzf2flac4a6ivlb7vfzw7s50vhwkb95d";
+
+  overrideModAttrs = _: {
+    postBuild = ''
+      rm -r vendor/github.com/chai2010/webp
+      cp -r --reflink=auto ${fetchFromGitHub {
+        owner = "chai2010";
+        repo = "webp";
+        rev = "3da79ec3d682694d42bfd211db18fc1343c07cd7";
+        sha256 = "0gh3g52vz8na153mjmxkl80g3dvrcjw77xpjs1c02vagpj9jyw46";
+      }} vendor/github.com/chai2010/webp
+    '';
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/tulir/mautrix-whatsapp";

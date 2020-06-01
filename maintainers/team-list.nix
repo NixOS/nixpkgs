@@ -17,6 +17,18 @@
 
 { lib }:
 with lib.maintainers; {
+  acme = {
+    members = [
+      aanderse
+      andrew-d
+      arianvp
+      emily
+      flokli
+      m1cr0man
+    ];
+    scope = "Maintain ACME-related packages and modules.";
+  };
+
   freedesktop = {
     members = [ jtojnar worldofpeace ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
@@ -31,12 +43,24 @@ with lib.maintainers; {
     scope = "Maintain GNOME desktop environment and platform.";
   };
 
+  php = {
+    members = [
+      aanderse
+      etu
+      globin
+      ma27
+      talyz
+    ];
+    scope = "Maintain PHP related packages and extensions.";
+  };
+
   podman = {
     members = [
+      adisbladis
       saschagrunert
       vdemeester
       zowoq
     ];
-    scope = "Maintain podman related packages.";
+    scope = "Maintain Podman and CRI-O related packages and modules.";
   };
 }

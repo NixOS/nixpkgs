@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, libpng, bzip2, libusb, openssl }:
+{ stdenv, fetchFromGitHub, cmake, zlib, libpng, bzip2, libusb-compat-0_1, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "xpwn";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib libpng bzip2 libusb openssl ];
+  buildInputs = [ zlib libpng bzip2 libusb-compat-0_1 openssl ];
 
   meta = with stdenv.lib; {
     homepage    = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";

@@ -3,6 +3,7 @@
 }:
 
 buildDunePackage rec {
+  minimumOCamlVersion = "4.03";
   pname = "uri";
   version = "3.1.0";
 

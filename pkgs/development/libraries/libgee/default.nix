@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/Libgee";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

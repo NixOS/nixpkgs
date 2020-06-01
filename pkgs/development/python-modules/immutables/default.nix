@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "immutables";
-  version = "0.11";
+  version = "0.14";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6850578a0dc6530ac19113cfe4ddc13903df635212d498f176fe601a8a5a4a3";
+    sha256 = "0y0aqw29g525frdnmv9paljzacpp4s21sadfbca5b137iciwr8d0";
   };
 
   meta = {

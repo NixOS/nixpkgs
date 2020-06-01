@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages, fetchpatch }:
+{ stdenv, pythonPackages, fetchpatch, installShellFiles }:
 
 with pythonPackages;
 
@@ -14,15 +14,21 @@ buildPythonApplication rec {
 
   checkPhase = ''
     pytest -vs tests
- '';
+  '';
+
+  postInstall = ''
+    installShellCompletion --bash --name watson watson.completion
+    installShellCompletion --zsh --name _watson watson.zsh-completion
+  '';
 
   checkInputs = [ py pytest pytest-datafiles mock pytest-mock pytestrunner ];
   propagatedBuildInputs = [ requests click arrow ];
+  nativeBuildInputs = [ installShellFiles ];
 
   meta = with stdenv.lib; {
     homepage = "https://tailordev.github.io/Watson/";
     description = "A wonderful CLI to track your time!";
     license = licenses.mit;
-    maintainers = with maintainers; [ mguentner nathyong ] ;
+    maintainers = with maintainers; [ mguentner nathyong ];
   };
 }

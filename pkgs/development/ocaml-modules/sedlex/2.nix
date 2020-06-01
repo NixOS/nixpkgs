@@ -38,9 +38,9 @@ buildDunePackage rec {
     sha256 = "05f6qa8x3vhpdz1fcnpqk37fpnyyq13icqsk2gww5idjnh6kng26";
   };
 
-  buildInputs = [ ppx_tools_versioned ocaml-migrate-parsetree ];
-
-  propagatedBuildInputs = [ gen uchar ];
+  propagatedBuildInputs = [
+    gen uchar ocaml-migrate-parsetree ppx_tools_versioned
+  ];
 
   preBuild = ''
     ln -s ${DerivedCoreProperties} src/generator/data/DerivedCoreProperties.txt

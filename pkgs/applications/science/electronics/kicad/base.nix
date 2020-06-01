@@ -2,14 +2,13 @@
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp, fetchpatch, lndir, callPackages
 
-, pname ? "kicad"
 , stable ? true
 , baseName ? "kicad"
 , versions ? { }
 , oceSupport ? false, opencascade
 , withOCCT ? true, opencascade-occt
 , ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python, pythonPackages, wxPython
+, scriptingSupport ? true, swig, python, wxPython
 , debug ? false, valgrind
 , withI18n ? true
 }:
@@ -20,26 +19,26 @@ with lib;
 let
 
   versionConfig = versions.${baseName};
-  baseVersion = "${versions.${baseName}.kicadVersion.version}";
 
   # oce on aarch64 fails a test
   withOCE = oceSupport && !stdenv.isAarch64;
   withOCC = (withOCCT && !withOCE) || (oceSupport && stdenv.isAarch64);
 
-  kicad-libraries = callPackages ./libraries.nix versionConfig.libVersion;
+  libraries = callPackages ./libraries.nix versionConfig.libVersion;
 
 in
 stdenv.mkDerivation rec {
 
-  inherit pname;
-  version = "base-${baseVersion}";
+  i18n = libraries.i18n;
+
+  pname = "kicad-base";
+  version = "${versions.${baseName}.kicadVersion.version}";
 
   src = fetchFromGitLab (
     {
       group = "kicad";
       owner = "code";
       repo = "kicad";
-      rev = baseVersion;
     } // versionConfig.kicadVersion.src
   );
 
@@ -57,9 +56,11 @@ stdenv.mkDerivation rec {
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
+  # "-1" appended to indicate we're adding a patch
   postPatch = ''
     substituteInPlace CMakeModules/KiCadVersion.cmake \
-      --replace "unknown" ${builtins.substring 0 10 src.rev}
+      --replace "unknown" "${builtins.substring 0 10 src.rev}-1" \
+      --replace "${version}" "${version}-1"
   '';
 
   makeFlags = optional (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
@@ -113,7 +114,7 @@ stdenv.mkDerivation rec {
 
   postInstall = optional (withI18n) ''
     mkdir -p $out/share
-    lndir ${kicad-libraries.i18n}/share $out/share
+    lndir ${i18n}/share $out/share
   '';
 
   meta = {
@@ -124,7 +125,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.kicad-pcb.org/";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ evils kiwi berce ];
-    platforms = with platforms; linux;
+    platforms = platforms.all;
   };
 }

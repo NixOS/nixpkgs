@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb, libtool
+{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb1, libtool
 , withDebug ? false }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    cups automake autoconf glib libxml2 libusb libtool
+    cups automake autoconf glib libxml2 libusb1 libtool
   ];
 
   # lgmon3's --enable-libdir flag is used soley for specifying in which
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
       cd lgmon3
       substituteInPlace src/Makefile.am \
         --replace /usr/include/libusb-1.0 \
-                  ${libusb.dev}/include/libusb-1.0
+                  ${libusb1.dev}/include/libusb-1.0
       ./autogen.sh --prefix=$out --enable-progpath=$out/bin \
                    --datadir=$out/share \
                    --enable-libdir=/var/cache/cups

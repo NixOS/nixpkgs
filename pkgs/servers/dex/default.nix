@@ -22,8 +22,8 @@ buildGoPackage rec {
   ];
 
   postInstall = ''
-    mkdir -p $bin/share
-    cp -r $src/web $bin/share/web
+    mkdir -p $out/share
+    cp -r $src/web $out/share/web
   '';
 
   meta = with lib; {

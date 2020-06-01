@@ -17,6 +17,7 @@ let
       hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
       log_destination = 'stderr'
+      log_line_prefix = '${cfg.logLinePrefix}'
       listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
       port = ${toString cfg.port}
       ${cfg.extraConfig}
@@ -34,13 +35,7 @@ in
 
     services.postgresql = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run PostgreSQL.
-        '';
-      };
+      enable = mkEnableOption "PostgreSQL Server";
 
       package = mkOption {
         type = types.package;
@@ -192,6 +187,17 @@ in
         '';
       };
 
+      logLinePrefix = mkOption {
+        type = types.str;
+        default = "[%p] ";
+        example = "%m [%p] ";
+        description = ''
+          A printf-style string that is output at the beginning of each log line.
+          Upstream default is <literal>'%m [%p] '</literal>, i.e. it includes the timestamp. We do
+          not include the timestamp, because journal has it anyway.
+        '';
+      };
+
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -337,7 +343,7 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            PSQL="${pkgs.sudo}/bin/sudo -u ${cfg.superUser} psql --port=${toString cfg.port}"
+            PSQL="${pkgs.utillinux}/bin/runuser -u ${cfg.superUser} -- psql --port=${toString cfg.port}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi

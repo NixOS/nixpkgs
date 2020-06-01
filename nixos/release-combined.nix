@@ -20,11 +20,6 @@ let
       else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
 
-  allSupportedNixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
-    supportedSystems = supportedSystems ++ limitedSupportedSystems;
-    nixpkgs = nixpkgsSrc;
-  })) [ "unstable" ];
-
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
@@ -55,6 +50,7 @@ in rec {
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
         (onSystems ["x86_64-linux"] "nixos.iso_plasma5")
+        (onSystems ["x86_64-linux"] "nixos.iso_gnome")
         (onFullSupported "nixos.manual")
         (onSystems ["x86_64-linux"] "nixos.ova")
         (onSystems ["aarch64-linux"] "nixos.sd_image")
@@ -75,6 +71,7 @@ in rec {
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
         (onFullSupported "nixos.tests.gnome3")
         (onFullSupported "nixos.tests.gnome3-xorg")
+        (onFullSupported "nixos.tests.hardened")
         (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
@@ -96,6 +93,8 @@ in rec {
         (onFullSupported "nixos.tests.keymap.dvp")
         (onFullSupported "nixos.tests.keymap.neo")
         (onFullSupported "nixos.tests.keymap.qwertz")
+        (onFullSupported "nixos.tests.latestKernel.hardened")
+        (onFullSupported "nixos.tests.latestKernel.login")
         (onFullSupported "nixos.tests.lightdm")
         (onFullSupported "nixos.tests.login")
         (onFullSupported "nixos.tests.misc")
@@ -112,11 +111,13 @@ in rec {
         (onFullSupported "nixos.tests.networking.scripted.sit")
         (onFullSupported "nixos.tests.networking.scripted.static")
         (onFullSupported "nixos.tests.networking.scripted.vlan")
+        (onFullSupported "nixos.tests.systemd-networkd-ipv6-prefix-delegation")
         (onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
         (onFullSupported "nixos.tests.openssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
+        (onFullSupported "nixos.tests.php.httpd")
         (onFullSupported "nixos.tests.php.pcre")
         (onFullSupported "nixos.tests.plasma5")
         (onFullSupported "nixos.tests.predictable-interface-names.predictableNetworkd")

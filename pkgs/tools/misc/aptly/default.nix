@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, gnupg, bzip2, xz, graphviz }:
+{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz }:
 
 let
 
@@ -29,12 +29,11 @@ buildGoPackage {
 
   goPackagePath = "github.com/aptly-dev/aptly";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   postInstall = ''
-    mkdir -p $bin/share/bash-completion/completions
-    ln -s ${aptlyCompletionSrc}/aptly $bin/share/bash-completion/completions
-    wrapProgram "$bin/bin/aptly" \
+    installShellCompletion --bash ${aptlyCompletionSrc}/aptly
+    wrapProgram "$out/bin/aptly" \
       --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg bzip2 xz graphviz ]}"
   '';
 

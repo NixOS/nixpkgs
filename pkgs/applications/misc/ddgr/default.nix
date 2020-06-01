@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, python3, installShellFiles }:
 
 stdenv.mkDerivation rec {
-  version = "1.8";
+  version = "1.8.1";
   pname = "ddgr";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "ddgr";
     rev = "v${version}";
-    sha256 = "1cyaindcg2vc3ij0p6b35inr01c6ys04izxsn1h70ixhsz46qg8z";
+    sha256 = "0668wzh1gqin0xscy3fly9hz370n2ny175f3kya9bsld0x0jkd5p";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -16,11 +16,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
 
   makeFlags = [ "PREFIX=$(out)" ];
-
-  # Version 1.8 was released as 1.7
-  postPatch = ''
-    substituteInPlace ddgr --replace "_VERSION_ = '1.7'" "_VERSION_ = '${version}'"
-  '';
 
   postInstall = ''
     installShellCompletion --bash --name ddgr.bash auto-completion/bash/ddgr-completion.bash

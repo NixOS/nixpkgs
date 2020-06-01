@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "mirror://savannah/libunwind/${pname}-${version}.tar.gz";
-    sha256 = "1y0l08k6ak1mqbfj6accf9s5686kljwgsl4vcqpxzk5n74wpm6a3";
+    sha256 = "0dc46flppifrv2z0mrdqi60165ghxm1wk0g47vcbyzjdplqwjnfz";
   };
 
   patches = [ ./backtrace-only-with-glibc.patch ];

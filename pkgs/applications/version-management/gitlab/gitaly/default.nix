@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, fetchFromGitHub, buildGoPackage, ruby,
-  bundlerEnv, pkgconfig, libgit2 }:
+  bundlerEnv, pkgconfig, libgit2_0_27 }:
 
 let
   rubyEnv = bundlerEnv rec {
@@ -18,29 +18,22 @@ let
         };
       };
   };
-  libgit2_0_27 = libgit2.overrideAttrs (oldAttrs: rec {
-    version = "0.27.8";
-    src = fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "v${version}";
-      sha256 = "0wzx8nkyy9m7mx6cks58chjd4289vjsw97mxm9w6f1ggqsfnmbr9";
-    };
-  });
 in buildGoPackage rec {
-  version = "12.8.8";
+  version = "12.10.8";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "182jqglzbzq8jnlq6l634125jkvi67pfr1xck68n4k09gyzqllxv";
+    sha256 = "02dih35j97q80kzi46pkf9f9r1sffw11i5zmpjs2rr96al426g8q";
   };
 
   # Fix a check which assumes that hook files are writeable by their
   # owner.
-  patches = [ ./fix-executable-check.patch ];
+  patches = [
+    ./fix-executable-check.patch
+  ];
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";
 
@@ -61,11 +54,11 @@ in buildGoPackage rec {
     # code by default which doesn't work in nixos because it's a
     # read-only filesystem
     substituteInPlace $ruby/gitlab-shell/lib/gitlab_config.rb --replace \
-       "File.join(ROOT_PATH, 'config.yml')" \
-       "'/run/gitlab/shell-config.yml'"
+       "ROOT_PATH.join('config.yml')" \
+       "Pathname.new('/run/gitlab/shell-config.yml')"
   '';
 
-  outputs = [ "bin" "out" "ruby" ];
+  outputs = [ "out" "ruby" ];
 
   meta = with stdenv.lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";

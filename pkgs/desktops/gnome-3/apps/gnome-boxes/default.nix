@@ -51,11 +51,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "3.36.2";
+  version = "3.36.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "01hjlz9hljk2skrwfqxpy3934wjs6figs71sw8bm8g2vnyaqwq7a";
+    sha256 = "18imxv1859gr53z4yay02611p5f1rd2pwnbaq093gmn77l0j9292";
   };
 
   doCheck = true;
@@ -136,6 +136,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Boxes";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

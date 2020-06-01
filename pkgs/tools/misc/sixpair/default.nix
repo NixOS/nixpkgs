@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libusb }:
+{ stdenv, fetchurl, libusb-compat-0_1 }:
 stdenv.mkDerivation {
   name = "sixpair-2007-04-18";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   # hcitool is depricated
   patches = [ ./hcitool.patch ];
 
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   unpackPhase = ''
     cp $src sixpair.c

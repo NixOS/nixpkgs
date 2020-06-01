@@ -13,8 +13,12 @@ let
       buildInputs = [ coq.ocamlPackages.camlp5 ];
     };
     "8.10" = {
-      version = "1.1.1";
-      sha256 = "0b6r7bsygl1axbqybkhkr7zlwcd51ski5ql52994klrrxvjd58df";
+      version = "1.2";
+      sha256 = "1ir313mmkgp2c65wgw8c681a15clvri1wb1hyjqmj7ymx4shkl56";
+    };
+    "8.11" = {
+      version = "1.2";
+      sha256 = "1w317h7r5llyamzn1kqb8j6p5sxks2j8vq8wnpzrx01jqbyibxgy";
     };
   };
   param = params.${coq.coq-version};

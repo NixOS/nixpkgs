@@ -11,7 +11,7 @@
 , enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
 , enableJPEG2K    ? false, jasper  # disable jasper by default (many CVE)
 , enableEigen     ? true, eigen
-, enableOpenblas  ? true, openblas
+, enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
 
 , enableCuda      ? (config.cudaSupport or false) &&
@@ -34,6 +34,8 @@
 
 , AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
 }:
+
+assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 let
   version = "3.4.8";

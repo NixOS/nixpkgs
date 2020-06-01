@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.openttd.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jcumming the-kenny fpletz ];
+    maintainers = with maintainers; [ jcumming fpletz ];
   };
 }

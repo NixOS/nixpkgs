@@ -10,7 +10,7 @@
 }:
 let
   majMin = stdenv.lib.versions.majorMinor version;
-  version = "7.5.1";
+  version = "7.6.9";
 
   fahclient = stdenv.mkDerivation rec {
     inherit version;
@@ -18,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://download.foldingathome.org/releases/public/release/fahclient/debian-stable-64bit/v${majMin}/fahclient_${version}_amd64.deb";
-      hash = "sha256-7+RwYdMoZnJZwYFbmLxsN9ozk2P7jpOGZz9qlvTTfSY=";
+      sha256 = "1v4yijjjdq9qx1fp60flp9ya6ywl9qdsgkzwmzjzp8sd5gfvhyr6";
     };
 
     nativeBuildInputs = [

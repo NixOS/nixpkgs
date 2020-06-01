@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
 , stdenv ? pkgs.stdenv
 }:
@@ -46,6 +46,18 @@ self: super:
     }
   );
 
+  configparser = super.configparser.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [
+        self.toml
+      ];
+
+      postPatch = ''
+        substituteInPlace setup.py --replace 'setuptools.setup()' 'setuptools.setup(version="${old.version}")'
+      '';
+    }
+  );
+
   cryptography = super.cryptography.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ pkgs.openssl ];
@@ -55,8 +67,8 @@ self: super:
   django = (
     super.django.overridePythonAttrs (
       old: {
-        propagatedNativeBuildInputs = (old.propagatedNativeBuildInputs or [])
-        ++ [ pkgs.gettext ];
+        propagatedNativeBuildInputs = (old.propagatedNativeBuildInputs or [ ])
+          ++ [ pkgs.gettext ];
       }
     )
   );
@@ -118,19 +130,77 @@ self: super:
   );
 
   h5py = super.h5py.overridePythonAttrs (
-    old: rec {
+    old:
+    if old.format != "wheel" then rec {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
       buildInputs = old.buildInputs ++ [ pkgs.hdf5 self.pkgconfig self.cython ];
       configure_flags = "--hdf5=${pkgs.hdf5}";
       postConfigure = ''
         ${self.python.executable} setup.py configure ${configure_flags}
       '';
-    }
+    } else old
   );
 
   horovod = super.horovod.overridePythonAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.openmpi ];
+    }
+  );
+
+  imagecodecs = super.imagecodecs.overridePythonAttrs (
+    old: {
+      patchPhase = ''
+        substituteInPlace setup.py \
+          --replace "/usr/include/openjpeg-2.3" \
+                    "${pkgs.openjpeg.dev}/include/openjpeg-2.3"
+        substituteInPlace setup.py \
+          --replace "/usr/include/jxrlib" \
+                    "$out/include/libjxr"
+        substituteInPlace imagecodecs/_zopfli.c \
+          --replace '"zopfli/zopfli.h"' \
+                    '<zopfli.h>'
+        substituteInPlace imagecodecs/_zopfli.c \
+          --replace '"zopfli/zlib_container.h"' \
+                    '<zlib_container.h>'
+        substituteInPlace imagecodecs/_zopfli.c \
+          --replace '"zopfli/gzip_container.h"' \
+                    '<gzip_container.h>'
+      '';
+
+      preBuild = ''
+        mkdir -p $out/include/libjxr
+        ln -s ${pkgs.jxrlib}/include/libjxr/**/* $out/include/libjxr
+
+      '';
+
+      buildInputs = old.buildInputs ++ [
+        # Commented out packages are declared required, but not actually
+        # needed to build. They are not yet packaged for nixpkgs.
+        # bitshuffle
+        pkgs.brotli
+        # brunsli
+        pkgs.bzip2
+        pkgs.c-blosc
+        # charls
+        pkgs.giflib
+        pkgs.jxrlib
+        pkgs.lcms
+        pkgs.libaec
+        pkgs.libaec
+        pkgs.libjpeg_turbo
+        # liblzf
+        # liblzma
+        pkgs.libpng
+        pkgs.libtiff
+        pkgs.libwebp
+        pkgs.lz4
+        pkgs.openjpeg
+        pkgs.snappy
+        # zfp
+        pkgs.zopfli
+        pkgs.zstd
+        pkgs.zlib
+      ];
     }
   );
 
@@ -141,12 +211,27 @@ self: super:
     }
   );
 
+  isort = super.isort.overridePythonAttrs (
+    old: {
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
+    }
+  );
+
   jupyter = super.jupyter.overridePythonAttrs (
     old: rec {
       # jupyter is a meta-package. Everything relevant comes from the
       # dependencies. It does however have a jupyter.py file that conflicts
       # with jupyter-core so this meta solves this conflict.
       meta.priority = 100;
+    }
+  );
+
+  kiwisolver = super.kiwisolver.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [
+        # cppy is at the time of writing not in nixpkgs
+        (self.cppy or null)
+      ];
     }
   );
 
@@ -202,38 +287,38 @@ self: super:
 
   matplotlib = super.matplotlib.overridePythonAttrs (
     old:
-      let
-        enableGhostscript = old.passthru.enableGhostscript or false;
-        enableGtk3 = old.passthru.enableTk or false;
-        enableQt = old.passthru.enableQt or false;
-        enableTk = old.passthru.enableTk or false;
+    let
+      enableGhostscript = old.passthru.enableGhostscript or false;
+      enableGtk3 = old.passthru.enableTk or false;
+      enableQt = old.passthru.enableQt or false;
+      enableTk = old.passthru.enableTk or false;
 
-        inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
-      in
-        {
-          NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
+      inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+    in
+    {
+      NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
 
-          XDG_RUNTIME_DIR = "/tmp";
+      XDG_RUNTIME_DIR = "/tmp";
 
-          buildInputs = old.buildInputs
-          ++ lib.optional enableGhostscript pkgs.ghostscript
-          ++ lib.optional stdenv.isDarwin [ Cocoa ];
+      buildInputs = old.buildInputs
+        ++ lib.optional enableGhostscript pkgs.ghostscript
+        ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
-          nativeBuildInputs = old.nativeBuildInputs ++ [
-            pkgs.pkgconfig
-          ];
+      nativeBuildInputs = old.nativeBuildInputs ++ [
+        pkgs.pkgconfig
+      ];
 
-          propagatedBuildInputs = old.propagatedBuildInputs ++ [
-            pkgs.libpng
-            pkgs.freetype
-          ]
-          ++ stdenv.lib.optionals enableGtk3 [ pkgs.cairo self.pycairo pkgs.gtk3 pkgs.gobject-introspection self.pygobject3 ]
-          ++ stdenv.lib.optionals enableTk [ pkgs.tcl pkgs.tk self.tkinter pkgs.libX11 ]
-          ++ stdenv.lib.optionals enableQt [ self.pyqt5 ]
-          ;
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+        pkgs.libpng
+        pkgs.freetype
+      ]
+        ++ stdenv.lib.optionals enableGtk3 [ pkgs.cairo self.pycairo pkgs.gtk3 pkgs.gobject-introspection self.pygobject3 ]
+        ++ stdenv.lib.optionals enableTk [ pkgs.tcl pkgs.tk self.tkinter pkgs.libX11 ]
+        ++ stdenv.lib.optionals enableQt [ self.pyqt5 ]
+      ;
 
-          inherit (super.matplotlib) patches;
-        }
+      inherit (super.matplotlib) patches;
+    }
   );
 
   # Calls Cargo at build time for source builds and is really tricky to package
@@ -273,36 +358,37 @@ self: super:
 
   numpy = super.numpy.overridePythonAttrs (
     old:
-      let
-        blas = old.passthru.args.blas or pkgs.openblasCompat;
-        blasImplementation = lib.nameFromURL blas.name "-";
-        cfg = pkgs.writeTextFile {
-          name = "site.cfg";
-          text = (
-            lib.generators.toINI {} {
-              ${blasImplementation} = {
-                include_dirs = "${blas}/include";
-                library_dirs = "${blas}/lib";
-              } // lib.optionalAttrs (blasImplementation == "mkl") {
-                mkl_libs = "mkl_rt";
-                lapack_libs = "";
-              };
-            }
-          );
-        };
-      in
-        {
-          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
-          buildInputs = old.buildInputs ++ [ blas self.cython ];
-          enableParallelBuilding = true;
-          preBuild = ''
-            ln -s ${cfg} site.cfg
-          '';
-          passthru = old.passthru // {
-            blas = blas;
-            inherit blasImplementation cfg;
-          };
-        }
+    let
+      blas = old.passthru.args.blas or pkgs.openblasCompat;
+      blasImplementation = lib.nameFromURL blas.name "-";
+      cfg = pkgs.writeTextFile {
+        name = "site.cfg";
+        text = (
+          lib.generators.toINI
+            { } {
+            ${blasImplementation} = {
+              include_dirs = "${blas}/include";
+              library_dirs = "${blas}/lib";
+            } // lib.optionalAttrs (blasImplementation == "mkl") {
+              mkl_libs = "mkl_rt";
+              lapack_libs = "";
+            };
+          }
+        );
+      };
+    in
+    {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
+      buildInputs = old.buildInputs ++ [ blas self.cython ];
+      enableParallelBuilding = true;
+      preBuild = ''
+        ln -s ${cfg} site.cfg
+      '';
+      passthru = old.passthru // {
+        blas = blas;
+        inherit blasImplementation cfg;
+      };
+    }
   );
 
   openexr = super.openexr.overridePythonAttrs (
@@ -314,16 +400,16 @@ self: super:
 
   peewee = super.peewee.overridePythonAttrs (
     old:
-      let
-        withPostgres = old.passthru.withPostgres or false;
-        withMysql = old.passthru.withMysql or false;
-      in
-        {
-          buildInputs = old.buildInputs ++ [ self.cython pkgs.sqlite ];
-          propagatedBuildInputs = old.propagatedBuildInputs
-          ++ lib.optional withPostgres self.psycopg2
-          ++ lib.optional withMysql self.mysql-connector;
-        }
+    let
+      withPostgres = old.passthru.withPostgres or false;
+      withMysql = old.passthru.withMysql or false;
+    in
+    {
+      buildInputs = old.buildInputs ++ [ self.cython pkgs.sqlite ];
+      propagatedBuildInputs = old.propagatedBuildInputs
+        ++ lib.optional withPostgres self.psycopg2
+        ++ lib.optional withMysql self.mysql-connector;
+    }
   );
 
   pillow = super.pillow.overridePythonAttrs (
@@ -345,13 +431,55 @@ self: super:
     }
   );
 
-  pyarrow = super.pyarrow.overridePythonAttrs (
-    old: {
-      buildInputs = old.buildInputs ++ [
-        self.cython
-      ];
-    }
-  );
+  pyarrow =
+    if lib.versionAtLeast super.pyarrow.version "0.16.0" then super.pyarrow.overridePythonAttrs (
+      old:
+      let
+        parseMinor = drv: lib.concatStringsSep "." (lib.take 2 (lib.splitVersion drv.version));
+        _arrow-cpp = pkgs.arrow-cpp.override { inherit (self) python; };
+        ARROW_HOME = _arrow-cpp;
+        arrowCppVersion = parseMinor pkgs.arrow-cpp;
+        pyArrowVersion = parseMinor super.pyarrow;
+        errorMessage = "arrow-cpp version (${arrowCppVersion}) mismatches pyarrow version (${pyArrowVersion})";
+      in
+      if arrowCppVersion != pyArrowVersion then throw errorMessage else {
+
+        nativeBuildInputs = old.nativeBuildInputs ++ [
+          self.cython
+          pkgs.pkgconfig
+          pkgs.cmake
+        ];
+
+        preBuild = ''
+          export PYARROW_PARALLEL=$NIX_BUILD_CORES
+        '';
+
+        PARQUET_HOME = _arrow-cpp;
+        inherit ARROW_HOME;
+
+        buildInputs = old.buildInputs ++ [
+          pkgs.arrow-cpp
+        ];
+
+        PYARROW_BUILD_TYPE = "release";
+        PYARROW_WITH_PARQUET = true;
+        PYARROW_CMAKE_OPTIONS = [
+          "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
+
+          # This doesn't use setup hook to call cmake so we need to workaround #54606
+          # ourselves
+          "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
+        ];
+
+        dontUseCmakeConfigure = true;
+      }
+    ) else super.pyarrow.overridePythonAttrs (
+      old: {
+        nativeBuildInputs = old.nativeBuildInputs ++ [
+          self.cython
+        ];
+      }
+    );
 
   pycairo = (
     drv: (
@@ -377,7 +505,8 @@ self: super:
         mesonFlags = [ "-Dpython=${if self.isPy3k then "python3" else "python"}" ];
       }
     )
-  ) super.pycairo;
+  )
+    super.pycairo;
 
   pycocotools = super.pycocotools.overridePythonAttrs (
     old: {
@@ -408,13 +537,14 @@ self: super:
     }
   );
 
-  pyqt5 = let
-    drv = super.pyqt5;
-    withConnectivity = drv.passthru.args.withConnectivity or false;
-    withMultimedia = drv.passthru.args.withMultimedia or false;
-    withWebKit = drv.passthru.args.withWebKit or false;
-    withWebSockets = drv.passthru.args.withWebSockets or false;
-  in
+  pyqt5 =
+    let
+      drv = super.pyqt5;
+      withConnectivity = drv.passthru.args.withConnectivity or false;
+      withMultimedia = drv.passthru.args.withMultimedia or false;
+      withWebKit = drv.passthru.args.withWebKit or false;
+      withWebSockets = drv.passthru.args.withWebSockets or false;
+    in
     super.pyqt5.overridePythonAttrs (
       old: {
         format = "other";
@@ -430,10 +560,10 @@ self: super:
           # self.pyqt5-sip
           self.sip
         ]
-        ++ lib.optional withConnectivity pkgs.qt5.qtconnectivity
-        ++ lib.optional withMultimedia pkgs.qt5.qtmultimedia
-        ++ lib.optional withWebKit pkgs.qt5.qtwebkit
-        ++ lib.optional withWebSockets pkgs.qt5.qtwebsockets
+          ++ lib.optional withConnectivity pkgs.qt5.qtconnectivity
+          ++ lib.optional withMultimedia pkgs.qt5.qtmultimedia
+          ++ lib.optional withWebKit pkgs.qt5.qtwebkit
+          ++ lib.optional withWebSockets pkgs.qt5.qtwebsockets
         ;
 
         buildInputs = old.buildInputs ++ [
@@ -443,13 +573,13 @@ self: super:
           pkgs.qt5.qtdeclarative
           self.sip
         ]
-        ++ lib.optional withConnectivity pkgs.qt5.qtconnectivity
-        ++ lib.optional withWebKit pkgs.qt5.qtwebkit
-        ++ lib.optional withWebSockets pkgs.qt5.qtwebsockets
+          ++ lib.optional withConnectivity pkgs.qt5.qtconnectivity
+          ++ lib.optional withWebKit pkgs.qt5.qtwebkit
+          ++ lib.optional withWebSockets pkgs.qt5.qtwebsockets
         ;
 
         # Fix dbus mainloop
-        patches = pkgs.python3.pkgs.pyqt5.patches or [];
+        patches = pkgs.python3.pkgs.pyqt5.patches or [ ];
 
         configurePhase = ''
           runHook preConfigure
@@ -482,22 +612,22 @@ self: super:
           EOF
         '';
 
-        installCheckPhase = let
-          modules = [
-            "PyQt5"
-            "PyQt5.QtCore"
-            "PyQt5.QtQml"
-            "PyQt5.QtWidgets"
-            "PyQt5.QtGui"
-          ]
-          ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
-          ++ lib.optional withWebKit "PyQt5.QtWebKit"
-          ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-          ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
-          ;
-
-          imports = lib.concatMapStrings (module: "import ${module};") modules;
-        in
+        installCheckPhase =
+          let
+            modules = [
+              "PyQt5"
+              "PyQt5.QtCore"
+              "PyQt5.QtQml"
+              "PyQt5.QtWidgets"
+              "PyQt5.QtGui"
+            ]
+            ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
+            ++ lib.optional withWebKit "PyQt5.QtWebKit"
+            ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
+            ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
+            ;
+            imports = lib.concatMapStrings (module: "import ${module};") modules;
+          in
           ''
             echo "Checking whether modules can be imported..."
             ${self.python.interpreter} -c "${imports}"
@@ -524,6 +654,15 @@ self: super:
   );
 
   pytest-runner = super.pytest-runner or super.pytestrunner;
+
+  python-jose = super.python-jose.overridePythonAttrs (
+    old: {
+      postPath = ''
+        substituteInPlace setup.py --replace "'pytest-runner'," ""
+        substituteInPlace setup.py --replace "'pytest-runner'" ""
+      '';
+    }
+  );
 
   python-prctl = super.python-prctl.overridePythonAttrs (
     old: {
@@ -562,11 +701,17 @@ self: super:
     }
   );
 
+  panel = super.panel.overridePythonAttrs (
+    old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.nodejs ];
+    }
+  );
+
   # Pybind11 is an undeclared dependency of scipy that we need to pick from nixpkgs
   # Make it not fail with infinite recursion
   pybind11 = super.pybind11.overridePythonAttrs (
     old: {
-      cmakeFlags = (old.cmakeFlags or []) ++ [
+      cmakeFlags = (old.cmakeFlags or [ ]) ++ [
         "-DPYBIND11_TEST=off"
       ];
       doCheck = false; # Circular test dependency
@@ -574,7 +719,8 @@ self: super:
   );
 
   scipy = super.scipy.overridePythonAttrs (
-    old: {
+    old:
+    if old.format != "wheel" then {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
       propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.pybind11 ];
       setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
@@ -587,7 +733,7 @@ self: super:
       preBuild = ''
         ln -s ${self.numpy.cfg} site.cfg
       '';
-    }
+    } else old
   );
 
   scikit-learn = super.scikit-learn.overridePythonAttrs (
@@ -614,13 +760,14 @@ self: super:
     }
   );
 
-  shellingham = if lib.versionAtLeast super.shellingham.version "1.3.2" then (
-    super.shellingham.overridePythonAttrs (
-      old: {
-        format = "pyproject";
-      }
-    )
-  ) else super.shellingham;
+  shellingham =
+    if lib.versionAtLeast super.shellingham.version "1.3.2" then (
+      super.shellingham.overridePythonAttrs (
+        old: {
+          format = "pyproject";
+        }
+      )
+    ) else super.shellingham;
 
   tables = super.tables.overridePythonAttrs (
     old: {
@@ -669,7 +816,8 @@ self: super:
       python = self.python;
     }
   ).wheel.overridePythonAttrs (
-    _: {
+    old:
+    if old.format == "other" then old else {
       inherit (super.wheel) pname name version src;
     }
   );

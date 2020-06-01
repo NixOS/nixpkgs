@@ -58,7 +58,7 @@ in {
       default = {};
       example = literalExample ''
         {
-          domain = https://bw.domain.tld:8443;
+          domain = "https://bw.domain.tld:8443";
           signupsAllowed = true;
           rocketPort = 8222;
           rocketLog = "critical";

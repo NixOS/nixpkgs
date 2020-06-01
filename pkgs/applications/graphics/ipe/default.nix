@@ -1,8 +1,8 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
-, libjpeg, libpng, qtbase
+, libjpeg, libpng, qtbase, mkDerivation
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "ipe-7.2.13";
 
   src = fetchurl {
@@ -20,13 +20,9 @@ stdenv.mkDerivation rec {
     libjpeg libpng zlib qtbase freetype cairo lua5 texlive ghostscript
   ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  postFixup = ''
-    for prog in $out/bin/*; do
-      wrapProgram "$prog" --prefix PATH : "${texlive}/bin"
-    done
-  '';
+  qtWrapperArgs = [ ''--prefix PATH : ${texlive}/bin''  ];
 
   enableParallelBuilding = true;
 

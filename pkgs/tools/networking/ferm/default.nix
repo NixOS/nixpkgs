@@ -1,23 +1,29 @@
 { stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables, nixosTests }:
 
-stdenv.mkDerivation rec {
-  version = "2.4.1";
+let
+  inherit (stdenv.lib.versions) majorMinor;
+in stdenv.mkDerivation rec {
+  version = "2.5.1";
   pname = "ferm";
 
   src = fetchurl {
-    url = "http://ferm.foo-projects.org/download/2.4/ferm-${version}.tar.xz";
-    sha256 = "1fv8wk513yysp4q0i65rl2m0hg2lxwwgk9ppprsca1xcxrdpsvwa";
+    url = "http://ferm.foo-projects.org/download/${majorMinor version}/ferm-${version}.tar.xz";
+    sha256 = "0awl9s243sxgayr2fcmfks8xydhrmb9gy8bd9sfq738dgq7vybjb";
   };
 
-  buildInputs = [ perl ipset ebtables iptables makeWrapper ];
-  preConfigure = ''
-    substituteInPlace config.mk --replace "PERL = /usr/bin/perl" "PERL = ${perl}/bin/perl"
-    substituteInPlace config.mk --replace "PREFIX = /usr" "PREFIX = $out"
-  '';
+  # perl is used at build time to gather the ferm version.
+  nativeBuildInputs = [ makeWrapper perl ];
+  buildInputs = [ perl ];
+
+  makeFlags = [
+    "PERL=perl"
+    "PREFIX=${placeholder "out"}"
+  ];
+
   postInstall = ''
     rm -r $out/lib/systemd
     for i in "$out/sbin/"*; do
-      wrapProgram "$i" --prefix PATH : "${iptables}/bin:${ipset}/bin:${ebtables}/bin"
+      wrapProgram "$i" --prefix PATH : "${stdenv.lib.makeBinPath [ iptables ipset ebtables ]}"
     done
   '';
 

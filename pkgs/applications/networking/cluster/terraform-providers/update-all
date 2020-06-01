@@ -112,8 +112,10 @@ cd "$(dirname "$0")"
 
 # individual repos to fetch
 slugs=(
+  IBM-Cloud/terraform-provider-ibm
   ajbosco/terraform-provider-segment
   camptocamp/terraform-provider-pass
+  carlpett/terraform-provider-sops
   poseidon/terraform-provider-matchbox
   spaceapegames/terraform-provider-wavefront
   tweag/terraform-provider-nixos

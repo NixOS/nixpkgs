@@ -1,5 +1,5 @@
 { stdenv
-, fetchFromGitHub 
+, fetchFromGitHub
 , pantheon
 , pkgconfig
 , meson
@@ -27,6 +27,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0a0pqrpmrdd5pch30lizr9righlc7165z7krmnaxrzd0fvfkbr2h";
   };
+
+  patches = [
+    # https://github.com/elementary/wingpanel-indicator-datetime/pull/207
+    # Fixes lots of issues despite being rejected upstream
+    # https://github.com/elementary/wingpanel-indicator-datetime/issues/206
+    # https://github.com/elementary/wingpanel-indicator-datetime/issues/55
+    # https://github.com/elementary/wingpanel-indicator-datetime/issues/127
+    ./207.patch
+  ];
 
   passthru = {
     updateScript = pantheon.updateScript {

@@ -21,6 +21,7 @@ in
     services.yandex-disk = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "
           Whether to enable Yandex-disk client. See https://disk.yandex.ru/

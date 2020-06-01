@@ -78,7 +78,7 @@ in lib.makeScope newScope (self: lib.makeOverridable ({
   // melpaStablePackages // { inherit melpaStablePackages; }
   // melpaPackages // { inherit melpaPackages; }
   // orgPackages // { inherit orgPackages; }
-  // manualPackages
+  // manualPackages // { inherit manualPackages; }
   // {
     inherit emacs melpaBuild trivialBuild;
     emacsWithPackages = emacsWithPackages self;

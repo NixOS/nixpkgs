@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig, iconnamingutils, imagemagick, librsvg
-, gtk/*any version*/, hicolor-icon-theme
+, gtk/*any version*/, gnome-icon-theme, hicolor-icon-theme
 }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ intltool iconnamingutils imagemagick librsvg ];
-
-  propagatedBuildInputs = [
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs = [ gnome-icon-theme hicolor-icon-theme ];
+  # still missing parent icon themes: cristalsvg
 
   dontDropIconThemeCache = true;
 

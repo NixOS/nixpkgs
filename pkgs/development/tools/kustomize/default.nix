@@ -23,7 +23,7 @@ buildGoModule rec {
   # avoid finding test and development commands
   sourceRoot = "source/kustomize";
 
-  modSha256 = "1bas6al14ck0d2ccb4235426a5hldqsm0nf8vi76chz4nahzb71g";
+  vendorSha256 = "06mf5zvxn10g5rqjpqv3afvhj9xmijbj8ag8pqcg1996s4rp4p7a";
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";

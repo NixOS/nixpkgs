@@ -19,6 +19,5 @@ python2Packages.buildPythonApplication {
     homepage = "http://rdiff-backup.nongnu.org/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

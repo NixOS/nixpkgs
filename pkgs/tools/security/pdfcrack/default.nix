@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pdfcrack";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchurl {
     url = "mirror://sourceforge/pdfcrack/pdfcrack/pdfcrack-${version}.tar.gz";
-    sha256 = "035s3jzrs3ci0i53x04dzpqp9225c4s52cd722d6zqra5b2sw8w2";
+    sha256 = "1vf0l83xk627fg0a3b10wabgqxy08q4vbm0xjw9xzkdpk1lj059i";
   };
 
   installPhase = ''

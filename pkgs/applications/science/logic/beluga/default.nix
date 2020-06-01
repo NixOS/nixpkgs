@@ -1,34 +1,40 @@
-{ stdenv, fetchFromGitHub, ocamlPackages, omake }:
+{ lib, fetchFromGitHub, ocamlPackages, rsync }:
 
-stdenv.mkDerivation {
-  name = "beluga-20180403";
+ocamlPackages.buildDunePackage {
+  pname = "beluga";
+  version = "unstable-2020-03-11";
 
   src = fetchFromGitHub {
     owner  = "Beluga-lang";
     repo   = "Beluga";
-    rev    = "046aa59f008be70a7c4700b723bed0214ea8b687";
-    sha256 = "0m68y0r0wdw3mg2jks68bihaww7sg305zdfnic1rkndq2cxv0mld";
+    rev    = "6133b2f572219333f304bb4f77c177592324c55b";
+    sha256 = "0sy6mi50z3mvs5z7dx38piydapk89all81rh038x3559b5fsk68q";
   };
 
-  nativeBuildInputs = with ocamlPackages; [ findlib ocamlbuild omake ];
-  buildInputs = with ocamlPackages; [ ocaml ulex ocaml_extlib ];
+  useDune2 = true;
 
-  installPhase = ''
-    mkdir -p $out
-    cp -r bin $out/
+  buildInputs = with ocamlPackages; [
+    gen sedlex_2 ocaml_extlib dune-build-info linenoise
+  ];
 
-    mkdir -p $out/share/beluga
-    cp -r tools/ examples/ $out/share/beluga
+  postPatch = ''
+    patchShebangs ./TEST ./run_harpoon_test.sh
+  '';
 
+  checkPhase = "./TEST";
+  checkInputs = [ rsync ];
+  doCheck = true;
+
+  postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/beluga/
     cp -r tools/beluga-mode.el $out/share/emacs/site-lisp/beluga
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A functional language for reasoning about formal systems";
     homepage    = "http://complogic.cs.mcgill.ca/beluga/";
-    license     = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.bcdarwin ];
-    platforms   = stdenv.lib.platforms.unix;
+    license     = licenses.gpl3Plus;
+    maintainers = [ maintainers.bcdarwin ];
+    platforms   = platforms.unix;
   };
 }

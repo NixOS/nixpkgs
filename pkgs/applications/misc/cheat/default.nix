@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "cheat";
-  version = "3.9.0";
+  version = "3.10.1";
 
   src = fetchFromGitHub {
     owner = "cheat";
     repo = "cheat";
     rev = version;
-    sha256 = "0jbqflkcfdrinx1lk45klm8ml0n4cgp43nzls1376cd3hfayby1y";
+    sha256 = "0indvycj972wng979mvia8mrb7bwdfay7wxq3lnj05qyxqafj5h2";
   };
 
   subPackages = [ "cmd/cheat" ];
@@ -17,10 +17,11 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
+    installManPage doc/cheat.1
     installShellCompletion scripts/cheat.{bash,fish,zsh}
   '';
 
-  modSha256 = "1is19qca5wgzya332rmpk862nnivxzgxchkllv629f5fwwdvdgmg";
+  vendorSha256 = null;
 
   meta = with stdenv.lib; {
     description = "Create and view interactive cheatsheets on the command-line";

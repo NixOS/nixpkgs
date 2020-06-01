@@ -103,6 +103,7 @@ in
         };
 
         forwardDns = mkOption {
+          type = types.bool;
           default = false;
           description = ''
             If set to <literal>true</literal>, the DNS queries from the
@@ -135,14 +136,8 @@ in
           };
       };
 
-    virtualisation.xen.trace =
-      mkOption {
-        default = false;
-        description =
-          ''
-            Enable Xen tracing.
-          '';
-      };
+    virtualisation.xen.trace = mkEnableOption "Xen tracing";
+
   };
 
 

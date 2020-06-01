@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/eXeC64/imv";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj markus1189 ];
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    platforms   = platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, gfortran, openblas, openmpi, petsc, python3 }:
+{ stdenv, fetchurl, cmake, gfortran, blas, lapack, openmpi, petsc, python3 }:
 
 stdenv.mkDerivation rec {
   name = "getdp-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake gfortran ];
-  buildInputs = [ openblas openmpi petsc python3 ];
+  buildInputs = [ blas lapack openmpi petsc python3 ];
 
   meta = with stdenv.lib; {
     description = "A General Environment for the Treatment of Discrete Problems";

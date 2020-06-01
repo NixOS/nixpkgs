@@ -52,6 +52,28 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/teams/teams $out/bin/
   '';
 
+  dontAutoPatchelf = true;
+
+  # Includes runtimeDependencies in the RPATH of the included Node modules
+  # so that dynamic loading works. We cannot use directly runtimeDependencies
+  # here, since the libraries from runtimeDependencies are not propagated 
+  # to the dynamically loadable node modules because of a condition in
+  # autoPatchElfHook since *.node modules have Type: DYN (Shared object file) 
+  # instead of EXEC or INTERP it expects.
+  # Fixes: https://github.com/NixOS/nixpkgs/issues/85449
+  postFixup = ''
+    autoPatchelf "$out"
+
+    runtime_rpath="${lib.makeLibraryPath runtimeDependencies}"
+
+    for mod in $(find "$out/opt/teams" -name '*.node'); do
+      mod_rpath="$(patchelf --print-rpath "$mod")"
+
+      echo "Adding runtime dependencies to RPATH of Node module $mod"
+      patchelf --set-rpath "$runtime_rpath:$mod_rpath" "$mod"
+    done;
+  '';
+
   meta = with stdenv.lib; {
     description = "Microsoft Teams";
     homepage = "https://teams.microsoft.com";

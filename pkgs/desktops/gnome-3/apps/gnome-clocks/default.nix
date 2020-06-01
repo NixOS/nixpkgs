@@ -27,21 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-clocks";
-  version = "3.36.0";
+  version = "3.36.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ij9xwp3c96gsnnlhkqkiw3y45a4lpw7a09d4yysx7bvgw68p5sc";
+    sha256 = "8RsbIuwfKF5QmINoTAsfSlFJauoQVZEjnlsm+JhnUeY=";
   };
-
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = "gnome-clocks";
-      attrPath = "gnome3.gnome-clocks";
-    };
-  };
-
-  doCheck = true;
 
   nativeBuildInputs = [
     vala
@@ -55,6 +46,7 @@ stdenv.mkDerivation rec {
     libxml2
     gobject-introspection # for finding vapi files
   ];
+
   buildInputs = [
     gtk3
     glib
@@ -76,10 +68,19 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  doCheck = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-clocks";
+      attrPath = "gnome3.gnome-clocks";
+    };
+  };
+
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Apps/Clocks";
     description = "Clock application designed for GNOME 3";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

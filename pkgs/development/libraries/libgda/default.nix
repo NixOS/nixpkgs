@@ -47,7 +47,7 @@ assert postgresSupport -> postgresql != null;
     description = "Database access library";
     homepage = "https://www.gnome-db.org/";
     license = [ licenses.lgpl2 licenses.gpl2 ];
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

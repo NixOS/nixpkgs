@@ -10,6 +10,7 @@ in
   options = {
     services.xserver.desktopManager.kodi = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Enable the kodi multimedia center.";
       };

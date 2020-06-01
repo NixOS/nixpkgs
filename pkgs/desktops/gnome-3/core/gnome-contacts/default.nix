@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "3.36";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0yvgsfmqm8dxbhay12m20xp6qi9v31wwyv1gz4fx7j4kklhd5jzf";
+    sha256 = "0qb2kgyk6f6wr129a0gzhvpy5wdjpwjbksxyfs6zxv183jl9s73z";
   };
 
   propagatedUserEnvPkgs = [ evolution-data-server ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Apps/Contacts";
     description = "GNOME’s integrated address book";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

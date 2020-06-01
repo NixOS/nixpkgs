@@ -155,6 +155,12 @@ in rec {
     inherit system;
   });
 
+  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-gnome.nix;
+    type = "gnome";
+    inherit system;
+  });
+
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
   iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
@@ -308,9 +314,9 @@ in rec {
     lapp = makeClosure ({ pkgs, ... }:
       { services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
+        services.httpd.enablePHP = true;
         services.postgresql.enable = true;
         services.postgresql.package = pkgs.postgresql;
-        environment.systemPackages = [ pkgs.php ];
       });
   };
 }

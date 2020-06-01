@@ -18,6 +18,7 @@
 , mpd_clientlib
 # Tag support
 , libid3tag
+, nixosTests
 }:
 
 let
@@ -102,13 +103,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.21.21";
+      version = "0.21.23";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "0ysyjlmmfm1y5jqyv83bs9p7zqr9pgj1hmdq2b7kx9kridclbnng";
+        sha256 = "0jnhjhm1ilpcwb4f58b8pgyzjq3dlr0j2xyk0zck0afwkdxyj9cb";
       };
 
       buildInputs = [ glib boost ]
@@ -127,6 +128,8 @@ let
           "-Dzeroconf=avahi"
         ++ lib.optional (builtins.elem "systemd" features_)
           "-Dsystemd_system_unit_dir=etc/systemd/system";
+
+      passthru.tests.nixos = nixosTests.mpd;
 
       meta = with stdenv.lib; {
         description = "A flexible, powerful daemon for playing music";

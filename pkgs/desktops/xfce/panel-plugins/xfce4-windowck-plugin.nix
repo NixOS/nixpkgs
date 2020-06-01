@@ -3,18 +3,32 @@
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-windowck-plugin";
-  version = "0.4.4";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "cedl38";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0c6a1ibh39dpq9x0dha5lsg0vzmgaf051fgwz0nlky0s94nwzvgv";
+    sha256 = "1gwrbjfv4cnlsqh05h42w41z3xs15yjj6j8y9gxvvvvlgzzp4p3g";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool python3 imagemagick libwnck gtk2
-    exo libxfce4ui libxfce4util xfce4-panel xfconf xfce4-dev-tools ];
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+  ];
+
+  buildInputs = [
+    python3
+    imagemagick
+    libwnck
+    gtk2
+    exo
+    libxfce4ui
+    libxfce4util
+    xfce4-panel
+    xfconf
+    xfce4-dev-tools
+  ];
 
   preConfigure = ''
     ./autogen.sh
@@ -31,8 +45,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "https://goodies.xfce.org/projects/panel-plugins/${pname}";
-    description = "Set of two plugins which allows you to put the maximized window title and windows buttons on the panel";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/xfce4-windowck-plugin";
+    description = "Xfce plugins which allows to put the maximized window title and buttons on the panel";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.volth ];

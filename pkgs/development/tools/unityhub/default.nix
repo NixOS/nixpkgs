@@ -1,6 +1,8 @@
 { stdenv, fetchurl, appimageTools, gsettings-desktop-schemas, gtk3 }:
 
-appimageTools.wrapType2 rec {
+let
+  version = "2.3.1";
+in appimageTools.wrapType2 rec {
   name = "unityhub";
 
   extraPkgs = (pkgs: with pkgs; with xorg; [ gtk2 gdk_pixbuf glib libGL libGLU nss nspr
@@ -16,8 +18,9 @@ appimageTools.wrapType2 rec {
   '';
 
   src = fetchurl {
-    url = "https://public-cdn.cloud.unity3d.com/hub/prod/UnityHub.AppImage";
-    sha256 = "05p5kqbwgqyk2aw2lix5dk1ql16aj6iczxrc63a1l0vj8wrha7z4";
+    # mirror of https://public-cdn.cloud.unity3d.com/hub/prod/UnityHub.AppImage
+    url = "https://archive.org/download/unity-hub-${version}/UnityHub.AppImage";
+    sha256 = "09nrgjlknl3hgrrl7rc79bmbrq6r6sl49dw0cmvs37vjqnvlr8ny";
   };
 
   meta = with stdenv.lib; {

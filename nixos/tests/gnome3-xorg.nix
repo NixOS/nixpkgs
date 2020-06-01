@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gnome3-xorg";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = pkgs.gnome3.maintainers;
+  meta = with lib; {
+    maintainers = teams.gnome.members;
   };
 
   machine = { nodes, ... }: let

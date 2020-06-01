@@ -1,10 +1,10 @@
-{ mkDerivation, lib, fetchpatch, fetchFromGitHub, cmake, boost, ceres-solver, eigen,
+{ mkDerivation, lib, fetchpatch, fetchFromGitHub, cmake, boost17x, ceres-solver, eigen,
   freeimage, glog, libGLU, glew, qtbase,
   cudaSupport ? false, cudatoolkit ? null }:
 
 assert !cudaSupport || cudatoolkit != null;
 
-let boost_static = boost.override { enableStatic = true; };
+let boost_static = boost17x.override { enableStatic = true; };
 in
 mkDerivation rec {
   version = "3.5";

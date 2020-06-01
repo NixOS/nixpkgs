@@ -31,6 +31,7 @@
 <xref linkend="opt-services.xserver.windowManager.twm.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.icewm.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.i3.enable"/> = true;
+<xref linkend="opt-services.xserver.windowManager.herbstluftwm.enable"/> = true;
 </programlisting>
  </para>
  <para>

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nagios";
-  version = "4.4.5";
+  version = "4.4.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/nagios/nagios-4.x/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "079rgi3dqdg6h511c96hrch62rxsap9p4x37hm2nj672zb9f4sdz";
+    sha256 = "1x5hb97zbvkm73q53ydp1gwj8nnznm72q9c4rm6ny7phr995l3db";
   };
 
   patches = [ ./nagios.patch ];

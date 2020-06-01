@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools, qtx11extras, poppler }:
+{ mkDerivation, stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools, qtx11extras, poppler }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qcomicbook";
   version = "0.9.1";
 

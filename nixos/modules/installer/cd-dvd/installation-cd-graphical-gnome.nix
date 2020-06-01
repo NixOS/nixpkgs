@@ -11,9 +11,6 @@ with lib;
 
   services.xserver.desktopManager.gnome3.enable = true;
 
-  # Wayland can be problematic for some hardware like Nvidia graphics cards.
-  services.xserver.displayManager.defaultSession = "gnome-xorg";
-
   services.xserver.displayManager.gdm = {
     enable = true;
     # autoSuspend makes the machine automatically suspend after inactivity.

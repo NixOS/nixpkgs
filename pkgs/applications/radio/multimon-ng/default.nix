@@ -39,6 +39,5 @@ stdenv.mkDerivation {
     homepage = "https://github.com/EliasOenal/multimon-ng";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ the-kenny ];
   };
 }

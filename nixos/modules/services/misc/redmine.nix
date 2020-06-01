@@ -26,7 +26,7 @@ let
       scm_mercurial_command: ${pkgs.mercurial}/bin/hg
       scm_git_command: ${pkgs.gitAndTools.git}/bin/git
       scm_cvs_command: ${pkgs.cvs}/bin/cvs
-      scm_bazaar_command: ${pkgs.bazaar}/bin/bzr
+      scm_bazaar_command: ${pkgs.breezy}/bin/bzr
       scm_darcs_command: ${pkgs.darcs}/bin/darcs
 
     ${cfg.extraConfig}
@@ -132,7 +132,7 @@ in
         example = literalExample ''
           {
             dkuk-redmine_alex_skin = builtins.fetchurl {
-              url = https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip;
+              url = "https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip";
               sha256 = "0hrin9lzyi50k4w2bd2b30vrf1i4fi1c0gyas5801wn8i7kpm9yl";
             };
           }
@@ -146,7 +146,7 @@ in
         example = literalExample ''
           {
             redmine_env_auth = builtins.fetchurl {
-              url = https://github.com/Intera/redmine_env_auth/archive/0.6.zip;
+              url = "https://github.com/Intera/redmine_env_auth/archive/0.6.zip";
               sha256 = "0yyr1yjd8gvvh832wdc8m3xfnhhxzk2pk3gm2psg5w9jdvd6skak";
             };
           }
@@ -297,7 +297,7 @@ in
       environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
       path = with pkgs; [
         imagemagick
-        bazaar
+        breezy
         cvs
         darcs
         gitAndTools.git

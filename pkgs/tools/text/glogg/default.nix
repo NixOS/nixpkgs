@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, qmake, boost }:
+{ mkDerivation, stdenv, fetchurl, qmake, boost }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
 
   pname = "glogg";
   version = "1.1.4";

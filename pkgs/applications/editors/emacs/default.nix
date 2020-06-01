@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm
+{ stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
@@ -11,6 +11,10 @@
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 , siteStart ? ./site-start.el
+, toolkit ? (
+  if withGTK2 then "gtk2"
+  else if withGTK3 then "gtk3"
+  else "lucid")
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -23,12 +27,7 @@ assert withGTK2 -> !withGTK3 && gtk2-x11 != null;
 assert withGTK3 -> !withGTK2 && gtk3-x11 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
-let
-  toolkit =
-    if withGTK2 then "gtk2"
-    else if withGTK3 then "gtk3"
-    else "lucid";
-in
+
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
   version = "26.3";
@@ -44,6 +43,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./clean-env.patch
     ./tramp-detect-wrapped-gvfsd.patch
+    # unbreak macOS unexec
+    (fetchpatch {
+      url = "https://github.com/emacs-mirror/emacs/commit/888ffd960c06d56a409a7ff15b1d930d25c56089.patch";
+      sha256 = "08q3ygdigqwky70r47rcgzlkc5jy82xiq8am5kwwy891wlpl7frw";
+    })
   ];
 
   postPatch = lib.optionalString srcRepo ''
@@ -134,7 +138,7 @@ stdenv.mkDerivation rec {
     description = "The extensible, customizable GNU text editor";
     homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 peti the-kenny jwiegley adisbladis ];
+    maintainers = with maintainers; [ lovek323 peti jwiegley adisbladis ];
     platforms   = platforms.all;
 
     longDescription = ''

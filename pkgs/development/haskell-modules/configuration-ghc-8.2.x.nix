@@ -91,4 +91,7 @@ self: super: {
   ListLike = addBuildDepend super.ListLike self.semigroups;
   base-compat-batteries = addBuildDepend super.base-compat-batteries self.contravariant;
 
+  # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
+
 }

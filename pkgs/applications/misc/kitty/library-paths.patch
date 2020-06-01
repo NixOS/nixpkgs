@@ -12,21 +12,27 @@
 
 --- a/kitty/desktop.c
 +++ b/kitty/desktop.c
-@@ -30,7 +30,7 @@
- static PyObject*
- init_x11_startup_notification(PyObject UNUSED *self, PyObject *args) {
-     static bool done = false;
--    static const char* libname = "libstartup-notification-1.so";
-+    static const char* libname = "@libstartup_notification@";
-     // some installs are missing the .so symlink, so try the full name
-     static const char* libname2 = "libstartup-notification-1.so.0";
-     static const char* libname3 = "libstartup-notification-1.so.0.0.0";
-@@ -105,7 +105,7 @@ load_libcanberra_functions(void) {
+@@ -34,10 +34,7 @@ init_x11_startup_notification(PyObject UNUSED *self, PyObject *args) {
+         done = true;
  
- static void
- load_libcanberra(void) {
--    static const char* libname = "libcanberra.so";
-+    static const char* libname = "@libcanberra@";
-     // some installs are missing the .so symlink, so try the full name
-     static const char* libname2 = "libcanberra.so.0";
-     static const char* libname3 = "libcanberra.so.0.2.5";
+         const char* libnames[] = {
+-            "libstartup-notification-1.so",
+-            // some installs are missing the .so symlink, so try the full name
+-            "libstartup-notification-1.so.0",
+-            "libstartup-notification-1.so.0.0.0",
++            "@libstartup_notification@",
+             NULL
+         };
+         for (int i = 0; libnames[i]; i++) {
+@@ -113,10 +110,7 @@ load_libcanberra(void) {
+     if (done) return;
+     done = true;
+     const char* libnames[] = {
+-        "libcanberra.so",
+-        // some installs are missing the .so symlink, so try the full name
+-        "libcanberra.so.0",
+-        "libcanberra.so.0.2.5",
++        "@libcanberra@",
+         NULL
+     };
+     for (int i = 0; libnames[i]; i++) {

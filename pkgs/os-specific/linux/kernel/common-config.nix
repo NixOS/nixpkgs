@@ -122,6 +122,7 @@ let
       XDP_SOCKETS        = whenAtLeast "4.19" yes;
       XDP_SOCKETS_DIAG   = whenAtLeast "4.19" yes;
       WAN                = yes;
+      TCP_CONG_CUBIC     = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
       CGROUP_NET_PRIO             = yes; # Required by systemd
@@ -177,6 +178,10 @@ let
       NF_TABLES_BRIDGE            = mkMerge [ (whenBetween "4.19" "5.3" yes)
                                               (whenAtLeast "5.3" module) ];
 
+      # needed for `dropwatch`
+      # Builtin-only since https://github.com/torvalds/linux/commit/f4b6bcc7002f0e3a3428bac33cf1945abff95450
+      NET_DROP_MONITOR = yes;
+
       # needed for ss
       INET_DIAG         = yes;
       INET_TCP_DIAG     = module;
@@ -214,6 +219,7 @@ let
       FB_3DFX_ACCEL       = yes;
       FB_VESA             = yes;
       FRAMEBUFFER_CONSOLE = yes;
+      FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER = whenAtLeast "4.19" yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
       FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
     };
@@ -244,10 +250,32 @@ let
       SND_HDA_RECONFIG    = yes; # Support reconfiguration of jack functions
       # Support configuring jack functions via fw mechanism at boot
       SND_HDA_PATCH_LOADER = yes;
+      SND_HDA_CODEC_CA0132_DSP = whenOlder "5.8" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
       SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
       # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
       PSS_MIXER           = whenOlder "4.12" yes;
+    # Enable Sound Open Firmware support
+    } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
+                        versionAtLeast version "5.5") {
+      SND_SOC_SOF_TOPLEVEL              = yes;
+      SND_SOC_SOF_ACPI                  = module;
+      SND_SOC_SOF_PCI                   = module;
+      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = yes;
+      SND_SOC_SOF_CANNONLAKE_SUPPORT    = yes;
+      SND_SOC_SOF_COFFEELAKE_SUPPORT    = yes;
+      SND_SOC_SOF_COMETLAKE_H_SUPPORT   = yes;
+      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = yes;
+      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = yes;
+      SND_SOC_SOF_GEMINILAKE_SUPPORT    = yes;
+      SND_SOC_SOF_HDA_AUDIO_CODEC       = yes;
+      SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = yes;
+      SND_SOC_SOF_HDA_LINK              = yes;
+      SND_SOC_SOF_ICELAKE_SUPPORT       = yes;
+      SND_SOC_SOF_INTEL_TOPLEVEL        = yes;
+      SND_SOC_SOF_JASPERLAKE_SUPPORT    = yes;
+      SND_SOC_SOF_MERRIFIELD_SUPPORT    = yes;
+      SND_SOC_SOF_TIGERLAKE_SUPPORT     = yes;
     };
 
     usb-serial = {
@@ -603,9 +631,14 @@ let
 
     misc = {
       HID_BATTERY_STRENGTH = yes;
+      # enabled by default in x86_64 but not arm64, so we do that here
+      HIDRAW               = yes;
+
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
       KERNEL_XZ          = yes;
+
+      SYSVIPC            = yes;  # System-V IPC
 
       UNIX               = yes;  # Unix domain sockets.
 

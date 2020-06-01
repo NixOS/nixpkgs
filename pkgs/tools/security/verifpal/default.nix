@@ -28,8 +28,8 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    mkdir -p $bin/bin
-    cp go/src/$goPackagePath/build/bin/linux/verifpal $bin/bin/
+    mkdir -p $out/bin
+    cp go/src/$goPackagePath/build/bin/linux/verifpal $out/bin/
   '';
 
   meta = {

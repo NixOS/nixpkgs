@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
-  version = "3.36.0";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0b5b1k0a531c2jyf4g59dw7lblga8xrba38mzfdl57dnknbvbafs";
+    sha256 = "0vkgpy2afb33rrk94zqlm2q728xhzjj8s24n9wh9ylw00z3nckad";
   };
 
   patches = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Software store that lets you install and update applications and system extensions";
     homepage = "https://wiki.gnome.org/Apps/Software";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

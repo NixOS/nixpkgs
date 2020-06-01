@@ -45,6 +45,7 @@ def rules_pkg_dependencies(*args, **kw): pass
 def winsdk_configure(*args, **kw): pass
 def register_local_rc_exe_toolchains(*args, **kw): pass
 def register_toolchains(*args, **kw): pass
+def debian_deps(): pass
 
 # execute the WORKSPACE like it was python code in this module,
 # using all the function stubs from above.

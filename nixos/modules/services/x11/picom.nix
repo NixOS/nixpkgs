@@ -1,39 +1,48 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-with builtins;
 
 let
 
   cfg = config.services.picom;
 
-  pairOf = x: with types; addCheck (listOf x) (y: length y == 2);
+  pairOf = x: with types;
+    addCheck (listOf x) (y: length y == 2)
+    // { description = "pair of ${x.description}"; };
 
-  floatBetween = a: b: with lib; with types;
-    addCheck str (x: versionAtLeast x a && versionOlder x b);
+  floatBetween = a: b: with types;
+    let
+      # toString prints floats with hardcoded high precision
+      floatToString = f: builtins.toJSON f;
+    in
+      addCheck float (x: x <= b && x >= a)
+      // { description = "a floating point number in " +
+                         "range [${floatToString a}, ${floatToString b}]"; };
 
-  toConf = attrs: concatStringsSep "\n"
-    (mapAttrsToList
-      (k: v: let
-        sep = if isAttrs v then ":" else "=";
-        # Basically a tinkered lib.generators.mkKeyValueDefault
-        mkValueString = v:
-          if isBool v        then boolToString v
-          else if isInt v    then toString v
-          else if isFloat v  then toString v
-          else if isString v then ''"${escape [ ''"'' ] v}"''
-          else if isList v   then "[ "
-            + concatMapStringsSep " , " mkValueString v
-            + " ]"
-          else if isAttrs v  then "{ "
-            + concatStringsSep " "
-              (mapAttrsToList
-                (key: value: "${toString key}=${mkValueString value};")
-                v)
-            + " }"
-          else abort "picom.mkValueString: unexpected type (v = ${v})";
-      in "${escape [ sep ] k}${sep}${mkValueString v};")
-      attrs);
+  mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
+
+  # Basically a tinkered lib.generators.mkKeyValueDefault
+  # It either serializes a top-level definition "key: { values };"
+  # or an expression "key = { values };"
+  mkAttrsString = top:
+    mapAttrsToList (k: v:
+      let sep = if (top && isAttrs v) then ":" else "=";
+      in "${escape [ sep ] k}${sep}${mkValueString v};");
+
+  # This serializes a Nix expression to the libconfig format.
+  mkValueString = v:
+         if types.bool.check  v then boolToString v
+    else if types.int.check   v then toString v
+    else if types.float.check v then toString v
+    else if types.str.check   v then "\"${escape [ "\"" ] v}\""
+    else if builtins.isList   v then "[ ${concatMapStringsSep " , " mkValueString v} ]"
+    else if types.attrs.check v then "{ ${concatStringsSep " " (mkAttrsString false v) } }"
+    else throw ''
+                 invalid expression used in option services.picom.settings:
+                 ${v}
+               '';
+
+  toConf = attrs: concatStringsSep "\n" (mkAttrsString true cfg.settings);
 
   configFile = pkgs.writeText "picom.conf" (toConf cfg.settings);
 
@@ -61,7 +70,7 @@ in {
     };
 
     fadeDelta = mkOption {
-      type = types.addCheck types.int (x: x > 0);
+      type = types.ints.positive;
       default = 10;
       example = 5;
       description = ''
@@ -70,12 +79,11 @@ in {
     };
 
     fadeSteps = mkOption {
-      type = pairOf (floatBetween "0.01" "1.01");
-      default = [ "0.028" "0.03" ];
-      example = [ "0.04" "0.04" ];
+      type = pairOf (floatBetween 0.01 1);
+      default = [ 0.028 0.03 ];
+      example = [ 0.04 0.04 ];
       description = ''
         Opacity change between fade steps (in and out).
-        (numbers in range 0.01 - 1.0)
       '';
     };
 
@@ -111,11 +119,11 @@ in {
     };
 
     shadowOpacity = mkOption {
-      type = floatBetween "0.0" "1.01";
-      default = "0.75";
-      example = "0.8";
+      type = floatBetween 0 1;
+      default = 0.75;
+      example = 0.8;
       description = ''
-        Window shadows opacity (number in range 0.0 - 1.0).
+        Window shadows opacity.
       '';
     };
 
@@ -134,29 +142,29 @@ in {
     };
 
     activeOpacity = mkOption {
-      type = floatBetween "0.0" "1.01";
-      default = "1.0";
-      example = "0.8";
+      type = floatBetween 0 1;
+      default = 1.0;
+      example = 0.8;
       description = ''
-        Opacity of active windows (number in range 0.0 - 1.0).
+        Opacity of active windows.
       '';
     };
 
     inactiveOpacity = mkOption {
-      type = floatBetween "0.1" "1.01";
-      default = "1.0";
-      example = "0.8";
+      type = floatBetween 0.1 1;
+      default = 1.0;
+      example = 0.8;
       description = ''
-        Opacity of inactive windows (number in range 0.1 - 1.0).
+        Opacity of inactive windows.
       '';
     };
 
     menuOpacity = mkOption {
-      type = floatBetween "0.0" "1.01";
-      default = "1.0";
-      example = "0.8";
+      type = floatBetween 0 1;
+      default = 1.0;
+      example = 0.8;
       description = ''
-        Opacity of dropdown and popup menu (number in range 0.0 - 1.0).
+        Opacity of dropdown and popup menu.
       '';
     };
 
@@ -210,7 +218,7 @@ in {
     };
 
     refreshRate = mkOption {
-      type = types.addCheck types.int (x: x >= 0);
+      type = types.ints.unsigned;
       default = 0;
       example = 60;
       description = ''
@@ -218,54 +226,69 @@ in {
       '';
     };
 
-    settings = let
-      configTypes = with types; oneOf [ bool int float str ];
-      # types.loaOf converts lists to sets
-      loaOf = t: with types; either (listOf t) (attrsOf t);
+    settings = with types;
+    let
+      scalar = oneOf [ bool int float str ]
+        // { description = "scalar types"; };
+
+      libConfig = oneOf [ scalar (listOf libConfig) (attrsOf libConfig) ]
+        // { description = "libconfig type"; };
+
+      topLevel = attrsOf libConfig
+        // { description = ''
+               libconfig configuration. The format consists of an attributes
+               set (called a group) of settings. Each setting can be a scalar type
+               (boolean, integer, floating point number or string), a list of
+               scalars or a group itself
+             '';
+           };
+
     in mkOption {
-      type = loaOf (types.either configTypes (loaOf (types.either configTypes (loaOf configTypes))));
-      default = {};
+      type = topLevel;
+      default = { };
+      example = literalExample ''
+        blur =
+          { method = "gaussian";
+            size = 10;
+            deviation = 5.0;
+          };
+      '';
       description = ''
-        Additional Picom configuration.
+        Picom settings. Use this option to configure Picom settings not exposed
+        in a NixOS option or to bypass one.  For the available options see the
+        CONFIGURATION FILES section at <literal>picom(1)</literal>.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    services.picom.settings = let
-      # Hard conversion to float, literally lib.toInt but toFloat
-      toFloat = str: let
-        may_be_float = builtins.fromJSON str;
-      in if builtins.isFloat may_be_float
-        then may_be_float
-        else throw "Could not convert ${str} to float.";
-    in {
+    services.picom.settings = mkDefaultAttrs {
       # fading
-      fading           = mkDefault cfg.fade;
-      fade-delta       = mkDefault cfg.fadeDelta;
-      fade-in-step     = mkDefault (toFloat (elemAt cfg.fadeSteps 0));
-      fade-out-step    = mkDefault (toFloat (elemAt cfg.fadeSteps 1));
-      fade-exclude     = mkDefault cfg.fadeExclude;
+      fading           = cfg.fade;
+      fade-delta       = cfg.fadeDelta;
+      fade-in-step     = elemAt cfg.fadeSteps 0;
+      fade-out-step    = elemAt cfg.fadeSteps 1;
+      fade-exclude     = cfg.fadeExclude;
 
       # shadows
-      shadow           = mkDefault cfg.shadow;
-      shadow-offset-x  = mkDefault (elemAt cfg.shadowOffsets 0);
-      shadow-offset-y  = mkDefault (elemAt cfg.shadowOffsets 1);
-      shadow-opacity   = mkDefault (toFloat cfg.shadowOpacity);
-      shadow-exclude   = mkDefault cfg.shadowExclude;
+      shadow           = cfg.shadow;
+      shadow-offset-x  = elemAt cfg.shadowOffsets 0;
+      shadow-offset-y  = elemAt cfg.shadowOffsets 1;
+      shadow-opacity   = cfg.shadowOpacity;
+      shadow-exclude   = cfg.shadowExclude;
 
       # opacity
-      active-opacity   = mkDefault (toFloat cfg.activeOpacity);
-      inactive-opacity = mkDefault (toFloat cfg.inactiveOpacity);
+      active-opacity   = cfg.activeOpacity;
+      inactive-opacity = cfg.inactiveOpacity;
 
-      wintypes         = mkDefault cfg.wintypes;
+      wintypes         = cfg.wintypes;
 
-      opacity-rule     = mkDefault cfg.opacityRules;
+      opacity-rule     = cfg.opacityRules;
 
       # other options
-      backend          = mkDefault cfg.backend;
-      vsync            = mkDefault cfg.vSync;
-      refresh-rate     = mkDefault cfg.refreshRate;
+      backend          = cfg.backend;
+      vsync            = cfg.vSync;
+      refresh-rate     = cfg.refreshRate;
     };
 
     systemd.user.services.picom = {

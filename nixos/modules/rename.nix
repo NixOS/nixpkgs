@@ -48,6 +48,11 @@ with lib;
       systemd-logind API). Instead of using the module you can now
       simply add the brightnessctl package to environment.systemPackages.
     '')
+    (mkRemovedOptionModule [ "virtualisation" "rkt" ] "The rkt module has been removed, it was archived by upstream")
+
+    (mkRemovedOptionModule ["services" "prey" ] ''
+      prey-bash-client is deprecated upstream
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];

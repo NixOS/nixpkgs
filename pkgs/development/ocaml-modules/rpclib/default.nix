@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "rpclib";
-  version = "6.0.0";
+  version = "7.0.0";
 
   minimumOCamlVersion = "4.04";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "mirage";
     repo = "ocaml-rpc";
     rev = "v${version}";
-    sha256 = "0bmr20sj7kybjjlwd42irj0f5zlnxcw7mxa1mdgxkki9bmhsqr51";
+    sha256 = "0d8nb272mjxkq5ddn65cy9gjpa8yvd0v3jv3wp5xfh9gj29wd2jj";
   };
 
   buildInputs = [ alcotest cmdliner yojson ];

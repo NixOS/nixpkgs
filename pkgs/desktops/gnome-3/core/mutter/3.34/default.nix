@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.34.4";
+  version = "3.34.5";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "18hbw98p4h3d4qz57415smwmfg72s9a0nk8mb04ds1gn2lsm2d01";
+    sha256 = "1i3r51ghfld1rf1rczzi3jhybz3mhywqcj2jyiqhfcyp1svlklfi";
   };
 
   mesonFlags = [
@@ -109,6 +109,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/mutter/commit/a444a4c5f58ea516ad3cd9d6ddc0056c3ca9bc90.patch";
       sha256 = "0imy2j8af9477jliwdq4jc40yw1cifsjjf196gnmwxr9rkj0hbrd";
+    })
+
+    # gnome-3-34 2020-04-24
+    # also fixes https://mail.gnome.org/archives/distributor-list/2020-April/msg00001.html
+    (fetchpatch {
+      url = "https://github.com/GNOME/mutter/compare/3.34.5..3bafd234248fdcd84bc62fef5e31c29fbb613909.patch";
+      sha256 = "1a7krbdfmvx204p6av44rbp4ckp6ddg1mms8wkixxh2p871zq1pi";
     })
 
     # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking

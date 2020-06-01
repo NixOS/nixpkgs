@@ -20,8 +20,8 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    mv $bin/bin/{internal,ct}
-    rm $bin/bin/tools
+    mv $out/bin/{internal,ct}
+    rm $out/bin/tools
   '';
 
   meta = {

@@ -11,6 +11,7 @@
 , numpy
 , pandas
 , panel
+, pyarrow
 , python-snappy
 , requests
 , ruamel_yaml
@@ -22,16 +23,16 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.5.4";
+  version = "0.5.5";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "81c3bdadbb81ec10c923b89e118c229d977a584ccbe27466f8fde41c0c274c3f";
+    sha256 = "0ypgf0046hln27gjcy7gjh4diblgmivkf7kxbcy1mjvwka55bdmw";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pyarrow pytest ];
   propagatedBuildInputs = [
     appdirs
     dask

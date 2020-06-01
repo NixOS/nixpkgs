@@ -2,18 +2,33 @@
 
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.9.12";
+  version = "1.9.14";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "143imiphyzk3009cfnqj7q013pb1wva13zq63byfj3d204b58cg6";
+    sha256 = "0vqsx4q7jn6vhmrm9kkk810d5nvnmyb6bni38ynkxcwlrp3qs6v2";
   };
 
-  modSha256 = "15a8if5gx361nrqgv201jy8saq1ir1g18rpqzdmavg4ic75si5x1";
+  usb = fetchFromGitHub {
+    owner = "karalabe";
+    repo = "usb";
+    rev = "911d15fe12a9c411cf5d0dd5635231c759399bed";
+    sha256 = "0asd5fz2rhzkjmd8wjgmla5qmqyz4jaa6qf0n2ycia16jsck6wc2";
+  };
+
+  vendorSha256 = "01mbmc8qlp08127dlmcqz0viasmg7mrzqzmyw21an69sabcr112n";
+
+  overrideModAttrs = (_: {
+      postBuild = ''
+      cp -r --reflink=auto ${usb}/libusb vendor/github.com/karalabe/usb
+      cp -r --reflink=auto ${usb}/hidapi vendor/github.com/karalabe/usb
+      '';
+    });
 
   subPackages = [
+    "cmd/abidump"
     "cmd/abigen"
     "cmd/bootnode"
     "cmd/checkpoint-admin"

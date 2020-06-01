@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
 
   postInstall = ''
-    ln -s $bin/bin/phraseapp-client $bin/bin/phraseapp
+    ln -s $out/bin/phraseapp-client $out/bin/phraseapp
   '';
 
   meta = with stdenv.lib; {

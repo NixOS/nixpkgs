@@ -4,10 +4,14 @@
 , givaro
 , pkgconfig
 , blas
+, lapack
 , fflas-ffpack
 , gmpxx
 , withSage ? false # sage support
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
+
 stdenv.mkDerivation rec {
   pname = "linbox";
   version = "1.6.3";
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-blas-libs=-l${blas.linkName}"
+    "--with-blas-libs=-lblas"
     "--disable-optimization"
   ] ++ stdenv.lib.optionals stdenv.isx86_64 {
     # disable SIMD instructions (which are enabled *when available* by default)

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   
   meta = with lib; {
     description = "Convert XML documents into Python objects";
-    homepage = "http://github.com/stchris/untangle";
+    homepage = "https://github.com/stchris/untangle";
     license = licenses.mit;
     maintainers = [ maintainers.arnoldfarkas ];
   };
