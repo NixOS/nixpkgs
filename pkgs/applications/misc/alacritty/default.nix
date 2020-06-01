@@ -52,16 +52,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "v${version}";
-    sha256 = "133d8vm7ihlvgw8n1jghhh35h664h0f52h6gci54f11vl6c1spws";
+    sha256 = "1b6fspcd8yn1857cgn1m8a828bvjspvrfc2giwsa9ai0ighcqbgl";
   };
 
-  cargoSha256 = "0y7yzbl6hyb89f2lcn3s65jbrzibr8b8x7l84iriw6ifsqnvcyg5";
+  cargoSha256 = "0hskj1rnql8sxsgr317vidcb9av3rvjwfwrfp89dlw5l87gyvn8s";
 
   nativeBuildInputs = [
     cmake
@@ -129,7 +129,7 @@ rustPlatform.buildRustPackage rec {
     description = "A cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
-    maintainers = with maintainers; [ filalex77 mic92 cole-h ];
+    maintainers = with maintainers; [ filalex77 mic92 cole-h ma27 ];
     platforms = platforms.unix;
   };
 }
