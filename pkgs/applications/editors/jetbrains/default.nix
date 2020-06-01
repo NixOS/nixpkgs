@@ -138,6 +138,24 @@ let
       };
     });
 
+  buildMps = { name, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct rec {
+      inherit name version src wmClass jdk;
+      product = "MPS";
+      meta = with stdenv.lib; {
+        homepage = https://www.jetbrains.com/mps/;
+        inherit license description;
+        longDescription = ''
+          A metaprogramming system which uses projectional editing
+          which allows users to overcome the limits of language
+          parsers, and build DSL editors, such as ones with tables and
+          diagrams.
+        '';
+        maintainers = with maintainers; [ rasendubi ];
+        platforms = platforms.linux;
+      };
+    });
+
   buildPhpStorm = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
@@ -311,6 +329,19 @@ in
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
+  };
+
+  mps = buildMps rec {
+    name = "mps-${version}";
+    version = "2019.2";
+    description = "Create your own domain-specific language";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/mps/2019.2/MPS-${version}.tar.gz";
+      sha256 = "0rph3bibj74ddbyrn0az1npn4san4g1alci8nlq4gaqdlcz6zx22";
+    };
+    wmClass = "jetbrains-mps";
+    update-channel = "MPS RELEASE";
   };
 
   phpstorm = buildPhpStorm rec {
