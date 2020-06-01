@@ -107,7 +107,7 @@ in stdenv.mkDerivation rec {
     ]}
 
     ## GRAAL-JS ##
-
+    cd graal-js
     cp ${ ./build-js.xml } build.xml
     ant js-launcher
     ant js-factory
@@ -143,7 +143,7 @@ in stdenv.mkDerivation rec {
       "$out/jre/languages/js/icu4j.jar"
     ]}
 
-   export IMAGE_CLASSPATH=''${TRUFFLE_JARS-}:${builtins.concatStringsSep ":" [
+    export IMAGE_CLASSPATH=''${TRUFFLE_JARS-}:${builtins.concatStringsSep ":" [
      "${graalvm}/jre/languages/regex/tregex.jar"
      "${graalvm}/jre/lib/graalvm/launcher-common.jar"
      "${graalvm}/jre/lib/graal/graal-compiler-match-processor.jar"
@@ -157,7 +157,7 @@ in stdenv.mkDerivation rec {
      "${graalvm}/jre/lib/truffle/truffle-dsl-processor.jar"
      "${graalvm}/jre/lib/boot/graal-sdk.jar"
      "${graalvm}/jre/lib/ext/nashorn.jar"
-   ]}
+    ]}
 
     native-image -cp $out/jre/languages/js:$IMAGE_CLASSPATH \
       -J-Xmx3G -H:MaxRuntimeCompileMethods=9000 \
@@ -190,5 +190,11 @@ in stdenv.mkDerivation rec {
     # {builtins.concatStringsSep ";" (builtins.map (x: "cp -rf {x.jar} $out/jre/languages/js/{x.name}.jar") mavenDeps)}
   '';
 
-  dontStrip = true;
+  meta = with stdenv.lib; {
+    homepage = https://github.com/graalvm/graaljs;
+    description = "A ECMAScript 2020 compliant Javascript implementation built on GraalVM";
+    license = licenses.upl;
+    maintainers = with maintainers; [ hlolli ];
+    platforms = [ "x86_64-linux" ];
+  };
 }

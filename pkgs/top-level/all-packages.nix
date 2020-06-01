@@ -8712,6 +8712,7 @@ in
   jre_headless = jre8_headless;
 
   inherit (callPackages ../development/compilers/graalvm/community-edition.nix { }) graalvm8Packages;
+  graalvm8 = graalvm8Packages.sdk;
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee

@@ -111,4 +111,12 @@ in stdenv.mkDerivation rec {
     ln -s $out/jre/languages/python/bin/graalpython $out/bin/graalpython
     ln -s $out/jre/languages/python/lib/* $out/lib
   '';
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/graalvm/graalpython;
+    description = "A Python 3 implementation built on GraalVM";
+    license = licenses.upl;
+    maintainers = with maintainers; [ hlolli ];
+    platforms = [ "x86_64-linux" ];
+  };
 }
