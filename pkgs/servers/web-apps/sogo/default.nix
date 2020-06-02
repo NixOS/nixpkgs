@@ -20,6 +20,11 @@
       url = "https://sources.debian.org/data/main/s/sogo/4.3.0-1/debian/patches/0005-Remove-build-date.patch";
       sha256 = "0lrh3bkfj3r0brahfkyb0g7zx7r2jjd5cxzjl43nqla0fs09wsh8";
     })
+    # SSL/STARTTLS support for SMTP; merged upstream, will be available in next official release
+    (fetchpatch {
+      url = "https://github.com/inverse-inc/sogo/commit/589cfaa2f4957b7b528e80ddc7cf7befbd890e47.diff";
+      sha256 = "151dmp02qqzgm5y3mv37p8bi1j4mcvdn9lws64c69fdwm1q9hjp2";
+    })
   ];
 
   postPatch = ''
