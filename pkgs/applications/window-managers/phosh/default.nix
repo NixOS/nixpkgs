@@ -4,7 +4,7 @@
 , substituteAll
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , libhandy
 , pulseaudio
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

@@ -2,7 +2,7 @@
 , fetchFromGitLab
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , libinput
 , gnome3
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

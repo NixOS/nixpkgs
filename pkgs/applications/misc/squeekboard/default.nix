@@ -71,8 +71,6 @@ rustPlatform.buildRustPackage rec {
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  mesonFlags = [ "-Ddepdatadir=${placeholder "out"}/usr/share" ];
-
   # Don't use buildRustPackage phases, only use it for rust deps setup
   configurePhase = null;
   buildPhase = null;
