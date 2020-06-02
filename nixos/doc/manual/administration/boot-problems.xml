@@ -51,6 +51,22 @@
    </varlistentry>
    <varlistentry>
     <term>
+     <literal>boot.debug1mounts</literal>
+    </term>
+    <listitem>
+     <para>
+      Like <literal>boot.debug1</literal> or
+      <literal>boot.debug1devices</literal>, but runs stage1 until all
+      filesystems that are mounted during initrd are mounted (see
+      <option><link linkend="opt-fileSystems._name__.neededForBoot">neededForBoot</link></option>
+      ). As a motivating example, this could be useful if you've forgotten to set
+      <option><link linkend="opt-fileSystems._name__.neededForBoot">neededForBoot</link></option>
+      on a file system.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <literal>boot.trace</literal>
     </term>
     <listitem>
