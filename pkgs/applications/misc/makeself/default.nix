@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, which }:
 
 stdenv.mkDerivation rec {
   version = "2.4.2";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     sha256 = "07cq7q71bv3fwddkp2863ylry2ivds00f8sjy8npjpdbkailxm21";
   };
+
+  nativeBuildInputs = [ which ];
 
   patchPhase = "patchShebangs test";
 
