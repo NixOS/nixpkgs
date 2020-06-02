@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage rec {
   installPhase = null;
 
   postFixup = ''
+    # Substitute the placeholder created by desktop-in.patch
     substituteInPlace "$out/share/applications/sm.puri.Squeekboard.desktop" \
         --replace "@bindir@" "$out/bin"
   '';
