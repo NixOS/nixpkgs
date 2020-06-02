@@ -2586,6 +2586,9 @@ dont-distribute-packages:
   - Obsidian
   - odpic-raw
   - patch-image
+  # license for input data unclear, dependency not on Hackage
+  # see https://github.com/NixOS/nixpkgs/pull/88604
+  - tensorflow-mnist
   - yices-easy
   - yices-painless
 
