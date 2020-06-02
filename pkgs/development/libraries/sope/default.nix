@@ -1,4 +1,4 @@
-{ gnustep, lib, fetchFromGitHub , libxml2, openssl_1_1
+{ gnustep, lib, fetchFromGitHub, fetchpatch, libxml2, openssl_1_1
 , openldap, mysql, libmysqlclient, postgresql }: with lib; gnustep.stdenv.mkDerivation rec {
   pname = "sope";
   version = "4.3.2";
@@ -15,6 +15,14 @@
     ++ optional (openldap != null) openldap
     ++ optionals (mysql != null) [ libmysqlclient mysql ]
     ++ optional (postgresql != null) postgresql);
+
+  patches = [
+    # SSL/STARTTLS support for SMTP; merged upstream, will be available in next official release
+    (fetchpatch {
+      url = "https://github.com/inverse-inc/sope/commit/45c1819d71bd8c7d14719a687cde5e12ed8800d9.diff";
+      sha256 = "0ybg8y17hzsp3pxg5nc25nihcv4yjsk221cjlbljwvks92gnqihq";
+    })
+  ];
 
   postPatch = ''
     # Exclude NIX_ variables
