@@ -18495,6 +18495,8 @@ in
 
   tzdata = callPackage ../data/misc/tzdata { };
 
+  ubuntu-themes = callPackage ../data/themes/ubuntu-themes { };
+
   ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
 
   ucs-fonts = callPackage ../data/fonts/ucs-fonts
