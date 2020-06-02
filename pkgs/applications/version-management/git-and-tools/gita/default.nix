@@ -1,6 +1,8 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
+, git
+, pytest
 , pyyaml
 , setuptools
 , installShellFiles
@@ -23,6 +25,23 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  postUnpack = ''
+    for case in "\n" ""; do
+        substituteInPlace source/tests/test_main.py \
+         --replace "'gita$case'" "'source$case'"
+    done
+  '';
+
+  checkInputs = [
+    git
+    pytest
+  ];
+
+  checkPhase = ''
+    git init
+    pytest tests
+  '';
 
   postInstall = ''
     installShellCompletion --bash --name gita ${src}/.gita-completion.bash
