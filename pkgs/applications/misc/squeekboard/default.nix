@@ -33,9 +33,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   patches = [
+    # Use absolute exec path in the desktop file.
+    # https://source.puri.sm/Librem5/squeekboard/merge_requests/352
     ./desktop-in.patch
-    # This patch removes the unused dependency 'libcroco' the from meson.build
-    ( fetchpatch {
+
+    # Remove the unused dependency 'libcroco' the from meson.build.
+    # https://source.puri.sm/Librem5/squeekboard/merge_requests/351
+    (fetchpatch {
       url = "https://source.puri.sm/Librem5/squeekboard/commit/f473a47eb8f394ab6f36704850e7e2bfa74ce8a1.patch";
       sha256 = "0mlp8c38s4mbza8czf4kdg86kvqw294nbpqfk9apbl92nq0a26zr";
     })
