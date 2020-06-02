@@ -8,7 +8,7 @@ let
   src = fetchurl {
     url =
       "https://download.delta.chat/desktop/v${version}/DeltaChat-${version}.AppImage";
-    sha256 = "sha256-Mk4OzKcZceRv2IEzf/72VBWEq2RWi6BVzqjfEB5D1/c=";
+    sha256 = "1xyp8cg11px8rras12sncjmq85alyvz7ycw1v1py8w8rlz60wkij";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
