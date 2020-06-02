@@ -10002,7 +10002,7 @@ in
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   inherit (callPackages ../development/tools/electron { })
-    electron_4 electron_5 electron_6 electron_7 electron_8;
+    electron_4 electron_5 electron_6 electron_7 electron_8 electron_9;
 
   electron_3 = callPackage ../development/tools/electron/3.x.nix { };
   electron = electron_4;
