@@ -19,9 +19,9 @@
     </term>
     <listitem>
      <para>
-      Start a root shell if something goes wrong in stage 1 of the boot process
-      (the initial ramdisk). This is disabled by default because there is no
-      authentication for the root shell.
+      Allows the user to start a root shell if something goes wrong in stage 1
+      of the boot process (the initial ramdisk). This is disabled by default
+      because there is no authentication for the root shell.
      </para>
     </listitem>
    </varlistentry>
@@ -104,6 +104,15 @@
   For more parameters recognised by systemd, see <citerefentry>
   <refentrytitle>systemd</refentrytitle>
   <manvolnum>1</manvolnum></citerefentry>.
+ </para>
+
+ <para>
+  Notice that for <literal>boot.shell_on_fail</literal>,
+  <literal>boot.debug1</literal>, <literal>boot.debug1devices</literal>, and
+  <literal>boot.debug1mounts</literal>, if you did <emphasis>not</emphasis>
+  select "start the new shell as pid 1", and you <literal>exit</literal> from
+  the new shell, boot will proceed normally from the point where it failed, as
+  if you'd chosen "ignore the error and continue".
  </para>
 
  <para>
