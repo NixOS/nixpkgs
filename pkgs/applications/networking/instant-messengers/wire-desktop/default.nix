@@ -21,12 +21,12 @@ let
 
   version = {
     x86_64-darwin = "3.17.3666";
-    x86_64-linux = "3.17.2924";
+    x86_64-linux = "3.18.2925";
   }.${system} or throwSystem;
 
   sha256 = {
     x86_64-darwin = "0r3ckfrdx0ah6wn364ii1q1laya2nmmfz9jsikc6ss28lijb6ipn";
-    x86_64-linux = "16f8zawdx7dyrb8hp3fd2j821jj7jlan60knmdlrrk84phlc9ldd";
+    x86_64-linux = "01g39hncj1w0zyfrzv4mgv8npwvx0g0lw99azyai99877b30bm8j";
   }.${system} or throwSystem;
 
   meta = with stdenv.lib; {
