@@ -6098,6 +6098,8 @@ in {
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
+  yamale = callPackage ../development/python-modules/yamale { };
+
   ydiff = callPackage ../development/python-modules/ydiff { };
 
   yoda = toPythonModule (pkgs.yoda.override {
