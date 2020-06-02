@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "mgfhfKpUtHycXCUVKFs9A58E1D1pPKHvSoPqjQzWGfQ=";
+    sha256 = "1x0rsq68vsl39bps2g397pa097q37mdjh595bjf7rd2lm9yf21ws";
   };
 
   nativeBuildInputs = [
