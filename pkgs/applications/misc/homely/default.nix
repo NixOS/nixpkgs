@@ -20,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Dotfile management utility written in python";
     license = licenses.mit;
-    homepage = https://homely.readthedocs.io;
+    homepage = "https://homely.readthedocs.io";
     maintainers = [ maintainers.lokke ];
   };
 }
