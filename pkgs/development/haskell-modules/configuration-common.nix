@@ -1504,6 +1504,10 @@ self: super: {
     };
   };
 
+  tdlib = super.tdlib.override {
+    tdjson = pkgs.tdlib;
+  };
+
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
