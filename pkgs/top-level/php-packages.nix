@@ -854,6 +854,9 @@ in
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 
+      prePatch = "pushd ../..";
+      postPatch = "popd";
+
       preConfigure = ''
         nullglobRestore=$(shopt -p nullglob)
         shopt -u nullglob   # To make ?-globbing work
@@ -989,8 +992,8 @@ in
         # included by all .c-files.
         patches = [
           (pkgs.writeText "mysqlnd_config.patch" ''
-            --- a/mysqlnd.h
-            +++ b/mysqlnd.h
+            --- a/ext/mysqlnd/mysqlnd.h
+            +++ b/ext/mysqlnd/mysqlnd.h
             @@ -1,3 +1,6 @@
             +#ifdef HAVE_CONFIG_H
             +#include "config.h"
@@ -1013,8 +1016,8 @@ in
         # included after the ifdef...
         patches = lib.optional (lib.versionOlder php.version "7.4") [
           (pkgs.writeText "zend_file_cache_config.patch" ''
-            --- a/zend_file_cache.c
-            +++ b/zend_file_cache.c
+            --- a/ext/opcache/zend_file_cache.c
+            +++ b/ext/opcache/zend_file_cache.c
             @@ -27,9 +27,9 @@
              #include "ext/standard/md5.h"
              #endif
