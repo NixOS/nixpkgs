@@ -54,8 +54,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    glib.dev
-    gtk3.dev
+    glib
+    gtk3
     gnome3.gnome-desktop
     wayland
     wayland-protocols
