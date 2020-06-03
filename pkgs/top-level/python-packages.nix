@@ -7407,25 +7407,25 @@ in {
 
   rxv     = callPackage ../development/python-modules/rxv     { };
 
-  typechecks = callPackage ../development/python-modules/typechecks { };
-
   datacache = callPackage ../development/python-modules/datacache { };
+
+  gffutils = callPackage ../development/python-modules/gffutils { };
+
+  gtfparse = callPackage ../development/python-modules/gtfparse { };
 
   memoized-property = callPackage ../development/python-modules/memoized-property { };
 
-  gtfparse = callPackage ../development/python-modules/gtfparse { };
+  pybedtools = callPackage ../development/python-modules/pybedtools { };
+
+  pyensembl = callPackage ../development/python-modules/pyensembl { };
+
+  scikit-plot = callPackage ../development/python-modules/scikit-plot { };
 
   serializable = callPackage ../development/python-modules/serializable { };
 
   tinytimer = callPackage ../development/python-modules/tinytimer { };
 
-  pyensembl = callPackage ../development/python-modules/pyensembl { };
-
-  gffutils = callPackage ../development/python-modules/gffutils { };
-
-  scikit-plot = callPackage ../development/python-modules/scikit-plot { };
-
-  pybedtools = callPackage ../development/python-modules/pybedtools { };
+  typechecks = callPackage ../development/python-modules/typechecks { };
 });
 
 in fix' (extends overrides packages)
