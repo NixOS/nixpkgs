@@ -236,6 +236,50 @@ let
       '';
     };
 
+    lnd = {
+      exporterConfig = {
+        enable = true;
+        lndTlsPath = "/var/lib/lnd/tls.cert";
+        lndMacaroonDir = "/var/lib/lnd";
+      };
+      metricProvider = {
+        systemd.services.prometheus-lnd-exporter.serviceConfig.DynamicUser = false;
+        services.bitcoind.enable = true;
+        services.bitcoind.extraConfig = ''
+          rpcauth=bitcoinrpc:e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7
+          bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332
+          bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333
+        '';
+        systemd.services.lnd = {
+          serviceConfig.ExecStart = ''
+          ${pkgs.lnd}/bin/lnd \
+            --datadir=/var/lib/lnd \
+            --tlscertpath=/var/lib/lnd/tls.cert \
+            --tlskeypath=/var/lib/lnd/tls.key \
+            --logdir=/var/log/lnd \
+            --bitcoin.active \
+            --bitcoin.mainnet \
+            --bitcoin.node=bitcoind \
+            --bitcoind.rpcuser=bitcoinrpc \
+            --bitcoind.rpcpass=hunter2 \
+            --bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332 \
+            --bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333 \
+            --readonlymacaroonpath=/var/lib/lnd/readonly.macaroon
+          '';
+          serviceConfig.StateDirectory = "lnd";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("lnd.service")
+        wait_for_open_port(10009)
+        wait_for_unit("prometheus-lnd-exporter.service")
+        wait_for_open_port(9092)
+        succeed("curl -sSf localhost:9092/metrics | grep -q '^promhttp_metric_handler'")
+      '';
+    };
+
     mail = {
       exporterConfig = {
         enable = true;
