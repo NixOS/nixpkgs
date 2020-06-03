@@ -5756,6 +5756,8 @@ in {
 
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
 
+  scikit-plot = callPackage ../development/python-modules/scikit-plot { };
+
   scp = callPackage ../development/python-modules/scp {};
 
   seaborn = if isPy3k then
@@ -7418,8 +7420,6 @@ in {
   pybedtools = callPackage ../development/python-modules/pybedtools { };
 
   pyensembl = callPackage ../development/python-modules/pyensembl { };
-
-  scikit-plot = callPackage ../development/python-modules/scikit-plot { };
 
   serializable = callPackage ../development/python-modules/serializable { };
 
