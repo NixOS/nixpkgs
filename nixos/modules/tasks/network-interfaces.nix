@@ -381,7 +381,7 @@ in
       # syntax). Note: We also allow underscores for compatibility/legacy
       # reasons (as undocumented feature):
       type = types.strMatching
-        "^[[:alpha:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
+        "^$|^[[:alpha:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
       description = ''
         The name of the machine. Leave it empty if you want to obtain it from a
         DHCP server (if using DHCP). The hostname must be a valid DNS label (see
