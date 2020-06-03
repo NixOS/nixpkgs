@@ -15,6 +15,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/iskandr/tinytimer";
     description = "Tiny Python benchmarking library";
     license = licenses.asl20;
-    maintainer = maintainers.moritzs;
+    maintainers = [ maintainers.moritzs ];
   };
 }

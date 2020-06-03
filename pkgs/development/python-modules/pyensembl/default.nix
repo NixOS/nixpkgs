@@ -19,6 +19,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/openvax/pyensembl";
     description = " Python interface to access reference genome features (such as genes, transcripts, and exons) from Ensembl ";
     license = licenses.asl20;
-    maintainer = maintainers.moritzs;
+    maintainers = [ maintainers.moritzs ];
   };
 }

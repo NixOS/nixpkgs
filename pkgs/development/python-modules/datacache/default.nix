@@ -18,6 +18,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/openvax/datacache";
     description = "Helpers for transparently downloading datasets";
     license = licenses.asl20;
-    maintainer = maintainers.moritzs;
+    maintainers = [ maintainers.moritzs ];
   };
 }

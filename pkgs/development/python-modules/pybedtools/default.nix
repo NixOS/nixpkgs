@@ -24,6 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/daler/pybedtools";
     description = "Python wrapper -- and more -- for Aaron Quinlan's BEDTools (bioinformatics tools) http://daler.github.io/pybedtools";
     license = licenses.gpl2;
-    maintainer = maintainers.moritzs;
+    maintainers = [ maintainers.moritzs ];
   };
 }

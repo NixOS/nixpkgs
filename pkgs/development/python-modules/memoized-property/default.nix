@@ -16,6 +16,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/estebistec/python-memoized-property";
     description = "A simple python decorator for defining properties that only run their fget function once ";
     license = licenses.bsd3;
-    maintainer = maintainers.moritzs;
+    maintainers = [ maintainers.moritzs ];
   };
 }

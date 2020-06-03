@@ -22,6 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/daler/gffutils";
     description = "GFF and GTF file manipulation and interconversion http://daler.github.io/gffutils";
     license = licenses.mit;
-    maintainer = maintainers.moritzs;
+    maintainers = [ maintainers.moritzs ];
   };
 }

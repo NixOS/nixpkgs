@@ -22,6 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/openvax/gtfparse";
     description = " Parsing tools for GTF (gene transfer format) files ";
     license = licenses.asl20;
-    maintainer = maintainers.moritzs;
+    maintainers = [ maintainers.moritzs ];
   };
 }

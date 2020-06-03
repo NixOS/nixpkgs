@@ -15,6 +15,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/openvax/typechecks";
     description = "Helper functions for runtime type checking";
     license = licenses.asl20;
-    maintainer = maintainers.moritzs;
+    maintainers = [ maintainers.moritzs ];
   };
 }

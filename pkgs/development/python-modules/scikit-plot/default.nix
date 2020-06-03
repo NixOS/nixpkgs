@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/reiinakano/scikit-plot";
     description = "An intuitive library to add plotting functionality to scikit-learn objects. ";
     license = licenses.mit;
-    maintainer = maintainers.moritzs;
+    maintainers = [ maintainers.moritzs ];
   };
 }
