@@ -13,21 +13,26 @@ rec {
 
   # Use this function to create a Gerbil library. See gerbil-utils as an example.
   gerbilPackage = {
-    pname, version, src, meta, package,
-    git-version ? "", version-path ? "config/version.ss",
+    pname, version, src, meta, gerbil-package,
+    git-version ? "", version-path ? "",
     gerbil ? pkgs.gerbil-unstable,
     gambit-params ? pkgs.gambit-support.stable-params,
     gerbilInputs ? [],
     buildInputs ? [],
-    softwareName ? "" } :
+    softwareName ? ""} :
     let buildInputs_ = buildInputs; in
     gccStdenv.mkDerivation rec {
       inherit src meta pname version;
+      passthru = { inherit gerbil-package version-path ;};
       buildInputs = [ gerbil ] ++ gerbilInputs ++ buildInputs_;
       postPatch = ''
         set -e ;
-        if [ -n "${version-path}" ] ; then
-          echo '(import :clan/utils/version)\n(register-software "${softwareName}" "${git-version}")\n' > "${version-path}"
+        if [ -n "${version-path}.ss" ] ; then
+          echo -e '(import :clan/versioning${builtins.concatStringsSep ""
+                     (map (x : if x.passthru.version-path != ""
+                               then " :${x.passthru.gerbil-package}/${x.passthru.version-path}" else "")
+                          gerbilInputs)
+                     })\n(register-software "${softwareName}" "v${git-version}")\n' > "${passthru.version-path}.ss"
         fi
         patchShebangs . ;
       '';
