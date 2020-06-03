@@ -44,7 +44,7 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     rev = version;
-    sha256 = "dmcTee3hp6ZkwwunG4ouEVmCxQ1a9LfQ7oWpHxnKumc=";
+    sha256 = "0rxsr8cizac5xv8bgx2s1p2q4n8i5s51p9qbqdjad9z1xmwi6rvn";
   };
 
   patches = [
