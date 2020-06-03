@@ -336,7 +336,16 @@ in {
              server, and wait until the upgrade to 17 is finished.
 
           Then, set `services.nextcloud.package` to `pkgs.nextcloud18` to upgrade to
-          Nextcloud version 18.
+          Nextcloud version 18. Please note that Nextcloud 19 is already out and it's
+          recommended to upgrade to nextcloud19 after that.
+        '')
+        ++ (optional (versionOlder cfg.package.version "19") ''
+          A legacy Nextcloud install (from before NixOS 20.09/unstable) may be installed.
+
+          If/After nextcloud18 is installed successfully, you can safely upgrade to
+          nextcloud19. If not, please upgrade to nextcloud18 first since Nextcloud doesn't
+          support upgrades that skip multiple versions (i.e. an upgrade from 17 to 19 isn't
+          possible, but an upgrade from 18 to 19).
         '');
 
       services.nextcloud.package = with pkgs;
@@ -348,7 +357,8 @@ in {
               `pkgs.nextcloud`.
             ''
           else if versionOlder stateVersion "20.03" then nextcloud17
-          else nextcloud18
+          else if versionOlder stateVersion "20.09" then nextcloud18
+          else nextcloud19
         );
     }
 
@@ -360,6 +370,11 @@ in {
       };
 
       systemd.services = {
+        # When upgrading the Nextcloud package, Nextcloud can report errors such as
+        # "The files of the app [all apps in /var/lib/nextcloud/apps] were not replaced correctly"
+        # Restarting phpfpm on Nextcloud package update fixes these issues (but this is a workaround).
+        phpfpm-nextcloud.restartTriggers = [ cfg.package ];
+
         nextcloud-setup = let
           c = cfg.config;
           writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
