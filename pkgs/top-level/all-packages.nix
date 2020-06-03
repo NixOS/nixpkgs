@@ -25681,8 +25681,9 @@ in
     mkKops
     kops_1_15
     kops_1_16
+    kops_1_17
     ;
-  kops = kops_1_16;
+  kops = kops_1_17;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
