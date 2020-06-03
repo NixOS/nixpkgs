@@ -5008,6 +5008,8 @@ in
 
   libiberty = callPackage ../development/libraries/libiberty { };
 
+  libucl = callPackage ../development/libraries/libucl { };
+
   libxc = callPackage ../development/libraries/libxc { };
 
   libxcomp = callPackage ../development/libraries/libxcomp { };
