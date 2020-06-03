@@ -19,6 +19,8 @@ python3Packages.buildPythonApplication rec {
     toml
   ];
 
+  passthru.tests = nixosTests.pinnwand;
+
   meta = with lib; {
     homepage = "https://github.com/supakeen/steck";
     license = licenses.mit;
