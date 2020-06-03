@@ -1482,15 +1482,17 @@ self: super: {
   };
 
   # Needed for ghcide
-  haskell-lsp_0_19_0_0 = super.haskell-lsp_0_19_0_0.override {
-    haskell-lsp-types = self.haskell-lsp-types_0_19_0_0;
+  haskell-lsp_0_22_0_0 = super.haskell-lsp_0_22_0_0.override {
+    haskell-lsp-types = self.haskell-lsp-types_0_22_0_0;
   };
 
   # this will probably need to get updated with every ghcide update,
   # we need an override because ghcide is tracking haskell-lsp closely.
   ghcide = dontCheck (super.ghcide.override rec {
-    haskell-lsp-types = self.haskell-lsp-types_0_19_0_0;
-    haskell-lsp = self.haskell-lsp_0_19_0_0;
+    haskell-lsp-types = self.haskell-lsp-types_0_22_0_0;
+    haskell-lsp = self.haskell-lsp_0_22_0_0;
+    hie-bios = self.hie-bios_0_5_0;
+    ghc-check = self.ghc-check_0_3_0_1;
   });
 
   # stackage right now is not new enough for hlint-3.0
