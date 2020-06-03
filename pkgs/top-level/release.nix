@@ -183,6 +183,9 @@ let
       idrisPackages = packagePlatforms pkgs.idrisPackages;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
+      pkgsMusl.stdenv = linux;
+      pkgsStatic.stdenv = linux;
+
       tests = packagePlatforms pkgs.tests;
 
       # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
