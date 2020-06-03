@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  enableParallelBuild = true;
 
   meta = with stdenv.lib; {
     description = "Intel Media SDK.";
