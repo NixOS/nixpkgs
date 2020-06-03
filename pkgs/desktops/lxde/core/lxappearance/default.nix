@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, libX11, gtk2, withGtk3 ? false, gtk3 }:
+{ stdenv, fetchurl, intltool, pkgconfig, libX11, gtk2, withGtk3 ? true, gtk3 }:
 
 stdenv.mkDerivation rec {
   name = "lxappearance-0.6.3";
