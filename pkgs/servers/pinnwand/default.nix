@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, nixosTests }:
 
 let
   python = python3.override {
@@ -34,6 +34,8 @@ in with python.pkgs; buildPythonApplication rec {
   checkPhase = ''
     $out/bin/pinnwand --help > /dev/null
   '';
+
+  passthru.tests = nixosTests.pinnwand;
 
   meta = with lib; {
     homepage = "https://supakeen.com/project/pinnwand/";
