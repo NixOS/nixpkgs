@@ -2,14 +2,14 @@
 
 let
   versions = {
-      "0.9.1+alpha1" =  {
-        rev = "d399d644ba7845dd6648e92b81b16f8ba77d597a";
-        sha256 = "0nbrbfpzv2cx9ik9v8hnfn5nk3mknj4308sq5pp3qsh81cfqzzry";
+      "0.9.1" =  {
+        rev = "v0.9.1";
+        sha256 = "00fibahkmvisr16ffaxfrc00gcijsv9rgk4v8ibmy1jv0iyk875b";
       };
   };
   version = x: versions.${x} // {version = x;};
   params = {
-   "8.11" = version "0.9.1+alpha1";
+   "8.11" = version "0.9.1";
   };
   param = params.${coq.coq-version};
 in
