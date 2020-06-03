@@ -125,6 +125,8 @@ let
   mailboxConfig = mailbox: ''
     mailbox "${mailbox.name}" {
       auto = ${toString mailbox.auto}
+  '' + optionalString (mailbox.autoexpunge != null) ''
+    autoexpunge = ${mailbox.autoexpunge}
   '' + optionalString (mailbox.specialUse != null) ''
     special_use = \${toString mailbox.specialUse}
   '' + "}";
@@ -147,6 +149,15 @@ let
         default = null;
         example = "Junk";
         description = "Null if no special use flag is set. Other than that every use flag mentioned in the RFC is valid.";
+      };
+      autoexpunge = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "60d";
+        description = ''
+          To automatically remove all email from the mailbox which is older than the
+          specified time.
+        '';
       };
     };
   };
