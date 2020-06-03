@@ -20205,6 +20205,8 @@ in
     pulseSupport = config.pulseaudio or false;
   };
 
+  hikari = callPackage ../applications/window-managers/hikari { };
+
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
   };
