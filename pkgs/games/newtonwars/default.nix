@@ -22,6 +22,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin $out/share
     cp nw $out/bin
+    ln -s $out/bin/nw $out/bin/newtonwars
     cp font24.raw $out/share
 
     wrapProgram $out/bin/nw \
