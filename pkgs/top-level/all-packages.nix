@@ -3140,7 +3140,9 @@ in
 
   tracker-miners = callPackage ../development/libraries/tracker-miners { };
 
-  tracy = callPackage ../development/tools/tracy { };
+  tracy = callPackage ../development/tools/tracy {
+    inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
+  };
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
