@@ -138,7 +138,6 @@ stdenv.mkDerivation ({
     "-Wno-error=format-security");
 
   postPatch = ''
-    substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
     rm -rf obj-x86_64-pc-linux-gnu
   '';
 
