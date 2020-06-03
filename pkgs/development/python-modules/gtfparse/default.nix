@@ -13,17 +13,15 @@ buildPythonPackage rec {
   checkInputs = [ nose six ];
   propagatedBuildInputs = [ numpy pandas ];
 
-  checkPhase = ''
-    # PYTHONPATH='test' nosetests # fails because six is not found
-    ${python.interpreter} -c 'import gtfparse'
-  '';
-
-  # Tests require extra dependencies
-  doCheck = true;
+  pythonImportsCheck = [ "gtfparse" ];
+  # checkPhase = ''
+  #   # PYTHONPATH='test' nosetests # fails because six is not found
+  # '';
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/openvax/gtfparse";
     description = " Parsing tools for GTF (gene transfer format) files ";
     license = licenses.asl20;
+    maintainer = maintainers.moritzs;
   };
 }

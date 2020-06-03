@@ -5300,6 +5300,12 @@
     githubId = 99988;
     name = "Maarten Hoogendoorn";
   };
+  moritzs = {
+    name = "Moritz Schäfer";
+    email = "mail@moritzs.de";
+    github = "moritzschaefer";
+    githubId = 2714540;
+  };
   MostAwesomeDude = {
     email = "cds@corbinsimpson.com";
     github = "MostAwesomeDude";

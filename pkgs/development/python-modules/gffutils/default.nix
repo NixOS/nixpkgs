@@ -12,18 +12,16 @@ buildPythonPackage rec {
   checkInputs = [ nose wget ];
   propagatedBuildInputs = [ pyfaidx six argh argcomplete simplejson ];
 
-  checkPhase = ''
-    # sh gffutils/test/data/download-large-annotation-files.sh
-    # nosetests
-    ${python.interpreter} -c 'import gffutils'
-  '';
-
-  # Tests require extra dependencies
-  doCheck = true;
+  # checkPhase = ''  # unfortunately fails
+  #   # sh gffutils/test/data/download-large-annotation-files.sh
+  #   # nosetests
+  # '';
+  pythonImportsCheck = [ "gffutils" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/daler/gffutils";
     description = "GFF and GTF file manipulation and interconversion http://daler.github.io/gffutils";
     license = licenses.mit;
+    maintainer = maintainers.moritzs;
   };
 }

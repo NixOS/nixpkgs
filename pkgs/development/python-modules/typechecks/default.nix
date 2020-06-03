@@ -9,18 +9,12 @@ buildPythonPackage rec {
     sha256 = "7d801a6018f60d2a10aa3debc3af65f590c96c455de67159f39b9b183107c83b";
   };
 
-  checkInputs = [ ];
-  propagatedBuildInputs = [ ];
-
-  checkPhase = ''
-      ${python.interpreter} -c 'import typechecks'
-  '';
-
-  doCheck = true;
+  pythonImportsCheck = [ "typechecks" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/openvax/typechecks";
     description = "Helper functions for runtime type checking";
     license = licenses.asl20;
+    maintainer = maintainers.moritzs;
   };
 }
