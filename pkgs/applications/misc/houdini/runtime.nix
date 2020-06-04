@@ -38,11 +38,11 @@ let
   license_dir = "~/.config/houdini";
 in
 stdenv.mkDerivation rec {
-  version = "18.0.391";
+  version = "18.0.460";
   pname = "houdini-runtime";
   src = requireFile rec {
     name = "houdini-${version}-linux_x86_64_gcc6.3.tar.gz";
-    sha256 = "0bcbw8hjrg180wlw34bl085d3vx666j2pzsfdbsxwgrf3lzkx7wk";
+    sha256 = "18rbwszcks2zfn9zbax62rxmq50z9mc3h39b13jpd39qjqdd3jsd";
     url = meta.homepage;
   };
 
