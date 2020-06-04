@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/436
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/commit/dd2ec3681e2d38e13e01477efa36e851650690fb.patch";
-      sha256 = "CMYQF2MTsC5A0btMpLVLemkwsMtEbzhDXVE3u49xHB4=";
+      sha256 = "07hwf67vndsibm1khvs4rfq30sbs9fss8k5vs502xc0kccbi1ih8";
     })
   ];
 

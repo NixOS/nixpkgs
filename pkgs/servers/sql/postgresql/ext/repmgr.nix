@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "2ndQuadrant";
     repo = "repmgr";
     rev = "v${version}";
-    hash = "sha256-1CshcutjgwWCRxBfjlNGDLKMT5BYqb+sh4i+/E/YN38=";
+    sha256 = "0zrpv17zrgl8hynbzaaqj17qrchc8r9qwpqh8y10b0v3xdr22ayl";
   };
 
   nativeBuildInputs = [ flex ];

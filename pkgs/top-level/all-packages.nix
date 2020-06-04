@@ -507,6 +507,10 @@ in
 
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
+  validatePkgConfig = makeSetupHook
+    { name = "validate-pkg-config"; deps = [ findutils pkgconfig ]; }
+    ../build-support/setup-hooks/validate-pkg-config.sh;
+
   #package writers
   writers = callPackage ../build-support/writers {};
 
@@ -984,7 +988,11 @@ in
 
   glasgow = with python3Packages; toPythonApplication glasgow;
 
+  goimapnotify = callPackage ../tools/networking/goimapnotify { };
+
   gomatrix = callPackage ../applications/misc/gomatrix { };
+
+  gopacked = callPackage ../applications/misc/gopacked { };
 
   gucci = callPackage ../tools/text/gucci { };
 
@@ -2205,6 +2213,8 @@ in
 
   rav1e = callPackage ../tools/video/rav1e { };
 
+  razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
+
   ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
 
   riot-desktop = callPackage ../applications/networking/instant-messengers/riot/riot-desktop.nix { };
@@ -2933,6 +2943,7 @@ in
   diction = callPackage ../tools/text/diction { };
 
   diffoscope = callPackage ../tools/misc/diffoscope {
+    inherit (androidenv.androidPkgs_9_0) build-tools;
     jdk = jdk8;
   };
 
@@ -3139,6 +3150,10 @@ in
   tracker = callPackage ../development/libraries/tracker { };
 
   tracker-miners = callPackage ../development/libraries/tracker-miners { };
+
+  tracy = callPackage ../development/tools/tracy {
+    inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
+  };
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
@@ -4708,6 +4723,8 @@ in
 
   matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {};
 
+  matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
+
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
@@ -4829,9 +4846,9 @@ in
 
   nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
 
-  nodejs = hiPrio nodejs-10_x;
+  nodejs = hiPrio nodejs-12_x;
 
-  nodejs-slim = nodejs-slim-10_x;
+  nodejs-slim = nodejs-slim-12_x;
 
 
   nodejs-10_x = callPackage ../development/web/nodejs/v10.nix { };
@@ -4855,19 +4872,13 @@ in
   nodejs_latest = nodejs-14_x;
   nodejs-slim_latest = nodejs-slim-14_x;
 
-  nodePackages_13_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v13.nix {
-    nodejs = pkgs.nodejs-13_x;
+  nodePackages_latest = dontRecurseIntoAttrs (callPackage ../development/node-packages/default.nix {
+    nodejs = pkgs.nodejs_latest;
   });
 
-  nodePackages_12_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v12.nix {
-    nodejs = pkgs.nodejs-12_x;
+  nodePackages = dontRecurseIntoAttrs (callPackage ../development/node-packages/default.nix {
+    nodejs = pkgs.nodejs;
   });
-
-  nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
-    nodejs = pkgs.nodejs-10_x;
-  });
-
-  nodePackages = nodePackages_10_x;
 
   now-cli = callPackage ../development/web/now-cli {};
 
@@ -6091,7 +6102,7 @@ in
 
   projectlibre = callPackage ../applications/misc/projectlibre { };
 
-  projectm = callPackage ../applications/audio/projectm { };
+  projectm = libsForQt5.callPackage ../applications/audio/projectm { };
 
   proot = callPackage ../tools/system/proot { };
 
@@ -10004,7 +10015,7 @@ in
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   inherit (callPackages ../development/tools/electron { })
-    electron_4 electron_5 electron_6 electron_7 electron_8;
+    electron_4 electron_5 electron_6 electron_7 electron_8 electron_9;
 
   electron_3 = callPackage ../development/tools/electron/3.x.nix { };
   electron = electron_4;
@@ -13790,6 +13801,8 @@ in
   };
 
   mlt = callPackage ../development/libraries/mlt { ffmpeg = ffmpeg_4; };
+
+  mlv-app = libsForQt5.callPackage ../applications/video/mlv-app { };
 
   mono-addins = callPackage ../development/libraries/mono-addins { };
 
@@ -17674,6 +17687,7 @@ in
     ubootRaspberryPiZero
     ubootRock64
     ubootRockPro64
+    ubootROCPCRK3399
     ubootSheevaplug
     ubootSopine
     ubootUtilite
@@ -17843,6 +17857,8 @@ in
   carlito = callPackage ../data/fonts/carlito {};
 
   cascadia-code = callPackage ../data/fonts/cascadia-code { };
+
+  cde-gtk-theme = callPackage ../data/themes/cde-motif-theme { };
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
@@ -18490,6 +18506,8 @@ in
 
   tzdata = callPackage ../data/misc/tzdata { };
 
+  ubuntu-themes = callPackage ../data/themes/ubuntu-themes { };
+
   ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
 
   ucs-fonts = callPackage ../data/fonts/ucs-fonts
@@ -18668,6 +18686,8 @@ in
 
   ardour = callPackage ../applications/audio/ardour { };
 
+  ardour_5 = lowPrio (callPackage ../applications/audio/ardour/5.nix { });
+
   arelle = with python3Packages; toPythonApplication arelle;
 
   argo = callPackage ../applications/networking/cluster/argo { };
@@ -18707,6 +18727,8 @@ in
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
   autokey = callPackage ../applications/office/autokey { };
+
+  autotalent = callPackage ../applications/audio/autotalent { };
 
   autotrace = callPackage ../applications/graphics/autotrace {};
 
@@ -20411,7 +20433,7 @@ in
   kdevelop-pg-qt = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix { };
 
   kdevelop-unwrapped = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
-    llvmPackages = llvmPackages_7;
+    llvmPackages = llvmPackages_10;
   };
 
   kdev-php = libsForQt5.callPackage ../applications/editors/kdevelop5/kdev-php.nix { };
@@ -22268,6 +22290,8 @@ in
   tasknc = callPackage ../applications/misc/tasknc { };
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
+
+  dstask = callPackage ../applications/misc/dstask { };
 
   tasksh = callPackage ../applications/misc/tasksh { };
 
@@ -25659,8 +25683,9 @@ in
     mkKops
     kops_1_15
     kops_1_16
+    kops_1_17
     ;
-  kops = kops_1_16;
+  kops = kops_1_17;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 

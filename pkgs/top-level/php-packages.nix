@@ -854,6 +854,9 @@ in
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 
+      prePatch = "pushd ../..";
+      postPatch = "popd";
+
       preConfigure = ''
         nullglobRestore=$(shopt -p nullglob)
         shopt -u nullglob   # To make ?-globbing work
@@ -983,14 +986,14 @@ in
         # The configure script doesn't correctly add library link
         # flags, so we add them to the variable used by the Makefile
         # when linking.
-        MYSQLND_SHARED_LIBADD = "-lssl -lcrypto -lz";
+        MYSQLND_SHARED_LIBADD = "-lssl -lcrypto";
         # The configure script builds a config.h which is never
         # included. Let's include it in the main header file
         # included by all .c-files.
         patches = [
           (pkgs.writeText "mysqlnd_config.patch" ''
-            --- a/mysqlnd.h
-            +++ b/mysqlnd.h
+            --- a/ext/mysqlnd/mysqlnd.h
+            +++ b/ext/mysqlnd/mysqlnd.h
             @@ -1,3 +1,6 @@
             +#ifdef HAVE_CONFIG_H
             +#include "config.h"
@@ -998,6 +1001,18 @@ in
              /*
                +----------------------------------------------------------------------+
                | Copyright (c) The PHP Group                                          |
+          '')
+          (pkgs.writeText "mysqlnd_fix_compression.patch" ''
+            --- a/ext/mysqlnd/mysqlnd.h
+            +++ b/ext/mysqlnd/mysqlnd.h
+            @@ -48,7 +48,7 @@
+             #define MYSQLND_DBG_ENABLED 0
+             #endif
+
+            -#if defined(MYSQLND_COMPRESSION_WANTED) && defined(HAVE_ZLIB)
+            +#if defined(MYSQLND_COMPRESSION_WANTED)
+             #define MYSQLND_COMPRESSION_ENABLED 1
+             #endif
           '')
         ];
         postPhpize = lib.optionalString (lib.versionOlder php.version "7.4") ''
@@ -1013,8 +1028,8 @@ in
         # included after the ifdef...
         patches = lib.optional (lib.versionOlder php.version "7.4") [
           (pkgs.writeText "zend_file_cache_config.patch" ''
-            --- a/zend_file_cache.c
-            +++ b/zend_file_cache.c
+            --- a/ext/opcache/zend_file_cache.c
+            +++ b/ext/opcache/zend_file_cache.c
             @@ -27,9 +27,9 @@
              #include "ext/standard/md5.h"
              #endif

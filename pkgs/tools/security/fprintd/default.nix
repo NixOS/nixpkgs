@@ -40,17 +40,17 @@ stdenv.mkDerivation rec {
     # https://gitlab.freedesktop.org/libfprint/fprintd/-/merge_requests/50
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/d7fec03f24d10f88d34581c72f0eef201f5eafac.patch";
-      sha256 = "QNN05WF4YZ0XiTwm5NkfqZDuQpyXlnrh+RJF9SNsCDk=";
+      sha256 = "0f88dhizai8jz7hpm5lpki1fx4593zcy89iwi4brsqbqc7jp9ls0";
     })
 
     # Fix locating libpam_wrapper for tests
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/merge_requests/40.patch";
-      sha256 = "43uPihK6HhygHw1Qplwci80Wseq/S77VUp+OdEECHmM=";
+      sha256 = "0qqy090p93lzabavwjxzxaqidkcb3ifacl0d3yh1q7ms2a58yyz3";
     })
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/f401f399a85dbeb2de165b9b9162eb552ab6eea7.patch";
-      sha256 = "Pga+/QEkln8DOwGZfKM1r2urJX4Y3X0bozWWxKZ5ia0=";
+      sha256 = "1bc9g6kc95imlcdpvp8qgqjsnsxg6nipr6817c1pz5i407yvw1iy";
     })
   ];
 

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://cdn.joypixels.com/arch-linux/font/${version}/joypixels-android.ttf";
-    sha256 = "S0Y/yAps11W69poz2c3xJSX9Augexm82ZzbbCSgoeXA=";
+    sha256 = "0w3r50l0knrncwv6zihyx01gs995y76xjcwsysx5bmvc1b43yijb";
   };
 
   dontUnpack = true;

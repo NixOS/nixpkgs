@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     export LANG=C.UTF-8 # fix elixir locale warning
   '';
 
-  runtimePath = stdenv.lib.makeBinPath [
+  runtimePath = stdenv.lib.makeBinPath ([
     erlang
     getconf # for getting memory limits
-    socat systemd procps # for systemd unit activation check
+    socat procps
     gnused coreutils # used by helper scripts
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early
     sed -i $out/sbin/rabbitmq-env -e '2s|^|PATH=${runtimePath}\''${PATH:+:}\$PATH/\n|'

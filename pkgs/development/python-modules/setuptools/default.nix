@@ -23,7 +23,7 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256:1f6bp3qy5zvykimadk8k11k3629hmnwlw2cfw4vwcsvdarhig673";
+      sha256 = "1f6bp3qy5zvykimadk8k11k3629hmnwlw2cfw4vwcsvdarhig673";
       name = "${pname}-${version}-source";
     };
 

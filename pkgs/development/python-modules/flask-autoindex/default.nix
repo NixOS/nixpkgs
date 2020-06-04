@@ -1,9 +1,11 @@
-{ stdenv
+{ lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , flask
 , flask-silk
 , future
+, pathlib
 }:
 
 buildPythonPackage rec {
@@ -19,9 +21,11 @@ buildPythonPackage rec {
     flask
     flask-silk
     future
+  ] ++ lib.optionals (pythonOlder "3.4") [
+    pathlib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The mod_autoindex for Flask";
     longDescription = ''
       Flask-AutoIndex generates an index page for your Flask application automatically.

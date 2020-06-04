@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     # Fix tests: https://github.com/storaged-project/udisks/issues/724
     (fetchpatch {
       url = "https://github.com/storaged-project/udisks/commit/60a0c1c967821d317046d9494e45b9a8e4e7a1c1.patch";
-      sha256 = "tWl49mSc1zDyB3kV6SKlhHFPi/Kg7mg6OWDlY7vGj2Y=";
+      sha256 = "0rlgqsxn7rb074x6ivm0ya5lywc4llifj5br0zr31mwwckv7hsdm";
     })
   ];
 
