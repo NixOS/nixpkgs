@@ -734,6 +734,7 @@ self: super: builtins.intersectAttrs super {
 
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
+  hie-bios_0_5_0 = dontCheck super.hie-bios_0_5_0;
 
   # Compiling the readme throws errors and has no purpose in nixpkgs
   aeson-gadt-th =
