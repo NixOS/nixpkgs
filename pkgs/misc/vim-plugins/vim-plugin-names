@@ -562,6 +562,7 @@ vito-c/jq.vim
 vmchale/ats-vim
 vmchale/dhall-vim
 VundleVim/Vundle.vim
+w0ng/vim-hybrid
 wakatime/vim-wakatime
 wannesm/wmgraphviz.vim
 wellle/targets.vim
