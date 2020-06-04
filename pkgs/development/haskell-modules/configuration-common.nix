@@ -1027,7 +1027,8 @@ self: super: {
   # Test has either build errors or fails anyway, depending on the compiler.
   vector-algorithms = dontCheck super.vector-algorithms;
 
-  # The test suite attempts to use the network.
+  # 2020-06-04: HACK: dontCheck - The test suite attempts to use the network.
+  # Should be solved when: https://github.com/dhall-lang/dhall-haskell/issues/1837
   dhall = generateOptparseApplicativeCompletion "dhall" (dontCheck super.dhall);
 
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
