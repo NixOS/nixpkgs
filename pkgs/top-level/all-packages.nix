@@ -20569,6 +20569,14 @@ in
     };
   };
 
+  libreoffice-qt = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+    libreoffice = libsForQt5.callPackage ../applications/office/libreoffice
+      (libreoffice-args // {
+        kdeIntegration = true;
+        variant = "fresh";
+      });
+  });
+
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     libreoffice = callPackage ../applications/office/libreoffice
       (libreoffice-args // {
