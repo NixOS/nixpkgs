@@ -637,6 +637,11 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
 }</programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+      <package>netbeans</package> was upgraded to 12.0 and now defaults to OpenJDK 11. This might cause problems if your projects depend on packages that were removed in Java 11.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
