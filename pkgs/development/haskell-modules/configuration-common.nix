@@ -1031,9 +1031,8 @@ self: super: {
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
   # https://github.com/dhall-lang/dhall-haskell/pull/997
   dhall-json =
-    generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (
-      dontCheck super.dhall-json
-  );
+    generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"]
+      super.dhall-json;
 
   dhall-nix =
     generateOptparseApplicativeCompletion "dhall-to-nix" (
