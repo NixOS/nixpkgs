@@ -160,6 +160,7 @@ jceb/vim-orgmode
 jeetsukumaran/vim-buffergator
 jeetsukumaran/vim-indentwise
 jeffkreeftmeijer/neovim-sensible
+jeffkreeftmeijer/vim-numbertoggle
 jelera/vim-javascript-syntax
 jgdavey/tslime.vim
 jhradilek/vim-docbk
