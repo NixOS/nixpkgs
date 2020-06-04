@@ -6930,6 +6930,10 @@ in {
     inherit (pkgs.linuxPackages) nvidia_x11;
     cudatoolkit = pkgs.cudatoolkit_10;
     cudnn = pkgs.cudnn_cudatoolkit_10;
+
+    # needed for tensorflow <2.2
+    # see https://github.com/tensorflow/tensorflow/issues/38734
+    gast = self.gast_0_2_2;
   };
 
   tensorflow-bin_2 = callPackage ../development/python-modules/tensorflow/2/bin.nix {
@@ -6937,6 +6941,10 @@ in {
     inherit (pkgs.linuxPackages) nvidia_x11;
     cudatoolkit = pkgs.cudatoolkit_10;
     cudnn = pkgs.cudnn_cudatoolkit_10;
+
+    # needed for tensorflow <2.2
+    # see https://github.com/tensorflow/tensorflow/issues/38734
+    gast = self.gast_0_2_2;
   };
 
   tensorflow-build = self.tensorflow-build_1;
@@ -6949,6 +6957,10 @@ in {
     nccl = pkgs.nccl_cudatoolkit_10;
     openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+
+    # needed for tensorflow <2.2
+    # see https://github.com/tensorflow/tensorflow/issues/38734
+    gast = self.gast_0_2_2;
   };
 
   tensorflow-build_2 = callPackage ../development/python-modules/tensorflow/2 {
@@ -6959,6 +6971,10 @@ in {
     nccl = pkgs.nccl_cudatoolkit_10;
     openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+
+    # needed for tensorflow <2.2
+    # see https://github.com/tensorflow/tensorflow/issues/38734
+    gast = self.gast_0_2_2;
   };
 
   tensorflow = self.tensorflow_1;
@@ -7291,6 +7307,8 @@ in {
   astunparse = callPackage ../development/python-modules/astunparse { };
 
   gast = callPackage ../development/python-modules/gast { };
+
+  gast_0_2_2 = callPackage ../development/python-modules/gast/0_2_2.nix { };
 
   ibis = callPackage ../development/python-modules/ibis { };
 

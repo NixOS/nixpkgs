@@ -124,14 +124,6 @@ let
         sha256 = "1n9ypbrx36fc1kc9cz5b3p9qhg15xxhq4nz6ap3hwqba535nakfz";
       })
 
-      (fetchpatch {
-        # be compatible with gast >0.2 instead of only gast 0.2.2
-        name = "gast-update.patch";
-        url = "https://github.com/tensorflow/tensorflow/commit/85751ad6c7f5fd12c6c79545d96896cba92fa8b4.patch";
-        sha256 = "077cpj0kzyqxzdya1dwh8df17zfzhqn7c685hx6iskvw2979zg2n";
-      })
-      ./lift-gast-restriction.patch
-
       # cuda 10.2 does not have "-bin2c-path" option anymore
       # https://github.com/tensorflow/tensorflow/issues/34429
       ../cuda-10.2-no-bin2c-path.patch

@@ -126,8 +126,6 @@ let
         excludes = [ "tensorflow/cc/saved_model/BUILD" ];
       })
 
-      ./lift-gast-restriction.patch
-
       # cuda 10.2 does not have "-bin2c-path" option anymore
       # https://github.com/tensorflow/tensorflow/issues/34429
       ../cuda-10.2-no-bin2c-path.patch

@@ -96,11 +96,6 @@ in buildPythonPackage {
     # Unpack the wheel file.
     wheel unpack --dest unpacked ./*.whl
 
-    # Tensorflow has a hard dependency on gast==0.2.2, but we relax it to
-    # gast==0.3.2.
-    substituteInPlace ./unpacked/tensorflow*/tensorflow_core/tools/pip_package/setup.py --replace "gast == 0.2.2" "gast == 0.3.2"
-    substituteInPlace ./unpacked/tensorflow*/tensorflow_*.dist-info/METADATA --replace "gast (==0.2.2)" "gast (==0.3.2)"
-
     # Pack the wheel file back up.
     wheel pack ./unpacked/tensorflow*
 
