@@ -1098,7 +1098,8 @@ self: super: {
     # Generate shell completions
     generateOptparseApplicativeCompletion "purs" dontHaddockPurescript;
 
-  # https://github.com/kcsongor/generic-lens/pull/65
+  # 2020-06-05: HACK: Package can not pass test suite,
+  # Upstream Report: https://github.com/kcsongor/generic-lens/issues/83
   generic-lens = dontCheck super.generic-lens;
 
   # https://github.com/danfran/cabal-macosx/issues/13
