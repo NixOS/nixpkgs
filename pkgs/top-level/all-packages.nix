@@ -7419,6 +7419,8 @@ in
 
   vcstool = callPackage ../development/tools/vcstool { };
 
+  vend = callPackage ../development/tools/vend { };
+
   verilator = callPackage ../applications/science/electronics/verilator {};
 
   verilog = callPackage ../applications/science/electronics/verilog {};
