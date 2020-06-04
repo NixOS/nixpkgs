@@ -183,8 +183,8 @@ let
       idrisPackages = packagePlatforms pkgs.idrisPackages;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
-      pkgsMusl.stdenv = linux;
-      pkgsStatic.stdenv = linux;
+      pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsStatic.stdenv = [ "x86_64-linux" "aarch64-linux" ];
 
       tests = packagePlatforms pkgs.tests;
 
