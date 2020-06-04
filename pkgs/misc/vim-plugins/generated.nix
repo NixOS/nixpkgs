@@ -5402,6 +5402,18 @@ let
     meta.homepage = "https://github.com/LnL7/vim-nix/";
   };
 
+  vim-numbertoggle = buildVimPluginFrom2Nix {
+    pname = "vim-numbertoggle";
+    version = "2017-10-26";
+    src = fetchFromGitHub {
+      owner = "jeffkreeftmeijer";
+      repo = "vim-numbertoggle";
+      rev = "cfaecb9e22b45373bb4940010ce63a89073f6d8b";
+      sha256 = "1rrmvv7ali50rpbih1s0fj00a3hjspwinx2y6nhwac7bjsnqqdwi";
+    };
+    meta.homepage = "https://github.com/jeffkreeftmeijer/vim-numbertoggle/";
+  };
+
   vim-obsession = buildVimPluginFrom2Nix {
     pname = "vim-obsession";
     version = "2020-01-19";
