@@ -406,6 +406,7 @@ ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
 roxma/nvim-yarp
+roxma/vim-tmux-clipboard
 RRethy/vim-illuminate
 rust-lang/rust.vim
 ryanoasis/vim-devicons
