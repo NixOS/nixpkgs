@@ -26,6 +26,12 @@ self: super: {
   # successfully with recent versions of the compiler).
   bin-package-db = null;
 
+  # waiting for release: https://github.com/jwiegley/c2hsc/issues/41
+  c2hsc = appendPatch super.c2hsc (pkgs.fetchpatch {
+    url = "https://github.com/jwiegley/c2hsc/commit/490ecab202e0de7fc995eedf744ad3cb408b53cc.patch";
+    sha256 = "1c7knpvxr7p8c159jkyk6w29653z5yzgjjqj11130bbb8mk9qhq7";
+  });
+
   # Some Hackage packages reference this attribute, which exists only in the
   # GHCJS package set. We provide a dummy version here to fix potential
   # evaluation errors.

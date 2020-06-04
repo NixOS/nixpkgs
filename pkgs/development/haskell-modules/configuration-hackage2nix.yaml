@@ -3562,7 +3562,6 @@ broken-packages:
   - c0parser
   - c10k
   - c2ats
-  - c2hsc
   - cabal-audit
   - cabal-bounds
   - cabal-bundle-clib
