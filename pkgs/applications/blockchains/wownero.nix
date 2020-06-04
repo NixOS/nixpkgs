@@ -1,19 +1,26 @@
 { stdenv, fetchFromGitHub, cmake, boost, miniupnpc_2, openssl, unbound
-, readline, libsodium, rapidjson
+, readline, libsodium, rapidjson, fetchurl
 }:
 
 with stdenv.lib;
 
+let
+  randomwowVersion = "1.1.6";
+  randomwow = fetchurl {
+    url = "https://github.com/wownero/RandomWOW/archive/${randomwowVersion}.tar.gz";
+    sha256 = "1c55y2dwrayh6k1avpchs89gq1mvy5c305h92jm2k48kzhw6a792";
+  };
+in
+
 stdenv.mkDerivation rec {
   pname = "wownero";
-  version = "0.7.0";
+  version = "0.8.0.0";
 
   src = fetchFromGitHub {
     owner = "wownero";
     repo = "wownero";
     rev    = "v${version}";
-    sha256 = "0lji24s6346qxcj4pmylv8byb8fnqzpmz81rx4i3zhc1bcsvdwas";
-    fetchSubmodules = true;
+    sha256 = "14nggivilgzaqhjd4ng3g2p884yp2hc322hpcpwjdnz2zfc3qq6c";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,6 +28,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost miniupnpc_2 openssl unbound rapidjson readline libsodium
   ];
+
+  postUnpack = ''
+    rm -r $sourceRoot/external/RandomWOW
+    unpackFile ${randomwow}
+    mv RandomWOW-${randomwowVersion} $sourceRoot/external/RandomWOW
+  '';
 
   cmakeFlags = [
     "-DReadline_ROOT_DIR=${readline.dev}"
