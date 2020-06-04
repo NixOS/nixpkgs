@@ -1,12 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock }:
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
   version = "9.0";
 
+  disabled = pythonOlder "3.5";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "895ac2a6486c0da0468ae31768b818d9f3f7fceddef110970c7dbb09e7b4b8e4";
+    sha256 = "1r5qnkkhkfvx1jbi1wfyxpyggwyr32w6h5z3i93a03bc92kc4nl9";
   };
 
   checkInputs = [ mock pytest ];
