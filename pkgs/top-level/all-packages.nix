@@ -18247,10 +18247,7 @@ in
 
   inriafonts = callPackage ../data/fonts/inriafonts { };
 
-
-  iosevka = callPackage ../data/fonts/iosevka {
-    nodejs = nodejs-10_x;
-  };
+  iosevka = callPackage ../data/fonts/iosevka {};
   iosevka-bin = callPackage ../data/fonts/iosevka/bin.nix {};
 
   ipafont = callPackage ../data/fonts/ipafont {};
