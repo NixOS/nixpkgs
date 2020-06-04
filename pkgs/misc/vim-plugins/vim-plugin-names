@@ -141,7 +141,6 @@ hsanson/vim-android
 hsitz/VimOrganizer
 iamcco/coc-spell-checker
 ianks/vim-tsx
-icymind/NeoSolarized
 idris-hackers/idris-vim
 Inazuma110/deoplete-greek
 inkarkat/vim-SyntaxRange
@@ -366,6 +365,7 @@ osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
 osyo-manga/vim-textobj-multiblock
 osyo-manga/vim-watchdogs
+overcache/NeoSolarized
 pangloss/vim-javascript
 parsonsmatt/intero-neovim
 pearofducks/ansible-vim
