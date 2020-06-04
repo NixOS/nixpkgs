@@ -111,6 +111,7 @@ fsharp/vim-fsharp
 fszymanski/deoplete-emoji
 garbas/vim-snipmate
 gentoo/gentoo-syntax
+GEverding/vim-hocon
 gibiansky/vim-textobj-haskell
 glts/vim-textobj-comment
 godlygeek/csapprox

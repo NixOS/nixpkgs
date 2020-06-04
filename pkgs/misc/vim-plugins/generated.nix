@@ -4789,6 +4789,18 @@ let
     meta.homepage = "https://github.com/alx741/vim-hindent/";
   };
 
+  vim-hocon = buildVimPluginFrom2Nix {
+    pname = "vim-hocon";
+    version = "2017-09-08";
+    src = fetchFromGitHub {
+      owner = "GEverding";
+      repo = "vim-hocon";
+      rev = "bb8fb14e00f8fc1eec27dd39dcc605aac43328a3";
+      sha256 = "0w6ckm931zpm1k3w02gl58hgfxzfy53sgcc9m8jz3vgi3zz0vki2";
+    };
+    meta.homepage = "https://github.com/GEverding/vim-hocon/";
+  };
+
   vim-hoogle = buildVimPluginFrom2Nix {
     pname = "vim-hoogle";
     version = "2018-03-04";
