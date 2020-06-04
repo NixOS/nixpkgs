@@ -6098,6 +6098,18 @@ let
     meta.homepage = "https://github.com/tpope/vim-speeddating/";
   };
 
+  vim-spirv = buildVimPluginFrom2Nix {
+    pname = "vim-spirv";
+    version = "2019-11-20";
+    src = fetchFromGitHub {
+      owner = "kbenzie";
+      repo = "vim-spirv";
+      rev = "e71404f92990aa4718925ade568427c0d8631469";
+      sha256 = "0aimpcz6vvrkcfgsj0xp12xdy1l83n387rsy74dzk23a220d59na";
+    };
+    meta.homepage = "https://github.com/kbenzie/vim-spirv/";
+  };
+
   vim-startify = buildVimPluginFrom2Nix {
     pname = "vim-startify";
     version = "2020-04-18";
