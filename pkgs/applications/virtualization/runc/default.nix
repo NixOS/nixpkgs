@@ -14,7 +14,7 @@
 
 buildGoPackage rec {
   pname = "runc";
-  version = "1.0.0-rc10";
+  version = "1.0.0-rc90";
 
   src = fetchFromGitHub {
     owner = "opencontainers";

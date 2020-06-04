@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, pkgconfig, SDL2, libpng, zlib, xz, freetype, fontconfig
+{ stdenv, fetchurl, fetchzip, pkgconfig, SDL2, libpng, zlib, xz, freetype, fontconfig, libxdg_basedir
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
 , withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
 , writeScriptBin, makeWrapper, runtimeShell
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig ]
+  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig libxdg_basedir ]
     ++ stdenv.lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
   prefixKey = "--prefix-dir=";

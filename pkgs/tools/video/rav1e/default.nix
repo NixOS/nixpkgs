@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = stdenv.mkDerivation rec {
     name = "${pname}-${version}-source";
@@ -11,11 +11,11 @@ rustPlatform.buildRustPackage rec {
       owner = "xiph";
       repo = "rav1e";
       rev = "v${version}";
-      sha256 = "001v29baa77pkab13d7imi71llixyvffqax8kgjwhm1dhsqlm7bl";
+      sha256 = "0qqw397yfglwj9kg45imhx1p5bb0nsx2gkaxj4lcc9i1hav6ia43";
     };
     cargoLock = fetchurl {
       url = "https://github.com/xiph/rav1e/releases/download/v${version}/Cargo.lock";
-      sha256 = "06l8jj75ma5kvz1m14x58an2zvx12i6wcq70gzq5k47nvj5l0zax";
+      sha256 = "1kdr3q97vq3mip1h7iv2iy9qzlgb69y6nwjzbw9nfi7dl7ip6q3l";
     };
 
     installPhase = ''
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "0n6gkn4iyqk4bijrvcpq884hiihl4mpw1p417w1m0dw7j4y4karn";
+  cargoSha256 = "03zsvavk7wskz843qxwwcymhclarcp6nfxwa1mwna3nmzvlm1hwb";
 
   nativeBuildInputs = [ nasm ];
 
@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage rec {
       Features: https://github.com/xiph/rav1e#features
     '';
     inherit (src.src.meta) homepage;
+    changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = [ maintainers.primeos ];
     platforms = platforms.all;

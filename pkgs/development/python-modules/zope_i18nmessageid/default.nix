@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , six
+, coverage
+, zope_testrunner
 }:
 
 buildPythonPackage rec {
@@ -14,6 +16,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ];
+
+  checkInputs = [ coverage zope_testrunner ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/zopefoundation/zope.i18nmessageid";

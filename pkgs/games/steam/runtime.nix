@@ -1,17 +1,25 @@
-{ stdenv, steamArch, fetchurl, writeText, python2, dpkg }:
+{ stdenv, steamArch, fetchurl, }:
 
-let input = builtins.getAttr steamArch (import ./runtime-generated.nix { inherit fetchurl; });
+stdenv.mkDerivation rec {
 
-    inputFile = writeText "steam-runtime.json" (builtins.toJSON input);
+  name = "steam-runtime";
+  # from https://repo.steampowered.com/steamrt-images-scout/snapshots/
+  version = "0.20200417.0";
 
-in stdenv.mkDerivation {
-  name = "steam-runtime-2016-08-13";
-
-  nativeBuildInputs = [ python2 dpkg stdenv.cc.bintools ];
+  src =
+    if steamArch == "amd64" then fetchurl {
+      url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/com.valvesoftware.SteamRuntime.Platform-amd64,i386-scout-runtime.tar.gz";
+      sha256 = "0kps8i5v23sycqm69xz389n8k831jd7ncsmlrkky7nib2q91rbvj";
+      name = "scout-runtime-${version}.tar.gz";
+    } else fetchurl {
+      url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/com.valvesoftware.SteamRuntime.Platform-i386-scout-runtime.tar.gz";
+      sha256 = "03fhac1r25xf7ia2pd35wjw360v5pa9h4870yrhhygp9h7v4klzf";
+      name = "scout-runtime-i386-${version}.tar.gz";
+    };
 
   buildCommand = ''
     mkdir -p $out
-    python2 ${./build-runtime.py} -i ${inputFile} -r $out
+    tar -C $out -x --strip=1 -f $src files/
   '';
 
   meta = with stdenv.lib; {

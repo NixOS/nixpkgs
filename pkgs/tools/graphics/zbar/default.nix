@@ -16,6 +16,7 @@
 , dbus
 , enableVideo ? stdenv.isLinux
 , enableDbus ? stdenv.isLinux
+, libintl
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     imagemagickBig
     libX11
+    libintl
   ] ++ lib.optionals enableDbus [
     dbus
   ] ++ lib.optionals enableVideo [

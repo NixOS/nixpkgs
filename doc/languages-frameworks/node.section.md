@@ -12,10 +12,9 @@ When it is desired to use NPM libraries in a development project, use the
 `node2nix` generator directly on the `package.json` configuration file of the
 project.
 
-The package set also provides support for multiple Node.js versions. The policy
-is that a new package should be added to the collection for the latest stable LTS
-release (which is currently 10.x), unless there is an explicit reason to support
-a different release.
+The package set provides support for the official stable Node.js versions.
+The latest stable LTS release in `nodePackages`, as well as the latest stable
+Current release in `nodePackages_latest`.
 
 If your package uses native addons, you need to examine what kind of native
 build system it uses. Here are some examples:
@@ -26,7 +25,7 @@ build system it uses. Here are some examples:
 
 After you have identified the correct system, you need to override your package
 expression while adding in build system as a build input. For example, `dat`
-requires `node-gyp-build`, so we override its expression in `default-v10.nix`:
+requires `node-gyp-build`, so we override its expression in `default.nix`:
 
 ```nix
 dat = nodePackages.dat.override (oldAttrs: {
@@ -36,14 +35,14 @@ dat = nodePackages.dat.override (oldAttrs: {
 
 To add a package from NPM to nixpkgs:
 
- 1. Modify `pkgs/development/node-packages/node-packages-v10.json` to add, update
-    or remove package entries. (Or `pkgs/development/node-packages/node-packages-v8.json`
-    for packages depending on Node.js 8.x)
+ 1. Modify `pkgs/development/node-packages/node-packages.json` to add, update
+    or remove package entries to have it included in `nodePackages` and
+    `nodePackages_latest`.
  2. Run the script: `(cd pkgs/development/node-packages && ./generate.sh)`.
  3. Build your new package to test your changes:
     `cd /path/to/nixpkgs && nix-build -A nodePackages.<new-or-updated-package>`.
-    To build against a specific Node.js version (e.g. 10.x):
-    `nix-build -A nodePackages_10_x.<new-or-updated-package>`
+    To build against the latest stable Current Node.js version (e.g. 14.x):
+    `nix-build -A nodePackages_latest.<new-or-updated-package>`
  4. Add and commit all modified and generated files.
 
 For more information about the generation process, consult the

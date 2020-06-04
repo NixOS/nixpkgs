@@ -373,7 +373,7 @@ start_all()
    </varlistentry>
    <varlistentry>
     <term>
-     <methodname>copy_file_from_host</methodname>
+     <methodname>copy_from_host</methodname>
     </term>
     <listitem>
      <para>

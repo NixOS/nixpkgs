@@ -8,7 +8,7 @@
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, vte
+, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, vte, wrapGAppsHook
 , vncSupport ? true, libjpeg, libpng
 , smartcardSupport ? true, libcacard
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dlcwyshdp94fwd30pddxf9bn2q8dfw5jsvry2gvdj551wmaj4rg";
   };
 
-  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ];
+  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ]
+    ++ optionals gtkSupport [ wrapGAppsHook ];
   buildInputs =
     [ zlib glib ncurses perl pixman
       vde2 texinfo makeWrapper lzo snappy
@@ -129,12 +130,17 @@ stdenv.mkDerivation rec {
     ++ optional smbdSupport "--smbd=${samba}/bin/smbd";
 
   doCheck = false; # tries to access /dev
+  dontWrapGApps = true;
 
-  postFixup =
-    ''
+  postFixup = ''
       # copy qemu-ga (guest agent) to separate output
       mkdir -p $ga/bin
       cp $out/bin/qemu-ga $ga/bin/
+    '' + optionalString gtkSupport ''
+      # wrap GTK Binaries
+      for f in $out/bin/qemu-system-*; do
+        wrapGApp $f
+      done
     '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.

@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Sphinx";
     inherit version;
-    hash = "sha256:0wpmqfx4mxv5kv9xxd6wyfsm8vcnp8p99h14q7b6if2mv69gvvb2";
+    sha256 = "0wpmqfx4mxv5kv9xxd6wyfsm8vcnp8p99h14q7b6if2mv69gvvb2";
   };
   LC_ALL = "en_US.UTF-8";
 

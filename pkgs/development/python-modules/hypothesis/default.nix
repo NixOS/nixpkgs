@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "hypothesis-python-${version}";
-    hash = "sha256:1ca2dwih65s4r8vazwqm963ywngdr3v854ldnfyny7bvx1v28m8k";
+    sha256 = "1ca2dwih65s4r8vazwqm963ywngdr3v854ldnfyny7bvx1v28m8k";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
