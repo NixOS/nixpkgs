@@ -1,7 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, intltool, python3Packages, wrapGAppsHook
-, glib, libxml2, libxslt, sqlite, libsoup , webkitgtk, json-glib, gst_all_1
-, libnotify, gtk3, gsettings-desktop-schemas, libpeas, dconf, librsvg
-, gobject-introspection, glib-networking
+{ stdenv
+, fetchurl
+, pkg-config
+, intltool
+, python3Packages
+, wrapGAppsHook
+, glib
+, libxml2
+, libxslt
+, sqlite
+, libsoup
+, webkitgtk
+, json-glib
+, gst_all_1
+, libnotify
+, gtk3
+, gsettings-desktop-schemas
+, libpeas
+, dconf
+, librsvg
+, gobject-introspection
+, glib-networking
 }:
 
 stdenv.mkDerivation rec {
@@ -13,17 +31,40 @@ stdenv.mkDerivation rec {
     sha256 = "03pr1gmiv5y0i92bkhcxr8s311ll91chz19wb96jkixx32xav91d";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook python3Packages.wrapPython intltool pkgconfig ];
+  nativeBuildInputs = [
+    wrapGAppsHook
+    python3Packages.wrapPython
+    intltool
+    pkg-config
+  ];
 
   buildInputs = [
-    glib gtk3 webkitgtk libxml2 libxslt sqlite libsoup gsettings-desktop-schemas
-    libpeas gsettings-desktop-schemas json-glib dconf gobject-introspection
-    librsvg glib-networking libnotify
+    glib
+    gtk3
+    webkitgtk
+    libxml2
+    libxslt
+    sqlite
+    libsoup
+    libpeas
+    gsettings-desktop-schemas
+    json-glib
+    dconf
+    gobject-introspection
+    librsvg
+    glib-networking
+    libnotify
   ] ++ (with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
   ]);
 
-  pythonPath = with python3Packages; [ pygobject3 pycairo ];
+  pythonPath = with python3Packages; [
+    pygobject3
+    pycairo
+  ];
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"
