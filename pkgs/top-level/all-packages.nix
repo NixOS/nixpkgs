@@ -18155,6 +18155,8 @@ in
 
   medio = callPackage ../data/fonts/medio { };
 
+  mint-x-icons = callPackage ../data/icons/mint-x-icons { };
+
   mno16 = callPackage ../data/fonts/mno16 { };
 
   mnist = callPackage ../data/machine-learning/mnist { };
