@@ -1145,7 +1145,9 @@ self: super: {
     '';
   });
 
-  # test suite failure: https://github.com/jgm/pandoc/issues/5582
+  # 2020-06-05: HACK: In Nixpkgs currently this is
+  # old pandoc version 2.7.4 to current 2.9.2.1,
+  # test suite failures: https://github.com/jgm/pandoc/issues/5582
   pandoc = dontCheck super.pandoc;
 
   # Fix build with attr-2.4.48 (see #53716)
