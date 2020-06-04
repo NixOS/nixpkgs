@@ -1,3 +1,3 @@
 [
-    {"matrix-appservice-slack": "git+https://github.com/matrix-org/matrix-appservice-slack.git#1.2.0" }
+    {"matrix-appservice-slack": "git+https://github.com/matrix-org/matrix-appservice-slack.git#1.3.1" }
 ]

@@ -10,7 +10,7 @@ mkDerivation {
     # https://github.com/NixOS/nixpkgs/issues/86930
     (fetchpatch {
       url = "https://w1.fi/cgit/hostap/patch/?id=0388992905a5c2be5cba9497504eaea346474754";
-      sha256 = "YDSY7l/qEco+aZYcYHLf/rxCKvPw35ibGoMorjA5GhY=";
+      sha256 = "05hs74qawa433adripzhycm45g7yvxr6074nd4zcl4gabzp9hd30";
     })
   ];
 

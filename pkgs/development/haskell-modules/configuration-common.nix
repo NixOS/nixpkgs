@@ -137,6 +137,9 @@ self: super: {
     then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
     else super.conduit-extra;
 
+  # https://github.com/cachix/cachix/issues/308
+  cachix = dontCheck super.cachix;
+
   # Fix Darwin build.
   halive = if pkgs.stdenv.isDarwin
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
@@ -710,18 +713,7 @@ self: super: {
   });
 
   # The standard libraries are compiled separately.
-  # The megaparsec-7 override is needed because https://github.com/idris-lang/Idris-dev/issues/4826 declares that
-  # idris1 has no plans to migrate to megaparsec-8.
-  # The idris-lang/Idris-dev#4808 patch is for GHC 8.8 compatibility, and can likely be removed with the next release.
-  idris = generateOptparseApplicativeCompletion "idris" (doJailbreak (dontCheck
-    (appendPatches
-      (super.idris.override { megaparsec = self.megaparsec_7_0_5; }) [
-        (pkgs.fetchpatch {
-          url = "https://github.com/idris-lang/Idris-dev/pull/4808.diff";
-          sha256 = "060ib1rczy34ip8xf3bv1pf28655f6s0bvvij19jhh5dpcr0pf71";
-          excludes = [ ".travis.yml" "Makefile" "appveyor.yml" ];
-        })
-      ])));
+  idris = generateOptparseApplicativeCompletion "idris" (dontCheck super.idris);
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
@@ -1018,6 +1010,9 @@ self: super: {
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
+  # Compiles some C++ source which requires these headers
+  VulkanMemoryAllocator = addExtraLibrary super.VulkanMemoryAllocator pkgs.vulkan-headers;
+
   # # Builds only with the latest version of indexed-list-literals.
   # vector-sized_1_0_3_0 = super.vector-sized_1_0_3_0.override {
   #   indexed-list-literals = self.indexed-list-literals_0_2_1_1;
@@ -1311,9 +1306,6 @@ self: super: {
     '';
   });
 
-  # cabal-fmt requires Cabal3
-  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_0_0; };
-
   # Several gtk2hs-provided packages at v0.13.8.0 fail to build on Darwin
   # until we pick up https://github.com/gtk2hs/gtk2hs/pull/293 so apply that
   # patch here. That single patch is for the gtk2hs super-repo, out of which
@@ -1481,7 +1473,7 @@ self: super: {
   # release of webify is published.
   webify = appendPatch super.webify (pkgs.fetchpatch {
     url = "https://github.com/ananthakumaran/webify/pull/27/commits/6d653e7bdc1ffda75ead46851b5db45e87cb2aa0.patch";
-    sha256 = "sha256:0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
+    sha256 = "0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
   });
 
   # Depends on selective >= 0.4, but the default of selective is 0.3
@@ -1502,21 +1494,25 @@ self: super: {
   });
 
   # stackage right now is not new enough for hlint-3.0
-  ghc-lib-parser-ex_8_10_0_8 = super.ghc-lib-parser-ex_8_10_0_8.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
+  ghc-lib-parser-ex_8_10_0_11 = super.ghc-lib-parser-ex_8_10_0_11.override {
+    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
   };
 
   hlint = super.hlint.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_8;
-    extra = self.extra_1_7_1;
+    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_11;
+    extra = self.extra_1_7_2;
     filepattern = self.filepattern.override {
-      extra = self.extra_1_7_1;
+      extra = self.extra_1_7_2;
     };
   };
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
+
+  # the test suite attempts to run the binaries built in this package
+  # through $PATH but they aren't in $PATH
+  dhall-lsp-server = dontCheck super.dhall-lsp-server;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
