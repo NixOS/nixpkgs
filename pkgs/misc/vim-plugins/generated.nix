@@ -609,8 +609,8 @@ let
     src = fetchFromGitHub {
       owner = "fannheyward";
       repo = "coc-rust-analyzer";
-      rev = "612e7eb6fdc55bc97972907b3926bf11188295ad";
-      sha256 = "13fn4jqcqhsvhjqcfifrkzp8sbwvm1859vgj9ic6c64xi9adp9nr";
+      rev = "acd5e7fca38dbc8ad8bfe9f187f1f4e6ee64ea88";
+      sha256 = "14qyszmyzykibdkdv38cypc8gmhaz0301prirjbpf2gijryk922b";
     };
     meta.homepage = "https://github.com/fannheyward/coc-rust-analyzer/";
   };
@@ -4835,6 +4835,18 @@ let
       sha256 = "09kqzaqa4jdh31q0a3nxbx9li7zg890qxh68rfzblzyx22xv4mka";
     };
     meta.homepage = "https://github.com/vim-utils/vim-husk/";
+  };
+
+  vim-hybrid = buildVimPluginFrom2Nix {
+    pname = "vim-hybrid";
+    version = "2016-01-05";
+    src = fetchFromGitHub {
+      owner = "w0ng";
+      repo = "vim-hybrid";
+      rev = "cc58baabeabc7b83768e25b852bf89c34756bf90";
+      sha256 = "1c3q39121hiw85r9ymiyhz5zsf6bl9pwk4pgj6nh6ckwns4cgcmw";
+    };
+    meta.homepage = "https://github.com/w0ng/vim-hybrid/";
   };
 
   vim-hybrid-material = buildVimPluginFrom2Nix {
