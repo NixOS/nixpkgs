@@ -16,8 +16,7 @@
 , gtk3
 , gsettings-desktop-schemas
 , libpeas
-, dconf
-, librsvg
+, libsecret
 , gobject-introspection
 , glib-networking
 }:
@@ -49,9 +48,8 @@ stdenv.mkDerivation rec {
     libpeas
     gsettings-desktop-schemas
     json-glib
-    dconf
     gobject-introspection
-    librsvg
+    libsecret
     glib-networking
     libnotify
   ] ++ (with gst_all_1; [
