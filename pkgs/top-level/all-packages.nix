@@ -17607,6 +17607,8 @@ in
 
     rtl88x2bu = callPackage ../os-specific/linux/rtl88x2bu { };
 
+    rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
+
     rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
 
     openafs = callPackage ../servers/openafs/1.6/module.nix { };
