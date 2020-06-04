@@ -12,6 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose six ];
   propagatedBuildInputs = [ numpy pandas ];
+  doCheck = false;
 
   pythonImportsCheck = [ "gtfparse" ];
   # checkPhase = ''

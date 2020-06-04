@@ -9,8 +9,10 @@ buildPythonPackage rec {
     sha256 = "a8fc39006d7aa353147238160640e2210b168f7849cb99896be3fc9441e351cb";
   };
 
+
   checkInputs = [ nose wget ];
   propagatedBuildInputs = [ pyfaidx six argh argcomplete simplejson ];
+  doCheck = false;
 
   # checkPhase = ''  # unfortunately fails
   #   # sh gffutils/test/data/download-large-annotation-files.sh
