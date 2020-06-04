@@ -31,6 +31,7 @@
 , stripBytecode ? false
 , includeSiteCustomize ? true
 , static ? false
+, enableOptimizations ? true
 }:
 
 assert x11Support -> tcl != null
@@ -151,11 +152,12 @@ in with passthru; stdenv.mkDerivation {
   PYTHONHASHSEED=0;
 
   configureFlags = [
-    "--enable-optimizations"
     "--enable-shared"
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals enableOptimizations [
+    "--enable-optimizations"
   ] ++ optionals (pythonOlder "3.7") [
     # This is unconditionally true starting in CPython 3.7.
     "--with-threads"
