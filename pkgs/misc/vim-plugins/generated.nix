@@ -5354,6 +5354,18 @@ let
     meta.homepage = "https://github.com/terryma/vim-multiple-cursors/";
   };
 
+  vim-mundo = buildVimPluginFrom2Nix {
+    pname = "vim-mundo";
+    version = "2020-05-06";
+    src = fetchFromGitHub {
+      owner = "simnalamburt";
+      repo = "vim-mundo";
+      rev = "046fc0664b953ab17153da379df0b9fd34b85ec1";
+      sha256 = "0np83qa95cfg1059r4iaf31sfhs86241jzkmw026gdja9s30q3m1";
+    };
+    meta.homepage = "https://github.com/simnalamburt/vim-mundo/";
+  };
+
   vim-nerdtree-tabs = buildVimPluginFrom2Nix {
     pname = "vim-nerdtree-tabs";
     version = "2018-12-21";
