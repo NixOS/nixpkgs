@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "http://romfs.sourceforge.net/";
     description = "Tool for creating romfs file system images";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pxc ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }
