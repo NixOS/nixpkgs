@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "unrszSK+tKcARSHxRSAAos+jDtYxdDcSnFENixaDJsw=";
+    sha256 = "1k16hcb8n3aikh93fx1isq7a7kx200h4bw918l0agd5y4b6yqyms";
   };
 
   patches = [

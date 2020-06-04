@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "IBBoard";
     repo = "cawbird";
     rev = "v${version}";
-    sha256 = "sha256:0zghryx5y47ff8kxa65lvgmy1cnhvhazxml7r1lxixxj3d88wh7p";
+    sha256 = "0zghryx5y47ff8kxa65lvgmy1cnhvhazxml7r1lxixxj3d88wh7p";
   };
 
   nativeBuildInputs = [

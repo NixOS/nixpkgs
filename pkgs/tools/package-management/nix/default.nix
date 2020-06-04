@@ -216,7 +216,7 @@ in rec {
       owner = "NixOS";
       repo = "nix";
       rev = "00b562c87ec4c3bbe514f5dc1f4d1c41f66f66bf";
-      hash = "sha256-GqTFh4wBfkKapixKyd3gA9C1tF0PSzZDD5LN+5nQEWk=";
+      sha256 = "0s8is2czpkcj1x1kcjqgbnsbbl03w3fwjjiclsd44zh1ij3wb90s";
     };
 
     crates = fetchurl {

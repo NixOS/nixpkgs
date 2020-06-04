@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "pazz";
     repo = "alot";
     rev = version;
-    sha256 = "sha256-WUwOJcq8JE7YO8sFeZwYikCRhpufO0pL6MKu54ZYsHI=";
+    sha256 = "0wmhb23fgbn2x15llfwzkf392h4a32f7j1fb7gc4w95wr8jhwk2r";
   };
 
   patches = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/Connector-C++/mysql-connector-c++-${version}-src.tar.gz";
-    sha256 = "fDvXTOZKkwDn1IG3aziK2VAXpSSAxpi3VVea7GLUoh4=";
+    sha256 = "07m2siifr6jpanvriil04jjifl6ri8w6pdw1skkh14sawr6dffvw";
   };
 
   nativeBuildInputs = [

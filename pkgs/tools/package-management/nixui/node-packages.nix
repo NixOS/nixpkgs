@@ -64,7 +64,7 @@ let
       version = "1.9.1";
       src = fetchurl {
         url = "https://registry.npmjs.org/underscore/-/underscore-1.9.1.tgz";
-        sha512 = "5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==";
+        sha512 = "1v1j738fqadps32lirl0nxzfhif6db9kslri77cwxq3c12adksibr6ips2zxqywh672d32sxrhfcvx2gwpc4a08hcydfxx4f2v1xzp7";
       };
     };
   };

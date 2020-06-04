@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "sha256:06kpf730al50xv1q53ahycky3im23ysrqp40libls4k24zxs9ha2";
+    sha256 = "06kpf730al50xv1q53ahycky3im23ysrqp40libls4k24zxs9ha2";
   };
 
   patches = lib.singleton (

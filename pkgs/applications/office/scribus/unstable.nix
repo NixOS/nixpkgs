@@ -40,7 +40,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-devel/${pname}-${version}.tar.xz";
-    sha256 = "eQiyGmzoQyafWM7fX495GJMlfmIBzOX73ccNrKL+P3E=";
+    sha256 = "0w9zzsiaq3f7vpxybk01c9z2b4qqg67mzpyfb2gjchz8dhdb423r";
   };
 
   patches = [

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}b.tar.bz2";
-    sha256 = "sha256:03pr1gmiv5y0i92bkhcxr8s311ll91chz19wb96jkixx32xav91d";
+    sha256 = "03pr1gmiv5y0i92bkhcxr8s311ll91chz19wb96jkixx32xav91d";
   };
 
   nativeBuildInputs = [ wrapGAppsHook python3Packages.wrapPython intltool pkgconfig ];

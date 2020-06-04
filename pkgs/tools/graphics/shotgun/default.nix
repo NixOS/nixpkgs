@@ -12,10 +12,10 @@ rustPlatform.buildRustPackage rec {
     owner = "neXromancers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "tJnF1X+NI1hP0J/n3rGy8TD/yIveqRPVlJvJvn0C7Do=";
+    sha256 = "0fpc09yvxjcvjkai7afyig4gyc7inaqxxrwzs17mh8wdgzawb6dl";
   };
 
-  cargoSha256 = "TL2WehcCwygLMVVrBHOX1HgVtDhgVsIgUeiadEjCj1o=";
+  cargoSha256 = "0nlgq94796p8a4hc4mk072s1ay6ljxrh8ssm645jihq22xx9dgac";
 
   meta = with lib; {
     description = "Minimal X screenshot utility";
