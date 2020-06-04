@@ -1846,6 +1846,18 @@ let
     meta.homepage = "https://github.com/twerth/ir_black/";
   };
 
+  is-vim = buildVimPluginFrom2Nix {
+    pname = "is-vim";
+    version = "2017-10-30";
+    src = fetchFromGitHub {
+      owner = "haya14busa";
+      repo = "is.vim";
+      rev = "61d5029310c69bde700b2d46a454f80859b5af17";
+      sha256 = "1nnf6y62mc0rj7hbrapfkmr91ypsqkzhwgpfx7pahz8m3a2324q6";
+    };
+    meta.homepage = "https://github.com/haya14busa/is.vim/";
+  };
+
   jdaddy-vim = buildVimPluginFrom2Nix {
     pname = "jdaddy-vim";
     version = "2014-02-22";
