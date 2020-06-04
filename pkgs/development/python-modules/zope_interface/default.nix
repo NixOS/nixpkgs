@@ -6,14 +6,16 @@
 
 buildPythonPackage rec {
   pname = "zope.interface";
-  version = "4.7.2";
-  
+  version = "5.1.0";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd1101bd3fcb4f4cf3485bb20d6cb0b56909b94d3bd2a53a6cb9d381c3da3365";
+    sha256 = "03nrl6b8cb600dnnh46y149awvrm0gxyqgwq5hdw3lvys8mw9r20";
   };
 
   propagatedBuildInputs = [ zope_event ];
+
+  doCheck = false; # Circular deps.
 
   meta = with stdenv.lib; {
     description = "Zope.Interface";
