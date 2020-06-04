@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.3.0";
+  version = "3.3.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qph9i93ndahfxi3bb2sd0kjm2c0pkh844ai6zacfmvihl1k3pvy";
+    sha256 = "0idfiv48jjgc0jq4731094ddhraqq8bxnwmjk6sg5ask0jss9kxq";
   };
 
   propagatedBuildInputs = [
