@@ -216,12 +216,6 @@ self: super: {
   # Needs older version of QuickCheck.
   these_0_7_6 = doJailbreak super.these_0_7_6;
 
-  # dontCheck: Can be removed once https://github.com/haskell-nix/hnix/commit/471712f is in (5.2 probably)
-  #   This is due to GenList having been removed from generic-random in 1.2.0.0
-  # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
-  #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
-  # Does not support recent versions of "these".
-  # https://github.com/haskell-nix/hnix/issues/514
   hnix =
     generateOptparseApplicativeCompletion "hnix" (
       dontCheck (doJailbreak (super.hnix.override { these = self.these_0_7_6; }))
