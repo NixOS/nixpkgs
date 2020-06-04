@@ -64,6 +64,17 @@ in rec {
     };
   };
 
+  better-mouse-mode = mkDerivation {
+    pluginName = "scroll_copy_mode";
+    version = "unstable-2017-10-16";
+    src = fetchFromGitHub {
+      owner = "NHDaly";
+      repo = "tmux-better-mouse-mode";
+      rev = "aa59077c635ab21b251bd8cb4dc24c415e64a58e";
+      hash = "sha256:nPNa3JvDgptGvy2vpo0WSZytyu7kFSEn/Jp/OGA0ZBg=";
+    };
+  };
+
   continuum = mkDerivation {
     pluginName = "continuum";
     version = "unstable-2018-02-23";
