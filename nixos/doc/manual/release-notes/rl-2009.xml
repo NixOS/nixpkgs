@@ -44,6 +44,11 @@
    </listitem>
    <listitem>
     <para>
+     Python 3 now defaults to Python 3.8 instead of 3.7.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
      and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
      been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>

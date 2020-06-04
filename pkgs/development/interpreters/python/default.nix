@@ -129,7 +129,7 @@ in {
   };
 
   # Minimal versions of Python (built without optional dependencies)
-  python3Minimal = (python37.override {
+  python3Minimal = (python3.override {
     self = python3Minimal;
     pythonForBuild = pkgs.buildPackages.python3Minimal;
     # strip down that python version as much as possible
