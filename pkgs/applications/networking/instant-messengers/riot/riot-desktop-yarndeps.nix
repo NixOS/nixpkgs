@@ -146,11 +146,11 @@
       };
     }
     {
-      name = "acorn___acorn_6.4.0.tgz";
+      name = "acorn___acorn_6.4.1.tgz";
       path = fetchurl {
-        name = "acorn___acorn_6.4.0.tgz";
-        url  = "https://registry.yarnpkg.com/acorn/-/acorn-6.4.0.tgz";
-        sha1 = "b659d2ffbafa24baf5db1cdbb2c94a983ecd2784";
+        name = "acorn___acorn_6.4.1.tgz";
+        url  = "https://registry.yarnpkg.com/acorn/-/acorn-6.4.1.tgz";
+        sha1 = "531e58ba3f51b9dacb9a6646ca4debf5b14ca474";
       };
     }
     {
@@ -3154,11 +3154,11 @@
       };
     }
     {
-      name = "matrix_js_sdk___matrix_js_sdk_6.1.0.tgz";
+      name = "matrix_js_sdk___matrix_js_sdk_6.2.0.tgz";
       path = fetchurl {
-        name = "matrix_js_sdk___matrix_js_sdk_6.1.0.tgz";
-        url  = "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-6.1.0.tgz";
-        sha1 = "c28ad67c113c4aa9c8bce409c7ba550170bdc2ee";
+        name = "matrix_js_sdk___matrix_js_sdk_6.2.0.tgz";
+        url  = "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-6.2.0.tgz";
+        sha1 = "b1aa6f23858ab3ee4b66be25d3e854f6e287d36b";
       };
     }
     {
