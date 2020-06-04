@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy pandas datacache six memoized-property gtfparse serializable tinytimer serializable ];
 
-  pythonImportsCheck = [ "pyensembl" ];
+  # pythonImportsCheck = [ "pyensembl" ];
   doCheck = false;  # import fails (only) in build environment because pyensembl creates a file in root directory
 
   meta = with stdenv.lib; {
