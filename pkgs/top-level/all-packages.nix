@@ -16542,8 +16542,6 @@ in
 
   cachefilesd = callPackage ../os-specific/linux/cachefilesd { };
 
-  cgmanager = callPackage ../os-specific/linux/cgmanager { };
-
   checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
 
   checksec = callPackage ../os-specific/linux/checksec { };

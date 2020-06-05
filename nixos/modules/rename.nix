@@ -24,6 +24,7 @@ with lib;
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule ["services" "cgmanager" "enable"] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "osquery" ] "The osquery module has been removed")
     (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
