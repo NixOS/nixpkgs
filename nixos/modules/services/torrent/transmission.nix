@@ -179,6 +179,8 @@ in
           ${getLib pkgs.utillinuxMinimal.out}/lib/libblkid.so.* mr,
           ${getLib pkgs.utillinuxMinimal.out}/lib/libmount.so.* mr,
           ${getLib pkgs.utillinuxMinimal.out}/lib/libuuid.so.* mr,
+          ${getLib pkgs.gcc.cc.lib}/lib/libstdc++.so.* mr,
+          ${getLib pkgs.gcc.cc.lib}/lib/libgcc_s.so.* mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,
