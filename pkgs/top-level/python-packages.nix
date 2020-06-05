@@ -1367,6 +1367,8 @@ in {
 
   pytmx = callPackage ../development/python-modules/pytmx { };
 
+  pythonmagick = callPackage ../development/python-modules/pythonmagick { };
+
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };

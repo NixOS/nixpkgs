@@ -21614,8 +21614,6 @@ in
 
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
-  pythonmagick = callPackage ../applications/graphics/PythonMagick { };
-
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
   qbittorrent-nox = qbittorrent.override {
     guiSupport = false;
