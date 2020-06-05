@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     # https://source.puri.sm/Librem5/libhandy/merge_requests/451
     (fetchpatch {
       url = "https://source.puri.sm/Librem5/libhandy/commit/887beedb467984ab5c7b91830181645fadef7849.patch";
-      sha256 = "0qgh4i0l1028qxqmig4x2c10yj5s80skl70qnc5wnp71s45alvk5";
+      sha256 = "ZW6qCtHhXMsLsxgcOjVAukgPAhOdvFhxx0iAQEEk8GE=";
       excludes = [ "glade/glade-hdy-header-bar.c" ];
     })
   ];

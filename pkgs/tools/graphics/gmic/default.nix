@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
-    sha256 = "1df4x1dadf5llf8r0845vr2bv4pin2079an3gk69v697kdgnjcv2";
+    sha256 = "YjNpX5snmZ3MfMOqdICw8ZK9RN6FIJCRo7S4plroxLU=";
   };
 
   nativeBuildInputs = [

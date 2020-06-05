@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1p4n0b6jn8pyj6rwxg48ayphji8v1482cabrwhzf2avnf92znxig";
+    sha256 = "L3b7RXJ2K+E+5HkpJhAJG0UJr1eIvM6zkf4iK80Cltw=";
   };
 
   postFixup = ''

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Ubuntu";
     repo = "gnome-shell-extension-appindicator";
     rev = "v${version}";
-    sha256 = "0qm77s080nbf4gqnfzpwp8a7jf7lliz6fxbsd3lasvrr11pgsk87";
+    sha256 = "B039bgg5b63oaHp1Z36k9Dh5FLr8fmfxI25ZgIA+p2I=";
   };
 
   # This package has a Makefile, but it's used for building a zip for

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
-    sha256 = "1a48ca66izmm8hnp608jv5isg3jxb0vlfmhns0bg9nbkilag7390";
+    sha256 = "II3zFI1z2fQW0BZWRzdYXY6nY9kSAXMtRLX+aIxiiKg=";
   };
 
   nativeBuildInputs = [

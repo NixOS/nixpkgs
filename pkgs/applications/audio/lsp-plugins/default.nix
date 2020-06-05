@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/sadko4u/lsp-plugins/commit/4d901135fb82fa95e668b4d55d05e405f5e620d2.patch";
       excludes = [ "TODO.txt" ];
-      sha256 = "1s028gqvahvwm1px4xxxawrw2zrwyszb1aq93f0kspf3g7lq27f1";
+      sha256 = "wR2B6XnDXT2BGwmrsL72PH/BM1e9d9JvqHxDtfFDAug=";
     })
   ];
 

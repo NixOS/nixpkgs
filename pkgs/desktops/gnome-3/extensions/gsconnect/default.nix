@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "andyholmes";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    sha256 = "10z8kkp5agf2bfn10ad0kbhbf6hhx6vjpdh2y0z7qf28s55kd8qs";
+    sha256 = "GqM2S9FIOHw+8AK2K7fpEBq34JqgKRCsW8I9Ve6c6IM=";
   };
 
   patches = [
