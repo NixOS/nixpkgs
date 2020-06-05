@@ -1367,6 +1367,8 @@ in {
 
   pytmx = callPackage ../development/python-modules/pytmx { };
 
+  pythonmagick = callPackage ../development/python-modules/pythonmagick { };
+
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
@@ -3118,6 +3120,8 @@ in {
   jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab {};
+
+  jupyter-sphinx = callPackage ../development/python-modules/jupyter-sphinx { };
 
   jupytext = callPackage ../development/python-modules/jupytext { };
 

@@ -600,7 +600,8 @@ in
   };
 
   aflplusplus = callPackage ../tools/security/aflplusplus {
-    stdenv = clangStdenv;
+    clang = clang_9;
+    llvm = llvm_9;
     python = python37;
     wine = null;
   };
@@ -4585,6 +4586,8 @@ in
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
   peruse = libsForQt5.callPackage ../tools/misc/peruse { };
+
+  ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
 
   kst = libsForQt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
 
@@ -9508,12 +9511,11 @@ in
     nodejs = nodejs-13_x;
   };
 
-  lxappearance = callPackage ../desktops/lxde/core/lxappearance {
-    gtk2 = gtk2-x11;
-  };
+  lxappearance = callPackage ../desktops/lxde/core/lxappearance { };
 
-  lxappearance-gtk3 = lxappearance.override {
-    withGtk3 = true;
+  lxappearance-gtk2 = callPackage ../desktops/lxde/core/lxappearance {
+    gtk2 = gtk2-x11;
+    withGtk3 = false;
   };
 
   lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
@@ -16566,8 +16568,6 @@ in
 
   cachefilesd = callPackage ../os-specific/linux/cachefilesd { };
 
-  cgmanager = callPackage ../os-specific/linux/cgmanager { };
-
   checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
 
   checksec = callPackage ../os-specific/linux/checksec { };
@@ -17063,6 +17063,8 @@ in
     rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
 
     rtl8821ce = callPackage ../os-specific/linux/rtl8821ce { };
+
+    rtl88x2bu = callPackage ../os-specific/linux/rtl88x2bu { };
 
     rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
 
@@ -18181,6 +18183,8 @@ in
   media-player-info = callPackage ../data/misc/media-player-info {};
 
   medio = callPackage ../data/fonts/medio { };
+
+  mint-x-icons = callPackage ../data/icons/mint-x-icons { };
 
   mno16 = callPackage ../data/fonts/mno16 { };
 
@@ -20596,6 +20600,14 @@ in
     };
   };
 
+  libreoffice-qt = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+    libreoffice = libsForQt5.callPackage ../applications/office/libreoffice
+      (libreoffice-args // {
+        kdeIntegration = true;
+        variant = "fresh";
+      });
+  });
+
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     libreoffice = callPackage ../applications/office/libreoffice
       (libreoffice-args // {
@@ -21625,8 +21637,6 @@ in
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
 
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
-
-  pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
   qbittorrent-nox = qbittorrent.override {
@@ -23045,6 +23055,8 @@ in
   xdg-desktop-portal = callPackage ../development/libraries/xdg-desktop-portal { };
 
   xdg-desktop-portal-gtk = callPackage ../development/libraries/xdg-desktop-portal-gtk { };
+
+  xdg-desktop-portal-wlr = callPackage ../development/libraries/xdg-desktop-portal-wlr { };
 
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 

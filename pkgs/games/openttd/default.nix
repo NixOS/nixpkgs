@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, pkgconfig, SDL2, libpng, zlib, xz, freetype, fontconfig, libxdg_basedir
+{ stdenv, fetchurl, fetchzip, pkgconfig, which, SDL2, libpng, zlib, xz, freetype, fontconfig, libxdg_basedir
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
 , withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
 , writeScriptBin, makeWrapper, runtimeShell
@@ -29,14 +29,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchurl {
     url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
-    sha256 = "0d22a3c50f7a321f4f211594f4987ac16c381e8e3e40f116848e63e91e7fbb9b";
+    sha256 = "1xdn9rr858nq22a13cpbhcw74bwygf7lw95kvx3wn4zvb795b74k";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig which makeWrapper ];
   buildInputs = [ SDL2 libpng xz zlib freetype fontconfig libxdg_basedir ]
     ++ stdenv.lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
