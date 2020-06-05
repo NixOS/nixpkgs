@@ -32,47 +32,6 @@ in
 
   tensorflow-logging = setTensorflowSourceRoot "tensorflow-logging" super.tensorflow-logging;
 
-  tensorflow-mnist = (setTensorflowSourceRoot "tensorflow-mnist" super.tensorflow-mnist).override {
-    # https://github.com/tensorflow/haskell/issues/215
-    tensorflow-mnist-input-data = self.tensorflow-mnist-input-data;
-  };
-
-  tensorflow-mnist-input-data = setTensorflowSourceRoot "tensorflow-mnist-input-data" (super.callPackage (
-    { mkDerivation, base, bytestring, Cabal, cryptonite, directory
-    , filepath, HTTP, network-uri, stdenv
-    }:
-
-    let
-      fileInfos = {
-        "train-images-idx3-ubyte.gz" = "440fcabf73cc546fa21475e81ea370265605f56be210a4024d2ca8f203523609";
-        "train-labels-idx1-ubyte.gz" = "3552534a0a558bbed6aed32b30c495cca23d567ec52cac8be1a0730e8010255c";
-        "t10k-images-idx3-ubyte.gz"  = "8d422c7b0a1c1c79245a5bcf07fe86e33eeafee792b84584aec276f5a2dbc4e6";
-        "t10k-labels-idx1-ubyte.gz"  = "f7ae60f92e00ec6debd23a6088c31dbd2371eca3ffa0defaefb259924204aec6";
-      };
-      downloads = with pkgs.lib; flip mapAttrsToList fileInfos (name: sha256:
-                    pkgs.fetchurl {
-                      url = "http://yann.lecun.com/exdb/mnist/${name}";
-                      inherit sha256;
-                    });
-    in
-    mkDerivation {
-      pname = "tensorflow-mnist-input-data";
-      version = "0.1.0.0";
-      enableSeparateDataOutput = true;
-      setupHaskellDepends = [
-        base bytestring Cabal cryptonite directory filepath HTTP
-        network-uri
-      ];
-      preConfigure = pkgs.lib.strings.concatStringsSep "\n" (
-          map (x: "ln -s ${x} data/$(stripHash ${x})") downloads
-        );
-      libraryHaskellDepends = [ base ];
-      homepage = "https://github.com/tensorflow/haskell#readme";
-      description = "Downloader of input data for training MNIST";
-      license = stdenv.lib.licenses.asl20;
-    }
-  ) {});
-
   tensorflow-opgen = setTensorflowSourceRoot "tensorflow-opgen" super.tensorflow-opgen;
 
   tensorflow-ops = setTensorflowSourceRoot "tensorflow-ops" super.tensorflow-ops;
