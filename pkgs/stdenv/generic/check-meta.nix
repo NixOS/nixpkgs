@@ -80,9 +80,9 @@ let
   pos_str = meta: meta.position or "«unknown-file»";
 
   remediation = {
-    unfree = remediate_whitelist "Unfree";
-    broken = remediate_whitelist "Broken";
-    unsupported = remediate_whitelist "UnsupportedSystem";
+    unfree = remediate_whitelist "Unfree" remediate_unfree_predicate;
+    broken = remediate_whitelist "Broken" (x: "");
+    unsupported = remediate_whitelist "UnsupportedSystem" (x: "");
     blacklisted = x: "";
     insecure = remediate_insecure;
     broken-outputs = remediateOutputsToInstall;
@@ -98,7 +98,17 @@ let
     Broken = "broken packages";
     UnsupportedSystem = "packages that are unsupported for this system";
   }.${allow_attr};
-  remediate_whitelist = allow_attr: attrs:
+  remediate_unfree_predicate = attrs:
+    ''
+
+      Alternatively you can configure a predicate to whitelist specific packages:
+        { nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+            "${lib.getName attrs}"
+          ];
+        }
+    '';
+
+  remediate_whitelist = allow_attr: rebuild_amendment: attrs:
     ''
       a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
          for a single invocation of the nix tools.
@@ -108,7 +118,7 @@ let
       b) For `nixos-rebuild` you can set
         { nixpkgs.config.allow${allow_attr} = true; }
       in configuration.nix to override this.
-
+      ${rebuild_amendment attrs}
       c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
         { allow${allow_attr} = true; }
       to ~/.config/nixpkgs/config.nix.
