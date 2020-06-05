@@ -137,9 +137,6 @@ self: super: {
     then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
     else super.conduit-extra;
 
-  # https://github.com/cachix/cachix/issues/308
-  cachix = dontCheck super.cachix;
-
   # Fix Darwin build.
   halive = if pkgs.stdenv.isDarwin
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
