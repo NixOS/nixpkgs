@@ -197,6 +197,8 @@ in {
 
   aplpy = callPackage ../development/python-modules/aplpy { };
 
+  apply_defaults = callPackage ../development/python-modules/apply_defaults { };
+
   apprise = callPackage ../development/python-modules/apprise { };
 
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
