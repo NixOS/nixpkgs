@@ -1,6 +1,6 @@
 { stdenv
 , poppler_gi
-, gdk_pixbuf
+, gdk-pixbuf
 , librsvg
 , ffmpeg
 , exiftool
@@ -33,7 +33,7 @@ in buildPythonApplication rec {
     exiftool
     gobject-introspection
     poppler_gi
-    gdk_pixbuf
+    gdk-pixbuf
   ];
 
   meta = {
