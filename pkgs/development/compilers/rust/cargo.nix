@@ -9,8 +9,7 @@ rustPlatform.buildRustPackage {
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
-  preBuild = "pushd src/tools/cargo";
-  postBuild = "popd";
+  buildAndTestSubdir = "src/tools/cargo";
 
   passthru.rustc = rustc;
 
