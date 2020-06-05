@@ -10243,6 +10243,7 @@ broken-packages:
   - typeable-th
   - TypeClass
   - typed-encoding
+  - typed-encoding-encoding
   - typed-streams
   - typed-wire
   - typedflow
@@ -10423,6 +10424,7 @@ broken-packages:
   - vect-floating-accelerate
   - vect-opengl
   - vector-bytestring
+  - vector-circular
   - vector-clock
   - vector-conduit
   - vector-endian
