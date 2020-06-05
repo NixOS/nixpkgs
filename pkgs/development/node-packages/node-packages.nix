@@ -74596,6 +74596,27 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  rollup = nodeEnv.buildNodePackage {
+    name = "rollup";
+    packageName = "rollup";
+    version = "2.15.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/rollup/-/rollup-2.15.0.tgz";
+      sha512 = "HAk4kyXiV5sdNDnbKWk5zBPnkX/DAgx09Kbp8rRIRDVsTUVN3vnSowR7ZHkV6/lAiE6c2TQ8HtYb72aCPGW4Jw==";
+    };
+    dependencies = [
+      sources."fsevents-2.1.3"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Next-generation ES module bundler";
+      homepage = https://rollupjs.org/;
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   "rust-analyzer-build-deps-../../misc/vscode-extensions/rust-analyzer/build-deps" = nodeEnv.buildNodePackage {
     name = "rust-analyzer";
     packageName = "rust-analyzer";
