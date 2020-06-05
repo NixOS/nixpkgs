@@ -4044,7 +4044,9 @@ in
 
   pgformatter = callPackage ../development/tools/pgformatter { };
 
-  pgloader = callPackage ../development/tools/pgloader { };
+  pgloader = callPackage ../development/tools/pgloader {
+    openssl = openssl_1_0_2;
+  };
 
   pigz = callPackage ../tools/compression/pigz { };
 
