@@ -75,6 +75,24 @@ pkgs.rustPlatform.buildRustPackage {
 }
 ```
 
+### Building a crate with an absent or out-of-date Cargo.lock file
+
+`buildRustPackage` needs a `Cargo.lock` file to get all dependencies in the
+source code in a reproducible way. If it is missing or out-of-date one can use
+the `cargoPatches` attribute to update or add it.
+
+```
+{ lib, rustPlatform, fetchFromGitHub }:
+
+rustPlatform.buildRustPackage rec {
+  (...)
+  cargoPatches = [
+    # a patch file to add/update Cargo.lock in the source code
+    ./add-Cargo.lock.patch
+  ];
+}
+```
+
 ## Compiling Rust crates using Nix instead of Cargo
 
 ### Simple operation
