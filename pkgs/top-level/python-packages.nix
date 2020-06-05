@@ -6338,7 +6338,7 @@ in {
 
   python_statsd = callPackage ../development/python-modules/python_statsd { };
 
-  skein = disabledIf isPy27 (callPackage ../development/python-modules/skein { });
+  skein = callPackage ../development/python-modules/skein { };
 
   stompclient = callPackage ../development/python-modules/stompclient { };
 

@@ -1,11 +1,13 @@
 { buildPythonPackage
 , callPackage
 , fetchPypi
+, isPy27
 , jre
 , lib
 , pythonPackages
 , stdenv
 }:
+
 let
   pname = "skein";
   version = "0.8.0";
@@ -17,6 +19,7 @@ let
 in
 buildPythonPackage rec {
   inherit pname version src;
+  disabled = isPy27;
 
   propagatedBuildInputs = with pythonPackages; [ cryptography grpcio grpcio-tools jupyter pytest pyyaml requests jre ];
 
