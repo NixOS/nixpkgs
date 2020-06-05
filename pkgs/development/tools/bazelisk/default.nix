@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "bazelisk";
-  version = "1.4.0";
+  version = "1.5.0";
 
   patches = [ ./gomod.patch ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "bazelbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14zp0bi0p1rfbx1pxi5y28ndxwbqbvfx0pvy3jh1mnx5qsii1gcq";
+    sha256 = "06vimiklcprsxq7l6rmxshv8l0kjr7aanpm206qgx3wvw4shibmw";
   };
 
-  vendorSha256 = "10156k90ky3znb9rxhy7zasskxmlcs5cn9f3xk25ana1c66vxszr";
+  vendorSha256 = "11iwgrnid0f8sq9f23m1a3s55sc7lpl60phykmd9ss4xs39bapl5";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.BazeliskVersion=${version}" ];
 
