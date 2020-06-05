@@ -110,7 +110,7 @@ in with passthru; stdenv.mkDerivation {
     # Backport a fix for discovering `rpmbuild` command when doing `python setup.py bdist_rpm` to 3.5, 3.6, 3.7.
     # See: https://bugs.python.org/issue11122
     ./3.7/fix-hardcoded-path-checking-for-rpmbuild.patch
-  ] ++ optionals (isPy37 || isPy38) [
+  ] ++ optionals (isPy37 || isPy38 || isPy39) [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
   ] ++ optionals (pythonOlder "3.8") [
@@ -129,7 +129,7 @@ in with passthru; stdenv.mkDerivation {
     (
       if isPy35 then
         ./3.5/python-3.x-distutils-C++.patch
-      else if isPy37 || isPy38 then
+      else if isPy37 || isPy38 || isPy39 then
         ./3.7/python-3.x-distutils-C++.patch
       else
         fetchpatch {

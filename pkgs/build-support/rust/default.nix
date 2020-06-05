@@ -137,6 +137,7 @@ stdenv.mkDerivation (args // {
       # give a friendlier error msg.
       if ! [ -e $srcLockfile ]; then
         echo "ERROR: Missing Cargo.lock from src. Expected to find it at: $srcLockfile"
+        echo "Hint: You can use the cargoPatches attribute to add a Cargo.lock manually to the build."
         exit 1
       fi
 

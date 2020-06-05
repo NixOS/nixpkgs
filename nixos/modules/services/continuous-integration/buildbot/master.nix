@@ -16,7 +16,7 @@ let
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
      workers       = [${concatStringsSep "," cfg.workers}],
-     protocols     = { 'pb': {'port': ${toString cfg.bpPort} } },
+     protocols     = { 'pb': {'port': ${toString cfg.pbPort} } },
      title         = '${escapeStr cfg.title}',
      titleURL      = '${escapeStr cfg.titleUrl}',
      buildbotURL   = '${escapeStr cfg.buildbotUrl}',
@@ -155,10 +155,20 @@ in {
         description = "Specifies the Buildbot directory.";
       };
 
-      bpPort = mkOption {
+      pbPort = mkOption {
         default = 9989;
-        type = types.int;
-        description = "Port where the master will listen to Buildbot Worker.";
+        type = types.either types.str types.int;
+        example = "'tcp:9990:interface=127.0.0.1'";
+        description = ''
+          The buildmaster will listen on a TCP port of your choosing
+          for connections from workers.
+          It can also use this port for connections from remote Change Sources,
+          status clients, and debug tools.
+          This port should be visible to the outside world, and you’ll need to tell
+          your worker admins about your choice.
+          If put in (single) quotes, this can also be used as a connection string,
+          as defined in the <link xlink:href="https://twistedmatrix.com/documents/current/core/howto/endpoints.html">ConnectionStrings guide</link>.
+        '';
       };
 
       listenAddress = mkOption {
@@ -263,6 +273,10 @@ in {
       };
     };
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "buildbot-master" "bpPort" ] [ "services" "buildbot-master" "pbPort" ])
+  ];
 
   meta.maintainers = with lib.maintainers; [ nand0p mic92 ];
 }
