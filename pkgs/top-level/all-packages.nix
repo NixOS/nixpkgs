@@ -2034,6 +2034,8 @@ in
 
   massren = callPackage ../tools/misc/massren { };
 
+  mat2 = callPackage ../tools/graphics/mat2 { };
+
   medusa = callPackage ../tools/security/medusa { };
 
   megasync = libsForQt5.callPackage ../applications/misc/megasync { };
