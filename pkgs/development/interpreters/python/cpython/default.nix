@@ -31,6 +31,7 @@
 , stripBytecode ? false
 , includeSiteCustomize ? true
 , static ? false
+, enableOptimizations ? true
 }:
 
 assert x11Support -> tcl != null
@@ -99,31 +100,6 @@ in with passthru; stdenv.mkDerivation {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
-  ] ++ optionals stdenv.isLinux [
-    # Optimize symbol tables for the sake of dynamic linking.
-    # Significant for Python because of extension modules.
-    (
-      if pythonAtLeast "3.8" then
-        fetchpatch {
-          url = "https://salsa.debian.org/cpython-team/python3/-/raw/3.8.3rc1-1/debian/patches/link-opt.diff";
-          sha256 = "0va85318nahnqgydwjs7723h8gx41inbdawdy6v4hiykzgc8s7vs";
-        }
-      else if isPy37 then
-        fetchurl {
-          url = "https://salsa.debian.org/cpython-team/python3/-/raw/3.7.6-1/debian/patches/link-opt.diff";
-          sha256 = "1aqvsc0p3sxnfsi8jz7537wl6v95v26ba4nflwvmn5lxlc3y3g13";
-        }
-      else if isPy36 then
-        fetchpatch {
-          url = "https://salsa.debian.org/cpython-team/python3/-/raw/3.6.8-1/debian/patches/link-opt.diff";
-          sha256 = "1nhdrgla75ily9gk7xx0crxa7ynqzks0djxk36sa3lgg5w8vjvyr";
-        }
-      else
-        fetchpatch {
-          url = "https://salsa.debian.org/cpython-team/python3/-/raw/27103a32e/debian/patches/link-opt.diff";
-          sha256 = "0vp36276ndbrwr7882vg7vjd61c8mv7bqgal6bbh2fimp6zlkdhv";
-        }
-    )
   ] ++ optionals (isPy35 || isPy36) [
     # Determinism: Write null timestamps when compiling python files.
     ./3.5/force_bytecode_determinism.patch
@@ -176,11 +152,12 @@ in with passthru; stdenv.mkDerivation {
   PYTHONHASHSEED=0;
 
   configureFlags = [
-    "--enable-optimizations"
     "--enable-shared"
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals enableOptimizations [
+    "--enable-optimizations"
   ] ++ optionals (pythonOlder "3.7") [
     # This is unconditionally true starting in CPython 3.7.
     "--with-threads"

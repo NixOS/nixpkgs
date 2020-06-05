@@ -146,6 +146,7 @@ in {
     rebuildBytecode = false;
     stripBytecode = true;
     includeSiteCustomize = false;
+    enableOptimizations = false;
   }).overrideAttrs(old: {
     pname = "python3-minimal";
     meta = old.meta // {

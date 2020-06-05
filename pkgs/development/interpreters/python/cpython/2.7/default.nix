@@ -100,13 +100,6 @@ let
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
 
-      # Optimize symbol tables for the sake of dynamic linking.
-      # Significant for Python because of extension modules.
-      (fetchpatch {
-        url = "https://salsa.debian.org/cpython-team/python3/-/raw/27103a32e/debian/patches/link-opt.diff";
-        sha256 = "0vp36276ndbrwr7882vg7vjd61c8mv7bqgal6bbh2fimp6zlkdhv";
-      })
-
     ] ++ optionals stdenv.hostPlatform.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
