@@ -9698,6 +9698,21 @@ let
     };
   };
 
+  IRCUtils = buildPerlPackage {
+    pname = "IRC-Utils";
+    version = "0.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HI/HINRIK/IRC-Utils-0.12.tar.gz";
+      sha256 = "c7d6311eb6c79e983833c9e6b4e8d426d07a9874d20f4bc641b313b99c9bc8a0";
+    };
+    meta = {
+      homepage = "http://metacpan.org/release/IRC-Utils";
+      description = "Common utilities for IRC-related tasks";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
   # TODO: use CPAN version
   ImageExifTool = buildPerlPackage {
     pname = "Image-ExifTool";
@@ -10300,6 +10315,23 @@ let
       sha256 = "113f91d8fc2c630437153a49fb7a52b023af8f6278ed96c070b1f60824b8eae1";
     };
     doCheck = false;
+  };
+
+  LinkEmbedder = buildPerlPackage {
+    pname = "LinkEmbedder";
+    version = "1.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.12.tar.gz";
+      sha256 = "1fd25bd6047b45cdcb1ab71a3d3bb0b36c71ec844a8742dee0bb34f8587fbd08";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/linkembedder";
+      description = "Embed / expand oEmbed resources and other URL / links";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = with maintainers; [ sgo ];
+    };
   };
 
   LinuxACL = buildPerlPackage {
@@ -12359,6 +12391,22 @@ let
       description = "Render exceptions as text in command line user agents";
       license = stdenv.lib.licenses.artistic2;
       maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MojoliciousPluginWebpack = buildPerlPackage {
+    pname = "Mojolicious-Plugin-Webpack";
+    version = "0.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Webpack-0.12.tar.gz";
+      sha256 = "2a0856e68446fc22b46692d9a6737f78467654f31e58ad1935e708bddf806d2c";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/mojolicious-plugin-webpack";
+      description = "Mojolicious <3 Webpack";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = with maintainers; [ sgo ];
     };
   };
 
@@ -14715,6 +14763,21 @@ let
     propagatedBuildInputs = [ IOStringy LWP ];
     meta = with stdenv.lib; {
       license = with licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ParseIRC = buildPerlPackage {
+    pname = "Parse-IRC";
+    version = "1.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Parse-IRC-1.22.tar.gz";
+      sha256 = "457b09897f37d38a7054f9563247365427fe24101622ed4c7f054723a45b58d5";
+    };
+    meta = {
+      homepage = "https://github.com/bingos/parse-irc";
+      description = "A parser for the IRC protocol";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
     };
   };
 
@@ -20374,6 +20437,21 @@ let
     };
   };
 
+  TimePiece = buildPerlPackage {
+    pname = "Time-Piece";
+    version = "1.3401";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ES/ESAYM/Time-Piece-1.3401.tar.gz";
+      sha256 = "4b55b7bb0eab45cf239a54dfead277dfa06121a43e63b3fce0853aecfdb04c27";
+    };
+    meta = {
+      description = "Object Oriented time objects";
+      homepage = "https://metacpan.org/release/Time-Piece";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
   Tirex = buildPerlPackage rec {
     pname = "Tirex";
     version = "0.6.1";
@@ -20632,6 +20710,22 @@ let
       description = "Preparation of Internationalized Strings (RFC 3454)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  UnicodeUTF8 = buildPerlPackage {
+    pname = "Unicode-UTF8";
+    version = "0.62";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CH/CHANSEN/Unicode-UTF8-0.62.tar.gz";
+      sha256 = "fa8722d0b74696e332fddd442994436ea93d3bfc7982d4babdcedfddd657d0f6";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      homepage = "https://github.com/chansen/p5-unicode-utf8";
+      description = "Encoding and decoding of UTF-8 encoding form";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
     };
   };
 
