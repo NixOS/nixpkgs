@@ -127,6 +127,8 @@ let
       auto = ${toString mailbox.auto}
   '' + optionalString (mailbox.specialUse != null) ''
     special_use = \${toString mailbox.specialUse}
+  '' + optionalString (mailbox.autoexpunge != null) ''
+    autoexpunge = ${toString mailbox.autoexpunge}
   '' + "}";
 
   mailboxes = { ... }: {
@@ -141,6 +143,12 @@ let
         default = "no";
         example = "subscribe";
         description = "Whether to automatically create or create and subscribe to the mailbox or not.";
+      };
+      autoexpunge = mkOption {
+        type = types.nullOr (types.strMatching ''[0-9]+([wdhms]|weeks|days|hours|mins|secs)'');
+        default = null;
+        example = "30d";
+        description = "When to automatically expunge messages from this mailbox. Processed on disconnect.";
       };
       specialUse = mkOption {
         type = types.nullOr (types.enum [ "All" "Archive" "Drafts" "Flagged" "Junk" "Sent" "Trash" ]);
