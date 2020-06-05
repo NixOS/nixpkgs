@@ -5993,7 +5993,6 @@ broken-packages:
   - hmt-diagrams
   - hmumps
   - hnetcdf
-  - hnix
   - hnix-store-remote
   - HNM
   - hnormalise
