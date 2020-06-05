@@ -221,7 +221,7 @@ self: super: {
 
   # 2020-06-05: HACK: does not passes own build suite - `dontCheck`
   hnix = generateOptparseApplicativeCompletion "hnix" (
-    dontCheck (doJailbreak (super.hnix.override { these = self.these_0_7_6; }))
+    dontCheck (doJailbreak super.hnix)
     );
 
   # Fails for non-obvious reasons while attempting to use doctest.
