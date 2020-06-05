@@ -118,6 +118,7 @@ slugs=(
   carlpett/terraform-provider-sops
   poseidon/terraform-provider-matchbox
   spaceapegames/terraform-provider-wavefront
+  poseidon/terraform-provider-ct
   tweag/terraform-provider-nixos
   tweag/terraform-provider-secret
 )
