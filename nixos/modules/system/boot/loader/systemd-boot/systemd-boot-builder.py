@@ -52,6 +52,8 @@ def write_loader_conf(profile, generation):
             f.write("default nixos-generation-%d\n" % (generation))
         if not @editor@:
             f.write("editor 0\n");
+        if not @autoEntries@:
+            f.write("auto-entries 0\n");
         f.write("console-mode @consoleMode@\n");
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 

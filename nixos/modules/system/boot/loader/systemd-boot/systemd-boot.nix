@@ -24,7 +24,7 @@ let
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode;
+    inherit (cfg) consoleMode autoEntries;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
@@ -114,6 +114,14 @@ in {
           <literal>true</literal>.
         '';
       };
+    };
+
+    autoEntries = mkOption {
+      default = true;
+
+      type = types.bool;
+
+      description = "Whether to automatically add Windows, EFI Shell, and Default Loader if found";
     };
   };
 
