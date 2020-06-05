@@ -216,9 +216,6 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  # Needs older version of QuickCheck.
-  these_0_7_6 = doJailbreak super.these_0_7_6;
-
   # 2020-06-05: HACK: does not passes own build suite - `dontCheck`
   hnix = generateOptparseApplicativeCompletion "hnix" (
     dontCheck (doJailbreak super.hnix)
