@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pam, python3, libxslt, perl, ArchiveZip, gettext
+{ stdenv, fetchurl, fetchpatch, lib, pam, python3, libxslt, perl, ArchiveZip, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
@@ -29,7 +29,6 @@ let
 
   inherit (primary-src) major minor subdir version;
 
-  lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
 
   mkDrv = if kdeIntegration then mkDerivation else stdenv.mkDerivation;
@@ -377,7 +376,7 @@ in (mkDrv rec {
     "--enable-kf5"
     "--enable-qt5"
     "--enable-gtk3-kde5"
-  ] ++ lib.optional (variant == "still") "--disable-gtk"; # disables GTK2, GTK3 is still there
+  ] ++ lib.optional (lib.versionOlder version "6.4") "--disable-gtk"; # disables GTK2, GTK3 is still there
 
   checkPhase = ''
     make unitcheck
