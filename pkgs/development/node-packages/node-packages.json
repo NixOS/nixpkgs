@@ -60,7 +60,6 @@
 , "csslint"
 , "dat"
 , "dhcp"
-, "dnschain"
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
 , "elm-oracle"
