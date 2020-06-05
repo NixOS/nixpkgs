@@ -101,6 +101,14 @@ stdenv.mkDerivation rec {
     patchShebangs     libs/libvpx/build/make/rtcd.pl
     substituteInPlace libs/libvpx/build/make/configure.sh \
       --replace AS=\''${AS} AS=yasm
+
+    # Disable advertisement banners
+    for f in src/include/cc.h libs/esl/src/include/cc.h; do
+      {
+        echo 'const char *cc = "";'
+        echo 'const char *cc_s = "";'
+      } > $f
+    done
   '';
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
