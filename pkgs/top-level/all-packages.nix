@@ -914,6 +914,8 @@ in
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
+  sed-opal-unlocker = callPackage ../tools/security/sed-opal-unlocker { };
+
   sedutil = callPackage ../tools/security/sedutil { };
 
   elvish = callPackage ../shells/elvish { };
