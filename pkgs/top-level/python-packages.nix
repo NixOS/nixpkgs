@@ -865,6 +865,8 @@ in {
 
   jsonpath = callPackage ../development/python-modules/jsonpath { };
 
+  jsonrpcclient = callPackage ../development/python-modules/jsonrpcclient { };
+
   junit-xml = callPackage ../development/python-modules/junit-xml { };
 
   junitparser = callPackage ../development/python-modules/junitparser { };
