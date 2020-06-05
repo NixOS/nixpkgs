@@ -96,9 +96,9 @@ in (mkDrv rec {
   # are in multiple directories due to each having their own derivation.
   postPatch = let
     inc = e: path:
-      "${e.dev}/include/KF5/${path}";
+      "${lib.getDev e}/include/KF5/${path}";
     libs = list:
-      lib.concatMapStringsSep " " (e: "-L${e.out}/lib") list;
+      lib.concatMapStringsSep " " (e: "-L${lib.getLib e}/lib") list;
   in ''
     substituteInPlace shell/source/unix/exec/shellexec.cxx \
       --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
@@ -377,7 +377,7 @@ in (mkDrv rec {
     "--enable-kf5"
     "--enable-qt5"
     "--enable-gtk3-kde5"
-  ];
+  ] ++ lib.optional (variant == "still") "--disable-gtk"; # disables GTK2, GTK3 is still there
 
   checkPhase = ''
     make unitcheck
