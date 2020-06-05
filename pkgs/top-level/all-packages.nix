@@ -14170,6 +14170,8 @@ in
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
+  nanopb = callPackage ../development/libraries/nanopb { };
+
   gnupth = callPackage ../development/libraries/pth { };
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
 
