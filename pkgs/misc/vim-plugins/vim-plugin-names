@@ -282,6 +282,7 @@ megaannum/self
 mengelbrecht/lightline-bufferline
 mfukar/robotframework-vim
 mg979/vim-visual-multi
+mhartington/nvim-typescript
 mhinz/vim-grepper
 mhinz/vim-janah
 mhinz/vim-sayonara

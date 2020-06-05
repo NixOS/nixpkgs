@@ -1,5 +1,5 @@
 { lib, stdenv
-, python, cmake, meson, vim, ruby
+, python, cmake, meson, vim, ruby, callPackage, runCommand
 , which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim, stylish-haskell
@@ -10,7 +10,7 @@
 , languagetool
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
-, nodePackages
+, nodePackages, nodejs
 , dasht
 
 # coc-go dependency
@@ -710,6 +710,35 @@ self: super: {
   lf-vim = super.lf-vim.overrideAttrs(old: {
     dependencies = with super; [ bclose-vim ];
   });
+
+  nvim-typescript = let
+     # node2nix dynamically resolves nodeDependencies
+     nvim-typescript-deps = (callPackage (
+       runCommand "nvim-typescript-rplugin.nix" {
+         buildInputs = [ nodePackages.node2nix ];
+       } ''
+         mkdir -p $out
+         cd ${super.nvim-typescript.src}/rplugin/node/nvim_typescript
+         node2nix --input package.json \
+                  --lock package-lock.json \
+                  --include-peer-dependencies \
+                  --nodejs-10 \
+                  --development \
+                  --output $out/node-packages.nix \
+                  --node-env $out/node-env.nix \
+                  --composition $out/default.nix
+       ''
+     ) {});
+   in
+     super.nvim-typescript.overrideAttrs(old: {
+       buildInputs = [ nodejs ];
+       buildPhase = ''
+         pushd rplugin/node/nvim_typescript
+         cp -r ${nvim-typescript-deps.shell.nodeDependencies}/lib/node_modules node_modules
+         npm run build
+         popd
+       '';
+     });
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
     postPatch = old.postPatch or "" + ''
