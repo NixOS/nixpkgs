@@ -9507,12 +9507,11 @@ in
     nodejs = nodejs-13_x;
   };
 
-  lxappearance = callPackage ../desktops/lxde/core/lxappearance {
-    gtk2 = gtk2-x11;
-  };
+  lxappearance = callPackage ../desktops/lxde/core/lxappearance { };
 
-  lxappearance-gtk3 = lxappearance.override {
-    withGtk3 = true;
+  lxappearance-gtk2 = callPackage ../desktops/lxde/core/lxappearance {
+    gtk2 = gtk2-x11;
+    withGtk3 = false;
   };
 
   lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
