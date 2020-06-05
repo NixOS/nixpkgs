@@ -24,6 +24,12 @@ in
           containers. Users in the "lxd" group can interact with
           the daemon (e.g. to start or stop containers) using the
           <command>lxc</command> command line tool, among others.
+
+          Most of the time, you'll also want to start lxcfs, so
+          that containers can "see" the limits:
+          <code>
+            virtualisation.lxc.lxcfs.enable = true;
+          </code>
         '';
       };
 
@@ -114,6 +120,12 @@ in
         LimitNOFILE = "1048576";
         LimitNPROC = "infinity";
         TasksMax = "infinity";
+
+        # By default, `lxd` loads configuration files from hard-coded
+        # `/usr/share/lxc/config` - since this is a no-go for us, we have to
+        # explicitly tell it where the actual configuration files are
+        Environment = mkIf (config.virtualisation.lxc.lxcfs.enable)
+          "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
       };
     };
 
