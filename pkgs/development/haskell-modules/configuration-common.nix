@@ -216,9 +216,9 @@ self: super: {
   # Needs older version of QuickCheck.
   these_0_7_6 = doJailbreak super.these_0_7_6;
 
-  hnix =
-    generateOptparseApplicativeCompletion "hnix" (
-      dontCheck (doJailbreak (super.hnix.override { these = self.these_0_7_6; }))
+  # 2020-06-05: HACK: does not passes own build suite - `dontCheck`
+  hnix = generateOptparseApplicativeCompletion "hnix" (
+    dontCheck (doJailbreak (super.hnix.override { these = self.these_0_7_6; }))
     );
 
   # Fails for non-obvious reasons while attempting to use doctest.
