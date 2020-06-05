@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     patchShebangs --build tests
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out) OS=" ];
 
   # The name of the main executable of pkgs.chez is `scheme`
   buildFlags = [ "bootstrap-build" "SCHEME=scheme" ];
