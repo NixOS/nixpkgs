@@ -3121,6 +3121,8 @@ in {
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab {};
 
+  jupyter-sphinx = callPackage ../development/python-modules/jupyter-sphinx { };
+
   jupytext = callPackage ../development/python-modules/jupytext { };
 
   PyLTI = callPackage ../development/python-modules/pylti { };
