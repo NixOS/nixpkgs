@@ -15,7 +15,6 @@ in
   ###### interface
 
   options = {
-
     virtualisation.lxd = {
       enable = mkOption {
         type = types.bool;
@@ -30,7 +29,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.lxd;
+        default = pkgs.lxd.override { nftablesSupport = config.networking.nftables.enable; };
         defaultText = "pkgs.lxd";
         description = ''
           The LXD package to use.
@@ -65,6 +64,7 @@ in
           with nixos.
         '';
       };
+
       recommendedSysctlSettings = mkOption {
         type = types.bool;
         default = false;
@@ -83,7 +83,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
     environment.systemPackages = [ cfg.package ];
 
     security.apparmor = {
