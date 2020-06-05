@@ -52,6 +52,13 @@ in stdenv.mkDerivation rec {
     chmod +x $out/bin/protoc-gen-nanopb
   '';
 
+  passthru.tests = {
+    simple-proto2 = callPackage ./test-simple-proto2 {};
+    simple-proto3 = callPackage ./test-simple-proto3 {};
+    message-with-annotations = callPackage ./test-message-with-annotations {};
+    message-with-options = callPackage ./test-message-with-options {};
+  };
+
   meta = with lib; {
     inherit (protobuf.meta) platforms;
 
