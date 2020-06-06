@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "micronaut";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchzip {
     url = "https://github.com/micronaut-projects/micronaut-core/releases/download/v${version}/${pname}-${version}.zip";
-    sha256 = "16n1dk9jgy78mrkvr78m4x772kn09y5aa4d06wl4sdgn6apcq2mc";
+    sha256 = "0jmj5xpj4invvpp289gh81vq7b4mmfhqb2h50yjn7wgdicyn295a";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
