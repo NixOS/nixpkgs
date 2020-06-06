@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "hactool";
-  version = "1.3.3";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "SciresM";
     repo = "hactool";
-    rev = "1.3.3";
-    sha256 = "1qb51fck7liqc1ridms8wdlzgbdbvp6iv4an8jvmzhcj5p5xq631";
+    rev = "1.4.0";
+    sha256 = "0305ngsnwm8npzgyhyifasi4l802xnfz19r0kbzzniirmcn4082d";
   };
 
   preBuild = ''
