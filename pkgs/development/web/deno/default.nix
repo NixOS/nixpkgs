@@ -61,6 +61,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion deno.{bash,fish} --zsh _deno
   '';
 
+  passthru.updateScript = ./update/update.ts;
+
   meta = with stdenv.lib; {
     homepage = "https://deno.land/";
     changelog = "${src.meta.homepage}/releases/tag/v${version}";
