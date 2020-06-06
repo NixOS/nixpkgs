@@ -47,7 +47,6 @@ in
         auth    required        pam_succeed_if.so user != root quiet_success
         auth    required        pam_securetty.so
         auth    requisite       pam_nologin.so
-        auth    optional        ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so
       '';
     };
 
