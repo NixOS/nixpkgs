@@ -1617,6 +1617,17 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
+  pyuavcan = callPackage ../development/python-modules/pyuavcan { 
+    # this version pinpoint to anold version is necessary due to a regression
+    nunavut = self.nunavut.overridePythonAttrs ( old: rec {
+      version = "0.2.3";
+      src = old.src.override {
+        inherit version;
+        sha256 = "0x8a9h4mc2r2yz49s9arsbs4bn3h25mvmg4zbgksm9hcyi9536x5";
+      };
+    });
+  };
+
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
   vdf = callPackage ../development/python-modules/vdf { };
