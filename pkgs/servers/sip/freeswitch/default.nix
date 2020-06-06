@@ -3,7 +3,7 @@
 , openssl, perl, sqlite, libjpeg, speex, pcre
 , ldns, libedit, yasm, which, libsndfile, libtiff
 
-, curl, lua, libmysqlclient, postgresql, libopus, libctb, gsmlib
+, callPackage
 
 , SystemConfiguration
 
@@ -13,9 +13,7 @@
 
 let
 
-availableModules = import ./modules.nix {
-  inherit curl lua libmysqlclient postgresql libopus libctb gsmlib;
-};
+availableModules = callPackage ./modules.nix { };
 
 # the default list from v1.8.7, except with applications/mod_signalwire also disabled
 defaultModules = mods: with mods; [
