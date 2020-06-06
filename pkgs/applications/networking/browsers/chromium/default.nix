@@ -2,6 +2,7 @@
 , makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
+, pipewire_0_2
 , gcc, nspr, nss, patchelfUnstable, runCommand
 , lib
 
@@ -152,7 +153,7 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
-    libPath = stdenv.lib.makeLibraryPath [ libva ];
+    libPath = stdenv.lib.makeLibraryPath [ libva pipewire_0_2 ];
 
   in with stdenv.lib; ''
     mkdir -p "$out/bin"
