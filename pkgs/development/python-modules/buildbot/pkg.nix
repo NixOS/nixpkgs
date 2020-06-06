@@ -1,8 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, buildbot }:
 
 buildPythonPackage rec {
   pname = "buildbot-pkg";
-  version = "2.8.1";
+  inherit (buildbot) version;
 
   src = fetchPypi {
     inherit pname version;
