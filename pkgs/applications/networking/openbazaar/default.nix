@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openbazaar";
-  version = "0.14.2";
+  version = "0.14.3";
 
   suffix = {
     i686-linux    = "linux-386";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = {
       i686-linux    = "02kl4ci2pz86qqsll7578q0acygncsyylaschjzzii34c86f1aym";
       x86_64-darwin = "1v5m94x4x0nc6i8zlcwb36ps1zpgqgcsz81x1ghkz5c9xzszgzbp";
-      x86_64-linux  = "0m0digw66rzhwl2im88qavli9cc5vxd9pwj6ix86dcf98r93xsrp";
+      x86_64-linux  = "093rwn4nfirknbxz58n16v0l0apj2h0yr63f64fqysmy78883al2";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
