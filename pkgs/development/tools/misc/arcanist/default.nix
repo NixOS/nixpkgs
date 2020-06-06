@@ -42,10 +42,12 @@ stdenv.mkDerivation {
     mkdir -p $out/bin $out/libexec
     cp -R libphutil $out/libexec/libphutil
     cp -R arcanist  $out/libexec/arcanist
-
-    ln -s $out/libexec/arcanist/bin/arc $out/bin
-    wrapProgram $out/bin/arc \
-      --prefix PATH : "${php}/bin"
+    ${if stdenv.isDarwin then ''
+        echo "#! $shell -e" > $out/bin/arc
+        echo "exec ${php}/bin/php $out/libexec/arcanist/scripts/arcanist.php "'"$@"' >> $out/bin/arc
+        chmod +x $out/bin/arc''
+      else ''
+        ln -s $out/libexec/arcanist/scripts/arcanist.php $out/bin/arc''}
   '';
 
   meta = {

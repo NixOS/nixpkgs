@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1i0q9lxdxbyj0l0510cbkwkbycawrx8cxlbdrhb2p2fnk0vqnyiv";
   };
 
-  modSha256 = "0hlbhky3c6zva9khn73n6xgq57k5p8anskxy3g2m0wzhr72cyc41";
+  vendorSha256 = "1r8lvy2xk0gvlwy6k86wh14ajb6hgs9f1fwfqk17ra1cb404l2lz";
 
   buildFlagsArray = ''
     -ldflags=

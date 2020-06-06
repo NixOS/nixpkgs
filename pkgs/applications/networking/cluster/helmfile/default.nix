@@ -15,7 +15,7 @@ buildGoModule {
 
   goPackagePath = "github.com/roboll/helmfile";
 
-  modSha256 = "0j7w12rrnsv2h5v0bqh6sjq9anm51zs0p3nzlhwsksw9c98r9avk";
+  vendorSha256 = "0m16l3px2ykdsrmlirf7c4lwgmigs6p3rdr61l49acwsmniz2m8a";
 
   nativeBuildInputs = [ makeWrapper ];
 

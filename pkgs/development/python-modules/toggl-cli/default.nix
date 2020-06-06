@@ -1,13 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi, twine, pbr, click, click-completion, validate-email,
-pendulum, ptable, requests, inquirer, pythonOlder, pytest, pytestcov, pytest-mock, faker, factory_boy,
-setuptools }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
+, click
+, click-completion
+, factory_boy
+, faker
+, inquirer
+, pbr
+, pendulum
+, ptable
+, pytest
+, pytestcov
+, pytest-mock
+, requests
+, setuptools
+, twine
+, validate-email
+}:
 
 
 buildPythonPackage rec {
   pname = "toggl-cli";
   version = "2.1.0";
-
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.5" || pythonAtLeast "3.8";
 
   src = fetchPypi {
     pname = "togglCli";

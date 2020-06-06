@@ -41,7 +41,6 @@
         pkgs.deepin.dde-session-ui
         pkgs.deepin.deepin-anything
         pkgs.deepin.deepin-image-viewer
-        pkgs.deepin.deepin-screenshot
       ];
 
       services.dbus.packages = [
@@ -55,7 +54,6 @@
         pkgs.deepin.dde-session-ui
         pkgs.deepin.deepin-anything
         pkgs.deepin.deepin-image-viewer
-        pkgs.deepin.deepin-screenshot
       ];
 
       systemd.packages = [

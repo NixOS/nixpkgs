@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "microcode-intel";
-  version = "20200508";
+  version = "20200520";
 
   src = fetchFromGitHub {
     owner = "intel";

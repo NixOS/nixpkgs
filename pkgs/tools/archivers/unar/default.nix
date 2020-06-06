@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
     for f in Makefile.linux ../UniversalDetector/Makefile.linux ; do
       substituteInPlace $f \
         --replace "= gcc" "=cc" \
-        --replace "= g++" "=c++"
+        --replace "= g++" "=c++" \
+        --replace "-DGNU_RUNTIME=1" "" \
+        --replace "-fgnu-runtime" "-fobjc-nonfragile-abi"
     done
 
     # we need to build inside this directory as well, so we have to make it writeable

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, makeWrapper, isPy3k,
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, fetchpatch, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, future, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
   txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
@@ -25,12 +25,17 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.7.0";
+    version = "2.8.0";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0jj8fh611n7xc3vsfbgpqsllp38cfj3spkr2kz3ara2x7jvh3406";
+    # tests fail with the 2.8.0 sdist, so fetchFromGitHub instead
+    # https://github.com/buildbot/buildbot/pull/5322
+    src = fetchFromGitHub {
+      owner = "buildbot";
+      repo = "buildbot";
+      rev = "v${version}";
+      sha256 = "0akd61mgjp53c3vyf2yyzd0xf0cjwpvsi7g8pz72xrvnil1s4w7k";
     };
+    sourceRoot = "./source/master";
 
     propagatedBuildInputs = [
       # core

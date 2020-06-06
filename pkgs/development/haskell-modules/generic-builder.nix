@@ -383,7 +383,8 @@ stdenv.mkDerivation ({
 
     for d in $(grep '^dynamic-library-dirs:' "$packageConfDir"/* | cut -d' ' -f2- | tr ' ' '\n' | sort -u); do
       for lib in "$d/"*.{dylib,so}; do
-        ln -s "$lib" "$dynamicLinksDir"
+        # Allow overwriting because C libs can be pulled in multiple times.
+        ln -sf "$lib" "$dynamicLinksDir"
       done
     done
     # Edit the local package DB to reference the links directory.

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth-mvtools";
-  version = "22";
+  version = "23";
 
   src = fetchFromGitHub {
     owner  = "dubhater";
     repo   = "vapoursynth-mvtools";
     rev    = "v${version}";
-    sha256 = "11al56liaahkr3819iynq83k8n42wvijfv2ja5fsjdl6j4zfzpbr";
+    sha256 = "0lngkvxnzn82rz558nvl96rvclrck07ja1pny7wcfixp9b68ppkn";
   };
 
   nativeBuildInputs = [ pkgconfig ];

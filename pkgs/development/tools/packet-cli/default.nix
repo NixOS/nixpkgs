@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "17f3ax7pjm5k93cxj7fd8hwr4id1lbzz9pkl2xflpxydi89bwdfz";
   };
 
-  modSha256 = "1hyv1vxk1rsr3jq3b08q0487sqf3y0km3mlwvqivib1y6hrknnnr";
+  vendorSha256 = "10praxaiscxq4v3zknrabldxl7rpklkr5wdlwa5lxsx0if8mrvp7";
 
   meta = with stdenv.lib; {
     description = "Official Packet CLI";

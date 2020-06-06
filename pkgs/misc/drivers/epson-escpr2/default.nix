@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.1.11";
+  version = "1.1.12";
 
   src = fetchurl {
     # To find new versions, visit
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
     # version.  
     # NOTE: Don't forget to update the webarchive link too!
     urls = [ 
-      "https://download3.ebz.epson.net/dsc/f/03/00/11/01/98/8ff121831d0a6be76e86b87c78178f3c93df6d0f/epson-inkjet-printer-escpr2-1.1.11-1lsb3.2.src.rpm"
-      "https://web.archive.org/web/20200425154102/https://download3.ebz.epson.net/dsc/f/03/00/11/01/98/8ff121831d0a6be76e86b87c78178f3c93df6d0f/epson-inkjet-printer-escpr2-1.1.11-1lsb3.2.src.rpm"
+      "https://download3.ebz.epson.net/dsc/f/03/00/11/12/33/f7e44f924a4f479e4c74f8f587e07c57de3abd85/epson-inkjet-printer-escpr2-1.1.12-1lsb3.2.src.rpm"
+      "https://web.archive.org/web/20200523220202if_/https://download3.ebz.epson.net/dsc/f/03/00/11/12/33/f7e44f924a4f479e4c74f8f587e07c57de3abd85/epson-inkjet-printer-escpr2-1.1.12-1lsb3.2.src.rpm"
     ];
-    sha256 = "1gcdzmqli7jycljm66mdssivb3lk223ih6zg0l3lyn7hj2gbkinm";
+    sha256 = "07sq5xlmidqiycv0qwvpk2xf22vbkbk4fclnjlnx7s08d2jl75kv";
   };
 
   patches = [ ./cups-filter-ppd-dirs.patch ];

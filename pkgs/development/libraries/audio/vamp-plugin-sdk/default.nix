@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vamp-plugin-sdk";
-  version = "2.9";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "c4dm";
     repo = "vamp-plugin-sdk";
     rev = "vamp-plugin-sdk-v${version}";
-    sha256 = "1ay12gjqp2wzysg9k2qha3gd8sj5rjlfy4hsl923csi4ssiapsh1";
+    sha256 = "1lhmskcyk7qqfikmasiw7wjry74gc8g5q6a3j1iya84yd7ll0cz6";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -25,11 +25,11 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3000.2";
+  version = "3000.3";
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1n90qqhsvbf4pc4pcbya3rjfkblbccf4np4mxpghjqaa16fl4cqf";
+    sha256 = "19yfjhidx93rl9s03lvrfz7kp0xxigyv4d3zb9792zb9bsc4kjpw";
   };
 
   propagatedBuildInputs = with py.pkgs; [

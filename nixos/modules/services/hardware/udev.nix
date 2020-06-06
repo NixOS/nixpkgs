@@ -83,6 +83,10 @@ let
       run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="/' |
         sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
       for i in $import_progs $run_progs; do
+        # if the path refers to /run/current-system/systemd, replace with config.systemd.package
+        if [[ $i == /run/current-system/systemd* ]]; then
+          i="${config.systemd.package}/''${i#/run/current-system/systemd/}"
+        fi
         if [[ ! -x $i ]]; then
           echo "FAIL"
           echo "$i is called in udev rules but is not executable or does not exist"

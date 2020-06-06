@@ -217,6 +217,9 @@ in {
         createHome = false;
         uid = config.ids.uids.ipfs;
         description = "IPFS daemon user";
+        packages = [
+          pkgs.ipfs-migrator
+        ];
       };
     };
 

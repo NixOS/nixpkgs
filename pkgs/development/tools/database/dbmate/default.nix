@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "16grd03r41n0vj5fs7j6jk395zs2q0i878p9nh1ycicy64nzmxky";
   };
 
-  modSha256 = "1ky6cxpmw93nrk26vyrxz8kqa7247axzaxilm6ciypxf30ad0vdq";
+  vendorSha256 = "1915h1hi2y2sx5jvx84c1j281zaz100gbhyalvg5jqjr1van5s4d";
 
   meta = with stdenv.lib; {
     description = "Database migration tool";

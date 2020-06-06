@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${builtins.replaceStrings ["."] [""]  version}.zip";
-    hash = "sha256-+T8U/GwMA46FHd0p6qpklHXb6+HPCbbIbo6s2Y/77RQ=";
+    sha256 = "057dzf7xkb4fdv4bc2fgw7mxnxclcjmflafx3n2qw0qcdky18gzr";
   };
 
   desktopItem = makeDesktopItem {

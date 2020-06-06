@@ -13,7 +13,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  modSha256 = "02c668bp1pfrd994lhg6z3hm1qg3530nk9aw1cahiwj549vxxfhm";
+  vendorSha256 = "1276k2hpyr7bqp6hdi576xcdcd2c8vz100jpls663z7vb2rbpvxf";
 
   postInstall = ''
     ln -rs "$out/bin/azure-storage-azcopy" "$out/bin/azcopy"

@@ -12,14 +12,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4.0";
+  version = "1.5.0";
   pname = "azure-core";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0vfcfpb01qsrqh9xg4xyfm153bczwjglkv59zpdvrn7x0rrdc1cc";
+    sha256 = "181iyigm11y56lf1kwv7pcdyppavpwjb1b6k3qp3jnbqaypad9mg";
   };
 
   propagatedBuildInputs = [

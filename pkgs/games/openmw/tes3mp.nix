@@ -50,6 +50,12 @@ in openmw.overrideAttrs (oldAttrs: rec {
     "-DRakNet_LIBRARY_DEBUG=${rakNetLibrary}/lib/libRakNetLibStatic.a"
   ];
 
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=95175
+  patches = [
+    ./tes3mp.patch
+  ];
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
   preConfigure = ''
     substituteInPlace files/version.in \
       --subst-var-by OPENMW_VERSION_COMMITHASH ${compatHash}

@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = stdenv.lib.optionals withManpage [ pandoc installShellFiles ];
 
+  patches = [ ./fix-dbus-path.patch ];
+
   makeFlags = [ "VERSION=${version}" ];
 
   installPhase = ''

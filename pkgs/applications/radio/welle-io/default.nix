@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2
+, qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2, qtgraphicaleffects
 , faad2, rtl-sdr, soapysdr-with-plugins, libusb-compat-0_1, fftwSinglePrec, lame, mpg123 }:
 let
 
@@ -30,6 +30,7 @@ in mkDerivation {
     qtmultimedia
     qtquickcontrols
     qtquickcontrols2
+    qtgraphicaleffects
     rtl-sdr
     soapysdr-with-plugins
   ];

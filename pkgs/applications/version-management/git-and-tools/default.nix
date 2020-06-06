@@ -171,6 +171,8 @@ let
 
   gitflow = callPackage ./gitflow { };
 
+  gitin = callPackage ./gitin { };
+
   gitstatus = callPackage ./gitstatus { };
 
   gitui = callPackage ./gitui {

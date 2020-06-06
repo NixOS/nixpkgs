@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "cff600f1f65a2164ab25ff2b039cba008776ce62.patch";
       url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=cff600f1f65a2164ab25ff2b039cba008776ce62";
-      sha256 = "9vB2aTv3zeAQS3UxCDfkRjqUlng8lkcyJPgMzdm+Qzc=";
+      sha256 = "0ds3pvcws37q4hr4g5iwg2b98fj6whvhhcbm9c8f1kgp7dlpdw7n";
     })
     (fetchpatch {
       name = "c4cf527ea227edb468a84bf9b8ce996807bd6992.patch";
       url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992";
-      sha256 = "pKL1tvUw7PB2w4FHSt2up4SvpFiprBH6TLdgKxYFC3g=";
+      sha256 = "0y0b0lb2nq5p9kx13b59b2jaz157mvflliw1qdvg1v1hynvgb8m4";
     })
     # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
     (fetchpatch {

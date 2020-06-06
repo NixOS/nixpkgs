@@ -55,6 +55,7 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         DynamicUser = true;
         ExecStart = "${pkgs.dnscrypt-proxy2}/bin/dnscrypt-proxy -config ${cfg.configFile}";
+        Restart = "always";
       };
     };
   };

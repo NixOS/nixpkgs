@@ -13,7 +13,7 @@ buildGoModule rec {
     sha256 = "18c02ss0sxxg8lkhdmyaac2x5alfxsizf6jqhck8bqkf6hiyv5hc";
   };
 
-  modSha256 = "07mlprwa37s6qpg5wvpljbvkiqcvrcljr27qsdwz49wldhdp6im6";
+  vendorSha256 = "0ykhqsz4a7bkkxcg7w23jl3qs36law1f8l1b5r3i26qlamibqxl7";
 
   meta = with stdenv.lib; {
     homepage = "https://coredns.io";

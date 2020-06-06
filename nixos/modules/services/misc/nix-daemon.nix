@@ -442,6 +442,12 @@ in
     nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
     nix.binaryCaches = [ "https://cache.nixos.org/" ];
 
+    environment.systemPackages =
+      [ nix
+        pkgs.nix-info
+      ]
+      ++ optional (config.programs.bash.enableCompletion && !versionAtLeast nixVersion "2.4pre") pkgs.nix-bash-completions;
+
     environment.etc."nix/nix.conf".source = nixConf;
 
     environment.etc."nix/registry.json".text = builtins.toJSON {

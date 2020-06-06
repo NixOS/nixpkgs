@@ -6,17 +6,17 @@
 , withExtraTiff ? true, libtiff
 , withFFmpeg ? true, libao, ffmpeg
 , withMultimedia ? true
-, withZim ? true }:
+, withZim ? true, zstd }:
 
 mkDerivation rec {
   pname = "goldendict";
-  version = "2020-01-09";
+  version = "2020-05-27";
 
   src = fetchFromGitHub {
     owner = "goldendict";
     repo = pname;
-    rev = "da197ff5cd0e7326124c9240a1853a0e8b1de439";
-    sha256 = "0dlzwjh9wg4bzhhib71jycpp21qw762ww63a37dd50z1ymi61lxc";
+    rev = "ec40c1dcfde6df1dc7950443b46ae22c283b1e52";
+    sha256 = "1zmnwwnpnrqfyf7vmmh38r95q2fl4cqzbkp69bcwkr0xc80wgyz7";
   };
 
   patches = [
@@ -39,7 +39,8 @@ mkDerivation rec {
     ++ stdenv.lib.optional withCC opencc
     ++ stdenv.lib.optional withEpwing libeb
     ++ stdenv.lib.optional withExtraTiff libtiff
-    ++ stdenv.lib.optionals withFFmpeg [ libao ffmpeg ];
+    ++ stdenv.lib.optionals withFFmpeg [ libao ffmpeg ]
+    ++ stdenv.lib.optional withZim zstd;
 
   qmakeFlags = with stdenv.lib; [
     "goldendict.pro"

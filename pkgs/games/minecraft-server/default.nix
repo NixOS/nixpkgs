@@ -4,9 +4,9 @@ stdenv.mkDerivation {
   version = "1.15.2";
 
   src = fetchurl {
-    url =
-      "https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar";
-    sha256 = "12kynrpxgcdg8x12wcvwkxka0fxgm5siqg8qq0nnmv0443f8dkw0";
+    url = "https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar";
+    # sha1 because that comes from mojang via api
+    sha1 = "bb2b6b1aefcd70dfd1892149ac3a215f6c636b07";
   };
 
   preferLocalBuild = true;
@@ -24,6 +24,8 @@ stdenv.mkDerivation {
   '';
 
   phases = "installPhase";
+
+  passthru.updateScript = ./update.sh;
 
   meta = with stdenv.lib; {
     description = "Minecraft Server";

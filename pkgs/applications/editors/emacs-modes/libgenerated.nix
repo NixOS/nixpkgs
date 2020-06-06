@@ -25,10 +25,12 @@ let
         }
       ) {};
       git = self.callPackage ({ fetchgit }:
-        fetchgit {
+        (fetchgit {
           rev = commit;
           inherit sha256 url;
-        }
+        }).overrideAttrs(_: {
+          GIT_SSL_NO_VERIFY = true;
+        })
       ) {};
       bitbucket = self.callPackage ({ fetchhg }:
         fetchhg {

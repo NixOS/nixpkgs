@@ -67,9 +67,19 @@ in
       notificationsCommand = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "sudo -u example_user DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send";
         description = ''
-          Command used to send notifications.
+          This option is deprecated and ignored by earlyoom since 1.6.
+          Use <option>services.earlyoom.enableNotifications</option> instead.
+        '';
+      };
+
+      enableNotifications = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Send notifications about killed processes via the system d-bus.
+          To actually see the notifications in your GUI session, you need to have
+          <literal>systembus-notify</literal> running as your user.
 
           See <link xlink:href="https://github.com/rfjakob/earlyoom#notifications">README</link> for details.
         '';
@@ -87,9 +97,13 @@ in
         message = "Both options in conjunction do not make sense"; }
     ];
 
+    warnings = optional (ecfg.notificationsCommand != null)
+      "`services.earlyoom.notificationsCommand` is deprecated and ignored by earlyoom since 1.6.";
+
     systemd.services.earlyoom = {
       description = "Early OOM Daemon for Linux";
       wantedBy = [ "multi-user.target" ];
+      path = optional ecfg.enableNotifications pkgs.dbus;
       serviceConfig = {
         StandardOutput = "null";
         StandardError = "syslog";
@@ -100,10 +114,11 @@ in
           ${optionalString ecfg.useKernelOOMKiller "-k"} \
           ${optionalString ecfg.ignoreOOMScoreAdjust "-i"} \
           ${optionalString ecfg.enableDebugInfo "-d"} \
-          ${optionalString (ecfg.notificationsCommand != null)
-            "-N ${escapeShellArg ecfg.notificationsCommand}"}
+          ${optionalString ecfg.enableNotifications "-n"}
         '';
       };
     };
+
+    environment.systemPackages = optional ecfg.enableNotifications pkgs.systembus-notify;
   };
 }

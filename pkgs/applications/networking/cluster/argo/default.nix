@@ -28,7 +28,7 @@ buildGoModule rec {
     sha256 = "12wq79h4m8wlzf18r66965mbbjjb62kvnxdj50ra7nxa8jjxpsmf";
   };
 
-  modSha256 = "1394bav1k1xv9n1rvji0j9a09mibk97xpha24640jkgmy9bnmg45";
+  vendorSha256 = "0dhzr62x2lzf3w0j2r496cr7jvkdcavfqaqr2xh972k3qqc9caky";
 
   subPackages = [ "cmd/argo" ];
 

@@ -294,6 +294,12 @@ with super;
     };
   });
 
+  mpack = super.mpack.override({
+    buildInputs = [ pkgs.libmpack ];
+    # the rockspec doesn't use the makefile so you may need to export more flags
+    USE_SYSTEM_LUA = "yes";
+    USE_SYSTEM_MPACK = "yes";
+  });
 
   rapidjson = super.rapidjson.override({
     preBuild = ''

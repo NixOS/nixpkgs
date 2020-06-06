@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "0.12.1";
   rev = "v${version}";
 
-  modSha256 = "0bn47lcb9plzvl2vqqj7p33ishz6bbqpsgf2i6p34g13bwwpq647";
+  vendorSha256 = "1n0zb3v83wsy8y3k7xbpjc2ykh1b2n6p10d5wkflhga49q7rf64h";
 
   src = fetchFromGitHub {
     owner = "ipfs";
@@ -22,4 +22,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ jglukasik ];
   };
 }
-

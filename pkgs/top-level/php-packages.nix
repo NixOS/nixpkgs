@@ -57,12 +57,12 @@ in
     };
 
     composer = mkDerivation rec {
-      version = "1.10.5";
+      version = "1.10.6";
       pname = "composer";
 
       src = pkgs.fetchurl {
         url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "0a9iwhd7ijm8gkp3zadxza0xb6xwa5ps0d16pz4mz2p21gfzvwym";
+        sha256 = "0yzfzgg9qlc388g91bdg7y7rp1q8vqb5hkwykwmr1n1lv8dsrg99";
       };
 
       dontUnpack = true;
@@ -202,7 +202,7 @@ in
         maintainers = with maintainers; [ javaguirre ] ++ teams.php.members;
       };
     };
- 
+
     phpmd = mkDerivation rec {
       version = "2.8.2";
       pname = "phpmd";
@@ -230,14 +230,14 @@ in
         broken = !isPhp74;
       };
     };
- 
+
     phpstan = mkDerivation rec {
-      version = "0.12.19";
+      version = "0.12.25";
       pname = "phpstan";
 
       src = pkgs.fetchurl {
         url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "15fz7rixi9s46qqxpj26349aky7wxqnzmfsnwlh1f2p4jsfd85ki";
+        sha256 = "1a864v7fxpv5kp24nkvczrir3ldl6wxvaq85rd391ppa8ahdhvdd";
       };
 
       phases = [ "installPhase" ];
@@ -709,6 +709,26 @@ in
       meta.broken = isPhp74;
     };
 
+    rdkafka = buildPecl {
+      version = "4.0.3";
+      pname = "rdkafka";
+
+      sha256 = "1g00p911raxcc7n2w9pzadxaggw5c564md6hjvqfs9ip550y5x16";
+
+      buildInputs = with pkgs; [ rdkafka pcre' ];
+
+      postPhpize = ''
+        substituteInPlace configure \
+          --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${pkgs.rdkafka}'
+      '';
+
+      meta = {
+        description = "Kafka client based on librdkafka";
+        homepage = "https://github.com/arnaud-lb/php-rdkafka";
+        maintainers = lib.teams.php.members;
+      };
+    };
+
     redis = buildPecl {
       version = "5.1.1";
       pname = "redis";
@@ -833,6 +853,9 @@ in
       nativeBuildInputs = [ php.unwrapped autoconf pkgconfig re2c ];
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
+
+      prePatch = "pushd ../..";
+      postPatch = "popd";
 
       preConfigure = ''
         nullglobRestore=$(shopt -p nullglob)
@@ -963,14 +986,14 @@ in
         # The configure script doesn't correctly add library link
         # flags, so we add them to the variable used by the Makefile
         # when linking.
-        MYSQLND_SHARED_LIBADD = "-lssl -lcrypto -lz";
+        MYSQLND_SHARED_LIBADD = "-lssl -lcrypto";
         # The configure script builds a config.h which is never
         # included. Let's include it in the main header file
         # included by all .c-files.
         patches = [
           (pkgs.writeText "mysqlnd_config.patch" ''
-            --- a/mysqlnd.h
-            +++ b/mysqlnd.h
+            --- a/ext/mysqlnd/mysqlnd.h
+            +++ b/ext/mysqlnd/mysqlnd.h
             @@ -1,3 +1,6 @@
             +#ifdef HAVE_CONFIG_H
             +#include "config.h"
@@ -978,6 +1001,18 @@ in
              /*
                +----------------------------------------------------------------------+
                | Copyright (c) The PHP Group                                          |
+          '')
+          (pkgs.writeText "mysqlnd_fix_compression.patch" ''
+            --- a/ext/mysqlnd/mysqlnd.h
+            +++ b/ext/mysqlnd/mysqlnd.h
+            @@ -48,7 +48,7 @@
+             #define MYSQLND_DBG_ENABLED 0
+             #endif
+
+            -#if defined(MYSQLND_COMPRESSION_WANTED) && defined(HAVE_ZLIB)
+            +#if defined(MYSQLND_COMPRESSION_WANTED)
+             #define MYSQLND_COMPRESSION_ENABLED 1
+             #endif
           '')
         ];
         postPhpize = lib.optionalString (lib.versionOlder php.version "7.4") ''
@@ -993,8 +1028,8 @@ in
         # included after the ifdef...
         patches = lib.optional (lib.versionOlder php.version "7.4") [
           (pkgs.writeText "zend_file_cache_config.patch" ''
-            --- a/zend_file_cache.c
-            +++ b/zend_file_cache.c
+            --- a/ext/opcache/zend_file_cache.c
+            +++ b/ext/opcache/zend_file_cache.c
             @@ -27,9 +27,9 @@
              #include "ext/standard/md5.h"
              #endif

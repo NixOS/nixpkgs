@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, substituteAll, cmake, makeWrapper, pkgconfig
 , curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
-, coreutils, procps, psmisc }:
+, coreutils, procps, psmisc, nixosTests }:
 
 # NOTES:
 #
@@ -172,7 +172,10 @@ in stdenv.mkDerivation rec {
     "-DZM_WEB_GROUP=${user}"
   ];
 
-  passthru = { inherit dirName; };
+  passthru = {
+    inherit dirName;
+    tests = nixosTests.zoneminder;
+  };
 
   postInstall = ''
     PERL5LIB="$PERL5LIB''${PERL5LIB:+:}$out/${perl.libPrefix}"

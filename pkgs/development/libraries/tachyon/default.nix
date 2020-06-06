@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     cp tachyon "$out"/bin
     cp libtachyon.* "$out/lib"
     cd ../..
+    cp src/*.h "$out/include/"
     cp Changes Copyright README "$out/share/doc/tachyon"
     cp -r scenes "$out/share/tachyon/scenes"
   '';

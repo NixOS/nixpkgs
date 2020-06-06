@@ -1,10 +1,10 @@
 { stdenv, fetchurl, autoreconfHook }:
 stdenv.mkDerivation rec {
   pname = "sdate";
-  version = "0.5";
+  version = "0.6";
   src = fetchurl {
     url = "https://github.com/ChristophBerg/sdate/archive/${version}.tar.gz";
-    sha256 = "0gbjl1jfxjwiiwf9rz38yp6rb1mgzhawcyg0g9byl6m4kgivf0cx";
+    sha256 = "11irlbbhlzkg6y621smk351jl8ay3yjhl2j9hila0xa72hs4n7gz";
   };
 
   buildInputs = [ autoreconfHook ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "nGl7c5UY9kJPRaMveMF+aIf8T11WFrB//37oKzREdvM=";
+    sha256 = "1wvn8hs2ps3yzxzv05jnbm7zr1v8gv0phbx38m7l5xhqjmrpnscw";
   };
 
   buildInputs = with stdenv.lib; [ boost zlib openssl ]

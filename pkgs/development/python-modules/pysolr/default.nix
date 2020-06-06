@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pysolr";
-  version = "3.8.1";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "88ecb176627db6bcf9aeb94a3570bfa0363cb68be4b2a6d89a957d4a87c0a81b";
+    sha256 = "1rj5jmscvxjwcmlfi6hmkj44l4x6n3ln5p7d8d18j566hzmmzw3f";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

@@ -12,8 +12,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "1c1frfx0qkprhf4var70cncvrw8s9gjag2hygndbd9055hb52bvv";
   };
-
-  modSha256 = "19sxyvfq1bpg85w8cd1yk2s6rd8759cf2zqs5b6wyny4cak2bl83";
+  vendorSha256 = "004hpjxpp18f71vy5v5ky0g07a8d5xh5qwl5b4bbx34hpf8yxs81";
 
   meta = with stdenv.lib; {
     homepage = "https://caddyserver.com";

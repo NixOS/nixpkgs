@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub , cmake, libjack2, libsndfile }:
+{ stdenv, fetchFromGitHub , cmake, libjack2, libsndfile, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
-  version = "unstable-2020-01-24";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "sfztools";
     repo = pname;
-    rev = "b9c332777853cb35faeeda2ff4bf34ea7121ffb9";
-    sha256 = "0wzgwpcwal5a7ifrm1hx8y6vx832qixk9ilp8wkjnsdxj6i88p2c";
+    rev = version;
+    sha256 = "1px22x9lb6wyqfbv1jg1sbl1rsnwrzs8sm4dnas1w4ifchiv3ymd";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ libjack2 libsndfile ];
 

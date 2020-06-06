@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tendermint";
-  version = "0.32.11";
+  version = "0.32.12";
 
   src = fetchFromGitHub {
     owner = "tendermint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "17p7khfiv5aflpl4imbqp8v7gignd6v6a7g80xlnzgix5ismh84l";
+    sha256 = "1d3q5d49pzh86brrwp4kfsxs0n9zdmcnkminarg3wl9w97qrjsr6";
   };
 
-  modSha256 = "1sdjzj52gkqk51ml29hijzv64clmi38km5z7j7paf28dla2brfxq";
+  vendorSha256 = "1vhd3s6yxfhirgipxcy0rh8sk55cdzirr8n8r31sijgyak92mq0l";
 
   meta = with stdenv.lib; {
     description = "Byzantine-Fault Tolerant State Machines. Or Blockchain, for short.";

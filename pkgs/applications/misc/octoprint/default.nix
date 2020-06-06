@@ -20,6 +20,7 @@ let
       (mkOverride "flaskbabel"  "0.12.2" "11jwp8vvq1gnm31qh6ihy2h393hy18yn9yjp569g60r0wj1x2sii")
       (mkOverride "tornado"     "4.5.3"  "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d")
       (mkOverride "psutil"      "5.6.7"  "ffad8eb2ac614518bbe3c0b8eb9dffdb3a8d2e3a7d5da51c5b974fb723a5c5aa")
+      (mkOverride "watchdog"    "0.9.0"  "07cnvvlpif7a6cg4rav39zq8fxa5pfqawchr46433pij0y6napwn")
 
       # Octoprint holds back jinja2 to 2.8.1 due to breaking changes.
       # This old version does not have updated test config for pytest 4,

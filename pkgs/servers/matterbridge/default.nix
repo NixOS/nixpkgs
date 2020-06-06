@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "1.17.1";
 
   goPackagePath = "github.com/42wim/matterbridge";
-  modSha256 = "1mqp8dlwa4p70iv9ksq3pxx5zbxdh56xyksvd98zk0vkrz4f1rij";
+  vendorSha256 = null;
 
   src = fetchurl {
     url = "https://github.com/42wim/matterbridge/archive/v${version}.tar.gz";

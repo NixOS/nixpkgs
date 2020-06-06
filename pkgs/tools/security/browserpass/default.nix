@@ -12,7 +12,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  modSha256 = "13yw7idgw8l48yvm4jjha0kbx6q22m2zp13y006mikavynqsr5kj";
+  vendorSha256 = "1wcbn0ip596f2dp68y6jmxgv20l0dgrcxg5cwclkawigj05416zj";
 
   postPatch = ''
     # Because this Makefile will be installed to be used by the user, patch

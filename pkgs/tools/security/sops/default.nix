@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1515bk0fl0pvdkp402l51gdg63bmqlh89sglss6prc1qqvv5v2xy";
   };
 
-  modSha256 = "0vhxd3dschj5i9sig6vpxzbl59cas1qa843akzmjnfjrrafb916y";
+  vendorSha256 = "0yryc799k4563wy53z7amraj89cyprklj0lfv207530hwv5i5gm6";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mozilla/sops";

@@ -8,6 +8,7 @@
 { name ? ""
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
@@ -205,6 +206,10 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gnatlink ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatlink
     ''
 
+    + optionalString cc.langD or false ''
+      wrap ${targetPrefix}gdc $wrapper $ccPath/${targetPrefix}gdc
+    ''
+
     + optionalString cc.langFortran or false ''
       wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
@@ -220,7 +225,7 @@ stdenv.mkDerivation {
     '';
 
   strictDeps = true;
-  propagatedBuildInputs = [ bintools ] ++ extraTools;
+  propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or false [ zlib ];
   depsTargetTargetPropagated = extraPackages;
 
   wrapperName = "CC_WRAPPER";
@@ -262,8 +267,9 @@ stdenv.mkDerivation {
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
       echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
+    '' + optionalString (!(cc.langD or false)) ''
       echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
-    '' + optionalString isGNU ''
+    '' + optionalString (isGNU && (!(cc.langD or false))) ''
       for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
         echo '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
       done
@@ -307,6 +313,8 @@ stdenv.mkDerivation {
 
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
+    '' + optionalString (cc.langD or false) ''
+      echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     ''
 
     + ''
@@ -366,9 +374,9 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString cc.langAda or false ''
       hardening_unsupported_flags+=" stackprotector strictoverflow"
-    ''
-
-    + optionalString targetPlatform.isWasm ''
+    '' + optionalString cc.langD or false ''
+      hardening_unsupported_flags+=" format"
+    '' + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     ''
 

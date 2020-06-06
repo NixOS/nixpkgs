@@ -224,6 +224,7 @@ in
       (mkIf cfg.enable {
 
         system.nssModules = optional cfg.nsswins samba;
+        system.nssDatabases.hosts = optional cfg.nsswins "wins";
 
         systemd = {
           targets.samba = {

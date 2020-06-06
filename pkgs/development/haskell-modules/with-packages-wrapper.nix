@@ -105,6 +105,15 @@ symlinkJoin {
         --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
     fi
 
+    # ghcide does package discovery without calling our ghc wrapper.
+    if [[ -x "$out/bin/ghcide" ]]; then
+      wrapProgram $out/bin/ghcide  \
+          --set "NIX_${ghcCommandCaps}"        "$out/bin/${ghcCommand}"     \
+          --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
+          --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
+          --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
+    fi
+
   '' + (lib.optionalString (stdenv.targetPlatform.isDarwin && !isGhcjs && !stdenv.targetPlatform.isiOS) ''
     # Work around a linker limit in macOS Sierra (see generic-builder.nix):
     local packageConfDir="$out/lib/${ghc.name}/package.conf.d";
@@ -113,7 +122,7 @@ symlinkJoin {
     # Clean up the old links that may have been (transitively) included by
     # symlinkJoin:
     rm -f $dynamicLinksDir/*
-    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'|sort -u); do
+    for d in $(grep -Poz "dynamic-library-dirs:\s*\K .+\n" $packageConfDir/*|awk '{print $2}'|sort -u); do
       ln -s $d/*.dylib $dynamicLinksDir
     done
     for f in $packageConfDir/*.conf; do
@@ -123,7 +132,7 @@ symlinkJoin {
       # $dynamicLinksDir
       cp $f $f-tmp
       rm $f
-      sed "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f-tmp > $f
+      sed "N;s,dynamic-library-dirs:\s*.*,dynamic-library-dirs: $dynamicLinksDir," $f-tmp > $f
       rm $f-tmp
     done
   '') + ''

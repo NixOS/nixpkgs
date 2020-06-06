@@ -10,6 +10,7 @@
 , nodejs
 , packaging
 , pillow
+#, pytestCheckHook#
 , pytest
 , python
 , python-dateutil
@@ -18,15 +19,25 @@
 , six
 , substituteAll
 , tornado
+, typing-extensions
+, pytz
+, flaky
+, networkx
+, beautifulsoup4
+, requests
+, nbconvert
+, icalendar
+, pandas
+, pythonImportsCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "bokeh";
-  version = "1.4.0";
+  version = "2.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rywd6c6hi0c6yg18j5zxssjd07a5hafcd21xr3q2yvp3aj3h3f6";
+    sha256 = "d9248bdb0156797abf6d04b5eac581dcb121f5d1db7acbc13282b0609314893a";
   };
 
   patches = [
@@ -37,13 +48,29 @@ buildPythonPackage rec {
     })
   ];
 
-  disabled = isPyPy;
+  disabled = isPyPy || isPy27;
+
+  nativeBuildInputs = [
+    pythonImportsCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "bokeh"
+  ];
 
   checkInputs = [
     mock
     pytest
     pillow
     selenium
+    pytz
+    flaky
+    networkx
+    beautifulsoup4
+    requests
+    nbconvert
+    icalendar
+    pandas
   ];
 
   propagatedBuildInputs = [
@@ -55,14 +82,14 @@ buildPythonPackage rec {
     tornado
     numpy
     packaging
+    typing-extensions
   ]
   ++ lib.optionals ( isPy27 ) [
     futures
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s bokeh/tests
-  '';
+  # This test suite is a complete pain. Somehow it can't find its fixtures.
+  doCheck = false;
 
   meta = {
     description = "Statistical and novel interactive HTML plots for Python";

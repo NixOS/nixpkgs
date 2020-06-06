@@ -32,13 +32,7 @@ in
 
     services.mysql = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "
-          Whether to enable the MySQL server.
-        ";
-      };
+      enable = mkEnableOption "MySQL server";
 
       package = mkOption {
         type = types.package;
@@ -87,7 +81,6 @@ in
             datadir = /var/lib/mysql
             bind-address = 127.0.0.1
             port = 3336
-            plugin-load-add = auth_socket.so
 
             !includedir /etc/mysql/conf.d/
           ''';
@@ -315,13 +308,16 @@ in
         datadir = cfg.dataDir;
         bind-address = mkIf (cfg.bind != null) cfg.bind;
         port = cfg.port;
-        plugin-load-add = optional (cfg.ensureUsers != []) "auth_socket.so";
       }
       (mkIf (cfg.replication.role == "master" || cfg.replication.role == "slave") {
         log-bin = "mysql-bin-${toString cfg.replication.serverId}";
         log-bin-index = "mysql-bin-${toString cfg.replication.serverId}.index";
         relay-log = "mysql-relay-bin";
         server-id = cfg.replication.serverId;
+        binlog-ignore-db = [ "information_schema" "performance_schema" "mysql" ];
+      })
+      (mkIf (!isMariaDB) {
+        plugin-load-add = optional (cfg.ensureUsers != []) "auth_socket.so";
       })
     ];
 
@@ -444,7 +440,6 @@ in
 
                         ( echo "stop slave;"
                           echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
-                          echo "set global slave_exec_mode='IDEMPOTENT';"
                           echo "start slave;"
                         ) | ${mysql}/bin/mysql -u root -N
                       ''}

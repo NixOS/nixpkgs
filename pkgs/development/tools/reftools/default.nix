@@ -8,7 +8,7 @@ buildGoModule rec {
   version = "2019-12-21";
   rev = "65925cf013156409e591f7a1be4df96f640d02f4";
 
-  modSha256 = "1sihahgkcj018ixbnz58npfh4drhqip2xmc9p7lq3an8japb9nyx";
+  vendorSha256 = null;
 
   goPackagePath = "github.com/davidrjenni/reftools";
   excludedPackages = "\\(cmd/fillswitch/test-fixtures\\)";

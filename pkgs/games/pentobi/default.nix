@@ -5,12 +5,12 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "17.3";
+  version = "18.0";
   pname = "pentobi";
 
   src = fetchurl {
     url = "mirror://sourceforge/pentobi/${pname}-${version}.tar.xz";
-    sha256 = "00c495i4vrji9hs7v8xr9gm8yqs97bfk2wzsayhps11hmbqzllx9";
+    sha256 = "0dlvshywxijl0hrkl66szamcr77arh118f44ngr1ail8mg1fx1fy";
   };
 
   nativeBuildInputs = [ cmake docbook_xsl wrapQtAppsHook ];

@@ -10,7 +10,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "Fullscreen";
     repo = "aws-rotate-key";
-    sha256 = "sha256:1w9704g1l2b0y6g6mk79g28kk0yaswpgljkk85d0i10wyxq4icby";
+    sha256 = "1w9704g1l2b0y6g6mk79g28kk0yaswpgljkk85d0i10wyxq4icby";
   };
 
   goDeps = ./deps.nix;

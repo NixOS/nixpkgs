@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "udI1Jc/Y0iw3tdlkqf6ajOdYMEKi+NOSLnHmu8aMML0=";
+    sha256 = "1g9hik3bprki5s9d7y5288q5irwckbzajr6rnlvjrlnqrwjkblmr";
   };
 
   patches = optionals stdenv.isLinux [
@@ -178,7 +178,6 @@ stdenv.mkDerivation rec {
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    hydraPlatforms = [];
     maintainers = teams.gnome.members;
   };
 }

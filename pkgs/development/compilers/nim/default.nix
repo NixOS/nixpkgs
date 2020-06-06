@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://nim-lang.org/download/${pname}-${version}.tar.xz";
-    sha256 = "TpRYOjc5ZYIYBeZl4KBfUvthCRZnbtsJFIlBQVY3xXU=";
+    sha256 = "0xf56xb42hc92h4xnvk72q4n3ysjbyhf0rg60lc84r9r6wx5i52f";
   };
 
   enableParallelBuilding = true;

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum-qt4";
-  version = "0.11.2";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${version}";
-    sha256 = "1jcfv96ws6sm3kc2q8zriwqhry24qbq3zbp8gkqw75wssbv82rmc";
+    sha256 = "0cv0lxyi2sr0k7f03rsh1j28avdxd0l0480jsa95ca3d2lq392g3";
   };
 
   nativeBuildInputs = [ qmake4Hook ];

@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     "-DUSE_KWALLET=OFF"
   ];
 
+  # Reduce the risk of collisions
+  postInstall = "rm -r $out/share/doc";
 
   # darktable changed its rpath handling in commit
   # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the

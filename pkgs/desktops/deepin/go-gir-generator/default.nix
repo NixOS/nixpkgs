@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     # https://github.com/linuxdeepin/go-gir-generator/pull/11
     (fetchpatch {
       url = "https://github.com/linuxdeepin/go-gir-generator/commit/7dea15a1a491f28d2ac8c411068ccefeba01aae3.patch";
-      sha256 = "7bn/mtruCcK+AIXMzhN2e3o7CuzuJ3mtTz0HOTEYTaA=";
+      sha256 = "182d30qkj1rx9ynpj9zfxh53nykvfq9wxk4502zc42gfvadgzfgd";
     })
   ];
 

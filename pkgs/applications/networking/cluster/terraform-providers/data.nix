@@ -224,6 +224,14 @@
       version = "2.7.0";
       sha256  = "11c54waq7w34l79ak4kizjkmh8zjca5ygh9yib691hdmxsx2cifj";
     };
+  ct =
+    {
+      owner   = "poseidon";
+      repo    = "terraform-provider-ct";
+      rev     = "v0.5.0";
+      version = "0.5.0";
+      sha256  = "1zqfaxlyhr9vpqj2qqpfyh1f1nfpynb7c5ris6mdmy9zin55ppni";
+    };
   datadog =
     {
       owner   = "terraform-providers";

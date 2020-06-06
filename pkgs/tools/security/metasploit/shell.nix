@@ -3,14 +3,15 @@ with import <nixpkgs> {};
 stdenv.mkDerivation {
   name = "env";
   buildInputs = [
-    ruby.devEnv
+    bundix
     git
-    sqlite
+    libiconv
     libpcap
-    postgresql
     libxml2
     libxslt
-    pkgconfig
-    bundix
+    pkg-config
+    postgresql
+    ruby.devEnv
+    sqlite
   ];
 }

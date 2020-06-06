@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.43.0.3";
+  version = "7.43.0.5";
   disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13nsvqhvnmnvfk75s8iynqsgszyv06cjp4drd3psi7zpbh63623g";
+    sha256 = "ec7dd291545842295b7b56c12c90ffad2976cc7070c98d7b1517b7b6cd5994b3";
   };
 
   buildInputs = [

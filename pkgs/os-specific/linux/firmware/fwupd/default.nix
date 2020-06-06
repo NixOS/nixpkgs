@@ -87,11 +87,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "ga8MpbY9tTwr0jsmjEAMyFxDC+yD4LBTx5gXRXig31M=";
+    sha256 = "1wch1n0z89ymfxx7ganiab4h64rdxr54rcg37n5nshw35bc3f390";
   };
 
   # libfwupd goes to lib
@@ -247,7 +247,6 @@ stdenv.mkDerivation rec {
       "fwupd/ata.conf"
       # "fwupd/daemon.conf" # already created by the module
       "fwupd/redfish.conf"
-      "fwupd/remotes.d/dell-esrt.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
@@ -262,6 +261,8 @@ stdenv.mkDerivation rec {
       "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA.pem"
+    ] ++ stdenv.lib.optionals haveDell [
+      "fwupd/remotes.d/dell-esrt.conf"
     ];
 
     # BlacklistPlugins key in fwupd/daemon.conf

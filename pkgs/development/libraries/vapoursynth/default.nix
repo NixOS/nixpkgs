@@ -36,6 +36,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    # If vapoursynth is added to the build inputs of mpv and then
+    # used in the wrapping of it, we want to know once inside the
+    # wrapper, what python3 version was used to build vapoursynth so
+    # the right python3.sitePackages will be used there.
+    inherit python3;
+  };
+
   postInstall = ''
     wrapProgram $out/bin/vspipe \
         --prefix PYTHONPATH : $out/${python3.sitePackages}

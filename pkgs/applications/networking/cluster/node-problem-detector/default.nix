@@ -11,14 +11,7 @@ buildGoModule rec {
     sha256 = "02avknglmkr9k933a64hkw0rjfxvyh4sc3x70p41b8q2g6vzv2gs";
   };
 
-  # Project upstream recommends building through vendoring
-  overrideModAttrs = (_: {
-    buildCommand = ''
-      echo "Skipping go.mod, using vendoring instead." && touch $out
-    '';
-  });
-
-  modSha256 = "0ip26j2h11n1kgkz36rl4akv694yz65hr72q4kv4b3lxcbi65b3p";
+  vendorSha256 = null;
 
   # Optionally, a log counter binary can be created to parse journald logs.
   # The binary is dynamically linked against systemd libraries, making it a

@@ -19,7 +19,7 @@ buildGoModule rec {
   '';
 
   goPackagePath = "github.com/jlesquembre/kubeprompt";
-  modSha256 = "0rbpdk2dixywn3wcdgz48f3xw3b7fk8xh7mrlx27wz7fq5wj9v8f";
+  vendorSha256 = "089lfkvyf00f05kkmr935jbrddf2c0v7m2356whqnz7ad6a2whsi";
 
   meta = with stdenv.lib; {
     description = "Kubernetes prompt";

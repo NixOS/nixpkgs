@@ -13,7 +13,7 @@ buildGoModule rec {
 
     modRoot = "./go";
     subPackages = [ "cmd/dolt" "cmd/git-dolt" "cmd/git-dolt-smudge" ];
-    modSha256 = "1fx830dif9cq2rvigdbqbc3vmmq01ywj9b095adbrwddvay8m8si";
+  vendorSha256 = "1kjh252p91yxq5mi0igamkwlsr50lij24wsp2ilgz6ksv3ijzfr1";
 
     meta = with lib; {
         description = "Relational database with version control and CLI a-la Git.";

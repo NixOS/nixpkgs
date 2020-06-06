@@ -52,13 +52,16 @@
 , typing
 , nose
 , python
-, isPy3k
+, pythonOlder
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "apache-airflow";
   version = "1.10.5";
-  disabled = (!isPy3k);
+  # Upstream does not yet support python 3.8
+  # https://github.com/apache/airflow/issues/8674
+  disabled = pythonOlder "3.5" || pythonAtLeast "3.8";
 
   src = fetchFromGitHub rec {
     owner = "apache";
@@ -167,6 +170,9 @@ buildPythonPackage rec {
       --replace "/bin/bash" "${stdenv.shell}"
   '';
 
+  # allow for gunicorn processes to have access to python packages
+  makeWrapperArgs = [ "--prefix PYTHONPATH : $PYTHONPATH" ];
+
   checkPhase = ''
    export HOME=$(mktemp -d)
    export AIRFLOW_HOME=$HOME
@@ -186,6 +192,6 @@ buildPythonPackage rec {
     description = "Programmatically author, schedule and monitor data pipelines";
     homepage = "http://airflow.apache.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ingenieroariel ];
+    maintainers = with maintainers; [ bhipple costrouc ingenieroariel ];
   };
 }

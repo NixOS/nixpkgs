@@ -18,7 +18,7 @@ buildGoModule rec {
     sha256 = "0lz9lf1swrn67kymcp2wh67lh3c0ifqm9035gpkd3zynlq3wzqfm";
   };
 
-  modSha256 = "13x4wbfj8049ygm3zbgzyr2bm4sq4x6xddrxx6shr8fydlcf1g8v";
+  vendorSha256 = null;
 
   meta = with stdenv.lib; {
     description = "A friendly and expressive command shell";

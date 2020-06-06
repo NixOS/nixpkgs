@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , bison
 , pam
+
+, withTimestamp ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +20,17 @@ stdenv.mkDerivation rec {
 
   # otherwise confuses ./configure
   dontDisableStatic = true;
+
+  configureFlags = [
+    (lib.optionalString withTimestamp "--with-timestamp") # to allow the "persist" setting
+    "--pamdir=${placeholder "out"}/etc/pam.d"
+  ];
+
+  patches = [
+    # Allow doas to discover binaries in /run/current-system/sw/{s,}bin and
+    # /run/wrappers/bin
+    ./0001-add-NixOS-specific-dirs-to-safe-PATH.patch
+  ];
 
   postPatch = ''
     sed -i '/\(chown\|chmod\)/d' bsd.prog.mk

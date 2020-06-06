@@ -219,6 +219,7 @@ let
       FB_3DFX_ACCEL       = yes;
       FB_VESA             = yes;
       FRAMEBUFFER_CONSOLE = yes;
+      FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER = whenAtLeast "4.19" yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
       FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
     };

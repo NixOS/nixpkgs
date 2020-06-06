@@ -4,7 +4,7 @@ buildGoModule rec {
   pname = "age";
   version = "unstable-2020-03-25";
   goPackagePath = "github.com/FiloSottile/age";
-  modSha256 = "00yhn1894ni8bvkqm1vr0rqkky52pkhvdzbi2sqx3czlgb5ibw3h";
+  vendorSha256 = "0km7a2826j3fk2nrkmgc990chrkcfz006wfw14yilsa4p2hmfl7m";
 
   subPackages = [
     "cmd/age"

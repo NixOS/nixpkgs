@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dx39krafb6cdnd7h5vgwmw4y075s6k3d31a6vhwvqhmdig3294h";
+    sha256 = "5a91324fcaa4c72a0fe9a13601436f65ee33b2ef033686f4e2228d58a7631970";
   };
 
   propagatedBuildInputs = [ six dateutil convertdate ];

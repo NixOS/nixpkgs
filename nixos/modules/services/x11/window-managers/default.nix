@@ -10,6 +10,7 @@ in
   imports = [
     ./2bwm.nix
     ./afterstep.nix
+    ./berry.nix
     ./bspwm.nix
     ./cwm.nix
     ./dwm.nix
@@ -21,6 +22,7 @@ in
     ./i3.nix
     ./jwm.nix
     ./leftwm.nix
+    ./lwm.nix
     ./metacity.nix
     ./mwm.nix
     ./openbox.nix
@@ -28,6 +30,7 @@ in
     ./notion.nix
     ./ratpoison.nix
     ./sawfish.nix
+    ./smallwm.nix
     ./stumpwm.nix
     ./spectrwm.nix
     ./tinywm.nix
@@ -35,6 +38,7 @@ in
     ./windowmaker.nix
     ./wmii.nix
     ./xmonad.nix
+    ./yeahwm.nix
     ./qtile.nix
     ./none.nix ];
 

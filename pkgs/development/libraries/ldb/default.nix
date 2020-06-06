@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ldb";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "mirror://samba/ldb/${pname}-${version}.tar.gz";
-    sha256 = "0x6yr14znp42b92i7br4wxfjri6i689dsifzz9kbyzvn558a16b4";
+    sha256 = "0xkps414ndb87abla7dlv44ndnfg5r5vwgmkm3ngcq9knbv1x6w7";
   };
 
   outputs = [ "out" "dev" ];

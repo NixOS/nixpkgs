@@ -154,13 +154,10 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi) ([ # Fixes for the VA-API build:
+    ] ++ optionals (useVaapi) [ # Improvements for the VA-API build:
       ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
       ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
-    ] ++ optionals (versionRange "81" "82") [
-      (githubPatch "5b2ff215473e0526b5b24aeff4ad90d369b21c75" "0n00vh8wfpn2ay5fqsxcsx0zadnv7mihm72bcvnrfzh75nzbg902")
-      (githubPatch "98e343ab369e4262511b5fce547728e3e5eefba8" "00wwp653jk0k0yvix00vr7ymgck9dj7fxjwx4nc67ynn84dh6064")
-    ]);
+    ];
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX

@@ -3,22 +3,22 @@
 , fetchPypi
 , six
 , pytest_4
-, hypothesis
+, hypothesis_4
 , pytestrunner
 }:
 
 buildPythonPackage rec {
   pname = "pyrsistent";
-  version = "0.15.6";
+  version = "0.15.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f3b280d030afb652f79d67c5586157c5c1355c9a58dfc7940566e28d28f3df1b";
+    sha256 = "cdc7b5e3ed77bed61270a47d35434a30617b9becdf2478af76ad2c6ade307280";
   };
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestrunner pytest_4 hypothesis ];
+  checkInputs = [ pytestrunner pytest_4 hypothesis_4 ];
 
   postPatch = ''
     substituteInPlace setup.py --replace 'pytest<5' 'pytest'

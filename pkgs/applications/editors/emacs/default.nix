@@ -11,6 +11,10 @@
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 , siteStart ? ./site-start.el
+, toolkit ? (
+  if withGTK2 then "gtk2"
+  else if withGTK3 then "gtk3"
+  else "lucid")
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -23,12 +27,7 @@ assert withGTK2 -> !withGTK3 && gtk2-x11 != null;
 assert withGTK3 -> !withGTK2 && gtk3-x11 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
-let
-  toolkit =
-    if withGTK2 then "gtk2"
-    else if withGTK3 then "gtk3"
-    else "lucid";
-in
+
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
   version = "26.3";

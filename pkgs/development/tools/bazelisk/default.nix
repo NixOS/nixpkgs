@@ -4,6 +4,8 @@ buildGoModule rec {
   pname = "bazelisk";
   version = "1.4.0";
 
+  patches = [ ./gomod.patch ];
+
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = pname;
@@ -11,7 +13,7 @@ buildGoModule rec {
     sha256 = "14zp0bi0p1rfbx1pxi5y28ndxwbqbvfx0pvy3jh1mnx5qsii1gcq";
   };
 
-  modSha256 = "1w8k659ifapcxbbim0nf7wd7w10bhlagc33q08izh84gcgsh0yyz";
+  vendorSha256 = "10156k90ky3znb9rxhy7zasskxmlcs5cn9f3xk25ana1c66vxszr";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.BazeliskVersion=${version}" ];
 

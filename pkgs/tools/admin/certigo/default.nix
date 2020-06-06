@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0siwbxxzknmbsjy23d0lvh591ngabqhr2g8mip0siwa7c1y7ivv4";
   };
 
-  modSha256 = "1i5n5yh6nvv2i2nm60vqy1gngj8p5w6ma5fcwmp7bl4jxjrzbi83";
+  vendorSha256 = "1l6ajfl04rfbssvijgd5jrppmqc5svfrswdx01x007lr8rvdfd94";
 
   meta = with stdenv.lib; {
     description = "A utility to examine and validate certificates in a variety of formats";

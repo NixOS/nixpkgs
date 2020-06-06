@@ -1,24 +1,60 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, python3, wrapGAppsHook
-, cairo, gdk-pixbuf, colord, glib, gtk3, gusb, packagekit, libwebp
-, libxml2, sane-backends, vala, gnome3, gobject-introspection }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gettext
+, itstool
+, python3
+, wrapGAppsHook
+, cairo
+, gdk-pixbuf
+, colord
+, glib
+, gtk3
+, gusb
+, packagekit
+, libwebp
+, libxml2
+, sane-backends
+, vala
+, gnome3
+, gobject-introspection
+}:
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "3.36.2";
+  version = "3.36.2.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/simple-scan/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ya4k63q75w8xwv3vrk1gvbvbpxq876dvnkn3ym1wxzfd29pznxf";
+    sha256 = "0aq1pf0wk536b91as54684xgmhl7lps0k2xcwha5wh6h1isyb35v";
   };
 
-  buildInputs = [
-    cairo gdk-pixbuf colord glib gnome3.adwaita-icon-theme gusb
-    gtk3 libwebp packagekit sane-backends vala
-  ];
   nativeBuildInputs = [
-    meson ninja gettext itstool pkgconfig python3 wrapGAppsHook libxml2
-    # For setup hook
-    gobject-introspection
+    meson
+    ninja
+    gettext
+    itstool
+    pkgconfig
+    python3
+    wrapGAppsHook
+    libxml2
+    gobject-introspection # For setup hook
+  ];
+
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    colord
+    glib
+    gnome3.adwaita-icon-theme
+    gusb
+    gtk3
+    libwebp
+    packagekit
+    sane-backends
+    vala
   ];
 
   postPatch = ''

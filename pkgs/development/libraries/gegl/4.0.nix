@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/glib/issues/1941
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gegl/commit/1d530816266b52c8788bbe1504c5b2d6eceba036.patch";
-      sha256 = "8PlUcLQkuskjDGCA2obUPDW3jE++A6B5YWVgvn+GFrU=";
+      sha256 = "1d8nhrzvwq35c5ws00xy9y6bfd9wsj3dm0301hiwkfi4niq59ygh";
     })
   ];
 

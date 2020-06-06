@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper
 , alsaLib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
-, factorio-utils
+, libSM, libICE, libXext, factorio-utils
 , releaseType
 , mods ? []
 , username ? "", token ? "" # get/reset token at https://factorio.com/profile
@@ -53,11 +53,11 @@ let
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
       alpha = {
         stable        = bdist { sha256 = "1fg2wnia6anzya4m53jf2xqwwspvwskz3awdb3j0v3fzijps94wc"; version = "0.17.79"; withAuth = true; };
-        experimental  = bdist { sha256 = "1fg2wnia6anzya4m53jf2xqwwspvwskz3awdb3j0v3fzijps94wc"; version = "0.17.79"; withAuth = true; };
+        experimental  = bdist { sha256 = "1xkmx29dxbg9vbhbrdbq6bb229mc0mbar3r14b49bdia3qfvvx8p"; version = "0.18.29"; withAuth = true; };
       };
       headless = {
         stable        = bdist { sha256 = "1pr39nm23fj83jy272798gbl9003rgi4vgsi33f2iw3dk3x15kls"; version = "0.17.79"; };
-        experimental  = bdist { sha256 = "1pr39nm23fj83jy272798gbl9003rgi4vgsi33f2iw3dk3x15kls"; version = "0.17.79"; };
+        experimental  = bdist { sha256 = "0z1n9p7cqbzmmjniwjyxp7x058c4d1knf4mwg14vgvh77ywz0y8j"; version = "0.18.29"; };
       };
       demo = {
         stable        = bdist { sha256 = "07qknasaqvzl9vy1fglm7xmdi7ynhmslrb0a209fhbfs0s7qqlgi"; version = "0.17.79"; };
@@ -166,7 +166,7 @@ let
       '';
       homepage = "https://www.factorio.com/";
       license = stdenv.lib.licenses.unfree;
-      maintainers = with stdenv.lib.maintainers; [ Baughn elitak ];
+      maintainers = with stdenv.lib.maintainers; [ Baughn elitak erictapen ];
       platforms = [ "i686-linux" "x86_64-linux" ];
     };
   };
@@ -186,6 +186,9 @@ let
         libXrandr
         libXi
         libGL
+        libSM
+        libICE
+        libXext
       ];
 
       installPhase = base.installPhase + ''

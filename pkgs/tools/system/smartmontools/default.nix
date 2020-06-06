@@ -4,11 +4,11 @@
 let
   version = "7.1";
 
-  dbrev = "5033";
+  dbrev = "5062";
   drivedbBranch = "RELEASE_7_0_DRIVEDB";
   driverdb = fetchurl {
     url    = "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
-    sha256 = "029j118lwiazn56vg6d3i7ayv73wrpv1fypw3ff4nd4hgs2mlcrg";
+    sha256 = "0gggl55h9gq0z846ndhyd7xrpxh8lqfbidblx0598q2wlh9rvlww";
     name   = "smartmontools-drivedb.h";
   };
 

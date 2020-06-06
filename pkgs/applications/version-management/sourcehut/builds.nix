@@ -11,7 +11,7 @@ let
     pname = "builds-sr-ht-worker";
     goPackagePath = "git.sr.ht/~sircmpwn/builds.sr.ht/worker";
 
-    modSha256 = "10is7siscids9qz6jh9m1i17749dafqqkg4b3sslmxaxyn16yj97";
+  vendorSha256 = "0prdlihcy5yz760llwyby747yy2981dn3gy401a48df7ndlfj6lp";
   };
 in buildPythonPackage rec {
   inherit version;
@@ -20,7 +20,7 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     rev = version;
-    sha256 = "uFoS9xaVXsZZf4neZQcUyTqKo2RshOQeifD27kaKSVE=";
+    sha256 = "0la9i93fxxphi4gf913ccjiqlfn92h3nbpl9gxcwcplm2vvi4nmq";
   };
 
   patches = [

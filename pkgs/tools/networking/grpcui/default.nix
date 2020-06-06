@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0dcah6bamjqyp9354qrd1cykdr5k5l93hh7qcy5b4nkag9531gl0";
   };
 
-  modSha256 = "1yq8484cjxad72nqsrim3zppr8hmn7dc6f8rgkw8fg952lqy5jjb";
+  vendorSha256 = "0m9nn8x0ji0n9v3d5w5z3grwv0zh8ijvh92jqjpcfv4bcjr5vsjr";
 
   meta = with lib; {
     description = "An interactive web UI for gRPC, along the lines of postman";

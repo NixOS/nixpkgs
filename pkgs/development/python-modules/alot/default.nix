@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "alot";
-  version = "0.9";
+  version = "0.9.1";
   outputs = [ "out" ] ++ lib.optional withManpage "man";
 
   disabled = !isPy3k;
@@ -16,17 +16,8 @@ buildPythonPackage rec {
     owner = "pazz";
     repo = "alot";
     rev = version;
-    sha256 = "sha256-WUwOJcq8JE7YO8sFeZwYikCRhpufO0pL6MKu54ZYsHI=";
+    sha256 = "0s94m17yph1gq9f2svipb3bbwbw1s4j3zf2xkg5h91006v8286r6";
   };
-
-  patches = [
-    # can't compose email if signature is set: https://github.com/pazz/alot/issues/1468
-    (fetchpatch {
-      name = "envelope-body.patch";
-      url = "https://github.com/pazz/alot/commit/28a4296c7f556c251d71d9502681980d46d9fa55.patch";
-      sha256 = "1iwvmjyz4mh1g08vr85ywhah2xarcqg8dazagygk19icgsn45w06";
-    })
-  ];
 
   nativeBuildInputs = lib.optional withManpage sphinx;
 
@@ -70,6 +61,6 @@ buildPythonPackage rec {
     description = "Terminal MUA using notmuch mail";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ edibopp ];
   };
 }

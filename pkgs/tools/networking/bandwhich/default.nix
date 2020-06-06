@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = version;
-    sha256 = "09lyl9cpb5li7kyh0y78lhgvvb24ssfjmkz65xzbgm5jyrz8rmr4";
+    sha256 = "09qr8s136ilqa9r5yjys2mnyyprhancn5n4maqmlfbjrz590g6nb";
   };
 
-  cargoSha256 = "0m57cdbghzzjyxr6c0diyrfsjqip1dnqsh0zlapv8myizxy4rrzy";
+  cargoSha256 = "0awm79gbip3p2k3qr08n0p9lmmbnibnhvz06qzcj27gvmdxs8xvz";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 

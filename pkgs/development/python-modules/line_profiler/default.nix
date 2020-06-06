@@ -5,6 +5,7 @@
 , isPyPy
 , ipython
 , python
+, scikit-build
 }:
 
 buildPythonPackage rec {
@@ -16,11 +17,9 @@ buildPythonPackage rec {
     sha256 = "7218ad6bd81f8649b211974bf108933910f016d66b49651effe7bbf63667d141";
   };
 
-  patches = [ ./python37.patch ];
+  nativeBuildInputs = [ cython ];
 
-  buildInputs = [ cython ];
-
-  propagatedBuildInputs = [ ipython ];
+  propagatedBuildInputs = [ ipython scikit-build ];
 
   disabled = isPyPy;
 
@@ -37,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rkern/line_profiler";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
+    broken = true;
   };
 }

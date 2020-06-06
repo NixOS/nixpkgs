@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "Zb/hEejuv/093jAWzLUH+ZSNJmPZSXy0ONm7YJ4R1xY=";
+    sha256 = "05np26g61fyr72s7qjfrcck8v57r0yswq5ihvqyzvgzfx08y3gv5";
   };
 
   nativeBuildInputs = [

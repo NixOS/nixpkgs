@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.13.0";
+  version = "0.14.1";
 
   disabled = pythonOlder "3.5";
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "03fgqmyahgmkf5dbw19n9c1v8p4kmpk50wxhhc8435cclvs26x9j";
+    sha256 = "0pd7x2jrqy7q1s38ychqw9bayjn2rvi6rq7c2c0kd160rwj1l2sc";
   };
 
   nativeBuildInputs = [ cython ];
@@ -92,10 +92,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "qiskit"
     "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial"
-  ];
-
-  disabledTests = [
-    "test_jupyter_jobs_pbars" # needs IBMQ provider package (qiskit-ibmq-provider), circular dependency
   ];
 
   pytestFlagsArray = [

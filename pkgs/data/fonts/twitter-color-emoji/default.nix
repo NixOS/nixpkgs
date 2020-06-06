@@ -22,7 +22,7 @@ let
     owner = "twitter";
     repo = "twemoji";
     rev = "v${version}";
-    hash = "sha256-qb3bLiUgtA8QQ13u928kvM+3qwmQpyjUk0EPKja1kSk=";
+    sha256 = "0acinlv2l3s1jga2i9wh16mvgkxw4ipzgvjx8c80zd104lpdpgd9";
   };
 
 in
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     # ImageMagick -> GraphicsMagick
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/07778605d50696f6aa929020e82611a01d254c90/f/noto-emoji-use-gm.patch";
-      sha256 = "sha256-kyJwT1SKS1vnXxvPTiIMK6TRHMp1ZOSlb6rodL4Jbxs=";
+      sha256 = "06vg16z79s5adyjy8r3mr8fd391b1hi4xkqvbzkmnjwaai7p08lk";
     })
   ];
 

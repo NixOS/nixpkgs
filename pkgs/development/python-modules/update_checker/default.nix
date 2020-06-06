@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "update_checker";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f38l40d32dm0avcidf3dmikma8z0la84yngj88v4xygzi399qvh";
+    sha256 = "0qhfn5fjjab50gbnj2053wdfppzkydqgapfz35ymrm1vysvqvvrd";
   };
 
   propagatedBuildInputs = [ requests ];

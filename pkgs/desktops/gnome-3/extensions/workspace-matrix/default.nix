@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mzur";
     repo = "gnome-shell-wsmatrix";
     rev = "v${version}";
-    sha256 = "LTDkKSKvReJxBzAERE+vV+uJBNZw6UyhiB7kN48BZCo=";
+    sha256 = "0ak4067kgr0yi2hlrsbhsq28ksspmx7l811h0xqy4idg48ly8c1d";
   };
 
   uuid = "wsmatrix@martin.zurowietz.de";

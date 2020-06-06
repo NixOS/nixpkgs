@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "Laxp9xbo0EunqVCRWJ4rquyV3KzpMssVg5Fj20ebHfM=";
+    sha256 = "1wqxkd3xnqwihcawncp9mkf9bv5a5fg5i4ahm6klpl782vvnkb1d";
   };
 
   patches = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/gtk/merge_requests/1793
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gtk/commit/6d9db8610eff8c12d594d53b7813d9eea1247801.patch";
-      sha256 = "QHseZWgPlZBDEM2dIVixUJkGZMCaYjahkLmSCqCcoWU=";
+      sha256 = "0rd1kjh0m4mrj2hkcqlsq1j0d6ahn5c237fd211r158gd1jiwys0";
     })
   ] ++ optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin

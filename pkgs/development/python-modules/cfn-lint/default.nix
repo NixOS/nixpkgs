@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.26.2";
+  version = "0.26.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5449313b5f176024bd5fd6ebe69ce986a2d9b8a9d6a147b2d442c8d9fa99a6c5";
+    sha256 = "384c37d239579c7b9f61a3aaadb92ebe81f37cd6ee6a161485401179af6c7a44";
   };
 
   propagatedBuildInputs = [

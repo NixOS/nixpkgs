@@ -1,22 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, Babel, celery, importlib-metadata, pytz, tornado, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, Babel
+, celery
+, future
+, humanize
+, importlib-metadata
+, mock
+, pytz
+, tornado
+}:
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "0.9.3";
-  
+  version = "0.9.4";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f45acb297ab7cf3dd40140816143a2588f6938dbd70b8c46b59c7d8d1e93d55";
+    sha256 = "25782840f7ffc25dcf478d94535a2d815448de4aa6c71426be6abfa9ca417448";
   };
 
-  propagatedBuildInputs = [ Babel celery importlib-metadata pytz tornado ];
-  
+  # flower and humanize aren't listed in setup.py but imported
+  propagatedBuildInputs = [
+    Babel
+    celery
+    future
+    importlib-metadata
+    pytz
+    tornado
+    humanize
+  ];
+
   checkInputs = [ mock ];
-  
+
   meta = with lib; {
     description = "Celery Flower";
     homepage = "https://github.com/mher/flower";
-    license = licenses.bsdOriginal;    
+    license = licenses.bsdOriginal;
     maintainers = [ maintainers.arnoldfarkas ];
   };
 }

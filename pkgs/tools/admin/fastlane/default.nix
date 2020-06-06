@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     maintainers     = with maintainers; [
       peterromfeldhk
       nicknovitski
+      shahrukh330
     ];
   };
 }

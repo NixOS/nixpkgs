@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "dotnetcore2";
-  version = "2.1.13";
+  version = "2.1.14";
   format = "wheel";
   disabled = isPy27;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     inherit pname version format;
     python = "py3";
     platform = "manylinux1_x86_64";
-    sha256 = "1fbg3pn7g0a6pg0gb5vaapcc3cdp6wfnliim57fn3cnzmx5d8p6i";
+    sha256 = "0dxp9a73ncjylc09bjwq81fgj5ysk1yi27l8ka5f98121k1kmn6q";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -35,14 +35,18 @@ buildPythonPackage rec {
     )
   ];
 
-  # prevent exposing a broken dotnet executable
-  postInstall = ''
-    rm -r $out/${python.sitePackages}/${pname}/bin
+  # remove bin, which has a broken dotnetcore installation
+  installPhase = ''
+    rm -rf dotnetcore2/bin
+    mkdir -p $out/${python.sitePackages}/
+    cp -r dotnetcore2 $out/${python.sitePackages}/
   '';
 
   # no tests, ensure it's one useful function works
   checkPhase = ''
-    ${python.interpreter} -c 'from dotnetcore2 import runtime; print(runtime.get_runtime_path())'
+    rm -r dotnetcore2 # avoid importing local directory
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+    ${python.interpreter} -c 'from dotnetcore2 import runtime; print(runtime.get_runtime_path()); runtime.ensure_dependencies()'
   '';
 
   meta = with lib; {

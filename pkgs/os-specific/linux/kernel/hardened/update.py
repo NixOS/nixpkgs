@@ -184,11 +184,10 @@ for filename in os.listdir(NIXPKGS_KERNEL_PATH):
             with import {NIXPKGS_PATH} {{}};
             (callPackage {NIXPKGS_KERNEL_PATH / filename} {{}}).version
         """
-        kernel_version = parse_version(
-            run(
-                "nix", "eval", "--impure", "--raw", "--expr", nix_version_expr,
-            ).stdout
-        )
+        kernel_version_json = run(
+            "nix-instantiate", "--eval", "--json", "--expr", nix_version_expr,
+        ).stdout
+        kernel_version = parse_version(json.loads(kernel_version_json))
         if kernel_version < MIN_KERNEL_VERSION:
             continue
         kernel_key = major_kernel_version_key(kernel_version)

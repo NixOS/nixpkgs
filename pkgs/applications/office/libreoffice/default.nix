@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, pam, python3, libxslt, perl, ArchiveZip, gettext
+{ stdenv, fetchurl, fetchpatch, lib, pam, python3, libxslt, perl, ArchiveZip, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
+, bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
 , openssl, gperf, cppunit, poppler, utillinux
 , librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus-glib, qt4, clucene_core, libcdr, lcms, vigra
+, libwpg, dbus-glib, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, bluez5, libtool, carlito
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
@@ -15,7 +15,8 @@
 , gnome3, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ru" "sl" "zh-CN" ]
 , withHelp ? true
-, kdeIntegration ? false
+, kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
+, ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
 , variant ? "fresh"
 } @ args:
 
@@ -28,8 +29,9 @@ let
 
   inherit (primary-src) major minor subdir version;
 
-  lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
+
+  mkDrv = if kdeIntegration then mkDerivation else stdenv.mkDerivation;
 
   srcs = {
     third_party =
@@ -47,7 +49,7 @@ let
     translations = primary-src.translations;
     help = primary-src.help;
   };
-in (stdenv.mkDerivation rec {
+in (mkDrv rec {
   pname = "libreoffice";
   inherit version;
 
@@ -57,8 +59,9 @@ in (stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal"
-    + stdenv.lib.optionalString stdenv.isx86_64 " -mno-fma";
+  NIX_CFLAGS_COMPILE = [
+    "-I${librdf_rasqal}/include/rasqal"
+  ] ++ lib.optional stdenv.isx86_64 "-mno-fma";
 
   patches = [
     ./xdg-open-brief.patch
@@ -84,8 +87,20 @@ in (stdenv.mkDerivation rec {
     tar -xf ${srcs.translations}
   '';
 
-  postPatch = ''
-    sed -e 's@/usr/bin/xdg-open@xdg-open@g' -i shell/source/unix/exec/shellexec.cxx
+  ### QT/KDE
+  #
+  # We have to resort to the ugly patching of configure.ac as it assumes that
+  # the first directory that contains headers and libraries during the check
+  # contains all the relevant headers/libs which doesn't work with both as they
+  # are in multiple directories due to each having their own derivation.
+  postPatch = let
+    inc = e: path:
+      "${lib.getDev e}/include/KF5/${path}";
+    libs = list:
+      lib.concatMapStringsSep " " (e: "-L${lib.getLib e}/lib") list;
+  in ''
+    substituteInPlace shell/source/unix/exec/shellexec.cxx \
+      --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
 
     # configure checks for header 'gpgme++/gpgmepp_version.h',
     # and if it is found (no matter where) uses a hardcoded path
@@ -96,9 +111,24 @@ in (stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+  '' + lib.optionalString kdeIntegration ''
+      substituteInPlace configure.ac \
+        --replace '$QT5INC'             ${qtbase.dev}/include \
+        --replace '$QT5LIB'             ${qtbase.out}/lib \
+        --replace '-I$qt5_incdir '      '-I${qtx11extras.dev}/include '\
+        --replace '-L$qt5_libdir '      '${libs [ qtbase qtx11extras ]} ' \
+        --replace '$KF5INC'             ${kcoreaddons.dev}/include \
+        --replace '$KF5LIB'             ${kcoreaddons.out}/lib \
+        --replace '$kf5_incdir/KCore'   ${inc kcoreaddons "KCore"} \
+        --replace '$kf5_incdir/KI18n'   ${inc ki18n "KI18n"} \
+        --replace '$kf5_incdir/KConfig' ${inc kconfig "KConfig"} \
+        --replace '$kf5_incdir/KWindow' ${inc kwindowsystem "KWindow"} \
+        --replace '$kf5_incdir/KIO'     ${inc kio "KIO"} \
+        --replace '-L$kf5_libdir '      '${libs [ kconfig kcoreaddons ki18n kio kwindowsystem ]} '
   '';
 
-  QT4DIR = qt4;
+  dontUseCmakeConfigure = true;
+  dontUseCmakeBuildDir = true;
 
   preConfigure = ''
     configureFlagsArray=(
@@ -264,13 +294,15 @@ in (stdenv.mkDerivation rec {
     ln -s $out/lib/libreoffice/share/xdg $out/share/applications
 
     for f in $out/share/applications/*.desktop; do
-      substituteInPlace "$f" --replace "Exec=libreofficedev${major}.${minor}" "Exec=libreoffice"
-      substituteInPlace "$f" --replace "Exec=libreoffice${major}.${minor}" "Exec=libreoffice"
-      substituteInPlace "$f" --replace "Exec=libreoffice" "Exec=libreoffice"
+      substituteInPlace "$f" \
+        --replace "Exec=libreofficedev${major}.${minor}" "Exec=libreoffice" \
+        --replace "Exec=libreoffice${major}.${minor}"    "Exec=libreoffice"
     done
 
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
+
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
 
     mkdir -p $dev
     cp -r include $dev
@@ -335,29 +367,35 @@ in (stdenv.mkDerivation rec {
     "--without-system-libstaroffice"
     "--without-system-libepubgen"
     "--without-system-libqxp"
-    "--without-system-mdds"
+    "--without-system-mdds" # we have mdds but our version is too new
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
     "--without-system-qrcodegen"
     "--without-system-xmlsec"
-  ];
+  ] ++ lib.optionals kdeIntegration [
+    "--enable-kf5"
+    "--enable-qt5"
+    "--enable-gtk3-kde5"
+  ] ++ lib.optional (lib.versionOlder version "6.4") "--disable-gtk"; # disables GTK2, GTK3 is still there
 
   checkPhase = ''
     make unitcheck
     make slowcheck
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook gdb fontforge autoconf automake bison pkgconfig libtool ];
+  nativeBuildInputs = [
+    gdb fontforge autoconf automake bison pkgconfig libtool
+  ] ++ lib.optional (!kdeIntegration) wrapGAppsHook;
 
   buildInputs = with xorg;
     [ ant ArchiveZip boost cairo clucene_core
       IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
-      freetype getopt gperf gtk3 gtk2
+      freetype getopt gperf gtk3
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs libGLU libGL mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base glib libmysqlclient
+      libXdmcp libpthreadstubs libGLU libGL mythes
+      glib libmysqlclient
       neon nspr nss openldap openssl pam perl pkgconfig poppler
       python3 sane-backends unzip vigra which zip zlib
       mdds bluez5 libcmis libwps libabw libzmf
@@ -365,7 +403,8 @@ in (stdenv.mkDerivation rec {
       librevenge libe-book libmwaw glm glew ncurses epoxy
       libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
     ]
-    ++ lib.optional kdeIntegration kdelibs4;
+    ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
+    ++ lib.optional kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
 
   passthru = {
     inherit srcs jdk;

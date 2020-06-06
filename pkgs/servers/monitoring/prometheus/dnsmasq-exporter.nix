@@ -11,7 +11,7 @@ buildGoModule rec {
     rev = "v${version}";
   };
 
-  modSha256 = "1ag1k0z35zkazaxj8hh2wxfj73xg63xdybfm1565il2vxs5986dh";
+  vendorSha256 = "1dqpa180pbdi2gcmp991d4cry560mx5rm5l9x065s9n9gnd38hvl";
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

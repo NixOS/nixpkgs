@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "word2vec";
-  version = "0.10.2";
+  version = "0.10.6";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "40f6f30a5f113ffbfc24c5ad5de23bfac897f4c1210fb93685b7fca5c4dee7db";
+    sha256 = "95aa222ff2d5c2559192414b794870d14a022016ba83f1bef0cf8cc185e41483";
   };
 
   propagatedBuildInputs = [ cython numpy scikitlearn six ];

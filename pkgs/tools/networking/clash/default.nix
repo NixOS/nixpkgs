@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   goPackagePath = "github.com/Dreamacro/clash";
-  modSha256 = "113ynl1f01ihmbc376rb421rrjlxxbc8p9fhxrvpxcsm10rjky8w";
+  vendorSha256 = "0nh3cn31p7yhnhjzqp84dnhzy3hag253bjp70w8q03lw7mkhdgz3";
 
   buildFlagsArray = [
     "-ldflags="

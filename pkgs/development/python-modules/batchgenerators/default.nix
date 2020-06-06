@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchFromGitHub
+, fetchpatch
 , pytest
 , unittest2
 , future
@@ -26,6 +27,13 @@ buildPythonPackage rec {
     sha256 = "0cc3i4wznqb7lk8n6jkprvkpsby6r7khkxqwn75k8f01mxgjfpvf";
     
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/MIC-DKFZ/batchgenerators/pull/59.patch";
+      sha256 = "171b3dm40yn0wi91m9s2nq3j565s1w39jpdf1mvc03rn75i8vdp0";
+    })
+  ];
 
   propagatedBuildInputs = [
     future numpy pillow scipy scikitlearn scikitimage threadpoolctl

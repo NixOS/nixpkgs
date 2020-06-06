@@ -7,6 +7,8 @@ buildDunePackage rec {
 
   inherit (dune_2) src version;
 
+  minimumOCamlVersion = "4.07";
+
   dontAddPrefix = true;
 
   meta = with lib; {

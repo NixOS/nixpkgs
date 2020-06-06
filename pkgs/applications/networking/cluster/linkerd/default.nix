@@ -2,16 +2,16 @@
 
 buildGoModule {
   pname = "linkerd-unstablle";
-  version = "2019-07-26";
+  version = "2020-05-01";
 
   src = fetchFromGitHub {
     owner = "linkerd";
     repo = "linkerd2";
-    rev = "065dd3ec9d4b84c90383b31be16ccadd34a8ab0d";
-    sha256 = "01m8g627sd126as0a74fy9svmymwd41sifd897nhn6kz78a21gq8";
+    rev = "9e9f3bb1e2aeab8cf20f98f5cad159bbb6f24883";
+    sha256 = "1pvj31wz1klwhcqga1m8kixdqsxwmppp9ix6r3wpp4dwfig45fm0";
   };
 
-  modSha256 = "0gahhywpcj16ww4l8s3wjwvavq24fpy258snhyf94ipy6lb797sl";
+  vendorSha256 = "0vls58ld50jca5yn73kvg3lx4z83cc7skky54a90pkbj737y58pz";
 
   subPackages = [ "cli/cmd" ];
 

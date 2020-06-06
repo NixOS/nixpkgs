@@ -1,29 +1,30 @@
-{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ stdenv, buildGoModule, fetchurl, nixosTests }:
 
 buildGoModule rec {
   pname = "ipfs";
   version = "0.5.1";
   rev = "v${version}";
 
-  src = fetchFromGitHub {
-    owner = "ipfs";
-    repo = "go-ipfs";
-    inherit rev;
-    sha256 = "11l55hlbixv1i25d3n216pkrwgcgac99fa88lyy3dailvminqxw7";
+  # go-ipfs makes changes to it's source tarball that don't match the git source.
+  src = fetchurl {
+    url = "https://github.com/ipfs/go-ipfs/releases/download/${rev}/go-ipfs-source.tar.gz";
+    sha256 = "0lpilycjbc1g9adp4d5kryfprixj18hg3235fnivakmv7fy2akkm";
   };
 
-  postPatch = ''
-    rm -rf test/dependencies
-    patchShebangs plugin/loader/preload.sh
+  # tarball contains multiple files/directories
+  postUnpack = ''
+    mkdir ipfs-src
+    mv * ipfs-src || true
+    cd ipfs-src
   '';
 
-  buildPhase = ''
-    make install
-  '';
+  sourceRoot = ".";
+
+  subPackages = [ "cmd/ipfs" ];
 
   passthru.tests.ipfs = nixosTests.ipfs;
 
-  modSha256 = "13mpva3r6r2amw08g0bdggbxn933jjimngkvzgq1q5dksp4mivfk";
+  vendorSha256 = null;
 
   meta = with stdenv.lib; {
     description = "A global, versioned, peer-to-peer filesystem";
