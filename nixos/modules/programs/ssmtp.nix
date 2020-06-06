@@ -21,9 +21,11 @@ in
     (mkRenamedOptionModule [ "networking" "defaultMailServer" "useTLS" ] [ "services" "ssmtp" "useTLS" ])
     (mkRenamedOptionModule [ "networking" "defaultMailServer" "useSTARTTLS" ] [ "services" "ssmtp" "useSTARTTLS" ])
     (mkRenamedOptionModule [ "networking" "defaultMailServer" "authUser" ] [ "services" "ssmtp" "authUser" ])
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authPass" ] [ "services" "ssmtp" "authPass" ])
     (mkRenamedOptionModule [ "networking" "defaultMailServer" "authPassFile" ] [ "services" "ssmtp" "authPassFile" ])
     (mkRenamedOptionModule [ "networking" "defaultMailServer" "setSendmail" ] [ "services" "ssmtp" "setSendmail" ])
+
+    (mkRemovedOptionModule [ "networking" "defaultMailServer" "authPass" ] "authPass has been removed since it leaks the clear-text password into the world-readable store. Use authPassFile instead and make sure it's not a store path")
+    (mkRemovedOptionModule [ "services" "ssmtp" "authPass" ] "authPass has been removed since it leaks the clear-text password into the world-readable store. Use authPassFile instead and make sure it's not a store path")
   ];
 
   options = {
@@ -116,18 +118,6 @@ in
         '';
       };
 
-      authPass = mkOption {
-        type = types.str;
-        default = "";
-        example = "correctHorseBatteryStaple";
-        description = ''
-          Password used for SMTP auth. (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)
-
-          It's recommended to use <option>authPassFile</option>
-          which takes precedence over <option>authPass</option>.
-        '';
-      };
-
       authPassFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -136,11 +126,6 @@ in
           Path to a file that contains the password used for SMTP auth. The file
           should not contain a trailing newline, if the password does not contain one.
           This file should be readable by the users that need to execute ssmtp.
-
-          <option>authPassFile</option> takes precedence over <option>authPass</option>.
-
-          Warning: when <option>authPass</option> is non-empty <option>authPassFile</option>
-          defaults to a file in the WORLD-READABLE Nix store containing that password.
         '';
       };
 
@@ -156,12 +141,6 @@ in
 
 
   config = mkIf cfg.enable {
-
-    services.ssmtp.authPassFile = mkIf (cfg.authPass != "")
-      (mkDefault (toString (pkgs.writeTextFile {
-        name = "ssmtp-authpass";
-        text = cfg.authPass;
-      })));
 
     services.ssmtp.settings = mkMerge [
       ({
