@@ -45,6 +45,21 @@ in
         '';
       };
 
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ bool str ]);
+        default = {};
+        description = ''
+          <citerefentry><refentrytitle>ssmtp</refentrytitle><manvolnum>5</manvolnum></citerefentry> configuration. Refer
+          to <link xlink:href="https://linux.die.net/man/5/ssmtp.conf"/> for details on supported values.
+        '';
+        example = literalExample ''
+          {
+            Debug = true;
+            FromLineOverride = false;
+          }
+        '';
+      };
+
       hostName = mkOption {
         type = types.str;
         example = "mail.example.org";
@@ -148,19 +163,28 @@ in
         text = cfg.authPass;
       })));
 
-    environment.etc."ssmtp/ssmtp.conf".text =
-      let yesNo = yes : if yes then "YES" else "NO"; in
-      ''
-        MailHub=${cfg.hostName}
-        FromLineOverride=YES
-        ${optionalString (cfg.root   != "") "root=${cfg.root}"}
-        ${optionalString (cfg.domain != "") "rewriteDomain=${cfg.domain}"}
-        UseTLS=${yesNo cfg.useTLS}
-        UseSTARTTLS=${yesNo cfg.useSTARTTLS}
-        #Debug=YES
-        ${optionalString (cfg.authUser != "")       "AuthUser=${cfg.authUser}"}
-        ${optionalString (cfg.authPassFile != null) "AuthPassFile=${cfg.authPassFile}"}
-      '';
+    services.ssmtp.settings = mkMerge [
+      ({
+        MailHub = cfg.hostName;
+        FromLineOverride = mkDefault true;
+        UseTLS = cfg.useTLS;
+        UseSTARTTLS = cfg.useSTARTTLS;
+      })
+      (mkIf (cfg.root != "") { root = cfg.root; })
+      (mkIf (cfg.domain != "") { rewriteDomain = cfg.domain; })
+      (mkIf (cfg.authUser != "") { AuthUser = cfg.authUser; })
+      (mkIf (cfg.authPassFile != null) { AuthPassFile = cfg.authPassFile; })
+    ];
+
+    environment.etc."ssmtp/ssmtp.conf".source =
+      let
+        toStr = value:
+          if value == true then "YES"
+          else if value == false then "NO"
+          else builtins.toString value
+        ;
+      in
+        pkgs.writeText "ssmtp.conf" (concatStringsSep "\n" (mapAttrsToList (key: value: "${key}=${toStr value}") cfg.settings));
 
     environment.systemPackages = [pkgs.ssmtp];
 
