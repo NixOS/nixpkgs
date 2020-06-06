@@ -65,6 +65,7 @@ luazip,,,,,
 lua-yajl,,,,,pstn
 luuid,,,,,
 luv,,,,,
+lyaml,,,,,lblasc
 markdown,,,,,
 mediator_lua,,,,,
 mpack,,,,,
