@@ -97,6 +97,12 @@ stdenv.mkDerivation {
     substituteInPlace meson.build --replace \
       "find_program('pkg-config')" \
       "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
+
+    # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
+    substituteInPlace src/util/xmlconfig.c --replace \
+      'DATADIR "/drirc.d"' '"${placeholder "out"}/drirc.d"'
+    substituteInPlace src/util/meson.build --replace \
+      "get_option('datadir')" "'${placeholder "out"}'"
   '';
 
   outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";
@@ -104,6 +110,7 @@ stdenv.mkDerivation {
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
     "--sysconfdir=/etc"
+    "--datadir=${placeholder "drivers"}/share" # Vendor files
 
     # Don't build in debug mode
     # https://gitlab.freedesktop.org/mesa/mesa/blob/master/docs/meson.html#L327
@@ -183,9 +190,6 @@ stdenv.mkDerivation {
       # Move other drivers to a separate output
       mv $out/lib/lib*_mesa* $drivers/lib
     fi
-
-    # move vendor files
-    mv $out/share/ $drivers/
 
     # Update search path used by glvnd
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
