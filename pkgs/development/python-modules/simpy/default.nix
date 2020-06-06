@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "simpy";
-  version = "3.0.13";
+  version = "4.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd8c16ca3cff1574c99fe9f5ea4019c631c327f2bdc842e8b1a5c55f5e3e9d27";
+    sha256 = "b36542e2faab612f861c5ef4da17220ac1553f5892b3583c67281dbe4faad404";
   };
 
   meta = with lib; {
