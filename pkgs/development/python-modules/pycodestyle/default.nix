@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0v4prb05n21bm8650v0a01k1nyqjdmkrsm3zycfxh2j5k9n962p4";
+    sha256 = "c58a7d2815e0e8d7972bf1803331fb0152f867bd89adf8a01dfd55085434192e";
   };
 
   # https://github.com/PyCQA/pycodestyle/blob/2.5.0/tox.ini#L14
