@@ -1002,6 +1002,8 @@ in {
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
+  
+  nunavut = callPackage ../development/python-modules/nunavut { };
 
   oath = callPackage ../development/python-modules/oath { };
 
