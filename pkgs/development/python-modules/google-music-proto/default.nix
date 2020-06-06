@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "google-music-proto";
-  version = "2.8.0";
+  version = "2.10.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10qraipdr18pwnr1dz6ai5vxs9lmww5wbavbh1xyg4lsggmlsrqb";
+    sha256 = "91b78c0de4f59b1e5503fd6d49cb3fec029d9199cca0794c87667e643342e987";
   };
 
   postPatch = ''
