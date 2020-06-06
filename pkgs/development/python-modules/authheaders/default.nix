@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "authheaders";
-  version = "0.12.2";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a6f96d1dfb7a6cffcdd78d1582914d4f9a0b25d66e1cf5ce959446c92cd8b74f";
+    sha256 = "935726b784cc636cbcfed2c977f1a6887dc60056806da4eff60db932c5896692";
   };
 
   propagatedBuildInputs = [ authres dnspython dkimpy publicsuffix ]
