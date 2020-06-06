@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "0.6.2";
+  version = "0.7.0";
 
   propagatedBuildInputs = [ tzlocal requests vobject lxml nose ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "80c33b143539da3a471148ac89512f67d9df3a5286fae5a023e2ad3923246c0d";
+    sha256 = "f5982b204fcfac8598381e35e46b667542bd728009971271463f81100e6e5943";
   };
 
   # xandikos is only a optional test dependency, not available for python3
