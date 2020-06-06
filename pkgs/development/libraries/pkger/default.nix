@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "pkger";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "markbates";
     repo = "pkger";
     rev = "v${version}";
-    sha256 = "0fpvrgww5h40l2js7raarx6gpysafvj75x26ljx4qz925x8nb6zn";
+    sha256 = "195ba1avkpm9ssgakngv8j72k7yq2xna3xmm5m8l6c5g7lf91kkp";
   };
 
   vendorSha256 = "1b9gpym6kb4hpdbrixphfh1qylmqr265jrmcd4vxb87ahvrsrvgp";
