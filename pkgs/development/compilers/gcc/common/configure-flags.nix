@@ -24,6 +24,16 @@
 assert cloog != null -> stdenv.lib.versionOlder version "5";
 assert langJava -> stdenv.lib.versionOlder version "7";
 
+# Note [Windows Exception Handling]
+# sjlj (short jump long jump) exception handling makes no sense on x86_64,
+# it's forcably slowing programs down as it produces a constant overhead.
+# On x86_64 we have SEH (Structured Exception Handling) and we should use
+# that. On i686, we do not have SEH, and have to use sjlj with dwarf2.
+# Hence it's now conditional on x86_32 (i686 is 32bit).
+#
+# ref: https://stackoverflow.com/questions/15670169/what-is-difference-between-sjlj-vs-dwarf-vs-seh
+
+
 let
   inherit (stdenv)
     buildPlatform hostPlatform targetPlatform
@@ -55,8 +65,11 @@ let
       "--with-gnu-as"
       "--with-gnu-ld"
       "--disable-debug"
-      "--enable-sjlj-exceptions"
       "--disable-win32-registry"
+    ] ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
+      # See Note [Windows Exception Handling]
+      "--enable-sjlj-exceptions"
+      "--with-dwarf2"
     ] else [
       (if crossDarwin then "--with-sysroot=${lib.getLib libcCross}/share/sysroot"
        else                "--with-headers=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
@@ -78,11 +91,9 @@ let
       # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
       "--disable-libmpx"
     ] ++ lib.optionals crossMingw [
-      "--enable-sjlj-exceptions"
       "--enable-hash-synchronization"
       "--enable-libssp"
       "--disable-nls"
-      "--with-dwarf2"
       # To keep ABI compatibility with upstream mingw-w64
       "--enable-fully-dynamic-string"
     ] ++ lib.optional (targetPlatform.libc == "newlib") "--with-newlib"
