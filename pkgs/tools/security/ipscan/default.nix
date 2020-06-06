@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ipscan";
-  version = "3.7.1";
+  version = "3.7.2";
 
   src = fetchurl {
     url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_all.deb";
-    sha256 = "1l6l3nb1yq0f09ia3k9k1dcpzp9g1hxnf547pqmiyiqvd27n7shs";
+    sha256 = "1c02y9p8x237l79v6m86d095lfpwlg2bhc2ramdmqsips0444bsi";
   };
 
   sourceRoot = ".";
