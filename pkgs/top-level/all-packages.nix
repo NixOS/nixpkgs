@@ -26679,6 +26679,9 @@ in
 
   omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
+  minipro = callPackage ../development/tools/minipro { };
+  minipro-unstable = callPackage ../development/tools/minipro/unstable.nix { };
+
   wasmtime = callPackage ../development/interpreters/wasmtime {};
 
   wfuzz = with python3Packages; toPythonApplication wfuzz;
