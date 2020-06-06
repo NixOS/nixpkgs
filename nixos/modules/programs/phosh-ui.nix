@@ -52,7 +52,12 @@ in
 
     security.pam.services.gdm.enableGnomeKeyring = true;
 
-    environment.systemPackages = [ pkgs.phoc pkgs.phosh pkgs.squeekboard oskItem ];
+    environment.systemPackages = [
+      pkgs.phoc
+      pkgs.phosh
+      pkgs.squeekboard
+      oskItem
+    ];
   };
 
 }
