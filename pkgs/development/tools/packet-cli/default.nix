@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "packet-cli";
-  version = "0.0.6";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "packethost";
     repo = pname;
     rev = version;
-    sha256 = "17f3ax7pjm5k93cxj7fd8hwr4id1lbzz9pkl2xflpxydi89bwdfz";
+    sha256 = "1ixdqq0xwy2l2m1w93rzqw5gfrzw7w03r42qab3n733m4jkf4ni1";
   };
 
   vendorSha256 = "10praxaiscxq4v3zknrabldxl7rpklkr5wdlwa5lxsx0if8mrvp7";
