@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "jaraco.itertools";
-  version = "4.4.2";
+  version = "5.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zxx8ffk5ycapy2d41dfgzskl5jfwjc10hsd91jsrax5alkhrh7x";
+    sha256 = "6447d567f57efe5efea386265c7864652e9530830a1b80f43e60b4f222b9ab84";
   };
 
   patches = [ ./0001-Don-t-run-flake8-checks-during-the-build.patch ];
