@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "node-problem-detector";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02avknglmkr9k933a64hkw0rjfxvyh4sc3x70p41b8q2g6vzv2gs";
+    sha256 = "0cphlaf9k2va879jgqd6fzdgkscpwg29j1cpr677i3zj3hfgaw1g";
   };
 
   vendorSha256 = null;
@@ -37,6 +37,7 @@ buildGoModule rec {
   meta = with stdenv.lib; {
     description = "Various problem detectors running on the Kubernetes nodes";
     homepage = "https://github.com/kubernetes/node-problem-detector";
+    changelog = "https://github.com/kubernetes/node-problem-detector/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ lbpdt ];
   };
