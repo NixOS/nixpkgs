@@ -10,7 +10,7 @@ date: 2019-02-05
 
 ### Overview of Lua
 
-Several versions of the Lua interpreter are available: luajit, lua5.1, 5.2, 5.3.
+Several versions of the Lua interpreter are available: luajit, lua 5.1, 5.2, 5.3.
 The attribute `lua` refers to the default interpreter, it is also possible to refer to specific versions, e.g. `lua_52` refers to Lua 5.2.
 
 Lua libraries are in separate sets, with one set per interpreter version.
@@ -18,10 +18,10 @@ Lua libraries are in separate sets, with one set per interpreter version.
 The interpreters have several common attributes. One of these attributes is
 `pkgs`, which is a package set of Lua libraries for this specific
 interpreter. E.g., the `busted` package corresponding to the default interpreter
-is `lua.pkgs.busted`, and the lua 5.2 version is lua_52.pkgs.busted`.
+is `lua.pkgs.busted`, and the lua 5.2 version is `lua5_2.pkgs.busted`.
 The main package set contains aliases to these package sets, e.g.
-`luaPackages` refers to `lua_51.pkgs` and `lua_52Packages` to
-`lua_52.pkgs`.
+`luaPackages` refers to `lua5_1.pkgs` and `lua52Packages` to
+`lua5_2.pkgs`.
 
 ### Installing Lua and packages
 
@@ -31,7 +31,7 @@ Create a file, e.g. `build.nix`, with the following expression
 ```nix
 with import <nixpkgs> {};
 
-lua_52.withPackages (ps: with ps; [ busted luafilesystem ])
+lua5_2.withPackages (ps: with ps; [ busted luafilesystem ])
 ```
 and install it in your profile with
 ```shell
@@ -77,14 +77,14 @@ For the sake of completeness, here's another example how to install the environm
 Use the following overlay template:
 
 ```nix
-self: prev:
+final: prev:
 {
 
   lua = prev.lua.override {
     packageOverrides = luaself: luaprev: {
 
       luarocks-nix = luaprev.luarocks-nix.overrideAttrs(oa: {
-        pname = "toto";
+        pname = "luarocks-nix";
         src = /home/my_luarocks/repository;
       });
   };
@@ -95,9 +95,6 @@ self: prev:
 
 ### Temporary Lua environment with `nix-shell`
 
-For development you may need to use multiple environments.
-`nix-shell` gives the possibility to temporarily load another environment, akin
-to `virtualenv`.
 
 There are two methods for loading a shell with Lua packages. The first and recommended method
 is to create an environment with `lua.buildEnv` or `lua.withPackages` and load that. E.g.
@@ -127,17 +124,20 @@ Let's present the luarocks way first and the manual one in a second time.
 
 ### Packaging a library on luarocks
 
-[Luarocks.org](www.luarocks.org) is the main repository of lua packages. The site proposes two types of packages, the rockspec and the src.rock (equivalent of a rockspec but with the source). These packages can have different build types such as `cmake`, `builtin` etc (See https://github.com/luarocks/luarocks/wiki/Rockspec-format).
+[Luarocks.org](www.luarocks.org) is the main repository of lua packages.
+The site proposes two types of packages, the rockspec and the src.rock
+(equivalent of a [rockspec](https://github.com/luarocks/luarocks/wiki/Rockspec-format) but with the source).
+These packages can have different build types such as `cmake`, `builtin` etc .
 
 Luarocks-based packages are generated in pkgs/development/lua-modules/generated-packages.nix from
 the whitelist maintainers/scripts/luarocks-packages.csv and updated by running maintainers/scripts/update-luarocks-packages.
 
-[luarocks2nix](https://github.com/teto/luarocks) is a tool capable of generating nix derivations from both rockspec and src.rock (and favors the src.rock).
-The automation only goes so far though and some packages need some customization.
-These go in pkgs/development/lua-modules/generated-packages.nix
-nix won't work with all packages. If the package lists `external_dependencies` in its rockspec file then it won't work.
+[luarocks2nix](https://github.com/nix-community/luarocks) is a tool capable of generating nix derivations from both rockspec and src.rock (and favors the src.rock).
+The automation only goes so far though and some packages need to be customized.
+These customizations go in `pkgs/development/lua-modules/overrides.nix`.
+For instance if the rockspec defines `external_dependencies`, these need to be manually added in in its rockspec file then it won't work.
 
-You can run `nix-shell -p luarocks-nix` and then `luarocks nix PKG_NAME`.
+You can try converting luarocks packages to nix packages with the command `nix-shell -p luarocks-nix` and then `luarocks nix PKG_NAME`.
 Nix rely on luarocks to install lua packages, basically it runs:
 `luarocks make --deps-mode=none --tree $out`
 
@@ -149,22 +149,23 @@ within a `toLuaModule` call, for instance
 mynewlib = toLuaModule ( stdenv.mkDerivation { ... });
 ```
 
-
+There is also the `buildLuaPackage` function that can be used when lua modules
+are not packaged for luarocks. You can see a few examples at `pkgs/top-level/lua-packages.nix`.
 
 ## Lua Reference
 
 ### Lua interpreters
 
 Versions 5.1, 5.2 and 5.3 of the lua interpreter are available as
-respectively `lua_51`, `lua_52` and `lua_53`. The luajit interpreter is also available.
-The Nix expressions for the interpreters can be found in `pkgs/development/interpreters/lua`.
+respectively `lua_51`, `lua_52` and `lua_53`. Luajit is available too.
+The Nix expressions for the interpreters can be found in `pkgs/development/interpreters/lua-5`.
 
 
 #### Attributes on lua interpreters packages
 
 Each interpreter has the following attributes:
 
-- `interpreter`. Alias for `${lua}/bin/lua`.
+- `interpreter`. Alias for `${pkgs.lua}/bin/lua`.
 - `buildEnv`. Function to build lua interpreter environments with extra packages bundled together. See section *lua.buildEnv function* for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`.
 - `pkgs`. Set of Lua packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
@@ -175,36 +176,32 @@ Each interpreter has the following attributes:
 The `buildLuarocksPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-lua-package.nix`
 The following is an example:
 ```nix
-luaexpat = buildLuarocksPackage rec {
-  pname = "luaexpat";
-  version = "1.3.0-1";
+luaposix = buildLuarocksPackage {
+  pname = "luaposix";
+  version = "34.0.4-1";
 
   src = fetchurl {
-    url    = https://luarocks.org/luaexpat-1.3.0-1.src.rock;
-    sha256 = "15jqz5q12i9zvjyagzwz2lrpzya64mih8v1hxwr0wl2gsjh86y5a";
+    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/luaposix-34.0.4-1.src.rock";
+    sha256 = "0yrm5cn2iyd0zjd4liyj27srphvy0gjrjx572swar6zqr4dwjqp2";
   };
-  disabled = luaOlder "5.1";
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ bit32 lua std_normalize ];
 
-  propagatedBuildInputs = [ lua ];
-
-  buildType="builtin";
-
-  meta = {
-    homepage = http://www.keplerproject.org/luaexpat/;
-    description="XML Expat parsing";
-    license = {
-      fullName = "MIT/X11";
-    };
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/luaposix/luaposix/";
+    description = "Lua bindings for POSIX";
+    maintainers = with maintainers; [ vyp lblasc ];
+    license.fullName = "MIT/X11";
   };
 };
 ```
 
 The `buildLuarocksPackage` delegates most tasks to luarocks:
 
-* it adds `luarocks` as an unpacker for `src.rock` files (in fact zip files)
+* it adds `luarocks` as an unpacker for `src.rock` files (zip files really).
 * configurePhase` writes a temporary luarocks configuration file which location
 is exported via the environment variable `LUAROCKS_CONFIG`.
-* In the `buildPhase`, nothing is done.
+* the `buildPhase` does nothing.
 * `installPhase` calls `luarocks make --deps-mode=none --tree $out` to build and
 install the package
 * In the `postFixup` phase, the `wrapLuaPrograms` bash function is called to
@@ -212,8 +209,7 @@ install the package
   environment variable and add dependent libraries to script's `LUA_PATH` and
   `LUA_CPATH`.
 
-By default `meta.platforms` is set to the same value
-as the interpreter unless overridden otherwise.
+By default `meta.platforms` is set to the same value as the interpreter unless overridden otherwise.
 
 #### `buildLuaApplication` function
 
@@ -232,19 +228,19 @@ lua.withPackages (ps: [ps.luafilesystem])
 ```
 
 `withPackages` passes the correct package set for the specific interpreter version as an argument to the function. In the above example, `ps` equals `luaPackages`.
-But you can also easily switch to using lua_52:
+But you can also easily switch to using `lua5_2`:
 ```nix
 with import <nixpkgs> {};
 
-lua_52.withPackages (ps: [ps.lua])
+lua5_2.withPackages (ps: [ps.lua])
 ```
 
-Now, `ps` is set to `lua_52Packages`, matching the version of the interpreter.
+Now, `ps` is set to `lua52Packages`, matching the version of the interpreter.
 
 
 ### Possible Todos
 
-* export/use version specific variables such as LUA_PATH_5_2/LUAROCKS_CONFIG_5_2
+* export/use version specific variables such as `LUA_PATH_5_2`/`LUAROCKS_CONFIG_5_2`
 * let luarocks check for dependencies via exporting the different rocktrees in temporary config
 
 ### Lua Contributing guidelines
@@ -252,5 +248,5 @@ Now, `ps` is set to `lua_52Packages`, matching the version of the interpreter.
 Following rules should be respected:
 
 * Make sure libraries build for all Lua interpreters.
-* Commit names of Lua libraries should reflect that they are Lua libraries, so write for example `lua.luafilesystem: 1.11 -> 1.12`.
+* Commit names of Lua libraries should reflect that they are Lua libraries, so write for example `luaPackages.luafilesystem: 1.11 -> 1.12`.
 
