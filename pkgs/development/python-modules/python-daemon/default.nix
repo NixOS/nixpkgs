@@ -20,6 +20,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ docutils lockfile ];
 
   checkInputs = [ pytest mock testscenarios ];
+
+  # Test suite is not compatible with pytest > 5.3.5
+  doCheck = false;
+
   checkPhase = ''
     pytest -k 'not detaches_process_context \
                 and not standard_stream_file_descriptors'
@@ -35,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to implement a well-behaved Unix daemon process";
     homepage = "https://pagure.io/python-daemon/";
+    changelog = "https://pagure.io/python-daemon/blob/master/f/ChangeLog";
     license = [ licenses.gpl3Plus licenses.asl20 ];
   };
 }
