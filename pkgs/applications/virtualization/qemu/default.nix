@@ -35,7 +35,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.2.0";
+  version = "5.0.0";
   pname = "qemu"
     + stdenv.lib.optionalString xenSupport "-xen"
     + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only"
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "1gczv8hn3wqci86css3mhzrppp3z8vppxw25l08j589k6bvz7x1w";
+    sha256 = "1ysyax70ljih46b87fd6rvrm1y0vvkmnmylr2qpgd2kf18fzhs63";
   };
 
   nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ];
@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-etc-install.patch
+];
+foo = [
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
     (fetchpatch {
