@@ -24,6 +24,7 @@ in
     (mkRenamedOptionModule [ "networking" "defaultMailServer" "authPass" ] [ "services" "ssmtp" "authPass" ])
     (mkRenamedOptionModule [ "networking" "defaultMailServer" "authPassFile" ] [ "services" "ssmtp" "authPassFile" ])
     (mkRenamedOptionModule [ "networking" "defaultMailServer" "setSendmail" ] [ "services" "ssmtp" "setSendmail" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "debug£" ] [ "services" "ssmtp" "debug" ])
   ];
 
   options = {
@@ -135,6 +136,12 @@ in
         description = "Whether to set the system sendmail to ssmtp's.";
       };
 
+      debug = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Log the entire contents of emails sent via sSMTP, including headers, to syslog.";
+      };
+
     };
 
   };
@@ -157,7 +164,7 @@ in
         ${optionalString (cfg.domain != "") "rewriteDomain=${cfg.domain}"}
         UseTLS=${yesNo cfg.useTLS}
         UseSTARTTLS=${yesNo cfg.useSTARTTLS}
-        #Debug=YES
+        Debug=${yesNo cfg.debug}
         ${optionalString (cfg.authUser != "")       "AuthUser=${cfg.authUser}"}
         ${optionalString (cfg.authPassFile != null) "AuthPassFile=${cfg.authPassFile}"}
       '';
