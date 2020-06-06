@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "bitwarden_rs-vault";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     tar xf $src
     mv web-vault vault
   '';
+
+  passthru.tests = nixosTests.bitwarden;
 
   meta = with stdenv.lib; {
     description = "Integrates the web vault into bitwarden_rs";
