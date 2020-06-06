@@ -19490,6 +19490,8 @@ in
 
   ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
 
+  github-cli = callPackage ../development/tools/github/cli { };
+
   gitweb = callPackage ../applications/version-management/git-and-tools/gitweb { };
 
   gksu = callPackage ../applications/misc/gksu { };
