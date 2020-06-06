@@ -764,9 +764,6 @@ following are specific to `buildPythonPackage`:
 * `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
-* `installFlags ? []`: A list of strings. Arguments to be passed to `pip
-  install`. To pass options to `python setup.py install`, use
-  `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"]`.
 * `format ? "setuptools"`: Format of the source. Valid options are
   `"setuptools"`, `"pyproject"`, `"flit"`, `"wheel"`, and `"other"`.
   `"setuptools"` is for when the source has a `setup.py` and `setuptools` is
@@ -782,6 +779,9 @@ following are specific to `buildPythonPackage`:
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
   defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications
   to `""`.
+* `pipInstallFlags ? []`: A list of strings. Arguments to be passed to `pip
+  install`. To pass options to `python setup.py install`, use
+  `--install-option`. E.g., `pipInstallFlags=["--install-option='--cpp_implementation'"]`.
 * `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages
   in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
 * `preShellHook`: Hook to execute commands before `shellHook`.
