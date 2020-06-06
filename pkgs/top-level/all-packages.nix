@@ -19815,6 +19815,8 @@ in
 
   git-review = callPackage ../applications/version-management/git-review { };
 
+  github-cli = gitAndTools.gh;
+
   gitolite = callPackage ../applications/version-management/gitolite { };
 
   inherit (gnome3) gitg;
