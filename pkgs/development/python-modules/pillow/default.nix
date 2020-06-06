@@ -68,8 +68,8 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://python-pillow.github.io/";
-    description = "Fork of The Python Imaging Library (PIL)";
+    homepage = "https://python-pillow.org/";
+    description = "The friendly PIL fork (Python Imaging Library)";
     longDescription = ''
       The Python Imaging Library (PIL) adds image processing
       capabilities to your Python interpreter.  This library
