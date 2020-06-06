@@ -41,6 +41,15 @@ let
           sha256 = "00y2d35wvqmx9glaqhfb62wdgbfpwr77v0934nnvh9ks71vnsjqy";
         };
       });
+    } // lib.optionalAttrs (channel == "dev") {
+      gnChromium = gn.overrideAttrs (oldAttrs: {
+        version = "2020-05-19";
+        src = fetchgit {
+          url = "https://gn.googlesource.com/gn";
+          rev = "d0a6f072070988e7b038496c4e7d6c562b649732";
+          sha256 = "0197msabskgfbxvhzq73gc3wlr3n9cr4bzrhy5z5irbvy05lxk17";
+        };
+      });
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine; };
