@@ -25,15 +25,15 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.8.0";
+    version = "2.8.1";
 
-    # tests fail with the 2.8.0 sdist, so fetchFromGitHub instead
+    # tests fail with the 2.8.1 sdist, so fetchFromGitHub instead
     # https://github.com/buildbot/buildbot/pull/5322
     src = fetchFromGitHub {
       owner = "buildbot";
       repo = "buildbot";
       rev = "v${version}";
-      sha256 = "0akd61mgjp53c3vyf2yyzd0xf0cjwpvsi7g8pz72xrvnil1s4w7k";
+      sha256 = "0y182wmlgcsm7s5sr3imjfxrjs5pkrdsx85gwi68f4iwkv0a7l5f";
     };
     sourceRoot = "./source/master";
 
