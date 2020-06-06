@@ -16948,6 +16948,8 @@ in
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
 
+    amdvlk = callPackage ../os-specific/linux/amdvlk { };
+
     anbox = callPackage ../os-specific/linux/anbox/kmod.nix { };
 
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
