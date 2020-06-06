@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "dpath";
-  version = "1.4.2";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gr7816pnzbyh9h1ia0qz0q1f9zfzacwb8dc36js8hw8x14myqqg";
+    sha256 = "bea06b5f4ff620a28dfc9848cf4d6b2bfeed34238edeb8ebe815c433b54eb1fa";
   };
 
   checkInputs = [ mock nose ];
