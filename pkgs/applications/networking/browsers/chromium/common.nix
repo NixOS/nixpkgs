@@ -4,7 +4,7 @@
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
-, xdg_utils, yasm, minizip, libwebp
+, xdg_utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib
 
 , python2Packages, perl, pkgconfig
@@ -72,14 +72,14 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng"
+    "flac" "libwebp" "libxslt" "opus" "snappy" "libpng"
     # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
                     # so we can't build with one from system and other from source
-  ];
+  ] ++ optional (upstream-info.channel != "dev") "yasm";
 
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
@@ -89,12 +89,12 @@ let
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
     libpng libcap
-    xdg_utils yasm minizip libwebp
+    xdg_utils minizip libwebp
     libusb1 re2 zlib
     ffmpeg libxslt libxml2
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
-  ];
+  ] ++ (if upstream-info.channel == "dev" then [ nasm ] else [ yasm ]);
 
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
@@ -224,8 +224,9 @@ let
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
     '';
 
-    gnFlags = mkGnFlags ({
+    gnFlags = mkGnFlags (optionalAttrs (upstream-info.channel != "dev") {
       linux_use_bundled_binutils = false;
+    } // {
       use_lld = false;
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
