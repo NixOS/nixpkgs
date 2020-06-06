@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "openfst";
@@ -8,7 +8,24 @@ stdenv.mkDerivation rec {
     url = "http://www.openfst.org/twiki/pub/FST/FstDownload/${pname}-${version}.tar.gz";
     sha256 = "03hs0196qbjfbviqn6nnb7igvv3cnpxyizlwlzmx88a6fhiq97bm";
   };
-  meta = {
+
+  configureFlags = [
+    "--enable-compact-fsts"
+    "--enable-compress"
+    "--enable-const-fsts"
+    "--enable-far"
+    "--enable-linear-fsts"
+    "--enable-lookahead-fsts"
+    "--enable-mpdt"
+    "--enable-ngram-fsts"
+    "--enable-pdt"
+  ];
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  meta = with stdenv.lib; {
     description = "Library for working with finite-state transducers";
     longDescription = ''
       Library for constructing, combining, optimizing, and searching weighted finite-state transducers (FSTs).
@@ -16,9 +33,8 @@ stdenv.mkDerivation rec {
       pattern matching, string processing, machine learning, information extraction and retrieval among others
     '';
     homepage = "http://www.openfst.org/twiki/bin/view/FST/WebHome";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.dfordivam ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = [ maintainers.dfordivam ];
+    platforms = platforms.unix;
   };
 }
-
