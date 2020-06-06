@@ -4,10 +4,13 @@
 , readline, woff2, zeromq, libuninameslist
 , withSpiro ? false, libspiro
 , withGTK ? false, gtk3
+, withGUI ? withGTK
 , withPython ? true
 , withExtras ? true
 , Carbon ? null, Cocoa ? null
 }:
+
+assert withGTK -> withGUI;
 
 stdenv.mkDerivation rec {
   pname = "fontforge";
@@ -36,12 +39,13 @@ stdenv.mkDerivation rec {
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
   ]
     ++ lib.optionals withSpiro [libspiro]
-    ++ lib.optionals withGTK [ gtk3 cairo pango ]
+    ++ lib.optionals withGUI [ gtk3 cairo pango ]
     ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
     ++ lib.optional (!withSpiro) "-DENABLE_LIBSPIRO=OFF"
-    ++ lib.optional (!withGTK) "-DENABLE_GUI=OFF"
+    ++ lib.optional (!withGUI) "-DENABLE_GUI=OFF"
+    ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
     ++ lib.optional withExtras "-DENABLE_FONTFORGE_EXTRAS=ON";
 
   # work-around: git isn't really used, but configuration fails without it
