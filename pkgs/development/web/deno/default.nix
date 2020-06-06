@@ -8,23 +8,26 @@
 , CoreServices
 }:
 let
-  rustyV8Lib = fetchlib "rusty_v8" "0.5.0" {
-    x86_64-linux = "1jmrqf5ns2y51cxx9r88my15m6gc6wmg54xadi3kphq47n4hmdfw";
-    aarch64-linux = "14v57pxpkz1fs483rbbc8k55rc4x41dqi0k12zdrjwa5ycdam3m5";
-    x86_64-darwin = "0466px7k2zvbsswwcrr342i5ml669gf76xd8yzzypsmb7l71s6vr";
-  };
-
+  deps = import ./deps.nix { };
   arch = rust.toRustTarget stdenv.hostPlatform;
-  fetchlib = name: version: sha256: fetchurl {
-    url = "https://github.com/denoland/${name}/releases/download/v${version}/librusty_v8_release_${arch}.a";
-    sha256 = sha256."${stdenv.hostPlatform.system}";
+  rustyV8Lib = with deps.rustyV8Lib; fetchurl {
+    url = "https://github.com/denoland/rusty_v8/releases/download/v${version}/librusty_v8_release_${arch}.a";
+    sha256 = sha256s."${stdenv.hostPlatform.system}";
     meta = { inherit version; };
   };
 in
 rustPlatform.buildRustPackage rec {
-  inherit pname version cargoSha256;
+  pname = "deno";
+  version = "1.0.5";
 
-  src = denoSrc;
+  src = fetchFromGitHub {
+    owner = "denoland";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1hlmgcppr01bddvp28js010hhlzyx2lm7g7lq9nrcjazfw7kd2pf";
+    fetchSubmodules = true;
+  };
+  cargoSha256 = "1jqaryr7np6h65a1bqr952h0vllsvd6v6v6wvivc7933dcbhdal4";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
@@ -35,16 +38,6 @@ rustPlatform.buildRustPackage rec {
   # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and place it in the locations it will require it in advance
   preBuild = ''
-    # Check the rusty_v8 lib downloaded matches the Cargo.lock file
-    rusty_v8_ver="$(grep 'name = "rusty_v8"' -A 1 Cargo.lock | grep "version =" | cut -d\" -f2)"
-    if [ "${rustyV8Lib.meta.version}" != "$rusty_v8_ver" ]; then
-      printf "%s\n" >&2 \
-        "version mismatch between 'rusty_v8' in Cargo.lock and downloaded library:" \
-        "  wanted: ${rustyV8Lib.meta.version}" \
-        "  got:    $rusty_v8_ver"
-      exit 1
-    fi;
-
     _rusty_v8_setup() {
       for v in "$@"; do
         dir="target/$v/gn_out/obj"
@@ -70,6 +63,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://deno.land/";
+    changelog = "${src.meta.homepage}/releases/tag/v${version}";
     description = "A secure runtime for JavaScript and TypeScript";
     longDescription = ''
       Deno aims to be a productive and secure scripting environment for the modern programmer.
