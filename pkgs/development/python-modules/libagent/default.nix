@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.13.1";
+  version = "0.14.1";
 
   src = fetchPypi{
     inherit pname version;
-    sha256 = "b9afa0851f668612702fcd648cee47af4dc7cfe4f86d4c4a84b1a6b4a4960b41";
+    sha256 = "dc979a564cb68cf7c6fa235bf747eb4555deb84f3a8d716940a1709377f140e7";
   };
 
   propagatedBuildInputs = [ unidecode backports-shutil-which ConfigArgParse
