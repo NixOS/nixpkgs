@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "6.2.1";
+  version = "7.0.1";
 
   checkInputs = [
     pytest
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c5944ffd2343141fa5679b17991c398e15105f3b35bb11beefe66c67e08289d5";
+    sha256 = "a633464dc3a22b305df0f27abcb3e83515898aa1fd0ed2f9726c3571a27258cf";
   };
 
   # testing based on project's tox.ini
