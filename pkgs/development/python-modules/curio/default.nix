@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "curio";
-  version = "0.9";
+  version = "1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "51d1a7b49b4f8dd1486ac785c72d522962e93ccfdcfc1f818f5c7553a307b5ef";
+    sha256 = "90f320fafb3f5b791f25ffafa7b561cc980376de173afd575a2114380de7939b";
   };
 
   disabled = !isPy3k;
