@@ -51,14 +51,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     rustc
     cargo
-    glib.dev
-    gtk3.dev
+    gtk3
     wayland
     makeWrapper
   ];
 
   buildInputs = [
-    glib
     gtk3
     gnome3.gnome-desktop
     wayland
