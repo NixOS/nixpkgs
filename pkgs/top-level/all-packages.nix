@@ -9172,15 +9172,11 @@ in
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_42 = callPackage ../development/compilers/rust/1_42.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
   rust_1_44 = callPackage ../development/compilers/rust/1_44.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
   rust = rust_1_44;
 
-  rustPackages_1_42 = rust_1_42.packages.stable;
   rustPackages_1_44 = rust_1_44.packages.stable;
   rustPackages = rustPackages_1_44;
 
@@ -22499,7 +22495,6 @@ in
   thonny = callPackage ../applications/editors/thonny { };
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
-    inherit (rustPackages_1_42) rustc;
     libpng = libpng_apng;
     gtk3Support = true;
   };
