@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "41386187b9261cd59a3ffe4cf9df58d517288a1d3f11d96749b39b4e38b0a02c";
+    sha256 = "ed440f43e33191f09aed7bbc4f60db3dfb8f295ab33e04c59302af7eda9e29aa";
   };
 
   propagatedBuildInputs = [
