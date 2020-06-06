@@ -1822,6 +1822,18 @@ let
     meta.homepage = "https://github.com/parsonsmatt/intero-neovim/";
   };
 
+  investigate-vim = buildVimPluginFrom2Nix {
+    pname = "investigate-vim";
+    version = "2020-02-29";
+    src = fetchFromGitHub {
+      owner = "keith";
+      repo = "investigate.vim";
+      rev = "aef9332ba3cfc070fb59fd7a4ac82bae2b42cd7b";
+      sha256 = "1jiipch8jr66h1cywwj0zdlx45p70d359s8ljdwcndjwicrqslmk";
+    };
+    meta.homepage = "https://github.com/keith/investigate.vim/";
+  };
+
   iosvkem = buildVimPluginFrom2Nix {
     pname = "iosvkem";
     version = "2020-01-18";
