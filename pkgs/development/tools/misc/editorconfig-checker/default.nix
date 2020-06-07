@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "editorconfig-checker";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
     rev = "${version}";
-    sha256 = "1y90yz8da0iqig3m0kbjcicwblkirbbx0s3agpmz2pdca6y2ijwi";
+    sha256 = "09v8gqwcaay3bqbidparmg20dy0mvlrzh34591hanbrx3cwhrz3f";
   };
 
-  vendorSha256 = "1lyrqrm3pyfv470dmymbkb3vpvp0i2zsndp7qw34fbhp2gnay5kh";
+  vendorSha256 = "132blcdw3lywxhqslkcpwwvkzl4cpbbkhb7ba8mrvfgl5kvfm1q0";
 
   nativeBuildInputs = [ installShellFiles ];
 
