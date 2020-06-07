@@ -1,6 +1,7 @@
 { lib, buildPythonPackage, fetchPypi
 , psutil
 , pytest
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
@@ -12,6 +13,7 @@ buildPythonPackage rec {
     sha256 = "779aeca517cd9c996d1544bdc510cb3cff40c48136d94bbce6148e27f30a93ff";
   };
 
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ psutil pytest ];
 
   # Remove test QoL package from install_requires
