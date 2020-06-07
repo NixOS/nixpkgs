@@ -136,6 +136,10 @@ let
 
   git-subrepo = callPackage ./git-subrepo { };
 
+  git-subset = callPackage ./git-subset {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-subtrac = callPackage ./git-subtrac { };
 
   git-sync = callPackage ./git-sync { };
