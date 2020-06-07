@@ -19416,6 +19416,8 @@ in
 
   bjumblr = callPackage ../applications/audio/bjumblr { };
 
+  bschaffl = callPackage ../applications/audio/bschaffl { };
+
   bsequencer = callPackage ../applications/audio/bsequencer { };
 
   bslizr = callPackage ../applications/audio/bslizr { };
