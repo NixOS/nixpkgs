@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform
+{ stdenv, makeWrapper, fetchFromGitHub, rustPlatform
 , openssh, openssl, pkgconfig, cmake, zlib, curl, libiconv
 , CoreFoundation, Security }:
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
   CARGO_BUILD_RUSTFLAGS = if stdenv.isDarwin then "-C rpath" else null;
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ openssh openssl curl zlib libiconv rustPlatform.rust.rustc.llvm ]
+  buildInputs = [ openssh openssl curl zlib libiconv makeWrapper rustPlatform.rust.rustc.llvm ]
     ++ (stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security ]);
 
   doCheck = true;
@@ -33,6 +33,11 @@ rustPlatform.buildRustPackage {
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/rls --version
+  '';
+
+  RUST_SRC_PATH = rustPlatform.rustcSrc;
+  postInstall = ''
+    wrapProgram $out/bin/rls --set-default RUST_SRC_PATH ${rustPlatform.rustcSrc}
   '';
 
   meta = with stdenv.lib; {
