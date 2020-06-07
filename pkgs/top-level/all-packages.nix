@@ -23947,6 +23947,8 @@ in
 
   pokerth-server = libsForQt5.callPackage ../games/pokerth { target = "server"; };
 
+  pterodactyl-panel = callPackage ../games/pterodactyl-panel { noDev=true; };
+
   prboom = callPackage ../games/prboom { };
 
   privateer = callPackage ../games/privateer { };
