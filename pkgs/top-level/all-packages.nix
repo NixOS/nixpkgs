@@ -21694,6 +21694,8 @@ in
     };
   };
 
+  qsudo = libsForQt5.callPackage ../applications/misc/qsudo { };
+
   qsynth = libsForQt5.callPackage ../applications/audio/qsynth { };
 
   qtbitcointrader = libsForQt5.callPackage ../applications/misc/qtbitcointrader { };
