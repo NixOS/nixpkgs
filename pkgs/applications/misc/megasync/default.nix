@@ -1,5 +1,5 @@
 { stdenv, autoconf, automake, c-ares, cryptopp, curl, doxygen, fetchFromGitHub
-, fetchpatch, ffmpeg, libmediainfo, libraw, libsodium, libtool, libuv, libzen
+, fetchpatch, ffmpeg_3, libmediainfo, libraw, libsodium, libtool, libuv, libzen
 , lsb-release, mkDerivation, pkgconfig, qtbase, qttools, sqlite, swig, unzip
 , wget }:
 
@@ -21,7 +21,7 @@ mkDerivation rec {
     c-ares
     cryptopp
     curl
-    ffmpeg
+    ffmpeg_3
     libmediainfo
     libraw
     libsodium

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeDesktopItem, wrapQtAppsHook, pkgconfig
-, cmake, epoxy, libzip, libelf, libedit, ffmpeg, SDL2, imagemagick
+, cmake, epoxy, libzip, libelf, libedit, ffmpeg_3, SDL2, imagemagick
 , qtbase, qtmultimedia, qttools, minizip }:
 
 let
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapQtAppsHook pkgconfig cmake ];
 
   buildInputs = [
-    epoxy libzip libelf libedit ffmpeg SDL2 imagemagick
+    epoxy libzip libelf libedit ffmpeg_3 SDL2 imagemagick
     qtbase qtmultimedia qttools minizip
   ];
 

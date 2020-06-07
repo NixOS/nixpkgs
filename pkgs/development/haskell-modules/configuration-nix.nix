@@ -724,7 +724,7 @@ self: super: builtins.intersectAttrs super {
   dhall_1_32_0 = dontCheck super.dhall_1_32_0;
 
   cut-the-crap =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg ];
+    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 ];
     in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, alsaLib, ffmpeg, glib, openssl
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, alsaLib, ffmpeg_3, glib, openssl
 , pcre, zlib, libX11, libXcursor, libXdamage, libXext, libXi, libXinerama
 , libXrandr, libXrender, libXv, libXtst, libxkbcommon, libxkbfile, wayland
 , gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc, libxslt
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     [
       alsaLib
       cups
-      ffmpeg
+      ffmpeg_3
       glib
       gst-plugins-base
       gst-plugins-good

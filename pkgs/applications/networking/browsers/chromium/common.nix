@@ -16,7 +16,7 @@
 , xorg
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2, at-spi2-core
+, ffmpeg_3, libxslt, libxml2, at-spi2-core
 , jre
 , pipewire_0_2
 
@@ -93,7 +93,7 @@ let
     libpng libcap
     xdg_utils minizip libwebp
     libusb1 re2 zlib
-    ffmpeg libxslt libxml2
+    ffmpeg_3 libxslt libxml2
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
   ] ++ (if (versionRange "0" "84") then [ yasm ] else [ nasm ]);

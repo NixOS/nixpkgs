@@ -4,7 +4,7 @@
 # Archive support
 , bzip2, zziplib
 # Codecs
-, audiofile, faad2, ffmpeg, flac, fluidsynth, game-music-emu
+, audiofile, faad2, ffmpeg_3, flac, fluidsynth, game-music-emu
 , libmad, libmikmod, mpg123, libopus, libvorbis, lame
 # Filters
 , libsamplerate
@@ -46,7 +46,7 @@ let
     # Decoder plugins
     audiofile     = [ audiofile ];
     faad          = [ faad2 ];
-    ffmpeg        = [ ffmpeg ];
+    ffmpeg        = [ ffmpeg_3 ];
     flac          = [ flac ];
     fluidsynth    = [ fluidsynth ];
     gme           = [ game-music-emu ];
