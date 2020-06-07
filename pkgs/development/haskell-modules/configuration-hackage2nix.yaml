@@ -74,7 +74,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 15.13
+  # LTS Haskell 15.15
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -92,7 +92,7 @@ default-package-overrides:
   - aeson-casing ==0.2.0.0
   - aeson-compat ==0.3.9
   - aeson-default ==0.9.1.0
-  - aeson-diff ==1.1.0.8
+  - aeson-diff ==1.1.0.9
   - aeson-generic-compat ==0.0.1.3
   - aeson-lens ==0.5.0.0
   - aeson-optics ==1.1.0.1
@@ -237,7 +237,7 @@ default-package-overrides:
   - asn1-encoding ==0.9.6
   - asn1-parse ==0.9.5
   - asn1-types ==0.3.4
-  - assert-failure ==0.1.2.2
+  - assert-failure ==0.1.2.3
   - assoc ==1.0.1
   - astro ==0.4.2.1
   - async ==2.2.2
@@ -265,7 +265,7 @@ default-package-overrides:
   - auto-update ==0.1.6
   - avers ==0.0.17.1
   - avro ==0.4.7.0
-  - aws-cloudfront-signed-cookies ==0.2.0.4
+  - aws-cloudfront-signed-cookies ==0.2.0.6
   - base16-bytestring ==0.1.1.6
   - base32string ==0.9.1
   - base58string ==0.10.0
@@ -333,7 +333,7 @@ default-package-overrides:
   - boots ==0.2.0.1
   - bordacount ==0.1.0.0
   - boring ==0.1.3
-  - both ==0.1.1.0
+  - both ==0.1.1.1
   - bound ==2.0.1
   - BoundedChan ==1.0.3.0
   - bounded-queue ==1.0.0
@@ -347,7 +347,7 @@ default-package-overrides:
   - btrfs ==0.2.0.0
   - buffer-builder ==0.2.4.7
   - buffer-pipe ==0.0
-  - bugsnag-hs ==0.1.0.1
+  - bugsnag-hs ==0.1.0.3
   - butcher ==1.3.3.1
   - bv ==0.5
   - bv-little ==1.1.1
@@ -384,14 +384,14 @@ default-package-overrides:
   - casa-types ==0.0.1
   - cased ==0.1.0.0
   - case-insensitive ==1.2.1.0
-  - cases ==0.1.3.2
+  - cases ==0.1.4
   - casing ==0.1.4.1
   - cassava ==0.5.2.0
   - cassava-conduit ==0.5.1
   - cassava-megaparsec ==2.0.1
   - cast ==0.1.0.2
   - category ==0.2.5.0
-  - cayley-client ==0.4.12
+  - cayley-client ==0.4.13
   - cborg ==0.2.3.0
   - cborg-json ==0.2.2.0
   - cereal ==0.5.8.1
@@ -473,7 +473,7 @@ default-package-overrides:
   - conduit-concurrent-map ==0.1.1
   - conduit-extra ==1.3.5
   - conduit-parse ==0.2.1.0
-  - conduit-zstd ==0.0.1.1
+  - conduit-zstd ==0.0.2.0
   - conferer ==0.2.0.0
   - conferer-hspec ==0.2.0.0
   - conferer-provider-json ==0.2.0.0
@@ -673,7 +673,7 @@ default-package-overrides:
   - enclosed-exceptions ==1.0.3
   - ENIG ==0.0.1.0
   - entropy ==0.4.1.6
-  - enummapset ==0.6.0.2
+  - enummapset ==0.6.0.3
   - enumset ==0.0.5
   - enum-subset-generate ==0.1.0.0
   - envelope ==0.2.2.0
@@ -681,7 +681,7 @@ default-package-overrides:
   - epub-metadata ==4.5
   - eq ==4.2
   - equal-files ==0.0.5.3
-  - equational-reasoning ==0.6.0.2
+  - equational-reasoning ==0.6.0.3
   - erf ==2.0.0.0
   - errors ==2.3.0
   - errors-ext ==0.4.2
@@ -876,7 +876,7 @@ default-package-overrides:
   - gitrev ==1.3.1
   - gi-xlib ==2.0.8
   - gl ==0.9
-  - glabrous ==2.0.1
+  - glabrous ==2.0.2
   - GLFW-b ==3.3.0.0
   - Glob ==0.10.0
   - gloss ==1.13.1.1
@@ -886,7 +886,7 @@ default-package-overrides:
   - gluturtle ==0.0.58.1
   - gnuplot ==0.5.6.1
   - google-isbn ==1.0.3
-  - gothic ==0.1.4
+  - gothic ==0.1.5
   - gpolyline ==0.1.0.1
   - graph-core ==0.3.0.0
   - graphite ==0.10.0.1
@@ -895,8 +895,8 @@ default-package-overrides:
   - graph-wrapper ==0.2.6.0
   - gravatar ==0.8.0
   - greskell ==1.0.1.0
-  - greskell-core ==0.1.3.2
-  - greskell-websocket ==0.1.2.2
+  - greskell-core ==0.1.3.3
+  - greskell-websocket ==0.1.2.3
   - groom ==0.1.2.1
   - group-by-date ==0.1.0.3
   - groups ==0.4.1.0
@@ -922,7 +922,7 @@ default-package-overrides:
   - haskell-lexer ==1.1
   - haskell-lsp ==0.20.0.1
   - haskell-lsp-types ==0.20.0.0
-  - haskell-names ==0.9.8
+  - haskell-names ==0.9.9
   - haskell-src ==1.0.3.1
   - haskell-src-exts ==1.22.0
   - haskell-src-exts-util ==0.2.5
@@ -930,11 +930,11 @@ default-package-overrides:
   - haskey-btree ==0.3.0.1
   - haskoin-core ==0.10.1
   - haskoin-node ==0.9.21
-  - hasql ==1.4.2
+  - hasql ==1.4.3
   - hasql-optparse-applicative ==0.3.0.5
   - hasql-pool ==0.5.2
   - hasql-transaction ==1.0.0.1
-  - hasty-hamiltonian ==1.3.2
+  - hasty-hamiltonian ==1.3.3
   - HaXml ==1.25.5
   - haxr ==3000.11.4
   - hdaemonize ==0.5.6
@@ -1005,7 +1005,7 @@ default-package-overrides:
   - HSlippyMap ==3.0.1
   - hslogger ==1.3.1.0
   - hslua ==1.0.3.2
-  - hslua-aeson ==1.0.1
+  - hslua-aeson ==1.0.2
   - hslua-module-system ==0.2.1
   - hslua-module-text ==0.2.1
   - HsOpenSSL ==0.11.4.18
@@ -1126,7 +1126,7 @@ default-package-overrides:
   - indexed-profunctors ==0.1
   - infer-license ==0.2.0
   - inflections ==0.4.0.5
-  - influxdb ==1.7.1.3
+  - influxdb ==1.7.1.5
   - ini ==0.4.1
   - inj ==1.0
   - inline-c ==0.9.1.0
@@ -1155,10 +1155,10 @@ default-package-overrides:
   - io-storage ==0.3
   - io-streams ==1.5.1.0
   - io-streams-haproxy ==1.0.1.0
-  - ip ==1.7.1
+  - ip ==1.7.2
   - ip6addr ==1.0.1
   - iproute ==1.7.9
-  - IPv6Addr ==1.1.3
+  - IPv6Addr ==1.1.4
   - ipynb ==0.1.0.1
   - ipython-kernel ==0.10.2.0
   - irc ==0.6.1.0
@@ -1179,7 +1179,7 @@ default-package-overrides:
   - js-flot ==0.8.3
   - js-jquery ==3.3.1
   - json-alt ==1.0.0
-  - json-feed ==1.0.9
+  - json-feed ==1.0.10
   - jsonpath ==0.2.0.0
   - json-rpc ==1.0.1
   - json-rpc-generic ==0.2.1.5
@@ -1202,7 +1202,7 @@ default-package-overrides:
   - kind-generics-th ==0.2.2.0
   - kmeans ==0.1.3
   - koofr-client ==1.0.0.3
-  - kubernetes-webhook-haskell ==0.2.0.1
+  - kubernetes-webhook-haskell ==0.2.0.2
   - l10n ==0.1.0.1
   - labels ==0.3.3
   - lackey ==1.0.12
@@ -1215,7 +1215,7 @@ default-package-overrides:
   - language-java ==0.2.9
   - language-javascript ==0.7.1.0
   - language-protobuf ==1.0.1
-  - language-puppet ==1.4.6.3
+  - language-puppet ==1.4.6.5
   - lapack-carray ==0.0.3
   - lapack-comfort-array ==0.0.0.1
   - lapack-ffi ==0.0.2
@@ -1237,7 +1237,7 @@ default-package-overrides:
   - lens-datetime ==0.3
   - lens-family ==2.0.0
   - lens-family-core ==2.0.0
-  - lens-family-th ==0.5.0.2
+  - lens-family-th ==0.5.1.0
   - lens-misc ==0.0.2.0
   - lens-properties ==4.11.1
   - lens-regex ==0.1.1
@@ -1298,7 +1298,7 @@ default-package-overrides:
   - massiv-io ==0.2.1.0
   - massiv-test ==0.1.2
   - mathexpr ==0.3.0.0
-  - math-functions ==0.3.3.0
+  - math-functions ==0.3.4.0
   - matplotlib ==0.7.5
   - matrices ==0.5.0
   - matrix ==0.3.6.1
@@ -1327,7 +1327,7 @@ default-package-overrides:
   - microlens-ghc ==0.4.12
   - microlens-mtl ==0.2.0.1
   - microlens-platform ==0.4.1
-  - microlens-process ==0.2.0.1
+  - microlens-process ==0.2.0.2
   - microlens-th ==0.4.3.5
   - microspec ==0.2.1.3
   - microstache ==1.0.1.1
@@ -1454,7 +1454,7 @@ default-package-overrides:
   - nonempty-containers ==0.3.3.0
   - nonemptymap ==0.0.6.0
   - non-empty-sequence ==0.2.0.4
-  - nonempty-vector ==0.2.0.1
+  - nonempty-vector ==0.2.0.2
   - non-negative ==0.1.2
   - not-gloss ==0.7.7.0
   - no-value ==1.0.0.0
@@ -1535,7 +1535,7 @@ default-package-overrides:
   - partial-isomorphisms ==0.2.2.1
   - password ==1.0.0.0
   - password-instances ==1.0.0.0
-  - path ==0.7.0
+  - path ==0.7.1
   - path-extra ==0.2.0
   - path-io ==1.6.0
   - path-pieces ==0.2.1
@@ -1644,7 +1644,7 @@ default-package-overrides:
   - profunctors ==5.5.2
   - projectroot ==0.2.0.1
   - project-template ==0.2.0.1
-  - prometheus-client ==1.0.0
+  - prometheus-client ==1.0.0.1
   - promises ==0.3
   - prompt ==0.1.1.2
   - prospect ==0.1.0.0
@@ -1666,7 +1666,7 @@ default-package-overrides:
   - pureMD5 ==2.1.3
   - purescript-bridge ==0.13.0.0
   - pushbullet-types ==0.4.1.0
-  - pusher-http-haskell ==1.5.1.11
+  - pusher-http-haskell ==1.5.1.13
   - PyF ==0.9.0.1
   - qchas ==1.1.0.1
   - qm-interpolated-string ==0.3.0.0
@@ -1703,8 +1703,8 @@ default-package-overrides:
   - rank2classes ==1.3.2.1
   - Rasterific ==0.7.5.2
   - rasterific-svg ==0.3.3.2
-  - ratel ==1.0.10
-  - ratel-wai ==1.1.2
+  - ratel ==1.0.12
+  - ratel-wai ==1.1.3
   - rattle ==0.1
   - rawfilepath ==0.2.4
   - rawstring-qm ==0.2.3.0
@@ -1725,7 +1725,7 @@ default-package-overrides:
   - reducers ==3.12.3
   - refact ==0.3.0.2
   - ref-fd ==0.4.0.2
-  - reflection ==2.1.5
+  - reflection ==2.1.6
   - RefSerialize ==0.4.0
   - regex ==1.1.0.0
   - regex-applicative ==0.3.3.1
@@ -1777,7 +1777,7 @@ default-package-overrides:
   - RSA ==2.4.1
   - runmemo ==1.0.0.1
   - run-st ==0.1.1.0
-  - safe ==0.3.18
+  - safe ==0.3.19
   - safecopy ==0.10.3
   - safe-decimal ==0.2.0.0
   - safe-exceptions ==0.1.7.0
@@ -1802,7 +1802,7 @@ default-package-overrides:
   - scanner ==0.3.1
   - scheduler ==1.4.2.2
   - scientific ==0.3.6.2
-  - scotty ==0.11.5
+  - scotty ==0.11.6
   - scrypt ==0.5.0
   - sdl2 ==2.5.2.0
   - sdl2-gfx ==0.2
@@ -1883,7 +1883,7 @@ default-package-overrides:
   - signal ==0.1.0.4
   - silently ==1.2.5.1
   - simple-affine-space ==0.1.1
-  - simple-cabal ==0.1.1
+  - simple-cabal ==0.1.2
   - simple-cmd ==0.2.1
   - simple-cmd-args ==0.1.6
   - simple-log ==0.9.12
@@ -1909,10 +1909,10 @@ default-package-overrides:
   - slist ==0.1.1.0
   - small-bytearray-builder ==0.3.4.0
   - smallcheck ==1.1.5
-  - smoothie ==0.4.2.10
+  - smoothie ==0.4.2.11
   - snap-blaze ==0.2.1.5
   - snap-core ==1.0.4.1
-  - snap-server ==1.1.1.1
+  - snap-server ==1.1.1.2
   - snowflake ==0.1.1.1
   - soap ==0.2.3.6
   - soap-tls ==0.1.1.4
@@ -1929,11 +1929,11 @@ default-package-overrides:
   - spatial-math ==0.5.0.1
   - special-values ==0.1.0.0
   - speculate ==0.4.2
-  - speedy-slice ==0.3.0
+  - speedy-slice ==0.3.1
   - Spintax ==0.3.4
   - splice ==0.6.1.1
   - split ==0.2.3.4
-  - splitmix ==0.0.4
+  - splitmix ==0.0.5
   - spoon ==0.3.1
   - spreadsheet ==0.1.3.8
   - sqlcli ==0.2.2.0
@@ -1980,9 +1980,9 @@ default-package-overrides:
   - string-qq ==0.0.4
   - stringsearch ==0.3.6.6
   - string-transform ==1.1.1
-  - stripe-concepts ==1.0.2.2
-  - stripe-signature ==1.0.0.2
-  - strive ==5.0.10
+  - stripe-concepts ==1.0.2.4
+  - stripe-signature ==1.0.0.4
+  - strive ==5.0.12
   - structs ==0.1.3
   - structured-cli ==2.5.2.0
   - stylish-haskell ==0.10.0.0
@@ -2090,13 +2090,13 @@ default-package-overrides:
   - thread-local-storage ==0.2
   - threads ==0.5.1.6
   - thread-supervisor ==0.1.0.0
-  - threepenny-gui ==0.8.3.1
+  - threepenny-gui ==0.8.3.2
   - th-reify-compat ==0.0.1.5
   - th-reify-many ==0.1.9
   - throttle-io-stream ==0.2.0.1
   - throwable-exceptions ==0.1.0.9
   - th-strict-compat ==0.1.0.1
-  - th-test-utils ==1.0.1
+  - th-test-utils ==1.0.2
   - thyme ==0.3.5.5
   - tidal ==1.4.9
   - tile ==0.3.0.0
@@ -2138,7 +2138,7 @@ default-package-overrides:
   - triplesec ==0.2.2.1
   - trivial-constraint ==0.6.0.0
   - tsv2csv ==0.1.0.2
-  - ttc ==0.2.1.0
+  - ttc ==0.2.2.0
   - ttl-hashtables ==1.4.1.0
   - ttrie ==0.1.2.1
   - tuple ==0.3.0.2
@@ -2197,7 +2197,7 @@ default-package-overrides:
   - unix-bytestring ==0.3.7.3
   - unix-compat ==0.5.2
   - unix-time ==0.4.7
-  - unliftio ==0.2.12.1
+  - unliftio ==0.2.13
   - unliftio-core ==0.1.2.0
   - unliftio-pool ==0.2.1.1
   - unlit ==0.4.0.0
@@ -2260,7 +2260,7 @@ default-package-overrides:
   - wai-cors ==0.2.7
   - wai-enforce-https ==0.0.2.1
   - wai-eventsource ==3.0.0
-  - wai-extra ==3.0.29.1
+  - wai-extra ==3.0.29.2
   - wai-handler-launch ==3.0.3.1
   - wai-logger ==2.3.6
   - wai-middleware-caching ==0.1.0.2
@@ -2268,8 +2268,8 @@ default-package-overrides:
   - wai-session ==0.3.3
   - wai-slack-middleware ==0.2.0
   - wai-websockets ==3.0.1.2
-  - warp ==3.3.11
-  - warp-tls ==3.2.11
+  - warp ==3.3.12
+  - warp-tls ==3.2.12
   - warp-tls-uid ==0.2.0.6
   - wave ==0.2.0
   - wcwidth ==0.0.2
@@ -2316,7 +2316,7 @@ default-package-overrides:
   - xdg-basedir ==0.2.2
   - xdg-userdirs ==0.1.0.2
   - xeno ==0.3.5.2
-  - xls ==0.1.2
+  - xls ==0.1.3
   - xlsx ==0.8.0
   - xlsx-tabular ==0.2.2.1
   - xml ==1.3.14
@@ -2371,7 +2371,7 @@ default-package-overrides:
   - zlib-bindings ==0.1.1.5
   - zlib-lens ==0.1.2.1
   - zot ==0.0.3
-  - zstd ==0.1.1.2
+  - zstd ==0.1.2.0
 
 extra-packages:
   - aeson < 0.8                         # newer versions don't work with GHC 7.6.x or earlier
@@ -2396,6 +2396,7 @@ extra-packages:
   - dhall == 1.29.0                     # required for spago 0.14.0.
   - doctemplates == 0.8                 # required by pandoc-2.9.x
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
+  - ghc-check == 0.3.0.1                # only version compatible with ghcide 0.2.0
   - ghc-tcplugins-extra ==0.3.2         # required for polysemy-plugin 0.2.5.0
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock == 2.22.*                   # required on GHC 8.0.x
@@ -2405,8 +2406,8 @@ extra-packages:
   - happy <1.19.6                       # newer versions break Agda
   - happy == 1.19.9                     # for purescript
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
-  - haskell-lsp == 0.19.*               # required for ghcide 0.1.0
-  - haskell-lsp-types == 0.19.*         # required for ghcide 0.1.0
+  - haskell-lsp == 0.22.*               # required for ghcide 0.2.0
+  - haskell-lsp-types == 0.22.*         # required for ghcide 0.2.0
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hoogle == 5.0.14                    # required by hie-hoogle
@@ -2434,7 +2435,6 @@ extra-packages:
   - seqid-streams < 0.2                 # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
   - split < 0.2                         # newer versions don't work with GHC 6.12.3
   - tar < 0.4.2.0                       # later versions don't work with GHC < 7.6.x
-  - these == 0.7.6                      # required by hnix 0.6.1
   - transformers == 0.4.3.*             # the latest version isn't supported by mtl yet
   - vector < 0.10.10                    # newer versions don't work with GHC 6.12.3
   - xml-conduit ^>= 1.7                 # pre-lts-11.x versions neeed by git-annex 6.20180227
@@ -2586,6 +2586,9 @@ dont-distribute-packages:
   - Obsidian
   - odpic-raw
   - patch-image
+  # license for input data unclear, dependency not on Hackage
+  # see https://github.com/NixOS/nixpkgs/pull/88604
+  - tensorflow-mnist
   - yices-easy
   - yices-painless
 
@@ -5990,7 +5993,6 @@ broken-packages:
   - hmt-diagrams
   - hmumps
   - hnetcdf
-  - hnix
   - hnix-store-remote
   - HNM
   - hnormalise
@@ -6047,9 +6049,6 @@ broken-packages:
   - hOpenPGP
   - hopenpgp-tools
   - hopfield
-  - hoppy-docs
-  - hoppy-generator
-  - hoppy-std
   - hops
   - hoq
   - horizon
@@ -8574,10 +8573,6 @@ broken-packages:
   - qr-imager
   - qr-repa
   - qsem
-  - qtah-cpp-qt5
-  - qtah-examples
-  - qtah-generator
-  - qtah-qt5
   - QuadEdge
   - QuadTree
   - quantfin
@@ -10243,6 +10238,7 @@ broken-packages:
   - typeable-th
   - TypeClass
   - typed-encoding
+  - typed-encoding-encoding
   - typed-streams
   - typed-wire
   - typedflow
@@ -10423,6 +10419,7 @@ broken-packages:
   - vect-floating-accelerate
   - vect-opengl
   - vector-bytestring
+  - vector-circular
   - vector-clock
   - vector-conduit
   - vector-endian

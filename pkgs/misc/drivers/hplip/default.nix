@@ -4,6 +4,8 @@
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools
 , bash, coreutils, utillinux
+# To remove references to gcc-unwrapped
+, removeReferencesTo
 , withQt5 ? true
 , withPlugin ? false
 , withStaticPPDInstall ? false
@@ -65,7 +67,7 @@ python3Packages.buildPythonApplication {
     zlib
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig removeReferencesTo ];
 
   pythonPath = with python3Packages; [
     dbus
@@ -216,7 +218,13 @@ python3Packages.buildPythonApplication {
       --replace /usr/bin/nohup "" \
       --replace {,${utillinux}/bin/}logger \
       --replace {/usr,$out}/bin
+    remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
   '';
+
+  # There are some binaries there, which reference gcc-unwrapped otherwise.
+  stripDebugList = [
+    "share/hplip" "lib/cups/backend" "lib/cups/filter" "lib/python3.7/site-packages" "lib/sane"
+  ];
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";

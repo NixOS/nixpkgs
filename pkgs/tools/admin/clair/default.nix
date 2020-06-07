@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "clair";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "quay";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wkljfq9lnadzkg1ki3wkimlqd6j405nxcl35npzrxjglkvsdjym";
+    sha256 = "1bvwh3ghxb3ynq8a07ka9i0rzaqg1aikxvqxmpjkwjvhwk63lwqd";
   };
 
   vendorSha256 = "0x31n50vd8660z816as6kms5dkv87b0mhblccpkvd9cbvcv2n37a";

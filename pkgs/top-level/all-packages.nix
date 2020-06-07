@@ -4861,6 +4861,8 @@ in
 
   kea = callPackage ../tools/networking/kea { };
 
+  keysmith = libsForQt5.callPackage ../tools/security/keysmith { };
+
   ispell = callPackage ../tools/text/ispell {};
 
   jumanpp = callPackage ../tools/text/jumanpp {};
@@ -13213,7 +13215,6 @@ in
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
   # also known as libturbojpeg
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
-  libjpeg_drop = callPackage ../development/libraries/libjpeg-drop { };
   libjpeg = libjpeg_turbo;
 
   libjreen = callPackage ../development/libraries/libjreen { };
@@ -19843,6 +19844,8 @@ in
   git-quick-stats = callPackage ../development/tools/git-quick-stats {};
 
   git-review = callPackage ../applications/version-management/git-review { };
+
+  github-cli = gitAndTools.gh;
 
   gitolite = callPackage ../applications/version-management/gitolite { };
 
