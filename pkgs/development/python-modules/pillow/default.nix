@@ -2,7 +2,7 @@
 , olefile
 , freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
 , openjpeg, libimagequant
-, pytest, pytestrunner, pyroma, numpy
+, pyroma, numpy, pytestCheckHook
 , isPy3k
 }:
 
@@ -23,15 +23,12 @@ buildPythonPackage rec {
     rm Tests/test_imagefont.py
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    python -m pytest -v -x -W always
-    runHook postCheck
-  '';
+  # Disable darwin tests which require executables: `iconutil` and `screencapture`
+  disabledTests = stdenv.lib.optionals stdenv.isDarwin [ "test_save" "test_grab" "test_grabclipboard" ];
 
   propagatedBuildInputs = [ olefile ];
 
-  checkInputs = [ pytest pytestrunner pyroma numpy ];
+  checkInputs = [ pytestCheckHook pyroma numpy ];
 
   buildInputs = [
     freetype libjpeg openjpeg libimagequant zlib libtiff libwebp tcl lcms2 ]
@@ -71,8 +68,8 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://python-pillow.github.io/";
-    description = "Fork of The Python Imaging Library (PIL)";
+    homepage = "https://python-pillow.org/";
+    description = "The friendly PIL fork (Python Imaging Library)";
     longDescription = ''
       The Python Imaging Library (PIL) adds image processing
       capabilities to your Python interpreter.  This library
