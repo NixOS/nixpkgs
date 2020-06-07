@@ -1,4 +1,4 @@
-{ stdenv, mkDerivationWith, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg
+{ stdenv, mkDerivationWith, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg_3
 , boost, cmake, SDL2, unshield, openal, libXt, pkgconfig }:
 
 let
@@ -24,7 +24,7 @@ in mkDerivationWith stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake boost ffmpeg bullet mygui openscenegraph_ SDL2 unshield openal libXt qtbase ];
+  buildInputs = [ cmake boost ffmpeg_3 bullet mygui openscenegraph_ SDL2 unshield openal libXt qtbase ];
 
   cmakeFlags = [
     "-DDESIRED_QT_VERSION:INT=5"

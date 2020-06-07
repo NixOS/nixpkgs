@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg, jack2,
+{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg_3, jack2,
   liblo, libpulseaudio, libsndfile, pkgconfig, python3Packages,
   which, withFrontend ? true,
   withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ] ++ optional withFrontend pyqt5;
 
   buildInputs = [
-    file liblo alsaLib fluidsynth ffmpeg jack2 libpulseaudio libsndfile
+    file liblo alsaLib fluidsynth ffmpeg_3 jack2 libpulseaudio libsndfile
   ] ++ pythonPath
     ++ optional withQt qtbase
     ++ optional withGtk2 gtk2

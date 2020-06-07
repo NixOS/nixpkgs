@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoreconfHook
 , libarchive, perl, xorg, libdvdnav, libbluray
-, zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
+, zlib, a52dec, libmad, faad2, ffmpeg_3, alsaLib
 , pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # which are not included here for no other reason that nobody has mentioned
   # needing them
   buildInputs = [
-    zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
+    zlib a52dec libmad faad2 ffmpeg_3 alsaLib libdvdnav libdvdnav.libdvdread
     libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpgerror
     libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
     systemd gnutls avahi libcddb SDL SDL_image libmtp unzip taglib libarchive

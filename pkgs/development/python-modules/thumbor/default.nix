@@ -25,7 +25,7 @@ buildPythonPackage rec {
       gifsicle = "${pkgs.gifsicle}/bin/gifsicle";
       exiftool = "${pkgs.exiftool}/bin/exiftool";
       jpegtran = "${pkgs.libjpeg}/bin/jpegtran";
-      ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
+      ffmpeg = "${pkgs.ffmpeg_3}/bin/ffmpeg";
     })
   ];
 

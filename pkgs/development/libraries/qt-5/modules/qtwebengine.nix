@@ -14,7 +14,7 @@
 , enableProprietaryCodecs ? true
 , gn
 , cups, darwin, openbsm, runCommand, xcbuild
-, ffmpeg ? null
+, ffmpeg_3 ? null
 , lib, stdenv
 }:
 
@@ -152,7 +152,7 @@ EOF
 
     libevent
   ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
-    ffmpeg
+    ffmpeg_3
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
