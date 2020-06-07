@@ -9173,6 +9173,11 @@ in
     else
       openjdk8.override { headless = true; };
 
+  jdk8 = openjdk8;
+  jdk8_headless = openjdk8_headless;
+  jre8 = openjdk8.jre;
+  jre8_headless = openjdk8_headless.jre;
+
   openjdk11-bootstrap =
     if adoptopenjdk-hotspot-bin-11.meta.available then
       adoptopenjdk-hotspot-bin-11
@@ -9213,7 +9218,10 @@ in
         };
       };
 
-  /* current JDK */
+  jdk11 = openjdk11;
+  jdk11_headless = openjdk11_headless;
+
+  /* Latest JDK */
   openjdk14 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin { }
@@ -9229,23 +9237,18 @@ in
     else
       openjdk14.override { headless = true; };
 
-  openjdk = openjdk8;
-  openjdk_headless = openjdk8_headless;
-
-  jdk8 = openjdk8;
-  jdk8_headless = openjdk8_headless;
-  jre8 = openjdk8.jre;
-  jre8_headless = openjdk8_headless.jre;
-
-  jdk11 = openjdk11;
-  jdk11_headless = openjdk11_headless;
-
   jdk14 = openjdk14;
   jdk14_headless = openjdk14_headless;
 
-  jdk = jdk8;
-  jre = jre8;
-  jre_headless = jre8_headless;
+  /* default JDK */
+
+  jdk = jdk14;
+  # jdk14 lacks a jre output. See https://github.com/NixOS/nixpkgs/issues/79490
+  jre = jdk14;
+  jre_headless = jdk14_headless;
+
+  openjdk = openjdk14;
+  openjdk_headless = openjdk14_headless;
 
   inherit (callPackages ../development/compilers/graalvm {
     gcc = if stdenv.targetPlatform.isDarwin then gcc8 else gcc;
