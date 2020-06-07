@@ -2527,7 +2527,10 @@ in {
 
   pytest-mpl = callPackage ../development/python-modules/pytest-mpl { };
 
-  pytest-mock = callPackage ../development/python-modules/pytest-mock { };
+  pytest-mock = if isPy3k then
+    callPackage ../development/python-modules/pytest-mock { }
+  else
+    callPackage ../development/python-modules/pytest-mock/2.nix { };
 
   pytest-openfiles = callPackage ../development/python-modules/pytest-openfiles { };
 
