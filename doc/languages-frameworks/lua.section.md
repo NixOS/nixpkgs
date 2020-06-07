@@ -11,7 +11,7 @@ date: 2019-02-05
 ### Overview of Lua
 
 Several versions of the Lua interpreter are available: luajit, lua 5.1, 5.2, 5.3.
-The attribute `lua` refers to the default interpreter, it is also possible to refer to specific versions, e.g. `lua_52` refers to Lua 5.2.
+The attribute `lua` refers to the default interpreter, it is also possible to refer to specific versions, e.g. `lua5_2` refers to Lua 5.2.
 
 Lua libraries are in separate sets, with one set per interpreter version.
 
@@ -48,7 +48,7 @@ using `config.nix`,
 { # ...
 
   packageOverrides = pkgs: with pkgs; {
-    myLuaEnv = lua_52.withPackages (ps: with ps; [ busted luafilesystem ]);
+    myLuaEnv = lua5_2.withPackages (ps: with ps; [ busted luafilesystem ]);
   };
 }
 ```
@@ -157,7 +157,7 @@ are not packaged for luarocks. You can see a few examples at `pkgs/top-level/lua
 ### Lua interpreters
 
 Versions 5.1, 5.2 and 5.3 of the lua interpreter are available as
-respectively `lua_51`, `lua_52` and `lua_53`. Luajit is available too.
+respectively `lua5_1`, `lua5_2` and `lua5_3`. Luajit is available too.
 The Nix expressions for the interpreters can be found in `pkgs/development/interpreters/lua-5`.
 
 
