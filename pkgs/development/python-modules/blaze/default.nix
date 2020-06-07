@@ -12,7 +12,6 @@
 , multipledispatch
 , numba
 , numpy
-, odo
 , pandas
 , psutil
 , pymongo
@@ -46,7 +45,6 @@ buildPythonPackage rec {
     multipledispatch
     numba
     numpy
-    odo
     pandas
     psutil
     pymongo
