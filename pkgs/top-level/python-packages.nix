@@ -2323,6 +2323,8 @@ in {
 
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
+  cppy = callPackage ../development/python-modules/cppy { };
+
   cryptacular = callPackage ../development/python-modules/cryptacular { };
 
   cryptography = callPackage ../development/python-modules/cryptography { };
