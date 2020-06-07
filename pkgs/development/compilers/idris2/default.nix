@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
     patchShebangs --build tests
   '';
 
-  makeFlags = [ "PREFIX=$(out) OS=" ];
+  makeFlags =
+    if builtins.currentSystem == "x86_64-darwin"
+    then [ "PREFIX=$(out)" "OS=" ]
+    else [ "PREFIX=$(out)" ];
 
   # The name of the main executable of pkgs.chez is `scheme`
   buildFlags = [ "bootstrap-build" "SCHEME=scheme" ];
@@ -39,6 +42,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/idris-lang/Idris2;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ wchresta ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }
 
