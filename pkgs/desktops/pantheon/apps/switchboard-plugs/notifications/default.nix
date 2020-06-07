@@ -24,15 +24,6 @@ stdenv.mkDerivation rec {
     sha256 = "02amm2j6blpfc16p5rm64p8shnppzsg49hz4v196mli5xr1r441h";
   };
 
-  patches = [
-    # Fix do not disturb on NixOS
-    # https://github.com/elementary/switchboard-plug-notifications/pull/66
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-notifications/commit/c306366b39c3199f0b64eda73419005fcb5e29b8.patch";
-      sha256 = "0m018rfw5iv582sw6qgwc8lzn0j32ix1w47fvlfmx0kw04irl2x3";
-    })
-  ];
-
   passthru = {
     updateScript = pantheon.updateScript {
       attrPath = "pantheon.${pname}";
