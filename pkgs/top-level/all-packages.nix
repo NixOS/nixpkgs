@@ -23949,6 +23949,8 @@ in
 
   pterodactyl-panel = callPackage ../games/pterodactyl-panel { noDev=true; };
 
+  pterodactyl-daemon = callPackage ../games/pterodactyl-daemon { };
+
   prboom = callPackage ../games/prboom { };
 
   privateer = callPackage ../games/privateer { };
