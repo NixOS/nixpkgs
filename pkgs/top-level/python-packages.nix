@@ -7037,7 +7037,10 @@ in {
 
   morphys = callPackage ../development/python-modules/morphys { };
 
-  jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
+  jaraco_functools = if pythonOlder "3.6" then
+    callPackage ../development/python-modules/jaraco_functools/2.nix { }
+  else
+    callPackage ../development/python-modules/jaraco_functools { };
 
   jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
 
