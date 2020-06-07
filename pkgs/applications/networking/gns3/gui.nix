@@ -23,7 +23,7 @@ in python.pkgs.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    raven psutil jsonschema # tox for check
+    sentry-sdk psutil jsonschema # tox for check
     # Runtime dependencies
     sip (pyqt5.override { withWebSockets = true; }) distro setuptools
     pkgs.qt5Full
