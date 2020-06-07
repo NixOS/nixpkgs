@@ -23863,6 +23863,8 @@ in
 
   nexuiz = callPackage ../games/nexuiz { };
 
+  ninvaders = callPackage ../games/ninvaders { };
+
   njam = callPackage ../games/njam { };
 
   newtonwars = callPackage ../games/newtonwars { };
