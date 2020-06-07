@@ -1,4 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, certifi, six }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, certifi, six
+, setuptools_scm
+}:
 
 buildPythonPackage rec {
   pname = "pylast";
@@ -11,6 +13,7 @@ buildPythonPackage rec {
     sha256 = "3c984be04c9a22a884c3106a7f75749466d27c68870d6fb7e1f56b71becea7c0";
   };
 
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ certifi six ];
 
   # tests require last.fm credentials
