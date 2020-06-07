@@ -130,7 +130,7 @@ in {
             timezone = mkOption {
               type = types.str;
               description = "The IANA timezone database name";
-              default = config.time.timeZone;
+              default = toString config.time.timeZone;
               example = "Europe/London";
             };
 
@@ -447,17 +447,17 @@ in {
         mkdir -p ${panelDir + "/bootstrap/cache"}
 
         # TODO: Check if this is necessary
-        cp -r ${pkgs.pterodactylPanel}/public ${panelDir}
+        cp -r ${pkgs.pterodactyl-panel}/public ${panelDir}
 
-        ln -sfn ${pkgs.pterodactylPanel}/vendor ${panelDir}/vendor
-        ln -sf ${pkgs.pterodactylPanel}/bootstrap/app.php ${panelDir}/bootstrap/app.php
-        cp ${pkgs.pterodactylPanel}/artisan ${panelDir}/artisan
+        ln -sfn ${pkgs.pterodactyl-panel}/vendor ${panelDir}/vendor
+        ln -sf ${pkgs.pterodactyl-panel}/bootstrap/app.php ${panelDir}/bootstrap/app.php
+        cp ${pkgs.pterodactyl-panel}/artisan ${panelDir}/artisan
 
         # Copy the example .env filw
         # This will contain the environment variables that are not configured, such as the app key.
         if [ ! -f ${panelDir}/.env ]; then
           echo "Creating .env file"
-          cp ${pkgs.pterodactylPanel}/.env.example ${panelDir}/.env
+          cp ${pkgs.pterodactyl-panel}/.env.example ${panelDir}/.env
         fi
 
         # From the docs:
