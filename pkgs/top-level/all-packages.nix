@@ -11135,7 +11135,9 @@ in
 
   vultr-cli = callPackage ../development/tools/vultr-cli { };
 
-  vulnix = callPackage ../tools/security/vulnix { };
+  vulnix = callPackage ../tools/security/vulnix {
+    python3Packages = python37Packages;
+  };
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
