@@ -68,7 +68,7 @@ in
                 WorkingDirectory = daemonDir;
                 LimitNOFILE = 4096;
                 PIDFile = "/var/run/wings/daemon.pid";
-                ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.pterodactylDaemon}/lib/node_modules/pteronode/src/index.js";
+                ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.pterodactyl-daemon}/lib/node_modules/pteronode/src/index.js";
                 Restart = "on-failure";
                 StartLimitInterval = 600;
             };
