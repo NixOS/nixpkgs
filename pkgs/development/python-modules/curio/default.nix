@@ -24,9 +24,7 @@ buildPythonPackage rec {
   # test_aside_basic times out,
   # test_aside_cancel fails because modifies PYTHONPATH and cant find pytest
   checkPhase = ''
-    # __pycache__ was packaged accidentally, https://github.com/dabeaz/curio/issues/301
-    rm -r tests/__pycache__
-    pytest --deselect tests/test_task.py::test_aside_basic --deselect tests/test_task.py::test_aside_cancel
+    pytest --deselect tests/test_task.py::test_aside_basic --deselect tests/test_task.py::test_aside_cancel -k "not test_ssl_outgoing"
   '';
 
   meta = with lib; {
