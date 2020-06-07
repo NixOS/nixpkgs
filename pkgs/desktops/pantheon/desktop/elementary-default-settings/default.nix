@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
-    "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png"
+    "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
     "-Dplank-dockitems=false"
   ];
 
