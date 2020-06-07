@@ -336,6 +336,7 @@
   ./services/games/openarena.nix
   ./services/games/terraria.nix
   ./services/games/pterodactyl-panel.nix
+  ./services/games/pterodactyl-daemon.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/bluetooth.nix
