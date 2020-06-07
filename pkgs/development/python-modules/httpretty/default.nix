@@ -12,6 +12,9 @@
 , nose-randomly
 , six
 , mock
+, eventlet
+, pytest
+, freezegun
 }:
 
 buildPythonPackage rec {
@@ -29,10 +32,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ nose sure coverage mock rednose
+  checkInputs = [ nose sure coverage mock rednose pytest
     # Following not declared in setup.py
-    nose-randomly requests tornado httplib2 nose-exclude
+    nose-randomly requests tornado httplib2 nose-exclude freezegun
   ];
+
+  checkPhase = ''
+    nosetests tests/unit # functional tests cause trouble requiring /etc/protocol
+  '';
 
   __darwinAllowLocalNetworking = true;
 
