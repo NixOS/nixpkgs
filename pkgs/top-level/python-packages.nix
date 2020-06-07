@@ -2100,8 +2100,6 @@ in {
 
   bitstring = callPackage ../development/python-modules/bitstring { };
 
-  blaze = callPackage ../development/python-modules/blaze { };
-
   html5-parser = callPackage ../development/python-modules/html5-parser {
     inherit (pkgs) pkgconfig;
   };
