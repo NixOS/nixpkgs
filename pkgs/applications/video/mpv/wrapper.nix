@@ -32,10 +32,10 @@ let
     # All arguments besides the input and output binaries (${mpv}/bin/mpv and
     # $out/bin/mpv). These are used by the darwin specific makeWrapper call
     # used to wrap $out/Applications/mpv.app/Contents/MacOS/mpv as well.
-    mostMakeWrapperArgs = builtins.concatStringsSep " " ([ "--argv0" "'$0'"
+    mostMakeWrapperArgs = lib.strings.escapeShellArgs ([ "--argv0" "'$0'"
       # These are always needed (TODO: Explain why)
-      "--prefix" "LUA_CPATH" "\\;" "${mpv.luaEnv}/lib/lua/${mpv.lua.luaversion}/\\?.so"
-      "--prefix" "LUA_PATH" "\\;" "${mpv.luaEnv}/share/lua/${mpv.lua.luaversion}/\\?.lua"
+      "--prefix" "LUA_CPATH" ";" "${mpv.luaEnv}/lib/lua/${mpv.lua.luaversion}/?.so"
+      "--prefix" "LUA_PATH" ";" "${mpv.luaEnv}/share/lua/${mpv.lua.luaversion}/?.lua"
     ] ++ lib.optionals mpv.vapoursynthSupport [
       "--prefix" "PYTHONPATH" ":" "${mpv.vapoursynth}/lib/${mpv.vapoursynth.python3.sitePackages}"
     ] ++ lib.optionals (binPath != "") [
@@ -52,7 +52,7 @@ let
       ) scripts
     )) ++ extraMakeWrapperArgs)
     ;
-    umpvWrapperArgs = builtins.concatStringsSep " " ([
+    umpvWrapperArgs = lib.strings.escapeShellArgs ([
       "--argv0" "'$0'"
       "--set" "MPV" "$out/bin/mpv"
     ] ++ extraUmpvWrapperArgs)
