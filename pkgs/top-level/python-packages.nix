@@ -7278,7 +7278,10 @@ in {
 
   behave = callPackage ../development/python-modules/behave { };
 
-  pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
+  pyhamcrest = if isPy3k then
+    callPackage ../development/python-modules/pyhamcrest { }
+  else
+    callPackage ../development/python-modules/pyhamcrest/1.nix { };
 
   pyhaversion = callPackage ../development/python-modules/pyhaversion { };
 
