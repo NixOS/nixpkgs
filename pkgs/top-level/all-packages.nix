@@ -15741,6 +15741,27 @@ in
   knot-dns = callPackage ../servers/dns/knot-dns { };
   knot-resolver = callPackage ../servers/dns/knot-resolver { };
 
+  kurentoPackages = {
+    # Building stuff
+    lib = callPackage ../servers/kurento-media-server/lib.nix {};
+    kmsjsoncpp = super.callPackage ../servers/kurento-media-server/kmsjsoncpp.nix {};
+    kurento-module-creator = callPackage ../servers/kurento-media-server/kurento-module-creator.nix {};
+    kms-cmake-utils = callPackage ../servers/kurento-media-server/kms-cmake-utils.nix {};
+    kms-jsonrpc = callPackage ../servers/kurento-media-server/kms-jsonrpc.nix {};
+    # libsrtp patch
+    gst_all_1 = gst_all_1 // {
+      gst-plugins-bad = gst_all_1.gst-plugins-bad.override {
+        srtp = callPackage ../servers/kurento-media-server/libsrtp.nix {};
+      };
+    };
+    # Modules
+    kms-core = callPackage ../servers/kurento-media-server/kms-core.nix {};
+    kms-elements = callPackage ../servers/kurento-media-server/kms-elements.nix {};
+    kms-filters = callPackage ../servers/kurento-media-server/kms-filters.nix {};
+    # Kurento Media Server itself
+    kurento-media-server = callPackage ../servers/kurento-media-server/kurento-media-server.nix {};
+  };
+
   rdkafka = callPackage ../development/libraries/rdkafka { };
 
   leafnode = callPackage ../servers/news/leafnode { };

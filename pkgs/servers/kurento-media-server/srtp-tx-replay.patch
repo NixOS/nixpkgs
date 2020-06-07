@@ -1,0 +1,22 @@
+diff --git a/srtp/srtp.c b/srtp/srtp.c
+index b34563d..89445b9 100644
+--- a/srtp/srtp.c
++++ b/srtp/srtp.c
+@@ -963,7 +963,7 @@ srtp_protect_aead (srtp_ctx_t *ctx, srtp_stream_ctx_t *stream,
+     delta = rdbx_estimate_index(&stream->rtp_rdbx, &est, ntohs(hdr->seq));
+     status = rdbx_check(&stream->rtp_rdbx, delta);
+     if (status) {
+-	if (status != err_status_replay_fail || !stream->allow_repeat_tx) {
++	if (status != err_status_replay_fail && status != err_status_replay_old) {
+ 	    return status;  /* we've been asked to reuse an index */
+ 	}
+     } else {
+@@ -1337,7 +1337,7 @@ srtp_unprotect_aead (srtp_ctx_t *ctx, srtp_stream_ctx_t *stream, int delta,
+    delta = rdbx_estimate_index(&stream->rtp_rdbx, &est, ntohs(hdr->seq));
+    status = rdbx_check(&stream->rtp_rdbx, delta);
+    if (status) {
+-     if (status != err_status_replay_fail || !stream->allow_repeat_tx)
++     if (status != err_status_replay_fail && status != err_status_replay_old)
+        return status;  /* we've been asked to reuse an index */
+    }
+    else
