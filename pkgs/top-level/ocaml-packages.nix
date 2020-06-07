@@ -770,14 +770,11 @@ let
       then type_conv_108_08_00
       else null;
 
-    sexplib_111_25_00 = callPackage ../development/ocaml-modules/sexplib/111.25.00.nix { };
     sexplib_112_24_01 = callPackage ../development/ocaml-modules/sexplib/112.24.01.nix { };
 
     sexplib_p4 =
       if lib.versionOlder "4.02" ocaml.version
       then sexplib_112_24_01
-      else if lib.versionOlder "4.00" ocaml.version
-      then sexplib_111_25_00
       else null;
 
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
