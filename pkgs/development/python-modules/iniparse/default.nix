@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , python
+, six
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,8 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} runtests.py
   '';
+
+  propagatedBuildInputs = [ six ];
 
   # Does not install tests
   doCheck = false;
