@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
+, setuptools_scm
+, toml
 }:
 
 buildPythonPackage rec {
@@ -15,7 +17,15 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  checkPhase = "pytest tests/jsonpickle_test.py";
+  nativeBuildInputs = [
+    setuptools_scm
+    toml
+  ];
+
+  checkPhase = ''
+    rm pytest.ini
+    pytest tests/jsonpickle_test.py
+  '';
 
   meta = {
     description = "Python library for serializing any arbitrary object graph into JSON";
