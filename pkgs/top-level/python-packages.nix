@@ -4265,7 +4265,10 @@ in {
 
   keyutils = callPackage ../development/python-modules/keyutils { inherit (pkgs) keyutils; };
 
-  kiwisolver = callPackage ../development/python-modules/kiwisolver { };
+  kiwisolver = if isPy3k then
+    callPackage ../development/python-modules/kiwisolver { }
+  else
+    callPackage ../development/python-modules/kiwisolver/1_1.nix { };
 
   klaus = callPackage ../development/python-modules/klaus {};
 
