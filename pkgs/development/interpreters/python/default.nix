@@ -63,7 +63,7 @@ in {
     inherit passthruFun;
   };
 
-  python35 = callPackage ./cpython {
+  python35 = lib.warn "Python 3.5 will be EOL after 2020-09-13 and removed in the next release (20.09)." (callPackage ./cpython {
     self = python35;
     sourceVersion = {
       major = "3";
@@ -74,7 +74,7 @@ in {
     sha256 = "0jdh9pvx6m6lfz2liwvvhn7vks7qrysqgwn517fkpxb77b33fjn2";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  });
 
   python36 = callPackage ./cpython {
     self = python36;
