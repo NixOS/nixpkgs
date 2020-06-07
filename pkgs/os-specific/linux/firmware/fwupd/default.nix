@@ -87,11 +87,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.3.7";
+  version = "1.3.9";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "02mzn3whk5mba4nxyrkypawr1gzjx79n4nrkhrp8vja6mxxgsf10";
+    sha256 = "ZuRG+UN8ebXv5Z8fOYWT0eCtHykGXoB8Ysu3wAeqx0A=";
   };
 
   # libfwupd goes to lib
@@ -264,6 +264,7 @@ stdenv.mkDerivation rec {
       "fwupd/remotes.d/vendor.conf"
       "fwupd/remotes.d/vendor-directory.conf"
       "fwupd/thunderbolt.conf"
+      "fwupd/upower.conf"
       # "fwupd/uefi.conf" # already created by the module
       "pki/fwupd/GPG-KEY-Hughski-Limited"
       "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
