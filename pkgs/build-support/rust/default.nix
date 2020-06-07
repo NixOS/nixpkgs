@@ -70,7 +70,8 @@ let
 
   # Specify the stdenv's `diff` by abspath to ensure that the user's build
   # inputs do not cause us to find the wrong `diff`.
-  diff = "${diffutils}/bin/diff";
+  # The `.nativeDrv` stanza works like nativeBuildInputs and ensures cross-compiling has the right version available.
+  diff = "${diffutils.nativeDrv or diffutils}/bin/diff";
 
 in
 
