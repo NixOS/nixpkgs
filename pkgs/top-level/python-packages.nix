@@ -6906,6 +6906,8 @@ in {
 
   scrapy-deltafetch = callPackage ../development/python-modules/scrapy-deltafetch { };
 
+  scrapy-splash = callPackage ../development/python-modules/scrapy-splash { };
+
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
 
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
