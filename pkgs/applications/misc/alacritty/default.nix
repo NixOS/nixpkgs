@@ -101,6 +101,8 @@ rustPlatform.buildRustPackage rec {
     if stdenv.isDarwin then ''
       mkdir $out/Applications
       cp -r $releaseDir/osx/Alacritty.app $out/Applications/Alacritty.app
+      # Overwrite binary inside .app with a link to the binary inside bin/
+      ln -sfn ../../../../bin/alacritty $out/Applications/Alacritty.app/Contents/MacOS/alacritty
     '' else ''
       install -D extra/linux/Alacritty.desktop -t $out/share/applications/
       install -D extra/logo/compat/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
