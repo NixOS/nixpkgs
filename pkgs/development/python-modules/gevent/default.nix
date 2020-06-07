@@ -1,8 +1,11 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPyPy, python, libev, greenlet }:
+{ stdenv, fetchPypi, buildPythonPackage, isPyPy, python, libev, greenlet
+, zope_interface
+}:
 
 buildPythonPackage rec {
   pname = "gevent";
   version = "20.5.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -10,7 +13,9 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ libev ];
-  propagatedBuildInputs = stdenv.lib.optionals (!isPyPy) [ greenlet ];
+  propagatedBuildInputs = [
+    zope_interface
+  ] ++ stdenv.lib.optionals (!isPyPy) [ greenlet ];
 
   checkPhase = ''
     cd greentest
