@@ -5267,7 +5267,10 @@ in {
 
   pyglet = callPackage ../development/python-modules/pyglet {};
 
-  pygments = callPackage ../development/python-modules/Pygments { };
+  pygments = if isPy3k then
+    callPackage ../development/python-modules/Pygments { }
+  else
+    callPackage ../development/python-modules/Pygments/2_5.nix { };
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
 
