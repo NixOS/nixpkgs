@@ -770,13 +770,6 @@ let
       then type_conv_108_08_00
       else null;
 
-    sexplib_112_24_01 = callPackage ../development/ocaml-modules/sexplib/112.24.01.nix { };
-
-    sexplib_p4 =
-      if lib.versionOlder "4.02" ocaml.version
-      then sexplib_112_24_01
-      else null;
-
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
 
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
@@ -1127,7 +1120,7 @@ let
       then janeStreet.sexplib
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/sexplib.nix {}
-      else sexplib_p4;
+      else null;
 
     variantslib =
       if lib.versionOlder "4.03" ocaml.version
