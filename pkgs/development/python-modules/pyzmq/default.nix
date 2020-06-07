@@ -30,7 +30,8 @@ buildPythonPackage rec {
       and not test_callable_check \
       and not test_on_recv_basic \
       and not test_on_recv_wake \
-      and not test_monitor"
+      and not test_monitor \
+      and not test_cython"
   '';
 
   # Some of the tests use localhost networking.
