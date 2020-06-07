@@ -43,14 +43,15 @@ let
 
   indent = "  ";
 
-  mkRelation = name: value: "${name} = ${mkVal value}";
+  mkRelation = name: value:
+    if (isList value) then
+      concatMapStringsSep "\n" (mkRelation name) value
+    else "${name} = ${mkVal value}";
 
   mkVal = value:
     if (value == true) then "true"
     else if (value == false) then "false"
     else if (isInt value) then (toString value)
-    else if (isList value) then
-      concatMapStringsSep " " mkVal value
     else if (isAttrs value) then
       let configLines = concatLists
         (map (splitString "\n")
