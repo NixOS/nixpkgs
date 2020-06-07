@@ -4853,6 +4853,8 @@ in
 
   now-cli = callPackage ../development/web/now-cli {};
 
+  np2kai = callPackage ../misc/emulators/np2kai { };
+
   file-rename = callPackage ../tools/filesystems/file-rename { };
 
   kea = callPackage ../tools/networking/kea { };
@@ -22867,6 +22869,7 @@ in
       ++ optional (cfg.enableMupen64Plus or false) mupen64plus
       ++ optional (cfg.enableNeoCD or false) neocd
       ++ optional (cfg.enableNestopia or false) nestopia
+      ++ optional (cfg.enableNP2kai or false) np2kai
       ++ optional (cfg.enableO2EM or false) o2em
       ++ optional (cfg.enableOpera or false) opera
       ++ optional (cfg.enableParallelN64 or false) parallel-n64
