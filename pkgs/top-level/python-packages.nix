@@ -6493,7 +6493,10 @@ in {
 
   zha-quirks = callPackage ../development/python-modules/zha-quirks { };
 
-  zipp = callPackage ../development/python-modules/zipp { };
+  zipp = if pythonOlder "3.6" then
+    callPackage ../development/python-modules/zipp/1.nix { }
+  else 
+    callPackage ../development/python-modules/zipp { };
 
   zope_broken = callPackage ../development/python-modules/zope_broken { };
 
