@@ -44,11 +44,23 @@ let
       , groff, docSupport ? true
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
-      # ruby -e "puts RbConfig::CONFIG['configure_args']"
-      # puts a reference to the C compiler in the binary.
-      # This might be required by some gems at runtime,
-      # but we allow to strip it out for smaller closure size.
-      , removeReferencesTo, removeReferenceToCC ? true
+      # By default, ruby has 3 observed references to stdenv.cc:
+      #
+      # - If you run:
+      #     ruby -e "puts RbConfig::CONFIG['configure_args']"
+      # - In:
+      #     $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
+      #   Or (usually):
+      #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
+      # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
+      #
+      # Since some Gems require JIT support, there's probably no
+      # escape from this reference. Hence, it was decided to enable this
+      # feature by default, as it's enabled by default by ruby's ./configure
+      # script. We do disable this feature though for the other cc references
+      # in all of the locations given above for the `rubyMinimal` build defined
+      # in all-packages.nix.
+      , removeReferencesTo, jitSupport ? true
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
@@ -121,6 +133,7 @@ let
 
         configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby-${version}"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
+          ++ op (!jitSupport) "--disable-jit-support"
           ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [
             # on darwin, we have /usr/include/tk.h -- so the configure script detects
@@ -157,11 +170,14 @@ let
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
           ${
-            lib.optionalString removeReferenceToCC ''
+            lib.optionalString (!jitSupport) ''
               # Get rid of the CC runtime dependency
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
                 $out/lib/libruby*
+              ${removeReferencesTo}/bin/remove-references-to \
+                -t ${stdenv.cc} \
+                $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
             ''
           }
           # Bundler tries to create this directory

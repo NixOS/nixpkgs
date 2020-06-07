@@ -10548,6 +10548,7 @@ in
   rubyMinimal = ruby.override {
     # gem support is minimal overhead
     rubygemsSupport = true;
+    jitSupport = false;
     useRailsExpress = false;
     zlibSupport = false;
     opensslSupport = false;
