@@ -157,6 +157,9 @@ let
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
                 $out/lib/libruby*
+              ${removeReferencesTo}/bin/remove-references-to \
+                -t ${stdenv.cc} \
+                $out/lib/ruby/${version}/${stdenv.targetPlatform.system}/rbconfig.rb
             ''
           }
           # Bundler tries to create this directory
