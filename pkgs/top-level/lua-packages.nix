@@ -160,5 +160,37 @@ with self; {
     };
   });
 
+  pulseaudio = buildLuaPackage rec {
+    name = "pulseaudio-${version}";
+    version = "0.2-1";
+
+    src = fetchFromGitHub {
+      owner = "doronbehar";
+      repo = "lua-pulseaudio";
+      rev = "v${version}";
+      sha256 = "140y1m6k798c4w7xfl0zb0a4ffjz6i1722bgkdcdg8g76hr5r8ys";
+    };
+    disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+    buildInputs = [ pkgs.libpulseaudio ];
+    propagatedBuildInputs = [ lua ];
+    nativeBuildInputs = [ pkgs.pulseaudio pkgconfig ];
+
+    makeFlags = [
+      "INST_LIBDIR=${placeholder "out"}/lib/lua/${lua.luaversion}"
+      "INST_LUADIR=${placeholder "out"}/share/lua/${lua.luaversion}"
+      "LUA_BINDIR=${placeholder "out"}/bin"
+    ];
+    preBuild = ''
+      mkdir -p ${placeholder "out"}/lib/lua/${lua.luaversion}
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/doronbehar/lua-pulseaudio";
+      description = "Bindings to libpulse";
+      maintainers = with maintainers; [ doronbehar ];
+      license = licenses.lgpl21;
+    };
+  };
+
 });
 in packages

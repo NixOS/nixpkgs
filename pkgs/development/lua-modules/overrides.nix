@@ -316,13 +316,4 @@ with super;
       sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
     '';
   });
-
-  pulseaudio = super.pulseaudio.override({
-    buildInputs = [
-      pkgs.libpulseaudio
-    ];
-    nativeBuildInputs = [
-      pkgs.pulseaudio pkgs.pkgconfig
-    ];
-  });
 }

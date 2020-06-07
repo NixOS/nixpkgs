@@ -1455,24 +1455,6 @@ stdlib = buildLuarocksPackage {
     license.fullName = "MIT/X11";
   };
 };
-pulseaudio = buildLuarocksPackage {
-  pname = "pulseaudio";
-  version = "0.2-1";
-
-  src = fetchurl {
-    url    = "mirror://luarocks/pulseaudio-0.2-1.src.rock";
-    sha256 = "06w8fmwddrpm02yam818yi30gghw4ckb18zljjncy3x0zfijyhz7";
-  };
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
-
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/doronbehar/lua-pulseaudio";
-    description = "Bindings to libpulse";
-    maintainers = with maintainers; [ doronbehar ];
-    license.fullName = "Apache v2.0";
-  };
-};
 vstruct = buildLuarocksPackage {
   pname = "vstruct";
   version = "2.0.2-1";
