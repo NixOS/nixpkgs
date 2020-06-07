@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     patchShebangs --build tests
   '';
 
-  makeFlags =
+  makeFlags = [ "PREFIX=$(out)" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "OS=";
     if builtins.currentSystem == "x86_64-darwin"
     then [ "PREFIX=$(out)" "OS=" ]
     else [ "PREFIX=$(out)" ];
@@ -45,4 +46,3 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }
-
