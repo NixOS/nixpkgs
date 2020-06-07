@@ -11,6 +11,22 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
+  patches = [
+    # Temporary, so builds with a prefixed pkg-config (like cross builds) work.
+    #
+    # https://savannah.gnu.org/support/?109050 was supposed to fix this, but
+    # the generated configure script mysteriously still contained hard-coded
+    # pkg-config. I tried regenerating it, but that didn't help. Only
+    # https://git.savannah.gnu.org/cgit/autogen.git/commit/?h=5cbe233387d7f7b36752736338d1cd4f71287daa,
+    # in the next release, finally fixes this, by getting rid of some
+    # metaprogramming of the autoconf m4 metaprogram! There evidentally was
+    # some sort escaping error such that the `PKG_CONFIG` check got evaluated
+    # before `configure` was generated.
+    #
+    # Remove this when the version is bumped
+    ./pkg-config-use-var.patch
+  ];
+
   nativeBuildInputs = [
     which pkgconfig perl
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
