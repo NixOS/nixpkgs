@@ -1,4 +1,9 @@
-{ fetchPypi, buildPythonPackage, lib, six, singledispatch, isPy3k }:
+{ fetchPypi, buildPythonPackage, lib, six, singledispatch, isPy3k
+, click
+, joblib
+, regex
+, tqdm
+}:
 
 buildPythonPackage rec {
   version = "3.5";
@@ -10,7 +15,12 @@ buildPythonPackage rec {
     sha256 = "845365449cd8c5f9731f7cb9f8bd6fd0767553b9d53af9eb1b3abf7700936b35";
   };
 
-  propagatedBuildInputs = [ six ] ++ lib.optional (!isPy3k) singledispatch;
+  propagatedBuildInputs = [
+    click
+    joblib
+    regex
+    tqdm
+  ] ++ lib.optional (!isPy3k) singledispatch;
 
   # Tests require some data, the downloading of which is impure. It would
   # probably make sense to make the data another derivation, but then feeding
