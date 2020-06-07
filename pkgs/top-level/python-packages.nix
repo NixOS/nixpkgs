@@ -6904,6 +6904,8 @@ in {
 
   scrapy-fake-useragent = callPackage ../development/python-modules/scrapy-fake-useragent { };
 
+  scrapy-deltafetch = callPackage ../development/python-modules/scrapy-deltafetch { };
+
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
 
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
