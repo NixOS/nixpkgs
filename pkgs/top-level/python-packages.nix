@@ -6902,6 +6902,8 @@ in {
 
   scrapy = callPackage ../development/python-modules/scrapy { };
 
+  scrapy-fake-useragent = callPackage ../development/python-modules/scrapy-fake-useragent { };
+
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
 
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
