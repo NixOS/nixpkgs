@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A purely functional programming language with first class types";
-    homepage = https://github.com/idris-lang/Idris2;
+    homepage = "https://github.com/idris-lang/Idris2";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ wchresta ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
