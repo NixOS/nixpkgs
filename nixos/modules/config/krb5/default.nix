@@ -41,31 +41,29 @@ let
         value)
     else value;
 
-  mkIndent = depth: concatStrings (builtins.genList (_:  " ") (2 * depth));
+  indent = "  ";
 
-  mkRelation = name: value: "${name} = ${mkVal { inherit value; }}";
+  mkRelation = name: value: "${name} = ${mkVal value}";
 
-  mkVal = { value, depth ? 0 }:
+  mkVal = value:
     if (value == true) then "true"
     else if (value == false) then "false"
     else if (isInt value) then (toString value)
     else if (isList value) then
-      concatMapStringsSep " " mkVal { inherit value depth; }
+      concatMapStringsSep " " mkVal value
     else if (isAttrs value) then
-      (concatStringsSep "\n${mkIndent (depth + 1)}"
-        ([ "{" ] ++ (mapAttrsToList
-          (attrName: attrValue: let
-            mappedAttrValue = mkVal {
-              value = attrValue;
-              depth = depth + 1;
-            };
-          in "${attrName} = ${mappedAttrValue}")
-        value))) + "\n${mkIndent depth}}"
+      let configLines = concatLists
+        (map (splitString "\n")
+          (mapAttrsToList mkRelation value));
+      in
+      (concatStringsSep "\n${indent}"
+        ([ "{" ] ++ configLines))
+      + "\n}"
     else value;
 
   mkMappedAttrsOrString = value: concatMapStringsSep "\n"
     (line: if builtins.stringLength line > 0
-      then "${mkIndent 1}${line}"
+      then "${indent}${line}"
       else line)
     (splitString "\n"
       (if isAttrs value then
