@@ -12,7 +12,6 @@
 , unpaper
 , substituteAll
 }:
-
 let
   inherit (python3Packages) buildPythonApplication;
 
@@ -27,16 +26,17 @@ let
     pillow
   ];
 
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "9.8.0";
+  version = "9.8.2";
   disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "1l4bwnbd3g0wmdx8yv8hi5wm2z2q67y9mwrvrc4xxmkdrb5y8jcd";
+    sha256 = "0zff9gsbfaf72p8zbjamn6513czpr7papyh1jy0fz1z2a9h7ya0g";
   };
 
   nativeBuildInputs = with python3Packages; [
