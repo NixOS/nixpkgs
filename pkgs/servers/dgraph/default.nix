@@ -1,28 +1,25 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dgraph";
-  version = "1.0.17";
-
-  goPackagePath = "github.com/dgraph-io/dgraph";
+  version = "20.03.3";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "05z1xwbd76q49zyqahh9krvq78dgkzr22qc6srr4djds0l7y6x5i";
+    sha256 = "0z2zc0mf7ndf3cpzi1js396s1yxpgfjaj9jacifsi8v6i6r0c6cz";
   };
 
   # see licensing
   buildFlags = [ "-tags oss" ];
+  buildFlagsArray = [ "-ldflags=" "-X github.com/dgraph-io/dgraph/x.dgraphVersion=${version}" ];
 
-  goDeps = ./deps.nix;
-  subPackages = [ "dgraph"];
+  vendorSha256 = "1nz4yr3y4dr9l09hcsp8x3zhbww9kz0av1ax4192f5zxpw1q275s";
 
-  preBuild = ''
-    export buildFlagsArray="-ldflags=\
-      -X github.com/dgraph-io/dgraph/x.dgraphVersion=${version}"
-  '';
+  subPackages = [ 
+    "dgraph" 
+  ];
 
   meta = {
     homepage = "https://dgraph.io/";
