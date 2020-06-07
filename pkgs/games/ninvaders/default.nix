@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, ncurses }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "ninvaders";
   version = "0.1.2";
 
