@@ -36,7 +36,7 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "wpsoffice";
   version = "11.1.0.9505";
 
