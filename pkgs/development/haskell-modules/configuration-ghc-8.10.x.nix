@@ -102,6 +102,7 @@ self: super: {
   # Jailbreak to fix the build.
   aeson-diff = doJailbreak super.aeson-diff;
   brick = doJailbreak super.brick;
+  cabal-plan = doJailbreak super.cabal-plan;
   cborg = doJailbreak super.cborg;
   cborg-json = doJailbreak super.cborg-json;
   exact-pi = doJailbreak super.exact-pi;
@@ -125,13 +126,6 @@ self: super: {
 
   # Only 0.8 is compatible with ghc 8.10 https://hackage.haskell.org/package/apply-refact/changelog
   apply-refact = super.apply-refact_0_8_0_0;
-
-  # Apply patch to fix the build.
-  cabal-plan = appendPatch super.cabal-plan (pkgs.fetchpatch {
-    name = "cabal-plan-fix-for-ghc-8.10.x.patch";
-    url = "https://github.com/haskell-hvr/cabal-plan/pull/55.patch";
-    sha256 = "0lhs4vx5qg5ldhnyb9z7k0jmxhmd2f34x4xbwv6vsljs9vr02pd8";
-  });
 
   # https://github.com/commercialhaskell/pantry/issues/21
   pantry = appendPatch super.pantry (pkgs.fetchpatch {

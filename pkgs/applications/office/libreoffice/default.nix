@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pam, python3, libxslt, perl, ArchiveZip, gettext
+{ stdenv, fetchurl, fetchpatch, lib, pam, python3, libxslt, perl, ArchiveZip, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
@@ -29,7 +29,6 @@ let
 
   inherit (primary-src) major minor subdir version;
 
-  lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
 
   mkDrv = if kdeIntegration then mkDerivation else stdenv.mkDerivation;
@@ -96,9 +95,9 @@ in (mkDrv rec {
   # are in multiple directories due to each having their own derivation.
   postPatch = let
     inc = e: path:
-      "${e.dev}/include/KF5/${path}";
+      "${lib.getDev e}/include/KF5/${path}";
     libs = list:
-      lib.concatMapStringsSep " " (e: "-L${e.out}/lib") list;
+      lib.concatMapStringsSep " " (e: "-L${lib.getLib e}/lib") list;
   in ''
     substituteInPlace shell/source/unix/exec/shellexec.cxx \
       --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
@@ -377,7 +376,7 @@ in (mkDrv rec {
     "--enable-kf5"
     "--enable-qt5"
     "--enable-gtk3-kde5"
-  ];
+  ] ++ lib.optional (lib.versionOlder version "6.4") "--disable-gtk"; # disables GTK2, GTK3 is still there
 
   checkPhase = ''
     make unitcheck

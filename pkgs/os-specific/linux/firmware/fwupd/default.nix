@@ -247,7 +247,6 @@ stdenv.mkDerivation rec {
       "fwupd/ata.conf"
       # "fwupd/daemon.conf" # already created by the module
       "fwupd/redfish.conf"
-      "fwupd/remotes.d/dell-esrt.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
@@ -262,6 +261,8 @@ stdenv.mkDerivation rec {
       "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA.pem"
+    ] ++ stdenv.lib.optionals haveDell [
+      "fwupd/remotes.d/dell-esrt.conf"
     ];
 
     # BlacklistPlugins key in fwupd/daemon.conf
