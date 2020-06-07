@@ -3154,11 +3154,11 @@
       };
     }
     {
-      name = "matrix_js_sdk___matrix_js_sdk_6.2.0.tgz";
+      name = "matrix_js_sdk___matrix_js_sdk_6.2.1.tgz";
       path = fetchurl {
-        name = "matrix_js_sdk___matrix_js_sdk_6.2.0.tgz";
-        url  = "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-6.2.0.tgz";
-        sha1 = "b1aa6f23858ab3ee4b66be25d3e854f6e287d36b";
+        name = "matrix_js_sdk___matrix_js_sdk_6.2.1.tgz";
+        url  = "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-6.2.1.tgz";
+        sha1 = "d5f76491a650c0a36fcdd078cff59f2da96edd7b";
       };
     }
     {

@@ -2,19 +2,16 @@
 , olefile
 , freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
 , openjpeg, libimagequant
-, pyroma, numpy, pytestCheckHook
-, isPy3k
+, pytest, pytestrunner, pyroma, numpy
 }:
 
 buildPythonPackage rec {
   pname = "Pillow";
-  version = "7.1.2";
-
-  disabled = !isPy3k;
+  version = "6.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pdh1zzdwxilvsjg6rnl4q810pc2p2y16q6lx9gzzihb25h9kd50";
+    sha256 = "0l5rv8jkdrb5q846v60v03mcq64yrhklidjkgwv6s1pda71g17yv";
   };
 
   # Disable imagefont tests, because they don't work well with infinality:
@@ -23,12 +20,15 @@ buildPythonPackage rec {
     rm Tests/test_imagefont.py
   '';
 
-  # Disable darwin tests which require executables: `iconutil` and `screencapture`
-  disabledTests = stdenv.lib.optionals stdenv.isDarwin [ "test_save" "test_grab" "test_grabclipboard" ];
+  checkPhase = ''
+    runHook preCheck
+    python -m pytest -v -x -W always
+    runHook postCheck
+  '';
 
   propagatedBuildInputs = [ olefile ];
 
-  checkInputs = [ pytestCheckHook pyroma numpy ];
+  checkInputs = [ pytest pytestrunner pyroma numpy ];
 
   buildInputs = [
     freetype libjpeg openjpeg libimagequant zlib libtiff libwebp tcl lcms2 ]
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://python-pillow.org/";
-    description = "The friendly PIL fork (Python Imaging Library)";
+    homepage = "https://python-pillow.github.io/";
+    description = "Fork of The Python Imaging Library (PIL)";
     longDescription = ''
       The Python Imaging Library (PIL) adds image processing
       capabilities to your Python interpreter.  This library

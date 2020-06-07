@@ -36,12 +36,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "10.6.1";
+  version = "10.6.2";
   pname = "geant4";
 
   src = fetchurl{
-    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.p01.tar.gz";
-    sha256 = "0ssxg7dd7vxljb3fdyb0llg7gsxack21qjfsb3n23k107a19yibk";
+    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.p02.tar.gz";
+    sha256 = "0vznm3pjlbihjy1wsxc4gj229k0dzc283wvil2xghyl08vwdpnpc";
   };
 
   cmakeFlags = [
