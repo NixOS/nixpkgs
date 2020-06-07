@@ -9777,6 +9777,8 @@ in
   rubyMinimal = ruby.override {
     # gem support is minimal overhead
     rubygemsSupport = true;
+    removeReferenceToCC = true;
+    JitSupport = false;
     useRailsExpress = false;
     zlibSupport = false;
     opensslSupport = false;
