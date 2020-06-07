@@ -874,8 +874,6 @@ in
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
-  cloudflare-wrangler = callPackage ../development/tools/cloudflare-wrangler { };
-
   codeql = callPackage ../development/tools/analysis/codeql { };
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
@@ -3178,6 +3176,8 @@ in
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
   wob = callPackage ../tools/misc/wob { };
+
+  wrangler = callPackage ../development/tools/wrangler { };
 
   xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
 
