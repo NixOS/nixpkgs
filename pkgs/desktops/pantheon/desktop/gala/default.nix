@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "03cq9ihgjasnv1n4v3dn1m3ypzj26k2ybd5b1a7yrbprb35zbrs4";
+    sha256 = "1qd8ynn04rzkki68w4x3ryq6fhlbi6mk359rx86a8ni084fsprh4";
   };
 
   passthru = {
