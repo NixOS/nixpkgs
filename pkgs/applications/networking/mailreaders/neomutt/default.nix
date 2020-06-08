@@ -42,12 +42,6 @@ stdenv.mkDerivation rec {
     # and use a far more comprehensive list than the one shipped with neomutt
     substituteInPlace sendlib.c \
       --replace /etc/mime.types ${mailcap}/etc/mime.types
-
-    # The string conversion tests all fail with the first version of neomutt
-    # that has tests (20180223) as well as 20180716 so we disable them for now.
-    # I don't know if that is related to the tests or our build environment.
-    # Try again with a later release.
-    sed -i '/rfc2047/d' test/Makefile.autosetup test/main.c
   '';
 
   configureFlags = [
@@ -89,10 +83,8 @@ stdenv.mkDerivation rec {
     (cd test-files && ./setup.sh)
 
     export NEOMUTT_TEST_DIR=$(pwd)/test-files
-    export LC_ALL="en_US.UTF-8"
   '';
 
-  checkInputs = [ glibcLocales ];
   checkTarget = "test";
   postCheck = "unset NEOMUTT_TEST_DIR";
 
