@@ -17,7 +17,7 @@ buildGoModule rec {
     description = "Provides a Prometheus exporter for the apcupsd Network Information Server (NIS)";
     homepage = "https://github.com/mdlayher/apcupsd_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ maintainers."1000101" mdlayher ];
+    maintainers = with maintainers; [ b1000101 mdlayher ];
     platforms = platforms.all;
   };
 }

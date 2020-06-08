@@ -19,7 +19,7 @@ buildGoPackage rec {
     description = "A command line tool for shopify themes";
     homepage = "https://shopify.github.io/themekit/";
     license = licenses.mit;
-    maintainers = with maintainers; [ maintainers."1000101" ];
+    maintainers = with maintainers; [ b1000101 ];
     platforms = platforms.all;
   };
 }

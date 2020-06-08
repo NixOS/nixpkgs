@@ -25,7 +25,7 @@ buildGoPackage rec {
     description = "Prometheus exporter that mines /proc to report on selected processes";
     homepage = "https://github.com/ncabatoff/process-exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ maintainers."1000101" ];
+    maintainers = with maintainers; [ b1000101 ];
     platforms = platforms.linux;
   };
 }

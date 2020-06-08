@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "trezord";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ mmahut "1000101" ];
+    maintainers = [ mmahut b1000101 ];
   };
 
   nodes = {

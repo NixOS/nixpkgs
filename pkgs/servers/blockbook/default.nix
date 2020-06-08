@@ -65,7 +65,7 @@ buildGoModule rec {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ mmahut maintainers."1000101" ];
+    maintainers = with maintainers; [ mmahut b1000101 ];
     platforms = remove "aarch64-linux" platforms.unix;
   };
 }

@@ -51,7 +51,7 @@
       fingerprint = "F466 A548 AD3F C1F1 8C88  4576 8702 7528 B006 D66D";
     }];
   };
-  "1000101" = {
+  b1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
     githubId = 791309;
