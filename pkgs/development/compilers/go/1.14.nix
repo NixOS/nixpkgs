@@ -2,6 +2,7 @@
 , perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages, pkgsTargetTarget
+, fetchpatch
 }:
 
 let
@@ -138,6 +139,12 @@ stdenv.mkDerivation rec {
     ./go-1.9-skip-flaky-20072.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+
+    # fix rare TestDontCacheBrokenHTTP2Conn failure
+    (fetchpatch {
+      url = "https://github.com/golang/go/commit/ea1437a8cdf6bb3c2d2447833a5d06dbd75f7ae4.patch";
+      sha256 = "1lyzy4nf8c34a966vw45j3j7hzpvncq2gqspfxffzkyh17xd8sgy";
+    })
   ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
     (if stdenv.isAarch32
