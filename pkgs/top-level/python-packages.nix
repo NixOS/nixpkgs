@@ -588,6 +588,8 @@ in {
 
   clickclick = callPackage ../development/python-modules/clickclick { };
 
+  clldutils = callPackage ../development/python-modules/clldutils { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
