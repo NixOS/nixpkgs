@@ -6924,6 +6924,18 @@ let
     meta.homepage = "https://github.com/hrsh7th/vim-vsnip/";
   };
 
+  vim-vsnip-integ = buildVimPluginFrom2Nix {
+    pname = "vim-vsnip-integ";
+    version = "2020-06-04";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "vim-vsnip-integ";
+      rev = "5ac40adc26c9b3638395f04ccfc1c4c40f82a423";
+      sha256 = "0q59s8rfrj2rswifhx11f201myi2nk5jc93qr25qh3wchy0pbpr3";
+    };
+    meta.homepage = "https://github.com/hrsh7th/vim-vsnip-integ/";
+  };
+
   vim-vue = buildVimPluginFrom2Nix {
     pname = "vim-vue";
     version = "2019-08-03";
