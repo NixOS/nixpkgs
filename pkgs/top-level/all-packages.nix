@@ -25840,6 +25840,8 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   tremulous = callPackage ../games/tremulous { };
 
+  tts = callPackage ../tools/audio/tts { };
+
   tuxpaint = callPackage ../games/tuxpaint { };
 
   tuxtype = callPackage ../games/tuxtype { };
