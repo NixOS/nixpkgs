@@ -13,7 +13,7 @@
 , pinentry
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "trezor_agent";
   version = "0.10.0";
 
