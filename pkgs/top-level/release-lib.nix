@@ -157,9 +157,4 @@ rec {
   /* Common platform groups on which to test packages. */
   inherit (platforms) unix linux darwin cygwin all mesaPlatforms;
 
-  /* Platform groups for specific kinds of applications. */
-  x11Supported = linux;
-  gtkSupported = linux;
-  ghcSupported = linux;
-
 }
