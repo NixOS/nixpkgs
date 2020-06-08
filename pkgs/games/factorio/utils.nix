@@ -36,10 +36,10 @@ let
   '';
 in
 {
-  fetchurlWithAuth = { name, url, sha256, username, token }:
+  fetchurlWithAuth = { name, url, sha1 ? "", sha256 ? "", username, token }:
     stdenv.lib.overrideDerivation
       (fetchurl {
-        inherit name url sha256;
+        inherit name url sha1 sha256;
         curlOpts = [
           "--get"
           "--data-urlencode"

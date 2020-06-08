@@ -1,0 +1,253 @@
+[
+  {
+    "name": "bobassembly",
+    "version": "0.18.5",
+    "src": {
+      "name": "bobassembly_0.18.5.zip",
+      "url": "https://mods.factorio.com//download/bobassembly/5ec96a30c15abe000ba19cdf",
+      "sha1": "py6papmqz360s871nvzv7d31adg6wy04"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobplates"
+    ]
+  },
+  {
+    "name": "bobconfig",
+    "version": "0.14.0",
+    "src": {
+      "name": "bobconfig_0.14.0.zip",
+      "url": "https://mods.factorio.com//download/bobconfig/5a5f1ae6adcc441024d73e06",
+      "sha1": "k2icavmwws5pw62gs9gh6a3v3an3gkqs"
+    },
+    "deps": [],
+    "optionalDeps": []
+  },
+  {
+    "name": "bobelectronics",
+    "version": "0.18.1",
+    "src": {
+      "name": "bobelectronics_0.18.1.zip",
+      "url": "https://mods.factorio.com//download/bobelectronics/5e6aa8f2d1a668000ef958cf",
+      "sha1": "5dslfxfflb9lrxy5w8nknn99vmvprzad"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobplates"
+    ]
+  },
+  {
+    "name": "bobenemies",
+    "version": "0.18.5",
+    "src": {
+      "name": "bobenemies_0.18.5.zip",
+      "url": "https://mods.factorio.com//download/bobenemies/5ec96a4f552ff2000d1b7027",
+      "sha1": "05v0lcgmy23q15djhs651g4q4m60yc5k"
+    },
+    "deps": [],
+    "optionalDeps": []
+  },
+  {
+    "name": "bobgreenhouse",
+    "version": "0.18.1",
+    "src": {
+      "name": "bobgreenhouse_0.18.1.zip",
+      "url": "https://mods.factorio.com//download/bobgreenhouse/5e98951a6bb914000bcc7c0c",
+      "sha1": "g3vsdr605hw2i2wrvzwb5lk9lrlynjrc"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobplates"
+    ]
+  },
+  {
+    "name": "bobinserters",
+    "version": "0.18.4",
+    "src": {
+      "name": "bobinserters_0.18.4.zip",
+      "url": "https://mods.factorio.com//download/bobinserters/5edd6b670c4233000c076243",
+      "sha1": "5al5j71cb2v0hyc7r8bldvqi8jbrkvzj"
+    },
+    "deps": [],
+    "optionalDeps": []
+  },
+  {
+    "name": "boblibrary",
+    "version": "0.18.9",
+    "src": {
+      "name": "boblibrary_0.18.9.zip",
+      "url": "https://mods.factorio.com//download/boblibrary/5e9daef69e85eb000cee2549",
+      "sha1": "sgzjq2kp96qckwmy26f4mh0zs884702f"
+    },
+    "deps": [],
+    "optionalDeps": []
+  },
+  {
+    "name": "boblogistics",
+    "version": "0.18.9",
+    "src": {
+      "name": "boblogistics_0.18.9.zip",
+      "url": "https://mods.factorio.com//download/boblogistics/5eaaf2fe89f712000c87bcdb",
+      "sha1": "9n2m6jmyjq2dhi6c3n12c59l4q1gcxj6"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobplates",
+      "bobinserters"
+    ]
+  },
+  {
+    "name": "bobmining",
+    "version": "0.18.1",
+    "src": {
+      "name": "bobmining_0.18.1.zip",
+      "url": "https://mods.factorio.com//download/bobmining/5e6aa97bd1a668000d4baea5",
+      "sha1": "nvafswxyzhllz2vhkd52d2gyg04nwi5r"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobores",
+      "bobplates"
+    ]
+  },
+  {
+    "name": "bobmodules",
+    "version": "0.18.3",
+    "src": {
+      "name": "bobmodules_0.18.3.zip",
+      "url": "https://mods.factorio.com//download/bobmodules/5ec96a713cf12a000e056513",
+      "sha1": "9dn8y3s9n03jgfjrw2nvqrflik89b1h4"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobplates",
+      "bobelectronics",
+      "DiscoScience"
+    ]
+  },
+  {
+    "name": "bobores",
+    "version": "0.18.3",
+    "src": {
+      "name": "bobores_0.18.3.zip",
+      "url": "https://mods.factorio.com//download/bobores/5ec96a823cf12a000b34fcb0",
+      "sha1": "dp8lsh6arkl7wysvkygwiycv2sajr4jc"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": []
+  },
+  {
+    "name": "bobplates",
+    "version": "0.18.8",
+    "src": {
+      "name": "bobplates_0.18.8.zip",
+      "url": "https://mods.factorio.com//download/bobplates/5ec96a9bc15abe000c94659e",
+      "sha1": "vyh086cfp6igiiq8a5nx0jnmgc434j5p"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobores",
+      "bobenemies"
+    ]
+  },
+  {
+    "name": "bobpower",
+    "version": "0.18.6",
+    "src": {
+      "name": "bobpower_0.18.6.zip",
+      "url": "https://mods.factorio.com//download/bobpower/5ec96ab3552ff2000b2edbfc",
+      "sha1": "gh6sxlhl9d0l8iq867a44lbnga2blsix"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobplates"
+    ]
+  },
+  {
+    "name": "bobrevamp",
+    "version": "0.18.5",
+    "src": {
+      "name": "bobrevamp_0.18.5.zip",
+      "url": "https://mods.factorio.com//download/bobrevamp/5ec96ac7552ff2000e291dea",
+      "sha1": "yvkfxwqvcc2lfns9h4dzhmfdx3h5cycq"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobplates"
+    ]
+  },
+  {
+    "name": "bobtech",
+    "version": "0.18.3",
+    "src": {
+      "name": "bobtech_0.18.3.zip",
+      "url": "https://mods.factorio.com//download/bobtech/5e78fa88936116000e23eea5",
+      "sha1": "f64qsxcw4l97wyscv4xww1pmwga95l3y"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobenemies",
+      "DiscoScience"
+    ]
+  },
+  {
+    "name": "bobtechsave",
+    "version": "0.14.2",
+    "src": {
+      "name": "bobtechsave_0.14.2.zip",
+      "url": "https://mods.factorio.com//download/bobtechsave/5a5f1ae6adcc441024d746e2",
+      "sha1": "swqiz9ywllg6xsfm5h2x832a84glb6xf"
+    },
+    "deps": [],
+    "optionalDeps": []
+  },
+  {
+    "name": "bobwarfare",
+    "version": "0.18.6",
+    "src": {
+      "name": "bobwarfare_0.18.6.zip",
+      "url": "https://mods.factorio.com//download/bobwarfare/5ec96addc15abe000d64428c",
+      "sha1": "3f0xlni5y1hwmgxx2zinqzpg33h02wgx"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobplates",
+      "bobenemies"
+    ]
+  },
+  {
+    "name": "clock",
+    "version": "0.18.1",
+    "src": {
+      "name": "clock_0.18.1.zip",
+      "url": "https://mods.factorio.com//download/clock/5edd6b4c0c4233000b59f065",
+      "sha1": "c5granjd8sfx6f33a4wwzn7b13xqkd6s"
+    },
+    "deps": [],
+    "optionalDeps": []
+  }
+]
