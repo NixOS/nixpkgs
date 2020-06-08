@@ -165,6 +165,14 @@ let
           Additional flags to pass to lego renew.
         '';
       };
+
+      extraLegoRunFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Additional flags to pass to lego run.
+        '';
+      };
     };
   };
 
@@ -319,7 +327,7 @@ in
                           ++ optionals (cfg.server != null || data.server != null) ["--server" (if data.server == null then cfg.server else data.server)]
                           ++ data.extraLegoFlags;
                 certOpts = optionals data.ocspMustStaple [ "--must-staple" ];
-                runOpts = escapeShellArgs (globalOpts ++ [ "run" ] ++ certOpts);
+                runOpts = escapeShellArgs (globalOpts ++ [ "run" ] ++ certOpts ++ data.extraLegoRunFlags);
                 renewOpts = escapeShellArgs (globalOpts ++
                   [ "renew" "--days" (toString cfg.validMinDays) ] ++
                   certOpts ++ data.extraLegoRenewFlags);
