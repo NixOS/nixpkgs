@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gotop";
-  version = "3.5.2";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "xxxserxxx";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d08pi213nzvj4vhd2sbri39qlxa7iazc8bcrikhmmr0pghjfwhn";
+    sha256 = "0m1a5bdqjgsm9fy3d2c6r4nil013cizqyqf19k6r4p9bq8rajnzp";
   };
 
-  vendorSha256 = "1ais548gii4q7xzysnw2ykjxyzb7azszsqdlp9hgiwp0bax9nj2n";
+  vendorSha256 = "1pxp0a1hldkdmh174adhq8q0wyz005g7wm8yxknchvp7krxi9r0v";
 
   meta = with stdenv.lib; {
     description = "A terminal based graphical activity monitor inspired by gtop and vtop";
