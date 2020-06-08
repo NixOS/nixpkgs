@@ -60,6 +60,9 @@ stdenv.mkDerivation rec {
     "--sasl"
     "--with-homespool=mailbox"
     "--with-mailpath="
+    # To make it not reference .dev outputs. See:
+    # https://github.com/neomutt/neomutt/pull/2367
+    "--disable-include-path-in-cflags"
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
     "ac_cv_path_SENDMAIL=sendmail"
     "--zlib"
