@@ -17353,6 +17353,8 @@ in
 
   go-symbols = callPackage ../development/tools/go-symbols { };
 
+  go-toml = callPackage ../development/tools/go-toml { };
+
   go-outline = callPackage ../development/tools/go-outline { };
 
   gocode = callPackage ../development/tools/gocode { };
