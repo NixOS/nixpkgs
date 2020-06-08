@@ -3171,6 +3171,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  visdom = callPackage ../applications/misc/visdom { };
+
   volctl = callPackage ../tools/audio/volctl { };
 
   vorta = python3Packages.callPackage ../applications/backup/vorta { };
