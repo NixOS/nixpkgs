@@ -367,6 +367,8 @@ let
 
     graphql_parser = callPackage ../development/ocaml-modules/graphql/parser.nix { };
 
+    graphql_ppx = callPackage ../development/ocaml-modules/graphql_ppx { };
+
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
 
     hex = callPackage ../development/ocaml-modules/hex { };
