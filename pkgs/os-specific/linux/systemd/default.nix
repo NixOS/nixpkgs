@@ -66,6 +66,16 @@ in stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+  ''
+    # TODO: unconditionalize on the next rebuild
+  + stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace src/boot/efi/meson.build \
+      --replace \
+      "find_program('ld'" \
+      "find_program('${stdenv.cc.bintools.targetPrefix}ld'" \
+      --replace \
+      "find_program('objcopy'" \
+      "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
   '';
 
   outputs = [ "out" "lib" "man" "dev" ];

@@ -1,6 +1,6 @@
 { stdenv, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "cypress";
   version = "4.5.0";
 

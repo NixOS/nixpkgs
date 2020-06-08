@@ -878,8 +878,6 @@ in
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
-  cloudflare-wrangler = callPackage ../development/tools/cloudflare-wrangler { };
-
   codeql = callPackage ../development/tools/analysis/codeql { };
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
@@ -3183,6 +3181,8 @@ in
 
   wob = callPackage ../tools/misc/wob { };
 
+  wrangler = callPackage ../development/tools/wrangler { };
+
   xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
 
   xob = callPackage ../tools/X11/xob { };
@@ -4856,6 +4856,8 @@ in
   });
 
   now-cli = callPackage ../development/web/now-cli {};
+
+  np2kai = callPackage ../misc/emulators/np2kai { };
 
   file-rename = callPackage ../tools/filesystems/file-rename { };
 
@@ -9721,7 +9723,7 @@ in
   pipenv = callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {};
-  pipewire_0_2 = callPackage ../development/libraries/pipewire/2.nix {};
+  pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix {};
 
   pyradio = callPackage ../applications/radio/pyradio {};
 
@@ -9996,9 +9998,7 @@ in
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   inherit (callPackages ../development/tools/electron { })
-    electron_4 electron_5 electron_6 electron_7 electron_8 electron_9;
-
-  electron_3 = callPackage ../development/tools/electron/3.x.nix { };
+    electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9;
   electron = electron_4;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
@@ -17388,6 +17388,8 @@ in
 
   go-symbols = callPackage ../development/tools/go-symbols { };
 
+  go-toml = callPackage ../development/tools/go-toml { };
+
   go-outline = callPackage ../development/tools/go-outline { };
 
   gocode = callPackage ../development/tools/gocode { };
@@ -22902,6 +22904,7 @@ in
       ++ optional (cfg.enableMupen64Plus or false) mupen64plus
       ++ optional (cfg.enableNeoCD or false) neocd
       ++ optional (cfg.enableNestopia or false) nestopia
+      ++ optional (cfg.enableNP2kai or false) np2kai
       ++ optional (cfg.enableO2EM or false) o2em
       ++ optional (cfg.enableOpera or false) opera
       ++ optional (cfg.enableParallelN64 or false) parallel-n64
@@ -23896,6 +23899,8 @@ in
   neverball = callPackage ../games/neverball { };
 
   nexuiz = callPackage ../games/nexuiz { };
+
+  ninvaders = callPackage ../games/ninvaders { };
 
   njam = callPackage ../games/njam { };
 
