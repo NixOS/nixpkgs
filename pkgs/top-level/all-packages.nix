@@ -10613,6 +10613,8 @@ in
 
   julius = callPackage ../games/julius { };
 
+  augustus = callPackage ../games/augustus { };
+
   kafkacat = callPackage ../development/tools/kafkacat { };
 
   kati = callPackage ../development/tools/build-managers/kati { };
