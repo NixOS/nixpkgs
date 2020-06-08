@@ -13036,7 +13036,7 @@ in
 
   liblastfmSF = callPackage ../development/libraries/liblastfmSF { };
 
-  liblastfm = callPackage ../development/libraries/liblastfm { };
+  liblastfm = libsForQt5.callPackage ../development/libraries/liblastfm { };
 
   liblcf = callPackage ../development/libraries/liblcf { };
 

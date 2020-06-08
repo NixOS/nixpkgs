@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, qt4, pkgconfig, libsamplerate, fftwSinglePrec, which, cmake
+{ stdenv, fetchurl, pkgconfig, which, cmake
+, fftwSinglePrec, libsamplerate, qtbase
 , darwin }:
 
 let version = "1.1.0"; in
@@ -14,16 +15,22 @@ stdenv.mkDerivation rec {
     sha256 = "1j34xc30vg7sfszm2jx9mlz9hy7p1l929fka9wnfcpbib8gfi43x";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'find_package(Qt5Core QUIET)' \
+                'find_package(Qt5 REQUIRED COMPONENTS Core Network Sql Test Xml)'
+  '';
+
   prefixKey = "--prefix ";
-  propagatedBuildInputs = [ qt4 libsamplerate fftwSinglePrec ];
   nativeBuildInputs = [ pkgconfig which cmake ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
+  buildInputs = [ fftwSinglePrec libsamplerate qtbase ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/lastfm/liblastfm";
     repositories.git = "git://github.com/lastfm/liblastfm.git";
     description = "Official LastFM library";
-    inherit (qt4.meta) platforms;
+    platforms = platforms.unix;
     maintainers =  [ maintainers.phreedom ];
     license = licenses.gpl3;
   };
