@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, cython
 , mock
 , numpy
 , pathlib
@@ -18,6 +19,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "fa3c7375be8fe75f23c27feafbfb5f738d55ffdbf02964c6896fb7684f519a52";
   };
+
+  nativeBuildInputs = [ cython ];
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.4") pathlib;
 
