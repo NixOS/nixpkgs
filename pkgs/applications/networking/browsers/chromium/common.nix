@@ -13,6 +13,7 @@
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
+, xorg
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
@@ -117,7 +118,8 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar
-    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools;
+    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools
+      ++ optional (versionAtLeast version "84") (xorg.xcbproto.override { python = python2Packages.python; });
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
@@ -217,6 +219,11 @@ let
       ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
       ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
+    '' + optionalString (versionAtLeast version "84") ''
+      substituteInPlace ui/gfx/x/BUILD.gn \
+        --replace \
+          '/usr/share/xcb' \
+          '${xorg.xcbproto}/share/xcb/'
     '';
 
     gnFlags = mkGnFlags (optionalAttrs (versionRange "0" "84") {
