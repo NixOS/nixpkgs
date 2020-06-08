@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, setuptools_scm, nose, six, importlib-metadata }:
+{ buildPythonPackage, fetchPypi, setuptools_scm, nose, six, importlib-metadata, toml }:
 
 buildPythonPackage rec {
   pname = "inflect";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "def6f3791be9181f0c01e0bf5949304007ec6e04c6674fbef7cc49c657b8a9a5";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm toml ];
   propagatedBuildInputs = [ six importlib-metadata ];
   checkInputs = [ nose ];
 }
