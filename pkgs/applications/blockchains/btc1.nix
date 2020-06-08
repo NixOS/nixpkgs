@@ -5,7 +5,7 @@
 }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   name = "bit1" + (toString (optional (!withGui) "d")) + "-" + version;
   version = "1.15.1";
 
