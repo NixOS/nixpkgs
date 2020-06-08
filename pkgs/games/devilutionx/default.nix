@@ -19,7 +19,11 @@ in stdenv.mkDerivation rec {
     "-I${SDL2_ttf}/include/SDL2"
     ''-DTTF_FONT_PATH="${placeholder "out"}/share/fonts/truetype/CharisSILB.ttf"''
   ];
-
+  
+  cmakeFlags = [ 
+    "-DBINARY_RELEASE=ON" 
+  ];
+  
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ libsodium SDL2' SDL2_mixer SDL2_ttf ];
 
