@@ -4,6 +4,7 @@
 , pytest
 , sh
 , typing
+, mock
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click ] ++ lib.optionals isPy27 [ typing ];
 
-  checkInputs = [ ipython pytest sh ];
+  checkInputs = [ ipython mock pytest sh ];
 
   # cli tests are impure
   checkPhase = ''
