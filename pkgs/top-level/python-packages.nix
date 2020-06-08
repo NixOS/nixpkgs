@@ -1353,6 +1353,8 @@ in {
 
   csvs-to-sqlite = callPackage ../development/python-modules/csvs-to-sqlite { };
 
+  csvw = callPackage ../development/python-modules/csvw { };
+
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
