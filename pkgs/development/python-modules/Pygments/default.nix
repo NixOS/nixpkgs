@@ -2,15 +2,17 @@
 , buildPythonPackage
 , fetchPypi
 , docutils
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "Pygments";
-  version = "2.5.2";
+  version = "2.6.1";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "98c8aa5a9f778fcd1026a17361ddaf7330d1b7c62ae97c3bb0ae73e0b9b6b0fe";
+    sha256 = "0i4gnd4q0mgkq0dp5wymn7ca8zjd8fgp63139svs6jf2c6h48wv4";
   };
 
   propagatedBuildInputs = [ docutils ];
