@@ -1,5 +1,10 @@
 { stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, SDL2_ttf, libsodium, pkg-config }:
-stdenv.mkDerivation rec {
+
+let
+  # Cmake needs static SDL2
+  SDL2' = SDL2.override { withStatic = true; };
+
+in stdenv.mkDerivation rec {
   version = "1.0.1";
   pname = "devilutionx";
 
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ libsodium SDL2 SDL2_mixer SDL2_ttf ];
+  buildInputs = [ libsodium SDL2' SDL2_mixer SDL2_ttf ];
 
   installPhase = ''
     runHook preInstall
