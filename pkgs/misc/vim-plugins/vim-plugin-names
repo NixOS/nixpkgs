@@ -144,6 +144,7 @@ henrik/vim-indexed-search
 HerringtonDarkholme/yats.vim
 honza/vim-snippets
 hotwatermorning/auto-git-diff
+hrsh7th/vim-vsnip
 hsanson/vim-android
 hsitz/VimOrganizer
 iamcco/coc-spell-checker

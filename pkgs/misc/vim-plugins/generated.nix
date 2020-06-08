@@ -6912,6 +6912,18 @@ let
     meta.homepage = "https://github.com/thinca/vim-visualstar/";
   };
 
+  vim-vsnip = buildVimPluginFrom2Nix {
+    pname = "vim-vsnip";
+    version = "2020-06-04";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "vim-vsnip";
+      rev = "c95bb8bc2ff05e2261488497c050d63786c11a16";
+      sha256 = "0vp98v3wcsmicpa4lzfg3v6scr67wfj36aj1qxwdkx7ahyc6c75g";
+    };
+    meta.homepage = "https://github.com/hrsh7th/vim-vsnip/";
+  };
+
   vim-vue = buildVimPluginFrom2Nix {
     pname = "vim-vue";
     version = "2019-08-03";
