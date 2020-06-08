@@ -6345,6 +6345,8 @@ in {
 
   seekpath = callPackage ../development/python-modules/seekpath { };
 
+  segments = callPackage ../development/python-modules/segments { };
+
   selectors2 = callPackage ../development/python-modules/selectors2 { };
 
   selectors34 = callPackage ../development/python-modules/selectors34 { };
