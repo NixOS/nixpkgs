@@ -15,6 +15,21 @@
     ]
   },
   {
+    "name": "bobclasses",
+    "version": "0.18.8",
+    "src": {
+      "name": "bobclasses_0.18.8.zip",
+      "url": "https://mods.factorio.com//download/bobclasses/5edd6b3cfd6b7c000dcec7af",
+      "sha1": "1fyk9idbz4psgf1z15j91b37zc37f7kk"
+    },
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "bobplates"
+    ]
+  },
+  {
     "name": "bobconfig",
     "version": "0.14.0",
     "src": {
@@ -49,6 +64,19 @@
       "sha1": "05v0lcgmy23q15djhs651g4q4m60yc5k"
     },
     "deps": [],
+    "optionalDeps": []
+  },
+  {
+    "name": "bobequipment",
+    "version": "0.18.1",
+    "src": {
+      "name": "bobequipment_0.18.1.zip",
+      "url": "https://mods.factorio.com//download/bobequipment/5e6aa917d1a668000ef959b7",
+      "sha1": "f1nz3j4z6p4i2sr0fjpq3h21ri9bx54j"
+    },
+    "deps": [
+      "boblibrary"
+    ],
     "optionalDeps": []
   },
   {
@@ -213,15 +241,20 @@
     ]
   },
   {
-    "name": "bobtechsave",
-    "version": "0.14.2",
+    "name": "bobvehicleequipment",
+    "version": "0.18.1",
     "src": {
-      "name": "bobtechsave_0.14.2.zip",
-      "url": "https://mods.factorio.com//download/bobtechsave/5a5f1ae6adcc441024d746e2",
-      "sha1": "swqiz9ywllg6xsfm5h2x832a84glb6xf"
+      "name": "bobvehicleequipment_0.18.1.zip",
+      "url": "https://mods.factorio.com//download/bobvehicleequipment/5e6aaa26d1a668000ef977d3",
+      "sha1": "5fv8135j2jrxv61m24akil2daxgqp7wj"
     },
-    "deps": [],
-    "optionalDeps": []
+    "deps": [
+      "boblibrary"
+    ],
+    "optionalDeps": [
+      "boblogistics",
+      "bobwarfare"
+    ]
   },
   {
     "name": "bobwarfare",
@@ -241,11 +274,11 @@
   },
   {
     "name": "clock",
-    "version": "0.18.1",
+    "version": "0.18.2",
     "src": {
-      "name": "clock_0.18.1.zip",
-      "url": "https://mods.factorio.com//download/clock/5edd6b4c0c4233000b59f065",
-      "sha1": "c5granjd8sfx6f33a4wwzn7b13xqkd6s"
+      "name": "clock_0.18.2.zip",
+      "url": "https://mods.factorio.com//download/clock/5ede20bca9868c003ce1c8a3",
+      "sha1": "gsxbn06ly8hfa9w29qbaxnc0ln48jlka"
     },
     "deps": [],
     "optionalDeps": []
