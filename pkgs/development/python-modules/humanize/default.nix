@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , mock
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,8 @@ buildPythonPackage rec {
     sha256 = "42ae7d54b398c01bd100847f6cb0fc9e381c21be8ad3f8e2929135e48dbff026";
   };
 
-  buildInputs = [ mock ];
+  nativeBuildInputs = [ setuptools_scm ];
+  checkInputs = [ mock ];
 
   doCheck = false;
 
