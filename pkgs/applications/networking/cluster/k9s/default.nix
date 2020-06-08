@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "k9s";
-  version = "0.19.4";
+  version = "0.20.5";
 
   src = fetchFromGitHub {
     owner  = "derailed";
     repo   = "k9s";
     rev    = "v${version}";
-    sha256 = "1ya3lrw31pxd1rxzf88l5hzilaxwrng1a3ibawgn57my333hrmf6";
+    sha256 = "0miaam0v0gd7a8qy2mz0pbcbi0a66blq9mx4f5ah5x306k1v19xr";
   };
 
   buildFlagsArray = ''
@@ -18,7 +18,7 @@ buildGoModule rec {
       -X github.com/derailed/k9s/cmd.commit=${src.rev}
   '';
 
-  vendorSha256 = "0vvzv5v7j77v809h2ial9n23244j1sy3xhkarsv0wwkifc3swvq5";
+  vendorSha256 = "1dg2lsfc3s820axvdrqywz3n389xns5vvb7m3gw3v5c62yfs05xn";
 
   meta = with stdenv.lib; {
     description = "Kubernetes CLI To Manage Your Clusters In Style.";
