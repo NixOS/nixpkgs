@@ -20,7 +20,9 @@ let
   #
   toWheelAttrs = str:
     let
-      entries = splitString "-" str;
+      entries' = splitString "-" str;
+      # Hack: Remove version "suffixes" like 2.11.4-1
+      entries = builtins.filter (x: builtins.match "[0-9]" x == null) entries';
       p = removeSuffix ".whl" (builtins.elemAt entries 4);
     in
     {
@@ -60,7 +62,12 @@ let
   selectWheel = files:
     let
       filesWithoutSources = (builtins.filter (x: hasSuffix ".whl" x.file) files);
-      isPyAbiCompatible = pyabi: x: x == "none" || pyabi == x;
+      isPyAbiCompatible = pyabi: x: x == "none" || lib.hasPrefix pyabi x || (
+        # The CPython stable ABI is abi3 as in the shared library suffix.
+        python.passthru.implementation == "cpython" &&
+          builtins.elemAt (lib.splitString "." python.version) 0 == "3" &&
+          x == "abi3"
+      );
       withPython = ver: abi: x: (isPyVersionCompatible ver x.pyVer) && (isPyAbiCompatible abi x.abi);
       withPlatform =
         if isLinux
