@@ -1186,6 +1186,8 @@ in {
 
   clize = callPackage ../development/python-modules/clize { };
 
+  clldutils = callPackage ../development/python-modules/clldutils { };
+
   closure-linter = callPackage ../development/python-modules/closure-linter { };
 
   cloudflare = callPackage ../development/python-modules/cloudflare { };
