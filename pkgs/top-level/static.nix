@@ -274,4 +274,6 @@ in {
 
 
   libev = super.libev.override { static = true; };
+
+  libexecinfo = super.libexecinfo.override { enableShared = false; };
 }
