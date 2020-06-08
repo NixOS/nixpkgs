@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Check MANIFEST.in in a Python source package for completeness";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo ];
+    broken = true; # pep517 package doesn't exist in nixpkgs
   };
 }
