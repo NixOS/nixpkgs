@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
-, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell, sqlite, zlib
+, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, elinks, mailcap, runtimeShell, sqlite, zlib
 , glibcLocales
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib
+    docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib elinks
   ];
 
   enableParallelBuilding = true;
