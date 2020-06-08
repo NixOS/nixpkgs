@@ -18,7 +18,7 @@ cat mods.json | jq -r '.[].name' | sort | while read name; do
     sha1="$(nix-hash --to-base32 --type sha1 "$(jq -r '.sha1' <<< "$release_json")")"
 
     dependencies="$(jq '.info_json' <<< "$release_json")"
-    deps="$(jq '.dependencies | map(split(" ")[0] | select(. != "base" and . != "?" and . != "(?)"))' <<< "$dependencies")"
+    deps="$(jq '.dependencies | map(split(" ")[0] | select(. != "base" and (.|startswith("?")|not) and (.|startswith("(?)")|not) and (.|startswith("!")|not)))' <<< "$dependencies")"
     optionalDeps="$(jq '.dependencies | map(select(.|startswith("? ")) | split(" ")[1])' <<< "$dependencies")"
 
     jq "{
