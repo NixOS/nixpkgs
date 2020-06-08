@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock, six, twisted,isPy37 }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, mock, six, twisted, isPy37, isPy27 }:
 
 buildPythonPackage rec {
   pname = "txaio";
   version = "20.4.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
