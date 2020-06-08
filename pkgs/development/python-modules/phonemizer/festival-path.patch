@@ -1,0 +1,13 @@
+diff --git a/phonemizer/backend/festival.py b/phonemizer/backend/festival.py
+index b5bc56d..4832030 100644
+--- a/phonemizer/backend/festival.py
++++ b/phonemizer/backend/festival.py
+@@ -32,7 +32,7 @@ from phonemizer.utils import get_package_resource
+ # a global variable being used to overload the default festival installed on
+ # the system. The user can choose an alternative espeak with the method
+ # FestivalBackend.set_festival_path().
+-_FESTIVAL_DEFAULT_PATH = None
++_FESTIVAL_DEFAULT_PATH = "@festival@"
+ 
+ 
+ class FestivalBackend(BaseBackend):

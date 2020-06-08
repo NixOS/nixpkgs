@@ -1,0 +1,13 @@
+diff --git a/phonemizer/backend/espeak.py b/phonemizer/backend/espeak.py
+index 944cc07..d5d252a 100644
+--- a/phonemizer/backend/espeak.py
++++ b/phonemizer/backend/espeak.py
+@@ -36,7 +36,7 @@ _ESPEAK_FLAGS_RE = re.compile(r'\(.+?\)')
+ # a global variable being used to overload the default espeak installed on the
+ # system. The user can choose an alternative espeak with the method
+ # EspeakBackend.set_espeak_path().
+-_ESPEAK_DEFAULT_PATH = None
++_ESPEAK_DEFAULT_PATH = "@espeak@"
+ 
+ 
+ class BaseEspeakBackend(BaseBackend):
