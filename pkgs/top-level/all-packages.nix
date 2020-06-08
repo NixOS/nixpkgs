@@ -19926,6 +19926,8 @@ in
 
   giada = callPackage ../applications/audio/giada {};
 
+  gitit = callPackage ../applications/misc/gitit {};
+
   gkrellm = callPackage ../applications/misc/gkrellm {
     inherit (darwin) IOKit;
   };
