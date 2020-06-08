@@ -4342,7 +4342,10 @@ in {
 
   libarcus = callPackage ../development/python-modules/libarcus { inherit (pkgs) protobuf; };
 
-  libcloud = callPackage ../development/python-modules/libcloud { };
+  libcloud = if isPy27 then
+      callPackage ../development/python-modules/libcloud/2.nix { }
+    else
+      callPackage ../development/python-modules/libcloud { };
 
   libgpuarray = callPackage ../development/python-modules/libgpuarray {
     clblas = pkgs.clblas.override { boost = self.boost; };
