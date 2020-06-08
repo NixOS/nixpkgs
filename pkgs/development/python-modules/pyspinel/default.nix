@@ -1,21 +1,32 @@
-{ buildPythonPackage, fetchPypi, lib, future, pyserial, ipaddress }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
+, future, pyserial, ipaddress
+}:
 
 buildPythonPackage rec {
   pname = "pyspinel";
-  version = "1.0.1";
+  version = "unstable-2020-06-19";  # no versioned release since 2018
+  disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5cbfd0f6e9ef3b5cd3a4e72a9a0cee1fe50d518b43746be07a1fd17e883328c2";
+  src = fetchFromGitHub {
+    owner = "openthread";
+    repo = pname;
+    rev = "e0bb3f8e6f49b593ab248a75de04a71626ae8101";
+    sha256 = "0nfmdkgbhmkl82dfxjpwiiarxngm6a3fvdrzpaqp60a4b17pipqg";
   };
 
-  propagatedBuildInputs = [ pyserial ipaddress future ];
+  propagatedBuildInputs = [
+    future
+    ipaddress
+    pyserial
+  ];
 
   doCheck = false;
+  pythonImportsCheck = [ "spinel" ];
 
-  meta = {
+  meta = with lib; {
     description = "Interface to the OpenThread Network Co-Processor (NCP)";
     homepage = "https://github.com/openthread/pyspinel";
-    maintainers = with lib.maintainers; [ gebner ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ gebner ];
   };
 }
