@@ -342,6 +342,26 @@ let
         };
       });
 
+      msal-extensions = super.msal-extensions.overridePythonAttrs(oldAttrs: rec {
+        version = "0.1.3";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "1p05cbfksnhijx1il7s24js2ydzgxbpiasf607qdpb5sljlp3qar";
+        };
+      });
+
+      websocket_client = super.websocket_client.overridePythonAttrs(oldAttrs: rec {
+        version = "0.56.0";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "0fpxjyr74klnyis3yf6m54askl0h5dchxcwbfjsq92xng0455m8z";
+        };
+      });
+
     };
   };
 in
