@@ -69,6 +69,11 @@ let
       "--with-gnu-ld"
       "--disable-debug"
       "--disable-win32-registry"
+      "--enable-hash-synchronization"
+      "--enable-libssp"
+      "--disable-nls"
+      # To keep ABI compatibility with upstream mingw-w64
+      "--enable-fully-dynamic-string"      
     ] ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
       # See Note [Windows Exception Handling]
       "--enable-sjlj-exceptions"
@@ -93,12 +98,6 @@ let
     ] ++ lib.optionals (targetPlatform.libc == "musl") [
       # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
       "--disable-libmpx"
-    ] ++ lib.optionals crossMingw [
-      "--enable-hash-synchronization"
-      "--enable-libssp"
-      "--disable-nls"
-      # To keep ABI compatibility with upstream mingw-w64
-      "--enable-fully-dynamic-string"
     ] ++ lib.optional (targetPlatform.libc == "newlib") "--with-newlib"
       ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
