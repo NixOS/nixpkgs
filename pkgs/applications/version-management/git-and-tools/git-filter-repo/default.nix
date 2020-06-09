@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/newren/git-filter-repo";
     description = "Quickly rewrite git repository history (filter-branch replacement)";
     license = licenses.mit;
+    inherit (pythonPackages.python.meta) platforms;
     maintainers = [ maintainers.marsam ];
   };
 }
