@@ -24,11 +24,10 @@
 # distro can use an unmodified (upstream) Calamares package and a local
 # customisation package in tandem.
 #
+cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(calamares-branding LANGUAGES CXX)
-cmake_minimum_required(VERSION 3.2)
 
-find_package(Calamares REQUIRED)
-include( "${CALAMARES_USE_FILE}" )
+find_package(Calamares 3.2.26 REQUIRED)
 
 ### BRANDING
 #
