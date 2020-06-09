@@ -1,54 +1,37 @@
-{ fetchurl, stdenv, perl, makeWrapper }:
+{ stdenv, fetchurl, perlPackages, coreutils, flex, glibcLocales, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "sloccount-2.26";
+perlPackages.buildPerlPackage rec {
+  pname = "sloccount";
+  version = "2.26";
 
   src = fetchurl {
-    url = "https://www.dwheeler.com/sloccount/${name}.tar.gz";
+    url = "https://www.dwheeler.com/sloccount/${pname}-${version}.tar.gz";
     sha256 = "0ayiwfjdh1946asah861ah9269s5xkc8p5fv1wnxs9znyaxs4zzs";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ];
+  # needed for the standard buildPerlPackage builder
+  postPatch = "touch Makefile.PL";
 
-  # Make sure the Flex-generated files are newer than the `.l' files, so that
-  # Flex isn't needed to recompile them.
-  patchPhase = ''
-    for file in *
-    do
-      if grep -q /usr/bin/perl "$file"
-      then
-          echo "patching \`$file'..."
-          substituteInPlace "$file" --replace \
-            "/usr/bin/perl" "${perl}/bin/perl"
-      fi
-    done
+  nativeBuildInputs = [ flex makeWrapper ];
 
-    for file in *.l
-    do
-      touch "$(echo $file | sed -es'/\.l$/.c/g')"
-    done
-  '';
+  outputs = [ "out" ];
 
   makeFlags = [ "PREFIX=$(out)" "CC=cc" ];
 
-  doCheck = true;
   checkPhase = ''HOME="$TMPDIR" PATH="$PWD:$PATH" make test'';
 
-  preInstall = ''
-    mkdir -p "$out/bin"
-    mkdir -p "$out/share/man/man1"
-    mkdir -p "$out/share/doc"
+  preInstall = "mkdir -p $out/bin";
+
+  # coreutils is needed for wc and md5sum
+  postInstall = ''
+    mv $out/bin $out/libexec
+
+    makeWrapper $out/libexec/sloccount $out/bin/sloccount \
+      --prefix PATH : $out/libexec:${stdenv.lib.makeBinPath [ coreutils ]} \
+      --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive
   '';
 
-  postInstall = ''
-    for w in "$out/bin"/*; do
-      isScript "$w" || continue
-      wrapProgram "$w" --prefix PATH : "$out/bin"
-    done
-    '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Set of tools for counting physical Source Lines of Code (SLOC)";
 
     longDescription = ''
@@ -62,11 +45,8 @@ stdenv.mkDerivation rec {
       the Perl CPAN library using this tool suite.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-
     homepage = "https://www.dwheeler.com/sloccount/";
-
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
   };
 }
