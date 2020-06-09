@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p jq nix coreutils curl nix-prefetch-git
+#! nix-shell -i bash -p jq nix coreutils curl
 set -eu -o pipefail
 
 # TODO:
@@ -9,7 +9,7 @@ base_url="https://mods.factorio.com/"
 
 echo "Updating mods."
 
-cat mods.json | jq -r '.[].name' | sort | while read name; do
+cat mods.json | jq -r '.[].name' | sort -u | while read name; do
     mod_json="$(curl -s https://mods.factorio.com/api/mods/${name}/full)"
     version="$(jq -r '.releases[] | .version' <<< "$mod_json" | sort -V | tail -n1)"
     echo "$name $version" 1>&2
@@ -24,7 +24,9 @@ cat mods.json | jq -r '.[].name' | sort | while read name; do
     jq "{
         name: \"$name\",
         version,
-        src: ({name: .file_name, url: (\"$base_url\" + .download_url), sha1: \"$sha1\"}),
+        file_name,
+        download_url,
+        sha1: \"$sha1\",
         deps: $deps,
         optionalDeps: $optionalDeps
     }" <<< "$release_json"
