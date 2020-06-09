@@ -5916,6 +5916,8 @@ in {
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml { });
 
+  pyxnat = callPackage ../development/python-modules/pyxnat { };
+
   pyyaml = callPackage ../development/python-modules/pyyaml { };
 
   pyzmq = callPackage ../development/python-modules/pyzmq { };
