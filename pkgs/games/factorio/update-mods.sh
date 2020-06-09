@@ -15,7 +15,6 @@ cat mods.json | jq -r '.[].name' | sort -u | while read name; do
     echo "$name $version" 1>&2
 
     release_json="$(jq -r ".releases[] | select(.version == \"${version}\")" <<< "$mod_json")"
-    sha1="$(nix-hash --to-base32 --type sha1 "$(jq -r '.sha1' <<< "$release_json")")"
 
     dependencies="$(jq '.info_json' <<< "$release_json")"
     deps="$(jq '.dependencies | map(split(" ")[0] | select(. != "base" and (.|startswith("?")|not) and (.|startswith("(?)")|not) and (.|startswith("!")|not)))' <<< "$dependencies")"
@@ -26,7 +25,7 @@ cat mods.json | jq -r '.[].name' | sort -u | while read name; do
         version,
         file_name,
         download_url,
-        sha1: \"$sha1\",
+        sha1,
         deps: $deps,
         optionalDeps: $optionalDeps
     }" <<< "$release_json"
