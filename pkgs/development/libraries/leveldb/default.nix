@@ -1,4 +1,4 @@
-{ snappy, stdenv, fetchFromGitHub, fixDarwinDylibNames }:
+{ stdenv, fetchFromGitHub, fixDarwinDylibNames, snappy }:
 
 stdenv.mkDerivation rec {
   pname = "leveldb";
