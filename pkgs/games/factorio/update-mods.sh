@@ -2,15 +2,15 @@
 #! nix-shell -i bash -p jq nix coreutils curl
 set -eu -o pipefail
 
+# Lint: shellcheck -s bash update-mods.sh
+
 # TODO:
 # - Filter for stable and experimental mods by factorio_version (in info_json) in releases.
 
-base_url="https://mods.factorio.com/"
-
 echo "Updating mods."
 
-cat mods.json | jq -r '.[].name' | sort -u | while read name; do
-    mod_json="$(curl -s https://mods.factorio.com/api/mods/${name}/full)"
+jq -r '.[].name' < mods.json | sort -u | while read -r name; do
+    mod_json="$(curl -s https://mods.factorio.com/api/mods/"${name}"/full)"
     version="$(jq -r '.releases[] | .version' <<< "$mod_json" | sort -V | tail -n1)"
     echo "$name $version" 1>&2
 
