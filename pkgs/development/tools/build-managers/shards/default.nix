@@ -2,13 +2,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "shards";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "crystal-lang";
     repo = "shards";
     rev = "v${version}";
-    sha256 = "1bjy3hcdqq8769bx73f3pwn26rnkj23dngyfbw4iv32bw23x1d49";
+    sha256 = "0wrmwrqp24cg0937mhhbjq862vddb78lxg8a3zpbiyj24bk5j5a2";
   };
 
   # we cannot use `make` here as it would introduce a dependency on itself
