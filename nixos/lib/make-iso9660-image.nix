@@ -35,7 +35,7 @@
   isohybridMbrImage ? ""
 
 , # Whether to compress the resulting ISO image with zstd.
-  compressImage ? false
+  compressImage ? false, zstd
 
 , # The volume ID.
   volumeID ? ""
