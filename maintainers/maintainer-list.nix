@@ -1695,8 +1695,8 @@
     name = "Naoya Hatta";
   };
   Dallos = {
-    name = "Thenmozhi";
-    email = "thenmozhi@alsejk.ch";
+    name = "1010";
+    email = "1010@alsejk.ch";
     github = "Dallos";
     githubId = 11308100;
     keys = [{
