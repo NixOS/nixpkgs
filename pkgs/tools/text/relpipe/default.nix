@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchhg, cmake, pkgconfig, symlinkJoin,
+{ lib, stdenv, fetchhg, cmake, pkgconfig, installShellFiles, symlinkJoin,
   xercesc, libxmlxx, guile_2_2, unixODBC, python36, libjack2 }:
 # Build instructions: https://relational-pipes.globalcode.info/v_0/release-v0.16.xhtml
 # Things not yet done: bash completion
@@ -15,9 +15,15 @@ let
       };
 
       buildInputs = deps;
-      nativeBuildInputs = [ cmake pkgconfig ];
+      nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
 
       cmakeFlags = [ "-DPROJECT_VERSION=${version}" ];
+
+      postInstall = ''
+        if [[ -f $src/bash-completion.sh ]]; then
+          installShellCompletion --bash --name ${pname}.completion.bash $src/bash-completion.sh
+        fi
+      '';
 
       meta = {
         maintainers = [ stdenv.lib.maintainers.MostAwesomeDude ];
