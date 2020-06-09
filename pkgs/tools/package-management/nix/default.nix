@@ -21,8 +21,8 @@ common =
   , stateDir
   , confDir
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
-  , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
-
+  , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
+  , enableStatic ? false
   , name, suffix ? "", src, crates ? null
 
   }:
@@ -65,12 +65,21 @@ common =
       propagatedBuildInputs = [ boehmgc ];
 
       # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+      NIX_LDFLAGS =
+        # need to list libraries individually until
+        # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
+        # is in a release
+          lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto"
+
+        # need to detect it here until
+        # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
+        # is in a release
+        + lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
         # https://github.com/NixOS/nixpkgs/issues/45462
-        ''
+        lib.optionalString (!enableStatic) ''
           mkdir -p $out/lib
           cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
           rm -f $out/lib/*.a
@@ -178,10 +187,10 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.4";
+    name = "nix-2.3.6";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "1c626a0de0acc69830b1891ec4d3c96aabe673b2a9fd04cef84f2304d05ad00d";
+      sha256 = "05e90529c9dc9f4bf656cbceae61cafdca49935bb79cd291c8f078a095701d89";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -216,7 +225,7 @@ in rec {
       owner = "NixOS";
       repo = "nix";
       rev = "00b562c87ec4c3bbe514f5dc1f4d1c41f66f66bf";
-      hash = "sha256-GqTFh4wBfkKapixKyd3gA9C1tF0PSzZDD5LN+5nQEWk=";
+      sha256 = "0s8is2czpkcj1x1kcjqgbnsbbl03w3fwjjiclsd44zh1ij3wb90s";
     };
 
     crates = fetchurl {

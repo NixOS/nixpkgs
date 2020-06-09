@@ -5,20 +5,34 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    mysql =
+    mysql57 =
       { pkgs, ... }:
 
       {
+        users.users.testuser = { };
+        users.users.testuser2 = { };
         services.mysql.enable = true;
         services.mysql.initialDatabases = [
-          { name = "testdb"; schema = ./testdb.sql; }
-          { name = "empty_testdb"; }
+          { name = "testdb3"; schema = ./testdb.sql; }
         ];
         # note that using pkgs.writeText here is generally not a good idea,
         # as it will store the password in world-readable /nix/store ;)
         services.mysql.initialScript = pkgs.writeText "mysql-init.sql" ''
-          CREATE USER 'passworduser'@'localhost' IDENTIFIED BY 'password123';
+          CREATE USER 'testuser3'@'localhost' IDENTIFIED BY 'secure';
+          GRANT ALL PRIVILEGES ON testdb3.* TO 'testuser3'@'localhost';
         '';
+        services.mysql.ensureDatabases = [ "testdb" "testdb2" ];
+        services.mysql.ensureUsers = [{
+          name = "testuser";
+          ensurePermissions = {
+            "testdb.*" = "ALL PRIVILEGES";
+          };
+        } {
+          name = "testuser2";
+          ensurePermissions = {
+            "testdb2.*" = "ALL PRIVILEGES";
+          };
+        }];
         services.mysql.package = pkgs.mysql57;
       };
 
@@ -30,16 +44,30 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
         # Kernel panic - not syncing: Out of memory: compulsory panic_on_oom is enabled
         virtualisation.memorySize = 1024;
 
+        users.users.testuser = { };
+        users.users.testuser2 = { };
         services.mysql.enable = true;
         services.mysql.initialDatabases = [
-          { name = "testdb"; schema = ./testdb.sql; }
-          { name = "empty_testdb"; }
+          { name = "testdb3"; schema = ./testdb.sql; }
         ];
         # note that using pkgs.writeText here is generally not a good idea,
         # as it will store the password in world-readable /nix/store ;)
         services.mysql.initialScript = pkgs.writeText "mysql-init.sql" ''
-          CREATE USER 'passworduser'@'localhost' IDENTIFIED BY 'password123';
+          CREATE USER 'testuser3'@'localhost' IDENTIFIED BY 'secure';
+          GRANT ALL PRIVILEGES ON testdb3.* TO 'testuser3'@'localhost';
         '';
+        services.mysql.ensureDatabases = [ "testdb" "testdb2" ];
+        services.mysql.ensureUsers = [{
+          name = "testuser";
+          ensurePermissions = {
+            "testdb.*" = "ALL PRIVILEGES";
+          };
+        } {
+          name = "testuser2";
+          ensurePermissions = {
+            "testdb2.*" = "ALL PRIVILEGES";
+          };
+        }];
         services.mysql.package = pkgs.mysql80;
       };
 
@@ -81,17 +109,49 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
   testScript = ''
     start_all()
 
-    mysql.wait_for_unit("mysql")
-    mysql.succeed("echo 'use empty_testdb;' | mysql -u root")
-    mysql.succeed("echo 'use testdb; select * from tests;' | mysql -u root -N | grep 4")
-    # ';' acts as no-op, just check whether login succeeds with the user created from the initialScript
-    mysql.succeed("echo ';' | mysql -u passworduser --password=password123")
+    mysql57.wait_for_unit("mysql")
+    mysql57.succeed(
+        "echo 'use testdb; create table tests (test_id INT, PRIMARY KEY (test_id));' | sudo -u testuser mysql -u testuser"
+    )
+    mysql57.succeed(
+        "echo 'use testdb; insert into tests values (41);' | sudo -u testuser mysql -u testuser"
+    )
+    # Ensure testuser2 is not able to insert into testdb as mysql testuser2
+    mysql57.fail(
+        "echo 'use testdb; insert into tests values (22);' | sudo -u testuser2 mysql -u testuser2"
+    )
+    # Ensure testuser2 is not able to authenticate as mysql testuser
+    mysql57.fail(
+        "echo 'use testdb; insert into tests values (22);' | sudo -u testuser2 mysql -u testuser"
+    )
+    mysql57.succeed(
+        "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 41"
+    )
+    mysql57.succeed(
+        "echo 'use testdb3; select * from tests;' | mysql -u testuser3 --password=secure -N | grep 4"
+    )
 
     mysql80.wait_for_unit("mysql")
-    mysql80.succeed("echo 'use empty_testdb;' | mysql -u root")
-    mysql80.succeed("echo 'use testdb; select * from tests;' | mysql -u root -N | grep 4")
-    # ';' acts as no-op, just check whether login succeeds with the user created from the initialScript
-    mysql80.succeed("echo ';' | mysql -u passworduser --password=password123")
+    mysql80.succeed(
+        "echo 'use testdb; create table tests (test_id INT, PRIMARY KEY (test_id));' | sudo -u testuser mysql -u testuser"
+    )
+    mysql80.succeed(
+        "echo 'use testdb; insert into tests values (41);' | sudo -u testuser mysql -u testuser"
+    )
+    # Ensure testuser2 is not able to insert into testdb as mysql testuser2
+    mysql80.fail(
+        "echo 'use testdb; insert into tests values (22);' | sudo -u testuser2 mysql -u testuser2"
+    )
+    # Ensure testuser2 is not able to authenticate as mysql testuser
+    mysql80.fail(
+        "echo 'use testdb; insert into tests values (22);' | sudo -u testuser2 mysql -u testuser"
+    )
+    mysql80.succeed(
+        "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 41"
+    )
+    mysql80.succeed(
+        "echo 'use testdb3; select * from tests;' | mysql -u testuser3 --password=secure -N | grep 4"
+    )
 
     mariadb.wait_for_unit("mysql")
     mariadb.succeed(

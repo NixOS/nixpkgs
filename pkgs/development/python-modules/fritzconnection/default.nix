@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "kbr";
     repo = pname;
     rev = version;
-    hash = "sha256:17z4shs56ci9mxmilppv5xy9gbnbp6p1h2ms6x55nkvwndacrp7x";
+    sha256 = "17z4shs56ci9mxmilppv5xy9gbnbp6p1h2ms6x55nkvwndacrp7x";
   };
 
   disabled = pythonOlder "3.5";

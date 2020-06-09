@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , alsaLib
 , acpid
@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation rec {
   pname = "enlightenment";
-  version = "0.24.0";
+  version = "0.24.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "01053hxdmyjfb6gmz1pqmw0llrgc4356np515h5vsqcn59mhvfz7";
+    sha256 = "02aadl5fqvpmpjnisrc4aw7ffwyp1109y4k1wvmp33ciihbvdqmf";
   };
 
   nativeBuildInputs = [
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

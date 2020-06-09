@@ -517,8 +517,7 @@ in
     };
 
     boot.initrd.secrets = mkOption
-      { internal = true;
-        default = {};
+      { default = {};
         type = types.attrsOf (types.nullOr types.path);
         description =
           ''
@@ -585,7 +584,7 @@ in
       { assertion = !config.boot.loader.supportsInitrdSecrets ->
           all (source:
             builtins.isPath source ||
-            (builtins.isString source && hasPrefix source builtins.storeDir))
+            (builtins.isString source && hasPrefix builtins.storeDir source))
           (attrValues config.boot.initrd.secrets);
         message = ''
           boot.loader.initrd.secrets values must be unquoted paths when

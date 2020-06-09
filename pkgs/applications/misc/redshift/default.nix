@@ -9,6 +9,7 @@
 , withGeolocation ? true
 , withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
 , withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
+, withAppIndicator ? true, libappindicator
 }:
 
 let
@@ -50,6 +51,7 @@ let
         ++ stdenv.lib.optional  withDrm          libdrm
         ++ stdenv.lib.optional  withQuartz       ApplicationServices
         ++ stdenv.lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
+        ++ stdenv.lib.optional  withAppIndicator libappindicator
         ;
 
       pythonPath = [ pygobject3 pyxdg ];

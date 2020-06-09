@@ -8,11 +8,11 @@ assert withMysql -> (mysql_jdbc != null);
 
 stdenvNoCC.mkDerivation rec {
   pname = "atlassian-confluence";
-  version = "7.4.0";
+  version = "7.5.1";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/confluence/downloads/${pname}-${version}.tar.gz";
-    sha256 = "1spykb8f24dlzrcyj01nv1ra278j0b6bxbnvrcnp6yr2s69cjwd0";
+    sha256 = "0lxvff0sn1kxsm599lq72hw11qnwjn2da3mz1h8mqz0rn2adhg07";
   };
 
   buildPhase = ''
@@ -44,6 +44,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Team collaboration software written in Java and mainly used in corporate environments";
     homepage = "https://www.atlassian.com/software/confluence";
     license = licenses.unfree;
-    maintainers = with maintainers; [ fpletz globin willibutz ];
+    maintainers = with maintainers; [ fpletz globin willibutz ciil ];
   };
 }

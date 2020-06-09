@@ -4,7 +4,7 @@
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
-, xdg_utils, yasm, minizip, libwebp
+, xdg_utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib
 
 , python2Packages, perl, pkgconfig
@@ -17,6 +17,7 @@
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
 , jre
+, pipewire_0_2
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -72,14 +73,14 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng"
+    "flac" "libwebp" "libxslt" "opus" "snappy" "libpng"
     # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
                     # so we can't build with one from system and other from source
-  ];
+  ] ++ optional (versionRange "0" "84") "yasm";
 
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
@@ -89,12 +90,12 @@ let
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
     libpng libcap
-    xdg_utils yasm minizip libwebp
+    xdg_utils minizip libwebp
     libusb1 re2 zlib
     ffmpeg libxslt libxml2
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
-  ];
+  ] ++ (if (versionRange "0" "84") then [ yasm ] else [ nasm ]);
 
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
@@ -132,6 +133,7 @@ let
       libXScrnSaver libXcursor libXtst libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
+      pipewire_0_2
     ] ++ optional useVaapi libva
       ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
@@ -224,8 +226,9 @@ let
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
     '';
 
-    gnFlags = mkGnFlags ({
+    gnFlags = mkGnFlags (optionalAttrs (versionRange "0" "84") {
       linux_use_bundled_binutils = false;
+    } // {
       use_lld = false;
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
@@ -243,6 +246,8 @@ let
       # added later in the wrapped -wv build or downloaded from Google.
       enable_widevine = true;
       use_cups = cupsSupport;
+      # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture.
+      rtc_use_pipewire = true;
 
       treat_warnings_as_errors = false;
       is_clang = stdenv.cc.isClang;

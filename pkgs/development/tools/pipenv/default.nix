@@ -14,28 +14,27 @@ let
     virtualenv-clone
   ];
 
-  pythonEnv = python3.withPackages(ps: with ps; [ virtualenv ]);
+  pythonEnv = python3.withPackages(ps: with ps; runtimeDeps);
 
 in buildPythonApplication rec {
   pname = "pipenv";
-  version = "2018.11.26";
+  version = "2020.5.28";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ip8zsrwmhrankrix0shig9g8q2knmr7b63sh7lqa8a5x03fcwx6";
+    sha256 = "072lc4nywcf9q9irvanwcz7w0sd9dcyannz208jm6glyj8a271l1";
   };
 
   LC_ALL = "en_US.UTF-8";
 
   postPatch = ''
     # pipenv invokes python in a subprocess to create a virtualenv
-    # it uses sys.executable which will point in our case to a python that
-    # does not have virtualenv.
+    # and to call setup.py.
+    # It would use sys.executable, which in our case points to a python that
+    # does not have the required dependencies.
     substituteInPlace pipenv/core.py \
-      --replace "vistir.compat.Path(sys.executable).absolute().as_posix()" "vistir.compat.Path('${pythonEnv.interpreter}').absolute().as_posix()"
+      --replace "sys.executable" "'${pythonEnv.interpreter}'"
   '';
-
-  nativeBuildInputs = [ invoke parver ];
 
   propagatedBuildInputs = runtimeDeps;
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner  = "eXeC64";
     repo   = "imv";
     rev    = "v${version}";
-    sha256 = "sha256:0gk8g178i961nn3bls75a8qpv6wvfvav6hd9lxca1skaikd33zdx";
+    sha256 = "0gk8g178i961nn3bls75a8qpv6wvfvav6hd9lxca1skaikd33zdx";
   };
 
   preBuild = ''

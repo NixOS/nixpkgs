@@ -70,7 +70,8 @@ let
 
   # Specify the stdenv's `diff` by abspath to ensure that the user's build
   # inputs do not cause us to find the wrong `diff`.
-  diff = "${diffutils}/bin/diff";
+  # The `.nativeDrv` stanza works like nativeBuildInputs and ensures cross-compiling has the right version available.
+  diff = "${diffutils.nativeDrv or diffutils}/bin/diff";
 
 in
 
@@ -130,6 +131,7 @@ stdenv.mkDerivation (args // {
       # give a friendlier error msg.
       if ! [ -e $srcLockfile ]; then
         echo "ERROR: Missing Cargo.lock from src. Expected to find it at: $srcLockfile"
+        echo "Hint: You can use the cargoPatches attribute to add a Cargo.lock manually to the build."
         exit 1
       fi
 

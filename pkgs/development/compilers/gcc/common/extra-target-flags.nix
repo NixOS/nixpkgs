@@ -5,9 +5,12 @@ let
 in
 
 {
+  # For non-cross builds these flags are currently assigned in builder.sh.
+  # It would be good to consolidate the generation of makeFlags
+  # ({C,CXX,LD}FLAGS_FOR_{BUILD,TARGET}, etc...) at some point.
   EXTRA_TARGET_FLAGS = let
       mkFlags = dep: langD: lib.optionals (targetPlatform != hostPlatform && dep != null && !langD) ([
-        "-idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
+        "-O2 -idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
       ] ++ stdenv.lib.optionals (! crossStageStatic) [
         "-B${lib.getLib dep}${dep.libdir or "/lib"}"
       ]);

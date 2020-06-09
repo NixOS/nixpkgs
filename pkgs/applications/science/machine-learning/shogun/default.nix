@@ -25,7 +25,7 @@ let
       owner = pname + "-toolbox";
       repo = pname;
       rev = pname + "_" + version;
-      sha256 = "38aULxK50wQ2+/ERosSpRyBmssmYSGv5aaWfWSlrSRc=";
+      sha256 = "05s9dclmk7x5d7wnnj4qr6r6c827m72a44gizcv09lxr28pr9inz";
       fetchSubmodules = true;
     };
     # we need the packed archive

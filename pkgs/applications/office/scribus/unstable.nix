@@ -40,7 +40,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-devel/${pname}-${version}.tar.xz";
-    sha256 = "eQiyGmzoQyafWM7fX495GJMlfmIBzOX73ccNrKL+P3E=";
+    sha256 = "0w9zzsiaq3f7vpxybk01c9z2b4qqg67mzpyfb2gjchz8dhdb423r";
   };
 
   patches = [
@@ -66,17 +66,17 @@ mkDerivation rec {
     # Formating changes needed for the Poppler 0.86 patch to apply
     (fetchpatch {
       url = "https://github.com/scribusproject/scribus/commit/58613b5ce44335f202a55ab15ed303d97fe274cb.patch";
-      sha256 = "qwmVAZVYCijLNMVGwnOLJE8223vcRwPWfEvNKiDjw5o=";
+      sha256 = "16n3wch2mkabgkb06iywggdkckr4idrw4in56k5jh2jqjl0ra2db";
     })
     (fetchpatch {
       url = "https://github.com/scribusproject/scribus/commit/24aba508aac3f672f5f8cd629744a3b71e58ec37.patch";
-      sha256 = "sha256-OY+EIiGBTg2aIAmZOnkI8DPZVZYqFZAKnD7ychge1Dw=";
+      sha256 = "0g6l3qc75wiykh59059ajraxjczh11wkm68942d0skl144i893rr";
       includes = [ "scribus/plugins/import/pdf/*" ];
     })
     # fix build with Poppler 0.86
     (fetchpatch {
       url = "https://github.com/scribusproject/scribus/commit/67f8771aaff2f55d61b8246f420e762f4b526944.patch";
-      sha256 = "51z+BYKhbH8a9dFph8X60NGpiogSb+5tOhW2d+m/X9M=";
+      sha256 = "1lszpzlpgdhm79nywvqji25aklfhzb2qfsfiyld7yv51h82zwp77";
     })
   ];
 

@@ -67,6 +67,7 @@ mapAliases ({
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   catfish = xfce.catfish; # added 2019-12-22
+  cgmanager = throw "cgmanager was deprecated by lxc and therefore removed from nixpkgs."; # added 2020-06-05
   checkbashism = checkbashisms; # added 2016-08-16
   cide = throw "deprecated in 2019-09-11: abandoned by upstream";
   cinepaint = throw "cinepaint has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
@@ -246,6 +247,7 @@ mapAliases ({
   libgumbo = gumbo; # added 2018-01-21
   libGL_driver = mesa.drivers;
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
+  libjpeg_drop = libjpeg_original; # added 2020-06-05
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   liblapackWithoutAtlas = lapack-reference; # added 2018-11-05
   liblrdf = lrdf; # added 2018-04-25
@@ -275,6 +277,7 @@ mapAliases ({
   lua5_1_sockets = lua51Packages.luasocket; # added 2017-05-02
   lua5_expat = luaPackages.luaexpat; # added 2017-05-02
   lua5_sec = luaPackages.luasec; # added 2017-05-02
+  lxappearance-gtk3 = throw "lxappearance-gtk3 has been removed. Use lxappearance instead, which now defaults to Gtk3";  # added 2020-06-03
   m3d-linux = m33-linux; # added 2016-08-13
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06

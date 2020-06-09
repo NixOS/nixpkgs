@@ -213,18 +213,9 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  # Needs older version of QuickCheck.
-  these_0_7_6 = doJailbreak super.these_0_7_6;
-
-  # dontCheck: Can be removed once https://github.com/haskell-nix/hnix/commit/471712f is in (5.2 probably)
-  #   This is due to GenList having been removed from generic-random in 1.2.0.0
-  # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
-  #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
-  # Does not support recent versions of "these".
-  # https://github.com/haskell-nix/hnix/issues/514
-  hnix =
-    generateOptparseApplicativeCompletion "hnix" (
-      dontCheck (doJailbreak (super.hnix.override { these = self.these_0_7_6; }))
+  # 2020-06-05: HACK: does not passes own build suite - `dontCheck`
+  hnix = generateOptparseApplicativeCompletion "hnix" (
+    dontCheck super.hnix
     );
 
   # Fails for non-obvious reasons while attempting to use doctest.
@@ -710,18 +701,7 @@ self: super: {
   });
 
   # The standard libraries are compiled separately.
-  # The megaparsec-7 override is needed because https://github.com/idris-lang/Idris-dev/issues/4826 declares that
-  # idris1 has no plans to migrate to megaparsec-8.
-  # The idris-lang/Idris-dev#4808 patch is for GHC 8.8 compatibility, and can likely be removed with the next release.
-  idris = generateOptparseApplicativeCompletion "idris" (doJailbreak (dontCheck
-    (appendPatches
-      (super.idris.override { megaparsec = self.megaparsec_7_0_5; }) [
-        (pkgs.fetchpatch {
-          url = "https://github.com/idris-lang/Idris-dev/pull/4808.diff";
-          sha256 = "060ib1rczy34ip8xf3bv1pf28655f6s0bvvij19jhh5dpcr0pf71";
-          excludes = [ ".travis.yml" "Makefile" "appveyor.yml" ];
-        })
-      ])));
+  idris = generateOptparseApplicativeCompletion "idris" (dontCheck super.idris);
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
@@ -1018,6 +998,9 @@ self: super: {
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
+  # Compiles some C++ source which requires these headers
+  VulkanMemoryAllocator = addExtraLibrary super.VulkanMemoryAllocator pkgs.vulkan-headers;
+
   # # Builds only with the latest version of indexed-list-literals.
   # vector-sized_1_0_3_0 = super.vector-sized_1_0_3_0.override {
   #   indexed-list-literals = self.indexed-list-literals_0_2_1_1;
@@ -1041,15 +1024,13 @@ self: super: {
   # Test has either build errors or fails anyway, depending on the compiler.
   vector-algorithms = dontCheck super.vector-algorithms;
 
-  # The test suite attempts to use the network.
+  # 2020-06-04: HACK: dontCheck - The test suite attempts to use the network.
+  # Should be solved when: https://github.com/dhall-lang/dhall-haskell/issues/1837
   dhall = generateOptparseApplicativeCompletion "dhall" (dontCheck super.dhall);
 
-  # Missing test files in source distribution, fixed once 1.4.0 is bumped
-  # https://github.com/dhall-lang/dhall-haskell/pull/997
   dhall-json =
-    generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (
-      dontCheck super.dhall-json
-  );
+    generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"]
+      super.dhall-json;
 
   dhall-nix =
     generateOptparseApplicativeCompletion "dhall-to-nix" (
@@ -1061,10 +1042,6 @@ self: super: {
 
   # https://github.com/haskell-hvr/hgettext/issues/14
   hgettext = doJailbreak super.hgettext;
-
-  # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
-  haddock-library = doJailbreak (dontCheck super.haddock-library);
-  haddock-library_1_9_0 = doJailbreak (dontCheck super.haddock-library_1_9_0);
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
@@ -1121,7 +1098,8 @@ self: super: {
     # Generate shell completions
     generateOptparseApplicativeCompletion "purs" dontHaddockPurescript;
 
-  # https://github.com/kcsongor/generic-lens/pull/65
+  # 2020-06-05: HACK: Package can not pass test suite,
+  # Upstream Report: https://github.com/kcsongor/generic-lens/issues/83
   generic-lens = dontCheck super.generic-lens;
 
   # https://github.com/danfran/cabal-macosx/issues/13
@@ -1167,7 +1145,9 @@ self: super: {
     '';
   });
 
-  # test suite failure: https://github.com/jgm/pandoc/issues/5582
+  # 2020-06-05: HACK: In Nixpkgs currently this is
+  # old pandoc version 2.7.4 to current 2.9.2.1,
+  # test suite failures: https://github.com/jgm/pandoc/issues/5582
   pandoc = dontCheck super.pandoc;
 
   # Fix build with attr-2.4.48 (see #53716)
@@ -1265,7 +1245,7 @@ self: super: {
   });
 
   # Needs the corresponding version of haskell-src-exts.
-  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
+  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_23_1; };
 
   # https://github.com/Daniel-Diaz/HaTeX/issues/144
   HaTeX = dontCheck super.HaTeX;
@@ -1310,9 +1290,6 @@ self: super: {
       substituteInPlace hledger-flow.cabal --replace "-static" ""
     '';
   });
-
-  # cabal-fmt requires Cabal3
-  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_0_0; };
 
   # Several gtk2hs-provided packages at v0.13.8.0 fail to build on Darwin
   # until we pick up https://github.com/gtk2hs/gtk2hs/pull/293 so apply that
@@ -1481,7 +1458,7 @@ self: super: {
   # release of webify is published.
   webify = appendPatch super.webify (pkgs.fetchpatch {
     url = "https://github.com/ananthakumaran/webify/pull/27/commits/6d653e7bdc1ffda75ead46851b5db45e87cb2aa0.patch";
-    sha256 = "sha256:0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
+    sha256 = "0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
   });
 
   # Depends on selective >= 0.4, but the default of selective is 0.3
@@ -1490,33 +1467,39 @@ self: super: {
   };
 
   # Needed for ghcide
-  haskell-lsp_0_19_0_0 = super.haskell-lsp_0_19_0_0.override {
-    haskell-lsp-types = self.haskell-lsp-types_0_19_0_0;
+  haskell-lsp_0_22_0_0 = super.haskell-lsp_0_22_0_0.override {
+    haskell-lsp-types = self.haskell-lsp-types_0_22_0_0;
   };
 
   # this will probably need to get updated with every ghcide update,
   # we need an override because ghcide is tracking haskell-lsp closely.
   ghcide = dontCheck (super.ghcide.override rec {
-    haskell-lsp-types = self.haskell-lsp-types_0_19_0_0;
-    haskell-lsp = self.haskell-lsp_0_19_0_0;
+    haskell-lsp-types = self.haskell-lsp-types_0_22_0_0;
+    haskell-lsp = self.haskell-lsp_0_22_0_0;
+    hie-bios = self.hie-bios_0_5_0;
+    ghc-check = self.ghc-check_0_3_0_1;
   });
 
   # stackage right now is not new enough for hlint-3.0
-  ghc-lib-parser-ex_8_10_0_8 = super.ghc-lib-parser-ex_8_10_0_8.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
+  ghc-lib-parser-ex_8_10_0_13 = super.ghc-lib-parser-ex_8_10_0_13.override {
+    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
   };
 
   hlint = super.hlint.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_8;
-    extra = self.extra_1_7_1;
+    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_13;
+    extra = self.extra_1_7_3;
     filepattern = self.filepattern.override {
-      extra = self.extra_1_7_1;
+      extra = self.extra_1_7_3;
     };
   };
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
+
+  # the test suite attempts to run the binaries built in this package
+  # through $PATH but they aren't in $PATH
+  dhall-lsp-server = dontCheck super.dhall-lsp-server;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -5,29 +5,15 @@
 with python3.pkgs;
 
 let
-  matrix-synapse-ldap3 = buildPythonPackage rec {
-    pname = "matrix-synapse-ldap3";
-    version = "0.1.4";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "01bms89sl16nyh9f141idsz4mnhxvjrc3gj721wxh1fhikps0djx";
-    };
-
-    propagatedBuildInputs = [ service-identity ldap3 twisted ];
-
-    # ldaptor is not ready for py3 yet
-    doCheck = !isPy3k;
-    checkInputs = [ ldaptor mock ];
-  };
-
-in buildPythonApplication rec {
+  plugins = python3.pkgs.callPackage ./plugins { };
+in
+buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10s34h1qh9k88bxv0l0whvy7kirmx9kwgdxrz7sv3rv42cyr1989";
+    sha256 = "09drdqcjvpk9s3hq5rx9yxsxq0wak5fg5gfaiqfnbnxav2c2v7kq";
   };
 
   patches = [
@@ -45,7 +31,6 @@ in buildPythonApplication rec {
     jinja2
     jsonschema
     lxml
-    matrix-synapse-ldap3
     msgpack
     netaddr
     phonenumbers
@@ -72,17 +57,20 @@ in buildPythonApplication rec {
     twisted
     unpaddedbase64
     typing-extensions
+    authlib
   ] ++ lib.optional enableSystemd systemd;
 
   checkInputs = [ mock parameterized openssl ];
 
   doCheck = !stdenv.isDarwin;
 
-  passthru.tests = { inherit (nixosTests) matrix-synapse; };
-
   checkPhase = ''
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
   '';
+
+  passthru.tests = { inherit (nixosTests) matrix-synapse; };
+  passthru.plugins = plugins;
+  passthru.python = python3;
 
   meta = with stdenv.lib; {
     homepage = "https://matrix.org";

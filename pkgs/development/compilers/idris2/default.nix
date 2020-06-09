@@ -3,15 +3,15 @@
 }:
 
 # Uses scheme to bootstrap the build of idris2
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "idris2";
-  version = "0.2.0-840e020";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "idris-lang";
     repo = "Idris2";
-    rev = "840e020d8ccc332135e86f855ad78053ca15d603";
-    sha256 = "1l6pdjiglwd13pf56xwzbjzyyxgz48ypfggjgsgqk2w57rmbfy90";
+    rev = "v${version}";
+    sha256 = "153z6zgb90kglw8rspk8ph5gh5nkplhi27mxai6yqbbjs2glx5d4";
   };
 
   strictDeps = true;
@@ -20,26 +20,26 @@ stdenv.mkDerivation {
 
   prePatch = ''
     patchShebangs --build tests
-
-    # Do not run tests as part of the build process
-    substituteInPlace bootstrap.sh --replace "make test" "# make test"
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "OS=";
 
   # The name of the main executable of pkgs.chez is `scheme`
-  buildFlags = [ "bootstrap" "SCHEME=scheme" ];
+  buildFlags = [ "bootstrap-build" "SCHEME=scheme" ];
+
+  checkTarget = "bootstrap-test";
 
   # idris2 needs to find scheme at runtime to compile
   postInstall = ''
-    wrapProgram "$out/bin/idris2" --prefix PATH : "${chez}/bin"
+    wrapProgram "$out/bin/idris2" --set CHEZ "${chez}/bin/scheme"
   '';
 
   meta = {
     description = "A purely functional programming language with first class types";
-    homepage = https://github.com/idris-lang/Idris2;
+    homepage = "https://github.com/idris-lang/Idris2";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ wchresta ];
+    inherit (chez.meta) platforms;
   };
 }
-

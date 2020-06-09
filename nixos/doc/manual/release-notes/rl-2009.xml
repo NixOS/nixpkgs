@@ -441,6 +441,20 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
        recommended to only use lower-case characters.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     The GRUB specific option <option>boot.loader.grub.extraInitrd</option>
+     has been replaced with the generic option
+     <option>boot.initrd.secrets</option>. This option creates a secondary
+     initrd from the specified files, rather than using a manually created
+     initrd file.
+
+     Due to an existing bug with <option>boot.loader.grub.extraInitrd</option>,
+     it is not possible to directly boot an older generation that used that
+     option. It is still possible to rollback to that generation if the required
+     initrd file has not been deleted.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -452,6 +466,9 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
   <title>Other Notable Changes</title>
 
   <itemizedlist>
+   <listitem>
+     <para>SD and ISO images are now compressed by default using <literal>zstd</literal>.</para>
+   </listitem>
    <listitem>
     <para>
      <option>services.journald.rateLimitBurst</option> was updated from

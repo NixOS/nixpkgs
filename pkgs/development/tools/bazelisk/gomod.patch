@@ -6,7 +6,7 @@ index 8eef134..54382cb 100644
  go 1.14
  
  require (
-+	github.com/bazelbuild/rules_go v0.22.4
++	github.com/bazelbuild/rules_go v0.23.3
  	github.com/hashicorp/go-version v1.2.0
  	github.com/mitchellh/go-homedir v1.1.0
  )

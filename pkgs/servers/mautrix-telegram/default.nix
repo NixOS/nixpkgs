@@ -4,18 +4,16 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.7.2";
+  version = "0.8.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ahchkhrhyd160fwlg6g0d2v8v56j9f3h9rnm71nxibgfjcb6m3n";
+    sha256 = "10r644ddprnhadv2jfb1xxp0rcqi65n3hv7dv7j9znnnykgnwvls";
   };
 
   postPatch = ''
-    sed -i -e '/alembic>/d' setup.py
-    substituteInPlace setup.py \
-      --replace "telethon>=1.9,<1.10" "telethon~=1.9"
+    sed -i -e '/alembic>/d' requirements.txt
   '';
 
   propagatedBuildInputs = [

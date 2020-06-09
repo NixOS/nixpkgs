@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , fetchpatch
 
 , platform-tools
@@ -10,10 +10,10 @@
 }:
 
 let
-  version = "1.13";
+  version = "1.14";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "11gqsl2x18hgwdjajag9q8qdxqvdqr9m67zka22z7hnd3k569vjz";
+    sha256 = "082n57a9lw39lfjxybgim09qf0id9m0rpfb3zmqng58fp2i1h6qx";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zc73l5vm4hca8niaa3y76kpk7i9vj89wv4gbxmf1yjmixb71hby";
+    sha256 = "1w06gsvgjdbpb9lvvhpjwmysxjl0daiigjfh3cxfgz88447bgw7j";
   };
 
   # postPatch:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
-  nativeBuildInputs = [ makeWrapper meson ninja pkgconfig ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
 
   buildInputs = [ ffmpeg SDL2 ];
 

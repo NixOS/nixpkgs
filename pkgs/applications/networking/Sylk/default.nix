@@ -10,7 +10,7 @@ appimageTools.wrapType2 rec {
 
   src = fetchurl {
     url = "http://download.ag-projects.com/Sylk/Sylk-${version}-x86_64.AppImage";
-    hash = "sha256:1hz41jan8hw56ahpaajlb1yy5zjkyxrclzmqhklm5x59b76pd0zx";
+    sha256 = "1hz41jan8hw56ahpaajlb1yy5zjkyxrclzmqhklm5x59b76pd0zx";
   };
 
   profile = ''

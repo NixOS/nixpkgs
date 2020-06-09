@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     description = "Sound editor with graphical UI";
     homepage = "http://audacityteam.org/";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lheckemann ];
     platforms = intersectLists platforms.linux platforms.x86; # fails on ARM
   };
 }
