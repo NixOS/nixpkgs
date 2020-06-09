@@ -31,8 +31,10 @@ let
       (
         v:
           let
-            deps = map (s: head (splitString " " s)) (filter isRequiredDependency v.dependencies);
-            optionalDeps = map (s: findFirst (e: e != "?") (split " " s)) (filter isOptionalDependency v.dependencies);
+            depNames = map (s: head (splitString " " s)) (filter isRequiredDependency v.dependencies);
+            deps = map (dep: mods."${dep}") depNames;
+            optionalDepNames = map (s: findFirst (e: e != "?") (split " " s)) (filter isOptionalDependency v.dependencies);
+            optionalDeps = map (dep: mods."${dep}") optionalDepNames;
           in
             {
               inherit (v) name;
