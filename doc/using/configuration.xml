@@ -387,7 +387,7 @@ fi
 </screen>
 
    <para>
-    Now just run <literal>source $HOME/.profile</literal> and you can starting loading man pages from your environent.
+    Now just run <literal>source $HOME/.profile</literal> and you can starting loading man pages from your environment.
    </para>
   </section>
 
