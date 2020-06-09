@@ -3177,6 +3177,8 @@ in
 
   wob = callPackage ../tools/misc/wob { };
 
+  wfdb = callPackage ../tools/misc/wfdb { };
+  
   wrangler = callPackage ../development/tools/wrangler { };
 
   xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
