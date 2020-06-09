@@ -19,19 +19,30 @@ let
       inherit (v) sha1;
     };
 
+  isBaseDependency = d: head (splitString " " d) == "base";
+  isOptionalDependency = d: hasPrefix "?" d;
+  isHiddenOptionalDependency = d: hasPrefix "(?)" d;
+  isIncompatibleDependency = d: hasPrefix "!" d;
+
+  isRequiredDependency = d: ! any (f: f d) [ isBaseDependency isOptionalDependency isHiddenOptionalDependency isIncompatibleDependency ];
+
   mods = listToAttrs (
     map
       (
-        v: {
-          inherit (v) name;
-          value = modDrv {
-            name = "${v.name}-${v.version}";
-            src = factorio-utils.fetchurlWithAuth ({ inherit username token; } // mkSrc v);
-            deps = map (dep: mods."${dep}") v.deps;
-            optionalDeps = map (dep: mods."${dep}") v.optionalDeps;
-            # TODO: Add recommendedDeps
-          };
-        }
+        v:
+          let
+            deps = map (s: head (splitString " " s)) (filter isRequiredDependency v.dependencies);
+            optionalDeps = map (s: findFirst (e: e != "?") (split " " s)) (filter isOptionalDependency v.dependencies);
+          in
+            {
+              inherit (v) name;
+              value = modDrv {
+                name = "${v.name}-${v.version}";
+                src = factorio-utils.fetchurlWithAuth ({ inherit username token; } // mkSrc v);
+                inherit deps optionalDeps;
+                # TODO: Add recommendedDeps.
+              };
+            }
       )
       (fromJSON (readFile ./mods.json))
   );

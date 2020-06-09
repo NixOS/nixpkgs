@@ -16,19 +16,10 @@ cat mods.json | jq -r '.[].name' | sort -u | while read name; do
 
     release_json="$(jq -r ".releases[] | select(.version == \"${version}\")" <<< "$mod_json")"
 
-    dependencies="$(jq '.info_json' <<< "$release_json")"
-    deps="$(jq '.dependencies | map(split(" ")[0] | select(. != "base" and (.|startswith("?")|not) and (.|startswith("(?)")|not) and (.|startswith("!")|not)))' <<< "$dependencies")"
-    optionalDeps="$(jq '.dependencies | map(select(.|startswith("? ")) | split(" ")[1])' <<< "$dependencies")"
+    info_json="$(jq '.info_json' <<< "$release_json")"
+    dependencies="$(jq '.dependencies' <<< "$info_json")"
 
-    jq "{
-        name: \"$name\",
-        version,
-        file_name,
-        download_url,
-        sha1,
-        deps: $deps,
-        optionalDeps: $optionalDeps
-    }" <<< "$release_json"
+    jq "{ name: \"$name\", version, file_name, download_url, sha1, dependencies: $dependencies}" <<< "$release_json"
 done | jq -s . > mods.new.json
 mv mods.new.json mods.json
 

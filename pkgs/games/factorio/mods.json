@@ -5,11 +5,10 @@
     "file_name": "bobassembly_0.18.5.zip",
     "download_url": "/download/bobassembly/5ec96a30c15abe000ba19cdf",
     "sha1": "04786e5e5361b4b3ffb6e1200dccf8b85e758dbf",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobplates"
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.0",
+      "? bobplates >= 0.18.0"
     ]
   },
   {
@@ -18,11 +17,10 @@
     "file_name": "bobclasses_0.18.8.zip",
     "download_url": "/download/bobclasses/5edd6b3cfd6b7c000dcec7af",
     "sha1": "731e7706fb67ac9064093fb8a72ff9abc534bd0b",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobplates"
+    "dependencies": [
+      "base >= 0.18.27",
+      "boblibrary >= 0.18.0",
+      "? bobplates >= 0.18.0"
     ]
   },
   {
@@ -31,8 +29,9 @@
     "file_name": "bobconfig_0.14.0.zip",
     "download_url": "/download/bobconfig/5a5f1ae6adcc441024d73e06",
     "sha1": "1acf37ac1a7b28035fd24f187e8be6bc6ec5a298",
-    "deps": [],
-    "optionalDeps": []
+    "dependencies": [
+      "base >= 0.14.0"
+    ]
   },
   {
     "name": "bobelectronics",
@@ -40,11 +39,10 @@
     "file_name": "bobelectronics_0.18.1.zip",
     "download_url": "/download/bobelectronics/5e6aa8f2d1a668000ef958cf",
     "sha1": "4dfd7c77dd29593b2de2c5f74cd3a2ce7547752b",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobplates"
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.0",
+      "? bobplates >= 0.18.0"
     ]
   },
   {
@@ -53,8 +51,9 @@
     "file_name": "bobenemies_0.18.5.zip",
     "download_url": "/download/bobenemies/5ec96a4f552ff2000d1b7027",
     "sha1": "b3300f4c2598bc508c86b2958087f0f5310a7601",
-    "deps": [],
-    "optionalDeps": []
+    "dependencies": [
+      "base >= 0.18.2"
+    ]
   },
   {
     "name": "bobequipment",
@@ -62,10 +61,10 @@
     "file_name": "bobequipment_0.18.1.zip",
     "download_url": "/download/bobequipment/5e6aa917d1a668000ef959b7",
     "sha1": "9294be52cc41c081af74206b11c9359fc8f16d70",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": []
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.0"
+    ]
   },
   {
     "name": "bobgreenhouse",
@@ -73,11 +72,10 @@
     "file_name": "bobgreenhouse_0.18.1.zip",
     "download_url": "/download/bobgreenhouse/5e98951a6bb914000bcc7c0c",
     "sha1": "2c4beb69a669d2b2f8df998b28382cc0e4a6f778",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobplates"
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.0",
+      "? bobplates >= 0.18.0"
     ]
   },
   {
@@ -86,8 +84,9 @@
     "file_name": "bobinserters_0.18.4.zip",
     "download_url": "/download/bobinserters/5edd6b670c4233000c076243",
     "sha1": "f2ef99974411ef4617ca877908b6582c1c59a82a",
-    "deps": [],
-    "optionalDeps": []
+    "dependencies": [
+      "base >= 0.18.27"
+    ]
   },
   {
     "name": "boblibrary",
@@ -95,8 +94,9 @@
     "file_name": "boblibrary_0.18.9.zip",
     "download_url": "/download/boblibrary/5e9daef69e85eb000cee2549",
     "sha1": "4e804310d21fc04a9c11bef2c9b049770a2cffd3",
-    "deps": [],
-    "optionalDeps": []
+    "dependencies": [
+      "base >= 0.18.0"
+    ]
   },
   {
     "name": "boblogistics",
@@ -104,12 +104,11 @@
     "file_name": "boblogistics_0.18.9.zip",
     "download_url": "/download/boblogistics/5eaaf2fe89f712000c87bcdb",
     "sha1": "4676f60226341526821dcc44d80496be4a53854d",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobplates",
-      "bobinserters"
+    "dependencies": [
+      "base >= 0.18.13",
+      "boblibrary >= 0.18.0",
+      "? bobplates >= 0.18.0",
+      "? bobinserters >= 0.18.0"
     ]
   },
   {
@@ -118,12 +117,11 @@
     "file_name": "bobmining_0.18.1.zip",
     "download_url": "/download/bobmining/5e6aa97bd1a668000d4baea5",
     "sha1": "b9446e0978fe89264a9b708b4f29fcbe73edd4b6",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobores",
-      "bobplates"
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.0",
+      "? bobores >= 0.18.0",
+      "? bobplates >= 0.18.0"
     ]
   },
   {
@@ -132,13 +130,12 @@
     "file_name": "bobmodules_0.18.3.zip",
     "download_url": "/download/bobmodules/5ec96a713cf12a000e056513",
     "sha1": "048695d08cd465bcade059ba2707b0490f8f6c4b",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobplates",
-      "bobelectronics",
-      "DiscoScience"
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.0",
+      "? bobplates >= 0.18.0",
+      "? bobelectronics >= 0.18.0",
+      "? DiscoScience"
     ]
   },
   {
@@ -147,10 +144,10 @@
     "file_name": "bobores_0.18.3.zip",
     "download_url": "/download/bobores/5ec96a823cf12a000b34fcb0",
     "sha1": "4c922c95169bf9c89f9f5b7b7ee8ccca404dd16d",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": []
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.0"
+    ]
   },
   {
     "name": "bobplates",
@@ -158,12 +155,11 @@
     "file_name": "bobplates_0.18.8.zip",
     "download_url": "/download/bobplates/5ec96a9bc15abe000c94659e",
     "sha1": "b74832087bd54ad06d5108c7f8a2b98e1904a0df",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobores",
-      "bobenemies"
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.4",
+      "? bobores >= 0.18.0",
+      "? bobenemies >= 0.18.0"
     ]
   },
   {
@@ -172,11 +168,10 @@
     "file_name": "bobpower_0.18.6.zip",
     "download_url": "/download/bobpower/5ec96ab3552ff2000b2edbfc",
     "sha1": "3d6aba847a765142d431084744414b14d2ae0d7c",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobplates"
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.0",
+      "? bobplates >= 0.18.0"
     ]
   },
   {
@@ -185,11 +180,10 @@
     "file_name": "bobrevamp_0.18.5.zip",
     "download_url": "/download/bobrevamp/5ec96ac7552ff2000e291dea",
     "sha1": "987956e0e8cd55f81b81495b4705631bf3eee6f6",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobplates"
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.0",
+      "? bobplates >= 0.18.0"
     ]
   },
   {
@@ -198,12 +192,11 @@
     "file_name": "bobtech_0.18.3.zip",
     "download_url": "/download/bobtech/5e78fa88936116000e23eea5",
     "sha1": "7ed092d4e3f506ce3bd94c7b7e12259c758d8971",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobenemies",
-      "DiscoScience"
+    "dependencies": [
+      "base >= 0.18.13",
+      "boblibrary >= 0.18.0",
+      "? bobenemies >= 0.18.0",
+      "? DiscoScience"
     ]
   },
   {
@@ -212,12 +205,11 @@
     "file_name": "bobvehicleequipment_0.18.1.zip",
     "download_url": "/download/bobvehicleequipment/5e6aaa26d1a668000ef977d3",
     "sha1": "929f8b5f574dd03815113598ddb314b28c80b62b",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "boblogistics",
-      "bobwarfare"
+    "dependencies": [
+      "base >= 0.18.0",
+      "boblibrary >= 0.18.0",
+      "? boblogistics >= 0.18.0",
+      "? bobwarfare >= 0.18.0"
     ]
   },
   {
@@ -226,12 +218,11 @@
     "file_name": "bobwarfare_0.18.6.zip",
     "download_url": "/download/bobwarfare/5ec96addc15abe000d64428c",
     "sha1": "fd7101e018ef7e6ce317bdbfca61f0255ada811b",
-    "deps": [
-      "boblibrary"
-    ],
-    "optionalDeps": [
-      "bobplates",
-      "bobenemies"
+    "dependencies": [
+      "base >= 0.18.16",
+      "boblibrary >= 0.18.0",
+      "? bobplates >= 0.18.0",
+      "? bobenemies >= 0.18.0"
     ]
   },
   {
@@ -240,7 +231,8 @@
     "file_name": "clock_0.18.2.zip",
     "download_url": "/download/clock/5ede20bca9868c003ce1c8a3",
     "sha1": "6a528988a580d9ae164e8227e520f2d400bbba7e",
-    "deps": [],
-    "optionalDeps": []
+    "dependencies": [
+      "base >= 0.18.0"
+    ]
   }
 ]
