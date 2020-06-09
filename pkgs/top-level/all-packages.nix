@@ -17126,6 +17126,7 @@ in
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
+  # And update linux_latest_for_hardened below if the patches are already available
   linuxPackages_latest = linuxPackages_5_7;
   linux_latest = linuxPackages_latest.kernel;
 
@@ -17176,28 +17177,32 @@ in
 
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
-  # Hardened linux
-  hardenedLinuxPackagesFor = kernel: linuxPackagesFor (kernel.override {
-    structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-      inherit stdenv;
-      inherit (kernel) version;
-    };
-    kernelPatches = kernel.kernelPatches ++ [
-      kernelPatches.tag_hardened
-      kernelPatches.hardened.${kernel.meta.branch}
-    ];
-    modDirVersionArg = kernel.modDirVersion + "-hardened";
+  # Hardened Linux
+  hardenedLinuxPackagesFor = kernel': overrides:
+    let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
+      linux_latest_for_hardened = pkgs.linux_5_6; # TODO: Update to linux_latest
+      kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
+    in linuxPackagesFor (kernel.override {
+      structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
+        inherit stdenv;
+        inherit (kernel) version;
+      };
+      kernelPatches = kernel.kernelPatches ++ [
+        kernelPatches.tag_hardened
+        kernelPatches.hardened.${kernel.meta.branch}
+      ];
+      modDirVersionArg = kernel.modDirVersion + "-hardened";
   });
 
-  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux);
+  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux { });
   linux_hardened = linuxPackages_hardened.kernel;
 
-  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest);
+  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest { });
   linux_latest_hardened = linuxPackages_latest_hardened.kernel;
 
-  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
+  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux { features.xen_dom0=true; });
 
-  linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
+  linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest { features.xen_dom0=true; });
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_hardkernel_4_14);
