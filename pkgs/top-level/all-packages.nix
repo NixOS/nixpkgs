@@ -5193,6 +5193,8 @@ in
 
   mimetic = callPackage ../development/libraries/mimetic { };
 
+  mindmaster = callPackage ../applications/misc/mindmaster { };
+
   minetime = callPackage ../applications/office/minetime { };
 
   minio-client = callPackage ../tools/networking/minio-client { };
