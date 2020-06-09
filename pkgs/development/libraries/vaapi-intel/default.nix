@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-vaapi-driver";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "intel-vaapi-driver";
     rev    = version;
-    sha256 = "019w0hvjc9l85yqhy01z2bvvljq208nkb43ai2v377l02krgcrbl";
+    sha256 = "1cidki3av9wnkgwi7fklxbg3bh6kysf8w3fk2qadjr05a92mx3zp";
   };
 
   patchPhase = ''
