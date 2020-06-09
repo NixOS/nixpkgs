@@ -1,16 +1,30 @@
 { pname, version, src, binaryName, desktopName
-, stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
-, alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gtk3, libnotify, libX11, libXcomposite, libXcursor, libXdamage, libuuid
-, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
-, pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
+, autoPatchelfHook, fetchurl, makeDesktopItem, stdenv, wrapGAppsHook
+, alsaLib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
+, freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
+, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
+, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb
+, mesa, nspr, nss, pango, systemd
+}:
 
 let
   inherit binaryName;
 in stdenv.mkDerivation rec {
   inherit pname version src;
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [
+    alsaLib
+    autoPatchelfHook
+    cups
+    libdrm
+    libX11
+    libXScrnSaver
+    libXtst
+    libxcb
+    mesa.drivers
+    nss
+    wrapGAppsHook
+  ];
 
   dontWrapGApps = true;
 
