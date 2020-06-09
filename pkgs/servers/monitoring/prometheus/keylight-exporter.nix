@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "keylight-exporter";
   version = "0.1.1";
 
-  goPackagePath = "github.com/mdlayher/keylight_exporter";
-
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "keylight_exporter";
