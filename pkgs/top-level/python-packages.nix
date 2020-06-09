@@ -1995,6 +1995,8 @@ in {
     pythonProtobuf = self.protobuf;
   };
 
+  citeproc-py = callPackage ../development/python-modules/citeproc-py { };
+
   colorcet = callPackage ../development/python-modules/colorcet { };
 
   coloredlogs = callPackage ../development/python-modules/coloredlogs { };
