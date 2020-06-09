@@ -24,6 +24,9 @@ let
     imports = concatMap
       (f: map f phases)
       (map shPkgsFn shells);
+    #Allows packages from nixpkgs to be used as shellFiles
+    config._module.check = false;
+
   };
 
   cfg = config.environment.shellFiles;
