@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     sha256 = "0j685w6pzkn926z5nf5r8fij4ziipvw4c9yb0wc577nzf4j16rbd";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" ] ++ stdenv.lib.optional withManual "doc";
 
   hardeningDisable = [ "format" ];
 
