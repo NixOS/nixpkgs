@@ -2067,6 +2067,8 @@ in {
 
   dodgy = callPackage ../development/python-modules/dodgy { };
 
+  duecredit = callPackage ../development/python-modules/duecredit { };
+
   dugong = callPackage ../development/python-modules/dugong {};
 
   easysnmp = callPackage ../development/python-modules/easysnmp {
