@@ -10,25 +10,8 @@
     <link xlink:href="https://yggdrasil-network.github.io/"/>
   </para>
   <para>
-Yggdrasil is an early-stage implementation of a fully end-to-end encrypted
-IPv6 network. It is lightweight, self-arranging, supported on multiple
-platforms and allows pretty much any IPv6-capable application to communicate
-securely with other Yggdrasil nodes.
-</para>
-  <para>
-When enabled the Yggdrasil service creates a tun device with a unique IPv6 in
-the <literal>200::/8</literal> address space. This device and address can be
-used to communicate with all other connected nodes in the
-<literal>200::/7</literal> Yggdrasil network. Each Yggdrasil node can also
-route a subnet using the first half of its address with the eighth bit masked
-as a prefix, that is to say, within the <literal>300::/8</literal> space. This
-prefix may be announced to locally attached networks.
-</para>
-  <para>
-Despite the normal distribution of nodes within the <literal>200::/8</literal>
-space, the addresses of connected nodes can be readily enumerated, unlike the
-the traditional global IPv6 network. For this reason, all open services on a
-node should be considered public, or the system firewall should be enabled.
+Yggdrasil is an early-stage implementation of a fully end-to-end encrypted,
+self-arranging IPv6 network.
 </para>
   <section xml:id="module-services-networking-yggdrasil-configuration">
     <title>Configuration</title>
@@ -40,6 +23,10 @@ An annotated example of a simple configuration:
 {
   services.yggdrasil = {
     enable = true;
+    persistentKeys = false;
+      # The NixOS module will generate new keys and a new IPv6 address each time
+      # it is started if persistentKeys is not enabled.
+
     config = {
       Peers = [
         # Yggdrasil will automatically connect and "peer" with other nodes it
@@ -48,6 +35,8 @@ An annotated example of a simple configuration:
         # network that it can tunnel to.
         "tcp://1.2.3.4:1024"
         "tcp://1.2.3.5:1024"
+        # Public peers can be found at
+        # https://github.com/yggdrasil-network/public-peers
       ];
     };
   };
@@ -115,7 +104,8 @@ A NixOS container attached to the Yggdrasil network via a node running on the
 host:
         <programlisting>
 let
-  yggPrefix64 = "&#x2026;";
+  yggPrefix64 = "310:5217:69c0:9afc";
+    # Again, taken from the output of "yggdrasilctl getself".
 in
 {
   boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
