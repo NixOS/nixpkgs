@@ -142,6 +142,6 @@ stdenv.mkDerivation rec {
     # say: "We've decided to cancel the BL offering for an indefinite period."
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu veprbl ];
   };
 }
