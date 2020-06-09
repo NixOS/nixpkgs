@@ -20899,6 +20899,8 @@ in
 
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 
+  mooSpace = callPackage ../applications/audio/mooSpace { };
+
   mop = callPackage ../applications/misc/mop { };
 
   mopidyPackages = callPackages ../applications/audio/mopidy/default.nix {
