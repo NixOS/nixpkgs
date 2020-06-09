@@ -112,7 +112,7 @@ let
     else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
     else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
-    else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
+    else { outputHashAlgo = "sha256"; outputHash = ""; };
 in
 
 stdenvNoCC.mkDerivation {
