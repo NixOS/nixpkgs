@@ -454,7 +454,7 @@ in
         '';
         example = {
           mail_owner = "postfix";
-          smtp_use_tls = true;
+          smtp_tls_security_level = "may";
         };
       };
 
@@ -776,13 +776,13 @@ in
         smtp_tls_cert_file = cfg.sslCert;
         smtp_tls_key_file = cfg.sslKey;
 
-        smtp_use_tls = true;
+        smtp_tls_security_level = "may";
 
         smtpd_tls_CAfile = cfg.sslCACert;
         smtpd_tls_cert_file = cfg.sslCert;
         smtpd_tls_key_file = cfg.sslKey;
 
-        smtpd_use_tls = true;
+        smtpd_tls_security_level = "may";
       };
 
       services.postfix.masterConfig = {
