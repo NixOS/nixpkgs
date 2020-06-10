@@ -32,7 +32,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.5";
+  version = "0.3.6";
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "1x0rsq68vsl39bps2g397pa097q37mdjh595bjf7rd2lm9yf21ws";
+    sha256 = "0g149vyaigf4gzm764fcgxxci9niw19z0af9afs4diwq5xzr1qd3";
   };
 
   nativeBuildInputs = [
