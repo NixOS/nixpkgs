@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray+=(
       "--cc=$CC"
-      "--host-cc=$BUILD_CC"
+      "--host-cc=$CC_FOR_BUILD"
       "--as=$AS"
       "--nm=$NM"
       "--ar=$AR"

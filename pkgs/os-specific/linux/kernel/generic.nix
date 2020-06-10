@@ -158,11 +158,8 @@ let
         ;
       }).config;
 
-      #
       structuredConfig = moduleStructuredConfig.settings;
     };
-
-
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix {}) {

@@ -492,6 +492,17 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    </listitem>
    <listitem>
    <para>
+     The cc- and binutils-wrapper's "infix salt" and <literal>_BUILD_</literal> and <literal>_TARGET_</literal> user infixes have been replaced with with a "suffix salt" and suffixes and <literal>_FOR_BUILD</literal> and <literal>_FOR_TARGET</literal>.
+      This matches the autotools convention for env vars which standard for these things, making interfacing with other tools easier.
+   </para>
+   </listitem>
+   <listitem>
+   <para>
+     Additional Git documentation (HTML and text files) is now available via the <literal>git-doc</literal> package.
+   </para>
+   </listitem>
+   <listitem>
+   <para>
      Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
    </para>
    </listitem>
