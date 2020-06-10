@@ -24,6 +24,7 @@ images:
     productWelcome:      "languages.png"
 
 slideshow:               "show.qml"
+slideshowAPI:            1
 
 style:
    sidebarBackground:    "#bdc3c7"

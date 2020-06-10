@@ -60,6 +60,7 @@ images:
 # The slideshow is displayed during execution steps (e.g. when the
 # installer is actually writing to disk and doing other slow things).
 slideshow:               "samegame.qml"
+slideshowAPI:            1
 
 # Colors for text and background components.
 #
