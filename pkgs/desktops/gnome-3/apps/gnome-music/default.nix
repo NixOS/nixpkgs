@@ -93,6 +93,9 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
+  # handle setup hooks better
+  strictDeps = false;
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
