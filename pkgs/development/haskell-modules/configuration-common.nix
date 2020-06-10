@@ -1411,11 +1411,6 @@ self: super: {
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
   haskell-ci = doJailbreak super.haskell-ci;
 
-  # Needs the latest version of vty.
-  matterhorn = super.matterhorn.overrideScope (self: super: {
-    vty = self.vty_5_28_2;
-  });
-
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
   persistent-postgresql = dontCheck super.persistent-postgresql;
@@ -1440,9 +1435,6 @@ self: super: {
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
   });
 
-  # Needs a version that's newer than LTS-15.x provides.
-  weeder = super.weeder.override { generic-lens = self.generic-lens_2_0_0_0;  };
-
   polysemy-plugin = super.polysemy-plugin.override {
     # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
     # This upstream issue is relevant:
@@ -1465,38 +1457,9 @@ self: super: {
     sha256 = "0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
   });
 
-  # Depends on selective >= 0.4, but the default of selective is 0.3
-  headed-megaparsec = super.headed-megaparsec.override {
-    selective = self.selective_0_4_1;
-  };
-
-  # Needed for ghcide
-  haskell-lsp_0_22_0_0 = super.haskell-lsp_0_22_0_0.override {
-    haskell-lsp-types = self.haskell-lsp-types_0_22_0_0;
-  };
-
   # this will probably need to get updated with every ghcide update,
   # we need an override because ghcide is tracking haskell-lsp closely.
-  ghcide = dontCheck (super.ghcide.override rec {
-    haskell-lsp-types = self.haskell-lsp-types_0_22_0_0;
-    haskell-lsp = self.haskell-lsp_0_22_0_0;
-    hie-bios = self.hie-bios_0_5_0;
-    ghc-check = self.ghc-check_0_3_0_1;
-  });
-
-  # stackage right now is not new enough for hlint-3.0
-  ghc-lib-parser-ex_8_10_0_13 = super.ghc-lib-parser-ex_8_10_0_13.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
-  };
-
-  hlint = super.hlint.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_13;
-    extra = self.extra_1_7_3;
-    filepattern = self.filepattern.override {
-      extra = self.extra_1_7_3;
-    };
-  };
+  ghcide = dontCheck (super.ghcide.override { ghc-check = self.ghc-check_0_3_0_1; });
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
@@ -1505,5 +1468,8 @@ self: super: {
   # the test suite attempts to run the binaries built in this package
   # through $PATH but they aren't in $PATH
   dhall-lsp-server = dontCheck super.dhall-lsp-server;
+
+  # https://github.com/ocharles/weeder/issues/15
+  weeder = doJailbreak super.weeder;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
