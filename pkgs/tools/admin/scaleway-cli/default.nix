@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildGoPackage }:
 
-buildGoPackage rec{
+buildGoPackage rec {
   pname = "scaleway-cli";
   version = "1.20";
 
