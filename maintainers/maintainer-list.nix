@@ -5154,6 +5154,12 @@
       fingerprint = "3196 83D3 9A1B 4DE1 3DC2  51FD FEA8 88C9 F5D6 4F62";
     }];
   };
+  mir06 = {
+    email = "armin.leuprecht@uni-graz.at";
+    github = "mir06";
+    githubId = 8479244;
+    name = "Armin Leuprecht";
+  };
   mirdhyn = {
     email = "mirdhyn@gmail.com";
     github = "mirdhyn";
