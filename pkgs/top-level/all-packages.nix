@@ -19996,6 +19996,8 @@ in
 
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
+  hamster = callPackage ../applications/misc/hamster { };
+
   hashit = callPackage ../tools/misc/hashit { };
 
   hactool = callPackage ../tools/compression/hactool { };

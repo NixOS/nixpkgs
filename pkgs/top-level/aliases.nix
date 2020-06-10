@@ -198,7 +198,6 @@ mapAliases ({
   gupnp_igd = gupnp-igd; # added 2018-02-25
   gupnptools = gupnp-tools;  # added 2015-12-19
   gutenberg = zola;  # added 2018-11-17
-  hamster-time-traker = throw "hamster-time-tracker has been removed from nixpkgs, as it was unmaintained."; # added 2019-12-10
   heimdalFull = heimdal; # added 2018-05-01
   hepmc = hepmc2; # added 2019-08-05
   hexen = throw "hexen (SDL port) has been removed: Abandoned by upstream."; # added 2019-12-11
