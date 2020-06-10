@@ -11,6 +11,8 @@
 , eglPlatforms ? [ "x11" "surfaceless" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
 , OpenGL, Xplugin
 , withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
+, enableGalliumNine ? stdenv.isLinux
+, enableOSMesa ? stdenv.isLinux
 }:
 
 /** Packaging design:
@@ -27,7 +29,9 @@
 with stdenv.lib;
 
 let
-  version = "20.0.2";
+  # Release calendar: https://www.mesa3d.org/release-calendar.html
+  # Release frequency: https://www.mesa3d.org/releasing.html#schedule
+  version = "20.0.7"; # Update only to the final (last planned) release (i.e. X.Y.MAX)?
   branch  = versions.major version;
 in
 
@@ -37,12 +41,12 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
+      "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
-      "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "0vz8k07d23qdwy67fnna9y0ynnni0m8lgswcmdm60l4mcv5z2m5a";
+    sha256 = "0y517qpdg6v6dsdgzb365p03m30511sbyh8pq0mcvhvjwy7javpy";
   };
 
   prePatch = "patchShebangs .";
@@ -79,7 +83,7 @@ stdenv.mkDerivation {
       "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
   '';
 
-  outputs = [ "out" "dev" "drivers" "osmesa" ];
+  outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
@@ -103,10 +107,10 @@ stdenv.mkDerivation {
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
+    "-Dgallium-nine=${if enableGalliumNine then "true" else "false"}" # Direct3D in Wine
+    "-Dosmesa=${if enableOSMesa then "gallium" else "none"}" # used by wine
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
-    "-Dosmesa=gallium" # used by wine
-    "-Dgallium-nine=true" # Direct3D in Wine
   ];
 
   buildInputs = with xorg; [
@@ -142,17 +146,17 @@ stdenv.mkDerivation {
   '' + optionalString stdenv.isLinux ''
     mkdir -p $drivers/lib
 
-    # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
-    mv -t $drivers/lib       \
-      $out/lib/libxatracker* \
-      $out/lib/libvulkan_*
+    if [ -n "$(shopt -s nullglob; echo "$out/lib/libxatracker"*)" -o -n "$(shopt -s nullglob; echo "$out/lib/libvulkan_"*)" ]; then
+      # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
+      mv -t $drivers/lib       \
+        $out/lib/libxatracker* \
+        $out/lib/libvulkan_*
+    fi
 
-    # Move other drivers to a separate output
-    mv $out/lib/lib*_mesa* $drivers/lib
-
-    # move libOSMesa to $osmesa, as it's relatively big
-    mkdir -p $osmesa/lib
-    mv -t $osmesa/lib/ $out/lib/libOSMesa*
+    if [ -n "$(shopt -s nullglob; echo "$out"/lib/lib*_mesa*)" ]; then
+      # Move other drivers to a separate output
+      mv $out/lib/lib*_mesa* $drivers/lib
+    fi
 
     # move vendor files
     mv $out/share/ $drivers/
@@ -167,6 +171,10 @@ stdenv.mkDerivation {
     for js in $drivers/share/vulkan/icd.d/*.json; do
       substituteInPlace "$js" --replace "$out" "$drivers"
     done
+  '' + lib.optionalString enableOSMesa ''
+    # move libOSMesa to $osmesa, as it's relatively big
+    mkdir -p $osmesa/lib
+    mv -t $osmesa/lib/ $out/lib/libOSMesa*
   '';
 
   # TODO:
@@ -181,7 +189,9 @@ stdenv.mkDerivation {
 
     # Update search path used by pkg-config
     for pc in $dev/lib/pkgconfig/{d3d,dri,xatracker}.pc; do
-      substituteInPlace "$pc" --replace $out $drivers
+      if [ -f "$pc" ]; then
+        substituteInPlace "$pc" --replace $out $drivers
+      fi
     done
 
     # add RPATH so the drivers can find the moved libgallium and libdricore9
@@ -215,6 +225,6 @@ stdenv.mkDerivation {
     changelog = "https://www.mesa3d.org/relnotes/${version}.html";
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ vcunat ];
+    maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
 }

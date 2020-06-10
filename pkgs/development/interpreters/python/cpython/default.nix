@@ -12,6 +12,7 @@
 , zlib
 , self
 , configd
+, autoreconfHook
 , python-setup-hook
 , nukeReferences
 # For the Python package set
@@ -30,6 +31,7 @@
 , stripBytecode ? false
 , includeSiteCustomize ? true
 , static ? false
+, enableOptimizations ? true
 }:
 
 assert x11Support -> tcl != null
@@ -53,6 +55,7 @@ let
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
   nativeBuildInputs = [
+    autoreconfHook
     nukeReferences
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
@@ -110,6 +113,14 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals (isPy37 || isPy38 || isPy39) [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
+  ] ++ optionals (pythonOlder "3.8") [
+    # Backport from CPython 3.8 of a good list of tests to run for PGO.
+    (
+      if isPy36 || isPy37 then
+        ./3.6/profile-task.patch
+      else
+        ./3.5/profile-task.patch
+    )
   ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
@@ -142,10 +153,14 @@ in with passthru; stdenv.mkDerivation {
 
   configureFlags = [
     "--enable-shared"
-    "--with-threads"
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals enableOptimizations [
+    "--enable-optimizations"
+  ] ++ optionals (pythonOlder "3.7") [
+    # This is unconditionally true starting in CPython 3.7.
+    "--with-threads"
   ] ++ optionals (sqlite != null && isPy3k) [
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (openssl != null) [

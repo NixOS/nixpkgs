@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.17.3";
+  version = "0.17.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "39dd15a333f67bfb70798faa9de8a6e99c819da6ad82b77f9a259a5c7b1225a2";
+    sha256 = "1e9340ecf0187a621bdcfb407c32e04e8e09fc6ab28b050efa38f20eae0e975f";
   };
 
   # Needs setting up

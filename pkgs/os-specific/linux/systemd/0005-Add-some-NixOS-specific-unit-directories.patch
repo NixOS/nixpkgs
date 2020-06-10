@@ -24,8 +24,8 @@ index 8331832c7a..bedb97115d 100644
  systemduserconfdir=${sysconfdir}/systemd/user
 -systemdsystemunitpath=${systemdsystemconfdir}:/etc/systemd/system:/run/systemd/system:/usr/local/lib/systemd/system:${systemdsystemunitdir}:/usr/lib/systemd/system:/lib/systemd/system
 -systemduserunitpath=${systemduserconfdir}:/etc/systemd/user:/run/systemd/user:/usr/local/lib/systemd/user:/usr/local/share/systemd/user:${systemduserunitdir}:/usr/lib/systemd/user:/usr/share/systemd/user
-+systemdsystemunitpath=${systemdsystemconfdir}:/etc/systemd/system:/etc/systemd-mutable/system:/nix/var/nix/profiles/default/lib/systemd/user:/run/systemd/system:${systemdsystemunitdir}
-+systemduserunitpath=${systemduserconfdir}:/etc/systemd/user:/etc/systemd-mutable/user:/nix/var/nix/profiles/default/lib/systemd/system:/run/systemd/user:${systemduserunitdir}
++systemdsystemunitpath=${systemdsystemconfdir}:/etc/systemd/system:/etc/systemd-mutable/system:/nix/var/nix/profiles/default/lib/systemd/system:/run/systemd/system:${systemdsystemunitdir}
++systemduserunitpath=${systemduserconfdir}:/etc/systemd/user:/etc/systemd-mutable/user:/nix/var/nix/profiles/default/lib/systemd/user:/run/systemd/user:${systemduserunitdir}
  systemdsystemgeneratordir=${rootprefix}/lib/systemd/system-generators
  systemdusergeneratordir=${prefix}/lib/systemd/user-generators
  systemdsystemgeneratorpath=/run/systemd/system-generators:/etc/systemd/system-generators:/usr/local/lib/systemd/system-generators:${systemdsystemgeneratordir}

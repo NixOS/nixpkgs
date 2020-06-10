@@ -24,8 +24,20 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  # tests disabled until a release with https://github.com/nymtech/nym/pull/260 is available
-  doCheck = false;
+  checkType = "debug";
+
+  /*
+  Nym's test presence::converting_mixnode_presence_into_topology_mixnode::it_returns_resolved_ip_on_resolvable_hostname tries to resolve nymtech.net.
+  Since there is no external DNS resolution available in the build sandbox, we point cargo and its children (that's what we remove the 'unsetenv' call for) to a hosts file in which we statically resolve nymtech.net.
+  */
+  preCheck = ''
+    export LD_PRELOAD=${libredirect.overrideAttrs (drv: {
+      postPatch = "sed -i -e /unsetenv/d libredirect.c";
+    })}/lib/libredirect.so
+    export NIX_REDIRECTS=/etc/hosts=${writeText "nym_resolve_test_hosts" "127.0.0.1 nymtech.net"}
+  '';
+
+  postCheck = "unset NIX_REDIRECTS LD_PRELOAD";
 
 
   passthru.updateScript = ./update.sh;

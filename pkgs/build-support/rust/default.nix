@@ -28,6 +28,13 @@
 , meta ? {}
 , target ? null
 , cargoVendorDir ? null
+, checkType ? buildType
+
+# Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
+# contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
+# case for `rustfmt`/etc from the `rust-sources).
+# Otherwise, everything from the tarball would've been built/tested.
+, buildAndTestSubdir ? null
 , ... } @ args:
 
 assert cargoVendorDir == null -> cargoSha256 != "unset";
@@ -163,6 +170,7 @@ stdenv.mkDerivation (args // {
   '';
 
   buildPhase = with builtins; args.buildPhase or ''
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preBuild
 
     (
@@ -178,22 +186,29 @@ stdenv.mkDerivation (args // {
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
-    # rename the output dir to a architecture independent one
-    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
-    for target in "''${targets[@]}"; do
-      rm -rf "$target/../../${buildType}"
-      ln -srf "$target" "$target/../../"
-    done
-
     runHook postBuild
+
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
+
+    # This needs to be done after postBuild: packages like `cargo` do a pushd/popd in
+    # the pre/postBuild-hooks that need to be taken into account before gathering
+    # all binaries to install.
+    bins=$(find $releaseDir \
+      -maxdepth 1 \
+      -type f \
+      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
   '';
 
-  checkPhase = args.checkPhase or ''
+  checkPhase = args.checkPhase or (let
+    argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${rustTarget} --frozen";
+  in ''
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preCheck
-    echo "Running cargo cargo test -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    echo "Running cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
-  '';
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
+  '');
 
   doCheck = args.doCheck or true;
 
@@ -203,13 +218,16 @@ stdenv.mkDerivation (args // {
 
   installPhase = args.installPhase or ''
     runHook preInstall
+
+    # rename the output dir to a architecture independent one
+    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
+    for target in "''${targets[@]}"; do
+      rm -rf "$target/../../${buildType}"
+      ln -srf "$target" "$target/../../"
+    done
     mkdir -p $out/bin $out/lib
 
-    find $releaseDir \
-      -maxdepth 1 \
-      -type f \
-      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \) \
-      -print0 | xargs -r -0 cp -t $out/bin
+    xargs -r cp -t $out/bin <<< $bins
     find $releaseDir \
       -maxdepth 1 \
       -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \

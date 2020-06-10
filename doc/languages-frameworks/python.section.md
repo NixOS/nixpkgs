@@ -643,7 +643,7 @@ and in this case the `python38` interpreter is automatically used.
 Versions 2.7, 3.5, 3.6, 3.7 and 3.8 of the CPython interpreter are available as
 respectively `python27`, `python35`, `python36`, `python37` and `python38`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
-`python37`. The default interpreter, `python`, maps to `python2`. The PyPy
+`python38`. The default interpreter, `python`, maps to `python2`. The PyPy
 interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
 `pypy3`, with aliases `pypy2` mapping to `pypy27` and `pypy` mapping to `pypy2`.
 The Nix expressions for the interpreters can be found in
