@@ -20,11 +20,11 @@ assert enableSystemd -> systemd != null;
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.12.16";
+  version = "1.12.18";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "107ckxaff1cv4q6kmfdi2fb1nlsv03312a7kf6lb4biglhpjv8jl";
+    sha256 = "01jkm6shm76bl3cflmnn37dv6nkph0w1akbqpklyac02hiq4vkv4";
   };
 
   patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
