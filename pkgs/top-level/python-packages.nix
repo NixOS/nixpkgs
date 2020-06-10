@@ -7418,6 +7418,8 @@ in {
 
   rxv     = callPackage ../development/python-modules/rxv     { };
 
+  swifter = callPackage ../development/python-modules/swifter { };
+
 });
 
 in fix' (extends overrides packages)
