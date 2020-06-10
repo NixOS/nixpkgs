@@ -5027,6 +5027,12 @@
     githubId = 223323;
     name = "Miguel de la Cruz";
   };
+  mgdm = {
+    email = "michael@mgdm.net";
+    github = "mgdm";
+    githubId = 71893;
+    name = "Michael Maclean";
+  };
   mgregoire = {
     email = "gregoire@martinache.net";
     github = "M-Gregoire";
