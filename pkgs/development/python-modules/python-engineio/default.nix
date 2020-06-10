@@ -47,7 +47,6 @@ buildPythonPackage rec {
     description = "Engine.IO server";
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = [ maintainers.mic92 ];
   };
 }
