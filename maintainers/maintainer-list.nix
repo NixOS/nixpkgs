@@ -4520,6 +4520,12 @@
     github = "minijackson";
     name = "Rémi Nicole";
   };
+  mir06 = {
+    email = "armin.leuprecht@uni-graz.at";
+    github = "mir06";
+    githubId = 8479244;
+    name = "Armin Leuprecht";
+  };
   mirdhyn = {
     email = "mirdhyn@gmail.com";
     github = "mirdhyn";
