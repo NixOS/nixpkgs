@@ -17,6 +17,7 @@
 , dbus
 , gdk-pixbuf
 , makeWrapper
+, which
 , xvfb_run
 , nixosTests
 }:
@@ -42,6 +43,7 @@ in stdenv.mkDerivation rec {
     ninja
     pkgconfig
     makeWrapper
+    which # for locale detection
     libxml2 # for xml-stripblanks
   ];
 
@@ -77,6 +79,7 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
+    patchShebangs build/choose-tests-locale.sh
     substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
   '';
 
