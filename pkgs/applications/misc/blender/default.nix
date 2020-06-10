@@ -17,11 +17,11 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.82a";
+  version = "2.83.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "18zbdgas6qf2kmvvlimxgnq7y9kj7hdxcgixrs6fj50x40q01q2d";
+    sha256 = "07rzm4xaj94pjxy2vlqfhi1adsqpshfkrzrq8kljmcbnw22vrqhl";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -142,6 +142,6 @@ stdenv.mkDerivation rec {
     # say: "We've decided to cancel the BL offering for an indefinite period."
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu veprbl ];
   };
 }
