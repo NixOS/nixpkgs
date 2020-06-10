@@ -29,7 +29,7 @@ import QtQuick.Controls.Material 2.1
 Item {
     Text {
         anchors.top: parent.top
-        margin.top: 10
+        anchors.topMargin: 10
         text: "Select a disk on which to install FreeBSD."
     }
 }
