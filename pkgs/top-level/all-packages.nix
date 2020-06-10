@@ -6264,6 +6264,8 @@ in
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
+  go-red = callPackage ../tools/admin/red { };
+
   redir = callPackage ../tools/networking/redir { };
 
   # failed to build websocket-driver gem with ruby 2.6, so sticking to 2.5 for now
