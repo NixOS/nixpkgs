@@ -24,11 +24,10 @@
 # distro can use an unmodified (upstream) Calamares package and a local
 # customisation package in tandem.
 #
+cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(calamares-branding LANGUAGES CXX)
-cmake_minimum_required(VERSION 3.2)
 
-find_package(Calamares REQUIRED)
-include( "${CALAMARES_USE_FILE}" )
+find_package(Calamares 3.2.26 REQUIRED)
 
 ### BRANDING
 #
@@ -48,9 +47,12 @@ calamares_add_branding_subdirectory( branding/kaos_branding NAME kaos )
 #
 # Add one of more modules, either C++ or Python.
 #
-include_directories( ${CALAMARES_INCLUDE_DIRS} )
+set(SKIPPED_MODULES "")
 
-calamares_add_module_subdirectory( modules/filekeeper )
+calamares_add_module_subdirectory( modules/filekeeper )  # C++ job
+calamares_add_module_subdirectory( modules/freebsddisk )  # C++ viewmodule
+
+calamares_explain_skipped_modules( ${SKIPPED_MODULES} )
 
 ### CONFIGURATION
 #

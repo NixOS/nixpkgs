@@ -7,7 +7,5 @@ calamares_add_plugin( filekeeper
     EXPORT_MACRO PLUGINDLLEXPORT_PRO
     SOURCES
         FileKeeper.cpp
-    LINK_PRIVATE_LIBRARIES
-        calamares
     SHARED_LIB
 )
