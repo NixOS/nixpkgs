@@ -21,6 +21,7 @@ let
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
   exporterOpts = genAttrs [
+    "apcupsd"
     "bind"
     "blackbox"
     "collectd"
