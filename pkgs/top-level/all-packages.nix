@@ -17448,6 +17448,8 @@ in
 
   gopls = callPackage ../development/tools/gopls { };
 
+  gore = callPackage ../development/tools/gore { };
+
   gotests = callPackage ../development/tools/gotests { };
 
   gotestsum = callPackage ../development/tools/gotestsum { };
