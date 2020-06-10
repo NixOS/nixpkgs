@@ -160,6 +160,9 @@ let
 
     thelounge = super.thelounge.override {
       buildInputs = [ self.node-pre-gyp ];
+      postInstall = ''
+        echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
+      '';
     };
   };
 in self
