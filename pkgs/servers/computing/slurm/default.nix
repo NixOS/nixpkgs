@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
-, python, munge, perl, pam, openssl, zlib
+, python, munge, perl, pam, openssl, zlib, shadow, coreutils
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, libssh2, xorg, lz4
 # enable internal X11 support via libssh2
@@ -22,10 +22,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  prePatch = stdenv.lib.optional enableX11 ''
+  prePatch = ''
+    substituteInPlace src/common/env.c \
+        --replace "/bin/echo" "${coreutils}/bin/echo"
+  '' + (stdenv.lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
         --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
-  '';
+  '');
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
   # https://groups.google.com/forum/#!topic/slurm-devel/QHOajQ84_Es
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl python munge perl pam openssl zlib
       libmysqlclient ncurses gtk2 lz4
-      lua hwloc numactl readline freeipmi
+      lua hwloc numactl readline freeipmi shadow.su
   ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
 
   configureFlags = with stdenv.lib;
