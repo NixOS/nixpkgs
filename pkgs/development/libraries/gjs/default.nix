@@ -74,9 +74,7 @@ in stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
-  # Gio test is failing
-  # https://github.com/NixOS/nixpkgs/pull/81626#issuecomment-599325843
-  doCheck = false;
+  doCheck = true;
 
   postPatch = ''
     substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
@@ -95,7 +93,15 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
+    # TODO: make the glib setup hook handle this
+    installedTestsSchemaDatadir="$installedTests/share/gsettings-schemas/${pname}-${version}"
+    mkdir -p "$installedTestsSchemaDatadir"
+    mv "$installedTests/share/glib-2.0" "$installedTestsSchemaDatadir"
+  '';
+
+  postFixup = ''
     wrapProgram "$installedTests/libexec/gjs/installed-tests/minijasmine" \
+      --prefix XDG_DATA_DIRS : "$installedTestsSchemaDatadir" \
       --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" testDeps}"
   '';
 
