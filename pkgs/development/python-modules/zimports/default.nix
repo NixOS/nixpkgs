@@ -31,9 +31,7 @@ buildPythonPackage rec {
     mock
   ];
 
-  doInstallCheck = true;
-
-  installCheckPhase = ''
+  checkPhase = ''
     runHook preInstallCheck
     PYTHONPATH= $out/bin/zimports --help >/dev/null
     runHook postInstallCheck
