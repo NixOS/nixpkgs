@@ -57,6 +57,6 @@ buildRustPackage rec {
     '';
     homepage = "https://the.exa.website";
     license = licenses.mit;
-    maintainers = with maintainers; [ ehegnes lilyball globin ];
+    maintainers = with maintainers; [ ehegnes lilyball globin zowoq ];
   };
 }
