@@ -8187,6 +8187,7 @@ in
     crystal_0_32
     crystal_0_33
     crystal_0_34
+    crystal_0_35
     crystal
     crystal2nix;
 
