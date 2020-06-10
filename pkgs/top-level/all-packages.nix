@@ -11984,7 +11984,8 @@ in
     else null;
 
   wasilibc = callPackage ../development/libraries/wasilibc {
-    stdenv = crossLibcStdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages_10.stdenv else crossLibcStdenv;
+    llvm-tools = llvm_10;
   };
 
   # Only supported on Linux, using glibc
