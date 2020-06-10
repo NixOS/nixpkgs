@@ -53,6 +53,6 @@ buildGoModule rec {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3 gpl3 ];
-    maintainers = with maintainers; [ adisbladis asymmetric lionello xrelkd ];
+    maintainers = with maintainers; [ adisbladis lionello xrelkd ];
   };
 }
