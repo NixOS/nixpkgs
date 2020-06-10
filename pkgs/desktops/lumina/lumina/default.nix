@@ -2,6 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , fluxbox
+, libarchive
 , numlockx
 , qmake
 , qtbase
@@ -33,6 +34,7 @@ mkDerivation rec {
 
   buildInputs = [
     fluxbox # window manager for Lumina DE
+    libarchive # make `bsdtar` available for lumina-archiver
     numlockx # required for changing state of numlock at login
     qtbase
     qtmultimedia
@@ -66,9 +68,12 @@ mkDerivation rec {
     substituteInPlace src-qt5/core-utils/lumina-config/pages/page_fluxbox_settings.cpp \
       --replace 'LOS::AppPrefix()+"share/fluxbox' "\"${fluxbox}/share/fluxbox"
 
+    # Add full path of bsdtar to lumina-archiver
+    substituteInPlace src-qt5/desktop-utils/lumina-archiver/TarBackend.cpp \
+      --replace '"bsdtar"' '"${stdenv.lib.getBin libarchive}/bin/bsdtar"'
+
     # Fix desktop files
     for i in $(grep -lir 'OnlyShowIn=Lumina' src-qt5); do
-      echo ===== $i
       substituteInPlace $i --replace 'OnlyShowIn=Lumina' 'OnlyShowIn=X-Lumina'
     done
   '';
