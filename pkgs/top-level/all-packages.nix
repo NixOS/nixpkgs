@@ -4670,6 +4670,8 @@ in
 
   libepc = callPackage ../development/libraries/libepc { };
 
+  liberfa = callPackage ../development/libraries/liberfa { };
+
   libestr = callPackage ../development/libraries/libestr { };
 
   libevdev = callPackage ../development/libraries/libevdev { };
