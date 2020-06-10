@@ -1,4 +1,4 @@
-{ stdenv, addOpenGLRunpath, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
+{ stdenv, ffmpeg, addOpenGLRunpath, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -239,12 +239,7 @@ assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
-  version = "4.2.3";
-
-  src = fetchurl {
-    url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.bz2";
-    sha256 = "0pkrariwjv25k7inwshch7b5820ly3hsp991amyb60rkqc8v4zi1";
-  };
+  inherit (ffmpeg) src version;
 
   patches = [ ./prefer-libdav1d-over-libaom.patch ];
 

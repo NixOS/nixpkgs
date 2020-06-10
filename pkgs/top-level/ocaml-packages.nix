@@ -161,6 +161,8 @@ let
 
     cpuid = callPackage ../development/ocaml-modules/cpuid { };
 
+    crowbar = callPackage ../development/ocaml-modules/crowbar { };
+
     crunch = callPackage ../development/tools/ocaml/crunch { };
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
@@ -362,6 +364,8 @@ let
     graphql-lwt = callPackage ../development/ocaml-modules/graphql/lwt.nix { };
 
     graphql_parser = callPackage ../development/ocaml-modules/graphql/parser.nix { };
+
+    graphql_ppx = callPackage ../development/ocaml-modules/graphql_ppx { };
 
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
 

@@ -146,7 +146,7 @@ let
     else
       pkgs.fetchurl {
         url = predictURLFromPypi { inherit pname file hash kind; };
-        sha256 = builtins.elemAt (builtins.match "sha256:(.*)" hash) 0; # nix 2.0 backwards compatibility.
+        inherit hash;
       }
   );
   getBuildSystemPkgs =
