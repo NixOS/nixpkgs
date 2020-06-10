@@ -202,6 +202,25 @@ let
       '';
     };
 
+    keylight = {
+      # A hardware device is required to properly test this exporter, so just
+      # perform a couple of basic sanity checks that the exporter is running
+      # and requires a target, but cannot reach a specified target.
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-keylight-exporter.service")
+        wait_for_open_port(9288)
+        succeed(
+            "curl -sS --write-out '%{http_code}' -o /dev/null http://localhost:9288/metrics | grep -q '400'"
+        )
+        succeed(
+            "curl -sS --write-out '%{http_code}' -o /dev/null http://localhost:9288/metrics?target=nosuchdevice | grep -q '500'"
+        )
+      '';
+    };
+
     mail = {
       exporterConfig = {
         enable = true;
