@@ -4,12 +4,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "marvin";
-  version = "20.12.0";
+  version = "20.13.0";
 
   src = fetchurl {
     name = "marvin-${version}.deb";
     url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${versions.majorMinor version}.deb";
-    sha256 = "1imfr56nbq2mbcyapwa8xmcmj5rjhbjz9r438387s73kd1avd6yl";
+    sha256 = "1mbbl7z215l6z4acwdrmqnvlvc2hv4znz4dmng9iw7rrqns3jjlv";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
