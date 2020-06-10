@@ -47,7 +47,6 @@ calamares_add_branding_subdirectory( branding/kaos_branding NAME kaos )
 #
 # Add one of more modules, either C++ or Python.
 #
-include_directories( ${CALAMARES_INCLUDE_DIRS} )
 
 calamares_add_module_subdirectory( modules/filekeeper )
 

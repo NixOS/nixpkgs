@@ -19,14 +19,12 @@
 #ifndef FILEKEEPER_H
 #define FILEKEEPER_H
 
-#include <QObject>
-#include <QVariantMap>
-
 #include <CppJob.h>
-
+#include <DllMacro.h>
 #include <utils/PluginFactory.h>
 
-#include <PluginDllMacro.h>
+#include <QObject>
+#include <QVariantMap>
 
 class PLUGINDLLEXPORT FileKeeperJob : public Calamares::CppJob
 {
