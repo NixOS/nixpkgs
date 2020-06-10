@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "osinfo-db-tools";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${pname}-${version}.tar.xz";
-    sha256 = "08x8mrafphyll0d35xdc143rip3ahrz6bmzhc85nwhq7yk2vxpab";
+    sha256 = "038q3gzdbkfkhpicj0755mw1q4gbvn57pslpw8n2dp3lds9im0g9";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext perl python3 ];
