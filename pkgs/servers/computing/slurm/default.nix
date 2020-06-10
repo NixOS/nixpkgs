@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
 , python, munge, perl, pam, openssl, zlib, shadow, coreutils
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
-, readline, freeipmi, libssh2, xorg, lz4, rdma-core
+, readline, freeipmi, libssh2, xorg, lz4, rdma-core, nixosTests
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
@@ -66,6 +66,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.slurm = nixosTests.slurm;
 
   meta = with stdenv.lib; {
     homepage = "http://www.schedmd.com/";
