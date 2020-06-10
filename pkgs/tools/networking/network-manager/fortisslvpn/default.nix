@@ -2,9 +2,10 @@
 , fetchurl
 , substituteAll
 , openfortivpn
-, intltool
+, gettext
 , pkg-config
 , file
+, glib
 , gtk3
 , networkmanager
 , ppp
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    intltool
+    gettext
     pkg-config
     file
   ];
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     openfortivpn
     networkmanager
     ppp
+    glib
   ] ++ stdenv.lib.optionals withGnome [
     gtk3
     libsecret
@@ -55,7 +57,6 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--localstatedir=/var"
     "--enable-absolute-paths"
