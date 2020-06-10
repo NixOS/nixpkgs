@@ -21,8 +21,8 @@ common =
   , stateDir
   , confDir
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
-  , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
-
+  , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
+  , enableStatic ? false
   , name, suffix ? "", src, crates ? null
 
   }:
@@ -65,12 +65,21 @@ common =
       propagatedBuildInputs = [ boehmgc ];
 
       # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+      NIX_LDFLAGS =
+        # need to list libraries individually until
+        # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
+        # is in a release
+          lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto"
+
+        # need to detect it here until
+        # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
+        # is in a release
+        + lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
         # https://github.com/NixOS/nixpkgs/issues/45462
-        ''
+        lib.optionalString (!enableStatic) ''
           mkdir -p $out/lib
           cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
           rm -f $out/lib/*.a

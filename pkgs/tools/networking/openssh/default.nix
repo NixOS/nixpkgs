@@ -5,7 +5,7 @@
 , withGssapiPatches ? false
 , kerberos
 , libfido2
-, withFIDO ? stdenv.hostPlatform.isUnix
+, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
 , linkOpenssl? true
 }:
 

@@ -161,6 +161,8 @@ let
 
     cpuid = callPackage ../development/ocaml-modules/cpuid { };
 
+    crowbar = callPackage ../development/ocaml-modules/crowbar { };
+
     crunch = callPackage ../development/tools/ocaml/crunch { };
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
@@ -362,6 +364,8 @@ let
     graphql-lwt = callPackage ../development/ocaml-modules/graphql/lwt.nix { };
 
     graphql_parser = callPackage ../development/ocaml-modules/graphql/parser.nix { };
+
+    graphql_ppx = callPackage ../development/ocaml-modules/graphql_ppx { };
 
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
 
@@ -770,19 +774,6 @@ let
       then type_conv_108_08_00
       else null;
 
-    sexplib_108_08_00 = callPackage ../development/ocaml-modules/sexplib/108.08.00.nix { };
-    sexplib_111_25_00 = callPackage ../development/ocaml-modules/sexplib/111.25.00.nix { };
-    sexplib_112_24_01 = callPackage ../development/ocaml-modules/sexplib/112.24.01.nix { };
-
-    sexplib_p4 =
-      if lib.versionOlder "4.02" ocaml.version
-      then sexplib_112_24_01
-      else if lib.versionOlder "4.00" ocaml.version
-      then sexplib_111_25_00
-      else if lib.versionOlder "3.12" ocaml.version
-      then sexplib_108_08_00
-      else null;
-
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
 
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
@@ -1133,7 +1124,7 @@ let
       then janeStreet.sexplib
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/sexplib.nix {}
-      else sexplib_p4;
+      else null;
 
     variantslib =
       if lib.versionOlder "4.03" ocaml.version

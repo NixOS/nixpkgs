@@ -16,7 +16,7 @@
 , "bower2nix"
 , "browserify"
 , "castnow"
-, "clean-css"
+, "clean-css-cli"
 , "coc-css"
 , "coc-emmet"
 , "coc-eslint"
@@ -144,6 +144,7 @@
 , "react-native-cli"
 , "react-tools"
 , "reveal.js"
+, "rollup"
 , { "rust-analyzer-build-deps": "../../misc/vscode-extensions/rust-analyzer/build-deps" }
 , "s3http"
 , "semver"

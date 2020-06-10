@@ -874,8 +874,6 @@ in
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
-  cloudflare-wrangler = callPackage ../development/tools/cloudflare-wrangler { };
-
   codeql = callPackage ../development/tools/analysis/codeql { };
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
@@ -3179,6 +3177,8 @@ in
 
   wob = callPackage ../tools/misc/wob { };
 
+  wrangler = callPackage ../development/tools/wrangler { };
+
   xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
 
   xob = callPackage ../tools/X11/xob { };
@@ -4691,6 +4691,8 @@ in
   /* Python 3.8 is currently broken with matrix-synapse since `python38Packages.bleach` fails
     (https://github.com/NixOS/nixpkgs/issues/76093) */
   matrix-synapse = callPackage ../servers/matrix-synapse { /*python3 = python38;*/ };
+
+  matrix-synapse-plugins = recurseIntoAttrs matrix-synapse.plugins;
 
   matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {};
 
@@ -9705,7 +9707,7 @@ in
 
   pew = callPackage ../development/tools/pew {};
 
-  poetry = callPackage ../development/tools/poetry {
+  poetry = callPackage ../development/tools/poetry2nix/poetry2nix/pkgs/poetry {
     python = python3;
   };
   poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
@@ -9715,7 +9717,7 @@ in
   pipenv = callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {};
-  pipewire_0_2 = callPackage ../development/libraries/pipewire/2.nix {};
+  pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix {};
 
   pyradio = callPackage ../applications/radio/pyradio {};
 
@@ -9989,9 +9991,7 @@ in
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   inherit (callPackages ../development/tools/electron { })
-    electron_4 electron_5 electron_6 electron_7 electron_8 electron_9;
-
-  electron_3 = callPackage ../development/tools/electron/3.x.nix { };
+    electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9;
   electron = electron_4;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
@@ -11683,6 +11683,8 @@ in
   ffmpeg = ffmpeg_3;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
+    ffmpeg = ffmpeg_4;
+
     # The following need to be fixed on Darwin
     frei0r = if stdenv.isDarwin then null else frei0r;
     game-music-emu = if stdenv.isDarwin then null else game-music-emu;
@@ -16908,6 +16910,14 @@ in
     ];
   };
 
+  linux_5_7 = callPackage ../os-specific/linux/kernel/linux-5.7.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+      kernelPatches.export_kernel_fpu_functions."5.3"
+    ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -17120,7 +17130,8 @@ in
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_5_6;
+  # And update linux_latest_for_hardened below if the patches are already available
+  linuxPackages_latest = linuxPackages_5_7;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -17135,6 +17146,7 @@ in
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_6 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_6);
+  linuxPackages_5_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_7);
 
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
@@ -17169,28 +17181,32 @@ in
 
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
-  # Hardened linux
-  hardenedLinuxPackagesFor = kernel: linuxPackagesFor (kernel.override {
-    structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-      inherit stdenv;
-      inherit (kernel) version;
-    };
-    kernelPatches = kernel.kernelPatches ++ [
-      kernelPatches.tag_hardened
-      kernelPatches.hardened.${kernel.meta.branch}
-    ];
-    modDirVersionArg = kernel.modDirVersion + "-hardened";
+  # Hardened Linux
+  hardenedLinuxPackagesFor = kernel': overrides:
+    let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
+      linux_latest_for_hardened = pkgs.linux_5_6; # TODO: Update to linux_latest
+      kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
+    in linuxPackagesFor (kernel.override {
+      structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
+        inherit stdenv;
+        inherit (kernel) version;
+      };
+      kernelPatches = kernel.kernelPatches ++ [
+        kernelPatches.tag_hardened
+        kernelPatches.hardened.${kernel.meta.branch}
+      ];
+      modDirVersionArg = kernel.modDirVersion + "-hardened";
   });
 
-  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux);
+  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux { });
   linux_hardened = linuxPackages_hardened.kernel;
 
-  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest);
+  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest { });
   linux_latest_hardened = linuxPackages_latest_hardened.kernel;
 
-  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
+  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux { features.xen_dom0=true; });
 
-  linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
+  linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest { features.xen_dom0=true; });
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_hardkernel_4_14);
@@ -17355,6 +17371,8 @@ in
 
   go-symbols = callPackage ../development/tools/go-symbols { };
 
+  go-toml = callPackage ../development/tools/go-toml { };
+
   go-outline = callPackage ../development/tools/go-outline { };
 
   gocode = callPackage ../development/tools/gocode { };
@@ -17396,6 +17414,8 @@ in
   go-langserver = callPackage ../development/tools/go-langserver { };
 
   gopls = callPackage ../development/tools/gopls { };
+
+  gore = callPackage ../development/tools/gore { };
 
   gotests = callPackage ../development/tools/gotests { };
 
@@ -23864,6 +23884,8 @@ in
   neverball = callPackage ../games/neverball { };
 
   nexuiz = callPackage ../games/nexuiz { };
+
+  ninvaders = callPackage ../games/ninvaders { };
 
   njam = callPackage ../games/njam { };
 
