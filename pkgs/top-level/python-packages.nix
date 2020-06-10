@@ -1556,6 +1556,8 @@ in {
 
   spglib = callPackage ../development/python-modules/spglib { };
 
+  srvlookup = callPackage ../development/python-modules/srvlookup { };
+
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
