@@ -274,7 +274,7 @@ let
       SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = yes;
       SND_SOC_SOF_GEMINILAKE_SUPPORT    = yes;
       SND_SOC_SOF_HDA_AUDIO_CODEC       = yes;
-      SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = yes;
+      SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = whenOlder "5.7" yes;
       SND_SOC_SOF_HDA_LINK              = yes;
       SND_SOC_SOF_ICELAKE_SUPPORT       = yes;
       SND_SOC_SOF_INTEL_TOPLEVEL        = yes;
