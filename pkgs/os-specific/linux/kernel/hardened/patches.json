@@ -15,8 +15,8 @@
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.45.a/linux-hardened-5.4.45.a.patch"
     },
     "5.6": {
-        "name": "linux-hardened-5.6.16.a.patch",
+        "name": "linux-hardened-5.6.17.a.patch",
         "sha256": "0nci30k7xh56b6454cd0hkpvpkfqb98cqdpvjaamlnmiphz4sk1f",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.6.16.a/linux-hardened-5.6.16.a.patch"
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.6.17.a/linux-hardened-5.6.17.a.patch"
     }
 }
