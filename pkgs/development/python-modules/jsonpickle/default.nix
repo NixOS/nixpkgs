@@ -4,6 +4,7 @@
 , pytest
 , setuptools_scm
 , toml
+, importlib-metadata
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools_scm
     toml
+  ];
+
+  propagatedBuildInputs = [
+    importlib-metadata
   ];
 
   checkPhase = ''
