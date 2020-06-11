@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "Archive";
     repo = "gdk-pixbuf-xlib";
-    rev = "dc22ea36f69755007c66877284596df270532cc1";
-    sha256 = "XhBQ4wano+MtGaqF6JNKoWgYQN6eBW+b8ZCGEBGt8IM=";
+    rev = "19482794a621d542b223219940e836257d4ae2c9";
+    sha256 = "7Qv6tyjR0/iFXYHx5jPhvLLLt0Ms2nzpyWw02oXTkZc=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,9 @@ stdenv.mkDerivation rec {
     gtk-doc
   ];
 
-  buildInputs = [
-    libX11
-  ];
-
   propagatedBuildInputs = [
     gdk-pixbuf
+    libX11
   ];
 
   mesonFlags = [
