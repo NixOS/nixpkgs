@@ -13,4 +13,6 @@ stdenv.mkDerivation rec {
     cp "${qemu}/bin/qemu-io"  "$out/bin/qemu-io"
     cp "${qemu}/bin/qemu-nbd" "$out/bin/qemu-nbd"
   '';
+
+  inherit (qemu) meta;
 }
