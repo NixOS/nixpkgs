@@ -12,7 +12,7 @@ from collections import namedtuple
 
 
 # Adds the given store paths to as a tar to the given writable stream.
-def archive_paths_to(obj, paths, created, add_nix, filter=None):
+def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
     filter = filter if filter else lambda i: i
 
     # gettarinfo makes the paths relative, this makes them
@@ -22,7 +22,7 @@ def archive_paths_to(obj, paths, created, add_nix, filter=None):
         return ti
 
     def apply_filters(ti):
-        ti.mtime = int(created.timestamp())
+        ti.mtime = mtime
         return filter(ti)
 
     def dir(path):
@@ -77,14 +77,14 @@ LayerInfo = namedtuple("LayerInfo", ["size", "checksum", "path", "paths"])
 
 # Given a list of store paths 'paths', creates a layer add append it
 # to tarfile 'tar'. Returns some a 'LayerInfo' for the layer.
-def add_layer_dir(tar, paths, created, add_nix=True, filter=None):
+def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
     assert all(i.startswith("/nix/store/") for i in paths)
 
     extract_checksum = ExtractChecksum()
     archive_paths_to(
         extract_checksum,
         paths,
-        created=created,
+        mtime=mtime,
         add_nix=add_nix,
         filter=filter
     )
@@ -93,6 +93,7 @@ def add_layer_dir(tar, paths, created, add_nix=True, filter=None):
     path = f"{checksum}/layer.tar"
     ti = tarfile.TarInfo(path)
     ti.size = size
+    ti.mtime = mtime
 
     read_fd, write_fd = os.pipe()
     with open(read_fd, "rb") as read, open(write_fd, "wb") as write:
@@ -100,7 +101,7 @@ def add_layer_dir(tar, paths, created, add_nix=True, filter=None):
             archive_paths_to(
                 write,
                 paths,
-                created=created,
+                mtime=mtime,
                 add_nix=add_nix,
                 filter=filter
             )
@@ -111,25 +112,26 @@ def add_layer_dir(tar, paths, created, add_nix=True, filter=None):
     return LayerInfo(size=size, checksum=checksum, path=path, paths=paths)
 
 
-def add_customisation_layer(tar, path, created):
+def add_customisation_layer(tar, path, mtime):
     def filter(ti):
         ti.name = re.sub("^/nix/store/[^/]*", "", ti.name)
         return ti
     return add_layer_dir(
         tar,
         [path],
-        created=created,
+        mtime=mtime,
         add_nix=False,
         filter=filter
       )
 
 
 # Adds a file to the tarball with given path and contents.
-def add_bytes(tar, path, content):
+def add_bytes(tar, path, content, mtime):
     assert type(content) is bytes
 
     ti = tarfile.TarInfo(path)
     ti.size = len(content)
+    ti.mtime = mtime
     tar.addfile(ti, io.BytesIO(content))
 
 
@@ -143,6 +145,7 @@ created = (
   if conf["created"] == "now"
   else datetime.fromisoformat(conf["created"])
 )
+mtime = int(created.timestamp())
 
 with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
     layers = []
@@ -151,7 +154,7 @@ with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
           "Creating layer", num,
           "from paths:", store_layer,
           file=sys.stderr)
-        info = add_layer_dir(tar, store_layer, created=created)
+        info = add_layer_dir(tar, store_layer, mtime=mtime)
         layers.append(info)
 
     print("Creating the customisation layer...", file=sys.stderr)
@@ -159,7 +162,7 @@ with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
       add_customisation_layer(
         tar,
         conf["customisation_layer"],
-        created=created
+        mtime=mtime
       )
     )
 
@@ -186,7 +189,7 @@ with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
     image_json = json.dumps(image_json, indent=4).encode("utf-8")
     image_json_checksum = hashlib.sha256(image_json).hexdigest()
     image_json_path = f"{image_json_checksum}.json"
-    add_bytes(tar, image_json_path, image_json)
+    add_bytes(tar, image_json_path, image_json, mtime=mtime)
 
     manifest_json = [
         {
@@ -196,6 +199,6 @@ with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
         }
     ]
     manifest_json = json.dumps(manifest_json, indent=4).encode("utf-8")
-    add_bytes(tar, "manifest.json", manifest_json)
+    add_bytes(tar, "manifest.json", manifest_json, mtime=mtime)
 
     print("Done.", file=sys.stderr)
