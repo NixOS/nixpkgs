@@ -8,6 +8,7 @@
 , sphinx
 , traitlets
 , python
+, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,8 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} -m nbsphinx
   '';
+
+  disabled = !isPy3k;
 
   meta = with lib; {
     description = "Jupyter Notebook Tools for Sphinx";
