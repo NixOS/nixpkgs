@@ -3123,6 +3123,8 @@ in
 
   magic-vlsi = callPackage ../applications/science/electronics/magic-vlsi { };
 
+  mat2 = callPackage ../tools/graphics/mat2 {};
+
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   rage = callPackage ../tools/security/rage {
