@@ -28,6 +28,7 @@ let
     "dovecot"
     "fritzbox"
     "json"
+    "keylight"
     "mail"
     "mikrotik"
     "minio"
