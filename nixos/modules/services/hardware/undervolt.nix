@@ -30,7 +30,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-        The amount of voltage to offset the CPU cores by. Accepts a floating point number.
+        The amount of voltage in mV to offset the CPU cores by.
       '';
     };
 
@@ -38,7 +38,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-        The amount of voltage to offset the GPU by. Accepts a floating point number.
+        The amount of voltage in mV to offset the GPU by.
       '';
     };
 
@@ -46,7 +46,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-        The amount of voltage to offset uncore by. Accepts a floating point number.
+        The amount of voltage in mV to offset uncore by.
       '';
     };
 
@@ -54,7 +54,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-        The amount of voltage to offset analogio by. Accepts a floating point number.
+        The amount of voltage in mV to offset analogio by.
       '';
     };
 
@@ -62,7 +62,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-        The temperature target. Accepts a floating point number.
+        The temperature target in Celsius degrees.
       '';
     };
 
@@ -70,7 +70,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-        The temperature target on AC power. Accepts a floating point number.
+        The temperature target on AC power in Celsius degrees.
       '';
     };
 
@@ -78,7 +78,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-        The temperature target on battery power. Accepts a floating point number.
+        The temperature target on battery power in Celsius degrees.
       '';
     };
   };
