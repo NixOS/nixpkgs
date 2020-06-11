@@ -5,14 +5,14 @@
 
 buildPythonApplication rec {
   pname = "cmake-language-server";
-  version = "0.1.1";
+  version = "0.1.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "regen100";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09rijjksx07inbwxjinrsqihkxb011l2glysasmwpkhy0rmmhbcm";
+    sha256 = "0vz7bjxkk0phjhz3h9kj6yr7wnk3g7lqmkqraa0kw12mzcfck837";
   };
 
   nativeBuildInputs = [ poetry ];

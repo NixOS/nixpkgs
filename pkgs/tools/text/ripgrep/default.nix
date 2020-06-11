@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = with licenses; [ unlicense /* or */ mit ];
-    maintainers = with maintainers; [ tailhook globin ma27 ];
+    maintainers = with maintainers; [ tailhook globin ma27 zowoq ];
     platforms = platforms.all;
   };
 }
