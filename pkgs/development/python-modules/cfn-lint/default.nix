@@ -12,6 +12,8 @@
 , jsonschema
 , pathlib2
 , setuptools
+, junit-xml
+, networkx
 }:
 
 buildPythonPackage rec {
@@ -32,6 +34,8 @@ buildPythonPackage rec {
     jsonschema
     pathlib2
     setuptools
+    junit-xml
+    networkx
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
 
   # No tests included in archive
