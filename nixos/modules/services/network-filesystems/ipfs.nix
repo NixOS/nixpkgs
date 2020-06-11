@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, options, ... }:
 with lib;
 let
   cfg = config.services.ipfs;
+  opt = options.services.ipfs;
 
   ipfsFlags = toString ([
     (optionalString  cfg.autoMount                   "--mount")
@@ -247,15 +248,16 @@ in {
       wantedBy = [ "default.target" ];
     };
 
-    # Note the upstream service assumes default host / port
-    # we should override it when a custom is provided above.
     systemd.sockets.ipfs-gateway = {
       wantedBy = [ "sockets.target" ];
+      socketConfig.ListenStream = [ "" ]
+        ++ lib.optional (cfg.gatewayAddress == opt.gatewayAddress.default) [ "127.0.0.1:8080" "[::1]:8080" ];
     };
 
     systemd.sockets.ipfs-api = {
       wantedBy = [ "sockets.target" ];
-      socketConfig.ListenStream = [ "%t/ipfs.sock" ];
+      socketConfig.ListenStream = [ "" "%t/ipfs.sock" ]
+        ++ lib.optional (cfg.apiAddress == opt.apiAddress.default) [ "127.0.0.1:5001" "[::1]:5001" ];
     };
 
   };
