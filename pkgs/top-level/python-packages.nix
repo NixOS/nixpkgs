@@ -5018,6 +5018,8 @@ in {
 
   pep257 = callPackage ../development/python-modules/pep257 { };
 
+  pep517 = callPackage ../development/python-modules/pep517 { };
+
   percol = callPackage ../development/python-modules/percol { };
 
   pexif = callPackage ../development/python-modules/pexif { };
