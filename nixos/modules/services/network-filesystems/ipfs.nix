@@ -136,6 +136,12 @@ in {
         example = 64*1024;
       };
 
+      startWhenNeeded = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to use socket activation to start IPFS when needed.";
+      };
+
     };
   };
 
@@ -192,6 +198,8 @@ in {
         fi
       '';
 
+      wantedBy = [ "default.target" ];
+
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
@@ -206,8 +214,6 @@ in {
 
       wants = [ "ipfs-init.service" ];
       after = [ "ipfs-init.service" ];
-
-      wantedBy = [ "default.target" ];
 
       preStart = optionalString cfg.autoMount ''
         ipfs --local config Mounts.FuseAllowOther --json true
@@ -235,6 +241,18 @@ in {
         User = cfg.user;
         Group = cfg.group;
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
+    } // optionalAttrs (!cfg.startWhenNeeded) {
+      wantedBy = [ "default.target" ];
+    };
+
+    # Note the upstream service assumes default host / port
+    # we should override it when a custom is provided above.
+    systemd.sockets.ipfs-gateway = mkIf cfg.startWhenNeeded {
+      wantedBy = [ "sockets.target" ];
+    };
+
+    systemd.sockets.ipfs-api = mkIf cfg.startWhenNeeded {
+      wantedBy = [ "sockets.target" ];
     };
 
   };
