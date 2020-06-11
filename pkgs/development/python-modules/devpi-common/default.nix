@@ -3,6 +3,7 @@
 , py
 , pytest
 , pytest-flake8
+, lazy
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,11 @@ buildPythonPackage rec {
     sha256 = "4f1eb1bf85a5dabd4f4ecc11ad99588e01cc204989a9f424c2dbe5809c6c3745";
   };
 
-  propagatedBuildInputs = [ requests py ];
+  propagatedBuildInputs = [
+    requests
+    py
+    lazy
+  ];
   checkInputs = [ pytest pytest-flake8 ];
 
   checkPhase = ''
