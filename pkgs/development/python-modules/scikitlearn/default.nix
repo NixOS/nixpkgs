@@ -8,6 +8,7 @@
 , cython
 , joblib
 , llvmPackages
+, threadpoolctl
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     scipy
     numpy.blas
     joblib
+    threadpoolctl
   ];
   checkInputs = [ pytest ];
 
