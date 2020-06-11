@@ -179,6 +179,8 @@ in {
       "d '${cfg.ipnsMountDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
+    systemd.packages = [ pkgs.ipfs ];
+
     systemd.services.ipfs-init = {
       description = "IPFS Initializer";
 
@@ -237,7 +239,7 @@ in {
               cfg.extraConfig))
           );
       serviceConfig = {
-        ExecStart = "${pkgs.ipfs}/bin/ipfs daemon ${ipfsFlags}";
+        ExecStart = ["" "${pkgs.ipfs}/bin/ipfs daemon ${ipfsFlags}"];
         User = cfg.user;
         Group = cfg.group;
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
