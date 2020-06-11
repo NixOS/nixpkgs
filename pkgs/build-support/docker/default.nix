@@ -752,8 +752,9 @@ rec {
           imageTag="${tag}"
         ''}
 
-        if [[ "$created" == "now" ]]; then
-            created="$(TZ=utc date --iso-8601="seconds")"
+        # convert "created" to iso format
+        if [[ "$created" != "now" ]]; then
+            created="$(date -Iseconds -d "$created")"
         fi
 
         # Create $maxLayers worth of Docker Layers, one layer per store path

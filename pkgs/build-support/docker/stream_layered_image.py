@@ -7,11 +7,12 @@ import hashlib
 import tarfile
 import itertools
 import threading
+from datetime import datetime
 from collections import namedtuple
 
 
 # Adds the given store paths to as a tar to the given writable stream.
-def archive_paths_to(obj, paths, add_nix, filter=None):
+def archive_paths_to(obj, paths, created, add_nix, filter=None):
     filter = filter if filter else lambda i: i
 
     # gettarinfo makes the paths relative, this makes them
@@ -20,6 +21,10 @@ def archive_paths_to(obj, paths, add_nix, filter=None):
         ti.name = "/" + ti.name
         return ti
 
+    def apply_filters(ti):
+        ti.mtime = int(created.timestamp())
+        return filter(ti)
+
     def dir(path):
         ti = tarfile.TarInfo(path)
         ti.type = tarfile.DIRTYPE
@@ -27,12 +32,12 @@ def archive_paths_to(obj, paths, add_nix, filter=None):
 
     with tarfile.open(fileobj=obj, mode="w|") as tar:
         if add_nix:
-            tar.addfile(dir("/nix"))
-            tar.addfile(dir("/nix/store"))
+            tar.addfile(apply_filters(dir("/nix")))
+            tar.addfile(apply_filters(dir("/nix/store")))
 
         for path in paths:
             ti = tar.gettarinfo(os.path.join("/", path))
-            tar.addfile(filter(append_root(ti)))
+            tar.addfile(apply_filters(append_root(ti)))
 
             for root, dirs, files in os.walk(path, topdown=True):
                 for name in itertools.chain(dirs, files):
@@ -43,7 +48,7 @@ def archive_paths_to(obj, paths, add_nix, filter=None):
                     if ti.islnk():
                         ti.type = tarfile.REGTYPE
 
-                    ti = filter(ti)
+                    ti = apply_filters(ti)
                     if ti.isfile():
                         with open(name, "rb") as f:
                             tar.addfile(ti, f)
@@ -72,11 +77,17 @@ LayerInfo = namedtuple("LayerInfo", ["size", "checksum", "path", "paths"])
 
 # Given a list of store paths 'paths', creates a layer add append it
 # to tarfile 'tar'. Returns some a 'LayerInfo' for the layer.
-def add_layer_dir(tar, paths, add_nix=True, filter=None):
+def add_layer_dir(tar, paths, created, add_nix=True, filter=None):
     assert all(i.startswith("/nix/store/") for i in paths)
 
     extract_checksum = ExtractChecksum()
-    archive_paths_to(extract_checksum, paths, add_nix=add_nix, filter=filter)
+    archive_paths_to(
+        extract_checksum,
+        paths,
+        created=created,
+        add_nix=add_nix,
+        filter=filter
+    )
     (checksum, size) = extract_checksum.extract()
 
     path = f"{checksum}/layer.tar"
@@ -86,7 +97,13 @@ def add_layer_dir(tar, paths, add_nix=True, filter=None):
     read_fd, write_fd = os.pipe()
     with open(read_fd, "rb") as read, open(write_fd, "wb") as write:
         def producer():
-            archive_paths_to(write, paths, add_nix=add_nix, filter=filter)
+            archive_paths_to(
+                write,
+                paths,
+                created=created,
+                add_nix=add_nix,
+                filter=filter
+            )
             write.close()
         threading.Thread(target=producer).start()
         tar.addfile(ti, read)
@@ -94,11 +111,17 @@ def add_layer_dir(tar, paths, add_nix=True, filter=None):
     return LayerInfo(size=size, checksum=checksum, path=path, paths=paths)
 
 
-def add_customisation_layer(tar, path):
+def add_customisation_layer(tar, path, created):
     def filter(ti):
         ti.name = re.sub("^/nix/store/[^/]*", "", ti.name)
         return ti
-    return add_layer_dir(tar, [path], add_nix=False, filter=filter)
+    return add_layer_dir(
+        tar,
+        [path],
+        created=created,
+        add_nix=False,
+        filter=filter
+      )
 
 
 # Adds a file to the tarball with given path and contents.
@@ -115,6 +138,12 @@ def add_bytes(tar, path, content):
 with open(sys.argv[1], "r") as f:
     conf = json.load(f)
 
+created = (
+  datetime.now(tz=datetime.timezone.utc)
+  if conf["created"] == "now"
+  else datetime.fromisoformat(conf["created"])
+)
+
 with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
     layers = []
     for num, store_layer in enumerate(conf["store_layers"]):
@@ -122,15 +151,22 @@ with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
           "Creating layer", num,
           "from paths:", store_layer,
           file=sys.stderr)
-        info = add_layer_dir(tar, store_layer)
+        info = add_layer_dir(tar, store_layer, created=created)
         layers.append(info)
 
     print("Creating the customisation layer...", file=sys.stderr)
-    layers.append(add_customisation_layer(tar, conf["customisation_layer"]))
+    layers.append(
+      add_customisation_layer(
+        tar,
+        conf["customisation_layer"],
+        created=created
+      )
+    )
 
     print("Adding manifests...", file=sys.stderr)
+
     image_json = {
-        "created": conf["created"],
+        "created": datetime.isoformat(created),
         "architecture": conf["architecture"],
         "os": "linux",
         "config": conf["config"],
