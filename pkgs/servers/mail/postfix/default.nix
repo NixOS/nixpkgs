@@ -26,11 +26,11 @@ in stdenv.mkDerivation rec {
 
   pname = "postfix";
 
-  version = "3.4.10";
+  version = "3.5.2";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "0m36wn5grm4cf8nnvlgsgwsm6v09xz01n7jnx13h0yjk73y6d2lh";
+    sha256 = "1hxy9458apnzfg4n0alncsdgy5dwzn5dbn4xm46iv15xynbj9gz3";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -48,7 +48,6 @@ in stdenv.mkDerivation rec {
     ./postfix-3.0-no-warnings.patch
     ./post-install-script.patch
     ./relative-symlinks.patch
-    ./0001-Fix-build-with-glibc-2.30.patch
   ];
 
   postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
