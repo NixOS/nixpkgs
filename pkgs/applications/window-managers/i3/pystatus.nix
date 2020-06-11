@@ -1,8 +1,13 @@
-{ stdenv, fetchFromGitHub, libpulseaudio, python3Packages, extraLibs ? [] }:
+{ stdenv
+, fetchFromGitHub
+, libpulseaudio
+, libnotify
+, gobject-introspection
+, python3Packages
+, wrapGAppsHook
+, extraLibs ? [] }:
 
-let
-  ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${stdenv.lib.makeLibraryPath [ libpulseaudio ]}\"";
-in python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
   version = "unstable-2020-06-12";
@@ -15,23 +20,26 @@ in python3Packages.buildPythonApplication rec {
     sha256 = "18ygvkl92yr69kxsym57k1mc90asdxpz4b943i61qr0s4fc5n4mq";
   };
 
-  propagatedBuildInputs = with python3Packages; [ keyring colour netifaces psutil basiciw ] ++
-    [ libpulseaudio ] ++ extraLibs;
+  buildInputs = [ libpulseaudio libnotify gobject-introspection ];
 
-  # LC_TIME != C results in locale.Error: unsupported locale setting
+  propagatedBuildInputs = with python3Packages; [
+    keyring colour netifaces psutil basiciw pygobject3
+  ] ++ extraLibs;
+
   makeWrapperArgs = [
+    # LC_TIME != C results in locale.Error: unsupported locale setting
     "--set" "LC_TIME" "C"
-    ldWrapperSuffix
-  ]; # libpulseaudio.so is loaded manually
+    "--suffix" "LD_LIBRARY_PATH" ":" "${stdenv.lib.makeLibraryPath [ libpulseaudio ]}"
+  ];
 
-  postConfigure = ''
-    makeWrapperArgs+=("--set" "GI_TYPELIB_PATH" "$GI_TYPELIB_PATH")
+  postPatch = ''
+    makeWrapperArgs+=(--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH")
   '';
 
   postInstall = ''
     makeWrapper ${python3Packages.python.interpreter} $out/bin/${pname}-python-interpreter \
       --prefix PYTHONPATH : "$PYTHONPATH" \
-      ${ldWrapperSuffix}
+      ''${makeWrapperArgs[@]}
   '';
 
   # no tests in tarball
