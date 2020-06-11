@@ -30,6 +30,7 @@ let
     "fritzbox"
     "json"
     "keylight"
+    "lnd"
     "mail"
     "mikrotik"
     "minio"
