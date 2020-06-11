@@ -7,7 +7,6 @@ let
 
   ipfsFlags = toString ([
     (optionalString  cfg.autoMount                   "--mount")
-    #(optionalString  cfg.autoMigrate                 "--migrate")
     (optionalString  cfg.enableGC                    "--enable-gc")
     (optionalString (cfg.serviceFdlimit != null)     "--manage-fdlimit=false")
     (optionalString (cfg.defaultMode == "offline")   "--offline")
@@ -36,7 +35,6 @@ let
 
   baseService = recursiveUpdate commonEnv {
     wants = [ "ipfs-init.service" ];
-    # NB: migration must be performed prior to pre-start, else we get the failure message!
     preStart = optionalString cfg.autoMount ''
       ipfs --local config Mounts.FuseAllowOther --json true
       ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
@@ -97,18 +95,6 @@ in {
         default = "online";
         description = "systemd service that is enabled by default";
       };
-
-      /*
-      autoMigrate = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether IPFS should try to migrate the file system automatically.
-
-          The daemon will need to be able to download a binary from https://ipfs.io to perform the migration.
-        '';
-      };
-      */
 
       autoMount = mkOption {
         type = types.bool;
