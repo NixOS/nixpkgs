@@ -178,6 +178,12 @@ services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
    </listitem>
    <listitem>
     <para>
+      <literal>vmware</literal> has been removed from the <literal>services.x11.videoDrivers</literal> defaults.
+      For VMWare guests set <literal>virtualisation.vmware.guest.enable</literal> to <literal>true</literal> which will include the appropriate drivers.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The initrd SSH support now uses OpenSSH rather than Dropbear to
      allow the use of Ed25519 keys and other OpenSSH-specific
      functionality. Host keys must now be in the OpenSSH format, and at
