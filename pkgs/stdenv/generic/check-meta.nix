@@ -107,11 +107,11 @@ let
 
         You can install it anyway by whitelisting this package, using the
         following methods:
-        
-        a) To temporarily allow all insecure packages, you can use an environment variable 
-           for a single invocation of the nix tools:
-           
-           $ export NIXPKGS_ALLOW_INSECURE=1
+
+        a) To temporarily allow all insecure packages, you can use an environment
+           variable for a single invocation of the nix tools:
+
+             $ export NIXPKGS_ALLOW_INSECURE=1
 
         b) for `nixos-rebuild` you can add ‘${getName attrs}’ to
            `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
@@ -124,8 +124,8 @@ let
              }
 
         c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-        ‘${getName attrs}’ to `permittedInsecurePackages` in
-        ~/.config/nixpkgs/config.nix, like so:
+           ‘${getName attrs}’ to `permittedInsecurePackages` in
+           ~/.config/nixpkgs/config.nix, like so:
 
              {
                permittedInsecurePackages = [
