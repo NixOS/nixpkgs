@@ -56,6 +56,21 @@ let
  */
 
   exporterTests = {
+     apcupsd = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.apcupsd.enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("apcupsd.service")
+        wait_for_open_port(3551)
+        wait_for_unit("prometheus-apcupsd-exporter.service")
+        wait_for_open_port(9162)
+        succeed("curl -sSf http://localhost:9162/metrics | grep -q 'apcupsd_info'")
+      '';
+    };
 
     bind = {
       exporterConfig = {
