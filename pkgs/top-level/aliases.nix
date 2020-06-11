@@ -306,7 +306,9 @@ mapAliases ({
   msf = metasploit; # added 2018-04-25
   libmsgpack = msgpack; # added 2018-08-17
   mssys = ms-sys; # added 2015-12-13
-  mpv-with-scripts = throw "Use wrapMpv for editing the environment of mpv"; # added 2012-05-22
+  mpv-with-scripts = lib.warn "Use wrapMpv for editing the environment of mpv" (
+    self.wrapMpv self.mpv-unwrapped { }
+  ); # added 2020-05-22
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   mysqlWorkbench = mysql-workbench; # added 2017-01-19
