@@ -1,18 +1,13 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.undervolt;
-in {
+in
+{
   options.services.undervolt = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to undervolt intel cpus.
-      '';
-    };
+    enable = mkEnableOption
+      "Intel CPU undervolting service (WARNING: may permanently damage your hardware!)";
 
     verbose = mkOption {
       type = types.bool;
