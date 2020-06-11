@@ -40,7 +40,10 @@ calamares_add_branding_subdirectory( branding/fancy NAME fancy )
 # This one has files in subdirectories
 calamares_add_branding_subdirectory( branding/samegame NAME samegame SUBDIRECTORIES img )
 
-# KaOS branding, with translations
+# KaOS branding, with translations, note we can *NAME* something
+# different from the source directory it lives in; this will be installed
+# to a directory called *NAME* though -- and the `branding.desc` must
+# have a *componentName* that matches this *NAME*.
 calamares_add_branding_subdirectory( branding/kaos_branding NAME kaos )
 
 ### MODULES
@@ -52,8 +55,7 @@ set(SKIPPED_MODULES "")
 calamares_add_module_subdirectory( modules/filekeeper )  # C++ job
 calamares_add_module_subdirectory( modules/freebsddisk )  # C++ viewmodule
 
+# If modules cannot be built, they usually call a macro
+# which builds a list of explanations; show that list.
 calamares_explain_skipped_modules( ${SKIPPED_MODULES} )
 
-### CONFIGURATION
-#
-# (TODO)
