@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-gtk-theme";
-  version = "17.10.11";
+  version = "2020.06.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-gtk-theme";
     rev = version;
-    sha256 = "0zs6mq70yd1k3d9zm3q6zxnw1md56r4imad5imdxwx58yxdx47fw";
+    sha256 = "1ah99nj7dws4mq3i6hkv2sk84098zh33lp4g9y9phbfpgm1q1qvi";
   };
 
   propagatedUserEnvPkgs = [
