@@ -1694,6 +1694,16 @@
     githubId = 4331004;
     name = "Naoya Hatta";
   };
+  Dallos = {
+    name = "1010";
+    email = "1010@alsejk.ch";
+    github = "Dallos";
+    githubId = 11308100;
+    keys = [{
+      longkeyid = "ed25519/0x708709C99802E961";
+      fingerprint = "EB5E 6CD0 3C59 41CC 3724  97DE 7087 09C9 9802 E961";
+    }];
+  };
   DamienCassou = {
     email = "damien@cassou.me";
     github = "DamienCassou";
