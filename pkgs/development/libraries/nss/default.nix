@@ -66,6 +66,7 @@ in stdenv.mkDerivation rec {
     "USE_SYSTEM_ZLIB=1"
     "NSS_USE_SYSTEM_SQLITE=1"
     "NATIVE_CC=${buildPackages.stdenv.cc}/bin/cc"
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
     # Pass in CPU even if we're not cross compiling, because otherwise it tries to guess with
     # uname, which can be wrong if e.g. we're compiling for aarch32 on aarch64
     "OS_TEST=${cpu}"
