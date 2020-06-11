@@ -249,12 +249,13 @@ in {
 
     # Note the upstream service assumes default host / port
     # we should override it when a custom is provided above.
-    systemd.sockets.ipfs-gateway = mkIf cfg.startWhenNeeded {
+    systemd.sockets.ipfs-gateway = {
       wantedBy = [ "sockets.target" ];
     };
 
-    systemd.sockets.ipfs-api = mkIf cfg.startWhenNeeded {
+    systemd.sockets.ipfs-api = {
       wantedBy = [ "sockets.target" ];
+      socketConfig.ListenStream = [ "%t/ipfs.sock" ];
     };
 
   };
