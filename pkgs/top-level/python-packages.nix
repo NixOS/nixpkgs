@@ -3652,9 +3652,10 @@ in {
     duckdb = pkgs.duckdb;
   };
 
-  dulwich = callPackage ../development/python-modules/dulwich {
-    inherit (pkgs) git glibcLocales;
-  };
+  dulwich = if isPy3k then
+    callPackage ../development/python-modules/dulwich { }
+  else
+    callPackage ../development/python-modules/dulwich/0_19.nix { };
 
   hg-git = callPackage ../development/python-modules/hg-git { };
 
