@@ -7,19 +7,14 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "76.0.1";
+    ffversion = "77.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0gnhfcgrz6022xf3vqia3s3639xa5pjp13h343d3c09mn8r919cmm6s38vzj1v3734fm25zb68acyarsp72xqq8z1420rh02b2pv38q";
+      sha512 = "ngLihC0YuclLJEV3iPEX+tRzDKIdBe+CCOuFxvWNo7DnX8royOvTj2m4YyWyZoTQ5UCbPTQYmP4otgfovZSe8g==";
     };
 
     patches = [
       ./no-buildconfig-ffx76.patch
-      # Fix for NSS 3.52 (add missing CK_GCM_PARMS field)
-      (fetchpatch {
-        url = "https://hg.mozilla.org/mozilla-central/raw-rev/463069687b3d";
-        sha256 = "00yhz67flnkww3rbry0kqn6z6bm7vxfb2sgf7qikgbjcm3ysvpsm";
-      })
     ];
 
     meta = {
@@ -40,10 +35,10 @@ rec {
 
   firefox-esr-68 = common rec {
     pname = "firefox-esr";
-    ffversion = "68.8.0esr";
+    ffversion = "68.9.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "2rl5irkamxi8caa8krj0wng93lb82kk9mf09mgci87mj9hy6fxzcrlmiiffp14s03rv0raagrn4w54pbx1336mylq6saxmfhpf676hk";
+      sha512 = "mEMYANgPfGgK757t4p34IXgQkSoxmn9/jC5jfEPs1PTikiOkF6+ypjFegl+XlFP/bmtaV1ZJq6XMY85ZVjdbuA==";
     };
 
     patches = [

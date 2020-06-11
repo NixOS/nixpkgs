@@ -51,6 +51,10 @@
 , xcbuild, CoreMedia, ExceptionHandling, Kerberos, AVFoundation, MediaToolbox
 , CoreLocation, Foundation, AddressBook, libobjc, cups, rsync
 
+# dependencies requires for stable backports
+
+, rust-cbindgen_0_14_1
+
 ## other
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
@@ -96,6 +100,7 @@ let
 
 nss_pkg = if lib.versionAtLeast ffversion "74" then nss_3_52 else nss;
 sqlite_pkg = if lib.versionAtLeast ffversion "74" then sqlite_3_31_1 else sqlite;
+rust-cbindgen_pkg = if lib.versionAtLeast ffversion "77" then rust-cbindgen_0_14_1 else rust-cbindgen;
 
 in
 
@@ -151,7 +156,6 @@ stdenv.mkDerivation ({
     "-Wno-error=format-security");
 
   postPatch = ''
-    substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
     rm -rf obj-x86_64-pc-linux-gnu
   '';
 
@@ -166,7 +170,7 @@ stdenv.mkDerivation ({
       pkgconfig
       python2
       python3
-      rust-cbindgen
+      rust-cbindgen_pkg
       rustc
       which
     ]
