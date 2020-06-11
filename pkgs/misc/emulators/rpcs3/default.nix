@@ -6,8 +6,8 @@
 }:
 
 let
-  majorVersion = "0.0.8";
-  gitVersion = "9300-341fdf7eb"; # echo $(git rev-list HEAD --count)-$(git rev-parse --short HEAD)
+  majorVersion = "0.0.10";
+  gitVersion = "10310-7df825855"; # echo $(git rev-list HEAD --count)-$(git rev-parse --short HEAD)
 in
 mkDerivation {
   pname = "rpcs3";
@@ -15,8 +15,8 @@ mkDerivation {
 
   src = fetchgit {
     url = "https://github.com/RPCS3/rpcs3";
-    rev = "341fdf7eb14763fd06e2eab9a4b2b8f1adf9fdbd";
-    sha256 = "1qx97zkkjl6bmv5rhfyjqynbz0v8h40b2wxqnl59g287wj0yk3y1";
+    rev = "v${majorVersion}";
+    sha256 = "1nhyqyh0l63h6mhyznqmixf3n7vb6bi4p88zgjpywy2lmyy79973";
   };
 
   preConfigure = ''
