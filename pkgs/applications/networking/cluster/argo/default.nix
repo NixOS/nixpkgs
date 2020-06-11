@@ -19,16 +19,16 @@ let
 in
 buildGoModule rec {
   pname = "argo";
-  version = "2.6.1";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     rev = "v${version}";
-    sha256 = "12wq79h4m8wlzf18r66965mbbjjb62kvnxdj50ra7nxa8jjxpsmf";
+    sha256 = "193nxc27fh37wf035mclvwwwxjjfc8nnbncg009fg19ycqmvmgvc";
   };
 
-  vendorSha256 = "0dhzr62x2lzf3w0j2r496cr7jvkdcavfqaqr2xh972k3qqc9caky";
+  vendorSha256 = "1p9b2m20gxc7iyq08mvllf5dpi4m06aw233sb45d05d624kw4aps";
 
   subPackages = [ "cmd/argo" ];
 
@@ -37,6 +37,15 @@ buildGoModule rec {
     echo "Built without static files" > ui/dist/app/index.html
 
     ${staticfiles}/bin/staticfiles -o server/static/files.go ui/dist/app
+  '';
+
+  buildFlagsArray = ''
+    -ldflags=
+      -s -w
+      -X github.com/argoproj/argo.version=${version}
+      -X github.com/argoproj/argo.gitCommit=${src.rev}
+      -X github.com/argoproj/argo.gitTreeState=clean
+      -X github.com/argoproj/argo.gitTag=${version}
   '';
 
   meta = with lib; {
