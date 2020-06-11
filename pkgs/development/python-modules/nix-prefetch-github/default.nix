@@ -35,9 +35,6 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pytest-black pytestcov pytest-isort git ];
 
-  # aiohttp is not supported on 3.8 yet
-  doCheck = pythonOlder "3.8";
-
   # latest version of isort will cause tests to fail
   # ignore tests which are impure
   disabledTests = [ "isort" "life" "outputs" "fetch_submodules" ];
