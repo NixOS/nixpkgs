@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , poppler_gi
 , gdk-pixbuf
 , librsvg
@@ -36,12 +36,12 @@ in buildPythonApplication rec {
     gdk-pixbuf
   ];
 
-  meta = {
+  meta = with lib; {
     description = "metadata removal tool supporting a wide range of commonly used file formats";
     homepage = "https://0xacab.org/jvoisin/mat2";
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
     platforms = python3.meta.platforms;
-    maintainers = with stdenv.lib.maintainers; [ Dallos ];
+    maintainers = with maintainers; [ Dallos ];
   };
 }
 
