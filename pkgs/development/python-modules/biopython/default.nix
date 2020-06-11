@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , numpy
+, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -12,6 +13,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "fb1936e9ca9e7af8de1050e84375f23328e04b801063edf0ad73733494d8ec42";
   };
+
+  disabled = !isPy3k;
 
   propagatedBuildInputs = [ numpy ];
   # Checks try to write to $HOME, which does not work with nix
