@@ -1,9 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, nose }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, nose
+, lxml
+, requests
+, pyparsing
+}:
 buildPythonPackage rec {
   pname = "twill";
   version = "2.0";
-
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -11,6 +13,12 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
+
+  propagatedBuildInputs = [
+    lxml
+    requests
+    pyparsing
+  ];
 
   doCheck = false; # pypi package comes without tests, other homepage does not provide all verisons
 
