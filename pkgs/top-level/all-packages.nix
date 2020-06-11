@@ -21915,6 +21915,8 @@ in
 
   rtl_433 = callPackage ../applications/radio/rtl_433 { };
 
+  rtl-ais = callPackage ../applications/radio/rtl-ais { };
+
   rtl-sdr = callPackage ../applications/radio/rtl-sdr { };
 
   rtv = callPackage ../applications/misc/rtv { };
