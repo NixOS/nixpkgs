@@ -50,13 +50,13 @@ let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
   pname = "gimp";
-  version = "2.10.18";
+  version = "2.10.20";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "05np26g61fyr72s7qjfrcck8v57r0yswq5ihvqyzvgzfx08y3gv5";
+    sha256 = "4S+fh0saAHxCd7YKqB4LZzML5+YVPldJ6tg5uQL8ezw=";
   };
 
   nativeBuildInputs = [
