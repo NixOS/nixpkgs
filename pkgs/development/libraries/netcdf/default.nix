@@ -3,6 +3,7 @@
 , hdf5
 , m4
 , curl # for DAP
+, removeReferencesTo
 }:
 
 let
@@ -26,7 +27,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ m4 ];
+  nativeBuildInputs = [ m4 removeReferencesTo ];
   buildInputs = [ hdf5 curl mpi ];
 
   passthru = {
@@ -41,6 +42,12 @@ in stdenv.mkDerivation rec {
       "--disable-dap-remote-tests"
   ]
   ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+
+  disallowedReferences = [ stdenv.cc ];
+
+  postFixup = ''
+    remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
+  '';
 
   doCheck = !mpiSupport;
 
