@@ -534,6 +534,8 @@ in {
 
   breezy = callPackage ../development/python-modules/breezy { };
 
+  build = callPackage ../development/python-modules/build { };
+
   ciso8601 = callPackage ../development/python-modules/ciso8601 { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
