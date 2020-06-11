@@ -37,6 +37,7 @@ let
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
       , rubygemsSupport ? true
+      , JitSupport ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
@@ -118,6 +119,7 @@ let
 
         configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby_${tag}"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
+          ++ op (!JitSupport) "--disable-jit-support"
           ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [
             # on darwin, we have /usr/include/tk.h -- so the configure script detects
@@ -155,6 +157,9 @@ let
               ${removeReferencesTo}/bin/remove-references-to \
                 -t ${stdenv.cc} \
                 $out/lib/libruby*
+              ${removeReferencesTo}/bin/remove-references-to \
+                -t ${stdenv.cc} \
+                $out/${passthru.libPath}/${stdenv.targetPlatform.system}/rbconfig.rb
             ''
           }
           # Bundler tries to create this directory
