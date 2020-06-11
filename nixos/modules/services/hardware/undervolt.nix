@@ -27,7 +27,7 @@ in
     };
 
     coreOffset = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.int;
       default = null;
       description = ''
         The amount of voltage in mV to offset the CPU cores by.
@@ -35,7 +35,7 @@ in
     };
 
     gpuOffset = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.int;
       default = null;
       description = ''
         The amount of voltage in mV to offset the GPU by.
@@ -43,7 +43,7 @@ in
     };
 
     uncoreOffset = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.int;
       default = null;
       description = ''
         The amount of voltage in mV to offset uncore by.
@@ -51,7 +51,7 @@ in
     };
 
     analogioOffset = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.int;
       default = null;
       description = ''
         The amount of voltage in mV to offset analogio by.
@@ -59,7 +59,7 @@ in
     };
 
     temp = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.int;
       default = null;
       description = ''
         The temperature target in Celsius degrees.
@@ -67,7 +67,7 @@ in
     };
 
     tempAc = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.int;
       default = null;
       description = ''
         The temperature target on AC power in Celsius degrees.
@@ -75,7 +75,7 @@ in
     };
 
     tempBat = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr types.int;
       default = null;
       description = ''
         The temperature target on battery power in Celsius degrees.
@@ -104,14 +104,14 @@ in
         ExecStart = ''
           ${pkgs.undervolt}/bin/undervolt \
             ${optionalString cfg.verbose "--verbose"} \
-            ${optionalString (cfg.coreOffset != null) "--core ${cfg.coreOffset}"} \
-            ${optionalString (cfg.coreOffset != null) "--cache ${cfg.coreOffset}"} \
-            ${optionalString (cfg.gpuOffset != null) "--gpu ${cfg.gpuOffset}"} \
-            ${optionalString (cfg.uncoreOffset != null) "--uncore ${cfg.uncoreOffset}"} \
-            ${optionalString (cfg.analogioOffset != null) "--analogio ${cfg.analogioOffset}"} \
-            ${optionalString (cfg.temp != null) "--temp ${cfg.temp}"} \
-            ${optionalString (cfg.tempAc != null) "--temp-ac ${cfg.tempAc}"} \
-            ${optionalString (cfg.tempBat != null) "--temp-bat ${cfg.tempBat}"}
+            ${optionalString (cfg.coreOffset != null) "--core ${toString cfg.coreOffset}"} \
+            ${optionalString (cfg.coreOffset != null) "--cache ${toString cfg.coreOffset}"} \
+            ${optionalString (cfg.gpuOffset != null) "--gpu ${toString cfg.gpuOffset}"} \
+            ${optionalString (cfg.uncoreOffset != null) "--uncore ${toString cfg.uncoreOffset}"} \
+            ${optionalString (cfg.analogioOffset != null) "--analogio ${toString cfg.analogioOffset}"} \
+            ${optionalString (cfg.temp != null) "--temp ${toString cfg.temp}"} \
+            ${optionalString (cfg.tempAc != null) "--temp-ac ${toString cfg.tempAc}"} \
+            ${optionalString (cfg.tempBat != null) "--temp-bat ${toString cfg.tempBat}"}
         '';
       };
     };
