@@ -3069,6 +3069,8 @@ in {
 
   latexcodec = callPackage ../development/python-modules/latexcodec {};
 
+  lazy = callPackage ../development/python-modules/lazy { };
+
   libmodulemd = pipe pkgs.libmodulemd [
     toPythonModule
 
