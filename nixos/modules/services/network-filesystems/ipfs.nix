@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  inherit (pkgs) ipfs runCommand makeWrapper;
-
   cfg = config.services.ipfs;
 
   ipfsFlags = toString ([
@@ -13,55 +11,6 @@ let
     (optionalString (cfg.defaultMode == "norouting") "--routing=none")
   ] ++ cfg.extraFlags);
 
-  defaultDataDir = if versionAtLeast config.system.stateVersion "17.09" then
-    "/var/lib/ipfs" else
-    "/var/lib/ipfs/.ipfs";
-
-  # Wrapping the ipfs binary with the environment variable IPFS_PATH set to dataDir because we can't set it in the user environment
-  wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; preferLocalBuild = true; } ''
-    mkdir -p "$out/bin"
-    makeWrapper "${ipfs}/bin/ipfs" "$out/bin/ipfs" \
-      --set IPFS_PATH ${cfg.dataDir} \
-      --prefix PATH : /run/wrappers/bin
-  '';
-
-
-  commonEnv = {
-    environment.IPFS_PATH = cfg.dataDir;
-    path = [ wrapped ];
-    serviceConfig.User = cfg.user;
-    serviceConfig.Group = cfg.group;
-  };
-
-  baseService = recursiveUpdate commonEnv {
-    wants = [ "ipfs-init.service" ];
-    preStart = optionalString cfg.autoMount ''
-      ipfs --local config Mounts.FuseAllowOther --json true
-      ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
-      ipfs --local config Mounts.IPNS ${cfg.ipnsMountDir}
-    '' + concatStringsSep "\n" (collect
-          isString
-          (mapAttrsRecursive
-            (path: value:
-            # Using heredoc below so that the value is never improperly quoted
-            ''
-              read value <<EOF
-              ${builtins.toJSON value}
-              EOF
-              ipfs --local config --json "${concatStringsSep "." path}" "$value"
-            '')
-            ({ Addresses.API = cfg.apiAddress;
-               Addresses.Gateway = cfg.gatewayAddress;
-               Addresses.Swarm = cfg.swarmAddress;
-            } //
-            cfg.extraConfig))
-        );
-    serviceConfig = {
-      ExecStart = "${wrapped}/bin/ipfs daemon ${ipfsFlags}";
-      Restart = "on-failure";
-      RestartSec = 1;
-    } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
-  };
 in {
 
   ###### interface
@@ -86,7 +35,9 @@ in {
 
       dataDir = mkOption {
         type = types.str;
-        default = defaultDataDir;
+        default = if versionAtLeast config.system.stateVersion "17.09"
+                  then "/var/lib/ipfs"
+                  else "/var/lib/ipfs/.ipfs";
         description = "The data dir for IPFS";
       };
 
@@ -191,7 +142,9 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ wrapped ];
+    environment.systemPackages = [ pkgs.ipfs ];
+    environment.variables.IPFS_PATH = cfg.dataDir;
+
     programs.fuse = mkIf cfg.autoMount {
       userAllowOther = true;
     };
@@ -220,10 +173,12 @@ in {
       "d '${cfg.ipnsMountDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
-    systemd.services.ipfs-init = recursiveUpdate commonEnv {
+    systemd.services.ipfs-init = {
       description = "IPFS Initializer";
 
-      before = [ "ipfs.service" "ipfs-offline.service" "ipfs-norouting.service" ];
+      environment.IPFS_PATH = cfg.dataDir;
+
+      path = [ pkgs.ipfs ];
 
       script = ''
         if [[ ! -f ${cfg.dataDir}/config ]]; then
@@ -240,31 +195,46 @@ in {
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        User = cfg.user;
+        Group = cfg.group;
       };
     };
 
-    # TODO These 3 definitions possibly be further abstracted through use of a function
-    # like: mutexServices "ipfs" [ "", "offline", "norouting" ] { ... shared conf here ... }
+    systemd.services.ipfs = {
+      path = [ "/run/wrappers" pkgs.ipfs ];
+      environment.IPFS_PATH = cfg.dataDir;
 
-    systemd.services.ipfs = recursiveUpdate baseService {
-      description = "IPFS Daemon";
-      wantedBy = mkIf (cfg.defaultMode == "online") [ "multi-user.target" ];
-      after = [ "network.target" "ipfs-init.service" ];
-      conflicts = [ "ipfs-offline.service" "ipfs-norouting.service"];
-    };
-
-    systemd.services.ipfs-offline = recursiveUpdate baseService {
-      description = "IPFS Daemon (offline mode)";
-      wantedBy = mkIf (cfg.defaultMode == "offline") [ "multi-user.target" ];
+      wants = [ "ipfs-init.service" ];
       after = [ "ipfs-init.service" ];
-      conflicts = [ "ipfs.service" "ipfs-norouting.service"];
-    };
 
-    systemd.services.ipfs-norouting = recursiveUpdate baseService {
-      description = "IPFS Daemon (no routing mode)";
-      wantedBy = mkIf (cfg.defaultMode == "norouting") [ "multi-user.target" ];
-      after = [ "ipfs-init.service" ];
-      conflicts = [ "ipfs.service" "ipfs-offline.service"];
+      wantedBy = [ "default.target" ];
+
+      preStart = optionalString cfg.autoMount ''
+        ipfs --local config Mounts.FuseAllowOther --json true
+        ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
+        ipfs --local config Mounts.IPNS ${cfg.ipnsMountDir}
+      '' + concatStringsSep "\n" (collect
+            isString
+            (mapAttrsRecursive
+              (path: value:
+              # Using heredoc below so that the value is never improperly quoted
+              ''
+                read value <<EOF
+                ${builtins.toJSON value}
+                EOF
+                ipfs --local config --json "${concatStringsSep "." path}" "$value"
+              '')
+              ({ Addresses.API = cfg.apiAddress;
+                 Addresses.Gateway = cfg.gatewayAddress;
+                 Addresses.Swarm = cfg.swarmAddress;
+              } //
+              cfg.extraConfig))
+          );
+      serviceConfig = {
+        ExecStart = "${pkgs.ipfs}/bin/ipfs daemon ${ipfsFlags}";
+        User = cfg.user;
+        Group = cfg.group;
+      } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     };
 
   };
