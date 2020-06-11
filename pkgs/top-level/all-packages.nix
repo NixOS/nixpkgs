@@ -6559,6 +6559,8 @@ in
 
   setserial = callPackage ../tools/system/setserial { };
 
+  setzer = callPackage ../applications/editors/setzer { };
+
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
   sequoia = callPackage ../tools/security/sequoia {
