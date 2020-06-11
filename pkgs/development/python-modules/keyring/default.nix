@@ -6,6 +6,7 @@
 , pytest-flake8
 , secretstorage
 , setuptools_scm
+, toml
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,10 @@ buildPythonPackage rec {
     sha256 = "c53e0e5ccde3ad34284a40ce7976b5b3a3d6de70344c3f8ee44364cc340976ec";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools_scm
+    toml
+  ];
 
   checkInputs = [ pytest pytest-flake8 ];
 
