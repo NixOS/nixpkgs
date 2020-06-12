@@ -4922,6 +4922,7 @@ broken-packages:
   - fingertree-tf
   - finitary
   - finitary-derive
+  - finitary-optics
   - FiniteMap
   - firefly-example
   - first-and-last
@@ -8546,6 +8547,7 @@ broken-packages:
   - postgres-embedded
   - postgres-tmp
   - postgres-websockets
+  - postgresql-libpq-notify
   - postgresql-lo-stream
   - postgresql-named
   - postgresql-query
@@ -10223,7 +10225,6 @@ broken-packages:
   - tldr
   - tls-extra
   - tlynx
-  - tmp-postgres
   - tn
   - to-haskell
   - to-string-class
