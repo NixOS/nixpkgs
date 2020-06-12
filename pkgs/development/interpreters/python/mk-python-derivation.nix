@@ -17,6 +17,7 @@
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
 , pythonNamespacesHook
+, pythonRecompileBytecodeHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
 , setuptoolsBuildHook
@@ -110,6 +111,7 @@ let
     python
     wrapPython
     ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
+    pythonRecompileBytecodeHook  # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
     pythonRemoveTestsDirHook
   ] ++ lib.optionals catchConflicts [
     setuptools pythonCatchConflictsHook
