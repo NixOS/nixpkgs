@@ -1027,6 +1027,7 @@ self: super: {
   # 2020-06-04: HACK: dontCheck - The test suite attempts to use the network.
   # Should be solved when: https://github.com/dhall-lang/dhall-haskell/issues/1837
   dhall = generateOptparseApplicativeCompletion "dhall" (dontCheck super.dhall);
+  dhall_1_30_0 = dontCheck super.dhall_1_30_0;
 
   dhall-json =
     generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"]
@@ -1467,5 +1468,16 @@ self: super: {
 
   # https://github.com/ocharles/weeder/issues/15
   weeder = doJailbreak super.weeder;
+
+  # Requested version bump on upstream https://github.com/obsidiansystems/constraints-extras/issues/32
+  constraints-extras = doJailbreak super.constraints-extras;
+  # Requested version bump on upstream https://github.com/srid/rib/issues/160
+  rib = doJailbreak (super.rib.override {
+    dhall = self.dhall_1_30_0;
+  });
+  # Necessary for neuron 0.4.0
+  neuron = super.neuron.override {
+    dhall = self.dhall_1_30_0;
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
