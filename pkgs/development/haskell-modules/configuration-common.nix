@@ -1046,8 +1046,7 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-  stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: { http-download = self.http-download_0_2_0_0; }));
-  http-download_0_2_0_0 = dontCheck super.http-download_0_2_0_0;
+  stack = generateOptparseApplicativeCompletion "stack" super.stack;
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
