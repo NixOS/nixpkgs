@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
+{ stdenv, fetchFromGitHub, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
   unidecode, mock, pytest , backports-shutil-which, ConfigArgParse,
   python-daemon, pymsgbox }:
 
@@ -6,9 +6,11 @@ buildPythonPackage rec {
   pname = "libagent";
   version = "0.14.1";
 
-  src = fetchPypi{
-    inherit pname version;
-    sha256 = "dc979a564cb68cf7c6fa235bf747eb4555deb84f3a8d716940a1709377f140e7";
+  src = fetchFromGitHub {
+    owner = "romanz";
+    repo = "trezor-agent";
+    rev = "v${version}";
+    sha256 = "16y1y9ahcv3wj7f0v4mfiwzkmn2hz1iv7y13cgr57sxa3ymyqx6c";
   };
 
   propagatedBuildInputs = [ unidecode backports-shutil-which ConfigArgParse
