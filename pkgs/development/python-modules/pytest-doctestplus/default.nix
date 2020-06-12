@@ -25,8 +25,9 @@ buildPythonPackage rec {
     pytest
   ];
 
+  # check_distribution incorrectly pulls pytest version
   checkPhase = ''
-    pytest
+    pytest -k 'not check_distribution'
   '';
 
   meta = with lib; {
