@@ -5148,7 +5148,6 @@ broken-packages:
   - gas
   - gbu
   - gc-monitoring-wai
-  - gcodehs
   - gconf
   - gdax
   - gdiff-ig
@@ -10336,7 +10335,6 @@ broken-packages:
   - tsvsql
   - tsweb
   - ttask
-  - ttn-client
   - tttool
   - tubes
   - tuntap
