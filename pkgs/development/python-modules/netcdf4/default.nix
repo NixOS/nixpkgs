@@ -61,7 +61,7 @@ buildPythonPackage rec {
   
   passthru = {
     mpiSupport = mpiSupport;
-    inherit mpi;
+    inherit mpi mpiSupport;
   }; 
 
   meta = with stdenv.lib; {
