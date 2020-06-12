@@ -1,6 +1,6 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, isPyPy
 , numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
-,mpi4py ? null, openssh ? null}:
+, mpi4py ? null, openssh ? null }:
 assert (mpi4py != null) -> 
   openssh != null
   && hdf5.mpi == mpi4py.mpi 
