@@ -39,7 +39,7 @@ buildPythonPackage rec {
     hdf5
     curl
     libjpeg
-  ] ++ (if mpiSupport then [mpi4py mpi openssh] else []);
+  ] ++ lib.optionals mpiSupport [mpi4py mpi openssh];
 
   #patches=[./skipDapTest.patch];
 
