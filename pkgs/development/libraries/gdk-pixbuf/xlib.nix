@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=true"
   ];
 
+  postInstall = ''
+    substituteInPlace $out/lib/pkgconfig/gdk-pixbuf-xlib-2.0.pc --replace gdk-pixbuf-xlib-2.0 gdk-pixbuf-2.0
+  '';
+
   meta = with stdenv.lib; {
     description = "Deprecated API for integrating GdkPixbuf with Xlib data types";
     homepage = "https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib";
