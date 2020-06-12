@@ -82,6 +82,7 @@
 #, libnut ? null # NUT (de)muxer, native (de)muser exists
 , libogg ? null # Ogg container used by vorbis & theora
 , libopus ? null # Opus de/encoder
+, librsvg ? null # SVG protocol
 , libssh ? null # SFTP protocol
 , libtheora ? null # Theora encoder
 , libv4l ? null # Video 4 Linux support
@@ -355,6 +356,7 @@ stdenv.mkDerivation rec {
     (enableFeature (libmysofa != null) "libmysofa")
     #(enableFeature (libnut != null) "libnut")
     (enableFeature (libopus != null) "libopus")
+    (enableFeature (librsvg != null) "librsvg")
     (enableFeature (libssh != null) "libssh")
     (enableFeature (libtheora != null) "libtheora")
     (enableFeature (if isLinux then libv4l != null else false) "libv4l2")
@@ -416,7 +418,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
-    libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
+    libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv libXext lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
     samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
