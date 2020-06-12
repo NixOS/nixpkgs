@@ -187,6 +187,8 @@ in
 
   hobbes = callPackage ../development/tools/hobbes { };
 
+  html5validator = python36Packages.callPackage ../applications/misc/html5validator { };
+
   proto-contrib = callPackage ../development/tools/proto-contrib {};
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
