@@ -116,7 +116,7 @@ let
       CLS_U32_PERF       = yes;
       CLS_U32_MARK       = yes;
       BPF_JIT            = whenPlatformHasEBPFJit yes;
-      BPF_JIT_ALWAYS_ON  = no; # whenPlatformHasEBPFJit yes; # see https://github.com/NixOS/nixpkgs/issues/79304
+      BPF_JIT_ALWAYS_ON  = whenPlatformHasEBPFJit no; # whenPlatformHasEBPFJit yes; # see https://github.com/NixOS/nixpkgs/issues/79304
       HAVE_EBPF_JIT      = whenPlatformHasEBPFJit yes;
       BPF_STREAM_PARSER  = whenAtLeast "4.19" yes;
       XDP_SOCKETS        = whenAtLeast "4.19" yes;
@@ -771,8 +771,8 @@ let
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
       # Enable AMD's ROCm GPU compute stack
-      HSA_AMD = whenAtLeast "4.20" yes;
-      ZONE_DEVICE = whenAtLeast "5.3" yes;
+      HSA_AMD =     mkIf stdenv.hostPlatform.is64bit (whenAtLeast "4.20" yes);
+      ZONE_DEVICE = mkIf stdenv.hostPlatform.is64bit (whenAtLeast "5.3" yes);
       HMM_MIRROR = whenAtLeast "5.3" yes;
       DRM_AMDGPU_USERPTR = whenAtLeast "5.3" yes;
 
