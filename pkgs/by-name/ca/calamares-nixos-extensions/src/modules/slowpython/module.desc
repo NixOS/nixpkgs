@@ -1,0 +1,7 @@
+# The slowpython module is .. just slow. It can be used
+# in testing to allow the slideshow time to run.
+---
+type:       "job"
+interface:  "python"
+name:       "slowpython"
+script:     "main.py"

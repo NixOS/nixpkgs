@@ -54,6 +54,7 @@ set(SKIPPED_MODULES "")
 
 calamares_add_module_subdirectory( modules/filekeeper )  # C++ job
 calamares_add_module_subdirectory( modules/freebsddisk )  # C++ viewmodule
+calamares_add_module_subdirectory( modules/slowpython )  # Python job
 
 # If modules cannot be built, they usually call a macro
 # which builds a list of explanations; show that list.
