@@ -8,7 +8,7 @@ assert (mpi4py != null) ->
 
 let 
   mpiSupport = (mpi4py != null);
-  mpi= if mpiSupport then mpi4py.mpi else null;
+  mpi = if mpiSupport then mpi4py.mpi else null;
 in
 buildPythonPackage rec {
   pname = "netCDF4";
