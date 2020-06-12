@@ -1,4 +1,4 @@
-{ lib, linkFarm, buildGoModule, runCommand, makeWrapper
+{ lib, linkFarm, buildGoModule, runCommand, makeWrapper, nixosTests
 
 # Version specific args
 , version, src, assets, vendorSha256
@@ -42,6 +42,10 @@ in runCommand "v2ray-${version}" {
     description = "A platform for building proxies to bypass network restrictions";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ servalcatty ];
+  };
+
+  passthru.tests = {
+    simple-vmess-proxy-test = nixosTests.v2ray;
   };
 
 } ''
