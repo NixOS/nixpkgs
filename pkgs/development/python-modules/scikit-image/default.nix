@@ -13,6 +13,7 @@
 , cloudpickle
 , pytest
 , imageio
+, tifffile
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,21 @@ buildPythonPackage rec {
     sha256 = "bd954c0588f0f7e81d9763dc95e06950e68247d540476e06cb77bcbcd8c2d8b3";
   };
 
-  buildInputs = [ cython ];
+  nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [ numpy scipy matplotlib networkx six pillow pywavelets dask cloudpickle imageio ];
+  propagatedBuildInputs = [
+    cloudpickle
+    dask
+    imageio
+    matplotlib
+    networkx
+    numpy
+    pillow
+    pywavelets
+    scipy
+    six
+    tifffile
+  ];
 
   checkInputs = [ pytest ];
 
