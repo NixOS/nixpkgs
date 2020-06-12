@@ -11117,7 +11117,6 @@ broken-packages:
   - zoom-cache-pcm
   - zoom-cache-sndfile
   - zoom-refs
-  - zre
   - zsh-battery
   - zsyntax
   - ztail
