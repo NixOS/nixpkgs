@@ -344,6 +344,32 @@ let
         buildTests = true;
         expectedTestOutputs = [ "test baz_false ... ok" ];
       };
+      buildScriptFeatureEnv = {
+        crateName = "build-script-feature-env";
+        features = [ "some-feature" "crate/another_feature" ];
+        src = symlinkJoin {
+          name = "build-script-feature-env";
+          paths = [
+            (mkFile  "src/main.rs" ''
+              #[cfg(test)]
+              #[test]
+              fn feature_not_visible() {
+                assert!(std::env::var("CARGO_FEATURE_SOME_FEATURE").is_err());
+                assert!(option_env!("CARGO_FEATURE_SOME_FEATURE").is_none());
+              }
+              fn main() {}
+            '')
+            (mkFile  "build.rs" ''
+              fn main() {
+                assert!(std::env::var("CARGO_FEATURE_SOME_FEATURE").is_ok());
+                assert!(option_env!("CARGO_FEATURE_SOME_FEATURE").is_none());
+              }
+            '')
+          ];
+        };
+        buildTests = true;
+        expectedTestOutputs = [ "test feature_not_visible ... ok" ];
+      };
       # Regression test for https://github.com/NixOS/nixpkgs/pull/88054
       # Build script output should be rewritten as valid env vars.
       buildScriptIncludeDirDeps = let
