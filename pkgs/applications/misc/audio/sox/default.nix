@@ -8,6 +8,7 @@
 , enableFLAC ? true, flac ? null
 , enablePNG ? true, libpng ? null
 , enableLibsndfile ? true, libsndfile ? null
+, enableWavpack ? true, wavpack ? null
 # amrnb and amrwb are unfree, disabled by default
 , enableAMR ? false, amrnb ? null, amrwb ? null
 , enableLibpulseaudio ? true, libpulseaudio ? null
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     optional enableFLAC flac ++
     optional enablePNG libpng ++
     optional enableLibsndfile libsndfile ++
+    optional enableWavpack wavpack ++
     optionals enableAMR [ amrnb amrwb ] ++
     optional enableLibpulseaudio libpulseaudio ++
     optional (stdenv.isDarwin) CoreAudio;
