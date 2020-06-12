@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "2a3ca855848f4bbf07fac366da77a681fcead18c0a8813d91d46302f562dc3be";
   };
 
-  checkInputs = [ netcdf numpy ] ++(if mpiSupport then [ mpi4py openssh ] else []);
+  checkInputs = [ netcdf numpy ] ++ lib.optionals mpiSupport [ mpi4py openssh ];
 
   nativeBuildInputs = [
     cython 
