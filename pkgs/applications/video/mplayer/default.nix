@@ -199,6 +199,7 @@ stdenv.mkDerivation rec {
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
+    ++ [ "-lfreetype" ]
   );
 
   installTargets = [ "install" ] ++ stdenv.lib.optional x11Support "install-gui";
