@@ -66,6 +66,7 @@
 , "elm-oracle"
 , "emoj"
 , "emojione"
+, "escape-string-regexp"
 , "eslint"
 , "eslint_d"
 , {"fast-cli": "1.x"}
@@ -80,6 +81,7 @@
 , "gtop"
 , "gulp"
 , "gulp-cli"
+, "he"
 , "html-minifier"
 , "htmlhint"
 , "http-server"

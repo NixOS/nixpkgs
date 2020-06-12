@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk, pcre
+{ stdenv, fetchFromGitHub , alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk, pcre
 , libjack2, libsndfile, libXdmcp, readline, lv2, libGLU, libGL, minixml, pkgconfig, zlib, xorg
 }:
 
@@ -6,13 +6,15 @@ assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
   pname = "yoshimi";
-  version = "1.7.0.1";
+  # Fix build with lv2 1.18: https://github.com/Yoshimi/yoshimi/pull/102/commits/86996cbb235f0fe138ae814a6758c2c8ba1c2a38
+  version = "unstable-2020-05-10";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/yoshimi/${pname}-${version}.tar.bz2";
-    sha256 = "1pkqrrr51vlxh96vy0c0rf5ijjvymys4brsw9rv1bdp1bb8izw6c";
+  src = fetchFromGitHub {
+    owner = "Yoshimi";
+    repo = pname;
+    rev = "86996cbb235f0fe138ae814a6758c2c8ba1c2a38";
+    sha256 = "0bgcc5fbgwpdjircq00wlii30pakf45yzligpbnf02a554hh4j01";
   };
-
   buildInputs = [
     alsaLib boost cairo fftwSinglePrec fltk libjack2 libsndfile libXdmcp readline lv2 libGLU libGL
     minixml zlib xorg.libpthreadstubs pcre

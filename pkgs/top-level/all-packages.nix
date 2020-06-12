@@ -6559,6 +6559,8 @@ in
 
   setserial = callPackage ../tools/system/setserial { };
 
+  setzer = callPackage ../applications/editors/setzer { };
+
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
   sequoia = callPackage ../tools/security/sequoia {
@@ -16175,6 +16177,8 @@ in
   prometheus-gitlab-ci-pipelines-exporter = callPackage ../servers/monitoring/prometheus/gitlab-ci-pipelines-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
+  prometheus-keylight-exporter = callPackage ../servers/monitoring/prometheus/keylight-exporter.nix { };
+  prometheus-lnd-exporter = callPackage ../servers/monitoring/prometheus/lnd-exporter.nix { };
   prometheus-mail-exporter = callPackage ../servers/monitoring/prometheus/mail-exporter.nix { };
   prometheus-mesos-exporter = callPackage ../servers/monitoring/prometheus/mesos-exporter.nix { };
   prometheus-mikrotik-exporter = callPackage ../servers/monitoring/prometheus/mikrotik-exporter.nix { };
@@ -21919,6 +21923,8 @@ in
 
   rtl_433 = callPackage ../applications/radio/rtl_433 { };
 
+  rtl-ais = callPackage ../applications/radio/rtl-ais { };
+
   rtl-sdr = callPackage ../applications/radio/rtl-sdr { };
 
   rtv = callPackage ../applications/misc/rtv { };
@@ -25586,7 +25592,7 @@ in
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
   faust2 = callPackage ../applications/audio/faust/faust2.nix {
-    llvm = llvm_9;
+    llvm = llvm_10;
   };
 
   faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };

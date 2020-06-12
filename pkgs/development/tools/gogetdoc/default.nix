@@ -10,7 +10,6 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  goPackagePath = "github.com/zmb3/gogetdoc";
   excludedPackages = "\\(testdata\\)";
 
   src = fetchFromGitHub {
@@ -20,8 +19,6 @@ buildGoModule rec {
     repo = "gogetdoc";
     sha256 = "1v74zd0x2xh10603p8raazssacv3y0x0lr9apkpsdk0bfp5jj0lr";
   };
-
-  goDeps = ./deps.nix;
 
   meta = with lib; {
     description = "Gets documentation for items in Go source code";

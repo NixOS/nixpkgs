@@ -24,6 +24,7 @@
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, golangci-lint
 , impl, iferr, gocode, gocode-gomod, go-tools
+, gopls
 
 # direnv-vim dependencies
 , direnv
@@ -593,6 +594,7 @@ self: super: {
       golint
       golangci-lint
       gomodifytags
+      gopls
       gotags
       gotools
       iferr
