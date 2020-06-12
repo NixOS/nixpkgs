@@ -1436,13 +1436,11 @@ self: super: {
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
   });
 
+  # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
+  # This upstream issue is relevant:
+  # https://github.com/polysemy-research/polysemy/issues/322
   polysemy-plugin = super.polysemy-plugin.override {
-    # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
-    # This upstream issue is relevant:
-    # https://github.com/polysemy-research/polysemy/issues/322
     ghc-tcplugins-extra = self.ghc-tcplugins-extra_0_3_2;
-    # version of Polysemy the plugin goes with
-    polysemy = self.polysemy_1_3_0_0;
   };
 
   # Test suite requires running a database server. Testing is done upstream.
