@@ -2677,11 +2677,11 @@ package-maintainers:
   sorki:
     - cayene-lpp
     - data-stm32
-    - gcodehs
+    # - gcodehs
     - nix-derivation
     - nix-narinfo
     - ttn
-    - ttn-client
+    # - ttn-client
     - zre
 
 unsupported-platforms:
@@ -5148,6 +5148,7 @@ broken-packages:
   - gas
   - gbu
   - gc-monitoring-wai
+  - gcodehs
   - gconf
   - gdax
   - gdiff-ig
@@ -10336,6 +10337,7 @@ broken-packages:
   - tsvsql
   - tsweb
   - ttask
+  - ttn-client
   - tttool
   - tubes
   - tuntap
