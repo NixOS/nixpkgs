@@ -3,8 +3,7 @@
 
   let repos = [
         "https://repo.clojars.org/"
-        "https://repo1.maven.org/"
-        "http://central.maven.org/maven2/"
+        "https://repo1.maven.org/maven2/"
         "http://oss.sonatype.org/content/repositories/releases/"
         "http://oss.sonatype.org/content/repositories/public/"
         "http://repo.typesafe.com/typesafe/releases/"
