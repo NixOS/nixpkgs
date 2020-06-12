@@ -2557,6 +2557,7 @@ extra-packages:
   - dbus <1                             # for xmonad-0.26
   - deepseq == 1.3.0.1                  # required to build Cabal with GHC 6.12.3
   - dhall == 1.29.0                     # required for spago 0.14.0.
+  - dhall == 1.30.0                     # required for neuron 0.4.0.0.
   - doctemplates == 0.8                 # required by pandoc-2.9.x
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - ghc-check == 0.3.0.1                # only version compatible with ghcide 0.2.0
