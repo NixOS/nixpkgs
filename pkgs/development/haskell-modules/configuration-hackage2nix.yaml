@@ -7995,7 +7995,6 @@ broken-packages:
   - nix-deploy
   - nix-eval
   - nix-freeze-tree
-  - nix-narinfo
   - nix-tools
   - nixfromnpm
   - nixpkgs-update
