@@ -1453,6 +1453,7 @@ self: super: {
   };
 
   # Test suite requires running a database server. Testing is done upstream.
+  hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
 
   # This bumps optparse-applicative to <0.16 in the cabal file, as otherwise
