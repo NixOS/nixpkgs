@@ -2675,6 +2675,15 @@ package-maintainers:
     - hlint
     - releaser
     - taskwarrior
+  sorki:
+    - cayene-lpp
+    - data-stm32
+    - gcodehs
+    - nix-derivation
+    - nix-narinfo
+    - ttn
+    - ttn-client
+    - zre
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
