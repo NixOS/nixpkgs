@@ -1,6 +1,7 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, isPyPy
 , numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
-, mpi4py ? null, openssh ? null }:
+, mpi4py ? null, openssh ? null
+}:
 assert (mpi4py != null) -> 
   openssh != null
   && hdf5.mpi == mpi4py.mpi 
@@ -45,7 +46,7 @@ buildPythonPackage rec {
 
   makeFlags = lib.optionals mpiSupport [ "CC=mpicc" "CXX=mpicxx" ];
 
-  checkPhase= ''
+  checkPhase = ''
     cd test
     rm tst_dap.py # does not fail in the nix-shell  
     python -m unittest tst_*.py
@@ -54,13 +55,12 @@ buildPythonPackage rec {
 
   # Variables used to configure the build process
   USE_NCCONFIG="0";
-  HDF5_DIR= lib.getDev hdf5;
+  HDF5_DIR = lib.getDev hdf5;
   NETCDF4_DIR="${netcdf}";
   CURL_DIR="${curl.dev}";
   JPEG_DIR="${libjpeg.dev}";
   
   passthru = {
-    mpiSupport = mpiSupport;
     inherit mpi mpiSupport;
   }; 
 
