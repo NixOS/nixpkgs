@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "abc-verifier";
-  version = "2020.03.05";
+  version = "2020.04.30";
 
   src = fetchFromGitHub {
     owner  = "berkeley-abc";
     repo   = "abc";
-    rev    = "ed90ce20df9c7c4d6e1db5d3f786f9b52e06bab1";
-    sha256 = "01sw67pkrb6wzflkxbkxzwsnli3nvp0yxwp3j1ngb3c0j86ri437";
+    rev    = "fd2c9b1c19216f6b756f88b18f5ca67b759ca128";
+    sha256 = "1d18pkpsx0nlzl3a6lyfdnpk4kixjmgswy6cp5fbrkpp4rf1gahi";
   };
 
   nativeBuildInputs = [ cmake ];
