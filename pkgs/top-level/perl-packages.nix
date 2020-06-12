@@ -5,7 +5,11 @@
    for each package in a separate file: the call to the function would
    be almost as much code as the function itself. */
 
-{config, pkgs, fetchurl, fetchpatch, fetchFromGitHub, stdenv, perl, overrides, buildPerl, shortenPerlShebang}:
+{ config
+, stdenv, buildPackages, pkgs
+, fetchurl, fetchpatch, fetchFromGitHub
+, perl, overrides, buildPerl, shortenPerlShebang
+}:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.2 or above
 assert stdenv.lib.versionAtLeast perl.version "5.28.2";
@@ -6882,6 +6886,7 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/ExtUtils-PkgConfig-1.16.tar.gz";
       sha256 = "bbeaced995d7d8d10cfc51a3a5a66da41ceb2bc04fedcab50e10e6300e801c6e";
     };
+    nativeBuildInputs = [ buildPackages.pkgconfig ];
     propagatedBuildInputs = [ pkgs.pkgconfig ];
     meta = {
       homepage = "http://gtk2-perl.sourceforge.net";
