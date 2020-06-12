@@ -47,11 +47,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  preBuild = lib.optionalString (stdenv.lib.versionAtLeast kernel.version "5.6")
-  ''
-    sed -i 's/ioremap_nocache/ioremap_cache/g' fthd_drv.c
-  '';
-
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
