@@ -18,8 +18,28 @@ in
       ";
     };
 
+    settings = let
+      baseTypes = with types; (oneOf [
+        int bool str
+        (listOf str) (attrsOf baseTypes)
+      ]) // { description = "Valid base types"; };
+
+      topLevel = with types; attrsOf (baseTypes // {
+        description = ''
+          An attribute set with valid types being an integer, boolean, string,
+          an array of strings, or another attrset with the same possible values.
+        '';
+      });
+    in mkOption {
+      type = topLevel;
+      default = {};
+      description = ''
+        Cryptpad settings using Nix. Requires configFile to be null.
+      '';
+    };
+
     configFile = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
       default = "${cfg.package}/lib/node_modules/cryptpad/config/config.example.js";
       defaultText = "\${cfg.package}/lib/node_modules/cryptpad/config/config.example.js";
       description = ''
@@ -32,7 +52,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = let
+    configFile = if cfg.configFile != null
+      then cfg.configFile
+      else pkgs.writeText "cryptpad-config.js" ''
+        module.exports = ${builtins.toJSON cfg.settings};
+      '';
+  in mkIf cfg.enable {
     systemd.services.cryptpad = {
       description = "Cryptpad Service";
       wantedBy = [ "multi-user.target" ];
@@ -40,7 +66,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         Environment = [
-          "CRYPTPAD_CONFIG=${cfg.configFile}"
+          "CRYPTPAD_CONFIG=${configFile}"
           "HOME=%S/cryptpad"
         ];
         ExecStart = "${cfg.package}/bin/cryptpad";
@@ -49,6 +75,24 @@ in
         StateDirectory = "cryptpad";
         WorkingDirectory = "%S/cryptpad";
       };
+    };
+
+    services.cryptpad.settings = mapAttrs (_: v: mkDefault v) {
+      # Explicit defaults
+      httpUnsafeOrigin = "http://localhost:3000/";
+      adminEmail = "i.did.not.read.my.config@cryptpad.fr";
+      filePath = "./datastore/";
+      archivePath = "./data/archive";
+      pinPath = "./data/pins";
+      taskPath = "./data/tasks";
+      blockPath = "./block";
+      blobPath = "./blob";
+      blobStagingPath = "./data/blobstage";
+      logPath = "./data/logs";
+      logToStdout = false;
+      logLevel = "info";
+      logFeedback = false;
+      verbose = false;
     };
   };
 }
