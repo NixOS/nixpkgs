@@ -5384,7 +5384,7 @@ in
   
   netcdffortran-mpi = appendToName "mpi" (netcdffortran.override {
     hdf5 = hdf5-mpi;
-    netcdf= netcdf-mpi;
+    netcdf = netcdf-mpi;
   });
 
   nco = callPackage ../development/libraries/nco { };
