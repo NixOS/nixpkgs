@@ -78,7 +78,7 @@ in mkYarnPackage rec {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://about.riot.im/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pacien worldofpeace ma27 ];
+    maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;
   };
 }
