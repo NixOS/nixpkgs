@@ -5307,6 +5307,7 @@ broken-packages:
   - github-webhooks
   - githud
   - gitignore
+  - gitit
   - gitlab-api
   - gitlib
   - gitlib-cmdline
