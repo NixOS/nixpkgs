@@ -40,6 +40,12 @@ DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
 DEFAULT_OUT = ROOT.joinpath("generated.nix")
 DEPRECATED = ROOT.joinpath("deprecated.json")
 
+# When updating without cache, generate a token here:
+# https://github.com/settings/tokens
+# and paste it, to get a rate-limit high enough for the script to complete
+# in reasonable time:
+OAUTH_TOKEN = None
+
 
 def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: float = 2):
     """Retry calling the decorated function using an exponential backoff.
@@ -120,6 +126,17 @@ class Repo:
             updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
             return Path(str(url.path)).name, updated
 
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def description(self) -> Optional[str]:
+        url = f"https://api.github.com/repos/{self.owner}/{self.name}"
+
+        req = urllib.request.Request(url)
+        if OAUTH_TOKEN:
+            req.add_header("Authorization", "token " + OAUTH_TOKEN)
+        with urllib.request.urlopen(req, timeout=10) as req:
+            data = json.load(req)  # type: ignore
+            return data["description"]
+
     def check_for_redirect(self, url: str, req: http.client.HTTPResponse):
         response_url = req.geturl()
         if url != response_url:
@@ -153,12 +170,14 @@ class Plugin:
         commit: str,
         has_submodules: bool,
         sha256: str,
+        description: Optional[str],
         date: Optional[datetime] = None,
     ) -> None:
         self.name = name
         self.commit = commit
         self.has_submodules = has_submodules
         self.sha256 = sha256
+        self.description = description
         self.date = date
 
     @property
@@ -214,7 +233,9 @@ def get_current_plugins() -> List[Plugin]:
     data = json.loads(out)
     plugins = []
     for name, attr in data.items():
-        p = Plugin(name, attr["rev"], attr["submodules"], attr["sha256"])
+        p = Plugin(
+            name, attr["rev"], attr["submodules"], attr["sha256"], attr["description"]
+        )
         plugins.append(p)
     return plugins
 
@@ -228,6 +249,7 @@ def prefetch_plugin(
 ) -> Tuple[Plugin, Dict[str, str]]:
     repo = Repo(user, repo_name, branch, alias)
     commit, date = repo.latest_commit()
+    description = repo.description()
     has_submodules = repo.has_submodules()
     cached_plugin = cache[commit] if cache else None
     if cached_plugin is not None:
@@ -242,7 +264,9 @@ def prefetch_plugin(
         sha256 = repo.prefetch_github(commit)
 
     return (
-        Plugin(alias or repo_name, commit, has_submodules, sha256, date=date),
+        Plugin(
+            alias or repo_name, commit, has_submodules, sha256, description, date=date
+        ),
         repo.redirect,
     )
 
@@ -344,7 +368,11 @@ class Cache:
             data = json.load(f)
             for attr in data.values():
                 p = Plugin(
-                    attr["name"], attr["commit"], attr["has_submodules"], attr["sha256"]
+                    attr["name"],
+                    attr["commit"],
+                    attr["has_submodules"],
+                    attr["sha256"],
+                    attr["description"],
                 )
                 downloads[attr["commit"]] = p
         return downloads
@@ -403,6 +431,14 @@ let
             else:
                 submodule_attr = ""
 
+            if plugin.description:
+                escaped_description = plugin.description.replace(
+                    '"', r"\""
+                )  # good enough
+                description_attr = f'\n    meta.description = "{escaped_description}";'
+            else:
+                description_attr = ""
+
             f.write(
                 f"""
   {plugin.normalized_name} = buildVimPluginFrom2Nix {{
@@ -414,7 +450,7 @@ let
       rev = "{plugin.commit}";
       sha256 = "{plugin.sha256}";{submodule_attr}
     }};
-    meta.homepage = "https://github.com/{owner}/{repo}/";
+    meta.homepage = "https://github.com/{owner}/{repo}/";{description_attr}
   }};
 """
             )

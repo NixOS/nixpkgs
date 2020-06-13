@@ -13,6 +13,7 @@ let
       sha256 = "0h62v9z5bh9xmaq22pqdb3z79i84a5rknqm68mjpy7nq7s3q42fa";
     };
     meta.homepage = "https://github.com/vim-scripts/a.vim/";
+    meta.description = "Alternate Files quickly (.c --> .h etc)";
   };
 
   ack-vim = buildVimPluginFrom2Nix {
@@ -25,6 +26,7 @@ let
       sha256 = "0yppr89hd1jyp0pj56hxdjbn32sr7pj3mihd18wxispvl5dqd6fm";
     };
     meta.homepage = "https://github.com/mileszs/ack.vim/";
+    meta.description = "Vim plugin for the Perl module / CLI script 'ack'";
   };
 
   acp = buildVimPluginFrom2Nix {
@@ -37,6 +39,7 @@ let
       sha256 = "0h7s4nvxin7m2caka7g1hhlxj1bbiwsvw8s2lqwlh7nq43v23ghg";
     };
     meta.homepage = "https://github.com/eikenb/acp/";
+    meta.description = "acp is a fork of the vim plugin autocomplpop (2.14.1)";
   };
 
   agda-vim = buildVimPluginFrom2Nix {
@@ -49,6 +52,7 @@ let
       sha256 = "09lpg223l1s8zpsmbg1r18cnr7r3np32nsv185qgcv889mlildqn";
     };
     meta.homepage = "https://github.com/derekelkins/agda-vim/";
+    meta.description = "Agda interaction in vim";
   };
 
   alchemist-vim = buildVimPluginFrom2Nix {
@@ -61,6 +65,7 @@ let
       sha256 = "0svciz70yccaaifq1ivb7f0cwfjssmrkm7fbpjlylslx6wjjfc1i";
     };
     meta.homepage = "https://github.com/slashmili/alchemist.vim/";
+    meta.description = "Elixir Integration Into Vim";
   };
 
   ale = buildVimPluginFrom2Nix {
@@ -73,6 +78,7 @@ let
       sha256 = "172ip0wbrmrwxhv5nvpgb0g982w9smyzlwg16gphrjiwnxllj1w7";
     };
     meta.homepage = "https://github.com/dense-analysis/ale/";
+    meta.description = "Check syntax in Vim asynchronously and fix files, with Language Server Protocol (LSP) support";
   };
 
   align = buildVimPluginFrom2Nix {
@@ -85,6 +91,7 @@ let
       sha256 = "0acacr572kfh7jvavbw61q5pkwrpi1albgancma063rpax1pddgp";
     };
     meta.homepage = "https://github.com/vim-scripts/align/";
+    meta.description = "Help folks to align text, eqns, declarations, tables, etc";
   };
 
   ansible-vim = buildVimPluginFrom2Nix {
@@ -97,6 +104,7 @@ let
       sha256 = "12nhiz5hnbi4l5ksb26xhj47r5g5z68zncgdlmqkkfqzqw1cj9c3";
     };
     meta.homepage = "https://github.com/pearofducks/ansible-vim/";
+    meta.description = "A vim plugin for syntax highlighting Ansible's common filetypes";
   };
 
   antonys-macro-repeater = buildVimPluginFrom2Nix {
@@ -109,6 +117,7 @@ let
       sha256 = "1cq5r091qbxjs9s12f7bb2fdm43gxwpnnh2l8nhj0n69jfk7gblw";
     };
     meta.homepage = "https://github.com/ckarnell/antonys-macro-repeater/";
+    meta.description = "Repeat macros with the '.' operator in vim";
   };
 
   arcanist-vim = buildVimPluginFrom2Nix {
@@ -121,6 +130,7 @@ let
       sha256 = "11v7gqa5rnv28q0i3d02g9sw22gkjn10afvjx7bg352d91knxn9m";
     };
     meta.homepage = "https://github.com/solarnz/arcanist.vim/";
+    meta.description = "Arcanist plugin for vim";
   };
 
   argtextobj-vim = buildVimPluginFrom2Nix {
@@ -133,6 +143,7 @@ let
       sha256 = "1l4jh5hdmky1qj5z26jpnk49a6djjcvzyyr6pknrrgb8rzkiln48";
     };
     meta.homepage = "https://github.com/vim-scripts/argtextobj.vim/";
+    meta.description = "Text-object like motion for arguments";
   };
 
   ats-vim = buildVimPluginFrom2Nix {
@@ -145,6 +156,7 @@ let
       sha256 = "0dv60za39v2w5d9mbk1r263fqpv11bdfyqp39b0snw40f0kh92z0";
     };
     meta.homepage = "https://github.com/vmchale/ats-vim/";
+    meta.description = "Vim plugin for ATS";
   };
 
   auto-git-diff = buildVimPluginFrom2Nix {
@@ -157,6 +169,7 @@ let
       sha256 = "0i0bnlxclh8pzanrxj428728mdx4wdy19fx499kiin87qr4r2hbn";
     };
     meta.homepage = "https://github.com/hotwatermorning/auto-git-diff/";
+    meta.description = "A vim plugin which shows git diff for Git Rebase Interactive";
   };
 
   auto-pairs = buildVimPluginFrom2Nix {
@@ -169,6 +182,7 @@ let
       sha256 = "1hxf155cmavpxpbsxx6zk23hgl9grl6yrh165kp9bjvld9ng08ng";
     };
     meta.homepage = "https://github.com/jiangmiao/auto-pairs/";
+    meta.description = "Vim plugin, insert or delete brackets, parens, quotes in pair";
   };
 
   autoload_cscope-vim = buildVimPluginFrom2Nix {
@@ -181,6 +195,7 @@ let
       sha256 = "150h6k4nd1msa21c0zxl68nwwq3qdmqi0d8h4as98rrz0b0lghn7";
     };
     meta.homepage = "https://github.com/vim-scripts/autoload_cscope.vim/";
+    meta.description = "Script that will search for and load cscope.out databases automatically";
   };
 
   awesome-vim-colorschemes = buildVimPluginFrom2Nix {
@@ -193,6 +208,7 @@ let
       sha256 = "0crg0gph8wmb412yvknh6ic42i3p5hd8c736rv61v52b2g0dgwxm";
     };
     meta.homepage = "https://github.com/rafi/awesome-vim-colorschemes/";
+    meta.description = "Collection of awesome color schemes for Neo/vim, merged for quick use.";
   };
 
   ayu-vim = buildVimPluginFrom2Nix {
@@ -205,6 +221,7 @@ let
       sha256 = "0w7ixhz72g3lr1hkn450k6x8sdgv95pp6pxbykka3s01i506rzmj";
     };
     meta.homepage = "https://github.com/ayu-theme/ayu-vim/";
+    meta.description = "Modern theme for modern VIMs";
   };
 
   base16-vim = buildVimPluginFrom2Nix {
@@ -217,6 +234,7 @@ let
       sha256 = "1qz21jizcy533mqk9wff1wqchhixkcfkysqcqs0x35wwpbri6nz8";
     };
     meta.homepage = "https://github.com/chriskempson/base16-vim/";
+    meta.description = "Base16 for Vim";
   };
 
   bats-vim = buildVimPluginFrom2Nix {
@@ -229,6 +247,7 @@ let
       sha256 = "06f3hdf7y5gpwmc6inrhk938qmn7cr6mbk00amrnl1qjvk09givx";
     };
     meta.homepage = "https://github.com/vim-scripts/bats.vim/";
+    meta.description = "Syntax highlighting for Bats - Bash Automated Testing System";
   };
 
   bclose-vim = buildVimPluginFrom2Nix {
@@ -241,6 +260,7 @@ let
       sha256 = "09a7g0nxn8cbnfz6za8q1p46kb5zbvxl80077hrjpnx4xc82xn2h";
     };
     meta.homepage = "https://github.com/rbgrouleff/bclose.vim/";
+    meta.description = "The BClose Vim plugin for deleting a buffer without closing the window";
   };
 
   bufexplorer = buildVimPluginFrom2Nix {
@@ -253,6 +273,7 @@ let
       sha256 = "00wjwk9yzfclrbd4p59b5wpl21s2vjs4ahn30xhpza93bk513wnq";
     };
     meta.homepage = "https://github.com/jlanzarotta/bufexplorer/";
+    meta.description = "BufExplorer Plugin for Vim";
   };
 
   BufOnly-vim = buildVimPluginFrom2Nix {
@@ -265,6 +286,7 @@ let
       sha256 = "1gvpaqvvxjma0dl1zai68bpv42608api4054appwkw9pgczkkcdl";
     };
     meta.homepage = "https://github.com/vim-scripts/BufOnly.vim/";
+    meta.description = "Delete all the buffers except the current/named buffer";
   };
 
   calendar-vim = buildVimPluginFrom2Nix {
@@ -277,6 +299,7 @@ let
       sha256 = "03fx03pdw4bwqyd4jyk0ixb5fhv900x0lg615ig0i4qg9nqjnc8n";
     };
     meta.homepage = "https://github.com/itchyny/calendar.vim/";
+    meta.description = "A calendar application for Vim";
   };
 
   camelcasemotion = buildVimPluginFrom2Nix {
@@ -289,6 +312,7 @@ let
       sha256 = "0yfsb0d9ly8abmc95nqcmr8r8ylif80zdjppib7g1qj1wapdhc69";
     };
     meta.homepage = "https://github.com/bkad/camelcasemotion/";
+    meta.description = "A vim script to provide CamelCase motion through words (fork of inkarkat's camelcasemotion script)";
   };
 
   caw-vim = buildVimPluginFrom2Nix {
@@ -301,6 +325,7 @@ let
       sha256 = "14rsjy5lllmb84vs5q111cb17c6nwc37zf460kh8ii1ijziyqhy2";
     };
     meta.homepage = "https://github.com/tyru/caw.vim/";
+    meta.description = "Vim comment plugin: supported operator/non-operator mappings, repeatable by dot-command, 300+ filetypes";
   };
 
   changeColorScheme-vim = buildVimPluginFrom2Nix {
@@ -313,6 +338,7 @@ let
       sha256 = "0pybhsg9k9252d4ifdc4gsar8lkmfzbvs6xkzqq1m6f35l9wqk09";
     };
     meta.homepage = "https://github.com/vim-scripts/changeColorScheme.vim/";
+    meta.description = "change color schemes";
   };
 
   CheckAttach = buildVimPluginFrom2Nix {
@@ -325,6 +351,7 @@ let
       sha256 = "1z9a40nbdjd3pnp28nfsi2bijsbaiphc0ia816f5flkchn07gmmj";
     };
     meta.homepage = "https://github.com/chrisbra/CheckAttach/";
+    meta.description = "Check for attachments when writing mails with mutt";
   };
 
   clang_complete = buildVimPluginFrom2Nix {
@@ -337,6 +364,7 @@ let
       sha256 = "0crynvmdp9a5rws5hfnsn19kxqviyp29n8fz40wq7k1g5vrhvdl7";
     };
     meta.homepage = "https://github.com/xavierd/clang_complete/";
+    meta.description = "Vim plugin that use clang for completing C/C++ code.";
   };
 
   clighter8 = buildVimPluginFrom2Nix {
@@ -349,6 +377,7 @@ let
       sha256 = "01r92idbym2p1hiqszrprrl1hrqzz2yhzv8n08m8gycd7m227cwg";
     };
     meta.homepage = "https://github.com/bbchung/clighter8/";
+    meta.description = "VIM C++ semantic syntax highlight plugin";
   };
 
   coc-css = buildVimPluginFrom2Nix {
@@ -361,6 +390,7 @@ let
       sha256 = "13xg0v2iwf8nrd1bba5nmwgav37fb8q4fqr5bsg3qxlbghpw0bbl";
     };
     meta.homepage = "https://github.com/neoclide/coc-css/";
+    meta.description = "Css language server extension for coc.nvim";
   };
 
   coc-denite = buildVimPluginFrom2Nix {
@@ -373,6 +403,7 @@ let
       sha256 = "06h3if5sn5sqgrq1ql1j7g5xy658mwywd7ri1hajzi8s3mb5lanq";
     };
     meta.homepage = "https://github.com/neoclide/coc-denite/";
+    meta.description = "Denite support of coc.nvim";
   };
 
   coc-emmet = buildVimPluginFrom2Nix {
@@ -385,6 +416,7 @@ let
       sha256 = "15zfmsy7ymcp3js3y8f6wvwj3r0p9a45v1zvq07ilwri91z6nkrl";
     };
     meta.homepage = "https://github.com/neoclide/coc-emmet/";
+    meta.description = "Emmet extension for coc.nvim";
   };
 
   coc-eslint = buildVimPluginFrom2Nix {
@@ -397,6 +429,7 @@ let
       sha256 = "1a9csiyj7abksar917acfjgypmc28rcfsqga0p1550mjxvkjr2ia";
     };
     meta.homepage = "https://github.com/neoclide/coc-eslint/";
+    meta.description = "Eslint extension for coc.nvim";
   };
 
   coc-fzf = buildVimPluginFrom2Nix {
@@ -409,6 +442,7 @@ let
       sha256 = "04616lzpch9r5cj6nh4dw4b666iyi314n95mi62n5qcaibr6r85s";
     };
     meta.homepage = "https://github.com/antoinemadec/coc-fzf/";
+    meta.description = "fzf :heart: coc.nvim";
   };
 
   coc-git = buildVimPluginFrom2Nix {
@@ -421,6 +455,7 @@ let
       sha256 = "1p7ah0dr31h0pllx00ms46fd5pmkp604zlkk08z40w54hzhr5qhh";
     };
     meta.homepage = "https://github.com/neoclide/coc-git/";
+    meta.description = "Git integration of coc.nvim";
   };
 
   coc-go = buildVimPluginFrom2Nix {
@@ -433,6 +468,7 @@ let
       sha256 = "14qc9ny12y52rbxn0gcwh6cpqc2zpwgb4jlla5p72w9pfh9gfh6z";
     };
     meta.homepage = "https://github.com/josa42/coc-go/";
+    meta.description = "Go language server extension using gopls for coc.nvim.";
   };
 
   coc-highlight = buildVimPluginFrom2Nix {
@@ -445,6 +481,7 @@ let
       sha256 = "06h64jq8cgj5hc19inidns046kkb76750179jsw7xv5zbp93ygap";
     };
     meta.homepage = "https://github.com/neoclide/coc-highlight/";
+    meta.description = "Document highlight and document colors LSP support for coc.nvim";
   };
 
   coc-html = buildVimPluginFrom2Nix {
@@ -457,6 +494,7 @@ let
       sha256 = "1rf9qfimnbxjr5s55pzm8npixan5cz2v17g4j34f18i9ky6yyk0b";
     };
     meta.homepage = "https://github.com/neoclide/coc-html/";
+    meta.description = "Html language server extension for coc.nvim.";
   };
 
   coc-imselect = buildVimPluginFrom2Nix {
@@ -469,6 +507,7 @@ let
       sha256 = "1vqx9yna66njdw1my15ac6djr3yvnb6das96nx12mpingnw85kky";
     };
     meta.homepage = "https://github.com/neoclide/coc-imselect/";
+    meta.description = "Input method enhance for iTerm2 on mac.";
   };
 
   coc-java = buildVimPluginFrom2Nix {
@@ -481,6 +520,7 @@ let
       sha256 = "1nyswz55dg4d1nz6ff2479ibnzcdhv9ky8a4awlakwp0g0c3680s";
     };
     meta.homepage = "https://github.com/neoclide/coc-java/";
+    meta.description = "Java extension for coc.nvim";
   };
 
   coc-jest = buildVimPluginFrom2Nix {
@@ -493,6 +533,7 @@ let
       sha256 = "0vcri3kp8njsp4zgl74vc6ydhxq5spzx6pm798jh2lvrid2byvg9";
     };
     meta.homepage = "https://github.com/neoclide/coc-jest/";
+    meta.description = "Jest extension for coc.nvim";
   };
 
   coc-json = buildVimPluginFrom2Nix {
@@ -505,6 +546,7 @@ let
       sha256 = "0ixqk417ba1yz7lnjkir5h9h8qm5jc9sh2190vmddxr8wgxhjhbb";
     };
     meta.homepage = "https://github.com/neoclide/coc-json/";
+    meta.description = "Json language extension for coc.nvim";
   };
 
   coc-lists = buildVimPluginFrom2Nix {
@@ -517,6 +559,7 @@ let
       sha256 = "1m8i8r7fl1csnx6f4mrbaf7ncng8yyfnprqax0zyiryc5i4nqjbg";
     };
     meta.homepage = "https://github.com/neoclide/coc-lists/";
+    meta.description = "Common lists for coc.nvim";
   };
 
   coc-metals = buildVimPluginFrom2Nix {
@@ -529,6 +572,7 @@ let
       sha256 = "068aqynvzsnrz2dh68zdy40h342nfrf8kvv9234qdr91mhbvrxv4";
     };
     meta.homepage = "https://github.com/ckipp01/coc-metals/";
+    meta.description = "coc.nvim extension for Metals, the Scala language server";
   };
 
   coc-neco = buildVimPluginFrom2Nix {
@@ -541,6 +585,7 @@ let
       sha256 = "1yzh3p1xx6k6rnr9skdvy5lsb7hz4kh2y537ill8a7770y936vn8";
     };
     meta.homepage = "https://github.com/neoclide/coc-neco/";
+    meta.description = "viml completion source for coc.nvim";
   };
 
   coc-pairs = buildVimPluginFrom2Nix {
@@ -553,6 +598,7 @@ let
       sha256 = "1w6p2dk7yj8ldxg1qxh9zpn9ypm6gn66gi0vbax33wf5c0dmp0v9";
     };
     meta.homepage = "https://github.com/neoclide/coc-pairs/";
+    meta.description = "Auto pairs extension for coc.nvim";
   };
 
   coc-prettier = buildVimPluginFrom2Nix {
@@ -565,6 +611,7 @@ let
       sha256 = "170zhsq73shykxszwwcqakrnl5cawf9kkgc1mqy0l0jqmw3jk8qy";
     };
     meta.homepage = "https://github.com/neoclide/coc-prettier/";
+    meta.description = "Prettier extension for coc.nvim.";
   };
 
   coc-python = buildVimPluginFrom2Nix {
@@ -577,6 +624,7 @@ let
       sha256 = "1hk29c55nk21avhrk9i8dppcid62jnr1y2b9lml14c4y01yr4mpp";
     };
     meta.homepage = "https://github.com/neoclide/coc-python/";
+    meta.description = "Python extension for coc.nvim, fork of vscode-python";
   };
 
   coc-r-lsp = buildVimPluginFrom2Nix {
@@ -589,6 +637,7 @@ let
       sha256 = "04g1kbgm8p0asrsibmg4w6wj8i2xzwc70g7rkcs2bj3pakbkvws6";
     };
     meta.homepage = "https://github.com/neoclide/coc-r-lsp/";
+    meta.description = "R LSP Client for coc.nvim";
   };
 
   coc-rls = buildVimPluginFrom2Nix {
@@ -601,6 +650,7 @@ let
       sha256 = "17x0h2g5791z5xmhl7kps09b9zrac2yni3r59rrx96rry50fkca5";
     };
     meta.homepage = "https://github.com/neoclide/coc-rls/";
+    meta.description = "Rust language server support for coc.nvim";
   };
 
   coc-rust-analyzer = buildVimPluginFrom2Nix {
@@ -613,6 +663,7 @@ let
       sha256 = "14qyszmyzykibdkdv38cypc8gmhaz0301prirjbpf2gijryk922b";
     };
     meta.homepage = "https://github.com/fannheyward/coc-rust-analyzer/";
+    meta.description = "rust-analyzer extension for coc.nvim";
   };
 
   coc-smartf = buildVimPluginFrom2Nix {
@@ -625,6 +676,7 @@ let
       sha256 = "0kfrq5hk8zn24cl7fiy48nyvd30a2dva93c61079axkdg9912yd7";
     };
     meta.homepage = "https://github.com/neoclide/coc-smartf/";
+    meta.description = "Make jump to character easier.";
   };
 
   coc-snippets = buildVimPluginFrom2Nix {
@@ -637,6 +689,7 @@ let
       sha256 = "0zrllqqdgf1ckzgaxhk7459cbkv7x1vkfgwsvilcjspxaww1s1bv";
     };
     meta.homepage = "https://github.com/neoclide/coc-snippets/";
+    meta.description = "Snippets solution for coc.nvim";
   };
 
   coc-solargraph = buildVimPluginFrom2Nix {
@@ -649,6 +702,7 @@ let
       sha256 = "0amcx519r9j8jr6ckglywsjlyph3m5jq4qvbfwyir8ihxhxa4b0d";
     };
     meta.homepage = "https://github.com/neoclide/coc-solargraph/";
+    meta.description = "Solargraph extension for coc.nvim";
   };
 
   coc-spell-checker = buildVimPluginFrom2Nix {
@@ -661,6 +715,7 @@ let
       sha256 = "1fsjf07w0z9l2zra46krpg1d6qxg51niz9zmxas66si90qb2j3d7";
     };
     meta.homepage = "https://github.com/iamcco/coc-spell-checker/";
+    meta.description = "A basic spell checker that works well with camelCase code for (Neo)vim";
   };
 
   coc-stylelint = buildVimPluginFrom2Nix {
@@ -673,6 +728,7 @@ let
       sha256 = "1qir8diqnv1a78lzw9p3jsbni52gdg38rx1lj5i4iyff9282ir2x";
     };
     meta.homepage = "https://github.com/neoclide/coc-stylelint/";
+    meta.description = "Stylelint language server extension for coc.nvim";
   };
 
   coc-tabnine = buildVimPluginFrom2Nix {
@@ -685,6 +741,7 @@ let
       sha256 = "0as4b33nnp7anqbxkkja8lp37y4a74b3507zyk3gmmna0my1ca3r";
     };
     meta.homepage = "https://github.com/neoclide/coc-tabnine/";
+    meta.description = "Tabnine integration of coc.nvim";
   };
 
   coc-tslint = buildVimPluginFrom2Nix {
@@ -697,6 +754,7 @@ let
       sha256 = "1vi4vrawknkd5wjyb0j143jbfis9vaanl219a7argirwjs057vpd";
     };
     meta.homepage = "https://github.com/neoclide/coc-tslint/";
+    meta.description = "Tslint language server extension of coc.nvim";
   };
 
   coc-tslint-plugin = buildVimPluginFrom2Nix {
@@ -709,6 +767,7 @@ let
       sha256 = "1cjgimqgd70x5zhw641z6g4hc54vrkg3r4sscg092gkrdpkq3969";
     };
     meta.homepage = "https://github.com/neoclide/coc-tslint-plugin/";
+    meta.description = "coc.nvim extension that provides TSLint support using the typescript-tslint-plugin";
   };
 
   coc-tsserver = buildVimPluginFrom2Nix {
@@ -721,6 +780,7 @@ let
       sha256 = "1b10bdlqbj82rragymka691fz0phgk6v63diijkyb1ia302q1613";
     };
     meta.homepage = "https://github.com/neoclide/coc-tsserver/";
+    meta.description = "Tsserver extension for coc.nvim that provide rich features like VSCode for javascript & typescript";
   };
 
   coc-vetur = buildVimPluginFrom2Nix {
@@ -733,6 +793,7 @@ let
       sha256 = "1jkz0qixrp7vzpv9l2ls0yl5kyqzi3bbvydpifdb858j8jqbk4dq";
     };
     meta.homepage = "https://github.com/neoclide/coc-vetur/";
+    meta.description = "Vue language server extension for coc.nvim";
   };
 
   coc-vimtex = buildVimPluginFrom2Nix {
@@ -745,6 +806,7 @@ let
       sha256 = "0z9kxm40kr8a5sa06vkg7xaai2n54y21xfkrsx774zzdkcrrkizk";
     };
     meta.homepage = "https://github.com/neoclide/coc-vimtex/";
+    meta.description = "vimtex integration for coc.nvim";
   };
 
   coc-wxml = buildVimPluginFrom2Nix {
@@ -757,6 +819,7 @@ let
       sha256 = "1448019dzdy55j4plhzlnp2qkfzk0zkqqs7kn94ndn60hn1x889m";
     };
     meta.homepage = "https://github.com/neoclide/coc-wxml/";
+    meta.description = "wxml extension for coc.nvim";
   };
 
   coc-yaml = buildVimPluginFrom2Nix {
@@ -769,6 +832,7 @@ let
       sha256 = "020jpsm9ss2v3x1g43m920w2yamv8khl7mg7wm4sx6qsl3rlfq4g";
     };
     meta.homepage = "https://github.com/neoclide/coc-yaml/";
+    meta.description = "Yaml language server extension for coc.nvim";
   };
 
   coc-yank = buildVimPluginFrom2Nix {
@@ -781,6 +845,7 @@ let
       sha256 = "1mjdd1kqvc5hzygjs2gv8vrpr3wc2a9590cr6vq0pfllxbkyqjng";
     };
     meta.homepage = "https://github.com/neoclide/coc-yank/";
+    meta.description = "Yank highlight and persist yank history support for vim";
   };
 
   coc-nvim = buildVimPluginFrom2Nix {
@@ -793,6 +858,7 @@ let
       sha256 = "0f4vsg2fbwn4jpfj8lv8ib8i8adzvr9inw4q861w87zssk65bi8g";
     };
     meta.homepage = "https://github.com/neoclide/coc.nvim/";
+    meta.description = "Intellisense engine for Vim8 & Neovim, full language server protocol support as VSCode ";
   };
 
   colorizer = buildVimPluginFrom2Nix {
@@ -805,6 +871,7 @@ let
       sha256 = "1dpiv9z8h6196acncyjhzd1qa56y17468fpxbfzrx5q2266sajc7";
     };
     meta.homepage = "https://github.com/lilydjwg/colorizer/";
+    meta.description = "A Vim plugin to colorize all text in the form #rrggbb or #rgb.";
   };
 
   Colour-Sampler-Pack = buildVimPluginFrom2Nix {
@@ -817,6 +884,7 @@ let
       sha256 = "03v2r18sfgs0xbgy9p56pxfdg0lsk6m7wyr5hw63wm1nzpwiipg3";
     };
     meta.homepage = "https://github.com/vim-scripts/Colour-Sampler-Pack/";
+    meta.description = "[[[Oct 2012 Update]]] Top 100(ish) Themes, GUI Menu";
   };
 
   command-t = buildVimPluginFrom2Nix {
@@ -830,6 +898,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/wincent/command-t/";
+    meta.description = "⌨️ Fast file navigation for VIM";
   };
 
   committia-vim = buildVimPluginFrom2Nix {
@@ -842,6 +911,7 @@ let
       sha256 = "1g6ykdh7d16q6nvpvmxx4ss8w7cisx5r8qmbrrvhpwmbb3894pxp";
     };
     meta.homepage = "https://github.com/rhysd/committia.vim/";
+    meta.description = "A Vim plugin for more pleasant editing on commit messages";
   };
 
   concealedyank-vim = buildVimPluginFrom2Nix {
@@ -866,6 +936,7 @@ let
       sha256 = "1h23qf0i97lcng1llc0q80jizsv7hkpnyvaj5dr3kfbwi84nfkmp";
     };
     meta.homepage = "https://github.com/Olical/conjure/";
+    meta.description = "Interactive evaluation for Neovim (Clojure, Fennel, Janet)";
   };
 
   context_filetype-vim = buildVimPluginFrom2Nix {
@@ -878,6 +949,7 @@ let
       sha256 = "1pgb86cpv4649qnxfw4280sqghldm66s572pg610giqjxda4a52s";
     };
     meta.homepage = "https://github.com/Shougo/context_filetype.vim/";
+    meta.description = "Context filetype library for Vim script";
   };
 
   cosco-vim = buildVimPluginFrom2Nix {
@@ -890,6 +962,7 @@ let
       sha256 = "01byd7j4gl7zb1bh61p839ka04x2sm0rgwvbb126az7dr6gpclyf";
     };
     meta.homepage = "https://github.com/lfilho/cosco.vim/";
+    meta.description = "VIM colon and semicolon insertion bliss";
   };
 
   cpsm = buildVimPluginFrom2Nix {
@@ -902,6 +975,7 @@ let
       sha256 = "1p1ry11f39fcz32i3b3p0p8n99qrnvrx4d7p0123123dj7wbxk3p";
     };
     meta.homepage = "https://github.com/nixprime/cpsm/";
+    meta.description = "A CtrlP matcher, specialized for paths.";
   };
 
   csapprox = buildVimPluginFrom2Nix {
@@ -914,6 +988,7 @@ let
       sha256 = "08g4x6nnd6hkgm2daa5ihhz75pcdx3jzzv8rfjls80qajlhx5rf6";
     };
     meta.homepage = "https://github.com/godlygeek/csapprox/";
+    meta.description = "Make gvim-only colorschemes work transparently in terminal vim";
   };
 
   csv-vim = buildVimPluginFrom2Nix {
@@ -926,6 +1001,7 @@ let
       sha256 = "1gjhbgwqf1zg813a3wcqj2x29gs4x7yc185mxi3lvnxghwj9j2i3";
     };
     meta.homepage = "https://github.com/chrisbra/csv.vim/";
+    meta.description = "A Filetype plugin for csv files";
   };
 
   ctrlp-cmatcher = buildVimPluginFrom2Nix {
@@ -938,6 +1014,7 @@ let
       sha256 = "1573kd6xf3n8sxlz2j4zadai4rnc7k3s9c54648yfzickwn57d8q";
     };
     meta.homepage = "https://github.com/JazzCore/ctrlp-cmatcher/";
+    meta.description = "CtrlP C matching extension";
   };
 
   ctrlp-py-matcher = buildVimPluginFrom2Nix {
@@ -950,6 +1027,7 @@ let
       sha256 = "0hs829x3vxv12y78hz5g4a5qpw05xf42dk0hxxk3ind77mnl1ir1";
     };
     meta.homepage = "https://github.com/FelikZ/ctrlp-py-matcher/";
+    meta.description = "Fast vim CtrlP matcher based on python";
   };
 
   ctrlp-z = buildVimPluginFrom2Nix {
@@ -962,6 +1040,7 @@ let
       sha256 = "16nsj1g8lqmyizlb5ijwhf4dsmh0xv1kwqq6jxvhaf55vfga82yl";
     };
     meta.homepage = "https://github.com/amiorin/ctrlp-z/";
+    meta.description = "fasd interface with ctrlp.vim";
   };
 
   ctrlp-vim = buildVimPluginFrom2Nix {
@@ -974,6 +1053,7 @@ let
       sha256 = "0lgw839xnmdsbaiflqp3i2liqhg4lp01iaz0jv380kbw9g6k666k";
     };
     meta.homepage = "https://github.com/ctrlpvim/ctrlp.vim/";
+    meta.description = "Active fork of kien/ctrlp.vim—Fuzzy file, buffer, mru, tag, etc finder.";
   };
 
   dart-vim-plugin = buildVimPluginFrom2Nix {
@@ -986,6 +1066,7 @@ let
       sha256 = "01agwm0scg7g5l04djxmj22rd5rd3di1z9g89hp2lr3rqp8ipdrn";
     };
     meta.homepage = "https://github.com/dart-lang/dart-vim-plugin/";
+    meta.description = "Syntax highlighting for Dart in Vim";
   };
 
   defx-git = buildVimPluginFrom2Nix {
@@ -998,6 +1079,7 @@ let
       sha256 = "0i8vi6zhnv088qc3f3wa5h4b17xnpvmr603srhg44zx2clcjblnr";
     };
     meta.homepage = "https://github.com/kristijanhusak/defx-git/";
+    meta.description = "Git status implementation for https://github.com/Shougo/defx.nvim";
   };
 
   defx-icons = buildVimPluginFrom2Nix {
@@ -1010,6 +1092,7 @@ let
       sha256 = "0wkn02z75pvfl0xrhgq80sw0qfidjg5s0zm5mij632pq3dm7axiq";
     };
     meta.homepage = "https://github.com/kristijanhusak/defx-icons/";
+    meta.description = "Filetype icons for https://github.com/Shougo/defx.nvim";
   };
 
   defx-nvim = buildVimPluginFrom2Nix {
@@ -1022,6 +1105,7 @@ let
       sha256 = "1gw73cybp1qxgnqfa6hn6g2ky30canhmrchf550kp5j8nflqa887";
     };
     meta.homepage = "https://github.com/Shougo/defx.nvim/";
+    meta.description = ":file_folder: The dark powered file explorer implementation";
   };
 
   delimitMate = buildVimPluginFrom2Nix {
@@ -1034,6 +1118,7 @@ let
       sha256 = "0fskm9gz81dk8arcidrm71mv72a7isng1clssqkqn5wnygbiimsn";
     };
     meta.homepage = "https://github.com/Raimondi/delimitMate/";
+    meta.description = "Vim plugin, provides insert mode auto-completion for quotes, parens, brackets, etc.";
   };
 
   denite-extra = buildVimPluginFrom2Nix {
@@ -1046,6 +1131,7 @@ let
       sha256 = "0bmq9yhylfd3v6bfwvakw3pbsz5kk8wlmmql0yllqayp6410w25a";
     };
     meta.homepage = "https://github.com/neoclide/denite-extra/";
+    meta.description = "extra useful sources for denite.nvim";
   };
 
   denite-git = buildVimPluginFrom2Nix {
@@ -1058,6 +1144,7 @@ let
       sha256 = "0b687i64hr8hll7pv7r1xz906b46cl2q62zm18ipikhkpva6iv13";
     };
     meta.homepage = "https://github.com/neoclide/denite-git/";
+    meta.description = "Manger list of git objects with interface of denite.nvim";
   };
 
   denite-nvim = buildVimPluginFrom2Nix {
@@ -1070,6 +1157,7 @@ let
       sha256 = "04v3v14g7nnmc6rhz5vpppqgkk8z67am4nc6k8jwbrv61sq1ga6b";
     };
     meta.homepage = "https://github.com/Shougo/denite.nvim/";
+    meta.description = ":dragon: Dark powered asynchronous unite all interfaces for Neovim/Vim8";
   };
 
   deol-nvim = buildVimPluginFrom2Nix {
@@ -1082,6 +1170,7 @@ let
       sha256 = "0p6kvl1pgf5d5rnag297dhjzzplmawvmi2j1r2m6p0732ls4qxrw";
     };
     meta.homepage = "https://github.com/Shougo/deol.nvim/";
+    meta.description = "Dark powered shell interface for NeoVim and Vim8.";
   };
 
   deoplete-clang = buildVimPluginFrom2Nix {
@@ -1095,6 +1184,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-clang/";
+    meta.description = "deoplete.nvim source for C/C++/Obj-C/Obj-C++ with clang-python3";
   };
 
   deoplete-dictionary = buildVimPluginFrom2Nix {
@@ -1107,6 +1197,7 @@ let
       sha256 = "05p707b15fzhf0laqy3q0hi34vxpljy86cd5qvpjzx5h0ry32p09";
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-dictionary/";
+    meta.description = "deoplete source for dictionary";
   };
 
   deoplete-emoji = buildVimPluginFrom2Nix {
@@ -1119,6 +1210,7 @@ let
       sha256 = "0drqbdmy8igq6rv7s2qlxsp391pydcynlr9gkaadzrg7pk4nlgsb";
     };
     meta.homepage = "https://github.com/fszymanski/deoplete-emoji/";
+    meta.description = "Deoplete source for emoji codes";
   };
 
   deoplete-fish = buildVimPluginFrom2Nix {
@@ -1131,6 +1223,7 @@ let
       sha256 = "19a6j4qsqljz1pmrn4fx8v1bhlfpqdq821fc2ibjd9h98f6dzi5p";
     };
     meta.homepage = "https://github.com/ponko2/deoplete-fish/";
+    meta.description = "deoplete.nvim source for fish";
   };
 
   deoplete-github = buildVimPluginFrom2Nix {
@@ -1143,6 +1236,7 @@ let
       sha256 = "11n15nqi417sdcqgb6gkk6z4wrrdd8vdbd7wzqpg41140c73v5gm";
     };
     meta.homepage = "https://github.com/SevereOverfl0w/deoplete-github/";
+    meta.description = "Deopletions for Github.";
   };
 
   deoplete-go = buildVimPluginFrom2Nix {
@@ -1156,6 +1250,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-go/";
+    meta.description = "Asynchronous Go completion for Neovim. deoplete source for Go.";
   };
 
   deoplete-greek = buildVimPluginFrom2Nix {
@@ -1168,6 +1263,7 @@ let
       sha256 = "086qjbqps05zb2vnyb5q7a67i7al8mxxi86n0h5nsqdd0ws6qqhx";
     };
     meta.homepage = "https://github.com/Inazuma110/deoplete-greek/";
+    meta.description = "Deoplete souece for Greek letters";
   };
 
   deoplete-jedi = buildVimPluginFrom2Nix {
@@ -1181,6 +1277,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-jedi/";
+    meta.description = "deoplete.nvim source for Python";
   };
 
   deoplete-julia = buildVimPluginFrom2Nix {
@@ -1193,6 +1290,7 @@ let
       sha256 = "0x5cc9g1g1w9myr6p1ahb9gpn2abpbggjdk2bc903f62pkrapvjf";
     };
     meta.homepage = "https://github.com/JuliaEditorSupport/deoplete-julia/";
+    meta.description = "deoplete.nvim source for julia. Providing julia Syntax Completions for julia, in Neovim (deprecated for julia 0.6+)";
   };
 
   deoplete-khard = buildVimPluginFrom2Nix {
@@ -1205,6 +1303,7 @@ let
       sha256 = "0jnpv0lpli9qjqwkzfl66fyhywa6q586q44d26q3h7sllxpz0066";
     };
     meta.homepage = "https://github.com/nicoe/deoplete-khard/";
+    meta.description = "Deoplete source for carddav contacts using khard";
   };
 
   deoplete-lsp = buildVimPluginFrom2Nix {
@@ -1217,6 +1316,7 @@ let
       sha256 = "0y22nay6qkn0sl74hlhhri3hjw5r3fwmmxby3j9q0avszlmq7352";
     };
     meta.homepage = "https://github.com/Shougo/deoplete-lsp/";
+    meta.description = "LSP Completion source for deoplete";
   };
 
   deoplete-notmuch = buildVimPluginFrom2Nix {
@@ -1229,6 +1329,7 @@ let
       sha256 = "1l2pfazhpkz26zwbjdafvhgvjj533kncm7dywlandsf3cibm8mv9";
     };
     meta.homepage = "https://github.com/Valodim/deoplete-notmuch/";
+    meta.description = "Deoplete completion source for notmuch";
   };
 
   deoplete-phpactor = buildVimPluginFrom2Nix {
@@ -1241,6 +1342,7 @@ let
       sha256 = "14097r9fmyp9zxfgv0fj2s52qd1v5cxdckfg4zph7lg3yri1hx9p";
     };
     meta.homepage = "https://github.com/kristijanhusak/deoplete-phpactor/";
+    meta.description = "Phpactor integration for deoplete.nvim";
   };
 
   deoplete-rust = buildVimPluginFrom2Nix {
@@ -1253,6 +1355,7 @@ let
       sha256 = "0wsck83jns40ny3740vwjhc8g5bh6zl71hkirbjxy6n4xgixa54h";
     };
     meta.homepage = "https://github.com/sebastianmarkow/deoplete-rust/";
+    meta.description = "Rust completion for Neovim (Deoplete) via Racer";
   };
 
   deoplete-tabnine = buildVimPluginFrom2Nix {
@@ -1265,6 +1368,7 @@ let
       sha256 = "0q10zcjhjgak3w365pagd4ym5mmj3yd1lfsxv0d4wr4lp9a51sd7";
     };
     meta.homepage = "https://github.com/tbodt/deoplete-tabnine/";
+    meta.description = "Deoplete source for TabNine";
   };
 
   deoplete-ternjs = buildVimPluginFrom2Nix {
@@ -1277,6 +1381,7 @@ let
       sha256 = "0684f9ci0y4wihf04z9r8x55cir02al4wp911dz0zg678z8w0yha";
     };
     meta.homepage = "https://github.com/carlitux/deoplete-ternjs/";
+    meta.description = "deoplete.nvim source for javascript";
   };
 
   deoplete-zsh = buildVimPluginFrom2Nix {
@@ -1301,6 +1406,7 @@ let
       sha256 = "01wpq4majnhh4lxmai0ix5dqvfxrbdsj2pic785x3kaqn4all31w";
     };
     meta.homepage = "https://github.com/Shougo/deoplete.nvim/";
+    meta.description = ":stars: Dark powered asynchronous completion framework for neovim/Vim8";
   };
 
   dhall-vim = buildVimPluginFrom2Nix {
@@ -1313,6 +1419,7 @@ let
       sha256 = "0rnkmfrzsm4hg6ln8g8qj9ff8z2sk7cnf4gqrswychqhhkg1f817";
     };
     meta.homepage = "https://github.com/vmchale/dhall-vim/";
+    meta.description = "Syntax highlighting for Dhall";
   };
 
   direnv-vim = buildVimPluginFrom2Nix {
@@ -1325,6 +1432,7 @@ let
       sha256 = "0vabsv98vwdjns3dliplg7x8ssyrin44af9jl248kdzkqw5fx445";
     };
     meta.homepage = "https://github.com/direnv/direnv.vim/";
+    meta.description = "vim plugin for direnv support";
   };
 
   DoxygenToolkit-vim = buildVimPluginFrom2Nix {
@@ -1337,6 +1445,7 @@ let
       sha256 = "1za8li02j4nhqjjsyxg4p78638h5af4izim37zc0p1x55zr3i85r";
     };
     meta.homepage = "https://github.com/vim-scripts/DoxygenToolkit.vim/";
+    meta.description = "Simplify Doxygen documentation in C, C++, Python.";
   };
 
   echodoc-vim = buildVimPluginFrom2Nix {
@@ -1349,6 +1458,7 @@ let
       sha256 = "1ygm4g90zv009iqv8k8n4930a7gpij5jxbz7dqq2dfyj4jn37rkf";
     };
     meta.homepage = "https://github.com/Shougo/echodoc.vim/";
+    meta.description = "Print documents in echo area.";
   };
 
   editorconfig-vim = buildVimPluginFrom2Nix {
@@ -1362,6 +1472,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/editorconfig/editorconfig-vim/";
+    meta.description = "EditorConfig plugin for Vim";
   };
 
   elm-vim = buildVimPluginFrom2Nix {
@@ -1374,6 +1485,7 @@ let
       sha256 = "0gf7b49by0ybx3ndz7sz5dwcfnps4sz6wsr02lyarj8f8116ysy5";
     };
     meta.homepage = "https://github.com/elmcast/elm-vim/";
+    meta.description = "Elm plugin for Vim";
   };
 
   emmet-vim = buildVimPluginFrom2Nix {
@@ -1387,6 +1499,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/mattn/emmet-vim/";
+    meta.description = "emmet for vim: http://emmet.io/";
   };
 
   emodeline = buildVimPluginFrom2Nix {
@@ -1399,6 +1512,7 @@ let
       sha256 = "0x9y7rzbk6g8cq6jkn37wi95wzhq0abban6w10652v4kdmjrxrr0";
     };
     meta.homepage = "https://github.com/vim-scripts/emodeline/";
+    meta.description = "Set the file type from emacs -*- modelines -*-";
   };
 
   ensime-vim = buildVimPluginFrom2Nix {
@@ -1411,6 +1525,7 @@ let
       sha256 = "190qq8r2zs7xzmsag7ygk6dvpav3cnzlc40lc3fvwmkfwgci5zg0";
     };
     meta.homepage = "https://github.com/ensime/ensime-vim/";
+    meta.description = "ENSIME for the Editor of the Beast (Vim)";
   };
 
   falcon = buildVimPluginFrom2Nix {
@@ -1423,6 +1538,7 @@ let
       sha256 = "1cvw3n8ysxnm3w0rvk1rks815ha5grca1p3c7bkas6klrplfhlsc";
     };
     meta.homepage = "https://github.com/fenetikm/falcon/";
+    meta.description = "A colour scheme for terminals, Vim and friends.";
   };
 
   far-vim = buildVimPluginFrom2Nix {
@@ -1435,6 +1551,7 @@ let
       sha256 = "0hk2p10cx36dz6vf22v4hx3shkkhqhkmxp6s1l517kkchh98m4bg";
     };
     meta.homepage = "https://github.com/brooth/far.vim/";
+    meta.description = "Find And Replace Vim plugin";
   };
 
   fastfold = buildVimPluginFrom2Nix {
@@ -1447,6 +1564,7 @@ let
       sha256 = "07mls0yczg2cmia2jn0s2rvgwl07yxlm4hyvjd941p1knvn88x8q";
     };
     meta.homepage = "https://github.com/konfekt/fastfold/";
+    meta.description = "Speed up Vim by updating folds only when called-for.";
   };
 
   ferret = buildVimPluginFrom2Nix {
@@ -1459,6 +1577,7 @@ let
       sha256 = "1sjia8bk9gmwymhdrc3bksax4msincychd96ar5bdmifr6p1klg4";
     };
     meta.homepage = "https://github.com/wincent/ferret/";
+    meta.description = "🐀 Enhanced multi-file search for Vim";
   };
 
   file-line = buildVimPluginFrom2Nix {
@@ -1471,6 +1590,7 @@ let
       sha256 = "1w183g0hj8jvzm6m1jw7m6xz3x1dld8n8342vnycsh6hyzdcg3mg";
     };
     meta.homepage = "https://github.com/bogado/file-line/";
+    meta.description = "Plugin for vim to enabling opening a file in a given line";
   };
 
   flake8-vim = buildVimPluginFrom2Nix {
@@ -1484,6 +1604,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/andviro/flake8-vim/";
+    meta.description = "Pyflakes, Pep8 and mccabe code complexity checker for Vim, bundled with latest libraries for easy installation";
   };
 
   float-preview-nvim = buildVimPluginFrom2Nix {
@@ -1496,6 +1617,7 @@ let
       sha256 = "1i5wj1hqimzrw3bwsf76w8l8yp654pdn8f61kp0v98xdgkab007d";
     };
     meta.homepage = "https://github.com/ncm2/float-preview.nvim/";
+    meta.description = "Less annoying completion preview window based on neovim's floating window";
   };
 
   floobits-neovim = buildVimPluginFrom2Nix {
@@ -1508,6 +1630,7 @@ let
       sha256 = "0bnncn3waw9birpd51j27hrzlriz8dk4naxdajmbwznwcnbkkgwx";
     };
     meta.homepage = "https://github.com/floobits/floobits-neovim/";
+    meta.description = "Floobits plugin for NeoVim";
   };
 
   forms = buildVimPluginFrom2Nix {
@@ -1520,6 +1643,7 @@ let
       sha256 = "19kp1i5c6jmnpbsap9giayqbzlv7vh02mp4mjvicqj9n0nfyay74";
     };
     meta.homepage = "https://github.com/megaannum/forms/";
+    meta.description = "Vim Forms TUI framework";
   };
 
   fruzzy = buildVimPluginFrom2Nix {
@@ -1532,6 +1656,7 @@ let
       sha256 = "01iisbawq2w7yw866qvv109amnvyaymzyz9nqal3cjrrcwk6mmdk";
     };
     meta.homepage = "https://github.com/raghur/fruzzy/";
+    meta.description = "Freaky fast fuzzy finder for (denite.nvim/CtrlP matcher) for vim/neovim";
   };
 
   fugitive-gitlab-vim = buildVimPluginFrom2Nix {
@@ -1544,6 +1669,7 @@ let
       sha256 = "0cx3zd7f09prxjfrj201139j00wsw66fx5crw6dhblf4z6mfpgnx";
     };
     meta.homepage = "https://github.com/shumphrey/fugitive-gitlab.vim/";
+    meta.description = "An extension to fugitive.vim for gitlab support";
   };
 
   fzf-vim = buildVimPluginFrom2Nix {
@@ -1556,6 +1682,7 @@ let
       sha256 = "0b7lgdr66q99dfc73iwgb11pd4b465qmslfzqypsp8jamckk1jii";
     };
     meta.homepage = "https://github.com/junegunn/fzf.vim/";
+    meta.description = "fzf :heart: vim";
   };
 
   gen_tags-vim = buildVimPluginFrom2Nix {
@@ -1568,6 +1695,7 @@ let
       sha256 = "00s1kxi1bsvz06z7x78kls0k6ncnbqdyz14fvdxxq82f6s1kdvdw";
     };
     meta.homepage = "https://github.com/jsfaint/gen_tags.vim/";
+    meta.description = "Async plugin for vim and neovim to ease the use of ctags/gtags";
   };
 
   gentoo-syntax = buildVimPluginFrom2Nix {
@@ -1580,6 +1708,7 @@ let
       sha256 = "0q5cj2zpcdxmwm8dcj0nbyffjs1a075fgqbang4s0ikangbhx586";
     };
     meta.homepage = "https://github.com/gentoo/gentoo-syntax/";
+    meta.description = "[MIRROR] Gentoo Ebuild, Eclass, GLEP, ChangeLog and Portage Files syntax highlighting, filetype and indent settings for Vim";
   };
 
   ghcid = buildVimPluginFrom2Nix {
@@ -1592,6 +1721,7 @@ let
       sha256 = "194njs7nfdmpnv1bkadamvicp735834kq0ijha5s41i492hb589i";
     };
     meta.homepage = "https://github.com/ndmitchell/ghcid/";
+    meta.description = "Very low feature GHCi based IDE";
   };
 
   ghcmod-vim = buildVimPluginFrom2Nix {
@@ -1604,6 +1734,7 @@ let
       sha256 = "0bzahgzagnf0a9zv86jhdf8nc3p0yfz9izv5n3lc8gc12cp47d0a";
     };
     meta.homepage = "https://github.com/eagletmt/ghcmod-vim/";
+    meta.description = "Happy Haskell programming on Vim, powered by ghc-mod";
   };
 
   gitignore-vim = buildVimPluginFrom2Nix {
@@ -1616,6 +1747,7 @@ let
       sha256 = "0fg36hrkwqb3accqm7ihw1cjs64fxf73zk06gickdkzq0zn4yl8x";
     };
     meta.homepage = "https://github.com/vim-scripts/gitignore.vim/";
+    meta.description = "Gitignore files support";
   };
 
   gitv = buildVimPluginFrom2Nix {
@@ -1628,6 +1760,7 @@ let
       sha256 = "0hhamv2q3z8cy4n9yzxq0jvs2x8qx4wx6c2qpsk82jsnghmzipd6";
     };
     meta.homepage = "https://github.com/gregsexton/gitv/";
+    meta.description = "gitk for Vim.";
   };
 
   goyo-vim = buildVimPluginFrom2Nix {
@@ -1640,6 +1773,7 @@ let
       sha256 = "1ywlz1hn54kxyp5q0angriaarimq7ys7m6sk6l4x8jr1g2yh0afz";
     };
     meta.homepage = "https://github.com/junegunn/goyo.vim/";
+    meta.description = ":tulip: Distraction-free writing in Vim";
   };
 
   gruvbox = buildVimPluginFrom2Nix {
@@ -1652,6 +1786,7 @@ let
       sha256 = "0qk2mqs04qlxkc1ldgjbiv1yisi2xl2b8svmjz0hdp9y2l5vfccw";
     };
     meta.homepage = "https://github.com/morhetz/gruvbox/";
+    meta.description = "Retro groove color scheme for Vim";
   };
 
   gruvbox-community = buildVimPluginFrom2Nix {
@@ -1664,6 +1799,7 @@ let
       sha256 = "0w10hcz66dgilx6fv07bb3zsf5c0x9gv4vhp15c5fp2rzwxi10bn";
     };
     meta.homepage = "https://github.com/gruvbox-community/gruvbox/";
+    meta.description = "Retro groove color scheme for Vim - community maintained edition";
   };
 
   gundo-vim = buildVimPluginFrom2Nix {
@@ -1676,6 +1812,7 @@ let
       sha256 = "0py35mmwnfl581isnbh33j3bjgghq17jnamdi1bg3akwyn1jyhqb";
     };
     meta.homepage = "https://github.com/sjl/gundo.vim/";
+    meta.description = "A git mirror of gundo.vim";
   };
 
   gv-vim = buildVimPluginFrom2Nix {
@@ -1688,6 +1825,7 @@ let
       sha256 = "00h4d6jah0fdr5m8x9c1gmmm9wskplixnvbbalfbbpc599xhgj83";
     };
     meta.homepage = "https://github.com/junegunn/gv.vim/";
+    meta.description = "A git commit browser in Vim";
   };
 
   haskell-vim = buildVimPluginFrom2Nix {
@@ -1700,6 +1838,7 @@ let
       sha256 = "1vqj3r2v8skffywwgv4093ww7fm540437j5qz7n8q8787bs5w0br";
     };
     meta.homepage = "https://github.com/neovimhaskell/haskell-vim/";
+    meta.description = "Custom Haskell Vimscripts";
   };
 
   hasksyn = buildVimPluginFrom2Nix {
@@ -1712,6 +1851,7 @@ let
       sha256 = "09998lnfcshqis5m062wlag6y476imq9jday9gp4ayjjl1cp3cwx";
     };
     meta.homepage = "https://github.com/travitch/hasksyn/";
+    meta.description = "A vim mode for Haskell";
   };
 
   hlint-refactor-vim = buildVimPluginFrom2Nix {
@@ -1736,6 +1876,7 @@ let
       sha256 = "045jm4gz8gqv7mgz04l3q42mj1ji9qv99n915zq8fgzfskc0pixj";
     };
     meta.homepage = "https://github.com/cocopon/iceberg.vim/";
+    meta.description = ":antarctica: Dark blue color scheme for Vim and Neovim";
   };
 
   idris-vim = buildVimPluginFrom2Nix {
@@ -1748,6 +1889,7 @@ let
       sha256 = "1zibar2vxcmai0k37ricwnimfdv1adxfbbvz871rc4l6h3q85if1";
     };
     meta.homepage = "https://github.com/idris-hackers/idris-vim/";
+    meta.description = "Idris mode for vim";
   };
 
   Improved-AnsiEsc = buildVimPluginFrom2Nix {
@@ -1760,6 +1902,7 @@ let
       sha256 = "1smjs4kz2kmzprzp9az4957675nakb43146hshbby39j5xz4jsbz";
     };
     meta.homepage = "https://github.com/vim-scripts/Improved-AnsiEsc/";
+    meta.description = "Improved AnsiEsc.vim : ansi escape sequences highlighted and concealed";
   };
 
   increment-activator = buildVimPluginFrom2Nix {
@@ -1772,6 +1915,7 @@ let
       sha256 = "1swlv1mrck9s3n7fdg10c2nmlasf2fx8yfk01x3vii7l4aaa9w2y";
     };
     meta.homepage = "https://github.com/nishigori/increment-activator/";
+    meta.description = "[Vim] Enhance to increment candidates U have defined ";
   };
 
   incsearch-easymotion-vim = buildVimPluginFrom2Nix {
@@ -1796,6 +1940,7 @@ let
       sha256 = "05v0d9b5sm4d1bvhb01jk6s7brlli2xc16hvzr6gik1nm1ks6ai1";
     };
     meta.homepage = "https://github.com/haya14busa/incsearch.vim/";
+    meta.description = ":flashlight: Improved incremental searching for Vim";
   };
 
   indentLine = buildVimPluginFrom2Nix {
@@ -1808,6 +1953,7 @@ let
       sha256 = "0qnzi19vb5qk773pc9v75wqm2ipdkcscljblla6gq05srm1h8x9d";
     };
     meta.homepage = "https://github.com/Yggdroot/indentLine/";
+    meta.description = "A vim plugin to display the indention levels with thin vertical lines";
   };
 
   intero-neovim = buildVimPluginFrom2Nix {
@@ -1820,6 +1966,7 @@ let
       sha256 = "1na61qb31z80973jfi7ziw2zv6y73rm0bpfb6iqxjppmg4iqgl3i";
     };
     meta.homepage = "https://github.com/parsonsmatt/intero-neovim/";
+    meta.description = "A neovim plugin for Intero, forked from ghcmod-vim";
   };
 
   iosvkem = buildVimPluginFrom2Nix {
@@ -1832,6 +1979,7 @@ let
       sha256 = "0jawl7fs6wl3ny9vsmzqv5pnkv5nn6wj1nx7hzgdl41183958pni";
     };
     meta.homepage = "https://github.com/neutaaaaan/iosvkem/";
+    meta.description = "Because what the world needs is yet another vim colourscheme";
   };
 
   ir_black = buildVimPluginFrom2Nix {
@@ -1844,6 +1992,7 @@ let
       sha256 = "13g9nqlqsjsxnrq37y33ldh41dw9q9dw07spfi7qwrskiwa0ayk7";
     };
     meta.homepage = "https://github.com/twerth/ir_black/";
+    meta.description = "The original IR_Black color scheme for vim";
   };
 
   is-vim = buildVimPluginFrom2Nix {
@@ -1856,6 +2005,7 @@ let
       sha256 = "1nnf6y62mc0rj7hbrapfkmr91ypsqkzhwgpfx7pahz8m3a2324q6";
     };
     meta.homepage = "https://github.com/haya14busa/is.vim/";
+    meta.description = "incremental search improved - successor of incsearch.vim";
   };
 
   jdaddy-vim = buildVimPluginFrom2Nix {
@@ -1868,6 +2018,7 @@ let
       sha256 = "1ch12bffrs3gqqzdj9vh0i2azhc5d06i5vwds4rqcx797lqh7pzb";
     };
     meta.homepage = "https://github.com/vim-scripts/jdaddy.vim/";
+    meta.description = "JSON manipulation and pretty printing";
   };
 
   jedi-vim = buildVimPluginFrom2Nix {
@@ -1881,6 +2032,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/davidhalter/jedi-vim/";
+    meta.description = "Using the jedi autocompletion library for VIM.";
   };
 
   jellybeans-vim = buildVimPluginFrom2Nix {
@@ -1893,6 +2045,7 @@ let
       sha256 = "1zy3gjz5bna3l5a7k2ddqa0w7x8wbndy2vc9gmqfdsxdbhrgpvaz";
     };
     meta.homepage = "https://github.com/nanotech/jellybeans.vim/";
+    meta.description = "A colorful, dark color scheme for Vim.";
   };
 
   Jenkinsfile-vim-syntax = buildVimPluginFrom2Nix {
@@ -1905,6 +2058,7 @@ let
       sha256 = "14s26hlsdqys7br84l9wiyvhcy17s6966mhgr9n6sdqmhz6lc4nm";
     };
     meta.homepage = "https://github.com/martinda/Jenkinsfile-vim-syntax/";
+    meta.description = "Jenkinsfile DSL vim syntax";
   };
 
   jq-vim = buildVimPluginFrom2Nix {
@@ -1917,6 +2071,7 @@ let
       sha256 = "0dfsym34xiza9221bdsr51jykcxmz8bnkzi846bqxxjxiw0p3yk1";
     };
     meta.homepage = "https://github.com/vito-c/jq.vim/";
+    meta.description = "Syntax highlighting for jq files in vim/neovim";
   };
 
   julia-vim = buildVimPluginFrom2Nix {
@@ -1929,6 +2084,7 @@ let
       sha256 = "1ijmxxw63mraa5afddahfvwbh9acrf11q7g6hf32k6923rfccrnq";
     };
     meta.homepage = "https://github.com/JuliaEditorSupport/julia-vim/";
+    meta.description = "Vim support for Julia.";
   };
 
   kotlin-vim = buildVimPluginFrom2Nix {
@@ -1941,6 +2097,7 @@ let
       sha256 = "1yqzxabhpc4jbdlzhsysp0vi1ayqg0vnpysvx4ynd9961q2fk3sz";
     };
     meta.homepage = "https://github.com/udalov/kotlin-vim/";
+    meta.description = "Kotlin plugin for Vim. Featuring: syntax highlighting, basic indentation, Syntastic support";
   };
 
   lalrpop-vim = buildVimPluginFrom2Nix {
@@ -1953,6 +2110,7 @@ let
       sha256 = "1xx6hlgrdbnk3d6rsn4jzbaqwankvnnmj4iilakaazddfaa0l6rr";
     };
     meta.homepage = "https://github.com/qnighy/lalrpop.vim/";
+    meta.description = "LALRPOP Vim plugin with minimal syntax-highlighting functionality";
   };
 
   LanguageClient-neovim = buildVimPluginFrom2Nix {
@@ -1965,6 +2123,7 @@ let
       sha256 = "1i1c98r9fg1mzyl15b3grk6v7s7frwadh86rr1ggz7aq1gwfy7dq";
     };
     meta.homepage = "https://github.com/autozimu/LanguageClient-neovim/";
+    meta.description = "Language Server Protocol (LSP) support for vim and neovim.";
   };
 
   last256 = buildVimPluginFrom2Nix {
@@ -1977,6 +2136,7 @@ let
       sha256 = "16njh0p1j166dnf92110vlrj7gmrbsfkbkd8k6s9gfqjzbgd25jv";
     };
     meta.homepage = "https://github.com/sk1418/last256/";
+    meta.description = "A vim dark colorscheme based on vim-hybrid";
   };
 
   latex-box = buildVimPluginFrom2Nix {
@@ -1989,6 +2149,7 @@ let
       sha256 = "1z4mdy47cpwcdhvy8mr72vhlybxn1y59yd3ixf6ids1bzpkrd7zl";
     };
     meta.homepage = "https://github.com/latex-box-team/latex-box/";
+    meta.description = "Lightweight Toolbox for LaTeX - New Official repository";
   };
 
   lean-vim = buildVimPluginFrom2Nix {
@@ -2013,6 +2174,7 @@ let
       sha256 = "154x6i2ncmcbc3snkzdcggq5m5zvlbjyry5lvr6n4qcvf65z5z44";
     };
     meta.homepage = "https://github.com/thirtythreeforty/lessspace.vim/";
+    meta.description = "Better whitespace stripping for Vim";
   };
 
   lexima-vim = buildVimPluginFrom2Nix {
@@ -2025,6 +2187,7 @@ let
       sha256 = "15cc09vb0yrasz76qkcqxhj95y1m6yrsx3wsn6khx39kp1bas0jd";
     };
     meta.homepage = "https://github.com/cohama/lexima.vim/";
+    meta.description = "Auto close parentheses and repeat by dot dot dot...";
   };
 
   lf-vim = buildVimPluginFrom2Nix {
@@ -2037,6 +2200,7 @@ let
       sha256 = "0phfqg6ax79vsz1sy6pvjflz1929x58k7nifiqki9bzp2m6knls9";
     };
     meta.homepage = "https://github.com/ptzz/lf.vim/";
+    meta.description = "Lf integration in vim and neovim";
   };
 
   lh-brackets = buildVimPluginFrom2Nix {
@@ -2049,6 +2213,7 @@ let
       sha256 = "0gh21v0gnwhq2gim1hhfd0376zk4jdhfn9dldczxvzipxw3jaknr";
     };
     meta.homepage = "https://github.com/LucHermitte/lh-brackets/";
+    meta.description = "LH's bracketing system for vim";
   };
 
   lh-vim-lib = buildVimPluginFrom2Nix {
@@ -2061,6 +2226,7 @@ let
       sha256 = "1k4man0jm8pkvb2f8l2f743ipwiz76ljzzn1hi4pvs0wncdr7k6q";
     };
     meta.homepage = "https://github.com/LucHermitte/lh-vim-lib/";
+    meta.description = "Library of Vim functions";
   };
 
   lightline-ale = buildVimPluginFrom2Nix {
@@ -2073,6 +2239,7 @@ let
       sha256 = "1cz1pcz6qxddpalymj2p19clnwsj568zlvbyg7mai0vxx6cv7a9w";
     };
     meta.homepage = "https://github.com/maximbaz/lightline-ale/";
+    meta.description = "ALE indicator for the lightline vim plugin";
   };
 
   lightline-bufferline = buildVimPluginFrom2Nix {
@@ -2085,6 +2252,7 @@ let
       sha256 = "0kdla3gmkyk77vqz6hj41alq3jmrkml7836fhsd3hb50f6wwvk11";
     };
     meta.homepage = "https://github.com/mengelbrecht/lightline-bufferline/";
+    meta.description = "A lightweight plugin to display the list of buffers in the lightline vim plugin";
   };
 
   lightline-vim = buildVimPluginFrom2Nix {
@@ -2097,6 +2265,7 @@ let
       sha256 = "04nxldbb885n11vwz61c1r4h65y26six5cs9invbz27h4pgyrvna";
     };
     meta.homepage = "https://github.com/itchyny/lightline.vim/";
+    meta.description = "A light and configurable statusline/tabline plugin for Vim";
   };
 
   limelight-vim = buildVimPluginFrom2Nix {
@@ -2109,6 +2278,7 @@ let
       sha256 = "0bxmihv9i96k6pl37pzgri03vbvjwlp34rl4gkj8w2ajhhi6nsnn";
     };
     meta.homepage = "https://github.com/junegunn/limelight.vim/";
+    meta.description = ":flashlight: All the world's indeed a stage and we are merely players";
   };
 
   lushtags = buildVimPluginFrom2Nix {
@@ -2121,6 +2291,7 @@ let
       sha256 = "03saw1w5pybj6yywzi8hinciv18znimm7k0h34k4pqp5gi1jfaql";
     };
     meta.homepage = "https://github.com/mkasa/lushtags/";
+    meta.description = "Create ctags compatible tags files for Haskell programs";
   };
 
   matchit-zip = buildVimPluginFrom2Nix {
@@ -2133,6 +2304,7 @@ let
       sha256 = "1s9c4lnsmbfm97bp22jrmcp5lga5ihx23lzqqncvv7rcizkvr3dm";
     };
     meta.homepage = "https://github.com/vim-scripts/matchit.zip/";
+    meta.description = "extended % matching for HTML, LaTeX, and many other languages";
   };
 
   mattn-calendar-vim = buildVimPluginFrom2Nix {
@@ -2145,6 +2317,7 @@ let
       sha256 = "0xvvkq9zckmv9pnzvxg71fblly8lksfi736brbcwcvnszqif4b69";
     };
     meta.homepage = "https://github.com/mattn/calendar-vim/";
+    meta.description = "calendar vimscript";
   };
 
   mayansmoke = buildVimPluginFrom2Nix {
@@ -2157,6 +2330,7 @@ let
       sha256 = "1xxcky7i6sx7f1q8xka4gd2xg78w6sqjvqrdwgrdzv93fhf82rpd";
     };
     meta.homepage = "https://github.com/vim-scripts/mayansmoke/";
+    meta.description = "Pleasant and ergonomic light-background color scheme.";
   };
 
   molokai = buildVimPluginFrom2Nix {
@@ -2169,6 +2343,7 @@ let
       sha256 = "1piszjr5kyw43ac1f0jh9z88g824xknshrkchbys9qxlz7pd831s";
     };
     meta.homepage = "https://github.com/tomasr/molokai/";
+    meta.description = "Molokai color scheme for Vim";
   };
 
   ncm2 = buildVimPluginFrom2Nix {
@@ -2181,6 +2356,7 @@ let
       sha256 = "16276cjviij92ypqj9148828k4dhiywam0dz07v3rikknak11cra";
     };
     meta.homepage = "https://github.com/ncm2/ncm2/";
+    meta.description = ":heart: Slim, Fast and Hackable Completion Framework for Neovim";
   };
 
   ncm2-bufword = buildVimPluginFrom2Nix {
@@ -2193,6 +2369,7 @@ let
       sha256 = "14q76n5c70wvi48wm1alyckba71rp5300i35091ga197nkgphyaz";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-bufword/";
+    meta.description = "completion words from current buffer";
   };
 
   ncm2-jedi = buildVimPluginFrom2Nix {
@@ -2229,6 +2406,7 @@ let
       sha256 = "1g99vbrdz06i36gpa95crwixj61my7c9miy7mbpfbiy4zykf2wl2";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-tmux/";
+    meta.description = "completion with words from other tmux panes";
   };
 
   ncm2-ultisnips = buildVimPluginFrom2Nix {
@@ -2253,6 +2431,7 @@ let
       sha256 = "1v7ibi4fp99s4lswz3v0gf4i0h5i5gpj05xpsf4cixwj2zgh206h";
     };
     meta.homepage = "https://github.com/eagletmt/neco-ghc/";
+    meta.description = "A completion plugin for Haskell, using ghc-mod";
   };
 
   neco-look = buildVimPluginFrom2Nix {
@@ -2265,6 +2444,7 @@ let
       sha256 = "1brvzg15ni5j60wncpvxhs5k36wz83lhvfcnvja2l9yrngcgh6vr";
     };
     meta.homepage = "https://github.com/ujihisa/neco-look/";
+    meta.description = "A neocomplcache plugin for English, using look command";
   };
 
   neco-syntax = buildVimPluginFrom2Nix {
@@ -2277,6 +2457,7 @@ let
       sha256 = "1kmzlz6c5bs7f4dxgrdn4azwh55k6ghhyzy8jjdgj0wsb309y92k";
     };
     meta.homepage = "https://github.com/Shougo/neco-syntax/";
+    meta.description = "Syntax source for neocomplete/deoplete/ncm";
   };
 
   neco-vim = buildVimPluginFrom2Nix {
@@ -2289,6 +2470,7 @@ let
       sha256 = "0lk5p2aihalcarsjnvn1yidgv0xqp1bk29wywsbp8ni964s0si39";
     };
     meta.homepage = "https://github.com/Shougo/neco-vim/";
+    meta.description = "The vim source for neocomplete/deoplete";
   };
 
   neocomplete-vim = buildVimPluginFrom2Nix {
@@ -2301,6 +2483,7 @@ let
       sha256 = "1ydnb576qbdbij7ipciw0m46wbj45gj7xirpmqxazgp9y6b13isf";
     };
     meta.homepage = "https://github.com/Shougo/neocomplete.vim/";
+    meta.description = "Next generation completion framework after neocomplcache";
   };
 
   neodark-vim = buildVimPluginFrom2Nix {
@@ -2313,6 +2496,7 @@ let
       sha256 = "1wz9ygfdg59jwi19l9njcxknf77azlx5nkf5q0ghk6zyv1mqwvc1";
     };
     meta.homepage = "https://github.com/KeitaNakamura/neodark.vim/";
+    meta.description = "A dark color scheme for vim";
   };
 
   neoformat = buildVimPluginFrom2Nix {
@@ -2325,6 +2509,7 @@ let
       sha256 = "15lsxwf4f1mg5h716zikwv1hbb0i41d24hrvyrqhwqlnqbwizlbi";
     };
     meta.homepage = "https://github.com/sbdchd/neoformat/";
+    meta.description = ":sparkles: A (Neo)vim plugin for formatting code.";
   };
 
   neoinclude-vim = buildVimPluginFrom2Nix {
@@ -2337,6 +2522,7 @@ let
       sha256 = "0qw63xyvrxvdzx01k5nnsv3p8zmnd77cwbkk24pikqrscxw3ypsz";
     };
     meta.homepage = "https://github.com/Shougo/neoinclude.vim/";
+    meta.description = "Include completion framework for neocomplete/deoplete";
   };
 
   neomake = buildVimPluginFrom2Nix {
@@ -2349,6 +2535,7 @@ let
       sha256 = "0zv27bln0n687s0xm19nrk16i58hmxdhy26jmjh335zji0ydx27v";
     };
     meta.homepage = "https://github.com/neomake/neomake/";
+    meta.description = "Asynchronous linting and make framework for Neovim/Vim";
   };
 
   neomru-vim = buildVimPluginFrom2Nix {
@@ -2361,6 +2548,7 @@ let
       sha256 = "04fic8s4g19kgml1pb5fd6yzhsscq8yrpwbmg8sb0lqjas2qpakv";
     };
     meta.homepage = "https://github.com/Shougo/neomru.vim/";
+    meta.description = "MRU plugin includes unite.vim/denite.nvim MRU sources";
   };
 
   neosnippet-snippets = buildVimPluginFrom2Nix {
@@ -2373,18 +2561,20 @@ let
       sha256 = "0a0irlhj1skkwy1897q6dbg9zh8v6b0sx12dsgj3z37rvplfw78y";
     };
     meta.homepage = "https://github.com/Shougo/neosnippet-snippets/";
+    meta.description = "The standard snippets repository for neosnippet";
   };
 
   neosnippet-vim = buildVimPluginFrom2Nix {
     pname = "neosnippet-vim";
-    version = "2020-05-12";
+    version = "2020-06-13";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neosnippet.vim";
-      rev = "70f855d93c4bc727873c42111432660cf6929cdc";
-      sha256 = "1gh7vh3qc9k8xhpmcvhdn5nfff81y7hkfky0mgs75a97mkd8qhnz";
+      rev = "a52edf794bae0174a682131333c891717633994b";
+      sha256 = "1k3ncjlikdbsjk33fi14y88yqywrpzdfz8kwzjfxjlidbzzlzk0w";
     };
     meta.homepage = "https://github.com/Shougo/neosnippet.vim/";
+    meta.description = "neo-snippet plugin";
   };
 
   NeoSolarized = buildVimPluginFrom2Nix {
@@ -2409,6 +2599,7 @@ let
       sha256 = "1wmsqnhbd438xs8dp2jrkk7fhzzi7w1l66jqwfwz6sxl0ayc3k7y";
     };
     meta.homepage = "https://github.com/kassio/neoterm/";
+    meta.description = "Wrapper of some vim/neovim's :terminal functions.";
   };
 
   neovim-fuzzy = buildVimPluginFrom2Nix {
@@ -2421,6 +2612,7 @@ let
       sha256 = "064qi6zv2hrzn91pvr31b9zj2q0k9vbkk5csdhw5y52q26p1gakq";
     };
     meta.homepage = "https://github.com/cloudhead/neovim-fuzzy/";
+    meta.description = "Fuzzy file finding for neovim";
   };
 
   neovim-sensible = buildVimPluginFrom2Nix {
@@ -2433,6 +2625,7 @@ let
       sha256 = "06whnfvmzfdsx9gvkd2nxhx29939gjzibr2xadh54sj8ns646w58";
     };
     meta.homepage = "https://github.com/jeffkreeftmeijer/neovim-sensible/";
+    meta.description = "neovim-sensible.vim: More defaults to agree on. Because neovim has sensible defaults out of the box.";
   };
 
   neoyank-vim = buildVimPluginFrom2Nix {
@@ -2445,6 +2638,7 @@ let
       sha256 = "1y6fvxqpj3rwf1fmjib177lqzh3z7syp7bccn79g1j8177m515w6";
     };
     meta.homepage = "https://github.com/Shougo/neoyank.vim/";
+    meta.description = "Saves yank history includes unite.vim/denite.nvim history/yank source.";
   };
 
   nerdcommenter = buildVimPluginFrom2Nix {
@@ -2457,6 +2651,7 @@ let
       sha256 = "0w4bxj423dxxkcxnfmipf8x5jfm058rq4g3m98wzcz5zbambv3qs";
     };
     meta.homepage = "https://github.com/preservim/nerdcommenter/";
+    meta.description = "Vim plugin for intensely nerdy commenting powers";
   };
 
   nerdtree = buildVimPluginFrom2Nix {
@@ -2469,6 +2664,7 @@ let
       sha256 = "0rd228ks4gppskcvz6cj94gnbd9wykic8f4ilc9smaqw817gq20s";
     };
     meta.homepage = "https://github.com/preservim/nerdtree/";
+    meta.description = "A tree explorer plugin for vim.";
   };
 
   nerdtree-git-plugin = buildVimPluginFrom2Nix {
@@ -2481,6 +2677,7 @@ let
       sha256 = "15i66mxvygs6xa2jvk7bqdagxx1lcvynmyb9g75whgbv7is80qn7";
     };
     meta.homepage = "https://github.com/albfan/nerdtree-git-plugin/";
+    meta.description = "A plugin of NERDTree showing git status";
   };
 
   nim-vim = buildVimPluginFrom2Nix {
@@ -2493,6 +2690,7 @@ let
       sha256 = "0ja8qx9c5g7k4phllvk3vz6s62iwpwsn40w6c32sybjs98jkrw7y";
     };
     meta.homepage = "https://github.com/zah/nim.vim/";
+    meta.description = "Nim language plugin for vim";
   };
 
   nord-vim = buildVimPluginFrom2Nix {
@@ -2505,6 +2703,7 @@ let
       sha256 = "0gk4zq0gz3nnwfkldswg9bjpk0gf6d6mgfzcgvj0pnlbja6ass81";
     };
     meta.homepage = "https://github.com/arcticicestudio/nord-vim/";
+    meta.description = "An arctic, north-bluish clean and elegant Vim theme.";
   };
 
   NrrwRgn = buildVimPluginFrom2Nix {
@@ -2517,6 +2716,7 @@ let
       sha256 = "00fd466i5860bazd4pj69k8piicgckxj68lkn2l7haawj9chslzs";
     };
     meta.homepage = "https://github.com/chrisbra/NrrwRgn/";
+    meta.description = "A Narrow Region Plugin for vim (like Emacs Narrow Region)";
   };
 
   nvim-cm-racer = buildVimPluginFrom2Nix {
@@ -2529,6 +2729,7 @@ let
       sha256 = "1yljxwypgn91084yyicbc2qprn31ld7s4drvnddzczyhzq5m2gpx";
     };
     meta.homepage = "https://github.com/roxma/nvim-cm-racer/";
+    meta.description = "Neovim/vim8 completion for rust";
   };
 
   nvim-completion-manager = buildVimPluginFrom2Nix {
@@ -2541,6 +2742,7 @@ let
       sha256 = "0znwgry4ill0nxm096hc8s9vf20rf9xcq3dz8y8h7xlqzzsycl7a";
     };
     meta.homepage = "https://github.com/roxma/nvim-completion-manager/";
+    meta.description = ":warning: PLEASE USE https://github.com/ncm2/ncm2 INSTEAD";
   };
 
   nvim-gdb = buildVimPluginFrom2Nix {
@@ -2553,6 +2755,7 @@ let
       sha256 = "0rsgpnl20pxfqcwd5gr89mkqv3im4s7v4d1cvxvi9wj0ix06pxm1";
     };
     meta.homepage = "https://github.com/sakhnik/nvim-gdb/";
+    meta.description = "Neovim thin wrapper for GDB, LLDB, PDB/PDB++ and BashDB";
   };
 
   nvim-hs-vim = buildVimPluginFrom2Nix {
@@ -2577,6 +2780,7 @@ let
       sha256 = "04v1g4sa6dccaffrlkmyh410ppza5zlrnrapf9c3sfj6bmsr4jd3";
     };
     meta.homepage = "https://github.com/neovim/nvim-lsp/";
+    meta.description = "Nvim LSP client configurations";
   };
 
   nvim-terminal-lua = buildVimPluginFrom2Nix {
@@ -2589,6 +2793,7 @@ let
       sha256 = "09hass19v3wrqgxjcr3b59w462lp2nw533zwb1nnmiz99gx1znpx";
     };
     meta.homepage = "https://github.com/norcalli/nvim-terminal.lua/";
+    meta.description = "A high performance filetype mode for Neovim which leverages conceal and highlights your buffer with the correct color codes.";
   };
 
   nvim-yarp = buildVimPluginFrom2Nix {
@@ -2601,6 +2806,7 @@ let
       sha256 = "16ma42niwsc066s991idfbwvm0dvwqwdr2zfkc3av10hyimxnzbb";
     };
     meta.homepage = "https://github.com/roxma/nvim-yarp/";
+    meta.description = "Yet Another Remote Plugin Framework for Neovim";
   };
 
   nvimdev-nvim = buildVimPluginFrom2Nix {
@@ -2613,6 +2819,7 @@ let
       sha256 = "07dx6qkxqpakl1hrqwhfjgdzcnl4j3j9qih0l20qn8p6askj3b2j";
     };
     meta.homepage = "https://github.com/neovim/nvimdev.nvim/";
+    meta.description = "Neovim plugin for working on Neovim";
   };
 
   onehalf = buildVimPluginFrom2Nix {
@@ -2625,6 +2832,7 @@ let
       sha256 = "1v34n0cz7jkx0wlbl6kv693qgifs0frcw4mv32ll36pmqfyb4m0h";
     };
     meta.homepage = "https://github.com/sonph/onehalf/";
+    meta.description = "Clean, vibrant and pleasing color schemes for Vim, Sublime Text, iTerm, gnome-terminal and more.";
   };
 
   open-browser-github-vim = buildVimPluginFrom2Nix {
@@ -2637,6 +2845,7 @@ let
       sha256 = "09x9lfyi9gfhy4m1vp6z1kxpvi31rr8dnlqhh6fgskkziiqch3jw";
     };
     meta.homepage = "https://github.com/tyru/open-browser-github.vim/";
+    meta.description = "Open GitHub URL of current file, etc. from Vim editor (supported GitHub Enterprise)";
   };
 
   open-browser-vim = buildVimPluginFrom2Nix {
@@ -2649,6 +2858,7 @@ let
       sha256 = "1akgsq1v9v5klm995y09zmka0hbfsa0gr44gyp2nvqi9ggfadp0k";
     };
     meta.homepage = "https://github.com/tyru/open-browser.vim/";
+    meta.description = "Open URI with your favorite browser from your most favorite editor";
   };
 
   palenight-vim = buildVimPluginFrom2Nix {
@@ -2661,6 +2871,7 @@ let
       sha256 = "0nd2hqvxnjnbsp17x666nwyy0s9j9b6igyfhl44p7lkci6560gwp";
     };
     meta.homepage = "https://github.com/drewtempelmeyer/palenight.vim/";
+    meta.description = "Soothing color scheme for your favorite [best] text editor";
   };
 
   papercolor-theme = buildVimPluginFrom2Nix {
@@ -2673,6 +2884,7 @@ let
       sha256 = "1dhbnd99xs6l5alqhn9m1nynmr9sbvrqj2137l23ysisprl3rgmr";
     };
     meta.homepage = "https://github.com/NLKNguyen/papercolor-theme/";
+    meta.description = ":art: Light & Dark Vim color schemes inspired by Google's Material Design";
   };
 
   pear-tree = buildVimPluginFrom2Nix {
@@ -2685,6 +2897,7 @@ let
       sha256 = "0n70rzw34lsnnprqna90ssqrka33qx3z0n2kj19ps8yp3j6lsxvk";
     };
     meta.homepage = "https://github.com/tmsvg/pear-tree/";
+    meta.description = "A Vim auto-pair plugin that supports multi-character pairs, intelligent matching, and more";
   };
 
   peskcolor-vim = buildVimPluginFrom2Nix {
@@ -2697,6 +2910,7 @@ let
       sha256 = "15hw3casr5y3ckgcn6aq8vhk6g2hym41w51nvgf34hbj9fx1nvkq";
     };
     meta.homepage = "https://github.com/andsild/peskcolor.vim/";
+    meta.description = "My preferred colorscheme";
   };
 
   pig-vim = buildVimPluginFrom2Nix {
@@ -2709,6 +2923,7 @@ let
       sha256 = "0az48a3slpzljb69d60cpahkshmdbss0snc8lmvf4yrc1gx8yncv";
     };
     meta.homepage = "https://github.com/motus/pig.vim/";
+    meta.description = "Pig syntax highlighting for vim";
   };
 
   plantuml-syntax = buildVimPluginFrom2Nix {
@@ -2721,6 +2936,7 @@ let
       sha256 = "1fkls8qwkdgr5fyaml9rlrjzrbwav2zyp2xyfdyg4h6pbgchvkbl";
     };
     meta.homepage = "https://github.com/aklt/plantuml-syntax/";
+    meta.description = "vim syntax file for plantuml";
   };
 
   pony-vim-syntax = buildVimPluginFrom2Nix {
@@ -2733,6 +2949,7 @@ let
       sha256 = "0r2lv99hkm95dv8wy9rkrkcwz5wkmwggfwi5vakgw497l3a9jskr";
     };
     meta.homepage = "https://github.com/dleonard0/pony-vim-syntax/";
+    meta.description = "Vim syntax plugin for ponylang";
   };
 
   PreserveNoEOL = buildVimPluginFrom2Nix {
@@ -2745,6 +2962,7 @@ let
       sha256 = "1726jpr2zf6jrb00pp082ikbx4mll3a877pnzs6i18f9fgpaqqgd";
     };
     meta.homepage = "https://github.com/vim-scripts/PreserveNoEOL/";
+    meta.description = "Preserve missing EOL at the end of text files.";
   };
 
   prev_indent = buildVimPluginFrom2Nix {
@@ -2757,6 +2975,7 @@ let
       sha256 = "03xqdwfkc7a84742ldsggi7ix99c7dhpmg6j13gkasyfk487ryh6";
     };
     meta.homepage = "https://github.com/vim-scripts/prev_indent/";
+    meta.description = "Utility functions for custom indentation of line under cursor";
   };
 
   psc-ide-vim = buildVimPluginFrom2Nix {
@@ -2769,6 +2988,7 @@ let
       sha256 = "0gzbxsq6wh8d9z9vyrff4hdpc66yg9y8hnxq4kjrz9qrccc75c1f";
     };
     meta.homepage = "https://github.com/frigoeu/psc-ide-vim/";
+    meta.description = "Vim plugin for psc-ide";
   };
 
   purescript-vim = buildVimPluginFrom2Nix {
@@ -2793,6 +3013,7 @@ let
       sha256 = "0zxsa1agigzb9adrwq54pdyl984drdqzz3kkixaijkq77kkdvj0n";
     };
     meta.homepage = "https://github.com/python-mode/python-mode/";
+    meta.description = "Vim python-mode. PyLint, Rope, Pydoc, breakpoints from box.";
   };
 
   quick-scope = buildVimPluginFrom2Nix {
@@ -2805,6 +3026,7 @@ let
       sha256 = "1h5kc2wffvaljdvggp2s74jkd7z88y2r5g1flqlgda2x1ihlhavm";
     };
     meta.homepage = "https://github.com/unblevable/quick-scope/";
+    meta.description = "Lightning fast left-right movement in Vim";
   };
 
   quickfix-reflector-vim = buildVimPluginFrom2Nix {
@@ -2817,6 +3039,7 @@ let
       sha256 = "1i8453z3s0xmbmbzk3kpxwvd42ar9v2m2gjqic9k7njpxw87czvs";
     };
     meta.homepage = "https://github.com/stefandtw/quickfix-reflector.vim/";
+    meta.description = "Change code right in the quickfix window";
   };
 
   quickfixstatus = buildVimPluginFrom2Nix {
@@ -2829,6 +3052,7 @@ let
       sha256 = "16vxhvyxq51y7wnx0c1fmdi2yb6kfr1pxijq65gxj8qwvbak2s3v";
     };
     meta.homepage = "https://github.com/dannyob/quickfixstatus/";
+    meta.description = "See quickfix, location list and Syntastic lists errors and warnings as you move through a vim file.";
   };
 
   rainbow = buildVimPluginFrom2Nix {
@@ -2841,6 +3065,7 @@ let
       sha256 = "168mbdf2h3zhkqrdyyhh0pbkjdvxwida80rdwk8ml97mxxii8ziw";
     };
     meta.homepage = "https://github.com/luochen1990/rainbow/";
+    meta.description = "Rainbow Parentheses Improved, shorter code, no level limit, smooth and fast, powerful configuration.";
   };
 
   rainbow_parentheses-vim = buildVimPluginFrom2Nix {
@@ -2853,6 +3078,7 @@ let
       sha256 = "1qw84imlhq4654mxazj7j3sp5g1j3yjxi496i08iix06dm15m5s7";
     };
     meta.homepage = "https://github.com/kien/rainbow_parentheses.vim/";
+    meta.description = "Better Rainbow Parentheses";
   };
 
   random-vim = buildVimPluginFrom2Nix {
@@ -2865,6 +3091,7 @@ let
       sha256 = "1lzy2cq4jcrsqyxlnbnd0y6j4mabm09bi7q22lf6vinqlb84w7sp";
     };
     meta.homepage = "https://github.com/vim-scripts/random.vim/";
+    meta.description = "A \"color scheme\" to pseudo-randomly load a color scheme.";
   };
 
   ranger-vim = buildVimPluginFrom2Nix {
@@ -2877,6 +3104,7 @@ let
       sha256 = "0890rbmdw3p25cww6vsji7xrndcxsisfyv5przahpclk9fc9sxs8";
     };
     meta.homepage = "https://github.com/rafaqz/ranger.vim/";
+    meta.description = "Ranger file manager for Vim";
   };
 
   readline-vim = buildVimPluginFrom2Nix {
@@ -2889,6 +3117,7 @@ let
       sha256 = "1vs91lkm9gwvp0bahx80ag6lw03r5x6kyih70l4sq8q0kydp5f13";
     };
     meta.homepage = "https://github.com/ryvnf/readline.vim/";
+    meta.description = "Readline emulation for command-line mode";
   };
 
   Recover-vim = buildVimPluginFrom2Nix {
@@ -2901,6 +3130,7 @@ let
       sha256 = "1q87n2xz6p879ihijvhxs1iv9iyrqcbx7z8dkql0ivbf572q9iwh";
     };
     meta.homepage = "https://github.com/chrisbra/Recover.vim/";
+    meta.description = "A Plugin to show a diff, whenever recovering a buffer";
   };
 
   Rename = buildVimPluginFrom2Nix {
@@ -2913,6 +3143,7 @@ let
       sha256 = "1d1myg4zyc281zcc1ba9idbgcgxndb4a0jwqr4yqxhhzdgszw46r";
     };
     meta.homepage = "https://github.com/vim-scripts/Rename/";
+    meta.description = "Rename a buffer within Vim and on disk";
   };
 
   ReplaceWithRegister = buildVimPluginFrom2Nix {
@@ -2925,6 +3156,7 @@ let
       sha256 = "0mb0sx85j1k59b1zz95r4vkq4kxlb4krhncq70mq7fxrs5bnhq8g";
     };
     meta.homepage = "https://github.com/vim-scripts/ReplaceWithRegister/";
+    meta.description = "Replace text with the contents of a register. ";
   };
 
   riv-vim = buildVimPluginFrom2Nix {
@@ -2937,6 +3169,7 @@ let
       sha256 = "1da3iwrpy08rayrsf8v0ml4khlp9j5i4cffpv9j3iyalcbhk2m9g";
     };
     meta.homepage = "https://github.com/gu-fan/riv.vim/";
+    meta.description = "Notes and Wiki with rst.";
   };
 
   robotframework-vim = buildVimPluginFrom2Nix {
@@ -2949,6 +3182,7 @@ let
       sha256 = "091ac5rq6f1a7j2q3dy9rc00vckv21m4wd29ijj63jannr02v5ad";
     };
     meta.homepage = "https://github.com/mfukar/robotframework-vim/";
+    meta.description = "Some vim scripts for use with the Robot framework.";
   };
 
   rtorrent-syntax-file = buildVimPluginFrom2Nix {
@@ -2961,6 +3195,7 @@ let
       sha256 = "1vhvmwnwi6862cckl8dqr8pgy0inrr0c31lic89826yv7mfl9mbz";
     };
     meta.homepage = "https://github.com/ccarpita/rtorrent-syntax-file/";
+    meta.description = "Syntax highlighting for rtorrent.rc files";
   };
 
   rust-vim = buildVimPluginFrom2Nix {
@@ -2973,6 +3208,7 @@ let
       sha256 = "1abacayriz439lj4r3s1x92pp3wwxqav3kqsanxq9k6f6p2b2fyb";
     };
     meta.homepage = "https://github.com/rust-lang/rust.vim/";
+    meta.description = "Vim configuration for Rust.";
   };
 
   salt-vim = buildVimPluginFrom2Nix {
@@ -2985,6 +3221,7 @@ let
       sha256 = "0r79bpl98xcsmkw6dg83cf1ghn89rzsr011zirk3v1wfxclri2c4";
     };
     meta.homepage = "https://github.com/saltstack/salt-vim/";
+    meta.description = "Vim files for editing Salt files";
   };
 
   self = buildVimPluginFrom2Nix {
@@ -2997,6 +3234,7 @@ let
       sha256 = "1gcwn6i5i3msg7hrlzsnv1bs6pm4jz9cff8ppaz2xdj8xv9qy6fn";
     };
     meta.homepage = "https://github.com/megaannum/self/";
+    meta.description = "Self: Vim prototype object system";
   };
 
   semshi = buildVimPluginFrom2Nix {
@@ -3009,6 +3247,7 @@ let
       sha256 = "0adq1qxlxd53ps5byjvqmzk266f3wbvqmw74dkx6vd41zqw38wfx";
     };
     meta.homepage = "https://github.com/numirias/semshi/";
+    meta.description = "🌈 Semantic Highlighting for Python in Neovim";
   };
 
   seoul256-vim = buildVimPluginFrom2Nix {
@@ -3021,6 +3260,7 @@ let
       sha256 = "1z980hsmf6gcvd16ja67az131mrgv5fv6v0ivsh0ga8hwc4f9l6q";
     };
     meta.homepage = "https://github.com/junegunn/seoul256.vim/";
+    meta.description = ":deciduous_tree: Low-contrast Vim color scheme based on Seoul Colors";
   };
 
   shabadou-vim = buildVimPluginFrom2Nix {
@@ -3045,6 +3285,7 @@ let
       sha256 = "0hg5352ahzgh2kwqha5v8ai024fld93xag93hb53wjf5b8nzsz8i";
     };
     meta.homepage = "https://github.com/vim-scripts/ShowMultiBase/";
+    meta.description = "Display a number in binary, octal, decimal and hexadecimal formats";
   };
 
   SimpylFold = buildVimPluginFrom2Nix {
@@ -3057,6 +3298,7 @@ let
       sha256 = "1gjv78x2cgh79a04l411kdhkm53f93czs54p07kadpa9659z93ss";
     };
     meta.homepage = "https://github.com/tmhedberg/SimpylFold/";
+    meta.description = "No-BS Python code folding for Vim";
   };
 
   sky-color-clock-vim = buildVimPluginFrom2Nix {
@@ -3069,6 +3311,7 @@ let
       sha256 = "1ln50rahb177vilzr4zc7v9znm8xfid1v8gddl83gr9srdbn2bbz";
     };
     meta.homepage = "https://github.com/mopp/sky-color-clock.vim/";
+    meta.description = "A clock widget for statusline with sky color at the time";
   };
 
   smartpairs-vim = buildVimPluginFrom2Nix {
@@ -3081,6 +3324,7 @@ let
       sha256 = "1pyynwz7wfbgccdxsyggzl0301qjj3wgyymah5spx8b3s42a6slj";
     };
     meta.homepage = "https://github.com/gorkunov/smartpairs.vim/";
+    meta.description = "Enchanted visual (selection) mode for Vim";
   };
 
   sourcemap-vim = buildVimPluginFrom2Nix {
@@ -3093,6 +3337,7 @@ let
       sha256 = "1gcgnynallz420911fdfm0ccbv3zs78p69nnh2ls1r4vlfp7g350";
     };
     meta.homepage = "https://github.com/chikatoike/sourcemap.vim/";
+    meta.description = "Switch between generated file and orignal file using source map.";
   };
 
   SpaceCamp = buildVimPluginFrom2Nix {
@@ -3105,6 +3350,7 @@ let
       sha256 = "1sbc9ivczkyfylhk1n4sm2sqzp8vddw03k0xb6z8k475n5vm8mvq";
     };
     meta.homepage = "https://github.com/jaredgorski/SpaceCamp/";
+    meta.description = "🔭 Colors for the final frontier";
   };
 
   Spacegray-vim = buildVimPluginFrom2Nix {
@@ -3117,6 +3363,7 @@ let
       sha256 = "0ks5yd1vmpjw8ml7hqd2zz2d8mqkqhfw2ya73y1igf6as70za896";
     };
     meta.homepage = "https://github.com/ajh17/Spacegray.vim/";
+    meta.description = "A Vim color scheme loosely based on the Spacegray Xcode theme.";
   };
 
   spacevim = buildVimPluginFrom2Nix {
@@ -3129,6 +3376,7 @@ let
       sha256 = "0m389cnpg17ca8s7vb9yrs40sxb56zg32lcpilnd63zfi7awgscg";
     };
     meta.homepage = "https://github.com/ctjhoa/spacevim/";
+    meta.description = "Spacemacs for vim";
   };
 
   sparkup = buildVimPluginFrom2Nix {
@@ -3141,6 +3389,7 @@ let
       sha256 = "17jgpvl879ik53rr3razfnbpfx63mzpp1rlvxxjsvvrk4g45dssm";
     };
     meta.homepage = "https://github.com/chrisgeo/sparkup/";
+    meta.description = "A parser for a condensed HTML format";
   };
 
   splice-vim = buildVimPluginFrom2Nix {
@@ -3153,6 +3402,7 @@ let
       sha256 = "0bh1gr2h6w872ql72rdlzpk5znl4lz01x6lgyf330sickizz5mvb";
     };
     meta.homepage = "https://github.com/sjl/splice.vim/";
+    meta.description = "A Vim plugin for managing three-way merges.";
   };
 
   split-term-vim = buildVimPluginFrom2Nix {
@@ -3165,6 +3415,7 @@ let
       sha256 = "12vrmbq1r8d6sgyxjwi0s856n1v4vjhrf8wpwq6l4ydmk1bnvjkb";
     };
     meta.homepage = "https://github.com/vimlab/split-term.vim/";
+    meta.description = "Utilites around neovim's `:terminal`.";
   };
 
   splitjoin-vim = buildVimPluginFrom2Nix {
@@ -3178,6 +3429,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/AndrewRadev/splitjoin.vim/";
+    meta.description = "Switch between single-line and multiline forms of code";
   };
 
   starsearch-vim = buildVimPluginFrom2Nix {
@@ -3190,6 +3442,7 @@ let
       sha256 = "1i1ygdqwhz4jqmz9lzjnx1a7s5chdqjsvgkmnd9x0s8ixqa41bpr";
     };
     meta.homepage = "https://github.com/darfink/starsearch.vim/";
+    meta.description = "Improvements to VIM's default asterisk (*) search";
   };
 
   supertab = buildVimPluginFrom2Nix {
@@ -3202,6 +3455,7 @@ let
       sha256 = "0l5labq68kyprv63k1q35hz5ly0dd06mf2z202mccnix4mlxf0db";
     };
     meta.homepage = "https://github.com/ervandew/supertab/";
+    meta.description = "Perform all your vim insert mode completions with Tab";
   };
 
   sved = buildVimPluginFrom2Nix {
@@ -3214,6 +3468,7 @@ let
       sha256 = "1r2nv069d6r2q6gbiz795x94mfjm9hnv05zka085hhq9a3yf1pgx";
     };
     meta.homepage = "https://github.com/peterbjorgensen/sved/";
+    meta.description = "Synctex support for Vim and Evince through DBus";
   };
 
   swift-vim = buildVimPluginFrom2Nix {
@@ -3226,6 +3481,7 @@ let
       sha256 = "0awz0pf3awrwhay40wngfllpmmh24zwm02ra530x4n1hk74iwf2v";
     };
     meta.homepage = "https://github.com/keith/swift.vim/";
+    meta.description = "Vim runtime files for Swift";
   };
 
   syntastic = buildVimPluginFrom2Nix {
@@ -3238,6 +3494,7 @@ let
       sha256 = "1ljsh0npbcv9g6l23z4jpba0bk1k5n13ix0p0rr22cipgzlxsbvh";
     };
     meta.homepage = "https://github.com/vim-syntastic/syntastic/";
+    meta.description = "Syntax checking hacks for vim";
   };
 
   tabmerge = buildVimPluginFrom2Nix {
@@ -3250,6 +3507,7 @@ let
       sha256 = "0prkyza1n49cdaslcr57w8zv15vw78mlqbzib2xipmawzjq02idq";
     };
     meta.homepage = "https://github.com/vim-scripts/tabmerge/";
+    meta.description = "Merge a tab's windows with the current tab";
   };
 
   tabpagebuffer-vim = buildVimPluginFrom2Nix {
@@ -3262,6 +3520,7 @@ let
       sha256 = "1z6zlpzkhwy1p2pmx9qrwb91dp9v4yi8jrdvm1if2k79ij4sl08f";
     };
     meta.homepage = "https://github.com/Shougo/tabpagebuffer.vim/";
+    meta.description = "Tabpage buffer interface";
   };
 
   tabular = buildVimPluginFrom2Nix {
@@ -3274,6 +3533,7 @@ let
       sha256 = "0jq91770wsp2waw7pywxjqx59v0vg54gfzirgcd85pg61w22bfla";
     };
     meta.homepage = "https://github.com/godlygeek/tabular/";
+    meta.description = "Vim script for text filtering and alignment";
   };
 
   tagbar = buildVimPluginFrom2Nix {
@@ -3286,6 +3546,7 @@ let
       sha256 = "16rj8pv8b9knbxi2967h96kgwp4r631kmpxdy74xsf938z4cya0j";
     };
     meta.homepage = "https://github.com/majutsushi/tagbar/";
+    meta.description = "Vim plugin that displays tags in a window, ordered by scope";
   };
 
   taglist-vim = buildVimPluginFrom2Nix {
@@ -3298,6 +3559,7 @@ let
       sha256 = "07aa2gfc73lznyi7w7cybzanspza3p67cv5hxr21g43zhs5k9izd";
     };
     meta.homepage = "https://github.com/vim-scripts/taglist.vim/";
+    meta.description = "Source code browser (supports C/C++, java, perl, python, tcl, sql, php, etc)";
   };
 
   targets-vim = buildVimPluginFrom2Nix {
@@ -3310,6 +3572,7 @@ let
       sha256 = "192wq3x64x11nm2jhs4yrc627b0lh002dfnj72xrc7jak9vbdps9";
     };
     meta.homepage = "https://github.com/wellle/targets.vim/";
+    meta.description = "Vim plugin that provides additional text objects";
   };
 
   tcomment_vim = buildVimPluginFrom2Nix {
@@ -3322,6 +3585,7 @@ let
       sha256 = "0nj7bsmkw8yc4hfnbsm32lf4qcwc4qd18nr5sb7vrkm6ipsr2qyz";
     };
     meta.homepage = "https://github.com/tomtom/tcomment_vim/";
+    meta.description = "An extensible & universal comment vim-plugin that also handles embedded filetypes";
   };
 
   tender-vim = buildVimPluginFrom2Nix {
@@ -3334,6 +3598,7 @@ let
       sha256 = "059my5q6gqjdkaf7qn842h92c6y7lp5z8wpwsi2ww6anzy85506z";
     };
     meta.homepage = "https://github.com/jacoborus/tender.vim/";
+    meta.description = "A 24bit colorscheme for Vim, Airline and Lightline";
   };
 
   tern_for_vim = buildVimPluginFrom2Nix {
@@ -3346,6 +3611,7 @@ let
       sha256 = "0vpi5lqlyf6kcc0ha8hf3ch2h8v3awidgpwbrv9f3bqvyg4yhdcd";
     };
     meta.homepage = "https://github.com/ternjs/tern_for_vim/";
+    meta.description = "Tern plugin for Vim";
   };
 
   thesaurus_query-vim = buildVimPluginFrom2Nix {
@@ -3358,6 +3624,7 @@ let
       sha256 = "0kfqpjwashwf084cbz6dmhirk42a4n8d1zj17i086by17nx7qn1g";
     };
     meta.homepage = "https://github.com/ron89/thesaurus_query.vim/";
+    meta.description = "Multi-language Thesaurus Query and Replacement plugin for Vim/NeoVim";
   };
 
   thumbnail-vim = buildVimPluginFrom2Nix {
@@ -3370,6 +3637,7 @@ let
       sha256 = "101w0pvfcnms07w4l6yjhn4b4hb3rvwm827qb2z4rb14fydakias";
     };
     meta.homepage = "https://github.com/itchyny/thumbnail.vim/";
+    meta.description = "A thumbnail-style buffer selector for Vim";
   };
 
   tlib_vim = buildVimPluginFrom2Nix {
@@ -3382,6 +3650,7 @@ let
       sha256 = "05swfvjyai32cbdpg10m3k2frkv017i1avf0nzilqavskvg04vi3";
     };
     meta.homepage = "https://github.com/tomtom/tlib_vim/";
+    meta.description = "Some utility functions for VIM";
   };
 
   tmux-complete-vim = buildVimPluginFrom2Nix {
@@ -3394,6 +3663,7 @@ let
       sha256 = "05ypjahaf7gk4vjc8hhglmw7y8vyjxyhxq8sm0s3np05aw0gdbsc";
     };
     meta.homepage = "https://github.com/wellle/tmux-complete.vim/";
+    meta.description = "Vim plugin for insert mode completion of words in adjacent tmux panes";
   };
 
   todo-txt-vim = buildVimPluginFrom2Nix {
@@ -3407,6 +3677,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/freitass/todo.txt-vim/";
+    meta.description = "Vim plugin for Todo.txt";
   };
 
   traces-vim = buildVimPluginFrom2Nix {
@@ -3419,6 +3690,7 @@ let
       sha256 = "0qny9z459x7hp5y43iivws2m312clacysdy1nnb3cr1fyhw9pflx";
     };
     meta.homepage = "https://github.com/markonm/traces.vim/";
+    meta.description = "Range, pattern and substitute preview for Vim";
   };
 
   tslime-vim = buildVimPluginFrom2Nix {
@@ -3431,6 +3703,7 @@ let
       sha256 = "1y5xikryv6851d0rjk9c64agawshp5208mwym6ma9ngs7s3s1l4x";
     };
     meta.homepage = "https://github.com/jgdavey/tslime.vim/";
+    meta.description = "Send command from vim to a running tmux session";
   };
 
   tsuquyomi = buildVimPluginFrom2Nix {
@@ -3443,6 +3716,7 @@ let
       sha256 = "1j5wdh0xa5yld4fy2msyjf1qvj8zx0iccc1bw63zzbrcl6rs30gx";
     };
     meta.homepage = "https://github.com/Quramy/tsuquyomi/";
+    meta.description = "A Vim plugin for TypeScript";
   };
 
   typescript-vim = buildVimPluginFrom2Nix {
@@ -3455,6 +3729,7 @@ let
       sha256 = "17z8ygns97wlnm4vq7kgkx3ymnbb2f6imxn02fc0iywkrhdqv7mj";
     };
     meta.homepage = "https://github.com/leafgarland/typescript-vim/";
+    meta.description = "Typescript syntax files for Vim";
   };
 
   ultisnips = buildVimPluginFrom2Nix {
@@ -3467,6 +3742,7 @@ let
       sha256 = "0a9fqgg8sg8s19q9inxyzl6lqdsnxs22csqs2rss1qz9dsic4yrh";
     };
     meta.homepage = "https://github.com/SirVer/ultisnips/";
+    meta.description = "UltiSnips - The ultimate snippet solution for Vim. Send pull requests to SirVer/ultisnips!";
   };
 
   undotree = buildVimPluginFrom2Nix {
@@ -3479,6 +3755,7 @@ let
       sha256 = "00zyvff32zp7pyjzkq8da9xhr378mlpi8gj717yfr9wbwwarwfd7";
     };
     meta.homepage = "https://github.com/mbbill/undotree/";
+    meta.description = "The undo history visualizer for VIM";
   };
 
   unicode-vim = buildVimPluginFrom2Nix {
@@ -3491,6 +3768,7 @@ let
       sha256 = "0k9gmf2rdvnlfqqhjlk206wimlh5di3smmrr9cgz0djq5pd3r5jz";
     };
     meta.homepage = "https://github.com/chrisbra/unicode.vim/";
+    meta.description = "A Vim plugin that provides a completion function for Unicode glyphs";
   };
 
   unite-vim = buildVimPluginFrom2Nix {
@@ -3503,6 +3781,7 @@ let
       sha256 = "03bqljjc1h43qimm81mv8ywkx5388kd6clm2f7887diiww0fgvfi";
     };
     meta.homepage = "https://github.com/Shougo/unite.vim/";
+    meta.description = ":dragon: Unite and create user interfaces";
   };
 
   utl-vim = buildVimPluginFrom2Nix {
@@ -3515,6 +3794,7 @@ let
       sha256 = "0ax68nmzlka9193n2h82qzvhzv4dv6lm7rg3b1vhj2pn1r6ci6p4";
     };
     meta.homepage = "https://github.com/vim-scripts/utl.vim/";
+    meta.description = "Univeral Text Linking - Execute URLs, footnotes, open emails, organize ideas";
   };
 
   vader-vim = buildVimPluginFrom2Nix {
@@ -3527,6 +3807,7 @@ let
       sha256 = "153cr1mrf5w5lyr8374brwx1z5yl9h0cnijxnd3xikh3yi3pbmwk";
     };
     meta.homepage = "https://github.com/junegunn/vader.vim/";
+    meta.description = "A simple Vimscript test framework";
   };
 
   vCoolor-vim = buildVimPluginFrom2Nix {
@@ -3539,6 +3820,7 @@ let
       sha256 = "193cjxfha5xcpfjqqpyfa6xidys1zmmmwlcj7w2cxbr5j5bdnybm";
     };
     meta.homepage = "https://github.com/KabbAmine/vCoolor.vim/";
+    meta.description = "Simple color selector/picker plugin for Vim.";
   };
 
   verilog_systemverilog-vim = buildVimPluginFrom2Nix {
@@ -3551,6 +3833,7 @@ let
       sha256 = "16w1nskfxsfs9dhk1yxmk16i5vjg0wq8l3fsqwa0904rh5wnakjn";
     };
     meta.homepage = "https://github.com/vhda/verilog_systemverilog.vim/";
+    meta.description = "Verilog/SystemVerilog Syntax and Omni-completion";
   };
 
   vim = buildVimPluginFrom2Nix {
@@ -3563,6 +3846,7 @@ let
       sha256 = "0d85kgxb52xw6120q6zrksr10nj54s8qi0fl6gqw6nc08ldaq0b1";
     };
     meta.homepage = "https://github.com/dracula/vim/";
+    meta.description = "🧛🏻‍♂️ Dark theme for Vim";
   };
 
   vim-abolish = buildVimPluginFrom2Nix {
@@ -3575,6 +3859,7 @@ let
       sha256 = "1n35igng3a6d5y4nh5pyb09s6khgcwbr3v0lnh33qb51cv4cnjh4";
     };
     meta.homepage = "https://github.com/tpope/vim-abolish/";
+    meta.description = "abolish.vim: easily search for, substitute, and abbreviate multiple variants of a word";
   };
 
   vim-addon-actions = buildVimPluginFrom2Nix {
@@ -3587,6 +3872,7 @@ let
       sha256 = "1098jc4amwfvcrfjfa5hgmyrjrbl680c3s56h7grvyl3i6n4hj34";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-actions/";
+    meta.description = "map actions such as running compilers to keys fast";
   };
 
   vim-addon-async = buildVimPluginFrom2Nix {
@@ -3599,6 +3885,7 @@ let
       sha256 = "1lk8ma51dd0syi73vq5r4qk9cpy6cq3llizvh94hmxblfjpvrs7q";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-async/";
+    meta.description = "This plugin will provide different async communication implementations";
   };
 
   vim-addon-background-cmd = buildVimPluginFrom2Nix {
@@ -3611,6 +3898,7 @@ let
       sha256 = "0csy68x686l3x5ancidxb5b6prg9k7ikybqzq3klx0gs5rmksfy4";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-background-cmd/";
+    meta.description = "provide a way to run commands in background";
   };
 
   vim-addon-commenting = buildVimPluginFrom2Nix {
@@ -3623,6 +3911,7 @@ let
       sha256 = "0alak8h33vada2ckb0v06y82qlib5mhyc2yswlv1rqh8ypzhq3mc";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-commenting/";
+    meta.description = "commentary.vim: comment stuff out";
   };
 
   vim-addon-completion = buildVimPluginFrom2Nix {
@@ -3635,6 +3924,7 @@ let
       sha256 = "1ld059y2qwlc5bdfjm2p314s1qh31lxs54g944pw49r46s5nlslr";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-completion/";
+    meta.description = "allow the user to switch between various completions easily + CamelCase regex";
   };
 
   vim-addon-errorformats = buildVimPluginFrom2Nix {
@@ -3647,6 +3937,7 @@ let
       sha256 = "09cds33lb5gm69wv5plgidprm8nf52vvg9qdzpq9mihvinvj5qv7";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-errorformats/";
+    meta.description = "some errorformats for vim";
   };
 
   vim-addon-goto-thing-at-cursor = buildVimPluginFrom2Nix {
@@ -3659,6 +3950,7 @@ let
       sha256 = "1s9021qnn95bzl8r7nx818j1kmjfjzg8xg07s071ic96lv40bcqp";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-goto-thing-at-cursor/";
+    meta.description = "make gf mapping of Vim more useful";
   };
 
   vim-addon-local-vimrc = buildVimPluginFrom2Nix {
@@ -3671,6 +3963,7 @@ let
       sha256 = "0n8lwl1gyak149p7jpgm0qbmfj8hcg8hirx3dxdhizw0yc47ws7h";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-local-vimrc/";
+    meta.description = "kiss local vimrc with hash protection";
   };
 
   vim-addon-manager = buildVimPluginFrom2Nix {
@@ -3683,6 +3976,7 @@ let
       sha256 = "0mgm2dqw8js9gajkrvm5n3k9m1grjxcrfc9xdzb3jxw1c0njdhcy";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-manager/";
+    meta.description = "manage and install vim plugins (including their dependencies) in a sane way. If you have any trouble contact me. Usually I reply within 24 hours";
   };
 
   vim-addon-mru = buildVimPluginFrom2Nix {
@@ -3695,6 +3989,7 @@ let
       sha256 = "0q6rxr9nrp63kidr3m3c2z5sda4g813pzshg0scxkjr8dxwhzdqm";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-mru/";
+    meta.description = "open most recently used files fast";
   };
 
   vim-addon-mw-utils = buildVimPluginFrom2Nix {
@@ -3707,6 +4002,7 @@ let
       sha256 = "1w99r6ck6gqg6b0fk9qj07q0b7p2qxav0ar6x294g34wsqij6xj5";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-mw-utils/";
+    meta.description = "vim: interpret a file by function and cache file automatically";
   };
 
   vim-addon-nix = buildVimPluginFrom2Nix {
@@ -3719,6 +4015,7 @@ let
       sha256 = "195z2yz09wirpqjpsha8x7qcr9is1q8qph4j0svws6qbqrkh8ryy";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-nix/";
+    meta.description = "some scripts assisting wirting .nix files";
   };
 
   vim-addon-other = buildVimPluginFrom2Nix {
@@ -3731,6 +4028,7 @@ let
       sha256 = "0sding7rc11imf5k9ki4h426wjiz8ywxa81v74xj3m23zm6l77sa";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-other/";
+    meta.description = "some small things which are not worth putting into its own repository";
   };
 
   vim-addon-php-manual = buildVimPluginFrom2Nix {
@@ -3743,6 +4041,7 @@ let
       sha256 = "1kc67f12wccqdza069b75lpcbqp4kv4r23i4mfz0ihwif5mfnhir";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-php-manual/";
+    meta.description = "tagged php manual which you can open in Vim";
   };
 
   vim-addon-signs = buildVimPluginFrom2Nix {
@@ -3755,6 +4054,7 @@ let
       sha256 = "0i4gfp30hmw1vqjl6zxjrgkca3ikdkcnjmma2mncjmcr6f59kjzy";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-signs/";
+    meta.description = "simple abstraction over the bad signs api of Vim";
   };
 
   vim-addon-sql = buildVimPluginFrom2Nix {
@@ -3767,6 +4067,7 @@ let
       sha256 = "0ihm157sby6csdwsnw2gwh3jmm3prm1mxwgkx2hsfwlmpb1vwwm3";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-sql/";
+    meta.description = "kiss alias aware SQL completion for Vim";
   };
 
   vim-addon-syntax-checker = buildVimPluginFrom2Nix {
@@ -3779,6 +4080,7 @@ let
       sha256 = "1rcn1ps06156nyglvxg6m7pn3vhvmnv5ad6kidp59hggyr5332i9";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-syntax-checker/";
+    meta.description = "Syntax checking hacks for vim";
   };
 
   vim-addon-toggle-buffer = buildVimPluginFrom2Nix {
@@ -3791,6 +4093,7 @@ let
       sha256 = "1xq38kfdm36c34ln66znw841q797w5gm8bpq1x64bsf2h6n3ml03";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-toggle-buffer/";
+    meta.description = "toggle related buffers. This can be .c <-> .h. It also can mean: show all files having same file extension in curent dir etc. Extend as you wish";
   };
 
   vim-addon-xdebug = buildVimPluginFrom2Nix {
@@ -3803,6 +4106,7 @@ let
       sha256 = "1i64ppdfp2qqq7vw1jf160mj4ikc04v39iazdab83xmiqjsh8ixw";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-xdebug/";
+    meta.description = "veriy simple xdebug protocol implementation so that you can debug PHP easily with Vim";
   };
 
   vim-airline = buildVimPluginFrom2Nix {
@@ -3815,6 +4119,7 @@ let
       sha256 = "0w4lwpynn5cj9si3apyfmxb8x8hv0acggsyfvmhpi41638sz2310";
     };
     meta.homepage = "https://github.com/vim-airline/vim-airline/";
+    meta.description = "lean & mean status/tabline for vim that's light as air";
   };
 
   vim-airline-themes = buildVimPluginFrom2Nix {
@@ -3827,6 +4132,7 @@ let
       sha256 = "18bfw09ywmw10jiv37iw2ijf46jhj2yw5wndqdgn7k42gy1wk7p6";
     };
     meta.homepage = "https://github.com/vim-airline/vim-airline-themes/";
+    meta.description = "A collection of themes for vim-airline";
   };
 
   vim-android = buildVimPluginFrom2Nix {
@@ -3839,6 +4145,7 @@ let
       sha256 = "1d187w74y0viv502gqxfqi0kyak0lyi0dbpcfkjd9c0fjbqrydd6";
     };
     meta.homepage = "https://github.com/hsanson/vim-android/";
+    meta.description = "Android development plugin for vim";
   };
 
   vim-anzu = buildVimPluginFrom2Nix {
@@ -3851,6 +4158,7 @@ let
       sha256 = "1p5lh4xsv9xsl8kx0h1bg6iy0if4a69hvairq69p50ffka83pv00";
     };
     meta.homepage = "https://github.com/osyo-manga/vim-anzu/";
+    meta.description = "Vim search status.";
   };
 
   vim-asterisk = buildVimPluginFrom2Nix {
@@ -3863,6 +4171,7 @@ let
       sha256 = "1bm99j4vskbgzfn09567qi0462dvjrpdkifc4hg24bi02bx9hjrj";
     };
     meta.homepage = "https://github.com/haya14busa/vim-asterisk/";
+    meta.description = ":snowflake: *-Improved";
   };
 
   vim-auto-save = buildVimPluginFrom2Nix {
@@ -3875,6 +4184,7 @@ let
       sha256 = "0dj45g56n0q4advc9sgch11ghb2h5ahk601gndwy02a0937axjh2";
     };
     meta.homepage = "https://github.com/907th/vim-auto-save/";
+    meta.description = "Automatically save changes to disk in Vim";
   };
 
   vim-autoformat = buildVimPluginFrom2Nix {
@@ -3887,6 +4197,7 @@ let
       sha256 = "1vamldn3y9pima18ryrrzn2mz1czzzadkiiklcrcl104v9mhv4am";
     };
     meta.homepage = "https://github.com/Chiel92/vim-autoformat/";
+    meta.description = "Provide easy code formatting in Vim by integrating existing code formatters.";
   };
 
   vim-automkdir = buildVimPluginFrom2Nix {
@@ -3899,6 +4210,7 @@ let
       sha256 = "00ix0y1ijbis8pj7pf6gv2g5z2s7kxwlr0viybwrs0li5acym6jp";
     };
     meta.homepage = "https://github.com/benizi/vim-automkdir/";
+    meta.description = "Really simple plugin to automatically create directories when saving files";
   };
 
   vim-bazel = buildVimPluginFrom2Nix {
@@ -3911,6 +4223,7 @@ let
       sha256 = "182w8ibr34z86nmx6byabkah0q9fgrzml8m2ardaqzqjqr2ya5yg";
     };
     meta.homepage = "https://github.com/bazelbuild/vim-bazel/";
+    meta.description = "Vim support for Bazel";
   };
 
   vim-beancount = buildVimPluginFrom2Nix {
@@ -3923,6 +4236,7 @@ let
       sha256 = "1vvfr1wz2770h4rh48qnaqbbdbfxj6pcyhyfh0vf641l46v6wzf8";
     };
     meta.homepage = "https://github.com/nathangrigg/vim-beancount/";
+    meta.description = "Vim ftplugin for beancount";
   };
 
   vim-better-whitespace = buildVimPluginFrom2Nix {
@@ -3935,6 +4249,7 @@ let
       sha256 = "1iga1xdzygnr9rhv0kw01nr3vahl2d486p06slmri2vy8ngzym0q";
     };
     meta.homepage = "https://github.com/ntpeters/vim-better-whitespace/";
+    meta.description = "Better whitespace highlighting for Vim";
   };
 
   vim-buffergator = buildVimPluginFrom2Nix {
@@ -3947,6 +4262,7 @@ let
       sha256 = "0g7ymflzfdsj5793s32gc83bidqys5dxmw455viwpqgmgjxnar5c";
     };
     meta.homepage = "https://github.com/jeetsukumaran/vim-buffergator/";
+    meta.description = "Vim plugin to list, select and switch between buffers.";
   };
 
   vim-bufferline = buildVimPluginFrom2Nix {
@@ -3959,6 +4275,7 @@ let
       sha256 = "0zls47a3v8dv3h63drbak1mxf3j2x3scvclk7bjwzlk2yp447das";
     };
     meta.homepage = "https://github.com/bling/vim-bufferline/";
+    meta.description = "super simple vim plugin to show the list of buffers in the command bar";
   };
 
   vim-bufkill = buildVimPluginFrom2Nix {
@@ -3971,6 +4288,7 @@ let
       sha256 = "0j3r63j2vs0lm1vnfzwcwqbahncnqq46wmaf1rp8i9l8skqm20px";
     };
     meta.homepage = "https://github.com/qpkorr/vim-bufkill/";
+    meta.description = "Git repo for http://www.vim.org/scripts/script.php?script_id=1147";
   };
 
   vim-choosewin = buildVimPluginFrom2Nix {
@@ -3983,6 +4301,7 @@ let
       sha256 = "1nq1vpwv6h5sc849y26nzkrmr9w3aj6w32apyih9kx0jh4ybv0xs";
     };
     meta.homepage = "https://github.com/t9md/vim-choosewin/";
+    meta.description = "Land on window you chose like tmux's 'display-pane'";
   };
 
   vim-clojure-highlight = buildVimPluginFrom2Nix {
@@ -3995,6 +4314,7 @@ let
       sha256 = "0fg3faj0fq7b8pqr0i33qdg2xfd5966lrjl1wkq6jcgvdqamhz0y";
     };
     meta.homepage = "https://github.com/guns/vim-clojure-highlight/";
+    meta.description = "Extend builtin syntax highlighting to referred and aliased vars in Clojure buffers";
   };
 
   vim-clojure-static = buildVimPluginFrom2Nix {
@@ -4007,6 +4327,7 @@ let
       sha256 = "0s98qrhv7xh7bvh8bm1vaxpw3n2mcxayay3k90ibgjrv1jpyvzx7";
     };
     meta.homepage = "https://github.com/guns/vim-clojure-static/";
+    meta.description = "Meikel Brandmeyer's excellent Clojure runtime files";
   };
 
   vim-closetag = buildVimPluginFrom2Nix {
@@ -4019,6 +4340,7 @@ let
       sha256 = "0kxba7s0s66m2k4j1v8iwq6m5j9843ha67br03dg7d9ya4qiyyw9";
     };
     meta.homepage = "https://github.com/alvan/vim-closetag/";
+    meta.description = "Auto close (X)HTML tags";
   };
 
   vim-codefmt = buildVimPluginFrom2Nix {
@@ -4043,6 +4365,7 @@ let
       sha256 = "1yzhyi12r508r2yjkzbcnddv3q4whjf3kchp23xs0snhwd9b981x";
     };
     meta.homepage = "https://github.com/kchmck/vim-coffee-script/";
+    meta.description = "CoffeeScript support for vim";
   };
 
   vim-colemak = buildVimPluginFrom2Nix {
@@ -4055,6 +4378,7 @@ let
       sha256 = "1li7yc5vglrhf7w7i7gs2i7ihdb1bhx85basmpgqlf7790lv1599";
     };
     meta.homepage = "https://github.com/kalbasit/vim-colemak/";
+    meta.description = "Colemak key mappings for Vim.";
   };
 
   vim-colors-solarized = buildVimPluginFrom2Nix {
@@ -4067,6 +4391,7 @@ let
       sha256 = "05d3lmd1shyagvr3jygqghxd3k8a4vp32723fvxdm57fdrlyzcm1";
     };
     meta.homepage = "https://github.com/altercation/vim-colors-solarized/";
+    meta.description = "precision colorscheme for the vim text editor";
   };
 
   vim-colorschemes = buildVimPluginFrom2Nix {
@@ -4079,6 +4404,7 @@ let
       sha256 = "1cg8q7w0vgl73aw1b9zz0zh5vw5d2pm8pm54fhfzva4azg56f416";
     };
     meta.homepage = "https://github.com/flazz/vim-colorschemes/";
+    meta.description = "one colorscheme pack to rule them all!";
   };
 
   vim-colorstepper = buildVimPluginFrom2Nix {
@@ -4091,6 +4417,7 @@ let
       sha256 = "05ykxn0gmh8liz0zv5hb8df1ajggxp88izq3825m0yb3ma3k1jqs";
     };
     meta.homepage = "https://github.com/jonbri/vim-colorstepper/";
+    meta.description = "Cycle easily through vim color schemes";
   };
 
   vim-commentary = buildVimPluginFrom2Nix {
@@ -4103,6 +4430,7 @@ let
       sha256 = "09d81q9na7pvvrmxxqy09ffdzsx5v5dikinb704c9wm4ys2bidr9";
     };
     meta.homepage = "https://github.com/tpope/vim-commentary/";
+    meta.description = "commentary.vim: comment stuff out";
   };
 
   vim-cool = buildVimPluginFrom2Nix {
@@ -4115,6 +4443,7 @@ let
       sha256 = "1in44gf7hs978nc9328zh1kj3jh04kcinw0m8spcbgj079782sg8";
     };
     meta.homepage = "https://github.com/romainl/vim-cool/";
+    meta.description = "A very simple plugin that makes hlsearch more useful.";
   };
 
   vim-cpp-enhanced-highlight = buildVimPluginFrom2Nix {
@@ -4127,6 +4456,7 @@ let
       sha256 = "15nyd4yssswyi4brkch09rca0qh7p77li4xyrivmiapkr4a60vwb";
     };
     meta.homepage = "https://github.com/octol/vim-cpp-enhanced-highlight/";
+    meta.description = "Additional Vim syntax highlighting for C++ (including C++11/14/17)";
   };
 
   vim-csharp = buildVimPluginFrom2Nix {
@@ -4139,6 +4469,7 @@ let
       sha256 = "16sf3yqvd36b4rkrh6w7jskvlkrgymwa13xcvh586lmlc7g6ilcx";
     };
     meta.homepage = "https://github.com/OrangeT/vim-csharp/";
+    meta.description = "Enhancement's to Vim's C-Sharp Functionality";
   };
 
   vim-css-color = buildVimPluginFrom2Nix {
@@ -4151,6 +4482,7 @@ let
       sha256 = "1mjwyznprhhfmwi1djyjgxkqv9bwima1ysxa9782rk198j2n87vs";
     };
     meta.homepage = "https://github.com/ap/vim-css-color/";
+    meta.description = "Preview colours in source code while editing";
   };
 
   vim-cue = buildVimPluginFrom2Nix {
@@ -4163,6 +4495,7 @@ let
       sha256 = "0aybj1xxi860cn7wzg13z50f16kdsyhba0z7qwchps4fr24xkjms";
     };
     meta.homepage = "https://github.com/jjo/vim-cue/";
+    meta.description = "cuelang/cue syntax highlighting plugin for vim, derived from google/vim-jsonnet";
   };
 
   vim-cursorword = buildVimPluginFrom2Nix {
@@ -4175,6 +4508,7 @@ let
       sha256 = "1mrkkl6pchrmd2s5wjdh46p54hchv7jvgdbjjxmvzhg5ndk0zxvf";
     };
     meta.homepage = "https://github.com/itchyny/vim-cursorword/";
+    meta.description = "Underlines the word under the cursor";
   };
 
   vim-cute-python = buildVimPluginFrom2Nix {
@@ -4187,6 +4521,7 @@ let
       sha256 = "1jrfd6z84cdzn3yxdfp0xfxygscq7s8kbzxk37hf9cf5pl9ln0qf";
     };
     meta.homepage = "https://github.com/ehamberg/vim-cute-python/";
+    meta.description = "Unicode goodness for Python code using vim's “conceal” feature";
   };
 
   vim-dadbod = buildVimPluginFrom2Nix {
@@ -4199,6 +4534,7 @@ let
       sha256 = "019k26g88y713wy3q06sbab82dgcgsj7f08g9xr2z2xsjmijp8g4";
     };
     meta.homepage = "https://github.com/tpope/vim-dadbod/";
+    meta.description = "dadbod.vim: Modern database interface for Vim";
   };
 
   vim-dasht = buildVimPluginFrom2Nix {
@@ -4211,6 +4547,7 @@ let
       sha256 = "186rvr9vw140sin219q6psvh70vlqas9vfnbbg5ms6n7wvhz6a19";
     };
     meta.homepage = "https://github.com/sunaku/vim-dasht/";
+    meta.description = ":information_desk_person: (Neo)Vim plugin for dasht integration";
   };
 
   vim-devicons = buildVimPluginFrom2Nix {
@@ -4223,6 +4560,7 @@ let
       sha256 = "0cfiwdaj43fx2gq7916i98iyn3ky79d359ylgpznczn88k37s1wi";
     };
     meta.homepage = "https://github.com/ryanoasis/vim-devicons/";
+    meta.description = "Adds file type icons to Vim plugins such as: NERDTree, vim-airline, CtrlP, unite, Denite, lightline, vim-startify and many more";
   };
 
   vim-diminactive = buildVimPluginFrom2Nix {
@@ -4235,6 +4573,7 @@ let
       sha256 = "14jf5hh3v2f5wb10v09ygx15pxbwziv20pwv0fqkakxwf0vqwd50";
     };
     meta.homepage = "https://github.com/blueyed/vim-diminactive/";
+    meta.description = "Vim plugin to dim inactive windows";
   };
 
   vim-dirdiff = buildVimPluginFrom2Nix {
@@ -4247,6 +4586,7 @@ let
       sha256 = "0nvhsj12gsjgncpmvg8b1qz675ghfcsib5gj22p7j4l4brih563r";
     };
     meta.homepage = "https://github.com/will133/vim-dirdiff/";
+    meta.description = "Vim plugin to diff two directories";
   };
 
   vim-dirvish = buildVimPluginFrom2Nix {
@@ -4259,6 +4599,7 @@ let
       sha256 = "0iz72p992z2bkvz66x7fgyd9hpjq558h009bsjvfr4l6fpbi4ys2";
     };
     meta.homepage = "https://github.com/justinmk/vim-dirvish/";
+    meta.description = "Directory viewer for Vim :zap:";
   };
 
   vim-dispatch = buildVimPluginFrom2Nix {
@@ -4271,6 +4612,7 @@ let
       sha256 = "1m0dfm8r3d8zph6i4ln3jqfzs8hxbkq9rvxpij1m2vvk2hgy2nf5";
     };
     meta.homepage = "https://github.com/tpope/vim-dispatch/";
+    meta.description = "dispatch.vim: Asynchronous build and test dispatcher";
   };
 
   vim-docbk = buildVimPluginFrom2Nix {
@@ -4283,6 +4625,7 @@ let
       sha256 = "1jnx39m152hf9j620ygagaydg6h8m8gxkr1fmxj6kgqf71jr0n9d";
     };
     meta.homepage = "https://github.com/jhradilek/vim-docbk/";
+    meta.description = "DocBook 4.5 and 5.0 support for Vim";
   };
 
   vim-docbk-snippets = buildVimPluginFrom2Nix {
@@ -4295,6 +4638,7 @@ let
       sha256 = "1qz3azgzv9718s2a6h8xw5nrvs4j776csmzsn9chvykdpx8rwim1";
     };
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
+    meta.description = "AsciiDoc, DocBook, Mallard, and RELAX NG snippets for Vim";
   };
 
   vim-easy-align = buildVimPluginFrom2Nix {
@@ -4307,6 +4651,7 @@ let
       sha256 = "0gpfdla8shaf5ykgakrsf0h0w6ygvwcv3lfpnki24l790xhdi606";
     };
     meta.homepage = "https://github.com/junegunn/vim-easy-align/";
+    meta.description = ":sunflower: A Vim alignment plugin";
   };
 
   vim-easygit = buildVimPluginFrom2Nix {
@@ -4319,6 +4664,7 @@ let
       sha256 = "1a42s0nymakz20rjrpwmiqpnlndrkdakzbm53aclzcs61i9zq2k8";
     };
     meta.homepage = "https://github.com/neoclide/vim-easygit/";
+    meta.description = "A git wrapper focus on simplity and usability";
   };
 
   vim-easymotion = buildVimPluginFrom2Nix {
@@ -4331,6 +4677,7 @@ let
       sha256 = "1dhhq1y6xa3q26irclad6254q89xpnxglfd92v3bq01l4p41zcqf";
     };
     meta.homepage = "https://github.com/easymotion/vim-easymotion/";
+    meta.description = "Vim motions on speed!";
   };
 
   vim-easytags = buildVimPluginFrom2Nix {
@@ -4343,6 +4690,7 @@ let
       sha256 = "0i8ha1fa5d860b1mi0xp8kwsgb0b9vbzcg1bldzv6s5xd9yyi12i";
     };
     meta.homepage = "https://github.com/xolox/vim-easytags/";
+    meta.description = "Automated tag file generation and syntax highlighting of tags in Vim";
   };
 
   vim-eighties = buildVimPluginFrom2Nix {
@@ -4355,6 +4703,7 @@ let
       sha256 = "1yh1kny28c7f5qm52y7xd5aj4mycksfb0x1zvcb37c73ycdxc1v2";
     };
     meta.homepage = "https://github.com/justincampbell/vim-eighties/";
+    meta.description = "Automatically resizes your windows";
   };
 
   vim-elixir = buildVimPluginFrom2Nix {
@@ -4367,6 +4716,7 @@ let
       sha256 = "13yr7iwi4w0m4zgkq1ia74qcca9wh9k0bz2y1yvm81db0bllsf6s";
     };
     meta.homepage = "https://github.com/elixir-editors/vim-elixir/";
+    meta.description = "Vim configuration files for Elixir";
   };
 
   vim-elm-syntax = buildVimPluginFrom2Nix {
@@ -4379,6 +4729,7 @@ let
       sha256 = "05jkx4dbkb646wy0igqpwc55iamm0a030dswhirg6nyl3x6qzgym";
     };
     meta.homepage = "https://github.com/andys8/vim-elm-syntax/";
+    meta.description = "Elm plugin for syntax. Only necessary if Vim is older than 8.2 patch 929";
   };
 
   vim-endwise = buildVimPluginFrom2Nix {
@@ -4391,6 +4742,7 @@ let
       sha256 = "1f9nwp9qiip4alkpacwaq2nzsrx80a4cdwyrvajs6lrk48dv4hbw";
     };
     meta.homepage = "https://github.com/tpope/vim-endwise/";
+    meta.description = "endwise.vim: wisely add \"end\" in ruby, endfunction/endif/more in vim script, etc";
   };
 
   vim-eunuch = buildVimPluginFrom2Nix {
@@ -4403,6 +4755,7 @@ let
       sha256 = "1xadb22kd40swmww0qxmmkcpcq6viy8l167pjck5q32hfngll5d3";
     };
     meta.homepage = "https://github.com/tpope/vim-eunuch/";
+    meta.description = "eunuch.vim: Helpers for UNIX";
   };
 
   vim-exchange = buildVimPluginFrom2Nix {
@@ -4415,6 +4768,7 @@ let
       sha256 = "09fa156y8pxpzdbngifa7yzg1vjg1fjsgp1h9inj818zbig8mamb";
     };
     meta.homepage = "https://github.com/tommcdo/vim-exchange/";
+    meta.description = "Easy text exchange operator for Vim";
   };
 
   vim-expand-region = buildVimPluginFrom2Nix {
@@ -4427,6 +4781,7 @@ let
       sha256 = "0l30wjlk4vxr16f1njnvf8aw9yg9p9jisvcxbcg3znsq5q8ix6zv";
     };
     meta.homepage = "https://github.com/terryma/vim-expand-region/";
+    meta.description = "Vim plugin that allows you to visually select increasingly larger regions of text using the same key combination.";
   };
 
   vim-extradite = buildVimPluginFrom2Nix {
@@ -4439,6 +4794,7 @@ let
       sha256 = "1mm2icx50q5iyhaz1dypnbqh14s1wsnw8skpxcm1klhqn02zk46f";
     };
     meta.homepage = "https://github.com/int3/vim-extradite/";
+    meta.description = "A git commit browser for vim. Extends fugitive.vim.";
   };
 
   vim-fetch = buildVimPluginFrom2Nix {
@@ -4451,6 +4807,7 @@ let
       sha256 = "1hadfzhzkq2n9k3yga55fsl6nm5mgl2vv975jnxsi4qgz9cwcsgr";
     };
     meta.homepage = "https://github.com/wsdjeg/vim-fetch/";
+    meta.description = "Make Vim handle line and column numbers in file names with a minimum of fuss";
   };
 
   vim-fireplace = buildVimPluginFrom2Nix {
@@ -4463,6 +4820,7 @@ let
       sha256 = "1x74j3gghfmqh1mxswzhb6d0zdll735r5lrgn4g3z580y15h37w5";
     };
     meta.homepage = "https://github.com/tpope/vim-fireplace/";
+    meta.description = "fireplace.vim: Clojure REPL support";
   };
 
   vim-fish = buildVimPluginFrom2Nix {
@@ -4475,6 +4833,7 @@ let
       sha256 = "1yvjlm90alc4zsdsppkmsja33wsgm2q6kkn9dxn6xqwnq4jw5s7h";
     };
     meta.homepage = "https://github.com/dag/vim-fish/";
+    meta.description = "Vim support for editing fish scripts";
   };
 
   vim-flagship = buildVimPluginFrom2Nix {
@@ -4487,6 +4846,7 @@ let
       sha256 = "0vqkdzd7b204kbinn12jk306kc9bn2f0yaifj49swd0g8hv6dk4b";
     };
     meta.homepage = "https://github.com/tpope/vim-flagship/";
+    meta.description = "flagship.vim: Configurable and extensible tab line and status line";
   };
 
   vim-flake8 = buildVimPluginFrom2Nix {
@@ -4499,6 +4859,7 @@ let
       sha256 = "14k1b7gjj1sh40qsf4wxbn0dymmc4jvsrd9pacsr6li273aiy6gq";
     };
     meta.homepage = "https://github.com/nvie/vim-flake8/";
+    meta.description = "Flake8 plugin for Vim";
   };
 
   vim-flatbuffers = buildVimPluginFrom2Nix {
@@ -4511,6 +4872,7 @@ let
       sha256 = "1mfi9als56cpfsz3s91hg3lci8zn7pr9s0l690wqh40vh57d1gxm";
     };
     meta.homepage = "https://github.com/dcharbon/vim-flatbuffers/";
+    meta.description = "Vim syntax highlighting for Google Flatbuffers";
   };
 
   vim-flutter = buildVimPluginFrom2Nix {
@@ -4523,6 +4885,7 @@ let
       sha256 = "0jibmr0v0pqml1cprs3qmkhhmacpb2bwpk8lhaz4dzp8jlga9g00";
     };
     meta.homepage = "https://github.com/thosakwe/vim-flutter/";
+    meta.description = "Vim commands for Flutter, including hot-reload-on-save and more. 🦋";
   };
 
   vim-fsharp = buildVimPluginFrom2Nix {
@@ -4535,6 +4898,7 @@ let
       sha256 = "0ds300kjhm352ni3fwivsrnc9ls021d2x29f4cdszillamcgs7pw";
     };
     meta.homepage = "https://github.com/fsharp/vim-fsharp/";
+    meta.description = "F# bindings for vim";
   };
 
   vim-ft-diff_fold = buildVimPluginFrom2Nix {
@@ -4547,6 +4911,7 @@ let
       sha256 = "0bk95cxkfzamlgv1x2jb1bnfas2pmvvqgpn5fvxddf0andm8sfma";
     };
     meta.homepage = "https://github.com/thinca/vim-ft-diff_fold/";
+    meta.description = "Folding setting for diff.";
   };
 
   vim-fugitive = buildVimPluginFrom2Nix {
@@ -4559,6 +4924,7 @@ let
       sha256 = "18rvp600vk0anbzxdgcw3kdswqr3100b3jgnmz6c2k5c50wz37rm";
     };
     meta.homepage = "https://github.com/tpope/vim-fugitive/";
+    meta.description = "fugitive.vim: A Git wrapper so awesome, it should be illegal";
   };
 
   vim-ghost = buildVimPluginFrom2Nix {
@@ -4571,6 +4937,7 @@ let
       sha256 = "0p1y5g9fj58m48z9c6vdis7d4zajlv9j0y8065rmivws3df9n50j";
     };
     meta.homepage = "https://github.com/raghur/vim-ghost/";
+    meta.description = "Vim/Nvim client for GhostText - Edit browser text areas in Vim/Neovim";
   };
 
   vim-gist = buildVimPluginFrom2Nix {
@@ -4583,6 +4950,7 @@ let
       sha256 = "1dz33c63q7gghz35hyrvbshqw20faccs7bvxlda5w70mkbz9h9c4";
     };
     meta.homepage = "https://github.com/mattn/vim-gist/";
+    meta.description = "Vim plugin for Gist";
   };
 
   vim-gista = buildVimPluginFrom2Nix {
@@ -4595,6 +4963,7 @@ let
       sha256 = "0f3pxahsaj37iln1k3289h7pj7z4fm0z3vfd0szf1spv3hzcjapd";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-gista/";
+    meta.description = "An alternative gist.vim, vim plugin which manipulate gists in Vim.";
   };
 
   vim-gitbranch = buildVimPluginFrom2Nix {
@@ -4607,6 +4976,7 @@ let
       sha256 = "01gvd96mnzfc5s0951zzq122birg5svnximkldgb9kv5bmsnmh3j";
     };
     meta.homepage = "https://github.com/itchyny/vim-gitbranch/";
+    meta.description = "Provides the branch name of the current git repository";
   };
 
   vim-gitgutter = buildVimPluginFrom2Nix {
@@ -4619,6 +4989,7 @@ let
       sha256 = "19f28c3wasgck78xqdygsyiwv17qqh69nkn9n1gajcbmbr55lhzn";
     };
     meta.homepage = "https://github.com/airblade/vim-gitgutter/";
+    meta.description = "A Vim plugin which shows git diff markers in the sign column and stages/previews/undoes hunks and partial hunks.";
   };
 
   vim-github-dashboard = buildVimPluginFrom2Nix {
@@ -4631,6 +5002,7 @@ let
       sha256 = "0jkr6mz5zcpbyswmiyprcbm8l93lkg5sr46r8kyds1n2vz19cf7x";
     };
     meta.homepage = "https://github.com/junegunn/vim-github-dashboard/";
+    meta.description = ":octocat: Browse GitHub events in Vim";
   };
 
   vim-glsl = buildVimPluginFrom2Nix {
@@ -4643,6 +5015,7 @@ let
       sha256 = "0vxjbv5qn7lvvpqv1danmkg423cbf7czxzp208zlx9l82vnr24z8";
     };
     meta.homepage = "https://github.com/tikhomirov/vim-glsl/";
+    meta.description = "Vim runtime files for OpenGL Shading Language";
   };
 
   vim-go = buildVimPluginFrom2Nix {
@@ -4655,6 +5028,7 @@ let
       sha256 = "0rpay08m3q0syvw9ks45b3cvggghi1350h7dp87bx24jd3dqvdvf";
     };
     meta.homepage = "https://github.com/fatih/vim-go/";
+    meta.description = "Go development plugin for Vim";
   };
 
   vim-grammarous = buildVimPluginFrom2Nix {
@@ -4667,6 +5041,7 @@ let
       sha256 = "1cxycr2ijzxn9d5xgp9ri4f2i4d87a3100nsc11iwa2bzir4xsiz";
     };
     meta.homepage = "https://github.com/rhysd/vim-grammarous/";
+    meta.description = "A powerful grammar checker for Vim using LanguageTool.";
   };
 
   vim-graphql = buildVimPluginFrom2Nix {
@@ -4679,6 +5054,7 @@ let
       sha256 = "0d98b0zpbyjcafp0q25c3qsx13q74nszxsi5jxxjnpz1wv6s83x1";
     };
     meta.homepage = "https://github.com/jparise/vim-graphql/";
+    meta.description = "A Vim plugin that provides GraphQL file detection, syntax highlighting, and indentation.";
   };
 
   vim-grepper = buildVimPluginFrom2Nix {
@@ -4691,6 +5067,7 @@ let
       sha256 = "0c411yg2s6wb8141lqpgasg7iwgvfwy88z6l0c0gccmk8knypxhm";
     };
     meta.homepage = "https://github.com/mhinz/vim-grepper/";
+    meta.description = ":space_invader: Helps you win at grep.";
   };
 
   vim-gui-position = buildVimPluginFrom2Nix {
@@ -4703,6 +5080,7 @@ let
       sha256 = "11kv9kkya9sybslg7lfhhcn2fi3n735zvprg8ch6kd58m82xr4n3";
     };
     meta.homepage = "https://github.com/brennanfee/vim-gui-position/";
+    meta.description = "Vim plugin to remember and restore the GUI screen size and position.";
   };
 
   vim-gutentags = buildVimPluginFrom2Nix {
@@ -4715,6 +5093,7 @@ let
       sha256 = "1j9548h2cqvnmqa89hha0s1wfvijdgk6ilakq60awlijdw427f04";
     };
     meta.homepage = "https://github.com/ludovicchabant/vim-gutentags/";
+    meta.description = "A Vim plugin that manages your tag files";
   };
 
   vim-hardtime = buildVimPluginFrom2Nix {
@@ -4727,6 +5106,7 @@ let
       sha256 = "0yhai27zqkdmgck1iy64fw9yy2vghmqvj4g2lbh21h50df1sa8cf";
     };
     meta.homepage = "https://github.com/takac/vim-hardtime/";
+    meta.description = "Plugin to help you stop repeating the basic movement keys";
   };
 
   vim-haskellconceal = buildVimPluginFrom2Nix {
@@ -4739,6 +5119,7 @@ let
       sha256 = "1kh6853hi4rgl4z1xs8kz9l1q9w7lh0r42y2m0rabfpr6yh3091r";
     };
     meta.homepage = "https://github.com/twinside/vim-haskellconceal/";
+    meta.description = "Conceal operator for haskell";
   };
 
   vim-haskellConcealPlus = buildVimPluginFrom2Nix {
@@ -4751,6 +5132,7 @@ let
       sha256 = "1y2hgcpls21738lhrgimsxnkhxxqczp05nmk68s28xssbn4dqgma";
     };
     meta.homepage = "https://github.com/enomsg/vim-haskellConcealPlus/";
+    meta.description = "Extended Haskell Conceal feature for Vim";
   };
 
   vim-hdevtools = buildVimPluginFrom2Nix {
@@ -4763,6 +5145,7 @@ let
       sha256 = "1xvjz6yidcywn1xmdqlxsz68lmkx6rmiqf6q2gfz56pzq1mfmski";
     };
     meta.homepage = "https://github.com/bitc/vim-hdevtools/";
+    meta.description = "Vim plugin for Haskell development";
   };
 
   vim-hier = buildVimPluginFrom2Nix {
@@ -4775,6 +5158,7 @@ let
       sha256 = "118pd9sx1bl9vfr89xrf536hfx4l162a43a1qpwpkqxzb9a3ca7n";
     };
     meta.homepage = "https://github.com/jceb/vim-hier/";
+    meta.description = "Highlight quickfix errors";
   };
 
   vim-highlightedyank = buildVimPluginFrom2Nix {
@@ -4787,6 +5171,7 @@ let
       sha256 = "091qw0zlc80micn29wb6r8m4f7pplcv8bx1yfvbn3cba77qyj3nb";
     };
     meta.homepage = "https://github.com/machakann/vim-highlightedyank/";
+    meta.description = "Make the yanked region apparent!";
   };
 
   vim-hindent = buildVimPluginFrom2Nix {
@@ -4799,6 +5184,7 @@ let
       sha256 = "1y4nnz38zal1ffs5n751dn9p9apk8q7pq3cw79r5z6fsdp942ai6";
     };
     meta.homepage = "https://github.com/alx741/vim-hindent/";
+    meta.description = "Vim Haskell Hindent integration plugin";
   };
 
   vim-hocon = buildVimPluginFrom2Nix {
@@ -4823,6 +5209,7 @@ let
       sha256 = "17qvi57g72ijgk7nczczli3kcphvdf625fzqbqcmqpsawgvfd07n";
     };
     meta.homepage = "https://github.com/Twinside/vim-hoogle/";
+    meta.description = "Vim plugin used to query hoogle, the haskell search engine";
   };
 
   vim-html-template-literals = buildVimPluginFrom2Nix {
@@ -4835,6 +5222,7 @@ let
       sha256 = "0vq0y9adx2023p0nqv020921r474216msrkm0lkb5v776xm4mks2";
     };
     meta.homepage = "https://github.com/jonsmithers/vim-html-template-literals/";
+    meta.description = "Syntax highlighting for html template literals in javascript (as in lit-html and polymer 3)";
   };
 
   vim-husk = buildVimPluginFrom2Nix {
@@ -4847,6 +5235,7 @@ let
       sha256 = "09kqzaqa4jdh31q0a3nxbx9li7zg890qxh68rfzblzyx22xv4mka";
     };
     meta.homepage = "https://github.com/vim-utils/vim-husk/";
+    meta.description = "Mappings that boost vim's command line.";
   };
 
   vim-hybrid = buildVimPluginFrom2Nix {
@@ -4859,6 +5248,7 @@ let
       sha256 = "1c3q39121hiw85r9ymiyhz5zsf6bl9pwk4pgj6nh6ckwns4cgcmw";
     };
     meta.homepage = "https://github.com/w0ng/vim-hybrid/";
+    meta.description = "A dark color scheme for Vim";
   };
 
   vim-hybrid-material = buildVimPluginFrom2Nix {
@@ -4871,6 +5261,7 @@ let
       sha256 = "01b9n598106qh68ky3fykczq13pldi221r7lrxvg0vnv2zp1z5qd";
     };
     meta.homepage = "https://github.com/kristijanhusak/vim-hybrid-material/";
+    meta.description = "Material color scheme for Vim based on w0ng/vim-hybrid color scheme";
   };
 
   vim-iced-coffee-script = buildVimPluginFrom2Nix {
@@ -4883,6 +5274,7 @@ let
       sha256 = "14yfirny359rlrr082il2ys3hxiyrbbk794rdxrs2lasjy8rb1f7";
     };
     meta.homepage = "https://github.com/noc7c9/vim-iced-coffee-script/";
+    meta.description = "Iced Coffeescript vim support";
   };
 
   vim-illuminate = buildVimPluginFrom2Nix {
@@ -4895,6 +5287,7 @@ let
       sha256 = "1yijaj1dqfmw4dsdmgj01sxizyraisxwjqh2hhbq93pdln4lm51f";
     };
     meta.homepage = "https://github.com/RRethy/vim-illuminate/";
+    meta.description = "illuminate.vim - Vim plugin for automatically highlighting other uses of the word under the cursor";
   };
 
   vim-indent-guides = buildVimPluginFrom2Nix {
@@ -4907,6 +5300,7 @@ let
       sha256 = "0ahlbjv2ibhhnf9zqn85b2sh3wf9l0kmg2qmavz3z5fmf8sqljj2";
     };
     meta.homepage = "https://github.com/nathanaelkane/vim-indent-guides/";
+    meta.description = "A Vim plugin for visually displaying indent levels in code";
   };
 
   vim-indent-object = buildVimPluginFrom2Nix {
@@ -4919,6 +5313,7 @@ let
       sha256 = "1kmwnz0jxjkvfzy06r7r73pcxfcyjp8p8m2d6qrhjfvzidgfhw19";
     };
     meta.homepage = "https://github.com/michaeljsmith/vim-indent-object/";
+    meta.description = "Vim plugin that defines a new text object representing lines of code at the same indent level. Useful for python/vim scripts, etc.";
   };
 
   vim-indentwise = buildVimPluginFrom2Nix {
@@ -4931,6 +5326,7 @@ let
       sha256 = "0bnzk1afi88icq58389nxqz196gkxcj71qrxvw87d72h2zaspvcx";
     };
     meta.homepage = "https://github.com/jeetsukumaran/vim-indentwise/";
+    meta.description = "A Vim plugin for indent-level based motion.";
   };
 
   vim-indexed-search = buildVimPluginFrom2Nix {
@@ -4943,6 +5339,7 @@ let
       sha256 = "0cq265yqksh7jqazxn7qxr7bclrk2pq7py4c29wspsvbi0m3m8rc";
     };
     meta.homepage = "https://github.com/henrik/vim-indexed-search/";
+    meta.description = "Show \"Match 123 of 456  /search term/\" in Vim searches. By Yakov Lerner.";
   };
 
   vim-ipython = buildVimPluginFrom2Nix {
@@ -4955,6 +5352,7 @@ let
       sha256 = "10wpfvfs8yv1bvzra4d5zy5glp62gbalpayxx7mkalhr2ccppy3x";
     };
     meta.homepage = "https://github.com/ivanov/vim-ipython/";
+    meta.description = "A two-way integration between Vim and IPython 0.11+";
   };
 
   vim-isort = buildVimPluginFrom2Nix {
@@ -4967,6 +5365,7 @@ let
       sha256 = "1h8s21kwbjdg632jvd46r2va7il4f1dbgwfw8fkds0n08rbnpdjw";
     };
     meta.homepage = "https://github.com/fisadev/vim-isort/";
+    meta.description = "Vim plugin to sort python imports using https://github.com/timothycrosley/isort";
   };
 
   vim-janah = buildVimPluginFrom2Nix {
@@ -4979,6 +5378,7 @@ let
       sha256 = "16bygyri9qxyhl8n8md945wwy1i9lss4hwxa7yjl9ms2fzzragv4";
     };
     meta.homepage = "https://github.com/mhinz/vim-janah/";
+    meta.description = "Vim colorscheme.";
   };
 
   vim-javacomplete2 = buildVimPluginFrom2Nix {
@@ -4991,6 +5391,7 @@ let
       sha256 = "0dwgqnjcnnyvmrplbxkzmfyrm0rgd4z5kgx5989c528gp0dwhaja";
     };
     meta.homepage = "https://github.com/artur-shaik/vim-javacomplete2/";
+    meta.description = "Updated javacomplete plugin for vim.";
   };
 
   vim-javascript = buildVimPluginFrom2Nix {
@@ -5003,6 +5404,7 @@ let
       sha256 = "16s3s883azfmwkr6hhnh8m7ibk6jm3vnvpmsagangxn0mz6ky533";
     };
     meta.homepage = "https://github.com/pangloss/vim-javascript/";
+    meta.description = "Vastly improved Javascript indentation and syntax support in Vim.";
   };
 
   vim-javascript-syntax = buildVimPluginFrom2Nix {
@@ -5015,6 +5417,7 @@ let
       sha256 = "09561jf3cmzpm8jn8k34fd3av6i1mqi6n32bisri96jkabw8dpv7";
     };
     meta.homepage = "https://github.com/jelera/vim-javascript-syntax/";
+    meta.description = "Enhanced javascript syntax file for Vim";
   };
 
   vim-jinja = buildVimPluginFrom2Nix {
@@ -5027,6 +5430,7 @@ let
       sha256 = "1n62ga02rcj7jjgzvwr46pckj59dc1zqahjgampjcwdd8vf4mg3q";
     };
     meta.homepage = "https://github.com/lepture/vim-jinja/";
+    meta.description = "jinja plugins for vim (syntax and indent)";
   };
 
   vim-jsbeautify = buildVimPluginFrom2Nix {
@@ -5040,6 +5444,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/maksimr/vim-jsbeautify/";
+    meta.description = "vim plugin which formated javascript files by js-beautify";
   };
 
   vim-jsdoc = buildVimPluginFrom2Nix {
@@ -5052,6 +5457,7 @@ let
       sha256 = "0biyf2vzvnqzzdykq0agf1hzs2ynbbly4fxfwrfablznbdgsm0pz";
     };
     meta.homepage = "https://github.com/heavenshell/vim-jsdoc/";
+    meta.description = "Generate JSDoc to your JavaScript code.";
   };
 
   vim-json = buildVimPluginFrom2Nix {
@@ -5064,6 +5470,7 @@ let
       sha256 = "1c19pqrys45pzflj5jyrm4q6hcvs977lv6qsfvbnk7nm4skxrqp1";
     };
     meta.homepage = "https://github.com/elzr/vim-json/";
+    meta.description = "A better JSON for Vim: distinct highlighting of keywords vs values, JSON-specific (non-JS) warnings, quote concealing. Pathogen-friendly.";
   };
 
   vim-jsonnet = buildVimPluginFrom2Nix {
@@ -5076,6 +5483,7 @@ let
       sha256 = "0fc6xpiyxly3ibs4lzn6dk9yd2cc353qb8lavag7zmims1bncvqf";
     };
     meta.homepage = "https://github.com/google/vim-jsonnet/";
+    meta.description = "Jsonnet filetype plugin for Vim.";
   };
 
   vim-jsx-pretty = buildVimPluginFrom2Nix {
@@ -5088,6 +5496,7 @@ let
       sha256 = "09xr8pbx27qpffcr0j1857cpyxgkv5xay6mgpzvynpxq21xrmm3q";
     };
     meta.homepage = "https://github.com/MaxMEllon/vim-jsx-pretty/";
+    meta.description = ":flashlight: [Vim script] JSX and TSX syntax pretty highlighting for vim.";
   };
 
   vim-kitty-navigator = buildVimPluginFrom2Nix {
@@ -5100,6 +5509,7 @@ let
       sha256 = "0zqvcnbns0vbxkqr0mpiapql8cvp54nn5a6mwc7l24jr6plhiwmn";
     };
     meta.homepage = "https://github.com/knubie/vim-kitty-navigator/";
+    meta.description = "Seamless navigation between kitty panes and vim splits";
   };
 
   vim-lastplace = buildVimPluginFrom2Nix {
@@ -5112,6 +5522,7 @@ let
       sha256 = "0m8skd86p2cr0wz8rghj4is3fgnlh7vrw7can916li35i3hajid2";
     };
     meta.homepage = "https://github.com/farmergreg/vim-lastplace/";
+    meta.description = "Intelligently reopen files at your last edit position in Vim.";
   };
 
   vim-latex-live-preview = buildVimPluginFrom2Nix {
@@ -5124,6 +5535,7 @@ let
       sha256 = "14fgbq7wyyhhzkd8832g07z97jg1b9awibzf3sn33ih7p5bb3hhp";
     };
     meta.homepage = "https://github.com/xuhdev/vim-latex-live-preview/";
+    meta.description = "A Vim Plugin for Lively Previewing LaTeX PDF Output";
   };
 
   vim-lawrencium = buildVimPluginFrom2Nix {
@@ -5136,6 +5548,7 @@ let
       sha256 = "1gvvr04x17157iz83rv45nlbj1qaz90j0l96q3fki3h1b0fw0099";
     };
     meta.homepage = "https://github.com/ludovicchabant/vim-lawrencium/";
+    meta.description = "A Mercurial wrapper for Vim.";
   };
 
   vim-leader-guide = buildVimPluginFrom2Nix {
@@ -5160,6 +5573,7 @@ let
       sha256 = "1yw13wf7j92gk8fwkhls6bdbz2h7xbyq4qba8zsfm76rbqn7vzfg";
     };
     meta.homepage = "https://github.com/mk12/vim-lean/";
+    meta.description = "Lean Theorem Prover plugin for Vim.";
   };
 
   vim-ledger = buildVimPluginFrom2Nix {
@@ -5172,6 +5586,7 @@ let
       sha256 = "1jx814sqs0n0mrdi2lrh6xa3d2cmgyc78176gd5c1n8k5q7qkp40";
     };
     meta.homepage = "https://github.com/ledger/vim-ledger/";
+    meta.description = "Vim plugin for Ledger";
   };
 
   vim-lion = buildVimPluginFrom2Nix {
@@ -5184,6 +5599,7 @@ let
       sha256 = "0kkf91ppn5jhvnpmmjsp6rvf97pqj57jrbn3qmmy925ncfqh90ld";
     };
     meta.homepage = "https://github.com/tommcdo/vim-lion/";
+    meta.description = "A simple alignment operator for Vim text editor";
   };
 
   vim-liquid = buildVimPluginFrom2Nix {
@@ -5196,6 +5612,7 @@ let
       sha256 = "0cvcjiii5wv55n695284k520rrwi0l4gqpyiqnrpnhmsaqks0n0f";
     };
     meta.homepage = "https://github.com/tpope/vim-liquid/";
+    meta.description = "Vim Liquid runtime files with Jekyll enhancements";
   };
 
   vim-localvimrc = buildVimPluginFrom2Nix {
@@ -5208,6 +5625,7 @@ let
       sha256 = "0428hbcj4w9lwmsv9jribkp5fjcbw3sg0gs81jf9n5ax0mxgnbzy";
     };
     meta.homepage = "https://github.com/embear/vim-localvimrc/";
+    meta.description = "Search local vimrc files (\".lvimrc\") in the tree (root dir up to current dir) and load them.";
   };
 
   vim-logreview = buildVimPluginFrom2Nix {
@@ -5220,6 +5638,7 @@ let
       sha256 = "09lyymq0f3ybqdzhbpia7b0wcjbcyg5nkqd72qk8jkvc42da2af3";
     };
     meta.homepage = "https://github.com/andreshazard/vim-logreview/";
+    meta.description = "vim plugin for log navigation";
   };
 
   vim-lsc = buildVimPluginFrom2Nix {
@@ -5232,6 +5651,7 @@ let
       sha256 = "07m2wqich31pxp9jgh3fzjqqdm7vdjh8rjf67d4l6kkf13dw89yh";
     };
     meta.homepage = "https://github.com/natebosch/vim-lsc/";
+    meta.description = "A vim plugin for communicating with a language server";
   };
 
   vim-maktaba = buildVimPluginFrom2Nix {
@@ -5244,6 +5664,7 @@ let
       sha256 = "1vcc8gaikbgdq1k4f3jdjrmlwad1z44g3biifgqyp0sgd7bjd9lp";
     };
     meta.homepage = "https://github.com/google/vim-maktaba/";
+    meta.description = "Consistent Vimscript";
   };
 
   vim-manpager = buildVimPluginFrom2Nix {
@@ -5256,6 +5677,7 @@ let
       sha256 = "0d7rg4lvyxr4v34bimxpdkynmvs606fqvv0qpi7g139ng9hv6wqm";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-manpager/";
+    meta.description = "Use Vim as a MANPAGER program";
   };
 
   vim-markdown = buildVimPluginFrom2Nix {
@@ -5268,6 +5690,7 @@ let
       sha256 = "198bsv88njz6l2pf9yjxb8292aj7x8n2sxi50q3cdsg29a3y2i5c";
     };
     meta.homepage = "https://github.com/plasticboy/vim-markdown/";
+    meta.description = "Markdown Vim Mode";
   };
 
   vim-mergetool = buildVimPluginFrom2Nix {
@@ -5280,6 +5703,7 @@ let
       sha256 = "1i3zil06zyndm400i2pfn64ykbs29fw8l720229a8ypp9mxcibcp";
     };
     meta.homepage = "https://github.com/samoshkin/vim-mergetool/";
+    meta.description = ":cake: Efficient way of using Vim as a Git mergetool";
   };
 
   vim-metamath = buildVimPluginFrom2Nix {
@@ -5292,6 +5716,7 @@ let
       sha256 = "0gwqafhr18wv9ygq47cxwi0k4gj1xll4z8s61w9l9vwaiy5znssh";
     };
     meta.homepage = "https://github.com/david-a-wheeler/vim-metamath/";
+    meta.description = "vim mode for editing metamath files";
   };
 
   vim-misc = buildVimPluginFrom2Nix {
@@ -5304,6 +5729,7 @@ let
       sha256 = "0rd9788dyfc58py50xbiaz5j7nphyvf3rpp3yal7yq2dhf0awwfi";
     };
     meta.homepage = "https://github.com/xolox/vim-misc/";
+    meta.description = "Miscellaneous auto-load Vim scripts";
   };
 
   vim-monokai-pro = buildVimPluginFrom2Nix {
@@ -5316,6 +5742,7 @@ let
       sha256 = "0rszkf070d8w94dhgjpsl1kyn19j7bqyz434qshz4j88jk7hap6h";
     };
     meta.homepage = "https://github.com/phanviet/vim-monokai-pro/";
+    meta.description = "Monokai Pro color scheme for Vim / Neovim";
   };
 
   vim-move = buildVimPluginFrom2Nix {
@@ -5328,6 +5755,7 @@ let
       sha256 = "18pnk6ri73a6dq86zh510wy1s0z1dwnsyay7lxrgirjgh3s9nhhq";
     };
     meta.homepage = "https://github.com/matze/vim-move/";
+    meta.description = "Plugin to move lines and selections up and down";
   };
 
   vim-mucomplete = buildVimPluginFrom2Nix {
@@ -5340,6 +5768,7 @@ let
       sha256 = "1z6h8qwr12isr0xhpdqjf9imprz84gijaqgr761vgh7l2q1piqqv";
     };
     meta.homepage = "https://github.com/lifepillar/vim-mucomplete/";
+    meta.description = "Chained completion that works the way you want!";
   };
 
   vim-multiple-cursors = buildVimPluginFrom2Nix {
@@ -5352,6 +5781,7 @@ let
       sha256 = "09rcs435nh74p5dwdw8k1mv1w2lni4y098dg99j6dh6859lc3hw8";
     };
     meta.homepage = "https://github.com/terryma/vim-multiple-cursors/";
+    meta.description = "True Sublime Text style multiple selections for Vim";
   };
 
   vim-mundo = buildVimPluginFrom2Nix {
@@ -5364,6 +5794,7 @@ let
       sha256 = "0np83qa95cfg1059r4iaf31sfhs86241jzkmw026gdja9s30q3m1";
     };
     meta.homepage = "https://github.com/simnalamburt/vim-mundo/";
+    meta.description = ":christmas_tree: Vim undo tree visualizer";
   };
 
   vim-nerdtree-tabs = buildVimPluginFrom2Nix {
@@ -5376,6 +5807,7 @@ let
       sha256 = "16iqhp5l6xvq0k8bq9ngqfhish1fwggpmvd7ni1fh5dqr00iii9x";
     };
     meta.homepage = "https://github.com/jistr/vim-nerdtree-tabs/";
+    meta.description = "NERDTree and tabs together in Vim, painlessly";
   };
 
   vim-nftables = buildVimPluginFrom2Nix {
@@ -5388,6 +5820,7 @@ let
       sha256 = "1n3mpaa60k4w0sqpkgw19aksa1sbcqz7vl8fp6bj6i63bhiprsqf";
     };
     meta.homepage = "https://github.com/nfnty/vim-nftables/";
+    meta.description = "vim nftables syntax";
   };
 
   vim-niceblock = buildVimPluginFrom2Nix {
@@ -5400,6 +5833,7 @@ let
       sha256 = "1d0rx7s10jl1q9y5s4235imizbyxrgkm4dxh5ankcr8s617l7mz2";
     };
     meta.homepage = "https://github.com/kana/vim-niceblock/";
+    meta.description = "Vim plugin: Make blockwise Visual mode more useful";
   };
 
   vim-ninja-feet = buildVimPluginFrom2Nix {
@@ -5412,6 +5846,7 @@ let
       sha256 = "1i3n5nlwyg65k0f0qrimbfs67l2xx39cqp4gyrycw4vzp6hs0lsc";
     };
     meta.homepage = "https://github.com/tommcdo/vim-ninja-feet/";
+    meta.description = "Strike from the cursor to either end of a text object";
   };
 
   vim-nix = buildVimPluginFrom2Nix {
@@ -5424,6 +5859,7 @@ let
       sha256 = "0pwdfwws1dj3705m00ghw3dvym5zbm00bfsj023gmbp6vr8wn6yi";
     };
     meta.homepage = "https://github.com/LnL7/vim-nix/";
+    meta.description = "Vim configuration files for Nix http://nixos.org/nix";
   };
 
   vim-numbertoggle = buildVimPluginFrom2Nix {
@@ -5436,6 +5872,7 @@ let
       sha256 = "1rrmvv7ali50rpbih1s0fj00a3hjspwinx2y6nhwac7bjsnqqdwi";
     };
     meta.homepage = "https://github.com/jeffkreeftmeijer/vim-numbertoggle/";
+    meta.description = "Toggles between hybrid and absolute line numbers automatically";
   };
 
   vim-obsession = buildVimPluginFrom2Nix {
@@ -5448,6 +5885,7 @@ let
       sha256 = "11h7jyg7fhjmq3pmpc93nrsxm175ra14407rs3558h8p04snc159";
     };
     meta.homepage = "https://github.com/tpope/vim-obsession/";
+    meta.description = "obsession.vim: continuously updated session files";
   };
 
   vim-one = buildVimPluginFrom2Nix {
@@ -5460,6 +5898,7 @@ let
       sha256 = "0951r9kw23zlwd7fda6ib2d9k0akpfd2hvh82pasgw3ks9v1n2vf";
     };
     meta.homepage = "https://github.com/rakr/vim-one/";
+    meta.description = "Adaptation of one-light and one-dark colorschemes for Vim";
   };
 
   vim-operator-replace = buildVimPluginFrom2Nix {
@@ -5472,6 +5911,7 @@ let
       sha256 = "07cibp61zwbzpjfxqdc77fzrgnz8jhimmdhhyjr0lvgrjgvsnv6q";
     };
     meta.homepage = "https://github.com/kana/vim-operator-replace/";
+    meta.description = "Vim plugin: Operator to replace text with register content";
   };
 
   vim-operator-surround = buildVimPluginFrom2Nix {
@@ -5484,6 +5924,7 @@ let
       sha256 = "0f9shg81bl39hz67ahbi6k6gbhky7gzp8by16fhiz75hbjgp9lq2";
     };
     meta.homepage = "https://github.com/rhysd/vim-operator-surround/";
+    meta.description = "Vim operator mapping to enclose text objects with surrounds like paren, quote and so on.";
   };
 
   vim-operator-user = buildVimPluginFrom2Nix {
@@ -5496,6 +5937,7 @@ let
       sha256 = "16y2fyrmwg4vkcl85i8xg8s6m39ca2jvgi9qm36b3vzbnkcifafb";
     };
     meta.homepage = "https://github.com/kana/vim-operator-user/";
+    meta.description = "Vim plugin: Define your own operator easily";
   };
 
   vim-orgmode = buildVimPluginFrom2Nix {
@@ -5508,6 +5950,7 @@ let
       sha256 = "00yihsp5fmpw1ch013brrjkxb6h4slkxms1n154glz8pm95bqsm0";
     };
     meta.homepage = "https://github.com/jceb/vim-orgmode/";
+    meta.description = "Text outlining and task management for Vim based on Emacs' Org-Mode";
   };
 
   vim-pager = buildVimPluginFrom2Nix {
@@ -5520,6 +5963,7 @@ let
       sha256 = "10xm77pia916zf9i2llyhs89s653r98l6zq8cswm7cw61bjfxvv6";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-pager/";
+    meta.description = "Use VIM as a PAGER program";
   };
 
   vim-pandoc = buildVimPluginFrom2Nix {
@@ -5532,6 +5976,7 @@ let
       sha256 = "0i1zcnsc962bzm3q6kw8bldd9xh6vb7kw0j72c4dzwdw4ayx0wf1";
     };
     meta.homepage = "https://github.com/vim-pandoc/vim-pandoc/";
+    meta.description = "pandoc integration and utilities for vim";
   };
 
   vim-pandoc-after = buildVimPluginFrom2Nix {
@@ -5544,6 +5989,7 @@ let
       sha256 = "07wg4j2kx08s9hvvp8jspwb0v7fgac8m8cjr3y1sbq8ca18bkvgy";
     };
     meta.homepage = "https://github.com/vim-pandoc/vim-pandoc-after/";
+    meta.description = "Handles vim-pandoc's integration with third-party plugins";
   };
 
   vim-pandoc-syntax = buildVimPluginFrom2Nix {
@@ -5556,6 +6002,7 @@ let
       sha256 = "162l2p8md8lfyfjxzlmlz5ky5kvvr6wjmdk8r8lk6ygpkl2b51f7";
     };
     meta.homepage = "https://github.com/vim-pandoc/vim-pandoc-syntax/";
+    meta.description = "pandoc markdown syntax, to be installed alongside vim-pandoc";
   };
 
   vim-parinfer = buildVimPluginFrom2Nix {
@@ -5568,6 +6015,7 @@ let
       sha256 = "1v2pyjyxvqw2kl9j4pdpdlbl2q3jnndcb8iqgyygs7jn91c4s073";
     };
     meta.homepage = "https://github.com/bhurlow/vim-parinfer/";
+    meta.description = "vim plugin to balance your parenthesis ";
   };
 
   vim-pasta = buildVimPluginFrom2Nix {
@@ -5580,6 +6028,7 @@ let
       sha256 = "14rswwx24i75xzgkbx1hywan1msn2ki26353ly2pyvznnqss1pwq";
     };
     meta.homepage = "https://github.com/sickill/vim-pasta/";
+    meta.description = "Pasting in Vim with indentation adjusted to destination context";
   };
 
   vim-pathogen = buildVimPluginFrom2Nix {
@@ -5592,6 +6041,7 @@ let
       sha256 = "1scj84vlrn2kavnq2wabhdzhnlkb3w046grv9j3976i5ykjmyiif";
     };
     meta.homepage = "https://github.com/tpope/vim-pathogen/";
+    meta.description = "pathogen.vim: manage your runtimepath";
   };
 
   vim-peekaboo = buildVimPluginFrom2Nix {
@@ -5604,6 +6054,7 @@ let
       sha256 = "11lgf60v2kj772d9azkfddypwidcgfps5mvnhmp4gg0fmfx12h99";
     };
     meta.homepage = "https://github.com/junegunn/vim-peekaboo/";
+    meta.description = ":eyes: \" / @ / CTRL-R";
   };
 
   vim-pencil = buildVimPluginFrom2Nix {
@@ -5616,6 +6067,7 @@ let
       sha256 = "09b30cxlwbr9l07ya05is9q2y9vzbzhcc656nvjjzf968l496xr2";
     };
     meta.homepage = "https://github.com/reedes/vim-pencil/";
+    meta.description = "Rethinking Vim as a tool for writing";
   };
 
   vim-phabricator = buildVimPluginFrom2Nix {
@@ -5628,6 +6080,7 @@ let
       sha256 = "0yhf347fhrs0aqsq1swqihyav32442lv2chzjr3mzqcym8zbzsh6";
     };
     meta.homepage = "https://github.com/jparise/vim-phabricator/";
+    meta.description = "Vim plugin for Phabricator and Arcanist";
   };
 
   vim-pico8-syntax = buildVimPluginFrom2Nix {
@@ -5640,6 +6093,7 @@ let
       sha256 = "0say0bb74rdbabgsf7rrbm8x841pmgh80fwr6kn94fgphr3vhm0s";
     };
     meta.homepage = "https://github.com/justinj/vim-pico8-syntax/";
+    meta.description = "Syntax file for Pico-8";
   };
 
   vim-plug = buildVimPluginFrom2Nix {
@@ -5652,6 +6106,7 @@ let
       sha256 = "1k9y119xwb84fgsyyp1npjh5z1wlbbm1922n411h70cfa4928rfh";
     };
     meta.homepage = "https://github.com/junegunn/vim-plug/";
+    meta.description = ":hibiscus: Minimalist Vim Plugin Manager";
   };
 
   vim-plugin-AnsiEsc = buildVimPluginFrom2Nix {
@@ -5664,6 +6119,7 @@ let
       sha256 = "05sf9xh7zs475kykz1hsp0xp7iiclp7pdiy3bpx7wlfp9z71bd9p";
     };
     meta.homepage = "https://github.com/powerman/vim-plugin-AnsiEsc/";
+    meta.description = "ansi escape sequences concealed, but highlighted as specified (conceal)";
   };
 
   vim-polyglot = buildVimPluginFrom2Nix {
@@ -5676,6 +6132,7 @@ let
       sha256 = "0v6ll98j44hgmczhl6cp4rw734x582iz7942cw5jmbp7wg83nz88";
     };
     meta.homepage = "https://github.com/sheerun/vim-polyglot/";
+    meta.description = "A solid language pack for Vim.";
   };
 
   vim-prettyprint = buildVimPluginFrom2Nix {
@@ -5688,6 +6145,7 @@ let
       sha256 = "0mb1ylsq4023ik9wd9iwzlynra2c320xp9h2i79bspapglgd5gk9";
     };
     meta.homepage = "https://github.com/thinca/vim-prettyprint/";
+    meta.description = "Prettyprint vim variables.";
   };
 
   vim-projectionist = buildVimPluginFrom2Nix {
@@ -5700,6 +6158,7 @@ let
       sha256 = "1h5gb29rs64cfr55g12s1f0w0cqzqs2nhfw8qfbfch5jbh21p10p";
     };
     meta.homepage = "https://github.com/tpope/vim-projectionist/";
+    meta.description = "projectionist.vim: Granular project configuration";
   };
 
   vim-prosession = buildVimPluginFrom2Nix {
@@ -5712,6 +6171,7 @@ let
       sha256 = "1ix04f3nxxmxd36kzalx0hrbks30v44ydz15apvl1h8l8663hda2";
     };
     meta.homepage = "https://github.com/dhruvasagar/vim-prosession/";
+    meta.description = "Handle vim sessions like a pro";
   };
 
   vim-protobuf = buildVimPluginFrom2Nix {
@@ -5724,6 +6184,7 @@ let
       sha256 = "1vh9f34rb7pg6dc64xhr102yig6y03is74777av464bhq651z7p5";
     };
     meta.homepage = "https://github.com/uarun/vim-protobuf/";
+    meta.description = "Vim syntax highlighting for Google's Protocol Buffers";
   };
 
   vim-ps1 = buildVimPluginFrom2Nix {
@@ -5736,6 +6197,7 @@ let
       sha256 = "1yx1rnpln0lxvf6pbdn8yyxiyhi7rfl8wl94kd8djk51h5lhq1n3";
     };
     meta.homepage = "https://github.com/PProvost/vim-ps1/";
+    meta.description = "A Vim plugin for Windows PowerShell support";
   };
 
   vim-pug = buildVimPluginFrom2Nix {
@@ -5748,6 +6210,7 @@ let
       sha256 = "07141jkfnaia4ydc6qcg0bc06w720l2lzl7bm4bsjwswqrzmhfam";
     };
     meta.homepage = "https://github.com/digitaltoad/vim-pug/";
+    meta.description = "Vim Pug (formerly Jade) template engine syntax highlighting and indention";
   };
 
   vim-puppet = buildVimPluginFrom2Nix {
@@ -5760,6 +6223,7 @@ let
       sha256 = "0a4qv8f74g6c2i9l6kv3zbcq9lskhdqg86w12f8hshw1vkfmfr4x";
     };
     meta.homepage = "https://github.com/rodjek/vim-puppet/";
+    meta.description = "Puppet niceties for your Vim setup";
   };
 
   vim-python-pep8-indent = buildVimPluginFrom2Nix {
@@ -5772,6 +6236,7 @@ let
       sha256 = "1blyhkykfnf4pgfq9hn9l8pq0iqdvig9m4zd8qq9aa9rlm8f0kzh";
     };
     meta.homepage = "https://github.com/Vimjas/vim-python-pep8-indent/";
+    meta.description = "A nicer Python indentation style for vim.";
   };
 
   vim-qml = buildVimPluginFrom2Nix {
@@ -5784,6 +6249,7 @@ let
       sha256 = "1pxl70l0g4i8cbnpjhb9pyjhz982flkrng07y9xwzbdl2jx42i8s";
     };
     meta.homepage = "https://github.com/peterhoeg/vim-qml/";
+    meta.description = "QML syntax highlighting for VIM";
   };
 
   vim-quickrun = buildVimPluginFrom2Nix {
@@ -5796,6 +6262,7 @@ let
       sha256 = "1ncfw4inb6rdlrayvijy7769wyppiihmazmfcjdx5g42mycfxg0y";
     };
     meta.homepage = "https://github.com/thinca/vim-quickrun/";
+    meta.description = "Run commands quickly.";
   };
 
   vim-racer = buildVimPluginFrom2Nix {
@@ -5808,6 +6275,7 @@ let
       sha256 = "0k62yybilh2052w6zfscw7daz7y1qnqv1311zngjim5z8xmp7j1l";
     };
     meta.homepage = "https://github.com/racer-rust/vim-racer/";
+    meta.description = "Racer support for Vim";
   };
 
   vim-repeat = buildVimPluginFrom2Nix {
@@ -5820,6 +6288,7 @@ let
       sha256 = "00hhbqcx21j0738ad5xh92lsykpa0qxhdy1s7wnwc8d3jndmyjwb";
     };
     meta.homepage = "https://github.com/tpope/vim-repeat/";
+    meta.description = "repeat.vim: enable repeating supported plugin maps with \".\"";
   };
 
   vim-rhubarb = buildVimPluginFrom2Nix {
@@ -5832,6 +6301,7 @@ let
       sha256 = "1hpyxcmwrjxhkgkb0w2qpg8gh9bgiqwddyj4zx8hy2g8qnx7z5yj";
     };
     meta.homepage = "https://github.com/tpope/vim-rhubarb/";
+    meta.description = "rhubarb.vim: GitHub extension for fugitive.vim";
   };
 
   vim-rooter = buildVimPluginFrom2Nix {
@@ -5844,6 +6314,7 @@ let
       sha256 = "1vwydkjm5h12kcnqmg2cv1cqf9hmhmyy2lx5lj3g0g6ra27yfjnw";
     };
     meta.homepage = "https://github.com/airblade/vim-rooter/";
+    meta.description = "Changes Vim working directory to project root (identified by presence of known directory or file).";
   };
 
   vim-rsi = buildVimPluginFrom2Nix {
@@ -5856,6 +6327,7 @@ let
       sha256 = "1ycjwnbs6rks78yxh0k0ywpvic0663mv7kydy3kjpa4f5bnkgbvc";
     };
     meta.homepage = "https://github.com/tpope/vim-rsi/";
+    meta.description = "rsi.vim: Readline style insertion";
   };
 
   vim-ruby = buildVimPluginFrom2Nix {
@@ -5868,6 +6340,7 @@ let
       sha256 = "086pzicqal2cmvbrzy09d93c7cz5scgjcqc9xn4cw19dn55irllp";
     };
     meta.homepage = "https://github.com/vim-ruby/vim-ruby/";
+    meta.description = "Vim/Ruby Configuration Files";
   };
 
   vim-salve = buildVimPluginFrom2Nix {
@@ -5880,6 +6353,7 @@ let
       sha256 = "1hj0qg182jv3cwg85rg4z0f8f8hr409is71z7sxhnhjq9fn1h6xj";
     };
     meta.homepage = "https://github.com/tpope/vim-salve/";
+    meta.description = "salve.vim: static support for Leiningen and Boot";
   };
 
   vim-sandwich = buildVimPluginFrom2Nix {
@@ -5892,6 +6366,7 @@ let
       sha256 = "1jd5i0ykvwf5jnm3g3rm2r0zn64xqk38p2xl55la9a1a99j9mfxh";
     };
     meta.homepage = "https://github.com/machakann/vim-sandwich/";
+    meta.description = "The set of operator and textobject plugins to search/select/edit sandwiched textobjects.";
   };
 
   vim-sayonara = buildVimPluginFrom2Nix {
@@ -5904,6 +6379,7 @@ let
       sha256 = "0m4pbpqq7m4rbqj1sxzx3r25znm9m5df6z6kndc6x5c1p27a63pi";
     };
     meta.homepage = "https://github.com/mhinz/vim-sayonara/";
+    meta.description = ":japanese_goblin: Sane buffer/window deletion.";
   };
 
   vim-scala = buildVimPluginFrom2Nix {
@@ -5916,6 +6392,7 @@ let
       sha256 = "14q8j6vwqad2nwia29d0844v2zdcx04xn9dyicv13sdpivzcm4rb";
     };
     meta.homepage = "https://github.com/derekwyatt/vim-scala/";
+    meta.description = "My work on integration of Scala into Vim - not a ton here, but useful for me.";
   };
 
   vim-scouter = buildVimPluginFrom2Nix {
@@ -5928,6 +6405,7 @@ let
       sha256 = "0fx64hj1kzrsxz96195d5lm3x88zyycbcr78819mcbgfzyxis6b8";
     };
     meta.homepage = "https://github.com/thinca/vim-scouter/";
+    meta.description = "Measures Battle Power of a vimmer.";
   };
 
   vim-scriptease = buildVimPluginFrom2Nix {
@@ -5940,6 +6418,7 @@ let
       sha256 = "0kcv5q4qahqd316h5k81xnf8skn71126x4lw2i6wa2m2653d0k5c";
     };
     meta.homepage = "https://github.com/tpope/vim-scriptease/";
+    meta.description = "scriptease.vim: A Vim plugin for Vim plugins";
   };
 
   vim-sensible = buildVimPluginFrom2Nix {
@@ -5952,6 +6431,7 @@ let
       sha256 = "153i3kh44ri046va3qdrbvvsv7gy25fsd9pc2yhrg23lvj169zfp";
     };
     meta.homepage = "https://github.com/tpope/vim-sensible/";
+    meta.description = "sensible.vim: Defaults everyone can agree on";
   };
 
   vim-sexp = buildVimPluginFrom2Nix {
@@ -5964,6 +6444,7 @@ let
       sha256 = "1mfqbmrbqgnsc34pmcsrc0c5zvgxhhnw4hx4g5wbssfk1ddyx6y0";
     };
     meta.homepage = "https://github.com/guns/vim-sexp/";
+    meta.description = "Precision Editing for S-expressions";
   };
 
   vim-sexp-mappings-for-regular-people = buildVimPluginFrom2Nix {
@@ -5976,6 +6457,7 @@ let
       sha256 = "0malswal9hnbq2wf1rx2lp1r69wpwsvyhgi46xbg079x2n857bmj";
     };
     meta.homepage = "https://github.com/tpope/vim-sexp-mappings-for-regular-people/";
+    meta.description = "vim-sexp mappings for regular people";
   };
 
   vim-signature = buildVimPluginFrom2Nix {
@@ -5988,6 +6470,7 @@ let
       sha256 = "08m5dg77yavria7n7iajkj4kqaw848763680003j2gbrjlhpprpm";
     };
     meta.homepage = "https://github.com/kshenoy/vim-signature/";
+    meta.description = "Plugin to toggle, display and navigate marks";
   };
 
   vim-signify = buildVimPluginFrom2Nix {
@@ -6000,6 +6483,7 @@ let
       sha256 = "0p1hnjwhqmrczwns7h8gsmdl95yxcb6sqw59xshz7ji0b80h45mf";
     };
     meta.homepage = "https://github.com/mhinz/vim-signify/";
+    meta.description = ":heavy_plus_sign: Show a diff using Vim its sign column.";
   };
 
   vim-slash = buildVimPluginFrom2Nix {
@@ -6012,6 +6496,7 @@ let
       sha256 = "0ifdd3yqbk8hdvdmr4k44967lyvjnv9ig3r2145wn1lab797sbl4";
     };
     meta.homepage = "https://github.com/junegunn/vim-slash/";
+    meta.description = "Enhancing in-buffer search experience";
   };
 
   vim-sleuth = buildVimPluginFrom2Nix {
@@ -6024,6 +6509,7 @@ let
       sha256 = "17w4m6zg1izcs75isy1jdzycgdr1ml1f5wqf1bjq80qgy3f28znp";
     };
     meta.homepage = "https://github.com/tpope/vim-sleuth/";
+    meta.description = "sleuth.vim: Heuristically set buffer options";
   };
 
   vim-slime = buildVimPluginFrom2Nix {
@@ -6036,6 +6522,7 @@ let
       sha256 = "0wavkm9k2vm23nm5bmc3lpm6cac7mihzjcyk4r77qgdgmnnxkm49";
     };
     meta.homepage = "https://github.com/jpalardy/vim-slime/";
+    meta.description = "A vim plugin to give you some slime. (Emacs)";
   };
 
   vim-smalls = buildVimPluginFrom2Nix {
@@ -6048,6 +6535,7 @@ let
       sha256 = "0s5z3zv220cg95yky2av6w0jmpc56ysyhsx0596ksvgz5jwhpbad";
     };
     meta.homepage = "https://github.com/t9md/vim-smalls/";
+    meta.description = "spot your cursor with simple search ";
   };
 
   vim-smt2 = buildVimPluginFrom2Nix {
@@ -6060,6 +6548,7 @@ let
       sha256 = "0cas6c3pj55qhbcy2vaygg8l9gncjshi1g0a54l78x73d3y3wm03";
     };
     meta.homepage = "https://github.com/bohlender/vim-smt2/";
+    meta.description = "A VIM plugin that adds support for the SMT-LIB2 format (including Z3's extensions)";
   };
 
   vim-sneak = buildVimPluginFrom2Nix {
@@ -6072,6 +6561,7 @@ let
       sha256 = "0xcxr658i5vzdkxfssd7zx6n3ar9b6dg4b2ddaswgnwq75xphrh9";
     };
     meta.homepage = "https://github.com/justinmk/vim-sneak/";
+    meta.description = "The missing motion for Vim :athletic_shoe:";
   };
 
   vim-snipmate = buildVimPluginFrom2Nix {
@@ -6084,6 +6574,7 @@ let
       sha256 = "0qq81hcavmaq76r38qfy1cxlmhj0aswbd41k2k9fyzilzq4r0bg8";
     };
     meta.homepage = "https://github.com/garbas/vim-snipmate/";
+    meta.description = "snipMate.vim aims to be a concise vim script that implements some of TextMate's snippets features in Vim. ";
   };
 
   vim-snippets = buildVimPluginFrom2Nix {
@@ -6096,6 +6587,7 @@ let
       sha256 = "1gxqmvr6hz7vblrji2dz2l1x18264ainbl70j60yfx3vjp5aa9vq";
     };
     meta.homepage = "https://github.com/honza/vim-snippets/";
+    meta.description = "vim-snipmate default snippets (Previously snipmate-snippets)";
   };
 
   vim-solidity = buildVimPluginFrom2Nix {
@@ -6108,6 +6600,7 @@ let
       sha256 = "1qpfbbrm4gjgvbkimhpxyl4fsdqkyw4raf17nw0ibqillz2d3pxx";
     };
     meta.homepage = "https://github.com/tomlion/vim-solidity/";
+    meta.description = "Vim syntax file for solidity";
   };
 
   vim-sort-motion = buildVimPluginFrom2Nix {
@@ -6120,6 +6613,7 @@ let
       sha256 = "02v12iqy3gjhvh5aza6b6b3pfv2qkyyw83bxqjgbjj002f71ydkb";
     };
     meta.homepage = "https://github.com/christoomey/vim-sort-motion/";
+    meta.description = "Vim mapping for sorting a range of text";
   };
 
   vim-sourcetrail = buildVimPluginFrom2Nix {
@@ -6132,6 +6626,7 @@ let
       sha256 = "1xgvvmah3zn22rjaa093vghwrchmpm5wj30lwwl6h398dyywz8bg";
     };
     meta.homepage = "https://github.com/CoatiSoftware/vim-sourcetrail/";
+    meta.description = "Vim plugin for communication with Sourcetrail";
   };
 
   vim-speeddating = buildVimPluginFrom2Nix {
@@ -6144,6 +6639,7 @@ let
       sha256 = "02875qswrmanr7b798ymlc7w60055q0av0qj3fh7fvpqhsqpg52k";
     };
     meta.homepage = "https://github.com/tpope/vim-speeddating/";
+    meta.description = "speeddating.vim: use CTRL-A/CTRL-X to increment dates, times, and more";
   };
 
   vim-spirv = buildVimPluginFrom2Nix {
@@ -6156,6 +6652,7 @@ let
       sha256 = "0aimpcz6vvrkcfgsj0xp12xdy1l83n387rsy74dzk23a220d59na";
     };
     meta.homepage = "https://github.com/kbenzie/vim-spirv/";
+    meta.description = "A vim plugin for the Khronos Group's SPIR-V standard.";
   };
 
   vim-startify = buildVimPluginFrom2Nix {
@@ -6168,6 +6665,7 @@ let
       sha256 = "1k0sgx8r3gi3k4ira1ilvc1jmj0k5apiv7x71dqnh41gfrz1i12h";
     };
     meta.homepage = "https://github.com/mhinz/vim-startify/";
+    meta.description = ":link: The fancy start screen for Vim.";
   };
 
   vim-stylish-haskell = buildVimPluginFrom2Nix {
@@ -6180,6 +6678,7 @@ let
       sha256 = "0ysz68v4c2i4kxchsvxgkpj5kb0jbm5x06ri1ns9cmk5gj01pmd6";
     };
     meta.homepage = "https://github.com/nbouscal/vim-stylish-haskell/";
+    meta.description = "stylish-haskell vim plugin";
   };
 
   vim-stylishask = buildVimPluginFrom2Nix {
@@ -6192,6 +6691,7 @@ let
       sha256 = "09k1n6r9gy3jikss84y141dqqsgc1a1ia89jj0367an53pfl6dn2";
     };
     meta.homepage = "https://github.com/alx741/vim-stylishask/";
+    meta.description = "Vim Haskell stylish-haskell integration plugin";
   };
 
   vim-subversive = buildVimPluginFrom2Nix {
@@ -6204,6 +6704,7 @@ let
       sha256 = "0lksvgk3g2yqbm8pw8ba5f8594djh5cj795hwjhnxc8rrhl29qpq";
     };
     meta.homepage = "https://github.com/svermeulen/vim-subversive/";
+    meta.description = "Vim plugin providing operator motions to quickly replace text";
   };
 
   vim-surround = buildVimPluginFrom2Nix {
@@ -6216,6 +6717,7 @@ let
       sha256 = "0aqrqn35xdiy80y7skxfsh3m33n6cdxw6lzz6aspfgzwllx2f0kr";
     };
     meta.homepage = "https://github.com/tpope/vim-surround/";
+    meta.description = "surround.vim: quoting/parenthesizing made simple";
   };
 
   vim-swap = buildVimPluginFrom2Nix {
@@ -6228,6 +6730,7 @@ let
       sha256 = "0rqvxqqk961syawmyc2qdfb4w9ilb1r3mxxij2ja1jbhl1f3w4vq";
     };
     meta.homepage = "https://github.com/machakann/vim-swap/";
+    meta.description = "Reorder delimited items.";
   };
 
   vim-SyntaxRange = buildVimPluginFrom2Nix {
@@ -6240,6 +6743,7 @@ let
       sha256 = "0mxih2ixaqnzh915w8zycdjxf07ax648dw5nvglcp7ym4r8fzg0q";
     };
     meta.homepage = "https://github.com/inkarkat/vim-SyntaxRange/";
+    meta.description = "Define a different filetype syntax on regions of a buffer.";
   };
 
   vim-table-mode = buildVimPluginFrom2Nix {
@@ -6252,6 +6756,7 @@ let
       sha256 = "0gbj324wwgai1kprn78srq3cvldpi6hx9gsr5kk2sn2yxq32xp3y";
     };
     meta.homepage = "https://github.com/dhruvasagar/vim-table-mode/";
+    meta.description = "VIM Table Mode for instant table creation.";
   };
 
   vim-tabpagecd = buildVimPluginFrom2Nix {
@@ -6264,6 +6769,7 @@ let
       sha256 = "1mr6s2hvsf2a2nkjjvq78c9isfxk2k1ih890w740srbq6ssj0npm";
     };
     meta.homepage = "https://github.com/kana/vim-tabpagecd/";
+    meta.description = "Vim plugin: Turn :cd into :tabpagecd, to use one tab page per project";
   };
 
   vim-tbone = buildVimPluginFrom2Nix {
@@ -6276,6 +6782,7 @@ let
       sha256 = "0pbj4v6zhlpcxm10jcq50jf2rpqiyp2x0zpxa50s6y6gm834v9wc";
     };
     meta.homepage = "https://github.com/tpope/vim-tbone/";
+    meta.description = "tbone.vim: tmux basics";
   };
 
   vim-terraform = buildVimPluginFrom2Nix {
@@ -6288,6 +6795,7 @@ let
       sha256 = "1gkr3akvx44802i8cv4zw8j3bk5qk0h0rgz5k9jgkfch2yc76gzg";
     };
     meta.homepage = "https://github.com/hashivim/vim-terraform/";
+    meta.description = "basic vim/terraform integration";
   };
 
   vim-test = buildVimPluginFrom2Nix {
@@ -6300,6 +6808,7 @@ let
       sha256 = "05jh89rgd4p6mkryv5dm83jhxfmg1k77rk4zq35i8dy8i6cvi41z";
     };
     meta.homepage = "https://github.com/vim-test/vim-test/";
+    meta.description = "Run your tests at the speed of thought";
   };
 
   vim-textobj-comment = buildVimPluginFrom2Nix {
@@ -6312,6 +6821,7 @@ let
       sha256 = "00wc14chwjfx95gl3yzbxm1ajx88zpzqz0ckl7xvd7gvkrf0mx04";
     };
     meta.homepage = "https://github.com/glts/vim-textobj-comment/";
+    meta.description = "Vim text objects for comments";
   };
 
   vim-textobj-function = buildVimPluginFrom2Nix {
@@ -6324,6 +6834,7 @@ let
       sha256 = "0cwl102si9zhhhpg6c0fjnyq35v6bl5f34p2s7b47isxdn0qvris";
     };
     meta.homepage = "https://github.com/kana/vim-textobj-function/";
+    meta.description = "Vim plugin: Text objects for functions";
   };
 
   vim-textobj-haskell = buildVimPluginFrom2Nix {
@@ -6336,6 +6847,7 @@ let
       sha256 = "096pjjl3ngw0hsh59j2x6pdrpqvp657rcxfyl9kw13ndqyd867xs";
     };
     meta.homepage = "https://github.com/gibiansky/vim-textobj-haskell/";
+    meta.description = "vim text objects for haskell";
   };
 
   vim-textobj-multiblock = buildVimPluginFrom2Nix {
@@ -6360,6 +6872,7 @@ let
       sha256 = "1y1g3vcm97fqjyigiajbvbck4nlc04vxl3535x4sl40s5jbm5vz3";
     };
     meta.homepage = "https://github.com/kana/vim-textobj-user/";
+    meta.description = "Vim plugin: Create your own text objects";
   };
 
   vim-textobj-variable-segment = buildVimPluginFrom2Nix {
@@ -6372,6 +6885,7 @@ let
       sha256 = "14dcrnk83hj4ixrkdgjrk9cf0193f82wqckdzd4w0b76adf3habj";
     };
     meta.homepage = "https://github.com/Julian/vim-textobj-variable-segment/";
+    meta.description = "A text object to turn foo_bar_baz into foo_baz *and* quuxSpamEggs into quuxEggs *and* shine your shoes";
   };
 
   vim-themis = buildVimPluginFrom2Nix {
@@ -6384,6 +6898,7 @@ let
       sha256 = "06ab0kjamzpyql71qmc8qhvb72rx07x2g598aidk8nqkk36x87ai";
     };
     meta.homepage = "https://github.com/thinca/vim-themis/";
+    meta.description = "A testing framework for Vim script.";
   };
 
   vim-tmux = buildVimPluginFrom2Nix {
@@ -6396,6 +6911,7 @@ let
       sha256 = "16fgc0lx1jr8zbayanf5w677ssiw5xb8vwfaca295c8xlk760c3m";
     };
     meta.homepage = "https://github.com/tmux-plugins/vim-tmux/";
+    meta.description = "vim plugin for tmux.conf";
   };
 
   vim-tmux-clipboard = buildVimPluginFrom2Nix {
@@ -6408,6 +6924,7 @@ let
       sha256 = "1a7rpbvb7dgjfnrh95zg2ia6iiz2mz2xps31msb8h14hcj6dsv6y";
     };
     meta.homepage = "https://github.com/roxma/vim-tmux-clipboard/";
+    meta.description = "seamless integration for vim and tmux's clipboard";
   };
 
   vim-tmux-focus-events = buildVimPluginFrom2Nix {
@@ -6420,6 +6937,7 @@ let
       sha256 = "0ds6qw2i1r67jhxh9ff36al45bafsmbxxdc127l6iy2vl5wj0d3d";
     };
     meta.homepage = "https://github.com/tmux-plugins/vim-tmux-focus-events/";
+    meta.description = "Make terminal vim and tmux work better together.";
   };
 
   vim-tmux-navigator = buildVimPluginFrom2Nix {
@@ -6432,6 +6950,7 @@ let
       sha256 = "075cncr53w9xc1kqm50zl8yl18aspn3zdr6qjqyslf7gkw8yk38d";
     };
     meta.homepage = "https://github.com/christoomey/vim-tmux-navigator/";
+    meta.description = "Seamless navigation between tmux panes and vim splits";
   };
 
   vim-togglelist = buildVimPluginFrom2Nix {
@@ -6444,6 +6963,7 @@ let
       sha256 = "17y4ply2irz81gjv5hb51dy7wzv3l3sq6qaska31lswd5dgh1ifg";
     };
     meta.homepage = "https://github.com/milkypostman/vim-togglelist/";
+    meta.description = "Functions to toggle the [Location List] and the [Quickfix List] windows.";
   };
 
   vim-toml = buildVimPluginFrom2Nix {
@@ -6456,6 +6976,7 @@ let
       sha256 = "1dgykq4vl7vvj2f8lvg58rzqddm53i278g26ljwfimgqc8l6gmqd";
     };
     meta.homepage = "https://github.com/cespare/vim-toml/";
+    meta.description = "Vim syntax for TOML";
   };
 
   vim-trailing-whitespace = buildVimPluginFrom2Nix {
@@ -6468,6 +6989,7 @@ let
       sha256 = "0arv1hmlw7c1rlkc00hzjyg48pg8g4cc9q9l2hy8kpmsl037akm3";
     };
     meta.homepage = "https://github.com/bronson/vim-trailing-whitespace/";
+    meta.description = "Highlights trailing whitespace in red and provides :FixWhitespace to fix it.";
   };
 
   vim-tsx = buildVimPluginFrom2Nix {
@@ -6492,6 +7014,7 @@ let
       sha256 = "1p7sfhk0mwx4xk88b29ijb9nfbjwsf6hf3nab2ybcw291qaa75nj";
     };
     meta.homepage = "https://github.com/lumiliet/vim-twig/";
+    meta.description = "Twig syntax highlighting, snipMate, auto-indent, etc.";
   };
 
   vim-unimpaired = buildVimPluginFrom2Nix {
@@ -6504,6 +7027,7 @@ let
       sha256 = "052amdb4bd2qbip3z9xz7h1cv61k4p038j65yijm68vy0hf2724y";
     };
     meta.homepage = "https://github.com/tpope/vim-unimpaired/";
+    meta.description = "unimpaired.vim: Pairs of handy bracket mappings";
   };
 
   vim-vinegar = buildVimPluginFrom2Nix {
@@ -6516,6 +7040,7 @@ let
       sha256 = "0zxqdyla40xcp0ps362b85bqwl3mp4zfmfdggl0gwvgd5m949yk0";
     };
     meta.homepage = "https://github.com/tpope/vim-vinegar/";
+    meta.description = "vinegar.vim: Combine with netrw to create a delicious salad dressing";
   };
 
   vim-visual-increment = buildVimPluginFrom2Nix {
@@ -6528,6 +7053,7 @@ let
       sha256 = "0if3r3ih8f4yxy5s4xsl7384xzf14rmalvg60n9mbhshyljggvc4";
     };
     meta.homepage = "https://github.com/triglav/vim-visual-increment/";
+    meta.description = "visual-increment.vim - use CTRL+A/X to create increasing sequence of numbers or letters via visual mode";
   };
 
   vim-visual-multi = buildVimPluginFrom2Nix {
@@ -6540,6 +7066,7 @@ let
       sha256 = "0kawg12w7ssk58lv6ppv85c75x4af7dbkw9ngx7n91y1f1wkinjj";
     };
     meta.homepage = "https://github.com/mg979/vim-visual-multi/";
+    meta.description = "Multiple cursors plugin for vim/neovim";
   };
 
   vim-visualstar = buildVimPluginFrom2Nix {
@@ -6552,6 +7079,7 @@ let
       sha256 = "0yz6ci4i84xxrgazjfa5nsj3q8733p0b6vwcljk1l7ghdfiflvy4";
     };
     meta.homepage = "https://github.com/thinca/vim-visualstar/";
+    meta.description = "star for Visual-mode.";
   };
 
   vim-vue = buildVimPluginFrom2Nix {
@@ -6564,6 +7092,7 @@ let
       sha256 = "1ig8qacavr15i6z7whlkf2ivw5smnqsw3jwhh4dg5q6037k1hjh1";
     };
     meta.homepage = "https://github.com/posva/vim-vue/";
+    meta.description = "Syntax Highlight for Vue.js components";
   };
 
   vim-wakatime = buildVimPluginFrom2Nix {
@@ -6576,6 +7105,7 @@ let
       sha256 = "1dc04vmpv62x2rfnfad2y60l5xzpw0167pbii9kss6n6ra81gayr";
     };
     meta.homepage = "https://github.com/wakatime/vim-wakatime/";
+    meta.description = "Vim plugin for automatic time tracking and metrics generated from your programming activity.";
   };
 
   vim-watchdogs = buildVimPluginFrom2Nix {
@@ -6588,6 +7118,7 @@ let
       sha256 = "1hvgqdcnnz09afbas5brwls2sifs8y78jmq44ldgsjny9l445df4";
     };
     meta.homepage = "https://github.com/osyo-manga/vim-watchdogs/";
+    meta.description = "Async syntax checking.";
   };
 
   vim-which-key = buildVimPluginFrom2Nix {
@@ -6600,6 +7131,7 @@ let
       sha256 = "01afdf37fqz6i9g9371yh0ymv9lsw81z52vcpnwyysbj8n7qswwc";
     };
     meta.homepage = "https://github.com/liuchengxu/vim-which-key/";
+    meta.description = ":tulip: Vim plugin that shows keybindings in popup";
   };
 
   vim-wordy = buildVimPluginFrom2Nix {
@@ -6612,6 +7144,7 @@ let
       sha256 = "0v5cl3rrg2vrdb2al67hbh730rw8m2zvhb1vippv64k65mknkgp5";
     };
     meta.homepage = "https://github.com/reedes/vim-wordy/";
+    meta.description = "Uncover usage problems in your writing";
   };
 
   vim-xdebug = buildVimPluginFrom2Nix {
@@ -6624,6 +7157,7 @@ let
       sha256 = "1qh18r0sm4gh95sjbi2hnflvxdl4gk00jyy3n7z4i1gnx9ihxjqw";
     };
     meta.homepage = "https://github.com/joonty/vim-xdebug/";
+    meta.description = "(deprecated) a remote debugger interface to the DBGp protocol (tested only with XDebug/PHP)";
   };
 
   vim-xkbswitch = buildVimPluginFrom2Nix {
@@ -6636,6 +7170,7 @@ let
       sha256 = "0542prcclaw6s4f6dlp0ywz5zp10brb7br7hx4lhhizslcakg09v";
     };
     meta.homepage = "https://github.com/lyokha/vim-xkbswitch/";
+    meta.description = "vim plugin for automatic keyboard layout switching in insert mode";
   };
 
   vim-yaml = buildVimPluginFrom2Nix {
@@ -6648,6 +7183,7 @@ let
       sha256 = "08bg7mxvgrl070m0kk4rmain7h3rv712jj6lk9l808cfjzaw9343";
     };
     meta.homepage = "https://github.com/stephpy/vim-yaml/";
+    meta.description = "Override vim syntax for yaml files";
   };
 
   vim-yapf = buildVimPluginFrom2Nix {
@@ -6660,6 +7196,7 @@ let
       sha256 = "0ncv6kjyywljsq5fz71rkmgmqxm7msyscgndnj055bnx5sh9wk80";
     };
     meta.homepage = "https://github.com/mindriot101/vim-yapf/";
+    meta.description = "yapf plugin for Vim";
   };
 
   vim2hs = buildVimPluginFrom2Nix {
@@ -6672,6 +7209,7 @@ let
       sha256 = "18lqrl3hqb6cmizc04bbnsh8j0g761w2q8wascbzzfw80dmxy36b";
     };
     meta.homepage = "https://github.com/dag/vim2hs/";
+    meta.description = "vim2hs :: Vim -> Haskell";
   };
 
   vimacs = buildVimPluginFrom2Nix {
@@ -6684,6 +7222,7 @@ let
       sha256 = "0x92jcpdlvxhhdpwkv7ig9ya7s96yqjy6ms9xnx8djkf12xql16f";
     };
     meta.homepage = "https://github.com/andrep/vimacs/";
+    meta.description = "Vim-Improved eMACS: Emacs emulation for Vim";
   };
 
   vimagit = buildVimPluginFrom2Nix {
@@ -6696,6 +7235,7 @@ let
       sha256 = "1f7gvlhrvvkf69y5vfrkvidhx8aa03n1aqmdhk9qjd6sglfg5w0i";
     };
     meta.homepage = "https://github.com/jreybert/vimagit/";
+    meta.description = " Ease your git workflow within Vim";
   };
 
   vimelette = buildVimPluginFrom2Nix {
@@ -6708,6 +7248,7 @@ let
       sha256 = "094xyqba64dndgr5gfcqp6hy3siw90niyrrwz0avs924abss6adg";
     };
     meta.homepage = "https://github.com/gotcha/vimelette/";
+    meta.description = "Vim plugin that detects omelette directory (set of Python eggs) and use it to setup other plugins. ";
   };
 
   vimfiler-vim = buildVimPluginFrom2Nix {
@@ -6720,6 +7261,7 @@ let
       sha256 = "0iv1smk0999sfm3iqdlpb2il74l01lxfahwg87g7h3gq9frky2wd";
     };
     meta.homepage = "https://github.com/Shougo/vimfiler.vim/";
+    meta.description = ":file_folder: Powerful file explorer implemented by Vim script";
   };
 
   VimOrganizer = buildVimPluginFrom2Nix {
@@ -6732,6 +7274,7 @@ let
       sha256 = "0qncr00xn7lj1i469fzjaaghhqrlyg5s2wj4v6625dhg98y0irix";
     };
     meta.homepage = "https://github.com/hsitz/VimOrganizer/";
+    meta.description = "VimOrganizer is partly a clone of Emacs' Org-mode, and partly a front end to Org-mode itself.  Do Org in Vim.";
   };
 
   vimoutliner = buildVimPluginFrom2Nix {
@@ -6744,6 +7287,7 @@ let
       sha256 = "1gn21b8yr0bjg0y1nidk13zcl4f6z8wkrxncgkd1hlc14d99jkg0";
     };
     meta.homepage = "https://github.com/vimoutliner/vimoutliner/";
+    meta.description = "Work fast, think well.";
   };
 
   vimpreviewpandoc = buildVimPluginFrom2Nix {
@@ -6756,6 +7300,7 @@ let
       sha256 = "15yjr01wfnhaqw1k8bgxk04vvh76y13zfms66irpihw79f9yzxi9";
     };
     meta.homepage = "https://github.com/tex/vimpreviewpandoc/";
+    meta.description = "VIM plugin for markup editing with live preview";
   };
 
   vimproc-vim = buildVimPluginFrom2Nix {
@@ -6768,6 +7313,7 @@ let
       sha256 = "06nzh4x7j7j3nvw2s4m1gmds0z0bldxbizja91jd43qma9xnwvlk";
     };
     meta.homepage = "https://github.com/Shougo/vimproc.vim/";
+    meta.description = "Interactive command execution in Vim.";
   };
 
   vimshell-vim = buildVimPluginFrom2Nix {
@@ -6780,6 +7326,7 @@ let
       sha256 = "0inf9xx6ni1scxkn0b78qq0234r0ybrwpphyzcafw7i8kzisbn26";
     };
     meta.homepage = "https://github.com/Shougo/vimshell.vim/";
+    meta.description = ":shell: Powerful shell implemented by vim.";
   };
 
   vimtex = buildVimPluginFrom2Nix {
@@ -6792,6 +7339,7 @@ let
       sha256 = "1i9phcxb29x14n202971vflqlwd9y2wa74v8aic4xhvqb5rli8as";
     };
     meta.homepage = "https://github.com/lervag/vimtex/";
+    meta.description = "A modern vim plugin for editing LaTeX files.";
   };
 
   vimux = buildVimPluginFrom2Nix {
@@ -6804,6 +7352,7 @@ let
       sha256 = "0k7ymak2ag67lb4sf80y4k35zj38rj0jf61bf50i6h1bgw987pra";
     };
     meta.homepage = "https://github.com/benmills/vimux/";
+    meta.description = "vim plugin to interact with tmux";
   };
 
   vimwiki = buildVimPluginFrom2Nix {
@@ -6816,6 +7365,7 @@ let
       sha256 = "03dic4vjl3bwd7s6jj3vrz6xicf3a3bccaqgx635hn01ha6vw1jw";
     };
     meta.homepage = "https://github.com/vimwiki/vimwiki/";
+    meta.description = "Personal Wiki for Vim";
   };
 
   vissort-vim = buildVimPluginFrom2Nix {
@@ -6840,6 +7390,7 @@ let
       sha256 = "1wf7plybcrrdx459f0g2rzzl9drik7w264y0i1jxf43y7nlm138n";
     };
     meta.homepage = "https://github.com/liuchengxu/vista.vim/";
+    meta.description = ":cactus: Viewer & Finder for LSP symbols and tags";
   };
 
   Vundle-vim = buildVimPluginFrom2Nix {
@@ -6852,6 +7403,7 @@ let
       sha256 = "0fkmklcq3fgvd6x6irz9bgyvcdaxafykk3k89gsi9p6b0ikw3rw6";
     };
     meta.homepage = "https://github.com/VundleVim/Vundle.vim/";
+    meta.description = "Vundle, the plug-in manager for Vim";
   };
 
   wal-vim = buildVimPluginFrom2Nix {
@@ -6864,6 +7416,7 @@ let
       sha256 = "0aiwsrcqnazam56cvwmck4bf7w543cr219bkmq0ngqzna72h9735";
     };
     meta.homepage = "https://github.com/dylanaraps/wal.vim/";
+    meta.description = "🎨 A vim colorscheme for use with wal";
   };
 
   webapi-vim = buildVimPluginFrom2Nix {
@@ -6876,6 +7429,7 @@ let
       sha256 = "1hbm2mgsncqdjjfgabgncr4ji90mjsa3z0cx7813vdf113v41x26";
     };
     meta.homepage = "https://github.com/mattn/webapi-vim/";
+    meta.description = "vim interface to Web API";
   };
 
   wmgraphviz-vim = buildVimPluginFrom2Nix {
@@ -6888,6 +7442,7 @@ let
       sha256 = "12mb0lbkrzrxyawd9gg6igmsaylvsixcslim0lcgsrd551l9lq2l";
     };
     meta.homepage = "https://github.com/wannesm/wmgraphviz.vim/";
+    meta.description = "Vim plugin for Graphviz";
   };
 
   wombat256-vim = buildVimPluginFrom2Nix {
@@ -6900,6 +7455,7 @@ let
       sha256 = "01fdvfwdfqn5xi88lfanb4lb6jmn1ma6wq6d9jj2x7qamdbpvsrg";
     };
     meta.homepage = "https://github.com/vim-scripts/wombat256.vim/";
+    meta.description = "Wombat for 256 color xterms";
   };
 
   workflowish = buildVimPluginFrom2Nix {
@@ -6912,6 +7468,7 @@ let
       sha256 = "044jxkcbycmmahi98qd0ynpc8baay72i45qymv4mxvl1d96fjbmd";
     };
     meta.homepage = "https://github.com/lukaszkorecki/workflowish/";
+    meta.description = "A todo \"plugin\" for Vim, inspired by  https://workflowy.com/";
   };
 
   xptemplate = buildVimPluginFrom2Nix {
@@ -6924,6 +7481,7 @@ let
       sha256 = "1myxp0ldk0s46aipx1iswa9zx2fkc4gwqpmhbswqgg7sxl1bz30g";
     };
     meta.homepage = "https://github.com/drmingdrmer/xptemplate/";
+    meta.description = "Code snippets engine for Vim, with snippets library.  XPTemplate let you write codes in a smooth, quick and comfortable way.";
   };
 
   xterm-color-table-vim = buildVimPluginFrom2Nix {
@@ -6936,6 +7494,7 @@ let
       sha256 = "08a1d9428xwrjp40qgi34cb5fwgc239qf3agxl32k7bqbn08pq19";
     };
     meta.homepage = "https://github.com/guns/xterm-color-table.vim/";
+    meta.description = "All 256 xterm colors with their RGB equivalents, right in Vim!";
   };
 
   YankRing-vim = buildVimPluginFrom2Nix {
@@ -6948,6 +7507,7 @@ let
       sha256 = "0zdp8pdsqgrh6lfw8ipjhrig6psvmdxkim9ik801y3r373sk2hxw";
     };
     meta.homepage = "https://github.com/vim-scripts/YankRing.vim/";
+    meta.description = "Maintains a history of previous yanks, changes and deletes";
   };
 
   yats-vim = buildVimPluginFrom2Nix {
@@ -6961,6 +7521,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/HerringtonDarkholme/yats.vim/";
+    meta.description = "Yet Another TypeScript Syntax: The most advanced TypeScript Syntax Highlighting in Vim";
   };
 
   YouCompleteMe = buildVimPluginFrom2Nix {
@@ -6974,6 +7535,7 @@ let
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/ycm-core/YouCompleteMe/";
+    meta.description = "A code-completion engine for Vim";
   };
 
   YUNOcommit-vim = buildVimPluginFrom2Nix {
@@ -6986,6 +7548,7 @@ let
       sha256 = "0mjc7fn405vcx1n7vadl98p5wgm6jxrlbdbkqgjq8f1m1ir81zab";
     };
     meta.homepage = "https://github.com/esneider/YUNOcommit.vim/";
+    meta.description = "Y U NO commit after so many writes???";
   };
 
   zeavim-vim = buildVimPluginFrom2Nix {
@@ -6998,6 +7561,7 @@ let
       sha256 = "1qj6z0vd7y89wfwh84rndl4iz6cvilncih2fc5xgmljaarg914fs";
     };
     meta.homepage = "https://github.com/KabbAmine/zeavim.vim/";
+    meta.description = "Zeal for Vim";
   };
 
   zenburn = buildVimPluginFrom2Nix {
@@ -7010,6 +7574,7 @@ let
       sha256 = "1ff5ac8lp7fq854kgf03c5h695lm60giw0qda5z428mmzwq0xask";
     };
     meta.homepage = "https://github.com/jnurmine/zenburn/";
+    meta.description = "Zenburn is a low-contrast color scheme for Vim.";
   };
 
   zig-vim = buildVimPluginFrom2Nix {
@@ -7022,6 +7587,7 @@ let
       sha256 = "1svy3bp8rhcbimcp5p4crz57fiv1p2xvcr4xs90frsncq1r483q9";
     };
     meta.homepage = "https://github.com/ziglang/zig.vim/";
+    meta.description = "Vim configuration for Zig";
   };
 
   zoomwintab-vim = buildVimPluginFrom2Nix {
@@ -7034,6 +7600,7 @@ let
       sha256 = "1dsi2d6wrv5x6w2hrrjzqivsspxxav0hdj0pymml6gry2jcbj4s9";
     };
     meta.homepage = "https://github.com/troydm/zoomwintab.vim/";
+    meta.description = "zoomwintab vim plugin";
   };
 
 });
