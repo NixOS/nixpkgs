@@ -17820,6 +17820,8 @@ in
 
   alegreya = callPackage ../data/fonts/alegreya { };
 
+  alegreya-sans = callPackage ../data/fonts/alegreya-sans { };
+
   amber-theme = callPackage ../data/themes/amber { };
 
   amiri = callPackage ../data/fonts/amiri { };
