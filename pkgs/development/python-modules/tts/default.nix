@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , phonemizer
 , tensorboardx
 , matplotlib
@@ -13,7 +14,7 @@
 , tqdm
 , librosa
 , unidecode
-, fetchpatch
+, parallel-wavegan
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,13 @@ buildPythonPackage rec {
       url = "https://github.com/mozilla/TTS/commit/edf257a91363c4c58b6e1c9e1a9e7f3b0b37dd17.patch";
       sha256 = "087hj13f9kf31i2nvwhkdx37y3qwgdxayzfpv0am5b3f5alsr6xb";
     })
+    # allow to load vocoder from PYTHONPATH
+    # https://github.com/mozilla/TTS/pull/426
+    (fetchpatch {
+      url = "https://github.com/mozilla/TTS/commit/edf257a91363c4c58b6e1c9e1a9e7f3b0b37dd17.patch";
+      sha256 = "087hj13f9kf31i2nvwhkdx37y3qwgdxayzfpv0am5b3f5alsr6xb";
+    })
+    ./0001-fix-pwgan-vocoder-with-pytorch-1.5.patch
   ];
 
   propagatedBuildInputs = [
@@ -53,6 +61,7 @@ buildPythonPackage rec {
     unidecode
     phonemizer
     tensorboardx
+    parallel-wavegan
   ];
 
   preBuild = ''

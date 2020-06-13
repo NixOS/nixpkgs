@@ -1,0 +1,29 @@
+From 52fdb799f523ff9f87c44580ce6dd8ba23dfd0e7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Sat, 13 Jun 2020 19:36:28 +0100
+Subject: [PATCH] fix pwgan vocoder with pytorch 1.5
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ server/synthesizer.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/synthesizer.py b/server/synthesizer.py
+index 28cb393..2de64fa 100644
+--- a/server/synthesizer.py
++++ b/server/synthesizer.py
+@@ -187,7 +187,7 @@ class Synthesizer(object):
+                 vocoder_input = torch.FloatTensor(postnet_output.T).unsqueeze(0)
+                 if self.use_cuda:
+                     vocoder_input.cuda()
+-                wav = self.pwgan.inference(vocoder_input, hop_size=self.ap.hop_length)
++                wav = self.pwgan.inference(vocoder_input, hop_size=self.ap.hop_length).data.cpu().numpy()[0][0]
+             elif self.wavernn:
+                 vocoder_input = torch.FloatTensor(postnet_output.T).unsqueeze(0)
+                 if self.use_cuda:
+-- 
+2.26.2
+
