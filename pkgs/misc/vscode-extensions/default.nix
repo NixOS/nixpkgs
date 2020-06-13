@@ -108,12 +108,12 @@ in
     };
   };
 
-  ms-vscode.Go = buildVscodeMarketplaceExtension {
+  golang.Go = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "Go";
-      publisher = "ms-vscode";
-      version = "0.11.7";
-      sha256 = "1l6jjdfivw1pn9y4d4i7zf80ls1k1b0ap1d828ah57ad3bgmyqfi";
+      publisher = "golang";
+      version = "0.14.4";
+      sha256 = "1rid3vxm4j64kixlm65jibwgm4gimi9mry04lrgv0pa96q5ya4pi";
     };
     meta = {
       license = stdenv.lib.licenses.mit;
