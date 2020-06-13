@@ -13655,6 +13655,7 @@ in
 
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
     inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration;
+    openblas = openblasCompat;
   };
 
   opencv3WithoutCuda = opencv3.override {
@@ -13663,6 +13664,7 @@ in
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration;
+    openblas = openblasCompat;
   };
 
   openexr = callPackage ../development/libraries/openexr { };
