@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
     # work fine, and I'm not sure how to write the condition.
     ++ stdenv.lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
 
+  postPatch = ''
+    substituteInPlace build/cmake/lib/CMakeLists.txt \
+      --replace 'ARCHIVE DESTINATION "''${CMAKE_INSTALL_LIBDIR}"' \
+                "ARCHIVE DESTINATION \"''${!outputDev}/lib\""
+  '';
+
   cmakeFlags = [
     "-DZSTD_BUILD_SHARED:BOOL=${if enableShared then "ON" else "OFF"}"
     # They require STATIC for bin/zstd and tests.
@@ -56,8 +62,6 @@ stdenv.mkDerivation rec {
     substituteInPlace ../programs/zstdless \
       --replace "zstdcat" "$bin/bin/zstdcat"
   '';
-  # Don't duplicate the library code in runtime closures.
-  postInstall = stdenv.lib.optionalString enableShared ''rm "$out"/lib/libzstd.a'';
 
   outputs = [ "bin" "dev" "man" "out" ];
 
