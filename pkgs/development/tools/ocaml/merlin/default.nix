@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "merlin";
-  version = "3.3.4";
+  version = "3.3.6";
 
   minimumOCamlVersion = "4.02.1";
 
   src = fetchurl {
     url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-v${version}.tbz";
-    sha256 = "12wxric6n3rmsn0w16xm8vjd8p5aw24cj76zw2x87qfwwgmy1kdd";
+    sha256 = "1360cm0jkn2v2y5p3yzdyw9661a1vpddcibkbfblmk95qafx4civ";
   };
 
   buildInputs = [ yojson ];
