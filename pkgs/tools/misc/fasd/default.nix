@@ -1,6 +1,8 @@
 { stdenv, fetchFromGitHub } :
 
-stdenv.mkDerivation rec {
+let
+  shells = [ "bash" "fish" "zsh" ];
+in stdenv.mkDerivation rec {
   pname = "fasd";
   name = "${pname}-unstable-2016-08-11";
 
@@ -11,8 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "0i22qmhq3indpvwbxz7c472rdyp8grag55x7iyjz8gmyn8gxjc11";
   };
 
+  outputs = [ "out" ]
+    ++ map (sh:"${sh}_interactiveShellInit") shells;
+
   installPhase = ''
     PREFIX=$out make install
+    ${stdenv.lib.concatMapStrings (sh: ''
+      ln $out/bin/fasd $${sh}_interactiveShellInit
+    '') shells}
   '';
 
   meta = {
