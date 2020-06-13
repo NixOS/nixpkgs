@@ -66,7 +66,8 @@ let
   #######################################################################
     # sha256 of released mathcomp versions
     sha256 = {
-      "1.11.0+beta1" = "12i3zznwajlihzpqsiqniv20rklj8d8401lhd241xy4s21fxkkjm";
+      "1.11.0"       = "06a71d196wd5k4wg7khwqb7j7ifr7garhwkd54s86i0j7d6nhl3c";
+      "1.11+beta1"   = "12i3zznwajlihzpqsiqniv20rklj8d8401lhd241xy4s21fxkkjm";
       "1.10.0"       = "1b9m6pwxxyivw7rgx82gn5kmgv2mfv3h3y0mmjcjfypi8ydkrlbv";
       "1.9.0"        = "0lid9zaazdi3d38l8042lczb02pw5m9wq0yysiilx891hgq2p81r";
       "1.8.0"        = "07l40is389ih8bi525gpqs3qp4yb2kl11r9c8ynk1ifpjzpnabwp";
@@ -75,7 +76,8 @@ let
     };
     # versions of coq compatible with released mathcomp versions
     coq-versions     = {
-      "1.11.0+beta1" = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
+      "1.11.0"       = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
+      "1.11+beta1"   = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
       "1.10.0"       = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
       "1.9.0"        = flip elem [ "8.7" "8.8" "8.9" "8.10" ];
       "1.8.0"        = flip elem [ "8.7" "8.8" "8.9" ];
@@ -94,7 +96,7 @@ let
     # mathcomp preferred versions by decreasing order
     # (the first version in the list will be tried first)
     version-preferences =
-      [ "1.10.0" "1.9.0" "1.11.0+beta1" "1.8.0" "1.7.0" "1.6.1" ];
+      [ "1.10.0" "1.11.0" "1.9.0" "1.8.0" "1.7.0" "1.6.1" ];
 
     # list of core mathcomp packages sorted by dependency order
     packages = _version: # unused in current versions of mathcomp

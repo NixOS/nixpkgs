@@ -1,6 +1,6 @@
 { stdenv, lib, fetchgit, makeDesktopItem
 , pkgconfig, autoconf213, alsaLib, bzip2, cairo
-, dbus, dbus-glib, ffmpeg, file, fontconfig, freetype
+, dbus, dbus-glib, ffmpeg_3, file, fontconfig, freetype
 , gnome2, gnum4, gtk2, hunspell, libevent, libjpeg
 , libnotify, libstartup_notification, makeWrapper
 , libGLU, libGL, perl, python2, libpulseaudio
@@ -11,17 +11,17 @@
 
 let
 
-  libPath = lib.makeLibraryPath [ ffmpeg ];
+  libPath = lib.makeLibraryPath [ ffmpeg_3 ];
   gtkVersion = if withGTK3 then "3" else "2";
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.9.3";
+  version = "28.10.0";
 
   src = fetchgit {
     url = "https://github.com/MoonchildProductions/Pale-Moon.git";
     rev = "${version}_Release";
-    sha256 = "1f8vfjyihlr2l79mkfgdcvwjnh261n6imkps310x9x3977jiq2wr";
+    sha256 = "0c64vmrp46sbl1dgl9dq2vkmpgz9gvgd59dk02jqwyhx4lln1g2l";
     fetchSubmodules = true;
   };
 
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib bzip2 cairo dbus dbus-glib ffmpeg fontconfig freetype
+    alsaLib bzip2 cairo dbus dbus-glib ffmpeg_3 fontconfig freetype
     gnome2.GConf gtk2 hunspell libevent libjpeg libnotify
     libstartup_notification libGLU libGL
     libpulseaudio unzip yasm zip zlib

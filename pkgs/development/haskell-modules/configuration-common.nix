@@ -1405,6 +1405,9 @@ self: super: {
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
+  # gitit is unbroken in the latest release
+  gitit = markUnbroken super.gitit;
+
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
   haskell-ci = doJailbreak super.haskell-ci;
 
@@ -1450,6 +1453,7 @@ self: super: {
   };
 
   # Test suite requires running a database server. Testing is done upstream.
+  hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
 
   # This bumps optparse-applicative to <0.16 in the cabal file, as otherwise

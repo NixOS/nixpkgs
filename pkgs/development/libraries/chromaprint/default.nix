@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, boost, ffmpeg }:
+{ stdenv, fetchurl, cmake, boost, ffmpeg_3 }:
 
 stdenv.mkDerivation rec {
   pname = "chromaprint";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost ffmpeg ];
+  buildInputs = [ boost ffmpeg_3 ];
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];
 
