@@ -2668,6 +2668,7 @@ package-maintainers:
   terlar:
     - nix-diff
   maralorn:
+    - reflex-dom
     - ghcide
     - cabal-fmt
     - neuron
@@ -2805,7 +2806,6 @@ dont-distribute-packages:
   - reflex-dom-contrib
   - reflex-dom-fragment-shader-canvas
   - reflex-dom-helpers
-  - reflex-dom
   - reflex-jsx
   - sneathlane-haste
   - spike
@@ -8302,7 +8302,6 @@ broken-packages:
   - pastis
   - pasty
   - patat
-  - patch
   - patches-vector
   - path-text-utf8
   - Pathfinder
@@ -8918,7 +8917,6 @@ broken-packages:
   - references
   - refh
   - reflection-extras
-  - reflex
   - reflex-animation
   - reflex-backend-socket
   - reflex-backend-wai
