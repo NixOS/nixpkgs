@@ -17818,6 +17818,8 @@ in
 
   albatross = callPackage ../data/themes/albatross { };
 
+  alegreya = callPackage ../data/fonts/alegreya { };
+
   amber-theme = callPackage ../data/themes/amber { };
 
   amiri = callPackage ../data/fonts/amiri { };
