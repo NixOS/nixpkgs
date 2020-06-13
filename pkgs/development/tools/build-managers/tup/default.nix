@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tup";
-  version = "0.7.8";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "gittup";
     repo = "tup";
     rev = "v${version}";
-    sha256 = "07dmz712zbs5kayf98kywp7blssgh0y2gc1623jbsynmqwi77mcb";
+    sha256 = "1b9rllwfdmjvfmwvzqfbqfi1flf4y9zzjmyp0dizq23gpkvhi42f";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://gittup.org/tup/";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
