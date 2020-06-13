@@ -5,19 +5,19 @@
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0v4prb05n21bm8650v0a01k1nyqjdmkrsm3zycfxh2j5k9n962p4";
+    sha256 = "0bhr6ia0hmgx3nhgibc9pmkzhlh1zcqk707i5fbxgs702ll7v2n5";
   };
 
-  # https://github.com/PyCQA/pycodestyle/blob/2.5.0/tox.ini#L14
+  # https://github.com/PyCQA/pycodestyle/blob/2.6.0/tox.ini#L13
   checkPhase = ''
-    python pycodestyle.py --max-doc-length=72 --testsuite testsuite
     python pycodestyle.py --statistics pycodestyle.py
+    python pycodestyle.py --max-doc-length=72 --testsuite testsuite
     python pycodestyle.py --max-doc-length=72 --doctest
-    python setup.py test
+    python -m unittest discover testsuite -vv
   '';
 
   meta = with lib; {
