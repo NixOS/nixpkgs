@@ -1486,5 +1486,6 @@ self: super: {
 
   # Stack
   x509-validation = dontCheck super.x509-validation;
+  tls = dontCheck super.tls;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
