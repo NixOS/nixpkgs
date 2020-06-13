@@ -1484,4 +1484,7 @@ self: super: {
     dhall = self.dhall_1_30_0;
   };
 
+  # Stack
+  x509-validation = dontCheck super.x509-validation;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
