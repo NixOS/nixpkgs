@@ -35,6 +35,7 @@ let
     deepin-image-viewer = callPackage ./deepin-image-viewer { };
     deepin-menu = callPackage ./deepin-menu { };
     deepin-movie-reborn = callPackage ./deepin-movie-reborn { };
+    deepin-screen-recorder = callPackage ./deepin-screen-recorder { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-sound-theme = callPackage ./deepin-sound-theme { };
     deepin-terminal = callPackage ./deepin-terminal {
