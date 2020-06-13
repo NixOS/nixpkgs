@@ -11191,9 +11191,7 @@ in
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
-  yq = callPackage ../development/tools/yq {
-    inherit (python3Packages) buildPythonApplication fetchPypi pyyaml xmltodict;
-  };
+  yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
 
   yq-go = callPackage ../development/tools/yq-go { };
 

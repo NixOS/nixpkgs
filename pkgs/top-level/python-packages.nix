@@ -7126,6 +7126,8 @@ in {
 
   yarl = callPackage ../development/python-modules/yarl { };
 
+  yq = callPackage ../development/python-modules/yq { };
+
   solo-python = disabledIf (! pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
 
   suseapi = callPackage ../development/python-modules/suseapi { };
