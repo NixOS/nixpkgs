@@ -1,4 +1,4 @@
-{ stdenv, steamArch, fetchurl, }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
 
@@ -6,20 +6,15 @@ stdenv.mkDerivation rec {
   # from https://repo.steampowered.com/steamrt-images-scout/snapshots/
   version = "0.20200417.0";
 
-  src =
-    if steamArch == "amd64" then fetchurl {
-      url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/com.valvesoftware.SteamRuntime.Platform-amd64,i386-scout-runtime.tar.gz";
-      sha256 = "0kps8i5v23sycqm69xz389n8k831jd7ncsmlrkky7nib2q91rbvj";
-      name = "scout-runtime-${version}.tar.gz";
-    } else fetchurl {
-      url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/com.valvesoftware.SteamRuntime.Platform-i386-scout-runtime.tar.gz";
-      sha256 = "03fhac1r25xf7ia2pd35wjw360v5pa9h4870yrhhygp9h7v4klzf";
-      name = "scout-runtime-i386-${version}.tar.gz";
-    };
+  src = fetchurl {
+    url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/steam-runtime.tar.xz";
+    sha256 = "0d4dfl6i31i8187wj8rr9yvmrg32bx96bsgs2ya21b00czf070sy";
+    name = "scout-runtime-${version}.tar.gz";
+  };
 
   buildCommand = ''
     mkdir -p $out
-    tar -C $out -x --strip=1 -f $src files/
+    tar -C $out --strip=1 -x -f $src
   '';
 
   meta = with stdenv.lib; {
