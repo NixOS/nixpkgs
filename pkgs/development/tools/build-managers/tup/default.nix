@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     cp tup.1 $out/share/man/man1/
   '';
 
-  setupHook = ./tup/setup-hook.sh;
+  setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
     description = "A fast, file-based build system";
