@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, python, bash }:
-
-stdenv.mkDerivation rec {
+let
+  shells = [ "bash" "fish" "zsh"];
+in stdenv.mkDerivation rec {
   pname = "autojump";
   version = "22.5.3";
 
@@ -13,6 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python bash ];
   dontBuild = true;
+  outputs = [ "out" ]
+    ++ map (sh:"${sh}_interactiveShellInit") shells;
 
   installPhase = ''
     python ./install.py -d "$out" -p "" -z "$out/share/zsh/site-functions/"
@@ -21,6 +24,10 @@ stdenv.mkDerivation rec {
     install -Dt "$out/share/bash-completion/completions/" -m444 "$out/share/autojump/autojump.bash"
     install -Dt "$out/share/fish/vendor_conf.d/" -m444 "$out/share/autojump/autojump.fish"
     install -Dt "$out/share/zsh/site-functions/" -m444 "$out/share/autojump/autojump.zsh"
+
+    ${stdenv.lib.concatMapStrings (sh: ''
+      ln $out/share/autojump/autojump.${sh} $${sh}_interactiveShellInit
+    '') shells}
   '';
 
   meta = with stdenv.lib; {
