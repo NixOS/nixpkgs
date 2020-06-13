@@ -1,4 +1,4 @@
-{ lib, git, buildGoPackage, fetchFromGitHub, libcap }:
+{ lib, nixosTests, git, buildGoPackage, fetchFromGitHub, libcap }:
 
 buildGoPackage rec {
   pname = "ncdns";
@@ -35,4 +35,7 @@ buildGoPackage rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ rnhmjoj ];
   };
+
+  passthru.tests.ncdns = nixosTests.ncdns;
+
 }
