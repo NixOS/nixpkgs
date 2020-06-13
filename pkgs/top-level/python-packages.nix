@@ -7369,6 +7369,8 @@ in {
 
   rxv     = callPackage ../development/python-modules/rxv     { };
 
+  neuralcoref = callPackage ../development/python-modules/neuralcoref {};
+
 });
 
 in fix' (extends overrides packages)
