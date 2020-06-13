@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoModule, bash }:
-
-buildGoModule rec {
+let
+  shells = [ "bash" "fish" "zsh" ];
+in buildGoModule rec {
   pname = "direnv";
   version = "2.21.3";
 
@@ -23,10 +24,18 @@ buildGoModule rec {
     make BASH_PATH=$BASH_PATH
   '';
 
+  outputs = [ "out" ]
+    ++ map (sh:"${sh}_interactiveShellInit") shells;
+
   installPhase = ''
     make install DESTDIR=$out
     mkdir -p $out/share/fish/vendor_conf.d
-    echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish
+
+    ${stdenv.lib.concatMapStrings (sh: ''
+      $out/bin/direnv hook ${sh} > $${sh}_interactiveShellInit
+    '') shells}
+
+    ln -s $fish_interactiveShellInit $out/share/fish/vendor_conf.d/direnv.fish
   '';
 
   meta = with stdenv.lib; {
