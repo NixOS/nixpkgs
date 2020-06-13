@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig gtk-doc docbook_xsl gobject-introspection ];
   buildInputs = [ glib ];
 
+  mesonFlags = [ "-Dbash-completions=true" ];
+
   meta = with stdenv.lib; {
     description = "Command-line utility and library for controlling media players that implement MPRIS";
     homepage = "https://github.com/acrisci/playerctl";

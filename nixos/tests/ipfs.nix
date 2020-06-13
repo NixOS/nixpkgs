@@ -21,5 +21,12 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     )
 
     machine.succeed(f"ipfs cat /ipfs/{ipfs_hash.strip()} | grep fnord")
+
+    ipfs_hash = machine.succeed(
+        "echo fnord2 | ipfs --api /unix/run/ipfs.sock add | awk '{ print $2 }'"
+    )
+    machine.succeed(
+        f"ipfs --api /unix/run/ipfs.sock cat /ipfs/{ipfs_hash.strip()} | grep fnord2"
+    )
   '';
 })

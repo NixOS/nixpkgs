@@ -10151,10 +10151,6 @@ in
 
   cask = callPackage ../development/tools/cask { };
 
-  casperjs = callPackage ../development/tools/casperjs {
-    inherit (texFunctions) fontsConf;
-  };
-
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
   ccache = callPackage ../development/tools/misc/ccache { };
