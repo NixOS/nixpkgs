@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
       libaom (the reference encoder) is too slow.
       Features: https://github.com/xiph/rav1e#features
     '';
-    inherit (src.src.meta) homepage;
+    inherit (src.meta) homepage;
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = [ maintainers.primeos ];
