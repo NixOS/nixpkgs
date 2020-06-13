@@ -1,41 +1,26 @@
-diff --git a/requirements.txt b/requirements.txt
-index 862cb22..403b702 100644
---- a/requirements.txt
-+++ b/requirements.txt
-@@ -11,4 +11,4 @@ scipy
- tqdm
- soundfile
- phonemizer
--bokeh==1.4.0
-+bokeh
 diff --git a/setup.py b/setup.py
-index a784056..ae238b4 100644
+index f92dac8..fa4a11f 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -94,8 +94,8 @@ setup(
+@@ -93,9 +93,9 @@ setup(
+     install_requires=[
          "scipy>=0.19.0",
-         "torch>=1.5",
-         "numpy>=1.16.0",
+         "torch>=0.4.1",
+-        "numpy==1.15.4",
 -        "librosa==0.6.2",
 -        "unidecode==0.4.20",
++        "numpy>=1.15.4",
 +        "librosa>=0.6.2",
 +        "unidecode>=0.4.20",
          "attrdict",
          "tensorboardX",
          "matplotlib",
-@@ -103,11 +103,14 @@ setup(
+@@ -103,7 +103,7 @@ setup(
          "flask",
          # "lws",
          "tqdm",
 -        "bokeh==1.4.0",
-+        "bokeh",
++        "bokeh>=1.4.0",
          "soundfile",
          "phonemizer @ https://github.com/bootphon/phonemizer/tarball/master",
      ],
-     dependency_links=[
-         "http://github.com/bootphon/phonemizer/tarball/master#egg=phonemizer-1.0.1"
-+    ],
-+    scripts = [
-+        'server/server.py'
-     ]
- )
