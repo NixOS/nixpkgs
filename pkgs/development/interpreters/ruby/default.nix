@@ -57,9 +57,8 @@ let
       # Since some Gems require JIT support, there's probably no
       # escape from this reference. Hence, it was decided to enable this
       # feature by default, as it's enabled by default by ruby's ./configure
-      # script. We do disable this feature though for the other cc references
-      # in all of the locations given above for the `rubyMinimal` build defined
-      # in all-packages.nix.
+      # script. If you'd like to have a ruby without reference to cc, setting
+      # jitSupport to false should remove all known references mentioned above.
       , removeReferencesTo, jitSupport ? true
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix

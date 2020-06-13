@@ -85,6 +85,18 @@
     </para>
    </listitem>
    <listitem>
+     <para>
+       <literal>rubyMinimal</literal> was removed due to being unused and
+       unusable. The default ruby interpreter includes JIT support, which makes
+       it reference it's compiler. Since JIT support is probably needed by some
+       Gems, it was decided to enable this feature with all cc references by
+       default, and allow to build a Ruby derivation without references to cc,
+       by setting <literal>jitSupport = false;</literal> in an overlay. See
+       <link xlink:href="https://github.com/NixOS/nixpkgs/pull/90151">#90151</link>
+       for more info.
+     </para>
+   </listitem>
+   <listitem>
     <para>
       The option <option>fonts.enableFontDir</option> has been renamed to
       <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
