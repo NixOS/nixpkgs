@@ -10,7 +10,7 @@
 
 let
   major = "11";
-  update = ".0.6";
+  update = ".0.7";
   build = "ga";
 
   openjdk = stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ let
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "1w6n0cnz9izpjb3sc870q7a0jz85a6c7fiszymxin10cnsajkzir";
+      sha256 = "14daacng9ndxf4kmvsn7nracwfiwwmw5rha8rkk3723pfk9g8q7p";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];
