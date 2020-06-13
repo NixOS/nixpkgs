@@ -18,13 +18,23 @@ searchHardCodedPaths() {
 
     local path=$1
 
-    echo ----------- looking for command invocations in $path
-    grep --color=always -r -E '\<(ExecStart|Exec|startDetached|execute|exec\.(Command|LookPath))\>' $path || true
+    local display_path=$path
+    if [ -z "$display_path" ]; then
+        display_path=$(pwd)
+    fi
 
-    echo ----------- looking for hard coded paths in $path
-    grep --color=always $binary -r -E '/(usr|bin|sbin|etc|var|opt)\>' $path || true
+    echo ---------- looking for hard coded paths and command invocations in $display_path
 
-    echo ----------- done
+    grep \
+        --color=always \
+        $binary \
+        -r \
+        -E '(/usr|/bin|/sbin|/etc|/var|/opt|(\<(ExecStart|Exec|startDetached|execute|exec\.(Command|LookPath))))\>' \
+        $path \
+     | sort \
+     || true
+
+    echo ---------- done
 }
 
 fixPath() {
