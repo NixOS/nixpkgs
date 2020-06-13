@@ -1,6 +1,6 @@
 { config, stdenv, fetchurl, fetchFromGitHub, fetchpatch
 , addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
-, ffmpeg_4, freefont_ttf, freetype, libass, libpthreadstubs, mujs
+, ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
 , CoreFoundation, Cocoa, CoreAudio, MediaPlayer
 
@@ -152,7 +152,7 @@ in stdenv.mkDerivation rec {
     ++ optional swiftSupport swift;
 
   buildInputs = [
-    ffmpeg_4 freetype libass libpthreadstubs
+    ffmpeg freetype libass libpthreadstubs
     luaEnv libuchardet mujs
   ] ++ optional alsaSupport        alsaLib
     ++ optional archiveSupport     libarchive
