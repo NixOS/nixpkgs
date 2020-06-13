@@ -123,7 +123,7 @@ in
 
     services.dbus.packages = mkIf (cfg.agent.pinentryFlavor == "gnome3") [ pkgs.gcr ];
 
-    environment.systemPackages = with pkgs; [ cfg.package ];
+    environment.systemPackages = with pkgs; [ cfg.package pinentry.${cfg.agent.pinentryFlavor} ];
     systemd.packages = [ cfg.package ];
 
     environment.interactiveShellInit = ''
