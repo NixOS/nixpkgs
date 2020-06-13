@@ -3896,6 +3896,11 @@ in {
 
   gdrivefs = callPackage ../development/python-modules/gdrivefs { };
 
+  geant4 = disabledIf (!isPy3k) (toPythonModule (pkgs.geant4.override {
+    enablePython = true;
+    python3 = python;
+  }));
+
   genshi = callPackage ../development/python-modules/genshi { };
 
   gentools = callPackage ../development/python-modules/gentools { };
