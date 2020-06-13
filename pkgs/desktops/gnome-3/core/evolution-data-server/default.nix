@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.36.2";
+  version = "3.36.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0yz9fsnbnnlj2iidd81i9w7d0dhidrzqkixrnfjfdkhnxk7p9qlq";
+    sha256 = "1cix02xl473m0l7h715s68cn7bi1p4y1jkrxswcq4a0g7lblhpqz";
   };
 
   patches = [

@@ -5137,7 +5137,6 @@ broken-packages:
   - github-webhooks
   - githud
   - gitignore
-  - gitit
   - gitlab-api
   - gitlib
   - gitlib-cmdline
@@ -5673,7 +5672,6 @@ broken-packages:
   - hasql-generic
   - hasql-implicits
   - hasql-migration
-  - hasql-notifications
   - hasql-optparse-applicative
   - hasql-postgres
   - hasql-postgres-options

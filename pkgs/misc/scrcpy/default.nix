@@ -5,7 +5,7 @@
 , fetchpatch
 
 , platform-tools
-, ffmpeg
+, ffmpeg_3
 , SDL2
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
 
-  buildInputs = [ ffmpeg SDL2 ];
+  buildInputs = [ ffmpeg_3 SDL2 ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''

@@ -11,6 +11,7 @@
 , tornado
 , aiohttp
 , uritemplate
+, pyjwt
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools pytestrunner ];
   checkInputs = [ pytest pytest-asyncio twisted treq tornado aiohttp ];
-  propagatedBuildInputs = [ uritemplate ];
+  propagatedBuildInputs = [
+    uritemplate
+    pyjwt
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

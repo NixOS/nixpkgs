@@ -232,18 +232,22 @@ let
               '';
             preStop = ''
               state="/run/nixos/network/routes/${i.name}"
-              while read cidr; do
-                echo -n "deleting route $cidr... "
-                ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
-              done < "$state"
-              rm -f "$state"
+              if [ -e "$state" ]; then
+                while read cidr; do
+                  echo -n "deleting route $cidr... "
+                  ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
+                done < "$state"
+                rm -f "$state"
+              fi
 
               state="/run/nixos/network/addresses/${i.name}"
-              while read cidr; do
-                echo -n "deleting address $cidr... "
-                ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
-              done < "$state"
-              rm -f "$state"
+              if [ -e "$state" ]; then
+                while read cidr; do
+                  echo -n "deleting address $cidr... "
+                  ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
+                done < "$state"
+                rm -f "$state"
+              fi
             '';
           };
 

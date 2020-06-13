@@ -859,6 +859,8 @@ in {
 
   itanium_demangler = callPackage ../development/python-modules/itanium_demangler { };
 
+  iterm2 = callPackage ../development/python-modules/iterm2 { };
+
   janus = callPackage ../development/python-modules/janus { };
 
   jc = callPackage ../development/python-modules/jc { };
@@ -2003,6 +2005,8 @@ in {
     pythonProtobuf = self.protobuf;
   };
 
+  citeproc-py = callPackage ../development/python-modules/citeproc-py { };
+
   colorcet = callPackage ../development/python-modules/colorcet { };
 
   coloredlogs = callPackage ../development/python-modules/coloredlogs { };
@@ -2072,6 +2076,8 @@ in {
   defusedxml = callPackage ../development/python-modules/defusedxml {};
 
   dodgy = callPackage ../development/python-modules/dodgy { };
+
+  duecredit = callPackage ../development/python-modules/duecredit { };
 
   dugong = callPackage ../development/python-modules/dugong {};
 
@@ -5713,6 +5719,8 @@ in {
   Pyro4 = callPackage ../development/python-modules/pyro4 { };
 
   Pyro5 = callPackage ../development/python-modules/pyro5 { };
+
+  rnc2rng = callPackage ../development/python-modules/rnc2rng { };
 
   rope = callPackage ../development/python-modules/rope { };
 

@@ -8,7 +8,7 @@
 , pandas
 , tables
 , git
-, ffmpeg
+, ffmpeg_3
 , scikitimage
 , matplotlib
 , qdarkstyle
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pandas
     tables
     git
-    ffmpeg
+    ffmpeg_3
     scikitimage
     matplotlib
     qdarkstyle

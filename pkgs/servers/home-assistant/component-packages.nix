@@ -2,10 +2,11 @@
 # Do not edit!
 
 {
-  version = "0.110.1";
+  version = "0.111.0";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];
+    "acmeda" = ps: with ps; [ ]; # missing inputs: aiopulse
     "actiontec" = ps: with ps; [ ];
     "adguard" = ps: with ps; [ ]; # missing inputs: adguardhome
     "ads" = ps: with ps; [ ]; # missing inputs: pyads
@@ -56,7 +57,6 @@
     "aurora" = ps: with ps; [ ];
     "aurora_abb_powerone" = ps: with ps; [ ]; # missing inputs: aurorapy
     "auth" = ps: with ps; [ aiohttp-cors];
-    "automatic" = ps: with ps; [ aiohttp-cors]; # missing inputs: aioautomatic
     "automation" = ps: with ps; [ ];
     "avea" = ps: with ps; [ ]; # missing inputs: avea
     "avion" = ps: with ps; [ ]; # missing inputs: avion
@@ -107,6 +107,7 @@
     "cast" = ps: with ps; [ PyChromecast];
     "cert_expiry" = ps: with ps; [ ];
     "channels" = ps: with ps; [ ]; # missing inputs: pychannels
+    "circuit" = ps: with ps; [ ]; # missing inputs: circuit-webhook
     "cisco_ios" = ps: with ps; [ pexpect];
     "cisco_mobility_express" = ps: with ps; [ ]; # missing inputs: ciscomobilityexpress
     "cisco_webex_teams" = ps: with ps; [ ]; # missing inputs: webexteamssdk
@@ -276,7 +277,6 @@
     "garmin_connect" = ps: with ps; [ ]; # missing inputs: garminconnect
     "gc100" = ps: with ps; [ ]; # missing inputs: python-gc100
     "gdacs" = ps: with ps; [ ]; # missing inputs: aio_georss_gdacs
-    "gearbest" = ps: with ps; [ ]; # missing inputs: gearbest_parser
     "geizhals" = ps: with ps; [ ]; # missing inputs: geizhals
     "generic" = ps: with ps; [ ];
     "generic_thermostat" = ps: with ps; [ ];
@@ -294,7 +294,7 @@
     "glances" = ps: with ps; [ ]; # missing inputs: glances_api
     "gntp" = ps: with ps; [ ]; # missing inputs: gntp
     "goalfeed" = ps: with ps; [ ]; # missing inputs: pysher
-    "gogogate2" = ps: with ps; [ ]; # missing inputs: pygogogate2
+    "gogogate2" = ps: with ps; [ ]; # missing inputs: gogogate2-api
     "google" = ps: with ps; [ google_api_python_client httplib2 oauth2client];
     "google_assistant" = ps: with ps; [ aiohttp-cors];
     "google_cloud" = ps: with ps; [ google_cloud_texttospeech];
@@ -315,6 +315,7 @@
     "growatt_server" = ps: with ps; [ ]; # missing inputs: growattServer
     "gstreamer" = ps: with ps; [ ]; # missing inputs: gstreamer-player
     "gtfs" = ps: with ps; [ ]; # missing inputs: pygtfs
+    "guardian" = ps: with ps; [ ]; # missing inputs: aioguardian
     "habitica" = ps: with ps; [ ]; # missing inputs: habitipy
     "hangouts" = ps: with ps; [ ]; # missing inputs: hangups
     "harman_kardon_avr" = ps: with ps; [ ]; # missing inputs: hkavr
@@ -372,7 +373,7 @@
     "input_number" = ps: with ps; [ ];
     "input_select" = ps: with ps; [ ];
     "input_text" = ps: with ps; [ ];
-    "insteon" = ps: with ps; [ ]; # missing inputs: insteonplm
+    "insteon" = ps: with ps; [ ]; # missing inputs: pyinsteon
     "integration" = ps: with ps; [ ];
     "intent" = ps: with ps; [ aiohttp-cors];
     "intent_script" = ps: with ps; [ ];
@@ -599,7 +600,7 @@
     "plaato" = ps: with ps; [ aiohttp-cors];
     "plant" = ps: with ps; [ ];
     "plex" = ps: with ps; [ aiohttp-cors plexapi plexauth plexwebsocket];
-    "plugwise" = ps: with ps; [ ]; # missing inputs: haanna
+    "plugwise" = ps: with ps; [ ]; # missing inputs: Plugwise_Smile
     "plum_lightpad" = ps: with ps; [ ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [ ]; # missing inputs: pocketcasts
     "point" = ps: with ps; [ aiohttp-cors]; # missing inputs: pypoint
@@ -732,7 +733,7 @@
     "soma" = ps: with ps; [ ]; # missing inputs: pysoma
     "somfy" = ps: with ps; [ aiohttp-cors]; # missing inputs: pymfy
     "somfy_mylink" = ps: with ps; [ ]; # missing inputs: somfy-mylink-synergy
-    "sonarr" = ps: with ps; [ ];
+    "sonarr" = ps: with ps; [ ]; # missing inputs: sonarr
     "songpal" = ps: with ps; [ ]; # missing inputs: python-songpal
     "sonos" = ps: with ps; [ pysonos];
     "sony_projector" = ps: with ps; [ ]; # missing inputs: pysdcp
@@ -904,9 +905,8 @@
     "worxlandroid" = ps: with ps; [ ];
     "wsdot" = ps: with ps; [ ];
     "wunderground" = ps: with ps; [ ];
-    "wunderlist" = ps: with ps; [ ]; # missing inputs: wunderpy2
-    "wwlln" = ps: with ps; [ ]; # missing inputs: aiowwlln
     "x10" = ps: with ps; [ ];
+    "xbee" = ps: with ps; [ ]; # missing inputs: xbee-helper
     "xbox_live" = ps: with ps; [ ]; # missing inputs: xboxapi
     "xeoma" = ps: with ps; [ ]; # missing inputs: pyxeoma
     "xfinity" = ps: with ps; [ ]; # missing inputs: xfinity-gateway
@@ -934,7 +934,6 @@
     "zestimate" = ps: with ps; [ xmltodict];
     "zha" = ps: with ps; [ pyserial zha-quirks zigpy-deconz]; # missing inputs: bellows zigpy-cc zigpy-xbee zigpy-zigate zigpy
     "zhong_hong" = ps: with ps; [ ]; # missing inputs: zhong_hong_hvac
-    "zigbee" = ps: with ps; [ ]; # missing inputs: xbee-helper
     "ziggo_mediabox_xl" = ps: with ps; [ ]; # missing inputs: ziggo-mediabox-xl
     "zone" = ps: with ps; [ ];
     "zoneminder" = ps: with ps; [ zm-py];

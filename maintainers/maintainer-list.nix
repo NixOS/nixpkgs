@@ -3514,6 +3514,12 @@
     githubId = 1608697;
     name = "Jens Binkert";
   };
+  jeremyschlatter = {
+    email = "github@jeremyschlatter.com";
+    github = "jeremyschlatter";
+    githubId = 5741620;
+    name = "Jeremy Schlatter";
+  };
   jerith666 = {
     email = "github@matt.mchenryfamily.org";
     github = "jerith666";
@@ -5026,6 +5032,12 @@
     github = "mgdelacroix";
     githubId = 223323;
     name = "Miguel de la Cruz";
+  };
+  mgdm = {
+    email = "michael@mgdm.net";
+    github = "mgdm";
+    githubId = 71893;
+    name = "Michael Maclean";
   };
   mgregoire = {
     email = "gregoire@martinache.net";

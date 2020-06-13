@@ -48,7 +48,7 @@
 , gnused
 , gnugrep
 , gnupg
-, ffmpeg
+, ffmpeg_3
 , runtimeShell
 , systemLocale ? config.i18n.defaultLocale or "en-US"
 }:
@@ -134,7 +134,7 @@ stdenv.mkDerivation {
       libpulseaudio
       (lib.getDev libpulseaudio)
       systemd
-      ffmpeg
+      ffmpeg_3
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
