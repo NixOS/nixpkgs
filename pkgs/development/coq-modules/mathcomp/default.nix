@@ -76,8 +76,8 @@ let
     };
     # versions of coq compatible with released mathcomp versions
     coq-versions     = {
-      "1.11.0"       = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
-      "1.11+beta1"   = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
+      "1.11.0"       = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" "8.12" ];
+      "1.11+beta1"   = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" "8.12" ];
       "1.10.0"       = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
       "1.9.0"        = flip elem [ "8.7" "8.8" "8.9" "8.10" ];
       "1.8.0"        = flip elem [ "8.7" "8.8" "8.9" ];
