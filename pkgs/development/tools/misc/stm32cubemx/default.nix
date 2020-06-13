@@ -1,7 +1,7 @@
 { stdenv, requireFile, makeDesktopItem, libicns, imagemagick, zstd, jre }:
 
 let
-  version = "5.3.0";
+  version = "5.6.1";
   desktopItem = makeDesktopItem {
     name = "stm32CubeMX";
     exec = "stm32cubemx";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
       Notice: The setup will quit with an error about /bin/chmod
     '';
-    sha256 = "1r5k5wmsvw1w2nfs3nb4gc6pb3j0x6bqljn9jzc4r8y5bxc34rr8";
+    sha256 = "14m2nanywng1kp7q9ax413ml3zz0x5n33cnp9nd256j0jh0rc080";
   };
 
   nativeBuildInputs = [ libicns imagemagick zstd ];
