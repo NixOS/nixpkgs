@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.8.38";
+  version = "1.9.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7fa81ba38388ac1760ae61229681f46a7fc2ed96cb2d435b616873a73e668b64";
+    sha256 = "9b1ca602b63b7bcb9f53e9f3d4b815839926533112bc6e3ecf1d37cb125259f3";
   };
 
   propagatedBuildInputs = [

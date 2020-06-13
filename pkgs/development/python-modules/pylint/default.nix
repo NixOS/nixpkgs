@@ -1,20 +1,20 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, astroid,
-  isort, mccabe, pytestCheckHook, pytestrunner }:
+  isort, mccabe, pytestCheckHook, pytest-benchmark, pytestrunner, toml }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.4.4";
+  version = "2.5.2";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3db5468ad013380e987410a8d6956226963aed94ecb5f9d3a28acca6d9ac36cd";
+    sha256 = "b95e31850f3af163c2283ed40432f053acbc8fc6eba6a069cb518d9dbf71848c";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytestrunner toml ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [ pytestCheckHook pytest-benchmark ];
 
   propagatedBuildInputs = [ astroid isort mccabe ];
 
@@ -26,10 +26,17 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/PyCQA/pylint/issues/3198
     "test_by_module_statement_value"
+    # has issues with local directories
+    "test_version"
    ] ++ lib.optionals stdenv.isDarwin [
       "test_parallel_execution"
       "test_py3k_jobs_option"
    ];
+
+  # calls executable in one of the tests
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+  '';
 
   dontUseSetuptoolsCheck = true;
 
