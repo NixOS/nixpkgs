@@ -5,7 +5,7 @@
 , fetchpatch
 , python
 , glibcLocales
-, pkgconfig
+, pkg-config
 , gdb
 , numpy
 , ncurses
@@ -34,7 +34,7 @@ in buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
   checkInputs = [
     numpy ncurses

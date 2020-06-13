@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = "Release-${version}";
-    sha256 = "sha256-IdlRScAy7tCyVCElCceY4PvqPXWfZZ35f+MwCo3nO3s=";
+    sha256 = "0yrvwy6hlc73gzwrsrczflyymyz0k33hj991ajrd1vijq14m3n91";
   };
 
   buildInputs = [

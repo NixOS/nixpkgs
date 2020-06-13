@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
 # Inputs
 , curl, libmms, libnfs, samba
 # Archive support
 , bzip2, zziplib
 # Codecs
-, audiofile, faad2, ffmpeg, flac, fluidsynth, game-music-emu
+, audiofile, faad2, ffmpeg_3, flac, fluidsynth, game-music-emu
 , libmad, libmikmod, mpg123, libopus, libvorbis, lame
 # Filters
 , libsamplerate
@@ -19,6 +19,13 @@
 # Tag support
 , libid3tag
 , nixosTests
+# For documentation
+, doxygen
+, python3Packages # for sphinx-build
+# For tests
+, gtest
+, fetchpatch # used to fetch an upstream patch fixing a failing test
+, zip
 }:
 
 let
@@ -39,7 +46,7 @@ let
     # Decoder plugins
     audiofile     = [ audiofile ];
     faad          = [ faad2 ];
-    ffmpeg        = [ ffmpeg ];
+    ffmpeg        = [ ffmpeg_3 ];
     flac          = [ flac ];
     fluidsynth    = [ fluidsynth ];
     gme           = [ game-music-emu ];
@@ -112,17 +119,60 @@ let
         sha256 = "0jnhjhm1ilpcwb4f58b8pgyzjq3dlr0j2xyk0zck0afwkdxyj9cb";
       };
 
-      buildInputs = [ glib boost ]
+      # Won't be needed when 0.21.24 will be out
+      patches = [
+        # Tests fail otherwise, see https://github.com/MusicPlayerDaemon/MPD/issues/844
+        (fetchpatch {
+          url = "https://github.com/MusicPlayerDaemon/MPD/commit/7aea2853612743e111ae5e947c8d467049e291a8.patch";
+          sha256 = "1bmxlsaiz3wlg1yyc4rkwsmgvc0pirv0s1vdxxsn91yssmh16c2g";
+          excludes = [
+            # The patch fails otherwise because it tries to update the NEWS
+            # file which doesn't have the title "ver 0.21.24" yet.
+            "NEWS"
+          ];
+        })
+      ];
+
+      buildInputs = [
+        glib
+        boost
+        # According to the configurePhase of meson, gtest is considered a
+        # runtime dependency. Quoting:
+        #
+        #    Run-time dependency GTest found: YES 1.10.0
+        gtest
+      ]
         ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
         ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
 
-      nativeBuildInputs = [ meson ninja pkgconfig ];
+      nativeBuildInputs = [
+        meson
+        ninja
+        pkg-config
+        python3Packages.sphinx
+        doxygen
+      ];
+
+      # Otherwise, the meson log says:
+      #
+      #    Program zip found: NO
+      checkInputs = [ zip ];
+
+      doCheck = true;
 
       enableParallelBuilding = true;
 
       mesonAutoFeatures = "disabled";
-      mesonFlags =
-        map (x: "-D${x}=enabled") features_
+
+      outputs = [ "out" "doc" "man" ];
+
+      mesonFlags = [
+        # Documentation is enabled unconditionally but it's not installed
+        # unconditionally thanks to the outputs being split
+        "-Ddocumentation=true"
+        "-Dtest=true"
+      ]
+        ++ map (x: "-D${x}=enabled") features_
         ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
         ++ lib.optional (builtins.elem "zeroconf" features_)
           "-Dzeroconf=avahi"

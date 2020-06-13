@@ -1,22 +1,30 @@
 { stdenv, hwdata, pkgconfig, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables, libcap, libco-canonical, dqlite
-, raft-canonical, sqlite-replication, udev
+, squashfsTools, iproute, iptables, ebtables, iptables-nftables-compat, libcap
+, libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
 , bash
 , installShellFiles
+, nftablesSupport ? false
 }:
 
+let
+  networkPkgs = if nftablesSupport then
+    [ iptables-nftables-compat ]
+  else
+    [ iptables ebtables ];
+
+in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.1";
+  version = "4.2";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0svzj57wwm43d2gnx0myr2p9pzjmkivwhgg0dww6zl169bx32liz";
+    sha256 = "0pv84ywnigrp94kh54fz689i15yv01lhrnkxpk8dg9wypxara9m4";
   };
 
   postPatch = ''
@@ -38,12 +46,14 @@ buildGoPackage rec {
     # test binaries, code generation
     rm $out/bin/{deps,macaroon-identity,generate}
 
-    wrapProgram $out/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash criu
-      (writeShellScriptBin "apparmor_parser" ''
-        exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
-      '')
-    ]}
+    wrapProgram $out/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath (
+      networkPkgs
+      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute bash criu ]
+      ++ [ (writeShellScriptBin "apparmor_parser" ''
+             exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+           '') ]
+      )
+    }
 
     installShellCompletion --bash go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';

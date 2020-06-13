@@ -8,9 +8,6 @@ let
 
   cfg = config.networking;
 
-  localhostMapped4 = cfg.hosts ? "127.0.0.1" && elem "localhost" cfg.hosts."127.0.0.1";
-  localhostMapped6 = cfg.hosts ? "::1"       && elem "localhost" cfg.hosts."::1";
-
   localhostMultiple = any (elem "localhost") (attrValues (removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]));
 
 in
@@ -147,12 +144,6 @@ in
   config = {
 
     assertions = [{
-      assertion = localhostMapped4;
-      message = ''`networking.hosts` doesn't map "127.0.0.1" to "localhost"'';
-    } {
-      assertion = !cfg.enableIPv6 || localhostMapped6;
-      message = ''`networking.hosts` doesn't map "::1" to "localhost"'';
-    } {
       assertion = !localhostMultiple;
       message = ''
         `networking.hosts` maps "localhost" to something other than "127.0.0.1"
@@ -161,22 +152,34 @@ in
       '';
     }];
 
-    networking.hosts = {
-      "127.0.0.1" = [ "localhost" ];
-    } // optionalAttrs (cfg.hostName != "") {
-      "127.0.1.1" = [ cfg.hostName ];
+    # These entries are required for "hostname -f" and to resolve both the
+    # hostname and FQDN correctly:
+    networking.hosts = let
+      hostnames = # Note: The FQDN (canonical hostname) has to come first:
+        optional (cfg.hostName != "" && cfg.domain != null) "${cfg.hostName}.${cfg.domain}"
+        ++ optional (cfg.hostName != "") cfg.hostName; # Then the hostname (without the domain)
+    in {
+      "127.0.0.2" = hostnames;
     } // optionalAttrs cfg.enableIPv6 {
-      "::1" = [ "localhost" ];
+      "::1" = hostnames;
     };
 
     networking.hostFiles = let
+      # Note: localhostHosts has to appear first in /etc/hosts so that 127.0.0.1
+      # resolves back to "localhost" (as some applications assume) instead of
+      # the FQDN! By default "networking.hosts" also contains entries for the
+      # FQDN so that e.g. "hostname -f" works correctly.
+      localhostHosts = pkgs.writeText "localhost-hosts" ''
+        127.0.0.1 localhost
+        ${optionalString cfg.enableIPv6 "::1 localhost"}
+      '';
       stringHosts =
         let
           oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip} + "\n";
           allToString = set: concatMapStrings (oneToString set) (attrNames set);
         in pkgs.writeText "string-hosts" (allToString (filterAttrs (_: v: v != []) cfg.hosts));
       extraHosts = pkgs.writeText "extra-hosts" cfg.extraHosts;
-    in mkBefore [ stringHosts extraHosts ];
+    in mkBefore [ localhostHosts stringHosts extraHosts ];
 
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.

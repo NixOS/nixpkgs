@@ -54,6 +54,11 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
+    # https://gitlab.freedesktop.org/accountsservice/accountsservice/-/issues/55
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/58.patch";
+      sha256 = "1pnwq4ycnryb2kkgvnz44qzm71240ybqj6507wynlkdsw8180fdw";
+    })
     (substituteAll {
       src = ./fix-paths.patch;
       inherit shadow coreutils;

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, alsaLib, ffmpeg, glib, openssl
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, alsaLib, ffmpeg_3, glib, openssl
 , pcre, zlib, libX11, libXcursor, libXdamage, libXext, libXi, libXinerama
 , libXrandr, libXrender, libXv, libXtst, libxkbcommon, libxkbfile, wayland
 , gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc, libxslt
@@ -17,13 +17,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
-    sha256 = "0905374k4x647052sr27m2hgjcavbxdl0xd8n02vm5xa6whz239j";
+    sha256 = "1avfsx837rjfk50qv3xjccx2309phn04rq6imadqvqpfnyx4ma66";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     [
       alsaLib
       cups
-      ffmpeg
+      ffmpeg_3
       glib
       gst-plugins-base
       gst-plugins-good

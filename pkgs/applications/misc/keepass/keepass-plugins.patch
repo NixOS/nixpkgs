@@ -11,7 +11,7 @@ diff --git a/KeePass/Forms/MainForm.cs b/KeePass/Forms/MainForm.cs
 index 347eaf5..b92e1e2 100644
 --- a/KeePass/Forms/MainForm.cs
 +++ b/KeePass/Forms/MainForm.cs
-@@ -440,7 +440,7 @@ namespace KeePass.Forms
+@@ -440,7 +440,$OUTPUT_LC$ @@ namespace KeePass.Forms
  				ToolStripItemCollection tsicT = m_ctxTray.Items;
  				ToolStripItem tsiPrevT = m_ctxTrayOptions;
  

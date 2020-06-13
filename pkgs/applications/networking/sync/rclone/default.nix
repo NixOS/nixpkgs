@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "rclone";
-  version = "1.51.0";
+  version = "1.52.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0z4kaq6wnj5dgl52g7f86phxlvnk5pbpda7prgh3hahpyhxj0z7d";
+    sha256 = "1v91c3wydpixi0p0afclp4baxchigy3czlm1mq9hn6cw973z6spf";
   };
 
   goPackagePath = "github.com/rclone/rclone";
@@ -28,7 +28,7 @@ buildGoPackage rec {
     in
       ''
         installManPage $src/rclone.1
-        for shell in bash zsh; do
+        for shell in bash zsh fish; do
           ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
           installShellCompletion rclone.$shell
         done

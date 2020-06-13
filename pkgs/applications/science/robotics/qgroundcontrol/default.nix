@@ -1,33 +1,30 @@
 { lib, mkDerivation, fetchgit, SDL2
 , qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
-, qtgraphicaleffects, qtspeech, qmake
-, makeWrapper
-, gst_all_1, pkgconfig
+, qtgraphicaleffects, qtspeech, qtx11extras, qmake, qttools
+, gst_all_1, wayland, pkgconfig
 }:
 
 mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "3.5.5";
+  version = "4.0.8";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
-    qtgraphicaleffects qtspeech
+    qtgraphicaleffects qtspeech qtx11extras
   ];
 
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base
+    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad wayland
   ];
 
   enableParallelBuilding = true;
   buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
-  nativeBuildInputs = [ pkgconfig makeWrapper qmake ];
+  nativeBuildInputs = [ pkgconfig qmake qttools ];
 
   preConfigure = ''
     mkdir build
     cd build
   '';
-
-  NIX_CFLAGS_COMPILE = [ "-Wno-address-of-packed-member" ]; # Don't litter logs with these warnings
 
   qmakeFlags = [
     # Default install tries to copy Qt files into package
@@ -36,6 +33,8 @@ mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     cd ..
 
     mkdir -p $out/share/applications
@@ -50,18 +49,19 @@ mkDerivation rec {
 
     mkdir -p $out/share/pixmaps
     cp -v resources/icons/qgroundcontrol.png $out/share/pixmaps
+
+    runHook postInstall
   '';
 
   postInstall = ''
-    wrapProgram "$out/bin/qgroundcontrol" \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
   # TODO: package mavlink so we can build from a normal source tarball
   src = fetchgit {
     url = "https://github.com/mavlink/qgroundcontrol.git";
     rev = "v${version}";
-    sha256 = "05zy6w9lwwh254wa8c6wysa67kk0flywcvipii9b1rmy47slflhs";
+    sha256 = "0jr9jpjqdwizsvh9zm0fdp8k2r4536m40dxrn30fbr3ba8vnzkgq";
     fetchSubmodules = true;
   };
 
@@ -70,6 +70,6 @@ mkDerivation rec {
     homepage = "http://qgroundcontrol.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pxc ];
+    maintainers = with maintainers; [ lopsided98 ];
   };
 }

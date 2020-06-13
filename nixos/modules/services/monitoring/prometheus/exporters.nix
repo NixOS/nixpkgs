@@ -21,6 +21,7 @@ let
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
   exporterOpts = genAttrs [
+    "apcupsd"
     "bind"
     "blackbox"
     "collectd"
@@ -28,6 +29,8 @@ let
     "dovecot"
     "fritzbox"
     "json"
+    "keylight"
+    "lnd"
     "mail"
     "mikrotik"
     "minio"

@@ -80,7 +80,7 @@ let
   ############################
   rec-mathcomp-extra-config = {
     initial = {
-      mathcomp-finmap = version: {
+      mathcomp-finmap = {version, coqPackages}: {
         meta = {
           description = "A finset and finmap library";
           repo = "finmap";
@@ -89,7 +89,7 @@ let
         passthru.compatibleCoqVersions = flip elem [ "8.8" "8.9" "8.10" "8.11" ];
       };
 
-      mathcomp-bigenough = version: {
+      mathcomp-bigenough = {version, coqPackages}: {
         meta = {
           description = "A small library to do epsilon - N reasonning";
           repo = "bigenough";
@@ -98,7 +98,7 @@ let
         passthru.compatibleCoqVersions = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
       };
 
-      multinomials = version: {
+      multinomials = {version, coqPackages}: {
         buildInputs = [ which ];
         propagatedBuildInputs = with coqPackages;
           [ mathcomp.algebra mathcomp-finmap mathcomp-bigenough ];
@@ -110,9 +110,9 @@ let
         passthru.compatibleCoqVersions = flip elem [ "8.9" "8.10" "8.11" ];
       };
 
-      mathcomp-analysis = version: {
+      mathcomp-analysis = {version, coqPackages}: {
         propagatedBuildInputs = with coqPackages;
-          [ mathcomp.field mathcomp-finmap mathcomp-bigenough ];
+          [ mathcomp.field mathcomp-finmap mathcomp-bigenough mathcomp-real-closed ];
         meta = {
           description = "Analysis library compatible with Mathematical Components";
           homepage = "https://github.com/math-comp/analysis";
@@ -122,9 +122,9 @@ let
         passthru.compatibleCoqVersions = flip elem ["8.8" "8.9" "8.10" "8.11" ];
       };
 
-      mathcomp-real-closed = version: {
+      mathcomp-real-closed = {version, coqPackages}: {
         propagatedBuildInputs = with coqPackages;
-          [ coq mathcomp.field  mathcomp-bigenough ];
+          [ mathcomp.field mathcomp-bigenough ];
         meta = {
           description = "Mathematical Components Library on real closed fields";
           repo = "real-closed";
@@ -133,7 +133,7 @@ let
         passthru.compatibleCoqVersions = flip elem ["8.8" "8.9" "8.10" "8.11" ];
       };
 
-      coqeal = version: {
+      coqeal = {version, coqPackages}: {
         buildInputs = [ which ];
         propagatedBuildInputs = with coqPackages;
           [ mathcomp-algebra bignums paramcoq multinomials ];
@@ -168,12 +168,15 @@ let
         "1.0.0" = "10g0gp3hk7wri7lijkrqna263346wwf6a3hbd4qr9gn8hmsx70wg";
       };
       mathcomp-analysis = {
+        "0.3.1" = "1iad288yvrjv8ahl9v18vfblgqb1l5z6ax644w49w9hwxs93f2k8";
+        "0.3.0" = "03klwi4fja0cqb4myp3kgycfbmdv00bznmxf8yg3zzzzw997hjqc";
         "0.2.3" = "0p9mr8g1qma6h10qf7014dv98ln90dfkwn76ynagpww7qap8s966";
         "0.2.2" = "1d5dwg9di2ppdzfg21zr0a691zigb5kz0lcw263jpyli1nrq7cvk";
         "0.2.0" = "1186xjxgns4ns1szyi931964bjm0mp126qzlv10mkqqgfw07nhrd";
         "0.1.0" = "0hwkr2wzy710pcyh274fcarzdx8sv8myp16pv0vq5978nmih46al";
       };
       multinomials = {
+        "1.5.2" = "15aspf3jfykp1xgsxf8knqkxv8aav2p39c2fyirw7pwsfbsv2c4s";
         "1.5.1" = "13nlfm2wqripaq671gakz5mn4r0xwm0646araxv0nh455p9ndjs3";
         "1.5"   = "064rvc0x5g7y1a0nip6ic91vzmq52alf6in2bc2dmss6dmzv90hw";
         "1.4"   = "0vnkirs8iqsv8s59yx1fvg1nkwnzydl42z3scya1xp1b48qkgn0p";
@@ -183,6 +186,8 @@ let
         "1.0"   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
       };
       mathcomp-real-closed = {
+        "1.1.1" = "0ksjscrgq1i79vys4zrmgvzy2y4ylxa8wdsf4kih63apw6v5ws6b";
+        "1.1.0" = "0zgfmrlximw77bw5w6w0xg2nampp02pmrwnrzx8m1n5pqljnv8fh";
         "1.0.5" = "0q8nkxr9fba4naylr5xk7hfxsqzq2pvwlg1j0xxlhlgr3fmlavg2";
         "1.0.4" = "058v9dj973h9kfhqmvcy9a6xhhxzljr90cf99hdfcdx68fi2ha1b";
         "1.0.3" = "1xbzkzqgw5p42dx1liy6wy8lzdk39zwd6j14fwvv5735k660z7yb";
@@ -190,6 +195,7 @@ let
         "1.0.1" = "0j81gkjbza5vg89v4n9z598mfdbql416963rj4b8fzm7dp2r4rxg";
       };
       coqeal = {
+        "1.0.4" = "1g5m26lr2lwxh6ld2gykailhay4d0ayql4bfh0aiwqpmmczmxipk";
         "1.0.3" = "0hc63ny7phzbihy8l7wxjvn3haxx8jfnhi91iw8hkq8n29i23v24";
         "1.0.2" = "1brmf3gj03iky1bcl3g9vx8vknny7xfvs0y2rfr85am0296sxsfj";
         "1.0.1" = "19jhdrv2yp9ww0h8q73ihb2w1z3glz4waf2d2n45klafxckxi7bm";
@@ -201,13 +207,21 @@ let
     # CONSISTENT sets of packages. #
     ################################
     for-coq-and-mc = let
+      v6 = {
+        mathcomp-finmap       = "1.5.0";
+        mathcomp-bigenough    = "1.0.0";
+        mathcomp-analysis     = "0.3.1";
+        multinomials          = "1.5.2";
+        mathcomp-real-closed  = "1.1.1";
+        coqeal                = "1.0.4";
+      };
       v5 = {
         mathcomp-finmap       = "1.5.0";
         mathcomp-bigenough    = "1.0.0";
-        mathcomp-analysis     = "678d3cc37f5f3c71b1bd550836eb44e3ba2a5459";
-        multinomials           = "1.5.1";
+        mathcomp-analysis     = "0.3.0";
+        multinomials          = "1.5.1";
         mathcomp-real-closed  = "1.0.5";
-        coqeal                = "CohenCyril/bdfc96771644b082e41268edc43d61dc5fda2358";
+        coqeal                = "1.0.4";
       };
       v4 = v3 // { coqeal = "1.0.3"; };
       v3 = {
@@ -236,32 +250,37 @@ let
     in
       {
         "8.11" = {
-          "1.11.0+beta1" = v5;
+          "1.11.0"     = v6;
+          "1.11+beta1" = v5;
           "1.10.0"       = v4 // {mathcomp-finmap = "1.4.0+coq-8.11";};
         };
         "8.10" = {
-          "1.11.0+beta1" = v5;
+          "1.11.0"       = removeAttrs v6 ["coqeal"];
+          "1.11+beta1"   = removeAttrs v5 ["coqeal"];
           "1.10.0"       = v4;
           "1.9.0"        = removeAttrs v3 ["coqeal"];
         };
         "8.9" = {
-          "1.11.0+beta1" = removeAttrs v5 ["mathcomp-analysis"];
+          "1.11.0"       = removeAttrs v6 ["mathcomp-analysis"];
+          "1.11+beta1"   = removeAttrs v5 ["mathcomp-analysis"];
           "1.10.0"       = v4;
           "1.9.0"        = removeAttrs v3 ["coqeal"];
           "1.8.0"        = removeAttrs v2 ["coqeal"];
         };
         "8.8" = {
-          "1.11.0+beta1" = removeAttrs v5 ["mathcomp-analysis"];
+          "1.11.0"       = removeAttrs v6 ["mathcomp-analysis"];
+          "1.11+beta1"   = removeAttrs v5 ["mathcomp-analysis"];
           "1.10.0"       = removeAttrs v4 ["mathcomp-analysis"];
           "1.9.0"        = removeAttrs v3 ["coqeal"];
           "1.8.0"        = removeAttrs v2 ["coqeal"];
           "1.7.0"        = removeAttrs v1 ["coqeal" "multinomials"];
         };
         "8.7" = {
-          "1.11.0+beta1" = removeAttrs v5 ["mathcomp-analysis"];
+          "1.11.0"       = removeAttrs v6 ["mathcomp-analysis"];
+          "1.11+beta1"   = removeAttrs v5 ["mathcomp-analysis"];
           "1.10.0"       = removeAttrs v4 ["mathcomp-analysis"];
-          "1.9.0"        = removeAttrs v3 ["coqeal"];
-          "1.8.0"        = removeAttrs v2 ["coqeal"];
+          "1.9.0"        = removeAttrs v3 ["coqeal" "mathcomp-analysis"];
+          "1.8.0"        = removeAttrs v2 ["coqeal" "mathcomp-analysis"];
           "1.7.0"        = removeAttrs v1 ["coqeal" "multinomials"];
         };
       };
@@ -318,13 +337,14 @@ let
   rec-mathcomp-extra-override = generic: old: let
     version = getVersion generic;
     package = old.meta.package or "math-comp-nix";
-    cfg = pkgUp ((mathcomp-extra-config.initial.${package} or (_: {})) version) old
+    cfg = pkgUp ((mathcomp-extra-config.initial.${package} or (_: {}))
+      { inherit version coqPackages; }) old
           // { inherit version; };
     fix = attrs: fix-attrs (pkgUp cfg attrs);
   in
     if isFunction generic then fix (generic cfg)
     else  if generic == null || generic == "" then fix {}
-    else  if isDerivation generic then fix generic.drvAttrs
+    else  if isDerivation generic then generic.drvAttrs
     else  if isAttrs generic then fix generic
     else  if generic == "broken" then fix { meta.broken = true; passthru.compatibleCoqVersions = _: false; }
     else  let fixedcfg = fix cfg; in fixedcfg // (
@@ -365,7 +385,7 @@ in
     mathcomp-real-closed  = current-mathcomp-extra "mathcomp-real-closed";
     coqeal                = current-mathcomp-extra "coqeal";
 
-    mathcomp-extra-fast    = map (pkg: current-mathcomp-extra pkg)
+    mathcomp-extra-fast    = map current-mathcomp-extra
       (attrNames (filterAttrs (pkg: config: !(config?slow && config.slow)) for-this));
-    mathcomp-extra-all    = map (pkg: current-mathcomp-extra pkg) (attrNames for-this);
+    mathcomp-extra-all    = map current-mathcomp-extra (attrNames for-this);
   }

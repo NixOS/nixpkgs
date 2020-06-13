@@ -542,6 +542,9 @@ self: super: builtins.intersectAttrs super {
   # Break infinite recursion cycle between tasty and clock.
   clock = dontCheck super.clock;
 
+  # Break infinite recursion cycle between devtools and mprelude.
+  devtools = super.devtools.override { mprelude = dontCheck super.mprelude; };
+
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
 
@@ -718,9 +721,10 @@ self: super: builtins.intersectAttrs super {
   # dhall's tests access the network.
   dhall_1_29_0 = dontCheck super.dhall_1_29_0;
   dhall_1_31_1 = dontCheck super.dhall_1_31_1;
+  dhall_1_32_0 = dontCheck super.dhall_1_32_0;
 
   cut-the-crap =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg ];
+    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 ];
     in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
@@ -730,6 +734,7 @@ self: super: builtins.intersectAttrs super {
 
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
+  hie-bios_0_5_0 = dontCheck super.hie-bios_0_5_0;
 
   # Compiling the readme throws errors and has no purpose in nixpkgs
   aeson-gadt-th =
@@ -749,5 +754,27 @@ self: super: builtins.intersectAttrs super {
       PATH=$PATH:$out/bin
     '';
   });
+
+  postgresql-syntax = super.postgresql-syntax.override {
+    rerebase = self.rerebase_1_6_1;
+  };
+
+  rerebase_1_6_1 = super.rerebase_1_6_1.override {
+    rebase = self.rebase_1_6_1;
+  };
+
+  rebase_1_6_1 = super.rebase_1_6_1.override {
+    selective = super.selective_0_4_1;
+  };
+
+  # Fix compilation of Setup.hs by removing the module declaration.
+  # See: https://github.com/tippenein/guid/issues/1
+  guid = overrideCabal (super.guid) (drv: {
+    prePatch = "sed -i '1d' Setup.hs"; # 1st line is module declaration, remove it
+    doCheck = false;
+  });
+
+  # Tests disabled as recommended at https://github.com/luke-clifton/shh/issues/39
+  shh = dontCheck super.shh;
 
 }

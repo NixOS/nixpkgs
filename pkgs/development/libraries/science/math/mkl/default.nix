@@ -1,9 +1,9 @@
 { stdenvNoCC
 , fetchurl
-, pkgconfig
 , rpmextract
 , undmg
 , darwin
+, validatePkgConfig
 , enableStatic ? false
 }:
 
@@ -46,15 +46,11 @@ in stdenvNoCC.mkDerivation {
         sha256 = "0v86hrqg15mbc78m9qk8dbkaaq3mlwashgbf9n79kxpl1gilnah8";
       });
 
-  nativeBuildInputs = if stdenvNoCC.isDarwin
+  nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin
     then
       [ undmg darwin.cctools ]
     else
-      [ rpmextract ];
-
-  installCheckInputs = [ pkgconfig ];
-
-  doInstallCheck = true;
+      [ rpmextract ]);
 
   buildPhase = if stdenvNoCC.isDarwin then ''
     for f in Contents/Resources/pkg/*.tgz; do
@@ -150,11 +146,6 @@ in stdenvNoCC.mkDerivation {
     install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libmkl_intel_thread.dylib
     install_name_tool -change @rpath/libtbb.dylib $out/lib/libtbb.dylib $out/lib/libmkl_tbb_thread.dylib
     install_name_tool -change @rpath/libtbbmalloc.dylib $out/lib/libtbbmalloc.dylib $out/lib/libtbbmalloc_proxy.dylib
-  '';
-
-  # Validate pkgconfig files, since they break often on updates.
-  installCheckPhase = ''
-    pkg-config --validate $out/lib/pkgconfig/*.pc
   '';
 
   # Per license agreement, do not modify the binary

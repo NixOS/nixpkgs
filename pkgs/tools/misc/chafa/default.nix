@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, which, libxslt, libxml2, docbook_xml_dtd_412, docbook_xsl, glib, imagemagick, darwin }:
 
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   version = "1.4.1";
   pname = "chafa";
 

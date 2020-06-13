@@ -2,23 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "0.13.6";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08d0zddqqymxj1qcp8c78r7mpii1piy6awaf135jxhzwi775sqqv";
+    sha256 = "1ggzx4w69fmvaxm5gfqhh8ncr2mdx528zm6vwrrwz165lga2fvw6";
   };
 
-  cargoSha256 = "1cxvx51zkmhszmgwsi0aj469xz98v5nk79zvqfyma27gsnh8jczr";
+  cargoSha256 = "0gcq0fww9hl3avh3qcnpnwmpwda4cymr7x3kd3frdizrs8i643mr";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postPatch = ''
-    substituteInPlace src/verb_store.rs --replace '"/bin/' '"${coreutils}/bin/'
+    substituteInPlace src/verb/builtin.rs --replace '"/bin/' '"${coreutils}/bin/'
   '';
 
   postInstall = ''

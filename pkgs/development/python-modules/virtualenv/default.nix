@@ -22,7 +22,6 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "1kxnxxwa25ghlkpyrxa8pi49v87b7ps2gyla7d1h6kbz9sfn45m1";
-
   };
 
   nativeBuildInputs = [
@@ -42,6 +41,10 @@ buildPythonPackage rec {
     importlib-resources
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
+  ];
+
+  patches = lib.optionals (isPy27) [
+    ./0001-Check-base_prefix-and-base_exec_prefix-for-Python-2.patch
   ];
 
   meta = {

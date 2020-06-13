@@ -40,6 +40,17 @@
    </varlistentry>
    <varlistentry>
     <term>
+     <literal>boot.debug1devices</literal>
+    </term>
+    <listitem>
+     <para>
+      Like <literal>boot.debug1</literal>, but runs stage1 until kernel modules are loaded and device nodes are created.
+      This may help with e.g. making the keyboard work.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <literal>boot.trace</literal>
     </term>
     <listitem>

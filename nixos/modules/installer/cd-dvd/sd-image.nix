@@ -68,7 +68,7 @@ in
       default = null;
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
       description = ''
-        UUID for the main NixOS partition on the SD card.
+        UUID for the filesystem on the main NixOS partition on the SD card.
       '';
     };
 
@@ -105,7 +105,7 @@ in
       default = true;
       description = ''
         Whether the SD image should be compressed using
-        <command>bzip2</command>.
+        <command>zstd</command>.
       '';
     };
 
@@ -130,10 +130,10 @@ in
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
-    mtools, libfaketime, utillinux, bzip2, zstd }: stdenv.mkDerivation {
+    mtools, libfaketime, utillinux, zstd }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux bzip2 zstd ];
+      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux zstd ];
 
       inherit (config.sdImage) compressImage;
 
@@ -143,7 +143,7 @@ in
 
         echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
         if test -n "$compressImage"; then
-          echo "file sd-image $img.bz2" >> $out/nix-support/hydra-build-products
+          echo "file sd-image $img.zst" >> $out/nix-support/hydra-build-products
         else
           echo "file sd-image $img" >> $out/nix-support/hydra-build-products
         fi
@@ -190,7 +190,7 @@ in
         fsck.vfat -vn firmware_part.img
         dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
         if test -n "$compressImage"; then
-            bzip2 $img
+            zstd -T$NIX_BUILD_CORES $img
         fi
       '';
     }) {};

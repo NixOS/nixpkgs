@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
-, python, munge, perl, pam, openssl, zlib
+, python, munge, perl, pam, openssl, zlib, shadow, coreutils
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
-, readline, freeipmi, libssh2, xorg, lz4, rdma-core
+, readline, freeipmi, libssh2, xorg, lz4, rdma-core, nixosTests
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "19.05.5.1";
+  version = "19.05.7.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -17,15 +17,18 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "0f0gv3sirp6sxdrbwydsbcqicjbmrpm58yhgbsar8v6nx3g6y3hx";
+    sha256 = "115f40k8y7d569nbl6g0mkyshgv925lawlwar7ib5296g30p97f0";
   };
 
   outputs = [ "out" "dev" ];
 
-  prePatch = stdenv.lib.optional enableX11 ''
+  prePatch = ''
+    substituteInPlace src/common/env.c \
+        --replace "/bin/echo" "${coreutils}/bin/echo"
+  '' + (stdenv.lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
         --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
-  '';
+  '');
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
   # https://groups.google.com/forum/#!topic/slurm-devel/QHOajQ84_Es
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl python munge perl pam openssl zlib
       libmysqlclient ncurses gtk2 lz4 rdma-core
-      lua hwloc numactl readline freeipmi
+      lua hwloc numactl readline freeipmi shadow.su
   ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
 
   configureFlags = with stdenv.lib;
@@ -63,6 +66,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.slurm = nixosTests.slurm;
 
   meta = with stdenv.lib; {
     homepage = "http://www.schedmd.com/";

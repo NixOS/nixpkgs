@@ -17,11 +17,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.36.2";
+  version = "3.36.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0lqpxhvn073bshnzarnisym3da3k3awsi3h906hm85hz3wm9n4iv";
+    sha256 = "1fs51lcaal4lnx6m5a3j8922yjbjk32khznx77cxb2db1zvspn46";
   };
 
   LANG = "en_US.UTF-8";
@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1194
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/9f1ad5d86ddbabaa840eb2860279d53f4e635453.patch";
-      sha256 = "f8MDFbfg9D7ORF84Ld9GIvf0xRCYuSszo3QLMji2VaE=";
+      sha256 = "18amnqw342vllcrjpfcq232z9xr28vgjsf2z8k73xx70nwah7hvz";
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
@@ -82,7 +82,7 @@ in stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/ffb8bd5fa7704ce70ce7d053e03549dd15dce5ae.patch";
       revert = true;
-      sha256 = "9DdzjEnDiBL+JmdfgKwjYPn1O2wJ/6n1sMDT1ylUB5I=";
+      sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
     })
   ];
 

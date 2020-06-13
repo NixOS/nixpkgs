@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, gettext, perl, asciidoc
 , libjpeg, libtiff, libungif, libpng, imlib, expat
-, freetype, fontconfig, pkgconfig, gdk-pixbuf
+, freetype, fontconfig, pkgconfig, gdk-pixbuf, gdk-pixbuf-xlib, glib
 , mkfontdir, libX11, libXft, libXext, libXinerama
 , libXrandr, libICE, libSM, libXpm, libXdmcp, libxcb
 , libpthreadstubs, pcre, libXdamage, libXcomposite, libXfixes
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gettext libjpeg libtiff libungif libpng imlib expat
-    freetype fontconfig gdk-pixbuf mkfontdir libX11
+    freetype fontconfig gdk-pixbuf gdk-pixbuf-xlib glib mkfontdir libX11
     libXft libXext libXinerama libXrandr libICE libSM libXpm
     libXdmcp libxcb libpthreadstubs pcre libsndfile fribidi
     libXdamage libXcomposite libXfixes

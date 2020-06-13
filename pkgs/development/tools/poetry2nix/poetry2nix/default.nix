@@ -7,7 +7,7 @@ let
   inherit (poetryLib) isCompatible readTOML moduleName;
 
   # Poetry2nix version
-  version = "1.8.0";
+  version = "1.9.2";
 
   /* The default list of poetry2nix override overlays */
   defaultPoetryOverrides = (import ./overrides.nix { inherit pkgs lib; });
@@ -69,28 +69,28 @@ let
       baseOverlay = self: super:
         let
           getDep = depName: self.${depName};
-          lockPkgs = builtins.listToAttrs
-            (
-              builtins.map
-                (
-                  pkgMeta: rec {
-                    name = moduleName pkgMeta.name;
-                    value = self.mkPoetryDep
-                      (
-                        pkgMeta // {
-                          inherit pwd preferWheels;
-                          source = pkgMeta.source or null;
-                          files = lockFiles.${name};
-                          pythonPackages = self;
-                          sourceSpec = pyProject.tool.poetry.dependencies.${name} or pyProject.tool.poetry.dev-dependencies.${name};
-                        }
-                      );
-                  }
-                ) compatible
-            );
+          lockPkgs = builtins.listToAttrs (
+            builtins.map
+              (
+                pkgMeta: rec {
+                  name = moduleName pkgMeta.name;
+                  value = self.mkPoetryDep (
+                    pkgMeta // {
+                      inherit pwd preferWheels;
+                      source = pkgMeta.source or null;
+                      files = lockFiles.${name};
+                      pythonPackages = self;
+                      sourceSpec = pyProject.tool.poetry.dependencies.${name} or pyProject.tool.poetry.dev-dependencies.${name} or { };
+                    }
+                  );
+                }
+              )
+              compatible
+          );
         in
         lockPkgs;
-      overlays = builtins.map getFunctorFn
+      overlays = builtins.map
+        getFunctorFn
         (
           [
             (
@@ -127,6 +127,8 @@ let
     };
 
   /* Returns a package with a python interpreter and all packages specified in the poetry.lock lock file.
+     In editablePackageSources you can pass a mapping from package name to source directory to have
+     those packages available in the resulting environment, whose source changes are immediately available.
 
      Example:
        poetry2nix.mkPoetryEnv { poetrylock = ./poetry.lock; python = python3; }
@@ -139,18 +141,31 @@ let
     , pwd ? projectDir
     , python ? pkgs.python3
     , preferWheels ? false
+      # Example: { my-app = ./src; }
+    , editablePackageSources ? { }
     }:
     let
-      py = mkPoetryPackages
-        (
-          {
-            inherit pyproject poetrylock overrides python pwd preferWheels;
-          }
-        );
-    in
-    py.python.withPackages (_: py.poetryPackages);
+      py = mkPoetryPackages (
+        {
+          inherit pyproject poetrylock overrides python pwd preferWheels;
+        }
+      );
 
-  /* Creates a Python application from pyproject.toml and poetry.lock */
+      editablePackage = import ./editable.nix {
+        inherit pkgs lib poetryLib editablePackageSources;
+        inherit (py) pyProject python;
+      };
+
+    in
+    py.python.withPackages (_: py.poetryPackages ++ lib.optional (editablePackageSources != { }) editablePackage);
+
+  /* Creates a Python application from pyproject.toml and poetry.lock
+
+     The result also contains a .dependencyEnv attribute which is a python
+     environment of all dependencies and this apps modules. This is useful if
+     you rely on dependencies to invoke your modules for deployment: e.g. this
+     allows `gunicorn my-module:app`.
+  */
   mkPoetryApplication =
     { projectDir ? null
     , src ? poetryLib.cleanPythonSources { src = projectDir; }
@@ -194,17 +209,17 @@ let
               pkg = py.pkgs."${dep}";
               constraints = deps.${dep}.python or "";
               isCompat = compat constraints;
-            in if isCompat then pkg else null
-          ) depAttrs;
+            in
+            if isCompat then pkg else null
+          )
+          depAttrs;
       getInputs = attr: attrs.${attr} or [ ];
       mkInput = attr: extraInputs: getInputs attr ++ extraInputs;
       buildSystemPkgs = poetryLib.getBuildSystemPkgs {
         inherit pyProject;
         pythonPackages = py.pkgs;
       };
-    in
-    py.pkgs.buildPythonApplication
-      (
+      app = py.pkgs.buildPythonPackage (
         passedAttrs // {
           pname = moduleName pyProject.tool.poetry.name;
           version = pyProject.tool.poetry.version;
@@ -212,6 +227,10 @@ let
           inherit src;
 
           format = "pyproject";
+          # Like buildPythonApplication, but without the toPythonModule part
+          # Meaning this ends up looking like an application but it also
+          # provides python modules
+          namePrefix = "";
 
           buildInputs = mkInput "buildInputs" buildSystemPkgs;
           propagatedBuildInputs = mkInput "propagatedBuildInputs" (getDeps "dependencies") ++ ([ py.pkgs.setuptools ]);
@@ -220,16 +239,30 @@ let
 
           passthru = {
             python = py;
+            dependencyEnv = (
+              lib.makeOverridable ({ app, ... }@attrs:
+                let
+                  args = builtins.removeAttrs attrs [ "app" ] // {
+                    extraLibs = [ app ];
+                  };
+                in
+                py.buildEnv.override args)
+            ) { inherit app; };
           };
 
-          meta = meta // {
-            inherit (pyProject.tool.poetry) description homepage;
+          meta = lib.optionalAttrs (lib.hasAttr "description" pyProject.tool.poetry) {
+            inherit (pyProject.tool.poetry) description;
+          } // lib.optionalAttrs (lib.hasAttr "homepage" pyProject.tool.poetry) {
+            inherit (pyProject.tool.poetry) homepage;
+          } // {
             inherit (py.meta) platforms;
             license = getLicenseBySpdxId (pyProject.tool.poetry.license or "unknown");
-          };
+          } // meta;
 
         }
       );
+    in
+    app;
 
   /* Poetry2nix CLI used to supplement SHA-256 hashes for git dependencies  */
   cli = import ./cli.nix { inherit pkgs lib version; };

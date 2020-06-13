@@ -64,14 +64,14 @@ let
 in
 mkDerivation rec {
   pname = "qcef";
-  version = "1.1.7";
+  version = "1.1.8";
 
   srcs = [
     (fetchFromGitHub {
       owner = "linuxdeepin";
       repo = pname;
       rev = version;
-      sha256 = "1x0vb4nkfa1lq0nh6iqpxfvsqmb6qfn305pbc92bsqpgiqd7jvb1";
+      sha256 = "14a33af1h3wj3yph080c1ri3m27bqj1v1k0jdqc63x7c3smnpwfk";
       name = pname;
     })
     (fetchFromGitHub {

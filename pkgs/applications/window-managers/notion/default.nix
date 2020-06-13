@@ -5,7 +5,7 @@
 , xlibsWrapper, makeWrapper
 }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "notion";
   version = "4.0.0";
 
