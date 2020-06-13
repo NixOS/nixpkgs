@@ -10545,20 +10545,6 @@ in
     ruby_2_6
     ruby_2_7;
 
-  rubyMinimal = ruby.override {
-    # gem support is minimal overhead
-    rubygemsSupport = true;
-    jitSupport = false;
-    useRailsExpress = false;
-    zlibSupport = false;
-    opensslSupport = false;
-    gdbmSupport = false;
-    cursesSupport = false;
-    docSupport = false;
-    yamlSupport = false;
-    fiddleSupport = false;
-  };
-
   ruby = ruby_2_6;
   rubyPackages = rubyPackages_2_6;
 
