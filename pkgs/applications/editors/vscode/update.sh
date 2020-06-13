@@ -1,10 +1,5 @@
-#!/usr/bin/env bash
-
-command -v grep >/dev/null 2>&1 || { echo >&2 "[grep] is required, but not installed.  Aborting."; exit 1; }
-command -v awk >/dev/null 2>&1 || { echo >&2 "[awk] is required, but not installed.  Aborting."; exit 1; }
-command -v sed >/dev/null 2>&1 || { echo >&2 "[sed] is required, but not installed.  Aborting."; exit 1; }
-command -v curl >/dev/null 2>&1 || { echo >&2 "[curl] is required, but not installed.  Aborting."; exit 1; }
-command -v nix-prefetch-url >/dev/null 2>&1 || { echo >&2 "[nix-prefetch-url] is required, but not installed.  Aborting."; exit 1; }
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p curl gnugrep gnused gawk
 
 ROOT="$(dirname "$(readlink -f "$0")")"
 if [ ! -f "$ROOT/vscode.nix" ]; then
