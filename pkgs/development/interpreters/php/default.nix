@@ -211,14 +211,7 @@ let
             done
 
             export EXTENSION_DIR=$out/lib/php/extensions
-          ''
-          # PKG_CONFIG need not be a relative path
-          + lib.optionalString (! lib.versionAtLeast version "7.4") ''
-            for i in $(find . -type f -name "*.m4"); do
-              substituteInPlace $i \
-                --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
-            done
-          '' + ''
+
             ./buildconf --copy --force
 
             if test -f $src/genfiles; then
@@ -271,16 +264,24 @@ let
     version = "7.2.31";
     sha256 = "0057x1s43f9jidmrl8daka6wpxclxc1b1pm5cjbz616p8nbmb9qv";
 
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
+    extraPatches = [
+      # PKG_CONFIG need not be a relative path
+      ./fix-paths-pkgconfig-php72.patch
+    ]
+      # https://bugs.php.net/bug.php?id=76826
+      ++ lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   });
 
   php73base = callPackage generic (_args // {
     version = "7.3.19";
     sha256 = "199l1lr7ima92icic7b1bqlb036md78m305lc3v6zd4zw8qix70d";
 
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
+    extraPatches = [
+      # PKG_CONFIG need not be a relative path
+      ./fix-paths-pkgconfig-php73.patch
+    ]
+      # https://bugs.php.net/bug.php?id=76826
+      ++ lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   });
 
   php74base = callPackage generic (_args // {

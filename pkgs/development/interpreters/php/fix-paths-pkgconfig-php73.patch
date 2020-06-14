@@ -1,0 +1,131 @@
+diff --git a/acinclude.m4 b/acinclude.m4
+index bf4c88d3..0c350bc9 100644
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -2180,7 +2180,7 @@ AC_DEFUN([PHP_SETUP_ICU],[
+   fi
+ 
+   dnl If pkg-config is found try using it
+-  if test "$PHP_ICU_DIR" = "DEFAULT" && test -x "$PKG_CONFIG" && $PKG_CONFIG --exists icu-uc icu-io icu-i18n; then
++  if test "$PHP_ICU_DIR" = "DEFAULT" && type -P "$PKG_CONFIG" >/dev/null && $PKG_CONFIG --exists icu-uc icu-io icu-i18n; then
+     if $PKG_CONFIG --atleast-version=4.0 icu-uc; then
+       found_icu=yes
+       icu_version_full=`$PKG_CONFIG --modversion icu-uc`
+@@ -2339,7 +2339,7 @@ AC_DEFUN([PHP_SETUP_OPENSSL],[
+   fi
+ 
+   dnl If pkg-config is found try using it
+-  if test "$PHP_OPENSSL_DIR" = "yes" && test -x "$PKG_CONFIG" && $PKG_CONFIG --exists openssl; then
++  if test "$PHP_OPENSSL_DIR" = "yes" && type -P "$PKG_CONFIG" >/dev/null && $PKG_CONFIG --exists openssl; then
+     if $PKG_CONFIG --atleast-version=1.0.1 openssl; then
+       found_openssl=yes
+       OPENSSL_LIBS=`$PKG_CONFIG --libs openssl`
+@@ -2574,7 +2574,7 @@ AC_DEFUN([PHP_SETUP_LIBXML], [
+     fi
+ 
+     dnl If pkg-config is found try using it
+-    if test -x "$PKG_CONFIG" && $PKG_CONFIG --exists libxml-2.0; then
++    if type -P "$PKG_CONFIG" >/dev/null && $PKG_CONFIG --exists libxml-2.0; then
+       if $PKG_CONFIG --atleast-version=2.6.11 libxml-2.0; then
+         found_libxml=yes
+         LIBXML_LIBS=`$PKG_CONFIG --libs libxml-2.0`
+diff --git a/ext/curl/config.m4 b/ext/curl/config.m4
+index 7d36458a..137e9f08 100644
+--- a/ext/curl/config.m4
++++ b/ext/curl/config.m4
+@@ -8,7 +8,7 @@ if test "$PHP_CURL" != "no"; then
+     AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+   fi
+ 
+-  if test -x "$PKG_CONFIG"; then
++  if type -P "$PKG_CONFIG" >/dev/null; then
+     dnl using pkg-config output
+ 
+     AC_MSG_CHECKING(for libcurl.pc)
+diff --git a/ext/odbc/config.m4 b/ext/odbc/config.m4
+index 5d5456e3..94d6e9c6 100644
+--- a/ext/odbc/config.m4
++++ b/ext/odbc/config.m4
+@@ -321,7 +321,7 @@ PHP_ARG_WITH(iodbc,,
+     if test -z "$PKG_CONFIG"; then
+       AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+     fi
+-    if test -x "$PKG_CONFIG" && $PKG_CONFIG --exists libiodbc ; then
++    if type -P "$PKG_CONFIG" >/dev/null && $PKG_CONFIG --exists libiodbc ; then
+       PHP_ADD_LIBRARY_WITH_PATH(iodbc, $PHP_IODBC/$PHP_LIBDIR)
+       ODBC_TYPE=iodbc
+       ODBC_INCLUDE=`$PKG_CONFIG --cflags-only-I libiodbc`
+diff --git a/ext/pcre/config0.m4 b/ext/pcre/config0.m4
+index 3b043aec..a7d80d81 100644
+--- a/ext/pcre/config0.m4
++++ b/ext/pcre/config0.m4
+@@ -15,7 +15,7 @@ PHP_ARG_WITH(pcre-jit,,[  --with-pcre-jit         Enable PCRE JIT functionality
+       if test -z "$PKG_CONFIG"; then
+         AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+       fi
+-      if test -x "$PKG_CONFIG"; then
++      if type -P "$PKG_CONFIG" >/dev/null; then
+         AC_MSG_CHECKING(for PCRE2 10.30 or greater)
+         if $PKG_CONFIG --atleast-version 10.30 libpcre2-8; then
+           PCRE2_VER=`$PKG_CONFIG --modversion libpcre2-8`
+diff --git a/ext/pdo_pgsql/config.m4 b/ext/pdo_pgsql/config.m4
+index ca6320ef..fb82e1e4 100644
+--- a/ext/pdo_pgsql/config.m4
++++ b/ext/pdo_pgsql/config.m4
+@@ -73,7 +73,7 @@ if test "$PHP_PDO_PGSQL" != "no"; then
+     AC_MSG_RESULT([yes])
+     dnl First try to find pkg-config
+     AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+-    if test -x "$PKG_CONFIG" && $PKG_CONFIG --exists openssl; then
++    if type -P "$PKG_CONFIG" >/dev/null && $PKG_CONFIG --exists openssl; then
+       PDO_PGSQL_CFLAGS=`$PKG_CONFIG openssl --cflags`
+     fi
+   else
+diff --git a/ext/sodium/config.m4 b/ext/sodium/config.m4
+index d9061c53..d44f6a4b 100644
+--- a/ext/sodium/config.m4
++++ b/ext/sodium/config.m4
+@@ -16,7 +16,7 @@ if test "$PHP_SODIUM" != "no"; then
+     AC_MSG_RESULT([found in $PHP_SODIUM])
+ 
+   dnl pkg-config output
+-  elif test -x "$PKG_CONFIG" && $PKG_CONFIG --exists libsodium; then
++  elif type -P "$PKG_CONFIG" >/dev/null && $PKG_CONFIG --exists libsodium; then
+     LIBSODIUM_VERSION=`$PKG_CONFIG libsodium --modversion`
+     if $PKG_CONFIG libsodium --atleast-version=1.0.8; then
+       LIBSODIUM_CFLAGS=`$PKG_CONFIG libsodium --cflags`
+diff --git a/ext/zip/config.m4 b/ext/zip/config.m4
+index c3370129..eb2392e3 100644
+--- a/ext/zip/config.m4
++++ b/ext/zip/config.m4
+@@ -60,7 +60,7 @@ if test "$PHP_ZIP" != "no"; then
+       LIBZIP_LIBDIR="$PHP_LIBZIP/$PHP_LIBDIR"
+       AC_MSG_RESULT(from option: found in $PHP_LIBZIP)
+ 
+-    elif test -x "$PKG_CONFIG" && $PKG_CONFIG --exists libzip; then
++    elif type -P "$PKG_CONFIG" >/dev/null && $PKG_CONFIG --exists libzip; then
+       if $PKG_CONFIG libzip --atleast-version 0.11; then
+         LIBZIP_CFLAGS=`$PKG_CONFIG libzip --cflags`
+         LIBZIP_LIBDIR=`$PKG_CONFIG libzip --variable=libdir`
+diff --git a/sapi/fpm/config.m4 b/sapi/fpm/config.m4
+index 44d842b2..d8ef1f10 100644
+--- a/sapi/fpm/config.m4
++++ b/sapi/fpm/config.m4
+@@ -582,7 +582,7 @@ if test "$PHP_FPM" != "no"; then
+     unset SYSTEMD_LIBS
+     unset SYSTEMD_INCS
+ 
+-    if test -x "$PKG_CONFIG" && $PKG_CONFIG --exists libsystemd; then
++    if type -P "$PKG_CONFIG" >/dev/null && $PKG_CONFIG --exists libsystemd; then
+       dnl systemd version >= 209 provides libsystemd
+       AC_MSG_CHECKING([for libsystemd])
+       SYSTEMD_LIBS=`$PKG_CONFIG --libs libsystemd`
+@@ -590,7 +590,7 @@ if test "$PHP_FPM" != "no"; then
+       SYSTEMD_VERS=`$PKG_CONFIG --modversion libsystemd`
+       AC_MSG_RESULT([version $SYSTEMD_VERS])
+ 
+-    elif test -x "$PKG_CONFIG" && $PKG_CONFIG --exists libsystemd-daemon; then
++    elif type -P "$PKG_CONFIG" >/dev/null && $PKG_CONFIG --exists libsystemd-daemon; then
+       dnl systemd version < 209 provides libsystemd-daemon
+       AC_MSG_CHECKING([for libsystemd-daemon])
+       SYSTEMD_LIBS=`$PKG_CONFIG --libs libsystemd-daemon`
