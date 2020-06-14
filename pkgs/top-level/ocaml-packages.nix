@@ -401,7 +401,7 @@ let
 
     jingoo = callPackage ../development/ocaml-modules/jingoo { };
 
-    js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml/3.0.nix { };
+    js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
     js_of_ocaml-camlp4 = callPackage ../development/tools/ocaml/js_of_ocaml/camlp4.nix {};
 
