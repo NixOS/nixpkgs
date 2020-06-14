@@ -1,0 +1,35 @@
+diff --git a/main/build-defs.h.in b/main/build-defs.h.in
+index f0075268..a41353d0 100644
+--- a/main/build-defs.h.in
++++ b/main/build-defs.h.in
+@@ -16,7 +16,7 @@
+    +----------------------------------------------------------------------+
+ */
+ 
+-#define CONFIGURE_COMMAND "@CONFIGURE_COMMAND@"
++#define CONFIGURE_COMMAND       ""
+ #define PHP_ODBC_CFLAGS	"@ODBC_CFLAGS@"
+ #define PHP_ODBC_LFLAGS		"@ODBC_LFLAGS@"
+ #define PHP_ODBC_LIBS		"@ODBC_LIBS@"
+diff --git a/scripts/php-config.in b/scripts/php-config.in
+index 9271e872..2a1052f1 100644
+--- a/scripts/php-config.in
++++ b/scripts/php-config.in
+@@ -8,7 +8,7 @@ version="@PHP_VERSION@"
+ vernum="@PHP_VERSION_ID@"
+ include_dir="@includedir@/php"
+ includes="-I$include_dir -I$include_dir/main -I$include_dir/TSRM -I$include_dir/Zend -I$include_dir/ext -I$include_dir/ext/date/lib"
+-ldflags="@PHP_LDFLAGS@"
++ldflags=""
+ libs="@EXTRA_LIBS@"
+ extension_dir='@EXTENSION_DIR@'
+ man_dir=`eval echo @mandir@`
+@@ -17,7 +17,7 @@ program_suffix="@program_suffix@"
+ exe_extension="@EXEEXT@"
+ php_cli_binary=NONE
+ php_cgi_binary=NONE
+-configure_options="@CONFIGURE_OPTIONS@"
++configure_options=""
+ php_sapis="@PHP_INSTALLED_SAPIS@"
+ ini_dir="@EXPANDED_PHP_CONFIG_FILE_SCAN_DIR@"
+ ini_path="@EXPANDED_PHP_CONFIG_FILE_PATH@"

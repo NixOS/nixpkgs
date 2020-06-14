@@ -1,0 +1,35 @@
+diff --git a/main/build-defs.h.in b/main/build-defs.h.in
+index 50849a11..74d6c79b 100644
+--- a/main/build-defs.h.in
++++ b/main/build-defs.h.in
+@@ -18,7 +18,7 @@
+ 
+ /* $Id$ */
+ 
+-#define CONFIGURE_COMMAND "@CONFIGURE_COMMAND@"
++#define CONFIGURE_COMMAND       ""
+ #define PHP_ADA_INCLUDE		""
+ #define PHP_ADA_LFLAGS		""
+ #define PHP_ADA_LIBS		""
+diff --git a/scripts/php-config.in b/scripts/php-config.in
+index d6c62ccf..489b4094 100644
+--- a/scripts/php-config.in
++++ b/scripts/php-config.in
+@@ -8,7 +8,7 @@ version="@PHP_VERSION@"
+ vernum="@PHP_VERSION_ID@"
+ include_dir="@includedir@/php"
+ includes="-I$include_dir -I$include_dir/main -I$include_dir/TSRM -I$include_dir/Zend -I$include_dir/ext -I$include_dir/ext/date/lib"
+-ldflags="@PHP_LDFLAGS@"
++ldflags=""
+ libs="@EXTRA_LIBS@"
+ extension_dir='@EXTENSION_DIR@'
+ man_dir=`eval echo @mandir@`
+@@ -17,7 +17,7 @@ program_suffix="@program_suffix@"
+ exe_extension="@EXEEXT@"
+ php_cli_binary=NONE
+ php_cgi_binary=NONE
+-configure_options="@CONFIGURE_OPTIONS@"
++configure_options=""
+ php_sapis="@PHP_INSTALLED_SAPIS@"
+ 
+ # Set php_cli_binary and php_cgi_binary if available
