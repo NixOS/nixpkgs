@@ -31,7 +31,7 @@ in mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Multi-platform software synthesiser emulating Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
     homepage = "http://munt.sourceforge.net/";
-    license = licenses.gpl2;
+    license = with licenses; [ lgpl21 gpl3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ gnidorah ];
   };
