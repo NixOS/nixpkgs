@@ -431,7 +431,7 @@ let
             else:
                 submodule_attr = ""
 
-            if plugin.description:
+            if plugin.description is not None:
                 escaped_description = plugin.description.replace(
                     '"', r"\""
                 )  # good enough
