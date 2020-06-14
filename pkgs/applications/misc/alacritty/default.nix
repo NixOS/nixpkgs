@@ -121,6 +121,8 @@ rustPlatform.buildRustPackage rec {
     install -dm 755 "$out/share/man/man1"
     gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
 
+    install -Dm 644 alacritty.yml $out/share/doc/alacritty.yml
+
     install -dm 755 "$terminfo/share/terminfo/a/"
     tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info
     mkdir -p $out/nix-support
