@@ -1,4 +1,4 @@
-From cb3f1ec1793cbf74c4b5663e038bd49ff4576192 Mon Sep 17 00:00:00 2001
+From b5665ef8b9266c662c3a137df1ef1721cdff346e Mon Sep 17 00:00:00 2001
 From: Imuli <i@imu.li>
 Date: Wed, 19 Oct 2016 08:46:47 -0400
 Subject: [PATCH 10/18] localectl: use /etc/X11/xkb for list-x11-*
