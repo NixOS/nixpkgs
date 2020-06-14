@@ -2174,6 +2174,8 @@ in
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
+  remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
+
   scour = with python3Packages; toPythonApplication scour;
 
   s2png = callPackage ../tools/graphics/s2png { };
