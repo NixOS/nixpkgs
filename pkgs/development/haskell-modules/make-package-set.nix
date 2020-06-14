@@ -169,7 +169,7 @@ let
       };
     });
 
-in package-set { inherit pkgs stdenv callPackage; } self // {
+in package-set { inherit pkgs stdenv; inherit (self) callPackage; } self // {
 
     inherit mkDerivation callPackage haskellSrc2nix hackage2nix buildHaskellPackages;
 
@@ -248,7 +248,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     ghcWithHoogle = selectFrom:
       let
         packages = selectFrom self;
-        hoogle = callPackage ./hoogle.nix {
+        hoogle = self.callPackage ./hoogle.nix {
           inherit packages;
         };
       in withPackages (packages ++ [ hoogle ]);
