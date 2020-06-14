@@ -6,9 +6,11 @@ let
   cfg = config.services.corerad;
 
   writeTOML = name: x:
-    pkgs.runCommandNoCCLocal name { } ''
-      echo '${builtins.toJSON x}' | ${pkgs.go-toml}/bin/jsontoml > $out
-    '';
+    pkgs.runCommandNoCCLocal name {
+      passAsFile = ["config"];
+      config = builtins.toJSON x;
+      buildInputs = [ pkgs.go-toml ];
+    } "jsontoml < $configPath > $out";
 
 in {
   meta.maintainers = with maintainers; [ mdlayher ];
