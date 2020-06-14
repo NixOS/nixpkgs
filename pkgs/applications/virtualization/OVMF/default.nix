@@ -38,14 +38,13 @@ edk2.mkDerivation projectDscPath {
 
   postFixup = if stdenv.isAarch64 then ''
     mkdir -vp $fd/FV
-    mkdir -vp $fd/AAVMF
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
 
-    # Uses Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
-    # FIXME: why is it different from Debian dir layout? https://salsa.debian.org/qemu-team/edk2/blob/debian/debian/rules
-    dd of=$fd/AAVMF/QEMU_EFI-pflash.raw       if=/dev/zero bs=1M    count=64
-    dd of=$fd/AAVMF/QEMU_EFI-pflash.raw       if=$fd/FV/QEMU_EFI.fd conv=notrunc
-    dd of=$fd/AAVMF/vars-template-pflash.raw if=/dev/zero bs=1M    count=64
+    # Use Debian dir layout: https://salsa.debian.org/qemu-team/edk2/blob/debian/debian/rules
+    # Note that Fedora dir layout is different: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
+    dd of=$fd/FV/AAVMF_CODE.fd  if=/dev/zero bs=1M    count=64
+    dd of=$fd/FV/AAVMF_CODE.fd  if=$fd/FV/QEMU_EFI.fd conv=notrunc
+    dd of=$fd/FV/AAVMF_VARS.fd  if=/dev/zero bs=1M    count=64
   '' else ''
     mkdir -vp $fd/FV
     mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $fd/FV
