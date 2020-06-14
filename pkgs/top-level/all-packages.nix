@@ -5951,7 +5951,7 @@ in
 
   pfetch = callPackage ../tools/misc/pfetch { };
 
-  pfstools = callPackage ../tools/graphics/pfstools { };
+  pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
 
   philter = callPackage ../tools/networking/philter { };
 
