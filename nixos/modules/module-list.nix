@@ -225,6 +225,8 @@
   ./services/backup/borgbackup.nix
   ./services/backup/duplicati.nix
   ./services/backup/duplicity.nix
+  ./services/backup/burp.nix
+  ./services/backup/crashplan.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/postgresql-wal-receiver.nix
