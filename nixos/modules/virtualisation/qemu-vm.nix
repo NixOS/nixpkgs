@@ -99,6 +99,10 @@ let
   addDeviceNames =
     imap1 (idx: drive: drive // { device = driveDeviceName idx; });
 
+  efiPrefix = "${pkgs.OVMF.fd}/FV/OVMF";
+  efiFirmware = "${efiPrefix}_CODE.fd";
+  efiVars = "${efiPrefix}_VARS.fd";
+
   # Shell script to start the VM.
   startVM =
     ''
@@ -125,9 +129,9 @@ let
         ${qemu}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
 
         ${if cfg.useEFIBoot then ''
-          # VM needs a writable flash BIOS.
-          cp ${bootDisk}/bios.bin $TMPDIR || exit 1
-          chmod 0644 $TMPDIR/bios.bin || exit 1
+          # VM needs writable EFI vars
+          cp ${bootDisk}/EFI_VARS.fd $TMPDIR || exit 1
+          chmod 0644 $TMPDIR/EFI_VARS.fd || exit 1
         '' else ''
         ''}
       '' else ''
@@ -172,18 +176,19 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
-              bootFlash=$out/bios.bin
               ${qemu}/bin/qemu-img create -f qcow2 $diskImage "40M"
               ${if cfg.useEFIBoot then ''
-                cp ${pkgs.OVMF-CSM.fd}/FV/OVMF.fd $bootFlash
-                chmod 0644 $bootFlash
+                efiVars=$out/EFI_VARS.fd
+                cp ${efiVars} $efiVars
+                chmod 0644 $efiVars
               '' else ''
               ''}
             '';
           buildInputs = [ pkgs.utillinux ];
-          QEMU_OPTS = if cfg.useEFIBoot
-                      then "-pflash $out/bios.bin -nographic -serial pty"
-                      else "-nographic -serial pty";
+          QEMU_OPTS = "-nographic -serial stdio -monitor none"
+                      + lib.optionalString cfg.useEFIBoot (
+                        " -drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+                      + " -drive if=pflash,format=raw,unit=1,file=$efiVars");
         }
         ''
           # Create a /boot EFI partition with 40M and arbitrary but fixed GUIDs for reproducibility
@@ -560,7 +565,8 @@ in
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
       ])
       (mkIf cfg.useEFIBoot [
-        "-pflash $TMPDIR/bios.bin"
+        "-drive if=pflash,format=raw,unit=0,readonly,file=${efiFirmware}"
+        "-drive if=pflash,format=raw,unit=1,file=$TMPDIR/EFI_VARS.fd"
       ])
       (mkIf (cfg.bios != null) [
         "-bios ${cfg.bios}/bios.bin"
