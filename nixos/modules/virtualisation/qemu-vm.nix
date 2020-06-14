@@ -105,7 +105,7 @@ let
     else if pkgs.stdenv.isAarch64 then "${pkgs.OVMF.fd}/FV/AAVMF"
     else throw "No EFI firmware available for platform";
   efiFirmware = "${efiPrefix}_CODE.fd";
-  efiVars = "${efiPrefix}_VARS.fd";
+  efiVarsDefault = "${efiPrefix}_VARS.fd";
 
   # Shell script to start the VM.
   startVM =
@@ -132,10 +132,14 @@ let
         # A writable boot disk can be booted from automatically.
         ${qemu}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
 
+        NIX_EFI_VARS=$(readlink -f ''${NIX_EFI_VARS:-${cfg.efiVars}})
+
         ${if cfg.useEFIBoot then ''
           # VM needs writable EFI vars
-          cp ${bootDisk}/EFI_VARS.fd $TMPDIR || exit 1
-          chmod 0644 $TMPDIR/EFI_VARS.fd || exit 1
+          if ! test -e "$NIX_EFI_VARS"; then
+            cp ${bootDisk}/efi-vars.fd "$NIX_EFI_VARS" || exit 1
+            chmod 0644 "$NIX_EFI_VARS" || exit 1
+          fi
         '' else ''
         ''}
       '' else ''
@@ -182,8 +186,8 @@ let
               diskImage=$out/disk.img
               ${qemu}/bin/qemu-img create -f qcow2 $diskImage "60M"
               ${if cfg.useEFIBoot then ''
-                efiVars=$out/EFI_VARS.fd
-                cp ${efiVars} $efiVars
+                efiVars=$out/efi-vars.fd
+                cp ${efiVarsDefault} $efiVars
                 chmod 0644 $efiVars
               '' else ''
               ''}
@@ -480,6 +484,16 @@ in
           '';
       };
 
+    virtualisation.efiVars =
+      mkOption {
+        default = "./${vmName}-efi-vars.fd";
+        description =
+          ''
+            Path to nvram image containing UEFI variables.  The will be created
+            on startup if it does not exist.
+          '';
+      };
+
     virtualisation.bios =
       mkOption {
         default = null;
@@ -570,7 +584,7 @@ in
       ])
       (mkIf cfg.useEFIBoot [
         "-drive if=pflash,format=raw,unit=0,readonly,file=${efiFirmware}"
-        "-drive if=pflash,format=raw,unit=1,file=$TMPDIR/EFI_VARS.fd"
+        "-drive if=pflash,format=raw,unit=1,file=$NIX_EFI_VARS"
       ])
       (mkIf (cfg.bios != null) [
         "-bios ${cfg.bios}/bios.bin"
