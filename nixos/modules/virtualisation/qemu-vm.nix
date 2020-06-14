@@ -81,6 +81,7 @@ let
 
   drivesCmdLine = drives: concatStringsSep " " (imap1 driveCmdline drives);
 
+
   # Creates a device name from a 1-based a numerical index, e.g.
   # * `driveDeviceName 1` -> `/dev/vda`
   # * `driveDeviceName 2` -> `/dev/vdb`
@@ -99,7 +100,10 @@ let
   addDeviceNames =
     imap1 (idx: drive: drive // { device = driveDeviceName idx; });
 
-  efiPrefix = "${pkgs.OVMF.fd}/FV/OVMF";
+  efiPrefix =
+    if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then "${pkgs.OVMF.fd}/FV/OVMF"
+    else if pkgs.stdenv.isAarch64 then "${pkgs.OVMF.fd}/FV/AAVMF"
+    else throw "No EFI firmware available for platform";
   efiFirmware = "${efiPrefix}_CODE.fd";
   efiVars = "${efiPrefix}_VARS.fd";
 
@@ -176,7 +180,7 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
-              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "40M"
+              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "60M"
               ${if cfg.useEFIBoot then ''
                 efiVars=$out/EFI_VARS.fd
                 cp ${efiVars} $efiVars
@@ -191,7 +195,7 @@ let
                       + " -drive if=pflash,format=raw,unit=1,file=$efiVars");
         }
         ''
-          # Create a /boot EFI partition with 40M and arbitrary but fixed GUIDs for reproducibility
+          # Create a /boot EFI partition with 60M and arbitrary but fixed GUIDs for reproducibility
           ${pkgs.gptfdisk}/bin/sgdisk \
             --set-alignment=1 --new=1:34:2047 --change-name=1:BIOSBootPartition --typecode=1:ef02 \
             --set-alignment=512 --largest-new=2 --change-name=2:EFISystem --typecode=2:ef00 \
