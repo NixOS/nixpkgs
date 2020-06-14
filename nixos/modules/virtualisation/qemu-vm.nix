@@ -210,6 +210,10 @@ let
           mkdir /boot
           mount /dev/vda2 /boot
 
+          ${optionalString config.boot.loader.efi.canTouchEfiVariables ''
+            mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+          ''}
+
           # This is needed for GRUB 0.97, which doesn't know about virtio devices.
           mkdir /boot/grub
           echo '(hd0) /dev/vda' > /boot/grub/device.map
