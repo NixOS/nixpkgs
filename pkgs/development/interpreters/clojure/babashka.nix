@@ -3,17 +3,17 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.0.97";
+  version = "0.1.2";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "1gd9ih9l02n1j9qkbxb36d3cb5sddwvxiw8kkicgc4xig77lsa7z";
+    sha256 = "1lg74npii9g6x5cmwdxzcsrkr6c6l79v9ly4liyr2ghyq33cqqx4";
   };
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "08py6bawfrhg90fbcnv2mq4c91g5wa1q2q6zdjy2i1b9q4x1654r";
+    sha256 = "00rnalmxy90lwdsk0hfnqq849a0wf32swcbym0r9w9aql3fzm11i";
   };
 
   dontUnpack = true;
