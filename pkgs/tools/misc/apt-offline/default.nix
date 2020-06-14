@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "1.8.1";
+  version = "1.8.2";
   pname = "apt-offline";
 
   src = fetchFromGitHub {
     owner = "rickysarraf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0k79d1d8jiwg1s684r05njmk1dz8gsb8a9bl4agz7m31snc11j84";
+    sha256 = "1y9l4jwjk8qsh8x0kk0nqgk6mfsj7zp1gvapnm2bypywkwljbisz";
   };
 
   doCheck = false;
