@@ -2172,6 +2172,8 @@ in
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
+  remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
+
   scour = with python3Packages; toPythonApplication scour;
 
   s2png = callPackage ../tools/graphics/s2png { };
@@ -13078,7 +13080,7 @@ in
 
   liblastfmSF = callPackage ../development/libraries/liblastfmSF { };
 
-  liblastfm = callPackage ../development/libraries/liblastfm { };
+  liblastfm = libsForQt5.callPackage ../development/libraries/liblastfm { };
 
   liblcf = callPackage ../development/libraries/liblcf { };
 
@@ -16259,8 +16261,9 @@ in
     libtool = darwin.cctools;
   };
 
+  # Fails to compile with boost >= 1.72
   rippled = callPackage ../servers/rippled {
-    boost = boost17x;
+    boost = boost171;
   };
 
   rippled-validator-keys-tool = callPackage ../servers/rippled/validator-keys-tool.nix {
@@ -25417,8 +25420,6 @@ in
   geant4 = libsForQt5.callPackage ../development/libraries/physics/geant4 { };
 
   cernlib = callPackage ../development/libraries/physics/cernlib { };
-
-  g4py = callPackage ../development/libraries/physics/geant4/g4py { };
 
   hepmc2 = callPackage ../development/libraries/physics/hepmc2 { };
 

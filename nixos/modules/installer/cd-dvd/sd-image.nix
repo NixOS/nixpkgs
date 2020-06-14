@@ -190,7 +190,7 @@ in
         fsck.vfat -vn firmware_part.img
         dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
         if test -n "$compressImage"; then
-            zstd -T$NIX_BUILD_CORES $img
+            zstd -T$NIX_BUILD_CORES --rm $img
         fi
       '';
     }) {};

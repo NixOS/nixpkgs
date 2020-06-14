@@ -195,9 +195,10 @@ let
 
           hardeningDisable = [ "bindnow" ];
 
-          preConfigure = ''
-            # Don't record the configure flags since this causes unnecessary
-            # runtime dependencies
+          preConfigure =
+          # Don't record the configure flags since this causes unnecessary
+          # runtime dependencies
+          ''
             for i in main/build-defs.h.in scripts/php-config.in; do
               substituteInPlace $i \
                 --replace '@CONFIGURE_COMMAND@' '(omitted)' \
@@ -206,7 +207,14 @@ let
             done
 
             export EXTENSION_DIR=$out/lib/php/extensions
-
+          ''
+          # PKG_CONFIG need not be a relative path
+          + lib.optionalString (! lib.versionAtLeast version "7.4") ''
+            for i in $(find . -type f -name "*.m4"); do
+              substituteInPlace $i \
+                --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
+            done
+          '' + ''
             ./buildconf --copy --force
 
             if test -f $src/genfiles; then
