@@ -4647,12 +4647,12 @@ let
 
   vim-go = buildVimPluginFrom2Nix {
     pname = "vim-go";
-    version = "2020-06-09";
+    version = "2020-06-13";
     src = fetchFromGitHub {
       owner = "fatih";
       repo = "vim-go";
-      rev = "354774cd7aea891cf553c34d79582be3346c1615";
-      sha256 = "0pqmm6s50vxs9788f6avgwrdp1vi5mv3lzrxi2nxqdxvrcxngk93";
+      rev = "33bf26891ce43ab688a48d100a79b0a51fd38678";
+      sha256 = "08m9h2xbxw98b9y9lmrvi28lm5bgj0222c0i2zmhdixcxjfp72bv";
     };
     meta.homepage = "https://github.com/fatih/vim-go/";
   };
@@ -5044,12 +5044,12 @@ let
 
   vim-jsdoc = buildVimPluginFrom2Nix {
     pname = "vim-jsdoc";
-    version = "2020-06-09";
+    version = "2020-06-14";
     src = fetchFromGitHub {
       owner = "heavenshell";
       repo = "vim-jsdoc";
-      rev = "3b88595805ac7c0499dc05bc8aa5cc7909c6f5b7";
-      sha256 = "04yjjcfmaby466krqzmvwg0cb2ydri6pj49x48z15h4s9ac47p66";
+      rev = "f541124a50410c39b1534a098600a20a7ad0661f";
+      sha256 = "1ldk9gh6k2qmdiy4am3rl63pkywk221lz4c4wbwp6kzs0imlhb7f";
     };
     meta.homepage = "https://github.com/heavenshell/vim-jsdoc/";
   };
@@ -6532,12 +6532,12 @@ let
 
   vim-visual-multi = buildVimPluginFrom2Nix {
     pname = "vim-visual-multi";
-    version = "2020-06-08";
+    version = "2020-06-14";
     src = fetchFromGitHub {
       owner = "mg979";
       repo = "vim-visual-multi";
-      rev = "f972b5357af0e5c9b840f8e82eceb313891ef8b2";
-      sha256 = "0ngvl4ikd45d1nhfpnpp003mfwx9mv5ywgk9mi5fjn2bc9a2y4l7";
+      rev = "507c498c7dac31c396ed64bfddcd92551a93669d";
+      sha256 = "0jq1ywz4fwlln93qwwxl28dlq43c5vaybhi1y365hcn03nz526cc";
     };
     meta.homepage = "https://github.com/mg979/vim-visual-multi/";
   };
@@ -6832,12 +6832,12 @@ let
 
   vista-vim = buildVimPluginFrom2Nix {
     pname = "vista-vim";
-    version = "2020-06-06";
+    version = "2020-06-13";
     src = fetchFromGitHub {
       owner = "liuchengxu";
       repo = "vista.vim";
-      rev = "bfd70f620d30dc756d8ae57056b7a67a3fbbff22";
-      sha256 = "1a60qbswwdl58pqg6d9llj4l96h9vz7vp99s7ji0zjg8vzzklyxm";
+      rev = "afd66d3413fde08bde752b74c370b8745538f034";
+      sha256 = "1pkk2g9654w5diryc7rqwaz6sw35jzq7ksl8xbrs2qaavqp74wnq";
     };
     meta.homepage = "https://github.com/liuchengxu/vista.vim/";
   };
