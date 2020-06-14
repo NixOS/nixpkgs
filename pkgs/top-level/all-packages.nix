@@ -599,6 +599,8 @@ in
     stdenv = clangStdenv;
   };
 
+  honggfuzz = callPackage ../tools/security/honggfuzz { };
+
   aflplusplus = callPackage ../tools/security/aflplusplus {
     clang = clang_9;
     llvm = llvm_9;
