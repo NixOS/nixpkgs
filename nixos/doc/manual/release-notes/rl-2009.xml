@@ -543,6 +543,12 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      <link xlink:href="https://grafana.com/docs/grafana/latest/installation/upgrading/#upgrading-to-v7-0">in the Grafana documentation</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>hardware.u2f</literal> module, which was installing udev rules
+     was removed, as udev gained native support to handle FIDO security tokens.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
