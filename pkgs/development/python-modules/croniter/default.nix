@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, natsort
 , python-dateutil
 , pytest
 , pytz
+, tzlocal
 }:
 
 buildPythonPackage rec {
@@ -16,12 +18,14 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    natsort
     python-dateutil
   ];
 
   checkInputs = [
     pytest
     pytz
+    tzlocal
   ];
 
   checkPhase = ''
