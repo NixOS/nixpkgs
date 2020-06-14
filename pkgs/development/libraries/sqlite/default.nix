@@ -10,7 +10,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite";
-  version = "3.32.2";
+  version = import ./version.nix;
 
   # NB! Make sure to update analyzer.nix src (in the same directory).
   src = fetchurl {
