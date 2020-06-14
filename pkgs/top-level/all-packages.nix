@@ -1083,6 +1083,8 @@ in
 
   wiiload = callPackage ../development/tools/wiiload { };
 
+  wiimms-iso-tools = callPackage ../tools/filesystems/wiimms-iso-tools { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
