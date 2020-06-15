@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
   nativeBuildInputs = [
-    which pkgconfig perl autoreconfHook/*patches applied*/ 
+    which pkgconfig perl autoreconfHook/*patches applied*/
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # autogen needs a build autogen when cross-compiling
     buildPackages.buildPackages.autogen buildPackages.texinfo
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
       sed -e "s|$lib/lib|/no-such-autogen-lib-path|" -i $f
     done
 
+  '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # remove /build/** from RPATHs
     for f in "$bin"/bin/*; do
       local nrp="$(patchelf --print-rpath "$f" | sed -E 's@(:|^)/build/[^:]*:@\1@g')"

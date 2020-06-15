@@ -6845,7 +6845,9 @@ in {
 
   jenkins-job-builder = callPackage ../development/python-modules/jenkins-job-builder { };
 
-  dot2tex = callPackage ../development/python-modules/dot2tex { };
+  dot2tex = callPackage ../development/python-modules/dot2tex {
+    inherit (pkgs) graphviz;
+  };
 
   poezio = callPackage ../applications/networking/instant-messengers/poezio {
     inherit (pkgs) pkgconfig;

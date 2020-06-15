@@ -10145,6 +10145,8 @@ in
   buildkite-agent2 = throw "pkgs.buildkite-agent2 has been discontinued. Please use pkgs.buildkite-agent (v3.x)";
   buildkite-agent3 = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
+  buildkite-cli = callPackage ../development/tools/continuous-integration/buildkite-cli { };
+
   libbpf = callPackage ../os-specific/linux/libbpf { };
 
   bpftool = callPackage ../os-specific/linux/bpftool { };
@@ -10381,7 +10383,7 @@ in
 
   dolt = callPackage ../servers/sql/dolt { };
 
-  dot2tex = pythonPackages.dot2tex;
+  dot2tex = with python3.pkgs; toPythonApplication dot2tex;
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
     qt4 = null;
@@ -20205,6 +20207,7 @@ in
   swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
+  sway-contrib = recurseIntoAttrs (callPackages ../applications/window-managers/sway/contrib.nix { });
 
   swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
 
