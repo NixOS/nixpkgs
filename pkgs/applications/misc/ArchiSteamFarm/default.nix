@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       --run "[ -d config ] || cp --no-preserve=mode -r $dist/config ." \
       --run "[ -d logs ] || cp --no-preserve=mode -r $dist/logs ." \
       --run "[ -d plugins ] || cp --no-preserve=mode -r $dist/plugins ." \
-      --run "ln -sf $dist/www ."
+      --run "[ -d www ] || ln -sf $dist/www ."
   '';
 
   meta = with stdenv.lib; {
