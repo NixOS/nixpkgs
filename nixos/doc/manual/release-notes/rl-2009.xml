@@ -486,7 +486,7 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
 
   <itemizedlist>
    <listitem>
-     <para>SD and ISO images are now compressed by default using <literal>zstd</literal>.</para>
+    <para>SD images are now compressed by default using <literal>zstd</literal>. The compression for ISO images has also been changed to <literal>zstd</literal>, but ISO images are still not compressed by default.</para>
    </listitem>
    <listitem>
     <para>
