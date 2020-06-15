@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs, patchelf
 , langC ? true, langCC ? true, langFortran ? false
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
@@ -255,6 +255,14 @@ stdenv.mkDerivation ({
   inherit enableMultilib;
 
   inherit (stdenv) is64bit;
+
+  # Linux shared objects built on Darwin contain superfluous rpaths,
+  # causing a cyclic dependency between the out and lib outputs
+  preFixup = optionalString (hostPlatform.isDarwin && targetPlatform.isLinux) ''
+    for file in $lib/*-linux*/lib/*.so.*.*.* ; do
+      isELF $file && ${patchelf}/bin/patchelf --shrink-rpath $file
+    done
+  '';
 
   meta = {
     homepage = "https://gcc.gnu.org/";
