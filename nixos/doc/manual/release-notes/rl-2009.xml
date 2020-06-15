@@ -466,6 +466,14 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      initrd file has not been deleted.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <link xlink:href="https://github.com/okTurtles/dnschain">DNSChain</link>
+     package and NixOS module have been removed from Nixpkgs as the software is
+     unmaintained and can't be built. For more information see issue
+     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/89205">#89205</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

@@ -239,7 +239,6 @@ in
       shout = 206;
       gateone = 207;
       namecoin = 208;
-      dnschain = 209;
       #lxd = 210; # unused
       kibana = 211;
       xtreemfs = 212;
@@ -549,7 +548,6 @@ in
       #shout = 206; #unused
       gateone = 207;
       namecoin = 208;
-      #dnschain = 209; #unused
       lxd = 210; # unused
       #kibana = 211;
       xtreemfs = 212;

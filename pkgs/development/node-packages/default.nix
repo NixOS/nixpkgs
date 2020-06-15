@@ -39,14 +39,6 @@ let
       meta.broken = since "12";
     };
 
-    dnschain = super.dnschain.override {
-      buildInputs = [ pkgs.makeWrapper super.coffee-script ];
-      postInstall = ''
-        wrapProgram $out/bin/dnschain --suffix PATH : ${pkgs.openssl.bin}/bin
-      '';
-      meta.broken = since "14";
-    };
-
     bitwarden-cli = pkgs.lib.overrideDerivation super."@bitwarden/cli" (drv: {
       name = "bitwarden-cli-${drv.version}";
     });

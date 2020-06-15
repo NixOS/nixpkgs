@@ -17,6 +17,7 @@ in stdenv.mkDerivation rec {
     autoPatchelfHook
     cups
     libdrm
+    libuuid
     libX11
     libXScrnSaver
     libXtst

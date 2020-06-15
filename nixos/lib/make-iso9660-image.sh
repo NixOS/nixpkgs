@@ -129,7 +129,7 @@ fi
 
 if test -n "$compressImage"; then
     echo "Compressing image..."
-    zstd -T$NIX_BUILD_CORES $out/iso/$isoName
+    zstd -T$NIX_BUILD_CORES --rm $out/iso/$isoName
 fi
 
 mkdir -p $out/nix-support
