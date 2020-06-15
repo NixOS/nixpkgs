@@ -3652,6 +3652,12 @@
     githubId = 41977;
     name = "Joachim Fasting";
   };
+  joachimschmidt557 = {
+    email = "joachim.schmidt557@outlook.com";
+    github = "joachimschmidt557";
+    githubId = 28556218;
+    name = "Joachim Schmidt";
+  };
   joamaki = {
     email = "joamaki@gmail.com";
     github = "joamaki";
