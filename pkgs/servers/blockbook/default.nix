@@ -15,7 +15,7 @@
 buildGoModule rec {
   pname = "blockbook";
   version = "0.3.4";
-  commit = "b6961ca";
+  commit = "eb4e10a";
 
   src = fetchFromGitHub {
     owner = "trezor";
