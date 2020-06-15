@@ -6401,7 +6401,9 @@ in
 
   rpiboot-unstable = callPackage ../development/misc/rpiboot/unstable.nix { };
 
-  rpm = callPackage ../tools/package-management/rpm { };
+  rpm = callPackage ../tools/package-management/rpm {
+    python = python3;
+  };
 
   rpm-ostree = callPackage ../tools/misc/rpm-ostree {
     gperf = gperf_3_0;
