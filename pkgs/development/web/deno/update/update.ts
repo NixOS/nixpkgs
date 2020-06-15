@@ -1,6 +1,6 @@
 #!/usr/bin/env nix-shell
 /*
-#!nix-shell -i "deno run --allow-net --allow-run --allow-read --allow-write" -p deno git nix-prefetch nix-prefetch-url
+#!nix-shell -i "deno run --allow-net --allow-run --allow-read --allow-write" -p deno git nix-prefetch
 */
 import {
   commit,
