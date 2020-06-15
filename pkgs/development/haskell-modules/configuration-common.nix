@@ -1484,4 +1484,10 @@ self: super: {
     dhall = self.dhall_1_30_0;
   };
 
+  # Necessary for stack
+  # x509-validation test suite hangs: upstream https://github.com/vincenthz/hs-certificate/issues/120
+  # tls test suite fails: upstream https://github.com/vincenthz/hs-tls/issues/434
+  x509-validation = dontCheck super.x509-validation;
+  tls = dontCheck super.tls;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
