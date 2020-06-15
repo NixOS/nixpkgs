@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 		patchShebangs ./tests/
 	'';
 
-	checkTarget = "tests";
+	checkTarget = "test";
+	doCheck = true;
 
 	meta = with stdenv.lib; {
 		homepage = "https://dasm-assembler.github.io";
