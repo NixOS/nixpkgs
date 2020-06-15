@@ -3,6 +3,8 @@
 , glib
 , xorg
 , gdk-pixbuf
+, glibc
+, isocodes
 , pulseaudio
 , mobile-broadband-provider-info
 , deepin
@@ -10,14 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "go-lib";
-  version = "5.4.5";
+  version = "5.5.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "021sq7nzvfwsa5ccsb3vdjk53m7cf693xm4wkdkrkf8pja6vz94q";
+    sha256 = "128909as236yn6gf92dfwa08zpj5nl5j7wwk2ixfnqgfir66hnwh";
   };
+
+  nativeBuildInputs = [
+    deepin.setupHook
+  ];
 
   buildInputs = [
     glib
@@ -26,6 +32,15 @@ stdenv.mkDerivation rec {
     pulseaudio
     mobile-broadband-provider-info
   ];
+
+  postPatch = ''
+    searchHardCodedPaths  # debugging
+
+    fixPath ${glibc} /usr/share/locale/locale.alias locale/locale.go
+    fixPath ${isocodes} /usr/share/xml/iso-codes/iso_3166.xml iso/country.go
+
+    substituteInPlace iso/country.go --replace /usr/share/locale /run/current-system/sw/share/locale
+  '';
 
   installPhase = ''
     mkdir -p $out/share/go/src/pkg.deepin.io/lib
