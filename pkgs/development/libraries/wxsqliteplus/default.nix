@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, wxGTK, wxsqlite3, sqlite }:
+{ stdenv, fetchFromGitHub, sqlite
+, wxGTK30-gtk2, wxsqlite3-gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "wxsqliteplus";
@@ -11,11 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "0mgfq813pli56mar7pdxlhwjf5k10j196rs3jd0nc8b6dkzkzlnf";
   };
 
-  buildInputs = [ wxGTK wxsqlite3 sqlite ];
+  buildInputs = [ wxGTK30-gtk2 wxsqlite3-gtk2 sqlite ];
 
   makeFlags = [
-    "LDFLAGS=-L${wxsqlite3}/lib"
+    "LDFLAGS=-L${wxsqlite3-gtk2}/lib"
   ];
+
+  enableParallelBuilding = true;
 
   preBuild = ''
     sed -ie 's|all: $(LIBPREFIX)wxsqlite$(LIBEXT)|all: |g' Makefile
@@ -24,14 +27,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -D wxsqliteplus $out/bin/wxsqliteplus
+    install -Dm555 -t $out/bin wxsqliteplus
   '';
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/guanlisheng/wxsqliteplus";
     description = "A simple SQLite database browser built with wxWidgets";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vrthra ];
     license = licenses.gpl2;
+    maintainers = with maintainers; [ vrthra ];
+    platforms = platforms.unix;
   };
 }

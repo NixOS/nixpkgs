@@ -15766,7 +15766,7 @@ in
 
   hiawatha = callPackage ../servers/http/hiawatha {};
 
-  home-assistant = callPackage ../servers/home-assistant { 
+  home-assistant = callPackage ../servers/home-assistant {
     python3 = python37;
   };
 
@@ -26454,13 +26454,17 @@ in
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
-  wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
-    wxGTK = wxGTK30;
+  wxsqlite3-gtk2 = callPackage ../development/libraries/wxsqlite3 {
+    withGtk2 = true;
   };
 
-  wxsqliteplus = callPackage ../development/libraries/wxsqliteplus {
-    wxGTK = wxGTK30;
+  wxsqlite3-gtk3 = callPackage ../development/libraries/wxsqlite3 {
+    withGtk2 = false;
   };
+
+  wxsqlite3 = wxsqlite3-gtk3;
+
+  wxsqliteplus = callPackage ../development/libraries/wxsqliteplus { };
 
   x11idle = callPackage ../tools/misc/x11idle {};
 

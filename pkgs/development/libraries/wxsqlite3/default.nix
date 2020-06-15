@@ -1,13 +1,14 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , autoreconfHook
-, wxGTK
 , sqlite
 , darwin
+, withGtk2 ? false, wxGTK30-gtk2 ? null, wxGTK30-gtk3 ? null
 }:
 
 stdenv.mkDerivation rec {
-  pname = "wxsqlite3";
+  pname = "wxsqlite3-gtk${toString (if withGtk2 then 2 else 3)}";
   version = "4.5.1";
 
   src = fetchFromGitHub {
@@ -19,12 +20,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ wxGTK sqlite ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa darwin.stubs.setfile darwin.stubs.rez darwin.stubs.derez ];
+  buildInputs = [ sqlite ]
+    ++ [ (if withGtk2 then wxGTK30-gtk2 else wxGTK30-gtk3) ]
+    ++ lib.optionals stdenv.isDarwin (with darwin; [ apple_sdk.frameworks.Cocoa ] ++ (with stubs; [ setfile rez derez ]));
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://utelle.github.io/wxsqlite3/";
     description = "A C++ wrapper around the public domain SQLite 3.x for wxWidgets";
+    homepage = "https://utelle.github.io/wxsqlite3/";
     platforms = platforms.unix;
     maintainers = with maintainers; [ vrthra ];
     license = [ licenses.lgpl2 ];
