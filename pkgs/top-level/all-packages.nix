@@ -13082,8 +13082,6 @@ in
 
   liblastfmSF = callPackage ../development/libraries/liblastfmSF { };
 
-  liblastfm = libsForQt5.callPackage ../development/libraries/liblastfm { };
-
   liblcf = callPackage ../development/libraries/liblcf { };
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 { };
@@ -14356,6 +14354,8 @@ in
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
 
     libktorrent = callPackage ../development/libraries/libktorrent { };
+
+    liblastfm = callPackage ../development/libraries/liblastfm { };
 
     libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
 

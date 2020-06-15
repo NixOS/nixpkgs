@@ -5,13 +5,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "rmlint";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "rmlint";
     rev = "v${version}";
-    sha256 = "1r7j1bmm83p6wdw0jhvkm4sa568r534zsy45bvas7qq4433jl019";
+    sha256 = "15xfkcw1bkfyf3z8kl23k3rlv702m0h7ghqxvhniynvlwbgh6j2x";
   };
 
   CFLAGS="-I${stdenv.lib.getDev utillinux}/include";
