@@ -22194,9 +22194,7 @@ in
 
   soxr = callPackage ../applications/misc/audio/soxr { };
 
-  spek = callPackage ../applications/audio/spek {
-    ffmpeg = ffmpeg_2;
-  };
+  spek = callPackage ../applications/audio/spek { };
 
   spotify = callPackage ../applications/audio/spotify {
     libgcrypt = libgcrypt_1_5;
