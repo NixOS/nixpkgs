@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ stdenv, fetchFromGitHub, python2, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "fpp";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace fpp --replace 'PYTHONCMD="python"' 'PYTHONCMD="${python3.interpreter}"'
+    substituteInPlace fpp --replace 'PYTHONCMD="python2"' 'PYTHONCMD="${python2.interpreter}"'
+    substituteInPlace fpp --replace 'PYTHONCMD="python3"' 'PYTHONCMD="${python3.interpreter}"'
   '';
 
   installPhase = ''
