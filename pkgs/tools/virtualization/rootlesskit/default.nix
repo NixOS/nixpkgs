@@ -2,14 +2,14 @@
 
 buildGoPackage rec {
   pname = "rootlesskit";
-  version = "0.3.0-alpha.2";
+  version = "0.9.5";
   goPackagePath = "github.com/rootless-containers/rootlesskit";
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "rootlesskit";
     rev = "v${version}";
-    sha256 = "11y4hcrpayyyi9j3b80ilccxs5bbwnqfpi5nsjgmjb9v01z35fw6";
+    sha256 = "0l41khr4zhhsx1i8bpdji00i6bvfigs0ygfpkci0746sbplcldgj";
   };
 
   meta = with lib; {
