@@ -43,6 +43,11 @@
       <!-- nix user profile -->
       <dir>~/.nix-profile/lib/X11/fonts</dir>
       <dir>~/.nix-profile/share/fonts</dir>
+
+      <!-- FHS paths for non-NixOS platforms -->
+      <dir>/usr/share/fonts</dir>
+      <dir>/usr/local/share/fonts</dir>
+
       <!-- nix default profile -->
       <dir>/nix/var/nix/profiles/default/lib/X11/fonts</dir>
       <dir>/nix/var/nix/profiles/default/share/fonts</dir>
