@@ -76,6 +76,17 @@ with super;
     */
   });
 
+  ldbus = super.ldbus.override({
+    extraVariables = {
+      DBUS_DIR="${pkgs.dbus.lib}";
+      DBUS_ARCH_INCDIR="${pkgs.dbus.lib}/lib/dbus-1.0/include";
+      DBUS_INCDIR="${pkgs.dbus.dev}/include/dbus-1.0";
+    };
+    buildInputs = with pkgs; [
+      dbus
+    ];
+  });
+
   ljsyscall = super.ljsyscall.override(rec {
     version = "unstable-20180515";
     # package hasn't seen any release for a long time
