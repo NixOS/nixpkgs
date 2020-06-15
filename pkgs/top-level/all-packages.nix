@@ -7065,6 +7065,8 @@ in
 
   tmate-ssh-server = callPackage ../servers/tmate-ssh-server { };
 
+  tme = callPackage ../misc/emulators/tme { };
+
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
 
   tmux = callPackage ../tools/misc/tmux { };
