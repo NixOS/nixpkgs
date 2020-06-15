@@ -21290,8 +21290,6 @@ in
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
-  kdecoration-viewer = libsForQt5.callPackage ../tools/misc/kdecoration-viewer { };
-
   inherit (kdeFrameworks) kdesu;
 
   kdevelop-pg-qt = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix { };
