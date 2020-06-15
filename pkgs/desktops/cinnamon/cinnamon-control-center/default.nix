@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "4.4.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1rxm5n2prh182rxvjs7psxgjddikrjr8492j22060gmyvq55n7kc";
+    sha256 = "0ls2ys4x6qqp0j727c4n7a6319m4k1qsy1ybxkfzlzgf750v9xda";
   };
 
   configureFlags = [ "--enable-systemd" ];
