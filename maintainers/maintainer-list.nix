@@ -3076,6 +3076,12 @@
     githubId = 147689;
     name = "Hans-Christian Esperer";
   };
+  hcssmith = {
+    email = "nix@hcssmith.com";
+    github = "hcssmith";
+    githubId = 66956565;
+    name = "Hallam Smith";
+  };
   hectorj = {
     email = "hector.jusforgues+nixos@gmail.com";
     github = "hectorj";
