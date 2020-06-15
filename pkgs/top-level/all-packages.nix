@@ -2712,7 +2712,9 @@ in
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
-  clamav = callPackage ../tools/security/clamav { };
+  clamav = callPackage ../tools/security/clamav {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   clex = callPackage ../tools/misc/clex { };
 
