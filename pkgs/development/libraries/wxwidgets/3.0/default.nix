@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchurl, pkgconfig
-, libXinerama, libSM, libXxf86vm
+, libXinerama, libSM, libXxf86vm, libnotify
 , gtk2, GConf ? null, gtk3
 , xorgproto, gstreamer, gst-plugins-base, setfile
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
@@ -20,7 +20,7 @@ assert assertMsg (withGtk2 -> withWebKit == false) "wxGTK30: You cannot enable w
 
 stdenv.mkDerivation rec {
   version = "3.0.4";
-  pname = "wxwidgets";
+  pname = "wxwidgets-gtk${toString (if withGtk2 then 2 else 3)}";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libXinerama libSM libXxf86vm xorgproto gstreamer gst-plugins-base
+    libXinerama libSM libXxf86vm xorgproto gstreamer gst-plugins-base libnotify
   ] ++ optionals withGtk2 [ gtk2 GConf ]
     ++ optional (!withGtk2) gtk3
     ++ optional withMesa libGLU
