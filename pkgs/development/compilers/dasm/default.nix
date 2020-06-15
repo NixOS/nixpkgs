@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 	'';
 
 	preCheck = ''
-		patchShebangs ./tests/
+		patchShebangs ./test/
 	'';
 
 	checkTarget = "test";
