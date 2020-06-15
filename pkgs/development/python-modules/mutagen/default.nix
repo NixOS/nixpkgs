@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "mutagen";
-  version = "1.43.0";
+  version = "1.44.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3a982d39f1b800520a32afdebe3543f972e83a6ddd0c0198739a161ee705b588";
+    sha256 = "56065d8a9ca0bc64610a4d0f37e2bd4453381dde3226b8835ee656faa3287be4";
   };
 
   propagatedBuildInputs = [ setuptools ];

@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "7.0.1";
+  version = "8.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10qav9dryly9h6n8vypx5m334v2lh88fsvgfg0zjy4bxjslay4zv";
+    sha256 = "a3bba6bf68766b8a1a057f28869c7078cf0a1ec3207c7788c2ce8fe6f6bd8267";
   };
 
   checkInputs = [ numpy ];

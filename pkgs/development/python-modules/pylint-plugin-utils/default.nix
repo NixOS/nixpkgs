@@ -5,6 +5,7 @@
 
 # pythonPackages
 , pylint
+, toml
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pylint
+    pylint toml
   ];
 
   checkPhase = ''

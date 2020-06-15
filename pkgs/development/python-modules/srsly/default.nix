@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, cython
 , mock
 , numpy
 , pathlib
@@ -12,12 +13,14 @@
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "1.0.2";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n0f9kbbz5akpbiqqz4j3p7zqai3zasw8cqai9zj1pv7sn0qn9ar";
+    sha256 = "fa3c7375be8fe75f23c27feafbfb5f738d55ffdbf02964c6896fb7684f519a52";
   };
+
+  nativeBuildInputs = [ cython ];
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.4") pathlib;
 

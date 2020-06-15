@@ -2,6 +2,7 @@
 , perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages, pkgsTargetTarget
+, fetchpatch
 }:
 
 let
@@ -30,11 +31,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.14.3";
+  version = "1.14.4";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "0mmgf74snprdiajgh99jjliwjl5im71qcgm5qrxpnyfisiw3f0lk";
+    sha256 = "1105qk2l4kfy1ki9n9gh8j4gfqrfgfwapa1fp38hih9aphxsy4bh";
   };
 
   # perl is used for testing go vet
@@ -137,6 +138,12 @@ stdenv.mkDerivation rec {
     ./go-1.9-skip-flaky-20072.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+
+    # fix rare TestDontCacheBrokenHTTP2Conn failure
+    (fetchpatch {
+      url = "https://github.com/golang/go/commit/ea1437a8cdf6bb3c2d2447833a5d06dbd75f7ae4.patch";
+      sha256 = "1lyzy4nf8c34a966vw45j3j7hzpvncq2gqspfxffzkyh17xd8sgy";
+    })
   ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
     (if stdenv.isAarch32

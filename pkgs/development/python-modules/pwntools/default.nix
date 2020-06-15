@@ -5,12 +5,12 @@
 , requests, tox, unicorn, intervaltree, fetchpatch }:
 
 buildPythonPackage rec {
-  version = "4.0.0b0";
+  version = "4.1.1";
   pname = "pwntools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11f7x7rjad1nawn3r524lzxgz3nk89c6s3xycrscn3n86hh0zgid";
+    sha256 = "694ce7a6cfca0ad40eae36c1d2663c44eb953f84785c63daa9752b4dfa7f39d8";
   };
 
   propagatedBuildInputs = [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pyserial dateutil requests tox unicorn intervaltree ];

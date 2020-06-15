@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.7.0";
+  version = "0.9.2";
 
   nativeBuildInputs = [ pytest ];
   buildInputs = [ aiohttp crccheck pycryptodome ];
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "049k6lvgf6yjkinbbzm7gqrzqljk2ky9kfw8n53x8kjyfmfp71i2";
+    sha256 = "f4256136d714c00d22f6d2abf975438e2bc080cc43b8afef0decb80ed8066ef6";
   };
 
   meta = with stdenv.lib; {

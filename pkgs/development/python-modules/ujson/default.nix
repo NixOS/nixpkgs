@@ -2,17 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , isPyPy
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "ujson";
-  version = "1.35";
+  version = "3.0.0";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11jz5wi7mbgqcsz52iqhpyykiaasila4lq8cmc2d54bfa3jp6q7n";
+    sha256 = "e0199849d61cc6418f94d52a314c6a27524d65e82174d2a043fb718f73d1520d";
   };
+
+  nativeBuildInputs = [ setuptools_scm ];
 
   meta = with stdenv.lib; {
     homepage = "https://pypi.python.org/pypi/ujson";
