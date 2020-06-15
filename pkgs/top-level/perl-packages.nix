@@ -3734,7 +3734,7 @@ let
       sha256 = "93ebdfaaefcfe9ab683f0121c85f24475d8197f0bcec46018219e4111434dde3";
     };
     propagatedBuildInputs = [ DigestSHA1 ];
-    perlPreHook = stdenv.lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = stdenv.lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
   };
 
   CryptRijndael = buildPerlPackage {
