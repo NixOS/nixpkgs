@@ -10274,12 +10274,6 @@ in
 
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
-  cquery = callPackage ../development/tools/misc/cquery {
-    # 7 is the default, but only on Linux, so keep this for now
-    llvmPackages = llvmPackages_7;
-  };
-
-
   ccls = callPackage ../development/tools/misc/ccls {
     llvmPackages = llvmPackages_8;
     stdenv = llvmPackages_8.stdenv;
