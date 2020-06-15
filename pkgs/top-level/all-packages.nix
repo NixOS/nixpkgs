@@ -12416,6 +12416,8 @@ in
 
   imlibsetroot = callPackage ../applications/graphics/imlibsetroot { libXinerama = xorg.libXinerama; } ;
 
+  impy = callPackage ../development/libraries/impy { };
+
   ineffassign = callPackage ../development/tools/ineffassign { };
 
   ijs = callPackage ../development/libraries/ijs { };
