@@ -624,7 +624,7 @@ in
 
   airfield = callPackage ../tools/networking/airfield { };
 
-  apache-airflow = with python3.pkgs; toPythonApplication apache-airflow;
+  apache-airflow = with python37.pkgs; toPythonApplication apache-airflow;
 
   airsonic = callPackage ../servers/misc/airsonic { };
 
@@ -777,7 +777,7 @@ in
 
   iamy = callPackage ../tools/admin/iamy { };
 
-  azure-cli = callPackage ../tools/admin/azure-cli { python = python3; };
+  azure-cli = callPackage ../tools/admin/azure-cli { python = python37; };
 
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
@@ -1133,9 +1133,7 @@ in
 
   atftp = callPackage ../tools/networking/atftp { };
 
-  autogen = callPackage ../development/tools/misc/autogen {
-    guile = guile_2_0;
-  };
+  autogen = callPackage ../development/tools/misc/autogen { };
 
   autojump = callPackage ../tools/misc/autojump { };
 
@@ -3529,7 +3527,7 @@ in
   fontforge-gtk = fontforge.override {
     withSpiro = true;
     withGTK = true;
-    gtk2 = gtk2-x11;
+    gtk3 = gtk3-x11;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
@@ -5234,7 +5232,9 @@ in
 
   mirrorbits = callPackage ../servers/mirrorbits { };
 
-  mitmproxy = callPackage ../tools/networking/mitmproxy { };
+  mitmproxy = callPackage ../tools/networking/mitmproxy {
+    python3Packages = python37Packages;
+  };
 
   mjpegtools = callPackage ../tools/video/mjpegtools { };
 
@@ -7916,7 +7916,11 @@ in
 
   zssh = callPackage ../tools/networking/zssh { };
 
-  zstd = callPackage ../tools/compression/zstd { };
+  zstd = callPackage ../tools/compression/zstd {
+    cmake = cmake.override {
+      libarchive = libarchive.override { zstd = null; };
+    };
+  };
 
   zsync = callPackage ../tools/compression/zsync { };
 
@@ -9658,7 +9662,7 @@ in
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python = python2;
   python2 = python27;
-  python3 = python37;
+  python3 = python38;
   pypy = pypy2;
   pypy2 = pypy27;
   pypy3 = pypy36;
@@ -11140,7 +11144,9 @@ in
 
   vultr-cli = callPackage ../development/tools/vultr-cli { };
 
-  vulnix = callPackage ../tools/security/vulnix { };
+  vulnix = callPackage ../tools/security/vulnix {
+    python3Packages = python37Packages;
+  };
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
@@ -15747,7 +15753,9 @@ in
 
   hiawatha = callPackage ../servers/http/hiawatha {};
 
-  home-assistant = callPackage ../servers/home-assistant { };
+  home-assistant = callPackage ../servers/home-assistant { 
+    python3 = python37;
+  };
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 

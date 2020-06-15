@@ -129,7 +129,7 @@ in {
   };
 
   # Minimal versions of Python (built without optional dependencies)
-  python3Minimal = (python37.override {
+  python3Minimal = (python38.override {
     self = python3Minimal;
     pythonForBuild = pkgs.buildPackages.python3Minimal;
     # strip down that python version as much as possible
@@ -146,6 +146,7 @@ in {
     rebuildBytecode = false;
     stripBytecode = true;
     includeSiteCustomize = false;
+    enableOptimizations = false;
   }).overrideAttrs(old: {
     pname = "python3-minimal";
     meta = old.meta // {

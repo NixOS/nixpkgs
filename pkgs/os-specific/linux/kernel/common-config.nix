@@ -727,6 +727,7 @@ let
       PSI = whenAtLeast "4.20" yes;
 
       MODVERSIONS        = whenOlder "4.9" yes;
+      MOUSE_ELAN_I2C_SMBUS = yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
       MTRR_SANITIZER     = yes;
       NET_FC             = yes; # Fibre Channel driver support

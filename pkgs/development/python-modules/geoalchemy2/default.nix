@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "GeoAlchemy2";
-  version = "0.8.0";
+  version = "0.8.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kqxm9imqjbhjj5imvf2kl57di454xmnnsr3i0cs66ibq90nx5m8";
+    sha256 = "a5a2444d90ce7f2c6b2d7bd7346c8aed16fd32c3e190e631576a51814e8f7ee9";
   };
 
   propagatedBuildInputs = [ sqlalchemy shapely ];
