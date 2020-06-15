@@ -307,6 +307,48 @@ let
         '';
       };
 
+      externalCommand = mkOption {
+        default = null;
+        type = types.nullOr (types.submodule {
+          options = {
+
+            type = mkOption {
+              type = types.enum [ "account" "auth" "password" "session" ];
+              example = "session";
+              description = ''
+                The type is the management group that the rule corresponds to.
+              '';
+            };
+
+            control = mkOption {
+              type = types.enum [ "required" "requisite" "sufficient" "optional" "include" "substack" ];
+              example = "required";
+              description = ''
+                The behavior of the PAM-API should the module fail to succeed in its authentication task.
+              '';
+            };
+
+            command = mkOption {
+              type = types.path;
+              description = ''
+                Command to call
+              '';
+            };
+
+          };
+        });
+        example = literalExample ''
+          {
+            type = "session";
+            control = "required";
+            command = /path/to/command
+          }
+        '';
+        description = ''
+          External command to call with pam_exec.
+        '';
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = "Contents of the PAM service file.";
@@ -463,6 +505,9 @@ let
               "session optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start"}
           ${optionalString (config.virtualisation.lxc.lxcfs.enable)
                "session optional ${pkgs.lxc}/lib/security/pam_cgfs.so -c all"}
+
+          ${optionalString (cfg.externalCommand != null)
+              "${cfg.externalCommand.type} ${cfg.externalCommand.control} pam_exec.so ${cfg.externalCommand.command}"}
         '');
     };
 
