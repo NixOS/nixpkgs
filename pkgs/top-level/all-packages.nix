@@ -10075,6 +10075,8 @@ in
 
   bazelisk = callPackage ../development/tools/bazelisk { };
 
+  rebazel = callPackage ../development/tools/rebazel { };
+
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
