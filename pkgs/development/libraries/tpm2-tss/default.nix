@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     cmocka uthash
   ];
 
+  enableParallelBuilding = true;
+
   postPatch = "patchShebangs script";
 
   configureFlags = [
