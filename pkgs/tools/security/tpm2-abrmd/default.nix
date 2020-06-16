@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook autoconf-archive which ];
-  buildInputs = [ tpm2-tss glib dbus cmocka ];
+  buildInputs = [ tpm2-tss glib dbus ];
+  checkInputs = [ cmocka ];
 
   enableParallelBuilding = true;
 
