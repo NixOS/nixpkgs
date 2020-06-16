@@ -74,7 +74,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 16.0
+  # LTS Haskell 16.1
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -220,7 +220,7 @@ default-package-overrides:
   - antiope-sns ==7.5.1
   - antiope-sqs ==7.5.1
   - ANum ==0.2.0.2
-  - apecs ==0.9.1
+  - apecs ==0.9.2
   - apecs-gloss ==0.2.4
   - apecs-physics ==0.4.4
   - api-field-json-th ==0.1.0.2
@@ -264,7 +264,7 @@ default-package-overrides:
   - attoparsec-path ==0.0.0.1
   - audacity ==0.0.2
   - aur ==7.0.3
-  - aura ==3.1.1
+  - aura ==3.1.4
   - authenticate ==1.3.5
   - authenticate-oauth ==1.6.0.1
   - auto ==0.4.3.1
@@ -313,7 +313,7 @@ default-package-overrides:
   - binary-ieee754 ==0.1.0.0
   - binary-list ==1.1.1.2
   - binary-orphans ==1.0.1
-  - binary-parser ==0.5.5
+  - binary-parser ==0.5.6
   - binary-parsers ==0.2.4.0
   - binary-search ==1.0.0.3
   - binary-shared ==0.8.3
@@ -364,7 +364,7 @@ default-package-overrides:
   - buffer-builder ==0.2.4.7
   - buffer-pipe ==0.0
   - bugsnag-hs ==0.1.0.3
-  - butcher ==1.3.3.1
+  - butcher ==1.3.3.2
   - bv ==0.5
   - bv-little ==1.1.1
   - byteable ==0.1.1
@@ -387,7 +387,7 @@ default-package-overrides:
   - cabal-appimage ==0.3.0.0
   - cabal-debian ==5.0.2
   - cabal-doctest ==1.0.8
-  - cabal-rpm ==2.0.4
+  - cabal-rpm ==2.0.5.1
   - cache ==0.1.3.0
   - cacophony ==0.10.1
   - calendar-recycling ==0.0.0.1
@@ -441,9 +441,9 @@ default-package-overrides:
   - cipher-des ==0.0.6
   - cipher-rc4 ==0.1.4
   - circle-packing ==0.1.0.6
-  - clash-ghc ==1.2.1
-  - clash-lib ==1.2.1
-  - clash-prelude ==1.2.1
+  - clash-ghc ==1.2.2
+  - clash-lib ==1.2.2
+  - clash-prelude ==1.2.2
   - classy-prelude ==1.5.0
   - classy-prelude-conduit ==1.5.0
   - classy-prelude-yesod ==1.5.0
@@ -487,7 +487,7 @@ default-package-overrides:
   - concise ==0.1.0.1
   - concurrency ==1.11.0.0
   - concurrent-extra ==0.7.0.12
-  - concurrent-output ==1.10.11
+  - concurrent-output ==1.10.12
   - concurrent-split ==0.0.1.1
   - concurrent-supply ==0.1.8
   - cond ==0.4.1.1
@@ -573,7 +573,7 @@ default-package-overrides:
   - cursor-gen ==0.3.0.0
   - cutter ==0.0
   - cyclotomic ==1.1.1
-  - czipwith ==1.0.1.2
+  - czipwith ==1.0.1.3
   - d10 ==0.2.1.6
   - data-accessor ==0.2.3
   - data-accessor-mtl ==0.2.0.4
@@ -629,7 +629,7 @@ default-package-overrides:
   - deque ==0.4.3
   - deriveJsonNoPrefix ==0.1.0.1
   - deriving-aeson ==0.2.6
-  - deriving-compat ==0.5.8
+  - deriving-compat ==0.5.9
   - derulo ==1.0.9
   - detour-via-sci ==1.0.0
   - dhall ==1.32.0
@@ -708,7 +708,7 @@ default-package-overrides:
   - ekg ==0.4.0.15
   - ekg-core ==0.1.1.7
   - ekg-json ==0.1.0.6
-  - ekg-statsd ==0.2.4.1
+  - ekg-statsd ==0.2.5.0
   - elerea ==2.9.0
   - elf ==0.30
   - eliminators ==0.6
@@ -862,7 +862,7 @@ default-package-overrides:
   - generic-deriving ==1.13.1
   - generic-lens ==2.0.0.0
   - generic-lens-core ==2.0.0.0
-  - generic-monoid ==0.1.0.0
+  - generic-monoid ==0.1.0.1
   - generic-optics ==2.0.0.0
   - GenericPretty ==1.2.2
   - generic-random ==1.3.0.1
@@ -904,7 +904,7 @@ default-package-overrides:
   - ghcjs-codemirror ==0.0.0.2
   - ghc-lib ==8.10.1.20200523
   - ghc-lib-parser ==8.10.1.20200523
-  - ghc-lib-parser-ex ==8.10.0.13
+  - ghc-lib-parser-ex ==8.10.0.14
   - ghc-parser ==0.2.2.0
   - ghc-paths ==0.1.0.12
   - ghc-prof ==1.4.1.7
@@ -931,7 +931,7 @@ default-package-overrides:
   - gi-graphene ==1.0.1
   - gi-gtk ==3.0.33
   - gi-gtk-hs ==0.3.8.1
-  - ginger ==0.10.0.4
+  - ginger ==0.10.0.5
   - gingersnap ==0.3.1.0
   - gi-pango ==1.0.22
   - giphy-api ==0.7.0.0
@@ -1046,7 +1046,7 @@ default-package-overrides:
   - hint ==0.9.0.3
   - hjsmin ==0.2.0.4
   - hkd-default ==1.1.0.0
-  - hkgr ==0.2.5.2
+  - hkgr ==0.2.6
   - hlibcpuid ==0.2.0
   - hlibgit2 ==0.18.0.16
   - hmatrix ==0.20.0.0
@@ -1168,7 +1168,7 @@ default-package-overrides:
   - hw-mquery ==0.2.1.0
   - hw-parser ==0.1.1.0
   - hw-prim ==0.6.3.0
-  - hw-rankselect-base ==0.3.4.0
+  - hw-rankselect-base ==0.3.4.1
   - hw-streams ==0.0.1.0
   - hw-string-parse ==0.0.0.4
   - hxt ==9.3.1.18
@@ -1223,7 +1223,7 @@ default-package-overrides:
   - interpolatedstring-perl6 ==1.0.2
   - interpolation ==0.1.1.1
   - interpolator ==1.0.0
-  - IntervalMap ==0.6.1.1
+  - IntervalMap ==0.6.1.2
   - intervals ==0.9.1
   - intro ==0.7.0.0
   - intset-imperative ==0.1.0.0
@@ -1265,7 +1265,7 @@ default-package-overrides:
   - json-alt ==1.0.0
   - json-feed ==1.0.11
   - jsonpath ==0.2.0.0
-  - json-rpc ==1.0.1
+  - json-rpc ==1.0.2
   - json-rpc-generic ==0.2.1.5
   - JuicyPixels ==3.3.5
   - JuicyPixels-blurhash ==0.1.0.3
@@ -1505,7 +1505,7 @@ default-package-overrides:
   - multimap ==1.2.1
   - multiset ==0.3.4.3
   - multistate ==0.8.0.3
-  - murmur3 ==1.0.3
+  - murmur3 ==1.0.4
   - murmur-hash ==0.1.0.9
   - MusicBrainz ==0.4.1
   - mustache ==2.3.1
@@ -1564,7 +1564,7 @@ default-package-overrides:
   - not-gloss ==0.7.7.0
   - no-value ==1.0.0.0
   - nowdoc ==0.1.1.0
-  - nqe ==0.6.1
+  - nqe ==0.6.3
   - nsis ==0.3.3
   - numbers ==3000.2.0.2
   - numeric-extras ==0.1
@@ -1577,7 +1577,7 @@ default-package-overrides:
   - ObjectName ==1.1.0.1
   - o-clock ==1.1.0
   - odbc ==0.2.2
-  - oeis2 ==1.0.3
+  - oeis2 ==1.0.4
   - ofx ==0.4.4.0
   - old-locale ==1.0.0.7
   - old-time ==1.1.0.3
@@ -1623,7 +1623,7 @@ default-package-overrides:
   - pandoc ==2.9.2.1
   - pandoc-citeproc ==0.17
   - pandoc-csv2table ==1.0.8
-  - pandoc-plot ==0.6.0.0
+  - pandoc-plot ==0.6.1.0
   - pandoc-pyplot ==2.3.0.1
   - pandoc-types ==1.20
   - pantry ==0.4.0.1
@@ -1723,7 +1723,7 @@ default-package-overrides:
   - postgrest ==7.0.0
   - post-mess-age ==0.2.1.0
   - pptable ==0.3.0.0
-  - pqueue ==1.4.1.2
+  - pqueue ==1.4.1.3
   - prefix-units ==0.2.0
   - prelude-compat ==0.0.0.2
   - prelude-safeenum ==0.1.1.2
@@ -1879,17 +1879,17 @@ default-package-overrides:
   - rethinkdb-client-driver ==0.0.25
   - retry ==0.8.1.2
   - rev-state ==0.1.2
-  - rfc1751 ==0.1.2
+  - rfc1751 ==0.1.3
   - rfc5051 ==0.1.0.4
   - rhine ==0.6.0
   - rhine-gloss ==0.6.0.1
   - rigel-viz ==0.2.0.0
-  - rio ==0.1.16.0
+  - rio ==0.1.17.0
   - rio-orphans ==0.1.1.0
   - rio-prettyprint ==0.1.0.0
   - roc-id ==0.1.0.0
   - rocksdb-haskell ==1.0.1
-  - rocksdb-query ==0.3.1
+  - rocksdb-query ==0.3.2
   - roles ==0.2.0.0
   - rope-utf16-splay ==0.3.1.0
   - rosezipper ==0.2
@@ -1930,7 +1930,7 @@ default-package-overrides:
   - sdl2-mixer ==1.1.0
   - sdl2-ttf ==2.1.1
   - search-algorithms ==0.3.1
-  - secp256k1-haskell ==0.2.3
+  - secp256k1-haskell ==0.2.5
   - securemem ==0.1.10
   - selda ==0.5.1.0
   - selda-json ==0.1.1.0
@@ -2034,7 +2034,7 @@ default-package-overrides:
   - skylighting-core ==0.8.4
   - slack-api ==0.12
   - slist ==0.1.1.0
-  - smallcheck ==1.1.5
+  - smallcheck ==1.1.7
   - smash ==0.1.1.0
   - smash-aeson ==0.1.0.0
   - smash-lens ==0.1.0.0
@@ -2171,7 +2171,7 @@ default-package-overrides:
   - tasty-program ==1.0.5
   - tasty-quickcheck ==0.10.1.1
   - tasty-rerun ==1.1.17
-  - tasty-silver ==3.1.13
+  - tasty-silver ==3.1.15
   - tasty-smallcheck ==0.8.1
   - tasty-th ==0.1.7
   - tasty-wai ==0.1.1.0
@@ -2226,7 +2226,7 @@ default-package-overrides:
   - th-expand-syns ==0.4.6.0
   - th-extras ==0.0.0.4
   - th-lift ==0.8.1
-  - th-lift-instances ==0.1.16
+  - th-lift-instances ==0.1.17
   - th-nowq ==0.1.0.5
   - th-orphans ==0.13.10
   - th-printf ==0.7
