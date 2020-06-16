@@ -51,13 +51,13 @@ assert stdenv.isDarwin -> AudioToolbox != null
 
 stdenv.mkDerivation rec {
   pname = "handbrake";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     rev = version;
-    sha256 = "04z3hcy7m5yvma849rlrsx2wdqmkilkl1qds9yrzr2ydpw697f85";
+    sha256 = "0bsmk37543zv3p32a7wxnh2w483am23ha2amj339q3nnb4142krn";
     extraPostFetch = ''
       echo "DATE=$(date +"%F %T %z" -r $out/NEWS.markdown)" > $out/version.txt
     '';
