@@ -25,7 +25,8 @@ buildPythonApplication rec {
       --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0' \
       --replace 'pyopenssl==19.0.0' 'pyopenssl' \
       --replace 'python-dateutil==2.8.0' 'python-dateutil==2.8.*' \
-      --replace 'pyyaml==5.1' 'pyyaml'
+      --replace 'pyyaml==5.1' 'pyyaml' \
+      --replace 'requests[socks]==2.22.0' 'requests[socks]'
     substituteInPlace requirements-dev.txt \
       --replace 'plone.testing==5.0.0' 'plone.testing' \
       --replace 'pep8==1.7.0' 'pep8==1.7.*' \
