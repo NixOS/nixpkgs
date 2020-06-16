@@ -2,10 +2,10 @@
 
 buildDunePackage rec {
   pname = "encore";
-  version = "0.3";
+  version = "0.4";
   src = fetchurl {
     url = "https://github.com/mirage/encore/releases/download/v${version}/encore-v${version}.tbz";
-    sha256 = "05nv6yms5axsmq9cspr7884rz5kirj50izx3vdm89q4yl186qykl";
+    sha256 = "1qknpz9rlkxny48gq5qv1fzglnkparyv8gmz3331zah0c3jgj051";
   };
   propagatedBuildInputs = [ angstrom ke ];
   checkInputs = lib.optional doCheck alcotest;
