@@ -1,12 +1,14 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pkgs
 }:
 
 buildPythonPackage rec {
   pname = "limnoria";
   version = "2020.04.11";
+  disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
