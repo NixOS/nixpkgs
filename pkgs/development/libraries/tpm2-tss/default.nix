@@ -1,26 +1,29 @@
-{ stdenv, lib, fetchurl, fetchpatch
-, cmocka, doxygen, ibm-sw-tpm2, iproute, openssl, perl, pkgconfig, procps, json_c, curl
-, uthash, which
+{ stdenv, lib, fetchFromGitHub
+, autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
+, openssl, json_c, curl, libgcrypt
+, cmocka, uthash, ibm-sw-tpm2, iproute, procps, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
   version = "2.4.1";
 
-  src = fetchurl {
-    url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "03g6l64nzkpadjyabmbhnhs8648iqb95fviinnpslggzp75azmsq";
+  src = fetchFromGitHub {
+    owner = "tpm2-software";
+    repo = pname;
+    rev = version;
+    sha256 = "09x5czaj4a8cyf8cxavcasx3yy1kik1s45a90c7zvxb7y1kfp9zs";
   };
 
   nativeBuildInputs = [
-    doxygen perl pkgconfig
+    autoreconfHook autoconf-archive pkg-config doxygen perl libgcrypt.dev
   ];
-  buildInputs = [
-    openssl json_c curl
-  ];
+  buildInputs = [ openssl json_c curl libgcrypt ];
   checkInputs = [
     cmocka uthash ibm-sw-tpm2 iproute procps which
   ];
+
+  preAutoreconf = "./bootstrap";
 
   enableParallelBuilding = true;
 
