@@ -34,10 +34,9 @@ stdenv.mkDerivation rec {
   # seems to require the path to the device TCTI (used for accessing
   # /dev/tpm0) in it's LD_LIBRARY_PATH
   postFixup = ''
-    wrapProgram $out/bin/tpm2-abrmd \
-      --suffix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [ tpm2-tss ]
-      }"
+    wrapProgram $out/bin/tpm2-abrmd --suffix LD_LIBRARY_PATH : "${
+      lib.makeLibraryPath [ tpm2-tss ]
+    }"
   '';
 
   meta = with lib; {
