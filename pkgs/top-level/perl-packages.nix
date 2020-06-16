@@ -12346,6 +12346,22 @@ let
     };
   };
 
+  MojoliciousPluginAssetPack = buildPerlPackage {
+    pname = "Mojolicious-Plugin-AssetPack";
+    version = "2.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-AssetPack-2.08.tar.gz";
+      sha256 = "585d9e056258b00590da109b4d5ee573fa3eb2248425247aebbfedac5a157152";
+    };
+    propagatedBuildInputs = [ FileWhich IPCRun3 Mojolicious JavaScriptMinifierXS CSSMinifierXS ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/mojolicious-plugin-assetpack";
+      description = "Compress and convert css, less, sass, javascript and coffeescript files";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
   MojoliciousPluginMail = buildPerlModule {
     pname = "Mojolicious-Plugin-Mail";
     version = "1.5";
