@@ -87,4 +87,89 @@ in
       assert "updating systemd-boot from 001 to " in output
     '';
   };
+
+  bootCounters = let
+    baseConfig = { pkgs, lib, ... }: {
+      imports = [ common ];
+      boot.loader.systemd-boot.counters.enable = true;
+      boot.loader.systemd-boot.counters.tries = 2;
+    };
+  in makeTest {
+    name = "systemd-boot-counters";
+    nodes = {
+      machine = { pkgs, lib, ... }: {
+        imports = [ baseConfig ];
+      };
+
+      bad = { pkgs, lib, ...}: {
+        imports = [ baseConfig ];
+
+        systemd.services."failing" = {
+          script = "exit 1";
+          requiredBy = [ "boot-complete.target" ];
+          before = [ "boot-complete.target" ];
+          serviceConfig.Type = "oneshot";
+        };
+      };
+    };
+    testScript = { nodes, ... }: let
+      orig = nodes.machine.config.system.build.toplevel;
+      bad = nodes.bad.config.system.build.toplevel;
+    in ''
+      # fmt: off
+      orig = "${orig}"
+      bad = "${bad}"
+      # fmt: on
+
+
+      def check_current_system(system_path):
+          machine.succeed(f'test $(readlink -f /run/current-system) = "{system_path}"')
+
+
+      # Ensure we booted using an entry with counters enabled
+      machine.succeed(
+          "test -e /sys/firmware/efi/efivars/LoaderBootCountPath-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+      )
+
+      # systemd-bless-boot should have already removed the "+2" suffix from the boot entry
+      machine.wait_for_unit("systemd-bless-boot.service")
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-default-1.conf")
+      check_current_system(orig)
+
+      # Switch to bad configuration
+      machine.succeed(
+          "ln -s $(readlink -f /run/current-system) /nix/var/nix/profiles/system-1-link",
+          "ln -s /nix/var/nix/profiles/system-1-link /nix/var/nix/profiles/system",
+          f"ln -s {bad} /nix/var/nix/profiles/system-2-link",
+          f"{bad}/bin/switch-to-configuration boot",
+      )
+
+      # Ensure new bootloader entry has initialized counter
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-default-2+2.conf")
+      machine.shutdown()
+
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+      check_current_system(bad)
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-default-2+1-1.conf")
+      machine.shutdown()
+
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+      check_current_system(bad)
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-default-2+0-2.conf")
+      machine.shutdown()
+
+      # Should boot back into original configuration
+      machine.start()
+      check_current_system(orig)
+      machine.wait_for_unit("multi-user.target")
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-default-2+0-2.conf")
+      machine.shutdown()
+    '';
+  };
 }
