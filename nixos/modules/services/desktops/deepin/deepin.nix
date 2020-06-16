@@ -22,6 +22,8 @@
       that helps to launch applications faster.
     ";
 
+    programs.dde-calendar.enable = lib.mkEnableOption "Deepin calendar";
+
   };
 
 
@@ -39,7 +41,6 @@
 
       environment.systemPackages = [
         pkgs.deepin.dde-api
-        pkgs.deepin.dde-calendar
         pkgs.deepin.dde-control-center
         pkgs.deepin.dde-daemon
         pkgs.deepin.dde-dock
@@ -52,7 +53,6 @@
 
       services.dbus.packages = [
         pkgs.deepin.dde-api
-        pkgs.deepin.dde-calendar
         pkgs.deepin.dde-control-center
         pkgs.deepin.dde-daemon
         pkgs.deepin.dde-dock
@@ -114,6 +114,7 @@
 
       services.deepin.deepin-menu.enable = true;
       services.deepin.deepin-turbo.enable = true;
+      programs.dde-calendar.enable = true;
     })
 
     (lib.mkIf config.services.deepin.deepin-menu.enable {
@@ -123,6 +124,11 @@
     (lib.mkIf config.services.deepin.deepin-turbo.enable {
       environment.systemPackages = [ pkgs.deepin.deepin-turbo ];
       systemd.packages = [ pkgs.deepin.deepin-turbo ];
+    })
+
+    (lib.mkIf config.programs.dde-calendar.enable {
+      environment.systemPackages = [ pkgs.deepin.dde-calendar ];
+      services.dbus.packages = [ pkgs.deepin.dde-calendar ];
     })
 
   ];
