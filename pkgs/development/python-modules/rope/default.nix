@@ -4,8 +4,6 @@ buildPythonPackage rec {
   pname = "rope";
   version = "0.17.0";
 
-  disabled = pythonAtLeast "3.8";  # 0.17 should support Python 3.8
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "658ad6705f43dcf3d6df379da9486529cf30e02d9ea14c5682aa80eb33b649e1";
