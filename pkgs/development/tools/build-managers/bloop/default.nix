@@ -2,80 +2,74 @@
  autoPatchelfHook, 
  lib, zlib }:
 
-let
-  baseName = "bloop";
+stdenv.mkDerivation rec {
+  basename = "bloop";
   version = "1.4.1";
+  name = "bloop-${version}";
 
-  client = stdenv.mkDerivation {
-    name = "${baseName}-client-${version}";
+  bloop-coursier-channel = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-coursier.json";
+    sha256 = "2e6a873183e5e22712913bfdab1331d0a7792167c369fee5be0c83e27572fe12";
+  };
+
+  bloop-bash = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bash-completions";
+    sha256 = "da6b7ecd4109bd0ff98b1c452d9dd9d26eee0d28ff604f6c83fb8d3236a6bdd1";
+  };
+
+  bloop-fish = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/fish-completions";
+    sha256 = "1pa8h81l2498q8dbd83fzipr99myjwxpy8xdgzhvqzdmfv6aa4m0";
+  };
+
+  bloop-zsh = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/zsh-completions";
+    sha256 = "1xzg0qfkjdmzm3mvg82mc4iia8cl7b6vbl8ng4ir2xsz00zjrlsq";
+  };
+
+  bloop-coursier = stdenv.mkDerivation {
+    name = "${basename}-coursier-${version}";
 
     nativeBuildInputs = [ autoPatchelfHook ] ;
     phases = [ "installPhase" "fixupPhase" ];
-    buildInputs = [ stdenv.cc.cc.lib zlib] ;
+    buildInputs = [ stdenv.cc.cc.lib zlib ] ;
 
     installPhase = ''
-      mkdir -p $out/bin
- 
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier install bloop:${version} \
-                               --repository "bintray:scalameta/maven" \
-                               --repository "bintray:scalacenter/releases" \
-                               --repository "https://oss.sonatype.org/content/repositories/staging" \
-                               --force \
-                               --install-dir $out
-    '';
-    
+      export COURSIER_JVM_CACHE=$(pwd)
+
+      mkdir channel
+      ln -s ${bloop-coursier-channel} channel/bloop.json
+      ${coursier}/bin/coursier install --install-dir $out --default-channels=false --channel channel --only-prebuilt=true bloop
+
+      # Remove binary part of the coursier launcher script to make derivation output hash stable
+      sed -i '5,$ d' $out/bloop
+   '';
+
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "01hgv0j0a4v8iqi638rcqdirpa30jwfp7gh7dvsk32apx003ylvb";
+    outputHash     = "1f5hf80s71w5g61s8vcaccabsn9xvkf05jgbnwwx01i3f23w31vb";
   };
 
-  server = stdenv.mkDerivation {
-    name = "${baseName}-server-${version}";
-    buildCommand = ''
-      mkdir -p $out/bin
+  buildCommand = ''
+    export COURSIER_CACHE=$(pwd)
+    export COURSIER_JVM_CACHE=$(pwd)
 
-      export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier bootstrap ch.epfl.scala:bloop-frontend_2.12:${version} \
-                               --repository "bintray:scalameta/maven" \
-                               --repository "bintray:scalacenter/releases" \
-                               --repository "https://oss.sonatype.org/content/repositories/staging" \
-                               --deterministic \
-                               --force \
-                               --main bloop.Server \
-                               --output $out/blp-server
-    '';
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash     = "01kyzb374kyicm1nmx6vzz42gj8cd9m6bd5dgrajkcr6q09jfgbg";
-  };
-
-  zsh = stdenv.mkDerivation {
-    name = "${baseName}-zshcompletion-${version}";
-
-    src = fetchurl {
-      url = "https://raw.githubusercontent.com/scalacenter/bloop/v${version}/etc/zsh/_bloop";
-      sha256 = "1xzg0qfkjdmzm3mvg82mc4iia8cl7b6vbl8ng4ir2xsz00zjrlsq";
-    };
-
-    phases = [ "installPhase" ];
-
-    installPhase = ''cp $src $out'';
-  };
-in
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
-
-  phases = [ "installPhase" ];
-
-  installPhase = ''
     mkdir -p $out/bin
+    cp ${bloop-coursier}/bloop $out/bloop
+    ln -s ${bloop-coursier}/.bloop.aux $out/.bloop.aux
+    ln -s $out/bloop $out/bin/bloop
+
+    # patch the bloop launcher so that it works when symlinked
+    sed "s|\$(dirname \"\$0\")|$out|" -i $out/bloop
+
+    #Install completions
+    mkdir -p $out/etc/bash_completion.d
+    ln -s ${bloop-bash} $out/etc/bash_completion.d/bloop
     mkdir -p $out/share/zsh/site-functions
-
-    ln -s ${server}/blp-server $out/bin/blp-server
-
-    ln -s ${zsh} $out/share/zsh/site-functions/_bloop
-    ln -s ${client}/.bloop.aux $out/bin/bloop
+    ln -s ${bloop-zsh} $out/share/zsh/site-functions/_bloop
+    mkdir -p $out/usr/share/fish/vendor_completions.d/
+    ln -s ${bloop-fish} $out/usr/share/fish/vendor_completions.d/bloop.fish
   '';
 
   meta = with stdenv.lib; {
