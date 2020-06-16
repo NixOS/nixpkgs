@@ -1,17 +1,17 @@
 { rustPlatform, fetchFromGitHub, stdenv }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "tre";
-  version = "0.2.3";
+  pname = "tre-command";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "dduan";
     repo = "tre";
     rev = "v${version}";
-    sha256 = "1fazw2wn738iknbv54gv7qll7d4q2gy9bq1s3f3cv21cdv6bqral";
+    sha256 = "1fm3fszy7fd0dgf5dwm35nb0ym0waw92iyx128lr2vlbyzln6ija";
   };
 
-  cargoSha256 = "16bvnwgjf3kj99d77j1pkldbasxfwy55sj9sv9vf2z6llfmzfabd";
+  cargoSha256 = "0sk4dn5rrqhkaxm76y1d7rsjsw6pdjdhb2xv7qqrlivfk6y5k31x";
 
   meta = with stdenv.lib; {
     description = "Tree command, improved";
