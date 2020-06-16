@@ -1,8 +1,9 @@
-{ buildPythonPackage, fetchPypi, lib, pytest }:
+{ buildPythonPackage, fetchPypi, lib, isPy27, pytest }:
 
 buildPythonPackage rec {
   pname = "ordered-set";
   version = "4.0.1";
+  disabled = isPy27;
 
   checkInputs = [ pytest ];
 
