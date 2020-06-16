@@ -23857,8 +23857,8 @@ in
 
   katagoWithCuda = katago.override {
     cudaSupport = true;
-    cudnn = cudnn_cudatoolkit_10_1;
-    cudatoolkit = cudatoolkit_10_1;
+    cudnn = cudnn_cudatoolkit_10_2;
+    cudatoolkit = cudatoolkit_10_2;
   };
 
   klavaro = callPackage ../games/klavaro {};
