@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication {
   pythonPath = with python3Packages; [
     dbus
     pillow
-    pygobject2
+    pygobject3
     reportlab
     usbutils
     sip
