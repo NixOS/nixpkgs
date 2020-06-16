@@ -623,6 +623,7 @@
   ./services/networking/gdomap.nix
   ./services/networking/git-daemon.nix
   ./services/networking/gnunet.nix
+  ./services/networking/go-neb.nix
   ./services/networking/go-shadowsocks2.nix
   ./services/networking/gogoclient.nix
   ./services/networking/gvpe.nix
