@@ -219,6 +219,7 @@ in {
         Section "InputClass"
           Identifier "libinputConfiguration"
           MatchDriver "libinput"
+          MatchTag "Touchpad"
           ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
           Option "AccelProfile" "${cfg.accelProfile}"
           ${optionalString (cfg.accelSpeed != null) ''Option "AccelSpeed" "${cfg.accelSpeed}"''}
