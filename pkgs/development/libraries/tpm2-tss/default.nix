@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook autoconf-archive pkg-config doxygen perl libgcrypt.dev
+    autoreconfHook autoconf-archive pkg-config doxygen perl
   ];
   buildInputs = [ openssl json_c curl libgcrypt ];
   checkInputs = [
