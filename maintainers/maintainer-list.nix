@@ -4284,6 +4284,12 @@
     githubId = 16374374;
     name = "Joshua Campbell";
   };
+  jshholland = {
+    email = "josh@inv.alid.pw";
+    github = "jshholland";
+    githubId = 107689;
+    name = "Josh Holland";
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
