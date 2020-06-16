@@ -1,0 +1,8 @@
+elinks/0.13.2-1
+03_459467_ui.leds.enable_0.diff
+04_436817_nostrip.diff
+07_617713_cache_control.diff
+10-reproducible-build.diff
+14_debug_disable_Werror.diff
+16_POST_BUFFER_SIZE.diff
+11-reproducible-build.diff
