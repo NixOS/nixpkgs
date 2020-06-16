@@ -81,6 +81,18 @@ let
         };
       };
 
+      golang.Go = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "Go";
+          publisher = "golang";
+          version = "0.18.1";
+          sha256 = "sha256-b2Wa3TULQQnBm1/xnDCB9SZjE+Wxz5wBttjDEtf8qlE=";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       haskell.haskell = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "haskell";
