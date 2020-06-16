@@ -14,16 +14,16 @@
 let
 
   name = "hplip-${version}";
-  version = "3.20.3";
+  version = "3.20.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0sh6cg7yjc11x1cm4477iaslj9n8ksghs85hqwgfbk7m5b2pw2a1";
+    sha256 = "004bbd78487b7803cdcf2a96b00de938797227068c4de43ee7ad7d174c4e475a";
   };
 
   plugin = fetchurl {
     url = "https://developers.hp.com/sites/default/files/${name}-plugin.run";
-    sha256 = "13xyv30jqjysfk7gh0gyn7qj0pb0qvk2rlbhm85a3lw7bjycal8g";
+    sha256 = "ff3dedda3158be64b985efbf636890ddda5b271ae1f1fbd788219e1344a9c2e7";
   };
 
   hplipState = substituteAll {

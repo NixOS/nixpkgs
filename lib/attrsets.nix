@@ -253,7 +253,7 @@ rec {
   /* Like `mapAttrsRecursive', but it takes an additional predicate
      function that tells it whether to recursive into an attribute
      set.  If it returns false, `mapAttrsRecursiveCond' does not
-     recurse, but does apply the map function.  It is returns true, it
+     recurse, but does apply the map function.  If it returns true, it
      does recurse, and does not apply the map function.
 
      Type:

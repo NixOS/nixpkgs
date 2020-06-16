@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , gdb
@@ -18,6 +19,9 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ gdb ];
+
+  # tests require gcc for some reason
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     # tries to execute flake8,
