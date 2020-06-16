@@ -8,6 +8,7 @@
 , bleach
 , mistune
 , jinja2
+, packaging
 , pygments
 , traitlets
 , testpath
@@ -33,8 +34,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     entrypoints bleach mistune jinja2 pygments traitlets testpath
-    jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client
-    defusedxml
+    jupyter_core nbformat ipykernel packaging pandocfilters tornado
+    jupyter_client defusedxml
   ];
 
   # disable preprocessor tests for ipython 7
