@@ -23,6 +23,7 @@ let
     dde-network-utils = callPackage ./dde-network-utils { };
     dde-polkit-agent = callPackage ./dde-polkit-agent { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
+    dde-session-shell = callPackage ./dde-session-shell { };
     dde-session-ui = callPackage ./dde-session-ui { };
     deepin-anything = callPackage ./deepin-anything { };
     deepin-calculator = callPackage ./deepin-calculator { };
