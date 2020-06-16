@@ -4,13 +4,8 @@
 
 let
   # TODO: This package requires qt5Full to launch
-  defaultOverrides = commonOverrides ++ [
-    (mkOverride "jsonschema" "2.6.0"
-      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
-  ];
-
   python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) commonOverrides;
   };
 in python.pkgs.buildPythonPackage rec {
   name = "${pname}-${version}";
