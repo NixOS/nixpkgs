@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.2.4";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fgm1zlw8mjhmk64skxs79ymhcningml13y9c9fy7rj1b1yadwzh";
+    sha256 = "0nri437dyapiq5gx8lbmjdfvqw2cnw3di13kp44rzr17bm5yh2jv";
   };
 
   propagatedBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   # '';
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "thinc==7.4.0" "thinc>=7.4.0,<8"
+    substituteInPlace setup.cfg --replace "thinc==7.4.1" "thinc>=7.4.1,<8"
   '';
 
   meta = with lib; {
@@ -62,5 +62,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk sdll ];
-    };
+  };
 }
