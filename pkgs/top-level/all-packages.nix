@@ -5871,8 +5871,6 @@ in
 
   patchage = callPackage ../applications/audio/patchage { };
 
-  patchwork-classic = callPackage ../applications/networking/ssb/patchwork-classic { };
-
   pcapfix = callPackage ../tools/networking/pcapfix { };
 
   pbzip2 = callPackage ../tools/compression/pbzip2 { };
@@ -6842,7 +6840,7 @@ in
 
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
-  ssb-patchwork = callPackage ../applications/networking/ssb/patchwork { };
+  ssb-patchwork = callPackage ../applications/networking/ssb-patchwork { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
 
@@ -15771,7 +15769,7 @@ in
 
   hiawatha = callPackage ../servers/http/hiawatha {};
 
-  home-assistant = callPackage ../servers/home-assistant { 
+  home-assistant = callPackage ../servers/home-assistant {
     python3 = python37;
   };
 
