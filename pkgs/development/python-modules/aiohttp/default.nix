@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, pythonAtLeast
 , attrs
 , chardet
 , multidict
@@ -14,7 +13,6 @@
 , pytestrunner
 , pytestCheckHook
 , gunicorn
-, pytest-timeout
 , async_generator
 , pytest_xdist
 , pytestcov
@@ -63,6 +61,8 @@ buildPythonPackage rec {
     "test_read_boundary_with_incomplete_chunk"
     "test_read_incomplete_chunk"
     "test_request_tracing_exception"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_close"
   ];
 
   # aiohttp in current folder shadows installed version
