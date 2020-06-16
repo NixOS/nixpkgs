@@ -23377,6 +23377,8 @@ in
 
   virtscreen = callPackage ../tools/admin/virtscreen {};
 
+  virtual-ans = callPackage ../applications/audio/virtual-ans {};
+
   virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
