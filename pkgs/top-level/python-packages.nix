@@ -4655,7 +4655,10 @@ in {
 
   mutag = callPackage ../development/python-modules/mutag { };
 
-  mutagen = callPackage ../development/python-modules/mutagen { };
+  mutagen = if isPy27 then
+      callPackage ../development/python-modules/mutagen/1.43.nix { }
+    else
+      callPackage ../development/python-modules/mutagen { };
 
   muttils = callPackage ../development/python-modules/muttils { };
 
