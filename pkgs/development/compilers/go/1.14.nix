@@ -1,9 +1,8 @@
 { stdenv, fetchurl, tzdata, iana-etc, runCommand
 , perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
-, makeWrapper, darwin
 , buildPackages, pkgsTargetTarget
-, callPackage
+, makeWrapper, darwin, callPackage
 }:
 
 let
@@ -240,7 +239,7 @@ stdenv.mkDerivation rec {
   '');
 
   passthru.tests = {
-    compile-cgo = callPackage ./test-compile-cgo {};
+    compile-cgo = callPackage ./test-compile-cgo-stdlib { goPackage = "go_1_14"; };
   };
 
   disallowedReferences = [ goBootstrap ];
