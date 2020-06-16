@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     tpm2-tss glib which dbus cmocka
   ];
 
+  enableParallelBuilding = true;
+
   # Unit tests are currently broken as the check phase attempts to start a dbus daemon etc.
   #configureFlags = [ "--enable-unit" ];
   doCheck = false;
