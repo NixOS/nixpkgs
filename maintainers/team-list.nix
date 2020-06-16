@@ -34,6 +34,20 @@ with lib.maintainers; {
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
   };
 
+  golang = {
+    members = [
+      c00w
+      cstrahan
+      Frostman
+      kalbasit
+      mic92
+      orivej
+      rvolosatovs
+      zowoq
+    ];
+    scope = "Maintain Golang compilers.";
+  };
+
   gnome = {
     members = [
       hedning
