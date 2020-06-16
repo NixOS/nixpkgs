@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libzip";
-  version = "1.6.1";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "https://www.nih.at/libzip/${pname}-${version}.tar.gz";
-    sha256 = "120xgf7cgjmz9d3yp10lks6lhkgxqb4skbmbiiwf46gx868qxsq6";
+    sha256 = "1kivvlcl3cz1bngjqkiq5jk1wj99jxhpq2n7g7n7dymdgvzpp5dm";
   };
 
   # Fix pkgconfig file paths
