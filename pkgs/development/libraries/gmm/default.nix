@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gmm";
-  version = "5.3";
+  version = "5.4";
 
   src = fetchurl {
     url = "mirror://savannah/getfem/stable/${pname}-${version}.tar.gz";
-    sha256 = "0lkjd3n0298w1dli446z320sn7mqdap8h9q31nydkbw2k7b4db46";
+    sha256 = "0mhygfpsdyr0d4h3sn6g7nxn149yrlqv7r2h34yqkrpv1q4daqvi";
   };
 
   meta = with stdenv.lib; {
