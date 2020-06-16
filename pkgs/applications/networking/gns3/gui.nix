@@ -1,9 +1,8 @@
 { stable, branch, version, sha256Hash, mkOverride }:
 
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib, stdenv, python3, pkgs, fetchFromGitHub }:
 
 let
-  # TODO: This package requires qt5Full to launch
   defaultOverrides = [
     (mkOverride "psutil" "5.6.3"
       "1wv31zly44qj0rp2acg58xbnc7bf6ffyadasq093l455q30qafl6")
@@ -29,6 +28,7 @@ in python.pkgs.buildPythonPackage rec {
     raven psutil jsonschema # tox for check
     # Runtime dependencies
     sip (pyqt5.override { withWebSockets = true; }) distro setuptools
+    pkgs.qt5Full
   ];
 
   doCheck = false; # Failing
