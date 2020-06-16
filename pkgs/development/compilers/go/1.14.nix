@@ -1,7 +1,9 @@
 { stdenv, fetchurl, tzdata, iana-etc, runCommand
 , perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
+, makeWrapper, darwin
 , buildPackages, pkgsTargetTarget
+, callPackage
 }:
 
 let
@@ -41,6 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl which pkgconfig patch procps ];
   buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+    ++ optionals stdenv.isDarwin [ makeWrapper ]
     ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
   depsTargetTargetPropagated = optionals stdenv.isDarwin [ Security Foundation ];
@@ -228,6 +231,17 @@ stdenv.mkDerivation rec {
     ln -s $GOROOT_FINAL/bin $out/bin
     runHook postInstall
   '';
+
+  # These flags are needed to ensure the standard library compiles correctly
+  postInstall = optionalString stdenv.isDarwin (with darwin.apple_sdk.frameworks; ''
+    wrapProgram $out/share/go/bin/go \
+      --suffix CGO_CFLAGS  ' ' '-iframework ${CoreFoundation}/Library/Frameworks -iframework ${Security}/Library/Frameworks' \
+      --suffix CGO_LDFLAGS ' ' '-F${CoreFoundation}/Library/Frameworks -F${Security}/Library/Frameworks'
+  '');
+
+  passthru.tests = {
+    compile-cgo = callPackage ./test-compile-cgo {};
+  };
 
   disallowedReferences = [ goBootstrap ];
 
