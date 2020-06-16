@@ -1,8 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, requests, pytest }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, requests, pytest }:
 
 buildPythonPackage rec {
   version = "0.2.1";
   pname = "etelemetry";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
