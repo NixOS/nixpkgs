@@ -1,14 +1,11 @@
 { stdenv, fetchFromGitHub, cmake
-, sqlite, wxGTK30, libusb1, soapysdr
+, sqlite, wxGTK30-gtk3, libusb1, soapysdr
 , mesa_glu, libX11, gnuplot, fltk
 } :
 
-let
-  version = "20.01.0";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "limesuite";
-  inherit version;
+  version = "20.01.0";
 
   src = fetchFromGitHub {
     owner = "myriadrf";
@@ -17,14 +14,16 @@ in stdenv.mkDerivation {
     sha256 = "01z4idcby2lm34bbnpbp400ski7p61jjiir6sy6dalnvsl52m7vx";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    "-DOpenGL_GL_PREFERENCE=GLVND"
+  ];
 
   buildInputs = [
     libusb1
     sqlite
-    wxGTK30
+    wxGTK30-gtk3
     fltk
     gnuplot
     libusb1
@@ -34,11 +33,8 @@ in stdenv.mkDerivation {
   ];
 
   postInstall = ''
-    mkdir -p $out/lib/udev/rules.d
-    cp ../udev-rules/64-limesuite.rules $out/lib/udev/rules.d
-
-    mkdir -p $out/share/limesuite
-    cp bin/Release/lms7suite_mcu/* $out/share/limesuite
+    install -Dm444 -t $out/lib/udev/rules.d ../udev-rules/64-limesuite.rules
+    install -Dm444 -t $out/share/limesuite bin/Release/lms7suite_mcu/*
   '';
 
   meta = with stdenv.lib; {

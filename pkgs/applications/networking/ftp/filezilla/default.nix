@@ -10,16 +10,10 @@
 , pugixml
 , sqlite
 , tinyxml
-, wxGTK30
+, wxGTK30-gtk3
 , xdg_utils
 }:
 
-let
-  # we can drop this when wxgtk is built with gtk3 by default
-  # see: https://github.com/NixOS/nixpkgs/pull/73145
-  wxgtk' = wxGTK30.override { compat26 = false; withGtk2 = false; };
-
-in
 stdenv.mkDerivation rec {
   pname = "filezilla";
   version = "3.48.1";
@@ -52,8 +46,8 @@ stdenv.mkDerivation rec {
     pugixml
     sqlite
     tinyxml
-    wxgtk'
-    wxgtk'.gtk
+    wxGTK30-gtk3
+    wxGTK30-gtk3.gtk
     xdg_utils
   ];
 

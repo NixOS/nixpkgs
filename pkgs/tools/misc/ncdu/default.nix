@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ncdu";
-  version = "1.15";
+  version = "1.15.1";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/${pname}-${version}.tar.gz";
-    sha256 = "1ywpa8yg74a5xa46f0qig92xw5z5s1lmspwzcslr497brk2ksnaa";
+    sha256 = "1c1zxalm5asyhn4p1hd51h7khw17515gbqmvdz63kc8xpx6xqbdh";
   };
 
   buildInputs = [ ncurses ];

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-gone";
-  version = "0.3.2";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zc4cb1dg30np5yc4ymkr894qs2bk0r123i302md00niayk4njyd";
+    sha256 = "0wpmabd5lshsga3dhv1hix7i99f1f82rpl6kjmpi315whg11kki3";
   };
 
-  cargoSha256 = "1d892889ml7sqyxzmjipq5fvizb4abqhmmn450qm7yam9fn5q5wf";
+  cargoSha256 = "0ayqsrhy6hpi20gfryhnwl2c1na4nnmzxkp7him104cc07vsdllq";
 
   nativeBuildInputs = [ pkgconfig makeWrapper installShellFiles ];
 

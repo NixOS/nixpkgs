@@ -47,7 +47,8 @@ buildPythonPackage rec {
                      and not test_libcurl_ssl_openssl" \
                  --ignore=tests/getinfo_test.py \
                  --ignore=tests/memory_mgmt_test.py \
-                 --ignore=tests/multi_memory_mgmt_test.py
+                 --ignore=tests/multi_memory_mgmt_test.py \
+                 --ignore=tests/multi_timer_test.py
   '';
 
   preConfigure = ''
