@@ -24,6 +24,9 @@ let
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
+    countersEnable = if cfg.counters.enable then "True" else "False";
+    countersTries = cfg.counters.tries;
+
     inherit (cfg) consoleMode;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
@@ -43,6 +46,21 @@ in {
       type = types.bool;
 
       description = "Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager";
+    };
+
+    counters = {
+      enable = mkEnableOption "boot counters tracking the boot status of each nixos generation";
+
+      tries = mkOption {
+        default = 3;
+
+        type = types.int;
+
+        description = ''
+          The default number of tries to boot new nixos generations before
+          falling back to a known working generation.
+        '';
+      };
     };
 
     editor = mkOption {

@@ -26,7 +26,7 @@ in
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
-      machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-default-1.conf")
 
       # Ensure we actually booted using systemd-boot
       # Magic number is the vendor UUID used by systemd-boot.
@@ -53,7 +53,7 @@ in
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
-      machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-default-1.conf")
 
       # Ensure we actually booted using systemd-boot
       # Magic number is the vendor UUID used by systemd-boot.
