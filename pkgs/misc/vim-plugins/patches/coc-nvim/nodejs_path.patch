@@ -1,0 +1,39 @@
+diff --git a/autoload/coc/util.vim b/autoload/coc/util.vim
+index d58ca401..6ba992df 100644
+--- a/autoload/coc/util.vim
++++ b/autoload/coc/util.vim
+@@ -325,7 +325,7 @@ function! coc#util#job_command()
+   if (has_key(g:, 'coc_node_path'))
+     let node = expand(g:coc_node_path)
+   else
+-    let node = 'node'
++    let node = '@nodejs@'
+   endif
+   if !executable(node)
+     echohl Error | echom '[coc.nvim] "'.node.'" is not executable, checkout https://nodejs.org/en/download/' | echohl None
+diff --git a/autoload/health/coc.vim b/autoload/health/coc.vim
+index 193fad2c..574e18f7 100644
+--- a/autoload/health/coc.vim
++++ b/autoload/health/coc.vim
+@@ -6,7 +6,7 @@ function! s:checkEnvironment() abort
+     let valid = 0
+     call health#report_error('Neovim version not satisfied, 0.3.0 and above required')
+   endif
+-  let node = get(g:, 'coc_node_path', 'node')
++  let node = get(g:, 'coc_node_path', '@node@')
+   if !executable(node)
+     let valid = 0
+     call health#report_error('Executable node.js not found, install node.js from http://nodejs.org/')
+diff --git a/plugin/coc.vim b/plugin/coc.vim
+index 7be5daef..dd97a96b 100644
+--- a/plugin/coc.vim
++++ b/plugin/coc.vim
+@@ -360,7 +360,7 @@ function! s:ShowInfo()
+   else
+     let lines = []
+     echomsg 'coc.nvim service not started, checking environment...'
+-    let node = get(g:, 'coc_node_path', 'node')
++    let node = get(g:, 'coc_node_path', '@nodejs@')
+     if !executable(node)
+       call add(lines, 'Error: '.node.' is not executable!')
+     else
