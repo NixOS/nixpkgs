@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , fetchpatch
 , hypothesis
 , pycodestyle
@@ -13,6 +14,7 @@
 buildPythonPackage rec {
   pname = "mutagen";
   version = "1.44.0";
+  disabled = isPy27; # abandoned
 
   src = fetchPypi {
     inherit pname version;
