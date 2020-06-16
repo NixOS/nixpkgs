@@ -3207,6 +3207,8 @@ in
 
   vorta = python3Packages.callPackage ../applications/backup/vorta { };
 
+  utahfs = callPackage ../applications/networking/utahfs { };
+
   wallutils = callPackage ../tools/graphics/wallutils { };
 
   wev = callPackage ../tools/misc/wev { };
