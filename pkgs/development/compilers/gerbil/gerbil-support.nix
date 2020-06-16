@@ -5,6 +5,7 @@ rec {
   # Gerbil libraries
   gerbilPackages-unstable = {
     gerbil-utils = callPackage ./gerbil-utils.nix { };
+    gerbil-crypto = callPackage ./gerbil-crypto.nix { };
   };
 
   # Use this function in any package that uses Gerbil libraries, to define the GERBIL_LOADPATH.
