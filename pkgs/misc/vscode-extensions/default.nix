@@ -153,18 +153,6 @@ let
         };
       };
 
-      ms-vscode.Go = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "Go";
-          publisher = "ms-vscode";
-          version = "0.11.7";
-          sha256 = "1l6jjdfivw1pn9y4d4i7zf80ls1k1b0ap1d828ah57ad3bgmyqfi";
-        };
-        meta = {
-          license = stdenv.lib.licenses.mit;
-        };
-      };
-
       ms-vscode.cpptools = callPackage ./cpptools {};
 
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
@@ -260,6 +248,7 @@ let
     } // lib.optionalAttrs (config.allowAliases or true) (
     with self; {
       # aliases
+      ms-vscode.Go = golang.Go;
     }
   );
 in
