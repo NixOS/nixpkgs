@@ -3,12 +3,12 @@ let
   yesno = b: if b then "yes" else "no";
 in stdenv.mkDerivation rec {
   pname = "libbacktrace";
-  version = "2018-06-05";
+  version = "2020-05-13";
   src = fetchFromGitHub {
     owner = "ianlancetaylor";
     repo = pname;
-    rev = "5a99ff7fed66b8ea8f09c9805c138524a7035ece";
-    sha256 = "0mb81x76k335iz3h5nqxsj4z3cz2a13i33bkhpk6iffrjz9i4dhz";
+    rev = "9b7f216e867916594d81e8b6118f092ac3fcf704";
+    sha256 = "0qr624v954gnfkmpdlfk66sxz3acyfmv805rybsaggw5gz5sd1nh";
   };
   configureFlags = [
     "--enable-static=${yesno enableStatic}"
