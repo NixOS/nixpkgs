@@ -14,14 +14,14 @@
 
 buildGoModule rec {
   pname = "blockbook";
-  version = "0.3.3";
-  commit = "b6961ca";
+  version = "0.3.4";
+  commit = "eb4e10a";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "blockbook";
     rev = "v${version}";
-    sha256 = "01nb4if2dix2h95xvqvafil325jjw2a4v1izb9mad0cjqcf8rk6n";
+    sha256 = "0da1kav5x2xcmwvdgfk1q70l1k0sqqj3njgx2xx885d40m6qbnrs";
   };
 
   vendorSha256 = "1qjlvhizl8cy06cgf4phia70bgbm4lj57z5z2gyr8aglx98bnpdn";

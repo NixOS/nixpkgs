@@ -24,10 +24,12 @@ stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform)
     [ "ac_cv_linux_vers=2" ];
 
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace " -arch i386" ""
+  '';
+
+  postInstall = ''
+    rm -f $out/lib/libpcap.a
   '';
 
   meta = {

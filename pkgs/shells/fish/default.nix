@@ -125,6 +125,10 @@ let
       pcre2
     ];
 
+    cmakeFlags = [
+      "-DCMAKE_INSTALL_DOCDIR=${placeholder "out"}/share/doc/fish"
+    ];
+
     preConfigure = ''
       patchShebangs ./build_tools/git_version_gen.sh
     '';

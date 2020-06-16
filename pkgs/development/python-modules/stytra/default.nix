@@ -30,12 +30,12 @@
 
 buildPythonPackage rec {
   pname = "stytra";
-  version = "0.8.27";
+  version = "0.8.33";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fc1ca5f75f47ec1eeb3d62722437bed4ddf598e130b3dd22f0e663f61857df5";
+    sha256 = "b0aacc8e2c1bba33c337ebc76c0d8f2971c113d298aea2a375d84a5eeff5d83e";
   };
   doCheck = false;
   checkInputs = [

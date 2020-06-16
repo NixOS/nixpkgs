@@ -21,7 +21,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.26.2";
+  version = "2.27.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0j685w6pzkn926z5nf5r8fij4ziipvw4c9yb0wc577nzf4j16rbd";
+    sha256 = "1ybk39ylvs32lywq7ra4l2kdr5izc80r9461hwfnw8pssxs9gjkk";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional withManual "doc";
@@ -286,13 +286,14 @@ stdenv.mkDerivation {
         mv t/{,skip-}$test.sh || true
       else
         sed -i t/$test.sh \
-          -e "/^ *test_expect_.*$pattern/,/^ *' *\$/{s/^/#/}"
+          -e "/^\s*test_expect_.*$pattern/,/^\s*' *\$/{s/^/: #/}"
       fi
     }
 
     # Shared permissions are forbidden in sandbox builds.
     disable_test t0001-init shared
     disable_test t1301-shared-repo
+    disable_test t5324-split-commit-graph 'split commit-graph respects core.sharedrepository'
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
@@ -343,6 +344,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ peti wmertens globin ];
+    maintainers = with stdenv.lib.maintainers; [ primeos peti wmertens globin ];
   };
 }

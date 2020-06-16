@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.0.1";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa9c318256945ad4a8623fdf921ce81c466a7aea18b04a6711efb662f520b195";
+    sha256 = "8d23caf4906f2112dc88b9a6d5e1767877744cae016cd71c2bf75592a4be3b79";
   };
 
   checkInputs = [ pytest ];

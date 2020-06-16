@@ -40,13 +40,13 @@ let
   throwSystem = throw "Unsupported system: ${system}";
 
   sha256 = {
-    x86_64-darwin = "0z731q00bwljlcmbjwqphyys7skqms1vg87pyi4nsvjmc7kjx7qg";
-    x86_64-linux = "0wrs0i2bqv21ivy8s88khbww28b3gsw4abbbbjc76mqma9b0bajs";
+    x86_64-darwin = "09daxnqxyccshkrmr7ysgjvgvgmlgd590ym68fz0l8n6ayfpkgw0";
+    x86_64-linux = "00ihhsgxm441nsmav7pq4n4y9s7p2r4x5dqld160658xyqi836cq";
   }.${system} or throwSystem;
 
   version = {
-    x86_64-darwin = "4.4.2";
-    x86_64-linux = "4.4.2";
+    x86_64-darwin = "4.6.0";
+    x86_64-linux = "4.4.3";
   }.${system} or throwSystem;
 
   meta = with stdenv.lib; {

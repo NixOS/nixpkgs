@@ -401,15 +401,7 @@ let
 
     jingoo = callPackage ../development/ocaml-modules/jingoo { };
 
-    js_of_ocaml =
-    if lib.versionOlder "4.02" ocaml.version
-    then callPackage ../development/tools/ocaml/js_of_ocaml/3.0.nix { }
-    else js_of_ocaml_2;
-
-    js_of_ocaml_2 = callPackage ../development/tools/ocaml/js_of_ocaml {
-      base64 = base64_2;
-      lwt = lwt2;
-    };
+    js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
     js_of_ocaml-camlp4 = callPackage ../development/tools/ocaml/js_of_ocaml/camlp4.nix {};
 

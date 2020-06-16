@@ -119,6 +119,7 @@ in
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
+  go-neb = handleTest ./go-neb.nix {};
   google-oslogin = handleTest ./google-oslogin {};
   grafana = handleTest ./grafana.nix {};
   graphite = handleTest ./graphite.nix {};
