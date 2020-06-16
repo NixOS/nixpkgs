@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , python
 , pytest
 , numpy
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   pname = "traits";
   version = "6.1.0";
+  disabled = isPy27; # setup.py no longer py3 compat
 
   src = fetchPypi {
     inherit pname version;
