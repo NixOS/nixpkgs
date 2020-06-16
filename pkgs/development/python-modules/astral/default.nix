@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytz, requests, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, pytz, requests, pytest }:
 
 buildPythonPackage rec {
   pname = "astral";
   version = "2.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
