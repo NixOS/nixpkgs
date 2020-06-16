@@ -1,21 +1,30 @@
-{ stdenv, fetchurl, lib
-, makeWrapper, tpm2-tss, pkgconfig, glib, which, dbus, cmocka }:
+{ stdenv, lib, fetchFromGitHub
+, autoreconfHook, pkg-config, autoconf-archive, makeWrapper, which
+, tpm2-tss, glib, dbus
+, cmocka
+}:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-abrmd";
   version = "2.3.2";
 
-  src = fetchurl {
-    url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "040d01pdzkj0nc1c0vsf6gfqf28cgil03ix8dasijvhiha4c20nz";
+  src = fetchFromGitHub {
+    owner = "tpm2-software";
+    repo = pname;
+    rev = version;
+    sha256 = "0jzglnlb700clcq6mjhhgvcq29a6893h888wsn9fbrh4f255sw8q";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [
-    tpm2-tss glib which dbus cmocka
-  ];
+  nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook autoconf-archive which ];
+  buildInputs = [ tpm2-tss glib dbus cmocka ];
 
   enableParallelBuilding = true;
+
+  # Emulate the required behavior of ./bootstrap in the original
+  # package
+  preAutoreconf = ''
+    echo "${version}" > VERSION
+  '';
 
   # Unit tests are currently broken as the check phase attempts to start a dbus daemon etc.
   #configureFlags = [ "--enable-unit" ];
