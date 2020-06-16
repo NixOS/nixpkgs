@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, makeWrapper
 , coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, p7zip, utillinux, wget
-, wxGTK30 }:
+, wxGTK30-gtk3, gsettings_desktop_schemas }:
 
 stdenv.mkDerivation rec {
   version = "3.3.1";
@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
   patches = [ ./remove-workaround.patch ];
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
-  buildInputs = [ wxGTK30 ];
+
+  buildInputs = [ wxGTK30-gtk3 gsettings_desktop_schemas ];
+
+  enableParallelBuilding = true;
 
   postPatch = ''
     # Emulate version smudge filter (see .gitattributes, .gitconfig).
