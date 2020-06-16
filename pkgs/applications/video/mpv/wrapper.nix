@@ -54,7 +54,7 @@ let
     ;
     umpvWrapperArgs = lib.strings.escapeShellArgs ([
       "--argv0" "'$0'"
-      "--set" "MPV" "$out/bin/mpv"
+      "--set" "MPV" "${placeholder "out"}/bin/mpv"
     ] ++ extraUmpvWrapperArgs)
     ;
   in
