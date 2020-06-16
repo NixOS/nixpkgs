@@ -14,13 +14,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     doxygen perl pkgconfig
-    # For unit tests and integration tests.
-    ibm-sw-tpm2 iproute procps which
   ];
   buildInputs = [
     openssl json_c curl
-    # For unit tests and integration tests.
-    cmocka uthash
+  ];
+  checkInputs = [
+    cmocka uthash ibm-sw-tpm2 iproute procps which
   ];
 
   enableParallelBuilding = true;
