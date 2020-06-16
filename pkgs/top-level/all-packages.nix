@@ -564,6 +564,8 @@ in
 
   adlplug = callPackage ../applications/audio/adlplug { };
 
+  tuijam = callPackage ../applications/audio/tuijam { inherit (python3Packages) buildPythonApplication; };
+
   opnplug = callPackage ../applications/audio/adlplug {
     adlplugChip = "-DADLplug_CHIP=OPN2";
     pname = "OPNplug";
@@ -15770,7 +15772,7 @@ in
 
   hiawatha = callPackage ../servers/http/hiawatha {};
 
-  home-assistant = callPackage ../servers/home-assistant { 
+  home-assistant = callPackage ../servers/home-assistant {
     python3 = python37;
   };
 
