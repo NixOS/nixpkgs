@@ -2,6 +2,7 @@
 
 { stdenv
 , fetchurl
+, fetchpatch
 , substituteAll
 , gtk-doc
 , pkgconfig
@@ -161,6 +162,12 @@ stdenv.mkDerivation rec {
       src = ./installed-tests-path.patch;
       # needs a different set of modules than po/make-images
       inherit installedTestsPython;
+    })
+
+    (fetchpatch {
+      name = "CVE-2020-10759.patch";
+      url = "https://github.com/fwupd/fwupd/commit/21f2d12fccef63b8aaa99ec53278ce18250b0444.patch";
+      sha256 = "1lgfm1k8723i1dawg71nv21lgmbbyzlm8hxkra8xpf73qmpxygnk";
     })
   ];
 
