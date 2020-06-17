@@ -72,6 +72,7 @@ in {
         audiocontroller = "ac97";
         audio = "alsa";
         audioout = "on";
+        graphicscontroller = "vmsvga";
         rtcuseutc = "on";
         usb = "on";
         usbehci = "on";
