@@ -1,5 +1,5 @@
 diff --git a/bin/flutter b/bin/flutter
-index 3955f8f39..1e7573d30 100755
+index cdf974233..1f7de1c1b 100755
 --- a/bin/flutter
 +++ b/bin/flutter
 @@ -185,8 +185,6 @@ fi
@@ -12,20 +12,20 @@ index 3955f8f39..1e7573d30 100755
  # separate space-separated args.
  "$DART" --packages="$FLUTTER_TOOLS_DIR/.packages" $FLUTTER_TOOL_ARGS "$SNAPSHOT_PATH" "$@"
 diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-index 5e45819d9..ab748b059 100644
+index b3e69714f..a9eb76234 100644
 --- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
 +++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-@@ -377,13 +377,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+@@ -301,13 +301,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
          }
  
          _checkFlutterCopy();
 -        try {
--          await FlutterVersion.instance.ensureVersionFile();
+-          await globals.flutterVersion.ensureVersionFile();
 -        } on FileSystemException catch (e) {
--          printError('Failed to write the version file to the artifact cache: "$e".');
--          printError('Please ensure you have permissions in the artifact cache directory.');
+-          globals.printError('Failed to write the version file to the artifact cache: "$e".');
+-          globals.printError('Please ensure you have permissions in the artifact cache directory.');
 -          throwToolExit('Failed to write the version file');
 -        }
-         if (topLevelResults.command?.name != 'upgrade' && topLevelResults['version-check'] as bool) {
-           await FlutterVersion.instance.checkFlutterVersionFreshness();
-         }
+         final bool machineFlag = topLevelResults['machine'] as bool;
+         if (topLevelResults.command?.name != 'upgrade' && topLevelResults['version-check'] as bool && !machineFlag) {
+           await globals.flutterVersion.checkFlutterVersionFreshness();
