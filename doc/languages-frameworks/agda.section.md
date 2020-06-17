@@ -67,13 +67,13 @@ A derivation can then be written using `agdaPackages.mkDerivation`. This has sim
 + `libraryName` should be the name that appears in the `*.agda-lib` file, defaulting to `pname`.
 + `libraryFile` should be the file name of the `*.agda-lib` file, defaulting to `${libraryName}.agda-lib`.
 
-### Build phase
+### Building Agda packages
 The default build phase for `agdaPackages.mkDerivation` simply runs `agda` on the `Everything.agda` file.
 If something else is needed to build the package (e.g. `make`) then the `buildPhase` should be overridden.
 Additionally, a `preBuild` or `configurePhase` can be used if there are steps that need to be done prior to checking the `Everything.agda` file.
 `agda` and the Agda libraries contained in `buildInputs` are made available during the build phase.
 
-### Install phase
+### Installing Agda packages
 The default install phase copies agda source files, agda interface files (`*.agdai`) and `*.agda-lib` files to the output directory.
 This can be overridden.
 
