@@ -13,10 +13,10 @@ buildGoModule rec {
 
   vendorSha256 = "020z4izc8i4yhbbr8h2fn8bqbis9q9yfcrjnixd6rsiayw1brh4p";
 
-  subPackages = ["cmd/swagger"];
+  subPackages = [ "cmd/swagger" ];
 
   meta = with lib; {
-    description = "Golang implementation of Swagger 2.0, representation of your RESTful API.";
+    description = "Golang implementation of Swagger 2.0, representation of your RESTful API";
     homepage = "https://github.com/go-swagger/go-swagger";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
