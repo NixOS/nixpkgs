@@ -467,11 +467,9 @@ let
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
 
-    lwt2 = callPackage ../development/ocaml-modules/lwt/legacy.nix { };
-
     lwt4 = callPackage ../development/ocaml-modules/lwt/4.x.nix { };
 
-    ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt4 else lwt2;
+    ocaml_lwt = lwt4;
 
     lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
 
