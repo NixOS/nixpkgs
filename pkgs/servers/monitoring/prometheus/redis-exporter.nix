@@ -26,7 +26,7 @@ buildGoPackage rec {
     description = "Prometheus exporter for Redis metrics";
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ srhb ];
+    maintainers = with maintainers; [ eskytthe srhb ];
     platforms = platforms.unix;
   };
 }
