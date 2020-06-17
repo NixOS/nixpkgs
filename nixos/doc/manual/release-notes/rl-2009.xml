@@ -94,6 +94,22 @@ services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
       When MariaDB data directory is just upgraded (not initialized), the users are not created or modified.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      MySQL server is now started with additional systemd sandbox/hardening options for better security. The PrivateTmp, ProtectHome, and ProtectSystem options
+      may be problematic when MySQL is attempting to read from or write to your filesystem anywhere outside of its own state directory, for example when
+      calling <literal>LOAD DATA INFILE or SELECT * INTO OUTFILE</literal>. In this scenario a variant of the following may be required:
+        - allow MySQL to read from /home and /tmp directories when using <literal>LOAD DATA INFILE</literal>
+<programlisting>
+systemd.services.mysql.serviceConfig.ProtectHome = lib.mkForce "read-only";
+</programlisting>
+        - allow MySQL to write to custom folder <literal>/var/data</literal> when using <literal>SELECT * INTO OUTFILE</literal>, assuming the mysql user has write
+          access to <literal>/var/data</literal>
+<programlisting>
+systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
+</programlisting>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
