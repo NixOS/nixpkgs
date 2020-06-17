@@ -20870,6 +20870,8 @@ in
 
   meli = callPackage ../applications/networking/mailreaders/meli { };
 
+  melonDS = callPackage ../misc/emulators/melonDS { };
+
   meme = callPackage ../applications/graphics/meme { };
 
   mendeley = libsForQt5.callPackage ../applications/office/mendeley {
