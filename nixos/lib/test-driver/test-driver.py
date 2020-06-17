@@ -223,8 +223,8 @@ class Machine:
             os.makedirs(path, mode=0o700, exist_ok=True)
             return path
 
-        self.state_dir = create_dir("vm-state-{}".format(self.name))
         self.shared_dir = create_dir("shared-xchg")
+        self.state_dir = tempfile.mkdtemp(prefix="vm-state-{}-".format(self.name))
 
         self.booted = False
         self.connected = False
