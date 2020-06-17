@@ -165,10 +165,8 @@ let
   # Python packages built through cross-compilation are always for the host platform.
   disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
 
-  # many packages that support python2, may include code
-  # which python2 is not able to compile
-  # mkDerivation hash will not change when passed null attrs
-  dontUsePythonRecompileBytecode = attrs.dontUsePythonRecompileBytecode or (if python.isPy27 then true else null);
+  # For now, revert recompilation of bytecode.
+  dontUsePythonRecompileBytecode = true;
 
   meta = {
     # default to python's platforms
