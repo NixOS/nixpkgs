@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-network";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "17s5fixhwgalgjhrhnb3wh0hdzi17waqcdfw1fx8q4zs78hapjzg";
+    sha256 = "1ja789m4d3akm3i9fl3kazfcny376xl4apv445mrwkwlvcfyylf1";
   };
 
   passthru = {
