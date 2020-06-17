@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
 , fetchpatch
 , hypothesis
 , pycodestyle
@@ -13,12 +12,11 @@
 
 buildPythonPackage rec {
   pname = "mutagen";
-  version = "1.44.0";
-  disabled = isPy27; # abandoned
+  version = "1.43.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "56065d8a9ca0bc64610a4d0f37e2bd4453381dde3226b8835ee656faa3287be4";
+    sha256 = "125m0pkiw5lsffc0236xdlxfhwpr8csvxpmg6855405qy4wjv61s";
   };
 
   propagatedBuildInputs = [ setuptools ];

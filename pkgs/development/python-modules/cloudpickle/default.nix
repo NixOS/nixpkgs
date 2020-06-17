@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "cloudpickle";
   version = "1.4.1";
+  disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;

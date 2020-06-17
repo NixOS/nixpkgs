@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , appdirs
 , requests
 , pytest
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pipdate";
   version = "0.5.1";
+  disabled = isPy27; # abandoned
 
   src = fetchPypi {
     inherit pname version;

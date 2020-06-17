@@ -1,8 +1,9 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest, pyhamcrest }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy27, pytest, pyhamcrest }:
 
 buildPythonPackage rec {
   pname = "base58";
   version = "2.0.0";
+  disabled = isPy27; # python 2 abandoned upstream
 
   src = fetchPypi {
     inherit pname version;

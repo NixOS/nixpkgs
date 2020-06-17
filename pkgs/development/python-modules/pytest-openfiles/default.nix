@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , pytestCheckHook
 , psutil
@@ -10,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-openfiles";
   version = "0.5.0";
+  disabled = isPy27; # abandoned
 
   src = fetchPypi {
     inherit pname version;

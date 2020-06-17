@@ -1,8 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, six }:
 
 buildPythonPackage rec {
   pname = "cfgv";
   version = "3.1.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
