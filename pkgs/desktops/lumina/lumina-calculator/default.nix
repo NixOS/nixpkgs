@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qttools }:
+{ stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lumina-calculator";
-  version = "2019-04-27";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "lumina-desktop";
     repo = pname;
-    rev = "ccb792fc713aa7163fffd37fc20c83ffe9ca7523";
-    sha256 = "0cdyz94znycsc3qxg5bmg51bwms7586d4ja1bsmj8cb9pd3lv980";
+    rev = "v${version}";
+    sha256 = "1238d1m0mjkwkdpgq165a4ql9aql0aji5f41rzdzny6m7ws9nm2y";
   };
   
   sourceRoot = "source/src-qt5";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Scientific calculator for the Lumina Desktop";
-    homepage = https://github.com/lumina-desktop/lumina-calculator;
+    homepage = "https://github.com/lumina-desktop/lumina-calculator";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

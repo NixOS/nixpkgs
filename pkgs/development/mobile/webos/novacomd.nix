@@ -1,10 +1,10 @@
 { stdenv,
 fetchFromGitHub, fetchpatch,
 webos, cmake, pkgconfig,
-libusb }:
+libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
-  name = "novacomd-${version}";
+  pname = "novacomd";
   version = "127";
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig webos.cmake-modules ];
 
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   cmakeFlags = [ "-DWEBOS_TARGET_MACHINE_IMPL=host" ];
 

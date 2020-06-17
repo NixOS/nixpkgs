@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "git-octopus-${version}";
+  pname = "git-octopus";
   version = "1.4";
 
   installFlags = [ "prefix=$(out)" ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = https://github.com/lesfurets/git-octopus;
+    homepage = "https://github.com/lesfurets/git-octopus";
     description = "The continuous merge workflow";
     license = licenses.lgpl3;
     platforms = platforms.unix;

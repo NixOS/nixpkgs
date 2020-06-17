@@ -14,7 +14,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyparsing ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/heinzK1X/pylibconfig2;
+    homepage = "https://github.com/heinzK1X/pylibconfig2";
     description = "Pure python library for libconfig syntax";
     license = licenses.gpl3;
   };

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "aioresponses";
-  version = "0.6.0";
+  version = "0.6.4";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ii1jiwb8qa2y8cqa1zqn7mjax9l8bpf16k4clv616mxw1l0bvs6";
+    sha256 = "4397ca736238a1ada8c7f47e557dda05e9ecfdd467b9f6b83871efd365af7e9f";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A helper to mock/fake web requests in python aiohttp package";
-    homepage = https://github.com/pnuckowski/aioresponses;
+    homepage = "https://github.com/pnuckowski/aioresponses";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rvl ];
   };

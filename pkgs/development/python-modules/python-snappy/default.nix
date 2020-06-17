@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for the snappy compression library from Google";
-    homepage = https://github.com/andrix/python-snappy;
+    homepage = "https://github.com/andrix/python-snappy";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

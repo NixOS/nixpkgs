@@ -1,6 +1,6 @@
 { stdenv, fetchurl, p7zip }:
 stdenv.mkDerivation rec {
-  name = "win-virtio-${version}";
+  pname = "win-virtio";
   version = "0.1.141-1";
 
   phases = [ "buildPhase" "installPhase" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Windows VirtIO Drivers";
-    homepage = https://fedoraproject.org/wiki/Windows_Virtio_Drivers;
+    homepage = "https://fedoraproject.org/wiki/Windows_Virtio_Drivers";
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;
   };

@@ -14,7 +14,7 @@ in {
       enable = mkEnableOption "periodic SSD TRIM of mounted partitions in background";
 
       interval = mkOption {
-        type = types.string;
+        type = types.str;
         default = "weekly";
         description = ''
           How often we run fstrim. For most desktop and server systems

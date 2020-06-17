@@ -2,26 +2,68 @@ Search $PATH for the shutdown binary instead of hard-coding /sbin/shutdown,
 which isn't valid on NixOS (and a compatibility link on most other modern
 distros anyway).
 
-  -- nckx <github@tobias.gr>
 --- a/include/pathnames.h
 +++ b/include/pathnames.h
-@@ -53,7 +53,7 @@
+@@ -50,8 +50,8 @@
  #ifndef _PATH_LOGIN
- #define _PATH_LOGIN		"/bin/login"
+ # define _PATH_LOGIN		"/bin/login"
  #endif
 -#define _PATH_SHUTDOWN		"/sbin/shutdown"
-+#define _PATH_SHUTDOWN   "shutdown"
-
+-#define _PATH_POWEROFF		"/sbin/poweroff"
++#define _PATH_SHUTDOWN		"shutdown"
++#define _PATH_POWEROFF		"poweroff"
+ 
  #define _PATH_TERMCOLORS_DIRNAME "terminal-colors.d"
  #define _PATH_TERMCOLORS_DIR	"/etc/" _PATH_TERMCOLORS_DIRNAME
 --- a/sys-utils/rtcwake.c
 +++ b/sys-utils/rtcwake.c
-@@ -575,7 +575,7 @@ int main(int argc, char **argv)
- 		arg[i++] = "now";
- 		arg[i]   = NULL;
- 		if (!ctl.dryrun) {
--			execv(arg[0], arg);
+@@ -587,29 +587,29 @@ int main(int argc, char **argv)
+ 		char *arg[5];
+ 		int i = 0;
+ 
+-		if (!access(_PATH_SHUTDOWN, X_OK)) {
+-			arg[i++] = _PATH_SHUTDOWN;
+-			arg[i++] = "-h";
+-			arg[i++] = "-P";
+-			arg[i++] = "now";
+-			arg[i]   = NULL;
+-		} else if (!access(_PATH_POWEROFF, X_OK)) {
+-			arg[i++] = _PATH_POWEROFF;
+-			arg[i]   = NULL;
+-		} else {
+-			arg[i] 	 = NULL;
+-		}
++		arg[i++] = _PATH_SHUTDOWN;
++		arg[i++] = "-h";
++		arg[i++] = "-P";
++		arg[i++] = "now";
++		arg[i]   = NULL;
+ 
+-		if (arg[0]) {
+-			if (ctl.verbose)
+-				printf(_("suspend mode: off; executing %s\n"),
+-						arg[0]);
+-			if (!ctl.dryrun) {
+-				execv(arg[0], arg);
++		if (ctl.verbose)
++			printf(_("suspend mode: off; executing %s\n"),
++					arg[0]);
++
++		if (!ctl.dryrun) {
 +			execvp(arg[0], arg);
- 			warn(_("failed to execute %s"), _PATH_SHUTDOWN);
- 			rc = EXIT_FAILURE;
- 		}
++			if (ctl.verbose) {
+ 				warn(_("failed to execute %s"), arg[0]);
+-				rc = EX_EXEC_ENOENT;
++				// Reuse translations.
++				printf(_("suspend mode: off; executing %s\n"),
++						_PATH_POWEROFF);
+ 			}
+-		} else {
++
++			i = 0;
++			arg[i++] = _PATH_POWEROFF;
++			arg[i]   = NULL;
++			execvp(arg[0], arg);
+ 			/* Failed to find shutdown command */
+ 			warn(_("failed to find shutdown command"));
+ 			rc = EX_EXEC_ENOENT;

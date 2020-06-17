@@ -15,40 +15,52 @@ let
     };
 
     "8.8" = {
-      version = "1.2beta2";
-      rev = "v1.2-beta2-8.8";
-      sha256 = "1v9asdlhhks25ngnjn4dafx7nrcc5p0lhriqckh3y79nxbgpq4lx";
+      version = "1.2";
+      rev = "v1.2-8.8";
+      sha256 = "06452fyzalz7zcjjp73qb7d6xvmqb6skljkivf8pfm55fsc8s7kx";
     };
 
     "8.9" = {
-      version = "1.2beta2";
-      rev = "v1.2-beta2-8.9";
-      sha256 = "0y2zwv7jxs1crprj5qvg46h0v9wyfn99ln40yskq91y9h1lj5h3j";
+      version = "1.2.1";
+      rev = "v1.2.1-8.9";
+      sha256 = "0d8ddj6nc6p0k25cd8fs17cq427zhzbc3v9pk2wd2fnvk70nlfij";
+    };
+
+    "8.10" = {
+      version = "1.2.1";
+      rev = "v1.2.1-8.10-2";
+      sha256 = "0j3z4l5nrbyi9zbbyqkc6kassjanwld2188mwmrbqspaypm2ys68";
+    };
+
+    "8.11" = {
+      version = "1.2.1";
+      rev = "v1.2.1-8.11";
+      sha256 = "06k0h7lansxs479is3vj5ikg8s5k4c6svnqcwmxbni4wx8bhmg17";
     };
   };
-  param = params."${coq.coq-version}";
+  param = params.${coq.coq-version};
 in
 
 stdenv.mkDerivation rec {
 
   name = "coq${coq.coq-version}-equations-${version}";
-  version = "${param.version}";
+  version = param.version;
 
   src = fetchFromGitHub {
     owner = "mattam82";
     repo = "Coq-Equations";
-    rev = "${param.rev}";
-    sha256 = "${param.sha256}";
+    rev = param.rev;
+    sha256 = param.sha256;
   };
 
   buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
 
   preBuild = "coq_makefile -f _CoqProject -o Makefile";
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
-    homepage = https://mattam82.github.io/Coq-Equations/;
+    homepage = "https://mattam82.github.io/Coq-Equations/";
     description = "A plugin for Coq to add dependent pattern-matching";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "1.9.4";
+  version = "1.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03qkijz56fx7p8405sknw2wji4pfj5knajk2lmj9y58mjxydbpp3";
+    sha256 = "61e6b92ee23ea3f7afbb427508e51c789a0c10cbc962fab9de582ad48b5792e4";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Webpush Data encryption library for Python";
-    homepage = https://github.com/web-push-libs/pywebpush;
+    homepage = "https://github.com/web-push-libs/pywebpush";
     license = licenses.mpl20;
     maintainers = with maintainers; [ peterhoeg ];
   };

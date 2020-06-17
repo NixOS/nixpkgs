@@ -1,6 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, isPy3k, attrs, coverage, enum34
+, isPy3k, attrs, coverage, enum34, pexpect
 , doCheck ? true, pytest, pytest_xdist, flaky, mock
+, sortedcontainers
 }:
 buildPythonPackage rec {
   # https://hypothesis.readthedocs.org/en/latest/packaging.html
@@ -9,7 +10,7 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "4.7.3";
+  version = "5.11.0";
   pname = "hypothesis";
 
   # Use github tarballs that includes tests
@@ -17,14 +18,18 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "hypothesis-python-${version}";
-    sha256 = "03l4hp0p7i2k04arnqkav0ygc23ml46dy3cfrlwviasrj7yzk5hc";
+    sha256 = "1ca2dwih65s4r8vazwqm963ywngdr3v854ldnfyny7bvx1v28m8k";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
-  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) [ enum34 ];
+  propagatedBuildInputs = [
+    attrs
+    coverage
+    sortedcontainers
+  ] ++ lib.optional (!isPy3k) enum34;
 
-  checkInputs = [ pytest pytest_xdist flaky mock ];
+  checkInputs = [ pytest pytest_xdist flaky mock pexpect ];
   inherit doCheck;
 
   checkPhase = ''
@@ -34,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library for property based testing";
-    homepage = https://github.com/HypothesisWorks/hypothesis;
+    homepage = "https://github.com/HypothesisWorks/hypothesis";
     license = licenses.mpl20;
   };
 }

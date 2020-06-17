@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "nagstamon-${version}";
+  pname = "nagstamon";
   version = "3.2.1";
 
   src = fetchurl {
@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A status monitor for the desktop";
-    homepage = https://nagstamon.ifw-dresden.de/;
+    homepage = "https://nagstamon.ifw-dresden.de/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     inherit version;

@@ -3,8 +3,8 @@
 , libiberty, zlib
 }:
 
-stdenv.mkDerivation rec {
-  name = "libbfd-${version}";
+stdenv.mkDerivation {
+  pname = "libbfd";
   inherit (binutils-unwrapped) version src;
 
   outputs = [ "out" "dev" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ libiberty zlib ];
+  buildInputs = [ libiberty zlib.dev ];
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       It is associated with GNU Binutils, and elsewhere often distributed with
       it.
     '';
-    homepage = https://www.gnu.org/software/binutils/;
+    homepage = "https://www.gnu.org/software/binutils/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;

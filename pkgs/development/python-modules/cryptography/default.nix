@@ -1,15 +1,15 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
+, isPy27
+, ipaddress
 , openssl
 , cryptography_vectors
 , darwin
-, asn1crypto
 , packaging
 , six
 , pythonOlder
-, enum34
-, ipaddress
 , isPyPy
 , cffi
 , pytest
@@ -17,15 +17,16 @@
 , iso8601
 , pytz
 , hypothesis
+, enum34
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "2.7"; # Also update the hash in vectors.nix
+  version = "2.9.2"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1inlnr36kl36551c9rcad99jmhk81v33by3glkadwdcgmi17fd76";
+    sha256 = "a0c30272fb4ddda5f5ffc1089d7405b7a71b0b0f51993cb4e5dbb4590b2fc229";
   };
 
   outputs = [ "out" "dev" ];
@@ -33,12 +34,10 @@ buildPythonPackage rec {
   buildInputs = [ openssl ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
-    asn1crypto
     packaging
     six
-  ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34
-  ++ stdenv.lib.optional (pythonOlder "3.3") ipaddress
-  ++ stdenv.lib.optional (!isPyPy) cffi;
+  ] ++ stdenv.lib.optional (!isPyPy) cffi
+  ++ stdenv.lib.optionals isPy27 [ ipaddress enum34 ];
 
   checkInputs = [
     cryptography_vectors
@@ -64,9 +63,11 @@ buildPythonPackage rec {
       common cryptographic algorithms such as symmetric ciphers, message
       digests, and key derivation functions.
       Our goal is for it to be your "cryptographic standard library". It
-      supports Python 2.7, Python 3.4+, and PyPy 5.3+.
+      supports Python 2.7, Python 3.5+, and PyPy 5.4+.
     '';
-    homepage = https://github.com/pyca/cryptography;
+    homepage = "https://github.com/pyca/cryptography";
+    changelog = "https://cryptography.io/en/latest/changelog/#v"
+      + replaceStrings [ "." ] [ "-" ] version;
     license = with licenses; [ asl20 bsd3 psfl ];
     maintainers = with maintainers; [ primeos ];
   };

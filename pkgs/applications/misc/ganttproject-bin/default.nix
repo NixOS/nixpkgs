@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ganttproject-bin-${version}";
+  pname = "ganttproject-bin";
   version = "2.8.10";
 
   src = let build = "r2364"; in fetchzip {
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Project scheduling and management";
-    homepage = https://www.ganttproject.biz/;
-    downloadPage = https://www.ganttproject.biz/download;
+    homepage = "https://www.ganttproject.biz/";
+    downloadPage = "https://www.ganttproject.biz/download";
     # GanttProject itself is GPL3+. All bundled libraries are declared
     # ‘GPL3-compatible’. See ${downloadPage} for detailed information.
     license = licenses.gpl3Plus;

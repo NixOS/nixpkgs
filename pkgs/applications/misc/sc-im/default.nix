@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.7.0";
-  name = "sc-im-${version}";
+  pname = "sc-im";
 
   src = fetchFromGitHub {
     owner = "andmarti1424";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/andmarti1424/sc-im;
+    homepage = "https://github.com/andmarti1424/sc-im";
     description = "SC-IM - Spreadsheet Calculator Improvised - SC fork";
     license = licenses.bsdOriginal;
     maintainers = [ ];

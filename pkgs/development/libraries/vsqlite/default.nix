@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "vsqlite-${version}";
+  pname = "vsqlite";
   version = "0.3.13";
 
   src = fetchurl {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://vsqlite.virtuosic-bytes.com/;
+    homepage = "http://vsqlite.virtuosic-bytes.com/";
     description = "C++ wrapper library for sqlite.";
     license = licenses.bsd3;
     platforms = platforms.unix;

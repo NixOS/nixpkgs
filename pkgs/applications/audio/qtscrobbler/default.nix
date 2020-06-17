@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, withMtp ? true, libmtp, pkgconfig, which, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
-  name = "qtscrobbler-${version}";
+  pname = "qtscrobbler";
   version = "0.11";
 
   src = fetchurl {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       It is able to gather this information from Apple iPods or DAPs running the Rockbox replacement firmware.
     '';
 
-    homepage = http://qtscrob.sourceforge.net;
+    homepage = "http://qtscrob.sourceforge.net";
     license = licenses.gpl2;
     maintainers = [ maintainers.vanzef ];
     platforms = platforms.linux;

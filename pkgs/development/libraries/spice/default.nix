@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   mesonFlags = [
-    "-Dauto_features=enabled"
     "-Dgstreamer=1.0"
     "-Dcelt051=disabled"
   ];
@@ -95,7 +94,7 @@ stdenv.mkDerivation rec {
       VD-Interfaces. The VD-Interfaces (VDI) enable both ends of the solution to be easily
       utilized by a third-party component.
     '';
-    homepage = https://www.spice-space.org/;
+    homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
 
     maintainers = [ maintainers.bluescreen303 ];

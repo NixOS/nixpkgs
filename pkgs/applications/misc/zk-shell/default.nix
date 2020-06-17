@@ -20,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "A powerful & scriptable shell for Apache ZooKeeper";
-    homepage = https://github.com/rgs1/zk_shell;
+    homepage = "https://github.com/rgs1/zk_shell";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.mahe ];
     platforms = stdenv.lib.platforms.all;

@@ -1,9 +1,9 @@
 { fetchgit, stdenv, pkgconfig, libtool, autoconf, automake
 , curl, ncurses, ocl-icd, opencl-headers, xorg, jansson }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.7.2";
-  name = "cgminer-${version}";
+  pname = "cgminer";
 
   src = fetchgit {
     url = "https://github.com/ckolivas/cgminer.git";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       monitoring, (over)clocking and fanspeed support for bitcoin and derivative
       coins. Do not use on multiple block chains at the same time!
     '';
-    homepage = https://github.com/ckolivas/cgminer;
+    homepage = "https://github.com/ckolivas/cgminer";
     license = licenses.gpl3;
     maintainers = [ maintainers.offline ];
     platforms = stdenv.lib.platforms.linux;

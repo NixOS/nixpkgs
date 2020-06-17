@@ -1,147 +1,48 @@
-{ stdenv, nix, perlPackages, buildEnv, releaseTools, fetchFromGitHub
-, makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
-, gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
-, guile, perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
-, docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
-, rpm, dpkg, cdrkit, pixz, lib, fetchpatch, boost, autoreconfHook
-}:
+{ fetchFromGitHub, nixStable, callPackage, nixFlakes, fetchpatch, nixosTests }:
 
-with stdenv;
+{
+  # Package for phase-1 of the db migration for Hydra.
+  # https://github.com/NixOS/hydra/pull/711
+  hydra-migration = callPackage ./common.nix {
+    version = "2020-02-10";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "hydra";
+      rev = "add4f610ce6f206fb44702b5a894d877b3a30e3a";
+      sha256 = "1d8hdgjx2ys0zmixi2ydmimdq7ml20h1ji4amwawcyw59kssh6l3";
+    };
+    nix = nixStable;
+    migration = true;
 
-if lib.versions.major nix.version == "1"
-  then throw "This Hydra version doesn't support Nix 1.x"
-else
-
-let
-  perlDeps = buildEnv {
-    name = "hydra-perl-deps";
-    paths = with perlPackages;
-      [ ModulePluggable
-        CatalystActionREST
-        CatalystAuthenticationStoreDBIxClass
-        CatalystDevel
-        CatalystDispatchTypeRegex
-        CatalystPluginAccessLog
-        CatalystPluginAuthorizationRoles
-        CatalystPluginCaptcha
-        CatalystPluginSessionStateCookie
-        CatalystPluginSessionStoreFastMmap
-        CatalystPluginStackTrace
-        CatalystRuntime
-        CatalystTraitForRequestProxyBase
-        CatalystViewDownload
-        CatalystViewJSON
-        CatalystViewTT
-        CatalystXScriptServerStarman
-        CatalystXRoleApplicator
-        CryptRandPasswd
-        DBDPg
-        DBDSQLite
-        DataDump
-        DateTime
-        DigestSHA1
-        EmailMIME
-        EmailSender
-        FileSlurp
-        IOCompress
-        IPCRun
-        JSON
-        JSONAny
-        JSONXS
-        LWP
-        LWPProtocolHttps
-        NetAmazonS3
-        NetStatsd
-        PadWalker
-        Readonly
-        SQLSplitStatement
-        SetScalar
-        Starman
-        SysHostnameLong
-        TextDiff
-        TextTable
-        XMLSimple
-        nix
-        nix.perl-bindings
-        git
-        boehmgc
-      ];
-  };
-in releaseTools.nixBuild rec {
-  pname = "hydra";
-  version = "2019-05-06";
-
-  inherit stdenv;
-
-  src = fetchFromGitHub {
-    owner = "NixOS";
-    repo = pname;
-    rev = "ff64583d07f046e378a6be596ec0ce7a9e2b7472";
-    sha256 = "0w88q0saz7si22z3ryim6vdrv9qkwn6l25xfmiapvh5qrnrrdcb9";
+    tests = {
+      db-migration = nixosTests.hydra-db-migration.mig;
+      basic = nixosTests.hydra.hydra-migration;
+    };
   };
 
-  buildInputs =
-    [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx
-      gitAndTools.topGit mercurial darcs subversion bazaar openssl bzip2 libxslt
-      guile # optional, for Guile + Guix support
-      perlDeps perl nix
-      postgresql # for running the tests
-      nlohmann_json
-      boost
+  # Hydra from latest master branch. Contains breaking changes,
+  # so when having an older version, `pkgs.hydra-migration` should be deployed first.
+
+  hydra-unstable = callPackage ./common.nix {
+    version = "2020-06-01";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "hydra";
+      rev = "750e2e618ac6d3df02c57a2cf8758bc66a27c40a";
+      sha256 = "1szfzf9kw5cj6yn57gfxrffbdkdf8v3xy9914924blpn5qll31g4";
+    };
+    nix = nixFlakes;
+
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/NixOS/hydra/commit/d4822a5f4b57dff26bdbf436723a87dd62bbcf30.patch";
+        sha256 = "1n6hyjz1hzvka4wi78d4wg0sg2wanrdmizqy23vmp7pmv8s3gz8w";
+      })
     ];
 
-  hydraPath = lib.makeBinPath (
-    [ sqlite subversion openssh nix coreutils findutils pixz
-      gzip bzip2 lzma gnutar unzip git gitAndTools.topGit mercurial darcs gnused bazaar
-    ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
-
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/NixOS/hydra/pull/648/commits/4171ab4c4fd576c516dc03ba64d1c7945f769af0.patch";
-      sha256 = "1fxa2459kdws6qc419dv4084c1ssmys7kqg4ic7n643kybamsgrx";
-    })
-  ];
-
-  configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
-
-  NIX_CFLAGS_COMPILE = [ "-pthread" ];
-
-  shellHook = ''
-    PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
-    PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
-  '';
-
-  enableParallelBuilding = true;
-
-  preCheck = ''
-    patchShebangs .
-    export LOGNAME=''${LOGNAME:-foo}
-  '';
-
-  postInstall = ''
-    mkdir -p $out/nix-support
-    for i in $out/bin/*; do
-        read -n 4 chars < $i
-        if [[ $chars =~ ELF ]]; then continue; fi
-        wrapProgram $i \
-            --prefix PERL5LIB ':' $out/libexec/hydra/lib:$PERL5LIB \
-            --prefix PATH ':' $out/bin:$hydraPath \
-            --set HYDRA_RELEASE ${version} \
-            --set HYDRA_HOME $out/libexec/hydra \
-            --set NIX_RELEASE ${nix.name or "unknown"}
-    done
-  ''; # */
-
-  dontStrip = true;
-
-  passthru.perlDeps = perlDeps;
-
-  meta = with stdenv.lib; {
-    description = "Nix-based continuous build system";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    tests = {
+      db-migration = nixosTests.hydra-db-migration.mig;
+      basic = nixosTests.hydra.hydra-unstable;
+    };
   };
 }

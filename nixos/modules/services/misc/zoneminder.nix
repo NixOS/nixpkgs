@@ -2,6 +2,7 @@
 
 let
   cfg = config.services.zoneminder;
+  fpm = config.services.phpfpm.pools.zoneminder;
   pkg = pkgs.zoneminder;
 
   dirName = pkg.dirName;
@@ -10,7 +11,7 @@ let
   group = {
     nginx = config.services.nginx.group;
     none  = user;
-  }."${cfg.webserver}";
+  }.${cfg.webserver};
 
   useNginx = cfg.webserver == "nginx";
 
@@ -18,8 +19,6 @@ let
   home = if useCustomDir then cfg.storageDir else defaultDir;
 
   useCustomDir = cfg.storageDir != null;
-
-  socket = "/run/phpfpm-zoneminder/zoneminder.sock";
 
   zms = "/cgi-bin/zms";
 
@@ -64,10 +63,6 @@ let
     ${cfg.extraConfig}
   '';
 
-  phpExtensions = with pkgs.phpPackages; [
-    { pkg = apcu; name = "apcu"; }
-  ];
-
 in {
   options = {
     services.zoneminder = with lib; {
@@ -78,6 +73,8 @@ in {
         `config.services.zoneminder.database.createLocally` to true. Otherwise,
         when set to `false` (the default), you will have to create the database
         and database user as well as populate the database yourself.
+        Additionally, you will need to run `zmupdate.pl` yourself when
+        upgrading to a newer version.
       '';
 
       webserver = mkOption {
@@ -201,7 +198,10 @@ in {
       "zoneminder/80-nixos.conf".source    = configFile;
     };
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
+      cfg.port
+      6802 # zmtrigger
+    ];
 
     services = {
       fcgiwrap = lib.mkIf useNginx {
@@ -223,7 +223,7 @@ in {
       nginx = lib.mkIf useNginx {
         enable = true;
         virtualHosts = {
-          "${cfg.hostname}" = {
+          ${cfg.hostname} = {
             default = true;
             root = "${pkg}/share/zoneminder/www";
             listen = [ { addr = "0.0.0.0"; inherit (cfg) port; } ];
@@ -262,8 +262,8 @@ in {
                   fastcgi_pass ${fcgi.socketType}:${fcgi.socketAddress};
                 }
 
-                location /cache {
-                  alias /var/cache/${dirName};
+                location /cache/ {
+                  alias /var/cache/${dirName}/;
                 }
 
                 location ~ \.php$ {
@@ -274,7 +274,7 @@ in {
                   fastcgi_param SCRIPT_FILENAME $request_filename;
                   fastcgi_param HTTP_PROXY "";
 
-                  fastcgi_pass unix:${socket};
+                  fastcgi_pass unix:${fpm.socket};
                 }
               }
             '';
@@ -284,36 +284,31 @@ in {
 
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
-          socketName = "zoneminder";
-          phpPackage = pkgs.php;
-          user = "${user}";
-          group = "${group}";
+          inherit user group;
+          phpPackage = pkgs.php.withExtensions ({ enabled, all }: enabled ++ [ all.apcu ]);
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
-
-            ${lib.concatStringsSep "\n" (map (e:
-            "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
           '';
-          extraConfig = ''
-            listen.owner = ${user}
-            listen.group = ${group}
-            listen.mode = 0660
+          settings = lib.mapAttrs (name: lib.mkDefault) {
+            "listen.owner" = user;
+            "listen.group" = group;
+            "listen.mode" = "0660";
 
-            pm = dynamic
-            pm.start_servers = 1
-            pm.min_spare_servers = 1
-            pm.max_spare_servers = 2
-            pm.max_requests = 500
-            pm.max_children = 5
-            pm.status_path = /$pool-status
-            ping.path = /$pool-ping
-          '';
+            "pm" = "dynamic";
+            "pm.start_servers" = 1;
+            "pm.min_spare_servers" = 1;
+            "pm.max_spare_servers" = 2;
+            "pm.max_requests" = 500;
+            "pm.max_children" = 5;
+            "pm.status_path" = "/$pool-status";
+            "ping.path" = "/$pool-ping";
+          };
         };
       };
     };
 
     systemd.services = {
-      zoneminder = with pkgs; rec {
+      zoneminder = with pkgs; {
         inherit (zoneminder.meta) description;
         documentation = [ "https://zoneminder.readthedocs.org/en/latest/" ];
         path = [
@@ -331,6 +326,8 @@ in {
             ${config.services.mysql.package}/bin/mysql < ${pkg}/share/zoneminder/db/zm_create.sql
             touch "/var/lib/${dirName}/db-created"
           fi
+
+          ${zoneminder}/bin/zmupdate.pl -nointeractive
         '';
         serviceConfig = {
           User = user;
@@ -357,11 +354,11 @@ in {
       };
     };
 
-    users.groups."${user}" = {
+    users.groups.${user} = {
       gid = config.ids.gids.zoneminder;
     };
 
-    users.users."${user}" = {
+    users.users.${user} = {
       uid = config.ids.uids.zoneminder;
       group = user;
       inherit home;

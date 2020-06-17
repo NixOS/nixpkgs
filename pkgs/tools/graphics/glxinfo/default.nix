@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libGL, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "glxinfo-${version}";
+  pname = "glxinfo";
   version = "8.4.0";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libGL ];
 
-  configurePhase = "true";
+  dontConfigure = true;
 
   buildPhase = "
     $CC src/xdemos/{glxinfo.c,glinfo_common.c} -o glxinfo -lGL -lX11
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Test utilities for OpenGL";
-    homepage = https://www.mesa3d.org/;
+    homepage = "https://www.mesa3d.org/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

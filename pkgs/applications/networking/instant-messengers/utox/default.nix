@@ -3,7 +3,7 @@
 , libXrender, fontconfig, libXext, libXft, libsodium, libopus }:
 
 stdenv.mkDerivation rec {
-  name = "utox-${version}";
+  pname = "utox";
 
   version = "0.17.0";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";
-    homepage = https://github.com/uTox/uTox;
+    homepage = "https://github.com/uTox/uTox";
     license = licenses.gpl3;
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.all;

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An easy to use web application framework for C";
-    homepage = https://kore.io;
+    homepage = "https://kore.io";
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ johnmh ];

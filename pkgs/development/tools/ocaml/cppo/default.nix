@@ -1,14 +1,19 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, dune }:
 let
   pname = "cppo";
-  webpage = "http://mjambon.com/${pname}.html";
+  webpage = "https://github.com/ocaml-community/${pname}";
 in
 assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 
 let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
+  if stdenv.lib.versionAtLeast ocaml.version "4.02" then
+   (if stdenv.lib.versionAtLeast ocaml.version "4.03" then {
+    version = "1.6.6";
+    sha256 = "1smcc0l6fh2n0y6bp96c69j5nw755jja99w0b206wx3yb2m4w2hs";
+   } else {
     version = "1.6.5";
     sha256 = "03c0amszy28shinvz61hm340jz446zz5763a1pdqlza36kwcj0p0";
+   }) // {
     buildInputs = [ dune ];
     extra = {
       inherit (dune) installPhase;
@@ -18,7 +23,7 @@ let param =
     sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
     extra = {
       createFindlibDestdir = true;
-      makeFlags = "PREFIX=$(out)";
+      makeFlags = [ "PREFIX=$(out)" ];
       preBuild = ''
         mkdir $out/bin
       '';
@@ -26,7 +31,7 @@ let param =
   }
 ; in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
 
   name = "${pname}-${param.version}";
 
@@ -44,7 +49,7 @@ stdenv.mkDerivation (rec {
     longDescription = ''
       Cppo is an equivalent of the C preprocessor targeted at the OCaml language and its variants.
     '';
-    homepage = "${webpage}";
+    homepage = webpage;
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;
   };

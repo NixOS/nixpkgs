@@ -1,0 +1,69 @@
+From 76c25147328d71960c70bbdd5a9396aac4a362a2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Wed, 20 May 2020 14:19:07 -0300
+Subject: [PATCH] Fix paths
+
+---
+ fbmenugen | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/fbmenugen b/fbmenugen
+index 46a18dc..0c8eb08 100755
+--- a/fbmenugen
++++ b/fbmenugen
+@@ -214,9 +214,7 @@ my %CONFIG = (
+ 
+ #<<<
+         desktop_files_paths => [
+-            '/usr/share/applications',
+-            '/usr/local/share/applications',
+-            '/usr/share/applications/kde4',
++            '/run/current-system/sw/share/applications',
+             "$home_dir/.local/share/applications",
+         ],
+ #>>>
+@@ -232,7 +230,7 @@ my %CONFIG = (
+     force_icon_size  => 0,
+     generic_fallback => 0,
+     locale_support   => 1,
+-    use_gtk3         => 0,
++    use_gtk3         => 1,
+ 
+     VERSION => $version,
+              );
+@@ -252,7 +250,7 @@ if (not -e $config_file) {
+ }
+ 
+ if (not -e $schema_file) {
+-    if (-e (my $etc_schema_file = "/etc/xdg/$pkgname/schema.pl")) {
++    if (-e (my $etc_schema_file = "@fbmenugen@/etc/xdg/$pkgname/schema.pl")) {
+         require File::Copy;
+         File::Copy::copy($etc_schema_file, $schema_file)
+           or warn "$0: can't copy file `$etc_schema_file' to `$schema_file': $!\n";
+@@ -570,7 +568,7 @@ EXIT
+         $generated_menu .= begin_category(@{$schema->{fluxbox}}) . <<"FOOTER";
+ [config] (Configure)
+ [submenu] (System Styles) {Choose a style...}
+-  [stylesdir] (/usr/share/fluxbox/styles)
++  [stylesdir] (@fluxbox@/share/fluxbox/styles)
+ [end]
+ [submenu] (User Styles) {Choose a style...}
+   [stylesdir] (~/.fluxbox/styles)
+@@ -580,12 +578,12 @@ EXIT
+   [exec] (Screenshot - JPG) {import screenshot.jpg && display -resize 50% screenshot.jpg}
+   [exec] (Screenshot - PNG) {import screenshot.png && display -resize 50% screenshot.png}
+   [exec] (Run) {fbrun}
+-  [exec] (Regen Menu) {fluxbox-generate_menu}
++  [exec] (Regen Menu) {@fluxbox@/bin/fluxbox-generate_menu}
+ [end]
+ [commanddialog] (Fluxbox Command)
+   [reconfig] (Reload config)
+   [restart] (Restart)
+-  [exec] (About) {(fluxbox -v; fluxbox -info | sed 1d) | xmessage -file - -center}
++  [exec] (About) {(@fluxbox@/bin/fluxbox -v; @fluxbox@/bin/fluxbox -info | @gnused@/bin/sed 1d) | @xmessage@/bin/xmessage -file - -center}
+   [separator]
+   [exit] (Exit)
+ [end]
+-- 
+2.26.2
+

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Memory efficient Python objects";
     maintainers = [ maintainers.bhipple ];
-    homepage = https://github.com/nucleic/atom;
+    homepage = "https://github.com/nucleic/atom";
     license = licenses.bsd3;
   };
 }

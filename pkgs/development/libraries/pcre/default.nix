@@ -8,17 +8,17 @@ with stdenv.lib;
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
 let
-  version = "8.43";
+  version = "8.44";
   pname = if (variant == null) then "pcre"
     else  if (variant == "cpp") then "pcre-cpp"
     else  variant;
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://ftp.pcre.org/pub/pcre/pcre-${version}.tar.bz2";
-    sha256 = "0sxg1wlknq05ryq63h21cchjmcjkin9lmnqsmhs3h08301965rwi";
+    sha256 = "0v9nk51wh55pcbnf2jr36yarz8ayajn6d7ywiq2wagivn9c8c40r";
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
@@ -28,8 +28,6 @@ in stdenv.mkDerivation rec {
     "--disable-cpp"
   ]
     ++ optional (variant != null) "--enable-${variant}";
-
-  buildInputs = optional (stdenv.hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
 
   # https://bugs.exim.org/show_bug.cgi?id=2173
   patches = [ ./stacksize-detection.patch ];
@@ -50,7 +48,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.pcre.org/;
+    homepage = "http://www.pcre.org/";
     description = "A library for Perl Compatible Regular Expressions";
     license = stdenv.lib.licenses.bsd3;
 

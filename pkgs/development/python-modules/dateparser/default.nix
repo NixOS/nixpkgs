@@ -2,6 +2,7 @@
 , nose
 , parameterized
 , mock
+, flake8
 , glibcLocales
 , six
 , jdatetime
@@ -14,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "0.7.1";
+  version = "0.7.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42d51be54e74a8e80a4d76d1fa6e4edd997098fce24ad2d94a2eab5ef247193e";
+    sha256 = "fb5bfde4795fa4b179fe05c2c25b3981f785de26bec37e247dee1079c63d5689";
   };
 
-  checkInputs = [ nose mock parameterized six glibcLocales ];
+  checkInputs = [ flake8 nose mock parameterized six glibcLocales ];
   preCheck =''
     # skip because of missing convertdate module, which is an extra requirement
     rm tests/test_jalali.py
@@ -36,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Date parsing library designed to parse dates from HTML pages";
-    homepage = https://github.com/scrapinghub/dateparser;
+    homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;
   };
 }

@@ -1,7 +1,7 @@
 { buildGoPackage, fetchFromGitHub, lib, ... }:
 
 buildGoPackage rec {
-  name = "amazon-ecr-credential-helper-${version}";
+  pname = "amazon-ecr-credential-helper";
   version = "0.3.0";
 
   goPackagePath = "github.com/awslabs/amazon-ecr-credential-helper";
@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "The Amazon ECR Docker Credential Helper is a credential helper for the Docker daemon that makes it easier to use Amazon Elastic Container Registry";
-    homepage = https://github.com/awslabs/amazon-ecr-credential-helper;
+    homepage = "https://github.com/awslabs/amazon-ecr-credential-helper";
     license = licenses.asl20 ;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

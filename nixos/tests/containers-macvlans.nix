@@ -6,7 +6,7 @@ let
   containerIp2 = "192.168.1.254";
 in
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "containers-macvlans";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ montag451 ];
@@ -64,19 +64,23 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    startAll;
-    $machine1->waitForUnit("default.target");
-    $machine2->waitForUnit("default.target");
+    start_all()
+    machine1.wait_for_unit("default.target")
+    machine2.wait_for_unit("default.target")
 
-    # Ping between containers to check that macvlans are created in bridge mode
-    $machine1->succeed("nixos-container run test1 -- ping -n -c 1 ${containerIp2}");
+    with subtest(
+        "Ping between containers to check that macvlans are created in bridge mode"
+    ):
+        machine1.succeed("nixos-container run test1 -- ping -n -c 1 ${containerIp2}")
 
-    # Ping containers from the host (machine1)
-    $machine1->succeed("ping -n -c 1 ${containerIp1}");
-    $machine1->succeed("ping -n -c 1 ${containerIp2}");
+    with subtest("Ping containers from the host (machine1)"):
+        machine1.succeed("ping -n -c 1 ${containerIp1}")
+        machine1.succeed("ping -n -c 1 ${containerIp2}")
 
-    # Ping containers from the second machine to check that containers are reachable from the outside
-    $machine2->succeed("ping -n -c 1 ${containerIp1}");
-    $machine2->succeed("ping -n -c 1 ${containerIp2}");
+    with subtest(
+        "Ping containers from the second machine to check that containers are reachable from the outside"
+    ):
+        machine2.succeed("ping -n -c 1 ${containerIp1}")
+        machine2.succeed("ping -n -c 1 ${containerIp2}")
   '';
 })

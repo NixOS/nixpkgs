@@ -6,22 +6,23 @@
 , dropbox
 , gtk3
 , gnome3
-, gdk_pixbuf
+, gdk-pixbuf
 , gobject-introspection
 }:
 
 let
-  version = "2019.02.14";
+  version = "2020.03.04";
   dropboxd = "${dropbox}/bin/dropbox";
 in
 stdenv.mkDerivation {
-  name = "dropbox-cli-${version}";
+  pname = "dropbox-cli";
+  inherit version;
 
   outputs = [ "out" "nautilusExtension" ];
 
   src = fetchurl {
     url = "https://linux.dropboxstatic.com/packages/nautilus-dropbox-${version}.tar.bz2";
-    sha256 = "09yg7q45sycl88l3wq0byz4a9k6sxx3m0r3szinvisfay9wlj35f";
+    sha256 = "1jjc835n2j61d23kvygdb4n4jsrw33r9mbwxrm4fqin6x01l2w7k";
   };
 
   strictDeps = true;
@@ -36,7 +37,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkgconfig
     gobject-introspection
-    gdk_pixbuf
+    gdk-pixbuf
     # only for build, the install command also wants to use GTK through introspection
     # but we are using Nix for installation so we will not need that.
     (python3.withPackages (ps: with ps; [
@@ -52,18 +53,17 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = [
-    "--with-nautilus-extension-dir=${placeholder ''nautilusExtension''}/lib/nautilus/extensions-3.0"
+    "--with-nautilus-extension-dir=${placeholder "nautilusExtension"}/lib/nautilus/extensions-3.0"
   ];
 
   makeFlags = [
-    "EMBLEM_DIR=${placeholder ''nautilusExtension''}/share/nautilus-dropbox/emblems"
+    "EMBLEM_DIR=${placeholder "nautilusExtension"}/share/nautilus-dropbox/emblems"
   ];
 
   meta = {
-    homepage = https://www.dropbox.com;
+    homepage = "https://www.dropbox.com";
     description = "Command line client for the dropbox daemon";
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     # NOTE: Dropbox itself only works on linux, so this is ok.
     platforms = stdenv.lib.platforms.linux;
   };

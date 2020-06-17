@@ -1,7 +1,7 @@
 {stdenv, fetchurl, fetchpatch, cmake, zlib, libxml2, eigen, python, cairo, pcre, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "openbabel-${version}";
+  pname = "openbabel";
   version = "2.4.1";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [
     # ARM / AArch64 fixes.
     (fetchpatch {
-      url = https://github.com/openbabel/openbabel/commit/ee11c98a655296550710db1207b294f00e168216.patch;
+      url = "https://github.com/openbabel/openbabel/commit/ee11c98a655296550710db1207b294f00e168216.patch";
       sha256 = "0wjqjrkr4pfirzzicdvlyr591vppydk572ix28jd2sagnfnf566g";
     })
   ];
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
+    description = "A toolbox designed to speak the many languages of chemical data";
+    homepage = "http://openbabel.org";
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];
     license = stdenv.lib.licenses.gpl2Plus;

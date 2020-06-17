@@ -1,6 +1,6 @@
 {stdenv, fetchurl, qt4, cmake, libjpeg, libtiff, boost }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "scantailor-0.9.12.1";
 
   src = fetchurl {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://scantailor.org/;
+    homepage = "http://scantailor.org/";
     description = "Interactive post-processing tool for scanned pages";
 
     license = stdenv.lib.licenses.gpl3Plus;

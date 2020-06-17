@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mavenEnforcerApi_1_3_1 = map (obj: fetchMaven {
     version = "1.3.1";
     artifactId = "enforcer-api";

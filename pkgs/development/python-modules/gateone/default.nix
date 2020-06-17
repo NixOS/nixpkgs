@@ -7,8 +7,9 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
-  name = "gateone-1.2-0d57c3";
+buildPythonPackage {
+  pname = "gateone";
+  version = "1.2-0d57c3";
   disabled = isPy3k;
 
   src = pkgs.fetchFromGitHub {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://liftoffsoftware.com/;
+    homepage = "http://liftoffsoftware.com/";
     description = "GateOne is a web-based terminal emulator and SSH client";
     maintainers = with maintainers; [ tomberek ];
     license = licenses.gpl3;

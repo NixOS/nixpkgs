@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, pidgin, json-glib }:
 
-stdenv.mkDerivation rec {
-  name = "purple-discord-${version}";
+stdenv.mkDerivation {
+  pname = "purple-discord";
   version = "unstable-2018-04-10";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/EionRobb/purple-discord;
+    homepage = "https://github.com/EionRobb/purple-discord";
     description = "Discord plugin for Pidgin";
     license = licenses.gpl3;
     platforms = platforms.linux;

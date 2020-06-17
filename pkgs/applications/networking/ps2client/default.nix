@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "unstable-2018-10-18";
-  name = "ps2client-${version}";
+  pname = "ps2client";
 
   src = fetchFromGitHub {
     owner = "ps2dev";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Desktop clients to interact with ps2link and ps2netfs";
-    homepage = https://github.com/ps2dev/ps2client;
+    homepage = "https://github.com/ps2dev/ps2client";
     license = licenses.bsd3;
     maintainers = [ maintainers.genesis ];
     platforms = platforms.unix;

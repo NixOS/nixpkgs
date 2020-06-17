@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitLab, cmake, qtbase }:
+{ mkDerivation, stdenv, fetchFromGitLab, cmake, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "enyo-doom-${version}";
+mkDerivation rec {
+  pname = "enyo-doom";
   version = "1.06.9";
 
   src = fetchFromGitLab {

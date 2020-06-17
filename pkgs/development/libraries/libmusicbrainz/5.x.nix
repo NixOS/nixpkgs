@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.1.0";
-  name = "libmusicbrainz-${version}";
+  pname = "libmusicbrainz";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake neon libdiscid libxml2 ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeBuildDir=true;
 
   meta = with stdenv.lib; {
-    homepage = http://musicbrainz.org/doc/libmusicbrainz;
+    homepage = "http://musicbrainz.org/doc/libmusicbrainz";
     description = "MusicBrainz Client Library (5.x version)";
     longDescription = ''
       The libmusicbrainz (also known as mb_client or MusicBrainz Client

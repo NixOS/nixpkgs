@@ -1,4 +1,4 @@
-{ lib, python3Packages, ffmpeg }:
+{ lib, python3Packages, ffmpeg_3 }:
 
 python3Packages.buildPythonApplication rec {
   version = "2.0";
@@ -20,14 +20,14 @@ python3Packages.buildPythonApplication rec {
     blinker
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${ffmpeg}/bin" ];
+  makeWrapperArgs = [ "--prefix PATH : ${ffmpeg_3}/bin" ];
 
   # No tests included
   doCheck = false;
 
   meta = with lib; {
     description = "Yet another simple static gallery generator";
-    homepage    = http://sigal.saimon.org/en/latest/index.html;
+    homepage    = "http://sigal.saimon.org/en/latest/index.html";
     license     = licenses.mit;
     maintainers = with maintainers; [ domenkozar matthiasbeyer ];
   };

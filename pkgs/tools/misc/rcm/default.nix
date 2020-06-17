@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "rcm-${version}";
+  pname = "rcm";
   version = "1.3.3";
 
   src = fetchurl {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Management Suite for Dotfiles";
-    homepage = https://github.com/thoughtbot/rcm;
+    homepage = "https://github.com/thoughtbot/rcm";
     license = licenses.bsd3;
     maintainers = with maintainers; [ malyn ];
     platforms = with platforms; unix;

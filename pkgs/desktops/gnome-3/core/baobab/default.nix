@@ -4,13 +4,13 @@
 
 let
   pname = "baobab";
-  version = "3.32.0";
+  version = "3.34.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0b33s9bhpiffv5wl76cq2bbnqhvx3qs2vxyxmil5gcs583llqh9r";
+    sha256 = "01w6m5ylyqs4wslpjn1hg6n6ynwh3rghksak0qs8r9m6dm3dkss6";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig vala gettext itstool libxml2 desktop-file-utils wrapGAppsHook ];
@@ -26,9 +26,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical application to analyse disk usage in any GNOME environment";
-    homepage = https://wiki.gnome.org/Apps/DiskUsageAnalyzer;
+    homepage = "https://wiki.gnome.org/Apps/DiskUsageAnalyzer";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

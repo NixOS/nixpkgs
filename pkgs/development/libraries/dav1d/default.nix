@@ -1,19 +1,33 @@
-{ stdenv, fetchFromGitLab, meson, ninja, nasm }:
+{ stdenv, fetchFromGitLab
+, meson, ninja, nasm, pkgconfig
+, withTools ? false # "dav1d" binary
+, withExamples ? false, SDL2 # "dav1dplay" binary
+, useVulkan ? false, libplacebo, vulkan-loader, vulkan-headers
+}:
+
+assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "0.3.1";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = version;
-    sha256 = "1m5vdg64iqxpi37l84mcfiq313g9z55zf66s85j2rqik6asmxbqg";
+    sha256 = "0zmn4ald518vgs3cc0ga227aimr38h16mkliq5j8mg6p9dn7nx1w";
   };
 
-  nativeBuildInputs = [ meson ninja nasm ];
+  nativeBuildInputs = [ meson ninja nasm pkgconfig ];
   # TODO: doxygen (currently only HTML and not build by default).
+  buildInputs = stdenv.lib.optional withExamples SDL2
+    ++ stdenv.lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
+
+  mesonFlags= [
+    "-Denable_tools=${stdenv.lib.boolToString withTools}"
+    "-Denable_examples=${stdenv.lib.boolToString withExamples}"
+  ];
 
   meta = with stdenv.lib; {
     description = "A cross-platform AV1 decoder focused on speed and correctness";
@@ -24,6 +38,8 @@ stdenv.mkDerivation rec {
       subsampling and bit-depth parameters.
     '';
     inherit (src.meta) homepage;
+    changelog = "https://code.videolan.org/videolan/dav1d/-/tags/${version}";
+    # More technical: https://code.videolan.org/videolan/dav1d/blob/${version}/NEWS
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

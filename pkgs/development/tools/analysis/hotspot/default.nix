@@ -1,4 +1,5 @@
 { stdenv,
+  mkDerivation,
   cmake,
   elfutils,
   extra-cmake-modules,
@@ -14,7 +15,7 @@
   threadweaver,
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "hotspot";
   version = "1.2.0";
 
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
       It takes a perf.data file, parses and evaluates its contents and
       then displays the result in a graphical way.
     '';
-    homepage = https://github.com/KDAB/hotspot;
+    homepage = "https://github.com/KDAB/hotspot";
     license = with stdenv.lib.licenses; [ gpl2 gpl3 ];
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ nh2 ];

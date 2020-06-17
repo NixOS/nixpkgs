@@ -2,8 +2,8 @@
 
 assert stdenv ? glibc;
 
-perlPackages.buildPerlPackage rec {
-  name = "ninka-${version}";
+perlPackages.buildPerlPackage {
+  pname = "ninka";
   version = "2.0-pre";
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = with stdenv.lib; {
     description = "A sentence based license detector";
-    homepage = http://ninka.turingmachine.org/;
+    homepage = "http://ninka.turingmachine.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.all;

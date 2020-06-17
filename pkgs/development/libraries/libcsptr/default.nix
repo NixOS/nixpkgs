@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "libcsptr-${version}";
+  pname = "libcsptr";
   version = "2.0.4";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Smart pointer constructs for the (GNU) C programming language";
-    homepage = https://github.com/Snaipe/libcsptr;
+    homepage = "https://github.com/Snaipe/libcsptr";
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ maintainers.fragamus ];

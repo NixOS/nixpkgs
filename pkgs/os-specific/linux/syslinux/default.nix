@@ -1,13 +1,16 @@
-{ stdenv, fetchFromGitHub, fetchurl, nasm, perl, python, libuuid, mtools, makeWrapper }:
+{ stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "syslinux-2015-11-09";
+stdenv.mkDerivation {
+  pname = "syslinux";
+  version = "unstable-20190207";
 
-  src = fetchFromGitHub {
-    owner = "geneC";
-    repo = "syslinux";
-    rev = "0cc9a99e560a2f52bcf052fd85b1efae35ee812f";
-    sha256 = "0wk3r5ki4lc334f9jpml07wpl8d0bnxi9h1l4h4fyf9a0d7n4kmw";
+  # This is syslinux-6.04-pre3^1; syslinux-6.04-pre3 fails to run.
+  # Same issue here https://www.syslinux.org/archives/2019-February/026330.html
+  src = fetchgit {
+    url = "https://repo.or.cz/syslinux";
+    rev = "b40487005223a78c3bb4c300ef6c436b3f6ec1f7";
+    sha256 = "1acf6byx7i6vz8hq6mra526g8mf7fmfhid211y8nq0v6px7d3aqs";
+    fetchSubmodules = true;
   };
 
   patches = let
@@ -15,12 +18,13 @@ stdenv.mkDerivation rec {
       "https://salsa.debian.org/images-team/syslinux/raw/${commit}/debian/patches/"
       + patchName;
   in [
-    ./perl-deps.patch
     (fetchurl {
-      # ldlinux.elf: Not enough room for program headers, try linking with -N
-      name = "not-enough-room.patch";
-      url = mkURL "a556ad7" "0014_fix_ftbfs_no_dynamic_linker.patch";
-      sha256 = "0ijqjsjmnphmvsx0z6ppnajsfv6xh6crshy44i2a5klxw4nlvrsw";
+      url = mkURL "fa1349f1" "0002-gfxboot-menu-label.patch";
+      sha256 = "06ifgzbpjj4picpj17zgprsfi501zf4pp85qjjgn29i5rs291zni";
+    })
+    (fetchpatch {
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/0005-gnu-efi-version-compatibility.patch?h=packages/syslinux";
+      sha256 = "0fbqz56hj8az8ws26m39hyp3l5fvcbzvzdddqz3x6n56hzdpz1p6";
     })
     (fetchurl {
       # mbr.bin: too big (452 > 440)
@@ -33,37 +37,41 @@ stdenv.mkDerivation rec {
       url = mkURL "012e1dd312eb" "0017-single-load-segment.patch";
       sha256 = "0azqzicsjw47b9ppyikhzaqmjl4lrvkxris1356bkmgcaiv6d98b";
     })
+    (fetchurl {
+      url = mkURL "26f0e7b2" "0018-prevent-pow-optimization.patch";
+      sha256 = "1c8g0jz5yj9a0rsmryx9vdjsw4hw8mjfcg05c9pmyjg85w3dfp3m";
+    })
   ];
 
   postPatch = ''
     substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
-    substituteInPlace gpxe/src/Makefile.housekeeping --replace /bin/echo $(type -P echo)
     substituteInPlace utils/ppmtolss16 --replace /usr/bin/perl $(type -P perl)
-    substituteInPlace gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
 
     # fix tests
     substituteInPlace tests/unittest/include/unittest/unittest.h \
       --replace /usr/include/ ""
+
+    # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
+    mkdir gnu-efi/inc/ia32/gnu
+    touch gnu-efi/inc/ia32/gnu/stubs-32.h
   '';
 
-  nativeBuildInputs = [ nasm perl python ];
+  nativeBuildInputs = [ nasm perl python3 ];
   buildInputs = [ libuuid makeWrapper ];
 
   enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
   hardeningDisable = [ "pic" "stackprotector" "fortify" ];
 
-  stripDebugList = "bin sbin share/syslinux/com32";
+  stripDebugList = [ "bin" "sbin" "share/syslinux/com32" ];
 
   makeFlags = [
     "BINDIR=$(out)/bin"
     "SBINDIR=$(out)/sbin"
-    "LIBDIR=$(out)/lib"
-    "INCDIR=$(out)/include"
     "DATADIR=$(out)/share"
     "MANDIR=$(out)/share/man"
     "PERL=perl"
-    "bios"
-  ];
+  ]
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
 
   doCheck = false; # fails. some fail in a sandbox, others require qemu
 
@@ -76,7 +84,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.syslinux.org/;
+    homepage = "http://www.syslinux.org/";
     description = "A lightweight bootloader";
     license = licenses.gpl2;
     maintainers = [ maintainers.samueldr ];

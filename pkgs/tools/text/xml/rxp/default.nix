@@ -1,7 +1,7 @@
 {stdenv, fetchurl} :
 
 stdenv.mkDerivation rec {
-  name = "rxp-${version}";
+  pname = "rxp";
   version = "1.5.0";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
     description = "A validating XML parser written in C";
-    homepage = http://www.cogsci.ed.ac.uk/~richard/rxp.html;
+    homepage = "http://www.cogsci.ed.ac.uk/~richard/rxp.html";
     platforms = stdenv.lib.platforms.unix;
   };
 }

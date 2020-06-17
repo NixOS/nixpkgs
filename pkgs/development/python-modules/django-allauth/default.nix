@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.39.1";
+  version = "0.40.0";
 
   # no tests on PyPI
   src = fetchFromGitHub {
     owner = "pennersr";
     repo = pname;
     rev = version;
-    sha256 = "1kplkanhj26z3i6p0l1r5lczha4pavcx96vj3kpcp1rvyk1v0f7r";
+    sha256 = "10id4k01p1hg5agb8cmllg8mv4kc7ryl75br10idwxabqqp4vla1";
   };
 
   propagatedBuildInputs = [ requests requests_oauthlib django python3-openid ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication";
-    homepage = https://www.intenct.nl/projects/django-allauth;
+    homepage = "https://www.intenct.nl/projects/django-allauth";
     license = licenses.mit;
   };
 }

@@ -1,4 +1,4 @@
-{ gcc8Stdenv
+{ stdenv
 , ctags
 , appstream-glib
 , desktop-file-utils
@@ -9,20 +9,22 @@
 , gnome3
 , libgit2-glib
 , gobject-introspection
+, glade
 , gspell
 , gtk-doc
 , gtk3
 , gtksourceview4
-, hicolor-icon-theme
 , json-glib
 , jsonrpc-glib
 , libdazzle
 , libpeas
+, libportal
 , libxml2
 , meson
 , ninja
 , ostree
 , pcre
+, pcre2
 , pkgconfig
 , python3
 , sysprof
@@ -33,20 +35,16 @@
 , wrapGAppsHook
 , dbus
 , xvfb_run
+, glib
 }:
 
-let
-  # Does not build with GCC 7
-  # https://gitlab.gnome.org/GNOME/gnome-builder/issues/868
-  stdenv = gcc8Stdenv;
-in
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "3.32.0";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "00l7sshpndk995aw98mjmsc3mxhxzynlp7il551iwwjjdbc70qp4";
+    sha256 = "02ni81jyncycgfwslvaav0a62wzx3r9bi86xf0x7jvvk6plfaj8v";
   };
 
   nativeBuildInputs = [
@@ -56,8 +54,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     gobject-introspection
     gtk-doc
-    hicolor-icon-theme
-    (meson.override ({ inherit stdenv; }))
+    meson
     ninja
     pkgconfig
     python3
@@ -69,9 +66,10 @@ stdenv.mkDerivation rec {
     ctags
     flatpak
     gnome3.devhelp
-    gnome3.glade
+    glade
     libgit2-glib
     libpeas
+    libportal
     vte
     gspell
     gtk3
@@ -82,6 +80,7 @@ stdenv.mkDerivation rec {
     libxml2
     ostree
     pcre
+    pcre2
     python3
     sysprof
     template-glib
@@ -151,9 +150,9 @@ stdenv.mkDerivation rec {
       currently recommend running gnome-builder inside a nix-shell with
       appropriate dependencies loaded.
     '';
-    homepage = https://wiki.gnome.org/Apps/Builder;
+    homepage = "https://wiki.gnome.org/Apps/Builder";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

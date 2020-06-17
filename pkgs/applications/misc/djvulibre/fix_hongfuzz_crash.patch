@@ -1,0 +1,51 @@
+commit 89d71b01d606e57ecec2c2930c145bb20ba5bbe3
+Author: Leon Bottou <leon@bottou.org>
+Date:   Fri Jul 13 08:46:22 2018 -0400
+
+    fix hongfuzz crash.
+
+diff --git a/libdjvu/DjVmDir.cpp b/libdjvu/DjVmDir.cpp
+index d322323..a6a39e0 100644
+--- a/libdjvu/DjVmDir.cpp
++++ b/libdjvu/DjVmDir.cpp
+@@ -299,7 +299,13 @@ DjVmDir::decode(const GP<ByteStream> &gstr)
+          memcpy((char*) strings+strings_size, buffer, length);
+       }
+       DEBUG_MSG("size of decompressed names block=" << strings.size() << "\n");
+-   
++      if (strings[strings.size()-1] != 0)
++        {
++         int strings_size=strings.size();
++         strings.resize(strings_size+1);
++         strings[strings_size] = 0;
++        }
++      
+          // Copy names into the files
+       const char * ptr=strings;
+       for(pos=files_list;pos;++pos)
+diff --git a/libdjvu/miniexp.cpp b/libdjvu/miniexp.cpp
+index 6a5cd90..828addc 100644
+--- a/libdjvu/miniexp.cpp
++++ b/libdjvu/miniexp.cpp
+@@ -1065,7 +1065,7 @@ print_c_string(const char *s, char *d, int flags, size_t len)
+       c = (unsigned char)(*s++);
+       if (char_quoted(c, flags))
+         {
+-          char buffer[10];
++          char buffer[16]; /* 10+1 */
+           static const char *tr1 = "\"\\tnrbf";
+           static const char *tr2 = "\"\\\t\n\r\b\f";
+           buffer[0] = buffer[1] = 0;
+diff --git a/tools/csepdjvu.cpp b/tools/csepdjvu.cpp
+index 7ed13ad..fab9472 100644
+--- a/tools/csepdjvu.cpp
++++ b/tools/csepdjvu.cpp
+@@ -1834,7 +1834,7 @@ main(int argc, const char **argv)
+                 ByteStream::create(GURL::Filename::UTF8(arg),"rb");
+               BufferByteStream ibs(*fbs);
+               do {
+-                char pagename[16];
++                char pagename[20];
+                 sprintf(pagename, "p%04d.djvu", ++pageno);
+                 if (opts.verbose > 1)
+                   DjVuPrintErrorUTF8("%s","--------------------\n");

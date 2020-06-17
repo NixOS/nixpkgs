@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libnetfilter_queue, libnfnetlink }:
 
-stdenv.mkDerivation rec {
-  name = "freebind-${version}";
+stdenv.mkDerivation {
+  pname = "freebind";
   version = "2017-12-27";
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "IPv4 and IPv6 address rate limiting evasion tool";
-    homepage = https://github.com/blechschmidt/freebind;
+    homepage = "https://github.com/blechschmidt/freebind";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ volth ];

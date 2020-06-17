@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "surfboard_exporter-${version}";
+  pname = "surfboard_exporter";
   version = "2.0.0";
 
   goPackagePath = "github.com/ipstatic/surfboard_exporter";
@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Arris Surfboard signal metrics exporter";
-    homepage = https://github.com/ipstatic/surfboard_exporter;
+    homepage = "https://github.com/ipstatic/surfboard_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ disassembler ];
     platforms = platforms.unix;

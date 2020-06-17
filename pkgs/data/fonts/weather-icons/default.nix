@@ -21,7 +21,7 @@ in fetchzip {
       ready to be dropped right into Bootstrap, or any project that needs high
       quality weather, maritime, and meteorological based icons!
     '';
-    homepage = https://erikflowers.github.io/weather-icons/;
+    homepage = "https://erikflowers.github.io/weather-icons/";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ pnelson ];

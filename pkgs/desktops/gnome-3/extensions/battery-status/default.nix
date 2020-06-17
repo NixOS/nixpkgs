@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-battery-status-${version}";
+  pname = "gnome-shell-extension-battery-status";
   version = "6";
 
   src = fetchFromGitHub {
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     broken = true; # not compatable with latest GNOME
     maintainers = with maintainers; [ jonafato ];
-    homepage = https://github.com/milliburn/gnome-shell-extension-battery_status;
+    homepage = "https://github.com/milliburn/gnome-shell-extension-battery_status";
   };
 }

@@ -30,6 +30,14 @@ with lib;
 
 {
 
+  imports = [
+    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
+      (config:
+        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
+        in if value != "" then [ value ] else []))
+    (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
+  ];
+
   ###### interface
 
   options = {

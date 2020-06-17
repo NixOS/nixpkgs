@@ -9,5 +9,5 @@ stdenv.mkDerivation {
     sha256 = "0wp08b1gh2chs1xri43wziznyjcplx0clpsrb13wzyscv290ay5a";
   };
   makeFlags = [ "DESTDIR=$(out)" "prefix=" ];
-  buildInputs = [ imagemagick ];
+  nativeBuildInputs = [ imagemagick ];
 }

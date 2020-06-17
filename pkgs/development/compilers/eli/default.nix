@@ -28,11 +28,11 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "eli-${version}";
+  pname = "eli";
   version = "4.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/eli-project/Eli/Eli%20${version}/${name}.tar.bz2";
+    url = "mirror://sourceforge/project/eli-project/Eli/Eli%20${version}/${pname}-${version}.tar.bz2";
     sha256="1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   # skip interactive browser check
-  buildFlags = "nobrowsers";
+  buildFlags = [ "nobrowsers" ];
 
 
   preConfigure=''
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       construction with extensive libraries implementing common tasks, yet handling
       arbitrary special cases. Output is the C subset of C++.
     '';
-    homepage = http://eli-project.sourceforge.net/;
+    homepage = "http://eli-project.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ timokau ];
     platforms = stdenv.lib.platforms.linux;

@@ -1,7 +1,7 @@
 {stdenv, fetchurl, jre, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "varscan-${version}";
+  pname = "varscan";
   version = "2.4.2";
 
   src = fetchurl {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     # through the Office of Technology Management at Washington
     # University School of Medicine.
     license = licenses.unfree;
-    homepage = https://github.com/dkoboldt/varscan;
+    homepage = "https://github.com/dkoboldt/varscan";
     maintainers = with maintainers; [ jbedo ];
     platforms = platforms.all;
   };

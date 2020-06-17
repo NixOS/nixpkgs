@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Calculations for the position of the sun and the moon";
-    homepage = https://github.com/sffjunkie/astral/;
+    homepage = "https://github.com/sffjunkie/astral/";
     license = licenses.asl20;
     maintainers = with maintainers; [ flokli ];
   };

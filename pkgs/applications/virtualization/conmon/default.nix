@@ -1,34 +1,36 @@
 { stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , glib
 , glibc
 , systemd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
-  project = "conmon";
-  name = "${project}-${version}";
-  version = "0.3.0";
+  pname = "conmon";
+  version = "2.0.18";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = project;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0s23gm0cq4mylv882dr1n8bqql42674vny3z58yy77lwzmifc6id";
+    sha256 = "0f32g048jamfhrds68vzirx8iqizr45wf2d4bfvdsk176amrj4k0";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib systemd ] ++
-    stdenv.lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ glib systemd ]
+  ++ stdenv.lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
-  installPhase = "install -Dm755 bin/${project} $out/bin/${project}";
+  installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.podman = nixosTests.podman;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/containers/conmon;
+    homepage = "https://github.com/containers/conmon";
     description = "An OCI container runtime monitor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester saschagrunert ];
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

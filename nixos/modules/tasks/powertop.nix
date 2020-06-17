@@ -15,6 +15,7 @@ in {
     systemd.services = {
       powertop = {
         wantedBy = [ "multi-user.target" ];
+        after = [ "multi-user.target" ];
         description = "Powertop tunings";
         path = [ pkgs.kmod ];
         serviceConfig = {

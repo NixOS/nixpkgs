@@ -1,10 +1,18 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qtbase, udisks2-qt5, utillinux,
-  dtkcore, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, qtbase
+, udisks2-qt5
+, utillinux
+, dtkcore
+, deepin
+}:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "deepin-anything";
-  version = "0.1.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
@@ -12,6 +20,16 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1kvyffrii4b012f6ld1ih14qrn7gg5cxbdpbkac0wxb22hnz0azm";
   };
+
+  patches = [
+    # fix compilation error and add support to kernel 5.6
+    # https://github.com/linuxdeepin/deepin-anything/pull/27
+    (fetchpatch {
+      name = "linux-5.6.patch";
+      url = "https://github.com/linuxdeepin/deepin-anything/commit/764b820c2bcd7248993349b32f91043fc58ee958.patch";
+      sha256 = "1ww4xllxc2s04px6fy8wp5cyw54xaz155ry30sqz21vl8awfr36h";
+    })
+  ];
 
   outputs = [ "out" "modsrc" ];
 
@@ -31,7 +49,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "DEB_HOST_MULTIARCH="
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
   ];
 
   postPatch = ''
@@ -52,11 +70,11 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $modsrc  # for debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin file search tool";
-    homepage = https://github.com/linuxdeepin/deepin-anything;
+    homepage = "https://github.com/linuxdeepin/deepin-anything";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

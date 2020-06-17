@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "gast";
-  version =  "0.2.2";
+  version =  "0.3.3";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w5dzdb3gpcfmd2s0b93d8gff40a1s41rv31458z14inb3s9v4zy";
+    sha256 = "b881ef288a49aa81440d2c5eb8aeefd4c2bb8993d5f50edae7413a85bfdb3b57";
   };
   checkInputs = [ astunparse ] ;
   meta = with stdenv.lib; {

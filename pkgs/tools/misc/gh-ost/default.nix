@@ -7,7 +7,8 @@ let
 
 in
 buildGoPackage ({
-    name = "gh-ost-${version}";
+    pname = "gh-ost";
+    inherit version;
     inherit goPackagePath;
 
     src = fetchFromGitHub {
@@ -19,9 +20,8 @@ buildGoPackage ({
 
     meta = with stdenv.lib; {
       description = "Triggerless online schema migration solution for MySQL";
-      homepage = https://github.com/github/gh-ost;
+      homepage = "https://github.com/github/gh-ost";
       license = licenses.mit;
-      platforms = platforms.linux;
     };
 })
 

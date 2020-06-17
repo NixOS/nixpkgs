@@ -2,10 +2,13 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, isPy38
 # python dependencies
 , click
 , configparser ? null
 , dateutil
+, etelemetry
+, filelock
 , funcsigs
 , future
 , futures
@@ -14,8 +17,10 @@
 , nibabel
 , numpy
 , packaging
+, pathlib2
 , prov
 , psutil
+, pybids
 , pydot
 , pytest
 , pytest_xdist
@@ -26,6 +31,7 @@
 , xvfbwrapper
 , pytestcov
 , codecov
+, sphinx
 # other dependencies
 , which
 , bash
@@ -44,11 +50,11 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.1.9";
+  version = "1.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f80096ec6cfd7cffc05764bba1749e424877140ef1373193f076bdd843f19016";
+    sha256 = "1nr0z0k4xx1vswkp03g1lf8141mr4j2fbwd7wmpay4vz46qcp786";
   };
 
   postPatch = ''
@@ -56,9 +62,15 @@ buildPythonPackage rec {
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
   '';
 
+  nativeBuildInputs = [
+    sphinx
+  ];
+
   propagatedBuildInputs = [
     click
     dateutil
+    etelemetry
+    filelock
     funcsigs
     future
     networkx
@@ -73,12 +85,14 @@ buildPythonPackage rec {
     simplejson
     traits
     xvfbwrapper
-  ] ++ stdenv.lib.optional (!isPy3k) [
+  ] ++ stdenv.lib.optionals (!isPy3k) [
     configparser
     futures
+    pathlib2 # darwin doesn't receive this transitively, but it is in install_requires
   ];
 
   checkInputs = [
+    pybids
     codecov
     glibcLocales
     mock
@@ -89,15 +103,16 @@ buildPythonPackage rec {
     which
   ];
 
+  # checks on darwin inspect memory which doesn't work in build environment
+  doCheck = !stdenv.isDarwin;
+  # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest -v --doctest-modules nipype
+    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display'
   '';
-
-  # See: https://github.com/nipy/nipype/issues/2839
-  doCheck = false;
+  pythonImportsCheck = [ "nipype" ];
 
   meta = with stdenv.lib; {
-    homepage = https://nipy.org/nipype/;
+    homepage = "https://nipy.org/nipype/";
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];

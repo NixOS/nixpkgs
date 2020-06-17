@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "28";
   pname = "pforth";
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Portable ANSI style Forth written in ANSI C";
-    homepage = http://www.softsynth.com/pforth/;
+    homepage = "http://www.softsynth.com/pforth/";
     license = stdenv.lib.licenses.publicDomain;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ yrashk ];

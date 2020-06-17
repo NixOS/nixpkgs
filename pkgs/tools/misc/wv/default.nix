@@ -4,10 +4,9 @@
 stdenv.mkDerivation rec {
   pname = "wv";
   version = "1.2.9";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://www.abisource.com/downloads/${pname}/${version}/${name}.tar.gz";
+    url = "http://www.abisource.com/downloads/${pname}/${version}/${pname}-${version}.tar.gz";
     sha256 = "17f16lkdv1c3amaz2hagiicih59ynpp4786k1m2qa1sw68xhswsc";
   };
 

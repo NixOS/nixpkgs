@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mavenDoxiaSinkApi_1_0_alpha6 = map (obj: fetchMaven {
     version = "1.0-alpha-6";
     artifactId = "doxia-sink-api";

@@ -13,12 +13,12 @@
 # FIXME: clean the mess around choosing the SSL library (nss by default)
 
 let unwrapped = stdenv.mkDerivation rec {
-  name = "pidgin-${version}";
+  pname = "pidgin";
   majorVersion = "2";
   version = "${majorVersion}.13.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pidgin/${name}.tar.bz2";
+    url = "mirror://sourceforge/pidgin/${pname}-${version}.tar.bz2";
     sha256 = "13vdqj70315p9rzgnbxjp9c51mdzf1l4jg1kvnylc4bidw61air7";
   };
 
@@ -67,7 +67,7 @@ let unwrapped = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Multi-protocol instant messaging client";
-    homepage = http://pidgin.im;
+    homepage = "http://pidgin.im";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.vcunat ];

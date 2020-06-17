@@ -24,8 +24,8 @@ let
     genericName = "NixUI";
   };
 in
-stdenv.mkDerivation rec {
-  name = "nixui-${version}";
+stdenv.mkDerivation {
+  pname = "nixui";
   inherit version src;
   installPhase = ''
     mkdir -p $out/bin
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "NodeWebkit user interface for Nix";
-    homepage = https://github.com/matejc/nixui;
+    homepage = "https://github.com/matejc/nixui";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.matejc ];
     platforms = stdenv.lib.platforms.unix;

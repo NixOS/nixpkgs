@@ -4,11 +4,11 @@ with stdenv.lib;
 
 buildPythonPackage rec {
   pname = "Flask-Migrate";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00nm76w4xymsiih6hq8y46wp026v7zkzq15cx39hp929ba3z2vx9";
+    sha256 = "a69d508c2e09d289f6e55a417b3b8c7bfe70e640f53d2d9deb0d056a384f37ee";
   };
 
   checkInputs = [ flask_script ] ++ optional isPy3k glibcLocales;
@@ -22,6 +22,6 @@ buildPythonPackage rec {
   meta = {
     description = "SQLAlchemy database migrations for Flask applications using Alembic";
     license = licenses.mit;
-    homepage = https://github.com/miguelgrinberg/Flask-Migrate;
+    homepage = "https://github.com/miguelgrinberg/Flask-Migrate";
   };
 }

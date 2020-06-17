@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name    = "ssdeep-${version}";
+  pname = "ssdeep";
   version = "2.14.1";
 
   src = fetchFromGitHub {

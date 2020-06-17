@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libpcap, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "ngrep-${version}";
+  pname = "ngrep";
   version = "1.47";
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       null interfaces, and understands BPF filter logic in the same fashion as
       more common packet sniffing tools, such as tcpdump and snoop.
     '';
-    homepage = https://github.com/jpr5/ngrep/;
+    homepage = "https://github.com/jpr5/ngrep/";
     # <ngrep>/doc/README.txt says that ngrep itself is licensed under a
     # 'BSD-like' license but that the 'regex' library (in the ngrep tarball) is
     # GPLv2.

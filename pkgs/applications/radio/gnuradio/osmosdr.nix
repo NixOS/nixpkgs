@@ -13,13 +13,13 @@
 assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
-  name = "gr-osmosdr-${version}";
-  version = "2018-08-15";
+  pname = "gr-osmosdr";
+  version = "0.1.5";
 
   src = fetchgit {
     url = "git://git.osmocom.org/gr-osmosdr";
-    rev = "4d83c6067f059b0c5015c3f59f8117bbd361e877";
-    sha256 = "1d5nb47506qry52bg4cn02d3l4lwxwz44g2fz1ph0q93c7892j60";
+    rev = "v${version}";
+    sha256 = "0bf9bnc1c3c4yqqqgmg3nhygj6rcfmyk6pybi27f7461d2cw1drv";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gnuradio block for OsmoSDR and rtl-sdr";
-    homepage = https://sdr.osmocom.org/trac/wiki/GrOsmoSDR;
+    homepage = "https://sdr.osmocom.org/trac/wiki/GrOsmoSDR";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor the-kenny ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

@@ -1,0 +1,17 @@
+diff --git a/meson.build b/meson.build
+index 31dd8b8..8761087 100644
+--- a/meson.build
++++ b/meson.build
+@@ -21,12 +21,6 @@ endif
+ 
+ cpu = host_machine.cpu_family()
+ 
+-if cpu == 'x86_64'
+-	c_args += '-mavx'
+-elif cpu == 'arm'
+-	c_args += '-mfpu=neon'
+-endif
+-
+ add_project_arguments(c_args, language: 'c')
+ 
+ cc = meson.get_compiler('c')

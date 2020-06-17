@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Taking Google App Engine's webapp to the next level";
-    homepage = http://webapp-improved.appspot.com;
+    homepage = "http://webapp-improved.appspot.com";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

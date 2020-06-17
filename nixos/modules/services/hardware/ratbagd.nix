@@ -10,12 +10,7 @@ in
 
   options = {
     services.ratbagd = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable ratbagd for configuring gaming mice.
-        '';
-      };
+      enable = mkEnableOption "ratbagd for configuring gaming mice";
     };
   };
 

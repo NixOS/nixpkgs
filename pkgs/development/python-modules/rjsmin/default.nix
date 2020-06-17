@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://opensource.perlig.de/rjsmin/;
+    homepage = "http://opensource.perlig.de/rjsmin/";
     license = licenses.asl20;
     description = "Javascript minifier written in python";
   };

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python wrapper for Ofir Pele and Michael Werman's implementation of the Earth Mover's Distance";
-    homepage = https://github.com/wmayner/pyemd;
+    homepage = "https://github.com/wmayner/pyemd";
     license = licenses.mit;
     maintainers = with maintainers; [ rvl ];
   };

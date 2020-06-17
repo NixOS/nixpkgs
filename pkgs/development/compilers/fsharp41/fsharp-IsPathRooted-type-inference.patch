@@ -1,0 +1,21 @@
+commit c37fce5b3019c7a150203fc3a484885591b194de
+Author: Alexis Christoforides <alexis@thenull.net>
+Date:   Sun Dec 2 00:10:24 2018 -0500
+
+    Help Path.IsPathRooted method overload selection.
+
+    .NET Core, and Mono after merging https://github.com/mono/mono/pull/11342, introduce ambiguity with a new overload.
+
+diff --git a/src/scripts/scriptlib.fsx b/src/scripts/scriptlib.fsx
+index cc797e305..699c7bb93 100644
+--- a/src/scripts/scriptlib.fsx
++++ b/src/scripts/scriptlib.fsx
+@@ -92,7 +92,7 @@ module Scripting =
+
+     module Process =
+
+-        let processExePath baseDir exe =
++        let processExePath baseDir (exe:string) =
+             if Path.IsPathRooted(exe) then exe
+             else
+                 match Path.GetDirectoryName(exe) with

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "desync-${version}";
+  pname = "desync";
   version = "0.4.0";
   rev = "v${version}";
 
@@ -19,7 +19,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Content-addressed binary distribution system";
     longDescription = "An alternate implementation of the casync protocol and storage mechanism with a focus on production-readiness";
-    homepage = https://github.com/folbricht/desync;
+    homepage = "https://github.com/folbricht/desync";
     license = licenses.bsd3;
     platforms = platforms.unix; # *may* work on Windows, but varies between releases.
     maintainers = [ maintainers.chaduffy ];

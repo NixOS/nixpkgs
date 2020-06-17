@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.1";
+  version = "4.2.2";
   pname = "openapi-generator-cli";
 
   jarfilename = "${pname}-${version}.jar";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://central.maven.org/maven2/org/openapitools/${pname}/${version}/${jarfilename}";
-    sha256 = "1fglvn6ricvb0csbrjkjfp902y6drjf6cby5fihmr5v9m7pjym1y";
+    url = "mirror://maven/org/openapitools/${pname}/${version}/${jarfilename}";
+    sha256 = "1pafv432ll3pp52580pbnk0gnrm6byl5fkrf1rarhxfkpkr82yif";
   };
 
   phases = [ "installPhase" ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
-    homepage = https://github.com/OpenAPITools/openapi-generator;
+    homepage = "https://github.com/OpenAPITools/openapi-generator";
     license = licenses.asl20;
     maintainers = [ maintainers.shou ];
   };

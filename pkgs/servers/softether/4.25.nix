@@ -14,7 +14,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "softether-${version}";
+  pname = "softether";
   version = "4.25";
   build = "9656";
   compiledDate = "2018.01.15";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An Open-Source Free Cross-platform Multi-protocol VPN Program";
-    homepage = https://www.softether.org/;
+    homepage = "https://www.softether.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.rick68 ];
     platforms = [ "x86_64-linux" ];

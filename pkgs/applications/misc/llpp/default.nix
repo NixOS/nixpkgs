@@ -1,16 +1,16 @@
 { stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11,
-libGLU_combined, freetype, xclip, inotify-tools, procps }:
+libGLU, libGL, freetype, xclip, inotify-tools, procps }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
 stdenv.mkDerivation rec {
-  name = "llpp-${version}";
-  version = "30";
+  pname = "llpp";
+  version = "32";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
     rev = "v${version}";
-    sha256 = "0iilpzf12hs0zky58j55l4y5dvzv7fc53nsrg324n9vka92mppvd";
+    sha256 = "1h1zysm5cz8laq8li49djl6929cnrjlflag9hw0c1dcr4zaxk32y";
     fetchSubmodules = false;
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   });
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml mupdf libX11 libGLU_combined freetype ];
+  buildInputs = [ ocaml mupdf libX11 libGLU libGL freetype ];
 
   dontStrip = true;
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://repo.or.cz/w/llpp.git;
+    homepage = "https://repo.or.cz/w/llpp.git";
     description = "A MuPDF based PDF pager written in OCaml";
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub enzime ];

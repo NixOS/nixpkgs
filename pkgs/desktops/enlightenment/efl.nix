@@ -1,58 +1,162 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig
-, fribidi, SDL2, SDL, libGL, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
-, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, bullet, luajit
-, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
-, dbus, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
-, curl, libinput, systemd, mesa, writeText, gtk3
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, SDL2
+, alsaLib
+, bullet
+, check
+, curl
+, dbus
+, doxygen
+, expat
+, fontconfig
+, freetype
+, fribidi
+, ghostscript
+, giflib
+, glib
+, gst_all_1
+, gtk3
+, harfbuzz
+, hicolor-icon-theme
+, ibus
+, jbig2dec
+, libGL
+, libdrm
+, libinput
+, libjpeg
+, libpng
+, libpulseaudio
+, libraw
+, librsvg
+, libsndfile
+, libspectre
+, libtiff
+, libwebp
+, libxkbcommon
+, luajit
+, lz4
+, mesa
+, mint-x-icons
+, openjpeg
+, openssl
+, poppler
+, python3Packages
+, systemd
+, udev
+, utillinux
+, writeText
+, xorg
+, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "efl-${version}";
-  version = "1.22.2";
+  pname = "efl";
+  version = "1.24.2";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "1l0wdgzxqm2y919277b1p9d37xzg808zwxxaw0nn44arh8gqk68n";
+    url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0w3srvigg4kfi7xq76c7y4hnq5yr2gxrrsvlyj1g2wc1igz1vyg1";
   };
 
-  nativeBuildInputs = [ pkgconfig gtk3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gtk3
+    pkgconfig
+    check
+  ];
 
-  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGL mesa
-    giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-    gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.xorgproto
-    xorg.libX11 udev systemd ];
+  buildInputs = [
+    fontconfig
+    freetype
+    giflib
+    glib
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
+    ibus
+    libGL
+    libpng
+    libpulseaudio
+    libsndfile
+    libtiff
+    lz4
+    mesa
+    openssl
+    systemd
+    udev
+    xorg.libX11
+    xorg.libXcursor
+    xorg.xorgproto
+    zlib
+    # still missing parent icon themes: RAVE-X, Faenza
+  ];
 
-  propagatedBuildInputs = [ libxkbcommon python27Packages.dbus-python dbus libjpeg xorg.libXcomposite
-    xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext
-    bullet xorg.libXScrnSaver xorg.libXrender xorg.libXfixes xorg.libXrandr
-    xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
-    harfbuzz jbig2dec librsvg dbus alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
-    libinput utillinux fribidi SDL2 ];
+  propagatedBuildInputs = [
+    SDL2
+    alsaLib
+    bullet
+    curl
+    dbus
+    dbus
+    doxygen
+    expat
+    fribidi
+    ghostscript
+    harfbuzz
+    hicolor-icon-theme # for the icon theme
+    jbig2dec
+    libdrm
+    libinput
+    libjpeg
+    libraw
+    librsvg
+    libspectre
+    libwebp
+    libxkbcommon
+    luajit
+    mint-x-icons # Mint-X is a parent icon theme of Enlightenment-X
+    openjpeg
+    poppler
+    utillinux
+    xorg.libXScrnSaver
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXtst
+    xorg.libxcb
+  ];
 
-  # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
-  configureFlags = [
-    "--enable-sdl"
-    "--enable-drm"
-    "--enable-elput"
-    "--with-opengl=full"
-    "--enable-image-loader-jp2k"
-    "--enable-xinput22"
-    "--enable-multisense"
-    "--enable-liblz4"
-    "--enable-systemd"
-    "--enable-image-loader-webp"
-    "--enable-harfbuzz"
-    "--enable-xine"
-    "--enable-fb"
-    "--disable-tslib"
-    "--with-systemdunitdir=$out/systemd/user"
-    "ac_ct_CXX=foo"
+  dontDropIconThemeCache = true;
+
+  mesonFlags = [
+    "--buildtype=release"
+    "-D build-tests=false" # disable build tests, which are not working
+    "-D drm=true"
+    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disalbed by default, scim is not availabe in nixpkgs
+    "-D embedded-lz4=false"
+    "-D fb=true"
+    "-D network-backend=connman"
+    "-D sdl=true"
   ];
 
   patches = [ ./efl-elua.patch ];
 
   postPatch = ''
     patchShebangs src/lib/elementary/config_embed
+
+    # fix destination of systemd unit and dbus service
+    substituteInPlace systemd-services/meson.build --replace "dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
+    substituteInPlace dbus-services/meson.build --replace "dep.get_pkgconfig_variable('session_bus_services_dir')" "'$out/share/dbus-1/services'"
   '';
 
   # bin/edje_cc creates $HOME/.run, which would break build of reverse dependencies.
@@ -61,35 +165,38 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    export LD_LIBRARY_PATH="$(pwd)/src/lib/eina/.libs:$LD_LIBRARY_PATH"
+    # allow ecore_con to find libcurl.so, which is a runtime dependency (it is dlopened)
+    export LD_LIBRARY_PATH="${curl.out}/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+
     source "$setupHook"
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
   postInstall = ''
+    # fix use of $out variable
     substituteInPlace "$out/share/elua/core/util.lua" --replace '$out' "$out"
+
+    # add all module include dirs to the Cflags field in efl.pc
     modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)
-    substituteInPlace "$out/lib/pkgconfig/efl.pc" --replace 'Cflags: -I''${includedir}/efl-1' \
-      'Cflags: -I''${includedir}/eina-1/eina'"$modules"
+    substituteInPlace "$out/lib/pkgconfig/efl.pc" \
+      --replace 'Cflags: -I''${includedir}/efl-1' \
+                'Cflags: -I''${includedir}/eina-1/eina'"$modules"
 
     # build icon cache
     gtk-update-icon-cache "$out"/share/icons/Enlightenment-X
   '';
 
-  # EFL applications depend on libcurl, although it is linked at
-  # runtime by hand in code (it is dlopened).
   postFixup = ''
+    # EFL applications depend on libcurl, which is linked at runtime by hand in code (it is dlopened)
     patchelf --add-needed ${curl.out}/lib/libcurl.so $out/lib/libecore_con.so
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Enlightenment foundation libraries";
-    homepage = http://enlightenment.org/;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://enlightenment.org/";
     license = stdenv.lib.licenses.lgpl3;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

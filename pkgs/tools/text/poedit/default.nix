@@ -3,12 +3,12 @@
   nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "poedit-${version}";
-  version = "2.2.1";
+  pname = "poedit";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "https://github.com/vslavik/poedit/archive/v${version}-oss.tar.gz";
-    sha256 = "0brj6ysisxng2xn8l9ii2rngsj5b4rk27hzfjbp3zwb2caagd3vq";
+    sha256 = "04f9za35rwyr7mabk8f8izc0fgvc3sfx45v8dml1xmi634n174ds";
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cross-platform gettext catalogs (.po files) editor";
-    homepage = https://www.poedit.net/;
+    homepage = "https://www.poedit.net/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ domenkozar genesis ];

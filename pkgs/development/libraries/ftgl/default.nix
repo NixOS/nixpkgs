@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, freetype, libGLU_combined, OpenGL }:
+{ stdenv, fetchurl, freetype, libGL, libGLU, OpenGL }:
 
 let
   name = "ftgl-2.1.3-rc5";
@@ -15,13 +15,15 @@ stdenv.mkDerivation {
     ++ (if stdenv.isDarwin then
       [ OpenGL ]
     else
-      [ libGLU_combined ])
+      [ libGL libGLU ])
     ;
+
+  configureFlags = [ "--with-ft-prefix=${stdenv.lib.getDev freetype}" ];
 
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://sourceforge.net/apps/mediawiki/ftgl/;
+    homepage = "https://sourceforge.net/apps/mediawiki/ftgl/";
     description = "Font rendering library for OpenGL applications";
     license = stdenv.lib.licenses.gpl3Plus;
 

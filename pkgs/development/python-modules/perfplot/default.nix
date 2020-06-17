@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Performance plots for Python code snippets";
-    homepage = https://github.com/nschloe/perfplot;
+    homepage = "https://github.com/nschloe/perfplot";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

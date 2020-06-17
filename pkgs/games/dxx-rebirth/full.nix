@@ -2,7 +2,7 @@
 , dxx-rebirth, descent1-assets, descent2-assets }:
 
 let
-  generic = ver: assets: stdenv.mkDerivation rec {
+  generic = ver: assets: stdenv.mkDerivation {
     name = "d${toString ver}x-rebirth-full-${assets.version}";
 
     nativeBuildInputs = [ makeWrapper ];
@@ -16,7 +16,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Descent ${toString ver} using the DXX-Rebirth project engine and game assets from GOG";
-      homepage    = https://www.dxx-rebirth.com/;
+      homepage    = "https://www.dxx-rebirth.com/";
       license     = with licenses; [ free unfree ];
       maintainers = with maintainers; [ peterhoeg ];
       platforms   = with platforms; linux;

@@ -3,7 +3,8 @@
 let version = "1.6.2"; in
 
 stdenv.mkDerivation {
-  name = "libossp-uuid-${version}";
+  pname = "libossp-uuid";
+  inherit version;
 
   src = fetchurl {
     url = "ftp://ftp.ossp.org/pkg/lib/uuid/uuid-${version}.tar.gz";
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
   patches = [ ./shtool.patch ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.ossp.org/pkg/lib/uuid/;
+    homepage = "http://www.ossp.org/pkg/lib/uuid/";
     description = "OSSP uuid ISO-C and C++ shared library";
     longDescription =
       ''

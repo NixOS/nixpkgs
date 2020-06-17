@@ -3,12 +3,12 @@
 , docbook_xsl, docbook_xml_dtd_43, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-keyring-${version}";
-  version = "3.31.91";
+  pname = "gnome-keyring";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-keyring/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1fjylqw4xp0rqsylq4gbxzw1sql2sy55h1mnz1pprrxb9py0mnd4";
+    url = "mirror://gnome/sources/gnome-keyring/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "11sgffrrpss5cmv3b717pqlbhgq17l1xd33fsvqgsw8simxbar52";
   };
 
   outputs = [ "out" "dev" ];
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-pkcs11-config=${placeholder ''out''}/etc/pkcs11/" # installation directories
-    "--with-pkcs11-modules=${placeholder ''out''}/lib/pkcs11/"
+    "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories
+    "--with-pkcs11-modules=${placeholder "out"}/lib/pkcs11/"
   ];
 
   postPatch = ''
@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
-    homepage = https://wiki.gnome.org/Projects/GnomeKeyring;
+    homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

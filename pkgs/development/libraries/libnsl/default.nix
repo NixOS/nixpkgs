@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Client interface library for NIS(YP) and NIS+";
-    homepage = https://github.com/thkukuk/libnsl;
+    homepage = "https://github.com/thkukuk/libnsl";
     license = licenses.lgpl21;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

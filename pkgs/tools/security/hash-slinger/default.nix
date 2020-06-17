@@ -4,13 +4,12 @@ let
   inherit (pythonPackages) python;
 in stdenv.mkDerivation rec {
   pname    = "hash-slinger";
-  name    = "${pname}-${version}";
   version = "2.7";
 
   src = fetchFromGitHub {
     owner = "letoams";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "05wn744ydclpnpyah6yfjqlfjlasrrhzj48lqmm5a91nyps5yqyn";
   };
 

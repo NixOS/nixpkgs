@@ -12,7 +12,7 @@ iproute.overrideAttrs (oa: rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/multipath-tcp/iproute-mptcp;
+    homepage = "https://github.com/multipath-tcp/iproute-mptcp";
     description = "IP-Route extensions for MultiPath TCP";
     license = licenses.gpl2;
     platforms = platforms.linux;

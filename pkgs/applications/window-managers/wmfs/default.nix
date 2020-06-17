@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gnumake,
   libX11, libXinerama, libXrandr, libXpm, libXft, imlib2 }:
-stdenv.mkDerivation rec {
-  name = "wmfs-${version}";
+stdenv.mkDerivation {
+  pname = "wmfs";
 
   version = "201902";
 
   src = fetchFromGitHub {
     owner = "xorg62";
     repo = "wmfs";
-    sha256 = "sha256:1m7dsmmlhq2qipim659cp9aqlriz1cwrrgspl8baa5pncln0gd5c";
+    sha256 = "1m7dsmmlhq2qipim659cp9aqlriz1cwrrgspl8baa5pncln0gd5c";
     rev = "b7b8ff812d28c79cb22a73db2739989996fdc6c2";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "openelec-dvb-firmware-${version}";
+  pname = "openelec-dvb-firmware";
   version = "0.0.51";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "DVB firmware from OpenELEC";
-    homepage = https://github.com/OpenELEC/dvb-firmware;
+    homepage = "https://github.com/OpenELEC/dvb-firmware";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
     priority = 7;

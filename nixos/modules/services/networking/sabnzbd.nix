@@ -15,10 +15,8 @@ in
 
   options = {
     services.sabnzbd = {
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the sabnzbd server.";
-      };
+      enable = mkEnableOption "the sabnzbd server";
+
       configFile = mkOption {
         default = "/var/lib/sabnzbd/sabnzbd.ini";
         description = "Path to config file.";

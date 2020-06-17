@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "ostinato-${version}";
+  pname = "ostinato";
   version = "0.9";
 
   src = fetchFromGitHub  {
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A packet traffic generator and analyzer";
-    homepage    = https://ostinato.org;
+    homepage    = "https://ostinato.org";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ rick68 ];
     platforms   = with platforms; linux ++ darwin ++ cygwin;

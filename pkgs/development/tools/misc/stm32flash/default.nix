@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source flash program for the STM32 ARM processors using the ST bootloader";
-    homepage = https://sourceforge.net/projects/stm32flash/;
+    homepage = "https://sourceforge.net/projects/stm32flash/";
     license = stdenv.lib.licenses.gpl2;
     platforms = platforms.all; # Should work on all platforms
-    maintainers = with maintainers; [ the-kenny elitak ];
+    maintainers = with maintainers; [ elitak ];
   };
 }

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.3";
-  name = "libnetfilter_queue-${version}";
+  pname = "libnetfilter_queue";
 
   src = fetchurl {
-    url = "https://www.netfilter.org/projects/libnetfilter_queue/files/${name}.tar.bz2";
+    url = "https://www.netfilter.org/projects/libnetfilter_queue/files/${pname}-${version}.tar.bz2";
     sha256 = "0x77m1fvbqzz5z64jz59fb6j8dvv8b9pg4fmznqwax4x6imjcncq";
   };
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libmnl libnfnetlink ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.netfilter.org/projects/libnetfilter_queue/;
+    homepage = "http://www.netfilter.org/projects/libnetfilter_queue/";
     description = "Userspace API to packets queued by the kernel packet filter";
     license = licenses.gpl2;
     platforms = platforms.linux;

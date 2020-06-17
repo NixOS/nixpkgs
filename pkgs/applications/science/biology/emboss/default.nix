@@ -23,6 +23,6 @@ stdenv.mkDerivation {
     data in a variety of formats and even allows transparent retrieval of
     sequence data from the web.''; 
     license     = "GPL2";
-    homepage    = http://emboss.sourceforge.net/;
+    homepage    = "http://emboss.sourceforge.net/";
   };
 }

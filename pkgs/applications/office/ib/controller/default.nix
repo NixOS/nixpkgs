@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.14.0";
-  name = "ib-controller-${version}";
+  pname = "ib-controller";
 
   src = fetchurl {
     url = "https://github.com/ib-controller/ib-controller/archive/${version}.tar.gz";
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Automation Controller for the Trader Work Station of Interactive Brokers";
-    homepage = https://github.com/ib-controller/ib-controller;
+    homepage = "https://github.com/ib-controller/ib-controller";
     license = licenses.gpl3;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;

@@ -23,9 +23,9 @@ let
   flags = "-r ${rulesDir} -c ${configFile} -L ${logFiles} -${levelFlag} -m ${cfg.mailTo}";
 
   levelFlag = getAttrFromPath [cfg.level]
-    { "paranoid"    = "p";
-      "server"      = "s";
-      "workstation" = "w";
+    { paranoid    = "p";
+      server      = "s";
+      workstation = "w";
     };
 
   cronJob = ''
@@ -155,7 +155,7 @@ in
 
       config = mkOption {
         default = "FQDN=1";
-        type = types.string;
+        type = types.lines;
         description = ''
           Config options that you would like in logcheck.conf.
         '';
@@ -213,13 +213,14 @@ in
         mapAttrsToList writeIgnoreRule cfg.ignore
         ++ mapAttrsToList writeIgnoreCronRule cfg.ignoreCron;
 
-    users.users = optionalAttrs (cfg.user == "logcheck") (singleton
-      { name = "logcheck";
+    users.users = optionalAttrs (cfg.user == "logcheck") {
+      logcheck = {
         uid = config.ids.uids.logcheck;
         shell = "/bin/sh";
         description = "Logcheck user account";
         extraGroups = cfg.extraGroups;
-      });
+      };
+    };
 
     system.activationScripts.logcheck = ''
       mkdir -m 700 -p /var/{lib,lock}/logcheck

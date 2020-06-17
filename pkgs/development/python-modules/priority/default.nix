@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://python-hyper.org/priority/;
+    homepage = "https://python-hyper.org/priority/";
     description = "A pure-Python implementation of the HTTP/2 priority tree";
     license = licenses.mit;
     maintainers = [ maintainers.qyliss ];

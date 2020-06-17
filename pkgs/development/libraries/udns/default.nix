@@ -4,7 +4,7 @@
 # https://tracker.debian.org/media/packages/u/udns/rules-0.4-1
 
 stdenv.mkDerivation rec {
-  name = "udns-${version}";
+  pname = "udns";
   version = "0.4";
 
   configurePhase = "./configure --enable-ipv6";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildPhase = "make staticlib sharedlib rblcheck_s dnsget_s";
 
   src = fetchurl {
-    url = "http://www.corpit.ru/mjt/udns/${name}.tar.gz";
+    url = "http://www.corpit.ru/mjt/udns/${pname}-${version}.tar.gz";
     sha256 = "0447fv1hmb44nnchdn6p5pd9b44x8p5jn0ahw6crwbqsg7f0hl8i";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   outputDevdoc = "out";
 
   meta = with stdenv.lib; {
-    homepage = http://www.corpit.ru/mjt/udns.html;
+    homepage = "http://www.corpit.ru/mjt/udns.html";
     description = "Async-capable DNS stub resolver library";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.womfoo ];

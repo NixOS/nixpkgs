@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses, zlib, bzip2, sqlite, pkgconfig, glib, gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "ncdc-${version}";
+  pname = "ncdc";
   version = "1.22.1";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Modern and lightweight direct connect client with a friendly ncurses interface";
-    homepage = https://dev.yorhel.nl/ncdc;
+    homepage = "https://dev.yorhel.nl/ncdc";
     license = licenses.mit;
     platforms = platforms.linux; # arbitrary
     maintainers = with maintainers; [ ehmry ];

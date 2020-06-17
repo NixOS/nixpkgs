@@ -1,7 +1,7 @@
 { stdenv, fetchhg, pidgin, glib, json-glib, protobuf, protobufc }:
 
-stdenv.mkDerivation rec {
-  name = "purple-hangouts-hg-${version}";
+stdenv.mkDerivation {
+  pname = "purple-hangouts-hg";
   version = "2018-12-02";
 
   src = fetchhg {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
   meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/EionRobb/purple-hangouts;
+    homepage = "https://bitbucket.org/EionRobb/purple-hangouts";
     description = "Native Hangouts support for pidgin";
     license = licenses.gpl3;
     platforms = platforms.linux;

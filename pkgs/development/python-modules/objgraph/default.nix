@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Draws Python object reference graphs with graphviz";
-    homepage = https://mg.pov.lt/objgraph/;
+    homepage = "https://mg.pov.lt/objgraph/";
     license = licenses.mit;
   };
 

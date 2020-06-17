@@ -1,64 +1,34 @@
-{ stdenv
-, autoconf
-, automake
-, c-ares
-, cryptopp
-, curl
-, doxygen
-, fetchFromGitHub
-, ffmpeg
-, hicolor-icon-theme
-, libmediainfo
-, libraw
-, libsodium
-, libtool
-, libuv
-, libzen
-, lsb-release
-, pkgconfig
-, qt5
-, sqlite
-, swig
-, unzip
-, wget
-}:
+{ stdenv, autoconf, automake, c-ares, cryptopp, curl, doxygen, fetchFromGitHub
+, fetchpatch, ffmpeg_3, libmediainfo, libraw, libsodium, libtool, libuv, libzen
+, lsb-release, mkDerivation, pkgconfig, qtbase, qttools, sqlite, swig, unzip
+, wget }:
 
-stdenv.mkDerivation rec {
-  name = "megasync-${version}";
-  version = "4.1.1.0";
+mkDerivation rec {
+  pname = "megasync";
+  version = "4.3.0.8";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "0lc228q3s9xp78dxjn22g6anqlsy1hi7a6yfs4q3l6gyfc3qcxl2";
+    sha256 = "1rhxkc6j3039rcsi8cxy3n00g6w7acir82ymnksbpsnp4yxqv5r3";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    doxygen
-    lsb-release
-    pkgconfig
-    qt5.qmake
-    qt5.qttools
-    swig
-  ];
+  nativeBuildInputs =
+    [ autoconf automake doxygen lsb-release pkgconfig qttools swig ];
   buildInputs = [
     c-ares
     cryptopp
     curl
-    ffmpeg
-    hicolor-icon-theme
+    ffmpeg_3
     libmediainfo
     libraw
     libsodium
     libtool
     libuv
     libzen
-    qt5.qtbase
-    qt5.qtsvg
+    qtbase
     sqlite
     unzip
     wget
@@ -87,21 +57,21 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-          "--disable-examples"
-          "--disable-java"
-          "--disable-php"
-          "--enable-chat"
-          "--with-cares"
-          "--with-cryptopp"
-          "--with-curl"
-          "--with-ffmpeg"
-          "--without-freeimage"  # unreferenced even when found
-          "--without-readline"
-          "--without-termcap"
-          "--with-sodium"
-          "--with-sqlite"
-          "--with-zlib"
-    ];
+    "--disable-examples"
+    "--disable-java"
+    "--disable-php"
+    "--enable-chat"
+    "--with-cares"
+    "--with-cryptopp"
+    "--with-curl"
+    "--with-ffmpeg"
+    "--without-freeimage" # unreferenced even when found
+    "--without-readline"
+    "--without-termcap"
+    "--with-sodium"
+    "--with-sqlite"
+    "--with-zlib"
+  ];
 
   postConfigure = ''
     cd ../..
@@ -116,10 +86,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Easy automated syncing between your computers and your MEGA Cloud Drive";
-    homepage    = https://mega.nz/;
-    license     = licenses.unfree;
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    description =
+      "Easy automated syncing between your computers and your MEGA Cloud Drive";
+    homepage = "https://mega.nz/";
+    license = licenses.unfree;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ maintainers.michojel ];
   };
 }

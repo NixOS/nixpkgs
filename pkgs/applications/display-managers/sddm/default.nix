@@ -1,13 +1,14 @@
 { mkDerivation, lib, fetchFromGitHub
 , cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs
-, libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
+, libXdmcp, libXau, qtbase, qtdeclarative, qtquickcontrols2, qttools, pam, systemd
 }:
 
 let
   version = "0.18.1";
 
-in mkDerivation rec {
-  name = "sddm-${version}";
+in mkDerivation {
+  pname = "sddm";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "sddm";
@@ -29,7 +30,7 @@ in mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
 
   buildInputs = [
-    libxcb libpthreadstubs libXdmcp libXau pam qtbase qtdeclarative systemd
+    libxcb libpthreadstubs libXdmcp libXau pam qtbase qtdeclarative qtquickcontrols2 systemd
   ];
 
   cmakeFlags = [
@@ -45,6 +46,7 @@ in mkDerivation rec {
     "-DQT_IMPORTS_DIR=${placeholder "out"}/${qtbase.qtQmlPrefix}"
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
     "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
+    "-DDBUS_CONFIG_DIR=${placeholder "out"}/share/dbus-1/system.d"
   ];
 
   postInstall = ''
@@ -58,7 +60,7 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "QML based X11 display manager";
-    homepage    = https://github.com/sddm/sddm;
+    homepage    = "https://github.com/sddm/sddm";
     maintainers = with maintainers; [ abbradar ttuegel ];
     platforms   = platforms.linux;
     license     = licenses.gpl2Plus;

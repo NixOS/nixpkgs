@@ -1,11 +1,11 @@
 { pkgs, stdenv, fetchurl, dpkg, makeWrapper, coreutils, ghostscript, gnugrep, gnused, which, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mfcl2720dwlpr-${version}";
+  pname = "mfcl2720dwlpr";
   version = "3.2.0-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf101801/${name}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf101801/${pname}-${version}.i386.deb";
     sha256 = "088217e9ad118ec1e7f3d3f8f60f3bd839fe2c7d7c1136b249e9ac648dc742af";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother MFC-L2720DW lpr driver";
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     license = stdenv.lib.licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ stdenv.lib.maintainers.xeji ];

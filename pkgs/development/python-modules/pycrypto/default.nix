@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = http://www.pycrypto.org/;
+    homepage = "http://www.pycrypto.org/";
     description = "Python Cryptography Toolkit";
     platforms = pycryptodome.meta.platforms;
   };

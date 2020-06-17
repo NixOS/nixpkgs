@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libffcall-${version}";
+  pname = "libffcall";
   version = "2.1";
 
   src = fetchurl {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Foreign function call library";
-    homepage = https://www.gnu.org/software/libffcall/;
+    homepage = "https://www.gnu.org/software/libffcall/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

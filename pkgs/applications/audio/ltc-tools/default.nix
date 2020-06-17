@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, pkgconfig, libltc, libsndfile, jack2}:
 
 stdenv.mkDerivation rec {
-  name = "ltc-tools-${version}";
+  pname = "ltc-tools";
   version = "0.7.0";
 
   src = fetchFromGitHub {

@@ -1,34 +1,48 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, python3,ninja, hicolor-icon-theme, gtk3 }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, python3
+, ninja
+, hicolor-icon-theme
+, gtk3
+, xorg
+, librsvg
+}:
 
 stdenv.mkDerivation rec {
-  pname = "icons";
-  version = "5.0.3";
+  pname = "elementary-icon-theme";
+  version = "5.3.1";
 
-  name = "elementary-icon-theme-${version}";
+  repoName = "icons";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "0wpv7yirf44bfqfmyshzfw9605j1idm7c9jqg68k3nmymmd6iqzf";
+    sha256 = "0rs68cb39r9vq85pr8h3mgmyjpj8bkhkxr5cz4cn5947kf776wg9";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-icon-theme";
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
+    gtk3
+    librsvg
     meson
     ninja
     python3
+    xorg.xcursorgen
   ];
 
-  buildInputs = [ gtk3 ];
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
 
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  dontDropIconThemeCache = true;
 
   mesonFlags = [
     "-Dvolume_icons=false" # Tries to install some icons to /
@@ -47,7 +61,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       An original set of vector icons designed specifically for elementary OS and its desktop environment: Pantheon.
     '';
-    homepage = https://github.com/elementary/icons;
+    homepage = "https://github.com/elementary/icons";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

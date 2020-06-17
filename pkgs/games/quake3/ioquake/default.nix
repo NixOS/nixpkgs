@@ -2,8 +2,8 @@
 , curl, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype
 }:
 
-stdenv.mkDerivation rec {
-  name = "ioquake3-git-${version}";
+stdenv.mkDerivation {
+  pname = "ioquake3-git";
   version = "2019-05-29";
 
   src = fetchFromGitHub {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://ioquake3.org/;
+    homepage = "https://ioquake3.org/";
     description = "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
     license = licenses.gpl2;
     platforms = platforms.linux;

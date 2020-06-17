@@ -7,7 +7,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "openmp-${version}";
+  pname = "openmp";
+  inherit version;
 
   src = fetch "openmp" "1dg53wzsci2kra8lh1y0chh60h2l8h1by93br5spzvzlxshkmrqy";
 
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Components required to build an executable OpenMP program";
-    homepage    = http://openmp.llvm.org/;
+    homepage    = "https://openmp.llvm.org/";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.all;
   };

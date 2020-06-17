@@ -2,16 +2,16 @@
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.9.0";
+  version = "1.9.2";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0af72fcql34v30cvjqm9nmz68rl35znn5qbd4k3b9ks02xzy3b2y";
+    sha256 = "4487f0e91d0d44142bd08b3c6da57073b720c3effb02eeb4e2e822804964c56b";
   };
 
   meta = with stdenv.lib; {
     description = "A serialization and RPC framework";
-    homepage = https://pypi.python.org/pypi/avro/;
+    homepage = "https://pypi.python.org/pypi/avro/";
   };
 }

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
 
 stdenv.mkDerivation rec {
-  name = "hostapd-${version}";
-  version = "2.8";
+  pname = "hostapd";
+  version = "2.9";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/${name}.tar.gz";
-    sha256 = "1c74rrazkhy4lr7pwgwa2igzca7h9l4brrs7672kiv7fwqmm57wj";
+    url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
+    sha256 = "1mrbvg4v7vm7mknf0n29mf88k3s4a4qj6r4d51wq8hmjj1m7s7c8";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -17,7 +17,32 @@ stdenv.mkDerivation rec {
       # Note: fetchurl seems to be unhappy with openwrt git
       # server's URLs containing semicolons. Using the github mirror instead.
       url = "https://raw.githubusercontent.com/openwrt/openwrt/master/package/network/services/hostapd/patches/300-noscan.patch";
-      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";})
+      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";
+    })
+    # AP mode PMF disconnection protection bypass (CVE.2019-16275), can be removed >= 2.10
+    # https://w1.fi/security/2019-7/
+    (fetchurl {
+      name = "CVE-2019-16275.patch";
+      url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
+      sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
+    })
+    # Fixes for UPnP SUBSCRIBE misbehavior in hostapd WPS AP (CVE-2020-12695), can be removed >= 2.10
+    # https://w1.fi/security/2020-1/
+    (fetchurl {
+      name = "CVE-2020-12695_0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch";
+      url = "https://w1.fi/security/2020-1/0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch";
+      sha256 = "1mrbhicqb34jlw1nid5hk2vnjbvfhvp7r5iblaj4l6vgc6fmp6id";
+    })
+    (fetchurl {
+      name = "CVE-2020-12695_0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch";
+      url = "https://w1.fi/security/2020-1/0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch";
+      sha256 = "1pk08b06b24is50bis3rr56xjd3b5kxdcdk8bx39n9vna9db7zj9";
+    })
+    (fetchurl {
+      name = "CVE-2020-12695_0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch";
+      url = "https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch";
+      sha256 = "12npqp2skgrj934wwkqicgqksma0fxz09di29n1b5fm5i4njl8d8";
+    })
   ];
 
   outputs = [ "out" "man" ];
@@ -49,6 +74,7 @@ stdenv.mkDerivation rec {
     CONFIG_INTERNETWORKING=y
     CONFIG_HS20=y
     CONFIG_ACS=y
+    CONFIG_GETRANDOM=y
   '' + stdenv.lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
@@ -69,11 +95,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://hostap.epitest.fi;
-    repositories.git = git://w1.fi/hostap.git;
+    homepage = "https://hostap.epitest.fi";
+    repositories.git = "git://w1.fi/hostap.git";
     description = "A user space daemon for access point and authentication servers";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom ninjatrappeur ];
+    maintainers = with maintainers; [ phreedom ninjatrappeur hexa ];
     platforms = platforms.linux;
   };
 }

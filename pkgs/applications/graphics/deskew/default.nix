@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "deskew-${version}";
+  pname = "deskew";
   version = "1.25";
 
   src = fetchFromBitbucket {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command line tool for deskewing scanned text documents";
-    homepage = https://bitbucket.org/galfar/app-deskew/overview;
+    homepage = "https://bitbucket.org/galfar/app-deskew/overview";
     license = licenses.mit;
     maintainers = with maintainers; [ryantm];
     platforms = platforms.all;

@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pstoedit-3.74";
+  name = "pstoedit-3.75";
 
   src = fetchurl {
     url = "mirror://sourceforge/pstoedit/${name}.tar.gz";
-    sha256 = "034rcrsi69vyh01rcqh7jy3bw4la4m6jl4niav4c6wrs9bx44cim";
+    sha256 = "1kv46g2wsvsvcngkavxl5gnw3l6g5xqnh4kmyx4b39a01d8xiddp";
   };
 
   #
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Translates PostScript and PDF graphics into other vector formats";
-    homepage = https://sourceforge.net/projects/pstoedit/;
+    homepage = "https://sourceforge.net/projects/pstoedit/";
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;

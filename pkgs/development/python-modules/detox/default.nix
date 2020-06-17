@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "What is detox?";
-    homepage = https://bitbucket.org/hpk42/detox;
+    homepage = "https://bitbucket.org/hpk42/detox";
     license = licenses.mit;
     # detox is unmaintained and incompatible with tox > 3.6
     broken = true;

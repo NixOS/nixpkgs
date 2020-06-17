@@ -15,7 +15,7 @@ isExecutable() {
     # *or* there is an INTERP section. This also catches position-independent
     # executables, as they typically have an INTERP section but their ELF type
     # is DYN.
-    isExeResult="$(LANG=C readelf -h -l "$1" 2> /dev/null \
+    isExeResult="$(LANG=C $READELF -h -l "$1" 2> /dev/null \
         | grep '^ *Type: *EXEC\>\|^ *INTERP\>')"
     # not using grep -q, because it can cause Broken pipe
     [ -n "$isExeResult" ]
@@ -207,7 +207,7 @@ autoPatchelf() {
     # outside of this function.
     while IFS= read -r -d $'\0' file; do
       isELF "$file" || continue
-      segmentHeaders="$(LANG=C readelf -l "$file")"
+      segmentHeaders="$(LANG=C $READELF -l "$file")"
       # Skip if the ELF file doesn't have segment headers (eg. object files).
       # not using grep -q, because it can cause Broken pipe
       [ -n "$(echo "$segmentHeaders" | grep '^Program Headers:')" ] || continue
@@ -228,7 +228,7 @@ autoPatchelf() {
 # behaviour as fixupOutputHooks because the setup hook for patchelf is run in
 # fixupOutput and the postFixup hook runs later.
 postFixupHooks+=('
-    if [ -z "$dontAutoPatchelf" ]; then
+    if [ -z "${dontAutoPatchelf-}" ]; then
         autoPatchelf -- $(for output in $outputs; do
             [ -e "${!output}" ] || continue
             echo "${!output}"

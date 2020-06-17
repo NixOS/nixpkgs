@@ -1,10 +1,17 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, dtkcore, dtkwidget,
-  qt5integration, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, dtkcore
+, dtkwidget
+, qt5integration
+, deepin
+}:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "deepin-shortcut-viewer";
-  version = "1.3.5";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
@@ -26,11 +33,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Pop-up shortcut viewer for Deepin applications";
-    homepage = https://github.com/linuxdeepin/deepin-shortcut-viewer;
+    homepage = "https://github.com/linuxdeepin/deepin-shortcut-viewer";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

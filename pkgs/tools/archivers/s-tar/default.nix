@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "s-tar-${version}";
+  pname = "s-tar";
   version = "1.6";
   src = fetchurl {
     url = "mirror://sourceforge/s-tar/star-${version}.tar.bz2";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       The way star acts may be modified by additional options.
       Note that unpacking tar archives may be a security risk because star may overwrite existing files.
     '';
-    homepage = http://cdrtools.sourceforge.net/private/star.html;
+    homepage = "http://cdrtools.sourceforge.net/private/star.html";
     license = stdenv.lib.licenses.cddl;
     maintainers = [ stdenv.lib.maintainers.wucke13 ];
     platforms = [ "x86_64-linux" ];

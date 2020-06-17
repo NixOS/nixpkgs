@@ -1,7 +1,7 @@
 {stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant, isocodes, intltool, gobject-introspection, vala}:
 
 stdenv.mkDerivation rec {
-  name = "gtkspell-${version}";
+  pname = "gtkspell";
   version = "3.0.10";
 
   outputs = [ "out" "dev" ];
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://gtkspell.sourceforge.net/;
+    homepage = "http://gtkspell.sourceforge.net/";
     description = "Word-processor-style highlighting GtkTextView widget";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
   };
 }

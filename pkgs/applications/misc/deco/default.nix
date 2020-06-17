@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "deco";
   version = "0.0.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ebzzry";
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ebzzry/deco;
+    homepage = "https://github.com/ebzzry/deco";
     description = "A simple root image setter";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];

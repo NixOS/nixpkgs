@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libtomcrypt-${version}";
+  pname = "libtomcrypt";
   version = "1.18.2";
 
   src = fetchurl {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.libtom.net/LibTomCrypt/;
+    homepage = "https://www.libtom.net/LibTomCrypt/";
     description = "A fairly comprehensive, modular and portable cryptographic toolkit";
     license = with licenses; [ publicDomain wtfpl ];
     platforms = platforms.linux;

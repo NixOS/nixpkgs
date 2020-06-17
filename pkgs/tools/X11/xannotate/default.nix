@@ -1,6 +1,5 @@
 {stdenv, fetchFromBitbucket, libX11}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xannotate";
   version = "20150301";
   
@@ -19,6 +18,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = https://bitbucket.org/blais/xannotate;
+    homepage = "https://bitbucket.org/blais/xannotate";
   };
 }

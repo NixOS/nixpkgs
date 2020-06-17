@@ -59,19 +59,19 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == name) (singleton {
-      name = name;
-      uid = config.ids.uids.headphones;
-      group = cfg.group;
-      description = "headphones user";
-      home = cfg.dataDir;
-      createHome = true;
-    });
+    users.users = optionalAttrs (cfg.user == name) {
+      ${name} = {
+        uid = config.ids.uids.headphones;
+        group = cfg.group;
+        description = "headphones user";
+        home = cfg.dataDir;
+        createHome = true;
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == name) (singleton {
-      name = name;
-      gid = config.ids.gids.headphones;
-    });
+    users.groups = optionalAttrs (cfg.group == name) {
+      ${name}.gid = config.ids.gids.headphones;
+    };
 
     systemd.services.headphones = {
         description = "Headphones Server";

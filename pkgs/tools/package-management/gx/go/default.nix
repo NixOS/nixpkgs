@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "gx-go-${version}";
+  pname = "gx-go";
   version = "1.9.0";
   rev = "refs/tags/v${version}";
 
@@ -27,7 +27,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tool for importing go packages into gx";
-    homepage = https://github.com/whyrusleeping/gx-go;
+    homepage = "https://github.com/whyrusleeping/gx-go";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
   };

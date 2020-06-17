@@ -34,7 +34,7 @@ in {
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "opentsdb";
         description = ''
           User account under which OpenTSDB runs.
@@ -42,7 +42,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "opentsdb";
         description = ''
           Group account under which OpenTSDB runs.

@@ -2,9 +2,9 @@
 , autoreconfHook, pkgconfig
 , libsndfile }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "twolame-${version}";
+  pname = "twolame";
   version = "2017-09-27";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       tooLAME by Mike Cheng, which in turn is based upon the ISO dist10
       code and portions of LAME.
     '';
-    homepage = http://www.twolame.org/;
+    homepage = "http://www.twolame.org/";
     license = with licenses; [ lgpl2Plus ];
     platforms = with platforms; unix;
     maintainers = with maintainers; [ AndersonTorres ];

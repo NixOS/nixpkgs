@@ -2,9 +2,10 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , python
 , glibcLocales
-, pkgconfig
+, pkg-config
 , gdb
 , numpy
 , ncurses
@@ -25,21 +26,30 @@ let
 
 in buildPythonPackage rec {
   pname = "Cython";
-  version = "0.29.10";
+  version = "0.29.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "26229570d6787ff3caa932fe9d802960f51a89239b990d275ae845405ce43857";
+    sha256 = "0n2j87nka8cs772qc60d0c7lrpvsw0y8p3qzvhrsi3nmq1yqmycp";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
   checkInputs = [
     numpy ncurses
   ];
   buildInputs = [ glibcLocales gdb ];
   LC_ALL = "en_US.UTF-8";
+
+  patches = [
+    # https://github.com/cython/cython/issues/2752, needed by sage (https://trac.sagemath.org/ticket/26855) and up to be included in 0.30
+    (fetchpatch {
+      name = "non-int-conversion-to-pyhash.patch";
+      url = "https://github.com/cython/cython/commit/28251032f86c266065e4976080230481b1a1bb29.patch";
+      sha256 = "19rg7xs8gr90k3ya5c634bs8gww1sxyhdavv07cyd2k71afr83gy";
+    })
+  ];
 
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP"
@@ -58,7 +68,7 @@ in buildPythonPackage rec {
 
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
-    homepage = https://cython.org;
+    homepage = "https://cython.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -53,7 +53,7 @@ in {
 
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "hbase";
         description = ''
           User account under which HBase runs.
@@ -61,7 +61,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "hbase";
         description = ''
           Group account under which HBase runs.

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, cmake, pkgconfig, makeWrapper
+{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, makeWrapper
 , httrack, qtbase, qtmultimedia }:
 
-stdenv.mkDerivation rec {
-  name = "httraqt-${version}";
+mkDerivation rec {
+  pname = "httraqt";
   version = "1.4.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/httraqt/${name}.tar.gz";
+    url = "mirror://sourceforge/httraqt/${pname}-${version}.tar.gz";
     sha256 = "0pjxqnqchpbla4xiq4rklc06484n46cpahnjy03n9rghwwcad25b";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Easy-to-use offline browser / website mirroring utility - QT frontend";
-    homepage    = http://www.httrack.com;
+    homepage    = "http://www.httrack.com";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = with platforms; unix;

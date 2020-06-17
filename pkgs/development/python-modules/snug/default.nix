@@ -1,11 +1,13 @@
 { buildPythonPackage, lib, fetchFromGitHub, glibcLocales
 , pytest, pytest-mock, gentools
 , typing, singledispatch, pythonOlder
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "snug";
   version = "1.3.4";
+  disabled = isPy3k;
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
@@ -30,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tiny toolkit for writing reusable interactions with web APIs";
     license = licenses.mit;
-    homepage = https://snug.readthedocs.io/en/latest/;
+    homepage = "https://snug.readthedocs.io/en/latest/";
     maintainers = with maintainers; [ mredaelli ];
   };
 

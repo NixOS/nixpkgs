@@ -5,7 +5,7 @@ assert stdenv.isDarwin -> IOKit != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "picocom-${version}";
+  pname = "picocom";
   version = "3.1";
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Minimal dumb-terminal emulation program";
-    homepage = https://github.com/npat-efault/picocom/;
+    homepage = "https://github.com/npat-efault/picocom/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.unix;
   };

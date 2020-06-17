@@ -6,7 +6,6 @@
 stdenv.mkDerivation rec {
   pname = "elliptic_curves";
   version = "0.8";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sageupstream/${pname}/${pname}-${version}.tar.bz2";

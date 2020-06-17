@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "python-fedora";
   version = "0.10.0";
-  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Fedora Module";
-    homepage = https://github.com/fedora-infra/python-fedora;
+    homepage = "https://github.com/fedora-infra/python-fedora";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ ];
   };

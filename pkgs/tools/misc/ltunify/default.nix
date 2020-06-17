@@ -3,8 +3,8 @@
 # Although we copy in the udev rules here, you probably just want to use logitech-udev-rules instead of
 # adding this to services.udev.packages on NixOS
 
-stdenv.mkDerivation rec {
-  name = "ltunify-${version}";
+stdenv.mkDerivation {
+  pname = "ltunify";
   version = "unstable-20180330";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool for working with Logitech Unifying receivers and devices";
-    homepage = https://lekensteyn.nl/logitech-unifying.html;
+    homepage = "https://lekensteyn.nl/logitech-unifying.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

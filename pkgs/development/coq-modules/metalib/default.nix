@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "20170713";
 
   src = fetchgit {
-    url = https://github.com/plclub/metalib.git;
+    url = "https://github.com/plclub/metalib.git";
     rev = "44e40aa082452dd333fc1ca2d2cc55311519bd52";
     sha256 = "1pra0nvx69q8d4bvpcvh9ngic1cy6z1chi03x56nisfqnc61b6y9";
   };
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     pname = "lngen";
     version = "0.0.1";
     src = fetchgit {
-      url = https://github.com/plclub/lngen;
+      url = "https://github.com/plclub/lngen";
       rev = "ea73ad315de33afd25f87ca738c71f358f1cd51c";
       sha256 = "1a0sj8n3lmsl1wlnqfy176k9lb9s8rl422bvg3ihl2i70ql8wisd";
     };
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     isExecutable = true;
     libraryHaskellDepends = [ base containers mtl parsec syb ];
     executableHaskellDepends = [ base ];
-    homepage = https://github.com/plclub/lngen;
+    homepage = "https://github.com/plclub/lngen";
     description = "Tool for generating Locally Nameless definitions and proofs in Coq, working together with Ott";
     license = stdenv.lib.licenses.mit;
   };
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/plclub/metalib;
+    homepage = "https://github.com/plclub/metalib";
     license = licenses.mit;
     maintainers = [ maintainers.jwiegley ];
     platforms = coq.meta.platforms;

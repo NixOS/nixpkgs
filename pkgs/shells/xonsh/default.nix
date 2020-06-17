@@ -1,15 +1,21 @@
-{ stdenv, fetchFromGitHub, python3Packages, glibcLocales, coreutils, git }:
+{ stdenv
+, fetchFromGitHub
+, python3Packages
+, glibcLocales
+, coreutils
+, git
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.6";
+  version = "0.9.18";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
-    owner  = "scopatz";
+    owner  = "xonsh";
     repo   = "xonsh";
-    rev    = "refs/tags/${version}";
-    sha256 = "0lnvx1kdk1nwv988wrxyvbzb25xawz517amvi4pwzs22bymcdhws";
+    rev    = version;
+    sha256 = "1zg5dl9qdysbaw2djy9f7f1ydp7vzjv840cjwqxlmg9615lgg7xa";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -19,6 +25,7 @@ python3Packages.buildPythonApplication rec {
 
     sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' tests/test_integrations.py
     sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' scripts/xon.sh
+    find scripts -name 'xonsh*' -exec sed -i -e "s|env -S|env|" {} \;
     find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
   '';
@@ -26,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    HOME=$TMPDIR pytest -k 'not test_repath_backslash and not test_os and not test_man_completion and not test_builtins and not test_main and not test_ptk_highlight'
+    HOME=$TMPDIR pytest -k 'not test_repath_backslash and not test_os and not test_man_completion and not test_builtins and not test_main and not test_ptk_highlight and not test_pyghooks'
     HOME=$TMPDIR pytest -k 'test_builtins or test_main' --reruns 5
     HOME=$TMPDIR pytest -k 'test_ptk_highlight'
   '';
@@ -37,9 +44,10 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A Python-ish, BASHwards-compatible shell";
-    homepage = http://xon.sh/;
+    homepage = "https://xon.sh/";
+    changelog = "https://github.com/xonsh/xonsh/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ spwhitt garbas vrthra ];
+    maintainers = with maintainers; [ spwhitt vrthra ];
     platforms = platforms.all;
   };
 

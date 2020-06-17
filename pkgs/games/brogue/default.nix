@@ -1,7 +1,7 @@
 { stdenv, fetchurl, SDL, ncurses, libtcod, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "brogue-${version}";
+  pname = "brogue";
   version = "1.7.5";
 
   src = fetchurl {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A roguelike game";
-    homepage = https://sites.google.com/site/broguegame/;
+    homepage = "https://sites.google.com/site/broguegame/";
     license = licenses.agpl3;
     maintainers = [ maintainers.skeidel ];
     platforms = [ "x86_64-linux" ];

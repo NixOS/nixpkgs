@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   plexusI18n_1_0_beta6 = map (obj: fetchMaven {
     version = "1.0-beta-6";
     artifactId = "plexus-i18n";

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
 , xwininfo, xdotool, xprop }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tdrop";
   version = "unstable-2018-11-13";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Glorified WM-Independent Dropdown Creator";
-    homepage = https://github.com/noctuid/tdrop;
+    homepage = "https://github.com/noctuid/tdrop";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wedens ];

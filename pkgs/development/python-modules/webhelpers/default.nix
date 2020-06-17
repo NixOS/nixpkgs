@@ -22,10 +22,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://webhelpers.readthedocs.org/en/latest/;
+    homepage = "https://webhelpers.readthedocs.org/en/latest/";
     description = "Web Helpers";
     license = licenses.free;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

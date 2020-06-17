@@ -4,8 +4,9 @@
 let
   version = "1.3.1";
 in
-stdenv.mkDerivation rec {
-  name = "libopus-${version}";
+stdenv.mkDerivation {
+  pname = "libopus";
+  inherit version;
 
   src = fetchurl {
     url = "https://archive.mozilla.org/pub/opus/opus-${version}.tar.gz";
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Open, royalty-free, highly versatile audio codec";
     license = stdenv.lib.licenses.bsd3;
-    homepage = http://www.opus-codec.org/;
+    homepage = "http://www.opus-codec.org/";
     platforms = platforms.unix;
   };
 }

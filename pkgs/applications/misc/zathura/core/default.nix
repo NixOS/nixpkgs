@@ -1,22 +1,20 @@
 { stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig
 , appstream-glib, desktop-file-utils, python3
-, gtk, girara, gettext, libxml2
+, gtk, girara, gettext, libxml2, check
 , sqlite, glib, texlive, libintl, libseccomp
 , file, librsvg
-, gtk-mac-integration, synctexSupport ? true
+, gtk-mac-integration
 }:
-
-assert synctexSupport -> texlive != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "zathura-core-${version}";
-  version = "0.4.3";
+  pname = "zathura";
+  version = "0.4.5";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/zathura/download/zathura-${version}.tar.xz";
-    sha256 = "0hgx5x09i6d0z45llzdmh4l348fxh1y102sb1w76f2fp4r21j4ky";
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "0b3nrcvykkpv2vm99kijnic2gpfzva520bsjlihaxandzfm9ff8c";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];
@@ -29,24 +27,29 @@ stdenv.mkDerivation rec {
     # "-Dseccomp=enabled"
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
-  ] ++ optional synctexSupport "-Dsynctex=enabled";
+    "-Dsynctex=enabled"
+    # Make sure tests are enabled for doCheck
+    "-Dtests=enabled"
+  ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig desktop-file-utils python3.pkgs.sphinx
-    gettext wrapGAppsHook libxml2
+    gettext wrapGAppsHook libxml2 check
   ] ++ optional stdenv.isLinux appstream-glib;
 
   buildInputs = [
     gtk girara libintl sqlite glib file librsvg
-  ] ++ optional synctexSupport texlive.bin.core
-    ++ optional stdenv.isLinux libseccomp
+    texlive.bin.core
+  ] ++ optional stdenv.isLinux libseccomp
     ++ optional stdenv.isDarwin gtk-mac-integration;
 
+  doCheck = true;
+
   meta = {
-    homepage = https://pwmt.org/projects/zathura/;
+    homepage = "https://git.pwmt.org/pwmt/zathura";
     description = "A core component for zathura PDF viewer";
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ globin ];
   };
 }

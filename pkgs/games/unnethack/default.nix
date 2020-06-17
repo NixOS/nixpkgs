@@ -1,7 +1,7 @@
 { stdenv, fetchgit, utillinux, ncurses, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "unnethack-${version}";
+  pname = "unnethack";
   version = "5.2.0";
 
   src = fetchgit {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fork of NetHack";
-    homepage = https://unnethack.wordpress.com/;
+    homepage = "https://unnethack.wordpress.com/";
     license = "nethack";
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];

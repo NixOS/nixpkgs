@@ -4,11 +4,11 @@
 { stdenv, fetchurl, perl, busybox, vim }:
 
 stdenv.mkDerivation rec {
-  name = "fcron-${version}";
+  pname = "fcron";
   version = "3.3.0";
 
   src = fetchurl {
-    url = "http://fcron.free.fr/archives/${name}.src.tar.gz";
+    url = "http://fcron.free.fr/archives/${pname}-${version}.src.tar.gz";
     sha256 = "0q5b1fdq1rpsd4lj7v717x47pmn62hhm13394g0yxqi614xd7sls";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       "--disable-checks"
     ];
 
-  installTargets = "install-staged"; # install does also try to change permissions of /etc/* files
+  installTargets = [ "install-staged" ]; # install does also try to change permissions of /etc/* files
 
   # fcron tries to install pid into system directory on install
   installFlags = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description="A command scheduler with extended capabilities over cron and anacron";
-    homepage = http://fcron.free.fr;
+    homepage = "http://fcron.free.fr";
     license = licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
   };

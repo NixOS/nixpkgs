@@ -1,0 +1,13 @@
+diff --git a/mesonbuild/envconfig.py b/mesonbuild/envconfig.py
+index 17058df6b..7a68b7f15 100644
+--- a/mesonbuild/envconfig.py
++++ b/mesonbuild/envconfig.py
+@@ -120,7 +120,7 @@ def get_env_var_pair(for_machine: MachineChoice,
+         # compiling we fall back on the unprefixed host version. This
+         # allows native builds to never need to worry about the 'BUILD_*'
+         # ones.
+-        ([var_name + '_FOR_BUILD'] if is_cross else [var_name]),
++        [var_name + '_FOR_BUILD'] + ([] if is_cross else [var_name]),
+         # Always just the unprefixed host verions
+         [var_name]
+     )[for_machine]

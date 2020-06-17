@@ -1,40 +1,28 @@
 { stdenv, fetchFromGitHub, pkgconfig, makeWrapper
 , libsndfile, jack2Full
 , libGLU, libGL, lv2, cairo
-, ladspaH, php, expat }:
+, ladspaH, php }:
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.1.5";
-  name = "${pname}-${version}";
+  version = "1.1.22";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
-    repo = "${pname}";
-    rev = "${name}";
-    sha256 = "0xcxm47j7mz5vprjqqhi95gz62syp4y737h7cssxd3flqkgar7xr";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "0s0i0kf5nqxxywckg03fds1w7696ly60rnlljzqvp7qfgzps1r6c";
   };
 
-  nativeBuildInputs = [ pkgconfig php expat ];
-  buildInputs = [ jack2Full libsndfile libGLU libGL lv2 cairo ladspaH makeWrapper ];
+  nativeBuildInputs = [ pkgconfig php makeWrapper ];
+  buildInputs = [ jack2Full libsndfile libGLU libGL lv2 cairo ladspaH ];
 
   makeFlags = [
-    "BIN_PATH=$(out)/bin"
-    "LIB_PATH=$(out)/lib"
-    "DOC_PATH=$(out)/share/doc"
+    "PREFIX=${placeholder ''out''}"
+    "ETC_PATH=$(out)/etc"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-DLSP_NO_EXPERIMENTAL" ];
-
-  patchPhase = ''
-    runHook prePatch
-    substituteInPlace Makefile --replace "/usr/lib" "$out/lib"
-    substituteInPlace ./include/container/jack/main.h --replace "/usr/lib" "$out/lib"
-    substituteInPlace ./include/container/vst/main.h --replace "/usr/lib" "$out/lib"
-    # for https://github.com/sadko4u/lsp-plugins/issues/7#issuecomment-426561549 :
-    sed -i '/X11__NET_WM_WINDOW_TYPE_DOCK;/d' ./src/ui/ws/x11/X11Window.cpp
-    runHook postPatch
-  '';
+  NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
 
   doCheck = true;
 
@@ -46,7 +34,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  buildFlags = "release";
+  buildFlags = [ "release" ];
 
   meta = with stdenv.lib;
     { description = "Collection of open-source audio plugins";
@@ -152,7 +140,7 @@ stdenv.mkDerivation rec {
         - Delay Compensator Stereo - Verzögerungsausgleicher Stereo
         - Delay Compensator x2 Stereo - Verzögerungsausgleicher x2 Stereo
       '';
-      homepage = https://lsp-plug.in;
+      homepage = "https://lsp-plug.in";
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
       platforms = platforms.linux;

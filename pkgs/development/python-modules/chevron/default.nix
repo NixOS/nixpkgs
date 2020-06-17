@@ -4,7 +4,7 @@
 , python
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "chevron";
   version = "0.13.1";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/noahmorrison/chevron;
+    homepage = "https://github.com/noahmorrison/chevron";
     description = "A python implementation of the mustache templating language";
     license = licenses.mit;
     maintainers = with maintainers; [ dhkl ];

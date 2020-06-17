@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "morty-${version}";
+  pname = "morty";
   version = "0.2.0";
 
   goPackagePath = "github.com/asciimoo/morty";

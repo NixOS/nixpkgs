@@ -1,7 +1,7 @@
 { stdenv, pkgconfig, libappindicator-gtk3, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "systrayhelper-${version}";
+  pname = "systrayhelper";
   version = "0.0.4";
   rev = "ded1f2ed4d30f6ca2c89a13db0bd3046c6d6d0f9";
 

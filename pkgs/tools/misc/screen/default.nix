@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
-  name = "screen-${version}";
-  version = "4.6.2";
+  pname = "screen";
+  version = "4.8.0";
 
   src = fetchurl {
-    url = "mirror://gnu/screen/${name}.tar.gz";
-    sha256 = "0fps0fsipfbh7c2cnp7rjw9n79j0ysq21mk8hzifa33a1r924s8v";
+    url = "mirror://gnu/screen/${pname}-${version}.tar.gz";
+    sha256 = "18ascpjzsy70h6hk7wpg8zmzjwgdyrdr7c6z4pg5z4l9hhyv24bf";
   };
 
   configureFlags= [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
     (fetchpatch {
-      url = https://gist.githubusercontent.com/yujinakayama/4608863/raw/76b9f89af5e5a2e97d9a0f36aac989fb56cf1447/gistfile1.diff;
+      url = "https://gist.githubusercontent.com/yujinakayama/4608863/raw/76b9f89af5e5a2e97d9a0f36aac989fb56cf1447/gistfile1.diff";
       sha256 = "0f9bf83p8zdxaa1pr75jyf5g8xr3r8kv7cyzzbpraa1q4j15ss1p";
       stripLen = 1;
     });
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/screen/;
+    homepage = "https://www.gnu.org/software/screen/";
     description = "A window manager that multiplexes a physical terminal";
     license = licenses.gpl2Plus;
 

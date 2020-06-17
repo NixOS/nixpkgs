@@ -1,15 +1,32 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-globalkeys, qtx11extras,
-menu-cache, muparser, pcre }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, lxqt-build-tools
+, qtbase
+, qttools
+, qtsvg
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, lxqt-globalkeys
+, qtx11extras
+, menu-cache
+, muparser
+, pcre
+, lxqtUpdateScript
+}:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-runner";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "01a8ycpkzcbh85y4025pd3nbpnzxh98ll1xwz4ykz13yvm0l2n1w";
+    sha256 = "1x6s4k27cvj2k51hwpcp3l686c2am504ckry4fm76h0mlnkffjm5";
   };
 
   nativeBuildInputs = [
@@ -32,19 +49,13 @@ stdenv.mkDerivation rec {
     pcre
   ];
 
-  postPatch = ''
-    substituteInPlace autostart/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool used to launch programs quickly by typing their names";
-    homepage = https://github.com/lxqt/lxqt-runner;
+    homepage = "https://github.com/lxqt/lxqt-runner";
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

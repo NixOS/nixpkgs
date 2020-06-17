@@ -1,19 +1,19 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, protobuf
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python }:
 
-buildPythonPackage rec {
+let
+  py = python;
+in buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.16";
+  version = "8.0.20";
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    sha256 = "0yl3fkyws24lc2qrbvn42bqy72aqy8q5v8f0j5zy3mkh9a7wlxdp";
+    sha256 = "1pm98mjbkhwawhni98cjhp0gg3mim75i0sdby77vzrlcrxajxkbw";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  propagatedBuildInputs = with py.pkgs; [ protobuf dnspython ];
 
   # Tests are failing (TODO: unknown reason)
   # TypeError: __init__() missing 1 required positional argument: 'string'
@@ -26,7 +26,8 @@ buildPythonPackage rec {
       A MySQL driver that does not depend on MySQL C client libraries and
       implements the DB API v2.0 specification.
     '';
-    homepage = https://github.com/mysql/mysql-connector-python;
+    homepage = "https://github.com/mysql/mysql-connector-python";
+    changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
     license = [ lib.licenses.gpl2 ];
     maintainers = with lib.maintainers; [ primeos ];
   };

@@ -88,7 +88,7 @@ in with localPython.pkgs; buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://aws.amazon.com/elasticbeanstalk/;
+    homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "A command line interface for Elastic Beanstalk";
     maintainers = with maintainers; [ eqyiel ];
     license = licenses.asl20;

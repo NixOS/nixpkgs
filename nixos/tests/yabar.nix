@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 with lib;
 
@@ -11,7 +11,7 @@ with lib;
   machine = {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
 
-    services.xserver.displayManager.auto.user = "bob";
+    test-support.displayManager.auto.user = "bob";
 
     programs.yabar.enable = true;
     programs.yabar.bars = {
@@ -20,14 +20,14 @@ with lib;
   };
 
   testScript = ''
-    $machine->start;
-    $machine->waitForX;
+    machine.start()
+    machine.wait_for_x()
 
     # confirm proper startup
-    $machine->waitForUnit("yabar.service", "bob");
-    $machine->sleep(10);
-    $machine->waitForUnit("yabar.service", "bob");
+    machine.wait_for_unit("yabar.service", "bob")
+    machine.sleep(10)
+    machine.wait_for_unit("yabar.service", "bob")
 
-    $machine->screenshot("top_bar");
+    machine.screenshot("top_bar")
   '';
 })

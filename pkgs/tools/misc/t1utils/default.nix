@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       resources from a Macintosh font file or create a Macintosh Type 1 font
       file from a PFA or PFB font.
     '';
-    homepage = http://www.lcdf.org/type/;
+    homepage = "http://www.lcdf.org/type/";
     # README from tarball says "BSD-like" and points to non-existing LICENSE
     # file...
     license = "Click"; # MIT with extra clause, https://github.com/kohler/t1utils/blob/master/LICENSE

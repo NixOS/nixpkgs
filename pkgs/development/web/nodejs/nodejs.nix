@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python2, zlib, libuv, utillinux, http-parser
+{ stdenv, fetchurl, openssl, python, zlib, libuv, utillinux, http-parser
 , pkgconfig, which
 # Updater dependencies
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
@@ -53,12 +53,30 @@ in
     };
 
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
-      ++ [ python2 zlib libuv openssl http-parser icu ];
+      ++ [ zlib libuv openssl http-parser icu ];
 
-    nativeBuildInputs = [ which utillinux pkgconfig ]
+    nativeBuildInputs = [ which utillinux pkgconfig python ]
       ++ optionals stdenv.isDarwin [ xcbuild ];
 
-    configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
+    configureFlags = let
+      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+      host = stdenv.hostPlatform.platform;
+      isAarch32 = stdenv.hostPlatform.isAarch32;
+    in sharedConfigureFlags ++ [
+      "--without-dtrace"
+    ] ++ (optionals isCross [
+      "--cross-compiling"
+      "--without-intl"
+      "--without-snapshot"
+    ]) ++ (optionals (isCross && isAarch32 && hasAttr "fpu" host.gcc) [
+      "--with-arm-fpu=${host.gcc.fpu}"
+    ]) ++ (optionals (isCross && isAarch32 && hasAttr "float-abi" host.gcc) [
+      "--with-arm-float-abi=${host.gcc.float-abi}"
+    ]) ++ (optionals (isCross && isAarch32) [
+      "--dest-cpu=arm"
+    ]) ++ extraConfigFlags;
+
+    configurePlatforms = [];
 
     dontDisableStatic = true;
 
@@ -96,7 +114,7 @@ in
     postInstall = ''
       PATH=$out/bin:$PATH patchShebangs $out
 
-      ${optionalString enableNpm ''
+      ${optionalString (enableNpm && stdenv.hostPlatform == stdenv.buildPlatform) ''
         mkdir -p $out/share/bash-completion/completions/
         $out/bin/npm completion > $out/share/bash-completion/completions/npm
         for dir in "$out/lib/node_modules/npm/man/"*; do
@@ -121,11 +139,11 @@ in
 
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine";
-      homepage = https://nodejs.org;
+      homepage = "https://nodejs.org";
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu gilligan cko ];
       platforms = platforms.linux ++ platforms.darwin;
     };
 
-    passthru.python = python2; # to ensure nodeEnv uses the same version
+    passthru.python = python; # to ensure nodeEnv uses the same version
 }

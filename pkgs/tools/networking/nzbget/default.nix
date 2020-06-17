@@ -2,7 +2,7 @@
 , gnutls, libgcrypt, zlib, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "nzbget-${version}";
+  pname = "nzbget";
   version = "21.0";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://nzbget.net;
+    homepage = "https://nzbget.net";
     license = licenses.gpl2Plus;
     description = "A command line tool for downloading files from news servers";
     maintainers = with maintainers; [ pSub ];

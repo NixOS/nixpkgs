@@ -3,8 +3,8 @@
 , bc, coreutils, which
 }:
 
-stdenv.mkDerivation rec {
-  name = "faustlive-${version}";
+stdenv.mkDerivation {
+  pname = "faustlive";
   version = "2017-12-05";
   src = fetchFromGitHub {
     owner = "grame-cncm";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       together the convenience of a standalone interpreted language with the
       efficiency of a compiled language. It's ideal for fast prototyping.
     '';
-    homepage = http://faust.grame.fr/;
+    homepage = "http://faust.grame.fr/";
     license = licenses.gpl3;
   };
 }

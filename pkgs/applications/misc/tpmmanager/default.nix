@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.8.1";
-  name = "tpmmanager-${version}";
+  pname = "tpmmanager";
 
   src = fetchgit {
     url = "https://github.com/Sirrix-AG/TPMManager";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = https://projects.sirrix.com/trac/tpmmanager;
+    homepage = "https://projects.sirrix.com/trac/tpmmanager";
     description = "Tool for managing the TPM";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];

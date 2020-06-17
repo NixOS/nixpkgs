@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fuse, pkgconfig, attr, uthash }:
 
 stdenv.mkDerivation rec {
-  name = "mhddfs-${version}";
+  pname = "mhddfs";
   version = "0.1.39";
 
   src = fetchurl {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://mhddfs.uvw.ru/;
+    homepage = "http://mhddfs.uvw.ru/";
     description = "Combines a several mount points into the single one";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.makefu ];

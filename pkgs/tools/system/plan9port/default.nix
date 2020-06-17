@@ -1,30 +1,42 @@
-{ stdenv, fetchFromGitHub, which, libX11, libXt, fontconfig, freetype
+{ stdenv, fetchFromGitHub, which
+, darwin ? null
 , xorgproto ? null
+, libX11
 , libXext ? null
-, zlib ? null
+, libXt ? null
+, fontconfig ? null
+, freetype ? null
 , perl ? null  # For building web manuals
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "plan9port";
-  version = "2019-02-25";
-  name = "${pname}-${version}";
+  version = "2020-01-08";
 
   src =  fetchFromGitHub {
     owner = "9fans";
     repo = "plan9port";
-    rev = "047fd921744f39a82a86d9370e03f7af511e6e84";
-    sha256 = "1lp17948q7vpl8rc2bf5a45bc8jqyj0s3zffmks9r25ai42vgb43";
+    rev = "cc3d97d52a72d7eaceb5b636bcdf81c3e19f7a2e";
+    sha256 = "0gb55kj0gzx1kdhiwcrbr7xcgz1im21dyxgxhfhh6d0q9rw0c17g";
   };
+
+  patches = [
+    ./darwin-sw_vers.patch
+    ./darwin-cfframework.patch
+  ];
 
   postPatch = ''
     #hardcoded path
     substituteInPlace src/cmd/acme/acme.c \
       --replace /lib/font/bit $out/plan9/font
+
     #deprecated flags
     find . -type f \
       -exec sed -i -e 's/_SVID_SOURCE/_DEFAULT_SOURCE/g' {} \; \
       -exec sed -i -e 's/_BSD_SOURCE/_DEFAULT_SOURCE/g' {} \;
+
+    substituteInPlace bin/9c \
+      --replace 'which uniq' '${which}/bin/which uniq'
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     #add missing ctrl+c\z\x\v keybind for non-Darwin
     substituteInPlace src/cmd/acme/text.c \
@@ -35,30 +47,16 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    which perl libX11 fontconfig xorgproto libXt libXext
+    perl
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    xorgproto libX11 libXext libXt fontconfig
     freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Carbon Cocoa IOKit Metal QuartzCore
+  ]);
 
   builder = ./builder.sh;
-
-  libX11_dev = libX11.dev;
   libXt_dev = libXt.dev;
-  libXext_dev = libXext.dev;
-  fontconfig_dev = fontconfig.dev;
-  freetype_dev = freetype.dev;
-  zlib_dev = zlib.dev;
-
-  xorgproto_exp = xorgproto;
-  libX11_exp = libX11;
-  libXt_exp = libXt;
-  libXext_exp = libXext;
-  freetype_exp = freetype;
-  zlib_exp = zlib;
-
-  fontconfig_lib = fontconfig.lib;
-
-  NIX_LDFLAGS="-lgcc_s";
-  enableParallelBuilding = true;
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -82,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://9fans.github.io/plan9port/;
+    homepage = "https://9fans.github.io/plan9port/";
     description = "Plan 9 from User Space";
     longDescription = ''
       Plan 9 from User Space (aka plan9port) is a port of many Plan 9 programs
@@ -91,7 +89,7 @@ stdenv.mkDerivation rec {
     license = licenses.lpl-102;
     maintainers = with maintainers; [ AndersonTorres bbarker
                                       ftrvxmtrx kovirobi ];
-    platforms = platforms.unix;
+    platforms = remove "aarch64-linux" platforms.unix;
   };
 }
 # TODO: investigate the mouse chording support patch

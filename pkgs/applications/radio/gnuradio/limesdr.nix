@@ -7,8 +7,9 @@ assert pythonSupport -> python != null && swig != null;
 let
   version = "2.0.0";
 
-in stdenv.mkDerivation rec {
-  name = "gr-limesdr-${version}";
+in stdenv.mkDerivation {
+  pname = "gr-limesdr";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "myriadrf";
@@ -31,7 +32,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gnuradio source and sink blocks for LimeSDR";
-    homepage = https://wiki.myriadrf.org/Gr-limesdr_Plugin_for_GNURadio;
+    homepage = "https://wiki.myriadrf.org/Gr-limesdr_Plugin_for_GNURadio";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];

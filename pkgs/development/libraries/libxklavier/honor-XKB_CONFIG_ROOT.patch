@@ -1,0 +1,89 @@
+From 999a419f4b36764a7269650a7f965d48bd4b73f7 Mon Sep 17 00:00:00 2001
+From: Louis Bettens <louis@bettens.info>
+Date: Sat, 28 Dec 2019 14:30:58 +0100
+Subject: [PATCH] honor $XKB_CONFIG_ROOT
+
+---
+ libxklavier/xklavier_config_xkb.c | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/libxklavier/xklavier_config_xkb.c b/libxklavier/xklavier_config_xkb.c
+index baec569..00e8de5 100644
+--- a/libxklavier/xklavier_config_xkb.c
++++ b/libxklavier/xklavier_config_xkb.c
+@@ -45,6 +45,18 @@
+ #define XK_XKB_KEYS
+ #include <X11/keysymdef.h>
+ 
++static const gchar *
++xkl_xkb_get_base_path(void)
++{
++	const gchar *base_path;
++
++	base_path = g_getenv ("XKB_CONFIG_ROOT");
++	if (!base_path)
++		base_path = XKB_BASE;
++
++	return base_path;
++}
++
+ #ifdef LIBXKBFILE_PRESENT
+ static XkbRF_RulesPtr xkl_rules;
+ 
+@@ -65,7 +77,8 @@ xkl_rules_set_load(XklEngine * engine)
+ 
+ 	locale = setlocale(LC_ALL, NULL);
+ 
+-	g_snprintf(file_name, sizeof file_name, XKB_BASE "/rules/%s", rf);
++	g_snprintf(file_name, sizeof file_name, "%s/rules/%s",
++		   xkl_xkb_get_base_path(), rf);
+ 	xkl_debug(160, "Loading rules from [%s]\n", file_name);
+ 
+ 	rules_set = XkbRF_Load(file_name, locale, True, True);
+@@ -98,10 +111,14 @@ gboolean
+ xkl_xkb_load_config_registry(XklConfigRegistry * config,
+ 			     gboolean if_extras_needed)
+ {
+-	return xkl_config_registry_load_helper(config,
++	const gchar *rules_path = g_strdup_printf("%s/rules",
++					  xkl_xkb_get_base_path());
++	gboolean ok = xkl_config_registry_load_helper(config,
+ 					       XKB_DEFAULT_RULESET,
+-					       XKB_BASE "/rules",
++					       rules_path,
+ 					       if_extras_needed);
++	g_free(rules_path);
++	return ok;
+ }
+ 
+ #ifdef LIBXKBFILE_PRESENT
+@@ -249,6 +266,7 @@ xkl_config_get_keyboard(XklEngine * engine,
+ 		pid_t cpid, pid;
+ 		int status = 0;
+ 		FILE *tmpxkb;
++		const gchar *opt_I;
+ 
+ 		xkl_debug(150, "tmp XKB/XKM file names: [%s]/[%s]\n",
+ 			  xkb_fn, xkm_fn);
+@@ -296,14 +314,16 @@ xkl_config_get_keyboard(XklEngine * engine,
+ 				break;
+ 			case 0:
+ 				/* child */
++				opt_I = g_strdup_printf("-I%s", xkl_xkb_get_base_path());
+ 				xkl_debug(160, "Executing %s\n", XKBCOMP);
+ 				xkl_debug(160, "%s %s %s %s %s %s %s %s\n",
+ 					  XKBCOMP, XKBCOMP, "-w0", "-I",
+-					  "-I" XKB_BASE, "-xkm", xkb_fn,
++					  opt_I, "-xkm", xkb_fn,
+ 					  xkm_fn);
+ 				execl(XKBCOMP, XKBCOMP, "-w0", "-I",
+-				      "-I" XKB_BASE, "-xkm", xkb_fn,
++				      opt_I, "-xkm", xkb_fn,
+ 				      xkm_fn, NULL);
++				g_free(opt_I);
+ 				xkl_debug(0, "Could not exec %s: %d\n",
+ 					  XKBCOMP, errno);
+ 				exit(1);
+-- 
+2.24.1
+

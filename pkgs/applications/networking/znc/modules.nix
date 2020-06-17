@@ -15,7 +15,7 @@ let
     passthru.module_name = module_name;
   });
 
-in rec {
+in {
 
   backlog = zncDerivation rec {
     name = "znc-backlog-${version}";
@@ -31,7 +31,7 @@ in rec {
 
     meta = with stdenv.lib; {
       description = "Request backlog for IRC channels.";
-      homepage = https://github.com/fruitiex/znc-backlog/;
+      homepage = "https://github.com/fruitiex/znc-backlog/";
       license = licenses.asl20;
       maintainers = with maintainers; [ infinisil ];
     };
@@ -51,7 +51,7 @@ in rec {
 
     meta = with stdenv.lib; {
       description = "ZNC module for client specific buffers";
-      homepage = https://github.com/jpnurmi/znc-clientbuffer;
+      homepage = "https://github.com/jpnurmi/znc-clientbuffer";
       license = licenses.asl20;
       maintainers = with maintainers; [ hrdinka ];
     };
@@ -71,7 +71,7 @@ in rec {
 
     meta = with stdenv.lib; {
       description = "ZNC clientaway module";
-      homepage = https://github.com/kylef/znc-contrib;
+      homepage = "https://github.com/kylef/znc-contrib";
       license = licenses.gpl2;
       maintainers = with maintainers; [ kiwi ];
     };
@@ -79,20 +79,20 @@ in rec {
 
   fish = zncDerivation rec {
     name = "znc-fish-${version}";
-    version = "git-2014-10-10";
+    version = "git-2017-06-26";
     module_name = "fish";
 
     src = fetchFromGitHub {
-      # this fork works with ZNC 1.6
-      owner = "jarrydpage";
+      # this fork works with ZNC 1.7
+      owner = "oilslump";
       repo = "znc-fish";
-      rev = "9c580e018a1a08374e814fc06f551281cff827de";
-      sha256 = "0yvs0jkwwp18qxqvw1dvir91ggczz56ka00k0zlsb81csdi8xfvl";
+      rev = "7d91467dbb195f7b591567911210523c6087662e";
+      sha256 = "1ky5xg17k5f393whrv5iv8zsmdvdyk2f7z5qdsmxcwy3pdxy6vsm";
     };
 
     meta = {
       description = "ZNC FiSH module";
-      homepage = https://github.com/dctrwatson/znc-fish;
+      homepage = "https://github.com/dctrwatson/znc-fish";
       maintainers = [ stdenv.lib.maintainers.offline ];
     };
   };
@@ -111,7 +111,7 @@ in rec {
 
     meta = with stdenv.lib; {
       description = "ZNC ignore module";
-      homepage = https://github.com/kylef/znc-contrib;
+      homepage = "https://github.com/kylef/znc-contrib";
       license = licenses.gpl2;
       maintainers = with maintainers; [ kiwi ];
     };
@@ -151,7 +151,7 @@ in rec {
 
     meta = with stdenv.lib; {
       description = "An advanced playback module for ZNC";
-      homepage = https://github.com/jpnurmi/znc-playback;
+      homepage = "https://github.com/jpnurmi/znc-playback";
       license = licenses.asl20;
       maintainers = with maintainers; [ hrdinka ];
     };
@@ -171,7 +171,7 @@ in rec {
 
     meta = {
       description = "ZNC privmsg module";
-      homepage = https://github.com/kylef/znc-contrib;
+      homepage = "https://github.com/kylef/znc-contrib";
     };
   };
 
@@ -189,7 +189,7 @@ in rec {
 
     meta = {
       description = "Push notification service module for ZNC";
-      homepage = https://github.com/jreese/znc-push;
+      homepage = "https://github.com/jreese/znc-push";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ offline schneefux ];
     };

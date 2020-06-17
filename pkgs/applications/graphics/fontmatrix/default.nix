@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "fontmatrix-${version}";
+  pname = "fontmatrix";
   version = "0.6.0";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fontmatrix is a free/libre font explorer for Linux, Windows and Mac";
-    homepage = https://github.com/fontmatrix/fontmatrix;
+    homepage = "https://github.com/fontmatrix/fontmatrix";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

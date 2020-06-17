@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "octopus";
   version = "0.6.3-beta";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "luntergroup";

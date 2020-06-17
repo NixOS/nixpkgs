@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Tool for live presentations in the terminal";
-    homepage = https://pypi.python.org/pypi/doitlive;
+    homepage = "https://pypi.python.org/pypi/doitlive";
     license = licenses.mit;
     maintainers = with maintainers; [ mbode ];
   };

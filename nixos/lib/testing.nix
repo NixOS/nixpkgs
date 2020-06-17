@@ -10,21 +10,21 @@
 with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;
 
-let
-  jquery-ui = callPackage ./testing/jquery-ui.nix { };
-  jquery = callPackage ./testing/jquery.nix { };
-
-in rec {
+rec {
 
   inherit pkgs;
 
 
-  testDriver = stdenv.mkDerivation {
+  testDriver = lib.warn ''
+    Perl VM tests are deprecated and will be removed for 20.09.
+    Please update your tests to use the python test driver.
+    See https://github.com/NixOS/nixpkgs/pull/71684 for details.
+  '' stdenv.mkDerivation {
     name = "nixos-test-driver";
 
     buildInputs = [ makeWrapper perl ];
 
-    unpackPhase = "true";
+    dontUnpack = true;
 
     preferLocalBuild = true;
 
@@ -54,23 +54,11 @@ in rec {
 
       requiredSystemFeatures = [ "kvm" "nixos-test" ];
 
-      buildInputs = [ libxslt ];
-
       buildCommand =
         ''
-          mkdir -p $out/nix-support
+          mkdir -p $out
 
-          LOGFILE=$out/log.xml tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver
-
-          # Generate a pretty-printed log.
-          xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
-          ln -s ${./test-driver/logfile.css} $out/logfile.css
-          ln -s ${./test-driver/treebits.js} $out/treebits.js
-          ln -s ${jquery}/js/jquery.min.js $out/
-          ln -s ${jquery-ui}/js/jquery-ui.min.js $out/
-
-          touch $out/nix-support/hydra-build-products
-          echo "report testlog $out log.html" >> $out/nix-support/hydra-build-products
+          LOGFILE=/dev/null tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver
 
           for i in */xchg/coverage-data; do
             mkdir -p $out/coverage-data
@@ -246,13 +234,14 @@ in rec {
         { ... }:
         {
           inherit require;
+          imports = [
+            ../tests/common/auto.nix
+          ];
           virtualisation.memorySize = 1024;
           services.xserver.enable = true;
-          services.xserver.displayManager.slim.enable = false;
-          services.xserver.displayManager.auto.enable = true;
-          services.xserver.windowManager.default = "icewm";
+          test-support.displayManager.auto.enable = true;
+          services.xserver.displayManager.defaultSession = "none+icewm";
           services.xserver.windowManager.icewm.enable = true;
-          services.xserver.desktopManager.default = "none";
         };
     in
       runInMachine ({

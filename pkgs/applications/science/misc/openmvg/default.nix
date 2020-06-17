@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3";
-  name = "openmvg-${version}";
+  pname = "openmvg";
 
   src = fetchgit {
     url = "https://www.github.com/openmvg/openmvg.git";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
-    homepage = https://openmvg.readthedocs.io/en/latest/;
+    homepage = "https://openmvg.readthedocs.io/en/latest/";
     license = stdenv.lib.licenses.mpl20;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ mdaiter ];

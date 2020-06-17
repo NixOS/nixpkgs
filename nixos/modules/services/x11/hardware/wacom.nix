@@ -15,6 +15,7 @@ in
     services.xserver.wacom = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the Wacom touchscreen/digitizer/tablet.

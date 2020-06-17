@@ -16,7 +16,7 @@ let components = {
 in
 stdenv.mkDerivation rec {
   version = "2.3.4";
-  name = "hoomd-blue-${version}";
+  pname = "hoomd-blue";
 
   src = fetchgit {
     url = "https://bitbucket.org/glotzer/hoomd-blue";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = with stdenv.lib; {
-    homepage = http://glotzerlab.engin.umich.edu/hoomd-blue/;
+    homepage = "http://glotzerlab.engin.umich.edu/hoomd-blue/";
     description = "HOOMD-blue is a general-purpose particle simulation toolkit";
     license = licenses.bsdOriginal;
     platforms = [ "x86_64-linux" ];

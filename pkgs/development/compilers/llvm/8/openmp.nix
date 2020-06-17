@@ -7,9 +7,10 @@
 }:
 
 stdenv.mkDerivation {
-  name = "openmp-${version}";
+  pname = "openmp";
+  inherit version;
 
-  src = fetch "openmp" "1mf9cpgvix34xlpv0inkgl3qmdvgvp96f7sksqizri0n5xfp1cgp";
+  src = fetch "openmp" "0b3jlxhqbpyd1nqkpxjfggm5d9va5qpyf7d4i5y7n4a1mlydv19y";
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ llvm ];
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Components required to build an executable OpenMP program";
-    homepage    = http://openmp.llvm.org/;
+    homepage    = "https://openmp.llvm.org/";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.all;
   };

@@ -17,12 +17,13 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "megaglest-${version}";
+  pname = "megaglest";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "MegaGlest";
     repo = "megaglest-source";
-    rev = "${version}";
+    rev = version;
     fetchSubmodules = true;
     sha256 = "0fb58a706nic14ss89zrigphvdiwy5s9dwvhscvvgrfvjpahpcws";
   };
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
   meta = {
     description = "MegaGlest is an entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
     license = stdenv.lib.licenses.gpl3;
-    homepage = http://megaglest.org/;
+    homepage = "http://megaglest.org/";
     maintainers = [ stdenv.lib.maintainers.matejc ];
     platforms = stdenv.lib.platforms.linux;
   };

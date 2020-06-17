@@ -1,22 +1,37 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, cacert, curl }:
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, openssl
+, cacert
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
-  name = "tealdeer-${version}";
-  version = "1.1.0";
+  pname = "tealdeer";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "tealdeer";
     rev = "v${version}";
-    sha256 = "055pjxgiy31j69spq66w80ig469yi075dk8ad38z6rlvjmf74k71";
+    sha256 = "0l16qqkrya22nnm4j3dxyq4gb85i3c07p10s00bpqcvki6n6v6r8";
   };
 
-  cargoSha256 = "0yrz2pq4zdv6hzc8qc1zskpkq556mzpwvzl7qzbfzx8b6g31ak19";
+  cargoSha256 = "0jvgcf493rmkrh85j0fkf8ffanva80syyxclzkvkrzvvwwj78b5l";
 
-  buildInputs = [ openssl cacert curl ];
+  buildInputs = [ openssl cacert ]
+    ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
-  nativeBuildInputs = [ pkgconfig ];
-  
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+
+  postInstall = ''
+    installShellCompletion --bash --name tealdeer.bash bash_tealdeer
+    installShellCompletion --fish --name tealdeer.fish fish_tealdeer
+    installShellCompletion --zsh --name _tealdeer zsh_tealdeer
+  '';
+
   NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   # disable tests for now since one needs network

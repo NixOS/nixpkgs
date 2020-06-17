@@ -6,7 +6,8 @@ let
   version = "0.3.6";
 
 in stdenv.mkDerivation {
-  name = "soapyuhd-${version}";
+  pname = "soapyuhd";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pothosware";
@@ -25,7 +26,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pothosware/SoapyAirspy;
+    homepage = "https://github.com/pothosware/SoapyAirspy";
     description = "SoapySDR plugin for UHD devices";
     license = licenses.gpl3;
     maintainers = with maintainers; [ markuskowa ];

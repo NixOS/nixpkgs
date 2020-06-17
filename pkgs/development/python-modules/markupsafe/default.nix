@@ -14,9 +14,9 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Implements a XML/HTML/XHTML Markup safe string";
-    homepage = http://dev.pocoo.org;
+    homepage = "http://dev.pocoo.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ domenkozar garbas ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

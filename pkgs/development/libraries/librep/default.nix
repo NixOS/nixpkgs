@@ -6,7 +6,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "librep-${version}";
+  pname = "librep";
   version = "0.92.7";
   sourceName = "librep_${version}";
 
@@ -19,10 +19,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline texinfo ];
   propagatedBuildInputs = [ gdbm gmp libffi ];
 
-  configureFlags = [
-    "--disable-static"
-  ];
-
   setupHook = ./setup-hook.sh;
 
   meta = {
@@ -33,7 +29,7 @@ stdenv.mkDerivation rec {
       machine. It can serve as an application extension language
       but is also suitable for standalone scripts.
      '';
-    homepage = http://sawfish.wikia.com;
+    homepage = "http://sawfish.wikia.com";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
   };

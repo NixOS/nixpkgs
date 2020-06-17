@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "supervise-${version}";
+  pname = "supervise";
   version = "1.4.0";
 
   src = fetchzip {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/catern/supervise;
+    homepage = "https://github.com/catern/supervise";
     description = "A minimal unprivileged process supervisor making use of modern Linux features";
     platforms = platforms.linux;
     license = licenses.gpl3;

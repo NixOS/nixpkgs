@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iot";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b274fb5d38cfaa556a07943d9c9a23ca4aa3ecca51135a70325e1c95fa699474";
+    sha256 = "ab1070003027e28c6956cee3f11228277830d191a1c38a809c96eb0baf8be670";
   };
 
   checkInputs = [ pytest mock ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Cloud IoT API API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     # maintainers = [ maintainers. ];
   };

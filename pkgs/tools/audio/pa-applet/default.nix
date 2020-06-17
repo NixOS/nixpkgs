@@ -1,6 +1,6 @@
 { stdenv, fetchgit, libpulseaudio, pkgconfig, gtk3, glibc, autoconf, automake, libnotify, libX11, xf86inputevdev }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "pa-applet-2012-04-11";
 
   src = fetchgit {

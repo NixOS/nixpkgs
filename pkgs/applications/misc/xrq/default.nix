@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libX11}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "xrq-unstable-2016-01-15";
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "X utility for querying xrdb";
-    homepage = https://github.com/arianon/xrq;
+    homepage = "https://github.com/arianon/xrq";
     license = stdenv.lib.licenses.mit;
     platforms = with stdenv.lib.platforms; unix;
   };

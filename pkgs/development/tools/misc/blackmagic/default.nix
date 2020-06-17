@@ -1,28 +1,31 @@
 { stdenv, lib, fetchFromGitHub
-, gcc-arm-embedded, binutils-arm-embedded, libftdi
+, gcc-arm-embedded, libftdi1, libusb-compat-0_1, pkgconfig
 , python, pythonPackages
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blackmagic-${version}";
-  version = "1.6.1";
+  pname = "blackmagic";
+  version = "unstable-2020-02-20";
+  # `git describe --always`
+  firmwareVersion = "v1.6.1-409-g7a595ea";
 
   src = fetchFromGitHub {
     owner = "blacksphere";
     repo = "blackmagic";
-    rev = "29386aee140e5e99a958727358f60980418b4c88";
-    sha256 = "05x19y80mixk6blpnfpfngy5d41jpjvdqgjzkmhv1qc03bhyhc82";
+    rev = "7a595ead255f2a052fe4561c24a0577112c9de84";
+    sha256 = "01kdm1rkj7ll0px882crf9w27d2ka8f3hcdmvhb9jwd60bf5dlap";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    gcc-arm-embedded binutils-arm-embedded
+    gcc-arm-embedded pkgconfig
   ];
 
   buildInputs = [
-    libftdi
+    libftdi1
+    libusb-compat-0_1
     python
     pythonPackages.intelhex
   ];
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Prevent calling out to `git' to generate a version number:
     substituteInPlace src/Makefile \
-      --replace '`git describe --always --dirty`' '${version}'
+      --replace '$(shell git describe --always --dirty)' '${firmwareVersion}'
 
     # Fix scripts that generate headers:
     for f in $(find scripts libopencm3/scripts -type f); do
@@ -40,6 +43,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = "${stdenv.shell} ${./helper.sh}";
   installPhase = ":"; # buildPhase does this.
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "In-application debugger for ARM Cortex microcontrollers";
@@ -54,9 +59,11 @@ stdenv.mkDerivation rec {
       directory.  It also places the FTDI version of the blackmagic
       executable in the bin directory.
     '';
-    homepage = https://github.com/blacksphere/blackmagic;
+    homepage = "https://github.com/blacksphere/blackmagic";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pjones ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ pjones emily sorki ];
+    # fails on darwin with
+    # arm-none-eabi-gcc: error: unrecognized command line option '-iframework'
+    platforms = platforms.linux;
   };
 }

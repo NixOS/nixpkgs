@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;  # pypi tarball does not include tests
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/hamcrest/PyHamcrest;
+    homepage = "https://github.com/hamcrest/PyHamcrest";
     description = "Hamcrest framework for matcher objects";
     license = licenses.bsd3;
     maintainers = with maintainers; [

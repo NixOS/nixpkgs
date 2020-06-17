@@ -12,6 +12,8 @@ buildPythonPackage rec {
     sha256 = "1811b55wdfg4kbsjcgh1kc938g118jpvif97ilgrmbls25dfpvvw";
   };
 
+  dontConfigure = true;
+
   checkInputs = [ pytest ];
 
   checkPhase = ''
@@ -19,7 +21,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/google/brotli;
+    homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm";
     license = lib.licenses.mit;
   };

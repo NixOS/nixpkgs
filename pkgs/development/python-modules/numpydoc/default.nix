@@ -1,22 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, sphinx
+{ lib, buildPythonPackage, fetchPypi
 , jinja2
+, nose
+, pytest
+, sphinx
 }:
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "0.8.0";
+  version = "0.9.2";
 
   src = fetchPypi {
     inherit pname;
     inherit version;
-    sha256 = "61f4bf030937b60daa3262e421775838c945dcdd671f37b69e8e4854c7eb5ffd";
+    sha256 = "9140669e6b915f42c6ce7fef704483ba9b0aaa9ac8e425ea89c76fe40478f642";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [ nose pytest ];
   propagatedBuildInputs = [ sphinx jinja2 ];
 
   meta = {

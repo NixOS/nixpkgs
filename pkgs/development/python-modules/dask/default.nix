@@ -1,7 +1,10 @@
 { lib
+, bokeh
 , buildPythonPackage
-, fetchPypi
-, pytest
+, fetchFromGitHub
+, fsspec
+, pytestCheckHook
+, pythonOlder
 , cloudpickle
 , numpy
 , toolz
@@ -12,26 +15,51 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "1.2.2";
+  version = "2.14.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5e7876bae2a01b355d1969b73aeafa23310febd8c353163910b73e93dc7e492c";
+  disabled = pythonOlder "3.5";
+
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = pname;
+    rev = version;
+    sha256 = "0kj46pwzvdw8ii1h45y48wxvjid89yp4cfak2h4b8z8xic73fqgj";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ cloudpickle  numpy toolz dill pandas partd ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    py.test dask
+  dontUseSetuptoolsCheck = true;
+
+  propagatedBuildInputs = [
+    bokeh
+    cloudpickle
+    dill
+    fsspec
+    numpy
+    pandas
+    partd
+    toolz
+  ];
+
+  postPatch = ''
+    # versioneer hack to set version of github package
+    echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
+
+    substituteInPlace setup.py \
+      --replace "version=versioneer.get_version()," "version='${version}'," \
+      --replace "cmdclass=versioneer.get_cmdclass()," ""
   '';
 
-  # URLError
-  doCheck = false;
+  disabledTests = [
+    "test_argwhere_str"
+    "test_count_nonzero_str"
+  ];
 
   meta = {
     description = "Minimal task scheduling abstraction";
-    homepage = https://github.com/ContinuumIO/dask/;
+    homepage = "https://github.com/ContinuumIO/dask/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

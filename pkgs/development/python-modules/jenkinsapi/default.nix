@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "jenkinsapi";
-  version = "0.3.9";
+  version = "0.3.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bf35b208fe05e65508f3b8bbb0f91d164b007632e27ebe5f54041174b681b696";
+    sha256 = "a212a244b0a6022a61657746c8120ac9b6db83432371b345154075eb8faceb61";
   };
 
   propagatedBuildInputs = [ pytz requests ];
@@ -23,9 +23,10 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python API for accessing resources on a Jenkins continuous-integration server";
-    homepage = https://github.com/salimfadhley/jenkinsapi;
+    homepage = "https://github.com/salimfadhley/jenkinsapi";
     maintainers = with maintainers; [ drets ];
     license = licenses.mit;
+    broken = true;
   };
 
 }

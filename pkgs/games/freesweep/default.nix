@@ -2,7 +2,7 @@
   updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
-  name = "freesweep-${version}";
+  pname = "freesweep";
   version = "1.0.1";
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A console minesweeper-style game written in C for Unix-like systems";
-    homepage = https://github.com/rwestlund/freesweep;
+    homepage = "https://github.com/rwestlund/freesweep";
     license = licenses.gpl2;
     maintainers = with maintainers; [ kierdavis ];
     platforms = platforms.unix;

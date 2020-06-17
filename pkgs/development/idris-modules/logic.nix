@@ -21,7 +21,7 @@ build-idris-package  {
 
   meta = {
     description = "Propositional logic tools, inspired by the Coq standard library";
-    homepage = https://github.com/yurrriq/idris-logic;
+    homepage = "https://github.com/yurrriq/idris-logic";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

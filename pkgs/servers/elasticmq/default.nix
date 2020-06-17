@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = https://github.com/adamw/elasticmq;
+    homepage = "https://github.com/adamw/elasticmq";
     description = "Message queueing system with Java, Scala and Amazon SQS-compatible interfaces";
     longDescription =
       ''

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "clex-${version}";
+  pname = "clex";
   version = "4.6.patch9";
 
   src = fetchurl {
     sha256 = "1qj5yp8k90wag5sb3zrm2pn90qqx3zbrgf2gqpqpdqmlgffnv1jc";
-    url = "${meta.homepage}/download/${name}.tar.gz";
+    url = "${meta.homepage}/download/${pname}-${version}.tar.gz";
   };
 
   buildInputs = [ ncurses ];
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
       to be executed by the shell. There are no built-in commands, CLEX is an
       add-on to your favorite shell.
     '';
-    homepage = http://www.clex.sk;
+    homepage = "http://www.clex.sk";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

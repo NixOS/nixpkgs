@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 ];
 
   meta = {
-    homepage = http://pio.sourceforge.net/;
+    homepage = "http://pio.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Addicting game based on The Settlers of Catan";
     maintainers = with stdenv.lib.maintainers; [viric];

@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD${placeholder "out"}/lib
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$PWD${placeholder "out"}/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD${placeholder "out"}/lib
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD${placeholder "out"}/lib
   '';
   checkTarget = "tests test";
 

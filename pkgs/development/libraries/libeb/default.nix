@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, zlib }:
 stdenv.mkDerivation rec {
-  name = "libeb-${version}";
+  pname = "libeb";
   version = "4.4.3";
 
   src = fetchurl {

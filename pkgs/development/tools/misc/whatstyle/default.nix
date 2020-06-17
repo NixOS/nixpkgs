@@ -2,12 +2,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whatstyle";
-  version = "0.1.7";
+  version = "0.1.8";
   src = fetchFromGitHub {
     owner = "mikr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16ak4g149cr764c1lqakiyzmf5s98w8bdc4gk69m8qacimfg3mzm";
+    sha256 = "08lfd8h5fnvy5gci4f3an411cypad7p2yiahvbmlp51r9xwpaiwr";
   };
 
   # Fix references to previous version, to avoid confusion:
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Find a code format style that fits given source files";
-    homepage = https://github.com/mikr/whatstyle;
+    homepage = "https://github.com/mikr/whatstyle";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

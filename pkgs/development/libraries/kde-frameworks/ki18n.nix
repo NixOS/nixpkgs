@@ -1,6 +1,6 @@
 {
   mkDerivation, lib,
-  extra-cmake-modules, gettext, python,
+  extra-cmake-modules, gettext, python3,
   qtbase, qtdeclarative, qtscript,
 }:
 
@@ -11,6 +11,6 @@ mkDerivation {
     broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedNativeBuildInputs = [ gettext python ];
+  propagatedNativeBuildInputs = [ gettext python3 ];
   buildInputs = [ qtdeclarative qtscript ];
 }

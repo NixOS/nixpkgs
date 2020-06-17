@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "zeitgeist-20120221";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   src = fetchurl {
     url = "https://raw.githubusercontent.com/alexmurray/dotfiles/master/.emacs.d/vendor/zeitgeist.el";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Integreate Emacs with Zeitgeist";
-    homepage = http://zeitgeist-project.com/;
+    homepage = "http://zeitgeist-project.com/";
     platforms = stdenv.lib.platforms.all;
   };
 }

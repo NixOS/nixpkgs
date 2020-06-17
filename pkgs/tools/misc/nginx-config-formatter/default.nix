@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, python3 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2019-02-13";
-  name = "nginx-config-formatter-${version}";
+  pname = "nginx-config-formatter";
 
   src = fetchFromGitHub {
     owner = "1connect";
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "nginx config file formatter";
     maintainers = with maintainers; [ Baughn ];
     license = licenses.asl20;
-    homepage = https://github.com/1connect/nginx-config-formatter;
+    homepage = "https://github.com/1connect/nginx-config-formatter";
   };
 }

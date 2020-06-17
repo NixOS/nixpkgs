@@ -1,18 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake, python3 }:
+{ stdenv, fetchpatch, fetchFromGitHub, cmake, python3, substituteAll }:
 
 stdenv.mkDerivation rec {
-  name = "wabt-${version}";
-  version = "1.0.11";
+  pname = "wabt";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
-    owner  = "WebAssembly";
-    repo   = "wabt";
-    rev    = version;
-    sha256 = "0hn88vlqyclpk79v3wg3lrssd9vwhjdgvb41g03jqakygxxgnmp5";
+    owner = "WebAssembly";
+    repo = "wabt";
+    rev = version;
+    sha256 = "1zzc46d6m7l5lil423417crdda2cqb396p2idcla2ps161hwq3qp";
+    fetchSubmodules = true;
   };
 
+  # https://github.com/WebAssembly/wabt/pull/1408
+  patches = [ (fetchpatch {
+    url = "https://github.com/WebAssembly/wabt/pull/1408/commits/28505f4db6e4561cf6840af5c304a9aa900c4987.patch";
+    sha256 = "1nh1ddsak6w51np17xf2r7i0czxrjslz1i4impmmp88h5bp2yjba";
+  }) ];
+
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
+  cmakeFlags = [ "-DBUILD_TESTS=OFF" "-DCMAKE_PROJECT_VERSION=${version}" ];
   buildInputs = [ python3 ];
 
   meta = with stdenv.lib; {
@@ -32,7 +39,7 @@ stdenv.mkDerivation rec {
          format
        * wasm2c: convert a WebAssembly binary file to a C source and header
     '';
-    homepage = https://github.com/WebAssembly/wabt;
+    homepage = "https://github.com/WebAssembly/wabt";
     license = licenses.asl20;
     maintainers = with maintainers; [ ekleog ];
     platforms = platforms.unix;

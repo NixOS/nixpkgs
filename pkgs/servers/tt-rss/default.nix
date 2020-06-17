@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tt-rss-${version}";
+  pname = "tt-rss";
   version = "2019-01-29";
   rev = "c7c9c5fb0ab6b3d4ea3078865670d6c1dfe2ecac";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
     license = licenses.gpl2Plus;
-    homepage = https://tt-rss.org;
+    homepage = "https://tt-rss.org";
     maintainers = with maintainers; [ globin zohl ];
     platforms = platforms.all;
   };

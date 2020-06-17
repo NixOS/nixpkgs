@@ -1,4 +1,4 @@
-{ callPackage, octaveHg }:
+{ callPackage }:
 
 rec {
   audio = callPackage ../development/pure-modules/audio { };
@@ -19,7 +19,7 @@ rec {
   lv2 = callPackage ../development/pure-modules/lv2 { };
   midi = callPackage ../development/pure-modules/midi { };
   mpfr = callPackage ../development/pure-modules/mpfr { };
-  octave = callPackage ../development/pure-modules/octave { octave = octaveHg; };
+  octave = callPackage ../development/pure-modules/octave { };
   odbc = callPackage ../development/pure-modules/odbc { };
   pandoc = callPackage ../development/pure-modules/pandoc { };
   rational = callPackage ../development/pure-modules/rational { };

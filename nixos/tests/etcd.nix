@@ -1,6 +1,6 @@
 # This test runs simple etcd node
 
-import ./make-test.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... } : {
   name = "etcd";
 
   meta = with pkgs.stdenv.lib.maintainers; {
@@ -14,14 +14,12 @@ import ./make-test.nix ({ pkgs, ... } : {
   };
 
   testScript = ''
-    subtest "should start etcd node", sub {
-      $node->start();
-      $node->waitForUnit("etcd.service");
-    };
+    with subtest("should start etcd node"):
+        node.start()
+        node.wait_for_unit("etcd.service")
 
-    subtest "should write and read some values to etcd", sub {
-      $node->succeed("etcdctl set /foo/bar 'Hello world'");
-      $node->succeed("etcdctl get /foo/bar | grep 'Hello world'");
-    }
+    with subtest("should write and read some values to etcd"):
+        node.succeed("etcdctl set /foo/bar 'Hello world'")
+        node.succeed("etcdctl get /foo/bar | grep 'Hello world'")
   '';
 })

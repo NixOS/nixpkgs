@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ctrtool";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchFromGitHub {
-    owner  = "profi200";
+    owner  = "jakcron";
     repo   = "Project_CTR";
-    rev    = version;
-    sha256 = "1l6z05x18s1crvb283yvynlwsrpa1pdx1nbijp99plw06p88h4va";
+    rev    = "v${version}";
+    sha256 = "1n3j3fd1bqd39v5bdl9mhq4qdrcl1k4ib1yzl3qfckaz3y8bkrap";
   };
 
   sourceRoot = "source/ctrtool";

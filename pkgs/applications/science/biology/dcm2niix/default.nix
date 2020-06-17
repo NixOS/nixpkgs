@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.20190410";
-  name = "dcm2niix-${version}";
+  version = "1.0.20200331";
+  pname = "dcm2niix";
 
   src = fetchFromGitHub {
     owner = "rordenlab";
     repo = "dcm2niix";
     rev = "v${version}";
-    sha256 = "1prwpvbi76xlpkhc4kadjhyyx0s71cs30hi6anknhfm6hdyd26ms";
+    sha256 = "1cncfwhyhmg18n970lkn6yvp0i74ajznsl8dqz00asqfzmg681n1";
   };
 
   enableParallelBuilding = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       dcm2niix is a designed to convert neuroimaging data from the
       DICOM format to the NIfTI format.
     '';
-    homepage = https://www.nitrc.org/projects/dcm2nii;
+    homepage = "https://www.nitrc.org/projects/dcm2nii";
     license = licenses.bsd3;
     maintainers = [ maintainers.ashgillman ];
     platforms = platforms.all;

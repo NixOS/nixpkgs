@@ -1,8 +1,8 @@
 diff --git a/configure b/configure_new
-index 699bcb5..89a1832 100755
+index 12b4662..6ec641c 100755
 --- a/configure
 +++ b/configure_new
-@@ -11585,55 +11585,8 @@ else
+@@ -12162,55 +12162,8 @@ else
  $as_echo "no" >&6; }
  fi
  
@@ -44,7 +44,7 @@ index 699bcb5..89a1832 100755
 -   if test -d "${cups_default_prefix}/share/ppd" ; then
 -      CUPS_PPD_DIR="${cups_default_prefix}/share/ppd"
 -   elif test "xyes" = "x$have_cups_config" ; then
--            CUPS_PPD_DIR="${cups_default_prefix}/`cups-config --datadir | sed -e 's,^/[^/][^/]*,,'`/model"
+-            CUPS_PPD_DIR="${cups_default_prefix}`cups-config --datadir | sed -e 's,^/[^/][^/]*,,'`/model"
 -   else
 -      CUPS_PPD_DIR="${cups_default_prefix}/share/cups/model"
 -   fi
@@ -58,5 +58,5 @@ index 699bcb5..89a1832 100755
 +CUPS_FILTER_DIR="${prefix}/lib/cups/filter"
 +CUPS_PPD_DIR="${prefix}/share/cups/model"
  
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ANSI C header files" >&5
- $as_echo_n "checking for ANSI C header files... " >&6; }
+ # Check whether --enable-lsb was given.
+ if test "${enable_lsb+set}" = set; then :

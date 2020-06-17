@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python asyncio IMAP4rev1 client library";
-    homepage = https://github.com/bamthomas/aioimaplib;
+    homepage = "https://github.com/bamthomas/aioimaplib";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };

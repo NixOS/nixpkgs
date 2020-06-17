@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "kail-${version}";
+  pname = "kail";
   version = "0.8.0";
 
   goPackagePath = "github.com/boz/kail";
@@ -24,7 +24,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Kubernetes log viewer";
-    homepage = https://github.com/boz/kail;
+    homepage = "https://github.com/boz/kail";
     license = licenses.mit;
     maintainers = with maintainers; [ offline vdemeester ];
   };

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libsodium, ncurses, libopus
 , libvpx, check, libconfig, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "tox-core-new-20160727";
 
   src = fetchFromGitHub {

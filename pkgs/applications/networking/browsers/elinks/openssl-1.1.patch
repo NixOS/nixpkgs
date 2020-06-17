@@ -1,0 +1,51 @@
+diff --git a/src/network/ssl/socket.c b/src/network/ssl/socket.c
+index 45b4b4a8..0385a431 100644
+--- a/src/network/ssl/socket.c
++++ b/src/network/ssl/socket.c
+@@ -67,7 +67,9 @@ static void
+ ssl_set_no_tls(struct socket *socket)
+ {
+ #ifdef CONFIG_OPENSSL
+-	((ssl_t *) socket->ssl)->options |= SSL_OP_NO_TLSv1;
++#ifdef SSL_OP_NO_TLSv1
++	SSL_set_options((ssl_t *)socket->ssl, SSL_OP_NO_TLSv1);
++#endif
+ #elif defined(CONFIG_GNUTLS)
+ 	{
+ 		/* GnuTLS does not support SSLv2 because it is "insecure".
+@@ -145,9 +147,11 @@ ssl_connect(struct socket *socket)
+ 		}
+ 
+ 		if (client_cert) {
+-			SSL_CTX *ctx = ((SSL *) socket->ssl)->ctx;
++			SSL_CTX *ctx = SSL_get_SSL_CTX((SSL *) socket->ssl);
+ 
+-			SSL_CTX_use_certificate_chain_file(ctx, client_cert);
++			SSL_CTX_use_certificate_chain_file(
++					(SSL *) socket->ssl,
++					client_cert);
+ 			SSL_CTX_use_PrivateKey_file(ctx, client_cert,
+ 						    SSL_FILETYPE_PEM);
+ 		}
+diff --git a/src/network/ssl/ssl.c b/src/network/ssl/ssl.c
+index c008121d..c06a80a7 100644
+--- a/src/network/ssl/ssl.c
++++ b/src/network/ssl/ssl.c
+@@ -50,11 +50,16 @@ init_openssl(struct module *module)
+ 	 * cannot initialize the PRNG and so every attempt to use SSL fails.
+ 	 * It's actually an OpenSSL FAQ, and according to them, it's up to the
+ 	 * application coders to seed the RNG. -- William Yodlowsky */
+-	if (RAND_egd(RAND_file_name(f_randfile, sizeof(f_randfile))) < 0) {
++	RAND_file_name(f_randfile, sizeof(f_randfile));
++#ifdef HAVE_RAND_EGD
++	if (RAND_egd(f_randfile) < 0) {
+ 		/* Not an EGD, so read and write to it */
++#endif
+ 		if (RAND_load_file(f_randfile, -1))
+ 			RAND_write_file(f_randfile);
++#ifdef HAVE_RAND_EGD
+ 	}
++#endif
+ 
+ 	SSLeay_add_ssl_algorithms();
+ 	context = SSL_CTX_new(SSLv23_client_method());

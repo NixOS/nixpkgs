@@ -4,8 +4,8 @@
 , gettext, intltool, libtool, perl
 }:
 
-stdenv.mkDerivation rec {
-  name = "warmux-${version}";
+stdenv.mkDerivation {
+  pname = "warmux";
   version = "unstable-2017-10-20";
 
   src = fetchFromGitHub {
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = with licenses; [ gpl2 ufl ];
-    homepage = https://github.com/fluxer/warmux;
+    homepage = "https://github.com/fluxer/warmux";
   };
 }

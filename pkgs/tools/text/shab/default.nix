@@ -19,7 +19,6 @@ let
       done
     '';
 
-    doBuild = false;
     doCheck = true;
     doInstallCheck = true;
 
@@ -42,7 +41,7 @@ let
 
     meta = with lib; {
       description = "The bash templating language";
-      homepage = https://github.com/zimbatm/shab;
+      homepage = "https://github.com/zimbatm/shab";
       license = licenses.unlicense;
       maintainers = with maintainers; [ zimbatm ];
       platforms = bash.meta.platforms;

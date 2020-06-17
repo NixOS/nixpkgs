@@ -2,7 +2,7 @@
 
 
 buildGoPackage rec {
-  name = "reflex-${version}";
+  pname = "reflex";
   version = "0.2.0";
 
   goPackagePath = "github.com/cespare/reflex";
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "A small tool to watch a directory and rerun a command when certain files change";
-    homepage = https://github.com/cespare/reflex;
+    homepage = "https://github.com/cespare/reflex";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ nicknovitski ];

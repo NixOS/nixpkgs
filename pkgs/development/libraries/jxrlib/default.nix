@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, python }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "jxrlib";
   version = "1.1";
 
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Implementation of the JPEG XR image codec standard";
-    homepage = https://jxrlib.codeplex.com;
+    homepage = "https://jxrlib.codeplex.com";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

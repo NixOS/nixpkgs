@@ -3,7 +3,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   version = "1.4.2";
-  name = "bitlbee-steam-${version}";
+  pname = "bitlbee-steam";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Steam protocol plugin for BitlBee";
 
-    homepage = https://github.com/jgeboski/bitlbee-steam;
+    homepage = "https://github.com/jgeboski/bitlbee-steam";
     license = licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
   };

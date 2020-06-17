@@ -115,6 +115,14 @@ let
       magicOrExtension = ''\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xf3\x00'';
       mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
     };
+    wasm32-wasi = {
+      magicOrExtension = ''\x00asm'';
+      mask = ''\xff\xff\xff\xff'';
+    };
+    wasm64-wasi = {
+      magicOrExtension = ''\x00asm'';
+      mask = ''\xff\xff\xff\xff'';
+    };
     x86_64-windows = {
       magicOrExtension = ".exe";
       recognitionType = "extension";
@@ -126,6 +134,10 @@ let
   };
 
 in {
+  imports = [
+    (lib.mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
+  ];
+
   options = {
     boot.binfmt = {
       registrations = mkOption {
@@ -226,11 +238,12 @@ in {
 
       emulatedSystems = mkOption {
         default = [];
+        example = [ "wasm32-wasi" "x86_64-windows" "aarch64-linux" ];
         description = ''
           List of systems to emulate. Will also configure Nix to
           support your new systems.
         '';
-        type = types.listOf types.string;
+        type = types.listOf types.str;
       };
     };
   };
@@ -255,9 +268,10 @@ in {
       mkdir -p -m 0755 /run/binfmt
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList activationSnippet config.boot.binfmt.registrations)}
     '';
-    systemd.additionalUpstreamSystemUnits = lib.mkIf (config.boot.binfmt.registrations != {})
-      [ "proc-sys-fs-binfmt_misc.automount"
-        "proc-sys-fs-binfmt_misc.mount"
-      ];
+    systemd.additionalUpstreamSystemUnits = lib.mkIf (config.boot.binfmt.registrations != {}) [
+      "proc-sys-fs-binfmt_misc.automount"
+      "proc-sys-fs-binfmt_misc.mount"
+      "systemd-binfmt.service"
+    ];
   };
 }

@@ -7,11 +7,11 @@ assert mp4v2Support -> (mp4v2 != null);
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "faac-${version}";
+  pname = "faac";
   version = "1.29.9.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/faac/${name}.tar.gz";
+    url = "mirror://sourceforge/faac/${pname}-${version}.tar.gz";
     sha256 = "0wf781vp7rzmxkx5h0w8j2i4xc63iixxikgbvvkdljbwhffj0pyl";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
-    homepage    = https://www.audiocoding.com/faac.html;
+    homepage    = "https://www.audiocoding.com/faac.html";
     license     = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

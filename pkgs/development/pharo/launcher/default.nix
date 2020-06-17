@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2017.02.28";
-  name = "pharo-launcher-${version}";
+  pname = "pharo-launcher";
   src = fetchurl {
     url = "http://files.pharo.org/platform/launcher/PharoLauncher-user-stable-${version}.zip";
     sha256 = "1hfwjyx0c47s6ivc1zr2sf5mk1xw2zspsv0ns8mj3kcaglzqwiq0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = "Pharo";
-    exec = "${executable-name}";
+    exec = executable-name;
     icon = "pharo";
     comment = "Launcher for Pharo distributions";
     desktopName = "Pharo";
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       access it very rapidly from your OS application launcher. As a
       result, launching any image is never more than 3 clicks away.
     '';
-    homepage = http://pharo.org;
+    homepage = "http://pharo.org";
     license = stdenv.lib.licenses.mit;
     maintainers = [ ];
     platforms = pharo.meta.platforms;

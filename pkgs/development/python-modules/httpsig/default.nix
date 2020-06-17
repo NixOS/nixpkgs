@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Sign HTTP requests with secure signatures";
     license = licenses.mit;
     maintainers = with maintainers; [ srhb ];
-    homepage = https://github.com/ahknight/httpsig;
+    homepage = "https://github.com/ahknight/httpsig";
   };
 }

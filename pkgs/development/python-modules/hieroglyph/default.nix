@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Generate HTML presentations from plain text sources";
-    homepage = https://github.com/nyergler/hieroglyph/;
+    homepage = "https://github.com/nyergler/hieroglyph/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ juliendehos ];
   };

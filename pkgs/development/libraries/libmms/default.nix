@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for downloading (streaming) media files using the mmst and mmsh protocols";
-    homepage = http://libmms.sourceforge.net;
+    homepage = "http://libmms.sourceforge.net";
     platforms = platforms.all;
     license = licenses.lgpl21;
   };

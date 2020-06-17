@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "go-bindata-assetfs-${version}";
+  pname = "go-bindata-assetfs";
   version = "20160814-${rev}";
   rev = "e1a2a7e";
   goPackagePath = "github.com/elazarl/go-bindata-assetfs";

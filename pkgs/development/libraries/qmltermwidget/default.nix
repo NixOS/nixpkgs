@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, qtbase, qtquick1, qmake, qtmultimedia, utmp }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2018-11-24";
-  name = "qmltermwidget-unstable-${version}";
+  pname = "qmltermwidget-unstable";
 
   src = fetchFromGitHub {
     repo = "qmltermwidget";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A QML port of qtermwidget";
-    homepage = https://github.com/Swordfish90/qmltermwidget;
+    homepage = "https://github.com/Swordfish90/qmltermwidget";
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];

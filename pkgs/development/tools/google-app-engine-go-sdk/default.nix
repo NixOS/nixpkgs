@@ -3,7 +3,7 @@
 with python27Packages;
 
 stdenv.mkDerivation rec {
-  name = "google-app-engine-go-sdk-${version}";
+  pname = "google-app-engine-go-sdk";
   version = "1.9.61";
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Google App Engine SDK for Go";
     version = version;
-    homepage = https://cloud.google.com/appengine/docs/go/;
+    homepage = "https://cloud.google.com/appengine/docs/go/";
     license = licenses.asl20;
     platforms = ["x86_64-linux" "x86_64-darwin"];
     maintainers = with maintainers; [ lufia ];

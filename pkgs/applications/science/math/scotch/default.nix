@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "6.0.4";
-  name = "scotch-${version}";
+  pname = "scotch";
   src_name = "scotch_${version}";
 
   buildInputs = [ bison openmpi flex zlib ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       Scotch is a software package for graph and mesh/hypergraph partitioning, graph clustering, 
       and sparse matrix ordering.
     '';
-    homepage = http://www.labri.fr/perso/pelegrin/scotch;
+    homepage = "http://www.labri.fr/perso/pelegrin/scotch";
     license = stdenv.lib.licenses.cecill-c;
     maintainers = [ stdenv.lib.maintainers.bzizou ];
     platforms = stdenv.lib.platforms.linux;

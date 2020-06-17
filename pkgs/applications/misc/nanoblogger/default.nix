@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.5-rc1";
-  name = "nanoblogger-${version}";
+  pname = "nanoblogger";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nanoblogger/${name}.tar.gz";
+    url = "mirror://sourceforge/nanoblogger/${pname}-${version}.tar.gz";
     sha256 = "09mv52a5f0h3das8x96irqyznm69arfskx472b7w3b9q4a2ipxbq";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Small weblog engine written in Bash for the command line";
-    homepage = http://nanoblogger.sourceforge.net/;
+    homepage = "http://nanoblogger.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
   };

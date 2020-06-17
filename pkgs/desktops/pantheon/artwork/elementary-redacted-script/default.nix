@@ -1,6 +1,9 @@
-{ stdenv, fetchFromGitHub, pantheon }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elementary-redacted-script";
   version = "unstable-2016-06-03";
 
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Font for concealing text";
-    homepage = https://github.com/png2378/redacted-elementary;
+    homepage = "https://github.com/png2378/redacted-elementary";
     license = licenses.ofl;
     maintainers = pantheon.maintainers;
     platforms = platforms.linux;

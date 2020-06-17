@@ -7,7 +7,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "gammu-${version}";
+  pname = "gammu";
   version = "1.40.0";
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://wammu.eu/gammu/;
+    homepage = "https://wammu.eu/gammu/";
     description = "Command line utility and library to control mobile phones";
     license = licenses.gpl2;
     platforms = platforms.linux;

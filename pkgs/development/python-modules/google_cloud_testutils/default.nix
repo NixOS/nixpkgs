@@ -5,7 +5,7 @@
 , google_auth
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "google-cloud-testutils";
   version = "unstable-36ffa923c7037e8b4fdcaa76272cb6267e908a9d";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "System test utilities for google-cloud-python";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "collectd-exporter-${version}";
+  pname = "collectd-exporter";
   version = "0.3.1";
   rev = version;
 
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Relay server for exporting metrics from collectd to Prometheus";
-    homepage = https://github.com/prometheus/collectd_exporter;
+    homepage = "https://github.com/prometheus/collectd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz ];
     platforms = platforms.unix;

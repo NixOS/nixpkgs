@@ -1,7 +1,7 @@
 { stdenv, fetchMavenArtifact }:
 
 stdenv.mkDerivation rec {
-  name = "postgresql-jdbc-${version}";
+  pname = "postgresql-jdbc";
   version = "42.2.5";
 
   src = fetchMavenArtifact {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://jdbc.postgresql.org/;
+    homepage = "https://jdbc.postgresql.org/";
     description = "JDBC driver for PostgreSQL allowing Java programs to connect to a PostgreSQL database";
     license = licenses.bsd2;
     platforms = platforms.unix;

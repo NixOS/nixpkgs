@@ -1,7 +1,7 @@
 { fetchzip, stdenv, makeWrapper, openjdk }:
 
 stdenv.mkDerivation rec {
-  name = "gremlin-console-${version}";
+  pname = "gremlin-console";
   version = "3.3.4";
   src = fetchzip {
     url = "http://www-eu.apache.org/dist/tinkerpop/${version}/apache-tinkerpop-gremlin-console-${version}-bin.zip";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://tinkerpop.apache.org/;
+    homepage = "https://tinkerpop.apache.org/";
     description = "Console of the Apache TinkerPop graph computing framework";
     license = licenses.asl20;
     maintainers = [ maintainers.lewo ];

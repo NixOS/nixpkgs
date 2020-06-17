@@ -1,7 +1,7 @@
 { buildPythonPackage, wrapPython, python, fetchurl, stdenv, cmake, qt5,
   shiboken2, pyside2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pyside2-tools";
 
   inherit (pyside2) version src;

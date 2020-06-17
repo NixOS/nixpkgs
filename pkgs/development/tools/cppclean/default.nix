@@ -3,14 +3,14 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "cppclean-unstable-${version}";
-  version = "2018-05-12";
+  pname = "cppclean";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner  = "myint";
     repo   = "cppclean";
-    rev    = "e7da41eca5e1fd2bd1dddd6655e50128bb96dc28";
-    sha256 = "0pymh6r7y19bwcypfkmgwyixrx36pmz338jd83yrjflsbjlriqm4";
+    rev    = "v${version}";
+    sha256 = "081bw7kkl7mh3vwyrmdfrk3fgq8k5laacx7hz8fjpchrvdrkqph0";
   };
 
   postUnpack = ''
@@ -23,7 +23,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Finds problems in C++ source that slow development of large code bases";
-    homepage    = https://github.com/myint/cppclean;
+    homepage    = "https://github.com/myint/cppclean";
     license     = licenses.asl20;
     maintainers = with maintainers; [ nthorne ];
     platforms   = platforms.linux;

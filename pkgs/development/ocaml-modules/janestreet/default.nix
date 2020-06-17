@@ -515,13 +515,6 @@ rec {
     meta.description = "Micro-benchmarking library for OCaml";
   };
 
-  core_profiler = janePackage {
-    pname = "core_profiler";
-    hash = "1kaaw3jp3qarbd9rgpjfb9md0dqblf2bxiqb245sqmx4c1346v1c";
-    propagatedBuildInputs = [ core_extended ];
-    meta.description = "Profiling library";
-  };
-
   csvfields = janePackage {
     pname = "csvfields";
     hash = "10zw4fjlniivfdzzz79lnbvcjnhk5y16m1p8mn4xbs23n6mbix0f";
@@ -563,14 +556,6 @@ rec {
     hash = "01vx9aldxpigz5ah9h337xcw73a7r8449v8l2xbralljhs0zglx9";
     propagatedBuildInputs = [ incremental_kernel ];
     meta.description = "Helpers for incremental operations on map like data structures";
-  };
-
-  ocaml_plugin = janePackage {
-    pname = "ocaml_plugin";
-    hash = "0fal5j59qkbksg6ak1ngn92pcgg3f9gwfaglpxb7l6bck20kaigp";
-    buildInputs = [ ocamlbuild ];
-    propagatedBuildInputs = [ async ];
-    meta.description = "Automatically build and dynlink ocaml source files";
   };
 
   parsexp_io = janePackage {

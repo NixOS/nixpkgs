@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "radicale-${version}";
+  pname = "radicale";
   version = "1.1.6";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = !pythonPackages.isPy3k;
 
   meta = with stdenv.lib; {
-    homepage = http://www.radicale.org/;
+    homepage = "http://www.radicale.org/";
     description = "CalDAV CardDAV server";
     longDescription = ''
       The Radicale Project is a complete CalDAV (calendar) and CardDAV
@@ -29,6 +29,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ edwtjo pSub aneeshusa ];
+    maintainers = with maintainers; [ edwtjo pSub ];
   };
 }

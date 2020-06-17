@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "90secondportraits";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "A silly speed painting game";
     desktopName = "90 Second Portraits";
     genericName = "90secondportraits";
@@ -21,7 +21,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;
-    downloadPage = http://tangramgames.dk/games/90secondportraits;
+    downloadPage = "http://tangramgames.dk/games/90secondportraits";
   };
 
 }

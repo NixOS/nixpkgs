@@ -10,7 +10,7 @@
 , evernote
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "2015-05-11";
   pname = "geeknote";
   disabled = ! isPy27;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Work with Evernote from command line";
-    homepage = http://www.geeknote.me;
+    homepage = "http://www.geeknote.me";
     license = licenses.gpl1;
     maintainers = with maintainers; [ hbunke ];
   };

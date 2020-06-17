@@ -4,7 +4,7 @@
 # overriding the same-named attributes. See ./presets.nix for examples.
 
 stdenv.mkDerivation rec {
-  name = "mkspiffs-${version}";
+  pname = "mkspiffs";
   version = "0.2.3";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Tool to build and unpack SPIFFS images";
     license = licenses.mit;
-    homepage = https://github.com/igrr/mkspiffs;
+    homepage = "https://github.com/igrr/mkspiffs";
     maintainers = with maintainers; [ haslersn ];
     platforms = platforms.linux;
   };

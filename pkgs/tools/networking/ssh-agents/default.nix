@@ -4,7 +4,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "ssh-agents-${version}";
+  pname = "ssh-agents";
   version = "1.0.1";
 
   src = fetchFromGitHub {
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
         given name is expected to be a folder under ~/.ssh/name containing the
         keys to include in the agent.
     '';
-    homepage = https://github.com/kalbasit/ssh-agents;
+    homepage = "https://github.com/kalbasit/ssh-agents";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.unix;

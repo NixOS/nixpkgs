@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "tecoc-git-${version}";
+  pname = "tecoc-git";
   version = "20150606";
 
   src = fetchFromGitHub {
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc}/bin/cc" "-C src/" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/doc/${name} $out/lib/teco/macros
+    mkdir -p $out/bin $out/share/doc/${pname}-${version} $out/lib/teco/macros
     cp src/tecoc $out/bin
-    cp src/aaout.txt doc/* $out/share/doc/${name}
+    cp src/aaout.txt doc/* $out/share/doc/${pname}-${version}
     cp lib/* lib2/* $out/lib/teco/macros
     (cd $out/bin
      ln -s tecoc Make
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
 
       TECOC is a portable C implementation of TECO-11.
  '';
-    homepage = https://github.com/blakemcbride/TECOC;
-    license = {  url = https://github.com/blakemcbride/TECOC/tree/master/doc/readme-1st.txt; };
+    homepage = "https://github.com/blakemcbride/TECOC";
+    license = {  url = "https://github.com/blakemcbride/TECOC/tree/master/doc/readme-1st.txt"; };
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
   };

@@ -1,4 +1,4 @@
-{ stdenv, writeText, elixir, erlang, hexRegistrySnapshot, hex, lib }:
+{ stdenv, writeText, elixir, erlang, hex, lib }:
 
 { name
 , version
@@ -43,7 +43,7 @@ let
     else setupHook;
 
     inherit buildInputs;
-    propagatedBuildInputs = [ hexRegistrySnapshot hex elixir ] ++ beamDeps;
+    propagatedBuildInputs = [ hex elixir ] ++ beamDeps;
 
     configurePhase = if configurePhase == null
     then ''
@@ -63,7 +63,7 @@ let
         export MIX_ENV=prod
         export MIX_NO_DEPS=1
 
-        mix compile ${debugInfoFlag}
+        mix compile ${debugInfoFlag} --no-deps-check
 
         runHook postBuild
     ''

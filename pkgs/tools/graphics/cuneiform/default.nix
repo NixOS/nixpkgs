@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, imagemagick }:
 
-stdenv.mkDerivation rec {
-  name = "cuneiform-${version}";
+stdenv.mkDerivation {
+  pname = "cuneiform";
   version = "1.1.0";
 
   src = fetchurl {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Multi-language OCR system";
-    homepage = https://launchpad.net/cuneiform-linux;
+    homepage = "https://launchpad.net/cuneiform-linux";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.raskin ];

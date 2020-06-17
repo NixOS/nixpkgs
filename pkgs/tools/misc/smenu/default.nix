@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.15";
-  name = "smenu-${version}";
+  pname = "smenu";
 
   src = fetchFromGitHub {
     owner  = "p-gen";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with stdenv.lib; {
-    homepage        = https://github.com/p-gen/smenu;
+    homepage        = "https://github.com/p-gen/smenu";
     description     = "Terminal selection utility";
     longDescription = ''
       Terminal utility that allows you to use words coming from the standard

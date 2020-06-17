@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
-  name = "libsoundio-${version}";
+  pname = "libsoundio";
 
   src = fetchFromGitHub {
     owner = "andrewrk";
     repo = "libsoundio";
-    rev = "${version}";
+    rev = version;
     sha256 = "12l4rvaypv87vigdrmjz48d4d6sq4gfxf5asvnc4adyabxb73i4x";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cross platform audio input and output";
-    homepage = http://libsound.io/;
+    homepage = "http://libsound.io/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.andrewrk ];

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, read-edid }:
 
 stdenv.mkDerivation rec {
-  name = "i2c-tools-${version}";
+  pname = "i2c-tools";
   version = "4.1";
 
   src = fetchurl {
-    url = "https://www.kernel.org/pub/software/utils/i2c-tools/${name}.tar.xz";
+    url = "https://www.kernel.org/pub/software/utils/i2c-tools/${pname}-${version}.tar.xz";
     sha256 = "1m97hpwqfaqjl9xvr4pvz2vdrsdvxbcn0nnx8pamnyc3s7pikcjp";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Set of I2C tools for Linux";
-    homepage = https://i2c.wiki.kernel.org/index.php/I2C_Tools;
+    homepage = "https://i2c.wiki.kernel.org/index.php/I2C_Tools";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

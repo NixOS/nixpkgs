@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "wcwidth";
-  version = "0.1.7";
+  version = "0.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pn6dflzm609m4r3i8ik5ni9ijjbb5fa3vg1n7hn6vkd49r77wrx";
+    sha256 = "ee73862862a156bf77ff92b09034fc4825dd3af9cf81bc5b360668d425f3c5f1";
   };
 
   checkInputs = [ pytest ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
       a Terminal. It is implemented in python (no C library calls) and has
       no 3rd-party dependencies.
     '';
-    homepage = https://github.com/jquast/wcwidth;
+    homepage = "https://github.com/jquast/wcwidth";
     license = licenses.mit;
   };
 }

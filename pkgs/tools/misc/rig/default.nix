@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.11";
-  name = "rig-${version}";
+  pname = "rig";
 
   src = fetchurl {
     url = "https://ayera.dl.sourceforge.net/project/rig/rig/${version}/rig-${version}.tar.gz";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patches = [ ./rig_1.11-1.diff ];
 
   meta = {
-    homepage = http://rig.sourceforge.net/; 
+    homepage = "http://rig.sourceforge.net/"; 
     description = "Random identity generator";
     longDescription = ''
       RIG (Random Identity Generator) is a free replacement for a shareware

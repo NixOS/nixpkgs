@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python wrapper for the portable curve25519-donna implementation";
-    homepage = http://code.google.com/p/curve25519-donna/;
+    homepage = "http://code.google.com/p/curve25519-donna/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elseym ];
   };

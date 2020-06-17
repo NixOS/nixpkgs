@@ -4,7 +4,8 @@ let
   version = "0.5.1";
 
 in stdenv.mkDerivation {
-  name = "soapyremote-${version}";
+  pname = "soapyremote";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pothosware";
@@ -19,7 +20,7 @@ in stdenv.mkDerivation {
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pothosware/SoapyRemote;
+    homepage = "https://github.com/pothosware/SoapyRemote";
     description = "SoapySDR plugin for remote access to SDRs";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];

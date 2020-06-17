@@ -1,15 +1,22 @@
-{ buildPythonPackage, fetchPypi, lib, ipaddress }:
+{ buildPythonPackage, isPy27, fetchFromGitHub, lib, ipaddress }:
 
 buildPythonPackage rec {
   pname = "piccata";
-  version = "1.0.1";
+  version = "2.0.0";
+  disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "45f6c98c2ea809d445040888117f99bc3ee843490d86fecc5805ff5ea41508f7";
+  src = fetchFromGitHub {
+    owner = "NordicSemiconductor";
+    repo = pname;
+    rev = version;
+    sha256 = "0pn842jcf2czjks5dphivgp1s7wiifqiv93s0a89h0wxafd6pbsr";
   };
 
-  propagatedBuildInputs = [ ipaddress ];
+  propagatedBuildInputs = [
+    ipaddress
+  ];
+
+  pythonImportsCheck = [ "piccata" ];
 
   meta = {
     description = "Simple CoAP (RFC7252) toolkit";

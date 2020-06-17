@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 {
   name = "plasma5";
@@ -7,58 +7,53 @@ import ./make-test.nix ({ pkgs, ...} :
   };
 
   machine = { ... }:
-  let
-    sddm_theme = pkgs.stdenv.mkDerivation {
-      name = "breeze-ocr-theme";
-      phases = "buildPhase";
-      buildCommand = ''
-        mkdir -p $out/share/sddm/themes/
-        cp -r ${pkgs.plasma-workspace}/share/sddm/themes/breeze $out/share/sddm/themes/breeze-ocr-theme
-        chmod -R +w $out/share/sddm/themes/breeze-ocr-theme
-        printf "[General]\ntype=color\ncolor=#1d99f3\nbackground=\n" > $out/share/sddm/themes/breeze-ocr-theme/theme.conf
-      '';
-    };
-  in
+
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
-    services.xserver.displayManager.sddm.theme = "breeze-ocr-theme";
+    services.xserver.displayManager.defaultSession = "plasma5";
     services.xserver.desktopManager.plasma5.enable = true;
-    services.xserver.desktopManager.default = "plasma5";
     services.xserver.displayManager.sddm.autoLogin = {
       enable = true;
       user = "alice";
     };
+    hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
     virtualisation.memorySize = 1024;
-    environment.systemPackages = [ sddm_theme ];
   };
 
   testScript = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
     xdo = "${pkgs.xdotool}/bin/xdotool";
   in ''
-    startAll;
-    # wait for log in
-    $machine->waitForFile("/home/alice/.Xauthority");
-    $machine->succeed("xauth merge ~alice/.Xauthority");
+    with subtest("Wait for login"):
+        start_all()
+        machine.wait_for_file("${user.home}/.Xauthority")
+        machine.succeed("xauth merge ${user.home}/.Xauthority")
 
-    $machine->waitUntilSucceeds("pgrep plasmashell");
-    $machine->waitForWindow("^Desktop ");
+    with subtest("Check plasmashell started"):
+        machine.wait_until_succeeds("pgrep plasmashell")
+        machine.wait_for_window("^Desktop ")
 
-    # Check that logging in has given the user ownership of devices.
-    $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+    with subtest("Check that logging in has given the user ownership of devices"):
+        machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
-    $machine->execute("su - alice -c 'DISPLAY=:0.0 dolphin &'");
-    $machine->waitForWindow(" Dolphin");
+    with subtest("Run Dolphin"):
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 dolphin &'")
+        machine.wait_for_window(" Dolphin")
 
-    $machine->execute("su - alice -c 'DISPLAY=:0.0 konsole &'");
-    $machine->waitForWindow("Konsole");
+    with subtest("Run Konsole"):
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 konsole &'")
+        machine.wait_for_window("Konsole")
 
-    $machine->execute("su - alice -c 'DISPLAY=:0.0 systemsettings5 &'");
-    $machine->waitForWindow("Settings");
+    with subtest("Run systemsettings"):
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 systemsettings5 &'")
+        machine.wait_for_window("Settings")
 
-    $machine->execute("${xdo} key Alt+F1 sleep 10");
-    $machine->screenshot("screen");
+    with subtest("Wait to get a screenshot"):
+        machine.execute(
+            "${xdo} key Alt+F1 sleep 10"
+        )
+        machine.screenshot("screen")
   '';
 })

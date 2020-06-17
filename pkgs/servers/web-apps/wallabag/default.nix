@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "wallabag-${version}";
+  pname = "wallabag";
   version = "2.3.8";
 
   # remember to rm -r var/cache/* after a rebuild or unexpected errors will occur
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       After a package upgrade, empty the `var/cache` folder.
     '';
     license = licenses.mit;
-    homepage = http://wallabag.org;
+    homepage = "http://wallabag.org";
     maintainers = with maintainers; [ schneefux ];
     platforms = platforms.all;
   };

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, unzip, pkgconfig, makeWrapper, ncurses }:
 
-stdenv.mkDerivation rec {
-  name = "qnial-${version}";
+stdenv.mkDerivation {
+  pname = "qnial";
   version = "6.3";
 
   src = fetchFromGitHub {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An array language from Nial Systems";
-    homepage = https://github.com/vrthra/qnial;
+    homepage = "https://github.com/vrthra/qnial";
     license = stdenv.lib.licenses.artistic1;
     maintainers = [ stdenv.lib.maintainers.vrthra ];
     platforms = stdenv.lib.platforms.linux;

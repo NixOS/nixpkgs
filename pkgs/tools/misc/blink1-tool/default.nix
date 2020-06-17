@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libusb1, pkgconfig, ... }:
 
 stdenv.mkDerivation rec {
-  name = "blink1-${version}";
+  pname = "blink1";
   version = "1.98a";
 
   src = fetchurl {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Command line client for the blink(1) notification light";
-    homepage = https://blink1.thingm.com/;
+    homepage = "https://blink1.thingm.com/";
     license = stdenv.lib.licenses.cc-by-sa-30;
     maintainers = [ stdenv.lib.maintainers.cransom ];
     platforms = stdenv.lib.platforms.linux;

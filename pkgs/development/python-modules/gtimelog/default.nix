@@ -33,8 +33,8 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible";
-    homepage = https://mg.pov.lt/gtimelog/;
+    description = "A small GTK app for keeping track of your time. It's main goal is to be as unintrusive as possible";
+    homepage = "https://mg.pov.lt/gtimelog/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ocharles ];
     platforms = platforms.unix;

@@ -4,7 +4,8 @@ let
   version = "2.6.2";
   SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
 in stdenv.mkDerivation {
-  name = "tinyxml-${version}";
+  pname = "tinyxml";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/tinyxml/tinyxml/${version}/tinyxml_2_6_2.zip";
@@ -22,14 +23,14 @@ in stdenv.mkDerivation {
     ./2.6.2-cxx.patch
   ];
 
-  preConfigure = "export LD=${if stdenv.isDarwin then "clang++" else "g++"}";
+  preConfigure = "export LD=${stdenv.cc.targetPrefix}c++";
 
   hardeningDisable = [ "format" ];
 
   NIX_CFLAGS_COMPILE =
-    stdenv.lib.optional stdenv.isDarwin "-mmacosx-version-min=10.9";
+    stdenv.lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
   buildPhase = ''
     # use STL (xbmc requires it)
     sed '1i#define TIXML_USE_STL 1' -i tinyxml.h
@@ -72,7 +73,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
-    homepage = http://www.grinninglizard.com/tinyxml/index.html;
+    homepage = "http://www.grinninglizard.com/tinyxml/index.html";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;
   };

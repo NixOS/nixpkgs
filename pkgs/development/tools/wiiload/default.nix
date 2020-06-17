@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, zlib }:
 stdenv.mkDerivation rec {
-  version = "v0.5.1";
-  name = "wiiload-${version}";
+  version = "0.5.1";
+  pname = "wiiload";
 
   nativeBuildInputs = [ autoconf automake ];
   buildInputs = [ zlib ];
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "devkitPro";
     repo  = "wiiload";
-    rev = version;
+    rev = "v${version}";
     sha256 = "0dffy603zggkqv7g1a2jninmi64vy519gpgkdfhjnijhdm9gs5m3";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Load homebrew apps over network/usbgecko to your Wii";
-    homepage = https://wiibrew.org/wiki/Wiiload;
+    homepage = "https://wiibrew.org/wiki/Wiiload";
     license = licenses.gpl2;
     maintainers = with maintainers; [ tomsmeets ];
   };

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An automatic copyright update tool";
-    homepage = http://blog.tremily.us/posts/update-copyright;
+    homepage = "http://blog.tremily.us/posts/update-copyright";
     license = licenses.gpl3;
   };
 }

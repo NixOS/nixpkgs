@@ -21,7 +21,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "4.1";
-  name = "xloadimage-${version}";
+  pname = "xloadimage";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/x/xloadimage/xloadimage_${version}.orig.tar.gz";

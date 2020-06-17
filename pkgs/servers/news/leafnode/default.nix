@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pcre }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "leafnode-2.0.0.alpha20121101a.12";
 
   src = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre];
 
   meta = {
-    homepage = http://leafnode.sourceforge.net/;
+    homepage = "http://leafnode.sourceforge.net/";
     description = "Leafnode implements a store & forward NNTP proxy";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;

@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "usync";
   version = "0.0.3";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ebzzry";
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ebzzry/usync;
+    homepage = "https://github.com/ebzzry/usync";
     description = "A simple site-to-site synchronization tool";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];

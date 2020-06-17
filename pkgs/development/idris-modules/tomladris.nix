@@ -19,7 +19,7 @@ build-idris-package  {
 
   meta = {
     description = "TOML parser for Idris";
-    homepage = https://github.com/emptyflash/tomladris;
+    homepage = "https://github.com/emptyflash/tomladris";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siddharthist brainrape ];
   };

@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A code generator for array-based code on CPUs and GPUs";
-    homepage = https://mathema.tician.de/software/loopy;
+    homepage = "https://mathema.tician.de/software/loopy";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

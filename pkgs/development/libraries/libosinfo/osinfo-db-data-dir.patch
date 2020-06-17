@@ -5,7 +5,7 @@
          path = g_getenv("OSINFO_SYSTEM_DIR");
          if (!path)
 -            path = DATA_DIR "/osinfo";
-+            path = "@OSINFO_DB_DATA_DIR@/osinfo";
++            path = "@osinfo_db_data_dir@/osinfo";
  
          file = g_file_new_for_path(path);
      }

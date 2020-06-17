@@ -39,7 +39,8 @@ let
     libGL
   ] + ":${stdenv.cc.cc.lib}/lib64";
 in stdenv.mkDerivation {
-  name = "hipchat-${version}";
+  pname = "hipchat";
+  inherit version;
 
   src = fetchurl {
     url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
@@ -79,7 +80,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Desktop client for HipChat services";
-    homepage = http://www.hipchat.com;
+    homepage = "http://www.hipchat.com";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ puffnfresh ];

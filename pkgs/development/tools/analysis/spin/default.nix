@@ -6,7 +6,7 @@ let
   ibinPath = stdenv.lib.makeBinPath [ gcc tk swarm graphviz tk ];
 
 in stdenv.mkDerivation rec {
-  name = "spin-${version}";
+  pname = "spin";
   version = "6.4.9";
   url-version = stdenv.lib.replaceChars ["."] [""] version;
 
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Formal verification tool for distributed software systems";
-    homepage = http://spinroot.com/;
+    homepage = "http://spinroot.com/";
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

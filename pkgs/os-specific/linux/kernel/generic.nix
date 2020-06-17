@@ -93,7 +93,8 @@ let
 
   configfile = stdenv.mkDerivation {
     inherit ignoreConfigErrors autoModules preferBuiltin kernelArch;
-    name = "linux-config-${version}";
+    pname = "linux-config";
+    inherit version;
 
     generateConfig = ./generate-config.pl;
 
@@ -150,18 +151,15 @@ let
       moduleStructuredConfig = (lib.evalModules {
         modules = [
           module
-          { settings = commonStructuredConfig; }
-          { settings = structuredExtraConfig; }
+          { settings = commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
+          { settings = structuredExtraConfig; _file = "structuredExtraConfig"; }
         ]
         ++  structuredConfigFromPatches
         ;
       }).config;
 
-      #
       structuredConfig = moduleStructuredConfig.settings;
     };
-
-
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix {}) {

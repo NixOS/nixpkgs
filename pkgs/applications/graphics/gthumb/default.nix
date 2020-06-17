@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.8.0";
+  version = "3.10.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1l2s1facq1r6yvqjqc34aqfzlvb3nhkhn79xisxbbdlgrrxdq52f";
+    sha256 = "0j7cxp4hhkvkckyvll6pmqkv5rwrknlzq9j1my0grb01b8wzhw9y";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,10 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
     gtk3
     json-glib
     lcms2
@@ -103,6 +106,6 @@ stdenv.mkDerivation rec {
     description = "Image browser and viewer for GNOME";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mimadrid ];
+    maintainers = [ maintainers.mimame ];
   };
 }

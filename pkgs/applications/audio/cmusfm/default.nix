@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, libnotify, gdk_pixbuf }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, libnotify, gdk-pixbuf }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2018-10-11";
-  name = "cmusfm-unstable-${version}";
+  pname = "cmusfm-unstable";
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "cmusfm";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # building
   configureFlags = [ "--enable-libnotify" ];
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ curl libnotify gdk_pixbuf ];
+  buildInputs = [ curl libnotify gdk-pixbuf ];
 
   meta = with stdenv.lib; {
     description = "Last.fm and Libre.fm standalone scrobbler for the cmus music player";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       + run `cmusfm init` to generate configuration file under ~/.config/cmus/cmusfm.conf
       + Inside cmus run `:set status_display_program=cmusfm` to set up cmusfm
     '';
-    homepage = https://github.com/Arkq/cmusfm/;
+    homepage = "https://github.com/Arkq/cmusfm/";
     maintainers = with stdenv.lib.maintainers; [ CharlesHD ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;

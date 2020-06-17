@@ -2,11 +2,11 @@
 , tcl-8_5, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "rrdtool-1.7.1";
+  name = "rrdtool-1.7.2";
 
   src = fetchurl {
     url = "https://oss.oetiker.ch/rrdtool/pub/${name}.tar.gz";
-    sha256 = "1bhsg119j94xwykp2sbp01hhxcg78gzblfn7j98slrv9va77g6wq";
+    sha256 = "1nsqra0g2nja19akmf9x5y9hhgc35ml3w9dcdz2ayz7zgvmzm6d1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://oss.oetiker.ch/rrdtool/;
+    homepage = "https://oss.oetiker.ch/rrdtool/";
     description = "High performance logging in Round Robin Databases";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.darwin;

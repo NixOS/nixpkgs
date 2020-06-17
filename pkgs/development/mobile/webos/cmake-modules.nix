@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "cmake-modules-webos-${version}";
+  pname = "cmake-modules-webos";
   version = "19";
 
   src = fetchFromGitHub {

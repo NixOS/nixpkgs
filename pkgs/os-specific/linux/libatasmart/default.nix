@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ udev ];
 
   meta = with stdenv.lib; {
-    homepage = http://0pointer.de/blog/projects/being-smart.html;
+    homepage = "http://0pointer.de/blog/projects/being-smart.html";
     description = "Library for querying ATA SMART status";
     license = licenses.lgpl21;
     platforms = platforms.linux;

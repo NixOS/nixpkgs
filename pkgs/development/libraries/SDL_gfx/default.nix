@@ -1,11 +1,11 @@
 { stdenv, fetchurl, SDL }:
 
 stdenv.mkDerivation rec {
-  name = "SDL_gfx-${version}";
+  pname = "SDL_gfx";
   version = "2.0.26";
 
   src = fetchurl {
-    url = "https://www.ferzkopp.net/Software/SDL_gfx-2.0/${name}.tar.gz";
+    url = "https://www.ferzkopp.net/Software/SDL_gfx-2.0/${pname}-${version}.tar.gz";
     sha256 = "0ijljhs0v99dj6y27hc10z6qchyp8gdp4199y6jzngy6dzxlzsvw";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
          code. Its is written in plain C and can be used in C++ code.
        '';
 
-    homepage = https://sourceforge.net/projects/sdlgfx/;
+    homepage = "https://sourceforge.net/projects/sdlgfx/";
     license = licenses.zlib;
 
     maintainers = with maintainers; [ bjg ];

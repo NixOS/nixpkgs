@@ -1,39 +1,28 @@
 { stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkgconfig
 , glib
 , python3
 , sqlite
-, gdk_pixbuf
+, gdk-pixbuf
 , gnome3
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "gom";
-  version = "0.3.3";
+  version = "0.4";
 
   outputs = [ "out" "py" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1n1n226dyb3q98216aah87in9hhjcwsbpspsdqqfswz2bx5y6mxc";
+    sha256 = "17ca07hpg7dqxjn0jpqim3xqcmplk2a87wbwrrlq3dd3m8381l38";
   };
 
   patches = [
-    # Needed to apply the next patch
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gom/commit/e8b7c314ce61d459132cf03c9e455d2a01fdc6ea.patch";
-      sha256 = "0d7g3nm5lrfhfx9ly8qgf5bfp12kvr7m1xmlgin2q8vqpn0r2ggp";
-    })
-    # https://gitlab.gnome.org/GNOME/gom/merge_requests/3
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/worldofpeace/gom/commit/b621c15600b1c32826c9878565eb2398a50907f2.patch";
-      sha256 = "1hqck9bb7sxn4akisnn26sbddlphjsavgksick5k4h3rsc0xwx1v";
-    })
     ./longer-stress-timeout.patch
   ];
 
@@ -45,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     sqlite
     python3.pkgs.pygobject3
@@ -55,7 +44,8 @@ stdenv.mkDerivation rec {
     "-Dpygobject-override-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
-  doCheck = true;
+  # Success is more likely on x86_64
+  doCheck = stdenv.isx86_64;
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -65,9 +55,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A GObject to SQLite object mapper";
-    homepage = https://wiki.gnome.org/Projects/Gom;
+    homepage = "https://wiki.gnome.org/Projects/Gom";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

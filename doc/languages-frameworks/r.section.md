@@ -1,5 +1,5 @@
-R packages
-==========
+R
+=
 
 ## Installation
 

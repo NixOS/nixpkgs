@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, groff, Security, utillinux }:
+{ stdenv, buildGoPackage, fetchFromGitHub, groff, installShellFiles, utillinux }:
 
 buildGoPackage rec {
   pname = "hub";
-  version = "2.12.1";
+  version = "2.14.2";
 
   goPackagePath = "github.com/github/hub";
 
@@ -13,11 +13,10 @@ buildGoPackage rec {
     owner = "github";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i9bqcgdidl5zawkpq2fjrimzbb37i1m2fisvj32d27fsp1824bk";
+    sha256 = "1qjab3dpia1jdlszz3xxix76lqrm4zbmqzd9ymld7h06awzsg2vh";
   };
 
-  nativeBuildInputs = [ groff utillinux ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ groff installShellFiles utillinux ];
 
   postPatch = ''
     patchShebangs .
@@ -25,20 +24,20 @@ buildGoPackage rec {
 
   postInstall = ''
     cd go/src/${goPackagePath}
-    install -D etc/hub.zsh_completion "$bin/share/zsh/site-functions/_hub"
-    install -D etc/hub.bash_completion.sh "$bin/share/bash-completion/completions/hub"
-    install -D etc/hub.fish_completion  "$bin/share/fish/vendor_completions.d/hub.fish"
+    installShellCompletion --zsh --name _hub etc/hub.zsh_completion
+    installShellCompletion --bash --name hub etc/hub.bash_completion.sh
+    installShellCompletion --fish --name hub.fish etc/hub.fish_completion
 
     LC_ALL=C.UTF8 \
     make man-pages
-    cp -vr --parents share/man/man[1-9]/*.[1-9] $bin/
+    installManPage share/man/man[1-9]/*.[1-9]
   '';
 
   meta = with stdenv.lib; {
     description = "Command-line wrapper for git that makes you better at GitHub";
     license = licenses.mit;
-    homepage = https://hub.github.com/;
-    maintainers = with maintainers; [ the-kenny ];
+    homepage = "https://hub.github.com/";
+    maintainers = with maintainers; [ globin ];
     platforms = with platforms; unix;
   };
 }

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "1.4.4";
+  version = "1.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4d8eec30cc81bc5617dbf1218201d770dc35629363547f17577c61683ccfb3ee";
+    sha256 = "60fd8c4341bab59963dafd5d2a566e94f547e660b9b396f772afe67d8481dbf0";
   };
 
   propagatedBuildInputs = [ pycodestyle ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
-    homepage = https://pypi.python.org/pypi/autopep8/;
+    homepage = "https://pypi.python.org/pypi/autopep8/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ bjornfor ];

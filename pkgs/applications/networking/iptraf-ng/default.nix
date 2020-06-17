@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.1.4";
-  name = "iptraf-ng-${version}";
+  pname = "iptraf-ng";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/i/p/iptraf-ng/${name}.tar.gz";
+    url = "https://fedorahosted.org/releases/i/p/iptraf-ng/${pname}-${version}.tar.gz";
     sha256 = "02gb8z9h2s6s1ybyikywz7jgb1mafdx88hijfasv3khcgkq0q53r";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       of the Linux kernel, so it can be used on a wide variety of supported
       network cards.
     '';
-    homepage = https://fedorahosted.org/iptraf-ng/;
+    homepage = "https://fedorahosted.org/iptraf-ng/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];

@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python interface to the Flickr API";
-    homepage    = https://stuvel.eu/flickrapi;
+    homepage    = "https://stuvel.eu/flickrapi";
     license     = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ obadz ];
   };

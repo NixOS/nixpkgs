@@ -1,7 +1,7 @@
 { stdenv, fetchgit, libgtop, xmessage, which, pkgconfig }:
 
-stdenv.mkDerivation rec {
-  name = "das_watchdog-${version}";
+stdenv.mkDerivation {
+  pname = "das_watchdog";
   version = "git-2015-09-12";
 
   src = fetchgit {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kmatheussen/das_watchdog;
+    homepage = "https://github.com/kmatheussen/das_watchdog";
     description = "A general watchdog for the linux operating system";
     longDescription = ''
       It should run in the background at all times to ensure a realtime process

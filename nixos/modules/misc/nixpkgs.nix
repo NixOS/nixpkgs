@@ -19,7 +19,7 @@ let
       lhs = optCall lhs_ { inherit pkgs; };
       rhs = optCall rhs_ { inherit pkgs; };
     in
-    lhs // rhs //
+    recursiveUpdate lhs rhs //
     optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
         optCall lhs.packageOverrides pkgs //
@@ -196,7 +196,6 @@ in
     system = mkOption {
       type = types.str;
       example = "i686-linux";
-      default = { system = builtins.currentSystem; };
       description = ''
         Specifies the Nix platform type on which NixOS should be built.
         It is better to specify <code>nixpkgs.localSystem</code> instead.
@@ -217,6 +216,14 @@ in
         Ignored when <code>nixpkgs.pkgs</code> is set.
       '';
     };
+
+    initialSystem = mkOption {
+      type = types.str;
+      internal = true;
+      description = ''
+        Preserved value of <literal>system</literal> passed to <literal>eval-config.nix</literal>.
+      '';
+    };
   };
 
   config = {
@@ -229,8 +236,8 @@ in
         let
           nixosExpectedSystem =
             if config.nixpkgs.crossSystem != null
-            then config.nixpkgs.crossSystem.system
-            else config.nixpkgs.localSystem.system;
+            then config.nixpkgs.crossSystem.system or (lib.systems.parse.doubleFromSystem (lib.systems.parse.mkSystemFromString config.nixpkgs.crossSystem.config))
+            else config.nixpkgs.localSystem.system or (lib.systems.parse.doubleFromSystem (lib.systems.parse.mkSystemFromString config.nixpkgs.localSystem.config));
           nixosOption =
             if config.nixpkgs.crossSystem != null
             then "nixpkgs.crossSystem"

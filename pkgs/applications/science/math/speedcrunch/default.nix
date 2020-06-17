@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchgit, cmake, qtbase, qttools }:
 
 mkDerivation rec {
-  name = "speedcrunch-${version}";
+  pname = "speedcrunch";
   version = "0.12.0";
 
   src = fetchgit {
@@ -20,7 +20,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = http://speedcrunch.org;
+    homepage    = "http://speedcrunch.org";
     license     = licenses.gpl2Plus;
     description = "A fast power user calculator";
     longDescription = ''

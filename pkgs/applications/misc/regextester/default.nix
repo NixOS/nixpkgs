@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, vala
 , gettext
 , libxml2
 , pkgconfig
@@ -14,7 +15,7 @@
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "regextester-${version}";
+  pname = "regextester";
   version = "1.0.1";
 
   src = fetchFromGitHub {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pantheon.vala
+    vala
     gettext
     gobject-introspection
     libxml2
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A desktop application to test regular expressions interactively";
-    homepage = https://github.com/artemanufrij/regextester;
+    homepage = "https://github.com/artemanufrij/regextester";
     maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

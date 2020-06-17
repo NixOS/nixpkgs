@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, diffutils, gd, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "s2png-${version}";
+  pname = "s2png";
   version = "0.7.2";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "prefix=" "DESTDIR=$(out)" ];
 
   meta = {
-    homepage = https://github.com/dbohdan/s2png/;
+    homepage = "https://github.com/dbohdan/s2png/";
     description = "Store any data in PNG images";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.dbohdan ];

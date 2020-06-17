@@ -27,7 +27,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "An enterprise friendly way of detecting and preventing secrets in code";
-    homepage = https://github.com/Yelp/detect-secrets;
+    homepage = "https://github.com/Yelp/detect-secrets";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

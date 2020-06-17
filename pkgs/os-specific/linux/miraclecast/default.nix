@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig
 , glib, readline, pcre, systemd, udev }:
 
-stdenv.mkDerivation rec {
-  name = "miraclecast-${version}";
+stdenv.mkDerivation {
+  pname = "miraclecast";
   version = "1.0-20190403";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Connect external monitors via Wi-Fi";
-    homepage    = https://github.com/albfan/miraclecast;
+    homepage    = "https://github.com/albfan/miraclecast";
     license     = licenses.lgpl21Plus;
     maintainers = with maintainers; [ tstrobel ];
     platforms   = platforms.linux;

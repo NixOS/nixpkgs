@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A JSON implementation in C";
-    homepage    = https://github.com/json-c/json-c/wiki;
+    homepage    = "https://github.com/json-c/json-c/wiki";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
 

@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tiny 'shelve'-like database with concurrency support";
-    homepage = https://github.com/vivainio/pickleshare;
+    homepage = "https://github.com/vivainio/pickleshare";
     license = licenses.mit;
   };
 

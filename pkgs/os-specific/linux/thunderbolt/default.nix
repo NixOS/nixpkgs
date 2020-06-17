@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "thunderbolt-${version}";
+  pname = "thunderbolt";
   version = "0.9.3";
   src = fetchFromGitHub {
     owner = "01org";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Thunderbolt(TM) user-space components";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.ryantrinkle ];
-    homepage = https://01.org/thunderbolt-sw;
+    homepage = "https://01.org/thunderbolt-sw";
     platforms = stdenv.lib.platforms.linux;
   };
 }

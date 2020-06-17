@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, curl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libykclient";
   version = "unstable-2019-03-18";
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Yubikey C client library";
-    homepage = https://developers.yubico.com/yubico-c-client;
+    homepage = "https://developers.yubico.com/yubico-c-client";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
   };

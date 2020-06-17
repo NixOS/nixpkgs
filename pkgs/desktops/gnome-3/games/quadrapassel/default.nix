@@ -1,18 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf
-, librsvg, libcanberra-gtk3, libmanette
+{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
+, librsvg, gsound, libmanette
 , gettext, itstool, libxml2, clutter, clutter-gtk, wrapGAppsHook
 , meson, ninja, python3, vala, desktop-file-utils
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "quadrapassel";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "3.32.0";
+  version = "3.36.02";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/quadrapassel/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1zhi1957knz9dm98drn2dh95mr33sdch590yddh1f8r6bzsfjvpy";
+    url = "mirror://gnome/sources/quadrapassel/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0c80pzipxricyh4wydffsc94wj6ymnanqr9bg6wdx51hz1mmmilb";
   };
 
   nativeBuildInputs = [
@@ -21,11 +19,9 @@ in stdenv.mkDerivation rec {
     libxml2 itstool gettext wrapGAppsHook
   ];
   buildInputs = [
-    gtk3 gdk_pixbuf librsvg libmanette
-    libcanberra-gtk3 clutter libxml2 clutter-gtk
+    gtk3 gdk-pixbuf librsvg libmanette
+    gsound clutter libxml2 clutter-gtk
   ];
-
-  enableParallelBuilding = true;
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -36,9 +32,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Classic falling-block game, Tetris";
-    homepage = https://wiki.gnome.org/Apps/Quadrapassel;
+    homepage = "https://wiki.gnome.org/Apps/Quadrapassel";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

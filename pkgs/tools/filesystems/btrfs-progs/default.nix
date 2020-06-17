@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "btrfs-progs-${version}";
-  version = "5.1.1";
+  pname = "btrfs-progs";
+  version = "5.6.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "06xybs7rglxjqkbzl2409acb3rgmnc5zc0xhyaxsc2p1x5yipfcw";
+    sha256 = "1nwnvjdnr9fjj2q2p2vpjabfdhcrwykgj9knjcsqy0c7p1bgbk2h";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utilities for the btrfs filesystem";
-    homepage = https://btrfs.wiki.kernel.org/;
+    homepage = "https://btrfs.wiki.kernel.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

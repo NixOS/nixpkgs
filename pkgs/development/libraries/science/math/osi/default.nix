@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "osi";
-  version = "0.108.4";
+  version = "0.108.6";
 
   src = fetchurl {
     url = "https://www.coin-or.org/download/source/Osi/Osi-${version}.tgz";
-    sha256 = "13bwhdh01g37vp3kjwl9nvij5s5ikh5f7zgrqgwrqfyk35q2x9s5";
+    sha256 = "1n2jlpq4aikbp0ncs16f7q1pj7yk6kny1bh4fmjaqnwrjw63zvsp";
   };
 
   buildInputs =
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withCplex [ "--with-cplex-incdir=${cplex}/cplex/include/ilcplex" "--with-cplex-lib=-lcplex${cplex.libSuffix}" ];
 
   NIX_LDFLAGS =
-    lib.optional withCplex "-L${cplex}/cplex/bin/${cplex.libArch}";
+    lib.optionalString withCplex "-L${cplex}/cplex/bin/${cplex.libArch}";
 
-  # Compile errors 
-  NIX_CFLAGS_COMPILE = [ "-Wno-cast-qual" ];
+  # Compile errors
+  NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;

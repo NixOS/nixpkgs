@@ -1,12 +1,11 @@
 {stdenv, fetchurl, ant, jre, jdk}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "abcl";
-  version = "1.5.0";
+  version = "1.7.0";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
   src = fetchurl {
     url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "1hhvcg050nfpjbdmskc1cv2j38qi6qfl77a61b5cxx576kbff3lj";
+    sha256 = "0pbn5s22zygk6k0rzjc9g76220628lj1b3057gr0n4grl11p4lx5";
   };
   configurePhase = ''
     mkdir nix-tools
@@ -35,6 +34,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = https://common-lisp.net/project/armedbear/;
+    homepage = "https://common-lisp.net/project/armedbear/";
   };
 }

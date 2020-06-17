@@ -3,7 +3,7 @@
 , fetchPypi
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   version = "1.4.2";
   pname = "pandocfilters";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec{
 
   meta = with stdenv.lib; {
     description = "A python module for writing pandoc filters, with a collection of examples";
-    homepage = https://github.com/jgm/pandocfilters;
+    homepage = "https://github.com/jgm/pandocfilters";
     license = licenses.mit;
   };
 

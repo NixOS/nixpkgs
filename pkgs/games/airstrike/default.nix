@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, SDL, SDL_image }:
 
 stdenv.mkDerivation rec {
-  name = "airstrike-pre-${version}";
+  pname = "airstrike-pre";
   version = "6a";
 
   src = fetchurl {
@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper SDL SDL_image ];
 
-  NIX_LDFLAGS = [
-    "-lm"
-  ];
+  NIX_LDFLAGS = "-lm";
 
   installPhase = ''
     ls -l
@@ -29,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A 2d dogfighting game";
-    homepage = https://icculus.org/airstrike/;
+    homepage = "https://icculus.org/airstrike/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

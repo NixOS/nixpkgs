@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "dosfstools-${version}";
+  pname = "dosfstools";
   version = "4.1";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Utilities for creating and checking FAT and VFAT file systems";
-    homepage = https://github.com/dosfstools/dosfstools;
+    homepage = "https://github.com/dosfstools/dosfstools";
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     license = stdenv.lib.licenses.gpl3;
   };

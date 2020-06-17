@@ -1,6 +1,6 @@
 # This test runs peerflix and checks if peerflix starts
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "peerflix";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ offline ];
@@ -15,9 +15,9 @@ import ./make-test.nix ({ pkgs, ...} : {
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $peerflix->waitForUnit("peerflix.service");
-    $peerflix->waitUntilSucceeds("curl localhost:9000");
+    peerflix.wait_for_unit("peerflix.service")
+    peerflix.wait_until_succeeds("curl localhost:9000")
   '';
 })

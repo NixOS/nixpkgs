@@ -7,14 +7,15 @@
 
 assert spellChecking -> gtkspell3 != null;
 
-let version = "0.145"; in
+let version = "0.146"; in
 
 stdenv.mkDerivation {
-  name = "pan-${version}";
+  pname = "pan";
+  inherit version;
 
   src = fetchurl {
     url = "http://pan.rebelbase.com/download/releases/${version}/source/pan-${version}.tar.bz2";
-    sha256 = "1b4wamv33hprghcjk903bpvnd233yxyrm18qnh13alc8h1553nk8";
+    sha256 = "17agd27sn4a7nahvkpg0w39kv74njgdrrygs74bbvpaj8rk2hb55";
   };
 
   nativeBuildInputs = [ pkgconfig gettext intltool itstool libxml2 makeWrapper ];
@@ -36,10 +37,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "A GTK+-based Usenet newsreader good at both text and binaries";
-    homepage = http://pan.rebelbase.com/;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "A GTK-based Usenet newsreader good at both text and binaries";
+    homepage = "http://pan.rebelbase.com/";
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 fdl11 ];
   };
 }

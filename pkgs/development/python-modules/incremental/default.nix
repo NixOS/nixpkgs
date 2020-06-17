@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = https://github.com/twisted/treq;
+    homepage = "https://github.com/twisted/treq";
     description = "Incremental is a small library that versions your Python projects";
     license = licenses.mit;
     maintainers = with maintainers; [ nand0p ];

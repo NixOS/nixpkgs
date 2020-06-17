@@ -4,7 +4,7 @@
   libgee, json-glib, skk-dicts, libxkbcommon }:
 
 stdenv.mkDerivation rec {
-  name = "libskk-${version}";
+  pname = "libskk";
   version = "1.0.5";
 
   src = fetchFromGitHub {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       as well as various dictionary types including: file dictionary (such as SKK-JISYO.[SML]),
       user dictionary, skkserv, and CDB format dictionary.
     '';
-    homepage = https://github.com/ueno/libskk;
+    homepage = "https://github.com/ueno/libskk";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
     platforms = stdenv.lib.platforms.linux;

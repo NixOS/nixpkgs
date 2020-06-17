@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, intltool, gobject-introspection, glib, gdk_pixbuf
+{ fetchurl, stdenv, pkgconfig, intltool, gobject-introspection, glib, gdk-pixbuf
 , libxml2, cairo, pango, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];
 
   propagatedBuildInputs = [
-    glib gdk_pixbuf libxml2 cairo pango
+    glib gdk-pixbuf libxml2 cairo pango
   ];
 
   enableParallelBuilding = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SVG and MathML rendering library";
 
-    homepage = https://wiki.gnome.org/Projects/Lasem;
+    homepage = "https://wiki.gnome.org/Projects/Lasem";
     license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.unix;

@@ -1,42 +1,49 @@
 { lib
-, buildPythonApplication
-, flake8
-, invoke
-, parver
-, pip
-, requests
-, virtualenv
-, fetchPypi
-, virtualenv-clone
+, python3
 }:
 
-buildPythonApplication rec {
-  pname = "pipenv";
-  version = "2018.11.26";
+with python3.pkgs;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ip8zsrwmhrankrix0shig9g8q2knmr7b63sh7lqa8a5x03fcwx6";
-  };
+let
 
-  LC_ALL = "en_US.UTF-8";
-
-  propagatedBuildInputs = [
-    flake8
-    invoke
-    parver
+  runtimeDeps = [
+    certifi
+    setuptools
     pip
-    requests
     virtualenv
     virtualenv-clone
   ];
 
-  doCheck = false;
+  pythonEnv = python3.withPackages(ps: with ps; runtimeDeps);
 
-  makeWrapperArgs = [
-    "--set PYTHONPATH \".:$PYTHONPATH\""
-    "--set PIP_IGNORE_INSTALLED 1"
-  ];
+in buildPythonApplication rec {
+  pname = "pipenv";
+  version = "2020.6.2";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "12s7c3f3k5v1szdhklsxwisf9v3dk4mb9fh7762afpgs8mrrmm3x";
+  };
+
+  LC_ALL = "en_US.UTF-8";
+
+  postPatch = ''
+    # pipenv invokes python in a subprocess to create a virtualenv
+    # and to call setup.py.
+    # It would use sys.executable, which in our case points to a python that
+    # does not have the required dependencies.
+    substituteInPlace pipenv/core.py \
+      --replace "sys.executable" "'${pythonEnv.interpreter}'"
+  '';
+
+  propagatedBuildInputs = runtimeDeps;
+
+  doCheck = true;
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    cp -r --no-preserve=mode ${wheel.src} $HOME/wheel-src
+    $out/bin/pipenv install $HOME/wheel-src
+  '';
 
   meta = with lib; {
     description = "Python Development Workflow for Humans";

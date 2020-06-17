@@ -1,13 +1,17 @@
-{ stdenv, lib, fetchzip, xorg }:
+{ stdenv, lib, fetchzip, xorg, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "vanilla-dmz-${version}";
+  pname = "vanilla-dmz";
   version = "0.4.4";
   src = fetchzip {
     url = "http://ftp.de.debian.org/debian/pool/main/d/dmz-cursor-theme/dmz-cursor-theme_${version}.tar.gz";
     sha256 = "1l0c0svk7dy0d7icg7j2181wdn3fvks5gmyqnvjk749ppy5ks8mj";
   };
   buildInputs = [ xorg.xcursorgen ];
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+  dontDropIconThemeCache = true;
   buildPhase = ''
     cd DMZ-White/pngs; ./make.sh; cd -
     cd DMZ-Black/pngs; ./make.sh; cd -
@@ -22,7 +26,7 @@ stdenv.mkDerivation rec {
     install -Dm644 DMZ-Black/index.theme $out/share/icons/Vanilla-DMZ-AA/index.theme
   '';
   meta = with lib; {
-    homepage = http://jimmac.musichall.cz;
+    homepage = "http://jimmac.musichall.cz";
     description = "A style neutral scalable cursor theme";
     platforms = platforms.all;
     license = licenses.cc-by-nc-sa-30;

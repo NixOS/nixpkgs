@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gron-${version}";
+  pname = "gron";
   version = "0.6.0";
 
   owner = "tomnomnom";

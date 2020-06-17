@@ -2,7 +2,7 @@
 , cairo, gtk2, poppler }:
 
 stdenv.mkDerivation rec {
-  name = "pdf2svg-${version}";
+  pname = "pdf2svg";
   version = "0.2.3";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PDF converter to SVG format";
-    homepage = http://www.cityinthesky.co.uk/opensource/pdf2svg;
+    homepage = "http://www.cityinthesky.co.uk/opensource/pdf2svg";
     license = licenses.gpl2;
     maintainers = [ maintainers.ianwookim ];
     platforms = platforms.unix;

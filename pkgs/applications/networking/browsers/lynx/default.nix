@@ -7,7 +7,7 @@
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "lynx-${version}";
+  pname = "lynx";
   version = "2.8.9rel.1";
 
   src = fetchurl {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A text-mode web browser";
-    homepage = https://lynx.invisible-island.net/;
+    homepage = "https://lynx.invisible-island.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, imagemagick, libdvdread, libxml2, freetype, fribidi, libpng, zlib, pkgconfig
 , flex, bison }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   name = "dvdauthor-0.7.1";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec{
 
   meta = with stdenv.lib; {
     description = "Tools for generating DVD files to be played on standalone DVD players";
-    homepage = http://dvdauthor.sourceforge.net/;
+    homepage = "http://dvdauthor.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.darwin;
   };

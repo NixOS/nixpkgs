@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "ifuse";
   version = "2018-10-08";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
@@ -16,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig fuse usbmuxd libimobiledevice ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/libimobiledevice/ifuse;
+    homepage = "https://github.com/libimobiledevice/ifuse";
     description = "A fuse filesystem implementation to access the contents of iOS devices";
     longDescription = ''
       Mount directories of an iOS device locally using fuse. By default the media

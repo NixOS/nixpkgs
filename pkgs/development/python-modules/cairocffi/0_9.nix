@@ -1,4 +1,4 @@
-# FIXME: make gdk_pixbuf dependency optional
+# FIXME: make gdk-pixbuf dependency optional
 { stdenv
 , buildPythonPackage
 , pythonOlder
@@ -15,7 +15,7 @@
 , withXcffib ? false, xcffib
 , python
 , glib
-, gdk_pixbuf
+, gdk-pixbuf
 }@args:
 
 import ./generic.nix ({

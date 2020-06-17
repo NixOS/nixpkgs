@@ -12,7 +12,10 @@ let
 
       sub run {
           my ($cmd) = @_;
-          my @args = split " ", $cmd;
+          my @args = ();
+          while ($cmd =~ /([^ \t\n']+)|(\'([^'])\')\s*/g) {
+            push @args, $1;
+          }
           my $prog;
           if (substr($args[0], 0, 1) eq "@") {
               $prog = substr($args[0], 1);
@@ -48,15 +51,20 @@ let
       '') service.environment)}
 
       # Run the ExecStartPre program.  FIXME: this could be a list.
-      my $preStart = '${service.serviceConfig.ExecStartPre or ""}';
-      if ($preStart ne "") {
+      my $preStart = <<END_CMD;
+      ${service.serviceConfig.ExecStartPre or ""}
+      END_CMD
+      if (defined $preStart && $preStart ne "\n") {
           print STDERR "running ExecStartPre: $preStart\n";
           my $res = run_wait $preStart;
           die "$0: ExecStartPre failed with status $res\n" if $res;
       };
 
       # Run the ExecStart program.
-      my $cmd = '${service.serviceConfig.ExecStart}';
+      my $cmd = <<END_CMD;
+      ${service.serviceConfig.ExecStart}
+      END_CMD
+
       print STDERR "running ExecStart: $cmd\n";
       my $mainPid = run $cmd;
       $ENV{'MAINPID'} = $mainPid;
@@ -70,8 +78,10 @@ let
       $SIG{'QUIT'} = \&intHandler;
 
       # Run the ExecStartPost program.
-      my $postStart = '${service.serviceConfig.ExecStartPost or ""}';
-      if ($postStart ne "") {
+      my $postStart = <<END_CMD;
+      ${service.serviceConfig.ExecStartPost or ""}
+      END_CMD
+      if (defined $postStart && $postStart ne "\n") {
           print STDERR "running ExecStartPost: $postStart\n";
           my $res = run_wait $postStart;
           die "$0: ExecStartPost failed with status $res\n" if $res;
@@ -82,8 +92,10 @@ let
       my $mainRes = $?;
 
       # Run the ExecStopPost program.
-      my $postStop = '${service.serviceConfig.ExecStopPost or ""}';
-      if ($postStop ne "") {
+      my $postStop = <<END_CMD;
+      ${service.serviceConfig.ExecStopPost or ""}
+      END_CMD
+      if (defined $postStop && $postStop ne "\n") {
           print STDERR "running ExecStopPost: $postStop\n";
           my $res = run_wait $postStop;
           die "$0: ExecStopPost failed with status $res\n" if $res;

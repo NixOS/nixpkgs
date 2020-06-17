@@ -1,11 +1,18 @@
-{ stable, branch, version, sha256Hash }:
+{ stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
 
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, stdenv, python3, fetchFromGitHub }:
 
 let
-  pythonPackages = python3Packages;
+  # TODO: This package requires qt5Full to launch
+  defaultOverrides = commonOverrides ++ [
+    (mkOverride "jsonschema" "2.6.0"
+      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
+  ];
 
-in pythonPackages.buildPythonPackage rec {
+  python = python3.override {
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
+  };
+in python.pkgs.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "gns3-gui";
 
@@ -16,11 +23,11 @@ in pythonPackages.buildPythonPackage rec {
     sha256 = sha256Hash;
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python.pkgs; [
     raven psutil jsonschema # tox for check
     # Runtime dependencies
-    sip (pyqt5.override { withWebSockets = true; })
-  ] ++ stdenv.lib.optional (!stable) pythonPackages.distro;
+    sip (pyqt5.override { withWebSockets = true; }) distro setuptools
+  ];
 
   doCheck = false; # Failing
 
@@ -31,7 +38,8 @@ in pythonPackages.buildPythonPackage rec {
       requires access to a local or remote GNS3 server (it's recommended to
       download the official GNS3 VM).
     '';
-    homepage = https://www.gns3.com/;
+    homepage = "https://www.gns3.com/";
+    changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "canmatrix";
-  version = "0.7";
+  version = "0.8";
 
   # uses fetchFromGitHub as PyPi release misses test/ dir
   src = fetchFromGitHub {
     owner = "ebroecker";
     repo = pname;
     rev = version;
-    sha256 = "0q8qb282nfgirl8r2i9c8whm3hvr14ig2r42ssgnv2hya971cwjq";
+    sha256 = "1wzflapyj2j4xsi7d7gfmznmxbgr658n092xyq9nac46rbhpcphg";
   };
 
   propagatedBuildInputs = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/ebroecker/canmatrix;
+    homepage = "https://github.com/ebroecker/canmatrix";
     description = "Support and convert several CAN (Controller Area Network) database formats .arxml .dbc .dbf .kcd .sym fibex xls(x)";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sorki ];

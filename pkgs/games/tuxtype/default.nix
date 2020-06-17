@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An Educational Typing Tutor Game Starring Tux, the Linux Penguin";
-    homepage = https://github.com/tux4kids/tuxtype;
+    homepage = "https://github.com/tux4kids/tuxtype";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.aanderse ];
     platforms = platforms.linux;

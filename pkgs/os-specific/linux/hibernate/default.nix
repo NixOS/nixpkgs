@@ -2,8 +2,9 @@
 
 let version = "2.0";
 in
-  stdenv.mkDerivation rec {
-    name = "hibernate-${version}";
+  stdenv.mkDerivation {
+    pname = "hibernate";
+    inherit version;
     src = fetchurl {
       url = "http://tuxonice.nigelcunningham.com.au/files/hibernate-script-${version}.tar.gz";
       sha256 = "0ib5bac3spbcwmhf8f9apjbll8x7fgqj4k1s5q3srijh793rfifh";
@@ -39,7 +40,7 @@ in
       '';
 
       license = stdenv.lib.licenses.gpl2Plus;
-      homepage = http://www.tuxonice.net/;
+      homepage = "http://www.tuxonice.net/";
       platforms = stdenv.lib.platforms.linux;
     };
   }

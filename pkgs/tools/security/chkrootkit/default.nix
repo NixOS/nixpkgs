@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Locally checks for signs of a rootkit";
-    homepage = http://www.chkrootkit.org/;
+    homepage = "http://www.chkrootkit.org/";
     license = licenses.bsd2;
     platforms = with platforms; linux;
   };

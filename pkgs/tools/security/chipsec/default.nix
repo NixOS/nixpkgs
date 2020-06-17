@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, python27Packages, nasm, libelf
+{ stdenv, lib, fetchFromGitHub, pythonPackages, nasm, libelf
 , kernel ? null, withDriver ? false }:
-python27Packages.buildPythonApplication rec {
-  name = "chipsec-${version}";
-  version = "1.3.7";
+pythonPackages.buildPythonApplication rec {
+  pname = "chipsec";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
     rev = version;
-    sha256 = "00hwhi5f24y429zazhm77l1pp31q7fmx7ks3sfm6d16v89zbcp9a";
+    sha256 = "1rxr9i08a22m15slvlkrhnki30jixi2ds096kmmc2nqzfr9yibmb";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ python27Packages.buildPythonApplication rec {
       Mac OS X and UEFI shell.
     '';
     license = licenses.gpl2;
-    homepage = https://github.com/chipsec/chipsec;
+    homepage = "https://github.com/chipsec/chipsec";
     maintainers = with maintainers; [ johnazoidberg ];
     platforms = if withDriver then [ "x86_64-linux" ] else platforms.all;
   };

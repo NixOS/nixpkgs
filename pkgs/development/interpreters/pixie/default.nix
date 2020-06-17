@@ -30,13 +30,13 @@ let
   bin-path = stdenv.lib.concatStringsSep ":"
                (map (p: "${p}/bin") [ gcc ]);
   build = {flags, target}: stdenv.mkDerivation rec {
-    name = "pixie-${version}";
+    pname = "pixie";
     version = "0-r${commit-count}-${variant}";
     nativeBuildInputs = [ makeWrapper pkgconfig ];
     buildInputs = libs;
     PYTHON = if buildWithPypy
       then "${pypy}/pypy-c/pypy-c"
-      else "${python2.interpreter}";
+      else python2.interpreter;
     unpackPhase = ''
       cp -R ${pixie-src} pixie-src
       mkdir pypy-src
@@ -84,7 +84,7 @@ let
     '';
     meta = {
       description = "A clojure-like lisp, built with the pypy vm toolkit";
-      homepage = https://github.com/pixie-lang/pixie;
+      homepage = "https://github.com/pixie-lang/pixie";
       license = stdenv.lib.licenses.lgpl3;
       platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
       maintainers = with stdenv.lib.maintainers; [ bendlas ];

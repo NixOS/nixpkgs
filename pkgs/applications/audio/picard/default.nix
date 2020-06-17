@@ -1,19 +1,36 @@
-{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint }:
+{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5
+, enablePlayback ? true
+, gst_all_1
+}:
 
 let
   pythonPackages = python3Packages;
+  pyqt5 = if enablePlayback then
+    pythonPackages.pyqt5_with_qtmultimedia
+  else
+    pythonPackages.pyqt5
+  ;
 in pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.1.3";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "1armg8vpvnbpk7rrfk9q7nj5gm56rza00ni9qwdyqpxp1xaz6apj";
+    sha256 = "1785wnxhasp4j8w2a8bgbfp3gyhc7zac18r5fqw5qcndz2hfk5mc";
   };
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
+    ++ stdenv.lib.optionals (pyqt5.multimediaEnabled) [
+      qt5.qtmultimedia.bin
+      gst_all_1.gstreamer
+      gst_all_1.gst-vaapi
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+    ]
+  ;
 
   propagatedBuildInputs = with pythonPackages; [
     pyqt5
@@ -22,17 +39,22 @@ in pythonPackages.buildPythonApplication rec {
     discid
   ];
 
-  installPhase = ''
-    python setup.py install --prefix="$out"
-  '';
-
   prePatch = ''
     # Pesky unicode punctuation.
     substituteInPlace setup.cfg --replace "‘" "'"
   '';
 
+  # In order to spare double wrapping, we use:
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  ''
+    + stdenv.lib.optionalString (pyqt5.multimediaEnabled) ''
+      makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+    ''
+  ;
+
   meta = with stdenv.lib; {
-    homepage = http://musicbrainz.org/doc/MusicBrainz_Picard;
+    homepage = "https://picard.musicbrainz.org/";
     description = "The official MusicBrainz tagger";
     maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;

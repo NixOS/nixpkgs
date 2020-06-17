@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 buildGoPackage rec {
-  name = "packer-${version}";
-  version = "1.4.1";
+  pname = "packer";
+  version = "1.6.0";
 
   goPackagePath = "github.com/hashicorp/packer";
 
@@ -11,14 +11,14 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "13pj48pbhl47rwyi6gd6dhq9wq0z2h8kzjkahhqhf62dfssv35db";
+    sha256 = "0qddljg330i7059kvij84pjzz67g6qh1w2zcmsj6rv58ix8xsfx7";
   };
 
   meta = with stdenv.lib; {
     description = "A tool for creating identical machine images for multiple platforms from a single source configuration";
-    homepage    = https://www.packer.io;
+    homepage    = "https://www.packer.io";
     license     = licenses.mpl20;
-    maintainers = with maintainers; [ cstrahan zimbatm ];
+    maintainers = with maintainers; [ cstrahan zimbatm ma27 ];
     platforms   = platforms.unix;
   };
 }

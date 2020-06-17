@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, cmake, makeWrapper, pkgconfig
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, mysql, pcre, perl, perlPackages
+{ stdenv, lib, fetchFromGitHub, fetchurl, substituteAll, cmake, makeWrapper, pkgconfig
+, curl, ffmpeg_3, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
-, coreutils, procps, psmisc }:
+, coreutils, procps, psmisc, nixosTests }:
 
 # NOTES:
 #
@@ -77,18 +77,19 @@ let
   perlBin = "${perl}/bin/perl";
 
 in stdenv.mkDerivation rec {
-  name = "zoneminder-${version}";
-  version = "1.32.3";
+  pname = "zoneminder";
+  version = "1.34.9";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "1sx2fn99861zh0gp8g53ynr1q6yfmymxamn82y54jqj6nv475njz";
+    sha256 = "1xvgfsm260a3v0vqgbk7m9jzayhcs4ysyadnnxajyrndjhn802ic";
   };
 
   patches = [
     ./default-to-http-1dot1.patch
+    ./0001-Don-t-use-file-timestamp-in-cache-filename.patch
   ];
 
   postPatch = ''
@@ -121,7 +122,11 @@ in stdenv.mkDerivation rec {
     done
 
     substituteInPlace scripts/zmdbbackup.in \
-      --replace /usr/bin/mysqldump ${mysql}/bin/mysqldump
+      --replace /usr/bin/mysqldump ${mysql.client}/bin/mysqldump
+
+    substituteInPlace scripts/zmupdate.pl.in \
+      --replace "'mysql'" "'${mysql.client}/bin/mysql'" \
+      --replace "'mysqldump'" "'${mysql.client}/bin/mysqldump'"
 
     for f in scripts/ZoneMinder/lib/ZoneMinder/Config.pm.in \
              scripts/zmupdate.pl.in \
@@ -131,20 +136,25 @@ in stdenv.mkDerivation rec {
       substituteInPlace $f --replace @ZM_CONFIG_SUBDIR@ /etc/zoneminder
     done
 
-   for f in includes/Event.php views/image.php skins/classic/views/image-ffmpeg.php ; do
-     substituteInPlace web/$f \
-       --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
-   done
+    for f in includes/Event.php views/image.php ; do
+      substituteInPlace web/$f \
+        --replace "'ffmpeg " "'${ffmpeg_3}/bin/ffmpeg "
+    done
+
+    substituteInPlace web/includes/functions.php \
+      --replace "'date " "'${coreutils}/bin/date " \
+      --subst-var-by srcHash "`basename $out`"
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 mysql pcre perl polkit x264 zlib
+    curl ffmpeg_3 glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
     utillinuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies
     DateManip DBI DBDmysql LWP SysMmap
     # run-time dependencies not checked at build-time
-    ClassStdFast DataDump JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
+    ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
+    CryptEksblowfish DataEntropy # zmupdate.pl
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
@@ -162,7 +172,10 @@ in stdenv.mkDerivation rec {
     "-DZM_WEB_GROUP=${user}"
   ];
 
-  passthru = { inherit dirName; };
+  passthru = {
+    inherit dirName;
+    tests = nixosTests.zoneminder;
+  };
 
   postInstall = ''
     PERL5LIB="$PERL5LIB''${PERL5LIB:+:}$out/${perl.libPrefix}"
@@ -172,6 +185,7 @@ in stdenv.mkDerivation rec {
       perlFlags="$perlFlags -I$i"
     done
 
+    mkdir -p $out/libexec
     for f in $out/bin/*.pl ; do
       mv $f $out/libexec/
       makeWrapper ${perlBin} $f \
@@ -184,7 +198,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Video surveillance software system";
-    homepage = https://zoneminder.com;
+    homepage = "https://zoneminder.com";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;

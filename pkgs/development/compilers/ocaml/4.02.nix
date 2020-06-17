@@ -1,4 +1,4 @@
-import ./generic.nix rec {
+import ./generic.nix {
   major_version = "4";
   minor_version = "02";
   patch_version = "3";

@@ -3,9 +3,9 @@
 , qtSupport ? true, qt4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.31";
-  name = "xautoclick-${version}";
+  pname = "xautoclick";
   src = fetchurl {
     url = "mirror://sourceforge/project/xautoclick/xautoclick/xautoclick-0.31/xautoclick-0.31.tar.gz";
     sha256 = "0h522f12a7v2b89411xm51iwixmjp2mp90rnizjgiakx9ajnmqnm";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Autoclicker application, which enables you to automatically click the left mousebutton";
-    homepage = http://xautoclick.sourceforge.net;
+    homepage = "http://xautoclick.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

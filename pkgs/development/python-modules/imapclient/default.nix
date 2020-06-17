@@ -1,32 +1,35 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
-, isPy34
-, isPy35
+, fetchFromGitHub
 , mock
+, six
 }:
 
 buildPythonPackage rec {
   pname = "IMAPClient";
-  version = "0.13";
-  disabled = isPy34 || isPy35;
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "https://freshfoo.com/projects/IMAPClient/${pname}-${version}.tar.gz";
-    sha256 = "0v7kd1crdbff0rmh4ddm5qszkis6hpk9084qh94al8h7g4y9l3is";
+  src = fetchFromGitHub {
+    owner = "mjs";
+    repo = "imapclient";
+    rev = version;
+    sha256 = "1zc8qj8ify2zygbz255b6fcg7jhprswf008ccwjmbrnj08kh9l4x";
   };
 
-  buildInputs = [ mock ];
-
-  preConfigure = ''
-    sed -i '/distribute_setup/d' setup.py
-    substituteInPlace setup.py --replace "mock==0.8.0" "mock"
+  # fix test failing in python 36
+  postPatch = ''
+    substituteInPlace tests/test_imapclient.py \
+      --replace "if sys.version_info >= (3, 7):" "if sys.version_info >= (3, 6, 4):"
   '';
 
+  propagatedBuildInputs = [ six ];
+
+  checkInputs = [ mock ];
+
   meta = with stdenv.lib; {
-    homepage = https://imapclient.readthedocs.io/en/2.1.0/;
+    homepage = "https://imapclient.readthedocs.io";
     description = "Easy-to-use, Pythonic and complete IMAP client library";
     license = licenses.bsd3;
+    maintainers = [ maintainers.almac ];
   };
-
 }

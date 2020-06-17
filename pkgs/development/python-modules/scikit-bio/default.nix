@@ -19,13 +19,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.5";
+  version = "0.5.6";
   pname = "scikit-bio";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9fa813be66e88a994f7b7a68b8ba2216e205c525caa8585386ebdeebed6428df";
+    sha256 = "48b73ec53ce0ff2c2e3e05f3cfcf93527c1525a8d3e9dd4ae317b4219c37f0ea";
   };
 
   buildInputs = [ cython ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://scikit-bio.org/;
+    homepage = "http://scikit-bio.org/";
     description = "Data structures, algorithms and educational resources for bioinformatics";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ldacBT-${version}";
+  pname = "ldacBT";
   version = "2.0.2.3";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "AOSP libldac dispatcher";
-    homepage    = https://github.com/EHfive/ldacBT;
+    homepage    = "https://github.com/EHfive/ldacBT";
     license     = licenses.asl20;
     platforms   = platforms.all;
     maintainers = with maintainers; [ adisbladis ];

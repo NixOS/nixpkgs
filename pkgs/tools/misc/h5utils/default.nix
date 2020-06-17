@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.13.1";
-  name = "h5utils-${version}";
+  pname = "h5utils";
 
   # fetchurl is used instead of fetchFromGitHub because the git repo version requires
   # additional tools to build compared to the tarball release; see the README for details.
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A set of utilities for visualization and conversion of scientific data in the free, portable HDF5 format";
-    homepage = https://github.com/stevengj/h5utils;
+    homepage = "https://github.com/stevengj/h5utils";
     license = with licenses; [ mit gpl2 ];
     maintainers = with maintainers; [ sfrijters ];
   };
