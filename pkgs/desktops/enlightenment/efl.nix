@@ -54,11 +54,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.24.2";
+  version = "1.24.3";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0w3srvigg4kfi7xq76c7y4hnq5yr2gxrrsvlyj1g2wc1igz1vyg1";
+    sha256 = "de95c6e673c170c1e21382918b122417c091c643e7dcaced89aa785529625c2a";
   };
 
   nativeBuildInputs = [
@@ -149,13 +149,16 @@ stdenv.mkDerivation rec {
     "-D sdl=true"
   ];
 
-  patches = [ ./efl-elua.patch ];
+  patches = [
+    ./efl-elua.patch
+    ./0002-efreet-more-stat-info-changes.patch
+  ];
 
   postPatch = ''
     patchShebangs src/lib/elementary/config_embed
 
     # fix destination of systemd unit and dbus service
-    substituteInPlace systemd-services/meson.build --replace "dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
+    substituteInPlace systemd-services/meson.build --replace "sys_dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
     substituteInPlace dbus-services/meson.build --replace "dep.get_pkgconfig_variable('session_bus_services_dir')" "'$out/share/dbus-1/services'"
   '';
 
