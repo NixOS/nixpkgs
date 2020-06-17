@@ -93,4 +93,7 @@ self: super: {
 
   # Only 0.6 is compatible with ghc 8.6 https://hackage.haskell.org/package/apply-refact/changelog
   apply-refact = super.apply-refact_0_6_0_0;
+
+  # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
+  cachix = disableLibraryProfiling super.cachix;
 }

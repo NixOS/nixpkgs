@@ -89,4 +89,7 @@ self: super: {
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
 
+  # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
+  cachix = disableLibraryProfiling super.cachix;
+
 }
