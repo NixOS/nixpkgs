@@ -251,6 +251,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
     ejabberd_prefix = "su ejabberd -s $(which ejabberdctl) "
 
     server.wait_for_unit("ejabberd.service")
+    server.sleep(15)
 
     assert "status: started" in server.succeed(ejabberd_prefix + "status")
 
