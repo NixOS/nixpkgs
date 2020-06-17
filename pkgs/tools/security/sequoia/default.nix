@@ -56,6 +56,10 @@ rustPlatform.buildRustPackage rec {
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
+  # Please check if this is still needed when updating.
+  # Exlude tests for sequoia-store, they often error with 'Too many open files' Hydra.
+  CARGO_TEST_ARGS = " --all --exclude sequoia-store";
+
   postPatch = ''
     # otherwise, the check fails because we delete the `.git` in the unpack phase
     substituteInPlace openpgp-ffi/Makefile \
