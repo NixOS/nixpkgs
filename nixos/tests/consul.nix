@@ -55,31 +55,28 @@ let
 
   server = index: { pkgs, ... }:
     let
-      ip = builtins.elemAt allConsensusServerHosts index;
+      thisConsensusServerHost = builtins.elemAt allConsensusServerHosts index;
+      ip = thisConsensusServerHost; # since we already use IPs to identify servers
     in
       {
         networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = builtins.elemAt allConsensusServerHosts index; prefixLength = 16; }
+          { address = ip; prefixLength = 16; }
         ];
         networking.firewall = firewallSettings;
 
         services.consul =
-          let
-            thisConsensusServerHost = builtins.elemAt allConsensusServerHosts index;
-            numConsensusServers = builtins.length allConsensusServerHosts;
-          in
           assert builtins.elem thisConsensusServerHost allConsensusServerHosts;
           {
             enable = true;
             inherit webUi;
             extraConfig = defaultExtraConfig // {
               server = true;
-              bootstrap_expect = numConsensusServers;
+              bootstrap_expect = builtins.length allConsensusServerHosts;
               retry_join =
                 # If there's only 1 node in the network, we allow self-join;
                 # otherwise, the node must not try to join itself, and join only the other servers.
                 # See https://github.com/hashicorp/consul/issues/2868
-                if numConsensusServers == 1
+                if builtins.length allConsensusServerHosts == 1
                   then allConsensusServerHosts
                   else builtins.filter (h: h != thisConsensusServerHost) allConsensusServerHosts;
               bind_addr = ip;
