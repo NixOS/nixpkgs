@@ -6,7 +6,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
   nodes = {
     client = { nodes, pkgs, ... }: {
       environment.systemPackages = [
-        (pkgs.callPackage ./xmpp-sendmessage.nix { connectTo = nodes.server.config.networking.primaryIPAddress; })
+        (pkgs.callPackage ./xmpp-sendmessage.nix { connectTo = nodes.server.config.networking.primaryIPAddress; testUpload = false; })
       ];
     };
     server = { config, pkgs, ... }: {

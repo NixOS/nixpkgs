@@ -1,5 +1,6 @@
 { stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
 , erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, utillinux, procps, gd
+, nixosTests
 , flock
 , withMysql ? false
 , withPgsql ? false
@@ -109,6 +110,10 @@ in stdenv.mkDerivation rec {
       $out/sbin/ejabberdctl
     wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
   '';
+
+  passthru.tests = {
+    main = nixosTests.ejabberd;
+  };
 
   meta = with stdenv.lib; {
     description = "Open-source XMPP application server written in Erlang";

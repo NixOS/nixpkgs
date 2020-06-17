@@ -1,4 +1,4 @@
-{ writeScriptBin, writeText, python3, connectTo ? "localhost" }:
+{ lib, writeScriptBin, writeText, python3, connectTo ? "localhost", testUpload ? true }:
 let
   dummyFile = writeText "dummy-file" ''
     Dear dog,
@@ -17,6 +17,7 @@ from types import MethodType
 from slixmpp import ClientXMPP
 from slixmpp.exceptions import IqError, IqTimeout
 
+testUpload = ${if testUpload then "True" else "False"}
 
 class CthonTest(ClientXMPP):
 
@@ -33,11 +34,13 @@ class CthonTest(ClientXMPP):
         log.info('Message sent')
 
         # Test http upload (XEP_0363)
-        def timeout_callback(arg):
-            log.error("ERROR: Cannot upload file. XEP_0363 seems broken")
-            sys.exit(1)
-        url = await self['xep_0363'].upload_file("${dummyFile}",timeout=10, timeout_callback=timeout_callback)
-        log.info('Upload success!')
+        if testUpload:
+          def timeout_callback(arg):
+              log.error("ERROR: Cannot upload file. XEP_0363 seems broken")
+              sys.exit(1)
+          url = await self['xep_0363'].upload_file("${dummyFile}",timeout=10, timeout_callback=timeout_callback)
+          log.info('Upload success!')
+
         # Test MUC
         self.plugin['xep_0045'].join_muc('testMucRoom', 'cthon98', wait=True)
         log.info('MUC join success!')
