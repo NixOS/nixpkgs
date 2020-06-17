@@ -645,6 +645,8 @@ in
 
   almanah = callPackage ../applications/misc/almanah { };
 
+  alpine-make-vm-image = callPackage ../tools/virtualization/alpine-make-vm-image { };
+
   amazon-ecs-cli = callPackage ../tools/virtualization/amazon-ecs-cli { };
 
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
