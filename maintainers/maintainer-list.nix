@@ -1616,6 +1616,12 @@
     githubId = 12202789;
     name = "CrazedProgrammer";
   };
+  cript0nauta = {
+    email = "shareman1204@gmail.com";
+    github = "cript0nauta";
+    githubId = 1222362;
+    name = "Matías Lang";
+  };
   cryptix = {
     email = "cryptix@riseup.net";
     github = "cryptix";
