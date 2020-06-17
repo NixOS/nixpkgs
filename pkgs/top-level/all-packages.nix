@@ -26278,6 +26278,8 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
+  go-swagger = callPackage ../development/tools/go-swagger { };
+
   jx = callPackage ../applications/networking/cluster/jx {};
 
   prow = callPackage ../applications/networking/cluster/prow { };
