@@ -79,7 +79,7 @@ let
 
       # additional profiles are expected in order of precedence, which means the reverse of the
       # NIX_PROFILES variable (same as config.environment.profiles)
-      set -l __nix_profile_paths (echo $NIX_PROFILES | ${coreutils}/bin/tr ' ' '\n')[-1..1]
+      set -l __nix_profile_paths (string split ' ' $NIX_PROFILES)[-1..1]
 
       set __extra_completionsdir \
         $__nix_profile_paths"/etc/fish/completions" \
