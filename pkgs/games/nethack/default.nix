@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
-, less, makeWrapper
+, less
 , buildPackages
 , x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkgconfig, qt5
 }:
@@ -19,14 +19,14 @@ let
   binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation rec {
-  version = "3.6.2";
+  version = "3.6.6";
   name = if x11Mode then "nethack-x11-${version}"
          else if qtMode then "nethack-qt-${version}"
          else "nethack-${version}";
 
   src = fetchurl {
-    url = "https://nethack.org/download/3.6.2/nethack-362-src.tgz";
-    sha256 = "07fvkm3v11a4pjrq2f66vjslljsvk6raal53skn4gqsfdbd0ml7v";
+    url = "https://nethack.org/download/${version}/nethack-${lib.replaceStrings ["."] [""] version}-src.tgz";
+    sha256 = "1liyckjp34j354qnxc1zn9730lh1p2dabrg1hap24z6xnqx0rpng";
   };
 
   buildInputs = [ ncurses ]
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
                       ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
                       ++ lib.optionals qtMode [
                            pkgconfig mkfontdir qt5.qtbase.dev
-                           qt5.qtmultimedia.dev makeWrapper
+                           qt5.qtmultimedia.dev qt5.wrapQtAppsHook
                            bdftopcf
                          ];
 
@@ -97,6 +97,10 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preFixup = stdenv.lib.optionalString qtMode ''
+    wrapQtApp "$out/games/nethack"
+  '';
+
   postInstall = ''
     mkdir -p $out/games/lib/nethackuserdir
     for i in xlogfile logfile perm record save; do
@@ -137,14 +141,9 @@ in stdenv.mkDerivation rec {
     ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
   '';
 
-  postFixup = lib.optionalString qtMode ''
-    wrapProgram $out/bin/nethack-qt \
-      --prefix QT_PLUGIN_PATH : "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
-  '';
-
   meta = with stdenv.lib; {
     description = "Rogue-like game";
-    homepage = http://nethack.org/;
+    homepage = "http://nethack.org/";
     license = "nethack";
     platforms = if x11Mode then platforms.linux else platforms.unix;
     maintainers = with maintainers; [ abbradar ];

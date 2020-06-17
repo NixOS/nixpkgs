@@ -2,17 +2,19 @@
 , fetchFromGitHub
 , meson
 , ninja
+, vala
 , pkgconfig
 , pantheon
 , python3
 , glib
 , gtk3
 , gtksourceview
-, hicolor-icon-theme
 , json-glib
 , libsoup
 , libgee
-, wrapGAppsHook }:
+, wrapGAppsHook
+, vala_0_40
+}:
 
 stdenv.mkDerivation rec {
   pname = "ping";
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pantheon.vala
+    vala_0_40
     pkgconfig
     python3
     wrapGAppsHook
@@ -38,7 +40,6 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gtksourceview
-    hicolor-icon-theme
     json-glib
     libgee
     libsoup
@@ -50,10 +51,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "A helpful tool that lets you debug what part of your API is causing you issues";
-    homepage = https://github.com/jeremyvaartjes/ping;
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    homepage = "https://github.com/jeremyvaartjes/ping";
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

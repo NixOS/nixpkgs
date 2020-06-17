@@ -8,12 +8,12 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxc-${version}";
-  version = "3.1.0";
+  pname = "lxc";
+  version = "4.0.2";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "1igxqgx8q9cp15mcp1y8j564bl85ijw04jcmgb1s5bmfbg1751sd";
+    sha256 = "1c2wbbcvs58slyq0skxizx61q1lb4yvak28x4gzsbzh3yg6nscya";
   };
 
   nativeBuildInputs = [
@@ -67,10 +67,21 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapPythonPrograms
+
+    completions=(
+      lxc-attach lxc-cgroup lxc-console lxc-destroy lxc-device lxc-execute
+      lxc-freeze lxc-info lxc-monitor lxc-snapshot lxc-stop lxc-unfreeze
+    )
+    pushd $out/share/bash-completion/completions/
+      mv lxc lxc-start
+      for completion in ''${completions[@]}; do
+        ln -sfn lxc-start $completion
+      done
+    popd
   '';
 
   meta = {
-    homepage = https://linuxcontainers.org/;
+    homepage = "https://linuxcontainers.org/";
     description = "Userspace tools for Linux Containers, a lightweight virtualization system";
     license = licenses.lgpl21Plus;
 
@@ -83,6 +94,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

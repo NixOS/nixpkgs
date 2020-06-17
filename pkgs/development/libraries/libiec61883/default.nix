@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.0";
-  name = "libiec61883-${version}";
+  pname = "libiec61883";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/libi/libiec61883/libiec61883_${version}.orig.tar.gz";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libraw1394 ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.linux1394.org;
+    homepage = "https://www.linux1394.org";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

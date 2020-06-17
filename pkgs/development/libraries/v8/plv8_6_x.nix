@@ -1,6 +1,8 @@
 # NOTE: this expression is NOT exported from the top-level of all-packages.nix,
-# it is exclusively used by the 'plv8' PostgreSQL extension, which requires a
-# very exact version.
+# it is exclusively used by the 'plv8' PostgreSQL extension.
+# Since plv8 2.3.2, plv8 no longer requires this specific version, but as of
+# 2019-08-29, nixpkgs does not have v8 6.x, and v8_5 is bumped to 5.4.232, which
+# is a bit outdated.  plv8 3.x is planned to support v8 7.x
 
 { stdenv, lib, fetchgit, fetchFromGitHub, gn, ninja, python, glib, pkgconfig
 , doCheck ? false
@@ -24,12 +26,12 @@ let
       rev    = "0e9a47d74970bee1bbfc063c47215406f8918699";
       sha256 = "07rbzrlscp8adh4z86yl5jxdnvgkc3xs950xldpk318wf9i3bh6c";
     };
-    "build" = fetchgit {
+    build = fetchgit {
       url    = "${git_url}/chromium/src/build.git";
       rev    = "9338ce52d0b9bcef34c38285fbd5023b62739fac";
       sha256 = "1s2sa8dy3waidsirjylc82ggb18l1108bczjc8z0v4ywyj4k0cvh";
     };
-    "buildtools" = fetchgit {
+    buildtools = fetchgit {
       url    = "${git_url}/chromium/buildtools.git";
       rev    = "505de88083136eefd056e5ee4ca0f01fe9b33de8";
       sha256 = "0vj216nhb803bggsl0hnyagj8njrm96pn8sim6xcnqb7nhz1vabw";
@@ -109,7 +111,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "v8-${version}";
+  pname = "v8";
   version = "6.4.388.40";
 
   inherit doCheck;

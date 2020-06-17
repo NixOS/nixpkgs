@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.7.4";
-  name = "nload-${version}";
+  pname = "nload";
 
   src = fetchurl {
-    url = "http://www.roland-riegel.de/nload/${name}.tar.gz";
+    url = "http://www.roland-riegel.de/nload/${pname}-${version}.tar.gz";
     sha256 = "1rb9skch2kgqzigf19x8bzk211jdfjfdkrcvaqyj89jy2pkm3h61";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       using two graphs and provides additional info like total amount of
       transfered data and min/max network usage.
     '';
-    homepage = http://www.roland-riegel.de/nload/index.html;
+    homepage = "http://www.roland-riegel.de/nload/index.html";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];

@@ -5,7 +5,8 @@
 let
   version = "2.6";
 in stdenv.mkDerivation {
-  name = "midisheetmusic-${version}";
+  pname = "midisheetmusic";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/midisheetmusic/MidiSheetMusic-${version}-linux-src.tar.gz";
@@ -47,12 +48,13 @@ in stdenv.mkDerivation {
 
     makeWrapper ${mono}/bin/mono $out/bin/midisheetmusic.mono.exe \
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ gtk2 cups ]} \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ timidity ]} \
       --add-flags $out/bin/.MidiSheetMusic.exe
   '';
 
   meta = with stdenv.lib; {
     description = "Convert MIDI Files to Piano Sheet Music for two hands";
-    homepage = http://midisheetmusic.com;
+    homepage = "http://midisheetmusic.com";
     license = licenses.gpl2;
     maintainers = [ maintainers.gnidorah ];
     platforms = platforms.linux;

@@ -4,15 +4,15 @@
          https://launchpad.net/bugs/929067
          """
 
--        if platform.system().startswith('Linux'):
--            tarcmd = "tar"
--        elif platform.system().startswith('Darwin'):
--            tarcmd = "gtar"
--        elif platform.system().endswith('BSD'):
--            tarcmd = "gtar"
+-        if platform.system().startswith(u'Linux'):
+-            tarcmd = u"tar"
+-        elif platform.system().startswith(u'Darwin'):
+-            tarcmd = u"gtar"
+-        elif platform.system().endswith(u'BSD'):
+-            tarcmd = u"gtar"
 -        else:
--            raise Exception("Platform %s not supported by tar/gtar." % platform.platform())
-+        tarcmd = "tar"
+-            raise Exception(u"Platform %s not supported by tar/gtar." % platform.platform())
++        tarcmd = u"tar"
 
          # Intial normal backup
          self.backup("full", "testfiles/blocktartest")

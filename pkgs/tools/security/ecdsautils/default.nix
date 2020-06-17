@@ -1,8 +1,8 @@
 { stdenv, pkgs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.4.0";
-  name = "ecdsautils-${version}";
+  pname = "ecdsautils";
 
   src = pkgs.fetchFromGitHub {
     owner = "freifunk-gluon";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";
-    homepage = https://github.com/tcatm/ecdsautils/;
+    homepage = "https://github.com/tcatm/ecdsautils/";
     license = with licenses; [ mit bsd2 ];
     maintainers = with maintainers; [ andir ];
     platforms = platforms.unix;

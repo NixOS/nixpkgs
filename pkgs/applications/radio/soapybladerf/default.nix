@@ -6,7 +6,8 @@ let
   version = "0.4.1";
 
 in stdenv.mkDerivation {
-  name = "soapybladerf-${version}";
+  pname = "soapybladerf";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pothosware";
@@ -22,7 +23,7 @@ in stdenv.mkDerivation {
 
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pothosware/SoapyBladeRF;
+    homepage = "https://github.com/pothosware/SoapyBladeRF";
     description = "SoapySDR plugin for BladeRF devices";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ markuskowa ];

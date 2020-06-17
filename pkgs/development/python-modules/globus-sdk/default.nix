@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "1.7.1";
+  version = "1.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d96f7ed1887c8f55f2bc8d493cd8ec73ff9f3361f0a134203e34e2e57bedd964";
+    sha256 = "1fm0iqfbzd13m1lkd4h3ss4y9isp5cadd2w2k0qr3yqwfmrqqba2";
   };
 
   checkPhase = ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
  
   meta = with lib; {
     description = "A convenient Pythonic interface to Globus REST APIs, including the Transfer API and the Globus Auth API.";
-    homepage =  https://github.com/globus/globus-sdk-python;
+    homepage =  "https://github.com/globus/globus-sdk-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ ixxie ];
   };

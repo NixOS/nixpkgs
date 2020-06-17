@@ -1,38 +1,28 @@
-{ stdenv, fetchurl, ocaml, findlib, camlp4, ounit, gettext, fileutils, camomile }:
+{ lib, fetchurl, buildDunePackage, gettext, fileutils, ounit }:
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-gettext-${version}";
-  version = "0.3.8";
+buildDunePackage rec {
+  pname = "gettext";
+  version = "0.4.1";
+
+  minimumOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1731/ocaml-gettext-${version}.tar.gz";
-    sha256 = "05wnpxwzzpn2qinah2wb5wzfh5iz8gyf8jyihdbjxc8mk4hf70qv";
+    url = "https://github.com/gildor478/ocaml-gettext/releases/download/v${version}/gettext-v${version}.tbz";
+    sha256 = "0pwy6ym5fd77mdbgyas8x86vbrri9cgk79g8wxdjplhyi7zhh158";
   };
 
-  propagatedBuildInputs = [ gettext fileutils camomile ];
+  propagatedBuildInputs = [ gettext fileutils ];
 
-  buildInputs = [ ocaml findlib camlp4 ounit ];
+  doCheck = true;
 
-  postPatch = stdenv.lib.optionalString (camlp4 != null) ''
-    substituteInPlace test/test.ml                  --replace "+camlp4" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
-    substituteInPlace ocaml-gettext/OCamlGettext.ml --replace "+camlp4" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
-    substituteInPlace ocaml-gettext/Makefile        --replace "+camlp4" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
-    substituteInPlace ocaml-gettext/Makefile        --replace "unix.cma" ""
-    substituteInPlace libgettext-ocaml/Makefile     --replace "+camlp4" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
-    substituteInPlace libgettext-ocaml/Makefile     --replace "\$(shell ocamlc -where)" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib"
-  '';
-
-  configureFlags = [ "--disable-doc" ];
-
-  createFindlibDestdir = true;
+  checkInputs = lib.optional doCheck ounit;
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OCaml Bindings to gettext";
-    homepage = https://forge.ocamlcore.org/projects/ocaml-gettext;
-    license = licenses.gpl2;
+    homepage = "https://github.com/gildor478/ocaml-gettext";
+    license = licenses.lgpl21;
     maintainers = [ maintainers.volth ];
-    platforms = ocaml.meta.platforms or [];
   };
 }

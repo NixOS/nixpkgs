@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/tstack/lnav;
+    homepage = "https://github.com/tstack/lnav";
     description = "The Logfile Navigator";
     longDescription = ''
       The log file navigator, lnav, is an enhanced log file viewer that takes
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
     version = "0.8.5";
-    maintainers = [ maintainers.dochang ];
+    maintainers = with maintainers; [ dochang ma27 ];
     platforms = platforms.unix;
   };
 

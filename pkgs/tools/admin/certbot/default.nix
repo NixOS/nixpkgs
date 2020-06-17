@@ -1,36 +1,49 @@
-{ stdenv, python3Packages, fetchFromGitHub, dialog }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, ConfigArgParse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
+, dialog, mock, gnureadline
+, pytest_xdist, pytest, dateutil
+}:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "certbot";
-  version = "0.31.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rwjxmkpicyc9a5janvj1lfi430nq6ha94nyfgp11ds9fyydbh1s";
+    sha256 = "1nzp1l63f64qqp89y1vyd4lgfhykfp5dkr6iwfiyf273y7sjwpsa";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  patches = [
+    ./0001-Don-t-use-distutils.StrictVersion-that-cannot-handle.patch
+  ];
+
+  propagatedBuildInputs = [
     ConfigArgParse
     acme
     configobj
     cryptography
+    distro
     josepy
     parsedatetime
-    psutil
     pyRFC3339
     pyopenssl
     pytz
+    requests
     six
     zope_component
     zope_interface
   ];
-  buildInputs = [ dialog ] ++ (with python3Packages; [ mock gnureadline ]);
 
-  patchPhase = ''
-    substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
-    substituteInPlace certbot/util.py --replace "sw_vers" "/usr/bin/sw_vers"
+  buildInputs = [ dialog mock gnureadline ];
+
+  checkInputs = [ pytest_xdist pytest dateutil ];
+
+  preBuild = ''
+    cd certbot
   '';
 
   postInstall = ''
@@ -40,13 +53,13 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  doCheck = !stdenv.isDarwin; # On Hydra Darwin tests fail with "Too many open files".
+  doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = src.meta.homepage;
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
-    maintainers = [ maintainers.domenkozar ];
-    license = licenses.asl20;
+    maintainers = with maintainers; [ domenkozar ];
+    license = with licenses; [ asl20 ];
   };
 }

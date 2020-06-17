@@ -17,7 +17,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
-    rev = "${version}";
+    rev = version;
     sha256 = "0xngk8wgj5k27mh3bcrf2wwzqr8a3g0d4pc5i5vcavnnaj03j44m";
   };
 
@@ -53,7 +53,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Persepolis Download Manager is a GUI for aria2.";
-    homepage = https://persepolisdm.github.io/;
+    homepage = "https://persepolisdm.github.io/";
     license = licenses.gpl3;
     maintainers = [ maintainers.linarcx ];
   };

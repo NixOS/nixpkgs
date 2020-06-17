@@ -2,6 +2,7 @@
 , cacert, stack, makeSetupHook, lib }@depArgs:
 
 { buildInputs ? []
+, nativeBuildInputs ? []
 , extraArgs ? []
 , LD_LIBRARY_PATH ? []
 , ghc ? depArgs.ghc
@@ -19,10 +20,15 @@ let
 
 in stdenv.mkDerivation (args // {
 
+  # Doesn't work in the sandbox. Pass `--option sandbox relaxed` or
+  # `--option sandbox false` to be able to build this
+  __noChroot = true;
+
   buildInputs = buildInputs
     ++ lib.optional (stdenv.hostPlatform.libc == "glibc") glibcLocales;
 
-  nativeBuildInputs = [ ghc pkgconfig stack stackHook ];
+  nativeBuildInputs = nativeBuildInputs
+    ++ [ ghc pkgconfig stack stackHook ];
 
   STACK_PLATFORM_VARIANT = "nix";
   STACK_IN_NIX_SHELL = 1;

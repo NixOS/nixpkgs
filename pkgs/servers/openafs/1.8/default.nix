@@ -7,8 +7,8 @@
 
 with (import ./srcs.nix { inherit fetchurl; });
 
-stdenv.mkDerivation rec {
-  name = "openafs-${version}";
+stdenv.mkDerivation {
+  pname = "openafs";
   inherit version srcs;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -27,9 +27,6 @@ stdenv.mkDerivation rec {
 
   # Makefiles don't include install targets for all new shared libs, yet.
   dontDisableStatic = true;
-
-  # Fixes broken format string in 1.8.2
-  hardeningDisable=[ "format" ];
 
   preConfigure = ''
     patchShebangs .
@@ -93,9 +90,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     outputsToInstall = [ "out" "doc" "man" ];
     description = "Open AFS client";
-    homepage = https://www.openafs.org;
+    homepage = "https://www.openafs.org";
     license = licenses.ipl10;
     platforms = platforms.linux;
-    maintainers = [ maintainers.z77z maintainers.spacefrogg ];
+    maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
   };
 }

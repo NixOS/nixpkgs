@@ -11,11 +11,11 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "3.5.21";
+  version = "3.5.42";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08e6e63a4502d3a00062ba9ff9669f95577fbdb1a5f8c6cdb1230c5ee295273a";
+    sha256 = "9c21f202697a6cea57b9d716288fc919d99cbabeb30222eebfc7ff77eac32744";
   };
 
   checkInputs = [ glibcLocales ];
@@ -42,6 +42,6 @@ in buildPythonPackage rec {
 
   meta = {
     description = "An Open Source Python library for generating PDFs and graphics";
-    homepage = http://www.reportlab.com/;
+    homepage = "http://www.reportlab.com/";
   };
 }

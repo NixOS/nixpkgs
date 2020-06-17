@@ -1,27 +1,25 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, libxslt, ninja, libX11, gnome3, gtk3, glib
 , gettext, libxml2, xkeyboard_config, isocodes, meson, wayland
-, libseccomp, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
+, libseccomp, systemd, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-desktop-${version}";
-  version = "3.32.2";
+  pname = "gnome-desktop";
+  version = "3.36.3.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0bidx4626x7k2myv6f64qv4fzmxv8v475wibiz19kj8hjfr737q9";
+    url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0zkbx5inprjpf4abqwn0bxc2d1rwbhv450cjh1wgz82ylagi3vab";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     pkgconfig meson ninja gettext libxslt libxml2 gobject-introspection
-    gtk-doc docbook_xsl
+    gtk-doc docbook_xsl glib
   ];
   buildInputs = [
     libX11 bubblewrap xkeyboard_config isocodes wayland
-    gtk3 glib libseccomp
+    gtk3 glib libseccomp systemd
   ];
 
   propagatedBuildInputs = [ gsettings-desktop-schemas ];
@@ -50,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "Library with common API for various GNOME modules";
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

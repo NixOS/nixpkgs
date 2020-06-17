@@ -1,8 +1,8 @@
-import ./make-test.nix ({ lib, ... }:
+import ./make-test-python.nix ({ lib, ... }:
 
 with lib;
 
-rec {
+{
   name = "lidarr";
   meta.maintainers = with maintainers; [ etu ];
 
@@ -11,8 +11,10 @@ rec {
     { services.lidarr.enable = true; };
 
   testScript = ''
-    $machine->waitForUnit('lidarr.service');
-    $machine->waitForOpenPort('8686');
-    $machine->succeed("curl --fail http://localhost:8686/");
+    start_all()
+
+    machine.wait_for_unit("lidarr.service")
+    machine.wait_for_open_port("8686")
+    machine.succeed("curl --fail http://localhost:8686/")
   '';
 })

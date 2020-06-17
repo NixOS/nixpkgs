@@ -1,14 +1,17 @@
-{ stdenv, fetchgit, coreutils, ocaml, zlib, pcre, neko, camlp4 }:
+{ stdenv, fetchgit, coreutils, ocamlPackages, zlib, pcre, neko }:
+
+let inherit (ocamlPackages) ocaml camlp4; in
 
 let
   generic = { version, sha256, prePatch }:
-    stdenv.mkDerivation rec {
-      name = "haxe-${version}";
+    stdenv.mkDerivation {
+      pname = "haxe";
+      inherit version;
 
       buildInputs = [ocaml zlib pcre neko camlp4];
 
       src = fetchgit {
-        url = https://github.com/HaxeFoundation/haxe.git;
+        url = "https://github.com/HaxeFoundation/haxe.git";
         inherit sha256;
         fetchSubmodules = true;
         rev = "refs/tags/${version}";
@@ -73,7 +76,7 @@ let
 
       meta = with stdenv.lib; {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
-        homepage = https://haxe.org;
+        homepage = "https://haxe.org";
         license = with licenses; [ gpl2 bsd2 /*?*/ ];  # -> docs/license.txt
         maintainers = [ maintainers.marcweber ];
         platforms = platforms.linux ++ platforms.darwin;

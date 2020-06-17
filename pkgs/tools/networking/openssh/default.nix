@@ -4,6 +4,8 @@
 , withKerberos ? true
 , withGssapiPatches ? false
 , kerberos
+, libfido2
+, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
 , linkOpenssl? true
 }:
 
@@ -12,27 +14,25 @@ let
   # **please** update this patch when you update to a new openssh release.
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
-    url = "https://salsa.debian.org/ssh-team/openssh/raw/"
-      + "d80ebbf028196b2478beebf5a290b97f35e1eed9"
-      + "/debian/patches/gssapi.patch";
-    sha256 = "14j9cabb3gkhkjc641zbiv29mbvsmgsvis3fbj8ywsd21zc7m2wv";
+    url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%258.2p1-1/debian/patches/gssapi.patch";
+    sha256 = "081gryqkfr5zr4f5m4v0piq1sxz06sb38z5lqxccgpivql7pa8d8";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "openssh-${version}";
-  version = if hpnSupport then "7.8p1" else "7.9p1";
+  pname = "openssh";
+  version = if hpnSupport then "8.1p1" else "8.2p1";
 
   src = if hpnSupport then
       fetchurl {
-        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_8_P1.tar.gz";
-        sha256 = "05q5hxx7fzcgd8a5i0zk4fwvmnz4xqk04j489irnwm7cka7xdqxw";
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-8_1_P1.tar.gz";
+        sha256 = "1xiv28df9c15h44fv1i93fq8rvkyapjj9vj985ndnw3xk1nvqjyd";
       }
     else
       fetchurl {
-        url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-        sha256 = "1b8sy6v0b8v4ggmknwcqx3y1rjcpsll0f1f8f4vyv11x4ni3njvb";
+        url = "mirror://openbsd/OpenSSH/portable/${pname}-${version}.tar.gz";
+        sha256 = "0wg6ckzvvklbzznijxkk28fb8dnwyjd0w30ra0afwv6gwr8m34j3";
       };
 
   patches =
@@ -42,14 +42,7 @@ stdenv.mkDerivation rec {
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
 
-      # CVE-2018-20685, can probably be dropped with next version bump
-      # See https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt
-      # for details
-      (fetchpatch {
-        name = "CVE-2018-20685.patch";
-        url = https://github.com/openssh/openssh-portable/commit/6010c0303a422a9c5fa8860c061bf7105eb7f8b2.patch;
-        sha256 = "0q27i9ymr97yb628y44qi4m11hk5qikb1ji1vhvax8hp18lwskds";
-      })
+      ./ssh-keysign.patch
     ]
     ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
 
@@ -60,11 +53,10 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ] ++ optional (hpnSupport || withGssapiPatches) autoreconfHook;
   buildInputs = [ zlib openssl libedit pam ]
-    ++ optional withKerberos kerberos
-    ++ optional hpnSupport autoreconfHook
-    ;
+    ++ optional withFIDO libfido2
+    ++ optional withKerberos kerberos;
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -83,9 +75,12 @@ stdenv.mkDerivation rec {
     "--disable-strip"
     (if pam != null then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
+    ++ optional withFIDO "--with-security-key-builtin=yes"
     ++ optional withKerberos (assert kerberos != null; "--with-kerberos5=${kerberos}")
     ++ optional stdenv.isDarwin "--disable-libutil"
     ++ optional (!linkOpenssl) "--without-openssl";
+
+  buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 
   enableParallelBuilding = true;
 
@@ -104,7 +99,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://www.openssh.com/;
+    homepage = "http://www.openssh.com/";
     description = "An implementation of the SSH protocol";
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;

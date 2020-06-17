@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 	meta = {
 		description = "A simple tool and library to embed files and directories inside OCaml executables";
 		license = stdenv.lib.licenses.lgpl3Plus;
-		homepage = https://www.typerex.org/ocp-ocamlres.html;
+		homepage = "https://www.typerex.org/ocp-ocamlres.html";
 		maintainers = [ stdenv.lib.maintainers.vbgl ];
 		inherit (ocaml.meta) platforms;
 	};

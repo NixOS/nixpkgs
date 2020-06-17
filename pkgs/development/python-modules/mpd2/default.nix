@@ -1,22 +1,24 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, python
 , mock
 }:
 
 buildPythonPackage rec {
-  pname = "mpd2";
-  version = "0.5.5";
+  pname = "python-mpd2";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gfrxf71xll1w6zb69znqg5c9j0g7036fsalkvqprh2id640cl3a";
+    extension = "tar.bz2";
+    sha256 = "772fa6861273bb9f363a97987c2c45ca3965eb770570f1f02566efec9c89fc5f";
   };
 
   buildInputs = [ mock ];
-  patchPhase = ''
-    sed -i -e '/tests_require/d' \
-        -e 's/cmdclass.*/test_suite="mpd_test",/' setup.py
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest mpd.tests
   '';
 
   meta = with stdenv.lib; {

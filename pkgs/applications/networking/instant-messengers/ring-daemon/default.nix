@@ -13,7 +13,7 @@
 , libsndfile
 , dbus
 , dbus_cplusplus
-, ffmpeg
+, ffmpeg_3
 , udev
 , pcre
 , gsm
@@ -44,7 +44,7 @@ let
   ]);
 
   src = fetchgit {
-    url = https://gitlab.savoirfairelinux.com/ring/ring-daemon.git;
+    url = "https://gitlab.savoirfairelinux.com/ring/ring-daemon.git";
     rev = "006b8dc7be08fe9beb68709af71004e7bc1ceb5c";
     sha256 = "0ih9g0rismrhx6nqcy3jqfbcs166grg0shnfmrnmykl9h0xy8z47";
   };
@@ -78,8 +78,8 @@ let
     CFLAGS = "-g -DPJ_ICE_MAX_CAND=256 -DPJ_ICE_MAX_CHECKS=150 -DPJ_ICE_COMP_BITS=2 -DPJ_ICE_MAX_STUN=3 -DPJSIP_MAX_PKT_LEN=8000";
   });
 in
-stdenv.mkDerivation rec {
-  name = "ring-daemon-${version}";
+stdenv.mkDerivation {
+  pname = "ring-daemon";
   version = "2017-07-11";
 
   inherit src;
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     libsndfile
     dbus
     dbus_cplusplus
-    ffmpeg
+    ffmpeg_3
     udev
     pcre
     gsm
@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
       graphical user interfaces and even scripts to control the daemon from the
       shell.
     '';
-    homepage = https://ring.cx;
+    homepage = "https://ring.cx";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch ];
     platforms = platforms.linux;

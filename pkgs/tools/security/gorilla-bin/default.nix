@@ -1,7 +1,7 @@
 { fetchurl, makeWrapper, patchelf, stdenv, libXft, libX11, freetype, fontconfig, libXrender, libXScrnSaver, libXext }:
 
 stdenv.mkDerivation rec {
-  name = "gorilla-bin-${version}";
+  pname = "gorilla-bin";
   version = "1.5.3.7";
 
   src = fetchurl {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Password Gorilla is a Tk based password manager";
-    homepage = https://github.com/zdia/gorilla/wiki;
+    homepage = "https://github.com/zdia/gorilla/wiki";
     maintainers = [ stdenv.lib.maintainers.namore ];
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;

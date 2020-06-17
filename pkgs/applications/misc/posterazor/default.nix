@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, unzip, pkgconfig, libXpm, fltk13, freeimage }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "posterazor-1.5.1";
 
   src = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://posterazor.sourceforge.net/;
+    homepage = "http://posterazor.sourceforge.net/";
     description = "Cuts a raster image into pieces which can afterwards be printed out and assembled to a poster";
     maintainers = [ maintainers.madjar ];
     license = licenses.gpl3Plus;

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Watchman client for Python";
-    homepage = https://facebook.github.io/watchman/;
+    homepage = "https://facebook.github.io/watchman/";
     license = licenses.bsd3;
   };
 

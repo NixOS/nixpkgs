@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "screencloud-${version}";
+  pname = "screencloud";
   version = "1.2.0";
 
   # API Keys. According to the author of the AUR package, these are only used
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://screencloud.net/;
+    homepage = "https://screencloud.net/";
     description = "Client for Screencloud, an easy to use screenshot sharing tool";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ forkk ];

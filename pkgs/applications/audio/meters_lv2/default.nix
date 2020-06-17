@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, lv2, libGLU_combined, gtk2, cairo, pango, fftwFloat, libjack2 }:
+, lv2, libGLU, libGL, gtk2, cairo, pango, fftwFloat, libjack2 }:
 
 let
   version = "0.9.10";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   inherit name;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ lv2 libGLU_combined gtk2 cairo pango fftwFloat libjack2 ];
+  buildInputs = [ lv2 libGLU libGL gtk2 cairo pango fftwFloat libjack2 ];
 
   srcs = [ src robtkSrc ];
   sourceRoot = name;
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib;
     { description = "Collection of audio level meters with GUI in LV2 plugin format";
-      homepage = http://x42.github.io/meters.lv2/;
+      homepage = "http://x42.github.io/meters.lv2/";
       maintainers = with maintainers; [ ehmry ];
       license = licenses.gpl2;
       platforms = platforms.linux;

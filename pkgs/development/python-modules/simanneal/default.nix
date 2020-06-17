@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A python implementation of the simulated annealing optimization technique";
-    homepage = https://github.com/perrygeo/simanneal;
+    homepage = "https://github.com/perrygeo/simanneal";
     license = licenses.isc;
     maintainers = with maintainers; [ veprbl ];
   };

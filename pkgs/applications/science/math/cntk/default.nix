@@ -1,11 +1,12 @@
-{ config, lib, stdenv, fetchgit, fetchFromGitHub, cmake
-, openblas, opencv3, libzip, boost, protobuf, openmpi
+{ lib, stdenv, fetchgit, fetchFromGitHub, cmake
+, openblas, blas, lapack, opencv3, libzip, boost, protobuf, openmpi
 , onebitSGDSupport ? false
-, cudaSupport ? config.cudaSupport or false, cudatoolkit, nvidia_x11
+, cudaSupport ? false, addOpenGLRunpath, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport, cudnn
 }:
 
 assert cudnnSupport -> cudaSupport;
+assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 let
   # Old specific version required for CNTK.
@@ -17,7 +18,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "CNTK-${version}";
+  pname = "CNTK";
   version = "2.7";
 
   # Submodules
@@ -27,7 +28,10 @@ in stdenv.mkDerivation rec {
     sha256 = "18l9k7s966a26ywcf7flqyhm61788pcb9fj3wk61jrmgkhy2pcns";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optional cudaSupport addOpenGLRunpath;
+
+  # Force OpenMPI to use g++ in PATH.
+  OMPI_CXX = "g++";
 
   buildInputs = [ openblas opencv3 libzip boost protobuf openmpi ]
              ++ lib.optional cudaSupport cudatoolkit
@@ -69,6 +73,7 @@ in stdenv.mkDerivation rec {
       ln -s ${cudnn}/include cuda
       export configureFlags="$configureFlags --with-cudnn=$PWD"
     ''}
+
     ../configure $configureFlags
   '';
 
@@ -79,10 +84,19 @@ in stdenv.mkDerivation rec {
     cp bin/cntk $out/bin
   '';
 
+  postFixup = lib.optionalString cudaSupport ''
+    for lib in $out/lib/*; do
+      addOpenGLRunpath "$lib"
+    done
+  '';
+
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://github.com/Microsoft/CNTK;
+    # Newer cub is included with cudatoolkit now and it breaks the build.
+    # https://github.com/Microsoft/CNTK/issues/3191
+    broken = cudaSupport;
+    homepage = "https://github.com/Microsoft/CNTK";
     description = "An open source deep-learning toolkit";
     license = if onebitSGDSupport then licenses.unfreeRedistributable else licenses.mit;
     platforms = [ "x86_64-linux" ];

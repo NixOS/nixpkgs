@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "compile-daemon-unstable-${version}";
+  pname = "compile-daemon-unstable";
   version = "2017-03-08";
   rev = "d447e567232bcb84cedd3b2be012c7127f31f469";
 

@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, inotify-tools, openssh, perl, gnutar, bash, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "sshlatex-${version}";
+  pname = "sshlatex";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "iblech";
     repo = "sshlatex";
-    rev = "${version}";
+    rev = version;
     sha256 = "0kaah8is74zba9373xccmsxmnnn6kh0isr4qpg21x3qhdzhlxl7q";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       thereby preloading the required LaTeX packages, it is also useful in a
       purely local setting.
     '';
-    homepage = https://github.com/iblech/sshlatex;
+    homepage = "https://github.com/iblech/sshlatex";
     license = stdenv.lib.licenses.gpl3Plus;  # actually dual-licensed gpl3Plus | lppl13cplus
     platforms = stdenv.lib.platforms.all;
     maintainers = [ maintainers.iblech ];

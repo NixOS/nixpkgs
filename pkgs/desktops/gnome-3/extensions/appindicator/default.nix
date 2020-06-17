@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-appindicator-${version}";
-  version = "28";
+  pname = "gnome-shell-extension-appindicator";
+  version = "33";
 
   src = fetchFromGitHub {
     owner = "Ubuntu";
     repo = "gnome-shell-extension-appindicator";
     rev = "v${version}";
-    sha256 = "03sgb2xkb4lzp8pbb7g56q29y1r764qzpc0j4d4m1gi0sb39sxrl";
+    sha256 = "0qm77s080nbf4gqnfzpwp8a7jf7lliz6fxbsd3lasvrr11pgsk87";
   };
 
   # This package has a Makefile, but it's used for building a zip for
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonafato ];
     platforms = gnome3.gnome-shell.meta.platforms;
-    homepage = https://github.com/Ubuntu/gnome-shell-extension-appindicator;
+    homepage = "https://github.com/Ubuntu/gnome-shell-extension-appindicator";
   };
 }

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, qmake, qttools, qtsvg }:
+{ stdenv, fetchurl, qmake, qttools, qtsvg, mkDerivation }:
 
-stdenv.mkDerivation rec {
-  name = "cutemaze-${version}";
-  version = "1.2.4";
+mkDerivation rec {
+  pname = "cutemaze";
+  version = "1.2.6";
 
   src = fetchurl {
-    url = "https://gottcode.org/cutemaze/${name}-src.tar.bz2";
-    sha256 = "0l727j28igs7cx6gvxs43vvzhp3hk0z61df7sprp1vdxzpzzfifl";
+    url = "https://gottcode.org/cutemaze/${pname}-${version}-src.tar.bz2";
+    sha256 = "0pw31j2i3ifndikhz9w684ia00r8zvcgnb66ign9w4lgs1zjgcrw";
   };
 
   nativeBuildInputs = [ qmake qttools ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://gottcode.org/cutemaze/;
+    homepage = "https://gottcode.org/cutemaze/";
     description = "Simple, top-down game in which mazes are randomly generated";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

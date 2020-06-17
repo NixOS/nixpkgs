@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , makeWrapper
+, installShellFiles
 , coreutils
 , gnused
 , gnugrep
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "dasht";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner  = "sunaku";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0d0pcjalba58nvxdgn39m4b6n9ifajf3ygyjaqgvzwxzgpzw0a60";
+    sha256 = "08wssmifxi7pnvn9gqrvpzpkc2qpkfbzbhxh0dk1gff2y2211qqk";
   };
 
   deps = lib.makeBinPath [
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     (placeholder "out")
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   installPhase = ''
     runHook preInstall
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp bin/* $out/bin/
 
-    mkdir -p $out/share/man/man1
-    cp man/man1/* $out/share/man/man1/
+    installManPage man/man1/*
+    installShellCompletion --zsh etc/zsh/completions/*
 
     for i in $out/bin/*; do
       echo "Wrapping $i"

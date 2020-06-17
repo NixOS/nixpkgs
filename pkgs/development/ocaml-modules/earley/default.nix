@@ -1,4 +1,8 @@
-{ lib, fetchurl, buildDunePackage }:
+{ lib, fetchurl, ocaml, buildDunePackage }:
+
+if lib.versionAtLeast ocaml.version "4.08"
+then throw "earley is not available for OCaml ${ocaml.version}"
+else
 
 buildDunePackage rec {
   version = "2.0.0";

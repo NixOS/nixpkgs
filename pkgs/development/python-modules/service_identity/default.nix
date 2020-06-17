@@ -32,6 +32,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Service identity verification for pyOpenSSL";
     license = licenses.mit;
-    homepage = https://service-identity.readthedocs.io;
+    homepage = "https://service-identity.readthedocs.io";
   };
 }

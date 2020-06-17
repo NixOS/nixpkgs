@@ -3,7 +3,7 @@
 , curl, geoip, libxml2, lmdb, lua, pcre, yajl }:
 
 stdenv.mkDerivation rec {
-  name = "libmodsecurity-${version}";
+  pname = "libmodsecurity";
   version = "3.0.3";
 
   src = fetchFromGitHub {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       the ModSecurity SecRules format and apply them to HTTP content provided
       by your application via Connectors.
     '';
-    homepage = https://modsecurity.org/;
+    homepage = "https://modsecurity.org/";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ izorkin ];

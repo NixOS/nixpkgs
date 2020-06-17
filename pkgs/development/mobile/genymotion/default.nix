@@ -7,7 +7,7 @@ let
   packages = [
     stdenv.cc.cc zlib glib xorg.libX11 libxkbcommon libXmu libXi libXext libGL
   ];
-  libPath = "${stdenv.lib.makeLibraryPath packages}";
+  libPath = stdenv.lib.makeLibraryPath packages;
 in
 stdenv.mkDerivation rec {
   pname = "genymotion";
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       pre-configured Android (x86 with OpenGL hardware acceleration) images,
       suitable for application testing.
      '';
-    homepage = https://www.genymotion.com/;
+    homepage = "https://www.genymotion.com/";
     license = stdenv.lib.licenses.unfree;
     platforms = ["x86_64-linux"];
     maintainers = [ stdenv.lib.maintainers.puffnfresh ];

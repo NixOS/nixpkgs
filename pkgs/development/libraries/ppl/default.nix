@@ -2,8 +2,9 @@
 
 let version = "1.2"; in
 
-stdenv.mkDerivation rec {
-  name = "ppl-${version}";
+stdenv.mkDerivation {
+  pname = "ppl";
+  inherit version;
 
   src = fetchurl {
     url = "http://bugseng.com/products/ppl/download/ftp/releases/${version}/ppl-${version}.tar.bz2";
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
       version of the simplex algorithm.
     '';
 
-    homepage = http://bugseng.com/products/ppl/;
+    homepage = "http://bugseng.com/products/ppl/";
 
     license = stdenv.lib.licenses.gpl3Plus;
 

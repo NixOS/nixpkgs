@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An HTTP interface to Redland RDF store";
-    homepage = https://www.aelius.com/njh/redstore/;
+    homepage = "https://www.aelius.com/njh/redstore/";
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = with stdenv.lib.platforms;
       linux ++ freebsd ++ gnu;

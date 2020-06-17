@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "darkice-${version}";
+  pname = "darkice";
   version = "1.3";
 
   src = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://darkice.org/;
+    homepage = "http://darkice.org/";
     description = "Live audio streamer";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ ikervagyok fpletz ];

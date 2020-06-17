@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, which, procps, kbd }:
 
-stdenv.mkDerivation rec {
-  name = "logkeys-${version}";
+stdenv.mkDerivation {
+  pname = "logkeys";
   version = "2018-01-22";
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A GNU/Linux keylogger that works!";
     license = licenses.gpl3;
-    homepage = https://github.com/kernc/logkeys;
+    homepage = "https://github.com/kernc/logkeys";
     maintainers = with maintainers; [mikoim offline];
     platforms = platforms.linux;
   };

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libX11 }:
 
-stdenv.mkDerivation rec {
-  name = "runningx-${version}";
+stdenv.mkDerivation {
+  pname = "runningx";
   version = "1.0";
   
   src = fetchurl {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.fiction.net/blong/programs/mutt/;
+    homepage = "http://www.fiction.net/blong/programs/mutt/";
     description = "A program for testing if X is running";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;

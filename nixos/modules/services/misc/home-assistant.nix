@@ -11,6 +11,9 @@ let
     (recursiveUpdate defaultConfig cfg.config) else cfg.config));
   configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
+    # Hack to support custom yaml objects,
+    # i.e. secrets: https://www.home-assistant.io/docs/configuration/secrets/
+    sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
   '';
 
   lovelaceConfigJSON = pkgs.writeText "ui-lovelace.json"
@@ -93,14 +96,33 @@ in {
 
     config = mkOption {
       default = null;
-      type = with types; nullOr attrs;
+      # Migrate to new option types later: https://github.com/NixOS/nixpkgs/pull/75584
+      type =  with lib.types; let
+          valueType = nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            (lazyAttrsOf valueType)
+            (listOf valueType)
+          ]) // {
+            description = "Yaml value";
+            emptyValue.value = {};
+          };
+        in valueType;
       example = literalExample ''
         {
           homeassistant = {
             name = "Home";
+            latitude = "!secret latitude";
+            longitude = "!secret longitude";
+            elevation = "!secret elevation";
+            unit_system = "metric";
             time_zone = "UTC";
           };
-          frontend = { };
+          frontend = {
+            themes = "!include_dir_merge_named themes";
+          };
           http = { };
           feedreader.urls = [ "https://nixos.org/blogs.xml" ];
         }
@@ -108,6 +130,8 @@ in {
       description = ''
         Your <filename>configuration.yaml</filename> as a Nix attribute set.
         Beware that setting this option will delete your previous <filename>configuration.yaml</filename>.
+        <link xlink:href="https://www.home-assistant.io/docs/configuration/secrets/">Secrets</link>
+        are encoded as strings as shown in the example.
       '';
     };
 
@@ -224,6 +248,7 @@ in {
         KillSignal = "SIGINT";
         PrivateTmp = true;
         RemoveIPC = true;
+        AmbientCapabilities = "cap_net_raw,cap_net_admin+eip";
       };
       path = [
         "/run/wrappers" # needed for ping
@@ -241,6 +266,7 @@ in {
       home = cfg.configDir;
       createHome = true;
       group = "hass";
+      extraGroups = [ "dialout" ];
       uid = config.ids.uids.hass;
     };
 

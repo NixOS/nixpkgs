@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gxemul-${version}";
+  pname = "gxemul";
   version = "0.6.0.1";
 
   src = fetchurl {
-    url = "http://gxemul.sourceforge.net/src/${name}.tar.gz";
+    url = "http://gxemul.sourceforge.net/src/${pname}-${version}.tar.gz";
     sha256 = "1afd9l0igyv7qgc0pn3rkdgrl5d0ywlyib0qhg4li23zilyq5407";
   };
 
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin;
-    mkdir -p $out/share/${name};
+    mkdir -p $out/share/${pname}-${version};
     cp gxemul $out/bin;
-    cp -r doc $out/share/${name};
-    cp -r demos $out/share/${name};
+    cp -r doc $out/share/${pname}-${version};
+    cp -r demos $out/share/${pname}-${version};
     cp -r ./man $out/;
   '';
 
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
       and serial controllers. The emulation is working well enough to
       allow several unmodified "guest" operating systems to run.
     '';
-    homepage = http://gxemul.sourceforge.net/;
+    homepage = "http://gxemul.sourceforge.net/";
   };
 }

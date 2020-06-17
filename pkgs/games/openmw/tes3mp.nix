@@ -1,102 +1,83 @@
-{ stdenv, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg, boost, cmake, SDL2, unshield, openal
-, libXt, writeScriptBin, makeWrapper, ncurses, libGL, luajit }:
+{ stdenv, cmake, openmw, fetchFromGitHub, luajit, makeWrapper }:
+
+# revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
 
 let
-  version = "0.7.0-alpha";
-  TES3MP = fetchFromGitHub {
-    owner = "TES3MP";
-    repo = "openmw-tes3mp";
-    rev = version;
-    sha256 = "012f50f9jd29qcdww2vk4habg6pmxvxl0q6rrjq8xchb0566712q";
-  };
-  CallFF = fetchFromGitHub {
-    owner = "Koncord";
-    repo = "CallFF";
-    rev = "da94b59ffe95d45bf98b9264e3d1279c9f6ebb6b";
-    sha256 = "10wgiqmknh0av968c6r74n5n2izxsx8qawfrab57kkmj9h0zp0pm";
-  };
-  CrabNet = fetchFromGitHub {
+  # TES3MP_STABLE_VERSION_FILE
+  compatHash = "292536439eeda58becdb7e441fe2e61ebb74529e";
+  rakNet = fetchFromGitHub {
     owner = "TES3MP";
     repo = "CrabNet";
-    rev = "ab1306050fe0f5b0f9c4f56893a79e56a9459567";
-    sha256 = "03q76pjv9mdi7w832b23q1mj4r2wb0hsnh4kpvwai607g04l0pp0";
+    # usually fixed:
+    # https://github.com/GrimKriegor/TES3MP-deploy/blob/d2a4a5d3acb64b16d9b8ca85906780aeea8d311b/tes3mp-deploy.sh#L589
+    rev = "4eeeaad2f6c11aeb82070df35169694b4fb7b04b";
+    sha256 = "0p0li9l1i5lcliswm5w9jql0zff9i6fwhiq0bl130m4i7vpr4cr3";
   };
-  CoreScripts = fetchFromGitHub {
+  rakNetLibrary = stdenv.mkDerivation {
+    name = "RakNetLibrary";
+    src = rakNet;
+    nativeBuildInputs = [ cmake ];
+    installPhase = ''
+      install -Dm755 lib/libRakNetLibStatic.a $out/lib/libRakNetLibStatic.a
+    '';
+  };
+  coreScripts = fetchFromGitHub {
     owner = "TES3MP";
     repo = "CoreScripts";
-    rev = "1e9f69f98051b2639b18203f989ffbd0a4b427ea";
-    sha256 = "03ysi7rh0k78kv4slvmkxpymxvdpr8b6hwr1lvjdgq7rq0ljy0lg";
+    # usually latest in stable branch (e.g. 0.7.0)
+    rev = "24aae91d9ddad38cdb3b0e0a13af59f142803e94";
+    sha256 = "1rfmxxr9ircfagdpbdrzl26msdhx1i3g974cblbv69078cradfh3";
   };
-
-  fakegit = writeScriptBin "git" ''
-    #! ${stdenv.shell}
-  '';
-in stdenv.mkDerivation rec {
-  inherit version;
-  name = "tes3mp-${version}";
+in openmw.overrideAttrs (oldAttrs: rec {
+  version = "2019-11-19";
+  name = "openmw-tes3mp-${version}";
 
   src = fetchFromGitHub {
-    owner = "GrimKriegor";
-    repo = "TES3MP-deploy";
-    rev = "1dd78a3e2cf9f4fe85bf7ca9c393251968a9c325";
-    sha256 = "1bp9c4kds9q0xhbn4sxb7n0f6rvb45gzx7ljdgc56wz4j5rfi3xn";
+    owner = "TES3MP";
+    repo = "openmw-tes3mp";
+    # usually latest in stable branch (e.g. 0.7.0)
+    rev = "ad9ee80641a3e22d0780daca051df7f4e90f3615";
+    sha256 = "03a1vldiv5lk7yq6lhicx3qz8hjfxhind2dj0w9lg5839ljyk6jv";
   };
 
-  dontUseCmakeConfigure = true;
+  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];
+  buildInputs = oldAttrs.buildInputs ++ [ luajit ];
 
-  nativeBuildInputs = [ cmake makeWrapper fakegit ];
-  buildInputs = [ boost ffmpeg qtbase bullet mygui openscenegraph SDL2 unshield openal libXt
-    ncurses libGL luajit ];
+  cmakeFlags = oldAttrs.cmakeFlags ++ [
+    "-DBUILD_OPENCS=OFF"
+    "-DRakNet_INCLUDES=${rakNet}/include"
+    "-DRakNet_LIBRARY_RELEASE=${rakNetLibrary}/lib/libRakNetLibStatic.a"
+    "-DRakNet_LIBRARY_DEBUG=${rakNetLibrary}/lib/libRakNetLibStatic.a"
+  ];
 
-  buildPhase = ''
-    mkdir dependencies keepers
-    cp --no-preserve=mode -r ${TES3MP} code
-    cp --no-preserve=mode -r ${CallFF} dependencies/callff
-    cp --no-preserve=mode -r ${CrabNet} dependencies/raknet
-    cp --no-preserve=mode -r ${CoreScripts} keepers/CoreScripts
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=95175
+  patches = [
+    ./tes3mp.patch
+  ];
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
-    substituteInPlace tes3mp-deploy.sh \
-      --replace "-DBUILD_OPENCS=OFF" "-DBUILD_OPENCS=OFF -DCMAKE_INSTALL_PREFIX=$out"
-    patchShebangs tes3mp-deploy.sh
-    echo y | ./tes3mp-deploy.sh -i -c $NIX_BUILD_CORES
+  preConfigure = ''
+    substituteInPlace files/version.in \
+      --subst-var-by OPENMW_VERSION_COMMITHASH ${compatHash}
   '';
 
-  installPhase = ''
-    prefix=$out/opt/tes3mp
-    mkdir -p $prefix/build $out/etc/openmw $out/bin
-    for i in build/*; do
-      if [ -f "$i" ] && [ -x "$i" ]; then
-        mv "$i" $prefix/build
-      fi
-    done
-    mv build/resources $prefix/build
-    mv build/{settings-default.cfg,openmw.cfg,gamecontrollerdb.txt} $out/etc/openmw
-    mv keepers $prefix
-    mv build/tes3mp-credits.md $prefix/build
-    mv -f $prefix/keepers/version $prefix/build/resources
-
-    for i in tes3mp.sh tes3mp-browser.sh tes3mp-server.sh
-    do
-      bin="$out/bin/''${i%.sh}"
-      mv $i $bin
-      substituteInPlace $bin \
-        --replace build/ $prefix/build/
-      chmod +x $bin
-    done
-    ln -s $prefix/keepers/*.cfg $out/etc/openmw/
-
+  postInstall = ''
+    # components/process/processinvoker.cpp: path.prepend(QLatin1String("./"))
+    wrapProgram $out/bin/tes3mp-browser \
+      --run "cd $out/bin"
     wrapProgram $out/bin/tes3mp-server \
       --run "mkdir -p ~/.config/openmw" \
       --run "cd ~/.config/openmw" \
-      --run "[ -d CoreScripts ] || cp --no-preserve=mode -r $prefix/keepers/CoreScripts ." \
-      --run "[ -f tes3mp-server.cfg ] || echo \"[Plugins] home = \$HOME/.config/openmw/CoreScripts\" > tes3mp-server.cfg"
+      --run "[ -d CoreScripts ] || cp --no-preserve=mode -r ${coreScripts} CoreScripts" \
+      --run "[ -f tes3mp-server.cfg ] || echo \"[Plugins] home = \$HOME/.config/openmw/CoreScripts\" > tes3mp-server.cfg" \
+      --run "cd $out/bin"
   '';
 
   meta = with stdenv.lib; {
     description = "Multiplayer for TES3:Morrowind based on OpenMW";
     homepage = "https://tes3mp.com/";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ gnidorah ];
   };
-}
+})

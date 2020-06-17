@@ -15,8 +15,8 @@ in fetchurl {
       and provides elegant APIs around the clumsy interfaces
       of Ajax and the Document Object Model.
     '';
-    homepage = http://prototypejs.org/;
-    downloadPage = http://prototypejs.org/download/;
+    homepage = "http://prototypejs.org/";
+    downloadPage = "http://prototypejs.org/download/";
     license = licenses.mit;
     maintainers = with maintainers; [ das_j ];
   };

@@ -1,7 +1,7 @@
 { stdenv, fetchgit, glib, pkgconfig, python, scons }:
 
-stdenv.mkDerivation rec {
-  name = "hammer-${version}";
+stdenv.mkDerivation {
+  pname = "hammer";
   version = "e7aa734";
 
   src = fetchgit {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       character-oriented, making it ideal for parsing binary data such
       as images, network packets, audio, and executables.
     '';
-    homepage = https://github.com/UpstandingHackers/hammer;
+    homepage = "https://github.com/UpstandingHackers/hammer";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

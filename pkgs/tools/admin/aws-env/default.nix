@@ -3,7 +3,6 @@
 buildGoPackage rec {
   pname = "aws-env";
   version = "0.4";
-  name = "${pname}-${version}";
   rev = "v${version}";
 
   goPackagePath = "github.com/Droplr/aws-env";

@@ -2,7 +2,7 @@
         xmlns:xlink="http://www.w3.org/1999/xlink"
         xmlns:xi="http://www.w3.org/2001/XInclude"
         version="5.0"
-        xml:id="sec-running-nixos-tests">
+        xml:id="sec-running-nixos-tests-interactively">
  <title>Running Tests interactively</title>
 
  <para>
@@ -14,14 +14,14 @@
 starting VDE switch for network 1
 <prompt>&gt;</prompt>
 </screen>
-  You can then take any Perl statement, e.g.
+  You can then take any Python statement, e.g.
 <screen>
-<prompt>&gt;</prompt> startAll
-<prompt>&gt;</prompt> testScript
-<prompt>&gt;</prompt> $machine->succeed("touch /tmp/foo")
-<prompt>&gt;</prompt> print($machine->succeed("pwd")) # Show stdout of command
+<prompt>&gt;</prompt> start_all()
+<prompt>&gt;</prompt> test_script()
+<prompt>&gt;</prompt> machine.succeed("touch /tmp/foo")
+<prompt>&gt;</prompt> print(machine.succeed("pwd")) # Show stdout of command
 </screen>
-  The function <command>testScript</command> executes the entire test script
+  The function <command>test_script</command> executes the entire test script
   and drops you back into the test driver command line upon its completion.
   This allows you to inspect the state of the VMs after the test (e.g. to debug
   the test script).

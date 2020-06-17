@@ -14,7 +14,7 @@ index 34a25e3..3d94135 100644
  
 -        set -g -x $key $value
 +        if contains $key $ignore
-+          set -g -x $key $value ^/dev/null
++          set -g -x $key $value 2>/dev/null
 +        else
 +          set -g -x $key $value
 +        end

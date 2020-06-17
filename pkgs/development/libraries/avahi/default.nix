@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ./no-mkdir-localstatedir.patch
     (fetchpatch {
       name ="CVE-2017-6519-CVE-2018-100084.patch";
-      url = https://github.com/lathiat/avahi/commit/e111def44a7df4624a4aa3f85fe98054bffb6b4f.patch;
+      url = "https://github.com/lathiat/avahi/commit/e111def44a7df4624a4aa3f85fe98054bffb6b4f.patch";
       sha256 = "06n7b7kz6xcc35c7xjfc1kj3k2llyjgi09nhy0ci32l1bhacjw0q";
     })
   ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-mono"
-      "--disable-gtk"
+      "--disable-gtk" "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
       (stdenv.lib.enableFeature gtk3Support "gtk3")
       "--${if qt4Support then "enable" else "disable"}-qt4"
       (stdenv.lib.enableFeature withPython "python")
@@ -70,10 +70,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "mDNS/DNS-SD implementation";
-    homepage    = http://avahi.org;
+    homepage    = "http://avahi.org";
     license     = licenses.lgpl2Plus;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 globin ];
 
     longDescription = ''
       Avahi is a system which facilitates service discovery on a local

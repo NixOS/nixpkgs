@@ -1,62 +1,57 @@
-{ stdenv, libarchive, patchelf, zlib, buildFHSUserEnv, writeScript }:
+{ stdenv
+, bash
+, binutils-unwrapped
+, coreutils
+, gawk
+, libarchive
+, pv
+, squashfsTools
+, buildFHSUserEnv
+, pkgs
+}:
 
 rec {
-  # Both extraction functions could be unified, but then
-  # it would depend on libmagic to correctly identify ISO 9660s
-
-  extractType1 = { name, src }: stdenv.mkDerivation {
-    name = "${name}-extracted";
-    inherit src;
-
-    nativeBuildInputs = [ libarchive ];
-    buildCommand = ''
-      mkdir $out
-      bsdtar -x -C $out -f $src
-    '';
+  appimage-exec = pkgs.substituteAll {
+    src = ./appimage-exec.sh;
+    isExecutable = true;
+    dir = "bin";
+    path = with pkgs; stdenv.lib.makeBinPath [
+      bash
+      binutils-unwrapped
+      coreutils
+      gawk
+      libarchive
+      pv
+      squashfsTools
+    ];
   };
 
-  extractType2 = { name, src }: stdenv.mkDerivation {
-    name = "${name}-extracted";
-    inherit src;
-
-    nativeBuildInputs = [ patchelf ];
-    buildCommand = ''
-      install $src ./appimage
-      patchelf \
-        --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-        --replace-needed libz.so.1 ${zlib}/lib/libz.so.1 \
-        ./appimage
-
-      ./appimage --appimage-extract
-
-      cp -rv squashfs-root $out
+  extract = { name, src }: pkgs.runCommand "${name}-extracted" {
+      buildInputs = [ appimage-exec ];
+    } ''
+      appimage-exec.sh -x $out ${src}
     '';
-  };
 
-  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
-    inherit name;
+  # for compatibility, deprecated
+  extractType1 = extract;
+  extractType2 = extract;
+  wrapType1 = wrapType2;
 
-    targetPkgs = pkgs: defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
+  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv
+    (defaultFhsEnvArgs // {
+      inherit name;
 
-    runScript = writeScript "run" ''
-      #!${stdenv.shell}
+      targetPkgs = pkgs: [ appimage-exec ]
+        ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
-      export APPDIR=${src}
-      export APPIMAGE_SILENT_INSTALL=1
-      cd $APPDIR
-      exec ./AppRun "$@"
-    '';
-  } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
+      runScript = "appimage-exec.sh -w ${src}";
+    } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
-  wrapType1 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
-    inherit name extraPkgs;
-    src = extractType1 { inherit name src; };
-  });
-
-  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
-    inherit name extraPkgs;
-    src = extractType2 { inherit name src; };
-  });
+  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
+    (args // {
+      inherit name extraPkgs;
+      src = extract { inherit name src; };
+    });
 
   defaultFhsEnvArgs = {
     name = "appimage-env";
@@ -97,7 +92,7 @@ rec {
       gtk2
       bzip2
       zlib
-      gdk_pixbuf
+      gdk-pixbuf
 
       xorg.libXinerama
       xorg.libXdamage
@@ -185,10 +180,12 @@ rec {
       keyutils.lib
       libjack2
       fribidi
+      p11-kit
 
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
+      at-spi2-core
     ];
   };
 }

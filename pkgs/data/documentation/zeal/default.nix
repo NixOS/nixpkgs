@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig
-, qtbase, qtimageformats, qtwebkit, qtx11extras
+, qtbase, qtimageformats, qtwebkit, qtx11extras, mkDerivation
 , libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
 
-stdenv.mkDerivation rec {
-  name = "zeal-${version}";
+mkDerivation rec {
+  pname = "zeal";
   version = "0.6.1";
 
   src = fetchFromGitHub {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Zeal is a simple offline API documentation browser inspired by Dash (macOS
       app), available for Linux and Windows.
     '';
-    homepage    = https://zealdocs.org/;
+    homepage    = "https://zealdocs.org/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ skeidel peterhoeg ];
     platforms   = platforms.linux;

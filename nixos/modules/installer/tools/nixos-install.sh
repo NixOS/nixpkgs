@@ -14,6 +14,7 @@ extraBuildFlags=()
 mountPoint=/mnt
 channelPath=
 system=
+verbosity=()
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -55,6 +56,9 @@ while [ "$#" -gt 0 ]; do
         --debug)
             set -x
             ;;
+        -v*|--verbose)
+            verbosity+=("$i")
+            ;;
         *)
             echo "$0: unknown option \`$i'"
             exit 1
@@ -83,8 +87,11 @@ if [[ ! -e $NIXOS_CONFIG && -z $system ]]; then
 fi
 
 # A place to drop temporary stuff.
+tmpdir="$(mktemp -d -p $mountPoint)"
 trap "rm -rf $tmpdir" EXIT
-tmpdir="$(mktemp -d)"
+
+# store temporary files on target filesystem by default
+export TMPDIR=${TMPDIR:-$tmpdir}
 
 sub="auto?trusted=1"
 
@@ -92,9 +99,9 @@ sub="auto?trusted=1"
 if [[ -z $system ]]; then
     echo "building the configuration in $NIXOS_CONFIG..."
     outLink="$tmpdir/system"
-    nix build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
+    nix-build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
-        -f '<nixpkgs/nixos>' system -I "nixos-config=$NIXOS_CONFIG"
+        '<nixpkgs/nixos>' -A system -I "nixos-config=$NIXOS_CONFIG" ${verbosity[@]}
     system=$(readlink -f $outLink)
 fi
 
@@ -103,7 +110,7 @@ fi
 # a progress bar.
 nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
-        -p $mountPoint/nix/var/nix/profiles/system --set "$system"
+        -p $mountPoint/nix/var/nix/profiles/system --set "$system" ${verbosity[@]}
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
 # of the NixOS channel.
@@ -115,7 +122,8 @@ if [[ -z $noChannelCopy ]]; then
         echo "copying channel..."
         mkdir -p $mountPoint/nix/var/nix/profiles/per-user/root
         nix-env --store "$mountPoint" "${extraBuildFlags[@]}" --extra-substituters "$sub" \
-                -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet
+                -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet \
+                ${verbosity[@]}
         install -m 0700 -d $mountPoint/root/.nix-defexpr
         ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
     fi

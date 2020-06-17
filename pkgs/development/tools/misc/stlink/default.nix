@@ -1,20 +1,25 @@
-{ stdenv, fetchurl, cmake, libusb1 }:
-
-# IMPORTANT: You need permissions to access the stlink usb devices. 
-# Add services.udev.pkgs = [ pkgs.stlink ] to your configuration.nix
+{ stdenv, fetchFromGitHub, cmake, libusb1 }:
 
 let
-  version = "1.3.0";
-in
-stdenv.mkDerivation {
-  name = "stlink-${version}";
+  # The Darwin build of stlink explicitly refers to static libusb.
+  libusb1' = if stdenv.isDarwin then libusb1.override { withStatic = true; } else libusb1;
 
-  src = fetchurl {
-    url = "https://github.com/texane/stlink/archive/${version}.tar.gz";
-    sha256 = "3e8cba21744d2c38a0557f6835a05189e1b98202931bb0183d22efc462c893dd";
+# IMPORTANT: You need permissions to access the stlink usb devices.
+# Add services.udev.pkgs = [ pkgs.stlink ] to your configuration.nix
+
+in stdenv.mkDerivation rec {
+  pname = "stlink";
+  version = "1.6.0";
+
+  src = fetchFromGitHub {
+    owner = "texane";
+    repo = "stlink";
+    rev = "v${version}";
+    sha256 = "1mlkrxjxg538335g59hjb0zc739dx4mhbspb26z5gz3lf7d4xv6x";
   };
 
-  buildInputs = [ cmake libusb1 ];
+  buildInputs = [ libusb1' ];
+  nativeBuildInputs = [ cmake ];
   patchPhase = ''
     sed -i 's@/etc/udev/rules.d@$ENV{out}/etc/udev/rules.d@' CMakeLists.txt
     sed -i 's@/etc/modprobe.d@$ENV{out}/etc/modprobe.d@' CMakeLists.txt

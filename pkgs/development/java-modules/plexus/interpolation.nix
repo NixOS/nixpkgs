@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   plexusInterpolation_1_11 = map (obj: fetchMaven {
     version = "1.11";
     artifactId = "plexus-interpolation";

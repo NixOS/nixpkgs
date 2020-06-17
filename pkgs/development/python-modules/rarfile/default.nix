@@ -6,7 +6,7 @@
 assert useUnrar -> unrar != null;
 assert !useUnrar -> libarchive != null;
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rarfile";
   version = "3.0";
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "RAR archive reader for Python";
-    homepage = https://github.com/markokr/rarfile;
+    homepage = "https://github.com/markokr/rarfile";
     license = licenses.isc;
   };
 }

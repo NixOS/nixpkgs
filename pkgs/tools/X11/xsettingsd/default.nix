@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, scons, pkgconfig, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "xsettingsd-${version}";
+  pname = "xsettingsd";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Provides settings to X11 applications via the XSETTINGS specification";
-    homepage = https://github.com/derat/xsettingsd;
+    homepage = "https://github.com/derat/xsettingsd";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

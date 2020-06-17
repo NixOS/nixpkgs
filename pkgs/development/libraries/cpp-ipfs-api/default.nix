@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, curl, cmake, nlohmann_json }:
 
-stdenv.mkDerivation rec {
-  name = "cpp-ipfs-api-${version}";
+stdenv.mkDerivation {
+  pname = "cpp-ipfs-api";
   version = "2017-01-04";
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "IPFS C++ API client library";
-    homepage = https://github.com/vasild/cpp-ipfs-api;
+    homepage = "https://github.com/vasild/cpp-ipfs-api";
     license = licenses.mit;
     platforms = platforms.all;
   };

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.2";
-  name = "japa-${version}";
+  pname = "japa";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1zmi4wg23hwsypg3h6y3qb72cbrihqcs19qrbzgs5a67d13q4897";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A 'perceptual' or 'psychoacoustic' audio spectrum analyser for JACK and ALSA";
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/index.html;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

@@ -1,7 +1,7 @@
 {stdenv, buildOcamlJane,
  ppx_core, ppx_driver, ppx_sexp_conv, ppx_tools}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "ppx_custom_printf";
   hash = "06y85m6ky376byja4w7gdwd339di5ag0xrf0czkylzjsnylhdr85";
 

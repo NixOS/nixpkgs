@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Exclude specific files and directories from nosetests runs";
-    homepage = https://github.com/jakubroztocil/nose-pattern-exclude;
+    homepage = "https://github.com/jakubroztocil/nose-pattern-exclude";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jluttine ];
   };

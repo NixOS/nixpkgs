@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, asciidoctor, gawk, gnused, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "esh-${version}";
+  pname = "esh";
   version = "0.1.1";
 
   src = fetchFromGitHub {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple templating engine based on shell";
-    homepage = https://github.com/jirutka/esh;
+    homepage = "https://github.com/jirutka/esh";
     license = licenses.mit;
     maintainers = with maintainers; [ mnacamura ];
     platforms = platforms.unix;

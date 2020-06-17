@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "urbit-${version}";
+  pname = "urbit";
   version = "0.7.3";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An operating function";
-    homepage = https://urbit.org;
+    homepage = "https://urbit.org";
     license = licenses.mit;
     maintainers = with maintainers; [ mudri ];
     platforms = with platforms; linux;

@@ -2,7 +2,7 @@
 , gitSupport ? false, git ? null
 , docutilsSupport ? false, python ? null, docutils ? null
 , monotoneSupport ? false, monotone ? null
-, bazaarSupport ? false, bazaar ? null
+, bazaarSupport ? false, breezy ? null
 , cvsSupport ? false, cvs ? null, cvsps ? null
 , subversionSupport ? false, subversion ? null
 , mercurialSupport ? false, mercurial ? null
@@ -12,14 +12,14 @@
 assert docutilsSupport -> (python != null && docutils != null);
 assert gitSupport -> (git != null);
 assert monotoneSupport -> (monotone != null);
-assert bazaarSupport -> (bazaar != null);
+assert bazaarSupport -> (breezy != null);
 assert cvsSupport -> (cvs != null && cvsps != null && perlPackages.Filechdir != null);
 assert subversionSupport -> (subversion != null);
 assert mercurialSupport -> (mercurial != null);
 
 let
   name = "ikiwiki";
-  version = "3.20170111";
+  version = "3.20190228";
 
   lib = stdenv.lib;
 in
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/i/ikiwiki/${name}_${version}.tar.xz";
-    sha256 = "00d7yzv426fvqbhvzyafddv7fa6b4j2647b0wi371wd5yjj9j3sz";
+    url = "mirror://debian/pool/main/i/ikiwiki/${name}_${version}.orig.tar.xz";
+    sha256 = "17pyblaqhkb61lxl63bzndiffism8k859p54k3k4sghclq6lsynh";
   };
 
   buildInputs = [ which ]
@@ -39,12 +39,16 @@ stdenv.mkDerivation {
     ++ lib.optionals docutilsSupport [python docutils]
     ++ lib.optionals gitSupport [git]
     ++ lib.optionals monotoneSupport [monotone]
-    ++ lib.optionals bazaarSupport [bazaar]
+    ++ lib.optionals bazaarSupport [breezy]
     ++ lib.optionals cvsSupport [cvs cvsps perlPackages.Filechdir]
     ++ lib.optionals subversionSupport [subversion]
     ++ lib.optionals mercurialSupport [mercurial];
 
-  patchPhase = ''
+  # A few markdown tests fail, but this is expected when using Text::Markdown
+  # instead of Text::Markdown::Discount.
+  patches = [ ./remove-markdown-tests.patch ];
+
+  postPatch = ''
     sed -i s@/usr/bin/perl@${perlPackages.perl}/bin/perl@ pm_filter mdwn2man
     sed -i s@/etc/ikiwiki@$out/etc@ Makefile.PL
     sed -i /ENV{PATH}/d ikiwiki.in
@@ -60,7 +64,7 @@ stdenv.mkDerivation {
       wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perlPackages.perl}/bin:$out/bin \
       ${lib.optionalString gitSupport ''--prefix PATH : ${git}/bin \''}
       ${lib.optionalString monotoneSupport ''--prefix PATH : ${monotone}/bin \''}
-      ${lib.optionalString bazaarSupport ''--prefix PATH : ${bazaar}/bin \''}
+      ${lib.optionalString bazaarSupport ''--prefix PATH : ${breezy}/bin \''}
       ${lib.optionalString cvsSupport ''--prefix PATH : ${cvs}/bin \''}
       ${lib.optionalString cvsSupport ''--prefix PATH : ${cvsps}/bin \''}
       ${lib.optionalString subversionSupport ''--prefix PATH : ${subversion.out}/bin \''}
@@ -79,10 +83,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
-    homepage = http://ikiwiki.info/;
+    homepage = "http://ikiwiki.info/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.peti ];
-    broken = true; # https://ikiwiki.info/bugs/imagemagick_6.9.8_test_suite_failure/
   };
 }

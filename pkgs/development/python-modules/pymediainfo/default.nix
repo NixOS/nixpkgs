@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pymediainfo";
-  version = "4.0";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yjs208c34p2xsc0r8vbi264ii5hixh546718n06b7v670glqjir";
+    sha256 = "0vg2icmsc44k1ra898rjfp912xijsn96s0zplax6w13lpzb9jb9r";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python wrapper for the mediainfo library";
-    homepage = https://github.com/sbraz/pymediainfo;
+    homepage = "https://github.com/sbraz/pymediainfo";
     license = licenses.mit;
     maintainers = with maintainers; [ jfrankenau ];
   };

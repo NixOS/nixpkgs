@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, sqlite, luajit
-, freetype, gettext, doxygen, ncurses, graphviz, xorg
-, leveldb, postgresql, hiredis
+, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
+, freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
+, leveldb, postgresql, hiredis, libiconv, OpenGL, OpenAL ? openal, Carbon, Cocoa
 }:
 
 with stdenv.lib;
@@ -24,7 +24,8 @@ let
       };
     };
   in stdenv.mkDerivation {
-    name = "minetest-${version}";
+    pname = "minetest";
+    inherit version;
 
     src = sources.src;
 
@@ -38,16 +39,19 @@ let
     ] ++ optionals buildClient [
       "-DOpenGL_GL_PREFERENCE=GLVND"
     ];
-
-    NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+    
+    NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
     nativeBuildInputs = [ cmake doxygen graphviz ];
 
     buildInputs = [
       irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
+      gmp libspatialindex
+    ] ++ optionals stdenv.isDarwin [ 
+      libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [
-      libpng libjpeg libGLU_combined openal libogg libvorbis xorg.libX11 libXxf86vm
-    ] ++ optional buildServer [
+      libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
+    ] ++ optionals buildServer [
       leveldb postgresql hiredis
     ];
 
@@ -57,10 +61,10 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://minetest.net/;
+      homepage = "http://minetest.net/";
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
       maintainers = with maintainers; [ pyrolagus fpletz ];
     };
   };
@@ -72,9 +76,9 @@ let
   };
 
   v5 = {
-    version = "5.0.1";
-    sha256 = "11i8fqjpdggqfdlx440k5758zy0nbf9phxan9r63mavc7mph88ay";
-    dataSha256 = "1hw3n7qqpasq6bivxhq01kr0d58w0gp46s0baxixp1fakd79p8a7";
+    version = "5.2.0";
+    sha256 = "0pj9hkxwc1vzng2khbixi79557sbawf6mqkzl589jciyqa7jqkv1";
+    dataSha256 = "1kjz7x3xiqqnpyrd6339a139pbdxx31c4qpg8pmns410hsm8i358";
   };
 
 in {

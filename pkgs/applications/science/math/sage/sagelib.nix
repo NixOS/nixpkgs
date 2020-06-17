@@ -3,7 +3,8 @@
 , perl
 , buildPythonPackage
 , arb
-, openblasCompat
+, blas
+, lapack
 , brial
 , cliquer
 , cypari2
@@ -52,6 +53,8 @@
 , pplpy
 }:
 
+assert (!blas.isILP64) && (!lapack.isILP64);
+
 # This is the core sage python package. Everything else is just wrappers gluing
 # stuff together. It is not very useful on its own though, since it will not
 # find many of its dependencies without `sage-env`, will not be tested without
@@ -60,7 +63,7 @@
 buildPythonPackage rec {
   format = "other";
   version = src.version;
-  name = "sagelib-${version}";
+  pname = "sagelib";
   src = sage-src;
 
   nativeBuildInputs = [
@@ -103,7 +106,8 @@ buildPythonPackage rec {
     m4rie
     mpfi
     ntl
-    openblasCompat
+    blas
+    lapack
     pari
     planarity
     ppl
@@ -138,8 +142,8 @@ buildPythonPackage rec {
     mkdir -p "$SAGE_SHARE/sage/ext/notebook-ipython"
     mkdir -p "var/lib/sage/installed"
 
+    source build/bin/sage-dist-helpers
     cd src
-    source bin/sage-dist-helpers
 
     ${python.interpreter} -u setup.py --no-user-cfg build
   '';

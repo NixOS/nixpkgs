@@ -4,7 +4,8 @@ let
   version = "22-1.1ubuntu1"; # Zesty
 
 in stdenv.mkDerivation {
-  name = "kmod-blacklist-${version}";
+  pname = "kmod-blacklist";
+  inherit version;
 
   src = fetchurl {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/kmod_${version}.debian.tar.xz";
@@ -30,7 +31,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://packages.ubuntu.com/source/zesty/kmod;
+    homepage = "https://packages.ubuntu.com/source/zesty/kmod";
     description = "Linux kernel module blacklists from Ubuntu";
     platforms = platforms.linux;
   };

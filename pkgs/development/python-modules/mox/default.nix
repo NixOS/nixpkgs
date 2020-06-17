@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/pymox/;
+    homepage = "https://pymox.readthedocs.io/";
     description = "A mock object framework for Python";
     license = licenses.asl20;
   };

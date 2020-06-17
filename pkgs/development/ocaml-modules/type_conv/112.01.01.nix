@@ -12,9 +12,9 @@ buildOcaml rec {
   };
 
   meta = {
-    homepage = https://github.com/janestreet/type_conv/;
+    homepage = "https://github.com/janestreet/type_conv/";
     description = "Support library for preprocessor type conversions";
     license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ z77z ericbmerritt ];
+    maintainers = with stdenv.lib.maintainers; [ maggesi ericbmerritt ];
   };
 }

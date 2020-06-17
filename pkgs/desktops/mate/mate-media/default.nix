@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libtool, libxml2, libcanberra-gtk3, gtk3, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, libtool, libxml2, libcanberra-gtk3, gtk3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-media-${version}";
-  version = "1.22.1";
+  pname = "mate-media";
+  version = "1.24.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "13g1n2ddgr1yxgl4fsqj3sgb9344b756kam9v3sq6vh0bxlr4yf2";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1d5dx79yfqghjaxrdrdh053nfnvkbx8p3ma7j87s7rsvy5irs963";
   };
 
   buildInputs = [
@@ -20,14 +20,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     libtool
     wrapGAppsHook
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Media tools for MATE";
-    homepage = https://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo maintainers.chpatrick ];

@@ -26,12 +26,12 @@ in
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libinput-${version}";
-  version = "1.13.2";
+  pname = "libinput";
+  version = "1.15.5";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/libinput/${name}.tar.xz";
-    sha256 = "0vbapc90m49n0z8w8w4v0qf1iiwaixw9h79jfmps9pj8hdls17qx";
+    url = "https://www.freedesktop.org/software/libinput/${pname}-${version}.tar.xz";
+    sha256 = "15ww4jl3lcxyi8m8idg8canklbqv729gnwpkz7r98c1w8a7zq3m9";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -40,16 +40,17 @@ stdenv.mkDerivation rec {
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
+    "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
 
   nativeBuildInputs = [ pkgconfig meson ninja ]
-    ++ optionals documentationSupport [ doxygen graphviz sphinx-build ]
-    ++ optionals testsSupport [ valgrind ];
+    ++ optionals documentationSupport [ doxygen graphviz sphinx-build ];
 
-  buildInputs = [ libevdev mtdev libwacom (python3.withPackages (pkgs: with pkgs; [ evdev ])) ]
-    ++ optionals eventGUISupport [ cairo glib gtk3 ]
-    ++ optionals testsSupport [ check ];
+  buildInputs = [ libevdev mtdev libwacom ]
+    ++ optionals eventGUISupport [ cairo glib gtk3 ];
+
+  checkInputs = [ (python3.withPackages (pkgs: with pkgs; [ evdev ])) check valgrind ];
 
   propagatedBuildInputs = [ udev ];
 
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
-    homepage    = http://www.freedesktop.org/wiki/Software/libinput;
+    homepage    = "http://www.freedesktop.org/wiki/Software/libinput";
     license     = licenses.mit;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel ];

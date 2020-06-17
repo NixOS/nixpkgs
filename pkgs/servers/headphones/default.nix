@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2, makeWrapper }:
 
 python2.pkgs.buildPythonApplication rec {
-  name = "headphones-${version}";
+  pname = "headphones";
   version = "0.5.19";
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ python2.pkgs.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Automatic music downloader for SABnzbd";
     license     = licenses.gpl3;
-    homepage    = https:/github.com/rembo10/headphones;
+    homepage    = "https://github.com/rembo10/headphones";
     maintainers = with stdenv.lib.maintainers; [ rembo10 ];
   };
 }

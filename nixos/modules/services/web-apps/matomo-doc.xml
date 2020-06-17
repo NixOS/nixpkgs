@@ -86,12 +86,6 @@ GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
   <itemizedlist>
    <listitem>
     <para>
-     Matomo's file integrity check will warn you. This is due to the patches
-     necessary for NixOS, you can safely ignore this.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      Matomo will warn you that the JavaScript tracker is not writable. This is
      because it's located in the read-only nix store. You can safely ignore
      this, unless you need a plugin that needs JavaScript tracker access.
@@ -105,7 +99,7 @@ GRANT ALL PRIVILEGES ON matomo.* TO 'matomo'@'localhost';
   <para>
    You can use other web servers by forwarding calls for
    <filename>index.php</filename> and <filename>piwik.php</filename> to the
-   <literal>/run/phpfpm-matomo.sock</literal> fastcgi unix socket. You can use
+   <literal><link linkend="opt-services.phpfpm.pools._name_.socket">services.phpfpm.pools.&lt;name&gt;.socket</link></literal> fastcgi unix socket. You can use
    the nginx configuration in the module code as a reference to what else
    should be configured.
   </para>

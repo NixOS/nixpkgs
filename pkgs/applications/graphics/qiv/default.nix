@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation (rec {
   version = "2.3.2";
-  name = "qiv-${version}";
+  pname = "qiv";
 
   src = fetchurl {
-    url = "https://spiegl.de/qiv/download/${name}.tgz";
+    url = "https://spiegl.de/qiv/download/${pname}-${version}.tgz";
     sha256 = "1mc0f2nnas4q0d7zc9r6g4z93i32xlx0p9hl4fn5zkyml24a1q28";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation (rec {
 
   meta = with stdenv.lib; {
     description = "Quick image viewer";
-    homepage = http://spiegl.de/qiv/;
+    homepage = "http://spiegl.de/qiv/";
     inherit version;
     license = licenses.gpl2;
     platforms = platforms.linux;

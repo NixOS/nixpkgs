@@ -1,17 +1,17 @@
-{ stdenv, pkgconfig, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
+{ lib, pkgconfig, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "elan-${version}";
-  version = "0.7.5";
-
-  cargoSha256 = "0lc320m3vw76d6pa5wp6c9jblac6lmyf9qqnxmsnkn4ixdhnghsd";
+  pname = "elan";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "kha";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "1147f3lzr6lgvf580ppspn20bdwnf6l8idh1h5ana0p0lf5a0dn1";
+    sha256 = "0ycw1r364g5gwh8796dpv1israpg7zqwx8mcvnacv2lqj5iijmby";
   };
+
+  cargoSha256 = "0hcaiy046d2gnkp6sfpnkkprb3nd94i9q8dgqxxpwrc1j157x6z9";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     pushd $out/bin
     mv elan-init elan
-    for link in lean leanpkg leanchecker; do
+    for link in lean leanpkg leanchecker leanc leanmake; do
       ln -s elan $link
     done
     popd
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     $out/bin/elan completions zsh >  "$out/share/zsh/site-functions/_elan"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
     homepage = "https://github.com/Kha/elan";
     license = with licenses; [ asl20 /* or */ mit ];

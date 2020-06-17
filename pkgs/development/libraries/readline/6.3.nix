@@ -1,6 +1,6 @@
 { fetchurl, stdenv, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "readline-6.3p08";
 
   src = fetchurl {
@@ -12,13 +12,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ncurses];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
-  configureFlags =
-    stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    [ # This test requires running host code
-      "bash_cv_wcwidth_broken=no"
-    ];
+  configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    # This test requires running host code
+    "bash_cv_wcwidth_broken=no";
 
   patches =
     [ ./link-against-ncurses.patch
@@ -33,10 +31,6 @@ stdenv.mkDerivation rec {
          };
      in
        import ./readline-6.3-patches.nix patch);
-
-  # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-  bash_cv_func_sigsetjmp = if stdenv.isCygwin then "missing" else null;
 
   meta = with stdenv.lib; {
     description = "Library for interactive line editing";
@@ -56,7 +50,7 @@ stdenv.mkDerivation rec {
       desire its capabilities.
     '';
 
-    homepage = https://savannah.gnu.org/projects/readline/;
+    homepage = "https://savannah.gnu.org/projects/readline/";
 
     license = licenses.gpl3Plus;
 

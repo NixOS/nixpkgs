@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.21.0";
+  version = "2.23.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e";
+    sha256 = "1rhpg0jb08v0gd7f19jjiwlcdnxpmqi1fhvw7r4s9avddi4kvx5k";
   };
 
   nativeBuildInputs = [ pytest ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An Apache2 licensed HTTP library, written in Python, for human beings";
-    homepage = http://docs.python-requests.org/en/latest/;
+    homepage = "http://docs.python-requests.org/en/latest/";
     license = licenses.asl20;
   };
 }

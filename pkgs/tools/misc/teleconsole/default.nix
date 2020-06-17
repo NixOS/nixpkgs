@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "teleconsole-${version}";
+  pname = "teleconsole";
   version = "0.4.0";
 
   goPackagePath = "github.com/gravitational/teleconsole";
@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   CGO_ENABLED = 1;
-  buildFlags = "-ldflags";
+  buildFlags = [ "-ldflags" ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.teleconsole.com/";

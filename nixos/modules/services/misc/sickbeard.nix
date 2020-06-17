@@ -63,19 +63,19 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == name) (singleton {
-      name = name;
-      uid = config.ids.uids.sickbeard;
-      group = cfg.group;
-      description = "sickbeard user";
-      home = cfg.dataDir;
-      createHome = true;
-    });
+    users.users = optionalAttrs (cfg.user == name) {
+      ${name} = {
+        uid = config.ids.uids.sickbeard;
+        group = cfg.group;
+        description = "sickbeard user";
+        home = cfg.dataDir;
+        createHome = true;
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == name) (singleton {
-      name = name;
-      gid = config.ids.gids.sickbeard;
-    });
+    users.groups = optionalAttrs (cfg.group == name) {
+      ${name}.gid = config.ids.gids.sickbeard;
+    };
 
     systemd.services.sickbeard = {
       description = "Sickbeard Server";

@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library to handle keyboard descriptions";
-    homepage = https://xkbcommon.org;
+    homepage = "https://xkbcommon.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ttuegel ];
+    maintainers = with maintainers; [ ttuegel ];
     platforms = with platforms; unix;
   };
 }

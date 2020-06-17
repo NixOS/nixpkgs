@@ -39,8 +39,6 @@ let
         bindsTo = deps;
         after = deps;
         before = [ "network.target" ];
-        # Receive restart event after resume
-        partOf = [ "post-resume.target" ];
 
         path = [ pkgs.coreutils ];
 

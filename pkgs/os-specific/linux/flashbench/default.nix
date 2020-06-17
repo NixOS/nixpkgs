@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
-  name = "flashbench-${version}";
+stdenv.mkDerivation {
+  pname = "flashbench";
   version = "2012-06-06";
 
   src = fetchgit {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Testing tool for flash based memory devices";
-    homepage = https://github.com/bradfa/flashbench;
+    homepage = "https://github.com/bradfa/flashbench";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = [ maintainers.rycee ];

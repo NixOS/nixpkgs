@@ -17,7 +17,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris FFI binding for html5 canvas 2d api";
-    homepage = https://github.com/JinWuZhao/idriscanvas;
+    homepage = "https://github.com/JinWuZhao/idriscanvas";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

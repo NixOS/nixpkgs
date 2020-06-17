@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
-    rev = "${version}";
-    sha256 = "0xn2c31kcjh1j76gq1qrcxwjyjyqnsxygkfrvh3xk07qc92f99xd";
+    rev = version;
+    sha256 = "1qamls0fll0qc27lqavf56hv1yj6v6n4ry90g7bcnwpvccmd82yd";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   patches = [ ./0001-skip-mkdir.patch ];
 
   postPatch = ''
-    patchShebangs tests/test-integration
+    patchShebangs scripts tests
   '';
 
   mesonFlags = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Thunderbolt 3 device management daemon";
-    homepage = https://gitlab.freedesktop.org/bolt/bolt;
+    homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.callahad ];
     platforms = platforms.linux;

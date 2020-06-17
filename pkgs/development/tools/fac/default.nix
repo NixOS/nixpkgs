@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, git }:
 
 buildGoPackage rec {
-  name = "fac-${version}";
+  pname = "fac";
   version = "2.0.0";
 
   goPackagePath = "github.com/mkchoi212/fac";
@@ -18,7 +18,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram $bin/bin/fac \
+    wrapProgram $out/bin/fac \
       --prefix PATH : ${git}/bin
 
     # Install man page, not installed by default

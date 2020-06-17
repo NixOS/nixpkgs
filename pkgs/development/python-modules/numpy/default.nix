@@ -1,31 +1,51 @@
-{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile }:
+{ lib
+, fetchPypi
+, python
+, buildPythonPackage
+, gfortran
+, pytest
+, blas
+, lapack
+, writeTextFile
+, isPyPy
+, cython
+, setuptoolsBuildHook
+ }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
-  blasImplementation = lib.nameFromURL blas.name "-";
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {
-      "${blasImplementation}" = {
-        include_dirs = "${blas}/include";
+      ${blas.implementation} = {
+        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
+        library_dirs = "${blas}/lib:${lapack}/lib";
+        libraries = "lapack,lapacke,blas,cblas";
+      };
+      lapack = {
+        include_dirs = "${lib.getDev lapack}/include";
+        library_dirs = "${lapack}/lib";
+      };
+      blas = {
+        include_dirs = "${lib.getDev blas}/include";
         library_dirs = "${blas}/lib";
-      } // lib.optionalAttrs (blasImplementation == "mkl") {
-        mkl_libs = "mkl_rt";
-        lapack_libs = "";
       };
     });
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.16.4";
+  version = "1.18.5";
+  format = "pyproject.toml";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7242be12a58fec245ee9734e625964b97cf7e3f2f7d016603f9e56660ce479c7";
+    sha256 = "34e96e9dae65c4839bd80012023aadd6ee2ccb73ce7fdf3074c62f301e63120b";
   };
 
-  nativeBuildInputs = [ gfortran pytest ];
-  buildInputs = [ blas ];
+  nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
+  buildInputs = [ blas lapack ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -45,6 +65,8 @@ in buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
+
   checkPhase = ''
     runHook preCheck
     pushd dist
@@ -54,18 +76,19 @@ in buildPythonPackage rec {
   '';
 
   passthru = {
-    blas = blas;
-    inherit blasImplementation cfg;
+    # just for backwards compatibility
+    blas = blas.provider;
+    blasImplementation = blas.implementation;
+    inherit cfg;
   };
 
-  # Disable two tests
-  # - test_f2py: f2py isn't yet on path.
+  # Disable test
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_f2py,test_large_file_support";
+  NOSE_EXCLUDE="test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";
-    homepage = http://numpy.scipy.org/;
+    homepage = "https://numpy.org/";
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

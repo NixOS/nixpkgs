@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = https://editorconfig.org/;
+    homepage = "https://editorconfig.org/";
     description = "EditorConfig core library written in C";
     longDescription = ''
       EditorConfig makes it easy to maintain the correct coding style when
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       by those editors. For information on the file format and supported text
       editors, see the EditorConfig website.
     '';
-    downloadPage = https://github.com/editorconfig/editorconfig-core-c;
+    downloadPage = "https://github.com/editorconfig/editorconfig-core-c";
     license = with licenses; [ bsd2 bsd3 ];
     version = "0.12.1";
     maintainers = with maintainers; [ dochang ];

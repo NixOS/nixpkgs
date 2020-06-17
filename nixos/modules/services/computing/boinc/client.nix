@@ -99,22 +99,24 @@ in
       environment.systemPackages = [cfg.package];
 
       users.users.boinc = {
+        group = "boinc";
         createHome = false;
         description = "BOINC Client";
         home = cfg.dataDir;
         isSystemUser = true;
       };
+      users.groups.boinc = {};
 
       systemd.tmpfiles.rules = [
-        "d '${cfg.dataDir}' - boinc - - -"
+        "d '${cfg.dataDir}' - boinc boinc - -"
       ];
 
       systemd.services.boinc = {
         description = "BOINC Client";
-        after = ["network.target" "local-fs.target"];
+        after = ["network.target"];
         wantedBy = ["multi-user.target"];
         script = ''
-          ${fhsEnvExecutable} --dir ${cfg.dataDir} --redirectio ${allowRemoteGuiRpcFlag}
+          ${fhsEnvExecutable} --dir ${cfg.dataDir} ${allowRemoteGuiRpcFlag}
         '';
         serviceConfig = {
           User = "boinc";

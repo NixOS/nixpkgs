@@ -1,44 +1,56 @@
 { stdenv
-, pythonPackages
+, buildPythonApplication
+, fetchPypi
+# buildInputs
 , glibcLocales
+, pkginfo
+, check-manifest
+# propagatedBuildInputs
+, py
+, devpi-common
+, pluggy
+, setuptools
+# CheckInputs
+, pytest
+, pytest-flake8
+, webtest
+, mock
 , devpi-server
+, tox
+, sphinx
+, wheel
 , git
 , mercurial
-} :
+}:
 
-pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
+buildPythonApplication rec {
   pname = "devpi-client";
-  version = "4.1.0";
+  version = "5.2.0";
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "0f5jkvxx9fl8v5vwbwmplqhjsdfgiib7j3zvn0zxd8krvi2s38fq";
+    sha256 = "1y8r1pjav0gyrbnyqjnc202sa962n1gasi8233xj7jc39lv3iq40";
   };
 
-  checkInputs = with pythonPackages; [
-                    pytest pytest-flakes webtest mock
-                    devpi-server tox
-                    sphinx wheel git mercurial detox
-                    setuptools
-                    ];
+  buildInputs = [ glibcLocales pkginfo check-manifest ];
+
+  propagatedBuildInputs = [ py devpi-common pluggy setuptools ];
+
+  checkInputs = [
+    pytest pytest-flake8 webtest mock
+    devpi-server tox
+    sphinx wheel git mercurial
+  ];
+
+  # --fast skips tests which try to start a devpi-server improperly
   checkPhase = ''
-    export PATH=$PATH:$out/bin
-    export HOME=$TMPDIR # fix tests failing in sandbox due to "/homeless-shelter"
-
-    # setuptools do not get propagated into the tox call (cannot import setuptools)
-    rm testing/test_test.py
-
-    # test_pypi_index_attributes tries to connect to upstream pypi
-    py.test -k 'not test_pypi_index_attributes' testing
+    HOME=$TMPDIR py.test --fast
   '';
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = with pythonPackages; [ glibcLocales pkginfo check-manifest ];
-  propagatedBuildInputs = with pythonPackages; [ py devpi-common pluggy setuptools ];
 
   meta = with stdenv.lib; {
-    homepage = http://doc.devpi.net;
+    homepage = "http://doc.devpi.net";
     description = "Client for devpi, a pypi index server and packaging meta tool";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];

@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
-    homepage = http://www.grantjenks.com/docs/sortedcontainers/;
+    homepage = "http://www.grantjenks.com/docs/sortedcontainers/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ costrouc ];
   };

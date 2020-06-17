@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pkgconfig, libnfc, openssl
 , libobjc ? null }:
 
-stdenv.mkDerivation rec {
-  name = "libfreefare-${version}";
+stdenv.mkDerivation {
+  pname = "libfreefare";
   version = "0.4.0";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The libfreefare project aims to provide a convenient API for MIFARE card manipulations";
     license = licenses.lgpl3;
-    homepage = https://github.com/nfc-tools/libfreefare;
+    homepage = "https://github.com/nfc-tools/libfreefare";
     maintainers = with maintainers; [bobvanderlinden];
     platforms = platforms.unix;
   };

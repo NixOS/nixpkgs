@@ -28,8 +28,9 @@ in buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Subclass of the rpkg project for dealing with rpm packaging";
-    homepage = https://pagure.io/fedpkg;
+    homepage = "https://pagure.io/fedpkg";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
+    broken = true;
   };
 }

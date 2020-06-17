@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ''; # */
 
   meta = {
-    homepage = https://requester.mturk.com/developer;
+    homepage = "https://requester.mturk.com/developer";
     description = "Command line tools for interacting with the Amazon Mechanical Turk";
     license = stdenv.lib.licenses.amazonsl;
 

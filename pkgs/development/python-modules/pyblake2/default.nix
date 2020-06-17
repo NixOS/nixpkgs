@@ -18,6 +18,6 @@ buildPythonPackage rec {
   meta = {
     description = "BLAKE2 hash function extension module";
     license = lib.licenses.publicDomain;
-    homepage = https://github.com/dchest/pyblake2;
+    homepage = "https://github.com/dchest/pyblake2";
   };
 }

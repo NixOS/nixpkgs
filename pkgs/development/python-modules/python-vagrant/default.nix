@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python module that provides a thin wrapper around the vagrant command line executable";
-    homepage = https://github.com/todddeluca/python-vagrant;
+    homepage = "https://github.com/todddeluca/python-vagrant";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pmiddend ];
   };

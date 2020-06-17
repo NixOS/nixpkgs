@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
-  name = "pixman-${version}";
+  pname = "pixman";
   version = "0.38.4";
 
   src = fetchurl {
-    url = "mirror://xorg/individual/lib/${name}.tar.bz2";
+    url = "mirror://xorg/individual/lib/${pname}-${version}.tar.bz2";
     sha256 = "0l0m48lnmdlmnaxn2021qi5cj366d9fzfjxkqgcj9bs14pxbgaw4";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   postInstall = glib.flattenInclude;
 
   meta = with stdenv.lib; {
-    homepage = http://pixman.org;
+    homepage = "http://pixman.org";
     description = "A low-level library for pixel manipulation";
     license = licenses.mit;
     platforms = platforms.all;

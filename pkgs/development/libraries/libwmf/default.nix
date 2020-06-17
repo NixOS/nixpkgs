@@ -6,6 +6,8 @@ stdenv.mkDerivation rec {
   pname = "libwmf";
   version = "0.2.12";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "caolanm";
     repo = pname;

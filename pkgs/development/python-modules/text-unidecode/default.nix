@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "text-unidecode";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a1375bb2ba7968740508ae38d92e1f889a0832913cb1c447d5e2046061a396d";
+    sha256 = "bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93";
   };
 
   checkInputs = [ pytest ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The most basic Text::Unidecode port";
-    homepage = https://github.com/kmike/text-unidecode;
+    homepage = "https://github.com/kmike/text-unidecode";
     license = licenses.artistic1;
   };
 }

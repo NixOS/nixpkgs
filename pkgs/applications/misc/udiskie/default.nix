@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, asciidoc-full, gettext
-, gobject-introspection, gtk3, hicolor-icon-theme, libappindicator-gtk3, libnotify, librsvg
+, gobject-introspection, gtk3, libappindicator-gtk3, libnotify, librsvg
 , udisks2, wrapGAppsHook
 , python3Packages
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "udiskie";
-  version = "1.7.7";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
     rev = version;
-    sha256 = "1j17z26vy44il2s9zgchvhq280vq8ag64ddi35f35b444wz2azlb";
+    sha256 = "0kn5w6bm3rmbszphzbxpjfnkawb2naa230svzkpmh3n6dcdvk4qa";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    hicolor-icon-theme
     librsvg              # required for loading svg icons (udiskie uses svg icons)
     gobject-introspection
     libnotify
@@ -57,7 +56,7 @@ python3Packages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Removable disk automounter for udisks";
     license = licenses.mit;
-    homepage = https://github.com/coldfix/udiskie;
+    homepage = "https://github.com/coldfix/udiskie";
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }

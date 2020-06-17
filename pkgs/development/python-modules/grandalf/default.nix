@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python package made for experimentations with graphs and drawing algorithms";
-    homepage = https://github.com/bdcht/grandalf;
+    homepage = "https://github.com/bdcht/grandalf";
     license = licenses.gpl2;
     maintainers = with maintainers; [ cmcdragonkai ];
   };

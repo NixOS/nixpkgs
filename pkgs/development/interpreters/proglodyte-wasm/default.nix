@@ -55,5 +55,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ proglodyte ];
     platforms = platforms.linux;
     license = licenses.asl20;
+    broken = true;
   };
 }

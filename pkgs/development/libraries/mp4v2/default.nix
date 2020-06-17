@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  buildFlags = [ "CXXFLAGS=-std=c++03" ];
+
   # `faac' expects `mp4.h'.
   postInstall = "ln -s mp4v2/mp4v2.h $out/include/mp4.h";
 
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
       as defined by ISO-IEC:14496-1:2001 MPEG-4 Systems.
       This container format is derived from Apple's QuickTime format.
     '';
-    homepage = https://code.google.com/archive/p/mp4v2/;
+    homepage = "https://code.google.com/archive/p/mp4v2/";
     maintainers = [ lib.maintainers.Anton-Latukha ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mpl11;

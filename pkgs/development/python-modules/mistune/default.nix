@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The fastest markdown parser in pure Python";
-    homepage = https://github.com/lepture/mistune;
+    homepage = "https://github.com/lepture/mistune";
     license = licenses.bsd3;
   };
 }

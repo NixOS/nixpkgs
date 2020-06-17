@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "vue-${version}";
+  pname = "vue";
   version = "3.3.0";
   src = fetchurl {
     url = "http://releases.atech.tufts.edu/jenkins/job/VUE/116/deployedArtifacts/download/artifact.1";

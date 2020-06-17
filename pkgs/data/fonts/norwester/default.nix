@@ -3,7 +3,7 @@
 let
   version = "1.2";
   pname = "norwester";
-in fetchzip rec {
+in fetchzip {
   name = "${pname}-${version}";
 
   url = "http://jamiewilson.io/norwester/assets/norwester.zip";
@@ -16,7 +16,7 @@ in fetchzip rec {
   sha256 = "1npsaiiz9g5z6315lnmynwcnrfl37fyxc7w1mhkw1xbzcnv74z4r";
 
   meta = with lib; {
-    homepage = http://jamiewilson.io/norwester;
+    homepage = "http://jamiewilson.io/norwester";
     description = "A condensed geometric sans serif by Jamie Wilson";
     maintainers = with maintainers; [ leenaars ];
     license = licenses.ofl;

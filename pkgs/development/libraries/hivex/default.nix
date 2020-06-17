@@ -2,11 +2,11 @@
 , perlPackages, libxml2, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "hivex-${version}";
+  pname = "hivex";
   version = "1.3.18";
 
   src = fetchurl {
-    url = "http://libguestfs.org/download/hivex/${name}.tar.gz";
+    url = "http://libguestfs.org/download/hivex/${pname}-${version}.tar.gz";
     sha256 = "0ibl186l6rd9qj4rqccfwbg1nnx6z07vspkhk656x6zav67ph7la";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Windows registry hive extraction library";
     license = licenses.lgpl2;
-    homepage = https://github.com/libguestfs/hivex;
+    homepage = "https://github.com/libguestfs/hivex";
     maintainers = with maintainers; [offline];
     platforms = platforms.linux ++ platforms.darwin;
   };

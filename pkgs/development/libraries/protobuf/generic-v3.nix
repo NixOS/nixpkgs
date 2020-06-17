@@ -6,8 +6,9 @@
 }:
 
 let
-mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation rec {
-  name = "protobuf-${version}";
+mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
+  pname = "protobuf";
+  inherit version;
 
   # make sure you test also -A pythonPackages.protobuf
   src = fetchFromGitHub {
@@ -40,10 +41,6 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation rec {
 
   dontDisableStatic = true;
 
-  NIX_CFLAGS_COMPILE = with stdenv.lib;
-    # gcc before 6 doesn't know this option
-    optionalString (hasPrefix "gcc-6" stdenv.cc.cc.name) "-Wno-error=misleading-indentation";
-
   meta = {
     description = "Google's data interchange format";
     longDescription =
@@ -53,7 +50,7 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation rec {
       '';
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
-    homepage = https://developers.google.com/protocol-buffers/;
+    homepage = "https://developers.google.com/protocol-buffers/";
   };
 
   passthru.version = version;

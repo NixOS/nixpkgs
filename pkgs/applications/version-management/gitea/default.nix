@@ -1,5 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
+{ stdenv, buildGoPackage, fetchurl, makeWrapper
 , git, bash, gzip, openssh, pam
+, fetchpatch
 , sqliteSupport ? true
 , pamSupport ? true
 }:
@@ -8,32 +9,36 @@ with stdenv.lib;
 
 buildGoPackage rec {
   pname = "gitea";
-  version = "1.8.3";
+  version = "1.11.6";
 
-  src = fetchFromGitHub {
-    owner = "go-gitea";
-    repo = "gitea";
-    rev = "v${version}";
-    sha256 = "1q3wslf9s4dg7h1f41rh9rb7qlbsqz8k3xffmlzdbbgfdrm7sym1";
-    # Required to generate the same checksum on MacOS due to unicode encoding differences
-    # More information: https://github.com/NixOS/nixpkgs/pull/48128
-    extraPostFetch = ''
-      rm -rf $out/integrations
-      rm -rf $out/vendor/github.com/Unknown/cae/tz/testdata
-      rm -rf $out/vendor/github.com/Unknown/cae/zip/testdata
-      rm -rf $out/vendor/gopkg.in/macaron.v1/fixtures
-    '';
+  src = fetchurl {
+    url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
+    sha256 = "11nyq5faq0hy1pi3yhmc6y8is7jyiyfrb162fq9l33pkyw6qihqs";
   };
 
-  patches = [ ./static-root-path.patch ];
+  unpackPhase = ''
+    mkdir source/
+    tar xvf $src -C source/
+  '';
+
+  sourceRoot = "source";
+
+  patches = [
+    ./static-root-path.patch
+    (fetchpatch {
+      url = "https://github.com/go-gitea/gitea/commit/1830d0ed5f4a67e3360ecbb55933b5540b6affce.patch";
+      sha256 = "163531pcki28qfs56l64vv4xxaavxgksf038da1sn21j5l2jm81i";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .
     substituteInPlace modules/setting/setting.go --subst-var data
   '';
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ optional pamSupport pam;
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = optional pamSupport pam;
 
   preBuild = let
     tags = optional pamSupport "pam"
@@ -46,15 +51,15 @@ buildGoPackage rec {
     )
   '';
 
-  outputs = [ "bin" "out" "data" ];
+  outputs = [ "out" "data" ];
 
   postInstall = ''
     mkdir $data
-    cp -R $src/{public,templates,options} $data
+    cp -R ./go/src/${goPackagePath}/{public,templates,options} $data
     mkdir -p $out
-    cp -R $src/options/locale $out/locale
+    cp -R ./go/src/${goPackagePath}/options/locale $out/locale
 
-    wrapProgram $bin/bin/gitea \
+    wrapProgram $out/bin/gitea \
       --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
 
@@ -62,8 +67,8 @@ buildGoPackage rec {
 
   meta = {
     description = "Git with a cup of tea";
-    homepage = https://gitea.io;
+    homepage = "https://gitea.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ disassembler kolaente ];
+    maintainers = with maintainers; [ disassembler kolaente ma27 ];
   };
 }

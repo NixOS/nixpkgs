@@ -9,22 +9,22 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "0.9.0";
+  version = "0.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "965f658d0732de3188211932aeb0bb457587f04f63ab4c1e33eab878e9de961d";
+    sha256 = "0ss58k33l5vah894lykid6ar6kw7z1f29cl4hzr5xvgs8fvfyq65";
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin
-    [ pkgs.darwin.apple_sdk.frameworks.CoreServices pkgs.darwin.cf-private ];
+    [ pkgs.darwin.apple_sdk.frameworks.CoreServices ];
   propagatedBuildInputs = [ argh pathtools pyyaml ];
 
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python API and shell utilities to monitor file system events";
-    homepage = https://github.com/gorakhargosh/watchdog;
+    homepage = "https://github.com/gorakhargosh/watchdog";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
   };

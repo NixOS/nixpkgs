@@ -6,7 +6,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "lld-${version}";
+  pname = "lld";
+  inherit version;
 
   src = fetch "lld" "1ah75rjly6747jk1zbwca3z0svr9b09ylgxd4x9ns721xir6sia6";
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "The LLVM Linker";
-    homepage    = http://lld.llvm.org/;
+    homepage    = "https://lld.llvm.org/";
     license     = stdenv.lib.licenses.ncsa;
     platforms   = stdenv.lib.platforms.all;
     badPlatforms = [ "x86_64-darwin" ];

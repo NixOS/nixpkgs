@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libusb, glib, dbus-glib, bluez, openobex, dbus }:
+{ stdenv, fetchurl, pkgconfig, libusb-compat-0_1, glib, dbus-glib, bluez, openobex, dbus }:
 
 stdenv.mkDerivation rec {
   name = "obex-data-server-0.4.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb glib dbus-glib bluez openobex dbus ];
+  buildInputs = [ libusb-compat-0_1 glib dbus-glib bluez openobex dbus ];
 
   patches = [ ./obex-data-server-0.4.6-build-fixes-1.patch ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://wiki.muiline.com/obex-data-server;
+    homepage = "http://wiki.muiline.com/obex-data-server";
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

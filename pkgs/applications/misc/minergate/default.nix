@@ -1,8 +1,8 @@
 { fetchurl, stdenv, dpkg, makeWrapper, fontconfig, freetype, openssl, xorg, xkeyboard_config }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "8.1";
-  name = "minergate-${version}";
+  pname = "minergate";
   src = fetchurl {
     url = "https://minergate.com/download/ubuntu";
     sha256 = "1dbbbb8e0735cde239fca9e82c096dcc882f6cecda20bba7c14720a614c16e13";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Minergate CPU/GPU mining software";
-    homepage = https://www.minergate.com/;
+    homepage = "https://www.minergate.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ bfortz ];
     platforms = [ "x86_64-linux" ];

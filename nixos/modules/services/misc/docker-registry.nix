@@ -138,18 +138,20 @@ in {
 
       script = ''
         ${pkgs.docker-distribution}/bin/registry garbage-collect ${configFile}
-        ${pkgs.systemd}/bin/systemctl restart docker-registry.service
+        /run/current-system/systemd/bin/systemctl restart docker-registry.service
       '';
 
       startAt = optional cfg.enableGarbageCollect cfg.garbageCollectDates;
     };
 
     users.users.docker-registry =
-      if cfg.storagePath != null
+      (if cfg.storagePath != null
       then {
         createHome = true;
         home = cfg.storagePath;
       }
-      else {};
+      else {}) // {
+        isSystemUser = true;
+      };
   };
 }

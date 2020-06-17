@@ -1,7 +1,7 @@
 { buildGoPackage, fetchFromGitHub, stdenv, docker }:
 
 buildGoPackage rec {
-  name = "docker-ls-${version}";
+  pname = "docker-ls";
   version = "0.3.2";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ buildGoPackage rec {
       with tags.
     '';
 
-    homepage = https://github.com/mayflower/docker-ls;
+    homepage = "https://github.com/mayflower/docker-ls";
     maintainers = with maintainers; [ ma27 ];
     platforms = docker.meta.platforms;
     license = licenses.mit;

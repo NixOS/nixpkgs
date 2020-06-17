@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Use Rust failures as Python exceptions";
-    homepage = https://github.com/untitaker/shippai;
+    homepage = "https://github.com/untitaker/shippai";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
   };

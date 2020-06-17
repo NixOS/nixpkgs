@@ -1,22 +1,24 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
-  name = "lf-${version}";
-  version = "12";
+  pname = "lf";
+  version = "14";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "1pjydnwlc6mrnwz13s13c91nvjvb1ibwl944ppg8xq8dcy9b2cs4";
+    sha256 = "0kl9yrgph1i0jbxhlg3k0411436w80xw1s8dzd7v7h2raygkb4is";
   };
 
-  modSha256 = "14fvn8yjm9cnpsmzgxw2dypr3h8h36mxrbk7zma42w8rsp46jpz7";
+  vendorSha256 = "1zb2z3c2w4gnq9cjczg1y7r7jg4mlrm2hsb12dqd9w8mh44rvr37";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # TODO: Setting buildFlags probably isn't working properly. I've tried a few
   # variants, e.g.:
-  # - buildFlags = "-ldflags \"-s -w -X 'main.gVersion=${version}'\"";
-  # - buildFlags = "-ldflags \\\"-X ${goPackagePath}/main.gVersion=${version}\\\"";
+  # - buildFlags = [ "-ldflags" "\"-s" "-w"" ""-X 'main.gVersion=${version}'\"" ];
+  # - buildFlags = [ "-ldflags" "\\\"-X" "${goPackagePath}/main.gVersion=${version}\\\"" ];
   # Override the build phase (to set buildFlags):
   buildPhase = ''
     runHook preBuild
@@ -26,7 +28,9 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    install -D --mode=444 lf.1 $out/share/man/man1/lf.1
+    install -D --mode=444 lf.desktop $out/share/applications/lf.desktop
+    installManPage lf.1
+    installShellCompletion etc/lf.{zsh,fish}
   '';
 
   meta = with lib; {
@@ -37,7 +41,8 @@ buildGoModule rec {
       the missing features are deliberately omitted since it is better if they
       are handled by external tools.
     '';
-    homepage = https://godoc.org/github.com/gokcehan/lf;
+    homepage = "https://godoc.org/github.com/gokcehan/lf";
+    changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

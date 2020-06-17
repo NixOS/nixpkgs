@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "dashing-unstable-${version}";
+  pname = "dashing-unstable";
   version = "2018-02-15";
   rev = "0e0519d76ed6bbbe02b00ee1d1ac24697d349f49";
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Dash Generator Script for Any HTML";
-    homepage    = https://github.com/technosophos/dashing;
+    homepage    = "https://github.com/technosophos/dashing";
     license     = licenses.mit;
     maintainers = [ ];
     platforms   = platforms.all;

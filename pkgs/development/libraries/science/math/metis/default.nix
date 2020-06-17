@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Serial graph partitioning and fill-reducing matrix ordering";
-    homepage = http://glaros.dtc.umn.edu/gkhome/metis/metis/overview;
+    homepage = "http://glaros.dtc.umn.edu/gkhome/metis/metis/overview";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
   };

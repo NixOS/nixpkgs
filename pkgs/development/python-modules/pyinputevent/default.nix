@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyinputevent";
   version = "2016-10-18";
 

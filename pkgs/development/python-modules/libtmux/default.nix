@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Scripting library for tmux";
-    homepage = https://libtmux.readthedocs.io/;
+    homepage = "https://libtmux.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

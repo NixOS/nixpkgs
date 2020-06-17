@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "A tool to merge/concatenate Jupyter (IPython) notebooks";
     inherit (src.meta) homepage;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

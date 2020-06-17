@@ -19,9 +19,9 @@
     </term>
     <listitem>
      <para>
-      Start a root shell if something goes wrong in stage 1 of the boot process
-      (the initial ramdisk). This is disabled by default because there is no
-      authentication for the root shell.
+      Allows the user to start a root shell if something goes wrong in stage 1
+      of the boot process (the initial ramdisk). This is disabled by default
+      because there is no authentication for the root shell.
      </para>
     </listitem>
    </varlistentry>
@@ -35,6 +35,33 @@
       done. That is, no modules have been loaded and no file systems have been
       mounted, except for <filename>/proc</filename> and
       <filename>/sys</filename>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <literal>boot.debug1devices</literal>
+    </term>
+    <listitem>
+     <para>
+      Like <literal>boot.debug1</literal>, but runs stage1 until kernel modules are loaded and device nodes are created.
+      This may help with e.g. making the keyboard work.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <literal>boot.debug1mounts</literal>
+    </term>
+    <listitem>
+     <para>
+      Like <literal>boot.debug1</literal> or
+      <literal>boot.debug1devices</literal>, but runs stage1 until all
+      filesystems that are mounted during initrd are mounted (see
+      <option><link linkend="opt-fileSystems._name__.neededForBoot">neededForBoot</link></option>
+      ). As a motivating example, this could be useful if you've forgotten to set
+      <option><link linkend="opt-fileSystems._name__.neededForBoot">neededForBoot</link></option>
+      on a file system.
      </para>
     </listitem>
    </varlistentry>
@@ -77,6 +104,15 @@
   For more parameters recognised by systemd, see <citerefentry>
   <refentrytitle>systemd</refentrytitle>
   <manvolnum>1</manvolnum></citerefentry>.
+ </para>
+
+ <para>
+  Notice that for <literal>boot.shell_on_fail</literal>,
+  <literal>boot.debug1</literal>, <literal>boot.debug1devices</literal>, and
+  <literal>boot.debug1mounts</literal>, if you did <emphasis>not</emphasis>
+  select "start the new shell as pid 1", and you <literal>exit</literal> from
+  the new shell, boot will proceed normally from the point where it failed, as
+  if you'd chosen "ignore the error and continue".
  </para>
 
  <para>

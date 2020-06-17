@@ -3,10 +3,9 @@
 stdenv.mkDerivation rec {
   pname = "animbar";
   version = "1.2";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "0836nwcpyfdrapyj3hbg3wh149ihc26pc78h01adpc7c0r7d9pr9";
   };
 
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
 	names: picket fence animation, barrier grid animation, Moiré
 	animation, to name a few.
     '';
-    homepage = http://animbar.mnim.org;
+    homepage = "http://animbar.mnim.org";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.gpl3;

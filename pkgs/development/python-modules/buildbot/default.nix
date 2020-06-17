@@ -1,9 +1,9 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
+{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, future, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
   txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, parameterized,
-  glibcLocales }:
+  isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
+  parameterized, git, openssh, glibcLocales, nixosTests }:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.3.1";
+    version = "2.8.2";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0qzr6my8zvaj0a1jwyaf254rdgm1xcyq8zp4b6fa5aqigfld4dfg";
+      sha256 = "0rdrz2zkd6xaf9kb5l41xmbfzq618sz498w23irshih4c802pdv5";
     };
 
     propagatedBuildInputs = [
@@ -37,7 +37,6 @@ let
       twisted
       jinja2
       zope_interface
-      future
       sqlalchemy
       sqlalchemy_migrate
       dateutil
@@ -45,10 +44,9 @@ let
       autobahn
       pyjwt
       pyyaml
-
+    ]
       # tls
-      twisted.extras.tls
-    ];
+      ++ twisted.extras.tls;
 
     checkInputs = [
       treq
@@ -64,7 +62,10 @@ let
       flake8
       buildbot-worker
       buildbot-pkg
+      buildbot-plugins.www
       parameterized
+      git
+      openssh
       glibcLocales
     ];
 
@@ -90,12 +91,13 @@ let
 
     passthru = {
       inherit withPlugins;
+      tests.buildbot = nixosTests.buildbot;
     };
 
     meta = with lib; {
-      homepage = http://buildbot.net/;
+      homepage = "https://buildbot.net/";
       description = "Buildbot is an open-source continuous integration framework for automating software build, test, and release processes";
-      maintainers = with maintainers; [ nand0p ryansydnor ];
+      maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };
   };

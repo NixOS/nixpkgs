@@ -1,0 +1,29 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a2297311..25a51f56 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -138,7 +138,7 @@ if (UNIX)
+ 
+ 
+     if (APPLE)
+-        set (CMAKE_CXX_FLAGS "--sysroot ${CMAKE_OSX_SYSROOT} ${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
++        set (CMAKE_CXX_FLAGS "--sysroot ${CMAKE_OSX_SYSROOT} ${CMAKE_CXX_FLAGS}")
+ 
+         find_library (lib_ScreenSaver ScreenSaver)
+         find_library (lib_IOKit IOKit)
+@@ -292,14 +292,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+         ${OPENSSL_ROOT}/lib/libssl.lib
+         ${OPENSSL_ROOT}/lib/libcrypto.lib
+     )
+-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+-    set (OPENSSL_ROOT /usr/local/opt/openssl)
+-    include_directories (BEFORE SYSTEM ${OPENSSL_ROOT}/include)
+-    set (OPENSSL_LIBS
+-        ${OPENSSL_ROOT}/lib/libssl.a
+-        ${OPENSSL_ROOT}/lib/libcrypto.a
+-    )
+-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
++elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+     set (OPENSSL_LIBS ssl crypto)
+ else()
+     message (FATAL_ERROR "Couldn't find OpenSSL")

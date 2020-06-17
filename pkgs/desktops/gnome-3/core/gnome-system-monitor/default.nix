@@ -1,24 +1,23 @@
-{ stdenv, gettext, fetchurl, pkgconfig, gtkmm3, libxml2, polkit
+{ stdenv, gettext, fetchurl, pkgconfig, gtkmm3, libxml2
 , bash, gtk3, glib, wrapGAppsHook, meson, ninja, python3
-, gsettings-desktop-schemas, itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
+, gsettings-desktop-schemas, itstool, gnome3, librsvg, gdk-pixbuf, libgtop, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-system-monitor-${version}";
-  version = "3.32.1";
+  pname = "gnome-system-monitor";
+  version = "3.36.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-system-monitor/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1wd43qdgjav6xamq5z5cy8fri5zr01jga3plc9w95gcia0rk3ha8";
+    url = "mirror://gnome/sources/gnome-system-monitor/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "18dwwwmw4m2kzvfmxyaxmnm66d1plwvh6c6naznb0xac1ymlfsw6";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
     pkgconfig gettext itstool wrapGAppsHook meson ninja python3
-    polkit # for ITS file
   ];
   buildInputs = [
-    bash gtk3 glib libxml2 gtkmm3 libgtop gdk_pixbuf gnome3.adwaita-icon-theme librsvg
+    bash gtk3 glib libxml2 gtkmm3 libgtop gdk-pixbuf gnome3.adwaita-icon-theme librsvg
     gsettings-desktop-schemas systemd
   ];
 
@@ -36,9 +35,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/SystemMonitor;
+    homepage = "https://wiki.gnome.org/Apps/SystemMonitor";
     description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

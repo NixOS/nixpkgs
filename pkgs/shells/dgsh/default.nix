@@ -3,8 +3,8 @@
   perl, texinfo, help2man, gettext, ncurses
 }:
 
-stdenv.mkDerivation rec {
-  name = "dgsh-unstable-${version}";
+stdenv.mkDerivation {
+  pname = "dgsh-unstable";
   version = "2017-02-05";
 
   src = fetchFromGitHub {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The Directed Graph Shell";
-    homepage = http://www.dmst.aueb.gr/dds/sw/dgsh;
+    homepage = "http://www.dmst.aueb.gr/dds/sw/dgsh";
     license = with licenses; asl20;
     maintainers = with maintainers; [ vrthra ];
     platforms = with platforms; all;

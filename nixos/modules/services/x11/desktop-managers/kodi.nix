@@ -10,6 +10,7 @@ in
   options = {
     services.xserver.desktopManager.kodi = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Enable the kodi multimedia center.";
       };
@@ -20,7 +21,7 @@ in
     services.xserver.desktopManager.session = [{
       name = "kodi";
       start = ''
-        ${pkgs.kodi}/bin/kodi --lircdev /run/lirc/lircd --standalone &
+        LIRC_SOCKET_PATH=/run/lirc/lircd ${pkgs.kodi}/bin/kodi --standalone &
         waitPID=$!
       '';
     }];

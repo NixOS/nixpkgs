@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyhomematic";
-  version = "0.1.59";
+  version = "0.1.67";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4406d9bf49d570ef0ba80be9cf8eb4bd75c08a2909369ebd90b8e94ff07f116e";
+    sha256 = "2d18e0059367e9e32d6472023322113fce431bcc72187b4a6eb7402fe5d2794b";
   };
 
   # PyPI tarball does not include tests/ directory
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python 3 Interface to interact with Homematic devices";
-    homepage = https://github.com/danielperna84/pyhomematic;
+    homepage = "https://github.com/danielperna84/pyhomematic";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

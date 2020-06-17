@@ -3,15 +3,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opensmtpd-${version}";
-  version = "6.4.1p2";
+  pname = "opensmtpd";
+  version = "6.7.1p1";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib libressl db pam ];
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "0cppqlx4fk6l8rbim5symh2fm1kzshf421256g596j6c9f9q96xn";
+    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
+    sha256 = "1jh8vxfajm1mvp1v5yh6llrhjzv0n9fgab88mlwllwqynhcfjy3l";
   };
 
   patches = [
@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
   # See https://github.com/OpenSMTPD/OpenSMTPD/issues/885 for the `sh bootstrap`
   # requirement
   postPatch = ''
-    substituteInPlace smtpd/parse.y \
-      --replace "/usr/libexec/" "$out/libexec/opensmtpd/"
     substituteInPlace mk/smtpctl/Makefile.am --replace "chgrp" "true"
     substituteInPlace mk/smtpctl/Makefile.am --replace "chmod 2555" "chmod 0555"
     sh bootstrap
@@ -52,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.opensmtpd.org/;
+    homepage = "https://www.opensmtpd.org/";
     description = ''
       A free implementation of the server-side SMTP protocol as defined by
       RFC 5321, with some additional standard extensions

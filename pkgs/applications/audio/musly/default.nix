@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, eigen, libav_all }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "musly";
   version = "unstable-2017-04-26";
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '' else "";
 
   meta = with stdenv.lib; {
-    homepage = https://www.musly.org;
+    homepage = "https://www.musly.org";
     description = "A fast and high-quality audio music similarity library written in C/C++";
     longDescription = ''
       Musly analyzes the the audio signal of music pieces to estimate their similarity.

@@ -4,31 +4,19 @@
  <title>Coq</title>
 
  <para>
-  Coq libraries should be installed in
-  <literal>$(out)/lib/coq/${coq.coq-version}/user-contrib/</literal>. Such
-  directories are automatically added to the <literal>$COQPATH</literal>
-  environment variable by the hook defined in the Coq derivation.
+  Coq libraries should be installed in <literal>$(out)/lib/coq/${coq.coq-version}/user-contrib/</literal>. Such directories are automatically added to the <literal>$COQPATH</literal> environment variable by the hook defined in the Coq derivation.
  </para>
 
  <para>
-  Some extensions (plugins) might require OCaml and sometimes other OCaml
-  packages. The <literal>coq.ocamlPackages</literal> attribute can be used to
-  depend on the same package set Coq was built against.
+  Some extensions (plugins) might require OCaml and sometimes other OCaml packages. The <literal>coq.ocamlPackages</literal> attribute can be used to depend on the same package set Coq was built against.
  </para>
 
  <para>
-  Coq libraries may be compatible with some specific versions of Coq only. The
-  <literal>compatibleCoqVersions</literal> attribute is used to precisely
-  select those versions of Coq that are compatible with this derivation.
+  Coq libraries may be compatible with some specific versions of Coq only. The <literal>compatibleCoqVersions</literal> attribute is used to precisely select those versions of Coq that are compatible with this derivation.
  </para>
 
  <para>
-  Here is a simple package example. It is a pure Coq library, thus it depends
-  on Coq. It builds on the Mathematical Components library, thus it also takes
-  <literal>mathcomp</literal> as <literal>buildInputs</literal>. Its
-  <literal>Makefile</literal> has been generated using
-  <literal>coq_makefile</literal> so we only have to set the
-  <literal>$COQLIB</literal> variable at install time.
+  Here is a simple package example. It is a pure Coq library, thus it depends on Coq. It builds on the Mathematical Components library, thus it also takes <literal>mathcomp</literal> as <literal>buildInputs</literal>. Its <literal>Makefile</literal> has been generated using <literal>coq_makefile</literal> so we only have to set the <literal>$COQLIB</literal> variable at install time.
  </para>
 
 <programlisting>

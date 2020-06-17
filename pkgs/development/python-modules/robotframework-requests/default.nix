@@ -8,12 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.0";
+  version = "0.6.6";
   pname = "robotframework-requests";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c253b8061c8a91251abf3ebadc33152b8621671621405dd343efd17bdc9e620";
+    sha256 = "01b6d02052349663b7faae5e9363877b1e5ea1f181bd52b1a29df3b03a348bcf";
   };
 
   buildInputs = [ unittest2 ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Robot Framework keyword library wrapper around the HTTP client library requests";
-    homepage = https://github.com/bulkan/robotframework-requests;
+    homepage = "https://github.com/bulkan/robotframework-requests";
     license = licenses.mit;
   };
 

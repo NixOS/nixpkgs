@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python humanize utilities";
-    homepage = https://github.com/jmoiron/humanize;
+    homepage = "https://github.com/jmoiron/humanize";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;

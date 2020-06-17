@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "bmake-${version}";
-  version = "20181221";
+  pname = "bmake";
+  version = "20200606";
 
   src = fetchurl {
-    url    = "http://www.crufty.net/ftp/pub/sjg/${name}.tar.gz";
-    sha256 = "0zp6yy27z52qb12bgm3hy1dwal2i570615pqqk71zwhcxfs4h2gw";
+    url    = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
+    sha256 = "00kh1g8z6808ylbfcn9afpb0xmb99k302dfdsmyx1rsn65xs58v7";
   };
 
   nativeBuildInputs = [ getopt ];

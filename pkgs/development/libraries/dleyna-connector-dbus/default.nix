@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "dleyna-connector-dbus";
-  name = "${pname}-${version}";
   version = "0.3.0";
 
   src = fetchFromGitHub {
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A D-Bus API for the dLeyna services";
-    homepage = https://01.org/dleyna;
+    homepage = "https://01.org/dleyna";
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.linux;
     license = licenses.lgpl21;

@@ -5,18 +5,19 @@
 
 assert par2Support -> par2cmdline != null;
 
-let version = "0.29.2"; in
+let version = "0.30.1"; in
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "bup-${version}";
+stdenv.mkDerivation {
+  pname = "bup";
+  inherit version;
 
   src = fetchFromGitHub {
     repo = "bup";
     owner = "bup";
     rev = version;
-    sha256 = "17lpbyhf43gcln5s43m2zzgichcx7jq6ragcawfklw6svg1vnj89";
+    sha256 = "0z9rpmmi6mbm48ynd6izr0f8l3cklfyar6gjy0c8z9zal1ac9r55";
   };
 
   buildInputs = [
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/bup/bup;
+    homepage = "https://github.com/bup/bup";
     description = "Efficient file backup system based on the git packfile format";
     license = licenses.gpl2Plus;
 

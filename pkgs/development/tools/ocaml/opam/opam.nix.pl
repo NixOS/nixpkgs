@@ -64,8 +64,8 @@ print <<"EOF";
       sha256 = "$OPAM_RELEASE_SHA256";
     };
   };
-in stdenv.mkDerivation rec {
-  name = "opam-\${version}";
+in stdenv.mkDerivation {
+  pname = "opam";
   version = "$OPAM_RELEASE";
 
   buildInputs = [ unzip curl ncurses ocaml makeWrapper getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
@@ -122,8 +122,8 @@ print <<'EOF';
 
   meta = with stdenv.lib; {
     description = "A package manager for OCaml";
-    homepage = http://opam.ocamlpro.com/;
-    maintainers = [ maintainers.henrytill ];
+    homepage = "https://opam.ocaml.org/";
+    maintainers = [ maintainers.henrytill maintainers.marsam ];
     platforms = platforms.all;
   };
 }

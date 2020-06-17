@@ -5,13 +5,13 @@
 }:
 
 mkDerivation rec {
-  name = "virt-manager-qt-${version}";
+  pname = "virt-manager-qt";
   version = "0.70.91";
 
   src = fetchFromGitHub {
     owner  = "F1ash";
     repo   = "qt-virt-manager";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "1z2kq88lljvr24z1kizvg3h7ckf545h4kjhhrjggkr0w4wjjwr43";
   };
 
@@ -29,7 +29,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   meta = with lib; {
-    homepage    = https://f1ash.github.io/qt-virt-manager;
+    homepage    = "https://f1ash.github.io/qt-virt-manager";
     description = "Desktop user interface for managing virtual machines (QT)";
     longDescription = ''
       The virt-manager application is a desktop user interface for managing

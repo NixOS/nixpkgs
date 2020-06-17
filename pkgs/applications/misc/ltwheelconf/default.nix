@@ -1,9 +1,8 @@
 { stdenv, libusb1, pkgconfig, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ltwheelconf";
   version = "0.2.7";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "thk";
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/thk/LTWheelConf;
+    homepage = "https://github.com/thk/LTWheelConf";
     description = "Logitech wheels configuration tool";
     license = licenses.gpl3;
     maintainers = [ maintainers.ebzzry ];

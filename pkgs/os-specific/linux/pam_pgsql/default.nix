@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, postgresql, libgcrypt, pam }:
 
 stdenv.mkDerivation rec {
-  name = "pam_pgsql-${version}";
+  pname = "pam_pgsql";
   version = "0.7.3.2";
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Support to authenticate against PostgreSQL for PAM-enabled appliations";
-    homepage = https://github.com/pam-pgsql/pam-pgsql;
+    homepage = "https://github.com/pam-pgsql/pam-pgsql";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

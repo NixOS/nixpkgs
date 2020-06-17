@@ -16,19 +16,19 @@ let
     gemdir = ./.;
   };
 in stdenv.mkDerivation rec {
-  name = "metasploit-framework-${version}";
-  version = "4.16.1";
+  pname = "metasploit-framework";
+  version = "5.0.90";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "1vilyy0dqzp8kbbpvs2zrv2ac7s39w2vv7mrbzgcjgh2bj7c6bg1";
+    sha256 = "1z3m8pvf1r8rz0snfkr9svhgjl2xn2qjgf8qswszzplsccqx1rss";
   };
 
   buildInputs = [ makeWrapper ];
 
-  dontPatchelf = true; # stay away from exploit executables
+  dontPatchELF = true; # stay away from exploit executables
 
   installPhase = ''
     mkdir -p $out/{bin,share/msf}
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Metasploit Framework - a collection of exploits";
-    homepage = https://github.com/rapid7/metasploit-framework/wiki;
+    homepage = "https://github.com/rapid7/metasploit-framework/wiki";
     platforms = platforms.unix;
     license = licenses.bsd3;
     maintainers = [ maintainers.makefu ];

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/matrix-org/python-unpaddedbase64;
+    homepage = "https://github.com/matrix-org/python-unpaddedbase64";
     description = "Unpadded Base64";
     license = licenses.asl20;
   };

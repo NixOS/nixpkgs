@@ -1,0 +1,31 @@
+diff --git a/bin/flutter b/bin/flutter
+index e0c18e235..2c3fb7ddd 100755
+--- a/bin/flutter
++++ b/bin/flutter
+@@ -185,8 +185,6 @@ fi
+ # FLUTTER_TOOL_ARGS="--enable-asserts $FLUTTER_TOOL_ARGS"
+ # FLUTTER_TOOL_ARGS="$FLUTTER_TOOL_ARGS --observe=65432"
+ 
+-(upgrade_flutter) 3< "$PROG_NAME"
+-
+ # FLUTTER_TOOL_ARGS isn't quoted below, because it is meant to be considered as
+ # separate space-separated args.
+ "$DART" --packages="$FLUTTER_TOOLS_DIR/.packages" $FLUTTER_TOOL_ARGS "$SNAPSHOT_PATH" "$@"
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+index 99455ae64..f5b0cb59c 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+@@ -301,13 +301,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+         }
+ 
+         _checkFlutterCopy();
+-        try {
+-          await globals.flutterVersion.ensureVersionFile();
+-        } on FileSystemException catch (e) {
+-          globals.printError('Failed to write the version file to the artifact cache: "$e".');
+-          globals.printError('Please ensure you have permissions in the artifact cache directory.');
+-          throwToolExit('Failed to write the version file');
+-        }
+         final bool machineFlag = topLevelResults['machine'] as bool;
+         if (topLevelResults.command?.name != 'upgrade' && topLevelResults['version-check'] as bool && !machineFlag) {
+           await globals.flutterVersion.checkFlutterVersionFreshness();

@@ -1,27 +1,28 @@
-{ stdenv, fetchurl, cmake, git, swig, lua, itk }:
+{ stdenv, fetchFromGitHub, cmake, git, swig, lua, itk4, tcl, tk }:
 
 stdenv.mkDerivation rec {
-  pname    = "simpleitk";
-  version = "1.2.0";
-  name  = "${pname}-${version}";
+  pname = "simpleitk";
+  version = "1.2.4";
 
-  src = fetchurl {
-    url    = "https://sourceforge.net/projects/${pname}/files/SimpleITK/${version}/Source/SimpleITK-${version}.tar.gz";
-    sha256 = "10lxsr0144li6bmfgs646cvczczqkgmvvs3ndds66q8lg9zwbnky";
+  src = fetchFromGitHub {
+    owner = "SimpleITK";
+    repo = "SimpleITK";
+    rev = "v${version}";
+    sha256 = "0dvf2407z9n6lczm0l5vzcvpw6r6z1wzrs2gk3dqjrgynq6952qr";
   };
 
   nativeBuildInputs = [ cmake git swig ];
-  buildInputs = [ lua itk ];
+  buildInputs = [ lua itk4 ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_CXX_FLAGS='-Wno-attributes'" ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.simpleitk.org;
+    homepage = "http://www.simpleitk.org";
     description = "Simplified interface to ITK";
     maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     license = licenses.asl20;
   };
 }

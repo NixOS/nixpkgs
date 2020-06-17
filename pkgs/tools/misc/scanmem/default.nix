@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.17";
-  name = "scanmem-${version}";
+  pname = "scanmem";
 
   src = fetchFromGitHub {
     owner  = "scanmem";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
   meta = with stdenv.lib; {
-    homepage = https://github.com/scanmem/scanmem;
+    homepage = "https://github.com/scanmem/scanmem";
     description = "Memory scanner for finding and poking addresses in executing processes";
     maintainers = [ maintainers.chattered ];
     platforms = platforms.linux;

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "wuzz-${version}";
+  pname = "wuzz";
   version = "0.2.0";
   rev = "v${version}";
 
@@ -17,7 +17,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/asciimoo/wuzz;
+    homepage = "https://github.com/asciimoo/wuzz";
     description = "Interactive cli tool for HTTP inspection";
     license = licenses.agpl3;
     maintainers = with maintainers; [ pradeepchhetri ];

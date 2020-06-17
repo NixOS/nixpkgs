@@ -10,14 +10,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.8";
+  version = "8.9";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0jm7zdkz8wfgrmf6620jfr8kgvprrz3qfl8gzx6rl5z5cm734b6x";
+    sha256 = "1bwga58x3s8z42w5h51c232f91ndsc1861dlb1glhax3pn0rhn3a";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -28,6 +28,14 @@ stdenv.mkDerivation rec {
       name = "safe-directory-test-without-patch.patch";
       url = "https://git.sagemath.org/sage.git/patch?id2=8bdc326ba57d1bb9664f63cf165a9e9920cc1afc&id=dc673c17555efca611f68398d5013b66e9825463";
       sha256 = "1hhannz7xzprijakn2w2d0rhd5zv2zikik9p51i87bas3nc658f7";
+    })
+    
+    # `is_unitary` test in `matrix_double_dense.pyx` fails with some BLAS implementations
+    # https://trac.sagemath.org/ticket/29297 should be included in 9.1
+    (fetchpatch {
+      name = "is_unitary-special-case.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=cc3eb9ffa991e328b09028d32aab7e7cc2ddbb6a";
+      sha256 = "0jq4w8hnp5c9q99011ldr4n3knvm1rx2g85z0hidv3i9x868p0ay";
     })
 
     # Unfortunately inclusion in upstream sage was rejected. Instead the bug was
@@ -49,19 +57,24 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/27660#ticket
     ./patches/do-not-test-find-library.patch
 
-
-    # https://trac.sagemath.org/ticket/28007
-    ./patches/threejs-offline.patch
-
     # Parallelize docubuild using subprocesses, fixing an isolation issue. See
     # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
     ./patches/sphinx-docbuild-subprocesses.patch
+
+    # Fix doctest failures with docutils 0.15:
+    # https://nix-cache.s3.amazonaws.com/log/dzmzrb2zvardsmpy7idg7djkizmkzdhs-sage-tests-8.9.drv
+    # https://trac.sagemath.org/ticket/28856#comment:19
+    ./patches/docutils-0.15.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
   # fix those bugs themselves. This is for critical bugfixes, where "critical"
   # == "causes (transient) doctest failures / somebody complained".
-  bugfixPatches = [ ];
+  bugfixPatches = [
+    # To help debug the transient error in
+    # https://trac.sagemath.org/ticket/23087 when it next occurs.
+    ./patches/configurationpy-error-verbose.patch
+  ];
 
   # Patches needed because of package updates. We could just pin the versions of
   # dependencies, but that would lead to rebuilds, confusion and the burdons of
@@ -93,12 +106,44 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
 
-    # https://trac.sagemath.org/ticket/26932
-    (fetchSageDiff {
-      name = "givaro-4.1.0_fflas-ffpack-2.4.0_linbox-1.6.0.patch";
-      base = "8.8.beta4";
-      rev = "c11d9cfa23ff9f77681a8f12742f68143eed4504";
-      sha256 = "0xzra7mbgqvahk9v45bjwir2mqz73hrhhy314jq5nxrb35ysdxyi";
+    # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
+    # now set the cache dir to be withing the .sage directory. This is not
+    # strictly necessary, but keeps us from littering in the user's HOME.
+    ./patches/sympow-cache.patch
+
+    # https://trac.sagemath.org/ticket/28472
+    (fetchpatch {
+      name = "eclib-20190909.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=d27dc479a5772d59e4bc85d805b6ffd595284f1d";
+      sha256 = "1nf1s9y7n30lhlbdnam7sghgaq9nasmv96415gl5jlcf7a3hlxk3";
+    })
+
+    # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
+    ./patches/ignore-cmp-deprecation.patch
+
+    # Werkzeug has deprecated ImmutableDict, but it is still used in legacy
+    # sagenb. That's no big issue since sagenb will be removed soon anyways.
+    ./patches/ignore-werkzeug-immutable-dict-deprecation.patch
+
+    # threejs r109 (#28560)
+    (fetchpatch {
+      name = "threejs-r109.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=fcc11d6effa39f375bc5f4ea5831fb7a2f2767da";
+      sha256 = "0hnmc8ld3bblks0hcjvjjaydkgwdr1cs3dbl2ys4gfq964pjgqwc";
+    })
+
+    # https://trac.sagemath.org/ticket/28911
+    (fetchpatch {
+      name = "sympy-1.5.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=c6d0308db15efd611211d26cfcbefbd180fc0831";
+      sha256 = "0nwai2jr22h49km4hx3kwafs3mzsc5kwsv7mqwjf6ibwfx2bbgyq";
+    })
+
+    # https://trac.sagemath.org/ticket/29313 (patch from ArchLinux)
+    (fetchpatch {
+      name = "pari-2.11.3.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/sagemath-pari-2.11.3.patch?h=sagemath-git&id=02e1d58bd1cd70935d69a4990469d18be6bd2c43";
+      sha256 = "0z07444zvijyw96d11q7j81pvg7ysd6ycf1bbbjr6za9y74hv7d2";
     })
   ];
 

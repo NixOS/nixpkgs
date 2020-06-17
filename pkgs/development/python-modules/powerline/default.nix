@@ -11,11 +11,10 @@
 buildPythonPackage rec {
   version  = "2.7";
   pname = "powerline";
-  name = pname + "-" + version;
 
   src = fetchurl {
     url    = "https://github.com/powerline/powerline/archive/${version}.tar.gz";
-    name   = "${name}.tar.gz";
+    name   = "${pname}-${version}.tar.gz";
     sha256 = "1h1j2rfphvfdq6mmfyn5bql45hzrwxkhpc2jcwf0vrl3slzkl5s5";
   };
 
@@ -38,10 +37,14 @@ buildPythonPackage rec {
 
     install -dm755 "$out/share/tmux"
     install -m644 "powerline/bindings/tmux/powerline.conf" "$out/share/tmux/powerline.conf"
+    
+    install -dm755 "$out/share/fish/vendor_functions.d"
+    install -m644 "powerline/bindings/fish/powerline-setup.fish" "$out/share/fish/vendor_functions.d/powerline-setup.fish"
+
     '';
 
   meta = {
-    homepage    = https://github.com/powerline/powerline;
+    homepage    = "https://github.com/powerline/powerline";
     description = "The ultimate statusline/prompt utility";
     license     = lib.licenses.mit;
   };

@@ -3,16 +3,16 @@
 
 buildPythonPackage rec {
   pname = "zstd";
-  version = "1.4.0.0";
+  version = "1.4.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01prq9rwz1gh42idnj2162w79dzs8gf3ac8pn12lz347w280kjbk";
+    sha256 = "2a1806d625bd2d8944ead4b3018fc6444a31467fa09935e9c1d4296275f024c6";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "/usr/bin/pkg-config" "${pkgconfig}/bin/pkg-config"
+      --replace "/usr/bin/pkg-config" "${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"
   '';
 
   nativeBuildInputs = [ pkgconfig ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Simple python bindings to Yann Collet ZSTD compression library";
-    homepage = https://github.com/sergey-dryabzhinsky/python-zstd;
+    homepage = "https://github.com/sergey-dryabzhinsky/python-zstd";
     license = licenses.bsd2;
     maintainers = with maintainers; [
       eadwu

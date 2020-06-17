@@ -14,7 +14,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
     officialRelease = false;
   };
 
-} // (mapTestOn (rec {
+} // (mapTestOn ({
 
   aspell = all;
   at = linux;
@@ -38,7 +38,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
-  emacs25 = gtkSupported;
+  emacs25 = linux;
   enscript = all;
   file = all;
   findutils = all;
@@ -78,9 +78,9 @@ with import ./release-lib.nix { inherit supportedSystems; };
   kvm = linux;
   qemu = linux;
   qemu_kvm = linux;
+  lapack-reference = linux;
   less = all;
   lftp = all;
-  liblapack = linux;
   libtool = all;
   libtool_2 = all;
   libxml2 = all;
@@ -119,7 +119,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   ntp = linux;
   openssh = linux;
   openssl = all;
-  pan = gtkSupported;
+  pan = linux;
   par2cmdline = all;
   pciutils = linux;
   pdf2xml = all;
@@ -156,7 +156,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   time = linux;
   tinycc = linux;
   udev = linux;
-  unar = linux;
   unzip = all;
   usbutils = linux;
   utillinux = linux;

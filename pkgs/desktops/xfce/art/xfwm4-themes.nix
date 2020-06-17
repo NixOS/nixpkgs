@@ -1,18 +1,26 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, xfce }:
+
+let
+  category = "art";
+in
 
 stdenv.mkDerivation rec {
-  p_name  = "xfwm4-themes";
-  ver_maj = "4.10";
-  ver_min = "0";
+  pname  = "xfwm4-themes";
+  version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/art/${p_name}/${ver_maj}/${name}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "0xfmdykav4rf6gdxbd6fhmrfrvbdc1yjihz7r7lba0wp1vqda51j";
   };
-  name = "${p_name}-${ver_maj}.${ver_min}";
+  
+  passthru.updateScript = xfce.updateScript {
+    inherit pname version;
+    attrPath = "xfce.${pname}";
+    versionLister = xfce.archiveLister category pname;
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://www.xfce.org/;
+    homepage = "https://www.xfce.org/";
     description = "Themes for Xfce";
     license = licenses.gpl3;
     platforms = platforms.linux;

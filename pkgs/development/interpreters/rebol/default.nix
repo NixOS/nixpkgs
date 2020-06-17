@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, glibc, libX11, libXt, perl }:
 
 stdenv.mkDerivation rec {
-  name = "rebol-nightly-${version}";
+  pname = "rebol-nightly";
   version = "3-alpha";
   src = fetchFromGitHub {
     rev = "bd45d0de512ff5953e098301c3d610f6024515d6";
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ vrthra ];
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    homepage = http://www.rebol.com/;
+    homepage = "http://www.rebol.com/";
   };
 }

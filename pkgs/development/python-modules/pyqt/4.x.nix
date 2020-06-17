@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for Qt";
     license = "GPL";
-    homepage = http://www.riverbankcomputing.co.uk;
+    homepage = "http://www.riverbankcomputing.co.uk";
     maintainers = [ stdenv.lib.maintainers.sander ];
     platforms = stdenv.lib.platforms.mesaPlatforms;
   };

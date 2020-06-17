@@ -1,10 +1,11 @@
 { stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsaLib, dbus, cups, libexif, ffmpeg, systemd
+, alsaLib, dbus, cups, libexif, ffmpeg_3, systemd
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , gstreamer, gst-plugins-base, libxml2
-, glib, gtk3, pango, gdk_pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
+, glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
+, libdrm, mesa
 , nss, nspr
 , patchelf, makeWrapper
 , isSnapshot ? false
@@ -17,11 +18,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "2.6.1566.44-1";
+  version = "3.0.1874.38-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "0bqx78bikcgrpg7qg10jylxa582fcxiwah7g2151hadvy8xl15ab";
+    sha256 = "03667f8rlk8shxq6ghjg4q9hqhsaw4gwpqnjpyili49qczd5423w";
   };
 
   unpackPhase = ''
@@ -34,9 +35,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk_pixbuf libexif ffmpeg systemd
+    atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg_3 systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
     gstreamer libxml2 gst-plugins-base pango cairo gnome2.GConf
+    libdrm mesa
   ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
   libPath = stdenv.lib.makeLibraryPath buildInputs
@@ -51,8 +53,7 @@ in stdenv.mkDerivation rec {
       --set-rpath "${libPath}" \
       opt/${vivaldiName}/vivaldi-bin
   '' + stdenv.lib.optionalString proprietaryCodecs ''
-    sed -i '/^if \[ "$VIVALDI_FFMPEG_FOUND/i \
-      VIVALDI_FFMPEG_FOUND=YES\nCACHED_FFMPEG=${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so' opt/${vivaldiName}/${vivaldiName}
+    ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/${vivaldiName}/libffmpeg.so.''${version%\.*\.*}
   '' + ''
     echo "Finished patching Vivaldi binaries"
   '';
@@ -69,6 +70,8 @@ in stdenv.mkDerivation rec {
     cp -r usr/share/{applications,xfce4} "$out"/share
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace /usr/bin/${vivaldiName} "$out"/bin/vivaldi
+    substituteInPlace "$out"/share/applications/*.desktop \
+      --replace vivaldi-stable vivaldi
     local d
     for d in 16 22 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
@@ -80,8 +83,7 @@ in stdenv.mkDerivation rec {
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${stdenv.lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + stdenv.lib.optionalString enableWidevine ''
-    rm $out/opt/${vivaldiName}/libwidevinecdm.so
-    ln -s ${vivaldi-widevine}/lib/libwidevinecdm.so $out/opt/${vivaldiName}/libwidevinecdm.so
+    ln -sf ${vivaldi-widevine}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
   '';
 
   meta = with stdenv.lib; {

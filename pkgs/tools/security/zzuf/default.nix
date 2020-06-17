@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Transparent application input fuzzer.";
-    homepage = http://caca.zoy.org/wiki/zzuf;
+    homepage = "http://caca.zoy.org/wiki/zzuf";
     license = licenses.wtfpl;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lihop ];

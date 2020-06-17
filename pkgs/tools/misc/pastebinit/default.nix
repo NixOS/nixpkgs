@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.5";
-  name = "pastebinit-${version}";
+  pname = "pastebinit";
 
   src = fetchurl {
-    url = "https://launchpad.net/pastebinit/trunk/${version}/+download/${name}.tar.bz2";
+    url = "https://launchpad.net/pastebinit/trunk/${version}/+download/${pname}-${version}.tar.bz2";
     sha256 = "0mw48fgm9lyh9d3pw997fccmglzsjccf2y347gxjas74wx6aira2";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://launchpad.net/pastebinit;
+    homepage = "https://launchpad.net/pastebinit";
     description = "A software that lets you send anything you want directly to a pastebin from the command line";
     maintainers = with maintainers; [ lethalman ];
     license = licenses.gpl2;

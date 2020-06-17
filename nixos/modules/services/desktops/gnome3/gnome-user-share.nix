@@ -6,20 +6,17 @@ with lib;
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   ###### interface
 
   options = {
 
     services.gnome3.gnome-user-share = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable GNOME User Share, a service that exports the
-          contents of the Public folder in your home directory on the local network.
-        '';
-      };
+      enable = mkEnableOption "GNOME User Share, a user-level file sharing service for GNOME";
 
     };
 
@@ -30,12 +27,13 @@ with lib;
 
   config = mkIf config.services.gnome3.gnome-user-share.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.gnome-user-share ];
+    environment.systemPackages = [
+      pkgs.gnome3.gnome-user-share
+    ];
 
-    services.xserver.displayManager.sessionCommands = with pkgs.gnome3; ''
-      # Don't let gnome-control-center depend upon gnome-user-share
-      export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${gnome-user-share}/share/gsettings-schemas/${gnome-user-share.name}
-    '';
+    systemd.packages = [
+      pkgs.gnome3.gnome-user-share
+    ];
 
   };
 

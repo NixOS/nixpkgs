@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "beignet-${version}";
+  pname = "beignet";
   version = "unstable-2018.08.20";
 
   src = fetchFromGitHub {
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  passthru.utests = stdenv.mkDerivation rec {
-    name = "beignet-utests-${version}";
+  passthru.utests = stdenv.mkDerivation {
+    pname = "beignet-utests";
     inherit version src;
 
     preConfigure = ''
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://cgit.freedesktop.org/beignet/;
+    homepage = "https://cgit.freedesktop.org/beignet/";
     description = "OpenCL Library for Intel Ivy Bridge and newer GPUs";
     longDescription = ''
       The package provides an open source implementation of the OpenCL specification for Intel GPUs.

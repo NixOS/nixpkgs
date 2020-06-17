@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, libX11, libXtst, openssl, libscrypt }:
+{ stdenv, mkDerivation, fetchFromGitHub, qtbase, qmake, libX11, libXtst, openssl, libscrypt }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "qMasterPassword";
   version = "1.2.2";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       there is no password file that can be lost or get stolen. There is also
       no need to trust any online password service.
     '';
-    homepage = https://github.com/bkueng/qMasterPassword;
+    homepage = "https://github.com/bkueng/qMasterPassword";
     license = licenses.gpl3;
     maintainers = [ maintainers.tadeokondrak ];
     platforms = platforms.all;

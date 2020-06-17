@@ -2,7 +2,7 @@ nvidia_x11: sha256:
 
 { stdenv, fetchFromGitHub, m4 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nvidia-persistenced";
   inherit (nvidia_x11) version;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.nvidia.com/object/unix.html;
+    homepage = "https://www.nvidia.com/object/unix.html";
     description = "Settings application for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;

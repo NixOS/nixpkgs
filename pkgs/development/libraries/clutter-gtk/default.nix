@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Clutter-GTK";
-    homepage = http://www.clutter-project.org/;
+    homepage = "http://www.clutter-project.org/";
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ lethalman ];
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice

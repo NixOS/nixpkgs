@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "statsd_exporter-${version}";
+  pname = "statsd_exporter";
   version = "0.9.0";
   rev = version;
 
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Receives StatsD-style metrics and exports them to Prometheus";
-    homepage = https://github.com/prometheus/statsd_exporter;
+    homepage = "https://github.com/prometheus/statsd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ivan ];
     platforms = platforms.unix;

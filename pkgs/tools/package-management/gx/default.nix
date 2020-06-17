@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "gx-${version}";
+  pname = "gx";
   version = "0.14.1";
   rev = "refs/tags/v${version}";
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A packaging tool built around IPFS";
-    homepage = https://github.com/whyrusleeping/gx;
+    homepage = "https://github.com/whyrusleeping/gx";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
   };

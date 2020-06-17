@@ -2,9 +2,9 @@
 
 let
   archids = {
-    "x86_64-linux" = { hostarch = "x86_64"; efiPlatform = "x64"; };
-    "i686-linux" = rec { hostarch = "ia32"; efiPlatform = hostarch; };
-    "aarch64-linux" = rec { hostarch = "aarch64"; efiPlatform = "aa64"; };
+    x86_64-linux = { hostarch = "x86_64"; efiPlatform = "x64"; };
+    i686-linux = rec { hostarch = "ia32"; efiPlatform = hostarch; };
+    aarch64-linux = { hostarch = "aarch64"; efiPlatform = "aa64"; };
   };
 
   inherit
@@ -13,13 +13,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "refind-${version}";
-  version = "0.11.4";
+  pname = "refind";
+  version = "0.12.0";
   srcName = "refind-src-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "1bjd0dl77bc5k6g3kc7s8m57vpbg2zscph9qh84xll9rc10g3fir";
+    sha256 = "1i5p3sir3mx4i2q5w78360xn2kbgsj8rmgrqvsvag1zzr5dm1f3v";
   };
 
   patches = [
@@ -120,8 +120,8 @@ stdenv.mkDerivation rec {
       runtime makes it very easy to use, particularly when paired with
       Linux kernels that provide EFI stub support.
     '';
-    homepage = http://refind.sourceforge.net/;
-    maintainers = [ maintainers.AndersonTorres ];
+    homepage = "http://refind.sourceforge.net/";
+    maintainers = with maintainers; [ AndersonTorres samueldr ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     license = licenses.gpl3Plus;
   };

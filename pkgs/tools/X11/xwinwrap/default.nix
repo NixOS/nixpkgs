@@ -4,10 +4,11 @@ let
   version = "4";
 in
 stdenv.mkDerivation {
-  name = "xwinwrap-${version}";
+  pname = "xwinwrap";
+  inherit version;
 
   src = fetchbzr {
-    url = https://code.launchpad.net/~shantanu-goel/xwinwrap/devel;
+    url = "https://code.launchpad.net/~shantanu-goel/xwinwrap/devel";
     rev = version;
     sha256 = "1annhqc71jcgx5zvcy31c1c488ygx4q1ygrwyy2y0ww743smbchw";
   };
@@ -47,7 +48,7 @@ stdenv.mkDerivation {
       it is, in its new avatar “Shantz XWinWrap”.
     '';
     license = licenses.hpnd;
-    homepage = https://shantanugoel.com/2008/09/03/shantz-xwinwrap/;
+    homepage = "https://shantanugoel.com/2008/09/03/shantz-xwinwrap/";
     maintainers = with maintainers; [ infinisil ];
     platforms = platforms.linux;
   };

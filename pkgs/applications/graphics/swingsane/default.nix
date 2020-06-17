@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem, unzip, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "swingsane-${version}";
+  pname = "swingsane";
   version = "0.2";
 
   src = fetchurl {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       simultaneous scan jobs, image transformation jobs (deskew, binarize,
       crop, etc), PDF and PNG output.
     '';
-    homepage = http://swingsane.com/;
+    homepage = "http://swingsane.com/";
     license = licenses.asl20;
     platforms = platforms.all;
   };

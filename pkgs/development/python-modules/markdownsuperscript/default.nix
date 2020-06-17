@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "An extension to the Python Markdown package enabling superscript text";
-    homepage = https://github.com/jambonrose/markdown_superscript_extension;
+    homepage = "https://github.com/jambonrose/markdown_superscript_extension";
     license = stdenv.lib.licenses.bsd2;
   };
 }

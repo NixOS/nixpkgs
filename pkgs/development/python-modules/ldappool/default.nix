@@ -2,7 +2,7 @@
 , pbr, ldap, prettytable, fixtures, testresources, testtools }:
 
 buildPythonPackage rec {
-  name = "ldappool-${version}";
+  pname = "ldappool";
   version = "2.4.1";
 
   src = fetchPypi {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A simple connector pool for python-ldap";
-    homepage = https://git.openstack.org/cgit/openstack/ldappool;
+    homepage = "https://git.openstack.org/cgit/openstack/ldappool";
     license = licenses.mpl20;
   };
 }

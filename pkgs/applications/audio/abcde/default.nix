@@ -6,7 +6,8 @@
 let version = "2.9.3";
 in
   stdenv.mkDerivation {
-    name = "abcde-${version}";
+    pname = "abcde";
+    inherit version;
     src = fetchurl {
       url = "https://abcde.einval.com/download/abcde-${version}.tar.gz";
       sha256 = "091ip2iwb6b67bhjsj05l0sxyq2whqjycbzqpkfbpm4dlyxx0v04";
@@ -45,7 +46,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://abcde.einval.com/wiki/;
+      homepage = "http://abcde.einval.com/wiki/";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ gebner ];
       description = "Command-line audio CD ripper";

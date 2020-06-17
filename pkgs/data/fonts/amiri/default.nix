@@ -1,14 +1,14 @@
 { lib, fetchzip }:
 
 let
-  version = "0.111";
+  version = "0.112";
 
 in fetchzip rec {
   name = "Amiri-${version}";
 
   url = "https://github.com/alif-type/amiri/releases/download/${version}/${name}.zip";
 
-  sha256 = "1w3a5na4mazspwy8j2hvpjha10sgd287kamm51p49jcr90cvwbdr";
+  sha256 = "13j8kglgca296czxjz1xvrbz6yx05s2xassiliyszndbkrhn6bkl";
 
   postFetch = ''
     unzip $downloadedFile

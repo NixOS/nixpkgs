@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.05";
-  name = "quota-${version}";
+  pname = "quota";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxquota/quota-${version}.tar.gz";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools to manage kernel-level quotas in Linux";
-    homepage = https://sourceforge.net/projects/linuxquota/;
+    homepage = "https://sourceforge.net/projects/linuxquota/";
     license = licenses.gpl2; # With some files being BSD as an exception
     platforms = platforms.linux;
     maintainers = [ maintainers.dezgeg ];

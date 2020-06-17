@@ -16,10 +16,9 @@
 mkDerivation rec {
   pname = "calligra";
   version = "3.1.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/${name}.tar.xz";
+    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
     sha256 = "0w782k0hprpb6viixnqz34sp0z5csv3prdby46z22qqkcipcs638";
   };
 
@@ -61,7 +60,7 @@ mkDerivation rec {
       Sheets for computations, Plan for planning, and Karbon for
       vector graphics.
     '';
-    homepage = https://www.calligra.org/;
+    homepage = "https://www.calligra.org/";
     maintainers = with maintainers; [ phreedom ebzzry zraexy ];
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2 ];

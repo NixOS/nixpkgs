@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.2";
-  name = "python-qt-${version}";
+  pname = "python-qt";
 
   src = fetchurl {
     url="mirror://sourceforge/pythonqt/PythonQt${version}.zip";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PythonQt is a dynamic Python binding for the Qt framework. It offers an easy way to embed the Python scripting language into your C++ Qt applications.";
-    homepage = http://pythonqt.sourceforge.net/;
+    homepage = "http://pythonqt.sourceforge.net/";
     license = licenses.lgpl21;
     platforms = platforms.all;
     maintainers = with maintainers; [ hlolli ];

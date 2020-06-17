@@ -1,6 +1,6 @@
 { stdenv, runtimeShell, fetchurl, unzip, mono, avrdude, gtk2, xdg_utils }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "avrdudess-2.2.20140102";
 
   src = fetchurl {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GUI for AVRDUDE (AVR microcontroller programmer)";
-    homepage = https://github.com/zkemble/AVRDUDESS;
+    homepage = "https://github.com/zkemble/AVRDUDESS";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

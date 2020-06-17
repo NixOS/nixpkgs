@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "crex";
   version = "0.2.5";
 
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Explore, test, and check regular expressions in the terminal";
-    homepage = https://octobanana.com/software/crex;
+    homepage = "https://octobanana.com/software/crex";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, runtimeShell }:
 
-stdenv.mkDerivation rec {
-  name = "flockit-${version}";
+stdenv.mkDerivation {
+  pname = "flockit";
   version = "2012-08-11";
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       Also see the following blog post:
       https://www.swiftstack.com/blog/2012/08/15/old-school-monkeypatching/
     '';
-    homepage = https://github.com/smerritt/flockit;
+    homepage = "https://github.com/smerritt/flockit";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.basvandijk ];

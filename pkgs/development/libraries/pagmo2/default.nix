@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pagmo2-${version}";
+  pname = "pagmo2";
   version = "2.9";
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://esa.github.io/pagmo2/;
+    homepage = "https://esa.github.io/pagmo2/";
     description = "Scientific library for massively parallel optimization";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.costrouc ];

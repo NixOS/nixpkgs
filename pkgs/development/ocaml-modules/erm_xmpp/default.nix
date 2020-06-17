@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, camlp4, ocamlbuild
-, erm_xml, nocrypto
+, erm_xml, mirage-crypto, mirage-crypto-rng, base64
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.3+20180112";
+  version = "0.3+20200317";
   name = "ocaml${ocaml.version}-erm_xmpp-${version}";
 
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "xmpp";
-    rev    = "184dc70fab7d46d09b9148ca4448f07f1e0a2df2";
-    sha256 = "1dsqsfacvd9xqsqjzh6xwbnf2mv1dvhy210riyvjd260q085ch6n";
+    rev    = "7fa5bea252671fd88625c6af109998b879ca564f";
+    sha256 = "0spzyd9kbyizzwl8y3mq8z19zlkzxnkh2fppry4lyc7vaw7bqrwq";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
-  propagatedBuildInputs = [ erm_xml nocrypto ];
+  propagatedBuildInputs = [ erm_xml mirage-crypto mirage-crypto-rng base64 ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out";
   buildPhase = "ocaml setup.ml -build";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/hannesm/xmpp;
+    homepage = "https://github.com/hannesm/xmpp";
     description = "OCaml based XMPP implementation (fork)";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ sternenseemann ];

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, cmrt, libdrm, libva, libX11, libGL, wayland }:
 
 stdenv.mkDerivation rec {
-  name = "intel-hybrid-driver-${version}";
+  pname = "intel-hybrid-driver";
   version = "1.0.2";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [
     # driver_init: load libva-x11.so for any ABI version
     (fetchurl {
-      url = https://github.com/01org/intel-hybrid-driver/pull/26.diff;
+      url = "https://github.com/01org/intel-hybrid-driver/pull/26.diff";
       sha256 = "1ql4mbi5x1d2a5c8mkjvciaq60zj8nhx912992winbhfkyvpb3gx";
     })
   ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://01.org/linuxmedia;
+    homepage = "https://01.org/linuxmedia";
     description = "Intel driver for the VAAPI library with partial HW acceleration";
     license = licenses.mit;
     maintainers = with maintainers; [ tadfisher ];

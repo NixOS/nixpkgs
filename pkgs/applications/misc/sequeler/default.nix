@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
+, vala, meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
 , gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libssh2 }:
 
 
@@ -11,16 +11,16 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "sequeler";
-  version = "0.7.0";
+  version = "0.7.91";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1x2ikagjsgnhhhwkj09ihln17mq4wjq3wwbnf02j2p3jpp4i8w1i";
+    sha256 = "071vfx7bdf7hfa4784xz97vrj9x5aipgjbp30r00kg2zhg8wa2ls";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig pantheon.vala gettext wrapGAppsHook python3 desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja pkgconfig vala gettext wrapGAppsHook python3 desktop-file-utils ];
 
   buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libssh2 ];
 
@@ -28,6 +28,12 @@ in stdenv.mkDerivation rec {
     chmod +x build-aux/meson_post_install.py
     patchShebangs build-aux/meson_post_install.py
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Friendly SQL Client";
@@ -37,7 +43,7 @@ in stdenv.mkDerivation rec {
       editor with language recognition, and visualize SELECT results in a
       Gtk.Grid Widget.
     '';
-    homepage = https://github.com/Alecaddd/sequeler;
+    homepage = "https://github.com/Alecaddd/sequeler";
     license = licenses.gpl3;
     maintainers = [ maintainers.etu ] ++ pantheon.maintainers;
     platforms = platforms.linux;

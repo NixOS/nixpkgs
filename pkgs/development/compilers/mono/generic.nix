@@ -1,27 +1,25 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which, enableParallelBuilding ? true }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which
+, enableParallelBuilding ? true
+, srcArchiveSuffix ? "tar.bz2"
+, extraPatches ? []
+}:
 
 let
   llvm     = callPackage ./llvm.nix { };
 in
 stdenv.mkDerivation rec {
-  name = "mono-${version}";
+  pname = "mono";
+  inherit version;
 
   src = fetchurl {
     inherit sha256;
-    url = "https://download.mono-project.com/sources/mono/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
   };
 
   buildInputs =
     [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib python autoconf libtool automake cmake which
     ]
     ++ (stdenv.lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
-
-  propagatedBuildInputs = [glib];
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "" else "-lgcc_s" ;
-
-  # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
-  dontDisableStatic = true;
 
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
@@ -38,13 +36,9 @@ stdenv.mkDerivation rec {
     ./autogen.sh --prefix $out $configureFlags
   '';
 
-  # Attempt to fix this error when running "mcs --version":
-  # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
-  dontStrip = true;
-
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
-  patches = [ ./pkgconfig-before-gac.patch ];
+  patches = [ ./pkgconfig-before-gac.patch ] ++ extraPatches;
 
   # Patch all the necessary scripts. Also, if we're using LLVM, we fix the default
   # LLVM path to point into the Mono LLVM build, since it's private anyway.
@@ -80,7 +74,7 @@ stdenv.mkDerivation rec {
   inherit enableParallelBuilding;
 
   meta = with stdenv.lib; {
-    homepage = https://mono-project.com/;
+    homepage = "https://mono-project.com/";
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ thoughtpolice obadz vrthra ];

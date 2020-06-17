@@ -2,19 +2,19 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkOption;
-  inherit (lib) mapAttrs optional optionalString types;
+  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
+  inherit (lib) literalExample mapAttrs optional optionalString types;
 
   cfg = config.services.limesurvey;
+  fpm = config.services.phpfpm.pools.limesurvey;
 
   user = "limesurvey";
   group = config.services.httpd.group;
   stateDir = "/var/lib/limesurvey";
 
-  php = pkgs.php;
   pkg = pkgs.limesurvey;
 
-  configType = with types; either (either (attrsOf configType) str) (either int bool) // {
+  configType = with types; oneOf [ (attrsOf configType) str int bool ] // {
     description = "limesurvey config type (str, int, bool or attribute set thereof)";
   };
 
@@ -100,19 +100,15 @@ in
     };
 
     virtualHost = mkOption {
-      type = types.submodule ({
-        options = import ../web-servers/apache-httpd/per-server-options.nix {
-          inherit lib;
-          forMainServer = false;
-        };
-      });
-      example = {
-        hostName = "survey.example.org";
-        enableSSL = true;
-        adminAddr = "webmaster@example.org";
-        sslServerCert = "/var/lib/acme/survey.example.org/full.pem";
-        sslServerKey = "/var/lib/acme/survey.example.org/key.pem";
-      };
+      type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+      example = literalExample ''
+        {
+          hostName = "survey.example.org";
+          adminAddr = "webmaster@example.org";
+          forceSSL = true;
+          enableACME = true;
+        }
+      '';
       description = ''
         Apache configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
         See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
@@ -120,17 +116,18 @@ in
     };
 
     poolConfig = mkOption {
-      type = types.lines;
-      default = ''
-        pm = dynamic
-        pm.max_children = 32
-        pm.start_servers = 2
-        pm.min_spare_servers = 2
-        pm.max_spare_servers = 4
-        pm.max_requests = 500
-      '';
+      type = with types; attrsOf (oneOf [ str int bool ]);
+      default = {
+        "pm" = "dynamic";
+        "pm.max_children" = 32;
+        "pm.start_servers" = 2;
+        "pm.min_spare_servers" = 2;
+        "pm.max_spare_servers" = 4;
+        "pm.max_requests" = 500;
+      };
       description = ''
-        Options for LimeSurvey's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+        Options for the LimeSurvey PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+        for details on configuration directives.
       '';
     };
 
@@ -183,7 +180,7 @@ in
       config = {
         tempdir = "${stateDir}/tmp";
         uploaddir = "${stateDir}/upload";
-        force_ssl = mkIf cfg.virtualHost.enableSSL "on";
+        force_ssl = mkIf (cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL) "on";
         config.defaultlang = "en";
       };
     };
@@ -202,56 +199,48 @@ in
     };
 
     services.phpfpm.pools.limesurvey = {
-      socketName = "limesurvey";
-      phpPackage = php;
-      user = "${user}";
-      group = "${group}";
-      extraConfig = ''
-        listen.owner = ${config.services.httpd.user};
-        listen.group = ${config.services.httpd.group};
-
-        env[LIMESURVEY_CONFIG] = ${limesurveyConfig}
-
-        ${cfg.poolConfig}
-      '';
+      inherit user group;
+      phpEnv.LIMESURVEY_CONFIG = "${limesurveyConfig}";
+      settings = {
+        "listen.owner" = config.services.httpd.user;
+        "listen.group" = config.services.httpd.group;
+      } // cfg.poolConfig;
     };
 
     services.httpd = {
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = [
-        (cfg.virtualHost // {
-          documentRoot = mkForce "${pkg}/share/limesurvey";
-          extraConfig = ''
-            Alias "/tmp" "${stateDir}/tmp"
-            <Directory "${stateDir}">
-              AllowOverride all
-              Require all granted
-              Options -Indexes +FollowSymlinks
-            </Directory>
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
+        documentRoot = mkForce "${pkg}/share/limesurvey";
+        extraConfig = ''
+          Alias "/tmp" "${stateDir}/tmp"
+          <Directory "${stateDir}">
+            AllowOverride all
+            Require all granted
+            Options -Indexes +FollowSymlinks
+          </Directory>
 
-            Alias "/upload" "${stateDir}/upload"
-            <Directory "${stateDir}/upload">
-              AllowOverride all
-              Require all granted
-              Options -Indexes
-            </Directory>
+          Alias "/upload" "${stateDir}/upload"
+          <Directory "${stateDir}/upload">
+            AllowOverride all
+            Require all granted
+            Options -Indexes
+          </Directory>
 
-            <Directory "${pkg}/share/limesurvey">
-              <FilesMatch "\.php$">
-                <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:/run/phpfpm-limesurvey/limesurvey.sock|fcgi://localhost/"
-                </If>
-              </FilesMatch>
+          <Directory "${pkg}/share/limesurvey">
+            <FilesMatch "\.php$">
+              <If "-f %{REQUEST_FILENAME}">
+                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+              </If>
+            </FilesMatch>
 
-              AllowOverride all
-              Options -Indexes
-              DirectoryIndex index.php
-            </Directory>
-          '';
-        })
-      ];
+            AllowOverride all
+            Options -Indexes
+            DirectoryIndex index.php
+          </Directory>
+        '';
+      } ];
     };
 
     systemd.tmpfiles.rules = [
@@ -270,8 +259,8 @@ in
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
-        ${php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
-        ${php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+        ${pkgs.php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
+        ${pkgs.php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
       '';
       serviceConfig = {
         User = user;
@@ -282,7 +271,10 @@ in
 
     systemd.services.httpd.after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
 
-    users.users."${user}".group = group;
+    users.users.${user} = {
+      group = group;
+      isSystemUser = true;
+    };
 
   };
 }

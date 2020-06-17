@@ -3,7 +3,7 @@
 let
   majorVersion = "8.1";
 in stdenv.mkDerivation rec {
-  name = "gurobi-${version}";
+  pname = "gurobi";
   version = "${majorVersion}.0";
 
   src = with stdenv.lib; fetchurl {
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optimization solver for mathematical programming";
-    homepage = https://www.gurobi.com;
+    homepage = "https://www.gurobi.com";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jfrankenau ];

@@ -1,11 +1,11 @@
 { fetchurl, stdenv, autogen }:
 
 stdenv.mkDerivation rec {
-  name = "complexity-${version}";
+  pname = "complexity";
   version = "1.10";
 
   src = fetchurl {
-    url = "mirror://gnu/complexity/${name}.tar.gz";
+    url = "mirror://gnu/complexity/${pname}-${version}.tar.gz";
     sha256 = "1vfns9xm7w0wrz12a3w15slrqnrfh6qxk15nv7qkj3irll3ff522";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/complexity/;
+    homepage = "https://www.gnu.org/software/complexity/";
 
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
     maintainers = [ ];

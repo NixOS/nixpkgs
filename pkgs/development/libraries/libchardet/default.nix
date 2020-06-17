@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libchardet-${version}";
+  pname = "libchardet";
   version = "1.0.5";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mozilla's Universal Charset Detector C/C++ API";
-    homepage = ftp://ftp.oops.org/pub/oops/libchardet/index.html;
+    homepage = "ftp://ftp.oops.org/pub/oops/libchardet/index.html";
     license = licenses.mpl11;
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.unix;

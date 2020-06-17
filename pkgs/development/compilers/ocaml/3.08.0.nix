@@ -1,12 +1,12 @@
 { stdenv, fetchurl, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-${version}";
+  pname = "ocaml";
   version = "3.08.0";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = "http://tarballs.nixos.org/${name}.tar.gz";
+    url = "http://tarballs.nixos.org/${pname}-${version}.tar.gz";
     sha256 = "135g5waj7djzrj0dbc8z1llasfs2iv5asq41jifhldxb4l2b97mx";
   };
   configureScript = ./configure-3.08.0;

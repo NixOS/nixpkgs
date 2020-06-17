@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "pytest plugin for click";
-    homepage = https://github.com/Stranger6667/pytest-click;
+    homepage = "https://github.com/Stranger6667/pytest-click";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

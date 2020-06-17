@@ -1,26 +1,37 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, makeWrapper
+, ncurses
 }:
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.11.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1b671jhf3xaaisgpiad5apmvwkp40qr2hm4n21m0ya7k5ckps09z";
-  };
+    sha256 = "11vy39zygk1gxb1nc1zmxlgs6fn7yq68090fwm2jar0lsxx8a83i";
+   };
 
-  modSha256 = "0as736nnx7ci4w9gdp27g55g6dny9bh1fryz3g89gxm2sa2nlb9l";
+  vendorSha256 = "0qfb352gmsmy5glrsjwc3w57di5k2kjdsyfqn4xf7p4v12yg88va";
 
-  buildFlagsArray = [ "-ldflags=" "-X main.version=${version}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  subPackages = [ "." ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    mv "$out/bin/wtf" "$out/bin/wtfutil"
+    wrapProgram "$out/bin/wtfutil" --prefix PATH : "${ncurses.dev}/bin"
+  '';
 
   meta = with lib; {
     description = "The personal information dashboard for your terminal";
-    homepage = http://wtfutil.com/;
+    homepage = "https://wtfutil.com/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

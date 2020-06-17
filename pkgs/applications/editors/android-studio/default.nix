@@ -8,21 +8,21 @@ let
     inherit (gnome2) GConf gnome_vfs;
   };
   stableVersion = {
-    version = "3.4.1.0"; # "Android Studio 3.4.1"
-    build = "183.5522156";
-    sha256Hash = "0y4l9d1yrvv1csx6vl4jnqgqy96y44rl6p8hcxrnbvrg61iqnj30";
+    version = "4.0.0.16"; # "Android Studio 4.0"
+    build = "193.6514223";
+    sha256Hash = "1sqj64vddwfrr9821habfz7dms9csvbp7b8gf1d027188b2lvh3h";
   };
   betaVersion = {
-    version = "3.5.0.17"; # "Android Studio 3.5 Beta 5"
-    build = "191.5675373";
-    sha256Hash = "0iw9v2rzr32dhs3z4vgz93zvxcv111q4cvwzi2cb83hn8kl050ip";
+    version = "4.0.0.16"; # "Android Studio 4.0"
+    build = "193.6514223";
+    sha256Hash = "1sqj64vddwfrr9821habfz7dms9csvbp7b8gf1d027188b2lvh3h";
   };
   latestVersion = { # canary & dev
-    version = "3.6.0.3"; # "Android Studio 3.6 Canary 3"
-    build = "191.5618338";
-    sha256Hash = "0ryf61svn6ra8gh1rvfjqj3j282zmgcvkjvgfvql1wgkjlz21519";
+    version = "4.1.0.10"; # "Android Studio 4.1 Canary 10"
+    build = "201.6507185";
+    sha256Hash = "19yawwsjsdqc0brr0ahviljv4v4p085k3izdpmm915c0bjm89y72";
   };
-in rec {
+in {
   # Attributes are named by their corresponding release channels
 
   stable = mkStudio (stableVersion // {

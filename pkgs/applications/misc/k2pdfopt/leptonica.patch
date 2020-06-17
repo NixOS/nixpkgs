@@ -1,0 +1,254 @@
+From 8c11a20925686855023df90ed477957c7d7fe91e Mon Sep 17 00:00:00 2001
+From: Daniel Fullmer <danielrf12@gmail.com>
+Date: Fri, 13 Sep 2019 15:54:21 -0400
+Subject: [PATCH] Willus mod for k2pdfopt
+
+---
+ src/allheaders.h |   4 ++
+ src/dewarp2.c    | 106 ++++++++++++++++++++++++++++++++++++++++++-----
+ src/leptwin.c    |   6 ++-
+ 3 files changed, 104 insertions(+), 12 deletions(-)
+
+diff --git a/src/allheaders.h b/src/allheaders.h
+index e68eff1..b3cc729 100644
+--- a/src/allheaders.h
++++ b/src/allheaders.h
+@@ -669,6 +669,10 @@ LEPT_DLL extern L_DEWARPA * dewarpaReadMem ( const l_uint8 *data, size_t size );
+ LEPT_DLL extern l_ok dewarpaWrite ( const char *filename, L_DEWARPA *dewa );
+ LEPT_DLL extern l_ok dewarpaWriteStream ( FILE *fp, L_DEWARPA *dewa );
+ LEPT_DLL extern l_ok dewarpaWriteMem ( l_uint8 **pdata, size_t *psize, L_DEWARPA *dewa );
++/* WILLUS MOD */
++    LEPT_DLL extern l_int32 dewarpBuildPageModel_ex ( L_DEWARP *dew, const char *debugfile,l_int32 fit_order );
++    LEPT_DLL extern l_int32 dewarpFindVertDisparity_ex ( L_DEWARP *dew, PTAA *ptaa, l_int32 rotflag,l_int32 fit_order );
++    LEPT_DLL extern l_int32 dewarpBuildLineModel_ex ( L_DEWARP *dew, l_int32 opensize, const char *debugfile,l_int32 fit_order );
+ LEPT_DLL extern l_ok dewarpBuildPageModel ( L_DEWARP *dew, const char *debugfile );
+ LEPT_DLL extern l_ok dewarpFindVertDisparity ( L_DEWARP *dew, PTAA *ptaa, l_int32 rotflag );
+ LEPT_DLL extern l_ok dewarpFindHorizDisparity ( L_DEWARP *dew, PTAA *ptaa );
+diff --git a/src/dewarp2.c b/src/dewarp2.c
+index 220eec1..2e29500 100644
+--- a/src/dewarp2.c
++++ b/src/dewarp2.c
+@@ -144,9 +144,17 @@ static const l_float32   L_ALLOWED_W_FRACT = 0.05;  /* no bigger */
+  *          longest textlines.
+  * </pre>
+  */
++/* WILLUS MOD */
+ l_ok
+-dewarpBuildPageModel(L_DEWARP    *dew,
+-                     const char  *debugfile)
++dewarpBuildPageModel(L_DEWARP *dew,const char *debugfile)
++{
++return(dewarpBuildPageModel_ex(dew,debugfile,2));
++}
++
++l_ok
++dewarpBuildPageModel_ex(L_DEWARP    *dew,
++                     const char  *debugfile,
++                     l_int32 fit_order)
+ {
+ l_int32  linecount, topline, botline, ret;
+ PIX     *pixs, *pix1, *pix2, *pix3;
+@@ -225,7 +233,7 @@ PTAA    *ptaa1, *ptaa2;
+         /* Get the sampled vertical disparity from the textline centers.
+          * The disparity array will push pixels vertically so that each
+          * textline is flat and centered at the y-position of the mid-point. */
+-    if (dewarpFindVertDisparity(dew, ptaa2, 0) != 0) {
++    if (dewarpFindVertDisparity_ex(dew, ptaa2, 0, fit_order) != 0) {
+         L_WARNING("vertical disparity not built\n", procName);
+         ptaaDestroy(&ptaa2);
+         return 1;
+@@ -290,13 +298,24 @@ PTAA    *ptaa1, *ptaa2;
+  *          a pdf.  Non-pix debug output goes to /tmp.
+  * </pre>
+  */
++/* WILLUS MOD */
+ l_ok
+ dewarpFindVertDisparity(L_DEWARP  *dew,
+                         PTAA      *ptaa,
+                         l_int32    rotflag)
+ {
++return(dewarpFindVertDisparity_ex(dew,ptaa,rotflag,2));
++}
++/* WILLUS MOD -- add cubic and quartic fits and ..._ex functions */
++l_int32
++dewarpFindVertDisparity_ex(L_DEWARP  *dew,
++                        PTAA      *ptaa,
++                        l_int32    rotflag,
++                        l_int32    fit_order)
++{
+ l_int32     i, j, nlines, npts, nx, ny, sampling;
+-l_float32   c0, c1, c2, x, y, midy, val, medval, meddev, minval, maxval;
++/* WILLUS MOD */
++l_float32   c0, c1, c2, c3, c4, x, y, midy, val, medval, meddev, minval, maxval;
+ l_float32  *famidys;
+ NUMA       *nax, *nafit, *nacurve0, *nacurve1, *nacurves;
+ NUMA       *namidy, *namidys, *namidysi;
+@@ -304,11 +323,22 @@ PIX        *pix1, *pix2, *pixcirc, *pixdb;
+ PTA        *pta, *ptad, *ptacirc;
+ PTAA       *ptaa0, *ptaa1, *ptaa2, *ptaa3, *ptaa4, *ptaa5, *ptaat;
+ FPIX       *fpix;
++/* WILLUS MOD */
++l_int32 fit_order1,fit_order2;
+ 
+     PROCNAME("dewarpFindVertDisparity");
+ 
+     if (!dew)
+         return ERROR_INT("dew not defined", procName, 1);
++/* WILLUS MOD */
++    if (fit_order < 10)
++        fit_order1 = fit_order2 = fit_order;
++    else
++        {
++        fit_order1=fit_order % 10;
++        fit_order2=fit_order / 10;
++        fit_order2=fit_order2 % 10;
++        }
+     dew->vsuccess = 0;
+     if (!ptaa)
+         return ERROR_INT("ptaa not defined", procName, 1);
+@@ -331,12 +361,32 @@ FPIX       *fpix;
+     pixdb = (rotflag) ? pixRotateOrth(dew->pixs, 1) : pixClone(dew->pixs);
+     for (i = 0; i < nlines; i++) {  /* for each line */
+         pta = ptaaGetPta(ptaa, i, L_CLONE);
+-        ptaGetQuadraticLSF(pta, &c2, &c1, &c0, NULL);
+-        numaAddNumber(nacurve0, c2);
++/* WILLUS MOD */
++if (fit_order1>3)
++    {
++    ptaGetQuarticLSF(pta, &c4, &c3, &c2, &c1, &c0, NULL);
++    numaAddNumber(nacurve0, c4);
++    }
++else if (fit_order1==3)
++    {
++    ptaGetCubicLSF(pta, &c3, &c2, &c1, &c0, NULL);
++    numaAddNumber(nacurve0, c3);
++    }
++else
++    {
++    ptaGetQuadraticLSF(pta, &c2, &c1, &c0, NULL);
++    numaAddNumber(nacurve0, c2);
++    }
+         ptad = ptaCreate(nx);
+         for (j = 0; j < nx; j++) {  /* uniformly sampled in x */
+              x = j * sampling;
+-             applyQuadraticFit(c2, c1, c0, x, &y);
++/* WILLUS MOD */
++if (fit_order1>3)
++    applyQuarticFit(c4, c3, c2, c1, c0, x, &y);
++else if (fit_order1==3)
++    applyCubicFit(c3, c2, c1, c0, x, &y);
++else
++    applyQuadraticFit(c2, c1, c0, x, &y);
+              ptaAddPt(ptad, x, y);
+         }
+         ptaaAddPta(ptaa0, ptad, L_INSERT);
+@@ -350,7 +400,13 @@ FPIX       *fpix;
+         for (i = 0; i < nlines; i++) {
+             pta = ptaaGetPta(ptaa, i, L_CLONE);
+             ptaGetArrays(pta, &nax, NULL);
+-            ptaGetQuadraticLSF(pta, NULL, NULL, NULL, &nafit);
++/* WILLUS MOD */
++if (fit_order1>3)
++ptaGetQuarticLSF(pta, NULL, NULL, NULL, NULL, NULL, &nafit);
++else if (fit_order1==3)
++ptaGetCubicLSF(pta, NULL, NULL, NULL, NULL, &nafit);
++else
++ptaGetQuadraticLSF(pta, NULL, NULL, NULL, &nafit);
+             ptad = ptaCreateFromNuma(nax, nafit);
+             ptaaAddPta(ptaat, ptad, L_INSERT);
+             ptaDestroy(&pta);
+@@ -494,11 +550,24 @@ FPIX       *fpix;
+     ptaa5 = ptaaCreate(nx);  /* uniformly sampled across full height of image */
+     for (j = 0; j < nx; j++) {  /* for each column */
+         pta = ptaaGetPta(ptaa4, j, L_CLONE);
+-        ptaGetQuadraticLSF(pta, &c2, &c1, &c0, NULL);
++/* WILLUS MOD */
++/* Order higher than 2 can cause a little craziness here. */
++if (fit_order2>3)
++    ptaGetQuarticLSF(pta, &c4, &c3, &c2, &c1, &c0, NULL);
++else if (fit_order2==3)
++    ptaGetCubicLSF(pta, &c3, &c2, &c1, &c0, NULL);
++else
++    ptaGetQuadraticLSF(pta, &c2, &c1, &c0, NULL);
+         ptad = ptaCreate(ny);
+         for (i = 0; i < ny; i++) {  /* uniformly sampled in y */
+              y = i * sampling;
+-             applyQuadraticFit(c2, c1, c0, y, &val);
++/* WILLUS MOD */
++if (fit_order2>3)
++    applyQuarticFit(c4, c3, c2, c1, c0, y, &val);
++else if (fit_order2==3)
++    applyCubicFit(c3, c2, c1, c0, y, &val);
++else
++    applyQuadraticFit(c2, c1, c0, y, &val);
+              ptaAddPt(ptad, y, val);
+         }
+         ptaaAddPta(ptaa5, ptad, L_INSERT);
+@@ -1602,11 +1671,21 @@ FPIX      *fpix;
+  *          See notes there.
+  * </pre>
+  */
++/* WILLUS MOD */
+ l_ok
+ dewarpBuildLineModel(L_DEWARP    *dew,
+                      l_int32      opensize,
+                      const char  *debugfile)
+ {
++return(dewarpBuildLineModel_ex(dew,opensize,debugfile,2));
++}
++
++l_int32
++dewarpBuildLineModel_ex(L_DEWARP    *dew,
++                     l_int32      opensize,
++                     const char  *debugfile,
++                     l_int32 fit_order)
++{
+ char     buf[64];
+ l_int32  i, j, bx, by, ret, nlines;
+ BOXA    *boxa;
+@@ -1695,6 +1774,8 @@ PTAA    *ptaa1, *ptaa2;
+ 
+             /* Remove all lines that are not at least 0.75 times the length
+              * of the longest line. */
++/* WILLUS MOD */
++/*
+         ptaa2 = dewarpRemoveShortLines(pix, ptaa1, 0.75, DEBUG_SHORT_LINES);
+         if (debugfile) {
+             pix1 = pixConvertTo32(pix);
+@@ -1704,6 +1785,8 @@ PTAA    *ptaa1, *ptaa2;
+             pixDestroy(&pix1);
+             pixDestroy(&pix2);
+         }
++*/
++ptaa2=ptaa1;
+         ptaaDestroy(&ptaa1);
+         nlines = ptaaGetCount(ptaa2);
+         if (nlines < dew->minlines) {
+@@ -1717,7 +1800,8 @@ PTAA    *ptaa1, *ptaa2;
+              * centers.  The disparity array will push pixels vertically
+              * so that each line is flat and centered at the y-position
+              * of the mid-point. */
+-        ret = dewarpFindVertDisparity(dew, ptaa2, 1 - i);
++/* WILLUS MOD */
++        ret = dewarpFindVertDisparity_ex(dew, ptaa2, 1 - i, fit_order);
+ 
+             /* If i == 0, move the result to the horizontal disparity,
+              * rotating it back by -90 degrees. */
+diff --git a/src/leptwin.c b/src/leptwin.c
+index 72643a0..573d33e 100644
+--- a/src/leptwin.c
++++ b/src/leptwin.c
+@@ -364,5 +364,9 @@ PIXCMAP   *cmap;
+ 
+     return hBitmap;
+ }
+-
++#else
++/* willus mod: Avoid weird issue with OS/X library archiver when there are no symbols */
++int leptwin_my_empty_func(void);
++int leptwin_my_empty_func(void)
++{return(0);}
+ #endif   /* _WIN32 */
+-- 
+2.22.0
+

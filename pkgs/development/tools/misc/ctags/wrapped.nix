@@ -27,10 +27,10 @@ with pkgs.stdenv.lib;
 
   # don't scan version control directories
   defaultArgs = [
-    "--exclude=\.svn"
-    "--exclude=\.hg"
-    "--exclude=\.git"
-    "--exclude=\_darcs"
+    "--exclude=.svn"
+    "--exclude=.hg"
+    "--exclude=.git"
+    "--exclude=_darcs"
     "--sort=yes"
   ];
 
@@ -38,8 +38,8 @@ with pkgs.stdenv.lib;
   asLang = [
     "--langdef=ActionScript"
     "--langmap=ActionScript:.as"
-    "--regex-ActionScript=/function[ \\t]+([A-Za-z0-9_]+)[ \\t]*\\(/\1/f,function,functions/"
-    "--regex-ActionScript=/function[ \\t]+(set|get)[ \\t]+([A-Za-z0-9_]+)[ \\t]*\\(/\2/p,property,properties/"
+    "--regex-ActionScript=/function[ \\t]+([A-Za-z0-9_]+)[ \\t]*\\(/\\1/f,function,functions/"
+    "--regex-ActionScript=/function[ \\t]+(set|get)[ \\t]+([A-Za-z0-9_]+)[ \\t]*\\(/\\2/p,property,properties/"
     "--regex-ActionScript=/interface[ \\t]+[a-z0-9_.]*([A-Z][A-Za-z0-9_]+)/\\1/i,interface,interfaces/"
     "--regex-ActionScript=/package[ \\t]+([^ \\t]*)/\\1/p/"
     "--regex-ActionScript=/class[ \\t]+[a-z0-9_.]*([A-Z][A-Za-z0-9_]+)/\\1/c,class,classes/"
@@ -67,7 +67,7 @@ with pkgs.stdenv.lib;
   nixLang = [
     "--langdef=NIX"
     "--langmap=NIX:.nix"
-    "--regex-NIX=/\([^ \\t*]*\)[ \\t]*=/\\1/f/"
+    "--regex-NIX=/([^ \\t*]*)[ \\t]*=/\\1/f/"
   ];
 
   rubyLang = [

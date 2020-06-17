@@ -2,8 +2,8 @@
 , ghostscript, graphicsmagick, quicktemplate, go-bindata, easyjson
 , nodePackages, emscripten, opencv, statik }:
 
-buildGoPackage rec {
-  name = "meguca-unstable-${version}";
+buildGoPackage {
+  pname = "meguca-unstable";
   version = "2019-03-12";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
@@ -17,10 +17,10 @@ buildGoPackage rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkgconfig cmake go-bindata ];
 
   buildInputs = [
-    ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata
+    ffmpeg-full graphicsmagick ghostscript quicktemplate
     easyjson emscripten opencv statik
   ];
 
@@ -35,9 +35,9 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    mkdir -p $bin/bin $bin/share/meguca
-    cp meguca $bin/bin
-    cp -r www $bin/share/meguca
+    mkdir -p $out/bin $out/share/meguca
+    cp meguca $out/bin
+    cp -r www $out/share/meguca
   '';
 
   meta = with stdenv.lib; {
@@ -46,5 +46,7 @@ buildGoPackage rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.all;
+    broken = true; # Broken on Hydra since 2019-04-18:
+    # https://hydra.nixos.org/build/98885902
   };
 }

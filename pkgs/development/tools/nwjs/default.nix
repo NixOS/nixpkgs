@@ -1,9 +1,9 @@
 { stdenv, fetchurl, buildEnv, makeWrapper
 
 , xorg, alsaLib, dbus, glib, gtk3, atk, pango, freetype, fontconfig
-, gdk_pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
+, gdk-pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify
-, ffmpeg, libxcb, cups
+, ffmpeg_3, libxcb, cups
 , sqlite, udev
 , libuuid
 , sdk ? false
@@ -15,14 +15,14 @@ let
   nwEnv = buildEnv {
     name = "nwjs-env";
     paths = [
-      xorg.libX11 xorg.libXrender glib /*gtk2*/ gtk3 atk pango cairo gdk_pixbuf
+      xorg.libX11 xorg.libXrender glib /*gtk2*/ gtk3 atk pango cairo gdk-pixbuf
       freetype fontconfig xorg.libXcomposite alsaLib xorg.libXdamage
       xorg.libXext xorg.libXfixes nss nspr gconf expat dbus
       xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr
       xorg.libXScrnSaver cups
       libcap libnotify
       # libnw-specific (not chromium dependencies)
-      ffmpeg libxcb
+      ffmpeg_3 libxcb
       # chromium runtime deps (dlopen’d)
       sqlite udev
       libuuid
@@ -32,7 +32,7 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "nwjs-${version}";
+  pname = "nwjs";
   version = "0.33.4";
 
   src = if sdk then fetchurl {
@@ -87,7 +87,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An app runtime based on Chromium and node.js";
-    homepage = https://nwjs.io/;
+    homepage = "https://nwjs.io/";
     platforms = ["i686-linux" "x86_64-linux"];
     maintainers = [ maintainers.offline ];
     license = licenses.bsd3;

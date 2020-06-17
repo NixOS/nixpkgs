@@ -1,34 +1,33 @@
-{ stdenv, fetchzip, which, ocsigen_server, ocsigen_deriving, ocaml, lwt_camlp4,
+{ stdenv, fetchzip, which, ocsigen_server, ocaml,
   lwt_react,
-  opaline, ppx_tools, ppx_deriving, findlib
+  opaline, ppx_deriving, findlib
 , js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
 , js_of_ocaml-tyxml
 , lwt_ppx
 }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.07"
+then throw "eliom is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "6.7.0";
-  name = "${pname}-${version}";
+  version = "6.12.0";
 
   src = fetchzip {
     url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
-    sha256 = "0mrlpvjaihpsf2xr6p1gs0sz4cwzkknf5b1s32bhmqq5qzsh4j8k";
+    sha256 = "015jh72v6ch9h9czd8sn5kjz3pv6lsnvvnhdjgrplwj443dn1xp8";
   };
 
-  patches = [ ./camlp4.patch ];
-
-  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline ppx_tools
-    ocsigen_deriving
+  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline
   ];
 
   propagatedBuildInputs = [
     js_of_ocaml-lwt
     js_of_ocaml-ppx
     js_of_ocaml-tyxml
-    lwt_camlp4
     lwt_ppx
     lwt_react
     ocsigen_server
@@ -40,8 +39,8 @@ stdenv.mkDerivation rec
   setupHook = [ ./setup-hook.sh ];
 
   meta = {
-    homepage = http://ocsigen.org/eliom/;
-    description = "Ocaml Framework for programming Web sites and client/server Web applications";
+    homepage = "http://ocsigen.org/eliom/";
+    description = "OCaml Framework for programming Web sites and client/server Web applications";
 
     longDescription =''Eliom is a framework for programming Web sites
     and client/server Web applications. It introduces new concepts to

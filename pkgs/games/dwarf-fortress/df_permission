@@ -12,7 +12,7 @@ Tarn
 On Fri, Oct 29, 2010 at 6:56 AM,  <roconnor@theorem.ca> wrote:
 > I'd like to distribute a *slightly* modified version of Dwarf Fortress which
 > is needed to run it under the NixOS distribution of Linux (see
-> <http://nixos.org/>
+> <https://nixos.org/>
 >
 > Modification: The interpreter location /lib/ld-linux.so.2 in
 > lib/Dwarf_Fortress is replaced with the location of ld-linux.so.2 under the

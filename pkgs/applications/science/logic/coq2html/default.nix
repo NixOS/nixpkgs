@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "coq2html-${version}";
+  pname = "coq2html";
+  inherit version;
 
   src = fetchgit {
     url = "https://github.com/xavierleroy/coq2html";
@@ -30,7 +31,7 @@ stdenv.mkDerivation {
       initially hidden, but can be revealed one by one by clicking on the
       "Proof" keyword.
     '';
-    homepage = https://github.com/xavierleroy/coq2html;
+    homepage = "https://github.com/xavierleroy/coq2html";
     license = licenses.gpl2;
     maintainers = with maintainers; [ jwiegley ];
     platforms = platforms.unix;

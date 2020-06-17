@@ -1,19 +1,36 @@
-{ stdenv, fetchFromGitHub, libX11, libXt }:
+{ stdenv, fetchFromGitHub, fetchpatch, libX11, libXt, withGraphics ? true }:
 
 stdenv.mkDerivation rec {
-  name = "icon-lang-${version}";
+  pname = "icon-lang";
   version = "9.5.1";
   src = fetchFromGitHub {
-    rev = "39d7438e8d23ccfe20c0af8bbbf61e34d9c715e9";
     owner = "gtownsend";
     repo = "icon";
+    rev = "rel${builtins.replaceStrings ["."] [""] version}";
     sha256 = "1gkvj678ldlr1m5kjhx6zpmq11nls8kxa7pyy64whgakfzrypynw";
   };
-  buildInputs = [ libX11 libXt ];
 
-  configurePhase = ''
-    make X-Configure name=linux
-  '';
+  buildInputs = stdenv.lib.optionals withGraphics [ libX11 libXt ];
+
+  patches = [
+    # Patch on git master, likely won't be necessary in future release
+    (fetchpatch {
+      url = "https://github.com/gtownsend/icon/commit/bfc4a6004d0d3984c8066289b8d8e563640c4ddd.patch";
+      sha256 = "1pqapjghk10rb73a1mfflki2wipjy4kvnravhmrilkqzb9hd6v8m";
+      excludes = [
+        "doc/relnotes.htm"
+        "src/h/version.h"
+      ];
+    })
+  ];
+
+  configurePhase =
+    let
+      _name = if stdenv.isDarwin then "macintosh" else "linux";
+    in
+    ''
+      make ${stdenv.lib.optionalString withGraphics "X-"}Configure name=${_name}
+    '';
 
   installPhase = ''
     make Install dest=$out
@@ -21,9 +38,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = ''A very high level general-purpose programming language'';
-    maintainers = with maintainers; [ vrthra ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ vrthra yurrriq ];
+    platforms = with platforms; linux ++ darwin;
     license = licenses.publicDomain;
-    homepage = https://www.cs.arizona.edu/icon/;
+    homepage = "https://www.cs.arizona.edu/icon/";
   };
 }

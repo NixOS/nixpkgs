@@ -1,7 +1,12 @@
-{ stdenv, fetchFromGitHub, gettext, python3Packages, perlPackages, deepin }:
+{ stdenv
+, fetchFromGitHub
+, gettext
+, python3Packages
+, perlPackages
+, deepin
+}:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-gettext-tools";
   version = "1.0.8";
 
@@ -24,7 +29,9 @@ stdenv.mkDerivation rec {
     python3Packages.python
   ];
 
-  makeFlags = [ "PREFIX=${placeholder ''out''}" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   postPatch = ''
     sed -e 's/sudo cp/cp/' -i src/generate_mo.py
@@ -36,11 +43,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/deepin-desktop-ts-convert --set PERL5LIB $PERL5LIB
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin Internationalization utilities";
-    homepage = https://github.com/linuxdeepin/deepin-gettext-tools;
+    homepage = "https://github.com/linuxdeepin/deepin-gettext-tools";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

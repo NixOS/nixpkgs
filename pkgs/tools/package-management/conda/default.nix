@@ -5,11 +5,13 @@
 , makeWrapper
 , buildFHSUserEnv
 , libselinux
+, libarchive
+, libGL
 , xorg
 # Conda installs its packages and environments under this directory
 , installationPath ? "~/.conda"
 # Conda manages most pkgs itself, but expects a few to be on the system.
-, condaDeps ? [ stdenv.cc xorg.libSM xorg.libICE xorg.libXrender libselinux ]
+, condaDeps ? [ stdenv.cc xorg.libSM xorg.libICE xorg.libX11 xorg.libXau xorg.libXi xorg.libXrender libselinux libGL ]
 # Any extra nixpkgs you'd like available in the FHS env for Conda to use
 , extraPkgs ? [ ]
 }:
@@ -59,11 +61,12 @@ in
       # Some other required environment variables
       export FONTCONFIG_FILE=/etc/fonts/fonts.conf
       export QTCOMPOSE=${xorg.libX11}/share/X11/locale
+      export LIBARCHIVE=${libarchive.lib}/lib/libarchive.so
     '';
 
     meta = {
       description = "Conda is a package manager for Python";
-      homepage = https://conda.io/;
+      homepage = "https://conda.io/";
       platforms = lib.platforms.linux;
       license = lib.licenses.bsd3;
       maintainers = with lib.maintainers; [ jluttine bhipple ];

@@ -29,12 +29,7 @@ in
 
     services.mongodb = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable the MongoDB server.
-        ";
-      };
+      enable = mkEnableOption "the MongoDB server";
 
       package = mkOption {
         default = pkgs.mongodb;
@@ -65,9 +60,9 @@ in
         default = false;
         description = "Enable client authentication. Creates a default superuser with username root!";
       };
-      
+
       initialRootPassword = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         description = "Password for the root user if auth is enabled.";
       };

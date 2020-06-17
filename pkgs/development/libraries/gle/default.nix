@@ -1,7 +1,7 @@
-{stdenv, fetchurl, libGLU_combined, freeglut, libX11, libXt, libXmu, libXi, libXext}:
+{stdenv, fetchurl, freeglut, libX11, libXt, libXmu, libXi, libXext, libGL, libGLU}:
 stdenv.mkDerivation {
   name = "gle-3.1.0";
-  buildInputs = [libGLU_combined freeglut libX11 libXt libXmu libXi libXext];
+  buildInputs = [libGLU libGL freeglut libX11 libXt libXmu libXi libXext];
   src = fetchurl {
     urls = [
       "mirror://sourceforge/project/gle/gle/gle-3.1.0/gle-3.1.0.tar.gz"

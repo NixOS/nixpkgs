@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.6.14";
-  name    = "piqi-${version}";
+  pname = "piqi";
  
   src = fetchurl {
     url = "https://github.com/alavrik/piqi/archive/v${version}.tar.gz";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://piqi.org;
+    homepage = "http://piqi.org";
     description = "Universal schema language and a collection of tools built around it";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer ];

@@ -1,7 +1,11 @@
-{ lib, callPackage, fetchurl, stdenv }:
+{ lib, callPackage, fetchpatch, fetchurl, stdenv }:
 
 let
-  generic = args: callPackage (import ./generic.nix args) { };
+
+generic = args:
+if ((!lib.versionOlder args.version "391")
+    && stdenv.hostPlatform.system != "x86_64-linux") then null
+  else callPackage (import ./generic.nix args) { };
   kernel = callPackage # a hacky way of extracting parameters from callPackage
     ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
 
@@ -16,40 +20,25 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_418 else legacy_390;
+  stable = if stdenv.hostPlatform.system == "x86_64-linux"
+    then generic {
+      version = "440.82";
+      sha256_64bit = "13km9800skyraa0s312fc4hwyw5pzb0jfkrv1yg6anppyan1bm7d";
+      settingsSha256 = "15psxvd65wi6hmxmd2vvsp2v0m07axw613hb355nh15r1dpkr3ma";
+      persistencedSha256 = "13izz9p2kg9g38gf57g3s2sw7wshp1i9m5pzljh9v82c4c22x1fw";
+    }
+    else legacy_390;
 
   # No active beta right now
-  beta = generic {
-    version = "430.14";
-    sha256_64bit = "05qgakc0sqv9zr6j4i49iqrd271nris8pmnv3l431r71ygx6zm00";
-    settingsSha256 = "1hh07258a6z0g8dl6mxrizdxqcgswv58r4rbamfhhwh9i42fpdgg";
-    persistencedSha256 = "1wmwmg9ma9rfx03s2qa249f0p7yf0lxdpiadab0raajk1lzlrrc8";
-  };
-
-  stable_418 = generic {
-    version = "418.74";
-    sha256_64bit = "03qj42ppzkc9nphdr9zc12968bb8fc9cpcx5f66y29wnrgg3d1yw";
-    settingsSha256 = "15mbqdx5wyk7iq13kl2vd99lykpil618izwpi1kfldlabxdxsi9d";
-    persistencedSha256 = "0442qbby0r1b6l72wyw0b3iwvln6k20s6dn0zqlpxafnia9bvc8c";
-  };
+  beta = stable;
 
   # Last one supporting x86
   legacy_390 = generic {
-    version = "390.116";
-    sha256_32bit = "0aavzi99ps7r6nrchf4h9gw3fkvm2z6wppkqkz5fwcy7x03ky4qk";
-    sha256_64bit = "106qc62a7m9imchqfq8rfn8fwyrjxg383354q7z2wr8112fyhyg1";
-    settingsSha256 = "0n4pj8dzkr7ccwrn5p46mn59cnijdhg8zmn3idjzrk56pq0hbgjr";
-    persistencedSha256 = "0bnjr0smhlwlqpyg9m6lca3b7brl2mw8aypc6p7525dn9d9kv6kb";
-
-    patches = [
-    (fetchurl {
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-4.16.patch?h=2ad07241ea525a6b6b555b6cb96a97634a4b2cb0";
-      sha256 = "11b3dp0na496rn13v5q4k66bf61174800g36rcwj42r0xj9cfak2";
-    })
-    (fetchurl {
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel-5.1.patch?h=42d50ef8d6048608d18bdf2c296dd335260c5a1a";
-      sha256 = "03v46ym2bcckg9q2xrilkg21hfiwypr6gl4jmly2q3m4yza9ja6r";
-    })];
+    version = "390.132";
+    sha256_32bit = "0xgjywzkmmm6a5gby67l2kx0gn7bcxksv4wam0sqym6l1s7v5bai";
+    sha256_64bit = "0qgzsajrc3xkf2jjkwip3la0f2ixp45f76nmz5cphvzrb7k2slxn";
+    settingsSha256 = "07nylqzhldq1gr40q7x5424p2aml3qqnvl2zvnpzc65x2way34v6";
+    persistencedSha256 = "0vab5rj9b1n9yl9674q7i88w1i5p8nhvrwsayn7i1vh4wp3m840r";
   };
 
   legacy_340 = generic {

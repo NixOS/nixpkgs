@@ -9,8 +9,9 @@ let
     sha256 = "1mk8pv0g2xg9m0gsb96plbh6mc24xrlyrmnqac5mlbl4637l4q95";
   };
 in
-stdenv.mkDerivation rec {
-  name = "nailgun-${version}";
+stdenv.mkDerivation {
+  pname = "nailgun";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "facebook";
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Client, protocol, and server for running Java programs from the command line without incurring the JVM startup overhead";
-    homepage = http://www.martiansoftware.com/nailgun/;
+    homepage = "http://www.martiansoftware.com/nailgun/";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ volth ];

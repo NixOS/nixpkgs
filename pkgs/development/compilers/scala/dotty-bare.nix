@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, jre, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.0-RC1";
-  name = "dotty-bare-${version}";
+  version = "0.23.0-RC1";
+  pname = "dotty-bare";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/dotty-${version}.tar.gz";
-    sha256 = "0nrgsyhqjlpvnjqgb18pryr8q7knq3dq25jhp98s4wh76nssm1zr";
+    sha256 = "0c64dw2qp8mhgsll8viqaiy34wq1ablkbc4bi813a1r4nqg57sv0";
   };
 
   propagatedBuildInputs = [ jre ncurses.dev ] ;
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
        and try to boil down Scala’s types into a smaller set of more fundamental constructs.
        The theory behind these constructs is researched in DOT, a calculus for dependent object types.
     '';
-    homepage = http://dotty.epfl.ch/;
+    homepage = "http://dotty.epfl.ch/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [maintainers.karolchmist];
+    maintainers = [maintainers.karolchmist maintainers.virusdave];
   };
 }

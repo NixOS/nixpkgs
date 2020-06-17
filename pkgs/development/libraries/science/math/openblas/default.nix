@@ -3,11 +3,20 @@
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
 , blas64 ? null
+# Multi-threaded applications must not call a threaded OpenBLAS
+# (the only exception is when an application uses OpenMP as its
+# *only* form of multi-threading). See
+#     https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+#     https://github.com/xianyi/OpenBLAS/issues/2543
+# This flag builds a single-threaded OpenBLAS using the flags
+# stated in thre.
+, singleThreaded ? false
 , buildPackages
 # Select a specific optimization target (other than the default)
 # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
 , enableStatic ? false
+, enableShared ? true
 }:
 
 with stdenv.lib;
@@ -60,7 +69,7 @@ let
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = true;
       NO_AVX512 = true;
-      USE_OPENMP = true;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
   };
 in
@@ -84,15 +93,18 @@ let
     if !builtins.isBool val then toString val
     else if val then "1" else "0";
   mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
+
+  shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
+
 in
 stdenv.mkDerivation rec {
-  name = "openblas-${version}";
-  version = "0.3.6";
+  pname = "openblas";
+  version = "0.3.9";
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "12vg0g3s4m49fr8z04j15yrgscqnaaflnkckjbffqxnrf90fcav1";
+    sha256 = "0nq51j45shb32n6086xff3x374kx5qhr2cwjzvppx4s2z0ahflal";
   };
 
   inherit blas64;
@@ -115,8 +127,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     which
+  ];
+
+  depsBuildBuild = [
     buildPackages.gfortran
     buildPackages.stdenv.cc
+  ];
+
+  # Disable an optimisation which seems to cause issues, pending an
+  # upstream fix: https://github.com/xianyi/OpenBLAS/issues/2496
+  patches = stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
+    ./0001-Disable-optimised-aarch64-dgemm_beta-pending-fix.patch
   ];
 
   makeFlags = mkMakeFlagsFromConfig (config // {
@@ -126,6 +147,7 @@ stdenv.mkDerivation rec {
     NUM_THREADS = 64;
     INTERFACE64 = blas64;
     NO_STATIC = !enableStatic;
+    NO_SHARED = !enableShared;
     CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
     HOSTCC = "cc";
     # Makefile.system only checks defined status
@@ -135,7 +157,12 @@ stdenv.mkDerivation rec {
     NO_BINARY_MODE = if stdenv.isx86_64
         then toString (stdenv.hostPlatform != stdenv.buildPlatform)
         else stdenv.hostPlatform != stdenv.buildPlatform;
-  });
+  } // (stdenv.lib.optionalAttrs singleThreaded {
+    # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+    USE_THREAD = false;
+    USE_LOCKING = true; # available with openblas >= 0.3.7
+    USE_OPENMP = false; # openblas will refuse building with both USE_OPENMP=1 and USE_THREAD=0
+  }));
 
   doCheck = true;
   checkTarget = "tests";
@@ -152,19 +179,24 @@ Cflags: -I$out/include
 Libs: -L$out/lib -lopenblas
 EOF
     done
+
+    # Setup symlinks for blas / lapack
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
   '';
 
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
-    homepage = https://github.com/xianyi/OpenBLAS;
+    homepage = "https://github.com/xianyi/OpenBLAS";
     platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel ];
   };
-
-  # We use linkName to pass a different name to --with-blas-libs for
-  # fflas-ffpack and linbox, because we use blas on darwin but openblas
-  # elsewhere.
-  # See see https://github.com/NixOS/nixpkgs/pull/45013.
-  passthru.linkName = "openblas";
 }

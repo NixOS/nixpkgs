@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "vnstat";
-  version = "2.2";
+  version = "2.6";
 
   src = fetchurl {
-    sha256 = "0b7020rlc568pz6vkiy28kl8493z88wzrn18wv9b0iq2bv1pn2n6";
+    sha256 = "1xvzkxkq1sq33r2s4f1967f4gnca4xw411sbapdkx541f856w9w9";
     url = "https://humdi.net/${pname}/${pname}-${version}.tar.gz";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       This means that vnStat won't actually be sniffing any traffic and also
       ensures light use of system resources.
     '';
-    homepage = https://humdi.net/vnstat/;
+    homepage = "https://humdi.net/vnstat/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

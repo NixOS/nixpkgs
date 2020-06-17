@@ -1,20 +1,16 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name = "metamath-${version}";
-  version = "0.172";
+stdenv.mkDerivation {
+  pname = "metamath";
+  version = "0.182";
 
   buildInputs = [ autoreconfHook ];
 
-  # This points to my own repository because there is no official repository
-  # for metamath; there's a download location but it gets updated in place with
-  # no permanent link. See discussion at
-  # https://groups.google.com/forum/#!topic/metamath/N4WEWQQVUfY
   src = fetchFromGitHub {
-    owner = "Taneb";
-    repo = "metamath";
-    rev = "43141cd17638f8efb409dc5d46e7de6a6c39ec42";
-    sha256 = "07c7df0zl0wsb0pvdgkwikpr8kz7fi3mshxzk61vkamyp68djjb5";
+    owner = "metamath";
+    repo = "metamath-exe";
+    rev = "5df616efe4119ff88daf77e7041d45b6fa39c578";
+    sha256 = "0amjdgy42c7jypf6sz98iczlxcyl9bqx67ws1q8w2zdqk2izsyjp";
   };
 
   meta = with stdenv.lib; {
@@ -25,7 +21,7 @@ stdenv.mkDerivation rec {
       in the Metamath Proof Explorer, and it generated its web pages. The *.mm
       ASCII databases (set.mm and others) are also included in this derivation.
     '';
-    homepage = http://us.metamath.org;
+    homepage = "http://us.metamath.org";
     downloadPage = "http://us.metamath.org/#downloads";
     license = licenses.gpl2;
     maintainers = [ maintainers.taneb ];

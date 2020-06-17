@@ -1,7 +1,7 @@
 { stdenv, fetchurl, atomEnv, libXScrnSaver, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "marp-${version}";
+  pname = "marp";
   version = "0.0.14";
 
   src = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Markdown presentation writer, powered by Electron";
-    homepage = https://yhatt.github.io/marp/;
+    homepage = "https://yhatt.github.io/marp/";
     license = licenses.mit;
     maintainers = [ maintainers.puffnfresh ];
     platforms = [ "x86_64-linux" ];

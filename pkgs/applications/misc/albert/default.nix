@@ -37,13 +37,8 @@ mkDerivation rec {
     rm "$out/lib"
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/albert \
-      --prefix XDG_DATA_DIRS : $out/share
-  '';
-
   meta = with lib; {
-    homepage    = https://albertlauncher.github.io/;
+    homepage    = "https://albertlauncher.github.io/";
     description = "Desktop agnostic launcher";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes synthetica ];

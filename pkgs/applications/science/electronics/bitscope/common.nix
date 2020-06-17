@@ -2,7 +2,7 @@
 , buildFHSUserEnv
 , cairo
 , dpkg
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gtk2-x11
 , makeWrapper
@@ -23,7 +23,7 @@ let
     name = "${toolName}-${version}";
 
     meta = with stdenv.lib; {
-      homepage = http://bitscope.com/software/;
+      homepage = "http://bitscope.com/software/";
       license = licenses.unfree;
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [
@@ -39,7 +39,7 @@ let
     libs = attrs.libs or [
       atk
       cairo
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       gtk2-x11
       pango

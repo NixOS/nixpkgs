@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library of code shared between tuxmath and tuxtype.";
-    homepage = https://github.com/tux4kids/t4kcommon;
+    homepage = "https://github.com/tux4kids/t4kcommon";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.aanderse ];
     platforms = platforms.linux;

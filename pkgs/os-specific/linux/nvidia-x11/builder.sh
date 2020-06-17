@@ -45,6 +45,17 @@ installPhase() {
         cp -prd tls "$out/lib/"
     fi
 
+    # Install systemd power management executables
+    if [ -e nvidia-sleep.sh ]; then
+        sed -E 's#(PATH=).*#\1"$PATH"#' nvidia-sleep.sh > nvidia-sleep.sh.fixed
+        install -Dm755 nvidia-sleep.sh.fixed $out/bin/nvidia-sleep.sh
+    fi
+
+    if [ -e nvidia ]; then
+        sed -E "s#/usr(/bin/nvidia-sleep.sh)#$out\\1#" nvidia > nvidia.fixed
+        install -Dm755 nvidia.fixed $out/lib/systemd/system-sleep/nvidia
+    fi
+
     for i in $lib32 $out; do
         rm -f $i/lib/lib{glx,nvidia-wfb}.so.* # handled separately
         rm -f $i/lib/libnvidia-gtk* # built from source
@@ -58,18 +69,38 @@ installPhase() {
         mkdir $i/lib/vdpau
         mv $i/lib/libvdpau* $i/lib/vdpau
 
-        # Install ICDs.
-        install -Dm644 nvidia.icd $i/etc/OpenCL/vendors/nvidia.icd
-        if [ -e nvidia_icd.json.template ]; then
-            sed "s#__NV_VK_ICD__#libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
-            install -Dm644 nvidia_icd.json $i/share/vulkan/icd.d/nvidia.json
+        # Install ICDs, make absolute paths.
+        # Be careful not to modify any original files because this runs twice.
+
+        # OpenCL
+        sed -E "s#(libnvidia-opencl)#$i/lib/\\1#" nvidia.icd > nvidia.icd.fixed
+        install -Dm644 nvidia.icd.fixed $i/etc/OpenCL/vendors/nvidia.icd
+
+        # Vulkan
+        if [ -e nvidia_icd.json.template ] || [ -e nvidia_icd.json ]; then
+            if [ -e nvidia_icd.json.template ]; then
+                # template patching for version < 435
+                sed "s#__NV_VK_ICD__#$i/lib/libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json.fixed
+            else
+                sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_icd.json > nvidia_icd.json.fixed
+            fi
+            install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia.json
         fi
+        if [ -e nvidia_layers.json ]; then
+            sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_layers.json > nvidia_layers.json.fixed
+            install -Dm644 nvidia_layers.json.fixed $i/share/vulkan/implicit_layer.d/nvidia_layers.json
+        fi
+
+        # EGL
         if [ "$useGLVND" = "1" ]; then
-            install -Dm644 10_nvidia.json $i/share/glvnd/egl_vendor.d/nvidia.json
+            sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
+            sed -E "s#(libnvidia-egl-wayland)#$i/lib/\\1#" 10_nvidia_wayland.json > 10_nvidia_wayland.json.fixed
+
+            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
+            install -Dm644 10_nvidia_wayland.json.fixed $i/share/glvnd/egl_vendor.d/nvidia_wayland.json
         fi
 
     done
-
 
     if [ -n "$bin" ]; then
         # Install the X drivers.
@@ -145,6 +176,5 @@ installPhase() {
         # install -Dm755 nvidia-bug-report.sh $bin/bin/nvidia-bug-report.sh
     fi
 }
-
 
 genericBuild

@@ -1,36 +1,27 @@
-{ stdenv, fetchFromGitHub, ocaml, ocamlbuild, findlib, topkg
-, ppx_tools, ppx_sexp_conv, cstruct, ppx_cstruct, sexplib, rresult, nocrypto
-, astring
+{ lib, fetchurl, buildDunePackage
+, cstruct, sexplib0, rresult, mirage-crypto, mirage-crypto-pk, astring, base64
+, mirage-crypto-rng
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "otr is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  pname = "otr";
+  version = "0.3.8";
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-otr-${version}";
-  version = "0.3.4";
-
-  src = fetchFromGitHub {
-    owner  = "hannesm";
-    repo   = "ocaml-otr";
-    rev    = "${version}";
-    sha256 = "0ixf0jvccmcbhk5mhzqakfzimvz200wkdkq3z2d0bdzyggslbdl4";
+  src = fetchurl {
+    url = "https://github.com/hannesm/ocaml-otr/releases/download/v${version}/otr-v${version}.tbz";
+    sha256 = "18hn9l8wznqnlh2jf1hpnp36f1cx80ncwiiivsbj34llhgp3893d";
   };
 
-  buildInputs = [ ocaml ocamlbuild findlib topkg ppx_tools ppx_sexp_conv ppx_cstruct ];
-  propagatedBuildInputs = [ cstruct sexplib rresult nocrypto astring ];
+  useDune2 = true;
 
-  buildPhase = "${topkg.run} build --tests true";
-
-  inherit (topkg) installPhase;
+  propagatedBuildInputs = [ cstruct sexplib0 mirage-crypto mirage-crypto-pk
+                            astring rresult base64 ];
 
   doCheck = true;
-  checkPhase = "${topkg.run} test";
+  checkInputs = [ mirage-crypto-rng ];
 
-  meta = with stdenv.lib; {
-    inherit (ocaml.meta) platforms;
-    homepage = https://github.com/hannesm/ocaml-otr;
+  meta = with lib; {
+    homepage = "https://github.com/hannesm/ocaml-otr";
     description = "Off-the-record messaging protocol, purely in OCaml";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sternenseemann ];

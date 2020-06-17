@@ -1,38 +1,35 @@
 { stdenv, fetchFromGitHub, rustPlatform, libX11, libXinerama, makeWrapper }:
 
-let 
+let
     rpath = stdenv.lib.makeLibraryPath [ libXinerama libX11 ];
 in
 
 rustPlatform.buildRustPackage rec {
-    pname = "leftwm";
-    version = "0.1.9";
+  pname = "leftwm";
+  version = "0.2.2";
 
-    src = fetchFromGitHub {
-        owner = "leftwm";
-        repo = "leftwm";
-        rev = "${version}";
-        sha256 = "0ji7m2npkdg27gm33b19rxr50km0gm1h9czi1f425vxq65mlkl4y";
-    };
+  src = fetchFromGitHub {
+    owner = "leftwm";
+    repo = "leftwm";
+    rev = version;
+    sha256 = "0x8cqc7zay19jxy7cshayjjwwjrcblqpmqrxipm2g5hhyjghk6q0";
+  };
 
-    buildInputs = [ makeWrapper libX11 libXinerama ];
+  cargoSha256 = "1kphv3vnr8ij7raf0niwz3rwly986xi5fgwqg2ya0r46ifqkgvrc";
 
-    postInstall = ''
-        wrapProgram $out/bin/leftwm --prefix LD_LIBRARY_PATH : "${rpath}"
-        wrapProgram $out/bin/leftwm-state --prefix LD_LIBRARY_PATH : "${rpath}"
-        wrapProgram $out/bin/leftwm-worker --prefix LD_LIBRARY_PATH : "${rpath}"
-    '';
+  buildInputs = [ makeWrapper libX11 libXinerama ];
 
-    cargoSha256 = "0mpvfix7bvc84vanha474l4gaq97ac1zy5l77z83m9jg0246yxd6";
+  postInstall = ''
+    wrapProgram $out/bin/leftwm --prefix LD_LIBRARY_PATH : "${rpath}"
+    wrapProgram $out/bin/leftwm-state --prefix LD_LIBRARY_PATH : "${rpath}"
+    wrapProgram $out/bin/leftwm-worker --prefix LD_LIBRARY_PATH : "${rpath}"
+  '';
 
-    # https://github.com/leftwm/leftwm/pull/37
-    cargoPatches = [ ./cargo-lock.patch ];
-
-    meta = {
-        description = "Leftwm - A tiling window manager for the adventurer";
-        homepage = https://github.com/leftwm/leftwm;
-        license = stdenv.lib.licenses.mit;
-        platforms = stdenv.lib.platforms.linux;
-        maintainers = with stdenv.lib.maintainers; [ mschneider ];
-    };
+  meta = with stdenv.lib; {
+    description = "Leftwm - A tiling window manager for the adventurer";
+    homepage = "https://github.com/leftwm/leftwm";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mschneider ];
+  };
 }

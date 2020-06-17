@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, webos, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "novacom-${version}";
+  pname = "novacom";
   version = "18";
 
   src = fetchFromGitHub {

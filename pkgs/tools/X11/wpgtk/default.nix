@@ -3,13 +3,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wpgtk";
-  version = "6.0.7";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
     rev = version;
-    sha256 = "14qk7kmi37ppxh2m69g7wb7w2wh62nbsy3z4ns7hsns3p21va7y3";
+    sha256 = "06z6qbfd9l3acp3wm28rq4vx3m5cxi4lpxgzc2nxvxmiz8rnnmh1";
   };
 
   buildInputs = [
@@ -39,11 +39,11 @@ python3Packages.buildPythonApplication rec {
     longDescription = ''
      In short, wpgtk is a colorscheme/wallpaper manager with a template system attached which lets you create templates from any textfile and will replace keywords on it on the fly, allowing for great styling and theming possibilities.
 
-     wpgtk uses pywal as its colorscheme generator, but builds upon it with a UI and other features, such as the abilty to mix and edit the colorschemes generated and save them with their respective wallpapers, having light and dark themes, hackable and fast GTK+ theme made specifically for wpgtk and custom keywords and values to replace in templates.
+     wpgtk uses pywal as its colorscheme generator, but builds upon it with a UI and other features, such as the abilty to mix and edit the colorschemes generated and save them with their respective wallpapers, having light and dark themes, hackable and fast GTK theme made specifically for wpgtk and custom keywords and values to replace in templates.
 
      INFO: To work properly, this tool needs "programs.dconf.enable = true" on nixos or dconf installed. A reboot may be required after installing dconf.
      '';
-    homepage = https://github.com/deviantfero/wpgtk;
+    homepage = "https://github.com/deviantfero/wpgtk";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.melkor333 ];

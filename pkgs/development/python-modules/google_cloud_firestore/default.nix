@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "0.31.0";
+  version = "1.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5349d1a112dc8ff1b96d400a04ab18949503b542c72f526847e2066eef6cbc25";
+    sha256 = "5ad4835c3a0f6350bcbbc42fd70e90f7568fca289fdb5e851888df394c4ebf80";
   };
 
   checkInputs = [ pytest ];
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Google Cloud Firestore API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

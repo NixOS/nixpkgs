@@ -1,16 +1,17 @@
 { stdenv, fetchurl, makeWrapper
 , xorg, imlib2, libjpeg, libpng
-, curl, libexif, perlPackages }:
+, curl, libexif, jpegexiforient, perlPackages
+, enableAutoreload ? true }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "feh-${version}";
-  version = "3.1.3";
+  pname = "feh";
+  version = "3.4.1";
 
   src = fetchurl {
-    url = "https://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "1vsnxf4as3vyzjfhd8frzb1a8i7wnq7ck5ljx7qxqrnfqvxl1s4z";
+    url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
+    sha256 = "0yvvj1s7ayn0lwils582smwkmckdk0gij5c58g45n4xh981n693q";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -21,11 +22,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}" "exif=1"
-  ] ++ optional stdenv.isDarwin "verscmp=0";
+  ] ++ optional stdenv.isDarwin "verscmp=0"
+    ++ optional enableAutoreload "inotify=1";
 
   installTargets = [ "install" ];
   postInstall = ''
-    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg.bin}/bin" \
+    wrapProgram "$out/bin/feh" --prefix PATH : "${makeBinPath [ libjpeg jpegexiforient ]}" \
                                --add-flags '--theme=feh'
   '';
 
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "A light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.viric maintainers.willibutz ];
+    maintainers = with maintainers; [ viric willibutz globin ma27 ];
     platforms = platforms.unix;
   };
 }

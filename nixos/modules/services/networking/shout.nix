@@ -35,7 +35,7 @@ in {
     };
 
     listenAddress = mkOption {
-      type = types.string;
+      type = types.str;
       default = "0.0.0.0";
       description = "IP interface to listen on for http connections.";
     };
@@ -82,8 +82,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.users = singleton {
-      name = "shout";
+    users.users.shout = {
       uid = config.ids.uids.shout;
       description = "Shout daemon user";
       home = shoutHome;

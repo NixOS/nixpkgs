@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pgroonga";
-  version = "2.2.0";
+  version = "2.2.5";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1cankcprikx8nf72yg4h8542gqqlfgww6d63kg7l8l8sz962d28b";
+    sha256 = "0lwj99kdx9kfp4vfd7lfapj183mz235kj1vjfscfnkg5ypj656gz";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   makeFlags = [ "HAVE_MSGPACK=1" ];
 
   installPhase = ''
-    mkdir -p $out/bin
     install -D pgroonga.so -t $out/lib/
     install -D ./{pgroonga-*.sql,pgroonga.control} -t $out/share/postgresql/extension
   '';
@@ -30,6 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://pgroonga.github.io/";
     license = licenses.postgresql;
+    platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [ DerTim1 ];
   };
 }

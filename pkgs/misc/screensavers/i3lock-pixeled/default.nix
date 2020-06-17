@@ -1,7 +1,7 @@
 { stdenv, i3lock, imagemagick, scrot, playerctl, fetchFromGitLab }:
 
 stdenv.mkDerivation rec {
-  name = "i3lock-pixeled-${version}";
+  pname = "i3lock-pixeled";
   version = "1.2.1";
 
   src = fetchFromGitLab {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple i3lock helper which pixels a screenshot by scaling it down and up to get a pixeled version of the screen when the lock is active.";
-    homepage = https://gitlab.com/Ma27/i3lock-pixeled;
+    homepage = "https://gitlab.com/Ma27/i3lock-pixeled";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ma27 ];

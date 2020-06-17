@@ -32,7 +32,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "snapcast-${version}";
+  pname = "snapcast";
   version = "0.15.0";
 
   src = fetchFromGitHub {
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Synchronous multi-room audio player";
-    homepage = https://github.com/badaix/snapcast;
+    homepage = "https://github.com/badaix/snapcast";
     maintainers = with maintainers; [ fpletz ];
     license = licenses.gpl3;
   };

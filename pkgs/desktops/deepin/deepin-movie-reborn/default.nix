@@ -1,17 +1,32 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
-  dtkcore, dtkwidget, ffmpeg, ffmpegthumbnailer, mpv, pulseaudio,
-  libdvdnav, libdvdread, xorg, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkgconfig
+, qttools
+, qtx11extras
+, dtkcore
+, dtkwidget
+, ffmpeg_3
+, ffmpegthumbnailer
+, mpv
+, pulseaudio
+, libdvdnav
+, libdvdread
+, xorg
+, deepin
+}:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "deepin-movie-reborn";
-  version = "3.2.24";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "16mxym7dm6qk90q2w7xqm62047rq0lirrjmnnpaxshzaww9gngkh";
+    sha256 = "0cly8q0514a58s3h3wsvx9yxar7flz6i2q8xkrkfjias22b3z7b0";
   };
 
   outputs = [ "out" "dev" ];
@@ -20,12 +35,13 @@ stdenv.mkDerivation rec {
     cmake
     pkgconfig
     qttools
+    deepin.setupHook
   ];
 
   buildInputs = [
     dtkcore
     dtkwidget
-    ffmpeg
+    ffmpeg_3
     ffmpegthumbnailer
     libdvdnav
     libdvdread
@@ -38,18 +54,30 @@ stdenv.mkDerivation rec {
     xorg.xcbproto
   ];
 
+  patches = [
+    # fix: build failed if cannot find dtk-settings tool
+    (fetchpatch {
+      url = "https://github.com/linuxdeepin/deepin-movie-reborn/commit/fbb307b.patch";
+      sha256 = "0915za0khki0729rvcfpxkh6vxhqwc47cgcmjc90kfq1004221vx";
+    })
+  ];
+
   NIX_LDFLAGS = "-ldvdnav";
 
   postPatch = ''
-    sed -i src/CMakeLists.txt -e "s,/usr/lib/dtk2,${dtkcore}/lib/dtk2,"
+    searchHardCodedPaths  # debugging
+
     sed -i src/libdmr/libdmr.pc.in -e "s,/usr,$out," -e 's,libdir=''${prefix}/,libdir=,'
+
+    substituteInPlace src/deepin-movie.desktop \
+      --replace "Exec=deepin-movie" "Exec=$out/bin/deepin-movie"
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin movie player";
-    homepage = https://github.com/linuxdeepin/deepin-movie-reborn;
+    homepage = "https://github.com/linuxdeepin/deepin-movie-reborn";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

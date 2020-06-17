@@ -1,51 +1,150 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
-, jdk, jre, libpulseaudio, libXxf86vm
+{ stdenv
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, wrapGAppsHook
+, gobject-introspection
+, jre # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
+, xorg
+, zlib
+, nss
+, nspr
+, fontconfig
+, gnome2
+, cairo
+, expat
+, alsaLib
+, cups
+, dbus
+, atk
+, gtk3-x11
+, gtk2-x11
+, gdk-pixbuf
+, glib
+, curl
+, freetype
+, libpulseaudio
+, libuuid
+, systemd
+, flite ? null
+, libXxf86vm ? null
 }:
-
 let
   desktopItem = makeDesktopItem {
-    name = "minecraft";
-    exec = "minecraft";
-    icon = "minecraft";
-    comment = "A sandbox-building game";
-    desktopName = "Minecraft";
-    genericName = "minecraft";
-    categories = "Game;";
+    name = "minecraft-launcher";
+    exec = "minecraft-launcher";
+    icon = "minecraft-launcher";
+    comment = "Official launcher for Minecraft, a sandbox-building game";
+    desktopName = "Minecraft Launcher";
+    categories = "Game;Application;";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [
+  envLibPath = stdenv.lib.makeLibraryPath [
+    curl
     libpulseaudio
-    libXxf86vm # Needed only for versions <1.13
+    systemd
+    alsaLib # needed for narrator
+    flite # needed for narrator
+    libXxf86vm # needed only for versions <1.13
   ];
 
-in stdenv.mkDerivation {
-  name = "minecraft-2015-07-24";
+  libPath = stdenv.lib.makeLibraryPath ([
+    alsaLib
+    atk
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gnome2.GConf
+    gnome2.pango
+    gtk3-x11
+    gtk2-x11
+    nspr
+    nss
+    stdenv.cc.cc
+    zlib
+    libuuid
+  ] ++
+  (with xorg; [
+    libX11
+    libxcb
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    libXScrnSaver
+  ]));
+in
+stdenv.mkDerivation rec {
+  pname = "minecraft-launcher";
+
+  version = "2.1.14947";
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/Minecraft.Download/launcher/Minecraft.jar";
-    sha256 = "04pj4l5q0a64jncm2kk45r7nxnxa2z9n110dcxbbahdi6wk0png8";
+    url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
+    sha256 = "1lsc39n1kq08sssnpr6kf4lfpy01a7i7rgvi298mmxsprjmc7a9q";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  icon = fetchurl {
+    url = "https://launcher.mojang.com/download/minecraft-launcher.svg";
+    sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
+  };
 
-  unpackPhase = "${jdk}/bin/jar xf $src favicon.png";
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  buildInputs = [ gobject-introspection ];
+
+  sourceRoot = ".";
+
+  dontWrapGApps = true;
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/minecraft
+    mkdir -p $out/opt
+    mv minecraft-launcher $out/opt
 
-    makeWrapper ${jre}/bin/java $out/bin/minecraft \
-      --add-flags "-jar $out/share/minecraft/minecraft.jar" \
-      --suffix LD_LIBRARY_PATH : ${libPath}
+    ${desktopItem.buildCommand}
+    install -D $icon $out/share/icons/hicolor/symbolic/apps/minecraft-launcher.svg
+  '';
 
-    cp $src $out/share/minecraft/minecraft.jar
-    cp -r ${desktopItem}/share/applications $out/share
-    install -D favicon.png $out/share/icons/hicolor/32x32/apps/minecraft.png
+  preFixup = ''
+    patchelf \
+      --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+      --set-rpath '$ORIGIN/'":${libPath}" \
+      $out/opt/minecraft-launcher/minecraft-launcher
+    patchelf \
+      --set-rpath '$ORIGIN/'":${libPath}" \
+      $out/opt/minecraft-launcher/libcef.so
+    patchelf \
+      --set-rpath '$ORIGIN/'":${libPath}" \
+      $out/opt/minecraft-launcher/liblauncher.so
+  '';
+
+  postFixup = ''
+    # Do not create `GPUCache` in current directory
+    makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
+      --prefix LD_LIBRARY_PATH : ${envLibPath} \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
+      --run "cd /tmp" \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   meta = with stdenv.lib; {
-    description = "A sandbox-building game";
-    homepage = https://minecraft.net;
+    description = "Official launcher for Minecraft, a sandbox-building game";
+    homepage = "https://minecraft.net";
     maintainers = with maintainers; [ cpages ryantm infinisil ];
-    license = licenses.unfreeRedistributable;
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
+
+  passthru.updateScript = ./update.sh;
 }

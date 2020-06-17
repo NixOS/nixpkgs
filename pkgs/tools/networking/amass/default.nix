@@ -5,22 +5,22 @@
 
 buildGoModule rec {
   pname = "amass";
-  version = "2.9.11";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
-    rev = version;
-    sha256 = "1mbxxj7cjypxdn80svgmq9yvzaj2x0y1lcbglzzmlqj3r0j265mr";
+    rev = "v${version}";
+    sha256 = "1acjqpa9xg9ji2mzxag57yq589cdq3rh78a8vz8wnkkkp7b8why8";
   };
 
-  modSha256 = "028ln760xaxlsk074x1i5fqi1334rw2bpz7fg520q6m13d9w86hw";
+  vendorSha256 = "1s8g0qqg3m6hdvc5v3s86l3ba5grmyhx0lf2ymi39k5dpcg8l19s";
 
   outputs = [ "out" "wordlists" ];
 
   postInstall = ''
     mkdir -p $wordlists
-    cp -R $src/wordlists/*.txt $wordlists
+    cp -R $src/examples/wordlists/*.txt $wordlists
     gzip $wordlists/*.txt
   '';
 
@@ -37,9 +37,8 @@ buildGoModule rec {
       Amass ships with a set of wordlist (to be used with the amass -w flag)
       that are found under the wordlists output.
       '';
-    homepage = https://www.owasp.org/index.php/OWASP_Amass_Project;
+    homepage = "https://www.owasp.org/index.php/OWASP_Amass_Project";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

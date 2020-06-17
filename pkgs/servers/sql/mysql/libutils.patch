@@ -1,0 +1,5 @@
+--- a/cmake/libutils.cmake
++++ b/cmake/libutils.cmake
+@@ -345 +345 @@ MACRO(MERGE_CONVENIENCE_LIBRARIES)
+-      COMMAND /usr/bin/libtool -static -o $<TARGET_FILE:${TARGET}>
++      COMMAND libtool -static -o $<TARGET_FILE:${TARGET}>

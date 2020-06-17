@@ -8,9 +8,10 @@
 { name ? ""
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
-, extraPackages ? [], extraBuildCommands ? ""
+, extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
@@ -35,31 +36,33 @@ let
   targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
                                            (targetPlatform.config + "-");
 
-  ccVersion = (builtins.parseDrvName cc.name).version;
-  ccName = (builtins.parseDrvName cc.name).name;
+  ccVersion = stdenv.lib.getVersion cc;
+  ccName = stdenv.lib.removePrefix targetPrefix (stdenv.lib.getName cc);
 
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
   libc_lib = if libc == null then null else getLib libc;
-  cc_solib = getLib cc;
+  cc_solib = getLib cc
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
   default_cxx_stdlib_compile = if (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc) && !(targetPlatform.useLLVM or false) then
-    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)"
+    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/${targetPlatform.config}"
   else if targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false) && !(targetPlatform.useLLVM or false) then
     "-isystem ${libcxx}/include/c++/v1"
   else "";
 
-  # The "infix salt" is a arbitrary string added in the middle of env vars
+  # The "suffix salt" is a arbitrary string added in the end of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
   # without interfering. For the moment, it is defined as the target triple,
   # adjusted to be a valid bash identifier. This should be considered an
   # unstable implementation detail, however.
-  infixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
-    if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
+    if buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
 
@@ -93,9 +96,9 @@ assert nativeLibc == bintools.nativeLibc;
 assert nativePrefix == bintools.nativePrefix;
 
 stdenv.mkDerivation {
-  name = targetPrefix
-    + (if name != "" then name else stdenv.lib.removePrefix targetPrefix "${ccName}-wrapper")
-    + (stdenv.lib.optionalString (cc != null && ccVersion != "") "-${ccVersion}");
+  pname = targetPrefix
+    + (if name != "" then name else "${ccName}-wrapper");
+  version = if cc == null then null else ccVersion;
 
   preferLocalBuild = true;
 
@@ -103,7 +106,7 @@ stdenv.mkDerivation {
   shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
-  inherit targetPrefix infixSalt;
+  inherit targetPrefix suffixSalt;
 
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
@@ -120,7 +123,7 @@ stdenv.mkDerivation {
       (mapc
         (lambda (arg)
           (when (file-directory-p (concat arg "/include"))
-            (setenv "NIX_${infixSalt}_CFLAGS_COMPILE" (concat (getenv "NIX_${infixSalt}_CFLAGS_COMPILE") " -isystem " arg "/include"))))
+            (setenv "NIX_CFLAGS_COMPILE_${suffixSalt}" (concat (getenv "NIX_CFLAGS_COMPILE_${suffixSalt}") " -isystem " arg "/include"))))
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
   };
@@ -132,10 +135,10 @@ stdenv.mkDerivation {
     src=$PWD
   '';
 
+  wrapper = ./cc-wrapper.sh;
+
   installPhase =
     ''
-      set -u
-
       mkdir -p $out/bin $out/nix-support
 
       wrap() {
@@ -173,46 +176,56 @@ stdenv.mkDerivation {
       export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
 
       if [ -e $ccPath/${targetPrefix}gcc ]; then
-        wrap ${targetPrefix}gcc ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcc
+        wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc
         ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}gcc
         export named_cxx=${targetPrefix}g++
       elif [ -e $ccPath/clang ]; then
-        wrap ${targetPrefix}clang ${./cc-wrapper.sh} $ccPath/clang
+        wrap ${targetPrefix}clang $wrapper $ccPath/clang
         ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}clang
         export named_cxx=${targetPrefix}clang++
       fi
 
       if [ -e $ccPath/${targetPrefix}g++ ]; then
-        wrap ${targetPrefix}g++ ${./cc-wrapper.sh} $ccPath/${targetPrefix}g++
+        wrap ${targetPrefix}g++ $wrapper $ccPath/${targetPrefix}g++
         ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
       elif [ -e $ccPath/clang++ ]; then
-        wrap ${targetPrefix}clang++ ${./cc-wrapper.sh} $ccPath/clang++
+        wrap ${targetPrefix}clang++ $wrapper $ccPath/clang++
         ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
       fi
 
       if [ -e $ccPath/cpp ]; then
-        wrap ${targetPrefix}cpp ${./cc-wrapper.sh} $ccPath/cpp
+        wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
       fi
     ''
 
+    + optionalString cc.langAda or false ''
+      wrap ${targetPrefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatmake
+      wrap ${targetPrefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatbind
+      wrap ${targetPrefix}gnatlink ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatlink
+    ''
+
+    + optionalString cc.langD or false ''
+      wrap ${targetPrefix}gdc $wrapper $ccPath/${targetPrefix}gdc
+    ''
+
     + optionalString cc.langFortran or false ''
-      wrap ${targetPrefix}gfortran ${./cc-wrapper.sh} $ccPath/${targetPrefix}gfortran
+      wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
     ''
 
     + optionalString cc.langJava or false ''
-      wrap ${targetPrefix}gcj ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcj
+      wrap ${targetPrefix}gcj $wrapper $ccPath/${targetPrefix}gcj
     ''
 
     + optionalString cc.langGo or false ''
-      wrap ${targetPrefix}gccgo ${./cc-wrapper.sh} $ccPath/${targetPrefix}gccgo
+      wrap ${targetPrefix}gccgo $wrapper $ccPath/${targetPrefix}gccgo
     '';
 
   strictDeps = true;
-  propagatedBuildInputs = [ bintools ];
+  propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or false [ zlib ];
   depsTargetTargetPropagated = extraPackages;
 
   wrapperName = "CC_WRAPPER";
@@ -224,8 +237,6 @@ stdenv.mkDerivation {
 
   postFixup =
     ''
-      set -u
-
       # Backwards compatability for packages expecting this file, e.g. with
       # `$NIX_CC/nix-support/dynamic-linker`.
       #
@@ -239,7 +250,7 @@ stdenv.mkDerivation {
       fi
     ''
 
-    + optionalString (libc != null) ''
+    + optionalString (libc != null) (''
       ##
       ## General libc support
       ##
@@ -255,11 +266,18 @@ stdenv.mkDerivation {
       # compile, because it uses "#include_next <limits.h>" to find the
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
-      echo "-B${libc_lib}${libc.libdir or "/lib/"} -idirafter ${libc_dev}${libc.incdir or "/include"} ${optionalString isGNU "-idirafter ${cc}/lib/gcc/*/*/include-fixed"}" > $out/nix-support/libc-cflags
+      echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
+    '' + optionalString (!(cc.langD or false)) ''
+      echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+    '' + optionalString (isGNU && (!(cc.langD or false))) ''
+      for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
+        echo '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
+      done
+    '' + ''
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
-    ''
+    '')
 
     + optionalString (!nativeTools) ''
       ##
@@ -277,6 +295,13 @@ stdenv.mkDerivation {
       ccLDFlags+=" -L${cc_solib}/lib"
       ccCFlags+=" -B${cc_solib}/lib"
 
+    '' + optionalString cc.langAda or false ''
+      basePath=$(echo $cc/lib/*/*/*)
+      ccCFlags+=" -B$basePath -I$basePath/adainclude"
+      gnatCFlags="-I$basePath/adainclude -I$basePath/adalib"
+
+      echo "$gnatCFlags" > $out/nix-support/gnat-cflags
+    '' + ''
       echo "$ccLDFlags" > $out/nix-support/cc-ldflags
       echo "$ccCFlags" > $out/nix-support/cc-cflags
     '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
@@ -288,6 +313,8 @@ stdenv.mkDerivation {
 
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
+    '' + optionalString (cc.langD or false) ''
+      echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     ''
 
     + ''
@@ -345,9 +372,11 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     '' + optionalString targetPlatform.isNetBSD ''
       hardening_unsupported_flags+=" stackprotector fortify"
-    ''
-
-    + optionalString targetPlatform.isWasm ''
+    '' + optionalString cc.langAda or false ''
+      hardening_unsupported_flags+=" stackprotector strictoverflow"
+    '' + optionalString cc.langD or false ''
+      hardening_unsupported_flags+=" format"
+    '' + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     ''
 
@@ -357,7 +386,13 @@ stdenv.mkDerivation {
       done
     ''
 
+    # There are a few tools (to name one libstdcxx5) which do not work
+    # well with multi line flags, so make the flags single line again
     + ''
+      if [ -e "$out/nix-support/libc-cflags" ]; then
+        substituteInPlace "$out/nix-support/libc-cflags" --replace $'\n' ' '
+      fi
+
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash

@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication {
 
   meta = with stdenv.lib; {
     description = "A text scroller for use with panels and shells";
-    homepage = https://github.com/noctuid/zscroll;
+    homepage = "https://github.com/noctuid/zscroll";
     license = licenses.bsd2;
     platforms = platforms.all;
   };

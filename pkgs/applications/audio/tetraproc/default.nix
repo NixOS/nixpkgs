@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tetraproc-${version}";
+  pname = "tetraproc";
   version = "0.8.6";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
     sha256 = "02155ljfwgvfgq9z258fb4z7jrz7qx022d054fj5gr0v007cv0r7";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Converts the A-format signals from a tetrahedral Ambisonic microphone into B-format signals ready for recording";
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

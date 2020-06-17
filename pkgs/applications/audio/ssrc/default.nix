@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "ssrc";
-  name = "${pname}-${version}";
   version = "1.33";
 
   src = fetchFromGitHub {
@@ -33,8 +32,8 @@ stdenv.mkDerivation rec {
       without audible degradation.
     '';
 
-    version = "${version}";
-    homepage = http://shibatch.sourceforge.net/;
+    version = version;
+    homepage = "http://shibatch.sourceforge.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ leenaars];
     platforms = with platforms; [ linux ] ;

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "insync-${version}";
+  pname = "insync";
   version = "1.5.7.37371";
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
         sha256 = "1cm3q6y2crw6pcsvh21sbkmh1hin7xl4fyslc96nbyql8rxsky5n";
       }
     else
-      throw "${name} is not supported on ${stdenv.hostPlatform.system}";
+      throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
   buildInputs = [ makeWrapper ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     platforms = ["x86_64-linux"];
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.benley ];
-    homepage = https://www.insynchq.com;
+    homepage = "https://www.insynchq.com";
     description = "Google Drive sync and backup with multiple account support";
     longDescription = ''
      Insync is a commercial application that syncs your Drive files to your

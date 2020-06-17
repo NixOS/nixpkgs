@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "mimetic";
   version = "0.9.8";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url    = "http://www.codesink.org/download/${pname}-${version}.tar.gz";
@@ -14,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "MIME handling library";
-    homepage    = http://www.codesink.org/mimetic_mime_library.html;
+    homepage    = "http://www.codesink.org/mimetic_mime_library.html";
     license     = licenses.mit;
     maintainers = with maintainers; [ leenaars];
     platforms = platforms.linux;

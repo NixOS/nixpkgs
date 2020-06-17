@@ -1,8 +1,8 @@
 { stdenv, fetchurl, e2fsprogs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.2.4";
-  name = "extundelete-${version}";
+  pname = "extundelete";
 
   src = fetchurl {
     url = "mirror://sourceforge/extundelete/extundelete-0.2.4.tar.bz2";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utility that can recover deleted files from an ext3 or ext4 partition";
-    homepage = http://extundelete.sourceforge.net/;
+    homepage = "http://extundelete.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];

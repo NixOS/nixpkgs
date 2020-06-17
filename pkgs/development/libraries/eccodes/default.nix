@@ -5,7 +5,7 @@
 , enableOpenMPThreads ? false}:
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "eccodes-${version}";
+  pname = "eccodes";
   version = "2.12.5";
 
   src = fetchurl {
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://confluence.ecmwf.int/display/ECC/;
+    homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = licenses.asl20;
     maintainers = with maintainers; [ knedlsepp ];
     platforms = platforms.unix;

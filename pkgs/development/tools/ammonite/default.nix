@@ -1,30 +1,28 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre, gnused
+{ stdenv, fetchurl, jre
 , disableRemoteLogging ? true
 }:
 
 with stdenv.lib;
+
+let
+common = { scalaVersion, sha256 }:
 stdenv.mkDerivation rec {
-  name = "ammonite-${version}";
-  version = "1.6.8";
-  scalaVersion = "2.12";
+  pname = "ammonite";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
-    sha256 = "1lqc071v5f8dy1da669l0bfw9p8l6yavzlizzig9m441zcrmbj5d";
+    inherit sha256;
   };
-
-  propagatedBuildInputs = [ jre ] ;
-  buildInputs = [ makeWrapper gnused ] ;
 
   phases = "installPhase";
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp ${src} $out/bin/amm
-    chmod +x $out/bin/amm
-    ${gnused}/bin/sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
+    install -Dm755 $src $out/bin/amm
+    sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
   '' + optionalString (disableRemoteLogging) ''
-    ${gnused}/bin/sed -i '0,/ammonite.Main/{s|ammonite.Main|ammonite.Main --no-remote-logging|}' $out/bin/amm
+    sed -i '0,/ammonite.Main/{s|ammonite.Main|ammonite.Main --no-remote-logging|}' $out/bin/amm
+    sed -i '1i #!/bin/sh' $out/bin/amm
   '';
 
   meta = {
@@ -35,9 +33,13 @@ stdenv.mkDerivation rec {
         with a lot of ergonomic improvements and configurability
         that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
     '';
-    homepage = http://www.lihaoyi.com/Ammonite/;
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.nequissimus ];
+    homepage = "http://www.lihaoyi.com/Ammonite/";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.nequissimus ];
   };
+};
+in {
+  ammonite_2_12 = common { scalaVersion = "2.12"; sha256 = "068lcdi1y3zcspr0qmppflad7a4kls9gi321rp8dc5qc6f9nnk04"; };
+  ammonite_2_13 = common { scalaVersion = "2.13"; sha256 = "0fa0q9nk00crr2ws2mmw6pp4vf0xy53bqqhnws524ywwg6zwrl9s"; };
 }

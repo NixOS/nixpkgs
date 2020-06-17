@@ -26,7 +26,7 @@ stdenv.mkDerivation rec
     meta = with stdenv.lib;
       { description = "InterViews graphical library for Neuron";
         license     = licenses.bsd3;
-        homepage    = http://www.neuron.yale.edu/neuron;
+        homepage    = "http://www.neuron.yale.edu/neuron";
         platforms   = platforms.all;
       };
   }

@@ -1,28 +1,24 @@
 { stdenv, fetchFromGitHub, rustPlatform, CoreServices, darwin }:
 
 rustPlatform.buildRustPackage rec {
-  name = "mdbook-${version}";
-  version = "0.1.8";
+  pname = "mdbook";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "mdBook";
     rev = "v${version}";
-    sha256 = "1xmw4v19ff6mvimwk5l437wslzw5npy60zdb8r4319bjf32pw9pn";
+    sha256 = "0a5i842aqa5xaii5lfrnks0ldavbhbd3bl4f2d442i1ahbin5b32";
   };
 
-  cargoSha256 = "1xpsc4qff2lrq15mz1gvmw6n5vl88sfwpjbsnp5ja5k1im156lam";
+  cargoSha256 = "1qx3447y684b7y18lgk9cc37if2ld42jnmy1kak191q6rjh5ssh7";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
-    CoreServices
-    # This is needed to avoid an undefined symbol error for "_CFURLResourceIsReachable"
-    darwin.cf-private
-  ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with stdenv.lib; {
     description = "Create books from MarkDown";
-    homepage = https://github.com/rust-lang-nursery/mdbook;
-    license = [ licenses.asl20 licenses.mit ];
+    homepage = "https://github.com/rust-lang-nursery/mdbook";
+    license = [ licenses.mpl20 ];
     maintainers = [ maintainers.havvy ];
     platforms = platforms.all;
   };

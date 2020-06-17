@@ -16,6 +16,7 @@
 , enableTruetype ? true
 , enableFPS ? false
 , enableTextMode ? false
+, enableSound ? true
 }:
 
 with lib;
@@ -32,7 +33,7 @@ buildEnv {
   paths = [
     (dwarf-fortress.override {
       inherit enableDFHack enableTWBT enableSoundSense enableStoneSense theme
-              enableIntro enableTruetype enableFPS enableTextMode;
+              enableIntro enableTruetype enableFPS enableTextMode enableSound;
     })]
     ++ lib.optional enableDwarfTherapist dwarf-therapist
     ++ lib.optional enableLegendsBrowser legends-browser;
@@ -42,6 +43,6 @@ buildEnv {
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.all;
-    homepage = https://github.com/NixOS/nixpkgs/;
+    homepage = "https://github.com/NixOS/nixpkgs/";
   };
 }

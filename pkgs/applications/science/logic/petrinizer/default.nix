@@ -1,6 +1,12 @@
-{ mkDerivation, async, base, bytestring, containers, fetchFromGitLab, mtl
-, parallel-io, parsec, sbv, stdenv, stm, transformers
+{ mkDerivation, callPackage, buildPackages
+, async, base, bytestring, containers, fetchFromGitLab, mtl
+, parallel-io, parsec, stdenv, stm, transformers
 }:
+let
+  z3 = callPackage ./z3.nix { gomp = null; z3 = buildPackages.z3; };
+in let
+  sbv = callPackage ./sbv-7.13.nix { inherit z3; };
+in
 mkDerivation rec {
   pname = "petrinizer";
   version = "0.9.1.1";

@@ -5,7 +5,7 @@ let
 in stdenv.mkDerivation rec {
   version = "1.1.24";
 
-  name = "backintime-common-${version}";
+  pname = "backintime-common";
 
   src = fetchFromGitHub {
     owner = "bit-team";
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = https://github.com/bit-team/backintime;
+    homepage = "https://github.com/bit-team/backintime";
     description = "Simple backup tool for Linux";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ ];

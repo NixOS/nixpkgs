@@ -1,14 +1,14 @@
-{ lib, fetchurl, python3Packages, qtbase, makeWrapper }:
+{ lib, fetchFromGitHub, python3Packages, qtbase, wrapQtAppsHook, secp256k1 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.0.7";
+  version = "4.0.14";
 
-  src = fetchurl {
-    url = "https://electroncash.org/downloads/${version}/win-linux/Electron-Cash-${version}.tar.gz";
-    # Verified using official SHA-1 and signature from
-    # https://github.com/fyookball/keys-n-hashes
-    sha256 = "d63ef2d52cff0b821b745067d752fd0c7f2902fa23eaf8e9392c54864cae5c77";
+  src = fetchFromGitHub {
+    owner = "Electron-Cash";
+    repo = "Electron-Cash";
+    rev = version;
+    sha256 = "1dp7cj1185h6xfz6jzh0iq58zvg3wq9hl96bkgxkf5h4ygni2vm6";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication rec {
     requests
     tlslite-ng
     qdarkstyle
+    stem
 
     # plugins
     keepkey
@@ -32,11 +33,11 @@ python3Packages.buildPythonApplication rec {
     btchip
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
-      --replace "qdarkstyle<2.6" "qdarkstyle<3"
+      --replace "qdarkstyle==2.6.8" "qdarkstyle<3"
 
     substituteInPlace setup.py \
       --replace "(share_dir" "(\"share\""
@@ -54,10 +55,16 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
+  '';
 
-    # Please remove this when #44047 is fixed
-    wrapProgram $out/bin/electron-cash \
-      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
+  # If secp256k1 wasn't added to the library path, the following warning is given:
+  #
+  #   Electron Cash was unable to find the secp256k1 library on this system.
+  #   Elliptic curve cryptography operations will be performed in slow
+  #   Python-only mode.
+  postFixup = ''
+    wrapQtApp $out/bin/electron-cash \
+      --prefix LD_LIBRARY_PATH : ${secp256k1}/lib
   '';
 
   doInstallCheck = true;
@@ -73,7 +80,7 @@ python3Packages.buildPythonApplication rec {
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
-    homepage = https://www.electroncash.org/;
+    homepage = "https://www.electroncash.org/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ lassulus nyanloutre ];
     license = licenses.mit;

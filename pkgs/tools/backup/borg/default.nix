@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.10";
+  version = "1.1.13";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1pp70p4n5kamvcbl4d8021ggrxhyykmg9isjg4yd3wags8b19d7g";
+    sha256 = "089q3flmwbz7dc28zlscwylf64kgck3jf1n6lqpwww8hlrk8cjhn";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -17,8 +17,8 @@ python3.pkgs.buildPythonApplication rec {
     libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3.pkgs; [
-    cython
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
+    cython llfuse
+  ];
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
@@ -58,14 +58,14 @@ python3.pkgs.buildPythonApplication rec {
     HOME=$(mktemp -d) py.test --pyargs borg.testsuite
   '';
 
-  # 63 failures, needs pytest-benchmark
+  # 64 failures, needs pytest-benchmark
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";
-    homepage = https://www.borgbackup.org;
+    homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ flokli dotlambda ];
+    maintainers = with maintainers; [ flokli dotlambda globin ];
   };
 }

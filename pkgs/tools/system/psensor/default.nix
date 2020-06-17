@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "psensor-${version}";
+  pname = "psensor";
 
   version = "1.2.0";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical hardware monitoring application for Linux";
-    homepage = https://wpitchoune.net/psensor/;
+    homepage = "https://wpitchoune.net/psensor/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

@@ -71,7 +71,7 @@ let
 
   trivialBuilders = self: super:
     import ../build-support/trivial-builders.nix {
-      inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.xorg) lndir;
+      inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.pkgsBuildHost.xorg) lndir;
       inherit (self) runtimeShell;
     };
 
@@ -169,9 +169,9 @@ let
         then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
           abi = {
-            "gnu" = lib.systems.parse.abis.musl;
-            "gnueabi" = lib.systems.parse.abis.musleabi;
-            "gnueabihf" = lib.systems.parse.abis.musleabihf;
+            gnu = lib.systems.parse.abis.musl;
+            gnueabi = lib.systems.parse.abis.musleabi;
+            gnueabihf = lib.systems.parse.abis.musleabihf;
           }.${stdenv.hostPlatform.parsed.abi.name}
             or lib.systems.parse.abis.musl;
         };
@@ -217,9 +217,9 @@ let
       crossSystem = {
         parsed = stdenv.hostPlatform.parsed // {
           abi = {
-            "gnu" = lib.systems.parse.abis.musl;
-            "gnueabi" = lib.systems.parse.abis.musleabi;
-            "gnueabihf" = lib.systems.parse.abis.musleabihf;
+            gnu = lib.systems.parse.abis.musl;
+            gnueabi = lib.systems.parse.abis.musleabi;
+            gnueabihf = lib.systems.parse.abis.musleabihf;
           }.${stdenv.hostPlatform.parsed.abi.name}
             or lib.systems.parse.abis.musl;
         };

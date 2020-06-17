@@ -7,7 +7,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "polymake";
   version = "3.2.rc4";
 
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     makeWrapper ninja ant perl
   ];
 
-  ninjaFlags = "-C build/Opt";
+  ninjaFlags = [ "-C" "build/Opt" ];
 
   postInstall = ''
     for i in "$out"/bin/*; do

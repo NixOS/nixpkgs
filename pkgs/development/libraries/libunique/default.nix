@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1fsgvmncd9caw552lyfg8swmsd6bh4ijjsph69bwacwfxwf09j75";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   # Patches from Gentoo portage
   patches = [
@@ -31,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Attic/LibUnique";
     description = "A library for writing single instance applications";
     license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

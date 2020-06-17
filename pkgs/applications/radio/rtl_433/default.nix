@@ -2,16 +2,16 @@
 , libusb1, rtl-sdr, soapysdr-with-plugins
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  version = "18.12";
-  name = "rtl_433-${version}";
+  version = "20.02";
+  pname = "rtl_433";
 
   src = fetchFromGitHub {
     owner = "merbanan";
     repo = "rtl_433";
-    rev = "18.12";
-    sha256 = "0y73g9ffpsgnmfk8lbihyl9d1fd9v91wsn8k8xhsdmgmn4ra1jk5";
+    rev = "20.02";
+    sha256 = "11991xky9gawkragdyg27qsf7kw5bhlg7ygvf3fn7ng00x4xbh1z";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Decode traffic from devices that broadcast on 433.9 MHz";
-    homepage = https://github.com/merbanan/rtl_433;
+    homepage = "https://github.com/merbanan/rtl_433";
     license = licenses.gpl2;
     maintainers = with maintainers; [ earldouglas ];
     platforms = platforms.all;

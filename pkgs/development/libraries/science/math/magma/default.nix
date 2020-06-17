@@ -1,23 +1,28 @@
-{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, liblapack }:
+{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, lapack, blas }:
 
 with stdenv.lib;
 
-let version = "2.0.2";
+let version = "2.5.0";
 
 in stdenv.mkDerivation {
-  name = "magma-${version}";
+  pname = "magma";
+  inherit version;
   src = fetchurl {
     url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
-    sha256 = "0w3z6k1npfh0d3r8kpw873f1m7lny29sz2bvvfxzk596d4h083lk";
+    sha256 = "0czspk93cv1fy37zyrrc9k306q4yzfxkhy1y4lj937dx8rz5rm2g";
     name = "magma-${version}.tar.gz";
   };
 
-  buildInputs = [ gfortran cudatoolkit libpthreadstubs liblapack cmake ];
+  buildInputs = [ gfortran cudatoolkit libpthreadstubs cmake lapack blas ];
 
   doCheck = false;
-  #checkTarget = "tests";
+
+  preConfigure = ''
+    export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
+  '';
 
   enableParallelBuilding=true;
+  buildFlags = [ "magma" "magma_sparse" ];
 
   # MAGMA's default CMake setup does not care about installation. So we copy files directly.
   installPhase = ''
@@ -39,8 +44,8 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
     license = licenses.bsd3;
-    homepage = http://icl.cs.utk.edu/magma/index.html;
+    homepage = "http://icl.cs.utk.edu/magma/index.html";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ianwookim ];
+    maintainers = with maintainers; [ tbenst ];
   };
 }

@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opensubdiv-${version}";
-  version = "3.3.3";
+  pname = "opensubdiv";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     rev = "v${lib.replaceChars ["."] ["_"] version}";
-    sha256 = "1rld4hgl9yrbnk5sd6bhvnm8jdnqq09hq93hrmx0nhccccximi9z";
+    sha256 = "0zpnpg2zzyavv9r3jakv3j2gn603b62rbczrflc6qmg6qvpgz0kr";
   };
 
   outputs = [ "out" "dev" ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An Open-Source subdivision surface library";
-    homepage = http://graphics.pixar.com/opensubdiv;
+    homepage = "http://graphics.pixar.com/opensubdiv";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.eelco ];
     license = lib.licenses.asl20;

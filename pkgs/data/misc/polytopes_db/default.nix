@@ -5,7 +5,6 @@
 stdenv.mkDerivation rec {
   pname = "polytopes_db";
   version = "20170220";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sageupstream/${pname}/${pname}-${version}.tar.bz2";

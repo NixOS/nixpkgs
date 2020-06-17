@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.9.1";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "66901483808839ed895a685ca7bc4731379f4a627d73a83b77f0df1847b14892";
+    sha256 = "540789abc21872469e52c59ac3962c61259a8df557feadd6514eb23eb0a64ca7";
   };
 
   disabled = pythonOlder "3.5";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Make beautiful maps with Leaflet.js & Python";
-    homepage = https://github.com/python-visualization/folium;
+    homepage = "https://github.com/python-visualization/folium";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fridh ];
   };

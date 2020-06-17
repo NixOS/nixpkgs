@@ -3,40 +3,38 @@
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 {
   test1 = makeTest {
     name = "rsyslogd-test1";
-    meta.maintainers = [ maintainers.aanderse ];
+    meta.maintainers = [ pkgs.stdenv.lib.maintainers.aanderse ];
 
-    machine =
-      { config, pkgs, ... }:
-      { services.rsyslogd.enable = true;
-        services.journald.forwardToSyslog = false;
-      };
+    machine = { config, pkgs, ... }: {
+      services.rsyslogd.enable = true;
+      services.journald.forwardToSyslog = false;
+    };
 
     # ensure rsyslogd isn't receiving messages from journald if explicitly disabled
     testScript = ''
-      $machine->waitForUnit("default.target");
-      $machine->fail("test -f /var/log/messages");
+      machine.wait_for_unit("default.target")
+      machine.fail("test -f /var/log/messages")
     '';
   };
 
   test2 = makeTest {
     name = "rsyslogd-test2";
-    meta.maintainers = [ maintainers.aanderse ];
+    meta.maintainers = [ pkgs.stdenv.lib.maintainers.aanderse ];
 
-    machine =
-      { config, pkgs, ... }:
-      { services.rsyslogd.enable = true;
-      };
+    machine = { config, pkgs, ... }: {
+      services.rsyslogd.enable = true;
+    };
 
     # ensure rsyslogd is receiving messages from journald
     testScript = ''
-      $machine->waitForUnit("default.target");
-      $machine->succeed("test -f /var/log/messages");
+      machine.wait_for_unit("default.target")
+      machine.succeed("test -f /var/log/messages")
     '';
   };
 }

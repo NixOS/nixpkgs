@@ -14,7 +14,8 @@ let
   version = "7.5.0";
 
 in stdenv.mkDerivation {
-  name = "spideroak-${version}";
+  pname = "spideroak";
+  inherit version;
 
   src = fetchurl {
     name = "SpiderOakONE-${version}-slack_tar_x64.tgz";
@@ -50,7 +51,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ patchelf makeWrapper ];
 
   meta = {
-    homepage = https://spideroak.com;
+    homepage = "https://spideroak.com";
     description = "Secure online backup and sychronization";
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ amorsillo ];

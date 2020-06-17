@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "fritzbox-exporter-${version}";
+  pname = "fritzbox-exporter";
   version = "v1.0-32-g90fc0c5";
   rev = "90fc0c572d3340803f7c2aafc4b097db7af1f871";
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Prometheus Exporter for FRITZ!Box (TR64 and UPnP)";
-    homepage = https://github.com/ndecker/fritzbox_exporter;
+    homepage = "https://github.com/ndecker/fritzbox_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ bachp flokli ];
     platforms = platforms.unix;

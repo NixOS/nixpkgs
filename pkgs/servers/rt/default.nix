@@ -31,12 +31,12 @@
 #
 # Good luck.
 stdenv.mkDerivation rec {
-  name = "rt-${version}";
+  pname = "rt";
 
   version = "4.4.4";
 
   src = fetchurl {
-    url = "https://download.bestpractical.com/pub/rt/release/${name}.tar.gz";
+    url = "https://download.bestpractical.com/pub/rt/release/${pname}-${version}.tar.gz";
     sha256 = "1108jhz1gvalcfnbzgpbk7fkxzxkkc7m74a3bnwyjzldlyj1dhrl";
   };
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     perl
     (buildEnv {
       name = "rt-perl-deps";
-      paths = (with perlPackages; [
+      paths = with perlPackages; (requiredPerlModules [
         ApacheSession BusinessHours CGIEmulatePSGI CGIPSGI
-        CSSMinifierXP CSSSquish ConvertColor CryptEksblowfish
+        CSSMinifierXS CSSSquish ConvertColor CryptEksblowfish
         CryptSSLeay DBDSQLite DBDmysql DBIxSearchBuilder DataGUID
         DataICal DataPagePageset DateExtract DateManip
         DateTimeFormatNatural DevelGlobalDestruction EmailAddress

@@ -4,8 +4,8 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "notbit-${version}";
+stdenv.mkDerivation {
+  pname = "notbit";
   version = "2018-01-09";
 
   src = fetchFromGitHub {
@@ -21,9 +21,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A minimal Bitmessage client";
-    homepage = https://github.com/bpeel/notbit;
+    homepage = "https://github.com/bpeel/notbit";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mog ];
+    broken = true;
   };
 }

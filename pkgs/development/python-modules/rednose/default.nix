@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A python nose plugin adding color to console results";
-    homepage = https://github.com/JBKahn/rednose;
+    homepage = "https://github.com/JBKahn/rednose";
     license = licenses.mit;
   };
 }

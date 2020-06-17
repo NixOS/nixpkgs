@@ -9,10 +9,10 @@ let
 
 in stdenv.mkDerivation rec {
   version = "${major}.${minor}";
-  name = "brasero-${version}";
+  pname = "brasero";
 
   src = fetchurl {
-    url = "http://download.gnome.org/sources/brasero/${major}/${name}.tar.xz";
+    url = "http://download.gnome.org/sources/brasero/${major}/${pname}-${version}.tar.xz";
     sha256 = "0h90y674j26rvjahb8cc0w79zx477rb6zaqcj26wzvq8kmpic8k8";
   };
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Gnome CD/DVD Burner";
-    homepage = https://wiki.gnome.org/Apps/Brasero;
+    homepage = "https://wiki.gnome.org/Apps/Brasero";
     maintainers = [ maintainers.bdimcheff ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -24,7 +24,8 @@ let
     ""; # use linux flags by default
 in
 stdenv.mkDerivation {
-  name = "tree-${version}";
+  pname = "tree";
+  inherit version;
 
   src = fetchurl {
     url = "http://mama.indstate.edu/users/ice/tree/src/tree-${version}.tgz";
@@ -42,7 +43,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://mama.indstate.edu/users/ice/tree/;
+    homepage = "http://mama.indstate.edu/users/ice/tree/";
     description = "Command to produce a depth indented directory listing";
     license = stdenv.lib.licenses.gpl2;
 

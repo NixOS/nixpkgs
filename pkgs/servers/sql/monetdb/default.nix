@@ -3,14 +3,15 @@
 }:
 
 let
-  version = "11.33.3";
-in stdenv.mkDerivation rec {
+  version = "11.35.19";
+in stdenv.mkDerivation {
 
-  name = "monetdb-${version}";
+  pname = "monetdb";
+  inherit version;
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "0k0xcm3b5qq2arjfn8f1h020sjkk97qfynsimn848bnl01vscqh8";
+    sha256 = "1qfgsv1k23sn6jl7jbxmfh7w7hyzmh8r1cddl4kksqrw41q6h82q";
   };
 
   postPatch = ''
@@ -22,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open source database system";
-    homepage = https://www.monetdb.org/;
+    homepage = "https://www.monetdb.org/";
     license = licenses.mpl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.StillerHarpo ];

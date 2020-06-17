@@ -9,4 +9,4 @@ fi
 
 initString+="]}}"
 
-exec -a "$0" "@out@/bin/@wrapped@" "${initString}" "${extraFlagsArray[@]}" "$@"
+exec -a "$0" "@out@/bin/@wrapped@" "${initString}" "$@"

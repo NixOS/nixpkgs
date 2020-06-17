@@ -1,25 +1,52 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, desktop-file-utils
-, gtk3, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2
-, granite, gst_all_1, libgudev, json-glib, libraw, librest, libsoup, sqlite, python3
-, scour, webkitgtk, libwebp, appstream, libunity, wrapGAppsHook, elementary-icon-theme }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, desktop-file-utils
+, gtk3
+, libaccounts-glib
+, libexif
+, libgee
+, geocode-glib
+, gexiv2
+, libgphoto2
+, granite
+, gst_all_1
+, libgudev
+, json-glib
+, libraw
+, librest
+, libsoup
+, sqlite
+, python3
+, scour
+, webkitgtk
+, libwebp
+, appstream
+, libunity
+, wrapGAppsHook
+, elementary-icon-theme
+}:
 
 stdenv.mkDerivation rec {
-  pname = "photos";
-  version = "2.6.4";
+  pname = "elementary-photos";
+  version = "2.7.0";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "photos";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "17r9658s0pqy6s45ysi3915sm8hpvmsp7cw2jahqvjc61r4qpdc1";
+    sha256 = "09jjic165rmprc2cszsgj2m3j3f5p8v9pxx5mj66a0gj3ar3hfbd";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -52,10 +79,10 @@ stdenv.mkDerivation rec {
     libgphoto2
     libgudev
     libraw
+    librest
     libsoup
     libunity
     libwebp
-    librest
     scour
     sqlite
     webkitgtk
@@ -72,7 +99,7 @@ stdenv.mkDerivation rec {
 
   meta =  with stdenv.lib; {
     description = "Photo viewer and organizer designed for elementary OS";
-    homepage = https://github.com/elementary/photos;
+    homepage = "https://github.com/elementary/photos";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

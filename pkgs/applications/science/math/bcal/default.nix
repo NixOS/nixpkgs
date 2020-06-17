@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "bcal-${version}";
+  pname = "bcal";
   version = "1.9";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Storage conversion and expression calculator";
-    homepage = https://github.com/jarun/bcal;
+    homepage = "https://github.com/jarun/bcal";
     license = licenses.gpl3;
     platforms = [ "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
     maintainers = with maintainers; [ jfrankenau ];

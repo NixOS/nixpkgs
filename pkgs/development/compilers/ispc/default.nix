@@ -1,73 +1,70 @@
-{stdenv, fetchFromGitHub, which, m4, python, bison, flex, llvmPackages,
-testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is not supported by all Hydra agents
+{ stdenv, fetchFromGitHub
+, cmake, which, m4, python3, bison, flex, llvmPackages
+
+  # the default test target is sse4, but that is not supported by all Hydra agents
+, testedTargets ? [ "sse2" ]
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.10.0";
-  rev = "v${version}";
+  pname   = "ispc";
+  version = "1.13.0";
+
+  src = fetchFromGitHub {
+    owner  = pname;
+    repo   = pname;
+    rev    = "v${version}";
+    sha256 = "1l74xkpwwxc38k2ngg7mpvswziiy91yxslgfad6688hh1n5jvayd";
+  };
+
+  nativeBuildInputs = [ cmake which m4 bison flex python3 ];
+  buildInputs = with llvmPackages; [
+    # we need to link against libclang, so we need the unwrapped
+    llvm llvmPackages.clang-unwrapped
+  ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace curses ncurses
+    substituteInPlace cmake/GenerateBuiltins.cmake \
+      --replace 'bit 32 64' 'bit 64'
+  '';
 
   inherit testedTargets;
 
-  name = "ispc-${version}";
+  # needs 'transcendentals' executable, which is only on linux
+  doCheck = stdenv.isLinux;
 
-  src = fetchFromGitHub {
-    owner = "ispc";
-    repo = "ispc";
-    inherit rev;
-    sha256 = "1x07n2gaff3v32yvddrb659mx5gg12bnbsqbyfimp396wn04w60b";
-  };
-
-  # there are missing dependencies in the Makefile, causing sporadic build failures
-  enableParallelBuilding = false;
-
-  doCheck = true;
-
-  buildInputs = with llvmPackages; [
-    which
-    m4
-    python
-    bison
-    flex
-    llvm
-    llvmPackages.clang-unwrapped # we need to link against libclang, so we need the unwrapped
-  ];
-
-  postPatch = "sed -i -e 's,/bin/,,g' -e 's/-lcurses/-lncurses/g' Makefile";
-
-  # TODO: this correctly catches errors early, but also some things that are just weird and don't seem to be real
-  # errors
-  #configurePhase = ''
-  #  makeFlagsArray=( SHELL="${bash}/bin/bash -o pipefail" )
-  #'';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ispc $out/bin
-  '';
+  # the compiler enforces -Werror, and -fno-strict-overflow makes it mad.
+  # hilariously this is something of a double negative: 'disable' the
+  # 'strictoverflow' hardening protection actually means we *allow* the compiler
+  # to do strict overflow optimization. somewhat misleading...
+  hardeningDisable = [ "strictoverflow" ];
 
   checkPhase = ''
-    export ISPC_HOME=$PWD
+    export ISPC_HOME=$PWD/bin
     for target in $testedTargets
     do
       echo "Testing target $target"
       echo "================================"
       echo
-      PATH=${llvmPackages.clang}/bin:$PATH python run_tests.py -t $target --non-interactive --verbose --file=test_output.log
-      fgrep -q "No new fails"  test_output.log || exit 1
+      (cd ../
+       PATH=${llvmPackages.clang}/bin:$PATH python run_tests.py -t $target --non-interactive --verbose --file=test_output.log
+       fgrep -q "No new fails"  test_output.log || exit 1)
     done
   '';
 
-  makeFlags = [
-    "CXX=${stdenv.cc}/bin/clang++"
-    "CLANG=${stdenv.cc}/bin/clang"
-    "CLANG_INCLUDE=${llvmPackages.clang-unwrapped}/include"
-    ];
+  cmakeFlags = [
+    "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
+    "-DISPC_INCLUDE_EXAMPLES=OFF"
+    "-DISPC_INCLUDE_UTILS=OFF"
+    "-DARM_ENABLED=FALSE"
+  ];
 
   meta = with stdenv.lib; {
-    homepage = https://ispc.github.io/ ;
+    homepage    = "https://ispc.github.io/";
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
-    license = licenses.bsd3;
-    platforms = ["x86_64-linux"]; # TODO: buildable on more platforms?
-    maintainers = [ maintainers.aristid ];
+    license     = licenses.bsd3;
+    platforms   = [ "x86_64-linux" "x86_64-darwin" ]; # TODO: buildable on more platforms?
+    maintainers = with maintainers; [ aristid thoughtpolice ];
   };
 }

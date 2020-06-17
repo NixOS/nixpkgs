@@ -5,8 +5,8 @@
 
 assert pythonSupport -> python != null && swig != null;
 
-stdenv.mkDerivation rec {
-  name = "gr-nacl-${version}";
+stdenv.mkDerivation {
+  pname = "gr-nacl";
   version = "2017-04-10";
 
   src = fetchFromGitHub {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gnuradio block for encryption";
-    homepage = https://github.com/stwunsch/gr-nacl;
+    homepage = "https://github.com/stwunsch/gr-nacl";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ mog ];

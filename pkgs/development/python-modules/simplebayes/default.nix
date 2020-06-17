@@ -6,7 +6,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "simplebayes";
   version = "1.5.8";
 

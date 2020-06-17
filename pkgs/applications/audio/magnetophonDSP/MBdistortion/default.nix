@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "MBdistortion-${version}";
+  pname = "MBdistortion";
   version = "1.1.1";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mid-side multiband distortion for jack and lv2";
-    homepage = https://github.com/magnetophon/MBdistortion;
+    homepage = "https://github.com/magnetophon/MBdistortion";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
   };

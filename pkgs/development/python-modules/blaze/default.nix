@@ -63,7 +63,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/ContinuumIO/blaze;
+    homepage = "https://github.com/ContinuumIO/blaze";
     description = "Allows Python users a familiar interface to query data living in other data storage systems";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ fridh ];

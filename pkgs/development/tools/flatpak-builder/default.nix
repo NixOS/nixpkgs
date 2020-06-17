@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , substituteAll
+, nixosTests
 
 , autoreconfHook
 , docbook_xml_dtd_412
@@ -14,7 +15,7 @@
 , xmlto
 
 , acl
-, bazaar
+, breezy
 , binutils
 , bzip2
 , coreutils
@@ -43,15 +44,15 @@
 let
   installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
-  version = "1.0.7";
 in stdenv.mkDerivation rec {
-  name = "flatpak-builder-${version}";
+  pname = "flatpak-builder";
+  version = "1.0.10";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
-    url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${name}.tar.xz";
-    sha256 = "04z9i2kahj4mffzq8ny0jvc4g3ah8kv8ilqv2rx9r1l8fhbq30jj";
+    url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "1fn61cl1d33yd1jgqm8jpffjw3xlyyhkn032g14d9gnwkcaf4649";
   };
 
   nativeBuildInputs = [
@@ -88,7 +89,7 @@ in stdenv.mkDerivation rec {
     ./respect-xml-catalog-files-var.patch
     (substituteAll {
       src = ./fix-paths.patch;
-      bzr = "${bazaar}/bin/bzr";
+      bzr = "${breezy}/bin/bzr";
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
       tar = "${gnutar}/bin/tar";
@@ -130,13 +131,22 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    installedTestsDependencies = [ gnupg ostree python2 gnumake ];
+    installedTestsDependencies = [
+      gnupg
+      ostree
+      python2
+      gnumake
+    ];
+
+    tests = {
+      installedTests = nixosTests.installed-tests.flatpak-builder;
+    };
   };
 
   meta = with stdenv.lib; {
     description = "Tool to build flatpaks from source";
-    homepage = https://flatpak.org/;
-    license = licenses.lgpl21;
+    homepage = "https://github.com/flatpak/flatpak-builder";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

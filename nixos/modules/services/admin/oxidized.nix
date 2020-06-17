@@ -89,6 +89,7 @@ in
       group = cfg.group;
       home = cfg.dataDir;
       createHome = true;
+      isSystemUser = true;
     };
 
     systemd.services.oxidized = {
@@ -97,8 +98,8 @@ in
 
       preStart = ''
         mkdir -p ${cfg.dataDir}/.config/oxidized
-        cp -v ${cfg.routerDB} ${cfg.dataDir}/.config/oxidized/router.db
-        cp -v ${cfg.configFile} ${cfg.dataDir}/.config/oxidized/config
+        ln -f -s ${cfg.routerDB} ${cfg.dataDir}/.config/oxidized/router.db
+        ln -f -s ${cfg.configFile} ${cfg.dataDir}/.config/oxidized/config
       '';
 
       serviceConfig = {
@@ -110,6 +111,7 @@ in
         Restart  = "always";
         WorkingDirectory = cfg.dataDir;
         KillSignal = "SIGKILL";
+        PIDFile = "${cfg.dataDir}/.config/oxidized/pid";
       };
     };
   };

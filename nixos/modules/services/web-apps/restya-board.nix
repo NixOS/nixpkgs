@@ -9,11 +9,11 @@ with lib;
 
 let
   cfg = config.services.restya-board;
+  fpm = config.services.phpfpm.pools.${poolName};
 
   runDir = "/run/restya-board";
 
   poolName = "restya-board";
-  phpfpmSocketName = "/run/phpfpm-${poolName}/${poolName}.sock";
 
 in
 
@@ -116,7 +116,7 @@ in
         };
 
         passwordFile = mkOption {
-          type = types.nullOr types.str;
+          type = types.nullOr types.path;
           default = null;
           description = ''
             The database user's password. 'null' if no password is set.
@@ -179,11 +179,9 @@ in
   config = mkIf cfg.enable {
 
     services.phpfpm.pools = {
-      "${poolName}" = {
-        socketName = "${poolName}";
-        phpPackage = pkgs.php;
-        user = "${cfg.user}";
-        group = "${cfg.group}";
+      ${poolName} = {
+        inherit (cfg) user group;
+
         phpOptions = ''
           date.timezone = "CET"
 
@@ -194,23 +192,23 @@ in
             auth_password = ${cfg.email.password}
           ''}
         '';
-        extraConfig = ''
-          listen.owner = ${config.services.nginx.user}
-          listen.group = ${config.services.nginx.group}
-          listen.mode = 0600
-          pm = dynamic
-          pm.max_children = 75
-          pm.start_servers = 10
-          pm.min_spare_servers = 5
-          pm.max_spare_servers = 20
-          pm.max_requests = 500
-          catch_workers_output = 1
-        '';
+        settings = mapAttrs (name: mkDefault) {
+          "listen.owner" = "nginx";
+          "listen.group" = "nginx";
+          "listen.mode" = "0600";
+          "pm" = "dynamic";
+          "pm.max_children" = 75;
+          "pm.start_servers" = 10;
+          "pm.min_spare_servers" = 5;
+          "pm.max_spare_servers" = 20;
+          "pm.max_requests" = 500;
+          "catch_workers_output" = 1;
+        };
       };
     };
 
     services.nginx.enable = true;
-    services.nginx.virtualHosts."${cfg.virtualHost.serverName}" = {
+    services.nginx.virtualHosts.${cfg.virtualHost.serverName} = {
       listen = [ { addr = cfg.virtualHost.listenHost; port = cfg.virtualHost.listenPort; } ];
       serverName = cfg.virtualHost.serverName;
       root = runDir;
@@ -218,7 +216,6 @@ in
         index index.html index.php;
 
         gzip on;
-        gzip_disable "msie6";
 
         gzip_comp_level 6;
         gzip_min_length  1100;
@@ -238,18 +235,18 @@ in
 
       locations."/".root = "${runDir}/client";
 
-      locations."~ \.php$" = {
+      locations."~ \\.php$" = {
         tryFiles = "$uri =404";
         extraConfig = ''
           include ${pkgs.nginx}/conf/fastcgi_params;
-          fastcgi_pass    unix:${phpfpmSocketName};
+          fastcgi_pass    unix:${fpm.socket};
           fastcgi_index   index.php;
           fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
           fastcgi_param   PHP_VALUE "upload_max_filesize=9G \n post_max_size=9G \n max_execution_time=200 \n max_input_time=200 \n memory_limit=256M";
         '';
       };
 
-      locations."~* \.(css|js|less|html|ttf|woff|jpg|jpeg|gif|png|bmp|ico)" = {
+      locations."~* \\.(css|js|less|html|ttf|woff|jpg|jpeg|gif|png|bmp|ico)" = {
         root = "${runDir}/client";
         extraConfig = ''
           if (-f $request_filename) {
@@ -288,7 +285,7 @@ in
           sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', 'restya');/g" "${runDir}/server/php/config.inc.php"
         '' else ''
           sed -i "s/^.*'R_DB_HOST'.*$/define('R_DB_HOST', '${cfg.database.host}');/g" "${runDir}/server/php/config.inc.php"
-          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', '$(<${cfg.database.dbPassFile})');/g" "${runDir}/server/php/config.inc.php"
+          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', ${if cfg.database.passwordFile == null then "''" else "'file_get_contents(${cfg.database.passwordFile})'"});/g" "${runDir}/server/php/config.inc.php
         ''}
         sed -i "s/^.*'R_DB_PORT'.*$/define('R_DB_PORT', '${toString cfg.database.port}');/g" "${runDir}/server/php/config.inc.php"
         sed -i "s/^.*'R_DB_NAME'.*$/define('R_DB_NAME', '${cfg.database.name}');/g" "${runDir}/server/php/config.inc.php"
@@ -366,9 +363,6 @@ in
       home = runDir;
       group  = "restya-board";
     };
-    users.users.nginx = {
-      extraGroups = [ "restya-board" ];
-     };
     users.groups.restya-board = {};
 
     services.postgresql.enable = mkIf (cfg.database.host == null) true;

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version="0.5.0";
-  name = "uhttpmock-${version}";
+  pname = "uhttpmock";
 
   src = fetchFromGitLab {
     repo = "uhttpmock";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Project for mocking web service APIs which use HTTP or HTTPS";
-    homepage = https://gitlab.com/groups/uhttpmock/;
+    homepage = "https://gitlab.com/groups/uhttpmock/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ ];
     platforms = with platforms; linux;

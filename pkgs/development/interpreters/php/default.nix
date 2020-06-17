@@ -1,279 +1,304 @@
-# pcre functionality is tested in nixos/tests/php-pcre.nix
-{ lib, stdenv, fetchurl, autoconf, bison, libtool, pkgconfig, re2c
-, mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pcre, pcre2, sqlite, config, libjpeg, libpng, freetype
-, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
-, libzip, valgrind
-}:
+# We have tests for PCRE and PHP-FPM in nixos/tests/php/ or
+# both in the same attribute named nixosTests.php
 
-with lib;
+{ callPackage, lib, stdenv, nixosTests }@_args:
 
 let
   generic =
-  { version
-  , sha256
-  , extraPatches ? []
-  , withSystemd ? config.php.systemd or stdenv.isLinux
-  , imapSupport ? config.php.imap or (!stdenv.isDarwin)
-  , ldapSupport ? config.php.ldap or true
-  , mhashSupport ? config.php.mhash or true
-  , mysqlndSupport ? config.php.mysqlnd or true
-  , mysqliSupport ? config.php.mysqli or true
-  , pdo_mysqlSupport ? config.php.pdo_mysql or true
-  , libxml2Support ? config.php.libxml2 or true
-  , apxs2Support ? config.php.apxs2 or (!stdenv.isDarwin)
-  , embedSupport ? config.php.embed or false
-  , bcmathSupport ? config.php.bcmath or true
-  , socketsSupport ? config.php.sockets or true
-  , curlSupport ? config.php.curl or true
-  , gettextSupport ? config.php.gettext or true
-  , pcntlSupport ? config.php.pcntl or true
-  , pdo_odbcSupport ? config.php.pdo_odbc or true
-  , postgresqlSupport ? config.php.postgresql or true
-  , pdo_pgsqlSupport ? config.php.pdo_pgsql or true
-  , readlineSupport ? config.php.readline or true
-  , sqliteSupport ? config.php.sqlite or true
-  , soapSupport ? (config.php.soap or true) && (libxml2Support)
-  , zlibSupport ? config.php.zlib or true
-  , opensslSupport ? config.php.openssl or true
-  , mbstringSupport ? config.php.mbstring or true
-  , gdSupport ? config.php.gd or true
-  , intlSupport ? config.php.intl or true
-  , exifSupport ? config.php.exif or true
-  , xslSupport ? config.php.xsl or false
-  , mcryptSupport ? (config.php.mcrypt or true) && (versionOlder version "7.2")
-  , bz2Support ? config.php.bz2 or false
-  , zipSupport ? config.php.zip or true
-  , ftpSupport ? config.php.ftp or true
-  , fpmSupport ? config.php.fpm or true
-  , gmpSupport ? config.php.gmp or true
-  , ztsSupport ? (config.php.zts or false) || (apxs2Support)
-  , calendarSupport ? config.php.calendar or true
-  , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
-  , tidySupport ? (config.php.tidy or false)
-  , argon2Support ? (config.php.argon2 or true) && (versionAtLeast version "7.2")
-  , libzipSupport ? (config.php.libzip or true) && (versionAtLeast version "7.2")
-  , phpdbgSupport ? config.php.phpdbg or true
-  , cgiSupport ? config.php.cgi or true
-  , cliSupport ? config.php.cli or true
-  , pharSupport ? config.php.phar or true
-  , xmlrpcSupport ? (config.php.xmlrpc or false) && (libxml2Support)
-  , cgotoSupport ? config.php.cgoto or false
-  , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
-  }:
+    { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
+    , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
+    , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
+    , systemd, valgrind
 
-    let
-      mysqlBuildInputs = optional (!mysqlndSupport) mysql.connector-c;
-      libmcrypt' = libmcrypt.override { disablePosixThreads = true; };
-    in stdenv.mkDerivation {
+    , version
+    , sha256
+    , extraPatches ? []
 
-      inherit version;
+    # Sapi flags
+    , cgiSupport ? true
+    , cliSupport ? true
+    , fpmSupport ? true
+    , pearSupport ? true
+    , pharSupport ? true
+    , phpdbgSupport ? true
 
-      name = "php-${version}";
+    # Misc flags
+    , apxs2Support ? !stdenv.isDarwin
+    , argon2Support ? true
+    , cgotoSupport ? false
+    , embedSupport ? false
+    , ipv6Support ? true
+    , systemdSupport ? stdenv.isLinux
+    , valgrindSupport ? true
+    , ztsSupport ? apxs2Support
+    }@args:
+      let
+        # buildEnv wraps php to provide additional extensions and
+        # configuration. Its usage is documented in
+        # doc/languages-frameworks/php.section.md.
+        #
+        # Create a buildEnv with earlier overridden values and
+        # extensions functions in its closure. This is necessary for
+        # consecutive calls to buildEnv and overrides to work as
+        # expected.
+        mkBuildEnv = prevArgs: prevExtensionFunctions: lib.makeOverridable (
+          { extensions ? ({ enabled, ... }: enabled), extraConfig ? "", ... }@innerArgs:
+            let
+              allArgs = args // prevArgs // innerArgs;
+              filteredArgs = builtins.removeAttrs allArgs [ "extensions" "extraConfig" ];
+              php = generic filteredArgs;
 
-      enableParallelBuilding = true;
+              php-packages = (callPackage ../../../top-level/php-packages.nix {
+                php = phpWithExtensions;
+              });
 
-      nativeBuildInputs = [ autoconf bison libtool pkgconfig re2c ];
-      buildInputs = [ ]
-        ++ optional (versionOlder version "7.3") pcre
-        ++ optional (versionAtLeast version "7.3") pcre2
-        ++ optional withSystemd systemd
-        ++ optionals imapSupport [ uwimap openssl pam ]
-        ++ optionals curlSupport [ curl openssl ]
-        ++ optionals ldapSupport [ openldap openssl ]
-        ++ optionals gdSupport [ libpng libjpeg freetype ]
-        ++ optionals opensslSupport [ openssl openssl.dev ]
-        ++ optional apxs2Support apacheHttpd
-        ++ optional (ldapSupport && stdenv.isLinux) cyrus_sasl
-        ++ optional mhashSupport libmhash
-        ++ optional zlibSupport zlib
-        ++ optional libxml2Support libxml2
-        ++ optional readlineSupport readline
-        ++ optional sqliteSupport sqlite
-        ++ optional postgresqlSupport postgresql
-        ++ optional pdo_odbcSupport unixODBC
-        ++ optional pdo_pgsqlSupport postgresql
-        ++ optional pdo_mysqlSupport mysqlBuildInputs
-        ++ optional mysqliSupport mysqlBuildInputs
-        ++ optional gmpSupport gmp
-        ++ optional gettextSupport gettext
-        ++ optional intlSupport icu
-        ++ optional xslSupport libxslt
-        ++ optional mcryptSupport libmcrypt'
-        ++ optional bz2Support bzip2
-        ++ optional sodiumSupport libsodium
-        ++ optional tidySupport html-tidy
-        ++ optional argon2Support libargon2
-        ++ optional libzipSupport libzip
-        ++ optional valgrindSupport valgrind;
+              allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
+              enabledExtensions =
+                builtins.foldl'
+                  (enabled: f:
+                    f { inherit enabled; all = php-packages.extensions; })
+                  []
+                  allExtensionFunctions;
 
-      CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
+              getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
 
-      configureFlags = [
-        "--with-config-file-scan-dir=/etc/php.d"
-      ]
-      ++ optional (versionOlder version "7.3") "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
-      ++ optional (versionAtLeast version "7.3") "--with-pcre-regex=${pcre2.dev} PCRE_LIBDIR=${pcre2}"
-      ++ optional stdenv.isDarwin "--with-iconv=${libiconv}"
-      ++ optional withSystemd "--with-fpm-systemd"
-      ++ optionals imapSupport [
-        "--with-imap=${uwimap}"
-        "--with-imap-ssl"
-      ]
-      ++ optionals ldapSupport [
-        "--with-ldap=/invalid/path"
-        "LDAP_DIR=${openldap.dev}"
-        "LDAP_INCDIR=${openldap.dev}/include"
-        "LDAP_LIBDIR=${openldap.out}/lib"
-      ]
-      ++ optional (ldapSupport && stdenv.isLinux)   "--with-ldap-sasl=${cyrus_sasl.dev}"
-      ++ optional apxs2Support "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
-      ++ optional embedSupport "--enable-embed"
-      ++ optional mhashSupport "--with-mhash"
-      ++ optional curlSupport "--with-curl=${curl.dev}"
-      ++ optional zlibSupport "--with-zlib=${zlib.dev}"
-      ++ optional libxml2Support "--with-libxml-dir=${libxml2.dev}"
-      ++ optional (!libxml2Support) [
-        "--disable-dom"
-        "--disable-libxml"
-        "--disable-simplexml"
-        "--disable-xml"
-        "--disable-xmlreader"
-        "--disable-xmlwriter"
-        "--without-pear"
-      ]
-      ++ optional pcntlSupport "--enable-pcntl"
-      ++ optional readlineSupport "--with-readline=${readline.dev}"
-      ++ optional sqliteSupport "--with-pdo-sqlite=${sqlite.dev}"
-      ++ optional postgresqlSupport "--with-pgsql=${postgresql}"
-      ++ optional pdo_odbcSupport "--with-pdo-odbc=unixODBC,${unixODBC}"
-      ++ optional pdo_pgsqlSupport "--with-pdo-pgsql=${postgresql}"
-      ++ optional pdo_mysqlSupport "--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"
-      ++ optionals mysqliSupport [
-        "--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"
-      ]
-      ++ optional ( pdo_mysqlSupport || mysqliSupport ) "--with-mysql-sock=/run/mysqld/mysqld.sock"
-      ++ optional bcmathSupport "--enable-bcmath"
-      # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
-      ++ optionals gdSupport [
-        "--with-gd"
-        "--with-freetype-dir=${freetype.dev}"
-        "--with-png-dir=${libpng.dev}"
-        "--with-jpeg-dir=${libjpeg.dev}"
-      ]
-      ++ optional gmpSupport "--with-gmp=${gmp.dev}"
-      ++ optional soapSupport "--enable-soap"
-      ++ optional socketsSupport "--enable-sockets"
-      ++ optional opensslSupport "--with-openssl"
-      ++ optional mbstringSupport "--enable-mbstring"
-      ++ optional gettextSupport "--with-gettext=${gettext}"
-      ++ optional intlSupport "--enable-intl"
-      ++ optional exifSupport "--enable-exif"
-      ++ optional xslSupport "--with-xsl=${libxslt.dev}"
-      ++ optional mcryptSupport "--with-mcrypt=${libmcrypt'}"
-      ++ optional bz2Support "--with-bz2=${bzip2.dev}"
-      ++ optional zipSupport "--enable-zip"
-      ++ optional ftpSupport "--enable-ftp"
-      ++ optional fpmSupport "--enable-fpm"
-      ++ optional ztsSupport "--enable-maintainer-zts"
-      ++ optional calendarSupport "--enable-calendar"
-      ++ optional sodiumSupport "--with-sodium=${libsodium.dev}"
-      ++ optional tidySupport "--with-tidy=${html-tidy}"
-      ++ optional argon2Support "--with-password-argon2=${libargon2}"
-      ++ optional libzipSupport "--with-libzip=${libzip.dev}"
-      ++ optional phpdbgSupport "--enable-phpdbg"
-      ++ optional (!phpdbgSupport) "--disable-phpdbg"
-      ++ optional (!cgiSupport) "--disable-cgi"
-      ++ optional (!cliSupport) "--disable-cli"
-      ++ optional (!pharSupport) "--disable-phar"
-      ++ optional xmlrpcSupport "--with-xmlrpc"
-      ++ optional cgotoSupport "--enable-re2c-cgoto"
-      ++ optional valgrindSupport "--with-valgrind=${valgrind.dev}";
+              # Recursively get a list of all internal dependencies
+              # for a list of extensions.
+              getDepsRecursively = extensions:
+                let
+                  deps = lib.concatMap
+                           (ext: (ext.internalDeps or []) ++ (ext.peclDeps or []))
+                           extensions;
+                in
+                  if ! (deps == []) then
+                    deps ++ (getDepsRecursively deps)
+                  else
+                    deps;
 
-      hardeningDisable = [ "bindnow" ];
+              # Generate extension load configuration snippets from the
+              # extension parameter. This is an attrset suitable for use
+              # with textClosureList, which is used to put the strings in
+              # the right order - if a plugin which is dependent on
+              # another plugin is placed before its dependency, it will
+              # fail to load.
+              extensionTexts =
+                lib.listToAttrs
+                  (map (ext:
+                    let
+                      extName = getExtName ext;
+                      phpDeps = (ext.internalDeps or []) ++ (ext.peclDeps or []);
+                      type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
+                    in
+                      lib.nameValuePair extName {
+                        text = "${type}=${ext}/lib/php/extensions/${extName}.so";
+                        deps = map getExtName phpDeps;
+                      })
+                    (enabledExtensions ++ (getDepsRecursively enabledExtensions)));
 
-      preConfigure = ''
-        # Don't record the configure flags since this causes unnecessary
-        # runtime dependencies
-        for i in main/build-defs.h.in scripts/php-config.in; do
-          substituteInPlace $i \
-            --replace '@CONFIGURE_COMMAND@' '(omitted)' \
-            --replace '@CONFIGURE_OPTIONS@' "" \
-            --replace '@PHP_LDFLAGS@' ""
-        done
+              extNames = map getExtName enabledExtensions;
+              extraInit = writeText "php.ini" ''
+                ${lib.concatStringsSep "\n"
+                  (lib.textClosureList extensionTexts extNames)}
+                ${extraConfig}
+              '';
 
-        #[[ -z "$libxml2" ]] || addToSearchPath PATH $libxml2/bin
+              phpWithExtensions = symlinkJoin rec {
+                name = "php-with-extensions-${version}";
+                inherit (php) version;
+                nativeBuildInputs = [ makeWrapper ];
+                passthru = {
+                  buildEnv = mkBuildEnv allArgs allExtensionFunctions;
+                  withExtensions = mkWithExtensions allArgs allExtensionFunctions;
+                  phpIni = "${phpWithExtensions}/lib/php.ini";
+                  unwrapped = php;
+                  tests = nixosTests.php;
+                  inherit (php-packages) packages extensions buildPecl;
+                  meta = php.meta // {
+                    outputsToInstall = [ "out" ];
+                  };
+                };
+                paths = [ php ];
+                postBuild = ''
+                  cp ${extraInit} $out/lib/php.ini
 
-        export EXTENSION_DIR=$out/lib/php/extensions
+                  wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
 
-        configureFlags+=(--with-config-file-path=$out/etc \
-          --includedir=$dev/include)
+                  if test -e $out/bin/php-fpm; then
+                    wrapProgram $out/bin/php-fpm --set PHP_INI_SCAN_DIR $out/lib
+                  fi
+                '';
+              };
+            in
+              phpWithExtensions);
 
-        ./buildconf --force
-      '';
+        mkWithExtensions = prevArgs: prevExtensionFunctions: extensions:
+          mkBuildEnv prevArgs prevExtensionFunctions { inherit extensions; };
 
-      postInstall = ''
-        test -d $out/etc || mkdir $out/etc
-        cp php.ini-production $out/etc/php.ini
-      '';
+        pcre' = if (lib.versionAtLeast version "7.3") then pcre2 else pcre;
+      in
+        stdenv.mkDerivation {
+          pname = "php";
 
-      postFixup = ''
-        mkdir -p $dev/bin $dev/share/man/man1
-        mv $out/bin/phpize $out/bin/php-config $dev/bin/
-        mv $out/share/man/man1/phpize.1.gz \
-          $out/share/man/man1/php-config.1.gz \
-          $dev/share/man/man1/
-      '';
+          inherit version;
 
-      src = fetchurl {
-        url = "https://www.php.net/distributions/php-${version}.tar.bz2";
-        inherit sha256;
-      };
+          enableParallelBuilding = true;
 
-      meta = with stdenv.lib; {
-        description = "An HTML-embedded scripting language";
-        homepage = https://www.php.net/;
-        license = licenses.php301;
-        maintainers = with maintainers; [ globin etu ];
-        platforms = platforms.all;
-        outputsToInstall = [ "out" "dev" ];
-      };
+          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ];
 
-      patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
+          buildInputs =
+            # PCRE extension
+            [ pcre' ]
 
-      postPatch = optional stdenv.isDarwin ''
-        substituteInPlace configure --replace "-lstdc++" "-lc++"
-      '';
+            # Enable sapis
+            ++ lib.optional pearSupport [ libxml2.dev ]
 
-      stripDebugList = "bin sbin lib modules";
+            # Misc deps
+            ++ lib.optional apxs2Support apacheHttpd
+            ++ lib.optional argon2Support libargon2
+            ++ lib.optional systemdSupport systemd
+            ++ lib.optional valgrindSupport valgrind
+          ;
 
-      outputs = [ "out" "dev" ];
+          CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
-    };
+          configureFlags =
+            # Disable all extensions
+            [ "--disable-all" ]
+
+            # PCRE
+            ++ lib.optionals (lib.versionAtLeast version "7.4") [ "--with-external-pcre=${pcre'.dev}" ]
+            ++ lib.optionals (lib.versions.majorMinor version == "7.3") [ "--with-pcre-regex=${pcre'.dev}" ]
+            ++ lib.optionals (lib.versionOlder version "7.3") [ "--with-pcre-regex=${pcre'.dev}" ]
+            ++ [ "PCRE_LIBDIR=${pcre'}" ]
+
+
+            # Enable sapis
+            ++ lib.optional (!cgiSupport) "--disable-cgi"
+            ++ lib.optional (!cliSupport) "--disable-cli"
+            ++ lib.optional fpmSupport    "--enable-fpm"
+            ++ lib.optional pearSupport [ "--with-pear=$(out)/lib/php/pear" "--enable-xml" "--with-libxml" ]
+            ++ lib.optional (pearSupport && (lib.versionOlder version "7.4")) "--enable-libxml"
+            ++ lib.optional pharSupport   "--enable-phar"
+            ++ lib.optional phpdbgSupport "--enable-phpdbg"
+
+
+            # Misc flags
+            ++ lib.optional apxs2Support "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
+            ++ lib.optional argon2Support "--with-password-argon2=${libargon2}"
+            ++ lib.optional cgotoSupport "--enable-re2c-cgoto"
+            ++ lib.optional embedSupport "--enable-embed"
+            ++ lib.optional (!ipv6Support) "--disable-ipv6"
+            ++ lib.optional systemdSupport "--with-fpm-systemd"
+            ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
+            ++ lib.optional ztsSupport "--enable-maintainer-zts"
+          ;
+
+          hardeningDisable = [ "bindnow" ];
+
+          preConfigure =
+          # Don't record the configure flags since this causes unnecessary
+          # runtime dependencies
+          ''
+            for i in main/build-defs.h.in scripts/php-config.in; do
+              substituteInPlace $i \
+                --replace '@CONFIGURE_COMMAND@' '(omitted)' \
+                --replace '@CONFIGURE_OPTIONS@' "" \
+                --replace '@PHP_LDFLAGS@' ""
+            done
+
+            export EXTENSION_DIR=$out/lib/php/extensions
+          ''
+          # PKG_CONFIG need not be a relative path
+          + lib.optionalString (! lib.versionAtLeast version "7.4") ''
+            for i in $(find . -type f -name "*.m4"); do
+              substituteInPlace $i \
+                --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
+            done
+          '' + ''
+            ./buildconf --copy --force
+
+            if test -f $src/genfiles; then
+              ./genfiles
+            fi
+          '' + lib.optionalString stdenv.isDarwin ''
+            substituteInPlace configure --replace "-lstdc++" "-lc++"
+          '';
+
+          postInstall = ''
+            test -d $out/etc || mkdir $out/etc
+            cp php.ini-production $out/etc/php.ini
+          '';
+
+          postFixup = ''
+            mkdir -p $dev/bin $dev/share/man/man1
+            mv $out/bin/phpize $out/bin/php-config $dev/bin/
+            mv $out/share/man/man1/phpize.1.gz \
+               $out/share/man/man1/php-config.1.gz \
+               $dev/share/man/man1/
+          '';
+
+          src = fetchurl {
+            url = "https://www.php.net/distributions/php-${version}.tar.bz2";
+            inherit sha256;
+          };
+
+          patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
+
+          separateDebugInfo = true;
+
+          outputs = [ "out" "dev" ];
+
+          passthru = {
+            buildEnv = mkBuildEnv {} [];
+            withExtensions = mkWithExtensions {} [];
+          };
+
+          meta = with stdenv.lib; {
+            description = "An HTML-embedded scripting language";
+            homepage = "https://www.php.net/";
+            license = licenses.php301;
+            maintainers = teams.php.members;
+            platforms = platforms.all;
+            outputsToInstall = [ "out" "dev" ];
+          };
+        };
+
+  php72base = callPackage generic (_args // {
+    version = "7.2.29";
+    sha256 = "08xry2fgqgg8s0ym1hh11wkbr36av3zq1bn4krbciw1b7x8gb8ga";
+
+    # https://bugs.php.net/bug.php?id=76826
+    extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
+  });
+
+  php73base = callPackage generic (_args // {
+    version = "7.3.16";
+    sha256 = "0bh499v9dfgh9k51w4rird1slb9rh9whp5h37fb84c98d992s1xq";
+
+    # https://bugs.php.net/bug.php?id=76826
+    extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
+  });
+
+  php74base = callPackage generic (_args // {
+    version = "7.4.6";
+    sha256 = "0j133pfwa823d4jhx2hkrrzjl4hswvz00b1z58r5c82xd5sr9vd6";
+  });
+
+  defaultPhpExtensions = { all, ... }: with all; ([
+    bcmath calendar curl ctype dom exif fileinfo filter ftp gd
+    gettext gmp iconv intl json ldap mbstring mysqli mysqlnd opcache
+    openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql pdo_sqlite pgsql
+    posix readline session simplexml sockets soap sodium sqlite3
+    tokenizer xmlreader xmlwriter zip zlib
+  ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]);
+
+  defaultPhpExtensionsWithHash = { all, ... }:
+    (defaultPhpExtensions { inherit all; }) ++ [ all.hash ];
+
+  php74 = php74base.withExtensions defaultPhpExtensions;
+  php73 = php73base.withExtensions defaultPhpExtensionsWithHash;
+  php72 = php72base.withExtensions defaultPhpExtensionsWithHash;
 
 in {
-  php71 = generic {
-    version = "7.1.30";
-    sha256 = "1czcf5qwk727sdzx5n4wvsxvl50jx6d5x8ws1dqx46fa9xvm0j36";
-
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = optional stdenv.isDarwin ./php71-darwin-isfinite.patch;
-  };
-
-  php72 = generic {
-    version = "7.2.19";
-    sha256 = "16d0j0d4563bcrxlw5yysldscxpgyp917hmc4m4ys1zyfprv3l7b";
-
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
-  };
-
-  php73 = generic {
-    version = "7.3.6";
-    sha256 = "0xvgdxmhk0hsx8gh3ircm2s7pf59gm8i9a73204mr0sl05qchnhy";
-
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
-  };
+  inherit php72 php73 php74;
 }

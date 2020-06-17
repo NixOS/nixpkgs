@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Rakarrak effects ported to LV2";
-    homepage = https://github.com/ssj71/rkrlv2;
+    homepage = "https://github.com/ssj71/rkrlv2";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.joelmo ];
     platforms = stdenv.lib.platforms.linux;

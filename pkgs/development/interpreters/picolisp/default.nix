@@ -2,11 +2,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "picoLisp-${version}";
-  version = "18.12";
+  pname = "picoLisp";
+  version = "19.12";
   src = fetchurl {
-    url = "https://www.software-lab.de/${name}.tgz";
-    sha256 = "0hvgq2vc03bki528jqn95xmvv7mw8xx832spfczhxc16wwbrnrhk";
+    url = "https://www.software-lab.de/${pname}-${version}.tgz";
+    sha256 = "10np0mhihr47r3201617zccrvzpkhdl1jwvz7zimk8kxpriydq2j";
   };
   buildInputs = [makeWrapper openssl] ++ optional stdenv.is64bit jdk;
   patchPhase = ''
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A simple Lisp with an integrated database";
-    homepage = https://picolisp.com/;
+    homepage = "https://picolisp.com/";
     license = licenses.mit;
     platforms = platforms.all;
     broken = stdenv.isDarwin; # times out

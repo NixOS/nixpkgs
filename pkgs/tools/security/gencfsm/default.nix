@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.8.19";
-  name = "gnome-encfs-manager-${version}";
+  pname = "gnome-encfs-manager";
 
   src = fetchurl {
     url = "https://launchpad.net/gencfsm/trunk/1.8/+download/gnome-encfs-manager_${version}.tar.xz";
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.libertyzero.com/GEncfsM/;
-    downloadPage = https://launchpad.net/gencfsm/;
+    homepage = "http://www.libertyzero.com/GEncfsM/";
+    downloadPage = "https://launchpad.net/gencfsm/";
     description = "EncFS manager and mounter with GNOME3 integration";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

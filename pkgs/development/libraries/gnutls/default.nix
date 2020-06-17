@@ -1,6 +1,6 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , perl, gmp, autoconf, autogen, automake, libidn, p11-kit, libiconv
-, unbound, dns-root-data, gettext, cacert
+, unbound, dns-root-data, gettext, cacert, utillinux
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withSecurity ? false, Security  # darwin Security.framework
@@ -8,10 +8,10 @@
 
 assert guileBindings -> guile != null;
 let
-  version = "3.6.8";
+  version = "3.6.14";
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
-  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
+  # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4"
       && stdenv.buildPlatform == stdenv.hostPlatform;
 
@@ -24,11 +24,13 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v3.6/gnutls-${version}.tar.xz";
-    sha256 = "10ry71sy8zbksa905bjryphafcg25gkmfa3pf48ripimar7990da";
+    sha256 = "0qwxsfizynly0ns537vnhnlm5lh03la4vbsmz675n0n7vqd7ac2n";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  # Not normally useful docs.
   outputInfo = "devdoc";
+  outputDoc  = "devdoc";
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.
@@ -46,6 +48,8 @@ stdenv.mkDerivation {
     sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
     sed '/^void doit(void)/,/^{/ s/{/{ exit(77);/' -i tests/{trust-store,psk-file}.c
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
+  '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
+    sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool
   '';
 
   preConfigure = "patchShebangs .";
@@ -55,8 +59,12 @@ stdenv.mkDerivation {
     "--disable-dependency-tracking"
     "--enable-fast-install"
     "--with-unbound-root-key-file=${dns-root-data}/root.key"
-  ] ++ lib.optional guileBindings
-    [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
+  ] ++ lib.optional guileBindings [
+    "--enable-guile"
+    "--with-guile-site-dir=\${out}/share/guile/site"
+    "--with-guile-site-ccache-dir=\${out}/share/guile/site"
+    "--with-guile-extension-dir=\${out}/share/guile/site"
+  ];
 
   enableParallelBuilding = true;
 
@@ -67,7 +75,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl pkgconfig ]
     ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
-    ++ lib.optionals doCheck [ which nettools ];
+    ++ lib.optionals doCheck [ which nettools utillinux ];
 
   propagatedBuildInputs = [ nettle ];
 
@@ -106,7 +114,7 @@ stdenv.mkDerivation {
        tampering, or message forgery."
     '';
 
-    homepage = https://www.gnu.org/software/gnutls/;
+    homepage = "https://www.gnu.org/software/gnutls/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ eelco fpletz ];
     platforms = platforms.all;

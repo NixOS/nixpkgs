@@ -1,6 +1,6 @@
 { fetchFromGitHub, lib, python2Packages, meld, subversion, gvfs, xdg_utils }:
 python2Packages.buildPythonApplication rec {
-  name = "rabbitvcs-${version}";
+  pname = "rabbitvcs";
   version = "0.17.1";
   namePrefix = "";
 
@@ -34,7 +34,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = {
     description = "Graphical tools for working with version control systems";
-    homepage = http://rabbitvcs.org/;
+    homepage = "http://rabbitvcs.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.mathnerd314 ];

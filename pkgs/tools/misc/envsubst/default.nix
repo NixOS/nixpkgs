@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "envsubst-${version}";
+  pname = "envsubst";
   version = "1.1.0";
 
   goPackagePath = "github.com/a8m/envsubst";
@@ -14,7 +14,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Environment variables substitution for Go";
-    homepage = https://github.com/a8m/envsubst;
+    homepage = "https://github.com/a8m/envsubst";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ nicknovitski ];

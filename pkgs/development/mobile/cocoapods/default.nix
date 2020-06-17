@@ -1,7 +1,7 @@
 { lib, bundlerApp, ruby
 , beta ? false }:
 
-bundlerApp rec {
+bundlerApp {
   inherit ruby;
   pname = "cocoapods";
   gemfile = if beta then ./Gemfile-beta else ./Gemfile;
@@ -14,7 +14,7 @@ bundlerApp rec {
 
   meta = with lib; {
     description     = "CocoaPods manages dependencies for your Xcode projects.";
-    homepage        = https://github.com/CocoaPods/CocoaPods;
+    homepage        = "https://github.com/CocoaPods/CocoaPods";
     license         = licenses.mit;
     platforms       = platforms.darwin;
     maintainers     = with maintainers; [

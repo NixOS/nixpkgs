@@ -1,26 +1,29 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, tree }:
 
-buildGoPackage rec {
-  name = "kustomize-${version}";
-  version = "2.0.3";
-  # rev is the 2.0.3 commit, mainly for kustomize version command output
-  rev = "a6f65144121d1955266b0cd836ce954c04122dc8";
+buildGoModule rec {
+  pname = "kustomize";
+  version = "3.3.1";
+  # rev is the 3.3.1 commit, mainly for kustomize version command output
+  rev = "f2ac5a2d0df13c047fb20cbc12ef1a3b41ce2dad";
 
-  goPackagePath = "sigs.k8s.io/kustomize";
-
-  buildFlagsArray = let t = "${goPackagePath}/pkg/commands/misc"; in ''
+  buildFlagsArray = let t = "sigs.k8s.io/kustomize/v3/provenance"; in ''
     -ldflags=
-      -s -X ${t}.kustomizeVersion=${version}
+      -s -X ${t}.version=${version}
          -X ${t}.gitCommit=${rev}
          -X ${t}.buildDate=unknown
   '';
 
   src = fetchFromGitHub {
-    sha256 = "1dfkpx9rllj1bzm5f52bx404kdds3zx1h38yqri9ha3p3pcb1bbb";
-    rev = "v${version}";
-    repo = "kustomize";
     owner = "kubernetes-sigs";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0yxxz0b56r18w178y32s619zy8ci6l93c6vlzx11hhxhbw43f6v6";
   };
+
+  # avoid finding test and development commands
+  sourceRoot = "source/kustomize";
+
+  vendorSha256 = "06mf5zvxn10g5rqjpqv3afvhj9xmijbj8ag8pqcg1996s4rp4p7a";
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
@@ -29,7 +32,7 @@ buildGoPackage rec {
       multiple purposes, leaving the original YAML untouched and usable
       as is.
     '';
-    homepage = https://github.com/kubernetes-sigs/kustomize;
+    homepage = "https://github.com/kubernetes-sigs/kustomize";
     license = licenses.asl20;
     maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime ];
   };

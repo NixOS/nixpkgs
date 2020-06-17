@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitLab }:
 
-buildGoPackage rec {
-  name = "mm-${version}";
+buildGoPackage {
+  pname = "mm";
   version = "2016.11.04";
 
   goPackagePath = "gitlab.com/meutraa/mm";
@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A file system based matrix client";
-    homepage = https://gitlab.com/meutraa/mm;
+    homepage = "https://gitlab.com/meutraa/mm";
     license = stdenv.lib.licenses.isc;
   };
 }

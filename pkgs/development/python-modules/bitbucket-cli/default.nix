@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Bitbucket command line interface";
-    homepage = https://bitbucket.org/zhemao/bitbucket-cli;
+    homepage = "https://bitbucket.org/zhemao/bitbucket-cli";
     maintainers = with maintainers; [ refnil ];
     license = licenses.bsd2;
   };

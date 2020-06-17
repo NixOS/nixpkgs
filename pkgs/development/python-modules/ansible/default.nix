@@ -1,32 +1,36 @@
 { lib
-, fetchurl
+, fetchFromGitHub
 , buildPythonPackage
 , pycrypto
 , paramiko
 , jinja2
 , pyyaml
 , httplib2
-, boto
 , six
 , netaddr
 , dnspython
 , jmespath
 , dopy
+, ncclient
 , windowsSupport ? false
 , pywinrm
 }:
 
 buildPythonPackage rec {
   pname = "ansible";
-  version = "2.8.1";
+  version = "2.9.9";
 
-  src = fetchurl {
-    url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-    sha256 = "0ia4x17ywym3r1m96ar4h0wc2xlylhbjp6x4wzwkh4p2i0x1vmg1";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible";
+    rev = "v${version}";
+    sha256 = "06a9iq7w2cm0hsxaw5irsja8w44gffiw09ly27jxklpa8gv57rml";
   };
 
   prePatch = ''
-    sed -i "s,/usr/,$out," lib/ansible/constants.py
+    # ansible-connection is wrapped, so make sure it's not passed
+    # through the python interpreter.
+    sed -i "s/\[python, /[/" lib/ansible/executor/task_executor.py
   '';
 
   postInstall = ''
@@ -36,18 +40,18 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    pycrypto paramiko jinja2 pyyaml httplib2 boto
-    six netaddr dnspython jmespath dopy
+    pycrypto paramiko jinja2 pyyaml httplib2
+    six netaddr dnspython jmespath dopy ncclient
   ] ++ lib.optional windowsSupport pywinrm;
 
   # dificult to test
   doCheck = false;
 
   meta = with lib; {
-    homepage = http://www.ansible.com;
+    homepage = "http://www.ansible.com";
     description = "Radically simple IT automation";
     license = [ licenses.gpl3 ] ;
-    maintainers = with maintainers; [ joamaki costrouc ];
+    maintainers = with maintainers; [ joamaki costrouc hexa ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

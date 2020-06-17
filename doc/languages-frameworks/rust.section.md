@@ -4,7 +4,7 @@ author: Matthias Beyer
 date: 2017-03-05
 ---
 
-# User's Guide to the Rust Infrastructure
+# Rust
 
 To install the rust compiler and cargo put
 
@@ -16,12 +16,6 @@ cargo
 into the `environment.systemPackages` or bring them into
 scope with `nix-shell -p rustc cargo`.
 
-> If you are using NixOS and you want to use rust without a nix expression you
-> probably want to add the following in your `configuration.nix` to build
-> crates with C dependencies.
->
->     environment.systemPackages = [binutils gcc gnumake openssl pkgconfig]
-
 For daily builds (beta and nightly) use either rustup from
 nixpkgs or use the [Rust nightlies
 overlay](#using-the-rust-nightlies-overlay).
@@ -32,21 +26,21 @@ Rust applications are packaged by using the `buildRustPackage` helper from `rust
 
 ```
 rustPlatform.buildRustPackage rec {
-  name = "ripgrep-${version}";
-  version = "0.4.0";
+  pname = "ripgrep";
+  version = "11.0.2";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = "ripgrep";
-    rev = "${version}";
-    sha256 = "0y5d1n6hkw85jb3rblcxqas2fp82h3nghssa4xqrhqnz25l799pj";
+    repo = pname;
+    rev = version;
+    sha256 = "1iga3320mgi7m853la55xip514a3chqsdi1a1rwv25lr9b1p7vd3";
   };
 
-  cargoSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
+  cargoSha256 = "17ldqr3asrdcsh4l29m3b5r37r5d0b3npq1lrgjmxb6vlx6a36qh";
 
   meta = with stdenv.lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
-    homepage = https://github.com/BurntSushi/ripgrep;
+    homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
     maintainers = [ maintainers.tailhook ];
     platforms = platforms.all;
@@ -59,10 +53,111 @@ all crate sources of this package. Currently it is obtained by inserting a
 fake checksum into the expression and building the package once. The correct
 checksum can be then take from the failed build.
 
-When the `Cargo.lock`, provided by upstream, is not in sync with the
-`Cargo.toml`, it is possible to use `cargoPatches` to update it. All patches
-added in `cargoPatches` will also be prepended to the patches in `patches` at
-build-time.
+Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
+best practices guide, Rust applications should always commit the `Cargo.lock`
+file in git to ensure a reproducible build. However, a few packages do not, and
+Nix depends on this file, so if it missing you can use `cargoPatches` to apply
+it in the `patchPhase`. Consider sending a PR upstream with a note to the
+maintainer describing why it's important to include in the application.
+
+The fetcher will verify that the `Cargo.lock` file is in sync with the `src`
+attribute, and fail the build if not. It will also will compress the vendor
+directory into a tar.gz archive.
+
+### Building a crate for a different target
+
+To build your crate with a different cargo `--target` simply specify the `target` attribute:
+
+```nix
+pkgs.rustPlatform.buildRustPackage {
+  (...)
+  target = "x86_64-fortanix-unknown-sgx";
+}
+```
+
+### Running package tests
+
+When using `buildRustPackage`, the `checkPhase` is enabled by default and runs
+`cargo test` on the package to build. To make sure that we don't compile the
+sources twice and to actually test the artifacts that will be used at runtime, 
+the tests will be ran in the `release` mode by default.
+
+However, in some cases the test-suite of a package doesn't work properly in the
+`release` mode. For these situations, the mode for `checkPhase` can be changed like
+so:
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  checkType = "debug";
+}
+```
+
+Please note that the code will be compiled twice here: once in `release` mode
+for the `buildPhase`, and again in `debug` mode for the `checkPhase`.
+
+#### Tests relying on the structure of the `target/` directory
+
+Some tests may rely on the structure of the `target/` directory. Those tests
+are likely to fail because we use `cargo --target` during the build. This means that
+the artifacts
+[are stored in `target/<architecture>/release/`](https://doc.rust-lang.org/cargo/guide/build-cache.html),
+rather than in `target/release/`.
+
+This can only be worked around by patching the affected tests accordingly.
+
+#### Disabling package-tests
+
+In some instances, it may be necessary to disable testing altogether (with `doCheck = false;`):
+
+* If no tests exist -- the `checkPhase` should be explicitly disabled to skip
+  unnecessary build steps to speed up the build.
+* If tests are highly impure (e.g. due to network usage).
+
+There will obviously be some corner-cases not listed above where it's sensible to disable tests.
+The above are just guidelines, and exceptions may be granted on a case-by-case basis.
+
+However, please check if it's possible to disable a problematic subset of the
+test suite and leave a comment explaining your reasoning.
+
+### Building a package in `debug` mode
+
+By default, `buildRustPackage` will use `release` mode for builds. If a package
+should be built in `debug` mode, it can be configured like so:
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  buildType = "debug";
+}
+```
+
+In this scenario, the `checkPhase` will be ran in `debug` mode as well.
+
+### Custom `build`/`install`-procedures
+
+Some packages may use custom scripts for building/installing, e.g. with a `Makefile`.
+In these cases, it's recommended to override the `buildPhase`/`installPhase`/`checkPhase`.
+
+Otherwise, some steps may fail because of the modified directory structure of `target/`.
+
+### Building a crate with an absent or out-of-date Cargo.lock file
+
+`buildRustPackage` needs a `Cargo.lock` file to get all dependencies in the
+source code in a reproducible way. If it is missing or out-of-date one can use
+the `cargoPatches` attribute to update or add it.
+
+```
+{ lib, rustPlatform, fetchFromGitHub }:
+
+rustPlatform.buildRustPackage rec {
+  (...)
+  cargoPatches = [
+    # a patch file to add/update Cargo.lock in the source code
+    ./add-Cargo.lock.patch
+  ];
+}
+```
 
 ## Compiling Rust crates using Nix instead of Cargo
 
@@ -188,7 +283,7 @@ argument and returns a set that contains all attribute that should be
 overwritten.
 
 For more complicated cases, such as when parts of the crate's
-derivation depend on the the crate's version, the `attrs` argument of
+derivation depend on the crate's version, the `attrs` argument of
 the override above can be read, as in the following example, which
 patches the derivation:
 

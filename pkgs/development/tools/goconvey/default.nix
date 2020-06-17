@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "goconvey-${version}";
+  pname = "goconvey";
   version = "1.6.3";
 
   goPackagePath = "github.com/smartystreets/goconvey";
@@ -12,13 +12,13 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "smartystreets";
     repo = "goconvey";
-    rev = "${version}";
+    rev = version;
     sha256 = "1ph18rkl3ns3fgin5i4j54w5a69grrmf3apcsmnpdn1wlrbs3dxh";
   };
 
   meta = {
     description = "Go testing in the browser. Integrates with `go test`. Write behavioral tests in Go.";
-    homepage = https://github.com/smartystreets/goconvey;
+    homepage = "https://github.com/smartystreets/goconvey";
     maintainers = with stdenv.lib.maintainers; [ vdemeester ];
     license = stdenv.lib.licenses.mit;
   };

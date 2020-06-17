@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, mono}:
 stdenv.mkDerivation rec {
-  name = "wavefunctioncollapse-${version}";
+  pname = "wavefunctioncollapse";
   version = "0.0pre20170130";
   src = fetchFromGitHub {
     owner = "mxgmn";

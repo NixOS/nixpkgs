@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ flask webassets flask_script nose ];
 
   meta = with lib; {
-    homepage = https://github.com/miracle2k/flask-assets;
+    homepage = "https://github.com/miracle2k/flask-assets";
     description = "Asset management for Flask, to compress and merge CSS and Javascript files";
     license = licenses.bsd2;
     maintainers = with maintainers; [ abbradar ];

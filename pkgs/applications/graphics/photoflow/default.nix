@@ -47,10 +47,10 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A fully non-destructive photo retouching program providing a complete RAW image editing workflow";
-    homepage = https://aferrero2707.github.io/PhotoFlow/;
+    homepage = "https://aferrero2707.github.io/PhotoFlow/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.MtP ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = true;
   };
 }

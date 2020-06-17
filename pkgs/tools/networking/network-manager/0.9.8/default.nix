@@ -3,7 +3,7 @@
 , libgcrypt, perl, libgudev, avahi, ppp, kmod }:
 
 stdenv.mkDerivation rec {
-  name = "network-manager-${version}";
+  pname = "network-manager";
   version = "0.9.8.10";
 
   src = fetchurl {
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://projects.gnome.org/NetworkManager/;
+    homepage = "http://projects.gnome.org/NetworkManager/";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

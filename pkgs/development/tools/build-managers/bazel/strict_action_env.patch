@@ -1,0 +1,13 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java b/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java
+index a70b5559bc..10bdffe961 100644
+--- a/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java
++++ b/src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java
+@@ -466,7 +466,7 @@ public class BazelRuleClassProvider {
+       // Note that --action_env does not propagate to the host config, so it is not a viable
+       // workaround when a genrule is itself built in the host config (e.g. nested genrules). See
+       // #8536.
+-      return "/bin:/usr/bin:/usr/local/bin";
++      return "@strictActionEnvPatch@";
+     }
+
+     String newPath = "";

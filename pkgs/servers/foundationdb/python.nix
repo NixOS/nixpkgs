@@ -1,6 +1,6 @@
 { buildPythonPackage, lib, foundationdb }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "foundationdb";
   version = foundationdb.version;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for FoundationDB";
-    homepage    = https://www.foundationdb.org;
+    homepage    = "https://www.foundationdb.org";
     license     = with licenses; [ asl20 ];
     maintainers = with maintainers; [ thoughtpolice ];
   };

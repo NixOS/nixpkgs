@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/fdisk/;
+    homepage = "https://www.gnu.org/software/fdisk/";
 
     platforms = stdenv.lib.platforms.linux;
   };

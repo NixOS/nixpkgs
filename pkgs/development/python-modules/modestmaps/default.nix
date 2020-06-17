@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A library for building interactive maps";
-    homepage = http://modestmaps.com;
+    homepage = "http://modestmaps.com";
     license = stdenv.lib.licenses.bsd3;
   };
 

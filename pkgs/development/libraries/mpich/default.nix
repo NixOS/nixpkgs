@@ -3,12 +3,12 @@
 } :
 
 stdenv.mkDerivation  rec {
-  name = "mpich-${version}";
-  version = "3.3.1";
+  pname = "mpich";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    sha256 = "1raism1r4jsx4cybc9ddyr1xkccbxm0l8j3ryrw8kslfkkr1wmgy";
+    sha256 = "1farz5zfx4cd0c3a0wb9pgfypzw0xxql1j1294z1sxslga1ziyjb";
   };
 
   configureFlags = [
@@ -44,9 +44,9 @@ stdenv.mkDerivation  rec {
       the Message Passing Interface (MPI) standard, both version 1 and
       version 2.
     '';
-    homepage = http://www.mcs.anl.gov/mpi/mpich2/;
+    homepage = "http://www.mcs.anl.gov/mpi/mpich2/";
     license = {
-      url = http://git.mpich.org/mpich.git/blob/a385d6d0d55e83c3709ae851967ce613e892cd21:/COPYRIGHT;
+      url = "http://git.mpich.org/mpich.git/blob/a385d6d0d55e83c3709ae851967ce613e892cd21:/COPYRIGHT";
       fullName = "MPICH license (permissive)";
     };
     maintainers = [ maintainers.markuskowa ];

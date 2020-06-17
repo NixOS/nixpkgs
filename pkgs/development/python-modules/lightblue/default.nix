@@ -18,7 +18,7 @@ buildPythonPackage rec {
   buildInputs = [ pkgs.bluez pkgs.openobex ];
 
   meta = with stdenv.lib; {
-    homepage = http://lightblue.sourceforge.net;
+    homepage = "http://lightblue.sourceforge.net";
     description = "Cross-platform Bluetooth API for Python";
     maintainers = with maintainers; [ leenaars ];
     license = licenses.gpl3;

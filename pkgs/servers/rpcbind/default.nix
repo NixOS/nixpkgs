@@ -1,8 +1,8 @@
 { fetchgit, stdenv, pkgconfig, libnsl, libtirpc, autoreconfHook
 , useSystemd ? true, systemd }:
 
-stdenv.mkDerivation rec {
-  name = "rpcbind-${version}";
+stdenv.mkDerivation {
+  pname = "rpcbind";
   version = "1.2.5";
 
   src = fetchgit {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "ONC RPC portmapper";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    homepage = https://linux-nfs.org/;
+    homepage = "https://linux-nfs.org/";
     maintainers = with maintainers; [ abbradar ];
     longDescription = ''
       Universal addresses to RPC program number mapper.

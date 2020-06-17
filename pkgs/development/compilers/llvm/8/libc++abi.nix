@@ -2,9 +2,10 @@
 , enableShared ? true }:
 
 stdenv.mkDerivation {
-  name = "libc++abi-${version}";
+  pname = "libc++abi";
+  inherit version;
 
-  src = fetch "libcxxabi" "1k875f977ybdkpdnr9105wa6hccy9qvpd9xd42n75h7p56bdxmn2";
+  src = fetch "libcxxabi" "1vznz8n1z1h8af0ga451m98lc2hjnv4fyzl71napsvjhvk4g6nxp";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
@@ -39,7 +40,7 @@ stdenv.mkDerivation {
         # this should be done in CMake, but having trouble figuring out
         # the magic combination of necessary CMake variables
         # if you fancy a try, take a look at
-        # http://www.cmake.org/Wiki/CMake_RPATH_handling
+        # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
         install_name_tool -id $out/$file $file
       done
       make install
@@ -57,7 +58,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    homepage = http://libcxxabi.llvm.org/;
+    homepage = "https://libcxxabi.llvm.org/";
     description = "A new implementation of low level support for a standard C++ library";
     license = with stdenv.lib.licenses; [ ncsa mit ];
     maintainers = with stdenv.lib.maintainers; [ vlstill ];

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.1.11";
-  name = "ggobi-${version}";
+  pname = "ggobi";
 
   src = fetchurl {
     url = "http://www.ggobi.org/downloads/ggobi-${version}.tar.bz2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Visualization program for exploring high-dimensional data";
-    homepage = http://www.ggobi.org/;
+    homepage = "http://www.ggobi.org/";
     license = licenses.cpl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.michelk ];

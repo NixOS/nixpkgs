@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, libosmium, protozero, boost, bzip2, zlib, expat }:
 
 stdenv.mkDerivation rec {
-  name = "osmium-tool-${version}";
-  version = "1.10.0";
+  pname = "osmium-tool";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "osmium-tool";
     rev = "v${version}";
-    sha256 = "1balhz78nva0agmbp8n9vg8fhmdssnd9fjxj20bpw7b45mxhjc20";
+    sha256 = "18afn5qzdjpip176kk5pr04mj0p7dv70dbz1n36qmqnq3gyms10q";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "fitbit";
-  version = "0.3.0";
+  version = "0.3.1";
 
   checkInputs = [ coverage freezegun mock requests-mock sphinx ];
   propagatedBuildInputs = [ dateutil requests_oauthlib ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     rev = version;
     owner = "orcasgit";
     repo = "python-fitbit";
-    sha256 = "0s1kp4qcxvxghqf9nb71843slm4r5lhl2rlvj3yvhbby3cqs4g84";
+    sha256 = "1w2lpgf6bs5nbnmslppaf4lbhr9cj6grg0a525xv41jip7iy3vfn";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fitbit API Python Client Implementation";
     license = licenses.asl20;
-    homepage = https://github.com/orcasgit/python-fitbit;
+    homepage = "https://github.com/orcasgit/python-fitbit";
     maintainers = with maintainers; [ delroth ];
   };
 }

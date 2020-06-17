@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, tinyxml-2, cmake, qtbase, qtmultimedia }:
-stdenv.mkDerivation rec {
+{ mkDerivation, stdenv, fetchFromGitHub, tinyxml-2, cmake, qtbase, qtmultimedia }:
+mkDerivation rec {
   version = "1.0.13";
-  name = "pro-office-calculator-${version}";
+  pname = "pro-office-calculator";
 
   src = fetchFromGitHub {
     owner  = "RobJinman";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Just an ordinary calculator. Nothing to see here...";
-    homepage = https://proofficecalculator.com/;
+    homepage = "https://proofficecalculator.com/";
     maintainers = [ maintainers.pmiddend ];
     platforms = platforms.linux;
     license = licenses.gpl3;

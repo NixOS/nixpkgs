@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Sphinx API for Web Apps";
-    homepage = http://sphinx-doc.org/;
+    homepage = "http://sphinx-doc.org/";
     license = lib.licenses.bsd2;
   };
 }

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Framework for managing passwords and other secrets";
-    homepage = https://wiki.gnome.org/Projects/GnomeKeyring;
+    homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
     license = with stdenv.lib.licenses; [ gpl2Plus lgpl2Plus ];
     inherit (glib.meta) platforms maintainers;
 

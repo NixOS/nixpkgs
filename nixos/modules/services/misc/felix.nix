@@ -17,10 +17,7 @@ in
 
     services.felix = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the Apache Felix OSGi service";
-      };
+      enable = mkEnableOption "the Apache Felix OSGi service";
 
       bundles = mkOption {
         type = types.listOf types.package;
@@ -47,14 +44,10 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    users.groups = singleton
-      { name = "osgi";
-        gid = config.ids.gids.osgi;
-      };
+    users.groups.osgi.gid = config.ids.gids.osgi;
 
-    users.users = singleton
-      { name = "osgi";
-        uid = config.ids.uids.osgi;
+    users.users.osgi =
+      { uid = config.ids.uids.osgi;
         description = "OSGi user";
         home = "/homeless-shelter";
       };

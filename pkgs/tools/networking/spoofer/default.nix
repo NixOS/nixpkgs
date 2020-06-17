@@ -6,12 +6,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "spoofer";
-  version = "1.4.2";
-  name = "${pname}-${version}";
+  version = "1.4.5";
 
   src = fetchurl {
-    url = "https://www.caida.org/projects/spoofer/downloads/${name}.tar.gz";
-    sha256 = "041piwc2r4fig5b4apm2ibq1wyd11ic8p3xv3ss2hrbn5d8inza1";
+    url = "https://www.caida.org/projects/spoofer/downloads/${pname}-${version}.tar.gz";
+    sha256 = "0pnim3xyfsmv6alsvhwjs4v9lp39wwiyj63rxsqyz4wx4vkmn12z";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
                 ++ optional withGUI qt5.qtbase ;
 
   meta = with stdenv.lib; {
-    homepage = https://www.caida.org/projects/spoofer;
+    homepage = "https://www.caida.org/projects/spoofer";
     description = "Assess and report on deployment of source address validation";
     longDescription = ''
       Spoofer is a new client-server system for Windows, MacOS, and

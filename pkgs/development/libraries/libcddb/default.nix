@@ -10,11 +10,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
+  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
+
   doCheck = false; # fails 3 of 5 tests with locale errors
 
   meta = with stdenv.lib; {
     description = "C library to access data on a CDDB server (freedb.org)";
-    homepage = http://libcddb.sourceforge.net/;
+    homepage = "http://libcddb.sourceforge.net/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };

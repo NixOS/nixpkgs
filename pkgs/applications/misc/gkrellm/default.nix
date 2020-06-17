@@ -4,11 +4,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "gkrellm-2.3.10";
+  name = "gkrellm-2.3.11";
 
   src = fetchurl {
     url = "http://gkrellm.srcbox.net/releases/${name}.tar.bz2";
-    sha256 = "0rnpzjr0ys0ypm078y63q4aplcgdr5nshjzhmz330n6dmnxci7lb";
+    sha256 = "01lccz4fga40isv09j8rjgr0qy10rff9vj042n6gi6gdv4z69q0y";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       manager, Gtk, or any other theme.
     '';
 
-    homepage = http://gkrellm.srcbox.net;
+    homepage = "http://gkrellm.srcbox.net";
     license = licenses.gpl3Plus;
     maintainers = [ ];
     platforms = platforms.linux;

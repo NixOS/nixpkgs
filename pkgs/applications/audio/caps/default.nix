@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "caps-${version}";
+  pname = "caps";
   version = "0.9.26";
   src = fetchurl {
     url = "http://www.quitte.de/dsp/caps_${version}.tar.bz2";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       considerations are latency-free realtime operation, modesty of
       resource demands and meaningful control interfaces.
     '';
-    homepage = http://www.quitte.de/dsp/caps.html;
+    homepage = "http://www.quitte.de/dsp/caps.html";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.astsmtl ];
     platforms = stdenv.lib.platforms.linux;

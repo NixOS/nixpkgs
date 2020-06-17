@@ -14,11 +14,11 @@
 
 let
   apparmor-series = "2.13";
-  apparmor-patchver = "1";
+  apparmor-patchver = "4";
   apparmor-version = apparmor-series + "." + apparmor-patchver;
 
   apparmor-meta = component: with stdenv.lib; {
-    homepage = http://apparmor.net/;
+    homepage = "https://apparmor.net/";
     description = "A mandatory access control system - ${component}";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom thoughtpolice joachifm ];
@@ -27,7 +27,7 @@ let
 
   apparmor-sources = fetchurl {
     url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "7a060d94c275e59f96bacd1da150e6fee2c9152a85bf57800109d07d51ef8afb";
+    sha256 = "03nislxccnbxld89giak2s8xa4mdbwscfxbdwhmw5qpvgz08dgwh";
   };
 
   prePatchCommon = ''
@@ -39,17 +39,17 @@ let
 
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
+      url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
       sha256 = "0yyaqz8jlmn1bm37arggprqz0njb4lhjni2d9c8qfqj0kll0bam0";
     })
     (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/testing/apparmor/0007-Do-not-build-install-vim-file-with-utils-package.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
+      url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0007-Do-not-build-install-vim-file-with-utils-package.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0007-Do-not-build-install-vim-file-with-utils-package.patch";
       sha256 = "1m4dx901biqgnr4w4wz8a2z9r9dxyw7wv6m6mqglqwf2lxinqmp4";
     })
     # (alpine patches {1,4,5,6,8} are needed for apparmor 2.11, but not 2.12)
-  ];
+    ];
 
   # Set to `true` after the next FIXME gets fixed or this gets some
   # common derivation infra. Too much copy-paste to fix one by one.
@@ -122,8 +122,8 @@ let
     prePatch = prePatchCommon;
     inherit patches;
     postPatch = "cd ./utils";
-    makeFlags = ''LANGS='';
-    installFlags = ''DESTDIR=$(out) BINDIR=$(out)/bin VIM_INSTALL_PATH=$(out)/share PYPREFIX='';
+    makeFlags = [ "LANGS=" ];
+    installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "VIM_INSTALL_PATH=$(out)/share" "PYPREFIX=" ];
 
     postInstall = ''
       for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-status aa-unconfined ; do
@@ -160,8 +160,8 @@ let
 
     prePatch = prePatchCommon;
     postPatch = "cd ./binutils";
-    makeFlags = ''LANGS= USE_SYSTEM=1'';
-    installFlags = ''DESTDIR=$(out) BINDIR=$(out)/bin'';
+    makeFlags = [ "LANGS=" "USE_SYSTEM=1" ];
+    installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" ];
 
     inherit doCheck;
 
@@ -185,8 +185,11 @@ let
     '';
     inherit patches;
     postPatch = "cd ./parser";
-    makeFlags = ''LANGS= USE_SYSTEM=1 INCLUDEDIR=${libapparmor}/include'';
-    installFlags = ''DESTDIR=$(out) DISTRO=unknown'';
+    makeFlags = [
+      "LANGS=" "USE_SYSTEM=1" "INCLUDEDIR=${libapparmor}/include"
+      "AR=${stdenv.cc.bintools.targetPrefix}ar"
+    ];
+    installFlags = [ "DESTDIR=$(out)" "DISTRO=unknown" ];
 
     inherit doCheck;
 
@@ -202,8 +205,8 @@ let
     buildInputs = [ libapparmor pam ];
 
     postPatch = "cd ./changehat/pam_apparmor";
-    makeFlags = ''USE_SYSTEM=1'';
-    installFlags = ''DESTDIR=$(out)'';
+    makeFlags = [ "USE_SYSTEM=1" ];
+    installFlags = [ "DESTDIR=$(out)" ];
 
     inherit doCheck;
 
@@ -217,7 +220,7 @@ let
     nativeBuildInputs = [ which ];
 
     postPatch = "cd ./profiles";
-    installFlags = ''DESTDIR=$(out) EXTRAS_DEST=$(out)/share/apparmor/extra-profiles'';
+    installFlags = [ "DESTDIR=$(out)" "EXTRAS_DEST=$(out)/share/apparmor/extra-profiles" ];
 
     inherit doCheck;
 

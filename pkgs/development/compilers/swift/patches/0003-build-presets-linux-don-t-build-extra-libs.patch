@@ -1,6 +1,8 @@
+Disable targets, where we use Nix packages.
+
 --- a/utils/build-presets.ini	2019-04-11 15:19:57.845178834 +0200
 +++ b/utils/build-presets.ini	2019-04-11 15:27:42.041297057 +0200
-@@ -716,8 +716,6 @@
+@@ -740,8 +740,6 @@
  llbuild
  swiftpm
  xctest
@@ -9,15 +11,13 @@
  
  dash-dash
  
-@@ -727,11 +725,9 @@
+@@ -751,9 +749,7 @@
  install-llbuild
  install-swiftpm
  install-xctest
 -install-libicu
  install-prefix=%(install_prefix)s
- swift-install-components=autolink-driver;compiler;clang-resource-dir-symlink;stdlib;swift-remote-mirror;sdk-overlay;license;sourcekit-inproc
- llvm-install-components=llvm-cov;llvm-profdata;IndexStore;clang;clang-headers;compiler-rt
 -install-libcxx
+ install-sourcekit-lsp
  build-swift-static-stdlib
  build-swift-static-sdk-overlay
- build-swift-stdlib-unittest-extra

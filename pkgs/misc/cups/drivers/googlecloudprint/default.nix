@@ -14,7 +14,7 @@ let pythonEnv = python2.buildEnv.override {
 };
 
 in stdenv.mkDerivation rec {
-  name    = "cups-googlecloudprint-${version}";
+  pname = "cups-googlecloudprint";
   version = "20160502";
 
   src = fetchFromGitHub {
@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Google Cloud Print driver for CUPS, allows printing to printers hosted on Google Cloud Print";
-    homepage    = http://ccp.niftiestsoftware.com;
+    homepage    = "http://ccp.niftiestsoftware.com";
     platforms   = platforms.linux;
     license     = licenses.gpl3;
   };

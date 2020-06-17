@@ -17,7 +17,7 @@ in fetchzip {
   sha256 = "0iisi2scq72lyj7pc1f36fhfjnm676n5byl4zaavhbxpdrbc6d1v";
 
   meta = with lib; {
-    homepage = http://dotcolon.net/font/vegur/;
+    homepage = "http://dotcolon.net/font/vegur/";
     description = "A humanist sans serif font.";
     platforms = platforms.all;
     maintainers = [ maintainers.samueldr ];

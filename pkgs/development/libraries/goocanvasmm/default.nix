@@ -18,12 +18,13 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
+      attrPath = "goocanvasmm2";
     };
   };
 
   meta = with stdenv.lib; {
     description = "C++ bindings for GooCanvas";
-    homepage = https://wiki.gnome.org/Projects/GooCanvas;
+    homepage = "https://wiki.gnome.org/Projects/GooCanvas";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;

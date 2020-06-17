@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip ];
 
-  makeFlags = "LINK=gcc CFLAGS=-O2";
+  makeFlags = [ "LINK=gcc" "CFLAGS=-O2" ];
 
   hardeningDisable = [ "format" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.davidviner.com/dlx.php;
+    homepage = "http://www.davidviner.com/dlx.php";
     description = "DLX Simulator";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

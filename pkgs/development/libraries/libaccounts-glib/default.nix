@@ -2,7 +2,7 @@
 , libxml2, libxslt, pkgconfig, sqlite, docbook_xsl, docbook_xml_dtd_43, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "libaccounts-glib-${version}";
+  pname = "libaccounts-glib";
   version = "1.24";
 
   outputs = [ "out" "dev" "devdoc" "py" ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # See: https://gitlab.com/accounts-sso/libaccounts-glib/merge_requests/22
   patches = [ ./py-override.patch ];
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     check
     docbook_xml_dtd_43
     docbook_xsl
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   LC_ALL = "en_US.UTF-8";
 
   mesonFlags = [
-    "-Dpy-overrides-dir=${placeholder ''py''}/${python3.sitePackages}/gi/overrides"
+    "-Dpy-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
   meta = with stdenv.lib; {

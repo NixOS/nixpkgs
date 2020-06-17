@@ -23,7 +23,7 @@ let
   isLua51 = (lib.versions.majorMinor lua.version) == "5.1";
   isLua52 = (lib.versions.majorMinor lua.version) == "5.2";
   isLua53 = lua.luaversion == "5.3";
-  isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
+  isLuaJIT = lib.getName lua == "luajit";
 
   lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
 
@@ -64,17 +64,18 @@ in
 with self; {
 
   getLuaPathList = majorVersion: [
-     "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
-    "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
+    "share/lua/${majorVersion}/?.lua"
+    "share/lua/${majorVersion}/?/init.lua"
   ];
   getLuaCPathList = majorVersion: [
-     "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
+    "lib/lua/${majorVersion}/?.so"
   ];
 
   # helper functions for dealing with LUA_PATH and LUA_CPATH
-  getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
-  getLuaPath    = lib : getPath lib "lua";
-  getLuaCPath   = lib : getPath lib "so";
+  getPath = drv: pathListForVersion:
+    lib.concatMapStringsSep ";" (path: "${drv}/${path}") (pathListForVersion lua.luaversion);
+  getLuaPath = drv: getPath drv getLuaPathList;
+  getLuaCPath = drv: getPath drv getLuaCPathList;
 
   #define build lua package function
   buildLuaPackage = callPackage ../development/lua-modules/generic {
@@ -132,7 +133,7 @@ with self; {
   };
 
   vicious = toLuaModule(stdenv.mkDerivation rec {
-    name = "vicious-${version}";
+    pname = "vicious";
     version = "2.3.1";
 
     src = fetchFromGitHub {
@@ -152,7 +153,7 @@ with self; {
 
     meta = with stdenv.lib; {
       description = "A modular widget library for the awesome window manager";
-      homepage    = https://github.com/Mic92/vicious;
+      homepage    = "https://github.com/Mic92/vicious";
       license     = licenses.gpl2;
       maintainers = with maintainers; [ makefu mic92 ];
       platforms   = platforms.linux;

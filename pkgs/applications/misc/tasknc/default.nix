@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2017-05-15";
-  name = "tasknc-${version}";
+  pname = "tasknc";
 
   src = fetchFromGitHub {
     owner = "lharding";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/lharding/tasknc;
+    homepage = "https://github.com/lharding/tasknc";
     description = "A ncurses wrapper around taskwarrior";
     maintainers = with maintainers; [ matthiasbeyer infinisil ];
     platforms = platforms.linux; # Cannot test others

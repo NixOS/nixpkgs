@@ -1,7 +1,7 @@
 { stdenv, fetchurl, alsaLib, gtk2, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "praat-${version}";
+  pname = "praat";
   version = "6.0.43";
 
   src = fetchurl {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Doing phonetics by computer";
-    homepage = http://www.fon.hum.uva.nl/praat/;
+    homepage = "http://www.fon.hum.uva.nl/praat/";
     license = stdenv.lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
     platforms = stdenv.lib.platforms.linux;
   };

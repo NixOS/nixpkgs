@@ -7,10 +7,8 @@ let
   cfg = config.virtualisation.libvirtd;
   vswitch = config.virtualisation.vswitch;
   configFile = pkgs.writeText "libvirtd.conf" ''
-    unix_sock_group = "libvirtd"
-    unix_sock_rw_perms = "0770"
-    auth_unix_ro = "none"
-    auth_unix_rw = "none"
+    auth_unix_ro = "polkit"
+    auth_unix_rw = "polkit"
     ${cfg.extraConfig}
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
@@ -27,6 +25,11 @@ let
   subDirs = list: [ dirName ] ++ map (e: "${dirName}/${e}") list;
 
 in {
+
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
+      "Set the option `virtualisation.libvirtd.qemuPackage' instead.")
+  ];
 
   ###### interface
 
@@ -104,6 +107,18 @@ in {
       '';
     };
 
+    onBoot = mkOption {
+      type = types.enum ["start" "ignore" ];
+      default = "start";
+      description = ''
+        Specifies the action to be done to / on the guests when the host boots.
+        The "start" option starts all guests that were running prior to shutdown
+        regardless of their autostart settings. The "ignore" option will not
+        start the formerly running guest on boot. However, any guest marked as
+        autostart will still be automatically started by libvirtd.
+      '';
+    };
+
     onShutdown = mkOption {
       type = types.enum ["shutdown" "suspend" ];
       default = "suspend";
@@ -134,7 +149,8 @@ in {
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e:
         "allow ${e}") cfg.allowedBridges;
-      systemPackages = with pkgs; [ libvirt libressl.nc cfg.qemuPackage ];
+      systemPackages = with pkgs; [ libvirt libressl.nc iptables cfg.qemuPackage ];
+      etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
     boot.kernelModules = [ "tun" ];
@@ -196,14 +212,14 @@ in {
     };
 
     systemd.services.libvirtd = {
-      description = "Libvirt Virtual Machine Management Daemon";
-
-      wantedBy = [ "multi-user.target" ];
       requires = [ "libvirtd-config.service" ];
       after = [ "systemd-udev-settle.service" "libvirtd-config.service" ]
-              ++ optional vswitch.enable "vswitchd.service";
+              ++ optional vswitch.enable "ovs-vswitchd.service";
 
-      environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
+      environment.LIBVIRTD_ARGS = escapeShellArgs (
+        [ "--config" configFile
+          "--timeout" "120"     # from ${libvirt}/var/lib/sysconfig/libvirtd
+        ] ++ cfg.extraOptions);
 
       path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
              ++ optional vswitch.enable vswitch.package;
@@ -221,6 +237,7 @@ in {
       path = with pkgs; [ coreutils libvirt gawk ];
       restartIfChanged = false;
 
+      environment.ON_BOOT = "${cfg.onBoot}";
       environment.ON_SHUTDOWN = "${cfg.onShutdown}";
     };
 
@@ -247,5 +264,17 @@ in {
       serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/virtlockd virtlockd";
       restartIfChanged = false;
     };
+
+    systemd.sockets.libvirtd    .wantedBy = [ "sockets.target" ];
+    systemd.sockets.libvirtd-tcp.wantedBy = [ "sockets.target" ];
+
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.libvirt.unix.manage" &&
+          subject.isInGroup("libvirtd")) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
   };
 }

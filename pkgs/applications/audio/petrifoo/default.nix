@@ -3,11 +3,11 @@
 , pkgconfig, openssl }:
 
 stdenv.mkDerivation  rec {
-  name = "petri-foo-${version}";
+  pname = "petri-foo";
   version = "0.1.87";
 
   src = fetchurl {
-    url =  "mirror://sourceforge/petri-foo/${name}.tar.bz2";
+    url =  "mirror://sourceforge/petri-foo/${pname}-${version}.tar.bz2";
     sha256 = "0b25iicgn8c42487fdw32ycfrll1pm2zjgy5djvgw6mfcaa4gizh";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation  rec {
   meta = with stdenv.lib; {
     description = "MIDI controllable audio sampler";
     longDescription = "a fork of Specimen";
-    homepage = http://petri-foo.sourceforge.net;
+    homepage = "http://petri-foo.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

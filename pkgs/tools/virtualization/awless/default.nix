@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "awless-${version}";
+  pname = "awless";
   version = "0.1.11";
 
   goPackagePath = "github.com/wallix/awless";
@@ -14,7 +14,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/wallix/awless/;
+    homepage = "https://github.com/wallix/awless/";
     description = "A Mighty CLI for AWS";
     platforms = with platforms; linux ++ darwin;
     license = licenses.asl20;

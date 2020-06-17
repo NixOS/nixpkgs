@@ -1,7 +1,7 @@
-{ stdenv, fetchzip, libtool, ghostscript, groff }:
+{ stdenv, fetchzip, libtool, ghostscript, groff, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "fstrcmp-${version}";
+  pname = "fstrcmp";
   version = "0.7";
 
   src = fetchzip {
@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0yg3y3k0wz50gmhgigfi2dx725w1gc8snb95ih7vpcnj6kabgz9a";
   };
 
+  patches = [ ./cross.patch ];
+
   outputs = [ "out" "dev" "doc" "man" "devman" ];
 
-  nativeBuildInputs = [ libtool ghostscript groff ];
+  nativeBuildInputs = [ libtool ghostscript groff autoreconfHook ];
 
   enableParallelBuilding = true;
 
@@ -22,8 +24,8 @@ stdenv.mkDerivation rec {
       comparisons of strings and byte arrays, including multi-byte character
       strings.
     '';
-    homepage = http://fstrcmp.sourceforge.net/;
-    downloadPage = https://sourceforge.net/projects/fstrcmp/;
+    homepage = "http://fstrcmp.sourceforge.net/";
+    downloadPage = "https://sourceforge.net/projects/fstrcmp/";
     license = licenses.gpl3;
     maintainers = [ maintainers.sephalon ];
     platforms = platforms.unix;

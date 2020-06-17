@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libindicator-gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk3, libindicator-gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-indicator-applet-${version}";
-  version = "1.22.0";
+  pname = "mate-indicator-applet";
+  version = "1.24.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0zad81qvcin4m329hfxhv4a5j8gf4gj8944mvjrdgdh71bzan2x1";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0m7pvbs5hhy5f400wqb8wp0dw3pyjpjnjax9qzc73j97l1k3zawf";
   };
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     wrapGAppsHook
   ];
 
@@ -22,8 +22,10 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/mate-desktop/mate-indicator-applet;
+    homepage = "https://github.com/mate-desktop/mate-indicator-applet";
     description = "MATE panel indicator applet";
     longDescription = ''
       A small applet to display information from various applications

@@ -8,7 +8,7 @@
 /* There is a project called "closure-linter" on PyPI that is the
    same as this, but it does not appear to be owned by Google.
    So we're pulling from Google's GitHub repo instead. */
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "closure-linter";
   version = "2.3.19";
 

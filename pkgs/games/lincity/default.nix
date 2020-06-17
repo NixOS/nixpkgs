@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, libX11, libXext, xorgproto, libICE, libSM, libpng12, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "lincity-${version}";
+  pname = "lincity";
   version = "1.13.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lincity/${name}.tar.gz";
+    url = "mirror://sourceforge/lincity/${pname}-${version}.tar.gz";
     sha256 = "0p81wl7labyfb6rgp0hi42l2akn3n7r2bnxal1wyvjylzw8vsk3v";
   };
 
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "City simulation game";
     license = licenses.gpl2Plus;
-    homepage = https://sourceforge.net/projects/lincity;
+    homepage = "https://sourceforge.net/projects/lincity";
   };
 }

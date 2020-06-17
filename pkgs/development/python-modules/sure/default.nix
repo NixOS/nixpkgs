@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Utility belt for automated testing";
-    homepage = https://sure.readthedocs.io/en/latest/;
+    homepage = "https://sure.readthedocs.io/en/latest/";
     license = licenses.gpl3Plus;
   };
 

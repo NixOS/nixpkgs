@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "keybinder3-${version}";
+  pname = "keybinder3";
   version = "0.3.2";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for registering global key bindings";
-    homepage = https://github.com/kupferlauncher/keybinder/;
+    homepage = "https://github.com/kupferlauncher/keybinder/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.cstrahan ];

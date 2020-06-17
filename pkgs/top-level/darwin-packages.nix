@@ -10,6 +10,10 @@ in
 
   callPackage = newScope (darwin.apple_sdk.frameworks // darwin);
 
+  stdenvNoCF = stdenv.override {
+    extraBuildInputs = [];
+  };
+
   apple_sdk = callPackage ../os-specific/darwin/apple-sdk { };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
@@ -32,9 +36,8 @@ in
     libcxxabi = pkgs.libcxxabi;
   };
 
-  cf-private = callPackage ../os-specific/darwin/cf-private {
-    inherit (darwin) CF apple_sdk;
-  };
+  # TODO: remove alias.
+  cf-private = darwin.apple_sdk.frameworks.CoreFoundation;
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
 
@@ -65,8 +68,12 @@ in
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 
-  inherit (callPackages ../os-specific/darwin/xcode { } )
-          xcode_8_1 xcode_8_2 xcode_9_1 xcode_9_2 xcode_9_4 xcode;
+  inherit (callPackages ../os-specific/darwin/xcode { })
+    xcode_8_1 xcode_8_2
+    xcode_9_1 xcode_9_2 xcode_9_4 xcode_9_4_1
+    xcode_10_2 xcode_10_2_1 xcode_10_3
+    xcode_11
+    xcode;
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 

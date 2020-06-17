@@ -3,8 +3,9 @@
 , ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "protobuf-${version}";
+stdenv.mkDerivation {
+  pname = "protobuf";
+  inherit version;
 
   inherit src;
 
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
          almost all of its internal RPC protocols and file formats.
       '';
     license = "mBSD";
-    homepage = https://developers.google.com/protocol-buffers/;
+    homepage = "https://developers.google.com/protocol-buffers/";
     platforms = stdenv.lib.platforms.unix;
   };
 

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "telethon";
-  version = "1.6.2";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit version;
     pname = "Telethon";
-    sha256 = "074h5gj0c330rb1nxzpqm31fp1vw7calh1cdkapbjx90j769iz18";
+    sha256 = "1fg12gcg6ca7rjh7m3g48m30cx4aaw5g09855nlyz2sa1kw3gfyq";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.5";
 
   meta = with lib; {
-    homepage = https://github.com/LonamiWebs/Telethon;
+    homepage = "https://github.com/LonamiWebs/Telethon";
     description = "Full-featured Telegram client library for Python 3";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];

@@ -4,8 +4,8 @@ let arch =
   if stdenv.isi686 then "i386"
   else if stdenv.isx86_64 then "x86_64"
   else throw "Unknown architecture";
-in stdenv.mkDerivation rec {
-  name = "grub4dos-${version}";
+in stdenv.mkDerivation {
+  pname = "grub4dos";
   version = "0.4.6a-2019-05-12";
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = http://grub4dos.chenall.net/;
+    homepage = "http://grub4dos.chenall.net/";
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

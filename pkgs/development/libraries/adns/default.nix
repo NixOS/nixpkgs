@@ -4,7 +4,8 @@ let
   version = "1.5.1";
 in
 stdenv.mkDerivation {
-  name = "adns-${version}";
+  pname = "adns";
+  inherit version;
 
   src = fetchurl {
     urls = [
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.chiark.greenend.org.uk/~ian/adns/;
+    homepage = "http://www.chiark.greenend.org.uk/~ian/adns/";
     description = "Asynchronous DNS Resolver Library";
     license = stdenv.lib.licenses.lgpl2;
 

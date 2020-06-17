@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with pkgs.lib; {
     description = "Complete yet simple CSS parser for Python";
     license = licenses.bsd3;
-    homepage = https://pythonhosted.org/tinycss/;
+    homepage = "https://pythonhosted.org/tinycss/";
     maintainers = [ maintainers.costrouc ];
   };
 }

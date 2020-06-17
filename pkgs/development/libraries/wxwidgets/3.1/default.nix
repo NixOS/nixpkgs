@@ -1,23 +1,25 @@
 { stdenv, fetchFromGitHub, fetchurl, pkgconfig
-, gtk2, gtk3, libXinerama, libSM, libXxf86vm
-, xorgproto, gstreamer, gst-plugins-base, GConf, setfile
+, libXinerama, libSM, libXxf86vm
+, gtk2, GConf ? null, gtk3
+, xorgproto, gstreamer, gst-plugins-base, setfile
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported, libGLU ? null, libGL ? null
 , compat28 ? false, compat30 ? true, unicode ? true
 , withGtk2 ? true
-, withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk ? null
+, withWebKit ? false, webkitgtk ? null
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
 }:
 
+with stdenv.lib;
 
 assert withMesa -> libGLU != null && libGL != null;
-assert withWebKit -> (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk) != null;
+assert withWebKit -> webkitgtk != null;
 
-with stdenv.lib;
+assert assertMsg (withGtk2 -> withWebKit == false) "wxGTK31: You cannot enable withWebKit when using withGtk2.";
 
 stdenv.mkDerivation rec {
   version = "3.1.2";
-  name = "wxwidgets-${version}";
+  pname = "wxwidgets";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
@@ -26,11 +28,12 @@ stdenv.mkDerivation rec {
     sha256 = "0gfdhb7xq5vzasm7s1di39nchv42zsp0dmn4v6knzb7mgsb107wb";
   };
 
-  buildInputs =
-    [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xorgproto gstreamer
-      gst-plugins-base GConf ]
+  buildInputs = [
+    libXinerama libSM libXxf86vm xorgproto gstreamer gst-plugins-base
+  ] ++ optionals withGtk2 [ gtk2 GConf ]
+    ++ optional (!withGtk2) gtk3
     ++ optional withMesa libGLU
-    ++ optional withWebKit (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk)
+    ++ optional withWebKit webkitgtk
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
   nativeBuildInputs = [ pkgconfig ];
@@ -86,7 +89,7 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = with platforms; darwin ++ linux;
     license = licenses.wxWindows;
-    homepage = https://www.wxwidgets.org/;
+    homepage = "https://www.wxwidgets.org/";
     description = "a C++ library that lets developers create applications for Windows, macOS, Linux and other platforms with a single code base";
     longDescription = "wxWidgets gives you a single, easy-to-use API for writing GUI applications on multiple platforms that still utilize the native platform's controls and utilities. Link with the appropriate library for your platform and compiler, and your application will adopt the look and feel appropriate to that platform. On top of great GUI functionality, wxWidgets gives you: online help, network programming, streams, clipboard and drag and drop, multithreading, image loading and saving in a variety of popular formats, database support, HTML viewing and printing, and much more.";
     badPlatforms = [ "x86_64-darwin" ];

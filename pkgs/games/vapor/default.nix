@@ -12,8 +12,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "Vapor";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "LÖVE Distribution Client"; 
     desktopName = "Vapor";
     genericName = "vapor";
@@ -22,7 +22,7 @@ let
 
 in 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.zlib;
     maintainers = with maintainers; [ leenaars ];
-    downloadPage = http://vapor.love2d.org/;
+    downloadPage = "http://vapor.love2d.org/";
   };
 
 }

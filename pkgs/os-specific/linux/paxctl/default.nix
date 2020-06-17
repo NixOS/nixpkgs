@@ -1,11 +1,11 @@
 { fetchurl, stdenv, elf-header }:
 
 stdenv.mkDerivation rec {
-  name = "paxctl-${version}";
+  pname = "paxctl";
   version = "0.9";
 
   src = fetchurl {
-    url = "https://pax.grsecurity.net/${name}.tar.gz";
+    url = "https://pax.grsecurity.net/${pname}-${version}.tar.gz";
     sha256 = "0biw882fp1lmgs6kpxznp1v6758r7dg9x8iv5a06k0b82bcdsc53";
   };
 

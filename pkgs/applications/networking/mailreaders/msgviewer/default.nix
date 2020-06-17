@@ -5,7 +5,7 @@ let
   name = "msgviewer-${version}";
   uname = "MSGViewer-${version}";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Viewer for .msg files (MS Outlook)";
-    homepage    = https://www.washington.edu/alpine/;
+    homepage    = "https://www.washington.edu/alpine/";
     license     = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.all;

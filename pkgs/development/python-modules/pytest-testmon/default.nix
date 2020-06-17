@@ -7,21 +7,22 @@
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "0.9.16";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "df00594e55f8f8f826e0e345dc23863ebac066eb749f8229c515a0373669c5bb";
+    sha256 = "fdb016d953036051d1ef0e36569b7168cefa4914014789a65a4ffefc87f85ac5";
   };
-
-  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [ coverage ];
 
   checkInputs = [ pytest ];
 
+  # avoid tests which try to import unittest_mixins
+  # unittest_mixins doesn't seem to be very active
   checkPhase = ''
-    pytest test
+    cd test
+    pytest test_{core,process_code,pytest_assumptions}.py
   '';
 
   meta = with lib; {

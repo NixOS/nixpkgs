@@ -1,7 +1,7 @@
 { buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "nsq-${version}";
+  pname = "nsq";
   version = "0.3.5";
   rev = "v${version}";
 

@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "roccat-tools-${version}";
+  pname = "roccat-tools";
   version = "5.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/roccat/${name}.tar.bz2";
+    url = "mirror://sourceforge/roccat/${pname}-${version}.tar.bz2";
     sha256 = "12j02rzbz3iqxprz8cj4kcfcdgnqlva142ci177axqmckcq6crvg";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tools to configure ROCCAT devices";
-    homepage = http://roccat.sourceforge.net/;
+    homepage = "http://roccat.sourceforge.net/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
   };

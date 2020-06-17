@@ -25,7 +25,7 @@ let
   desktopItem =  makeDesktopItem {
     name = "CCEmuX";
     exec = "ccemux";
-    icon = "${desktopIcon}";
+    icon = desktopIcon;
     comment = "A modular ComputerCraft emulator";
     desktopName = "CCEmuX";
     genericName = "ComputerCraft Emulator";
@@ -34,10 +34,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ccemux-${version}";
+  pname = "ccemux";
+  inherit version;
 
   src = jar;
-  unpackPhase = "true";
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A modular ComputerCraft emulator";
-    homepage = https://github.com/CCEmuX/CCEmuX;
+    homepage = "https://github.com/CCEmuX/CCEmuX";
     license = licenses.mit;
     maintainers = with maintainers; [ CrazedProgrammer ];
   };

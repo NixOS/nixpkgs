@@ -23,12 +23,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ];
 
-  installTargets = "ocamlfind-install";
+  installTargets = [ "ocamlfind-install" ];
 
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.lri.fr/~filliatr/functory/;
+    homepage = "https://www.lri.fr/~filliatr/functory/";
     description = "A distributed computing library for Objective Caml which facilitates distributed execution of parallelizable computations in a seamless fashion";
     license = licenses.lgpl21;
     maintainers = [ maintainers.vbgl ];

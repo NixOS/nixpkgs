@@ -12,7 +12,7 @@
 , autoreconfHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libunity";
   version = "unstable-2019-03-19";
 
@@ -43,18 +43,22 @@ stdenv.mkDerivation rec {
     libdbusmenu
   ];
 
+  patches = [
+    # See: https://gitlab.gnome.org/GNOME/vala/issues/766
+    ./fix-vala.patch
+  ];
+
   preConfigure = ''
     intltoolize
   '';
 
   configureFlags = [
-    "--disable-static"
-    "--with-pygi-overrides-dir=${placeholder ''py''}/${python3.sitePackages}/gi/overrides"
+    "--with-pygi-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
   meta = with stdenv.lib; {
     description = "A library for instrumenting and integrating with all aspects of the Unity shell";
-    homepage = https://launchpad.net/libunity;
+    homepage = "https://launchpad.net/libunity";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ worldofpeace ];

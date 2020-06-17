@@ -1,9 +1,9 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "jp-${version}";
+  pname = "jp";
   version = "0.1.2";
-  rev = "${version}";
+  rev = version;
 
   goPackagePath = "github.com/jmespath/jp";
 
@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
   meta = with stdenv.lib; {
     description = "A command line interface to the JMESPath expression language for JSON";
-    homepage = https://github.com/jmespath/jp;
+    homepage = "https://github.com/jmespath/jp";
     maintainers = with maintainers; [ cransom ];
     license = licenses.asl20;
   };

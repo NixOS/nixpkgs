@@ -3,28 +3,23 @@
 
 stdenv.mkDerivation rec {
   pname = "btfs";
-  version = "2.19";
+  version = "2.21";
 
   src = fetchFromGitHub {
     owner  = "johang";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1b58zqha2hpnk4ysp9870wd9pkyy6l106ghp0z0x655q70npj0wn";
+    sha256 = "0zqkzfc49jl9kn3m0cg7q0156xyzrdl5w4v70p16sqxdly86mwb0";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    boost fuse libtorrentRasterbar curl
+    boost fuse libtorrentRasterbar curl python3
   ];
-
-  preInstall = ''
-    substituteInPlace scripts/btplay \
-      --replace "/usr/bin/env python" "${python3.interpreter}"
-  '';
 
   meta = with stdenv.lib; {
     description = "A bittorrent filesystem based on FUSE";
-    homepage    = https://github.com/johang/btfs;
+    homepage    = "https://github.com/johang/btfs";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms   = platforms.linux;

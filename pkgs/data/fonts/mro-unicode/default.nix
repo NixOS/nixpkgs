@@ -10,7 +10,7 @@ fetchzip {
   sha256 = "1i71bjd9gdyn8ladfncbfhz6xz1h8xx8yf876j1z8lh719410c8g";
 
   meta = with lib; {
-    homepage = https://github.com/phjamr/MroUnicode;
+    homepage = "https://github.com/phjamr/MroUnicode";
     description = "Unicode-compliant Mro font";
     maintainers = with maintainers; [ mathnerd314 ];
     license = licenses.ofl;

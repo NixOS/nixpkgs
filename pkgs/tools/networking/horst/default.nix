@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, pkgconfig, ncurses, libnl }:
 
 stdenv.mkDerivation rec {
-  name = "horst-${version}";
+  pname = "horst";
   version = "5.1";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Small and lightweight IEEE802.11 wireless LAN analyzer with a text interface";
-    homepage = http://br1.einfach.org/tech/horst/;
+    homepage = "http://br1.einfach.org/tech/horst/";
     maintainers = [ maintainers.fpletz ];
     license = licenses.gpl3;
     platforms = platforms.linux;

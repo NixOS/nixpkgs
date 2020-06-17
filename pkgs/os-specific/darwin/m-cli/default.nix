@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "m-cli-${version}";
+  pname = "m-cli";
   version = "0.2.5";
 
   src = fetchFromGitHub {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Swiss Army Knife for macOS";
     inherit (src.meta) homepage;
-    repositories.git = git://github.com/rgcr/m-cli.git;
+    repositories.git = "git://github.com/rgcr/m-cli.git";
 
     license = licenses.mit;
 

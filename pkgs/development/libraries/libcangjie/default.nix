@@ -1,7 +1,7 @@
 { stdenv, autoconf, automake, libtool, m4, fetchurl, bash, pkgconfig, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "libcangjie-${version}";
+  pname = "libcangjie";
   version = "1.4_rev_${rev}";
   rev = "a73c1d8783f7b6526fd9b2cc44a669ffa5518d3d";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       libcangjie is a library implementing the Cangjie input method.
     '';
-    homepage = http://cangjians.github.io/projects/libcangjie/;
+    homepage = "http://cangjians.github.io/projects/libcangjie/";
     license = stdenv.lib.licenses.lgpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.linquize ];

@@ -1,10 +1,18 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
+, buildBazelPackage
 , buildPythonPackage
 , python
+, setuptools
+, wheel
+, absl-py
 , tensorflow
+, six
+, numpy
 , decorator
 , cloudpickle
+, gast
 , hypothesis
 , scipy
 , matplotlib
@@ -12,21 +20,81 @@
 , pytest
 }:
 
-buildPythonPackage rec {
-  pname = "tensorflow-probability";
-  version = "0.7";
+let
+  version = "0.8.0";
+  pname = "tensorflow_probability";
 
-  src = fetchFromGitHub {
-    owner = "tensorflow";
-    repo = "probability";
-    rev = "v${version}";
-    sha256 = "0sy9gmjcvmwciamqvd7kd9qw2wd7ksklk80815fsn7sj0wiqxjyd";
+  # first build all binaries and generate setup.py using bazel
+  bazel-wheel = buildBazelPackage {
+    name = "${pname}-${version}-py2.py3-none-any.whl";
+
+    src = fetchFromGitHub {
+      owner = "tensorflow";
+      repo = "probability";
+      rev = "${version}";
+      sha256 = "07cm8zba8n0ihzdm3k4a4rsg5v62xxsfvcw4h0niz91c0parqjqy";
+    };
+
+    patches = [
+      (fetchpatch {
+        name = "gast-0.3.patch";
+        url = "https://github.com/tensorflow/probability/commit/ae7a9d9771771ec1e7755a3588b9325f050a84cc.patch";
+        sha256 = "0kfhx30gshm8f3945na9yjjik71r20qmjzifbigaj4l8dwd9dz1a";
+        excludes = ["testing/*"];
+      })
+      (fetchpatch {
+        name = "cloudpickle-1.2.patch";
+        url = "https://github.com/tensorflow/probability/commit/78ef12b5afe3f567d16c70b74015ed1ddff1b0c8.patch";
+        sha256 = "12ms2xcljvvrnig0j78s3wfv4yf3bm5ps4rgfgv5lg2a8mzpc1ga";
+      })
+    ];
+
+    nativeBuildInputs = [
+      # needed to create the output wheel in installPhase
+      python
+      setuptools
+      wheel
+      absl-py
+      tensorflow
+    ];
+
+    bazelTarget = ":pip_pkg";
+
+    fetchAttrs = {
+      sha256 = "1snj7fxfxzvrqv9cpir1daxcg3fip6cvbk94y3mi2h50k3ni826i";
+    };
+
+    buildAttrs = {
+      preBuild = ''
+        patchShebangs .
+      '';
+
+      installPhase = ''
+        # work around timestamp issues
+        # https://github.com/NixOS/nixpkgs/issues/270#issuecomment-467583872
+        export SOURCE_DATE_EPOCH=315532800
+
+        # First build, then move. Otherwise pip_pkg would create the dir $out
+        # and then put the wheel in that directory. However we want $out to
+        # point directly to the wheel file.
+        ./bazel-bin/pip_pkg . --release
+        mv *.whl "$out"
+      '';
+    };
   };
+in buildPythonPackage {
+  inherit version pname;
+  format = "wheel";
+
+  src = bazel-wheel;
 
   propagatedBuildInputs = [
     tensorflow
+    six
+    numpy
     decorator
     cloudpickle
+    gast
   ];
 
   # Listed here:
@@ -55,7 +123,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for probabilistic reasoning and statistical analysis";
-    homepage = https://www.tensorflow.org/probability/;
+    homepage = "https://www.tensorflow.org/probability/";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
   };

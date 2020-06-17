@@ -1,7 +1,7 @@
 {stdenv, lib, fetchFromGitHub, dmd, curl}:
 
 stdenv.mkDerivation rec {
-  name = "dtools-${version}";
+  pname = "dtools";
   version = "2.085.1";
 
   srcs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ancillary tools for the D programming language compiler";
-    homepage = https://github.com/dlang/tools;
+    homepage = "https://github.com/dlang/tools";
     license = lib.licenses.boost;
     maintainers = with maintainers; [ ThomasMader ];
     platforms = stdenv.lib.platforms.unix;

@@ -1,9 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy36 }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "demjson";
   version = "2.2.4";
-  disabled = isPy36;
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Encoder/decoder and lint/validator for JSON (JavaScript Object Notation)";
-    homepage = http://deron.meranda.us/python/demjson/;
+    homepage = "https://github.com/dmeranda/demjson";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.all;

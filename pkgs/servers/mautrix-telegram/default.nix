@@ -4,21 +4,22 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.5.2";
+  version = "0.8.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03dbd389e05aa08c52ef36ca362fcc9aa103f6c6173bb093ed03a96e05e8d43d";
+    sha256 = "1gz6d28dq3ykvr3wp85wkc05lbppdzf5j9i62pgx0blmx3jh0yrk";
   };
 
   postPatch = ''
-    sed -i -e '/alembic>/d' setup.py
+    sed -i -e '/alembic>/d' requirements.txt
   '';
 
   propagatedBuildInputs = [
     Mako
     aiohttp
-    mautrix-appservice
+    mautrix
     sqlalchemy
     CommonMark
     ruamel_yaml
@@ -28,6 +29,7 @@ buildPythonPackage rec {
     telethon-session-sqlalchemy
     pillow
     lxml
+    setuptools
   ];
 
   # `alembic` (a database migration tool) is only needed for the initial setup,
@@ -50,9 +52,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = https://github.com/tulir/mautrix-telegram;
+    homepage = "https://github.com/tulir/mautrix-telegram";
     description = "A Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nyanloutre ma27 ];
   };
 }

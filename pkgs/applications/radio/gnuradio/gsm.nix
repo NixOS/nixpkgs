@@ -5,8 +5,8 @@
 
 assert pythonSupport -> python != null && swig != null;
 
-stdenv.mkDerivation rec {
-  name = "gr-gsm-${version}";
+stdenv.mkDerivation {
+  pname = "gr-gsm";
   version = "2016-08-25";
 
   src = fetchFromGitHub {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gnuradio block for gsm";
-    homepage = https://github.com/ptrkrysik/gr-gsm;
+    homepage = "https://github.com/ptrkrysik/gr-gsm";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mog ];

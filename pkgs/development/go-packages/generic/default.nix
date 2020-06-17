@@ -72,14 +72,21 @@ let
 
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;
-  package = go.stdenv.mkDerivation (
+  package = stdenv.mkDerivation (
     (builtins.removeAttrs args [ "goPackageAliases" "disabled" "extraSrcs"]) // {
 
     nativeBuildInputs = [ removeReferencesTo go ]
       ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
     buildInputs = buildInputs;
 
-    inherit (go) GOOS GOARCH;
+    inherit (go) GOOS GOARCH GO386 CGO_ENABLED;
+
+    GOHOSTARCH = go.GOHOSTARCH or null;
+    GOHOSTOS = go.GOHOSTOS or null;
+
+    GO111MODULE = "off";
+
+    GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -196,16 +203,18 @@ let
     installPhase = args.installPhase or ''
       runHook preInstall
 
-      mkdir -p $bin
+      mkdir -p $out
       dir="$NIX_BUILD_TOP/go/bin"
-      [ -e "$dir" ] && cp -r $dir $bin
+      [ -e "$dir" ] && cp -r $dir $out
 
       runHook postInstall
     '';
 
     preFixup = preFixup + ''
-      find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
+      find $out/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
     '';
+
+    strictDeps = true;
 
     shellHook = ''
       d=$(mktemp -d "--suffix=-$name")
@@ -226,18 +235,11 @@ let
 
     enableParallelBuilding = enableParallelBuilding;
 
-    # I prefer to call this dev but propagatedBuildInputs expects $out to exist
-    outputs = args.outputs or [ "bin" "out" ];
-
     meta = {
       # Add default meta information
       homepage = "https://${goPackagePath}";
       platforms = go.meta.platforms or lib.platforms.all;
-    } // meta // {
-      # add an extra maintainer to every package
-      maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.ehmry lib.maintainers.lethalman ];
-    };
+    } // meta;
   });
 in if disabled then
   throw "${package.name} not supported for go ${go.meta.branch}"

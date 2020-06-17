@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyspark";
-  version = "2.4.3";
+  version = "2.4.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6839718ce9f779e81153d8a14a843a5c4b2d5e6574f3c916aec241022d717cb2";
+    sha256 = "0deed5687828efdaf4091e748f0ba1ae8aad6e4c3a5f07aa07e19487397e0e07";
   };
 
   # pypandoc is broken with pandoc2, so we just lose docs.
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Apache Spark";
-    homepage = https://github.com/apache/spark/tree/master/python;
+    homepage = "https://github.com/apache/spark/tree/master/python";
     license = licenses.asl20;
     maintainers = [ maintainers.shlevy ];
   };

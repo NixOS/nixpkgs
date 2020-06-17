@@ -6,7 +6,8 @@ let
   version = "0.3.0";
 
 in stdenv.mkDerivation {
-  name = "soapyrtlsdr-${version}";
+  pname = "soapyrtlsdr";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pothosware";
@@ -21,7 +22,7 @@ in stdenv.mkDerivation {
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pothosware/SoapyRTLSDR;
+    homepage = "https://github.com/pothosware/SoapyRTLSDR";
     description = "SoapySDR plugin for RTL-SDR devices";
     license = licenses.mit;
     maintainers = with maintainers; [ ragge ];

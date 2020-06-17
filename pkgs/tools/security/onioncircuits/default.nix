@@ -1,7 +1,7 @@
 { stdenv, fetchgit, pythonPackages, intltool, gtk3, gobject-introspection, gnome3 }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "onioncircuits-${version}";
+  pname = "onioncircuits";
   version = "0.5";
 
   src = fetchgit {
@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://tails.boum.org;
+    homepage = "https://tails.boum.org";
     description = "GTK application to display Tor circuits and streams";
     license = licenses.gpl3;
     maintainers = [ maintainers.phreedom ];

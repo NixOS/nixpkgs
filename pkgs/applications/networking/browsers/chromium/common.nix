@@ -1,10 +1,10 @@
-{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchpatch, gnutar
+{ stdenv, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
-, xdg_utils, yasm, minizip, libwebp
+, xdg_utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib
 
 , python2Packages, perl, pkgconfig
@@ -13,19 +13,26 @@
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
-, libXScrnSaver, libXcursor, libXtst, libGLU_combined
+, xorg
+, libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2, at-spi2-core
-, jdk
+, ffmpeg_3, libxslt, libxml2, at-spi2-core
+, jre
+, pipewire_0_2
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 , libva ? null # useVaapi
+, libdrm ? null, wayland ? null, mesa_drivers ? null, libxkbcommon ? null # useOzone
 
 # package customization
-, enableNaCl ? false
-, enableWideVine ? false
-, useVaapi ? false
+, useOzone ? false
+, useVaapi ? !(useOzone || stdenv.isAarch64) # Built if supported, but disabled in the wrapper
+# VA-API TODOs:
+# - Ozone: M81 fails to build due to "ozone_platform_gbm = false"
+#   - Possible solutions: Write a patch to fix the build (wrong gn dependencies)
+#     or build with minigbm
+# - AArch64: Causes serious regressions (https://github.com/NixOS/nixpkgs/pull/85253#issuecomment-614405879)
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -67,13 +74,14 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
+    "flac" "libwebp" "libxslt" "opus" "snappy" "libpng"
+    # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
                     # so we can't build with one from system and other from source
-  ];
+  ] ++ optional (versionRange "0" "84") "yasm";
 
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
@@ -83,12 +91,12 @@ let
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
     libpng libcap
-    xdg_utils yasm minizip libwebp
+    xdg_utils minizip libwebp
     libusb1 re2 zlib
-    ffmpeg libxslt libxml2
+    ffmpeg_3 libxslt libxml2
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
-  ];
+  ] ++ (if (versionRange "0" "84") then [ yasm ] else [ nasm ]);
 
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
@@ -107,7 +115,7 @@ let
 
   base = rec {
     name = "${packageName}-unwrapped-${version}";
-    inherit (upstream-info) version;
+    inherit (upstream-info) channel version;
     inherit packageName buildType buildPath;
 
     src = upstream-info.main;
@@ -116,28 +124,31 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar
-    ];
+    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools
+      ++ optional (versionAtLeast version "84") (xorg.xcbproto.override { python = python2Packages.python; });
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
       glib gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst libGLU_combined
+      libXScrnSaver libXcursor libXtst libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
-    ] ++ optional gnomeKeyringSupport libgnome-keyring3
+      jre
+      pipewire_0_2
+    ] ++ optional useVaapi libva
+      ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional useVaapi libva
       ++ optional pulseSupport libpulseaudio
-      ++ optional (versionAtLeast version "72") jdk.jre;
+      ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
-    patches = optional enableWideVine ./patches/widevine.patch ++ [
+    patches = [
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
-      ./patches/jumbo-sorted.patch
       ./patches/no-build-timestamps.patch
-
+      ./patches/widevine-79.patch
+      ./patches/dont-use-ANGLE-by-default.patch
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
       # Good sources for such patches and other hints:
@@ -145,25 +156,12 @@ let
       # - https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
       #
+      # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi) [
-      # source: https://aur.archlinux.org/cgit/aur.git/plain/chromium-vaapi.patch?h=chromium-vaapi
-      ./patches/chromium-vaapi.patch
-    ] ++ optionals (!stdenv.cc.isClang && (versionRange "71" "72")) [
-      ( githubPatch "65be571f6ac2f7942b4df9e50b24da517f829eec" "1sqv0aba0mpdi4x4f21zdkxz2cf8ji55ffgbfcr88c5gcg0qn2jh" )
-    ] ++ optional stdenv.isAarch64
-           (if (versionOlder version "71") then
-              fetchpatch {
-                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
-                sha256    = "0dkchqair8cy2f5a5p5vi24r9b4d28pgn2bfvm1568lypbjw6iab";
-              }
-            else
-              fetchpatch {
-                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
-                postFetch = "substituteInPlace $out --replace __aarch64__ SK_CPU_ARM64";
-                sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
-              }
-            );
+    ] ++ optionals (useVaapi) [ # Improvements for the VA-API build:
+      ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
+      ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
+    ];
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -228,30 +226,40 @@ let
       ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
       ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
+    '' + optionalString (versionAtLeast version "84") ''
+      substituteInPlace ui/gfx/x/BUILD.gn \
+        --replace \
+          '/usr/share/xcb' \
+          '${xorg.xcbproto}/share/xcb/'
     '';
 
-    gnFlags = mkGnFlags ({
+    gnFlags = mkGnFlags (optionalAttrs (versionRange "0" "84") {
       linux_use_bundled_binutils = false;
+    } // {
       use_lld = false;
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
-      # at least 2X compilation speedup
-      use_jumbo_build = true;
 
       proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
       use_gio = gnomeSupport;
-      enable_nacl = enableNaCl;
-      enable_widevine = enableWideVine;
+      # ninja: error: '../../native_client/toolchain/linux_x86/pnacl_newlib/bin/x86_64-nacl-objcopy',
+      # needed by 'nacl_irt_x86_64.nexe', missing and no known rule to make it
+      enable_nacl = false;
+      # Enabling the Widevine component here doesn't affect whether we can
+      # redistribute the chromium package; the Widevine component is either
+      # added later in the wrapped -wv build or downloaded from Google.
+      enable_widevine = true;
       use_cups = cupsSupport;
+      # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture.
+      rtc_use_pipewire = true;
 
       treat_warnings_as_errors = false;
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
-      enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:
@@ -271,6 +279,16 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
+    } // optionalAttrs useOzone {
+      use_ozone = true;
+      ozone_platform_gbm = false;
+      use_xkbcommon = true;
+      use_glib = true;
+      use_gtk = true;
+      use_system_libwayland = true;
+      use_system_minigbm = true;
+      use_system_libdrm = true;
+      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
     } // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
@@ -280,13 +298,18 @@ let
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gn_files.py \
         --system-libraries ${toString gnSystemLibraries}
-      ${gn}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1
 
       runHook postConfigure
     '';
+
+    # Don't spam warnings about unknown warning options. This is useful because
+    # our Clang is always older than Chromium's and the build logs have a size
+    # of approx. 25 MB without this option (and this saves e.g. 66 %).
+    NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
       # Build paralelism: on Hydra the build was frequently running into memory
@@ -308,6 +331,13 @@ let
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
     in concatStringsSep "\n" commands;
+
+    postFixup = ''
+      # Make sure that libGLESv2 is found by dlopen (if using EGL).
+      chromiumBinary="$libExecPath/$packageName"
+      origRpath="$(patchelf --print-rpath "$chromiumBinary")"
+      patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
+    '';
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.

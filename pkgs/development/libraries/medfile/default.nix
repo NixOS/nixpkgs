@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, hdf5 }:
 
 stdenv.mkDerivation rec {
-  name = "medfile-${version}";
+  pname = "medfile";
   version = "4.0.0";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to read and write MED files";
-    homepage = http://salome-platform.org/;
+    homepage = "http://salome-platform.org/";
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;
   };

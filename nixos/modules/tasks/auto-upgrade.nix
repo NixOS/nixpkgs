@@ -24,7 +24,7 @@ let cfg = config.system.autoUpgrade; in
       channel = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = https://nixos.org/channels/nixos-14.12-small;
+        example = "https://nixos.org/channels/nixos-14.12-small";
         description = ''
           The URI of the NixOS channel to use for automatic
           upgrades. By default, this is the channel set using
@@ -53,6 +53,29 @@ let cfg = config.system.autoUpgrade; in
         '';
       };
 
+      allowReboot = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Reboot the system into the new generation instead of a switch
+          if the new generation uses a different kernel, kernel modules
+          or initrd than the booted system.
+        '';
+      };
+
+      randomizedDelaySec = mkOption {
+        default = "0";
+        type = types.str;
+        example = "45min";
+        description = ''
+          Add a randomized delay before each automatic upgrade.
+          The delay will be chozen between zero and this value.
+          This value must be a time span in the format specified by
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>
+        '';
+      };
+
     };
 
   };
@@ -78,14 +101,28 @@ let cfg = config.system.autoUpgrade; in
           HOME = "/root";
         } // config.networking.proxy.envVars;
 
-      path = [ pkgs.gnutar pkgs.xz.bin pkgs.gitMinimal config.nix.package.out ];
+      path = with pkgs; [ coreutils gnutar xz.bin gzip gitMinimal config.nix.package.out ];
 
-      script = ''
-        ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}
-      '';
+      script = let
+          nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+        in
+        if cfg.allowReboot then ''
+            ${nixos-rebuild} boot ${toString cfg.flags}
+            booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
+            built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+            if [ "$booted" = "$built" ]; then
+              ${nixos-rebuild} switch ${toString cfg.flags}
+            else
+              /run/current-system/sw/bin/shutdown -r +1
+            fi
+          '' else ''
+            ${nixos-rebuild} switch ${toString cfg.flags}
+        '';
 
       startAt = cfg.dates;
     };
+
+    systemd.timers.nixos-upgrade.timerConfig.RandomizedDelaySec = cfg.randomizedDelaySec;
 
   };
 

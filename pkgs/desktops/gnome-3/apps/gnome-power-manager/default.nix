@@ -51,9 +51,9 @@ in stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://projects-old.gnome.org/gnome-power-manager/;
+    homepage = "https://projects-old.gnome.org/gnome-power-manager/";
     description = "View battery and power statistics provided by UPower";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

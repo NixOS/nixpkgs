@@ -1,33 +1,46 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, six, requests, websocket_client
-, ipaddress, backports_ssl_match_hostname, docker_pycreds
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
+, backports_ssl_match_hostname
+, mock
+, paramiko
+, pytest
+, pytestCheckHook
+, requests
+, six
+, websocket_client
 }:
+
 buildPythonPackage rec {
-  version = "3.7.2";
   pname = "docker";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c456ded5420af5860441219ff8e51cdec531d65f4a9e948ccd4133e063b72f50";
+    sha256 = "380a20d38fbfaa872e96ee4d0d23ad9beb0f9ed57ff1c30653cbeb0c9c0964f2";
   };
 
+  nativeBuildInputs = lib.optional isPy27 mock;
+
   propagatedBuildInputs = [
-    six
+    paramiko
     requests
+    six
     websocket_client
-    ipaddress
-    backports_ssl_match_hostname
-    docker_pycreds
+  ] ++ lib.optional isPy27 backports_ssl_match_hostname;
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
-  # Flake8 version conflict
-  doCheck = false;
+  pytestFlagsArray = [ "tests/unit" ];
+  # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
+  disabledTests = lib.optionals stdenv.isDarwin [ "stream_response" "socket_file" ];
 
-  meta = with stdenv.lib; {
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
     description = "An API client for docker written in Python";
-    homepage = https://github.com/docker/docker-py;
+    homepage = "https://github.com/docker/docker-py";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-    ];
+    maintainers = with maintainers; [ jonringer ];
   };
 }

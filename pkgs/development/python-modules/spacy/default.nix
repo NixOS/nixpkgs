@@ -3,58 +3,45 @@
 , fetchPypi
 , pythonOlder
 , pytest
-, preshed
-, ftfy
-, numpy
-, murmurhash
-, plac
-, ujson
-, dill
-, requests
-, thinc
-, regex
-, cymem
-, pathlib
-, msgpack-python
-, msgpack-numpy
-, jsonschema
 , blis
-, wasabi
+, catalogue
+, cymem
+, jsonschema
+, murmurhash
+, numpy
+, pathlib
+, plac
+, preshed
+, requests
+, setuptools
 , srsly
+, thinc
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.1.4";
+  version = "2.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03m4c59aaqpqr2x5yhv7y37z0vxhmmkfi6dv4cbp9nxsq9wv100d";
+    sha256 = "1fgm1zlw8mjhmk64skxs79ymhcningml13y9c9fy7rj1b1yadwzh";
   };
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
-  '';
-
   propagatedBuildInputs = [
-   numpy
-   murmurhash
-   cymem
-   preshed
-   thinc
-   plac
-   ujson
-   dill
-   requests
-   regex
-   ftfy
-   msgpack-python
-   msgpack-numpy
-   jsonschema
    blis
-   wasabi
+   catalogue
+   cymem
+   jsonschema
+   murmurhash
+   numpy
+   plac
+   preshed
+   requests
+   setuptools
    srsly
+   thinc
+   wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
@@ -66,10 +53,14 @@ buildPythonPackage rec {
   #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   # '';
 
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "thinc==7.4.0" "thinc>=7.4.0,<8"
+  '';
+
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
-    homepage = https://github.com/explosion/spaCy;
+    homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
-    maintainers = with maintainers; [ sdll ];
+    maintainers = with maintainers; [ danieldk sdll ];
     };
 }

@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "jbidwatcher";
   version = "2.5.6";
 
-  name = "${pname}-${version}";
-
   src = fetchurl {
     url = "http://www.jbidwatcher.com/download/JBidwatcher-${version}.jar";
     sha256 = "1cw59wh72w1zzibs8x64dma3jc4hry64wjksqs52nc3vpnf0fzfr";
@@ -15,7 +13,7 @@ stdenv.mkDerivation rec {
 
   jarfile = "$out/share/java/${pname}/JBidwatcher.jar";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   dontBuild = true;
 
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.jbidwatcher.com/;
+    homepage = "http://www.jbidwatcher.com/";
     description = "Monitor and snipe Ebay auctions";
     license = "LGPL";
 

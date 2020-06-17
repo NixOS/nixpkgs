@@ -6,7 +6,7 @@ let
   lib = stdenv.lib;
 in
 stdenv.mkDerivation rec {
-  name = "gnu-cobol-${version}";
+  pname = "gnu-cobol";
   inherit version;
 
   src = fetchurl {
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open-source COBOL compiler";
-    homepage = https://sourceforge.net/projects/open-cobol/;
+    homepage = "https://sourceforge.net/projects/open-cobol/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ericsagnes the-kenny ];
+    maintainers = with maintainers; [ ericsagnes ];
     platforms = with platforms; linux ++ darwin;
   };
 }

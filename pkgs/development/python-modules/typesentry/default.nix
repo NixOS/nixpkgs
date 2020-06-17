@@ -6,7 +6,7 @@
 , pytestcov
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "typesentry";
   version = "0.2.7";
 

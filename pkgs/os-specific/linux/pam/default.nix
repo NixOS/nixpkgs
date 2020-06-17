@@ -1,7 +1,7 @@
 { stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4 }:
 
 stdenv.mkDerivation rec {
-  name = "linux-pam-${version}";
+  pname = "linux-pam";
   version = "1.3.1";
 
   src = fetchurl {
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals (stdenv.hostPlatform.libc == "musl") [
     (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/fix-compat.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
+      url = "https://git.alpinelinux.org/aports/plain/main/linux-pam/fix-compat.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
       sha256 = "1h5yp5h2mqp1fcwiwwklyfpa69a3i03ya32pivs60fd7g5bqa7sf";
     })
     (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/libpam-fix-build-with-eglibc-2.16.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
+      url = "https://git.alpinelinux.org/aports/plain/main/linux-pam/libpam-fix-build-with-eglibc-2.16.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
       sha256 = "1ib6shhvgzinjsc603k2x1lxh9dic6qq449fnk110gc359m23j81";
     })
     # From adelie's package repo, using local copy since it seems to be currently offline.
@@ -44,9 +44,7 @@ stdenv.mkDerivation rec {
   # which is done by dlopening $out/lib/security/pam_foo.so
   # $out/etc was also missed: pam_env(login:session): Unable to open config file
 
-  preConfigure = ''
-    configureFlags="$configureFlags --includedir=$out/include/security"
-  '' + stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
+  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
       # export ac_cv_search_crypt=no
       # (taken from Alpine linux, apparently insecure but also doesn't build O:))
       # disable insecure modules
@@ -54,10 +52,19 @@ stdenv.mkDerivation rec {
       sed -e 's/pam_rhosts//g' -i modules/Makefile.in
   '';
 
+  configureFlags = [
+    "--includedir=${placeholder "out"}/include/security"
+    "--enable-sconfigdir=/etc/security"
+  ];
+
+  installFlags = [
+    "SCONFIGDIR=${placeholder "out"}/etc/security"
+  ];
+
   doCheck = false; # fails
 
   meta = with stdenv.lib; {
-    homepage = http://www.linux-pam.org/;
+    homepage = "http://www.linux-pam.org/";
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = platforms.linux;
     license = licenses.bsd3;

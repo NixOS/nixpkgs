@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "20171104";
-  name = "libewf-${version}";
+  pname = "libewf";
 
   src = fetchurl {
     url = "https://github.com/libyal/libewf/releases/download/${version}/libewf-experimental-${version}.tar.gz";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library for support of the Expert Witness Compression Format";
-    homepage = https://sourceforge.net/projects/libewf/;
+    homepage = "https://sourceforge.net/projects/libewf/";
     license = stdenv.lib.licenses.lgpl3;
     maintainers = [ stdenv.lib.maintainers.raskin ] ;
     platforms = stdenv.lib.platforms.unix;

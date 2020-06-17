@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "readline-${version}";
+  pname = "readline";
   version = "7.0p${toString (builtins.length upstreamPatches)}";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ncurses];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   upstreamPatches =
     (let
@@ -31,10 +31,6 @@ stdenv.mkDerivation rec {
       ./no-arch_only-6.3.patch
     ]
     ++ upstreamPatches;
-
-  # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-  bash_cv_func_sigsetjmp = if stdenv.isCygwin then "missing" else null;
 
   meta = with stdenv.lib; {
     description = "Library for interactive line editing";
@@ -54,11 +50,11 @@ stdenv.mkDerivation rec {
       desire its capabilities.
     '';
 
-    homepage = https://savannah.gnu.org/projects/readline/;
+    homepage = "https://savannah.gnu.org/projects/readline/";
 
     license = licenses.gpl3Plus;
 
-    maintainers = [ maintainers.vanschelven ];
+    maintainers = [ ];
 
     platforms = platforms.unix;
     branch = "7.0";

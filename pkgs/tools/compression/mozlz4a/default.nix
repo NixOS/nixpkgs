@@ -1,7 +1,6 @@
 { stdenv, fetchurl, python3, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "mozlz4a";
   version = "2018-08-23";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
@@ -10,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d1ai062kdms34bya9dlykkx011rj8d8nh5l7d76xj8k9kv4ssq6";
   };
 
-  unpackPhase = "true;";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin" "$out/${python3.sitePackages}/"
@@ -30,6 +29,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = https://gist.githubusercontent.com/Tblue/62ff47bef7f894e92ed5;
+    homepage = "https://gist.githubusercontent.com/Tblue/62ff47bef7f894e92ed5";
   };
 }

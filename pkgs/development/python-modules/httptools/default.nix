@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A collection of framework independent HTTP protocol utils";
-    homepage = https://github.com/MagicStack/httptools;
+    homepage = "https://github.com/MagicStack/httptools";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

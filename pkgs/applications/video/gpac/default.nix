@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.1";
-  name = "gpac-${version}";
+  version = "0.8.0";
+  pname = "gpac";
 
   src = fetchFromGitHub {
     owner = "gpac";
     repo = "gpac";
     rev = "v${version}";
-    sha256 = "197c5968p5bzvk0ga347fwgkqh4j1v3z65wlx65c5m9gwfxz2k2q";
+    sha256 = "1w1dyrn6900yi8ngchfzy5hvxr6yc60blvdq8y8mczimmmq8khb5";
   };
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       A multimedia packager, called MP4Box,
       And some server tools included in MP4Box and MP42TS applications.
     '';
-    homepage = https://gpac.wp.imt.fr;
+    homepage = "https://gpac.wp.imt.fr";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ bluescreen303 mgdelacroix ];
     platforms = platforms.linux;

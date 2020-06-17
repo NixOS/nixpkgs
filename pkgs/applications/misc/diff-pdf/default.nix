@@ -8,14 +8,14 @@ let
       [ wxGTK ];
 in
 stdenv.mkDerivation rec {
-  name = "diff-pdf-${version}";
-  version = "2017-12-30";
+  pname = "diff-pdf";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "diff-pdf";
-    rev = "c4d67226ec4c29b30a7399e75f80636ff8a6f9fc";
-    sha256 = "1c3ig7ckrg37p5vzvgjnsfdzdad328wwsx0r31lbs1d8pkjkgq3m";
+    rev = "v${version}";
+    sha256 = "1y5ji4c4m69vzs0z051fkhfdrjnyxb6kzac5flhdkfb2hgp1jnxl";
   };
 
   nativeBuildInputs = [ autoconf automake pkgconfig ];
@@ -24,9 +24,10 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap";
 
   meta = with stdenv.lib; {
-    homepage = http://vslavik.github.io/diff-pdf;
+    homepage = "https://vslavik.github.io/diff-pdf/";
     description = "Simple tool for visually comparing two PDF files";
     license = licenses.gpl2;
+    platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];
   };
 }

@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "clasp-${version}";
+  pname = "clasp";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/potassco/clasp/${version}/clasp-${version}-source.tar.gz";
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Answer set solver for (extended) normal and disjunctive logic programs";
-    homepage = http://potassco.sourceforge.net/;
+    homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;
     maintainers = [ maintainers.hakuch ];
     license = licenses.gpl2Plus;

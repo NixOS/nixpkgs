@@ -1,32 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, llvm
-, typesentry
+{ stdenv, lib, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
 , blessed
+, docutils
+, libcxx
+, libcxxabi
+, llvm
+, openmp
 , pytest
+, typesentry
 }:
 
 buildPythonPackage rec {
   pname = "datatable";
-  version = "0.8.0";
+  version = "0.9.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s8z81zffrckvdwrrl0pkjc7gsdvjxw59xgg6ck81dl7gkh5grjk";
+    sha256 = "1shwjkm9nyaj6asn57vwdd74pn13pggh14r6dzv729lzxm7nm65f";
   };
 
-  disabled = pythonOlder "3.5";
+  patches = lib.optionals stdenv.isDarwin [
+    # Replace the library auto-detection with hardcoded paths.
+    (substituteAll {
+      src = ./hardcode-library-paths.patch;
+
+      libomp_dylib = "${lib.getLib openmp}/lib/libomp.dylib";
+      libcxx_dylib = "${lib.getLib libcxx}/lib/libc++.1.dylib";
+      libcxxabi_dylib = "${lib.getLib libcxxabi}/lib/libc++abi.dylib";
+    })
+  ];
 
   propagatedBuildInputs = [ typesentry blessed ];
-  buildInputs = [ llvm ];
-  checkInputs = [ pytest ];
+  buildInputs = [ llvm ] ++ lib.optionals stdenv.isDarwin [ openmp ];
+  checkInputs = [ docutils pytest ];
 
   LLVM = llvm;
 
   checkPhase = ''
-    # py.test adds local datatable to path, which doesn't contain built native library.
     mv datatable datatable.hidden
     pytest
   '';

@@ -2,14 +2,14 @@
   asciidoc, cacert, libxml2, libxslt, docbook_xsl }:
 
 python2Packages.buildPythonApplication rec {
-  version = "7.2.4";
+  version = "7.3.3";
   pname = "offlineimap";
 
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap";
     rev = "v${version}";
-    sha256 = "0h5q5nk2p2vx86w6rrbs7v70h81dpqqr68x6l3klzl3m0yj9agb1";
+    sha256 = "1gg8ry67i20qapj4z20am9bm67m2q28kixcj7ja75m897vhzarnq";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ python2Packages.buildPythonApplication rec {
   doCheck = false;
 
   nativeBuildInputs = [ asciidoc libxml2 libxslt docbook_xsl ];
-  propagatedBuildInputs = with python2Packages; [ six kerberos ];
+  propagatedBuildInputs = with python2Packages; [ six kerberos rfc6555 pysocks ];
 
   postInstall = ''
     make -C docs man
@@ -33,8 +33,8 @@ python2Packages.buildPythonApplication rec {
 
   meta = {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
-    homepage = http://offlineimap.org;
+    homepage = "http://offlineimap.org";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    maintainers = with stdenv.lib.maintainers; [ endocrimes ];
   };
 }

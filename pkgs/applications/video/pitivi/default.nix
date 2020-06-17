@@ -12,7 +12,7 @@ let
   # don't bother exposing the package to all of nixpkgs.
   gst-transcoder = stdenv.mkDerivation rec {
     version = "1.14.1";
-    name = "gst-transcoder-${version}";
+    pname = "gst-transcoder";
     src = fetchFromGitHub {
       owner = "pitivi";
       repo = "gst-transcoder";
@@ -68,7 +68,7 @@ in python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Non-Linear video editor utilizing the power of GStreamer";
-    homepage = http://pitivi.org/;
+    homepage = "http://pitivi.org/";
     longDescription = ''
       Pitivi is a video editor built upon the GStreamer Editing Services.
       It aims to be an intuitive and flexible application

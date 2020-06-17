@@ -1,10 +1,10 @@
 { stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "philter-${version}";
+  pname = "philter";
   version = "1.1";
   src = fetchurl {
-    url = "mirror://sourceforge/philter/${name}.tar.gz";
+    url = "mirror://sourceforge/philter/${pname}-${version}.tar.gz";
     sha256 = "177pqfflhdn2mw9lc1wv9ik32ji69rjqr6dw83hfndwlsva5151l";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mail sorter for Maildirs";
-    homepage = http://philter.sourceforge.net;
+    homepage = "http://philter.sourceforge.net";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;

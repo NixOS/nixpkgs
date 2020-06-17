@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, qmake, taglib }:
 
 stdenv.mkDerivation rec {
-  name = "keyfinder-${version}";
+  pname = "keyfinder";
   version = "2.2";
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       management, no track suggestions, no media player. Just a fast,
       efficient workflow tool.
     '';
-    homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
+    homepage = "http://www.ibrahimshaath.co.uk/keyfinder/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
