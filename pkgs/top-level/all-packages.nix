@@ -5696,6 +5696,8 @@ in
 
   openresolv = callPackage ../tools/networking/openresolv { };
 
+  openrgb = libsForQt5.callPackage ../applications/misc/openrgb { };
+
   opensc = callPackage ../tools/security/opensc {
     inherit (darwin.apple_sdk.frameworks) Carbon PCSC;
   };
