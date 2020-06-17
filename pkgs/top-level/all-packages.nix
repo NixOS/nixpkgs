@@ -672,6 +672,10 @@ in
 
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
 
+  apk-tools = callPackage ../tools/package-management/apk-tools {
+    lua = lua5_3;
+  };
+
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
   };
