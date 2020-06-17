@@ -5015,7 +5015,6 @@ broken-packages:
   - GeocoderOpenCage
   - geodetic
   - geodetic-types
-  - geojson
   - geojson-types
   - geolite-csv
   - geom2d
