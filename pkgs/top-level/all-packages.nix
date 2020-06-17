@@ -15540,6 +15540,8 @@ in
     kerberos = libkrb5;
   };
 
+  adguardhome = callPackage ../servers/adguardhome {};
+
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = pkgs.apacheHttpd_2_4;
 
