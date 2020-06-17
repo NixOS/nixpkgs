@@ -1,108 +1,108 @@
 [{
   "pname": "de_core_news_md",
-  "version": "2.2.5",
-  "sha256": "1jkc4r0f1916k5qpmpnwawsbnrbscq250q7b1llgxi70f2xyw9gk",
+  "version": "2.3.0",
+  "sha256": "0kxir1w000r5fn1kpa38m7688xinkn2mk1m82aiwqlck3r72jdi6",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "de_core_news_sm",
-  "version": "2.2.5",
-  "sha256": "10z30hirfwa692m0zp6wk60ccvqj84i5vjaiyyzd21innysb5y3g",
+  "version": "2.3.0",
+  "sha256": "00cbmrf4njg28laysapdnp4rv4lw4yw03rxkynw1ain5fwb0izl7",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "el_core_news_md",
-  "version": "2.2.5",
-  "sha256": "1jjmf6rf1hjgqswhpqq2l5w7s351k4kk93c7rr85iv2754f71h36",
+  "version": "2.3.0",
+  "sha256": "170x8bzm5nf02mhkxyxjk58yk2639hsjb5b9prcc69500c0vmnp0",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "el_core_news_sm",
-  "version": "2.2.5",
-  "sha256": "00h55fc27d3jfm3knyidz7a4rasiz7qs4wfs3sl0ndq815yvag0l",
+  "version": "2.3.0",
+  "sha256": "10mh3za4jvr07rawzk8ps642rp11s3smraj9xvrxflik4fqkz18b",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "en_core_web_lg",
-  "version": "2.2.5",
-  "sha256": "1shd4gkshr4a92fhvrjhzn1abywnrcf548cv3dz8dhmi0wxa4klr",
+  "version": "2.3.0",
+  "sha256": "0mfa5wz31ya295jhyj489gb4qy806zmpq1zc11bvv5alv2m35if2",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "en_core_web_md",
-  "version": "2.2.5",
-  "sha256": "1x32vl2a75ps2iyhysjvdygd366zs546s82yzqwj2m7jcsdszrxy",
+  "version": "2.3.0",
+  "sha256": "1ys8sqkhiap1mq6mhbkbq8bc07lvl68xngbx725xkwvirzl5gabh",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "en_core_web_sm",
-  "version": "2.2.5",
-  "sha256": "1vna6zik7863hahxdgz0s80kbbfyw42h4c1k5jby9lkzr5jr1dk0",
+  "version": "2.3.0",
+  "sha256": "04icv9qf4pj53ll8vqxcjl2a723q1k00i7lifk8wx5saif28g37a",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "en_vectors_web_lg",
-  "version": "2.1.0",
-  "sha256": "1sq41pr70215f2s8k35x5ni4w0i4xhbzbfg3iyxgbp1b35gizg94",
+  "version": "2.3.0",
+  "sha256": "13g012rwh0bcxx3ii5mmygqzyryah1y3zd000zhidnacc1x1g743",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "es_core_news_md",
-  "version": "2.2.5",
-  "sha256": "0b50gd2mx1klr6ss0fsj58qmw2wpbawwv015pr9vq3j7jq805scl",
+  "version": "2.3.0",
+  "sha256": "0nz33bmpr3rxqbnv6vb1id8pkfsvh8ii8vqplwgb3b8772kmpzy2",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "es_core_news_sm",
-  "version": "2.2.5",
-  "sha256": "19hrpxg1a5bvf9j9wlm03rkxfkgrldky7alsgl8bdwnwq3vpbgfi",
+  "version": "2.3.0",
+  "sha256": "02xqhg4m0gg5r9yibvl02zixkll6w0nsmbdhp07y5yyaqjarc90d",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "fr_core_news_md",
-  "version": "2.2.5",
-  "sha256": "1y4dqbcwa7gg6z8q84n0j4my7gyia7a2z7pln71sqa78pin06r9b",
+  "version": "2.3.0",
+  "sha256": "04fk212ksac3bp9dj7dmzsdcnbqmbsgymsic6ddcv9zbfdv5d0db",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "fr_core_news_sm",
-  "version": "2.2.5",
-  "sha256": "1q2kvznbylyz4frxy5rbvpm5jvm7bfin8g3dks0c1k9hhdymv35y",
+  "version": "2.3.0",
+  "sha256": "0kldww855z67qfc9maa9z1lsvdf5vj5vc8gj0x3h68kv5n1xr4h0",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "it_core_news_sm",
-  "version": "2.2.5",
-  "sha256": "02r3x308s5kn62xpa2cizxfw7cyjk48zm9i6r4vhs8kycmp9z0px",
+  "version": "2.3.0",
+  "sha256": "1c3ywqa8li0j7cyvd1xqbb096y61978hd6qv7rc6cxxjdhmkrrds",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "lt_core_news_sm",
-  "version": "2.2.5",
-  "sha256": "0vy0cff1fw33srqyi93vj03rnzqr8f62p1hwi565b0sb8v3n4p08",
+  "version": "2.3.0",
+  "sha256": "0r3rbqgz4897wyhz5jli30lryb45039f4rlvn4q0364cg1pm92g9",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "nb_core_news_sm",
-  "version": "2.2.5",
-  "sha256": "1kdn3qwlmmd52sjrvi97aiv7xp260bka009jjal79l3qrz4czrw1",
+  "version": "2.3.0",
+  "sha256": "07b7xri2q3m7fvn9a2gjc1044a3f14231vr32hrw96h7k6vg95h7",
   "license": "mit"
 },
 {
   "pname": "nl_core_news_sm",
-  "version": "2.2.1",
-  "sha256": "0gw9a1j3v4f15cxcz7zr7dz7mqi2a3541b04q6kj74gg397li4ny",
+  "version": "2.3.0",
+  "sha256": "0alvz7pn7cj0yax8h5gp71vrdblh3mcsmyhzgiddsd44ry35nxnj",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "pt_core_news_sm",
-  "version": "2.2.5",
-  "sha256": "02p617ybh6wqmq1scch9dgim44rhhj0k81sbw8nysv20pc6wb89a",
+  "version": "2.3.0",
+  "sha256": "1vcvzdg9f93x0vaafkk9l9xhpmaavfj0cf0l3p06c5kx2d76f9ph",
   "license": "cc-by-sa-40"
 },
 {
   "pname": "xx_ent_wiki_sm",
-  "version": "2.2.0",
-  "sha256": "0niwnd1mdaji92yp2dqsbmr0w420gpaybb1ppbqr1rmk6bwgyhsb",
+  "version": "2.3.0",
+  "sha256": "0x3zmmybl5kh4dn5prkfmr4q5j9bh13p40qc3rhdfi0i3jxc11pn",
   "license": "cc-by-sa-40"
 }]

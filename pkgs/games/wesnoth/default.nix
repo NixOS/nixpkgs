@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
 , pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
 , Cocoa, Foundation
 , enableTools ? false
@@ -6,11 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.14.11";
+  version = "1.14.12";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1i8mz6gw3qar09bscczhki0g4scj8pl58v85rp0g55r4bcq41l5v";
+  src = fetchFromGitHub {
+    rev = version;
+    owner = "wesnoth";
+    repo = "wesnoth";
+    sha256 = "0xpypy0yfjmjp3apvlh51nm19p1cjhjw2p547kvmrckm7y6naaw8";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
       adventures.
     '';
 
-    homepage = "http://www.wesnoth.org/";
+    homepage = "https://www.wesnoth.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;

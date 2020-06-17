@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , numpy
-, ffmpeg_4
+, ffmpeg
 , pkgconfig
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   checkInputs = [ numpy ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ffmpeg_4 ];
+  buildInputs = [ ffmpeg ];
 
   # Tests require downloading files from internet
   doCheck = false;

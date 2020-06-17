@@ -1,5 +1,5 @@
 { lib, fetchurl, buildPythonPackage
-, zip, ffmpeg_4, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
+, zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   makeWrapperArgs = let
       packagesToBinPath =
         [ atomicparsley ]
-        ++ lib.optional ffmpegSupport ffmpeg_4
+        ++ lib.optional ffmpegSupport ffmpeg
         ++ lib.optional rtmpSupport rtmpdump
         ++ lib.optional phantomjsSupport phantomjs2;
     in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];

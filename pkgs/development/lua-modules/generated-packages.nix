@@ -359,6 +359,33 @@ inspect = buildLuarocksPackage {
     license.fullName = "MIT <http://opensource.org/licenses/MIT>";
   };
 };
+ldbus = buildLuarocksPackage {
+  pname = "ldbus";
+  version = "scm-0";
+
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/dev/ldbus-scm-0.rockspec";
+    sha256 = "1yhkw5y8h1qf44vx31934k042cmnc7zcv2k0pv0g27wsmlxrlznx";
+  }).outPath;
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "git://github.com/daurnimator/ldbus.git",
+  "rev": "9e176fe851006037a643610e6d8f3a8e597d4073",
+  "date": "2019-08-16T14:26:05+10:00",
+  "sha256": "06wcz4i5b7kphqbry274q3ivnsh331rxiyf7n4qk3zx2kvarq08s",
+  "fetchSubmodules": true
+}
+ '') ["date"]) ;
+
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/daurnimator/ldbus";
+    description = "A Lua library to access dbus.";
+    license.fullName = "MIT/X11";
+  };
+};
 ldoc = buildLuarocksPackage {
   pname = "ldoc";
   version = "1.4.6-2";

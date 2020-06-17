@@ -25,11 +25,11 @@ assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wra
 
 stdenv.mkDerivation rec {
   pname = "vlc";
-  version = "3.0.10";
+  version = "3.0.11";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0cackl1084hcmg4myf3kvjvd6sjxmzn0c0qkmanz6brvgzyanrm9";
+    sha256 = "06a9hfl60f6l0fs5c9ma5s8np8kscm4ala6m2pdfji9lyfna351y";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "bazel-buildtools";
-  version = "3.2.0";
+  version = "3.2.1";
 
   goPackagePath = "github.com/bazelbuild/buildtools";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "bazelbuild";
     repo = "buildtools";
     rev = version;
-    sha256 = "0r3vc47w5vxgy5rzh75q0lng1c490ic1a1dcc0ih7dcl6i5p1p88";
+    sha256 = "1f2shjskcmn3xpgvb9skli5xaf942wgyg5ps7r905n1zc0gm8izn";
   };
 
   goDeps = ./deps.nix;
