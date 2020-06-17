@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "A glossy Matrix collaboration client for the web";
     homepage = "http://riot.im/";
-    maintainers = with stdenv.lib.maintainers; [ bachp pacien ma27 ];
+    maintainers = stdenv.lib.teams.matrix.members;
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
     hydraPlatforms = [];
