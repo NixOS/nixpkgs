@@ -1656,6 +1656,8 @@ in
 
   desync = callPackage ../applications/networking/sync/desync { };
 
+  devdocs-desktop = callPackage ../applications/misc/devdocs-desktop { };
+
   devmem2 = callPackage ../os-specific/linux/devmem2 { };
 
   dbus-broker = callPackage ../os-specific/linux/dbus-broker { };
