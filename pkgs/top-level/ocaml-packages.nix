@@ -170,11 +170,9 @@ let
     cstruct =
       if lib.versionAtLeast ocaml.version "4.2"
       then callPackage ../development/ocaml-modules/cstruct {}
-      else callPackage ../development/ocaml-modules/cstruct/1.9.0.nix { lwt = ocaml_lwt; };
+      else callPackage ../development/ocaml-modules/cstruct/1.9.0.nix { };
 
-    cstruct-lwt = callPackage ../development/ocaml-modules/cstruct/lwt.nix {
-      lwt = ocaml_lwt;
-    };
+    cstruct-lwt = callPackage ../development/ocaml-modules/cstruct/lwt.nix { };
 
     cstruct-sexp = callPackage ../development/ocaml-modules/cstruct/sexp.nix {};
 
@@ -459,35 +457,25 @@ let
       llvm = pkgs.llvm_8;
     };
 
-    logs = callPackage ../development/ocaml-modules/logs {
-      lwt = ocaml_lwt;
-    };
+    logs = callPackage ../development/ocaml-modules/logs { };
 
     lru = callPackage ../development/ocaml-modules/lru { };
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
 
-    lwt4 = callPackage ../development/ocaml-modules/lwt/4.x.nix { };
+    lwt = callPackage ../development/ocaml-modules/lwt { };
 
-    ocaml_lwt = lwt4;
+    ocaml_lwt = lwt;
 
     lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
 
-    lwt_log = callPackage ../development/ocaml-modules/lwt_log {
-      lwt = lwt4;
-    };
+    lwt_log = callPackage ../development/ocaml-modules/lwt_log { };
 
-    lwt_ppx = callPackage ../development/ocaml-modules/lwt/ppx.nix {
-      lwt = ocaml_lwt;
-    };
+    lwt_ppx = callPackage ../development/ocaml-modules/lwt/ppx.nix { };
 
-    lwt_react = callPackage ../development/ocaml-modules/lwt_react {
-      lwt = ocaml_lwt;
-    };
+    lwt_react = callPackage ../development/ocaml-modules/lwt_react { };
 
-    lwt_ssl = callPackage ../development/ocaml-modules/lwt_ssl {
-      lwt = ocaml_lwt;
-    };
+    lwt_ssl = callPackage ../development/ocaml-modules/lwt_ssl { };
 
     macaddr = callPackage ../development/ocaml-modules/macaddr { };
 
@@ -497,7 +485,7 @@ let
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
-    markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
+    markup = callPackage ../development/ocaml-modules/markup { };
 
     mdx = callPackage ../development/ocaml-modules/mdx { };
 
@@ -565,9 +553,7 @@ let
 
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
 
-    notty = callPackage ../development/ocaml-modules/notty {
-      lwt = ocaml_lwt;
-    };
+    notty = callPackage ../development/ocaml-modules/notty { };
 
     npy = callPackage ../development/ocaml-modules/npy {
       inherit (pkgs.python3Packages) numpy;
