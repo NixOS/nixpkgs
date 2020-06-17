@@ -8915,6 +8915,12 @@
     githubId = 474343;
     name = "Xavier Zwirtz";
   };
+  ymarkus = {
+    name = "Yannick Markus";
+    email = "nixpkgs@ymarkus.dev";
+    github = "ymarkus";
+    githubId = 62380378;
+  };
   ymeister = {
     name = "Yuri Meister";
     email = "47071325+ymeister@users.noreply.github.com";
