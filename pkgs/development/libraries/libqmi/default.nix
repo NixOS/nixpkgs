@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, python3, libgudev, libmbim }:
+{ stdenv, fetchurl, pkg-config, gobject-introspection, glib, python3, libgudev, libmbim }:
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
@@ -13,10 +13,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"
+    "--enable-introspection"
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
+    gobject-introspection
     python3
   ];
 
