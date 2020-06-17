@@ -2536,6 +2536,8 @@ in {
 
   PyLD = callPackage ../development/python-modules/PyLD { };
 
+  pysingleton = callPackage ../development/python-modules/pysingleton { };
+
   python-jose = callPackage ../development/python-modules/python-jose {};
 
   python-json-logger = callPackage ../development/python-modules/python-json-logger { };
