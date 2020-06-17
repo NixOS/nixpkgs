@@ -3614,7 +3614,7 @@ let
       sha256 = "3cc7126d5841107237a9be2dc5c7fbc167cf3c4b4ce34678a8448b850757014c";
     };
     propagatedBuildInputs = [ ClassMix ];
-    perlPreHook = stdenv.lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = stdenv.lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
   };
 
   CryptIDEA = buildPerlPackage {
