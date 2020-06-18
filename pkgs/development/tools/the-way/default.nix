@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "out-of-cheese-error";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "02aa4iwwi89r6sj1q5sj74n2cy1rj94yfh39cp97zlx4lam9pj6b";
   };
 
