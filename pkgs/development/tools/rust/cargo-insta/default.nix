@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, runCommand }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
