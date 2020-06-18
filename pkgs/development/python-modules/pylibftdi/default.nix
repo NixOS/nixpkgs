@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , libftdi1
@@ -7,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pylibftdi";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17c5h4xz1grynbpffngjflk3dlw2g2zbhkwb7h5v4n9rjdv41l5x";
+    sha256 = "0ghjjakifcrnvbmrwmg1323k6kfzp67ykwbvld58ivwjy96wf3mv";
   };
 
   propagatedBuildInputs = [
@@ -21,14 +22,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pylibftdi/driver.py \
-      --replace "self._load_library('libusb')" "cdll.LoadLibrary('${libusb1.out}/lib/libusb-1.0.so')" \
-      --replace "self._load_library('libftdi')" "cdll.LoadLibrary('${libftdi1.out}/lib/libftdi1.so')"
+      --replace "self._load_library('libusb')" \
+        "cdll.LoadLibrary('${libusb1.out}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}')" \
+      --replace "self._load_library('libftdi')" \
+        "cdll.LoadLibrary('${libftdi1.out}/lib/libftdi1${stdenv.hostPlatform.extensions.sharedLibrary}')"
   '';
 
   pythonImportsCheck = [ "pylibftdi" ];
 
   meta = with lib; {
-    homepage = "https://bitbucket.org/codedstructure/pylibftdi/src/default/";
+    homepage = "https://github.com/codedstructure/pylibftdi";
     description = "Minimal pythonic wrapper to Intra2net's libftdi driver for FTDI's USB devices";
     license = licenses.mit;
     maintainers = with maintainers; [ matthuszagh ];
