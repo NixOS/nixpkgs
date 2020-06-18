@@ -12,6 +12,19 @@ let
     (optionalString (cfg.defaultMode == "norouting") "--routing=none")
   ] ++ cfg.extraFlags);
 
+  splitMulitaddr = addrRaw: lib.tail (lib.splitString "/" addrRaw);
+
+  multiaddrToListenStream = addrRaw: let
+      addr = splitMulitaddr addrRaw;
+      s = builtins.elemAt addr;
+    in if s 0 == "ip4" && s 2 == "tcp"
+      then "${s 1}:${s 3}"
+    else if s 0 == "ip6" && s 2 == "tcp"
+      then "[${s 1}]:${s 3}"
+    else if s 0 == "unix"
+      then "/${lib.concatStringsSep "/" (lib.tail addr)}"
+    else null; # not valid for listen stream, skip
+
 in {
 
   ###### interface
@@ -80,7 +93,10 @@ in {
 
       swarmAddress = mkOption {
         type = types.listOf types.str;
-        default = [ "/ip4/0.0.0.0/tcp/4001" "/ip6/::/tcp/4001" ];
+        default = [
+          "/ip4/0.0.0.0/tcp/4001"
+          "/ip6/::/tcp/4001"
+        ];
         description = "Where IPFS listens for incoming p2p connections";
       };
 
@@ -250,14 +266,18 @@ in {
 
     systemd.sockets.ipfs-gateway = {
       wantedBy = [ "sockets.target" ];
-      socketConfig.ListenStream = [ "" ]
-        ++ lib.optional (cfg.gatewayAddress == opt.gatewayAddress.default) [ "127.0.0.1:8080" "[::1]:8080" ];
+      socketConfig.ListenStream = let
+          fromCfg = multiaddrToListenStream cfg.gatewayAddress;
+        in [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
     };
 
     systemd.sockets.ipfs-api = {
       wantedBy = [ "sockets.target" ];
-      socketConfig.ListenStream = [ "" "%t/ipfs.sock" ]
-        ++ lib.optional (cfg.apiAddress == opt.apiAddress.default) [ "127.0.0.1:5001" "[::1]:5001" ];
+      # We also include "%t/ipfs.sock" because tere is no way to put the "%t"
+      # in the multiaddr.
+      socketConfig.ListenStream = let
+          fromCfg = multiaddrToListenStream cfg.apiAddress;
+        in [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
     };
 
   };
