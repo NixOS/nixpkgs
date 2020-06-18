@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "blackbox_exporter";
@@ -16,6 +16,8 @@ buildGoPackage rec {
 
   # dns-lookup is performed for the tests
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) blackbox; };
 
   meta = with stdenv.lib; {
     description = "Blackbox probing of endpoints over HTTP, HTTPS, DNS, TCP and ICMP";
