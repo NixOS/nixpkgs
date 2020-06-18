@@ -2778,6 +2778,8 @@ in {
 
   elementpath = callPackage ../development/python-modules/elementpath { };
 
+  eliot = callPackage ../development/python-modules/eliot { };
+
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
   envisage = callPackage ../development/python-modules/envisage { };
