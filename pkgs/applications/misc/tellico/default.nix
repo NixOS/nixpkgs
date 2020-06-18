@@ -23,10 +23,9 @@
 mkDerivation rec {
   name = "tellico";
   version = "3.3.0";
-  pversion = "3.3";
 
   src = fetchurl {
-    url = "https://tellico-project.org/files/tellico-${pversion}.tar.xz";
+    url = "https://tellico-project.org/files/tellico-${lib.versions.majorMinor version}.tar.xz";
     sha256 = "1digkpvzrsbv5znf1cgzs6zkmysfz6lzs12n12mrrpgkcdxc426y";
   };
 
