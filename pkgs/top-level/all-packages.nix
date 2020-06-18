@@ -11046,6 +11046,8 @@ in
 
   swiftformat = callPackage ../development/tools/swiftformat { };
 
+  swiftshader = callPackage ../development/libraries/swiftshader { };
+
   systemfd = callPackage ../development/tools/systemfd { };
 
   swig1 = callPackage ../development/tools/misc/swig { };
