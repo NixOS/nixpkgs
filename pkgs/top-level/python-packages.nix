@@ -3749,6 +3749,8 @@ in {
 
   flask-babelex = callPackage ../development/python-modules/flask-babelex { };
 
+  flask-basicauth = callPackage ../development/python-modules/flask-basicauth { };
+
   flask-bcrypt = callPackage ../development/python-modules/flask-bcrypt { };
 
   flask-bootstrap = callPackage ../development/python-modules/flask-bootstrap { };
