@@ -3901,6 +3901,12 @@
     githubId = 2396926;
     name = "Justin Woo";
   };
+  jwatt = {
+    email = "jwatt@broken.watch";
+    github = "jjwatt";
+    githubId = 2397327;
+    name = "Jesse Wattenbarger";
+  };
   jwiegley = {
     email = "johnw@newartisans.com";
     github = "jwiegley";
