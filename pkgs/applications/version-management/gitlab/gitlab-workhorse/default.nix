@@ -3,13 +3,13 @@
 buildGoPackage rec {
   pname = "gitlab-workhorse";
 
-  version = "8.30.2";
+  version = "8.30.3";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-workhorse";
     rev = "v${version}";
-    sha256 = "1ws59ry16kx4nqp92xcqw3fri570pvpdgvy822ndi7rybw5xij7p";
+    sha256 = "13xnx04j8p31l1lslcixf3ihagz9brih9zvypwnjb76ipgcg431z";
   };
 
   goPackagePath = "gitlab.com/gitlab-org/gitlab-workhorse";

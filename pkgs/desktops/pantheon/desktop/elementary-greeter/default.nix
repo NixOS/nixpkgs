@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "5.0.3";
+  version = "5.0.4";
 
   repoName = "greeter";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1zbfcdgjn57r8pz01xrz6kk8rmviq133snz9f1vqhjdsznk82w5i";
+    sha256 = "1zrsvbd386f7r3jbvjf8j08v1n5cpzkbjjaj2lxvjn8b81xgwy8j";
   };
 
   passthru = {
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     # Needed until https://github.com/elementary/greeter/issues/360 is fixed
     (substituteAll {
       src = ./hardcode-fallback-background.patch;
-      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png";
+      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
     })
   ];
 
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     # Use NixOS default wallpaper
     substituteInPlace $out/etc/lightdm/io.elementary.greeter.conf \
       --replace "#default-wallpaper=/usr/share/backgrounds/elementaryos-default" \
-      "default-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png"
+      "default-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
 
     substituteInPlace $out/share/xgreeters/io.elementary.greeter.desktop \
       --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"

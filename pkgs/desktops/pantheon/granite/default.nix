@@ -10,19 +10,22 @@
 , gtk3
 , glib
 , gettext
+, gsettings-desktop-schemas
 , gobject-introspection
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "5.3.1";
+  version = "5.4.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "12f1n07cjlc7czf642ak6964wl4fsgakc39nnmiba22z5aahfpz9";
+    sha256 = "0acicv3f9gksb352v88lwap8ailjsxdrfknl2xql7blasbjzl2q0";
   };
 
   passthru = {
@@ -46,6 +49,10 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libgee
+  ];
+
+  propagatedBuildInputs = [
+    gsettings-desktop-schemas # is_clock_format_12h uses "org.gnome.desktop.interface clock-format"
   ];
 
   postPatch = ''

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sideload";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1nnaq4vc0aag6pckxhrma5qv8al7i00rrlg95ac4iqqmivja7i92";
+    sha256 = "0mlc3nm2navzxm8k1rwpbw4w6mv30lmhqybm8jqxd4v8x7my73vq";
   };
 
   passthru = {
