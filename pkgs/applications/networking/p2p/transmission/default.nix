@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, file, wrapGAppsHook
 , openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
@@ -23,6 +23,16 @@ stdenv.mkDerivation rec {
     ++ optionals enableGTK3 [ gtk3 ]
     ++ optionals enableSystemd [ systemd ]
     ++ optionals stdenv.isLinux [ inotify-tools ];
+
+  patches = [
+    (fetchpatch {
+      name = "cve-2018-10756.diff";
+      url = "https://src.fedoraproject.org/rpms/transmission/raw/ec98cd40/f/"
+          + "2123adf8e5e1c2b48791f9d22fc8c747e974180e.patch";
+      extraPrefix = "./"; # this way we don't need to add -p0 flag
+      sha256 = "1wq2sk81yyi8ida4115f9mpkna63dijkx8vphac72w2fhpz905k7";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace ./configure \
