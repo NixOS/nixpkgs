@@ -31,6 +31,7 @@
 , rttr
 , kpurpose
 , kdeclarative
+, wrapGAppsHook
 }:
 
 mkDerivation {
@@ -69,6 +70,7 @@ mkDerivation {
     rttr
     kpurpose
     kdeclarative
+    wrapGAppsHook
   ];
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:
