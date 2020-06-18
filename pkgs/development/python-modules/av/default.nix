@@ -1,14 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , numpy
-, ffmpeg_4
+, ffmpeg
 , pkgconfig
 }:
 
 buildPythonPackage rec {
   pname = "av";
   version = "8.0.2";
+  disabled = isPy27; # setup.py no longer compatible
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ numpy ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ffmpeg_4 ];
+  buildInputs = [ ffmpeg ];
 
   # Tests require downloading files from internet
   doCheck = false;

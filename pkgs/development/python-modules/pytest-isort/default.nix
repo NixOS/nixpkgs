@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, isort }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, mock, pytest, isort }:
 
 buildPythonPackage rec {
   pname = "pytest-isort";
@@ -11,7 +11,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ isort ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest ]
+    ++ lib.optionals isPy27 [ mock ];
 
   checkPhase = ''
     py.test -vs --cache-clear

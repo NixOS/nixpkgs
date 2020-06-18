@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , mock
 , setuptools_scm
 }:
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   version = "2.4.0";
   pname = "humanize";
+  disabled = isPy27; # setup.py no longer compatible
 
   src = fetchPypi {
     inherit pname version;

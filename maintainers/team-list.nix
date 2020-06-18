@@ -57,6 +57,18 @@ with lib.maintainers; {
     scope = "Maintain GNOME desktop environment and platform.";
   };
 
+  matrix = {
+    members = [
+      ma27
+      pacien
+      fadenb
+      mguentner
+      ekleog
+      ralith
+    ];
+    scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+  };
+
   php = {
     members = [
       aanderse

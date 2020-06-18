@@ -17,7 +17,7 @@
 #
 # if vendorSha256 is null, then we won't fetch any dependencies and
 # rely on the vendor folder within the source.
-, vendorSha256 ? null
+, vendorSha256
 # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
 

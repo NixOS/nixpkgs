@@ -1,10 +1,11 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ stdenv, fetchPypi, buildPythonPackage, isPy27
 , mock, pytestCheckHook, nose, hypothesis
 }:
 
 buildPythonPackage rec {
   pname = "dpath";
   version = "2.0.1";
+  disabled = isPy27; # uses python3 imports
 
   src = fetchPypi {
     inherit pname version;

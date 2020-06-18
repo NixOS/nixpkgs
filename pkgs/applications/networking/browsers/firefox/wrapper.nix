@@ -2,7 +2,7 @@
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
-, ffmpeg_4, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
+, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
 , gnome3/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
 , tridactyl-native
@@ -66,7 +66,7 @@ let
           ++ extraNativeMessagingHosts
         );
       libs =   lib.optionals stdenv.isLinux [ udev libva ]
-            ++ lib.optional ffmpegSupport ffmpeg_4
+            ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
             ++ lib.optional gdkWayland libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)

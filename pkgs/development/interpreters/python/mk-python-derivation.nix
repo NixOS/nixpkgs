@@ -165,6 +165,9 @@ let
   # Python packages built through cross-compilation are always for the host platform.
   disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
 
+  # For now, revert recompilation of bytecode.
+  dontUsePythonRecompileBytecode = true;
+
   meta = {
     # default to python's platforms
     platforms = python.meta.platforms;

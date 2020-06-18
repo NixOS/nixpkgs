@@ -1,8 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, pytest } :
+{ lib, fetchPypi, buildPythonPackage, isPy27, pytest } :
 
 buildPythonPackage rec {
   pname = "inflection";
   version = "0.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
    inherit pname version;

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab
 , meson, ninja, pkgconfig, scdoc
 , wayland, wayland-protocols, openssh
-, mesa, lz4, zstd, ffmpeg_4, libva
+, mesa, lz4, zstd, ffmpeg, libva
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland wayland-protocols
     # Optional dependencies:
-    mesa lz4 zstd ffmpeg_4 libva
+    mesa lz4 zstd ffmpeg libva
   ];
 
   enableParallelBuilding = true;
