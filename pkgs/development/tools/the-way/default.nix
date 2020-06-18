@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
-  version = "v0.3.2";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "out-of-cheese-error";
