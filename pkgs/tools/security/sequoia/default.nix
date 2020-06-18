@@ -90,6 +90,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ minijackson doronbehar ];
     platforms = platforms.all;
-    broken = stdenv.targetPlatform.isDarwin;
   };
 }
