@@ -1,4 +1,5 @@
 { stdenv, fetchurl, buildPackages
+, fetchpatch
 , name ? "luajit-${version}"
 , isStable
 , sha256
@@ -20,6 +21,13 @@ stdenv.mkDerivation rec {
 
   luaversion = "5.1";
 
+  patches = [
+    (fetchpatch {
+      name = "cve-2019-19391.patch";
+      url = "https://github.com/LuaJIT/LuaJIT/commit/0cd643d7c.diff";
+      sha256 = "1ya5h6r3mi7mkjy6bj1hjbl43j3lwh4phmi5q792rrz8az64hnjy";
+    })
+  ];
   postPatch = ''
     substituteInPlace Makefile --replace ldconfig :
   '';
