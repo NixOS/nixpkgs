@@ -145,11 +145,16 @@ in {
     client2.succeed("[ $(consul kv get testkey) == 42 ]")
 
 
-    def rolling_reboot_test():
+    def rolling_reboot_test(proper_rolling_procedure=True):
         """
         Tests that the cluster can tolearate failures of any single server,
         following the recommended rolling upgrade procedure from
-        https://www.consul.io/docs/upgrading#standard-upgrades
+        https://www.consul.io/docs/upgrading#standard-upgrades.
+
+        Optionally, `proper_rolling_procedure=False` can be given
+        to wait only for each server to be back `Healthy`, not `Stable`
+        in the Raft consensus, see Consul setting `ServerStabilizationTime` and
+        https://github.com/hashicorp/consul/issues/8118#issuecomment-645330040.
         """
 
         for server in servers:
@@ -168,8 +173,12 @@ in {
             # Restart crashed machine.
             server.start()
 
-            # Wait for recovery.
-            wait_for_healthy_servers()
+            if proper_rolling_procedure:
+                # Wait for recovery.
+                wait_for_healthy_servers()
+            else:
+                # NOT proper rolling upgrade procedure, see above.
+                wait_for_all_machines_alive()
 
             # Wait for client connections.
             client1.wait_until_succeeds("consul kv get -recurse")
@@ -181,7 +190,40 @@ in {
             client2.succeed("consul kv delete testkey")
 
 
+    def all_servers_crash_simultaneously_test():
+        """
+        Tests that the cluster will eventually come back after all
+        servers crash simultaneously.
+        """
+
+        for server in servers:
+            server.crash()
+
+        for server in servers:
+            server.start()
+
+        # Wait for recovery.
+        wait_for_healthy_servers()
+
+        # Wait for client connections.
+        client1.wait_until_succeeds("consul kv get -recurse")
+        client2.wait_until_succeeds("consul kv get -recurse")
+
+        # Do some consul actions with servers back up.
+        client1.succeed("consul kv put testkey 44")
+        client2.succeed("[ $(consul kv get testkey) == 44 ]")
+        client2.succeed("consul kv delete testkey")
+
+
     # Run the tests.
+
+    print("rolling_reboot_test()")
     rolling_reboot_test()
+
+    print("all_servers_crash_simultaneously_test()")
+    all_servers_crash_simultaneously_test()
+
+    print("rolling_reboot_test(proper_rolling_procedure=False)")
+    rolling_reboot_test(proper_rolling_procedure=False)
   '';
 })
