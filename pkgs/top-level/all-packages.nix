@@ -18997,6 +18997,8 @@ in
 
   carla = qt5.callPackage ../applications/audio/carla { };
 
+  caster-soundboard = libsForQt5.callPackage ../applications/audio/caster-soundboard { };
+
   catimg = callPackage ../tools/misc/catimg { };
 
   catt = python3Packages.callPackage ../applications/video/catt { };

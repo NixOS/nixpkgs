@@ -8927,4 +8927,10 @@
     github = "cpcloud";
     githubId = 417981;
   };
+  iqubic = {
+    name = "Avi Caspe";
+    email = "avi.caspe@gmail.com";
+    github = "iqubic";
+    githubId = 22628816;
+  };
 }
