@@ -1,3 +1,36 @@
+"""
+This script generates a Docker image from a set of store paths. Uses
+Docker Image Specification v1.2 as reference [1].
+
+It expects a JSON file with the following properties and writes the
+image as an uncompressed tarball to stdout:
+
+* "architecture", "config", "os", "created", "repo_tag" correspond to
+  the fields with the same name on the image spec [2].
+* "created" can be "now".
+* "created" is also used as mtime for files added to the image.
+* "store_layers" is a list of layers in ascending order, where each
+  layer is the list of store paths to include in that layer.
+
+The main challenge for this script to create the final image in a
+streaming fashion, without dumping any intermediate data to disk
+for performance.
+
+A docker image has each layer contents archived as separate tarballs,
+and they later all get enveloped into a single big tarball in a
+content addressed fashion. However, because how "tar" format works,
+we have to know about the name (which includes the checksum in our
+case) and the size of the tarball before we can start adding it to the
+outer tarball.  We achieve that by creating the layer tarballs twice;
+on the first iteration we calculate the file size and the checksum,
+and on the second one we actually stream the contents. 'add_layer_dir'
+function does all this.
+
+[1]: https://github.com/moby/moby/blob/master/image/spec/v1.2.md
+[2]: https://github.com/moby/moby/blob/4fb59c20a4fb54f944fe170d0ff1d00eb4a24d6f/image/spec/v1.2.md#image-json-field-descriptions
+"""  # noqa: E501
+
+
 import io
 import os
 import re
@@ -31,6 +64,9 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
         return ti
 
     with tarfile.open(fileobj=obj, mode="w|") as tar:
+        # To be consistent with the docker utilities, we need to have
+        # these directories first when building layer tarballs. But
+        # we don't need them on the customisation layer.
         if add_nix:
             tar.addfile(apply_filters(dir("/nix")))
             tar.addfile(apply_filters(dir("/nix/store")))
@@ -80,6 +116,7 @@ LayerInfo = namedtuple("LayerInfo", ["size", "checksum", "path", "paths"])
 def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
     assert all(i.startswith("/nix/store/") for i in paths)
 
+    # First, calculate the tarball checksum and the size.
     extract_checksum = ExtractChecksum()
     archive_paths_to(
         extract_checksum,
@@ -95,6 +132,7 @@ def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
     ti.size = size
     ti.mtime = mtime
 
+    # Then actually stream the contents to the outer tarball.
     read_fd, write_fd = os.pipe()
     with open(read_fd, "rb") as read, open(write_fd, "wb") as write:
         def producer():
@@ -106,12 +144,20 @@ def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
                 filter=filter
             )
             write.close()
+
+        # Closing the write end of the fifo also closes the read end,
+        # so we don't need to wait until this thread is finished.
+        #
+        # Any exception from the thread will get printed by the default
+        # exception handler, and the 'addfile' call will fail since it
+        # won't be able to read required amount of bytes.
         threading.Thread(target=producer).start()
         tar.addfile(ti, read)
 
     return LayerInfo(size=size, checksum=checksum, path=path, paths=paths)
 
 
+# Adds the contents of the store path to the root as a new layer.
 def add_customisation_layer(tar, path, mtime):
     def filter(ti):
         ti.name = re.sub("^/nix/store/[^/]*", "", ti.name)
