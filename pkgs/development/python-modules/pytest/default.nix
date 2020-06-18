@@ -44,7 +44,7 @@ buildPythonPackage rec {
   # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
   checkPhase = ''
     runHook preCheck
-    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths" --ignore=testing/test_junitxml.py
+    py.test -x testing/ -k "not test_collect_pyargs_with_testpaths" --ignore=testing/test_junitxml.py
     runHook postCheck
   '';
 

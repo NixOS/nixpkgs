@@ -145,16 +145,10 @@ let
 
   LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
 
-  # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
-  doInstallCheck = attrs.doCheck or true;
-  installCheckInputs = [
-  ] ++ lib.optionals (format == "setuptools") [
-    # Longer-term we should get rid of this and require
-    # users of this function to set the `installCheckPhase` or
-    # pass in a hook that sets it.
-    setuptoolsCheckHook
-  ] ++ checkInputs;
+  doInstallCheck = false;
+  checkPhase = ":";
+  installCheckPhase = ":";
 
   postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
@@ -163,15 +157,42 @@ let
   # Python packages built through cross-compilation are always for the host platform.
   disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
 
+  passthru = passthru // {
+    tests.installation = stdenv.mkDerivation {
+      name = "testing-${self.name}";
+      inherit (self) LANG strictDeps src;
+      preUnpack = self.preUnpack or "";
+      postUnpack = self.postUnpack or "";
+      sourceRoot = self.sourceRoot or "";
+
+      installCheckPhase = attrs.checkPhase or ":";
+
+      nativeBuildInputs = [
+        self
+      ] ++ lib.optionals (format == "setuptools") [
+        # Longer-term we should get rid of this and require
+        # users of this function to set the `installCheckPhase` or
+        # pass in a hook that sets it.
+        #setuptoolsCheckHook
+      ] ++ checkInputs ++ propagatedBuildInputs;
+
+      doCheck = false;
+      doInstallCheck = attrs.doCheck or true;
+
+      dontBuild = true;
+      dontFixup = true;
+
+      installPhase = ''
+        ln -s ${self} $out
+      '';
+    };
+  };
+
   meta = {
     # default to python's platforms
     platforms = python.meta.platforms;
     isBuildPythonPackage = python.meta.platforms;
   } // meta;
-} // lib.optionalAttrs (attrs?checkPhase) {
-  # If given use the specified checkPhase, otherwise use the setup hook.
-  # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
-  installCheckPhase = attrs.checkPhase;
 }));
 
 passthru.updateScript = let
