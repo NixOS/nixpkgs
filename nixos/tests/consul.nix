@@ -107,40 +107,58 @@ in {
     for m in machines:
         m.wait_for_unit("consul.service")
 
+
+    def wait_for_healthy_servers():
+        for m in machines:
+            m.wait_until_succeeds("[ $(consul members | grep -o alive | wc -l) == 5 ]")
+
+
+    wait_for_healthy_servers()
+    # Also wait for clients to be alive.
     for m in machines:
         m.wait_until_succeeds("[ $(consul members | grep -o alive | wc -l) == 5 ]")
 
     client1.succeed("consul kv put testkey 42")
     client2.succeed("[ $(consul kv get testkey) == 42 ]")
 
-    # Test that the cluster can tolearate failures of any single server:
-    for server in servers:
-        server.crash()
 
-        # For each client, wait until they have connection again
-        # using `kv get -recurse` before issuing commands.
-        client1.wait_until_succeeds("consul kv get -recurse")
-        client2.wait_until_succeeds("consul kv get -recurse")
+    def rolling_reboot_test():
+        """
+        Tests that the cluster can tolearate failures of any single server,
+        following the recommended rolling upgrade procedure from
+        https://www.consul.io/docs/upgrading#standard-upgrades
+        """
 
-        # Do some consul actions while one server is down.
-        client1.succeed("consul kv put testkey 43")
-        client2.succeed("[ $(consul kv get testkey) == 43 ]")
-        client2.succeed("consul kv delete testkey")
+        for server in servers:
+            server.crash()
 
-        # Restart crashed machine.
-        server.start()
+            # For each client, wait until they have connection again
+            # using `kv get -recurse` before issuing commands.
+            client1.wait_until_succeeds("consul kv get -recurse")
+            client2.wait_until_succeeds("consul kv get -recurse")
 
-        # Wait for recovery.
-        for m in machines:
-            m.wait_until_succeeds("[ $(consul members | grep -o alive | wc -l) == 5 ]")
+            # Do some consul actions while one server is down.
+            client1.succeed("consul kv put testkey 43")
+            client2.succeed("[ $(consul kv get testkey) == 43 ]")
+            client2.succeed("consul kv delete testkey")
 
-        # Wait for client connections.
-        client1.wait_until_succeeds("consul kv get -recurse")
-        client2.wait_until_succeeds("consul kv get -recurse")
+            # Restart crashed machine.
+            server.start()
 
-        # Do some consul actions with server back up.
-        client1.succeed("consul kv put testkey 44")
-        client2.succeed("[ $(consul kv get testkey) == 44 ]")
-        client2.succeed("consul kv delete testkey")
+            # Wait for recovery.
+            wait_for_healthy_servers()
+
+            # Wait for client connections.
+            client1.wait_until_succeeds("consul kv get -recurse")
+            client2.wait_until_succeeds("consul kv get -recurse")
+
+            # Do some consul actions with server back up.
+            client1.succeed("consul kv put testkey 44")
+            client2.succeed("[ $(consul kv get testkey) == 44 ]")
+            client2.succeed("consul kv delete testkey")
+
+
+    # Run the tests.
+    rolling_reboot_test()
   '';
 })
