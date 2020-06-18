@@ -20699,6 +20699,8 @@ in
     portaudio = portaudio2014;
   };
 
+  LindeBuzoGrayStippling = libsForQt5.callPackage ../tools/graphics/LindeBuzoGrayStippling { };
+
   lingot = callPackage ../applications/audio/lingot { };
 
   linuxband = callPackage ../applications/audio/linuxband { };
