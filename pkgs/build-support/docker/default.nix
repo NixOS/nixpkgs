@@ -729,7 +729,7 @@ rec {
 
       # NOTE: the `closures` parameter is a list of closures to include.
       # The TOP LEVEL store paths themselves will never be present in the
-      # resulting image. At this time (2019-12-16) none of these layers
+      # resulting image. At this time (2020-06-18) none of these layers
       # are appropriate to include, as they are all created as
       # implementation details of dockerTools.
       closures = [ baseJson contentsEnv ];
@@ -761,6 +761,12 @@ rec {
         # unless there are more paths than $maxLayers. In that case, create
         # $maxLayers-1 for the most popular layers, and smush the remainaing
         # store paths in to one final layer.
+        #
+        # The following code is fiddly w.r.t. ensuring every layer is
+        # created, and that no paths are missed. If you change the
+        # following lines, double-check that your code behaves properly
+        # when the number of layers equals:
+        #      maxLayers-1, maxLayers, and maxLayers+1, 0
         store_layers="$(
           paths |
             jq -sR '
