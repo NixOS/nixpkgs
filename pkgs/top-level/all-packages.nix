@@ -23468,6 +23468,7 @@ in
 
   monero = callPackage ../applications/blockchains/monero {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
+    boost = boost17x;
     pythonProtobuf = python3Packages.protobuf.override { protobuf = protobuf3_10; };
   };
 
