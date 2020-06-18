@@ -10,7 +10,7 @@
 , languagetool
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
-, nodePackages
+, nodejs, nodePackages
 , dasht
 
 # coc-go dependency
@@ -202,6 +202,11 @@ self: super: {
     version = nodePackages.coc-metals.version;
     src = "${nodePackages.coc-metals}/lib/node_modules/coc-metals";
   };
+
+  coc-nvim = super.coc-nvim.overrideAttrs(old: {
+    buildInputs = [nodejs];
+    patches = [ (substituteAll {src = ./patches/coc-nvim/nodejs_path.patch; nodejs = "${nodejs}/bin/node"; }) ]; 
+  });
 
   coc-pairs = buildVimPluginFrom2Nix {
     pname = "coc-pairs";
