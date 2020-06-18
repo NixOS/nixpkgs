@@ -42,6 +42,26 @@ in stdenv.mkDerivation {
     sha256 = "0haj3iff3y13pm4w5dbqj1drp5wryqfad58jbbmnb6zdgis56h8f";
   };
 
+  # with the bump to 245.x, nixpkgs moved away from the custom fork to
+  # downstream patches, as the fork model was very error-prone
+  # (see https://github.com/NixOS/nixpkgs/pull/85334)
+  # This `patches` section is only there to carry security patches for 20.03,
+  # as it'd be much more ugly to push commits to the (abandoned) systemd fork.
+  patches = [
+    # pick the `safe_atou32` introduction in src/basic/parse-util.h
+    # used by CVE-2020-13776.patch
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/b934ac3d6e7dcad114776ef30ee9098693e7ab7e.patch";
+      includes = ["src/basic/parse-util.h"];
+      sha256 = "1q9nggh19nk4bi2amg0dfziahfvl2931i9r79kdi9gmf79wxz0yc";
+    })
+    (fetchpatch {
+      name = "CVE-2020-13776.patch";
+      url = "https://github.com/systemd/systemd/commit/156a5fd297b61bce31630d7a52c15614bf784843.patch";
+      sha256 = "1g1spb78mqywp97mxsgqaaq5zn3s5qk2k0w02xnp92v76h5y0sgl";
+    })
+  ];
+
   outputs = [ "out" "lib" "man" "dev" ];
 
   nativeBuildInputs =
