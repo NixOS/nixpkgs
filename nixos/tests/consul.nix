@@ -128,10 +128,18 @@ in {
             )
 
 
+    def wait_for_all_machines_alive():
+        """
+        Note that Serf-"alive" does not mean "Raft"-healthy;
+        see `wait_for_healthy_servers()` for that instead.
+        """
+        for m in machines:
+            m.wait_until_succeeds("[ $(consul members | grep -o alive | wc -l) == 5 ]")
+
+
     wait_for_healthy_servers()
     # Also wait for clients to be alive.
-    for m in machines:
-        m.wait_until_succeeds("[ $(consul members | grep -o alive | wc -l) == 5 ]")
+    wait_for_all_machines_alive()
 
     client1.succeed("consul kv put testkey 42")
     client2.succeed("[ $(consul kv get testkey) == 42 ]")
