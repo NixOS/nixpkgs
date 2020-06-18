@@ -19927,6 +19927,12 @@ in
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
+  librespot = callPackage ../applications/audio/librespot {
+    withALSA = stdenv.isLinux;
+    withPulseAudio = config.pulseaudio or stdenv.isLinux;
+    withPortAudio = stdenv.isDarwin;
+  };
+
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
   lollypop = callPackage ../applications/audio/lollypop { };
