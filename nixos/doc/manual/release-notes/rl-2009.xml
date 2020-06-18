@@ -614,6 +614,34 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      queued on the kernel side of the netlink socket.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Specifying <link linkend="opt-services.dovecot2.mailboxes">mailboxes</link> in the <package>dovecot2</package> module
+     as a list is deprecated and will break eval in 21.03. Instead, an attribute-set should be specified where the <literal>name</literal>
+     should be the key of the attribute.
+    </para>
+    <para>
+     This means that a configuration like this
+<programlisting>{
+  <link linkend="opt-services.dovecot2.mailboxes">services.dovecot2.mailboxes</link> = [
+    { name = "Junk";
+      auto = "create";
+    }
+  ];
+}</programlisting>
+    should now look like this:
+<programlisting>{
+  <link linkend="opt-services.dovecot2.mailboxes">services.dovecot2.mailboxes</link> = {
+    Junk.auto = "create";
+  };
+}</programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <package>netbeans</package> was upgraded to 12.0 and now defaults to OpenJDK 11. This might cause problems if your projects depend on packages that were removed in Java 11.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

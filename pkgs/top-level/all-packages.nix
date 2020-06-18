@@ -8212,6 +8212,8 @@ in
 
   scry = callPackage ../development/tools/scry {};
 
+  dasm = callPackage ../development/compilers/dasm/default.nix { };
+
   dbmate = callPackage ../development/tools/database/dbmate { };
 
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
@@ -10614,6 +10616,10 @@ in
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
 
   jenkins-job-builder = with python3Packages; toPythonApplication jenkins-job-builder;
+
+  julius = callPackage ../games/julius { };
+
+  augustus = callPackage ../games/augustus { };
 
   kafkacat = callPackage ../development/tools/kafkacat { };
 
@@ -15536,6 +15542,8 @@ in
     kerberos = libkrb5;
   };
 
+  adguardhome = callPackage ../servers/adguardhome {};
+
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = pkgs.apacheHttpd_2_4;
 
@@ -20230,6 +20238,8 @@ in
     pulseSupport = config.pulseaudio or false;
   };
 
+  hikari = callPackage ../applications/window-managers/hikari { };
+
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
   };
@@ -20860,6 +20870,10 @@ in
 
   meld = callPackage ../applications/version-management/meld { };
 
+  meli = callPackage ../applications/networking/mailreaders/meli { };
+
+  melonDS = callPackage ../misc/emulators/melonDS { };
+
   meme = callPackage ../applications/graphics/meme { };
 
   mendeley = libsForQt5.callPackage ../applications/office/mendeley {
@@ -21323,7 +21337,9 @@ in
 
   navit = libsForQt5.callPackage ../applications/misc/navit { };
 
-  netbeans = callPackage ../applications/editors/netbeans { };
+  netbeans = callPackage ../applications/editors/netbeans {
+    jdk = jdk11;
+  };
 
   ncdu = callPackage ../tools/misc/ncdu { };
 

@@ -18,6 +18,7 @@ dkjson,,,,,
 fifo,,,,,
 http,,,,,vcunat
 inspect,,,,,
+ldbus,,http://luarocks.org/dev,,,
 ldoc,,,,,
 lgi,,,,,
 linenoise,,,,,
