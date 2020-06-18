@@ -14520,6 +14520,8 @@ in
 
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
+  resnet = callPackage ../data/machine-learning/resnet { };
+
   rhino = callPackage ../development/libraries/java/rhino {
     javac = jdk;
     jvm = jre;
@@ -24661,6 +24663,8 @@ in
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
+
+  deeplabcut = callPackage ../applications/science/machine-learning/deeplabcut { };
 
   deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
 

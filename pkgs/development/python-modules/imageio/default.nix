@@ -5,7 +5,7 @@
 , pillow
 , psutil
 , imageio-ffmpeg
-, pytest
+, pytestCheckHook
 , numpy
 , isPy3k
 , ffmpeg_3
@@ -22,21 +22,30 @@ buildPythonPackage rec {
     inherit pname version;
   };
 
-  checkInputs = [ pytest psutil ] ++ stdenv.lib.optionals isPy3k [
+  checkInputs = [
+    psutil
+    pytestCheckHook
+  ] ++ stdenv.lib.optionals isPy3k [
     imageio-ffmpeg ffmpeg_3
-    ];
+  ];
+
   propagatedBuildInputs = [ numpy pillow ] ++ stdenv.lib.optionals (!isPy3k) [
     futures
     enum34
     pathlib
   ];
 
-  checkPhase = ''
+  dontUseSetuptoolsCheck = true;
+
+  preCheck = ''
     export IMAGEIO_USERDIR="$TMP"
     export IMAGEIO_NO_INTERNET="true"
     export HOME="$(mktemp -d)"
-    py.test
   '';
+
+  disabledTests = [
+    "test_get_exe_env"
+  ];
 
   # For some reason, importing imageio also imports xml on Nix, see
   # https://github.com/imageio/imageio/issues/395

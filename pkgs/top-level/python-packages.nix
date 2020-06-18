@@ -2340,6 +2340,8 @@ in {
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
+  deeplabcut = callPackage ../development/python-modules/deeplabcut { };
+
   envs = callPackage ../development/python-modules/envs { };
 
   etelemetry = callPackage ../development/python-modules/etelemetry { };
@@ -2356,6 +2358,8 @@ in {
   }));
 
   impacket = callPackage ../development/python-modules/impacket { };
+  
+  intel-openmp = callPackage ../development/python-modules/intel-openmp { };
 
   jsonlines = callPackage ../development/python-modules/jsonlines { };
 
@@ -7020,6 +7024,8 @@ in {
   };
 
   tensorly = callPackage ../development/python-modules/tensorly { };
+
+  tensorpack = callPackage ../development/python-modules/tensorpack { };
 
   tflearn = callPackage ../development/python-modules/tflearn { };
 
