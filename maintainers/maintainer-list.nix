@@ -3292,6 +3292,12 @@
       fingerprint = "6C2B 55D4 4E04 8266 6B7D  DA1A 422E 9EDA E015 7170";
     }];
   };
+  silviogutierrez = {
+    email = "silviogutierrez@gmail.com";
+    github = "silviogutierrez";
+    githubId = 92824;
+    name = "Silvio Gutierrez";
+  };
   ingenieroariel = {
     email = "ariel@nunez.co";
     github = "ingenieroariel";
