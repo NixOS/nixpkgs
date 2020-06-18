@@ -2460,6 +2460,12 @@
     githubId = 7432848;
     name = "Daniel Albert";
   };
+  eskytthe = {
+    email = "eskytthe@gmail.com";
+    github = "eskytthe";
+    githubId = 2544204;
+    name = "Erik Skytthe";
+  };
   Esteth = {
     email = "adam.copp@gmail.com";
     name = "Adam Copp";
