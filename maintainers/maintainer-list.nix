@@ -649,6 +649,12 @@
     githubId = 3965744;
     name = "Arthur Lee";
   };
+  arturcygan = {
+    email = "arczicygan@gmail.com";
+    github = "arcz";
+    githubId = 4679721;
+    name = "Artur Cygan";
+  };
   artuuge = {
     email = "artuuge@gmail.com";
     github = "artuuge";
