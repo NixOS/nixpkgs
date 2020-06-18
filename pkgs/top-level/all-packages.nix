@@ -7386,6 +7386,8 @@ in
 
   wakatime = pythonPackages.callPackage ../tools/misc/wakatime { };
 
+  wait-for-it = callPackage ../tools/networking/wait-for-it {};
+
   weather = callPackage ../applications/misc/weather { };
 
   wego = callPackage ../applications/misc/wego { };
