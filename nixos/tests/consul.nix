@@ -109,8 +109,23 @@ in {
 
 
     def wait_for_healthy_servers():
+        # See https://github.com/hashicorp/consul/issues/8118#issuecomment-645330040
+        # for why the `Voter` column of `list-peers` has that info.
+        # TODO: The `grep true` relies on the fact that currently in
+        #       the output like
+        #           # consul operator raft list-peers
+        #           Node     ID   Address           State     Voter  RaftProtocol
+        #           server3  ...  192.168.1.3:8300  leader    true   3
+        #           server2  ...  192.168.1.2:8300  follower  true   3
+        #           server1  ...  192.168.1.1:8300  follower  false  3
+        #       `Voter`is the only boolean column.
+        #       Change this to the more reliable way to be defined by
+        #       https://github.com/hashicorp/consul/issues/8118
+        #       once that ticket is closed.
         for m in machines:
-            m.wait_until_succeeds("[ $(consul members | grep -o alive | wc -l) == 5 ]")
+            m.wait_until_succeeds(
+                "[ $(consul operator raft list-peers | grep true | wc -l) == 3 ]"
+            )
 
 
     wait_for_healthy_servers()
