@@ -15,6 +15,9 @@ rustPlatform.buildRustPackage {
     inherit rev sha256;
   };
 
+  patches = [ ./read-rev-from-env.patch ];
+  REV = rev;
+
   buildAndTestSubdir = "crates/rust-analyzer";
 
   cargoBuildFlags = lib.optional useJemalloc "--features=jemalloc";
