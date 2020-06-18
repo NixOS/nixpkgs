@@ -20599,6 +20599,8 @@ in
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
+  tanka = callPackage ../applications/networking/cluster/tanka { };
+
   kubeless = callPackage ../applications/networking/cluster/kubeless { };
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
