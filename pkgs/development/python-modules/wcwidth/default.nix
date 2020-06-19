@@ -1,6 +1,7 @@
 { lib, fetchPypi, buildPythonPackage, pytestCheckHook
 , isPy3k
 , backports_functools_lru_cache
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = lib.optionals (!isPy3k) [
+  propagatedBuildInputs = [ setuptools ] ++ lib.optionals (!isPy3k) [
     backports_functools_lru_cache
   ];
 
