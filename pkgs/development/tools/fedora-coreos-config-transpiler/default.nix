@@ -1,12 +1,10 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 with lib;
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "fcct";
   version = "0.6.0";
-
-  goPackagePath = "github.com/coreos/fcct";
 
   src = fetchFromGitHub {
     owner = "coreos";
@@ -15,8 +13,13 @@ buildGoPackage rec {
     sha256 = "18hmnip1s0smp58q500p8dfbrmi4i3nsyq22ri5cs53wbvz3ih1l";
   };
 
+  deleteVendor = true;
+  vendorSha256 = "0qqkaskmyxgwv9qg3y5lckqf6nchn3bxp69fyqdbvki65p445608";
+
+  subPackages = [ "internal" ];
+
   buildFlagsArray = ''
-    -ldflags=-X ${goPackagePath}/internal/version.Raw=v${version}
+    -ldflags=-X github.com/coreos/fcct/internal/version.Raw=v${version}
   '';
 
   postInstall = ''
