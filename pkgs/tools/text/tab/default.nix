@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python2 ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   checkTarget = "test";
 
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://tkatchev.bitbucket.io/tab/";
     license     = licenses.boost;
     maintainers = with maintainers; [ mstarzyk ];
-    platforms   = with platforms; linux;
+    platforms   = with platforms; unix;
   };
 }
