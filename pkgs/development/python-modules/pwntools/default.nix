@@ -5,12 +5,12 @@
 , requests, tox, unicorn, intervaltree, fetchpatch }:
 
 buildPythonPackage rec {
-  version = "4.0.0b0";
+  version = "4.1.0";
   pname = "pwntools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11f7x7rjad1nawn3r524lzxgz3nk89c6s3xycrscn3n86hh0zgid";
+    sha256 = "1c9axs2kas58ihgn74d12c4xxgvvqybf8f8wvf0k0sxbfh4hddfk";
   };
 
   propagatedBuildInputs = [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pyserial dateutil requests tox unicorn intervaltree ];
@@ -21,6 +21,6 @@ buildPythonPackage rec {
     homepage = "http://pwntools.com";
     description = "CTF framework and exploit development library";
     license = licenses.mit;
-    maintainers = with maintainers; [ bennofs kristoff3r ];
+    maintainers = with maintainers; [ bennofs kristoff3r arturcygan ];
   };
 }
