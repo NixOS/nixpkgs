@@ -3,6 +3,7 @@
 , "@antora/cli"
 , "@antora/site-generator-default"
 , "@bitwarden/cli"
+, "@nestjs/cli"
 , "@vue/cli"
 , "@webassemblyjs/cli"
 , "@webassemblyjs/repl"
