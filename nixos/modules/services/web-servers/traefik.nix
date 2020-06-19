@@ -20,10 +20,10 @@ let
     in valueType;
   dynamicConfigFile = if cfg.dynamicConfigFile == null then
     pkgs.runCommand "config.toml" {
-      buildInputs = [ pkgs.remarshal ];
+      buildInputs = [ pkgs.yj ];
       preferLocalBuild = true;
     } ''
-      remarshal -if json -of toml \
+      yj -jt -i \
         < ${
           pkgs.writeText "dynamic_config.json"
           (builtins.toJSON cfg.dynamicConfigOptions)
