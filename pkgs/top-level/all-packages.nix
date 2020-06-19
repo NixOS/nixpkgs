@@ -15831,11 +15831,7 @@ in
 
   mailman-rss = callPackage ../development/python-modules/mailman-rss { };
 
-  mailman-web = with (python3.override {
-    packageOverrides = self: super: {
-      django = self.django_1_11;
-    };
-  }).pkgs; toPythonApplication mailman-web;
+  mailman-web = with python3.pkgs; toPythonApplication mailman-web;
 
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
