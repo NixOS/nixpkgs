@@ -8551,6 +8551,7 @@ broken-packages:
   - postgres-websockets
   - postgresql-lo-stream
   - postgresql-named
+  - postgresql-pure
   - postgresql-query
   - postgresql-simple-bind
   - postgresql-simple-named
