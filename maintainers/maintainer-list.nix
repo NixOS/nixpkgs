@@ -5008,6 +5008,10 @@
     github = "mdlayher";
     githubId = 1926905;
     name = "Matt Layher";
+    keys = [{
+      longkeyid = "rsa2048/0x77BFE531397EDE94";
+      fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
+    }];
   };
   meditans = {
     email = "meditans@gmail.com";
