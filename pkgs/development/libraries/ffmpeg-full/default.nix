@@ -242,8 +242,6 @@ stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
   inherit (ffmpeg) src version;
 
-  patches = [ ./prefer-libdav1d-over-libaom.patch ];
-
   prePatch = ''
     patchShebangs .
   '' + stdenv.lib.optionalString stdenv.isDarwin ''

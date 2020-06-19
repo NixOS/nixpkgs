@@ -15,18 +15,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
+  patches = [ ./systemwide-man-db-conf.patch ];
+
   postPatch = ''
     # Remove all mandatory manpaths. Nixpkgs makes no requirements on
     # these directories existing.
     sed -i 's/^MANDATORY_MANPATH/# &/' src/man_db.conf.in
 
-    # Add Nixpkgs and NixOS-related manpaths
-    echo "MANPATH_MAP	/run/current-system/sw/bin		/run/current-system/sw/share/man" >> src/man_db.conf.in
-    echo "MANPATH_MAP	/run/wrappers/bin			/run/current-system/sw/share/man" >> src/man_db.conf.in
+    # Add Nix-related manpaths
     echo "MANPATH_MAP	/nix/var/nix/profiles/default/bin	/nix/var/nix/profiles/default/share/man" >> src/man_db.conf.in
 
     # Add mandb locations for the above
-    echo "MANDB_MAP	/run/current-system/sw/share/man	/var/cache/man/nixos" >> src/man_db.conf.in
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
   '';
 
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
     "--disable-setuid"
     "--disable-cache-owner"
     "--localstatedir=/var"
-    # Don't try /etc/man_db.conf by default, so we avoid error messages.
     "--with-config-file=${placeholder "out"}/etc/man_db.conf"
     "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
