@@ -17,12 +17,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
+  # Don't use the default configure phase because ./configure isn't
+  # an autoconf script.
   configurePhase = ''
     ./configure \
       --prefix=$out \
       --includedir=$dev/include \
       --libdir=$lib/lib \
       --mandir=$man/share/man \
+      --cc=${stdenv.cc.targetPrefix}cc
   '';
 
   # Copy the examples into $out.
