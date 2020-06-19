@@ -3147,6 +3147,8 @@ in
 
   teamocil = callPackage ../tools/misc/teamocil { };
 
+  the-way = callPackage ../development/tools/the-way { };
+
   tsm-client = callPackage ../tools/backup/tsm-client { jdk8 = null; };
   tsm-client-withGui = callPackage ../tools/backup/tsm-client { };
 
