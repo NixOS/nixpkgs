@@ -90,7 +90,7 @@ in {
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
-          description = "File that contains the password the the RPC user.";
+          description = "File that contains the password of the RPC user.";
         };
       };
 
