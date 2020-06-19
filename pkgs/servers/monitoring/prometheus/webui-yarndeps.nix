@@ -6634,11 +6634,11 @@
       };
     }
     {
-      name = "jquery___jquery_3.4.1.tgz";
+      name = "jquery___jquery_3.5.1.tgz";
       path = fetchurl {
-        name = "jquery___jquery_3.4.1.tgz";
-        url  = "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz";
-        sha1 = "714f1f8d9dde4bdfa55764ba37ef214630d80ef2";
+        name = "jquery___jquery_3.5.1.tgz";
+        url  = "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz";
+        sha1 = "d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5";
       };
     }
     {
