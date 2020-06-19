@@ -257,7 +257,7 @@ let
               pkgs.gnused
               systemd
             ];
-          environment.PATH = config.path;
+          environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre =
