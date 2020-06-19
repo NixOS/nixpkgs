@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ python3 ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   preCheck = ''
     substituteInPlace Makefile --replace "python2 go2.py" "python go.py"
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://tkatchev.bitbucket.io/tab/";
     license     = licenses.boost;
     maintainers = with maintainers; [ mstarzyk ];
-    platforms   = with platforms; linux;
+    platforms   = with platforms; unix;
   };
 }
