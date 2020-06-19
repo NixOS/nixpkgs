@@ -88,7 +88,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional (!langJit) "lib";
+  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional (!langJit && targetPlatform == hostPlatform) "lib";
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
