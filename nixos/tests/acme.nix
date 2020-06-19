@@ -1,29 +1,43 @@
 let
   commonConfig = ./common/acme/client;
 
-  dnsScript = {writeScript, dnsAddress, bash, curl}: writeScript "dns-hook.sh" ''
-    #!${bash}/bin/bash
+  dnsServerIP = nodes: nodes.dnsserver.config.networking.primaryIPAddress;
+
+  dnsScript = {pkgs, nodes}: let
+    dnsAddress = dnsServerIP nodes;
+  in pkgs.writeShellScript "dns-hook.sh" ''
     set -euo pipefail
     echo '[INFO]' "[$2]" 'dns-hook.sh' $*
     if [ "$1" = "present" ]; then
-      ${curl}/bin/curl --data '{"host": "'"$2"'", "value": "'"$3"'"}' http://${dnsAddress}:8055/set-txt
+      ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'", "value": "'"$3"'"}' http://${dnsAddress}:8055/set-txt
     else
-      ${curl}/bin/curl --data '{"host": "'"$2"'"}' http://${dnsAddress}:8055/clear-txt
+      ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'"}' http://${dnsAddress}:8055/clear-txt
     fi
   '';
+
+  documentRoot = pkgs: pkgs.runCommand "docroot" {} ''
+    mkdir -p "$out"
+    echo hello world > "$out/index.html"
+  '';
+
+  vhostBase = pkgs: {
+    forceSSL = true;
+    locations."/".root = documentRoot pkgs;
+  };
 
 in import ./make-test-python.nix ({ lib, ... }: {
   name = "acme";
   meta.maintainers = lib.teams.acme.members;
 
-  nodes = rec {
+  nodes = {
+    # The fake ACME server which will respond to client requests
     acme = { nodes, lib, ... }: {
       imports = [ ./common/acme/server ];
-      networking.nameservers = lib.mkForce [
-        nodes.dnsserver.config.networking.primaryIPAddress
-      ];
+      networking.nameservers = lib.mkForce [ (dnsServerIP nodes) ];
     };
 
+    # A fake DNS server which can be configured with records as desired
+    # Used to test DNS-01 challenge
     dnsserver = { nodes, pkgs, ... }: {
       networking.firewall.allowedTCPPorts = [ 8055 53 ];
       networking.firewall.allowedUDPPorts = [ 53 ];
@@ -39,112 +53,87 @@ in import ./make-test-python.nix ({ lib, ... }: {
       };
     };
 
-    acmeStandalone = { nodes, lib, config, pkgs, ... }: {
+    # A web server which will be the node requesting certs
+    webserver = { pkgs, nodes, lib, config, ... }: {
       imports = [ commonConfig ];
-      networking.nameservers = lib.mkForce [
-        nodes.dnsserver.config.networking.primaryIPAddress
-      ];
-      networking.firewall.allowedTCPPorts = [ 80 ];
-      security.acme.certs."standalone.test" = {
-        webroot = "/var/lib/acme/acme-challenges";
-      };
-      systemd.targets."acme-finished-standalone.test" = {
-        after = [ "acme-standalone.test.service" ];
-        wantedBy = [ "acme-standalone.test.service" ];
-      };
-      services.nginx.enable = true;
-      services.nginx.virtualHosts."standalone.test" = {
-        locations."/.well-known/acme-challenge".root = "/var/lib/acme/acme-challenges";
-      };
-    };
-
-    webserver = { nodes, config, pkgs, lib, ... }: {
-      imports = [ commonConfig ];
+      networking.nameservers = lib.mkForce [ (dnsServerIP nodes) ];
       networking.firewall.allowedTCPPorts = [ 80 443 ];
-      networking.nameservers = lib.mkForce [
-        nodes.dnsserver.config.networking.primaryIPAddress
-      ];
 
-      # A target remains active. Use this to probe the fact that
-      # a service fired eventhough it is not RemainAfterExit
-      systemd.targets."acme-finished-a.example.test" = {
-        after = [ "acme-a.example.test.service" ];
-        wantedBy = [ "acme-a.example.test.service" ];
-      };
+      # OpenSSL will be used for more thorough certificate validation
+      environment.systemPackages = [ pkgs.openssl ];
 
+      # First tests configure a basic cert and run a bunch of openssl checks
       services.nginx.enable = true;
-
-      services.nginx.virtualHosts."a.example.test" = {
+      services.nginx.virtualHosts."a.example.test" = (vhostBase pkgs) // {
         enableACME = true;
-        forceSSL = true;
-        locations."/".root = pkgs.runCommand "docroot" {} ''
-          mkdir -p "$out"
-          echo hello world > "$out/index.html"
-        '';
       };
 
-      security.acme.server = "https://acme.test/dir";
+      # Used to determine if service reload was triggered
+      systemd.targets.test-renew-nginx = {
+        wants = [ "acme-a.example.test.service" ];
+        after = [ "acme-a.example.test.service" "nginx-config-reload.service" ];
+      };
 
-      specialisation.second-cert.configuration = {pkgs, ...}: {
-        systemd.targets."acme-finished-b.example.test" = {
-          after = [ "acme-b.example.test.service" ];
-          wantedBy = [ "acme-b.example.test.service" ];
+      # Cert config changes will not cause the nginx configuration to change.
+      # This tests that the reload service is correctly triggered.
+      specialisation.cert-change.configuration = { pkgs, ... }: {
+        security.acme.certs."a.example.test".keyType = "ec384";
+      };
+
+      # Now adding an alias to ensure that the certs are updated
+      specialisation.nginx-aliases.configuration = { pkgs, ... }: {
+        services.nginx.virtualHosts."a.example.test" = {
+          serverAliases = [ "b.example.test" ];
         };
-        services.nginx.virtualHosts."b.example.test" = {
-          enableACME = true;
+      };
+
+      # Test using Apache HTTPD
+      specialisation.httpd-aliases.configuration = { pkgs, config, lib, ... }: {
+        services.nginx.enable = lib.mkForce false;
+        services.httpd.enable = true;
+        services.httpd.adminAddr = config.security.acme.email;
+        services.httpd.virtualHosts."c.example.test" = {
+          serverAliases = [ "d.example.test" ];
           forceSSL = true;
-          locations."/".root = pkgs.runCommand "docroot" {} ''
-            mkdir -p "$out"
-            echo hello world > "$out/index.html"
-          '';
+          enableACME = true;
+          documentRoot = documentRoot pkgs;
+        };
+
+        # Used to determine if service reload was triggered
+        systemd.targets.test-renew-httpd = {
+          wants = [ "acme-c.example.test.service" ];
+          after = [ "acme-c.example.test.service" "httpd-config-reload.service" ];
         };
       };
 
-      specialisation.dns-01.configuration = {pkgs, config, nodes, lib, ...}: {
+      # Validation via DNS-01 challenge
+      specialisation.dns-01.configuration = { pkgs, config, nodes, ... }: {
         security.acme.certs."example.test" = {
           domain = "*.example.test";
+          group = config.services.nginx.group;
           dnsProvider = "exec";
           dnsPropagationCheck = false;
-          credentialsFile = with pkgs; writeText "wildcard.env" ''
-            EXEC_PATH=${dnsScript { inherit writeScript bash curl; dnsAddress = nodes.dnsserver.config.networking.primaryIPAddress; }}
+          credentialsFile = pkgs.writeText "wildcard.env" ''
+            EXEC_PATH=${dnsScript { inherit pkgs nodes; }}
           '';
-          user = config.services.nginx.user;
-          group = config.services.nginx.group;
         };
-        systemd.targets."acme-finished-example.test" = {
-          after = [ "acme-example.test.service" ];
-          wantedBy = [ "acme-example.test.service" ];
-        };
-        systemd.services."acme-example.test" = {
-          before = [ "nginx.service" ];
-          wantedBy = [ "nginx.service" ];
-        };
-        services.nginx.virtualHosts."c.example.test" = {
-          forceSSL = true;
-          sslCertificate = config.security.acme.certs."example.test".directory + "/cert.pem";
-          sslTrustedCertificate = config.security.acme.certs."example.test".directory + "/full.pem";
-          sslCertificateKey = config.security.acme.certs."example.test".directory + "/key.pem";
-          locations."/".root = pkgs.runCommand "docroot" {} ''
-            mkdir -p "$out"
-            echo hello world > "$out/index.html"
-          '';
+
+        services.nginx.virtualHosts."dns.example.test" = (vhostBase pkgs) // {
+          useACMEHost = "example.test";
         };
       };
 
-      # When nginx depends on a service that is slow to start up, requesting used to fail
-      # certificates fail.  Reproducer for https://github.com/NixOS/nixpkgs/issues/81842
-      specialisation.slow-startup.configuration = { pkgs, config, nodes, lib, ...}: {
+      # Validate service relationships by adding a slow start service to nginx' wants.
+      # Reproducer for https://github.com/NixOS/nixpkgs/issues/81842
+      specialisation.slow-startup.configuration = { pkgs, config, nodes, lib, ... }: {
         systemd.services.my-slow-service = {
           wantedBy = [ "multi-user.target" "nginx.service" ];
           before = [ "nginx.service" ];
           preStart = "sleep 5";
           script = "${pkgs.python3}/bin/python -m http.server";
         };
-        systemd.targets."acme-finished-d.example.com" = {
-          after = [ "acme-d.example.com.service" ];
-          wantedBy = [ "acme-d.example.com.service" ];
-        };
-        services.nginx.virtualHosts."d.example.com" = {
+
+        services.nginx.virtualHosts."slow.example.com" = {
           forceSSL = true;
           enableACME = true;
           locations."/".proxyPass = "http://localhost:8000";
@@ -152,11 +141,13 @@ in import ./make-test-python.nix ({ lib, ... }: {
       };
     };
 
-    client = {nodes, lib, ...}: {
+    # The client will be used to curl the webserver to validate configuration
+    client = {nodes, lib, pkgs, ...}: {
       imports = [ commonConfig ];
-      networking.nameservers = lib.mkForce [
-        nodes.dnsserver.config.networking.primaryIPAddress
-      ];
+      networking.nameservers = lib.mkForce [ (dnsServerIP nodes) ];
+
+      # OpenSSL will be used for more thorough certificate validation
+      environment.systemPackages = [ pkgs.openssl ];
     };
   };
 
@@ -167,73 +158,155 @@ in import ./make-test-python.nix ({ lib, ... }: {
     in
     # Note, wait_for_unit does not work for oneshot services that do not have RemainAfterExit=true,
     # this is because a oneshot goes from inactive => activating => inactive, and never
-    # reaches the active state. To work around this, we create some mock target units which
-    # get pulled in by the oneshot units. The target units linger after activation, and hence we
-    # can use them to probe that a oneshot fired. It is a bit ugly, but it is the best we can do
+    # reaches the active state. Targets do not have this issue.
+
     ''
+      has_switched = False
+
+
+      def switch_to(node, name):
+          global has_switched
+          if has_switched:
+              node.succeed(
+                  "${switchToNewServer}"
+              )
+          has_switched = True
+          node.succeed(
+              "/run/current-system/specialisation/{}/bin/switch-to-configuration test".format(
+                  name
+              )
+          )
+
+
+      # Ensures the issuer of our cert matches the chain
+      # and matches the issuer we expect it to be.
+      # It's a good validation to ensure the cert.pem and fullchain.pem
+      # are not still selfsigned afer verification
+      def check_issuer(node, cert_name, issuer):
+          for fname in ("cert.pem", "fullchain.pem"):
+              node.succeed(
+                  (
+                      """openssl x509 -noout -issuer -in /var/lib/acme/{cert_name}/{fname} \
+                        | tee /proc/self/fd/2 \
+                        | cut -d'=' -f2- \
+                        | grep "$(openssl x509 -noout -subject -in /var/lib/acme/{cert_name}/chain.pem \
+                        | cut -d'=' -f2-)\" \
+                        | grep -i '{issuer}'
+                      """
+                  ).format(cert_name=cert_name, issuer=issuer, fname=fname)
+              )
+
+
+      # Ensure cert comes before chain in fullchain.pem
+      def check_fullchain(node, cert_name):
+          node.succeed(
+              (
+                  """openssl crl2pkcs7 -nocrl -certfile /var/lib/acme/{cert_name}/fullchain.pem \
+                    | tee /proc/self/fd/2 \
+                    | openssl pkcs7 -print_certs -noout | head -1 | grep {cert_name}
+                  """
+              ).format(cert_name=cert_name)
+          )
+
+
+      def check_connection(node, domain):
+          node.succeed(
+              (
+                  """openssl s_client -brief -verify 2 -verify_return_error -CAfile /tmp/ca.crt \
+                    -servername {domain} -connect {domain}:443 < /dev/null 2>&1 \
+                    | tee /proc/self/fd/2
+                  """
+              ).format(domain=domain)
+          )
+
+
       client.start()
       dnsserver.start()
 
-      acme.wait_for_unit("default.target")
       dnsserver.wait_for_unit("pebble-challtestsrv.service")
+      client.wait_for_unit("default.target")
+
       client.succeed(
-          'curl --data \'{"host": "acme.test", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${nodes.dnsserver.config.networking.primaryIPAddress}:8055/add-a'
-      )
-      client.succeed(
-          'curl --data \'{"host": "standalone.test", "addresses": ["${nodes.acmeStandalone.config.networking.primaryIPAddress}"]}\' http://${nodes.dnsserver.config.networking.primaryIPAddress}:8055/add-a'
+          'curl --data \'{"host": "acme.test", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
       )
 
       acme.start()
-      acmeStandalone.start()
+      webserver.start()
 
       acme.wait_for_unit("default.target")
       acme.wait_for_unit("pebble.service")
 
-      with subtest("can request certificate with HTTPS-01 challenge"):
-          acmeStandalone.wait_for_unit("default.target")
-          acmeStandalone.succeed("systemctl start acme-standalone.test.service")
-          acmeStandalone.wait_for_unit("acme-finished-standalone.test.target")
-
-      client.wait_for_unit("default.target")
-
       client.succeed("curl https://acme.test:15000/roots/0 > /tmp/ca.crt")
       client.succeed("curl https://acme.test:15000/intermediate-keys/0 >> /tmp/ca.crt")
 
-      with subtest("Can request certificate for nginx service"):
+      with subtest("Can request certificate with HTTPS-01 challenge"):
+          webserver.wait_for_unit("acme-finished-a.example.test.target")
+          check_fullchain(webserver, "a.example.test")
+          check_issuer(webserver, "a.example.test", "pebble")
+          check_connection(client, "a.example.test")
+
+      with subtest("Can generate valid selfsigned certs"):
+          webserver.succeed("systemctl clean acme-a.example.test.service --what=state")
+          webserver.succeed("systemctl start acme-selfsigned-a.example.test.service")
+          check_fullchain(webserver, "a.example.test")
+          check_issuer(webserver, "a.example.test", "minica")
+          # Will succeed if nginx can load the certs
+          webserver.succeed("systemctl start nginx-config-reload.service")
+
+      with subtest("Can reload nginx when timer triggers renewal"):
+          # These syncs are required because of weird scenarios where the cert files
+          # were not actually changed when the checks run.
+          webserver.succeed("sync")
+          webserver.succeed("systemctl start test-renew-nginx.target")
+          webserver.succeed("sync")
+          check_issuer(webserver, "a.example.test", "pebble")
+          check_connection(client, "a.example.test")
+
+      with subtest("Can reload web server when cert configuration changes"):
+          switch_to(webserver, "cert-change")
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           client.succeed(
-              "curl --cacert /tmp/ca.crt https://a.example.test/ | grep -qF 'hello world'"
+              """openssl s_client -CAfile /tmp/ca.crt -connect a.example.test:443 < /dev/null \
+                | openssl x509 -noout -text | grep -i Public-Key | grep 384
+          """
           )
 
-      with subtest("Can add another certificate for nginx service"):
-          webserver.succeed(
-              "/run/current-system/specialisation/second-cert/bin/switch-to-configuration test"
-          )
-          webserver.wait_for_unit("acme-finished-b.example.test.target")
-          client.succeed(
-              "curl --cacert /tmp/ca.crt https://b.example.test/ | grep -qF 'hello world'"
-          )
+      with subtest("Can request certificate with HTTPS-01 when nginx startup is delayed"):
+          switch_to(webserver, "slow-startup")
+          webserver.wait_for_unit("acme-finished-slow.example.com.target")
+          check_issuer(webserver, "slow.example.com", "pebble")
+          check_connection(client, "slow.example.com")
+
+      with subtest("Can request certificate for vhost + aliases (nginx)"):
+          switch_to(webserver, "nginx-aliases")
+          webserver.wait_for_unit("acme-finished-a.example.test.target")
+          check_issuer(webserver, "a.example.test", "pebble")
+          check_connection(client, "a.example.test")
+          check_connection(client, "b.example.test")
+
+      with subtest("Can request certificates for vhost + aliases (apache-httpd)"):
+          switch_to(webserver, "httpd-aliases")
+          webserver.wait_for_unit("acme-finished-c.example.test.target")
+          check_issuer(webserver, "c.example.test", "pebble")
+          check_connection(client, "c.example.test")
+          check_connection(client, "d.example.test")
+
+      with subtest("Can reload httpd when timer triggers renewal"):
+          # Switch to selfsigned first
+          webserver.succeed("systemctl clean acme-c.example.test.service --what=state")
+          webserver.succeed("systemctl start acme-selfsigned-c.example.test.service")
+          webserver.succeed("sync")
+          check_issuer(webserver, "c.example.test", "minica")
+          webserver.succeed("systemctl start httpd-config-reload.service")
+          webserver.succeed("systemctl start test-renew-httpd.target")
+          webserver.succeed("sync")
+          check_issuer(webserver, "c.example.test", "pebble")
+          check_connection(client, "c.example.test")
 
       with subtest("Can request wildcard certificates using DNS-01 challenge"):
-          webserver.succeed(
-              "${switchToNewServer}"
-          )
-          webserver.succeed(
-              "/run/current-system/specialisation/dns-01/bin/switch-to-configuration test"
-          )
+          switch_to(webserver, "dns-01")
           webserver.wait_for_unit("acme-finished-example.test.target")
-          client.succeed(
-              "curl --cacert /tmp/ca.crt https://c.example.test/ | grep -qF 'hello world'"
-          )
-
-      with subtest("Can request certificate of nginx when startup is delayed"):
-          webserver.succeed(
-              "${switchToNewServer}"
-          )
-          webserver.succeed(
-              "/run/current-system/specialisation/slow-startup/bin/switch-to-configuration test"
-          )
-          webserver.wait_for_unit("acme-finished-d.example.com.target")
-          client.succeed("curl --cacert /tmp/ca.crt https://d.example.com/")
+          check_issuer(webserver, "example.test", "pebble")
+          check_connection(client, "dns.example.test")
     '';
 })
