@@ -1,15 +1,14 @@
 { lib, nodes, pkgs, ... }:
-
 let
-  acme-ca = nodes.acme.config.test-support.acme.caCert;
-in
+  caCert = nodes.acme.config.test-support.acme.caCert;
+  caDomain = nodes.acme.config.test-support.acme.caDomain;
 
-{
+in {
   security.acme = {
-    server = "https://acme.test/dir";
+    server = "https://${caDomain}/dir";
     email = "hostmaster@example.test";
     acceptTerms = true;
   };
 
-  security.pki.certificateFiles = [ acme-ca ];
+  security.pki.certificateFiles = [ caCert ];
 }
