@@ -8,6 +8,12 @@ let
     "ghcjs"
     "ghcjs86"
     "integer-simple"
+    "native-bignum"
+    "ghcHEAD"
+  ];
+
+  nativeBignumIncludes = [
+    "ghcHEAD"
   ];
 
   haskellLib = import ../development/haskell-modules/lib.nix {
@@ -97,6 +103,16 @@ in {
     in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
       integerSimpleGhcNames
       (name: compiler.${name}.override { enableIntegerSimple = true; }));
+
+    # Starting from GHC 9, integer-{simple,gmp} is replaced by ghc-bignum
+    # with "native" and "gmp" backends.
+    native-bignum = let
+      nativeBignumGhcNames = pkgs.lib.filter
+        (name: builtins.elem name nativeBignumIncludes)
+        (pkgs.lib.attrNames compiler);
+    in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
+      nativeBignumGhcNames
+      (name: compiler.${name}.override { enableNativeBignum = true; }));
   };
 
   # Default overrides that are applied to all package sets.
@@ -170,5 +186,16 @@ in {
       };
     });
 
+    native-bignum = let
+      nativeBignumGhcNames = pkgs.lib.filter
+        (name: builtins.elem name nativeBignumIncludes)
+        (pkgs.lib.attrNames compiler);
+    in pkgs.lib.genAttrs nativeBignumGhcNames (name: packages.${name}.override {
+      ghc = bh.compiler.native-bignum.${name};
+      buildHaskellPackages = bh.packages.native-bignum.${name};
+      overrides = _self : _super : {
+        integer-gmp = null;
+      };
+    });
   };
 }
