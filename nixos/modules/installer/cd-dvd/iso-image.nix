@@ -143,6 +143,13 @@ let
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
     INITRD /boot/${config.system.boot.loader.initrdFile}
+
+    # A variant to boot with a serial console enabled
+    LABEL boot-serial
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
+    LINUX /boot/${config.system.boot.loader.kernelFile}
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0,115200n8
+    INITRD /boot/${config.system.boot.loader.initrdFile}
   '';
 
   isolinuxMemtest86Entry = ''
