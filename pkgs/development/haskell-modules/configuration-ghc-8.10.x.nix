@@ -110,7 +110,6 @@ self: super: {
   serialise = doJailbreak super.serialise;
   setlocale = doJailbreak super.setlocale;
   shellmet = doJailbreak super.shellmet;
-  xmobar = doJailbreak super.xmobar;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });

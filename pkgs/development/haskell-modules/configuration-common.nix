@@ -1120,8 +1120,12 @@ self: super: {
   # });
   libnix = dontCheck super.libnix;
 
+  # Jailbreak: https://github.com/jaor/xmobar/issues/463
   # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
-  xmobar = dontCheck super.xmobar;
+  xmobar = appendPatch (dontCheck super.xmobar) (pkgs.fetchpatch {
+    url = "https://github.com/jaor/xmobar/pull/464.patch";
+    sha256 = "0y1dd878yzy1cx0cjj0ijd3dmywr7jdmk68vxdjimxzblrdw1al6";
+  });
 
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
@@ -1552,4 +1556,5 @@ self: super: {
       extraPrefix = "";
     })
   ]));
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
