@@ -10527,7 +10527,6 @@ broken-packages:
   - usb-safe
   - users-mysql-haskell
   - users-persistent
-  - utc
   - utf8-prelude
   - utf8-validator
   - UTFTConverter
