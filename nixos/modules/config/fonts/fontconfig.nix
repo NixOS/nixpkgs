@@ -278,7 +278,14 @@ in
     (mkRemovedOptionModule [ "fonts" "fontconfig" "hinting" "style" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
-  ];
+  ] ++ lib.forEach [ "enable" "substitutions" "preset" ]
+     (opt: lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
+       The fonts.fontconfig.ultimate module and configuration is obsolete.
+       The repository has since been archived and activity has ceased.
+       https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+       No action should be needed for font configuration, as the fonts.fontconfig
+       module is already used by default.
+     '');
 
   options = {
 

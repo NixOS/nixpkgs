@@ -25,7 +25,7 @@ let
      change_source = [ ${concatStringsSep "," cfg.changeSource} ],
      schedulers    = [ ${concatStringsSep "," cfg.schedulers} ],
      builders      = [ ${concatStringsSep "," cfg.builders} ],
-     status        = [ ${concatStringsSep "," cfg.status} ],
+     services      = [ ${concatStringsSep "," cfg.reporters} ],
     )
     for step in [ ${concatStringsSep "," cfg.factorySteps} ]:
       factory.addStep(step)
@@ -119,10 +119,10 @@ in {
         default = [ "worker.Worker('example-worker', 'pass')" ];
       };
 
-      status = mkOption {
+      reporters = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = "List of status notification endpoints.";
+        description = "List of reporter objects used to present build status to various users.";
       };
 
       user = mkOption {
@@ -276,6 +276,10 @@ in {
 
   imports = [
     (mkRenamedOptionModule [ "services" "buildbot-master" "bpPort" ] [ "services" "buildbot-master" "pbPort" ])
+    (mkRemovedOptionModule [ "services" "buildbot-master" "status" ] ''
+      Since Buildbot 0.9.0, status targets are deprecated and ignored.
+      Review your configuration and migrate to reporters (available at services.buildbot-master.reporters).
+    '')
   ];
 
   meta.maintainers = with lib.maintainers; [ nand0p mic92 ];
