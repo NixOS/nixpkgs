@@ -531,6 +531,8 @@ let
 
     mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { };
 
+    mirage-crypto-rng-mirage = callPackage ../development/ocaml-modules/mirage-crypto/rng-mirage.nix { };
+
     mirage-device = callPackage ../development/ocaml-modules/mirage-device { };
 
     mirage-flow = callPackage ../development/ocaml-modules/mirage-flow { };
