@@ -2,21 +2,25 @@
 
 buildGoPackage  rec {
   pname = "micro";
-  version = "2.0.3";
+  version = "2.0.5";
 
   goPackagePath = "github.com/zyedidia/micro";
 
   src = fetchFromGitHub {
     owner = "zyedidia";
-    repo = "micro";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "017m9kb3gfrgzd06f1nma1i3m5rb0hzpgdikb86lsyv8ik18y12z";
+    sha256 = "12fyyax1mr0n82s5yhmk90iyyzbh32rppkkpj37c25pal73czdhc";
     fetchSubmodules = true;
   };
 
   subPackages = [ "cmd/micro" ];
 
-  buildFlagsArray = [ "-ldflags=" "-X ${goPackagePath}/internal/util.Version=${version}" ];
+  buildFlagsArray = let t = "${goPackagePath}/internal/util"; in ''
+    -ldflags=
+      -X ${t}.Version=${version}
+      -X ${t}.CommitHash=${src.rev}
+  '';
 
   goDeps = ./deps.nix;
 
