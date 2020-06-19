@@ -6698,6 +6698,7 @@ broken-packages:
   - indextype
   - indices
   - indieweb-algorithms
+  - indigo
   - inf-interval
   - infer-upstream
   - infernal
