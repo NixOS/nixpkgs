@@ -490,6 +490,11 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      <link xlink:href="https://github.com/NixOS/nixpkgs/issues/89205">#89205</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     In the <literal>resilio</literal> module, <xref linkend="opt-services.resilio.httpListenAddr"/> has been changed to listen to <literal>[::1]</literal> instead of <literal>0.0.0.0</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
