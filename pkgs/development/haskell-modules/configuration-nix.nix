@@ -762,4 +762,8 @@ self: super: builtins.intersectAttrs super {
   # Tests disabled as recommended at https://github.com/luke-clifton/shh/issues/39
   shh = dontCheck super.shh;
 
+  # The test suites fail because there's no PostgreSQL database running in our
+  # build sandbox.
+  postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
+
 }
