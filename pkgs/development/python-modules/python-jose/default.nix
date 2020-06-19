@@ -1,6 +1,7 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
 , future, six, ecdsa, rsa
-, pycrypto, pytest, pytestcov, pytestrunner, cryptography
+, pycrypto, pytestcov, pytestrunner, cryptography
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,17 +17,16 @@ buildPythonPackage rec {
 
   checkInputs = [
     pycrypto
-    pytest
+    pytestCheckHook
     pytestcov
     pytestrunner
     cryptography # optional dependency, but needed in tests
   ];
-  checkPhase = ''
-    py.test
-  '';
 
-  # https://github.com/mpdavis/python-jose/issues/149
-  PYTEST_ADDOPTS = "-k 'not test_invalid_claims_json and not test_invalid_claims'";
+  disabledTests = [
+    # https://github.com/mpdavis/python-jose/issues/176
+    "test_key_too_short"
+  ];
 
   propagatedBuildInputs = [ future six ecdsa rsa ];
 

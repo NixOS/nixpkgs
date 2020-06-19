@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchurl, fetchsvn
 , pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
-, dee, ffmpeg_4, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
+, dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 , tl-expected, hunspell
 # TODO: Shouldn't be required:
 , pcre, xorg, utillinux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
@@ -19,12 +19,12 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.1.11";
+  version = "2.1.12";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1sd6nrcjg5gpq6ynvwnz8f4jz8flknybx6b0pfxqrqqpzy7wjl5m";
+    sha256 = "1b9kgib9dxjcfnw2zdbqd12ikcswkl35nwy9m47x5jvy3glxg6m8";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
-    dee ffmpeg_4 openalSoft minizip libopus alsaLib libpulseaudio range-v3
+    dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
     tl-expected hunspell
     # TODO: Shouldn't be required:
     pcre xorg.libpthreadstubs xorg.libXdmcp utillinux libselinux libsepol epoxy at-spi2-core libXtst

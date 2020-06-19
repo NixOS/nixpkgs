@@ -1,6 +1,6 @@
 { config, stdenv, fetchurl, fetchFromGitHub, fetchpatch
 , addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
-, ffmpeg_4, freefont_ttf, freetype, libass, libpthreadstubs, mujs
+, ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
 , CoreFoundation, Cocoa, CoreAudio, MediaPlayer
 
@@ -39,7 +39,10 @@
 , libpngSupport      ? true,           libpng        ? null
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
-, sambaSupport       ? stdenv.isLinux, samba         ? null
+# NOTE: samba support should be removed on the next mpv release, see also:
+# https://github.com/NixOS/nixpkgs/pull/89145#issuecomment-636424362
+# Please remove this line on the next mpv release.
+, sambaSupport       ? false,          samba         ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
 , sndioSupport       ? true,           sndio         ? null
@@ -152,7 +155,7 @@ in stdenv.mkDerivation rec {
     ++ optional swiftSupport swift;
 
   buildInputs = [
-    ffmpeg_4 freetype libass libpthreadstubs
+    ffmpeg freetype libass libpthreadstubs
     luaEnv libuchardet mujs
   ] ++ optional alsaSupport        alsaLib
     ++ optional archiveSupport     libarchive

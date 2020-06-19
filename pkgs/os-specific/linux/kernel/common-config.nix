@@ -639,11 +639,21 @@ let
       # enabled by default in x86_64 but not arm64, so we do that here
       HIDRAW               = yes;
 
+      HID_ACRUX_FF       = yes;
+      DRAGONRISE_FF      = yes;
+      HOLTEK_FF          = yes;
+      SONY_FF            = yes;
+      SMARTJOYPLUS_FF    = yes;
+      THRUSTMASTER_FF    = yes;
+      ZEROPLUS_FF        = yes;
+
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
       KERNEL_XZ          = yes;
 
       SYSVIPC            = yes;  # System-V IPC
+
+      AIO                = yes;  # POSIX asynchronous I/O
 
       UNIX               = yes;  # Unix domain sockets.
 

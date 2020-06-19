@@ -1,6 +1,7 @@
 { stdenv, fetchurl, makeWrapper
 , xorg, imlib2, libjpeg, libpng
-, curl, libexif, jpegexiforient, perlPackages }:
+, curl, libexif, jpegexiforient, perlPackages
+, enableAutoreload ? true }:
 
 with stdenv.lib;
 
@@ -21,7 +22,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}" "exif=1"
-  ] ++ optional stdenv.isDarwin "verscmp=0";
+  ] ++ optional stdenv.isDarwin "verscmp=0"
+    ++ optional enableAutoreload "inotify=1";
 
   installTargets = [ "install" ];
   postInstall = ''

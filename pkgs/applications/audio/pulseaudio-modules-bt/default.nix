@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pulseaudio
 , pkgconfig
-, ffmpeg_4
+, ffmpeg
 , patchelf
 , fdk_aac
 , libtool
@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     pulseaudio
-    ffmpeg_4
+    ffmpeg
     fdk_aac
     libtool
     ldacbt
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
     for so in $out/lib/pulse-${pulseaudio.version}/modules/*.so; do
       orig_rpath=$(patchelf --print-rpath "$so")
       patchelf \
-        --set-rpath "${ldacbt}/lib:${lib.getLib ffmpeg_4}/lib:$out/lib/pulse-${pulseaudio.version}/modules:$orig_rpath" \
+        --set-rpath "${ldacbt}/lib:${lib.getLib ffmpeg}/lib:$out/lib/pulse-${pulseaudio.version}/modules:$orig_rpath" \
         "$so"
     done
   '';

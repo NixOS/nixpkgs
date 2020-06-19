@@ -5,7 +5,7 @@
 , net-snmp, openssl, perl, nettools
 , bash, coreutils, utillinux
 # To remove references to gcc-unwrapped
-, removeReferencesTo
+, removeReferencesTo, qt5
 , withQt5 ? true
 , withPlugin ? false
 , withStaticPPDInstall ? false
@@ -67,12 +67,15 @@ python3Packages.buildPythonApplication {
     zlib
   ];
 
-  nativeBuildInputs = [ pkgconfig removeReferencesTo ];
+  nativeBuildInputs = [
+    pkgconfig
+    removeReferencesTo
+  ] ++ stdenv.lib.optional withQt5 qt5.wrapQtAppsHook;
 
   pythonPath = with python3Packages; [
     dbus
     pillow
-    pygobject2
+    pygobject3
     reportlab
     usbutils
     sip
@@ -219,6 +222,10 @@ python3Packages.buildPythonApplication {
       --replace {,${utillinux}/bin/}logger \
       --replace {/usr,$out}/bin
     remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
+  '' + stdenv.lib.optionalString withQt5 ''
+    for f in $out/bin/hp-*;do
+      wrapQtApp $f
+    done
   '';
 
   # There are some binaries there, which reference gcc-unwrapped otherwise.

@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
     ]
     ++ (stdenv.lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
 
-  propagatedBuildInputs = [glib];
-
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
     "--x-libraries=${libX11.out}/lib"

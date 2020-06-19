@@ -712,9 +712,7 @@ let
 
     phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
-    piqi = callPackage ../development/ocaml-modules/piqi {
-      base64 = base64_2;
-    };
+    piqi = callPackage ../development/ocaml-modules/piqi { };
 
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 

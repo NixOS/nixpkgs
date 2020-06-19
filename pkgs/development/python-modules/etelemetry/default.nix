@@ -1,12 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, requests, pytest }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, requests, pytest }:
 
 buildPythonPackage rec {
-  version = "0.1.2";
+  version = "0.2.1";
   pname = "etelemetry";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m3dqvs3xbckmjiwppy366qmgzx0z917j1d7dadfl3bprgipy51j";
+    sha256 = "bfb58f58e98f63eae20caffb8514fb68c572332aa6e773cf3fcbde9b408d88e7";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , appdirs
 , requests
 , pytest
@@ -8,11 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pipdate";
-  version = "0.3.5";
+  version = "0.5.1";
+  disabled = isPy27; # abandoned
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "240c0f270ddb7470ad7b8c8fba4106e3dbd8817a370624fd8c32cf19155c9547";
+    sha256 = "d10bd408e4b067a2a699badf87629a12838fa42ec74dc6140e64a09eb0dc28cf";
   };
 
   propagatedBuildInputs = [

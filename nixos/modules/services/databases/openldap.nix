@@ -232,7 +232,7 @@ in
   };
 
   meta = {
-    maintainers = lib.maintainers.mic92;
+    maintainers = [ lib.maintainers.mic92 ];
   };
 
 

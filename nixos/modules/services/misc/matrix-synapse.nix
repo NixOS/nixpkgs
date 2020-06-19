@@ -727,5 +727,6 @@ in {
   ];
 
   meta.doc = ./matrix-synapse.xml;
+  meta.maintainers = teams.matrix.members;
 
 }

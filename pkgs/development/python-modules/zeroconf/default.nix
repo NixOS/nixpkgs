@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.26.3";
+  version = "0.27.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "43ad5006c00be2040cdca1fe768206f4a25356d3cc87eff8b66bd7ead2a82440";
+    sha256 = "51a8bc581036cabcf82523c81b72f6a11b2c7913eb7eb418b6dad60cd40f9ef2";
   };
 
   propagatedBuildInputs = [ ifaddr ]

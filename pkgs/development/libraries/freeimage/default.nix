@@ -1,5 +1,8 @@
 { lib, stdenv, fetchurl, unzip, darwin }:
 
+# TODO: consider unvendoring various dependencies (libpng, libjpeg,
+# libwebp, zlib, ...)
+
 stdenv.mkDerivation {
   name = "freeimage-3.18.0";
 
@@ -50,5 +53,7 @@ stdenv.mkDerivation {
     license = "GPL";
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; unix;
+    # see https://github.com/NixOS/nixpkgs/issues/77653
+    broken = stdenv.isAarch64;
   };
 }
