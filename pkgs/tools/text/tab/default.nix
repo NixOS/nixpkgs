@@ -1,4 +1,4 @@
-{ stdenv, fetchFromBitbucket, python2 }:
+{ stdenv, fetchFromBitbucket, python3 }:
 
 stdenv.mkDerivation rec {
   version = "7.2";
@@ -11,9 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "1bm15lw0vp901dj2vsqx6yixmn7ls3brrzh1w6zgd1ksjzlm5aax";
   };
 
-  nativeBuildInputs = [ python2 ];
+  checkInputs = [ python3 ];
 
   doCheck = true;
+
+  preCheck = ''
+    substituteInPlace Makefile --replace "python2 go2.py" "python go.py"
+  '';
 
   checkTarget = "test";
 
