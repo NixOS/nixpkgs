@@ -777,6 +777,11 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/63103">PR #63103</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      <literal>config.systemd.services.${name}.path</literal> now returns a list of paths instead of a colon-separated string.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
