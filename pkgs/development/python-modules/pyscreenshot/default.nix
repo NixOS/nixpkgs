@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyscreenshot";
-  version = "0.6";
+  version = "2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7322ad9454652b1702a3689646ce53ef01ed2b14869ea557030bd4e03a06fc0e";
+    sha256 = "dec8517cb18faf4f983dd2ee6636924e472a5644da1480ae871786dfcac244e9";
   };
 
   propagatedBuildInputs = [

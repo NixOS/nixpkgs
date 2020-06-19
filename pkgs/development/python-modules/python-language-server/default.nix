@@ -21,14 +21,19 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.31.9";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "06hd6a1hhd57hrq4vbwfs0saplkhsrz2krv8kq9kw4fz4hx7zj74";
+    sha256 = "064ck4ikrrrhq8wjpbs5k6hzkrjvfg91pd6351471xpsij0kj16f";
   };
+
+  postPatch = ''
+    # https://github.com/palantir/python-jsonrpc-server/issues/36
+    sed -i -e 's!ujson<=!ujson>=!' setup.py
+  '';
 
   # The tests require all the providers, disable otherwise.
   doCheck = providers == ["*"];
@@ -53,10 +58,8 @@ buildPythonPackage rec {
     "test_pandas_completions"
     "test_matplotlib_completions"
     "test_snippet_parsing"
+    "test_numpy_hover"
   ] ++ stdenv.lib.optional isPy27 "test_flake8_lint";
-  # checkPhase = ''
-  #   HOME=$TEMPDIR pytest -k "not test_pyqt_completion and not 
-  # '';
 
   propagatedBuildInputs = [ setuptools jedi pluggy future python-jsonrpc-server flake8 ujson ]
     ++ stdenv.lib.optional (withProvider "autopep8") autopep8

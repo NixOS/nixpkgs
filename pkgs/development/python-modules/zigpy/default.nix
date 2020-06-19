@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-homeassistant";
-  version = "0.11.0";
+  version = "0.19.0";
 
   nativeBuildInputs = [ pytest pytest-asyncio asynctest ];
   buildInputs = [ aiohttp pycryptodome ];
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "021wg9yhz8dsif60r8s5621mf63bsayjjb2bimhq0am03ql0fysl";
+    sha256 = "779cff7affb86b7141aa641c188342b22be0ec766adee0d180c93e74e2b10adc";
   };
 
   meta = with stdenv.lib; {

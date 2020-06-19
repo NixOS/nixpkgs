@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-astropy";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f28fb81dcdfa745f423b8f6d0303d97357d775b4128bcc2b3668f1602fd5a0b";
+    sha256 = "619800eb2cbf64548fbea25268efe7c6f6ae206cb4825f34abd36f27bcf946a2";
   };
 
   propagatedBuildInputs = [

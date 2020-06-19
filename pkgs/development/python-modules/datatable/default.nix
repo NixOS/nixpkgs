@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "datatable";
-  version = "0.9.0";
+  version = "0.10.1";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1shwjkm9nyaj6asn57vwdd74pn13pggh14r6dzv729lzxm7nm65f";
+    sha256 = "3ce5257c0c4afa96e2b14ca47a0aaf73add195b11de48f4adda50b5ede927436";
   };
 
   patches = lib.optionals stdenv.isDarwin [

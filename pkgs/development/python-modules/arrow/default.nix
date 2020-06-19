@@ -1,6 +1,7 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, isPy27
 , nose, chai, simplejson, backports_functools_lru_cache
-, python-dateutil, pytz, pytest-mock, sphinx, dateparser, pytestcov, pytest
+, python-dateutil, pytz, pytest-mock, sphinx, dateparser, pytestcov
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     dateparser
-    pytest
+    pytestCheckHook
     pytestcov
     pytest-mock
     pytz
@@ -25,9 +26,10 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  # ParserError: Could not parse timezone expression "America/Nuuk"
+  disabledTests = [
+    "test_parse_tz_name_zzz"
+  ];
 
   meta = with lib; {
     description = "Python library for date manipulation";

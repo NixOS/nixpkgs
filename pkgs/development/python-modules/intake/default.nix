@@ -23,13 +23,13 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.5.5";
+  version = "0.6.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ypgf0046hln27gjcy7gjh4diblgmivkf7kxbcy1mjvwka55bdmw";
+    sha256 = "0c284abeb74927a7366dcab6cefc010c4d050365b8af61c37326a2473a490a4e";
   };
 
   checkInputs = [ pyarrow pytest ];
