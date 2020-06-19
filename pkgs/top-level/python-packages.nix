@@ -2318,7 +2318,7 @@ in {
 
   coreschema = callPackage ../development/python-modules/coreschema { };
 
-  coveralls = callPackage ../development/python-modules/coveralls { };
+  coveralls = disabledIf (pythonOlder "3.5") (callPackage ../development/python-modules/coveralls { });
 
   coverage = callPackage ../development/python-modules/coverage { };
 
