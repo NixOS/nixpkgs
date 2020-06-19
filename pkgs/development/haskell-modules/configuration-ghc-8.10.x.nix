@@ -62,6 +62,7 @@ self: super: {
 
   # Jailbreak to fix the build.
   async = doJailbreak super.async;
+  base-noprelude = doJailbreak super.base-noprelude;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   ed25519 = doJailbreak super.ed25519;
   email-validate = doJailbreak super.email-validate;  # https://github.com/Porges/email-validate-hs/issues/51
