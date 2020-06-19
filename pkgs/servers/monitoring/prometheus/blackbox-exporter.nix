@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "blackbox_exporter";
-  version = "0.16.0";
+  version = "0.17.0";
   rev = version;
 
   goPackagePath = "github.com/prometheus/blackbox_exporter";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "prometheus";
     repo = "blackbox_exporter";
-    sha256 = "1zbf3ljasv0r91rrmk3mj5nhimaf7xg3aih1ldz27rh5yww7gyzg";
+    sha256 = "00ganz6wfwyb9avkp2fr4bwpzvfiffsmpgndl8zp80bk7m1b3mnz";
   };
 
   # dns-lookup is performed for the tests
