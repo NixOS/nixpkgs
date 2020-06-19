@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk11, rlwrap, makeWrapper }:
+{ stdenv, fetchurl, installShellFiles, jdk11, rlwrap, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "clojure";
@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "06lg4z3q0fzxlbmx92g5qb0w3nw83dbwkzh3zjdy9ixrpm7b84i0";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   installPhase =
     let
@@ -26,6 +29,8 @@ stdenv.mkDerivation rec {
         install -Dt $out/bin clj clojure
         wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
         wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
+
+        installManPage clj.1 clojure.1
       '';
 
   doInstallCheck = true;
