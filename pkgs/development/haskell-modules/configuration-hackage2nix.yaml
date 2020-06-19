@@ -9512,7 +9512,6 @@ broken-packages:
   - SimpleServer
   - simplesmtpclient
   - simseq
-  - single-tuple
   - singleton-dict
   - singleton-typelits
   - singnal
