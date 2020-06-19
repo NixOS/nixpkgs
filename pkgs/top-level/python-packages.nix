@@ -4504,7 +4504,10 @@ in {
 
   mapsplotlib = callPackage ../development/python-modules/mapsplotlib { };
 
-  markdown = callPackage ../development/python-modules/markdown { };
+  markdown = if isPy3k then
+    callPackage ../development/python-modules/markdown { }
+  else
+    callPackage ../development/python-modules/markdown/3_1.nix { };
 
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript {};
 
