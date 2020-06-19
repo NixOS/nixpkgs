@@ -8,6 +8,7 @@
 , hypothesis
 , glibcLocales
 , pathlib ? null
+, isPy3k
 }:
 
 buildPythonPackage rec {
