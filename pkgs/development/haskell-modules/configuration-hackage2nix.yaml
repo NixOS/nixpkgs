@@ -5848,6 +5848,7 @@ broken-packages:
   - hasql-optparse-applicative
   - hasql-postgres
   - hasql-postgres-options
+  - hasql-queue
   - hasql-simple
   - hastache
   - hastache-aeson
