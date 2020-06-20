@@ -12458,6 +12458,7 @@ let
       sha256 = "8695494db239e6bbec67cc686e15a60a3424b9f71af5e9936729dfd2be8a3530";
     };
     propagatedBuildInputs = [ DBDmysql Mojolicious SQLAbstract ];
+    buildInputs = [ TestDeep ];
     meta = {
       homepage = "https://github.com/jhthorsen/mojo-mysql";
       description = "Mojolicious and Async MySQL/MariaDB";
