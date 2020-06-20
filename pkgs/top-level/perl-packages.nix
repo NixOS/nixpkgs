@@ -2984,10 +2984,10 @@ let
 
   ConfigGitLike = buildPerlPackage {
     pname = "Config-GitLike";
-    version = "1.17";
+    version = "1.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AL/ALEXMV/Config-GitLike-1.17.tar.gz";
-      sha256 = "674a07b814fdcf9d323088d093245bcd066aaee24ec0914cb4decc9a943de54e";
+      url = mirror://cpan/authors/id/A/AL/ALEXMV/Config-GitLike-1.18.tar.gz;
+      sha256 = "f7ae7440f3adab5b9ff9aa57216d84fd4a681009b9584e32da42f8bb71e332c5";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ Moo MooXTypesMooseLike ];
