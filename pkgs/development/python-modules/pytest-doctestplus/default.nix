@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , six
 , pytest
 , numpy
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
   version = "0.7.0";
+  disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
