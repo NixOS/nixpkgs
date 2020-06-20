@@ -3410,18 +3410,11 @@ let
 
   CPAN = buildPerlPackage {
     pname = "CPAN";
-    version = "2.27";
+    version = "2.28";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AN/ANDK/CPAN-2.27.tar.gz";
-      sha256 = "b4b1471a2881e2d616f59e723879b4110ae485b79d5962f115119c28cf69e07f";
+      url = "mirror://cpan/authors/id/A/AN/ANDK/CPAN-2.28.tar.gz";
+      sha256 = "39d357489283d479695027640d7fc25b42ec3c52003071d1ec94496e34af5974";
     };
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/andk/cpanpm/commit/10da44f1757aff6971e3bc4ed38ab115e738c740.diff";
-        name = "patch-YAML-modules-default-for-LoadBlessed-was-changed-to-false";
-        sha256 = "0sr2nxkr1cwavpvpxsqcsryfd5fjv4fkxfihd03jzavv5awj79hp";
-      })
-    ];
     propagatedBuildInputs = [ ArchiveZip CPANChecksums CPANPerlReleases Expect FileHomeDir LWP LogLog4perl ModuleBuild TermReadKey YAML YAMLLibYAML YAMLSyck ];
     meta = {
       description = "Query, download and build perl modules from CPAN sites";
