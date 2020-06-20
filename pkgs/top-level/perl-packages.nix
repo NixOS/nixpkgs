@@ -9052,13 +9052,13 @@ let
 
   HTTPMessage = buildPerlPackage {
     pname = "HTTP-Message";
-    version = "6.18";
+    version = "6.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-6.18.tar.gz";
-      sha256 = "d060d170d388b694c58c14f4d13ed908a2807f0e581146cef45726641d809112";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-6.24.tar.gz;
+      sha256 = "554a1acf2daa401091f7012f5cb82d04d281db43fbd8f39a1fcbb7ed56dde16d";
     };
     buildInputs = [ TryTiny ];
-    propagatedBuildInputs = [ EncodeLocale HTTPDate IOHTML LWPMediaTypes URI ];
+    propagatedBuildInputs = [ Clone Encode EncodeLocale HTTPDate IOHTML LWPMediaTypes URI ];
     meta = {
       homepage = "https://github.com/libwww-perl/HTTP-Message";
       description = "HTTP style message (base class)";
