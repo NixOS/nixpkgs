@@ -8004,10 +8004,10 @@ let
 
   Glib = buildPerlPackage {
     pname = "Glib";
-    version = "1.3291";
+    version = "1.3293";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-1.3291.tar.gz";
-      sha256 = "0whz5f87wvzq8zsva85h06mkfqim2ciq845ixlvmafwxggccv0xr";
+      url = mirror://cpan/authors/id/X/XA/XAOC/Glib-1.3293.tar.gz;
+      sha256 = "005m3inz12xcsd5sr056cm1kbhmxsx2ly88ifbdv6p6cwz0s05kk";
     };
     buildInputs = [ pkgs.glib ];
     doCheck = false; # tests failing with glib 2.60 https://rt.cpan.org/Public/Bug/Display.html?id=128165
