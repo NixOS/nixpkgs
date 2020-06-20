@@ -13736,16 +13736,17 @@ let
 
   NetDNSResolverMock = buildPerlPackage {
      pname = "Net-DNS-Resolver-Mock";
-     version = "1.20171219";
+     version = "1.20200215";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Net-DNS-Resolver-Mock-1.20171219.tar.gz";
-       sha256 = "0m3rxpkv1b9121srvbqkrgzg4m8mnydiydqv34in1i1ixwrl6jn9";
+       url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Net-DNS-Resolver-Mock-1.20200215.tar.gz;
+       sha256 = "1rv745c16l3m3w6xx2hjmmgzkdklmzm9imdfiddmdr9hwm8g3xxy";
      };
      propagatedBuildInputs = [ NetDNS ];
      meta = {
        description = "Mock a DNS Resolver object for testing";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
+    buildInputs = [ TestException ];
   };
 
   NetDomainTLD = buildPerlPackage {
