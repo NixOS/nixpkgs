@@ -15884,7 +15884,9 @@ in
   openafs = callPackage ../servers/openafs/1.6 { tsmbac = null; ncurses = null; };
   openafs_1_8 = callPackage ../servers/openafs/1.8 { tsmbac = null; ncurses = null; };
 
-  openresty = callPackage ../servers/http/openresty { };
+  openresty = callPackage ../servers/http/openresty {
+    withPerl = false;
+  };
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
   opensmtpd-extras = callPackage ../servers/mail/opensmtpd/extras.nix { };
