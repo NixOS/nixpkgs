@@ -13996,13 +13996,13 @@ let
 
   NetPrometheus = buildPerlModule {
     pname = "Net-Prometheus";
-    version = "0.07";
+    version = "0.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.07.tar.gz";
-      sha256 = "1dh498b26wdaip053hw52317jjmb2n2r5209a1zv5yfrlxpblqm7";
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.11.tar.gz;
+      sha256 = "0skjkz6q68y8g9blm7i03k4wprac3djq15akmlv1kmgag3i0ky12";
     };
-    propagatedBuildInputs = [ RefUtil StructDumb ];
-    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ RefUtil StructDumb URI ];
+    buildInputs = [ HTTPMessage TestFatal ];
     meta = {
       description = "export monitoring metrics for F<prometheus>";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
