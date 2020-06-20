@@ -15437,12 +15437,12 @@ let
 
   PPIxRegexp = buildPerlModule {
     pname = "PPIx-Regexp";
-    version = "0.068";
+    version = "0.072";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.068.tar.gz";
-      sha256 = "b5444b699a3c7ad79506c796559449c6f858dc62deb60e08249f96782636e5f4";
+      url = mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.072.tar.gz;
+      sha256 = "84a050b3b65c98a4b95f9df94fa0d8db9a931b000bb6e2946f0f8874cc2bac5c";
     };
-    propagatedBuildInputs = [ ListMoreUtils PPI ];
+    propagatedBuildInputs = [ PPI ];
     meta = {
       description = "Parse regular expressions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
