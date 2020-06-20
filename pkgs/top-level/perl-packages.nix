@@ -14791,7 +14791,7 @@ let
   };
 
   ParseYapp = buildPerlPackage {
-    pname = "Parser-Yapp";
+    pname = "Parse-Yapp";
     version = "1.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WB/WBRASWELL/Parse-Yapp-1.21.tar.gz";
