@@ -14920,10 +14920,10 @@ let
 
   Pegex = buildPerlPackage {
     pname = "Pegex";
-    version = "0.74";
+    version = "0.75";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/Pegex-0.74.tar.gz";
-      sha256 = "31f0889695d79a3ab79a6315a8a08baeb1268592bc6596c3feffb424d982dfdf";
+      url = mirror://cpan/authors/id/I/IN/INGY/Pegex-0.75.tar.gz;
+      sha256 = "4dc8d335de80b25247cdb3f946f0d10d9ba0b3c34b0ed7d00316fd068fd05edc";
     };
     buildInputs = [ TestPod TieIxHash ];
     meta = {
