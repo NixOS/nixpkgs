@@ -5558,10 +5558,10 @@ let
 
   DevelHide = buildPerlPackage {
     pname = "Devel-Hide";
-    version = "0.0010";
+    version = "0.0013";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FE/FERREIRA/Devel-Hide-0.0010.tar.gz";
-      sha256 = "10jyv9nmv513hs75rls5yx2xn82513xnnhjir3dxiwgb1ykfyvvm";
+      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-Hide-0.0013.tar.gz;
+      sha256 = "1jvyy3yasiwyjsn9ay9sja3ch4wcjc4wk5l22vjsclq29z7vphvg";
     };
   };
 
