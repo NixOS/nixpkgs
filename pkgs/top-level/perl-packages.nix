@@ -13721,10 +13721,10 @@ let
 
   NetDNS = buildPerlPackage {
     pname = "Net-DNS";
-    version = "1.21";
+    version = "1.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.21.tar.gz";
-      sha256 = "ddefe13b28084ffcc8f10a96b3c13c59449dbf6fc371c006d129630ea0ce767a";
+      url = mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.24.tar.gz;
+      sha256 = "11a6c2ba6cb1c6640f01c9bbf2036bcbe3974232e9b939ab94985230c92cde63";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     makeMakerFlags = "--noonline-tests";
