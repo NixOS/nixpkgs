@@ -11129,14 +11129,14 @@ let
 
   MailDKIM = buildPerlPackage {
     pname = "Mail-DKIM";
-    version = "0.58";
+    version = "1.20200513.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-0.58.tar.gz";
-      sha256 = "0cgkal65qqcy57b21lgij90ba36wl66byw9i76g5yhwaa8ms8hqa";
+      url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-1.20200513.1.tar.gz;
+      sha256 = "1gbnzxns4gy02lrgfmzdvr7bc0kxgxiq850mdj2y7k75nnv28iak";
     };
-    propagatedBuildInputs = [ CryptOpenSSLRSA MailAuthenticationResults MailTools NetDNSResolverMock YAMLLibYAML ];
+    propagatedBuildInputs = [ CryptOpenSSLRSA MailAuthenticationResults MailTools NetDNS ];
     doCheck = false; # tries to access the domain name system
-    buildInputs = [ TestRequiresInternet ];
+    buildInputs = [ NetDNSResolverMock TestRequiresInternet YAMLLibYAML ];
   };
 
   MailIMAPClient = buildPerlPackage {
