@@ -8,7 +8,6 @@
 , dbus
 , fontconfig
 , freetype
-, gconf
 , gdk-pixbuf
 , glib
 , glibc
@@ -101,7 +100,6 @@ stdenv.mkDerivation {
       dbus
       fontconfig
       freetype
-      gconf
       gdk-pixbuf
       glib
       glibc
