@@ -16462,10 +16462,10 @@ let
 
   Sereal = buildPerlPackage {
     pname = "Sereal";
-    version = "4.008";
+    version = "4.014";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-4.008.tar.gz";
-      sha256 = "1ima428v8mi509crr3b1rnh67ki8vbcd7iignw68mf2iaw5wmb58";
+      url = mirror://cpan/authors/id/Y/YV/YVES/Sereal-4.014.tar.gz;
+      sha256 = "02qpl3x6sh0xfby38gr80dndkah9m5r0xhk7d4a24i9hqljjaing";
     };
     buildInputs = [ TestLongString TestWarn ];
     propagatedBuildInputs = [ SerealDecoder SerealEncoder ];
