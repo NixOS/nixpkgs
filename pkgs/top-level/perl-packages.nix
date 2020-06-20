@@ -15451,12 +15451,12 @@ let
 
   PPIxQuoteLike = buildPerlModule {
     pname = "PPIx-QuoteLike";
-    version = "0.008";
+    version = "0.011";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WY/WYANT/PPIx-QuoteLike-0.008.tar.gz";
-      sha256 = "0dzlcddvfzn7s8z1jj12ghsbzf9wm5dq84361v4vx5p6j8zhsaz4";
+      url = mirror://cpan/authors/id/W/WY/WYANT/PPIx-QuoteLike-0.011.tar.gz;
+      sha256 = "0yi0rx8nf3pz1g5d9z7mi6pzbd4y2kqj61vsgmyllk6rfyjcgmsf";
     };
-    propagatedBuildInputs = [ PPI ];
+    propagatedBuildInputs = [ PPI Readonly ];
     meta = {
       description = "Parse Perl string literals and string-literal-like things.";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
