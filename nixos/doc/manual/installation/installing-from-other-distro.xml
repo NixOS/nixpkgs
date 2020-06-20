@@ -311,10 +311,14 @@ nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
      happens.
     </para>
    </warning>
-<screen>
-<prompt>$ </prompt>sudo mv -v /boot /boot.bak &amp;&amp;
-sudo /nix/var/nix/profiles/system/bin/switch-to-configuration boot
-</screen>
+   <screen>
+    <prompt>$ </prompt>sudo mv -v /boot /boot.bak
+    <prompt>$ </prompt>sudo mkdir /boot/
+    <prompt>$ </prompt>sudo umount /boot.bak/efi
+    <prompt>$ </prompt>sudo mount /dev/nvme0n1p1 /boot
+    <prompt>$ </prompt>sudo mv /boot/EFI /boot.bak/efi/
+    <prompt>$ </prompt>sudo NIXOS_INSTALL_BOOTLOADER=1 /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+   </screen>
    <para>
     Cross your fingers, reboot, hopefully you should get a NixOS prompt!
    </para>
