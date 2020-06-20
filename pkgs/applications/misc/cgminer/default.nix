@@ -1,45 +1,49 @@
-{ fetchgit, stdenv, pkgconfig, libtool, autoconf, automake
-, curl, ncurses, ocl-icd, opencl-headers, xorg, jansson }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, libtool
+, autoconf
+, automake
+, curl
+, ncurses
+, ocl-icd
+, opencl-headers
+, libusb1
+, xorg
+, jansson }:
 
-stdenv.mkDerivation {
-  version = "3.7.2";
+stdenv.mkDerivation rec {
   pname = "cgminer";
+  version = "4.11.1";
 
-  src = fetchgit {
-    url = "https://github.com/ckolivas/cgminer.git";
-    rev = "refs/tags/v3.7.2";
-    sha256  = "1xfzx91dpwjj1vmhas3v9ybs0p2i74lrhinijmpav15acfggm9fq";
+  src = fetchFromGitHub {
+    owner = "ckolivas";
+    repo = "cgminer";
+    rev = "v${version}";
+    sha256 = "0l1ms3nxnjzh4mpiadikvngcr9k3jnjqy3yna207za0va0c28dj5";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    autoconf automake libtool curl ncurses ocl-icd opencl-headers
-    xorg.libX11 xorg.libXext xorg.libXinerama jansson
-  ];
+  buildInputs = [ autoconf automake libtool curl ncurses ocl-icd opencl-headers
+    xorg.libX11 xorg.libXext xorg.libXinerama jansson libusb1 ];
+
   configureScript = "./autogen.sh";
-  configureFlags = [ "--enable-scrypt" "--enable-opencl" ];
-  NIX_LDFLAGS = "-lgcc_s -lX11 -lXext -lXinerama";
-
-  postBuild = ''
-    gcc api-example.c -o cgminer-api
-  '';
-
-  postInstall = ''
-    cp cgminer-api $out/bin/
-    chmod 444 $out/bin/*.cl
-  '';
+  configureFlags = [ "--enable-scrypt"
+                     "--enable-opencl"
+                     "--enable-bitforce"
+                     "--enable-icarus"
+                     "--enable-modminer"
+                     "--enable-ztex"
+                     "--enable-avalon"
+                     "--enable-klondike"
+                     "--enable-keccak"
+                     "--enable-bflsc"];
 
   meta = with stdenv.lib; {
     description = "CPU/GPU miner in c for bitcoin";
-    longDescription= ''
-      This is a multi-threaded multi-pool GPU, FPGA and ASIC miner with ATI GPU
-      monitoring, (over)clocking and fanspeed support for bitcoin and derivative
-      coins. Do not use on multiple block chains at the same time!
-    '';
     homepage = "https://github.com/ckolivas/cgminer";
     license = licenses.gpl3;
-    maintainers = [ maintainers.offline ];
-    platforms = stdenv.lib.platforms.linux;
-    hydraPlatforms = [];
+    maintainers = with maintainers; [ offline mmahut ];
+    platforms = platforms.linux;
   };
 }
