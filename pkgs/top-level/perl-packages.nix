@@ -15405,10 +15405,6 @@ let
   POE = buildPerlPackage {
     pname = "POE";
     version = "1.368";
-    patches = [
-      ../development/perl-modules/perl-POE-1.367-pod_linkcheck.patch
-      ../development/perl-modules/perl-POE-1.367-pod_no404s.patch
-    ];
     src = fetchurl {
       url = mirror://cpan/authors/id/B/BI/BINGOS/POE-1.368.tar.gz;
       sha256 = "08g1vzxamqg0gmkirdcx7fycq3pwv9vbajc30qwqpm1n3rvdrcdp";
@@ -16521,7 +16517,7 @@ let
       url = mirror://cpan/authors/id/Y/YV/YVES/Sereal-4.014.tar.gz;
       sha256 = "02qpl3x6sh0xfby38gr80dndkah9m5r0xhk7d4a24i9hqljjaing";
     };
-    buildInputs = [ TestLongString TestWarn ];
+    buildInputs = [ TestDeep TestLongString TestMemoryGrowth TestWarn ];
     propagatedBuildInputs = [ SerealDecoder SerealEncoder ];
     meta = {
       homepage = "https://github.com/Sereal/Sereal";
