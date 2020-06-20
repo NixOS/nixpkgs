@@ -642,6 +642,16 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
       <package>netbeans</package> was upgraded to 12.0 and now defaults to OpenJDK 11. This might cause problems if your projects depend on packages that were removed in Java 11.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <package>nextcloud</package> has been updated to <link xlink:href="https://nextcloud.com/blog/nextcloud-hub-brings-productivity-to-home-office/">v19</link>.
+    </para>
+    <para>
+     If you have an existing installation, please make sure that you're on
+     <package>nextcloud18</package> before upgrading to <package>nextcloud19</package>
+     since Nextcloud doesn't support upgrades across multiple major versions.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
