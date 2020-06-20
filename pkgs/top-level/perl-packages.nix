@@ -4205,14 +4205,14 @@ let
     };
   };
 
-  DataMessagePack = buildPerlPackage {
+  DataMessagePack = buildPerlModule {
     pname = "Data-MessagePack";
-    version = "1.00";
+    version = "1.01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SY/SYOHEX/Data-MessagePack-1.00.tar.gz";
-      sha256 = "c9f0eeaf56ee4dfd509eccba2dd838921aebdf186ba60de166443ffc4b0ba1a2";
+      url = mirror://cpan/authors/id/S/SY/SYOHEX/Data-MessagePack-1.01.tar.gz;
+      sha256 = "8fa0ed0101d04e661821a7b78e8d62ce3e19b299275bbfed178e2ba8912663ea";
     };
-    buildInputs = [ FileCopyRecursive TestRequires ];
+    buildInputs = [ DevelPPPort ModuleBuildXSUtil TestRequires ];
     meta = {
       homepage = "https://github.com/msgpack/msgpack-perl";
       description = "MessagePack serializing/deserializing";
