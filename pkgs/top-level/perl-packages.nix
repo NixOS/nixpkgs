@@ -18837,10 +18837,10 @@ let
 
   TestMost = buildPerlPackage {
     pname = "Test-Most";
-    version = "0.35";
+    version = "0.37";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OV/OVID/Test-Most-0.35.tar.gz";
-      sha256 = "0zv5dyzq55r28plffibcr7wd00abap0h2zh4s4p8snaiszsad5wq";
+      url = mirror://cpan/authors/id/O/OV/OVID/Test-Most-0.37.tar.gz;
+      sha256 = "1isg8z6by113zn08l044w6k04y5m5bnns3rqmks8rwdr3qa70csk";
     };
     propagatedBuildInputs = [ ExceptionClass ];
     meta = {
