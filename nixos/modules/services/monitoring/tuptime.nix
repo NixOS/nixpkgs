@@ -32,7 +32,10 @@ in {
 
     environment.systemPackages = [ pkgs.tuptime ];
 
-    users.users.tuptime.description = "tuptime database owner";
+    users = {
+      groups._tuptime.members = [ "_tuptime" ];
+      users._tuptime.description = "tuptime database owner";
+    };
 
     systemd = {
       services = {
@@ -45,7 +48,7 @@ in {
           serviceConfig = {
             StateDirectory = "tuptime";
             Type = "oneshot";
-            User = "tuptime";
+            User = "_tuptime";
             RemainAfterExit = true;
             ExecStart = "${pkgs.tuptime}/bin/tuptime -x";
             ExecStop = "${pkgs.tuptime}/bin/tuptime -xg";
@@ -57,7 +60,7 @@ in {
           serviceConfig = {
             StateDirectory = "tuptime";
             Type = "oneshot";
-            User = "tuptime";
+            User = "_tuptime";
             ExecStart = "${pkgs.tuptime}/bin/tuptime -x";
           };
         };
