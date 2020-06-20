@@ -26,6 +26,12 @@ self: super: {
   # successfully with recent versions of the compiler).
   bin-package-db = null;
 
+  # waiting for release: https://github.com/jwiegley/c2hsc/issues/41
+  c2hsc = appendPatch super.c2hsc (pkgs.fetchpatch {
+    url = "https://github.com/jwiegley/c2hsc/commit/490ecab202e0de7fc995eedf744ad3cb408b53cc.patch";
+    sha256 = "1c7knpvxr7p8c159jkyk6w29653z5yzgjjqj11130bbb8mk9qhq7";
+  });
+
   # Some Hackage packages reference this attribute, which exists only in the
   # GHCJS package set. We provide a dummy version here to fix potential
   # evaluation errors.
@@ -346,7 +352,6 @@ self: super: {
   pwstore-cli = dontCheck super.pwstore-cli;
   quantities = dontCheck super.quantities;
   redis-io = dontCheck super.redis-io;
-  reflex = dontCheck super.reflex; # test suite uses hlint, which has different haskell-src-exts version
   rethinkdb = dontCheck super.rethinkdb;
   Rlang-QQ = dontCheck super.Rlang-QQ;
   safecopy = dontCheck super.safecopy;
@@ -1027,6 +1032,7 @@ self: super: {
   # 2020-06-04: HACK: dontCheck - The test suite attempts to use the network.
   # Should be solved when: https://github.com/dhall-lang/dhall-haskell/issues/1837
   dhall = generateOptparseApplicativeCompletion "dhall" (dontCheck super.dhall);
+  dhall_1_30_0 = dontCheck super.dhall_1_30_0;
 
   dhall-json =
     generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"]
@@ -1045,8 +1051,7 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-  stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: { http-download = self.http-download_0_2_0_0; }));
-  http-download_0_2_0_0 = dontCheck super.http-download_0_2_0_0;
+  stack = generateOptparseApplicativeCompletion "stack" super.stack;
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
@@ -1115,8 +1120,12 @@ self: super: {
   # });
   libnix = dontCheck super.libnix;
 
+  # Jailbreak: https://github.com/jaor/xmobar/issues/463
   # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
-  xmobar = dontCheck super.xmobar;
+  xmobar = appendPatch (dontCheck super.xmobar) (pkgs.fetchpatch {
+    url = "https://github.com/jaor/xmobar/pull/464.patch";
+    sha256 = "0y1dd878yzy1cx0cjj0ijd3dmywr7jdmk68vxdjimxzblrdw1al6";
+  });
 
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
@@ -1243,9 +1252,6 @@ self: super: {
       })
     ];
   });
-
-  # Needs the corresponding version of haskell-src-exts.
-  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_23_1; };
 
   # https://github.com/Daniel-Diaz/HaTeX/issues/144
   HaTeX = dontCheck super.HaTeX;
@@ -1411,11 +1417,6 @@ self: super: {
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
   haskell-ci = doJailbreak super.haskell-ci;
 
-  # Needs the latest version of vty.
-  matterhorn = super.matterhorn.overrideScope (self: super: {
-    vty = self.vty_5_28_2;
-  });
-
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
   persistent-postgresql = dontCheck super.persistent-postgresql;
@@ -1440,16 +1441,11 @@ self: super: {
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
   });
 
-  # Needs a version that's newer than LTS-15.x provides.
-  weeder = super.weeder.override { generic-lens = self.generic-lens_2_0_0_0;  };
-
+  # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
+  # This upstream issue is relevant:
+  # https://github.com/polysemy-research/polysemy/issues/322
   polysemy-plugin = super.polysemy-plugin.override {
-    # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
-    # This upstream issue is relevant:
-    # https://github.com/polysemy-research/polysemy/issues/322
     ghc-tcplugins-extra = self.ghc-tcplugins-extra_0_3_2;
-    # version of Polysemy the plugin goes with
-    polysemy = self.polysemy_1_3_0_0;
   };
 
   # Test suite requires running a database server. Testing is done upstream.
@@ -1465,38 +1461,9 @@ self: super: {
     sha256 = "0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
   });
 
-  # Depends on selective >= 0.4, but the default of selective is 0.3
-  headed-megaparsec = super.headed-megaparsec.override {
-    selective = self.selective_0_4_1;
-  };
-
-  # Needed for ghcide
-  haskell-lsp_0_22_0_0 = super.haskell-lsp_0_22_0_0.override {
-    haskell-lsp-types = self.haskell-lsp-types_0_22_0_0;
-  };
-
   # this will probably need to get updated with every ghcide update,
   # we need an override because ghcide is tracking haskell-lsp closely.
-  ghcide = dontCheck (super.ghcide.override rec {
-    haskell-lsp-types = self.haskell-lsp-types_0_22_0_0;
-    haskell-lsp = self.haskell-lsp_0_22_0_0;
-    hie-bios = self.hie-bios_0_5_0;
-    ghc-check = self.ghc-check_0_3_0_1;
-  });
-
-  # stackage right now is not new enough for hlint-3.0
-  ghc-lib-parser-ex_8_10_0_13 = super.ghc-lib-parser-ex_8_10_0_13.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
-  };
-
-  hlint = super.hlint.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200523;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_13;
-    extra = self.extra_1_7_3;
-    filepattern = self.filepattern.override {
-      extra = self.extra_1_7_3;
-    };
-  };
+  ghcide = dontCheck (super.ghcide.override { ghc-check = self.ghc-check_0_3_0_1; });
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
@@ -1505,5 +1472,89 @@ self: super: {
   # the test suite attempts to run the binaries built in this package
   # through $PATH but they aren't in $PATH
   dhall-lsp-server = dontCheck super.dhall-lsp-server;
+
+  # https://github.com/ocharles/weeder/issues/15
+  weeder = doJailbreak super.weeder;
+
+  # Requested version bump on upstream https://github.com/obsidiansystems/constraints-extras/issues/32
+  constraints-extras = doJailbreak super.constraints-extras;
+  # Requested version bump on upstream https://github.com/srid/rib/issues/160
+  rib = doJailbreak (super.rib.override {
+    dhall = self.dhall_1_30_0;
+  });
+  # Necessary for neuron 0.4.0
+  neuron = super.neuron.override {
+    dhall = self.dhall_1_30_0;
+  };
+
+  # Necessary for stack
+  # x509-validation test suite hangs: upstream https://github.com/vincenthz/hs-certificate/issues/120
+  # tls test suite fails: upstream https://github.com/vincenthz/hs-tls/issues/434
+  x509-validation = dontCheck super.x509-validation;
+  tls = dontCheck super.tls;
+
+  # Upstream PR: https://github.com/bgamari/monoidal-containers/pull/62
+  # Bump these version bound
+  monoidal-containers = appendPatch super.monoidal-containers (pkgs.fetchpatch {
+    url = "https://github.com/bgamari/monoidal-containers/pull/62/commits/715093b22a015398a1390f636be6f39a0de83254.patch";
+    sha256="1lfxvwp8g55ljxvj50acsb0wjhrvp2hvir8y0j5pfjkd1kq628ng";
+  });
+
+  patch = appendPatches super.patch [
+    # Upstream PR: https://github.com/reflex-frp/patch/pull/20
+    # Makes tests work with hlint 3
+    (pkgs.fetchpatch {
+      url = "https://github.com/reflex-frp/patch/pull/20/commits/3ed23a4e4049ee17e64a1a5bbebf1990cdbe033a.patch";
+      sha256 ="1hfa980wln8kzbqw1lr8ddszgcibw25xf12ki2jb9xkl464aynzf";
+    })
+    # Upstream PR: https://github.com/reflex-frp/patch/pull/17
+    # Bumps version dependencies
+    (pkgs.fetchpatch {
+      url = "https://github.com/reflex-frp/patch/pull/17/commits/a191ed9ded708ed7ff0cf53ad6dafaf54db5b95a.patch";
+      sha256 ="1x9w5fimhk3a0l2aa5z91nqaa6s2irz1775iidd0191m6w25vszp";
+    })
+  ];
+
+  reflex = appendPatches super.reflex [
+    # Upstream PR: https://github.com/reflex-frp/reflex/pull/434
+    # Bump version bounds
+    (pkgs.fetchpatch {
+      url = "https://github.com/reflex-frp/reflex/pull/434/commits/e6104bdfd7f664f524b6765275490722e376df4d.patch";
+      sha256 ="1awp5p4640cnhfd50dplsvp0kzy6h8r0hpbw1s40blni74r3dhzr";
+    })
+    # Upstream PR: https://github.com/reflex-frp/reflex/pull/436
+    # Fix build with newest dependent-map version
+    (pkgs.fetchpatch {
+      url = "https://github.com/reflex-frp/reflex/pull/436/commits/dc3bf44d822d70594e3c474fe3869261776c3554.patch";
+      sha256 ="0rbjfj9b8p6zkvd5j4pak5kpgard6cyfvzk750s4xwpc1v84iiqd";
+    })
+    # Upstream PR: https://github.com/reflex-frp/reflex/pull/437
+    # Fix tests with newer dep versions
+    (pkgs.fetchpatch {
+      url = "https://github.com/reflex-frp/reflex/pull/437/commits/87c74a1b9d9098eae8a56148c59ed4963a5232c2.patch";
+      sha256 ="0qhjjgd6n4fms1hpbblny78c95bfh74izhx9dvrdlnhz6q7xlm9q";
+    })
+  ];
+
+  # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
+  # Tests disabled because of very old dep: https://github.com/reflex-frp/reflex-dom/issues/393
+  reflex-dom-core = unmarkBroken (dontCheck (appendPatches super.reflex-dom-core [
+    # Upstream PR: https://github.com/reflex-frp/reflex-dom/pull/388
+    # Fix upper bounds
+    (pkgs.fetchpatch {
+      url = "https://github.com/reflex-frp/reflex-dom/pull/388/commits/5ef04d8e478f410d2c63603b84af052c9273a533.patch";
+      sha256 ="0d0b819yh8mqw8ih5asdi9qcca2kmggfsi8gf22akfw1n7xvmavi";
+      stripLen = 2;
+      extraPrefix = "";
+    })
+    # Upstream PR: https://github.com/reflex-frp/reflex-dom/pull/394
+    # Bump dependent-map
+    (pkgs.fetchpatch {
+      url = "https://github.com/reflex-frp/reflex-dom/pull/394/commits/695bd17d5dcdb1bf321ee8858670731637f651db.patch";
+      sha256 ="0llky3i37rakgsw9vqaqmwryv7s91w8ph8xjkh83nxjs14p5zfyk";
+      stripLen = 2;
+      extraPrefix = "";
+    })
+  ]));
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

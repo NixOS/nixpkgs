@@ -62,6 +62,7 @@ self: super: {
 
   # Jailbreak to fix the build.
   async = doJailbreak super.async;
+  base-noprelude = doJailbreak super.base-noprelude;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   ed25519 = doJailbreak super.ed25519;
   email-validate = doJailbreak super.email-validate;  # https://github.com/Porges/email-validate-hs/issues/51
@@ -84,8 +85,6 @@ self: super: {
   zlib = doJailbreak super.zlib;
 
   # Use the latest version to fix the build.
-  dhall = self.dhall_1_32_0;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_4;
   lens = self.lens_4_19_2;
   optics-core = self.optics-core_0_3;
   repline = self.repline_0_3_0_0;
@@ -97,7 +96,7 @@ self: super: {
   # multiple verions of `ghc-lib-parser(-ex)` available, and the default ones
   # are older ones, those older ones will complain. Because we have a newer
   # GHC, we can just set the dependency to `null` as it is not used.
-  ghc-lib-parser-ex_8_10_0_4 = super.ghc-lib-parser-ex_8_10_0_4.override { ghc-lib-parser = null; };
+  ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = null; };
 
   # Jailbreak to fix the build.
   aeson-diff = doJailbreak super.aeson-diff;
@@ -111,8 +110,6 @@ self: super: {
   serialise = doJailbreak super.serialise;
   setlocale = doJailbreak super.setlocale;
   shellmet = doJailbreak super.shellmet;
-  weeder = doJailbreak super.weeder;    # https://github.com/ocharles/weeder/issues/15
-  xmobar = doJailbreak super.xmobar;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });

@@ -1,15 +1,14 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
 , pythonOlder
-, paver
 , python
 , isPyPy
 , six
-, pathlib
-, python_magic
 , lib
+, filetype
+, deprecation
+, dataclasses
 }:
 
 buildPythonPackage rec {
@@ -22,18 +21,13 @@ buildPythonPackage rec {
     sha256 = "faf5806197f2093e82c2830d41f2378f07b3a9da07a16fafb14fc6fbdebac50a";
   };
 
-  # https://github.com/nicfit/eyeD3/pull/284
-  postPatch = lib.optionalString (pythonAtLeast "3.4") ''
-    sed -ie '/pathlib/d' requirements/requirements.yml
-  '';
-
-  buildInputs = [ paver ];
-
   # requires special test data:
   # https://github.com/nicfit/eyeD3/blob/103198e265e3279384f35304e8218be6717c2976/Makefile#L97
   doCheck = false;
 
-  propagatedBuildInputs = [ six python_magic ] ++ lib.optional (pythonOlder "3.4") pathlib;
+  propagatedBuildInputs = [
+    six filetype deprecation
+  ] ++ lib.optional (pythonOlder "3.7") dataclasses;
 
   postInstall = ''
     for prog in "$out/bin/"*; do
@@ -55,5 +49,4 @@ buildPythonPackage rec {
       and v2.3/v2.4.
     '';
   };
-
 }

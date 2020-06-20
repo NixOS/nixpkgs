@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pythonOlder }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "janus";
@@ -11,7 +11,10 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest-asyncio pytestCheckHook ];
+
+  # also fails upstream: https://github.com/aio-libs/janus/pull/258
+  disabledTests = [ "test_format" ];
 
   meta = with lib; {
     description = "Mixed sync-async queue";

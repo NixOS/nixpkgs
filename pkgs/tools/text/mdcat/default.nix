@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.18.2";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
     repo = pname;
     rev = "mdcat-${version}";
-    sha256 = "0rbfx7951ascgd16jx0d9vcr46ca1v040dc0kfcdfisr6s9ifygw";
+    hash = "sha256-/ZhhDiiUc+swXr3IuuQD4YqIIdgh8PeRWm/ko9Lc0rM=";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "1j70l8g49qm4dbcb15ww1prasqhyf9ygprf65fg9p39jcs6j5gcv";
+  cargoSha256 = "sha256-SGX94XY7e38xySvTO+CDTUBDTfYybPy12iWFoFc2Nto=";
 
   checkInputs = [ ansi2html ];
   checkPhase = ''

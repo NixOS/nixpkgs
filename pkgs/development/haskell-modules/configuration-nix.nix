@@ -639,17 +639,14 @@ self: super: builtins.intersectAttrs super {
   spago =
     let
       # Spago needs a small patch to work with the latest versions of rio.
-      # https://github.com/purescript/spago/pull/616
-      # This can probably be removed when a version after spago-0.15.1 is released.
+      # https://github.com/purescript/spago/pull/647
       spagoWithPatches = appendPatch super.spago (pkgs.fetchpatch {
-        url = "https://github.com/purescript/spago/pull/616/commits/95b5fa0f1d3bfb07972d1ef5004b8bee8a070667.patch";
-        sha256 = "0v3890lwhddfrq9mhbq92962pkxra8kwbin97wg3s0b02dk65ysc";
+        url = "https://github.com/purescript/spago/pull/647/commits/917ee541a966db74f0f5d11f2f86df0030c35dd7.patch";
+        sha256 = "1nspqgcjk6z90cl9zhard0rn2q979kplcqz72x8xv5mh57zabk0w";
       });
 
-      # Spago basically compiles with LTS-14, but it requires a newer version
-      # of directory.  This is to work around a bug only present on windows, so
-      # we can safely jailbreak spago and use the older directory package from
-      # LTS-14.
+      # spago requires an older version of megaparsec, but it appears to work
+      # fine with newer versions.
       spagoWithOverrides = doJailbreak spagoWithPatches;
 
       # This defines the version of the purescript-docs-search release we are using.
@@ -755,18 +752,6 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
-  postgresql-syntax = super.postgresql-syntax.override {
-    rerebase = self.rerebase_1_6_1;
-  };
-
-  rerebase_1_6_1 = super.rerebase_1_6_1.override {
-    rebase = self.rebase_1_6_1;
-  };
-
-  rebase_1_6_1 = super.rebase_1_6_1.override {
-    selective = super.selective_0_4_1;
-  };
-
   # Fix compilation of Setup.hs by removing the module declaration.
   # See: https://github.com/tippenein/guid/issues/1
   guid = overrideCabal (super.guid) (drv: {
@@ -776,5 +761,11 @@ self: super: builtins.intersectAttrs super {
 
   # Tests disabled as recommended at https://github.com/luke-clifton/shh/issues/39
   shh = dontCheck super.shh;
+
+  # The test suites fail because there's no PostgreSQL database running in our
+  # build sandbox.
+  hasql-queue = dontCheck super.hasql-queue;
+  postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
+  postgresql-pure = dontCheck super.postgresql-pure;
 
 }
