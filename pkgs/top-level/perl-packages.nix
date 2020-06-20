@@ -12475,12 +12475,11 @@ let
 
   MojoPg = buildPerlPackage {
     pname = "Mojo-Pg";
-    version = "4.18";
+    version = "4.19";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojo-Pg-4.18.tar.gz";
-      sha256 = "31baacc0d6693886b3580e4b3ec6f2d053be8578809c9c1750753576bd1bda3c";
+      url = mirror://cpan/authors/id/S/SR/SRI/Mojo-Pg-4.19.tar.gz;
+      sha256 = "5061eaddddb52c9daf2cbc34bb21e9aeea6ae58a22775fdf1ffa747905ebc992";
     };
-    buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ DBDPg Mojolicious SQLAbstract ];
     meta = {
       homepage = "https://github.com/mojolicious/mojo-pg";
