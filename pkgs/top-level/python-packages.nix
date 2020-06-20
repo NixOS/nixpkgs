@@ -5484,7 +5484,7 @@ in {
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 
-  pylibgen = callPackage ../development/python-modules/pylibgen { };
+  pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
 
   pyliblo = callPackage ../development/python-modules/pyliblo { };
 
