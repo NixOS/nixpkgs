@@ -7770,10 +7770,10 @@ let
 
   Future = buildPerlModule {
     pname = "Future";
-    version = "0.43";
+    version = "0.45";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.43.tar.gz";
-      sha256 = "191qvn3jz5pk5zxykwsg1i17s45kc82rfd6kgzsv9nki1c04dzaf";
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Future-0.45.tar.gz;
+      sha256 = "1h5609wd1m774h8brgm5vinz6pfmdszp2ms6ybxlyhs0p5msp36f";
     };
     buildInputs = [ TestFatal TestIdentity TestRefcount ];
     meta = {
