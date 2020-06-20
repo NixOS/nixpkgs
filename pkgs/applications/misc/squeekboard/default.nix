@@ -22,7 +22,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "squeekboard";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
@@ -43,6 +43,13 @@ rustPlatform.buildRustPackage rec {
       url = "https://source.puri.sm/Librem5/squeekboard/commit/f473a47eb8f394ab6f36704850e7e2bfa74ce8a1.patch";
       sha256 = "0mlp8c38s4mbza8czf4kdg86kvqw294nbpqfk9apbl92nq0a26zr";
     })
+
+    # Add missing dependency 'gio-unix-2.0' to meson.build.
+    # https://source.puri.sm/Librem5/squeekboard/-/merge_requests/356
+    (fetchpatch {
+      url = "https://source.puri.sm/Librem5/squeekboard/-/merge_requests/356.patch";
+      sha256 = "1xi7h2nsrlf7szlj41kj6x1503af9svk5yj19l0q32ln3c40kgfs";
+    })
   ];
 
   nativeBuildInputs = [
@@ -51,13 +58,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     rustc
     cargo
-    gtk3
+    glib  # for glib-compile-resources
     wayland
     makeWrapper
   ];
 
   buildInputs = [
-    gtk3
+    gtk3  # for gio-2.0
     gnome3.gnome-desktop
     wayland
     wayland-protocols
@@ -65,9 +72,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  cargoSha256 = "1fkhj4i2l2hdk9wvld6ryvnm1mxfwx3s555r7n42pg9f5namn1sr";
-
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  cargoSha256 = "063f7p2ygl07dl6cp7v0arnzqvbskxa8wll9sk25w92xnhl05p5i";
 
   # Don't use buildRustPackage phases, only use it for rust deps setup
   configurePhase = null;

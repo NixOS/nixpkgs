@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1007kxap87h1bi79sz45lfb478d93pq0676cr5rnhbanljm1n28n";
+    sha256 = "135bpfxgpizfvhdgyl1n3b1b2gpddb8i7s2lmzfijiaa3gz8bdnq";
   };
 
   nativeBuildInputs = [
@@ -47,8 +47,6 @@ stdenv.mkDerivation rec {
     wayland
     wlroots
   ];
-
-  NIX_CFLAGS_COMPILE = "-I${libdrm.dev}/include/libdrm/";
 
   mesonFlags = ["-Dembed-wlroots=disabled"];
 
