@@ -21052,10 +21052,10 @@ let
 
   WWWMechanize = buildPerlPackage {
     pname = "WWW-Mechanize";
-    version = "1.95";
+    version = "2.00";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-1.95.tar.gz";
-      sha256 = "1w121x0xsn1bm699ncanyxqv3njqam3zzjkq8p54bqmzpikn5crs";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-2.00.tar.gz;
+      sha256 = "0j5bzn9jwb8rclif776gax57jxxn108swmajiqi2cpjbmlwng0ki";
     };
     propagatedBuildInputs = [ HTMLForm HTMLTree LWP ];
     doCheck = false;
@@ -21064,7 +21064,7 @@ let
       description = "Handy web browsing in a Perl object";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ CGI HTTPServerSimple TestDeep TestFatal TestOutput TestWarnings ];
+    buildInputs = [ CGI HTTPServerSimple PathTiny TestDeep TestFatal TestOutput TestWarnings ];
   };
 
   WWWMechanizeCGI = buildPerlPackage {
