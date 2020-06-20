@@ -13412,10 +13412,10 @@ let
 
   MozillaCA = buildPerlPackage {
     pname = "Mozilla-CA";
-    version = "20180117";
+    version = "20200520";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AB/ABH/Mozilla-CA-20180117.tar.gz";
-      sha256 = "f2cc9fbe119f756313f321e0d9f1fac0859f8f154ac9d75b1a264c1afdf4e406";
+      url = mirror://cpan/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz;
+      sha256 = "b3ca0002310bf24a16c0d5920bdea97a2f46e77e7be3e7377e850d033387c726";
     };
 
     postPatch = ''
