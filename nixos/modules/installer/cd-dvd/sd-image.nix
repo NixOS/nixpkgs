@@ -63,6 +63,14 @@ in
       '';
     };
 
+    firmwarePartitionName = mkOption {
+      type = types.str;
+      default = "FIRMWARE";
+      description = ''
+        Name of the filesystem which holds the boot firmware.
+      '';
+    };
+
     rootPartitionUUID = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -114,7 +122,7 @@ in
   config = {
     fileSystems = {
       "/boot/firmware" = {
-        device = "/dev/disk/by-label/FIRMWARE";
+        device = "/dev/disk/by-label/${config.sdImage.firmwarePartitionName}";
         fsType = "vfat";
         # Alternatively, this could be removed from the configuration.
         # The filesystem is not needed at runtime, it could be treated
@@ -178,7 +186,7 @@ in
         # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
         eval $(partx $img -o START,SECTORS --nr 1 --pairs)
         truncate -s $((SECTORS * 512)) firmware_part.img
-        faketime "1970-01-01 00:00:00" mkfs.vfat -i ${config.sdImage.firmwarePartitionID} -n FIRMWARE firmware_part.img
+        faketime "1970-01-01 00:00:00" mkfs.vfat -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
 
         # Populate the files intended for /boot/firmware
         mkdir firmware
