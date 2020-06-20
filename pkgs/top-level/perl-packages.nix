@@ -4432,7 +4432,7 @@ let
       url = "mirror://cpan/authors/id/B/BA/BALDUR/Data-ULID-1.0.0.tar.gz";
       sha256 = "4d757475893dbad5165f0a65c446d38b47f39019d36f77da9d29c98cbf27206f";
     };
-    propagatedBuildInputs = [ DateTime EncodeBase32GMP MathRandomSecure MathBigIntGMP ];
+    propagatedBuildInputs = [ DateTime EncodeBase32GMP MathRandomSecure ];
     meta = {
       homepage = "https://metacpan.org/release/Data-ULID";
       description = "Universally Unique Lexicographically Sortable Identifier";
