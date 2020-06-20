@@ -18292,10 +18292,10 @@ let
 
   TestDeep = buildPerlPackage {
     pname = "Test-Deep";
-    version = "1.128";
+    version = "1.130";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-1.128.tar.gz";
-      sha256 = "0bq9c0vrxbwhhy1pd2ss06fk06jal98j022mnyq6k0msdy1pwbc5";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-1.130.tar.gz;
+      sha256 = "0mkw18q5agr30djxr1y68rcfw8aq20ws872hmv88f9gnynag8r20";
     };
     meta = {
     };
