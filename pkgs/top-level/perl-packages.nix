@@ -5534,10 +5534,10 @@ let
 
   DevelDeclare = buildPerlPackage {
     pname = "Devel-Declare";
-    version = "0.006019";
+    version = "0.006022";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Devel-Declare-0.006019.tar.gz";
-      sha256 = "ac719dc289cbf53fbb3b090ccd3a55a9d207f24e09480423c96f7185af131808";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Devel-Declare-0.006022.tar.gz;
+      sha256 = "72f29ca35646a593be98311ffddb72033ae1e8a9d8254c62aa248bd6260e596e";
     };
     buildInputs = [ ExtUtilsDepends TestRequires ];
     propagatedBuildInputs = [ BHooksEndOfScope BHooksOPCheck SubName ];
