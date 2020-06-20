@@ -31,7 +31,7 @@
 
 let
   # when updating, also update rev-manual to a recent version of
-  # https://github.com/dae/ankidocs
+  # https://github.com/ankitects/anki-docs
   # The manual is distributed independently of the software.
   version = "2.1.15";
   sha256-pkg = "12dvyf3j9df4nrhhnqbzd9b21rpzkh4i6yhhangn2zf7ch0pclss";
@@ -42,8 +42,8 @@ let
     pname = "anki-manual";
     inherit version;
     src = fetchFromGitHub {
-      owner = "dae";
-      repo = "ankidocs";
+      owner = "ankitects";
+      repo = "anki-docs";
       rev = rev-manual;
       sha256 = sha256-manual;
     };
