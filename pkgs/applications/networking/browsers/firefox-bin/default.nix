@@ -27,7 +27,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra-gtk2
+, libcanberra
 , libgnome
 , libgnomeui
 , libnotify
@@ -122,7 +122,7 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra-gtk2
+      libcanberra
       libgnome
       libgnomeui
       libnotify
