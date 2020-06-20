@@ -28,8 +28,6 @@
 , libXrender
 , libXt
 , libcanberra
-, libgnome
-, libgnomeui
 , libnotify
 , gnome3
 , libGLU, libGL
@@ -123,8 +121,6 @@ stdenv.mkDerivation {
       libXrender
       libXt
       libcanberra
-      libgnome
-      libgnomeui
       libnotify
       libGLU libGL
       nspr
