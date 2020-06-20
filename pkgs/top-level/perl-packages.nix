@@ -20003,10 +20003,10 @@ let
 
   Testutf8 = buildPerlPackage {
     pname = "Test-utf8";
-    version = "1.01";
+    version = "1.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKF/Test-utf8-1.01.tar.gz";
-      sha256 = "ef371b1769cd8d36d2d657e8321723d94c8f8d89e7fd7437c6648c5dc6711b7a";
+      url = mirror://cpan/authors/id/M/MA/MARKF/Test-utf8-1.02.tar.gz;
+      sha256 = "df82f09c5940830b25a49f1c8162fa24d371e602880edef8d9a4d4bfd66b8bd7";
     };
     meta = {
       homepage = "https://github.com/2shortplanks/Test-utf8";
