@@ -7064,10 +7064,10 @@ let
 
   FileBOM = buildPerlModule {
     pname = "File-BOM";
-    version = "0.16";
+    version = "0.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MATTLAW/File-BOM-0.16.tar.gz";
-      sha256 = "97091a72bb1d3a7b5cac1dfb5372962b6f8055729189d0f3fd2c959c8ff374cf";
+      url = mirror://cpan/authors/id/M/MA/MATTLAW/File-BOM-0.18.tar.gz;
+      sha256 = "28edc43fcb118e11bc458c9ae889d56d388c1d9bc29997b00b1dffd8573823a3";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ Readonly ];
