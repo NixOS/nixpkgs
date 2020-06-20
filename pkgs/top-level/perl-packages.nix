@@ -19892,10 +19892,10 @@ let
 
   TextTable = buildPerlModule {
     pname = "Text-Table";
-    version = "1.133";
+    version = "1.134";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.133.tar.gz";
-      sha256 = "04kh5x5inq183rdg221wlqaaqi1ipyj588mxsslik6nhc14f17nd";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.134.tar.gz;
+      sha256 = "02yigisvgshpgfyqwj0xad4jg473cd80a6c210nb5h5p32dl5kxs";
     };
     propagatedBuildInputs = [ TextAligner ];
     meta = {
