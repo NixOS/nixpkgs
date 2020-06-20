@@ -26,6 +26,7 @@
 , enableSubsonicupdate ? true
 , enableThumbnails     ? true
 , enableWeb            ? true
+, enableZero           ? true
 
 # External plugins
 , enableAlternatives   ? false
@@ -50,6 +51,7 @@ assert enableReplaygain  -> bs1770gain                    != null;
 assert enableSonosUpdate -> pythonPackages.soco           != null;
 assert enableThumbnails  -> pythonPackages.pyxdg          != null;
 assert enableWeb         -> pythonPackages.flask          != null;
+assert enableZero        -> pythonPackages.flask          != null;
 
 with stdenv.lib;
 
@@ -77,6 +79,7 @@ let
     subsonicupdate = enableSubsonicupdate;
     thumbnails = enableThumbnails;
     web = enableWeb;
+    zero = enableZero;
   };
 
   pluginsWithoutDeps = [
@@ -85,7 +88,7 @@ let
     "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "lyrics"
     "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "permissions" "play"
     "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
-    "types" "zero"
+    "types"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -154,7 +157,8 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional enableMpd           pythonPackages.mpd2
     ++ optional enableSonosUpdate   pythonPackages.soco
     ++ optional enableThumbnails    pythonPackages.pyxdg
-    ++ optional enableWeb           pythonPackages.flask
+    ++ optional (enableWeb
+              || enableZero)        pythonPackages.flask
     ++ optional enableAlternatives  plugins.alternatives
     ++ optional enableCopyArtifacts plugins.copyartifacts;
 
