@@ -16092,10 +16092,10 @@ let
 
   Redis = buildPerlModule {
     pname = "Redis";
-    version = "1.995";
+    version = "1.996";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAMS/Redis-1.995.tar.gz";
-      sha256 = "a0b07b284ff12bb852a3120723f1e63ab279df575d6c52a78f914565a9f0b906";
+      url = mirror://cpan/authors/id/D/DA/DAMS/Redis-1.996.tar.gz;
+      sha256 = "5c196d56a4d771abb2042fd52f252096497fc86f35910581e0956b5710ea74b6";
     };
     buildInputs = [ IOString ModuleBuildTiny TestDeep TestFatal TestSharedFork TestTCP ];
     propagatedBuildInputs = [ IOSocketTimeout TryTiny ];
