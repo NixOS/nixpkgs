@@ -16360,10 +16360,10 @@ let
 
   RTClientREST = buildPerlModule {
     pname = "RT-Client-REST";
-    version = "0.56";
+    version = "0.60";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DJ/DJZORT/RT-Client-REST-0.56.tar.gz";
-      sha256 = "798baccf11eaecbb7d2d27be0b5e4fa9cb80b34cc51cab12eb7b88facf39fd4b";
+      url = mirror://cpan/authors/id/D/DJ/DJZORT/RT-Client-REST-0.60.tar.gz;
+      sha256 = "0e6f2da3d96903491b43b19c61221cbeea88414264f907312f277daaf144248b";
     };
     buildInputs = [ CGI HTTPServerSimple TestException ];
     meta = {
