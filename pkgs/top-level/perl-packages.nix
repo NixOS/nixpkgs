@@ -6401,10 +6401,10 @@ let
 
   Encode = buildPerlPackage {
     pname = "Encode";
-    version = "3.02";
+    version = "3.06";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.02.tar.gz";
-      sha256 = "5865be4951870f62f43722818d076d7724306c75c8f268346b282351cbc820a8";
+      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.06.tar.gz;
+      sha256 = "5b2dcd6861287880584e63b2e518840d483aa38da70194cf64d9957282851eea";
     };
     meta = {
       description = "Character encodings in Perl";
