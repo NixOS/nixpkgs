@@ -7280,12 +7280,12 @@ let
 
   FileLibMagic = buildPerlPackage {
     pname = "File-LibMagic";
-    version = "1.16";
+    version = "1.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/File-LibMagic-1.16.tar.gz";
-      sha256 = "c8a695fac1454f52e18e2e1b624c0647cf117326014023dda69fa3e1a5f33d60";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/File-LibMagic-1.22.tar.gz;
+      sha256 = "93639bd076849e93a020fea1507f0a2b3467b8792eb5c306f2aacbbfb4d080d6";
     };
-    buildInputs = [ pkgs.file TestFatal ];
+    buildInputs = [ pkgs.file ConfigAutoConf TestFatal ];
     makeMakerFlags = "--lib=${pkgs.file}/lib";
     preCheck = ''
       substituteInPlace t/oo-api.t \
