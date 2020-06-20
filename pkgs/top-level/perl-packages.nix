@@ -9880,15 +9880,16 @@ let
 
   JSONMaybeXS = buildPerlPackage {
     pname = "JSON-MaybeXS";
-    version = "1.004000";
+    version = "1.004002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/JSON-MaybeXS-1.004000.tar.gz";
-      sha256 = "09m1w03as6n0a00pzvaldkhm494yaf5n0g3j2cwwfx24iwpa1gar";
+      url = mirror://cpan/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004002.tar.gz;
+      sha256 = "1dbpdlrk4pjwbn3wzawwsj57jqzdvi01h4kqpknwbl1n7gf2z3iv";
     };
     meta = {
       description = "Use L<Cpanel::JSON::XS> with a fallback to L<JSON::XS> and L<JSON::PP>";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestNeeds ];
   };
 
   JSONPP = buildPerlPackage {
