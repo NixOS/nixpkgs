@@ -3044,10 +3044,10 @@ let
 
   ConfigIniFiles = buildPerlModule {
     pname = "Config-IniFiles";
-    version = "3.000002";
+    version = "3.000003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Config-IniFiles-3.000002.tar.gz";
-      sha256 = "d92ed6ed2db98d5addf732c96d2a9c15d9f878c7e8b355bb7a5c1668e3f8ba09";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Config-IniFiles-3.000003.tar.gz;
+      sha256 = "3c457b65d98e5ff40bdb9cf814b0d5983eb0c53fb8696bda3ba035ad2acd6802";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
