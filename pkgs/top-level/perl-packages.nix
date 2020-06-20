@@ -7511,10 +7511,10 @@ let
 
   FileSlurp = buildPerlPackage {
     pname = "File-Slurp";
-    version = "9999.29";
+    version = "9999.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/File-Slurp-9999.29.tar.gz";
-      sha256 = "1iqr7qi6rg45f4xa3fp48b30mnbw30xs9izxa5zf6fd6pgh4fvhf";
+      url = mirror://cpan/authors/id/C/CA/CAPOEIRAB/File-Slurp-9999.30.tar.gz;
+      sha256 = "0irpx72dk27d7c4cjr08dq4bwwbmq8gsr39hxd44widrn0yicdra";
     };
     meta = {
       description = "Simple and Efficient Reading/Writing/Modifying of Complete Files";
