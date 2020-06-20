@@ -7943,7 +7943,7 @@ let
   };
 
   GitAutofixup = buildPerlPackage rec {
-    pname = "GitAutofixup";
+    pname = "App-Git-Autofixup";
     version = "0.002007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-${version}.tar.gz";
