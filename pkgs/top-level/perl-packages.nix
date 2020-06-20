@@ -21294,13 +21294,13 @@ let
 
   XMLLibXML = buildPerlPackage {
     pname = "XML-LibXML";
-    version = "2.0202";
+    version = "2.0205";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0202.tar.gz";
-      sha256 = "1bp2d5jpfmp35f2giwqx60q2rmzq469szkxzfcqkd742x72h4ayc";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0205.tar.gz;
+      sha256 = "0y12bcpnxzn8vs9zglaaxkw0kgrgmljxrxdf1cnijgxi2hkh099s";
     };
     SKIP_SAX_INSTALL = 1;
-    buildInputs = [ AlienLibxml2 ];
+    buildInputs = [ AlienBuild AlienLibxml2 ];
     propagatedBuildInputs = [ XMLSAX ];
   };
 
