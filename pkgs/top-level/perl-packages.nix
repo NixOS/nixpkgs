@@ -5000,10 +5000,10 @@ let
 
   DevelPPPort = buildPerlPackage {
     pname = "Devel-PPPort";
-    version = "3.56";
+    version = "3.58";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.56.tar.gz";
-      sha256 = "628476dbfeb7be92471e48f75fe0d36659b92493669ebd02cf04e3a13429521b";
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.58.tar.gz;
+      sha256 = "531ff79f9e74962df2dba7b2e526b8a5208cfb6bcdc01d85732fda8c1fde0c00";
     };
     meta = {
       description = "Perl/Pollution/Portability";
