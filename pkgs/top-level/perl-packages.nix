@@ -7331,6 +7331,21 @@ let
     };
   };
 
+  FileMap = buildPerlModule {
+    pname = "File-Map";
+    version = "0.66";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/L/LE/LEONT/File-Map-0.66.tar.gz;
+      sha256 = "12d540v47jscjizcry2ir5vpp5q797vmd3gn9p91brqdbk5swfz7";
+    };
+    propagatedBuildInputs = [ PerlIOLayers SubExporterProgressive ];
+    buildInputs = [ TestFatal TestWarnings ];
+    meta = {
+      description = "Memory mapping made simple and safe.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileModified = buildPerlPackage {
     pname = "File-Modified";
     version = "0.10";
@@ -12348,12 +12363,12 @@ let
 
   MojoliciousPluginStatus = buildPerlPackage {
     pname = "Mojolicious-Plugin-Status";
-    version = "1.01";
+    version = "1.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-Status-1.01.tar.gz";
-      sha256 = "08hvwg395sibjjkwc9fg31ngpmzf7z0467p6b0il355xqbwjpdf6";
+      url = mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-Status-1.12.tar.gz;
+      sha256 = "1hn333220ba3hxl9aks0ywx933zv6klyi3a0iw571q76z5a8r2jn";
     };
-    propagatedBuildInputs = [ BSDResource IPCShareLite Mojolicious Sereal ];
+    propagatedBuildInputs = [ BSDResource CpanelJSONXS FileMap FileTemp Mojolicious ];
     meta = {
       homepage = "https://github.com/mojolicious/mojo-status";
       description = "Mojolicious server status plugin";
@@ -14996,6 +15011,19 @@ let
       sha256 = "0fyiysrq874ncscgdjg522fs29gvqads6ynyhwxwwq1b545srd20";
     };
     meta = {
+    };
+  };
+
+  PerlIOLayers = buildPerlModule {
+    pname = "PerlIO-Layers";
+    version = "0.012";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/L/LE/LEONT/PerlIO-Layers-0.012.tar.gz;
+      sha256 = "1psaq3kwlk7g9rxvgsacfjk2mh6cscqf4xl7ggfkzfrnz91aabal";
+    };
+    meta = {
+      description = "Querying your filehandle's capabilities";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
