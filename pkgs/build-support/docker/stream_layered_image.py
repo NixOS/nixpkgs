@@ -181,70 +181,73 @@ def add_bytes(tar, path, content, mtime):
     tar.addfile(ti, io.BytesIO(content))
 
 
-# Main
+def main():
+    with open(sys.argv[1], "r") as f:
+        conf = json.load(f)
 
-with open(sys.argv[1], "r") as f:
-    conf = json.load(f)
-
-created = (
-  datetime.now(tz=datetime.timezone.utc)
-  if conf["created"] == "now"
-  else datetime.fromisoformat(conf["created"])
-)
-mtime = int(created.timestamp())
-
-with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
-    layers = []
-    for num, store_layer in enumerate(conf["store_layers"]):
-        print(
-          "Creating layer", num,
-          "from paths:", store_layer,
-          file=sys.stderr)
-        info = add_layer_dir(tar, store_layer, mtime=mtime)
-        layers.append(info)
-
-    print("Creating the customisation layer...", file=sys.stderr)
-    layers.append(
-      add_customisation_layer(
-        tar,
-        conf["customisation_layer"],
-        mtime=mtime
-      )
+    created = (
+      datetime.now(tz=datetime.timezone.utc)
+      if conf["created"] == "now"
+      else datetime.fromisoformat(conf["created"])
     )
+    mtime = int(created.timestamp())
 
-    print("Adding manifests...", file=sys.stderr)
+    with tarfile.open(mode="w|", fileobj=sys.stdout.buffer) as tar:
+        layers = []
+        for num, store_layer in enumerate(conf["store_layers"]):
+            print(
+              "Creating layer", num,
+              "from paths:", store_layer,
+              file=sys.stderr)
+            info = add_layer_dir(tar, store_layer, mtime=mtime)
+            layers.append(info)
 
-    image_json = {
-        "created": datetime.isoformat(created),
-        "architecture": conf["architecture"],
-        "os": "linux",
-        "config": conf["config"],
-        "rootfs": {
-            "diff_ids": [f"sha256:{layer.checksum}" for layer in layers],
-            "type": "layers",
-        },
-        "history": [
-            {
-              "created": conf["created"],
-              "comment": f"store paths: {layer.paths}"
-            }
-            for layer in layers
-        ],
-    }
+        print("Creating the customisation layer...", file=sys.stderr)
+        layers.append(
+          add_customisation_layer(
+            tar,
+            conf["customisation_layer"],
+            mtime=mtime
+          )
+        )
 
-    image_json = json.dumps(image_json, indent=4).encode("utf-8")
-    image_json_checksum = hashlib.sha256(image_json).hexdigest()
-    image_json_path = f"{image_json_checksum}.json"
-    add_bytes(tar, image_json_path, image_json, mtime=mtime)
+        print("Adding manifests...", file=sys.stderr)
 
-    manifest_json = [
-        {
-            "Config": image_json_path,
-            "RepoTags": [conf["repo_tag"]],
-            "Layers": [layer.path for layer in layers],
+        image_json = {
+            "created": datetime.isoformat(created),
+            "architecture": conf["architecture"],
+            "os": "linux",
+            "config": conf["config"],
+            "rootfs": {
+                "diff_ids": [f"sha256:{layer.checksum}" for layer in layers],
+                "type": "layers",
+            },
+            "history": [
+                {
+                  "created": conf["created"],
+                  "comment": f"store paths: {layer.paths}"
+                }
+                for layer in layers
+            ],
         }
-    ]
-    manifest_json = json.dumps(manifest_json, indent=4).encode("utf-8")
-    add_bytes(tar, "manifest.json", manifest_json, mtime=mtime)
 
-    print("Done.", file=sys.stderr)
+        image_json = json.dumps(image_json, indent=4).encode("utf-8")
+        image_json_checksum = hashlib.sha256(image_json).hexdigest()
+        image_json_path = f"{image_json_checksum}.json"
+        add_bytes(tar, image_json_path, image_json, mtime=mtime)
+
+        manifest_json = [
+            {
+                "Config": image_json_path,
+                "RepoTags": [conf["repo_tag"]],
+                "Layers": [layer.path for layer in layers],
+            }
+        ]
+        manifest_json = json.dumps(manifest_json, indent=4).encode("utf-8")
+        add_bytes(tar, "manifest.json", manifest_json, mtime=mtime)
+
+        print("Done.", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()
