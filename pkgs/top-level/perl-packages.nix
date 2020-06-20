@@ -2775,10 +2775,10 @@ let
 
   Clipboard = buildPerlModule {
     pname = "Clipboard";
-    version = "0.22";
+    version = "0.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.22.tar.gz";
-      sha256 = "9fdb4dfc2e9bc2f3990b5b71649094dfe83aa12172c5a1809cf7e8b3be295ca7";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.26.tar.gz;
+      sha256 = "886ae43dc8538f9bfc4e07fdbcf09b7fbd6ee59c31f364618c859de14953c58a";
     };
     meta = {
       description = "Clipboard - Copy and Paste with any OS";
