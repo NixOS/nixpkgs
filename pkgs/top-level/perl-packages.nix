@@ -9674,10 +9674,10 @@ let
 
   IPCSystemSimple = buildPerlPackage {
     pname = "IPC-System-Simple";
-    version = "1.26";
+    version = "1.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JK/JKEENAN/IPC-System-Simple-1.26.tar.gz";
-      sha256 = "57177f21d8e8625bba32ea454f10a1fda16f93c1baf1aa80d106ab1951b465fd";
+      url = mirror://cpan/authors/id/J/JK/JKEENAN/IPC-System-Simple-1.30.tar.gz;
+      sha256 = "22e6f5222b505ee513058fdca35ab7a1eab80539b98e5ca4a923a70a8ae9ba9e";
     };
     meta = {
       description = "Run commands simply, with detailed diagnostics";
