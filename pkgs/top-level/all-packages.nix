@@ -19761,7 +19761,6 @@ in
     channel = "release";
     generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
     gconf = pkgs.gnome2.GConf;
-    inherit (pkgs.gnome2) libgnome libgnomeui;
   };
 
   firefox-bin = wrapFirefox firefox-bin-unwrapped {
@@ -19774,7 +19773,6 @@ in
     channel = "beta";
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
     gconf = pkgs.gnome2.GConf;
-    inherit (pkgs.gnome2) libgnome libgnomeui;
   };
 
   firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
@@ -19787,7 +19785,6 @@ in
     channel = "devedition";
     generated = import ../applications/networking/browsers/firefox-bin/devedition_sources.nix;
     gconf = pkgs.gnome2.GConf;
-    inherit (pkgs.gnome2) libgnome libgnomeui;
   };
 
   firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
