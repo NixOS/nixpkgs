@@ -4318,10 +4318,10 @@ let
 
   DataSerializer = buildPerlModule {
     pname = "Data-Serializer";
-    version = "0.60";
+    version = "0.65";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEELY/Data-Serializer-0.60.tar.gz";
-      sha256 = "0ca4s811l7f2bqkx7vnyxbpp4f0qska89g2pvsfb3k0bhhbk0jdk";
+      url = mirror://cpan/authors/id/N/NE/NEELY/Data-Serializer-0.65.tar.gz;
+      sha256 = "048zjy8valnil8yawa3vrxr005rz95gpfwvmy2jq0g830195l58j";
     };
     meta = {
       description = "Modules that serialize data structures";
