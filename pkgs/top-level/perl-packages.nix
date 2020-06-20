@@ -17237,10 +17237,10 @@ let
 
   StructDumb = buildPerlModule {
     pname = "Struct-Dumb";
-    version = "0.09";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.09.tar.gz";
-      sha256 = "0g9rziaqxkm00vh30g1yfwzq3b1xl23p8fbm4rszqsp641wr2z9k";
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.12.tar.gz;
+      sha256 = "0wvzcpil9xc2wkibq3sj8i5bgq4iadx2k7hfqb8jm5p66g271kjj";
     };
     buildInputs = [ TestFatal ];
     meta = {
