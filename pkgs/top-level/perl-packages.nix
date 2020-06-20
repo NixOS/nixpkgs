@@ -15335,14 +15335,14 @@ let
 
   POE = buildPerlPackage {
     pname = "POE";
-    version = "1.367";
+    version = "1.368";
     patches = [
       ../development/perl-modules/perl-POE-1.367-pod_linkcheck.patch
       ../development/perl-modules/perl-POE-1.367-pod_no404s.patch
     ];
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RC/RCAPUTO/POE-1.367.tar.gz";
-      sha256 = "0b9s7yxaa2lgzyi56brgygycfjk7lz33d1ddvc1wvwwvm45p4wmp";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/POE-1.368.tar.gz;
+      sha256 = "08g1vzxamqg0gmkirdcx7fycq3pwv9vbajc30qwqpm1n3rvdrcdp";
     };
     # N.B. removing TestPodLinkCheck from buildInputs because tests requiring
     # this module don't disable themselves when "run_network_tests" is
