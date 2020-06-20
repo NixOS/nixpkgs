@@ -4879,10 +4879,10 @@ let
 
   DateTimeTimeZone = buildPerlPackage {
     pname = "DateTime-TimeZone";
-    version = "2.38";
+    version = "2.39";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.38.tar.gz";
-      sha256 = "0e5c99ef22471f4d262ac590ce5ce8177094d7a92f380d8eea6219f5a12dc0cd";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.39.tar.gz;
+      sha256 = "65a49083bf465b42c6a65df575efaceb87b5ba5a997d4e91e6ddba57190c8fca";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassSingleton ParamsValidationCompiler Specio namespaceautoclean ];
