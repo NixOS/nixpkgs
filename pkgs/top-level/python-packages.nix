@@ -2498,6 +2498,8 @@ in {
 
   pytest-astropy-header = callPackage ../development/python-modules/pytest-astropy-header { };
 
+  pytest-filter-subpackage = callPackage ../development/python-modules/pytest-filter-subpackage { };
+
   pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
