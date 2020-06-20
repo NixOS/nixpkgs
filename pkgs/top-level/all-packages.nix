@@ -22436,7 +22436,6 @@ in
   thonny = callPackage ../applications/editors/thonny { };
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
-    inherit (gnome2) libIDL;
     inherit (rustPackages_1_42) rustc;
     libpng = libpng_apng;
     gtk3Support = true;
