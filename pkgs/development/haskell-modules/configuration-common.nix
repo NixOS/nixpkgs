@@ -1557,4 +1557,11 @@ self: super: {
     })
   ]));
 
+  # add unreleased commit fixing version constraint as a patch
+  # Can be removed if https://github.com/lpeterse/haskell-utc/issues/8 is resolved
+  utc = appendPatch super.utc (pkgs.fetchpatch {
+    url = "https://github.com/lpeterse/haskell-utc/commit/e4502c08591e80d411129bb7c0414539f6302aaf.diff";
+    sha256 = "0v6kv1d4syjzgzc2s7a76c6k4vminlcq62n7jg3nn9xd00gwmmv7";
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
