@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Ndis driver wrapper for the Linux kernel";
-    homepage = https://sourceforge.net/projects/ndiswrapper;
+    homepage = "https://sourceforge.net/projects/ndiswrapper";
     license = "GPL";
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "sqlite-backed dictionary";
-    homepage = https://github.com/Yelp/sqlite3dbm;
+    homepage = "https://github.com/Yelp/sqlite3dbm";
     license = licenses.asl20;
   };
 

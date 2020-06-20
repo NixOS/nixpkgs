@@ -1,0 +1,22 @@
+diff --git a/src/Widgets/BackgroundImage.vala b/src/Widgets/BackgroundImage.vala
+index ae9431c..f0f2a49 100644
+--- a/src/Widgets/BackgroundImage.vala
++++ b/src/Widgets/BackgroundImage.vala
+@@ -9,7 +9,7 @@ public class Greeter.BackgroundImage : Gtk.EventBox {
+ 
+     public BackgroundImage (string? path) {
+         if (path == null) {
+-            path = "/usr/share/backgrounds/elementaryos-default";
++            path = "@default_wallpaper@";
+         }
+ 
+         try {
+@@ -19,7 +19,7 @@ public class Greeter.BackgroundImage : Gtk.EventBox {
+             critical ("Fallback to default wallpaper");
+ 
+             try {
+-                full_pixbuf = new Gdk.Pixbuf.from_file ("/usr/share/backgrounds/elementaryos-default");
++                full_pixbuf = new Gdk.Pixbuf.from_file ("@default_wallpaper@");
+             } catch (GLib.Error e) {
+                 critical (e.message);
+             }

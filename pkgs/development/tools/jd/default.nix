@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "jd-${version}";
+  pname = "jd";
   version = "0.3.1";
   rev = "2729b5af166cfd72bd953ef8959b456c4db940fc";
 

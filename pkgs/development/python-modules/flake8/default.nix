@@ -1,22 +1,23 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , mock, pytest, pytestrunner
-, configparser, enum34, mccabe, pycodestyle, pyflakes, entrypoints, functools32, typing
+, configparser, enum34, mccabe, pycodestyle, pyflakes, functools32, typing, importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "3.7.7";
+  version = "3.8.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661";
+    sha256 = "f04b9fcbac03b0a3e58c0ab3a0ecc462e023a9faf046d57794184028123aa208";
   };
 
   checkInputs = [ pytest mock pytestrunner ];
-  propagatedBuildInputs = [ entrypoints pyflakes pycodestyle mccabe ]
+  propagatedBuildInputs = [ pyflakes pycodestyle mccabe ]
     ++ stdenv.lib.optionals (pythonOlder "3.2") [ configparser functools32 ]
     ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ]
+    ++ stdenv.lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   checkPhase = ''
     py.test tests
@@ -24,8 +25,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Code checking using pep8 and pyflakes";
-    homepage = https://pypi.python.org/pypi/flake8;
+    homepage = "https://pypi.python.org/pypi/flake8";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "re2-${version}";
+stdenv.mkDerivation {
+  pname = "re2";
   version = "20190401";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   installCheckTarget = "testinstall";
 
   meta = {
-    homepage = https://github.com/google/re2;
+    homepage = "https://github.com/google/re2";
     description = "An efficient, principled regular expression library";
     license = stdenv.lib.licenses.bsd3;
     platforms = with stdenv.lib.platforms; all;

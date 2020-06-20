@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, pyparsing, pytest }:
 
 buildPythonPackage rec {
-  version = "0.9";
+  version = "0.12";
   pname = "ezdxf";
 
   disabled = pythonOlder "3.5";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "mozman";
     repo = "ezdxf";
     rev = "v${version}";
-    sha256 = "1ggimjd9060b696sgzgxy9j9sl45wh9qbxnf0035qclafshprlzl";
+    sha256 = "1flcq96ljk5wqrmgsb4acflqzkg7rhlaxz0j5jxky9za0mj1x6dq";
   };
 
   checkInputs = [ pytest ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python package to read and write DXF drawings (interface to the DXF file format)";
-    homepage = https://github.com/mozman/ezdxf/;
+    homepage = "https://github.com/mozman/ezdxf/";
     license = licenses.mit;
     maintainers = with maintainers; [ hodapp ];
     platforms = platforms.unix;

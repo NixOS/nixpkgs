@@ -44,16 +44,11 @@ in
 
   options = {
 
-    services.xinetd.enable = mkOption {
-      default = false;
-      description = ''
-        Whether to enable the xinetd super-server daemon.
-      '';
-    };
+    services.xinetd.enable = mkEnableOption "the xinetd super-server daemon";
 
     services.xinetd.extraDefaults = mkOption {
       default = "";
-      type = types.string;
+      type = types.lines;
       description = ''
         Additional configuration lines added to the default section of xinetd's configuration.
       '';
@@ -70,13 +65,13 @@ in
         options = {
 
           name = mkOption {
-            type = types.string;
+            type = types.str;
             example = "login";
             description = "Name of the service.";
           };
 
           protocol = mkOption {
-            type = types.string;
+            type = types.str;
             default = "tcp";
             description =
               "Protocol of the service.  Usually <literal>tcp</literal> or <literal>udp</literal>.";
@@ -90,25 +85,25 @@ in
           };
 
           user = mkOption {
-            type = types.string;
+            type = types.str;
             default = "nobody";
             description = "User account for the service";
           };
 
           server = mkOption {
-            type = types.string;
+            type = types.str;
             example = "/foo/bin/ftpd";
             description = "Path of the program that implements the service.";
           };
 
           serverArgs = mkOption {
-            type = types.string;
+            type = types.separatedString " ";
             default = "";
             description = "Command-line arguments for the server program.";
           };
 
           flags = mkOption {
-            type = types.string;
+            type = types.str;
             default = "";
             description = "";
           };

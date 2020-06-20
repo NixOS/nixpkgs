@@ -1,0 +1,95 @@
+commit ca94cd56210067e2a55c1f413bd7713f7d338f9f
+Author: Bernardo Meurer <meurerbernardo@gmail.com>
+Date:   Wed Feb 26 10:46:23 2020 -0800
+
+    tlp-sleep.service: reintroduce
+    
+    This patch reintroduces tlp-sleep as a systemd unit as opposed to a
+    systemd system-sleep hook script. This is due to the recommendation by
+    systemd itself to not use the hook scripts. As per the manual:
+    
+    > Note that scripts or binaries dropped in /usr/lib/systemd/system-sleep/
+    > are intended for local use only and should be considered hacks. If
+    > applications want to react to system suspend/hibernation and resume,
+    > they should rather use the Inhibitor interface[1].
+
+diff --git a/Makefile b/Makefile
+index 95122df..0e9230a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -70,6 +70,7 @@ INFILES = \
+ 	tlp.rules \
+ 	tlp-readconfs \
+ 	tlp-run-on \
++	tlp-sleep.service \
+ 	tlp.service \
+ 	tlp-stat \
+ 	tlp.upstart \
+@@ -99,7 +100,6 @@ SHFILES = \
+ 	tlp-rdw-udev.in \
+ 	tlp-rf.in \
+ 	tlp-run-on.in \
+-	tlp-sleep \
+ 	tlp-sleep.elogind \
+ 	tlp-stat.in \
+ 	tlp-usb-udev.in
+@@ -147,7 +147,7 @@ ifneq ($(TLP_NO_INIT),1)
+ endif
+ ifneq ($(TLP_WITH_SYSTEMD),0)
+ 	install -D -m 644 tlp.service $(_SYSD)/tlp.service
+-	install -D -m 755 tlp-sleep $(_SDSL)/tlp
++	install -D -m 644 tlp-sleep.service $(_SYSD)/tlp-sleep.service
+ endif
+ ifneq ($(TLP_WITH_ELOGIND),0)
+ 	install -D -m 755 tlp-sleep.elogind $(_ELOD)/49-tlp-sleep
+@@ -204,7 +204,7 @@ uninstall-tlp:
+ 	rm $(_ULIB)/rules.d/85-tlp.rules
+ 	rm -f $(_SYSV)/tlp
+ 	rm -f $(_SYSD)/tlp.service
+-	rm -f $(_SDSL)/tlp-sleep
++	rm -f $(_SYSD)/tlp-sleep.service
+ 	rm -f $(_ELOD)/49-tlp-sleep
+ 	rm -f $(_SHCPL)/tlp-stat
+ 	rm -f $(_SHCPL)/bluetooth
+diff --git a/tlp-sleep b/tlp-sleep
+deleted file mode 100644
+index 3de85ce..0000000
+--- a/tlp-sleep
++++ /dev/null
+@@ -1,11 +0,0 @@
+-#!/bin/sh
+-
+-# tlp - systemd suspend/resume hook
+-#
+-# Copyright (c) 2020 Thomas Koch <linrunner at gmx.net> and others.
+-# This software is licensed under the GPL v2 or later.
+-
+-case $1 in
+-    pre)  tlp suspend ;;
+-    post) tlp resume  ;;
+-esac
+diff --git a/tlp-sleep.service.in b/tlp-sleep.service.in
+new file mode 100644
+index 0000000..4ac17bd
+--- /dev/null
++++ b/tlp-sleep.service.in
+@@ -0,0 +1,19 @@
++# tlp - systemd suspend/resume service
++#
++# Copyright (c) 2020 Thomas Koch <linrunner at gmx.net> and others.
++# This software is licensed under the GPL v2 or later.
++
++[Unit]
++Description=TLP suspend/resume
++Before=sleep.target
++StopWhenUnneeded=yes
++Documentation=https://linrunner.de/tlp
++
++[Service]
++Type=oneshot
++RemainAfterExit=yes
++ExecStart=@TLP_SBIN@/tlp suspend
++ExecStop=@TLP_SBIN@/tlp resume
++
++[Install]
++WantedBy=sleep.target

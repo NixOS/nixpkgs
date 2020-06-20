@@ -4,7 +4,6 @@
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
   version = "2017.3.23";
-  name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "man" "doc" ];
 
@@ -31,6 +30,7 @@ stdenv.mkDerivation rec {
     "--enable-posix-acls"
     "--enable-xattr-mappings"
     "--${if crypto then "enable" else "disable"}-crypto"
+    "--enable-extras"
   ];
 
   postInstall =
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.tuxera.com/community/open-source-ntfs-3g/;
+    homepage = "https://www.tuxera.com/community/open-source-ntfs-3g/";
     description = "FUSE-based NTFS driver with full write support";
     maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.linux;

@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "duckmarines";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Duck-themed action puzzle video game";
     desktopName = "Duck Marines";
     genericName = "duckmarines";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     hydraPlatforms = [];
     license = licenses.free;
-    downloadPage = http://tangramgames.dk/games/duckmarines;
+    downloadPage = "http://tangramgames.dk/games/duckmarines";
   };
 
 }

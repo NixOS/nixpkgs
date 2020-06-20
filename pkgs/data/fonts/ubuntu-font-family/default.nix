@@ -1,6 +1,6 @@
 { lib, fetchzip }:
 
-fetchzip rec {
+fetchzip {
   name = "ubuntu-font-family-0.83";
 
   url = "https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip";
@@ -18,7 +18,7 @@ fetchzip rec {
     created to complement the Ubuntu tone of voice. It has a
     contemporary style and contains characteristics unique to
     the Ubuntu brand that convey a precise, reliable and free attitude.";
-    homepage = http://font.ubuntu.com/;
+    homepage = "http://font.ubuntu.com/";
     license = lib.licenses.free;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.antono ];

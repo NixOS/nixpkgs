@@ -24,7 +24,7 @@ let
         # Name appended to menuentry defaults to params if no specific name given.
         option.name or (if option ? params then "(${option.params})" else "")
         }' ${if option ? class then " --class ${option.class}" else ""} {
-          linux ${defaults.image} ${defaults.params} ${
+          linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }
           initrd ${defaults.initrd}
@@ -165,8 +165,8 @@ let
     else
       "# No refind for ${targetArch}"
   ;
-  
-  grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs; 
+
+  grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
   grubMenuCfg = ''
     #
@@ -268,6 +268,12 @@ let
     set timeout=10
     ${grubMenuCfg}
 
+    # If the parameter iso_path is set, append the findiso parameter to the kernel
+    # line. We need this to allow the nixos iso to be booted from grub directly.
+    if [ \''${iso_path} ] ; then
+      set isoboot="findiso=\''${iso_path}"
+    fi
+
     #
     # Menu entries
     #
@@ -282,6 +288,14 @@ let
       submenu "Suggests resolution @1080p" --class hidpi-1080p {
         ${grubMenuCfg}
         ${buildMenuAdditionalParamsGrub2 config "video=1920x1080@60"}
+      }
+
+      # If we boot into a graphical environment where X is autoran
+      # and always crashes, it makes the media unusable. Allow the user
+      # to disable this.
+      submenu "Disable display-manager" --class quirk-disable-displaymanager {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 config "systemd.mask=display-manager.service"}
       }
 
       # Some laptop and convertibles have the panel installed in an
@@ -399,12 +413,21 @@ in
       default = false;
       description = ''
         Whether the ISO image should be compressed using
-        <command>bzip2</command>.
+        <command>zstd</command>.
+      '';
+    };
+
+    isoImage.edition = mkOption {
+      default = "";
+      description = ''
+        Specifies which edition string to use in the volume ID of the generated
+        ISO image.
       '';
     };
 
     isoImage.volumeID = mkOption {
-      default = "NIXOS_BOOT_CD";
+      # nixos-$EDITION-$RELEASE-$ARCH
+      default = "nixos${optionalString (config.isoImage.edition != "") "-${config.isoImage.edition}"}-${config.system.nixos.release}-${pkgs.stdenv.hostPlatform.uname.processor}";
       description = ''
         Specifies the label or volume ID of the generated ISO image.
         Note that the label is used by stage 1 of the boot process to
@@ -460,7 +483,7 @@ in
 
     isoImage.efiSplashImage = mkOption {
       default = pkgs.fetchurl {
-          url = https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/efi-background.png;
+          url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/efi-background.png";
           sha256 = "18lfwmp8yq923322nlb9gxrh5qikj1wsk6g5qvdh31c4h5b1538x";
         };
       description = ''
@@ -470,7 +493,7 @@ in
 
     isoImage.splashImage = mkOption {
       default = pkgs.fetchurl {
-          url = https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/isolinux/bios-boot.png;
+          url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/isolinux/bios-boot.png";
           sha256 = "1wp822zrhbg4fgfbwkr7cbkr4labx477209agzc0hr6k62fr6rxd";
         };
       description = ''
@@ -501,6 +524,19 @@ in
   };
 
   config = {
+    assertions = [
+      {
+        assertion = !(stringLength config.isoImage.volumeID > 32);
+        # https://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor
+        # Volume Identifier can only be 32 bytes
+        message = let
+          length = stringLength config.isoImage.volumeID;
+          howmany = toString length;
+          toomany = toString (length - 32);
+        in
+        "isoImage.volumeID ${config.isoImage.volumeID} is ${howmany} characters. That is ${toomany} characters longer than the limit of 32.";
+      }
+    ];
 
     boot.loader.grub.version = 2;
 
@@ -555,16 +591,18 @@ in
       };
 
     fileSystems."/nix/store" =
-      { fsType = "unionfs-fuse";
-        device = "unionfs";
-        options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
+      { fsType = "overlay";
+        device = "overlay";
+        options = [
+          "lowerdir=/nix/.ro-store"
+          "upperdir=/nix/.rw-store/store"
+          "workdir=/nix/.rw-store/work"
+        ];
       };
 
-    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" ];
+    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" "overlay" ];
 
-    boot.blacklistedKernelModules = [ "nouveau" ];
-
-    boot.initrd.kernelModules = [ "loop" ];
+    boot.initrd.kernelModules = [ "loop" "overlay" ];
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
@@ -591,9 +629,6 @@ in
         { source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";
         }
-        { source = config.isoImage.efiSplashImage;
-          target = "/EFI/boot/efi-background.png";
-        }
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
@@ -618,6 +653,9 @@ in
         { source = "${efiDir}/EFI";
           target = "/EFI";
         }
+        { source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/boot/grub.cfg") + "/grub";
+          target = "/boot/grub";
+        }
       ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
@@ -625,6 +663,10 @@ in
       ] ++ optionals (config.isoImage.grubTheme != null) [
         { source = config.isoImage.grubTheme;
           target = "/EFI/boot/grub-theme";
+        }
+      ] ++ [
+        { source = config.isoImage.efiSplashImage;
+          target = "/EFI/boot/efi-background.png";
         }
       ];
 

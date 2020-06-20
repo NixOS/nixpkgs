@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper }:
 stdenv.mkDerivation rec {
-  name = "hbase-${version}";
+  pname = "hbase";
   version = "0.98.24";
 
   src = fetchurl {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with stdenv.lib; {
     description = "A distributed, scalable, big data store";
-    homepage = https://hbase.apache.org;
+    homepage = "https://hbase.apache.org";
     license = licenses.asl20;
     platforms = stdenv.lib.platforms.linux;
   };

@@ -6,16 +6,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "chit";
-  version = "0.1.14";
+  version = "0.1.15";
 
   src = fetchFromGitHub {
     owner = "peterheesterman";
     repo = pname;
     rev = version;
-    sha256 = "1rzy15xwlf87c8kpy9pwvir6s9z3qc8d9iz4pk0gfdj2il3vmjwv";
+    sha256 = "0iixczy3cad44j2d7zzj8f3lnmp4jwnb0snmwfgiq3vj9wrn28pz";
   };
 
-  cargoSha256 = "1jqnnf4jgjpm1i310hda15423nxfw9frgpmc2kbrs66qcsj7avaw";
+  cargoSha256 = "1w25k3bqmmcrhpkw510vbwph0rfmrzi2wby0z2rz1q4k1f9k486m";
 
   nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkgconfig ];
   buildInputs = []
@@ -36,7 +36,7 @@ buildRustPackage rec {
       * Should i use this crate?
       * How mature is it?
     '';
-    homepage = https://github.com/peterheesterman/chit;
+    homepage = "https://github.com/peterheesterman/chit";
     license = licenses.mit;
     maintainers = [ maintainers.lilyball ];
     platforms = platforms.all;

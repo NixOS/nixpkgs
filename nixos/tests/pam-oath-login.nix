@@ -1,4 +1,4 @@
-import ./make-test.nix ({ ... }:
+import ./make-test-python.nix ({ ... }:
 
 let
   oathSnakeoilSecret = "cdd4083ef8ff1fa9178c6d46bfb1a3";
@@ -55,70 +55,54 @@ in
       };
     };
 
-  testScript =
-    ''
-      $machine->waitForUnit('multi-user.target');
-      $machine->waitUntilSucceeds("pgrep -f 'agetty.*tty1'");
-      $machine->screenshot("postboot");
+  testScript = ''
+    def switch_to_tty(tty_number):
+        machine.fail(f"pgrep -f 'agetty.*tty{tty_number}'")
+        machine.send_key(f"alt-f{tty_number}")
+        machine.wait_until_succeeds(f"[ $(fgconsole) = {tty_number} ]")
+        machine.wait_for_unit(f"getty@tty{tty_number}.service")
+        machine.wait_until_succeeds(f"pgrep -f 'agetty.*tty{tty_number}'")
 
 
-      subtest "Invalid password", sub {
-        $machine->fail("pgrep -f 'agetty.*tty2'");
-        $machine->sendKeys("alt-f2");
-        $machine->waitUntilSucceeds("[ \$(fgconsole) = 2 ]");
-        $machine->waitForUnit('getty@tty2.service');
-        $machine->waitUntilSucceeds("pgrep -f 'agetty.*tty2'");
+    def enter_user_alice(tty_number):
+        machine.wait_until_tty_matches(tty_number, "login: ")
+        machine.send_chars("alice\n")
+        machine.wait_until_tty_matches(tty_number, "login: alice")
+        machine.wait_until_succeeds("pgrep login")
+        machine.wait_until_tty_matches(tty_number, "One-time password")
 
-        $machine->waitUntilTTYMatches(2, "login: ");
-        $machine->sendChars("alice\n");
-        $machine->waitUntilTTYMatches(2, "login: alice");
-        $machine->waitUntilSucceeds("pgrep login");
 
-        $machine->waitUntilTTYMatches(2, "One-time password");
-        $machine->sendChars("${oathSnakeOilPassword1}\n");
-        $machine->waitUntilTTYMatches(2, "Password: ");
-        $machine->sendChars("blorg\n");
-        $machine->waitUntilTTYMatches(2, "Login incorrect");
-      };
+    machine.wait_for_unit("multi-user.target")
+    machine.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
+    machine.screenshot("postboot")
 
-      subtest "Invalid oath token", sub {
-        $machine->fail("pgrep -f 'agetty.*tty3'");
-        $machine->sendKeys("alt-f3");
-        $machine->waitUntilSucceeds("[ \$(fgconsole) = 3 ]");
-        $machine->waitForUnit('getty@tty3.service');
-        $machine->waitUntilSucceeds("pgrep -f 'agetty.*tty3'");
+    with subtest("Invalid password"):
+        switch_to_tty(2)
+        enter_user_alice(2)
 
-        $machine->waitUntilTTYMatches(3, "login: ");
-        $machine->sendChars("alice\n");
-        $machine->waitUntilTTYMatches(3, "login: alice");
-        $machine->waitUntilSucceeds("pgrep login");
-        $machine->waitUntilTTYMatches(3, "One-time password");
-        $machine->sendChars("000000\n");
-        $machine->waitUntilTTYMatches(3, "Login incorrect");
-        $machine->waitUntilTTYMatches(3, "login:");
-      };
+        machine.send_chars("${oathSnakeOilPassword1}\n")
+        machine.wait_until_tty_matches(2, "Password: ")
+        machine.send_chars("blorg\n")
+        machine.wait_until_tty_matches(2, "Login incorrect")
 
-      subtest "Happy path (both passwords are mandatory to get us in)", sub {
-        $machine->fail("pgrep -f 'agetty.*tty4'");
-        $machine->sendKeys("alt-f4");
-        $machine->waitUntilSucceeds("[ \$(fgconsole) = 4 ]");
-        $machine->waitForUnit('getty@tty4.service');
-        $machine->waitUntilSucceeds("pgrep -f 'agetty.*tty4'");
+    with subtest("Invalid oath token"):
+        switch_to_tty(3)
+        enter_user_alice(3)
 
-        $machine->waitUntilTTYMatches(4, "login: ");
-        $machine->sendChars("alice\n");
-        $machine->waitUntilTTYMatches(4, "login: alice");
-        $machine->waitUntilSucceeds("pgrep login");
-        $machine->waitUntilTTYMatches(4, "One-time password");
-        $machine->sendChars("${oathSnakeOilPassword2}\n");
-        $machine->waitUntilTTYMatches(4, "Password: ");
-        $machine->sendChars("${alicePassword}\n");
+        machine.send_chars("000000\n")
+        machine.wait_until_tty_matches(3, "Login incorrect")
+        machine.wait_until_tty_matches(3, "login:")
 
-        $machine->waitUntilSucceeds("pgrep -u alice bash");
-        $machine->sendChars("touch  done4\n");
-        $machine->waitForFile("/home/alice/done4");
-      };
+    with subtest("Happy path: Both passwords are mandatory to get us in"):
+        switch_to_tty(4)
+        enter_user_alice(4)
 
+        machine.send_chars("${oathSnakeOilPassword2}\n")
+        machine.wait_until_tty_matches(4, "Password: ")
+        machine.send_chars("${alicePassword}\n")
+
+        machine.wait_until_succeeds("pgrep -u alice bash")
+        machine.send_chars("touch  done4\n")
+        machine.wait_for_file("/home/alice/done4")
     '';
-
 })

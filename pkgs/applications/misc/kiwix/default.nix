@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig
 , zip, python, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
 , libuuid, libX11, libXext, libXt, libXrender, glib, dbus, dbus-glib
-, gtk2, gdk_pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
+, gtk2, gdk-pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
 , xapian, ctpp2, zimlib
 }:
 
@@ -9,19 +9,19 @@ with stdenv.lib;
 
 let
   xulrunner64_tar = fetchurl {
-    url = http://download.kiwix.org/dev/xulrunner-29.0.en-US.linux-x86_64.tar.bz2;
+    url = "http://download.kiwix.org/dev/xulrunner-29.0.en-US.linux-x86_64.tar.bz2";
     sha256 = "0i3m30gm5z7qmas14id6ypvbmnb2k7jhz8aby2wz5vvv49zqmx3s";
   };
   xulrunnersdk64_tar = fetchurl {
-    url = http://download.kiwix.org/dev/xulrunner-29.0.en-US.linux-x86_64.sdk.tar.bz2;
+    url = "http://download.kiwix.org/dev/xulrunner-29.0.en-US.linux-x86_64.sdk.tar.bz2";
     sha256 = "0z90v7c4mq15g5klmsj8vs2r10fbygj3qzynx4952hkv8ihw8n3a";
   };
   xulrunner32_tar = fetchurl {
-    url = http://download.kiwix.org/dev/xulrunner-29.0.en-US.linux-i686.tar.bz2;
+    url = "http://download.kiwix.org/dev/xulrunner-29.0.en-US.linux-i686.tar.bz2";
     sha256 = "0yln6pxz8f6b9wm9124sx049z8mgi17lgd63rcv2hnix825y8gjb";
   };
   xulrunnersdk32_tar = fetchurl {
-    url = http://download.kiwix.org/dev/xulrunner-29.0.en-US.linux-i686.sdk.tar.bz2;
+    url = "http://download.kiwix.org/dev/xulrunner-29.0.en-US.linux-i686.sdk.tar.bz2";
     sha256 = "1h9vcbvf8wgds6i2z20y7krpys0mqsqhv1ijyfljanp6vyll9fvi";
   };
 
@@ -31,10 +31,10 @@ let
 
   pugixml = stdenv.mkDerivation rec {
     version = "1.2";
-    name = "pugixml-${version}";
+    pname = "pugixml";
 
     src = fetchurl {
-      url = "http://download.kiwix.org/dev/${name}.tar.gz";
+      url = "http://download.kiwix.org/dev/${pname}-${version}.tar.gz";
       sha256 = "0sqk0vdwjq44jxbbkj1cy8qykrmafs1sickzldb2w2nshsnjshhg";
     };
 
@@ -42,8 +42,8 @@ let
 
     unpackPhase = ''
       # not a nice src archive: all the files are in the root :(
-      mkdir ${name}
-      cd ${name}
+      mkdir ${pname}-${version}
+      cd ${pname}-${version}
       tar -xf ${src}
 
       # and the build scripts are in there :'(
@@ -54,7 +54,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "kiwix-${version}";
+  pname = "kiwix";
   version = "0.9";
 
   src = fetchurl {
@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-static"
     "--disable-staticbins"
   ];
 
@@ -93,13 +92,13 @@ stdenv.mkDerivation rec {
 
     rm $out/bin/kiwix
     makeWrapper $out/lib/kiwix/kiwix-launcher $out/bin/kiwix \
-      --suffix LD_LIBRARY_PATH : ${makeLibraryPath [stdenv.cc.cc libX11 libXext libXt libXrender glib dbus dbus-glib gtk2 gdk_pixbuf pango cairo freetype fontconfig alsaLib atk]} \
+      --suffix LD_LIBRARY_PATH : ${makeLibraryPath [stdenv.cc.cc libX11 libXext libXt libXrender glib dbus dbus-glib gtk2 gdk-pixbuf pango cairo freetype fontconfig alsaLib atk]} \
       --suffix PATH : ${aria2}/bin
   '';
 
   meta = {
     description = "An offline reader for Web content";
-    homepage = https://kiwix.org;
+    homepage = "https://kiwix.org";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ robbinch ];

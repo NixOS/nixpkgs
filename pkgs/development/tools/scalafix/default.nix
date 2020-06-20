@@ -16,7 +16,7 @@ let
     outputHash     = "19j260prx7k010nxyvc1m9jj1ncxr73m2cym7if39360v5dc05c0";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   buildInputs = [ jdk makeWrapper deps ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Refactoring and linting tool for Scala";
-    homepage = https://scalacenter.github.io/scalafix/;
+    homepage = "https://scalacenter.github.io/scalafix/";
     license = licenses.bsd3;
     maintainers = [ maintainers.tomahna ];
   };

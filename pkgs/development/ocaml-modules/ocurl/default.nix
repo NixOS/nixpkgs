@@ -1,10 +1,14 @@
 { stdenv, pkgconfig, ocaml, findlib, fetchurl, curl, ncurses }:
 
+if stdenv.lib.versionOlder ocaml.version "4.02"
+then throw "ocurl is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
-  name = "ocurl-0.8.1";
+  name = "ocurl-0.9.1";
   src = fetchurl {
     url = "http://ygrek.org.ua/p/release/ocurl/${name}.tar.gz";
-    sha256 = "08ldzbx1k3mbjc01fmzsn86ll4paf331bcjss6iig6y6hgc9q3ry";
+    sha256 = "0n621cxb9012pj280c7821qqsdhypj8qy9qgrah79dkh6a8h2py6";
   };
 
   buildInputs = [ pkgconfig ocaml findlib ncurses ];

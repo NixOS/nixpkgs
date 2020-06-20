@@ -3,7 +3,7 @@
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -17,46 +17,33 @@ let
         ];
     }).config.system.build.isoImage;
 
-  makeBootTest = name: machineConfig:
-    makeTest {
-      inherit iso;
-      name = "boot-" + name;
-      nodes = { };
-      testScript =
-        ''
-          my $machine = createMachine({ ${machineConfig}, qemuFlags => '-m 768' });
-          $machine->start;
-          $machine->waitForUnit("multi-user.target");
-          $machine->succeed("nix verify -r --no-trust /run/current-system");
+  pythonDict = params: "\n    {\n        ${concatStringsSep ",\n        " (mapAttrsToList (name: param: "\"${name}\": \"${param}\"") params)},\n    }\n";
 
-          # Test whether the channel got installed correctly.
-          $machine->succeed("nix-instantiate --dry-run '<nixpkgs>' -A hello");
-          $machine->succeed("nix-env --dry-run -iA nixos.procps");
+  makeBootTest = name: extraConfig:
+    let
+      machineConfig = pythonDict ({ qemuFlags = "-m 768"; } // extraConfig);
+    in
+      makeTest {
+        inherit iso;
+        name = "boot-" + name;
+        nodes = { };
+        testScript =
+          ''
+            machine = create_machine(${machineConfig})
+            machine.start()
+            machine.wait_for_unit("multi-user.target")
+            machine.succeed("nix verify -r --no-trust /run/current-system")
 
-          $machine->shutdown;
-        '';
-    };
-in {
+            with subtest("Check whether the channel got installed correctly"):
+                machine.succeed("nix-instantiate --dry-run '<nixpkgs>' -A hello")
+                machine.succeed("nix-env --dry-run -iA nixos.procps")
 
-    biosCdrom = makeBootTest "bios-cdrom" ''
-        cdrom => glob("${iso}/iso/*.iso")
-      '';
+            machine.shutdown()
+          '';
+      };
 
-    biosUsb = makeBootTest "bios-usb" ''
-        usb => glob("${iso}/iso/*.iso")
-      '';
-
-    uefiCdrom = makeBootTest "uefi-cdrom" ''
-        cdrom => glob("${iso}/iso/*.iso"),
-        bios => '${pkgs.OVMF.fd}/FV/OVMF.fd'
-      '';
-
-    uefiUsb = makeBootTest "uefi-usb" ''
-        usb => glob("${iso}/iso/*.iso"),
-        bios => '${pkgs.OVMF.fd}/FV/OVMF.fd'
-      '';
-
-    netboot = let
+  makeNetbootTest = name: extraConfig:
+    let
       config = (import ../lib/eval-config.nix {
           inherit system;
           modules =
@@ -65,35 +52,54 @@ in {
               { key = "serial"; }
             ];
         }).config;
-      ipxeScriptDir = pkgs.writeTextFile {
-        name = "ipxeScriptDir";
-        text = ''
-          #!ipxe
-          dhcp
-          kernel bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0
-          initrd initrd
-          boot
-        '';
-        destination = "/boot.ipxe";
-      };
       ipxeBootDir = pkgs.symlinkJoin {
         name = "ipxeBootDir";
         paths = [
           config.system.build.netbootRamdisk
           config.system.build.kernel
-          ipxeScriptDir
+          config.system.build.netbootIpxeScript
         ];
       };
+      machineConfig = pythonDict ({
+        qemuFlags = "-boot order=n -m 2000";
+        netBackendArgs = "tftp=${ipxeBootDir},bootfile=netboot.ipxe";
+      } // extraConfig);
     in
       makeTest {
-        name = "boot-netboot";
+        name = "boot-netboot-" + name;
         nodes = { };
-        testScript =
-          ''
-            my $machine = createMachine({ qemuFlags => '-boot order=n -net nic,model=e1000 -net user,tftp=${ipxeBootDir}/,bootfile=boot.ipxe -m 2000M' });
-            $machine->start;
-            $machine->waitForUnit("multi-user.target");
-            $machine->shutdown;
+        testScript = ''
+            machine = create_machine(${machineConfig})
+            machine.start()
+            machine.wait_for_unit("multi-user.target")
+            machine.shutdown()
           '';
       };
+in {
+
+    biosCdrom = makeBootTest "bios-cdrom" {
+      cdrom = "${iso}/iso/${iso.isoName}";
+    };
+
+    biosUsb = makeBootTest "bios-usb" {
+      usb = "${iso}/iso/${iso.isoName}";
+    };
+
+    uefiCdrom = makeBootTest "uefi-cdrom" {
+      cdrom = "${iso}/iso/${iso.isoName}";
+      bios = "${pkgs.OVMF.fd}/FV/OVMF.fd";
+    };
+
+    uefiUsb = makeBootTest "uefi-usb" {
+      usb = "${iso}/iso/${iso.isoName}";
+      bios = "${pkgs.OVMF.fd}/FV/OVMF.fd";
+    };
+
+    biosNetboot = makeNetbootTest "bios" {};
+
+    uefiNetboot = makeNetbootTest "uefi" {
+      bios = "${pkgs.OVMF.fd}/FV/OVMF.fd";
+      # Custom ROM is needed for EFI PXE boot. I failed to understand exactly why, because QEMU should still use iPXE for EFI.
+      netFrontendArgs = "romfile=${pkgs.ipxe}/ipxe.efirom";
+    };
 }

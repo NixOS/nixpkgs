@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
    meta = with stdenv.lib; {
     description = "Evernote SDK for Python";
-    homepage = http://dev.evernote.com;
+    homepage = "https://dev.evernote.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ hbunke ];
    };

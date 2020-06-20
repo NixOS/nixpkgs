@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = https://github.com/y-256/libdivsufsort;
+    homepage = "https://github.com/y-256/libdivsufsort";
     license = stdenv.lib.licenses.mit;
     description = "Library to construct the suffix array and the BW transformed string";
     platforms = stdenv.lib.platforms.unix;

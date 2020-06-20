@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "2.5.1";
+  version = "2.6.7";
   inherit (stdenv.lib) optional optionals optionalString;
 in
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.xz";
-    sha256 = "17kiyq23g7bnjvyn2yg4gyr7i7qjam65n20whsrplpxxk9bk8j3d";
+    sha256 = "065jg6s8xix45s4msj0l2r0iycw5yyyjdylripv7pyfzdk883r29";
   };
 
   postPatch = ''
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An OpenType text shaping engine";
-    homepage = http://www.freedesktop.org/wiki/Software/HarfBuzz;
+    homepage = "http://www.freedesktop.org/wiki/Software/HarfBuzz";
     downloadPage = "https://www.freedesktop.org/software/harfbuzz/release/";
     maintainers = [ maintainers.eelco ];
     license = licenses.mit;

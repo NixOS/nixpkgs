@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "3.1.2";
+  version = "4.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aa702157694d55a743fb6f1cc0bd1af58fbfda8a7d71d747d4b12d6dac29cab3";
+    sha256 = "358d8fbbc029c4538ea25bcaa283e47f375be0017fcba829de8a3a731c9df25a";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Socket.IO server";
-    homepage = https://github.com/miguelgrinberg/python-socketio/;
+    homepage = "https://github.com/miguelgrinberg/python-socketio/";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

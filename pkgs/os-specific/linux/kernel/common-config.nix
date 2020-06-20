@@ -16,13 +16,21 @@
 }:
 
 with stdenv.lib;
-
-  with import ../../../../lib/kernel.nix { inherit (stdenv) lib; inherit version; };
+with stdenv.lib.kernel;
+with (stdenv.lib.kernel.whenHelpers version);
 
 let
 
+
   # configuration items have to be part of a subattrs
   flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues nested));
+
+  whenPlatformHasEBPFJit =
+    mkIf (stdenv.hostPlatform.isAarch32 ||
+          stdenv.hostPlatform.isAarch64 ||
+          stdenv.hostPlatform.isx86_64 ||
+          (stdenv.hostPlatform.isPowerPC && stdenv.hostPlatform.is64bit) ||
+          (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit));
 
   options = {
 
@@ -33,15 +41,16 @@ let
       DYNAMIC_DEBUG             = yes;
       TIMER_STATS               = whenOlder "4.11" yes;
       DEBUG_NX_TEST             = whenOlder "4.11" no;
-      CPU_NOTIFIER_ERROR_INJECT = whenOlder "4.4" (option no);
       DEBUG_STACK_USAGE         = no;
-      DEBUG_STACKOVERFLOW       = mkIf (!features.grsecurity) no;
+      DEBUG_STACKOVERFLOW       = mkIf (!features.grsecurity) (option no);
       RCU_TORTURE_TEST          = no;
       SCHEDSTATS                = no;
       DETECT_HUNG_TASK          = yes;
       CRASH_DUMP                = option no;
       # Easier debugging of NFS issues.
       SUNRPC_DEBUG              = yes;
+      # Provide access to tunables like sched_migration_cost_ns
+      SCHED_DEBUG               = yes;
     };
 
     power-management = {
@@ -52,6 +61,9 @@ let
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
       CPU_FREQ_GOV_SCHEDUTIL           = whenAtLeast "4.9" yes;
       PM_WAKELOCKS                     = yes;
+      # Power-capping framework and support for INTEL RAPL
+      POWERCAP                         = yes;
+      INTEL_RAPL                       = whenAtLeast "5.3" module;
     };
 
     external-firmware = {
@@ -93,9 +105,8 @@ let
 
     networking = {
       NET                = yes;
+      IP_ADVANCED_ROUTER = yes;
       IP_PNP             = no;
-      NETFILTER          = yes;
-      NETFILTER_ADVANCED = yes;
       IP_VS_PROTO_TCP    = yes;
       IP_VS_PROTO_UDP    = yes;
       IP_VS_PROTO_ESP    = yes;
@@ -104,14 +115,21 @@ let
       IP_DCCP_CCID3      = no; # experimental
       CLS_U32_PERF       = yes;
       CLS_U32_MARK       = yes;
-      BPF_JIT            = mkIf (stdenv.hostPlatform.system == "x86_64-linux") yes;
+      BPF_JIT            = whenPlatformHasEBPFJit yes;
+      BPF_JIT_ALWAYS_ON  = whenPlatformHasEBPFJit no; # whenPlatformHasEBPFJit yes; # see https://github.com/NixOS/nixpkgs/issues/79304
+      HAVE_EBPF_JIT      = whenPlatformHasEBPFJit yes;
+      BPF_STREAM_PARSER  = whenAtLeast "4.19" yes;
+      XDP_SOCKETS        = whenAtLeast "4.19" yes;
+      XDP_SOCKETS_DIAG   = whenAtLeast "5.1" yes;
       WAN                = yes;
+      TCP_CONG_CUBIC     = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
       CGROUP_NET_PRIO             = yes; # Required by systemd
       IP_ROUTE_VERBOSE            = yes;
       IP_MROUTE_MULTIPLE_TABLES   = yes;
       IP_MULTICAST                = yes;
+      IP_MULTIPLE_TABLES          = yes;
       IPV6_ROUTER_PREF            = yes;
       IPV6_ROUTE_INFO             = yes;
       IPV6_OPTIMISTIC_DAD         = yes;
@@ -123,6 +141,7 @@ let
       IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
       NET_CLS_BPF                 = whenAtLeast "4.4" module;
       NET_ACT_BPF                 = whenAtLeast "4.4" module;
+      NET_SCHED                   = yes;
       L2TP_V3                     = yes;
       L2TP_IP                     = module;
       L2TP_ETH                    = module;
@@ -139,12 +158,41 @@ let
       KEY_DH_OPERATIONS = whenAtLeast "4.7" yes;
 
       # needed for nftables
-      NF_TABLES_INET              = whenAtLeast "4.17" yes;
-      NF_TABLES_NETDEV            = whenAtLeast "4.17" yes;
-      NF_TABLES_IPV4              = whenAtLeast "4.17" yes;
-      NF_TABLES_ARP               = whenAtLeast "4.17" yes;
-      NF_TABLES_IPV6              = whenAtLeast "4.17" yes;
-      NF_TABLES_BRIDGE            = whenAtLeast "4.17" yes;
+      # Networking Options
+      NETFILTER                   = yes;
+      NETFILTER_ADVANCED          = yes;
+      # Core Netfilter Configuration
+      NF_CONNTRACK_ZONES          = yes;
+      NF_CONNTRACK_EVENTS         = yes;
+      NF_CONNTRACK_TIMEOUT        = yes;
+      NF_CONNTRACK_TIMESTAMP      = yes;
+      NETFILTER_NETLINK_GLUE_CT   = yes;
+      NF_TABLES_INET              = mkMerge [ (whenOlder "4.17" module)
+                                              (whenAtLeast "4.17" yes) ];
+      NF_TABLES_NETDEV            = mkMerge [ (whenOlder "4.17" module)
+                                              (whenAtLeast "4.17" yes) ];
+      # IP: Netfilter Configuration
+      NF_TABLES_IPV4              = mkMerge [ (whenOlder "4.17" module)
+                                              (whenAtLeast "4.17" yes) ];
+      NF_TABLES_ARP               = mkMerge [ (whenOlder "4.17" module)
+                                              (whenAtLeast "4.17" yes) ];
+      # IPv6: Netfilter Configuration
+      NF_TABLES_IPV6              = mkMerge [ (whenOlder "4.17" module)
+                                              (whenAtLeast "4.17" yes) ];
+      # Bridge Netfilter Configuration
+      NF_TABLES_BRIDGE            = mkMerge [ (whenBetween "4.19" "5.3" yes)
+                                              (whenAtLeast "5.3" module) ];
+
+      # needed for `dropwatch`
+      # Builtin-only since https://github.com/torvalds/linux/commit/f4b6bcc7002f0e3a3428bac33cf1945abff95450
+      NET_DROP_MONITOR = yes;
+
+      # needed for ss
+      INET_DIAG         = module;
+      INET_TCP_DIAG     = module;
+      INET_UDP_DIAG     = module;
+      INET_RAW_DIAG     = whenAtLeast "4.14" module;
+      INET_DIAG_DESTROY = whenAtLeast "4.9" yes;
     };
 
     wireless = {
@@ -157,6 +205,9 @@ let
       ATH9K_AHB             = option yes; # Ditto, AHB bus
       B43_PHY_HT            = option yes;
       BCMA_HOST_PCI         = option yes;
+      RTW88                 = whenAtLeast "5.2" module;
+      RTW88_8822BE          = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
+      RTW88_8822CE          = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
     };
 
     fb = {
@@ -173,13 +224,12 @@ let
       FB_3DFX_ACCEL       = yes;
       FB_VESA             = yes;
       FRAMEBUFFER_CONSOLE = yes;
+      FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER = whenAtLeast "4.19" yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
       FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
     };
 
     video = {
-      # Enable KMS for devices whose X.org driver supports it
-      DRM_I915_KMS           = whenOlder "4.3" yes;
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
       VGA_SWITCHEROO         = yes; # Hybrid graphics support
@@ -205,10 +255,32 @@ let
       SND_HDA_RECONFIG    = yes; # Support reconfiguration of jack functions
       # Support configuring jack functions via fw mechanism at boot
       SND_HDA_PATCH_LOADER = yes;
+      SND_HDA_CODEC_CA0132_DSP = whenOlder "5.7" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
       SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
       # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
       PSS_MIXER           = whenOlder "4.12" yes;
+    # Enable Sound Open Firmware support
+    } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
+                        versionAtLeast version "5.5") {
+      SND_SOC_SOF_TOPLEVEL              = yes;
+      SND_SOC_SOF_ACPI                  = module;
+      SND_SOC_SOF_PCI                   = module;
+      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = yes;
+      SND_SOC_SOF_CANNONLAKE_SUPPORT    = yes;
+      SND_SOC_SOF_COFFEELAKE_SUPPORT    = yes;
+      SND_SOC_SOF_COMETLAKE_H_SUPPORT   = yes;
+      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = yes;
+      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = yes;
+      SND_SOC_SOF_GEMINILAKE_SUPPORT    = yes;
+      SND_SOC_SOF_HDA_AUDIO_CODEC       = yes;
+      SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = whenOlder "5.7" yes;
+      SND_SOC_SOF_HDA_LINK              = yes;
+      SND_SOC_SOF_ICELAKE_SUPPORT       = yes;
+      SND_SOC_SOF_INTEL_TOPLEVEL        = yes;
+      SND_SOC_SOF_JASPERLAKE_SUPPORT    = yes;
+      SND_SOC_SOF_MERRIFIELD_SUPPORT    = yes;
+      SND_SOC_SOF_TIGERLAKE_SUPPORT     = yes;
     };
 
     usb-serial = {
@@ -248,7 +320,6 @@ let
       EXT2_FS_XATTR     = yes;
       EXT2_FS_POSIX_ACL = yes;
       EXT2_FS_SECURITY  = yes;
-      EXT2_FS_XIP       = whenOlder "4.0" yes; # Ext2 execute in place support
 
       EXT3_FS_POSIX_ACL = yes;
       EXT3_FS_SECURITY  = yes;
@@ -299,7 +370,7 @@ let
       CIFS_STATS        = whenOlder "4.19" yes;
       CIFS_WEAK_PW_HASH = yes;
       CIFS_UPCALL       = yes;
-      CIFS_ACL          = yes;
+      CIFS_ACL          = whenOlder "5.3" yes;
       CIFS_DFS_UPCALL   = yes;
       CIFS_SMB2         = whenOlder "4.13" yes;
 
@@ -330,7 +401,7 @@ let
       DEBUG_SET_MODULE_RONX            = { optional = true; tristate = whenOlder "4.11" "y"; };
       RANDOMIZE_BASE                   = option yes;
       STRICT_DEVMEM                    = option yes; # Filter access to /dev/mem
-      SECURITY_SELINUX_BOOTPARAM_VALUE = freeform "0"; # Disable SELinux by default
+      SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
       DEVKMEM                          = mkIf (!features.grsecurity) no; # Disable /dev/kmem
@@ -340,6 +411,7 @@ let
       SECURITY_APPARMOR                = yes;
       DEFAULT_SECURITY_APPARMOR        = yes;
 
+      SECURITY_LOCKDOWN_LSM            = whenAtLeast "5.4" yes;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack
@@ -350,10 +422,6 @@ let
       MICROCODE       = yes;
       MICROCODE_INTEL = yes;
       MICROCODE_AMD   = yes;
-
-      MICROCODE_EARLY       = whenOlder "4.4" yes;
-      MICROCODE_INTEL_EARLY = whenOlder "4.4" yes;
-      MICROCODE_AMD_EARLY   = whenOlder "4.4" yes;
     } // optionalAttrs (versionAtLeast version "4.10") {
       # Write Back Throttling
       # https://lwn.net/Articles/682582/
@@ -567,9 +635,25 @@ let
     });
 
     misc = {
+      HID_BATTERY_STRENGTH = yes;
+      # enabled by default in x86_64 but not arm64, so we do that here
+      HIDRAW               = yes;
+
+      HID_ACRUX_FF       = yes;
+      DRAGONRISE_FF      = yes;
+      HOLTEK_FF          = yes;
+      SONY_FF            = yes;
+      SMARTJOYPLUS_FF    = yes;
+      THRUSTMASTER_FF    = yes;
+      ZEROPLUS_FF        = yes;
+
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
       KERNEL_XZ          = yes;
+
+      SYSVIPC            = yes;  # System-V IPC
+
+      AIO                = yes;  # POSIX asynchronous I/O
 
       UNIX               = yes;  # Unix domain sockets.
 
@@ -629,14 +713,17 @@ let
       IDLE_PAGE_TRACKING  = yes;
       IRDA_ULTRA          = whenOlder "4.17" yes; # Ultra (connectionless) protocol
 
-      JOYSTICK_IFORCE_232 = option yes; # I-Force Serial joysticks and wheels
-      JOYSTICK_IFORCE_USB = option yes; # I-Force USB joysticks and wheels
+      JOYSTICK_IFORCE_232 = { optional = true; tristate = whenOlder "5.3" "y"; }; # I-Force Serial joysticks and wheels
+      JOYSTICK_IFORCE_USB = { optional = true; tristate = whenOlder "5.3" "y"; }; # I-Force USB joysticks and wheels
       JOYSTICK_XPAD_FF    = option yes; # X-Box gamepad rumble support
       JOYSTICK_XPAD_LEDS  = option yes; # LED Support for Xbox360 controller 'BigX' LED
+
+      KEYBOARD_APPLESPI = whenAtLeast "5.3" module;
 
       KEXEC_FILE      = option yes;
       KEXEC_JUMP      = option yes;
 
+      PARTITION_ADVANCED    = yes; # Needed for LDM_PARTITION
       # Windows Logical Disk Manager (Dynamic Disk) support
       LDM_PARTITION         = yes;
       LOGIRUMBLEPAD2_FF     = yes; # Logitech Rumblepad 2 force feedback
@@ -650,6 +737,7 @@ let
       PSI = whenAtLeast "4.20" yes;
 
       MODVERSIONS        = whenOlder "4.9" yes;
+      MOUSE_ELAN_I2C_SMBUS = yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
       MTRR_SANITIZER     = yes;
       NET_FC             = yes; # Fibre Channel driver support
@@ -675,6 +763,7 @@ let
 
       HWMON         = yes;
       THERMAL_HWMON = yes; # Hardware monitoring support
+      NVME_HWMON    = whenAtLeast "5.5" yes; # NVMe drives temperature reporting
       UEVENT_HELPER = no;
 
       USERFAULTFD   = yes;
@@ -693,17 +782,24 @@ let
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
       # Enable AMD's ROCm GPU compute stack
-      HSA_AMD = whenAtLeast "4.20" yes;
+      HSA_AMD =     mkIf stdenv.hostPlatform.is64bit (whenAtLeast "4.20" yes);
+      ZONE_DEVICE = mkIf stdenv.hostPlatform.is64bit (whenAtLeast "5.3" yes);
+      HMM_MIRROR = whenAtLeast "5.3" yes;
+      DRM_AMDGPU_USERPTR = whenAtLeast "5.3" yes;
 
       PREEMPT = no;
       PREEMPT_VOLUNTARY = yes;
 
+      X86_AMD_PLATFORM_DEVICE = yes;
+
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
-      # Enable memory hotplug support
-      # Allows you to dynamically add & remove memory to a VM client running NixOS without requiring a reboot
+      # Enable CPU/memory hotplug support
+      # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
+      ACPI_HOTPLUG_CPU = yes;
       ACPI_HOTPLUG_MEMORY = yes;
       MEMORY_HOTPLUG = yes;
       MEMORY_HOTREMOVE = yes;
+      HOTPLUG_CPU = yes;
       MIGRATION = yes;
       SPARSEMEM = yes;
 
@@ -713,6 +809,9 @@ let
     } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # Enables support for the Allwinner Display Engine 2.0
       SUN8I_DE2_CCU = whenAtLeast "4.13" yes;
+
+      # See comments on https://github.com/NixOS/nixpkgs/commit/9b67ea9106102d882f53d62890468071900b9647
+      CRYPTO_AEGIS128_SIMD = whenAtLeast "5.4" no;
     };
   };
 in

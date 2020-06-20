@@ -111,15 +111,14 @@ in
       gid = config.ids.gids.teamspeak;
     };
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.logPath}' - ${user} ${group} - -"
+    ];
+
     systemd.services.teamspeak3-server = {
       description = "Teamspeak3 voice communication server daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-
-      preStart = ''
-        mkdir -p ${cfg.logPath}
-        chown ${user}:${group} ${cfg.logPath}
-      '';
 
       serviceConfig = {
         ExecStart = ''
@@ -135,7 +134,6 @@ in
         WorkingDirectory = cfg.dataDir;
         User = user;
         Group = group;
-        PermissionsStartOnly = true;
       };
     };
   };

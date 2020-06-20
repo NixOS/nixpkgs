@@ -18,7 +18,7 @@ let # The gnu-smalltalk project has a dependency to the libsigsegv library.
 in stdenv.mkDerivation rec {
 
   version = "3.2.5";
-  name = "gnu-smalltalk-${version}";
+  pname = "gnu-smalltalk";
 
   src = fetchurl {
     url = "mirror://gnu/smalltalk/smalltalk-${version}.tar.xz";
@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
       course), as well as under Windows. Smalltalk is a dynamic object-oriented
       language, well-versed to scripting tasks.
     '';
-    homepage = http://smalltalk.gnu.org/;
+    homepage = "http://smalltalk.gnu.org/";
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ skeidel ];

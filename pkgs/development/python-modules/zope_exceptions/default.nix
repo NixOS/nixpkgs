@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Exception interfaces and implementations";
-    homepage = https://pypi.python.org/pypi/zope.exceptions;
+    homepage = "https://pypi.python.org/pypi/zope.exceptions";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
   };

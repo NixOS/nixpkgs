@@ -1,12 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, qmake
+{ stdenv, mkDerivation, lib, fetchFromGitHub
+, cmake, extra-cmake-modules, pkgconfig, qmake
 , libpthreadstubs, libxcb, libXdmcp
 , qtsvg, qttools, qtwebengine, qtx11extras
-, qtwayland
+, qtwayland, wrapQtAppsHook
 , kwallet
 }:
 
-stdenv.mkDerivation rec {
-  name = "falkon-${version}";
+mkDerivation rec {
+  pname = "falkon";
   version = "3.1.0";
 
   src = fetchFromGitHub {
@@ -29,13 +30,20 @@ stdenv.mkDerivation rec {
     kwallet
   ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qmake qttools ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkgconfig
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "QtWebEngine based cross-platform web browser";
-    homepage    = https://community.kde.org/Incubator/Projects/Falkon;
+    homepage    = "https://community.kde.org/Incubator/Projects/Falkon";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;

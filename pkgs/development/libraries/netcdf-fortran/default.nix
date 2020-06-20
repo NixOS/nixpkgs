@@ -1,6 +1,6 @@
 { stdenv, fetchurl, netcdf, hdf5, curl, gfortran }:
 stdenv.mkDerivation rec {
-  name = "netcdf-fortran-${version}";
+  pname = "netcdf-fortran";
   version = "4.4.5";
 
   src = fetchurl {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fortran API to manipulate netcdf files";
-    homepage = https://www.unidata.ucar.edu/software/netcdf/;
+    homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     license = licenses.free;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;

@@ -1,30 +1,33 @@
-{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja, docutils
+{ stdenv, fetchFromGitHub
+, meson, pkgconfig, ninja, docutils, makeWrapper
 , fuse3, glib
 , which, python3Packages
+, openssh
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.5.2";
-  name = "sshfs-fuse-${version}";
+  version = "3.7.0";
+  pname = "sshfs-fuse";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     rev = "sshfs-${version}";
-    sha256 = "0gvk8snivpi2sjidjnd9ypc66ny7lr0z9v4swl56rwjv539dkbx2";
+    sha256 = "119qvjaai3nqs2psqk2kv4gxjchrnrcfnmlwk7yxnj3v59pgyxhv";
   };
 
-  nativeBuildInputs = [ meson pkgconfig ninja docutils ];
+  nativeBuildInputs = [ meson pkgconfig ninja docutils makeWrapper ];
   buildInputs = [ fuse3 glib ];
   checkInputs = [ which python3Packages.pytest ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString
     (stdenv.hostPlatform.system == "i686-linux")
     "-D_FILE_OFFSET_BITS=64";
 
   postInstall = ''
     mkdir -p $out/sbin
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
+    wrapProgram $out/bin/sshfs --prefix PATH : "${openssh}/bin"
   '';
 
   #doCheck = true;

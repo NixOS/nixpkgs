@@ -25,6 +25,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "A collection of libraries to process XML with Python";
-    homepage = http://pyxml.sourceforge.net/;
+    homepage = "http://pyxml.sourceforge.net/";
   };
 }

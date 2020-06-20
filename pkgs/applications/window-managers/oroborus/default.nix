@@ -7,7 +7,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "oroborus-${version}";
+  pname = "oroborus";
   version = "2.0.20";
 
   nativeBuildInputs = [ pkgconfig ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A really minimalistic X window manager";
-    homepage = https://www.oroborus.org/;
+    homepage = "https://www.oroborus.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

@@ -32,7 +32,7 @@ python37Packages.buildPythonApplication rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib libxcb cairo pango python37Packages.xcffib ];
 
-  pythonPath = with python37Packages; [ xcffib cairocffi-xcffib ];
+  pythonPath = with python37Packages; [ xcffib cairocffi-xcffib setuptools ];
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
@@ -44,7 +44,7 @@ python37Packages.buildPythonApplication rec {
   doCheck = false; # Requires X server.
 
   meta = with stdenv.lib; {
-    homepage = http://www.qtile.org/;
+    homepage = "http://www.qtile.org/";
     license = licenses.mit;
     description = "A small, flexible, scriptable tiling window manager written in Python";
     platforms = platforms.linux;

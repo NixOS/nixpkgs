@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper
-, alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
-, factorio-utils
+, alsaLib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
+, libSM, libICE, libXext, factorio-utils
 , releaseType
 , mods ? []
 , username ? "", token ? "" # get/reset token at https://factorio.com/profile
@@ -39,7 +39,7 @@ let
     the store using e.g.:
 
       releaseType=alpha
-      version=0.16.51
+      version=0.17.74
       nix-prefetch-url file://$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
@@ -52,15 +52,15 @@ let
   binDists = {
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
       alpha = {
-        stable        = bdist { sha256 = "0b4hbpdcrh5hgip9q5dkmw22p66lcdhnr0kmb0w5dw6yi7fnxxh0"; version = "0.16.51"; withAuth = true; };
-        experimental  = bdist { sha256 = "0xgvvmyh49992y2r8yhafi80j3j4pcsp7pf0fg3rbc6zi1ariwsr"; version = "0.17.32"; withAuth = true; };
+        stable        = bdist { sha256 = "1fg2wnia6anzya4m53jf2xqwwspvwskz3awdb3j0v3fzijps94wc"; version = "0.17.79"; withAuth = true; };
+        experimental  = bdist { sha256 = "1h0gv7cdn999hm2fl93kq6g98bzd1x3c8afq8v0a04dqjarjgr86"; version = "0.18.32"; withAuth = true; };
       };
       headless = {
-        stable        = bdist { sha256 = "0zrnpg2js0ysvx9y50h3gajldk16mv02dvrwnkazh5kzr1d9zc3c"; version = "0.16.51"; };
-        experimental  = bdist { sha256 = "1jfjbb0v7yiqpn7nxkr4fcd1rsz59s8k6qcl82d1j320l3y7nl9w"; version = "0.17.32"; };
+        stable        = bdist { sha256 = "1pr39nm23fj83jy272798gbl9003rgi4vgsi33f2iw3dk3x15kls"; version = "0.17.79"; };
+        experimental  = bdist { sha256 = "017ggrsnhwyfgx99q0wjagafjvk5pb6lcxl72y37gig72bfcapab"; version = "0.18.32"; };
       };
       demo = {
-        stable        = bdist { sha256 = "0zf61z8937yd8pyrjrqdjgd0rjl7snwrm3xw86vv7s7p835san6a"; version = "0.16.51"; };
+        stable        = bdist { sha256 = "07qknasaqvzl9vy1fglm7xmdi7ynhmslrb0a209fhbfs0s7qqlgi"; version = "0.17.79"; };
       };
     };
     i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
@@ -164,9 +164,9 @@ let
         Factorio has been in development since spring of 2012 and it is
         currently in late alpha.
       '';
-      homepage = https://www.factorio.com/;
+      homepage = "https://www.factorio.com/";
       license = stdenv.lib.licenses.unfree;
-      maintainers = with stdenv.lib.maintainers; [ Baughn elitak ];
+      maintainers = with stdenv.lib.maintainers; [ Baughn elitak erictapen ];
       platforms = [ "i686-linux" "x86_64-linux" ];
     };
   };
@@ -175,16 +175,20 @@ let
     headless = base;
     demo = base // {
 
-      buildInputs = [ makeWrapper ];
+      buildInputs = [ makeWrapper libpulseaudio ];
 
       libPath = stdenv.lib.makeLibraryPath [
         alsaLib
+        libpulseaudio
         libX11
         libXcursor
         libXinerama
         libXrandr
         libXi
         libGL
+        libSM
+        libICE
+        libXext
       ];
 
       installPhase = base.installPhase + ''

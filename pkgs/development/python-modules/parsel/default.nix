@@ -8,19 +8,20 @@
 , w3lib
 , lxml
 , cssselect
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "parsel";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ccd82b8a122345601f6f9209e972c0e8c3518a188fcff2d37cb4d7bc570b4b8";
+    sha256 = "0yawf9r3r863lwxj0n89i7h3n8xjbsl5b7n6xg76r68scl5yzvvh";
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ functools32 six w3lib lxml cssselect ];
+  propagatedBuildInputs = [ six w3lib lxml cssselect ] ++ lib.optionals isPy27 [ functools32 ];
 
   checkPhase = ''
     py.test

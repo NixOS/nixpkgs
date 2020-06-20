@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       open standards for commuincation and interaction.
     '';
 
-    homepage = http://www.icecast.org;
+    homepage = "http://www.icecast.org";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
     platforms = with stdenv.lib.platforms; unix;

@@ -7,7 +7,7 @@
 assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
-  name = "xgboost-${version}";
+  pname = "xgboost";
   version = "0.90";
 
   # needs submodules
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
-    homepage = https://github.com/dmlc/xgboost;
+    homepage = "https://github.com/dmlc/xgboost";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ abbradar ];

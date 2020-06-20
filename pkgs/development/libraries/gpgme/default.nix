@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+{ stdenv, fetchurl, fetchpatch
+, autoreconfHook, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
 , file, which, ncurses
 , texinfo
 , buildPackages
@@ -12,13 +13,35 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gpgme-${version}";
+  pname = "gpgme";
   version = "1.13.1";
 
   src = fetchurl {
-    url = "mirror://gnupg/gpgme/${name}.tar.bz2";
+    url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
     sha256 = "0imyjfryvvjdbai454p70zcr95m94j9xnzywrlilqdw2fqi0pqy4";
   };
+
+  patches = [
+    # Fix tests with gnupg > 2.2.19
+    # https://dev.gnupg.org/T4820
+    (fetchpatch {
+      name = "cff600f1f65a2164ab25ff2b039cba008776ce62.patch";
+      url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=cff600f1f65a2164ab25ff2b039cba008776ce62";
+      sha256 = "0ds3pvcws37q4hr4g5iwg2b98fj6whvhhcbm9c8f1kgp7dlpdw7n";
+    })
+    (fetchpatch {
+      name = "c4cf527ea227edb468a84bf9b8ce996807bd6992.patch";
+      url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992";
+      sha256 = "0y0b0lb2nq5p9kx13b59b2jaz157mvflliw1qdvg1v1hynvgb8m4";
+    })
+    # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
+    (fetchpatch {
+      name = "0001-Fix-python-tests-on-non-Linux.patch";
+      url = "https://lists.gnupg.org/pipermail/gnupg-devel/attachments/20200415/f7be62d1/attachment.obj";
+      sha256 = "00d4sxq63601lzdp2ha1i8fvybh7dzih4531jh8bx07fab3sw65g";
+    })
+    # Disable python tests on Darwin as they use gpg (see configureFlags below)
+  ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch;
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
@@ -27,14 +50,10 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ file pkgconfig gnupg texinfo ]
+  nativeBuildInputs = [ pkgconfig gnupg texinfo autoreconfHook ]
   ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-  postPatch =''
-    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
-  '';
 
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
@@ -47,19 +66,19 @@ stdenv.mkDerivation rec {
   # fit in the limit. https://github.com/NixOS/nix/pull/1085
     ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
 
-  NIX_CFLAGS_COMPILE =
+  NIX_CFLAGS_COMPILE = toString (
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
     # debugging is disabled
     lib.optional (qtbase != null) "-DQT_NO_DEBUG"
     # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
-    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
+    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64");
 
   checkInputs = [ which ];
 
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://gnupg.org/software/gpgme/index.html;
+    homepage = "https://gnupg.org/software/gpgme/index.html";
     description = "Library for making GnuPG easier to use";
     longDescription = ''
       GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
@@ -69,6 +88,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ lgpl21Plus gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fuuzetsu primeos ];
+    maintainers = with maintainers; [ primeos ];
   };
 }

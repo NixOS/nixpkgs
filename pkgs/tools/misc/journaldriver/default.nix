@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub, rustPlatform, pkgconfig, openssl, systemd }:
 
 rustPlatform.buildRustPackage rec {
-  name        = "journaldriver-${version}";
+  pname = "journaldriver";
   version     = "1.1.0";
-  cargoSha256 = "0wmr0r54ar7gvhvhv76a49ap74lx8hl79bf73vc4f4xlj7hj303g";
+  cargoSha256 = "1vyc9pglppfz5idahvcj01wpmmm6jw043zk896wdksywa5zcqn28";
 
   src = fetchFromGitHub {
     owner  = "tazjin";

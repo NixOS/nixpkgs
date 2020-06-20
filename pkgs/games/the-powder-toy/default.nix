@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, scons, pkgconfig, SDL2, lua, fftwFloat, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "the-powder-toy-${version}";
+  pname = "the-powder-toy";
   version = "94.1";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free 2D physics sandbox game";
-    homepage = http://powdertoy.co.uk/;
+    homepage = "http://powdertoy.co.uk/";
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];

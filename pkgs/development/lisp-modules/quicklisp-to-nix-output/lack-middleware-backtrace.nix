@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''lack-middleware-backtrace'';
-  version = ''lack-20181210-git'';
+  version = ''lack-20191007-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lack/2018-12-10/lack-20181210-git.tgz'';
-    sha256 = ''00i36c5r5nk8abqqxhclr9nj6wawpybf5raswpm18h0kpxyf6qz8'';
+    url = ''http://beta.quicklisp.org/archive/lack/2019-10-07/lack-20191007-git.tgz'';
+    sha256 = ''1pjvsk1hc0n6aki393mg2z0dd0xwbkm4pmdph78jlk683158an5s'';
   };
 
   packageName = "lack-middleware-backtrace";
@@ -17,12 +17,12 @@ rec {
   asdFilesToKeep = ["lack-middleware-backtrace.asd"];
   overrides = x: x;
 }
-/* (SYSTEM lack-middleware-backtrace DESCRIPTION NIL SHA256
-    00i36c5r5nk8abqqxhclr9nj6wawpybf5raswpm18h0kpxyf6qz8 URL
-    http://beta.quicklisp.org/archive/lack/2018-12-10/lack-20181210-git.tgz MD5
-    b75ab822b0b1d7fa5ff4d47db3ec80dd NAME lack-middleware-backtrace FILENAME
+/* (SYSTEM lack-middleware-backtrace DESCRIPTION System lacks description
+    SHA256 1pjvsk1hc0n6aki393mg2z0dd0xwbkm4pmdph78jlk683158an5s URL
+    http://beta.quicklisp.org/archive/lack/2019-10-07/lack-20191007-git.tgz MD5
+    bce7a6b5aefb5bfd3fbeb782dda7748f NAME lack-middleware-backtrace FILENAME
     lack-middleware-backtrace DEPS ((NAME uiop FILENAME uiop)) DEPENDENCIES
-    (uiop) VERSION lack-20181210-git SIBLINGS
+    (uiop) VERSION lack-20191007-git SIBLINGS
     (lack-component lack-middleware-accesslog lack-middleware-auth-basic
      lack-middleware-csrf lack-middleware-mount lack-middleware-session
      lack-middleware-static lack-request lack-response lack-session-store-dbi

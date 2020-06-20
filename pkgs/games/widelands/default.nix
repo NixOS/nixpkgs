@@ -4,8 +4,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "widelands-${version}";
-  version = "19";
+  pname = "widelands";
+  version = "20";
 
   meta = with stdenv.lib; {
     description = "RTS with multiple-goods economy";
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://launchpad.net/widelands/build${version}/build${version}/+download/widelands-build${version}-src-gcc7.tar.bz2";
-    sha256 = "0n2lb1c2dix32j90nir96zfqivn63izr1pmabjnhns3wbb7vhwzg";
+    url = "https://launchpad.net/widelands/build${version}/build${version}/+download/widelands-build${version}.tar.bz2";
+    sha256 = "1cmwfwk7j6yi2pwmm4rm57s23sdzasqf53nx6567sdagqyc4sn9q";
   };
 
   preConfigure = ''

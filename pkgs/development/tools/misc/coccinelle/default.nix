@@ -1,11 +1,11 @@
 { fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name    = "coccinelle-${version}";
+  pname = "coccinelle";
   version = "1.0.6";
 
   src = fetchurl {
-    url = "http://coccinelle.lip6.fr/distrib/${name}.tgz";
+    url = "http://coccinelle.lip6.fr/distrib/${pname}-${version}.tgz";
     sha256 = "02g9hmwkvfl838zz690yra5jzrqjg6y6ffxkrfcsx790bhkfsll4";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       and others) for finding and fixing bugs in systems code.
     '';
 
-    homepage = http://coccinelle.lip6.fr/;
+    homepage = "http://coccinelle.lip6.fr/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

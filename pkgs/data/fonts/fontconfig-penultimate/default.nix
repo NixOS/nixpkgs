@@ -15,7 +15,7 @@ fetchzip {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/ttuegel/fontconfig-penultimate;
+    homepage = "https://github.com/ttuegel/fontconfig-penultimate";
     description = "Sensible defaults for Fontconfig";
     license = licenses.asl20;
     maintainers = [ maintainers.ttuegel ];

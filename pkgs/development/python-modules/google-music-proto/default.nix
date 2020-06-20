@@ -1,6 +1,7 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , attrs
 , audio-metadata
+, importlib-metadata
 , marshmallow
 , pendulum
 , protobuf
@@ -8,12 +9,17 @@
 
 buildPythonPackage rec {
   pname = "google-music-proto";
-  version = "2.4.0";
+  version = "2.10.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "798ac14408593525d1865f608b30f71cce291b1a239f4d63f14bb4dcf79d7528";
+    sha256 = "91b78c0de4f59b1e5503fd6d49cb3fec029d9199cca0794c87667e643342e987";
   };
+
+  postPatch = ''
+    sed -i -e "/audio-metadata/c\'audio-metadata'," -e "/marshmallow/c\'marshmallow'," setup.py
+  '';
 
   propagatedBuildInputs = [
     attrs
@@ -21,15 +27,16 @@ buildPythonPackage rec {
     marshmallow
     pendulum
     protobuf
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   # No tests
   doCheck = false;
-
-  disabled = pythonOlder "3.6";
+  pythonImportsCheck = [ "google_music_proto" ];
 
   meta = with lib; {
-    homepage = https://github.com/thebigmunch/google-music-proto;
+    homepage = "https://github.com/thebigmunch/google-music-proto";
     description = "Sans-I/O wrapper of Google Music API calls";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

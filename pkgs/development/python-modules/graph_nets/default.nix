@@ -13,14 +13,12 @@
 
 buildPythonPackage rec {
   pname = "graph_nets";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f27f0358a477d4ec3ab300bf09944b4dfdd5c10b0a5f7ac06bcb32d1327ebe1";
+    sha256 = "278a040674bef295aaf8bb5b0d1b3f207144dc68f0bcfe3f14912b9b85eb0927";
   };
-
-  buildInputs = [];
 
   postPatch = ''
     # https://github.com/deepmind/graph_nets/issues/63
@@ -40,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Build Graph Nets in Tensorflow";
-    homepage = https://github.com/deepmind/graph_nets;
+    homepage = "https://github.com/deepmind/graph_nets";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
   };

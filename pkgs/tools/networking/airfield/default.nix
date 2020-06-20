@@ -63,8 +63,8 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "A web-interface for hipache-proxy";
     license = licenses.mit;
-    homepage = https://github.com/emblica/airfield;
-    maintainers = with maintainers; [ offline ma27 ];
+    homepage = "https://github.com/emblica/airfield";
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;
   };
 }

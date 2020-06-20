@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Assertion Helpers inspired by Shouldly";
-    homepage =  https://pypi.python.org/pypi/shouldbe/;
+    homepage =  "https://pypi.python.org/pypi/shouldbe/";
     license = licenses.mit;
   };
 

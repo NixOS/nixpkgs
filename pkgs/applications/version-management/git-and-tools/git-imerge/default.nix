@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "git-imerge-${version}";
+  pname = "git-imerge";
   version = "1.1.0";
 
   src = fetchFromGitHub {
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython ];
 
-  makeFlags = "PREFIX= DESTDIR=$(out)" ; 
+  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ] ; 
  
   meta = with stdenv.lib; {
-    homepage = https://github.com/mhagger/git-imerge;
+    homepage = "https://github.com/mhagger/git-imerge";
     description = "Perform a merge between two branches incrementally";
     license = licenses.gpl2;
     platforms = platforms.all;

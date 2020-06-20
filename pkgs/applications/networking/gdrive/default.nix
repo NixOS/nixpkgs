@@ -1,9 +1,9 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name    = "gdrive-${version}";
+  pname = "gdrive";
   version = "2.1.0";
-  rev     = "${version}";
+  rev     = version;
 
   goPackagePath = "github.com/prasmussen/gdrive";
 
@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/prasmussen/gdrive;
+    homepage    = "https://github.com/prasmussen/gdrive";
     description = "A command line utility for interacting with Google Drive";
     platforms   = platforms.unix;
     license     = licenses.mit;

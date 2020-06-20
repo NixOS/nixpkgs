@@ -69,7 +69,7 @@ let
         substances or radiation, now more closely resemble insects, birds or fish
         than their original form.
       '';
-      homepage = https://cataclysmdda.org/;
+      homepage = "https://cataclysmdda.org/";
       license = licenses.cc-by-sa-30;
       maintainers = with maintainers; [ mnacamura ];
       platforms = platforms.unix;

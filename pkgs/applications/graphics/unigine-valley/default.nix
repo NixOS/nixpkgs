@@ -27,7 +27,8 @@ let
 
 in
   stdenv.mkDerivation rec {
-    name = "unigine-valley-${version}";
+    pname = "unigine-valley";
+    inherit version;
 
     src = fetchurl {
       url = "http://assets.unigine.com/d/Unigine_Valley-${version}.run";
@@ -106,7 +107,7 @@ in
 
     meta = {
       description = "The Unigine Valley GPU benchmarking tool";
-      homepage = http://unigine.com/products/benchmarks/valley/;
+      homepage = "http://unigine.com/products/benchmarks/valley/";
       license = stdenv.lib.licenses.unfree; # see also: $out/$instPath/documentation/License.pdf
       maintainers = [ stdenv.lib.maintainers.kierdavis ];
       platforms = ["x86_64-linux" "i686-linux"];

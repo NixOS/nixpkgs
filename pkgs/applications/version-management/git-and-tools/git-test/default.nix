@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, git }:
 
 stdenv.mkDerivation rec {
-  name = "git-test-${version}";
+  pname = "git-test";
   version = "1.0.4";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Test your commits";
-    homepage = https://github.com/spotify/git-test;
+    homepage = "https://github.com/spotify/git-test";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;

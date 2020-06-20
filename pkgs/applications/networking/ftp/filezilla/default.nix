@@ -1,14 +1,33 @@
-{ stdenv, fetchurl, dbus, gnutls, wxGTK30, libidn, tinyxml, gettext
-, pkgconfig, xdg_utils, gtk2, sqlite, pugixml, libfilezilla, nettle }:
+{ stdenv
+, fetchurl
+, dbus
+, gettext
+, gnutls
+, libfilezilla
+, libidn
+, nettle
+, pkgconfig
+, pugixml
+, sqlite
+, tinyxml
+, wxGTK30-gtk3
+, xdg_utils
+}:
 
-let version = "3.42.1"; in
-stdenv.mkDerivation {
-  name = "filezilla-${version}";
+stdenv.mkDerivation rec {
+  pname = "filezilla";
+  version = "3.48.1";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "083ycsycwy1szhp3mzf998wsqa74hmdxdsy07x6k81vp2cxjxijg";
+    sha256 = "0pgg2gp4x5qmxwin2qhf6skw0z52y29p75g41kjyh1lhzxvxizxb";
   };
+
+  # https://www.linuxquestions.org/questions/slackware-14/trouble-building-filezilla-3-47-2-1-current-4175671182/#post6099769
+  postPatch = ''
+    sed -i src/interface/Mainfrm.h \
+      -e '/^#define/a #include <list>'
+  '';
 
   configureFlags = [
     "--disable-manualupdatecheck"
@@ -16,22 +35,34 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [
-    dbus gnutls wxGTK30 libidn tinyxml gettext xdg_utils gtk2 sqlite
-    pugixml libfilezilla nettle ];
+    dbus
+    gettext
+    gnutls
+    libfilezilla
+    libidn
+    nettle
+    pugixml
+    sqlite
+    tinyxml
+    wxGTK30-gtk3
+    wxGTK30-gtk3.gtk
+    xdg_utils
+  ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://filezilla-project.org/;
+    homepage = "https://filezilla-project.org/";
     description = "Graphical FTP, FTPS and SFTP client";
-    license = licenses.gpl2;
     longDescription = ''
       FileZilla Client is a free, open source FTP client. It supports
       FTP, SFTP, and FTPS (FTP over SSL/TLS). The client is available
       under many platforms, binaries for Windows, Linux and macOS are
       provided.
     '';
+    license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
   };

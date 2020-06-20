@@ -6,8 +6,8 @@ let
     url = "https://geolite.maxmind.com/download/geoip/database/${src}";
   };
 in
-stdenv.mkDerivation rec {
-  name = "geolite-legacy-${version}";
+stdenv.mkDerivation {
+  pname = "geolite-legacy";
   version = "2017-12-02";
 
   srcGeoIP = fetchDB
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GeoLite Legacy IP geolocation databases";
-    homepage = https://geolite.maxmind.com/download/geoip;
+    homepage = "https://geolite.maxmind.com/download/geoip";
     license = licenses.cc-by-sa-30;
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];

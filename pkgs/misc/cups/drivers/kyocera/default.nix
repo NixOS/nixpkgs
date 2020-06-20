@@ -9,8 +9,8 @@ let
   libPath = lib.makeLibraryPath [ cups ];
 in
 
-stdenv.mkDerivation rec {
-  name = "cups-kyocera-${version}";
+stdenv.mkDerivation {
+  pname = "cups-kyocera";
   version = "1.1203";
 
   dontPatchELF = true;

@@ -1,0 +1,20 @@
+--- a/source/Irrlicht/MacOSX/CIrrDeviceMacOSX.mm
++++ b/source/Irrlicht/MacOSX/CIrrDeviceMacOSX.mm
+@@ -39,7 +39,7 @@
+ #include <IOKit/hidsystem/IOHIDUsageTables.h>
+ #else
+ /* The header was moved here in Mac OS X 10.1 */
+-#include <Kernel/IOKit/hidsystem/IOHIDUsageTables.h>
++#include <IOKit/hid/IOHIDUsageTables.h>
+ #endif
+ #include <IOKit/hid/IOHIDLib.h>
+ #include <IOKit/hid/IOHIDKeys.h>
+@@ -496,7 +496,7 @@
+ 		{
+ 			[[NSAutoreleasePool alloc] init];
+ 			[NSApplication sharedApplication];
+-			[NSApp setDelegate:(id<NSFileManagerDelegate>)[[[AppDelegate alloc] initWithDevice:this] autorelease]];
++			[NSApp setDelegate:(id<NSApplicationDelegate>)[[[AppDelegate alloc] initWithDevice:this] autorelease]];
+ 			[NSBundle loadNibNamed:@"MainMenu" owner:[NSApp delegate]];
+ 			[NSApp finishLaunching];
+ 		}

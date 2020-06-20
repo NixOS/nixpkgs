@@ -2,7 +2,7 @@
   imlib2, libstartup_notification, makeWrapper, libSM }:
 
 stdenv.mkDerivation rec {
-  name = "obconf-${version}";
+  pname = "obconf";
   version = "2.0.4";
 
   src = fetchurl {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GUI configuration tool for openbox";
-    homepage = http://openbox.org/wiki/ObConf;
+    homepage = "http://openbox.org/wiki/ObConf";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.lhvwb ];
     platforms = stdenv.lib.platforms.linux;

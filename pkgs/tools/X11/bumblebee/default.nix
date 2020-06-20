@@ -56,10 +56,11 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "bumblebee-${version}";
+  pname = "bumblebee";
+  inherit version;
 
   src = fetchurl {
-    url = "https://bumblebee-project.org/${name}.tar.gz";
+    url = "https://bumblebee-project.org/${pname}-${version}.tar.gz";
     sha256 = "03p3gvx99lwlavznrpg9l7jnl1yfg2adcj8jcjj0gxp20wxp060h";
   };
 
@@ -133,7 +134,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Bumblebee-Project/Bumblebee;
+    homepage = "https://github.com/Bumblebee-Project/Bumblebee";
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
     platforms = platforms.linux;
     license = licenses.gpl3;

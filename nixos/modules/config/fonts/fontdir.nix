@@ -25,6 +25,7 @@ in
     fonts = {
 
       enableFontDir = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to create a directory with links to all fonts in

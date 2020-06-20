@@ -2,17 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , pkgs
+, six
 }:
 
 buildPythonPackage rec {
   pname = "ecdsa";
-  version = "0.13.2";
+  version = "0.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c034ffa23413ac923541ceb3ac14ec15a0d2530690413bff58c12b80e56d884";
+    sha256 = "8f12ac317f8a1318efa75757ef0a651abe12e51fc1af8838fb91079445227277";
   };
 
+  propagatedBuildInputs = [ six ];
   # Only needed for tests
   checkInputs = [ pkgs.openssl ];
 

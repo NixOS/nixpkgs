@@ -2,7 +2,7 @@
 
 let
   version = "063a";
-in fetchzip rec {
+in fetchzip {
   name = "mplus-${version}";
 
   url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";

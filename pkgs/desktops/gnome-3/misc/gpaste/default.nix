@@ -1,13 +1,30 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, vala, glib, gjs, mutter
-, pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, appstream-glib
+, clutter
+, gjs
+, glib
+, gobject-introspection
+, gtk3
+, meson
+, mutter
+, ninja
+, pango
+, pkgconfig
+, vala
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  version = "3.32.0";
-  name = "gpaste-${version}";
+  version = "3.36.3";
+  pname = "gpaste";
 
-  src = fetchurl {
-    url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
-    sha256 = "1fvpl9vqmrr1w22hm0ybabn9pjfii5qj9ghnc2jzihgrn2h486v6";
+  src = fetchFromGitHub {
+    owner = "Keruspe";
+    repo = "GPaste";
+    rev = "v${version}";
+    sha256 = "1p1p2ng095lkly5fp9120b23wlvkj1xf4fhivzsd72css0szy7mi";
   };
 
   patches = [
@@ -22,30 +39,43 @@ stdenv.mkDerivation rec {
     substituteInPlace src/gnome-shell/prefs.js \
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/libgpaste/settings/gpaste-settings.c \
-      --subst-var-by gschemasCompiled "${placeholder "out"}/share/gsettings-schemas/${name}/glib-2.0/schemas"
+      --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig vala appstream-glib wrapGAppsHook
+    appstream-glib
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    vala
+    wrapGAppsHook
   ];
+
   buildInputs = [
-    glib gjs mutter gtk3 dbus
-    clutter pango gobject-introspection
+    clutter # required by mutter-clutter
+    gjs
+    glib
+    gtk3
+    mutter
+    pango
   ];
 
-  configureFlags = [
-    "--with-controlcenterdir=${placeholder "out"}/share/gnome-control-center/keybindings"
-    "--with-dbusservicesdir=${placeholder "out"}/share/dbus-1/services"
-    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
+  mesonFlags = [
+    "-Dcontrol-center-keybindings-dir=${placeholder "out"}/share/gnome-control-center/keybindings"
+    "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
+    "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"
   ];
 
-  enableParallelBuilding = true;
+  postInstall = ''
+    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Keruspe/GPaste;
-    description = "Clipboard management system with GNOME3 integration";
+    homepage = "https://github.com/Keruspe/GPaste";
+    description = "Clipboard management system with GNOME 3 integration";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

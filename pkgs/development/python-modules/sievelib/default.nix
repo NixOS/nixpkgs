@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Client-side Sieve and Managesieve library written in Python";
-    homepage    = https://github.com/tonioo/sievelib;
+    homepage    = "https://github.com/tonioo/sievelib";
     license     = lib.licenses.mit;
     maintainers = with lib.maintainers; [ leenaars ];
     longDescription = ''

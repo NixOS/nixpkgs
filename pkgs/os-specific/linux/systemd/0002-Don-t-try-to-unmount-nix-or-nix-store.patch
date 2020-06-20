@@ -1,0 +1,42 @@
+From e5b2b1e90d055068936336f6f01639bcde251b96 Mon Sep 17 00:00:00 2001
+From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+Date: Fri, 12 Apr 2013 13:16:57 +0200
+Subject: [PATCH 02/18] Don't try to unmount /nix or /nix/store
+
+They'll still be remounted read-only.
+
+https://github.com/NixOS/nixos/issues/126
+---
+ src/shared/fstab-util.c | 2 ++
+ src/shutdown/umount.c   | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/src/shared/fstab-util.c b/src/shared/fstab-util.c
+index b19127be09..f9adca1100 100644
+--- a/src/shared/fstab-util.c
++++ b/src/shared/fstab-util.c
+@@ -40,6 +40,8 @@ bool fstab_is_extrinsic(const char *mount, const char *opts) {
+         /* Don't bother with the OS data itself */
+         if (PATH_IN_SET(mount,
+                         "/",
++                        "/nix",
++                        "/nix/store",
+                         "/usr",
+                         "/etc"))
+                 return true;
+diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
+index 8a5e80eeaa..fab35ed6f3 100644
+--- a/src/shutdown/umount.c
++++ b/src/shutdown/umount.c
+@@ -414,6 +414,8 @@ static int delete_dm(dev_t devnum) {
+ 
+ static bool nonunmountable_path(const char *path) {
+         return path_equal(path, "/")
++                || path_equal(path, "/nix")
++                || path_equal(path, "/nix/store")
+ #if ! HAVE_SPLIT_USR
+                 || path_equal(path, "/usr")
+ #endif
+-- 
+2.26.2
+

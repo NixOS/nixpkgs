@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, linux-pam }:
 
 stdenv.mkDerivation rec { 
-  name = "ly-${version}";
+  pname = "ly";
   version = "0.2.1";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "TUI display manager";
     license = licenses.wtfpl;
-    homepage = https://github.com/cylgom/ly;
+    homepage = "https://github.com/cylgom/ly";
     maintainers = [ maintainers.spacekookie ];
   };
 }

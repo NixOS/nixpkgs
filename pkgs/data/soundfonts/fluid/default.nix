@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "Fluid-3";
 
   src = fetchurl {
-    url = "http://www.musescore.org/download/fluid-soundfont.tar.gz";
+    url = "https://ftp.osuosl.org/pub/musescore/soundfont/fluid-soundfont.tar.gz";
     sha256 = "1f96bi0y6rms255yr8dfk436azvwk66c99j6p43iavyq8jg7c5f8";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Frank Wen's pro-quality GM/GS soundfont";
-    homepage = http://www.hammersound.net/;
+    homepage = "http://www.hammersound.net/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];

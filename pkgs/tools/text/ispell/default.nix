@@ -1,14 +1,17 @@
 { stdenv, fetchurl, bison, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ispell-3.3.02";
+  pname = "ispell";
+  version = "3.4.00";
+
   src = fetchurl {
-    url = "http://fmg-www.cs.ucla.edu/geoff/tars/${name}.tar.gz";
+    url = "http://fmg-www.cs.ucla.edu/geoff/tars/${pname}-${version}.tar.gz";
     sha256 = "1d7c2fqrdjckp91ajpkn5nnmpci2qrxqn8b6cyl0zn1afb9amxbz";
   };
+
   buildInputs = [ bison ncurses ];
+
   patches = [
-    ./patches/0005-Do-not-reorder-words.patch
     ./patches/0007-Use-termios.patch
     ./patches/0008-Tex-backslash.patch
     ./patches/0009-Fix-FTBFS-on-glibc.patch
@@ -21,6 +24,7 @@ stdenv.mkDerivation rec {
     ./patches/0025-Languages.patch
     ./patches/0030-Display-whole-multibyte-character.patch
   ];
+
   postPatch = ''
     cat >> local.h <<EOF
     ${stdenv.lib.optionalString (!stdenv.isDarwin) "#define USG"}
@@ -37,11 +41,18 @@ stdenv.mkDerivation rec {
     #define MINIMENU
     #define HAS_RENAME
     EOF
-
   '';
+
   preBuild = ''
     for dir in $out/share/emacs/site-lisp $out/share/info $out/share/man/man1 $out/share/man/man4 $out/bin $out/lib; do
     mkdir -p $dir
     done
   '';
+
+  meta = with stdenv.lib; {
+    description = "An interactive spell-checking program for Unix";
+    homepage = "https://www.cs.hmc.edu/~geoff/ispell.html";
+    license = licenses.free;
+    platforms = platforms.unix;
+  };
 }

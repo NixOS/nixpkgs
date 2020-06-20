@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   version = "5.0.1";
-  name = "centerim5-${version}";
+  pname = "centerim5";
 
   src = fetchurl {
-    url = "http://centerim.org/download/cim5/${name}.tar.gz";
+    url = "http://centerim.org/download/cim5/${pname}-${version}.tar.gz";
     sha256 = "0viz86jflp684vfginhl6aaw4gh2qvalc25anlwljjl3kkmibklk";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://www.centerim.org/;
+    homepage = "http://www.centerim.org/";
     description = "Fork of CenterICQ, a curses instant messaging program";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; linux;

@@ -1,7 +1,7 @@
 { stdenv, lib, autoconf213, fetchurl, fetchpatch, pkgconfig, nspr, perl, python2, zip }:
 
-stdenv.mkDerivation rec {
-  name = "spidermonkey-${version}";
+stdenv.mkDerivation {
+  pname = "spidermonkey";
   version = "1.8.5";
 
   src = fetchurl {
@@ -35,7 +35,13 @@ stdenv.mkDerivation rec {
     ./1.8.5-arm-flags.patch
   ];
 
-  patchFlags = "-p3";
+  patchFlags = [ "-p3" ];
+
+  # fixes build on gcc8
+  postPatch = ''
+    substituteInPlace ./methodjit/MethodJIT.cpp \
+      --replace 'asm volatile' 'asm'
+  '';
 
   # On the Sheevaplug, ARM, its nanojit thing segfaults in japi-tests in
   # "make check". Disabling tracejit makes it work, but then it needs the
@@ -63,7 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
-    homepage = https://developer.mozilla.org/en/SpiderMonkey;
+    homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

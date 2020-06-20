@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "rebulk";
-  version = "1.0.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "162rad86slg4gmzxy33pnyyzm4hhcszcpjpw1vk79f3gxzvy8j8x";
+    sha256 = "320ded3cc456347d828f95e9aa5f8bab77ac01943cad024c06012069fe19690a";
   };
 
   # Some kind of trickery with imports that doesn't work.
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six regex ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Toilal/rebulk/;
+    homepage = "https://github.com/Toilal/rebulk/";
     license = licenses.mit;
     description = "Advanced string matching from simple patterns";
   };

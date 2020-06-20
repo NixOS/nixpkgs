@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, libxcb }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "lemonbar-1.3";
   
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "A lightweight xcb based bar";
-    homepage = https://github.com/LemonBoy/bar;
+    homepage = "https://github.com/LemonBoy/bar";
     maintainers = [ maintainers.meisternu ];
     license = "Custom";   
     platforms = platforms.linux;

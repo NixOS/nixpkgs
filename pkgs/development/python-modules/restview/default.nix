@@ -4,6 +4,7 @@
 , fetchpatch
 , docutils
 , readme_renderer
+, packaging
 , pygments
 , mock
 }:
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "de87c84f19526bd4a76505f6d40b51b7bb03ca43b6067c93f82f1c7237ac9e84";
   };
 
-  propagatedBuildInputs = [ docutils readme_renderer pygments ];
+  propagatedBuildInputs = [ docutils readme_renderer packaging pygments ];
   checkInputs = [ mock ];
 
   patches = [
@@ -36,7 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "ReStructuredText viewer";
-    homepage = https://mg.pov.lt/restview/;
+    homepage = "https://mg.pov.lt/restview/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ koral ];
   };

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, baseModules, extraModules, modules, ... }:
+{ config, lib, pkgs, baseModules, extraModules, modules, modulesPath, ... }:
 
 with lib;
 
@@ -17,12 +17,16 @@ let
     inherit pkgs config;
     version = config.system.nixos.release;
     revision = "release-${version}";
+    extraSources = cfg.nixos.extraModuleSources;
     options =
       let
         scrubbedEval = evalModules {
           modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
           args = (config._module.args) // { modules = [ ]; };
-          specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
+          specialArgs = {
+            pkgs = scrubDerivations "pkgs" pkgs;
+            inherit modulesPath;
+          };
         };
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
@@ -67,6 +71,11 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
+    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+  ];
 
   options = {
 
@@ -90,6 +99,16 @@ in
         description = ''
           Whether to install manual pages and the <command>man</command> command.
           This also includes "man" outputs.
+        '';
+      };
+
+      man.generateCaches = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to generate the manual page index caches using
+          <literal>mandb(8)</literal>. This allows searching for a page or
+          keyword using utilities like <literal>apropos(1)</literal>.
         '';
       };
 
@@ -155,6 +174,19 @@ in
         '';
       };
 
+      nixos.extraModuleSources = mkOption {
+        type = types.listOf (types.either types.path types.str);
+        default = [ ];
+        description = ''
+          Which extra NixOS module paths the generated NixOS's documentation should strip
+          from options.
+        '';
+        example = literalExample ''
+          # e.g. with options from modules in ''${pkgs.customModules}/nix:
+          [ pkgs.customModules ]
+        '';
+      };
+
     };
 
   };
@@ -165,7 +197,33 @@ in
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
-      environment.etc."man.conf".source = "${pkgs.man-db}/etc/man_db.conf";
+      environment.etc."man_db.conf".text =
+        let
+          manualPages = pkgs.buildEnv {
+            name = "man-paths";
+            paths = config.environment.systemPackages;
+            pathsToLink = [ "/share/man" ];
+            extraOutputsToInstall = ["man"];
+            ignoreCollisions = true;
+          };
+          manualCache = pkgs.runCommandLocal "man-cache" { }
+          ''
+            echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
+            ${pkgs.man-db}/bin/mandb -C man.conf -psc
+          '';
+        in
+        ''
+          # Manual pages paths for NixOS
+          MANPATH_MAP /run/current-system/sw/bin /run/current-system/sw/share/man
+          MANPATH_MAP /run/wrappers/bin          /run/current-system/sw/share/man
+
+          ${optionalString cfg.man.generateCaches ''
+          # Generated manual pages cache for NixOS (immutable)
+          MANDB_MAP /run/current-system/sw/share/man ${manualCache}
+          ''}
+          # Manual pages caches for NixOS
+          MANDB_MAP /run/current-system/sw/share/man /var/cache/man/nixos
+        '';
     })
 
     (mkIf cfg.info.enable {
@@ -196,9 +254,7 @@ in
            ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]);
 
       services.mingetty.helpLine = mkIf cfg.doc.enable (
-          "\nRun `nixos-help` "
-        + optionalString config.services.nixosManual.showManual "or press <Alt-F${toString config.services.nixosManual.ttyNumber}> "
-        + "for the NixOS manual."
+          "\nRun 'nixos-help' for the NixOS manual."
       );
     })
 

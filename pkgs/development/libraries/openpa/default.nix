@@ -3,10 +3,9 @@
 stdenv.mkDerivation rec {
   pname = "openpa";
   version = "1.0.4";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://trac.mpich.org/projects/${pname}/raw-attachment/wiki/Downloads/${name}.tar.gz";
+    url = "https://trac.mpich.org/projects/${pname}/raw-attachment/wiki/Downloads/${pname}-${version}.tar.gz";
     sha256 = "0flyi596hm6fv7xyw2iykx3s65p748s62bf15624xcnwpfrh8ncy";
   };
 
@@ -16,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Atomic primitives for high performance, concurrent software";
-    homepage = https://trac.mpich.org/projects/openpa;
+    homepage = "https://trac.mpich.org/projects/openpa";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ leenaars ];
     platforms = with stdenv.lib.platforms; linux;

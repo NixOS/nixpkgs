@@ -131,6 +131,7 @@ in {
       description = "Extra elasticsearch plugins";
       default = [];
       type = types.listOf types.package;
+      example = lib.literalExample "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };
 
   };

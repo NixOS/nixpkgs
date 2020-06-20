@@ -1,7 +1,6 @@
 { stdenv, fetchurl, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xkblayout-state";
   version = "1b";
 
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A small command-line program to get/set the current XKB keyboard layout";
-    homepage = https://github.com/nonpop/xkblayout-state;
+    homepage = "https://github.com/nonpop/xkblayout-state";
     license = licenses.gpl2;
     maintainers = [ maintainers.jagajaga ];
     platforms = platforms.linux;

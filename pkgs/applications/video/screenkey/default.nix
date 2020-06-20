@@ -10,7 +10,6 @@
 , libXtst
 , wrapGAppsHook
 , gnome3
-, hicolor-icon-theme
 }:
 buildPythonApplication rec {
   pname = "screenkey";
@@ -40,7 +39,6 @@ buildPythonApplication rec {
 
   buildInputs = [
     gnome3.adwaita-icon-theme
-    hicolor-icon-theme
   ];
 
   propagatedBuildInputs = [
@@ -51,7 +49,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://www.thregr.org/~wavexx/software/screenkey/;
+    homepage = "https://www.thregr.org/~wavexx/software/screenkey/";
     description = "A screencast tool to display your keys inspired by Screenflick";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

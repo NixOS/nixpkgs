@@ -1,18 +1,18 @@
-{ fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
+{ fetchurl, stdenv, which, pkgconfig, makeWrapper, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
 , xorgserver, xvfb_run }:
 
 stdenv.mkDerivation rec {
-  name = "i3-${version}";
-  version = "4.16.1";
+  pname = "i3";
+  version = "4.18.1";
 
   src = fetchurl {
-    url = "https://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "0xl56y196vxv001gvx35xwfr25zah8m3xwizp9ycdgdc0rfc4rdb";
+    url = "https://i3wm.org/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "0z709cianlzw0x0qwq4361347354xd9ckj1v7vjvhb1zh3x91gws";
   };
 
-  nativeBuildInputs = [ which pkgconfig makeWrapper ];
+  nativeBuildInputs = [ which pkgconfig makeWrapper installShellFiles ];
 
   buildInputs = [
     libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       sed -i 's/which/command -v/' $program
     done
 
-    install -vD -t $out/share/man/man1 man/*.{1,man}
+    installManPage man/*.1
   '';
 
   separateDebugInfo = true;
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A tiling window manager";
     homepage    = "https://i3wm.org";
-    maintainers = with maintainers; [ garbas modulistic fpletz ];
+    maintainers = with maintainers; [ modulistic fpletz globin ];
     license     = licenses.bsd3;
     platforms   = platforms.all;
 

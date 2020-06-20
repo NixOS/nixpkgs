@@ -21,10 +21,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://liw.fi/ttystatus/;
+    homepage = "http://liw.fi/ttystatus/";
     description = "Progress and status updates on terminals for Python";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rickynils ];
+    maintainers = [];
   };
 
 }

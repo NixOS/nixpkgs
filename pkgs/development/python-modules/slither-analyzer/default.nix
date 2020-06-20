@@ -1,8 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, makeWrapper, prettytable, pythonOlder, solc }:
+{ lib, buildPythonPackage, fetchPypi, makeWrapper, pythonOlder
+, prettytable
+, setuptools
+, solc
+}:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.3.0";
+  version = "0.6.12";
 
   disabled = pythonOlder "3.6";
 
@@ -11,11 +15,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10vrcqm371kqmf702xmqmzimv3xgrn3k3ip06nr1l6gnj3jk138g";
+    sha256 = "9773cf48754341d03bb2e65c07897fc9c00a8727487ab2820ed89eb85f546506";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ prettytable ];
+  propagatedBuildInputs = [ prettytable setuptools ];
 
   postFixup = ''
     wrapProgram $out/bin/slither \
@@ -29,7 +33,7 @@ buildPythonPackage rec {
       runs a suite of vulnerability detectors, prints visual information about
       contract details, and provides an API to easily write custom analyses.
     '';
-    homepage = https://github.com/trailofbits/slither;
+    homepage = "https://github.com/trailofbits/slither";
     license = licenses.agpl3;
     maintainers = [ maintainers.asymmetric ];
   };

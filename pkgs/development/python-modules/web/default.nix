@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.39";
+  version = "0.51";
   pname = "web.py";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7e7224493a51f6fbf02f3ce7f2011bcd9e5ebdfce0ee25e5921fdf665ba07542";
+    sha256 = "b50343941360984d37270186453bb897d13630028a739394fedf38f9cde2fd07";
   };
 
   meta = with stdenv.lib; {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
       Think about the ideal way to write a web app.
       Write the code to make it happen.
     '';
-    homepage = "http://webpy.org/";
+    homepage = "https://webpy.org/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ layus ];
   };

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "basex-${version}";
+  pname = "basex";
   version = "8.6.6";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   desktopItem = makeDesktopItem {
     name = "basex";
     exec = "basexgui %f";
-    icon = "${./basex.svg}"; # icon copied from Ubuntu basex package
+    icon = ./basex.svg; # icon copied from Ubuntu basex package
     comment = "Visually query and analyse your XML data";
     desktopName = "BaseX XML Database";
     genericName = "XML database tool";
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       highly interactive front-end (basexgui). Apart from two local standalone
       modes, BaseX offers a client/server architecture.
     '';
-    homepage = http://basex.org/;
+    homepage = "http://basex.org/";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

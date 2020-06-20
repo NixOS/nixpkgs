@@ -1,32 +1,26 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
-, python-Levenshtein, pytest }:
+, python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.1.3";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "python-fire";
     rev = "v${version}";
-    sha256 = "0kdcmzr3sgzjsw5fmvdylgrn8akqjbs433jbgqzp498njl9cc6qx";
+    sha256 = "0s5r6l39ck2scks54hmwwdf4lcihqqnqzjfx9lz2b67vxkajpwmc";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six termcolor ] ++ stdenv.lib.optional isPy27 enum34;
 
   checkInputs = [ hypothesis mock python-Levenshtein pytest ];
 
+  # ignore test which asserts exact usage statement, default behavior
+  # changed in python3.8. This can likely be remove >=0.3.1
   checkPhase = ''
-    py.test
+    py.test -k 'not testInitRequiresFlag'
   '';
-
-  patches = [
-    # Add Python 3.7 support. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/google/python-fire/commit/668007ae41391f5964870b4597e41493a936a11e.patch";
-      sha256 = "0rf7yzv9qx66zfmdggfz478z37fi4rwx4hlh3dk1065sx5rfksi0";
-    })
-  ];
 
   meta = with stdenv.lib; {
     description = "A library for automatically generating command line interfaces";

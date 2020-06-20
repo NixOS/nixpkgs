@@ -1,20 +1,19 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "lmdb-${version}";
-  version = "0.9.23";
+  pname = "lmdb";
+  version = "0.9.25";
 
-  src = fetchFromGitHub {
-    owner = "LMDB";
-    repo = "lmdb";
+  src = fetchgit {
+    url = "https://git.openldap.org/openldap/openldap.git";
     rev = "LMDB_${version}";
-    sha256 = "0ag7l5180ajvm73y59m7sn3p52xm8m972d08cshxhpwgwa4v35k6";
+    sha256 = "0i60zlca8r6fib23gdgl4c80gxpx24772ggpvz94yr7zaai4k11w";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
 
   patches = [ ./hardcoded-compiler.patch ];
-  patchFlags = "-p3";
+  patchFlags = [ "-p3" ];
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
       offering the persistence of standard disk-based databases, and is only
       limited to the size of the virtual address space.
     '';
-    homepage = http://symas.com/mdb/;
+    homepage = "http://symas.com/mdb/";
     maintainers = with maintainers; [ jb55 vcunat ];
     license = licenses.openldap;
     platforms = platforms.all;

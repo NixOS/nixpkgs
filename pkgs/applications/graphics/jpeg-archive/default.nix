@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, mozjpeg, makeWrapper, coreutils, parallel, findutils }:
 
-stdenv.mkDerivation rec {
-  name = "jpeg-archive-${version}";
+stdenv.mkDerivation {
+  pname = "jpeg-archive";
   version = "2.2.0"; # can be found here https://github.com/danielgtaylor/jpeg-archive/blob/master/src/util.c#L15
 
   # update with
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Utilities for archiving photos for saving to long term storage or serving over the web";
     homepage    = "https://github.com/danielgtaylor/jpeg-archive";
-    # license = ...; # mixed?
+    license = licenses.mit;
     maintainers = [ maintainers.srghma ];
     platforms   = platforms.all;
   };

@@ -2,7 +2,7 @@
 
 let
   version = "3.003";
-in fetchzip rec {
+in fetchzip {
   name = "hack-font-${version}";
 
   url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";
@@ -23,7 +23,7 @@ in fetchzip rec {
       The face has been re-designed with a larger glyph set, modifications of
       the original glyph shapes, and meticulous attention to metrics.
     '';
-    homepage = https://sourcefoundry.org/hack/;
+    homepage = "https://sourcefoundry.org/hack/";
 
     /*
      "The font binaries are released under a license that permits unlimited

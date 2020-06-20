@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, qmake, qtbase, qtwebkit }:
+{ mkDerivation, stdenv, fetchurl, qmake, qtbase, qtwebkit }:
 
-stdenv.mkDerivation rec {
-  name = "mindforger-${version}";
+mkDerivation rec {
+  pname = "mindforger";
   version = "1.48.2";
 
   src = fetchurl {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
      MindForger is actually more than an editor or IDE - it's human
      mind inspired personal knowledge management tool
     '';
-    homepage = https://www.mindforger.com;
+    homepage = "https://www.mindforger.com";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

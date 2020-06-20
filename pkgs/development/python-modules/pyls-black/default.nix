@@ -24,9 +24,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ black toml python-language-server ];
 
   meta = with lib; {
-    homepage = https://github.com/rupert/pyls-black;
+    homepage = "https://github.com/rupert/pyls-black";
     description = "Black plugin for the Python Language Server";
     license = licenses.mit;
+    # Not compatible with 0.33.1
+    # https://github.com/rupert/pyls-black/issues/24
+    broken = true; # since 2020-06-16
     maintainers = [ maintainers.mic92 ];
   };
 }

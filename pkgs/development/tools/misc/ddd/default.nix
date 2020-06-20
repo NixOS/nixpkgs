@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc44.patch ];
 
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
   meta = {
-    homepage = https://www.gnu.org/software/ddd;
+    homepage = "https://www.gnu.org/software/ddd";
     description = "Graphical front-end for command-line debuggers";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

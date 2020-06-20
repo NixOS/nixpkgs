@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "LAS 1.0/1.1/1.2 ASPRS LiDAR data translation toolset";
-    homepage = https://liblas.org;
+    homepage = "https://liblas.org";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.michelk ];

@@ -16,12 +16,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ aws-c-common aws-checksums ] ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
 
   cmakeFlags = [
+    "-DBUILD_SHARED_LIBS:BOOL=ON"
     "-DCMAKE_MODULE_PATH=${aws-c-common}/lib/cmake"
   ];
 
   meta = with lib; {
     description = "C99 implementation of the vnd.amazon.eventstream content-type";
-    homepage = https://github.com/awslabs/aws-c-event-stream;
+    homepage = "https://github.com/awslabs/aws-c-event-stream";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej eelco ];

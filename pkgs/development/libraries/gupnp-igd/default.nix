@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Add gupnp-1.2 compatibility
     (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gupnp-igd/commit/63531558a16ac2334a59f627b2fca5576dcfbb2e.patch;
+      url = "https://gitlab.gnome.org/GNOME/gupnp-igd/commit/63531558a16ac2334a59f627b2fca5576dcfbb2e.patch";
       sha256 = "0s8lkyy9fnnnnkkqwbk6gxb7795bb1kl1swk5ldjnlrzhfcy1ab2";
     })
   ];
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to handle UPnP IGD port mapping";
-    homepage = http://www.gupnp.org/;
+    homepage = "http://www.gupnp.org/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "stxxl-${version}";
+  pname = "stxxl";
   version = "1.4.1";
 
   src = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An implementation of the C++ standard template library STL for external memory (out-of-core) computations";
-    homepage = https://github.com/stxxl/stxxl;
+    homepage = "https://github.com/stxxl/stxxl";
     license = licenses.boost;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;

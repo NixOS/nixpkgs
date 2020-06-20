@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, ... }:
 
-stdenv.mkDerivation rec {
-  name = "git-stree-${version}";
+stdenv.mkDerivation {
+  pname = "git-stree";
   version = "0.4.5";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A better Git subtree helper command";
-    homepage = http://deliciousinsights.github.io/git-stree;
+    homepage = "http://deliciousinsights.github.io/git-stree";
     license = licenses.mit;
     maintainers = [ maintainers.benley ];
     platforms = platforms.unix;

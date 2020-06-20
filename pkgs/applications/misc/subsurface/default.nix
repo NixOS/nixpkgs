@@ -1,18 +1,25 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, makeWrapper, pkgconfig, qmake
-, curl, grantlee, libgit2, libusb, libssh2, libxml2, libxslt, libzip, zlib
+{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkgconfig, qmake
+, curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
 , qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
 }:
 
 let
-  version = "4.8.2";
+  version = "4.9.3";
 
-  libdc = stdenv.mkDerivation rec {
-    name = "libdivecomputer-ssrf-${version}";
+  subsurfaceSrc = (fetchFromGitHub {
+    owner = "Subsurface-divelog";
+    repo = "subsurface";
+    rev = "v${version}";
+    sha256 = "1i07f7appifx9j205x5a7ng01wsipxr6n9a3692pm60jli2nsir5";
+    fetchSubmodules = true;
+  });
 
-    src = fetchurl {
-      url = "https://subsurface-divelog.org/downloads/libdivecomputer-subsurface-branch-${version}.tgz";
-      sha256 = "167qan59raibmilkc574gdqxfjg2f5ww2frn86xzk2kn4qg8190w";
-    };
+  libdc = stdenv.mkDerivation {
+    pname = "libdivecomputer-ssrf";
+    inherit version;
+
+    src = subsurfaceSrc;
+    sourceRoot = "source/libdivecomputer";
 
     nativeBuildInputs = [ autoreconfHook ];
 
@@ -21,7 +28,7 @@ let
     enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
-      homepage = http://www.libdivecomputer.org;
+      homepage = "http://www.libdivecomputer.org";
       description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
       maintainers = with maintainers; [ mguentner ];
       license = licenses.lgpl21;
@@ -30,7 +37,7 @@ let
   };
 
   googlemaps = stdenv.mkDerivation rec {
-    name = "googlemaps-${version}";
+    pname = "googlemaps";
 
     version = "2017-12-18";
 
@@ -65,31 +72,27 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
-  name = "subsurface-${version}";
+in stdenv.mkDerivation {
+  pname = "subsurface";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://subsurface-divelog.org/downloads/Subsurface-${version}.tgz";
-    sha256 = "1fzrq6rqb6pzs36wxar2453cl509dqpcy9w7nq4gw7b1v2331wfy";
-  };
+  src = subsurfaceSrc;
+
+  # remove with the 4.10 release
+  patches = [ ./0001-core-fix-libgit-ifdef-to-handle-libgit2-v1.0-and-onw.patch ];
 
   buildInputs = [
     libdc googlemaps
-    curl grantlee libgit2 libssh2 libusb libxml2 libxslt libzip
+    curl grantlee libgit2 libssh2 libusb-compat-0_1 libxml2 libxslt libzip
     qtbase qtconnectivity qtsvg qttools qtwebkit
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook pkgconfig ];
 
   cmakeFlags = [
     "-DLIBDC_FROM_PKGCONFIG=ON"
     "-DNO_PRINTING=OFF"
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/subsurface \
-      --prefix QT_PLUGIN_PATH : "${googlemaps}/${googlemaps.pluginsSubdir}"
-  '';
 
   enableParallelBuilding = true;
 
@@ -103,7 +106,7 @@ in stdenv.mkDerivation rec {
       conveniently be entered using a map interface), logging of equipment used and
       names of other divers, and lets users rate dives and provide additional notes.
     '';
-    homepage = https://subsurface-divelog.org;
+    homepage = "https://subsurface-divelog.org";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;

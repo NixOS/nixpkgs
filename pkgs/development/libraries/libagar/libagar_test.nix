@@ -1,8 +1,8 @@
 { stdenv, fetchurl, bsdbuild, libagar, perl, libjpeg, libpng, openssl }:
 
 let srcs = import ./srcs.nix { inherit fetchurl; }; in
-stdenv.mkDerivation rec {
-  name = "libagar-test-${version}";
+stdenv.mkDerivation {
+  pname = "libagar-test";
   inherit (srcs) version src;
 
   sourceRoot = "agar-1.5.0/tests";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tests for libagar";
-    homepage = http://libagar.org/index.html;
+    homepage = "http://libagar.org/index.html";
     license = with licenses; bsd3;
     maintainers = with maintainers; [ ramkromberg ];
     platforms = with platforms; linux;

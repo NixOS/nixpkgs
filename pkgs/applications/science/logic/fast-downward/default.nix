@@ -1,6 +1,6 @@
 { stdenv, lib, fetchhg, cmake, which, python3, osi, cplex }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "fast-downward-2019-05-13";
 
   src = fetchhg {

@@ -1,12 +1,11 @@
+# Test ensures buildbot master comes up correctly and workers can connect
+
 { system ? builtins.currentSystem,
   config ? {},
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
-
-# Test ensures buildbot master comes up correctly and workers can connect
-makeTest {
+import ./make-test-python.nix {
   name = "buildbot";
 
   nodes = {
@@ -39,75 +38,76 @@ makeTest {
       services.openssh.enable = true;
       networking.firewall.allowedTCPPorts = [ 22 9418 ];
       environment.systemPackages = with pkgs; [ git ];
+      systemd.services.git-daemon = {
+        description   = "Git daemon for the test";
+        wantedBy      = [ "multi-user.target" ];
+        after         = [ "network.target" "sshd.service" ];
+
+        serviceConfig.Restart = "always";
+        path = with pkgs; [ coreutils git openssh ];
+        environment = { HOME = "/root"; };
+        preStart = ''
+          git config --global user.name 'Nobody Fakeuser'
+          git config --global user.email 'nobody\@fakerepo.com'
+          rm -rvf /srv/repos/fakerepo.git /tmp/fakerepo
+          mkdir -pv /srv/repos/fakerepo ~/.ssh
+          ssh-keyscan -H gitrepo > ~/.ssh/known_hosts
+          cat ~/.ssh/known_hosts
+
+          mkdir -p /src/repos/fakerepo
+          cd /srv/repos/fakerepo
+          rm -rf *
+          git init
+          echo -e '#!/bin/sh\necho fakerepo' > fakerepo.sh
+          cat fakerepo.sh
+          touch .git/git-daemon-export-ok
+          git add fakerepo.sh .git/git-daemon-export-ok
+          git commit -m fakerepo
+        '';
+        script = ''
+          git daemon --verbose --export-all --base-path=/srv/repos --reuseaddr
+        '';
+      };
     };
   };
 
   testScript = ''
-    #Start up and populate fake repo
-    $gitrepo->waitForUnit("multi-user.target");
-    print($gitrepo->execute(" \
-      git config --global user.name 'Nobody Fakeuser' && \
-      git config --global user.email 'nobody\@fakerepo.com' && \
-      rm -rvf /srv/repos/fakerepo.git /tmp/fakerepo && \
-      mkdir -pv /srv/repos/fakerepo ~/.ssh && \
-      ssh-keyscan -H gitrepo > ~/.ssh/known_hosts && \
-      cat ~/.ssh/known_hosts && \
-      cd /srv/repos/fakerepo && \
-      git init && \
-      echo -e '#!/bin/sh\necho fakerepo' > fakerepo.sh && \
-      cat fakerepo.sh && \
-      touch .git/git-daemon-export-ok && \
-      git add fakerepo.sh .git/git-daemon-export-ok && \
-      git commit -m fakerepo && \
-      git daemon --verbose --export-all --base-path=/srv/repos --reuseaddr & \
-    "));
+    gitrepo.wait_for_unit("git-daemon.service")
+    gitrepo.wait_for_unit("multi-user.target")
 
-    # Test gitrepo
-    $bbmaster->waitForUnit("network-online.target");
-    #$bbmaster->execute("nc -z gitrepo 9418");
-    print($bbmaster->execute(" \
-      rm -rfv /tmp/fakerepo && \
-      git clone git://gitrepo/fakerepo /tmp/fakerepo && \
-      pwd && \
-      ls -la && \
-      ls -la /tmp/fakerepo \
-    "));
+    with subtest("Repo is accessible via git daemon"):
+        bbmaster.wait_for_unit("network-online.target")
+        bbmaster.succeed("rm -rfv /tmp/fakerepo")
+        bbmaster.succeed("git clone git://gitrepo/fakerepo /tmp/fakerepo")
 
-    # Test start master and connect worker
-    $bbmaster->waitForUnit("buildbot-master.service");
-    $bbmaster->waitUntilSucceeds("curl -s --head http://bbmaster:8010") =~ /200 OK/;
-    $bbworker->waitForUnit("network-online.target");
-    $bbworker->execute("nc -z bbmaster 8010");
-    $bbworker->execute("nc -z bbmaster 9989");
-    $bbworker->waitForUnit("buildbot-worker.service");
-    print($bbworker->execute("ls -la /home/bbworker/worker"));
+    with subtest("Master service and worker successfully connect"):
+        bbmaster.wait_for_unit("buildbot-master.service")
+        bbmaster.wait_until_succeeds("curl --fail -s --head http://bbmaster:8010")
+        bbworker.wait_for_unit("network-online.target")
+        bbworker.succeed("nc -z bbmaster 8010")
+        bbworker.succeed("nc -z bbmaster 9989")
+        bbworker.wait_for_unit("buildbot-worker.service")
 
+    with subtest("Stop buildbot worker"):
+        bbmaster.succeed("systemctl -l --no-pager status buildbot-master")
+        bbmaster.succeed("systemctl stop buildbot-master")
+        bbworker.fail("nc -z bbmaster 8010")
+        bbworker.fail("nc -z bbmaster 9989")
+        bbworker.succeed("systemctl -l --no-pager status buildbot-worker")
+        bbworker.succeed("systemctl stop buildbot-worker")
 
-    # Test stop buildbot master and worker
-    print($bbmaster->execute(" \
-      systemctl -l --no-pager status buildbot-master && \
-      systemctl stop buildbot-master \
-    "));
-    $bbworker->fail("nc -z bbmaster 8010");
-    $bbworker->fail("nc -z bbmaster 9989");
-    print($bbworker->execute(" \
-      systemctl -l --no-pager status buildbot-worker && \
-      systemctl stop buildbot-worker && \
-      ls -la /home/bbworker/worker \
-    "));
-
-
-    # Test buildbot daemon mode
-    $bbmaster->execute("buildbot create-master /tmp");
-    $bbmaster->execute("mv -fv /tmp/master.cfg.sample /tmp/master.cfg");
-    $bbmaster->execute("sed -i 's/8010/8011/' /tmp/master.cfg");
-    $bbmaster->execute("buildbot start /tmp");
-    $bbworker->execute("nc -z bbmaster 8011");
-    $bbworker->waitUntilSucceeds("curl -s --head http://bbmaster:8011") =~ /200 OK/;
-    $bbmaster->execute("buildbot stop /tmp");
-    $bbworker->fail("nc -z bbmaster 8011");
-
+    with subtest("Buildbot daemon mode works"):
+        bbmaster.succeed(
+            "buildbot create-master /tmp",
+            "mv -fv /tmp/master.cfg.sample /tmp/master.cfg",
+            "sed -i 's/8010/8011/' /tmp/master.cfg",
+            "buildbot start /tmp",
+            "nc -z bbmaster 8011",
+        )
+        bbworker.wait_until_succeeds("curl --fail -s --head http://bbmaster:8011")
+        bbmaster.wait_until_succeeds("buildbot stop /tmp")
+        bbworker.fail("nc -z bbmaster 8011")
   '';
 
   meta.maintainers = with pkgs.stdenv.lib.maintainers; [ nand0p ];
-}
+} {}

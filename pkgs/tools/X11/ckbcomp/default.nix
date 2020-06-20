@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitLab, perl, xkeyboard_config }:
 
 stdenv.mkDerivation rec {
-  name = "ckbcomp-${version}";
-  version = "1.191";
+  pname = "ckbcomp";
+  version = "1.195";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "console-setup";
     rev = version;
-    sha256 = "0wplhjadk530fqxhfnizil32rcvkcl5m2r18yskspcib53r4pmim";
+    sha256 = "0d0xagigs5k3appzz5lzxdjncvnkgz4amz6ks7imiq8kkjixvmfy";
   };
 
   buildInputs = [ perl ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Compiles a XKB keyboard description to a keymap suitable for loadkeys";
-    homepage = https://salsa.debian.org/installer-team/console-setup;
+    homepage = "https://salsa.debian.org/installer-team/console-setup";
     license = licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ dezgeg ];
     platforms = platforms.unix;

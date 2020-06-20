@@ -1,45 +1,36 @@
 # based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
 
-{ stdenv, lib, fetchurl, makeWrapper, nodejs-slim-10_x, openssl, pcre, readline, boehmgc, sfml, tzdata, coreutils }:
+{ stdenv, lib, fetchurl, makeWrapper, openssl, pcre, readline,
+  boehmgc, sfml, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "nim-${version}";
-  version = "0.19.4";
+  pname = "nim";
+  version = "1.2.0";
 
   src = fetchurl {
-    url = "https://nim-lang.org/download/${name}.tar.xz";
-    sha256 = "0k59dhfsg5wnkc3nxg5a336pjd9jnfxabns63bl9n28iwdg16hgl";
+    url = "https://nim-lang.org/download/${pname}-${version}.tar.xz";
+    sha256 = "0xf56xb42hc92h4xnvk72q4n3ysjbyhf0rg60lc84r9r6wx5i52f";
   };
-
-  doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = [
-    "-lcrypto"
-    "-lpcre"
-    "-lreadline"
-    "-lgc"
-  ];
+  NIX_LDFLAGS = "-lcrypto -lpcre -lreadline -lgc -lsqlite3";
 
-  # 1. nodejs is only needed for tests
-  # 2. we could create a separate derivation for the "written in c" version of nim
-  #    used for bootstrapping, but koch insists on moving the nim compiler around
-  #    as part of building it, so it cannot be read-only
+  # we could create a separate derivation for the "written in c" version of nim
+  # used for bootstrapping, but koch insists on moving the nim compiler around
+  # as part of building it, so it cannot be read-only
 
   nativeBuildInputs = [
-    makeWrapper nodejs-slim-10_x tzdata coreutils
+    makeWrapper
   ];
 
   buildInputs = [
-    openssl pcre readline boehmgc sfml
+    openssl pcre readline boehmgc sfml sqlite
   ];
 
-  phases = [ "unpackPhase" "patchPhase" "buildPhase" "installPhase" "checkPhase" ];
-
   buildPhase = ''
-    # use $CC to trigger the linker since calling ld in build.sh causes an error
-    LD=$CC
+    runHook preBuild
+
     # build.sh wants to write to $HOME/.cache
     HOME=$TMPDIR
     sh build.sh
@@ -48,42 +39,31 @@ stdenv.mkDerivation rec {
                  -d:useGnuReadline \
                  ${lib.optionals (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace"}
     ./koch tools -d:release
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin bin/* koch
     ./koch install $out
     mv $out/nim/bin/* $out/bin/ && rmdir $out/nim/bin
     mv $out/nim/*     $out/     && rmdir $out/nim
+
+    # Fortify hardening appends -O2 to gcc flags which is unwanted for unoptimized nim builds.
     wrapProgram $out/bin/nim \
+      --run 'NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}' \
       --suffix PATH : ${lib.makeBinPath [ stdenv.cc ]}
-  '';
 
-  patchPhase =
-    let disableTest = ''sed -i '1i discard \"\"\"\n  disabled: true\n\"\"\"\n\n' '';
-        disableStdLibTest = ''sed -i -e '/^when isMainModule/,/^END$/{s/^/#/}' '';
-    in ''
-      substituteInPlace ./tests/async/tioselectors.nim --replace "/bin/sleep" "sleep"
-      substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin" "${coreutils}/bin"
-      substituteInPlace ./tests/stdlib/ttimes.nim --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-
-      # disable tests requiring network access (not available in the build container)
-      ${disableTest} ./tests/stdlib/thttpclient.nim
-    '' + lib.optionalString stdenv.isAarch64 ''
-      # disable test supposedly broken on aarch64
-      ${disableStdLibTest} ./lib/pure/stats.nim
-    '';
-
-  checkPhase = ''
-    PATH=$PATH:$out/bin
-    ./koch tests
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     description = "Statically typed, imperative programming language";
-    homepage = https://nim-lang.org/;
+    homepage = "https://nim-lang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ehmry peterhoeg ];
+    maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; linux ++ darwin; # arbitrary
   };
 }

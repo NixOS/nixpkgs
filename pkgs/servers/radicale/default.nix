@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     vobject
     python-dateutil
     passlib
+    setuptools
   ];
 
   checkInputs = with python3.pkgs; [
@@ -30,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.radicale.org/;
+    homepage = "https://www.radicale.org/";
     description = "CalDAV CardDAV server";
     longDescription = ''
       The Radicale Project is a complete CalDAV (calendar) and CardDAV

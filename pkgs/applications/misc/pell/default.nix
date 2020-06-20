@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "pell";
   version = "0.0.4";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ebzzry";
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ebzzry/pell;
+    homepage = "https://github.com/ebzzry/pell";
     description = "A simple host availability monitor";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];

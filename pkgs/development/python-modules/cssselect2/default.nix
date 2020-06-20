@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cssselect2";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "505d2ce3d3a1d390ddb52f7d0864b7efeb115a5b852a91861b498b92424503ab";
+    sha256 = "5c2716f06b5de93f701d5755a9666f2ee22cbcd8b4da8adddfc30095ffea3abc";
   };
 
   # We're not interested in code quality tests
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CSS selectors for Python ElementTree";
-    homepage = https://github.com/Kozea/cssselect2;
+    homepage = "https://github.com/Kozea/cssselect2";
     license = licenses.bsd3;
   };
 }

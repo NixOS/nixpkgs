@@ -16,6 +16,7 @@ in
     services.amule = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to run the AMule daemon. You need to manually run "amuled --ec-config" to configure the service for the first time.

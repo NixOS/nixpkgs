@@ -2,15 +2,14 @@
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
-, MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
-, jrePlugin, icedtea_web
-, bluejeans, djview4, adobe-reader
-, google_talk_plugin, fribid, gnome3/*.gnome-shell*/
-, esteidfirefoxplugin
+, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
+, gnome3/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
 , tridactyl-native
+, fx_cast_bridge
 , udev
 , kerberos
+, libva
 }:
 
 ## configurability of the wrapper itself
@@ -19,51 +18,42 @@ browser:
 
 let
   wrapper =
-    { browserName ? browser.browserName or (builtins.parseDrvName browser.name).name
-    , name ? (browserName + "-" + (builtins.parseDrvName browser.name).version)
+    { browserName ? browser.browserName or (lib.getName browser)
+    , pname ? browserName
+    , version ? lib.getVersion browser
     , desktopName ? # browserName with first letter capitalized
       (lib.toUpper (lib.substring 0 1 browserName) + lib.substring 1 (-1) browserName)
     , nameSuffix ? ""
     , icon ? browserName
-    , extraPlugins ? []
     , extraNativeMessagingHosts ? []
     , gdkWayland ? false
+    , cfg ? config.${browserName} or {}
     }:
 
     assert gdkWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
-      cfg = config.${browserName} or {};
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
-      jre = cfg.jre or false;
-      icedtea = cfg.icedtea or false;
-      supportsJDK =
-        stdenv.hostPlatform.system == "i686-linux" ||
-        stdenv.hostPlatform.system == "x86_64-linux" ||
-        stdenv.hostPlatform.system == "armv7l-linux" ||
-        stdenv.hostPlatform.system == "aarch64-linux";
 
       plugins =
-        assert !(jre && icedtea);
-        if builtins.hasAttr "enableVLC" cfg
-        then throw "The option \"${browserName}.enableVLC\" has been removed since Firefox no longer supports npapi plugins"
-        else
-        ([ ]
-          ++ lib.optional enableAdobeFlash flashplayer
-          ++ lib.optional (cfg.enableDjvu or false) (djview4)
-          ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
-          ++ lib.optional (supportsJDK && jre && jrePlugin ? mozillaPlugin) jrePlugin
-          ++ lib.optional icedtea icedtea_web
-          ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
-          ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
-          ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome-shell
-          ++ lib.optional (cfg.enableBluejeans or false) bluejeans
-          ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
-          ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin
-          ++ extraPlugins
-        );
+        let
+          removed = lib.filter (a: builtins.hasAttr a cfg) [
+            "enableVLC"
+            "enableDjvu"
+            "enableMPlayer"
+            "jre"
+            "icedtea"
+            "enableGoogleTalkPlugin"
+            "enableFriBIDPlugin"
+            "enableBluejeans"
+            "enableAdobeReader"
+          ];
+        in if removed != []
+           then throw "Your configuration mentions ${lib.concatMapStringsSep ", " (p: browserName + "." + p) removed}. All plugin related options, except for the adobe flash player, have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins)."
+           else lib.optional enableAdobeFlash flashplayer;
+
       nativeMessagingHosts =
         ([ ]
           ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
@@ -72,9 +62,10 @@ let
           ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration
+          ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
-      libs =   lib.optional stdenv.isLinux udev
+      libs =   lib.optionals stdenv.isLinux [ udev libva ]
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
             ++ lib.optional gdkWayland libglvnd
@@ -85,7 +76,7 @@ let
       gtk_modules = [ libcanberra-gtk2 ];
 
     in stdenv.mkDerivation {
-      inherit name;
+      inherit pname version;
 
       desktopItem = makeDesktopItem {
         name = browserName;
@@ -131,6 +122,8 @@ let
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             --set SNAP_NAME "firefox" \
+            --set MOZ_LEGACY_PROFILES 1 \
+            --set MOZ_ALLOW_DOWNGRADE 1 \
             ${lib.optionalString gdkWayland ''
               --set GDK_BACKEND "wayland" \
             ''}${lib.optionalString (browser ? gtk3)
@@ -154,9 +147,9 @@ let
 
         install -D -t $out/share/applications $desktopItem/share/applications/*
 
-        mkdir -p $out/lib/mozilla
+        mkdir -p $out/lib/mozilla/native-messaging-hosts
         for ext in ${toString nativeMessagingHosts}; do
-            lndir -silent $ext/lib/mozilla $out/lib/mozilla
+            ln -sLt $out/lib/mozilla/native-messaging-hosts $ext/lib/mozilla/native-messaging-hosts/*
         done
 
         # For manpages, in case the program supplies them

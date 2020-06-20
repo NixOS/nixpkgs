@@ -1,18 +1,33 @@
-{ fetchurl, stdenv, gtk, pkgconfig, libgsf, libofx, intltool, wrapGAppsHook
-, hicolor-icon-theme, libsoup, gnome3 }:
+{ fetchurl
+, stdenv
+, gtk
+, pkgconfig
+, libgsf
+, libofx
+, intltool
+, wrapGAppsHook
+, libsoup
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
-  name = "grisbi-${version}";
-  version = "1.2.1";
+  pname = "grisbi";
+  version = "1.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/grisbi/${name}.tar.bz2";
-    sha1 = "1159c5491967fa7afd251783013579ffb45b891b";
+    url = "mirror://sourceforge/grisbi/${pname}-${version}.tar.bz2";
+    sha256 = "1piiyyxjsjbw9gcqydvknzxmmfgh8kdqal12ywrxyxih2afwnvbw";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ gtk libgsf libofx intltool hicolor-icon-theme libsoup
-    gnome3.adwaita-icon-theme ];
+  buildInputs = [
+    gtk
+    libgsf
+    libofx
+    intltool
+    libsoup
+    gnome3.adwaita-icon-theme
+  ];
 
   meta = with stdenv.lib; {
     description = "A personnal accounting application.";
@@ -24,7 +39,7 @@ stdenv.mkDerivation rec {
       management and other information that make Grisbi adapted for
       associations.
     '';
-    homepage = "http://grisbi.org";
+    homepage = "https://grisbi.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ layus ];
     platforms = platforms.linux;

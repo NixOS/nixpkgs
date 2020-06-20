@@ -1,38 +1,18 @@
-{ stable, branch, version, sha256Hash }:
+{ stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
 
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, stdenv, python3, fetchFromGitHub }:
 
 let
-  python = if stable then python3.override {
-    packageOverrides = self: super: {
-      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1l3kg062m02mph6rf9rdv8r5c5n356clxa6b6mrn0i77vk9g9kq0";
-        };
-      });
-      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.10";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
-        };
-        propagatedBuildInputs = with self; [ async-timeout attrs chardet multidict yarl idna-ssl ];
-        doCheck = false;
-      });
-      aiohttp-cors = super.aiohttp-cors.overridePythonAttrs (oldAttrs: rec {
-        version = "0.6.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1r0mb4dw0dc1lpi54dk5vxqs06nyhvagp76lyrvk7rd94z5mjkd4";
-        };
-        propagatedBuildInputs = with self; [ aiohttp ]
-          ++ stdenv.lib.optional (pythonOlder "3.5") typing;
-      });
-    };
-  } else python3;
+  defaultOverrides = commonOverrides ++ [
+    (mkOverride "jsonschema" "3.2.0"
+      "0ykr61yiiizgvm3bzipa3l73rvj49wmrybbfwhvpgk3pscl5pa68")
+    (mkOverride "aiofiles" "0.4.0"
+      "1vmvq9qja3wahv8m1adkyk00zm7j0x64pk3f2ry051ja66xa07h2")
+  ];
 
+  python = python3.override {
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
+  };
 in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
   inherit version;
@@ -45,15 +25,15 @@ in python.pkgs.buildPythonPackage {
   };
 
   postPatch = ''
-    # Only 2.x is problematic:
-    sed -iE "s/prompt-toolkit==1.0.15/prompt-toolkit<2.0.0/" requirements.txt
+    # yarl 1.4+ only requires Python 3.6+
+    sed -iE "s/yarl==1.3.0//" requirements.txt
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict
-    jinja2 psutil zipstream raven jsonschema
-    (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
-  ] ++ stdenv.lib.optional (!stable) [ distro async_generator aiofiles ];
+    aiohttp-cors yarl aiohttp multidict setuptools
+    jinja2 psutil zipstream raven jsonschema distro async_generator aiofiles
+    prompt_toolkit py-cpuinfo
+  ];
 
   # Requires network access
   doCheck = false;
@@ -69,7 +49,8 @@ in python.pkgs.buildPythonPackage {
       Qemu/KVM. Clients like the GNS3 GUI control the server using a HTTP REST
       API.
     '';
-    homepage = https://www.gns3.com/;
+    homepage = "https://www.gns3.com/";
+    changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

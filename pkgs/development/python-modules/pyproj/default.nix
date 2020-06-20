@@ -1,38 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, nose2
+{ lib, buildPythonPackage, fetchFromGitHub, python, pkgs, pythonOlder, isPy27, substituteAll
+, aenum
 , cython
-, proj ? null
+, pytest
+, mock
+, numpy
+, shapely
 }:
 
-buildPythonPackage (rec {
+buildPythonPackage rec {
   pname = "pyproj";
-  version = "unstable-2018-11-13";
+  version = "2.6.0";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
-    owner = "jswhit";
-    repo = pname;
-    rev = "78540f5ff40da92160f80860416c91ee74b7643c";
-    sha256 = "1vq5smxmpdjxialxxglsfh48wx8kaq9sc5mqqxn4fgv1r5n1m3n9";
+    owner = "pyproj4";
+    repo = "pyproj";
+    rev = "v${version}rel";
+    sha256 = "0fyggkbr3kp8mlq4c0r8sl5ah58bdg2mj4kzql9p3qyrkcdlgixh";
   };
 
-  buildInputs = [ cython ];
+  # force pyproj to use ${pkgs.proj}
+  patches = [
+    (substituteAll {
+      src = ./001.proj.patch;
+      proj = pkgs.proj;
+      projdev = pkgs.proj.dev;
+    })
+  ];
 
-  checkInputs = [ nose2 ];
+  buildInputs = [ cython pkgs.proj ];
 
+  propagatedBuildInputs = [
+    numpy shapely
+  ] ++ lib.optional (pythonOlder "3.6") aenum;
+
+  checkInputs = [ pytest mock ];
+
+  # ignore rounding errors, and impure docgen
+  # datadir is ignored because it does the proj look up logic, which isn't relevant
   checkPhase = ''
-    runHook preCheck
-    pushd unittest  # changing directory should ensure we're importing the global pyproj
-    ${python.interpreter} test.py && ${python.interpreter} -c "import doctest, pyproj, sys; sys.exit(doctest.testmod(pyproj)[0])"
-    popd
-    runHook postCheck
+    pytest . -k 'not alternative_grid_name \
+                 and not transform_wgs84_to_alaska \
+                 and not transformer_group__unavailable \
+                 and not transform_group__missing_best \
+                 and not datum \
+                 and not repr' \
+            --ignore=test/test_doctest_wrapper.py \
+            --ignore=test/test_datadir.py
   '';
 
   meta = {
     description = "Python interface to PROJ.4 library";
-    homepage = https://github.com/jswhit/pyproj;
+    homepage = "https://github.com/jswhit/pyproj";
     license = with lib.licenses; [ isc ];
   };
-} // (if proj == null then {} else { PROJ_DIR = proj; }))
+}

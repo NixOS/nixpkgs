@@ -12,12 +12,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "znc-${version}";
-  version = "1.7.3";
+  pname = "znc";
+  version = "1.8.1";
 
   src = fetchurl {
-    url = "https://znc.in/releases/archive/${name}.tar.gz";
-    sha256 = "0g8i5hsl4kinpz1wp0a2zniidv3w2sd6awq8676fds516wcc6k0y";
+    url = "https://znc.in/releases/archive/${pname}-${version}.tar.gz";
+    sha256 = "0hb1v167aa6gv5bcwz352l6b8gnd74ymjw92y4x882l099hzg59i";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Advanced IRC bouncer";
-    homepage = https://wiki.znc.in/ZNC;
+    homepage = "https://wiki.znc.in/ZNC";
     maintainers = with maintainers; [ schneefux lnl7 ];
     license = licenses.asl20;
     platforms = platforms.unix;

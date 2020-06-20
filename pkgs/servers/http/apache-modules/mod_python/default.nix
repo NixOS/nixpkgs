@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
         --replace '-$GIT' ""
   '';
 
+  installFlags = [ "LIBEXECDIR=${placeholder "out"}/modules" ];
+
   preInstall = ''
-    installFlags="LIBEXECDIR=$out/modules $installFlags"
     mkdir -p $out/modules $out/bin
   '';
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ apacheHttpd python2 ];
 
   meta = {
-    homepage = http://modpython.org/;
+    homepage = "http://modpython.org/";
     description = "An Apache module that embeds the Python interpreter within the server";
     platforms = stdenv.lib.platforms.unix;
   };

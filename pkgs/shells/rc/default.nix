@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rc-${version}";
+  pname = "rc";
   version = "1.7.4";
 
   src = fetchurl {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The Plan 9 shell";
     longDescription = "Byron Rakitzis' UNIX reimplementation of Tom Duff's Plan 9 shell.";
-    homepage = http://tobold.org/article/rc;
+    homepage = "http://tobold.org/article/rc";
     license = with licenses; zlib;
     maintainers = with maintainers; [ ramkromberg ];
     platforms = with platforms; all;

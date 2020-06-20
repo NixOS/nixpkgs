@@ -8,7 +8,8 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "inav-${version}";
+  pname = "inav";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "iNavFlight";
@@ -50,9 +51,10 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Navigation-enabled flight control software";
-    homepage = https://inavflight.github.io;
+    homepage = "https://inavflight.github.io";
     license = licenses.gpl3;
     maintainers = with maintainers; [ elitak ];
+    broken = true;
   };
 
 }

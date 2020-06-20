@@ -12,7 +12,7 @@ stdenv.mkDerivation (mecab-base // {
 
     meta = with stdenv.lib; {
       description = "Japanese morphological analysis system";
-      homepage = http://taku910.github.io/mecab/;
+      homepage = "http://taku910.github.io/mecab/";
       license = licenses.bsd3;
       platforms = platforms.unix;
       maintainers = with maintainers; [ auntie ];

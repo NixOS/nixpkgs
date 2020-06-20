@@ -4,7 +4,8 @@ let
   version = "0.8.4";
 in
   stdenv.mkDerivation {
-    name = "cardpeek-${version}";
+    pname = "cardpeek";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "L1L1";
@@ -19,7 +20,7 @@ in
     enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/L1L1/cardpeek;
+      homepage = "https://github.com/L1L1/cardpeek";
       description = "A tool to read the contents of ISO7816 smart cards";
       license = licenses.gpl3Plus;
       platforms = with platforms; linux ++ darwin;

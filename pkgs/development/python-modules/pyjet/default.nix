@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyjet";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "89ce11cd4541fb573d68fd60a219e5e1bdeb94cfcfffc917b472fde2aa9a5a31";
+    sha256 = "ab6e63f8a8fd73bbd76ef2a384eea69bc1c201f2ce876faa4151ade6c0b20615";
   };
 
   # fix for python37

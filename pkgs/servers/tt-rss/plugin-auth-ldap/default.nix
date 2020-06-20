@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "tt-rss-plugin-auth-ldap-${version}";
+  pname = "tt-rss-plugin-auth-ldap";
   version = "2.0.0";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Plugin for TT-RSS to authenticate users via ldap";
     license = licenses.asl20;
-    homepage = https://github.com/hydrian/TTRSS-Auth-LDAP;
+    homepage = "https://github.com/hydrian/TTRSS-Auth-LDAP";
     maintainers = with maintainers; [ mic92 ];
     platforms = platforms.all;
   };

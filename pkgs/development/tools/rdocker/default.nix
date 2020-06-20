@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, openssh }:
 
-stdenv.mkDerivation rec {
-  name = "rdocker-${version}";
+stdenv.mkDerivation {
+  pname = "rdocker";
   version = "unstable-2018-07-17";
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Securely control a remote docker daemon CLI using ssh forwarding, no SSL setup needed";
-    homepage = https://github.com/dvddarias/rdocker;
+    homepage = "https://github.com/dvddarias/rdocker";
     maintainers = [ stdenv.lib.maintainers.pneumaticat ];
     license = licenses.mit;
     platforms = platforms.unix;

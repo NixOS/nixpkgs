@@ -23,7 +23,7 @@ let
   rev   = "v0.6-17-g271e784";
 in
 stdenv.mkDerivation rec {
-  name    = "neocomp-unstable-${version}";
+  pname = "neocomp-unstable";
   version = "2019-03-12";
 
   src = fetchFromGitHub {
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage        = https://github.com/DelusionalLogic/NeoComp;
+    homepage        = "https://github.com/DelusionalLogic/NeoComp";
     license         = licenses.gpl3;
     maintainers     = with maintainers; [ twey ];
     platforms       = platforms.linux;

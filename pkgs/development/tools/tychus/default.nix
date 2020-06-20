@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage, CoreFoundation }:
 
 buildGoPackage rec {
-  name = "tychus-${version}";
+  pname = "tychus";
   version = "0.6.3";
 
   goPackagePath = "github.com/devlocker/tychus";
@@ -17,11 +17,11 @@ buildGoPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation ];
 
-  buildFlags = "--tags release";
+  buildFlags = [ "--tags" "release" ];
 
   meta = {
     description = "Command line utility to live-reload your application.";
-    homepage = https://github.com/devlocker/tychus;
+    homepage = "https://github.com/devlocker/tychus";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;
   };

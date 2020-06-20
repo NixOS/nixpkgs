@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Kerberos high-level interface";
-    homepage = https://pypi.python.org/pypi/kerberos;
+    homepage = "https://pypi.python.org/pypi/kerberos";
     license = licenses.asl20;
   };
 

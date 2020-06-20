@@ -16,17 +16,12 @@
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "3.42.0";
+  version = "3.51.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a26r022lvz0vvwvhq2rfyl6h0hxbayvgbnajpnc0fc8f4gzr1n0";
+    sha256 = "ecf687696dd449067f69ef6730c4d4a0189db1f8d1aad9e376358354631d5b2c";
   };
-
-  postPatch = ''
-    rm -r tests/__pycache__
-    rm tests/*.pyc
-  '';
 
   propagatedBuildInputs = [ python-utils ];
   nativeBuildInputs = [ pytestrunner ];
@@ -42,7 +37,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://progressbar-2.readthedocs.io/en/latest/;
+    homepage = "https://progressbar-2.readthedocs.io/en/latest/";
     description = "Text progressbar library for python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];

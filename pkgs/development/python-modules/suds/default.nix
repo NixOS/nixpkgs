@@ -22,7 +22,7 @@ buildPythonPackage rec {
     # - https://lwn.net/Vulnerabilities/559200/
     broken = true;
     description = "Lightweight SOAP client";
-    homepage = https://fedorahosted.org/suds;
+    homepage = "https://fedorahosted.org/suds";
     license = licenses.lgpl3Plus;
   };
 

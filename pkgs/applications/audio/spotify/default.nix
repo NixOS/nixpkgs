@@ -1,7 +1,7 @@
 { fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
+, glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
-, at-spi2-atk
+, at-spi2-atk, at-spi2-core, libpulseaudio
 }:
 
 let
@@ -10,20 +10,21 @@ let
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.0.96.181.gf6bc1b6b-12";
+  version = "1.1.26.501.gbe11e53b-15";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "30";
+  rev = "41";
 
 
   deps = [
     alsaLib
     atk
     at-spi2-atk
+    at-spi2-core
     cairo
     cups
     curl
@@ -32,12 +33,13 @@ let
     ffmpeg_3
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk2
     libgcrypt
     libnotify
     libpng
+    libpulseaudio
     nss
     pango
     stdenv.cc.cc
@@ -54,13 +56,16 @@ let
     xorg.libXScrnSaver
     xorg.libXtst
     xorg.libxcb
+    xorg.libSM
+    xorg.libICE
     zlib
   ];
 
 in
 
 stdenv.mkDerivation {
-  name = "spotify-${version}";
+  pname = "spotify";
+  inherit version;
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last
@@ -72,13 +77,11 @@ stdenv.mkDerivation {
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    sha512 = "859730fbc80067f0828f7e13eee9a21b13b749f897a50e17c2da4ee672785cfd79e1af6336e609529d105e040dc40f61b6189524783ac93d49f991c4ea8b3c56";
+    sha512 = "41bc8d20388bab39058d0709d99b1c8e324ea37af217620797356b8bc0b24aedbe801eaaa6e00a93e94e26765602e5dc27ad423ce2e777b4bec1b92daf04f81e";
   };
 
   buildInputs = [ squashfsTools makeWrapper ];
 
-  doConfigure = false;
-  doBuild = false;
   dontStrip = true;
   dontPatchELF = true;
 
@@ -155,10 +158,10 @@ stdenv.mkDerivation {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.spotify.com/;
+    homepage = "https://www.spotify.com/";
     description = "Play music from the Spotify music service";
     license = licenses.unfree;
-    maintainers = with maintainers; [ eelco ftrvxmtrx sheenobu mudri timokau ];
+    maintainers = with maintainers; [ eelco ftrvxmtrx sheenobu mudri timokau ma27 ];
     platforms = [ "x86_64-linux" ];
   };
 }

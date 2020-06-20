@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "migmix-${version}";
+  pname = "migmix";
   version = "20150712";
 
   srcs = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     find $srcs -name '*.ttf' -exec install -m644 -Dt $out/share/fonts/truetype/migmix {} \;
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A high-quality Japanese font based on M+ fonts and IPA fonts";
-    homepage = http://mix-mplus-ipa.osdn.jp/migmix;
+    homepage = "http://mix-mplus-ipa.osdn.jp/migmix";
     license = licenses.ipa;
     maintainers = [ maintainers.mikoim ];
   };

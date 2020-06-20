@@ -21,6 +21,7 @@ buildPythonPackage rec {
     description = "Command-line tool to deduplicate mails from a set of maildir folders";
     homepage = "https://github.com/kdeldycke/maildir-deduplicate";
     license = licenses.gpl2;
+    broken = true;
   };
 
 }

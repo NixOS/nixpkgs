@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       ambient light sensor support removed, optimized for use with dwm
       and the like.
     '';
-    homepage = https://github.com/bytbox/pommed-light;
+    homepage = "https://github.com/bytbox/pommed-light";
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;
   };

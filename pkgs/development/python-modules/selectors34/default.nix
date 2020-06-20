@@ -6,8 +6,6 @@
 }:
 
 buildPythonPackage rec {
-
-  name = "${pname}-${version}";
   pname = "selectors34";
   version = "1.2";
 
@@ -24,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A backport of the selectors module from Python 3.4";
-    homepage = https://github.com/berkerpeksag/selectors34;
+    homepage = "https://github.com/berkerpeksag/selectors34";
     license = licenses.psfl;
     maintainers = with maintainers; [ prusnak ];
     };

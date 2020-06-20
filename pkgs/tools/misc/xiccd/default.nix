@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libX11, libXrandr, glib, colord }:
 
 stdenv.mkDerivation rec {
-  name = "xiccd-${version}";
+  pname = "xiccd";
   version = "0.3.0";
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "X color profile daemon";
-    homepage = https://github.com/agalakhov/xiccd;
+    homepage = "https://github.com/agalakhov/xiccd";
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

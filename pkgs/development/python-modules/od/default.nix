@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Shorthand syntax for building OrderedDicts";
-    homepage = https://github.com/epsy/od;
+    homepage = "https://github.com/epsy/od";
     license = licenses.mit;
   };
 

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python interface to Graphviz graph drawing package";
-    homepage = https://github.com/pygraphviz/pygraphviz;
+    homepage = "https://github.com/pygraphviz/pygraphviz";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthiasbeyer ];
   };

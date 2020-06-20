@@ -1,15 +1,41 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch, pkgconfig,
-  dbus-factory, go-dbus-factory, go-gir-generator, go-lib,
-  deepin-gettext-tools, dde-api, deepin-desktop-schemas,
-  deepin-wallpapers, deepin-desktop-base, alsaLib, glib, gtk3,
-  libgudev, libinput, libnl, librsvg, linux-pam, networkmanager,
-  pulseaudio, python3, hicolor-icon-theme, glibc, tzdata, go,
-  deepin, makeWrapper, wrapGAppsHook }:
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, go-dbus-factory
+, go-gir-generator
+, go-lib
+, deepin-gettext-tools
+, gettext
+, dde-api
+, deepin-desktop-schemas
+, deepin-wallpapers
+, deepin-desktop-base
+, alsaLib
+, glib
+, gtk3
+, libgudev
+, libinput
+, libnl
+, librsvg
+, linux-pam
+, networkmanager
+, pulseaudio
+, python3
+, hicolor-icon-theme
+, glibc
+, tzdata
+, go
+, deepin
+, makeWrapper
+, xkeyboard_config
+, wrapGAppsHook
+}:
 
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "dde-daemon";
-  version = "3.27.2.5";
+  version = "5.0.0";
 
   goPackagePath = "pkg.deepin.io/dde/daemon";
 
@@ -17,29 +43,23 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "117yhsb0axwblncyj02fhcyl4b7jl7vvh1bbx08bscih5lnvjihx";
+    sha256 = "08jri31bvzbaxaq78rpp46ndv0li2dij63hakvd9b9gs786srql1";
   };
 
   patches = [
     # https://github.com/linuxdeepin/dde-daemon/issues/51
     (fetchpatch {
-      url = https://github.com/jouyouyun/tap-gesture-patches/raw/master/patches/dde-daemon_3.8.0.patch;
+      url = "https://github.com/jouyouyun/tap-gesture-patches/raw/master/patches/dde-daemon_3.8.0.patch";
       sha256 = "1ampdsp9zlg263flswdw9gj10n7gxh7zi6w6z9jgh29xlai05pvh";
     })
   ];
 
   goDeps = ./deps.nix;
 
-  outputs = [ "out" ];
-
   nativeBuildInputs = [
     pkgconfig
-    dbus-factory
-    go-dbus-factory
-    go-gir-generator
-    go-lib
     deepin-gettext-tools
-    linux-pam
+    gettext
     networkmanager
     networkmanager.dev
     python3
@@ -49,6 +69,11 @@ buildGoPackage rec {
   ];
 
   buildInputs = [
+    go-dbus-factory
+    go-gir-generator
+    go-lib
+    linux-pam
+
     alsaLib
     dde-api
     deepin-desktop-base
@@ -63,6 +88,7 @@ buildGoPackage rec {
     librsvg
     pulseaudio
     tzdata
+    xkeyboard_config
   ];
 
   postPatch = ''
@@ -70,12 +96,16 @@ buildGoPackage rec {
     patchShebangs network/nm_generator/gen_nm_consts.py
 
     fixPath $out /usr/share/dde/data launcher/manager.go dock/dock_manager_init.go
+    fixPath $out /usr/share/dde-daemon launcher/manager.go gesture/config.go
     fixPath ${networkmanager.dev} /usr/share/gir-1.0/NM-1.0.gir network/nm_generator/Makefile
     fixPath ${glibc.bin} /usr/bin/getconf systeminfo/utils.go
     fixPath ${deepin-desktop-base} /etc/deepin-version systeminfo/version.go accounts/deepinversion.go
     fixPath ${tzdata} /usr/share/zoneinfo timedate/zoneinfo/zone.go
     fixPath ${dde-api} /usr/lib/deepin-api grub2/modify_manger.go accounts/image_blur.go
     fixPath ${deepin-wallpapers} /usr/share/wallpapers appearance/background/list.go accounts/user.go
+    fixPath ${xkeyboard_config} /usr/share/X11/xkb inputdevices/layout_list.go
+
+    # TODO: deepin-system-monitor comes from dde-extra
 
     sed -i -e "s|{DESTDIR}/etc|{DESTDIR}$out/etc|" Makefile
     sed -i -e "s|{DESTDIR}/lib|{DESTDIR}$out/lib|" Makefile
@@ -111,17 +141,17 @@ buildGoPackage rec {
   postFixup = ''
     # wrapGAppsHook does not work with binaries outside of $out/bin or $out/libexec
     for binary in $out/lib/deepin-daemon/*; do
-      wrapProgram $binary "''${gappsWrapperArgs[@]}"
+      wrapGApp "$binary"
     done
 
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Daemon for handling Deepin Desktop Environment session settings";
-    homepage = https://github.com/linuxdeepin/dde-daemon;
+    homepage = "https://github.com/linuxdeepin/dde-daemon";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

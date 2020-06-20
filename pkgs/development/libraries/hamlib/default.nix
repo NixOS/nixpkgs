@@ -1,18 +1,17 @@
-{stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb, pkgconfig,
+{stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb-compat-0_1, pkgconfig,
  boost, libtool, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "hamlib";
   version = "3.3";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "10788mgrhbc57zpzakcxv5aqnr2819pcshml6fbh8zvnkja562y9";
   };
 
   buildInputs = [ perl perlPackages.ExtUtilsMakeMaker python2 swig gd libxml2
-                  tcl libusb pkgconfig boost libtool ];
+                  tcl libusb-compat-0_1 pkgconfig boost libtool ];
 
   configureFlags = [ "--with-perl-binding" "--with-python-binding"
                      "--with-tcl-binding" "--with-rigmatrix" ];
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
     command line interface or in a text-oriented interactive interface.
     '';
     license = with stdenv.lib.licenses; [ gpl2Plus lgpl2Plus ];
-    homepage = http://hamlib.sourceforge.net;
+    homepage = "http://hamlib.sourceforge.net";
     maintainers = with stdenv.lib.maintainers; [ relrod ];
     platforms = with stdenv.lib.platforms; unix;
   };

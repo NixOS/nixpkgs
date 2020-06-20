@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libpulseaudio, libnotify, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "ponymix-${version}";
+  pname = "ponymix";
   version = "5";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "CLI PulseAudio Volume Control";
-    homepage = https://github.com/falconindy/ponymix;
+    homepage = "https://github.com/falconindy/ponymix";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ericsagnes ];

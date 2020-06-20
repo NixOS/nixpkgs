@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.4.0";
-  name = "atop-${version}";
+  pname = "atop";
 
   src = fetchurl {
     url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     '';
     inherit version;
     license = licenses.gpl2;
-    downloadPage = http://atoptool.nl/downloadatop.php;
+    downloadPage = "http://atoptool.nl/downloadatop.php";
   };
 }

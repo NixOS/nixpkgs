@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, xorg, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "hhpc-${version}";
+  pname = "hhpc";
   version = "0.3.1";
 
   src = fetchFromGitHub {

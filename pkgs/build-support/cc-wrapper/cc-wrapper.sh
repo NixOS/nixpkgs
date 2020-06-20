@@ -18,12 +18,12 @@ fi
 source @out@/nix-support/utils.bash
 
 # Flirting with a layer violation here.
-if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @bintools@/nix-support/add-flags.sh
 fi
 
 # Put this one second so libc ldflags take priority.
-if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
@@ -33,6 +33,7 @@ fi
 # GCC prints annoying warnings when they are not needed.
 dontLink=0
 nonFlagArgs=0
+cc1=0
 # shellcheck disable=SC2193
 [[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
 cppInclude=1
@@ -68,6 +69,8 @@ while (( "$n" < "$nParams" )); do
     elif [[ "$p" != -?* ]]; then
         # A dash alone signifies standard input; it is not a flag
         nonFlagArgs=1
+    elif [ "$p" = -cc1 ]; then
+        cc1=1
     fi
     n+=1
 done
@@ -110,7 +113,7 @@ fi
 
 
 # Clear march/mtune=native -- they bring impurity.
-if [ "$NIX_@infixSalt@_ENFORCE_NO_NATIVE" = 1 ]; then
+if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     rest=()
     # Old bash empty array hack
     for p in ${params+"${params[@]}"}; do
@@ -126,36 +129,36 @@ fi
 
 if [[ "$isCpp" = 1 ]]; then
     if [[ "$cppInclude" = 1 ]]; then
-        NIX_@infixSalt@_CFLAGS_COMPILE+=" ${NIX_@infixSalt@_CXXSTDLIB_COMPILE:-@default_cxx_stdlib_compile@}"
+        NIX_CFLAGS_COMPILE_@suffixSalt@+=" ${NIX_CXXSTDLIB_COMPILE_@suffixSalt@:-@default_cxx_stdlib_compile@}"
     fi
-    NIX_@infixSalt@_CFLAGS_LINK+=" $NIX_@infixSalt@_CXXSTDLIB_LINK"
+    NIX_CFLAGS_LINK_@suffixSalt@+=" $NIX_CXXSTDLIB_LINK_@suffixSalt@"
 fi
 
 source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
-extraAfter=($NIX_@infixSalt@_CFLAGS_COMPILE)
-extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_@infixSalt@_CFLAGS_COMPILE_BEFORE)
+extraAfter=($NIX_CFLAGS_COMPILE_@suffixSalt@)
+extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
 
 if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter+=($NIX_@infixSalt@_CFLAGS_LINK)
+    extraAfter+=($NIX_CFLAGS_LINK_@suffixSalt@)
 
     # Add the flags that should be passed to the linker (and prevent
-    # `ld-wrapper' from adding NIX_@infixSalt@_LDFLAGS again).
-    for i in $NIX_@infixSalt@_LDFLAGS_BEFORE; do
+    # `ld-wrapper' from adding NIX_LDFLAGS_@suffixSalt@ again).
+    for i in $NIX_LDFLAGS_BEFORE_@suffixSalt@; do
         extraBefore+=("-Wl,$i")
     done
-    for i in $NIX_@infixSalt@_LDFLAGS; do
+    for i in $NIX_LDFLAGS_@suffixSalt@; do
         if [ "${i:0:3}" = -L/ ]; then
             extraAfter+=("$i")
         else
             extraAfter+=("-Wl,$i")
         fi
     done
-    export NIX_@infixSalt@_LDFLAGS_SET=1
+    export NIX_LDFLAGS_SET_@suffixSalt@=1
 fi
 
 # As a very special hack, if the arguments are just `-v', then don't
@@ -165,6 +168,14 @@ fi
 if [ "$*" = -v ]; then
     extraAfter=()
     extraBefore=()
+fi
+
+# clang's -cc1 mode is not compatible with most options
+# that we would pass. Rather than trying to pass only
+# options that would work, let's just remove all of them.
+if [ "$cc1" = 1 ]; then
+  extraAfter=()
+  extraBefore=()
 fi
 
 # Optionally print debug info.

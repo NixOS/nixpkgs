@@ -2,7 +2,8 @@
 let
   version = "6M62";
 in stdenv.mkDerivation {
-  name = "inform7-${version}";
+  pname = "inform7";
+  inherit version;
   buildInputs = [ perl coreutils gnutar gzip ];
   src = fetchzip {
     url = "http://inform7.com/download/content/6M62/I7_6M62_Linux_all.tar.gz";
@@ -22,7 +23,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A design system for interactive fiction.";
-    homepage = http://inform7.com/;
+    homepage = "http://inform7.com/";
     license = licenses.artistic2;
     maintainers = with maintainers; [ mbbx6spp ];
     platforms = platforms.unix;

@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGL, libdrm,
   python27, wayland, udev, mesa, wafHook }:
 
-stdenv.mkDerivation rec {
-  name = "glmark2-${version}";
+stdenv.mkDerivation {
+  pname = "glmark2";
   version = "2017-09-01";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "OpenGL (ES) 2.0 benchmark";
-    homepage = https://github.com/glmark2/glmark2;
+    homepage = "https://github.com/glmark2/glmark2";
     license = licenses.gpl3Plus;
     longDescription = ''
       glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of

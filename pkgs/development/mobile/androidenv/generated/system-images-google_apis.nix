@@ -1,502 +1,384 @@
-
 {fetchurl}:
 
 {
-  
-
-    "10".google_apis."armeabi-v7a" = {
-      name = "system-image-10-google_apis-armeabi-v7a";
-      path = "system-images/android-10/google_apis/armeabi-v7a";
-      revision = "10-google_apis-armeabi-v7a";
-      displayName = "Google APIs ARM EABI v7a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-10_r05.zip;
-        sha1 = "cb60221d4ff6686ae96560970d48d9aa60e80b3f";
-      
-      };
+  "10".google_apis."armeabi-v7a" = {
+    name = "system-image-10-google_apis-armeabi-v7a";
+    path = "system-images/android-10/google_apis/armeabi-v7a";
+    revision = "10-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-10_r06.zip";
+      sha1 = "970abf3a2a9937a43576afd9bb56e4a8191947f8";
+    };
   };
-  
-
-    "10".google_apis."x86" = {
-      name = "system-image-10-google_apis-x86";
-      path = "system-images/android-10/google_apis/x86";
-      revision = "10-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-10_r05.zip;
-        sha1 = "b8e8a4ab26890c4a395fb796bf9cb7ceb51c880e";
-      
-      };
+  "10".google_apis."x86" = {
+    name = "system-image-10-google_apis-x86";
+    path = "system-images/android-10/google_apis/x86";
+    revision = "10-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-10_r06.zip";
+      sha1 = "070a9552e3d358d8e72e8b2042e539e2b7a1b035";
+    };
   };
-  
-
-    "15".google_apis."armeabi-v7a" = {
-      name = "system-image-15-google_apis-armeabi-v7a";
-      path = "system-images/android-15/google_apis/armeabi-v7a";
-      revision = "15-google_apis-armeabi-v7a";
-      displayName = "Google APIs ARM EABI v7a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-15_r05.zip;
-        sha1 = "1ec4e6f9014fcbe694511280f5b497aaf7dd750f";
-      
-      };
+  "15".google_apis."x86" = {
+    name = "system-image-15-google_apis-x86";
+    path = "system-images/android-15/google_apis/x86";
+    revision = "15-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-15_r06.zip";
+      sha1 = "a7deb32c12396b6c4fd60ad14a62e19f8bdcae20";
+    };
   };
-  
-
-    "15".google_apis."x86" = {
-      name = "system-image-15-google_apis-x86";
-      path = "system-images/android-15/google_apis/x86";
-      revision = "15-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-15_r05.zip;
-        sha1 = "f2b98baaf847ff5b82b82fdc6c396b229067307b";
-      
-      };
+  "15".google_apis."armeabi-v7a" = {
+    name = "system-image-15-google_apis-armeabi-v7a";
+    path = "system-images/android-15/google_apis/armeabi-v7a";
+    revision = "15-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-15_r06.zip";
+      sha1 = "6deb76cf34760a6037cb18d89772c9e986d07497";
+    };
   };
-  
-
-    "16".google_apis."x86" = {
-      name = "system-image-16-google_apis-x86";
-      path = "system-images/android-16/google_apis/x86";
-      revision = "16-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-16_r05.zip;
-        sha1 = "7edc5c0836fa32f8d453788c002ca0ee1bc5a0a2";
-      
-      };
+  "16".google_apis."armeabi-v7a" = {
+    name = "system-image-16-google_apis-armeabi-v7a";
+    path = "system-images/android-16/google_apis/armeabi-v7a";
+    revision = "16-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-16_r06.zip";
+      sha1 = "5a5ff097680c6dae473c8719296ce6d7b70edb2d";
+    };
   };
-  
-
-    "17".google_apis."armeabi-v7a" = {
-      name = "system-image-17-google_apis-armeabi-v7a";
-      path = "system-images/android-17/google_apis/armeabi-v7a";
-      revision = "17-google_apis-armeabi-v7a";
-      displayName = "Google APIs ARM EABI v7a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-17_r05.zip;
-        sha1 = "c990f2a81c24a61f9f1da5d5d205f2924ce548ae";
-      
-      };
+  "16".google_apis."x86" = {
+    name = "system-image-16-google_apis-x86";
+    path = "system-images/android-16/google_apis/x86";
+    revision = "16-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-16_r06.zip";
+      sha1 = "b57adef2f43dd176b8c02c980c16a796021b2071";
+    };
   };
-  
-
-    "17".google_apis."x86" = {
-      name = "system-image-17-google_apis-x86";
-      path = "system-images/android-17/google_apis/x86";
-      revision = "17-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-17_r06.zip;
-        sha1 = "7864c34faf0402b8923d8c6e609a5339f74cc8d6";
-      
-      };
+  "17".google_apis."armeabi-v7a" = {
+    name = "system-image-17-google_apis-armeabi-v7a";
+    path = "system-images/android-17/google_apis/armeabi-v7a";
+    revision = "17-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-17_r06.zip";
+      sha1 = "a59f26cb5707da97e869a27d87b83477204ac594";
+    };
   };
-  
-
-    "18".google_apis."armeabi-v7a" = {
-      name = "system-image-18-google_apis-armeabi-v7a";
-      path = "system-images/android-18/google_apis/armeabi-v7a";
-      revision = "18-google_apis-armeabi-v7a";
-      displayName = "Google APIs ARM EABI v7a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-18_r05.zip;
-        sha1 = "c4e69a96d4584f7e311e358fe4ad0e5d1bf1605b";
-      
-      };
+  "17".google_apis."x86" = {
+    name = "system-image-17-google_apis-x86";
+    path = "system-images/android-17/google_apis/x86";
+    revision = "17-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-17_r06.zip";
+      sha1 = "7864c34faf0402b8923d8c6e609a5339f74cc8d6";
+    };
   };
-  
-
-    "18".google_apis."x86" = {
-      name = "system-image-18-google_apis-x86";
-      path = "system-images/android-18/google_apis/x86";
-      revision = "18-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-18_r05.zip;
-        sha1 = "2b34741693eba9419cb6bf1a467596783234d37a";
-      
-      };
+  "18".google_apis."armeabi-v7a" = {
+    name = "system-image-18-google_apis-armeabi-v7a";
+    path = "system-images/android-18/google_apis/armeabi-v7a";
+    revision = "18-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-18_r06.zip";
+      sha1 = "7faaccabbcc5f08e410436d3f63eea42521ea974";
+    };
   };
-  
-
-    "19".google_apis."x86" = {
-      name = "system-image-19-google_apis-x86";
-      path = "system-images/android-19/google_apis/x86";
-      revision = "19-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-19_r37.zip;
-        sha1 = "f02473420a166b3df7821d8ae5a623524058b4b8";
-      
-      };
+  "18".google_apis."x86" = {
+    name = "system-image-18-google_apis-x86";
+    path = "system-images/android-18/google_apis/x86";
+    revision = "18-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-18_r06.zip";
+      sha1 = "dd674d719cad61602702be4b3d98edccfbfea53e";
+    };
   };
-  
-
-    "19".google_apis."armeabi-v7a" = {
-      name = "system-image-19-google_apis-armeabi-v7a";
-      path = "system-images/android-19/google_apis/armeabi-v7a";
-      revision = "19-google_apis-armeabi-v7a";
-      displayName = "Google APIs ARM EABI v7a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-19_r37.zip;
-        sha1 = "b388072493ed010fe2ddf607c8c4239f54ce1a0b";
-      
-      };
+  "19".google_apis."x86" = {
+    name = "system-image-19-google_apis-x86";
+    path = "system-images/android-19/google_apis/x86";
+    revision = "19-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-19_r38.zip";
+      sha1 = "928e4ec82876c61ef53451425d10ccb840cdd0f2";
+    };
   };
-  
-
-    "21".google_apis."x86" = {
-      name = "system-image-21-google_apis-x86";
-      path = "system-images/android-21/google_apis/x86";
-      revision = "21-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-21_r29.zip;
-        sha1 = "1f5ac49e0ae603b0bfeda0c94cd7e0b850b9b50e";
-      
-      };
+  "19".google_apis."armeabi-v7a" = {
+    name = "system-image-19-google_apis-armeabi-v7a";
+    path = "system-images/android-19/google_apis/armeabi-v7a";
+    revision = "19-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-19_r38.zip";
+      sha1 = "434edd2ddc39d1ca083a5fa9721c0db8ab804737";
+    };
   };
-  
-
-    "21".google_apis."x86_64" = {
-      name = "system-image-21-google_apis-x86_64";
-      path = "system-images/android-21/google_apis/x86_64";
-      revision = "21-google_apis-x86_64";
-      displayName = "Google APIs Intel x86 Atom_64 System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86_64-21_r29.zip;
-        sha1 = "74ac387aec286fcee01259dcccd4762cbdb4b517";
-      
-      };
+  "21".google_apis."x86" = {
+    name = "system-image-21-google_apis-x86";
+    path = "system-images/android-21/google_apis/x86";
+    revision = "21-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-21_r30.zip";
+      sha1 = "37548caae9e2897fb1d2b15f7fcf624c714cb610";
+    };
   };
-  
-
-    "21".google_apis."armeabi-v7a" = {
-      name = "system-image-21-google_apis-armeabi-v7a";
-      path = "system-images/android-21/google_apis/armeabi-v7a";
-      revision = "21-google_apis-armeabi-v7a";
-      displayName = "Google APIs ARM EABI v7a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-21_r29.zip;
-        sha1 = "1d0c428ac7f5eb49c7389ad0beb09f07cb989b45";
-      
-      };
+  "21".google_apis."x86_64" = {
+    name = "system-image-21-google_apis-x86_64";
+    path = "system-images/android-21/google_apis/x86_64";
+    revision = "21-google_apis-x86_64";
+    displayName = "Google APIs Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-21_r30.zip";
+      sha1 = "82d34fdaae2916bd4d48a4f144db51e4e5719aa4";
+    };
   };
-  
-
-    "22".google_apis."x86" = {
-      name = "system-image-22-google_apis-x86";
-      path = "system-images/android-22/google_apis/x86";
-      revision = "22-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-22_r23.zip;
-        sha1 = "4ceda9ffd69d5b827a8cc2f56ccac62e72982b33";
-      
-      };
+  "21".google_apis."armeabi-v7a" = {
+    name = "system-image-21-google_apis-armeabi-v7a";
+    path = "system-images/android-21/google_apis/armeabi-v7a";
+    revision = "21-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-21_r30.zip";
+      sha1 = "bbdbbb3c4387752a8f28718a3190d901c0378058";
+    };
   };
-  
-
-    "22".google_apis."armeabi-v7a" = {
-      name = "system-image-22-google_apis-armeabi-v7a";
-      path = "system-images/android-22/google_apis/armeabi-v7a";
-      revision = "22-google_apis-armeabi-v7a";
-      displayName = "Google APIs ARM EABI v7a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-22_r23.zip;
-        sha1 = "0a11bdffa6132303baf87e4a531987a74d5f0792";
-      
-      };
+  "22".google_apis."x86" = {
+    name = "system-image-22-google_apis-x86";
+    path = "system-images/android-22/google_apis/x86";
+    revision = "22-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-22_r24.zip";
+      sha1 = "e4cd95b1c0837fc12d6544742e82d8ef344c8758";
+    };
   };
-  
-
-    "22".google_apis."x86_64" = {
-      name = "system-image-22-google_apis-x86_64";
-      path = "system-images/android-22/google_apis/x86_64";
-      revision = "22-google_apis-x86_64";
-      displayName = "Google APIs Intel x86 Atom_64 System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86_64-22_r23.zip;
-        sha1 = "1dfee1c382574c18e3aa2bc2047793169f3ab125";
-      
-      };
+  "22".google_apis."armeabi-v7a" = {
+    name = "system-image-22-google_apis-armeabi-v7a";
+    path = "system-images/android-22/google_apis/armeabi-v7a";
+    revision = "22-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-22_r24.zip";
+      sha1 = "d2b7ca5f8259c6e4b3cfa5a0d77e4a088899cfb0";
+    };
   };
-  
-
-    "23".google_apis."x86" = {
-      name = "system-image-23-google_apis-x86";
-      path = "system-images/android-23/google_apis/x86";
-      revision = "23-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-23_r30.zip;
-        sha1 = "1b8fd61e7e7c76d8c05a41b19370edfb015ed240";
-      
-      };
+  "22".google_apis."x86_64" = {
+    name = "system-image-22-google_apis-x86_64";
+    path = "system-images/android-22/google_apis/x86_64";
+    revision = "22-google_apis-x86_64";
+    displayName = "Google APIs Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-22_r24.zip";
+      sha1 = "cde738f9353606af69ad7b4e625c957a4d603f27";
+    };
   };
-  
-
-    "23".google_apis."x86_64" = {
-      name = "system-image-23-google_apis-x86_64";
-      path = "system-images/android-23/google_apis/x86_64";
-      revision = "23-google_apis-x86_64";
-      displayName = "Google APIs Intel x86 Atom_64 System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86_64-23_r30.zip;
-        sha1 = "69a17c23c4e05e81a2820fe49884807fcebba546";
-      
-      };
+  "23".google_apis."x86" = {
+    name = "system-image-23-google_apis-x86";
+    path = "system-images/android-23/google_apis/x86";
+    revision = "23-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-23_r31.zip";
+      sha1 = "877cf79f5198fa53351eab08ba9ce162dc84f7ba";
+    };
   };
-  
-
-    "23".google_apis."armeabi-v7a" = {
-      name = "system-image-23-google_apis-armeabi-v7a";
-      path = "system-images/android-23/google_apis/armeabi-v7a";
-      revision = "23-google_apis-armeabi-v7a";
-      displayName = "Google APIs ARM EABI v7a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-23_r30.zip;
-        sha1 = "c3966e3a25623a915902d879f90f6d9253dbb619";
-      
-      };
+  "23".google_apis."x86_64" = {
+    name = "system-image-23-google_apis-x86_64";
+    path = "system-images/android-23/google_apis/x86_64";
+    revision = "23-google_apis-x86_64";
+    displayName = "Google APIs Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-23_r31.zip";
+      sha1 = "342c39df061804ee0d5bc671147e90dead3d6665";
+    };
   };
-  
-
-    "24".google_apis."x86" = {
-      name = "system-image-24-google_apis-x86";
-      path = "system-images/android-24/google_apis/x86";
-      revision = "24-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-24_r24.zip;
-        sha1 = "7a1adb4aa13946830763644d014fc9c6cc1f921d";
-      
-      };
+  "23".google_apis."armeabi-v7a" = {
+    name = "system-image-23-google_apis-armeabi-v7a";
+    path = "system-images/android-23/google_apis/armeabi-v7a";
+    revision = "23-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-23_r31.zip";
+      sha1 = "da0a07800b4eec53fcdb2e5c3b69a9a5d7a6b8a6";
+    };
   };
-  
-
-    "24".google_apis."x86_64" = {
-      name = "system-image-24-google_apis-x86_64";
-      path = "system-images/android-24/google_apis/x86_64";
-      revision = "24-google_apis-x86_64";
-      displayName = "Google APIs Intel x86 Atom_64 System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86_64-24_r24.zip;
-        sha1 = "53b26e8868c7cd27dda31c71ee2bcf999d6b9ce2";
-      
-      };
+  "24".google_apis."x86" = {
+    name = "system-image-24-google_apis-x86";
+    path = "system-images/android-24/google_apis/x86";
+    revision = "24-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-24_r25.zip";
+      sha1 = "53dba25eed8359aba394a1be1c7ccb741a459ec0";
+    };
   };
-  
-
-    "24".google_apis."armeabi-v7a" = {
-      name = "system-image-24-google_apis-armeabi-v7a";
-      path = "system-images/android-24/google_apis/armeabi-v7a";
-      revision = "24-google_apis-armeabi-v7a";
-      displayName = "Google APIs ARM EABI v7a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-24_r24.zip;
-        sha1 = "85068d55673bbf9417db8d70107ceed0952b5a28";
-      
-      };
+  "24".google_apis."x86_64" = {
+    name = "system-image-24-google_apis-x86_64";
+    path = "system-images/android-24/google_apis/x86_64";
+    revision = "24-google_apis-x86_64";
+    displayName = "Google APIs Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-24_r25.zip";
+      sha1 = "d757dd13ad9b0ba4dd872660e31b6506f60dcf32";
+    };
   };
-  
-
-    "24".google_apis."arm64-v8a" = {
-      name = "system-image-24-google_apis-arm64-v8a";
-      path = "system-images/android-24/google_apis/arm64-v8a";
-      revision = "24-google_apis-arm64-v8a";
-      displayName = "Google APIs ARM 64 v8a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-24_r24.zip;
-        sha1 = "93ab33d90fcdbb30ca2e927cd3eea447e933dfd9";
-      
-      };
+  "24".google_apis."armeabi-v7a" = {
+    name = "system-image-24-google_apis-armeabi-v7a";
+    path = "system-images/android-24/google_apis/armeabi-v7a";
+    revision = "24-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-24_r25.zip";
+      sha1 = "9a0ec5e9a239a7a6889364e44e9fa4fcd0052c6b";
+    };
   };
-  
-
-    "25".google_apis."x86" = {
-      name = "system-image-25-google_apis-x86";
-      path = "system-images/android-25/google_apis/x86";
-      revision = "25-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-25_r15.zip;
-        sha1 = "5948473077341265a0b21a53a7e0afc2f980187c";
-      
-      };
+  "24".google_apis."arm64-v8a" = {
+    name = "system-image-24-google_apis-arm64-v8a";
+    path = "system-images/android-24/google_apis/arm64-v8a";
+    revision = "24-google_apis-arm64-v8a";
+    displayName = "Google APIs ARM 64 v8a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-24_r25.zip";
+      sha1 = "5ff407d439e3c595ce9221f445a31dcc35df5a86";
+    };
   };
-  
-
-    "25".google_apis."x86_64" = {
-      name = "system-image-25-google_apis-x86_64";
-      path = "system-images/android-25/google_apis/x86_64";
-      revision = "25-google_apis-x86_64";
-      displayName = "Google APIs Intel x86 Atom_64 System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86_64-25_r15.zip;
-        sha1 = "5a81fc218a7fe82cc6af01f7fae54a8000900443";
-      
-      };
+  "25".google_apis."x86" = {
+    name = "system-image-25-google_apis-x86";
+    path = "system-images/android-25/google_apis/x86";
+    revision = "25-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-25_r16.zip";
+      sha1 = "562e3335c6334b8d1947bb9efb90f8d82f2d3e4d";
+    };
   };
-  
-
-    "25".google_apis."armeabi-v7a" = {
-      name = "system-image-25-google_apis-armeabi-v7a";
-      path = "system-images/android-25/google_apis/armeabi-v7a";
-      revision = "25-google_apis-armeabi-v7a";
-      displayName = "Google APIs ARM EABI v7a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-25_r15.zip;
-        sha1 = "813e25f9a5f6d775670ed6c5e67a39bffa1411bf";
-      
-      };
+  "25".google_apis."x86_64" = {
+    name = "system-image-25-google_apis-x86_64";
+    path = "system-images/android-25/google_apis/x86_64";
+    revision = "25-google_apis-x86_64";
+    displayName = "Google APIs Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-25_r16.zip";
+      sha1 = "e08b94903631d58964467b0b310c93642d85df6c";
+    };
   };
-  
-
-    "25".google_apis."arm64-v8a" = {
-      name = "system-image-25-google_apis-arm64-v8a";
-      path = "system-images/android-25/google_apis/arm64-v8a";
-      revision = "25-google_apis-arm64-v8a";
-      displayName = "Google APIs ARM 64 v8a System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-25_r15.zip;
-        sha1 = "c3049e32f031140757f71acb5b8f0179e6f27303";
-      
-      };
+  "25".google_apis."armeabi-v7a" = {
+    name = "system-image-25-google_apis-armeabi-v7a";
+    path = "system-images/android-25/google_apis/armeabi-v7a";
+    revision = "25-google_apis-armeabi-v7a";
+    displayName = "Google APIs ARM EABI v7a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/armeabi-v7a-25_r16.zip";
+      sha1 = "4c49e0edb845b0bf1f231cb0e8598b1a9f9aa9c8";
+    };
   };
-  
-
-    "26".google_apis."x86" = {
-      name = "system-image-26-google_apis-x86";
-      path = "system-images/android-26/google_apis/x86";
-      revision = "26-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-26_r12.zip;
-        sha1 = "167c83bcfd87127c7376ce986b34701f74fe87ff";
-      
-      };
+  "25".google_apis."arm64-v8a" = {
+    name = "system-image-25-google_apis-arm64-v8a";
+    path = "system-images/android-25/google_apis/arm64-v8a";
+    revision = "25-google_apis-arm64-v8a";
+    displayName = "Google APIs ARM 64 v8a System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-25_r16.zip";
+      sha1 = "33ffbd335d9a6dc8d9843469d0963091566b3167";
+    };
   };
-  
-
-    "26".google_apis."x86_64" = {
-      name = "system-image-26-google_apis-x86_64";
-      path = "system-images/android-26/google_apis/x86_64";
-      revision = "26-google_apis-x86_64";
-      displayName = "Google APIs Intel x86 Atom_64 System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86_64-26_r12.zip;
-        sha1 = "fcd46121c3486e2a759d0707c015e0b12bbab9db";
-      
-      };
+  "26".google_apis."x86" = {
+    name = "system-image-26-google_apis-x86";
+    path = "system-images/android-26/google_apis/x86";
+    revision = "26-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-26_r14.zip";
+      sha1 = "935da6794d5f64f7ae20a1f352929cb7e3b20cba";
+    };
   };
-  
-
-    "27".google_apis."x86" = {
-      name = "system-image-27-google_apis-x86";
-      path = "system-images/android-27/google_apis/x86";
-      revision = "27-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-27_r08.zip;
-        sha1 = "623ee2638713b7dfde8044c91280c2afad5a1ade";
-      
-      };
+  "26".google_apis."x86_64" = {
+    name = "system-image-26-google_apis-x86_64";
+    path = "system-images/android-26/google_apis/x86_64";
+    revision = "26-google_apis-x86_64";
+    displayName = "Google APIs Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-26_r14.zip";
+      sha1 = "965631f0554ca9027ac465ba147baa6a6a22fcce";
+    };
   };
-  
-
-    "28".google_apis."x86" = {
-      name = "system-image-28-google_apis-x86";
-      path = "system-images/android-28/google_apis/x86";
-      revision = "28-google_apis-x86";
-      displayName = "Google APIs Intel x86 Atom System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86-28_r07.zip;
-        sha1 = "fe5d58355545ae82b0e6a55adc1d41573ac7dec1";
-      
-      };
+  "27".google_apis."x86" = {
+    name = "system-image-27-google_apis-x86";
+    path = "system-images/android-27/google_apis/x86";
+    revision = "27-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-27_r09.zip";
+      sha1 = "ab009fc1308ded01539af4f8233b252d411145bc";
+    };
   };
-  
-
-    "28".google_apis."x86_64" = {
-      name = "system-image-28-google_apis-x86_64";
-      path = "system-images/android-28/google_apis/x86_64";
-      revision = "28-google_apis-x86_64";
-      displayName = "Google APIs Intel x86 Atom_64 System Image";
-      archives.all = fetchurl {
-      
-        url = 
-        https://dl.google.com/android/repository/sys-img/google_apis/x86_64-28_r07.zip;
-        sha1 = "068468683a56725326f741f75b6913ee1e7955ff";
-      
-      };
+  "28".google_apis."x86" = {
+    name = "system-image-28-google_apis-x86";
+    path = "system-images/android-28/google_apis/x86";
+    revision = "28-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-28_r09.zip";
+      sha1 = "7c84ba5cbc009132ce38df52830c17b9bffc54bb";
+    };
   };
-  
+  "28".google_apis."x86_64" = {
+    name = "system-image-28-google_apis-x86_64";
+    path = "system-images/android-28/google_apis/x86_64";
+    revision = "28-google_apis-x86_64";
+    displayName = "Google APIs Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-28_r09.zip";
+      sha1 = "eeb066346d29194e5b9387a0c0dd0f9e2a570b70";
+    };
+  };
+  "29".google_apis."x86" = {
+    name = "system-image-29-google_apis-x86";
+    path = "system-images/android-29/google_apis/x86";
+    revision = "29-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-29_r09.zip";
+      sha1 = "33d71d17138ea322dec2dea6d8198aebf4767ab3";
+    };
+  };
+  "29".google_apis."x86_64" = {
+    name = "system-image-29-google_apis-x86_64";
+    path = "system-images/android-29/google_apis/x86_64";
+    revision = "29-google_apis-x86_64";
+    displayName = "Google APIs Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-29_r09.zip";
+      sha1 = "0aa76b20a7ad30f2e41bc21b897b848d82533d26";
+    };
+  };
+  "R".google_apis."x86" = {
+    name = "system-image-R-google_apis-x86";
+    path = "system-images/android-R/google_apis/x86";
+    revision = "R-google_apis-x86";
+    displayName = "Google APIs Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86-R_r01.zip";
+      sha1 = "4e260bef94760eecba3224b68c1a4fed0fb89485";
+    };
+  };
+  "R".google_apis."x86_64" = {
+    name = "system-image-R-google_apis-x86_64";
+    path = "system-images/android-R/google_apis/x86_64";
+    revision = "R-google_apis-x86_64";
+    displayName = "Google APIs Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-R_r01.zip";
+      sha1 = "ae12e1c3e1b36043a299359850e9315f47262f81";
+    };
+  };
 }
-  

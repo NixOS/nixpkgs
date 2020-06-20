@@ -1,11 +1,11 @@
 {stdenv, fetchurl, erlang, pam, perl }:
 
 stdenv.mkDerivation rec {
-  name = "yaws-${version}";
+  pname = "yaws";
   version = "2.0.6";
 
   src = fetchurl {
-    url = "http://yaws.hyber.org/download/${name}.tar.gz";
+    url = "http://yaws.hyber.org/download/${pname}-${version}.tar.gz";
     sha256 = "03nh97g7smsgm6sw5asssmlq7zgx6y2gnn7jn0lv2x5mkf5nzyb9";
   };
 
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A high performance HTTP 1.1 server in Erlang";
-    homepage = http://yaws.hyber.org;
+    homepage = "http://yaws.hyber.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu the-kenny ];
+    maintainers = with maintainers; [ goibhniu ];
   };
 
 }

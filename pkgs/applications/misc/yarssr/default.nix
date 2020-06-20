@@ -23,9 +23,9 @@ let
     gtk2
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "git-2017-12-01";
-  name = "yarssr-${version}";
+  pname = "yarssr";
 
   src = fetchFromGitHub {
     owner = "JGRennison";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/tsyrogit/zxcvbn-c;
+    homepage = "https://github.com/tsyrogit/zxcvbn-c";
     description = "A fork of Yarssr (a RSS reader for the GNOME Tray) from http://yarssr.sf.net with various fixes.";
     license = licenses.gpl1;
     platforms = platforms.linux;

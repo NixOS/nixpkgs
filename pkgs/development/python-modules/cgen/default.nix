@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "cgen";
-  version = "2017.1";
+  version = "2020.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a04525d51ee975d37d590d6d82bf80a46e77f75187cccfd2248a89616a778795";
+    sha256 = "4ec99d0c832d9f95f5e51dd18a629ad50df0b5464ce557ef42c6e0cd9478bfcf";
   };
 
   checkInputs = [ pytest ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "C/C++ source generation from an AST";
-    homepage = https://github.com/inducer/cgen;
+    homepage = "https://github.com/inducer/cgen";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

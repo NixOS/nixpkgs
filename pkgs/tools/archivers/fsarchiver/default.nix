@@ -6,7 +6,8 @@ let
   version = "0.8.5";
 
 in stdenv.mkDerivation {
-  name = "fsarchiver-${version}";
+  pname = "fsarchiver";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "fdupoux";
@@ -35,7 +36,7 @@ in stdenv.mkDerivation {
       checksummed in the archive in order to protect the data. If the archive is
       corrupt, you just loose the current file, not the whole archive.
     '';
-    homepage = http://www.fsarchiver.org/;
+    homepage = "http://www.fsarchiver.org/";
     license = licenses.lgpl2;
     maintainers = [ maintainers.etu ];
     platforms = platforms.linux;

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, gtest }:
 
 stdenv.mkDerivation rec {
-  name = "gbenchmark-${version}";
+  pname = "gbenchmark";
   version = "1.5.0";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A microbenchmark support library";
-    homepage = https://github.com/google/benchmark;
+    homepage = "https://github.com/google/benchmark";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ abbradar ];

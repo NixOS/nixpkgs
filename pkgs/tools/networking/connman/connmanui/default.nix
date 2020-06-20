@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoconf, automake, libtool, glib, gtk3, dbus, pkgconfig, file, intltool, connman }:
 
 stdenv.mkDerivation rec {
-  name = "connmanui-${version}";
+  pname = "connmanui";
   rev = "fce0af94e121bde77c7fa2ebd6a319f0180c5516";
   version = "22062015-${rev}";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A full-featured GTK based trayicon UI for ConnMan";
-    homepage = https://github.com/tbursztyka/connman-ui;
+    homepage = "https://github.com/tbursztyka/connman-ui";
     maintainers = [ stdenv.lib.maintainers.matejc ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;

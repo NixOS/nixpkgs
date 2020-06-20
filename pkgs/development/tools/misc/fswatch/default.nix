@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fswatch-${version}";
+  pname = "fswatch";
   version = "1.14.0";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A cross-platform file change monitor with multiple backends";
-    homepage = https://github.com/emcrisostomo/fswatch;
+    homepage = "https://github.com/emcrisostomo/fswatch";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub ];

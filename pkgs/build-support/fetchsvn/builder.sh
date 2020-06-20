@@ -2,10 +2,6 @@ source $stdenv/setup
 
 header "exporting $url (r$rev) into $out"
 
-if test "$sshSupport"; then
-    export SVN_SSH="$openssh/bin/ssh"
-fi
-
 if test -n "$http_proxy"; then
     # Configure proxy
     mkdir .subversion

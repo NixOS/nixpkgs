@@ -18,7 +18,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/cython/backports_abc;
+    homepage = "https://github.com/cython/backports_abc";
     license = lib.licenses.psfl;
     description = "A backport of recent additions to the 'collections.abc' module";
   };

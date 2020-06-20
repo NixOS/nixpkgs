@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
     meta = with stdenv.lib; {
       description = "Adds read support for dbf files to agate";
-      homepage    = https://github.com/wireservice/agate-dbf;
+      homepage    = "https://github.com/wireservice/agate-dbf";
       license     = with licenses; [ mit ];
       maintainers = with maintainers; [ vrthra ];
     };

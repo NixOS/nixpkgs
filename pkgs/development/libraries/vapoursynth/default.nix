@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, makeWrapper
 , zimg, libass, python3, libiconv
-, ApplicationServices, nasm
+, ApplicationServices
 , ocrSupport ?  false, tesseract ? null
 , imwriSupport? true,  imagemagick7 ? null
 }:
@@ -11,17 +11,17 @@ assert imwriSupport -> imagemagick7 != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "vapoursynth-${version}";
-  version = "R45.1";
+  pname = "vapoursynth";
+  version = "R49";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "09fj4k75cksx1imivqfyr945swlr8k392kkdgzldwc4404qv82s6";
+    sha256 = "1d298mlb24nlc2x7pixfbkd0qbpv4c706c32idsgpi96z1spkhvl";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook nasm ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper ];
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
@@ -30,19 +30,31 @@ stdenv.mkDerivation rec {
     ++ optional imwriSupport imagemagick7;
 
   configureFlags = [
-    "--disable-static"
     (optionalString (!ocrSupport)   "--disable-ocr")
     (optionalString (!imwriSupport) "--disable-imwri")
   ];
 
   enableParallelBuilding = true;
 
+  passthru = {
+    # If vapoursynth is added to the build inputs of mpv and then
+    # used in the wrapping of it, we want to know once inside the
+    # wrapper, what python3 version was used to build vapoursynth so
+    # the right python3.sitePackages will be used there.
+    inherit python3;
+  };
+
+  postInstall = ''
+    wrapProgram $out/bin/vspipe \
+        --prefix PYTHONPATH : $out/${python3.sitePackages}
+  '';
+
   meta = with stdenv.lib; {
     description = "A video processing framework with the future in mind";
-    homepage    = http://www.vapoursynth.com/;
+    homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj tadeokondrak ];
   };
 
 }

@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xkbd-${version}";
+  pname = "xkbd";
   version = "0.8.18";
 
   src = fetchFromGitHub {
     owner = "mahatma-kaganovich";
     repo = "xkbd";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "05ry6q75jq545kf6p20nhfywaqf2wdkfiyp6iwdpv9jh238hf7m9";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mahatma-kaganovich/xkbd;
+    homepage = "https://github.com/mahatma-kaganovich/xkbd";
     description = "onscreen soft keyboard for X11";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.genesis ];

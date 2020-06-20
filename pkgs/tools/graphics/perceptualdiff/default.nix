@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "perceptualdiff";
-  name = "${pname}-${version}";
   version = "2.1";
 
   src = fetchFromGitHub {

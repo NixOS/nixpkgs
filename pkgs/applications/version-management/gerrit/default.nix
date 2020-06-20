@@ -1,28 +1,42 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gerrit-${version}";
-  version = "2.14.6";
+  pname = "gerrit";
+  version = "3.1.5";
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    sha256 = "0fsqwfsnyb4nbxgb1i1mp0vshl0mk8bwqlddzqr9x2v99mbca28q";
+    sha256 = "0gyh6a0p8gcrfnkm0sdjvzg6is9iirxjyffgza6k4v9rz6pjx8i8";
   };
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "1qrmvqqnlbabqz4yx06vi030ci12v0063iq2palxmbj3whrzv9la";
 
   buildCommand = ''
     mkdir -p "$out"/webapps/
     ln -s ${src} "$out"/webapps/gerrit-${version}.war
   '';
 
+  passthru = {
+    # A list of plugins that are part of the gerrit.war file.
+    # Use `java -jar gerrit.war ls | grep plugins/` to generate that list.
+    plugins = [
+      "codemirror-editor"
+      "commit-message-length-validator"
+      "delete-project"
+      "download-commands"
+      "gitiles"
+      "hooks"
+      "plugin-manager"
+      "replication"
+      "reviewnotes"
+      "singleusergroup"
+      "webhooks"
+    ];
+  };
+
   meta = with stdenv.lib; {
-    homepage = https://www.gerritcodereview.com/index.md;
+    homepage = "https://www.gerritcodereview.com/index.md";
     license = licenses.asl20;
     description = "A web based code review and repository management for the git version control system";
-    maintainers = with maintainers; [ jammerful ];
+    maintainers = with maintainers; [ jammerful zimbatm ];
     platforms = platforms.unix;
   };
 }

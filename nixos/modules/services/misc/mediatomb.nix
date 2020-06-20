@@ -163,7 +163,7 @@ in {
       };
 
       serverName = mkOption {
-        type = types.string;
+        type = types.str;
         default = "mediatomb";
         description = ''
           How to identify the server on the network.
@@ -259,26 +259,26 @@ in {
   config = mkIf cfg.enable {
     systemd.services.mediatomb = {
       description = "MediaTomb media Server";
-      after = [ "local-fs.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.mediatomb ];
       serviceConfig.ExecStart = "${pkgs.mediatomb}/bin/mediatomb -p ${toString cfg.port} ${if cfg.interface!="" then "-e ${cfg.interface}" else ""} ${if cfg.customCfg then "" else "-c ${mtConf}"} -m ${cfg.dataDir}";
       serviceConfig.User = "${cfg.user}";
     };
 
-    users.groups = optionalAttrs (cfg.group == "mediatomb") (singleton {
-      name = "mediatomb";
-      gid = gid;
-    });
+    users.groups = optionalAttrs (cfg.group == "mediatomb") {
+      mediatomb.gid = gid;
+    };
 
-    users.users = optionalAttrs (cfg.user == "mediatomb") (singleton {
-      name = "mediatomb";
-      isSystemUser = true;
-      group = cfg.group;
-      home = "${cfg.dataDir}";
-      createHome = true;
-      description = "Mediatomb DLNA Server User";
-    });
+    users.users = optionalAttrs (cfg.user == "mediatomb") {
+      mediatomb = {
+        isSystemUser = true;
+        group = cfg.group;
+        home = "${cfg.dataDir}";
+        createHome = true;
+        description = "Mediatomb DLNA Server User";
+      };
+    };
 
     networking.firewall = {
       allowedUDPPorts = [ 1900 cfg.port ];

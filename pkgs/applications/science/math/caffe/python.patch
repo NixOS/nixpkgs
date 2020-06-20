@@ -64,7 +64,7 @@ index 4a5bac47..be026d43 100644
 -  if(PYTHONLIBS_FOUND AND NUMPY_FOUND AND Boost_PYTHON_FOUND)
 +  find_package(NumPy 1.7.1)
 +  find_package(Boost 1.46 REQUIRED COMPONENTS python@major@@minor@)
-+  if(PYTHONLIBS_FOUND AND NUMPY_FOUND AND BOOST_PYTHON@major@@minor@_FOUND)
++  if(PYTHONLIBS_FOUND AND NUMPY_FOUND AND Boost_PYTHON@major@@minor@_FOUND)
      set(HAVE_PYTHON TRUE)
      if(BUILD_python_layer)
        list(APPEND Caffe_DEFINITIONS PRIVATE -DWITH_PYTHON_LAYER)

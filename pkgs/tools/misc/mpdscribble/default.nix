@@ -1,7 +1,7 @@
 { stdenv, fetchurl, mpd_clientlib, curl, glib, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "mpdscribble-${version}";
+  pname = "mpdscribble";
   version = "0.22";
 
   src = fetchurl {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Music Player Daemon (MPD) client which submits information about tracks beeing played to a scrobbler (e.g. last.fm)";
-    homepage = https://www.musicpd.org/clients/mpdscribble/;
+    homepage = "https://www.musicpd.org/clients/mpdscribble/";
     license = licenses.gpl2;
     maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.linux;

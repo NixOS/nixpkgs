@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ip2unix-${version}";
-  version = "2.1.0";
+  pname = "ip2unix";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
     rev = "v${version}";
-    sha256 = "1hbc7csicgza1w43aq1q189w8gzwkc2v5mxpnhaiwggwsa5vvkl0";
+    sha256 = "19c449h60b2m1d8kawnhpi4y9y4ddm24jmlh8kilqmx8m5l2khr6";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/nixcloud/ip2unix;
+    homepage = "https://github.com/nixcloud/ip2unix";
     description = "Turn IP sockets into Unix domain sockets";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;

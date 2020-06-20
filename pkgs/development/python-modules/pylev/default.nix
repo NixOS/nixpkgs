@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pylev";
   version = "1.3.0";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = https://github.com/toastdriven/pylev;
+    homepage = "https://github.com/toastdriven/pylev";
     description = "A pure Python Levenshtein implementation that's not freaking GPL'd";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jakewaksbaum ];

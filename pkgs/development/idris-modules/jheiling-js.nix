@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Js library for Idris";
-    homepage = https://github.com/jheiling/idris-js;
+    homepage = "https://github.com/jheiling/idris-js";
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.brainrape ];
   };

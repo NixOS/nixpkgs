@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hackertyper";
   version = "2.1";
 

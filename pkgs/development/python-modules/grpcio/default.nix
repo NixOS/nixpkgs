@@ -1,33 +1,28 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, lib, darwin
-, six, protobuf, enum34, futures, isPy27, isPy34, pkgconfig
-, cython}:
+{ stdenv, buildPythonPackage, darwin, grpc
+, six, protobuf, enum34, futures, isPy27, pkgconfig
+, cython, c-ares, openssl, zlib }:
 
-with stdenv.lib;
 buildPythonPackage rec {
+  inherit (grpc) src version;
   pname = "grpcio";
-  version = "1.18.0";
-
-  src = fetchFromGitHub {
-    owner = "grpc";
-    repo = "grpc";
-    rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "0cilbhk35gv46mk40jl5f3iqa94x14qyxbavpfq0kh0rld82nx4m";
-  };
 
   nativeBuildInputs = [ cython pkgconfig ]
-                    ++ optional stdenv.isDarwin darwin.cctools;
+                    ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
 
+  buildInputs = [ c-ares openssl zlib ];
   propagatedBuildInputs = [ six protobuf ]
-                        ++ lib.optionals (isPy27 || isPy34) [ enum34 ]
-                        ++ lib.optionals (isPy27) [ futures ];
+                        ++ stdenv.lib.optionals (isPy27) [ enum34 futures ];
 
-  preBuild = optionalString stdenv.isDarwin "unset AR";
+  preBuild = stdenv.lib.optionalString stdenv.isDarwin "unset AR";
+
+  GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
+  GRPC_PYTHON_BUILD_SYSTEM_ZLIB = 1;
+  GRPC_PYTHON_BUILD_SYSTEM_CARES = 1;
 
   meta = with stdenv.lib; {
     description = "HTTP/2-based RPC framework";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }

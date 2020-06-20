@@ -1,7 +1,7 @@
 { stdenv, fetchurl, m4, which, yasm }:
 
 stdenv.mkDerivation rec {
-  name = "mpir-${version}";
+  pname = "mpir";
   version = "3.0.0";
 
   nativeBuildInputs = [ m4 which yasm ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
     downloadPage = "http://mpir.org/downloads.html";
-    homepage = http://mpir.org/;
+    homepage = "http://mpir.org/";
     updateWalker = true;
   };
 }

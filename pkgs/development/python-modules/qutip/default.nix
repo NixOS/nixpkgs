@@ -37,8 +37,9 @@ buildPythonPackage rec {
       superconducting circuits, and quantum nanomechanical
       resonators.
     '';
-    homepage = http://qutip.org/;
+    homepage = "http://qutip.org/";
     license = licenses.bsd0;
+    broken = true;
   };
 
 }

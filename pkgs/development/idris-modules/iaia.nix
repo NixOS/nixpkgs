@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "Recursion scheme library for Idris";
-    homepage = https://github.com/sellout/Iaia;
+    homepage = "https://github.com/sellout/Iaia";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

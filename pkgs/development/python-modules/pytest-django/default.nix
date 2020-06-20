@@ -10,11 +10,11 @@
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
-  version = "3.4.8";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vj2xfb6jl570zmmwlhvfpj7af5q554z72z51ril07gyfkkq6cjd";
+    sha256 = "664e5f42242e5e182519388f01b9f25d824a9feb7cd17d8f863c8d776f38baf9";
   };
 
   nativeBuildInputs = [ pytest setuptools_scm ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "py.test plugin for testing of Django applications";
-    homepage = https://pytest-django.readthedocs.org/en/latest/;
+    homepage = "https://pytest-django.readthedocs.org/en/latest/";
     license = licenses.bsd3;
   };
 }

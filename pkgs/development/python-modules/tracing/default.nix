@@ -19,10 +19,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://liw.fi/tracing/;
+    homepage = "http://liw.fi/tracing/";
     description = "Python debug logging helper";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rickynils ];
+    maintainers = [];
   };
 
 }

@@ -4,7 +4,8 @@ let
   version = "0.6";
 in
 stdenv.mkDerivation {
-  name = "abootimg-${version}";
+  pname = "abootimg";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "ggrandou";
@@ -34,7 +35,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ggrandou/abootimg;
+    homepage = "https://github.com/ggrandou/abootimg";
     description = "Manipulate Android Boot Images";
     license = licenses.gpl2;
     platforms = platforms.linux;

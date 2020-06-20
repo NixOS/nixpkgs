@@ -1,6 +1,7 @@
 { stdenv
 , coreutils
 , patchelf
+, requireFile
 , callPackage
 , alsaLib
 , dbus
@@ -8,8 +9,9 @@
 , freetype
 , gcc
 , glib
+, libssh2
 , ncurses
-, opencv
+, opencv2
 , openssl
 , unixODBC
 , xkeyboard_config
@@ -24,10 +26,10 @@
 
 let
   l10n =
-    with stdenv.lib;
-    with callPackage ./l10ns.nix {};
-    flip (findFirst (l: l.lang == lang)) l10ns
-      (throw "Language '${lang}' not supported");
+    import ./l10ns.nix {
+      lib = stdenv.lib;
+      inherit requireFile lang;
+    };
 in
 stdenv.mkDerivation rec {
   inherit (l10n) version name src;
@@ -43,9 +45,11 @@ stdenv.mkDerivation rec {
     gcc.cc
     gcc.libc
     glib
+    libssh2
     ncurses
-    opencv
+    opencv2
     openssl
+    stdenv.cc.cc.lib
     unixODBC
     xkeyboard_config
     libxml2
@@ -72,8 +76,6 @@ stdenv.mkDerivation rec {
     + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
       (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
-  phases = "unpackPhase installPhase fixupPhase";
-
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="
     # find offset from file
@@ -94,14 +96,16 @@ stdenv.mkDerivation rec {
     # Fix library paths
     cd $out/libexec/Mathematica/Executables
     for path in mathematica MathKernel Mathematica WolframKernel wolfram math; do
-      sed -i -e 's#export LD_LIBRARY_PATH$#export LD_LIBRARY_PATH=${zlib}/lib:\''${LD_LIBRARY_PATH}#' $path
+      sed -i -e "2iexport LD_LIBRARY_PATH=${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}\n" $path
     done
 
     # Fix xkeyboard config path for Qt
     for path in mathematica Mathematica; do
-      line=$(grep -n QT_PLUGIN_PATH $path | sed 's/:.*//')
-      sed -i -e "$line iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"" $path
+      sed -i -e "2iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"\n" $path
     done
+
+    # Remove some broken libraries
+    rm -f $out/libexec/Mathematica/SystemFiles/Libraries/Linux-x86-64/libz.so*
   '';
 
   preFixup = ''
@@ -134,15 +138,19 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  dontBuild = true;
+
   # all binaries are already stripped
   dontStrip = true;
 
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Wolfram Mathematica computational software system";
-    homepage = http://www.wolfram.com/mathematica/;
-    license = stdenv.lib.licenses.unfree;
+    homepage = "http://www.wolfram.com/mathematica/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ herberteuler ];
+    platforms = [ "x86_64-linux" ];
   };
 }

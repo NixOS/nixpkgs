@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
 
-  name = "netsurf-nsgenbind-${version}";
-  version = "0.3";
+  pname = "netsurf-nsgenbind";
+  version = "0.7";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/nsgenbind-${version}-src.tar.gz";
-    sha256 = "16xsazly7gxwywmlkf2xix9b924sj3skhgdak7218l0nc62a08gg";
+    sha256 = "0rplmky4afsjwiwh7grkmcdmzg86zksa55j93dvq92f91yljwqqq";
   };
 
   buildInputs = [ buildsystem flex bison ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.netsurf-browser.org/;
+    homepage = "http://www.netsurf-browser.org/";
     description = "Generator for JavaScript bindings for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

@@ -15,8 +15,8 @@
 
 let inherit (stdenv.lib) optionals; in
 
-stdenv.mkDerivation rec {
-  name = "secp256k1-${version}";
+stdenv.mkDerivation {
+  pname = "secp256k1";
 
   # I can't find any version numbers, so we're just using the date of the
   # last commit.
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       Bitcoin Core. This library is a work in progress and is being used
       to research best practices. Use at your own risk.
     '';
-    homepage = https://github.com/bitcoin-core/secp256k1;
+    homepage = "https://github.com/bitcoin-core/secp256k1";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ chris-martin ];
     platforms = with platforms; unix;

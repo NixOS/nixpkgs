@@ -14,6 +14,13 @@
   to build the new configuration, make it the default configuration for
   booting, and try to realise the configuration in the running system (e.g., by
   restarting system services).
+  <warning>
+   <para>
+    This command doesn't start/stop <link linkend="opt-systemd.user.services">user
+    services</link> automatically. <command>nixos-rebuild</command> only runs a
+    <literal>daemon-reload</literal> for each user with running user services.
+   </para>
+  </warning>
  </para>
  <warning>
   <para>

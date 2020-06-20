@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, libGLU_combined, libX11, libXext, libXfixes
+{ stdenv, fetchurl, pkgconfig, libGLU, libGL, libX11, libXext, libXfixes
 , libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib
 , gobject-introspection, gtk3, gnome3, libinput, libgudev, libxkbcommon
 }:
 
 let
   pname = "clutter";
-  version = "1.26.2";
+  version = "1.26.4";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0mif1qnrpkgxi43h7pimim6w6zwywa16ixcliw0yjm9hk0a368z7";
+    sha256 = "1rn4cd1an6a9dfda884aqpcwcgq8dgydpqvb19nmagw4b70zlj4b";
   };
 
   outputs = [ "out" "dev" ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
-    [ libX11 libGLU_combined libXext libXfixes libXdamage libXcomposite libXi cogl pango
+    [ libX11 libGL libGLU libXext libXfixes libXdamage libXcomposite libXi cogl pango
       atk json-glib gobject-introspection libxcb libinput libgudev libxkbcommon
     ];
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       '';
 
     license = stdenv.lib.licenses.lgpl2Plus;
-    homepage = http://www.clutter-project.org/;
+    homepage = "http://www.clutter-project.org/";
 
     maintainers = with stdenv.lib.maintainers; [ lethalman ];
     platforms = stdenv.lib.platforms.mesaPlatforms;

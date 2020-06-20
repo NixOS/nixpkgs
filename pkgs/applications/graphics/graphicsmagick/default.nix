@@ -3,12 +3,12 @@
 , libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
-  name = "graphicsmagick-${version}";
-  version = "1.3.31";
+  pname = "graphicsmagick";
+  version = "1.3.35";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "0y22740f25qxsqqqg26xqlfp920dm57b7hrgaqmx7azksrcvnsq9";
+    sha256 = "0l024l4hawm9s3jqrgi2j0lxgm61dqh8sgkj1017ma7y11hqv2hq";
   };
 
   patches = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.graphicsmagick.org;
+    homepage = "http://www.graphicsmagick.org";
     description = "Swiss army knife of image processing";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;

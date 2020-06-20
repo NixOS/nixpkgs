@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fuse, zlib }:
 
-stdenv.mkDerivation rec {
-  name = "sqlar-${version}";
+stdenv.mkDerivation {
+  pname = "sqlar";
   version = "2018-01-07";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://sqlite.org/sqlar;
+    homepage = "https://sqlite.org/sqlar";
     description = "SQLite Archive utilities";
     license = licenses.bsd2;
     platforms = platforms.all;

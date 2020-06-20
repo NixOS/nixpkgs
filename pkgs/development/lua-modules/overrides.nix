@@ -6,10 +6,12 @@ with super;
   #### manual fixes for generated packages
   ##########################################3
   bit32 = super.bit32.override({
-    disabled = !isLua51;
-    # Theoretically works with luajit, but it does redefine at least one Lua
-    # 5.2 function that Luajit 2.1 provides, see:
-    # https://github.com/LuaJIT/LuaJIT/issues/325
+    # Small patch in order to no longer redefine a Lua 5.2 function that Luajit
+    # 2.1 also provides, see https://github.com/LuaJIT/LuaJIT/issues/325 for
+    # more
+    patches = [
+      ./bit32.patch
+    ];
   });
 
   busted = super.busted.override({
@@ -27,7 +29,7 @@ with super;
     # Parse out a version number without the Lua version inserted
     version = with pkgs.lib; let
       version' = super.cqueues.version;
-      rel = splitString "." version';
+      rel = splitVersion version';
       date = head rel;
       rev = last (splitString "-" (last rel));
     in "${date}-${rev}";
@@ -37,15 +39,6 @@ with super;
     externalDeps = [
       { name = "CRYPTO"; dep = pkgs.openssl; }
       { name = "OPENSSL"; dep = pkgs.openssl; }
-    ];
-    patches = [
-      # https://github.com/wahern/cqueues/issues/216 &
-      # https://github.com/wahern/cqueues/issues/217
-      (pkgs.fetchpatch {
-        name = "find-version-fix.patch";
-        url = "https://github.com/wahern/cqueues/pull/217.patch";
-        sha256 = "0068ql0jlxmjkvhzydyy52sjd0k4vad6b8w4y5szpbv4vb2lzcsc";
-      })
     ];
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
@@ -83,13 +76,43 @@ with super;
     */
   });
 
+  ldbus = super.ldbus.override({
+    extraVariables = {
+      DBUS_DIR="${pkgs.dbus.lib}";
+      DBUS_ARCH_INCDIR="${pkgs.dbus.lib}/lib/dbus-1.0/include";
+      DBUS_INCDIR="${pkgs.dbus.dev}/include/dbus-1.0";
+    };
+    buildInputs = with pkgs; [
+      dbus
+    ];
+  });
+
+  ljsyscall = super.ljsyscall.override(rec {
+    version = "unstable-20180515";
+    # package hasn't seen any release for a long time
+    src = pkgs.fetchFromGitHub {
+      owner = "justincormack";
+      repo = "ljsyscall";
+      rev = "e587f8c55aad3955dddab3a4fa6c1968037b5c6e";
+      sha256 = "06v52agqyziwnbp2my3r7liv245ddmb217zmyqakh0ldjdsr8lz4";
+    };
+    knownRockspec = "rockspec/ljsyscall-scm-1.rockspec";
+    # actually library works fine with lua 5.2
+    preConfigure = ''
+      sed -i 's/lua == 5.1/lua >= 5.1, < 5.3/' ${knownRockspec}
+    '';
+    disabled = luaOlder "5.1" || luaAtLeast "5.3";
+
+    propagatedBuildInputs = with pkgs.lib; optional (!isLuaJIT) luaffi;
+  });
+
   lgi = super.lgi.override({
     nativeBuildInputs = [
       pkgs.pkgconfig
     ];
     buildInputs = [
       pkgs.glib
-      pkgs.gobjectIntrospection
+      pkgs.gobject-introspection
     ];
     patches = [
       (pkgs.fetchpatch {
@@ -128,6 +151,14 @@ with super;
     ];
   });
 
+  lua-lsp = super.lua-lsp.override({
+    # until Alloyed/lua-lsp#28
+    postConfigure = ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace '"lpeglabel ~> 1.5",' '"lpeglabel >= 1.5",'
+    '';
+  });
+
   lua-zlib = super.lua-zlib.override({
     buildInputs = [
       pkgs.zlib.dev
@@ -136,14 +167,14 @@ with super;
   });
 
   luadbi-mysql = super.luadbi-mysql.override({
-    extraVariables = ''
-      -- Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR='${pkgs.mysql.connector-c}/include/mysql';
-      MYSQL_LIBDIR='${pkgs.mysql.connector-c}/lib/mysql';
-    '';
+    extraVariables = {
+      # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
+      MYSQL_INCDIR="${pkgs.libmysqlclient}/include/mysql";
+      MYSQL_LIBDIR="${pkgs.libmysqlclient}/lib/mysql";
+    };
     buildInputs = [
       pkgs.mysql.client
-      pkgs.mysql.connector-c
+      pkgs.libmysqlclient
     ];
   });
 
@@ -208,7 +239,7 @@ with super;
   });
 
   luasystem = super.luasystem.override({
-    buildInputs = [
+    buildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [
       pkgs.glibc
     ];
   });
@@ -216,6 +247,12 @@ with super;
   luazip = super.luazip.override({
     buildInputs = [
       pkgs.zziplib
+    ];
+  });
+
+  lua-yajl = super.lua-yajl.override({
+    buildInputs = [
+      pkgs.yajl
     ];
   });
 
@@ -231,7 +268,7 @@ with super;
     # Upstreams:
     # 5.1: http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/5.1/luuid.tar.gz
     # 5.2: http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/5.2/luuid.tar.gz
-    patchFlags = "-p2";
+    patchFlags = [ "-p2" ];
     patches = [
       ./luuid.patch
     ];
@@ -251,9 +288,37 @@ with super;
      sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
      rm -rf deps/libuv
     '';
-    propagatedBuildInputs = [
-      pkgs.libuv
+
+    buildInputs = [ pkgs.libuv ];
+
+    passthru = {
+      libluv = self.luv.override ({
+        preBuild = self.luv.preBuild + ''
+          sed -i 's,\(option(BUILD_MODULE.*\)ON,\1OFF,' CMakeLists.txt
+          sed -i 's,\(option(BUILD_SHARED_LIBS.*\)OFF,\1ON,' CMakeLists.txt
+          sed -i 's,${"\${INSTALL_INC_DIR}"},${placeholder "out"}/include/luv,' CMakeLists.txt
+        '';
+
+        nativeBuildInputs = [ pkgs.fixDarwinDylibNames ];
+
+        # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
+        NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+          (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
+      });
+    };
+  });
+
+  lyaml = super.lyaml.override({
+    buildInputs = [
+      pkgs.libyaml
     ];
+  });
+
+  mpack = super.mpack.override({
+    buildInputs = [ pkgs.libmpack ];
+    # the rockspec doesn't use the makefile so you may need to export more flags
+    USE_SYSTEM_LUA = "yes";
+    USE_SYSTEM_MPACK = "yes";
   });
 
   rapidjson = super.rapidjson.override({
@@ -261,5 +326,14 @@ with super;
       sed -i '/set(CMAKE_CXX_FLAGS/d' CMakeLists.txt
       sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
     '';
+  });
+
+  pulseaudio = super.pulseaudio.override({
+    buildInputs = [
+      pkgs.libpulseaudio
+    ];
+    nativeBuildInputs = [
+      pkgs.pulseaudio pkgs.pkgconfig
+    ];
   });
 }

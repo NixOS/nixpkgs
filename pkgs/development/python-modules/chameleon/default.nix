@@ -5,18 +5,18 @@
 
 buildPythonPackage rec {
   pname = "Chameleon";
-  version = "3.6.1";
+  version = "3.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "850f74f756bcb99423dd2658b99f448b09f09ccc2c60c0a2d6dec52294d7f9ed";
+    sha256 = "7adc331eb039d5c458cd78e42a76f8e470953f004ddf297bd57aa1501392aec9";
   };
 
   meta = with stdenv.lib; {
-    homepage = https://chameleon.readthedocs.io/;
+    homepage = "https://chameleon.readthedocs.io/";
     description = "Fast HTML/XML Template Compiler";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

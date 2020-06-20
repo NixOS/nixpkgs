@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "email_validator";
-  version = "1.0.2";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ja9149l9ck5n45a72h3is7v476hjny5ybxbcamx1nw6iplsm7k6";
+    sha256 = "63094045c3e802c3d3d575b18b004a531c36243ca8d1cec785ff6bfcb04185bb";
   };
 
   doCheck = false;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A robust email syntax and deliverability validation library for Python 2.x/3.x.";
-    homepage    = https://github.com/JoshData/python-email-validator;
+    homepage    = "https://github.com/JoshData/python-email-validator";
     license     = licenses.cc0;
     maintainers = with maintainers; [ siddharthist ];
     platforms   = platforms.unix;

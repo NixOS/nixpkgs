@@ -1,27 +1,26 @@
-{ stdenv, fetchurl, enchant, qt4, zlib, sox, libX11, xorgproto, libSM
-, libICE, qca2, pkgconfig, which, glib
-, libXScrnSaver
+{ stdenv, fetchFromGitHub, cmake, wrapQtAppsHook
+, qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
+, libidn, qca2-qt5, libXScrnSaver, hunspell
 }:
-
 stdenv.mkDerivation rec {
-  name = "psi-0.15";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/psi/${name}.tar.bz2";
-    sha256 = "593b5ddd7934af69c245afb0e7290047fd7dedcfd8765baca5a3a024c569c7e6";
+  pname = "psi";
+  version = "1.4";
+  src = fetchFromGitHub {
+    owner = "psi-im";
+    repo = pname;
+    rev = version;
+    sha256 = "09c7cg96vgxzgbpypgcw7yv73gvzppbi1lm4svbpfn2cfxy059d4";
+    fetchSubmodules = true;
   };
-
-  buildInputs =
-    [ enchant qt4 zlib sox libX11 xorgproto libSM libICE
-      qca2 pkgconfig which glib libXScrnSaver
-    ];
-
-  NIX_CFLAGS_COMPILE="-I${qca2}/include/QtCrypto";
-
-  NIX_LDFLAGS="-lqca";
-
+  patches = [
+    ./fix-cmake-hunspell-1.7.patch
+  ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  buildInputs = [
+    qtbase qtmultimedia qtx11extras qttools qtwebengine
+    libidn qca2-qt5 libXScrnSaver hunspell
+  ];
   enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Psi, an XMPP (Jabber) client";
     maintainers = [ maintainers.raskin ];

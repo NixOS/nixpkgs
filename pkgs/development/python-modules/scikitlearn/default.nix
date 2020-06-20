@@ -2,22 +2,24 @@
 , lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , gfortran, glibcLocales
 , numpy, scipy, pytest, pillow
 , cython
 , joblib
 , llvmPackages
+, threadpoolctl
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.21.2";
+  version = "0.23.1";
   # UnboundLocalError: local variable 'message' referenced before assignment
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nvj9j16y1hz9gm0qwzpnx2zmz55c63k1fai643migsyll9c7bqa";
+    sha256 = "e3fec1c8831f8f93ad85581ca29ca1bb88e2da377fb097cf8322aa89c21bc9b8";
   };
 
   buildInputs = [
@@ -37,6 +39,7 @@ buildPythonPackage rec {
     scipy
     numpy.blas
     joblib
+    threadpoolctl
   ];
   checkInputs = [ pytest ];
 
@@ -51,7 +54,13 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A set of python modules for machine learning and data mining";
-    homepage = http://scikit-learn.org;
+    changelog = let
+      major = versions.major version;
+      minor = versions.minor version;
+      dashVer = replaceChars ["."] ["-"] version;
+    in
+      "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
+    homepage = "https://scikit-learn.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

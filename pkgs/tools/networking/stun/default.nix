@@ -1,7 +1,6 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name    = "${pname}-${version}";
   pname   = "stun";
   version = "0.97";
 
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Stun server and test client";
-    homepage    = https://sourceforge.net/projects/stun/;
+    homepage    = "https://sourceforge.net/projects/stun/";
     license     = licenses.vsl10;
     maintainers = with maintainers; [ marcweber obadz ];
     platforms   = platforms.linux;

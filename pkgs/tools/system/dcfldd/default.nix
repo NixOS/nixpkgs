@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An enhanced version of GNU dd";
 
-    homepage = http://dcfldd.sourceforge.net/;
+    homepage = "http://dcfldd.sourceforge.net/";
 
     license = licenses.gpl2;
 

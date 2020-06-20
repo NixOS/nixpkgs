@@ -10,13 +10,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  configurePhase = "true"; # skip configure
+  dontConfigure = true; # skip configure
 
   installPhase = "make prefix=$out install";
 
   meta = {
     description = "Linux DVB API applications and utilities";
-    homepage = https://linuxtv.org/;
+    homepage = "https://linuxtv.org/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;
     broken = true; # 2018-04-10

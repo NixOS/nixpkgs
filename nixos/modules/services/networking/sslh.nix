@@ -77,19 +77,14 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      users.users.${user} = {
-        description = "sslh daemon user";
-        isSystemUser = true;
-      };
-
       systemd.services.sslh = {
         description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          User                 = user;
-          Group                = "nogroup";
+          DynamicUser          = true;
+          User                 = "sslh";
           PermissionsStartOnly = true;
           Restart              = "always";
           RestartSec           = "1s";

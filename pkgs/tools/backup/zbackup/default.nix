@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, zlib, openssl, protobuf, protobufc, lzo, libunwind } :
-stdenv.mkDerivation rec {
-  name = "zbackup-${version}";
+stdenv.mkDerivation {
+  pname = "zbackup";
   version = "1.4.4";
   src = fetchurl {
     url = "https://github.com/zbackup/zbackup/archive/1.4.4.tar.gz";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake protobufc ];
   meta = {
     description = "A versatile deduplicating backup tool";
-    homepage = http://zbackup.org/;
+    homepage = "http://zbackup.org/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
   };

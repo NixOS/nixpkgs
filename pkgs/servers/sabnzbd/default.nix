@@ -6,7 +6,6 @@ let
 in stdenv.mkDerivation rec {
   version = "2.3.9";
   pname = "sabnzbd";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -28,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Usenet NZB downloader, par2 repairer and auto extracting server";
-    homepage = https://sabnzbd.org;
+    homepage = "https://sabnzbd.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ fridh ];

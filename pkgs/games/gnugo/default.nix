@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gnugo-${version}";
+  pname = "gnugo";
   version = "3.8";
 
   src = fetchurl {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU Go - A computer go player";
-    homepage = https://www.gnu.org/software/gnugo/;
+    homepage = "https://www.gnu.org/software/gnugo/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;
   };

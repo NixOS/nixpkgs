@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-clipboard-indicator-${version}";
-  version = "30";
+  pname = "gnome-shell-extension-clipboard-indicator";
+  version = "34";
 
   src = fetchFromGitHub {
     owner = "Tudmotu";
     repo = "gnome-shell-extension-clipboard-indicator";
     rev = "v${version}";
-    sha256 = "1fmgmxv2y678bj0kmymkgnnglcpqk8ww053izlq46xg7s27jjdf6";
+    sha256 = "0i00psc1ky70zljd14jzr627y7nd8xwnwrh4xpajl1f6djabh12s";
   };
 
   uuid = "clipboard-indicator@tudmotu.com";
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ jonafato ];
     platforms = platforms.linux;
-    homepage = https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator;
+    homepage = "https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator";
   };
 }

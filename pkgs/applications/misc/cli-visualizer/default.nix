@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.8";
-  name = "cli-visualizer-${version}";
+  pname = "cli-visualizer";
 
   src = fetchFromGitHub {
     owner = "dpayne";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/dpayne/cli-visualizer;
+    homepage = "https://github.com/dpayne/cli-visualizer";
     description = "CLI based audio visualizer";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];

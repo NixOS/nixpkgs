@@ -2,15 +2,15 @@
 
 buildPythonPackage rec {
   pname = "python-mnist";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d59a44335eccb4b310efb2ebb76f44e8588a1732cfb4923f4a502b61d8b653a";
+    sha256 = "a0cced01e83b5b844cff86109280df7a672a8e4e38fc19fa68999a17f8a9fbd8";
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sorki/python-mnist;
+    homepage = "https://github.com/sorki/python-mnist";
     description = "Simple MNIST data parser written in Python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ cmcdragonkai ];

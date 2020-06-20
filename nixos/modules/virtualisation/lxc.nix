@@ -58,7 +58,7 @@ in
           ''
             This is the config file for managing unprivileged user network
             administration access in LXC. See <citerefentry>
-            <refentrytitle>lxc-user-net</refentrytitle><manvolnum>5</manvolnum>
+            <refentrytitle>lxc-usernet</refentrytitle><manvolnum>5</manvolnum>
             </citerefentry>.
           '';
       };

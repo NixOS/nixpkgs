@@ -3,7 +3,7 @@
 , gtk, pkgconfig, flex }:
 
 stdenv.mkDerivation rec {
-  name = "galculator-${version}";
+  pname = "galculator";
   version = "2.1.4";
 
   src = fetchFromGitHub {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       - Binary arithmetic of configurable bit length and signedness
       - Quad-precision floating point arithmetic, and 112-bit binary arithmetic
     '';
-    homepage = http://galculator.sourceforge.net/;
+    homepage = "http://galculator.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

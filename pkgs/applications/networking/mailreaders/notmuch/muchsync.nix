@@ -3,12 +3,12 @@
 }:
 stdenv.mkDerivation rec {
   version = "5";
-  name = "muchsync-${version}";
+  pname = "muchsync";
   passthru = {
     inherit version;
   };
   src = fetchurl {
-    url = "http://www.muchsync.org/src/${name}.tar.gz";
+    url = "http://www.muchsync.org/src/${pname}-${version}.tar.gz";
     sha256 = "1k2m44pj5i6vfhp9icdqs42chsp208llanc666p3d9nww8ngq2lb";
   };
   nativeBuildInputs = [ pkgconfig ];

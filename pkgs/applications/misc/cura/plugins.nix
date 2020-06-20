@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3Packages }:
+{ stdenv, fetchFromGitHub, fetchpatch, python3Packages }:
 
 let
 
@@ -6,20 +6,23 @@ let
 
     octoprint = stdenv.mkDerivation rec {
       pname = "Cura-OctoPrintPlugin";
-      version = "3.5.5";
+      version = "3.5.12";
 
       src = fetchFromGitHub {
         owner = "fieldOfView";
         repo = pname;
-        rev = "d05a9a4c1a01c584d5cec4f4b7d170077235467a";
-        sha256 = "0ik69g3kbn7rz2wh0cfq9ww8x222kagd8jvsd4xlqgq4yrf0jk7x";
+        rev = "ad522c0b7ead5fbe28da686a3cc75e351274c2bc";
+        sha256 = "0ln11ng32bh0smfsk54mv2j3sadh0gwf031nmm95zrvbj9cr6yc0";
       };
-
-      nativeBuildInputs = [ cmake ];
 
       propagatedBuildInputs = with python3Packages; [
         netifaces
       ];
+
+      installPhase = ''
+        mkdir -p $out/lib/cura/plugins/OctoPrintPlugin
+        cp -rv . $out/lib/cura/plugins/OctoPrintPlugin/
+      '';
 
       meta = with stdenv.lib; {
         description = "Enables printing directly to OctoPrint and monitoring the process";

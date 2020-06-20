@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Make your iPad/tablet/computer as a secondary monitor on Linux";
-    homepage = https://github.com/kbumsik/VirtScreen;
+    homepage = "https://github.com/kbumsik/VirtScreen";
     license = licenses.gpl3;
     maintainers = with maintainers; [ borisbabic ];
   };

@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     make $checkFlags check || print_logs_and_fail
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-std=c99" ];
+  NIX_CFLAGS_COMPILE = "-std=c99";
 
   hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "format";
 
   meta = {
-    homepage = https://www.gnu.org/software/rcs/;
+    homepage = "https://www.gnu.org/software/rcs/";
     description = "Revision control system";
     longDescription =
       '' The GNU Revision Control System (RCS) manages multiple revisions of

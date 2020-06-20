@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   version = "3.5";
 
-  name = "store-backup-${version}";
+  pname = "store-backup";
 
   enableParallelBuilding = true;
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A backup suite that stores files on other disks";
-    homepage = https://savannah.nongnu.org/projects/storebackup;
+    homepage = "https://savannah.nongnu.org/projects/storebackup";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

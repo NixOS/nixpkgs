@@ -17,7 +17,7 @@ perlPackages.buildPerlPackage rec {
   '';
   outputs = [ "out" ];
   meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/mahlon/shelldap/;
+    homepage = "https://bitbucket.org/mahlon/shelldap/";
     description = "A handy shell-like interface for browsing LDAP servers and editing their content";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ tobiasBora ];

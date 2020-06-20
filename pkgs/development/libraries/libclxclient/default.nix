@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libclthreads, libX11, libXft, xorg, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "libclxclient-${version}";
+  pname = "libclxclient";
   version = "3.9.2";
 
   src = fetchurl {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Zita X11 library";
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

@@ -14,7 +14,7 @@
 , musepackSupport ? true, libmpc, libmpcdec, taglib
 , vorbisSupport ? true, libvorbis
 , speexSupport ? true, speex
-, ffmpegSupport ? true, ffmpeg
+, ffmpegSupport ? true, ffmpeg_3
 , sndfileSupport ? true, libsndfile
 , wavpackSupport ? true, wavpack
 # Misc
@@ -30,7 +30,7 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "moc-${version}";
+  pname = "moc";
   version = "2.5.2";
 
   src = fetchurl {
@@ -57,10 +57,10 @@ in stdenv.mkDerivation rec {
     ++ opt midiSupport timidity
     ++ opt modplugSupport libmodplug
     ++ opt mp3Support libmad
-    ++ opt musepackSupport [ libmpc libmpcdec taglib ]
+    ++ stdenv.lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
     ++ opt vorbisSupport libvorbis
     ++ opt speexSupport speex
-    ++ opt (ffmpegSupport && !withffmpeg4) ffmpeg
+    ++ opt (ffmpegSupport && !withffmpeg4) ffmpeg_3
     ++ opt (ffmpegSupport && withffmpeg4) ffmpeg_4
     ++ opt sndfileSupport libsndfile
     ++ opt wavpackSupport wavpack
@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An ncurses console audio player designed to be powerful and easy to use";
-    homepage = http://moc.daper.net/;
+    homepage = "http://moc.daper.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ aethelz pSub jagajaga ];
     platforms = platforms.linux;

@@ -5,8 +5,9 @@
 let
   version = "1.1.0";
 in
-stdenv.mkDerivation rec {
-  name = "libmpc-${version}"; # to avoid clash with the MPD client
+stdenv.mkDerivation {
+  pname = "libmpc";
+  inherit version; # to avoid clash with the MPD client
 
   src = fetchurl {
     url = "mirror://gnu/mpc/mpc-${version}.tar.gz";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
          built upon and follows the same principles as GNU MPFR.
       '';
 
-    homepage = http://mpc.multiprecision.org/;
+    homepage = "http://mpc.multiprecision.org/";
     license = stdenv.lib.licenses.lgpl2Plus;
 
     platforms = stdenv.lib.platforms.all;

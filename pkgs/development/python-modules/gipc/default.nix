@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "gipc";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zg5bm30lqqd8x0jqbvr4yi8i4rzzk2hdnh280qnj2bwm5nqpghi";
+    sha256 = "06116628e9cb7b2c34c8f248d0e4859fa5943e1e07381ad2b234ae9c7ed6f4cc";
   };
 
   propagatedBuildInputs = [ gevent ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
       multiprocessing. Process-based child processes can safely be created
       anywhere within your gevent-powered application.
     '';
-    homepage = http://gehrcke.de/gipc;
+    homepage = "http://gehrcke.de/gipc";
     license = licenses.mit;
   };
 

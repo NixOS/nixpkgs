@@ -1,6 +1,6 @@
 {
-  fetchurl, fetchpatch, stdenv, pkgconfig,
-  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
+  fetchFromGitHub, stdenv, pkgconfig, autoreconfHook,
+  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
 
   # Optional but increases closure only negligibly.
   xarSupport ? true,
@@ -9,33 +9,20 @@
 assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
-  name = "libarchive-${version}";
-  version = "3.3.3";
+  pname = "libarchive";
+  version = "3.4.3";
 
-  src = fetchurl {
-    url = "${meta.homepage}/downloads/${name}.tar.gz";
-    sha256 = "0bhfncid058p7n1n8v29l6wxm3mhdqfassscihbsxfwz3iwb2zms";
+  src = fetchFromGitHub {
+    owner = "libarchive";
+    repo = "libarchive";
+    rev = "v${version}";
+    sha256 = "1y0v03p6zyv6plr2p0pid1qfgmk8hd427spj8xa93mcdmq5yc3s0";
   };
-
-  patches = [
-    (fetchpatch {
-      # details: https://github.com/libarchive/libarchive/pull/1105
-      name = "cve-2018-1000877.diff"; # CVE-2018-1000877..80
-      url = "https://github.com/libarchive/libarchive/pull/1105.diff";
-      sha256 = "0mxcawfdy9m40mykzwhkl39a6vnh4ypgy0ipcz74qm4bi72x0gyf";
-    })
-    (fetchpatch {
-      # details: https://github.com/libarchive/libarchive/pull/1120
-      name = "cve-2019-1000019_cve-2019-1000020.diff";
-      url = "https://github.com/libarchive/libarchive/pull/1120.diff";
-      sha256 = "1mgx92v8hm7hw9j34nbfriqfkxshh3cy25rhavr7kl7lz4x5a6g4";
-    })
-  ];
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ sharutils zlib bzip2 openssl xz lzo ]
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ sharutils zlib bzip2 openssl xz lzo zstd ]
     ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
     ++ stdenv.lib.optional xarSupport libxml2;
 
@@ -65,7 +52,7 @@ stdenv.mkDerivation rec {
       compressions formats including (but not limited to) tar, shar, cpio, zip, and
       compressed with gzip, bzip2, lzma, xz, ...
     '';
-    homepage = http://libarchive.org;
+    homepage = "http://libarchive.org";
     license = stdenv.lib.licenses.bsd3;
     platforms = with stdenv.lib.platforms; all;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];

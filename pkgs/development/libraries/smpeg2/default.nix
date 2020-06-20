@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "412";
 
   src = fetchsvn {
-    url = svn://svn.icculus.org/smpeg/trunk;
+    url = "svn://svn.icculus.org/smpeg/trunk";
     rev = version;
     sha256 = "1irf2d8f150j8cx8lbb0pz1rijap536crsz0mw871xrh6wd2fd96";
   };
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://icculus.org/smpeg/;
+    homepage = "http://icculus.org/smpeg/";
     description = "SDL2 MPEG Player Library";
     license = licenses.lgpl2;
     platforms = platforms.unix;

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "esptool-ck-${version}";
+  pname = "esptool-ck";
   version = "0.4.13";
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "ESP8266/ESP32 build helper tool";
-    homepage = https://github.com/igrr/esptool-ck;
+    homepage = "https://github.com/igrr/esptool-ck";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

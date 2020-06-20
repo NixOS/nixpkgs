@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, bobcat, icmake, yodl }:
 
 stdenv.mkDerivation rec {
-  name = "flexc++-${version}";
+  pname = "flexc++";
   version = "2.05.00";
 
   src = fetchFromGitHub {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       and requires simpler specification files than offered by flex's C++
       option.
     '';
-    homepage = https://fbb-git.github.io/flexcpp/;
+    homepage = "https://fbb-git.github.io/flexcpp/";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

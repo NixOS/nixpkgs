@@ -6,10 +6,9 @@
 stdenv.mkDerivation rec {
   version = "2.0.12";
   pname = "libgksu";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://people.debian.org/~kov/gksu/${name}.tar.gz";
+    url = "http://people.debian.org/~kov/gksu/${pname}-${version}.tar.gz";
     sha256 = "1brz9j3nf7l2gd3a5grbp0s3nksmlrp6rxmgp5s6gjvxcb1wzy92";
   };
 
@@ -79,7 +78,7 @@ stdenv.mkDerivation rec {
       user.  It provides X authentication facilities for running
       programs in an X session.
     '';
-    homepage = https://www.nongnu.org/gksu/;
+    homepage = "https://www.nongnu.org/gksu/";
     license = stdenv.lib.licenses.lgpl2;
     maintainers = [ stdenv.lib.maintainers.romildo ];
     platforms = stdenv.lib.platforms.linux;

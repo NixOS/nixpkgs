@@ -1,0 +1,26 @@
+diff --git a/tests/test-basic-user-only.sh b/tests/test-basic-user-only.sh
+index f65094fd..105be893 100755
+--- a/tests/test-basic-user-only.sh
++++ b/tests/test-basic-user-only.sh
+@@ -29,7 +29,7 @@ extra_basic_tests=5
+ . $(dirname $0)/basic-test.sh
+ 
+ $CMD_PREFIX ostree --version > version.yaml
+-python3 -c 'import yaml; yaml.safe_load(open("version.yaml"))'
++@python3@ -c 'import yaml; yaml.safe_load(open("version.yaml"))'
+ echo "ok yaml version"
+ 
+ # Reset things so we don't inherit a lot of state from earlier tests
+diff --git a/tests/test-remote-headers.sh b/tests/test-remote-headers.sh
+index a41d087a..77b34c90 100755
+--- a/tests/test-remote-headers.sh
++++ b/tests/test-remote-headers.sh
+@@ -26,7 +26,7 @@ echo '1..2'
+ . $(dirname $0)/libtest.sh
+ 
+ V=$($CMD_PREFIX ostree --version | \
+-  python3 -c 'import sys, yaml; print(yaml.safe_load(sys.stdin)["libostree"]["Version"])')
++  @python3@ -c 'import sys, yaml; print(yaml.safe_load(sys.stdin)["libostree"]["Version"])')
+ 
+ setup_fake_remote_repo1 "archive" "" \
+   --expected-header foo=bar \

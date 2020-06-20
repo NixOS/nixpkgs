@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
-    homepage = http://soprano.sourceforge.net/;
+    homepage = "http://soprano.sourceforge.net/";
     description = "An object-oriented C++/Qt4 framework for RDF data";
     license = "LGPL";
     maintainers = with stdenv.lib.maintainers; [ sander ];

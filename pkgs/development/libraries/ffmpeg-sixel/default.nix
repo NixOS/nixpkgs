@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, pkgconfig, libsixel, yasm
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "ffmpeg-sixel-${version}";
+  pname = "ffmpeg-sixel";
   version = "nightly-2.3.x";
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video, extended to support console graphics";
-    homepage = http://www.ffmpeg.org/;
+    homepage = "http://www.ffmpeg.org/";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ vrthra ];

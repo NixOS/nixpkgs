@@ -8,7 +8,7 @@ with stdenv.lib;
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "tinyfugue-${version}";
+  pname = "tinyfugue";
   version = "50b8";
   verUrl = "5.0%20beta%208";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ++ optional sslSupport openssl;
 
   meta = {
-    homepage = http://tinyfugue.sourceforge.net/;
+    homepage = "http://tinyfugue.sourceforge.net/";
     description = "A terminal UI, screen-oriented MUD client";
     longDescription = ''
       TinyFugue, aka "tf", is a flexible, screen-oriented MUD client, for use

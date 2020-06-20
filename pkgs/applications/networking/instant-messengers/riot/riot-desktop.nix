@@ -1,32 +1,27 @@
-{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron, riot-web }:
-
-# Note for maintainers:
-# Versions of `riot-web` and `riot-desktop` should be kept in sync.
-
-with (import ./yarn2nix.nix { inherit pkgs; });
+{ stdenv, fetchFromGitHub
+, makeWrapper, makeDesktopItem, mkYarnPackage
+, electron_7, riot-web
+}:
+# Notes for maintainers:
+# * versions of `riot-web` and `riot-desktop` should be kept in sync.
+# * the Yarn dependency expression must be updated with `./update-riot-desktop.sh <git release tag>`
 
 let
   executableName = "riot-desktop";
-  version = "1.2.1";
-  riot-web-src = fetchFromGitHub {
+  version = "1.6.5";
+  src = fetchFromGitHub {
     owner = "vector-im";
-    repo = "riot-web";
+    repo = "riot-desktop";
     rev = "v${version}";
-    sha256 = "0l50swqzdzbzbnrlkvwi133d54jgj15cj3awmlc1qdhnfdc3wxbb";
+    sha256 = "1snmfn98z63a8ahh5c7y7h00i8qsdq6wsnidmjjrkzcz3mchfq60";
   };
+  electron = electron_7;
 
 in mkYarnPackage rec {
   name = "riot-desktop-${version}";
-  inherit version;
+  inherit version src;
 
-  src = "${riot-web-src}/electron_app";
-
-  # The package manifest should be copied on each update of this package.
-  # > cp ${riot-web-src}/electron_app/package.json riot-desktop-package.json
   packageJSON = ./riot-desktop-package.json;
-
-  # The dependency expression can be regenerated using nixos.yarn2nix with the following command:
-  # > yarn2nix --lockfile=${riot-web-src}/electron_app/yarn.lock > riot-desktop-yarndeps.nix
   yarnNix = ./riot-desktop-yarndeps.nix;
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,8 +30,10 @@ in mkYarnPackage rec {
     # resources
     mkdir -p "$out/share/riot"
     ln -s '${riot-web}' "$out/share/riot/webapp"
-    cp -r '${riot-web-src}/origin_migrator' "$out/share/riot/origin_migrator"
-    cp -r '.' "$out/share/riot/electron"
+    cp -r './deps/riot-desktop' "$out/share/riot/electron"
+    cp -r './deps/riot-desktop/res/img' "$out/share/riot"
+    rm "$out/share/riot/electron/node_modules"
+    cp -r './node_modules' "$out/share/riot/electron"
 
     # icons
     for icon in $out/share/riot/electron/build/icons/*.png; do
@@ -65,7 +62,7 @@ in mkYarnPackage rec {
   # * category and StartupWMClass from the build.linux section of
   #   https://github.com/vector-im/riot-web/blob/develop/package.json
   desktopItem = makeDesktopItem {
-    inherit name;
+    name = "riot";
     exec = executableName;
     icon = "riot";
     desktopName = "Riot";
@@ -73,16 +70,15 @@ in mkYarnPackage rec {
     comment = meta.description;
     categories = "Network;InstantMessaging;Chat;";
     extraEntries = ''
-      StartupWMClass="riot"
+      StartupWMClass=riot
     '';
   };
 
   meta = with stdenv.lib; {
     description = "A feature-rich client for Matrix.org";
-    homepage = https://about.riot.im/;
+    homepage = "https://about.riot.im/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;
   };
 }
-

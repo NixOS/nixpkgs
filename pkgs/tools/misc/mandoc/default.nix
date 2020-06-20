@@ -1,7 +1,7 @@
 { stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "mandoc-${version}";
+  pname = "mandoc";
   version = "1.14.5";
 
   src = fetchurl {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://mandoc.bsd.lv/;
+    homepage = "https://mandoc.bsd.lv/";
     description = "suite of tools compiling mdoc and man";
     downloadPage = "http://mandoc.bsd.lv/snapshots/";
     license = licenses.bsd3;

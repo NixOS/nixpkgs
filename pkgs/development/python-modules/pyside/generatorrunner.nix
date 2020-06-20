@@ -5,7 +5,7 @@ let
   pythonEnv = python2.withPackages(ps: with ps; [ sphinx ]);
   pname = "pyside-generatorrunner";
   version = "0.6.16";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Eases the development of binding generators for C++ and Qt-based libraries by providing a framework to help automating most of the process";
     license = stdenv.lib.licenses.gpl2;
-    homepage = http://www.pyside.org/docs/generatorrunner/;
+    homepage = "http://www.pyside.org/docs/generatorrunner/";
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };

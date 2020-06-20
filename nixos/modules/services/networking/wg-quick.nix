@@ -302,7 +302,7 @@ in {
   ###### implementation
 
   config = mkIf (cfg.interfaces != {}) {
-    boot.extraModulePackages = [ kernel.wireguard ];
+    boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
     environment.systemPackages = [ pkgs.wireguard-tools ];
     # This is forced to false for now because the default "--validmark" rpfilter we apply on reverse path filtering
     # breaks the wg-quick routing because wireguard packets leave with a fwmark from wireguard.

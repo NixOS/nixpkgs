@@ -3,15 +3,17 @@
 , psutils, netpbm #for html output
 , buildPackages
 , autoreconfHook
+, pkgconfig
+, texinfo
 }:
 
 stdenv.mkDerivation rec {
-  name = "groff-${version}";
-  version = "1.22.3";
+  pname = "groff";
+  version = "1.22.4";
 
   src = fetchurl {
-    url = "mirror://gnu/groff/${name}.tar.gz";
-    sha256 = "1998v2kcs288d3y7kfxpvl369nqi06zbbvjzafyvyl3pr7bajj1s";
+    url = "mirror://gnu/groff/${pname}-${version}.tar.gz";
+    sha256 = "14q2mldnr1vx0l9lqp9v2f6iww24gj28iyh4j2211hyynx67p3p7";
   };
 
   outputs = [ "out" "man" "doc" "info" "perl" ];
@@ -19,8 +21,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   patches = [
-    ./look-for-ar.patch
-    ./mdate-determinism.patch
+    ./0001-Fix-cross-compilation-by-looking-for-ar.patch
   ];
 
   postPatch = stdenv.lib.optionalString (psutils != null) ''
@@ -28,17 +29,17 @@ stdenv.mkDerivation rec {
       --replace "psselect" "${psutils}/bin/psselect"
   '' + stdenv.lib.optionalString (netpbm != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \
-      --replace "pnmcut" "${netpbm}/bin/pnmcut" \
-      --replace "pnmcrop" "${netpbm}/bin/pnmcrop" \
-      --replace "pnmtopng" "${netpbm}/bin/pnmtopng"
+      --replace "pnmcut" "${stdenv.lib.getBin netpbm}/bin/pnmcut" \
+      --replace "pnmcrop" "${stdenv.lib.getBin netpbm}/bin/pnmcrop" \
+      --replace "pnmtopng" "${stdenv.lib.getBin netpbm}/bin/pnmtopng"
     substituteInPlace tmac/www.tmac \
-      --replace "pnmcrop" "${netpbm}/bin/pnmcrop" \
-      --replace "pngtopnm" "${netpbm}/bin/pngtopnm" \
-      --replace "@PNMTOPS_NOSETPAGE@" "${netpbm}/bin/pnmtops -nosetpage"
+      --replace "pnmcrop" "${stdenv.lib.getBin netpbm}/bin/pnmcrop" \
+      --replace "pngtopnm" "${stdenv.lib.getBin netpbm}/bin/pngtopnm" \
+      --replace "@PNMTOPS_NOSETPAGE@" "${stdenv.lib.getBin netpbm}/bin/pnmtops -nosetpage"
   '';
 
   buildInputs = [ ghostscript psutils netpbm perl ];
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig texinfo ];
 
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the
@@ -62,11 +63,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # Remove example output with (random?) colors and creation date
-  # to avoid non-determinism in the output.
   postInstall = ''
-    rm "$doc"/share/doc/groff/examples/hdtbl/*color*ps
-    find "$doc"/share/doc/groff/ -type f -print0 | xargs -0 sed -i -e 's/%%CreationDate: .*//'
     for f in 'man.local' 'mdoc.local'; do
         cat '${./site.tmac}' >>"$out/share/groff/site-tmac/$f"
     done
@@ -110,7 +107,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/groff/;
+    homepage = "https://www.gnu.org/software/groff/";
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

@@ -1,26 +1,33 @@
-{ stdenv, fetchFromGitHub, lua }:
+{ stdenv, fetchFromGitHub, lua52Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "z-lua";
-  version = "1.7.1";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "skywind3000";
     repo = "z.lua";
-    rev = "v${version}";
-    sha256 = "01n4x84rpmyjyfga90s2s63gdk17z944hz35fk95qnshc5fapfq8";
+    rev = version;
+    sha256 = "1whh2gzxhx4c24mwh5yifnpah56bzb6v7barp727pjw4whpflg1s";
   };
 
   dontBuild = true;
 
-  buildInputs = [ lua ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ lua52Packages.lua ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 z.lua $out/bin/z
+    wrapProgram $out/bin/z --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so" --set _ZL_USE_LFS 1;
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/skywind3000/z.lua;
+    homepage = "https://github.com/skywind3000/z.lua";
     description = "A new cd command that helps you navigate faster by learning your habits";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];

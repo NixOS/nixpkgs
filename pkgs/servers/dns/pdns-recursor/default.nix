@@ -7,12 +7,12 @@ assert enableProtoBuf -> protobuf != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pdns-recursor-${version}";
-  version = "4.1.14";
+  pname = "pdns-recursor";
+  version = "4.3.1";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${version}.tar.bz2";
-    sha256 = "055zhxp58883722dr9y5bi91bk1ypc0whdyi96nklsga7gxbikkz";
+    sha256 = "1n9gymis0h1grgg63ig3kk9cb27ayy1w6s8hcn8n4g5dzi90h8sl";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A recursive DNS server";
-    homepage = https://www.powerdns.com/;
+    homepage = "https://www.powerdns.com/";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj ];

@@ -1,0 +1,13 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p bundler bundix
+
+set -euf -o pipefail
+
+(
+  cd pkgs/development/ruby-modules/with-packages
+  rm -f gemset.nix Gemfile.lock
+  bundle lock
+  bundix
+  mv gemset.nix ../../../top-level/ruby-packages.nix
+  rm -f Gemfile.lock
+)

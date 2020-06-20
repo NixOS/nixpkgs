@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "robotsuite";
-  version = "2.0.0";
+  version = "2.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15iw7g6gspf1ill0mzjrj71dirqfc86f1j14wphdvs2lazv8d50z";
+    sha256 = "8764e01990ac6774e0c983579bcb9cb79f44373a61ad47fbae9a1dc7eedbdd61";
   };
 
   buildInputs = [ unittest2 ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python unittest test suite for Robot Framework";
-    homepage = https://github.com/collective/robotsuite/;
+    homepage = "https://github.com/collective/robotsuite/";
     license = licenses.gpl3;
   };
 }

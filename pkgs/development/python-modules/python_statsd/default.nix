@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A client for Etsy's node-js statsd server";
-    homepage = https://github.com/WoLpH/python-statsd;
+    homepage = "https://github.com/WoLpH/python-statsd";
     license = licenses.bsd3;
   };
 

@@ -1,20 +1,19 @@
 { lib, buildPythonPackage, fetchPypi
-, isPy27, isPy34
+, isPy27
 , pylev, pastel, typing, enum34 }:
 
 buildPythonPackage rec {
   pname = "clikit";
-  version = "0.2.4";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6807cf4a41e6b981b056075c0aefca2db1dabc597ed18fa4d92b8b2e2678835";
+    sha256 = "0603e3c19fa106f5df5f224826c92e57221f48ec969e42744173e0458d359354";
   };
 
   propagatedBuildInputs = [
     pylev pastel
-  ] ++ lib.optional (isPy27 || isPy34) typing
-    ++ lib.optional isPy27 enum34;
+  ] ++ lib.optionals isPy27 [ typing enum34 ];
 
   # The Pypi tarball doesn't include tests, and the GitHub source isn't
   # buildable until we bootstrap poetry, see
@@ -22,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/sdispater/clikit;
+    homepage = "https://github.com/sdispater/clikit";
     description = "A group of utilities to build beautiful and testable command line interfaces";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

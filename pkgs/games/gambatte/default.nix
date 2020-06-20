@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, scons, qt4 }:
 
-stdenv.mkDerivation rec {
-  name = "gambatte-${version}";
+stdenv.mkDerivation {
+  pname = "gambatte";
   version = "2016-05-03";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Portable, open-source Game Boy Color emulator";
-    homepage = https://github.com/sinamas/gambatte;
+    homepage = "https://github.com/sinamas/gambatte";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

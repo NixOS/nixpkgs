@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gdm-${version}";
+  pname = "gdm";
   version = "1.4";
 
   goPackagePath = "github.com/sparrc/gdm";
@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Minimalist dependency manager for Go written in Go.";
-    homepage = https://github.com/sparrc/gdm;
+    homepage = "https://github.com/sparrc/gdm";
     license = licenses.unlicense;
     platforms = platforms.all;
     maintainers = [ maintainers.mic92 ];

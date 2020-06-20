@@ -6,18 +6,18 @@
 
 buildPythonPackage rec {
   pname = "parso";
-  version = "0.3.4";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "68406ebd7eafe17f8e40e15a84b56848eccbf27d7c1feb89e93d8fca395706db";
+    sha256 = "908e9fae2144a076d72ae4e25539143d40b8e3eafbaeae03c1bfe226f4cdf12c";
   };
 
   checkInputs = [ pytest ];
 
   meta = {
     description = "A Python Parser";
-    homepage = https://github.com/davidhalter/parso;
+    homepage = "https://github.com/davidhalter/parso";
     license = lib.licenses.mit;
   };
 

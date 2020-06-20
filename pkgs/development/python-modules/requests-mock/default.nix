@@ -1,21 +1,34 @@
-{ buildPythonPackage, fetchPypi, python
-, mock, testrepository, testtools
-, requests, six }:
+{ lib, buildPythonPackage, fetchPypi, python
+, mock
+, purl
+, requests
+, six
+, testrepository
+, testtools
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "requests-mock";
-  version = "1.5.2";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7a5fa99db5e3a2a961b6f20ed40ee6baeff73503cf0a553cc4d679409e6170fb";
+    sha256 = "e68f46844e4cee9d447150343c9ae875f99fa8037c6dcf5f15bf1fe9ab43d226";
   };
 
   patchPhase = ''
     sed -i 's@python@${python.interpreter}@' .testr.conf
   '';
 
-  checkInputs = [ mock testrepository testtools ];
-
   propagatedBuildInputs = [ requests six ];
+
+  checkInputs = [ mock purl testrepository testtools pytest ];
+
+  meta = with lib; {
+    description = "Mock out responses from the requests package";
+    homepage = "https://requests-mock.readthedocs.io";
+    license = licenses.asl20;
+    maintainers = [ ];
+  };
 }

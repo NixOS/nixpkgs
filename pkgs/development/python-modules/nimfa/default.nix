@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "nimfa";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "651376eba6b049fe270dc0d29d4b2abecb5e998c2013df6735a97875503e2ffe";
+    sha256 = "39cff2b86856d03ca8a3d9c38598034ecf1a768c325fd3a728bb9eadb8c6b919";
   };
 
   propagatedBuildInputs = [ numpy scipy ];

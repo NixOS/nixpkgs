@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A CSS Cascading Style Sheets library for Python";
-    homepage = https://github.com/ebook-utils/css-parser;
+    homepage = "https://github.com/ebook-utils/css-parser";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jethro ];
   };

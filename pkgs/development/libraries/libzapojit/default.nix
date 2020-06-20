@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, intltool, json-glib, librest, libsoup, gnome3, gobject-introspection }:
+{ stdenv, fetchurl, pkgconfig, glib, intltool, json-glib, librest, libsoup, gnome3, gnome-online-accounts, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "libzapojit";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];
-  propagatedBuildInputs = [ glib json-glib librest libsoup gnome3.gnome-online-accounts ]; # zapojit-0.0.pc
+  propagatedBuildInputs = [ glib json-glib librest libsoup gnome-online-accounts ]; # zapojit-0.0.pc
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GObject wrapper for the SkyDrive and Hotmail REST APIs";
-    homepage = https://wiki.gnome.org/Projects/Zapojit;
+    homepage = "https://wiki.gnome.org/Projects/Zapojit";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

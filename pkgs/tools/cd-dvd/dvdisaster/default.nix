@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dvdisaster-${version}";
+  pname = "dvdisaster";
   version = "0.79.5";
 
   src = fetchurl {
-    url = "http://dvdisaster.net/downloads/${name}.tar.bz2";
+    url = "http://dvdisaster.net/downloads/${pname}-${version}.tar.bz2";
     sha256 = "0f8gjnia2fxcbmhl8b3qkr5b7idl8m855dw7xw2fnmbqwvcm6k4w";
   };
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://dvdisaster.net/;
+    homepage = "http://dvdisaster.net/";
     description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''
       Dvdisaster provides a margin of safety against data loss on CD and

@@ -54,7 +54,7 @@
     xlink:href="https://reproducible-builds.org/specs/source-date-epoch/">SOURCE_DATE_EPOCH</envar>
     to a deterministic value, and Nix has
     <link
-    xlink:href="http://nixos.org/nix/manual/#ssec-relnotes-1.11">gained
+    xlink:href="https://nixos.org/nix/manual/#ssec-relnotes-1.11">gained
     an option</link> to repeat a build a number of times to test determinism.
     An ongoing project, the goal of exact reproducibility is to allow binaries
     to be verified independently (e.g., a user might only trust binaries that

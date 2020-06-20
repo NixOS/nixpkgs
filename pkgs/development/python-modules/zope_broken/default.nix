@@ -17,7 +17,7 @@ buildPythonPackage rec {
   buildInputs = [ zope_interface ];
 
   meta = with stdenv.lib; {
-    homepage = http://pypi.python.org/pypi/zope.broken;
+    homepage = "http://pypi.python.org/pypi/zope.broken";
     description = "Zope Broken Object Interfaces";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

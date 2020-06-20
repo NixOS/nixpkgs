@@ -4,11 +4,11 @@
 }:
 buildPythonPackage rec {
   pname = "django-guardian";
-  version = "1.5.1";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fixr2g5amdgqzh0rvfvd7hbxyfd5ra3y3s0fsmp8i1b68p97930";
+    sha256 = "8cacf49ebcc1e545f0a8997971eec0fe109f5ed31fc2a569a7bf5615453696e2";
   };
 
   checkInputs = [ pytest pytestrunner pytest-django django_environ mock ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Per object permissions for Django";
-    homepage = https://github.com/django-guardian/django-guardian;
+    homepage = "https://github.com/django-guardian/django-guardian";
     license = [ licenses.mit licenses.bsd2 ];
   };
 }

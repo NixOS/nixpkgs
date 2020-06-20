@@ -8,11 +8,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "qmc2-${version}";
+  pname = "qmc2";
   version = "0.195";
 
   src = fetchurl {
-      url = "mirror://sourceforge/project/qmc2/qmc2/${version}/${name}.tar.gz";
+      url = "mirror://sourceforge/project/qmc2/qmc2/${version}/${pname}-${version}.tar.gz";
       sha256 = "1dzmjlfk8pdspns6zg1jmd5fqzg8igd4q38cz4a1vf39lx74svns";
   };
   
@@ -32,9 +32,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Qt frontend for MAME/MESS";
-    homepage = https://qmc2.batcom-it.net;
+    homepage = "https://qmc2.batcom-it.net";
     license = licenses.gpl2;
     maintainers = [ maintainers.genesis ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

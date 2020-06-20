@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gst-plugins-base gstreamer ];
 
   meta = {
-    homepage = https://gstreamer.freedesktop.org/modules/gnonlin.html;
+    homepage = "https://gstreamer.freedesktop.org/modules/gnonlin.html";
     description = "Gstreamer Non-Linear Multimedia Editing Plugins";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

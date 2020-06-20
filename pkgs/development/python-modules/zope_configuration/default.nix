@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "zope.configuration";
-  version = "4.3.1";
+  version = "4.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6e16747f9fd6b9d8f09d78edf2a6f539cad0fa4ad49d8deb9cf63447cc4168e1";
+    sha256 = "e9f02bac44405ad1526399d6574b91d792f9694f9c67df8b64e91fe10fcddb3c";
   };
 
   checkInputs = [ zope_testrunner manuel ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Zope Configuration Markup Language (ZCML)";
-    homepage = https://github.com/zopefoundation/zope.configuration;
+    homepage = "https://github.com/zopefoundation/zope.configuration";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
   };

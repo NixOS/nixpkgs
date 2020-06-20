@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-    name = "dumptorrent-${version}";
+    pname = "dumptorrent";
     version = "1.2";
     
     src = fetchurl {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
     meta = with stdenv.lib; {
       description = "Dump .torrent file information";
-      homepage = https://sourceforge.net/projects/dumptorrent/;
+      homepage = "https://sourceforge.net/projects/dumptorrent/";
       license = licenses.gpl2;
       maintainers = [ maintainers.zohl ];
       platforms = platforms.all;

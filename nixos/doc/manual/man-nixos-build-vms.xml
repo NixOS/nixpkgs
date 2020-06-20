@@ -8,8 +8,8 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><command>nixos-build-vms</command>
-  </refname><refpurpose>build a network of virtual machines from a network of NixOS configurations</refpurpose>
+  <refname><command>nixos-build-vms</command></refname>
+  <refpurpose>build a network of virtual machines from a network of NixOS configurations</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>

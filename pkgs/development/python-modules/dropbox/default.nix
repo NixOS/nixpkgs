@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "9.3.0";
+  version = "10.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ckpbksdby70d70m58b904h8y8v7m82h12n3q3qk58r4yrqwvld5";
+    sha256 = "4372916da70aad82e7227e7c31a8cfa2310e41c9d34d32883daedf43ed403f86";
   };
 
   # Set DROPBOX_TOKEN environment variable to a valid token.
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
-    homepage = https://www.dropbox.com/developers/core/docs;
+    homepage = "https://www.dropbox.com/developers/core/docs";
     license = licenses.mit;
   };
 }

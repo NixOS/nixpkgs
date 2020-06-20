@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk_pixbuf, libnotify, makeWrapper, pkgconfig, xorg
+{ stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk-pixbuf, libnotify, makeWrapper, pkgconfig, xorg
 , enableAlsaUtils ? true, alsaUtils, coreutils
 , enableNetwork ? true, dnsutils, iproute, wirelesstools }:
 
@@ -8,20 +8,20 @@ let
 in
 
 rustPlatform.buildRustPackage rec {
-  name = "dwm-status-${version}";
-  version = "1.6.0";
+  pname = "dwm-status";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = "dwm-status";
     rev = version;
-    sha256 = "02gvlxv6ylx4mdkf59crm2zyahiz1zd4cr5zz29dnhx7r7738i9a";
+    sha256 = "1a3dpawxgi8d2a6w5jzvzm5q13rvqd656ris8mz77gj6f8qp7ddl";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
+  buildInputs = [ dbus gdk-pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "1r2wczfkdpvjc7iylwajkminraaz1ix6n724in0dvv5klfcdxlxb";
+  cargoSha256 = "12b6fdhj13axhwf854n071dpiycg73g4kvl7igk1qn7l3gqwsfqn";
 
   postInstall = lib.optionalString (bins != [])  ''
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${stdenv.lib.makeBinPath bins}"
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Highly performant and configurable DWM status service";
-    homepage = https://github.com/Gerschtli/dwm-status;
+    homepage = "https://github.com/Gerschtli/dwm-status";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gerschtli ];
     platforms = platforms.linux;

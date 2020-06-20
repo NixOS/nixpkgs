@@ -1,0 +1,32 @@
+From 5a6aad633a7ceffd62b009ce0c4ab6673129f7ff Mon Sep 17 00:00:00 2001
+From: Nikolay Amiantov <ab@fmap.me>
+Date: Thu, 7 Jul 2016 02:47:13 +0300
+Subject: [PATCH 08/18] Fix hwdb paths
+
+Patch by vcunat.
+---
+ src/libsystemd/sd-hwdb/sd-hwdb.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/src/libsystemd/sd-hwdb/sd-hwdb.c b/src/libsystemd/sd-hwdb/sd-hwdb.c
+index b3febdbb31..eba00a5bc7 100644
+--- a/src/libsystemd/sd-hwdb/sd-hwdb.c
++++ b/src/libsystemd/sd-hwdb/sd-hwdb.c
+@@ -297,13 +297,8 @@ static int trie_search_f(sd_hwdb *hwdb, const char *search) {
+ }
+ 
+ static const char hwdb_bin_paths[] =
+-        "/etc/systemd/hwdb/hwdb.bin\0"
+         "/etc/udev/hwdb.bin\0"
+-        "/usr/lib/systemd/hwdb/hwdb.bin\0"
+-#if HAVE_SPLIT_USR
+-        "/lib/systemd/hwdb/hwdb.bin\0"
+-#endif
+-        UDEVLIBEXECDIR "/hwdb.bin\0";
++        ;
+ 
+ _public_ int sd_hwdb_new(sd_hwdb **ret) {
+         _cleanup_(sd_hwdb_unrefp) sd_hwdb *hwdb = NULL;
+-- 
+2.26.2
+

@@ -2,7 +2,7 @@
 , opencl-headers, ocl-icd, qtbase , zlib }:
 
 stdenv.mkDerivation rec {
-  name = "leela-zero-${version}";
+  pname = "leela-zero";
   version = "0.17";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Go engine modeled after AlphaGo Zero";
-    homepage    = https://github.com/gcp/leela-zero;
+    homepage    = "https://github.com/gcp/leela-zero";
     license     = licenses.gpl3;
     maintainers = [ maintainers.averelld maintainers.omnipotententity ];
     platforms   = platforms.linux;

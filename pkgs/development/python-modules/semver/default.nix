@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "semver";
   version = "2.8.1";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";
-    homepage = https://github.com/k-bx/python-semver;
+    homepage = "https://github.com/k-bx/python-semver";
     license = licenses.bsd3;
     maintainers = with maintainers; [ np ];
   };

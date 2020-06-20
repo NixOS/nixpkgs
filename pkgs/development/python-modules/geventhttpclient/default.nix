@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "1.3.1";
+  version = "1.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd87af8854f5fb05738916c8973671f7035568aec69b7c842887d6faf9c0a01d";
+    sha256 = "967b11c4a37032f98c08f58176e4ac8de10473ab0c1f617acb8202d44b97fe21";
   };
 
   buildInputs = [ pytest ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/gwik/geventhttpclient;
+    homepage = "https://github.com/gwik/geventhttpclient";
     description = "HTTP client library for gevent";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];

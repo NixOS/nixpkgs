@@ -10,8 +10,8 @@ let
 
   checkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name"
-      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port"
+      "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name" "OriginalName"
+      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port" "Advertise"
       "TCPSegmentationOffload" "TCP6SegmentationOffload" "GenericSegmentationOffload"
       "GenericReceiveOffload" "LargeReceiveOffload" "RxChannels" "TxChannels"
       "OtherChannels" "CombinedChannels"
@@ -49,10 +49,41 @@ let
     (assertValueOneOf "Kind" [
       "bond" "bridge" "dummy" "gre" "gretap" "ip6gre" "ip6tnl" "ip6gretap" "ipip"
       "ipvlan" "macvlan" "macvtap" "sit" "tap" "tun" "veth" "vlan" "vti" "vti6"
-      "vxlan" "geneve" "vrf" "vcan" "vxcan" "wireguard" "netdevsim"
+      "vxlan" "geneve" "vrf" "vcan" "vxcan" "wireguard" "netdevsim" "xfrm"
     ])
     (assertByteFormat "MTUBytes")
     (assertMacAddress "MACAddress")
+  ];
+
+  checkVRF = checkUnitConfig "VRF" [
+    (assertOnlyFields [ "Table" ])
+    (assertMinimum "Table" 0)
+  ];
+
+  # NOTE The PrivateKey directive is missing on purpose here, please
+  # do not add it to this list. The nix store is world-readable let's
+  # refrain ourselves from providing a footgun.
+  checkWireGuard = checkUnitConfig "WireGuard" [
+    (assertOnlyFields [
+      "PrivateKeyFile" "ListenPort" "FwMark"
+    ])
+    # The following check won't work on nix <= 2.2
+    # see https://github.com/NixOS/nix/pull/2378
+    #
+    # Add this again when we'll have drop the
+    # nix < 2.2 support.
+    # (assertRange "FwMark" 1 4294967295)
+  ];
+
+  # NOTE The PresharedKey directive is missing on purpose here, please
+  # do not add it to this list. The nix store is world-readable,let's
+  # refrain ourselves from providing a footgun.
+  checkWireGuardPeer = checkUnitConfig "WireGuardPeer" [
+    (assertOnlyFields [
+      "PublicKey" "PresharedKeyFile" "AllowedIPs"
+      "Endpoint" "PersistentKeepalive"
+    ])
+    (assertRange "PersistentKeepalive" 1 65535)
   ];
 
   checkVlan = checkUnitConfig "VLAN" [
@@ -151,6 +182,19 @@ let
     (assertValueOneOf "AllSlavesActive" boolValues)
   ];
 
+  checkXfrm = checkUnitConfig "Xfrm" [
+    (assertOnlyFields [
+      "InterfaceId" "Independent"
+    ])
+    # The following check won't work on nix <= 2.2
+    # see https://github.com/NixOS/nix/pull/2378
+    #
+    # Add this again when we'll have drop the
+    # nix < 2.2 support.
+    # (assertRange "InterfaceId" 1 4294967295)
+    (assertValueOneOf "Independent" boolValues)
+  ];
+
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
       "Description" "DHCP" "DHCPServer" "LinkLocalAddressing" "IPv4LLRoute"
@@ -161,12 +205,12 @@ let
       "IPv6HopLimit" "IPv4ProxyARP" "IPv6ProxyNDP" "IPv6ProxyNDPAddress"
       "IPv6PrefixDelegation" "IPv6MTUBytes" "Bridge" "Bond" "VRF" "VLAN"
       "IPVLAN" "MACVLAN" "VXLAN" "Tunnel" "ActiveSlave" "PrimarySlave"
-      "ConfigureWithoutCarrier"
+      "ConfigureWithoutCarrier" "Xfrm" "KeepConfiguration"
     ])
     # Note: For DHCP the values both, none, v4, v6 are deprecated
     (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6" "both" "none" "v4" "v6"])
     (assertValueOneOf "DHCPServer" boolValues)
-    (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6"])
+    (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "ipv4-fallback" "fallback"])
     (assertValueOneOf "IPv4LLRoute" boolValues)
     (assertValueOneOf "LLMNR" ["yes" "resolve" "no"])
     (assertValueOneOf "MulticastDNS" ["yes" "resolve" "no"])
@@ -180,10 +224,11 @@ let
     (assertValueOneOf "IPv6AcceptRA" boolValues)
     (assertValueOneOf "IPv4ProxyARP" boolValues)
     (assertValueOneOf "IPv6ProxyNDP" boolValues)
-    (assertValueOneOf "IPv6PrefixDelegation" boolValues)
+    (assertValueOneOf "IPv6PrefixDelegation" (boolValues ++ [ "dhcpv6" "static" ]))
     (assertValueOneOf "ActiveSlave" boolValues)
     (assertValueOneOf "PrimarySlave" boolValues)
     (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
+    (assertValueOneOf "KeepConfiguration" (boolValues ++ ["static" "dhcp-on-stop" "dhcp"]))
   ];
 
   checkAddress = checkUnitConfig "Address" [
@@ -201,6 +246,26 @@ let
     (assertValueOneOf "AutoJoin" boolValues)
   ];
 
+  checkRoutingPolicyRule = checkUnitConfig "RoutingPolicyRule" [
+    (assertOnlyFields [
+      "TypeOfService" "From" "To" "FirewallMark" "Table" "Priority"
+      "IncomingInterface" "OutgoingInterface" "SourcePort" "DestinationPort"
+      "IPProtocol" "InvertRule" "Family"
+    ])
+    (assertRange "TypeOfService" 0 255)
+    # The following check won't work on nix <= 2.2
+    # see https://github.com/NixOS/nix/pull/2378
+    #
+    # Add this again when we'll have drop the
+    # nix < 2.2 support.
+    #  (assertRange "FirewallMark" 1 4294967295)
+    (assertInt "Priority")
+    (assertPort "SourcePort")
+    (assertPort "DestinationPort")
+    (assertValueOneOf "InvertRule" boolValues)
+    (assertValueOneOf "Family" ["ipv4" "ipv6" "both"])
+  ];
+
   checkRoute = checkUnitConfig "Route" [
     (assertOnlyFields [
       "Gateway" "GatewayOnLink" "Destination" "Source" "Metric"
@@ -210,15 +275,16 @@ let
     ])
   ];
 
-  checkDhcp = checkUnitConfig "DHCP" [
+  checkDhcpV4 = checkUnitConfig "DHCPv4" [
     (assertOnlyFields [
-      "UseDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
-      "Hostname" "UseDomains" "UseRoutes" "UseTimezone" "CriticalConnection"
-      "ClientIdentifier" "VendorClassIdentifier" "UserClass" "DUIDType"
-      "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
-      "ListenPort" "RapidCommit"
+      "UseDNS" "RoutesToDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
+      "Hostname" "UseDomains" "UseRoutes" "UseTimezone"
+      "ClientIdentifier" "VendorClassIdentifier" "UserClass" "MaxAttempts"
+      "DUIDType" "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
+      "ListenPort" "SendRelease"
     ])
     (assertValueOneOf "UseDNS" boolValues)
+    (assertValueOneOf "RoutesToDNS" boolValues)
     (assertValueOneOf "UseNTP" boolValues)
     (assertValueOneOf "UseMTU" boolValues)
     (assertValueOneOf "Anonymize" boolValues)
@@ -227,12 +293,49 @@ let
     (assertValueOneOf "UseDomains" ["yes" "no" "route"])
     (assertValueOneOf "UseRoutes" boolValues)
     (assertValueOneOf "UseTimezone" boolValues)
-    (assertValueOneOf "CriticalConnection" boolValues)
+    (assertMinimum "MaxAttempts" 0)
     (assertValueOneOf "RequestBroadcast" boolValues)
     (assertInt "RouteTable")
     (assertMinimum "RouteTable" 0)
-    (assertValueOneOf "RapidCommit" boolValues)
+    (assertValueOneOf "SendRelease" boolValues)
   ];
+
+  checkDhcpV6 = checkUnitConfig "DHCPv6" [
+    (assertOnlyFields [
+      "UseDns" "UseNTP" "RapidCommit" "ForceDHCPv6PDOtherInformation"
+      "PrefixDelegationHint"
+    ])
+    (assertValueOneOf "UseDNS" boolValues)
+    (assertValueOneOf "UseNTP" boolValues)
+    (assertValueOneOf "RapidCommit" boolValues)
+    (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
+  ];
+
+  checkIpv6PrefixDelegation = checkUnitConfig "IPv6PrefixDelegation" [
+    (assertOnlyFields [
+      "Managed"  "OtherInformation"  "RouterLifetimeSec"
+      "RouterPreference"  "EmitDNS"  "DNS"  "EmitDomains"  "Domains"
+      "DNSLifetimeSec"
+    ])
+    (assertValueOneOf "Managed" boolValues)
+    (assertValueOneOf "OtherInformation" boolValues)
+    (assertValueOneOf "RouterPreference" ["high" "medium" "low" "normal" "default"])
+    (assertValueOneOf "EmitDNS" boolValues)
+    (assertValueOneOf "EmitDomains" boolValues)
+    (assertMinimum "DNSLifetimeSec" 0)
+  ];
+
+  checkIpv6Prefix = checkUnitConfig "IPv6Prefix" [
+    (assertOnlyFields [
+      "AddressAutoconfiguration"  "OnLink"  "Prefix"
+      "PreferredLifetimeSec" "ValidLifetimeSec"
+    ])
+    (assertValueOneOf "AddressAutoconfiguration" boolValues)
+    (assertValueOneOf "OnLink" boolValues)
+    (assertMinimum "PreferredLifetimeSec" 0)
+    (assertMinimum "ValidLifetimeSec" 0)
+  ];
+
 
   checkDhcpServer = checkUnitConfig "DHCPServer" [
     (assertOnlyFields [
@@ -255,7 +358,7 @@ let
     (assertValueOneOf "ARP" boolValues)
     (assertValueOneOf "Multicast" boolValues)
     (assertValueOneOf "Unmanaged" boolValues)
-    (assertValueOneOf "RequiredForOnline" boolValues)
+    (assertValueOneOf "RequiredForOnline" (boolValues ++ ["off" "no-carrier" "dormant" "degraded-carrier" "carrier" "degraded" "enslaved" "routable"]))
   ];
 
 
@@ -291,6 +394,14 @@ let
   };
 
   linkOptions = commonNetworkOptions // {
+    # overwrite enable option from above
+    enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to enable this .link unit. It's handled by udev no matter if <command>systemd-networkd</command> is enabled or not
+      '';
+    };
 
     linkConfig = mkOption {
       default = {};
@@ -317,6 +428,61 @@ let
         <literal>[Netdev]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vrfConfig = mkOption {
+      default = {};
+      example = { Table = 2342; };
+      type = types.addCheck (types.attrsOf unitOption) checkVRF;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[VRF]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        A detailed explanation about how VRFs work can be found in the
+        <link xlink:href="https://www.kernel.org/doc/Documentation/networking/vrf.txt">kernel
+        docs</link>.
+      '';
+    };
+
+    wireguardConfig = mkOption {
+      default = {};
+      example = {
+        PrivateKeyFile = "/etc/wireguard/secret.key";
+        ListenPort = 51820;
+        FwMark = 42;
+      };
+      type = types.addCheck (types.attrsOf unitOption) checkWireGuard;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[WireGuard]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        Use <literal>PrivateKeyFile</literal> instead of
+        <literal>PrivateKey</literal>: the nix store is
+        world-readable.
+      '';
+    };
+
+    wireguardPeers = mkOption {
+      default = [];
+      example = [ { wireguardPeerConfig={
+        Endpoint = "192.168.1.1:51820";
+        PublicKey = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
+        PresharedKeyFile = "/etc/wireguard/psk.key";
+        AllowedIPs = [ "10.0.0.1/32" ];
+        PersistentKeepalive = 15;
+      };}];
+      type = with types; listOf (submodule wireguardPeerOptions);
+      description = ''
+        Each item in this array specifies an option in the
+        <literal>[WireGuardPeer]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        Use <literal>PresharedKeyFile</literal> instead of
+        <literal>PresharedKey</literal>: the nix store is
+        world-readable.
       '';
     };
 
@@ -416,6 +582,18 @@ let
       '';
     };
 
+    xfrmConfig = mkOption {
+      default = {};
+      example = { InterfaceId = 1; };
+      type = types.addCheck (types.attrsOf unitOption) checkXfrm;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Xfrm]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
   };
 
   addressOptions = {
@@ -427,6 +605,22 @@ let
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Address]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
+  routingPolicyRulesOptions = {
+    options = {
+      routingPolicyRuleConfig = mkOption {
+        default = { };
+        example = { routingPolicyRuleConfig = { Table = 10; IncomingInterface = "eth1"; Family = "both"; } ;};
+        type = types.addCheck (types.attrsOf unitOption) checkRoutingPolicyRule;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[RoutingPolicyRule]</literal> section of the unit.  See
           <citerefentry><refentrytitle>systemd.network</refentrytitle>
           <manvolnum>5</manvolnum></citerefentry> for details.
         '';
@@ -450,6 +644,39 @@ let
     };
   };
 
+  wireguardPeerOptions = {
+    options = {
+      wireguardPeerConfig = mkOption {
+        default = {};
+        example = { };
+        type = types.addCheck (types.attrsOf unitOption) checkWireGuardPeer;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[WireGuardPeer]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
+  ipv6PrefixOptions = {
+    options = {
+      ipv6PrefixConfig = mkOption {
+        default = {};
+        example = { Prefix = "fd00::/64"; };
+        type = types.addCheck (types.attrsOf unitOption) checkIpv6Prefix;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[IPv6Prefix]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
+
   networkOptions = commonNetworkOptions // {
 
     networkConfig = mkOption {
@@ -464,13 +691,55 @@ let
       '';
     };
 
+    # systemd.network.networks.*.dhcpConfig has been deprecated in favor of ….dhcpV4Config
+    # Produce a nice warning message so users know it is gone.
     dhcpConfig = mkOption {
+      visible = false;
+      apply = _: throw "The option `systemd.network.networks.*.dhcpConfig` can no longer be used since it's been removed. Please use `systemd.network.networks.*.dhcpV4Config` instead.";
+    };
+
+    dhcpV4Config = mkOption {
       default = {};
       example = { UseDNS = true; UseRoutes = true; };
-      type = types.addCheck (types.attrsOf unitOption) checkDhcp;
+      type = types.addCheck (types.attrsOf unitOption) checkDhcpV4;
       description = ''
         Each attribute in this set specifies an option in the
-        <literal>[DHCP]</literal> section of the unit.  See
+        <literal>[DHCPv4]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dhcpV6Config = mkOption {
+      default = {};
+      example = { UseDNS = true; UseRoutes = true; };
+      type = types.addCheck (types.attrsOf unitOption) checkDhcpV6;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCPv6]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipv6PrefixDelegationConfig = mkOption {
+      default = {};
+      example = { EmitDNS = true; Managed = true; OtherInformation = true; };
+      type = types.addCheck (types.attrsOf unitOption) checkIpv6PrefixDelegation;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPv6PrefixDelegation]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipv6Prefixes = mkOption {
+      default = [];
+      example = { AddressAutoconfiguration = true; OnLink = true; };
+      type = with types; listOf (submodule ipv6PrefixOptions);
+      description = ''
+        A list of ipv6Prefix sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -634,11 +903,31 @@ let
       '';
     };
 
+    xfrm = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of xfrm interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     addresses = mkOption {
       default = [ ];
       type = with types; listOf (submodule addressOptions);
       description = ''
         A list of address sections to be added to the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    routingPolicyRules = mkOption {
+      default = [ ];
+      type = with types; listOf (submodule routingPolicyRulesOptions);
+      description = ''
+        A list of routing policy rules sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -732,6 +1021,26 @@ let
             ${attrsToSection def.bondConfig}
 
           ''}
+          ${optionalString (def.xfrmConfig != { }) ''
+            [Xfrm]
+            ${attrsToSection def.xfrmConfig}
+
+          ''}
+          ${optionalString (def.vrfConfig != { }) ''
+            [VRF]
+            ${attrsToSection def.vrfConfig}
+
+          ''}
+          ${optionalString (def.wireguardConfig != { }) ''
+            [WireGuard]
+            ${attrsToSection def.wireguardConfig}
+
+          ''}
+          ${flip concatMapStrings def.wireguardPeers (x: ''
+            [WireGuardPeer]
+            ${attrsToSection x.wireguardPeerConfig}
+
+          '')}
           ${def.extraConfig}
         '';
     };
@@ -759,12 +1068,28 @@ let
           ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
           ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
           ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
+          ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
 
-          ${optionalString (def.dhcpConfig != { }) ''
-            [DHCP]
-            ${attrsToSection def.dhcpConfig}
+          ${optionalString (def.dhcpV4Config != { }) ''
+            [DHCPv4]
+            ${attrsToSection def.dhcpV4Config}
 
           ''}
+          ${optionalString (def.dhcpV6Config != {}) ''
+            [DHCPv6]
+            ${attrsToSection def.dhcpV6Config}
+
+          ''}
+          ${optionalString (def.ipv6PrefixDelegationConfig != {}) ''
+            [IPv6PrefixDelegation]
+            ${attrsToSection def.ipv6PrefixDelegationConfig}
+
+          ''}
+          ${flip concatMapStrings def.ipv6Prefixes (x: ''
+            [IPv6Prefix]
+            ${attrsToSection x.ipv6PrefixConfig}
+
+          '')}
           ${optionalString (def.dhcpServerConfig != { }) ''
             [DHCPServer]
             ${attrsToSection def.dhcpServerConfig}
@@ -780,14 +1105,19 @@ let
             ${attrsToSection x.routeConfig}
 
           '')}
+          ${flip concatMapStrings def.routingPolicyRules (x: ''
+            [RoutingPolicyRule]
+            ${attrsToSection x.routingPolicyRuleConfig}
+
+          '')}
           ${def.extraConfig}
         '';
     };
 
-  unitFiles = map (name: {
-    target = "systemd/network/${name}";
-    source = "${cfg.units.${name}.unit}/${name}";
-  }) (attrNames cfg.units);
+  unitFiles = listToAttrs (map (name: {
+    name = "systemd/network/${name}";
+    value.source = "${cfg.units.${name}.unit}/${name}";
+  }) (attrNames cfg.units));
 in
 
 {
@@ -823,9 +1153,10 @@ in
     systemd.network.units = mkOption {
       description = "Definition of networkd units.";
       default = {};
+      internal = true;
       type = with types; attrsOf (submodule (
         { name, config, ... }:
-        { options = concreteUnitOptions;
+        { options = mapAttrs (_: x: x // { internal = true; }) concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
@@ -834,42 +1165,58 @@ in
 
   };
 
-  config = mkIf config.systemd.network.enable {
+  config = mkMerge [
 
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-networkd.service" "systemd-networkd-wait-online.service"
-    ];
+    # .link units are honored by udev, no matter if systemd-networkd is enabled or not.
+    {
+      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links;
+      environment.etc = unitFiles;
+    }
 
-    systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
-      // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
-      // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
+    (mkIf config.systemd.network.enable {
 
-    environment.etc = unitFiles;
+      users.users.systemd-network.group = "systemd-network";
 
-    systemd.services.systemd-networkd = {
-      wantedBy = [ "multi-user.target" ];
-      restartTriggers = map (f: f.source) (unitFiles);
-      # prevent race condition with interface renaming (#39069)
-      requires = [ "systemd-udev-settle.service" ];
-      after = [ "systemd-udev-settle.service" ];
-    };
+      systemd.additionalUpstreamSystemUnits = [
+        "systemd-networkd-wait-online.service"
+        "systemd-networkd.service"
+        "systemd-networkd.socket"
+      ];
 
-    systemd.services.systemd-networkd-wait-online = {
-      wantedBy = [ "network-online.target" ];
-    };
+      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
+        // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
 
-    systemd.services."systemd-network-wait-online@" = {
-      description = "Wait for Network Interface %I to be Configured";
-      conflicts = [ "shutdown.target" ];
-      requisite = [ "systemd-networkd.service" ];
-      after = [ "systemd-networkd.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I";
+      # systemd-networkd is socket-activated by kernel netlink route change
+      # messages. It is important to have systemd buffer those on behalf of
+      # networkd.
+      systemd.sockets.systemd-networkd.wantedBy = [ "sockets.target" ];
+
+      systemd.services.systemd-networkd = {
+        wantedBy = [ "multi-user.target" ];
+        aliases = [ "dbus-org.freedesktop.network1.service" ];
+        restartTriggers = map (x: x.source) (attrValues unitFiles);
+        # prevent race condition with interface renaming (#39069)
+        requires = [ "systemd-udev-settle.service" ];
+        after = [ "systemd-udev-settle.service" ];
       };
-    };
 
-    services.resolved.enable = mkDefault true;
-  };
+      systemd.services.systemd-networkd-wait-online = {
+        wantedBy = [ "network-online.target" ];
+      };
+
+      systemd.services."systemd-network-wait-online@" = {
+        description = "Wait for Network Interface %I to be Configured";
+        conflicts = [ "shutdown.target" ];
+        requisite = [ "systemd-networkd.service" ];
+        after = [ "systemd-networkd.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I";
+        };
+      };
+
+      services.resolved.enable = mkDefault true;
+    })
+  ];
 }

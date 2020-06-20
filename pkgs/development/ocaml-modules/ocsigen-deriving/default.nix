@@ -17,7 +17,8 @@ in
 let inherit (param) version; in
 
 stdenv.mkDerivation {
-  name = "ocsigen-deriving-${version}";
+  pname = "ocsigen-deriving";
+  inherit version;
   src = fetchzip {
     url = "https://github.com/ocsigen/deriving/archive/${version}.tar.gz";
     inherit (param) sha256;
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta =  {
-    homepage = https://github.com/ocsigen/deriving;
+    homepage = "https://github.com/ocsigen/deriving";
     description = "Extension to OCaml for deriving functions from type declarations";
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];

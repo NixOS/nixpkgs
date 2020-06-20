@@ -13,8 +13,8 @@ let
     sha256 = "0i699axqfkxk9mgv1hlms5r44pf0s642yz75ajjjpwzhw4d5pnv4";
   };
 in
-stdenv.mkDerivation rec {
-  name = "gnu-config-${version}";
+stdenv.mkDerivation {
+  pname = "gnu-config";
   version = "2019-04-15";
 
   buildCommand = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Attempt to guess a canonical system name";
-    homepage = https://savannah.gnu.org/projects/config;
+    homepage = "https://savannah.gnu.org/projects/config";
     license = licenses.gpl3;
     # In addition to GPLv3:
     #   As a special exception to the GNU General Public License, if you

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, xmlrpc_c, glib, zlib }:
 stdenv.mkDerivation rec {
-  name = "subberthehut-${version}";
+  pname = "subberthehut";
   version = "20";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mus65/subberthehut;
+    homepage = "https://github.com/mus65/subberthehut";
     description = "An OpenSubtitles.org downloader";
     license = licenses.gpl2;
     platforms = platforms.linux;

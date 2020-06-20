@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   meta = {
     description = "An easy interface on top of the Jsonm library";
-    homepage = https://github.com/mirage/ezjsonm;
+    homepage = "https://github.com/mirage/ezjsonm";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

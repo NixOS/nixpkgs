@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "1.17.0";
+  version = "2.2.1";
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qrpkdyl77956qg6g7g66bbd6bfvb2nwi2sjy3v3li8m3irx8d7d";
+    sha256 = "baf9f1aa397a104a0c3923bae927796ca57063ce62330767131b418cd833338e";
   };
 
   patches = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Provides an asynchronous client and server implementation of the SSHv2 protocol on top of the Python asyncio framework";
-    homepage = https://asyncssh.readthedocs.io/en/latest;
+    homepage = "https://asyncssh.readthedocs.io/en/latest";
     license = licenses.epl20;
     maintainers = with maintainers; [ worldofpeace ];
   };

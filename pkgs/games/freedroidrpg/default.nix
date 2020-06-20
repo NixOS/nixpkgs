@@ -2,8 +2,9 @@
 
 let
   version = "0.16.1";
-in stdenv.mkDerivation rec {
-  name = "freedroidrpg-${version}";
+in stdenv.mkDerivation {
+  pname = "freedroidrpg";
+  inherit version;
 
   src = fetchurl {
     url = "ftp://ftp.osuosl.org/pub/freedroid/freedroidRPG-${stdenv.lib.versions.majorMinor version}/freedroidRPG-${version}.tar.gz";
@@ -52,7 +53,7 @@ in stdenv.mkDerivation rec {
       </para>
     '';
 
-    homepage = http://www.freedroid.org/;
+    homepage = "http://www.freedroid.org/";
 
     license = licenses.gpl2Plus;
 

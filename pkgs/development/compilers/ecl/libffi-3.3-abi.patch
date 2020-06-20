@@ -1,0 +1,15 @@
+diff --git a/src/c/ffi.d b/src/c/ffi.d
+index 8174977a..caa69f39 100644
+--- a/src/c/ffi.d
++++ b/src/c/ffi.d
+@@ -133,8 +133,8 @@ static struct {
+ #elif defined(X86_WIN64)
+   {@':win64', FFI_WIN64},
+ #elif defined(X86_ANY) || defined(X86) || defined(X86_64)
+-  {@':cdecl', FFI_SYSV},
+-  {@':sysv', FFI_SYSV},
++  {@':cdecl', FFI_UNIX64},
++  {@':sysv', FFI_UNIX64},
+   {@':unix64', FFI_UNIX64},
+ #endif
+ };

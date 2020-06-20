@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Termcolor";
-    homepage = https://pypi.python.org/pypi/termcolor;
+    homepage = "https://pypi.python.org/pypi/termcolor";
     license = licenses.mit;
   };
 

@@ -3,14 +3,14 @@
 let
   versions = {
     atom = {
-      version = "1.36.1";
-      sha256 = "1m7q2r3zx463k7kpqb364piqrr69wrhs033ibzxdx9y7r4204qp4";
+      version = "1.48.0";
+      sha256 = "1693bxbylf6jhld9bdcr5pigk36wqlbj89praldpz9s96yxig9s1";
     };
 
     atom-beta = {
-      version = "1.37.0";
+      version = "1.49.0";
       beta = 0;
-      sha256 = "0aq8r5vfgq7r31qajjgcg4n5a57a2m8fvq6fzy9vq5gawkvmaxxx";
+      sha256 = "1fr6m4a7shdj3wpn6g4n95cqpkkg2x9srwjf7bqxv9f3d5jb1y33";
     };
   };
 
@@ -74,7 +74,7 @@ let
 
     meta = with stdenv.lib; {
       description = "A hackable text editor for the 21st Century";
-      homepage = https://atom.io/;
+      homepage = "https://atom.io/";
       license = licenses.mit;
       maintainers = with maintainers; [ offline nequissimus ysndr ];
       platforms = platforms.x86_64;

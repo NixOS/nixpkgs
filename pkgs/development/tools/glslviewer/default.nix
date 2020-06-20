@@ -4,8 +4,8 @@
 , Cocoa
 }:
 
-stdenv.mkDerivation rec {
-  name = "glslviewer-${version}";
+stdenv.mkDerivation {
+  pname = "glslviewer";
   version = "2019-04-22";
 
   src = fetchFromGitHub {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Live GLSL coding renderer";
-    homepage = http://patriciogonzalezvivo.com/2015/glslViewer/;
+    homepage = "http://patriciogonzalezvivo.com/2015/glslViewer/";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.hodapp ];

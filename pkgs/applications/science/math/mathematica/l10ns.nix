@@ -1,9 +1,24 @@
-{ lib, requireFile }:
+{ lib
+, requireFile
+, lang
+, majorVersion ? null
+}:
 
-with lib;
-{
-  l10ns = flip map
+let allVersions = with lib; flip map
+  # N.B. Versions in this list should be ordered from newest to oldest.
   [
+    {
+      version = "12.1.0";
+      lang = "en";
+      language = "English";
+      sha256 = "15m9l20jvkxh5w6mbp81ys7mx2lx5j8acw5gz0il89lklclgb8z7";
+    }
+    {
+      version = "12.0.0";
+      lang = "en";
+      language = "English";
+      sha256 = "b9fb71e1afcc1d72c200196ffa434512d208fa2920e207878433f504e58ae9d7";
+    }
     {
       version = "11.3.0";
       lang = "en";
@@ -30,4 +45,16 @@ with lib;
       inherit sha256;
     };
   });
-}
+minVersion =
+  with lib;
+  if majorVersion == null
+  then elemAt (builtins.splitVersion (elemAt allVersions 0).version) 0
+  else majorVersion;
+maxVersion = toString (1 + builtins.fromJSON minVersion);
+in
+with lib;
+findFirst (l: (l.lang == lang
+               && l.version >= minVersion
+               && l.version < maxVersion))
+          (throw "Version ${minVersion} in language ${lang} not supported")
+          allVersions

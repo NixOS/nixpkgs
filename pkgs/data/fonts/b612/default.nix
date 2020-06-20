@@ -16,7 +16,7 @@ in fetchFromGitHub {
   sha256 = "0r3lana1q9w3siv8czb3p9rrb5d9svp628yfbvvmnj7qvjrmfsiq";
 
   meta = with lib; {
-    homepage = http://b612-font.com/;
+    homepage = "http://b612-font.com/";
     description = "Highly legible font family for use on aircraft cockpit screens";
     longDescription = ''
       B612 is the result of a research project initiated by Airbus. The font

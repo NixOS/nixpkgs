@@ -1,0 +1,12 @@
+diff --git a/go.mod b/go.mod
+index a07e991..ba5ae99 100644
+--- a/go.mod
++++ b/go.mod
+@@ -9,6 +9,7 @@ require (
+ 	github.com/lithammer/fuzzysearch v1.1.0
+ 	github.com/lucasb-eyer/go-colorful v1.0.3
+ 	github.com/mattn/go-runewidth v0.0.9
++	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
+ 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
+ 	github.com/pkg/errors v0.9.1
+ 	github.com/rivo/uniseg v0.1.0

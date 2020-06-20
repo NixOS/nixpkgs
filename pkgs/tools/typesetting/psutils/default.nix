@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "psutils-17";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Collection of useful utilities for manipulating PS documents";
-    homepage = http://knackered.knackered.org/angus/psutils/;
+    homepage = "http://knackered.knackered.org/angus/psutils/";
     license = licenses.bsd3;
   };
 }

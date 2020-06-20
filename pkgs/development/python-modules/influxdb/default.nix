@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "influxdb";
-  version = "5.2.2";
+  version = "5.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hriag4d4gx4bsqisiz29478sj54b215p6xzmshlw6x9af4z5vxg";
+    sha256 = "9bcaafd57ac152b9824ab12ed19f204206ef5df8af68404770554c5b55b475f6";
   };
 
   # ImportError: No module named tests
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python client for InfluxDB";
-    homepage = https://github.com/influxdb/influxdb-python;
+    homepage = "https://github.com/influxdb/influxdb-python";
     license = licenses.mit;
   };
 

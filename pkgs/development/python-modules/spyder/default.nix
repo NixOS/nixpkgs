@@ -1,21 +1,28 @@
-{ stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree, jedi, pycodestyle,
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
-  spyder-kernels, qtpy, pyzmq, chardet }:
+  spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle, watchdog, python-language-server
+, pyqtwebengine, atomicwrites, pyxdg, diff-match-patch
+}:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "3.3.4";
+  version = "4.1.3";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fa5yhw0sjk5qydydp76scyxd8lvyciknq0vajnq0mxhhvfig3ra";
+    sha256 = "c88d973c6423fe0017818482a98163bb72e7f6a8c3127ff464930109df0958d9";
   };
 
+  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+
   propagatedBuildInputs = [
-    jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
+    intervaltree jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet
+    pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
+    atomicwrites pyxdg diff-match-patch
   ];
 
   # There is no test for spyder
@@ -28,20 +35,31 @@ buildPythonPackage rec {
     comment = "Scientific Python Development Environment";
     desktopName = "Spyder";
     genericName = "Python IDE";
-    categories = "Application;Development;Editor;IDE;";
+    categories = "Application;Development;IDE;";
   };
 
   postPatch = ''
     # remove dependency on pyqtwebengine
     # this is still part of the pyqt 5.11 version we have in nixpkgs
     sed -i /pyqtwebengine/d setup.py
+    substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
   '';
 
-  # Create desktop item
   postInstall = ''
+    # add Python libs to env so Spyder subprocesses
+    # created to run compute kernels don't fail with ImportErrors
+    wrapProgram $out/bin/spyder3 --prefix PYTHONPATH : "$PYTHONPATH"
+
+    # Create desktop item
     mkdir -p $out/share/icons
     cp spyder/images/spyder.svg $out/share/icons
     cp -r $desktopItem/share/applications/ $out/share
+  '';
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with stdenv.lib; {

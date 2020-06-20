@@ -1,7 +1,7 @@
 { stdenv, fetchurl, systemd, fcgi, autoreconfHook, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "fcgiwrap-${version}";
+  pname = "fcgiwrap";
   version = "1.1.0";
 
   src = fetchurl {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://nginx.localdomain.pl/wiki/FcgiWrap;
+    homepage = "https://nginx.localdomain.pl/wiki/FcgiWrap";
     description = "Simple server for running CGI applications over FastCGI";
     maintainers = with maintainers; [ lethalman ];
     platforms = with platforms; linux;

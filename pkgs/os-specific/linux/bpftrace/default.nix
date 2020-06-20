@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bpftrace-${version}";
-  version = "0.9";
+  pname = "bpftrace";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "refs/tags/v${version}";
-    sha256 = "1kp6as3i67dnw5v3vc1cj5hmrq6c8pjpg9g38g1qcnc9i6drl1r8";
+    sha256 = "00fvkq3razwacnpb82zkpv63dgyigbqx3gj6g0ka94nwa74i5i77";
   };
 
   enableParallelBuilding = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   # nicely without wrappers.
   patchPhase = ''
     patch -p1 < ${./fix-kernel-include-dir.patch}
-    substituteInPlace ./src/clang_parser.cpp \
+    substituteInPlace ./src/utils.cpp \
       --subst-var-by NIX_KERNEL_SRC '${kernel.dev}/lib/modules/${kernel.modDirVersion}'
   '';
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "High-level tracing language for Linux eBPF";
-    homepage    = https://github.com/iovisor/bpftrace;
+    homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;
     maintainers = with maintainers; [ rvl thoughtpolice ];
   };

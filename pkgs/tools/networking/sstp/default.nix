@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, ppp, libevent, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "sstp-client-${version}";
+  pname = "sstp-client";
   version = "1.0.12";
 
   src = fetchurl {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SSTP client for Linux";
-    homepage = http://sstp-client.sourceforge.net/;
+    homepage = "http://sstp-client.sourceforge.net/";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.ktosiek ];
     license = stdenv.lib.licenses.gpl2;

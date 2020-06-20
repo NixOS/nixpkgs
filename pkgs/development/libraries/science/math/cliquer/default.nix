@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.21";
-  name = "cliquer-${version}";
+  pname = "cliquer";
 
   # autotoolized version of the original cliquer
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://users.aalto.fi/~pat/cliquer.html;
+    homepage = "https://users.aalto.fi/~pat/cliquer.html";
     downloadPage = src.meta.homepage; # autocliquer
     description = "Routines for clique searching";
     longDescription = ''
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

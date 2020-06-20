@@ -2,7 +2,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "tabula-${version}";
+  pname = "tabula";
   version = "1.2.1";
 
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       out of PDF files. Tabula allows you to extract that data into a CSV or
       Microsoft Excel spreadsheet using a simple, easy-to-use interface.
     '';
-    homepage = https://tabula.technology/;
+    homepage = "https://tabula.technology/";
     license = licenses.mit;
     maintainers = [ maintainers.dpaetzel ];
     platforms = platforms.all;

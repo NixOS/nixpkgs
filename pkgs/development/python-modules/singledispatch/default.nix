@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "This library brings functools.singledispatch from Python 3.4 to Python 2.6-3.3.";
-    homepage = https://docs.python.org/3/library/functools.html;
+    homepage = "https://docs.python.org/3/library/functools.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ costrouc ];
   };

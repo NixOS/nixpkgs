@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, doxygen, perl, pam, nspr, nss, openldap
-, db, cyrus_sasl, svrcore, icu, net_snmp, kerberos, pcre, perlPackages, libevent, openssl, python
+, db, cyrus_sasl, svrcore, icu, net-snmp, kerberos, pcre, perlPackages, libevent, openssl, python
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig doxygen ];
   buildInputs = [
     perl pam nspr nss openldap db cyrus_sasl svrcore icu
-    net_snmp kerberos pcre libevent openssl python
+    net-snmp kerberos pcre libevent openssl python
   ] ++ (with perlPackages; [ MozillaLdap NetAddrIP DBFile ]);
 
   patches = [
@@ -46,7 +46,9 @@ stdenv.mkDerivation rec {
     "--with-db-inc=${db.dev}/include"
     "--with-db-lib=${db.out}/lib"
     "--with-sasl=${cyrus_sasl.dev}"
-    "--with-netsnmp=${net_snmp}"
+    "--with-netsnmp=yes"
+    "--with-netsnmp-inc=${stdenv.lib.getDev net-snmp}/include"
+    "--with-netsnmp-lib=${stdenv.lib.getLib net-snmp}/lib"
   ];
 
   enableParallelBuilding = true;

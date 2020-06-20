@@ -223,6 +223,7 @@ in {
         group = "jackaudio";
         extraGroups = [ "audio" ];
         description = "JACK Audio system service user";
+        isSystemUser = true;
       };
       # http://jackaudio.org/faq/linux_rt_config.html
       security.pam.loginLimits = [

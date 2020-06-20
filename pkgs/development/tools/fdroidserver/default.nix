@@ -4,14 +4,14 @@
 , lib }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.1.1";
+  version = "1.1.7";
   pname = "fdroidserver";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
     rev = version;
-    sha256 = "0m618rvjh8h8hnbafrxsdkw8m5r2wnkz7whqnh60jh91h3yr0kzs";
+    sha256 = "1xs4qmja7mm9m67368k2s9p7pmkdx9xz4g3xrsks0s8hwwyliz1s";
   };
 
   patchPhase = ''
@@ -49,7 +49,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    homepage = https://f-droid.org;
+    homepage = "https://f-droid.org";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3;
     maintainers = [ lib.maintainers.pmiddend ];

@@ -1,9 +1,20 @@
-{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages }:
+{ stdenv
+, buildPackages
+, cacert
+, cargo
+, diffutils
+, fetchCargoTarball
+, git
+, rust
+, rustc
+, windows
+}:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
+, unpackPhase ? null
 , cargoPatches ? []
 , patches ? []
 , sourceRoot ? null
@@ -14,45 +25,70 @@
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
 , buildType ? "release"
-
+, meta ? {}
+, target ? null
 , cargoVendorDir ? null
+, checkType ? buildType
+
+# Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
+# contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
+# case for `rustfmt`/etc from the `rust-sources).
+# Otherwise, everything from the tarball would've been built/tested.
+, buildAndTestSubdir ? null
 , ... } @ args:
 
 assert cargoVendorDir == null -> cargoSha256 != "unset";
 assert buildType == "release" || buildType == "debug";
 
 let
+
   cargoDeps = if cargoVendorDir == null
-    then fetchcargo {
-        inherit name src srcs sourceRoot cargoUpdateHook;
+    then fetchCargoTarball {
+        inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
         patches = cargoPatches;
         sha256 = cargoSha256;
       }
     else null;
 
+  # If we have a cargoSha256 fixed-output derivation, validate it at build time
+  # against the src fixed-output derivation to check consistency.
+  validateCargoDeps = cargoSha256 != "unset";
+
+  # Some cargo builds include build hooks that modify their own vendor
+  # dependencies. This copies the vendor directory into the build tree and makes
+  # it writable. If we're using a tarball, the unpackFile hook already handles
+  # this for us automatically.
   setupVendorDir = if cargoVendorDir == null
-    then ''
+    then (''
       unpackFile "$cargoDeps"
-      cargoDepsCopy=$(stripHash $(basename $cargoDeps))
-      chmod -R +w "$cargoDepsCopy"
-    ''
+      cargoDepsCopy=$(stripHash $cargoDeps)
+    '')
     else ''
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
+
+  rustTarget = if target == null then rust.toRustTarget stdenv.hostPlatform else target;
 
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${stdenv.hostPlatform.config}/${buildType}";
+  releaseDir = "target/${rustTarget}/${buildType}";
 
-in stdenv.mkDerivation (args // {
+  # Specify the stdenv's `diff` by abspath to ensure that the user's build
+  # inputs do not cause us to find the wrong `diff`.
+  # The `.nativeDrv` stanza works like nativeBuildInputs and ensures cross-compiling has the right version available.
+  diff = "${diffutils.nativeDrv or diffutils}/bin/diff";
+
+in
+
+stdenv.mkDerivation (args // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = [ cargo rustc git cacert ] ++ nativeBuildInputs;
-  inherit buildInputs;
+  nativeBuildInputs = nativeBuildInputs ++ [ cacert git cargo rustc ];
+  buildInputs = buildInputs ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   patches = cargoPatches ++ patches;
 
@@ -72,41 +108,116 @@ in stdenv.mkDerivation (args // {
     substitute $config .cargo/config \
       --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
-    unset cargoDepsCopy
+    cat >> .cargo/config <<'EOF'
+    [target."${rust.toRustTarget stdenv.buildPlatform}"]
+    "linker" = "${ccForBuild}"
+    ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
+    [target."${rustTarget}"]
+    "linker" = "${ccForHost}"
+    ${# https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633
+      stdenv.lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
+    "rustflags" = [ "-C", "target-feature=+crt-static", "-C", "link-arg=-lgcc" ]
+    ''}
+    ''}
+    EOF
 
     export RUST_LOG=${logLevel}
   '' + (args.postUnpack or "");
 
+  # After unpacking and applying patches, check that the Cargo.lock matches our
+  # src package. Note that we do this after the patchPhase, because the
+  # patchPhase may create the Cargo.lock if upstream has not shipped one.
+  postPatch = (args.postPatch or "") + stdenv.lib.optionalString validateCargoDeps ''
+    cargoDepsLockfile=$NIX_BUILD_TOP/$cargoDepsCopy/Cargo.lock
+    srcLockfile=$NIX_BUILD_TOP/$sourceRoot/Cargo.lock
+
+    echo "Validating consistency between $srcLockfile and $cargoDepsLockfile"
+    if ! ${diff} $srcLockfile $cargoDepsLockfile; then
+
+      # If the diff failed, first double-check that the file exists, so we can
+      # give a friendlier error msg.
+      if ! [ -e $srcLockfile ]; then
+        echo "ERROR: Missing Cargo.lock from src. Expected to find it at: $srcLockfile"
+        echo "Hint: You can use the cargoPatches attribute to add a Cargo.lock manually to the build."
+        exit 1
+      fi
+
+      if ! [ -e $cargoDepsLockfile ]; then
+        echo "ERROR: Missing lockfile from cargo vendor. Expected to find it at: $cargoDepsLockfile"
+        exit 1
+      fi
+
+      echo
+      echo "ERROR: cargoSha256 is out of date"
+      echo
+      echo "Cargo.lock is not the same in $cargoDepsCopy"
+      echo
+      echo "To fix the issue:"
+      echo '1. Use "0000000000000000000000000000000000000000000000000000" as the cargoSha256 value'
+      echo "2. Build the derivation and wait it to fail with a hash mismatch"
+      echo "3. Copy the 'got: sha256:' value back into the cargoSha256 field"
+      echo
+
+      exit 1
+    fi
+  '' + ''
+    unset cargoDepsCopy
+  '';
+
   configurePhase = args.configurePhase or ''
     runHook preConfigure
-    mkdir -p .cargo
-    cat >> .cargo/config <<'EOF'
-    [target."${stdenv.buildPlatform.config}"]
-    "linker" = "${ccForBuild}"
-    ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-    [target."${stdenv.hostPlatform.config}"]
-    "linker" = "${ccForHost}"
-    ''}
-    EOF
-    cat .cargo/config
     runHook postConfigure
   '';
 
   buildPhase = with builtins; args.buildPhase or ''
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preBuild
 
     (
     set -x
     env \
-      "CC_${stdenv.buildPlatform.config}"="${ccForBuild}" \
-      "CXX_${stdenv.buildPlatform.config}"="${cxxForBuild}" \
-      "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
-      "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
+      "CC_${rust.toRustTarget stdenv.buildPlatform}"="${ccForBuild}" \
+      "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
+      "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
+      "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
       cargo build \
-        --${buildType} \
-        --target ${stdenv.hostPlatform.config} \
+        ${stdenv.lib.optionalString (buildType == "release") "--release"} \
+        --target ${rustTarget} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
+
+    runHook postBuild
+
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
+
+    # This needs to be done after postBuild: packages like `cargo` do a pushd/popd in
+    # the pre/postBuild-hooks that need to be taken into account before gathering
+    # all binaries to install.
+    bins=$(find $releaseDir \
+      -maxdepth 1 \
+      -type f \
+      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
+  '';
+
+  checkPhase = args.checkPhase or (let
+    argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${rustTarget} --frozen";
+  in ''
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
+    runHook preCheck
+    echo "Running cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    runHook postCheck
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
+  '');
+
+  doCheck = args.doCheck or true;
+
+  strictDeps = true;
+
+  inherit releaseDir;
+
+  installPhase = args.installPhase or ''
+    runHook preInstall
 
     # rename the output dir to a architecture independent one
     mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
@@ -114,30 +225,9 @@ in stdenv.mkDerivation (args // {
       rm -rf "$target/../../${buildType}"
       ln -srf "$target" "$target/../../"
     done
-
-    runHook postBuild
-  '';
-
-  checkPhase = args.checkPhase or ''
-    runHook preCheck
-    echo "Running cargo test"
-    cargo test
-    runHook postCheck
-  '';
-
-  doCheck = args.doCheck or true;
-
-  inherit releaseDir;
-
-  installPhase = args.installPhase or ''
-    runHook preInstall
     mkdir -p $out/bin $out/lib
 
-    find $releaseDir \
-      -maxdepth 1 \
-      -type f \
-      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \) \
-      -print0 | xargs -r -0 cp -t $out/bin
+    xargs -r cp -t $out/bin <<< $bins
     find $releaseDir \
       -maxdepth 1 \
       -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
@@ -147,4 +237,9 @@ in stdenv.mkDerivation (args // {
   '';
 
   passthru = { inherit cargoDeps; } // (args.passthru or {});
+
+  meta = {
+    # default to Rust's platforms
+    platforms = rustc.meta.platforms;
+  } // meta;
 })

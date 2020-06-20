@@ -1,20 +1,20 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
 , beautifulsoup4, bottle, chardet, dateutil
-, google_api_python_client, lxml, ply, python_magic
-, pytest, requests }:
+, google_api_python_client, lxml, oauth2client
+, ply, python_magic, pytest, requests }:
 
 buildPythonPackage rec {
-  version = "2.2.1";
+  version = "2.3.0";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xrgmqv0wsc0makm5i6jwng99yp3rvm30v2xqmcah60fgjymkjzb";
+    sha256 = "04i788glp2cslwi67dixy1pi5l0izcl078i9mrd1j1sh8f99cvcs";
   };
 
-  # No tests in archive
+  # Tests require files not included in the PyPI archive.
   doCheck = false;
 
   propagatedBuildInputs = [
@@ -24,6 +24,7 @@ buildPythonPackage rec {
     dateutil
     google_api_python_client
     lxml
+    oauth2client
     ply
     python_magic
     requests
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = http://furius.ca/beancount/;
+    homepage = "http://furius.ca/beancount/";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
         A double-entry bookkeeping computer language that lets you define

@@ -8,7 +8,7 @@ assert checksumType == "mhash" -> libmhash != null;
 assert checksumType == "openssl" -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "netrw-${version}";
+  pname = "netrw";
   version = "1.3.2";
 
   configureFlags = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple tool for transporting data over the network";
     license = stdenv.lib.licenses.gpl2;
-    homepage = https://mamuti.net/netrw/index.en.html;
+    homepage = "https://mamuti.net/netrw/index.en.html";
     platforms = stdenv.lib.platforms.unix;
   };
 }

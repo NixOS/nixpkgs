@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Online and offline brute force attack against WPS";
-    homepage = https://github.com/t6x/reaver-wps-fork-t6x;
+    homepage = "https://github.com/t6x/reaver-wps-fork-t6x";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nico202 volth ];

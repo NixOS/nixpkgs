@@ -7,11 +7,14 @@ let
   };
 
   jdk = stdenv.mkDerivation {
-    name = "zulu1.8.0_121-8.20.0.5";
+    # @hlolli: Later version than 1.8.0_202 throws error when building jvmci.
+    # dyld: lazy symbol binding failed: Symbol not found: _JVM_BeforeHalt
+    # Referenced from: ../libjava.dylib Expected in: .../libjvm.dylib
+    name = "zulu1.8.0_202-8.36.0.1";
 
     src = fetchurl {
-      url = "http://cdn.azul.com/zulu/bin/zulu8.20.0.5-jdk8.0.121-macosx_x64.zip";
-      sha256 = "2a58bd1d9b0cbf0b3d8d1bcdd117c407e3d5a0ec01e2f53565c9bec5cf9ea78b";
+      url = "https://cdn.azul.com/zulu/bin/zulu8.36.0.1-ca-jdk8.0.202-macosx_x64.zip";
+      sha256 = "0s92l1wlf02vjx8dvrsla2kq7qwxnmgh325b38mgqy872016jm9p";
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-linux/";
     };
 
@@ -44,7 +47,7 @@ let
 
       # Set JAVA_HOME automatically.
       cat <<EOF >> $out/nix-support/setup-hook
-      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
     '';
 
@@ -53,7 +56,10 @@ let
       home = jdk;
     };
 
-    meta.platforms = stdenv.lib.platforms.darwin;
+    meta = with stdenv.lib; {
+      license = licenses.gpl2;
+      platforms = platforms.darwin;
+    };
 
   };
 in jdk

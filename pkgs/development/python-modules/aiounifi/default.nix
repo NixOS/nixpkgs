@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "4";
+  version = "22";
 
   disabled = ! isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0594nb8mpfhnnk9jadbdnbn9v7p4sh3430kcgfyhsh7ayw2mpb9m";
+    sha256 = "ad2625c8a62e28781d50644f4a4df5a97a32174b965cd3b329820ae85e2dfcc3";
   };
 
   propagatedBuildInputs = [ aiohttp ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An asynchronous Python library for communicating with Unifi Controller API";
-    homepage    = https://pypi.python.org/pypi/aiounifi/;
+    homepage    = "https://pypi.python.org/pypi/aiounifi/";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

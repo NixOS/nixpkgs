@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ratpoison-${version}";
+  pname = "ratpoison";
   version = "1.4.9";
 
   src = fetchurl {
-    url = "mirror://savannah/ratpoison/${name}.tar.xz";
+    url = "mirror://savannah/ratpoison/${pname}-${version}.tar.xz";
     sha256 = "1wfir1gvh5h7izgvx2kd1pr2k7wlncd33zq7qi9s9k2y0aza93yr";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.nongnu.org/ratpoison/;
+    homepage = "https://www.nongnu.org/ratpoison/";
     description = "Simple mouse-free tiling window manager";
     license = licenses.gpl2Plus;
 

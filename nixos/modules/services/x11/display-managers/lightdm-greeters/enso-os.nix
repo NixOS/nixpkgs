@@ -10,32 +10,6 @@ let
   icons = cfg.iconTheme.package;
   cursors = cfg.cursorTheme.package;
 
-  # We need a few things in the environment for the greeter to run with
-  # fonts/icons.
-  wrappedEnsoGreeter = pkgs.runCommand "lightdm-enso-os-greeter" {
-      buildInputs = [ pkgs.makeWrapper ];
-      preferLocalBuild = true;
-    } ''
-      # This wrapper ensures that we actually get themes
-      makeWrapper ${pkgs.lightdm-enso-os-greeter}/bin/pantheon-greeter \
-        $out/greeter \
-        --prefix PATH : "${pkgs.glibc.bin}/bin" \
-        --set GDK_PIXBUF_MODULE_FILE "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
-        --set GTK_PATH "${theme}:${pkgs.gtk3.out}" \
-        --set GTK_EXE_PREFIX "${theme}" \
-        --set GTK_DATA_PREFIX "${theme}" \
-        --set XDG_DATA_DIRS "${theme}/share:${icons}/share:${cursors}/share" \
-        --set XDG_CONFIG_HOME "${theme}/share"
-
-      cat - > $out/lightdm-enso-os-greeter.desktop << EOF
-      [Desktop Entry]
-      Name=LightDM Greeter
-      Comment=This runs the LightDM Greeter
-      Exec=$out/greeter
-      Type=Application
-      EOF
-    '';
-
   ensoGreeterConf = pkgs.writeText "lightdm-enso-os-greeter.conf" ''
     [greeter]
     default-wallpaper=${ldmcfg.background}
@@ -144,10 +118,16 @@ in {
   config = mkIf (ldmcfg.enable && cfg.enable) {
     environment.etc."lightdm/greeter.conf".source = ensoGreeterConf;
 
+    environment.systemPackages = [
+      cursors
+      icons
+      theme
+    ];
+
     services.xserver.displayManager.lightdm = {
       greeter = mkDefault {
-        package = wrappedEnsoGreeter;
-        name = "lightdm-enso-os-greeter";
+        package = pkgs.lightdm-enso-os-greeter.xgreeters;
+        name = "pantheon-greeter";
       };
 
       greeters = {

@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "moretools";
-  version = "0.1.9";
+  version = "0.1.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f531cc79b7cd0c4aab590d5d4d0291f7cf6f083398be1dd523224b3385b732f4";
+    sha256 = "73b0469d4f1df6d967508103473f0b1524708adbff71f8f90ef71d9a44226b22";
   };
 
   checkPhase = ''
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     description = ''
       Many more basic tools for python 2/3 extending itertools, functools, operator and collections
     '';
-    homepage = https://bitbucket.org/userzimmermann/python-moretools;
+    homepage = "https://bitbucket.org/userzimmermann/python-moretools";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

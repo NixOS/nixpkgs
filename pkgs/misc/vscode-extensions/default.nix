@@ -10,7 +10,7 @@ in
 # So an extension's attribute name should be of the form:
 # "${mktplcRef.publisher}.${mktplcRef.name}".
 #
-rec {
+{
 
   alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
     mktplcRef = {
@@ -36,6 +36,18 @@ rec {
     };
   };
 
+  cmschuetz12.wal = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+        name = "wal";
+        publisher = "cmschuetz12";
+        version = "0.1.0";
+        sha256 = "0q089jnzqzhjfnv0vlb5kf747s3mgz64r7q3zscl66zb2pz5q4zd";
+    };
+    meta = with stdenv.lib; {
+      license = licenses.mit;
+    };
+  };
+
   formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "auto-close-tag";
@@ -48,28 +60,130 @@ rec {
     };
   };
 
+  james-yu.latex-workshop = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "latex-workshop";
+      publisher = "James-Yu";
+      version = "8.2.0";
+      sha256 = "1ai16aam4v5jzhxgms589q0l24kyk1a9in6z4i7g05b3sahyxab2";
+    };
+    meta = with stdenv.lib; {
+      license = licenses.mit;
+    };
+  };
+
   justusadam.language-haskell = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "language-haskell";
       publisher = "justusadam";
-      version = "2.6.0"; # see the note above
-      sha256 = "1891pg4x5qkh151pylvn93c4plqw6vgasa4g40jbma5xzq8pygr4";
+      version = "3.0.3";
+      sha256 = "1sg4g8h1gww4y67zix5f33v2gf121k2fcm6l1m7lygpkn40a8dsj";
     };
     meta = {
       license = stdenv.lib.licenses.bsd3;
     };
   };
 
+  ms-azuretools.vscode-docker = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vscode-docker";
+      publisher = "ms-azuretools";
+      version = "0.8.1";
+      sha256 = "0n59whmcrx8946xix6skvc50f2vsc85ckvn8cs06w9mqmymm1q0s";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vscode-kubernetes-tools";
+      publisher = "ms-kubernetes-tools";
+      version = "1.0.6";
+      sha256 = "12a4phl1pddsajy3n0ld6rp607iy0pif6pqrs6ljbg2x97fyra28";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  ms-vscode.Go = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "Go";
+      publisher = "ms-vscode";
+      version = "0.11.7";
+      sha256 = "1l6jjdfivw1pn9y4d4i7zf80ls1k1b0ap1d828ah57ad3bgmyqfi";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   ms-vscode.cpptools = callPackage ./cpptools {};
 
-  ms-python.python = callPackage ./python {};
+  ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
+
+  ms-python.python = callPackage ./python {
+    extractNuGet = callPackage ./python/extract-nuget.nix { };
+  };
+
+  redhat.vscode-yaml = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vscode-yaml";
+      publisher = "redhat";
+      version = "0.5.3";
+      sha256 = "03swlsp906rqlrx6jf3ibh7pk36sm0zdr8jfy6sr3w5lqjg27gka";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  matklad.rust-analyzer = callPackage ./rust-analyzer {};
+
+  scala-lang.scala = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "scala";
+      publisher = "scala-lang";
+      version = "0.3.8";
+      sha256 = "17dl10m3ayf57sqgil4mr9fjdm7i8gb5clrs227b768pp2d39ll9";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  scalameta.metals = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "metals";
+      publisher = "scalameta";
+      version = "1.9.0";
+      sha256 = "0p2wbnw98zmjbfiz4mi1mh131s78r01kjnja339lwdigqxg88gi6";
+    };
+    meta = {
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
+  skyapps.fish-vscode = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "fish-vscode";
+      publisher = "skyapps";
+      version = "0.2.1";
+      sha256 = "0y1ivymn81ranmir25zk83kdjpjwcqpnc9r3jwfykjd9x0jib2hl";
+    };
+    meta = with stdenv.lib; {
+      license = licenses.mit;
+    };
+  };
 
   vscodevim.vim = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "vim";
       publisher = "vscodevim";
-      version = "1.3.0";
-      sha256 = "18z24w7smjjnv945f8qyy6dl95xckyqa6gg3gijfcigvq5sgyawc";
+      version = "1.11.3";
+      sha256 = "1smzsgcrkhghbnpy51gp28kh74l7y4s2m8pfxabb4ffb751254j0";
     };
     meta = {
       license = stdenv.lib.licenses.mit;

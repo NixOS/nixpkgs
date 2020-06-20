@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "demoit";
   version = "unstable-2019-05-10";
   goPackagePath = "github.com/dgageot/demoit";
@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Live coding demos without Context Switching";
-    homepage = https://github.com/dgageot/demoit;
+    homepage = "https://github.com/dgageot/demoit";
     license = licenses.asl20;
     maintainers = [ maintainers.freezeboy ];
   };

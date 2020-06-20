@@ -1,31 +1,74 @@
-{ docbook_xml_dtd_412, fetchurl, stdenv, perl, python2, zip, xmlto, zlib, fetchpatch }:
+{ stdenv
+, cmake
+, pkg-config
+, ninja
+, fetchFromGitHub
+, fetchpatch
+, zip
+, unzip
+, python3
+, xmlto
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-  name = "zziplib-${version}";
-  version = "0.13.69";
+  pname = "zziplib";
+  version = "0.13.71";
 
-  src = fetchurl {
-    url = "https://github.com/gdraheim/zziplib/archive/v${version}.tar.gz";
-    sha256 = "0i052a7shww0fzsxrdp3rd7g4mbzx7324a8ysbc0br7frpblcql4";
+  src = fetchFromGitHub {
+    owner = "gdraheim";
+    repo = "zziplib";
+    rev = "v${version}";
+    sha256 = "P+7D57sc2oIABhk3k96aRILpGnsND5SLXHh2lqr9O4E=";
   };
 
   patches = [
+    # Fix ninja parsing
     (fetchpatch {
-      name = "CVE-2018-17828.patch";
-      url = "https://github.com/gdraheim/zziplib/commit/f609ae8971f3c0ce6.diff";
-      sha256 = "0jhiz4fgr93wzh6q03avn95b2nsf6402jaki6hxirxyhs5v9ahry";
+      url = "https://github.com/gdraheim/zziplib/commit/75e22f3c365b62acbad8d8645d5404242800dfba.patch";
+      sha256 = "IB0am3K0x4+Ug1CKvowTtkS8JD6zHJJ247A7guJOw80=";
+    })
+
+    # Install man pages
+    (fetchpatch {
+      url = "https://github.com/gdraheim/zziplib/commit/5583ccc7a247ee27556ede344e93d3ac1dc72e9b.patch";
+      sha256 = "wVExEZN8Ml1/3GicB0ZYsLVS3KJ8BSz8i4Gu46naz1Y=";
+      excludes = [ "GNUmakefile" ];
+    })
+
+    # Fix man page formatting
+    (fetchpatch {
+      url = "https://github.com/gdraheim/zziplib/commit/22ed64f13dc239f86664c60496261f544bce1088.patch";
+      sha256 = "ScFVWLc4LQPqkcHn9HK/VkLula4b5HzuYl0b5vi4Ikc=";
     })
   ];
-  postPatch = ''
-    sed -i -e s,--export-dynamic,, configure
-  '';
 
-  buildInputs = [ docbook_xml_dtd_412 perl python2 zip xmlto zlib ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    ninja # make fails, unable to find test2.zip
+    zip
+    python3
+    xmlto
+  ];
+
+  buildInputs = [
+    zlib
+  ];
+
+  checkInputs = [
+    unzip
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
+  ];
 
   # tests are broken (https://github.com/gdraheim/zziplib/issues/20),
   # and test/zziptests.py requires network access
   # (https://github.com/gdraheim/zziplib/issues/24)
   doCheck = false;
+  checkTarget = "check";
 
   meta = with stdenv.lib; {
     description = "Library to extract data from files archived in a zip file";
@@ -41,9 +84,9 @@ stdenv.mkDerivation rec {
 
     license = with licenses; [ lgpl2Plus mpl11 ];
 
-    homepage = http://zziplib.sourceforge.net/;
+    homepage = "http://zziplib.sourceforge.net/";
 
     maintainers = [ ];
-    platforms = python2.meta.platforms;
+    platforms = python3.meta.platforms;
   };
 }

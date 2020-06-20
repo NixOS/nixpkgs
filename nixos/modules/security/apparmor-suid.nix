@@ -4,8 +4,12 @@ let
 in
 with lib;
 {
+  imports = [
+    (mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
+  ];
 
   options.security.apparmor.confineSUIDApplications = mkOption {
+    type = types.bool;
     default = true;
     description = ''
       Install AppArmor profiles for commonly-used SUID application

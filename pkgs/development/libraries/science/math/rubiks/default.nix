@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "rubiks";
   version = "20070912";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sageupstream/rubiks/rubiks-${version}.tar.bz2";
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.sagemath.org/spkg/rubiks;
+    homepage = "https://wiki.sagemath.org/spkg/rubiks";
     description = "Several programs for working with Rubik's cubes";
     # The individual websites are no longer available
     longDescription = ''
@@ -77,6 +76,6 @@ stdenv.mkDerivation rec {
       mit # Dik T. Winter's software
     ];
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

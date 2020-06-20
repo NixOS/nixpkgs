@@ -6,8 +6,8 @@
  <title>Replace Modules</title>
 
  <para>
-  Modules that are imported can also be disabled. The option declarations and
-  config implementation of a disabled module will be ignored, allowing another
+  Modules that are imported can also be disabled. The option declarations,
+  config implementation and the imports of a disabled module will be ignored, allowing another
   to take it's place. This can be used to import a set of modules from another
   channel while keeping the rest of the system on a stable release.
  </para>
@@ -37,7 +37,7 @@
 
   imports =
     [ # Use postgresql service from nixos-unstable channel.
-      # sudo nix-channel --add http://nixos.org/channels/nixos-unstable nixos-unstable
+      # sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
       &lt;nixos-unstable/nixos/modules/services/databases/postgresql.nix&gt;
     ];
 

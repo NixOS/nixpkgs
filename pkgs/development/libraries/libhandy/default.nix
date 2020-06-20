@@ -1,15 +1,13 @@
-{ stdenv, fetchFromGitLab, meson, ninja, pkgconfig, gobject-introspection, vala
+{ stdenv, fetchFromGitLab, fetchpatch, meson, ninja, pkgconfig, gobject-introspection, vala
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43
-, gtk3, gnome3
+, gtk3, gnome3, glade
 , dbus, xvfb_run, libxml2
 , hicolor-icon-theme
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "0.0.9";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "0.0.13";
 
   outputs = [ "out" "dev" "devdoc" "glade" ];
   outputBin = "dev";
@@ -19,14 +17,24 @@ in stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0smfnvfba6cnxbrcm1vh3zbr1hww43qcxhawka3hzn2hjr06rfzn";
+    sha256 = "1y23k623sjkldfrdiwfarpchg5mg58smcy1pkgnwfwca15wm1ra5";
   };
 
+  patches = [
+    # Fix build with Glade 3.36.0
+    # https://source.puri.sm/Librem5/libhandy/merge_requests/451
+    (fetchpatch {
+      url = "https://source.puri.sm/Librem5/libhandy/commit/887beedb467984ab5c7b91830181645fadef7849.patch";
+      sha256 = "0qgh4i0l1028qxqmig4x2c10yj5s80skl70qnc5wnp71s45alvk5";
+      excludes = [ "glade/glade-hdy-header-bar.c" ];
+    })
+  ];
+
   nativeBuildInputs = [
-    meson ninja pkgconfig gobject-introspection vala
+    meson ninja pkgconfig gobject-introspection vala libxml2
     gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
-  buildInputs = [ gnome3.gnome-desktop gtk3 gnome3.glade libxml2 ];
+  buildInputs = [ gnome3.gnome-desktop gtk3 glade libxml2 ];
   checkInputs = [ dbus xvfb_run hicolor-icon-theme ];
 
   mesonFlags = [
@@ -49,8 +57,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A library full of GTK+ widgets for mobile phones";
-    homepage = https://source.puri.sm/Librem5/libhandy;
+    description = "A library full of GTK widgets for mobile phones";
+    homepage = "https://source.puri.sm/Librem5/libhandy";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

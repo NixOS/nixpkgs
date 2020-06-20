@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "teyjus-${version}";
+  pname = "teyjus";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/teyjus/teyjus/archive/v${version}.tar.gz";
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An efficient implementation of the Lambda Prolog language";
-    homepage = https://github.com/teyjus/teyjus;
+    homepage = "https://github.com/teyjus/teyjus";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ maintainers.bcdarwin ];
     platforms = platforms.linux;

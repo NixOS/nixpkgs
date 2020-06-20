@@ -3,7 +3,7 @@
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio }:
 
 stdenv.mkDerivation rec {
-  name = "mimic-${version}";
+  pname = "mimic";
   version = "1.2.0.2";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mycroft's TTS engine, based on CMU's Flite (Festival Lite)";
-    homepage = https://mimic.mycroft.ai/;
+    homepage = "https://mimic.mycroft.ai/";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.noneucat ];

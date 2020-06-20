@@ -14,47 +14,9 @@ let
     RUN_USER = ${cfg.user}
     RUN_MODE = prod
 
-    [database]
-    DB_TYPE = ${cfg.database.type}
-    ${optionalString (usePostgresql || useMysql) ''
-      HOST = ${if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port}
-      NAME = ${cfg.database.name}
-      USER = ${cfg.database.user}
-      PASSWD = #dbpass#
-    ''}
-    ${optionalString useSqlite ''
-      PATH = ${cfg.database.path}
-    ''}
-    ${optionalString usePostgresql ''
-      SSL_MODE = disable
-    ''}
+    ${generators.toINI {} cfg.settings}
 
-    [repository]
-    ROOT = ${cfg.repositoryRoot}
-
-    [server]
-    DOMAIN = ${cfg.domain}
-    HTTP_ADDR = ${cfg.httpAddress}
-    HTTP_PORT = ${toString cfg.httpPort}
-    ROOT_URL = ${cfg.rootUrl}
-    STATIC_ROOT_PATH = ${cfg.staticRootPath}
-
-    [session]
-    COOKIE_NAME = session
-    COOKIE_SECURE = ${boolToString cfg.cookieSecure}
-
-    [security]
-    SECRET_KEY = #secretkey#
-    INSTALL_LOCK = true
-
-    [log]
-    ROOT_PATH = ${cfg.log.rootPath}
-    LEVEL = ${cfg.log.level}
-
-    [service]
-    DISABLE_REGISTRATION = ${boolToString cfg.disableRegistration}
-
-    ${cfg.extraConfig}
+    ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
   '';
 in
 
@@ -254,6 +216,13 @@ in
         description = "Upper level of template and static files path.";
       };
 
+      mailerPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/mailpw";
+        description = "Path to a file containing the SMTP password.";
+      };
+
       disableRegistration = mkEnableOption "the registration lock" // {
         description = ''
           By default any user can create an account on this <literal>gitea</literal> instance.
@@ -266,9 +235,36 @@ in
         '';
       };
 
+      settings = mkOption {
+        type = with types; attrsOf (attrsOf (oneOf [ bool int str ]));
+        default = {};
+        description = ''
+          Gitea configuration. Refer to <link xlink:href="https://docs.gitea.io/en-us/config-cheat-sheet/"/>
+          for details on supported values.
+        '';
+        example = literalExample ''
+          {
+            "cron.sync_external_users" = {
+              RUN_AT_START = true;
+              SCHEDULE = "@every 24h";
+              UPDATE_EXISTING = true;
+            };
+            mailer = {
+              ENABLED = true;
+              MAILER_TYPE = "sendmail";
+              FROM = "do-not-reply@example.org";
+              SENDMAIL_PATH = "${pkgs.system-sendmail}/bin/sendmail";
+            };
+            other = {
+              SHOW_FOOTER_VERSION = false;
+            };
+          }
+        '';
+      };
+
       extraConfig = mkOption {
-        type = types.str;
-        default = "";
+        type = with types; nullOr str;
+        default = null;
         description = "Configuration lines appended to the generated gitea configuration file.";
       };
     };
@@ -280,6 +276,62 @@ in
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
     ];
+
+    services.gitea.settings = {
+      database = mkMerge [
+        {
+          DB_TYPE = cfg.database.type;
+        }
+        (mkIf (useMysql || usePostgresql) {
+          HOST = if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port;
+          NAME = cfg.database.name;
+          USER = cfg.database.user;
+          PASSWD = "#dbpass#";
+        })
+        (mkIf useSqlite {
+          PATH = cfg.database.path;
+        })
+        (mkIf usePostgresql {
+          SSL_MODE = "disable";
+        })
+      ];
+
+      repository = {
+        ROOT = cfg.repositoryRoot;
+      };
+
+      server = {
+        DOMAIN = cfg.domain;
+        HTTP_ADDR = cfg.httpAddress;
+        HTTP_PORT = cfg.httpPort;
+        ROOT_URL = cfg.rootUrl;
+        STATIC_ROOT_PATH = cfg.staticRootPath;
+        LFS_JWT_SECRET = "#jwtsecret#";
+      };
+
+      session = {
+        COOKIE_NAME = "session";
+        COOKIE_SECURE = cfg.cookieSecure;
+      };
+
+      security = {
+        SECRET_KEY = "#secretkey#";
+        INSTALL_LOCK = true;
+      };
+
+      log = {
+        ROOT_PATH = cfg.log.rootPath;
+        LEVEL = cfg.log.level;
+      };
+
+      service = {
+        DISABLE_REGISTRATION = cfg.disableRegistration;
+      };
+
+      mailer = mkIf (cfg.mailerPasswordFile != null) {
+        PASSWD = "#mailerpass#";
+      };
+    };
 
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
       enable = mkDefault true;
@@ -309,6 +361,7 @@ in
       "d '${cfg.stateDir}/conf' - ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/custom' - ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/custom/conf' - ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/log' - ${cfg.user} gitea - -"
       "d '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
       "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
 
@@ -321,33 +374,46 @@ in
       description = "gitea";
       after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
-      path = [ gitea.bin pkgs.gitAndTools.git ];
+      path = [ gitea pkgs.gitAndTools.git ];
 
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
         secretKey = "${cfg.stateDir}/custom/conf/secret_key";
+        jwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret";
       in ''
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
           cp -f ${configFile} ${runConfig}
 
           if [ ! -e ${secretKey} ]; then
-              head -c 16 /dev/urandom | base64 > ${secretKey}
+              ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
           fi
 
-          KEY=$(head -n1 ${secretKey})
-          DBPASS=$(head -n1 ${cfg.database.passwordFile})
+          if [ ! -e ${jwtSecret} ]; then
+              ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${jwtSecret}
+          fi
+
+          KEY="$(head -n1 ${secretKey})"
+          DBPASS="$(head -n1 ${cfg.database.passwordFile})"
+          JWTSECRET="$(head -n1 ${jwtSecret})"
+          ${if (cfg.mailerPasswordFile == null) then ''
+            MAILERPASSWORD="#mailerpass#"
+          '' else ''
+            MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+          ''}
           sed -e "s,#secretkey#,$KEY,g" \
               -e "s,#dbpass#,$DBPASS,g" \
+              -e "s,#jwtsecret#,$JWTSECRET,g" \
+              -e "s,#mailerpass#,$MAILERPASSWORD,g" \
               -i ${runConfig}
-          chmod 640 ${runConfig} ${secretKey}
+          chmod 640 ${runConfig} ${secretKey} ${jwtSecret}
         ''}
 
         # update all hooks' binary paths
         HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
         if [ "$HOOKS" ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' $HOOKS
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea}/bin/gitea,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
@@ -356,7 +422,7 @@ in
         # update command option in authorized_keys
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
         fi
       '';
 
@@ -365,8 +431,28 @@ in
         User = cfg.user;
         Group = "gitea";
         WorkingDirectory = cfg.stateDir;
-        ExecStart = "${gitea.bin}/bin/gitea web";
+        ExecStart = "${gitea}/bin/gitea web";
         Restart = "always";
+
+        # Filesystem
+        ProtectHome = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        ReadWritePaths = cfg.stateDir;
+        # Caps
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        # Misc.
+        LockPersonality = true;
+        RestrictRealtime = true;
+        PrivateMounts = true;
+        PrivateUsers = true;
+        MemoryDenyWriteExecute = true;
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
+        SystemCallArchitectures = "native";
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
       };
 
       environment = {
@@ -382,14 +468,18 @@ in
         home = cfg.stateDir;
         useDefaultShell = true;
         group = "gitea";
+        isSystemUser = true;
       };
     };
 
     users.groups.gitea = {};
 
-    warnings = optional (cfg.database.password != "")
-      ''config.services.gitea.database.password will be stored as plaintext
-        in the Nix store. Use database.passwordFile instead.'';
+    warnings =
+      optional (cfg.database.password != "") ''
+        config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead.'' ++
+      optional (cfg.extraConfig != null) ''
+        services.gitea.`extraConfig` is deprecated, please use services.gitea.`settings`.
+      '';
 
     # Create database passwordFile default when password is configured.
     services.gitea.database.passwordFile =
@@ -402,7 +492,7 @@ in
        description = "gitea dump";
        after = [ "gitea.service" ];
        wantedBy = [ "default.target" ];
-       path = [ gitea.bin ];
+       path = [ gitea ];
 
        environment = {
          USER = cfg.user;
@@ -413,7 +503,7 @@ in
        serviceConfig = {
          Type = "oneshot";
          User = cfg.user;
-         ExecStart = "${gitea.bin}/bin/gitea dump";
+         ExecStart = "${gitea}/bin/gitea dump";
          WorkingDirectory = cfg.stateDir;
        };
     };
@@ -425,4 +515,5 @@ in
       timerConfig.OnCalendar = cfg.dump.interval;
     };
   };
+  meta.maintainers = with lib.maintainers; [ srhb ];
 }

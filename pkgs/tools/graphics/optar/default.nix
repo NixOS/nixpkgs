@@ -1,7 +1,7 @@
 { stdenv, fetchurl, imagemagick, libpng }:
 
-stdenv.mkDerivation rec {
-  name = "optar-${version}";
+stdenv.mkDerivation {
+  pname = "optar";
   version = "20150210";
 
   src = fetchurl {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optar stands for OPTical ARchiver - it's a codec for encoding data on paper";
-    homepage = http://ronja.twibright.com/optar/;
+    homepage = "http://ronja.twibright.com/optar/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = with platforms; linux; # possibly others, but only tested on Linux

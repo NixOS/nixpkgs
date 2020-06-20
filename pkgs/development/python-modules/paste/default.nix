@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "paste";
-  version = "3.0.8";
+  version = "3.4.0";
 
   src = fetchPypi {
     pname = "Paste";
     inherit version;
-    sha256 = "05w1sh6ky4d7pmdb8nv82n13w22jcn3qsagg5ih3hjmbws9kkwf4";
+    sha256 = "16sichvhyci1gaarkjs35mai8vphh7b244qm14hj1isw38nx4c03";
   };
 
   propagatedBuildInputs = [ six ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tools for using a Web Server Gateway Interface stack";
-    homepage = http://pythonpaste.org/;
+    homepage = "http://pythonpaste.org/";
     license = licenses.mit;
   };
 

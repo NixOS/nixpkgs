@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "19.1.0";
+  version = "20.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5feae03167620824d3ae3e8915ea8589fc28d1ad6f3edf3cc90ed7c7cb33fab5";
+    sha256 = "7a48375db6274ed1d0ae6123c486472aa1d0890b08d314d2b016f3aa7f35990b";
   };
 
   checkInputs = [ pytest pretend freezegun simplejson twisted ]
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Painless structural logging";
-    homepage = http://www.structlog.org/;
+    homepage = "http://www.structlog.org/";
     license = lib.licenses.asl20;
   };
 }

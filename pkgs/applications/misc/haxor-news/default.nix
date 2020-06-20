@@ -35,7 +35,7 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/donnemartin/haxor-news;
+    homepage = "https://github.com/donnemartin/haxor-news";
     description = "Browse Hacker News like a haxor";
     license = licenses.asl20;
     maintainers = with maintainers; [ matthiasbeyer ];

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgs }:
 
 stdenv.mkDerivation rec {
-  name = "pipes-${version}";
+  pname = "pipes";
   version = "1.3.0";
 
   src = fetchurl {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pipeseroni/pipes.sh;
+    homepage = "https://github.com/pipeseroni/pipes.sh";
     description = "Animated pipes terminal screensaver";
     license = licenses.mit;
     maintainers = [ maintainers.matthiasbeyer ];

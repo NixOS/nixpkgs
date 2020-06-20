@@ -8,9 +8,9 @@
 #     ZSH_COMMAND_TIME_ECHO=1
 #   '';
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2018-04-30";
-  name = "zsh-command-time-${version}";
+  pname = "zsh-command-time";
 
   src = fetchFromGitHub {
     owner = "popstas";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Plugin that output time: xx after long commands";
-    homepage = https://github.com/popstas/zsh-command-time;
+    homepage = "https://github.com/popstas/zsh-command-time";
     license = licenses.mit;
     platforms = platforms.unix;
   };

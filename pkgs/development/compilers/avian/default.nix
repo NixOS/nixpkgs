@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, zlib, jdk, CoreServices, Foundation }:
 
 stdenv.mkDerivation rec {
-  name = "avian-${version}";
+  pname = "avian";
   version = "1.2.0";
 
   src = fetchFromGitHub {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       to provide a useful subset of Java’s features, suitable for
       building self-contained applications.
     '';
-    homepage = https://readytalk.github.io/avian/;
+    homepage = "https://readytalk.github.io/avian/";
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.earldouglas ];

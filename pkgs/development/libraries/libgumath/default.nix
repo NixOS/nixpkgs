@@ -4,8 +4,8 @@
 , libxnd
 }:
 
-stdenv.mkDerivation rec {
-  name = "libgumath-${version}";
+stdenv.mkDerivation {
+  pname = "libgumath";
   version = "unstable-2018-11-27";
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library supporting function dispatch on general data containers. C base and Python wrapper";
-    homepage = https://xnd.io/;
+    homepage = "https://xnd.io/";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

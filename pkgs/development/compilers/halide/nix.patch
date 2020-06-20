@@ -1,11 +1,11 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 40a685b7e..c452efd09 100644
+index 4ba384324..7e23038f7 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -49,10 +49,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
-
+@@ -75,10 +75,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+ 
  set(LLVM_VERSION "${LLVM_VERSION_MAJOR}${LLVM_VERSION_MINOR}")
-
+ 
 -file(TO_NATIVE_PATH "${LLVM_TOOLS_BINARY_DIR}/llvm-as${CMAKE_EXECUTABLE_SUFFIX}" LLVM_AS)
 -file(TO_NATIVE_PATH "${LLVM_TOOLS_BINARY_DIR}/llvm-nm${CMAKE_EXECUTABLE_SUFFIX}" LLVM_NM)
 -file(TO_NATIVE_PATH "${LLVM_TOOLS_BINARY_DIR}/clang${CMAKE_EXECUTABLE_SUFFIX}" CLANG)
@@ -14,7 +14,7 @@ index 40a685b7e..c452efd09 100644
 +find_program(LLVM_NM llvm-nm HINTS ${LLVM_TOOLS_BINARY_DIR})
 +find_program(CLANG clang HINTS ${LLVM_TOOLS_BINARY_DIR})
 +find_program(LLVM_CONFIG llvm-config HINTS ${LLVM_TOOLS_BINARY_DIR})
-
+ 
  # LLVM doesn't appear to expose --system-libs via its CMake interface,
  # so we must shell out to llvm-config to find this info
 diff --git a/apps/linear_algebra/CMakeLists.txt b/apps/linear_algebra/CMakeLists.txt
@@ -27,7 +27,7 @@ index 132c80e6a..36ce865f2 100644
    set(OpenBLAS_EXTRA_LIBS)
 -  set(BLAS_VENDORS OpenBLAS ATLAS)
 +  set(BLAS_VENDORS OpenBLAS)
-
+ 
    # TODO
    # there are more vendors we could add here that support the cblas interface
 @@ -41,6 +41,7 @@ if (CBLAS_FOUND)
@@ -39,17 +39,18 @@ index 132c80e6a..36ce865f2 100644
      endif()
    endforeach()
 diff --git a/apps/linear_algebra/tests/CMakeLists.txt b/apps/linear_algebra/tests/CMakeLists.txt
-index 4b95eb3bb..1daa97437 100644
+index cc02eb0a4..c20419a0d 100644
 --- a/apps/linear_algebra/tests/CMakeLists.txt
 +++ b/apps/linear_algebra/tests/CMakeLists.txt
-@@ -19,6 +19,6 @@ target_compile_options(test_halide_blas PRIVATE -Wno-unused-variable)
+@@ -19,7 +19,7 @@ target_compile_options(test_halide_blas PRIVATE -Wno-unused-variable)
  target_link_libraries(test_halide_blas
    PRIVATE
     halide_blas
 -   cblas # XXX fragile
 +   ${BLAS_LIBRARIES}
-    Halide
+    ${HALIDE_COMPILER_LIB}
  )
---
-2.15.0
+ 
+-- 
+2.23.0
 

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "calcurse-${version}";
-  version = "4.4.0";
+  pname = "calcurse";
+  version = "4.6.0";
 
   src = fetchurl {
-    url = "https://calcurse.org/files/${name}.tar.gz";
-    sha256 = "0vw2xi6a2lrhrb8n55zq9lv4mzxhby4xdf3hmi1vlfpyrpdwkjzd";
+    url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
+    sha256 = "0hzhdpkkn75jlymanwzl69hrrf1pw29hrchr11wlxqjpl43h62gs";
   };
 
   buildInputs = [ ncurses gettext python3 python3Packages.wrapPython ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       customized to suit user needs and a very powerful set of command line options can
       be used to filter and format appointments, making it suitable for use in scripts.
     '';
-    homepage = http://calcurse.org/;
+    homepage = "http://calcurse.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

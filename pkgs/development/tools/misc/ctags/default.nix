@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   revision = "816";
 
   src = fetchsvn {
-    url = https://svn.code.sf.net/p/ctags/code/trunk;
+    url = "https://svn.code.sf.net/p/ctags/code/trunk";
     rev = revision;
     sha256 = "0jmbkrmscbl64j71qffcc39x005jrmphx8kirs1g2ws44wil39hf";
   };
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       alternatively, the index entry created for that object).  Many
       programming languages are supported.
     '';
-    homepage = http://ctags.sourceforge.net/;
+    homepage = "http://ctags.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
 

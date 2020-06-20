@@ -8,5 +8,7 @@
     [ ./installation-cd-base.nix
     ];
 
+  isoImage.edition = "minimal";
+
   fonts.fontconfig.enable = false;
 }

@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -50,13 +50,12 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-minio-exporter}/bin/minio-exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           -minio.server ${cfg.minioAddress} \
-          -minio.access-key ${cfg.minioAccessKey} \
-          -minio.access-secret ${cfg.minioAccessSecret} \
+          -minio.access-key ${escapeShellArg cfg.minioAccessKey} \
+          -minio.access-secret ${escapeShellArg cfg.minioAccessSecret} \
           ${optionalString cfg.minioBucketStats "-minio.bucket-stats"} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';

@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "galen";
   version = "2.4.4";
-  name = "${pname}-${version}";
 
   inherit jre8;
 
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://galenframework.com;
+    homepage = "http://galenframework.com";
     description = "Automated layout testing for websites";
     license = licenses.asl20;
     maintainers = [ ];

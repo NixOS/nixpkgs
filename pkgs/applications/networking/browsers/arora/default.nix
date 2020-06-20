@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
-  name = "arora-${version}";
+  pname = "arora";
   version = "0.11.0";
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     platforms = qt4.meta.platforms;
     maintainers = [ maintainers.phreedom ];
     description = "A cross-platform Qt4 Webkit browser";
-    homepage = https://github.com/Arora/arora;
+    homepage = "https://github.com/Arora/arora";
     license = with licenses; [ gpl2 gpl3 ];
   };
 }

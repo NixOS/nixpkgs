@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.4";
-  name = "clustal-omega-${version}";
+  pname = "clustal-omega";
 
   src = fetchurl {
-    url = "http://www.clustal.org/omega/${name}.tar.gz";
+    url = "http://www.clustal.org/omega/${pname}-${version}.tar.gz";
     sha256 = "1vm30mzncwdv881vrcwg11vzvrsmwy4wg80j5i0lcfk6dlld50w6";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "General purpose multiple sequence alignment program for protein and DNA/RNA";
-    homepage = http://www.clustal.org/omega/;
+    homepage = "http://www.clustal.org/omega/";
     license = licenses.gpl2;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;

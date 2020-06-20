@@ -1,29 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , fetchpatch
 , hypothesis
 , pycodestyle
 , pyflakes
 , pytest
+, setuptools
 , pkgs
 }:
 
 buildPythonPackage rec {
   pname = "mutagen";
-  version = "1.42.0";
+  version = "1.44.0";
+  disabled = isPy27; # abandoned
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb61e2456f59a9a4a259fbc08def6d01ba45a42da8eeaa97d00633b0ec5de71c";
+    sha256 = "56065d8a9ca0bc64610a4d0f37e2bd4453381dde3226b8835ee656faa3287be4";
   };
 
-  # fix tests with updated pycodestyle
-  patches = fetchpatch {
-    url = https://github.com/quodlibet/mutagen/commit/0ee86ef9d7e06639a388d0638732810b79998608.patch;
-    sha256 = "1bj3mpbv7krh5m1mvfl0z18s8wdxb1949zcnkcqxp2xl5fzsi288";
-  };
-
+  propagatedBuildInputs = [ setuptools ];
   checkInputs = [
     pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
     pkgs.glibcLocales pycodestyle pyflakes pytest hypothesis
@@ -32,7 +30,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python multimedia tagging library";
-    homepage = https://mutagen.readthedocs.io/;
+    homepage = "https://mutagen.readthedocs.io";
     license = licenses.lgpl2Plus;
+    platforms = platforms.all;
   };
 }

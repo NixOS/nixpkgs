@@ -18,7 +18,7 @@ let
     inherit pname version src;
 
     license     = lib.licenses.gpl3;
-    homepage    = https://tamarin-prover.github.io;
+    homepage    = "https://tamarin-prover.github.io";
     description = "Security protocol verification in the symbolic model";
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
@@ -104,4 +104,6 @@ mkDerivation (common "tamarin-prover" src // {
           tamarin-prover-term
           tamarin-prover-theory
         ];
+
+  broken = true;
 })

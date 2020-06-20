@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple Python interface for Graphviz";
-    homepage = https://github.com/xflr6/graphviz;
+    homepage = "https://github.com/xflr6/graphviz";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

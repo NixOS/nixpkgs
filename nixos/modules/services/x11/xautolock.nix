@@ -66,7 +66,7 @@ in
 
         killer = mkOption {
           default = null; # default according to `man xautolock` is none
-          example = "${pkgs.systemd}/bin/systemctl suspend";
+          example = "/run/current-system/systemd/bin/systemctl suspend";
           type = types.nullOr types.str;
 
           description = ''
@@ -129,10 +129,10 @@ in
           assertion = cfg.killer != null -> cfg.killtime >= 10;
           message = "killtime has to be at least 10 minutes according to `man xautolock`";
         }
-      ] ++ (lib.flip map [ "locker" "notifier" "nowlocker" "killer" ]
+      ] ++ (lib.forEach [ "locker" "notifier" "nowlocker" "killer" ]
         (option:
         {
-          assertion = cfg."${option}" != null -> builtins.substring 0 1 cfg."${option}" == "/";
+          assertion = cfg.${option} != null -> builtins.substring 0 1 cfg.${option} == "/";
           message = "Please specify a canonical path for `services.xserver.xautolock.${option}`";
         })
       );

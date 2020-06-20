@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.7";
-  name = "libnabo-${version}";
+  pname = "libnabo";
 
   src = fetchFromGitHub {
     owner = "ethz-asl";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = "
-    -DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3
-  ";
+  cmakeFlags = [
+    "-DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3"
+  ];
 
   doCheck = true;
   checkTarget = "test";

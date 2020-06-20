@@ -1,12 +1,12 @@
 { buildPythonPackage, fetchPypi, lib, pytorch, contextlib2
 , graphviz, networkx, six, opt-einsum, tqdm }:
 buildPythonPackage rec {
-  version = "0.3.3";
+  version = "1.3.1";
   pname = "pyro-ppl";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "e980e2aa5a029e2f133d422a9154a21c9cca96c417c230ddde858e41aa43687b";
+    sha256 = "a034d9311d4715a2e8e127e0a4dd2996cbd34c4b85ac57b02b277c176b0a62ff";
   };
 
   propagatedBuildInputs = [
@@ -31,8 +31,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python library for probabilistic modeling and inference";
-    homepage = http://pyro.ai;
+    homepage = "http://pyro.ai";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ teh ];
+    broken = true;
   };
 }

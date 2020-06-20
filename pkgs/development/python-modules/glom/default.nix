@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "19.1.0";
+  version = "20.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c47dc6dc97bb1c20e5607f3d58eac81e13b16880a284b52d503eea92d7b5fc2";
+    sha256 = "e753d2e8d16647ffcd9f0f99ac85d3db523ff0a1f097cf0a154a60702bca7e42";
   };
 
   propagatedBuildInputs = [ boltons attrs face ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = !isPy37; # https://github.com/mahmoud/glom/issues/72
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mahmoud/glom;
+    homepage = "https://github.com/mahmoud/glom";
     description = "Restructuring data, the Python way";
     longDescription = ''
       glom helps pull together objects from other objects in a

@@ -182,6 +182,10 @@ in
 
 {
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "dhcpd" ] [ "services" "dhcpd4" ])
+  ];
+
   ###### interface
 
   options = {

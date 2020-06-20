@@ -1,41 +1,40 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage rec {
-  name = "dgraph-${version}";
-  version = "0.8.2";
-
-  goPackagePath = "github.com/dgraph-io/dgraph";
+buildGoModule rec {
+  pname = "dgraph";
+  version = "20.03.3";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "0zc5bda8m2srjbk0gy1nnm0bya8if0kmk1szqr1qv3xifdzmi4nf";
+    sha256 = "0z2zc0mf7ndf3cpzi1js396s1yxpgfjaj9jacifsi8v6i6r0c6cz";
   };
 
-  extraOutputsToInstall = [ "dashboard" ];
+  vendorSha256 = "1nz4yr3y4dr9l09hcsp8x3zhbww9kz0av1ax4192f5zxpw1q275s";
 
-  goDeps = ./deps.nix;
-  subPackages = [ "cmd/dgraph" "cmd/dgraphloader" "cmd/bulkloader"];
+  nativeBuildInputs = [ installShellFiles ];
 
-  # let's move the dashboard to a different output, to prevent $bin from
-  # depending on $out
-  # TODO: provide a proper npm application for the dashboard.
-  postPatch = ''
-    mv dashboard/* $dashboard
+  # see licensing
+  buildPhase = ''
+    make oss BUILD_VERSION=${version}
   '';
 
-  preBuild = ''
-    export buildFlagsArray="-ldflags=\
-      -X github.com/dgraph-io/dgraph/x.dgraphVersion=${version} \
-      -X github.com/dgraph-io/dgraph/cmd/dgraph/main.uiDir=$dashboard/src/assets/"
+  installPhase = ''
+    install dgraph/dgraph -Dt $out/bin
+
+    for shell in bash zsh; do
+      $out/bin/dgraph completion $shell > dgraph.$shell
+      installShellCompletion dgraph.$shell
+    done
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://dgraph.io/";
     description = "Fast, Distributed Graph DB";
-    maintainers = with stdenv.lib.maintainers; [ sigma ];
-    license = stdenv.lib.licenses.agpl3;
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ sigma ];
+    # Apache 2.0 because we use only build "oss"
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

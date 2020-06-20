@@ -2,7 +2,7 @@
 , texinfo, gnused, usePython ? true }:
 
 stdenv.mkDerivation rec {
-  name = "ledger-${version}";
+  pname = "ledger";
   version = "3.1.3";
 
   src = fetchFromGitHub {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://ledger-cli.org/;
+    homepage = "https://ledger-cli.org/";
     description = "A double-entry accounting system with a command-line reporting interface";
     license = licenses.bsd3;
 
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ the-kenny jwiegley ];
+    maintainers = with maintainers; [ jwiegley ];
   };
 }

@@ -1,7 +1,7 @@
 {stdenv, fetchurl, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "quvi-scripts-${version}";
+  pname = "quvi-scripts";
   version="0.9.20131130";
 
   src = fetchurl {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Web video downloader";
-    homepage = http://quvi.sf.net;
+    homepage = "http://quvi.sf.net";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ ];

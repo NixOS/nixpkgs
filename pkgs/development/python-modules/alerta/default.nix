@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "alerta";
-  version = "6.5.0";
+  version = "7.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f9f0f8f800798fae83c05dd52dc2f06bd77fb318c784c4b44e3acfba81338881";
+    sha256 = "e903d4b097d4650983faecedc4e2dffd27a962b671643098f8425f9a19884d0f";
   };
 
   propagatedBuildInputs = [ six click requests pytz tabulate ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.5";
 
   meta = with stdenv.lib; {
-    homepage = https://alerta.io;
+    homepage = "https://alerta.io";
     description = "Alerta Monitoring System command-line interface";
     license = licenses.asl20;
   };

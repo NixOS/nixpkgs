@@ -1,6 +1,6 @@
 {stdenv, fetchurl, cmake}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "cmtk-3.3.1";
 
   src = fetchurl {
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ tbenst ];
     platforms = platforms.all;
     license     = licenses.gpl3;
-    homepage    = https://www.nitrc.org/projects/cmtk/;
+    homepage    = "https://www.nitrc.org/projects/cmtk/";
   };
 }

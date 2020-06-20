@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel, bc }:
+{ stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
 
 stdenv.mkDerivation rec {
   name = "rtl8821au-${kernel.version}-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kmdxgbh0s0v9809kdsi39p0jbm5cf10ivy40h8qj9hn70g1gw8q";
   };
 
-  nativeBuildInputs = [ bc ];
+  nativeBuildInputs = [ bc nukeReferences ];
   buildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" "format" ];
@@ -30,9 +30,13 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
+  postInstall = ''
+    nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
+  '';
+
   meta = with stdenv.lib; {
     description = "rtl8821AU, rtl8812AU and rtl8811AU chipset driver with firmware";
-    homepage = https://github.com/zebulon2/rtl8812au;
+    homepage = "https://github.com/zebulon2/rtl8812au";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ plchldr ];

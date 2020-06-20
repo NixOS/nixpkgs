@@ -2,8 +2,9 @@
 
 let version = "1.0.3"; in
 
-stdenv.mkDerivation rec {
-  name = "libnih-${version}";
+stdenv.mkDerivation {
+  pname = "libnih";
+  inherit version;
 
   src = fetchurl {
     url = "https://code.launchpad.net/libnih/1.0/${version}/+download/libnih-${version}.tar.gz";
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A small library for C application development";
-    homepage = https://launchpad.net/libnih;
+    homepage = "https://launchpad.net/libnih";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

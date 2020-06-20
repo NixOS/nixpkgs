@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Sorted Collections";
-    homepage = http://www.grantjenks.com/docs/sortedcollections/;
+    homepage = "http://www.grantjenks.com/docs/sortedcollections/";
     license = licenses.asl20;
   };
 

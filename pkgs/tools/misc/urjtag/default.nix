@@ -1,5 +1,5 @@
 { stdenv, autoconf, automake, pkgconfig, gettext, libtool, bison
-, flex, which, subversion, fetchsvn, makeWrapper, libftdi, libusb, readline
+, flex, which, subversion, fetchsvn, makeWrapper, libftdi, libusb-compat-0_1, readline
 , python3
 , svfSupport ? true
 , bsdlSupport ? true
@@ -7,9 +7,9 @@
 , jedecSupport ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.10";
-  name = "urjtag-${version}";
+  pname = "urjtag";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/urjtag/svn/trunk/urjtag";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gettext autoconf automake libtool bison flex which
-    subversion makeWrapper readline libftdi libusb python3 ];
+    subversion makeWrapper readline libftdi libusb-compat-0_1 python3 ];
 
   configureFlags = [
     (stdenv.lib.enableFeature svfSupport   "svf")
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Enhanced, modern tool for communicating over JTAG with flash chips, CPUs,and many more";
-    homepage = http://urjtag.org/;
+    homepage = "http://urjtag.org/";
     license = with stdenv.lib.licenses; [ gpl2Plus lgpl21Plus ];
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
     maintainers = with stdenv.lib.maintainers; [ lowfatcomputing ];

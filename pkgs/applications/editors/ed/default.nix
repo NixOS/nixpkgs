@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation (rec {
   name = "ed-${version}";
-  version = "1.15";
+  version = "1.16";
 
   src = fetchurl {
     url = "mirror://gnu/ed/${name}.tar.lz";
-    sha256 = "0x6ivy5k0d7dy5z9g8q8nipr89m4qbk2ink2898qq43smp08ji5d";
+    sha256 = "0b4b1lwizvng9bvpcjnmpj2i80xz9xw2w8nfff27b2h4mca7mh6g";
   };
 
   nativeBuildInputs = [ lzip ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation (rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/ed/;
+    homepage = "https://www.gnu.org/software/ed/";
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;

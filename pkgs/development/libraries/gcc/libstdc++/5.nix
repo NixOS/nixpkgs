@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, flex, bison, file }:
 
 stdenv.mkDerivation rec {
-  name = "libstdc++5-${version}";
+  pname = "libstdc++5";
   version = "3.3.6";
 
   src = [
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://gcc.gnu.org/;
+    homepage = "https://gcc.gnu.org/";
     license = licenses.lgpl3Plus;
     description = "GNU Compiler Collection, version ${version} -- C++ standard library";
     platforms = platforms.linux;

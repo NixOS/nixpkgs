@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, libpng, python3
-, libGLU_combined, qtbase, ncurses
+, libGLU, libGL, qtbase, wrapQtAppsHook, ncurses
 , cmake, flex, lemon
 }:
 
 let
-  gitRev    = "c0038e3ea82fec6119de364bcbc3370955ed46a2";
+  gitRev    = "8fb4b0929ce84cf375bfb83a9d522ccd80681eaf";
   gitBranch = "develop";
   gitTag    = "0.9.3";
 in
-  stdenv.mkDerivation rec {
-    name    = "antimony-${version}";
-    version = "2018-10-20";
+  stdenv.mkDerivation {
+    pname = "antimony";
+    version = "2020-03-28";
 
     src = fetchFromGitHub {
       owner  = "mkeeter";
       repo   = "antimony";
       rev    = gitRev;
-      sha256 = "01cjcjppbb0gvh6npcsaidzpfcfzrqhhi07z4v0jkfyi0fl125v4";
+      sha256 = "1s0zmq5jmhmb1wcsyaxfmii448g6x8b41mzvb1awlljj85qj0k2s";
     };
 
     patches = [ ./paths-fix.patch ];
@@ -29,10 +29,10 @@ in
 
     buildInputs = [
       libpng python3 python3.pkgs.boost
-      libGLU_combined qtbase ncurses
+      libGLU libGL qtbase ncurses
     ];
 
-    nativeBuildInputs = [ cmake flex lemon ];
+    nativeBuildInputs = [ cmake flex lemon wrapQtAppsHook ];
 
     cmakeFlags= [
       "-DGITREV=${gitRev}"

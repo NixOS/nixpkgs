@@ -1,19 +1,24 @@
-{ stdenv
+{ stdenv, targetPackages
 
 # Build time
 , fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , guile ? null
-
+, safePaths ? [
+   # $debugdir:$datadir/auto-load are whitelisted by default by GDB
+   "$debugdir" "$datadir/auto-load"
+   # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
+   targetPackages.stdenv.cc.cc.lib
+  ]
 }:
 
 let
   basename = "gdb-${version}";
-  version = "8.3";
+  version = "9.2";
 in
 
 assert pythonSupport -> python3 != null;
@@ -26,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "0bnpzz0rl672xg5547q5qck2sxi6cnyixmk8bbb4gifw17ipwbw0";
+    sha256 = "0mf5fn8v937qwnal4ykn3ji1y2sxk0fa1yfqi679hxmpg6pdf31n";
   };
 
   postPatch = if stdenv.isDarwin then ''
@@ -42,7 +47,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat zlib guile ]
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile ]
     ++ stdenv.lib.optional pythonSupport python3
     ++ stdenv.lib.optional doCheck dejagnu;
 
@@ -60,6 +65,13 @@ stdenv.mkDerivation rec {
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
 
+  # GDB have to be built out of tree.
+  preConfigure = ''
+    mkdir _build
+    cd _build
+  '';
+  configureScript = "../configure";
+
   configureFlags = with stdenv.lib; [
     "--enable-targets=all" "--enable-64-bit-bfd"
     "--disable-install-libbfd"
@@ -70,6 +82,7 @@ stdenv.mkDerivation rec {
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
+    "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ stdenv.lib.optional (!pythonSupport) "--without-python";
 
   postInstall =
@@ -89,11 +102,11 @@ stdenv.mkDerivation rec {
       program was doing at the moment it crashed.
     '';
 
-    homepage = https://www.gnu.org/software/gdb/;
+    homepage = "https://www.gnu.org/software/gdb/";
 
     license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = with platforms; linux ++ cygwin ++ darwin;
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with maintainers; [ pierron globin lsix ];
   };
 }

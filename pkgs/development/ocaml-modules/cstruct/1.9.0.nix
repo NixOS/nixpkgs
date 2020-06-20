@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mirage/ocaml-cstruct;
+    homepage = "https://github.com/mirage/ocaml-cstruct";
     description = "Map OCaml arrays onto C-like structs";
     license = stdenv.lib.licenses.isc;
     maintainers = [ maintainers.vbgl maintainers.ericbmerritt ];

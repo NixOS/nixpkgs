@@ -1,7 +1,7 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig
 , wayland, libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
-, colord, lcms2
+, colord, lcms2, pipewire ? null
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
 , libwebp ? null, xwayland ? null, wayland-protocols
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
@@ -9,12 +9,12 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "weston-${version}";
-  version = "6.0.1";
+  pname = "weston";
+  version = "8.0.0";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1d2m658ll8x7prlsfk71qgw89c7dz6y7d6nndfxwl49fmrd6sbxz";
+    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "0j3q0af3595g4wcicldgy749zm2g2b6bswa6ya8k075a5sdv863m";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
     mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
     libwebp wayland-protocols
-    colord lcms2
+    colord lcms2 pipewire
   ];
 
   mesonFlags= [
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     "-Dbackend-rdp=${boolToString (freerdp != null)}"
     "-Dxwayland=${boolToString (xwayland != null)}" # Default is true!
     "-Dremoting=false" # TODO
+    "-Dpipewire=${boolToString (pipewire != null)}"
     "-Dimage-webp=${boolToString (libwebp != null)}"
-    "-Dsimple-dmabuf-drm=" # Disables all drivers
     "-Ddemo-clients=false"
     "-Dsimple-clients="
     "-Dtest-junit-xml=false"
@@ -42,9 +42,11 @@ stdenv.mkDerivation rec {
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];
 
+  passthru.providedSessions = [ "weston" ];
+
   meta = {
     description = "Reference implementation of a Wayland compositor";
-    homepage = https://wayland.freedesktop.org/;
+    homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

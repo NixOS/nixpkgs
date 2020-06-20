@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "flex-${version}";
+  pname = "flex";
   version = "2.6.4";
 
   src = fetchurl {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   dontDisableStatic = stdenv.buildPlatform != stdenv.hostPlatform;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/westes/flex;
+    homepage = "https://github.com/westes/flex";
     description = "A fast lexical analyser generator";
     license = licenses.bsd2;
     platforms = platforms.unix;

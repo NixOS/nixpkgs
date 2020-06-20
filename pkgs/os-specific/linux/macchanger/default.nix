@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "macchanger-${version}";
+  pname = "macchanger";
   version = "1.7.0";
 
   src = fetchFromGitHub {
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A utility for viewing/manipulating the MAC address of network interfaces";
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with maintainers; [ joachifm ma27 ];
     license = licenses.gpl2Plus;
-    homepage = https://www.gnu.org/software/macchanger;
+    homepage = "https://www.gnu.org/software/macchanger";
     platforms = platforms.linux;
   };
 }

@@ -6,11 +6,11 @@
 # libpng16.so.16 rather than libpng12.
 
 stdenv.mkDerivation rec {
-  name = "autotrace-${version}";
+  pname = "autotrace";
   version = "0.31.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/autotrace/AutoTrace/0.31.1/${name}.tar.gz";
+    url = "mirror://sourceforge/autotrace/AutoTrace/0.31.1/${pname}-${version}.tar.gz";
     sha256 = "1xmgja5fv48mdbsa51inf7ksz36nqd6bsaybrk5xgprm6cy946js";
   };
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://autotrace.sourceforge.net/;
+    homepage = "http://autotrace.sourceforge.net/";
     description = "Utility for converting bitmap into vector graphics";
     platforms = platforms.unix;
     maintainers = with maintainers; [ hodapp ];

@@ -1,22 +1,18 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
+{ lib
+, python3Packages
+, stdenv
+, writeTextDir
+, substituteAll
+, pkgsHostHost
+}:
 
-let
-  # See https://mesonbuild.com/Reference-tables.html#cpu-families
-  cpuFamilies = {
-    "aarch64" = "aarch64";
-    "armv6l"  = "arm";
-    "armv7l"  = "arm";
-    "i686"    = "x86";
-    "x86_64"  = "x86_64";
-  };
-in
 python3Packages.buildPythonApplication rec {
   pname = "meson";
-  version = "0.50.1";
+  version = "0.54.2";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "05k3wsxjcnnq7a8n5kzxh2cdh5jdkh13xagigz5axs48j36zfai4";
+    sha256 = "0m84zb0q67vnxmd6ldz477w6yjdnk9c44xhlwh1g1pzqx3m6wwd7";
   };
 
   postFixup = ''
@@ -38,6 +34,11 @@ python3Packages.buildPythonApplication rec {
     # We remove the check so multiple outputs can work sanely.
     ./allow-dirs-outside-of-prefix.patch
 
+    # Meson is currently inspecting fewer variables than autoconf does, which
+    # makes it harder for us to use setup hooks, etc.  Taken from
+    # https://github.com/mesonbuild/meson/pull/6827
+    ./more-env-vars.patch
+
     # Unlike libtool, vanilla Meson does not pass any information
     # about the path library will be installed to to g-ir-scanner,
     # breaking the GIR when path other than ${!outputLib}/lib is used.
@@ -54,51 +55,24 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
-  ] ++ lib.optionals stdenv.isDarwin [
-    # We use custom Clang, which makes Meson think *not Apple*, while still
-    # relying on system linker. When it detects standard Clang, Meson will
-    # pass it `-Wl,-O1` flag but optimizations are not recognized by
-    # Mac linker.
-    # https://github.com/mesonbuild/meson/issues/4784
-    ./fix-objc-linking.patch
   ];
 
   setupHook = ./setup-hook.sh;
 
-  crossFile = writeTextDir "cross-file.conf" ''
-    [binaries]
-    c = '${targetPackages.stdenv.cc.targetPrefix}cc'
-    cpp = '${targetPackages.stdenv.cc.targetPrefix}c++'
-    ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
-    strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
-    pkgconfig = 'pkg-config'
-    ld = '${targetPackages.stdenv.cc.targetPrefix}ld'
-    objcopy = '${targetPackages.stdenv.cc.targetPrefix}objcopy'
-
-    [properties]
-    needs_exe_wrapper = true
-
-    [host_machine]
-    system = '${targetPackages.stdenv.targetPlatform.parsed.kernel.name}'
-    cpu_family = '${cpuFamilies.${targetPackages.stdenv.targetPlatform.parsed.cpu.name}}'
-    cpu = '${targetPackages.stdenv.targetPlatform.parsed.cpu.name}'
-    endian = ${if targetPackages.stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-  '';
+  # Ensure there will always be a native C compiler when meson is used, as a
+  # workaround until https://github.com/mesonbuild/meson/pull/6512 lands.
+  depsHostHostPropagated = [ pkgsHostHost.stdenv.cc ];
 
   # 0.45 update enabled tests but they are failing
   doCheck = false;
   # checkInputs = [ ninja pkgconfig ];
   # checkPhase = "python ./run_project_tests.py";
 
-  inherit (stdenv) cc;
-
-  isCross = stdenv.targetPlatform != stdenv.hostPlatform;
-
   meta = with lib; {
-    homepage = http://mesonbuild.com;
+    homepage = "https://mesonbuild.com";
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mbe rasendubi ];
+    maintainers = with maintainers; [ jtojnar mbe ];
     platforms = platforms.all;
   };
 }

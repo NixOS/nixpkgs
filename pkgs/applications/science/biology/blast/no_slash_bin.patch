@@ -1,0 +1,184 @@
+diff -u --recursive ncbi-blast-2.9.0+-src/scripts/common/impl/collect_outside_libs.sh ncbi-blast-2.9.0+-src.patched/scripts/common/impl/collect_outside_libs.sh
+--- ncbi-blast-2.9.0+-src/scripts/common/impl/collect_outside_libs.sh	2014-08-01 22:01:17.000000000 +0800
++++ ncbi-blast-2.9.0+-src.patched/scripts/common/impl/collect_outside_libs.sh	2019-05-15 12:40:44.145239480 +0800
+@@ -1,8 +1,5 @@
+ #!/bin/sh
+ set -e
+-PATH=/bin:/usr/bin
+-export PATH
+-unset CDPATH
+ 
+ base=$1
+ search=`echo ${2-$LD_LIBRARY_PATH} | tr : ' '`
+diff -u --recursive ncbi-blast-2.9.0+-src/scripts/common/impl/create_flat_tuneups.sh ncbi-blast-2.9.0+-src.patched/scripts/common/impl/create_flat_tuneups.sh
+--- ncbi-blast-2.9.0+-src/scripts/common/impl/create_flat_tuneups.sh	2011-08-17 02:55:10.000000000 +0800
++++ ncbi-blast-2.9.0+-src.patched/scripts/common/impl/create_flat_tuneups.sh	2019-05-15 12:40:48.449276574 +0800
+@@ -1,9 +1,6 @@
+ #!/bin/sh
+ id='$Id: create_flat_tuneups.sh 331412 2011-08-16 18:55:10Z ucko $'
+ 
+-PATH=/bin:/usr/bin
+-export PATH
+-
+ exec > auto_flat_tuneups.mk
+ 
+ cat <<EOF
+diff -u --recursive ncbi-blast-2.9.0+-src/scripts/common/impl/get_lock.sh ncbi-blast-2.9.0+-src.patched/scripts/common/impl/get_lock.sh
+--- ncbi-blast-2.9.0+-src/scripts/common/impl/get_lock.sh	2011-08-20 04:12:28.000000000 +0800
++++ ncbi-blast-2.9.0+-src.patched/scripts/common/impl/get_lock.sh	2019-05-15 12:40:52.901315000 +0800
+@@ -1,7 +1,5 @@
+ #!/bin/sh
+ 
+-PATH=/bin:/usr/bin
+-export PATH
+ 
+ dir=$1.lock
+ 
+diff -u --recursive ncbi-blast-2.9.0+-src/scripts/common/impl/if_diff.sh ncbi-blast-2.9.0+-src.patched/scripts/common/impl/if_diff.sh
+--- ncbi-blast-2.9.0+-src/scripts/common/impl/if_diff.sh	2014-07-30 22:06:45.000000000 +0800
++++ ncbi-blast-2.9.0+-src.patched/scripts/common/impl/if_diff.sh	2019-05-15 12:42:57.298410841 +0800
+@@ -4,9 +4,6 @@
+ # Author:  Denis Vakatov (vakatov@ncbi.nlm.nih.gov)
+ #################################
+ 
+-orig_PATH=$PATH
+-PATH=/bin:/usr/bin
+-
+ script_name=`basename $0`
+ script_args="$*"
+ 
+@@ -16,7 +13,7 @@
+ base_action=`basename "$action"`
+ case "$base_action" in
+   cp | cp\ * | ln | ln\ * )
+-      action=/bin/$base_action
++      action=$base_action
+       rm="rm -f"
+       ;;
+   * )
+@@ -58,10 +55,8 @@
+   shift
+   cmd="$* $dest_file"
+   test "$quiet" = yes || echo "$cmd"
+-  PATH=$orig_PATH
+   "$@" "$dest"
+   status=$?
+-  PATH=/bin:/usr/bin
+   return $status
+ }
+ 
+@@ -74,7 +69,7 @@
+   case "$base_action" in
+     ln | ln\ -f )
+       test "$quiet" = yes || echo "failed; trying \"cp -p ...\" instead"
+-      cmd="/bin/cp -p $src_file $dest_file"
++      cmd="cp -p $src_file $dest_file"
+       ExecHelper "$dest_file" /bin/cp -p "$src_file"  ||
+       Usage "\"$cmd\" failed"
+       ;;
+diff -u --recursive ncbi-blast-2.9.0+-src/scripts/common/impl/make_lock_map.sh ncbi-blast-2.9.0+-src.patched/scripts/common/impl/make_lock_map.sh
+--- ncbi-blast-2.9.0+-src/scripts/common/impl/make_lock_map.sh	2011-11-17 04:43:52.000000000 +0800
++++ ncbi-blast-2.9.0+-src.patched/scripts/common/impl/make_lock_map.sh	2019-05-15 12:40:56.769348434 +0800
+@@ -1,8 +1,6 @@
+ #!/bin/sh
+ # $Id: make_lock_map.sh 344587 2011-11-16 20:43:52Z ucko $
+ 
+-PATH=/bin:/usr/bin
+-export PATH
+ 
+ act=false
+ cache_dir='.#SRC-cache'
+diff -u --recursive ncbi-blast-2.9.0+-src/scripts/common/impl/run_with_lock.sh ncbi-blast-2.9.0+-src.patched/scripts/common/impl/run_with_lock.sh
+--- ncbi-blast-2.9.0+-src/scripts/common/impl/run_with_lock.sh	2015-10-29 22:36:05.000000000 +0800
++++ ncbi-blast-2.9.0+-src.patched/scripts/common/impl/run_with_lock.sh	2019-05-15 12:41:53.401842849 +0800
+@@ -1,10 +1,6 @@
+ #!/bin/sh
+ # $Id: run_with_lock.sh 483249 2015-10-29 14:36:05Z ucko $
+ 
+-orig_PATH=$PATH
+-PATH=/bin:/usr/bin
+-export PATH
+-
+ base=
+ logfile=
+ map=
+@@ -23,7 +19,7 @@
+ : ${base:=`basename "$1"`}
+ 
+ clean_up () {
+-    /bin/rm -rf "$base.lock"
++    rm -rf "$base.lock"
+ }
+ 
+ case $0 in
+@@ -45,7 +41,7 @@
+     trap "clean_up; exit $error_status" 1 2 15
+     if [ -n "$logfile" ]; then
+         status_file=$base.lock/status
+-        (PATH=$orig_PATH; export PATH; "$@"; echo $? > "$status_file") 2>&1 \
++        ("$@"; echo $? > "$status_file") 2>&1 \
+             | tee "$logfile.new"
+         # Emulate egrep -q to avoid having to move from under scripts.
+         if [ ! -f "$logfile" ]  \
+@@ -58,8 +54,6 @@
+             status=1
+         fi
+     else
+-        PATH=$orig_PATH
+-        export PATH
+         "$@"
+         status=$?
+     fi
+diff -u --recursive ncbi-blast-2.9.0+-src/scripts/common/impl/strip_for_install.sh ncbi-blast-2.9.0+-src.patched/scripts/common/impl/strip_for_install.sh
+--- ncbi-blast-2.9.0+-src/scripts/common/impl/strip_for_install.sh	2013-09-24 03:06:51.000000000 +0800
++++ ncbi-blast-2.9.0+-src.patched/scripts/common/impl/strip_for_install.sh	2019-05-15 12:40:13.272975092 +0800
+@@ -1,8 +1,5 @@
+ #!/bin/sh
+ 
+-PATH=/bin:/usr/bin:/usr/ccs/bin
+-export PATH
+-
+ case "$1" in
+     --dirs )
+         shift
+--- ncbi-blast-2.9.0+-src/scripts/common/impl/update_configurable.sh	2017-07-13 22:53:24.000000000 +0800
++++ ncbi-blast-2.9.0+-src.patched/scripts/common/impl/update_configurable.sh	2019-05-15 15:03:35.861276083 +0800
+@@ -1,6 +1,4 @@
+ #!/bin/sh
+-PATH=/bin:/usr/bin
+-export PATH
+ 
+ script_name=`basename $0`
+ script_dir=`dirname $0`
+--- ncbi-blast-2.9.0+-src/src/build-system/Makefile.mk.in	2019-01-04 01:38:37.000000000 +0800
++++ ncbi-blast-2.9.0+-src.patched/src/build-system/Makefile.mk.in	2019-05-15 15:14:41.749416495 +0800
+@@ -50,12 +50,12 @@
+ 
+ ### Auxiliary commands, filters
+ 
+-RM       = /bin/rm -f
+-RMDIR    = /bin/rm -rf
+-COPY     = /bin/cp -p
++RM       = rm -f
++RMDIR    = rm -rf
++COPY     = cp -p
+ BINCOPY  = @BINCOPY@
+ TOUCH    = @TOUCH@
+-MKDIR    = /bin/mkdir
++MKDIR    = mkdir
+ BINTOUCH = $(TOUCH)
+ LN_S     = @LN_S@
+ GREP     = @GREP@
+--- ncbi-blast-2.9.0+-src/src/build-system/configure	2019-03-05 00:49:08.000000000 +0800
++++ ncbi-blast-2.9.0+-src.patched/src/build-system/configure	2019-05-15 16:55:40.711795042 +0800
+@@ -10417,10 +10417,6 @@
+ echo "${ECHO_T}no, using $LN_S" >&6; }
+ fi
+ 
+-case "$LN_S" in
+-    /*) ;;
+-    * ) LN_S=/bin/$LN_S ;;
+-esac
+ 
+ if test -n "$ac_tool_prefix"; then
+   # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.

@@ -3,8 +3,8 @@
 , js_of_ocaml, reactivedata, tyxml
 }:
 
-stdenv.mkDerivation rec {
-	name = "js_of_ocaml-tyxml-${version}";
+stdenv.mkDerivation {
+	pname = "js_of_ocaml-tyxml";
 
 	inherit (js_of_ocaml-compiler) version src installPhase meta;
 

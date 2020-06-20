@@ -14,7 +14,7 @@
 with lib;
 
 buildGoPackage rec {
-  name = "singularity-${version}";
+  pname = "singularity";
   version = "3.2.1";
 
   src = fetchFromGitHub {
@@ -27,9 +27,14 @@ buildGoPackage rec {
   goPackagePath = "github.com/sylabs/singularity";
   goDeps = ./deps.nix;
 
-  buildInputs = [ openssl ];
-  nativeBuildInputs = [ removeReferencesTo utillinux which makeWrapper ];
+  buildInputs = [ openssl utillinux ];
+  nativeBuildInputs = [ removeReferencesTo which makeWrapper ];
   propagatedBuildInputs = [ coreutils squashfsTools ];
+
+  prePatch = ''
+    substituteInPlace internal/pkg/build/copy/copy.go \
+      --replace /bin/cp ${coreutils}/bin/cp
+  '';
 
   postConfigure = ''
     cd go/src/github.com/sylabs/singularity
@@ -37,7 +42,7 @@ buildGoPackage rec {
     patchShebangs .
     sed -i 's|defaultPath := "[^"]*"|defaultPath := "${stdenv.lib.makeBinPath propagatedBuildInputs}"|' cmd/internal/cli/actions.go
 
-    ./mconfig -V ${version} -p $bin --localstatedir=/var
+    ./mconfig -V ${version} -p $out --localstatedir=/var
 
     # Don't install SUID binaries
     sed -i 's/-m 4755/-m 755/g' builddir/Makefile
@@ -49,20 +54,20 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    make -C builddir install LOCALSTATEDIR=$bin/var
-    chmod 755 $bin/libexec/singularity/bin/starter-suid
-    wrapProgram $bin/bin/singularity --prefix PATH : ${stdenv.lib.makeBinPath propagatedBuildInputs}
+    make -C builddir install LOCALSTATEDIR=$out/var
+    chmod 755 $out/libexec/singularity/bin/starter-suid
+    wrapProgram $out/bin/singularity --prefix PATH : ${stdenv.lib.makeBinPath propagatedBuildInputs}
   '';
 
   postFixup = ''
-    find $bin/ -type f -executable -exec remove-references-to -t ${go} '{}' + || true
+    find $out/libexec/ -type f -executable -exec remove-references-to -t ${go} '{}' + || true
 
     # These etc scripts shouldn't have their paths patched
-    cp etc/actions/* $bin/etc/singularity/actions/
+    cp etc/actions/* $out/etc/singularity/actions/
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.sylabs.io/;
+    homepage = "http://www.sylabs.io/";
     description = "Application containers for linux";
     license = licenses.bsd3;
     platforms = platforms.linux;

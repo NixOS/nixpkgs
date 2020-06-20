@@ -4,11 +4,11 @@ let
 
 in buildPythonPackage rec {
   pname = "typing_extensions";
-  version = "3.7.2";
+  version = "3.7.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wfsv71pvkyf2na938l579jh0v3kzl6g744ijgnahcwd4d9x0b7v";
+    sha256 = "79ee589a3caca649a9bfd2a8de4709837400dfa00b6cc81962a1e6a1815969ae";
   };
 
   checkInputs = lib.optional (pythonOlder "3.5") typing;
@@ -24,7 +24,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Backported and Experimental Type Hints for Python 3.5+";
-    homepage = https://github.com/python/typing;
+    homepage = "https://github.com/python/typing";
     license = licenses.psfl;
     maintainers = with maintainers; [ pmiddend ];
   };

@@ -15,20 +15,14 @@
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
-, openblas, arpack
+, blas, lapack, arpack
 # Darwin frameworks
 , CoreServices, ApplicationServices
 }:
 
 with stdenv.lib;
 
-# All dependencies must use the same OpenBLAS.
-let
-  arpack_ = arpack;
-in
-let
-  arpack = arpack_.override { inherit openblas; };
-in
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
   dsfmtVersion = "2.2.3";
@@ -77,10 +71,9 @@ in
 stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
-  name = "${pname}-${version}";
 
   src = fetchzip {
-    url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
+    url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = src_sha256;
   };
   prePatch = ''
@@ -119,7 +112,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
-    pcre2.dev openblas openlibm openspecfun readline utf8proc
+    pcre2.dev blas lapack openlibm openspecfun readline utf8proc
     zlib
   ]
   ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
@@ -130,10 +123,10 @@ stdenv.mkDerivation rec {
   makeFlags =
     let
       arch = head (splitString "-" stdenv.system);
-      march = { "x86_64" = stdenv.hostPlatform.platform.gcc.arch or "x86-64"; "i686" = "pentium4"; }."${arch}"
+      march = { x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64"; i686 = "pentium4"; }.${arch}
               or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
-      cpuTarget = { "x86_64" = "x86-64"; "i686" = "pentium4"; }."${arch}"
+      cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; }.${arch}
                   or (throw "unsupported architecture: ${arch}");
     in [
       "ARCH=${arch}"
@@ -144,13 +137,9 @@ stdenv.mkDerivation rec {
       "SHELL=${stdenv.shell}"
 
       "USE_SYSTEM_BLAS=1"
-      "USE_BLAS64=${if openblas.blas64 then "1" else "0"}"
-      "LIBBLAS=-lopenblas"
-      "LIBBLASNAME=libopenblas"
+      "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
 
       "USE_SYSTEM_LAPACK=1"
-      "LIBLAPACK=-lopenblas"
-      "LIBLAPACKNAME=libopenblas"
 
       "USE_SYSTEM_ARPACK=1"
       "USE_SYSTEM_FFTW=1"
@@ -174,7 +163,7 @@ stdenv.mkDerivation rec {
     ];
 
   LD_LIBRARY_PATH = makeLibraryPath [
-    arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
+    arpack fftw fftwSinglePrec gmp libgit2 mpfr blas lapack openlibm
     openspecfun pcre2
   ];
 
@@ -212,7 +201,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
-    homepage = https://julialang.org/;
+    homepage = "https://julialang.org/";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin rob garrison ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];

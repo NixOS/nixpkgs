@@ -72,6 +72,7 @@ let
     resolution_type: GETDNS_RESOLUTION_STUB
     dns_transport_list:
       ${fallbacks}
+    appdata_dir: "/var/cache/stubby"
     tls_authentication: ${cfg.authenticationMode}
     tls_query_padding_blocksize: ${toString cfg.queryPaddingBlocksize}
     edns_client_subnet_private: ${if cfg.subnetPrivate then "1" else "0"}
@@ -168,7 +169,7 @@ in
         default = defaultUpstream;
         type = types.lines;
         description = ''
-          Add additional upstreams. See <citerefentry><refentrytitle>stubby
+          Replace default upstreams. See <citerefentry><refentrytitle>stubby
           </refentrytitle><manvolnum>1</manvolnum></citerefentry> for an
           example of the entry formatting. In Strict mode, at least one of the
           following settings must be supplied for each nameserver:
@@ -204,10 +205,12 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+        Type = "notify";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${optionalString cfg.debugLogging "-l"}";
         DynamicUser = true;
+        CacheDirectory = "stubby";
       };
     };
   };

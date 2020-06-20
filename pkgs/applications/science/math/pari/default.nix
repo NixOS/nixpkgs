@@ -13,22 +13,19 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.11.1";
+  version = "2.11.3";
 
   src = fetchurl {
     url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz";
-    sha256 = "1jfax92jpydjd02fwl30r6b8kfzqqd6sm4yx94gidyz9lqjb7a94";
+    sha256 = "1jd65h2psrmba2dx7rkf5qidf9ka0cwbsg20pd18k45ggr30l467";
   };
 
   patches = [
-    # Fix a off-by-one bug that can potentially lead to segfaults (accepted upstream)
-    # https://pari.math.u-bordeaux.fr/cgi-bin/bugreport.cgi?bug=2117
-    # https://trac.sagemath.org/ticket/27335
+    # https://trac.sagemath.org/ticket/29313#comment:1
     (fetchpatch {
-      name = "fix-off-by-one-error.patch";
-      # only relevant parts of https://pari.math.u-bordeaux.fr/cgi-bin/gitweb.cgi?p=pari.git;a=patch;h=aa1ee6e0898d177e6bcf49237d82c804bc410985
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pari/patches/red_montgomery.patch?id=bbea55c96e1f05302b3c7f593cf64492497047c5";
-      sha256 = "0vqkmhgv9splsdswp6zjnkj50z76rc1m6k9iy3cf9dxwqw3h3nr6";
+      name = "backport-bug-fix.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/repos/community-x86_64/c7a1d35f.patch?h=packages/pari&id=27893d227290dc3821d68aa25877d9765c204dad";
+      sha256 = "0vm0fwyzj66cr32imip6srksd47s2s2sjl1rb26ph8gpfi3nalii";
     })
   ];
 
@@ -84,8 +81,8 @@ stdenv.mkDerivation rec {
           run 3 or 4 times faster.) gp2c currently only understands a subset
            of the GP language.
     '';
-    homepage    = http://pari.math.u-bordeaux.fr;
-    downloadPage = http://pari.math.u-bordeaux.fr/download.html;
+    homepage    = "http://pari.math.u-bordeaux.fr";
+    downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ertes raskin AndersonTorres timokau ];
     platforms   = platforms.linux ++ platforms.darwin;

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, acl }:
 
 stdenv.mkDerivation rec {
-  name = "gnutar-${version}";
+  pname = "gnutar";
   version = "1.32";
 
   src = fetchurl {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = false; # fails
 
   meta = {
-    homepage = https://www.gnu.org/software/tar/;
+    homepage = "https://www.gnu.org/software/tar/";
     description = "GNU implementation of the `tar' archiver";
 
     longDescription = ''

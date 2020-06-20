@@ -2,20 +2,20 @@
 
 let
   arch = {
-    "x86_64-linux" = "x64";
-    "i686-linux" = "i386";
+    x86_64-linux = "x64";
+    i686-linux = "i386";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
 
 in stdenv.mkDerivation rec {
-  name = "resilio-sync-${version}";
-  version = "2.6.3";
+  pname = "resilio-sync";
+  version = "2.7.0";
 
   src = fetchurl {
     url = "https://download-cdn.resilio.com/${version}/linux-${arch}/resilio-sync_${arch}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "114k7dsxn7lzv6mjq9alsqxypvkah4lmjn5w6brbvgd6m6pdwslz";
-      "i686-linux"   = "1dh0hxbd33bs51xib3qwxw58h9j30v0dc10b4x4rwkbgsj11nc83";
+      x86_64-linux = "17vw4kyggmi8phm91jx1skkd7vrdhbahibv6d6zm14q87r01a56f";
+      i686-linux   = "0yvy3lif2g4jchcp5q1r5b8ndj8009pcq5js7r0kl20bmmcmzklg";
     }.${stdenv.hostPlatform.system};
   };
 
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Automatically sync files via secure, distributed technology";
-    homepage    = https://www.resilio.com/;
+    homepage    = "https://www.resilio.com/";
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ domenkozar thoughtpolice cwoac ];

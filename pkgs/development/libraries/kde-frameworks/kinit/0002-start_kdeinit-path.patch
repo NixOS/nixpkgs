@@ -1,0 +1,25 @@
+From 129cd0ae1e983adc10dbe84e87bcc6f31cb13db8 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Sun, 16 Feb 2020 14:23:44 -0600
+Subject: [PATCH 2/4] start_kdeinit-path
+
+---
+ src/start_kdeinit/start_kdeinit_wrapper.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/start_kdeinit/start_kdeinit_wrapper.c b/src/start_kdeinit/start_kdeinit_wrapper.c
+index 891f50c..ef664ad 100644
+--- a/src/start_kdeinit/start_kdeinit_wrapper.c
++++ b/src/start_kdeinit/start_kdeinit_wrapper.c
+@@ -23,7 +23,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ 
+-#define EXECUTE CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit"
++#define EXECUTE "/run/wrappers/bin/start_kdeinit"
+ 
+ #if KDEINIT_OOM_PROTECT
+ 
+-- 
+2.23.1
+

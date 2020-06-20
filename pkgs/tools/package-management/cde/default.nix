@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "cde-${version}";
+  pname = "cde";
   version = "0.1";
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pgbovine/CDE;
+    homepage = "https://github.com/pgbovine/CDE";
     description = "A packaging tool for building portable packages";
     license = licenses.gpl3;
     maintainers = [ maintainers.rlupton20 ];

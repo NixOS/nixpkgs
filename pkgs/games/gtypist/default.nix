@@ -1,7 +1,7 @@
 {stdenv, fetchurl, makeWrapper, libiconv, ncurses, perl, fortune}:
 
 stdenv.mkDerivation rec {
-  name = "gtypist-${version}";
+  pname = "gtypist";
   version = "2.9.5";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/gtypist;
+    homepage = "https://www.gnu.org/software/gtypist";
     description = "Universal typing tutor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;

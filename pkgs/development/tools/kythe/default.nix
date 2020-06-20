@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       source code — including build systems, compilers, interpreters, static
       analyses, editors, code-review applications, and more — to share
       information with each other smoothly.  '';
-    homepage = https://kythe.io/;
+    homepage = "https://kythe.io/";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.mpickering ];

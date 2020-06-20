@@ -5,12 +5,12 @@
 assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "libgcrypt-${version}";
-  version = "1.8.4";
+  pname = "libgcrypt";
+  version = "1.8.5";
 
   src = fetchurl {
-    url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "09r27ywj9zplq6n9qw3mn7zmvf6y2jdmwx5d1kg8yqkj0qx18f7n";
+    url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
+    sha256 = "1hvsazms1bfd769q0ngl0r9g5i4m9mpz9jmvvrdzyzk3rfa2ljiv";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -27,7 +27,12 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
 
-  configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ];
+  configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ]
+   ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-asm";
+
+  # Necessary to generate correct assembly when compiling for aarch32 on
+  # aarch64
+  configurePlatforms = [ "host" "build" ];
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
@@ -47,11 +52,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/libgcrypt/;
+    homepage = "https://www.gnu.org/software/libgcrypt/";
     description = "General-purpose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra ];
-    repositories.git = git://git.gnupg.org/libgcrypt.git;
+    repositories.git = "git://git.gnupg.org/libgcrypt.git";
   };
 }

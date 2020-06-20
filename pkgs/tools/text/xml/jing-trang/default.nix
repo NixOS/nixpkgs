@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, jre_headless, jdk, ant, saxon }:
 
-stdenv.mkDerivation rec {
-  name = "jing-trang-${version}";
+stdenv.mkDerivation {
+  pname = "jing-trang";
   version = "20151127";
 
   src = fetchFromGitHub {
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ jdk ant saxon ];
+
+  CLASSPATH = "lib/saxon.jar";
 
   preBuild = "ant";
 
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "A RELAX NG validator in Java";
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".
-    homepage = https://www.thaiopensource.com/relaxng/trang.html;
+    homepage = "https://www.thaiopensource.com/relaxng/trang.html";
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };

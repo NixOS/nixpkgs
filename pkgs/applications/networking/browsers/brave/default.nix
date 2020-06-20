@@ -10,13 +10,15 @@
 , expat
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gnome2
 , gnome3
 , gsettings-desktop-schemas
 , gtk3
+, libpulseaudio
 , libuuid
+, libdrm
 , libX11
 , libXcomposite
 , libXcursor
@@ -28,6 +30,7 @@
 , libXrender
 , libXScrnSaver
 , libXtst
+, mesa
 , nspr
 , nss
 , pango
@@ -51,10 +54,12 @@ rpath = lib.makeLibraryPath [
   expat
   fontconfig
   freetype
-  gdk_pixbuf
+  gdk-pixbuf
   glib
   gnome2.GConf
   gtk3
+  libdrm
+  libpulseaudio
   libX11
   libXScrnSaver
   libXcomposite
@@ -67,6 +72,7 @@ rpath = lib.makeLibraryPath [
   libXrender
   libXtst
   libuuid
+  mesa
   nspr
   nss
   pango
@@ -80,11 +86,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "0.65.118";
+  version = "1.8.95";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "13bihzf4yfgn01nrw780swhmcdh8gq71jqilhbi04jn1h1pbm3wg";
+    sha256 = "1mlffg2v31b42gj354w5yv0yzlqc2f4f3cmdnddzkplw10jgw6f1";
   };
 
   dontConfigure = true;
@@ -117,7 +123,7 @@ stdenv.mkDerivation rec {
 
       # Fix paths
       substituteInPlace $out/share/applications/brave-browser.desktop \
-          --replace /usr/bin/brave-browser $out/bin/brave
+          --replace /usr/bin/brave-browser-stable $out/bin/brave
       substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
           --replace /opt/brave.com $out/opt/brave.com
       substituteInPlace $out/share/menu/brave-browser.menu \
@@ -149,7 +155,7 @@ stdenv.mkDerivation rec {
       contribute to your favorite creators automatically.
     '';
     license = licenses.mpl20;
-    maintainers = [ maintainers.uskudnik ];
+    maintainers = with maintainers; [ uskudnik rht jefflabonte ];
     platforms = [ "x86_64-linux" ];
   };
 }

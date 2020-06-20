@@ -6,7 +6,8 @@ let
   version = "6.14.12";
 in
 stdenv.mkDerivation {
-  name = "libpgf-${version}";
+  pname = "libpgf";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/libpgf/libpgf-src-${version}.tar.gz";
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
 # configureFlags = optional static "--enable-static --disable-shared";
 
   meta = {
-    homepage = http://www.libpgf.org/;
+    homepage = "https://www.libpgf.org/";
     description = "Progressive Graphics Format";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.unix;

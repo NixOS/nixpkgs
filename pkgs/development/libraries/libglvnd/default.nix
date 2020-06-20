@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python2, pkgconfig, libX11, libXext, xorgproto, addOpenGLRunpath }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python3, pkgconfig, libX11, libXext, xorgproto, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
-  name = "libglvnd-${version}";
-  version = "1.0.0";
+  pname = "libglvnd";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libglvnd";
     rev = "v${version}";
-    sha256 = "1a126lzhd2f04zr3rvdl6814lfl0j077spi5dsf2alghgykn5iif";
+    sha256 = "0mkzdzdxjxjl794rblq4mq33wmb8ikqmfswbqdbr8gw2kw4wlhdl";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python2 addOpenGLRunpath ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig python3 addOpenGLRunpath ];
   buildInputs = [ libX11 libXext xorgproto ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -19,41 +19,35 @@ stdenv.mkDerivation rec {
       --replace "-Wl,-Bsymbolic " ""
     substituteInPlace src/EGL/Makefile.am \
       --replace "-Wl,-Bsymbolic " ""
+    substituteInPlace src/GLdispatch/Makefile.am \
+      --replace "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString ([
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
     # FHS paths are added so that non-NixOS applications can find vendor files.
     "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addOpenGLRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
-  ] ++ lib.optional stdenv.cc.isClang "-Wno-error";
+
+    "-Wno-error=array-bounds"
+  ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
 
   # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
   configureFlags  = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
 
-  # Upstream patch fixing use of libdl, should be in next release.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/NVIDIA/libglvnd/commit/0177ade40262e31a80608a8e8e52d3da7163dccf.patch";
-      sha256 = "1rnz5jw2gvx4i1lcp0k85jz9xgr3dgzsd583m2dlxkaf2a09j89d";
-    })
-  ] ++ stdenv.lib.optional stdenv.isDarwin
-    (fetchpatch {
-      url = "https://github.com/NVIDIA/libglvnd/commit/294ccb2f49107432567e116e13efac586580a4cc.patch";
-      sha256 = "01339wg27cypv93221rhk3885vxbsg8kvbfyia77jmjdcnwrdwm2";
-    });
   outputs = [ "out" "dev" ];
 
-  # Set RUNPATH so that driver libraries in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
+  # Set RUNPATH so that libGLX can find driver libraries in /run/opengl-driver(-32)/lib.
+  # Note that libEGL does not need it because it uses driver config files which should
+  # contain absolute paths to libraries.
   postFixup = ''
-    addOpenGLRunpath $out/lib/libGLX.so $out/lib/libEGL.so
+    addOpenGLRunpath $out/lib/libGLX.so
   '';
 
   passthru = { inherit (addOpenGLRunpath) driverLink; };
 
   meta = with stdenv.lib; {
     description = "The GL Vendor-Neutral Dispatch library";
-    homepage = https://github.com/NVIDIA/libglvnd;
+    homepage = "https://github.com/NVIDIA/libglvnd";
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
   };

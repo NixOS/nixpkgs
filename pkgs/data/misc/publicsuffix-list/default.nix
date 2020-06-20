@@ -3,7 +3,7 @@
 let
   pname = "publicsuffix-list";
   version = "2019-05-24";
-in fetchFromGitHub rec {
+in fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "publicsuffix";
   repo = "list";

@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ library for zkSNARKs";
-    homepage = https://github.com/scipr-lab/libsnark;
+    homepage = "https://github.com/scipr-lab/libsnark";
     license = licenses.mit;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };

@@ -1,0 +1,313 @@
+From 9262f52b0e30cf8c39d9f7684a8c0e8fd4887cd5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Mon, 26 Feb 2018 14:25:57 +0000
+Subject: [PATCH 12/18] Install default configuration into $out/share/factory
+
+By default systemd should read all its configuration from /etc. Therefor
+we rely on -Dsysconfdir=/etc in meson as default value. Unfortunately
+this would also lead to installation of systemd's own configuration
+files to `/etc` whereas we are limited to /nix/store. To counter that
+this commit introduces two new configuration variables `factoryconfdir`
+and `factorypkgconfdir` to install systemd's own configuration into nix
+store again, while having executables looking up files in /etc.
+---
+ hwdb.d/meson.build             |  2 +-
+ meson.build                    | 11 +++++++----
+ network/meson.build            |  2 +-
+ src/core/meson.build           | 10 +++++-----
+ src/coredump/meson.build       |  2 +-
+ src/journal-remote/meson.build |  4 ++--
+ src/journal/meson.build        |  2 +-
+ src/kernel-install/meson.build |  2 +-
+ src/login/meson.build          |  2 +-
+ src/network/meson.build        |  2 +-
+ src/pstore/meson.build         |  2 +-
+ src/resolve/meson.build        |  2 +-
+ src/timesync/meson.build       |  2 +-
+ src/udev/meson.build           |  4 ++--
+ sysctl.d/meson.build           |  2 +-
+ tmpfiles.d/meson.build         |  2 +-
+ units/meson.build              |  2 +-
+ 17 files changed, 29 insertions(+), 26 deletions(-)
+
+diff --git a/hwdb.d/meson.build b/hwdb.d/meson.build
+index 4df6dabf89..02d8d69095 100644
+--- a/hwdb.d/meson.build
++++ b/hwdb.d/meson.build
+@@ -27,7 +27,7 @@ if conf.get('ENABLE_HWDB') == 1
+                      install_dir : udevhwdbdir)
+ 
+         meson.add_install_script('sh', '-c',
+-                                 mkdir_p.format(join_paths(sysconfdir, 'udev/hwdb.d')))
++                                 mkdir_p.format(join_paths(factoryconfdir, 'udev/hwdb.d')))
+ 
+         meson.add_install_script('sh', '-c',
+                                  'test -n "$DESTDIR" || @0@/systemd-hwdb update'
+diff --git a/meson.build b/meson.build
+index 62eba4186c..b0b2edbb5a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -154,6 +154,9 @@ udevhwdbdir = join_paths(udevlibexecdir, 'hwdb.d')
+ catalogdir = join_paths(prefixdir, 'lib/systemd/catalog')
+ kernelinstalldir = join_paths(prefixdir, 'lib/kernel/install.d')
+ factorydir = join_paths(datadir, 'factory')
++factoryconfdir = join_paths(datadir, 'factory/etc')
++factorypkgconfdir = join_paths(datadir, 'factory/etc/systemd')
++factoryxinitrcdir = join_paths(datadir, 'factory/etc/X11/xinit/xinitrc.d')
+ bootlibdir = join_paths(prefixdir, 'lib/systemd/boot/efi')
+ testsdir = join_paths(prefixdir, 'lib/systemd/tests')
+ systemdstatedir = join_paths(localstatedir, 'lib/systemd')
+@@ -2511,7 +2514,7 @@ if conf.get('ENABLE_BINFMT') == 1
+         meson.add_install_script('sh', '-c',
+                                  mkdir_p.format(binfmtdir))
+         meson.add_install_script('sh', '-c',
+-                                 mkdir_p.format(join_paths(sysconfdir, 'binfmt.d')))
++                                 mkdir_p.format(join_paths(factoryconfdir, 'binfmt.d')))
+ endif
+ 
+ if conf.get('ENABLE_REPART') == 1
+@@ -2612,7 +2615,7 @@ executable('systemd-sleep',
+            install_dir : rootlibexecdir)
+ 
+ install_data('src/sleep/sleep.conf',
+-             install_dir : pkgsysconfdir)
++             install_dir : factorypkgconfdir)
+ 
+ exe = executable('systemd-sysctl',
+                  'src/sysctl/sysctl.c',
+@@ -2924,7 +2927,7 @@ if conf.get('HAVE_KMOD') == 1
+         meson.add_install_script('sh', '-c',
+                                  mkdir_p.format(modulesloaddir))
+         meson.add_install_script('sh', '-c',
+-                                 mkdir_p.format(join_paths(sysconfdir, 'modules-load.d')))
++                                 mkdir_p.format(join_paths(factoryconfdir, 'modules-load.d')))
+ endif
+ 
+ exe = executable('systemd-nspawn',
+@@ -3167,7 +3170,7 @@ install_subdir('factory/etc',
+                install_dir : factorydir)
+ 
+ install_data('xorg/50-systemd-user.sh',
+-             install_dir : xinitrcdir)
++             install_dir : factoryxinitrcdir)
+ install_data('modprobe.d/systemd.conf',
+              install_dir : modprobedir)
+ install_data('LICENSE.GPL2',
+diff --git a/network/meson.build b/network/meson.build
+index 544dcf4387..1828c50863 100644
+--- a/network/meson.build
++++ b/network/meson.build
+@@ -10,7 +10,7 @@ if conf.get('ENABLE_NETWORKD') == 1
+                      install_dir : networkdir)
+ 
+         meson.add_install_script('sh', '-c',
+-                                 mkdir_p.format(join_paths(sysconfdir, 'systemd/network')))
++                                 mkdir_p.format(join_paths(factoryconfdir, 'systemd/network')))
+ endif
+ 
+ install_data('99-default.link',
+diff --git a/src/core/meson.build b/src/core/meson.build
+index 3586838f59..02ddf1a123 100644
+--- a/src/core/meson.build
++++ b/src/core/meson.build
+@@ -179,8 +179,8 @@ libcore = static_library(
+ systemd_sources = files('main.c')
+ 
+ in_files = [['macros.systemd',   rpmmacrosdir],
+-            ['system.conf',      pkgsysconfdir],
+-            ['user.conf',        pkgsysconfdir],
++            ['system.conf',      factorypkgconfdir],
++            ['user.conf',        factorypkgconfdir],
+             ['systemd.pc',       pkgconfigdatadir],
+             ['triggers.systemd', '']]
+ 
+@@ -212,6 +212,6 @@ meson.add_install_script('sh', '-c', mkdir_p.format(systemsleepdir))
+ meson.add_install_script('sh', '-c', mkdir_p.format(systemgeneratordir))
+ meson.add_install_script('sh', '-c', mkdir_p.format(usergeneratordir))
+ 
+-meson.add_install_script('sh', '-c', mkdir_p.format(join_paths(pkgsysconfdir, 'system')))
+-meson.add_install_script('sh', '-c', mkdir_p.format(join_paths(pkgsysconfdir, 'user')))
+-meson.add_install_script('sh', '-c', mkdir_p.format(join_paths(sysconfdir, 'xdg/systemd')))
++meson.add_install_script('sh', '-c', mkdir_p.format(join_paths(factorypkgconfdir, 'system')))
++meson.add_install_script('sh', '-c', mkdir_p.format(join_paths(factorypkgconfdir, 'user')))
++meson.add_install_script('sh', '-c', mkdir_p.format(join_paths(factorypkgconfdir, 'xdg/systemd')))
+diff --git a/src/coredump/meson.build b/src/coredump/meson.build
+index 7fa5942697..34c865dfa0 100644
+--- a/src/coredump/meson.build
++++ b/src/coredump/meson.build
+@@ -15,7 +15,7 @@ coredumpctl_sources = files('coredumpctl.c')
+ 
+ if conf.get('ENABLE_COREDUMP') == 1
+         install_data('coredump.conf',
+-                     install_dir : pkgsysconfdir)
++                     install_dir : factorypkgconfdir)
+ endif
+ 
+ tests += [
+diff --git a/src/journal-remote/meson.build b/src/journal-remote/meson.build
+index 87b8ba6495..daff8ec967 100644
+--- a/src/journal-remote/meson.build
++++ b/src/journal-remote/meson.build
+@@ -49,7 +49,7 @@ if conf.get('ENABLE_REMOTE') ==1 and conf.get('HAVE_LIBCURL') == 1
+                 output : 'journal-upload.conf',
+                 configuration : substs)
+         install_data(journal_upload_conf,
+-                     install_dir : pkgsysconfdir)
++                     install_dir : factorypkgconfdir)
+ endif
+ 
+ if conf.get('ENABLE_REMOTE') == 1 and conf.get('HAVE_MICROHTTPD') == 1
+@@ -58,7 +58,7 @@ if conf.get('ENABLE_REMOTE') == 1 and conf.get('HAVE_MICROHTTPD') == 1
+                 output : 'journal-remote.conf',
+                 configuration : substs)
+         install_data(journal_remote_conf,
+-                     install_dir : pkgsysconfdir)
++                     install_dir : factorypkgconfdir)
+ 
+         install_data('browse.html',
+                      install_dir : join_paths(pkgdatadir, 'gatewayd'))
+diff --git a/src/journal/meson.build b/src/journal/meson.build
+index 5796f77cac..75d975c260 100644
+--- a/src/journal/meson.build
++++ b/src/journal/meson.build
+@@ -109,7 +109,7 @@ if conf.get('HAVE_QRENCODE') == 1
+ endif
+ 
+ install_data('journald.conf',
+-             install_dir : pkgsysconfdir)
++             install_dir : factorypkgconfdir)
+ 
+ if get_option('create-log-dirs')
+         meson.add_install_script(
+diff --git a/src/kernel-install/meson.build b/src/kernel-install/meson.build
+index 261c3aaae4..dbc5e23513 100644
+--- a/src/kernel-install/meson.build
++++ b/src/kernel-install/meson.build
+@@ -11,4 +11,4 @@ install_data('00-entry-directory.install',
+              install_dir : kernelinstalldir)
+ 
+ meson.add_install_script('sh', '-c',
+-                         mkdir_p.format(join_paths(sysconfdir, 'kernel/install.d')))
++                         mkdir_p.format(join_paths(factoryconfdir, 'kernel/install.d')))
+diff --git a/src/login/meson.build b/src/login/meson.build
+index 0a7d3d5440..ff90149c1c 100644
+--- a/src/login/meson.build
++++ b/src/login/meson.build
+@@ -75,7 +75,7 @@ if conf.get('ENABLE_LOGIND') == 1
+                 output : 'logind.conf',
+                 configuration : substs)
+         install_data(logind_conf,
+-                     install_dir : pkgsysconfdir)
++                     install_dir : factorypkgconfdir)
+ 
+         install_data('org.freedesktop.login1.conf',
+                      install_dir : dbuspolicydir)
+diff --git a/src/network/meson.build b/src/network/meson.build
+index c1c02cfda1..1bfa79a03b 100644
+--- a/src/network/meson.build
++++ b/src/network/meson.build
+@@ -201,7 +201,7 @@ if conf.get('ENABLE_NETWORKD') == 1
+         endif
+ 
+         install_data('networkd.conf',
+-                     install_dir : pkgsysconfdir)
++                     install_dir : factorypkgconfdir)
+ 
+         fuzzers += [
+     [['src/network/fuzz-netdev-parser.c',
+diff --git a/src/pstore/meson.build b/src/pstore/meson.build
+index adbac24b54..e9dc88dfa2 100644
+--- a/src/pstore/meson.build
++++ b/src/pstore/meson.build
+@@ -6,5 +6,5 @@ systemd_pstore_sources = files('''
+ 
+ if conf.get('ENABLE_PSTORE') == 1
+         install_data('pstore.conf',
+-                     install_dir : pkgsysconfdir)
++                     install_dir : factorypkgconfdir)
+ endif
+diff --git a/src/resolve/meson.build b/src/resolve/meson.build
+index c4d8d4e5d9..f550c289a5 100644
+--- a/src/resolve/meson.build
++++ b/src/resolve/meson.build
+@@ -170,7 +170,7 @@ if conf.get('ENABLE_RESOLVE') == 1
+                 output : 'resolved.conf',
+                 configuration : substs)
+         install_data(resolved_conf,
+-                     install_dir : pkgsysconfdir)
++                     install_dir : factorypkgconfdir)
+ 
+         install_data('resolv.conf',
+                      install_dir : rootlibexecdir)
+diff --git a/src/timesync/meson.build b/src/timesync/meson.build
+index e5c118c8db..19235df9ca 100644
+--- a/src/timesync/meson.build
++++ b/src/timesync/meson.build
+@@ -27,7 +27,7 @@ if conf.get('ENABLE_TIMESYNCD') == 1
+                 output : 'timesyncd.conf',
+                 configuration : substs)
+         install_data(timesyncd_conf,
+-                     install_dir : pkgsysconfdir)
++                     install_dir : factorypkgconfdir)
+         install_data('org.freedesktop.timesync1.conf',
+                      install_dir : dbuspolicydir)
+         install_data('org.freedesktop.timesync1.service',
+diff --git a/src/udev/meson.build b/src/udev/meson.build
+index 173b10be50..82638cf5a9 100644
+--- a/src/udev/meson.build
++++ b/src/udev/meson.build
+@@ -187,7 +187,7 @@ foreach prog : [['ata_id/ata_id.c'],
+ endforeach
+ 
+ install_data('udev.conf',
+-             install_dir : join_paths(sysconfdir, 'udev'))
++             install_dir : join_paths(factoryconfdir, 'udev'))
+ 
+ configure_file(
+         input : 'udev.pc.in',
+@@ -196,7 +196,7 @@ configure_file(
+         install_dir : pkgconfigdatadir == 'no' ? '' : pkgconfigdatadir)
+ 
+ meson.add_install_script('sh', '-c',
+-                         mkdir_p.format(join_paths(sysconfdir, 'udev/rules.d')))
++                         mkdir_p.format(join_paths(factoryconfdir, 'udev/rules.d')))
+ 
+ fuzzers += [
+         [['src/udev/net/fuzz-link-parser.c',
+diff --git a/sysctl.d/meson.build b/sysctl.d/meson.build
+index 3f072e3db7..bd9f843eba 100644
+--- a/sysctl.d/meson.build
++++ b/sysctl.d/meson.build
+@@ -27,4 +27,4 @@ foreach file : in_files
+ endforeach
+ 
+ meson.add_install_script('sh', '-c',
+-                         mkdir_p.format(join_paths(sysconfdir, 'sysctl.d')))
++                         mkdir_p.format(join_paths(factoryconfdir, 'sysctl.d')))
+diff --git a/tmpfiles.d/meson.build b/tmpfiles.d/meson.build
+index e77f46d06b..04d2ef621d 100644
+--- a/tmpfiles.d/meson.build
++++ b/tmpfiles.d/meson.build
+@@ -57,5 +57,5 @@ endforeach
+ if enable_tmpfiles
+         meson.add_install_script(
+                 'sh', '-c',
+-                mkdir_p.format(join_paths(sysconfdir, 'tmpfiles.d')))
++                mkdir_p.format(join_paths(factoryconfdir, 'tmpfiles.d')))
+ endif
+diff --git a/units/meson.build b/units/meson.build
+index ea91f0cc9e..8622054ca5 100644
+--- a/units/meson.build
++++ b/units/meson.build
+@@ -323,7 +323,7 @@ install_data('user-.slice.d/10-defaults.conf',
+ 
+ meson.add_install_script(meson_make_symlink,
+                          join_paths(pkgsysconfdir, 'user'),
+-                         join_paths(sysconfdir, 'xdg/systemd/user'))
++                         join_paths(factorypkgconfdir, 'xdg/systemd/user'))
+ meson.add_install_script(meson_make_symlink,
+                          join_paths(dbussystemservicedir, 'org.freedesktop.systemd1.service'),
+                          join_paths(dbussessionservicedir, 'org.freedesktop.systemd1.service'))
+-- 
+2.26.2
+

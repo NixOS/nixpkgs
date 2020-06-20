@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.0";
-  name = "qt-mobility-${version}";
+  pname = "qt-mobility";
   src = fetchFromGitHub {
     owner = "qtproject";
     repo = "qt-mobility";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Qt Mobility";
-    homepage = http://qt.nokia.com/products/qt-addons/mobility;
+    homepage = "http://qt.nokia.com/products/qt-addons/mobility";
     maintainers = [ maintainers.qknight ];
     platforms = platforms.linux;
     license = with licenses; [ bsd3 fdl13 gpl3 lgpl21 ];

@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, libidn, openssl, makeWrapper, fetchhg
+{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
 , lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop
+, nixosTests
 , withLibevent ? true, luaevent ? null
 , withDBI ? true, luadbi ? null
 # use withExtraLibs to add additional dependencies of community modules
@@ -14,12 +15,21 @@ with stdenv.lib;
 
 
 stdenv.mkDerivation rec {
-  version = "0.11.2"; # also update communityModules
-  name = "prosody-${version}";
-
+  version = "0.11.5"; # also update communityModules
+  pname = "prosody";
+  # The following community modules are necessary for the nixos module
+  # prosody module to comply with XEP-0423 and provide a working
+  # default setup.
+  nixosModuleDeps = [
+    "bookmarks"
+    "cloud_notify"
+    "vcard_muc"
+    "smacks"
+    "http_upload"
+  ];
   src = fetchurl {
-    url = "https://prosody.im/downloads/source/${name}.tar.gz";
-    sha256 = "0ca8ivqb4hxqka08pwnaqi1bqxrdl8zw47g6z7nw9q5r57fgc4c9";
+    url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
+    sha256 = "12s0hn6hvjbi61cdw3165l6iw0878971dmlvfg663byjsmjvvy2m";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -27,8 +37,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "b54e98d5c4a1";
-    sha256 = "0bzn92j48krb2zhp9gn5bbn5sg0qv15j5lpxfszwqdln3lpmrvzg";
+    rev = "acd231e2b46f";
+    sha256 = "1b33lsxrrrvarknqz9xs7j7f19bzxxymmfdhch7k70x3yyiwmfsy";
   };
 
   buildInputs = [
@@ -52,22 +62,28 @@ stdenv.mkDerivation rec {
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
-      '') (withCommunityModules ++ withOnlyInstalledCommunityModules)}
+      '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
       wrapProgram $out/bin/prosody \
-        --prefix LUA_PATH ';' "$NIX_LUA_PATH" \
-        --prefix LUA_CPATH ';' "$NIX_LUA_CPATH"
+        --prefix LUA_PATH ';' "$LUA_PATH" \
+        --prefix LUA_CPATH ';' "$LUA_CPATH"
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --prefix LUA_PATH ';' "$NIX_LUA_PATH" \
-        --prefix LUA_CPATH ';' "$NIX_LUA_CPATH"
+        --prefix LUA_PATH ';' "$LUA_PATH" \
+        --prefix LUA_CPATH ';' "$LUA_CPATH"
     '';
 
-  passthru.communityModules = withCommunityModules;
+  passthru = {
+    communityModules = withCommunityModules;
+    tests = {
+      main = nixosTests.prosody;
+      mysql = nixosTests.prosodyMysql;
+    };
+  };
 
   meta = {
     description = "Open-source XMPP application server written in Lua";
     license = licenses.mit;
-    homepage = https://prosody.im;
+    homepage = "https://prosody.im";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin ];
   };

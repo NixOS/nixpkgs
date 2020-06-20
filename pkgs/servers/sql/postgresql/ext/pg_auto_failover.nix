@@ -1,26 +1,23 @@
-{ stdenv, fetchFromGitHub, postgresql, openssl }:
+{ stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
 
-if stdenv.lib.versionOlder postgresql.version "10"
-then throw "pg_auto_failover not supported for PostgreSQL ${postgresql.version}"
-else
 stdenv.mkDerivation rec {
   pname = "pg_auto_failover";
-  version = "1.0.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1296zk143y9fvmcg2hjbrjdjfhi5rrd0clh16vblkghcvxrzfyvy";
+    sha256 = "1si4k37azigp7hqibnkzr1p6zknadxm7pb33lygrxarqkifx67j4";
   };
 
-  buildInputs = [ postgresql openssl ];
+  buildInputs = [ postgresql openssl zlib readline ];
 
   installPhase = ''
     install -D -t $out/bin src/bin/pg_autoctl/pg_autoctl
     install -D -t $out/lib src/monitor/pgautofailover.so
-    install -D -t $out/share/extension src/monitor/*.sql
-    install -D -t $out/share/extension src/monitor/pgautofailover.control
+    install -D -t $out/share/postgresql/extension src/monitor/*.sql
+    install -D -t $out/share/postgresql/extension src/monitor/pgautofailover.control
   '';
 
   meta = with stdenv.lib; {
@@ -29,5 +26,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.marsam ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
+    broken = versionOlder postgresql.version "10";
   };
 }

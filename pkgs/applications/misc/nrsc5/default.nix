@@ -13,7 +13,8 @@ let
   version = "1.0";
 
 in stdenv.mkDerivation {
-  name = "nrsc5-${version}";
+  pname = "nrsc5";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "theori-io";
@@ -42,7 +43,7 @@ in stdenv.mkDerivation {
   cmakeFlags = [ "-DUSE_COLOR=ON" "-DUSE_FAAD2=ON" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/theori-io/nrsc5;
+    homepage = "https://github.com/theori-io/nrsc5";
     description = "HD-Radio decoder for RTL-SDR";
     platforms = stdenv.lib.platforms.linux;
     license = licenses.gpl3;

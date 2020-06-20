@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, cython
 , mock
 , numpy
 , pathlib
@@ -12,12 +13,14 @@
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "0.0.7";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1v9nn17q2lshnvnc8ff6nk53rggz2hgnmx4fj4czfr40125r98pk";
+    sha256 = "fa3c7375be8fe75f23c27feafbfb5f738d55ffdbf02964c6896fb7684f519a52";
   };
+
+  nativeBuildInputs = [ cython ];
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.4") pathlib;
 
@@ -34,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Modern high-performance serialization utilities for Python";
-    homepage = https://github.com/explosion/srsly;
+    homepage = "https://github.com/explosion/srsly";
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk ];
   };

@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, autoreconfHook, asciidoc, libxml2,
   libxslt, docbook_xsl }:
 
-stdenv.mkDerivation rec{
-  name = "tinyproxy-${version}";
+stdenv.mkDerivation rec {
+  pname = "tinyproxy";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     sha256 = "0gzapnllzyc005l3rs6iarjk1p5fc8mf9ysbck1mbzbd8xg6w35s";
-    rev = "${version}";
+    rev = version;
     repo = "tinyproxy";
     owner = "tinyproxy";
   };
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec{
   stdenv.lib.optional stdenv.isDarwin "--disable-regexcheck";
 
   meta = with stdenv.lib; {
-    homepage = https://tinyproxy.github.io/;
+    homepage = "https://tinyproxy.github.io/";
     description = "A light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
     license = licenses.gpl2;
     platforms = platforms.all;
