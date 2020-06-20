@@ -18967,10 +18967,10 @@ let
 
   TestRequires = buildPerlPackage {
     pname = "Test-Requires";
-    version = "0.10";
+    version = "0.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Test-Requires-0.10.tar.gz";
-      sha256 = "1d9f481lj12cw1ciil46xq9nq16p6a90nm7yrsalpf8asn8s6s17";
+      url = mirror://cpan/authors/id/T/TO/TOKUHIROM/Test-Requires-0.11.tar.gz;
+      sha256 = "03q49vi09b4n31kpnmq4v2dga5ja438a8f1wgkgwvvlpjmadx22b";
     };
     meta = {
       description = "Checks to see if the module can be loaded";
