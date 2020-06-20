@@ -66,7 +66,6 @@ in
       };
 
       interface = mkOption {
-        default = "";
         example = "wlp2s0";
         description = ''
           The interfaces <command>hostapd</command> will use.
