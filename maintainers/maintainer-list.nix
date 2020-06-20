@@ -139,6 +139,12 @@
     githubId = 1517066;
     name = "Aiken Cairncross";
   };
+  aciceri = {
+    name = "Andrea Ciceri";
+    email = "andrea.ciceri@autistici.org";
+    github = "aciceri";
+    githubId = 2318843;
+  };
   acowley = {
     email = "acowley@gmail.com";
     github = "acowley";
