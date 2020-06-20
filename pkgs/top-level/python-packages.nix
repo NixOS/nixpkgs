@@ -2496,6 +2496,8 @@ in {
 
   pytest-astropy = callPackage ../development/python-modules/pytest-astropy { };
 
+  pytest-astropy-header = callPackage ../development/python-modules/pytest-astropy-header { };
+
   pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
