@@ -55,6 +55,15 @@
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
 
+# NixOS hardware descriptions
+/nixos/hardware/beagleboard/pocketbeagle @yegortimoshenko
+/nixos/hardware/dell/xps/13-9370 @moredread
+/nixos/hardware/dell/xps/13-9380 @kalbasit
+/nixos/hardware/lenovo/thinkpad/x230 @makefu @yegortimoshenko
+/nixos/hardware/lenovo/thinkpad/x250 @Mic92
+/nixos/hardware/pcengines/apu @yegortimoshenko
+/nixos/hardware/purism/librem/13v3 @yegortimoshenko
+
 # Updaters
 ## update.nix
 /maintainers/scripts/update.nix   @jtojnar

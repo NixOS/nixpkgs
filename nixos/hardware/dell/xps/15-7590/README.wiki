@@ -1,0 +1,54 @@
+= Dell XPS 15 7590 =
+*Mostly copied from 15-9550
+
+== Tested Hardware ==
+
+* CPU: Intel(R) Core(TM) i9-9980HK
+* RAM: 32 GB
+* HDD: 1 TiB SSD
+* Screen: 15" 4k (3840✕2160)
+* Input: Touchscreen and trackpad.
+
+== Firmware Configuration ==
+
+Not much tweaking of NixOS itself was needed. But we currently cannot automate the firmware setup, so this must be done by hand.
+
+=== Before installation ===
+
+These settings are needed both for booting the final install, and installer itself. Therefore, they must be done first.
+
+* ''Disable Secure Boot (but keep UEFI Boot).'' Thankfully doing so is as easy as changing any other simple setting.
+
+* ''Disable Intel hardware RAID and use AHCI instead.'' Intel doesn't seem to provide a working linux driver for this.  (If you just have SSD it's pointless and just slows things down needlessly anyways.)
+
+=== Wifi ===
+~~Wifi does not work with kernels older than 5.1 (firmware not present) or newer~~ (https://bbs.archlinux.org/viewtopic.php?id=247705)
+
+Update: The 48.ucode causes the Killer wifi card to crash. The iwlfwifi-cc-a0-46.ucode works perfectly. 
+default.nix contains an overlay that removes the offending ucode from the linux-firmware bundle.
+To use it one also needs to enable unfree firmware in their own configuration (<code>hardware.enableRedistributableFirmware = true;</code>)
+
+```
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.grub = {
+    device = "nodev";
+    efiSupport = true;
+    efiInstallAsRemovable = true;
+  };
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_5_1;
+```
+Disable the `canTouchEfiVariables` after a boot or two to prevent NVRAM wearout.
+
+
+=== After installation ===
+
+* ''Add systemd-boot to UEFI boot list.'' The (uneditable anyways) settings mapping drive UUIDs to HD* work fine.
+
+=== Optional ===
+
+* ''Update BIOS.'' According to Reddit, this helps with battery life.
+
+=== Troubleshooting ===
+
