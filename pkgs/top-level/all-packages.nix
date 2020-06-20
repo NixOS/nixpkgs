@@ -12458,6 +12458,8 @@ in
 
   imlibsetroot = callPackage ../applications/graphics/imlibsetroot { libXinerama = xorg.libXinerama; } ;
 
+  impy = callPackage ../development/libraries/impy { };
+
   ineffassign = callPackage ../development/tools/ineffassign { };
 
   ijs = callPackage ../development/libraries/ijs { };
@@ -19511,6 +19513,8 @@ in
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
   evilvte = callPackage ../applications/misc/evilvte (config.evilvte or {});
+
+  evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
 
   exercism = callPackage ../applications/misc/exercism { };
 
