@@ -9354,13 +9354,13 @@ let
 
   IOAsync = buildPerlModule {
     pname = "IO-Async";
-    version = "0.75";
+    version = "0.77";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.75.tar.gz";
-      sha256 = "1mi6gfbl11rimvzgzyj8kiqf131cg1w9nwxi47fwm9sbs0x6rkjb";
+      url = mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.77.tar.gz;
+      sha256 = "153rfnbs2xwvx559h0ilfr0g9pg30avjad3cad659is9bdmfipri";
     };
     propagatedBuildInputs = [ Future StructDumb ];
-    buildInputs = [ TestFatal TestIdentity TestRefcount ];
+    buildInputs = [ TestFatal TestIdentity TestMetricsAny TestRefcount ];
     meta = {
       description = "Asynchronous event-driven programming";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -11649,6 +11649,20 @@ let
     propagatedBuildInputs = [ DevelDeclare ];
     meta = {
       description = "Basic method declarations with signatures, without source filters";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MetricsAny = buildPerlModule {
+    pname = "Metrics-Any";
+    version = "0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Metrics-Any-0.05.tar.gz;
+      sha256 = "1xg7y8szbfwmh72y8l1w0rz4jrd66hisl6hh3hyq31f52cs6hwvr";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "abstract collection of monitoring metrics";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -18681,6 +18695,20 @@ let
     };
     meta = {
       description = "assert that code does not cause growth in memory usage";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestMetricsAny = buildPerlModule {
+    pname = "Test-Metrics-Any";
+    version = "0.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Test-Metrics-Any-0.01.tar.gz;
+      sha256 = "0s744lv997g1wr4i4vg1d7zpzjfw334hdy45215jf6xj9s6wh1i5";
+    };
+    propagatedBuildInputs = [ MetricsAny ];
+    meta = {
+      description = "assert that code produces metrics via L<Metrics::Any>";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
