@@ -23072,6 +23072,8 @@ in
 
   pbrt = callPackage ../applications/graphics/pbrt { };
 
+  pcloud = callPackage ../applications/networking/pcloud { };
+
   pcsxr = callPackage ../misc/emulators/pcsxr {
     ffmpeg = ffmpeg_2;
   };
