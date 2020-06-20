@@ -2877,10 +2877,10 @@ let
 
   CompressBzip2 = buildPerlPackage {
     pname = "Compress-Bzip2";
-    version = "2.26";
+    version = "2.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Compress-Bzip2-2.26.tar.gz";
-      sha256 = "5132f0c5f377a54d77ee36d332aa0ece585c22a40f2c31f2619e40262f5c4f0c";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/Compress-Bzip2-2.27.tar.gz;
+      sha256 = "a284c506ac8ef5b02136a15814271dcba10400b5ce818359cf3325ccde7bb3d3";
     };
     meta = {
       description = "Interface to Bzip2 compression library";
