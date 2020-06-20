@@ -5824,13 +5824,13 @@ let
 
   DistZilla = buildPerlPackage {
     pname = "Dist-Zilla";
-    version = "6.012";
+    version = "6.015";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-6.012.tar.gz";
-      sha256 = "0w1hhvxcdf52ln940f8i37adv2gp7l8ryf2nm6m7haynyrsk0n37";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-6.015.tar.gz;
+      sha256 = "06w9mdk46y4n2dshkx6laphkqk08wfw6bqpsa5q2yb4lky0yb212";
     };
     buildInputs = [ CPANMetaCheck TestDeep TestFailWarnings TestFatal TestFileShareDir ];
-    propagatedBuildInputs = [ AppCmd CPANUploader ConfigMVPReaderINI DateTime FileCopyRecursive FileFindRule FileShareDirInstall Filepushd LogDispatchouli MooseXLazyRequire MooseXSetOnce MooseXTypesPerl PathTiny PerlPrereqScanner PodEventual SoftwareLicense TermEncoding TermUI YAMLTiny ];
+    propagatedBuildInputs = [ AppCmd CPANUploader ConfigMVPReaderINI DateTime FileCopyRecursive FileFindRule FileShareDirInstall Filepushd LogDispatchouli MooseXLazyRequire MooseXSetOnce MooseXTypesPerl PathTiny PerlPrereqScanner SoftwareLicense TermEncoding TermUI YAMLTiny ];
     meta = {
       homepage = "http://dzil.org/";
       description = "Distribution builder; installer not included!";
