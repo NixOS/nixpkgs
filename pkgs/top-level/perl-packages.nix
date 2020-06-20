@@ -2864,10 +2864,10 @@ let
 
   commonsense = buildPerlPackage {
     pname = "common-sense";
-    version = "3.74";
+    version = "3.75";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/common-sense-3.74.tar.gz";
-      sha256 = "1wxv2s0hbjkrnssvxvsds0k213awg5pgdlrpkr6xkpnimc17s7vp";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/common-sense-3.75.tar.gz;
+      sha256 = "0zhfp8f0czg69ycwn7r6ayg6idm5kyh2ai06g5s6s07kli61qsm8";
     };
     meta = {
       description = "Implements some sane defaults for Perl programs";
