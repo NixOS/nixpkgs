@@ -40,6 +40,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/muttmua/mutt/commit/3e88866dc60b5fa6aaba6fd7c1710c12c1c3cd01.patch";
       sha256 = "1md4krh76kjbg6nkyvbpjn6iz17c7m7xvdj6gjvjr7akqjhfw48h";
     })
+
+    # Patch for security issue released in 1.14.4, see
+    # https://marc.info/?l=mutt-users&m=159252929418100&w=2
+    # and
+    # https://marc.info/?l=mutt-users&m=159268982901013&w=2
+    (fetchpatch {
+      url = "https://github.com/muttmua/mutt/commit/dc909119b3433a84290f0095c0f43a23b98b3748.patch";
+      sha256 = "sha256:1qqbl9qd2k1bn6qa5gssb6kqhw275hp2wrz7yhqrp9ijx3nzy281";
+    })
   ] ++ optional smimeSupport (fetchpatch {
     url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
     sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
