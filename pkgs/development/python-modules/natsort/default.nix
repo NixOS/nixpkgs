@@ -8,6 +8,7 @@
 , hypothesis
 , glibcLocales
 , pathlib ? null
+, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,9 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "a633464dc3a22b305df0f27abcb3e83515898aa1fd0ed2f9726c3571a27258cf";
   };
+
+  # Does not support Python 2
+  disabled = !isPy3k;
 
   # testing based on project's tox.ini
   # natsort_keygen has pytest mock issues

@@ -16,7 +16,11 @@ mkdir -p "$layerPath"
 # when there are other things being added to the
 # nix store, tar could fail, saying,
 # "tar: /nix/store: file changed as we read it"
-mkdir -p nix/store
+#
+# In addition, we use `__Nix__` instead of `nix` to avoid renaming
+# relative symlink destinations like
+# /nix/store/...-nix-2.3.4/bin/nix-daemon -> nix
+mkdir -p __Nix__/store
 
 # Then we change into the /nix/store in order to
 # avoid a similar "file changed as we read it" error
@@ -35,8 +39,8 @@ tarhash=$(
       --hard-dereference --sort=name \
       --mtime="@$SOURCE_DATE_EPOCH" \
       --owner=0 --group=0 \
-      --transform 's,^nix$,/\0,' \
-      --transform 's,^nix/store$,/\0,' \
+      --transform 's,^__Nix__$,/nix,' \
+      --transform 's,^__Nix__/store$,/nix/store,' \
       --transform 's,^[^/],/nix/store/\0,rS' |
     tee "$layerPath/layer.tar" |
     tarsum

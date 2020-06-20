@@ -882,6 +882,8 @@ in
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
+  fedora-coreos-config-transpiler = callPackage ../development/tools/fedora-coreos-config-transpiler { };
+
   ccextractor = callPackage ../applications/video/ccextractor { };
 
   cconv = callPackage ../tools/text/cconv { };
@@ -3146,6 +3148,8 @@ in
   };
 
   teamocil = callPackage ../tools/misc/teamocil { };
+
+  the-way = callPackage ../development/tools/the-way { };
 
   tsm-client = callPackage ../tools/backup/tsm-client { jdk8 = null; };
   tsm-client-withGui = callPackage ../tools/backup/tsm-client { };
@@ -5693,6 +5697,8 @@ in
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openresolv = callPackage ../tools/networking/openresolv { };
+
+  openrgb = libsForQt5.callPackage ../applications/misc/openrgb { };
 
   opensc = callPackage ../tools/security/opensc {
     inherit (darwin.apple_sdk.frameworks) Carbon PCSC;
@@ -11287,9 +11293,8 @@ in
 
   assimp = callPackage ../development/libraries/assimp { };
 
-  asio = asio_1_12;
   asio_1_10 = callPackage ../development/libraries/asio/1.10.nix { };
-  asio_1_12 = callPackage ../development/libraries/asio/1.12.nix { };
+  asio = callPackage ../development/libraries/asio/default.nix { };
 
   aspell = callPackage ../development/libraries/aspell { };
 
@@ -14063,10 +14068,12 @@ in
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_2_9
-    libressl_3_0;
+    libressl_3_0
+    libressl_3_1;
 
-  libressl = libressl_3_0;
+  # Please keep this pointed to the latest version. See also
+  # https://discourse.nixos.org/t/nixpkgs-policy-regarding-libraries-available-in-multiple-versions/7026/2
+  libressl = libressl_3_1;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
@@ -15767,9 +15774,17 @@ in
 
   hashi-ui = callPackage ../servers/hashi-ui {};
 
+  /* This package duplicates a lot of functionality from haskellPackages
+     instead of using the packages we maintain there. Now, a recent update to
+     haskellPackages causes these tools to fail evaluation, and I have been
+     unable to mark them as "broken" in a way that ofBorg bot recognizes. Since
+     I don't want to merge code into master that generates evaluation errors, I
+     have no other idea but to comment them out entirely.
+
   inherit (callPackage ../servers/hasura { })
     hasura-cli
     hasura-graphql-engine;
+   */
 
   heapster = callPackage ../servers/monitoring/heapster { };
 
@@ -19926,6 +19941,12 @@ in
   });
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
+
+  librespot = callPackage ../applications/audio/librespot {
+    withALSA = stdenv.isLinux;
+    withPulseAudio = config.pulseaudio or stdenv.isLinux;
+    withPortAudio = stdenv.isDarwin;
+  };
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
@@ -25053,6 +25074,7 @@ in
     coqPackages_8_9  coq_8_9
     coqPackages_8_10 coq_8_10
     coqPackages_8_11 coq_8_11
+    coqPackages_8_12 coq_8_12
     coqPackages      coq
   ;
 
@@ -26425,6 +26447,9 @@ in
   wasmer = callPackage ../development/interpreters/wasmer { };
 
   wasm-pack = callPackage ../development/tools/wasm-pack {
+    # Wasm-pack depends on a version of rust-openssl which is incompatible with
+    # LibreSSL 3.1, so we explicitly opt for the older version.
+    libressl = libressl_3_0;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
