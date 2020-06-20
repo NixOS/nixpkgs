@@ -28,8 +28,6 @@
 , libXt
 , libxcb
 , libcanberra
-, libgnome
-, libgnomeui
 , gnome3
 , libGLU, libGL
 , nspr
@@ -108,8 +106,6 @@ stdenv.mkDerivation {
       libXt
       libxcb
       libcanberra
-      libgnome
-      libgnomeui
       libGLU libGL
       nspr
       nss
