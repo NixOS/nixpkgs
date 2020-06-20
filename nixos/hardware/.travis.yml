@@ -1,3 +1,0 @@
-language: nix
-script:
-  ./tests/run.py
