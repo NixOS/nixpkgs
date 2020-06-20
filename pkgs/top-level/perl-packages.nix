@@ -16817,8 +16817,8 @@ let
       url = "mirror://cpan/authors/id/R/RE/REHSACK/SQL-Statement-1.412.tar.gz";
       sha256 = "65c870883379c11b53f19ead10aaac241ccc86a90bbab77f6376fe750720e5c8";
     };
-    buildInputs = [ TestDeep ];
-    propagatedBuildInputs = [ Clone ModuleRuntime ParamsUtil TextSoundex MathBaseConvert ];
+    buildInputs = [ MathBaseConvert TestDeep TextSoundex ];
+    propagatedBuildInputs = [ Clone ModuleRuntime ParamsUtil ];
   };
 
   SQLTokenizer = buildPerlPackage {
