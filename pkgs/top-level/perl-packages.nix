@@ -17649,16 +17649,17 @@ let
 
   SystemCommand = buildPerlPackage {
     pname = "System-Command";
-    version = "1.119";
+    version = "1.121";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOOK/System-Command-1.119.tar.gz";
-      sha256 = "c8c9fb1e527c52463cab1476500efea70396a0b62bea625d2d6faea994dc46e7";
+      url = mirror://cpan/authors/id/B/BO/BOOK/System-Command-1.121.tar.gz;
+      sha256 = "43de5ecd20c1da46e8a6f4fceab29e04697a2890a99bf6a91b3ca004a468a241";
     };
     propagatedBuildInputs = [ IPCRun ];
     meta = {
       description = "Object for running system commands";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ PodCoverageTrustPod TestCPANMeta TestPod TestPodCoverage ];
   };
 
   SysVirt = buildPerlModule rec {
