@@ -1,12 +1,15 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "catalogue";
   version = "2.0.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
