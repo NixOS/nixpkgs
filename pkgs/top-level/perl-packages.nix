@@ -6676,10 +6676,10 @@ let
 
   ExporterTiny = buildPerlPackage {
     pname = "Exporter-Tiny";
-    version = "1.002001";
+    version = "1.002002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Exporter-Tiny-1.002001.tar.gz";
-      sha256 = "a82c334c02ce4b0f9ea77c67bf77738f76a9b8aa4bae5c7209d1c76453d3c48d";
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/Exporter-Tiny-1.002002.tar.gz;
+      sha256 = "00f0b95716b18157132c6c118ded8ba31392563d19e490433e9a65382e707101";
     };
     meta = {
       description = "An exporter with the features of Sub::Exporter but only core dependencies";
