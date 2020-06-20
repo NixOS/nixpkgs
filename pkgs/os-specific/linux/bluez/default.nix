@@ -48,6 +48,13 @@ in stdenv.mkDerivation rec {
     substituteInPlace tools/hid2hci.rules \
       --replace /sbin/udevadm ${systemd}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
+
+    # https://github.com/NixOS/nixpkgs/issues/91011
+    # This test is flaky. Automake seemingly only allows specifying either:
+    # * a whitelist of tests to run, or
+    # * a list of tests which must fail
+    # This *sometimes* fails, so we overwrite the test with a file that just causes the test to be marked as skipped:
+    echo 'int main() { return 77; }' > unit/test-midi.c
   '';
 
   configureFlags = [
