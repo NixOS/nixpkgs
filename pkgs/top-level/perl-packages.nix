@@ -5064,7 +5064,7 @@ let
       url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.54.tgz";
       sha256 = "bc597cd7195e5a023e2b3413d8dc614602b9b3f279f436027881796464d4f0be";
     };
-    propagatedBuildInputs = [ DBI TextCSV_XS SQLStatement ModuleRuntime ParamsUtil ];
+    propagatedBuildInputs = [ DBI SQLStatement TextCSV_XS ];
   };
 
   DBDMock = buildPerlModule {
