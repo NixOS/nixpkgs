@@ -16302,9 +16302,10 @@ in
   };
 
   radicale1 = callPackage ../servers/radicale/1.x.nix { };
-  radicale2 = callPackage ../servers/radicale { };
+  radicale2 = callPackage ../servers/radicale/2.x.nix { };
+  radicale3 = callPackage ../servers/radicale/3.x.nix { };
 
-  radicale = radicale2;
+  radicale = radicale3;
 
   rake = callPackage ../development/tools/build-managers/rake { };
 
