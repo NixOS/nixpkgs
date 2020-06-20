@@ -29,21 +29,10 @@ rustPlatform.buildRustPackage rec {
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nrihpffr91p3ipif5k5z9vcvkwxk6qy8hp93w13s7gnwl2g93hx";
+    sha256 = "02jjc9qxzb4iw3vypqdaxzs5mc66zkfmij1yrv72h99acg5s3ncz";
   };
 
   patches = [
-    # Use absolute exec path in the desktop file.
-    # https://source.puri.sm/Librem5/squeekboard/merge_requests/352
-    ./desktop-in.patch
-
-    # Remove the unused dependency 'libcroco' the from meson.build.
-    # https://source.puri.sm/Librem5/squeekboard/merge_requests/351
-    (fetchpatch {
-      url = "https://source.puri.sm/Librem5/squeekboard/commit/f473a47eb8f394ab6f36704850e7e2bfa74ce8a1.patch";
-      sha256 = "0mlp8c38s4mbza8czf4kdg86kvqw294nbpqfk9apbl92nq0a26zr";
-    })
-
     # Add missing dependency 'gio-unix-2.0' to meson.build.
     # https://source.puri.sm/Librem5/squeekboard/-/merge_requests/356
     (fetchpatch {
@@ -72,7 +61,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  cargoSha256 = "063f7p2ygl07dl6cp7v0arnzqvbskxa8wll9sk25w92xnhl05p5i";
+  cargoSha256 = "00gzw703w16i81yna4winj7gi4w7a1p986ggnx48jvyi0c14mxx0";
 
   # Don't use buildRustPackage phases, only use it for rust deps setup
   configurePhase = null;

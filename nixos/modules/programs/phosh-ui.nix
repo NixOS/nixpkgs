@@ -50,7 +50,7 @@ in
       '';
     };
 
-    security.pam.services.gdm.enableGnomeKeyring = true;
+    services.gnome3.gnome-keyring.enable = true;
 
     environment.systemPackages = [
       pkgs.phoc
