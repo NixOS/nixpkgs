@@ -27,6 +27,11 @@ let
     (mkOverride "colorlog" "4.0.2"
       "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
 
+    # required by the sun/moon plugins
+    # https://github.com/home-assistant/core/issues/36636
+    (mkOverride "astral" "1.10.1"
+      "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
+
     # required by aioesphomeapi
     (self: super: {
       protobuf = super.protobuf.override {
