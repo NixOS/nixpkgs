@@ -25651,6 +25651,8 @@ in
 
   dosbox = callPackage ../misc/emulators/dosbox { };
 
+  emu2 = callPackage ../misc/emulators/emu2 { };
+
   dpkg = callPackage ../tools/package-management/dpkg { };
 
   dumb = callPackage ../misc/dumb { };
