@@ -58,9 +58,18 @@ buildPythonPackage rec {
   # Cannot find cython modules.
   doCheck = false;
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
+      --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
+      --replace "srsly>=0.0.6,<1.1.0" "srsly>=0.0.6,<3.0"
+  '';
+
   checkPhase = ''
     pytest thinc/tests
   '';
+
+  pythonImportsCheck = [ "thinc" ];
 
   meta = with stdenv.lib; {
     description = "Practical Machine Learning for NLP in Python";
