@@ -13799,7 +13799,13 @@ in
     llvmPackages = llvmPackages_9;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
-  };
+  }
+    # Temporary fix for .drivers that avoids causing lots of rebuilds; see #91145
+     // { drivers = (mesa.overrideAttrs (a: {
+            nativeBuildInputs = [ patchelf_0_9 ] ++ a.nativeBuildInputs or [];
+          })).drivers;
+        }
+    ;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
