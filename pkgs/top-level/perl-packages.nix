@@ -11798,7 +11798,7 @@ let
       sha256 = "db603ccbf6653bcd28cfa824d72e511ead019fc8afb9f1854ec872db2d3cd8da";
     };
     doCheck = false;
-    propagatedBuildInputs = [ HTMLParser LWP MIMELite URI ];
+    propagatedBuildInputs = [ LWP MIMELite ];
     meta = {
       description = "Provide routine to transform a HTML page in a MIME-Lite mail";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
