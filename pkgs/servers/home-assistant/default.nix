@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
+{ stdenv, nixosTests, lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
@@ -123,6 +123,9 @@ in with py.pkgs; buildPythonApplication rec {
 
   passthru = {
     inherit (py.pkgs) hass-frontend;
+    tests = {
+      inherit (nixosTests) home-assistant;
+    };
   };
 
   meta = with lib; {
