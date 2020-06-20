@@ -15270,10 +15270,10 @@ let
 
   PlackMiddlewareDebug = buildPerlModule {
     pname = "Plack-Middleware-Debug";
-    version = "0.17";
+    version = "0.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Debug-0.17.tar.gz";
-      sha256 = "a30b62f1bb94e641f7b60b5ea5335e140c553b4131ec4003b56db37f47617a26";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Debug-0.18.tar.gz;
+      sha256 = "192ef79e521c90c6eff6f4149ad2e4bfc911d2c95df78935855e90d659e9ac9a";
     };
     buildInputs = [ ModuleBuildTiny TestRequires ];
     propagatedBuildInputs = [ ClassMethodModifiers DataDump DataDumperConcise Plack TextMicroTemplate ];
