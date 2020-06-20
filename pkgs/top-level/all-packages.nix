@@ -23520,6 +23520,8 @@ in
 
   wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
 
+  wasabibackend = callPackage ../applications/blockchains/wasabibackend { Nuget = dotnetPackages.Nuget;  };
+
   wownero = callPackage ../applications/blockchains/wownero.nix {};
 
   zcash = callPackage ../applications/blockchains/zcash { };
