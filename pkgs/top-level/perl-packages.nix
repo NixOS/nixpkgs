@@ -14439,10 +14439,10 @@ let
 
   NetOpenSSH = buildPerlPackage {
     pname = "Net-OpenSSH";
-    version = "0.78";
+    version = "0.79";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SA/SALVA/Net-OpenSSH-0.78.tar.gz";
-      sha256 = "8f10844542a2824389decdb8edec7561d8199dc5f0250e849a0bb56f7aee880c";
+      url = mirror://cpan/authors/id/S/SA/SALVA/Net-OpenSSH-0.79.tar.gz;
+      sha256 = "4210fa64b50820f91ab4b6c0e02a579543fc071e73fbdec0f476447ca11172cc";
     };
     meta = {
       description = "Perl SSH client package implemented on top of OpenSSH";
