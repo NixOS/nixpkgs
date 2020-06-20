@@ -4947,12 +4947,12 @@ let
 
   DevelCheckOS = buildPerlPackage {
     pname = "Devel-CheckOS";
-    version = "1.81";
+    version = "1.83";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-CheckOS-1.81.tar.gz";
-      sha256 = "f3c17b56b79283b62616f938d36c57adc9df06bfaa295ff98be21e9014a23b10";
+      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-CheckOS-1.83.tar.gz;
+      sha256 = "b20fb5ab55d2cf8539fdc7268d77cdbf944408e620c4969023e687ddd28c9972";
     };
-    propagatedBuildInputs = [ DataCompare ];
+    propagatedBuildInputs = [ FileFindRule ];
   };
 
   DevelLeak = buildPerlPackage rec {
