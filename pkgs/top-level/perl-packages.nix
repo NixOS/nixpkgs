@@ -20280,10 +20280,10 @@ let
 
   TimeDate = buildPerlPackage {
     pname = "TimeDate";
-    version = "2.31";
+    version = "2.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/TimeDate-2.31.tar.gz";
-      sha256 = "10ad6l4ii2iahdpw8h0xqwasc1jblan31h597q3js4j5nbnhywjw";
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/TimeDate-2.33.tar.gz;
+      sha256 = "1cjyc0yi873597r7xcp9yz0l1c46ik2kxwfrn00zbrlx0d5rrdn0";
     };
   };
 
