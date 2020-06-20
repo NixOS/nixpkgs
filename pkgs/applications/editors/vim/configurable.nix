@@ -156,8 +156,7 @@ in stdenv.mkDerivation rec {
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
       "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
-      "$out"/bin/{vim,gvim}
-
+      "$out"/bin/vim ${stdenv.lib.optionalString (guiSupport == "gtk2" || guiSupport == "gtk3") "$out/bin/gvim"}
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '' + stdenv.lib.optionalString wrapPythonDrv ''
     wrapProgram "$out/bin/vim" --prefix PATH : "${python}/bin"
