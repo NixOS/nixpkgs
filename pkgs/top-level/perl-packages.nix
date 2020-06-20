@@ -16415,12 +16415,12 @@ let
 
   SerealDecoder = buildPerlPackage {
     pname = "Sereal-Decoder";
-    version = "4.008";
+    version = "4.014";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-4.008.tar.gz";
-      sha256 = "1vxgwlya7sj9mb6y278qblrjl2708d0agy7cryyqj7qf08d056rv";
+      url = mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-4.014.tar.gz;
+      sha256 = "0ph5k99ssm5anwsdjal7sw96pjs65lirfanfsw8gh6k40w0w6f44";
     };
-    buildInputs = [ TestDeep TestDifferences TestLongString TestWarn ];
+    buildInputs = [ TestDeep TestDifferences TestLongString TestMemoryGrowth TestWarn ];
     preBuild = ''ls'';
     meta = {
       homepage = "https://github.com/Sereal/Sereal";
@@ -18667,6 +18667,19 @@ let
     propagatedBuildInputs = [ DevelCycle PadWalker ];
     meta = {
       description = "Verifies code hasn't left circular references";
+    };
+  };
+
+  TestMemoryGrowth = buildPerlModule {
+    pname = "Test-MemoryGrowth";
+    version = "0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Test-MemoryGrowth-0.03.tar.gz;
+      sha256 = "0z6lmalhq3k3p303qahs0ijp6sarf3ij88m39yhzizzf9abapvsz";
+    };
+    meta = {
+      description = "assert that code does not cause growth in memory usage";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
