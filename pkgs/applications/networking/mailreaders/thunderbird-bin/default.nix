@@ -27,7 +27,7 @@
 , libXrender
 , libXt
 , libxcb
-, libcanberra-gtk2
+, libcanberra
 , libgnome
 , libgnomeui
 , gnome3
@@ -107,7 +107,7 @@ stdenv.mkDerivation {
       libXrender
       libXt
       libxcb
-      libcanberra-gtk2
+      libcanberra
       libgnome
       libgnomeui
       libGLU libGL
