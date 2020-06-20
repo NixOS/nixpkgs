@@ -104,6 +104,8 @@ in stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals luaSupport [
     "--with-lua-prefix=${lua}"
     "--enable-luainterp"
+  ] ++ stdenv.lib.optional lua.pkgs.isLuaJIT [
+    "--with-luajit"
   ]
   ++ stdenv.lib.optionals pythonSupport [
     "--enable-python${if isPython3 then "3" else ""}interp=yes"
