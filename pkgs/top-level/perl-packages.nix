@@ -1648,10 +1648,10 @@ let
 
   CatalystDevel = buildPerlPackage {
     pname = "Catalyst-Devel";
-    version = "1.39";
+    version = "1.40";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Devel-1.39.tar.gz";
-      sha256 = "bce371ba801c7d79eff3257e0af907cf62f140de968f0d63bf55be37d702a58a";
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Devel-1.40.tar.gz;
+      sha256 = "8c5f064b01fa58dce395ae46f33a0d37c4cb03472dde7c5076b6df1f99e116bb";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ CatalystActionRenderView CatalystPluginConfigLoader CatalystPluginStaticSimple ConfigGeneral FileChangeNotify FileCopyRecursive ModuleInstall TemplateToolkit ];
