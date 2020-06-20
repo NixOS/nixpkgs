@@ -17790,16 +17790,18 @@ let
 
   TemplateToolkit = buildPerlPackage {
     pname = "Template-Toolkit";
-    version = "3.007";
+    version = "3.008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-3.007.tar.gz";
-      sha256 = "1jh953f1v4r494mdvzfqs1ay1bh453dmp10z4qmv0makwarjsnfp";
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-3.008.tar.gz;
+      sha256 = "14m6kl9zrs6ycr440an7zswrmcimv2747qq0r87inwznprl0yh2j";
     };
     doCheck = !stdenv.isDarwin;
     meta = {
       description = "Comprehensive template processing system";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ AppConfig ];
+    buildInputs = [ CGI TestLeakTrace ];
   };
 
    TemplateGD = buildPerlPackage {
