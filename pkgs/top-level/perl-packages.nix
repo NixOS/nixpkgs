@@ -12774,13 +12774,13 @@ let
 
   MooXlate = buildPerlPackage {
     pname = "MooX-late";
-    version = "0.016";
+    version = "0.100";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOBYINK/MooX-late-0.016.tar.gz";
-      sha256 = "1fb6393e8b77c0ec1e99229bc6f5b9db362eedc172fa940b37defd9bb3415e4e";
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/MooX-late-0.100.tar.gz;
+      sha256 = "2ae5b1e3da5abc0e4006278ecbcfa8fa7c224ea5529a6a688acbb229c09e6a5f";
     };
     buildInputs = [ TestFatal TestRequires ];
-    propagatedBuildInputs = [ Moo TypeTiny ];
+    propagatedBuildInputs = [ Moo SubHandlesVia ];
     meta = {
       description = "Easily translate Moose code to Moo";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -17346,6 +17346,21 @@ let
     };
     meta = {
       description = "Only use Sub::Exporter if you need it";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  SubHandlesVia = buildPerlPackage {
+    pname = "Sub-HandlesVia";
+    version = "0.013";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.013.tar.gz;
+      sha256 = "1q5lqjnqw29ywkiv0iqidc88ydqp1cywrgfd8mi7yarksc296a3l";
+    };
+    propagatedBuildInputs = [ ClassMethodModifiers ClassTiny RoleTiny ScalarListUtils TypeTiny ];
+    buildInputs = [ TestFatal TestRequires ];
+    meta = {
+      description = "alternative handles_via implementation";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
