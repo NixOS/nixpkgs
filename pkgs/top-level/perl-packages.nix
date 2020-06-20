@@ -19008,10 +19008,10 @@ let
 
   TestPerlTidy = buildPerlModule {
     pname = "Test-PerlTidy";
-    version = "20190402";
+    version = "20200412";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-20190402.tar.gz";
-      sha256 = "e9cb9b23ed62e8c6a47a1e18b55328aa3bfa467e05cd93e7e12b2738dd1e025f";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-20200412.tar.gz;
+      sha256 = "905240447edb1930192000db659556cbf5ad5710f4376bb0a5abcd8716a4592c";
     };
     propagatedBuildInputs = [ PathTiny PerlTidy TextDiff ];
     meta = {
