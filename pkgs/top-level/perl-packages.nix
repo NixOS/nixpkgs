@@ -12511,6 +12511,7 @@ let
       sha256 = "5061eaddddb52c9daf2cbc34bb21e9aeea6ae58a22775fdf1ffa747905ebc992";
     };
     propagatedBuildInputs = [ DBDPg Mojolicious SQLAbstract ];
+    buildInputs = [ TestDeep ];
     meta = {
       homepage = "https://github.com/mojolicious/mojo-pg";
       description = "Mojolicious <3 PostgreSQL";
