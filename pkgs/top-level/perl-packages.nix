@@ -19331,10 +19331,10 @@ let
 
   TestTrailingSpace = buildPerlModule {
     pname = "Test-TrailingSpace";
-    version = "0.0302";
+    version = "0.0600";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-TrailingSpace-0.0302.tar.gz";
-      sha256 = "c48a6377d84576512b47652798d9d4bb4467adacf0e6afc3df1f880f2c03b612";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Test-TrailingSpace-0.0600.tar.gz;
+      sha256 = "f09d263adec06700a43a24e29f5484cf6d2939914c607dec51590f4bb8fa5a11";
     };
     propagatedBuildInputs = [ FileFindObjectRule ];
     meta = {
