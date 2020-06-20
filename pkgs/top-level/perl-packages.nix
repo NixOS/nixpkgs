@@ -17106,6 +17106,7 @@ let
       description = "String::Interpolate - Wrapper for builtin the Perl interpolation engine.";
       license = licenses.gpl1Plus;
     };
+    propagatedBuildInputs = [ PadWalker SafeHole ];
   };
 
   StringMkPasswd = buildPerlPackage {
@@ -17407,6 +17408,20 @@ let
       sha256 = "1ysgi38zx236cxz539k6d6rw5z0vc70rrglsaf5fk6rnwilw2g6n";
     };
     propagatedBuildInputs = [ (pkgs.subversionClient.override { inherit perl; }) ];
+  };
+
+  SafeHole = buildPerlModule {
+    pname = "Safe-Hole";
+    version = "0.14";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TO/TODDR/Safe-Hole-0.14.tar.gz;
+      sha256 = "01gc2lfli282dj6a2pkpxb0vmpyavs323cbdw15gxi06pn5nxxgl";
+    };
+    meta = {
+      description = "lib/Safe/Hole.pm";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "http://github.com/toddr/Safe-Hole";
+    };
   };
 
   Swim = buildPerlPackage {
