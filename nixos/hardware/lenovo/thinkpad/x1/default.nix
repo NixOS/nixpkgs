@@ -1,6 +1,0 @@
-{
-  imports = [
-    ../.
-    ../../../common/cpu/intel
-  ];
-}
