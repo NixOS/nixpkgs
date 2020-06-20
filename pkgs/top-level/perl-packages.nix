@@ -16432,10 +16432,10 @@ let
 
   SerealEncoder = buildPerlPackage {
     pname = "Sereal-Encoder";
-    version = "4.008";
+    version = "4.014";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Encoder-4.008.tar.gz";
-      sha256 = "0vzk6d2h034qks4lby53xrfljsrx4cvkaqi7gz9frba17lvl01rq";
+      url = mirror://cpan/authors/id/Y/YV/YVES/Sereal-Encoder-4.014.tar.gz;
+      sha256 = "0044pkjkdg8y0ljmfj0bx68wf7jpfyy98kxi4z36kxarz2hcf462";
     };
     buildInputs = [ SerealDecoder TestDeep TestDifferences TestLongString TestWarn ];
     meta = {
