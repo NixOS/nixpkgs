@@ -1310,10 +1310,10 @@ let
 
   CacheMemcachedFast = buildPerlPackage {
     pname = "Cache-Memcached-Fast";
-    version = "0.25";
+    version = "0.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RA/RAZ/Cache-Memcached-Fast-0.25.tar.gz";
-      sha256 = "0ijw5hlzas1aprp3s6wzabch426m1d8cvp1wn9qphrn4jj82aakq";
+      url = mirror://cpan/authors/id/R/RA/RAZ/Cache-Memcached-Fast-0.26.tar.gz;
+      sha256 = "16m0xafidycrlcvbv3zmbr5pzvqyqyr2qb0khpry99nc4bcld3jy";
     };
     meta = {
       description = "Perl client for B<memcached>, in C language";
