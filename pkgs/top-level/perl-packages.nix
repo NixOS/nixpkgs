@@ -3595,10 +3595,10 @@ let
 
   CryptECB = buildPerlPackage {
     pname = "Crypt-ECB";
-    version = "2.21";
+    version = "2.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AP/APPEL/Crypt-ECB-2.21.tar.gz";
-      sha256 = "890f8b3040220ea705ee5ca4f9bd23435a1779bc3ffa75533736e6c9c21d1015";
+      url = mirror://cpan/authors/id/A/AP/APPEL/Crypt-ECB-2.22.tar.gz;
+      sha256 = "f5af62e908cd31a34b2b813135a0718016fd003ffa0021ffbdd84c50158267aa";
     };
     meta = with stdenv.lib; {
       description = "Use block ciphers using ECB mode";
