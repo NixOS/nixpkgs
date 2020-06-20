@@ -12616,10 +12616,10 @@ let
 
   MooXStrictConstructor = buildPerlPackage {
      pname = "MooX-StrictConstructor";
-     version = "0.010";
+     version = "0.011";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/H/HA/HARTZELL/MooX-StrictConstructor-0.010.tar.gz";
-       sha256 = "0vvjgz7xbfmf69yav7sxsxmvklqv835xvh7h47w0apxmlkm9fjgr";
+       url = mirror://cpan/authors/id/H/HA/HARTZELL/MooX-StrictConstructor-0.011.tar.gz;
+       sha256 = "1qjkqrmzgz7lxhv14klsv0v9v6blf8js86d47ah24kpw5y12yf6s";
      };
      propagatedBuildInputs = [ Moo strictures ];
      buildInputs = [ TestFatal ];
