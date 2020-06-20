@@ -177,13 +177,13 @@ let
 
   AlienGMP = buildPerlPackage {
     pname = "Alien-GMP";
-    version = "1.14";
+    version = "1.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-GMP-1.14.tar.gz";
-      sha256 = "116vvh1b0d1ykkklqgfxfn89g3bw90a4cj3qrvsnkw1kk5cmn60a";
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-GMP-1.16.tar.gz;
+      sha256 = "199x24pl6jnqshgnl066lhdf2fkqa6l1fml9g3qn5grmwn7d8309";
     };
     propagatedBuildInputs = [ AlienBuild ];
-    buildInputs = [ pkgs.gmp DevelChecklib HTMLParser SortVersions Test2Suite URI ];
+    buildInputs = [ pkgs.gmp Alienm4 DevelChecklib IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI ];
     meta = {
       description = "Alien package for the GNU Multiple Precision library.";
       license = with stdenv.lib.licenses; [ lgpl3Plus ];
@@ -271,6 +271,36 @@ let
     };
     propagatedBuildInputs = [ pkgs.pkgconfig pkgs.gtk2 pkgs.wxGTK30 ModulePluggable ];
     buildInputs = [ LWPProtocolHttps ];
+  };
+
+  Alienm4 = buildPerlPackage {
+    pname = "Alien-m4";
+    version = "0.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-m4-0.19.tar.gz;
+      sha256 = "1xnh8qa99dcvqcqzbpy0s5jrxvn7wa5ydz3lfd56n358l5jfzns9";
+    };
+    propagatedBuildInputs = [ AlienBuild ];
+    buildInputs = [ Alienpatch IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI ];
+    meta = {
+      description = "Find or build GNU m4";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Alienpatch = buildPerlPackage {
+    pname = "Alien-patch";
+    version = "0.15";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-patch-0.15.tar.gz;
+      sha256 = "1l00mq56596wn09nn7fv552j2aa7sgh46bvx5xlncsnrn8jp5mpy";
+    };
+    propagatedBuildInputs = [ AlienBuild ];
+    buildInputs = [ IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI ];
+    meta = {
+      description = "Find or build patch";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   AnyEvent = buildPerlPackage {
