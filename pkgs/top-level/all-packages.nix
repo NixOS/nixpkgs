@@ -10817,6 +10817,7 @@ in
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
+  patchelf_0_9 = callPackage ../development/tools/misc/patchelf/0.9.nix { };
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
@@ -13798,7 +13799,13 @@ in
     llvmPackages = llvmPackages_9;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
-  };
+  }
+    # Temporary fix for .drivers that avoids causing lots of rebuilds; see #91145
+     // { drivers = (mesa.overrideAttrs (a: {
+            nativeBuildInputs = [ patchelf_0_9 ] ++ a.nativeBuildInputs or [];
+          })).drivers;
+        }
+    ;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
