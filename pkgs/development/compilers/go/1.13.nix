@@ -30,11 +30,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.13.8";
+  version = "1.13.12";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "0d7cxffk72568h46srzswrxd0bsdip7amgkf499wzn6l6d3g0fxi";
+    sha256 = "0d5s5rqyzp6ykj4x1dz8infcsmj3gy8djnf63ji971ypwi6jrfhp";
   };
 
   # perl is used for testing go vet
@@ -229,8 +229,6 @@ stdenv.mkDerivation rec {
     ln -s $GOROOT_FINAL/bin $out/bin
     runHook postInstall
   '';
-
-  setupHook = ./setup-hook.sh;
 
   disallowedReferences = [ goBootstrap ];
 
