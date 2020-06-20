@@ -6012,6 +6012,8 @@ in {
 
   extras = callPackage ../development/python-modules/extras { };
 
+  extension-helpers = callPackage ../development/python-modules/extension-helpers { };
+
   texttable = callPackage ../development/python-modules/texttable { };
 
   textwrap3 =  callPackage ../development/python-modules/textwrap3 { };
