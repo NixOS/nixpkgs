@@ -8150,10 +8150,10 @@ let
 
   GnuPGInterface = buildPerlPackage {
     pname = "GnuPG-Interface";
-    version = "0.52";
+    version = "1.00";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AL/ALEXMV/GnuPG-Interface-0.52.tar.gz";
-      sha256 = "247a9f5a88bb6745281c00d0f7d5d94e8599a92396849fd9571356dda047fd35";
+      url = mirror://cpan/authors/id/J/JE/JESSE/GnuPG-Interface-1.00.tar.gz;
+      sha256 = "97e9c809491a061b2e99fb4e50c7bf74eb42e1deb11c64b081b21b4dbe6aec2f";
     };
     buildInputs = [ pkgs.which pkgs.gnupg1compat ];
     propagatedBuildInputs = [ MooXHandlesVia MooXlate ];
