@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, nix, ronn }:
+{ stdenv, fetchpatch, python3Packages, nix, ronn }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
@@ -8,6 +8,14 @@ python3Packages.buildPythonApplication rec {
     inherit pname version;
     sha256 = "06dpdsnz1ih0syas3x25s557qpw0f4kmypvxwaffm734djg8klmi";
   };
+
+  patches = [
+    # https://github.com/flyingcircusio/vulnix/pull/64 -- flake8 fix
+    (fetchpatch {
+      url = "https://github.com/flyingcircusio/vulnix/commit/10c96d48d14d73cc27a22551c684e5bf5bedf884.patch";
+      sha256 = "080dnyq7ab2kg61z3zkf5y8yb1glqj1n6c032n8zw212v5kj4cxg";
+    })
+  ];
 
   outputs = [ "out" "doc" "man" ];
   nativeBuildInputs = [ ronn ];
