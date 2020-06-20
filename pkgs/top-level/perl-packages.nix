@@ -3628,12 +3628,12 @@ let
 
   CryptJWT = buildPerlPackage {
     pname = "Crypt-JWT";
-    version = "0.025";
+    version = "0.028";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-JWT-0.025.tar.gz";
-      sha256 = "2def87936645723de70fcc11cb380b1faddf9c5678832e4fc6116f267987087d";
+      url = mirror://cpan/authors/id/M/MI/MIK/Crypt-JWT-0.028.tar.gz;
+      sha256 = "af819a620fa9b2d0432f718fecc3e4d8458d04b932f27fcb6217e0f39027e633";
     };
-    propagatedBuildInputs = [ CryptX JSONMaybeXS ];
+    propagatedBuildInputs = [ CryptX JSON ];
     meta = {
       description = "JSON Web Token";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
