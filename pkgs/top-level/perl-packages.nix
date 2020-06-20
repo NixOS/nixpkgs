@@ -17487,10 +17487,10 @@ let
 
   SysMmap = buildPerlPackage {
     pname = "Sys-Mmap";
-    version = "0.19";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SW/SWALTERS/Sys-Mmap-0.19.tar.gz";
-      sha256 = "1yh0170xfw3z7n3lynffcb6axv7wi6zb46cx03crj1cvrhjmwa89";
+      url = mirror://cpan/authors/id/T/TO/TODDR/Sys-Mmap-0.20.tar.gz;
+      sha256 = "1kz22l7sh2mibliixyshc9958bqlkzsb13agcibp7azii4ncw80q";
     };
     meta = with stdenv.lib; {
       description = "Use mmap to map in a file as a Perl variable";
