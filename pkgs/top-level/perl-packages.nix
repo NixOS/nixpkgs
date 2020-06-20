@@ -21507,12 +21507,12 @@ let
 
   XSObjectMagic = buildPerlPackage {
     pname = "XS-Object-Magic";
-    version = "0.04";
+    version = "0.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FL/FLORA/XS-Object-Magic-0.04.tar.gz";
-      sha256 = "03fghj7hq0fiicmfdxhmzfm4mzv7s097pgkd32ji7jnljvhm9six";
+      url = mirror://cpan/authors/id/E/ET/ETHER/XS-Object-Magic-0.05.tar.gz;
+      sha256 = "0njyy4y0zax4zz55y82dlm9cly1pld1lcxb281s12bp9rrhf9j9x";
     };
-    buildInputs = [ ExtUtilsDepends TestFatal ];
+    buildInputs = [ ExtUtilsDepends TestFatal TestSimple13 ];
     meta = {
       description = "XS pointer backed objects using sv_magic";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
