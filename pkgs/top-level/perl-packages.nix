@@ -13865,7 +13865,6 @@ let
       url = "mirror://cpan/authors/id/A/AL/ALEXKOM/Net-IP-Lite-0.03.tar.gz";
       sha256 = "c9916e6cfaa53be275379ce4b2a550ae176ddfab50dad43b43ed43e8267802a9";
     };
-    buildInputs = [ TestException ];
     meta = {
       homepage = "https://metacpan.org/pod/Net::IP::Lite";
       description = "Perl extension for manipulating IPv4/IPv6 addresses";
