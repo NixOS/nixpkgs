@@ -2,11 +2,19 @@
 , python
 , buildPythonPackage
 , fetchPypi
+, backports_abc
+, backports_ssl_match_hostname
+, certifi
+, singledispatch
+, futures
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.0.4";
+  version = "5.1.1";
+
+  propagatedBuildInputs = lib.optionals isPy27 [ backports_abc certifi singledispatch backports_ssl_match_hostname futures ];
 
   # We specify the name of the test files to prevent
   # https://github.com/NixOS/nixpkgs/issues/14634
@@ -16,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fe2d45ba43b00a41cd73f8be321a44936dc1aba233dee979f17a042b83eb6dc";
+    sha256 = "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409";
   };
 
   __darwinAllowLocalNetworking = true;
