@@ -1236,10 +1236,10 @@ let
 
   BusinessISSN = buildPerlPackage {
     pname = "Business-ISSN";
-    version = "1.003";
+    version = "1.004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISSN-1.003.tar.gz";
-      sha256 = "1272456c19937a24bc5f9a0db9dc447043591137719ee4dc955a63be544b99d1";
+      url = mirror://cpan/authors/id/B/BD/BDFOY/Business-ISSN-1.004.tar.gz;
+      sha256 = "97ecab15d24d11e2852bf0b28f84c8798bd38402a0a69e17be0e6689b272715e";
     };
     meta = {
       description = "Work with International Standard Serial Numbers";
