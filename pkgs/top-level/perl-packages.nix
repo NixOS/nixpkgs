@@ -316,10 +316,10 @@ let
 
   AnyEventHTTP = buildPerlPackage {
     pname = "AnyEvent-HTTP";
-    version = "2.24";
+    version = "2.25";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-HTTP-2.24.tar.gz";
-      sha256 = "0358a542baa45403d81c0a70e43e79c044ddfa1371161d043f002acef63121dd";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-HTTP-2.25.tar.gz;
+      sha256 = "5cfa53416124176f6f4cd32b00ea8ca79a2d5df51258683989cd04fe86e25013";
     };
     propagatedBuildInputs = [ AnyEvent commonsense ];
   };
