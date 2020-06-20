@@ -34,6 +34,7 @@ let
 
     ${optionalString cfg.wpa ''
       wpa=2
+      wpa_pairwise=CCMP
       wpa_passphrase=${cfg.wpaPassphrase}
     ''}
     ${optionalString cfg.noScan "noscan=1"}
