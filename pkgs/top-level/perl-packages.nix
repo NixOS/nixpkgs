@@ -14944,10 +14944,10 @@ let
 
   Perlosnames = buildPerlPackage {
     pname = "Perl-osnames";
-    version = "0.11";
+    version = "0.122";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Perl-osnames-0.11.tar.gz";
-      sha256 = "fb22a1ed59dc2311f7f1ffca5685d90c0600020467f624f57b4dd3dba5bc659b";
+      url = mirror://cpan/authors/id/P/PE/PERLANCAR/Perl-osnames-0.122.tar.gz;
+      sha256 = "7075939d747e375178d00348d00c52ff9db2cebb18bae7473dcb09df825118a0";
     };
     meta = {
       description = "List possible $^O ($OSNAME) values, with description";
