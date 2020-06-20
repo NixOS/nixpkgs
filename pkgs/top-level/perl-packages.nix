@@ -8362,10 +8362,10 @@ let
 
   Gtk3SimpleList = buildPerlPackage {
     pname = "Gtk3-SimpleList";
-    version = "0.18";
+    version = "0.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TV/TVIGNAUD/Gtk3-SimpleList-0.18.tar.gz";
-      sha256 = "09azmc7miyvw7q21rz8cxw16zbd5i1j5hpakxy376f5vmhqqjyhp";
+      url = mirror://cpan/authors/id/T/TV/TVIGNAUD/Gtk3-SimpleList-0.21.tar.gz;
+      sha256 = "1158mnr2ldq02098hqbkwfv64d83zl3a8scll9s09g7k1c86ai0x";
     };
     meta = {
       description = "A simple interface to Gtk3's complex MVC list widget";
