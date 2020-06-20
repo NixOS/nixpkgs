@@ -281,7 +281,7 @@ let
       sha256 = "1xnh8qa99dcvqcqzbpy0s5jrxvn7wa5ydz3lfd56n358l5jfzns9";
     };
     propagatedBuildInputs = [ AlienBuild ];
-    buildInputs = [ Alienpatch IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI ];
+    buildInputs = [ Alienpatch IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI pkgs.gnum4 ];
     meta = {
       description = "Find or build GNU m4";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
