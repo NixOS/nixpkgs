@@ -2211,10 +2211,10 @@ let
 
   CGIMinimal = buildPerlModule {
     pname = "CGI-Minimal";
-    version = "1.29";
+    version = "1.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SN/SNOWHARE/CGI-Minimal-1.29.tar.gz";
-      sha256 = "36c785ffacf5cdee4f1a7219ca1848b7e1700bdd71cd9116e1f00545ec88475d";
+      url = mirror://cpan/authors/id/S/SN/SNOWHARE/CGI-Minimal-1.30.tar.gz;
+      sha256 = "b94d50821b02611da6ee5423193145078c4dbb282f2b162a4b0d58094997bc47";
     };
     meta = {
       description = "A lightweight CGI form processing package";
