@@ -13938,10 +13938,10 @@ let
 
   NetPing = buildPerlPackage {
     pname = "Net-Ping";
-    version = "2.72";
+    version = "2.73";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.72.tar.gz";
-      sha256 = "555af602f54229cd81fef7da1a81516800f3155c6dc4d07dc71be1de3253dd6a";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.73.tar.gz;
+      sha256 = "a5fbeafd3e65778364bead8800ae6a06d468ed68208619b5d4c1debd4d197cf2";
     };
     meta = {
       description = "Check a remote host for reachability";
