@@ -1,5 +1,4 @@
 { stdenv, fetchurl, config, makeWrapper
-, gconf
 , alsaLib
 , at-spi2-atk
 , atk
@@ -80,7 +79,6 @@ stdenv.mkDerivation {
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
-      gconf
       alsaLib
       at-spi2-atk
       atk
