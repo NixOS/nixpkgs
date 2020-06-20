@@ -4450,10 +4450,10 @@ let
 
   DataUUID = buildPerlPackage {
     pname = "Data-UUID";
-    version = "1.224";
+    version = "1.226";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Data-UUID-1.224.tar.gz";
-      sha256 = "0z7l3fc710v830n1krgrp7wzfispi5s0h10cyk65xvxv09sw2n69";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Data-UUID-1.226.tar.gz;
+      sha256 = "0lv4k4ibxwkw7zz9hw97s34za9nvjxb4kbmgmx5sj4fll3zmfg89";
     };
   };
 
