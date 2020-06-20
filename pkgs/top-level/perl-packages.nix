@@ -486,10 +486,10 @@ let
 
   AppClusterSSH = buildPerlModule {
     pname = "App-ClusterSSH";
-    version = "4.14";
+    version = "4.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DU/DUNCS/App-ClusterSSH-4.14.tar.gz";
-      sha256 = "020p28xl9507blvr8lr7hdxk1cl8jjkz5rkrkh7g538g52sa2cmi";
+      url = mirror://cpan/authors/id/D/DU/DUNCS/App-ClusterSSH-4.15.tar.gz;
+      sha256 = "1apk4yi9wfxrvspsfxr74jl1zr5z56ghknnmx8k5648zga1mn9z1";
     };
     propagatedBuildInputs = [ ExceptionClass Tk X11ProtocolOther XMLSimple ];
     buildInputs = [ DataDump FileWhich Readonly TestDifferences TestTrap ];
