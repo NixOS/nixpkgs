@@ -49,9 +49,14 @@ let
       sha256 = "0bldfrvd351agm237icnvn36va67crpnzmbh6dlq84ip910xsgas";
     };
     "2.4" = {
-      kafkaVersion = "2.4.0";
+      kafkaVersion = "2.4.1";
       scalaVersion = "2.12";
-      sha256 = "1vng5ipkjzqy0wijc706w2m1rjl5d0nsgbxiacci739y1jmjnn5r";
+      sha256 = "0ahsprmpjz026mhbr79187wfdrxcg352iipyfqfrx68q878wnxr1";
+    };
+    "2.5" = {
+      kafkaVersion = "2.5.0";
+      scalaVersion = "2.13";
+      sha256 = "0w3g7ii8x63m2blv2a8c491d0diczpliaqm9f7w5yn98hikh0aqi";
     };
   };
 in
