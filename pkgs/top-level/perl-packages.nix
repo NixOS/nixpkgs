@@ -9641,10 +9641,10 @@ let
 
   IPCRun = buildPerlPackage {
     pname = "IPC-Run";
-    version = "20180523.0";
+    version = "20200505.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-20180523.0.tar.gz";
-      sha256 = "0bvckcs1629ifqfb68xkapd4a74fd5qbg6z9qs8i6rx4z3nxfl1q";
+      url = mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-20200505.0.tar.gz;
+      sha256 = "00f9wjvhn55zbk3n9il76xvsqy7ddk60lg6phg2rkpx0gwhvyvl1";
     };
     doCheck = false; /* attempts a network connection to localhost */
     meta = {
