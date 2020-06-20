@@ -42,8 +42,6 @@ let
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
-    base64_2 = callPackage ../development/ocaml-modules/base64/2.0.nix { };
-
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bap = callPackage ../development/ocaml-modules/bap {
