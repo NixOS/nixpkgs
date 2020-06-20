@@ -12493,10 +12493,10 @@ let
 
   Moo = buildPerlPackage {
     pname = "Moo";
-    version = "2.003006";
+    version = "2.004000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Moo-2.003006.tar.gz";
-      sha256 = "bcb2092ab18a45005b5e2e84465ebf3a4999d8e82a43a09f5a94d859ae7f2472";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Moo-2.004000.tar.gz;
+      sha256 = "323240d000394cf38ec42e865b05cb8928f625c82c9391cd2cdc72b33c51b834";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ClassMethodModifiers ModuleRuntime RoleTiny SubQuote ];
