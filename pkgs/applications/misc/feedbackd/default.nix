@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "feedbackd";
-  version = "0.0.0+git20200420";
+  version = "0.0.0+git20200527";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0glzc284wbvwvax52lp6sqr4whhpbqrkn8isidlqz1yrag3phfv9";
+    sha256 = "1wbkzxnqjydfgjvp7vz4ghczcz740zcb1yn90cb6gb5md4n6qx2y";
   };
 
   nativeBuildInputs = [
