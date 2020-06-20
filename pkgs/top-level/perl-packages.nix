@@ -16111,10 +16111,10 @@ let
 
   RegexpGrammars = buildPerlModule {
     pname = "Regexp-Grammars";
-    version = "1.052";
+    version = "1.057";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCONWAY/Regexp-Grammars-1.052.tar.gz";
-      sha256 = "d552e7aaec956fc9ff0c56602fc95bc5c97ef815a0a8df7f42d1128f39534a62";
+      url = mirror://cpan/authors/id/D/DC/DCONWAY/Regexp-Grammars-1.057.tar.gz;
+      sha256 = "af53c19818461cd701aeb57c49dffdb463edc4bf8f658d9ea4e6d534ac177041";
     };
     meta = {
       description = "Add grammatical parsing features to Perl 5.10 regexes";
