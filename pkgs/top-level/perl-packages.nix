@@ -9213,10 +9213,10 @@ let
 
   Imager = buildPerlPackage {
     pname = "Imager";
-    version = "1.011";
+    version = "1.012";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.011.tar.gz";
-      sha256 = "a3aea2f0c172c2c094baeced4a3bdaa9f54e3e85c97eea2e5f8f994ba2beedfc";
+      url = mirror://cpan/authors/id/T/TO/TONYC/Imager-1.012.tar.gz;
+      sha256 = "a321c728e3277fd15de842351e69bbef0e2a5a608a31d089e5029b8381e23f21";
     };
     buildInputs = [ pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
     makeMakerFlags = "--incpath ${pkgs.libjpeg.dev}/include --libpath ${pkgs.libjpeg.out}/lib --incpath ${pkgs.libpng.dev}/include --libpath ${pkgs.libpng.out}/lib";
