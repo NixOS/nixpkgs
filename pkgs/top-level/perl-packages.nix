@@ -16314,10 +16314,10 @@ let
 
   ScalarListUtils = buildPerlPackage {
     pname = "Scalar-List-Utils";
-    version = "1.53";
+    version = "1.55";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.53.tar.gz";
-      sha256 = "bd4086b066fb3b18a0be2e7d9bc100a99aa0f233ad659492340415c7b2bdae99";
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.55.tar.gz;
+      sha256 = "4d2bdc1c72a7bc4d69d6a5cc85bc7566497c3b183c6175b832784329d58feb4b";
     };
     meta = {
       description = "Common Scalar and List utility subroutines";
