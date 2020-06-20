@@ -9186,10 +9186,10 @@ let
 
   HTTPTinyish = buildPerlPackage {
     pname = "HTTP-Tinyish";
-    version = "0.15";
+    version = "0.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Tinyish-0.15.tar.gz";
-      sha256 = "5d65f0ee20a9e4744acdb3ef12edae78c121f53dcbc9cf00867c5725c4513aa5";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Tinyish-0.16.tar.gz;
+      sha256 = "1a3318b89987c2aa5dd18990a109e8af63049f87e4e1a9357583beed1c3bfbda";
     };
     propagatedBuildInputs = [ FileWhich IPCRun3 ];
     meta = {
