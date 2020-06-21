@@ -629,7 +629,8 @@ in {
           content = "${base64}${sep}${base64}";
           mcf = "^${sep}${scheme}${sep}${content}$";
         in
-        if (user.hashedPassword != null
+        if (user.hashedPassword != null   # login disabled
+            && user.hashedPassword != ""  # login without password
             && builtins.match mcf user.hashedPassword == null)
         then
         ''
