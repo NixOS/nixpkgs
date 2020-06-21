@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1rl3h7waqja8blmbpmwy01q9fgr5r0c32b8dy3pbf59bp3xmd37g";
   };
 
+  # fix build with libdvdread 6.1 https://bugs.launchpad.net/dvdbackup/+bug/1869226
+  patches = [ ./dvdbackup-dvdread-6.1.patch ];
+
   buildInputs = [ libdvdread libdvdcss dvdauthor ];
 
   meta = {
