@@ -70,6 +70,11 @@ stdenv.mkDerivation rec {
   doCheck = false;
   checkTarget = "check";
 
+  postInstall =
+    if stdenv.isDarwin
+    then "ln -s $out/lib/libzzip-0.dylib $out/lib/libzzip.dylib"
+    else null;
+
   meta = with stdenv.lib; {
     description = "Library to extract data from files archived in a zip file";
 
