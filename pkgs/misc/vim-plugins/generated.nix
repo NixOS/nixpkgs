@@ -5114,6 +5114,18 @@ let
     meta.homepage = "https://github.com/MaxMEllon/vim-jsx-pretty/";
   };
 
+  vim-jsx-typescript = buildVimPluginFrom2Nix {
+    pname = "vim-jsx-typescript";
+    version = "2020-04-29";
+    src = fetchFromGitHub {
+      owner = "peitalin";
+      repo = "vim-jsx-typescript";
+      rev = "7b47d06819b5778de78cfbb28c225c3ab276f700";
+      sha256 = "0pm40psql6mzrzy750vm6jk71pp467hz9231izicp0554mq6qmsn";
+    };
+    meta.homepage = "https://github.com/peitalin/vim-jsx-typescript/";
+  };
+
   vim-kitty-navigator = buildVimPluginFrom2Nix {
     pname = "vim-kitty-navigator";
     version = "2019-11-04";
