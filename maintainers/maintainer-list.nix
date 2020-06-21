@@ -3698,6 +3698,12 @@
     githubId = 1102396;
     name = "Jussi Maki";
   };
+  jobojeha = {
+    email = "jobojeha@jeppener.de";
+    github = "jobojeha";
+    githubId = 60272884;
+    name = "Jonathan Jeppener-Haltenhoff";
+  };
   joelburget = {
     email = "joelburget@gmail.com";
     github = "joelburget";
