@@ -1302,6 +1302,8 @@ in
 
   quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
 
+  mirage-im = libsForQt5.callPackage ../applications/networking/instant-messengers/mirage {};
+
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
   libtensorflow-bin = callPackage ../development/libraries/science/math/tensorflow/bin.nix {
