@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.111.0";
+  version = "0.111.4";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];
@@ -796,7 +796,7 @@
     "telnet" = ps: with ps; [ ];
     "temper" = ps: with ps; [ ]; # missing inputs: temperusb
     "template" = ps: with ps; [ ];
-    "tensorflow" = ps: with ps; [ numpy pillow protobuf tensorflow];
+    "tensorflow" = ps: with ps; [ numpy pillow protobuf]; # missing inputs: tensorflow
     "tesla" = ps: with ps; [ ]; # missing inputs: teslajsonpy
     "tfiac" = ps: with ps; [ ]; # missing inputs: pytfiac
     "thermoworks_smoke" = ps: with ps; [ stringcase]; # missing inputs: thermoworks_smoke
