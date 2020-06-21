@@ -10,7 +10,7 @@
 
 buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.6.3";
+  version = "0.6.5";
 
   disabled = pythonOlder "3.6";
 
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     owner = "matrix-org";
     repo = pname;
     rev = version;
-    sha256 = "1h1z701sj1qgcqlsk3pnzifnbcg9fshl7v6271h9x54hm3d6hg8a";
+    sha256 = "1pjrq71fkpvsc79nwhxhwjkqvqhj5wsnnwvsgslghaajdaw3n6wd";
   };
 
   propagatedBuildInputs = [
