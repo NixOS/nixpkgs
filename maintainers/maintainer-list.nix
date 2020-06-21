@@ -3536,6 +3536,12 @@
     githubId = 117874;
     name = "Jeroen de Haas";
   };
+  jduan = {
+    name = "Jingjing Duan";
+    email = "duanjingjing@gmail.com";
+    github = "jduan";
+    githubId = 452450;
+  };
   jefdaj = {
     email = "jefdaj@gmail.com";
     github = "jefdaj";
