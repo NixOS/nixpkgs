@@ -5270,8 +5270,6 @@ broken-packages:
   - gi-gsk
   - gi-gstpbutils
   - gi-gsttag
-  - gi-gtk-declarative
-  - gi-gtk-declarative-app-simple
   - gi-gtkosxapplication
   - gi-handy
   - gi-poppler
