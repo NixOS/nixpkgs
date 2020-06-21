@@ -462,6 +462,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "GNU Lesser General Public License v3.0 or later";
   };
 
+  lgpllr = spdx {
+    spdxId = "LGPLLR";
+    fullName = "Lesser General Public License For Linguistic Resources";
+  };
+
   libpng = spdx {
     spdxId = "Libpng";
     fullName = "libpng License";
