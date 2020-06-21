@@ -1,23 +1,23 @@
-{ stdenv, lib, darwin, fetchFromGitHub, tbb, gtk2, glfw, pkgconfig, freetype, Carbon, AppKit }:
+{ stdenv, lib, darwin, fetchFromGitHub, tbb, gtk2, glfw, pkgconfig, freetype, Carbon, AppKit, capstone }:
 
 stdenv.mkDerivation rec {
-  name    = "tracy-${version}";
-  version = "0.6.3";
+  name = "tracy-${version}";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    sha256 = "0pgq8h5gq141zq1k4cgj6cp74kh4zqbp7h4wh29q4grjb04yy06i";
+    sha256 = "07cmz2w7iv10f9i9q3fhg80s6riy9bxnk9xvc3q4lw47mc150skp";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ glfw ]
+  buildInputs = [ glfw capstone ]
     ++ lib.optionals stdenv.isDarwin [ Carbon AppKit freetype ]
     ++ lib.optionals stdenv.isLinux [ gtk2 tbb ];
 
-  NIX_CFLAGS_COMPILE = []
+  NIX_CFLAGS_COMPILE = [ ]
     ++ lib.optional stdenv.isLinux "-ltbb"
     ++ lib.optional stdenv.cc.isClang "-faligned-allocation";
 
