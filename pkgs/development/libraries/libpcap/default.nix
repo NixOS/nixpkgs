@@ -28,10 +28,6 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace " -arch i386" ""
   '';
 
-  postInstall = ''
-    rm -f $out/lib/libpcap.a
-  '';
-
   meta = {
     homepage = "https://www.tcpdump.org";
     description = "Packet Capture Library";
