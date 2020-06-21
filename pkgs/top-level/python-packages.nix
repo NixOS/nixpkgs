@@ -1146,6 +1146,8 @@ in {
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
   pycm = callPackage ../development/python-modules/pycm { };
+  
+  pyvips = callPackage ../development/python-modules/pyvips { };
 
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
 
