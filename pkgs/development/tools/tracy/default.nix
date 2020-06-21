@@ -1,7 +1,7 @@
 { stdenv, lib, darwin, fetchFromGitHub, tbb, gtk2, glfw, pkgconfig, freetype, Carbon, AppKit, capstone }:
 
 stdenv.mkDerivation rec {
-  name = "tracy-${version}";
+  pname = "tracy";
   version = "0.7";
 
   src = fetchFromGitHub {
@@ -24,11 +24,15 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     make -j $NIX_BUILD_CORES -C profiler/build/unix release
     make -j $NIX_BUILD_CORES -C import-chrome/build/unix/ release
+    make -j $NIX_BUILD_CORES -C capture/build/unix/ release
+    make -j $NIX_BUILD_CORES -C update/build/unix/ release
   '';
 
   installPhase = ''
     install -D ./profiler/build/unix/Tracy-release $out/bin/Tracy
     install -D ./import-chrome/build/unix/import-chrome-release $out/bin/import-chrome
+    install -D ./capture/build/unix/capture-release $out/bin/capture
+    install -D ./update/build/unix/update-release $out/bin/update
   '';
 
   meta = with stdenv.lib; {
