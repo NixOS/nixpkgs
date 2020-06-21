@@ -25,17 +25,19 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate hashed password install <literal>mkpasswd</literal>
+    To generate a hashed password install the <literal>mkpasswd</literal>
     package and run <literal>mkpasswd -m sha-512</literal>.
 
-    For password-less logins without password prompt, use
-    the empty string <literal>""</literal>.
+    If set to an empty string (<literal>""</literal>), this user will
+    be able to log in without being asked for a password (but not via remote
+    services such as SSH, or indirectly via <command>su</command> or
+    <command>sudo</command>). This should only be used for e.g. bootable
+    live systems. Note: this is different from setting an empty password,
+    which ca be achieved using <option>users.users.&lt;name?&gt;.password</option>.
 
-    For logins with a fixed password (including the empty-string password with
-    prompt), use one of the un-hashed password options instead, such as
-    <option>users.users.&lt;name?&gt;.password</option>.
-
-    Such unprotected logins should only be used for e.g. bootable live systems.
+    If set to <literal>null</literal> (default) this user will not
+    be able to log in using a password (i.e. via <command>login</command>
+    command).
   '';
 
   userOpts = { name, config, ... }: {
