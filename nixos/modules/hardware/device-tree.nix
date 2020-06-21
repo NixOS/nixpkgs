@@ -22,7 +22,7 @@ in {
           example = literalExample "pkgs.device-tree_rpi";
           type = types.path;
           description = ''
-            The package containing the base device-tree (.dtb) to boot. Contains
+            The path containing the base device-tree (.dtb) to boot. Contains
             device trees bundled with the Linux kernel by default.
           '';
         };
