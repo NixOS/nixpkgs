@@ -15,7 +15,8 @@ python3Packages.buildPythonApplication rec {
    doCheck = false;
    installPhase = ''
     mkdir -p "$out/bin"
-    cp autotiling.py "$out/bin/autotiling"'';
+    cp autotiling.py "$out/bin/autotiling"
+  '';
    postInstall = ''
     makeWrapper ${python3Packages.python.interpreter} $out/bin/${pname}-python-interpreter
     '';
