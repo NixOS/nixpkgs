@@ -2639,6 +2639,18 @@ let
     meta.homepage = "https://github.com/neovim/nvimdev.nvim/";
   };
 
+  oceanic-next = buildVimPluginFrom2Nix {
+    pname = "oceanic-next";
+    version = "2019-04-10";
+    src = fetchFromGitHub {
+      owner = "mhartington";
+      repo = "oceanic-next";
+      rev = "08158eec24cd154afd1623686aeb336fad580be7";
+      sha256 = "1s2h9mnhl54ww7zpdllwlxz93d5i7l7rx3s9mr8w6sv8azcak3v8";
+    };
+    meta.homepage = "https://github.com/mhartington/oceanic-next/";
+  };
+
   onehalf = buildVimPluginFrom2Nix {
     pname = "onehalf";
     version = "2020-06-11";
