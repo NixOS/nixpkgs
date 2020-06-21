@@ -2030,6 +2030,8 @@ in {
 
   cornice = callPackage ../development/python-modules/cornice { };
 
+  crashtest = callPackage ../development/python-modules/crashtest { };
+
   cram = callPackage ../development/python-modules/cram { };
 
   crc16 = callPackage ../development/python-modules/crc16 { };
