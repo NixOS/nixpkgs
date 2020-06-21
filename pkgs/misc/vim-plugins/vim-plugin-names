@@ -572,6 +572,7 @@ vimwiki/vimwiki
 vito-c/jq.vim
 vmchale/ats-vim
 vmchale/dhall-vim
+voldikss/vim-floaterm
 VundleVim/Vundle.vim
 w0ng/vim-hybrid
 wakatime/vim-wakatime
