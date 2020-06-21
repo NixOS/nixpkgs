@@ -1287,6 +1287,8 @@ in {
 
   pyres = callPackage ../development/python-modules/pyres { };
 
+  PyRMVtransport = callPackage ../development/python-modules/PyRMVtransport { };
+
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     inherit (pkgs) pkgconfig;
   };
