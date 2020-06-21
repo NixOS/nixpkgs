@@ -401,6 +401,7 @@ rbgrouleff/bclose.vim
 reedes/vim-pencil
 reedes/vim-wordy
 rhysd/committia.vim
+rhysd/git-messenger.vim
 rhysd/vim-grammarous
 rhysd/vim-operator-surround
 rodjek/vim-puppet

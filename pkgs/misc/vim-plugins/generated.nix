@@ -1606,6 +1606,18 @@ let
     meta.homepage = "https://github.com/eagletmt/ghcmod-vim/";
   };
 
+  git-messenger-vim = buildVimPluginFrom2Nix {
+    pname = "git-messenger-vim";
+    version = "2020-06-08";
+    src = fetchFromGitHub {
+      owner = "rhysd";
+      repo = "git-messenger.vim";
+      rev = "0c79022b267f10305cd2d0d3e978c77bcb67b617";
+      sha256 = "1657622w60g2xqxalvxjhx9blcppxy69kgn170jb65902x2bav7p";
+    };
+    meta.homepage = "https://github.com/rhysd/git-messenger.vim/";
+  };
+
   gitignore-vim = buildVimPluginFrom2Nix {
     pname = "gitignore-vim";
     version = "2014-03-16";
