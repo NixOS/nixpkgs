@@ -1,38 +1,38 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub
+{ stdenv, lib, fetchurl, fetchzip
 , jre, makeWrapper, bash, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "confluent-platform";
-  version = "5.3.0";
+  version = "5.5.0";
   scalaVersion = "2.12";
+  confluentCliVersion = "1.10.0";
 
   src = fetchurl {
-    url = "http://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}-${scalaVersion}.tar.gz";
-    sha256 = "14cilq63fib5yvj40504aj6wssi7xw4f7c2jadlzdmdxzh4ixqmp";
+    url = "https://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}-${scalaVersion}.tar.gz";
+    sha256 = "0bfc2dsryyb000m1if0sqvncsjxrf1i415h7azjr02f5vbhs83ci";
   };
 
-  confluentCli = fetchFromGitHub {
-    owner = "confluentinc";
-    repo = "confluent-cli";
-    rev = "v${version}";
-    sha256 = "18yvp56b8l074qfkgr4afirgd43g8b023n9ija6dnk6p6dib1f4j";
-  };
+  confluentCli = fetchzip (if stdenv.hostPlatform.isDarwin then {
+      url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/${confluentCliVersion}/confluent_v${confluentCliVersion}_darwin_amd64.tar.gz";
+      sha256 = "07g09c6yy74hmmk3wn0jzhq37nkc5qmcpl14zw01700albn22y79";
+    } else {
+      url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/${confluentCliVersion}/confluent_v${confluentCliVersion}_linux_amd64.tar.gz";
+      sha256 = "1m2c9r84lykv0shj990k81cfjhcb3ljzi0ibjkaavsif1b0llq14";
+    });
 
   buildInputs = [ jre makeWrapper bash ];
 
   installPhase = ''
-    cp -R $confluentCli confluent-cli
-    chmod -R +w confluent-cli
-
-    (
-      export CONFLUENT_HOME=$PWD
-      cd confluent-cli
-      make install
-    )
-
     mkdir -p $out
+
     cp -R bin etc share src $out
     rm -rf $out/bin/windows
+
+    cp -R $confluentCli confluent-cli
+    mkdir -p $out/share/doc/confluent-cli
+    cp confluent-cli/confluent $out/bin/
+    cp confluent-cli/LICENSE $out/share/doc/confluent-cli/
+    cp -r confluent-cli/legal $out/share/doc/confluent-cli/
 
     patchShebangs $out/bin
 
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
       wrapProgram $p \
         --set JAVA_HOME "${jre}" \
         --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
+        --set CONFLUENT_HOME "$out" \
         --prefix PATH : "${jre}/bin:${bash}/bin:${gnused}/bin"
     done
   '';
@@ -54,8 +55,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://www.confluent.io/";
     description = "Confluent event streaming platform based on Apache Kafka";
-    license = licenses.asl20;
+    license = licenses.unfree;
     maintainers = [ maintainers.offline ];
-    platforms = platforms.unix;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
