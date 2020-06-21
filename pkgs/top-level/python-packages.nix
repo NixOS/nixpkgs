@@ -569,10 +569,7 @@ in {
 
   cadquery = callPackage ../development/python-modules/cadquery { };
 
-  catalogue = if isPy3k then
-    callPackage ../development/python-modules/catalogue { }
-  else
-    callPackage ../development/python-modules/catalogue/1.nix { };
+  catalogue = callPackage ../development/python-modules/catalogue { };
 
   cbeams = callPackage ../misc/cbeams { };
 
