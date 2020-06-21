@@ -44,8 +44,19 @@ from datetime import datetime
 from collections import namedtuple
 
 
-# Adds the given store paths to as a tar to the given writable stream.
 def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
+    """
+    Writes the given store paths as a tar file to the given stream.
+
+    obj: Stream to write to. Should have a 'write' method.
+    paths: List of store paths.
+    add_nix: Whether /nix and /nix/store directories should be
+             prepended to the archive.
+    filter: An optional transformation to be applied to TarInfo
+            objects. Should take a single TarInfo object and return
+            another one. Defaults to identity.
+    """
+
     filter = filter if filter else lambda i: i
 
     # gettarinfo makes the paths relative, this makes them
@@ -92,9 +103,12 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
                         tar.addfile(ti)
 
 
-# A writable stream which only calculates the final file size and
-# sha256sum, while discarding the actual contents.
 class ExtractChecksum:
+    """
+    A writable stream which only calculates the final file size and
+    sha256sum, while discarding the actual contents.
+    """
+
     def __init__(self):
         self._digest = hashlib.sha256()
         self._size = 0
@@ -104,6 +118,9 @@ class ExtractChecksum:
         self._size += len(data)
 
     def extract(self):
+        """
+        Returns: Hex-encoded sha256sum and size as a tuple.
+        """
         return (self._digest.hexdigest(), self._size)
 
 
@@ -111,9 +128,24 @@ class ExtractChecksum:
 LayerInfo = namedtuple("LayerInfo", ["size", "checksum", "path", "paths"])
 
 
-# Given a list of store paths 'paths', creates a layer add append it
-# to tarfile 'tar'. Returns some a 'LayerInfo' for the layer.
 def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
+    """
+    Appends given store paths to a TarFile object as a new layer.
+
+    tar: 'tarfile.TarFile' object for the new layer to be added to.
+    paths: List of store paths.
+    mtime: 'mtime' of the added files and the layer tarball.
+           Should be an integer representing a POSIX time.
+    add_nix: Whether /nix and /nix/store directories should be
+             added to a layer.
+    filter: An optional transformation to be applied to TarInfo
+            objects inside the layer. Should take a single TarInfo
+            object and return another one. Defaults to identity.
+
+    Returns: A 'LayerInfo' object containing some metadata of
+             the layer added.
+    """
+
     assert all(i.startswith("/nix/store/") for i in paths)
 
     # First, calculate the tarball checksum and the size.
@@ -157,8 +189,19 @@ def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
     return LayerInfo(size=size, checksum=checksum, path=path, paths=paths)
 
 
-# Adds the contents of the store path to the root as a new layer.
 def add_customisation_layer(tar, path, mtime):
+    """
+    Adds the contents of the store path as a new layer. This is different
+    than the 'add_layer_dir' function defaults in the sense that the contents
+    of a single store path will be added to the root of the layer. eg (without
+    the /nix/store prefix).
+
+    tar: 'tarfile.TarFile' object for the new layer to be added to.
+    path: A store path.
+    mtime: 'mtime' of the added files and the layer tarball. Should be an
+           integer representing a POSIX time.
+    """
+
     def filter(ti):
         ti.name = re.sub("^/nix/store/[^/]*", "", ti.name)
         return ti
@@ -171,8 +214,15 @@ def add_customisation_layer(tar, path, mtime):
       )
 
 
-# Adds a file to the tarball with given path and contents.
 def add_bytes(tar, path, content, mtime):
+    """
+    Adds a file to the tarball with given path and contents.
+
+    tar: 'tarfile.TarFile' object.
+    path: Path of the file as a string.
+    content: Contents of the file.
+    mtime: 'mtime' of the file. Should be an integer representing a POSIX time.
+    """
     assert type(content) is bytes
 
     ti = tarfile.TarInfo(path)
