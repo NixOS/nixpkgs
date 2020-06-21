@@ -27,6 +27,17 @@ in {
           '';
         };
 
+        name = mkOption {
+          default = null;
+          example = "some-dtb.dtb";
+          type = types.nullOr types.str;
+          description = ''
+            The name of an explicit dtb to be loaded, relative to the dtb base.
+            Useful in extlinux scenarios if the bootloader doesn't pick the
+            right .dtb file from FDTDIR.
+          '';
+        };
+
         overlays = mkOption {
           default = [];
           example = literalExample

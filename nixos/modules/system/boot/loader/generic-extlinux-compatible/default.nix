@@ -4,6 +4,7 @@ with lib;
 
 let
   blCfg = config.boot.loader;
+  dtCfg = config.hardware.deviceTree;
   cfg = blCfg.generic-extlinux-compatible;
 
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
@@ -53,7 +54,7 @@ in
   };
 
   config = let
-    builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}";
+    builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}" + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}";
   in
     mkIf cfg.enable {
       system.build.installBootLoader = "${builder} ${builderArgs} -c";
