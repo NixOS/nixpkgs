@@ -333,7 +333,7 @@ rec {
 
       chmod ug+w layer
 
-      if [[ -n $extraCommands ]]; then
+      if [[ -n "$extraCommands" ]]; then
         (cd layer; eval "$extraCommands")
       fi
 
