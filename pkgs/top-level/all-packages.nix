@@ -2156,6 +2156,8 @@ in
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
+  postmark-cli = nodePackages.postmark-cli;
+
   ps_mem = callPackage ../tools/system/ps_mem { };
 
   psstop = callPackage ../tools/system/psstop { };
