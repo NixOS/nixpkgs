@@ -146,7 +146,9 @@ def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
              the layer added.
     """
 
-    assert all(i.startswith("/nix/store/") for i in paths)
+    invalid_paths = [i for i in paths if not i.startswith("/nix/store/")]
+    assert len(invalid_paths) == 0, \
+        "Expecting absolute store paths, but got: {invalid_paths}"
 
     # First, calculate the tarball checksum and the size.
     extract_checksum = ExtractChecksum()
