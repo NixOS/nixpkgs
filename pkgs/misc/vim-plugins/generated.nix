@@ -4153,6 +4153,18 @@ let
     meta.homepage = "https://github.com/octol/vim-cpp-enhanced-highlight/";
   };
 
+  vim-crates = buildVimPluginFrom2Nix {
+    pname = "vim-crates";
+    version = "2019-11-11";
+    src = fetchFromGitHub {
+      owner = "mhinz";
+      repo = "vim-crates";
+      rev = "addbb157d0652ce5288c5b5b6f32f8716eb47898";
+      sha256 = "1pczfm9vjjna3xdqym9h69gi47kiwi97lzjf9jjlkmyg1s4pwlsp";
+    };
+    meta.homepage = "https://github.com/mhinz/vim-crates/";
+  };
+
   vim-csharp = buildVimPluginFrom2Nix {
     pname = "vim-csharp";
     version = "2017-03-29";
