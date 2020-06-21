@@ -67,6 +67,10 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
 
     def apply_filters(ti):
         ti.mtime = mtime
+        ti.uid = 0
+        ti.gid = 0
+        ti.uname = "root"
+        ti.gname = "root"
         return filter(ti)
 
     def dir(path):
