@@ -2651,6 +2651,18 @@ let
     meta.homepage = "https://github.com/mhartington/oceanic-next/";
   };
 
+  onedark-vim = buildVimPluginFrom2Nix {
+    pname = "onedark-vim";
+    version = "2020-05-01";
+    src = fetchFromGitHub {
+      owner = "joshdick";
+      repo = "onedark.vim";
+      rev = "4bd965e29811e29e1c1b0819f3a63671d3e6ef28";
+      sha256 = "168zim0ifkg441iwwpxdb93fq4ap2ps0rnrad5lqycpgwr0v0bg2";
+    };
+    meta.homepage = "https://github.com/joshdick/onedark.vim/";
+  };
+
   onehalf = buildVimPluginFrom2Nix {
     pname = "onehalf";
     version = "2020-06-11";
@@ -6904,12 +6916,12 @@ let
 
   vista-vim = buildVimPluginFrom2Nix {
     pname = "vista-vim";
-    version = "2020-06-19";
+    version = "2020-06-21";
     src = fetchFromGitHub {
       owner = "liuchengxu";
       repo = "vista.vim";
-      rev = "4465a93001fe2f7800569f63257446114d347a5b";
-      sha256 = "1vhi7zqywk15yzigky9nhsgjcjn9qvnpfgdw8173bsxh260bf33k";
+      rev = "0b5ece152b56e424b6df6ca9545517007ceb840f";
+      sha256 = "1dr98fibcpq6c1adsb4bnbbgg6gpk9brfy3kkrbl49jqf2120zww";
     };
     meta.homepage = "https://github.com/liuchengxu/vista.vim/";
   };

@@ -177,6 +177,7 @@ jonbri/vim-colorstepper
 jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 josa42/coc-go
+joshdick/onedark.vim
 jpalardy/vim-slime
 jparise/vim-graphql
 jparise/vim-phabricator
