@@ -415,6 +415,12 @@ in {
   imports = [
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
     (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
+    (mkChangedOptionModule
+      [ "security" "initialRootPassword" ]
+      [ "users" "users" "root" "initialHashedPassword" ]
+      (cfg: if cfg.security.initialHashedPassword == "!"
+            then null
+            else cfg.security.initialHashedPassword))
   ];
 
   ###### interface
@@ -486,14 +492,6 @@ in {
       '';
     };
 
-    # FIXME: obsolete - will remove.
-    security.initialRootPassword = mkOption {
-      type = types.str;
-      default = "!";
-      example = "";
-      visible = false;
-    };
-
   };
 
 
@@ -508,7 +506,6 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
-        initialHashedPassword = mkDefault config.security.initialRootPassword;
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -597,7 +594,7 @@ in {
              || cfg.group == "wheel"
              || elem "wheel" cfg.extraGroups)
             &&
-            ((cfg.hashedPassword != null && cfg.hashedPassword != "!")
+            (cfg.hashedPassword != null
              || cfg.password != null
              || cfg.passwordFile != null
              || cfg.openssh.authorizedKeys.keys != []
