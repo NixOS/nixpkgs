@@ -160,9 +160,9 @@ def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
     (checksum, size) = extract_checksum.extract()
 
     path = f"{checksum}/layer.tar"
-    ti = tarfile.TarInfo(path)
-    ti.size = size
-    ti.mtime = mtime
+    layer_tarinfo = tarfile.TarInfo(path)
+    layer_tarinfo.size = size
+    layer_tarinfo.mtime = mtime
 
     # Then actually stream the contents to the outer tarball.
     read_fd, write_fd = os.pipe()
@@ -184,7 +184,7 @@ def add_layer_dir(tar, paths, mtime, add_nix=True, filter=None):
         # exception handler, and the 'addfile' call will fail since it
         # won't be able to read required amount of bytes.
         threading.Thread(target=producer).start()
-        tar.addfile(ti, read)
+        tar.addfile(layer_tarinfo, read)
 
     return LayerInfo(size=size, checksum=checksum, path=path, paths=paths)
 
