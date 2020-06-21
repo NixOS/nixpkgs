@@ -4153,6 +4153,8 @@ in {
 
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
 
+  html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
+
   html5lib = callPackage ../development/python-modules/html5lib { };
 
   httmock = callPackage ../development/python-modules/httmock { };
