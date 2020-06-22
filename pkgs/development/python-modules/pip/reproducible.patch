@@ -1,0 +1,13 @@
+diff --git a/src/pip/_internal/operations/install/wheel.py b/src/pip/_internal/operations/install/wheel.py
+index e7315ee4..4e36b03d 100644
+--- a/src/pip/_internal/operations/install/wheel.py
++++ b/src/pip/_internal/operations/install/wheel.py
+@@ -615,6 +615,8 @@ def install_wheel(
+     direct_url=None,  # type: Optional[DirectUrl]
+ ):
+     # type: (...) -> None
++    _temp_dir_for_testing = (
++        _temp_dir_for_testing or os.environ.get("NIX_PIP_INSTALL_TMPDIR"))
+     with TempDirectory(
+         path=_temp_dir_for_testing, kind="unpacked-wheel"
+     ) as unpacked_dir, ZipFile(wheel_path, allowZip64=True) as z:
