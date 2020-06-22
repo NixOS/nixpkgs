@@ -1393,7 +1393,7 @@ self: super: {
   # https://github.com/serokell/nixfmt/pull/62
   nixfmt = doJailbreak super.nixfmt;
 
-  # https://github.com/phadej/binary-orphans/issues/45
+  # 2020-06-22: NOTE: QuickCheck upstreamed https://github.com/phadej/binary-instances/issues/7
   binary-instances = dontCheck super.binary-instances;
 
   # Disabling the test suite lets the build succeed on older CPUs
