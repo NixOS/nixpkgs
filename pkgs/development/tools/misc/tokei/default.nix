@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tokei";
-  version = "11.2.1";
+  version = "12.0.3";
 
   src = fetchFromGitHub {
     owner = "XAMPPRocky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bdq66si9vvvyf5nia8ww77imp0f8jas0yfcvq1rialwm9922dfl";
+    sha256 = "1imfjgjrsqxwrz7n574xpsh6xp44sb3dkccgg7xpn5playilmbgp";
   };
 
-  cargoSha256 = "17666wh4sfzhgxngymd02892mqpkr8jm6a4w95wwsc9iinzbygrm";
+  cargoSha256 = "0350q3jb0b3jmpcfx9jhjfpfb64v2f3h5z59n9ixr0lml0y0idkq";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [
     libiconv darwin.apple_sdk.frameworks.Security
