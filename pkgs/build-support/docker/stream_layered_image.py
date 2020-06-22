@@ -37,8 +37,8 @@ import re
 import sys
 import json
 import hashlib
+import pathlib
 import tarfile
-import itertools
 import threading
 from datetime import datetime
 from collections import namedtuple
@@ -90,21 +90,20 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
             ti = tar.gettarinfo(os.path.join("/", path))
             tar.addfile(apply_filters(append_root(ti)))
 
-            for root, dirs, files in os.walk(path, topdown=True):
-                for name in itertools.chain(dirs, files):
-                    name = os.path.join(root, name)
-                    ti = append_root(tar.gettarinfo(name))
+            for filename in pathlib.Path(path).rglob("*"):
+                ti = append_root(tar.gettarinfo(filename))
 
-                    # copy hardlinks as regular files
-                    if ti.islnk():
-                        ti.type = tarfile.REGTYPE
+                # copy hardlinks as regular files
+                if ti.islnk():
+                    ti.type = tarfile.REGTYPE
+                    ti.linkname = ""
 
-                    ti = apply_filters(ti)
-                    if ti.isfile():
-                        with open(name, "rb") as f:
-                            tar.addfile(ti, f)
-                    else:
-                        tar.addfile(ti)
+                ti = apply_filters(ti)
+                if ti.isfile():
+                    with open(filename, "rb") as f:
+                        tar.addfile(ti, f)
+                else:
+                    tar.addfile(ti)
 
 
 class ExtractChecksum:
