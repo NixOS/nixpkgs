@@ -13427,6 +13427,8 @@ in
 
   libpqxx = callPackage ../development/libraries/libpqxx { };
 
+  libprom = callPackage ../development/libraries/libprom { };
+
   libproxy = callPackage ../development/libraries/libproxy {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation JavaScriptCore;
   };
