@@ -1480,6 +1480,8 @@ in {
 
   rq = callPackage ../development/python-modules/rq { };
 
+  rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
+
   rx = callPackage ../development/python-modules/rx { };
 
   sabyenc = callPackage ../development/python-modules/sabyenc { };
