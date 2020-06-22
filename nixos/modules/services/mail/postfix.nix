@@ -466,22 +466,18 @@ in
         ";
       };
 
-      sslCert = mkOption {
+      clientTlsCAFile = mkOption {
         type = types.str;
-        default = "";
-        description = "SSL certificate to use.";
+        default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        description = "File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery.
+        Defaults to NixOS trusted certification authorities.";
       };
 
-      sslCACert = mkOption {
-        type = types.str;
-        default = "";
-        description = "SSL certificate of CA.";
-      };
-
-      sslKey = mkOption {
-        type = types.str;
-        default = "";
-        description = "SSL key to use.";
+      tlsChainFiles = mkOption {
+        type = types.nullOr (types.listOf types.str);
+        default = null;
+        description = "List of one or more PEM files, each holding one or more private keys directly followed by a corresponding certificate chain.
+        Each key must appear immediately before the corresponding certificate, optionally followed by additional issuer certificates that complete the certificate chain for that key.";
       };
 
       recipientDelimiter = mkOption {
@@ -771,18 +767,13 @@ in
         recipient_canonical_classes = [ "envelope_recipient" ];
       }
       // optionalAttrs cfg.enableHeaderChecks { header_checks = [ "regexp:/etc/postfix/header_checks" ]; }
-      // optionalAttrs (cfg.sslCert != "") {
-        smtp_tls_CAfile = cfg.sslCACert;
-        smtp_tls_cert_file = cfg.sslCert;
-        smtp_tls_key_file = cfg.sslKey;
-
-        smtp_use_tls = true;
-
-        smtpd_tls_CAfile = cfg.sslCACert;
-        smtpd_tls_cert_file = cfg.sslCert;
-        smtpd_tls_key_file = cfg.sslKey;
-
-        smtpd_use_tls = true;
+      // optionalAttrs (cfg.clientTlsCAFile != "") {
+        smtp_tls_CAfile = cfg.clientTlsCAFile;
+        smtp_tls_security_level = "may";
+      }
+      // optionalAttrs (cfg.tlsChainFiles != null) {
+        smtpd_tls_chain_files = concatStringsSep "," cfg.tlsChainFiles;
+        smtpd_tls_security_level = "may";
       };
 
       services.postfix.masterConfig = {
@@ -900,4 +891,13 @@ in
       services.postfix.mapFiles.client_access = checkClientAccessFile;
     })
   ]);
+
+  imports = [
+   (mkRemovedOptionModule [ "services" "postfix" "sslCACert" ]
+     "services.postfix.sslCACert was replaced by services.postfix.clientTlsCAFile. In case you intend to add trusted server CA use services.postfix.extraConfig.")
+   (mkRemovedOptionModule [ "services" "postfix" "sslCert" ]
+     "services.postfix.sslCert was replaced by services.postfix.tlsChainFiles. Ensure that you list key and certficate in right order.")
+   (mkRemovedOptionModule [ "services" "postfix" "sslKey" ]
+     "services.postfix.sslKey was replaced by services.postfix.tlsChainFiles. Ensure that you list key and certficate in right order.")
+  ];
 }
