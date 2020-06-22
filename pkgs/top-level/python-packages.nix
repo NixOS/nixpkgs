@@ -645,6 +645,8 @@ in {
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
+  diceware = callPackage ../development/python-modules/diceware { };
+
   dictionaries = callPackage ../development/python-modules/dictionaries { };
 
   diff_cover = callPackage ../development/python-modules/diff_cover { };
