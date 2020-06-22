@@ -10901,6 +10901,8 @@ in
 
   mkdocs = callPackage ../development/tools/documentation/mkdocs { };
 
+  mockgen = callPackage ../development/tools/mockgen { };
+
   modd = callPackage ../development/tools/modd { };
 
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
