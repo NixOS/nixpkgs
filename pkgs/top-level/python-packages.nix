@@ -972,6 +972,8 @@ in {
 
   nanomsg-python = callPackage ../development/python-modules/nanomsg-python { inherit (pkgs) nanomsg; };
 
+  nassl = callPackage ../development/python-modules/nassl { };
+
   nbsmoke = callPackage ../development/python-modules/nbsmoke { };
 
   nbsphinx = callPackage ../development/python-modules/nbsphinx { };
@@ -1556,6 +1558,8 @@ in {
 
   sslib = callPackage ../development/python-modules/sslib { };
 
+  sslyze = callPackage ../development/python-modules/sslyze { };
+
   statistics = callPackage ../development/python-modules/statistics { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
@@ -1585,6 +1589,8 @@ in {
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
+
+  tls-parser = callPackage ../development/python-modules/tls-parser { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 
