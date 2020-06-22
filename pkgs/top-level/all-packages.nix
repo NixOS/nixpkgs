@@ -9898,14 +9898,43 @@ in
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
-  pythonFull = python.override{x11Support=true;};
-  python2Full = python2.override{x11Support=true;};
-  python27Full = python27.override{x11Support=true;};
-  python3Full = python3.override{x11Support=true;};
-  python36Full = python36.override{x11Support=true;};
-  python37Full = python37.override{x11Support=true;};
-  python38Full = python38.override{x11Support=true;};
-  python39Full = python39.override{x11Support=true;};
+  pythonFull = python.override {
+    self = pythonFull;
+    x11Support = true;
+  };
+  python2Full = python2.override {
+    self = python2Full;
+    x11Support = true;
+  };
+  python27Full = python27.override {
+    self = python27Full;
+    x11Support = true;
+  };
+  python3Full = python3.override {
+    self = python3Full;
+    bluezSupport = true;
+    x11Support = true;
+  };
+  python36Full = python36.override {
+    self = python36Full;
+    bluezSupport = true;
+    x11Support = true;
+  };
+  python37Full = python37.override {
+    self = python37Full;
+    bluezSupport = true;
+    x11Support = true;
+  };
+  python38Full = python38.override {
+    self = python38Full;
+    bluezSupport = true;
+    x11Support = true;
+  };
+  python39Full = python39.override {
+    self = python39Full;
+    bluezSupport = true;
+    x11Support = true;
+  };
 
   # pythonPackages further below, but assigned here because they need to be in sync
   pythonPackages = python.pkgs;
