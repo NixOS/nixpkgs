@@ -9808,7 +9808,7 @@ in
   inherit (callPackage ../development/interpreters/ruby {
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
-    bison = bison_3_5;
+    bison = buildPackages.bison_3_5;
   })
     ruby_2_5
     ruby_2_6
