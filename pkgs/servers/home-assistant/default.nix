@@ -27,6 +27,11 @@ let
     (mkOverride "astral" "1.10.1"
       "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
 
+    # We have 3.x in nixpkgs which is incompatible with home-assistant atm:
+    # https://github.com/home-assistant/core/blob/dev/requirements_all.txt
+    (mkOverride "pyowm" "2.10.0"
+      "1xvcv3sbcn9na8cwz21nnjlixysfk5lymnf65d1nqkbgacc1mm4g")
+
     # required by aioesphomeapi
     (self: super: {
       protobuf = super.protobuf.override {
