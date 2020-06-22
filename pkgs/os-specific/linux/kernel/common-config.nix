@@ -193,8 +193,8 @@ let
       B43_PHY_HT            = option yes;
       BCMA_HOST_PCI         = option yes;
       RTW88                 = whenAtLeast "5.2" module;
-      RTW88_8822BE          = whenAtLeast "5.2" yes;
-      RTW88_8822CE          = whenAtLeast "5.2" yes;
+      RTW88_8822BE          = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
+      RTW88_8822CE          = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
     };
 
     fb = {
@@ -259,7 +259,7 @@ let
       SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = yes;
       SND_SOC_SOF_GEMINILAKE_SUPPORT    = yes;
       SND_SOC_SOF_HDA_AUDIO_CODEC       = yes;
-      SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = yes;
+      SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = whenOlder "5.7" yes;
       SND_SOC_SOF_HDA_LINK              = yes;
       SND_SOC_SOF_ICELAKE_SUPPORT       = yes;
       SND_SOC_SOF_INTEL_TOPLEVEL        = yes;

@@ -5,7 +5,7 @@
 , MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
 , jrePlugin, adoptopenjdk-icedtea-web
 , bluejeans, djview4, adobe-reader
-, google_talk_plugin, fribid, gnome3/*.gnome-shell*/
+, fribid, gnome3/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
 , tridactyl-native
 , udev
@@ -56,7 +56,6 @@ let
           ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
           ++ lib.optional (supportsJDK && jre && jrePlugin ? mozillaPlugin) jrePlugin
           ++ lib.optional icedtea adoptopenjdk-icedtea-web
-          ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome-shell
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
