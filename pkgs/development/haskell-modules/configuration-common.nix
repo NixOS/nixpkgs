@@ -1390,7 +1390,7 @@ self: super: {
     })
   ];
 
-  # https://github.com/serokell/nixfmt/pull/62
+  # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
 
   # 2020-06-22: NOTE: QuickCheck upstreamed https://github.com/phadej/binary-instances/issues/7
