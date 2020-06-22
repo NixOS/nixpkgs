@@ -94,6 +94,9 @@ buildPythonPackage rec {
     "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial"
   ];
 
+  disabledTests = [
+    "test_random_clifford_valid"  # random test, fails at least once when testing locally.
+  ];
   pytestFlagsArray = [
     "--ignore=test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
   ];
