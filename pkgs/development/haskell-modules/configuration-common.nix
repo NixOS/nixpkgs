@@ -1474,7 +1474,7 @@ self: super: {
 
   # Requested version bump on upstream https://github.com/obsidiansystems/constraints-extras/issues/32
   constraints-extras = doJailbreak super.constraints-extras;
-  # Requested version bump on upstream https://github.com/srid/rib/issues/160
+  # 2020-06-22: NOTE: > 0.10.0.0 => rm dhall override: https://github.com/srid/rib/issues/161
   rib = doJailbreak (super.rib.override {
     dhall = self.dhall_1_30_0;
   });
