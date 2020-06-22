@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, oauthlib
 , requests
+, requests_oauthlib
 }:
 
 buildPythonPackage rec {
@@ -13,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "9949338833a27b6c3251b52bf70b73aa99c43c56153541338cb63001afafdd1e";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ oauthlib requests requests_oauthlib ];
 
   # Upstream provides no unit tests.
   doCheck = false;

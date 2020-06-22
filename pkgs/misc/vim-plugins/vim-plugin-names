@@ -35,6 +35,7 @@ bohlender/vim-smt2
 brennanfee/vim-gui-position
 bronson/vim-trailing-whitespace
 brooth/far.vim
+buoto/gotests-vim
 carlitux/deoplete-ternjs
 ccarpita/rtorrent-syntax-file
 cespare/vim-toml

@@ -5466,7 +5466,7 @@ in
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud17 nextcloud18;
+    nextcloud17 nextcloud18 nextcloud19;
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
@@ -7929,8 +7929,8 @@ in
   zssh = callPackage ../tools/networking/zssh { };
 
   zstd = callPackage ../tools/compression/zstd {
-    cmake = cmake.override {
-      libarchive = libarchive.override { zstd = null; };
+    cmake = buildPackages.cmake.override {
+      libarchive = buildPackages.libarchive.override { zstd = null; };
     };
   };
 
@@ -10817,6 +10817,7 @@ in
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
+  patchelf_0_9 = callPackage ../development/tools/misc/patchelf/0.9.nix { };
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
@@ -12457,6 +12458,8 @@ in
 
   imlibsetroot = callPackage ../applications/graphics/imlibsetroot { libXinerama = xorg.libXinerama; } ;
 
+  impy = callPackage ../development/libraries/impy { };
+
   ineffassign = callPackage ../development/tools/ineffassign { };
 
   ijs = callPackage ../development/libraries/ijs { };
@@ -13798,7 +13801,13 @@ in
     llvmPackages = llvmPackages_9;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
-  };
+  }
+    # Temporary fix for .drivers that avoids causing lots of rebuilds; see #91145
+     // { drivers = (mesa.overrideAttrs (a: {
+            nativeBuildInputs = [ patchelf_0_9 ] ++ a.nativeBuildInputs or [];
+          })).drivers;
+        }
+    ;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -19505,6 +19514,8 @@ in
 
   evilvte = callPackage ../applications/misc/evilvte (config.evilvte or {});
 
+  evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
+
   exercism = callPackage ../applications/misc/exercism { };
 
   go-motion = callPackage ../development/tools/go-motion { };
@@ -23418,6 +23429,9 @@ in
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
   bitcoind = callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
+
+  bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots.nix { miniupnpc = miniupnpc_2; };
+
   clightning = callPackage ../applications/blockchains/clightning.nix { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc.nix { boost = boost165; withGui = true; };
@@ -23519,6 +23533,8 @@ in
   vertcoind = callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = false; };
 
   wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
+
+  wasabibackend = callPackage ../applications/blockchains/wasabibackend { Nuget = dotnetPackages.Nuget;  };
 
   wownero = callPackage ../applications/blockchains/wownero.nix {};
 
@@ -26884,4 +26900,6 @@ in
   vpsfree-client = callPackage ../tools/virtualization/vpsfree-client {};
 
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
+
+  navidrome = callPackage ../servers/misc/navidrome {};
 }
