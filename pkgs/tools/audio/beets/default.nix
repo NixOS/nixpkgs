@@ -185,6 +185,11 @@ in pythonPackages.buildPythonApplication rec {
     ./replaygain-default-bs1770gain.patch
     ./keyfinder-default-bin.patch
     ./mutagen-1.43.patch
+    (fetchpatch {
+      # Fixes failing testcases around the werkzeug component; can dropped after 1.4.9
+      url = "https://github.com/beetbox/beets/commit/d43d54e21cde97f57f19486925ab56b419254cc8.patch";
+      sha256 = "13n2gzmcgfi0m2ycl2r1hpczgksplnkc3y6b66vg57rx5y8nnv5c";
+    })
   ];
 
   postPatch = ''

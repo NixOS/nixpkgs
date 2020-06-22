@@ -303,6 +303,14 @@ in {
         '';
       };
     };
+    occ = mkOption {
+      type = types.package;
+      default = occ;
+      internal = true;
+      description = ''
+        The nextcloud-occ program preconfigured to target this Nextcloud instance.
+      '';
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [

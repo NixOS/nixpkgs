@@ -18,7 +18,6 @@
 , lib
 , libGL
 , libGLU
-, libIDL
 , libevent
 , libjpeg
 , libnotify
@@ -113,7 +112,6 @@ stdenv.mkDerivation rec {
     jemalloc
     libGL
     libGLU
-    libIDL
     libevent
     libjpeg
     libnotify

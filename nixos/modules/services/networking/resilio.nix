@@ -109,8 +109,8 @@ in
 
       httpListenAddr = mkOption {
         type = types.str;
-        default = "0.0.0.0";
-        example = "1.2.3.4";
+        default = "[::1]";
+        example = "0.0.0.0";
         description = ''
           HTTP address to bind to.
         '';

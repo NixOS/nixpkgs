@@ -569,10 +569,7 @@ in {
 
   cadquery = callPackage ../development/python-modules/cadquery { };
 
-  catalogue = if isPy3k then
-    callPackage ../development/python-modules/catalogue { }
-  else
-    callPackage ../development/python-modules/catalogue/1.nix { };
+  catalogue = callPackage ../development/python-modules/catalogue { };
 
   cbeams = callPackage ../misc/cbeams { };
 
@@ -2033,6 +2030,8 @@ in {
 
   cornice = callPackage ../development/python-modules/cornice { };
 
+  crashtest = callPackage ../development/python-modules/crashtest { };
+
   cram = callPackage ../development/python-modules/cram { };
 
   crc16 = callPackage ../development/python-modules/crc16 { };
@@ -2498,6 +2497,10 @@ in {
   pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
 
   pytest-astropy = callPackage ../development/python-modules/pytest-astropy { };
+
+  pytest-astropy-header = callPackage ../development/python-modules/pytest-astropy-header { };
+
+  pytest-filter-subpackage = callPackage ../development/python-modules/pytest-filter-subpackage { };
 
   pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
 
@@ -5484,7 +5487,7 @@ in {
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 
-  pylibgen = callPackage ../development/python-modules/pylibgen { };
+  pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
 
   pyliblo = callPackage ../development/python-modules/pyliblo { };
 
@@ -6010,6 +6013,8 @@ in {
   transitions = callPackage ../development/python-modules/transitions { };
 
   extras = callPackage ../development/python-modules/extras { };
+
+  extension-helpers = callPackage ../development/python-modules/extension-helpers { };
 
   texttable = callPackage ../development/python-modules/texttable { };
 

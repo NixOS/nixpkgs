@@ -96,6 +96,7 @@ self: super: builtins.intersectAttrs super {
 
   # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
   cachix = disableLibraryProfiling super.cachix;
+  hercules-ci-agent = disableLibraryProfiling super.hercules-ci-agent;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
   niv = enableSeparateBinOutput super.niv;

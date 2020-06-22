@@ -1,8 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, flask, pytest, pytestcov, pytest-xprocess, pytestcache }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, flask, pytest, pytestcov, pytest-xprocess, pytestcache }:
 
 buildPythonPackage rec {
   pname = "Flask-Caching";
   version = "1.9.0";
+  disabled = isPy27; # invalid python2 syntax
 
   src = fetchPypi {
     inherit pname version;
