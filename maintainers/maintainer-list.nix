@@ -1109,6 +1109,12 @@
     githubId = 3465841;
     name = "Boris Sukholitko";
   };
+  bouk = {
+    name = "Bouke van der Bijl";
+    email = "i@bou.ke";
+    github = "bouk";
+    githubId = 97820;
+  };
   bradediger = {
     email = "brad@bradediger.com";
     github = "bradediger";
