@@ -3049,6 +3049,10 @@ in {
 
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi {};
 
+  jax = callPackage ../development/python-modules/jax { };
+  
+  jaxlib = callPackage ../development/python-modules/jaxlib { };
+
   jdcal = callPackage ../development/python-modules/jdcal { };
 
   jieba = callPackage ../development/python-modules/jieba { };
