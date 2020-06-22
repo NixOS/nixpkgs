@@ -12,9 +12,9 @@ let
 
   builder =
     if cfg.uboot.enable then
-      "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
+      "${builderUboot} -g ${toString cfg.configurationLimit} -t ${timeoutStr} -c"
     else
-      "${builderGeneric} -c";
+      "${builderGeneric} -g ${toString cfg.configurationLimit} -c";
 
   blCfg = config.boot.loader;
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
@@ -64,6 +64,15 @@ in
         '';
       };
 
+      configurationLimit = mkOption {
+        default = 20;
+        example = 10;
+        type = types.int;
+        description = ''
+          Maximum number of configurations in the boot menu.
+        '';
+      };
+
       uboot = {
         enable = mkOption {
           default = false;
@@ -72,16 +81,6 @@ in
             Enable using uboot as bootmanager for the raspberry pi.
           '';
         };
-
-        configurationLimit = mkOption {
-          default = 20;
-          example = 10;
-          type = types.int;
-          description = ''
-            Maximum number of configurations in the boot menu.
-          '';
-        };
-
       };
 
       firmwareConfig = mkOption {
