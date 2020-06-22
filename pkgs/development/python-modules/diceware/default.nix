@@ -1,10 +1,10 @@
-{ lib
-, python3Packages
+{ lib, buildPythonPackage, fetchPypi
+, pytestrunner
+, setuptools
+, coverage, pytest
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "diceware";
   version = "0.9.6";
 

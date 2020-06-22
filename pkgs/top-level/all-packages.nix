@@ -26779,7 +26779,7 @@ in
 
   simplehttp2server = callPackage ../servers/simplehttp2server { };
 
-  diceware = callPackage ../tools/security/diceware { };
+  diceware = with python3Packages; toPythonApplication diceware;
 
   xml2rfc = with python3Packages; toPythonApplication xml2rfc;
 
