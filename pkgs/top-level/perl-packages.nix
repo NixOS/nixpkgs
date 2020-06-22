@@ -12294,7 +12294,7 @@ let
       homepage = "https://mojolicious.org";
       description = "Real-time web framework";
       license = stdenv.lib.licenses.artistic2;
-      maintainers = [ maintainers.thoughtpolice ];
+      maintainers = with maintainers; [ thoughtpolice sgo ];
     };
   };
 
