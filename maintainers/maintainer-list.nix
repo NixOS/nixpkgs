@@ -8961,4 +8961,10 @@
     github = "cpcloud";
     githubId = 417981;
   };
+  kalium = {
+    name = "Martijn Becker";
+    email = "nixpkgs@kalium.xyz";
+    github = "kaliumxyz";
+    githubId = 25854553;
+  };
 }
