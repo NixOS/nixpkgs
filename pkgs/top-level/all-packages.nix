@@ -24061,6 +24061,11 @@ in
       static = true;
     };
   };
+  openttd-jgrpp = callPackage ../games/openttd/jgrpp.nix {
+    zlib = zlib.override {
+      static = true;
+    };
+  };
 
   opentyrian = callPackage ../games/opentyrian { };
 
