@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, requests, six }:
+{ lib, fetchPypi, buildPythonPackage, pytestCheckHook, requests, six }:
 
 buildPythonPackage rec {
   pname   = "requests-file";
@@ -10,6 +10,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ requests six ];
+
+  checkInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/dashea/requests-file";

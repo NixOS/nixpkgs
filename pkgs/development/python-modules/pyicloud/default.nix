@@ -38,9 +38,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i \
-      -e 's!click>=6.0,<7.0!click!' \
-      -e 's!keyring>=8.0,<9.0!keyring!' \
-      -e 's!keyrings.alt>=1.0,<2.0!keyrings.alt!' \
+      -e 's!click>=.*!click!' \
+      -e 's!keyring>=.*!keyring!' \
+      -e 's!keyrings.alt>=.*!keyrings.alt!' \
+      -e 's!tzlocal==.*!tzlocal!' \
       requirements.txt
   '';
 

@@ -27,9 +27,12 @@ buildPythonPackage rec {
     async-timeout
   ];
 
+  doCheck = false; # requires siosocks, not packaged yet
   checkPhase = ''
     pytest
   '';
+
+  pythonImportsCheck = [ "aioftp" ];
 
   meta = with lib; {
     description = "Ftp client/server for asyncio";
