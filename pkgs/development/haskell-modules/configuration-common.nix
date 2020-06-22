@@ -1496,7 +1496,7 @@ self: super: {
   # Upstream PR: https://github.com/bgamari/monoidal-containers/pull/62
   # Bump these version bound
   monoidal-containers = appendPatch super.monoidal-containers (pkgs.fetchpatch {
-    url = "https://github.com/bgamari/monoidal-containers/pull/62/commits/715093b22a015398a1390f636be6f39a0de83254.patch";
+    url = "https://github.com/bgamari/monoidal-containers/commit/715093b22a015398a1390f636be6f39a0de83254.patch";
     sha256="1lfxvwp8g55ljxvj50acsb0wjhrvp2hvir8y0j5pfjkd1kq628ng";
   });
 
@@ -1504,13 +1504,13 @@ self: super: {
     # Upstream PR: https://github.com/reflex-frp/patch/pull/20
     # Makes tests work with hlint 3
     (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/patch/pull/20/commits/3ed23a4e4049ee17e64a1a5bbebf1990cdbe033a.patch";
+      url = "https://github.com/reflex-frp/patch/commit/3ed23a4e4049ee17e64a1a5bbebf1990cdbe033a.patch";
       sha256 ="1hfa980wln8kzbqw1lr8ddszgcibw25xf12ki2jb9xkl464aynzf";
     })
     # Upstream PR: https://github.com/reflex-frp/patch/pull/17
     # Bumps version dependencies
     (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/patch/pull/17/commits/a191ed9ded708ed7ff0cf53ad6dafaf54db5b95a.patch";
+      url = "https://github.com/reflex-frp/patch/commit/a191ed9ded708ed7ff0cf53ad6dafaf54db5b95a.patch";
       sha256 ="1x9w5fimhk3a0l2aa5z91nqaa6s2irz1775iidd0191m6w25vszp";
     })
   ];
@@ -1519,30 +1519,30 @@ self: super: {
     # Upstream PR: https://github.com/reflex-frp/reflex/pull/434
     # Bump version bounds
     (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex/pull/434/commits/e6104bdfd7f664f524b6765275490722e376df4d.patch";
+      url = "https://github.com/reflex-frp/reflex/commit/e6104bdfd7f664f524b6765275490722e376df4d.patch";
       sha256 ="1awp5p4640cnhfd50dplsvp0kzy6h8r0hpbw1s40blni74r3dhzr";
     })
     # Upstream PR: https://github.com/reflex-frp/reflex/pull/436
     # Fix build with newest dependent-map version
     (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex/pull/436/commits/dc3bf44d822d70594e3c474fe3869261776c3554.patch";
+      url = "https://github.com/reflex-frp/reflex/commit/dc3bf44d822d70594e3c474fe3869261776c3554.patch";
       sha256 ="0rbjfj9b8p6zkvd5j4pak5kpgard6cyfvzk750s4xwpc1v84iiqd";
     })
     # Upstream PR: https://github.com/reflex-frp/reflex/pull/437
     # Fix tests with newer dep versions
     (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex/pull/437/commits/87c74a1b9d9098eae8a56148c59ed4963a5232c2.patch";
+      url = "https://github.com/reflex-frp/reflex/commit/87c74a1b9d9098eae8a56148c59ed4963a5232c2.patch";
       sha256 ="0qhjjgd6n4fms1hpbblny78c95bfh74izhx9dvrdlnhz6q7xlm9q";
     })
   ];
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   # Tests disabled because of very old dep: https://github.com/reflex-frp/reflex-dom/issues/393
-  reflex-dom-core = unmarkBroken (dontCheck (appendPatches super.reflex-dom-core [
+  reflex-dom-core = doDistribute (unmarkBroken (dontCheck (appendPatches super.reflex-dom-core [
     # Upstream PR: https://github.com/reflex-frp/reflex-dom/pull/388
     # Fix upper bounds
     (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex-dom/pull/388/commits/5ef04d8e478f410d2c63603b84af052c9273a533.patch";
+      url = "https://github.com/reflex-frp/reflex-dom/commit/5ef04d8e478f410d2c63603b84af052c9273a533.patch";
       sha256 ="0d0b819yh8mqw8ih5asdi9qcca2kmggfsi8gf22akfw1n7xvmavi";
       stripLen = 2;
       extraPrefix = "";
@@ -1550,12 +1550,12 @@ self: super: {
     # Upstream PR: https://github.com/reflex-frp/reflex-dom/pull/394
     # Bump dependent-map
     (pkgs.fetchpatch {
-      url = "https://github.com/reflex-frp/reflex-dom/pull/394/commits/695bd17d5dcdb1bf321ee8858670731637f651db.patch";
+      url = "https://github.com/reflex-frp/reflex-dom/commit/695bd17d5dcdb1bf321ee8858670731637f651db.patch";
       sha256 ="0llky3i37rakgsw9vqaqmwryv7s91w8ph8xjkh83nxjs14p5zfyk";
       stripLen = 2;
       extraPrefix = "";
     })
-  ]));
+  ])));
 
   # add unreleased commit fixing version constraint as a patch
   # Can be removed if https://github.com/lpeterse/haskell-utc/issues/8 is resolved
