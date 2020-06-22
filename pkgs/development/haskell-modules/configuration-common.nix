@@ -1120,8 +1120,8 @@ self: super: {
   # });
   libnix = dontCheck super.libnix;
 
-  # Jailbreak: https://github.com/jaor/xmobar/issues/463
-  # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
+  # 2020-06-23: NOTE: > 0.33 => rm 464.patch: https://github.com/jaor/xmobar/issues/466
+  # dontCheck: The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
   xmobar = appendPatch (dontCheck super.xmobar) (pkgs.fetchpatch {
     url = "https://github.com/jaor/xmobar/pull/464.patch";
     sha256 = "0y1dd878yzy1cx0cjj0ijd3dmywr7jdmk68vxdjimxzblrdw1al6";
