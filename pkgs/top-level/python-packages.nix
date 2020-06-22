@@ -3196,6 +3196,8 @@ in {
 
   midiutil = callPackage ../development/python-modules/midiutil {};
 
+  mido = callPackage ../development/python-modules/mido { };
+
   misaka = callPackage ../development/python-modules/misaka {};
 
   mlrose = callPackage ../development/python-modules/mlrose { };
