@@ -76,6 +76,13 @@ rec {
    */
   dontHaddock = drv: overrideCabal drv (drv: { doHaddock = false; });
 
+  /* doHaddockInterfaces modifies a haskell package to enable the generation and
+     installation of API documentation in interface files.
+     Haddock parse errors will break a haskell package, even in tests.
+   */
+  doHaddockInterfaces = drv: overrideCabal drv (drv: { doHaddockInterfaces = true; });
+  dontHaddockInterfaces = drv: overrideCabal drv (drv: { doHaddockInterfaces = false; });
+
   /* doJailbreak enables the removal of version bounds from the cabal
      file. You may want to avoid this function.
 
@@ -86,11 +93,11 @@ rec {
      future.
 
      Instead of jailbreaking, you can patch the cabal file.
-     
+
      Note that jailbreaking at this time, doesn't lift bounds on
-     conditional branches. 
+     conditional branches.
      https://github.com/peti/jailbreak-cabal/issues/7 has further details.
-     
+
    */
   doJailbreak = drv: overrideCabal drv (drv: { jailbreak = true; });
 

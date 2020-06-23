@@ -53,6 +53,7 @@ in
 , maintainers ? []
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
+, doHaddockInterfaces ? doHaddock && !doCheck
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
@@ -199,6 +200,7 @@ let
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-options=${parallelBuildingFlags}")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
+    (optionalString (doHaddockInterfaces && isLibrary) "--ghc-options=-haddock")
     (enableFeature (enableDeadCodeElimination && !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
     (optionalString ((enableExecutableProfiling || enableLibraryProfiling) && versionOlder "8" ghc.version) "--profiling-detail=${profilingDetail}")
