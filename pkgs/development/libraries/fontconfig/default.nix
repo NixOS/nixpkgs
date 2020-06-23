@@ -24,7 +24,7 @@
 */
 
 let
-  configVersion = "2.13"; # bump whenever fontconfig breaks compatibility with older configurations
+  configVersion = "2.11"; # bump whenever fontconfig breaks compatibility with older configurations
 in
 stdenv.mkDerivation rec {
   pname = "fontconfig";
@@ -60,6 +60,18 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/a4aa66a858f1ecd375c5efe5916398281f73f794.patch";
       sha256 = "1j4ky8jhpllfm1lh2if34xglh2hl79nsa0xxgzxpj9sx6h4v99j5";
+    })
+
+    # Do not include its tags, they are external now and only cause warnings with old fontconfig clients.
+    # https://gitlab.freedesktop.org/fontconfig/fontconfig/merge_requests/97
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/528b17b2837c3b102acd90cc7548d07bacaccb1f.patch";
+      sha256 = "1zf4wcd2xlprh805jalfy8ja5c2qzgkh4fwd1m9d638nl9gx932m";
+    })
+    # https://gitlab.freedesktop.org/fontconfig/fontconfig/merge_requests/100
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/commit/37c7c748740bf6f2468d59e67951902710240b34.patch";
+      sha256 = "1rz5zrfwhpn9g49wrzzrmdglj78pbvpnw8ksgsw6bxq8l5d84jfr";
     })
   ];
 
