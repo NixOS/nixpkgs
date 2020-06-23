@@ -13427,6 +13427,8 @@ in
 
   libprom = callPackage ../development/libraries/libprom { };
 
+  libpromhttp = callPackage ../development/libraries/libpromhttp { };
+
   libproxy = callPackage ../development/libraries/libproxy {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation JavaScriptCore;
   };
