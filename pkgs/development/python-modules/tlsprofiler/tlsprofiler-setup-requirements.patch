@@ -1,0 +1,23 @@
+diff --git a/requirements.txt b/requirements.txt
+index a783532..34aa149 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,2 @@
+--e git+https://github.com/fabian-hk/sslyze.git@tls_profiler#egg=sslyze
+-# -e git+https://github.com/fabian-hk/nassl.git@tls_profiler#egg=nassl
+ requests
+ cryptography>=2.8
+diff --git a/setup.py b/setup.py
+index e9289df..262c521 100644
+--- a/setup.py
++++ b/setup.py
+@@ -22,6 +22,7 @@ setup(
+     python_requires='>=3.6',
+     install_requires=[
+         'requests',
+-        'sslyze @ git+https://github.com/fabian-hk/sslyze.git@tls_profiler#egg=sslyze',
++        'sslyze',
++        'cryptography',
+     ],
+ )
+
