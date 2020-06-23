@@ -1490,6 +1490,9 @@ in {
     inherit (pkgs) sentencepiece pkgconfig;
   };
 
+  tokenizers = disabledIf (!isPy3k)
+    (toPythonModule (callPackage ../development/python-modules/tokenizers { }));
+
   transformers = callPackage ../development/python-modules/transformers { };
 
   transforms3d = callPackage ../development/python-modules/transforms3d { };
