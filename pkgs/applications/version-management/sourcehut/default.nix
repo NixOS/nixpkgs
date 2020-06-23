@@ -16,6 +16,7 @@ let
       dispatchsrht = self.callPackage ./dispatch.nix { };
       gitsrht = self.callPackage ./git.nix { };
       hgsrht = self.callPackage ./hg.nix { };
+      hubsrht = self.callPackage ./hub.nix { };
       listssrht = self.callPackage ./lists.nix { };
       mansrht = self.callPackage ./man.nix { };
       metasrht = self.callPackage ./meta.nix { };
@@ -31,6 +32,7 @@ in with python.pkgs; recurseIntoAttrs {
   dispatchsrht = toPythonApplication dispatchsrht;
   gitsrht = toPythonApplication gitsrht;
   hgsrht = toPythonApplication hgsrht;
+  hubsrht = toPythonApplication hubsrht;
   listssrht = toPythonApplication listssrht;
   mansrht = toPythonApplication mansrht;
   metasrht = toPythonApplication metasrht;
