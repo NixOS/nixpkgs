@@ -29,13 +29,8 @@ buildPythonPackage rec {
     weasyprint
   ];
 
-  patches = [
-    ./use-srht-path.patch
-  ];
-
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   meta = with stdenv.lib; {
