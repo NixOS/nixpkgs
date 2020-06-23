@@ -132,4 +132,7 @@ self: super: {
     excludes = ["package.yaml"];
   });
 
+  # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
+  hnix = generateOptparseApplicativeCompletion "hnix" super.hnix;
+
 }
