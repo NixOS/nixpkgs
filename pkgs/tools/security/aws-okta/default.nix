@@ -17,6 +17,8 @@ buildGoPackage rec {
 
   buildFlags = [ "--tags" "release" ];
 
+  buildFlagsArray = [ "-ldflags=-X main.Version=${version}" ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb1  libiconv ];
 
