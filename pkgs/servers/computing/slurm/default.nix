@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  patches = [
+    # increase string length to allow for full
+    # path of 'echo' in nix store
+    ./common-env-echo.patch
+  ];
+
   prePatch = ''
     substituteInPlace src/common/env.c \
         --replace "/bin/echo" "${coreutils}/bin/echo"
