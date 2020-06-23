@@ -24886,6 +24886,8 @@ in
 
   cups-filters = callPackage ../misc/cups/filters.nix { };
 
+  cups-pdf = callPackage ../misc/cups/drivers/cups-pdf { };
+
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
   cups-kyocera = callPackage ../misc/cups/drivers/kyocera {};
