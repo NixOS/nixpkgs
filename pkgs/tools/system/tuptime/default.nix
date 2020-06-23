@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Total uptime & downtime statistics utility";
     homepage = "https://github.com/rfrail3/tuptime";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.evils ];
   };
