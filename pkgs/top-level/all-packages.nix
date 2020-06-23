@@ -7847,6 +7847,8 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  ytree = callPackage ../tools/misc/ytree { };
+
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 
   # To expose more packages for Yi, override the extraPackages arg.
