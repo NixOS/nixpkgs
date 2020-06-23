@@ -82,20 +82,19 @@ fn parse_options(args: &[String]) -> Result<Options> {
     }
 }
 
-fn show_help(app_name: &str) -> Result<()> {
+fn show_help() -> Result<()> {
     let status = try_with!(
         Command::new(MAN_EXECUTABLE)
             .arg("nixos-generate-config")
             .env("MANPATH", NIXOS_MANPAGES)
             .status(),
-        "{}: failed to open man page",
-        app_name
+        "failed to open man page"
     );
 
     match status.code() {
         Some(0) => Ok(()),
-        Some(code) => bail!("{}: man exited with {}", app_name, code),
-        None => bail!("{}: man was killed by signal", app_name),
+        Some(code) => bail!("man exited with {}", code),
+        None => bail!("man was killed by signal"),
     }
 }
 
@@ -113,7 +112,7 @@ pub fn run_app(args: &[String]) -> i32 {
     };
 
     if opts.show_help {
-        if let Err(err) = show_help(app_name) {
+        if let Err(err) = show_help() {
             writeln!(io::stderr(), "{}: {}", app_name, err)
                 .expect("Failed to write error to stderr");
 
