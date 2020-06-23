@@ -8,4 +8,4 @@ simple-error = "0.2"
 
 [[bin]]
 name = "nixos-generate-config"
-path = "src/bin/main.rs"
+path = "src/main.rs"
