@@ -1576,4 +1576,12 @@ self: super: {
     extraPrefix = "";
   }));
 
+  # 2020-06-24: Jailbreaking because of restrictive test dep bounds
+  # Upstream issue: https://github.com/kowainik/trial/issues/62
+  trial = doJailbreak super.trial;
+
+  # 2020-06-24: Tests are broken in hackage distribution.
+  # See: https://github.com/kowainik/stan/issues/316
+  stan = dontCheck super.stan;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
