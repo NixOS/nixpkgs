@@ -1363,9 +1363,6 @@ self: super: {
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
 
-  # https://github.com/bergmark/feed/issues/43
-  feed = dontCheck super.feed;
-
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
 
