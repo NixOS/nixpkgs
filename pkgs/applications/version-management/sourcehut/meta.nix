@@ -1,11 +1,23 @@
 { stdenv, fetchgit, buildPythonPackage
 , python
+, buildGoModule
 , pgpy, srht, redis, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache
 , sshpubkeys, weasyprint }:
 
-buildPythonPackage rec {
-  pname = "metasrht";
+let
   version = "0.50.2";
+
+  buildAPI = src: buildGoModule {
+    inherit src version;
+    pname = "metasrht-api";
+
+    vendorSha256 = "0k7i7j604wqvzjavmcsw7g2x059jkkgrgz1qyvzlqc0y4ws59xkq";
+
+    doCheck = false;
+  };
+in buildPythonPackage rec {
+  pname = "metasrht";
+  inherit version;
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
@@ -31,6 +43,11 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
+  '';
+
+  postInstall = ''
+    mkdir -p $out/bin
+    cp ${buildAPI "${src}/api"}/bin/api $out/bin/metasrht-api
   '';
 
   meta = with stdenv.lib; {
