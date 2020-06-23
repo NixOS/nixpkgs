@@ -1,0 +1,11 @@
+[package]
+name = "nixos-generate-config"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+simple-error = "0.2"
+
+[[bin]]
+name = "nixos-generate-config"
+path = "src/bin/main.rs"
