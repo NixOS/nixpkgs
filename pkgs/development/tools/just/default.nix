@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, dash
+{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash
 , installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh  --name _just     completions/just.zsh
   '';
 
-  checkInputs = [ coreutils bash dash ];
+  checkInputs = [ coreutils bash ];
 
   preCheck = ''
     # USER must not be empty
