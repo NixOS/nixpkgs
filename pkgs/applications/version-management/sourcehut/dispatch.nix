@@ -12,10 +12,6 @@ buildPythonPackage rec {
     sha256 = "JUffuJTKY4I8CrJc8tJWL+CbJCZtiqtUSO9SgYoeux0=";
   };
 
-  patches = [
-    ./use-srht-path.patch
-  ];
-
   nativeBuildInputs = srht.nativeBuildInputs;
 
   propagatedBuildInputs = [
@@ -26,7 +22,6 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   meta = with stdenv.lib; {
