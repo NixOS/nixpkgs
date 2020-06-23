@@ -20471,6 +20471,8 @@ in
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
+  k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
+
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
   kdecoration-viewer = libsForQt5.callPackage ../tools/misc/kdecoration-viewer { };
