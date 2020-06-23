@@ -7090,6 +7090,8 @@ in
 
   soapui = callPackage ../applications/networking/soapui { };
 
+  ssh-askpass-fullscreen = callPackage ../tools/networking/ssh-askpass-fullscreen { };
+
   sshguard = callPackage ../tools/security/sshguard {};
 
   sshping = callPackage ../tools/networking/sshping {};
