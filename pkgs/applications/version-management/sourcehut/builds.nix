@@ -10,7 +10,7 @@ let
     inherit src version;
     pname = "builds-sr-ht-worker";
 
-    vendorSha256 = "0prdlihcy5yz760llwyby747yy2981dn3gy401a48df7ndlfj6lp";
+    vendorSha256 = "1sbcjp93gb0c4p7dd1gjhmhwr1pygxvrrzp954j2fvxvi38w6571";
 
     doCheck = false;
   };
