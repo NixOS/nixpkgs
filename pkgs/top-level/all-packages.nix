@@ -16498,6 +16498,8 @@ in
 
   zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
 
+  pulsar = callPackage ../servers/pulsar { };
+
   xqilla = callPackage ../development/tools/xqilla { };
 
   xquartz = callPackage ../servers/x11/xquartz { };
