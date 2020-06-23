@@ -22082,6 +22082,8 @@ in
 
   simple-scan = gnome3.simple-scan;
 
+  simple-viewer-gl = callPackage ../applications/graphics/simple-viewer-gl { };
+
   siproxd = callPackage ../applications/networking/siproxd { };
 
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
