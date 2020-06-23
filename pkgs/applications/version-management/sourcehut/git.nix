@@ -28,7 +28,7 @@ let
     inherit src version;
     pname = "gitsrht-keys";
 
-    vendorSha256 = "16j7kpar318s4766pln8xn6d51xqblwig5n1jywhj0sl80qjl5cv";
+    vendorSha256 = "08g3cvxq2zkdqbbb9r9rvdg23fs7hn5zqf7fzhr792f6mshdm5v2";
 
     doCheck = false;
   };
