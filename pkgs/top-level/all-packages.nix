@@ -6668,6 +6668,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  v2ray-plugin = callPackage ../tools/networking/v2ray-plugin { };
+
   sharutils = callPackage ../tools/archivers/sharutils { };
 
   shelldap = callPackage ../tools/misc/shelldap { };
