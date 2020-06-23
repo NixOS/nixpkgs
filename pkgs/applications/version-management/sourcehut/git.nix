@@ -41,9 +41,18 @@ let
 
     doCheck = false;
   };
+
+  buildAPI = src: buildGoModule {
+    inherit src version;
+    pname = "gitsrht-api";
+
+    vendorSha256 = "1drrs3wrvhw8lp0877zkbx8gnbxly3fsqynww9vplajkx62z5m3a";
+
+    doCheck = false;
+  };
 in buildPythonPackage rec {
-  inherit version;
   pname = "gitsrht";
+  inherit version;
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/git.sr.ht";
@@ -70,6 +79,7 @@ in buildPythonPackage rec {
     cp ${buildDispatcher "${src}/gitsrht-dispatch"}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
     cp ${buildKeys "${src}/gitsrht-keys"}/bin/gitsrht-keys $out/bin/gitsrht-keys
     cp ${buildUpdateHook "${src}/gitsrht-update-hook"}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
+    cp ${buildAPI "${src}/api"}/bin/api $out/bin/gitsrht-api
   '';
 
   meta = with stdenv.lib; {
