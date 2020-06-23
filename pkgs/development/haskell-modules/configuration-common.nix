@@ -1366,30 +1366,6 @@ self: super: {
   # https://github.com/bergmark/feed/issues/43
   feed = dontCheck super.feed;
 
-  pantry_0_2_0_0 = appendPatches (dontCheck super.pantry_0_2_0_0) [
-    # pantry-0.2.0.0 doesn't build with ghc-8.8, but there is a PR adding support.
-    # https://github.com/commercialhaskell/pantry/pull/6
-    # Currently stack-2.1.3.1 requires pantry-0.2.0.0, but when a newer version of
-    # stack is released, it will probably use the newer pantry version, so we
-    # can completely get rid of pantry-0.2.0.0.
-    (pkgs.fetchpatch {
-      url = "https://github.com/commercialhaskell/pantry/pull/6.diff";
-      sha256 = "0aml06jshpjh3aiscs5av7y33m3d6s6x5pzdvh7pky476izfg87k";
-      excludes = [
-        ".azure/azure-linux-template.yml"
-        ".azure/azure-osx-template.yml"
-        ".azure/azure-windows-template.yml"
-        "package.yaml"
-        "pantry.cabal"
-        "stack-lts-11.yaml"
-        "stack-lts-12.yaml"
-        "stack-nightly.yaml"
-        "stack-windows.yaml"
-        "stack.yaml"
-      ];
-    })
-  ];
-
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
 
