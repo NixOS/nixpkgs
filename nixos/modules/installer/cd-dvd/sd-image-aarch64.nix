@@ -2,12 +2,6 @@
 # nix-build nixos -I nixos-config=nixos/modules/installer/cd-dvd/sd-image-aarch64.nix -A config.system.build.sdImage
 { config, lib, pkgs, ... }:
 
-let
-  extlinux-conf-builder =
-    import ../../system/boot/loader/generic-extlinux-compatible/extlinux-conf-builder.nix {
-      pkgs = pkgs.buildPackages;
-    };
-in
 {
   imports = [
     ../../profiles/base.nix
@@ -56,7 +50,7 @@ in
       '';
     populateRootCommands = ''
       mkdir -p ./files/boot
-      ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./files/boot
+      ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
     '';
   };
 

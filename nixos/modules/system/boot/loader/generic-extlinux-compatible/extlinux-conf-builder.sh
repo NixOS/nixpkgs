@@ -6,7 +6,7 @@ export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin; done
 
 usage() {
-    echo "usage: $0 -t <timeout> -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>]" >&2
+    echo "usage: $0 -t <timeout> -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>] [-n <dtbName>]" >&2
     exit 1
 }
 
@@ -15,7 +15,7 @@ default=                # Default configuration
 target=/boot            # Target directory
 numGenerations=0        # Number of other generations to include in the menu
 
-while getopts "t:c:d:g:" opt; do
+while getopts "t:c:d:g:n:" opt; do
     case "$opt" in
         t) # U-Boot interprets '0' as infinite and negative as instant boot
             if [ "$OPTARG" -lt 0 ]; then
@@ -29,6 +29,7 @@ while getopts "t:c:d:g:" opt; do
         c) default="$OPTARG" ;;
         d) target="$OPTARG" ;;
         g) numGenerations="$OPTARG" ;;
+        n) dtbName="$OPTARG" ;;
         \?) usage ;;
     esac
 done
@@ -96,7 +97,17 @@ addEntry() {
     echo "  LINUX ../nixos/$(basename $kernel)"
     echo "  INITRD ../nixos/$(basename $initrd)"
     if [ -d "$dtbDir" ]; then
-        echo "  FDTDIR ../nixos/$(basename $dtbs)"
+        # if a dtbName was specified explicitly, use that, else use FDTDIR
+        if [ -n "$dtbName" ]; then
+            echo "  FDT ../nixos/$(basename $dtbs)/${dtbName}"
+        else
+            echo "  FDTDIR ../nixos/$(basename $dtbs)"
+        fi
+    else
+        if [ -n "$dtbName" ]; then
+            echo "Explicitly requested dtbName $dtbName, but there's no FDTDIR - bailing out." >&2
+            exit 1
+        fi
     fi
     echo "  APPEND systemConfig=$path init=$path/init $extraParams"
 }
