@@ -5,6 +5,8 @@ buildDunePackage {
 
   inherit (irmin) version src minimumOCamlVersion;
 
+  useDune2 = true;
+
   buildInputs = [ ocaml-syntax-shims ];
   propagatedBuildInputs = [ ppxlib ];
 
