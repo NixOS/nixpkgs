@@ -3,7 +3,7 @@ with import <nixpkgs> {};
 let
   # FIXME:
   # move nixos-generate-config manpages out of this since users can disable manpages
-  # and updating manpages generates unnecessary rebuilds.
+  # and updating manpages generate unnecessary rebuild of this package itself.
   nixos-manpages = (import <nixpkgs/nixos> {}).config.system.build.manual.manpages;
   vendoredCrates =
     let
