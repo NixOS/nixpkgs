@@ -143,6 +143,7 @@
 , "pscid"
 , "pulp"
 , "purescript-psa"
+, "purty"
 , "react-native-cli"
 , "react-tools"
 , "reveal.js"
