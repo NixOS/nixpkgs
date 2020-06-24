@@ -626,6 +626,7 @@ mapAliases ({
   xfce4-14 = xfce;
   xfce4-12 = throw "xfce4-12 has been replaced by xfce4-14"; # added 2020-03-14
   x11 = xlibsWrapper; # added 2015-09
+  xara = throw "xara has been removed from nixpkgs. Unmaintained since 2006"; # added 2020-06-24
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25
   xbmcPlugins = kodiPlugins; # added 2018-04-25
