@@ -1,19 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "crimson";
   version = "2014.10";
-in fetchzip rec {
-  name = "crimson-${version}";
 
-  url = "https://github.com/skosch/Crimson/archive/fonts-october2014.tar.gz";
-
-  postFetch = ''
-    tar -xzvf $downloadedFile --strip-components=1
-    install -m444 -Dt $out/share/fonts/opentype "Desktop Fonts/OTF/"*.otf
-    install -m444 -Dt $out/share/doc/${name}    README.md
-  '';
-
-  sha256 = "0mg65f0ydyfmb43jqr1f34njpd10w8npw15cbb7z0nxmy4nkl842";
+  src = fetchzip {
+    url = "https://github.com/skosch/Crimson/archive/fonts-october2014.tar.gz";
+    sha256 = "00b8gpfp31fb9bqpzlaql6vb82gnhy43zx0amik39pdxpbplp7ss";
+  };
 
   meta = with lib; {
     homepage = "https://aldusleaf.org/crimson.html";

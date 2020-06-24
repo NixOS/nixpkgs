@@ -1,21 +1,17 @@
-{ stdenv, fetchzip }:
+{ lib, mkFont, fetchzip, fetchurl, unzip }:
 
-let
+mkFont rec {
+  pname = "kanji-stroke-order-font";
   version = "4.002";
-in fetchzip {
-  name = "kanji-stroke-order-font-${version}";
 
-  url = "https://sites.google.com/site/nihilistorguk/KanjiStrokeOrders_v${version}.zip?attredirects=0";
+  src = fetchzip {
+    url = "https://drive.google.com/uc?export=download&id=1gd5vUzwgfUSggn8ZbEG2m03x3bbwYPfL";
+    sha256 = "10zbwbcvb07ma727d3illnarywmr6vvxb4ymzgiwgk21zfcc63cs";
+    # for some reason, unpack fails without this
+    postFetch = "unzip $downloadedFile -d $out";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/kanji-stroke-order $out/share/doc/kanji-stroke-order
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/kanji-stroke-order
-    unzip -j $downloadedFile \*.txt -d $out/share/doc/kanji-stroke-order
-  '';
-
-  sha256 = "194ylkx5p7r1461wnnd3hisv5dz1xl07fyxmg8gv47zcwvdmwkc0";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Font containing stroke order diagrams for over 6500 kanji, 180 kana and other characters";
     homepage = "https://sites.google.com/site/nihilistorguk/";
 

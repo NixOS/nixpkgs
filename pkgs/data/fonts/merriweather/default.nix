@@ -1,9 +1,6 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-}:
+{ lib, mkFont, fetchFromGitHub }:
 
-stdenvNoCC.mkDerivation rec {
+mkFont rec {
   pname = "merriweather";
   version = "2.005";
 
@@ -16,14 +13,6 @@ stdenvNoCC.mkDerivation rec {
 
   # TODO: it would be nice to build this from scratch, but lots of
   # Python dependencies to package (fontmake, gftools)
-
-  installPhase = ''
-    install -m444 -Dt $out/share/fonts/opentype/${pname} fonts/otf/*.otf
-    install -m444 -Dt $out/share/fonts/truetype/${pname} fonts/ttfs/*.ttf
-    install -m444 -Dt $out/share/fonts/woff/${pname} fonts/woff/*.woff
-    install -m444 -Dt $out/share/fonts/woff2/${pname} fonts/woff2/*.woff2
-    # TODO: install variable version?
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/SorkinType/Merriweather";

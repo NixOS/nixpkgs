@@ -1,16 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let version = "2.2.0"; in
-fetchzip {
-  name = "redhat-official-${version}";
-  url = "https://github.com/RedHatOfficial/RedHatFont/archive/${version}.zip";
+mkFont rec {
+  pname = "redhat-official";
+  version = "2.2.0";
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-  '';
-
-  sha256 = "0yb6shgq6jrv3kq9faky66qpdbv4g580c3jl942844grwyngymyj";
+  src = fetchzip {
+    url = "https://github.com/RedHatOfficial/RedHatFont/archive/${version}.zip";
+    sha256 = "1vahpsg2qni9d73jkpfqp2jymvixdmwykwrcbhh0qafhcgg1iiwi";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/RedHatOfficial/RedHatFont";

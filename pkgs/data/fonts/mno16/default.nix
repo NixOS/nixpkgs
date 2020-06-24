@@ -1,21 +1,18 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
   pname = "mno16";
   version = "1.0";
-in fetchzip rec {
-  name = "${pname}-${version}";
-  url = "https://github.com/sevmeyer/${pname}/releases/download/${version}/${name}.zip";
-  sha256 = "1x06nl281fcjk6g1p4cgrgxakmwcci6vvasskaygsqlzxd8ig87w";
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype/
-  '';
+  src = fetchzip {
+    url = "https://github.com/sevmeyer/${pname}/releases/download/${version}/${pname}-${version}.zip";
+    sha256 = "1qq3w39gx9w3wnyfblcm5bm95sa9gxcn0sl8g72486d5n5bkv564";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     description = "minimalist monospaced font";
-    homepage = "https://sev.dev/fonts/mno16"; 
+    homepage = "https://sev.dev/fonts/mno16";
     license = licenses.cc0;
   };
 }

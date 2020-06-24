@@ -1,19 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "liberastika";
   version = "1.1.5";
-in fetchzip rec {
-  name = "liberastika-${version}";
 
-  url = "mirror://sourceforge/project/lib-ka/liberastika-ttf-${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf                           -d $out/share/fonts/truetype
-    unzip -j $downloadedFile AUTHORS ChangeLog COPYING README -d "$out/share/doc/${name}"
-  '';
-
-  sha256 = "1a9dvl1pzch2vh8sqyyn1d1wz4n624ffazl6hzlc3s5k5lzrb6jp";
+  src = fetchzip {
+    url = "mirror://sourceforge/project/lib-ka/liberastika-ttf-${version}.zip";
+    sha256 = "0gg7fabnpybkqihjd07l30wkgjs56b0jgjmkqf2ag3v1dhx2k1f2";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     description = "Liberation Sans fork with improved cyrillic support";

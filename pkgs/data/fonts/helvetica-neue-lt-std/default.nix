@@ -1,18 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
-  version = "2013.06.07"; # date of most recent file in distribution
-in fetchzip {
-  name = "helvetica-neue-lt-std-${version}";
+mkFont {
+  pname = "helvetica-neue-lt-std";
+  version = "2013-06-07";
 
-  url = "http://www.ephifonts.com/downloads/helvetica-neue-lt-std.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile Helvetica\ Neue\ LT\ Std/\*.otf -d $out/share/fonts/opentype
-  '';
-
-  sha256 = "0ampp9vf9xw0sdppl4lb9i9h75ywljhdcqmzh45mx2x9m7h6xgg9";
+  src = fetchzip {
+    url = "http://www.ephifonts.com/downloads/helvetica-neue-lt-std.zip";
+    sha256 = "14nmv495fbzy3jqivk2nbssvw2j40cpca4zqqd65jdzhp5717nna";
+    stripRoot = false;
+  };
 
   meta = {
     homepage = "http://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html";

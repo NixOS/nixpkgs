@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+mkFont {
   pname = "google-fonts";
   version = "2019-07-14";
 
@@ -10,8 +10,6 @@ stdenv.mkDerivation {
     rev = "f113126dc4b9b1473d9354a86129c9d7b837aa1a";
     sha256 = "0safw5prpa63mqcyfw3gr3a535w4c9hg5ayw5pkppiwil7n3pyxs";
   };
-
-  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
   patchPhase = ''
     # These directories need to be removed because they contain
@@ -38,12 +36,7 @@ stdenv.mkDerivation {
     fi
   '';
 
-  installPhase = ''
-    dest=$out/share/fonts/truetype
-    find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fonts.google.com";
     description = "Font files available from Google Fonts";
     license = with licenses; [ asl20 ofl ufl ];

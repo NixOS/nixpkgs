@@ -1,20 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
+mkFont rec {
   pname = "inriafonts";
   version = "1.200";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
-  owner = "BlackFoundry";
-  repo = "InriaFonts";
-  rev = "v${version}";
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    install -m444 -Dt $out/share/fonts/truetype fonts/*/TTF/*.ttf
-    install -m444 -Dt $out/share/fonts/opentype fonts/*/OTF/*.otf
-  '';
-  sha256 = "0wrwcyycyzvgvgnlmwi1ncdvwb8f6bbclynd1105rsyxgrz5dd70";
+  src = fetchFromGitHub {
+    owner = "BlackFoundry";
+    repo = "InriaFonts";
+    rev = "v${version}";
+    sha256 = "06775y99lyh6hj5hzvrx56iybdck8a8xfqkipqd5c4cldg0a9hh8";
+  };
 
   meta = with lib; {
     homepage = "https://black-foundry.com/work/inria";

@@ -1,18 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "overpass";
   version = "3.0.4";
-in fetchzip rec {
-  name = "overpass-${version}";
 
-  url = "https://github.com/RedHatBrand/Overpass/archive/${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype ; unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}    ; unzip -j $downloadedFile \*.md  -d $out/share/doc/${name}
-  '';
-
-  sha256 = "13b4yam0nycclccxidzj2fa3nwms5qji7gfkixdnl4ybf0f56b64";
+  src = fetchzip {
+    url = "https://github.com/RedHatBrand/Overpass/archive/${version}.zip";
+    sha256 = "1pl7zpwlx0j2xv23ahnpmbb4a5d6ib2cjck5mxqzi3jjk25rk9kb";
+  };
 
   meta = with lib; {
     homepage = "https://overpassfont.org/";

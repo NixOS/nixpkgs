@@ -1,18 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "mononoki";
   version = "1.2";
-in fetchzip {
-  name = "mononoki-${version}";
 
-  url = "https://github.com/madmalik/mononoki/releases/download/${version}/mononoki.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/mononoki
-    unzip -j $downloadedFile -d $out/share/fonts/mononoki
-  '';
-
-  sha256 = "19y4xg7ilm21h9yynyrwcafdqn05zknpmmjrb37qim6p0cy2glff";
+  src = fetchzip {
+    url = "https://github.com/madmalik/mononoki/releases/download/${version}/mononoki.zip";
+    sha256 = "07ghz2981daxzzqg4kjcya7x46rsvr7p4z4l4gpq8b9l4j2xygfa";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/madmalik/mononoki";

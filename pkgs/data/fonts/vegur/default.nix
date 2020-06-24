@@ -1,20 +1,19 @@
-{ lib, buildPackages, fetchzip }:
+{ lib, buildPackages, mkFont, fetchzip }:
 
-let
+mkFont rec {
   version = "0.701";
-in fetchzip {
-  name = "vegur-font-${version}";
+  pname = "vegur-font";
 
-  # Upstream doesn't version their URLs.
-  # http://dotcolon.net/font/vegur/ → http://dotcolon.net/DL/font/vegur.zip
-  url = "http://download.opensuse.org/repositories/M17N:/fonts/SLE_12_SP3/src/dotcolon-vegur-fonts-0.701-1.4.src.rpm";
-
-  postFetch = ''
-    ${buildPackages.rpmextract}/bin/rpmextract $downloadedFile
-    unzip vegur.zip
-    install -m444 -Dt $out/share/fonts/Vegur *.otf
-  '';
-  sha256 = "0iisi2scq72lyj7pc1f36fhfjnm676n5byl4zaavhbxpdrbc6d1v";
+    src = fetchzip {
+    # Upstream doesn't version their URLs.
+    # http://dotcolon.net/font/vegur/ → http://dotcolon.net/DL/font/vegur.zip
+    url = "http://download.opensuse.org/repositories/M17N:/fonts/SLE_12_SP3/src/dotcolon-vegur-fonts-0.701-1.4.src.rpm";
+    sha256 = "1w1csykf45hgiy7b7918qp6bqp4y3bq13cahi5cmx0zp8scgfrmh";
+    postFetch = ''
+      ${buildPackages.rpmextract}/bin/rpmextract $downloadedFile
+      unzip vegur.zip -d $out
+    '';
+  };
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/vegur/";

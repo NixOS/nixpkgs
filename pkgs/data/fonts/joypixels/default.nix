@@ -1,6 +1,6 @@
-{ stdenv, fetchurl }:
+{ lib, mkFont, fetchurl }:
 
-stdenv.mkDerivation rec {
+mkFont rec {
   pname = "joypixels";
   version = "5.5.0";
 
@@ -9,13 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0w3r50l0knrncwv6zihyx01gs995y76xjcwsysx5bmvc1b43yijb";
   };
 
-  dontUnpack = true;
+  noUnpackFonts = true;
 
-  installPhase = ''
-    install -Dm644 $src $out/share/fonts/truetype/joypixels.ttf
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Emoji as a Service (formerly EmojiOne)";
     homepage = "https://www.joypixels.com/";
     license = licenses.unfree;

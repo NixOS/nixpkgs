@@ -1,16 +1,13 @@
-{ lib, fetchzip }:
+{ lib, fetchzip, mkFont }:
 
-fetchzip {
-  name = "vdrsymbols-20100612";
+mkFont rec {
+  pname = "vdrsymbols";
+  version = "20100612";
 
-  url = "http://andreas.vdr-developer.org/fonts/download/vdrsymbols-ttf-20100612.tgz";
-
-  sha256 = "0wpxns8zqic98c84j18dr4zmj092v07yq07vwwgzblr0rw9n6gzr";
-
-  postFetch = ''
-    tar xvzf "$downloadedFile"
-    install -Dm444 -t "$out/share/fonts/truetype" */*.ttf
-  '';
+  src = fetchzip {
+    url = "http://andreas.vdr-developer.org/fonts/download/vdrsymbols-ttf-20100612.tgz";
+    sha256 = "0yjprvwdfb0wr22qjb3m449fbksa67i9drbwrzmx5k6hwb6yx1bi";
+  };
 
   meta = with lib; {
     description = "DejaVu fonts with additional symbols used by VDR";

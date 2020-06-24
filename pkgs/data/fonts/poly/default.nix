@@ -1,37 +1,25 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, mkFont, fetchurl, unzip }:
 
-stdenv.mkDerivation rec {
-  name = "poly";
+mkFont rec {
+  pname = "poly";
+  version = "2020-06-23";
 
-  regular = fetchurl {
-    # Finally a mirror that has a sha256 that doesn't change.
-    url = "https://googlefontdirectory.googlecode.com/hg-history/d7441308e589c9fa577f920fc4152fa32477a267/poly/src/Poly-Regular.otf";
-    sha256 = "1mxp2lvki6b1h7r9xcj1ld0g4z5y3dmsal85xam4yr764zpjzaiw";
-  };
+  srcs = map fetchurl [
+    {
+      # Finally a mirror that has a sha256 that doesn't change.
+      url = "https://googlefontdirectory.googlecode.com/hg-history/d7441308e589c9fa577f920fc4152fa32477a267/poly/src/Poly-Regular.otf";
+      sha256 = "1mxp2lvki6b1h7r9xcj1ld0g4z5y3dmsal85xam4yr764zpjzaiw";
+    }
+    {
+      # Finally a mirror that has a sha256 that doesn't change.
+      url = "https://googlefontdirectory.googlecode.com/hg-history/d7441308e589c9fa577f920fc4152fa32477a267/poly/src/Poly-Italic.otf";
+      sha256 = "1chzcy3kyi7wpr4iq4aj1v24fq1wwph1v5z96dimlqcrnvm66h2l";
+    }
+  ];
 
-  italic = fetchurl {
-    # Finally a mirror that has a sha256 that doesn't change.
-    url = "https://googlefontdirectory.googlecode.com/hg-history/d7441308e589c9fa577f920fc4152fa32477a267/poly/src/Poly-Italic.otf";
-    sha256 = "1chzcy3kyi7wpr4iq4aj1v24fq1wwph1v5z96dimlqcrnvm66h2l";
-  };
+  noUnpackFonts = true;
 
-  nativeBuildInputs = [unzip];
-
-  sourceRoot = ".";
-
-  dontUnpack = true;
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    cp ${regular} $out/share/fonts/opentype/Poly-Regular.otf
-    cp ${italic} $out/share/fonts/opentype/Poly-Italic.otf
-  '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "11d7ldryfxi0wzfrg1bhw23a668a44vdb8gggxryvahmp5ahmq2h";
-
-  meta = {
+  meta = with lib; {
     description = "Medium contrast serif font";
     longDescription = ''
       With short ascenders and a very high x-height, Poly is efficient in small
@@ -44,7 +32,7 @@ stdenv.mkDerivation rec {
       and languages that use the Latin script and its variants.
     '';
     homepage = "http://www.fontsquirrel.com/fonts/poly";
-    license = stdenv.lib.licenses.ofl;
-    maintainers = with stdenv.lib.maintainers; [ relrod ];
+    license = licenses.ofl;
+    maintainers = with maintainers; [ relrod ];
   };
 }

@@ -1,21 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "fantasque-sans-mono";
   version = "1.8.0";
-in
 
-fetchzip rec {
-  name = "fantasque-sans-mono-${version}";
-
-  url = "https://github.com/belluzj/fantasque-sans/releases/download/v${version}/FantasqueSansMono-Normal.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.otf    -d $out/share/fonts/opentype
-    unzip -j $downloadedFile README.md -d $out/share/doc/${name}
-  '';
-
-  sha256 = "07y2w6xzkbaj6vr95fvvnmwq1pw9jib4z02xf8937dx812yic9ni";
+  src = fetchzip {
+    url = "https://github.com/belluzj/fantasque-sans/releases/download/v${version}/FantasqueSansMono-Normal.zip";
+    sha256 = "0msql67gndixnw3pvhb1c5kfzbg9ylqh15bi3mbqrnz26fhdkm9h";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/belluzj/fantasque-sans";

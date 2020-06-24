@@ -1,22 +1,21 @@
-{ stdenv, fetchzip }:
+{ lib, mkFont, fetchurl, unzip }:
 
-fetchzip {
-  name = "paratype-pt-serif";
+mkFont {
+  pname = "paratype-pt-serif";
+  version = "2017-04-16";
 
-  url = [
-    "https://company.paratype.com/system/attachments/634/original/ptserif.zip"
-    "http://rus.paratype.ru/system/attachments/634/original/ptserif.zip"
-  ];
+  src = fetchurl {
+    urls = [
+      "https://company.paratype.com/system/attachments/634/original/ptserif.zip"
+      "http://rus.paratype.ru/system/attachments/634/original/ptserif.zip"
+    ];
+    sha256 = "0x3l58c1rvwmh83bmmgqwwbw9av1mvvq68sw2hdkyyihjvamyvvs";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.txt -d $out/share/doc/paratype
-  '';
+  nativeBuildInputs = [ unzip ];
+  sourceRoot = ".";
 
-  sha256 = "1iw5qi4ag3yp1lwmi91lb18gr768bqwl46xskaqnkhr9i9qp0v6d";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.paratype.ru/public/";
     description = "An open Paratype font";
 

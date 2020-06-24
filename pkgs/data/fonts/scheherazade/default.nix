@@ -1,21 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "scheherazade";
   version = "2.100";
-in fetchzip rec {
-  name = "scheherazade-${version}";
 
-  url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade-${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf                        -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*/FONTLOG.txt  \*/README.txt -d $out/share/doc/${name}
-    unzip -j $downloadedFile \*/documentation/\*           -d $out/share/doc/${name}/documentation
-  '';
-
-  sha256 = "1g5f5f9gzamkq3kqyf7vbzvl4rdj3wmjf6chdrbxksrm3rnb926z";
+  src = fetchzip {
+    url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade-${version}.zip";
+    sha256 = "0zapz17vdphwvrs0hiyp5r0fbgbc6nrj4cicgid4v657wcw34rbp";
+  };
 
   meta = with lib; {
     homepage = "https://software.sil.org/scheherazade/";

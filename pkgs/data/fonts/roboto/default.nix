@@ -1,18 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "roboto";
   version = "2.138";
-in fetchzip {
-  name = "roboto-${version}";
 
-  url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -x __MACOSX/\* -d $out/share/fonts/truetype
-  '';
-
-  sha256 = "1s3c48wwvvwd3p4w3hfkri5v2c54j2bdxmd3bjv54klc5mrlh6z3";
+  src = fetchzip {
+    url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";
+    sha256 = "0wa176l9718m39sm66iz0zpfb8fly2ddas18h4c9f1m7k18wzvdr";
+    stripRoot = false;
+  };
 
   meta = {
     homepage = "https://github.com/google/roboto";

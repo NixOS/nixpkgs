@@ -1,16 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-fetchzip rec {
-  name = "wqy-microhei-0.2.0-beta";
+mkFont rec {
+  pname = "wqy-microhei";
+  version = "0.2.0-beta";
 
-  url = "mirror://sourceforge/wqy/${name}.tar.gz";
-
-  postFetch = ''
-    tar -xzf $downloadedFile --strip-components=1
-    install -Dm644 wqy-microhei.ttc $out/share/fonts/wqy-microhei.ttc
-  '';
-
-  sha256 = "0i5jh7mkp371fxqmsvn7say075r641yl4hq26isjyrqvb8cv92a9";
+  src = fetchzip {
+    url = "mirror://sourceforge/wqy/${pname}-${version}.tar.gz";
+    sha256 = "15g5acz29yk1kv8167h1bf71ixycql0dwgxxsincx448fpd2hkym";
+  };
 
   meta = {
     description = "A (mainly) Chinese Unicode font";

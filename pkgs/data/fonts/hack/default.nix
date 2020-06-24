@@ -1,18 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "hack-font";
   version = "3.003";
-in fetchzip {
-  name = "hack-font-${version}";
 
-  url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/hack
-  '';
-
-  sha256 = "1l6ih6v7dqali5c7zh6z2xnbf9h2wz0ag6fdgszmqd5lnhw39v6s";
+  src = fetchzip {
+    url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";
+    sha256 = "04qmmgq3m203a7hwnggyvxd779qmmqm9w56i5zyvys3xia8ph4ab";
+  };
 
   meta = with lib; {
     description = "A typeface designed for source code";

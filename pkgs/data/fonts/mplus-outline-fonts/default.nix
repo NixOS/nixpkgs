@@ -1,19 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "mplus";
   version = "063a";
-in fetchzip {
-  name = "mplus-${version}";
 
-  url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";
-
-  postFetch = ''
-    tar -xJf $downloadedFile --strip-components=1
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
-  '';
-
-  sha256 = "1khbkch2r96ppifc93bmy1v047pgciyhfmcjb98ggncp5ix885xz";
+  src = fetchzip {
+    url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";
+    sha256 = "0nhxlmm9akz7r3ngilfl27dbmy4c327kk5br3ii7pps28zdym3j4";
+  };
 
   meta = with lib; {
     description = "M+ Outline Fonts";

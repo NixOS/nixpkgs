@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fontforge }:
+{ lib, mkFont, fetchFromGitHub, fontforge }:
 
-stdenv.mkDerivation rec {
+mkFont rec {
   pname = "gubbi-font";
   version = "1.3";
 
@@ -12,14 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ fontforge ];
-
-  dontConfigure = true;
-
+  dontBuild = false;
   preBuild = "patchShebangs generate.pe";
 
-  installPhase = "install -Dm444 -t $out/share/fonts/truetype/ Gubbi.ttf";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "A Kannada font";
     license = licenses.gpl3Plus;

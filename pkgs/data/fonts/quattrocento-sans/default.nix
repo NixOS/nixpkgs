@@ -1,25 +1,20 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  name = "quattrocento-sans";
   version = "2.0";
-in fetchzip rec {
-  name = "quattrocento-sans-${version}";
 
-  url = "http://web.archive.org/web/20170709124317/http://www.impallari.com/media/releases/quattrocento-sans-v${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/{fonts,doc}
-    unzip -j $downloadedFile '*/QuattrocentoSans*.otf' -d $out/share/fonts/opentype
-    unzip -j $downloadedFile '*/FONTLOG.txt'           -d $out/share/doc/${name}
-  '';
-
-  sha256 = "0g8hnn92ks4y0jbizwj7yfa097lk887wqkqpqjdmc09sd2n44343";
+  src = fetchzip {
+    url = "http://web.archive.org/web/20170709124317/http://www.impallari.com/media/releases/quattrocento-sans-v${version}.zip";
+    sha256 = "1jlynv2mamqizpiin4mpa8i1r6h6sb3afv7w01yq1xw0crk8axig";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     homepage = "http://www.impallari.com/quattrocentosans/";
     description = "A classic, elegant and sober sans-serif typeface";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = with maintainers; [ rycee ];
   };
 }

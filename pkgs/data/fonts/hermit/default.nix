@@ -1,18 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
   pname = "hermit";
   version = "2.0";
-in fetchzip rec {
-  name = "${pname}-${version}";
 
-  url = "https://pcaro.es/d/otf-${name}.tar.gz";
-
-  postFetch = ''
-    tar xf $downloadedFile
-    install -m444 -Dt $out/share/fonts/opentype *.otf
-  '';
-  sha256 = "127hnpxicqya7v1wmzxxqafq3aj1n33i4j5ncflbw6gj5g3bizwl";
+  src = fetchzip {
+    url = "https://pcaro.es/d/otf-${pname}-${version}.tar.gz";
+    sha256 = "0r2r692332x34mlgcc74dmc6fhw3zdy8ac71h5n8q13w4bdxk1a5";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     description = "monospace font designed to be clear, pragmatic and very readable";

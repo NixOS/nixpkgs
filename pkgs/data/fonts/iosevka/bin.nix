@@ -1,18 +1,14 @@
-{ stdenv, fetchzip }:
+{ stdenv, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "iosevka-bin";
   version = "2.3.3";
-in fetchzip {
-  name = "iosevka-bin-${version}";
 
-  url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-iosevka-${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttc -d $out/share/fonts/iosevka
-  '';
-
-  sha256 = "1dfm1888rii5kfmkxp5hnx8ycji57cbs5gazpgkxg1mnmn7i35wl";
+  src = fetchzip {
+    url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-iosevka-${version}.zip";
+    sha256 = "1drni30kjcsfz3rfflkk8nqrj0yklsx467knpwqsg69683848fld";
+    stripRoot = false;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://be5invis.github.io/Iosevka/";

@@ -1,21 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
-  majorVersion = "0";
-  minorVersion = "200";
+mkFont rec {
   pname = "medio";
-in
+  version = "0.200";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
-
-  url = "http://dotcolon.net/DL/font/${pname}.zip";
-  sha256 = "0gxcmhjlsh2pzsmj78vw4v935ax7hfk533ddlhfhfma52zyxyh7x";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
-  '';
+  src = fetchzip {
+    url = "http://dotcolon.net/download/fonts/${pname}_${lib.replaceStrings ["."] [""] version}.zip";
+    sha256 = "1d3hw6mfzfch1ikq9ay9db93z4cy1npfhhw1f0xmj69k7v09rq2b";
+  };
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/${pname}/";

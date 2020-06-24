@@ -1,16 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-fetchzip rec {
-  name = "undefined-medium-1.0";
+mkFont rec {
+  pname = "undefined-medium";
+  version = "1.0";
 
-  url = "https://github.com/andirueckel/undefined-medium/archive/v1.0.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile ${name}/fonts/otf/\*.otf -d $out/share/fonts/opentype
-  '';
-
-  sha256 = "1wa04jzbffshwcxm705yb5wja8wakn8j7fvim1mlih2z1sqw0njk";
+  src = fetchzip rec {
+    url = "https://github.com/andirueckel/undefined-medium/archive/v1.0.zip";
+    sha256 = "1bkzvwpmz0rx5sra18sxqrdjazqpzh7hl8pa5lx34x3v6kp9avqw";
+  };
 
   meta = with lib; {
     homepage = "https://undefined-medium.com/";

@@ -1,6 +1,6 @@
-{ stdenv, requireFile, unzip }:
+{ lib, mkFont, requireFile, unzip }:
 
-stdenv.mkDerivation {
+mkFont {
   pname = "input-fonts";
   version = "2019-11-25"; # date of the download and checksum
 
@@ -11,23 +11,9 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ unzip ];
-
-  phases = [ "unpackPhase" "installPhase" ];
-
   sourceRoot = ".";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    find Input_Fonts -name "*.ttf" -exec cp -a {} "$out"/share/fonts/truetype/ \;
-    mkdir -p "$out"/share/doc
-    cp -a *.txt "$out"/share/doc/
-  '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "15sdhqqqd4jgk80fw7ncx49avi9cxbdgyrvnrfya0066x4q4r6lv";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fonts for Code, from Font Bureau";
     longDescription = ''
       Input is a font family designed for computer programming, data,

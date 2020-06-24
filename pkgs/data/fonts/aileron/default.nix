@@ -1,24 +1,17 @@
-{ lib, fetchzip }:
+{ lib, fetchzip, mkFont }:
 
-let
-  majorVersion = "0";
-  minorVersion = "102";
+mkFont rec {
   pname = "aileron";
-in
+  version = "0.102";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
-
-  url = "http://dotcolon.net/DL/font/${pname}.zip";
-  sha256 = "04xnzdy9plzd2p02yq367h37m5ygx0w8cpkdv39cc3754ljlsxim";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
-  '';
+  src = fetchzip {
+    url = "https://dotcolon.net/download/fonts/${pname}_${lib.replaceStrings ["."] [""] version}.zip";
+    sha256 = "1hawb176dd90nq95q5blpmpv93v7qyl9fwldiqfpvbjr0a1krphy";
+    stripRoot = false;
+  };
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${pname}/";
+    homepage = "https://dotcolon.net/font/${pname}/";
     description = "A helvetica font in nine weights";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];

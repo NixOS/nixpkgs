@@ -1,10 +1,15 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "culmus";
   version = "0.133";
-in fetchzip {
-  name = "culmus-${version}";
-  url = "mirror://sourceforge/culmus/culmus/${version}/culmus-${version}.tar.gz";
+
+  src = fetchzip {
+    url = "mirror://sourceforge/culmus/culmus/${version}/culmus-${version}.tar.gz";
+    sha256 = "0q80j3vixn364sc23hcy6098rkgy0kb4p91lky6224am1dwn2qmr";
+  };
+
+  /*
   postFetch = ''
     tar xf $downloadedFile --strip=1
     mkdir -p $out/share/fonts/{truetype,type1}
@@ -15,7 +20,7 @@ in fetchzip {
     cp -v *.otf $out/share/fonts/truetype/
     cp -v fonts.scale-ttf $out/share/fonts/truetype/fonts.scale
   '';
-  sha256 = "0zqqjcrqmbd4389hqz2dwymkkcxjrq9ylyriiv3gbmzl6l1ffk3g";
+  */
 
   meta = {
     description = "Culmus Hebrew fonts";

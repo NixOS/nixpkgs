@@ -1,25 +1,19 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
   pname = "source-han-code-jp";
-  version = "2.011R";
-in fetchzip {
-  name = "${pname}-${version}";
+  version = "2.011";
 
-  url = "https://github.com/adobe-fonts/${pname}/archive/${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/adobe-fonts/${pname}/archive/${version}R.zip";
+    sha256 = "1grcnmfp74pc7l448jswyyrixfklrm45pkyznw5vz9q3ygfdx4y6";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-  '';
-
-  sha256 = "184vrjkymcm29k1cx00cdvjchzqr1w17925lmh85f0frx7vwljcd";
-
-  meta = {
+  meta = with lib; {
     description = "A monospaced Latin font suitable for coding";
-    maintainers = with lib.maintainers; [ mt-caret ];
-    platforms = with lib.platforms; all;
     homepage = "https://blogs.adobe.com/CCJKType/2015/06/source-han-code-jp.html";
-    license = lib.licenses.ofl;
+    license = licenses.ofl;
+    platforms = with platforms; all;
+    maintainers = with maintainers; [ mt-caret ];
   };
 }

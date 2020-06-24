@@ -1,20 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
+mkFont rec {
+  pname = "material-icons";
   version = "3.0.1";
-in fetchFromGitHub {
-  name = "material-icons-${version}";
 
-  owner  = "google";
-  repo   = "material-design-icons";
-  rev    = version;
-
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    mkdir -p $out/share/fonts/truetype
-    cp iconfont/*.ttf $out/share/fonts/truetype
-  '';
-  sha256 = "1syy6v941lb8nqxhdf7mfx28v05lwrfnq53r3c1ym13x05l9kchp";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "material-design-icons";
+    rev = version;
+    sha256 = "17q5brcqyyc8gbjdgpv38p89s60cwxjlwy2ljnrvas5cj0s62np0";
+  };
 
   meta = with lib; {
     description = "System status icons by Google, featuring material design";

@@ -1,21 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
+mkFont rec {
+  pname = "fira";
   version = "4.202";
-in fetchFromGitHub {
-  name = "fira-${version}";
 
-  owner = "mozilla";
-  repo = "Fira";
-  rev = version;
-
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    mkdir -p $out/share/fonts/opentype
-    cp otf/*.otf $out/share/fonts/opentype
-  '';
-
-  sha256 = "1iwxbp7kw5kghh5nbycb05zby7p2ib61mywva3h6giv2wd4lpxnz";
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "Fira";
+    rev = version;
+    sha256 = "116j26gdj5g1r124b4669372f7490vfjqw7apiwp2ggl0am5xd0w";
+  };
 
   meta = with lib; {
     homepage = "https://mozilla.github.io/Fira/";

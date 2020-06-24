@@ -1,7 +1,7 @@
-{ stdenv, fetchzip, libfaketime, fonttosfnt, mkfontscale }:
+{ lib, mkFont, fetchzip, libfaketime, fonttosfnt, mkfontscale }:
 
-stdenv.mkDerivation rec {
-  name = "siji-${version}";
+mkFont rec {
+  pname = "siji";
   version = "2016-05-13";
 
   src = fetchzip {
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ libfaketime fonttosfnt mkfontscale ];
 
+  dontBuild = false;
   buildPhase = ''
     # compress pcf fonts
     gzip -n -9 pcf/*
@@ -23,22 +24,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postInstall = ''
-    install -m 644 -D pcf/* -t "$out/share/fonts/misc"
-    install -m 644 -D bdf/* -t "$bdf/share/fonts/misc"
-    install -m 644 -D *.otb -t "$otb/share/fonts/misc"
-    mkfontdir "$out/share/fonts/misc"
-    mkfontdir "$bdf/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
-  '';
-
-  outputs = [ "out" "bdf" "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/stark/siji";
     description = "An iconic bitmap font based on Stlarch with additional glyphs";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = [ maintainers.asymmetric ];
+    maintainers = with maintainers; [ asymmetric ];
   };
 }

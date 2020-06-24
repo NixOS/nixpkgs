@@ -3,6 +3,8 @@
 fetchzip {
   name = "ipafont-003.03";
 
+  # 2020-06-17: this link results in a 404 error, and the file does not seem
+  # to be available from the homepage anymore.
   url = "http://ipafont.ipa.go.jp/old/ipafont/IPAfont00303.php";
 
   postFetch = ''

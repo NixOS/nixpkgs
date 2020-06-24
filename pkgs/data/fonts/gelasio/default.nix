@@ -1,19 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
+mkFont {
+  pname = "gelasio";
   version = "unstable-2018-08-12";
-in fetchFromGitHub {
-  name = "gelasio-${version}";
-  owner = "SorkinType";
-  repo = "Gelasio";
-  rev = "5bced461d54bcf8e900bb3ba69455af35b0d2ff1";
-  sha256 = "0dfskz2vpwsmd88rxqsxf0f01g4f2hm6073afcm424x5gc297n39";
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype/
-  '';
+  src = fetchFromGitHub {
+    owner = "SorkinType";
+    repo = "Gelasio";
+    rev = "5bced461d54bcf8e900bb3ba69455af35b0d2ff1";
+    sha256 = "19vmdi9zy5rs52mwwwi88kcgpfnwqyz12kw19bz5hfwzjrr7jdsn";
+  };
 
   meta = with lib; {
     description = "a font which is metric-compatible with Microsoft's Georgia";

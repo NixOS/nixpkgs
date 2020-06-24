@@ -1,24 +1,17 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
-  majorVersion = "1";
-  minorVersion = "10";
+mkFont rec {
   pname = "route159";
-in
+  version = "1.10";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
-
-  url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
-  sha256 = "1nv5csg73arvvwpac7ylh4j9n0s3qp79rbv2s4jvs2bf6gqhsq7h";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
-  '';
+  src = fetchzip {
+    url = "https://dotcolon.net/download/fonts/${pname}_${lib.replaceStrings ["."] [""] version}.zip";
+    sha256 = "0dd58yjiy4awhj9xa9giqkf1cpjgmzcrgsjg45zvl6abdl2z52fl";
+    stripRoot = false;
+  };
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${pname}/";
+    homepage = "https://dotcolon.net/font/${pname}/";
     description = "A weighted sans serif font";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];

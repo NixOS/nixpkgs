@@ -1,27 +1,15 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib, mkFont, fetchzip }:
 
-stdenv.mkDerivation rec {
+mkFont rec {
   pname = "line-awesome";
   version = "1.3.0";
 
-  src = fetchurl {
-    url =
-      "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/${version}/line-awesome-${version}.zip";
-    sha256 = "07qkz8s1wjh5xwqlq1b4lpihr1zah3kh6bnqvfwvncld8l9wjqfk";
+  src = fetchzip {
+    url = "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/${version}/line-awesome-${version}.zip";
+    sha256 = "1sv517g8vpf1r58zczyqbbkfmajrypfilfblhqz9r2cw4rkfpwkb";
   };
 
-  nativeBuildInputs = [ unzip ];
-
-  sourceRoot = "${version}/fonts";
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    mkdir -p $out/share/fonts/woff
-    mkdir -p $out/share/fonts/woff2
-    cp *.ttf $out/share/fonts/truetype
-    cp *.woff $out/share/fonts/woff
-    cp *.woff2 $out/share/fonts/woff2
-  '';
+  sourceRoot = "source/fonts";
 
   meta = with lib; {
     description = "Replace Font Awesome with modern line icons";
