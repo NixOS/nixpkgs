@@ -7254,7 +7254,7 @@ in
 
   udptunnel = callPackage ../tools/networking/udptunnel { };
 
-  ufetch-nixos = callPackage = ../tools/misc/ufetch-nixos { };
+  ufetch-nixos = callPackage ../tools/misc/ufetch-nixos { };
 
   ufraw = callPackage ../applications/graphics/ufraw {
     stdenv = gcc6Stdenv; # doesn't build with gcc7
