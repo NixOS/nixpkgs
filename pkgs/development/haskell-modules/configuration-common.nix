@@ -131,8 +131,7 @@ self: super: {
   ABList = dontCheck super.ABList;
 
   # sse2 flag due to https://github.com/haskell/vector/issues/47.
-  # dontCheck due to https://github.com/haskell/vector/issues/138
-  vector = dontCheck (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
+  vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
 
   conduit-extra = if pkgs.stdenv.isDarwin
     then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
