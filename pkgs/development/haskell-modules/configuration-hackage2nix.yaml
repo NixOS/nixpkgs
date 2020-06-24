@@ -4792,7 +4792,6 @@ broken-packages:
   - extensible-data
   - extensible-effects-concurrent
   - extensible-skeleton
-  - extensions
   - external-sort
   - Extra
   - extract-dependencies
