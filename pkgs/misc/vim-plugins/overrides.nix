@@ -13,6 +13,8 @@
 , nodePackages
 , dasht
 
+, nodejs
+
 # coc-go dependency
 , go
 
@@ -122,6 +124,15 @@ self: super: {
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
         -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
     '';
+  });
+
+  coc-nvim = super.coc-nvim.overrideAttrs(old: {
+    patches = [
+      (substituteAll {
+        src = ./patches/coc-nvim/nodejs-path.patch;
+        nodejs = "${nodejs}/bin/node";
+      })
+    ];
   });
 
   coc-go = super.coc-go.overrideAttrs(old: {
