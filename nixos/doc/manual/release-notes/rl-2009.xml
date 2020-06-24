@@ -659,7 +659,7 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    </listitem>
    <listitem>
     <para>
-      The packages perl, rsync and strace where removed from systemPackages. If you need them, install them again with <literal>environment.systemPackages = with pkgs; [ perl rsync strace ];</literal> in your <literal>configuration.nix</literal>.
+      The packages <package>perl</package>, <package>rsync</package> and <package>strace</package> where removed from <option>systemPackages</option>. If you need them, install them again with <code><xref linkend="opt-environment.systemPackages"/> = with pkgs; [ perl rsync strace ];</code> in your <filename>configuration.nix</filename>.
     </para>
    </listitem>
   </itemizedlist>
