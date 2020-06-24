@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "1yzq6anwgr5rlnwydpszb51cyhp2vjq29b24ck19flbwac1sk73l";
   };
 
+  patches = [
+    ./makefile-defaults.patch
+  ];
+
   postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
     sed '1i#include <linux/sockios.h>' -i src/dhcp.c
   '';

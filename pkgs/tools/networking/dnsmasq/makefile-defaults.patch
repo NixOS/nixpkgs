@@ -1,0 +1,55 @@
+diff --git a/Makefile b/Makefile
+index 78e25f0..8e44354 100644
+--- a/Makefile
++++ b/Makefile
+@@ -18,31 +18,31 @@
+ 
+ # Variables you may well want to override.
+ 
+-PREFIX        = /usr/local
+-BINDIR        = $(PREFIX)/sbin
+-MANDIR        = $(PREFIX)/share/man
+-LOCALEDIR     = $(PREFIX)/share/locale
+-BUILDDIR      = $(SRC)
+-DESTDIR       = 
+-CFLAGS        = -Wall -W -O2
+-LDFLAGS       = 
+-COPTS         = 
+-RPM_OPT_FLAGS = 
+-LIBS          = 
++PREFIX        ?= /usr/local
++BINDIR        ?= $(PREFIX)/sbin
++MANDIR        ?= $(PREFIX)/share/man
++LOCALEDIR     ?= $(PREFIX)/share/locale
++BUILDDIR      ?= $(SRC)
++DESTDIR       ?=
++CFLAGS        ?= -Wall -W -O2
++LDFLAGS       ?=
++COPTS         ?=
++RPM_OPT_FLAGS ?=
++LIBS          ?=
+ 
+ #################################################################
+ 
+ # Variables you might want to override.
+ 
+-PKG_CONFIG = pkg-config
+-INSTALL    = install
+-MSGMERGE   = msgmerge
+-MSGFMT     = msgfmt
+-XGETTEXT   = xgettext
++PKG_CONFIG ?= pkg-config
++INSTALL    ?= install
++MSGMERGE   ?= msgmerge
++MSGFMT     ?= msgfmt
++XGETTEXT   ?= xgettext
+ 
+-SRC = src
+-PO  = po
+-MAN = man
++SRC ?= src
++PO  ?= po
++MAN ?= man
+ 
+ #################################################################
+ 
