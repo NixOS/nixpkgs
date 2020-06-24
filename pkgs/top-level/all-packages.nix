@@ -437,6 +437,8 @@ in
       inherit kernel firmware rootModules allowMissing;
     };
 
+  mkFont = callPackage ../build-support/mkfont.nix { };
+
   mkShell = callPackage ../build-support/mkshell { };
 
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackages) inherit-local; };
