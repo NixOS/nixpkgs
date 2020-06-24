@@ -1074,7 +1074,7 @@ self: super: {
     })) ./patches/sexpr-0.2.1.patch;
 
   # https://github.com/haskell/hoopl/issues/50
-  #hoopl = dontCheck super.hoopl;
+  hoopl = dontCheck super.hoopl;
 
   # https://github.com/snapframework/xmlhtml/pull/37
   xmlhtml = doJailbreak super.xmlhtml;
@@ -1154,8 +1154,7 @@ self: super: {
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
 
   # Some tests depend on a postgresql instance
-  # Haddock failure: https://github.com/haskell/haddock/issues/979
-  esqueleto = dontHaddock (dontCheck super.esqueleto);
+  esqueleto = dontCheck super.esqueleto;
 
   # Requires API keys to run tests
   algolia = dontCheck super.algolia;
