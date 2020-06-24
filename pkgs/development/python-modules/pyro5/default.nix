@@ -22,7 +22,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   # ignore network related tests, which fail in sandbox
-  disabledTests = [ "StartNSfunc" "Broadcast" "GetIP" ];
+  disabledTests = [ "StartNSfunc" "Broadcast" "GetIP" "TestNameServer" "TestBCSetup" ];
 
   meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";
