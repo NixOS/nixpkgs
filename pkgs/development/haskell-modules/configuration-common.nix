@@ -1204,9 +1204,6 @@ self: super: {
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;
 
-  # https://github.com/blamario/grampa/issues/19
-  rank2classes = dontCheck super.rank2classes;
-
   nix-tools = super.nix-tools.overrideScope (self: super: {
     # Needs https://github.com/peti/hackage-db/pull/9
     hackage-db = super.hackage-db.overrideAttrs (old: {
