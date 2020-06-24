@@ -1240,9 +1240,6 @@ self: super: {
     ];
   });
 
-  # https://github.com/Daniel-Diaz/HaTeX/issues/144
-  HaTeX = dontCheck super.HaTeX;
-
   # https://github.com/kazu-yamamoto/dns/issues/150
   dns = dontCheck super.dns;
 
