@@ -517,6 +517,8 @@ in {
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
 
+  beancount_docverif = callPackage ../development/python-modules/beancount_docverif { };
+
   bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
