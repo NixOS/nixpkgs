@@ -8425,6 +8425,12 @@
     githubId = 7677567;
     name = "Victor SENE";
   };
+  vulcoes = {
+    email = "alan.gr993@gmail.com";
+    github = "vulcoes";
+    githubId = 3402003;
+    name = "mar";
+  };
   vyorkin = {
     email = "vasiliy.yorkin@gmail.com";
     github = "vyorkin";
