@@ -6372,7 +6372,6 @@ broken-packages:
   - hsI2C
   - hsignal
   - hSimpleDB
-  - hsimport
   - HsJudy
   - hskeleton
   - hslackbuilder
