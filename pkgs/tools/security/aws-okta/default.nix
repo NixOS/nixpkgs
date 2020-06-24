@@ -13,8 +13,6 @@ buildGoPackage rec {
     sha256 = "0rqkbhprz1j9b9bx3wvl5zi4p02q1qza905wkrvh42f9pbknajww";
   };
 
-  goDeps = ./deps.nix;
-
   buildFlags = [ "--tags" "release" ];
 
   buildFlagsArray = [ "-ldflags=-X main.Version=${version}" ];
