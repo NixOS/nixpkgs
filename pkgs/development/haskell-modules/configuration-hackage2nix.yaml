@@ -8853,7 +8853,6 @@ broken-packages:
   - rbr
   - rc
   - rclient
-  - rdf4h
   - rdioh
   - react-flux
   - react-flux-servant
