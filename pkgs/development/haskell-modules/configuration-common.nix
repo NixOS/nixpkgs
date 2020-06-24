@@ -51,10 +51,6 @@ self: super: {
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
-  # Tests are failing
-  # https://github.com/bos/statistics/issues/123
-  statistics = dontCheck super.statistics;
-
   # These packages (and their reverse deps) cannot be built with profiling enabled.
   ghc-heap-view = disableLibraryProfiling super.ghc-heap-view;
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
@@ -1122,8 +1118,8 @@ self: super: {
   # });
   libnix = dontCheck super.libnix;
 
-  # Jailbreak: https://github.com/jaor/xmobar/issues/463
-  # The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
+  # 2020-06-23: NOTE: > 0.33 => rm 464.patch: https://github.com/jaor/xmobar/issues/466
+  # dontCheck: The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
   xmobar = appendPatch (dontCheck super.xmobar) (pkgs.fetchpatch {
     url = "https://github.com/jaor/xmobar/pull/464.patch";
     sha256 = "0y1dd878yzy1cx0cjj0ijd3dmywr7jdmk68vxdjimxzblrdw1al6";
@@ -1320,37 +1316,10 @@ self: super: {
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
 
-  # https://github.com/bergmark/feed/issues/43
-  feed = dontCheck super.feed;
-
-  pantry_0_2_0_0 = appendPatches (dontCheck super.pantry_0_2_0_0) [
-    # pantry-0.2.0.0 doesn't build with ghc-8.8, but there is a PR adding support.
-    # https://github.com/commercialhaskell/pantry/pull/6
-    # Currently stack-2.1.3.1 requires pantry-0.2.0.0, but when a newer version of
-    # stack is released, it will probably use the newer pantry version, so we
-    # can completely get rid of pantry-0.2.0.0.
-    (pkgs.fetchpatch {
-      url = "https://github.com/commercialhaskell/pantry/pull/6.diff";
-      sha256 = "0aml06jshpjh3aiscs5av7y33m3d6s6x5pzdvh7pky476izfg87k";
-      excludes = [
-        ".azure/azure-linux-template.yml"
-        ".azure/azure-osx-template.yml"
-        ".azure/azure-windows-template.yml"
-        "package.yaml"
-        "pantry.cabal"
-        "stack-lts-11.yaml"
-        "stack-lts-12.yaml"
-        "stack-nightly.yaml"
-        "stack-windows.yaml"
-        "stack.yaml"
-      ];
-    })
-  ];
-
-  # https://github.com/serokell/nixfmt/pull/62
+  # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
 
-  # https://github.com/phadej/binary-orphans/issues/45
+  # 2020-06-22: NOTE: QuickCheck upstreamed https://github.com/phadej/binary-instances/issues/7
   binary-instances = dontCheck super.binary-instances;
 
   # Disabling the test suite lets the build succeed on older CPUs
@@ -1431,7 +1400,7 @@ self: super: {
 
   # Requested version bump on upstream https://github.com/obsidiansystems/constraints-extras/issues/32
   constraints-extras = doJailbreak super.constraints-extras;
-  # Requested version bump on upstream https://github.com/srid/rib/issues/160
+  # 2020-06-22: NOTE: > 0.10.0.0 => rm dhall override: https://github.com/srid/rib/issues/161
   rib = doJailbreak (super.rib.override {
     dhall = self.dhall_1_30_0;
   });
