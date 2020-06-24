@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
-, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell, sqlite, zlib
+, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, elinks, mailcap, runtimeShell, sqlite, zlib
 , glibcLocales
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200501";
+  version = "20200619";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "1xrs2bagrcg489zp7g39l3rrpgz8n1ji9cbr21wrnasfbhqcsmnx";
+    sha256 = "0dhdpd0wdk5bam0q7cvjy4f451ai0mapmyrar7r7m5dnn6lcwvfv";
   };
 
   buildInputs = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib
+    docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib elinks
   ];
 
   enableParallelBuilding = true;
@@ -42,12 +42,10 @@ stdenv.mkDerivation rec {
     # and use a far more comprehensive list than the one shipped with neomutt
     substituteInPlace sendlib.c \
       --replace /etc/mime.types ${mailcap}/etc/mime.types
+  '';
 
-    # The string conversion tests all fail with the first version of neomutt
-    # that has tests (20180223) as well as 20180716 so we disable them for now.
-    # I don't know if that is related to the tests or our build environment.
-    # Try again with a later release.
-    sed -i '/rfc2047/d' test/Makefile.autosetup test/main.c
+  preBuild = ''
+    export HOME=$(mktemp -d)
   '';
 
   configureFlags = [
@@ -60,6 +58,9 @@ stdenv.mkDerivation rec {
     "--sasl"
     "--with-homespool=mailbox"
     "--with-mailpath="
+    # To make it not reference .dev outputs. See:
+    # https://github.com/neomutt/neomutt/pull/2367
+    "--disable-include-path-in-cflags"
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
     "ac_cv_path_SENDMAIL=sendmail"
     "--zlib"
@@ -80,16 +81,15 @@ stdenv.mkDerivation rec {
     cp -r ${fetchFromGitHub {
       owner = "neomutt";
       repo = "neomutt-test-files";
-      rev = "1ee274e9ae1330fb901eb7b8275b3079d7869222";
-      sha256 = "0dhilz4rr7616jh8jcvh50a3rr09in43nsv72mm6f3vfklcqincp";
+      rev = "8629adab700a75c54e8e28bf05ad092503a98f75";
+      sha256 = "1ci04nqkab9mh60zzm66sd6mhsr6lya8wp92njpbvafc86vvwdlr";
     }} $(pwd)/test-files
+    chmod -R +w test-files
     (cd test-files && ./setup.sh)
 
     export NEOMUTT_TEST_DIR=$(pwd)/test-files
-    export LC_ALL="en_US.UTF-8"
   '';
 
-  checkInputs = [ glibcLocales ];
   checkTarget = "test";
   postCheck = "unset NEOMUTT_TEST_DIR";
 

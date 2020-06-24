@@ -34,7 +34,13 @@ stdenv.mkDerivation rec {
     sha256 = "0y3ks10mc7m8c7pd4c4j8pj7n5rqcvzrjs8mzldv7z7jnlb30hkq";
   };
 
-  patches = optional smimeSupport (fetchpatch {
+  patches = [
+    # patch for CVE-2020-14093
+    (fetchpatch {
+      url = "https://github.com/muttmua/mutt/commit/3e88866dc60b5fa6aaba6fd7c1710c12c1c3cd01.patch";
+      sha256 = "1md4krh76kjbg6nkyvbpjn6iz17c7m7xvdj6gjvjr7akqjhfw48h";
+    })
+  ] ++ optional smimeSupport (fetchpatch {
     url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
     sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });

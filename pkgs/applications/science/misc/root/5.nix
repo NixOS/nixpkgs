@@ -32,6 +32,12 @@ stdenv.mkDerivation rec {
     # disable dictionary generation for stuff that includes libc headers
     # our glibc requires a modern compiler
     ./disable_libc_dicts_root5.patch
+
+    (fetchpatch {
+      name = "CVE-2017-1000203.patch";
+      url = "https://github.com/root-project/root/commit/a568e80022ae6ffbfa0a908d625c986ee857cc0f.diff";
+      sha256 = "0fxiwh36ry2w98a7sw74z9rnp686vrddxmd34wkvjnj9alry9i5f";
+    })
   ];
 
   preConfigure = ''
