@@ -4455,7 +4455,9 @@ in {
 
   locustio = callPackage ../development/python-modules/locustio { };
 
-  llvmlite = callPackage ../development/python-modules/llvmlite { llvm = pkgs.llvm_8; };
+  llvmlite = callPackage ../development/python-modules/llvmlite { 
+    llvm = pkgs.llvm_9; # llvmlite always requires a specific version of llvm.
+  };
 
   lockfile = callPackage ../development/python-modules/lockfile { };
 
