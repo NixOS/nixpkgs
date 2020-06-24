@@ -10895,6 +10895,10 @@ in
 
   nrfutil = callPackage ../development/tools/misc/nrfutil { };
 
+  pc-ble-driver = callPackage ../development/tools/misc/pc-ble-driver {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
+
   obelisk = callPackage ../development/tools/ocaml/obelisk { };
 
   obuild = callPackage ../development/tools/ocaml/obuild { };
