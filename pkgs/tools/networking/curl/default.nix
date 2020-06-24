@@ -28,15 +28,32 @@ assert brotliSupport -> brotli != null;
 assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.68.0";
+  pname = "curl";
+  version = "7.70.0";
 
   src = fetchurl {
     urls = [
-      "https://curl.haxx.se/download/${name}.tar.bz2"
-      "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] name}/${name}.tar.bz2"
+      "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
+      "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "1fgf4f33wj25jk6lkpxmrvmfnnxvc66z3k3561rxr8nngn8m8zr0";
+    sha256 = "1l19b2xmzwjl2fqlbv46kwlz1823miaxczyx2a5lz8k7mmigw2x5";
   };
+
+  patches = [
+    # remove these two patches for cURL >= 7.71.0
+    (fetchurl {
+      # https://www.openwall.com/lists/oss-security/2020/06/24/1
+      name = "CVE-2020-8169.patch";
+      url = "https://github.com/curl/curl/commit/600a8cded447cd.patch";
+      sha256 = "10qdh995mgaxza3va7r7gl1xkyfidbhk09i5srm9h59ml4fqm36r";
+    })
+    (fetchurl {
+      # https://www.openwall.com/lists/oss-security/2020/06/24/2
+      name = "CVE-2020-8177.patch";
+      url = "https://github.com/curl/curl/commit/8236aba58542c5f.patch";
+      sha256 = "08zwizkbwy2blcqza4681099cd13z3ww2lq5ypnf2c5zsysnv48a";
+    })
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
@@ -119,8 +136,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A command line tool for transferring files with URL syntax";
     homepage    = https://curl.haxx.se/;
-    maintainers = with maintainers; [ lovek323 ];
     license = licenses.curl;
+    maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
   };
 }
