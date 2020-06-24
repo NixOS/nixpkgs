@@ -30,7 +30,12 @@ rec {
     else legacy_390;
 
   # No active beta right now
-  beta = stable;
+  beta = generic {
+    version = "450.51";
+    sha256_64bit = "17pam9737jx9vvczma5rafa0rihprccmfz84clb1y4nhbay5alf2";
+    settingsSha256 = "09hc1mjh7s94hy37rslxrxr30kx9a4yfnkmv35wn86b2p9zk3w6n";
+    persistencedSha256 = "0jmri8kj6gffqn8pm8nijhq2airvgid11vj2ffc037l7z4w0s6ar";
+  };
 
   # Last one supporting x86
   legacy_390 = generic {
