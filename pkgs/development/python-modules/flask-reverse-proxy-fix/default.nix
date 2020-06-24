@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , isPy3k
 , flask
+, werkzeug
 }:
 
 buildPythonPackage rec {
@@ -20,8 +21,13 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
+  postPatch = ''
+    sed -i 's@werkzeug.contrib.fixers@werkzeug.middleware.proxy_fix@g' flask_reverse_proxy_fix/middleware/__init__.py
+  '';
+
   propagatedBuildInputs = [
     flask
+    werkzeug
   ];
 
   meta = with stdenv.lib; {
