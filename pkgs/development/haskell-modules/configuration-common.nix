@@ -126,7 +126,6 @@ self: super: {
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
-  classy-prelude-yesod = dontHaddock super.classy-prelude-yesod; # https://github.com/haskell/haddock/issues/979
 
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
@@ -1212,9 +1211,6 @@ self: super: {
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;
 
-  # https://github.com/blamario/grampa/issues/19
-  rank2classes = dontCheck super.rank2classes;
-
   nix-tools = super.nix-tools.overrideScope (self: super: {
     # Needs https://github.com/peti/hackage-db/pull/9
     hackage-db = super.hackage-db.overrideAttrs (old: {
@@ -1250,9 +1246,6 @@ self: super: {
       })
     ];
   });
-
-  # https://github.com/Daniel-Diaz/HaTeX/issues/144
-  HaTeX = dontCheck super.HaTeX;
 
   # https://github.com/kazu-yamamoto/dns/issues/150
   dns = dontCheck super.dns;
