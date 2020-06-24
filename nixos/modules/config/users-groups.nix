@@ -626,7 +626,7 @@ in {
         then
         ''
           The password hash of user "${name}" may be invalid. You must set a
-          valid hash or the user will be locked out of his account. Please
+          valid hash or the user will be locked out of their account. Please
           check the value of option `users.users."${name}".hashedPassword`.
         ''
         else null

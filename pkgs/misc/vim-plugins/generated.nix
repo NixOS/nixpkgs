@@ -4021,6 +4021,18 @@ let
     meta.homepage = "https://github.com/bling/vim-bufferline/";
   };
 
+  vim-bsv = buildVimPluginFrom2Nix {
+    pname = "vim-bsv";
+    version = "2019-07-11";
+    src = fetchFromGitHub {
+      owner = "mtikekar";
+      repo = "vim-bsv";
+      rev = "dc775cb06891dd0923b5e2a882f5dcee6451540a";
+      sha256 = "18wsbvypi62nwgcazw2m47d6k8ymlv1zwabs2gwl931n710ldkfc";
+    };
+    meta.homepage = "https://github.com/mtikekar/vim-bsv/";
+  };
+
   vim-bufkill = buildVimPluginFrom2Nix {
     pname = "vim-bufkill";
     version = "2020-04-29";

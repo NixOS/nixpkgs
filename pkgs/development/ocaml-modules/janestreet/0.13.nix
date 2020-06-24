@@ -357,7 +357,8 @@ rec {
 
   async_unix = janePackage {
     pname = "async_unix";
-    hash = "0n3jz3qjlphyhkqgnbjbwf2fqxaksws82dx1mk4m4wnw3275gdi5";
+    version = "0.13.1";
+    hash = "1sb8grbj4bv6ih3yfdihxhn5c9rqczr56b5bhl85wy2mi92m17xv";
     meta.description = "Monadic concurrency library";
     propagatedBuildInputs = [ async_kernel core ];
   };

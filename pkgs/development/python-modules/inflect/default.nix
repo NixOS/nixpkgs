@@ -1,8 +1,9 @@
-{ buildPythonPackage, fetchPypi, setuptools_scm, nose, six, importlib-metadata, toml }:
+{ buildPythonPackage, fetchPypi, isPy27, setuptools_scm, nose, six, importlib-metadata, toml }:
 
 buildPythonPackage rec {
   pname = "inflect";
   version = "4.1.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
