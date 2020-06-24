@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "wordpress";
@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/wordpress
     cp -r . $out/share/wordpress
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) wordpress;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://wordpress.org";
