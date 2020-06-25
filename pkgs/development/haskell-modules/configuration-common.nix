@@ -557,9 +557,6 @@ self: super: {
     sha256 = "13g462qmj8c7if797gnyvf8h0cddmm3xy0pjldw48w8f8sr4qsj0";
   });
 
-  # https://github.com/athanclark/sets/issues/2
-  sets = dontCheck super.sets;
-
   # Install icons, metadata and cli program.
   bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
