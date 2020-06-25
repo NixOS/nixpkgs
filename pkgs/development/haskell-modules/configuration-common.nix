@@ -388,9 +388,6 @@ self: super: {
   # https://github.com/bos/snappy/issues/1
   snappy = dontCheck super.snappy;
 
-  # https://github.com/kim/snappy-framing/issues/3
-  snappy-framing = dontHaddock super.snappy-framing;
-
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
 
