@@ -117,7 +117,6 @@ self: super: {
   });
 
   # The Haddock phase fails for one reason or another.
-  bytestring-progress = dontHaddock super.bytestring-progress;
   deepseq-magic = dontHaddock super.deepseq-magic;
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
   hoodle-core = dontHaddock super.hoodle-core;
