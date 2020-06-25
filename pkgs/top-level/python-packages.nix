@@ -4750,6 +4750,8 @@ in {
 
   names = callPackage ../development/python-modules/names { };
 
+  nbclient = callPackage ../development/python-modules/nbclient { };
+
   nbconflux = callPackage ../development/python-modules/nbconflux { };
 
   nbconvert = callPackage ../development/python-modules/nbconvert { };
