@@ -1,965 +1,965 @@
 {
-  version = "77.0b7";
+  version = "78.0b9";
   sources = [
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ach/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ach/firefox-78.0b9.tar.bz2";
       locale = "ach";
       arch = "linux-x86_64";
-      sha512 = "b377d891ec1ede4d13a55bf6dccf67e9cacdad118241902ea97a1719f784cd8dcae47fc015bc79e4bf7c4a76dd66472cc56a39173021ee1c259bcd5f0b7c3097";
+      sha512 = "379dd556086264afb4cd324dd314ecee65e09a2dfc63c3f2b8dfa1e3f8e5ce0e3300f3c61fda186454d635c339b302c8d07c613137859dec585cf50f152ff556";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/af/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/af/firefox-78.0b9.tar.bz2";
       locale = "af";
       arch = "linux-x86_64";
-      sha512 = "729d7a9cff65d7d002e732a4224921621e3b29c1afa0575506863dece3290722d916ab6072ddf6701628204e9b78d19a5b0ee90c11fc27772ea2eb30ae62858e";
+      sha512 = "4b7b3e373253566c2672ad1d60b7b8af8617418c082f723fd5d3df9689e735ac5def3765f828af0f4147e74e347c288cb87a599cc5e611eb942589306625e1d0";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/an/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/an/firefox-78.0b9.tar.bz2";
       locale = "an";
       arch = "linux-x86_64";
-      sha512 = "7421dac51885269cbdea9514e4d96a9dc9a5acff496176f80fedf8dc570bb3113d3eceaaf25203aeadf2357b364e46b010df2d973f0d8c39cd6df7e408d286c1";
+      sha512 = "37f394a8609528aaf4979c948449ec8db79c010ffcf309c5430541c1cc9b5c198766efdbe0122b03df7f864027b13d2b3d156e9632d84a1049a3491ccf1c3d5a";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ar/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ar/firefox-78.0b9.tar.bz2";
       locale = "ar";
       arch = "linux-x86_64";
-      sha512 = "922cc579853ee87f9055b48c12df6ae5a756dcb0e6fef8907ea0befec3f7c2d53f158b4a089bd8bd42765104e0118328d27da4ca8924e732125b207ef72887d1";
+      sha512 = "ff487607504315e2ee466b350d2710f5217ac4de3c32bf6d03a33d80aeb404c6a095d10f423bca2f69181b6bca7e3d9134bc4a14943afa0d0d885acc347298b3";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ast/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ast/firefox-78.0b9.tar.bz2";
       locale = "ast";
       arch = "linux-x86_64";
-      sha512 = "6d193a8a8aa22a667de3fa4c2b53ce9d9a674919c7e3c95fa7357cb968e3dd36bbd123b2fec06a3cb08bc298e5fdd38c4dce690d10ff15bd31768c7694d0e6c9";
+      sha512 = "2db7e4a70029f2866991fbf19531444a3aef8094f9d3fe49d413023e10b544a2f9f1472aa50d1c4784f6d415384ace05efdbbab9b382e164ab6a0b48ce32e702";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/az/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/az/firefox-78.0b9.tar.bz2";
       locale = "az";
       arch = "linux-x86_64";
-      sha512 = "5048b6b859650523c1a98d6f0c471dce49833f6303a67f8bd02295dbd341981d145145671660ded3c777817aaf970b478e377bbd3fb367fcad5850402a16474b";
+      sha512 = "4664193864b34f060b720c186147c38a3ea1bfce23596de0764a220adebd44f559035009114da57f3733408b520319555cd0a3cc995d11642eb192d4259f8c60";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/be/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/be/firefox-78.0b9.tar.bz2";
       locale = "be";
       arch = "linux-x86_64";
-      sha512 = "0288debe1839fcbc9067e26411233b8b29960dbbe65c0878955eae67b91da7de0d51000e8adcac1e3f3e91d531c371f677e418366e50ed33337a4ce46c811b6d";
+      sha512 = "3ce6aac728ff4b6eeaacd1f70af0911a017f5df92edf2824ecdf83d499d3d8e0da7c3f8a16bfaf99c70667510ac99fc005c7feca1b3ef08af1ccbcc88a006a6d";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/bg/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/bg/firefox-78.0b9.tar.bz2";
       locale = "bg";
       arch = "linux-x86_64";
-      sha512 = "35821fcb332de76d2dbd039e9dc417631d8303921cb30947d39e6d0e57edd62f5fa1935238899076029189250a73dd657f25662f5bfdd193a5eb6227c706fb7f";
+      sha512 = "d6ff09eb01548cf0cf0f75151f0dab3e959d888bb75104dde49db0245cf72db73c0177e1eace68d0e7a4472c310cee21a9c82536570f9275b8d3f3fb0069b9a2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/bn/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/bn/firefox-78.0b9.tar.bz2";
       locale = "bn";
       arch = "linux-x86_64";
-      sha512 = "82b553daf2ad0e93232b655fbe1c24928625c7f682ef755e1f1759847cd93f0b66bd000784274a40ab5ea0e89985018bf17835208746197b546244503138db55";
+      sha512 = "3a46ee6b89dfc60e2a989a4f8302bfd7ea43ed7d40c0d3f6a938d38a009ff698418e36a96e7e85c6ea6626f58dff00cff943678573215d7e49c150fdb3c292a7";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/br/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/br/firefox-78.0b9.tar.bz2";
       locale = "br";
       arch = "linux-x86_64";
-      sha512 = "69952a7d21006632a77c0e719bcdd3370d72760c98df348486d4f5c9d4d6ba73641b2133a615f8c5548e5708d4d68a499466d4ac32f690c9b76eea54f988325c";
+      sha512 = "9d889cb992691ed4a0b8c5d77bf84141977c5741293eeefa12fc3c545b874472aa8a1ee352bd7cab985d5091463f47c5f0376b72b7dfc3aac36345a84a9324ed";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/bs/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/bs/firefox-78.0b9.tar.bz2";
       locale = "bs";
       arch = "linux-x86_64";
-      sha512 = "fdf0975e3b17097469f54e57b99fd99b69ed8241263600524b1599db94640b4b7bc105a67edcf67b70766188ba20ba7e9b7e96b181c2ed6de020c112af75dcd6";
+      sha512 = "408aa585259f2f8775108f54b3b89fcf2a75d4eb09621a462f942eaefce805f75a94ba50df7cdb695a5905202f1de0e27bd01f99ea73c626c03b5e7f596975bb";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ca-valencia/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ca-valencia/firefox-78.0b9.tar.bz2";
       locale = "ca-valencia";
       arch = "linux-x86_64";
-      sha512 = "438c3e5e9f6a34bda35ffced50e00012a9b84ef589b8868a7746f4f0abbe4143e591f5710d075def1187d61b7f289df0c4a5add6ba4c37227d04509c2b645207";
+      sha512 = "8c046266c4c684e86dd64327e1c04eeb5bf581ea9f56146d2248d5ab40f37e33cb1512b11513eac3a87c86350d2802664894adb64d5a097eaaca235b4bfc1004";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ca/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ca/firefox-78.0b9.tar.bz2";
       locale = "ca";
       arch = "linux-x86_64";
-      sha512 = "884d87560ea62da3218fc7bcb5b3b3fb9d98e70d5c13bf86627ce61e20aca5a8717db595b9141a302753fb0d704f1c1da99c0a8bb3e1f83fd3f6eddeeea5218a";
+      sha512 = "41bca38caa75841d1d87169ce31d8cb9d5e356e708f607d2d4dd7818749ae05adb21312700a4ee849196d6aac7d1c9ae595b7c36019a23f18159a176cd60d058";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/cak/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/cak/firefox-78.0b9.tar.bz2";
       locale = "cak";
       arch = "linux-x86_64";
-      sha512 = "6525cd987abbd4e871122a20c25c4ba353272437b56f82e1a9baec9581a6a10637a85942bbc261a375842660606259fd030c59e325b05aa9fe7f3dda77864a7b";
+      sha512 = "3edbe6919d52d94768fad0d0ae14cdc8d62822b17348c3ae9394e0816f06ad56e9fe6d383fa90a34400a9fda5ed0671b73e85ad975efdf7bad3ffb311334881c";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/cs/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/cs/firefox-78.0b9.tar.bz2";
       locale = "cs";
       arch = "linux-x86_64";
-      sha512 = "c3eb1d943b892fc41e25ee2bf15f0877ac297483595f7abea31332311e764353d8b12b7879044f688d8cc97f3104a7bc2b0305b02b8412a78e388e59b04d29ac";
+      sha512 = "3eb8df01cd7f3be700f03df2512f114dce87556694145f1cbbb80897c89266223052ef055a91b6a5863d228dc2b70f4177e72e11c65dfe5ad24bc58f45be8dae";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/cy/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/cy/firefox-78.0b9.tar.bz2";
       locale = "cy";
       arch = "linux-x86_64";
-      sha512 = "0a66eed4424c392f5dfaafa6aa198108757abffb069f8f665c06bdd24dfca08dff314447c57cd81815fdfaf54edc87eb67a6dd5c190e3512a15645e31d5d8428";
+      sha512 = "b3134d0405c68e02fd49be1d15c80befde907b44fd06d9c84a5dd938aebeceae89df695e28df2aeda865c682283a80d61934bf387a218e029dd1d08faf8d4372";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/da/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/da/firefox-78.0b9.tar.bz2";
       locale = "da";
       arch = "linux-x86_64";
-      sha512 = "e29aeeafc1f0d456dbe66d7ab07a632e91a25c62cfa03355eb3c4d9396529bf7908980b59acb9fe04204342b4c99f4f05ef5f440d638340272d20fd2bcfbc596";
+      sha512 = "be2aa9b4af5004e1c46792c26219b8d810f338a7f453e41741ff23ada1ee7486f7828e824c67ddd9e2eef5d5a0338a1bb59b7dd448d47716dc8425221de2a92b";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/de/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/de/firefox-78.0b9.tar.bz2";
       locale = "de";
       arch = "linux-x86_64";
-      sha512 = "b3aaec2e3d1a23976378bbe526c63503406690e23ccbf0e255f54c5eae34452491f414d5a8be6f9d8e7bf14d6d4479b9819289074b342691c607dd1a013db45c";
+      sha512 = "10fc73c1c101eb9d751dc16184a5131bbc233f33b2a5c416421a42c10890439dbbf39a364dc75422e02f69e3350d51c857a09e9e30c80b1f96c738852828601b";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/dsb/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/dsb/firefox-78.0b9.tar.bz2";
       locale = "dsb";
       arch = "linux-x86_64";
-      sha512 = "ebaff33285d3d78e22deb21da917174a8db140d05d511ad75dd1125361e4c1e7c6530f5fa096634f3bbe364c42c55cc0e36ca7066c05ac21822b28898841c49a";
+      sha512 = "cebe56b680bdfeb07da3e5111f6179481aeb10c080df736bf6f920d6287537b87f0848722ced6b679c1e069e8224548de2217c1f3018b5ab424fef0e0d6eb3be";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/el/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/el/firefox-78.0b9.tar.bz2";
       locale = "el";
       arch = "linux-x86_64";
-      sha512 = "706fbbb44ecb6e7acb93d7fe8c1bd5f4fb3d3fad7a8e64648770fa69756309c0aaf0c2ff583b2bccb30c9f34450631ca886db0343ace3fa80bc1a6e7934cc134";
+      sha512 = "a1100118bb7ed58f0ba182fbad0962976d307645bbd7415aa618111539fea530c9d6a14dfc5c136690b5ba5013ac082bf58cdfd02fbd06b725b786e90bac91d8";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/en-CA/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/en-CA/firefox-78.0b9.tar.bz2";
       locale = "en-CA";
       arch = "linux-x86_64";
-      sha512 = "62206c436f7fe811149936b8c73d62126e21874d63f66c72e7aff0e8d4f9fa26496a8adcd842071a602638ee01a14451c65c0ba8a2847f0b30b3d7da9c2625b8";
+      sha512 = "0eea76486632298a11b160a2cc6b0437ad682788c1ca1b1b9d3cfa6561ac3362079365da9f134f5cc364cd9ca39872af65fea177e424febbb71706b76cdb8300";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/en-GB/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/en-GB/firefox-78.0b9.tar.bz2";
       locale = "en-GB";
       arch = "linux-x86_64";
-      sha512 = "6481706c1f34378bc4c804216217b15ca90a214baaf6ad29ca0fd80cf050b4f5eca17d29427d0e4bb0a5c966b407ad7d4ce08c085a68a193a500480c9196c760";
+      sha512 = "ad06e3fc4f5efd83160bbcf8db07081fc8701137d37f172e57be3251a47051c4f1ac61323042a51de4b310464eda177761d87e53b4271c747568708e7ad84421";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/en-US/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/en-US/firefox-78.0b9.tar.bz2";
       locale = "en-US";
       arch = "linux-x86_64";
-      sha512 = "74ece95a9a152addfc30de6f3daccbb64172c4081163467401d6459d4f7a65a7e459ec91663dd066f9cd7f867e7455e09fd1bad4fd9da7a6c3af20426474f95a";
+      sha512 = "6b95d450d1346c6a862aebae3e910b1f50b65ac670aedace293443bd0a8da6509f4c6b286640413368d5452486b2a899fb4b1a30acbe1872327fc3cce957a8ae";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/eo/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/eo/firefox-78.0b9.tar.bz2";
       locale = "eo";
       arch = "linux-x86_64";
-      sha512 = "fca83582fe7cf14948fc352981dcbbc136cafbfd19fc85732466aa8af27cfde37264dd3168e9388c12eeb624d9af561bdd4caeceffe8d42a393d1133a8c20277";
+      sha512 = "3b8a2602d30ded67190de907d498718d6bce213556b74294a5789e11f34ef1d8613fffefeccc964aa8b802b4cb3dfcd5022b5caaba6dcad51ffc1b6a5db6924c";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/es-AR/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/es-AR/firefox-78.0b9.tar.bz2";
       locale = "es-AR";
       arch = "linux-x86_64";
-      sha512 = "442f9e533a1fa892d19aef77ca64024938ab934f4f963268ccdef1a715a2c3f2feb73f9c2f6c46751217d4dba9f72dbe88ed1b1114be22e2839c0b34a68e8c35";
+      sha512 = "4ed53101f3dcddb40ec3f4bf7f6e442cddc2a665e73125f2a944280fdae072340bae68738f37c0bc858b014b35fdcf41c3638ee0f83e755434ef904cf79c1a06";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/es-CL/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/es-CL/firefox-78.0b9.tar.bz2";
       locale = "es-CL";
       arch = "linux-x86_64";
-      sha512 = "29f4c00ccf180e239a6660f5832d6ba21c733ae0b90150b1da128e7cd072b6ff5974c6479e161c7b646f1367449b8373af9ffd7d072bad2a190e50627a17816c";
+      sha512 = "57ff61547ba0438c32f8fb099169fb2145e8b3106cf06146a43ac0439ea2df39040ac72c3b6b2ce2ab0e4e0a1e20e874561f8e73adb51e28c19ed8c24bdb513f";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/es-ES/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/es-ES/firefox-78.0b9.tar.bz2";
       locale = "es-ES";
       arch = "linux-x86_64";
-      sha512 = "f1d9ea6a116804e7deedf6e6d62b83224e1f7514255394f78fedecf500cc3343fc9fad1da1f690fde9a7eea4d3dfe0cd214a99a2f9bf3b83eb45ab00cc12de7e";
+      sha512 = "ac2a880f095b6044aeef91be69b1c56e28d9515b04e5cc6144dabfb6704c77f4a8bd037007497f37741bc6224889e811ba8e13a1dd5d71e243fca236996fffac";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/es-MX/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/es-MX/firefox-78.0b9.tar.bz2";
       locale = "es-MX";
       arch = "linux-x86_64";
-      sha512 = "8d4be6d04c22e1c98953b1a1468b2768d956b4d0190638cd24273d1a0356dd8479dca22566c5d45b8ec18a074be472e9ba9726b5224fbd3a2b7f05af3b46c411";
+      sha512 = "67849cbe94756db1fc7e3a07678550eca1d26530b0a141c5832d456e48fcffd83a1e6622505344225291fd4a6d0e3ae6e0771f5cb602cc0360e2fe045253e144";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/et/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/et/firefox-78.0b9.tar.bz2";
       locale = "et";
       arch = "linux-x86_64";
-      sha512 = "2c9962437d764aa27dc3d6a6c00e3cc40a456504cd74fe3a7f74a0f0216d54e9e4d9383fe6c5368fc28ae08d0b5424f65b9f50e33a7b6dc14c344a1aafb90fd0";
+      sha512 = "2b5a6618ce457cb0deedf234595e61530ac4f5b1a27f858a149748fe3bf7d3681c6d10f795f48f6dd65c3d965be8768894d8e29e01677f6c274ca3af4b854af8";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/eu/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/eu/firefox-78.0b9.tar.bz2";
       locale = "eu";
       arch = "linux-x86_64";
-      sha512 = "c465778901b01e966fdf81e56b0f1b7667898ff0359711fd32e343692dd216704941e30c3ae7f4882f42fa297715f778e68094db85583c0e60a57cb91e95cbce";
+      sha512 = "bd1415e571bdf7abe411b3017b168d6310e4eac84bd3634ba7f73f3f6eb259f54a3e7767b7ea4dce7a6f6d292984d201501c0c9d92c3490c1aa22cf29469fbd1";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/fa/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/fa/firefox-78.0b9.tar.bz2";
       locale = "fa";
       arch = "linux-x86_64";
-      sha512 = "e194a9be6f993b177031a2fd3d91d955abb6d7a4d249e8864d5a894f1f9af87c39034801ebc9d1cda5f934c8259706c6e7fdcea344b5602f6d4ea8008375ed53";
+      sha512 = "095169103f200c5a8cc6b618514a674f5d43d830ea1972ac18f5afde10632bc36c89b8cd96ebdb22d30c55bf27f7574f8b1a9fcf18fe25d49cf7c3bc85e821b2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ff/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ff/firefox-78.0b9.tar.bz2";
       locale = "ff";
       arch = "linux-x86_64";
-      sha512 = "613dd230689ca36df61d558db43d8d204da5168ed1172bd29e732e0a640d5f954ec4f5eb03e8c6abe5646139005981bfed716dba8fcfdb2e697627e563a6ba0b";
+      sha512 = "a0e73d6e57e441fe267fe43c6f6eec4c9d4d2d77e9c9b3f1a0abbda37a31ac4c45791275e6e19d50aba3f4256b637637b58738e6fa5c164b734aeef0989e8e0e";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/fi/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/fi/firefox-78.0b9.tar.bz2";
       locale = "fi";
       arch = "linux-x86_64";
-      sha512 = "63dfc7ea59a29901165707b3c11f1087c6e23a27805de1d355d677943c84303b7c54c199d0610a714b930539bbde96991a79aa895fdd3f6952174548fe014d0a";
+      sha512 = "df29cfea5faf453e17627cddf0234bd1896b7114a6c78f08347e2175bc1d4d8944b5af90da8d04c4c7e4a7e684990fbaa80b3d02be44fbe0583fabe971d79cbb";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/fr/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/fr/firefox-78.0b9.tar.bz2";
       locale = "fr";
       arch = "linux-x86_64";
-      sha512 = "477539bce633a1447937d5689972fedaa1592954ea3cd1537f648d1aca9801fba8441ba6c35cd2148646607982d84fec743bbb115da6807f29790c38d5c22e45";
+      sha512 = "7c848af02baf72ed1a1b74bb65485cdca4b55b11dcfe3d79988c5394dc1019ce05b7b3a421dbae7011921f5ea8c7f818672cac29103e087ad5344471629f9a7e";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/fy-NL/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/fy-NL/firefox-78.0b9.tar.bz2";
       locale = "fy-NL";
       arch = "linux-x86_64";
-      sha512 = "cab7637566adf3d41e25915b6e94020214da31aa12a6e913754d1de2fad0fac9abf61686af64bad21eb07e696f23ece8ac38d8255848d5bcc6b0c1ba4c9bd374";
+      sha512 = "e1d0a3611e6856889d08e8e29f251b89799c75ceed24fb9a03c7cab8753798b72b41beebd42777725d1166e1d306a6972f4a34a1a55031f1c3c8af5f430b680c";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ga-IE/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ga-IE/firefox-78.0b9.tar.bz2";
       locale = "ga-IE";
       arch = "linux-x86_64";
-      sha512 = "843f136635783c6a586ed273f5d97f152b004406c53958e59d265f48e5390fd42246c2e92491ff4b39633bcfa15ab1c8c420b3749a468b87672ad900fbe23de2";
+      sha512 = "f97c61ee7ef60c82d4d044562da2e4331f3fe529b66774640ff0b098e9b8b05d11b57be4be13eefade43f06b7859fe1ff9b53abe9ab2b00d87fac56f72e3a6d1";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/gd/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/gd/firefox-78.0b9.tar.bz2";
       locale = "gd";
       arch = "linux-x86_64";
-      sha512 = "380ee84b44b90329eb253a604508584cb15fb3d36dd25a859dcfc8443cedefa54959fa958827132d1260cd040b70369d65319f8e18d06359aeb420b96068ea7d";
+      sha512 = "66f1e68ef58259a90852e3d07d738b5c94dad69df1bc5923965af998b7fe7922db5ce40709575727054f8c9cfce88df6e4da9b5f7f8606b49985edfc270e26ab";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/gl/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/gl/firefox-78.0b9.tar.bz2";
       locale = "gl";
       arch = "linux-x86_64";
-      sha512 = "e328dfe710d097c49062b9d0a54f42d4896177ad7ba174fb5e45b37baf78ada25089360bb0bc7211d605cab92a2f3c220cd1b78a7bc0c65ac17d15314c68dc94";
+      sha512 = "7f9d3209fcb5937578eb34459d2d32470552941cfdae081f66a7411796f62f06000526d2d7054e72073c3b7431d6ad114d8d092ec70e001c2223992ba568cd0c";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/gn/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/gn/firefox-78.0b9.tar.bz2";
       locale = "gn";
       arch = "linux-x86_64";
-      sha512 = "2f65aa3b62e2573cbfb0591e1ccc729f983035c3ada9159e9fb8014263f38731d19e5a2da41943c0c540ff1dbc7620c9fde82c24dac49da7b2d920c1d7faa4f3";
+      sha512 = "58db0dfade04dd4e73ef6b9dfd3555a51870e32085ddf1ff5287d5e21867bad74d4ab83c383508c42569ee829a02f44f2bc31dead67b8f1ccb62dc8b6c1f8e4b";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/gu-IN/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/gu-IN/firefox-78.0b9.tar.bz2";
       locale = "gu-IN";
       arch = "linux-x86_64";
-      sha512 = "2d756897a5e3f7f038d3e000bfe6f1976611eae436ced45d5c06eea140ba26041c08588b6ceb7fc5026945a19a46715b154d0860ec7744762183f17d07b5e792";
+      sha512 = "083ad0f168b9d9dd0b59c8012c9ad2bd297d5de971cfa226d725adc25d1be9d31af040b383ab655a494d5689bba6c0868612b200b5c69e9abd3b03dda80d551d";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/he/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/he/firefox-78.0b9.tar.bz2";
       locale = "he";
       arch = "linux-x86_64";
-      sha512 = "fb5e2142f842ca0afbc5473dc3031eaba2bbc1f7ebe412d88696f05d8ab7102d9d8c57c318e7f6a8106b07e9cd6d7832ec9012868cf6b7571367ae1514959cc3";
+      sha512 = "86de69997e354888101ba94a9066b5c482566b65ee89364f1d980d016509e67d1fe27090724df44466fb7b3a9a7a65eeed8b3a18079815a3be3560a1353a98dc";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/hi-IN/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/hi-IN/firefox-78.0b9.tar.bz2";
       locale = "hi-IN";
       arch = "linux-x86_64";
-      sha512 = "5e779dc92115568c08ad511469e03af1b4018ed15638f88ff83df08cd5dacaf9bda39cb5877757f7eef3d0d47b43777eac5363ba4a2a4ea895663d8deedd643a";
+      sha512 = "106d76c0bf26166a623c577c2a3697966af95ea4e5e9e0d19bceb1a60050519439664959603933f20d713f4057e3ecbef1fabfd79e89cff207a196c2abefa61e";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/hr/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/hr/firefox-78.0b9.tar.bz2";
       locale = "hr";
       arch = "linux-x86_64";
-      sha512 = "2d196ec8cecd41fc5ea76aa535d830f98cec1572f7d8e7d8999769c09a49cd2063c9cc59314748579b8fb0fa9446b22df96b43c4f462b25dab96c265ba4f4d41";
+      sha512 = "9711210d9e1f5df7055984d425584bc5a9936508478ede52bd1eb78807f728d3fb7b71f2ac57293cd89af7954e703d64018dfa1fd61da185df11ad7f1e08a9ed";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/hsb/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/hsb/firefox-78.0b9.tar.bz2";
       locale = "hsb";
       arch = "linux-x86_64";
-      sha512 = "647bf9dbfb8f5d053b84c507abc1b121387464542621264df72236a29accdb895e8c71ecef80f7a5a241ff4a18db47e4340f67a0653669e39cc56cfa622dbc1d";
+      sha512 = "591dedeae2053b35a6db8b0ff86fc3f9be53dacc5ae60053d6c3ae1191805a0d2947d657e217440d225f32788aee2a4c7827547d3088a89dac08fe122e2aa233";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/hu/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/hu/firefox-78.0b9.tar.bz2";
       locale = "hu";
       arch = "linux-x86_64";
-      sha512 = "7a67cd7d6c4563189c93bc2b418423d6f787b36c5b188411ce49f763421d66ed37404b9caa0bf63ec4c150019df79de1992ef5a98600e63b5a8902ab44354a0a";
+      sha512 = "4b69259d4ff976c87f321f31de7d9c8a07e3a6bb5c038f45779586b32bea4d493365199082cd609a266ef5c4ed15fea3d7d0069b6042931074464e3ef1620ff6";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/hy-AM/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/hy-AM/firefox-78.0b9.tar.bz2";
       locale = "hy-AM";
       arch = "linux-x86_64";
-      sha512 = "3a9fc6e362af83a1776619e0a5b36ce6f5e59cb46d2e8f9be2c57bc35b7e4e2f82b5ba4b61e637bddb470342fa67993b0374f2065946ae0ce24af1e187695211";
+      sha512 = "e5fedf4eae997fd3e39699e0354d10d5354c5716cd469565d7f54c7da866a2fc272d0be43ace1d0436ff2daacd85f3696524bcf3ebc03dcca2e36ce1667139c5";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ia/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ia/firefox-78.0b9.tar.bz2";
       locale = "ia";
       arch = "linux-x86_64";
-      sha512 = "5eaa3a5d9b0cfcee453de81138ab9ffbf1abb58eedb97a6b1dddc73eeb919c89bf077138d7b86bf804bb545fdec404724f7f76936cb09fca3844a93c7008dea8";
+      sha512 = "6631cdd92464ce6adb971fae4062c4e33fca2c04399890ebca3004c127c99e7987318818cd626993e9ba17ac807349815cf49a806766b695dc3bba7c6d6aad97";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/id/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/id/firefox-78.0b9.tar.bz2";
       locale = "id";
       arch = "linux-x86_64";
-      sha512 = "714c19533e92d23d7ceb7ba07dea6842d6f378c8d705ab9fd51769720c1b7faa8fdfdc9786dee881aeb5106e5a38b840aae4f5134962db225d0d13c0a9dd886c";
+      sha512 = "d960404ba82cea642c8d33b6120d2209a2ca454e68877f29e4d10f5f914ccd7ea6b35dadc554b1c8d6be4d5808511b48fe4d7959088fff8006d07567db0db015";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/is/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/is/firefox-78.0b9.tar.bz2";
       locale = "is";
       arch = "linux-x86_64";
-      sha512 = "0b7216b9c09eb67d774fd0b8cf1a1b43a6cfd14d5327f6768136de3190974bc2fcb250f920253de8e77f7c61efcd23d0790da1eac2aeccc77e4e74fb4cc5d643";
+      sha512 = "290f940ae69ba340eb9d56b95224f62c32e07f63df68a5ba9544d093cfd17879baab6fa2a87b0e0f3fb6cb946f6ef4ca218768b4903f52893b186e2fb31ed57a";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/it/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/it/firefox-78.0b9.tar.bz2";
       locale = "it";
       arch = "linux-x86_64";
-      sha512 = "898c073e7335e7f2ef15abcbe9411f31522c2da464b62c2997550660dcb068fcaec2ab5e12fa4818816a34b37cf2a46bf9c5b36f65697a521cd5b0c05960122f";
+      sha512 = "d07fee4329e5448b31523f95d11f272c82668eff7a6d3ba4558b54f4c51028a0b8d86fb9d04296f4c0ac6e3d850bc6ac700bcf3ffc12ebce39fc0e2cc7e9fd9c";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ja/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ja/firefox-78.0b9.tar.bz2";
       locale = "ja";
       arch = "linux-x86_64";
-      sha512 = "f6dfd4d7aa9c1a0ced11034b59de3add54ef2b30aaff30a14081824bcfbd7bc020ef840f8c12544329b506fad1567400d2c7f57ddea22bd1fd37c17ddbe851d9";
+      sha512 = "8c2de9fefcf5089ac0a914244968d049cccd493c4c2352ad0ba2449a19f93fffc327c3aa77fcb6184b61fce2fd78cfd03617800c727f7413c7175cb65764ab71";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ka/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ka/firefox-78.0b9.tar.bz2";
       locale = "ka";
       arch = "linux-x86_64";
-      sha512 = "5dfb93fa63f26772a52b7d52a0839f1bb624408097cf927de0222eb06fc9b9b7a9649475d2fc6a02e7c66ab1e6aecd8fe3d959452a73b1f9d3d1be6fa1aa018e";
+      sha512 = "3aa5200932dad122da63c828ff54248bf6ccb999dbba6e014061cae97d30ee19c00daea1f72a77be7b8bb1f0a207dcd0c82426e13a532a5e175cbe8c016a0470";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/kab/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/kab/firefox-78.0b9.tar.bz2";
       locale = "kab";
       arch = "linux-x86_64";
-      sha512 = "767e3793cbe7e4023f227818617819026693287c3927d18193883e603d21d23c0239173266c89d776afc8ab0cbfb40ce9b4516e4663a44928abdb7672dea3f85";
+      sha512 = "dec8074470353c86488dc9fb1c1be218b5410c877ef5f70c4c806525f0d1846c98dfb2c553195b64d558ea88899116e3f365a58de5bac69651f0cc988d266cdf";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/kk/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/kk/firefox-78.0b9.tar.bz2";
       locale = "kk";
       arch = "linux-x86_64";
-      sha512 = "b4b7147631146a53b9ab32f8a3319466f0837219284d4757e29588890bd518b45c7ce329cf73e3840c018a160a13f841851c407a0c4ea06cc3acce163be8cf79";
+      sha512 = "bf07ad65ea0411598d711addc25ea44106e7b8608d0674a1e81024b9cdcf8538186eafe285e7e2de36c0c40bf4a24dff82a47d691cbbac48c376e1cb381b96b7";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/km/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/km/firefox-78.0b9.tar.bz2";
       locale = "km";
       arch = "linux-x86_64";
-      sha512 = "d3fc7706838fd310d34e9b45ee2fbdda352620b434e011a9b54aab598777001aaf24db2ea528da413356a486fa330729d121acf7e103905eac9bd914b5473426";
+      sha512 = "0b1034c7df41ff2b1dda99270f2c29b4a6bb32e82072d8a30ff403774ff489fdb05616a459c9d9334f493e53a07c12cf43645f5182f597b8a817024c1faf5a8e";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/kn/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/kn/firefox-78.0b9.tar.bz2";
       locale = "kn";
       arch = "linux-x86_64";
-      sha512 = "61621680b5dddd1058e58e741d2190a7d07ca74301706dc61d823b1577ba3b76c72cccd30fa64f4b5b95748e6ee4077945d6b7dfcc21d648f13ed7be62de2eca";
+      sha512 = "e4b46f136be69a14e75ed2db07764b16754edeb0f83f9542e96ea40c6a6c1a652cd56eda323386987e761330c3a135d0ca3e2b04bf73b7c2256a468d1b6b2fa2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ko/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ko/firefox-78.0b9.tar.bz2";
       locale = "ko";
       arch = "linux-x86_64";
-      sha512 = "66677835319f120fbd2290d7a050f2846484229527820e3e49daf3b7f377acbbfd0a736f2e71c388691f1d04ee013864813119e7f7c5c7528887b8061b62bc0b";
+      sha512 = "efe3b5b2b261dbab560a9c5458f5aaac5a114a5c9e05a9528411677e1bda1b5782011bc7ddd18a7dac13de6a7e8bc9a769e4831dafc381468829f3cf3a4b7ec9";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/lij/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/lij/firefox-78.0b9.tar.bz2";
       locale = "lij";
       arch = "linux-x86_64";
-      sha512 = "d590da1e993a5d598411717a9e4ec87876066fe106ae1cf37deeed77a0508885d47836cf6653d144be30dc21917a56cf5977f99f3c38d5e9843eb52d69a7d267";
+      sha512 = "cfef1767caf46aa95c8237ac6714e049f6df0bdda9e7c8657575e1d17df34259838eda1d3c6df8d7d478732602cfd7eaedee7699f326095b9605f410cac1921e";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/lt/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/lt/firefox-78.0b9.tar.bz2";
       locale = "lt";
       arch = "linux-x86_64";
-      sha512 = "450772baf4bec1a8077aa4ae1dd52d84ecefffcd4f93b9c486bbb4eec12c879a8daf2cbe51dfa2f81598abab6242bd63100d8243477d3176985a689eb2688147";
+      sha512 = "56e03d276a1e62a161ebfd200711e78e468d5703aed3d442687becc27a9e9bf1db8a219ad6681bcc609615352d55a6472c3cd9fac122f567f259a98b3f151a43";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/lv/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/lv/firefox-78.0b9.tar.bz2";
       locale = "lv";
       arch = "linux-x86_64";
-      sha512 = "3ef9bcbc9356a83b20f3f3fa83530790209866456f44f9115f8f22a1dece72bc28f485f24dbfb854c77d4306e2f3da5f759f7fbaf151ac8a8f303b2dd24832ae";
+      sha512 = "5149c964cecdce3c205fd14a9993cf79f5417dd26764ec4f81dfbd3972836d7b9f61534e53e531de4a3cb9b37e3e37d9eb1abd3a4d7412c6d13bd31398148c2a";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/mk/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/mk/firefox-78.0b9.tar.bz2";
       locale = "mk";
       arch = "linux-x86_64";
-      sha512 = "59e8a7fdaa37513e11722397d9708db397aca75eecf3ae2e3b99f42a9e40e89b183c6ff36fccec1c310269b5a4ec3ff9f81985ece314a868585082e4d132012a";
+      sha512 = "0b9af40405aa6fdfeb3985ac642e257148ecadd26af084be4230e0235f837525c654197f513bf557f9e39ddb5c7057ac03568b378cd71d878a71e476aced1c74";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/mr/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/mr/firefox-78.0b9.tar.bz2";
       locale = "mr";
       arch = "linux-x86_64";
-      sha512 = "bb7a9577fc6080fbb82918601405e8a6da59662c9edbb568e558ceaf71e04e95aa3dbd7acfbc780759b0cdeaca4b67e24cec1aa57fec30473d8410fe717450c5";
+      sha512 = "5e5af806dc7b3609e1359b6e88ef5a3c8dd1ed13d5d3fd8520cfe67b9665a018914e91a8fd0d15860b6719e430b50c2bd486b953970aa4b3e6202bf49d9aa4e8";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ms/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ms/firefox-78.0b9.tar.bz2";
       locale = "ms";
       arch = "linux-x86_64";
-      sha512 = "e8bfbc9f54b3cb2d2a3f816329948f9e13723dc6c680c41e33cdf3bbe4825e89c9547144cf5dfd3ecebb0fe8759cbbedbe7caddd85c31007ab28b42219a8c159";
+      sha512 = "6f8d1755d5c3a97c19232102c1241d43860a0915a7d0ab4f266ef6a6b3564f19f4f04b2aec7a756ad6d1d12298823e005a70b47e75eb3f9c2f93c6b4bf3de6bc";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/my/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/my/firefox-78.0b9.tar.bz2";
       locale = "my";
       arch = "linux-x86_64";
-      sha512 = "b95c1800738ebf79b5ffc64fa1a11ef772614eef6f49faeb977677c31e545e4bbaec3c9c75567afdc75397cd40dd80a671ff03ac17bc62ede2bdf162323e6559";
+      sha512 = "687fdeb0a10cf2d03f9b7f3f62eccc577e897201f870dc3f49148c7f610be04c9c593f8bd00b3a7964002e1662f70efe445023eb4f4efd918543f8881d3e899a";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/nb-NO/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/nb-NO/firefox-78.0b9.tar.bz2";
       locale = "nb-NO";
       arch = "linux-x86_64";
-      sha512 = "505d68a0009efa7c8312fc5230c00e3d72c8412d6308360cc10257ceaeff98b3f22a5eea9ceaddd7566a9a690b4f0c04f91dd8a447bd338af02c915115cde506";
+      sha512 = "3a0a47f972b3e72f6bad2288fa5e2ce7ba400b280d1366695729c4446adfb6a9a799f6f433ae17ac056999484caa4791b5f61f3112bd909b09aa3d1001065d3d";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ne-NP/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ne-NP/firefox-78.0b9.tar.bz2";
       locale = "ne-NP";
       arch = "linux-x86_64";
-      sha512 = "01eb90cc8c93afdc34fdc0e47eb5b4a012c9fe7d3dde1301ecece240562766066901d80cd3789e97f2f7a7188d56aaf7bd67c56c4e4a210b30ad10a738ca5b1b";
+      sha512 = "c0df6d7bba0ca18712ef932d8065404d245c41ef009d35569e829657a2a572a31f5c61541155753214e85a5cb77ef84d9445840d58fd7c69f58be5e4673a73f4";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/nl/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/nl/firefox-78.0b9.tar.bz2";
       locale = "nl";
       arch = "linux-x86_64";
-      sha512 = "486aba5ffc551be80e8e9b35cd92b903e318a3870638c532dcfc10cf0a7d545825eb7ef54b74d76f66cca2e86e25614896f78eac63b3662b43ed313b853ad4e7";
+      sha512 = "63959b74669f55d435c3e2e68989d7ca17f81b0f79e855b38cde675d1dc0f6fe8b3782ba20c5a1fe8eaccb30399ebce1278c891fe57b6a55213ff8bf7f43b7dc";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/nn-NO/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/nn-NO/firefox-78.0b9.tar.bz2";
       locale = "nn-NO";
       arch = "linux-x86_64";
-      sha512 = "b0e885c206d93c294997b3798a93738f99e4bbc459f7e8c7ff688414b73f69509686056f86b12407677a79b7d4bd7aa34f4dbebd5965c6a92766f3448a33cd79";
+      sha512 = "446f6280e587e8df0c54219cea47f3445e87398c6a63c3cedfa3d847f6cf33771456076621db34d0a46454ef89a4bc99060cae052c1f2fb3cd2ef901e2e02bd3";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/oc/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/oc/firefox-78.0b9.tar.bz2";
       locale = "oc";
       arch = "linux-x86_64";
-      sha512 = "1b04601dfa2110a2999dea0d6fcc19fc40b487296c705a403e741c9a9e0405fc90c774af7665c9335e605d6fcba3c8826701a497483b896e7911bae3a7ca7a80";
+      sha512 = "bbc8b1917953ca5ddd6ca760848c233b770e798c38919ef978141d2fa5a58a8adade9cdec0e66f460ac38833b5fa55ea9993f9bd437fa890ac54fc383b3fbba2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/pa-IN/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/pa-IN/firefox-78.0b9.tar.bz2";
       locale = "pa-IN";
       arch = "linux-x86_64";
-      sha512 = "59d6957fcd1b2527cb77622df7cec4267d84fea180dbd2a7397871c90b2c27e8dd0b01881229eeb7219b548258d72448e690d654262ee55cfdcfa9d4a337e102";
+      sha512 = "05f6b993ffec8e369246dbfc7708049b6700f1f662d3aed3c2ea70762a98edaf0d037d0e3859d2a1db024f95094f392fbd64714e17c8759191e7f76b858b89b2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/pl/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/pl/firefox-78.0b9.tar.bz2";
       locale = "pl";
       arch = "linux-x86_64";
-      sha512 = "1d18dc2e580238d59997198d9aeea8673aa1d32db329c0dae79e52d9e3e64b063f4b96695bd18ca0a449ac3fd5bf77815aeeae05c108c139dd73134199a6e599";
+      sha512 = "8471d0e686068ebd15c52d937c160648ad3e30571eb26667ea609f3f8c03393bce095b18c935bc1914d409ad564257f93ab52af1bafc05c47520227b8abaeea9";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/pt-BR/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/pt-BR/firefox-78.0b9.tar.bz2";
       locale = "pt-BR";
       arch = "linux-x86_64";
-      sha512 = "1d8bf57c135e56eb6fd823c605e870aa62f2b2c4d99f50447169411a3877fc089c588fb085d4c3a2dd62a2a955c5f7bb39cc6e8c391dad0f6c2d1f20f4a5944a";
+      sha512 = "d9f4e47f6574691fe6c8cd9b187b1d2006ed98e5e1844890d9ca7c6abada04716e28cb2b347aebfdd434d60aec38cefb6e322f2e56eda80165b8aeda52337576";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/pt-PT/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/pt-PT/firefox-78.0b9.tar.bz2";
       locale = "pt-PT";
       arch = "linux-x86_64";
-      sha512 = "41d3c18252287a172dbbd70c713e7176de8ff107ba0bff47c6f2546b8573bdb11508ca550fd8cc56d23172a84e30e1573dfa43232d4298c1862d5e8fa0ac2451";
+      sha512 = "01b80e0e548420e0cd0102b413e56e5e05c86f21c0b756c10001587032ff0a5d773e00de3d7d19cf64beb96d2f12988d424fabeb5fe1050d6fb1abe7e25faf2a";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/rm/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/rm/firefox-78.0b9.tar.bz2";
       locale = "rm";
       arch = "linux-x86_64";
-      sha512 = "b0b485f098475c1a1d422b8bf170e77ddd3ff2b7b3432bbd43dda975522767b9103368c74b8a74b7cf5639b6fe72690380b9c7c94995afa1badf728969123f62";
+      sha512 = "ff0b5ace23ceff3045bd6428656476c15a90c1b317fbe4659533afd42e4b7d8bab829042b3bdfe3ecabb6a132978665c4806cd8977663cd221c7166df93c2920";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ro/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ro/firefox-78.0b9.tar.bz2";
       locale = "ro";
       arch = "linux-x86_64";
-      sha512 = "ad8312d0ca6595dcf0073fc2de8a52dac61610e2714500372250ce142f1220ba4449f6cd5f0c0a2754eee11aef5a71062e82c08417ffd0222d771ea701943b3f";
+      sha512 = "b2fed50309b9e9bb7368b80941f867ee18bfaa0f8f369a6ff861b9f48ce5cd7e3f7acf9c6c01ee16f5a79d10ac401f0426764b01ed1a102cdd4f4fc421c69aea";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ru/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ru/firefox-78.0b9.tar.bz2";
       locale = "ru";
       arch = "linux-x86_64";
-      sha512 = "ca9bdf02f34f92f0c752fbb55d6f69d17206f47b8745df9d224dca47d57ca1cc4b5646f374b37d1250733f66d83afe287bb698bbf783b08a6b7ddfdfe35a2e64";
+      sha512 = "e8be53a00d9a5ef674c6063f080a4221a40f05490a34db631a8da734dcfa9d3af8d8a37422fa91c508743ecf040f0c3e8a88c6eccf3dc4f0c64cadeba2bd7357";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/si/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/si/firefox-78.0b9.tar.bz2";
       locale = "si";
       arch = "linux-x86_64";
-      sha512 = "2c621f00a6b2f2978fdbc28fceadcf2385711cc56c0b47c536c690ff3c7549a2b9cae71c9eb1ce40c7a199cc936f1402e7d3f5055a70b98b015ac25006019464";
+      sha512 = "d89e8e963da5e995171b1b4ad0e8752f5cdbebd16f683bcde9b9882203733e0bbadacebdba199dec21fe4cac52152667612b9542eaf1d3c8e5abed010fe1c75d";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/sk/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/sk/firefox-78.0b9.tar.bz2";
       locale = "sk";
       arch = "linux-x86_64";
-      sha512 = "2fbbdc40f1308513fb9064f6057a383af60d5a7f60d07a4918f6631d59762a2a8cc11b23de167ed0a7317c290436cc15443e6d893b92a53df1bae2b7da3098ba";
+      sha512 = "39791d1da195e9d177fc7ba67a8ea2c95887921bfa70b989778721aeb7e825d946247e11c96ce30b0930366a7c6c7c4d6f6cc623c224db5e18e07b619b614650";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/sl/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/sl/firefox-78.0b9.tar.bz2";
       locale = "sl";
       arch = "linux-x86_64";
-      sha512 = "7a993dea012e011c97b98938bdacba53c498fd15bb94b9deb05b27d7b842986e3748aef6a6bf96b1e288c8bf59df5ded37337ffd10063b3bf7afa81cfb1622f5";
+      sha512 = "72a1c5e18bfa8d3572f1734fa9affee8e761d56e7607650f79c656c80d01872d8c7ced0157c5bf133837ad315e81e002b6a3426304c0a861c1f8e31552bec9c3";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/son/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/son/firefox-78.0b9.tar.bz2";
       locale = "son";
       arch = "linux-x86_64";
-      sha512 = "22acbd2b46bc7eba4003295fcd2fd01dd9e6ea7a45b7ecb595d55801030dd7baa7363f2d8b414554b07e8e4ea7418901b0412c43e5bc7a5c3c03bcf54318c5f3";
+      sha512 = "fd0a57a959dc5b2ec131393be51d80cffd8d8faba9b3089ceb8e5bf19e3cac2614d2611077fc289d710b86c733200b5d6aeabfd80c13fb8edf644700849076d7";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/sq/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/sq/firefox-78.0b9.tar.bz2";
       locale = "sq";
       arch = "linux-x86_64";
-      sha512 = "5e0f2a51073728b8b90eef284f9e632365360f45839b0622e6a52c34dd0eb41ee7ad07d320e6b3610ea6265ae48daa05cfc022bff0b2bdb97caa8dce1b38e0e2";
+      sha512 = "fdcba60f81a478dafcd547b62119bec04c16e8fbd264b6622c90fd3f155c54927f205a6b73cc7d7caab93f336ba4bbc42e9e31c4e76ad004fc6000bb1cdf242d";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/sr/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/sr/firefox-78.0b9.tar.bz2";
       locale = "sr";
       arch = "linux-x86_64";
-      sha512 = "4bdd5193455e99f98ed90aa05349e2beae496c44718f07b6d81f81abe75d755f4a88fba8dc020998fd6199dcf1271dc7fff3177625e7872e1d271da743d4de00";
+      sha512 = "dc03351125431c81d5247ae8fa83b7e8e72398f806be6d7c7e9b5443004da03d123c2def551380c8eff85b52253c70fd3581b11b94e1daf96c3188eba21483c6";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/sv-SE/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/sv-SE/firefox-78.0b9.tar.bz2";
       locale = "sv-SE";
       arch = "linux-x86_64";
-      sha512 = "14e7db0c882d5a84439926602d6d706084001499aed5db4adae6a11cf7c25e95d0c77a59340c74bbe11c6cbf960500eac902a2ea23f7bbbffb9805b789242eac";
+      sha512 = "c317f90aa1dc70dcaa0a6dc9c81f3b8fb14c8fe61e1956752cbe3b85e039b8e1f387a53a2a75506b6e56a2042b096e2b15789a41f2435b61c0d52b927e7c08dc";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ta/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ta/firefox-78.0b9.tar.bz2";
       locale = "ta";
       arch = "linux-x86_64";
-      sha512 = "f0948c827cedd46641a26facc08c30c1b8292d48d8d703fd7fa846bdd1c9f631feb64b50457fc6d10b0b2a6effcf304b659e1d5f666215613bed75307de37a6e";
+      sha512 = "74d72946ef7a2becfea858c5fc7c848aa58014ccfbac5fca93205b6a2bc2642e5df3b02c4545bd3d29a4f379d76f50b2be803834949389aa945703a41dc53d4a";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/te/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/te/firefox-78.0b9.tar.bz2";
       locale = "te";
       arch = "linux-x86_64";
-      sha512 = "a0df152f09d0c6abfdaaa1c3c352282374c71fb2cb674199ae8fe4c53b891d98a5cbb19c5c20e92e7cb602bf4be1b66ccf6db295cb91190b639e2ccac9c68b86";
+      sha512 = "89577f313ae36daff2307530ab1eb3c73282141fd0dfd307084e79a713441190c09d500434a34e1b572a9eb8f0fd189130373f57dcd3ee5a144a9a5c5f290773";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/th/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/th/firefox-78.0b9.tar.bz2";
       locale = "th";
       arch = "linux-x86_64";
-      sha512 = "eda5d9fc2798e04addb6cf093548cd819a23ca480e392440838dc8a023e074b4b235a2df7a1ed26d4fd795c7e21c041be6f7c08d6dae35b05fefe9c31c79bb9c";
+      sha512 = "3f690b0e5425f7fea8673377229d7d8e92e988f9cf3fa1462073a7aee1442f85406248cda1807d272244f8eec470c85116d2f241c630836d55b23853b0132146";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/tl/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/tl/firefox-78.0b9.tar.bz2";
       locale = "tl";
       arch = "linux-x86_64";
-      sha512 = "09aef5e2ff0eb455284ad185274fb6fefa2ff6f768a16e6301c58be9f97aa357bb18147d7a909694c69daae683ac636ebb16f800b6e0d7d90e931426f74cf3a0";
+      sha512 = "92d95d8b20edd55ab8136402fb98c8e28c24253a3a45c3d5ac7925a00568e3fbec128daaa93dbb1d179e559b5cfd3fe3f68fb2fb92d3a3454adde2bd64805f81";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/tr/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/tr/firefox-78.0b9.tar.bz2";
       locale = "tr";
       arch = "linux-x86_64";
-      sha512 = "f936b11f4fbe0ee2f31b5c4f773e3e0044468bec15806afe21ee4e3f95862909f6cd68e35731ba29a32aa7cecc8c06120c3722500d9f3bd2912a29702045251e";
+      sha512 = "04ca1766bc846a9291d669d86ca515d7887ed0c67793c192b9a076ae0b910069e310727c9f22ac919b6590d0475970f5705ac26b0cd9a3c734883ef20d6e7352";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/trs/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/trs/firefox-78.0b9.tar.bz2";
       locale = "trs";
       arch = "linux-x86_64";
-      sha512 = "4089f69168225d62d89bb34bf8c2cba4c9225b1b768e9a94b13024bdffd485d83f3389a8d9964b6afdd5575917d70070d7779dda0bd0119a15946ceed2839afe";
+      sha512 = "905299a19706d0dba7be0beedb4b5ab482ebd0f058efc816ebbfa2a3ec19519a8add383b5c41625fb7dabe73d9596ee420f524f96b38b6bb8f0fdf7d611585d9";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/uk/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/uk/firefox-78.0b9.tar.bz2";
       locale = "uk";
       arch = "linux-x86_64";
-      sha512 = "4ecafcda0026949c745378e32a8bb68a1dcdaa292db74f7a88bd13e38dd39f2d1748a69e9e2827ad6e8a2a71f1872f0ec3cb846ff071954a41dee242ab233243";
+      sha512 = "188cac17e46c9ea2a24ecd24de93a5b1d68a81b7468e49647fa459cf83b73dbede4be3d13260fd9bc61ec843893d258bd4e726b53fe911ebfc7007e9e37f6db8";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/ur/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/ur/firefox-78.0b9.tar.bz2";
       locale = "ur";
       arch = "linux-x86_64";
-      sha512 = "25bf5543b9586e542968aba4896a0c0c00ab5eaf99b82c8d9b7354c82c33d2eab68dbae2295823230cd5708ef02817a51e9b9f12954a43aa0c0b131a44388d72";
+      sha512 = "26005358567e594f962e7a1b0dc20216796b2fffccf3fb0d586830222a953447d866ce95e1f7ae053aec2182faea9a202c19b2250f38df95ed5ca8edb734eb84";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/uz/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/uz/firefox-78.0b9.tar.bz2";
       locale = "uz";
       arch = "linux-x86_64";
-      sha512 = "90aaa4ed0f9377d17ec0b02ceb934ea775d5f378a01f8b4c0ba7cf5c67975bbf4f7ac59103e8002116118972eb6d2a48c6dd3d6cf515f766667309d0d515f994";
+      sha512 = "238e51edbc2c267cf212f3cbf6ba3fd69ac8414957878dfad10e6e700971ce2fad2150b76b92542c88632d8ddfe3b98a4fe86ba39ab42df83d0e89503bf63542";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/vi/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/vi/firefox-78.0b9.tar.bz2";
       locale = "vi";
       arch = "linux-x86_64";
-      sha512 = "0fccb7e7aa3ae6f8b539864ed44c7d8349ef96ae5d55d9ebec33bdc1dbf470a9a831b440fb0cf008e86421290760422201ec55e704b5ecb388155605ddaf35a8";
+      sha512 = "bafea9890b608309604d644d98bdb874d9d767528eaa012a3447cc0ed852907f4f06fa86e85ed39f5ba23922bd372f1aba8648cfa3c4672fc04ff913aa6853b8";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/xh/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/xh/firefox-78.0b9.tar.bz2";
       locale = "xh";
       arch = "linux-x86_64";
-      sha512 = "fd7d880ace4221cb8031bfcd9c90c07ed51fe345c9592791bcef61e52a29fefc035bce0a24a24594f310cb7113ebaae8525df0b2462f86560a45253b89b7a53b";
+      sha512 = "94538371036a693422e28969f373923d5953d199617e5fb728439242fff6241e7177ba9c0c30e3848b925eda929d28338c7dbf50d8357849b24f0881945a3335";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/zh-CN/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/zh-CN/firefox-78.0b9.tar.bz2";
       locale = "zh-CN";
       arch = "linux-x86_64";
-      sha512 = "d7c386894783434732c56460fa30de8ecc360041934743b4632c8a03c36b00227fa8e23d2180a7f5dc742cb324329aceb2eaa4831c9eb9545920a95ae3b7db44";
+      sha512 = "69e2bac008df8140041b23c370da8f6a07adf3c3724794f5d69c72442871bda35edd0736dfff5e27f0eaedbc916d7286740a9badd1c47b0b343c73ead7a2da0f";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-x86_64/zh-TW/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-x86_64/zh-TW/firefox-78.0b9.tar.bz2";
       locale = "zh-TW";
       arch = "linux-x86_64";
-      sha512 = "52a64ca3d152b0afa2be9206ad08fa1edef8411d41c23d984c4015b629bbc0ba21970c1059cda76041366221a193040db474218dabad7131766e53ed6b719d81";
+      sha512 = "6848b817eae291435243c12831df28f0d833ac23a6bd9bf9f8e91afbe6f0e30148a9567292b176e7f533bf160ffe4396ef6f26f4d8e482f18acacb5c7492d8dc";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ach/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ach/firefox-78.0b9.tar.bz2";
       locale = "ach";
       arch = "linux-i686";
-      sha512 = "d88c9bf2fc5b38d367a3e6210b59a4488092d42b380bf020bdf82b1c0527f03ecd48c08813a8bf73fcea48ff58a77fae80b2c907498f2d9f5275fc3a7f80c5a3";
+      sha512 = "174c54576995c2149fe3901a606d980868c0e4106c9b220058f4e913b14688b6cbfbe9b3784998ef19e0f511ca3b2608eba64aa553d6f5eb0d151fad9ff64759";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/af/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/af/firefox-78.0b9.tar.bz2";
       locale = "af";
       arch = "linux-i686";
-      sha512 = "cb15b0cd5980a7021abadbe765c714604840a2127722f8b61bf9187bcce3b70af2e902220d5f0faa0cc7b3d513e64a250bbfe43a090d13ae4b8835db0c28428e";
+      sha512 = "31c78d70dd51b4b3de1f30b56fd1751992f81d00accfac1b67e115d16d430a965e2f340fb802e894681f60eb2d432d1a391bd7d4488dffdc152cc3b3e397f6eb";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/an/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/an/firefox-78.0b9.tar.bz2";
       locale = "an";
       arch = "linux-i686";
-      sha512 = "8ee5673c42ba46e41ede5f3657a5fd7c9073fbf9f27e5583a0471802542012b67e8e0730cb58f0833fdb1d036dd887ed797b752d79290ad8982d3addf6739c44";
+      sha512 = "48fe2c9d9d72603ca958e7afb3ca5070c16065e8f5c47a7c739f7fb2cc053316c9335cd3b048b160c01b87e8f9b17805fee7ff80d57bf82ff977eac6a6b261aa";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ar/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ar/firefox-78.0b9.tar.bz2";
       locale = "ar";
       arch = "linux-i686";
-      sha512 = "25a2d1144a734270e0304bfc6a42a6f6585bb79e7289b381791fb6a45b86891f570c9c4d6a71de2fb8f0aefc6533a11862363ca60bdff14f817704fed4e9bb23";
+      sha512 = "bf51670e9b92125b95f269eaef7b577b336d44536909e1bf1b1222293dc796d43a142378ac6b31047bb0dc4b04ba1e692d8b9f32b105a42b6777d24a8a1f3837";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ast/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ast/firefox-78.0b9.tar.bz2";
       locale = "ast";
       arch = "linux-i686";
-      sha512 = "525fea1b71c9a51706033c4b2f523813e61666df6230ba51752a2161704c48c26ddd5d781285186beb53e90f01cb35e7de743723bb049b729fe26799eca6036b";
+      sha512 = "9c90a031a21e4e166e2c08151e048637cdf6623bd61eb69e1ea081932b4840f241f2fad77c3cbedd72b7a5cdb26be2771430215ee1ac02b2554a4639fd5c9b5f";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/az/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/az/firefox-78.0b9.tar.bz2";
       locale = "az";
       arch = "linux-i686";
-      sha512 = "743377d9a76b6acbec6a7c005824c6286e10e26e30a6bce90a8750657d52e19f62cb6653513a241ff9a6f3cebb5caf63dc438293568db5418827cee6dfd94b56";
+      sha512 = "bba9946a87468230c332bf8ce03191cba08ddadb0a4b40a7ebcc4fa3e89cc5a1c83b89f6cb2c2594573a1613475bd6f045297199fb0ec8e0d55adb43353cec5b";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/be/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/be/firefox-78.0b9.tar.bz2";
       locale = "be";
       arch = "linux-i686";
-      sha512 = "2b96da128311fbf97cbb31e3b4b6e0d1fe0158ff7892195d7074de67e0f5b7e22f82c8131dbc0ff209e043d89191d269f5b7af224f6d2646fb5a58168b2f0d31";
+      sha512 = "1f33deb4fdbc7042dc4e77b73b1fa55768768630f5065dbf819063a1fd93b7544889a2ec6e5d64f8bb214ce0520cecc65552e848a1d96ded78172e781964c6f8";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/bg/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/bg/firefox-78.0b9.tar.bz2";
       locale = "bg";
       arch = "linux-i686";
-      sha512 = "fc5712958fd93700d39bc60799a32e99ba0db868997e1c0b4750bf6258caab3296decc55d14a48d9ed065b9beabfcbd9b7979fd9289b4243d0449fa124267e2d";
+      sha512 = "ab9139dfb215fa455fa2098bb042cbd3c95943ced0eaa008ec7dadd745f2eb184b6e6023dabe18fc15ac336fc8a8e63627e0696b98dddd13592ac2280fe3e3be";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/bn/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/bn/firefox-78.0b9.tar.bz2";
       locale = "bn";
       arch = "linux-i686";
-      sha512 = "eef007d4b60b487a1a8352ed7daab3cc5fa0f3e24a235f5fc28979c2fa69390032feac2590401533b66add014ef85f573e89613334b0b4933bad903c8576d566";
+      sha512 = "8e37d06dffeaf777482a131ed750083d5d7a01324c1b217284c8c6778c2e0245c04bf7a47568dddd42d93b7211b3ea93ceb23a7609ddcc3e31d61674806c4083";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/br/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/br/firefox-78.0b9.tar.bz2";
       locale = "br";
       arch = "linux-i686";
-      sha512 = "51f73c61512ac4f568161ea0dbc045a11dfdf810bed9e56a109c127b8e64b649cd368f02f06791433ef694190a08eb5b2efc66db48674244553c997b783d0610";
+      sha512 = "531cd08ff36a6cbda39aada2fb0636f0bcda8a9ed619469f130b5c142163454c1f86065826c9dab2ffeadce14220163f1457b57269d0e5c054278c058abd1c36";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/bs/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/bs/firefox-78.0b9.tar.bz2";
       locale = "bs";
       arch = "linux-i686";
-      sha512 = "71a6dcb6af95976882eaaf330dcbd64942decc76ad2a110e11721d8dce64c1fc28522520f2dfd1484b430c8c5a6f531c57ec96e533d35a7cb3bc3d688939ef8a";
+      sha512 = "1173703700639a513062944e8c0b0f6f0c0a4817b60fd7ccc90924ec08702165fd214df617b7eeb325c425ce76302819d4a0a3446e7b8e4b7873f73e02312569";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ca-valencia/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ca-valencia/firefox-78.0b9.tar.bz2";
       locale = "ca-valencia";
       arch = "linux-i686";
-      sha512 = "e18c221ca0781c3a9a95ca1b2542eb7bfd66a09c9ceaa88b9d0ef76396f21635fd5d79bcc4881432426673865fe9aea679b8c4986bae668587371bdd237a3a89";
+      sha512 = "4b0861025cbf0ed500712412c1fab3d562c92ec2eba11aaea013ae67185aa9ada0e2662a62d908a38bb827fd0abe63caceff86ef72f6028b9bdf5574f1eefd49";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ca/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ca/firefox-78.0b9.tar.bz2";
       locale = "ca";
       arch = "linux-i686";
-      sha512 = "76135be63a3da2968dd35055207d58fd58241846b4e680aba92541047ddcb97635ebb58b218dd86f86c94aaccc58162007e964a63099b26d139cb8537787ff10";
+      sha512 = "5e7f762b8e0dac456ab673b8d6c0748d3728cbb587bdaef7b42a7621d4cbf36ca28e6f9fe4e49257f490a60b44437d4c13531396c8d3fb34fef0d8e8564d5706";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/cak/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/cak/firefox-78.0b9.tar.bz2";
       locale = "cak";
       arch = "linux-i686";
-      sha512 = "088e14979cca1a9e9296dc0fba4507e2e5a04b71211fd9c4d64032b6e76f2c5060eb40b331762727dffaae5595883e7162b8fa6c7915666e0c4183889ae64089";
+      sha512 = "f920732d97f05b502a6d5b66942d8d63ee90e3f14458e6d12533cc42607a0243f0c3d2ac52e3465550e9ef95bd4a9e10955701c64d76e0257cb0bdb955c45ef3";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/cs/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/cs/firefox-78.0b9.tar.bz2";
       locale = "cs";
       arch = "linux-i686";
-      sha512 = "35dc0443d861b8345610448ec145b1933c6de5eafca6fe83580632d086f0ca2a818bfc03cab85e9cf1aeb32a7ded6f47e7f9af1859c1432d8ae47f09440d81d4";
+      sha512 = "bae02b4d0cbc5db8ef1ba675bc82e9e73c180bd481a1e45f058622141c08b62636f51f219f5e41cb60881a4f049f01c6b921b3e8fc3c9a35b4ec8f8850312dfa";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/cy/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/cy/firefox-78.0b9.tar.bz2";
       locale = "cy";
       arch = "linux-i686";
-      sha512 = "5d3ffd08d02c2be15fe5e66c7fce402b2b3fa6534192fdfc38f718d3a341bdde25012a59e5f8481314986fe2cbeffbd9ed0d79726067fa4d3658d27855839af7";
+      sha512 = "5c80456aada7ca5f9cde4e933f7993cf9ef91c5ae77bd30a741155c9a08d22cb0924e86e007aa1af890b10fa636a7d48c7212ab4e6e8c745bb6fddf01d640e08";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/da/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/da/firefox-78.0b9.tar.bz2";
       locale = "da";
       arch = "linux-i686";
-      sha512 = "79dc2dcb1d1dcd17da99cc668086a42b25b32f867cd381016f5cf76529363680db5c7ffe53f2660d8883eafa965e320f3d8bfca00dd84759685dfdd2d3504f5d";
+      sha512 = "c2058678b9cb7a0098bcd320b3d1ce7911f515a6392c10e069c020cd61a44ddbddb96ae8e436ecd3e424b9309815cdedeeee82e76d26ba758ee1b4047011e18d";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/de/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/de/firefox-78.0b9.tar.bz2";
       locale = "de";
       arch = "linux-i686";
-      sha512 = "075639fd73e2595c5bf99632e0aac36664675a3aab3b1b96e9fa701fb4b4a6988a4d966cd111a206fae5a6d21a79286d7b24ebff44738fed2cba0fcb7af29ed3";
+      sha512 = "740561c2311d0ff22e64045d01a0cbe3608cc73cf86c4ff7a442c04a5d8d7e69346dfcb3343008c635cdb34a03dc45ca1a9fb08dbc7983dd70f4e5587f45a2f7";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/dsb/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/dsb/firefox-78.0b9.tar.bz2";
       locale = "dsb";
       arch = "linux-i686";
-      sha512 = "05d5b528aad3ca76449300e4708c5ee8c13951e72c8343b8c0ae7587d2470c485e7320e7ef70bf806caa2530217d525ca72a95f046ad5a1576d5fdd69a971969";
+      sha512 = "bde801d0f4db8007f7bb766c17f47025672214fd7fda38858eb01317db1d0daf8a8a341cac91af096a376296c749cd109b9dbf40057b282e32f50f1dc0bb0319";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/el/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/el/firefox-78.0b9.tar.bz2";
       locale = "el";
       arch = "linux-i686";
-      sha512 = "08334bae31f5ca6da017fc93889303d93f39be6d27bd79031e5f4f01038d78caced4ed5f407730d3c48b2094cb40448906f53f190415830d91bf7dda1463fbd7";
+      sha512 = "46c2b468506ec594fca4094b37a4512701a400e61ca962254b9df033652ae2fddb4e06641efcb306b0a266ad798a8035e1206d9a15020e9903a30669a20683f1";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/en-CA/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/en-CA/firefox-78.0b9.tar.bz2";
       locale = "en-CA";
       arch = "linux-i686";
-      sha512 = "054fe82f776c2b38175ce2ea6acc10f81c2e9f9ce3e6f96f49cd8d0521d447d26386384327011d0f7879e58a3af81c93b7f227ad4b5385fb8903ea29c28cb1ca";
+      sha512 = "fe50154a835122b28599f692d69bcfe2110a526baddb44f86a813019b7651b8e7534c3bbfa0a4354f53264a71b103c71aea9dc0fcdae32e1bee1dd0b5394b7b3";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/en-GB/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/en-GB/firefox-78.0b9.tar.bz2";
       locale = "en-GB";
       arch = "linux-i686";
-      sha512 = "82e9e546f77e94d4f91eac13b9f1600bcbbe05a250c6049693489ca46c93a3ccfc791879123f1b49c82ba83c9f472e8f6f3d00f50794cc491a99d756ee9eff22";
+      sha512 = "79f14b842022dd3fdcf0a74bb7c33719bea2e3b95331c49e624bde4f21568c11fc56566102aa4d567f7076f8f8dd08c7c038393cde5bed65d94ceeb568a4d488";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/en-US/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/en-US/firefox-78.0b9.tar.bz2";
       locale = "en-US";
       arch = "linux-i686";
-      sha512 = "f8e5e352b94e9ff12c86f2b2d189c88b6e1c24cd912e3777eb256403e691c0a28e860c22e098d8a3b4c5d526580db2da2deb408f1e8bdea91deda5dd8cb94e9d";
+      sha512 = "3a938275cff2f55fe93bc9587e08410b5d9e70a926291f124e8f7c679a40dd944303c80877f0e70d6b273690cc101da25643849746f207532f646e4b43894e34";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/eo/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/eo/firefox-78.0b9.tar.bz2";
       locale = "eo";
       arch = "linux-i686";
-      sha512 = "c6a806f7b7655861c1e44837e6b116c70d64a158e5f38c13179d52230d1bad34121c04865959d0608f6a3193bbd55fe081d2b6b3f9ffe9c9a41a1ea8c24d63ce";
+      sha512 = "97d1e61ae3ad39b531cc4309a43de654ff0eade822c1c264b9af4aaed889dd8251542a189c8fe6b4db527c1b175934bd7a2ad805becd4ef2319c2370b1e275ba";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/es-AR/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/es-AR/firefox-78.0b9.tar.bz2";
       locale = "es-AR";
       arch = "linux-i686";
-      sha512 = "c894fbce700c17200eee40d35fe423dfb19f5e4703b1bbf39925e4fae85e094eb5124b8dcd1e8f09f57e73be4793a92af32018b385bff09f7d111f8da06517ec";
+      sha512 = "0e7ca3c44f5e3ad4d32fade1a36bc2798b635f8a18681875987e88140b7ced48bd1e18eebf1c6ed2be8f5b67f618b5ffb439223d6c17e72c334a32f2f2cf1a33";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/es-CL/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/es-CL/firefox-78.0b9.tar.bz2";
       locale = "es-CL";
       arch = "linux-i686";
-      sha512 = "9896a7b6a72632a42b68e4bf0effb25b0882cbf1571c782045de452a5e58608b41fcd2027cec5677d31a454f6bc82b8104df7490bf1c4b1b05a36aa170fd2e7f";
+      sha512 = "bfaf1530b0e283a4c68482c4f0342bd11a2feeb66b925ebe796b0306e5084ff563ecdbdf3e7dd35bf3a14160fd6b5cf2dba2d71a19eadd22ed3d7d59d07da976";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/es-ES/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/es-ES/firefox-78.0b9.tar.bz2";
       locale = "es-ES";
       arch = "linux-i686";
-      sha512 = "4708a94835a987f040e27342d73adde1094de3824ae444d124f2e02223de5f4bc280fbd954631eaff8f17d839896c02050c78e00dd54b4a166f291faecedf1a8";
+      sha512 = "4a4a48cca77a128bd37ab09c6fc16592ce1f7b6ef15dbb140366a8ea97784c28b65a40cb65ca396df1e8b725de1250ce6ab030516a5fc6cc8aaadaa304af1349";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/es-MX/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/es-MX/firefox-78.0b9.tar.bz2";
       locale = "es-MX";
       arch = "linux-i686";
-      sha512 = "430c0ea67e09e36b5736f039995b3f6ee4a7bc83327366acf34cf2ac11d79c49d37a336b9b0a39a61381fb4d9c47b0908f25b4f303fa4b21242fc46749498c17";
+      sha512 = "e28b793f6510c61477af82191325f047ba4b66059c64b5ddd9d73dcbc3d9d01f93082907619daf05a44512733d91dbb6aff43663ef00a4d413fcca5bf34fb53a";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/et/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/et/firefox-78.0b9.tar.bz2";
       locale = "et";
       arch = "linux-i686";
-      sha512 = "e200e5b679a45d6a03784373861a7e78151289888f05561c9f58f4afd9cec36df5df85865d790483989b23435c1d762e8020863d0f3dd6e02f3fca31fbf642f6";
+      sha512 = "b0538fcb7ec47abf24724b06172c70cde39d68e37c8863510e40c75c0464c7a46501b14c8d27a7b72219a5d91e31ddbfae5dba04af1d0915e732e461e14402fe";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/eu/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/eu/firefox-78.0b9.tar.bz2";
       locale = "eu";
       arch = "linux-i686";
-      sha512 = "d7d5355aa60043fe759a86134bba37fb99ccea19978b0c56298f1acd465e5ec53d50761671e2636c535cdc6003fa82f8e99027969d254a3f0003995ba7db995f";
+      sha512 = "b5babbd93dda80860eccd4651dbbc249095658140336a419a8165adcc8a8e1001ac07f6d1b3ed1bb17bcdf28c83ec5bab2f2df2fcbf82cd5f4d9761b1c521489";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/fa/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/fa/firefox-78.0b9.tar.bz2";
       locale = "fa";
       arch = "linux-i686";
-      sha512 = "fb174f97e2e21f6ba70fa8eab316a445a0c01a32fb00237790cddd4e6a32e461e89977238a47317ef2c11268d75ea34e84ecf96eac346661da6a4e7fd1509666";
+      sha512 = "649287a74c1fb1c309d3e4f58b5ee8492c194e4f00334f11db2be9c14706cbf02affa320eb81729a4486a3433473c086b3cfc97040dd1f2ab60a30a2978d75f4";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ff/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ff/firefox-78.0b9.tar.bz2";
       locale = "ff";
       arch = "linux-i686";
-      sha512 = "d453cd657ce54da24179b74723e2e0c793d6253f31bcfab914ce5cce9992266a3533b0358f53ee17aac0b1e616bc9c5c2d32112a514ac85061da61bd7b8a425e";
+      sha512 = "aaaccb7b4ed53d1e5d2805e45fd49b2e8f1d505b358c271c5d12dad5f28c53f749a944c98078163a3200d0026aa5417af642c64a85565f5dfc875795266b0035";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/fi/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/fi/firefox-78.0b9.tar.bz2";
       locale = "fi";
       arch = "linux-i686";
-      sha512 = "ddd65dbe5e8a9cc59b1c44b40b0f836d56b1042b5a2a37fd021166929485fe013acd14ac59f0c985b6a691b1ccd8b62f5d0bbe89ba341c414003e73fbe839546";
+      sha512 = "8ccdecd8866b78c03ec26681abc381158a223ad4a60372ac31f5e8d5f920b8208dd58190f20b77e22d0f34e72caaf5aea35893781b1bfa14620a6146ab8cade1";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/fr/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/fr/firefox-78.0b9.tar.bz2";
       locale = "fr";
       arch = "linux-i686";
-      sha512 = "5473918598bad367a0f8cc71f50b54c899fc6ff015c78884040c09f558e0a80508dd104112b9ebfa92b8fe5f328262fb2c784dc8726c588ac84e41bcff95f943";
+      sha512 = "00d5e0d1f85e2ef9622fbe85025ee17594239ec9bf7bcd879fdb504370ecd684233f67c1f51973cc75caa9f3dfadde6fa9bb5598083dc5d1cf167e5f286cab2f";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/fy-NL/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/fy-NL/firefox-78.0b9.tar.bz2";
       locale = "fy-NL";
       arch = "linux-i686";
-      sha512 = "5e49d9d3a9aaace6192a838697ce0220ec347b93c0896dcd1cc46f97cee9a7835aae967d4413d71770feaf917eb984a5547d1dd5b6587baff7bb895e5c2fadbf";
+      sha512 = "9428a12bba33d6d872f93dc805b17cd8b344e2b90d3d57044dece426af04a473c84f1c29a23e501736402c8d5957122887e8cae3f0f009c64df70ecd3fa8e6fd";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ga-IE/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ga-IE/firefox-78.0b9.tar.bz2";
       locale = "ga-IE";
       arch = "linux-i686";
-      sha512 = "84b39f6aa3f9845d2d34ce089eddfbaad0c914a21bf68dc64e649a358739eff111e3809e48d882de0980b96537472e90b922ed2bb17a340e92000f0fedd17b4d";
+      sha512 = "3d78dae93c08ef2795281f12691d0fbfe43d2ef0547c106e28bbf61362f87cc7b4fe9d144a6eda9fa1cf30372ebb403681482afa4185bb518ef7bee726230d1f";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/gd/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/gd/firefox-78.0b9.tar.bz2";
       locale = "gd";
       arch = "linux-i686";
-      sha512 = "88657692e941513807522e7513f480915f2f40278ed3ba36855a03e47879eea2c17d48bb626543e71a19eebd7b554d797f522b499066e7a52f8a4363c8987a44";
+      sha512 = "1330c5d0c7c2074269993d93f40a512570e6858e76171a5299624c6e6b91e12b25aba5e83830a4b8b5d6252e8e0d8bf906ecac93b4ef5d0905284a0c4fe5d8b2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/gl/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/gl/firefox-78.0b9.tar.bz2";
       locale = "gl";
       arch = "linux-i686";
-      sha512 = "21cd90d9e5010ee858fd5b499b64cb1b0a695ea04c7551fff884e426895bf80e041244a5a27ca4e37a6a283b9058723b9b62ade273446a5ec9b0f5055c612a6b";
+      sha512 = "b43421162c4ef0dfa21331d5e2ba670ce2fb3d5fca86dccafde72f789bfc86765ccd61f9cfff5b436209107db1e4ebd0f1aef7fcb700c3c0febf7ed59b59e536";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/gn/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/gn/firefox-78.0b9.tar.bz2";
       locale = "gn";
       arch = "linux-i686";
-      sha512 = "23ad0e28b4d5bf1e83983e3b498d78019b78f821f17cb9c1e9b18a2f98b4c044ee25ec2de8ca43381366344010c81979c6f568ef9ccd70cf67bb933789b96179";
+      sha512 = "c49fd8637ab6a809f343317187c719badf84e626e5e9d7cfb2113a78b9afb1fef770fa4ede000b7fade3302601c3fc9d35ceca4f9703dad9d6c2fb8c17dffd29";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/gu-IN/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/gu-IN/firefox-78.0b9.tar.bz2";
       locale = "gu-IN";
       arch = "linux-i686";
-      sha512 = "6914fe4888f878904eced34e13392dfef90b313c4b66fbcdbdd02070b62a8b12a397267012267551f8ea36e826912e26e5563d0f2d8c320589ad7c572786316f";
+      sha512 = "8eea7b1ca7de041ca4e8aaf25c23b8853008c1fccbc57ffb802a835bba327d7913927e43f1a6a5c11951d9655c3b781be35aab636f8ce10874d0b4f1235993f0";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/he/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/he/firefox-78.0b9.tar.bz2";
       locale = "he";
       arch = "linux-i686";
-      sha512 = "453bd36930e6749afc97dc995565d72dcc8e1196d719b8ef3eba080796392297d698e439a2ffbe2c388dc78c7296baf40e2a02e539651f1c1b8bc62f9a294226";
+      sha512 = "d39d794bcdf93717af61d9a1e261d0115aac83762da2120a6f3cda5ed89611207b8f2815486f96b8e420f80f6454fdacc934f49985f7bd0635f50290bc37b451";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/hi-IN/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/hi-IN/firefox-78.0b9.tar.bz2";
       locale = "hi-IN";
       arch = "linux-i686";
-      sha512 = "67570140e8087e721ca4951fc7f8845164f6d6a6ac2bf7cbb84c2cdfc522bc1c8578a11154207097893b3556b415ee2724403ea377a59d2bca53bf1cadb78895";
+      sha512 = "ed235949d9f14918d8f034089550724ee2996dd6d32b77c654d270d96831f175f92355f94daa31a38a7f0ca3d677abe539f9da3a3c5b99208db9287cd396b751";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/hr/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/hr/firefox-78.0b9.tar.bz2";
       locale = "hr";
       arch = "linux-i686";
-      sha512 = "949d494a971d4abb4a0a7f41d994758cae50ede8db4be8c240382ee2f33b21e383bf9fe9ee53a1f767960c5c01005285f899f4c575e734dccd2ab95f6fbcbe73";
+      sha512 = "c67482d9d48ef9d0c5ba607d045d57378e27b7dcb3f15162534d1420743d784aa2ffd7adf119fd397c09aed1ae91978d737a1d1f0ce22bdc43221d9f52295ac2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/hsb/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/hsb/firefox-78.0b9.tar.bz2";
       locale = "hsb";
       arch = "linux-i686";
-      sha512 = "5987ac4a7b8ff18604de100f2dd5099d3f7b4217e1d921e3804a86b340686188761eee33240d8416aa6ec7cc538026039082953df34d2978d30992bd451c8e53";
+      sha512 = "d50ba1e4665b01584bc65b1ede0d7bf072b1b0a6118879bef51da0fe49b2a75971ff9dd175edc9f1ba9fecc95d571bc5c014b8c106a7dc0bfb2b258392b96ce6";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/hu/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/hu/firefox-78.0b9.tar.bz2";
       locale = "hu";
       arch = "linux-i686";
-      sha512 = "438344b07b4f788496de76cf361db5b8a8d43b71dbaabf025f05b24bb47f0fad17d93d683743a0a7673727339324d82196053e67eadccff901c5ad02b45b15bd";
+      sha512 = "5f5a6ec0f9df0a8d0cb6dd19e9e92ad581c9c1b63cb97247741085a5fa39d0599ee57baac86d444b1a887d7ab4d4d56df3ea6fda93582260c625c5a0a702da14";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/hy-AM/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/hy-AM/firefox-78.0b9.tar.bz2";
       locale = "hy-AM";
       arch = "linux-i686";
-      sha512 = "123f20b8b235009474b3b7e3d57619131a4f607dbd600ae23bb52a8f726c458a23356fc12929fb0557da96c9eca489ac8b87909b43d2f0bf4024b8a306e99148";
+      sha512 = "fbb9a35823c8e1277fa3f602adbf456e9b0d49e9a5c4ebc6857ab11fff271a7e352fdb9ee2ef2df96715b1e012302cc6f445722fb8c54c682a1c2c43ea89d749";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ia/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ia/firefox-78.0b9.tar.bz2";
       locale = "ia";
       arch = "linux-i686";
-      sha512 = "afcc7cf79d5d8f023699d6a9d2c35897329a9372f5161f28188b75126f5b843d105e50bc49968a7ec8acdb290ecfab5ab06731d7b002d2721c0161cd46dcd01b";
+      sha512 = "08b21692cf897f89a3a20b23ca1c0ccddd7c6f5d507b0296d6e7ff7e3b4993dd1263740181bdde72549bacf0f25294fe448215dfc6c423edc764c27027877845";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/id/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/id/firefox-78.0b9.tar.bz2";
       locale = "id";
       arch = "linux-i686";
-      sha512 = "3b505e26ba7fb53c27aee55dd47771abe2e16ddce33413cf61d21d757be2f9744b7e406294ed86a95f2ed645c73efca2714e405a6b0947e08e19f3c667f886ad";
+      sha512 = "0d194d912519549a6d578ae523b5f0448fe520893c8b04ca2fd03731f152b2324670c134e879c671600c8577ab1fcaad54866c3bb30b24e88b94fa00988cf007";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/is/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/is/firefox-78.0b9.tar.bz2";
       locale = "is";
       arch = "linux-i686";
-      sha512 = "7444d0cd5ab0f667a46f6e6ce685102a4a3940d422c671bcbe4c454333714dd17e2b6784cd3d865ff13fe9b5fd63c6bdff79a17188038baa2b558d0764f31d10";
+      sha512 = "ff2890e5843e56c007f6fc500cc0da09e2132d897f290e6710b0e0df96b35048095a413ffea276de213e50a55e7971484b6e915e53fac51e00381f4570f85ea6";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/it/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/it/firefox-78.0b9.tar.bz2";
       locale = "it";
       arch = "linux-i686";
-      sha512 = "675f81a6a7266855ff6ebb8effa0646b3bf48da50246bc4aafcaf35aab52be107df98767e51f3aafdee7ad7b866f7304c859aabf9039ce08ab601df8f3aaebf5";
+      sha512 = "4cdece1e9782f45cfecb8a4325d391332b71a6c044608162c40b322248641cc9ea231fd8e85d247e2ab01191737702d797dbf73d565bdac975e13b755d718dda";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ja/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ja/firefox-78.0b9.tar.bz2";
       locale = "ja";
       arch = "linux-i686";
-      sha512 = "296f7a8ebe0e685e854d5f2674af347c2c3dbe0735bc763cbb1b12ed7862cc44592795b0cd1b01030e36b3c933e3e5cdd6288e77283633655c60182f1b91b0d4";
+      sha512 = "4e12d8803fa2453082c6a132edf1d3599bf242cf4f76dcb1b65f26f5cf7b4e1f619f7b8b2c35c849a72c5fb4aaeb9d87da8ecf1dd4f74e7e79f656daa0616eca";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ka/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ka/firefox-78.0b9.tar.bz2";
       locale = "ka";
       arch = "linux-i686";
-      sha512 = "514409c1bebc87ac575edc28d461d165e64779e95e54a27f83b0f9194d86d7c3473b29e34c2666e4f9ee04a0365e963c0ad54dd0d34b979b0d444c2059d3681e";
+      sha512 = "d3539c501a693bdb1efa153df5d50e8db7d8395152bad41d4f13c710c7169e82d8497a714cf27d8c118fb205036d476d7cbe1d8cd25194a963a0fa33ff67e3ea";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/kab/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/kab/firefox-78.0b9.tar.bz2";
       locale = "kab";
       arch = "linux-i686";
-      sha512 = "d53d3b7fd5cfa7c96ddc528ae531d111998c95e8ddf0fb44a5e3e55f3223492680acf87590d1fb4d26278604eda2ed48b8681cd62a398a779ff76429df7bdb5e";
+      sha512 = "e2db664a5a7e8a95472c90d2e5e3f2b9d67fbc28f48cfa219b6ababd4f6bdd334f25933128ce628d485ff2580955eb1c20ac26bba5c963f0b8e6fdf92be6304e";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/kk/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/kk/firefox-78.0b9.tar.bz2";
       locale = "kk";
       arch = "linux-i686";
-      sha512 = "8a9fb7e5070ee73dc8d87935cf0d328616ddeb67f1f3955678cbcec6e240ec375117daca8a574f4379677959e7acd30efb65114e4941ffd204c3cfdbb848c570";
+      sha512 = "d26b381779d3cb5c71fa0b27dc46d31a272d7b5633a9573297be571325f6a0dfac35a1d87ec407db20c82f6fb4f8d5154acb0c2619a8d0070a88cd4aa7f6ec49";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/km/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/km/firefox-78.0b9.tar.bz2";
       locale = "km";
       arch = "linux-i686";
-      sha512 = "754254377c41865d6a5aa8f2e338353987885a6e54a7738c36b1566249a0b3becce3bcca9419905be64d935d97a90b3108f0020a313621c64cfdc568f663cc2c";
+      sha512 = "e672dd56f878548a611b567efed4024abbe9acaaee21fdf74ba4983e2f7c7373f0ac3a6dac2a21c92573693df86507b2daa53b43467fb491d756875fce486487";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/kn/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/kn/firefox-78.0b9.tar.bz2";
       locale = "kn";
       arch = "linux-i686";
-      sha512 = "79cb8cb3f8daacd1015a2d23b8cab568f9622396a983cbf1a3c6e231929d8bcc40ba84ba2787c9b60a1c9bdbb0729e2637ff3bfc87501bb0e156ff29c3a98148";
+      sha512 = "2f5fa29c9c4dec0ac88c4b3a43cd442f929e42c8329f33f5ea2e5b1662aae6405cfbde31f590bb9fa55c101684aed12de9452a98bf7234d95fde534125346b6e";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ko/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ko/firefox-78.0b9.tar.bz2";
       locale = "ko";
       arch = "linux-i686";
-      sha512 = "262a471319ecd41cfced36e353dd32f22c1aa79224198d203ed029d21f858bf283db75b33f3af7abc48cf3a995d7ed90d75701d70e371c8a937d6259ef50e7ca";
+      sha512 = "315caf9b980be6b1c63054d476fb0eb44cafb3c11e9812c376e3536ad08ae44577fc4647d74a99a4df32cdadca0c551953b48d15ac10e1c0c81ab597e4f2d595";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/lij/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/lij/firefox-78.0b9.tar.bz2";
       locale = "lij";
       arch = "linux-i686";
-      sha512 = "59b93c56ebe8022ac3ff72acec539639cf290c0339e825a27e6fe0a6e85ae02c6c4ac62ac056ade775eddf0462131e2c7cff99639c1626f2a6d979d2d340ed6d";
+      sha512 = "d1b2fcc0660813869087835abd6fe68f02e7375e3e6b1664b59636fb51eda8d3395b66882f7532d386999fdba30ebb836f100a0e17bf20ff8223b58e05d3ea60";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/lt/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/lt/firefox-78.0b9.tar.bz2";
       locale = "lt";
       arch = "linux-i686";
-      sha512 = "7578bf3f0d9428345d0d5f16c1cf6557d6fc0962382df1359e9a2c3b94feb3ef279266635da41cca1a90660640b0d5c0d20a415130a860aade0ab554b6fc8415";
+      sha512 = "f4e3e7ec38ce488591049e7d09978bdae9acefb64e747bec94c25b00c3a56dee45d5dc13569fdf5110812ed2ac9bbcedf0101c5ad429de3d0c68c5d7d2b72d60";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/lv/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/lv/firefox-78.0b9.tar.bz2";
       locale = "lv";
       arch = "linux-i686";
-      sha512 = "610f14f6e3ddc8b2f732e40e79ad07e40e5cedc2e92dcab6b39b3b3895970d9c82749f4af90f034b7431191faef6bb0f61e230a3374efae7c5715e096048878f";
+      sha512 = "e696c69ebc27fafbe899afb1eb84e30105f6d3b373d7d014ed8cba9b2ff53ba23c3427a4c684dbc9f6adc2fd9813989c8e16254d015c577be09e8f61c6d9a469";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/mk/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/mk/firefox-78.0b9.tar.bz2";
       locale = "mk";
       arch = "linux-i686";
-      sha512 = "cfddb67634a2e05d41c3595f62b88e53c05f5b07973ed16128f7620cabc9422a8f028458118e404148a2f5187fd0209910be1d5fede135caea25a2ee076811bc";
+      sha512 = "bb08fc439b7c0aafeac6061d7f9e179b2bbdb8fba0b732e222e1043b9d4972440f4c966a9dea0cee2cb2e5c632e264bed648816f479df27f63de8bac06a5c2f2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/mr/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/mr/firefox-78.0b9.tar.bz2";
       locale = "mr";
       arch = "linux-i686";
-      sha512 = "5bb458faf0495b24600395250f8800587f6cff04d46437fdfef4dfd1fc240c7c9bcc49f6679258bb761f587b2c8115f0bbb6ef5c0b11421b79cf8d534e70c8ea";
+      sha512 = "9715d7d245ea077185e0c375be8b3bbb51989728786ed30d8bd770c236a7cd2cd93ec3b4a15c1e946a82ce645fb9c0a3543c692c992b7c22fc9d506c2fabb5d2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ms/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ms/firefox-78.0b9.tar.bz2";
       locale = "ms";
       arch = "linux-i686";
-      sha512 = "0e509780c72eb1d6154e3b3d804ca434be340f6fe8e706b87e2fd9e00aff3b82002a8b1a2f5d6994da2b566f5678f1b489e3b116af95776b323da7f5f674ea17";
+      sha512 = "1b99814dd1b8c6c29d1d769622961bfb4f08d0d92ce6e452018423ad5104480f2863c66cab1baf3412bda94561073114d81de17b9d951b4c533ffe0f18350d94";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/my/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/my/firefox-78.0b9.tar.bz2";
       locale = "my";
       arch = "linux-i686";
-      sha512 = "2a036f00f40e98a5dade0d380e416f869d0c42f4004878dd1a51e99386a118cd88ad603915b741e91e16a7bedc0db9029d8627037e17f275c74736cdd69375f8";
+      sha512 = "8c596041d2271dad2b015da82689ff4ffc77ccf351a5ab4acb31ce568f6953595078908ca9fef133fdd958832771969031788b8e0aa10d01d9908bcf522a8622";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/nb-NO/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/nb-NO/firefox-78.0b9.tar.bz2";
       locale = "nb-NO";
       arch = "linux-i686";
-      sha512 = "f289ad816331cebb6634def4c7faf5ff6d1c6000cf5677502027a7823c34becca72a0cec5bbb13d5c4c16ca22fd87da941d0569b47369e1cf5ce00cbad326693";
+      sha512 = "17be021c57da49533552302cef3bd99d03e9876789e81ffcada592969e525007295eb8f49494466ec0c160b9268aa93339ecd3e91c30e8d84dcd2ec5cce83572";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ne-NP/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ne-NP/firefox-78.0b9.tar.bz2";
       locale = "ne-NP";
       arch = "linux-i686";
-      sha512 = "6084544df0c3f45562a3bd380386217c4a4a6cd4968159006e3c24ece9cf6c178731c4e8fb0466ddf484776ec533e838e24018ed3d41bc5f54d9757081a963cd";
+      sha512 = "189c42a7904e2a2b4f21a85e534db04b81d0ffcc159854029b8a8e2df99432e7bb64399294b7556e675b6194191d7fae3e5f286ea3a4f4788a46e246167486a9";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/nl/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/nl/firefox-78.0b9.tar.bz2";
       locale = "nl";
       arch = "linux-i686";
-      sha512 = "1d31ffd4e7e9cbf728d552cc1cf6692037f62884cd396ce5ff3c96f89096d44a9fd789ecffef1516cdc0d66413a30ce67daffaff224854dfab2e9a3fa37e6150";
+      sha512 = "5a8aab4aaf2a9f750939d4609cc02248069c4455c9664286e21072387deb2ec863faf2d869bf40de1f1a82ba4aae726c7219596883c34f416433731a6c960dda";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/nn-NO/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/nn-NO/firefox-78.0b9.tar.bz2";
       locale = "nn-NO";
       arch = "linux-i686";
-      sha512 = "0f97a3a2807b1087e1569e0f31cd80ef2995b89c69743c3441ad974a5786b789793c94828935027cd45f52b738a28dfdf86b1e95c5026d34de2e1f20107bf784";
+      sha512 = "fca06c7a517833914d746509330b874c55a2b294fd450aae483a2ae3021f4914383a5bf54f5e8bf22a3e41e57231a9292be155106f665c0f703b023e4ba9b24b";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/oc/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/oc/firefox-78.0b9.tar.bz2";
       locale = "oc";
       arch = "linux-i686";
-      sha512 = "91f5dd7f7c4ac97bde1235e9bf9594623f531a5558ed06d5ba61fe8cd584d80e6b01fdb070fe53b7c702893b2689fcdfedabd28c440ff865decbe4119bf4ef06";
+      sha512 = "3dfc063b14f27d2c24fcf997bc6dcac470bee5e01cc6b3c735318ae29284b8606e5cc32b4dd683a269821e969ce77e8cd8a2f4155d2138d91cbf1ca864c2da08";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/pa-IN/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/pa-IN/firefox-78.0b9.tar.bz2";
       locale = "pa-IN";
       arch = "linux-i686";
-      sha512 = "763e900df5673e5f88fd326ff6ced28502ebdf09001fa06fa37912317bab9d0ab6c737233baf8d644de286766a7d4dfe740242ab70fe938c0c3bbcaa1aa1b314";
+      sha512 = "155b1f5091183c3bd9f44903f835abd5cb153936510e8b4bd818ea744f5e2deebde29f59d8b6784f5f99ec6044317312515f6174f058a6ec69889a3900d150d2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/pl/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/pl/firefox-78.0b9.tar.bz2";
       locale = "pl";
       arch = "linux-i686";
-      sha512 = "1aeb0dff591ad21dd506da2cc89d7082044b762e7c987e364631cb6f28bb07618d51d138d9d7a936f244841cc4f5208dfb9bf8dcd1ee0d839fca5e6e58823c1d";
+      sha512 = "01fc29cbd4a0469119946878b654fe34d9ec31ece166f1eaf3c06615dde144f73ef8c4d4a4617ca1d605f124dc3ee1b96c9b95e5bf0c6c6706946de2b168857b";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/pt-BR/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/pt-BR/firefox-78.0b9.tar.bz2";
       locale = "pt-BR";
       arch = "linux-i686";
-      sha512 = "643a666005cfcb726a18dcd81c8af6d3fefb77861c2a4db884227044c39d907659f1b2abe640950c4cf31ff3552d4d12a52fd9e7527637a68543aecd93a61763";
+      sha512 = "62b1d24edb249a7418e74aea598d72e674ad528d240a0c70d775eb8922dafa75bcae6ce178a3a92211f706a1b1b5bd788011a8e47820bec7d4f04d3b610f1819";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/pt-PT/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/pt-PT/firefox-78.0b9.tar.bz2";
       locale = "pt-PT";
       arch = "linux-i686";
-      sha512 = "f17fff22865d6e64ba77069012072d24ab79abdf783652337a7dae7d9a901569f00f9d3cd20c2e3a268fc81188b478b9036229dfa248bd5b1ddd7a0f9c7b7201";
+      sha512 = "6a534951d73d8942e84e1301cbe5f0f5ff60f0317c9e1ef5fcf3283d37fc440d44c9373c821df1bf020ddf62c5ae9e7f7b81bb75d5e21b767d480854457baa74";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/rm/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/rm/firefox-78.0b9.tar.bz2";
       locale = "rm";
       arch = "linux-i686";
-      sha512 = "3e105652654c1691bdbf8ab51f20f4ebb9b62d6a6d09f0f6527079bbc1f5832f4170800e6b200c00dd43f62dde531e7e8bd6bebd0ce27fd058552672d423a967";
+      sha512 = "cbae337ee14f03731991b1c0d64a4e31c9a8ed6b98df3636e71fd11550997dd84699ccede05f9410e7c120716260ba0a208dee830d4e13c4ead9e9843ffa8fe5";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ro/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ro/firefox-78.0b9.tar.bz2";
       locale = "ro";
       arch = "linux-i686";
-      sha512 = "5062a90cc4712f30c9dc428d8ccbfe3bc1d0a50de3e84b5c475fbfbabad09394219fcb03db9313d7773518e24e5eb5b41dc16723ee235a87677dd07bdb1e975b";
+      sha512 = "0fcf28c2fd8fde5ae76e34318b4a792cab936c4425ccfd4ee140952c976d2c7b46fff984ef457187065b232e44bdd6e229ecd44f14712b1de44bccfee3f44f3c";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ru/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ru/firefox-78.0b9.tar.bz2";
       locale = "ru";
       arch = "linux-i686";
-      sha512 = "5b457059285c31381a03b9e0285874989cbf93cb264a74ee875ec9e120027d5bd921a666a95275c56631ebbe3f435764890852ba25d199b0c8c8258d5b8a5807";
+      sha512 = "280b8e19652593654d01bcfa561d432a9efe1b4ab3801801c0036684d1a4bea37cb0617c6f434fd9ef80c7b5ebee42b8f95588e9b14cf938960229e326a2fb2e";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/si/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/si/firefox-78.0b9.tar.bz2";
       locale = "si";
       arch = "linux-i686";
-      sha512 = "4f8ec721ae19da2466a31e363ecdd9743f90a597d0bcfba12c12120207545ed03685a552515c9fc1deb27e79dac41345b8c87efc025dddef6c0347d21c2809a2";
+      sha512 = "d4d077be6af067603f8347a49cdcbcbcff6d686e4bc1016f8edb72dc001ee8893269577cac173df62a742f0575952e58a41d602e4d7805d148a06d91b99605c7";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/sk/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/sk/firefox-78.0b9.tar.bz2";
       locale = "sk";
       arch = "linux-i686";
-      sha512 = "4953e879c353d7a9a71e517454ffdd793546d5c863676ffae3a1bc725000b5f69f0f74fdb9ba979fc54d809d576918e6def88ec1b1b7a81cdb6d1dffab624093";
+      sha512 = "d61d1d54c2b3d88adc21729c91f2e1cd0b7f73501c6cf29df75a00cf48ab17200a55e231e5e308162f2f28f71f16143ba2ee81959b626d974fbe460e9e0008c2";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/sl/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/sl/firefox-78.0b9.tar.bz2";
       locale = "sl";
       arch = "linux-i686";
-      sha512 = "ce930f05f2a6f3716ff54a71af907cfafb1398d4f86999e8b161771197c60260abf82d0431093ecd8894d2de2aabc317ee5b6f348d8c05f3a823ac706bce0b2c";
+      sha512 = "39de7a12cf2ac933d94673793928ff0a26fbde3e338135c3ba9faed52844a1fbde736dde5ed8c5893aaefcc9eed4f2109fd0192e85b0985bf9abd805aad80107";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/son/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/son/firefox-78.0b9.tar.bz2";
       locale = "son";
       arch = "linux-i686";
-      sha512 = "1862101ca5ae8d8e2543f55e6b283dc8f935eacf38dece8c0e1b62a0cf83342065b467ab001a9709dc25f305294506f84a1036ce618bd7d47ed8d60f89b838db";
+      sha512 = "6dcdbcf0ec715df1ce509e545f4c3bf99eac749d3c482d219408d840b422629e6f500f69d6a59b8c5bf4e8f814230dbd36b47ecceb38b18ef95eca46559add83";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/sq/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/sq/firefox-78.0b9.tar.bz2";
       locale = "sq";
       arch = "linux-i686";
-      sha512 = "511b7f3dba5083414d62090ff1202599d8b6d4623df06d8749c0bae2c18249b3370af71eacb87b77711982a196fac380f982c55156b2bc589572796607128763";
+      sha512 = "ad22a16e72c504ceb532e463752b121523ae2c74b89bc38b249d20c2f79b432ebf56a1ce7daa52a7c86ea7bd60d8ef821008503bc0bde17c9f078e9cbfe17d56";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/sr/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/sr/firefox-78.0b9.tar.bz2";
       locale = "sr";
       arch = "linux-i686";
-      sha512 = "372420a6a308e94a438b9b220a268264f3dbb0c45ebf5053fb0826948fb6f5e0598567f2e237a4c753431a135274a9867fb8d092f1abc3b90900039fa2be5322";
+      sha512 = "c20305d2fd5bd21d877af5a0c30151073a14c032ce63e0c7673cf074e508c894d2190f4b5b468b9f15452ecc2facb762915c1e4083dc513792540b986c3517ae";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/sv-SE/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/sv-SE/firefox-78.0b9.tar.bz2";
       locale = "sv-SE";
       arch = "linux-i686";
-      sha512 = "cab258cbae1aff73f16f4be2217274f0be2e82bd587ffa45846308b90d0bac043953828706fb3ad33e33d06ca4eba6d0fb4d96caa684dd18f9fc96a33e1b8445";
+      sha512 = "1705c465a304e4d9915149f7dd8095e54f232cc81e184c2f69c423208ec7e2d65371a827d4b19741f459b1223414cba93c0176c45e42e7cc0d9d5cb4340a53a4";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ta/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ta/firefox-78.0b9.tar.bz2";
       locale = "ta";
       arch = "linux-i686";
-      sha512 = "dad1630c0fea645199cf5577d3928cdb06bea5bd718d4da4ab27b194aa5068107b0bcf433ac530c53050137a42b700834fc30a778834885976c090a9a6817840";
+      sha512 = "a77771a10da7188ca198bd8882f435522c9643974917ab316e4ba3a53411e1f00dc3c445f33692b484efabbb66cd43de9ef2d08ecc36c91c0dcd9bee228394bf";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/te/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/te/firefox-78.0b9.tar.bz2";
       locale = "te";
       arch = "linux-i686";
-      sha512 = "7b903192af9e954b8b595e6f7eb7b176fa7fa91dad3891f364c676e0627a5eb7426b1f676c522943eda22565d459d049a5e10b2584e65b1e1fdf7bc27a7c2aa9";
+      sha512 = "4eedb898f0caa692c7b525d8a33ae784a345b912ac4ab4b26168c701a4bdeb4086706cf5b71b75d9977ab09e659a17264565bfe5a613ff49d7581a3ecc1ecb3f";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/th/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/th/firefox-78.0b9.tar.bz2";
       locale = "th";
       arch = "linux-i686";
-      sha512 = "5ddba062f7ed0de1b9b7782ad34acc32762ec5b4a33cbb3805eda39ac667d239ad23bf81777b8ea0d9dbf82d688c9a2fb273c635b4d44cd7afbe887a16c34ee6";
+      sha512 = "ed09925c67dc0a840ef3beb467d849cc0c6644e77e0f21e5349e66d6152034dff755de4753103e7e1cf86d41f783c30775e8b66f9d56933be81bf44d2ec5151c";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/tl/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/tl/firefox-78.0b9.tar.bz2";
       locale = "tl";
       arch = "linux-i686";
-      sha512 = "8f78278bd75240622edf86bcfef0563d51d671a7b7731195b698f3e6baf2e467c0864ddbafe38fa7728ff00c4ae059f2e60c1cf67a81772445639cfb75fddf04";
+      sha512 = "0c73908dad03020b85f64a449c00583dad4accb0d787df1c52013cbd29078490b7a8aa08efc415a2749adeb7c08e5cf9bf7ccb2cee6c5bbe287a18be05f01dcb";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/tr/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/tr/firefox-78.0b9.tar.bz2";
       locale = "tr";
       arch = "linux-i686";
-      sha512 = "20081f6fd914bdfa14ddf0a7896986290f3e7f35d7c77c90448be53a0ae09c5697b37ff8b63a0138ae20327d110a1eda2bcb5a41ce1927e36eb222795fb492f3";
+      sha512 = "90aeeb66a737f1110fc2c1a1f281bd5ab4df4a1fc1698e760e2e43f845a4c428718f2b22017e3f205defff667912bac6ff4bb17c7e88d93e1590223b5f522c8a";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/trs/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/trs/firefox-78.0b9.tar.bz2";
       locale = "trs";
       arch = "linux-i686";
-      sha512 = "023b6a4cc9069ba73e0072c8e4ef8d782b4e8cbbd9ab4810c921998d6eb87f8d631fe8e62771f8c3e5b0da83f43aac8a7d569a8309603e75b984b4233dd7b652";
+      sha512 = "b74b39a162ac8f0aefcec575129f7764865e14616fa5e64afc93fc4f3e400a455287b8f677f88e03c198911dd62a97eb31f4c5501b640e99ac5026a2c05b789c";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/uk/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/uk/firefox-78.0b9.tar.bz2";
       locale = "uk";
       arch = "linux-i686";
-      sha512 = "5d9774938c64271ccd14a498151436feb8ac3a2b46f8f093c7c11bc84b7f49ec559acd620ed0c4e1d76b6f466f8be5d19d64af4d84606c12271814cca88801fb";
+      sha512 = "ae5ae2afd758994c414b59bb65feaed73598590b4b5e14add28d0abaa9c5f82cafc238bdf41f3f12aee34482bb5fd18ed6de075b19b81d38fba7aa413cc277c6";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/ur/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/ur/firefox-78.0b9.tar.bz2";
       locale = "ur";
       arch = "linux-i686";
-      sha512 = "73aecd84a201e7047ebddc71695cfbddcff8d7866f1ed1299217bfb81c49865ce4140deaf0d3d0ca34f82bfeb1e3598059f299f163e816fc4f85bf0a1b8d93c5";
+      sha512 = "9a19cd8e3711c025675d5a189a12b0b9b6da1dcd0d0c05900fb255b85a43f301eb51652401239e7260dba78cc6f9ee0fdf42f5e9eb4e293e6058a2a04c53e3ab";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/uz/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/uz/firefox-78.0b9.tar.bz2";
       locale = "uz";
       arch = "linux-i686";
-      sha512 = "0b0a0f8bcc7a96222ab09c113b537b2e56d1ae38f198c9a0efd0a7defe917aae30b64b81047b404e09953146ca78588e8184127d1ec86ed05c642a8f03b0478d";
+      sha512 = "0d31dc646fcdaa09e6c07f9ac446f4d7ea0c4a49d441aa9c375e9a6242542e6097f78bcea0429677f61d9fcab785ebd559bc38217f6c0577b08ebdf881d9776a";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/vi/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/vi/firefox-78.0b9.tar.bz2";
       locale = "vi";
       arch = "linux-i686";
-      sha512 = "2b41d980f54907cf4f84ac5159ecf3d0b4ee4d6ff0003d2d26cf8ef51befbb67410c99eb75bfdba3f8afbc64c1911011946cc8ad23ec7f514982d522857a8304";
+      sha512 = "bf580d0527319fcb770936f3ed188e0599f1c5525c9f23328abf6ed9c9bde3b6eaf426fcef7683f5dee508ad0beec1892ffb58dc6c3437015a94d98f5da2d868";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/xh/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/xh/firefox-78.0b9.tar.bz2";
       locale = "xh";
       arch = "linux-i686";
-      sha512 = "9f07d1b5b54ccd5764aab35df797ef866cb6dfc705bb6db0337168eb0453d847d6068230ddd00368ef27f3f58300f8009c9848a9ad1dc3a459d90889e2f7c5aa";
+      sha512 = "3aa35017a33c258d3056b158f7b81fd5670900cf2855fc628331efd8fc14a42319f1cc1547b550f86c8354d7c6f6909e106489bec6158801c1059fde4ab7f371";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/zh-CN/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/zh-CN/firefox-78.0b9.tar.bz2";
       locale = "zh-CN";
       arch = "linux-i686";
-      sha512 = "1a5c6b1abab116fb0cf3e98e50024070c894e64334a82a3cff7c3a755b72a0ff8992f3a4c631cbb5489e2c03b5cd5dc5918dad56d5818c6050eab32335bf347b";
+      sha512 = "a6b7b634bf0541a165a93136ee40e47c7451c2d9d87df9da6ecffb6f95bbae243888553ee4bf8c7b94832c8e0e8c1c2efb383218dbdca1b79ef96efe8d5a826a";
     }
-    { url = "http://archive.mozilla.org/pub/devedition/releases/77.0b7/linux-i686/zh-TW/firefox-77.0b7.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/devedition/releases/78.0b9/linux-i686/zh-TW/firefox-78.0b9.tar.bz2";
       locale = "zh-TW";
       arch = "linux-i686";
-      sha512 = "0b16ba221c9c681e44bcb8ab6ebcbc0698dc8ecdcf31d14b9b4818afd396fa8608b389cedd372d15dfd833e4e7e028dadc7087af21c4c2d423fd97e1d2c0030f";
+      sha512 = "e85a01fa2431aad8a312b4b3294528cc283e91de87d785fd4f30b0fb785b00c5f1265388232b14237e530c376cbc270e2a71f98847efde6965b59c6bc83aada8";
     }
     ];
 }

@@ -7853,6 +7853,8 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  ytree = callPackage ../tools/misc/ytree { };
+
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 
   # To expose more packages for Yi, override the extraPackages arg.
@@ -8474,6 +8476,8 @@ in
 
     isl = if !stdenv.isDarwin then isl_0_17 else null;
   }));
+
+  gcc_latest = gcc10;
 
   gfortran = gfortran9;
 
@@ -11264,6 +11268,8 @@ in
   allegro = allegro4;
   allegro4 = callPackage ../development/libraries/allegro {};
   allegro5 = callPackage ../development/libraries/allegro/5.nix {};
+
+  amdvlk = callPackage ../development/libraries/amdvlk {};
 
   amrnb = callPackage ../development/libraries/amrnb { };
 
