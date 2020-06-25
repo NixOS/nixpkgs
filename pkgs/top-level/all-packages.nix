@@ -3880,6 +3880,8 @@ in
 
   google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp { };
 
+  gdown = with python3Packages; toPythonApplication gdown;
+
   gopro = callPackage ../tools/video/gopro { };
 
   gource = callPackage ../applications/version-management/gource { };
