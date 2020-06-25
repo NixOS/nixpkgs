@@ -22,7 +22,7 @@ appimageTools.wrapType2 rec {
   meta = with lib; {
     description = "Obsidian is a powerful knowledge base that works on top of a local folder of plain text Markdown files.";
     homepage = "https://obsidian.md";
-    license = licenses.mit;
+    license = licenses.obsidian;
     maintainers = with maintainers; [ conradmearns ];
     platforms = [ "x86_64-linux" ];
   };
