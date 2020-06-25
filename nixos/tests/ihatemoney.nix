@@ -30,9 +30,10 @@ let
     testScript = ''
       machine.wait_for_open_port(8000)
       machine.wait_for_unit("uwsgi.service")
+      machine.wait_until_succeeds("curl http://localhost:8000")
 
       assert '"yay"' in machine.succeed(
-          "curl -X POST http://localhost:8000/api/projects -d 'name=yay&id=yay&password=yay&contact_email=yay\@example.com'"
+          "curl -X POST http://localhost:8000/api/projects -d 'name=yay&id=yay&password=yay&contact_email=yay@example.com'"
       )
       owner, timestamp = machine.succeed(
           "stat --printf %U:%G___%Y /var/lib/ihatemoney/secret_key"
