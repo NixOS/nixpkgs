@@ -14170,6 +14170,8 @@ in
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
+  pdal = callPackage ../development/libraries/pdal { } ;
+
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
   inherit (callPackage ../development/libraries/physfs { })
