@@ -1133,6 +1133,12 @@
     githubId = 7716744;
     name = "Berno Strik";
   };
+  breakds = {
+    email = "breakds@gmail.com";
+    github = "breakds";
+    githubId = 1111035;
+    name = "Break Yang";
+  };
   brettlyons = {
     email = "blyons@fastmail.com";
     github = "brettlyons";
