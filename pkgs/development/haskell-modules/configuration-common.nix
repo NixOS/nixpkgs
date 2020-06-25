@@ -170,9 +170,6 @@ self: super: {
   # Test suite depends on source code being available
   simple-affine-space = dontCheck super.simple-affine-space;
 
-  # https://github.com/kazu-yamamoto/simple-sendfile/issues/17
-  simple-sendfile = dontCheck super.simple-sendfile;
-
   # Fails no apparent reason. Upstream has been notified by e-mail.
   assertions = dontCheck super.assertions;
 
