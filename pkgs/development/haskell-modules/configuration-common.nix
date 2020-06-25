@@ -731,10 +731,6 @@ self: super: {
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = doJailbreak super.applicative-quoters;
 
-  # https://github.com/roelvandijk/terminal-progress-bar/issues/13
-  # Still needed because of HUnit < 1.6
-  terminal-progress-bar = doJailbreak super.terminal-progress-bar;
-
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
   # note: the library is unmaintained, no upstream issue
   dataenc = doJailbreak super.dataenc;
@@ -757,24 +753,13 @@ self: super: {
   # No upstream issue tracker
   hspec-expectations-pretty-diff = dontCheck super.hspec-expectations-pretty-diff;
 
-  # https://github.com/basvandijk/lifted-base/issues/34
-  # Still needed as HUnit < 1.5
-  lifted-base = doJailbreak super.lifted-base;
-
   # Don't depend on chell-quickcheck, which doesn't compile due to restricting
   # QuickCheck to versions ">=2.3 && <2.9".
   system-filepath = dontCheck super.system-filepath;
 
-  # https://github.com/basvandijk/case-insensitive/issues/24
-  # Still needed as HUnit < 1.6
-  case-insensitive = doJailbreak super.case-insensitive;
-
   # https://github.com/hvr/uuid/issues/28
   uuid-types = doJailbreak super.uuid-types;
   uuid = doJailbreak super.uuid;
-
-  # https://github.com/ekmett/lens/issues/713
-  lens = disableCabalFlag super.lens "test-doctests";
 
   # https://github.com/haskell/fgl/issues/60
   # Needed for QuickCheck < 2.10
