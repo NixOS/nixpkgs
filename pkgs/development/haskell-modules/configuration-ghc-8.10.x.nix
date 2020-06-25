@@ -87,7 +87,7 @@ self: super: {
   # Use the latest version to fix the build.
   lens = self.lens_4_19_2;
   optics-core = self.optics-core_0_3;
-  repline = self.repline_0_3_0_0;
+  repline = self.repline_0_4_0_0;
   singletons = self.singletons_2_7;
   th-desugar = self.th-desugar_1_11;
 
