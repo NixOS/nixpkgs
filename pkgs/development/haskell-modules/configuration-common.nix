@@ -640,9 +640,6 @@ self: super: {
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
-  # https://github.com/goldfirere/singletons/issues/122
-  singletons = dontCheck super.singletons;
-
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
   djinn = appendPatch super.djinn (pkgs.fetchpatch {
