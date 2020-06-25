@@ -58,10 +58,13 @@ buildPythonPackage rec {
     export TEST_DIR=$(mktemp -d)
     cp -r tests $TEST_DIR
     pushd $TEST_DIR
+    # Drop failing test due to missing .flake8 file in 0.14.0
+    rm tests/test_sourcecode.py
   '' + lib.optionalString stdenv.isDarwin ''
-    # Some tests fail on Darwin
-    rm tests/test_[stu]*.py
+    # Some other tests fail on Darwin
+    rm tests/test_sockets.py tests/test_u*.py
   '';
+
   postCheck = ''
     popd
   '';
