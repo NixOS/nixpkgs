@@ -400,9 +400,6 @@ self: super: {
   # https://github.com/joeyadams/haskell-stm-delay/issues/3
   stm-delay = dontCheck super.stm-delay;
 
-  # https://github.com/cgaebel/stm-conduit/issues/33
-  stm-conduit = dontCheck super.stm-conduit;
-
   # https://github.com/pixbi/duplo/issues/25
   duplo = dontCheck super.duplo;
 
