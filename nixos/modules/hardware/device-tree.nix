@@ -22,8 +22,19 @@ in {
           example = literalExample "pkgs.device-tree_rpi";
           type = types.path;
           description = ''
-            The package containing the base device-tree (.dtb) to boot. Contains
+            The path containing the base device-tree (.dtb) to boot. Contains
             device trees bundled with the Linux kernel by default.
+          '';
+        };
+
+        name = mkOption {
+          default = null;
+          example = "some-dtb.dtb";
+          type = types.nullOr types.str;
+          description = ''
+            The name of an explicit dtb to be loaded, relative to the dtb base.
+            Useful in extlinux scenarios if the bootloader doesn't pick the
+            right .dtb file from FDTDIR.
           '';
         };
 

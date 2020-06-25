@@ -2661,6 +2661,9 @@ package-maintainers:
     - Agda
   roberth:
     - arion-compose
+    - hercules-ci-agent
+    - hercules-ci-api-core
+    - hercules-ci-api-agent
   cdepillabout:
     - pretty-simple
     - spago

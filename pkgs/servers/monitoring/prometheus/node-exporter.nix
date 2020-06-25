@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "node_exporter";
@@ -22,6 +22,8 @@ buildGoPackage rec {
         -X ${goPackagePath}/vendor/github.com/prometheus/common/version.Version=${version}
         -X ${goPackagePath}/vendor/github.com/prometheus/common/version.Revision=${rev}
   '';
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) node; };
 
   meta = with stdenv.lib; {
     description = "Prometheus exporter for machine metrics";

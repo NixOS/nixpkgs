@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, setuptools_scm
-, tempora, six, pytest
+, tempora, six
 }:
 
 buildPythonPackage rec {
@@ -11,15 +11,13 @@ buildPythonPackage rec {
     sha256 = "31716fe84d3d5df39d95572942513bd4bf8ae0a478f64031eff4c2ea9e83434e";
   };
 
-  patches = [ ./0001-Don-t-run-flake8-checks-during-the-build.patch ];
-
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ tempora six ];
-  checkInputs = [ pytest ];
 
-  checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" pytest
-  '';
+  # test no longer packaged with pypi
+  doCheck = false;
+
+  pythonImportsCheck = [ "jaraco.logging" ];
 
   meta = with lib; {
     description = "Support for Python logging facility";

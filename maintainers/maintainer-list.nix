@@ -139,6 +139,12 @@
     githubId = 1517066;
     name = "Aiken Cairncross";
   };
+  aciceri = {
+    name = "Andrea Ciceri";
+    email = "andrea.ciceri@autistici.org";
+    github = "aciceri";
+    githubId = 2318843;
+  };
   acowley = {
     email = "acowley@gmail.com";
     github = "acowley";
@@ -3530,6 +3536,12 @@
     githubId = 117874;
     name = "Jeroen de Haas";
   };
+  jduan = {
+    name = "Jingjing Duan";
+    email = "duanjingjing@gmail.com";
+    github = "jduan";
+    githubId = 452450;
+  };
   jefdaj = {
     email = "jefdaj@gmail.com";
     github = "jefdaj";
@@ -3691,6 +3703,12 @@
     github = "joamaki";
     githubId = 1102396;
     name = "Jussi Maki";
+  };
+  jobojeha = {
+    email = "jobojeha@jeppener.de";
+    github = "jobojeha";
+    githubId = 60272884;
+    name = "Jonathan Jeppener-Haltenhoff";
   };
   joelburget = {
     email = "joelburget@gmail.com";
@@ -7247,6 +7265,16 @@
     github = "simonvandel";
     githubId = 2770647;
     name = "Simon Vandel Sillesen";
+  };
+  siriobalmelli = {
+    email = "sirio@b-ad.ch";
+    github = "siriobalmelli";
+    githubId = 23038812;
+    name = "Sirio Balmelli";
+    keys = [{
+      longkeyid = "ed25519/0xF72C4A887F9A24CA";
+      fingerprint = "B234 EFD4 2B42 FE81 EE4D  7627 F72C 4A88 7F9A 24CA";
+    }];
   };
   sivteck = {
     email = "sivaram1992@gmail.com";

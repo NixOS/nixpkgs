@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "surfboard_exporter";
@@ -12,6 +12,8 @@ buildGoPackage rec {
     repo = "surfboard_exporter";
     sha256 = "11qms26648nwlwslnaflinxcr5rnp55s908rm1qpnbz0jnxf5ipw";
   };
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) surfboard; };
 
   meta = with stdenv.lib; {
     description = "Arris Surfboard signal metrics exporter";

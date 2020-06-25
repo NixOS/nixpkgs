@@ -43,7 +43,7 @@ pkgs.stdenv.mkDerivation {
       # Make a crude approximation of the size of the target image.
       # If the script starts failing, increase the fudge factors here.
       numInodes=$(find $storePaths ./files | wc -l)
-      numDataBlocks=$(du -s -c -B 4096 --apparent-size $storePaths ./files | tail -1 | awk '{ print int($1 * 1.03) }')
+      numDataBlocks=$(du -s -c -B 4096 --apparent-size $storePaths ./files | tail -1 | awk '{ print int($1 * 1.10) }')
       bytes=$((2 * 4096 * $numInodes + 4096 * $numDataBlocks))
       echo "Creating an EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks)"
 

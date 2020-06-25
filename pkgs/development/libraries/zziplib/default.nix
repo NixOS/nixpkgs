@@ -1,7 +1,6 @@
 { stdenv
-, cmake
+, perl
 , pkg-config
-, ninja
 , fetchFromGitHub
 , fetchpatch
 , zip
@@ -23,12 +22,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix ninja parsing
-    (fetchpatch {
-      url = "https://github.com/gdraheim/zziplib/commit/75e22f3c365b62acbad8d8645d5404242800dfba.patch";
-      sha256 = "IB0am3K0x4+Ug1CKvowTtkS8JD6zHJJ247A7guJOw80=";
-    })
-
     # Install man pages
     (fetchpatch {
       url = "https://github.com/gdraheim/zziplib/commit/5583ccc7a247ee27556ede344e93d3ac1dc72e9b.patch";
@@ -44,9 +37,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake
+    perl
     pkg-config
-    ninja # make fails, unable to find test2.zip
     zip
     python3
     xmlto
@@ -58,10 +50,6 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     unzip
-  ];
-
-  cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
   ];
 
   # tests are broken (https://github.com/gdraheim/zziplib/issues/20),

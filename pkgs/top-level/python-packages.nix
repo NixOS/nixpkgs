@@ -517,6 +517,8 @@ in {
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
 
+  beancount_docverif = callPackage ../development/python-modules/beancount_docverif { };
+
   bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
@@ -569,10 +571,7 @@ in {
 
   cadquery = callPackage ../development/python-modules/cadquery { };
 
-  catalogue = if isPy3k then
-    callPackage ../development/python-modules/catalogue { }
-  else
-    callPackage ../development/python-modules/catalogue/1.nix { };
+  catalogue = callPackage ../development/python-modules/catalogue { };
 
   cbeams = callPackage ../misc/cbeams { };
 
@@ -647,6 +646,8 @@ in {
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
+
+  diceware = callPackage ../development/python-modules/diceware { };
 
   dictionaries = callPackage ../development/python-modules/dictionaries { };
 
@@ -974,6 +975,8 @@ in {
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
 
   nanomsg-python = callPackage ../development/python-modules/nanomsg-python { inherit (pkgs) nanomsg; };
+
+  nassl = callPackage ../development/python-modules/nassl { };
 
   nbsmoke = callPackage ../development/python-modules/nbsmoke { };
 
@@ -1553,11 +1556,15 @@ in {
 
   spglib = callPackage ../development/python-modules/spglib { };
 
+  srvlookup = callPackage ../development/python-modules/srvlookup { };
+
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
 
   sslib = callPackage ../development/python-modules/sslib { };
+
+  sslyze = callPackage ../development/python-modules/sslyze { };
 
   statistics = callPackage ../development/python-modules/statistics { };
 
@@ -1588,6 +1595,8 @@ in {
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
+
+  tls-parser = callPackage ../development/python-modules/tls-parser { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 
@@ -2032,6 +2041,8 @@ in {
   constantly = callPackage ../development/python-modules/constantly { };
 
   cornice = callPackage ../development/python-modules/cornice { };
+
+  crashtest = callPackage ../development/python-modules/crashtest { };
 
   cram = callPackage ../development/python-modules/cram { };
 
@@ -2498,6 +2509,10 @@ in {
   pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
 
   pytest-astropy = callPackage ../development/python-modules/pytest-astropy { };
+
+  pytest-astropy-header = callPackage ../development/python-modules/pytest-astropy-header { };
+
+  pytest-filter-subpackage = callPackage ../development/python-modules/pytest-filter-subpackage { };
 
   pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
 
@@ -4466,6 +4481,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
   };
 
+  maestral = callPackage ../development/python-modules/maestral { };
+
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix {};
   marionette_driver = callPackage ../development/python-modules/marionette-harness/marionette_driver.nix {};
   mozcrash = callPackage ../development/python-modules/marionette-harness/mozcrash.nix {};
@@ -5228,6 +5245,8 @@ in {
 
   pyaudio = callPackage ../development/python-modules/pyaudio { };
 
+  pycoin = callPackage ../development/python-modules/pycoin { };
+
   pysam = callPackage ../development/python-modules/pysam { };
 
   pysaml2 = callPackage ../development/python-modules/pysaml2 {
@@ -5484,7 +5503,7 @@ in {
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 
-  pylibgen = callPackage ../development/python-modules/pylibgen { };
+  pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
 
   pyliblo = callPackage ../development/python-modules/pyliblo { };
 
@@ -6010,6 +6029,8 @@ in {
   transitions = callPackage ../development/python-modules/transitions { };
 
   extras = callPackage ../development/python-modules/extras { };
+
+  extension-helpers = callPackage ../development/python-modules/extension-helpers { };
 
   texttable = callPackage ../development/python-modules/texttable { };
 
