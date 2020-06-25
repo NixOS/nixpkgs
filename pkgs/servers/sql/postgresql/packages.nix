@@ -1,5 +1,7 @@
 self: super: {
 
+    multicorn = super.callPackage ./ext/multicorn.nix { };
+
     periods = super.callPackage ./ext/periods.nix { };
 
     postgis = super.callPackage ./ext/postgis.nix {

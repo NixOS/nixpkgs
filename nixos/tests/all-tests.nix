@@ -206,6 +206,7 @@ in
   morty = handleTest ./morty.nix {};
   mosquitto = handleTest ./mosquitto.nix {};
   mpd = handleTest ./mpd.nix {};
+  multicorn = handleTest ./multicorn.nix {};
   mumble = handleTest ./mumble.nix {};
   munin = handleTest ./munin.nix {};
   mutableUsers = handleTest ./mutable-users.nix {};
