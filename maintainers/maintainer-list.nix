@@ -7266,6 +7266,16 @@
     githubId = 2770647;
     name = "Simon Vandel Sillesen";
   };
+  siriobalmelli = {
+    email = "sirio@b-ad.ch";
+    github = "siriobalmelli";
+    githubId = 23038812;
+    name = "Sirio Balmelli";
+    keys = [{
+      longkeyid = "ed25519/0xF72C4A887F9A24CA";
+      fingerprint = "B234 EFD4 2B42 FE81 EE4D  7627 F72C 4A88 7F9A 24CA";
+    }];
+  };
   sivteck = {
     email = "sivaram1992@gmail.com";
     github = "sivteck";

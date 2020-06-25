@@ -564,6 +564,8 @@ in
 
   adlplug = callPackage ../applications/audio/adlplug { };
 
+  tuijam = callPackage ../applications/audio/tuijam { inherit (python3Packages) buildPythonApplication; };
+
   opnplug = callPackage ../applications/audio/adlplug {
     adlplugChip = "-DADLplug_CHIP=OPN2";
     pname = "OPNplug";
@@ -18807,6 +18809,10 @@ in
 
   arora = callPackage ../applications/networking/browsers/arora { };
 
+  asuka = callPackage ../applications/networking/browsers/asuka {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   artha = callPackage ../applications/misc/artha { };
 
   atlassian-cli = callPackage ../applications/office/atlassian-cli { };
@@ -19169,6 +19175,8 @@ in
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };
+
+  convos = callPackage ../applications/networking/irc/convos { };
 
   comical = callPackage ../applications/graphics/comical { };
 
@@ -23121,8 +23129,6 @@ in
   xaos = callPackage ../applications/graphics/xaos {
     libpng = libpng12;
   };
-
-  xara = callPackage ../applications/graphics/xara { };
 
   xastir = callPackage ../applications/misc/xastir {
     rastermagick = imagemagick;

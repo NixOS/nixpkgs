@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     icon = "avocode";
     desktopName = "Avocode";
     genericName = "Design Inspector";
-    categories = "Application;Development;";
+    categories = "Development;";
     comment = "The bridge between designers and developers";
   };
 

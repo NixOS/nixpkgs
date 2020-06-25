@@ -24,7 +24,7 @@ let
       icon = pname;
       comment =  description;
       genericName = "Computer Aided (Interior) Design";
-      categories = "Application;Graphics;2DGraphics;3DGraphics;";
+      categories = "Graphics;2DGraphics;3DGraphics;";
     };
 
     patchPhase = ''

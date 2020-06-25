@@ -44,6 +44,9 @@ buildPythonPackage rec {
     "--tb=native"
     # ignore code linting tests
     "--ignore=tests/test_sourcecode.py"
+    # Fails on Python 3.8
+    # https://salsa.debian.org/python-team/modules/uvloop/-/commit/302a7e8f5a2869e13d0550cd37e7a8f480e79869
+    "--ignore=tests/test_tcp.py"
   ];
 
   disabledTests = [

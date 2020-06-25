@@ -517,6 +517,8 @@ in {
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
 
+  beancount_docverif = callPackage ../development/python-modules/beancount_docverif { };
+
   bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
@@ -947,6 +949,8 @@ in {
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
+
+  pytest-freezegun = callPackage ../development/python-modules/pytest-freezegun { };
 
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
 
@@ -1553,6 +1557,8 @@ in {
   sparse = callPackage ../development/python-modules/sparse { };
 
   spglib = callPackage ../development/python-modules/spglib { };
+
+  srvlookup = callPackage ../development/python-modules/srvlookup { };
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
@@ -5240,6 +5246,8 @@ in {
   pyatmo = callPackage ../development/python-modules/pyatmo { };
 
   pyaudio = callPackage ../development/python-modules/pyaudio { };
+
+  pycoin = callPackage ../development/python-modules/pycoin { };
 
   pysam = callPackage ../development/python-modules/pysam { };
 

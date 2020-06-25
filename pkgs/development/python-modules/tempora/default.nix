@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
-, setuptools_scm, pytest, freezegun, backports_unittest-mock
-, pytest-black, pytestcov, pytest-flake8
-, six, pytz, jaraco_functools }:
+, setuptools_scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
+, six, pytz, jaraco_functools, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "tempora";
@@ -12,15 +11,22 @@ buildPythonPackage rec {
     sha256 = "e370d822cf48f5356aab0734ea45807250f5120e291c76712a1d766b49ae34f8";
   };
 
+  disabled = pythonOlder "3.2";
+
   nativeBuildInputs = [ setuptools_scm ];
+
+  patches = [
+    ./0001-pytest-remove-flake8-black-coverage.patch
+  ];
 
   propagatedBuildInputs = [ six pytz jaraco_functools ];
 
-  checkInputs = [ pytest pytest-flake8 pytest-black pytestcov freezegun backports_unittest-mock ];
+  checkInputs = [
+    pytest-freezegun pytest freezegun backports_unittest-mock
+  ];
 
-  # missing pytest-freezegun package
   checkPhase = ''
-    pytest -k 'not get_nearest_year_for_day'
+    pytest
   '';
 
   meta = with lib; {
