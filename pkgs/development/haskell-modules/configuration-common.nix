@@ -701,10 +701,6 @@ self: super: {
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = doJailbreak super.applicative-quoters;
 
-  # https://github.com/roelvandijk/terminal-progress-bar/issues/13
-  # Still needed because of HUnit < 1.6
-  terminal-progress-bar = doJailbreak super.terminal-progress-bar;
-
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
   # note: the library is unmaintained, no upstream issue
   dataenc = doJailbreak super.dataenc;
