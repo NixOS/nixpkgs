@@ -12612,6 +12612,7 @@ in
   lasso = callPackage ../development/libraries/lasso { };
 
   LASzip = callPackage ../development/libraries/LASzip { };
+  LASzip2 = callPackage ../development/libraries/LASzip/LASzip2.nix { };
 
   lcms = lcms1;
 

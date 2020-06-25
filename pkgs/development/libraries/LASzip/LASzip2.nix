@@ -1,23 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "3.4.3";
+  version = "2.2.0";
   pname = "LASzip";
 
-  src = fetchFromGitHub {
-    owner = "LASzip";
-    repo = "LASzip";
-    rev = version;
-    sha256 = "09lcsgxwv0jq50fhsgfhx0npbf1zcwn3hbnq6q78fshqksbxmz7m";
+  src = fetchurl {
+    url = "https://github.com/LASzip/LASzip/archive/v${version}.tar.gz";
+    sha256 = "b8e8cc295f764b9d402bc587f3aac67c83ed8b39f1cb686b07c168579c61fbb2";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  buildInputs = [cmake];
 
   meta = {
     description = "Turn quickly bulky LAS files into compact LAZ files without information loss";
-    homepage = "https://laszip.org";
+    homepage = https://laszip.org;
     license = stdenv.lib.licenses.lgpl2;
     maintainers = [ stdenv.lib.maintainers.michelk ];
     platforms = stdenv.lib.platforms.unix;
