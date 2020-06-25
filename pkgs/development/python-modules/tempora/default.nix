@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , setuptools_scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
-, six, pytz, jaraco_functools }:
+, six, pytz, jaraco_functools, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "tempora";
@@ -10,6 +10,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "e370d822cf48f5356aab0734ea45807250f5120e291c76712a1d766b49ae34f8";
   };
+
+  disabled = pythonOlder "3.2";
 
   nativeBuildInputs = [ setuptools_scm ];
 
