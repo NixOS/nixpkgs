@@ -1,6 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, setuptools_scm, pytest, freezegun, backports_unittest-mock
-, pytest-black, pytestcov, pytest-flake8
+, setuptools_scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
 , six, pytz, jaraco_functools }:
 
 buildPythonPackage rec {
@@ -14,13 +13,18 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
+  patches = [
+    ./0001-pytest-remove-flake8-black-coverage.patch
+  ];
+
   propagatedBuildInputs = [ six pytz jaraco_functools ];
 
-  checkInputs = [ pytest pytest-flake8 pytest-black pytestcov freezegun backports_unittest-mock ];
+  checkInputs = [
+    pytest-freezegun pytest freezegun backports_unittest-mock
+  ];
 
-  # missing pytest-freezegun package
   checkPhase = ''
-    pytest -k 'not get_nearest_year_for_day'
+    pytest
   '';
 
   meta = with lib; {
