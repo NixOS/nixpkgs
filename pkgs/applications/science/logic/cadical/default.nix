@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "05lvnvapjawgkky38xknb9lgaliiwan4kggmb9yggl4ifpjrh8qf";
   };
 
+  doCheck = true;
   dontAddPrefix = true;
+
   installPhase = ''
     install -Dm0755 build/cadical "$out/bin/cadical"
     install -Dm0755 build/mobical "$out/bin/mobical"
