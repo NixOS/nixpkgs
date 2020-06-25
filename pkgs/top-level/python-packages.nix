@@ -950,6 +950,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  pytest-freezegun = callPackage ../development/python-modules/pytest-freezegun { };
+
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
