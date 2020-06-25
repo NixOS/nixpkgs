@@ -3,7 +3,7 @@
 , html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
 , freetype, libffi, freetds, postgresql, sqlite, net-snmp, unixODBC, libedit
-, readline, rsync
+, readline, rsync, fetchpatch
 }:
 
 let
@@ -965,7 +965,13 @@ in
         # uwimap doesn't build on darwin.
         enable = (!stdenv.isDarwin); }
       # interbase (7.3, 7.2)
-      { name = "intl"; buildInputs = [ icu ]; }
+      { name = "intl";
+        buildInputs = [ icu ];
+        patches = lib.optional (lib.versionOlder php.version "7.4") (fetchpatch {
+          url = "https://github.com/php/php-src/commit/93a9b56c90c334896e977721bfb3f38b1721cec6.patch";
+          sha256 = "055l40lpyhb0rbjn6y23qkzdhvpp7inbnn6x13cpn4inmhjqfpg4";
+        });
+      }
       { name = "json"; }
       { name = "ldap";
         buildInputs = [ openldap cyrus_sasl ];

@@ -13,7 +13,7 @@ let
     comment = "IDE for TLA+";
     desktopName = name;
     genericName = comment;
-    categories = "Application;Development";
+    categories = "Development";
     extraEntries = ''
       StartupWMClass=TLA+ Toolbox
     '';
