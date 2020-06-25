@@ -735,11 +735,6 @@ self: super: {
   uuid-types = doJailbreak super.uuid-types;
   uuid = doJailbreak super.uuid;
 
-  # https://github.com/haskell/fgl/issues/60
-  # Needed for QuickCheck < 2.10
-  fgl = dontCheck super.fgl;
-  fgl-arbitrary = doJailbreak super.fgl-arbitrary;
-
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
 
