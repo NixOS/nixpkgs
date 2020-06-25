@@ -4,6 +4,7 @@
 , stdenv
 , setuptools_scm
 , pytest
+, typing-extensions
 , glibcLocales
 }:
 
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace " --cov" ""
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest typing-extensions ];
 
   checkPhase = ''
     py.test .
