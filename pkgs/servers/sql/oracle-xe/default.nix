@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   unpackCmd = ''
     (mkdir -p "${pname}-${version}" && cd "${pname}-${version}" &&
-      ${rpmextract}/bin/rpmextract "$curSrc")
+      ${rpmextract}/bin/rpmextract "$curSrc" &&
+      chmod +x u01/app/oracle/product/11.2.0/xe/bin/*)
   '';
 
   buildPhase = let
