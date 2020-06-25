@@ -8475,6 +8475,8 @@ in
     isl = if !stdenv.isDarwin then isl_0_17 else null;
   }));
 
+  gcc_latest = gcc10;
+
   gfortran = gfortran9;
 
   gfortran48 = wrapCC (gcc48.cc.override {
