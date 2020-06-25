@@ -74,7 +74,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 16.1
+  # LTS Haskell 16.2
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -275,7 +275,7 @@ default-package-overrides:
   - aws-cloudfront-signed-cookies ==0.2.0.6
   - bank-holidays-england ==0.2.0.4
   - base16 ==0.2.1.0
-  - base16-bytestring ==0.1.1.6
+  - base16-bytestring ==0.1.1.7
   - base16-lens ==0.1.2.0
   - base32 ==0.1.1.2
   - base32-lens ==0.1.0.0
@@ -427,7 +427,7 @@ default-package-overrides:
   - cheapskate ==0.1.1.2
   - cheapskate-highlight ==0.1.0.0
   - cheapskate-lucid ==0.1.0.0
-  - checkers ==0.5.5
+  - checkers ==0.5.6
   - checksum ==0.0
   - chimera ==0.3.1.0
   - chiphunk ==0.1.2.1
@@ -468,7 +468,7 @@ default-package-overrides:
   - co-log-core ==0.2.1.1
   - co-log-polysemy ==0.0.1.2
   - Color ==0.1.4
-  - colorful-monoids ==0.2.1.2
+  - colorful-monoids ==0.2.1.3
   - colorize-haskell ==1.0.1
   - colour ==2.3.5
   - colourista ==0.1.0.0
@@ -498,10 +498,10 @@ default-package-overrides:
   - conduit-extra ==1.3.5
   - conduit-parse ==0.2.1.0
   - conduit-zstd ==0.0.2.0
-  - conferer ==0.4.1.0
-  - conferer-hspec ==0.4.0.0
-  - conferer-source-json ==0.4.0.0
-  - conferer-warp ==0.4.0.0
+  - conferer ==0.4.1.1
+  - conferer-hspec ==0.4.0.1
+  - conferer-source-json ==0.4.0.1
+  - conferer-warp ==0.4.0.1
   - ConfigFile ==1.1.4
   - config-ini ==0.2.4.0
   - configurator ==0.3.0.0
@@ -635,7 +635,7 @@ default-package-overrides:
   - dhall ==1.32.0
   - dhall-bash ==1.0.30
   - dhall-json ==1.6.4
-  - dhall-lsp-server ==1.0.7
+  - dhall-lsp-server ==1.0.8
   - dhall-yaml ==1.1.0
   - diagrams ==1.4
   - diagrams-contrib ==1.4.4
@@ -674,7 +674,7 @@ default-package-overrides:
   - do-list ==1.0.1
   - do-notation ==0.1.0.2
   - dotenv ==0.8.0.4
-  - dotgen ==0.4.2
+  - dotgen ==0.4.3
   - dotnet-timespan ==0.0.1.0
   - double-conversion ==2.0.2.0
   - download ==0.3.2.7
@@ -841,10 +841,12 @@ default-package-overrides:
   - frontmatter ==0.1.0.2
   - fsnotify ==0.3.0.1
   - fsnotify-conduit ==0.1.1.1
+  - ftp-client ==0.5.1.4
+  - ftp-client-conduit ==0.5.0.5
   - funcmp ==1.9
   - function-builder ==0.3.0.1
   - functor-classes-compat ==1
-  - fused-effects ==1.0.2.0
+  - fused-effects ==1.0.2.2
   - fusion-plugin ==0.2.1
   - fusion-plugin-types ==0.1.0
   - fuzzcheck ==0.1.1
@@ -1023,7 +1025,7 @@ default-package-overrides:
   - hebrew-time ==0.1.2
   - hedgehog ==1.0.2
   - hedgehog-corpus ==0.2.0
-  - hedgehog-fakedata ==0.0.1.1
+  - hedgehog-fakedata ==0.0.1.2
   - hedgehog-fn ==1.0
   - hedgehog-quickcheck ==0.1.1
   - hedis ==0.12.13
@@ -1069,7 +1071,7 @@ default-package-overrides:
   - hpack ==0.34.2
   - hpack-dhall ==0.5.2
   - hpc-codecov ==0.2.0.0
-  - hpc-lcov ==1.0.0
+  - hpc-lcov ==1.0.1
   - hreader ==1.1.0
   - hreader-lens ==0.1.3.0
   - hruby ==0.3.8
@@ -1265,7 +1267,7 @@ default-package-overrides:
   - json-alt ==1.0.0
   - json-feed ==1.0.11
   - jsonpath ==0.2.0.0
-  - json-rpc ==1.0.2
+  - json-rpc ==1.0.3
   - json-rpc-generic ==0.2.1.5
   - JuicyPixels ==3.3.5
   - JuicyPixels-blurhash ==0.1.0.3
@@ -1343,7 +1345,7 @@ default-package-overrides:
   - lift-generics ==0.1.3
   - line ==4.0.1
   - linear ==1.21
-  - linenoise ==0.3.1
+  - linenoise ==0.3.2
   - linux-file-extents ==0.2.0.0
   - linux-namespaces ==0.1.3.0
   - List ==0.6.2
@@ -1730,7 +1732,7 @@ default-package-overrides:
   - prettyclass ==1.0.0.0
   - pretty-class ==1.0.1.1
   - pretty-hex ==1.1
-  - prettyprinter ==1.6.1
+  - prettyprinter ==1.6.2
   - prettyprinter-ansi-terminal ==1.1.1.2
   - prettyprinter-compat-annotated-wl-pprint ==1
   - prettyprinter-compat-ansi-wl-pprint ==1.0.1
@@ -1857,7 +1859,7 @@ default-package-overrides:
   - regex-posix ==0.96.0.0
   - regex-tdfa ==1.3.1.0
   - regex-with-pcre ==1.1.0.0
-  - registry ==0.1.7.1
+  - registry ==0.1.9.0
   - reinterpret-cast ==0.1.0
   - relapse ==1.0.0.0
   - relational-query ==0.12.2.3
@@ -1866,8 +1868,8 @@ default-package-overrides:
   - relational-schemas ==0.1.8.0
   - relude ==0.7.0.0
   - renderable ==0.2.0.1
-  - replace-attoparsec ==1.4.0.0
-  - replace-megaparsec ==1.4.1.0
+  - replace-attoparsec ==1.4.1.0
+  - replace-megaparsec ==1.4.2.0
   - repline ==0.2.2.0
   - req ==3.2.0
   - req-conduit ==1.0.0
@@ -1993,8 +1995,8 @@ default-package-overrides:
   - setlocale ==1.0.0.9
   - sexp-grammar ==2.1.0
   - SHA ==1.6.4.4
-  - shake-plus ==0.1.6.0
-  - shakespeare ==2.0.24
+  - shake-plus ==0.1.7.0
+  - shakespeare ==2.0.24.1
   - shared-memory ==0.2.0.0
   - shell-conduit ==4.7.0
   - shell-escape ==0.2.0
@@ -2009,7 +2011,7 @@ default-package-overrides:
   - silently ==1.2.5.1
   - simple-affine-space ==0.1.1
   - simple-cabal ==0.1.2
-  - simple-cmd ==0.2.1
+  - simple-cmd ==0.2.2
   - simple-cmd-args ==0.1.6
   - simple-log ==0.9.12
   - simple-reflect ==0.3.3
@@ -2030,8 +2032,8 @@ default-package-overrides:
   - skein ==1.0.9.4
   - skews ==0.1.0.3
   - skip-var ==0.1.1.0
-  - skylighting ==0.8.4
-  - skylighting-core ==0.8.4
+  - skylighting ==0.8.5
+  - skylighting-core ==0.8.5
   - slack-api ==0.12
   - slist ==0.1.1.0
   - smallcheck ==1.1.7
@@ -2055,7 +2057,7 @@ default-package-overrides:
   - sox ==0.2.3.1
   - soxlib ==0.0.3.1
   - sparse-linear-algebra ==0.3.1
-  - sparse-tensor ==0.2.1.3
+  - sparse-tensor ==0.2.1.4
   - spatial-math ==0.5.0.1
   - special-values ==0.1.0.0
   - speculate ==0.4.2
@@ -2371,7 +2373,7 @@ default-package-overrides:
   - validity ==0.11.0.0
   - validity-aeson ==0.2.0.4
   - validity-bytestring ==0.4.1.1
-  - validity-containers ==0.5.0.3
+  - validity-containers ==0.5.0.4
   - validity-path ==0.4.0.1
   - validity-primitive ==0.0.0.1
   - validity-scientific ==0.2.0.3
