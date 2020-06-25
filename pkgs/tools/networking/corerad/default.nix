@@ -13,10 +13,16 @@ buildGoModule rec {
 
   vendorSha256 = "19hp8xqr50v8h9vblihalvkb9ll8c0v4p071j9j1zkbjhnb07rca";
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X github.com/mdlayher/corerad/internal/build.linkTimestamp=1593050100
-    -X github.com/mdlayher/corerad/internal/build.linkVersion=v${version}
+  # Since the tarball pulled from GitHub doesn't contain git tag information,
+  # we fetch the expected tag's timestamp from a file in the root of the
+  # repository.
+  preBuild = ''
+    buildFlagsArray=(
+      -ldflags="
+        -X github.com/mdlayher/corerad/internal/build.linkTimestamp=$(<.gittagtime)
+        -X github.com/mdlayher/corerad/internal/build.linkVersion=v${version}
+      "
+    )
   '';
 
   passthru.tests = {
