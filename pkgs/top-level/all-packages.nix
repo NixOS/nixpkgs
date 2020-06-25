@@ -23130,8 +23130,6 @@ in
     libpng = libpng12;
   };
 
-  xara = callPackage ../applications/graphics/xara { };
-
   xastir = callPackage ../applications/misc/xastir {
     rastermagick = imagemagick;
     inherit (xorg) libXt;
