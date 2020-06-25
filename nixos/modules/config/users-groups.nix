@@ -606,7 +606,17 @@ in {
           Neither the root account nor any wheel user has a password or SSH authorized key.
           You must set one to prevent being locked out of your system.'';
       }
-    ];
+    ] ++ flip mapAttrsToList cfg.users (name: user:
+      {
+        assertion = (user.hashedPassword != null)
+                    -> (builtins.match ".*:.*" user.hashedPassword == null);
+        message = ''
+          The password hash of user "${name}" contains a ":" character.
+          This is invalid and would break the login system because the fields
+          of /etc/shadow (file where hashes are stored) are colon-separated.
+          Please check the value of option `users.users."${name}".hashedPassword`.'';
+      }
+    );
 
     warnings =
       builtins.filter (x: x != null) (
