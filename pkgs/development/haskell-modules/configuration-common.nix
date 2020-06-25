@@ -1503,5 +1503,9 @@ self: super: {
   # 2020-06-24: Tests are broken in hackage distribution.
   # See: https://github.com/kowainik/stan/issues/316
   stan = dontCheck super.stan;
+  
+  # 2020-06-24: Tests are broken in hackage distribution.
+  # See: https://github.com/robstewart57/rdf4h/issues/39
+  rdf4h = dontCheck super.rdf4h;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
