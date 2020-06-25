@@ -1776,6 +1776,12 @@
     email = "christoph.senjak@googlemail.com";
     name = "Christoph-Simon Senjak";
   };
+  dav1d23 = {
+    email = "petrodavi@gmail.com";
+    github = "dav1d23";
+    githubId = 10028479;
+    name = "David Petroni";
+  };
   david50407 = {
     email = "me@davy.tw";
     github = "david50407";
