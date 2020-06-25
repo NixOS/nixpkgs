@@ -664,9 +664,6 @@ self: super: {
   # The standard libraries are compiled separately.
   idris = generateOptparseApplicativeCompletion "idris" (dontCheck super.idris);
 
-  # https://github.com/bos/math-functions/issues/25
-  math-functions = dontCheck super.math-functions;
-
   # build servant docs from the repository
   servant =
     let
