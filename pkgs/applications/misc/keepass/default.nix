@@ -68,7 +68,7 @@ with builtins; buildDotnetPackage rec {
     icon = "keepass";
     desktopName = "Keepass";
     genericName = "Password manager";
-    categories = "Application;Utility;";
+    categories = "Utility;";
     mimeType = stdenv.lib.concatStringsSep ";" [
       "application/x-keepass2"
       ""
