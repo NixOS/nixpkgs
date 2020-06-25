@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     icon = "gitkraken";
     desktopName = "GitKraken";
     genericName = "Git Client";
-    categories = "Application;Development;";
+    categories = "Development;";
     comment = "Graphical Git client from Axosoft";
   };
 

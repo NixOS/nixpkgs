@@ -10,7 +10,7 @@ let
     comment = "Integrated Development Environment";
     desktopName = "Apache NetBeans IDE";
     genericName = "Integrated Development Environment";
-    categories = "Application;Development;";
+    categories = "Development;";
     icon = "netbeans";
   };
 in

@@ -6,7 +6,7 @@ let
     name = "stm32CubeMX";
     exec = "stm32cubemx";
     desktopName = "STM32CubeMX";
-    categories = "Application;Development;";
+    categories = "Development;";
     icon = "stm32cubemx";
   };
 in
