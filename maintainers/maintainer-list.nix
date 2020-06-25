@@ -1043,6 +1043,12 @@
     githubId = 16330;
     name = "Mathijs Kwik";
   };
+  bmilanov = {
+    name = "Biser Milanov";
+    email = "bmilanov11+nixpkgs@gmail.com";
+    github = "bmilanov";
+    githubId = 30090366;
+  };
   bobakker = {
     email = "bobakk3r@gmail.com";
     github = "bobakker";
