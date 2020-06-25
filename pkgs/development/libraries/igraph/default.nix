@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     description = "The network analysis package";
     homepage = "https://igraph.org/";
     license = lib.licenses.gpl2;
+    # NB: Known to fail tests on aarch64.
+    platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.MostAwesomeDude ];
   };
 }
