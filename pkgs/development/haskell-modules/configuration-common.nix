@@ -527,9 +527,6 @@ self: super: {
   # https://ghc.haskell.org/trac/ghc/ticket/9825
   vimus = overrideCabal super.vimus (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; });
 
-  # https://github.com/hspec/mockery/issues/6
-  mockery = overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; });
-
   # https://github.com/alphaHeavy/lzma-conduit/issues/5
   lzma-conduit = dontCheck super.lzma-conduit;
 
