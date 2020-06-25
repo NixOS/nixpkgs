@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i perl -p perl nix git python2 perlPackages.FileSlurp nix-prefetch-git
+#!nix-shell -i perl -p perl nix git python2 perlPackages.FileSlurp perlPackages.DigestSHA1 nix-prefetch-git
 
 use strict;
 use warnings;
@@ -8,13 +8,22 @@ use File::Fetch;
 use File::Basename  qw(dirname basename);
 use File::Path      qw(make_path remove_tree);
 use File::Slurp     qw(read_file write_file edit_file);
+use Digest::SHA1    qw(sha1_hex);
 
  # dir to store checked out sources, not $(mktemp -d) because persistency allows reusing files from previous runs
 my $basedir = "/tmp/z";
 
+# include url into path because:
+#       A. fetchgit { url = "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libunwind.git"; rev = "43bb9f872232f531bac80093ceb4de61c64b9ab7"; sha256 = "..."; };
+#   and B. fetchgit { url = "https://chromium.googlesource.com/external/llvm.org/libunwind.git"                    ; rev = "43bb9f872232f531bac80093ceb4de61c64b9ab7"; sha256 = "..."; };
+# are different dependencies, thay have different sha256
+sub depdir {
+  my ($url, $rev) = @_;
+  return "$basedir/".sha1_hex("$url $rev");
+}
+
 sub checkout {
   my ($url, $rev, $dir) = @_;
-  $dir ||= "$basedir/$rev";
 
   die "already exist $dir" if -e $dir;
 
@@ -38,6 +47,7 @@ sub make_vendor_file {
   # first checkout depot_tools for gclient.py which will help to produce list of deps
   unless (-d "$topdir/depot_tools") {
     my $hash = checkout("https://chromium.googlesource.com/chromium/tools/depot_tools",
+                      # "a12175c2a7a9f79c3296068a022ac4f3051f8600", # 2020-03-09
                         "refs/heads/master",
                         "$topdir/depot_tools");
   }
@@ -93,28 +103,34 @@ sub make_vendor_file {
     while ($content =~ /"([^"]+)":\s*\{\s*"url":\s*"(.+)@(.+)"/gm) {
       my $url = $2;
       my $rev = $3;
+      $url = "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxx.git"    if $url eq "https://chromium.googlesource.com/chromium/llvm-project/libcxx.git"    && $rev eq "d9040c75cfea5928c804ab7c235fed06a63f743a";
+      $url = "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxxabi.git" if $url eq "https://chromium.googlesource.com/chromium/llvm-project/libcxxabi.git" && $rev eq "196ba1aaa8ac285d94f4ea8d9836390a45360533";
+      $url = "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libunwind.git" if $url eq "https://chromium.googlesource.com/external/llvm.org/libunwind.git"     && $rev eq "43bb9f872232f531bac80093ceb4de61c64b9ab7";
+
+      my $rev = $3;
       my $path = $1 =~ s|\\|/|gr;
       next if $url =~ /chrome-internal\.googlesource\.com/; # access denied to this domain
       $url =~ s|^\Qhttps://chromium.googlesource.com/external/github.com/google/EarlGrey\E|https://github.com/google/EarlGrey|;  # some commits are not on the mirror (https://groups.google.com/a/chromium.org/forum/#!topic/chromium-dev/m6xJJhsGrLI)
       if (!exists($deps{$path})) {
         print("path=$path url=$url rev=$rev\n");
         my $hash;
-        if (-e "$basedir/$rev" && -e "$basedir/$rev.sha256") { # memoize $hash in "$basedir/$rev.sha256"
-          $hash = read_file("$basedir/$rev.sha256");
+        my $dd = depdir($url, $rev);
+        if (-e $dd && -e "$dd.sha256") { # memoize $hash in "$basedir/$rev.sha256"
+          $hash = read_file("$dd.sha256");
         } else {
-          remove_tree("$basedir/$rev", "$basedir/$rev.sha256");
-          $hash = checkout($url, $rev, "$basedir/$rev");
-          write_file("$basedir/$rev.sha256", $hash);
+          remove_tree($dd, "$dd.sha256");
+          $hash = checkout($url, $rev, $dd);
+          write_file("$dd.sha256", $hash);
         }
         if ($path ne 'src') {
-          die "$basedir/$rev does not exist" unless -d "$basedir/$rev";
+          die "$dd does not exist" unless -d $dd;
           if (-e "$topdir/$path") { # do not let `symtree_link` to do merge
             remove_tree("$topdir/$path") or die "remove_tree($topdir/$path): $!";
           }
           make_path(dirname("$topdir/$path")) or die unless -e dirname("$topdir/$path");
-          system("cp -al $basedir/$rev $topdir/$path") == 0 or die;
+          system("cp -al $dd $topdir/$path") == 0 or die;
         }
-        if (-f "$basedir/$rev/DEPS") {  # new DEPS file appeared after checkout
+        if (-f "$dd/DEPS") {  # new DEPS file appeared after checkout
           print("need_another_iteration\n");
           $need_another_iteration = 1;
         }
