@@ -177,7 +177,6 @@ self: super: {
   cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
   dbmigrations = dontCheck super.dbmigrations;
   filestore = dontCheck super.filestore;
-  getopt-generics = dontCheck super.getopt-generics;
   graceful = dontCheck super.graceful;
   Hclip = dontCheck super.Hclip;
   HList = dontCheck super.HList;
