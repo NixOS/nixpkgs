@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Tiny system info for Unix-like operating systems.";
+    description = "Tiny system info for NixOS";
     homepage = "https://gitlab.com/jschx/-/blob/master/ufetch-nixos";
     license = licenses.isc;
     platforms = platforms.all;
