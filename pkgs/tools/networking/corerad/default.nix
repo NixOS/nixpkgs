@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "corerad";
@@ -18,6 +18,10 @@ buildGoModule rec {
     -X github.com/mdlayher/corerad/internal/build.linkTimestamp=1593050100
     -X github.com/mdlayher/corerad/internal/build.linkVersion=v${version}
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) corerad;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mdlayher/corerad";
