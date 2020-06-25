@@ -2548,7 +2548,6 @@ extra-packages:
   - apply-refact == 0.8.0.0             # works with GHC 8.10.x https://hackage.haskell.org/package/apply-refact/changelog
   - binary > 0.7 && < 0.8               # keep a 7.x major release around for older compilers
   - binary > 0.8 && < 0.9               # keep a 8.x major release around for older compilers
-  - blank-canvas < 0.6.3                # more recent versions depend on base-compat-batteries == 0.10.* but we're on base-compat-0.9.*
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
   - colour < 2.3.4                      # newer versions don't support GHC 7.10.x
