@@ -2953,6 +2953,8 @@ in {
 
   googletrans = callPackage ../development/python-modules/googletrans { };
 
+  gdown = callPackage ../development/python-modules/gdown { };
+
   gpapi = callPackage ../development/python-modules/gpapi { };
   gplaycli = callPackage ../development/python-modules/gplaycli { };
 
