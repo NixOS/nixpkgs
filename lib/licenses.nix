@@ -545,6 +545,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Non-Profit Open Software License 3.0";
   };
 
+  obsidian = {
+    fullName = "Obsidian End User Agreement";
+    url = "https://obsidian.md/eula";
+    free = false;
+  };
+
   ocamlpro_nc = {
     fullName = "OCamlPro Non Commercial license version 1";
     url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-2.2.0/OCamlPro-Non-Commercial-License.pdf";
