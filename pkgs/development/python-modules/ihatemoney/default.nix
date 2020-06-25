@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests, fetchpatch
+{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests, fetchpatch, fetchPypi
 , alembic
 , aniso8601
 , Babel
@@ -31,6 +31,21 @@
 , psycopg2 # optional, for postgresql support
 , flask_testing
 }:
+
+# ihatemoney is not really a library. It will only ever be imported
+# by the interpreter of uwsgi. So overrides for its depencies are fine.
+let
+  # https://github.com/spiral-project/ihatemoney/issues/567
+  pinned_wtforms = wtforms.overridePythonAttrs (old: rec {
+    pname = "WTForms";
+    version = "2.2.1";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0q9vkcq6jnnn618h27lx9sas6s9qlg2mv8ja6dn0hy38gwzarnqc";
+    };
+  });
+  pinned_flask_wtf = flask_wtf.override { wtforms = pinned_wtforms; };
+in
 
 buildPythonPackage rec {
   pname = "ihatemoney";
@@ -75,7 +90,7 @@ buildPythonPackage rec {
     flask-restful
     flask_script
     flask_sqlalchemy
-    flask_wtf
+    pinned_flask_wtf
     idna
     itsdangerous
     jinja2
@@ -87,7 +102,7 @@ buildPythonPackage rec {
     sqlalchemy
     sqlalchemy-continuum
     werkzeug
-    wtforms
+    pinned_wtforms
     psycopg2
     debts
   ];
