@@ -5,21 +5,16 @@ let
   inherit (darwin.apple_sdk.frameworks) Security;
 in rustPlatform.buildRustPackage rec {
   name = "maturin-${version}";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    sha256 = "1fjai0c0j8zzaj4c186dkbvx6cpj0vi3sc1qbjbgn2cm8azsd6m6";
+    sha256 = "16bxxa261k2l6mpdd55gyzl1mx756i0zbvqp15glpzlcwhb9bm2m";
   };
 
-  # The maturin 0.8.0 lockfile has an incorrect version for maturin
-  # itself. The upstream lockfiles are normally correct, so this
-  # should be removed post-0.8.0.
-  cargoPatches = [ ./Cargo.lock.patch ];
-
-  cargoSha256 = "01sh523fi46k5xwdslhnmjz128jkdw47gp9bd8gim3ay13zkcn1i";
+  cargoSha256 = "1s1brfnhwl42jb37qqz4d8mxpyq2ck60jnmjfllkga3mhwm4r8px";
 
   nativeBuildInputs = [ pkgconfig ];
 
