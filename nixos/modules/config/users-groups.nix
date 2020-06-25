@@ -6,6 +6,16 @@ let
   ids = config.ids;
   cfg = config.users;
 
+  # Check whether a password hash will allow login.
+  allowsLogin = hash:
+    hash == "" # login without password
+    || !(lib.elem hash
+      [ null   # password login disabled
+        "!"    # password login disabled
+        "!!"   # a variant of "!"
+        "*"    # password unset
+      ]);
+
   passwordDescription = ''
     The options <option>hashedPassword</option>,
     <option>password</option> and <option>passwordFile</option>
@@ -596,7 +606,7 @@ in {
              || cfg.group == "wheel"
              || elem "wheel" cfg.extraGroups)
             &&
-            (cfg.hashedPassword != null
+            (allowsLogin cfg.hashedPassword
              || cfg.password != null
              || cfg.passwordFile != null
              || cfg.openssh.authorizedKeys.keys != []
@@ -639,15 +649,13 @@ in {
           content = "${base64}${sep}${base64}";
           mcf = "^${sep}${scheme}${sep}${content}$";
         in
-        if (user.hashedPassword != null   # login disabled
+        if (allowsLogin user.hashedPassword
             && user.hashedPassword != ""  # login without password
             && builtins.match mcf user.hashedPassword == null)
-        then
-        ''
+        then ''
           The password hash of user "${name}" may be invalid. You must set a
           valid hash or the user will be locked out of their account. Please
-          check the value of option `users.users."${name}".hashedPassword`.
-        ''
+          check the value of option `users.users."${name}".hashedPassword`.''
         else null
       ));
 
