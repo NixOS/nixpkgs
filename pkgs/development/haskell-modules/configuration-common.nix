@@ -1415,6 +1415,46 @@ self: super: {
   # 2020-06-24: Tests are broken in hackage distribution.
   # See: https://github.com/robstewart57/rdf4h/issues/39
   rdf4h = dontCheck super.rdf4h;
+  
+  # hasn't bumped upper bounds
+  # test fails: "floskell-test: styles/base.md: openBinaryFile: does not exist (No such file or directory)"
+  # https://github.com/ennocramer/floskell/issues/48
+  floskell = dontCheck (doJailbreak super.floskell);
+
+  # hasn't bumped upper bounds
+  # test fails because of a "Warning: Unused LANGUAGE pragma"
+  # https://github.com/ennocramer/monad-dijkstra/issues/4
+  monad-dijkstra = dontCheck (doJailbreak super.monad-dijkstra);
+
+  # haskell-language-server uses its own fork of ghcide
+  # Test disabled: it seems to freeze (is it just that it takes a long time ?)
+  hls-ghcide = 
+    dontCheck (
+      overrideCabal super.hls-ghcide
+        (old: {
+          # The integration test run by lsp-test requires the executable to be in the PATH
+          preCheck = ''
+            export PATH=$PATH:dist/build/ghcide
+          '';
+        })
+    );
+
+  haskell-language-server = (overrideCabal super.haskell-language-server
+    (old: {
+      # The integration test run by lsp-test requires the executable to be in the PATH
+      preCheck = ''
+        export PATH=$PATH:dist/build/haskell-language-server
+      '';
+
+      # test needs the git tool
+      testToolDepends = old.testToolDepends
+        ++ [ pkgs.git ];
+    })).override {
+      # use a fork of ghcide
+      ghcide = self.hls-ghcide;
+      # use specific version
+      ormolu = super.ormolu_0_0_5_0;
+    };
 
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;
