@@ -324,6 +324,10 @@ let
 
     ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
 
+    ipaddr-cstruct = callPackage ../development/ocaml-modules/ipaddr/cstruct.nix { };
+
+    ipaddr-sexp = callPackage ../development/ocaml-modules/ipaddr/sexp.nix { };
+
     irmin_1 = callPackage ../development/ocaml-modules/irmin/1.4.nix { };
 
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
@@ -476,6 +480,10 @@ let
     lwt_ssl = callPackage ../development/ocaml-modules/lwt_ssl { };
 
     macaddr = callPackage ../development/ocaml-modules/macaddr { };
+
+    macaddr-cstruct = callPackage ../development/ocaml-modules/macaddr/cstruct.nix { };
+
+    macaddr-sexp = callPackage ../development/ocaml-modules/macaddr/sexp.nix { };
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
