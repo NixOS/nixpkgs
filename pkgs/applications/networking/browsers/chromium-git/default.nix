@@ -1,6 +1,6 @@
-{ stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand, buildPackages, git
+{ stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand, buildPackages, git, openjdk8
 , python2, ninja, llvmPackages_9, llvmPackages_10, bison, gperf, pkg-config
-, dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf
+, dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf, xorg
 , gnome2, glib, gtk2, gtk3, cups, libgcrypt, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU, libGL, libXdamage
 , customGnFlags ? {}
 }:
@@ -52,11 +52,12 @@ let
     link_pulseaudio = gnFlags.use_pulseaudio;
     enable_widevine = false;
     enable_swiftshader = false;
-    closure_compile = false; # Disable type-checking for the Web UI to avoid a Java dependency.
 
     # enable support for the H.264 codec
     proprietary_codecs = true;
     ffmpeg_branding = "Chrome";
+
+    xcbproto_path = "${xorg.xcbproto}/share/xcb";
 
     # explicit host_cpu and target_cpu prevent "nix-shell pkgsi686Linux.chromium-git" from building x86_64 version
     # there is no problem with nix-build, but platform detection in nix-shell is not correct
@@ -107,7 +108,7 @@ let
       pname = "chromium-git";
       inherit version src;
 
-      nativeBuildInputs = [ ninja python2 pkg-config gperf bison git ]
+      nativeBuildInputs = [ ninja python2 pkg-config gperf bison openjdk8 git ]
         ++ lib.optional (lib.versionAtLeast version "83") python2.pkgs.setuptools;
 
       buildInputs = [
@@ -240,9 +241,10 @@ let
 in {
   chromium-git_78 = common { version = "78.0.3905.1"  ; llvmPackages = llvmPackages_9;  };
   chromium-git_79 = common { version = "79.0.3945.147"; llvmPackages = llvmPackages_9;  };
-  chromium-git_80 = common { version = "80.0.3987.163"; llvmPackages = llvmPackages_9;  };
-  chromium-git_81 = common { version = "81.0.4044.118"; llvmPackages = llvmPackages_9;  };
+  chromium-git_80 = common { version = "80.0.3987.165"; llvmPackages = llvmPackages_9;  };
+  chromium-git_81 = common { version = "81.0.4044.155"; llvmPackages = llvmPackages_9;  };
   chromium-git_82 = common { version = "82.0.4085.28" ; llvmPackages = llvmPackages_10; };
-  chromium-git_83 = common { version = "83.0.4103.18" ; llvmPackages = llvmPackages_10; };
-  chromium-git_84 = common { version = "84.0.4118.0"  ; llvmPackages = llvmPackages_10; };
+  chromium-git_83 = common { version = "83.0.4103.119"; llvmPackages = llvmPackages_10; };
+  chromium-git_84 = common { version = "84.0.4147.69" ; llvmPackages = llvmPackages_10; };
+  chromium-git_85 = common { version = "85.0.4181.6"  ; llvmPackages = llvmPackages_10; };
 }
