@@ -20,7 +20,7 @@ appimageTools.wrapType2 rec {
   '';
 
   # Strip version from binary name.
-  extraInstallCommands = "mv $out/bin/${name} $out/bin/${pname}";
+  extraInstallCommands = "mv $out/bin/{${name},${pname}}";
 
   meta = with lib; {
     description = "Obsidian is a powerful knowledge base that works on top of a local folder of plain text Markdown files.";
