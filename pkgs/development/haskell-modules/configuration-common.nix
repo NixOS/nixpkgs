@@ -486,8 +486,7 @@ self: super: {
      then self.buildHaskellPackages.tasty-discover
      else dontCheck super.tasty-discover);
 
-  # containers >=0.4 && <0.6 is too tight
-  # https://github.com/RaphaelJ/friday/issues/34
+  # Waiting on https://github.com/RaphaelJ/friday/pull/36
   friday = doJailbreak super.friday;
 
   # Won't compile with recent versions of QuickCheck.
@@ -507,9 +506,6 @@ self: super: {
 
   # https://github.com/alphaHeavy/lzma-enumerator/issues/3
   lzma-enumerator = dontCheck super.lzma-enumerator;
-
-  # https://github.com/haskell-hvr/lzma/issues/14
-  lzma = dontCheck super.lzma;
 
   # https://github.com/BNFC/bnfc/issues/140
   BNFC = dontCheck super.BNFC;
