@@ -729,14 +729,11 @@ self: super: {
 
   # https://github.com/basvandijk/case-insensitive/issues/24
   # Still needed as HUnit < 1.6
-  case-insensitive = doJailbreak super.case-insensitive;
+  #case-insensitive = doJailbreak super.case-insensitive;
 
   # https://github.com/hvr/uuid/issues/28
   uuid-types = doJailbreak super.uuid-types;
   uuid = doJailbreak super.uuid;
-
-  # https://github.com/ekmett/lens/issues/713
-  lens = disableCabalFlag super.lens "test-doctests";
 
   # https://github.com/haskell/fgl/issues/60
   # Needed for QuickCheck < 2.10
