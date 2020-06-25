@@ -19172,6 +19172,8 @@ in
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };
 
+  convos = callPackage ../applications/networking/irc/convos { };
+
   comical = callPackage ../applications/graphics/comical { };
 
   containerd = callPackage ../applications/virtualization/containerd { };
