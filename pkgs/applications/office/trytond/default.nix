@@ -1,40 +1,48 @@
-{ stdenv, python2Packages
-, withPostgresql ? true }:
+{ stdenv
+, python3Packages
+, withPostgresql ? true
+}:
 
 with stdenv.lib;
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "trytond";
-  version = "4.8.4";
-  src = python2Packages.fetchPypi {
+  version = "5.6.2";
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1935045b1b4674de602b4279a9cfd0a14431624a28ccb490234cffecb81fbca7";
+    sha256 = "0mlfl34zmmqrwip39mvhkk0h6dsljqwff2mk1ldahm253d4vzflp";
   };
 
   # Tells the tests which database to use
   DB_NAME = ":memory:";
 
-  buildInputs = with python2Packages; [
+  buildInputs = with python3Packages; [
     mock
   ];
-  propagatedBuildInputs = with python2Packages; ([
-    dateutil
+  propagatedBuildInputs = with python3Packages; [
     lxml
+    relatorio
+    genshi
+    dateutil
     polib
     python-sql
-    relatorio
     werkzeug
     wrapt
-    ipaddress
+    passlib
 
     # extra dependencies
     bcrypt
     pydot
     python-Levenshtein
     simplejson
-    cdecimal
     html2text
-  ] ++ stdenv.lib.optional withPostgresql psycopg2);
+  ] ++ stdenv.lib.optional withPostgresql psycopg2;
+
+  # If unset, trytond will try to mkdir /homeless-shelter
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   meta = {
     description = "The server of the Tryton application platform";
     longDescription = ''
