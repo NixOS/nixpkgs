@@ -1,4 +1,4 @@
-From 55b69fc1b5441e3aff8f1ab684ba8eed3718a32d Mon Sep 17 00:00:00 2001
+From 9c1ac48a7d95c09bef5a924bb5db6908596403b4 Mon Sep 17 00:00:00 2001
 From: Florian Klink <flokli@flokli.de>
 Date: Sun, 8 Mar 2020 01:05:54 +0100
 Subject: [PATCH 18/18] path-util.h: add placeholder for DEFAULT_PATH_NORMAL

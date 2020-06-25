@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , mock, pytest, pytestrunner
-, configparser, enum34, mccabe, pycodestyle, pyflakes, entrypoints, functools32, typing
+, configparser, enum34, mccabe, pycodestyle, pyflakes, functools32, typing, importlib-metadata
 }:
 
 buildPythonPackage rec {
@@ -13,10 +13,11 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock pytestrunner ];
-  propagatedBuildInputs = [ entrypoints pyflakes pycodestyle mccabe ]
+  propagatedBuildInputs = [ pyflakes pycodestyle mccabe ]
     ++ stdenv.lib.optionals (pythonOlder "3.2") [ configparser functools32 ]
     ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ]
+    ++ stdenv.lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   checkPhase = ''
     py.test tests
