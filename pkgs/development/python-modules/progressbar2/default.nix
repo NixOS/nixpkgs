@@ -29,10 +29,10 @@ buildPythonPackage rec {
     pytest sphinx flake8 pytestpep8 pytest-flakes pytestcov
     pytestcache freezegun
   ];
-  # ignore tests on the nix wrapped setup.py and don't flake .eggs directory
+  # ignore tests on the nix wrapped setup.py
   checkPhase = ''
     runHook preCheck
-    ${python.interpreter} setup.py test --addopts "--ignore=.eggs"
+    ${python.interpreter} setup.py test
     runHook postCheck
   '';
 
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://progressbar-2.readthedocs.io/en/latest/";
     description = "Text progressbar library for python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman ];
+    maintainers = with maintainers; [ ashgillman turion ];
   };
 }
