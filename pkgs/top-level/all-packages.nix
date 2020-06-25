@@ -21455,6 +21455,8 @@ in
 
   obs-ndi = callPackage ../applications/video/obs-studio/obs-ndi.nix { };
 
+  obsidian = callPackage ../applications/misc/obsidian { };
+
   octoprint = callPackage ../applications/misc/octoprint { };
 
   octoprint-plugins = throw ''octoprint-plugins are now part of the octoprint.python.pkgs package set.'';
