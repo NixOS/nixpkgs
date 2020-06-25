@@ -406,9 +406,6 @@ self: super: {
   # https://github.com/joeyadams/haskell-stm-delay/issues/3
   stm-delay = dontCheck super.stm-delay;
 
-  # https://github.com/cgaebel/stm-conduit/issues/33
-  stm-conduit = dontCheck super.stm-conduit;
-
   # https://github.com/pixbi/duplo/issues/25
   duplo = dontCheck super.duplo;
 
@@ -434,9 +431,6 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/issues/6350
   paypal-adaptive-hoops = overrideCabal super.paypal-adaptive-hoops (drv: { testTarget = "local"; });
 
-  # https://github.com/vincenthz/hs-asn1/issues/12
-  asn1-encoding = dontCheck super.asn1-encoding;
-
   # Avoid "QuickCheck >=2.3 && <2.10" dependency we cannot fulfill in lts-11.x.
   test-framework = dontCheck super.test-framework;
 
@@ -453,9 +447,6 @@ self: super: {
   apiary-purescript = dontCheck super.apiary-purescript;
   apiary-session = dontCheck super.apiary-session;
   apiary-websockets = dontCheck super.apiary-websockets;
-
-  # https://github.com/PaulJohnson/geodetics/issues/1
-  geodetics = dontCheck super.geodetics;
 
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
