@@ -19,6 +19,9 @@ appimageTools.wrapType2 rec {
     export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
+  # Strip version from binary name.
+  extraInstallCommands = "mv $out/bin/${name} $out/bin/${pname}";
+
   meta = with lib; {
     description = "Obsidian is a powerful knowledge base that works on top of a local folder of plain text Markdown files.";
     homepage = "https://obsidian.md";
