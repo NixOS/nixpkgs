@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ boost lua ];
 
+  postPatch = ''
+    substituteInPlace src/makefile --replace "CC=g++" "CC=c++"
+  '';
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "conf_dir=/etc/ansifilter"
@@ -26,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.php";
     license = licenses.gpl3;
     maintainers = [ maintainers.Adjective-Object ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
