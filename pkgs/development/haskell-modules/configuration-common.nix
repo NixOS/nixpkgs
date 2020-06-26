@@ -131,8 +131,7 @@ self: super: {
   ABList = dontCheck super.ABList;
 
   # sse2 flag due to https://github.com/haskell/vector/issues/47.
-  # dontCheck due to https://github.com/haskell/vector/issues/138
-  vector = dontCheck (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
+  vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
 
   conduit-extra = if pkgs.stdenv.isDarwin
     then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
@@ -185,7 +184,6 @@ self: super: {
   # These packages try to execute non-existent external programs.
   cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
   dbmigrations = dontCheck super.dbmigrations;
-  euler = dontCheck super.euler;                        # https://github.com/decomputed/euler/issues/1
   filestore = dontCheck super.filestore;
   getopt-generics = dontCheck super.getopt-generics;
   graceful = dontCheck super.graceful;
@@ -389,9 +387,6 @@ self: super: {
 
   # https://github.com/bos/snappy/issues/1
   snappy = dontCheck super.snappy;
-
-  # https://github.com/kim/snappy-framing/issues/3
-  snappy-framing = dontHaddock super.snappy-framing;
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
