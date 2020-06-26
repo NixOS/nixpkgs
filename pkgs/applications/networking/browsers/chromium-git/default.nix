@@ -22,6 +22,8 @@ let
     in
       attrs: lib.concatStringsSep " " (lib.attrValues (lib.mapAttrs toFlag attrs));
 
+  python2-xcbproto = xorg.xcbproto.override { python = python2; };
+
   # https://gitlab.com/noencoding/OS-X-Chromium-with-proprietary-codecs/wikis/List-of-all-gn-arguments-for-Chromium-build
   gnFlags = {
     is_debug = false;
@@ -57,7 +59,7 @@ let
     proprietary_codecs = true;
     ffmpeg_branding = "Chrome";
 
-    xcbproto_path = "${xorg.xcbproto}/share/xcb";
+    xcbproto_path = "${python2-xcbproto}/share/xcb";
 
     # explicit host_cpu and target_cpu prevent "nix-shell pkgsi686Linux.chromium-git" from building x86_64 version
     # there is no problem with nix-build, but platform detection in nix-shell is not correct
@@ -109,7 +111,8 @@ let
       inherit version src;
 
       nativeBuildInputs = [ ninja python2 pkg-config gperf bison openjdk8 git ]
-        ++ lib.optional (lib.versionAtLeast version "83") python2.pkgs.setuptools;
+        ++ lib.optional (lib.versionAtLeast version "83") python2.pkgs.setuptools
+        ++ lib.optional (lib.versionAtLeast version "84") python2-xcbproto;
 
       buildInputs = [
         dbus at-spi2-atk atk at-spi2-core nspr nss pciutils utillinux kerberos
