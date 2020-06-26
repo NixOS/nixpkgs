@@ -7197,7 +7197,7 @@ in
 
   tryton = callPackage ../applications/office/tryton { };
 
-  trytond = callPackage ../applications/office/trytond { };
+  trytond = with python3Packages; toPythonApplication trytond;
 
   omapd = callPackage ../tools/security/omapd { };
 
