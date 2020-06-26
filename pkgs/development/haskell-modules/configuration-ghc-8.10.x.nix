@@ -87,7 +87,7 @@ self: super: {
   # Use the latest version to fix the build.
   lens = self.lens_4_19_2;
   optics-core = self.optics-core_0_3;
-  repline = self.repline_0_3_0_0;
+  repline = self.repline_0_4_0_0;
   singletons = self.singletons_2_7;
   th-desugar = self.th-desugar_1_11;
 
@@ -105,7 +105,6 @@ self: super: {
   cborg = doJailbreak super.cborg;
   cborg-json = doJailbreak super.cborg-json;
   exact-pi = doJailbreak super.exact-pi;
-  policeman = doJailbreak super.policeman;
   relude = dontCheck (doJailbreak super.relude);
   serialise = doJailbreak super.serialise;
   setlocale = doJailbreak super.setlocale;
@@ -131,5 +130,8 @@ self: super: {
     sha256 = "198hsfjsy83s7rp71llf05cwa3vkm74g73djg5p4sk4awm9s6vf2";
     excludes = ["package.yaml"];
   });
+
+  # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
+  hnix = generateOptparseApplicativeCompletion "hnix" super.hnix;
 
 }
