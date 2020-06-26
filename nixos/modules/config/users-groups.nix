@@ -409,7 +409,9 @@ in {
   ];
 
   ###### interface
-
+  imports = [
+    (mkRenamedOptionModule ["security" "initialRootPassword"] ["users" "users" "root" "initialHashedPassword"])
+  ];
   options = {
 
     users.mutableUsers = mkOption {
@@ -477,14 +479,15 @@ in {
       '';
     };
 
-    # FIXME: obsolete - will remove.
-    security.initialRootPassword = mkOption {
-      type = types.str;
-      default = "!";
-      example = "";
-      visible = false;
-    };
 
+    users.allowLoginless = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to allow being locked out of your system by not allowing
+        login to any administrator user.
+      '';
+    };  
   };
 
 
@@ -499,7 +502,7 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
-        initialHashedPassword = mkDefault config.security.initialRootPassword;
+        initialHashedPassword = mkDefault "!";
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -582,7 +585,8 @@ in {
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        assertion = !cfg.mutableUsers ->
+        # Both allowLoginless and mutableUsers should be false to trigger the check
+        assertion = !(cfg.mutableUsers || cfg.allowLoginless) ->
           any id (mapAttrsToList (name: cfg:
             (name == "root"
              || cfg.group == "wheel"
