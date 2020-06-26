@@ -19249,7 +19249,9 @@ in
 
   coyim = callPackage ../applications/networking/instant-messengers/coyim {};
 
-  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor { };
+  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor {
+    python3Packages = python37Packages;
+  };
 
   cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
 
