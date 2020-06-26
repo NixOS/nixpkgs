@@ -2090,6 +2090,12 @@
     githubId = 10198051;
     name = "Drew Risinger";
   };
+  drfacepalm = {
+    email = "lucaslin111@gmail.com";
+    github = "DrFacepalm";
+    githubId = 31267481;
+    name = "Lucas Lin";
+  };
   dsferruzza = {
     email = "david.sferruzza@gmail.com";
     github = "dsferruzza";
