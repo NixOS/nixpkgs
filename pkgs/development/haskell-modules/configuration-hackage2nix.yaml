@@ -3085,6 +3085,7 @@ broken-packages:
   - arpa
   - arpack
   - array-forth
+  - array-list
   - array-primops
   - arrayfire
   - arraylist
@@ -3399,6 +3400,7 @@ broken-packages:
   - bisect-binary
   - bit-array
   - bit-stream
+  - bitcoin-address
   - bitcoin-api
   - bitcoin-api-extra
   - bitcoin-block
