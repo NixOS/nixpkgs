@@ -6056,6 +6056,8 @@ in {
 
   tqdm = callPackage ../development/python-modules/tqdm { };
 
+  trytond = callPackage ../development/python-modules/trytond { };
+
   smmap = callPackage ../development/python-modules/smmap { };
 
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14

@@ -1,14 +1,31 @@
 { stdenv
-, python3Packages
+, buildPythonApplication
+, fetchPypi
+, mock
+, lxml
+, relatorio
+, genshi
+, dateutil
+, polib
+, python-sql
+, werkzeug
+, wrapt
+, passlib
+, bcrypt
+, pydot
+, python-Levenshtein
+, simplejson
+, html2text
+, psycopg2
 , withPostgresql ? true
 }:
 
 with stdenv.lib;
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "trytond";
   version = "5.6.2";
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "0mlfl34zmmqrwip39mvhkk0h6dsljqwff2mk1ldahm253d4vzflp";
   };
@@ -16,10 +33,10 @@ python3Packages.buildPythonApplication rec {
   # Tells the tests which database to use
   DB_NAME = ":memory:";
 
-  buildInputs = with python3Packages; [
+  buildInputs = [
     mock
   ];
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     lxml
     relatorio
     genshi
