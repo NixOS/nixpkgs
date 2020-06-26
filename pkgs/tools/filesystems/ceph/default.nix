@@ -106,6 +106,12 @@ in rec {
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
+      (fetchurl {
+        # Remove for Ceph > v15.2.3; https://www.openwall.com/lists/oss-security/2020/06/25/5
+        name = "CVE-2020-10753.patch";
+        url = "https://github.com/ceph/ceph/pull/35773/commits/1524d3c0c5cb11775313ea1e2bb36a93257947f2.patch";
+        sha256 = "1c04kirijp4c8a5pgwqx17dzdnzvd29nl2nr3qdvf4fkqwnlf48s";
+      })
     ];
 
     nativeBuildInputs = [
