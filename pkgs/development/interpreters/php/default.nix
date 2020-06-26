@@ -8,7 +8,7 @@ let
     { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
     , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
-    , systemd, valgrind
+    , systemd, valgrind, xcbuild
 
     , version
     , sha256
@@ -143,7 +143,8 @@ let
 
           enableParallelBuilding = true;
 
-          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ];
+          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ]
+            ++ lib.optional stdenv.isDarwin xcbuild;
 
           buildInputs =
             # PCRE extension
@@ -177,7 +178,10 @@ let
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport    "--enable-fpm"
             ++ lib.optional pearSupport [ "--with-pear=$(out)/lib/php/pear" "--enable-xml" "--with-libxml" ]
-            ++ lib.optional (pearSupport && (lib.versionOlder version "7.4")) "--enable-libxml"
+            ++ lib.optionals (pearSupport && (lib.versionOlder version "7.4")) [
+              "--enable-libxml"
+              "--with-libxml-dir=${libxml2.dev}"
+            ]
             ++ lib.optional pharSupport   "--enable-phar"
             ++ lib.optional phpdbgSupport "--enable-phpdbg"
 
