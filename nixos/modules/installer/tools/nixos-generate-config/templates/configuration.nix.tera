@@ -1,0 +1,92 @@
+# edit this configuration file to define what should be installed on
+# your system.  help is available in the configuration.nix(5) man page
+# and in the nixos manual (accessible by running ‘nixos-help’).
+
+{ config, pkgs, ... }:
+
+{
+  imports =
+    [ # include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+
+  # FIXME, how to include this?
+  # {{ bootloader_config }}
+  # networking.hostname = "nixos"; # define your hostname.
+  # networking.wireless.enable = true;  # enables wireless support via wpa_supplicant.
+
+  # FIXME, how to include this?
+  # {{ networking_dhcp_config }}
+  # configure network proxy if necessary
+  # networking.proxy.default = "http://user:password\@proxy:port/";
+  # networking.proxy.noproxy = "127.0.0.1,localhost,internal.domain";
+
+  # select internationalisation properties.
+  # i18n.defaultlocale = "en_us.utf-8";
+  # console = {
+  #   font = "lat2-terminus16";
+  #   keymap = "us";
+  # };
+
+  # set your time zone.
+  # time.timezone = "europe/amsterdam";
+
+  # list packages installed in system profile. to search, run:
+  # \$ nix search wget
+  # environment.systempackages = with pkgs; [
+  #   wget vim
+  # ];
+
+  # some programs need suid wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enablesshsupport = true;
+  #   pinentryflavor = "gnome3";
+  # };
+
+  # list services that you want to enable:
+
+  # enable the openssh daemon.
+  # services.openssh.enable = true;
+
+  # open ports in the firewall.
+  # networking.firewall.allowedtcpports = [ ... ];
+  # networking.firewall.allowedudpports = [ ... ];
+  # or disable the firewall altogether.
+  # networking.firewall.enable = false;
+
+  # enable cups to print documents.
+  # services.printing.enable = true;
+
+  # enable sound.
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = true;
+
+  # enable the x11 windowing system.
+  # services.xserver.enable = true;
+  # services.xserver.layout = "us";
+  # services.xserver.xkboptions = "eurosign:e";
+
+  # enable touchpad support.
+  # services.xserver.libinput.enable = true;
+
+  # enable the kde desktop environment.
+  # services.xserver.displaymanager.sddm.enable = true;
+  # services.xserver.desktopmanager.plasma5.enable = true;
+
+  # define a user account. don't forget to set a password with ‘passwd’.
+  # users.users.jane = {
+  #   isnormaluser = true;
+  #   extragroups = [ "wheel" ]; # enable ‘sudo’ for the user.
+  # };
+
+  # this value determines the nixos release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. it‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateversion = "{{nixos_release}}"; # did you read the comment?
+}

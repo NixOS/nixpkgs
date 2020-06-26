@@ -76,4 +76,8 @@ in stdenv.mkDerivation {
   checkPhase = ''
     cargo test --release -- --nocapture
   '';
+  shellHook = ''
+    export TEMPLATES_DIR="$(pwd)/templates"
+    export PATH=PATH:${clippy}/bin
+  '';
 }
