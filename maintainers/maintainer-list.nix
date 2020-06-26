@@ -7850,6 +7850,12 @@
     githubId = 1141680;
     name = "Thane Gill";
   };
+  TheBrainScrambler = {
+    email = "esthromeris@riseup.net";
+    github = "TheBrainScrambler";
+    githubId = 34945377;
+    name = "John Smith";
+  };
   thedavidmeister = {
     email = "thedavidmeister@gmail.com";
     github = "thedavidmeister";
