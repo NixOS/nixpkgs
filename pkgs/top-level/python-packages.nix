@@ -2887,6 +2887,8 @@ in {
 
   fpylll = callPackage ../development/python-modules/fpylll { };
 
+  frameioclient = callPackage ../development/python-modules/frameioclient { };
+  
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
   frozendict = callPackage ../development/python-modules/frozendict { };
