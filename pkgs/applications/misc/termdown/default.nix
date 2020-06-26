@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, buildPythonApplication,
-click, pyfiglet, dateutil}:
+click, pyfiglet, dateutil, setuptools}:
 
 with stdenv.lib;
 
@@ -15,7 +15,7 @@ buildPythonApplication rec {
     owner  = "trehn";
   };
 
-  propagatedBuildInputs = [ dateutil click pyfiglet ];
+  propagatedBuildInputs = [ dateutil click pyfiglet setuptools ];
 
   meta = with stdenv.lib; {
     description     = "Starts a countdown to or from TIMESPEC";
