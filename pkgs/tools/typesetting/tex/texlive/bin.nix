@@ -159,6 +159,8 @@ core = stdenv.mkDerivation rec {
 
   installTargets = [ "install" "texlinks" ];
 
+  outputs = [ "out" "lib" "dev" ];
+
   # TODO: perhaps improve texmf.cnf search locations
   postInstall = /* a few texmf-dist files are useful; take the rest from pkgs */ ''
     mv "$out/share/texmf-dist/web2c/texmf.cnf" .
