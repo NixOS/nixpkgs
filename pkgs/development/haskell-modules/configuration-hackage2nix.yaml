@@ -2685,7 +2685,7 @@ package-maintainers:
   sorki:
     - cayene-lpp
     - data-stm32
-    # - gcodehs
+    - gcodehs
     - nix-derivation
     - nix-narinfo
     - ttn
@@ -5171,7 +5171,6 @@ broken-packages:
   - gas
   - gbu
   - gc-monitoring-wai
-  - gcodehs
   - gconf
   - gdax
   - gdiff-ig
