@@ -105,7 +105,6 @@ self: super: {
   cborg = doJailbreak super.cborg;
   cborg-json = doJailbreak super.cborg-json;
   exact-pi = doJailbreak super.exact-pi;
-  policeman = doJailbreak super.policeman;
   relude = dontCheck (doJailbreak super.relude);
   serialise = doJailbreak super.serialise;
   setlocale = doJailbreak super.setlocale;
