@@ -20,6 +20,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ attrs pendulum pprintpp wrapt ];
 
+  # this versioning was done to prevent normal pip users from encountering
+  # issues with package failing to build from source, but nixpkgs is better
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pendulum>=2.0,<=3.0,!=2.0.5,!=2.1.0" "pendulum>=2.0,<=3.0"
+  '';
+
   # No tests in archive.
   doCheck = false;
 
