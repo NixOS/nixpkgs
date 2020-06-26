@@ -71,56 +71,60 @@ let
       };
   };
 
-  /*
-  Node/NPM based dependecies can be upgraded using script
-  `packages/generate-node-packages.sh`.
-  Packages which rely on `bin-wrap` will fail by default
-  and can be patched using `patchBinwrap` function defined in `packages/patch-binwrap.nix`.
+  /* Node/NPM based dependecies can be upgraded using script `packages/generate-node-packages.sh`.
+
+      * Packages which rely on `bin-wrap` will fail by default
+        and can be patched using `patchBinwrap` function defined in `packages/lib.nix`.
+
+      * Packages which depend on npm installation of elm can be patched using
+        `patchNpmElm` function also defined in `packages/lib.nix`.
   */
-  elmNodePackages =
+  elmLib = import ./packages/lib.nix {
+    inherit lib writeScriptBin stdenv;
+    inherit (hsPkgs.elmPkgs) elm;
+  };
+
+  elmNodePackages = with elmLib;
     let
       nodePkgs = import ./packages/node-composition.nix {
           inherit nodejs pkgs;
           inherit (stdenv.hostPlatform) system;
         };
     in with hsPkgs.elmPkgs; {
-      elm-test = patchBinwrap [elmi-to-json] nodePkgs.elm-test;
-      elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples;
+
+      elm-test = patchBinwrap [elmi-to-json]
+        nodePkgs.elm-test;
+
+      elm-verify-examples = patchBinwrap [elmi-to-json]
+        nodePkgs.elm-verify-examples;
+
       elm-coverage =
-        let patched = patchBinwrap [elmi-to-json] nodePkgs.elm-coverage;
-        in patched.override {
-          preRebuild = ''
+        let patched = patchNpmElm (patchBinwrap [elmi-to-json] nodePkgs.elm-coverage);
+        in patched.override (old: {
+          # Symlink Elm instrument binary
+          preRebuild = (old.preRebuild or "") + ''
+            # Noop custom installation script
             sed 's/\"install\".*/\"install\":\"echo no-op\"/g' --in-place package.json
 
             # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
             # in case of just this package
+            # TODO: investigate
             sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
-
-            rm node_modules/elm/install.js
-            echo "console.log('no-op');" > node_modules/elm/install.js
           '';
-
-          # Link Elm instrument binary
-          postInstall = patched.postInstall + ''
+          postInstall = (old.postInstall or "") + ''
             mkdir -p unpacked_bin
             ln -sf ${elm-instrument}/bin/elm-instrument unpacked_bin/elm-instrument
           '';
-        };
+        });
 
-      create-elm-app = patchBinwrap [elmi-to-json] (nodePkgs.create-elm-app.override {
-        preRebuild = ''
-          rm node_modules/elm/install.js
-          echo "console.log('no-op');" > node_modules/elm/install.js
-        '';
-      });
+      create-elm-app = patchNpmElm (patchBinwrap [elmi-to-json]
+        nodePkgs.create-elm-app);
 
       elm-language-server = nodePkgs."@elm-tooling/elm-language-server";
 
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
     };
 
-  patchBinwrap = import ./packages/patch-binwrap.nix { inherit lib writeScriptBin stdenv; };
-
 in hsPkgs.elmPkgs // elmNodePackages // {
-  lib = { inherit patchBinwrap; };
+  lib = elmLib;
 }
