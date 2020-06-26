@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "libconfuse";
-  version = "3.2.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
-    sha256 = "0djjq7j9iiyqxqqrlzm476xkibjasqvgzjwkalgj1l3f2smi53aw";
+    sha256 = "1npfk5jv59kk4n8pkyx89fn9s6p8x3gbffs42jaw24frgxfgp8ca";
     rev = "v${version}";
     repo = "libconfuse";
     owner = "martinh";
