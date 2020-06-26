@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ezquake";
-  version = "3.2";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "ezQuake";
     repo = pname + "-source";
     rev = version;
-    sha256 = "11kyrqpc8w393kvfz2p2h2m7k8rm4w644m86w733b8w157f2fsk0";
+    sha256 = "0qs3a9mlcgk5gry48aifw9gszi4vhsrrjwk1f51vfnvfb5jkirqa";
   };
 
   nativeBuildInputs = [ pkgconfig ];
