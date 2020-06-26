@@ -2,12 +2,12 @@
 
 mkDerivation rec {
   pname = "kristall";
-  version = "0.2";
+  version = "0.3";
   src = fetchFromGitHub {
     owner = "MasterQ32";
     repo = "kristall";
     rev = "V" + version;
-    sha256 = "08k3rg0sa91ra0nzla5rw806nnncnyvq1s7k09k5i74fvcsnpqyp";
+    sha256 = "07nf7w6ilzs5g6isnvsmhh4qa1zsprgjyf0zy7rhpx4ikkj8c8zq";
   };
 
   buildInputs = [ qtbase qtmultimedia ];
