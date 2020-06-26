@@ -3253,6 +3253,10 @@
     github = "haozeke";
     githubId = 4336207;
     name = "Rohit Goswami";
+    keys = [{
+      longkeyid = "rsa4096/0x9CCCE36402CB49A6";
+      fingerprint = "74B1 F67D 8E43 A94A 7554  0768 9CCC E364 02CB 49A6";
+    }];
   };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
