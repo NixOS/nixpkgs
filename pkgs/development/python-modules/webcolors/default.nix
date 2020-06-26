@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , python
 , six
 }:
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   pname = "webcolors";
   version = "1.11.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
