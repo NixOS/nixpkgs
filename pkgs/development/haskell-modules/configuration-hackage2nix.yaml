@@ -2690,6 +2690,7 @@ package-maintainers:
     - nix-narinfo
     - ttn
     # - ttn-client
+    - update-nix-fetchgit
     - zre
 
 unsupported-platforms:
@@ -10563,7 +10564,6 @@ broken-packages:
   - unused
   - uom-plugin
   - up
-  - update-nix-fetchgit
   - Updater
   - uploadcare
   - upskirt
