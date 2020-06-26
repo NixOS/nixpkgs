@@ -17,6 +17,10 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ dateutil click pyfiglet setuptools ];
 
+  checkPhase = ''
+    ${placeholder "out"}/bin/termdown --no-figlet 1
+  '';
+
   meta = with stdenv.lib; {
     description     = "Starts a countdown to or from TIMESPEC";
     longDescription = "Countdown timer and stopwatch in your terminal";
