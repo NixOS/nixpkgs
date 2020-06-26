@@ -27,7 +27,7 @@ let
       comment = "Schematic capture and PCB layout";
       desktopName = "Eagle";
       genericName = "Schematic editor";
-      categories = "Application;Development;";
+      categories = "Development;";
     };
 
     buildInputs =

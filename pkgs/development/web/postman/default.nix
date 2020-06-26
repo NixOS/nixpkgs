@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     comment = "API Development Environment";
     desktopName = "Postman";
     genericName = "Postman";
-    categories = "Application;Development;";
+    categories = "Development;";
   };
 
   buildInputs = [

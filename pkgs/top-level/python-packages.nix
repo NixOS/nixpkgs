@@ -950,6 +950,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  pytest-freezegun = callPackage ../development/python-modules/pytest-freezegun { };
+
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
@@ -1422,6 +1424,8 @@ in {
 
   python-redis-lock = callPackage ../development/python-modules/python-redis-lock { };
 
+  python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-snappy = callPackage ../development/python-modules/python-snappy {
@@ -1475,6 +1479,8 @@ in {
   rlp = callPackage ../development/python-modules/rlp { };
 
   rq = callPackage ../development/python-modules/rq { };
+
+  rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
 
   rx = callPackage ../development/python-modules/rx { };
 
@@ -3190,6 +3196,8 @@ in {
 
   midiutil = callPackage ../development/python-modules/midiutil {};
 
+  mido = callPackage ../development/python-modules/mido { };
+
   misaka = callPackage ../development/python-modules/misaka {};
 
   mlrose = callPackage ../development/python-modules/mlrose { };
@@ -4046,6 +4054,8 @@ in {
   google_cloud_resource_manager = callPackage ../development/python-modules/google_cloud_resource_manager { };
 
   google_cloud_runtimeconfig = callPackage ../development/python-modules/google_cloud_runtimeconfig { };
+
+  google_cloud_secret_manager = callPackage ../development/python-modules/google_cloud_secret_manager { };
 
   google_cloud_securitycenter = callPackage ../development/python-modules/google_cloud_securitycenter { };
 

@@ -4,11 +4,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "st-0.8.3";
+  pname = "st";
+  version = "0.8.4";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/st/${name}.tar.gz";
-    sha256 = "0ll5wbw1szs70wdf8zy1y2ig5mfbqw2w4ls8d64r8z3y4gdf76lk";
+    url = "https://dl.suckless.org/st/${pname}-${version}.tar.gz";
+    sha256 = "19j66fhckihbg30ypngvqc9bcva47mp379ch5vinasjdxgn3qbfl";
   };
 
   inherit patches;

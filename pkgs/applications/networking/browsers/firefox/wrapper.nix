@@ -85,7 +85,7 @@ let
         comment = "";
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString gdkWayland " (Wayland)"}";
         genericName = "Web Browser";
-        categories = "Application;Network;WebBrowser;";
+        categories = "Network;WebBrowser;";
         mimeType = stdenv.lib.concatStringsSep ";" [
           "text/html"
           "text/xml"

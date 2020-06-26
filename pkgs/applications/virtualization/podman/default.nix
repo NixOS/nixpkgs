@@ -16,13 +16,13 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "1.9.3";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libpod";
     rev = "v${version}";
-    sha256 = "0gbp12xn1vliyawkw2w2bpn6b5h2cm41g3nj72vk4jyhis0igq1s";
+    sha256 = "11avj4q3xh7qbcbs8h4jis0bdfkvvh193sflwiz8hcp41qjvinz4";
   };
 
   vendorSha256 = null;
@@ -52,7 +52,7 @@ buildGoModule rec {
     install -Dm555 bin/podman $out/bin/podman
     installShellCompletion --bash completions/bash/podman
     installShellCompletion --zsh completions/zsh/_podman
-    MANDIR=$man/share/man make install.man
+    MANDIR=$man/share/man make install.man-nobuild
   '';
 
   passthru.tests.podman = nixosTests.podman;

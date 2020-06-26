@@ -1,4 +1,4 @@
-From 45f80155b7c2edb1e73c233283f1ab1582e1cfbe Mon Sep 17 00:00:00 2001
+From 450c133c1815b473136b2a5540f9213fef5506ee Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 19 Dec 2014 14:46:17 +0100
 Subject: [PATCH 05/18] Add some NixOS-specific unit directories

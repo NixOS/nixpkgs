@@ -6,6 +6,8 @@ buildDunePackage rec {
 
   inherit (irmin) version src;
 
+  useDune2 = true;
+
   propagatedBuildInputs = [ cohttp-lwt graphql-cohttp graphql-lwt irmin ];
 
   doCheck = true;

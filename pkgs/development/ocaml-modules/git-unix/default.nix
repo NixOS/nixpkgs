@@ -4,6 +4,8 @@ buildDunePackage {
 	pname = "git-unix";
 	inherit (git-http) version src;
 
+	useDune2 = true;
+
 	buildInputs = [ cmdliner mtime ];
 	propagatedBuildInputs = [ cohttp-lwt-unix git-http tls ];
 

@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper, shortenPerlShebang }:
+{ stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper, shortenPerlShebang
+, nixosTests
+}:
 
 with stdenv.lib;
 
@@ -15,7 +17,7 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [ makeWrapper ]
     ++ optional stdenv.isDarwin [ shortenPerlShebang ];
-  
+
   buildInputs = with perlPackages; [
     CryptEksblowfish FileHomeDir FileReadBackwards
     IOSocketSSL IRCUtils JSONValidator LinkEmbedder ModuleInstall
