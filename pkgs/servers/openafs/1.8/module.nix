@@ -19,7 +19,11 @@ in stdenv.mkDerivation {
   buildInputs = [ kerberos ];
 
   patches = [
-    # openafs 5.6 patches, included in the next release
+    # patches for Linux kernel 5.6 and 5.7, included in the next release
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/5679fdb720525ec5289e80927fdd8b25cf2ae62f.patch";
+      sha256 = "16dbdindj6vy1y9jq56gy5zbwzh2a16ymq7zba5fl8pgxmp1krdr";
+    })
     (fetchpatch {
       url = "https://github.com/openafs/openafs/commit/34f1689b7288688550119638ee9959e453fde414.patch";
       sha256 = "0rxjqzr8c5ajlk8wrhgjc1qp1934qiriqdi0qxsnk4gj5ibbk4d5";
@@ -31,6 +35,18 @@ in stdenv.mkDerivation {
     (fetchpatch {
       url = "https://github.com/openafs/openafs/commit/17d38e31e6f2e237a7fb4dfb46841060296310b6.patch";
       sha256 = "14dydxfm0f5fvnj0kmvgm3bgh0ajhh04i3l7l0hr9cpmwl7vrlcg";
+    })
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/8db1ef3eee67e40643eaf017a62d7f2c23473e9b.patch";
+      sha256 = "0sxgiz3s6y89ca3rzbjc4c7jll1mzxzdaf3lb0kzx4mvg8rmhnfr";
+    })
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/81581b362af86b4f636d8e411e9cb8f1cf86f723.patch";
+      sha256 = "1d8jv4wrf7s4aqbpnn2g15qbn2jbzndlvf3fqjmblx757bymsv17";
+    })
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/b7c5502516333d41aa1fa046c918dfece722f77c.patch";
+      sha256 = "0nrk9pnk41s5a1xbikkk0x5glljiscgbka1plqzp3spbyjk0f4cz";
     })
   ];
 
