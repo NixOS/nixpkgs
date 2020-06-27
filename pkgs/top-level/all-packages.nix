@@ -2895,6 +2895,8 @@ in
 
   ddccontrol-db = callPackage ../data/misc/ddccontrol-db { };
 
+  ddcui = libsForQt5.callPackage ../applications/misc/ddcui { };
+
   ddcutil = callPackage ../tools/misc/ddcutil { };
 
   ddclient = callPackage ../tools/networking/ddclient { };
