@@ -19,6 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace src/verb/builtin.rs --replace '"/bin/' '"${coreutils}/bin/'
+
+    # Fill the version stub in the man page. We can't fill the date
+    # stub reproducibly.
+    substitute man/page man/broot.1 \
+      --replace "#version" "${version}"
   '';
 
   postInstall = ''
@@ -28,6 +33,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --bash $OUT_DIR/{br,broot}.bash
     installShellCompletion --fish $OUT_DIR/{br,broot}.fish
     installShellCompletion --zsh $OUT_DIR/{_br,_broot}
+
+    installManPage man/broot.1
   '';
 
   meta = with stdenv.lib; {
