@@ -21107,6 +21107,8 @@ in
 
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
+  lossless-cut = callPackage ../applications/video/lossless-cut { };
+
   ltc-tools = callPackage ../applications/audio/ltc-tools { };
 
   lumail = callPackage ../applications/networking/mailreaders/lumail {
