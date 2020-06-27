@@ -50,8 +50,6 @@ in
    users.users.searx = {
       uid = config.ids.uids.searx;
       description = "Searx user";
-      createHome = true;
-      home = "/var/lib/searx";
     };
 
     users.groups.searx = {
@@ -66,6 +64,7 @@ in
         serviceConfig = {
           User = "searx";
           ExecStart = "${cfg.package}/bin/searx-run";
+          StateDirectory = "searx";
           # Allow running the service on priviledged ports.
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
