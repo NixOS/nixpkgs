@@ -12,6 +12,18 @@ in
 #
 {
 
+  DigitalAssetHoldingsLLC.ghcide = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "ghcide";
+      publisher = "DigitalAssetHoldingsLLC";
+      version = "0.0.2";
+      sha256 = "02gla0g11qcgd6sjvkiazzk3fq104b38skqrs6hvxcv2fzvm9zwf";
+    };
+    meta = {
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
   alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "vscode-hie-server";
