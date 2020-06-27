@@ -482,6 +482,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     url = "https://opensource.franz.com/preamble.html";
   };
 
+  llvm-exception = spdx {
+    spdxId = "LLVM-exception";
+    fullName = "LLVM Exception"; # LLVM exceptions to the Apache 2.0 License
+  };
+
   lppl12 = spdx {
     spdxId = "LPPL-1.2";
     fullName = "LaTeX Project Public License v1.2";

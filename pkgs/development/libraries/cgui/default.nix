@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     description = "A multiplatform basic GUI library";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
+    license = licenses.free;
   };
 }
