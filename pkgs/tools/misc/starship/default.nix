@@ -3,13 +3,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.42.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "17wc9f07308a97dsmrkq74w2r639sqms0hwh8gavwxycj7wq7xz2";
+    sha256 = "16ch3dhwgwmdalif3cyi3x4vrpww546wspcwc4xi0k7lp2zppbwf";
   };
 
   nativeBuildInputs = [ installShellFiles ] ++ stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
@@ -29,8 +29,16 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  cargoSha256 = "1nvs68qxygi2l43vxw890r40px35dvzbcg6qmrm09g60ykd8pjv2";
-  checkPhase = "cargo test -- --skip directory::home_directory --skip directory::directory_in_root";
+  cargoSha256 = "09lq9ngnwg5z2l2y2ah8ng4cl8afb4gy4djwiq9yv61sjlqbr1y2";
+
+  preCheck = ''
+    substituteInPlace tests/testsuite/common.rs \
+      --replace "./target/debug/starship" "./$releaseDir/starship"
+    substituteInPlace tests/testsuite/python.rs \
+      --replace "#[test]" "#[test] #[ignore]"
+  '';
+
+  checkFlagsArray = [ "--skip=directory::home_directory" "--skip=directory::directory_in_root" ];
 
   meta = with stdenv.lib; {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
