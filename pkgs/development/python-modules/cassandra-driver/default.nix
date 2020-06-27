@@ -2,6 +2,7 @@
 , cython
 , eventlet
 , futures
+, geomet
 , libev
 , mock
 , nose
@@ -24,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ libev ];
-  propagatedBuildInputs = [ six ]
+  propagatedBuildInputs = [ six geomet ]
     ++ lib.optionals (pythonOlder "3.4") [ futures ];
 
   checkInputs = [ eventlet mock nose pytest pytz pyyaml sure ];
