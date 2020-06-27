@@ -445,7 +445,7 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
-  # https://github.com/tych0/xcffib/issues/37
+  # Waiting on language-python 0.5.8 https://github.com/bjpop/language-python/issues/60
   xcffib = dontCheck super.xcffib;
 
   # https://github.com/afcowie/locators/issues/1
@@ -486,13 +486,7 @@ self: super: {
      then self.buildHaskellPackages.tasty-discover
      else dontCheck super.tasty-discover);
 
-  # generic-deriving bound is too tight
-  # aeson 1.4.6.0 needs Diff 0.4.0 to do tests but nixpkgs is still at 0.3.4
-  # https://github.com/bos/aeson/issues/740
-  aeson = dontCheck (doJailbreak super.aeson);
-
-  # containers >=0.4 && <0.6 is too tight
-  # https://github.com/RaphaelJ/friday/issues/34
+  # Waiting on https://github.com/RaphaelJ/friday/pull/36
   friday = doJailbreak super.friday;
 
   # Won't compile with recent versions of QuickCheck.
@@ -512,12 +506,6 @@ self: super: {
 
   # https://github.com/alphaHeavy/lzma-enumerator/issues/3
   lzma-enumerator = dontCheck super.lzma-enumerator;
-
-  # https://github.com/haskell-hvr/lzma/issues/14
-  lzma = dontCheck super.lzma;
-
-  # https://github.com/BNFC/bnfc/issues/140
-  BNFC = dontCheck super.BNFC;
 
   # FPCO's fork of Cabal won't succeed its test suite.
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
