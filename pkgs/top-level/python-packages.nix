@@ -2518,6 +2518,8 @@ in {
 
   geojson-client = callPackage ../development/python-modules/geojson-client { };
 
+  geomet = callPackage ../development/python-modules/geomet { };
+
   geopandas = callPackage ../development/python-modules/geopandas { };
 
   geopy = if isPy3k then
