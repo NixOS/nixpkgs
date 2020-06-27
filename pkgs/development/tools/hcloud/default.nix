@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "hcloud";
@@ -13,21 +13,17 @@ buildGoModule rec {
     sha256 = "1brqqcyyljkdd24ljx2qbr648ihhhmr8mq6gs90n63r59ci6ksch";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   vendorSha256 = "1m96j9cwqz2b67byf53qhgl3s0vfwaklj2pm8364qih0ilvifppj";
 
-  buildFlagsArray = [ "-ldflags=" "-w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
 
   postInstall = ''
-    mkdir -p \
-      $out/etc/bash_completion.d \
-      $out/share/zsh/vendor-completions
-
-    # Add bash completions
-    $out/bin/hcloud completion bash > "$out/etc/bash_completion.d/hcloud"
-
-    # Add zsh completions
-    echo "#compdef hcloud" > "$out/share/zsh/vendor-completions/_hcloud"
-    $out/bin/hcloud completion zsh >> "$out/share/zsh/vendor-completions/_hcloud"
+    for shell in bash zsh; do
+      $out/bin/hcloud completion $shell > hcloud.$shell
+      installShellCompletion hcloud.$shell
+    done
   '';
 
   meta = {
