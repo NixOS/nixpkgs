@@ -13504,6 +13504,8 @@ in
 
   libspiro = callPackage ../development/libraries/libspiro {};
 
+  libsrt = callPackage ../development/libraries/libsrt { };
+
   libssh = callPackage ../development/libraries/libssh { };
 
   libssh2 = callPackage ../development/libraries/libssh2 { };
