@@ -6019,6 +6019,8 @@ in
   platformioPackages = dontRecurseIntoAttrs (callPackage ../development/arduino/platformio { });
   platformio = platformioPackages.platformio-chrootenv;
 
+  platformio-udev-rules = callPackage ../os-specific/linux/platformio-udev-rules { };
+
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
