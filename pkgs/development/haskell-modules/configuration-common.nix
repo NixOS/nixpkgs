@@ -566,9 +566,6 @@ self: super: {
     sha256 = "13g462qmj8c7if797gnyvf8h0cddmm3xy0pjldw48w8f8sr4qsj0";
   });
 
-  # https://github.com/athanclark/sets/issues/2
-  sets = dontCheck super.sets;
-
   # Install icons, metadata and cli program.
   bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
@@ -652,9 +649,6 @@ self: super: {
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
-  # https://github.com/goldfirere/singletons/issues/122
-  singletons = dontCheck super.singletons;
-
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
   djinn = appendPatch super.djinn (pkgs.fetchpatch {
@@ -678,9 +672,6 @@ self: super: {
 
   # The standard libraries are compiled separately.
   idris = generateOptparseApplicativeCompletion "idris" (dontCheck super.idris);
-
-  # https://github.com/bos/math-functions/issues/25
-  math-functions = dontCheck super.math-functions;
 
   # build servant docs from the repository
   servant =
