@@ -4713,6 +4713,12 @@
     githubId = 34683288;
     name = "Luke Bentley-Fox";
   };
+  "lukegb" = {
+    email = "nit@lukegb.com";
+    github = "lukegb";
+    githubId = 246745;
+    name = "Luke Granger-Brown";
+  };
   lukego = {
     email = "luke@snabb.co";
     github = "lukego";
