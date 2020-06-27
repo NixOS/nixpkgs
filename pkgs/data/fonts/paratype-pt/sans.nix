@@ -1,22 +1,21 @@
-{ stdenv, fetchzip }:
+{ lib, mkFont, fetchurl, unzip }:
 
-fetchzip {
-  name = "paratype-pt-sans";
+mkFont {
+  pname = "paratype-pt-sans";
+  version = "2017-04-16";
 
-  url = [
-    "https://company.paratype.com/system/attachments/629/original/ptsans.zip"
-    "http://rus.paratype.ru/system/attachments/629/original/ptsans.zip"
-  ];
+  src = fetchurl {
+    urls = [
+      "https://company.paratype.com/system/attachments/629/original/ptsans.zip"
+      "http://rus.paratype.ru/system/attachments/629/original/ptsans.zip"
+    ];
+    sha256 = "1j9gkbqyhxx8pih5agr9nl8vbpsfr9vdqmhx73ji3isahqm3bhv5";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.txt -d $out/share/doc/paratype
-  '';
+  nativeBuildInputs = [ unzip ];
+  sourceRoot = ".";
 
-  sha256 = "01fkd417gv98jf3a6zyfi9w2dkqsbddy1vacga2672yf0kh1z1r0";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.paratype.ru/public/";
     description = "An open Paratype font";
 

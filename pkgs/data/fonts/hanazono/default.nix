@@ -1,19 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "hanazono";
   version = "20170904";
-in fetchzip {
-  name = "hanazono-${version}";
 
-  url = "mirror://osdn/hanazono-font/68253/hanazono-${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.txt -d $out/share/doc/hanazono
-  '';
-
-  sha256 = "0qiyd1vk3w8kqmwc6xi5d390wdr4ln8xhfbx3n8r1hhad9iz14p6";
+  src = fetchzip {
+    url = "mirror://osdn/hanazono-font/68253/hanazono-${version}.zip";
+    sha256 = "0m8gf4afbkrxf8cw7ca2fh5g2y9q48153gmh9y5i27170kijmpd9";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     description = "Japanese Mincho-typeface TrueType font";

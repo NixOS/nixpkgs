@@ -1,15 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-fetchFromGitHub rec {
-  name = "aurulent-sans-0.1";
-  owner = "deepfire";
-  repo = "hartke-aurulent-sans";
-  rev = name;
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    tar xf $downloadedFile -C $out/share/fonts --strip=1
-  '';
-  sha256 = "1l60psfv9x0x9qx9vp1qnhmck7a7kks385m5ycrd3d91irz1j5li";
+mkFont rec {
+  pname = "aurulent-sans";
+  version = "0.1";
+
+  src = fetchFromGitHub {
+    owner = "deepfire";
+    repo = "hartke-aurulent-sans";
+    rev = "${pname}-${version}";
+    sha256 = "01hvpvbrks40g9k1xr2f1gxnd5wd0sxidgfbwrm94pdi1a36xxrk";
+  };
 
   meta = {
     description = "Aurulent Sans";

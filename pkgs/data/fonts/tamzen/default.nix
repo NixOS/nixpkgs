@@ -1,6 +1,6 @@
-{ fetchFromGitHub, mkfontscale, stdenv }:
+{ lib, mkFont, fetchFromGitHub, mkfontscale }:
 
-stdenv.mkDerivation rec {
+mkFont rec {
   pname = "tamzen-font";
   version = "1.11.5";
 
@@ -11,19 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "00x5fipzqimglvshhqwycdhaqslbvn3rl06jnswhyxfvz16ymj7s";
   };
 
-  nativeBuildInputs = [ mkfontscale ];
-
-  installPhase = ''
-    install -m 644 -D pcf/*.pcf -t "$out/share/fonts/misc"
-    install -m 644 -D psf/*.psf -t "$out/share/consolefonts"
-    install -m 644 -D otb/*.otb -t "$otb/share/fonts/misc"
-    mkfontdir "$out/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
-  '';
-
-  outputs = [ "out" "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bitmapped programming font based on Tamsyn";
     longDescription = ''
     Tamzen is a monospace bitmap font. It is programatically forked

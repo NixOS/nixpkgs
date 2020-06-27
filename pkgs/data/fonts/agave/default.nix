@@ -1,19 +1,15 @@
-{ lib, fetchurl }:
+{ lib, mkFont, fetchurl }:
 
-let
+mkFont rec {
   pname = "agave";
   version = "14";
-in fetchurl {
-  name = "${pname}-${version}";
-  url = "https://github.com/agarick/agave/releases/download/v${version}/Agave-Regular.ttf";
 
-  downloadToTemp = true;
-  recursiveHash = true;
-  postFetch = ''
-    install -D $downloadedFile $out/share/fonts/truetype/Agave-Regular.ttf
-  '';
+  src = fetchurl {
+    url = "https://github.com/agarick/agave/releases/download/v${version}/Agave-Regular.ttf";
+    sha256 = "0n47xfg5grdvbxnygim5yz6qi8vy2bgk99xhns2pq6psb670yn4h";
+  };
 
-  sha256 = "14hr6cdn5xbfpszj4qyfqbwmjyrkmi83yl0g9j3y3jw561jwy27j";
+  noUnpackFonts = true;
 
   meta = with lib; {
     description = "truetype monospaced typeface designed for X environments";

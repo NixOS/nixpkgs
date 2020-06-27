@@ -1,16 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-fetchzip {
-  name = "kawkab-mono-20151015";
+mkFont rec {
+  pname = "kawkab-mono";
+  version = "0.1";
 
-  url = "http://makkuk.com/kawkab-mono/downloads/kawkab-mono-0.1.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-  '';
-
-  sha256 = "1vfrb7xs817najplncg7zl9j5yxj8qnwb7aqm2v9p9xwafa4d2yd";
+  src = fetchzip {
+    url = "http://makkuk.com/kawkab-mono/downloads/${pname}-${version}.zip";
+    sha256 = "0pl3wpgv0q10yshzhm0qxf28v8rm8sapjxv1w53aw1gvg36m7dka";
+    stripRoot = false;
+  };
 
   meta = {
     description = "An arab fixed-width font";

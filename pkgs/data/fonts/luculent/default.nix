@@ -1,17 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let version = "2.0.0"; in
-fetchzip {
-  name = "luculent-${version}";
-  url =  "http://www.eastfarthing.com/luculent/luculent.tar.xz";
+mkFont {
+  pname = "luculent";
+  version = "2.0.0";
 
-  postFetch = ''
-    tar -xJf $downloadedFile --strip-components=1
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
-  '';
-
-  sha256 = "1m3g64galwna1xjxb1fczmfplm6c1fn3ra1ln7f0vkm0ah5m4lbv";
+  src = fetchzip {
+    url =  "http://www.eastfarthing.com/luculent/luculent.tar.xz";
+    sha256 = "1kd6dccribwxfghnp7qxbjjjlcmd0spmxvk5z9c9h36r46vcb46x";
+  };
 
   meta = with lib; {
     description = "luculent font";

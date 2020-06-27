@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fontforge, python3Packages, python3 }:
+{ lib, mkFont, fetchFromGitHub, fontforge, python3Packages, python3 }:
 
-stdenv.mkDerivation rec {
+mkFont rec {
   pname = "liberation-sans-narrow";
   version = "1.07.6";
 
@@ -12,13 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ fontforge python3Packages.fonttools python3 ];
+  dontBuild = false;
 
-  installPhase = ''
-    find . -name '*Narrow*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
-    install -m444 -Dt $out/doc/${pname}-${version} AUTHORS ChangeLog COPYING License.txt README.rst
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Liberation Sans Narrow Font Family is a replacement for Arial Narrow";
     longDescription = ''
       Liberation Sans Narrow is a font originally created by Ascender

@@ -1,20 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let version = "20030809";
-in
-fetchzip {
-  name = "kochi-substitute-naga10-${version}";
+mkFont rec {
+  pname = "kochi-substitute-naga10";
+  version = "20030809";
 
-  url = "mirror://osdn/efont/5411/kochi-substitute-${version}.tar.bz2";
-
-  postFetch = ''
-    tar -xjf $downloadedFile --strip-components=1
-    mkdir -p $out/share/fonts/truetype
-    cp ./kochi-gothic-subst.ttf $out/share/fonts/truetype/kochi-gothic-subst-naga10.ttf
-    cp ./kochi-mincho-subst.ttf $out/share/fonts/truetype/kochi-mincho-subst-naga10.ttf
-  '';
-
-  sha256 = "1bjb5cr3wf3d5y7xj1ly2mkv4ndwvg615rb1ql6lsqc2icjxk7j9";
+  src = fetchzip {
+    url = "mirror://osdn/efont/5411/kochi-substitute-${version}.tar.bz2";
+    sha256 = "191b7lyvx3j12gv82m4jp04sb24vprl4ymk4czr3r8asl4di417s";
+  };
 
   meta = {
     description = "Japanese font, non-free replacement for MS Gothic and MS Mincho";

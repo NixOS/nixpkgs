@@ -1,20 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
+mkFont rec {
+  pname = "libertinus";
   version = "6.9";
-in fetchFromGitHub rec {
-  name = "libertinus-${version}";
 
-  owner  = "alif-type";
-  repo   = "libertinus";
-  rev    = "v${version}";
-
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    install -m444 -Dt $out/share/fonts/opentype *.otf
-    install -m444 -Dt $out/share/doc/${name}    *.txt
-  '';
-  sha256 = "0765a7w0askkhrjmjk638gcm9h6fcm1jpaza8iw9afr3sz1s0xlq";
+  src = fetchFromGitHub {
+    owner = "alif-type";
+    repo = "libertinus";
+    rev = "v${version}";
+    sha256 = "1996qfc9x23f4xxxyc02nc3z1fcnbaqv6awfhz17hi0544qpz5d2";
+  };
 
   meta = with lib; {
     description = "A fork of the Linux Libertine and Linux Biolinum fonts";

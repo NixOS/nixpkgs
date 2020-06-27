@@ -1,18 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "emacs-all-the-icons-fonts";
   version = "3.2.0";
-in fetchzip {
-  name = "emacs-all-the-icons-fonts-${version}";
 
-  url = "https://github.com/domtronn/all-the-icons.el/archive/${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/all-the-icons
-  '';
-
-  sha256 = "0ps8q9nkx67ivgn8na4s012360v36jwr0951rsg7j6dyyw9g41jq";
+  src = fetchzip {
+    url = "https://github.com/domtronn/all-the-icons.el/archive/${version}.zip";
+    sha256 = "1sdl33117lccznj38021lwcdnpi9nxmym295q6y460y4dm4lx0jn";
+  };
 
   meta = with lib; {
     description = "Icon fonts for emacs all-the-icons";
@@ -22,13 +17,7 @@ in fetchzip {
       the fonts needed to make the package work properly.
     '';
     homepage = "https://github.com/domtronn/all-the-icons.el";
-
-    /*
-    The fonts come under a mixture of licenses - the MIT license,
-    SIL OFL license, and Apache license v2.0. See the GitHub page
-    for further information.
-    */
-    license = licenses.free;
+    license = licenses.free; # MIT, SIL OFL, and Apache v2.0
     platforms = platforms.all;
     maintainers = with maintainers; [ rlupton20 ];
   };

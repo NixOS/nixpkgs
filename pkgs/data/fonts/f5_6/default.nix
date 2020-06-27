@@ -1,21 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
-  majorVersion = "0";
-  minorVersion = "110";
+mkFont rec {
   pname = "f5_6";
-in
+  version = "0.110";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
-
-  url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
-  sha256 = "04p6lccd26rhjbpq3ddxi5vkk3lk8lqbpnk8lakjzixp3fgdqpp4";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
-  '';
+  src = fetchzip {
+    url = "https://dotcolon.net/download/fonts/${pname}_${lib.replaceStrings ["."] [""] version}.zip";
+    sha256 = "1qfykpdhd8br9yrg4icn7wdfj6wysijyyj1cnswj7lnidkx99q0m";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/${pname}/";

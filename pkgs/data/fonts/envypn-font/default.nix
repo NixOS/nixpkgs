@@ -1,20 +1,17 @@
-{ stdenv, fetchurl, libfaketime
-, fonttosfnt, mkfontscale
-}:
+{ lib, mkFont, fetchurl, libfaketime , fonttosfnt }:
 
-stdenv.mkDerivation {
-  name = "envypn-font-1.7.1";
+mkFont {
+  pname = "envypn-font";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "https://ywstd.fr/files/p/envypn-font/envypn-font-1.7.1.tar.gz";
     sha256 = "bda67b6bc6d5d871a4d46565d4126729dfb8a0de9611dae6c68132a7b7db1270";
   };
 
-  nativeBuildInputs = [ libfaketime fonttosfnt mkfontscale ];
+  nativeBuildInputs = [ libfaketime fonttosfnt ];
 
-  unpackPhase = ''
-    tar -xzf $src --strip-components=1
-  '';
+  dontBuild = false;
 
   buildPhase = ''
     # convert pcf fonts to otb
@@ -24,16 +21,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  installPhase = ''
-    install -D -m 644 -t "$out/share/fonts/misc" *.pcf.gz
-    install -D -m 644 -t "$otb/share/fonts/misc" *.otb
-    mkfontdir "$out/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
-  '';
-
-  outputs = [ "out" "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Readable bitmap font inspired by Envy Code R
     '';

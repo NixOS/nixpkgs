@@ -1,21 +1,13 @@
-{ lib,  fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
-  majorVersion = "0";
-  minorVersion = "100";
+mkFont rec {
   pname = "seshat";
-in
+  version = "0.100";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
-
-  url = "http://dotcolon.net/DL/font/${pname}.zip";
-  sha256 = "1zzgc2d0jrris92p3irmxjhdq8aj99alz0z7dlz25qf37lcilrir";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
-  '';
+  src = fetchzip {
+    url = "http://dotcolon.net/download/fonts/${pname}_${lib.replaceStrings ["."] [""] version}.zip";
+    sha256 = "0r1v626zjm0az162k6cq2xiaqfwz8853p40dczrw8vf03h76n2jy";
+  };
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/${pname}/";

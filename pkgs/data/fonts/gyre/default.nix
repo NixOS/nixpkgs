@@ -1,19 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
-  baseName = "gyre-fonts";
+mkFont rec {
+  pname = "gyre-fonts";
   version = "2.005";
-in fetchzip {
-  name="${baseName}-${version}";
 
-  url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${version}otf.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/truetype
-  '';
-
-  sha256 = "17amdpahs6kn7hk3dqxpff1s095cg1caxzij3mxjbbxp8zy0l111";
+  src = fetchzip {
+    url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${version}otf.zip";
+    sha256 = "0f1sxvghy3zcshci2d6hma213n2hqxbkwi46bq5qmy2zw5z2x8pv";
+    stripRoot = false;
+  };
 
   meta = {
     description = "OpenType fonts from the Gyre project, suitable for use with (La)TeX";

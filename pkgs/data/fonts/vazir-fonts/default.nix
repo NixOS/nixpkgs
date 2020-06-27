@@ -1,20 +1,16 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
+mkFont rec {
   pname = "vazir-fonts";
   version = "22.1.0";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
 
-  owner = "rastikerdar";
-  repo = "vazir-font";
-  rev = "v${version}";
+  src = fetchFromGitHub {
+    owner = "rastikerdar";
+    repo = "vazir-font";
+    rev = "v${version}";
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
-  '';
-  sha256 = "1nh3pyyw3082aizdwgyihh4z122z7kzp45ry7lzdhq9lshkpzglc";
+    sha256 = "0k34xcf3r7pfpsvyk0rzcgiz0x34ynaa7i1rmwp7c6v7lkfri14l";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/vazir-font";

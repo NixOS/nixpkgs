@@ -1,19 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
+mkFont rec {
   version = "1.008";
-  pname = "b612";
-in fetchFromGitHub {
-  name = "${pname}-font-${version}";
-  owner = "polarsys";
-  repo = "b612";
-  rev = version;
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    mkdir -p $out/share/fonts/truetype/${pname}
-    cp fonts/ttf/*.ttf $out/share/fonts/truetype/${pname}
-  '';
-  sha256 = "0r3lana1q9w3siv8czb3p9rrb5d9svp628yfbvvmnj7qvjrmfsiq";
+  pname = "b612-font";
+
+  src = fetchFromGitHub {
+    owner = "polarsys";
+    repo = "b612";
+    rev = version;
+    sha256 = "0j4cwr9j782gs3l5c2hy5nvjng2qdrvgalbq3m13phsf8gql485v";
+  };
 
   meta = with lib; {
     homepage = "http://b612-font.com/";

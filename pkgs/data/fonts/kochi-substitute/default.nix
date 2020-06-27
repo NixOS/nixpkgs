@@ -1,10 +1,8 @@
-{ stdenv, fetchurl, dpkg }:
+{ lib, mkFont, fetchurl, dpkg }:
 
-let version = "20030809";
-in
-stdenv.mkDerivation {
+mkFont rec {
   pname = "kochi-substitute";
-  inherit version;
+  version = "20030809";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/t/ttf-kochi/ttf-kochi-gothic_${version}-15_all.deb";
@@ -18,22 +16,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ dpkg ];
 
-  unpackCmd = ''
+  unpackPhase = ''
     dpkg-deb --fsys-tarfile $src | tar xf - ./usr/share/fonts/truetype/kochi/kochi-gothic-subst.ttf
     dpkg-deb --fsys-tarfile $src2 | tar xf - ./usr/share/fonts/truetype/kochi/kochi-mincho-subst.ttf
   '';
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp ./share/fonts/truetype/kochi/kochi-gothic-subst.ttf $out/share/fonts/truetype/
-    cp ./share/fonts/truetype/kochi/kochi-mincho-subst.ttf $out/share/fonts/truetype/
-  '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "10hcrf51npc1w2jsz5aiw07dgw96vs4wmsz4ai9zyaswipvf8ddy";
-
-  meta = {
+  meta = with lib; {
     description = "Japanese font, a free replacement for MS Gothic and MS Mincho";
     longDescription = ''
       Kochi Gothic and Kochi Mincho were developed as free replacements for the
@@ -42,7 +30,7 @@ stdenv.mkDerivation {
       from the naga10 font.
     '';
     homepage = "https://osdn.net/projects/efont/";
-    license = stdenv.lib.licenses.wadalab;
-    maintainers = [ stdenv.lib.maintainers.auntie ];
+    license = licenses.wadalab;
+    maintainers = with maintainers; [ maintainers.auntie ];
   };
 }

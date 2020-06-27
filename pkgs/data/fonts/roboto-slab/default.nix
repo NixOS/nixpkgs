@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+mkFont {
   pname = "roboto-slab";
   version = "2.000";
 
@@ -11,16 +11,9 @@ stdenv.mkDerivation {
     sha256 = "1v6z0a2xgwgf9dyj62sriy8ckwpbwlxkki6gfax1f4h4livvzpdn";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp -a fonts/static/*.ttf $out/share/fonts/truetype/
-  '';
+  sourceRoot = "./source/fonts";
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "0g663npi5lkvwcqafd4cjrm90ph0nv1lig7d19xzfymnj47qpj8x";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.google.com/fonts/specimen/Roboto+Slab";
     description = "Roboto Slab Typeface by Google";
     longDescription = ''
@@ -36,6 +29,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

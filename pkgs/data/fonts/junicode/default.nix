@@ -1,19 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
   pname = "junicode";
   version = "1.002";
-in fetchzip {
-  name = "${pname}-${version}";
 
-  url = "mirror://sourceforge/junicode/junicode/junicode-${version}/junicode-${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/junicode-ttf
-  '';
-
-  sha256 = "1n170gw41lr0zr5958z5cgpg6i1aa7kj7iq9s6gdh1cqq7hhgd08";
+  src = fetchzip {
+    url = "mirror://sourceforge/junicode/junicode/junicode-${version}/junicode-${version}.zip";
+    sha256 = "1n86kxc2szdivh0nglizwdr7s8vw5pxmj6xa7fp9ql73scsrzbyn";
+    stripRoot = false;
+  };
 
   meta = {
     homepage = "http://junicode.sourceforge.net/";

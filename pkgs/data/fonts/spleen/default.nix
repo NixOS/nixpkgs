@@ -1,14 +1,15 @@
-{ lib, fetchurl, mkfontscale }:
+{ lib, mkFont, fetchzip, mkfontscale }:
 
-let
+mkFont rec {
   pname = "spleen";
   version = "1.7.0";
-in fetchurl {
-  name = "${pname}-${version}";
-  url = "https://github.com/fcambus/spleen/releases/download/${version}/spleen-${version}.tar.gz";
 
-  downloadToTemp = true;
-  recursiveHash = true;
+  src = fetchzip {
+    url = "https://github.com/fcambus/spleen/releases/download/${version}/spleen-${version}.tar.gz";
+    sha256 = "02193806fp2dw4114y0j61skv8wb2z8r1zg3hp4g9i9v579jbwir";
+  };
+
+  /*
   postFetch = ''
     tar xvf $downloadedFile --strip=1
     d="$out/share/fonts/misc"
@@ -19,7 +20,7 @@ in fetchurl {
     # create fonts.dir so NixOS xorg module adds to fp
     ${mkfontscale}/bin/mkfontdir "$d"
   '';
-  sha256 = "17dn6spfr8wv63sy009djb4q12q635m13wsyirzn074qabhr9ggg";
+  */
 
   meta = with lib; {
     description = "Monospaced bitmap fonts";

@@ -1,19 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
+mkFont rec {
   pname = "behdad-fonts";
   version = "0.0.3";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
-  owner = "font-store";
-  repo = "BehdadFont";
-  rev = "v${version}";
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/behrad-fonts {} \;
-  '';
-  sha256 = "0c57232462cv1jrfn0m2bl7jzcfkacirrdd2qimrc8iqhkz0ajfz";
+  src = fetchFromGitHub {
+    owner = "font-store";
+    repo = "BehdadFont";
+    rev = "v${version}";
+    sha256 = "0rlmyv82qmyy90zvkjnlva44ia7dyhiyk7axbq526v7zip3g79w0";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/font-store/BehdadFont";

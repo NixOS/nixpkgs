@@ -1,22 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
+mkFont rec {
+  pname = "material-design-icons";
   version = "4.7.95";
-in fetchFromGitHub {
-  name = "material-design-icons-${version}";
-  owner  = "Templarian";
-  repo   = "MaterialDesign-Webfont";
-  rev    = "v${version}";
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    mkdir -p $out/share/fonts/{eot,truetype,woff,woff2}
-    cp fonts/*.eot $out/share/fonts/eot/
-    cp fonts/*.ttf $out/share/fonts/truetype/
-    cp fonts/*.woff $out/share/fonts/woff/
-    cp fonts/*.woff2 $out/share/fonts/woff2/
-  '';
-  sha256 = "0da92kz8ryy60kb5xm52md13w28ih4sfap8g3v9b4ziyww66zjhz";
+  src = fetchFromGitHub {
+    owner  = "Templarian";
+    repo   = "MaterialDesign-Webfont";
+    rev    = "v${version}";
+    sha256 = "1509r16hn72j83yz5hbdv23c71svj34wxgdnsd5l9gfzg84wyy0r";
+  };
 
   meta = with lib; {
     description = "3200+ Material Design Icons from the Community";

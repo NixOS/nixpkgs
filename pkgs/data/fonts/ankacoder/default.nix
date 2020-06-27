@@ -1,17 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let version = "1.100"; in
-fetchzip {
-  name = "ankacoder-${version}";
-  url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoder.${version}.zip";
+mkFont rec {
+  pname = "ankacoder";
+  version = "1.100";
 
-  postFetch = ''
-    unzip $downloadedFile
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
-  '';
-
-  sha256 = "1jqx9micfmiarqh9xp330gl96v3vxbwzz9cmg2vi845n9md4im85";
+  src = fetchzip {
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoder.${version}.zip";
+    sha256 = "09mkvfz2jb08b5mj4sr4rn460xjsqqjy23md1vbfyz1z4iljv0np";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     description = "Anka/Coder fonts";

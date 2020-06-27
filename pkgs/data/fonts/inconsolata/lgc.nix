@@ -1,6 +1,6 @@
-{stdenv, fetchFromGitHub, fontforge}:
+{ stdenv, mkFont, fetchFromGitHub, fontforge }:
 
-stdenv.mkDerivation rec {
+mkFont rec {
   pname = "inconsolata-lgc";
   version = "1.3";
 
@@ -12,12 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ fontforge ];
-
-  installPhase = ''
-    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
-    find . -name '*.otf' -exec install -m444 -Dt $out/share/fonts/opentype {} \;
-    install -m444 -Dt $out/share/doc/${pname}-${version} LICENSE README
-  '';
+  dontBuild = false;
 
   meta = with stdenv.lib; {
     description = "Fork of Inconsolata font, with proper support of Cyrillic and Greek";

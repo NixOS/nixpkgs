@@ -1,20 +1,18 @@
-{ fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-fetchzip rec {
-  name = "baekmuk-ttf-2.2";
+mkFont rec {
+  pname = "baekmuk-ttf";
+  version = "2.2";
 
-  url = "http://kldp.net/baekmuk/release/865-${name}.tar.gz";
-  postFetch = ''
-    tar -xzvf $downloadedFile --strip-components=1
-    install -m444 -Dt $out/share/fonts        ttf/*.ttf
-    install -m444 -Dt $out/share/doc/${name}  COPYRIGHT*
-  '';
-  sha256 = "1jgsvack1l14q8lbcv4qhgbswi30mf045k37rl772hzcmx0r206g";
+  src = fetchzip {
+    url = "https://kldp.net/baekmuk/release/865-${pname}-${version}.tar.gz";
+    sha256 = "126zkgsrphgxqjwi0km4l8g9lnjvv233ikbp870bpkxnf6wgrwwm";
+  };
 
-  meta = {
+  meta = with lib; {
     description = "Korean font";
-    homepage = "http://kldp.net/projects/baekmuk/";
-    license = "BSD-like";
+    homepage = "https://kldp.net/projects/baekmuk/";
+    license = licenses.free; # BSD-like
   };
 }
 

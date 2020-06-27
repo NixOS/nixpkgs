@@ -437,6 +437,8 @@ in
       inherit kernel firmware rootModules allowMissing;
     };
 
+  mkFont = callPackage ../build-support/mkfont.nix { };
+
   mkShell = callPackage ../build-support/mkshell { };
 
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackages) inherit-local; };
@@ -5378,7 +5380,7 @@ in
 
   nat-traverse = callPackage ../tools/networking/nat-traverse { };
 
-  navilu-font = callPackage ../data/fonts/navilu { stdenv = stdenvNoCC; };
+  navilu-font = callPackage ../data/fonts/navilu { };
 
   nawk = callPackage ../tools/text/nawk { };
 
@@ -18116,7 +18118,7 @@ in
   encode-sans = callPackage ../data/fonts/encode-sans { };
 
   envypn-font = callPackage ../data/fonts/envypn-font
-    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+    { inherit (buildPackages.xorg) fonttosfnt; };
 
   envdir = callPackage ../tools/misc/envdir-go { };
 
@@ -18446,8 +18448,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  profont = callPackage ../data/fonts/profont
-    { inherit (buildPackages.xorg) mkfontscale; };
+  profont = callPackage ../data/fonts/profont { };
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 

@@ -1,18 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "lmmath";
   version = "1.959";
-in fetchzip rec {
-  name = "lmmath-${version}";
 
-  url = "http://www.gust.org.pl/projects/e-foundry/lm-math/download/latinmodern-math-1959.zip";
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/
-    mkdir -p $out/share/doc/latinmodern-math-${version}/
-    unzip -j $downloadedFile "*/otf/*.otf" -d $out/share/fonts/opentype/
-    unzip -j $downloadedFile "*/doc/*.txt" -d $out/share/doc/latinmodern-math-${version}/
-  '';
-  sha256 = "05k145bxgxjh7i9gx1ahigxfpc2v2vwzsy2mc41jvvg51kjr8fnn";
+  src = fetchzip {
+    url = "http://www.gust.org.pl/projects/e-foundry/lm-math/download/latinmodern-math-1959.zip";
+    sha256 = "15l3lxjciyjmbh0q6jjvzz16ibk4ij79in9fs47qhrfr2wrddpvs";
+  };
 
   meta = with lib; {
     description = "The Latin Modern Math (LM Math) font completes the modernization of the Computer Modern family of typefaces designed and programmed by Donald E. Knuth.";

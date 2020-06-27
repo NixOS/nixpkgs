@@ -1,20 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "source-serif-pro";
   version = "3.000";
-in fetchzip {
-  name = "source-serif-pro-${version}";
 
-  url = "https://github.com/adobe-fonts/source-serif-pro/releases/download/${version}R/source-serif-pro-${version}R.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/{opentype,truetype,variable}
-    unzip -j $downloadedFile "OTF/*.otf" -d $out/share/fonts/opentype
-    unzip -j $downloadedFile "TTF/*.ttf" -d $out/share/fonts/truetype
-    unzip -j $downloadedFile "VAR/*.otf" -d $out/share/fonts/variable
-  '';
-
-  sha256 = "06yp8y79mqk02qzp81h8zkmzqqlhicgrkwmzkd0bm338xh8grsiz";
+  src = fetchzip {
+    url = "https://github.com/adobe-fonts/source-serif-pro/releases/download/${version}R/source-serif-pro-${version}R.zip";
+    sha256 = "1l0bcb6czlrm6raldlvr3aq1rz8l1c83dqqv1pavgc5yc15c239j";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     homepage = "https://adobe-fonts.github.io/source-serif-pro/";

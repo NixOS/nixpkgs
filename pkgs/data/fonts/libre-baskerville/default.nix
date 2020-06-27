@@ -1,19 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-fetchFromGitHub rec {
-  name = "libre-baskerville-1.000";
+mkFont {
+  pname = "libre-baskerville";
+  version = "1.000";
 
-  owner = "impallari";
-  repo = "Libre-Baskerville";
-  rev = "2fba7c8e0a8f53f86efd3d81bc4c63674b0c613f";
-
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    install -m444 -Dt $out/share/fonts/truetype *.ttf
-    install -m444 -Dt $out/share/doc/${name}    README.md FONTLOG.txt
-  '';
-
-  sha256 = "1kpji85d1mgwq8b4fh1isznrhsrv32la3wf058rwjmhx5a3l7yaj";
+  src = fetchFromGitHub {
+    owner = "impallari";
+    repo = "Libre-Baskerville";
+    rev = "2fba7c8e0a8f53f86efd3d81bc4c63674b0c613f";
+    sha256 = "0i9ra6ip81zzjxl71p8zwa6ymlmkf4yi5ny22vlwx9a53kbf4ifl";
+  };
 
   meta = with lib; {
     description = "A webfont family optimized for body text";

@@ -1,21 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
-  version = "20110526";
-in fetchFromGitHub {
-  name = "orbitron-${version}";
+mkFont {
+  pname = "orbitron";
+  version = "2011-05-26";
 
-  owner = "theleagueof";
-  repo = "orbitron";
-  rev = "13e6a52";
-
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    install -m444 -Dt $out/share/fonts/opentype/orbitron *.otf
-    install -m444 -Dt $out/share/fonts/ttf/orbitron      *.ttf
-  '';
-
-  sha256 = "1y9yzvpqs2v3ssnqk2iiglrh8amgsscnk8vmfgnqgqi9f4dhdvnv";
+  src = fetchFromGitHub {
+    owner = "theleagueof";
+    repo = "orbitron";
+    rev = "13e6a52";
+    sha256 = "1c6jb7ayr07j1pbnzf3jxng9x9bbqp3zydf8mqdw9ifln1b4ycyf";
+  };
 
   meta = with lib; {
     homepage = "https://www.theleagueofmoveabletype.com/orbitron";

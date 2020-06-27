@@ -1,19 +1,13 @@
-{ fetchzip, lib }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "hyperscrypt-font";
   version = "1.1";
-  pname = "HyperScrypt";
-in
 
-fetchzip {
-  name = "${lib.toLower pname}-font-${version}";
-  url = "https://gitlab.com/StudioTriple/Hyper-Scrypt/-/archive/${version}/Hyper-Scrypt-${version}.zip";
-  sha256 = "01pf5p2scmw02s0gxnibiwxbpzczphaaapv0v4s7svk9aw2gmc0m";
-  postFetch = ''
-    mkdir -p $out/share/fonts/{truetype,opentype}
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype/${pname}.ttf
-    unzip -j $downloadedFile \*${pname}.otf -d $out/share/fonts/opentype/${pname}.otf
-  '';
+  src = fetchzip {
+    url = "https://gitlab.com/StudioTriple/Hyper-Scrypt/-/archive/${version}/Hyper-Scrypt-${version}.zip";
+    sha256 = "1swxk5qhr3g9l8kkbpahx7l15f8jk1q8i6k35ax846dzs03l1n9q";
+  };
 
   meta = with lib; {
     homepage = "http://velvetyne.fr/fonts/hyper-scrypt/";

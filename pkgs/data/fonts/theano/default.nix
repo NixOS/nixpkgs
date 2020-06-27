@@ -1,20 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "theano";
   version = "2.0";
-in fetchzip rec {
-  name = "theano-${version}";
 
-  url = "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.txt -d "$out/share/doc/${name}"
-  '';
-
-  sha256 = "1my1symb7k80ys33iphsxvmf6432wx6vjdnxhzhkgrang1rhx1h8";
+  src = fetchzip {
+    url = "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";
+    sha256 = "1z3c63rcp4vfjyfv8xwc3br10ydwjyac3ipbl09y01s7qhfz02gp";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/akryukov/theano";

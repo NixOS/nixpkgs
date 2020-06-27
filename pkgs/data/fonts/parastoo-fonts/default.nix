@@ -1,20 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-let
+mkFont rec {
   pname = "parastoo-fonts";
   version = "1.0.0-alpha5";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
 
-  owner = "rastikerdar";
-  repo = "parastoo-font";
-  rev = "v${version}";
-
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/parastoo-fonts {} \;
-  '';
-  sha256 = "10jbii6rskcy4akjl5yfcqv4mfwk3nqnx36l6sbxks43va9l04f4";
+  src = fetchFromGitHub {
+    owner = "rastikerdar";
+    repo = "parastoo-font";
+    rev = "v${version}";
+    sha256 = "1nya9cbbs6sgv2w3zyah3lb1kqylf922q3fazh4l7bi6zgm8q680";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/parastoo-font";

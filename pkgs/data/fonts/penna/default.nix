@@ -1,21 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
-  majorVersion = "0";
-  minorVersion = "10";
+mkFont rec {
   pname = "penna";
-in
+  version = "0.100";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
-
-  url = "http://dotcolon.net/DL/font/${pname}.zip";
-  sha256 = "0hk15yndm56l6rbdykpkry2flffx0567mgjcqcnsx1iyzwwla5km";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
-  '';
+  src = fetchzip {
+    url = "http://dotcolon.net/download/fonts/${pname}_${lib.replaceStrings ["."] [""] version}.zip";
+    sha256 = "170zhaxi65gq52avlnqiwflgi44vaar2gdwjyib6fl588sf8jq3y";
+  };
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/${pname}/";

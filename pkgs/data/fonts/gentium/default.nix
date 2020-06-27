@@ -1,21 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "gentium";
   version = "5.000";
-in fetchzip rec {
-  name = "gentium-${version}";
 
-  url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf                                          -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*/FONTLOG.txt \*/GENTIUM-FAQ.txt \*/README.txt -d $out/share/doc/${name}
-    unzip -j $downloadedFile \*/documentation/\*                             -d $out/share/doc/${name}/documentation
-  '';
-
-  sha256 = "1qr2wjdmm93167b0w9cidlf3wwsyjx4838ja9jmm4jkyian5whhp";
+  src = fetchzip {
+    url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
+    sha256 = "0g9sx38wh7f0m16gr64g2xggjwak2q6jw9y4zhrvhmp4aq4xfqm6";
+  };
 
   meta = with lib; {
     homepage = "https://software.sil.org/gentium/";

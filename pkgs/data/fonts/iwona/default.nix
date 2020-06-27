@@ -1,16 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "iwona";
   version = "0_995";
-in fetchzip {
-  name = "iwona-${version}";
-  url = "http://jmn.pl/pliki/Iwona-otf-${version}.zip";
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile *.otf -d $out/share/fonts/opentype
-  '';
-  sha256 = "1dcpn13bd31dw7ir0s722bv3nk136dy6qsab0kznjbzfqd7agswa";
+  src = fetchzip {
+    url = "http://jmn.pl/pliki/Iwona-otf-${version}.zip";
+    sha256 = "1wj5bxbxpz5a8p3rhw708cyjc0lgqji8g0iv6brmmbrrkpb3jq2s";
+  };
 
   meta = with lib; {
     description = "A two-element sans-serif typeface, created by Małgorzata Budyta";

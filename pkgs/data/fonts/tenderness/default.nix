@@ -1,21 +1,16 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
-  majorVersion = "0";
-  minorVersion = "601";
+mkFont rec {
   pname = "tenderness";
-in
+  version = "0.601";
+  # for compatibility
+  name = "${pname}-font-${version}";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
-
-  url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
-  sha256 = "0d88l5mzq0k63zsmb8d5w3hfqxy04vpv4j0j8nmj1xv6kikhhybh";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
-  '';
+  src = fetchzip {
+    url = "http://dotcolon.net/download/fonts/${pname}_${lib.replaceStrings ["."] [""] version}.zip";
+    sha256 = "03175rkbcy7mv9b4gwfliyq4r94mv2hh74hhlkvgmvyqx9dll0kg";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/${pname}/";

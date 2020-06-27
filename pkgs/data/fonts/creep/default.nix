@@ -1,8 +1,6 @@
-{ stdenv, fetchFromGitHub, libfaketime
-, fonttosfnt, mkfontscale
-}:
+{ lib, mkFont, fetchFromGitHub, libfaketime, fonttosfnt, mkfontscale }:
 
-stdenv.mkDerivation rec {
+mkFont rec {
   pname = "creep";
   version = "0.31";
 
@@ -14,21 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ libfaketime fonttosfnt mkfontscale ];
-
+  dontBuild = false;
   buildPhase = ''
     faketime -f "1970-01-01 00:00:01" fonttosfnt -g 2 -m 2 -o creep.otb creep.bdf
   '';
 
-  installPhase = ''
-    install -D -m644 creep.bdf "$out/share/fonts/misc/creep.bdf"
-    mkfontdir "$out/share/fonts/misc"
-    install -D -m644 creep.otb "$otb/share/fonts/misc/creep.otb"
-    mkfontdir "$otb/share/fonts/misc"
-  '';
-
-  outputs = [ "out" "otb" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pretty sweet 4px wide pixel font";
     homepage = "https://github.com/romeovs/creep";
     license = licenses.mit;

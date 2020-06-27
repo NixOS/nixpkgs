@@ -1,19 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont {
   version = "1.2";
   pname = "norwester";
-in fetchzip {
-  name = "${pname}-${version}";
 
-  url = "http://jamiewilson.io/norwester/assets/norwester.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -D -j $downloadedFile ${pname}-v${version}/${pname}.otf -d $out/share/fonts/opentype/
-  '';
-
-  sha256 = "1npsaiiz9g5z6315lnmynwcnrfl37fyxc7w1mhkw1xbzcnv74z4r";
+  src = fetchzip {
+    url = "http://jamiewilson.io/norwester/assets/norwester.zip";
+    sha256 = "1j3zb3g8d4hya6fqdczyyzhpnflmb4cj4gvb37cga4yhpahyfkq2";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     homepage = "http://jamiewilson.io/norwester";

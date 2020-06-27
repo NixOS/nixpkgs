@@ -1,18 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "hasklig";
   version = "1.1";
-in fetchzip {
-  name = "hasklig-${version}";
 
-  url = "https://github.com/i-tu/Hasklig/releases/download/${version}/Hasklig-${version}.zip";
-
-  postFetch = ''
-    unzip $downloadedFile
-    install -m444 -Dt $out/share/fonts/opentype *.otf
-  '';
-
-  sha256 = "0xxyx0nkapviqaqmf3b610nq17k20afirvc72l32pfspsbxz8ybq";
+  src = fetchzip {
+    url = "https://github.com/i-tu/Hasklig/releases/download/${version}/Hasklig-${version}.zip";
+    sha256 = "0jmjgy3y5sj6d8nqq1ap5hnpkbcsgpbdahcbny7wg04y7fvd1hwf";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/i-tu/Hasklig";

@@ -1,20 +1,13 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
+mkFont rec {
+  pname = "recursive";
   version = "1.052";
-in
-fetchzip {
-  name = "recursive-${version}";
 
-  url = "https://github.com/arrowtype/recursive/releases/download/${version}/Recursive-Beta_${version}.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/
-    unzip -j $downloadedFile \*.ttf   -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.woff2 -d $out/share/fonts/woff2
-  '';
-
-  sha256 = "1kam7wcn0rg89gw52pn174sz0r9lc2kjdz88l0jg20gwa3bjbpc6";
+  src = fetchzip {
+    url = "https://github.com/arrowtype/recursive/releases/download/${version}/Recursive-Beta_${version}.zip";
+    sha256 = "1sgywyxymys0si3wazmq2mvfcbcwq9m3fkyp29c0vcml0hhxjrh1";
+  };
 
   meta = with lib; {
     homepage = "https://recursive.design/";

@@ -1,19 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-fetchFromGitHub rec {
-  name = "libre-franklin-1.014";
+mkFont rec {
+  pname = "libre-franklin";
+  version = "1.014";
 
-  owner = "impallari";
-  repo = "Libre-Franklin";
-  rev = "006293f34c47bd752fdcf91807510bc3f91a0bd3";
-
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    install -m444 -Dt $out/share/fonts/opentype */OTF/*.otf
-    install -m444 -Dt $out/share/doc/${name}    README.md FONTLOG.txt
-  '';
-
-  sha256 = "0aq280m01pbirkzga432340aknf2m5ggalw0yddf40sqz7falykf";
+  src = fetchFromGitHub {
+    owner = "impallari";
+    repo = "Libre-Franklin";
+    rev = "006293f34c47bd752fdcf91807510bc3f91a0bd3";
+    sha256 = "0df41cqhw5dz3g641n4nd2jlqjf5m4fkv067afk3759m4hg4l78r";
+  };
 
   meta = with lib; {
     description = "A reinterpretation and expansion based on the 1912 Morris Fuller Benton’s classic.";

@@ -1,19 +1,15 @@
-{ lib, fetchFromGitHub }:
+{ lib, mkFont, fetchFromGitHub }:
 
-fetchFromGitHub rec {
-  name = "dosis-1.007";
+mkFont rec {
+  pname = "dosis";
+  version = "1.007";
 
-  owner = "impallari";
-  repo = "Dosis";
-  rev = "12df1e13e58768f20e0d48ff15651b703f9dd9dc";
-
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    find . -name '*.otf' -exec install -m444 -Dt $out/share/fonts/opentype {} \;
-    install -m444 -Dt $out/share/doc/${name} README.md FONTLOG.txt
-  '';
-
-  sha256 = "0vz25w45i8flfvppymr5h83pa2n1r37da20v7691p44018fdsdny";
+  src = fetchFromGitHub {
+    owner = "impallari";
+    repo = "Dosis";
+    rev = "12df1e13e58768f20e0d48ff15651b703f9dd9dc";
+    sha256 = "0glniyg07z5gx5gsa1ymarg2gsncjyf94wi6j9bf68v5s2w3v7md";
+  };
 
   meta = with lib; {
     description = "A very simple, rounded, sans serif family";

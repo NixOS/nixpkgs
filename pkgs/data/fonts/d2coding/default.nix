@@ -1,19 +1,14 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
-  version = "1.3.2";
+mkFont rec {
   pname = "d2codingfont";
+  version = "1.3.2";
 
-in fetchzip {
-  name = "${pname}-${version}";
-  url = "https://github.com/naver/${pname}/releases/download/VER${version}/D2Coding-Ver${version}-20180524.zip";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*-all.ttc -d $out/share/fonts/truetype/
-  '';
-
-  sha256 = "1812r82530wzfki7k9cm35fy6k2lvis7j6w0w8svc784949m1wwj";
+  src = fetchzip {
+    url = "https://github.com/naver/${pname}/releases/download/VER${version}/D2Coding-Ver${version}-20180524.zip";
+    sha256 = "081qc82d5gqs0dn32fc3wb1aqiqw712jai85vznqr0wm8ils4bl8";
+    stripRoot = false;
+  };
 
   meta = with lib; {
     description = "Monospace font with support for Korean and latin characters";

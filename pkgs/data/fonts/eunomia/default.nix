@@ -1,24 +1,17 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchzip }:
 
-let
-  majorVersion = "0";
-  minorVersion = "200";
+mkFont rec {
   pname = "eunomia";
-in
+  version = "0.200";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
-
-  url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
-  sha256 = "0lpmczs1d4p9dy4s0dnvv7bl5cd0f6yzyasfrkxij5s86glps38b";
-
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
-  '';
+  src = fetchzip {
+    url = "https://dotcolon.net/download/fonts/${pname}_${lib.replaceStrings ["."] [""] version}.zip";
+    sha256 = "0vhl46s8n5h5r71ghz05jn0dgxl3w1sb8d2x27l3qnlk8rm89pa5";
+    stripRoot = false;
+  };
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/eunomia/";
+    homepage = "https://dotcolon.net/font/eunomia/";
     description = "A futuristic decorative font.";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];

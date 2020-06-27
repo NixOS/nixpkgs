@@ -1,13 +1,15 @@
-{ lib, fetchzip }:
+{ lib, mkFont, fetchurl }:
 
-fetchzip {
-  name = "sampradaya-2015-05-26";
+mkFont {
+  pname = "sampradaya";
+  version = "0.1.0";
 
-  url = "https://bitbucket.org/OorNaattaan/sampradaya/raw/afa9f7c6ab17e14bd7dd74d0acaec2f75454dfda/Sampradaya.ttf";
+  src = fetchurl {
+    url = "https://github.com/deepestblue/Sampradaya/releases/download/v0.1.0/Sampradaya-osx.ttf";
+    sha256 = "1l8asiqbc6q0xcmjypw7z2gl9w32pnar46dh6lap38nqr1aykh07";
+  };
 
-  postFetch = "install -Dm644 $downloadedFile $out/share/fonts/truetype/Sampradaya.ttf";
-
-  sha256 = "1pqyj5r5jc7dk8yyzl7i6qq2m9zvahcjj49a66wwzdby5zyw8dqv";
+  noUnpackFonts = true;
 
   meta = with lib; {
     homepage = "https://bitbucket.org/OorNaattaan/sampradaya/";
