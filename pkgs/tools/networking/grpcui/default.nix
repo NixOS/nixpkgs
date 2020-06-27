@@ -13,6 +13,10 @@ buildGoModule rec {
 
   vendorSha256 = "0wih9xvpgqqd82v1pxy5rslrsd6wsl0ys1bi1mf373dnfq5vh5a9";
 
+  subPackages = [ "cmd/grpcui" ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
   meta = with lib; {
     description = "An interactive web UI for gRPC, along the lines of postman";
     homepage = "https://github.com/fullstorydev/grpcui";
