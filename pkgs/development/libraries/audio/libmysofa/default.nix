@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
+  cmakeFlags = [ "-DBUILD_TESTS=OFF" "-DCODE_COVERAGE=OFF" ];
 
   meta = with stdenv.lib; {
     description = "Reader for AES SOFA files to get better HRTFs";
