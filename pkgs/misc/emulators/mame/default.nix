@@ -26,7 +26,7 @@ in mkDerivation {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${majorVersion}${minorVersion}";
-    sha256 = "1jwc50hmlrkdj204gqcvf7lvgb1r6rhj8hhckykylb1mli04c7gy";
+    sha256 = "1ij08h7cflr76qzyhhj21948275lqkpzi9r4pbc7h2avrlpsijx4";
   };
 
   hardeningDisable = [ "fortify" ];
