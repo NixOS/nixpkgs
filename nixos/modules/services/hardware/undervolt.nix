@@ -46,7 +46,7 @@ in
     };
 
     coreOffset = mkOption {
-      type = types.nullOr types.int;
+      type = with types; nullOr (oneOf [ int str ]);
       default = null;
       description = ''
         The amount of voltage in mV to offset the CPU cores by.
@@ -54,7 +54,7 @@ in
     };
 
     gpuOffset = mkOption {
-      type = types.nullOr types.int;
+      type = with types; nullOr (oneOf [ int str ]);
       default = null;
       description = ''
         The amount of voltage in mV to offset the GPU by.
@@ -62,7 +62,7 @@ in
     };
 
     uncoreOffset = mkOption {
-      type = types.nullOr types.int;
+      type = with types; nullOr (oneOf [ int str ]);
       default = null;
       description = ''
         The amount of voltage in mV to offset uncore by.
@@ -70,7 +70,7 @@ in
     };
 
     analogioOffset = mkOption {
-      type = types.nullOr types.int;
+      type = with types; nullOr (oneOf [ int str ]);
       default = null;
       description = ''
         The amount of voltage in mV to offset analogio by.
@@ -78,7 +78,7 @@ in
     };
 
     temp = mkOption {
-      type = types.nullOr types.int;
+      type = with types; nullOr (oneOf [ int str ]);
       default = null;
       description = ''
         The temperature target in Celsius degrees.
@@ -86,7 +86,7 @@ in
     };
 
     tempAc = mkOption {
-      type = types.nullOr types.int;
+      type = with types; nullOr (oneOf [ int str ]);
       default = null;
       description = ''
         The temperature target on AC power in Celsius degrees.
@@ -94,7 +94,7 @@ in
     };
 
     tempBat = mkOption {
-      type = types.nullOr types.int;
+      type = with types; nullOr (oneOf [ int str ]);
       default = null;
       description = ''
         The temperature target on battery power in Celsius degrees.
