@@ -4325,6 +4325,8 @@ in
 
   incron = callPackage ../tools/system/incron { };
 
+  industrializer = callPackage ../applications/audio/industrializer { };
+
   inetutils = callPackage ../tools/networking/inetutils { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
