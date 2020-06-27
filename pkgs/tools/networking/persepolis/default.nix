@@ -6,6 +6,7 @@
 , pyqt5
 , requests
 , setproctitle
+, setuptools
 , sound-theme-freedesktop
 , youtube-dl
 }:
@@ -47,6 +48,7 @@ buildPythonApplication rec {
     pyqt5
     requests
     setproctitle
+    setuptools
     sound-theme-freedesktop
     youtube-dl
   ];
