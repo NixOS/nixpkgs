@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     icon = "monero";
     desktopName = "Monero";
     genericName = "Wallet";
-    categories  = "Application;Network;Utility;";
+    categories  = "Network;Utility;";
   };
 
   postInstall = ''

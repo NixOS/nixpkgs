@@ -36,7 +36,7 @@ let
     icon = "minecraft-launcher";
     comment = "Official launcher for Minecraft, a sandbox-building game";
     desktopName = "Minecraft Launcher";
-    categories = "Game;Application;";
+    categories = "Game;";
   };
 
   envLibPath = stdenv.lib.makeLibraryPath [

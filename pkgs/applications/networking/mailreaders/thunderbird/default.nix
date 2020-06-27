@@ -18,7 +18,6 @@
 , lib
 , libGL
 , libGLU
-, libIDL
 , libevent
 , libjpeg
 , libnotify
@@ -113,7 +112,6 @@ stdenv.mkDerivation rec {
     jemalloc
     libGL
     libGLU
-    libIDL
     libevent
     libjpeg
     libnotify
@@ -179,7 +177,7 @@ stdenv.mkDerivation rec {
 
     BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
       $(< ${stdenv.cc}/nix-support/cc-cflags) \
-      ${stdenv.cc.default_cxx_stdlib_compile} \
+      $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
       ${
         lib.optionalString stdenv.cc.isClang
         "-idirafter ${stdenv.cc.cc}/lib/clang/${

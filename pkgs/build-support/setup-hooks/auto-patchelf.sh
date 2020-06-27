@@ -141,7 +141,7 @@ autoPatchelfFile() {
     # This makes sure the builder fails if we didn't find a dependency, because
     # the stdenv setup script is run with set -e. The actual error is emitted
     # earlier in the previous loop.
-    [ $depNotFound -eq 0 ]
+    [ $depNotFound -eq 0 -o -n "$autoPatchelfIgnoreMissingDeps" ]
 
     if [ -n "$rpath" ]; then
         echo "setting RPATH to: $rpath" >&2

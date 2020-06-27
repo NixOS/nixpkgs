@@ -1,18 +1,18 @@
 { lib, buildPythonPackage, fetchPypi
 , isPy27
-, pylev, pastel, typing, enum34 }:
+, pylev, pastel, typing, enum34, crashtest }:
 
 buildPythonPackage rec {
   pname = "clikit";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0603e3c19fa106f5df5f224826c92e57221f48ec969e42744173e0458d359354";
+    sha256 = "0ngdkmb73gkp5y00q7r9k1cdlfn0wyzws2wrqlshc4hlkbdyabj4";
   };
 
   propagatedBuildInputs = [
-    pylev pastel
+    crashtest pylev pastel
   ] ++ lib.optionals isPy27 [ typing enum34 ];
 
   # The Pypi tarball doesn't include tests, and the GitHub source isn't

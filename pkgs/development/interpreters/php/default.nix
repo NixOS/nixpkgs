@@ -264,24 +264,24 @@ let
         };
 
   php72base = callPackage generic (_args // {
-    version = "7.2.29";
-    sha256 = "08xry2fgqgg8s0ym1hh11wkbr36av3zq1bn4krbciw1b7x8gb8ga";
+    version = "7.2.31";
+    sha256 = "0057x1s43f9jidmrl8daka6wpxclxc1b1pm5cjbz616p8nbmb9qv";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   });
 
   php73base = callPackage generic (_args // {
-    version = "7.3.16";
-    sha256 = "0bh499v9dfgh9k51w4rird1slb9rh9whp5h37fb84c98d992s1xq";
+    version = "7.3.19";
+    sha256 = "199l1lr7ima92icic7b1bqlb036md78m305lc3v6zd4zw8qix70d";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   });
 
   php74base = callPackage generic (_args // {
-    version = "7.4.6";
-    sha256 = "0j133pfwa823d4jhx2hkrrzjl4hswvz00b1z58r5c82xd5sr9vd6";
+    version = "7.4.7";
+    sha256 = "0ynq4fz54jpzh9nxvbgn3vrdad2clbac0989ai0yrj2ryc0hs3l0";
   });
 
   defaultPhpExtensions = { all, ... }: with all; ([

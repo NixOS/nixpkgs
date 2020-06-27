@@ -48,12 +48,6 @@ let
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
-  default_cxx_stdlib_compile = if (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc) && !(targetPlatform.useLLVM or false) then
-    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/${targetPlatform.config}"
-  else if targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false) && !(targetPlatform.useLLVM or false) then
-    "-isystem ${libcxx}/include/c++/v1"
-  else "";
-
   # The "suffix salt" is a arbitrary string added in the end of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
   # without interfering. For the moment, it is defined as the target triple,
@@ -68,7 +62,7 @@ let
 
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
   isGccArchSupported = arch:
-    if cc.isGNU or false then
+    if isGNU then
       { skylake        = versionAtLeast ccVersion "6.0";
         skylake-avx512 = versionAtLeast ccVersion "6.0";
         cannonlake     = versionAtLeast ccVersion "8.0";
@@ -76,7 +70,7 @@ let
         icelake-server = versionAtLeast ccVersion "8.0";
         knm            = versionAtLeast ccVersion "8.0";
       }.${arch} or true
-    else if cc.isClang or false then
+    else if isClang then
       { cannonlake     = versionAtLeast ccVersion "5.0";
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
@@ -116,7 +110,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile;
+    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -173,8 +167,6 @@ stdenv.mkDerivation {
       export named_cc=${targetPrefix}cc
       export named_cxx=${targetPrefix}c++
 
-      export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
-
       if [ -e $ccPath/${targetPrefix}gcc ]; then
         wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc
         ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
@@ -226,7 +218,7 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or false [ zlib ];
-  depsTargetTargetPropagated = extraPackages;
+  depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
 
   wrapperName = "CC_WRAPPER";
 
@@ -248,6 +240,24 @@ stdenv.mkDerivation {
       if [[ -f "$bintools/nix-support/dynamic-linker-m32" ]]; then
         ln -s "$bintools/nix-support/dynamic-linker-m32" "$out/nix-support"
       fi
+    ''
+
+    + optionalString isClang ''
+      ##
+      ## General Clang support
+      ##
+
+      echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
+    ''
+
+    + optionalString (isClang && libcxx == null && cc ? gcc) ''
+      ##
+      ## GCC libs for non-GCC support
+      ##
+
+      echo "-B${cc.gcc}/lib/gcc/${targetPlatform.config}/${cc.gcc.version}" >> $out/nix-support/cc-cflags
+      echo "-L${cc.gcc}/lib/gcc/${targetPlatform.config}/${cc.gcc.version}" >> $out/nix-support/cc-ldflags
+      echo "-L${cc.gcc.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     + optionalString (libc != null) (''
@@ -277,6 +287,27 @@ stdenv.mkDerivation {
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
+    '')
+
+    + ''
+      ##
+      ## General libc++ support
+      ##
+
+    ''
+    + optionalString (libcxx == null && cc ? gcc) ''
+      for dir in ${cc.gcc}/include/c++/*; do
+        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+      done
+      for dir in ${cc.gcc}/include/c++/*/${targetPlatform.config}; do
+        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+      done
+    ''
+    + optionalString (libcxx.isLLVM or false) (''
+      echo "-isystem ${libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
+    '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+      echo "-lc++abi" >> $out/nix-support/libcxx-ldflags
     '')
 
     + optionalString (!nativeTools) ''
@@ -389,9 +420,9 @@ stdenv.mkDerivation {
     # There are a few tools (to name one libstdcxx5) which do not work
     # well with multi line flags, so make the flags single line again
     + ''
-      if [ -e "$out/nix-support/libc-cflags" ]; then
-        substituteInPlace "$out/nix-support/libc-cflags" --replace $'\n' ' '
-      fi
+      for flags in "$out/nix-support"/*flags; do
+        substituteInPlace "$flags" --replace $'\n' ' '
+      done
 
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh

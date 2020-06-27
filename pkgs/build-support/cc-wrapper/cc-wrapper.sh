@@ -129,7 +129,7 @@ fi
 
 if [[ "$isCpp" = 1 ]]; then
     if [[ "$cppInclude" = 1 ]]; then
-        NIX_CFLAGS_COMPILE_@suffixSalt@+=" ${NIX_CXXSTDLIB_COMPILE_@suffixSalt@:-@default_cxx_stdlib_compile@}"
+        NIX_CFLAGS_COMPILE_@suffixSalt@+=" $NIX_CXXSTDLIB_COMPILE_@suffixSalt@"
     fi
     NIX_CFLAGS_LINK_@suffixSalt@+=" $NIX_CXXSTDLIB_LINK_@suffixSalt@"
 fi

@@ -1,9 +1,8 @@
 { stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
 
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib, stdenv, python3, pkgs, fetchFromGitHub }:
 
 let
-  # TODO: This package requires qt5Full to launch
   defaultOverrides = commonOverrides ++ [
     (mkOverride "jsonschema" "3.2.0"
       "0ykr61yiiizgvm3bzipa3l73rvj49wmrybbfwhvpgk3pscl5pa68")
@@ -27,6 +26,7 @@ in python.pkgs.buildPythonPackage rec {
     raven psutil jsonschema # tox for check
     # Runtime dependencies
     sip (pyqt5.override { withWebSockets = true; }) distro setuptools
+    pkgs.qt5Full
   ];
 
   doCheck = false; # Failing
