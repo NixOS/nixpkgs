@@ -241,5 +241,9 @@ stdenv.mkDerivation (args // {
   meta = {
     # default to Rust's platforms
     platforms = rustc.meta.platforms;
-  } // meta;
+  } // meta // {
+      # add an extra maintainer to every package
+      maintainers = (meta.maintainers or []) ++
+                    [ stdenv.lib.maintainers.nixpkgs-rust ];
+  };
 })
