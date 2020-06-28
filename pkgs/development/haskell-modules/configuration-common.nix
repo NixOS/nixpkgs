@@ -480,9 +480,6 @@ self: super: {
   # Won't compile with recent versions of QuickCheck.
   inilist = dontCheck super.inilist;
 
-  # Doesn't accept recent versions of 'base' or QuickCheck.
-  MissingH = dontCheck (doJailbreak super.MissingH);
-
   # https://github.com/yaccz/saturnin/issues/3
   Saturnin = dontCheck super.Saturnin;
 
@@ -754,9 +751,6 @@ self: super: {
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
   digestive-functors = doJailbreak super.digestive-functors;
 
-  # missing dependencies: doctest ==0.12.*
-  html-entities = doJailbreak super.html-entities;
-
   # https://github.com/takano-akio/filelock/issues/5
   filelock = dontCheck super.filelock;
 
@@ -776,8 +770,7 @@ self: super: {
   grakn = dontCheck (doJailbreak super.grakn);
 
   # test suite requires git and does a bunch of git operations
-  # doJailbreak because of hardcoded time, seems to be fixed upstream
-  restless-git = dontCheck (doJailbreak super.restless-git);
+  restless-git = dontCheck super.restless-git;
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
@@ -794,7 +787,6 @@ self: super: {
 
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
-  blaze-markup = doJailbreak super.blaze-markup;
   blaze-html = doJailbreak super.blaze-html;
   attoparsec = dontCheck super.attoparsec;      # 1 out of 67 tests fails
   int-cast = doJailbreak super.int-cast;
@@ -1118,10 +1110,6 @@ self: super: {
       done
     '';
   });
-
-  # The doctests in universum-1.5.0 are broken.  The doctests in versions of universum after
-  # 1.5.0 should be fixed, so this should be able to be removed.
-  universum = dontCheck super.universum;
 
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;
