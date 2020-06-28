@@ -4175,6 +4175,8 @@ in
     javac = jdk;
   };
 
+  hdl-dump = callPackage ../tools/filesystems/hdl-dump { };
+
   hecate = callPackage ../applications/editors/hecate { };
 
   heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack {};
