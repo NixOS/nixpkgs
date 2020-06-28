@@ -2,7 +2,7 @@
 
 buildDunePackage {
   pname = "lwt_ppx";
-  version = "1.2.4";
+  version = "2.0.1";
 
   src = fetchzip {
     # `lwt_ppx` has a different release cycle than Lwt, but it's included in
@@ -12,8 +12,8 @@ buildDunePackage {
     #
     # This is particularly useful for overriding Lwt without breaking `lwt_ppx`,
     # as new Lwt releases may contain broken `lwt_ppx` code.
-    url = "https://github.com/ocsigen/lwt/archive/4.4.0.tar.gz";
-    sha256 = "1l97zdcql7y13fhaq0m9n9xvxf712jg0w70r72fvv6j49xm4nlhi";
+    url = "https://github.com/ocsigen/lwt/archive/5.2.0.tar.gz";
+    sha256 = "1znw8ckwdmqsnrcgar4g33zgr659l4l904bllrz69bbwdnfmz2x3";
   };
 
 
