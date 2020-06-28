@@ -729,19 +729,11 @@ self: super: {
   uuid-types = doJailbreak super.uuid-types;
   uuid = doJailbreak super.uuid;
 
-  # https://github.com/haskell/fgl/issues/60
-  # Needed for QuickCheck < 2.10
-  fgl = dontCheck super.fgl;
-  fgl-arbitrary = doJailbreak super.fgl-arbitrary;
-
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
 
   # https://github.com/dan-t/cabal-lenses/issues/6
   cabal-lenses = doJailbreak super.cabal-lenses;
-
-  # https://github.com/fizruk/http-api-data/issues/49
-  http-api-data = dontCheck super.http-api-data;
 
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
