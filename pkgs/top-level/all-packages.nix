@@ -2046,6 +2046,8 @@ in
 
   massren = callPackage ../tools/misc/massren { };
 
+  maxcso = callPackage ../tools/archivers/maxcso {};
+
   medusa = callPackage ../tools/security/medusa { };
 
   megasync = libsForQt5.callPackage ../applications/misc/megasync { };
