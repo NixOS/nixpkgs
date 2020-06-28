@@ -15,6 +15,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/stan-dev/cmdstanpy";
     description = "CmdStanPy is a lightweight interface to Stan for Python users which provides the necessary objects and functions to do Bayesian inference given a probability model written as a Stan program and data.";
     license = licenses.mit;
-    maintainers = with maintainers; [ CmdStanPy ];
+    maintainers = with maintainers; [ ];
   };
 }

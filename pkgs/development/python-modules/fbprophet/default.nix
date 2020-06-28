@@ -13,7 +13,9 @@
   holidays,
   setuptools-git,
   python-dateutil,
-  tqdm
+  setuptools,
+  tqdm,
+  python
 }:
 
 let
@@ -36,7 +38,12 @@ in buildPythonPackage rec {
     sha256 = "16w9dag0v0pz5zp590z4dy56d5mybivhcsbhl1lvlk8fa0balzny";
   };
 
-  propagatedBuildInputs = [ numpy pandas lunar-calendar convertdate holidays pystan cython matplotlib setuptools-git tqdm cmdstanpy' ];
+  propagatedBuildInputs = [ numpy pandas lunar-calendar convertdate holidays pystan cython matplotlib setuptools setuptools-git tqdm cmdstanpy' ];
+
+  checkPhase = ''
+    cd fbprophet/tests/ && ${python.interpreter} -m unittest discover
+  '';
+
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/facebook/prophet";

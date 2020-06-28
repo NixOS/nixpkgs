@@ -22,6 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wolfhong/LunarCalendar";
     description = "LunarCalendar is a Lunar-Solar Converter, containing a number of lunar and solar festivals in China.";
     license = licenses.mit;
-    maintainers = with maintainers; [ bletham seanjtaylor ];
+    maintainers = with maintainers; [ wolfhong ];
   };
 }

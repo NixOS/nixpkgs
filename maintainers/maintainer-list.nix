@@ -8989,4 +8989,39 @@
     github = "cpcloud";
     githubId = 417981;
   };
+  bletham = {
+    name = "Ben Letham";
+    email = "6339760+bletham@users.noreply.github.com";
+    github = "bletham";
+    githubId = 6339760;
+  };
+  seanjtaylor = {
+    name = "Sean Taylor";
+    email = "7317+seanjtaylor@users.noreply.github.com";
+    github = "seanjtaylor"
+    githubId = 7317;
+  };
+  usingsky = {
+    name = "Jinil Lee";
+    email = "7775824+usingsky@users.noreply.github.comseanjtaylor";
+    github = "usingsky";
+    githubId = 7775824;
+  };
+  ahartikainen = {
+    name = "Ari Hartikainen";
+    email = "13161958+ahartikainen@users.noreply.github.com";
+    github = "ahartikainen";
+    githubId = 13161958;
+  };
+  ariddell = {
+    name = "Allen Riddell";
+    email = "19950+ariddell@users.noreply.github.com";
+    github = "ariddell";
+    githubId = 19950;
+  };
+  wolfhong = {
+    email = "1505169+wolfhong@users.noreply.github.com";
+    github = "wolfhong";
+    githubId = 1505169;
+  };
 }
