@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/openstreetmap/osm2pgsql";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ jglukasik ];
+    maintainers = with maintainers; [ jglukasik das-g ];
   };
 }
