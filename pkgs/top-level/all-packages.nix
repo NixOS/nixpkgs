@@ -10446,6 +10446,8 @@ in
 
   drush = callPackage ../development/tools/misc/drush { };
 
+  easypdkprog = callPackage ../development/tools/misc/easypdkprog { };
+
   editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
