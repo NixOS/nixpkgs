@@ -3577,7 +3577,6 @@ broken-packages:
   - c10k
   - c2ats
   - cabal-audit
-  - cabal-bounds
   - cabal-bundle-clib
   - cabal-cache
   - cabal-cargs
@@ -3594,7 +3593,6 @@ broken-packages:
   - cabal-install-bundle
   - cabal-install-ghc72
   - cabal-install-ghc74
-  - cabal-lenses
   - cabal-meta
   - cabal-mon
   - cabal-nirvana
