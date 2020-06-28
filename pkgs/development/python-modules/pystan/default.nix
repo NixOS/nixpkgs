@@ -1,9 +1,8 @@
-{
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  cython,
-  numpy
+{ stdenv
+,  buildPythonPackage
+,  fetchPypi
+,  cython
+,  numpy
 }:
 
 buildPythonPackage rec {
@@ -15,8 +14,8 @@ buildPythonPackage rec {
     sha256 = "0f5hbv9dhsx3b5yn5kpq5pwi1kxzmg4mdbrndyz2p8hdpj6sv2zs";
   };
 
-  buildInputs = [ numpy cython ];
-  propagatedBuildInputs = [ ];
+  nativeBuildInputs = [ cython ];
+  propagatedBuildInputs = [ numpy ];
 
   doCheck = false;
 
