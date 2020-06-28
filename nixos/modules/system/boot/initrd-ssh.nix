@@ -103,11 +103,10 @@ in
   config = let
     # Nix complains if you include a store hash in initrd path names, so
     # as an awful hack we drop the first character of the hash.
-    initrdKeyPath = path: if isString path
-      then path
+    initrdKeyPath = path: builtins.unsafeDiscardStringContext (
+      if isString path then path
       else let name = builtins.baseNameOf path; in
-        builtins.unsafeDiscardStringContext ("/etc/ssh/" +
-          substring 1 (stringLength name) name);
+        "/etc/ssh/" + substring 1 (stringLength name) name);
 
     sshdCfg = config.services.openssh;
 
