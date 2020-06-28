@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, expat, proj, bzip2, zlib, boost, postgresql
-, withLuaJIT ? false, lua, luajit }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, expat
+, proj
+, bzip2
+, zlib
+, boost
+, postgresql
+, withLuaJIT ? false
+, lua
+, luajit
+}:
 
 stdenv.mkDerivation rec {
   pname = "osm2pgsql";
