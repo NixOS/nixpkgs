@@ -504,6 +504,16 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      In the <literal>resilio</literal> module, <xref linkend="opt-services.resilio.httpListenAddr"/> has been changed to listen to <literal>[::1]</literal> instead of <literal>0.0.0.0</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Radicale's default package has changed from 2.x to 3.x. An upgrade
+     checklist can be found
+     <link xlink:href="https://github.com/Kozea/Radicale/blob/3.0.x/NEWS.md#upgrade-checklist">here</link>.
+     You can use the newer version in the NixOS service by setting the
+     <literal>package</literal> to <literal>radicale3</literal>, which is done
+     automatically if <literal>stateVersion</literal> is 20.09 or higher.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
