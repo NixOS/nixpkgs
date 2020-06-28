@@ -8998,7 +8998,7 @@
   seanjtaylor = {
     name = "Sean Taylor";
     email = "7317+seanjtaylor@users.noreply.github.com";
-    github = "seanjtaylor"
+    github = "seanjtaylor";
     githubId = 7317;
   };
   usingsky = {
