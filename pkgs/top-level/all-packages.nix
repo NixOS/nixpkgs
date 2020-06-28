@@ -4056,6 +4056,8 @@ in
 
   gbenchmark = callPackage ../development/libraries/gbenchmark {};
 
+  gtkcord = callPackage ../applications/networking/instant-messengers/gtkcord { };
+
   gtkdatabox = callPackage ../development/libraries/gtkdatabox {};
 
   gtklick = callPackage ../applications/audio/gtklick {};
