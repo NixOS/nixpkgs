@@ -8998,6 +8998,8 @@ in {
 
   webtest = callPackage ../development/python-modules/webtest { };
 
+  webtest-aiohttp = callPackage ../development/python-modules/webtest-aiohttp { };
+
   webthing = callPackage ../development/python-modules/webthing { };
 
   werkzeug = callPackage ../development/python-modules/werkzeug {
