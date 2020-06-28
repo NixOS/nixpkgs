@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
 	configureFlags = [ "--enable-lwt"
 	  (stdenv.lib.optionalString doCheck "--enable-tests") ];
 
+	postConfigure = stdenv.lib.optionalString doCheck ''
+	  echo '<lib_test/test_inotify_lwt.*>: pkg_threads' | tee -a _tags
+	'';
+
 	doCheck = true;
 	checkTarget = "test";
 
