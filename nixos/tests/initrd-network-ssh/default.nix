@@ -19,7 +19,10 @@ import ../make-test-python.nix ({ lib, ... }:
             enable = true;
             authorizedKeys = [ (readFile ./id_ed25519.pub) ];
             port = 22;
-            hostKeys = [ ./ssh_host_ed25519_key ];
+            # Key must be copied to the store for this test so that it is
+            # available when the bootloader is installed. DO NOT do this in a
+            # real config, as it will leak the key into the store.
+            hostKeys = [ "${./ssh_host_ed25519_key}" ];
           };
         };
         boot.initrd.preLVMCommands = ''
@@ -30,6 +33,7 @@ import ../make-test-python.nix ({ lib, ... }:
             sleep 1
           done
         '';
+        virtualisation.useBootLoader = true;
       };
 
     client =
