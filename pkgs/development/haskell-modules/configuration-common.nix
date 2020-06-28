@@ -62,10 +62,6 @@ self: super: {
   mysql-simple = dontCheck super.mysql-simple;
   mysql-haskell = dontCheck super.mysql-haskell;
 
-  # Tests failing, fixed once 0.8.0 is in stackage
-  # https://gitlab.com/twittner/zeromq-haskell/issues/63
-  zeromq4-haskell = dontCheck super.zeromq4-haskell;
-
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
   git-annex = (overrideSrc super.git-annex {
@@ -121,7 +117,6 @@ self: super: {
   });
 
   # The Haddock phase fails for one reason or another.
-  bytestring-progress = dontHaddock super.bytestring-progress;
   deepseq-magic = dontHaddock super.deepseq-magic;
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
   hoodle-core = dontHaddock super.hoodle-core;
@@ -174,9 +169,6 @@ self: super: {
 
   # Test suite depends on source code being available
   simple-affine-space = dontCheck super.simple-affine-space;
-
-  # https://github.com/kazu-yamamoto/simple-sendfile/issues/17
-  simple-sendfile = dontCheck super.simple-sendfile;
 
   # Fails no apparent reason. Upstream has been notified by e-mail.
   assertions = dontCheck super.assertions;
