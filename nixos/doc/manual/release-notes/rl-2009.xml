@@ -675,6 +675,12 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      <package>nextcloud18</package> before upgrading to <package>nextcloud19</package>
      since Nextcloud doesn't support upgrades across multiple major versions.
     </para>
+     <para>
+       The <literal>nixos-run-vms</literal> script now deletes the
+       previous run machines states on test startup. You can use the
+       <literal>--keep-vm-state</literal> flag to match the previous
+       behaviour and keep the same VM state between different test runs.
+     </para>
    </listitem>
   </itemizedlist>
  </section>
