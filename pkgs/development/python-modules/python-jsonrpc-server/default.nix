@@ -18,7 +18,7 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i 's/version=versioneer.get_version(),/version="${version}",/g' setup.py
     # https://github.com/palantir/python-jsonrpc-server/issues/36
-    sed -i -e 's!ujson<=!ujson>=!' setup.py
+    sed -iEe "s!'ujson.*\$!'ujson',!" setup.py
   '';
 
   checkInputs = [
