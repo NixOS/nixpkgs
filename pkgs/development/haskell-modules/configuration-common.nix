@@ -510,20 +510,11 @@ self: super: {
   inline-c-win32 = dontDistribute super.inline-c-win32;
   Southpaw = dontDistribute super.Southpaw;
 
-  # https://github.com/yesodweb/serversession/issues/1
-  serversession = dontCheck super.serversession;
-
   # Hydra no longer allows building texlive packages.
   lhs2tex = dontDistribute super.lhs2tex;
 
   # https://ghc.haskell.org/trac/ghc/ticket/9825
   vimus = overrideCabal super.vimus (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; });
-
-  # https://github.com/hspec/mockery/issues/6
-  mockery = overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; });
-
-  # https://github.com/alphaHeavy/lzma-conduit/issues/5
-  lzma-conduit = dontCheck super.lzma-conduit;
 
   # https://github.com/kazu-yamamoto/logger/issues/42
   logger = dontCheck super.logger;
