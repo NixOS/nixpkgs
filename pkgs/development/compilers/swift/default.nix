@@ -182,6 +182,9 @@ stdenv.mkDerivation {
   '';
 
   patchPhase = ''
+    # Glibc 2.31 fix
+    patch -p1 -i ${./patches/swift-llvm.patch}
+
     # Just patch all the things for now, we can focus this later
     patchShebangs $SWIFT_SOURCE_ROOT
 
