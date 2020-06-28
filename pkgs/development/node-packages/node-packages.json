@@ -142,6 +142,7 @@
 , "prettier"
 , "pscid"
 , "pulp"
+, "purescript-language-server"
 , "purescript-psa"
 , "purty"
 , "react-native-cli"
