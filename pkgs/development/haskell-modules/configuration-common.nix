@@ -846,12 +846,6 @@ self: super: {
     in doJailbreak (f super.servant-docs); # jailbreak tasty < 1.2 until servant-docs > 0.11.3 is on hackage.
   swagger2 = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontHaddock (dontCheck super.swagger2) else super.swagger2;
 
-  # requires a release including https://github.com/haskell-servant/servant-swagger/commit/249530d9f85fe76dfb18b100542f75a27e6a3079
-  servant-swagger = dontCheck super.servant-swagger;
-
-  # Tries to read a file it is not allowed to in the test suite
-  load-env = dontCheck super.load-env;
-
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal super.hledger (drv: {
@@ -924,11 +918,6 @@ self: super: {
   # Compiles some C++ source which requires these headers
   VulkanMemoryAllocator = addExtraLibrary super.VulkanMemoryAllocator pkgs.vulkan-headers;
 
-  # # Builds only with the latest version of indexed-list-literals.
-  # vector-sized_1_0_3_0 = super.vector-sized_1_0_3_0.override {
-  #   indexed-list-literals = self.indexed-list-literals_0_2_1_1;
-  # };
-
   # https://github.com/dmwit/encoding/pull/3
   encoding = doJailbreak (appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch);
 
@@ -943,9 +932,6 @@ self: super: {
 
   # https://github.com/haskell-servant/servant-auth/issues/113
   servant-auth-client = dontCheck super.servant-auth-client;
-
-  # Test has either build errors or fails anyway, depending on the compiler.
-  vector-algorithms = dontCheck super.vector-algorithms;
 
   # 2020-06-04: HACK: dontCheck - The test suite attempts to use the network.
   # Should be solved when: https://github.com/dhall-lang/dhall-haskell/issues/1837
@@ -1104,9 +1090,6 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
-  # QuickCheck >=2.3 && <2.13, hspec >=2.1 && <2.7
-  graphviz = dontCheck super.graphviz;
-
   # https://github.com/elliottt/hsopenid/issues/15
   openid = markBroken super.openid;
 
@@ -1140,9 +1123,6 @@ self: super: {
 
   # upstream issue: https://github.com/vmchale/atspkg/issues/12
   language-ats = dontCheck super.language-ats;
-
-  # https://github.com/Happstack/web-routes-th/pull/3
-  web-routes-th = doJailbreak super.web-routes-th;
 
   # Remove for hail > 0.2.0.0
   hail = overrideCabal super.hail (drv: {
