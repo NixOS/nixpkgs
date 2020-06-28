@@ -3594,7 +3594,6 @@ broken-packages:
   - cabal-install-bundle
   - cabal-install-ghc72
   - cabal-install-ghc74
-  - cabal-lenses
   - cabal-meta
   - cabal-mon
   - cabal-nirvana
