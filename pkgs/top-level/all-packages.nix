@@ -13604,7 +13604,7 @@ in
 
   libva = callPackage ../development/libraries/libva { };
   libva-minimal = libva.override { minimal = true; };
-  libva-utils = callPackage ../development/libraries/libva-utils { };
+  libva-utils = callPackage ../development/libraries/libva/utils.nix { };
 
   libva1 = callPackage ../development/libraries/libva/1.0.0.nix { };
   libva1-minimal = libva1.override { minimal = true; };
