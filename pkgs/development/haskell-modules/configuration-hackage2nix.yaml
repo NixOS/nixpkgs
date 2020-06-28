@@ -2685,11 +2685,12 @@ package-maintainers:
   sorki:
     - cayene-lpp
     - data-stm32
-    # - gcodehs
+    - gcodehs
     - nix-derivation
     - nix-narinfo
     - ttn
     # - ttn-client
+    - update-nix-fetchgit
     - zre
 
 unsupported-platforms:
@@ -5169,7 +5170,6 @@ broken-packages:
   - gas
   - gbu
   - gc-monitoring-wai
-  - gcodehs
   - gconf
   - gdax
   - gdiff-ig
@@ -10562,7 +10562,6 @@ broken-packages:
   - unused
   - uom-plugin
   - up
-  - update-nix-fetchgit
   - Updater
   - uploadcare
   - upskirt
