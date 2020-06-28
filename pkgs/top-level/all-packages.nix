@@ -183,6 +183,8 @@ in
 
   deadcode = callPackage ../development/tools/deadcode { };
 
+  eclipse-mat = callPackage ../development/tools/eclipse-mat { };
+
   glade = callPackage ../development/tools/glade { };
 
   hobbes = callPackage ../development/tools/hobbes { };
