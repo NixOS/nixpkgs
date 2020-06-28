@@ -2839,6 +2839,16 @@ in {
 
   facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
 
+  fbprophet = callPackage ../development/python-modules/fbprophet { };
+
+  pystan = callPackage ../development/python-modules/pystan { };
+
+  cmdstanpy = callPackage ../development/python-modules/cmdstanpy { };
+
+  lunar-calendar = callPackage ../development/python-modules/LunarCalendar { };
+
+  korean-lunar-calendar = callPackage ../development/python-modules/korean-lunar-calendar { };
+
   face_recognition = callPackage ../development/python-modules/face_recognition { };
 
   face_recognition_models = callPackage ../development/python-modules/face_recognition_models { };
