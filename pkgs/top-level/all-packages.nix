@@ -4734,9 +4734,7 @@ in
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
 
-  mcfly = callPackage ../tools/misc/mcfly {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  mcfly = callPackage ../tools/misc/mcfly { };
 
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
