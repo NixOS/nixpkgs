@@ -10,6 +10,7 @@
 , withLuaJIT ? false
 , lua
 , luajit
+, libosmium
 }:
 
 stdenv.mkDerivation rec {
@@ -25,11 +26,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ expat proj bzip2 zlib boost postgresql ]
+  buildInputs = [ expat proj bzip2 zlib boost postgresql libosmium ]
     ++ stdenv.lib.optional withLuaJIT luajit
     ++ stdenv.lib.optional (!withLuaJIT) lua;
 
-  cmakeFlags = stdenv.lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
+  cmakeFlags = [ "-DEXTERNAL_LIBOSMIUM=ON" ]
+    ++ stdenv.lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
 
   NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
 
