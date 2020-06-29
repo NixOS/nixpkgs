@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "1.4.1";
+  version = "1.4.3";
 
   bloop-coursier-channel = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-coursier.json";
-    sha256 = "2e6a873183e5e22712913bfdab1331d0a7792167c369fee5be0c83e27572fe12";
+    sha256 = "0abl91l2sb08pwr98mw910zibzwk6lss9r62h2s3g7qnnxp3z59r";
   };
 
   bloop-bash = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bash-completions";
-    sha256 = "da6b7ecd4109bd0ff98b1c452d9dd9d26eee0d28ff604f6c83fb8d3236a6bdd1";
+    sha256 = "1ldxlqv353gvhdn4yq7z506ywvnjv6fjsi8wigwhzg89876pwsys";
   };
 
   bloop-fish = fetchurl {
@@ -42,13 +42,14 @@ stdenv.mkDerivation rec {
       ln -s ${bloop-coursier-channel} channel/bloop.json
       ${coursier}/bin/coursier install --install-dir $out --default-channels=false --channel channel --only-prebuilt=true bloop
 
+
       # Remove binary part of the coursier launcher script to make derivation output hash stable
       sed -i '5,$ d' $out/bloop
    '';
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "17jskljn0aspvl7s2hadzjmp05blnsrxi8db8pn3lfw40da4yn79";
+    outputHash     = "1ncl34f39mvk0zb5jl1l77cwjdg3xfnhjxbzz11pdfqw0d7wqywj";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ] ;
