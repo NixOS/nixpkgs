@@ -84,6 +84,11 @@ stdenv.mkDerivation rec {
       stripLen = 1;
       extraPrefix = "slirp/";
     })
+    (fetchpatch {
+      name = "CVE-2020-1711.patch";
+      url = "https://git.qemu.org/?p=qemu.git;a=patch;h=693fd2acdf14dd86c0bf852610f1c2cca80a74dc";
+      sha256 = "0dh09h6q26fm6691shvsbr2prrak8vcnpzlg4nlj57a1v7ndka8k";
+    })
     # patches listed at: https://nvd.nist.gov/vuln/detail/CVE-2020-7039
     (fetchpatch {
       name = "CVE-2020-7039-1.patch";
