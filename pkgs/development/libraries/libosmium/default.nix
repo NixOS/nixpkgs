@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [ protozero zlib bzip2 expat boost ];
 
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Fast and flexible C++ library for working with OpenStreetMap data";
