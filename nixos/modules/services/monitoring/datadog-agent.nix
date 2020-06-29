@@ -204,10 +204,19 @@ in {
 
     permissions = mkOption {
       description = "User and group permissions for datadog-agent";
-      type = types.attrs;
-      default = {
-        User = "datadog";
-        Group = "datadog";
+      type = with types; submodule {
+        options = {
+          User = mkOption {
+            description = "User permissions";
+            type = types.str;
+            default = "datadog";
+          };
+          Group = mkOption {
+            description = "Group permissions";
+            type = types.str;
+            default = "datadog";
+          };
+        };
       };
     };
 
