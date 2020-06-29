@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "0.19.0";
 
   src = fetchFromGitHub {
-    owner = "instrumenta";
+    owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
     sha256 = "0d6n51p4b8jwkfqympwxkqxssgy462m5pgv5qvm6jy5pm566qa08";
@@ -20,7 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Write tests against structured configuration data";
-    homepage = "https://github.com/instrumenta/conftest";
+    inherit (src.meta) homepage;
     license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];
     platforms = platforms.all;
