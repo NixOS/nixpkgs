@@ -52,6 +52,8 @@ let
 
     bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
 
+    bigarray-overlap = callPackage ../development/ocaml-modules/bigarray-overlap { };
+
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
 
     bigstring = callPackage ../development/ocaml-modules/bigstring { };
