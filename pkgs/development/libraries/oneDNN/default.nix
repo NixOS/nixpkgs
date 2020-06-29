@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "https://01.org/dnnl";
     changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${version}";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ alexarice bhipple ];
   };
 }
