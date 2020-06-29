@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "Radicale";
-  version = "2.1.11";
+  version = "2.1.12";
 
   # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = version;
-    sha256 = "1k32iy55lnyyp1r75clarhwdqvw6w8mxb5v0l5aysga07fg2mix4";
+    sha256 = "14f9ql0fiwapaa4xaslwgk1ah9fzxxan2p1p2rxb4a5iqph1z0cl";
   };
 
   # We only want functional tests
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "https://www.radicale.org/";
+    homepage = "https://www.radicale.org/2.x.nix";
     description = "CalDAV CardDAV server";
     longDescription = ''
       The Radicale Project is a complete CalDAV (calendar) and CardDAV

@@ -39,6 +39,13 @@ rustPlatform.buildRustPackage rec {
     export HOME=$TMPDIR
   '';
 
+  checkPhase = ''
+    runHook preCheck
+    echo "Running cargo test"
+    cargo test
+    runHook postCheck
+  '';
+
   meta = with lib; {
     description = "A modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
