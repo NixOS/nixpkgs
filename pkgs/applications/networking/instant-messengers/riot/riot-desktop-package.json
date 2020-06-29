@@ -2,7 +2,7 @@
   "name": "riot-desktop",
   "productName": "Riot",
   "main": "src/electron-main.js",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
