@@ -1332,6 +1332,8 @@ in {
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
 
+  confuse = callPackage ../development/python-modules/confuse { };
+
   connexion = callPackage ../development/python-modules/connexion { };
 
   consonance = callPackage ../development/python-modules/consonance { };
