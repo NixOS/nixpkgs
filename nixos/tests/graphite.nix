@@ -1,11 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... } :
 {
   name = "graphite";
-  meta = {
-    # Fails on dependency `python-2.7-Twisted`'s test suite
-    # complaining `ImportError: No module named zope.interface`.
-    broken = true;
-  };
   nodes = {
     one =
       { ... }: {
