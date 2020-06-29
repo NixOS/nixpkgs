@@ -3810,6 +3810,8 @@ in {
 
   mechanize = callPackage ../development/python-modules/mechanize { };
 
+  mediafile = callPackage ../development/python-modules/mediafile { };
+
   meinheld = callPackage ../development/python-modules/meinheld { };
 
   meld3 = callPackage ../development/python-modules/meld3 { };
