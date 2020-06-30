@@ -7238,6 +7238,8 @@ in {
 
   suseapi = callPackage ../development/python-modules/suseapi { };
 
+  tensorboardx = callPackage ../development/python-modules/tensorboardx { };
+
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
   stripe = callPackage ../development/python-modules/stripe { };
