@@ -230,12 +230,19 @@ stdenv.mkDerivation {
   ];
 
   postFixup =
+    # Ensure flags files exists, as some other programs cat them. (That these
+    # are considered an exposed interface is a bit dubious, but fine for now.)
+    ''
+      touch "$out/nix-support/cc-cflags"
+      touch "$out/nix-support/cc-ldflags"
+    ''
+
     # Backwards compatability for packages expecting this file, e.g. with
     # `$NIX_CC/nix-support/dynamic-linker`.
     #
     # TODO(@Ericson2314): Remove this after stable release and force
     # everyone to refer to bintools-wrapper directly.
-    ''
+    + ''
       if [[ -f "$bintools/nix-support/dynamic-linker" ]]; then
         ln -s "$bintools/nix-support/dynamic-linker" "$out/nix-support"
       fi
@@ -278,6 +285,8 @@ stdenv.mkDerivation {
     # limits.h file in ../includes-fixed. To remedy the problem,
     # another -idirafter is necessary to add that directory again.
     + optionalString (libc != null) (''
+      touch "$out/nix-support/libc-cflags"
+      touch "$out/nix-support/libc-ldflags"
       echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     '' + optionalString (!(cc.langD or false)) ''
       echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
@@ -294,7 +303,13 @@ stdenv.mkDerivation {
     ##
     ## General libc++ support
     ##
-    + optionalString (libcxx == null && cc ? gcc) ''
+
+    # We have a libc++ directly, we have one via "smuggled" GCC, or we have one
+    # bundled with the C compiler because it is GCC
+    + optionalString (libcxx != null || cc.gcc.langCC or false || (isGNU && cc.langCC or false)) ''
+      touch "$out/nix-support/libcxx-cxxflags"
+      touch "$out/nix-support/libcxx-ldflags"
+    '' + optionalString (libcxx == null && cc ? gcc) ''
       for dir in ${cc.gcc}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
@@ -326,14 +341,16 @@ stdenv.mkDerivation {
       ccCFlags+=" -B${cc_solib}/lib"
 
     '' + optionalString cc.langAda or false ''
+      touch "$out/nix-support/gnat-cflags"
+      touch "$out/nix-support/gnat-ldflags"
       basePath=$(echo $cc/lib/*/*/*)
       ccCFlags+=" -B$basePath -I$basePath/adainclude"
       gnatCFlags="-I$basePath/adainclude -I$basePath/adalib"
 
-      echo "$gnatCFlags" > $out/nix-support/gnat-cflags
+      echo "$gnatCFlags" >> $out/nix-support/gnat-cflags
     '' + ''
-      echo "$ccLDFlags" > $out/nix-support/cc-ldflags
-      echo "$ccCFlags" > $out/nix-support/cc-cflags
+      echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
+      echo "$ccCFlags" >> $out/nix-support/cc-cflags
     '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
       echo " -L${libcxx}/lib" >> $out/nix-support/cc-ldflags
     ''
@@ -419,7 +436,7 @@ stdenv.mkDerivation {
     # There are a few tools (to name one libstdcxx5) which do not work
     # well with multi line flags, so make the flags single line again
     + ''
-      for flags in "$out/nix-support"/*flags; do
+      for flags in "$out/nix-support"/*flags*; do
         substituteInPlace "$flags" --replace $'\n' ' '
       done
 

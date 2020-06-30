@@ -204,7 +204,8 @@ stdenv.mkDerivation {
     ## General libc support
     ##
     optionalString (libc != null) (''
-      echo "-L${libc_lib}${libc.libdir or "/lib"}" > $out/nix-support/libc-ldflags
+      touch "$out/nix-support/libc-ldflags"
+      echo "-L${libc_lib}${libc.libdir or "/lib"}" >> $out/nix-support/libc-ldflags
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
@@ -230,25 +231,23 @@ stdenv.mkDerivation {
         *) echo "Multiple dynamic linkers found for platform '${targetPlatform.config}'." >&2;;
       esac
 
-      if [ -n "''${dynamicLinker:-}" ]; then
+      if [ -n "''${dynamicLinker-}" ]; then
         echo $dynamicLinker > $out/nix-support/dynamic-linker
 
     '' + (if targetPlatform.isDarwin then ''
         printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
-    '' else ''
+      '' else ''
         if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
           echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
         fi
-
-        local ldflagsBefore=(-dynamic-linker "$dynamicLinker")
+      ''
+      # The dynamic linker is passed in `ldflagsBefore' to allow
+      # explicit overrides of the dynamic linker by callers to ld
+      # (the *last* value counts, so ours should come first).
+      + ''
+        echo -dynamic-linker "$dynamicLinker" >> $out/nix-support/libc-ldflags-before
     '') + ''
       fi
-    ''
-    # The dynamic linker is passed in `ldflagsBefore' to allow
-    # explicit overrides of the dynamic linker by callers to ld
-    # (the *last* value counts, so ours should come first).
-    + ''
-      printWords "''${ldflagsBefore[@]}" > $out/nix-support/libc-ldflags-before
     '')
 
     # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
@@ -306,6 +305,10 @@ stdenv.mkDerivation {
     ''
 
     + ''
+      for flags in "$out/nix-support"/*flags*; do
+        substituteInPlace "$flags" --replace $'\n' ' '
+      done
+
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
