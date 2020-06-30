@@ -603,6 +603,7 @@ vimwiki/vimwiki
 vito-c/jq.vim
 vmchale/ats-vim
 vmchale/dhall-vim
+vn-ki/coc-clap
 voldikss/vim-floaterm
 VundleVim/Vundle.vim
 w0ng/vim-hybrid
