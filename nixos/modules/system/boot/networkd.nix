@@ -10,11 +10,29 @@ let
 
   checkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name" "OriginalName"
-      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port" "Advertise"
-      "TCPSegmentationOffload" "TCP6SegmentationOffload" "GenericSegmentationOffload"
-      "GenericReceiveOffload" "LargeReceiveOffload" "RxChannels" "TxChannels"
-      "OtherChannels" "CombinedChannels"
+      "Description"
+      "Alias"
+      "MACAddressPolicy"
+      "MACAddress"
+      "NamePolicy"
+      "Name"
+      "OriginalName"
+      "MTUBytes"
+      "BitsPerSecond"
+      "Duplex"
+      "AutoNegotiation"
+      "WakeOnLan"
+      "Port"
+      "Advertise"
+      "TCPSegmentationOffload"
+      "TCP6SegmentationOffload"
+      "GenericSegmentationOffload"
+      "GenericReceiveOffload"
+      "LargeReceiveOffload"
+      "RxChannels"
+      "TxChannels"
+      "OtherChannels"
+      "CombinedChannels"
     ])
     (assertValueOneOf "MACAddressPolicy" ["persistent" "random" "none"])
     (assertMacAddress "MACAddress")
@@ -42,21 +60,51 @@ let
 
   checkNetdev = checkUnitConfig "Netdev" [
     (assertOnlyFields [
-      "Description" "Name" "Kind" "MTUBytes" "MACAddress"
+      "Description"
+      "Name"
+      "Kind"
+      "MTUBytes"
+      "MACAddress"
     ])
     (assertHasField "Name")
     (assertHasField "Kind")
     (assertValueOneOf "Kind" [
-      "bond" "bridge" "dummy" "gre" "gretap" "ip6gre" "ip6tnl" "ip6gretap" "ipip"
-      "ipvlan" "macvlan" "macvtap" "sit" "tap" "tun" "veth" "vlan" "vti" "vti6"
-      "vxlan" "geneve" "vrf" "vcan" "vxcan" "wireguard" "netdevsim" "xfrm"
+      "bond"
+      "bridge"
+      "dummy"
+      "gre"
+      "gretap"
+      "ip6gre"
+      "ip6tnl"
+      "ip6gretap"
+      "ipip"
+      "ipvlan"
+      "macvlan"
+      "macvtap"
+      "sit"
+      "tap"
+      "tun"
+      "veth"
+      "vlan"
+      "vti"
+      "vti6"
+      "vxlan"
+      "geneve"
+      "vrf"
+      "vcan"
+      "vxcan"
+      "wireguard"
+      "netdevsim"
+      "xfrm"
     ])
     (assertByteFormat "MTUBytes")
     (assertMacAddress "MACAddress")
   ];
 
   checkVRF = checkUnitConfig "VRF" [
-    (assertOnlyFields [ "Table" ])
+    (assertOnlyFields [
+      "Table"
+    ])
     (assertMinimum "Table" 0)
   ];
 
@@ -65,7 +113,9 @@ let
   # refrain ourselves from providing a footgun.
   checkWireGuard = checkUnitConfig "WireGuard" [
     (assertOnlyFields [
-      "PrivateKeyFile" "ListenPort" "FwMark"
+      "PrivateKeyFile"
+      "ListenPort"
+      "FwMark"
     ])
     # The following check won't work on nix <= 2.2
     # see https://github.com/NixOS/nix/pull/2378
@@ -80,14 +130,23 @@ let
   # refrain ourselves from providing a footgun.
   checkWireGuardPeer = checkUnitConfig "WireGuardPeer" [
     (assertOnlyFields [
-      "PublicKey" "PresharedKeyFile" "AllowedIPs"
-      "Endpoint" "PersistentKeepalive"
+      "PublicKey"
+      "PresharedKeyFile"
+      "AllowedIPs"
+      "Endpoint"
+      "PersistentKeepalive"
     ])
     (assertRange "PersistentKeepalive" 1 65535)
   ];
 
   checkVlan = checkUnitConfig "VLAN" [
-    (assertOnlyFields ["Id" "GVRP" "MVRP" "LooseBinding" "ReorderHeader"])
+    (assertOnlyFields [
+      "Id"
+      "GVRP"
+      "MVRP"
+      "LooseBinding"
+      "ReorderHeader"
+    ])
     (assertRange "Id" 0 4094)
     (assertValueOneOf "GVRP" boolValues)
     (assertValueOneOf "MVRP" boolValues)
@@ -96,17 +155,34 @@ let
   ];
 
   checkMacvlan = checkUnitConfig "MACVLAN" [
-    (assertOnlyFields ["Mode"])
+    (assertOnlyFields [
+      "Mode"
+    ])
     (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
   ];
 
   checkVxlan = checkUnitConfig "VXLAN" [
     (assertOnlyFields [
-      "Id" "Remote" "Local" "TOS" "TTL" "MacLearning" "FDBAgeingSec"
-      "MaximumFDBEntries" "ReduceARPProxy" "L2MissNotification"
-      "L3MissNotification" "RouteShortCircuit" "UDPChecksum"
-      "UDP6ZeroChecksumTx" "UDP6ZeroChecksumRx" "RemoteChecksumTx"
-      "RemoteChecksumRx" "GroupPolicyExtension" "DestinationPort" "PortRange"
+      "Id"
+      "Remote"
+      "Local"
+      "TOS"
+      "TTL"
+      "MacLearning"
+      "FDBAgeingSec"
+      "MaximumFDBEntries"
+      "ReduceARPProxy"
+      "L2MissNotification"
+      "L3MissNotification"
+      "RouteShortCircuit"
+      "UDPChecksum"
+      "UDP6ZeroChecksumTx"
+      "UDP6ZeroChecksumRx"
+      "RemoteChecksumTx"
+      "RemoteChecksumRx"
+      "GroupPolicyExtension"
+      "DestinationPort"
+      "PortRange"
       "FlowLabel"
     ])
     (assertRange "TTL" 0 255)
@@ -126,8 +202,19 @@ let
 
   checkTunnel = checkUnitConfig "Tunnel" [
     (assertOnlyFields [
-      "Local" "Remote" "TOS" "TTL" "DiscoverPathMTU" "IPv6FlowLabel" "CopyDSCP"
-      "EncapsulationLimit" "Key" "InputKey" "OutputKey" "Mode" "Independent"
+      "Local"
+      "Remote"
+      "TOS"
+      "TTL"
+      "DiscoverPathMTU"
+      "IPv6FlowLabel"
+      "CopyDSCP"
+      "EncapsulationLimit"
+      "Key"
+      "InputKey"
+      "OutputKey"
+      "Mode"
+      "Independent"
       "AllowLocalRemote"
     ])
     (assertRange "TTL" 0 255)
@@ -139,12 +226,22 @@ let
   ];
 
   checkPeer = checkUnitConfig "Peer" [
-    (assertOnlyFields ["Name" "MACAddress"])
+    (assertOnlyFields [
+      "Name"
+      "MACAddress"
+    ])
     (assertMacAddress "MACAddress")
   ];
 
   tunTapChecks = [
-    (assertOnlyFields ["OneQueue" "MultiQueue" "PacketInfo" "VNetHeader" "User" "Group"])
+    (assertOnlyFields [
+      "OneQueue"
+      "MultiQueue"
+      "PacketInfo"
+      "VNetHeader"
+      "User"
+      "Group"
+    ])
     (assertValueOneOf "OneQueue" boolValues)
     (assertValueOneOf "MultiQueue" boolValues)
     (assertValueOneOf "PacketInfo" boolValues)
@@ -157,18 +254,41 @@ let
 
   checkBond = checkUnitConfig "Bond" [
     (assertOnlyFields [
-      "Mode" "TransmitHashPolicy" "LACPTransmitRate" "MIIMonitorSec"
-      "UpDelaySec" "DownDelaySec" "LearnPacketIntervalSec" "AdSelect"
-      "FailOverMACPolicy" "ARPValidate" "ARPIntervalSec" "ARPIPTargets"
-      "ARPAllTargets" "PrimaryReselectPolicy" "ResendIGMP" "PacketsPerSlave"
-      "GratuitousARP" "AllSlavesActive" "MinLinks"
+      "Mode"
+      "TransmitHashPolicy"
+      "LACPTransmitRate"
+      "MIIMonitorSec"
+      "UpDelaySec"
+      "DownDelaySec"
+      "LearnPacketIntervalSec"
+      "AdSelect"
+      "FailOverMACPolicy"
+      "ARPValidate"
+      "ARPIntervalSec"
+      "ARPIPTargets"
+      "ARPAllTargets"
+      "PrimaryReselectPolicy"
+      "ResendIGMP"
+      "PacketsPerSlave"
+      "GratuitousARP"
+      "AllSlavesActive"
+      "MinLinks"
     ])
     (assertValueOneOf "Mode" [
-      "balance-rr" "active-backup" "balance-xor"
-      "broadcast" "802.3ad" "balance-tlb" "balance-alb"
+      "balance-rr"
+      "active-backup"
+      "balance-xor"
+      "broadcast"
+      "802.3ad"
+      "balance-tlb"
+      "balance-alb"
     ])
     (assertValueOneOf "TransmitHashPolicy" [
-      "layer2" "layer3+4" "layer2+3" "encap2+3" "encap3+4"
+      "layer2"
+      "layer3+4"
+      "layer2+3"
+      "encap2+3"
+      "encap3+4"
     ])
     (assertValueOneOf "LACPTransmitRate" ["slow" "fast"])
     (assertValueOneOf "AdSelect" ["stable" "bandwidth" "count"])
@@ -184,7 +304,8 @@ let
 
   checkXfrm = checkUnitConfig "Xfrm" [
     (assertOnlyFields [
-      "InterfaceId" "Independent"
+      "InterfaceId"
+      "Independent"
     ])
     # The following check won't work on nix <= 2.2
     # see https://github.com/NixOS/nix/pull/2378
@@ -197,15 +318,49 @@ let
 
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
-      "Description" "DHCP" "DHCPServer" "LinkLocalAddressing" "IPv4LLRoute"
-      "IPv6Token" "LLMNR" "MulticastDNS" "DNSOverTLS" "DNSSEC"
-      "DNSSECNegativeTrustAnchors" "LLDP" "EmitLLDP" "BindCarrier" "Address"
-      "Gateway" "DNS" "Domains" "NTP" "IPForward" "IPMasquerade"
-      "IPv6PrivacyExtensions" "IPv6AcceptRA" "IPv6DuplicateAddressDetection"
-      "IPv6HopLimit" "IPv4ProxyARP" "IPv6ProxyNDP" "IPv6ProxyNDPAddress"
-      "IPv6PrefixDelegation" "IPv6MTUBytes" "Bridge" "Bond" "VRF" "VLAN"
-      "IPVLAN" "MACVLAN" "VXLAN" "Tunnel" "ActiveSlave" "PrimarySlave"
-      "ConfigureWithoutCarrier" "Xfrm" "KeepConfiguration"
+      "Description"
+      "DHCP"
+      "DHCPServer"
+      "LinkLocalAddressing"
+      "IPv4LLRoute"
+      "IPv6Token"
+      "LLMNR"
+      "MulticastDNS"
+      "DNSOverTLS"
+      "DNSSEC"
+      "DNSSECNegativeTrustAnchors"
+      "LLDP"
+      "EmitLLDP"
+      "BindCarrier"
+      "Address"
+      "Gateway"
+      "DNS"
+      "Domains"
+      "NTP"
+      "IPForward"
+      "IPMasquerade"
+      "IPv6PrivacyExtensions"
+      "IPv6AcceptRA"
+      "IPv6DuplicateAddressDetection"
+      "IPv6HopLimit"
+      "IPv4ProxyARP"
+      "IPv6ProxyNDP"
+      "IPv6ProxyNDPAddress"
+      "IPv6PrefixDelegation"
+      "IPv6MTUBytes"
+      "Bridge"
+      "Bond"
+      "VRF"
+      "VLAN"
+      "IPVLAN"
+      "MACVLAN"
+      "VXLAN"
+      "Tunnel"
+      "ActiveSlave"
+      "PrimarySlave"
+      "ConfigureWithoutCarrier"
+      "Xfrm"
+      "KeepConfiguration"
     ])
     # Note: For DHCP the values both, none, v4, v6 are deprecated
     (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6" "both" "none" "v4" "v6"])
@@ -233,9 +388,17 @@ let
 
   checkAddress = checkUnitConfig "Address" [
     (assertOnlyFields [
-      "Address" "Peer" "Broadcast" "Label" "PreferredLifetime" "Scope"
-      "HomeAddress" "DuplicateAddressDetection" "ManageTemporaryAddress"
-      "PrefixRoute" "AutoJoin"
+      "Address"
+      "Peer"
+      "Broadcast"
+      "Label"
+      "PreferredLifetime"
+      "Scope"
+      "HomeAddress"
+      "DuplicateAddressDetection"
+      "ManageTemporaryAddress"
+      "PrefixRoute"
+      "AutoJoin"
     ])
     (assertHasField "Address")
     (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
@@ -248,9 +411,19 @@ let
 
   checkRoutingPolicyRule = checkUnitConfig "RoutingPolicyRule" [
     (assertOnlyFields [
-      "TypeOfService" "From" "To" "FirewallMark" "Table" "Priority"
-      "IncomingInterface" "OutgoingInterface" "SourcePort" "DestinationPort"
-      "IPProtocol" "InvertRule" "Family"
+      "TypeOfService"
+      "From"
+      "To"
+      "FirewallMark"
+      "Table"
+      "Priority"
+      "IncomingInterface"
+      "OutgoingInterface"
+      "SourcePort"
+      "DestinationPort"
+      "IPProtocol"
+      "InvertRule"
+      "Family"
     ])
     (assertRange "TypeOfService" 0 255)
     # The following check won't work on nix <= 2.2
@@ -268,20 +441,49 @@ let
 
   checkRoute = checkUnitConfig "Route" [
     (assertOnlyFields [
-      "Gateway" "GatewayOnLink" "Destination" "Source" "Metric"
-      "IPv6Preference" "Scope" "PreferredSource" "Table" "Protocol" "Type"
-      "InitialCongestionWindow" "InitialAdvertisedReceiveWindow" "QuickAck"
+      "Gateway"
+      "GatewayOnLink"
+      "Destination"
+      "Source"
+      "Metric"
+      "IPv6Preference"
+      "Scope"
+      "PreferredSource"
+      "Table"
+      "Protocol"
+      "Type"
+      "InitialCongestionWindow"
+      "InitialAdvertisedReceiveWindow"
+      "QuickAck"
       "MTUBytes"
     ])
   ];
 
   checkDhcpV4 = checkUnitConfig "DHCPv4" [
     (assertOnlyFields [
-      "UseDNS" "RoutesToDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
-      "Hostname" "UseDomains" "UseRoutes" "UseTimezone"
-      "ClientIdentifier" "VendorClassIdentifier" "UserClass" "MaxAttempts"
-      "DUIDType" "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
-      "ListenPort" "SendRelease"
+      "UseDNS"
+      "RoutesToDNS"
+      "UseNTP"
+      "UseMTU"
+      "Anonymize"
+      "SendHostname"
+      "UseHostname"
+      "Hostname"
+      "UseDomains"
+      "UseRoutes"
+      "UseTimezone"
+      "ClientIdentifier"
+      "VendorClassIdentifier"
+      "UserClass"
+      "MaxAttempts"
+      "DUIDType"
+      "DUIDRawData"
+      "IAID"
+      "RequestBroadcast"
+      "RouteMetric"
+      "RouteTable"
+      "ListenPort"
+      "SendRelease"
     ])
     (assertValueOneOf "UseDNS" boolValues)
     (assertValueOneOf "RoutesToDNS" boolValues)
@@ -302,7 +504,10 @@ let
 
   checkDhcpV6 = checkUnitConfig "DHCPv6" [
     (assertOnlyFields [
-      "UseDNS" "UseNTP" "RapidCommit" "ForceDHCPv6PDOtherInformation"
+      "UseDNS"
+      "UseNTP"
+      "RapidCommit"
+      "ForceDHCPv6PDOtherInformation"
       "PrefixDelegationHint"
     ])
     (assertValueOneOf "UseDNS" boolValues)
@@ -313,8 +518,14 @@ let
 
   checkIpv6PrefixDelegation = checkUnitConfig "IPv6PrefixDelegation" [
     (assertOnlyFields [
-      "Managed"  "OtherInformation"  "RouterLifetimeSec"
-      "RouterPreference"  "EmitDNS"  "DNS"  "EmitDomains"  "Domains"
+      "Managed"
+      "OtherInformation"
+      "RouterLifetimeSec"
+      "RouterPreference"
+      "EmitDNS"
+      "DNS"
+      "EmitDomains"
+      "Domains"
       "DNSLifetimeSec"
     ])
     (assertValueOneOf "Managed" boolValues)
@@ -327,8 +538,11 @@ let
 
   checkIpv6Prefix = checkUnitConfig "IPv6Prefix" [
     (assertOnlyFields [
-      "AddressAutoconfiguration"  "OnLink"  "Prefix"
-      "PreferredLifetimeSec" "ValidLifetimeSec"
+      "AddressAutoconfiguration"
+      "OnLink"
+      "Prefix"
+      "PreferredLifetimeSec"
+      "ValidLifetimeSec"
     ])
     (assertValueOneOf "AddressAutoconfiguration" boolValues)
     (assertValueOneOf "OnLink" boolValues)
@@ -339,8 +553,17 @@ let
 
   checkDhcpServer = checkUnitConfig "DHCPServer" [
     (assertOnlyFields [
-      "PoolOffset" "PoolSize" "DefaultLeaseTimeSec" "MaxLeaseTimeSec"
-      "EmitDNS" "DNS" "EmitNTP" "NTP" "EmitRouter" "EmitTimezone" "Timezone"
+      "PoolOffset"
+      "PoolSize"
+      "DefaultLeaseTimeSec"
+      "MaxLeaseTimeSec"
+      "EmitDNS"
+      "DNS"
+      "EmitNTP"
+      "NTP"
+      "EmitRouter"
+      "EmitTimezone"
+      "Timezone"
     ])
     (assertValueOneOf "EmitDNS" boolValues)
     (assertValueOneOf "EmitNTP" boolValues)
@@ -351,14 +574,28 @@ let
   # .network files have a [Link] section with different options than in .netlink files
   checkNetworkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
-      "MACAddress" "MTUBytes" "ARP" "Multicast" "Unmanaged" "RequiredForOnline"
+      "MACAddress"
+      "MTUBytes"
+      "ARP"
+      "Multicast"
+      "Unmanaged"
+      "RequiredForOnline"
     ])
     (assertMacAddress "MACAddress")
     (assertByteFormat "MTUBytes")
     (assertValueOneOf "ARP" boolValues)
     (assertValueOneOf "Multicast" boolValues)
     (assertValueOneOf "Unmanaged" boolValues)
-    (assertValueOneOf "RequiredForOnline" (boolValues ++ ["off" "no-carrier" "dormant" "degraded-carrier" "carrier" "degraded" "enslaved" "routable"]))
+    (assertValueOneOf "RequiredForOnline" (boolValues ++ [
+      "off"
+      "no-carrier"
+      "dormant"
+      "degraded-carrier"
+      "carrier"
+      "degraded"
+      "enslaved"
+      "routable"
+    ]))
   ];
 
 
