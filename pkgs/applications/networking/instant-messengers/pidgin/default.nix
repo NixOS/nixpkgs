@@ -40,9 +40,7 @@ let unwrapped = stdenv.mkDerivation rec {
   ++ (lib.optional (openssl != null) openssl)
   ++ (lib.optional (gnutls != null) gnutls)
   ++ (lib.optional (libgcrypt != null) libgcrypt)
-  ++ (lib.optional (stdenv.isLinux) gtk2)
-  ++ (lib.optional (stdenv.isLinux) gtkspell2)
-  ++ (lib.optional (stdenv.isLinux) farstream)
+  ++ (lib.optionals (stdenv.isLinux) [gtk2 gtkspell2 farstream])
   ++ (lib.optional (stdenv.isDarwin) gtk2-x11);
 
 
@@ -62,11 +60,10 @@ let unwrapped = stdenv.mkDerivation rec {
     "--disable-meanwhile"
     "--disable-nm"
     "--disable-tcl"
-    "--disable-gtkspell"
-    "--disable-vv"
   ]
   ++ (lib.optionals (cyrus_sasl != null) [ "--enable-cyrus-sasl=yes" ])
-  ++ (lib.optionals (gnutls != null) ["--enable-gnutls=yes" "--enable-nss=no"]);
+  ++ (lib.optionals (gnutls != null) ["--enable-gnutls=yes" "--enable-nss=no"])
+  ++ (lib.optionals (stdenv.isDarwin) ["--disable-gtkspell" "--disable-vv"]);
 
   enableParallelBuilding = true;
 
