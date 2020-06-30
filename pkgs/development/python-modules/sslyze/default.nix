@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "sslyze";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "nabla-c0d3";
     repo = pname;
     rev = version;
-    sha256 = "1ahwldsh3xvagin09dy5q73bdw5k4siqy2qqgxwj4wdyd7pjb4p9";
+    sha256 = "06mwzxw6xaqin2gwzcqb9r7qhbyx3k7zcxygxywi2bpxyjv9lq32";
   };
 
   patchPhase = ''
