@@ -1,13 +1,13 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.14";
+  version = "1.2.15";
   pname = "zlog";
 
   src = fetchzip {
     name = "${pname}-${version}-src";
     url = "https://github.com/HardySimpson/zlog/archive/${version}.tar.gz";
-    sha256 = "1qcrfmh2vbarkx7ij3gwk174qmgmhm2j336bfaakln1ixd9lkxa5";
+    sha256 = "10hzifgpml7jm43y6v8c8q0cr9ziyx9qxznafxyw6glhnlqnb7pb";
   };
 
   configurePhase = ''
