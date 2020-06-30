@@ -11,11 +11,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "dpdk-${version}" + lib.optionalString mod "-${kernel.version}";
-  version = "19.11";
+  version = "20.05";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "1aqjn6bm9miv3v2rbqi1rh1c19wa8nip9fvnqaqpnrs3i2b36wa6";
+    sha256 = "0h0xv2zwb91b9n29afg5ihn06a8q28in64hag2f112kc19f79jj8";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optionals mod kernel.moduleBuildDependencies;
 
   postPatch = ''
-    patchShebangs config/arm
+    patchShebangs config/arm buildtools
   '';
 
   mesonFlags = [
