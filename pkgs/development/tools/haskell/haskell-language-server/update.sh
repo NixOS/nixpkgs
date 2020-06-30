@@ -50,7 +50,4 @@ echo "Running cabal2nix and outputting to ${hls_derivation_file}..."
 
 cabal2nix --revision "$hls_new_version" "https://github.com/haskell/haskell-language-server.git" > "$hls_derivation_file"
 
-# TODO: This should ideally also automatically update the docsSearchVersion
-# from pkgs/development/haskell/configuration-nix.nix.
-
 echo "Finished."
