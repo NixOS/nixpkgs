@@ -351,6 +351,18 @@ let
     meta.homepage = "https://github.com/bbchung/clighter8/";
   };
 
+  coc-clap = buildVimPluginFrom2Nix {
+    pname = "coc-clap";
+    version = "2020-05-11";
+    src = fetchFromGitHub {
+      owner = "vn-ki";
+      repo = "coc-clap";
+      rev = "bee1462eb252edd2f6a268ceab49e42beac1f728";
+      sha256 = "1hg407pk8nyw7wsdx4jlyhf9jr415z2zh0pj214mp96i3wbi3gl9";
+    };
+    meta.homepage = "https://github.com/vn-ki/coc-clap/";
+  };
+
   coc-css = buildVimPluginFrom2Nix {
     pname = "coc-css";
     version = "2020-06-28";
