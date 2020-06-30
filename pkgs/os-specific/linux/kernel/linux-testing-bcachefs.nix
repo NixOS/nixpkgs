@@ -11,7 +11,7 @@ buildLinux (args // {
     sha256 = "1fnyyl41fy96pn9hh65qp53jmdvygbjl2qwcvbslb5565mpm5875";
   };
 
-  extraConfig = "BCACHEFS_FS m";
+  extraConfig = "BCACHEFS_FS y";
 
   extraMeta = {
     branch = "master";
