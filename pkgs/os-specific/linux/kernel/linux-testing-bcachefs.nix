@@ -7,8 +7,8 @@ buildLinux (args // {
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs";
-    rev = "b1708f0191fcad1b7afa47dd6a7c6b1104c4639d";
-    sha256 = "1fnyyl41fy96pn9hh65qp53jmdvygbjl2qwcvbslb5565mpm5875";
+    rev = "9f34144308fcabb5dcf718406a8c90795e6fd481";
+    sha256 = "0z1aqallj3v20w09gjd2c9hf9kin6a8gnnwpkm37abvaddjh3kf6";
   };
 
   extraConfig = "BCACHEFS_FS y";
