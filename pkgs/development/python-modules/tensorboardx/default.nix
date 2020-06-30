@@ -1,6 +1,6 @@
-{ boto3, buildPythonPackage, crc32c, fetchFromGitHub, lib, matplotlib, moto,
-  numpy, pillow, pytorch, protobuf, six, pytest,
-  tensorflow-tensorboard, torchvision }:
+{ boto3, buildPythonPackage, crc32c, fetchFromGitHub, lib, matplotlib, moto
+, numpy, pillow, pytorch, protobuf, six, pytestCheckHook
+, tensorflow-tensorboard, torchvision }:
 
 buildPythonPackage rec {
   pname = "tensorboardx";
@@ -13,18 +13,17 @@ buildPythonPackage rec {
     sha256 = "0qqalq0fhbx0wnd8wdwhyhkkv2brvj9qbk3373vk3wjxbribf5c7";
   };
 
-  checkInputs = [ boto3 crc32c matplotlib moto pillow pytorch pytest tensorflow-tensorboard torchvision ];
+  checkInputs = [
+    pytestCheckHook boto3 crc32c matplotlib moto pillow pytorch tensorflow-tensorboard torchvision
+  ];
 
   propagatedBuildInputs = [ numpy protobuf six ];
 
-  postPatch = ''
-    substituteInPlace tests/test_visdom.py --replace test_TorchVis _skip_test_TorchVis
-    substituteInPlace tests/test_onnx_graph.py --replace test_onnx_graph _skip_test_onnx_graph
-  '';
+  disabledTests = [ "test_TorchVis"  "test_onnx_graph" ];
 
   meta = with lib; {
     description = "Library for writing tensorboard-compatible logs";
-    homepage = "https://github.com/lanpa/tensorboard-pytorch";
+    homepage = "https://github.com/lanpa/tensorboardX";
     license = licenses.mit;
     maintainers = with maintainers; [ lebastr akamaus ];
     platforms = platforms.all;
