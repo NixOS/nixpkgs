@@ -57,6 +57,10 @@ stdenv.mkDerivation rec {
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
+        --replace 'set(PYTHON_VERSION 3.7)' \
+                  'set(PYTHON_VERSION ${python.pythonVersion})' \
+        --replace '${"$"}{PYTHON_VERSION}m' \
+                  '${"$"}{PYTHON_VERSION}' \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
         --replace '${"$"}{LIBDIR}/opencollada' \
