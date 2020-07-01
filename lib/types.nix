@@ -17,6 +17,18 @@ rec {
     _type = typeName;
   };
 
+  # `showsPrec d t` shows the description of type `t` in an
+  # enclosing expression with precedence `d`. Since Nix does
+  # not have arbitrary infix operators, only two precedences
+  # are defined: 1 for function application, which may need
+  # to be parenthesised, and 0 for constants.
+  #
+  # This is inspired by the homonymous function from the
+  # Text.Show Haskell module.
+  showsPrec = d: t:
+    if d == 0 || t.precedence == 0
+      then t.description
+      else "(${t.description})";
 
   # Default type merging function
   # takes two type functors and return the merged type
@@ -94,9 +106,13 @@ rec {
     , # The deprecation message to display when this type is used by an option
       # If null, the type isn't deprecated
       deprecationMessage ? null
+    , # The precedence of the type when adding parenthesis in the descriptions.
+      # If a type takes one or more types as arguments, it should be 1.
+      precedence ? 0
     }:
     { _type = "option-type";
-      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor deprecationMessage;
+      inherit name check merge emptyValue getSubOptions getSubModules
+              substSubModules typeMerge functor deprecationMessage precedence;
       description = if description == null then name else description;
     };
 
@@ -259,7 +275,8 @@ rec {
 
     listOf = elemType: mkOptionType rec {
       name = "listOf";
-      description = "list of ${elemType.description}s";
+      description = "list of ${showsPrec 1 elemType}";
+      precedence = 1;
       check = isList;
       merge = loc: defs:
         map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
@@ -289,7 +306,8 @@ rec {
 
     attrsOf = elemType: mkOptionType rec {
       name = "attrsOf";
-      description = "attribute set of ${elemType.description}s";
+      description = "attribute set of ${showsPrec 1 elemType}";
+      precedence = 1;
       check = isAttrs;
       merge = loc: defs:
         mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
@@ -311,7 +329,8 @@ rec {
     # error that it's not defined. Use only if conditional definitions don't make sense.
     lazyAttrsOf = elemType: mkOptionType rec {
       name = "lazyAttrsOf";
-      description = "lazy attribute set of ${elemType.description}s";
+      description = "lazy attribute set of ${showsPrec 1 elemType}";
+      precedence = 1;
       check = isAttrs;
       merge = loc: defs:
         zipAttrsWith (name: defs:
@@ -351,7 +370,8 @@ rec {
     # Null or value of ...
     nullOr = elemType: mkOptionType rec {
       name = "nullOr";
-      description = "null or ${elemType.description}";
+      description = "null or ${showsPrec 1 elemType}";
+      precedence = 1;
       check = x: x == null || elemType.check x;
       merge = loc: defs:
         let nrNulls = count (def: def.value == null) defs; in
@@ -478,7 +498,8 @@ rec {
     # Either value of type `t1` or `t2`.
     either = t1: t2: mkOptionType rec {
       name = "either";
-      description = "${t1.description} or ${t2.description}";
+      description = "${showsPrec 1 t1} or ${showsPrec 1 t2}";
+      precedence = 1;
       check = x: t1.check x || t2.check x;
       merge = loc: defs:
         let
@@ -502,9 +523,14 @@ rec {
     # Any of the types in the given list
     oneOf = ts:
       let
-        head' = if ts == [] then throw "types.oneOf needs to get at least one type in its argument" else head ts;
+        head' =
+          if ts == []
+            then throw "types.oneOf needs to get at least one type in its argument"
+            else head ts;
         tail' = tail ts;
-      in foldl' either head' tail';
+        descriptions = concatMapStringsSep ", " (showsPrec 1) ts;
+      in (foldl' either head' tail')
+         // { description = "one of [ ${descriptions} ]"; };
 
     # Either value of type `coercedType` or `finalType`, the former is
     # converted to `finalType` using `coerceFunc`.
@@ -514,7 +540,8 @@ rec {
           coercedType.description})";
       mkOptionType rec {
         name = "coercedTo";
-        description = "${finalType.description} or ${coercedType.description} convertible to it";
+        description = "${showsPrec 1 finalType} or ${showsPrec 1 coercedType} convertible to it";
+        precedence = 1;
         check = x: (coercedType.check x && finalType.check (coerceFunc x)) || finalType.check x;
         merge = loc: defs:
           let
