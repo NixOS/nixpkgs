@@ -782,18 +782,14 @@ self: super: {
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
   blaze-html = doJailbreak super.blaze-html;
-  attoparsec = dontCheck super.attoparsec;      # 1 out of 67 tests fails
   int-cast = doJailbreak super.int-cast;
-  nix-derivation = doJailbreak super.nix-derivation;
 
   # Needs QuickCheck <2.10, HUnit <1.6 and base <4.10
   pointfree = doJailbreak super.pointfree;
 
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
-  cryptohash-sha256 = dontCheck super.cryptohash-sha256;
   cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
-  text-short = doJailbreak super.text-short;
   gitHUD = dontCheck super.gitHUD;
   githud = dontCheck super.githud;
 
@@ -801,7 +797,6 @@ self: super: {
   config-ini = dontCheck super.config-ini;
 
   # doctest >=0.9 && <0.12
-  genvalidity-property = doJailbreak super.genvalidity-property;
   path = dontCheck super.path;
 
   # Test suite fails due to trying to create directories
