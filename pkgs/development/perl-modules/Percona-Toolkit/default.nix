@@ -10,7 +10,8 @@ buildPerlPackage {
     sha256 = "0xk4h4dzl80kf97lbx0nznx9ajrb6kkg7k3iwca3rj6f3rqggv9y";
   };
   outputs = [ "out" ];
-  buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey shortenPerlShebang ];
+  nativeBuildInputs = [ shortenPerlShebang ];
+  buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey ];
   postInstall = ''
     shortenPerlShebang $(grep -l "/bin/env perl" $out/bin/*)
   '';
