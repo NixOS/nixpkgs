@@ -1,27 +1,27 @@
-{ stdenv, fetchzip, ocaml, findlib, cstruct, zarith }:
+{ lib, buildDunePackage, fetchurl
+, cstruct, zarith, bigarray-compat, stdlib-shims, ptime, alcotest
+}:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
+buildDunePackage rec {
+  minimumOCamlVersion = "4.05";
 
-let version = "0.1.1"; in
+  pname = "asn1-combinators";
+  version = "0.2.2";
 
-stdenv.mkDerivation {
-  name = "ocaml-asn1-combinators-${version}";
-
-  src = fetchzip {
-    url = "https://github.com/mirleft/ocaml-asn1-combinators/archive/${version}.tar.gz";
-    sha256 = "1wl5g2cqd4dk33w0ski6z425cs4sgj980fw0xkwgz1w1xzywh4i2";
+  src = fetchurl {
+    url = "https://github.com/mirleft/ocaml-asn1-combinators/releases/download/v${version}/asn1-combinators-v${version}.tbz";
+    sha256 = "0c9n3nki3drjwn7yv2pg7nzyzsi409laq70830wh147hvvwxbsy9";
   };
 
-  buildInputs = [ ocaml findlib ];
-  propagatedBuildInputs = [ cstruct zarith ];
+  propagatedBuildInputs = [ cstruct zarith bigarray-compat stdlib-shims ptime ];
 
-  createFindlibDestdir = true;
+  doCheck = true;
+  checkInputs = [ alcotest ];
 
-  meta = {
-    homepage = https://github.com/mirleft/ocaml-asn1-combinators;
+  meta = with lib; {
+    homepage = "https://github.com/mirleft/ocaml-asn1-combinators";
     description = "Combinators for expressing ASN.1 grammars in OCaml";
-    platforms = ocaml.meta.platforms;
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

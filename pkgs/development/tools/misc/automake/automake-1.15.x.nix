@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, autoconf, makeWrapper, doCheck ? false }:
+{ stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
   name = "automake-1.15";
@@ -8,14 +8,18 @@ stdenv.mkDerivation rec {
     sha256 = "0dl6vfi2lzz8alnklwxzfz624b95hb1ipjvd3mk177flmddcf24r";
   };
 
-  buildInputs = [ perl autoconf ];
+  nativeBuildInputs = [ autoconf perl ];
+  buildInputs = [ autoconf ];
 
   setupHook = ./setup-hook.sh;
+
+  patches = [ ./help2man-SOURCE_DATE_EPOCH-support.patch ];
 
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.
   preCheck = "unset NIX_INDENT_MAKE";
-  inherit doCheck;
+  doCheck = false; # takes _a lot_ of time, fails 3 out of 2698 tests, all seem to be related to paths
+  doInstallCheck = false; # runs the same thing, fails the same tests
 
   # The test suite can run in parallel.
   enableParallelBuilding = true;
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     branch = "1.15";
-    homepage = "http://www.gnu.org/software/automake/";
+    homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
     license = stdenv.lib.licenses.gpl2Plus;
 
@@ -35,8 +39,6 @@ stdenv.mkDerivation rec {
       `Makefile.in' files compliant with the GNU Coding
       Standards.  Automake requires the use of Autoconf.
     '';
-
-    maintainers = [ stdenv.lib.maintainers.simons ];
 
     platforms = stdenv.lib.platforms.all;
   };

@@ -1,18 +1,72 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, icu, libxslt, pkgconfig }:
+{ stdenv
+, fetchurl
+, autoreconfHook
+, docbook_xsl
+, docbook_xml_dtd_43
+, gtk-doc
+, lzip
+, libidn2
+, libunistring
+, libxslt
+, pkgconfig
+, python3
+, valgrind
+, publicsuffix-list
+}:
 
-let version = "0.7.1"; in
 stdenv.mkDerivation rec {
-  name = "libpsl-${version}";
+  pname = "libpsl";
+  version = "0.21.0";
 
-  src = fetchFromGitHub {
-    sha256 = "0hbsidbmwgpg0h48wh2pzsq59j8az7naz3s5q3yqn99yyjji2vgw";
-    rev = name;
-    repo = "libpsl";
-    owner = "rockdaboot";
+  src = fetchurl {
+    url = "https://github.com/rockdaboot/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.lz";
+    sha256 = "183hadbira0d2zvv8272lspy31dgm9x26z35c61s5axcd5wd9g9i";
   };
 
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook_xsl
+    docbook_xml_dtd_43
+    gtk-doc
+    lzip
+    pkgconfig
+    python3
+    valgrind
+    libxslt
+  ];
+
+  buildInputs = [
+    libidn2
+    libunistring
+    libxslt
+  ];
+
+  propagatedBuildInputs = [
+    publicsuffix-list
+  ];
+
+  postPatch = ''
+    patchShebangs src/psl-make-dafsa
+  '';
+
+  preAutoreconf = ''
+    gtkdocize
+  '';
+
+  configureFlags = [
+    # "--enable-gtk-doc"
+    "--enable-man"
+    "--enable-valgrind-tests"
+    "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
+    "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
+    "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
+  ];
+
+  enableParallelBuilding = true;
+
+  doCheck = !stdenv.isDarwin;
+
   meta = with stdenv.lib; {
-    inherit version;
     description = "C library for the Publix Suffix List";
     longDescription = ''
       libpsl is a C library for the Publix Suffix List (PSL). A "public suffix"
@@ -21,17 +75,10 @@ stdenv.mkDerivation rec {
       "supercookies" and "super domain" certificates, for highlighting parts of
       the domain in a user interface or sorting domain lists by site.
     '';
-    homepage = http://rockdaboot.github.io/libpsl/;
-    license = with licenses; mit;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ nckx ];
+    homepage = "https://rockdaboot.github.io/libpsl/";
+    changelog = "https://raw.githubusercontent.com/rockdaboot/${pname}/${pname}-${version}/NEWS";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.c0bw3b ];
   };
-
-  buildInputs = [ autoreconfHook icu libxslt pkgconfig ];
-
-  configureFlags = "--disable-static --enable-man";
-
-  enableParallelBuilding = true;
-
-  doCheck = true;
 }

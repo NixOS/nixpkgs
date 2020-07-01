@@ -1,7 +1,7 @@
 { fetchurl, stdenv, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "bigloo-${version}";
+  pname = "bigloo";
   version = "4.1a-2";
 
   src = fetchurl {
@@ -32,9 +32,12 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = {
     description = "Efficient Scheme compiler";
-    homepage    = http://www-sop.inria.fr/indes/fp/Bigloo/;
+    homepage    = "http://www-sop.inria.fr/indes/fp/Bigloo/";
     license     = stdenv.lib.licenses.gpl2Plus;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];

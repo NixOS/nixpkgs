@@ -1,8 +1,0 @@
---- llvm/lib/Target/AArch64/Utils/CMakeLists.txt	2013/05/18 04:32:15	182189
-+++ llvm/lib/Target/AArch64/Utils/CMakeLists.txt	2013/05/18 08:17:47	182190
-@@ -3,3 +3,5 @@
- add_llvm_library(LLVMAArch64Utils
-   AArch64BaseInfo.cpp
-   )
-+
-+add_dependencies(LLVMAArch64Utils AArch64CommonTableGen)

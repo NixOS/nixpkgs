@@ -1,11 +1,12 @@
-{stdenv, fetchurl, apacheAnt, jdk, unzip}:
+{ stdenv, fetchurl, apacheAnt, jdk, unzip }:
 
-stdenv.mkDerivation {
-  name = "axis2-1.6.2";
+stdenv.mkDerivation rec {
+  pname = "axis2";
+  version = "1.7.9";
 
   src = fetchurl {
-    url = http://apache.proserve.nl/axis/axis2/java/core/1.6.2/axis2-1.6.2-bin.zip;
-    sha256 = "02i6fv11ksd5ql81i501bcb11ib5gyhq3zxwrz5jm4ic80r097fp";
+    url = "http://apache.proserve.nl/axis/axis2/java/core/${version}/${pname}-${version}-bin.zip";
+    sha256 = "0dh0s9bfh95wmmw8nyf2yw95biq7d9zmrbg8k4vzcyz1if228lac";
   };
 
   buildInputs = [ unzip apacheAnt jdk ];
@@ -13,5 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Web Services / SOAP / WSDL engine, the successor to the widely used Apache Axis SOAP stack";
+    platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.asl20;
   };
 }

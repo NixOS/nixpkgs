@@ -1,0 +1,16 @@
+{ buildDunePackage, git-http, cohttp-lwt-unix, tls, cmdliner, mtime }:
+
+buildDunePackage {
+	pname = "git-unix";
+	inherit (git-http) version src;
+
+	useDune2 = true;
+
+	buildInputs = [ cmdliner mtime ];
+	propagatedBuildInputs = [ cohttp-lwt-unix git-http tls ];
+
+	meta = {
+		description = "Unix backend for the Git protocol(s)";
+		inherit (git-http.meta) homepage license maintainers;
+	};
+}

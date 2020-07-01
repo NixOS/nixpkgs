@@ -1,29 +1,36 @@
-{stdenv, fetchurl, ncurses}:
+{ stdenv, fetchurl, pkgconfig, gd, ncurses, sqlite, check }:
 
-let version = "1.14"; in
 stdenv.mkDerivation rec {
-  name = "vnstat-${version}";
+  pname = "vnstat";
+  version = "2.6";
 
   src = fetchurl {
-    sha256 = "11l39qqv5pgli9zzn0xilld67bi5qzxymsn97m4r022xv13jlipq";
-    url = "http://humdi.net/vnstat/${name}.tar.gz";
+    sha256 = "1xvzkxkq1sq33r2s4f1967f4gnca4xw411sbapdkx541f856w9w9";
+    url = "https://humdi.net/${pname}/${pname}-${version}.tar.gz";
   };
 
-  installPhase = ''
-    mkdir -p $out/{bin,sbin} $out/share/man/{man1,man5}
-    cp src/vnstat $out/bin
-    cp src/vnstatd $out/sbin
-    cp man/vnstat.1 man/vnstatd.1 $out/share/man/man1
-    cp man/vnstat.conf.5 $out/share/man/man5
+  postPatch = ''
+    substituteInPlace src/cfg.c --replace /usr/local $out
   '';
 
-  buildInputs = [ncurses];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gd ncurses sqlite ];
+
+  checkInputs = [ check ];
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
-    inherit version;
-    homepage = http://humdi.net/vnstat/;
-    license = licenses.gpl2Plus;
     description = "Console-based network statistics utility for Linux";
-    maintainers = with maintainers; [ nckx ];
+    longDescription = ''
+      vnStat is a console-based network traffic monitor for Linux and BSD that
+      keeps a log of network traffic for the selected interface(s). It uses the
+      network interface statistics provided by the kernel as information source.
+      This means that vnStat won't actually be sniffing any traffic and also
+      ensures light use of system resources.
+    '';
+    homepage = "https://humdi.net/vnstat/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

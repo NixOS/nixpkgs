@@ -1,20 +1,20 @@
 { stdenv, fetchurl, pkgconfig, libwpd, zlib, librevenge }:
 
 stdenv.mkDerivation rec {
-  name = "libwpg-0.3.0";
+  name = "libwpg-0.3.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/libwpg/${name}.tar.xz";
-    sha256 = "097jx8a638fwwfrzf6v29r1yhc34rq9526py7wf0ck2z4fcr2w3g";
+    sha256 = "074x159immf139szkswv2zapnq75p7xk10dbha2p9193hgwggcwr";
   };
 
   buildInputs = [ libwpd zlib librevenge ];
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
-    homepage = http://libwpg.sourceforge.net;
+  meta = with stdenv.lib; {
+    homepage = "http://libwpg.sourceforge.net";
     description = "C++ library to parse WPG";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.all;
+    license = with licenses; [ lgpl21 mpl20 ];
+    platforms = platforms.all;
   };
 }

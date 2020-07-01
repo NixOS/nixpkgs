@@ -2,7 +2,10 @@
 
 callPackage ./generic.nix (args // {
   baseVersion = "1.10";
-  revision = "9";
-  sha256 = "1wldp9py3qcdgswgxya83c03y6345a6cf3vwz0y41bl1l39jfza8";
+  revision = "17";
+  sha256 = "04rnha712dd3sdb2q7k2yw45sf405jyigk7yrjfr6bwd9fvgyiv8";
   extraConfigureFlags = "--with-gnump";
+  postPatch = ''
+    sed -e 's@lang_flags "@&--std=c++11 @' -i src/build-data/cc/{gcc,clang}.txt
+  '';
 })

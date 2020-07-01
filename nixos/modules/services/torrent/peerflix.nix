@@ -20,7 +20,7 @@ in {
     enable = mkOption {
       description = "Whether to enable peerflix service.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     stateDir = mkOption {
@@ -39,25 +39,27 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' - peerflix - - -"
+    ];
+
     systemd.services.peerflix = {
       description = "Peerflix Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
+      after = [ "network.target" ];
       environment.HOME = cfg.stateDir;
 
       preStart = ''
         mkdir -p "${cfg.stateDir}"/{torrents,.config/peerflix-server}
-        if [ "$(id -u)" = 0 ]; then chown -R peerflix "${cfg.stateDir}"; fi
         ln -fs "${configFile}" "${cfg.stateDir}/.config/peerflix-server/config.json"
       '';
 
       serviceConfig = {
         ExecStart = "${pkgs.nodePackages.peerflix-server}/bin/peerflix-server";
-        PermissionsStartOnly = true;
         User = "peerflix";
       };
     };
 
-    users.extraUsers.peerflix.uid = config.ids.uids.peerflix;
+    users.users.peerflix.uid = config.ids.uids.peerflix;
   };
 }

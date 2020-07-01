@@ -1,27 +1,25 @@
-{ stdenv, fetchurl, mpd_clientlib }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, mpd_clientlib, sphinx, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "0.26";
-  name = "mpc-${version}";
+  pname = "mpc";
+  version = "0.33";
 
-  src = fetchurl {
-    url = "http://www.musicpd.org/download/mpc/0/${name}.tar.xz";
-    sha256 = "0hp2qv6w2v902dhrmck5hg32s1ai6xiv9n61a3n6prfcfdqmywr0";
+  src = fetchFromGitHub {
+    owner  = "MusicPlayerDaemon";
+    repo   = "mpc";
+    rev    = "v${version}";
+    sha256 = "1qbi0i9cq54rj8z2kapk8x8g1jkw2jz781niwb9i7kw4xfhvy5zx";
   };
 
-  buildInputs = [ mpd_clientlib ];
+  buildInputs = [ mpd_clientlib ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
-  preConfigure =
-    ''
-      export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.so.${mpd_clientlib.majorVersion}.0.${mpd_clientlib.minorVersion}
-      export LIBMPDCLIENT_CFLAGS=${mpd_clientlib}
-    '';
+  nativeBuildInputs = [ meson ninja pkgconfig sphinx ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A minimalist command line interface to MPD";
-    homepage = http://www.musicpd.org/clients/mpc/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.algorith ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.musicpd.org/clients/mpc/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ algorith ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

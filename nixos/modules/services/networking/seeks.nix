@@ -33,7 +33,7 @@ in
         type = types.str;
         description = "
           The Seeks server configuration. If it is not specified,
-          a default configuration is used (${seeks}/etc/seeks).
+          a default configuration is used.
         ";
       };
 
@@ -46,14 +46,14 @@ in
 
   config = mkIf config.services.seeks.enable {
 
-    users.extraUsers.seeks =
+    users.users.seeks =
       { uid = config.ids.uids.seeks;
         description = "Seeks user";
         createHome = true;
         home = "/var/lib/seeks";
       };
 
-    users.extraGroups.seeks =
+    users.groups.seeks =
       { gid = config.ids.gids.seeks;
       };
 

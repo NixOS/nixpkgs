@@ -1,24 +1,19 @@
 { stdenv, fetchurl, pkgconfig
-, gettext, gtk, SDL, zlib, glib, openal, mesa, lua, freetype }:
+, gettext, gtk2, SDL2, zlib, glib, openal, libGLU, libGL, lua, freetype, libmpeg2, zip }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
 
-  name = "fs-uae-${version}";
-  version = "2.4.1";
+  pname = "fs-uae";
+  version = "3.0.5";
 
   src = fetchurl {
-    urls = [ "http://fs-uae.net/fs-uae/stable/${version}/${name}.tar.gz" ];
-    sha256 = "05gvnrkl1aclq1a6z57k6rmdnsg2ghyjcscwq0w5dhc5vcalv6f0";
+    url = "https://fs-uae.net/stable/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1qwzhp34wy7bnd3c0plv11rg9fs5m92rh3ffnr9pn6ng0cpc8vpj";
   };
 
-  buildInputs = [ pkgconfig gettext gtk SDL zlib glib openal mesa lua freetype ];
-
-  phases = "unpackPhase buildPhase installPhase";
-
-  # Strange: the docs recommend SDL2, but it does compile only with SDL1
-  buildPhase = "make sdl=1";
-  installPhase = "make install prefix=$out";
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gettext gtk2 SDL2 zlib glib openal libGLU libGL lua freetype libmpeg2 zip ];
 
   meta = {
     description = "An accurate, customizable Amiga Emulator";
@@ -29,7 +24,9 @@ stdenv.mkDerivation rec{
       create customized Amigas.
     '';
     license = licenses.gpl2Plus;
-    homepage = http://fs-uae.net;
-    maintainers = [ maintainers.AndersonTorres ];
+    homepage = "https://fs-uae.net";
+    maintainers = with stdenv.lib; [ maintainers.AndersonTorres ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
+# TODO: testing and Python GUI support

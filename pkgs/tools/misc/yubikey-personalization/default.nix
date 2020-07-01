@@ -1,30 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, libusb, libyubikey, json_c }:
+{ stdenv, fetchurl, pkgconfig, libusb1, libyubikey, json_c }:
 
 stdenv.mkDerivation rec {
-  name = "yubikey-personalization-${version}";
-  version = "1.17.1";
+  pname = "yubikey-personalization";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubikey-personalization/Releases/ykpers-${version}.tar.gz";
-    sha256 = "1i399z23skvyfdr3fp7a340qi3ynfcwdqr1y540swjy9pg1awssm";
+    sha256 = "14wvlwqnwj0gllkpvfqiy8ns938bwvjsz8x1hmymmx32m074vj0f";
   };
 
-  buildInputs = [ pkgconfig libusb libyubikey json_c ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libusb1 libyubikey json_c ];
 
   configureFlags = [
     "--with-backend=libusb-1.0"
   ];
 
+  doCheck = true;
+
   postInstall = ''
-    mkdir -p $out/lib/udev/rules.d/
-    cp -v *.rules $out/lib/udev/rules.d/
+    # Don't use 70-yubikey.rules because it depends on ConsoleKit
+    install -D -t $out/lib/udev/rules.d 69-yubikey.rules
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://developers.yubico.com/yubikey-personalization;
-    description = "a library and command line tool to personalize YubiKeys";
+    homepage = "https://developers.yubico.com/yubikey-personalization";
+    description = "A library and command line tool to personalize YubiKeys";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 04c5c58..429ca47 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -24,7 +24,7 @@ set(CMAKE_OSX_ARCHITECTURES "i386;x86_64" CACHE STRING  "Rogue")
+ 
+ set(EAR_LIB_FILE ${CMAKE_SHARED_LIBRARY_PREFIX}ear${CMAKE_SHARED_LIBRARY_SUFFIX})
+ set(EAR_LIB_PATH "${CMAKE_INSTALL_LIBDIR}/bear")
+-set(DEFAULT_PRELOAD_FILE ${CMAKE_INSTALL_PREFIX}/${EAR_LIB_PATH}/${EAR_LIB_FILE} CACHE STRING "Default path to libear.")
++set(DEFAULT_PRELOAD_FILE ${EAR_LIB_PATH}/${EAR_LIB_FILE} CACHE STRING "Default path to libear.")
+ 
+ add_subdirectory(libear)
+ add_subdirectory(bear)

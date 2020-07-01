@@ -4,5 +4,5 @@ for dir in pkg-config-*; do
     echo "Patching pkg-config registry dep"
 
     substituteInPlace "$dir/src/lib.rs" \
-        --replace '"/usr"' '"/nix/store/"'
+        --replace '"/usr"' '"'"$NIX_STORE"'/"'
 done

@@ -7,7 +7,7 @@ let
   torify = pkgs.writeTextFile {
     name = "tsocks";
     text = ''
-        #!${pkgs.stdenv.shell}
+        #!${pkgs.runtimeShell}
         TSOCKS_CONF_FILE=${pkgs.writeText "tsocks.conf" cfg.tsocks.config} LD_PRELOAD="${pkgs.tsocks}/lib/libtsocks.so $LD_PRELOAD" "$@"
     '';
     executable = true;
@@ -19,19 +19,29 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.tor.tsocks = {
 
       enable = mkOption {
-        default = cfg.enable && cfg.client.enable;
+        type = types.bool;
+        default = false;
         description = ''
-          Whether to build tsocks wrapper script to relay application traffic via TOR.
+          Whether to build tsocks wrapper script to relay application traffic via Tor.
+
+          <important>
+            <para>You shouldn't use this unless you know what you're
+            doing because your installation of Tor already comes with
+            its own superior (doesn't leak DNS queries)
+            <literal>torsocks</literal> wrapper which does pretty much
+            exactly the same thing as this.</para>
+          </important>
         '';
       };
 
       server = mkOption {
+        type = types.str;
         default = "localhost:9050";
         example = "192.168.0.20";
         description = ''
@@ -40,6 +50,7 @@ in
       };
 
       config = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration. Contents will be added verbatim to TSocks

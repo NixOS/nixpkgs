@@ -1,0 +1,136 @@
+#!/usr/bin/env nix-shell
+#!nix-shell update-luarocks-shell.nix -i bash
+
+# You'll likely want to use
+# ``
+# nixpkgs $ maintainers/scripts/update-luarocks-packages pkgs/development/lua-modules/generated-packages.nix
+# ``
+# to update all libraries in that folder.
+# to debug, redirect stderr to stdout with 2>&1
+
+# stop the script upon C-C
+set -eu -o pipefail
+
+CSV_FILE="maintainers/scripts/luarocks-packages.csv"
+TMP_FILE="$(mktemp)"
+# Set in the update-luarocks-shell.nix
+NIXPKGS_PATH="$LUAROCKS_NIXPKGS_PATH"
+export LUAROCKS_CONFIG="$NIXPKGS_PATH/maintainers/scripts/luarocks-config.lua"
+
+# 10 is a pretty arbitrary number of simultaneous jobs, but it is generally
+# impolite to hit a webserver with *too* many simultaneous connections :)
+PARALLEL_JOBS=1
+
+exit_trap() {
+    local lc="$BASH_COMMAND" rc=$?
+    test $rc -eq 0 || echo -e "*** error $rc: $lc.\nGenerated temporary file in $TMP_FILE" >&2
+}
+
+print_help() {
+    echo "Usage: $0 <GENERATED_FILE>"
+    echo "(most likely pkgs/development/lua-modules/generated-packages.nix)"
+    echo ""
+    echo " -c <CSV_FILE> to set the list of luarocks package to generate"
+    exit 1
+}
+
+if [ $# -lt 1 ]; then
+    print_help
+    exit 1
+fi
+
+trap exit_trap EXIT
+
+while getopts ":hc:" opt; do
+    case $opt in
+    h)
+        print_help
+        ;;
+    c)
+        echo "Loading package list from $OPTARG !" >&2
+        CSV_FILE="$OPTARG"
+        ;;
+    \?)
+        echo "Invalid option: -$OPTARG" >&2
+        ;;
+    esac
+    shift $((OPTIND - 1))
+done
+
+GENERATED_NIXFILE="$1"
+
+HEADER="
+/* ${GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
+Regenerate it with:
+nixpkgs$ ${0} ${GENERATED_NIXFILE}
+
+These packages are manually refined in lua-overrides.nix
+*/
+{ self, stdenv, fetchurl, fetchgit, pkgs, ... } @ args:
+self: super:
+with self;
+{
+"
+
+FOOTER="
+}
+/* GENERATED */
+"
+
+function convert_pkg() {
+    nix_pkg_name="$1"
+    lua_pkg_name="$2"
+    server="$3"
+    pkg_version="$4"
+    lua_version="$5"
+    maintainers="$6"
+
+    if [ "${nix_pkg_name:0:1}" == "#" ]; then
+        echo "Skipping comment ${*}" >&2
+        return
+    fi
+    if [ -z "$lua_pkg_name" ]; then
+        echo "Using nix_name as lua_pkg_name for '$nix_pkg_name'" >&2
+        lua_pkg_name="$nix_pkg_name"
+    fi
+
+    echo "Building expression for $lua_pkg_name (version $pkg_version) from server [$server]" >&2
+    luarocks_args=(nix)
+    if [[ -n $server ]]; then
+        luarocks_args+=("--only-server=$server")
+    fi
+    if [[ -n $maintainers ]]; then
+        luarocks_args+=("--maintainers=$maintainers")
+    fi
+    if [[ -n $lua_version ]]; then
+        lua_drv_path=$(nix-build --no-out-link "$NIXPKGS_PATH" -A "$lua_version")
+        luarocks_args+=("--lua-dir=$lua_drv_path/bin")
+    fi
+    luarocks_args+=("$lua_pkg_name")
+    if [[ -n $pkg_version ]]; then
+        luarocks_args+=("$pkg_version")
+    fi
+    echo "Running 'luarocks ${luarocks_args[*]}'" >&2
+    if drv="$nix_pkg_name = $(luarocks "${luarocks_args[@]}")"; then
+        echo "$drv"
+    else
+        echo "Failed to convert $nix_pkg_name" >&2
+        return 1
+    fi
+}
+
+# params needed when called via callPackage
+echo "$HEADER" | tee "$TMP_FILE"
+
+# Ensure parallel can run our bash function
+export -f convert_pkg
+export SHELL=bash
+# Read each line in the csv file and run convert_pkg for each, in parallel
+parallel --group --keep-order --halt now,fail=1 --jobs "$PARALLEL_JOBS" --colsep ',' convert_pkg {} <"$CSV_FILE" | tee -a "$TMP_FILE"
+
+# close the set
+echo "$FOOTER" | tee -a "$TMP_FILE"
+
+cp "$TMP_FILE" "$GENERATED_NIXFILE"
+
+# vim: set ts=4 sw=4 ft=sh:

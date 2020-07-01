@@ -1,0 +1,50 @@
+diff --git a/platform/gsutil/gslib/command_runner.py b/platform/gsutil/gslib/command_runner.py
+index 06ca5e5..4a4e225 100644
+--- a/platform/gsutil/gslib/command_runner.py
++++ b/platform/gsutil/gslib/command_runner.py
+@@ -61,7 +61,6 @@ from gslib.utils.text_util import InsistAsciiHeaderValue
+ from gslib.utils.text_util import print_to_fd
+ from gslib.utils.unit_util import SECONDS_PER_DAY
+ from gslib.utils.update_util import LookUpGsutilVersion
+-from gslib.tests.util import HAS_NON_DEFAULT_GS_HOST
+ 
+ 
+ def HandleHeaderCoding(headers):
+@@ -331,17 +330,6 @@ class CommandRunner(object):
+     Returns:
+       Return value(s) from Command that was run.
+     """
+-    command_changed_to_update = False
+-    if (not skip_update_check and
+-        self.MaybeCheckForAndOfferSoftwareUpdate(command_name, debug)):
+-      command_name = 'update'
+-      command_changed_to_update = True
+-      args = [_StringToSysArgType('-n')]
+-
+-      # Check for opt-in analytics.
+-      if system_util.IsRunningInteractively() and collect_analytics:
+-        metrics.CheckAndMaybePromptForAnalyticsEnabling()
+-
+     if not args:
+       args = []
+ 
+@@ -414,18 +402,10 @@ class CommandRunner(object):
+       ShutDownGsutil()
+     if GetFailureCount() > 0:
+       return_code = 1
+-    if command_changed_to_update:
+-      # If the command changed to update, the user's original command was
+-      # not executed.
+-      return_code = 1
+-      print('\n'.join(
+-          textwrap.wrap(
+-              'Update was successful. Exiting with code 1 as the original command '
+-              'issued prior to the update was not executed and should be re-run.'
+-          )))
+     return return_code
+ 
+   def MaybeCheckForAndOfferSoftwareUpdate(self, command_name, debug):
++    return False
+     """Checks the last time we checked for an update and offers one if needed.
+ 
+     Offer is made if the time since the last update check is longer

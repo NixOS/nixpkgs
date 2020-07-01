@@ -1,18 +1,21 @@
-{ stdenv, fetchurl, cmake, openssl, sqlite, pkgconfig, systemd
+{ stdenv, fetchpatch, fetchFromGitHub, cmake, openssl, sqlite, pkgconfig, systemd
 , tlsSupport ? false }:
 
 assert tlsSupport -> openssl != null;
 
-let version = "0.4.1"; in
-stdenv.mkDerivation {
-  name = "uhub-${version}";
+stdenv.mkDerivation rec {
+  pname = "uhub";
+  version = "0.5.0";
 
-  src = fetchurl {
-    url = "http://www.extatic.org/downloads/uhub/uhub-${version}-src.tar.bz2";
-    sha256 = "1q0n74fb0h5w0k9fhfkznxb4r46qyfb8g2ss3wflivx4l0m1f9x2";
+  src = fetchFromGitHub {
+    owner = "janvidar";
+    repo = "uhub";
+    rev = version;
+    sha256 = "0zdbxfvw7apmfhqgsfkfp4pn9iflzwdn0zwvzymm5inswfc00pxg";
   };
 
-  buildInputs = [ cmake sqlite pkgconfig systemd ] ++ stdenv.lib.optional tlsSupport openssl;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake sqlite systemd ] ++ stdenv.lib.optional tlsSupport openssl;
 
   outputs = [ "out"
     "mod_example"
@@ -26,18 +29,31 @@ stdenv.mkDerivation {
     "mod_no_guest_downloads"
   ];
 
-  patches = [ ./plugin-dir.patch ./systemd.patch ];
+  patches = [
+    ./plugin-dir.patch
+    # fix aarch64 build: https://github.com/janvidar/uhub/issues/46
+    (fetchpatch {
+      url = "https://github.com/janvidar/uhub/pull/47.patch";
+      sha256 = "07yik6za89ar5bxm7m2183i7f6hfbawbxvd4vs02n1zr2fgfxmiq";
+    })
 
-  cmakeFlags = ''
-    -DSYSTEMD_SUPPORT=ON
-    ${if tlsSupport then "-DSSL_SUPPORT=ON" else "-DSSL_SUPPORT=OFF"}
-  '';
+    # Fixed compilation on systemd > 210
+    (fetchpatch {
+      url = "https://github.com/janvidar/uhub/commit/70f2a43f676cdda5961950a8d9a21e12d34993f8.diff";
+      sha256 = "1jp8fvw6f9jh0sdjml9mahkk6p6b96p6rzg2y601mnnbcdj8y8xp";
+    })
+  ];
+
+  cmakeFlags = [
+    "-DSYSTEMD_SUPPORT=ON"
+    (if tlsSupport then "-DSSL_SUPPORT=ON" else "-DSSL_SUPPORT=OFF")
+  ];
 
   meta = with stdenv.lib; {
     description = "High performance peer-to-peer hub for the ADC network";
-    homepage = https://www.uhub.org/;
+    homepage = "https://www.uhub.org/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.emery ];
+    maintainers = [ maintainers.ehmry ];
     platforms = platforms.unix;
   };
 }

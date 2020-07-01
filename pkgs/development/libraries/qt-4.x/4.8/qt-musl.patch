@@ -1,0 +1,14 @@
+--- qt-everywhere-opensource-src-4.8.5/mkspecs/linux-g++/qplatformdefs.h.orig
++++ qt-everywhere-opensource-src-4.8.5/mkspecs/linux-g++/qplatformdefs.h
+@@ -86,11 +86,7 @@
+ 
+ #undef QT_SOCKLEN_T
+ 
+-#if defined(__GLIBC__) && (__GLIBC__ >= 2)
+ #define QT_SOCKLEN_T            socklen_t
+-#else
+-#define QT_SOCKLEN_T            int
+-#endif
+ 
+ #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 500)
+ #define QT_SNPRINTF		::snprintf

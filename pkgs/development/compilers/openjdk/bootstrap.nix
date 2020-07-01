@@ -1,33 +1,40 @@
-{ stdenv, runCommand, glibc, fetchurl, file }:
+{ stdenv
+, runCommand, fetchurl, zlib
+
+, version
+}:
+
+assert stdenv.hostPlatform.libc == "glibc";
 
 let
-  # !!! These should be on nixos.org
-  src = if glibc.system == "x86_64-linux" then
-    fetchurl {
-      url = http://tarballs.nixos.org/openjdk-bootstrap-x86_64-linux-2012-08-24.tar.xz;
-      sha256 = "0gla9dxrfq2w1hvgsnn8jg8a60k27im6z43a6iidi0qmwa0wah32";
-    }
-  else if glibc.system == "i686-linux" then
-    fetchurl {
-      url = http://tarballs.nixos.org/openjdk-bootstrap-i686-linux-2012-08-24.tar.xz;
-      sha256 = "184wq212bycwbbq4ix8cc6jwjxkrqw9b01zb86q95kqpa8zy5206";
-    }
-  else throw "No bootstrap for system";
-in
+  fetchboot = version: arch: sha256: fetchurl {
+    name = "openjdk${version}-bootstrap-${arch}-linux.tar.xz";
+    url  = "http://tarballs.nixos.org/openjdk/2018-03-31/${version}/${arch}-linux.tar.xz";
+    inherit sha256;
+  };
 
-runCommand "openjdk-bootstrap" {} ''
-  tar xvf ${src}
-  mv openjdk-bootstrap $out
+  src = if stdenv.hostPlatform.system == "x86_64-linux" then
+    (if version == "10"    then fetchboot "10" "x86_64" "08085fsxc1qhqiv3yi38w8lrg3vm7s0m2yvnwr1c92v019806yq2"
+    else if version == "8" then fetchboot "8"  "x86_64" "18zqx6jhm3lizn9hh6ryyqc9dz3i96pwaz8f6nxfllk70qi5gvks"
+    else throw "No bootstrap jdk for version ${version}")
+  else if stdenv.hostPlatform.system == "i686-linux" then
+    (if version == "10"    then fetchboot "10" "i686" "1blb9gyzp8gfyggxvggqgpcgfcyi00ndnnskipwgdm031qva94p7"
+    else if version == "8" then fetchboot "8"  "i686" "1yx04xh8bqz7amg12d13rw5vwa008rav59mxjw1b9s6ynkvfgqq9"
+    else throw "No bootstrap for version")
+  else throw "No bootstrap jdk for system ${stdenv.hostPlatform.system}";
 
-  for i in $out/bin/*; do
-    patchelf --set-interpreter ${glibc}/lib/ld-linux*.so.2 $i
-  done
+  bootstrap = runCommand "openjdk-bootstrap" {
+    passthru.home = "${bootstrap}/lib/openjdk";
+  } ''
+    tar xvf ${src}
+    mv openjdk-bootstrap $out
 
-  # Temporarily, while NixOS's OpenJDK bootstrap tarball doesn't have PaX markings:
-  exes=$(${file}/bin/file $out/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-  for file in $exes; do
-    paxmark m "$file"
-    # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
-    ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$file"''}
-  done
-''
+    LIBDIRS="$(find $out -name \*.so\* -exec dirname {} \; | sort | uniq | tr '\n' ':')"
+
+    find "$out" -type f -print0 | while IFS= read -r -d "" elf; do
+      isELF "$elf" || continue
+      patchelf --set-interpreter $(cat "${stdenv.cc}/nix-support/dynamic-linker") "$elf" || true
+      patchelf --set-rpath "${stdenv.cc.libc}/lib:${stdenv.cc.cc.lib}/lib:${zlib}/lib:$LIBDIRS" "$elf" || true
+    done
+  '';
+in bootstrap

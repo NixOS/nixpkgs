@@ -1,14 +1,15 @@
 { fetchurl, stdenv, pkgconfig, ucommon, libosip, libexosip, gnutls, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "sipwitch-1.6.1";
+  name = "sipwitch-1.9.15";
 
   src = fetchurl {
     url = "mirror://gnu/sipwitch/${name}.tar.gz";
-    sha256 = "1sa4fbv8filzcxqx2viyixsq4pwgvkidn6l6g3k62gl8bvdfk7p9";
+    sha256 = "2a7aa86a653f6810b3cd9cce6c37b3f70e937e7d14b09fd5c2a70d70588a9482";
   };
 
-  buildInputs = [ pkgconfig ucommon libosip libexosip gnutls zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ucommon libosip libexosip gnutls zlib ];
 
   preConfigure = ''
     export configureFlags="--sysconfdir=$out/etc"
@@ -18,9 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Secure peer-to-peer VoIP server that uses the SIP protocol";
-    homepage = http://www.gnu.org/software/sipwitch/;
+    homepage = "https://www.gnu.org/software/sipwitch/";
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

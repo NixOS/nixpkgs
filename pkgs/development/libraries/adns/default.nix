@@ -1,24 +1,25 @@
 { stdenv, fetchurl }:
 
 let
-  version = "1.5.0";
+  version = "1.5.1";
 in
 stdenv.mkDerivation {
-  name = "adns-${version}";
+  pname = "adns";
+  inherit version;
 
   src = fetchurl {
     urls = [
-      "http://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${version}.tar.gz"
+      "https://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${version}.tar.gz"
       "ftp://ftp.chiark.greenend.org.uk/users/ian/adns/adns-${version}.tar.gz"
       "mirror://gnu/adns/adns-${version}.tar.gz"
     ];
-    sha256 = "0hg89b5n84zjhzvbzrpvhl0hbm4s6d1z2pzllfis64ai656ypibz";
+    sha256 = "1ssfh94ck6kn98nf2yy6743srpgqgd167va5ja3bwx42igqjc42v";
   };
 
   preConfigure =
     stdenv.lib.optionalString stdenv.isDarwin "sed -i -e 's|-Wl,-soname=$(SHLIBSONAME)||' configure";
 
-  # http://thread.gmane.org/gmane.linux.distributions.nixos/1328 for details.
+  # https://www.mail-archive.com/nix-dev@cs.uu.nl/msg01347.html for details.
   doCheck = false;
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -31,6 +32,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.lgpl2;
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

@@ -1,0 +1,21 @@
+diff --git a/src/VBox/HostDrivers/linux/Makefile b/src/VBox/HostDrivers/linux/Makefile
+index 6e44129b..e68ce128 100644
+--- a/src/VBox/HostDrivers/linux/Makefile
++++ b/src/VBox/HostDrivers/linux/Makefile
+@@ -95,13 +95,13 @@ vboxpci: vboxdrv
+ install:
+ 	@$(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) -C vboxdrv install
+ 	@if [ -d vboxnetflt ]; then \
+-	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) -C vboxnetflt install; \
++		$(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) KBUILD_EXTRA_SYMBOLS=$(abspath vboxnetflt/Module.symvers) -C vboxnetflt install; \
+ 	fi
+ 	@if [ -d vboxnetadp ]; then \
+-	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) -C vboxnetadp install; \
++	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) KBUILD_EXTRA_SYMBOLS=$(abspath vboxnetadp/Module.symvers) -C vboxnetadp install; \
+ 	fi
+ 	@if [ -d vboxpci ]; then \
+-	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) -C vboxpci install; \
++	    $(MAKE) KBUILD_VERBOSE=$(KBUILD_VERBOSE) KBUILD_EXTRA_SYMBOLS=$(abspath vboxpci/Module.symvers) -C vboxpci install; \
+ 	fi
+ 
+ else

@@ -1,19 +1,25 @@
-{ stdenv, fetchsvn, pkgconfig, zlib }:
+{ stdenv, fetchFromGitHub, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "gpac-0.5.0-svn";
+  version = "0.8.0";
+  pname = "gpac";
 
-  src = fetchsvn {
-    url = "http://svn.code.sf.net/p/gpac/code/trunk/gpac";
-    rev = "4749";
-    sha256 = "0y38pmp64a2l70y1yby90qzxfzx8y7r0cdmgjxzw86jh6si5ndhp";
+  src = fetchFromGitHub {
+    owner = "gpac";
+    repo = "gpac";
+    rev = "v${version}";
+    sha256 = "1w1dyrn6900yi8ngchfzy5hvxr6yc60blvdq8y8mczimmmq8khb5";
   };
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
   # For most other functionality, this should probably be extended
-  nativeBuildInputs = [ pkgconfig zlib ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  buildInputs = [ zlib ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "Open Source multimedia framework for research and academic purposes";
     longDescription = ''
       GPAC is an Open Source multimedia framework for research and academic purposes.
@@ -27,10 +33,9 @@ stdenv.mkDerivation rec {
       A multimedia packager, called MP4Box,
       And some server tools included in MP4Box and MP42TS applications.
     '';
-    homepage = http://gpac.wp.mines-telecom.fr;
-    license = stdenv.lib.licenses.lgpl21;
-
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://gpac.wp.imt.fr";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ bluescreen303 mgdelacroix ];
+    platforms = platforms.linux;
   };
 }

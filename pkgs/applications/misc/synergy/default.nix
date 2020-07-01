@@ -1,54 +1,81 @@
-{ stdenv, fetchFromGitHub, cmake, x11, libX11, libXi, libXtst, libXrandr
-, xinput, curl, cryptopp ? null, unzip }:
-
-assert stdenv.isLinux -> cryptopp != null;
-
-with stdenv.lib;
+{ stdenv, lib, fetchFromGitHub, cmake, openssl, qttools
+, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
+, xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
+, withGUI ? true, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "synergy-${version}";
-  version = "1.6.3";
+  pname = "synergy";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
-    owner = "synergy";
-    repo = "synergy";
-    rev = version;
-    sha256 = "0n4zvz669vi2wyn6i6xhxp0j3nvjl4yzm441cqv6hb0d5k26wbcn";
+    owner = "symless";
+    repo = "synergy-core";
+    rev = "${version}-stable";
+    sha256 = "1jk60xw4h6s5crha89wk4y8rrf1f3bixgh5mzh3cq3xyrkba41gh";
   };
 
-  patches = optional stdenv.isLinux ./cryptopp.patch;
+  patches = [ ./build-tests.patch
+  ] ++ lib.optional stdenv.isDarwin ./macos_build_fix.patch;
 
-  postPatch = (if stdenv.isLinux then ''
-    sed -i -e '/HAVE_X11_EXTENSIONS_XRANDR_H/c \
-      set(HAVE_X11_EXTENSIONS_XRANDR_H true)' CMakeLists.txt
-  '' else ''
-    ${unzip}/bin/unzip -d ext/cryptopp562 ext/cryptopp562.zip
-  '') + ''
-    ${unzip}/bin/unzip -d ext/gmock-1.6.0 ext/gmock-1.6.0.zip
-    ${unzip}/bin/unzip -d ext/gtest-1.6.0 ext/gtest-1.6.0.zip
+  # Since the included gtest and gmock don't support clang and the
+  # segfault when built with gcc9, we replace it with 1.10.0 for
+  # synergy-1.11.0. This should become unnecessary when upstream
+  # updates these dependencies.
+  googletest = fetchFromGitHub {
+    owner = "google";
+    repo = "googletest";
+    rev = "release-1.10.0";
+    sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
+  };
+
+  postPatch = ''
+    rm -r ext/*
+    cp -r ${googletest}/googlemock ext/gmock/
+    cp -r ${googletest}/googletest ext/gtest/
+    chmod -R +w ext/
   '';
 
-  buildInputs = [ cmake x11 libX11 libXi libXtst libXrandr xinput curl ]
-             ++ optional stdenv.isLinux cryptopp;
+  cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
 
-  # At this moment make install doesn't work for synergy
-  # http://synergy-foss.org/spit/issues/details/3317/
+  nativeBuildInputs = [ cmake ] ++ lib.optional withGUI wrapQtAppsHook;
+
+  dontWrapQtApps = true;
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals withGUI [
+    qttools
+  ] ++ lib.optionals stdenv.isDarwin [
+    ApplicationServices Carbon Cocoa CoreServices ScreenSaver
+  ] ++ lib.optionals stdenv.isLinux [
+    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ../bin/synergyc $out/bin
-    cp ../bin/synergys $out/bin
-    cp ../bin/synergyd $out/bin
+    cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
+  '' + lib.optionalString withGUI ''
+    cp bin/synergy $out/bin/
+    wrapQtApp $out/bin/synergy --prefix PATH : ${lib.makeBinPath [ openssl ]}
+  '' + lib.optionalString stdenv.isLinux ''
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
+    mkdir -p $out/share/applications
+    substitute ../res/synergy.desktop $out/share/applications/synergy.desktop --replace /usr/bin $out/bin
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications/
+    mv bundle/Synergy.app $out/Applications/
+    ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS
   '';
 
   doCheck = true;
-  checkPhase = "../bin/unittests";
+  checkPhase = "bin/unittests";
 
-  meta = {
-    description = "Tool to share the mouse keyboard and the clipboard between computers";
-    homepage = http://synergy-foss.org;
+  meta = with lib; {
+    description = "Share one mouse and keyboard between multiple computers";
+    homepage = "http://synergy-project.org/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.aszlig ];
+    maintainers = with maintainers; [ aszlig enzime ];
     platforms = platforms.all;
   };
 }

@@ -1,18 +1,21 @@
-{ stdenv, fetchurl, readline, ncurses }:
+{ stdenv, fetchFromGitHub, readline, ncurses
+, autoreconfHook, pkgconfig, gettext }:
 
-let
-  version = "1.16";
-in
 stdenv.mkDerivation rec {
+  pname = "hstr";
+  version = "2.2";
 
-  name = "hstr-${version}";
-
-  src = fetchurl {
-    url = "https://github.com/dvorka/hstr/releases/download/${version}/hh-${version}-src.tgz";
-    sha256 = "1hl3fn6kravx5gsdsr0l824vnkj5aiz0dybhd3ak932v95b5knyg";
+  src = fetchFromGitHub {
+    owner  = "dvorka";
+    repo   = "hstr";
+    rev    = version;
+    sha256 = "07fkilqlkpygvf9kvxyvl58g3lfq0bwwdp3wczy4hk8qlbhmgihn";
   };
 
-  buildInputs = [ readline ncurses ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ readline ncurses gettext ];
+
+  configureFlags = [ "--prefix=$(out)" ];
 
   meta = {
     homepage = "https://github.com/dvorka/hstr";

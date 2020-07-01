@@ -1,11 +1,11 @@
-diff -rupN asterisk-13.3.2/build_tools/make_defaults_h asterisk-13.3.2-patched/build_tools/make_defaults_h
---- asterisk-13.3.2/build_tools/make_defaults_h	2012-01-30 14:21:16.000000000 -0700
-+++ asterisk-13.3.2-patched/build_tools/make_defaults_h	2015-04-15 19:07:46.760351155 -0600
+diff -rupN asterisk-14.1.2/build_tools/make_defaults_h asterisk-14.1.2-patched/build_tools/make_defaults_h
+--- asterisk-14.1.2/build_tools/make_defaults_h	2016-11-10 20:43:02.000000000 +0100
++++ asterisk-14.1.2-patched/build_tools/make_defaults_h	2016-11-16 10:09:04.189625495 +0100
 @@ -1,4 +1,13 @@
  #!/bin/sh
 +
 +ASTLOGDIR=/var/log/asterisk
-+ASTVARRUNDIR=/var/run/asterisk
++ASTVARRUNDIR=/run/asterisk
 +ASTVARLIBDIR=/var/lib/asterisk
 +ASTDBDIR=${ASTVARLIBDIR}
 +ASTDATADIR=${ASTVARLIBDIR}

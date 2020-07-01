@@ -35,7 +35,7 @@ let
 in {
   options = {
     services.rippleDataApi = {
-      enable = mkEnableOption "Whether to enable ripple data api.";
+      enable = mkEnableOption "ripple data api";
 
       port = mkOption {
         description = "Ripple data api port";
@@ -185,9 +185,8 @@ in {
       ];
     };
 
-    users.extraUsers = singleton
-      { name = "ripple-data-api";
-        description = "Ripple data api user";
+    users.users.ripple-data-api =
+      { description = "Ripple data api user";
         uid = config.ids.uids.ripple-data-api;
       };
   };

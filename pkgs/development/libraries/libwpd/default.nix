@@ -11,4 +11,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libgsf libxml2 zlib librevenge ];
 
   nativeBuildInputs = [ pkgconfig ];
+
+  meta = with stdenv.lib; {
+    description = "A library for importing and exporting WordPerfect documents";
+    homepage = "http://libwpd.sourceforge.net/";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+  };
 }

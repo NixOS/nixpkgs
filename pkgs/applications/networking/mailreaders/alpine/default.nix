@@ -1,38 +1,32 @@
-{stdenv, fetchurl, ncurses, tcl, openssl, pam, pkgconfig, gettext, kerberos
+{stdenv, fetchurl, ncurses, tcl, openssl, pam, kerberos
 , openldap
 }:
-let
-  s = 
-  rec {
-    version = "2.00";
-    url = "ftp://ftp.cac.washington.edu/alpine/alpine-${version}.tar.bz2";
-    sha256 = "19m2w21dqn55rhxbh5lr9qarc2fqa9wmpj204jx7a0zrb90bhpf8";
-    baseName = "alpine";
-    name = "${baseName}-${version}";
+
+stdenv.mkDerivation rec {
+  pname = "alpine";
+  version = "2.21";
+
+  src = fetchurl {
+    url = "http://alpine.x10host.com/alpine/release/src/${pname}-${version}.tar.xz";
+    sha256 = "0f3llxrmaxw7w9w6aixh752md3cdc91mwfmbarkm8s413f4bcc30";
   };
+
   buildInputs = [
     ncurses tcl openssl pam kerberos openldap
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
+
+  hardeningDisable = [ "format" ];
+
   configureFlags = [
-    "--with-ssl-include-dir=${openssl}/include/openssl"
-    "--with-tcl-lib=${tcl.libPrefix}"
-    ];
-  preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
-  '';
-  meta = {
-    inherit (s) version;
-    description = ''Console mail reader'';
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = "https://www.washington.edu/alpine/";
+    "--with-ssl-include-dir=${openssl.dev}/include/openssl"
+    "--with-passfile=.pine-passfile"
+  ];
+
+  meta = with stdenv.lib; {
+    description = "Console mail reader";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    homepage = "http://alpine.x10host.com/";
   };
 }

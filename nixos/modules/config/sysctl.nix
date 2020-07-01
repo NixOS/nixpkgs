@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -8,7 +8,7 @@ let
     name = "sysctl option value";
     check = val:
       let
-        checkType = x: isBool x || isString x || isInt x || isNull x;
+        checkType = x: isBool x || isString x || isInt x || x == null;
       in
         checkType val || (val._type or "" == "override" && checkType val.content);
     merge = loc: defs: mergeOneOption loc (filterOverrides defs);
@@ -22,10 +22,9 @@ in
 
     boot.kernel.sysctl = mkOption {
       default = {};
-      example = {
-        "net.ipv4.tcp_syncookies" = false;
-        "vm.swappiness" = 60;
-      };
+      example = literalExample ''
+        { "net.ipv4.tcp_syncookies" = false; "vm.swappiness" = 60; }
+      '';
       type = types.attrsOf sysctlOption;
       description = ''
         Runtime parameters of the Linux kernel, as set by
@@ -43,27 +42,22 @@ in
 
   config = {
 
-    environment.etc."sysctl.d/nixos.conf".text =
+    environment.etc."sysctl.d/60-nixos.conf".text =
       concatStrings (mapAttrsToList (n: v:
         optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
       ) config.boot.kernel.sysctl);
 
     systemd.services.systemd-sysctl =
       { wantedBy = [ "multi-user.target" ];
-        restartTriggers = [ config.environment.etc."sysctl.d/nixos.conf".source ];
+        restartTriggers = [ config.environment.etc."sysctl.d/60-nixos.conf".source ];
       };
-
-    # Enable hardlink and symlink restrictions.  See
-    # https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=800179c9b8a1e796e441674776d11cd4c05d61d7
-    # for details.
-    boot.kernel.sysctl."fs.protected_hardlinks" = true;
-    boot.kernel.sysctl."fs.protected_symlinks" = true;
 
     # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
     # users as these make it easier to exploit kernel vulnerabilities.
-    #
-    # Removed under grsecurity.
-    boot.kernel.sysctl."kernel.kptr_restrict" =
-      if (config.boot.kernelPackages.kernel.features.grsecurity or false) then null else 1;
+    boot.kernel.sysctl."kernel.kptr_restrict" = mkDefault 1;
+
+    # Disable YAMA by default to allow easy debugging.
+    boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkDefault 0;
+
   };
 }

@@ -7,7 +7,13 @@ stdenv.mkDerivation rec {
     url = "http://www.antigrain.com/${name}.tar.gz";
     sha256 = "07wii4i824vy9qsvjsgqxppgqmfdxq0xa87i5yk53fijriadq7mb";
   };
-  buildInputs = [ autoconf automake libtool pkgconfig freetype SDL libX11 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool freetype SDL libX11 ];
+
+  postPatch = ''
+    substituteInPlace include/agg_renderer_outline_aa.h \
+      --replace 'line_profile_aa& profile() {' 'const line_profile_aa& profile() {'
+  '';
 
   # fix build with new automake, from Gentoo ebuild
   preConfigure = ''
@@ -15,7 +21,11 @@ stdenv.mkDerivation rec {
     sh autogen.sh
   '';
 
-  configureFlags = "--x-includes=${libX11}/include --x-libraries=${libX11}/lib";
+  configureFlags = [ "--x-includes=${libX11.dev}/include" "--x-libraries=${libX11.out}/lib" "--enable-examples=no" ];
+
+  # libtool --tag=CXX --mode=link g++ -g -O2 libexamples.la ../src/platform/X11/libaggplatformX11.la ../src/libagg.la -o alpha_mask2 alpha_mask2.o
+  # libtool: error: cannot find the library 'libexamples.la'
+  enableParallelBuilding = false;
 
   meta = {
     description = "High quality rendering engine for C++";
@@ -31,6 +41,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://www.antigrain.com/;
+    homepage = "http://www.antigrain.com/";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

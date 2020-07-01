@@ -1,27 +1,31 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchgit, lib }:
 
 stdenv.mkDerivation rec {
-  name = "firmware-linux-nonfree-${version}";
-  version = "2015-05-13";
+  pname = "firmware-linux-nonfree";
+  version = "2020-05-19";
 
   src = fetchgit {
-    url = "http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-    rev = "3161bfa479d5e9ed4f46b57df9bcecbbc4f8eb3c";
-    sha256 = "0np6vwcnas3pzp38man3cs8j5ijs0p3skyzla19sfxzpwmjvfpjq";
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
+    rev = lib.replaceStrings ["-"] [""] version;
+    sha256 = "13yrpgfqxp5l457p3s1c61is410nv0kv6picx9r0m8h1b0v6aym3";
   };
-
-  preInstall = ''
-    mkdir -p $out
-  '';
 
   installFlags = [ "DESTDIR=$(out)" ];
 
+  # Firmware blobs do not need fixing and should not be modified
+  dontFixup = true;
+
+  outputHashMode = "recursive";
+  outputHashAlgo = "sha256";
+  outputHash = "0pjl70nwarnknxah8vikb051c75mkg25a5m4h3344cw86x8hcx10";
+
   meta = with stdenv.lib; {
     description = "Binary firmware collection packaged by kernel.org";
-    homepage = http://packages.debian.org/sid/firmware-linux-nonfree;
+    homepage = "http://packages.debian.org/sid/firmware-linux-nonfree";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ fpletz ];
+    priority = 6; # give precedence to kernel firmware
   };
 
   passthru = { inherit version; };

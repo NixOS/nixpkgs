@@ -1,18 +1,19 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dmidecode-2.12";
+  name = "dmidecode-3.2";
 
   src = fetchurl {
-    url = "mirror://savannah/dmidecode/${name}.tar.bz2";
-    sha256 = "122hgaw8mpqdfra159lfl6pyk3837giqx6vq42j64fjnbl2z6gwi";
+    url = "mirror://savannah/dmidecode/${name}.tar.xz";
+    sha256 = "1pcfhcgs2ifdjwp7amnsr3lq95pgxpr150bjhdinvl505px0cw07";
   };
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.nongnu.org/dmidecode/;
+    homepage = "https://www.nongnu.org/dmidecode/";
     description = "A tool that reads information about your system's hardware from the BIOS according to the SMBIOS/DMI standard";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

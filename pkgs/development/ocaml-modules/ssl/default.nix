@@ -1,33 +1,25 @@
-{stdenv, fetchurl, which, openssl, ocaml, findlib}:
+{ lib, buildDunePackage, fetchFromGitHub, pkg-config, openssl }:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.4.7";
-in
+buildDunePackage rec {
+  pname = "ssl";
+  version = "0.5.9";
 
-stdenv.mkDerivation {
-  name = "ocaml-ssl-${version}";
-
-  src = fetchurl {
-    url = "mirror://debian/pool/main/o/ocaml-ssl/ocaml-ssl_${version}.orig.tar.gz";
-    sha256 = "0i0j89b10n3xmmawcq4qfwa42133pddw4x5nysmsnpd15srv5gp9";
+  src = fetchFromGitHub {
+    owner = "savonet";
+    repo = "ocaml-ssl";
+    rev = version;
+    sha256 = "04h02rvzrwp886n5hsx84rnc9b150iggy38g5v1x1rwz3pkdnmf0";
   };
 
-  buildInputs = [which openssl ocaml findlib];
-
-  dontAddPrefix = true;
-
-  configureFlags = "--disable-ldconf";
-
-  createFindlibDestdir = true;
+  nativeBuildInputs = [ pkg-config ];
+  propagatedBuildInputs = [openssl];
 
   meta = {
-    homepage = http://savonet.rastageeks.org/;
+    homepage = "http://savonet.rastageeks.org/";
     description = "OCaml bindings for libssl ";
     license = "LGPL+link exception";
-    platforms = ocaml.meta.platforms;
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      lib.maintainers.maggesi
     ];
   };
 }

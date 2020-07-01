@@ -1,11 +1,11 @@
-{ fetchurl, stdenv, python
+{ fetchurl, stdenv, python2
 
 , enableStandardFeatures ? false
 , sourceHighlight ? null
 , highlight ? null
 , pygments ? null
 , graphviz ? null
-, tetex ? null
+, texlive ? null
 , dblatexFull ? null
 , libxslt ? null
 , w3m ? null
@@ -14,7 +14,7 @@
 , lilypond ? null
 , libxml2 ? null
 , docbook_xml_dtd_45 ? null
-, docbook5_xsl ? null
+, docbook_xsl_ns ? null
 , docbook_xsl ? null
 , fop ? null
 # TODO: Package this:
@@ -37,6 +37,9 @@
 # backends
 , enableDeckjsBackend ? false
 , enableOdfBackend ? false
+
+# java is problematic on some platforms, where it is unfree
+, enableJava ? true
 }:
 
 assert enableStandardFeatures ->
@@ -44,7 +47,7 @@ assert enableStandardFeatures ->
   highlight != null &&
   pygments != null &&
   graphviz != null &&
-  tetex != null &&
+  texlive != null &&
   dblatexFull != null &&
   libxslt != null &&
   w3m != null &&
@@ -53,9 +56,9 @@ assert enableStandardFeatures ->
   lilypond != null &&
   libxml2 != null &&
   docbook_xml_dtd_45 != null &&
-  docbook5_xsl != null &&
+  docbook_xsl_ns != null &&
   docbook_xsl != null &&
-  fop != null &&
+  (fop != null || !enableJava) &&
 # TODO: Package this:
 #  epubcheck != null &&
   gnused != null &&
@@ -63,7 +66,7 @@ assert enableStandardFeatures ->
 
 # filters
 assert enableExtraPlugins || enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter -> unzip != null;
-assert enableExtraPlugins || enableDitaaFilter -> jre != null;
+assert (enableExtraPlugins && enableJava) || enableDitaaFilter -> jre != null;
 assert enableExtraPlugins || enableMscgenFilter -> mscgen != null;
 assert enableExtraPlugins || enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
 assert enableExtraPlugins || enableMatplotlibFilter -> matplotlib != null && numpy != null;
@@ -73,7 +76,7 @@ assert enableExtraPlugins || enableDeckjsBackend || enableOdfBackend -> unzip !=
 
 let
 
-  _enableDitaaFilter = enableExtraPlugins || enableDitaaFilter;
+  _enableDitaaFilter = (enableExtraPlugins && enableJava) || enableDitaaFilter;
   _enableMscgenFilter = enableExtraPlugins || enableMscgenFilter;
   _enableDiagFilter = enableExtraPlugins || enableDiagFilter;
   _enableQrcodeFilter = enableExtraPlugins || enableQrcodeFilter;
@@ -108,7 +111,7 @@ let
   };
 
   # there are no archives or tags, using latest commit in master branch as per 2013-09-22
-  matplotlibFilterSrc = let commit = "75f0d009629f93f33fab04b83faca20cc35dd358"; in fetchurl rec {
+  matplotlibFilterSrc = let commit = "75f0d009629f93f33fab04b83faca20cc35dd358"; in fetchurl {
     name = "mplw-${commit}.tar.gz";
     url = "https://api.github.com/repos/lvv/mplw/tarball/${commit}";
     sha256 = "0yfhkm2dr8gnp0fcg25x89hwiymkri2m5cyqzmzragzwj0hbmcf1";
@@ -148,7 +151,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w71nk527lq504njmaf0vzr93pgahkgzzxzglrq6bay8cw2rvnvq";
   };
 
-  buildInputs = [ python unzip ];
+  buildInputs = [ python2 unzip ];
 
   # install filters early, so their shebangs are patched too
   patchPhase = with stdenv.lib; ''
@@ -212,18 +215,18 @@ stdenv.mkDerivation rec {
   '' + optionalString enableStandardFeatures ''
     sed -e "s|dot|${graphviz}/bin/dot|g" \
         -e "s|neato|${graphviz}/bin/neato|g" \
-        -e "s|twopi|${graphviz}/bin/circo|g" \
+        -e "s|twopi|${graphviz}/bin/twopi|g" \
         -e "s|circo|${graphviz}/bin/circo|g" \
         -e "s|fdp|${graphviz}/bin/fdp|g" \
         -i "filters/graphviz/graphviz2png.py"
 
-    sed -e "s|run('latex|run('${tetex}/bin/latex|g" \
-        -e "s|cmd = 'dvipng'|cmd = '${tetex}/bin/dvipng'|g" \
+    sed -e "s|run('latex|run('${texlive}/bin/latex|g" \
+        -e "s|cmd = 'dvipng'|cmd = '${texlive}/bin/dvipng'|g" \
         -i "filters/latex/latex2png.py"
 
     sed -e "s|run('abc2ly|run('${lilypond}/bin/abc2ly|g" \
         -e "s|run('lilypond|run('${lilypond}/bin/lilypond|g" \
-        -e "s|run('convert|run('${imagemagick}/bin/convert|g" \
+        -e "s|run('convert|run('${imagemagick.out}/bin/convert|g" \
         -i "filters/music/music2png.py"
 
     sed -e 's|filter="source-highlight|filter="${sourceHighlight}/bin/source-highlight|' \
@@ -235,19 +238,20 @@ stdenv.mkDerivation rec {
     # use it to work around an impurity in the tetex package; tetex tools
     # cannot find their neighbours (e.g. pdflatex doesn't find mktextfm).
     # We can remove PATH= when those impurities are fixed.
-    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook5_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${tetex}/bin:${coreutils}/bin:${gnused}/bin')|" \
+    # TODO: Is this still necessary when using texlive?
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${stdenv.lib.makeBinPath [ texlive coreutils gnused ]}')|" \
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
-        -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt}/bin/xsltproc'|" \
+        -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
-        -e "s|^FOP =.*|FOP = '${fop}/bin/fop'|" \
+        ${optionalString enableJava ''-e "s|^FOP =.*|FOP = '${fop}/bin/fop'|"''} \
         -e "s|^W3M =.*|W3M = '${w3m}/bin/w3m'|" \
         -e "s|^LYNX =.*|LYNX = '${lynx}/bin/lynx'|" \
-        -e "s|^XMLLINT =.*|XMLLINT = '${libxml2}/bin/xmllint'|" \
+        -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
         -e "s|^EPUBCHECK =.*|EPUBCHECK = 'nixpkgs_is_missing_epubcheck'|" \
         -i a2x.py
   '' + ''
     for n in $(find "$out" . -name \*.py); do
-      sed -i -e "s,^#![[:space:]]*.*/bin/env python,#!${python}/bin/python,g" "$n"
+      sed -i -e "s,^#![[:space:]]*.*/bin/env python,#!${python2}/bin/python,g" "$n"
       chmod +x "$n"
     done
 
@@ -255,7 +259,7 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = "mkdir -p $out/etc/vim";
-  makeFlags = if stdenv.isCygwin then "DESTDIR=/." else null;
+  makeFlags = stdenv.lib.optional stdenv.isCygwin "DESTDIR=/.";
 
   meta = with stdenv.lib; {
     description = "Text-based document generation system";
@@ -271,7 +275,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.methods.co.nz/asciidoc/";
     license = licenses.gpl2Plus;
-    hydraPlatforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

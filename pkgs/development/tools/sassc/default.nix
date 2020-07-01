@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, autoreconfHook, libsass }:
+{ stdenv, fetchFromGitHub, autoreconfHook, libsass }:
 
 stdenv.mkDerivation rec {
-  name = "sassc-${version}";
-  version = "3.2.1";
+  pname = "sassc";
+  version = "3.6.1";
 
-  src = fetchurl {
-    url = "https://github.com/sass/sassc/archive/${version}.tar.gz";
-    sha256 = "18pp7ylcwfvfagvnpw660cdvv7cjl7pl9v8x7xr05fp2l6133rxw";
+  src = fetchFromGitHub {
+    owner = "sass";
+    repo = pname;
+    rev = version;
+    sha256 = "1sxm54mkhs9m4vnl7vn11y17mhzamc403hv3966j1c7p2rbzg5pv";
   };
 
   patchPhase = ''
@@ -19,9 +21,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A front-end for libsass";
-    homepage = https://github.com/sass/sassc/;
+    homepage = "https://github.com/sass/sassc/";
     license = licenses.mit;
-    maintainers = with maintainers; [ pjones ];
+    maintainers = with maintainers; [ codyopel pjones ];
     platforms = platforms.unix;
   };
 }

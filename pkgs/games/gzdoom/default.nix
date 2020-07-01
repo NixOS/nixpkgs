@@ -1,33 +1,55 @@
-{stdenv, fetchFromGitHub, cmake, fmod, mesa, SDL2}:
+{ stdenv, fetchFromGitHub, cmake, makeWrapper
+, openal, fluidsynth_1, soundfont-fluid, libGL, SDL2
+, bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 
-stdenv.mkDerivation {
-  name = "gzdoom-2015-05-07";
-  src = fetchFromGitHub{
+stdenv.mkDerivation rec {
+  pname = "gzdoom";
+  version = "4.3.3";
+
+  src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
-    rev = "a59824cd8897dea5dd452c31be1328415478f990";
-    sha256 = "1lg9dk5prn2bjmyznq941a862alljvfgbb42whbpg0vw9vhpikak";
+    rev = "g${version}";
+    sha256 = "1c4vhnvvwy1rs8xm01kqd486h5xsiccwkf95fjx7912zr49yalks";
   };
 
-  buildInputs = [ cmake fmod mesa SDL2 ];
+  nativeBuildInputs = [ cmake makeWrapper ];
+  buildInputs = [
+    SDL2 libGL openal fluidsynth_1 bzip2 zlib libjpeg libsndfile mpg123
+    game-music-emu
+  ];
 
-  cmakeFlags = [ "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so" ];
+  enableParallelBuilding = true;
 
-  preConfigure=''
-    sed s@gzdoom.pk3@$out/share/gzdoom.pk3@ -i src/version.h
+  NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
+
+  preConfigure = ''
+    sed -i \
+      -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
+      -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
+      libraries/zmusic/mididevices/music_fluidsynth_mididevice.cpp
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp gzdoom $out/bin
-    mkdir -p $out/share
-    cp gzdoom.pk3 $out/share
+    install -Dm755 gzdoom "$out/lib/gzdoom/gzdoom"
+    for i in *.pk3; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    for i in fm_banks/*; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    for i in soundfonts/*; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    mkdir $out/bin
+    makeWrapper $out/lib/gzdoom/gzdoom $out/bin/gzdoom
   '';
 
-  meta = {
-    homepage = https://github.com/coelckers/gzdoom;
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/coelckers/gzdoom";
     description = "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
-    maintainer = [ stdenv.lib.maintainers.lassulus ];
+    license = licenses.gpl3;
+    platforms = ["x86_64-linux"];
+    maintainers = with maintainers; [ lassulus ];
   };
 }
-

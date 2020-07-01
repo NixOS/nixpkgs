@@ -16,6 +16,7 @@ in
     services.amule = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to run the AMule daemon. You need to manually run "amuled --ec-config" to configure the service for the first time.
@@ -45,34 +46,32 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = mkIf (cfg.user == null) [
+    users.users = mkIf (cfg.user == null) [
       { name = "amule";
         description = "AMule daemon";
         group = "amule";
         uid = config.ids.uids.amule;
       } ];
 
-    users.extraGroups = mkIf (cfg.user == null) [
+    users.groups = mkIf (cfg.user == null) [
       { name = "amule";
         gid = config.ids.gids.amule;
       } ];
 
-    jobs.amuled =
-      { description = "AMule daemon";
+    systemd.services.amuled = {
+      description = "AMule daemon";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
-        startOn = "ip-up";
+      preStart = ''
+        mkdir -p ${cfg.dataDir}
+        chown ${user} ${cfg.dataDir}
+      '';
 
-        preStart = ''
-            mkdir -p ${cfg.dataDir}
-            chown ${user} ${cfg.dataDir}
-        '';
-
-        exec = ''
-            ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${user} \
-                -c 'HOME="${cfg.dataDir}" ${pkgs.amuleDaemon}/bin/amuled'
-        '';
-      };
-
+      script = ''
+        ${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${user} \
+            -c 'HOME="${cfg.dataDir}" ${pkgs.amuleDaemon}/bin/amuled'
+      '';
+    };
   };
-
 }

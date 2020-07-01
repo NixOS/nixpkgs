@@ -1,23 +1,35 @@
-{ stdenv, fetchurl, wxGTK, libuuid, xercesc, zip , libXt, libXtst
-, libXi, xextproto, gettext, perl, pkgconfig, libyubikey, ykpers
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, zip, gettext, perl
+, wxGTK31, libXext, libXi, libXt, libXtst, xercesc
+, qrencode, libuuid, libyubikey, yubikey-personalization
+, curl, openssl, file
 }:
 
 stdenv.mkDerivation rec {
-  name = "pwsafe-${version}";
-  version = "0.95";
+  pname = "pwsafe";
+  version = "3.52.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/passwordsafe/pwsafe-${version}BETA-src.tgz";
-    sha256 = "f0b081bc358fee97fce20f352e360960d2813989023b837102b90ba6ed787d46";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "${version}";
+    sha256 = "1ka7xsl63v0559fzf3pwc1iqr37gwr4vq5iaxa2hzar2g28hsxvh";
   };
 
-  makefile = "Makefile.linux";
-  makeFlags = "YBPERS_LIBPATH=${ykpers}/lib";
+  nativeBuildInputs = [ 
+    cmake gettext perl pkgconfig zip
+  ];
+  buildInputs = [
+    libXext libXi libXt libXtst wxGTK31
+    curl qrencode libuuid openssl xercesc
+    libyubikey yubikey-personalization
+    file
+  ];
 
-  buildFlags = "unicoderelease";
-  buildInputs = [ wxGTK libuuid gettext perl zip
-                  xercesc libXt libXtst libXi xextproto
-                  pkgconfig libyubikey ykpers ];
+  cmakeFlags = [
+    "-DNO_GTEST=ON"
+    "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
+  ];
+  enableParallelBuilding = true;
 
   postPatch = ''
     # Fix perl scripts used during the build.
@@ -30,40 +42,18 @@ stdenv.mkDerivation rec {
       substituteInPlace $f --replace /usr/share/ $out/share/
     done
 
+    # Fix hard coded zip path.
+    substituteInPlace help/Makefile.linux --replace /usr/bin/zip ${zip}/bin/zip
+
     for f in `grep -Rl /usr/bin/ .`; do
       substituteInPlace $f --replace /usr/bin/ ""
     done
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin \
-             $out/share/applications \
-             $out/share/pwsafe/xml \
-             $out/share/icons/hicolor/48x48/apps \
-             $out/share/doc/passwordsafe/help \
-             $out/share/man/man1 \
-             $out/share/locale
-
-    (cd help && make -f Makefile.linux)
-    cp help/help.zip $out/share/doc/passwordsafe/help
-
-    (cd src/ui/wxWidgets/I18N && make mos)
-    cp -dr src/ui/wxWidgets/I18N/mos/* $out/share/locale/
-    # */
-
-    cp README.txt docs/ReleaseNotes.txt docs/ChangeLog.txt \
-      LICENSE install/copyright $out/share/doc/passwordsafe
-
-    cp src/ui/wxWidgets/GCCUnicodeRelease/pwsafe $out/bin/
-    cp install/graphics/pwsafe.png $out/share/icons/hicolor/48x48/apps
-    cp docs/pwsafe.1 $out/share/man/man1
-    cp xml/* $out/share/pwsafe/xml
-    #  */
-  '';
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with stdenv.lib; {
     description = "A password database utility";
-
     longDescription = ''
       Password Safe is a password database utility. Like many other
       such products, commercial and otherwise, it stores your
@@ -71,9 +61,8 @@ stdenv.mkDerivation rec {
       one password (the "safe combination"), instead of all the
       username/password combinations that you use.
     '';
-
-    homepage = http://passwordsafe.sourceforge.net/;
-    maintainers = with maintainers; [ pjones ];
+    homepage = "https://pwsafe.org/";
+    maintainers = with maintainers; [ c0bw3b pjones ];
     platforms = platforms.linux;
     license = licenses.artistic2;
   };

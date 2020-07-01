@@ -1,14 +1,27 @@
-{ coreutils, fetchurl, db, openssl, pcre, perl, pkgconfig, stdenv }:
+{ coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, stdenv
+, enableLDAP ? false, openldap
+, enableMySQL ? false, libmysqlclient, zlib
+, enableAuthDovecot ? false, dovecot
+, enablePAM ? false, pam
+, enableSPF ? true, libspf2
+}:
 
 stdenv.mkDerivation rec {
-  name = "exim-4.85";
+  pname = "exim";
+  version = "4.93.0.4";
 
   src = fetchurl {
-    url = "http://mirror.switch.ch/ftp/mirror/exim/exim/exim4/${name}.tar.bz2";
-    sha256 = "195a3ll5ck9viazf9pvgcyc0sziln5g0ggmlm6ax002lphmiy88k";
+    url = "https://ftp.exim.org/pub/exim/exim4/fixes/${pname}-${version}.tar.xz";
+    sha256 = "01g4sfycv13glnmfrapwhjbdw6z1z7w5bwjldxjmglwfw5p3czak";
   };
 
-  buildInputs = [ coreutils db openssl pcre perl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ coreutils db openssl perl pcre ]
+    ++ stdenv.lib.optional enableLDAP openldap
+    ++ stdenv.lib.optionals enableMySQL [ libmysqlclient zlib ]
+    ++ stdenv.lib.optional enableAuthDovecot dovecot
+    ++ stdenv.lib.optional enablePAM pam
+    ++ stdenv.lib.optional enableSPF libspf2;
 
   preBuild = ''
     sed '
@@ -16,12 +29,13 @@ stdenv.mkDerivation rec {
       s:^\(CONFIGURE_FILE\)=.*:\1=/etc/exim.conf:
       s:^\(EXIM_USER\)=.*:\1=ref\:nobody:
       s:^\(SPOOL_DIRECTORY\)=.*:\1=/exim-homeless-shelter:
+      s:^# \(TRANSPORT_LMTP\)=.*:\1=yes:
       s:^# \(SUPPORT_MAILDIR\)=.*:\1=yes:
       s:^EXIM_MONITOR=.*$:# &:
       s:^\(FIXED_NEVER_USERS\)=root$:\1=0:
       s:^# \(WITH_CONTENT_SCAN\)=.*:\1=yes:
       s:^# \(AUTH_PLAINTEXT\)=.*:\1=yes:
-      s:^# \(SUPPORT_TLS\)=.*:\1=yes:
+      s:^# \(USE_OPENSSL\)=.*:\1=yes:
       s:^# \(USE_OPENSSL_PC=openssl\)$:\1:
       s:^# \(LOG_FILE_PATH=syslog\)$:\1:
       s:^# \(HAVE_IPV6=yes\)$:\1:
@@ -32,6 +46,31 @@ stdenv.mkDerivation rec {
       s:^# \(RM_COMMAND\)=.*:\1=${coreutils}/bin/rm:
       s:^# \(TOUCH_COMMAND\)=.*:\1=${coreutils}/bin/touch:
       s:^# \(PERL_COMMAND\)=.*:\1=${perl}/bin/perl:
+      ${stdenv.lib.optionalString enableLDAP ''
+        s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:
+        s:^# \(LOOKUP_LDAP=yes\)$:\1:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lldap -llber:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lldap -llber:
+      ''}
+      ${stdenv.lib.optionalString enableMySQL ''
+        s:^# \(LOOKUP_MYSQL=yes\)$:\1:
+        s:^# \(LOOKUP_MYSQL_PC=libmysqlclient\)$:\1:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient}/include/mysql/:
+      ''}
+      ${stdenv.lib.optionalString enableAuthDovecot ''
+        s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
+      ''}
+      ${stdenv.lib.optionalString enablePAM ''
+        s:^# \(SUPPORT_PAM\)=.*:\1=yes:
+        s:^\(EXTRALIBS_EXIM\)=\(.*\):\1=\2 -lpam:
+        s:^# \(EXTRALIBS_EXIM\)=.*:\1=-lpam:
+      ''}
+      ${stdenv.lib.optionalString enableSPF ''
+        s:^# \(SUPPORT_SPF\)=.*:\1=yes:
+        s:^# \(LDFLAGS += -lspf2\):\1:
+      ''}
       #/^\s*#.*/d
       #/^\s*$/d
     ' < src/EDITME > Local/Makefile
@@ -54,7 +93,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://exim.org/;
+    homepage = "http://exim.org/";
     description = "A mail transfer agent (MTA)";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

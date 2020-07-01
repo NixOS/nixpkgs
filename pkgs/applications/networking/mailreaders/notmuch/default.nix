@@ -1,62 +1,102 @@
-{ fetchurl, stdenv, bash, emacs, fixDarwinDylibNames
-, gdb, glib, gmime, gnupg
-, pkgconfig, talloc, xapian
-, sphinx, python
+{ fetchurl, stdenv
+, pkgconfig, gnupg
+, xapian, gmime, talloc, zlib
+, doxygen, perl, texinfo
+, pythonPackages
+, emacs
+, ruby
+, which, dtach, openssl, bash, gdb, man
+, withEmacs ? true
 }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "notmuch-0.19";
+  version = "0.29.3";
+  pname = "notmuch";
 
   passthru = {
-    pythonSourceRoot = "${name}/bindings/python";
+    pythonSourceRoot = "${pname}-${version}/bindings/python";
+    inherit version;
   };
 
   src = fetchurl {
-    url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "1szf6c44g209pcjq5nvfhlp3nzcm3lrcwv4spsxmwy13hiaccvrr";
+    url = "https://notmuchmail.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "0dfwa38vgnxk9cvvpza66szjgp8lir6iz6yy0cry9593lywh9xym";
   };
 
-  buildInputs = [ bash emacs glib gmime gnupg pkgconfig talloc xapian sphinx python ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames
-    ++ stdenv.lib.optional (!stdenv.isDarwin) gdb;
+  nativeBuildInputs = [
+    pkgconfig
+    doxygen                   # (optional) api docs
+    pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
+    texinfo                   # (optional) documentation -> doc/INSTALL
+  ] ++ optional withEmacs [ emacs ];
 
-  patchPhase = ''
-    find test -type f -exec \
-      sed -i \
-        "1s_#!/usr/bin/env bash_#!${bash}/bin/bash_" \
-        "{}" ";"
+  buildInputs = [
+    gnupg                     # undefined dependencies
+    xapian gmime talloc zlib  # dependencies described in INSTALL
+    perl
+    pythonPackages.python
+    ruby
+  ];
 
-    for src in \
-      crypto.c \
-      emacs/notmuch-crypto.el
-    do
-      substituteInPlace "$src" \
-        --replace \"gpg\" \"${gnupg}/bin/gpg2\"
-    done
+  postPatch = ''
+    patchShebangs configure
+    patchShebangs test/
+
+    substituteInPlace lib/Makefile.local \
+      --replace '-install_name $(libdir)' "-install_name $out/lib"
+  '' + optionalString withEmacs ''
+    substituteInPlace emacs/notmuch-emacs-mua \
+      --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
+      --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
   '';
 
-  postInstall = ''
-    make install-man
+  configureFlags = [
+    "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
+    "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
+    "--infodir=${placeholder "info"}/share/info"
+  ] ++ optional (!withEmacs) "--without-emacs"
+    ++ optional (withEmacs) "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
+    ++ optional (isNull ruby) "--without-ruby";
+
+  # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
+  # friends
+  setOutputFlags = false;
+  enableParallelBuilding = true;
+  makeFlags = [ "V=1" ];
+
+
+  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional withEmacs "emacs";
+
+  preCheck = let
+    test-database = fetchurl {
+      url = "https://notmuchmail.org/releases/test-databases/database-v1.tar.xz";
+      sha256 = "1lk91s00y4qy4pjh8638b5lfkgwyl282g1m27srsf7qfn58y16a2";
+    };
+  in ''
+    ln -s ${test-database} test/test-databases/database-v1.tar.xz
   '';
-
-  preFixup = if stdenv.isDarwin then
-    ''
-      prg="$out/bin/notmuch"
-      target="libnotmuch.3.dylib"
-      echo "$prg: fixing link to $target"
-      install_name_tool -change "$target" "$out/lib/$target" "$prg"
-    ''
-  else
-    "";
-
-  # XXX: emacs tests broken
-  doCheck = false;
+  doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0.3");
   checkTarget = "test";
+  checkInputs = [
+    which dtach openssl bash
+    gdb man emacs
+  ];
+
+  installTargets = [ "install" "install-man" "install-info" ];
+
+  postInstall = stdenv.lib.optionalString withEmacs ''
+    moveToOutput bin/notmuch-emacs-mua $emacs
+  '';
+
+  dontGzipMan = true; # already compressed
 
   meta = {
     description = "Mail indexer";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ chaoflow garbas ];
-    platforms = stdenv.lib.platforms.gnu;
+    homepage    = "https://notmuchmail.org/";
+    license     = licenses.gpl3;
+    maintainers = with maintainers; [ flokli puckipedia ];
+    platforms   = platforms.unix;
   };
 }

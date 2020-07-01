@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libexif, popt }:
+{ stdenv, fetchurl, pkgconfig, libexif, popt, libintl }:
 
 stdenv.mkDerivation rec {
   name = "exif-0.6.21";
@@ -8,10 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "1zb9hwdl783d4vd2s2rw642hg8hd6n0mfp6lrbiqmp9jmhlq5rsr";
   };
 
-  buildInputs = [ pkgconfig libexif popt ];
-  
-  meta = {
-    homepage = http://libexif.sourceforge.net/;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libexif popt libintl ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://libexif.github.io";
     description = "A utility to read and manipulate EXIF data in digital photographs";
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

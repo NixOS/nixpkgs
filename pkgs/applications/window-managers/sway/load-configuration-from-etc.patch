@@ -1,0 +1,42 @@
+From 26f9c65ef037892977a824f0d7d7111066856b53 Mon Sep 17 00:00:00 2001
+From: Michael Weiss <dev.primeos@gmail.com>
+Date: Sat, 27 Apr 2019 14:26:16 +0200
+Subject: [PATCH] Load configs from /etc but fallback to /nix/store
+
+This change will load all configuration files from /etc, to make it easy
+to override them, but fallback to /nix/store/.../etc/sway/config to make
+Sway work out-of-the-box with the default configuration on non NixOS
+systems.
+---
+ meson.build   | 3 ++-
+ sway/config.c | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 02b5d606..c03a9c0f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -129,7 +129,8 @@ if scdoc.found()
+ 	endforeach
+ endif
+ 
+-add_project_arguments('-DSYSCONFDIR="/@0@"'.format(join_paths(prefix, sysconfdir)), language : 'c')
++add_project_arguments('-DSYSCONFDIR="/@0@"'.format(sysconfdir), language : 'c')
++add_project_arguments('-DNIX_SYSCONFDIR="/@0@"'.format(join_paths(prefix, sysconfdir)), language : 'c')
+ 
+ version = '"@0@"'.format(meson.project_version())
+ if git.found()
+diff --git a/sway/config.c b/sway/config.c
+index 4cd21bbc..dd855753 100644
+--- a/sway/config.c
++++ b/sway/config.c
+@@ -317,6 +317,7 @@ static char *get_config_path(void) {
+ 		"$XDG_CONFIG_HOME/i3/config",
+ 		SYSCONFDIR "/sway/config",
+ 		SYSCONFDIR "/i3/config",
++		NIX_SYSCONFDIR "/sway/config",
+ 	};
+ 
+ 	char *config_home = getenv("XDG_CONFIG_HOME");
+-- 
+2.19.2

@@ -1,60 +1,40 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, openconnect, file,
-  openvpn, vpnc, glib, dbus, iptables, gnutls, policykit, polkit,
-  wpa_supplicant, readline6, pptp, ppp, tree }:
+{ callPackage }:
 
-stdenv.mkDerivation rec {
-  name = "connman-${version}";
-  version = "1.28";
-  src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/network/connman/connman.git";
-    rev = "refs/tags/${version}";
-    sha256 = "13c374bfj7dzlx7zvnnigmk0ck5cy601aqi18n77mcrq9yyxw5y9";
+{
+  # All the defaults
+  connman = callPackage ./connman.nix { };
+
+  connmanFull = callPackage ./connman.nix {
+    # TODO: Why is this in `connmanFull` and not the default build? See TODO in
+    # nixos/modules/services/networking/connman.nix (near the assertions)
+    enableNetworkManager = true;
+    enableHh2serialGps = true;
+    enableL2tp = true;
+    enableIospm = true;
+    enableTist = true;
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig openconnect polkit
-                  file openvpn vpnc glib dbus iptables gnutls policykit
-                  wpa_supplicant readline6 pptp ppp tree ];
-
-  preConfigure = ''
-    export WPASUPPLICANT=${wpa_supplicant}/sbin/wpa_supplicant
-    ./bootstrap
-    sed -i "s/\/usr\/bin\/file/file/g" ./configure
-    substituteInPlace configure --replace /usr/sbin/pptp ${pptp}/sbin/pptp
-    substituteInPlace configure --replace /usr/sbin/pppd ${ppp}/sbin/pppd
-  '';
-
-  configureFlags = [
-    "--sysconfdir=\${out}/etc"
-    "--localstatedir=/var"
-    "--with-dbusconfdir=\${out}/etc"
-    "--with-dbusdatadir=\${out}/usr/share"
-    "--disable-maintainer-mode"
-    "--enable-openconnect=builtin"
-    "--with-openconnect=${openconnect}/sbin/openconnect"
-    "--enable-openvpn=builtin"
-    "--with-openvpn=${openvpn}/sbin/openvpn"
-    "--enable-vpnc=builtin"
-    "--with-vpnc=${vpnc}/sbin/vpnc"
-    "--enable-session-policy-local=builtin"
-    "--enable-client"
-    "--enable-bluetooth"
-    "--enable-wifi"
-    "--enable-polkit"
-    "--enable-tools"
-    "--enable-datafiles"
-    "--enable-pptp"
-  ];
-
-  postInstall = ''
-    cp ./client/connmanctl $out/sbin/connmanctl
-  '';
-
-  meta = {
-    description = "Provides a daemon for managing internet connections";
-    homepage = "https://connman.net/";
-    maintainers = [ stdenv.lib.maintainers.matejc ];
-    # tested only on linux, might work on others also
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+  connmanMinimal = callPackage ./connman.nix {
+    enableOpenconnect = false;
+    enableOpenvpn = false;
+    enableVpnc = false;
+    vpnc = false;
+    enablePolkit = false;
+    enablePptp = false;
+    enableLoopback = false;
+    # enableEthernet = false; # If disabled no ethernet connection can be performed
+    enableWireguard = false;
+    enableGadget = false;
+    # enableWifi = false; # If disabled no WiFi connection can be performed
+    enableBluetooth = false;
+    enableOfono = false;
+    enableDundee = false;
+    enablePacrunner = false;
+    enableNeard = false;
+    enableWispr = false;
+    enableTools = false;
+    enableStats = false;
+    enableClient = false;
+    # enableDatafiles = false; # If disabled, configuration and data files are not installed
   };
 }

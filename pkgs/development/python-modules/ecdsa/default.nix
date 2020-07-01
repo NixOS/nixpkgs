@@ -1,18 +1,28 @@
-{ stdenv, fetchurl, buildPythonPackage, openssl }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pkgs
+, six
+}:
 
 buildPythonPackage rec {
-  name = "ecdsa-0.11";
+  pname = "ecdsa";
+  version = "0.15";
 
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/source/e/ecdsa/${name}.tar.gz";
-    sha256 = "134mbq5xsvx54k9xm7zrizvh9imxmcz1w9mhyfr99p4i7wcnqfwf";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "8f12ac317f8a1318efa75757ef0a651abe12e51fc1af8838fb91079445227277";
   };
 
-  buildInputs = [ openssl ];
+  propagatedBuildInputs = [ six ];
+  # Only needed for tests
+  checkInputs = [ pkgs.openssl ];
 
-  meta = {
-    homepage = "http://github.com/warner/python-ecdsa";
-    description = "Pure-python ECDSA signature/verification";
-    license = stdenv.lib.licenses.mit;
+  meta = with stdenv.lib; {
+    description = "ECDSA cryptographic signature library";
+    homepage = "https://github.com/warner/python-ecdsa";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aszlig ];
   };
+
 }

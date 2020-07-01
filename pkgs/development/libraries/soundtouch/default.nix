@@ -1,22 +1,24 @@
-{stdenv, fetchurl, autoconf, automake, libtool}:
+{stdenv, lib, fetchFromGitLab, autoconf, automake, libtool}:
 
 stdenv.mkDerivation rec {
-  pName = "soundtouch";
-  name = "${pName}-1.8.0";
-  src = fetchurl {
-    url = "http://www.surina.net/soundtouch/${name}.tar.gz";
-    sha256 = "3d4161d74ca25c5a98c69dbb8ea10fd2be409ba1a3a0bf81db407c4c261f166b";
+  pname = "soundtouch";
+  version = "2.1.2";
+
+  src = fetchFromGitLab {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "174wgm3s0inmbnkrlnspxjwm2014qhjhkbdqa5r8rbfi0nzqxzsz";
   };
 
-  buildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake libtool ];
 
-  preConfigurePhases = "./bootstrap";
+  preConfigure = "./bootstrap";
 
-  meta = {
-      description = "A program and library for changing the tempo, pitch and playback rate of audio";
-      homepage = http://www.surina.net/soundtouch/;
-      downloadPage = http://www.surina.net/soundtouch/sourcecode.html;
-      license = stdenv.lib.licenses.lgpl21;
-      platforms = stdenv.lib.platforms.all;
+  meta = with lib; {
+    description = "A program and library for changing the tempo, pitch and playback rate of audio";
+    homepage = "http://www.surina.net/soundtouch/";
+    license = licenses.lgpl21;
+    platforms = platforms.all;
   };
 }

@@ -1,35 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, libvirt, glib, libxml2, intltool, libtool, yajl
-, nettle, libgcrypt, python, pygobject, gobjectIntrospection, libcap_ng
+{ stdenv, fetchurl, pkgconfig, gobject-introspection, intltool, vala
+, libcap_ng, libvirt, libxml2
 }:
 
 stdenv.mkDerivation rec {
-  name = "libvirt-glib-0.2.0";
+  name = "libvirt-glib-3.0.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "http://libvirt.org/sources/glib/${name}.tar.gz";
-    sha256 = "02saqkk4wzsimsan7s9yc5bx05xn7j00hnxhq4sczkgr4krf1drh";
+    url = "https://libvirt.org/sources/glib/${name}.tar.gz";
+    sha256 = "1zpbv4ninc57c9rw4zmmkvvqn7154iv1qfr20kyxn8xplalqrzvz";
   };
 
-  buildInputs = [
-    pkgconfig libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
-    python pygobject gobjectIntrospection libcap_ng
-  ];
+  nativeBuildInputs = [ pkgconfig intltool vala gobject-introspection ];
+  buildInputs = [ libcap_ng libvirt libxml2 gobject-introspection ];
 
-  # Compiler flag -fstack-protector-all fixes this build error:
-  #
-  #   ./.libs/libvirt-glib-1.0.so: undefined reference to `__stack_chk_guard'
-  #
-  # And the extra include path fixes this build error:
-  #
-  #   In file included from ../libvirt-gobject/libvirt-gobject-domain-device.h:30:0,
-  #                    from /tmp/nix-build-libvirt-glib-0.1.7.drv-2/libvirt-glib-0.1.7/libvirt-gobject/libvirt-gobject.h:33,
-  #                    from <stdin>:4:
-  #   ../libvirt-gobject/libvirt-gobject-domain.h:33:29: fatal error: libvirt/libvirt.h: No such file or directory
-  #   compilation terminated.
-  #   make[3]: *** [LibvirtGObject-1.0.gir] Error 1
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="-fstack-protector-all -I${libvirt}/include"
-  '';
+  enableParallelBuilding = true;
+  strictDeps = true;
 
   meta = with stdenv.lib; {
     description = "Library for working with virtual machines";
@@ -41,7 +28,7 @@ stdenv.mkDerivation rec {
       - libvirt-gconfig - GObjects for manipulating libvirt XML documents
       - libvirt-gobject - GObjects for managing libvirt objects
     '';
-    homepage = http://libvirt.org/;
+    homepage = "https://libvirt.org/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

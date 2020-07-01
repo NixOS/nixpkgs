@@ -7,19 +7,19 @@ let
   bin2c = stdenv.mkDerivation {
     name = "bossa-bin2c";
     src = ./bin2c.c;
-    unpackPhase = "true";
+    dontUnpack = true;
     buildPhase = ''cc $src -o bin2c'';
     installPhase = ''mkdir -p $out/bin; cp bin2c $out/bin/'';
   };
 
 in
-stdenv.mkDerivation rec {
-  name = "bossa";
+stdenv.mkDerivation {
+  name = "bossa-1.8";
 
   src = fetchgit {
-    url = https://github.com/shumatech/BOSSA;
-    rev = "0f0a41cb1c3a65e909c5c744d8ae664e896a08ac"; /* arduino branch */
-    sha256 = "01y8r45fw02rps9q995mv82bxrm6p0mysv4wir5glpagrhnyw7md";
+    url = "https://github.com/shumatech/BOSSA";
+    rev = "3be622ca0aa6214a2fc51c1ec682c4a58a423d62";
+    sha256 = "19ik86qbffcb04cgmi4mnascbkck4ynfj87ha65qdk6fmp5q35vm";
   };
 
   patches = [ ./bossa-no-applet-build.patch ];
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   # Explicitly specify targets so they don't get stripped.
   makeFlags = [ "bin/bossac" "bin/bossash" "bin/bossa" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
       Atmel's SAM-BA software. BOSSA is an acronym for Basic Open
       Source SAM-BA Application to reflect that goal.
     '';
-    homepage = http://www.shumatech.com/web/products/bossa;
+    homepage = "http://www.shumatech.com/web/products/bossa";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

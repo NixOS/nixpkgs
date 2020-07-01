@@ -42,15 +42,14 @@ in
 
     security.polkit.adminIdentities = mkOption {
       type = types.listOf types.str;
-      default = [ "unix-user:0" "unix-group:wheel" ];
+      default = [ "unix-group:wheel" ];
       example = [ "unix-user:alice" "unix-group:admin" ];
       description =
         ''
           Specifies which users are considered “administrators”, for those
           actions that require the user to authenticate as an
           administrator (i.e. have an <literal>auth_admin</literal>
-          value).  By default, this is the <literal>root</literal>
-          user and all users in the <literal>wheel</literal> group.
+          value).  By default, this is all users in the <literal>wheel</literal> group.
         '';
     };
 
@@ -59,12 +58,12 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.polkit ];
+    environment.systemPackages = [ pkgs.polkit.bin pkgs.polkit.out ];
 
-    systemd.packages = [ pkgs.polkit ];
+    systemd.packages = [ pkgs.polkit.out ];
 
     systemd.services.polkit.restartTriggers = [ config.system.path ];
-    systemd.services.polkit.unitConfig.X-StopIfChanged = false;
+    systemd.services.polkit.stopIfChanged = false;
 
     # The polkit daemon reads action/rule files
     environment.pathsToLink = [ "/share/polkit-1" ];
@@ -79,28 +78,22 @@ in
         ${cfg.extraConfig}
       ''; #TODO: validation on compilation (at least against typos)
 
-    services.dbus.packages = [ pkgs.polkit ];
+    services.dbus.packages = [ pkgs.polkit.out ];
 
     security.pam.services.polkit-1 = {};
 
-    security.setuidPrograms = [ "pkexec" ];
+    security.wrappers = {
+      pkexec.source = "${pkgs.polkit.bin}/bin/pkexec";
+      polkit-agent-helper-1.source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
+    };
 
-    security.setuidOwners = [
-      { program = "polkit-agent-helper-1";
-        owner = "root";
-        group = "root";
-        setuid = true;
-        source = "${pkgs.polkit}/lib/polkit-1/polkit-agent-helper-1";
-      }
+    systemd.tmpfiles.rules = [
+      # Probably no more needed, clean up
+      "R /var/lib/polkit-1"
+      "R /var/lib/PolicyKit"
     ];
 
-    system.activationScripts.polkit =
-      ''
-        # Probably no more needed, clean up
-        rm -rf /var/lib/{polkit-1,PolicyKit}
-      '';
-
-    users.extraUsers.polkituser = {
+    users.users.polkituser = {
       description = "PolKit daemon";
       uid = config.ids.uids.polkituser;
     };

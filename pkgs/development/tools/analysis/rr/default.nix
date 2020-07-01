@@ -1,31 +1,51 @@
-{ stdenv, fetchFromGitHub, cmake, libpfm, zlib, python }:
+{ stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkgconfig, python3Packages, which, procps, gdb, capnproto }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.0";
-  name = "rr-${version}";
+  version = "5.3.0";
+  pname = "rr";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
     rev = version;
-    sha256 = "1h4ddq7mmi0sfj6mh1qg2bfs3x7gz5qmn9dlnmpkrp38rqgnnhrg";
+    sha256 = "1x6l1xsdksnhz9v50p4r7hhmr077cq20kaywqy1jzdklvkjqzf64";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
-  ''
-  # On 64bit machines, don't build the 32-bit components for debugging
-  # 32-bit binaries. This sucks but I don't know how to make 'gcc' cooperate
-  # easily with how CMake works to build 32 and 64bit binaries at once.
-  + stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
-    substituteInPlace CMakeLists.txt --replace 'if(rr_64BIT)' 'if(false)'
+    sed '7i#include <math.h>' -i src/Scheduler.cc
+    patchShebangs .
   '';
 
-  buildInputs = [ cmake libpfm zlib python ];
-  cmakeFlags = "-DCMAKE_C_FLAGS_RELEASE:STRING= -DCMAKE_CXX_FLAGS_RELEASE:STRING=";
+  # TODO: remove this preConfigure hook after 5.2.0 since it is fixed upstream
+  # see https://github.com/mozilla/rr/issues/2269
+  preConfigure = ''substituteInPlace CMakeLists.txt --replace "std=c++11" "std=c++14"'';
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    cmake libpfm zlib python3Packages.python python3Packages.pexpect which procps gdb capnproto
+  ];
+  propagatedBuildInputs = [ gdb ]; # needs GDB to replay programs at runtime
+  cmakeFlags = [
+    "-DCMAKE_C_FLAGS_RELEASE:STRING="
+    "-DCMAKE_CXX_FLAGS_RELEASE:STRING="
+    "-Ddisable32bit=ON"
+  ];
+
+  # we turn on additional warnings due to hardening
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  hardeningDisable = [ "fortify" ];
+
+  enableParallelBuilding = true;
+
+  # FIXME
+  #doCheck = true;
+
+  preCheck = "export HOME=$TMPDIR";
 
   meta = {
-    homepage = http://rr-project.org/;
+    homepage = "https://rr-project.org/";
     description = "Records nondeterministic executions and debugs them deterministically";
     longDescription = ''
       rr aspires to be your primary debugging tool, replacing -- well,
@@ -34,8 +54,8 @@ stdenv.mkDerivation rec {
       time the same execution is replayed.
     '';
 
-    license = "custom";
+    license = with stdenv.lib.licenses; [ mit bsd2 ];
     maintainers = with stdenv.lib.maintainers; [ pierron thoughtpolice ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.x86;
   };
 }

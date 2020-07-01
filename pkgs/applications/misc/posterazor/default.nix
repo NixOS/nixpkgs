@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, unzip, pkgconfig, libXpm, fltk13, freeimage }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "posterazor-1.5.1";
 
   src = fetchurl {
@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1dqpdk8zl0smdg4fganp3hxb943q40619qmxjlga9jhjc01s7fq5";
   };
 
-  buildInputs = [ cmake unzip pkgconfig libXpm fltk13 freeimage ];
+  hardeningDisable = [ "format" ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake unzip libXpm fltk13 freeimage ];
 
   unpackPhase = ''
     unzip $src -d posterazor
@@ -25,10 +28,11 @@ stdenv.mkDerivation rec {
     cp PosteRazor $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://posterazor.sourceforge.net/";
     description = "Cuts a raster image into pieces which can afterwards be printed out and assembled to a poster";
-    maintainers = [ stdenv.lib.maintainers.madjar ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ maintainers.madjar ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

@@ -1,21 +1,29 @@
-{ stdenv, fetchFromGitHub, libsndfile, libsamplerate, liblo, jack2 }:
+{ stdenv, fetchFromGitHub, libsndfile, libsamplerate, liblo, libjack2 }:
 
-stdenv.mkDerivation rec {
-  name = "dirt-git";
+stdenv.mkDerivation {
+  name = "dirt-2018-01-01";
   src = fetchFromGitHub {
     repo = "Dirt";
     owner = "tidalcycles";
-    rev = "cfc5e85318defda7462192b5159103c823ce61f7";
-    sha256 = "1shbyp54q64g6bsl6hhch58k3z1dyyy9ph6cq2xvdf8syy00sisz";
+    rev = "b09604c7d8e581bc7799d7e2ad293e7cdd254bda";
+    sha256 = "13adglk2d31d7mswfvi02b0rjdhzmsv11cc8smhidmrns3f9s96n";
+    fetchSubmodules = true;
   };
-  buildInputs = [ libsndfile libsamplerate liblo jack2 ];
-  configurePhase = ''
-    export DESTDIR=$out
+  buildInputs = [ libsndfile libsamplerate liblo libjack2 ];
+  postPatch = ''
+    sed -i "s|./samples|$out/share/dirt/samples|" dirt.c
+  '';
+  makeFlags = ["PREFIX=$(out)"];
+  postInstall = ''
+    mkdir -p $out/share/dirt/
+    cp -r samples $out/share/dirt/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An unimpressive thingie for playing bits of samples with some level of accuracy";
     homepage = "https://github.com/tidalcycles/Dirt";
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ anderspapitto ];
+    platforms = with platforms; linux;
   };
 }

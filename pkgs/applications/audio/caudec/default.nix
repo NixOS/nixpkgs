@@ -4,8 +4,9 @@ let
   version = "1.7.5";
 in
 
-stdenv.mkDerivation rec {
-  name = "caudec-${version}";
+stdenv.mkDerivation {
+  pname = "caudec";
+  inherit version;
 
   src = fetchurl {
     url = "http://caudec.net/downloads/caudec-${version}.tar.gz";
@@ -25,15 +26,14 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for executable in $(cd $out/bin && ls); do
 	wrapProgram $out/bin/$executable \
-	  --prefix PATH : "${bc}/bin:${findutils}/bin:${sox}/bin:${procps}/bin:${opusTools}/bin:${lame}/bin:${flac}/bin"
+	  --prefix PATH : "${stdenv.lib.makeBinPath [ bc findutils sox procps opusTools lame flac ]}"
     done
   '';
 
    meta = with stdenv.lib; {
-    homepage = http://caudec.net/;
+    homepage = "http://caudec.net/";
     description = "A multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
     license     = licenses.gpl3;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ _1126 ];
   };
 }

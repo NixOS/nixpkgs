@@ -1,11 +1,19 @@
 { stdenv, appleDerivation, launchd, bootstrap_cmds, xnu, ppp, IOKit, eap8021x, Security }:
 
 appleDerivation {
-  buildInputs = [ launchd bootstrap_cmds xnu ppp IOKit eap8021x ];
+  meta.broken = stdenv.cc.nativeLibc;
+
+  nativeBuildInputs = [ bootstrap_cmds ];
+  buildInputs = [ launchd ppp IOKit eap8021x ];
 
   propagatedBuildInputs = [ Security ];
 
   patchPhase = ''
+    HACK=$PWD/hack
+    mkdir $HACK
+    cp -r ${xnu}/Library/Frameworks/System.framework/Versions/B/PrivateHeaders/net $HACK
+
+
     substituteInPlace SystemConfiguration.fproj/SCNetworkReachabilityInternal.h \
       --replace '#include <xpc/xpc.h>' ""
 
@@ -166,9 +174,9 @@ appleDerivation {
     cc -I. -Ihelper -Iderived -F. -c DHCP.c -o DHCP.o
     cc -I. -Ihelper -Iderived -F. -c moh.c -o moh.o
     cc -I. -Ihelper -Iderived -F. -c DeviceOnHold.c -o DeviceOnHold.o
-    cc -I. -Ihelper -Iderived -I${xnu}/Library/Frameworks/System.framework/Versions/B/PrivateHeaders -F. -c LinkConfiguration.c -o LinkConfiguration.o
+    cc -I. -Ihelper -Iderived -I $HACK -F. -c LinkConfiguration.c -o LinkConfiguration.o
     cc -I. -Ihelper -Iderived -F. -c dy_framework.c -o dy_framework.o
-    cc -I. -Ihelper -Iderived -I${xnu}/Library/Frameworks/System.framework/Versions/B/PrivateHeaders -F. -c VLANConfiguration.c -o VLANConfiguration.o
+    cc -I. -Ihelper -Iderived -I $HACK -F. -c VLANConfiguration.c -o VLANConfiguration.o
     cc -I. -Ihelper -Iderived -F. -c derived/configUser.c -o configUser.o
     cc -I. -Ihelper -Iderived -F. -c SCPreferencesPathKey.c -o SCPreferencesPathKey.o
     cc -I. -Ihelper -Iderived -I../dnsinfo -F. -c derived/shared_dns_infoUser.c -o shared_dns_infoUser.o
@@ -177,8 +185,8 @@ appleDerivation {
     cc -I. -Ihelper -Iderived -F. -c SCNetworkProtocol.c -o SCNetworkProtocol.o
     cc -I. -Ihelper -Iderived -F. -c SCNetworkService.c -o SCNetworkService.o
     cc -I. -Ihelper -Iderived -F. -c SCNetworkSet.c -o SCNetworkSet.o
-    cc -I. -Ihelper -Iderived -I${xnu}/Library/Frameworks/System.framework/Versions/B/PrivateHeaders -F. -c BondConfiguration.c -o BondConfiguration.o
-    cc -I. -Ihelper -Iderived -I${xnu}/Library/Frameworks/System.framework/Versions/B/PrivateHeaders -F. -c BridgeConfiguration.c -o BridgeConfiguration.o
+    cc -I. -Ihelper -Iderived -I $HACK -F. -c BondConfiguration.c -o BondConfiguration.o
+    cc -I. -Ihelper -Iderived -I $HACK -F. -c BridgeConfiguration.c -o BridgeConfiguration.o
     cc -I. -Ihelper -Iderived -F. -c helper/SCHelper_client.c -o SCHelper_client.o
     cc -I. -Ihelper -Iderived -F. -c SCPreferencesKeychainPrivate.c -o SCPreferencesKeychainPrivate.o
     cc -I. -Ihelper -Iderived -F. -c SCNetworkSignature.c -o SCNetworkSignature.o

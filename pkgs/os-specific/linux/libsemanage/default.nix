@@ -1,25 +1,39 @@
-{ stdenv, fetchurl, libsepol, libselinux, ustr, bzip2, bison, flex, audit }:
-stdenv.mkDerivation rec {
+{ stdenv, fetchurl, pkgconfig, bison, flex, libsepol, libselinux, bzip2, audit
+, enablePython ? true, swig ? null, python ? null
+}:
 
-  name = "libsemanage-${version}";
-  version = "2.3";
+with stdenv.lib;
+
+stdenv.mkDerivation rec {
+  pname = "libsemanage";
+  version = "2.9";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsemanage-${version}.tar.gz";
-    sha256 = "0jrf66df80mvjhrsbxcnb60j69pg4dh2pydy8vj8dhhiwqsrxq03";
-  };
+    sha256 = "075w6y3l9hiy5hicgwrmijyxmhfyd1r7cnc08qxyg4j46jfk8xi5";
+   };
 
-  makeFlags = "PREFIX=$(out) DESTDIR=$(out)";
+  outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";
 
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all";
-  NIX_CFLAGS_LINK = "-lsepol";
+  nativeBuildInputs = [ bison flex pkgconfig ];
+  buildInputs = [ libsepol libselinux bzip2 audit ]
+    ++ optionals enablePython [ swig python ];
 
-  buildInputs = [ libsepol libselinux ustr bzip2 bison flex audit ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "INCLUDEDIR=$(dev)/include"
+    "MAN3DIR=$(man)/share/man/man3"
+    "MAN5DIR=$(man)/share/man/man5"
+    "PYTHON=python"
+    "PYTHONLIBDIR=$(py)/${python.sitePackages}"
+    "DEFAULT_SEMANAGE_CONF_LOCATION=$(out)/etc/selinux/semanage.conf"
+  ];
 
-  meta = with stdenv.lib; {
-    inherit (libsepol.meta) homepage platforms maintainers;
+  installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
+
+  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "Policy management tools for SELinux";
-    license = licenses.lgpl21;
+    license = stdenv.lib.licenses.lgpl21;
   };
 }

@@ -1,24 +1,27 @@
-{ stdenv, fetchurl, qt4, poppler_qt4, zlib, pkgconfig, poppler}:
+{ lib, mkDerivation, fetchurl, qtbase, qtscript, qmake, zlib, pkgconfig, poppler }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "texmaker";
-  version = "4.4.1";
-  name = "${pname}-${version}";
+  version = "5.0.4";
 
   src = fetchurl {
-    url = "http://www.xm1math.net/texmaker/${name}.tar.bz2";
-    sha256 = "1d5lb4sibdhvzgfr0zi48j92b4acvvvdy2biqi3jzjdnzy9r94w0";
+    url = "http://www.xm1math.net/texmaker/${pname}-${version}.tar.bz2";
+    sha256 = "1qnh5g8zkjpjmw2l8spcynpfgs3wpcfcla5ms2kkgvkbdlzspqqx";
   };
 
-  buildInputs = [ qt4 poppler_qt4 zlib ];
-  nativeBuildInputs = [ pkgconfig poppler ];
-  NIX_CFLAGS_COMPILE="-I${poppler}/include/poppler";
+  buildInputs = [ qtbase qtscript poppler zlib ];
+  nativeBuildInputs = [ pkgconfig poppler qmake ];
+  NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
 
-  preConfigure = ''
-    qmake PREFIX=$out DESKTOPDIR=$out/share/applications ICONDIR=$out/share/pixmaps texmaker.pro
-  '';
+  qmakeFlags = [
+    "DESKTOPDIR=${placeholder "out"}/share/applications"
+    "ICONDIR=${placeholder "out"}/share/pixmaps"
+    "METAINFODIR=${placeholder "out"}/share/metainfo"
+  ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "TeX and LaTeX editor";
     longDescription=''
 	This editor is a full fledged IDE for TeX and
@@ -28,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.xm1math.net/texmaker/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cfouche ];
+    maintainers = with maintainers; [ cfouche markuskowa ];
   };
 }

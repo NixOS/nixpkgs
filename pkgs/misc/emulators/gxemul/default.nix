@@ -1,35 +1,24 @@
-{ stdenv, composableDerivation, fetchurl }:
+{ stdenv, fetchurl }:
 
-let edf = composableDerivation.edf;
-    version = "0.6.0.1";
-    name = "gxemul-${version}";
-in
-
-composableDerivation.composableDerivation {} {
-  inherit name;
+stdenv.mkDerivation rec {
+  pname = "gxemul";
+  version = "0.6.0.1";
 
   src = fetchurl {
-    url = "http://gavare.se/gxemul/src/${name}.tar.gz";
+    url = "http://gxemul.sourceforge.net/src/${pname}-${version}.tar.gz";
     sha256 = "1afd9l0igyv7qgc0pn3rkdgrl5d0ywlyib0qhg4li23zilyq5407";
   };
 
   configurePhase = "./configure";
 
-  installPhase = "mkdir -p \$out/bin; cp gxemul \$out/bin;";
-
-  mergeAttrBy = { installPhase = a : b : "${a}\n${b}"; };
-
-  flags = {
-    doc   = { installPhase = "mkdir -p \$out/share/${name}; cp -r doc \$out/share/${name};"; implies = "man"; };
-    demos = { installPhase = "mkdir -p \$out/share/${name}; cp -r demos \$out/share/${name};"; };
-    man   = { installPhase = "cp -r ./man \$out/;";};
-  };
-
-  cfg = {
-    docSupport = true;
-    demosSupport = true;
-    manSupport = true;
-  };
+  installPhase = ''
+    mkdir -p $out/bin;
+    mkdir -p $out/share/${pname}-${version};
+    cp gxemul $out/bin;
+    cp -r doc $out/share/${pname}-${version};
+    cp -r demos $out/share/${pname}-${version};
+    cp -r ./man $out/;
+  '';
 
   meta = {
     license = stdenv.lib.licenses.bsd3;
@@ -43,7 +32,6 @@ composableDerivation.composableDerivation {} {
       and serial controllers. The emulation is working well enough to
       allow several unmodified "guest" operating systems to run.
     '';
-    homepage = http://gxemul.sourceforge.net/;
+    homepage = "http://gxemul.sourceforge.net/";
   };
-
 }

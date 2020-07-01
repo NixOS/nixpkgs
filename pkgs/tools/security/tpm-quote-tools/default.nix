@@ -1,25 +1,32 @@
 { stdenv, fetchurl, trousers, openssl }:
 
-stdenv.mkDerivation {
-  name = "tpm-quote-tools-1.0.2";
+stdenv.mkDerivation rec { 
+  pname = "tpm-quote-tools";
+  version = "1.0.4";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/tpmquotetools/1.0.2/tpm-quote-tools-1.0.2.tar.gz";
-    sha256 = "17bf9d1hiiaybx6rgl0sqcb0prjz6d2mv8fwp4bj1c0rsfw5dbk8";
+  src = fetchurl { 
+    url = "mirror://sourceforge/project/tpmquotetools/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1qjs83xb4np4yn1bhbjfhvkiika410v8icwnjix5ad96w2nlxp0h";
   };
 
   buildInputs = [ trousers openssl ];
 
-  meta = with stdenv.lib; {
+  postFixup = ''
+    patchelf \
+      --set-rpath "${stdenv.lib.makeLibraryPath [ openssl ]}:$(patchelf --print-rpath $out/bin/tpm_mkaik)" \
+      $out/bin/tpm_mkaik
+  '';
+
+  meta = with stdenv.lib; { 
     description = "A collection of programs that provide support for TPM based attestation using the TPM quote mechanism";
     longDescription = ''
       The TPM Quote Tools is a collection of programs that provide support
       for TPM based attestation using the TPM quote mechanism.  The manual
       page for tpm_quote_tools provides a usage overview.
     '';
-    homepage    = http://tpmquotetools.sourceforge.net/;
+    homepage    = "http://tpmquotetools.sourceforge.net/";
     license     = licenses.bsd3;
-    maintainers = [ maintainers.ak ];
+    maintainers = with maintainers; [ ak ];
     platforms   = platforms.linux;
   };
 }

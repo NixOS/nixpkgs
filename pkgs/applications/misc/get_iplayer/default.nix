@@ -1,23 +1,41 @@
-{stdenv, fetchurl, flvstreamer, ffmpeg, makeWrapper, perl, buildPerlPackage, perlPackages, vlc, rtmpdump}:
-buildPerlPackage {
-  name = "get_iplayer-2.86";
+{stdenv, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg_3, makeWrapper, perl, perlPackages, rtmpdump}:
 
-  buildInputs = [makeWrapper perl];
-  propagatedBuildInputs = with perlPackages; [HTMLParser HTTPCookies LWP];
+with stdenv.lib;
+
+perlPackages.buildPerlPackage rec {
+  pname = "get_iplayer";
+  version = "3.24";
+
+  src = fetchFromGitHub {
+    owner = "get-iplayer";
+    repo = "get_iplayer";
+    rev = "v${version}";
+    sha256 = "0yd84ncb6cjrk4v4kz3zrddkl7iwkm3zlfbjyswd9hanp8fvd4q3";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
+  propagatedBuildInputs = with perlPackages; [
+    HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple
+  ];
 
   preConfigure = "touch Makefile.PL";
   doCheck = false;
+  outputs = [ "out" "man" ];
 
-  installPhase = '' 
-    mkdir -p $out/bin
+  installPhase = ''
+    mkdir -p $out/bin $out/share/man/man1
     cp get_iplayer $out/bin
-    sed -i 's|^update_script|#update_script|' $out/bin/get_iplayer
-    wrapProgram $out/bin/get_iplayer --suffix PATH : ${ffmpeg}/bin:${flvstreamer}/bin:${vlc}/bin:${rtmpdump}/bin --prefix PERL5LIB : $PERL5LIB
-  '';  
-  
-  src = fetchurl {
-    url = ftp://ftp.infradead.org/pub/get_iplayer/get_iplayer-2.86.tar.gz;
-    sha256 = "0zhcw0ikxrrz1jayx7jjgxmdf7gzk4pmzfvpraxmv64xwzgc1sc1";
+    wrapProgram $out/bin/get_iplayer --suffix PATH : ${makeBinPath [ atomicparsley ffmpeg_3 flvstreamer rtmpdump ]} --prefix PERL5LIB : $PERL5LIB
+    cp get_iplayer.1 $out/share/man/man1
+  '';
+
+  meta = {
+    description = "Downloads TV and radio from BBC iPlayer";
+    license = licenses.gpl3Plus;
+    homepage = "https://squarepenguin.co.uk/";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ rika ];
   };
-  
+
 }

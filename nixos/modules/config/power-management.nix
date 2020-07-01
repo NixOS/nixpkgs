@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -69,10 +69,6 @@ in
 
   config = mkIf cfg.enable {
 
-    # FIXME: Implement powersave governor for sandy bridge or later Intel CPUs
-    powerManagement.cpuFreqGovernor = mkDefault "ondemand";
-    powerManagement.scsiLinkPolicy = mkDefault "min_power";
-
     systemd.targets.post-resume = {
       description = "Post-Resume Actions";
       requires = [ "post-resume.service" ];
@@ -82,7 +78,7 @@ in
     };
 
     # Service executed before suspending/hibernating.
-    systemd.services."pre-sleep" =
+    systemd.services.pre-sleep =
       { description = "Pre-Sleep Actions";
         wantedBy = [ "sleep.target" ];
         before = [ "sleep.target" ];
@@ -93,11 +89,12 @@ in
         serviceConfig.Type = "oneshot";
       };
 
-    systemd.services."post-resume" =
+    systemd.services.post-resume =
       { description = "Post-Resume Actions";
         after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
         script =
           ''
+            /run/current-system/systemd/bin/systemctl try-restart post-resume.target
             ${cfg.resumeCommands}
             ${cfg.powerUpCommands}
           '';

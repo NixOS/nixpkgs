@@ -1,3 +1,0 @@
-url http://www4.informatik.tu-muenchen.de/~schulz/E/Download.html
-version_link '[.]tgz$'
-version '.*[/]V_([0-9.]+)[/].*' '\1'

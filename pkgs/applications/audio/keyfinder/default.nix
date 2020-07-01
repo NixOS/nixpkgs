@@ -1,15 +1,27 @@
-{ stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qt5, taglib }:
+{ stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, qmake, taglib }:
 
 stdenv.mkDerivation rec {
-  version = "1.25-17-gf670607";
-  name = "keyfinder-${version}";
+  pname = "keyfinder";
+  version = "2.2";
 
   src = fetchFromGitHub {
+    sha256 = "0vjszk1h8vj2qycgbffzy6k7amg75jlvlnzwaqhz9nll2pcvw0zl";
+    rev = version;
     repo = "is_KeyFinder";
     owner = "ibsh";
-    rev = "f6706074435ac14c5238ee3f0dd22ac22d72af9c";
-    sha256 = "1sfnywc6jdpm03344i6i4pz13mqa4i5agagj4k6252m63cqmjkrc";
   };
+
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ libav_0_8 libkeyfinder qtbase qtxmlpatterns taglib ];
+
+  postPatch = ''
+    substituteInPlace is_KeyFinder.pro \
+       --replace "keyfinder.0" "keyfinder" \
+       --replace "-stdlib=libc++" "" \
+       --replace "\$\$[QT_INSTALL_PREFIX]" "$out"
+  '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Musical key detection for digital audio (graphical UI)";
@@ -22,21 +34,8 @@ stdenv.mkDerivation rec {
       management, no track suggestions, no media player. Just a fast,
       efficient workflow tool.
     '';
-    homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
-    license = with licenses; gpl3Plus;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    homepage = "http://www.ibrahimshaath.co.uk/keyfinder/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
-
-  # TODO: upgrade libav when "Audio sample format conversion failed" is fixed
-  buildInputs = [ libav_0_8 libkeyfinder qt5.base qt5.xmlpatterns taglib ];
-
-  configurePhase = ''
-    substituteInPlace is_KeyFinder.pro \
-       --replace "keyfinder.0" "keyfinder" \
-       --replace '$$[QT_INSTALL_PREFIX]' "$out"
-    qmake
-  '';
-
-  enableParallelBuilding = true;
 }

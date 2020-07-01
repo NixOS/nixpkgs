@@ -1,33 +1,34 @@
-{ stdenv, fetchgit, qt5 }:
+{ stdenv, fetchFromGitHub, qtbase, qtquick1, qmake, qtmultimedia, utmp }:
 
-stdenv.mkDerivation rec {
-  version = "0.1.0";
-  name = "qmltermwidget-${version}";
+stdenv.mkDerivation {
+  version = "2018-11-24";
+  pname = "qmltermwidget-unstable";
 
-  src = fetchgit {
-    url = "https://github.com/Swordfish90/qmltermwidget.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "19pz27jsdpa3pybj8sghmmd1zqgr73js1mp3875rhx158dav37nz";
+  src = fetchFromGitHub {
+    repo = "qmltermwidget";
+    owner = "Swordfish90";
+    rev = "48274c75660e28d44af7c195e79accdf1bd44963";
+    sha256 = "028nb1xp84jmakif5mmzx52q3rsjwckw27jdpahyaqw7j7i5znq6";
   };
 
-  buildInputs = [ qt5.base qt5.quick1 ];
+  buildInputs = [ qtbase qtquick1 qtmultimedia ]
+                ++ stdenv.lib.optional stdenv.isDarwin utmp;
+  nativeBuildInputs = [ qmake ];
 
   patchPhase = ''
     substituteInPlace qmltermwidget.pro \
-      --replace '$$[QT_INSTALL_QML]' "/lib/qml/"
+      --replace '$$[QT_INSTALL_QML]' "/$qtQmlPrefix/"
   '';
 
-  configurePhase = "qmake PREFIX=$out";
-
-  installPhase=''make INSTALL_ROOT="$out" install'';
+  installFlags = [ "INSTALL_ROOT=$(out)" ];
 
   enableParallelBuilding = true;
 
   meta = {
     description = "A QML port of qtermwidget";
-    homepage = "https://github.com/Swordifish90/qmltermwidget";
-    license = with stdenv.lib.licenses; [ gpl2 ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/Swordfish90/qmltermwidget";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];
   };
 }

@@ -1,6 +1,6 @@
-diff -ru shellinabox-2.14/shellinabox/vt100.js shellinabox-2.14.new/shellinabox/vt100.js
---- shellinabox-2.14/shellinabox/vt100.js	2012-04-21 21:30:44.000000000 +0400
-+++ shellinabox-2.14.new/shellinabox/vt100.js	2014-03-27 16:33:31.012344164 +0400
+diff -ru shellinabox-2.14/shellinabox/vt100.jspp shellinabox-2.14.new/shellinabox/vt100.jspp
+--- shellinabox-2.14/shellinabox/vt100.jspp	2012-04-21 21:30:44.000000000 +0400
++++ shellinabox-2.14.new/shellinabox/vt100.jspp	2014-03-27 16:33:31.012344164 +0400
 @@ -2676,6 +2676,7 @@
        switch (key) {
        case  33: /* Page Up      */ this.scrollBack();                   return;

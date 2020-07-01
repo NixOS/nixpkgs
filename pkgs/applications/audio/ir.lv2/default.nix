@@ -1,37 +1,40 @@
-{ stdenv, fetchurl, fftw, gtk, lv2, libsamplerate, libsndfile, pkgconfig, zita-convolver }:
+{ stdenv, fetchFromGitHub, fftw, gtk2, lv2, libsamplerate, libsndfile, pkgconfig, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  name = "ir.lv2-${version}";
-  version = "1.2.2";
+  pname = "ir.lv2";
+  version = "1.2.4";
 
-  src = fetchurl {
-    url = "http://factorial.hu/system/files/${name}.tar.gz";
-    sha256 = "17a6h2mv9xv41jpbx6bdakkngin4kqzh2v67l4076ddq609k5a7v";
+  src = fetchFromGitHub {
+    owner = "tomszilagyi";
+    repo = "ir.lv2";
+    rev = version;
+    sha256 = "1p6makmgr898fakdxzl4agh48qqwgv1k1kwm8cgq187n0mhiknp6";
   };
 
-  buildInputs = [ fftw gtk lv2 libsamplerate libsndfile pkgconfig zita-convolver ];
+  buildInputs = [ fftw gtk2 lv2 libsamplerate libsndfile zita-convolver ];
 
-  buildPhase = ''
-    make
-    make convert4chan
-  '';
+  nativeBuildInputs = [  pkgconfig ];
+
+  postPatch = ''
+     # Fix build with lv2 1.18: https://github.com/tomszilagyi/ir.lv2/pull/20
+     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
+       -exec sed -i {} -e 's/const struct _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
+   '';
+
+
+  postBuild = "make convert4chan";
 
   installPhase = ''
-    mkdir "$out/bin"
+    mkdir -p "$out/bin"
     mkdir "$out/include"
-    mkdir "$out/share"
-    mkdir "$out/share/doc"
+    mkdir -p "$out/share/doc"
 
-    make PREFIX="$out" install
+    make PREFIX="$out" INSTDIR="$out/lib/lv2" install
     install -Dm755 convert4chan "$out/bin/convert4chan"
-    # fixed location
-    sed -i 's/, but seem like its gone://' README
-    sed -i  's@rhythminmind.net/1313@rhythminmind.net/STN@' README
-    install -Dm644 README "$out/share/doc/README"
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://factorial.hu/plugins/lv2/ir;
+    homepage = "http://factorial.hu/plugins/lv2/ir";
     description = "Zero-latency, realtime, high performance signal convolver especially for creating reverb effects";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

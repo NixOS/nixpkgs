@@ -16,11 +16,11 @@ for i in $extraFiles; do
     if test -d $i; then
         ln -s $i/* .
     else
-        ln -s $i $(stripHash $i; echo $strippedName)
+        ln -s $i $(stripHash $i)
     fi
 done
 
-rootName=$(basename $(stripHash "$rootFile"; echo $strippedName))
+rootName=$(basename $(stripHash "$rootFile"))
 
 rootNameBase=$(echo "$rootName" | sed 's/\..*//')
 
@@ -47,6 +47,7 @@ runLaTeX() {
     if fgrep -q \
         -e "LaTeX Warning: Label(s) may have changed." \
         -e "Rerun to get citations correct." \
+        -e "Please rerun LaTeX." \
         "$tmpFile"; then
         runNeeded=1
     fi

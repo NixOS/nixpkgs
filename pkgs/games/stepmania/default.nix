@@ -1,40 +1,44 @@
-{ fetchFromGitHub, stdenv, pkgconfig, autoconf, automake, yasm, zlib, bzip2, alsaLib
-, pulseaudio, libmad, libtheora, libvorbis, libpng, libjpeg, gtk
-, mesa, glew }:
+{ stdenv, lib, fetchFromGitHub, cmake, nasm
+, gtk2, glib, ffmpeg, alsaLib, libmad, libogg, libvorbis
+, glew, libpulseaudio, udev
+}:
 
 stdenv.mkDerivation rec {
-  name = "stepmania-${version}";
-  version = "5.0.7";
+  pname = "stepmania";
+  version = "5.1.0-b2";
 
   src = fetchFromGitHub {
     owner = "stepmania";
     repo  = "stepmania";
     rev   = "v${version}";
-    sha256 = "1lagnk8x72v5jazcbb39237fi33kp5zgg22fxw7zmvr4qwqiqbz9";
+    sha256 = "0a7y9l7xm510vgnpmj1is7p9m6d6yd0fcaxrjcickz295k5w3rdn";
   };
 
+  nativeBuildInputs = [ cmake nasm ];
+
   buildInputs = [
-    pkgconfig autoconf automake yasm zlib bzip2 alsaLib pulseaudio libmad libtheora
-    libvorbis libpng libjpeg gtk mesa glew
+    gtk2 glib ffmpeg alsaLib libmad libogg libvorbis
+    glew libpulseaudio udev
   ];
 
-  preConfigure = ''
-    substituteInPlace autoconf/m4/video.m4 \
-      --replace './configure $FFMPEG_CONFFLAGS' './configure --prefix='$out' $FFMPEG_CONFFLAGS'
-
-    ./autogen.sh
-  '';
+  cmakeFlags = [
+    "-DWITH_SYSTEM_FFMPEG=1"
+    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
+    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
+  ];
 
   postInstall = ''
     mkdir -p $out/bin
-    echo "#!/bin/sh" > $out/bin/stepmania
-    echo "export LD_LIBRARY_PATH=$out/stepmania-5.0:${alsaLib}/lib:\$LD_LIBRARY_PATH" >> $out/bin/stepmania
-    echo "exec $out/stepmania-5.0/stepmania" >> $out/bin/stepmania
-    chmod +x $out/bin/stepmania
+    ln -s $out/stepmania-5.1/stepmania $out/bin/stepmania
   '';
 
-  meta = with stdenv.lib; {
-      platforms = platforms.linux;
-      maintainers = [ maintainers.mornfall ];
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    homepage = "https://www.stepmania.com/";
+    description = "Free dance and rhythm game for Windows, Mac, and Linux";
+    platforms = platforms.linux;
+    license = licenses.mit; # expat version
+    maintainers = [ ];
   };
 }

@@ -1,26 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2 }:
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, autoreconfHook, wrapGAppsHook
+, gtk3, hicolor-icon-theme, netpbm }:
 
 stdenv.mkDerivation rec {
+  pname = "yad";
+  version = "6.0";
 
-  name = "yad-0.25.1";
-
-  src = fetchurl {
-    url = "http://yad.googlecode.com/files/${name}.tar.xz";
-    sha256 = "1pljs9799xa2w3y2vjg93gqkv76z0pjh947djd7179yq3kryb57a";
+  src = fetchFromGitHub {
+    owner = "v1cont";
+    repo = "yad";
+    rev = "v${version}";
+    sha256 = "07myjv0g0iwgclc6q9wkj25myhlc86ahy2lqma8vgv9i3rgy03p7";
   };
 
   configureFlags = [
     "--enable-icon-browser"
+    "--with-gtk=gtk3"
+    "--with-rgb=${placeholder "out"}/share/yad/rgb.txt"
   ];
 
-  buildInputs = [ gtk2 ];
+  buildInputs = [ gtk3 hicolor-icon-theme ];
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig intltool wrapGAppsHook ];
 
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
+  postPatch = ''
+    sed -i src/file.c -e '21i#include <glib/gprintf.h>'
+    sed -i src/form.c -e '21i#include <stdlib.h>'
 
-  meta = {
-    homepage = "http://code.google.com/p/yad/";
+    # there is no point to bring in the whole netpbm package just for this file
+    install -Dm644 ${netpbm.out}/share/netpbm/misc/rgb.txt $out/share/yad/rgb.txt
+  '';
+
+  postAutoreconf = ''
+    intltoolize
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://sourceforge.net/projects/yad-dialog/";
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
       Yad (yet another dialog) is a GUI dialog tool for shell scripts. It is a
@@ -28,8 +43,8 @@ stdenv.mkDerivation rec {
       dialogs, pop-up menu in notification icon and more.
     '';
 
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ smironov ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ smironov ];
+    platforms = with platforms; linux;
   };
 }
-

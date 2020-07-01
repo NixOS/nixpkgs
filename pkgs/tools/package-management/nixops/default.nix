@@ -1,45 +1,9 @@
-{ lib, pythonPackages, fetchurl, libxslt, docbook5_xsl, openssh }:
+{ callPackage, fetchurl }:
 
-pythonPackages.buildPythonPackage rec {
-  name = "nixops-1.2";
-  namePrefix = "";
-
+callPackage ./generic.nix (rec {
+  version = "1.7";
   src = fetchurl {
-    url = "http://nixos.org/releases/nixops/${name}/${name}.tar.bz2";
-    sha256 = "06cf54c62a810cac5013d57d31707f0a6381b409485503a94a57ce6d8a1ac12b";
+    url = "https://nixos.org/releases/nixops/nixops-${version}/nixops-${version}.tar.bz2";
+    sha256 = "091c0b5bca57d4aa20be20e826ec161efe3aec9c788fbbcf3806a734a517f0f3";
   };
-
-  buildInputs = [ libxslt ];
-
-  pythonPath =
-    [ pythonPackages.prettytable
-      pythonPackages.boto
-      pythonPackages.sqlite3
-      pythonPackages.hetzner
-    ];
-
-  doCheck = false;
-
-  postInstall =
-    ''
-      # Backward compatibility symlink.
-      ln -s nixops $out/bin/charon
-
-      make -C doc/manual install nixops.1 docbookxsl=${docbook5_xsl}/xml/xsl/docbook \
-        docdir=$out/share/doc/nixops mandir=$out/share/man
-
-      mkdir -p $out/share/nix/nixops
-      cp -av nix/* $out/share/nix/nixops
-
-      # Add openssh to nixops' PATH. On some platforms, e.g. CentOS and RHEL
-      # the version of openssh is causing errors when have big networks (40+)
-      wrapProgram $out/bin/nixops --prefix PATH : "${openssh}/bin"
-    '';
-
-  meta = {
-    homepage = https://github.com/NixOS/nixops;
-    description = "NixOS cloud provisioning and deployment tool";
-    maintainers = [ lib.maintainers.eelco lib.maintainers.rob ];
-    platforms = lib.platforms.unix;
-  };
-}
+})

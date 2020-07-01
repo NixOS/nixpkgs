@@ -1,60 +1,127 @@
-{ stdenv, fetchurl, pkgconfig, perl, perlXMLParser, gtk, libXft
-, libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm
-, glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
-, gsl, python, pyxml, lxml, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif
+{ stdenv
+, boehmgc
+, boost
+, cairo
+, cmake
+, fetchpatch
+, fetchurl
+, gettext
+, glib
+, glibmm
+, gsl
+, gtkmm2
+, gtkspell2
+, imagemagick
+, lcms
+, libcdr
+, libexif
+, libpng
+, librevenge
+, librsvg
+, libsigcxx
+, libvisio
+, libwpg
+, libXft
+, libxml2
+, libxslt
+, makeWrapper
+, perlPackages
+, pkg-config
+, poppler
+, popt
+, potrace
+, python3
+, wrapGAppsHook
+, zlib
 }:
-
+let
+  python3Env = python3.withPackages
+    (ps: with ps; [
+      numpy
+      lxml
+      scour
+    ]);
+in
 stdenv.mkDerivation rec {
-  name = "inkscape-0.91";
+  pname = "inkscape";
+  version = "0.92.5";
 
   src = fetchurl {
-    url = "https://inkscape.global.ssl.fastly.net/media/resources/file/"
-        + "${name}.tar.bz2";
-    sha256 = "06ql3x732x2rlnanv0a8aharsnj91j5kplksg574090rks51z42d";
+    url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.bz2";
+    sha256 = "02wsa66ifycibmgfsrhmhqdv41brg955lffq8drsjr5xw9lpzvl1";
   };
+
+  # Inkscape hits the ARGMAX when linking on macOS. It appears to be
+  # CMake’s ARGMAX check doesn’t offer enough padding for NIX_LDFLAGS.
+  # Setting strictDeps it avoids duplicating some dependencies so it
+  # will leave us under ARGMAX.
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs share/extensions
-  ''
-  # Clang gets misdetected, so hardcode the right answer
-  + stdenv.lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace src/ui/tool/node.h \
-      --replace "#if __cplusplus >= 201103L" "#if true"
-  '';
+    patchShebangs fix-roff-punct
 
-  propagatedBuildInputs = [
     # Python is used at run-time to execute scripts, e.g., those from
     # the "Effects" menu.
-    python pyxml lxml
-  ];
+    substituteInPlace src/extension/implementation/script.cpp \
+      --replace '"python-interpreter", "python"' '"python-interpreter", "${python3Env}/bin/python"'
+  '';
+
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    makeWrapper
+    python3Env
+    wrapGAppsHook
+  ] ++ (with perlPackages; [
+    perl
+    XMLParser
+  ]);
 
   buildInputs = [
-    pkgconfig perl perlXMLParser gtk libXft libpng zlib popt boehmgc
-    libxml2 libxslt glib gtkmm glibmm libsigcxx lcms boost gettext
-    makeWrapper intltool gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif
+    boehmgc
+    boost
+    gettext
+    glib
+    glibmm
+    gsl
+    gtkmm2
+    imagemagick
+    lcms
+    libcdr
+    libexif
+    libpng
+    librevenge
+    librsvg # for loading icons
+    libsigcxx
+    libvisio
+    libwpg
+    libXft
+    libxml2
+    libxslt
+    perlPackages.perl
+    poppler
+    popt
+    potrace
+    python3Env
+    zlib
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    gtkspell2
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    cairo
   ];
 
-  enableParallelBuilding = true;
-  doCheck = true;
-
-  postInstall = ''
-    # Make sure PyXML modules can be found at run-time.
-    for i in "$out/bin/"*
-    do
-      wrapProgram "$i" --prefix PYTHONPATH :      \
-       "$(toPythonPath ${pyxml}):$(toPythonPath ${lxml})"  \
-       --prefix PATH : ${python}/bin ||  \
-        exit 2
-    done
-    rm "$out/share/icons/hicolor/icon-theme.cache"
+  # Make sure PyXML modules can be found at run-time.
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
+    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';
 
   meta = with stdenv.lib; {
-    license = "GPL";
-    homepage = http://www.inkscape.org;
     description = "Vector graphics editor";
+    homepage = "https://www.inkscape.org";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.jtojnar ];
     platforms = platforms.all;
     longDescription = ''
       Inkscape is a feature-rich vector graphics editor that edits

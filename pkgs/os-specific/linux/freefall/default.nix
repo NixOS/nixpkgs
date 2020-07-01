@@ -1,42 +1,33 @@
-{ stdenv, fetchurl }:
+{ stdenv, kernel }:
 
-let version = "3.19"; in
-stdenv.mkDerivation rec {
-  name = "freefall-${version}";
+stdenv.mkDerivation {
+  inherit (kernel) version src;
 
-  src = fetchurl {
-    sha256 = "0v40b5l6dcviqgl47bxlcbimz7kawmy1c2909axi441jwlgm2hmy";
-    url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
-  };
+  pname = "freefall";
 
-  buildPhase = ''
-    cd Documentation/laptops
+  postPatch = ''
+    cd tools/laptop/freefall
 
     # Default time-out is a little low, probably because the AC/lid status
     # functions were never implemented. Because no-one still uses HDDs, right?
     substituteInPlace freefall.c --replace "alarm(2)" "alarm(5)"
-
-    cc -o freefall freefall.c
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    install freefall $out/bin
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
+    inherit (kernel.meta) homepage license;
+
     description = "Free-fall protection for spinning HP/Dell laptop hard drives";
     longDescription = ''
-      ATA/ATAPI-7 specifies the IDLE IMMEDIATE command with unload feature.
-      Issuing this command should cause the drive to switch to idle mode and
-      unload disk heads. This feature is being used in modern laptops in
-      conjunction with accelerometers and appropriate software to implement
-      a shock protection facility. The idea is to stop all I/O operations on
-      the internal hard drive and park its heads on the ramp when critical
-      situations are anticipated. This has no effect on SSD devices!
+      Provides a shock protection facility in modern laptops with spinning hard
+      drives, by stopping all input/output operations on the internal hard drive
+      and parking its heads on the ramp when critical situations are anticipated.
+      Requires support for the ATA/ATAPI-7 IDLE IMMEDIATE command with unload
+      feature, which should cause the drive to switch to idle mode and unload the
+      disk heads, and an accelerometer device. It has no effect on SSD devices!
     '';
-    license = with licenses; gpl2;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+
+    platforms = platforms.linux;
   };
 }

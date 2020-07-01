@@ -1,36 +1,41 @@
-{ fetchgit, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkgconfig
-, makeWrapper, enet, libXcursor }:
+{ fetchurl, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkgconfig
+, makeWrapper, enet, libXcursor, bullet, openal }:
 
 stdenv.mkDerivation rec {
-  name = "stunt-rally-${version}";
-  version = "2.5";
+  pname = "stunt-rally";
+  version = "2.6.1";
 
-  src = fetchgit {
-    url = git://github.com/stuntrally/stuntrally.git;
-    rev = "refs/tags/${version}";
-    sha256 = "1lsh7z7sjfwpdybg6vbwqx1zxsgbfp2n60n7xl33v225p32qh1qf";
+  src = fetchurl {
+    url = "https://github.com/stuntrally/stuntrally/archive/${version}.tar.gz";
+    sha256 = "1zxq3x2g9pzafa2awx9jzqd33z6gnqj231cs07paxzrm89y51w4v";
   };
 
-  tracks = fetchgit {
-    url = git://github.com/stuntrally/tracks.git;
-    rev = "refs/tags/${version}";
-    sha256 = "1614j6q1d2f69l58kkqndndvf6svcghhw8pzc2s1plf6k87h67mg";
+  tracks = fetchurl {
+    url = "https://github.com/stuntrally/tracks/archive/${version}.tar.gz";
+    sha256 = "0x6lgpa4c2grl0vrhqrcs7jcysa3mmvpdl1v5xa0dsf6vkvfr0zs";
   };
+
+  # include/OGRE/OgreException.h:265:126: error: invalid conversion from
+  # 'int' to 'Ogre::Exception::ExceptionCodes' [-fpermissive]
+  NIX_CFLAGS_COMPILE="-fpermissive";
 
   preConfigure = ''
-    cp -R ${tracks} data/tracks
-    chmod u+rwX -R data
+    pushd data
+    tar xf ${tracks}
+    mv tracks-${version} tracks
+    popd
   '';
 
-  buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis pkgconfig 
-    makeWrapper enet libXcursor
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis 
+    makeWrapper enet libXcursor bullet openal
   ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
-    homepage = http://code.google.com/p/vdrift-ogre/;
+    homepage = "http://stuntrally.tuxfamily.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

@@ -1,30 +1,24 @@
-{ stdenv, fetchgit, openssl, doxygen, boost, sqlite, cryptopp, pkgconfig, python, pythonPackages }:
+{ stdenv, fetchFromGitHub, openssl, doxygen
+, boost, sqlite, pkgconfig, python, pythonPackages, wafHook }:
 let
-  version = "4c32e7";
+  version = "0.6.3";
 in
 stdenv.mkDerivation {
-  name = "ndn-cxx-0.1-${version}";
-  src = fetchgit {
-    url = "https://github.com/named-data/ndn-cxx.git";
-    rev = "4c32e748863d5165cc0e3d6b54a8383f4836cdf1";
-    sha256 = "18s18inf14wmkfh1z6w087w7l3bqszd0nkhr09j73hqpz90b06hz";
+  pname = "ndn-cxx";
+  inherit version;
+  src = fetchFromGitHub {
+    owner = "named-data";
+    repo = "ndn-cxx";
+    rev = "a3bf4319ed483a4a6fe2c96b79ec4491d7217f00";
+    sha256 = "076jhrjigisqz5n8dgxwd5fhimg69zhm834m7w9yvf9afgzrr50h";
   };
-  buildInputs = [ openssl doxygen boost sqlite cryptopp pkgconfig python pythonPackages.sphinx];
-  preConfigure = ''
-    patchShebangs waf
-    ./waf configure \
-      --with-cryptopp=${cryptopp} \
-      --boost-includes=${boost.dev}/include \
-      --boost-libs=${boost.lib}/lib \
-      --with-examples \
-      --prefix=$out
-  '';
-  buildPhase = ''
-    ./waf
-  '';
-  installPhase = ''
-    ./waf install
-  '';
+  nativeBuildInputs = [ pkgconfig wafHook ];
+  buildInputs = [ openssl doxygen boost sqlite python pythonPackages.sphinx];
+  wafConfigureFlags = [
+    "--with-openssl=${openssl.dev}"
+    "--boost-includes=${boost.dev}/include"
+    "--boost-libs=${boost.out}/lib"
+  ];
   meta = with stdenv.lib; {
     homepage = "http://named-data.net/";
     description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";

@@ -1,30 +1,46 @@
-{stdenv, fetchurl, coreutils}:
+{ stdenv, fetchurl
+, coreutils
+}:
 
 stdenv.mkDerivation rec {
-  name = "findutils-4.4.2";
+  pname = "findutils";
+  version = "4.7.0";
 
   src = fetchurl {
-    url = "mirror://gnu/findutils/${name}.tar.gz";
-    sha256 = "0amn0bbwqvsvvsh6drfwz20ydc2czk374lzw5kksbh6bf78k4ks3";
+    url = "mirror://gnu/findutils/${pname}-${version}.tar.xz";
+    sha256 = "16kqz9yz98dasmj70jwf5py7jk558w96w0vgp3zf9xsqk3gzpzn5";
   };
 
-  nativeBuildInputs = [coreutils];
+  postPatch = ''
+    substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
+  '';
 
-  patches = [ ./findutils-path.patch ./change_echo_path.patch ];
+  patches = [
+    ./no-install-statedir.patch
+  ];
 
-  doCheck = true;
+  buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
-  crossAttrs = {
-    # http://osdir.com/ml/bug-findutils-gnu/2009-08/msg00026.html
-    configureFlags = [ "gl_cv_func_wcwidth_works=yes" ];
-  };
+  # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
+  doCheck
+    =  !stdenv.hostPlatform.isDarwin
+    && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
+    && (stdenv.hostPlatform.libc != "musl")
+    && stdenv.hostPlatform == stdenv.buildPlatform;
 
-  preConfigure = if stdenv.isCygwin then ''
-    sed -i gnulib/lib/fpending.h -e '/include <stdio_ext.h>/d'
-  '' else null;
+  outputs = [ "out" "info" ];
+
+  configureFlags = [
+    # "sort" need not be on the PATH as a run-time dep, so we need to tell
+    # configure where it is. Covers the cross and native case alike.
+    "SORT=${coreutils}/bin/sort"
+    "--localstatedir=/var/cache"
+  ];
+
+  enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.gnu.org/software/findutils/;
+    homepage = "https://www.gnu.org/software/findutils/";
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
 
     longDescription = ''

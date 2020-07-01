@@ -1,38 +1,92 @@
-{ stdenv, fetchurl, pkgconfig, glib, sqlite, gnome3, vala
-, intltool, libtool, python, dbus_libs, telepathy_glib
-, gtk3, json_glib, librdf_raptor2, pythonPackages, dbus_glib }:
+{ stdenv
+, fetchFromGitLab
+, fetchpatch
+, pkgconfig
+, glib
+, sqlite
+, gobject-introspection
+, vala
+, autoconf
+, automake
+, libtool
+, gettext
+, dbus
+, telepathy-glib
+, gtk3
+, json-glib
+, librdf_raptor2
+, dbus-glib
+, pythonSupport ? true
+, python2Packages
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.9.15";
-  name = "zeitgeist-${version}";
+  pname = "zeitgeist";
+  version = "1.0.2";
 
-  src = fetchurl {
-    url = "https://github.com/seiflotfy/zeitgeist/archive/v${version}.tar.gz";
-    sha256 = "07pnc7kmjpd0ncm32z6s3ny5p4zl52v9lld0n0f8sp6cw87k12p0";
+  outputs = [ "out" "lib" "dev" "man" ] ++ stdenv.lib.optional pythonSupport "py";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0ig3d3j1n0ghaxsgfww6g2hhcdwx8cljwwfmp9jk1nrvkxd6rnmv";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib}/include/gio-unix-2.0";
+  patches = [
+    # Fix build with gettext 0.20
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/zeitgeist/zeitgeist/commit/b5c00e80189fd59a059a95c4e276728a2492cb89.patch";
+      sha256 = "1r7f7j3l2p6xlzxajihgx8bzbc2sxcb9spc9pi26rz9bwmngdyq7";
+    })
+  ];
 
-  configureScript = "./autogen.sh";
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkgconfig
+    gettext
+    gobject-introspection
+    vala
+    python2Packages.python
+  ];
 
-  configureFlags = [ "--with-session-bus-services-dir=$(out)/share/dbus-1/services" ];
+  buildInputs = [
+    glib
+    sqlite
+    dbus
+    telepathy-glib
+    dbus-glib
+    gtk3
+    json-glib
+    librdf_raptor2
+    python2Packages.rdflib
+  ];
 
-  buildInputs = [ pkgconfig glib sqlite gnome3.gnome_common intltool
-                  libtool python dbus_libs telepathy_glib vala dbus_glib
-                  gtk3 json_glib librdf_raptor2 pythonPackages.rdflib ];
-
-  prePatch = "patchShebangs .";
-
-  patches = [ ./dbus_glib.patch ];
-
-  patchFlags = [ "-p0" ];
+  configureFlags = [
+    "--with-session-bus-services-dir=${placeholder "out"}/share/dbus-1/services"
+  ];
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    patchShebangs data/ontology2code
+  '';
+
+  preConfigure = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
+
+  postFixup = stdenv.lib.optionalString pythonSupport ''
+    moveToOutput lib/${python2Packages.python.libPrefix} "$py"
+  '';
+
   meta = with stdenv.lib; {
-    description = "A service which logs the users's activities and events";
-    homepage = https://launchpad.net/zeitgeist;
-    maintainers = with maintainers; [ lethalman ];
+    description = "A service which logs the users’s activities and events";
+    homepage = "https://zeitgeist.freedesktop.org/";
+    maintainers = with maintainers; [ lethalman worldofpeace ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

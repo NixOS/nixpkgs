@@ -1,12 +1,13 @@
 # idea: provide a build environments for your developement of preference
 /*
   #### examples of use: ####
-  # Add this to your ~/.nixpkgs/config.nix:
+  # Add this to your ~/.config/nixpkgs/config.nix:
   {
     packageOverrides = pkgs : with pkgs; {
       sdlEnv = pkgs.myEnvFun {
           name = "sdl";
-          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net  pkgconfig];
+  nativeBuildInputs = [ pkgconfig ];
+          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net];
       };
     };
   }
@@ -22,7 +23,7 @@
   ##### Another example, more complicated but achieving more: #######
   # Make an environment to build nix from source and create ctags (tagfiles can
   # be extracted from TAG_FILES) from every source package. Here would be a
-  # full ~/.nixpkgs/config.nix
+  # full ~/.config/nixpkgs/config.nix
   {
     packageOverrides = pkgs : with pkgs; with sourceAndTags;
     let complicatedMyEnv = { name, buildInputs ? [], cTags ? [], extraCmds ? ""}:
@@ -41,7 +42,7 @@
       # this is the example we will be using
       nixEnv = complicatedMyEnv {
         name = "nix";
-        buildInputs = [ libtool stdenv perl curl bzip2 openssl db45 autoconf automake zlib ];
+        buildInputs = [ libtool stdenv perl curl bzip2 openssl db5 autoconf automake zlib ];
       };
     };
   }
@@ -58,15 +59,11 @@
 
 { mkDerivation, substituteAll, pkgs }:
     { stdenv ? pkgs.stdenv, name, buildInputs ? []
-    , propagatedBuildInputs ? [], gcc ? stdenv.cc, cTags ? [], extraCmds ? ""
+    , propagatedBuildInputs ? [], gcc ? stdenv.cc, extraCmds ? ""
     , cleanupCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash --norc"}:
 
 mkDerivation {
-  # The setup.sh script from stdenv will expect the native build inputs in
-  # the nativeBuildInputs environment variable.
-  nativeBuildInputs = [ ] ++ buildInputs;
-  # Trick to bypass the stdenv usual change of propagatedBuildInputs => propagatedNativeBuildInputs
-  propagatedBuildInputs2 = propagatedBuildInputs;
+  inherit buildInputs propagatedBuildInputs;
 
   name = "env-${name}";
   phases = [ "buildPhase" "fixupPhase" ];
@@ -82,14 +79,15 @@ mkDerivation {
     mkdir -p "$out/dev-envs" "$out/nix-support" "$out/bin"
     s="$out/nix-support/setup-new-modified"
     # shut some warning up.., do not use set -e
-    sed -e 's@set -e@@' \
+    sed -e 's@set -eu@@' \
         -e 's@assertEnvExists\s\+NIX_STORE@:@' \
         -e 's@trap.*@@' \
         -e '1i initialPath="${toString initialPath}"' \
         "$setupNew" > "$s"
     cat >> "$out/dev-envs/''${name/env-/}" << EOF
-      nativeBuildInputs="$nativeBuildInputs"
-      propagatedBuildInputs="$propagatedBuildInputs2"
+      defaultNativeBuildInputs="$defaultNativeBuildInputs"
+      buildInputs="$buildInputs"
+      propagatedBuildInputs="$propagatedBuildInputs"
       # the setup-new script wants to write some data to a temp file.. so just let it do that and tidy up afterwards
       tmp="\$("${pkgs.coreutils}/bin/mktemp" -d)"
       NIX_BUILD_TOP="\$tmp"

@@ -1,46 +1,59 @@
-{ stdenv, fetchurl, cmake, pkgconfig, intltool, vala, makeWrapper
-, gtk3, webkitgtk, librsvg, libnotify, sqlite
-, glib_networking, gsettings_desktop_schemas
+{ stdenv
+, fetchurl
+, cmake
+, ninja
+, pkgconfig
+, intltool
+, vala
+, wrapGAppsHook
+, gcr
+, libpeas
+, gtk3
+, webkitgtk
+, sqlite
+, gsettings-desktop-schemas
+, libsoup
+, glib-networking
+, json-glib
+, libarchive
 }:
 
-let
-  version = "0.5.8";
-in
 stdenv.mkDerivation rec {
-  name = "midori-${version}";
-
-  meta = {
-    description = "Lightweight WebKitGTK+ web browser";
-    homepage = "http://midori-browser.org";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ raskin iyzsong ];
-  };
+  pname = "midori";
+  version = "9.0";
 
   src = fetchurl {
-    urls = [
-      "${meta.homepage}/downloads/midori_${version}_all_.tar.bz2"
-      "http://mirrors-ru.go-parts.com/blfs/conglomeration/midori/midori_${version}_all_.tar.bz2"
-    ];
-    name = "midori_${version}_all_.tar.bz2";
-    sha256 = "10ckm98rfqfbwr84b8mc1ssgj84wjgkr4dadvx2l7c64sigi66dg";
+    url = "https://github.com/midori-browser/core/releases/download/v${version}/midori-v${version}.tar.gz";
+    sha256 = "05i04qa83dnarmgkx4xsk6fga5lw1lmslh4rb3vhyyy4ala562jy";
   };
 
-  sourceRoot = ".";
-
-  buildInputs = [
-    cmake pkgconfig intltool vala makeWrapper
-    webkitgtk librsvg libnotify sqlite
+  nativeBuildInputs = [
+    cmake
+    intltool
+    ninja
+    pkgconfig
+    vala
+    wrapGAppsHook
   ];
 
-  cmakeFlags = ''
-    -DHALF_BRO_INCOM_WEBKIT2=ON
-    -DUSE_ZEITGEIST=OFF
-  '';
+  buildInputs = [
+    (libsoup.override { gnomeSupport = true; })
+    gcr
+    glib-networking
+    gsettings-desktop-schemas
+    gtk3
+    libpeas
+    sqlite
+    webkitgtk
+    json-glib
+    libarchive
+  ];
 
-  preFixup = ''
-    wrapProgram $out/bin/midori \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-  '';
+  meta = with stdenv.lib; {
+    description = "Lightweight WebKitGTK web browser";
+    homepage = "https://www.midori-browser.org/";
+    license = with licenses; [ lgpl21Plus ];
+    platforms = with platforms; linux;
+    maintainers = with maintainers; [ raskin ramkromberg ];
+  };
 }

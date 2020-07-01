@@ -1,39 +1,46 @@
-{ stdenv, fetchurl, ocaml, findlib, which, ocsigen_server, ocsigen_deriving,
-  js_of_ocaml, ocaml_react, ocaml_lwt, calendar, cryptokit, tyxml,
-  ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
-  reactivedata, opam}:
+{ stdenv, fetchzip, which, ocsigen_server, ocaml,
+  lwt_react,
+  opaline, ppx_deriving, findlib
+, js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
+, js_of_ocaml-lwt
+, js_of_ocaml-tyxml
+, lwt_ppx
+}:
+
+if !stdenv.lib.versionAtLeast ocaml.version "4.07"
+then throw "eliom is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "4.1.0";
-  name = "${pname}-${version}";
+  version = "6.12.0";
 
-  src = fetchurl {
-    url = https://github.com/ocsigen/eliom/archive/4.1.0.tar.gz;
-    sha256 = "10v7mrq3zsbxdlg8k8xif777mbvcdpabvnd1g7p2yqivr7f1qm24";
+  src = fetchzip {
+    url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
+    sha256 = "015jh72v6ch9h9czd8sn5kjz3pv6lsnvvnhdjgrplwj443dn1xp8";
   };
 
-  buildInputs = [ocaml which ocsigen_server findlib ocsigen_deriving
-                 js_of_ocaml ocaml_optcomp opam];
+  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline
+  ];
 
-  propagatedBuildInputs = [ ocaml_lwt reactivedata tyxml ipaddr
-                            calendar cryptokit ocamlnet ocaml_react ocaml_ssl
-                            ocaml_pcre ];
+  propagatedBuildInputs = [
+    js_of_ocaml-lwt
+    js_of_ocaml-ppx
+    js_of_ocaml-tyxml
+    lwt_ppx
+    lwt_react
+    ocsigen_server
+    ppx_deriving
+  ];
 
-  installPhase =
-  let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
-  in
-  ''opam-installer --script --prefix=$out ${pname}.install > install.sh
-    sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocamlVersion}/site-lib/
-  '';
+  installPhase = "opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
 
-  createFindlibDestdir = true;
+  setupHook = [ ./setup-hook.sh ];
 
   meta = {
-    homepage = http://ocsigen.org/eliom/;
-    description = "Ocaml Framework for programming Web sites and client/server Web applications";
+    homepage = "http://ocsigen.org/eliom/";
+    description = "OCaml Framework for programming Web sites and client/server Web applications";
 
     longDescription =''Eliom is a framework for programming Web sites
     and client/server Web applications. It introduces new concepts to
@@ -46,8 +53,6 @@ stdenv.mkDerivation rec
     Ocsigen Js_of_ocaml.'';
 
     license = stdenv.lib.licenses.lgpl21;
-
-    platforms = ocaml.meta.platforms;
 
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
   };

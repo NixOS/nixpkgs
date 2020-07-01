@@ -1,69 +1,77 @@
-{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
+with import ../lib;
+
+{ nixpkgs ? { outPath = cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
+, supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
+, configuration ? {}
 }:
 
-with import ../lib;
+with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
 
 let
 
-  version = builtins.readFile ../.version;
+  version = fileContents ../.version;
   versionSuffix =
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  forAllSystems = genAttrs supportedSystems;
+  # Run the tests for each platform.  You can run a test by doing
+  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
+  # ‘nix-build tests/login.nix -A result’.
+  allTestsForSystem = system:
+    import ./tests/all-tests.nix {
+      inherit system;
+      pkgs = import ./.. { inherit system; };
+      callTest = t: {
+        ${system} = hydraJob t.test;
+      };
+    };
+  allTests =
+    foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
 
-  callTest = fn: args: forAllSystems (system: hydraJob (import fn ({ inherit system; } // args)));
-
-  pkgs = import nixpkgs { system = "x86_64-linux"; };
+  pkgs = import ./.. { system = "x86_64-linux"; };
 
 
   versionModule =
-    { system.nixosVersionSuffix = versionSuffix;
-      system.nixosRevision = nixpkgs.rev or nixpkgs.shortRev;
+    { system.nixos.versionSuffix = versionSuffix;
+      system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
     };
 
+  makeModules = module: rest: [ configuration versionModule module rest ];
 
   makeIso =
-    { module, type, description ? type, maintainers ? ["eelco"], system }:
+    { module, type, system, ... }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
-    let
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = makeModules module {
+        isoImage.isoBaseName = "nixos-${type}";
+      };
+    }).config.system.build.isoImage);
 
-      config = (import lib/eval-config.nix {
-        inherit system;
-        modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
-      }).config;
 
-      iso = config.system.build.isoImage;
+  makeSdImage =
+    { module, system, ... }:
 
-    in
-      # Declare the ISO as a build product so that it shows up in Hydra.
-      hydraJob (runCommand "nixos-iso-${config.system.nixosVersion}"
-        { meta = {
-            description = "NixOS installation CD (${description}) - ISO image for ${system}";
-            maintainers = map (x: lib.maintainers.${x}) maintainers;
-          };
-          inherit iso;
-          passthru = { inherit config; };
-        }
-        ''
-          mkdir -p $out/nix-support
-          echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
-        ''); # */
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = makeModules module {};
+    }).config.system.build.sdImage);
 
 
   makeSystemTarball =
     { module, maintainers ? ["viric"], system }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     let
 
       config = (import lib/eval-config.nix {
         inherit system;
-        modules = [ module versionModule ];
+        modules = makeModules module {};
       }).config;
 
       tarball = config.system.build.tarball;
@@ -71,7 +79,7 @@ let
     in
       tarball //
         { meta = {
-            description = "NixOS system tarball for ${system} - ${stdenv.platform.name}";
+            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.platform.name}";
             maintainers = map (x: lib.maintainers.${x}) maintainers;
           };
           inherit config;
@@ -83,57 +91,57 @@ let
 
   buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
     inherit system;
-    modules = [ module versionModule ] ++ singleton
-      ({ config, lib, ... }:
+    modules = makeModules module
+      ({ ... }:
       { fileSystems."/".device  = mkDefault "/dev/sda1";
         boot.loader.grub.device = mkDefault "/dev/sda";
       });
   }).config));
 
+  makeNetboot = { module, system, ... }:
+    let
+      configEvaled = import lib/eval-config.nix {
+        inherit system;
+        modules = makeModules module {};
+      };
+      build = configEvaled.config.system.build;
+      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
+    in
+      pkgs.symlinkJoin {
+        name = "netboot";
+        paths = [
+          build.netbootRamdisk
+          build.kernel
+          build.netbootIpxeScript
+        ];
+        postBuild = ''
+          mkdir -p $out/nix-support
+          echo "file ${kernelTarget} ${build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
+          echo "file initrd ${build.netbootRamdisk}/initrd" >> $out/nix-support/hydra-build-products
+          echo "file ipxe ${build.netbootIpxeScript}/netboot.ipxe" >> $out/nix-support/hydra-build-products
+        '';
+        preferLocalBuild = true;
+      };
 
 in rec {
 
-  channel =
-    pkgs.releaseTools.makeSourceTarball {
-      name = "nixos-channel";
+  channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
 
-      src = nixpkgs;
-
-      officialRelease = false; # FIXME: fix this in makeSourceTarball
-      inherit version versionSuffix;
-
-      buildInputs = [ pkgs.nixUnstable ];
-
-      expr = builtins.readFile lib/channel-expr.nix;
-
-      distPhase = ''
-        rm -rf .git
-        echo -n $VERSION_SUFFIX > .version-suffix
-        echo -n ${nixpkgs.rev or nixpkgs.shortRev} > .git-revision
-        releaseName=nixos-$VERSION$VERSION_SUFFIX
-        mkdir -p $out/tarballs
-        mkdir ../$releaseName
-        cp -prd . ../$releaseName/nixpkgs
-        chmod -R u+w ../$releaseName
-        ln -s nixpkgs/nixos ../$releaseName/nixos
-        echo "$expr" > ../$releaseName/default.nix
-        NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
-        cd ..
-        chmod -R u+w $releaseName
-        tar cfJ $out/tarballs/$releaseName.tar.xz $releaseName
-      ''; # */
-    };
-
-
-  manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
-  manualPDF = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualPDF)).x86_64-linux;
-  manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
-  options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
+  manualHTML = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML);
+  manual = manualHTML; # TODO(@oxij): remove eventually
+  manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
+  manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
+  manualGeneratedSources = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.generatedSources);
+  options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
-  initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
+  initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
+  netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+    module = ./modules/installer/netboot/netboot-minimal.nix;
+    inherit system;
+  });
 
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
@@ -141,50 +149,77 @@ in rec {
     inherit system;
   });
 
-  iso_graphical = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical.nix;
-    type = "graphical";
+  iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-plasma5.nix;
+    type = "plasma5";
+    inherit system;
+  });
+
+  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-gnome.nix;
+    type = "gnome";
     inherit system;
   });
 
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
-  iso_minimal_new_kernel = forAllSystems (system: makeIso {
+  iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
   });
 
+  sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        armv6l-linux = ./modules/installer/cd-dvd/sd-image-raspberrypi.nix;
+        armv7l-linux = ./modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix;
+        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+      }.${system};
+    inherit system;
+  });
+
+  sd_image_new_kernel = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64-new-kernel.nix;
+      }.${system};
+    type = "minimal-new-kernel";
+    inherit system;
+  });
+
+  sd_image_raspberrypi4 = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = ./modules/installer/cd-dvd/sd-image-raspberrypi4.nix;
+    inherit system;
+  });
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = forAllSystems (system:
+  ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
-    let
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ versionModule
+          ./modules/installer/virtualbox-demo.nix
+        ];
+    }).config.system.build.virtualBoxOVA)
 
-      config = (import lib/eval-config.nix {
-        inherit system;
-        modules =
-          [ versionModule
-            ./modules/installer/virtualbox-demo.nix
-          ];
-      }).config;
+  );
 
-    in
-      # Declare the OVA as a build product so that it shows up in Hydra.
-      hydraJob (runCommand "nixos-ova-${config.system.nixosVersion}-${system}"
-        { meta = {
-            description = "NixOS VirtualBox appliance (${system})";
-            maintainers = maintainers.eelco;
-          };
-          ova = config.system.build.virtualBoxOVA;
-        }
-        ''
-          mkdir -p $out/nix-support
-          fn=$(echo $ova/*.ova)
-          echo "file ova $fn" >> $out/nix-support/hydra-build-products
-        '') # */
+
+  # A disk image that can be imported to Amazon EC2 and registered as an AMI
+  amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image.nix
+        ];
+    }).config.system.build.amazonImage)
 
   );
 
@@ -193,11 +228,13 @@ in rec {
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
     { toplevel = (import lib/eval-config.nix {
         inherit system;
-        modules = singleton ({ config, pkgs, ... }:
+        modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
+            system.stateVersion = mkDefault "18.03";
           });
       }).config.system.build.toplevel;
+      preferLocalBuild = true;
     }
     "mkdir $out; ln -s $toplevel $out/dummy");
 
@@ -206,10 +243,12 @@ in rec {
   # boot that system from uboot (like for the sheevaplug).
   # The pc variant helps preparing the expression for the system tarball
   # in a machine faster than the sheevpalug
+  /*
   system_tarball_pc = forAllSystems (system: makeSystemTarball {
     module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
     inherit system;
   });
+  */
 
   # Provide container tarball for lxc, libvirt-lxc, docker-lxc, ...
   containerTarball = forAllSystems (system: makeSystemTarball {
@@ -233,132 +272,51 @@ in rec {
     };
   */
 
-
-  # Run the tests for each platform.  You can run a test by doing
-  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
-  # ‘nix-build tests/login.nix -A result’.
-  tests.avahi = callTest tests/avahi.nix {};
-  tests.bittorrent = callTest tests/bittorrent.nix {};
-  tests.blivet = callTest tests/blivet.nix {};
-  tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
-  tests.chromium = callTest tests/chromium.nix {};
-  tests.cjdns = callTest tests/cjdns.nix {};
-  tests.containers = callTest tests/containers.nix {};
-  tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
-  tests.dockerRegistry = hydraJob (import tests/docker-registry.nix { system = "x86_64-linux"; });
-  tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
-  tests.firefox = callTest tests/firefox.nix {};
-  tests.firewall = callTest tests/firewall.nix {};
-  tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
-  #tests.gitlab = callTest tests/gitlab.nix {};
-  tests.gnome3 = callTest tests/gnome3.nix {};
-  tests.i3wm = callTest tests/i3wm.nix {};
-  tests.installer.grub1 = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).grub1.test);
-  tests.installer.lvm = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).lvm.test);
-  tests.installer.luksroot = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).luksroot.test);
-  tests.installer.rebuildCD = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).rebuildCD.test);
-  tests.installer.separateBoot = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).separateBoot.test);
-  tests.installer.simple = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simple.test);
-  tests.installer.simpleLabels = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simpleLabels.test);
-  tests.installer.simpleProvided = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simpleProvided.test);
-  tests.installer.swraid = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).swraid.test);
-  tests.installer.btrfsSimple = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).btrfsSimple.test);
-  tests.installer.btrfsSubvols = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).btrfsSubvols.test);
-  tests.installer.btrfsSubvolDefault = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).btrfsSubvolDefault.test);
-  tests.influxdb = callTest tests/influxdb.nix {};
-  tests.ipv6 = callTest tests/ipv6.nix {};
-  tests.jenkins = callTest tests/jenkins.nix {};
-  tests.kde4 = callTest tests/kde4.nix {};
-  tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
-  tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
-  tests.lightdm = callTest tests/lightdm.nix {};
-  tests.login = callTest tests/login.nix {};
-  #tests.logstash = callTest tests/logstash.nix {};
-  tests.misc = callTest tests/misc.nix {};
-  tests.mumble = callTest tests/mumble.nix {};
-  tests.munin = callTest tests/munin.nix {};
-  tests.mysql = callTest tests/mysql.nix {};
-  tests.mysqlReplication = callTest tests/mysql-replication.nix {};
-  tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
-  tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
-  tests.networking.networkd.static = callTest tests/networking.nix { networkd = true; test = "static"; };
-  tests.networking.networkd.dhcpSimple = callTest tests/networking.nix { networkd = true; test = "dhcpSimple"; };
-  tests.networking.networkd.dhcpOneIf = callTest tests/networking.nix { networkd = true; test = "dhcpOneIf"; };
-  tests.networking.networkd.bond = callTest tests/networking.nix { networkd = true; test = "bond"; };
-  tests.networking.networkd.bridge = callTest tests/networking.nix { networkd = true; test = "bridge"; };
-  tests.networking.networkd.macvlan = callTest tests/networking.nix { networkd = true; test = "macvlan"; };
-  tests.networking.networkd.sit = callTest tests/networking.nix { networkd = true; test = "sit"; };
-  tests.networking.networkd.vlan = callTest tests/networking.nix { networkd = true; test = "vlan"; };
-  tests.networking.scripted.static = callTest tests/networking.nix { networkd = false; test = "static"; };
-  tests.networking.scripted.dhcpSimple = callTest tests/networking.nix { networkd = false; test = "dhcpSimple"; };
-  tests.networking.scripted.dhcpOneIf = callTest tests/networking.nix { networkd = false; test = "dhcpOneIf"; };
-  tests.networking.scripted.bond = callTest tests/networking.nix { networkd = false; test = "bond"; };
-  tests.networking.scripted.bridge = callTest tests/networking.nix { networkd = false; test = "bridge"; };
-  tests.networking.scripted.macvlan = callTest tests/networking.nix { networkd = false; test = "macvlan"; };
-  tests.networking.scripted.sit = callTest tests/networking.nix { networkd = false; test = "sit"; };
-  tests.networking.scripted.vlan = callTest tests/networking.nix { networkd = false; test = "vlan"; };
-  # TODO: put in networking.nix after the test becomes more complete
-  tests.networkingProxy = callTest tests/networking-proxy.nix {};
-  tests.nfs3 = callTest tests/nfs.nix { version = 3; };
-  tests.nfs4 = callTest tests/nfs.nix { version = 4; };
-  tests.nsd = callTest tests/nsd.nix {};
-  tests.openssh = callTest tests/openssh.nix {};
-  tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
-  tests.peerflix = callTest tests/peerflix.nix {};
-  tests.printing = callTest tests/printing.nix {};
-  tests.proxy = callTest tests/proxy.nix {};
-  tests.quake3 = callTest tests/quake3.nix {};
-  tests.runInMachine = callTest tests/run-in-machine.nix {};
-  tests.simple = callTest tests/simple.nix {};
-  tests.tomcat = callTest tests/tomcat.nix {};
-  tests.udisks2 = callTest tests/udisks2.nix {};
-  tests.virtualbox = hydraJob (import tests/virtualbox.nix { system = "x86_64-linux"; });
-  tests.xfce = callTest tests/xfce.nix {};
-  tests.bootBiosCdrom = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootBiosCdrom);
-  tests.bootBiosUsb = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootBiosUsb);
-  tests.bootUefiCdrom = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootUefiCdrom);
-  tests.bootUefiUsb = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootUefiUsb);
-
+  tests = allTests;
 
   /* Build a bunch of typical closures so that Hydra can keep track of
      the evolution of closure sizes. */
 
   closures = {
 
-    smallContainer = makeClosure ({ pkgs, ... }:
+    smallContainer = makeClosure ({ ... }:
       { boot.isContainer = true;
         services.openssh.enable = true;
       });
 
-    tinyContainer = makeClosure ({ pkgs, ... }:
+    tinyContainer = makeClosure ({ ... }:
       { boot.isContainer = true;
         imports = [ modules/profiles/minimal.nix ];
       });
 
-    ec2 = makeClosure ({ pkgs, ... }:
+    ec2 = makeClosure ({ ... }:
       { imports = [ modules/virtualisation/amazon-image.nix ];
       });
 
-    kde = makeClosure ({ pkgs, ... }:
+    kde = makeClosure ({ ... }:
       { services.xserver.enable = true;
-        services.xserver.displayManager.kdm.enable = true;
-        services.xserver.desktopManager.kde4.enable = true;
+        services.xserver.displayManager.sddm.enable = true;
+        services.xserver.desktopManager.plasma5.enable = true;
       });
 
-    xfce = makeClosure ({ pkgs, ... }:
+    xfce = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.desktopManager.xfce.enable = true;
+      });
+
+    gnome3 = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.gdm.enable = true;
+        services.xserver.desktopManager.gnome3.enable = true;
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.
     lapp = makeClosure ({ pkgs, ... }:
       { services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
+        services.httpd.enablePHP = true;
         services.postgresql.enable = true;
-        services.postgresql.package = pkgs.postgresql93;
-        environment.systemPackages = [ pkgs.php ];
+        services.postgresql.package = pkgs.postgresql;
       });
-
   };
-
 }

@@ -1,50 +1,80 @@
-{ stdenv, fetchurl, pkgconfig, intltool, python, pygobject3
-, glib, gnome3, pango, libxml2, libxslt, sqlite, libsoup, glib_networking
-, webkitgtk, json_glib, gobjectIntrospection, gst_all_1
+{ stdenv
+, fetchurl
+, pkg-config
+, intltool
+, python3Packages
+, wrapGAppsHook
+, glib
+, libxml2
+, libxslt
+, sqlite
+, libsoup
+, webkitgtk
+, json-glib
+, gst_all_1
 , libnotify
-, makeWrapper
+, gtk3
+, gsettings-desktop-schemas
+, libpeas
+, libsecret
+, gobject-introspection
+, glib-networking
 }:
 
-let pname = "liferea";
-    version = "1.10.14";
-in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "liferea";
+  version = "1.12.6";
 
   src = fetchurl {
-    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "0szazfknarw6ivnr4flr928ar309pz2mv6alc6pk6l1i9jchcnfs";
+    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}b.tar.bz2";
+    sha256 = "03pr1gmiv5y0i92bkhcxr8s311ll91chz19wb96jkixx32xav91d";
   };
 
-  buildInputs = with gst_all_1; [
-    pkgconfig intltool python
-    glib gnome3.gtk pango libxml2 libxslt sqlite libsoup
-    webkitgtk json_glib gobjectIntrospection gnome3.gsettings_desktop_schemas
-    gnome3.libpeas gnome3.dconf
-    gst-plugins-base gst-plugins-good gst-plugins-bad
-    gnome3.libgnome_keyring gnome3.defaultIconTheme
+  nativeBuildInputs = [
+    wrapGAppsHook
+    python3Packages.wrapPython
+    intltool
+    pkg-config
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    webkitgtk
+    libxml2
+    libxslt
+    sqlite
+    libsoup
+    libpeas
+    gsettings-desktop-schemas
+    json-glib
+    gobject-introspection
+    libsecret
+    glib-networking
     libnotify
-    makeWrapper
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
+
+  pythonPath = with python3Packages; [
+    pygobject3
+    pycairo
   ];
 
   preFixup = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
-
-    for f in "$out"/bin/*; do
-      wrapProgram "$f" \
-        --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules:${glib_networking}/lib/gio/modules" \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
-    done
+    buildPythonPath "$out $pythonPath"
+    gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
-  meta = {
-    description = "A GTK-based news feed agregator";
-    homepage = http://lzone.de/liferea/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ vcunat romildo ];
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "A GTK-based news feed aggregator";
+    homepage = "http://lzone.de/liferea/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ vcunat romildo ];
+    platforms = platforms.linux;
 
     longDescription = ''
       Liferea (Linux Feed Reader) is an RSS/RDF feed reader.

@@ -1,16 +1,21 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, udev }:
+{ stdenv, fetchurl, cmake, pkgconfig, udev, libcec_platform, libraspberrypi ? null }:
 
-let version = "2.2.0"; in
+let version = "4.0.5"; in
 
 stdenv.mkDerivation {
-  name = "libcec-${version}";
+  pname = "libcec";
+  inherit version;
 
   src = fetchurl {
-    url = "https://github.com/Pulse-Eight/libcec/archive/libcec-${version}-repack.tar.gz";
-    sha256 = "1kdfak8y96v14d5vp2apkjjs0fvvim9phc0nkhlq5pjlagk8v32x";
+    url = "https://github.com/Pulse-Eight/libcec/archive/libcec-${version}.tar.gz";
+    sha256 = "0hvp33mq0kg544hw20aq3vy5lxf5zid6gxm3qdga7wxw1r1lkmz4";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig udev ];
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ udev libcec_platform ] ++
+    stdenv.lib.optional (libraspberrypi != null) libraspberrypi;
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=1" ];
 
   # Fix dlopen path
   patchPhase = ''

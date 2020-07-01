@@ -1,34 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, which, openssl, qt4, libtool, gcc, makeWrapper }:
+{ mkDerivation, lib, fetchFromGitHub, autoreconfHook, perl, pkgconfig
+, libtool, openssl, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
-  name = "xca-${version}";
-  version = "0.9.3";
+mkDerivation rec {
+  pname = "xca";
+  version = "2.2.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/xca/${name}.tar.gz";
-    sha256 = "1fn6kh8mdy65rrgjif7j9wn3mxg1mrrcnhzpi86hfy24ic6bahk8";
+  src = fetchFromGitHub {
+    owner  = "chris2511";
+    repo   = "xca";
+    rev    = "RELEASE.${version}";
+    sha256 = "0na2816lkfkkvssh9kmf5vwy6x8kd4x7h138jzy61wrvs69vhnbi";
   };
 
-  patches = [ ./0001-Fix-for-openssl-1.0.1i.patch ];
-
-  configurePhase = ''
-    export PATH=$PATH:${which}/bin
-    export QTDIR=${qt4}
-    prefix=$out ./configure ${openssl} ${libtool}
+  postPatch = ''
+    substituteInPlace doc/code2html \
+      --replace /usr/bin/perl ${perl}/bin/perl
   '';
 
-  postInstall = ''
-    wrapProgram "$out/bin/xca" \
-      --prefix LD_LIBRARY_PATH : "${qt4}/lib:${gcc.cc}/lib:${gcc.cc}/lib64:${openssl}/lib:${libtool}/lib"
-  '';
+  buildInputs = [ libtool openssl qtbase ];
 
-  buildInputs = [ openssl qt4 libtool gcc makeWrapper ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig qttools ];
 
-  meta = with stdenv.lib; {
-    description = "Interface for managing asymetric keys like RSA or DSA";
-    homepage = http://xca.sourceforge.net/;
-    platforms = platforms.all;
-    license = licenses.bsd3;
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    description = "An x509 certificate generation tool, handling RSA, DSA and EC keys, certificate signing requests (PKCS#10) and CRLs";
+    homepage    = "https://hohnstaedt.de/xca/";
+    license     = licenses.bsd3;
+    maintainers = with maintainers; [ offline peterhoeg ];
+    platforms   = platforms.all;
   };
 }

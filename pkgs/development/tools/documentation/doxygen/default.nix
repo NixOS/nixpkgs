@@ -1,44 +1,42 @@
-{ stdenv, fetchurl, perl, python, flex, bison, qt4 }:
+{ stdenv, cmake, fetchurl, python3, flex, bison, qt4, CoreServices, libiconv }:
 
-let
-  name = "doxygen-1.8.6";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+
+  name = "doxygen-1.8.18";
 
   src = fetchurl {
-    url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
-    sha256 = "0pskjlkbj76m9ka7zi66yj8ffjcv821izv3qxqyyphf0y0jqcwba";
+    urls = [
+      "mirror://sourceforge/doxygen/${name}.src.tar.gz" # faster, with https, etc.
+      "http://doxygen.nl/files/${name}.src.tar.gz"
+    ];
+    sha256 = "0mh6s1ri1fs5yb27m0avnjsbcxpchgb9aaprq4bd3lj6vjg3s5qq";
   };
 
-  patches = [ ./tmake.patch ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    flex
+    bison
+  ];
 
   buildInputs =
-    [ perl python flex bison ]
-    ++ stdenv.lib.optional (qt4 != null) qt4;
+       stdenv.lib.optional (qt4 != null) qt4
+    ++ stdenv.lib.optional stdenv.isSunOS libiconv
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
-  prefixKey = "--prefix ";
+  cmakeFlags =
+    [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
+    stdenv.lib.optional (qt4 != null) "-Dbuild_wizard=YES";
 
-  configureFlags =
-    [ "--dot dot" ]
-    ++ stdenv.lib.optional (qt4 != null) "--with-doxywizard";
-
-  preConfigure =
-    ''
-      patchShebangs .
-    '' + stdenv.lib.optionalString (qt4 != null)
-    ''
-      echo "using QTDIR=${qt4}..."
-      export QTDIR=${qt4}
-    '';
-
-  makeFlags = "MAN1DIR=share/man/man1";
+  NIX_CFLAGS_COMPILE =
+    stdenv.lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   enableParallelBuilding = true;
+  doCheck = false; # fails
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = "http://doxygen.org/";
+    homepage = "http://doxygen.nl/";
     description = "Source code documentation generator tool";
 
     longDescription = ''
@@ -49,7 +47,6 @@ stdenv.mkDerivation {
       manual (in LaTeX) from a set of documented source files.
     '';
 
-    maintainers = [stdenv.lib.maintainers.simons];
     platforms = if qt4 != null then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
   };
 }

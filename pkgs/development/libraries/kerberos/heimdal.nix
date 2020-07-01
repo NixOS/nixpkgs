@@ -1,100 +1,97 @@
-{ stdenv, fetchurl, pkgconfig, flex, yacc
-
-# Optional Dependencies
-, openldap ? null, libcap_ng ? null, sqlite ? null, openssl ? null, db ? null
-, readline ? null, libedit ? null, pam ? null
-
-#, readline, openldap, libcap_ng
-#, sqlite, db, ncurses, openssl, cyrus_sasl
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
+, texinfo, perlPackages
+, openldap, libcap_ng, sqlite, openssl, db, libedit, pam
+, CoreFoundation, Security, SystemConfiguration
 }:
 
-with stdenv;
 with stdenv.lib;
-let
-  optOpenldap = shouldUsePkg openldap;
-  optLibcap_ng = shouldUsePkg libcap_ng;
-  optSqlite = shouldUsePkg sqlite;
-  optOpenssl = shouldUsePkg openssl;
-  optDb = shouldUsePkg db;
-  optReadline = shouldUsePkg readline;
-  optLibedit = shouldUsePkg libedit;
-  optPam = shouldUsePkg pam;
-in
 stdenv.mkDerivation rec {
-  name = "heimdal-1.5.3";
+  pname = "heimdal";
+  version = "7.7.0";
 
-  src = fetchurl {
-    urls = [
-      "http://www.h5l.org/dist/src/${name}.tar.gz"
-      "http://ftp.pdc.kth.se/pub/heimdal/src/${name}.tar.gz"
-    ];
-    sha256 = "19gypf9vzfrs2bw231qljfl4cqc1riyg0ai0xmm1nd1wngnpphma";
+  src = fetchFromGitHub {
+    owner = "heimdal";
+    repo = "heimdal";
+    rev = "heimdal-${version}";
+    sha256 = "099qn9b8q20invvi5r8d8q9rnwpcm3nr89hx5rj7gj2ah2x5vgxs";
   };
 
-  nativeBuildInputs = [ pkgconfig flex yacc ];
-  buildInputs = [
-    optOpenldap optLibcap_ng optSqlite optOpenssl optDb optReadline optLibedit
-    optPam
+  outputs = [ "out" "dev" "man" "info" ];
+
+  patches = [ ./heimdal-make-missing-headers.patch ];
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex texinfo ]
+    ++ (with perlPackages; [ JSON ]);
+  buildInputs = optionals (stdenv.isLinux) [ libcap_ng ]
+    ++ [ db sqlite openssl libedit openldap pam]
+    ++ optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ];
+
+  ## ugly, X should be made an option
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--infodir=$info/share/info"
+    "--enable-hdb-openldap-module"
+    "--with-sqlite3=${sqlite.dev}"
+
+  # ugly, --with-libedit is not enought, it fall back to bundled libedit
+    "--with-libedit-include=${libedit.dev}/include"
+    "--with-libedit-lib=${libedit}/lib"
+    "--with-openssl=${openssl.dev}"
+    "--without-x"
+    "--with-berkeley-db"
+    "--with-berkeley-db-include=${db.dev}/include"
+    "--with-openldap=${openldap.dev}"
+  ] ++ optionals (stdenv.isLinux) [
+    "--with-capng"
   ];
 
-  configureFlags = [
-    (mkOther                         "sysconfdir"            "/etc")
-    (mkOther                         "localstatedir"         "/var")
-    (mkWith   (optOpenldap != null)  "openldap"              optOpenldap)
-    (mkEnable (optOpenldap != null)  "hdb-openldap-module"   null)
-    (mkEnable true                   "pk-init"               null)
-    (mkEnable true                   "digest"                null)
-    (mkEnable true                   "kx509"                 null)
-    (mkWith   (optLibcap_ng != null) "capng"                 null)
-    (mkWith   (optSqlite != null)    "sqlite3"               sqlite)
-    (mkEnable (optSqlite != null)    "sqlite-cache"          null)
-    (mkWith   false                  "libintl"               null)               # TODO libintl fix
-    (mkWith   true                   "hdbdir"                "/var/lib/heimdal")
-    (mkWith   (optOpenssl != null)   "openssl"               optOpenssl)
-    (mkEnable true                   "pthread-support"       null)
-    (mkEnable false                  "dce"                   null)               # TODO: Add support
-    (mkEnable true                   "afs-support"           null)
-    (mkWith   (optDb != null)        "berkeley-db"           optDb)
-    (mkEnable false                  "nmdb"                  null)
-    (mkEnable false                  "developer"             null)
-    (mkWith   true                   "ipv6"                  null)
-    (mkEnable false                  "socket-wrapper"        null)
-    (mkEnable true                   "otp"                   null)
-    (mkEnable false                  "osfc2"                 null)
-    (mkEnable true                   "mmap"                  null)
-    (mkEnable true                   "afs-string-to-key"     null)
-    (mkWith   (optReadline != null)  "readline"              optReadline)
-    (mkWith   (optLibedit != null)   "libedit"               optLibedit)
-    (mkWith   false                  "x"                     null)
-    (mkEnable true                   "kcm"                   null)
-    (mkEnable true                   "heimdal-documentation" null)
-  ];
+  postUnpack = ''
+    sed -i '/^DEFAULT_INCLUDES/ s,$, -I..,' source/cf/Makefile.am.common
+    sed -i -e 's/date/date --date="@$SOURCE_DATE_EPOCH"/' source/configure.ac
+  '';
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -pthread"
+    configureFlagsArray+=(
+      "--bindir=$out/bin"
+      "--sbindir=$out/sbin"
+      "--libexecdir=$out/libexec/heimdal"
+      "--mandir=$man/share/man"
+      "--infodir=$man/share/info"
+      "--includedir=$dev/include")
   '';
 
   # We need to build hcrypt for applications like samba
   postBuild = ''
-    (cd lib/hcrypto; make)
-    (cd include/hcrypto; make)
+    (cd include/hcrypto; make -j $NIX_BUILD_CORES)
+    (cd lib/hcrypto; make -j $NIX_BUILD_CORES)
   '';
 
   postInstall = ''
     # Install hcrypto
-    (cd lib/hcrypto; make install)
-    (cd include/hcrypto; make install)
+    (cd include/hcrypto; make -j $NIX_BUILD_CORES install)
+    (cd lib/hcrypto; make -j $NIX_BUILD_CORES install)
 
-    # Doesn't succeed with --libexec=$out/sbin, so
-    mv "$out/libexec/"* $out/sbin/
-    rmdir $out/libexec
+    # Do we need it?
+    rm $out/bin/su
+
+    mkdir -p $dev/bin
+    mv $out/bin/krb5-config $dev/bin/
+
+    # asn1 compilers, move them to $dev
+    mv $out/libexec/heimdal/heimdal/* $dev/bin
+    rmdir $out/libexec/heimdal/heimdal
   '';
 
+  # Issues with hydra
+  #  In file included from hxtool.c:34:0:
+  #  hx_locl.h:67:25: fatal error: pkcs10_asn1.h: No such file or directory
+  #enableParallelBuilding = true;
+
   meta = {
-    description = "an implementation of Kerberos 5 (and some more stuff) largely written in Sweden";
+    description = "An implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
+    platforms = platforms.unix;
   };
 
   passthru.implementation = "heimdal";

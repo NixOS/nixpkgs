@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, buildPythonPackage, blivet }:
+{ stdenv, fetchurl, buildPythonApplication, blivet }:
 
-buildPythonPackage rec {
-  name = "nixpart-${version}";
+buildPythonApplication rec {
+  pname = "nixpart";
   version = "1.0.0";
 
   src = fetchurl {
@@ -16,6 +16,5 @@ buildPythonPackage rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.aszlig ];
     platforms = stdenv.lib.platforms.linux;
-    broken = true;
   };
 }

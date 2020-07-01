@@ -4,18 +4,11 @@
 
 with lib;
 
-let
-
-  inherit (config.services.avahi) nssmdns;
-  inherit (config.services.samba) nsswins;
-  ldap = config.users.ldap.enable;
-
-in
-
 {
   options = {
 
     # NSS modules.  Hacky!
+    # Only works with nscd!
     system.nssModules = mkOption {
       type = types.listOf types.path;
       internal = true;
@@ -32,31 +25,109 @@ in
         };
     };
 
+    system.nssDatabases = {
+      passwd = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of passwd entries to configure in <filename>/etc/nsswitch.conf</filename>.
+
+          Note that "files" is always prepended while "systemd" is appended if nscd is enabled.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+
+      group = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of group entries to configure in <filename>/etc/nsswitch.conf</filename>.
+
+          Note that "files" is always prepended while "systemd" is appended if nscd is enabled.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+
+      shadow = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of shadow entries to configure in <filename>/etc/nsswitch.conf</filename>.
+
+          Note that "files" is always prepended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+
+      hosts = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of hosts entries to configure in <filename>/etc/nsswitch.conf</filename>.
+
+          Note that "files" is always prepended, and "dns" and "myhostname" are always appended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+
+      services = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of services entries to configure in <filename>/etc/nsswitch.conf</filename>.
+
+          Note that "files" is always prepended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+    };
   };
 
+  imports = [
+    (mkRenamedOptionModule [ "system" "nssHosts" ] [ "system" "nssDatabases" "hosts" ])
+  ];
+
   config = {
+    assertions = [
+      {
+        # Prevent users from disabling nscd, with nssModules being set.
+        # If disabling nscd is really necessary, it's still possible to opt out
+        # by forcing config.system.nssModules to [].
+        assertion = config.system.nssModules.path != "" -> config.services.nscd.enable;
+        message = "Loading NSS modules from system.nssModules (${config.system.nssModules.path}), requires services.nscd.enable being set to true.";
+      }
+    ];
 
     # Name Service Switch configuration file.  Required by the C
-    # library.  !!! Factor out the mdns stuff.  The avahi module
-    # should define an option used by this module.
-    environment.etc."nsswitch.conf".text =
-      ''
-        passwd:    files ${optionalString ldap "ldap"}
-        group:     files ${optionalString ldap "ldap"}
-        shadow:    files ${optionalString ldap "ldap"}
-        hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} ${optionalString nsswins "wins"} myhostname mymachines
-        networks:  files dns
-        ethers:    files
-        services:  files
-        protocols: files
-      '';
+    # library.
+    environment.etc."nsswitch.conf".text = ''
+      passwd:    ${concatStringsSep " " config.system.nssDatabases.passwd}
+      group:     ${concatStringsSep " " config.system.nssDatabases.group}
+      shadow:    ${concatStringsSep " " config.system.nssDatabases.shadow}
 
-    # Systemd provides nss-myhostname to ensure that our hostname
-    # always resolves to a valid IP address.  It returns all locally
-    # configured IP addresses, or ::1 and 127.0.0.2 as
-    # fallbacks. Systemd also provides nss-mymachines to return IP
-    # addresses of local containers.
-    system.nssModules = [ config.systemd.package ];
+      hosts:     ${concatStringsSep " " config.system.nssDatabases.hosts}
+      networks:  files
 
+      ethers:    files
+      services:  ${concatStringsSep " " config.system.nssDatabases.services}
+      protocols: files
+      rpc:       files
+    '';
+
+    system.nssDatabases = {
+      passwd = mkBefore [ "files" ];
+      group = mkBefore [ "files" ];
+      shadow = mkBefore [ "files" ];
+      hosts = mkMerge [
+        (mkBefore [ "files" ])
+        (mkAfter [ "dns" ])
+      ];
+      services = mkBefore [ "files" ];
+    };
   };
 }

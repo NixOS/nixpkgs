@@ -6,20 +6,21 @@
 }:
 
 let
-  binpath = stdenv.lib.makeSearchPath "bin"
+  binpath = stdenv.lib.makeBinPath
     ([ coreutils ncurses gnused gnugrep ] ++ stdenv.lib.optional (jdk != null) jdk);
 in
 stdenv.mkDerivation rec {
-  name = "grails-2.4.3";
+  pname = "grails";
+  version = "4.0.3";
 
   src = fetchurl {
-    url = "http://dist.springframework.org.s3.amazonaws.com/release/GRAILS/${name}.zip";
-    sha256 = "0lqkv0hsiiqa36pfnq5wv7s7nsp9xadmh1ri039bn0llpfck4742";
+    url = "https://github.com/grails/grails-core/releases/download/v${version}/grails-${version}.zip";
+    sha256 = "107dvgwv2ldpdr99q1nvb1i93jj635p1n7md6q14v9m4a6a226sa";
   };
 
   buildInputs = [ unzip ];
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out"
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
       over configuration to provide a productive and stream-lined development
       experience.
     '';
-    homepage = http://grails.org/;
+    homepage = "https://grails.org/";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

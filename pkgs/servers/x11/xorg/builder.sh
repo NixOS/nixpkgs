@@ -9,32 +9,21 @@ postInstall() {
     if test -n "$origPostInstall"; then eval "$origPostInstall"; fi
 
     local r p requires
-    requires=$(grep "Requires:" $out/lib/pkgconfig/*.pc | \
+    set +o pipefail
+    requires=$(grep "Requires:" ${!outputDev}/lib/pkgconfig/*.pc | \
         sed "s/Requires://" | sed "s/,/ /g")
+    set -o pipefail
 
     echo "propagating requisites $requires"
 
     for r in $requires; do
-        if test -n "$crossConfig"; then
-            for p in $crossPkgs; do
-                if test -e $p/lib/pkgconfig/$r.pc; then
-                    echo "  found requisite $r in $p"
-                    propagatedBuildInputs="$propagatedBuildInputs $p"
-                fi
-            done
-        else
-            for p in $nativePkgs; do
-                if test -e $p/lib/pkgconfig/$r.pc; then
-                    echo "  found requisite $r in $p"
-                    propagatedNativeBuildInputs="$propagatedNativeBuildInputs $p"
-                fi
-            done
-        fi
+        for p in "${pkgsHostHost[@]}" "${pkgsHostTarget[@]}"; do
+            if test -e $p/lib/pkgconfig/$r.pc; then
+                echo "  found requisite $r in $p"
+                propagatedBuildInputs+=" $p"
+            fi
+        done
     done
-
-    mkdir -p "$out/nix-support"
-    echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
-    echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
 }
 
 
@@ -47,6 +36,5 @@ fi
 
 
 enableParallelBuilding=1
-
 
 genericBuild

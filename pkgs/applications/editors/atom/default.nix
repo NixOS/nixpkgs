@@ -1,53 +1,83 @@
-{ stdenv, fetchurl, buildEnv, makeDesktopItem, makeWrapper, zlib, glib, alsaLib
-, dbus, gtk, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
-, cairo, cups, expat, libgpgerror, nspr, gconf, nss, xlibs, libcap
-}:
+{ stdenv, pkgs, fetchurl, wrapGAppsHook, gvfs, gtk3, atomEnv }:
 
 let
-  atomEnv = buildEnv {
-    name = "env-atom";
-    paths = [
-      stdenv.cc.cc zlib glib dbus gtk atk pango freetype libgnome_keyring3
-      fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr gconf nss
-      xlibs.libXrender xlibs.libX11 xlibs.libXext xlibs.libXdamage xlibs.libXtst
-      xlibs.libXcomposite xlibs.libXi xlibs.libXfixes xlibs.libXrandr
-      xlibs.libXcursor libcap
+  versions = {
+    atom = {
+      version = "1.48.0";
+      sha256 = "1693bxbylf6jhld9bdcr5pigk36wqlbj89praldpz9s96yxig9s1";
+    };
+
+    atom-beta = {
+      version = "1.49.0";
+      beta = 0;
+      sha256 = "1fr6m4a7shdj3wpn6g4n95cqpkkg2x9srwjf7bqxv9f3d5jb1y33";
+    };
+  };
+
+  common = pname: {version, sha256, beta ? null}:
+      let fullVersion = version + stdenv.lib.optionalString (beta != null) "-beta${toString beta}";
+      name = "${pname}-${fullVersion}";
+  in stdenv.mkDerivation {
+    inherit name;
+    version = fullVersion;
+
+    src = fetchurl {
+      url = "https://github.com/atom/atom/releases/download/v${fullVersion}/atom-amd64.deb";
+      name = "${name}.deb";
+      inherit sha256;
+    };
+
+    nativeBuildInputs = [
+      wrapGAppsHook  # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
     ];
+
+    buildInputs = [
+      gtk3  # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
+    ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --prefix "PATH" : "${gvfs}/bin" \
+      )
+    '';
+
+    buildCommand = ''
+      mkdir -p $out/usr/
+      ar p $src data.tar.xz | tar -C $out -xJ ./usr
+      sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/usr/share/applications/${pname}.desktop
+      mv $out/usr/* $out/
+      rm -r $out/share/lintian
+      rm -r $out/usr/
+      sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
+
+      fixupPhase
+
+      share=$out/share/${pname}
+
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${atomEnv.libPath}:$share" \
+        $share/atom
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${atomEnv.libPath}" \
+        $share/resources/app/apm/bin/node
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        $share/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
+
+      dugite=$share/resources/app.asar.unpacked/node_modules/dugite
+      rm -f $dugite/git/bin/git
+      ln -s ${pkgs.git}/bin/git $dugite/git/bin/git
+      rm -f $dugite/git/libexec/git-core/git
+      ln -s ${pkgs.git}/bin/git $dugite/git/libexec/git-core/git
+
+      find $share -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$share" {} \;
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A hackable text editor for the 21st Century";
+      homepage = "https://atom.io/";
+      license = licenses.mit;
+      maintainers = with maintainers; [ offline nequissimus ysndr ];
+      platforms = platforms.x86_64;
+    };
   };
-in stdenv.mkDerivation rec {
-  name = "atom-${version}";
-  version = "0.187.0";
-
-  src = fetchurl {
-    url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
-    sha256 = "0s6173dg5m52zc8kqwlgjn113d84cskrv9v29fb0nrvwvkv2xzmw";
-    name = "${name}.deb";
-  };
-
-  buildInputs = [ atomEnv makeWrapper ];
-
-  phases = [ "installPhase" "fixupPhase" ];
-
-  installPhase = ''
-    mkdir -p $out
-    ar p $src data.tar.gz | tar -C $out -xz ./usr
-    mv $out/usr/* $out/
-    rm -r $out/usr/
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/share/atom/atom
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/share/atom/resources/app/apm/bin/node
-    wrapProgram $out/bin/atom \
-      --prefix "LD_LIBRARY_PATH" : "${atomEnv}/lib:${atomEnv}/lib64"
-    wrapProgram $out/bin/apm \
-      --prefix "LD_LIBRARY_PATH" : "${atomEnv}/lib:${atomEnv}/lib64"
-  '';
-
-  meta = with stdenv.lib; {
-    description = "A hackable text editor for the 21st Century";
-    homepage = https://atom.io/;
-    license = [ licenses.mit ];
-    maintainers = [ maintainers.offline ];
-    platforms = [ "x86_64-linux" ];
-  };
-}
+in stdenv.lib.mapAttrs common versions

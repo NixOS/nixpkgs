@@ -1,19 +1,57 @@
-{fetchurl, stdenv, gupnp, gssdp, pkgconfig, gtk3, libuuid, intltool, gupnp_av, gnome3, makeWrapper}:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, gupnp
+, gssdp
+, pkgconfig
+, gtk3
+, libuuid
+, gettext
+, gupnp-av
+, gtksourceview4
+, gnome3
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "gupnp-tools-${version}";
-  majorVersion = "0.8";
-  version = "${majorVersion}.8";
+  pname = "gupnp-tools";
+  version = "0.10.0";
+
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp-tools/${majorVersion}/gupnp-tools-${version}.tar.xz";
-    sha256 = "160dgh9pmlb85qfavwqz46lqawpshs8514bx2b57f9rbiny8kbij";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "13d1qr1avz9r76989nvgxhhclmqzr025xjk4rfnja94fpbspznj1";
   };
 
-  buildInputs = [gupnp libuuid gssdp pkgconfig gtk3 intltool gupnp_av 
-                 gnome3.defaultIconTheme gnome3.gnome_themes_standard makeWrapper];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    wrapGAppsHook
+  ];
 
-  postInstall = ''
-    wrapProgram "$out/bin/gupnp-av-cp" --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.defaultIconTheme}/share:$out/share"
-    wrapProgram "$out/bin/gupnp-universal-cp" --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.defaultIconTheme}/share:$out/share"
-  '';
+  buildInputs = [
+    gupnp
+    libuuid
+    gssdp
+    gtk3
+    gupnp-av
+    gtksourceview4
+    gnome3.adwaita-icon-theme
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
+    description = "Set of utilities and demos to work with UPnP";
+    homepage = "https://wiki.gnome.org/Projects/GUPnP";
+    license = licenses.gpl2Plus;
+    maintainers = teams.gnome.members;
+    platforms = platforms.linux;
+  };
 }

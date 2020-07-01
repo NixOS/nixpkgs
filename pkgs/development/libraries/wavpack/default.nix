@@ -1,23 +1,21 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "wavpack-${version}";
-  version = "4.70.0";
+  pname = "wavpack";
+  version = "5.3.0";
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    sed -i '2iexec_prefix=@exec_prefix@' wavpack.pc.in
-  '';
+  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
   src = fetchurl {
-    url = "http://www.wavpack.com/${name}.tar.bz2";
-    sha256 = "191h8hv8qk72hfh1crg429i9yq3cminwqb249sy9zadbn1wy7b9c";
+    url = "http://www.wavpack.com/${pname}-${version}.tar.bz2";
+    sha256 = "00baiag7rlkzc6545dqdp4p5sr7xc3n97n7qdkgx58c544x0pw5n";
   };
 
   meta = with stdenv.lib; {
     description = "Hybrid audio compression format";
-    homepage    = http://www.wavpack.com/;
+    homepage    = "http://www.wavpack.com/";
     license     = licenses.bsd3;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel ];

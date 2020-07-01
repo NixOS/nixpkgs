@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, makeDesktopItem, unzip, ant, jdk }:
+{ stdenv, lib, fetchurl, makeDesktopItem, unzip, ant, jdk
+# Optional, Jitsi still runs without, but you may pass null:
+, alsaLib, dbus, gtk2, libpulseaudio, openssl, xorg
+}:
 
 stdenv.mkDerivation rec {
-
-  name = "jitsi-${version}";
-  version = "2.4.4997";
+  pname = "jitsi";
+  version = "2.10.5550";
 
   src = fetchurl {
     url = "https://download.jitsi.org/jitsi/src/jitsi-src-${version}.zip";
-    sha256 = "f1c2688d7d6bf1916fed3b8b105a785662980c5b297dcab3c9e7d272647ef825";
+    sha256 = "11vjchc3dnzj55x7c62wsm6masvwmij1ifkds917r1qvil1nzz6d";
   };
 
   patches = [ ./jitsi.patch ];
@@ -18,29 +20,52 @@ stdenv.mkDerivation rec {
     comment = "VoIP and Instant Messaging client";
     desktopName = "Jitsi";
     genericName = "Instant Messaging";
-    categories = "Application;Internet;";
+    categories = "X-Internet;";
   };
 
-  buildInputs = [unzip ant jdk];
+  libPath = lib.makeLibraryPath ([
+    stdenv.cc.cc  # For libstdc++.
+    alsaLib
+    dbus
+    gtk2
+    libpulseaudio
+    openssl
+    xorg.libX11
+    xorg.libXext
+    xorg.libXScrnSaver
+    xorg.libXv
+  ]);
+
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ ant jdk ];
 
   buildPhase = ''ant make'';
 
   installPhase = ''
     mkdir -p $out
     cp -a lib $out/
+    rm -rf $out/lib/native/solaris
     cp -a sc-bundles $out/
     mkdir $out/bin
     cp resources/install/generic/run.sh $out/bin/jitsi
     chmod +x $out/bin/jitsi
-    sed -i 's| java | ${jdk}/bin/java |' $out/bin/jitsi
+    substituteInPlace $out/bin/jitsi \
+      --subst-var-by JAVA ${jdk}/bin/java \
+      --subst-var-by EXTRALIBS ${gtk2.out}/lib
+    sed -e 's,^java\ ,${jdk}/bin/java ,' -i $out/bin/jitsi
     patchShebangs $out
+    libPath="$libPath:${jdk.home}/lib/${jdk.architecture}"
+    find $out/ -type f -name '*.so' | while read file; do
+      patchelf --set-rpath "$libPath" "$file" && \
+          patchelf --shrink-rpath "$file"
+    done
   '';
 
-  meta = {
-    homepage = https://jitsi.org/;
+  meta = with stdenv.lib; {
+    homepage = "https://jitsi.org/";
     description = "Open Source Video Calls and Chat";
-    license = stdenv.lib.licenses.lgpl21Plus.shortName;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [];
   };
-
 }

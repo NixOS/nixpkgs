@@ -165,7 +165,7 @@ in
 
   }; # options.services
 
-  config = { 
+  config = {
 
     systemd.services.mwlib-nserve = mkIf cfg.nserve.enable
     {
@@ -191,7 +191,6 @@ in
       description = "mwlib job queue server";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "local-fs.target" ];
 
       preStart = ''
         mkdir -pv '${cfg.qserve.datadir}'
@@ -218,7 +217,7 @@ in
       description = "mwlib worker";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "local-fs.target" ];
+      after = [ "network.target" ];
 
       preStart = ''
         mkdir -pv '${cfg.nslave.cachedir}'
@@ -226,10 +225,11 @@ in
         chmod -Rc u=rwX,go= '${cfg.nslave.cachedir}'
       '';
 
+      path = with pkgs; [ imagemagick pdftk ];
       environment = {
         PYTHONPATH = concatMapStringsSep ":"
           (m: "${pypkgs.${m}}/lib/${python.libPrefix}/site-packages")
-          [ "mwlib-rl" "mwlib-ext" "pygments" ];
+          [ "mwlib-rl" "mwlib-ext" "pygments" "pyfribidi" ];
       };
 
       serviceConfig = {

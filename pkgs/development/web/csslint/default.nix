@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.10.0";
-  name = "csslint-${version}";
+  pname = "csslint";
 
   src = fetchurl {
-    url = "http://registry.npmjs.org/csslint/-/${name}.tgz";
+    url = "https://registry.npmjs.org/csslint/-/${pname}-${version}.tgz";
     sha256 = "1gq2x0pf2p4jhccvn3y3kjhm1lmb4jsfdbzjdh924w8m3sr9jdid";
   };
 
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "checks CSS for syntax errors and other problems";
+    description = "Checks CSS for syntax errors and other problems";
     longDescription = ''
       CSSLint is a tool to help point out problems with your CSS
       code. It does basic syntax checking as well as applying a set of
       rules to the code that look for problematic patterns or signs of
       inefficiency. The rules are all pluggable, so you can easily
       write your own or omit ones you don't want. '';
-    homepage = http://nodejs.org;
+    homepage = "https://nodejs.org";
     license = licenses.bsd2;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

@@ -1,23 +1,24 @@
 { stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "socat-2.0.0-b7";
+  name = "socat-2.0.0-b9";
 
   src = fetchurl {
     url = "http://www.dest-unreach.org/socat/download/${name}.tar.bz2";
-    sha256 = "0h6k9ccrnziw03j0if7myrd28vcc97nwz1bifmbrkp5jkpk69ygk";
+    sha256 = "1ll395xjv4byvv0k2zjbxk8vp3mg3y2w5paa05wv553bqsjv1vs9";
   };
 
   buildInputs = [ openssl ];
 
-  configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--disable-ip6";
+  patches = stdenv.lib.singleton ./libressl-fixes.patch ;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A utility for bidirectional data transfer between two independent data channels";
-    homepage = http://www.dest-unreach.org/socat/;
-    repositories.git = git://repo.or.cz/socat.git;
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    homepage = "http://www.dest-unreach.org/socat/";
+    repositories.git = "git://repo.or.cz/socat.git";
+    platforms = platforms.unix;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.eelco ];
+    broken = true;  # broken with openssl 1.1
   };
 }

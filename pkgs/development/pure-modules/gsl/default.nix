@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "06bdd873d5417d90ca35093056a060b77365123ed24c3ac583cd3922d4c78a75";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure gsl ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
     description = "GNU Scientific Library interface for Pure";
-    homepage = http://puredocs.bitbucket.org/pure-gsl.html;
+    homepage = "http://puredocs.bitbucket.org/pure-gsl.html";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

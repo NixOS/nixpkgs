@@ -1,0 +1,1153 @@
+From 453ff940449bbbde9ec00f0bbf82a359c5598fc7 Mon Sep 17 00:00:00 2001
+From: Bruno Haible <bruno@clisp.org>
+Date: Sat, 23 Mar 2019 23:00:52 +0100
+Subject: [PATCH 1/1] Support cross-compilation to musl libc.
+
+Reported by Necktwi Ozfguah <necktwi@ferryfair.com>.
+
+* m4/calloc.m4 (_AC_FUNC_CALLOC_IF): Add cross-compilation guesses for
+musl libc.
+* m4/canonicalize.m4 (gl_FUNC_REALPATH_WORKS): Likewise.
+* m4/chown.m4 (gl_FUNC_CHOWN): Likewise.
+* m4/d-ino.m4 (gl_CHECK_TYPE_STRUCT_DIRENT_D_INO): Likewise.
+* m4/fdopendir.m4 (gl_FUNC_FDOPENDIR): Likewise.
+* m4/fnmatch.m4 (gl_FUNC_FNMATCH_POSIX): Likewise.
+* m4/fpurge.m4 (gl_FUNC_FPURGE): Likewise.
+* m4/getcwd.m4 (gl_FUNC_GETCWD_NULL): Likewise.
+* m4/getcwd-abort-bug.m4 (gl_FUNC_GETCWD_ABORT_BUG): Likewise.
+* m4/getdelim.m4 (gl_FUNC_GETDELIM): Likewise.
+* m4/getgroups.m4 (AC_FUNC_GETGROUPS, gl_FUNC_GETGROUPS): Likewise.
+* m4/getline.m4 (gl_FUNC_GETLINE): Likewise.
+* m4/gettimeofday.m4 (gl_FUNC_GETTIMEOFDAY_CLOBBER): Likewise.
+* m4/hypot.m4 (gl_FUNC_HYPOT): Likewise.  // removed
+* m4/hypotf.m4 (gl_FUNC_HYPOTF): Likewise.  // removed
+* m4/hypotl.m4 (gl_FUNC_HYPOTL): Likewise.  // removed
+* m4/iconv_open-utf.m4 (gl_FUNC_ICONV_OPEN_UTF_SUPPORT): Likewise.  // removed
+* m4/link-follow.m4 (gl_FUNC_LINK_FOLLOWS_SYMLINK): Likewise.
+* m4/log.m4 (gl_FUNC_LOG): Likewise.  // removed
+* m4/logf.m4 (gl_FUNC_LOGF): Likewise.  // removed
+* m4/logl.m4 (gl_FUNC_LOGL_WORKS): Likewise.  // removed
+* m4/log10.m4 (gl_FUNC_LOG10): Likewise.  // removed
+* m4/log10f.m4 (gl_FUNC_LOG10F): Likewise.  // removed
+* m4/log10l.m4 (gl_FUNC_LOG10L): Likewise.  // removed
+* m4/log1p.m4 (gl_FUNC_LOG1P): Likewise.  // removed
+* m4/log1pf.m4 (gl_FUNC_LOG1PF): Likewise.  // removed
+* m4/log1pl.m4 (gl_FUNC_LOG1PL): Likewise.  // removed
+* m4/log2.m4 (gl_FUNC_LOG2): Likewise.  // removed
+* m4/log2f.m4 (gl_FUNC_LOG2F): Likewise.  // removed
+* m4/malloc.m4 (_AC_FUNC_MALLOC_IF): Likewise.
+* m4/mkdir.m4 (gl_FUNC_MKDIR): Likewise.
+* m4/mkstemp.m4 (gl_FUNC_MKSTEMP): Likewise.
+* m4/modf.m4 (gl_FUNC_MODF): Likewise.  // removed
+* m4/modff.m4 (gl_FUNC_MODFF): Likewise.  // removed
+* m4/modfl.m4 (gl_FUNC_MODFL): Likewise.  // removed
+* m4/perror.m4 (gl_FUNC_PERROR): Likewise.
+* m4/printf.m4 (gl_PRINTF_SIZES_C99, gl_PRINTF_INFINITE,
+gl_PRINTF_INFINITE_LONG_DOUBLE, gl_PRINTF_DIRECTIVE_A,
+gl_PRINTF_DIRECTIVE_F, gl_PRINTF_FLAG_ZERO, gl_SNPRINTF_TRUNCATION_C99,
+gl_SNPRINTF_RETVAL_C99, gl_SNPRINTF_DIRECTIVE_N,
+gl_VSNPRINTF_ZEROSIZE_C99): Likewise.
+* m4/ptsname.m4 (gl_FUNC_PTSNAME): Likewise.  // removed
+* m4/putenv.m4 (gl_FUNC_PUTENV): Likewise.
+* m4/realloc.m4 (_AC_FUNC_REALLOC_IF): Likewise.
+* m4/remainder.m4 (gl_FUNC_REMAINDER): Likewise.  // removed
+* m4/remainderf.m4 (gl_FUNC_REMAINDERF): Likewise.  // removed
+* m4/remainderl.m4 (gl_FUNC_REMAINDERL): Likewise.  // removed
+* m4/rintl.m4 (gl_FUNC_RINTL): Likewise.  // removed
+* m4/round.m4 (gl_FUNC_ROUND): Likewise.  // removed
+* m4/roundf.m4 (gl_FUNC_ROUNDF): Likewise.  // removed
+* m4/roundl.m4 (gl_FUNC_ROUNDL): Likewise.  // removed
+* m4/setenv.m4 (gl_FUNC_SETENV): Likewise.
+* m4/signbit.m4 (gl_SIGNBIT): Likewise.
+* m4/sleep.m4 (gl_FUNC_SLEEP): Likewise.
+* m4/stpncpy.m4 (gl_FUNC_STPNCPY): Likewise.
+* m4/strerror.m4 (gl_FUNC_STRERROR, gl_FUNC_STRERROR_0): Likewise.
+* m4/strtod.m4 (gl_FUNC_STRTOD): Likewise.
+* m4/strtold.m4 (gl_FUNC_STRTOLD): Likewise.
+* m4/trunc.m4 (gl_FUNC_TRUNC): Likewise.    // removed
+* m4/truncf.m4 (gl_FUNC_TRUNCF): Likewise.  // removed
+* m4/truncl.m4 (gl_FUNC_TRUNCL): Likewise.  // removed
+* m4/tzset.m4 (gl_FUNC_TZSET_CLOBBER): Likewise.
+* m4/ungetc.m4 (gl_FUNC_UNGETC_WORKS): Likewise.
+* m4/usleep.m4 (gl_FUNC_USLEEP): Likewise.
+* m4/utimes.m4 (gl_FUNC_UTIMES): Likewise.
+* m4/wcwidth.m4 (gl_FUNC_WCWIDTH): Likewise.
+---
+ m4/calloc.m4           |  4 ++-
+ m4/canonicalize.m4     |  4 ++-
+ m4/chown.m4            | 22 +++++++------
+ m4/d-ino.m4            | 16 +++++-----
+ m4/fdopendir.m4        | 12 ++++---
+ m4/fnmatch.m4          | 18 ++++++++---
+ m4/fpurge.m4           | 24 +++++++++-----
+ m4/getcwd-abort-bug.m4 | 11 +++++--
+ m4/getcwd.m4           |  4 ++-
+ m4/getdelim.m4         | 40 ++++++++++++++----------
+ m4/getgroups.m4        |  6 +++-
+ m4/getline.m4          | 38 +++++++++++++---------
+ m4/gettimeofday.m4     |  4 ++-
+ m4/link-follow.m4      |  4 ++-
+ m4/malloc.m4           |  4 +--
+ m4/mkdir.m4            |  4 ++-
+ m4/mkstemp.m4          |  4 ++-
+ m4/perror.m4           | 12 ++++---
+ m4/printf.m4           | 22 ++++++++++++-
+ m4/putenv.m4           |  4 ++-
+ m4/realloc.m4          |  4 +--
+ m4/setenv.m4           |  4 ++-
+ m4/signbit.m4          |  6 +++-
+ m4/sleep.m4            |  4 ++-
+ m4/stpncpy.m4          | 14 +++++++--
+ m4/strerror.m4         |  6 +++-
+ m4/strtod.m4           | 10 +++---
+ m4/strtold.m4          |  9 ++++--
+ m4/tzset.m4            |  4 ++-
+ m4/ungetc.m4           | 18 ++++++-----
+ m4/usleep.m4           |  4 ++-
+ m4/utimes.m4           | 10 +++---
+ m4/wcwidth.m4          | 12 ++++---
+ 76 files changed, 461 insertions(+), 157 deletions(-)
+
+diff --git a/m4/calloc.m4 b/m4/calloc.m4
+index 012a5bf..d76535d 100644
+--- a/m4/calloc.m4
++++ b/m4/calloc.m4
+@@ -1,4 +1,4 @@
+-# calloc.m4 serial 18
++# calloc.m4 serial 19
+
+ # Copyright (C) 2004-2019 Free Software Foundation, Inc.
+ # This file is free software; the Free Software Foundation
+@@ -40,6 +40,8 @@ AC_DEFUN([_AC_FUNC_CALLOC_IF],
+        [case "$host_os" in
+                          # Guess yes on glibc systems.
+           *-gnu* | gnu*) ac_cv_func_calloc_0_nonnull="guessing yes" ;;
++                         # Guess yes on musl systems.
++          *-musl*)       ac_cv_func_calloc_0_nonnull="guessing yes" ;;
+                          # Guess yes on native Windows.
+           mingw*)        ac_cv_func_calloc_0_nonnull="guessing yes" ;;
+                          # If we don't know, assume the worst.
+diff --git a/m4/canonicalize.m4 b/m4/canonicalize.m4
+index 5b6e25d..b61747b 100644
+--- a/m4/canonicalize.m4
++++ b/m4/canonicalize.m4
+@@ -1,4 +1,4 @@
+-# canonicalize.m4 serial 29
++# canonicalize.m4 serial 30
+
+ dnl Copyright (C) 2003-2007, 2009-2019 Free Software Foundation, Inc.
+
+@@ -113,6 +113,8 @@ AC_DEFUN([gl_FUNC_REALPATH_WORKS],
+      [case "$host_os" in
+                        # Guess yes on glibc systems.
+         *-gnu* | gnu*) gl_cv_func_realpath_works="guessing yes" ;;
++                       # Guess yes on musl systems.
++        *-musl*)       gl_cv_func_realpath_works="guessing yes" ;;
+                        # Guess no on native Windows.
+         mingw*)        gl_cv_func_realpath_works="guessing no" ;;
+                        # If we don't know, assume the worst.
+diff --git a/m4/chown.m4 b/m4/chown.m4
+index ecfc0c0..b798325 100644
+--- a/m4/chown.m4
++++ b/m4/chown.m4
+@@ -1,4 +1,4 @@
+-# serial 30
++# serial 32
+ # Determine whether we need the chown wrapper.
+
+ dnl Copyright (C) 1997-2001, 2003-2005, 2007, 2009-2019 Free Software
+@@ -109,10 +109,12 @@ AC_DEFUN_ONCE([gl_FUNC_CHOWN],
+         [gl_cv_func_chown_slash_works=yes],
+         [gl_cv_func_chown_slash_works=no],
+         [case "$host_os" in
+-                   # Guess yes on glibc systems.
+-           *-gnu*) gl_cv_func_chown_slash_works="guessing yes" ;;
+-                   # If we don't know, assume the worst.
+-           *)      gl_cv_func_chown_slash_works="guessing no" ;;
++                    # Guess yes on glibc systems.
++           *-gnu*)  gl_cv_func_chown_slash_works="guessing yes" ;;
++                    # Guess yes on musl systems.
++           *-musl*) gl_cv_func_chown_slash_works="guessing yes" ;;
++                    # If we don't know, assume the worst.
++           *)       gl_cv_func_chown_slash_works="guessing no" ;;
+          esac
+         ])
+       rm -f conftest.link conftest.file])
+@@ -145,10 +147,12 @@ AC_DEFUN_ONCE([gl_FUNC_CHOWN],
+         [gl_cv_func_chown_ctime_works=yes],
+         [gl_cv_func_chown_ctime_works=no],
+         [case "$host_os" in
+-                   # Guess yes on glibc systems.
+-           *-gnu*) gl_cv_func_chown_ctime_works="guessing yes" ;;
+-                   # If we don't know, assume the worst.
+-           *)      gl_cv_func_chown_ctime_works="guessing no" ;;
++                    # Guess yes on glibc systems.
++           *-gnu*)  gl_cv_func_chown_ctime_works="guessing yes" ;;
++                    # Guess yes on musl systems.
++           *-musl*) gl_cv_func_chown_ctime_works="guessing yes" ;;
++                    # If we don't know, assume the worst.
++           *)       gl_cv_func_chown_ctime_works="guessing no" ;;
+          esac
+         ])
+       rm -f conftest.file])
+diff --git a/m4/d-ino.m4 b/m4/d-ino.m4
+index f1420cc..87dcacc 100644
+--- a/m4/d-ino.m4
++++ b/m4/d-ino.m4
+@@ -1,4 +1,4 @@
+-# serial 18
++# serial 19
+
+ dnl From Jim Meyering.
+ dnl
+@@ -40,12 +40,14 @@ AC_DEFUN([gl_CHECK_TYPE_STRUCT_DIRENT_D_INO],
+            [gl_cv_struct_dirent_d_ino=yes],
+            [gl_cv_struct_dirent_d_ino=no],
+            [case "$host_os" in
+-                           # Guess yes on glibc systems with Linux kernel.
+-              linux*-gnu*) gl_cv_struct_dirent_d_ino="guessing yes" ;;
+-                           # Guess no on native Windows.
+-              mingw*)      gl_cv_struct_dirent_d_ino="guessing no" ;;
+-                           # If we don't know, assume the worst.
+-              *)           gl_cv_struct_dirent_d_ino="guessing no" ;;
++                            # Guess yes on glibc systems with Linux kernel.
++              linux*-gnu*)  gl_cv_struct_dirent_d_ino="guessing yes" ;;
++                            # Guess yes on musl systems with Linux kernel.
++              linux*-musl*) gl_cv_struct_dirent_d_ino="guessing yes" ;;
++                            # Guess no on native Windows.
++              mingw*)       gl_cv_struct_dirent_d_ino="guessing no" ;;
++                            # If we don't know, assume the worst.
++              *)            gl_cv_struct_dirent_d_ino="guessing no" ;;
+             esac
+            ])])
+    case "$gl_cv_struct_dirent_d_ino" in
+diff --git a/m4/fdopendir.m4 b/m4/fdopendir.m4
+index 0490551..b2b3b03 100644
+--- a/m4/fdopendir.m4
++++ b/m4/fdopendir.m4
+@@ -1,4 +1,4 @@
+-# serial 10
++# serial 11
+ # See if we need to provide fdopendir.
+
+ dnl Copyright (C) 2009-2019 Free Software Foundation, Inc.
+@@ -45,10 +45,12 @@ DIR *fdopendir (int);
+          [gl_cv_func_fdopendir_works=yes],
+          [gl_cv_func_fdopendir_works=no],
+          [case "$host_os" in
+-                    # Guess yes on glibc systems.
+-            *-gnu*) gl_cv_func_fdopendir_works="guessing yes" ;;
+-                    # If we don't know, assume the worst.
+-            *)      gl_cv_func_fdopendir_works="guessing no" ;;
++                     # Guess yes on glibc systems.
++            *-gnu*)  gl_cv_func_fdopendir_works="guessing yes" ;;
++                     # Guess yes on musl systems.
++            *-musl*) gl_cv_func_fdopendir_works="guessing yes" ;;
++                     # If we don't know, assume the worst.
++            *)       gl_cv_func_fdopendir_works="guessing no" ;;
+           esac
+          ])])
+     case "$gl_cv_func_fdopendir_works" in
+diff --git a/m4/fnmatch.m4 b/m4/fnmatch.m4
+index c264ca7..75ba55b 100644
+--- a/m4/fnmatch.m4
++++ b/m4/fnmatch.m4
+@@ -1,4 +1,4 @@
+-# Check for fnmatch - serial 13.  -*- coding: utf-8 -*-
++# Check for fnmatch - serial 14.  -*- coding: utf-8 -*-
+
+ # Copyright (C) 2000-2007, 2009-2019 Free Software Foundation, Inc.
+ # This file is free software; the Free Software Foundation
+@@ -14,6 +14,7 @@ AC_DEFUN([gl_FUNC_FNMATCH_POSIX],
+   m4_divert_text([DEFAULTS], [gl_fnmatch_required=POSIX])
+
+   AC_REQUIRE([gl_FNMATCH_H])
++  AC_REQUIRE([AC_CANONICAL_HOST]) dnl for cross-compiles
+   gl_fnmatch_required_lowercase=`
+     echo $gl_fnmatch_required | LC_ALL=C tr '[[A-Z]]' '[[a-z]]'
+   `
+@@ -117,12 +118,19 @@ AC_DEFUN([gl_FUNC_FNMATCH_POSIX],
+             ]])],
+          [eval "$gl_fnmatch_cache_var=yes"],
+          [eval "$gl_fnmatch_cache_var=no"],
+-         [eval "$gl_fnmatch_cache_var=\"guessing no\""])
++         [case "$host_os" in
++                     # Guess yes on musl systems.
++            *-musl*) eval "$gl_fnmatch_cache_var=\"guessing yes\"" ;;
++                     # Guess no otherwise, even on glibc systems.
++            *)       eval "$gl_fnmatch_cache_var=\"guessing no\"" ;;
++          esac
++         ])
+       ])
+     eval "gl_fnmatch_result=\"\$$gl_fnmatch_cache_var\""
+-    if test "$gl_fnmatch_result" != yes; then
+-      REPLACE_FNMATCH=1
+-    fi
++    case "$gl_fnmatch_result" in
++      *yes) ;;
++      *) REPLACE_FNMATCH=1 ;;
++    esac
+   fi
+   if test $HAVE_FNMATCH = 0 || test $REPLACE_FNMATCH = 1; then
+     gl_REPLACE_FNMATCH_H
+diff --git a/m4/fpurge.m4 b/m4/fpurge.m4
+index cb21f56..6c5b3e9 100644
+--- a/m4/fpurge.m4
++++ b/m4/fpurge.m4
+@@ -1,4 +1,4 @@
+-# fpurge.m4 serial 8
++# fpurge.m4 serial 9
+ dnl Copyright (C) 2007, 2009-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -7,12 +7,13 @@ dnl with or without modifications, as long as this notice is preserved.
+ AC_DEFUN([gl_FUNC_FPURGE],
+ [
+   AC_REQUIRE([gl_STDIO_H_DEFAULTS])
++  AC_REQUIRE([AC_CANONICAL_HOST]) dnl for cross-compiles
+   AC_CHECK_FUNCS_ONCE([fpurge])
+   AC_CHECK_FUNCS_ONCE([__fpurge])
+   AC_CHECK_DECLS([fpurge], , , [[#include <stdio.h>]])
+   if test "x$ac_cv_func_fpurge" = xyes; then
+     HAVE_FPURGE=1
+-    # Detect BSD bug.  Only cygwin 1.7 is known to be immune.
++    # Detect BSD bug.  Only cygwin 1.7 and musl are known to be immune.
+     AC_CACHE_CHECK([whether fpurge works], [gl_cv_func_fpurge_works],
+       [AC_RUN_IFELSE(
+          [AC_LANG_PROGRAM(
+@@ -48,11 +49,20 @@ AC_DEFUN([gl_FUNC_FPURGE],
+                return 13;
+              return 0;
+             ])],
+-      [gl_cv_func_fpurge_works=yes], [gl_cv_func_fpurge_works=no],
+-      [gl_cv_func_fpurge_works='guessing no'])])
+-    if test "x$gl_cv_func_fpurge_works" != xyes; then
+-      REPLACE_FPURGE=1
+-    fi
++         [gl_cv_func_fpurge_works=yes],
++         [gl_cv_func_fpurge_works=no],
++         [case "$host_os" in
++                     # Guess yes on musl systems.
++            *-musl*) gl_cv_func_fpurge_works="guessing yes" ;;
++                     # Guess no otherwise.
++            *)       gl_cv_func_fpurge_works="guessing no" ;;
++          esac
++         ])
++      ])
++    case "$gl_cv_func_fpurge_works" in
++      *yes) ;;
++      *) REPLACE_FPURGE=1 ;;
++    esac
+   else
+     HAVE_FPURGE=0
+   fi
+diff --git a/m4/getcwd-abort-bug.m4 b/m4/getcwd-abort-bug.m4
+index f0f24a5..7227f08 100644
+--- a/m4/getcwd-abort-bug.m4
++++ b/m4/getcwd-abort-bug.m4
+@@ -1,4 +1,4 @@
+-# serial 9
++# serial 11
+ # Determine whether getcwd aborts when the length of the working directory
+ # name is unusually large.  Any length between 4k and 16k trigger the bug
+ # when using glibc-2.4.90-9 or older.
+@@ -13,6 +13,7 @@
+ # gl_FUNC_GETCWD_ABORT_BUG([ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]])
+ AC_DEFUN([gl_FUNC_GETCWD_ABORT_BUG],
+ [
++  AC_REQUIRE([AC_CANONICAL_HOST]) dnl for cross-compiles
+   AC_CHECK_DECLS_ONCE([getcwd])
+   AC_CHECK_HEADERS_ONCE([unistd.h])
+   AC_REQUIRE([gl_PATHMAX_SNIPPET_PREREQ])
+@@ -142,7 +143,13 @@ main ()
+         else
+           gl_cv_func_getcwd_abort_bug=no
+         fi],
+-       [gl_cv_func_getcwd_abort_bug=yes])
++       [case "$host_os" in
++                   # Guess no on musl systems.
++          *-musl*) gl_cv_func_getcwd_abort_bug="guessing no" ;;
++                   # Guess yes otherwise, even on glibc systems.
++          *)       gl_cv_func_getcwd_abort_bug="guessing yes"
++        esac
++       ])
+     ])
+   AS_IF([test $gl_cv_func_getcwd_abort_bug = yes], [$1], [$2])
+ ])
+diff --git a/m4/getcwd.m4 b/m4/getcwd.m4
+index 4929b51..625171a 100644
+--- a/m4/getcwd.m4
++++ b/m4/getcwd.m4
+@@ -6,7 +6,7 @@
+ # with or without modifications, as long as this notice is preserved.
+
+ # Written by Paul Eggert.
+-# serial 16
++# serial 17
+
+ AC_DEFUN([gl_FUNC_GETCWD_NULL],
+   [
+@@ -50,6 +50,8 @@ AC_DEFUN([gl_FUNC_GETCWD_NULL],
+         [[case "$host_os" in
+                            # Guess yes on glibc systems.
+             *-gnu* | gnu*) gl_cv_func_getcwd_null="guessing yes";;
++                           # Guess yes on musl systems.
++            *-musl*)       gl_cv_func_getcwd_null="guessing yes";;
+                            # Guess yes on Cygwin.
+             cygwin*)       gl_cv_func_getcwd_null="guessing yes";;
+                            # If we don't know, assume the worst.
+diff --git a/m4/getdelim.m4 b/m4/getdelim.m4
+index bf17c57..e77c379 100644
+--- a/m4/getdelim.m4
++++ b/m4/getdelim.m4
+@@ -1,4 +1,4 @@
+-# getdelim.m4 serial 12
++# getdelim.m4 serial 13
+
+ dnl Copyright (C) 2005-2007, 2009-2019 Free Software Foundation, Inc.
+ dnl
+@@ -11,6 +11,7 @@ AC_PREREQ([2.59])
+ AC_DEFUN([gl_FUNC_GETDELIM],
+ [
+   AC_REQUIRE([gl_STDIO_H_DEFAULTS])
++  AC_REQUIRE([AC_CANONICAL_HOST]) dnl for cross-compiles
+
+   dnl Persuade glibc <stdio.h> to declare getdelim().
+   AC_REQUIRE([AC_USE_SYSTEM_EXTENSIONS])
+@@ -21,9 +22,10 @@ AC_DEFUN([gl_FUNC_GETDELIM],
+   if test $ac_cv_func_getdelim = yes; then
+     HAVE_GETDELIM=1
+     dnl Found it in some library.  Verify that it works.
+-    AC_CACHE_CHECK([for working getdelim function], [gl_cv_func_working_getdelim],
+-    [echo fooNbarN | tr -d '\012' | tr N '\012' > conftest.data
+-    AC_RUN_IFELSE([AC_LANG_SOURCE([[
++    AC_CACHE_CHECK([for working getdelim function],
++      [gl_cv_func_working_getdelim],
++      [echo fooNbarN | tr -d '\012' | tr N '\012' > conftest.data
++       AC_RUN_IFELSE([AC_LANG_SOURCE([[
+ #    include <stdio.h>
+ #    include <stdlib.h>
+ #    include <string.h>
+@@ -53,25 +55,31 @@ AC_DEFUN([gl_FUNC_GETDELIM],
+       fclose (in);
+       return 0;
+     }
+-    ]])], [gl_cv_func_working_getdelim=yes] dnl The library version works.
+-    , [gl_cv_func_working_getdelim=no] dnl The library version does NOT work.
+-    , dnl We're cross compiling. Assume it works on glibc2 systems.
+-      [AC_EGREP_CPP([Lucky GNU user],
+-         [
++    ]])],
++         [gl_cv_func_working_getdelim=yes],
++         [gl_cv_func_working_getdelim=no],
++         [dnl We're cross compiling.
++          dnl Guess it works on glibc2 systems and musl systems.
++          AC_EGREP_CPP([Lucky GNU user],
++            [
+ #include <features.h>
+ #ifdef __GNU_LIBRARY__
+  #if (__GLIBC__ >= 2) && !defined __UCLIBC__
+   Lucky GNU user
+  #endif
+ #endif
+-         ],
+-         [gl_cv_func_working_getdelim="guessing yes"],
+-         [gl_cv_func_working_getdelim="guessing no"])]
+-    )])
++            ],
++            [gl_cv_func_working_getdelim="guessing yes"],
++            [case "$host_os" in
++               *-musl*) gl_cv_func_working_getdelim="guessing yes" ;;
++               *)       gl_cv_func_working_getdelim="guessing no" ;;
++             esac
++            ])
++         ])
++      ])
+     case "$gl_cv_func_working_getdelim" in
+-      *no)
+-        REPLACE_GETDELIM=1
+-        ;;
++      *yes) ;;
++      *) REPLACE_GETDELIM=1 ;;
+     esac
+   else
+     HAVE_GETDELIM=0
+diff --git a/m4/getgroups.m4 b/m4/getgroups.m4
+index 2ce986e..c93447b 100644
+--- a/m4/getgroups.m4
++++ b/m4/getgroups.m4
+@@ -1,4 +1,4 @@
+-# serial 21
++# serial 22
+
+ dnl From Jim Meyering.
+ dnl A wrapper around AC_FUNC_GETGROUPS.
+@@ -42,6 +42,8 @@ AC_DEFUN([AC_FUNC_GETGROUPS],
+          [case "$host_os" in # ((
+                            # Guess yes on glibc systems.
+             *-gnu* | gnu*) ac_cv_func_getgroups_works="guessing yes" ;;
++                           # Guess yes on musl systems.
++            *-musl*)       ac_cv_func_getgroups_works="guessing yes" ;;
+                            # If we don't know, assume the worst.
+             *)             ac_cv_func_getgroups_works="guessing no" ;;
+           esac
+@@ -95,6 +97,8 @@ AC_DEFUN([gl_FUNC_GETGROUPS],
+           [case "$host_os" in
+                             # Guess yes on glibc systems.
+              *-gnu* | gnu*) gl_cv_func_getgroups_works="guessing yes" ;;
++                            # Guess yes on musl systems.
++             *-musl*)       gl_cv_func_getgroups_works="guessing yes" ;;
+                             # If we don't know, assume the worst.
+              *)             gl_cv_func_getgroups_works="guessing no" ;;
+            esac
+diff --git a/m4/getline.m4 b/m4/getline.m4
+index 5b2ead2..32f771c 100644
+--- a/m4/getline.m4
++++ b/m4/getline.m4
+@@ -1,4 +1,4 @@
+-# getline.m4 serial 28
++# getline.m4 serial 29
+
+ dnl Copyright (C) 1998-2003, 2005-2007, 2009-2019 Free Software Foundation,
+ dnl Inc.
+@@ -16,6 +16,7 @@ dnl to do with the function we need.
+ AC_DEFUN([gl_FUNC_GETLINE],
+ [
+   AC_REQUIRE([gl_STDIO_H_DEFAULTS])
++  AC_REQUIRE([AC_CANONICAL_HOST]) dnl for cross-compiles
+
+   dnl Persuade glibc <stdio.h> to declare getline().
+   AC_REQUIRE([AC_USE_SYSTEM_EXTENSIONS])
+@@ -28,9 +29,10 @@ AC_DEFUN([gl_FUNC_GETLINE],
+                  gl_getline_needs_run_time_check=yes],
+                 [am_cv_func_working_getline=no])
+   if test $gl_getline_needs_run_time_check = yes; then
+-    AC_CACHE_CHECK([for working getline function], [am_cv_func_working_getline],
+-    [echo fooNbarN | tr -d '\012' | tr N '\012' > conftest.data
+-    AC_RUN_IFELSE([AC_LANG_SOURCE([[
++    AC_CACHE_CHECK([for working getline function],
++      [am_cv_func_working_getline],
++      [echo fooNbarN | tr -d '\012' | tr N '\012' > conftest.data
++       AC_RUN_IFELSE([AC_LANG_SOURCE([[
+ #    include <stdio.h>
+ #    include <stdlib.h>
+ #    include <string.h>
+@@ -61,21 +63,28 @@ AC_DEFUN([gl_FUNC_GETLINE],
+       fclose (in);
+       return 0;
+     }
+-    ]])], [am_cv_func_working_getline=yes] dnl The library version works.
+-    , [am_cv_func_working_getline=no] dnl The library version does NOT work.
+-    , dnl We're cross compiling. Assume it works on glibc2 systems.
+-      [AC_EGREP_CPP([Lucky GNU user],
+-         [
++    ]])],
++         [am_cv_func_working_getline=yes],
++         [am_cv_func_working_getline=no],
++         [dnl We're cross compiling.
++          dnl Guess it works on glibc2 systems and musl systems.
++          AC_EGREP_CPP([Lucky GNU user],
++            [
+ #include <features.h>
+ #ifdef __GNU_LIBRARY__
+  #if (__GLIBC__ >= 2) && !defined __UCLIBC__
+   Lucky GNU user
+  #endif
+ #endif
+-         ],
+-         [am_cv_func_working_getline="guessing yes"],
+-         [am_cv_func_working_getline="guessing no"])]
+-    )])
++            ],
++            [am_cv_func_working_getline="guessing yes"],
++            [case "$host_os" in
++               *-musl*) am_cv_func_working_getline="guessing yes" ;;
++               *)       am_cv_func_working_getline="guessing no" ;;
++             esac
++            ])
++         ])
++      ])
+   fi
+
+   if test $ac_cv_have_decl_getline = no; then
+@@ -83,7 +92,8 @@ AC_DEFUN([gl_FUNC_GETLINE],
+   fi
+
+   case "$am_cv_func_working_getline" in
+-    *no)
++    *yes) ;;
++    *)
+       dnl Set REPLACE_GETLINE always: Even if we have not found the broken
+       dnl getline function among $LIBS, it may exist in libinet and the
+       dnl executable may be linked with -linet.
+diff --git a/m4/gettimeofday.m4 b/m4/gettimeofday.m4
+index d29b4bf..5e2ef6f 100644
+--- a/m4/gettimeofday.m4
++++ b/m4/gettimeofday.m4
+@@ -1,4 +1,4 @@
+-# serial 25
++# serial 26
+
+ # Copyright (C) 2001-2003, 2005, 2007, 2009-2019 Free Software Foundation, Inc.
+ # This file is free software; the Free Software Foundation
+@@ -105,6 +105,8 @@ AC_DEFUN([gl_FUNC_GETTIMEOFDAY_CLOBBER],
+       case "$host_os" in
+                        # Guess all is fine on glibc systems.
+         *-gnu* | gnu*) gl_cv_func_gettimeofday_clobber="guessing no" ;;
++                       # Guess all is fine on musl systems.
++        *-musl*)       gl_cv_func_gettimeofday_clobber="guessing no" ;;
+                        # Guess no on native Windows.
+         mingw*)        gl_cv_func_gettimeofday_clobber="guessing no" ;;
+                        # If we don't know, assume the worst.
+diff --git a/m4/link-follow.m4 b/m4/link-follow.m4
+index cbd2dca..8ac7301 100644
+--- a/m4/link-follow.m4
++++ b/m4/link-follow.m4
+@@ -1,4 +1,4 @@
+-# serial 20
++# serial 21
+ dnl Run a program to determine whether link(2) follows symlinks.
+ dnl Set LINK_FOLLOWS_SYMLINKS accordingly.
+
+@@ -88,6 +88,8 @@ AC_DEFUN([gl_FUNC_LINK_FOLLOWS_SYMLINK],
+             case "$host_os" in
+                                   # On glibc/Linux we know the result.
+               linux*-gnu* | gnu*) gl_cv_func_link_follows_symlink="guessing no" ;;
++                                  # On musl/Linux we know the result.
++              linux*-musl*)       gl_cv_func_link_follows_symlink="guessing no" ;;
+                                   # Otherwise, we don't know.
+               *)                  gl_cv_func_link_follows_symlink=unknown ;;
+             esac
+diff --git a/m4/malloc.m4 b/m4/malloc.m4
+index b9b8d4b..c469c45 100644
+--- a/m4/malloc.m4
++++ b/m4/malloc.m4
+@@ -1,4 +1,4 @@
+-# malloc.m4 serial 17
++# malloc.m4 serial 19
+ dnl Copyright (C) 2007, 2009-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -32,7 +32,7 @@ AC_DEFUN([_AC_FUNC_MALLOC_IF],
+        [ac_cv_func_malloc_0_nonnull=no],
+        [case "$host_os" in
+           # Guess yes on platforms where we know the result.
+-          *-gnu* | gnu* | freebsd* | netbsd* | openbsd* \
++          *-gnu* | gnu* | *-musl* | freebsd* | netbsd* | openbsd* \
+           | hpux* | solaris* | cygwin* | mingw*)
+             ac_cv_func_malloc_0_nonnull="guessing yes" ;;
+           # If we don't know, assume the worst.
+diff --git a/m4/mkdir.m4 b/m4/mkdir.m4
+index 4cd9590..366a3cd 100644
+--- a/m4/mkdir.m4
++++ b/m4/mkdir.m4
+@@ -1,4 +1,4 @@
+-# serial 14
++# serial 15
+
+ # Copyright (C) 2001, 2003-2004, 2006, 2008-2019 Free Software Foundation, Inc.
+ # This file is free software; the Free Software Foundation
+@@ -62,6 +62,8 @@ AC_DEFUN([gl_FUNC_MKDIR],
+       [case "$host_os" in
+                         # Guess yes on glibc systems.
+          *-gnu* | gnu*) gl_cv_func_mkdir_trailing_dot_works="guessing yes" ;;
++                        # Guess yes on musl systems.
++         *-musl*)       gl_cv_func_mkdir_trailing_dot_works="guessing yes" ;;
+                         # Guess no on native Windows.
+          mingw*)        gl_cv_func_mkdir_trailing_dot_works="guessing no" ;;
+                         # If we don't know, assume the worst.
+diff --git a/m4/mkstemp.m4 b/m4/mkstemp.m4
+index ae24c3b..1b15c2e 100644
+--- a/m4/mkstemp.m4
++++ b/m4/mkstemp.m4
+@@ -1,4 +1,4 @@
+-#serial 25
++#serial 26
+
+ # Copyright (C) 2001, 2003-2007, 2009-2019 Free Software Foundation, Inc.
+ # This file is free software; the Free Software Foundation
+@@ -59,6 +59,8 @@ AC_DEFUN([gl_FUNC_MKSTEMP],
+           [case "$host_os" in
+                             # Guess yes on glibc systems.
+              *-gnu* | gnu*) gl_cv_func_working_mkstemp="guessing yes" ;;
++                            # Guess yes on musl systems.
++             *-musl*)       gl_cv_func_working_mkstemp="guessing yes" ;;
+                             # Guess no on native Windows.
+              mingw*)        gl_cv_func_working_mkstemp="guessing no" ;;
+                             # If we don't know, assume the worst.
+diff --git a/m4/perror.m4 b/m4/perror.m4
+index 335be72..08e2db1 100644
+--- a/m4/perror.m4
++++ b/m4/perror.m4
+@@ -1,4 +1,4 @@
+-# perror.m4 serial 7
++# perror.m4 serial 8
+ dnl Copyright (C) 2008-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -48,10 +48,12 @@ AC_DEFUN([gl_FUNC_PERROR],
+             rm -rf conftest.txt1 conftest.txt2],
+            [gl_cv_func_perror_works=no],
+            [case "$host_os" in
+-                      # Guess yes on native Windows.
+-              mingw*) gl_cv_func_perror_works="guessing yes" ;;
+-                      # Otherwise guess no.
+-              *)      gl_cv_func_perror_works="guessing no" ;;
++                       # Guess yes on musl systems.
++              *-musl*) gl_cv_func_perror_works="guessing yes" ;;
++                       # Guess yes on native Windows.
++              mingw*)  gl_cv_func_perror_works="guessing yes" ;;
++                       # Otherwise guess no.
++              *)       gl_cv_func_perror_works="guessing no" ;;
+             esac
+            ])
+         ])
+diff --git a/m4/printf.m4 b/m4/printf.m4
+index cbf6ae4..6d2280e 100644
+--- a/m4/printf.m4
++++ b/m4/printf.m4
+@@ -1,4 +1,4 @@
+-# printf.m4 serial 60
++# printf.m4 serial 61
+ dnl Copyright (C) 2003, 2007-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -62,6 +62,8 @@ int main ()
+ changequote(,)dnl
+                                  # Guess yes on glibc systems.
+            *-gnu* | gnu*)        gl_cv_func_printf_sizes_c99="guessing yes";;
++                                 # Guess yes on musl systems.
++           *-musl*)              gl_cv_func_printf_sizes_c99="guessing yes";;
+                                  # Guess yes on FreeBSD >= 5.
+            freebsd[1-4].*)       gl_cv_func_printf_sizes_c99="guessing no";;
+            freebsd* | kfreebsd*) gl_cv_func_printf_sizes_c99="guessing yes";;
+@@ -240,6 +242,8 @@ int main ()
+ changequote(,)dnl
+                                  # Guess yes on glibc systems.
+            *-gnu* | gnu*)        gl_cv_func_printf_infinite="guessing yes";;
++                                 # Guess yes on musl systems.
++           *-musl*)              gl_cv_func_printf_infinite="guessing yes";;
+                                  # Guess yes on FreeBSD >= 6.
+            freebsd[1-5].*)       gl_cv_func_printf_infinite="guessing no";;
+            freebsd* | kfreebsd*) gl_cv_func_printf_infinite="guessing yes";;
+@@ -457,6 +461,8 @@ int main ()
+ changequote(,)dnl
+                                          # Guess yes on glibc systems.
+                    *-gnu* | gnu*)        gl_cv_func_printf_infinite_long_double="guessing yes";;
++                                         # Guess yes on musl systems.
++                   *-musl*)              gl_cv_func_printf_infinite_long_double="guessing yes";;
+                                          # Guess yes on FreeBSD >= 6.
+                    freebsd[1-5].*)       gl_cv_func_printf_infinite_long_double="guessing no";;
+                    freebsd* | kfreebsd*) gl_cv_func_printf_infinite_long_double="guessing yes";;
+@@ -575,6 +581,8 @@ int main ()
+                [gl_cv_func_printf_directive_a="guessing yes"],
+                [gl_cv_func_printf_directive_a="guessing no"])
+              ;;
++                                 # Guess yes on musl systems.
++           *-musl*)              gl_cv_func_printf_directive_a="guessing yes";;
+                                  # Guess no on Android.
+            linux*-android*)      gl_cv_func_printf_directive_a="guessing no";;
+                                  # Guess no on native Windows.
+@@ -625,6 +633,8 @@ int main ()
+ changequote(,)dnl
+                                  # Guess yes on glibc systems.
+            *-gnu* | gnu*)        gl_cv_func_printf_directive_f="guessing yes";;
++                                 # Guess yes on musl systems.
++           *-musl*)              gl_cv_func_printf_directive_f="guessing yes";;
+                                  # Guess yes on FreeBSD >= 6.
+            freebsd[1-5].*)       gl_cv_func_printf_directive_f="guessing no";;
+            freebsd* | kfreebsd*) gl_cv_func_printf_directive_f="guessing yes";;
+@@ -960,6 +970,8 @@ changequote(,)dnl
+          case "$host_os" in
+                             # Guess yes on glibc systems.
+            *-gnu* | gnu*)   gl_cv_func_printf_flag_zero="guessing yes";;
++                            # Guess yes on musl systems.
++           *-musl*)         gl_cv_func_printf_flag_zero="guessing yes";;
+                             # Guess yes on BeOS.
+            beos*)           gl_cv_func_printf_flag_zero="guessing yes";;
+                             # Guess no on Android.
+@@ -1206,6 +1218,8 @@ changequote(,)dnl
+          case "$host_os" in
+                                  # Guess yes on glibc systems.
+            *-gnu* | gnu*)        gl_cv_func_snprintf_truncation_c99="guessing yes";;
++                                 # Guess yes on musl systems.
++           *-musl*)              gl_cv_func_snprintf_truncation_c99="guessing yes";;
+                                  # Guess yes on FreeBSD >= 5.
+            freebsd[1-4].*)       gl_cv_func_snprintf_truncation_c99="guessing no";;
+            freebsd* | kfreebsd*) gl_cv_func_snprintf_truncation_c99="guessing yes";;
+@@ -1308,6 +1322,8 @@ int main ()
+ changequote(,)dnl
+                                  # Guess yes on glibc systems.
+            *-gnu* | gnu*)        gl_cv_func_snprintf_retval_c99="guessing yes";;
++                                 # Guess yes on musl systems.
++           *-musl*)              gl_cv_func_snprintf_retval_c99="guessing yes";;
+                                  # Guess yes on FreeBSD >= 5.
+            freebsd[1-4].*)       gl_cv_func_snprintf_retval_c99="guessing no";;
+            freebsd* | kfreebsd*) gl_cv_func_snprintf_retval_c99="guessing yes";;
+@@ -1400,6 +1416,8 @@ changequote(,)dnl
+          case "$host_os" in
+                                  # Guess yes on glibc systems.
+            *-gnu* | gnu*)        gl_cv_func_snprintf_directive_n="guessing yes";;
++                                 # Guess yes on musl systems.
++           *-musl*)              gl_cv_func_snprintf_directive_n="guessing yes";;
+                                  # Guess yes on FreeBSD >= 5.
+            freebsd[1-4].*)       gl_cv_func_snprintf_directive_n="guessing no";;
+            freebsd* | kfreebsd*) gl_cv_func_snprintf_directive_n="guessing yes";;
+@@ -1554,6 +1572,8 @@ changequote(,)dnl
+          case "$host_os" in
+                                  # Guess yes on glibc systems.
+            *-gnu* | gnu*)        gl_cv_func_vsnprintf_zerosize_c99="guessing yes";;
++                                 # Guess yes on musl systems.
++           *-musl*)              gl_cv_func_vsnprintf_zerosize_c99="guessing yes";;
+                                  # Guess yes on FreeBSD >= 5.
+            freebsd[1-4].*)       gl_cv_func_vsnprintf_zerosize_c99="guessing no";;
+            freebsd* | kfreebsd*) gl_cv_func_vsnprintf_zerosize_c99="guessing yes";;
+diff --git a/m4/putenv.m4 b/m4/putenv.m4
+index f8960f6..342ba26 100644
+--- a/m4/putenv.m4
++++ b/m4/putenv.m4
+@@ -1,4 +1,4 @@
+-# putenv.m4 serial 22
++# putenv.m4 serial 23
+ dnl Copyright (C) 2002-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -36,6 +36,8 @@ AC_DEFUN([gl_FUNC_PUTENV],
+              [case "$host_os" in
+                                # Guess yes on glibc systems.
+                 *-gnu* | gnu*) gl_cv_func_svid_putenv="guessing yes" ;;
++                               # Guess yes on musl systems.
++                *-musl*)       gl_cv_func_svid_putenv="guessing yes" ;;
+                                # Guess no on native Windows.
+                 mingw*)        gl_cv_func_svid_putenv="guessing no" ;;
+                                # If we don't know, assume the worst.
+diff --git a/m4/realloc.m4 b/m4/realloc.m4
+index f9f15ad..93066e8 100644
+--- a/m4/realloc.m4
++++ b/m4/realloc.m4
+@@ -1,4 +1,4 @@
+-# realloc.m4 serial 15
++# realloc.m4 serial 17
+ dnl Copyright (C) 2007, 2009-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -32,7 +32,7 @@ AC_DEFUN([_AC_FUNC_REALLOC_IF],
+        [ac_cv_func_realloc_0_nonnull=no],
+        [case "$host_os" in
+           # Guess yes on platforms where we know the result.
+-          *-gnu* | gnu* | freebsd* | netbsd* | openbsd* \
++          *-gnu* | gnu* | *-musl* | freebsd* | netbsd* | openbsd* \
+           | hpux* | solaris* | cygwin* | mingw*)
+             ac_cv_func_realloc_0_nonnull="guessing yes" ;;
+           # If we don't know, assume the worst.
+diff --git a/m4/setenv.m4 b/m4/setenv.m4
+index 6101274..a8f83d6 100644
+--- a/m4/setenv.m4
++++ b/m4/setenv.m4
+@@ -1,4 +1,4 @@
+-# setenv.m4 serial 27
++# setenv.m4 serial 28
+ dnl Copyright (C) 2001-2004, 2006-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -37,6 +37,8 @@ AC_DEFUN([gl_FUNC_SETENV],
+       [case "$host_os" in
+                         # Guess yes on glibc systems.
+          *-gnu* | gnu*) gl_cv_func_setenv_works="guessing yes" ;;
++                        # Guess yes on musl systems.
++         *-musl*)       gl_cv_func_setenv_works="guessing yes" ;;
+                         # If we don't know, assume the worst.
+          *)             gl_cv_func_setenv_works="guessing no" ;;
+        esac
+diff --git a/m4/signbit.m4 b/m4/signbit.m4
+index bf5bce5..f7f2f3d 100644
+--- a/m4/signbit.m4
++++ b/m4/signbit.m4
+@@ -1,4 +1,4 @@
+-# signbit.m4 serial 16
++# signbit.m4 serial 17
+ dnl Copyright (C) 2007-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -31,6 +31,8 @@ AC_DEFUN([gl_SIGNBIT],
+         [case "$host_os" in
+                           # Guess yes on glibc systems.
+            *-gnu* | gnu*) gl_cv_func_signbit="guessing yes" ;;
++                          # Guess yes on musl systems.
++           *-musl*)       gl_cv_func_signbit="guessing yes" ;;
+                           # Guess yes on native Windows.
+            mingw*)        gl_cv_func_signbit="guessing yes" ;;
+                           # If we don't know, assume the worst.
+@@ -62,6 +64,8 @@ AC_DEFUN([gl_SIGNBIT],
+         [case "$host_os" in
+                           # Guess yes on glibc systems.
+            *-gnu* | gnu*) gl_cv_func_signbit_gcc="guessing yes" ;;
++                          # Guess yes on musl systems.
++           *-musl*)       gl_cv_func_signbit_gcc="guessing yes" ;;
+                           # Guess yes on mingw, no on MSVC.
+            mingw*)        if test -n "$GCC"; then
+                             gl_cv_func_signbit_gcc="guessing yes"
+diff --git a/m4/sleep.m4 b/m4/sleep.m4
+index 5f71cc7..7bab467 100644
+--- a/m4/sleep.m4
++++ b/m4/sleep.m4
+@@ -1,4 +1,4 @@
+-# sleep.m4 serial 9
++# sleep.m4 serial 10
+ dnl Copyright (C) 2007-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -48,6 +48,8 @@ handle_alarm (int sig)
+       [case "$host_os" in
+                         # Guess yes on glibc systems.
+          *-gnu* | gnu*) gl_cv_func_sleep_works="guessing yes" ;;
++                        # Guess yes on musl systems.
++         *-musl*)       gl_cv_func_sleep_works="guessing yes" ;;
+                         # Guess no on native Windows.
+          mingw*)        gl_cv_func_sleep_works="guessing no" ;;
+                         # If we don't know, assume the worst.
+diff --git a/m4/stpncpy.m4 b/m4/stpncpy.m4
+index 83425dd..f8e1a7c 100644
+--- a/m4/stpncpy.m4
++++ b/m4/stpncpy.m4
+@@ -1,4 +1,4 @@
+-# stpncpy.m4 serial 16
++# stpncpy.m4 serial 17
+ dnl Copyright (C) 2002-2003, 2005-2007, 2009-2019 Free Software Foundation,
+ dnl Inc.
+ dnl This file is free software; the Free Software Foundation
+@@ -7,6 +7,8 @@ dnl with or without modifications, as long as this notice is preserved.
+
+ AC_DEFUN([gl_FUNC_STPNCPY],
+ [
++  AC_REQUIRE([AC_CANONICAL_HOST]) dnl for cross-compiles
++
+   dnl Persuade glibc <string.h> to declare stpncpy().
+   AC_REQUIRE([AC_USE_SYSTEM_EXTENSIONS])
+
+@@ -69,12 +71,18 @@ int main ()
+ ]])],
+         [gl_cv_func_stpncpy=yes],
+         [gl_cv_func_stpncpy=no],
+-        [AC_EGREP_CPP([Thanks for using GNU], [
++        [dnl Guess yes on glibc systems and musl systems.
++         AC_EGREP_CPP([Thanks for using GNU], [
+ #include <features.h>
+ #ifdef __GNU_LIBRARY__
+   Thanks for using GNU
+ #endif
+-], [gl_cv_func_stpncpy="guessing yes"], [gl_cv_func_stpncpy="guessing no"])
++],         [gl_cv_func_stpncpy="guessing yes"],
++           [case "$host_os" in
++              *-musl*) gl_cv_func_stpncpy="guessing yes" ;;
++              *)       gl_cv_func_stpncpy="guessing no" ;;
++            esac
++           ])
+         ])
+     ])
+     case "$gl_cv_func_stpncpy" in
+diff --git a/m4/strerror.m4 b/m4/strerror.m4
+index b452f7f..2c90f31 100644
+--- a/m4/strerror.m4
++++ b/m4/strerror.m4
+@@ -1,4 +1,4 @@
+-# strerror.m4 serial 19
++# strerror.m4 serial 20
+ dnl Copyright (C) 2002, 2007-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -26,6 +26,8 @@ AC_DEFUN([gl_FUNC_STRERROR],
+         [case "$host_os" in
+                           # Guess yes on glibc systems.
+            *-gnu* | gnu*) gl_cv_func_working_strerror="guessing yes" ;;
++                          # Guess yes on musl systems.
++           *-musl*)       gl_cv_func_working_strerror="guessing yes" ;;
+                           # If we don't know, assume the worst.
+            *)             gl_cv_func_working_strerror="guessing no" ;;
+          esac
+@@ -80,6 +82,8 @@ AC_DEFUN([gl_FUNC_STRERROR_0],
+       [case "$host_os" in
+                         # Guess yes on glibc systems.
+          *-gnu* | gnu*) gl_cv_func_strerror_0_works="guessing yes" ;;
++                        # Guess yes on musl systems.
++         *-musl*)       gl_cv_func_strerror_0_works="guessing yes" ;;
+                         # Guess yes on native Windows.
+          mingw*)        gl_cv_func_strerror_0_works="guessing yes" ;;
+                         # If we don't know, assume the worst.
+diff --git a/m4/strtod.m4 b/m4/strtod.m4
+index 9912217..d68ab75 100644
+--- a/m4/strtod.m4
++++ b/m4/strtod.m4
+@@ -1,4 +1,4 @@
+-# strtod.m4 serial 24
++# strtod.m4 serial 25
+ dnl Copyright (C) 2002-2003, 2006-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -115,9 +115,11 @@ numeric_equal (double x, double y)
+            ],
+            [gl_cv_func_strtod_works="guessing yes"],
+            [case "$host_os" in
+-                      # Guess yes on native Windows.
+-              mingw*) gl_cv_func_strtod_works="guessing yes" ;;
+-              *)      gl_cv_func_strtod_works="guessing no" ;;
++                       # Guess yes on musl systems.
++              *-musl*) gl_cv_func_strtod_works="guessing yes" ;;
++                       # Guess yes on native Windows.
++              mingw*)  gl_cv_func_strtod_works="guessing yes" ;;
++              *)       gl_cv_func_strtod_works="guessing no" ;;
+             esac
+            ])
+         ])
+diff --git a/m4/strtold.m4 b/m4/strtold.m4
+index 16b4eda..17125fe 100644
+--- a/m4/strtold.m4
++++ b/m4/strtold.m4
+@@ -1,4 +1,4 @@
+-# strtold.m4 serial 2
++# strtold.m4 serial 4
+ dnl Copyright (C) 2002-2003, 2006-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -98,7 +98,12 @@ numeric_equal (long double x, long double y)
+ #endif
+            ],
+            [gl_cv_func_strtold_works="guessing yes"],
+-           [gl_cv_func_strtod_works="guessing no"])
++           [case "$host_os" in
++                       # Guess yes on musl systems.
++              *-musl*) gl_cv_func_strtold_works="guessing yes" ;;
++              *)       gl_cv_func_strtold_works="guessing no" ;;
++            esac
++           ])
+         ])
+       ])
+     case "$gl_cv_func_strtold_works" in
+diff --git a/m4/tzset.m4 b/m4/tzset.m4
+index 1278801..afdfa8e 100644
+--- a/m4/tzset.m4
++++ b/m4/tzset.m4
+@@ -1,4 +1,4 @@
+-# serial 11
++# serial 12
+
+ # Copyright (C) 2003, 2007, 2009-2019 Free Software Foundation, Inc.
+ # This file is free software; the Free Software Foundation
+@@ -70,6 +70,8 @@ main ()
+        [case "$host_os" in
+                          # Guess all is fine on glibc systems.
+           *-gnu* | gnu*) gl_cv_func_tzset_clobber="guessing no" ;;
++                         # Guess all is fine on musl systems.
++          *-musl*)       gl_cv_func_tzset_clobber="guessing no" ;;
+                          # Guess no on native Windows.
+           mingw*)        gl_cv_func_tzset_clobber="guessing no" ;;
+                          # If we don't know, assume the worst.
+diff --git a/m4/ungetc.m4 b/m4/ungetc.m4
+index ab8757b..08baf33 100644
+--- a/m4/ungetc.m4
++++ b/m4/ungetc.m4
+@@ -1,4 +1,4 @@
+-# ungetc.m4 serial 6
++# ungetc.m4 serial 7
+ dnl Copyright (C) 2009-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -41,12 +41,16 @@ AC_DEFUN_ONCE([gl_FUNC_UNGETC_WORKS],
+            remove ("conftest.tmp");])],
+         [gl_cv_func_ungetc_works=yes], [gl_cv_func_ungetc_works=no],
+         [case "$host_os" in
+-                                       # Guess yes on glibc and bionic systems.
+-           *-gnu* | gnu* | *-android*) gl_cv_func_ungetc_works="guessing yes" ;;
+-                                       # Guess yes on native Windows.
+-           mingw*)                     gl_cv_func_ungetc_works="guessing yes" ;;
+-                                       # If we don't know, assume the worst.
+-           *)                          gl_cv_func_ungetc_works="guessing no" ;;
++                          # Guess yes on glibc systems.
++           *-gnu* | gnu*) gl_cv_func_ungetc_works="guessing yes" ;;
++                          # Guess yes on musl systems.
++           *-musl*)       gl_cv_func_ungetc_works="guessing yes" ;;
++                          # Guess yes on bionic systems.
++           *-android*)    gl_cv_func_ungetc_works="guessing yes" ;;
++                          # Guess yes on native Windows.
++           mingw*)        gl_cv_func_ungetc_works="guessing yes" ;;
++                          # If we don't know, assume the worst.
++           *)             gl_cv_func_ungetc_works="guessing no" ;;
+          esac
+         ])
+     ])
+diff --git a/m4/usleep.m4 b/m4/usleep.m4
+index 59605a8..4a6bff0 100644
+--- a/m4/usleep.m4
++++ b/m4/usleep.m4
+@@ -1,4 +1,4 @@
+-# usleep.m4 serial 5
++# usleep.m4 serial 6
+ dnl Copyright (C) 2009-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -31,6 +31,8 @@ AC_DEFUN([gl_FUNC_USLEEP],
+         [case "$host_os" in
+                           # Guess yes on glibc systems.
+            *-gnu* | gnu*) gl_cv_func_usleep_works="guessing yes" ;;
++                          # Guess yes on musl systems.
++           *-musl*)       gl_cv_func_usleep_works="guessing yes" ;;
+                           # Guess no on native Windows.
+            mingw*)        gl_cv_func_usleep_works="guessing no" ;;
+                           # If we don't know, assume the worst.
+diff --git a/m4/utimes.m4 b/m4/utimes.m4
+index 7209b6d..5806d8f 100644
+--- a/m4/utimes.m4
++++ b/m4/utimes.m4
+@@ -1,5 +1,5 @@
+ # Detect some bugs in glibc's implementation of utimes.
+-# serial 5
++# serial 6
+
+ dnl Copyright (C) 2003-2005, 2009-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+@@ -143,9 +143,11 @@ main ()
+        [gl_cv_func_working_utimes=yes],
+        [gl_cv_func_working_utimes=no],
+        [case "$host_os" in
+-                  # Guess no on native Windows.
+-          mingw*) gl_cv_func_working_utimes="guessing no" ;;
+-          *)      gl_cv_func_working_utimes="guessing no" ;;
++                   # Guess yes on musl systems.
++          *-musl*) gl_cv_func_working_utimes="guessing yes" ;;
++                   # Guess no on native Windows.
++          mingw*)  gl_cv_func_working_utimes="guessing no" ;;
++          *)       gl_cv_func_working_utimes="guessing no" ;;
+         esac
+        ])
+     ])
+diff --git a/m4/wcwidth.m4 b/m4/wcwidth.m4
+index baa2002..3952fd2 100644
+--- a/m4/wcwidth.m4
++++ b/m4/wcwidth.m4
+@@ -1,4 +1,4 @@
+-# wcwidth.m4 serial 27
++# wcwidth.m4 serial 28
+ dnl Copyright (C) 2006-2019 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+@@ -98,9 +98,13 @@ int main ()
+           [
+ changequote(,)dnl
+            case "$host_os" in
+-                                        # Guess yes on glibc and AIX 7 systems.
+-             *-gnu* | gnu* | aix[7-9]*) gl_cv_func_wcwidth_works="guessing yes";;
+-             *)                         gl_cv_func_wcwidth_works="guessing no";;
++                            # Guess yes on glibc systems.
++             *-gnu* | gnu*) gl_cv_func_wcwidth_works="guessing yes";;
++                            # Guess yes on musl systems.
++             *-musl*)       gl_cv_func_wcwidth_works="guessing yes";;
++                            # Guess yes on AIX 7 systems.
++             aix[7-9]*)     gl_cv_func_wcwidth_works="guessing yes";;
++             *)             gl_cv_func_wcwidth_works="guessing no";;
+            esac
+ changequote([,])dnl
+           ])
+--
+1.9.1
+
+

@@ -1,55 +1,62 @@
-{ stdenv , fetchurl , git , glib_networking , gsettings_desktop_schemas , gtk,
-help2man , libunique , lua5 , luafilesystem , luajit , luasqlite3, makeWrapper,
-pkgconfig , sqlite , webkit }:
+{ stdenv, fetchFromGitHub, pkgconfig, wrapGAppsHook
+, help2man, luafilesystem, luajit, sqlite
+, webkitgtk, gtk3, gst_all_1, glib-networking
+}:
 
-let
-  lualibs       = [ luafilesystem luasqlite3 ];
-  getPath       = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
-  getLuaPath    = lib : getPath lib "lua";
-  getLuaCPath   = lib : getPath lib "so";
-  luaPath       = stdenv.lib.concatStringsSep ";" (map getLuaPath lualibs);
-  luaCPath      = stdenv.lib.concatStringsSep ";" (map getLuaCPath lualibs);
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  pname = "luakit";
+  version = "2.1";
 
-  name = "luakit-2012.09.13";
+  src = fetchFromGitHub {
+    owner = "luakit";
+    repo = "luakit";
+    rev = version;
+    sha256 = "05mm76g72fs48410pbij4mw0s3nqji3r7f3mnr2fvhv02xqj05aa";
+  };
+
+  nativeBuildInputs = [
+    pkgconfig help2man wrapGAppsHook
+  ];
+
+  buildInputs = [
+    webkitgtk luafilesystem luajit sqlite gtk3
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+    glib-networking # TLS support
+  ];
+
+  preBuild = ''
+    # build-utils/docgen/gen.lua:2: module 'lib.lousy.util' not found
+    # TODO: why is not this the default? The test runner adds
+    # ';./lib/?.lua;./lib/?/init.lua' to package.path, but the build-utils
+    # scripts don't add an equivalent
+    export LUA_PATH="$LUA_PATH;./?.lua;./?/init.lua"
+  '';
+
+  makeFlags = [
+    "DEVELOPMENT_PATHS=0"
+    "USE_LUAJIT=1"
+    "INSTALLDIR=${placeholder "out"}"
+    "PREFIX=${placeholder "out"}"
+    "USE_GTK3=1"
+    "XDGPREFIX=${placeholder "out"}/etc/xdg"
+  ];
+
+  preFixup = let
+    luaKitPath = "$out/share/luakit/lib/?/init.lua;$out/share/luakit/lib/?.lua";
+  in ''
+    gappsWrapperArgs+=(
+      --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
+      --prefix LUA_PATH ';' "${luaKitPath};$LUA_PATH"
+      --prefix LUA_CPATH ';' "$LUA_CPATH"
+    )
+  '';
 
   meta = with stdenv.lib; {
     description = "Fast, small, webkit based browser framework extensible in Lua";
-    homepage    = "http://luakit.org";
+    homepage    = "https://luakit.github.io/";
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ matthiasbeyer ];
-    platforms   = platforms.linux; # I only tested linux
+    platforms   = platforms.linux; # Only tested linux
   };
-
-  src = fetchurl {
-    url = "https://github.com/mason-larobina/luakit/archive/2012.09.13-r1.tar.gz";
-    sha256 = "067g3bp5w20jypc8rx54dpbn3ysbgxzchgpq7sld5yh2z36s1l52";
-  };
-
-  buildInputs = [ git gsettings_desktop_schemas gtk help2man libunique lua5
-    luafilesystem luajit luasqlite3 makeWrapper pkgconfig sqlite webkit ];
-
-  postPatch = ''
-    sed -i -e "s/DESTDIR/INSTALLDIR/" ./Makefile
-    sed -i -e "s|/etc/xdg/luakit/|$out/etc/xdg/luakit/|" lib/lousy/util.lua
-    patchShebangs ./build-utils
-  '';
-
-  buildPhase = ''
-    make DEVELOPMENT_PATHS=0 USE_LUAJIT=1 INSTALLDIR=$out DESTDIR=$out PREFIX=$out USE_GTK3=1
-  '';
-
-  installPhase = let
-    luaKitPath = "$out/share/luakit/lib/?/init.lua;$out/share/luakit/lib/?.lua";
-  in ''
-    make DEVELOPMENT_PATHS=0 INSTALLDIR=$out DESTDIR=$out PREFIX=$out USE_GTK3=1 install
-    wrapProgram $out/bin/luakit                                         \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/usr/share/:$out/share/:$GSETTINGS_SCHEMAS_PATH"     \
-      --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"                         \
-      --set LUA_PATH '"${luaKitPath};${luaPath};"'                      \
-      --set LUA_CPATH '"${luaCPath};"'
-  '';
-
 }

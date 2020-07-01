@@ -1,106 +1,118 @@
-{ stdenv, fetchgit, fetchurl, cmake, glew, ncurses
-, SDL, SDL_image, SDL_ttf, gtk2, glib
-, mesa, openal, pango, atk, gdk_pixbuf, glibc, libsndfile }:
+{ pkgs, stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs }:
+
+# To whomever it may concern:
+#
+# This directory menaces with spikes of Nix code. It is terrifying.
+#
+# If this is your first time here, you should probably install the dwarf-fortress-full package,
+# for instance with:
+#
+# environment.systemPackages = [ pkgs.dwarf-fortress-packages.dwarf-fortress-full ];
+#
+# You can adjust its settings by using override, or compile your own package by
+# using the other packages here.
+#
+# For example, you can enable the FPS indicator, disable the intro, pick a
+# theme other than phoebus (the default for dwarf-fortress-full), _and_ use
+# an older version with something like:
+#
+# environment.systemPackages = [
+#   (pkgs.dwarf-fortress-packages.dwarf-fortress-full.override {
+#      dfVersion = "0.44.11";
+#      theme = "cla";
+#      enableIntro = false;
+#      enableFPS = true;
+#   })
+# ]
+#
+# Take a look at lazy-pack.nix to see all the other options.
+#
+# You will find the configuration files in ~/.local/share/df_linux/data/init. If
+# you un-symlink them and edit, then the scripts will avoid overwriting your
+# changes on later launches, but consider extending the wrapper with your
+# desired options instead.
+
+with lib;
 
 let
-  baseVersion = "40";
-  patchVersion = "24";
-  srcs = {
-    df_unfuck = fetchgit {
-      url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
-      rev = "39742d64d2886fb594d79e7cc4b98fb917f26811";
-      sha256 = "19vwx6kpv1sf93bx5v8x47f7x2cgxsqk82v6j1a72sa3q7m5cpc7";
-    };
+  callPackage = pkgs.newScope self;
 
-    df = fetchurl {
-      url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_linux.tar.bz2";
-      sha256 = "0d4jrs45qj89vq9mjg7fxxhis7zivvb0vzjpmkk274b778kccdys";
+  # The latest Dwarf Fortress version. Maintainers: when a new version comes
+  # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
+  # this.
+  latestVersion = "0.47.04";
+
+  # Converts a version to a package name.
+  versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";
+
+  dwarf-therapist-original = pkgs.qt5.callPackage ./dwarf-therapist {
+    texlive = pkgs.texlive.combine {
+      inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
     };
   };
 
-in
+  # A map of names to each Dwarf Fortress package we know about.
+  df-games = lib.listToAttrs (map (dfVersion: {
+    name = versionToName dfVersion;
+    value =
+      let
+        # I can't believe this syntax works. Spikes of Nix code indeed...
+        dwarf-fortress = callPackage ./game.nix {
+          inherit dfVersion;
+          inherit dwarf-fortress-unfuck;
+        };
 
-assert stdenv.system == "i686-linux";
+        # unfuck is linux-only right now, we will only use it there.
+        dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
+                                else null;
 
-stdenv.mkDerivation rec {
-  name = "dwarf-fortress-0.${baseVersion}.${patchVersion}";
+        twbt = callPackage ./twbt { inherit dfVersion; };
 
-  inherit baseVersion patchVersion;
+        dfhack = callPackage ./dfhack {
+          inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
+          inherit dfVersion twbt;
+          stdenv = gccStdenv;
+        };
 
-  buildInputs = [ SDL SDL_image SDL_ttf gtk2 glib glew mesa ncurses openal glibc libsndfile pango atk cmake gdk_pixbuf];
-  src = "${srcs.df_unfuck} ${srcs.df}";
-  phases = "unpackPhase patchPhase configurePhase buildPhase installPhase";
+        dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix {
+          inherit dwarf-fortress;
+          dwarf-therapist = dwarf-therapist-original;
+        };
+      in
+      callPackage ./wrapper {
+        inherit (self) themes;
 
-  sourceRoot = srcs.df_unfuck.name;
+        dwarf-fortress = dwarf-fortress;
+        twbt = twbt;
+        dfhack = dfhack;
+        dwarf-therapist = dwarf-therapist;
+      };
+  }) (lib.attrNames self.df-hashes));
 
-  cmakeFlags = [
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2}/lib/gtk-2.0/include"
-  ];
+  self = rec {
+    df-hashes = builtins.fromJSON (builtins.readFile ./game.json);
 
-  permission = ./df_permission;
+    # Aliases for the latest Dwarf Fortress and the selected Therapist install
+    dwarf-fortress = getAttr (versionToName latestVersion) df-games;
+    inherit dwarf-therapist-original;
+    dwarf-therapist = dwarf-fortress.dwarf-therapist;
+    dwarf-fortress-original = dwarf-fortress.dwarf-fortress;
 
-  installPhase = ''
-    set -x
-    mkdir -p $out/bin
-    mkdir -p $out/share/df_linux
-    cd ../../
-    cp -r ./df_linux/* $out/share/df_linux
-    rm $out/share/df_linux/libs/lib*
+    dwarf-fortress-full = callPackage ./lazy-pack.nix {
+      inherit df-games versionToName latestVersion;
+    };
 
-    # Store the original hash for dwarf-therapist 
-    echo $(md5sum $out/share/df_linux/libs/Dwarf_Fortress | cut -c1-8) > $out/share/df_linux/hash.md5.orig
-    # Fix rpath
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.glibc ]}:$out/share/df_linux/libs"  $out/share/df_linux/libs/Dwarf_Fortress
-    cp -f ./${srcs.df_unfuck.name}/build/libgraphics.so $out/share/df_linux/libs/libgraphics.so
+    soundSense = callPackage ./soundsense.nix { };
 
-    cp $permission $out/share/df_linux/nix_permission
+    legends-browser = callPackage ./legends-browser {};
 
-    patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 $out/share/df_linux/libs/Dwarf_Fortress
+    themes = recurseIntoAttrs (callPackage ./themes {
+      stdenv = stdenvNoCC;
+    });
 
-    # Store new hash for dwarf-therapist
-    echo $(md5sum $out/share/df_linux/libs/Dwarf_Fortress | cut -c1-8) > $out/share/df_linux/hash.md5.patched
-
-    cat > $out/bin/dwarf-fortress << EOF
-      #!${stdenv.shell}
-      
-      set -ex
-
-      export DF_DIR="\$HOME/.config/df_linux"
-      if [ -n "\$XDG_DATA_HOME" ]
-       then export DF_DIR="\$XDG_DATA_HOME/df_linux"
-      fi
-
-      if [[ ! -d "\$DF_DIR" ]]; then
-          mkdir -p "\$DF_DIR"
-          ln -s $out/share/df_linux/raw "\$DF_DIR/raw"
-          ln -s $out/share/df_linux/libs "\$DF_DIR/libs"
-          mkdir -p "\$DF_DIR/data/init"
-          cp -rn $out/share/df_linux/data/init "\$DF_DIR/data/"
-      fi
-
-      for link in announcement art dipscript help index initial_movies movies shader.fs shader.vs sound speech; do
-          cp -r $out/share/df_linux/data/\$link "\$DF_DIR/data/\$link"
-          chmod -R u+rw "\$DF_DIR/data/\$link"
-      done
-
-      # now run Dwarf Fortress!
-      export LD_LIBRARY_PATH=\${stdenv.cc}/lib:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk2}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/:${libsndfile}/lib:\$DF_DIR/df_linux/libs/
-
-      export SDL_DISABLE_LOCK_KEYS=1 # Work around for bug in Debian/Ubuntu SDL patch.
-      #export SDL_VIDEO_CENTERED=1    # Centre the screen.  Messes up resizing.
-
-      cd \$DF_DIR
-      $out/share/df_linux/libs/Dwarf_Fortress "$@"
-    EOF
-
-    chmod +x $out/bin/dwarf-fortress
-  '';
-
-  meta = {
-    description = "A single-player fantasy game with a randomly generated adventure world";
-    homepage = http://www.bay12games.com/dwarves;
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = with stdenv.lib.maintainers; [ roconnor the-kenny ];
+    # Theme aliases
+    phoebus-theme = themes.phoebus;
+    cla-theme = themes.cla;
   };
-}
+
+in self // df-games

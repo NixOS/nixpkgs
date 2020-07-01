@@ -1,61 +1,72 @@
-{ stdenv, fetchurl, fetchFromSavannah, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb, freetype, qemu, devicemapper
+{ stdenv, fetchgit, flex, bison, python, autoconf, automake, gnulib, libtool
+, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkgconfig
+, fuse # only needed for grub-mount
 , zfs ? null
 , efiSupport ? false
 , zfsSupport ? true
+, xenSupport ? false
 }:
 
 with stdenv.lib;
 let
   pcSystems = {
-    "i686-linux".target = "i386";
-    "x86_64-linux".target = "i386";
+    i686-linux.target = "i386";
+    x86_64-linux.target = "i386";
   };
 
-  efiSystems = {
-    "i686-linux".target = "i386";
-    "x86_64-linux".target = "x86_64";
+  efiSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+    aarch64-linux.target = "aarch64";
   };
 
-  canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
-  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
-
-  version = "2.02-git-2015-05-14";
-
-  unifont_bdf = fetchurl {
-    url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
-    sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
+  # For aarch64, we need to use '--target=aarch64-efi' when building,
+  # but '--target=arm64-efi' when installing. Insanity!
+  efiSystemsInstall = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+    aarch64-linux.target = "arm64";
   };
 
-  po_src = fetchurl {
-    name = "grub-2.02-beta2.tar.gz";
-    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
-    sha256 = "1lr9h3xcx0wwrnkxdnkfjwy08j7g7mdlmmbdip2db4zfgi69h0rm";
-  };
+  canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
+  inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
+
+  version = "2.04";
 
 in (
 
 assert efiSupport -> canEfi;
 assert zfsSupport -> zfs != null;
+assert !(efiSupport && xenSupport);
 
 stdenv.mkDerivation rec {
-  name = "grub-${version}";
+  pname = "grub";
+  inherit version;
 
-  src = fetchFromSavannah {
-    repo = "grub";
-    rev = "5370dcfdae66b60cff3507ad925300a679fe4117";
-    sha256 = "1v4a3shcgfxjifwddmn3d0lyg3db1d3k87x5nchy7cyiss55jx1s";
+  src = fetchgit {
+    url = "git://git.savannah.gnu.org/grub.git";
+    rev = "${pname}-${version}";
+    sha256 = "02gly3xw88pj4zzqjniv1fxa1ilknbq1mdk30bj6qy8n44g90i8w";
   };
 
-  nativeBuildInputs = [ autogen flex bison python autoconf automake ];
-  buildInputs = [ ncurses libusb freetype gettext devicemapper ]
+  patches = [
+    ./fix-bash-completion.patch
+  ];
+
+  nativeBuildInputs = [ bison flex python pkgconfig autoconf automake ];
+  buildInputs = [ ncurses libusb-compat-0_1 freetype gettext lvm2 fuse libtool ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
+
+  hardeningDisable = [ "all" ];
+
+  # Work around a bug in the generated flex lexer (upstream flex bug?)
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preConfigure =
     '' for i in "tests/util/"*.in
        do
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
        done
 
        # Apparently, the QEMU executable is no longer called
@@ -69,35 +80,34 @@ stdenv.mkDerivation rec {
        # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
        sed -i "tests/util/grub-shell.in" \
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
+
+      unset CPP # setting CPP intereferes with dependency calculation
+
+      patchShebangs .
+
+      ./bootstrap --no-git --gnulib-srcdir=${gnulib}
+
+      substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
     '';
 
-  prePatch =
-    '' tar zxf ${po_src} grub-2.02~beta2/po
-       rm -rf po
-       mv grub-2.02~beta2/po po
-       sh autogen.sh
-       gunzip < "${unifont_bdf}" > "unifont.bdf"
-       sed -i "configure" \
-           -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
-    '';
-
-  patches = [ ./fix-bash-completion.patch ];
-
-  configureFlags = optional zfsSupport "--enable-libzfs"
-    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystems.${stdenv.system}.target}" "--program-prefix=" ];
+  configureFlags = [ "--enable-grub-mount" ] # dep of os-prober
+    ++ optional zfsSupport "--enable-libzfs"
+    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
+    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
 
   # save target that grub is compiled for
   grubTarget = if efiSupport
-               then "${efiSystems.${stdenv.system}.target}-efi"
+               then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
                else if inPCSystems
-                    then "${pcSystems.${stdenv.system}.target}-pc"
+                    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
                     else "";
 
   doCheck = false;
   enableParallelBuilding = true;
 
   postInstall = ''
-    paxmark pms $out/sbin/grub-{probe,bios-setup}
+    # Avoid a runtime reference to gcc
+    sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
   '';
 
   meta = with stdenv.lib; {
@@ -115,10 +125,10 @@ stdenv.mkDerivation rec {
          operating system (e.g., GNU).
       '';
 
-    homepage = http://www.gnu.org/software/grub/;
+    homepage = "https://www.gnu.org/software/grub/";
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 })

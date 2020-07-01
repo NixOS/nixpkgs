@@ -1,34 +1,41 @@
-{ stdenv, fetchurl, iptables, python, pythonPackages }:
-  
-stdenv.mkDerivation rec {
-  name = "sshuttle-${version}";
-  version = "0.61";
+{ stdenv, python3Packages, fetchurl, makeWrapper
+, coreutils, iptables, nettools, openssh, procps }:
 
-  src = fetchurl {
-    url = "https://github.com/apenwarr/sshuttle/archive/sshuttle-0.61.tar.gz";
-    sha256 = "1v2v1kbwnmx6ygzhbgqcmyafx914s2p7vjp7l0pf52sa7qkliy9b";
+python3Packages.buildPythonApplication rec {
+  pname = "sshuttle";
+  version = "0.78.5";
+
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "0vp13xwrhx4m6zgsyzvai84lkq9mzkaw47j58dk0ll95kaymk2x8";
   };
 
-  preBuild = ''
-   substituteInPlace Documentation/all.do --replace "/bin/ls" "$(type -tP ls)";
-   substituteInPlace Documentation/md2man.py --replace "/usr/bin/env python" "${python}/bin/python"
+  patches = [ ./sudo.patch ];
+
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ];
+  buildInputs =
+    [ coreutils openssh procps nettools ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];
+
+  checkInputs = with python3Packages; [ mock pytest pytestcov pytestrunner flake8 ];
+
+  postInstall = let
+    mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
+  in ''
+  wrapProgram $out/bin/sshuttle \
+    --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
   '';
-
-  phases = "unpackPhase installPhase";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -R . $out
-    ln -s $out/sshuttle $out/bin/sshuttle
-  '';
-  
-
-  buildInputs = [ iptables python pythonPackages.markdown pythonPackages.beautifulsoup ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/apenwarr/sshuttle;
+    homepage = "https://github.com/sshuttle/sshuttle/";
     description = "Transparent proxy server that works as a poor man's VPN";
-    maintainers = with maintainers; [ iElectric ];
+    longDescription = ''
+      Forward connections over SSH, without requiring administrator access to the
+      target network (though it does require Python 2.7, Python 3.5 or later at both ends).
+      Works with Linux and Mac OS and supports DNS tunneling.
+    '';
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ domenkozar carlosdagos ];
     platforms = platforms.unix;
   };
 }

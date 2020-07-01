@@ -1,6 +1,6 @@
 {stdenv, fetchurl, emacs}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "rect-mark-1.4";
 
   src = fetchurl {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mark a rectangle of text with highlighting";
-    homepage = http://emacswiki.org/emacs/RectangleMark;
+    homepage = "http://emacswiki.org/emacs/RectangleMark";
     license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.all;

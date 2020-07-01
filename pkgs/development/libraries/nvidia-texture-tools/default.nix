@@ -1,41 +1,42 @@
-{ stdenv, fetchsvn, cmake, libpng, ilmbase, libtiff, zlib, libjpeg
-, mesa, libX11
-}:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  # No support yet for cg, cuda, glew, glut, openexr.
+  pname = "nvidia-texture-tools";
+  version = "unstable-2019-10-27";
 
-  name = "nvidia-texture-tools";
-
-  src = fetchsvn {
-    url = "http://nvidia-texture-tools.googlecode.com/svn/trunk";
-    rev = "1388";
-    sha256 = "0pwxqx5l16nqidzm6mwd3rd4gbbknkz6q8cxnvf7sggjpbcvm2d6";
+  src = fetchFromGitHub {
+    owner = "castano";
+    repo = "nvidia-texture-tools";
+    rev = "a131e4c6b0b7c9c73ccc3c9e6f1c7e165be86bcc";
+    sha256 = "1qzyr3ib5dpxyq1y33lq02qv4cww075sm9bm4f651d34q5x38sk3";
   };
 
-  buildInputs = [ cmake libpng ilmbase libtiff zlib libjpeg mesa libX11 ];
+  nativeBuildInputs = [ cmake ];
 
-  patchPhase = ''
-    # Fix build due to missing dependnecies.
-    echo 'target_link_libraries(bc7 nvmath)' >> src/nvtt/bc7/CMakeLists.txt
-    echo 'target_link_libraries(bc6h nvmath)' >> src/nvtt/bc6h/CMakeLists.txt
+  outputs = [ "out" "dev" "lib" ];
 
+  postPatch = ''
     # Make a recently added pure virtual function just virtual,
     # to keep compatibility.
     sed -i 's/virtual void endImage() = 0;/virtual void endImage() {}/' src/nvtt/nvtt.h
-
-    # Fix building shared libraries.
-    sed -i 's/SET(NVIMAGE_SHARED TRUE)/SET(NVIMAGE_SHARED TRUE)\nSET(NVTHREAD_SHARED TRUE)/' CMakeLists.txt
   '';
 
   cmakeFlags = [
     "-DNVTT_SHARED=TRUE"
   ];
 
-  meta = {
+  postInstall = ''
+    moveToOutput include "$dev"
+    moveToOutput lib "$lib"
+  '';
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "A set of cuda-enabled texture tools and compressors";
-    homepage = "http://developer.nvidia.com/object/texture_tools.html";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/castano/nvidia-texture-tools";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    broken = stdenv.isAarch64;
   };
 }

@@ -3,11 +3,12 @@
 use strict;
 use DBI;
 use DBD::SQLite;
+use String::ShellQuote;
 use Config;
 
 my $program = $ARGV[0];
 
-my $dbPath = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite";
+my $dbPath = "@dbPath@";
 
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbPath", "", "")
     or die "cannot open database `$dbPath'";
@@ -30,11 +31,13 @@ The program ‘$program’ is currently not installed. It is provided by
 the package ‘$package’, which I will now install for you.
 EOF
         ;
-        exit 126 if system("nix-env", "-i", $package) == 0;
+        exit 126 if system("nix-env", "-iA", "nixos.$package") == 0;
+    } elsif ($ENV{"NIX_AUTO_RUN"} // "") {
+        exec("nix-shell", "-p", $package, "--run", shell_quote("exec", @ARGV));
     } else {
         print STDERR <<EOF;
 The program ‘$program’ is currently not installed. You can install it by typing:
-  nix-env -i $package
+  nix-env -iA nixos.$package
 EOF
     }
 } else {
@@ -42,7 +45,7 @@ EOF
 The program ‘$program’ is currently not installed. It is provided by
 several packages. You can install it by typing one of the following:
 EOF
-    print STDERR "  nix-env -i $_->{package}\n" foreach @$res;
+    print STDERR "  nix-env -iA nixos.$_->{package}\n" foreach @$res;
 }
 
 exit 127;

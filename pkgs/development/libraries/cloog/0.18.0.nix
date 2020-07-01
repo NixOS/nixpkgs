@@ -35,11 +35,9 @@ stdenv.mkDerivation rec {
       effective code.
     '';
 
-    homepage = http://www.cloog.org/;
+    homepage = "http://www.cloog.org/";
 
     license = stdenv.lib.licenses.gpl2Plus;
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
 
     /* Leads to an ICE on Cygwin:
 
@@ -60,6 +58,6 @@ stdenv.mkDerivation rec {
        make[3]: *** [Box.lo] Error 1
 
     */
-    platforms = with stdenv.lib.platforms; allBut cygwin;
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
   };
 }

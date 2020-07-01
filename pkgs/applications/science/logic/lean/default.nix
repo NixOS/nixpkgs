@@ -1,31 +1,36 @@
-{ stdenv, fetchFromGitHub, cmake, gmp, mpfr, luajit, boost, python
-, gperftools, ninja }:
+{ stdenv, fetchFromGitHub, cmake, gmp, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "lean-20150328";
+  pname = "lean";
+  version = "3.16.2";
 
   src = fetchFromGitHub {
-    owner  = "leanprover";
+    owner  = "leanprover-community";
     repo   = "lean";
-    rev    = "1b15036dba469020d37f7d6b77b88974d8a36cb1";
-    sha256 = "0w38g83gp7d3ybfiz9jpl2jz3ljad70bxmar0dnnv45wx42clg96";
+    rev    = "v${version}";
+    sha256 = "0fvm7gvbr5kn258sqpnxa7dvzz84iv1dx1n066vih5gz80plz4lh";
   };
 
-  buildInputs = [ gmp mpfr luajit boost cmake python gperftools ninja ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ gmp ];
   enableParallelBuilding = true;
 
   preConfigure = ''
-    patchShebangs bin/leantags
     cd src
   '';
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace $out/bin/leanpkg \
+      --replace "greadlink" "${coreutils}/bin/readlink"
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Automatic and interactive theorem prover";
-    homepage    = "http://leanprover.github.io";
-    license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    homepage    = "https://leanprover.github.io/";
+    changelog   = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";
+    license     = licenses.asl20;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice gebner ];
   };
 }
+

@@ -1,32 +1,68 @@
-{ stdenv, makeWrapper, requireFile, unzip, oraclejdk8, bash}:
+{ stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
 
-stdenv.mkDerivation rec {
-  version = "4.1.0.19.07";
-  name = "sqldeveloper-${version}";
+let
+  version = "19.4.0.354.1759";
 
-  src = requireFile {
-    name = "${name}-no-jre.zip";
-    url = http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html;
-    sha256 = "09gr40n4574fw9hg47xi4dk8vwgawzkjzzzj2h5jaicy0fdjkpbx";
+  desktopItem = makeDesktopItem {
+    name = "sqldeveloper";
+    exec = "sqldeveloper";
+    icon = "sqldeveloper";
+    desktopName = "Oracle SQL Developer";
+    genericName = "Oracle SQL Developer";
+    comment = "Oracle's Oracle DB GUI client";
+    categories = "Development;";
+  };
+in
+  stdenv.mkDerivation {
+
+  inherit version;
+  pname = "sqldeveloper";
+
+  src = requireFile rec {
+    name = "sqldeveloper-${version}-no-jre.zip";
+    url = "https://www.oracle.com/tools/downloads/sqldev-downloads.html";
+    message = ''
+      This Nix expression requires that ${name} already be part of the store. To
+      obtain it you need to
+
+      - navigate to ${url}
+      - make sure that it says "Version ${version}" above the list of downloads
+        - if it does not, click on the "Previous Version" link below the downloads
+          and repeat until the version is correct. This is necessarry because as the
+          time of this writing there exists no permanent link for the current version
+          yet.
+          Also consider updating this package yourself (you probably just need to
+          change the `version` variable and update the sha256 to the one of the
+          new file) or opening an issue at the nixpkgs repo.
+      - accept the license agreement
+      - download the file listed under "Other Platforms"
+      - sign in or create an oracle account if neccessary
+
+      and then add the file to the Nix store using either:
+
+        nix-store --add-fixed sha256 ${name}
+
+      or
+
+        nix-prefetch-url --type sha256 file:///path/to/${name}
+    '';
+    sha256 = "1hk3hfxyl6ryp4v1l9mgzflban565ayfmm2k412azmw5rnmjf6fv";
   };
 
   buildInputs = [ makeWrapper unzip ];
 
-  buildCommand = ''
-    mkdir -p $out/bin
-    # patch to be able to install a sqldeveloper wrapper script compliant with nix's bin folder once installed
-    echo -e '#!${bash}/bin/bash\ncd "`dirname $0`"/../sqldeveloper/bin && ${bash}/bin/bash sqldeveloper $*' >> $out/bin/sqldeveloper
+  unpackCmd = "unzip $curSrc";
 
-    cd $out
-    unzip ${src}
-    cp -r sqldeveloper/* $out/
-    # Activate the needed shell script
-    rm $out/sqldeveloper.sh
-    chmod +x $out/bin/sqldeveloper
-    chmod +x $out/sqldeveloper/bin/sqldeveloper
+  installPhase = ''
+    mkdir -p $out/libexec $out/share/{applications,pixmaps}
+    mv * $out/libexec/
 
-    wrapProgram $out/bin/sqldeveloper \
-      --set JAVA_HOME "${oraclejdk8}"
+    mv $out/libexec/icon.png $out/share/pixmaps/sqldeveloper.png
+    cp ${desktopItem}/share/applications/* $out/share/applications
+
+    makeWrapper $out/libexec/sqldeveloper/bin/sqldeveloper $out/bin/sqldeveloper \
+      --set JAVA_HOME ${jdk.home} \
+      --run "cd $out/libexec/sqldeveloper/bin"
   '';
 
   meta = with stdenv.lib; {
@@ -40,9 +76,9 @@ stdenv.mkDerivation rec {
       a reports interface, a complete data modeling solution, and a migration
       platform for moving your 3rd party databases to Oracle.
     '';
-    homepage = http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/index.html;
+    homepage = "http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/";
     license = licenses.unfree;
-    maintainers = [ maintainers.ardumont ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ ardumont ma27 ];
   };
 }

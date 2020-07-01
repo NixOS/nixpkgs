@@ -1,30 +1,44 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook
+, lzmaSupport ? true, xz ? null
+}:
 
-let version = "3.0.9"; in
-stdenv.mkDerivation rec {
-  name = "xdelta-${version}";
-  
+assert lzmaSupport -> xz != null;
+
+let
+  mkWith = flag: name: if flag
+    then "--with-${name}"
+    else "--without-${name}";
+in stdenv.mkDerivation rec {
+  pname = "xdelta";
+  version = "3.1.0";
+
   src = fetchFromGitHub {
-    sha256 = "1pd7dyq44dbggmwkrr8251anqsf2an67zbvrk4vfnc92jkmjp17i";
+    sha256 = "09mmsalc7dwlvgrda56s2k927rpl3a5dzfa88aslkqcjnr790wjy";
     rev = "v${version}";
     repo = "xdelta-devel";
     owner = "jmacd";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = []
+    ++ stdenv.lib.optionals lzmaSupport [ xz ];
 
   postPatch = ''
     cd xdelta3
-  '' + stdenv.lib.optionalString doCheck ''
-    mkdir tmp
-    substituteInPlace testing/file.h --replace /tmp tmp
-    substituteInPlace xdelta3-test.h --replace /tmp $PWD/tmp
   '';
+
+  configureFlags = [
+    (mkWith lzmaSupport "liblzma")
+  ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
   checkPhase = ''
+    mkdir $PWD/tmp
+    for i in testing/file.h xdelta3-test.h; do
+      substituteInPlace $i --replace /tmp $PWD/tmp
+    done
     ./xdelta3regtest
   '';
 
@@ -34,11 +48,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Binary differential compression in VCDIFF (RFC 3284) format";
-    homepage = http://xdelta.org/;
-    license = with licenses; gpl2Plus;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    longDescription = ''
+      xdelta is a command line program for delta encoding, which generates two
+      file differences. This is similar to diff and patch, but it is targeted
+      for binary files and does not generate human readable output.
+    '';
+    homepage = "http://xdelta.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

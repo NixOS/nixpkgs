@@ -1,29 +1,29 @@
-{ stdenv, fetchurl, mesa, libX11, xproto, tcl, freeglut
-, SDL, SDL_mixer, SDL_image, libXi, inputproto
-, libXmu, libXext, xextproto, libXt, libSM, libICE
+{ stdenv, fetchurl, libGLU, libGL, libX11, xorgproto, tcl, freeglut, freetype
+, sfml, libXi
+, libXmu, libXext, libXt, libSM, libICE
 , libpng, pkgconfig, gettext, intltool
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.0";
-  name = "extremetuxracer-${version}";
+  version = "0.8.0";
+  pname = "extremetuxracer";
 
   src = fetchurl {
     url = "mirror://sourceforge/extremetuxracer/etr-${version}.tar.xz";
-    sha256 = "0fl9pwkywqnsmgr6plfj9zb05xrdnl5xb2hcmbjk7ap9l4cjfca4";
+    sha256 = "05ysaxvsgps9fxc421kdifsxmc1sn6n79cjaa0k0i3fs9qqrja2b";
   };
 
   buildInputs = [
-    mesa libX11 xproto tcl freeglut
-    SDL SDL_mixer SDL_image libXi inputproto
-    libXmu libXext xextproto libXt libSM libICE
+    libGLU libGL libX11 xorgproto tcl freeglut freetype
+    sfml libXi
+    libXmu libXext libXt libSM libICE
     libpng pkgconfig gettext intltool
   ];
 
   configureFlags = [ "--with-tcl=${tcl}/lib" ];
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL}/include/SDL"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE"
   '';
 
   meta = {
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
       ExtremeTuxRacer - Tux lies on his belly and accelerates down ice slopes.
     '';
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://sourceforge.net/projects/extremetuxracer/;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    homepage = "https://sourceforge.net/projects/extremetuxracer/";
+    maintainers = with stdenv.lib.maintainers; [ ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

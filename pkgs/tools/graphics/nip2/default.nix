@@ -1,24 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, gnome,
-fftw, gsl, goffice_0_8, libgsf }:
+{ stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, gnome2,
+fftw, gsl, goffice, libgsf }:
 
 stdenv.mkDerivation rec {
-  name = "nip2-7.42.1";
+  pname = "nip2";
+  version = "8.7.1";
 
   src = fetchurl {
-    url = "http://www.vips.ecs.soton.ac.uk/supported/current/${name}.tar.gz";
-    sha256 = "14lfyn0azswrz8r81ign9lbpxzk7ibmnnp03a3l8wgxvm2j9a7jl";
+    url = "https://github.com/libvips/nip2/releases/download/v${version}/nip2-${version}.tar.gz";
+    sha256 = "0l7n427njif53npqn02gfjjly8y3khbrkzqxp10j5vp9h97psgiw";
   };
 
   buildInputs =
   [ pkgconfig glib libxml2 flex bison vips
-    gnome.gtk fftw gsl goffice_0_8 libgsf
+    gnome2.gtk fftw gsl goffice libgsf
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.vips.ecs.soton.ac.uk;
+    homepage = "https://github.com/libvips/nip2";
     description = "Graphical user interface for VIPS image processing system";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kovirobi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

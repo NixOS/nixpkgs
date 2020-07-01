@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "07krzl4czczdsgzrrw9fiqx35xcf32naf751khg821g5pqv12qgh";
   };
 
-  buildInputs = [m4 perl lzma];
+  nativebuildInputs = [ lzma ];
+  buildInputs = [ m4 perl ];
 
   doCheck = true;
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   postInstall = ''ln -s autoconf "$out"/bin/autoconf-2.13'';
 
   meta = {
-    homepage = http://www.gnu.org/software/autoconf/;
+    homepage = "https://www.gnu.org/software/autoconf/";
     description = "Part of the GNU Build System";
     branch = "2.13";
 
@@ -34,5 +35,6 @@ stdenv.mkDerivation rec {
     '';
 
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

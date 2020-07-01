@@ -1,26 +1,22 @@
-{stdenv, fetchurl, unzip}:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "quattrocento-${version}";
+let
   version = "1.1";
+in fetchzip rec {
+  name = "quattrocento-${version}";
 
-  src = fetchurl {
-    url = "http://www.impallari.com/media/releases/quattrocento-v${version}.zip";
-    sha256 = "09wmbfwkry1r2cf5z4yy67wd4yzlnsjigg01r5r80z1phl0axn9n";
-  };
+  url = "http://web.archive.org/web/20170707001804/http://www.impallari.com/media/releases/quattrocento-v${version}.zip";
 
-  buildInputs = [unzip];
-  phases = ["unpackPhase" "installPhase"];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    cp -v "src/"*.otf $out/share/fonts/opentype
-    cp -v FONTLOG.txt $out/share/doc/${name}
+  postFetch = ''
+    mkdir -p $out/share/{fonts,doc}
+    unzip -j $downloadedFile \*.otf        -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*FONTLOG.txt -d $out/share/doc/${name}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.impallari.com/quattrocento/;
+  sha256 = "0f8l19y61y20sszn8ni8h9kgl0zy1gyzychg22z5k93ip4h7kfd0";
+
+  meta = with lib; {
+    homepage = "http://www.impallari.com/quattrocento/";
     description = "A classic, elegant, sober and strong serif typeface";
     license = licenses.ofl;
     platforms = platforms.all;

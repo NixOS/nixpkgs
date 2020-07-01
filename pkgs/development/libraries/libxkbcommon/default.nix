@@ -1,21 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, yacc, flex, xkeyboard_config, libxcb }:
+{ stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, yacc, xkeyboard_config, libxcb, libX11, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "libxkbcommon-0.4.3";
+  pname = "libxkbcommon";
+  version = "0.10.0";
 
   src = fetchurl {
-    url = "http://xkbcommon.org/download/${name}.tar.xz";
-    sha1 = "2251adc7425c816ec7af4f1c3776a619a53293b6";
+    url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
+    sha256 = "1wmnl0hngn6vrqrya4r8hvimlkr4jag39yjprls4gyrqvh667hsp";
   };
 
-  buildInputs = [ pkgconfig yacc flex xkeyboard_config libxcb ];
+  outputs = [ "out" "dev" "doc" ];
 
-  configureFlags = ''
-    --with-xkb-config-root=${xkeyboard_config}/etc/X11/xkb
-  '';
+  nativeBuildInputs = [ meson ninja pkgconfig yacc doxygen ];
+  buildInputs = [ xkeyboard_config libxcb ];
 
-  meta = {
+  mesonFlags = [
+    "-Denable-wayland=false"
+    "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
+    "-Dx-locale-root=${libX11.out}/share/X11/locale"
+  ];
+
+  doCheck = false; # fails, needs unicode locale
+
+  meta = with stdenv.lib; {
     description = "A library to handle keyboard descriptions";
-    homepage = http://xkbcommon.org;
+    homepage = "https://xkbcommon.org";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ttuegel ];
+    platforms = with platforms; unix;
   };
 }

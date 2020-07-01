@@ -1,27 +1,48 @@
-{ stdenv, fetchgit, gmp }:
+{ stdenv, fetchFromGitHub, makeWrapper, gmp, gcc }:
 
-stdenv.mkDerivation rec {
-  v = "1.1.9";
-  name = "mkcl-${v}";
+with stdenv.lib; stdenv.mkDerivation rec {
+  pname = "mkcl";
+  version = "1.1.11";
 
-  src = fetchgit {
-    url = "https://github.com/jcbeaudoin/mkcl.git";
-    rev = "86768cc1dfc2cc9caa1fe9696584bb25ea6c1429";
-    sha256 = "0ja7vyp5rjidb2a1gah35jqzqn6zjkikz5sd966p0f0wh26l6n03";
+  src = fetchFromGitHub {
+    owner = "jcbeaudoin";
+    repo = "mkcl";
+    rev = "v${version}";
+    sha256 = "0i2bfkda20lfypis6i4m7srfz6miyf66d8knp693d6sms73m2l26";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   propagatedBuildInputs = [ gmp ];
 
+  hardeningDisable = [ "format" ];
+
   configureFlags = [
-    "GMP_CFLAGS=-I${gmp}/include"
-    "GMP_LDFLAGS=-L${gmp}/lib"
+    "GMP_CFLAGS=-I${gmp.dev}/include"
+    "GMP_LDFLAGS=-L${gmp.out}/lib"
   ];
+
+  # tinycc configure flags copied from the tinycc derivation.
+  postConfigure = ''(
+    cd contrib/tinycc
+    ./configure --cc=cc \
+      --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
+      --crtprefix=${getLib stdenv.cc.libc}/lib \
+      --sysincludepaths=${getDev stdenv.cc.libc}/include:{B}/include \
+      --libpaths=${getLib stdenv.cc.libc}/lib
+  )'';
+
+  postInstall = ''
+    wrapProgram $out/bin/mkcl --prefix PATH : "${gcc}/bin"
+  '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "ANSI Common Lisp Implementation";
-    homepage = https://common-lisp.net/project/mkcl/;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://common-lisp.net/project/mkcl/";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ tohl ];
   };
 }
-

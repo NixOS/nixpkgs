@@ -1,13 +1,14 @@
 { fetchurl, stdenv, libtool, makeWrapper
-, coreutils, ctags, ncurses, pythonPackages, sqlite, pkgconfig
+, coreutils, ctags, ncurses, pythonPackages, sqlite, universal-ctags
 }:
 
 stdenv.mkDerivation rec {
-  name = "global-6.4";
+  pname = "global";
+  version = "6.6.4";
 
   src = fetchurl {
-    url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "13i4zwx6gaibc4j79wd0hgxysw8ibxz9c018zxhydnxlyadzcnri";
+    url = "mirror://gnu/global/${pname}-${version}.tar.gz";
+    sha256 = "1515642wsjz7x3rsgaqk4sc7n0z2znl7idsk8jz8wgy5aswqqzlq";
   };
 
   nativeBuildInputs = [ libtool makeWrapper ];
@@ -18,10 +19,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-ltdl-include=${libtool}/include"
-    "--with-ltdl-lib=${libtool}/lib"
-    "--with-ncurses=${ncurses}"
-    "--with-sqlite3=${sqlite}"
+    "--with-ltdl-lib=${libtool.lib}/lib"
+    "--with-ncurses=${ncurses.dev}"
+    "--with-sqlite3=${sqlite.dev}"
     "--with-exuberant-ctags=${ctags}/bin/ctags"
+    "--with-universal-ctags=${universal-ctags}/bin/ctags"
     "--with-posix-sort=${coreutils}/bin/sort"
   ];
 
@@ -49,9 +51,9 @@ stdenv.mkDerivation rec {
       independence of any editor.  It runs on a UNIX (POSIX) compatible
       operating system like GNU and BSD.
     '';
-    homepage = http://www.gnu.org/software/global/;
+    homepage = "https://www.gnu.org/software/global/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub peterhoeg ];
     platforms = platforms.unix;
   };
 }

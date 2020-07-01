@@ -1,6 +1,7 @@
-{ fetchurl, stdenv, pkgconfig, python, gstreamer, xlibs, alsaLib, cdparanoia
+{ fetchurl, fetchpatch, stdenv, pkgconfig, gstreamer, xorg, alsaLib, cdparanoia
 , libogg, libtheora, libvorbis, freetype, pango, liboil, glib, cairo, orc
-, libintlOrEmpty
+, libintl
+, ApplicationServices
 , # Whether to build no plugins that have external dependencies
   # (except the ALSA plugin).
   minimalDeps ? false
@@ -17,32 +18,40 @@ stdenv.mkDerivation rec {
     sha256 = "0jp6hjlra98cnkal4n6bdmr577q8mcyp3c08s3a02c4hjhw5rr0z";
   };
 
-  patchPhase = ''
+  patches = [
+    ./gcc-4.9.patch
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/commit/f672277509705c4034bc92a141eefee4524d15aa.patch";
+      name = "CVE-2019-9928.patch";
+      sha256 = "1dlamsmyr7chrb6vqqmwikqvvqcx5l7k72p98448qm6k59ndnimc";
+    })
+  ];
 
+  postPatch = ''
     sed -i 's@/bin/echo@echo@g' configure
     sed -i -e 's/^   /\t/' docs/{libs,plugins}/Makefile.in
   '';
 
+  outputs = [ "out" "dev" ];
+
   # TODO : v4l, libvisual
   buildInputs =
-    [ pkgconfig glib cairo orc ]
+    [ pkgconfig glib cairo orc libintl ]
     # can't build alsaLib on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib
     ++ stdenv.lib.optionals (!minimalDeps)
-      [ xlibs.xlibs xlibs.libXv libogg libtheora libvorbis freetype pango
+      [ xorg.xlibsWrapper xorg.libXv libogg libtheora libvorbis freetype pango
         liboil ]
     # can't build cdparanoia on darwin
     ++ stdenv.lib.optional (!minimalDeps && !stdenv.isDarwin) cdparanoia
-    ++ libintlOrEmpty;
-
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+    ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
 
   propagatedBuildInputs = [ gstreamer ];
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = with stdenv.lib; {
-    homepage    = http://gstreamer.freedesktop.org;
+    homepage    = "https://gstreamer.freedesktop.org";
     description = "Base plug-ins for GStreamer";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];

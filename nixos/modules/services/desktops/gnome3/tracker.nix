@@ -4,10 +4,11 @@
 
 with lib;
 
-let
-  gnome3 = config.environment.gnome3.packageSet;
-in
 {
+
+  meta = {
+    maintainers = teams.gnome.members;
+  };
 
   ###### interface
 
@@ -33,9 +34,11 @@ in
 
   config = mkIf config.services.gnome3.tracker.enable {
 
-    environment.systemPackages = [ gnome3.tracker ];
+    environment.systemPackages = [ pkgs.tracker ];
 
-    services.dbus.packages = [ gnome3.tracker ];
+    services.dbus.packages = [ pkgs.tracker ];
+
+    systemd.packages = [ pkgs.tracker ];
 
   };
 

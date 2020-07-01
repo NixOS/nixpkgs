@@ -1,12 +1,14 @@
 { stdenv, fetchurl }:
- 
+
 stdenv.mkDerivation rec {
-  name = "libpipeline-1.4.0";
-  
+  name = "libpipeline-1.5.1";
+
   src = fetchurl {
     url = "mirror://savannah/libpipeline/${name}.tar.gz";
-    sha256 = "1dlvp2mxlhg5zbj509kc60h7g39hpgwkzkpdf855cyzizgkmkivr";
+    sha256 = "0bwh5xz5f2czwb7f564jz1mp4znm8pldnvf65fs0hpw4gmmp0cyn";
   };
+
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./fix-on-osx.patch ];
 
   meta = with stdenv.lib; {
     homepage = "http://libpipeline.nongnu.org";

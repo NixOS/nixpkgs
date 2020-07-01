@@ -1,6 +1,6 @@
 {stdenv, fetchurl, SDL, lua5_1, pkgconfig, SDL_mixer, SDL_image, SDL_ttf}:
 stdenv.mkDerivation rec {
-  name = "fish-fillets-ng-${version}";
+  pname = "fish-fillets-ng";
   version = "1.0.1";
   src = fetchurl {
     url = "mirror://sourceforge/fillets/fillets-ng-${version}.tar.gz";
@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/fillets/fillets-ng-data-${version}.tar.gz";
     sha256 = "169p0yqh2gxvhdilvjc2ld8aap7lv2nhkhkg4i1hlmgc6pxpkjgh";
   };
-  buildInputs = [SDL lua5_1 pkgconfig SDL_mixer SDL_image SDL_ttf];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [SDL lua5_1 SDL_mixer SDL_image SDL_ttf];
   postInstall=''
     mkdir -p "$out/share/games/fillets-ng/"
     tar -xf ${data} -C "$out/share/games/fillets-ng/" --strip-components=1

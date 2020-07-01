@@ -27,22 +27,22 @@ in
         '';
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "nobody";
+        description =
+          "User to run u9fs under.";
+      };
+
       extraArgs = mkOption {
         type = types.str;
         default = "";
-        example = "-a none -u nobody";
+        example = "-a none";
         description =
           ''
             Extra arguments to pass on invocation,
             see <command>man 4 u9fs</command>
           '';
-      };
-
-      fsroot = mkOption {
-        type = types.path;
-        default = "/";
-        example = "/srv";
-        description = "File system root to serve to clients.";
       };
 
     };
@@ -55,6 +55,7 @@ in
       sockets.u9fs = {
         description = "U9fs Listening Socket";
         wantedBy = [ "sockets.target" ];
+        after = [ "network.target" ];
         inherit (cfg) listenStreams;
         socketConfig.Accept = "yes";
       };
@@ -63,9 +64,11 @@ in
         reloadIfChanged = true;
         requires = [ "u9fs.socket" ];
         serviceConfig =
-          { ExecStart = "-${pkgs.u9fs}/bin/u9fs ${cfg.extraArgs} ${cfg.fsroot}";
+          { ExecStart = "-${pkgs.u9fs}/bin/u9fs ${cfg.extraArgs}";
             StandardInput = "socket";
             StandardError = "journal";
+            User = cfg.user;
+            AmbientCapabilities = "cap_setuid cap_setgid";
           };
       };
     };

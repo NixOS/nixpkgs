@@ -1,31 +1,40 @@
-{ stdenv, fetchgit, cmake, perl }:
+{ stdenv, fetchgit, cmake, perl, go }:
 
-stdenv.mkDerivation rec {
-  name = "boringssl-${version}";
-  version = "20140820-a7d1363f";
+# reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
+stdenv.mkDerivation {
+  pname = "boringssl";
+  version = "2019-12-04";
 
   src = fetchgit {
     url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "a7d1363fcb1f0d825ec2393c06be3d58b0c57efd";
-    sha256 = "d27dd1416de1a2ea4ec2c219248b2ed2cce5c0405e56adb394077ddc7c319bab";
+    rev    = "243b5cc9e33979ae2afa79eaa4e4c8d59db161d4";
+    sha256 = "1ak27dln0zqy2vj4llqsb99g03sk0sg25wlp09b58cymrh3gccvl";
   };
 
-  buildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl go ];
   enableParallelBuilding = true;
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
+  makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/include $out/lib
+    mkdir -p $bin/bin $out/include $out/lib
 
-    mv tool/bssl    $out/bin
-    mv ssl/libssl.a $out/lib
+    mv tool/bssl $bin/bin
+
+    mv ssl/libssl.a           $out/lib
+    mv crypto/libcrypto.a     $out/lib
+    mv decrepit/libdecrepit.a $out/lib
+
     mv ../include/openssl $out/include
   '';
 
-  meta = {
+  outputs = [ "out" "bin" ];
+
+  meta = with stdenv.lib; {
     description = "Free TLS/SSL implementation";
     homepage    = "https://boringssl.googlesource.com";
-    platforms   = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    platforms   = platforms.all;
+    maintainers = [ maintainers.thoughtpolice ];
+    license = with licenses; [ openssl isc mit bsd3 ];
   };
 }

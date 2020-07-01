@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, python, pycrypto, glib }:
+{ stdenv, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, pythonPackages }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "screencloud-${version}";
+  pname = "screencloud";
   version = "1.2.0";
 
   # API Keys. According to the author of the AUR package, these are only used
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1s0dxa1sa37nvna5nfqdsp294810favj68qb7ghl78qna7zw0cim";
   };
 
-  buildInputs = [ cmake qt4 quazip qt-mobility qxt python pycrypto ];
+  buildInputs = [ cmake qt4 quazip qt-mobility qxt pythonPackages.python pythonPackages.pycrypto ];
 
   patchPhase = ''
     # Required to make the configure script work. Normally, screencloud's
@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
     "-DCONSUMER_SECRET_SCREENCLOUD=${consumerSecret}"
   ];
 
-  sourceRoot = "screencloud-v${version}-src/screencloud";
+  setSourceRoot = ''
+    sourceRoot=$(echo */screencloud)
+  '';
 
   preConfigure = ''
     # This needs to be set in preConfigure instead of cmakeFlags in order to
@@ -58,7 +60,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     patchShebangs $prefix/opt/screencloud/screencloud.sh
     substituteInPlace "$prefix/opt/screencloud/screencloud.sh" --replace "/opt" "$prefix/opt"
-    sed -i "2 i\export PYTHONPATH=$(toPythonPath ${pycrypto}):\$PYTHONPATH" "$prefix/opt/screencloud/screencloud.sh"
+    sed -i "2 i\export PYTHONPATH=$(toPythonPath ${pythonPackages.pycrypto}):\$PYTHONPATH" "$prefix/opt/screencloud/screencloud.sh"
     mkdir $prefix/bin
     mkdir $prefix/lib
     ln -s $prefix/opt/screencloud/screencloud.sh $prefix/bin/screencloud
@@ -66,9 +68,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://screencloud.net/;
+    homepage = "https://screencloud.net/";
     description = "Client for Screencloud, an easy to use screenshot sharing tool";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ forkk ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

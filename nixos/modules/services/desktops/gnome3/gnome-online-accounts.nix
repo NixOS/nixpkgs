@@ -4,10 +4,11 @@
 
 with lib;
 
-let
-  gnome3 = config.environment.gnome3.packageSet;
-in
 {
+
+  meta = {
+    maintainers = teams.gnome.members;
+  };
 
   ###### interface
 
@@ -33,9 +34,9 @@ in
 
   config = mkIf config.services.gnome3.gnome-online-accounts.enable {
 
-    environment.systemPackages = [ gnome3.gnome_online_accounts ];
+    environment.systemPackages = [ pkgs.gnome-online-accounts ];
 
-    services.dbus.packages = [ gnome3.gnome_online_accounts ];
+    services.dbus.packages = [ pkgs.gnome-online-accounts ];
 
   };
 

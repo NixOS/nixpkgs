@@ -1,40 +1,41 @@
-{ stdenv, fetchurl, mkfontdir, mkfontscale }:
+{ stdenv, fetchurl, mkfontscale }:
 
-# adapted from https://aur.archlinux.org/packages/proggyfonts/
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "proggyfonts-0.1";
 
   src = fetchurl {
-    url = "http://kaictl.net/software/${name}.tar.gz";
+    url = "https://web.archive.org/web/20150801042353/http://kaictl.net/software/proggyfonts-0.1.tar.gz";
     sha256 = "1plcm1sjpa3hdqhhin48fq6zmz3ndm4md72916hd8ff0w6596q0n";
   };
 
-  buildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ mkfontscale ];
 
   installPhase =
     ''
-      mkdir -p $out/share/doc/$name $out/share/fonts/misc $out/share/fonts/truetype
-
-      cp Licence.txt $out/share/doc/$name/LICENSE
-
+      # compress pcf fonts
+      mkdir -p $out/share/fonts/misc
+      rm Speedy.pcf # duplicated as Speedy11.pcf
       for f in *.pcf; do
-        gzip -c "$f" > $out/share/fonts/misc/"$f".gz
+        gzip -n -9 -c "$f" > $out/share/fonts/misc/"$f".gz
       done
-      cp *.bdf $out/share/fonts/misc
-      cp *.ttf $out/share/fonts/truetype
 
-      for f in misc truetype; do
-        cd $out/share/fonts/$f
-        mkfontscale
-        mkfontdir
-      done
+      install -D -m 644 *.bdf -t "$out/share/fonts/misc"
+      install -D -m 644 *.ttf -t "$out/share/fonts/truetype"
+      install -D -m 644 Licence.txt -t "$out/share/doc/$name"
+
+      mkfontscale "$out/share/fonts/truetype"
+      mkfontdir   "$out/share/fonts/misc"
     '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1x196rp3wqjd7m57bgp5kfy5jmj97qncxi1vwibs925ji7dqzfgf";
+
   meta = with stdenv.lib; {
-    homepage = http://upperbounds.net;
+    homepage = "http://upperbounds.net";
     description = "A set of fixed-width screen fonts that are designed for code listings";
     license = licenses.mit;
     platforms = platforms.all;
+    maintainers = [ maintainers.myrl ];
   };
 }

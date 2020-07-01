@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonPackage rec {
-  name = "rawdog-2.20";
+python2Packages.buildPythonApplication rec {
+  pname = "rawdog";
+  version = "2.23";
 
   src = fetchurl {
-    url = "http://offog.org/files/${name}.tar.gz";
-    sha256 = "0a63b26cc111b0deca441f498177b49be0330760c5c0e24584cdb9ba1e7fd5a6";
+    url = "https://offog.org/files/${pname}-${version}.tar.gz";
+    sha256 = "18nyg19mwxyqdnykplkqmzb4n27vvrhvp639zai8f81gg9vdbsjp";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ feedparser ];
+  propagatedBuildInputs = with python2Packages; [ feedparser ];
 
   namePrefix = "";
-  
-  meta = {
-    homepage = "http://offog.org/code/rawdog/";
-    description = "An RSS Aggregator Without Delusions Of Grandeur";
-    license = stdenv.lib.licenses.gpl2;
-    platform = stdenv.lib.platforms.unix;
+
+  meta = with stdenv.lib; {
+    homepage = "https://offog.org/code/rawdog/";
+    description = "RSS Aggregator Without Delusions Of Grandeur";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

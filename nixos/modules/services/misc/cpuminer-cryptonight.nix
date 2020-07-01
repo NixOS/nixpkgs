@@ -28,15 +28,15 @@ in
         '';
       };
       url = mkOption {
-        type = types.string;
+        type = types.str;
         description = "URL of mining server";
       };
       user = mkOption {
-        type = types.string;
+        type = types.str;
         description = "Username for mining server";
       };
       pass = mkOption {
-        type = types.string;
+        type = types.str;
         default = "x";
         description = "Password for mining server";
       };

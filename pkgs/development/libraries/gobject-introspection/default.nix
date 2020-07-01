@@ -1,41 +1,123 @@
-{ stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintlOrEmpty, autoconf, automake, otool }:
-# now that gobjectIntrospection creates large .gir files (eg gtk3 case)
+{ stdenv
+, fetchurl
+, glib
+, flex
+, bison
+, meson
+, ninja
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, docbook_xml_dtd_45
+, pkg-config
+, libffi
+, python3
+, cctools
+, cairo
+, gnome3
+, substituteAll
+, nixStoreDir ? builtins.storeDir
+, x11Support ? true
+}:
+
+# now that gobject-introspection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
 
-let
-  ver_maj = "1.42";
-  ver_min = "0";
-in
 stdenv.mkDerivation rec {
-  name = "gobject-introspection-${ver_maj}.${ver_min}";
+  pname = "gobject-introspection";
+  version = "1.64.1";
+
+  # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
+  # by pygobject3 (and maybe others), but it's only searched in $out
+  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
-    sha256 = "3ba2edfad4f71d4f0de16960b5d5f2511335fa646b2c49bbb93ce5942b3f95f7";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "19vz7vp10h0zj3f491yk72dp89bix6rgkzxg4qcm4d6151ksxgl0";
   };
 
-  buildInputs = [ flex bison pkgconfig python ]
-    ++ libintlOrEmpty
-    ++ stdenv.lib.optional stdenv.isDarwin otool;
-  propagatedBuildInputs = [ libffi glib ];
+  patches = [
+    # Make g-ir-scanner put absolute path to GIR files it generates
+    # so that programs can just dlopen them without having to muck
+    # with LD_LIBRARY_PATH environment variable.
+    (substituteAll {
+      src = ./absolute_shlib_path.patch;
+      inherit nixStoreDir;
+    })
+  ] ++ stdenv.lib.optionals x11Support [
+    # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
+    # https://github.com/NixOS/nixpkgs/issues/34080
+    (substituteAll {
+      src = ./absolute_gir_path.patch;
+      cairoLib = "${stdenv.lib.getLib cairo}/lib";
+    })
+  ];
 
-  # Tests depend on cairo, which is undesirable (it pulls in lots of
-  # other dependencies).
-  configureFlags = [ "--disable-tests" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    flex
+    bison
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43 # FIXME: remove in next release
+    docbook_xml_dtd_45
+    python3
+    setupHook # move .gir files
+  ];
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  buildInputs = [
+    python3
+  ];
+
+  checkInputs = stdenv.lib.optionals stdenv.isDarwin [
+    cctools # for otool
+  ];
+
+  propagatedBuildInputs = [
+    libffi
+    glib
+  ];
+
+  mesonFlags = [
+    "--datadir=${placeholder "dev"}/share"
+    "-Ddoctool=disabled"
+    "-Dcairo=disabled"
+    "-Dgtk_doc=true"
+  ];
+
+  doCheck = !stdenv.isAarch64;
+
+  preCheck = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that we will delete before installation.
+    mkdir -p $out/lib
+    ln -s $PWD/tests/scanner/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary} $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+  '';
+
+  postCheck = ''
+    rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+  '';
 
   setupHook = ./setup-hook.sh;
 
-  patches = [ ./absolute_shlib_path.patch ];
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";
-    homepage    = http://live.gnome.org/GObjectIntrospection;
-    maintainers = with maintainers; [ lovek323 urkud lethalman ];
-    platforms   = platforms.unix;
+    homepage = "https://gi.readthedocs.io/";
+    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 ]);
+    platforms = platforms.unix;
+    license = with licenses; [ gpl2 lgpl2 ];
 
     longDescription = ''
       GObject introspection is a middleware layer between C libraries (using

@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, x11, ncurses }:
+{ stdenv, fetchurl, xlibsWrapper, ncurses }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
 
-  name = "metaocaml-3.09-alpha-30";
+  pname = "metaocaml";
+  version = "3.09-alpha-30";
 
   src = fetchurl {
     url = "http://www.metaocaml.org/dist/old/MetaOCaml_309_alpha_030.tar.gz";
@@ -10,9 +11,9 @@ stdenv.mkDerivation (rec {
   };
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk" "-x11lib" x11];
-  buildFlags = "world bootstrap world.opt";
-  buildInputs = [x11 ncurses];
+  configureFlags = ["-no-tk" "-x11lib" xlibsWrapper];
+  buildFlags = [ "world" "bootstrap" "world.opt" ];
+  buildInputs = [xlibsWrapper ncurses];
   installTargets = "install installopt";
   patchPhase = ''
     CAT=$(type -tp cat)
@@ -24,9 +25,10 @@ stdenv.mkDerivation (rec {
   '';
 
   meta = {
-    homepage = http://www.metaocaml.org/;
+    homepage = "http://www.metaocaml.org/";
     license = with stdenv.lib.licenses; [ qpl lgpl2 ];
-    desctiption = "A compiled, type-safe, multi-stage programming language";
+    description = "A compiled, type-safe, multi-stage programming language";
+    broken = true;
   };
 
 })

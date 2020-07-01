@@ -1,24 +1,27 @@
-{ lib, stdenv, fetchurl, libgcrypt, pkgconfig, glib, linuxHeaders }:
+{ stdenv, fetchFromGitHub, libgcrypt
+, pkgconfig, glib, linuxHeaders ? stdenv.cc.libc.linuxHeaders, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "duperemove-${version}";
-  version = "0.09.beta2";
+  pname = "duperemove";
+  version = "0.11.1";
 
-  src = fetchurl {
-    url = "https://github.com/markfasheh/duperemove/archive/v${version}.tar.gz";
-    sha256 = "0rn7lf9rjf4ypgfwms2y7b459rri4rfn809h6wx8xl9nbm5niil4";
+  src = fetchFromGitHub {
+    owner = "markfasheh";
+    repo = "duperemove";
+    rev = "v${version}";
+    sha256 = "1scz76pvpljvrpfn176125xwaqwyy4pirlm11sc9spb2hyzknw2z";
   };
 
-  buildInputs = [ libgcrypt pkgconfig glib linuxHeaders ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libgcrypt glib linuxHeaders sqlite ];
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A simple tool for finding duplicated extents and submitting them for deduplication";
-    homepage = https://github.com/markfasheh/duperemove;
-    license = lib.licenses.gpl2;
-
-    maintainers = [ lib.maintainers.bluescreen303 ];
-    platforms = lib.platforms.all;
+    homepage = "https://github.com/markfasheh/duperemove";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ bluescreen303 thoughtpolice ];
+    platforms = platforms.linux;
   };
 }

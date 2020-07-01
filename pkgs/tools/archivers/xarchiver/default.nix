@@ -1,20 +1,23 @@
-{ stdenv, fetchurl, gtk2, pkgconfig, intltool }:
+{ stdenv, fetchFromGitHub, gtk3, pkgconfig, intltool, libxslt }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.4";
-  name = "xarchiver-${version}";
+  version = "0.5.4.14";
+  pname = "xarchiver";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/xarchiver/${name}.tar.bz2";
-    sha256 = "1x1f8m71cvv2p1364rz99iqs2caxj7yrb46aikz6xigwg4wsfgz6";
+  src = fetchFromGitHub {
+    owner = "ib";
+    repo = "xarchiver";
+    rev = version;
+    sha256 = "1iklwgykgymrwcc5p1cdbh91v0ih1m58s3w9ndl5kyd44bwlb7px";
   };
 
-  buildInputs = [ gtk2 pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 intltool libxslt ];
 
   meta = {
-    description = "GTK+2 only frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";
-    homepage = http://sourceforge.net/projects/xarchiver/;
-    maintainers = [ stdenv.lib.maintainers.iElectric ];
+    description = "GTK frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";
+    homepage = "https://github.com/ib/xarchiver";
+    maintainers = [ stdenv.lib.maintainers.domenkozar ];
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
   };

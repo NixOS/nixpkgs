@@ -4,39 +4,29 @@ with pkgs;
 with lib;
 
 let
-
   uid = config.ids.uids.mopidy;
   gid = config.ids.gids.mopidy;
   cfg = config.services.mopidy;
 
   mopidyConf = writeText "mopidy.conf" cfg.configuration;
 
-  mopidyLauncher = stdenv.mkDerivation {
-    name = "mopidy-launcher";
-    phases = [ "installPhase" ];
-    buildInputs = [ makeWrapper python ];
-    installPhase = ''
-      mkdir -p $out/bin
-      ln -s ${mopidy}/bin/mopidy $out/bin/mopidy
-      wrapProgram $out/bin/mopidy \
-        --prefix PYTHONPATH : \
-        "${concatStringsSep ":" (map (p: "$(toPythonPath ${p})") cfg.extensionPackages)}"
+  mopidyEnv = buildEnv {
+    name = "mopidy-with-extensions-${mopidy.version}";
+    paths = closePropagation cfg.extensionPackages;
+    pathsToLink = [ "/${mopidyPackages.python.sitePackages}" ];
+    buildInputs = [ makeWrapper ];
+    postBuild = ''
+      makeWrapper ${mopidy}/bin/mopidy $out/bin/mopidy \
+        --prefix PYTHONPATH : $out/${mopidyPackages.python.sitePackages}
     '';
   };
-
 in {
 
   options = {
 
     services.mopidy = {
 
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Whether to enable Mopidy, a music player daemon.
-        '';
-      };
+      enable = mkEnableOption "Mopidy, a music player daemon";
 
       dataDir = mkOption {
         default = "/var/lib/mopidy";
@@ -56,6 +46,7 @@ in {
       };
 
       configuration = mkOption {
+        default = "";
         type = types.lines;
         description = ''
           The configuration that Mopidy should use.
@@ -75,43 +66,42 @@ in {
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - mopidy mopidy - -"
+    ];
 
     systemd.services.mopidy = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "sound.target" ];
       description = "mopidy music player daemon";
-      preStart = "mkdir -p ${cfg.dataDir} && chown -R mopidy:mopidy  ${cfg.dataDir}";
       serviceConfig = {
-        ExecStart = "${mopidyLauncher}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)}";
+        ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)}";
         User = "mopidy";
-        PermissionsStartOnly = true;
       };
     };
 
     systemd.services.mopidy-scan = {
       description = "mopidy local files scanner";
-      preStart = "mkdir -p ${cfg.dataDir} && chown -R mopidy:mopidy  ${cfg.dataDir}";
       serviceConfig = {
-        ExecStart = "${mopidyLauncher}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)} local scan";
+        ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)} local scan";
         User = "mopidy";
-        PermissionsStartOnly = true;
         Type = "oneshot";
       };
     };
 
-    users.extraUsers.mopidy = {
+    users.users.mopidy = {
       inherit uid;
       group = "mopidy";
       extraGroups = [ "audio" ];
       description = "Mopidy daemon user";
-      home = "${cfg.dataDir}";
+      home = cfg.dataDir;
     };
 
-    users.extraGroups.mopidy.gid = gid;
+    users.groups.mopidy.gid = gid;
 
   };
 

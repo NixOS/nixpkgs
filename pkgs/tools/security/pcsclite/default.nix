@@ -1,29 +1,48 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl }:
+{ stdenv, fetchurl, pkgconfig, udev, dbus, perl, python3
+, IOKit ? null }:
 
 stdenv.mkDerivation rec {
-  name = "pcsclite-1.8.13";
+  pname = "pcsclite";
+  version = "1.8.26";
+
+  outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
-    url = "https://alioth.debian.org/frs/download.php/file/4126/pcsc-lite-1.8.13.tar.bz2";
-    sha256 = "0fxwzckbjsckfp1f01yp3x6y1wlaaivhy12a5hka6qwdh1z085gk";
+    url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
+    sha256 = "1ndvvz0fgqwz70pijymsxmx25mzryb0zav1i8jjc067ndryvxdry";
   };
 
-  # The OS should care on preparing the drivers into this location
+  patches = [ ./no-dropdir-literals.patch ];
+
   configureFlags = [
+    # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    "--with-systemdsystemunitdir=$out/etc/systemd/system"
-    "--enable-confdir=$out/etc"
-  ];
+    "--enable-confdir=/etc"
+    "--enable-ipcdir=/run/pcscd"
+  ] ++ stdenv.lib.optional stdenv.isLinux
+         "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
+    ++ stdenv.lib.optional (!stdenv.isLinux)
+         "--disable-libsystemd";
 
-  buildInputs = [ udev dbus_libs perl ];
+  postConfigure = ''
+    sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
+      s/(DROPDIR *)(.*)/\1(getenv("PCSCLITE_HP_DROPDIR") ? : \2)/
+    }' config.h
+  '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  postInstall = ''
+    # pcsc-spy is a debugging utility and it drags python into the closure
+    moveToOutput bin/pcsc-spy "$dev"
+  '';
+
+  nativeBuildInputs = [ pkgconfig perl ];
+  buildInputs = [ python3 ] ++ stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
+             ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
-    homepage = http://pcsclite.alioth.debian.org/;
+    homepage = "https://pcsclite.apdu.fr/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ viric wkennington ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
   };
 }

@@ -1,20 +1,22 @@
-{ stdenv, fetchFromGitHub, fuse, pkgconfig }:
+{ stdenv, fetchFromGitHub, fuse, pkgconfig, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "tup-${version}";
-  version = "0.7.3";
+  pname = "tup";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "gittup";
     repo = "tup";
     rev = "v${version}";
-    sha256 = "1x2grwmlf2izip4djb8cjwgl8p3x0bmfqwzjsc017mqi17qkijy8";
+    sha256 = "1b9rllwfdmjvfmwvzqfbqfi1flf4y9zzjmyp0dizq23gpkvhi42f";
   };
 
-  buildInputs = [ fuse pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse pcre ];
 
   configurePhase = ''
-    sed -i 's/`git describe`/v${version}/g' Tupfile
+    sed -i 's/`git describe`/v${version}/g' src/tup/link.sh
+    sed -i 's/pcre-confg/pkg-config pcre/g' Tupfile Tuprules.tup
   '';
 
   # Regular tup builds require fusermount to have suid, which nix cannot
@@ -22,6 +24,7 @@ stdenv.mkDerivation rec {
   # generate' instead
   buildPhase = ''
     ./build.sh
+    ./build/tup init
     ./build/tup generate script.sh
     ./script.sh
   '';
@@ -34,6 +37,8 @@ stdenv.mkDerivation rec {
     cp tup.1 $out/share/man/man1/
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = with stdenv.lib; {
     description = "A fast, file-based build system";
     longDescription = ''
@@ -44,8 +49,9 @@ stdenv.mkDerivation rec {
       algorithms to avoid doing unnecessary work. This means you can stay focused on
       your project rather than on your build system.
     '';
-    homepage = http://gittup.org/tup/;
+    homepage = "http://gittup.org/tup/";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,48 +1,76 @@
-{ SDL_image, SDL_ttf, SDL_net, fpc, qt4, ghcWithPackages, ffmpeg, freeglut
-, stdenv, makeWrapper, fetchurl, cmake, pkgconfig, lua5_1, SDL, SDL_mixer
-, zlib, libpng, mesa
+{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg_3, freeglut
+, lib, fetchurl, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
+, zlib, libpng, libGL, libGLU, physfs
+, qtbase, qttools
+, withServer ? true
 }:
 
 let
+  # gameServer/hedgewars-server.cabal depends on network < 3
   ghc = ghcWithPackages (pkgs: with pkgs; [
-          network vector utf8-string bytestring-show random hslogger dataenc
+          SHA bytestring entropy hslogger network_2_6_3_1 pkgs.zlib random
+          regex-tdfa sandi utf8-string vector
         ]);
+
 in
-stdenv.mkDerivation rec {
-  version = "0.9.20.5";
-  name = "hedgewars-${version}";
+mkDerivation rec {
+  pname = "hedgewars";
+  version = "1.0.0";
+
   src = fetchurl {
-    url = "http://download.gna.org/hedgewars/hedgewars-src-${version}.tar.bz2";
-    sha256 = "1k5dq14s9pshrqlz8vnix237bcapfif4k3rc4yj4cmwdx1pqkl56";
+    url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
+    sha256 = "0nqm9w02m0xkndlsj6ys3wr0ik8zc14zgilq7k6fwjrf3zk385i1";
   };
 
+  nativeBuildInputs = [ cmake pkgconfig qttools ];
+
   buildInputs = [
-    SDL_ttf SDL_net cmake pkgconfig lua5_1 SDL SDL_mixer SDL_image fpc
-    qt4 ghc ffmpeg freeglut makeWrapper
+    SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
+    fpc lua5_1
+    ffmpeg_3 freeglut physfs
+    qtbase
+  ] ++ lib.optional withServer ghc;
+
+  postPatch = ''
+    substituteInPlace gameServer/CMakeLists.txt \
+      --replace mask evaluate
+  '';
+
+  cmakeFlags = [
+    "-DNOVERSIONINFOUPDATE=ON"
+    "-DNOSERVER=${if withServer then "OFF" else "ON"}"
   ];
 
-  patches = [ ./fix-ghc-7.8-build-failure.diff ];
 
-  preBuild = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${SDL_image}/lib
-                                     -rpath ${SDL_mixer}/lib
-                                     -rpath ${SDL_net}/lib
-                                     -rpath ${SDL_ttf}/lib
-                                     -rpath ${SDL}/lib
-                                     -rpath ${libpng}/lib
-                                     -rpath ${lua5_1}/lib
-                                     -rpath ${mesa}/lib
-                                     -rpath ${zlib}/lib
-                                     "
+  # hslogger brings network-3 and network-bsd which conflict with 
+  # network-2.6.3.1
+  preConfigure = ''
+    substituteInPlace gameServer/CMakeLists.txt \
+      --replace "haskell_flags}" \
+        "haskell_flags} -package network-2.6.3.1 -hide-package network-bsd"
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/hwengine --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH:${mesa}/lib/:${freeglut}/lib
-  '';
+  NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
+    SDL2.out
+    SDL2_image
+    SDL2_mixer
+    SDL2_net
+    SDL2_ttf
+    libGL
+    libGLU
+    libpng.out
+    lua5_1
+    physfs
+    zlib.out
+  ];
 
-  meta = with stdenv.lib; {
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libGLU freeglut physfs ]}"
+  ];
+
+  meta = with lib; {
     description = "Turn-based strategy artillery game similar to Worms";
-    homepage = http://hedgewars.org/;
+    homepage = "http://hedgewars.org/";
     license = licenses.gpl2;
     longDescription = ''
        Each player controls a team of several hedgehogs. During the course of
@@ -67,7 +95,8 @@ stdenv.mkDerivation rec {
        contact with explosions, to zero (the damage dealt to the attacked
        hedgehog or hedgehogs after a player's or CPU turn is shown only when
        all movement on the battlefield has ceased).'';
-    maintainers = with maintainers; [ kragniz ];
-    platforms = ghc.meta.platforms;
+    maintainers = with maintainers; [ kragniz fpletz ];
+    inherit (ghc.meta) platforms;
+    hydraPlatforms = [];
   };
 }

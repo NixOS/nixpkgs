@@ -1,46 +1,57 @@
-{ fetchurl, stdenv, sqlite, pkgconfig, autoconf, automake
-, xapian, glib, gmime, texinfo , emacs, guile
-, gtk3, webkit, libsoup, icu, withMug ? false /* doesn't build with current gtk3 */ }:
+{ stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
+, xapian, glib, gmime3, texinfo , emacs, guile
+, gtk3, webkitgtk, libsoup, icu
+, withMug ? false
+, batchSize ? null }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.12";
-  name = "mu-${version}";
+  pname = "mu";
+  version = "1.4.10";
 
-  src = fetchurl {
-    url = "https://github.com/djcb/mu/archive/v${version}.tar.gz";
-    sha256 = "1bxryacmas2llj68m2dv8dr1vwx8f5k2i2azh69jajkpqx7i4wdq";
+  src = fetchFromGitHub {
+    owner  = "djcb";
+    repo   = "mu";
+    rev    = version;
+    sha256 = "10vnqlpphjkkiji42sfs954l1zfgwnic7mmpr4nx6yx44z619v0y";
   };
 
-  buildInputs =
-    [ sqlite pkgconfig autoconf automake xapian
-      glib gmime texinfo emacs guile libsoup icu ]
-    ++ stdenv.lib.optional withMug [ gtk3 webkit ];
-
-  preConfigure = ''
-    autoreconf -i
+  postPatch = stdenv.lib.optionalString (batchSize != null) ''
+    sed -i lib/mu-store.cc --regexp-extended \
+      -e 's@(constexpr auto BatchSize).*@\1 = ${toString batchSize};@'
   '';
+
+  buildInputs = [
+    sqlite xapian glib gmime3 texinfo emacs libsoup icu
+  ]
+    # Workaround for https://github.com/djcb/mu/issues/1641
+    ++ stdenv.lib.optional (!stdenv.isDarwin) guile
+    ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk ];
+
+  nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
+
+  enableParallelBuilding = true;
 
   preBuild = ''
     # Fix mu4e-builddir (set it to $out)
     substituteInPlace mu4e/mu4e-meta.el.in \
       --replace "@abs_top_builddir@" "$out"
-
-    # We install msg2pdf to bin/msg2pdf, fix its location in elisp
-    substituteInPlace mu4e/mu4e-actions.el \
-      --replace "/toys/msg2pdf/msg2pdf" "/bin/msg2pdf"
   '';
 
-  # Install mug and msg2pdf
+  # Install mug
   postInstall = stdenv.lib.optionalString withMug ''
-    cp -v toys/msg2pdf/msg2pdf $out/bin/
-    cp -v toys/mug/mug $out/bin/
+    for f in mug ; do
+      install -m755 toys/$f/$f $out/bin/$f
+    done
   '';
 
-  meta = {
+  doCheck = true;
+
+  meta = with stdenv.lib; {
     description = "A collection of utilties for indexing and searching Maildirs";
-    license = stdenv.lib.licenses.gpl3Plus;
-    homepage = "http://www.djcbsoftware.nl/code/mu/";
-    platforms = stdenv.lib.platforms.mesaPlatforms;
-    maintainers = with stdenv.lib.maintainers; [ antono the-kenny ];
+    license = licenses.gpl3Plus;
+    homepage = "https://www.djcbsoftware.nl/code/mu/";
+    changelog = "https://github.com/djcb/mu/releases/tag/${version}";
+    maintainers = with maintainers; [ antono peterhoeg ];
+    platforms = platforms.mesaPlatforms;
   };
 }

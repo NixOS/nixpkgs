@@ -1,23 +1,47 @@
-{ fetchurl, stdenv, ocaml, ocamlPackages }:
+{ fetchurl, lib, which, ocamlPackages }:
 
-stdenv.mkDerivation rec {
-  name = "alt-ergo-${version}";
-  version = "0.99.1";
+let
+  pname = "alt-ergo";
+  version = "2.3.2";
 
   src = fetchurl {
-    url    = "http://alt-ergo.ocamlpro.com/download_manager.php?target=${name}.tar.gz";
-    name   = "${name}.tar.gz";
-    sha256 = "0lnlf56ysisa45dxvbwzhl4fgyxyfz35psals2kv9x8gyq54zwpm";
+    url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-${version}/alt-ergo-${version}.tar.gz";
+    sha256 = "130hisjzkaslygipdaaqib92spzx9rapsd45dbh5ssczjn5qnhb9";
   };
 
-  buildInputs = with ocamlPackages;
-    [ ocaml findlib ocamlgraph zarith lablgtk ];
+  preConfigure = "patchShebangs ./configure";
+
+  nativeBuildInputs = [ which ];
+
+in
+
+let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
+  pname = "alt-ergo-lib";
+  inherit version src preConfigure nativeBuildInputs;
+  configureFlags = pname;
+  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
+}; in
+
+let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
+  pname = "alt-ergo-parsers";
+  inherit version src preConfigure nativeBuildInputs;
+  configureFlags = pname;
+  buildInputs = with ocamlPackages; [ menhir ];
+  propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
+}; in
+
+ocamlPackages.buildDunePackage {
+
+  inherit pname version src preConfigure nativeBuildInputs;
+
+  configureFlags = pname;
+
+  buildInputs = [ alt-ergo-parsers ocamlPackages.menhir ];
 
   meta = {
     description = "High-performance theorem prover and SMT solver";
-    homepage    = "http://alt-ergo.ocamlpro.com/";
-    license     = stdenv.lib.licenses.cecill-c; # LGPL-2 compatible
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    homepage    = "https://alt-ergo.ocamlpro.com/";
+    license     = lib.licenses.ocamlpro_nc;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

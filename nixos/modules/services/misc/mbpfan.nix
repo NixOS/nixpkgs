@@ -8,16 +8,12 @@ let
 
 in {
   options.services.mbpfan = {
-    enable = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Whether to enable the mbpfan daemon.
-      '';
-    };
+    enable = mkEnableOption "mbpfan, fan controller daemon for Apple Macs and MacBooks";
 
     package = mkOption {
+      type = types.package;
       default = pkgs.mbpfan;
+      defaultText = "pkgs.mbpfan";
       description = ''
         The package used for the mbpfan daemon.
       '';
@@ -105,7 +101,7 @@ in {
         Type = "simple";
         ExecStart = "${cfg.package}/bin/mbpfan -f${verbose}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        PIDFile = "/var/run/mbpfan.pid";
+        PIDFile = "/run/mbpfan.pid";
         Restart = "always";
       };
     };

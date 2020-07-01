@@ -1,7 +1,0 @@
-url https://code.google.com/p/libewf/
-version_link 'googledrive[.]com'
-version_link '[.]tar[.]'
-do_overwrite () {
-  do_overwrite_just_version
-  set_var_value url "$CURRENT_URL"
-}

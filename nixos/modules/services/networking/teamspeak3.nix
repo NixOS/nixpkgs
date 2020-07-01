@@ -10,13 +10,12 @@ let
 in
 
 {
-  
+
   ###### interface
 
   options = {
 
     services.teamspeak3 = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -42,8 +41,9 @@ in
       };
 
       voiceIP = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.0.0.0";
         description = ''
           IP on which the server instance will listen for incoming voice connections. Defaults to any IP.
         '';
@@ -58,8 +58,9 @@ in
       };
 
       fileTransferIP = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.0.0.0";
         description = ''
           IP on which the server instance will listen for incoming file transfer connections. Defaults to any IP.
         '';
@@ -74,8 +75,9 @@ in
       };
 
       queryIP = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.0.0.0";
         description = ''
           IP on which the server instance will listen for incoming ServerQuery connections. Defaults to any IP.
         '';
@@ -97,46 +99,44 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    users.users.teamspeak = {
+      description = "Teamspeak3 voice communication server daemon";
+      group = group;
+      uid = config.ids.uids.teamspeak;
+      home = cfg.dataDir;
+      createHome = true;
+    };
 
-    users.extraUsers.teamspeak =
-      { name = "teamspeak";
-        description = "Teamspeak3 voice communication server daemon";
-        group = group;
-        uid = config.ids.uids.teamspeak;
-      };
+    users.groups.teamspeak = {
+      gid = config.ids.gids.teamspeak;
+    };
 
-    users.extraGroups.teamspeak =
-      { name = "teamspeak";
-        gid = config.ids.gids.teamspeak;
-      };
+    systemd.tmpfiles.rules = [
+      "d '${cfg.logPath}' - ${user} ${group} - -"
+    ];
 
-    systemd.services.teamspeak3-server = { 
+    systemd.services.teamspeak3-server = {
       description = "Teamspeak3 voice communication server daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        mkdir -p ${cfg.dataDir}
-        mkdir -p ${cfg.logPath}
-        chown ${user}:${group} ${cfg.dataDir}
-        chown ${user}:${group} ${cfg.logPath}
-      '';
-
-      serviceConfig =
-        { ExecStart = ''
-            ${ts3}/bin/ts3server \
-              dbsqlpath=${ts3}/lib/teamspeak/sql/ logpath=${cfg.logPath} \
-              voice_ip=${cfg.voiceIP} default_voice_port=${toString cfg.defaultVoicePort} \
-              filetransfer_ip=${cfg.fileTransferIP} filetransfer_port=${toString cfg.fileTransferPort} \
-              query_ip=${cfg.queryIP} query_port=${toString cfg.queryPort}
-          '';
-          WorkingDirectory = cfg.dataDir;
-          User = user;
-          Group = group;
-          PermissionsStartOnly = true; # preStart needs to run with root permissions
-        };
+      serviceConfig = {
+        ExecStart = ''
+          ${ts3}/bin/ts3server \
+            dbsqlpath=${ts3}/lib/teamspeak/sql/ logpath=${cfg.logPath} \
+            ${optionalString (cfg.voiceIP != null) "voice_ip=${cfg.voiceIP}"} \
+            default_voice_port=${toString cfg.defaultVoicePort} \
+            ${optionalString (cfg.fileTransferIP != null) "filetransfer_ip=${cfg.fileTransferIP}"} \
+            filetransfer_port=${toString cfg.fileTransferPort} \
+            ${optionalString (cfg.queryIP != null) "query_ip=${cfg.queryIP}"} \
+            query_port=${toString cfg.queryPort} license_accepted=1
+        '';
+        WorkingDirectory = cfg.dataDir;
+        User = user;
+        Group = group;
       };
-
+    };
   };
 
+  meta.maintainers = with lib.maintainers; [ arobyn ];
 }

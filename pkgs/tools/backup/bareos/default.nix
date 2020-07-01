@@ -1,30 +1,31 @@
-{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool
-, readline ? null, openssl ? null, python ? null, ncurses ? null
-, sqlite ? null, postgresql ? null, libmysql ? null, zlib ? null, lzo ? null
-, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
+{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, flex
+, readline ? null, openssl ? null, python2 ? null, ncurses ? null, rocksdb
+, sqlite ? null, postgresql ? null, libmysqlclient ? null, zlib ? null, lzo ? null
+, jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
 }:
 
-assert sqlite != null || postgresql != null || libmysql != null;
+assert sqlite != null || postgresql != null || libmysqlclient != null;
 
 with stdenv.lib;
 let
   withGlusterfs = "\${with_glusterfs_directory}";
 in
 stdenv.mkDerivation rec {
-  name = "bareos-${version}";
-  version = "14.2.4";
+  pname = "bareos";
+  version = "17.2.7";
 
   src = fetchFromGitHub {
     owner = "bareos";
     repo = "bareos";
     rev = "Release/${version}";
-    name = "${name}-src";
-    sha256 = "0shb91pawdgrn6rb4np3zyyxv36899nvwf8jaihkg0wvb01viqzr";
+    name = "${pname}-${version}-src";
+    sha256 = "1awf5i4mw2nfd7z0dmqnywapnx9nz6xwqv8rxp0y2mnrhzdpbrbz";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig nettools gettext readline openssl python
-    ncurses sqlite postgresql libmysql zlib lzo acl glusterfs libceph libcap
+    nettools gettext readline openssl python2 flex ncurses sqlite postgresql
+    libmysqlclient zlib lzo jansson acl glusterfs libceph libcap rocksdb
   ];
 
   postPatch = ''
@@ -41,37 +42,41 @@ stdenv.mkDerivation rec {
     "--with-working-dir=/var/lib/bareos"
     "--with-bsrdir=/var/lib/bareos"
     "--with-logdir=/var/log/bareos"
-    "--with-pid-dir=/var/run/bareos"
-    "--with-subsys-dir=/var/run/bareos"
+    "--with-pid-dir=/run/bareos"
+    "--with-subsys-dir=/run/bareos"
     "--enable-ndmp"
     "--enable-lmdb"
     "--enable-batch-insert"
     "--enable-dynamic-cats-backends"
     "--enable-sql-pooling"
     "--enable-scsi-crypto"
-  ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline}" ]
-    ++ optional (python != null) "--with-python=${python}"
-    ++ optional (openssl != null) "--with-openssl=${openssl}"
-    ++ optional (sqlite != null) "--with-sqlite3=${sqlite}"
+  ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline.dev}" ]
+    ++ optional (python2 != null) "--with-python=${python2}"
+    ++ optional (openssl != null) "--with-openssl=${openssl.dev}"
+    ++ optional (sqlite != null) "--with-sqlite3=${sqlite.dev}"
     ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
-    ++ optional (libmysql != null) "--with-mysql=${libmysql}"
-    ++ optional (zlib != null) "--with-zlib=${zlib}"
+    ++ optional (libmysqlclient != null) "--with-mysql=${libmysqlclient}"
+    ++ optional (zlib != null) "--with-zlib=${zlib.dev}"
     ++ optional (lzo != null) "--with-lzo=${lzo}"
+    ++ optional (jansson != null) "--with-jansson=${jansson}"
     ++ optional (acl != null) "--enable-acl"
     ++ optional (glusterfs != null) "--with-glusterfs=${glusterfs}"
     ++ optional (libceph != null) "--with-cephfs=${libceph}";
 
   installFlags = [
     "sysconfdir=\${out}/etc"
+    "confdir=\${out}/etc/bareos"
+    "scriptdir=\${out}/etc/bareos"
     "working_dir=\${TMPDIR}"
     "log_dir=\${TMPDIR}"
+    "sbindir=\${out}/bin"
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.bareos.org/;
+    homepage = "http://www.bareos.org/";
     description = "A fork of the bacula project";
     license = licenses.agpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
+    broken = true;
   };
 }

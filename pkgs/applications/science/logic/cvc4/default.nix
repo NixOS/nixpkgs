@@ -1,23 +1,43 @@
-{stdenv, fetchurl, gmp, libantlr3c, boost}:
+{ stdenv, fetchurl, cln, gmp, swig, pkgconfig
+, readline, libantlr3c, boost, jdk, autoreconfHook
+, python3, antlr3_4
+}:
 
-stdenv.mkDerivation {
-  name = "cvc4-1.4";
+stdenv.mkDerivation rec {
+  pname = "cvc4";
+  version = "1.6";
+
   src = fetchurl {
-    url = http://cvc4.cs.nyu.edu/builds/src/cvc4-1.4.tar.gz;
-    sha256 = "093h7zgv4z4ad503j30dpn8k2pz9m90pvd7gi5axdmwsxgwlzzkn";
+    url = "https://cvc4.cs.stanford.edu/downloads/builds/src/cvc4-${version}.tar.gz";
+    sha256 = "1iw793zsi48q91lxpf8xl8lnvv0jsj4whdad79rakywkm1gbs62w";
   };
 
-  buildInputs = [ gmp libantlr3c boost ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gmp cln readline swig libantlr3c antlr3_4 boost jdk python3 ];
+  configureFlags = [
+    "--enable-language-bindings=c,c++,java"
+    "--enable-gpl"
+    "--with-cln"
+    "--with-readline"
+    "--with-boost=${boost.dev}"
+  ];
 
-  preConfigure = "patchShebangs ./src/";
+  prePatch = ''
+    patch -p1 -i ${./minisat-fenv.patch} -d src/prop/minisat
+    patch -p1 -i ${./minisat-fenv.patch} -d src/prop/bvminisat
+  '';
 
-  doChecks = true;
+  preConfigure = ''
+    patchShebangs ./src/
+  '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "An efficient open-source automatic theorem prover for satisfiability modulo theories (SMT) problems";
-    homepage = http://cvc4.cs.nyu.edu/web/;
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vbgl ];
+    description = "A high-performance theorem prover and SMT solver";
+    homepage    = "http://cvc4.cs.stanford.edu/web/";
+    license     = licenses.gpl3;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ vbgl thoughtpolice gebner ];
   };
 }

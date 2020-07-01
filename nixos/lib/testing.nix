@@ -1,6 +1,13 @@
-{ system, minimal ? false }:
+{ system
+, pkgs ? import ../.. { inherit system config; }
+  # Use a minimal kernel?
+, minimal ? false
+  # Ignored
+, config ? {}
+  # Modules to add to each VM
+, extraConfigurations ? [] }:
 
-with import ./build-vms.nix { inherit system minimal; };
+with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;
 
 rec {
@@ -8,12 +15,18 @@ rec {
   inherit pkgs;
 
 
-  testDriver = stdenv.mkDerivation {
+  testDriver = lib.warn ''
+    Perl VM tests are deprecated and will be removed for 20.09.
+    Please update your tests to use the python test driver.
+    See https://github.com/NixOS/nixpkgs/pull/71684 for details.
+  '' stdenv.mkDerivation {
     name = "nixos-test-driver";
 
     buildInputs = [ makeWrapper perl ];
 
-    unpackPhase = "true";
+    dontUnpack = true;
+
+    preferLocalBuild = true;
 
     installPhase =
       ''
@@ -21,14 +34,14 @@ rec {
         cp ${./test-driver/test-driver.pl} $out/bin/nixos-test-driver
         chmod u+x $out/bin/nixos-test-driver
 
-        libDir=$out/lib/perl5/site_perl
+        libDir=$out/${perl.libPrefix}
         mkdir -p $libDir
         cp ${./test-driver/Machine.pm} $libDir/Machine.pm
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${qemu_kvm}/bin:${vde2}/bin:${netpbm}/bin:${coreutils}/bin" \
-          --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
+          --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
+          --prefix PERL5LIB : "${with perlPackages; makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/${perl.libPrefix}"
       '';
   };
 
@@ -41,29 +54,17 @@ rec {
 
       requiredSystemFeatures = [ "kvm" "nixos-test" ];
 
-      buildInputs = [ libxslt ];
-
       buildCommand =
         ''
-          mkdir -p $out/nix-support
+          mkdir -p $out
 
-          LOGFILE=$out/log.xml tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver
-
-          # Generate a pretty-printed log.
-          xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
-          ln -s ${./test-driver/logfile.css} $out/logfile.css
-          ln -s ${./test-driver/treebits.js} $out/treebits.js
-          ln -s ${jquery}/js/jquery.min.js $out/
-          ln -s ${jquery-ui}/js/jquery-ui.min.js $out/
-
-          touch $out/nix-support/hydra-build-products
-          echo "report testlog $out log.html" >> $out/nix-support/hydra-build-products
+          LOGFILE=/dev/null tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver
 
           for i in */xchg/coverage-data; do
             mkdir -p $out/coverage-data
             mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
-        ''; # */
+        '';
     };
 
 
@@ -76,14 +77,26 @@ rec {
     } @ t:
 
     let
-      testDriverName = "nixos-test-driver-${name}";
+      # A standard store path to the vm monitor is built like this:
+      #   /tmp/nix-build-vm-test-run-$name.drv-0/vm-state-machine/monitor
+      # The max filename length of a unix domain socket is 108 bytes.
+      # This means $name can at most be 50 bytes long.
+      maxTestNameLen = 50;
+      testNameLen = builtins.stringLength name;
+
+      testDriverName = with builtins;
+        if testNameLen > maxTestNameLen then
+          abort ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
+            "it's currently ${toString testNameLen} characters long.")
+        else
+          "nixos-test-driver-${name}";
 
       nodes = buildVirtualNetwork (
         t.nodes or (if t ? machine then { machine = t.machine; } else { }));
 
       testScript' =
         # Call the test script with the computed nodes.
-        if builtins.isFunction testScript
+        if lib.isFunction testScript
         then testScript { inherit nodes; }
         else testScript;
 
@@ -91,7 +104,9 @@ rec {
 
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      ocrProg = tesseract.override { enableLanguages = [ "eng" ]; };
+      ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
+
+      imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
 
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
@@ -106,28 +121,46 @@ rec {
           mkdir -p $out/bin
           echo "$testScript" > $out/test-script
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
-          vms="$(for i in ${toString vms}; do echo $i/bin/run-*-vm; done)"
+          vms=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
           wrapProgram $out/bin/nixos-test-driver \
-            --add-flags "$vms" \
-            ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
-            --run "testScript=\"\$(cat $out/test-script)\"" \
-            --set testScript '"$testScript"' \
-            --set VLANS '"${toString vlans}"'
+            --add-flags "''${vms[*]}" \
+            ${lib.optionalString enableOCR
+              "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
+            --run "export testScript=\"\$(cat $out/test-script)\"" \
+            --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
-            --add-flags "$vms" \
+            --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
-            --set tests '"startAll; joinAll;"' \
-            --set VLANS '"${toString vlans}"' \
+            --set tests 'startAll; joinAll;' \
+            --set VLANS '${toString vlans}' \
             ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
         ''; # "
 
-      test = runTests driver;
+      passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
+        meta = (drv.meta or {}) // t.meta;
+      };
 
-      report = releaseTools.gcovReport { coverageRuns = [ test ]; };
+      test = passMeta (runTests driver);
+      report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
 
-    in (if makeCoverageReport then report else test) // { inherit nodes driver test; };
+      nodeNames = builtins.attrNames nodes;
+      invalidNodeNames = lib.filter
+        (node: builtins.match "^[A-z_][A-z0-9_]+$" node == null) nodeNames;
 
+    in
+      if lib.length invalidNodeNames > 0 then
+        throw ''
+          Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
+          All machines are referenced as perl variables in the testing framework which will break the
+          script when special characters are used.
+
+          Please stick to alphanumeric chars and underscores as separation.
+        ''
+      else
+        (if makeCoverageReport then report else test) // {
+          inherit nodes driver test;
+        };
 
   runInMachine =
     { drv
@@ -142,6 +175,7 @@ rec {
           { key = "run-in-machine";
             networking.hostName = "client";
             nix.readOnlyStore = false;
+            virtualisation.writableStore = false;
           }
         ];
 
@@ -151,9 +185,7 @@ rec {
         ${coreutils}/bin/mkdir -p $TMPDIR
         cd $TMPDIR
 
-        $origBuilder $origArgs
-
-        exit $?
+        exec $origBuilder $origArgs
       '';
 
       testScript = ''
@@ -166,9 +198,22 @@ rec {
       '';
 
       vmRunCommand = writeText "vm-run" ''
+        xchg=vm-state-client/xchg
         ${coreutils}/bin/mkdir $out
-        ${coreutils}/bin/mkdir -p vm-state-client/xchg
-        export > vm-state-client/xchg/saved-env
+        ${coreutils}/bin/mkdir -p $xchg
+
+        for i in $passAsFile; do
+          i2=''${i}Path
+          _basename=$(${coreutils}/bin/basename ''${!i2})
+          ${coreutils}/bin/cp ''${!i2} $xchg/$_basename
+          eval $i2=/tmp/xchg/$_basename
+          ${coreutils}/bin/ls -la $xchg
+        done
+
+        unset i i2 _basename
+        export | ${gnugrep}/bin/grep -v '^xchg=' > $xchg/saved-env
+        unset xchg
+
         export tests='${testScript}'
         ${testDriver}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */
@@ -186,16 +231,17 @@ rec {
   runInMachineWithX = { require ? [], ... } @ args:
     let
       client =
-        { config, pkgs, ... }:
+        { ... }:
         {
           inherit require;
+          imports = [
+            ../tests/common/auto.nix
+          ];
           virtualisation.memorySize = 1024;
           services.xserver.enable = true;
-          services.xserver.displayManager.slim.enable = false;
-          services.xserver.displayManager.auto.enable = true;
-          services.xserver.windowManager.default = "icewm";
+          test-support.displayManager.auto.enable = true;
+          services.xserver.displayManager.defaultSession = "none+icewm";
           services.xserver.windowManager.icewm.enable = true;
-          services.xserver.desktopManager.default = "none";
         };
     in
       runInMachine ({

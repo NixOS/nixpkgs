@@ -40,15 +40,11 @@ in
 
     services.firebird = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable the Firebird super server.
-        '';
-      };
+      enable = mkEnableOption "the Firebird super server";
 
       package = mkOption {
         default = pkgs.firebirdSuper;
+        defaultText = "pkgs.firebirdSuper";
         type = types.package;
         /*
           Example: <code>package = pkgs.firebirdSuper.override { icu =
@@ -94,6 +90,11 @@ in
 
     environment.systemPackages = [cfg.package];
 
+    systemd.tmpfiles.rules = [
+      "d '${dataDir}' 0700 ${cfg.user} - - -"
+      "d '${systemDir}' 0700 ${cfg.user} - - -"
+    ];
+
     systemd.services.firebird =
       { description = "Firebird Super-Server";
 
@@ -103,21 +104,16 @@ in
         # is a better way
         preStart =
           ''
-            mkdir -m 0700 -p \
-              "${dataDir}" \
-              "${systemDir}" \
-              /var/log/firebird
-
             if ! test -e "${systemDir}/security2.fdb"; then
                 cp ${firebird}/security2.fdb "${systemDir}"
             fi
 
-            chown -R ${cfg.user} "${dataDir}" "${systemDir}" /var/log/firebird
             chmod -R 700         "${dataDir}" "${systemDir}" /var/log/firebird
           '';
 
-        serviceConfig.PermissionsStartOnly = true; # preStart must be run as root
         serviceConfig.User = cfg.user;
+        serviceConfig.LogsDirectory = "firebird";
+        serviceConfig.LogsDirectoryMode = "0700";
         serviceConfig.ExecStart = ''${firebird}/bin/fbserver -d'';
 
         # TODO think about shutdown
@@ -153,13 +149,13 @@ in
       # there are some additional settings which should be reviewed
     '';
 
-    users.extraUsers.firebird = {
+    users.users.firebird = {
       description = "Firebird server user";
       group = "firebird";
       uid = config.ids.uids.firebird;
     };
 
-    users.extraGroups.firebird.gid = config.ids.gids.firebird;
+    users.groups.firebird.gid = config.ids.gids.firebird;
 
   };
 }

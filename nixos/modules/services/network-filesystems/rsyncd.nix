@@ -8,35 +8,31 @@ let
 
   motdFile = builtins.toFile "rsyncd-motd" cfg.motd;
 
-  moduleConfig = name:
-    let module = getAttr name cfg.modules; in
-    "[${name}]\n " + (toString (
-       map
-         (key: "${key} = ${toString (getAttr key module)}\n")
-         (attrNames module)
-    ));
+  foreach = attrs: f:
+    concatStringsSep "\n" (mapAttrsToList f attrs);
 
-  cfgFile = builtins.toFile "rsyncd.conf"
-    ''
+  cfgFile = ''
     ${optionalString (cfg.motd != "") "motd file = ${motdFile}"}
     ${optionalString (cfg.address != "") "address = ${cfg.address}"}
     ${optionalString (cfg.port != 873) "port = ${toString cfg.port}"}
     ${cfg.extraConfig}
-    ${toString (map moduleConfig (attrNames cfg.modules))}
-    '';
+    ${foreach cfg.modules (name: module: ''
+      [${name}]
+      ${foreach module (k: v:
+        "${k} = ${v}"
+      )}
+    '')}
+  '';
 in
 
 {
   options = {
     services.rsyncd = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the rsync daemon.";
-      };
+      enable = mkEnableOption "the rsync daemon";
 
       motd = mkOption {
-        type = types.string;
+        type = types.str;
         default = "";
         description = ''
           Message of the day to display to clients on each connect.
@@ -75,13 +71,32 @@ in
             See <command>man rsyncd.conf</command> for options.
           '';
         type = types.attrsOf (types.attrsOf types.str);
-        example =
+        example = literalExample ''
           { srv =
              { path = "/srv";
                "read only" = "yes";
                comment = "Public rsync share.";
              };
-          };
+          }
+        '';
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "root";
+        description = ''
+          The user to run the daemon as.
+          By default the daemon runs as root.
+        '';
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "root";
+        description = ''
+          The group to run the daemon as.
+          By default the daemon runs as root.
+        '';
       };
 
     };
@@ -91,16 +106,17 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc = singleton {
-      source = cfgFile;
-      target = "rsyncd.conf";
-    };
+    environment.etc."rsyncd.conf".text = cfgFile;
 
     systemd.services.rsyncd = {
       description = "Rsync daemon";
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.rsync}/bin/rsync --daemon --no-detach";
+      restartTriggers = [ config.environment.etc."rsyncd.conf".source ];
+      serviceConfig = {
+        ExecStart = "${pkgs.rsync}/bin/rsync --daemon --no-detach";
+        User = cfg.user;
+        Group = cfg.group;
+      };
     };
-
   };
 }

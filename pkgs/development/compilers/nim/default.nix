@@ -1,28 +1,69 @@
-{ stdenv, fetchurl, unzip }:
+# based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
+
+{ stdenv, lib, fetchurl, makeWrapper, openssl, pcre, readline,
+  boehmgc, sfml, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "nim-0.11.0";
-
-  buildInputs = [ unzip ];
+  pname = "nim";
+  version = "1.2.4";
 
   src = fetchurl {
-    url = "http://nim-lang.org/download/${name}.zip";
-    sha256 = "0l19rrp6nhwhr2z33np4x32c35iba0hhv6w3qwj1sk8bjfpvz4cw";
+    url = "https://nim-lang.org/download/${pname}-${version}.tar.xz";
+    sha256 = "0dnn60slvp3ynlx3zhv3cjkanv8zglljxws0db8g0rdyz8r8zwgf";
   };
 
-  buildPhase   = "sh build.sh";
-  installPhase =
-    ''
-      installBin bin/nim
-      substituteInPlace install.sh --replace '$1/nim' "$out"
-      sh install.sh $out
-    '';
+  enableParallelBuilding = true;
 
-  meta = with stdenv.lib;
-    { description = "Statically typed, imperative programming language";
-      homepage = http://nim-lang.org/;
-      license = licenses.mit;
-      maintainers = with maintainers; [ emery ];
-      platforms = platforms.linux; # arbitrary
-    };
+  NIX_LDFLAGS = "-lcrypto -lpcre -lreadline -lgc -lsqlite3";
+
+  # we could create a separate derivation for the "written in c" version of nim
+  # used for bootstrapping, but koch insists on moving the nim compiler around
+  # as part of building it, so it cannot be read-only
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    openssl pcre readline boehmgc sfml sqlite
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    # build.sh wants to write to $HOME/.cache
+    HOME=$TMPDIR
+    sh build.sh
+    ./bin/nim c koch
+    ./koch boot  -d:release \
+                 -d:useGnuReadline \
+                 ${lib.optionals (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace"}
+    ./koch tools -d:release
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dt $out/bin bin/* koch
+    ./koch install $out
+    mv $out/nim/bin/* $out/bin/ && rmdir $out/nim/bin
+    mv $out/nim/*     $out/     && rmdir $out/nim
+
+    # Fortify hardening appends -O2 to gcc flags which is unwanted for unoptimized nim builds.
+    wrapProgram $out/bin/nim \
+      --run 'NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}' \
+      --suffix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+
+    runHook postInstall
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Statically typed, imperative programming language";
+    homepage = "https://nim-lang.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ehmry ];
+    platforms = with platforms; linux ++ darwin; # arbitrary
+  };
 }

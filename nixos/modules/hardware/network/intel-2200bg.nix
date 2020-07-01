@@ -23,7 +23,7 @@
 
   config = lib.mkIf config.networking.enableIntel2200BGFirmware {
 
-    hardware.enableAllFirmware = true;
+    hardware.firmware = [ pkgs.intel2200BGFirmware ];
 
   };
 

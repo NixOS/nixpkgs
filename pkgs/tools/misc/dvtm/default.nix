@@ -1,29 +1,19 @@
-{ stdenv, fetchurl, ncurses }:
-
-stdenv.mkDerivation rec {
-  name = "dvtm-0.14";
-
-  meta = {
-    description = "Dynamic virtual terminal manager";
-    homepage = http://www.brain-dump.org/projects/dvtm;
-    license = stdenv.lib.licenses.mit;
-    platfroms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
-  };
+{callPackage, fetchurl}:
+callPackage ./dvtm.nix rec {
+  name = "dvtm-0.15";
 
   src = fetchurl {
-    url = "${meta.homepage}/${name}.tar.gz";
-    sha256 = "0ykl8dz7ivjgdzhmhlgidnp2ffh5gxq9lbg276w7iid4z10v76wa";
+    url = "http://www.brain-dump.org/projects/dvtm/${name}.tar.gz";
+    sha256 = "0475w514b7i3gxk6khy8pfj2gx9l7lv2pwacmq92zn1abv01a84g";
   };
 
-  buildInputs = [ ncurses ];
-
-  prePatch = ''
-    substituteInPlace Makefile \
-      --replace /usr/share/terminfo $out/share/terminfo
-  '';
-
-  installPhase = ''
-    make PREFIX=$out install
-  '';
+  patches = [
+    # https://github.com/martanne/dvtm/pull/69
+    # Use self-pipe instead of signal blocking fixes issues on darwin.
+    (fetchurl {
+      url = "https://github.com/martanne/dvtm/commit/1f1ed664d64603f3f1ce1388571227dc723901b2.patch";
+      sha256 = "1cby8x3ckvhzqa8yxlfrwzgm8wk7yz84kr9psdjr7xwpnca1cqrd";
+    })
+  ];
 }
+    

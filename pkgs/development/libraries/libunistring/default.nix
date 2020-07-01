@@ -1,27 +1,40 @@
 { fetchurl, stdenv, libiconv }:
 
-stdenv.mkDerivation (rec {
-  name = "libunistring-0.9.3";
+stdenv.mkDerivation rec {
+  pname = "libunistring";
+  version = "0.9.10";
 
   src = fetchurl {
-    url = "mirror://gnu/libunistring/${name}.tar.gz";
-    sha256 = "18q620269xzpw39dwvr9zpilnl2dkw5z5kz3mxaadnpv4k3kw3b1";
+    url = "mirror://gnu/libunistring/${pname}-${version}.tar.gz";
+    sha256 = "02v17za10mxnj095x4pvm80jxyqwk93kailfc2j8xa1r6crmnbm8";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin [ ./clang.patch ];
+  outputs = [ "out" "dev" "info" "doc" ];
 
-  propagatedBuildInputs =
-    stdenv.lib.optional ((! (stdenv ? glibc))
-                         || (stdenv ? cross &&
-                             stdenv.cross.config == "i686-pc-mingw32"))
-     libiconv;
+  propagatedBuildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
-  # XXX: There are test failures on non-GNU systems, see
-  # http://lists.gnu.org/archive/html/bug-libunistring/2010-02/msg00004.html .
-  doCheck = (stdenv ? glibc);
+  configureFlags = [
+    "--with-libiconv-prefix=${libiconv}"
+  ];
+
+  doCheck = false;
+
+  /* This seems to cause several random failures like these, which I assume
+     is because of bad or missing target dependencies in their build system:
+
+        ./unistdio/test-u16-vasnprintf2.sh: line 16: ./test-u16-vasnprintf1: No such file or directory
+        FAIL unistdio/test-u16-vasnprintf2.sh (exit status: 1)
+
+        FAIL: unistdio/test-u16-vasnprintf3.sh
+        ======================================
+
+        ./unistdio/test-u16-vasnprintf3.sh: line 16: ./test-u16-vasnprintf1: No such file or directory
+        FAIL unistdio/test-u16-vasnprintf3.sh (exit status: 1)
+  */
+  enableParallelBuilding = false;
 
   meta = {
-    homepage = http://www.gnu.org/software/libunistring/;
+    homepage = "https://www.gnu.org/software/libunistring/";
 
     description = "Unicode string library";
 
@@ -52,19 +65,3 @@ stdenv.mkDerivation (rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-//
-
-# On Cygwin Libtool is unable to find `libiconv.dll' if there's no explicit
-# `-L/path/to/libiconv' argument on the linker's command line; and since it
-# can't find the dll, it will only create a static library.
-(if (stdenv ? glibc)
- then {}
- else { configureFlags = "--with-libiconv-prefix=${libiconv}"; })
-
-//
-
-# Don't run the native `strip' when cross-compiling.
-(if (stdenv ? cross)
- then { dontStrip = true; }
- else { }))

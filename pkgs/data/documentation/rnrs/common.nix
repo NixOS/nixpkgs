@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
       Algorithmic Language Scheme.
     '';
 
-    homepage = http://swiss.csail.mit.edu/~jaffer/Scheme;
+    homepage = "http://swiss.csail.mit.edu/~jaffer/Scheme";
+
+    broken = true;
   };
 }

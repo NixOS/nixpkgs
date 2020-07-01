@@ -1,30 +1,28 @@
-{ stdenv, fetchurl, gcc49, icmake, libmilter, libX11, openssl, readline
+{ stdenv, fetchFromGitHub, icmake
+, libmilter, libX11, openssl, readline
 , utillinux, yodl }:
 
-let version = "3.25.01"; in
 stdenv.mkDerivation rec {
-  name = "bobcat-${version}";
+  pname = "bobcat";
+  version = "4.08.03";
 
-  src = fetchurl {
-    sha256 = "07qc10hnjpmc2wq14kw01vfww5i049y0jmdvkiiafw33ffy0wdca";
-    url = "mirror://sourceforge/bobcat/bobcat/${version}/bobcat_${version}.orig.tar.gz";
+  src = fetchFromGitHub {
+    sha256 = "163mdl8hxids7123bjxmqhcaqyc1dv7hv8k33s713ac6lzawarq2";
+    rev = version;
+    repo = "bobcat";
+    owner = "fbb-git";
   };
 
-  meta = with stdenv.lib; {
-    inherit version;
-    description = "Brokken's Own Base Classes And Templates";
-    downloadPage = http://sourceforge.net/projects/bobcat/files/;
-    license = with licenses; gpl3;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
-  };
+  buildInputs = [ libmilter libX11 openssl readline utillinux ];
+  nativeBuildInputs = [ icmake yodl ];
 
-  buildInputs = [ gcc49 icmake libmilter libX11 openssl readline utillinux
-    yodl ];
+  setSourceRoot = ''
+    sourceRoot=$(echo */bobcat)
+  '';
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out
-    patchShebangs ./build
+    patchShebangs .
   '';
 
   buildPhase = ''
@@ -33,6 +31,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ./build install
+    ./build install x
   '';
+
+  meta = with stdenv.lib; {
+    description = "Brokken's Own Base Classes And Templates";
+    homepage = "https://fbb-git.github.io/bobcat/";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+  };
 }

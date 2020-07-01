@@ -1,11 +1,9 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
-
-  prl-tools = config.boot.kernelPackages.prl-tools;
-
+  prl-tools = config.hardware.parallels.package;
 in
 
 {
@@ -17,20 +15,39 @@ in
         type = types.bool;
         default = false;
         description = ''
-          This enables Parallel Tools for Linux guests, along with provided
+          This enables Parallels Tools for Linux guests, along with provided
           video, mouse and other hardware drivers.
         '';
       };
 
+      autoMountShares = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Control prlfsmountd service. When this service is running, shares can not be manually
+          mounted through `mount -t prl_fs ...` as this service will remount and trample any set options.
+          Recommended to enable for simple file sharing, but extended share use such as for code should
+          disable this to manually mount shares.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = config.boot.kernelPackages.prl-tools;
+        defaultText = "config.boot.kernelPackages.prl-tools";
+        example = literalExample "config.boot.kernelPackages.prl-tools";
+        description = ''
+          Defines which package to use for prl-tools. Override to change the version.
+        '';
+      };
     };
 
   };
 
   config = mkIf config.hardware.parallels.enable {
-
     services.xserver = {
       drivers = singleton
-        { name = "prlvideo"; modules = [ prl-tools ]; libPath = [ prl-tools ]; };
+        { name = "prlvideo"; modules = [ prl-tools ]; };
 
       screenSection = ''
         Option "NoMTRR"
@@ -47,7 +64,8 @@ in
     };
 
     hardware.opengl.package = prl-tools;
-    hardware.opengl.package32 = pkgs_i686.linuxPackages.prl-tools.override { libsOnly = true; kernel = null; };
+    hardware.opengl.package32 = pkgs.pkgsi686Linux.linuxPackages.prl-tools.override { libsOnly = true; kernel = null; };
+    hardware.opengl.setLdLibraryPath = true;
 
     services.udev.packages = [ prl-tools ];
 
@@ -55,9 +73,9 @@ in
 
     boot.extraModulePackages = [ prl-tools ];
 
-    boot.kernelModules = [ "prl_tg" "prl_eth" "prl_fs" "prl_fs_freeze" "acpi_memhotplug" ];
+    boot.kernelModules = [ "prl_tg" "prl_eth" "prl_fs" "prl_fs_freeze" ];
 
-    services.ntp.enable = false;
+    services.timesyncd.enable = false;
 
     systemd.services.prltoolsd = {
       description = "Parallels Tools' service";
@@ -68,7 +86,7 @@ in
       };
     };
 
-    systemd.services.prlfsmountd = {
+    systemd.services.prlfsmountd = mkIf config.hardware.parallels.autoMountShares {
       description = "Parallels Shared Folders Daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = rec {
@@ -86,6 +104,51 @@ in
       serviceConfig = {
         Type = "forking";
         ExecStart = "${prl-tools}/bin/prlshprint";
+      };
+    };
+
+    systemd.user.services = {
+      prlcc = {
+        description = "Parallels Control Center";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlcc";
+        };
+      };
+      prldnd = {
+        description = "Parallels Control Center";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prldnd";
+        };
+      };
+      prl_wmouse_d  = {
+        description = "Parallels Walking Mouse Daemon";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prl_wmouse_d";
+        };
+      };
+      prlcp = {
+        description = "Parallels CopyPaste Tool";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlcp";
+        };
+      };
+      prlsga = {
+        description = "Parallels Shared Guest Applications Tool";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlsga";
+        };
+      };
+      prlshprof = {
+        description = "Parallels Shared Profile Tool";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlshprof";
+        };
       };
     };
 

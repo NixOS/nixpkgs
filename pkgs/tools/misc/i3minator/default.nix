@@ -1,28 +1,22 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, python }:
+{ stdenv, fetchFromGitHub, pythonPackages, glibcLocales }:
 
-let
-  i3-py = buildPythonPackage rec {
-    version = "0.6.4";
-    name = "i3-py-${version}";
-
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/source/i/i3-py/i3-py-${version}.tar.gz";
-      sha256 = "1sgl438jrb4cdyl7hbc3ymwsf7y3zy09g1gh7ynilxpllp37jc8y";
-    };
-
-    # no tests in tarball
-    doCheck = false;
-  };
-in buildPythonPackage rec {
-  name = "i3minator-${version}";
+pythonPackages.buildPythonApplication rec {
+  pname = "i3minator";
   version = "0.0.4";
 
-  src = fetchurl {
-    url = "https://github.com/carlesso/i3minator/archive/${version}.tar.gz";
-    sha256 = "11dn062788kwfs8k2ry4v8zr2gn40r6lsw770s9g2gvhl5n469dw";
+  src = fetchFromGitHub {
+    owner = "carlesso";
+    repo = "i3minator";
+    rev = version;
+    sha256 = "07dic5d2m0zw0psginpl43xn0mpxw7wilj49d02knz69f7c416lm";
   };
 
-  propagatedBuildInputs = [ pythonPackages.pyyaml i3-py ];
+  LC_ALL = "en_US.UTF-8";
+  buildInputs = [ glibcLocales ];
+  propagatedBuildInputs = [ pythonPackages.pyyaml pythonPackages.i3-py ];
+
+  # No tests
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "i3 project manager similar to tmuxinator";
@@ -31,9 +25,9 @@ in buildPythonPackage rec {
       manage workspaces defining windows and their layout. The
       project is inspired by tmuxinator and uses i3-py.
     '';
-    homepage = https://github.com/carlesso/i3minator;
+    homepage = "https://github.com/carlesso/i3minator";
     license = stdenv.lib.licenses.wtfpl;
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = stdenv.lib.platforms.linux;
   };
 

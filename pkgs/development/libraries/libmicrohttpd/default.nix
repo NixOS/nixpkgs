@@ -1,57 +1,39 @@
-{ stdenv, fetchurl, pkgconfig
-, curl
+{ stdenv, fetchurl, libgcrypt, curl, gnutls, pkgconfig, libiconv, libintl }:
 
-# Optional Dependencies
-, openssl ? null, zlib ? null, libgcrypt ? null, gnutls ? null
-}:
-
-with stdenv;
-let
-  optOpenssl = shouldUsePkg openssl;
-  optZlib = shouldUsePkg zlib;
-  hasSpdy = optOpenssl != null && optZlib != null;
-
-  optLibgcrypt = shouldUsePkg libgcrypt;
-  optGnutls = shouldUsePkg gnutls;
-  hasHttps = optLibgcrypt != null && optGnutls != null;
-in
-with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libmicrohttpd-0.9.41";
+  pname = "libmicrohttpd";
+  version = "0.9.70";
 
   src = fetchurl {
-    url = "mirror://gnu/libmicrohttpd/${name}.tar.gz";
-    sha256 = "0z3s3aplgxj8cj947i4rxk9wzvg68b8hbn71fyipc7aagmivx64p";
+    url = "mirror://gnu/libmicrohttpd/${pname}-${version}.tar.gz";
+    sha256 = "01vkjy89b1ylmh22dy5yza2r414nfwcfixxh3v29nvzrjv9s7l4h";
   };
 
+  outputs = [ "out" "dev" "devdoc" "info" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = optional doCheck curl
-    ++ optionals hasSpdy [ optOpenssl optZlib ]
-    ++ optionals hasHttps [ optLibgcrypt optGnutls ];
+  buildInputs = [ libgcrypt curl gnutls libiconv libintl ];
 
-  configureFlags = [
-    (mkWith   true                 "threads"       "posix")
-    (mkEnable true                 "doc"           null)
-    (mkEnable false                "examples"      null)
-    (mkEnable true                 "epoll"         "auto")
-    (mkEnable doCheck              "curl"          null)
-    (mkEnable hasSpdy              "spdy"          null)
-    (mkEnable true                 "messages"      null)
-    (mkEnable true                 "postprocessor" null)
-    (mkWith   hasHttps             "gnutls"        null)
-    (mkEnable hasHttps             "https"         null)
-    (mkEnable true                 "bauth"         null)
-    (mkEnable true                 "dauth"         null)
-  ];
+  preCheck = ''
+    # Since `localhost' can't be resolved in a chroot, work around it.
+    sed -ie 's/localhost/127.0.0.1/g' src/test*/*.[ch]
+  '';
 
   # Disabled because the tests can time-out.
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Embeddable HTTP server library";
-    homepage = http://www.gnu.org/software/libmicrohttpd/;
+
+    longDescription = ''
+      GNU libmicrohttpd is a small C library that is supposed to make
+      it easy to run an HTTP server as part of another application.
+    '';
+
     license = licenses.lgpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
+
+    homepage = "https://www.gnu.org/software/libmicrohttpd/";
+
+    maintainers = with maintainers; [ eelco vrthra fpletz ];
+    platforms = platforms.unix;
   };
 }

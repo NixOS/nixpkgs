@@ -10,9 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "0f23a17549048ca3a8f4936ea9e931feb05997390b486850936b746996350cda";
   };
 
-  buildInputs = [ pkgconfig pure ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pure ];
   propagatedBuildInputs = [ pandoc gawk getopt ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   preInstall = ''
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Converts Sphinx-formatted Pure documentation files to Markdown and other formats using Pandoc";
-    homepage = http://puredocs.bitbucket.org/pure-pandoc.html;
+    homepage = "http://puredocs.bitbucket.org/pure-pandoc.html";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

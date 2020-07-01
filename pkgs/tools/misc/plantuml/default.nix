@@ -1,37 +1,34 @@
-{ stdenv, fetchurl, jre, graphviz }:
+{ stdenv, fetchurl, makeWrapper, jre, graphviz }:
 
 stdenv.mkDerivation rec {
-  version = "8012";
-  name = "plantuml-${version}";
+  version = "1.2020.12";
+  pname = "plantuml";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/plantuml/plantuml.${version}.jar";
-    sha256 = "12l2kmp6jaz6lmcj16ljhrpb1bm7zzz5qgvihhymvk66rfjd3ybz";
+    url = "mirror://sourceforge/project/plantuml/${version}/plantuml.${version}.jar";
+    sha256 = "0c0270kjw8vg8nphharap2p66yl72j5k4k3s5r9klafgp3sg4sjj";
   };
 
-  # It's only a .jar file and a shell wrapper
-  phases = [ "installPhase" ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    mkdir -p "$out/bin"
-    mkdir -p "$out/lib"
+  buildCommand = ''
+    install -Dm644 $src $out/lib/plantuml.jar
 
-    cp "$src" "$out/lib/plantuml.jar"
+    mkdir -p $out/bin
+    makeWrapper ${jre}/bin/java $out/bin/plantuml \
+      --argv0 plantuml \
+      --set GRAPHVIZ_DOT ${graphviz}/bin/dot \
+      --add-flags "-jar $out/lib/plantuml.jar"
 
-    cat > "$out/bin/plantuml" << EOF
-    #!${stdenv.shell}
-    export GRAPHVIZ_DOT="${graphviz}/bin/dot"
-    exec "${jre}/bin/java" -jar "$out/lib/plantuml.jar" "\$@"
-    EOF
-    chmod a+x "$out/bin/plantuml"
+    $out/bin/plantuml -help
   '';
 
   meta = with stdenv.lib; {
     description = "Draw UML diagrams using a simple and human readable text description";
-    homepage = http://plantuml.sourceforge.net/;
-    # "java -jar plantuml.jar -license" says GPLv3 or later
+    homepage = "http://plantuml.sourceforge.net/";
+    # "plantuml -license" says GPLv3 or later
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.bjornfor ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ bjornfor ];
+    platforms = platforms.unix;
   };
 }

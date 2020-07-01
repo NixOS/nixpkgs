@@ -1,24 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, gnutls, zlib }:
+{ stdenv, autoreconfHook, libtool, pkgconfig, gnutls, fetchFromGitHub, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "iksemel-${version}";
-  version = "1.4";
+  pname = "iksemel";
+  version = "1.4.2";
 
-  src = fetchurl {
-    url = "https://iksemel.googlecode.com/files/${name}.tar.gz";
-    sha1 = "722910b99ce794fd3f6f0e5f33fa804732cf46db";
+  src = fetchFromGitHub {
+    owner = "timothytylee";
+    repo = "iksemel-1.4";
+    rev = "v${version}";
+    sha256 = "1xv302p344hnpxqcgs3z6wwxhrik39ckgfw5cjyrw0dkf316z9yh";
   };
 
-  preConfigure = ''
-    sed -i -e '/if.*gnutls_check_version/,/return 1;/c return 0;' configure
-    export LIBGNUTLS_CONFIG="${pkgconfig}/bin/pkg-config gnutls"
-  '';
+  nativeBuildInputs = [ pkgconfig autoreconfHook libtool texinfo ];
+  buildInputs = [ gnutls ];
 
-  buildInputs = [ pkgconfig gnutls zlib ];
+  meta = with stdenv.lib; {
+    description = "XML parser for jabber";
 
-  meta = {
-    homepage = "https://code.google.com/p/iksemel/";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    description = "Fast and portable XML parser and Jabber protocol library";
+    homepage = "https://github.com/timothytylee/iksemel-1.4";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ disassembler ];
+    platforms = platforms.linux;
   };
 }

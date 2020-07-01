@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, pkgconfig, gst_plugins_base, aalib, cairo
-, flac, libjpeg, zlib, speex, libpng, libdv, libcaca, libvpx
-, libiec61883, libavc1394, taglib, pulseaudio, gdk_pixbuf, orc
-, glib, gstreamer, bzip2, libsoup, libintlOrEmpty
+{ fetchurl, stdenv, lib, pkgconfig, gst-plugins-base, aalib, cairo
+, flac, libjpeg, speex, libpng, libdv, libcaca, libvpx
+, taglib, libpulseaudio, gdk-pixbuf, orc
+, glib, gstreamer, bzip2, libsoup, libshout, ncurses, libintl
 , # Whether to build no plugins that have external dependencies
   # (except the PulseAudio plugin).
   minimalDeps ? false
@@ -20,22 +20,27 @@ stdenv.mkDerivation rec {
 
   patches = [ ./v4l.patch ./linux-headers-3.9.patch ];
 
-  configureFlags = "--enable-experimental --disable-oss";
+  configureFlags = [ "--enable-experimental" "--disable-oss" ];
 
   buildInputs =
-    [ pkgconfig glib gstreamer gst_plugins_base ]
-    ++ stdenv.lib.optional stdenv.isLinux [ pulseaudio ]
-    ++ libintlOrEmpty
-    ++ stdenv.lib.optionals (!minimalDeps)
+    [ pkgconfig glib gstreamer gst-plugins-base libintl ]
+    ++ lib.optional stdenv.isLinux libpulseaudio
+    ++ lib.optionals (!minimalDeps)
       [ aalib libcaca cairo libdv flac libjpeg libpng speex
-        taglib bzip2 libvpx gdk_pixbuf orc libsoup ];
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+        taglib bzip2 libvpx gdk-pixbuf orc libsoup libshout ];
 
   enableParallelBuilding = true;
 
+  postInstall = lib.optionalString (!minimalDeps) ''
+    substituteInPlace $out/lib/gstreamer-0.10/libgstaasink.la \
+      --replace "${ncurses.dev}/lib" "${ncurses.out}/lib"
+  '';
+
+  # fails 1 out of 65 tests with "Could not read TLS certificate from '../../tests/files/test-cert.pem': TLS support is not available"
+  doCheck = false;
+
   meta = {
-    homepage = http://gstreamer.freedesktop.org;
+    homepage = "https://gstreamer.freedesktop.org";
 
     description = "`Good' plug-ins for GStreamer";
 

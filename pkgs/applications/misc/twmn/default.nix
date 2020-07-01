@@ -1,30 +1,36 @@
-{ fetchurl, stdenv, fetchgit, qt5, pkgconfig, boost }:
+{ lib, mkDerivation, fetchFromGitHub, qtbase, qtx11extras, qmake, pkgconfig, boost }:
 
-stdenv.mkDerivation rec {
-  name = "twmn-git-2014-09-23";
+mkDerivation {
+  name = "twmn-git-2018-10-01";
 
-  src = fetchgit {
-    url = "https://github.com/sboli/twmn.git";
-    rev = "9492a47e25547e602dd57efd807033677c90b150";
-    sha256 = "9c91e9d3d6d7f9d90d34da6f1a4b9f3dee65605c1e43729417d6921c54dded6b";
+  src = fetchFromGitHub {
+    owner = "sboli";
+    repo = "twmn";
+    rev = "80f48834ef1a07087505b82358308ee2374b6dfb";
+    sha256 = "0mpjvp800x07lp9i3hfcc5f4bqj1fj4w3dyr0zwaxc6wqmm0fdqz";
   };
 
-  buildInputs = [ qt5.base qt5.x11extras pkgconfig boost ];
+  nativeBuildInputs = [ pkgconfig qmake ];
+  buildInputs = [ qtbase qtx11extras boost ];
 
-  configurePhase = ''
+  postPatch = ''
     sed -i s/-Werror// twmnd/twmnd.pro
-    qmake
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp bin/* "$out/bin"
+
+    runHook postInstall
   '';
 
   meta = {
     description = "A notification system for tiling window managers";
     homepage = "https://github.com/sboli/twmn";
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = [ stdenv.lib.maintainers.matejc ];
+    platforms = with lib.platforms; linux;
+    maintainers = [ lib.maintainers.matejc ];
+    license = lib.licenses.lgpl3;
   };
 }

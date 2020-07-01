@@ -1,30 +1,28 @@
-{ stdenv, cmake, fetchurl, pkgconfig, qt4, zlib, bzip2 }:
+{ stdenv, mkDerivation, cmake, fetchFromBitbucket, pkgconfig, qtbase, qttools, qtmultimedia, zlib, bzip2, xxd }:
 
-stdenv.mkDerivation rec {
-  name = "doomseeker-1.0";
-  src = fetchurl {
-    url = "http://doomseeker.drdteam.org/files/${name}_src.tar.bz2";
-    sha256 = "172ybxg720r64hp6aah0hqvxklqv1cf8v7kwx0ng5ap0h20jydbw";
+mkDerivation {
+  pname = "doomseeker";
+  version = "2018-03-05";
+
+  src = fetchFromBitbucket {
+    owner = "Doomseeker";
+    repo = "doomseeker";
+    rev = "c2c7f37b1afb";
+    sha256 = "17fna3a604miqsvply3klnmypps4ifz8axgd3pj96z46ybxs8akw";
   };
 
-  cmakeFlags = ''
-    -DCMAKE_BUILD_TYPE=Release
-  '';
+  patches = [ ./fix_paths.patch ./qt_build_fix.patch ];
 
-  buildInputs = [ cmake pkgconfig qt4 zlib bzip2 ];
+  nativeBuildInputs = [ cmake qttools pkgconfig xxd ];
+  buildInputs = [ qtbase qtmultimedia zlib bzip2 ];
 
-  enableParallelBuilding = true;
+  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
 
-  patchPhase = ''
-    sed -e 's#/usr/share/applications#$out/share/applications#' -i src/core/CMakeLists.txt
-  '';
-
-  meta = {
-    homepage = http://doomseeker.drdteam.org/;
+  meta = with stdenv.lib; {
+    homepage = "http://doomseeker.drdteam.org/";
     description = "Multiplayer server browser for many Doom source ports";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ MP2E ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.MP2E ];
   };
 }
-

@@ -1,68 +1,125 @@
-{ stdenv, fetchurl, boost, cairo, fontsConf, gettext, glibmm, gtk, gtkmm
-, libsigcxx, libtool, libxmlxx, pango, pkgconfig, imagemagick
-, intltool
+{ stdenv, fetchFromGitHub, boost, cairo, gettext, glibmm, gtk3, gtkmm3
+, libjack2, libsigcxx, libxmlxx, makeWrapper, mlt-qt5, pango, pkgconfig
+, imagemagick, intltool, autoreconfHook, which, gnome3
 }:
 
 let
-  version = "0.64.3";
+  version = "1.0.2";
 
-  ETL = stdenv.mkDerivation rec {
-    name = "ETL-0.04.17";
+  ETL = stdenv.mkDerivation {
+    name = "ETL-0.04.19";
 
-    src = fetchurl {
-       url = "mirror://sourceforge/synfig/${name}.tar.gz";
-       sha256 = "0rb9czkgan41q6xlck97kh77g176vjm1wnq620sqky7k2hiahr3s";
+    src = fetchFromGitHub {
+       repo   = "synfig";
+       owner  = "synfig";
+       rev    = version;
+       sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
     };
+
+    postUnpack = "sourceRoot=\${sourceRoot}/ETL/";
+
+    nativeBuildInputs = [ autoreconfHook ];
   };
 
-  synfig = stdenv.mkDerivation rec {
-    name = "synfig-${version}";
+  synfig = stdenv.mkDerivation {
+    pname = "synfig";
+    inherit version;
 
-    src = fetchurl {
-       url = "mirror://sourceforge/synfig/synfig-${version}.tar.gz";
-       sha256 = "0p4wqjidb4k3viahck4wzbh777f5ifpivn4vxhxs5fbq8nsvqksh";
+    src = fetchFromGitHub {
+       repo   = "synfig";
+       owner  = "synfig";
+       rev    = version;
+       sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
     };
+
+    postUnpack = "sourceRoot=\${sourceRoot}/synfig-core/";
 
     configureFlags = [
       "--with-boost=${boost.dev}"
-      "--with-boost-libdir=${boost.lib}/lib"
+      "--with-boost-libdir=${boost.out}/lib"
     ];
 
-    patches = [ ./synfig-cstring.patch ];
-
+    nativeBuildInputs = [ pkgconfig autoreconfHook gettext ];
     buildInputs = [
-      ETL boost cairo gettext glibmm libsigcxx libtool libxmlxx pango
-      pkgconfig
+      ETL boost cairo glibmm mlt-qt5 libsigcxx libxmlxx pango
     ];
+
+    meta.broken = true;
   };
 in
-stdenv.mkDerivation rec {
-  name = "synfigstudio-${version}";
+stdenv.mkDerivation {
+  pname = "synfigstudio";
+  inherit version;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/synfig/${name}.tar.gz";
-    sha256 = "1li3ac8qvg25h9fgym0zywnq5bg3sgbv162xs4c6pwksn75i6gsv";
+  src = fetchFromGitHub {
+     repo   = "synfig";
+     owner  = "synfig";
+     rev    = version;
+     sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
   };
 
+  postUnpack = "sourceRoot=\${sourceRoot}/synfig-studio/";
+
+  postPatch = ''
+    for i in \
+      brushlib/brushlib.hpp \
+      gui/canvasview.cpp \
+      gui/compview.cpp \
+      gui/docks/dock_canvasspecific.cpp \
+      gui/docks/dock_children.cpp \
+      gui/docks/dock_curves.cpp \
+      gui/docks/dock_history.cpp \
+      gui/docks/dock_keyframes.cpp \
+      gui/docks/dock_layergroups.cpp \
+      gui/docks/dock_layers.cpp \
+      gui/docks/dock_metadata.cpp \
+      gui/docks/dock_params.cpp \
+      gui/docks/dock_timetrack.cpp \
+      gui/docks/dock_toolbox.cpp \
+      gui/docks/dockable.cpp \
+      gui/docks/dockdialog.cpp \
+      gui/docks/dockmanager.h \
+      gui/duck.h \
+      gui/duckmatic.cpp \
+      gui/duckmatic.h \
+      gui/instance.cpp \
+      gui/instance.h \
+      gui/states/state_stroke.h \
+      gui/states/state_zoom.cpp \
+      gui/widgets/widget_curves.cpp \
+      gui/workarea.cpp \
+      gui/workarearenderer/workarearenderer.h \
+      synfigapp/action_system.h \
+      synfigapp/canvasinterface.h \
+      synfigapp/instance.h \
+      synfigapp/main.h \
+      synfigapp/uimanager.h
+    do
+      substituteInPlace src/"$i" --replace '#include <sigc++/object.h>' '#include <sigc++/sigc++.h>'
+      substituteInPlace src/"$i" --replace '#include <sigc++/hide.h>' '#include <sigc++/adaptors/hide.h>'
+      substituteInPlace src/"$i" --replace '#include <sigc++/retype.h>' '#include <sigc++/adaptors/retype.h>'
+    done
+  '';
+
+  preConfigure = "./bootstrap.sh";
+
+  nativeBuildInputs = [ pkgconfig autoreconfHook gettext ];
   buildInputs = [
-    ETL boost cairo gettext glibmm gtk gtkmm imagemagick intltool
-    intltool libsigcxx libtool libxmlxx pkgconfig synfig
+    ETL boost cairo glibmm gtk3 gtkmm3 imagemagick intltool
+    libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5
+    synfig which gnome3.adwaita-icon-theme
   ];
 
-  configureFlags = [
-    "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.lib}/lib"
-  ];
-
-  preBuild = ''
-    export FONTCONFIG_FILE=${fontsConf}
+  postInstall = ''
+    wrapProgram "$out/bin/synfigstudio" \
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A 2D animation program";
-    homepage = http://www.synfig.org;
+    homepage = "http://www.synfig.org";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

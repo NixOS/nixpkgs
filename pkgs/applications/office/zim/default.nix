@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildPythonPackage, pythonPackages, pygtk, pygobject, python }:
+{ stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook, gnome3 }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -7,99 +7,36 @@
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
 #
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "zim-${version}";
-  version = "0.62";
-  namePrefix = "";
-  
+  version = "0.72.1";
+
   src = fetchurl {
-    url = "http://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "1hmx24jjazqvs3z6h10jl8wrqxyvvk0wc807v222vaf1sbmjmmhr";
+    url = "https://zim-wiki.org/downloads/${name}.tar.gz";
+    sha256 = "0a9h97rmp7if74p3i028cllzf9p9468psbqwcvm9009ga253dr1l";
   };
 
-  propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk /*pythonPackages.pyxdg*/ pygobject ];
+  buildInputs = [ gtk3 gobject-introspection wrapGAppsHook gnome3.adwaita-icon-theme ];
+  propagatedBuildInputs = with python3Packages; [ pyxdg pygobject3 ];
 
-  preBuild = ''
-    mkdir -p /tmp/home
-    export HOME="/tmp/home"
-  '';
-  
-  setupPyInstallFlags = ["--skip-xdg-cmd"];
-  
-  #
-  # Exactly identical to buildPythonPackage's version but for the
-  # `--old-and-unmanagable`, which I removed. This was removed because
-  # this is a setuptools specific flag and as zim is overriding 
-  # the install step, setuptools could not perform its monkey
-  # patching trick for the command. Alternate solutions were to
-  #
-  #  -  Remove the custom install step (tested as working but
-  #	also remove the possibility of performing the xdg-cmd
-  #     stuff).
-  #  -  Explicitly replace distutils import(s) by their setuptools
-  #	equivalent (untested). 
-  #
-  # Both solutions were judged unsatisfactory as altering the code
-  # would be required.
-  #
-  # Note that a improved solution would be to expose the use of 
-  # the `--old-and-unmanagable` flag as an option of passed to the
-  # buildPythonPackage function.
-  #
-  # Also note that I stripped all comments.
-  #
-  installPhase = ''
-    runHook preInstall
 
-    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-    ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/lib/${python.libPrefix}/site-packages \
-      --prefix="$out" ${lib.concatStringsSep " " setupPyInstallFlags}
-
-    eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
-    if [ -e "$eapth" ]; then
-	# move colliding easy_install.pth to specifically named one
-	mv "$eapth" $(dirname "$eapth")/${name}.pth
-    fi
-
-    rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
-
-    runHook postInstall
+  preFixup = ''
+    export makeWrapperArgs="--prefix XDG_DATA_DIRS : $out/share --argv0 $out/bin/.zim-wrapped"
   '';
 
-  # FIXME: this is quick and dirty hack, because zim expects the
-  # path to the executable in argv[0] therefore the wrapper is
-  # modified accordingly.
-  postFixup = ''
-    wrapProgram "$out/bin/zim" \
-      --prefix XDG_DATA_DIRS : "$out/share"
-
-    wrapPythonPrograms
-
-    sed -i "s#sys\.argv\[0\] = '.zim-wrapped'#sys.argv[0] = '$out/bin/zim'#g" \
-      $out/bin/..zim-wrapped-wrapped
-
-    if test -e $out/nix-support/propagated-build-inputs; then
-        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-    fi
-
-    createBuildInputsPth build-inputs "$buildInputStrings"
-    for inputsfile in propagated-build-inputs propagated-native-build-inputs; do
-      if test -e $out/nix-support/$inputsfile; then
-          createBuildInputsPth $inputsfile "$(cat $out/nix-support/$inputsfile)"
-      fi
-    done
-  '';
-  
-  # Testing fails.
+  # RuntimeError: could not create GtkClipboard object
   doCheck = false;
 
-  meta = {
-      description = "A desktop wiki";
-      homepage = http://zim-wiki.org;
-      license = stdenv.lib.licenses.gpl2Plus;
+  checkPhase = ''
+    python test.py
+  '';
+
+
+  meta = with stdenv.lib; {
+    description = "A desktop wiki";
+    homepage = "http://zim-wiki.org";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ pSub ];
+    broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790
   };
 }

@@ -53,8 +53,16 @@ in
         '';
       };
 
+      nowait = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          don't wait for client connects to poll GPS
+        '';
+      };
+
       port = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 2947;
         description = ''
           The port where to listen for TCP connections.
@@ -62,7 +70,7 @@ in
       };
 
       debugLevel = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 0;
         description = ''
           The debugging level.
@@ -78,17 +86,13 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
-      { name = "gpsd";
-        inherit uid;
+    users.users.gpsd =
+      { inherit uid;
         description = "gpsd daemon user";
         home = "/var/empty";
       };
 
-    users.extraGroups = singleton
-      { name = "gpsd";
-        inherit gid;
-      };
+    users.groups.gpsd = { inherit gid; };
 
     systemd.services.gpsd = {
       description = "GPSD daemon";
@@ -99,7 +103,8 @@ in
         ExecStart = ''
           ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
             -S "${toString cfg.port}"                             \
-            ${if cfg.readonly then "-b" else ""}                  \
+            ${optionalString cfg.readonly "-b"}                   \
+            ${optionalString cfg.nowait "-n"}                     \
             "${cfg.device}"
         '';
       };

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.30";
-  name = "x86info-${version}";
+  pname = "x86info";
 
   src = fetchurl {
-    url = "http://codemonkey.org.uk/projects/x86info/${name}.tgz";
+    url = "http://codemonkey.org.uk/projects/x86info/${pname}-${version}.tgz";
     sha256 = "0a4lzka46nabpsrg3n7akwr46q38f96zfszd73xcback1s2hjc7y";
   };
 
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       registers (MSRs) via the msr kernel module.  it will approximate processor
       frequency, and identify the cache sizes and layout. 
     '';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;
-    homepage = http://codemonkey.org.uk/projects/x86info/;
+    homepage = "http://codemonkey.org.uk/projects/x86info/";
     maintainers = with stdenv.lib.maintainers; [jcumming];
   };
 }

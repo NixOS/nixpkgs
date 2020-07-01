@@ -7,25 +7,20 @@ with lib;
 
 let
 
-  extraManpages = pkgs.runCommand "extra-manpages" { buildInputs = [ pkgs.help2man ]; }
-    ''
-      mkdir -p $out/share/man/man1
-      help2man ${pkgs.gnutar}/bin/tar > $out/share/man/man1/tar.1
-    '';
-
-  requiredPackages =
-    [ config.nix.package
-      pkgs.acl
+  requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
+    [ pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
-      pkgs.coreutils
+      pkgs.coreutils-full
       pkgs.cpio
       pkgs.curl
       pkgs.diffutils
       pkgs.findutils
       pkgs.gawk
-      pkgs.glibc # for ldd, getent
+      pkgs.stdenv.cc.libc
+      pkgs.getent
+      pkgs.getconf
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
@@ -34,11 +29,10 @@ let
       pkgs.xz
       pkgs.less
       pkgs.libcap
-      pkgs.man
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.openssh
+      config.programs.ssh.package
       pkgs.perl
       pkgs.procps
       pkgs.rsync
@@ -46,7 +40,8 @@ let
       pkgs.su
       pkgs.time
       pkgs.utillinux
-      extraManpages
+      pkgs.which # 88K size
+      pkgs.zstd
     ];
 
 in
@@ -57,7 +52,7 @@ in
     environment = {
 
       systemPackages = mkOption {
-        type = types.listOf types.path;
+        type = types.listOf types.package;
         default = [];
         example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
@@ -77,8 +72,22 @@ in
         # to work.
         default = [];
         example = ["/"];
-        description = "List of directories to be symlinked in `/run/current-system/sw'.";
+        description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
       };
+
+      extraOutputsToInstall = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "doc" "info" "devdoc" ];
+        description = "List of additional package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
+      };
+
+      extraSetup = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell fragments to be run after the system environment has been created. This should only be used for things that need to modify the internals of the environment, e.g. generating MIME caches. The environment being built can be accessed at $out.";
+      };
+
     };
 
     system = {
@@ -101,41 +110,39 @@ in
     environment.pathsToLink =
       [ "/bin"
         "/etc/xdg"
-        "/info"
-        "/lib"
-        "/man"
+        "/etc/gtk-2.0"
+        "/etc/gtk-3.0"
+        "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
         "/share/emacs"
-        "/share/vim-plugins"
+        "/share/hunspell"
+        "/share/nano"
         "/share/org"
-        "/share/info"
-        "/share/terminfo"
-        "/share/man"
+        "/share/themes"
+        "/share/vim-plugins"
+        "/share/vulkan"
+        "/share/kservices5"
+        "/share/kservicetypes5"
+        "/share/kxmlgui5"
       ];
 
     system.path = pkgs.buildEnv {
       name = "system-path";
       paths = config.environment.systemPackages;
-      inherit (config.environment) pathsToLink;
+      inherit (config.environment) pathsToLink extraOutputsToInstall;
       ignoreCollisions = true;
       # !!! Hacky, should modularise.
+      # outputs TODO: note that the tools will often not be linked by default
       postBuild =
         ''
-          if [ -x $out/bin/update-mime-database -a -w $out/share/mime/packages ]; then
-              XDG_DATA_DIRS=$out/share $out/bin/update-mime-database -V $out/share/mime > /dev/null
-          fi
-
-          if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then
-              $out/bin/gtk-update-icon-cache $out/share/icons/hicolor
-          fi
+          # Remove wrapped binaries, they shouldn't be accessible via PATH.
+          find $out/bin -maxdepth 1 -name ".*-wrapped" -type l -delete
 
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi
 
-          if [ -x $out/bin/update-desktop-database -a -w $out/share/applications ]; then
-              $out/bin/update-desktop-database $out/share/applications
-          fi
+          ${config.environment.extraSetup}
         '';
     };
 

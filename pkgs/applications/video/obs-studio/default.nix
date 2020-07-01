@@ -1,36 +1,96 @@
-{ stdenv
-, fetchurl
+{ config, stdenv
+, mkDerivation
+, fetchFromGitHub
+, addOpenGLRunpath
 , cmake
+, fdk_aac
 , ffmpeg
 , jansson
+, libjack2
 , libxkbcommon
-, qt5
+, libpthreadstubs
+, libXdmcp
+, qtbase
+, qtx11extras
+, qtsvg
+, speex
 , libv4l
 , x264
+, curl
+, xorg
+, makeWrapper
+, pkgconfig
+, vlc
+, mbedtls
+
+, scriptingSupport ? true
+, luajit
+, swig
+, python3
+
+, alsaSupport ? stdenv.isLinux
+, alsaLib
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio
 }:
 
-stdenv.mkDerivation rec {
-  name = "obs-studio-${version}";
-  version = "0.10.0";
+let
+  inherit (stdenv.lib) optional optionals;
 
-  src = fetchurl {
-    url = "https://github.com/jp9000/obs-studio/archive/${version}.tar.gz";
-    sha256 = "1xms48gl20pr9g8bv8ygykh6m99c3wjphsavr4hb1d5263r9f4in";
+in mkDerivation rec {
+  pname = "obs-studio";
+  version = "25.0.8";
+
+  src = fetchFromGitHub {
+    owner = "obsproject";
+    repo = "obs-studio";
+    rev = version;
+    sha256 = "0j2k65q3wfyfxhvkl6icz4qy0s3kfqhksizy2i3ah7yml266axbj";
   };
 
-  buildInputs = [ cmake
-                  ffmpeg
-                  jansson
-                  libv4l
-                  libxkbcommon
-                  qt5.base
-                  x264
-                ];
+  nativeBuildInputs = [ addOpenGLRunpath cmake pkgconfig ];
+
+  buildInputs = [
+    curl
+    fdk_aac
+    ffmpeg
+    jansson
+    libjack2
+    libv4l
+    libxkbcommon
+    libpthreadstubs
+    libXdmcp
+    qtbase
+    qtx11extras
+    qtsvg
+    speex
+    x264
+    vlc
+    makeWrapper
+    mbedtls
+  ]
+  ++ optionals scriptingSupport [ luajit swig python3 ]
+  ++ optional alsaSupport alsaLib
+  ++ optional pulseaudioSupport libpulseaudio;
 
   # obs attempts to dlopen libobs-opengl, it fails unless we make sure
   # DL_OPENGL is an explicit path. Not sure if there's a better way
   # to handle this.
-  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-DDL_OPENGL=\\\"$(out)/lib/libobs-opengl.so\\\"" ];
+  cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-DDL_OPENGL=\\\"$(out)/lib/libobs-opengl.so\\\""
+    "-DOBS_VERSION_OVERRIDE=${version}"
+    "-Wno-dev" # kill dev warnings that are useless for packaging
+  ];
+
+  postInstall = ''
+      wrapProgram $out/bin/obs \
+        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${vlc}/lib"
+  '';
+
+  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
+      addOpenGLRunpath $out/lib/lib*.so
+      addOpenGLRunpath $out/lib/obs-plugins/*.so
+  '';
 
   meta = with stdenv.lib; {
     description = "Free and open source software for video recording and live streaming";
@@ -40,7 +100,8 @@ stdenv.mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ jb55 MP2E ];
     license = licenses.gpl2;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

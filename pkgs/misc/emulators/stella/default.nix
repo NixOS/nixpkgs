@@ -1,18 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, SDL2 }:
+{ stdenv, fetchFromGitHub, pkgconfig, SDL2 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "stella-${version}";
-  version = "4.6";
+  pname = "stella";
+  version = "6.2";
 
-  src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/stella/stella/${version}/${name}-src.tar.gz";
-    sha256 = "03vg8cxr0hn99vrr2dcwhv610xi9vhlw08ypazpm0nny522a9j4d";
+  src = fetchFromGitHub {
+    owner = "stella-emu";
+    repo = "stella";
+    rev = version;
+    sha256 = "1d97g4m686xsj6r5vy5x74ys9yk0hcpdppxh714n8hhcc9aglm19";
   };
 
-  buildInputs = with stdenv.lib;
-  [ pkgconfig SDL2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ SDL2 ];
+  
+  enableParallelBuilding = true;
 
   meta = {
     description = "An open-source Atari 2600 VCS emulator";
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
     maintained by Stephen Anthony.
     As of its 3.5 release, Stella is officially donationware. 
     '';
-    homepage = http://stella.sourceforge.net/;
+    homepage = "http://stella-emu.github.io/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

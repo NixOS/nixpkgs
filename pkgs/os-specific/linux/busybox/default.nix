@@ -1,9 +1,13 @@
-{ stdenv, fetchurl, musl
+{ stdenv, lib, buildPackages, fetchurl
 , enableStatic ? false
 , enableMinimal ? false
-, useMusl ? false
+# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
+, useMusl ? stdenv.hostPlatform.libc == "musl", musl
 , extraConfig ? ""
 }:
+
+assert stdenv.hostPlatform.libc == "musl" -> useMusl;
 
 let
   configParser = ''
@@ -23,17 +27,31 @@ let
     }
   '';
 
+  libcConfig = lib.optionalString useMusl ''
+    CONFIG_FEATURE_UTMP n
+    CONFIG_FEATURE_WTMP n
+  '';
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.23.2";
+  name = "busybox-1.31.1";
 
+  # Note to whoever is updating busybox: please verify that:
+  # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
+  # still builds after the update.
   src = fetchurl {
-    url = "http://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "16ii9sqracvh2r1gfzhmlypl269nnbkpvrwa7270k35d3bigk9h5";
+    url = "https://busybox.net/downloads/${name}.tar.bz2";
+    sha256 = "1659aabzp8w4hayr4z8kcpbk2z1q2wqhw7i1yb0l72b45ykl1yfh";
   };
 
-  patches = [ ./busybox-in-store.patch ];
+  hardeningDisable = [ "format" "pie" ]
+    ++ lib.optionals enableStatic [ "fortify" ];
+
+  patches = [
+    ./busybox-in-store.patch
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+
+  postPatch = "patchShebangs .";
 
   configurePhase = ''
     export KCONFIG_NOTIMESTAMP=1
@@ -46,7 +64,9 @@ stdenv.mkDerivation rec {
     CONFIG_PREFIX "$out"
     CONFIG_INSTALL_NO_USR y
 
-    ${stdenv.lib.optionalString enableStatic ''
+    CONFIG_LFS y
+
+    ${lib.optionalString enableStatic ''
       CONFIG_STATIC y
     ''}
 
@@ -54,31 +74,40 @@ stdenv.mkDerivation rec {
     CONFIG_FEATURE_MOUNT_CIFS n
     CONFIG_FEATURE_MOUNT_HELPERS y
 
+    # Set paths for console fonts.
+    CONFIG_DEFAULT_SETFONT_DIR "/etc/kbd"
+
+    # Bump from 4KB, much faster I/O
+    CONFIG_FEATURE_COPYBUF_KB 64
+
     ${extraConfig}
-    $extraCrossConfig
+    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
+    ${libcConfig}
     EOF
 
     make oldconfig
-  '' + stdenv.lib.optionalString useMusl ''
-    makeFlagsArray+=("CC=gcc -isystem ${musl}/include -B${musl}/lib -L${musl}/lib")
+
+    runHook postConfigure
   '';
 
-  crossAttrs = {
-    extraCrossConfig = ''
-      CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cross.config}-"
-    '' +
-      (if stdenv.cross.platform.kernelMajor == "2.4" then ''
-        CONFIG_IONICE n
-      '' else "");
-  };
+  postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
+    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
+  '';
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [ stdenv.cc.libc stdenv.cc.libc.static ];
 
   enableParallelBuilding = true;
 
+  doCheck = false; # tries to access the net
+
   meta = with stdenv.lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
-    homepage = http://busybox.net/;
+    homepage = "https://busybox.net/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    priority = 10;
   };
 }

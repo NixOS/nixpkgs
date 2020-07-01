@@ -1,28 +1,32 @@
-{ lib, pythonPackages, fetchurl }:
+{ lib, python3Packages, fetchurl, git }:
 
-pythonPackages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "nox-${version}";
-  version = "0.0.1";
+  version = "0.0.6";
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/n/nix-nox/nix-nox-${version}.tar.gz";
-    sha256 = "1s1jhickdhym70qrb5h4qxq1mvkpwgdppqpfb2jnpfaf1az6c207";
+    url = "mirror://pypi/n/nix-nox/nix-nox-${version}.tar.gz";
+    sha256 = "1qcbhdnhdhhv7q6cqdgv0q55ic8fk18526zn2yb12x9r1s0lfp9z";
   };
 
-  buildInputs = [ pythonPackages.pbr ];
+  patches = [ ./nox-review-wip.patch ];
 
-  pythonPath = with pythonPackages; [
+  buildInputs = [ python3Packages.pbr git ];
+
+  propagatedBuildInputs = with python3Packages; [
       dogpile_cache
       click
-      requests2
+      requests
       characteristic
+      setuptools
     ];
 
   meta = {
-    homepage = https://github.com/madjar/nox;
+    homepage = "https://github.com/madjar/nox";
     description = "Tools to make nix nicer to use";
     maintainers = [ lib.maintainers.madjar ];
+    license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
 }

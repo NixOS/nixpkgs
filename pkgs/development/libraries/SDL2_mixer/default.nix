@@ -1,20 +1,36 @@
-{ stdenv, fetchurl, SDL2, libogg, libvorbis, enableNativeMidi ? false }:
+{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, which
+, SDL2, libogg, libvorbis, smpeg2, flac, libmodplug, opusfile, mpg123
+, CoreServices, AudioUnit, AudioToolbox
+, enableNativeMidi ? false, fluidsynth ? null }:
 
 stdenv.mkDerivation rec {
-  name = "SDL2_mixer-2.0.0";
+  pname = "SDL2_mixer";
+  version = "2.0.4";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/projects/SDL_mixer/release/${name}.tar.gz";
-    sha256 = "0nvjdxjchrajrn0jag877hdx9zb788hsd315zzg1lyck2wb0xkm8";
+    url = "https://www.libsdl.org/projects/SDL_mixer/release/${pname}-${version}.tar.gz";
+    sha256 = "0694vsz5bjkcdgfdra6x9fq8vpzrl8m6q96gh58df7065hw5mkxl";
   };
 
-  propagatedBuildInputs = [SDL2 libogg libvorbis];
+  preAutoreconf = ''
+    aclocal
+  '';
 
-  configureFlags = "--disable-music-ogg-shared" + stdenv.lib.optionalString enableNativeMidi "--enable-music-native-midi-gpl";
+  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
 
-  postInstall = "ln -s $out/include/SDL2/SDL_mixer.h $out/include/";
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
-  meta = {
+  propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug opusfile mpg123 ];
+
+  configureFlags = [ "--disable-music-ogg-shared" ]
+    ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl"
+    ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" "--disable-smpegtest" ];
+
+  meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";
+    platforms = platforms.unix;
+    homepage = "https://www.libsdl.org/projects/SDL_mixer/";
+    maintainers = with maintainers; [ MP2E ];
+    license = licenses.zlib;
   };
 }

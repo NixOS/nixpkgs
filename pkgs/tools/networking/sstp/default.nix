@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, ppp, libevent, openssl }:
+{ stdenv, fetchurl, pkgconfig, ppp, libevent, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "sstp-client-${version}";
-  version = "1.0.9";
+  pname = "sstp-client";
+  version = "1.0.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/sstp-client/sstp-client/${version}/sstp-client-${version}.tar.gz";
-    sha256 = "0kpwywbavmlgid07rk8ff0bxp75bnfa1nc28w4j0pkxjhmja5n6k";
+    sha256 = "1zv7rx6wh9rhbyg9pg6759by8hc6n4162zrrw0y812cnaw3b8zj8";
   };
 
   patchPhase =
@@ -16,17 +16,19 @@ stdenv.mkDerivation rec {
     '';
 
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
     "--with-runtime-dir=/run/sstpc"
     "--with-pppd-plugin-dir=$(out)/lib/pppd"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libevent openssl ppp ];
 
   meta = {
     description = "SSTP client for Linux";
-    homepage = http://sstp-client.sourceforge.net/;
+    homepage = "http://sstp-client.sourceforge.net/";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.ktosiek ];
+    license = stdenv.lib.licenses.gpl2;
   };
 }

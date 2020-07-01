@@ -1,61 +1,122 @@
-{ stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs
+{ stdenv, buildPackages, buildHaskellPackages, ghc
+, jailbreak-cabal, hscolour, cpphs, nodejs
+, ghcWithHoogle, ghcWithPackages
 }:
 
+let
+  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  inherit (buildPackages)
+    fetchurl removeReferencesTo
+    pkgconfig coreutils gnugrep gnused glibcLocales;
+in
+
 { pname
+, dontStrip ? (ghc.isGhcjs or false)
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
-, buildDepends ? []
+, buildDepends ? [], setupHaskellDepends ? [], libraryHaskellDepends ? [], executableHaskellDepends ? []
 , buildTarget ? ""
-, buildTools ? []
+, buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? [], benchmarkToolDepends ? []
 , configureFlags ? []
+, buildFlags ? []
+, haddockFlags ? []
 , description ? ""
-, doCheck ? stdenv.lib.versionOlder "7.4" ghc.version
+, doCheck ? !isCross && stdenv.lib.versionOlder "7.4" ghc.version
+, doBenchmark ? false
 , doHoogle ? true
+, doHaddockQuickjump ? doHoogle && stdenv.lib.versionAtLeast ghc.version "8.6"
 , editedCabalFile ? null
-, enableLibraryProfiling ? false
-, enableSharedExecutables ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
-, enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
-, enableSplitObjs ? !stdenv.isDarwin # http://hackage.haskell.org/trac/ghc/ticket/4013
-, enableStaticLibraries ? true
-, extraLibraries ? []
-, homepage ? "http://hackage.haskell.org/package/${pname}"
-, hydraPlatforms ? ghc.meta.hydraPlatforms or ghc.meta.platforms
+, enableLibraryProfiling ? !(ghc.isGhcjs or false)
+, enableExecutableProfiling ? false
+, profilingDetail ? "exported-functions"
+# TODO enable shared libs for cross-compiling
+, enableSharedExecutables ? false
+, enableSharedLibraries ? (ghc.enableShared or false)
+, enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
+, enableStaticLibraries ? !stdenv.hostPlatform.isWindows
+, enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
+, extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
+# On macOS, statically linking against system frameworks is not supported;
+# see https://developer.apple.com/library/content/qa/qa1118/_index.html
+# They must be propagated to the environment of any executable linking with the library
+, libraryFrameworkDepends ? [], executableFrameworkDepends ? []
+, homepage ? "https://hackage.haskell.org/package/${pname}"
+, platforms ? with stdenv.lib.platforms; all # GHC can cross-compile
+, hydraPlatforms ? null
 , hyperlinkSource ? true
 , isExecutable ? false, isLibrary ? !isExecutable
 , jailbreak ? false
 , license
+  # aarch64 sometimes crashes for -jn with n>1: https://ghc.haskell.org/trac/ghc/ticket/15449
+, enableParallelBuilding ? !stdenv.buildPlatform.isAarch64
 , maintainers ? []
-, doHaddock ? true
+, doCoverage ? false
+, doHaddock ? !(ghc.isHaLVM or false)
 , passthru ? {}
-, pkgconfigDepends ? []
-, platforms ? ghc.meta.platforms
-, testDepends ? []
+, pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
+, testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
+, benchmarkDepends ? [], benchmarkHaskellDepends ? [], benchmarkSystemDepends ? [], benchmarkFrameworkDepends ? []
 , testTarget ? ""
 , broken ? false
+, preCompileBuildDriver ? "", postCompileBuildDriver ? ""
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , preConfigure ? "", postConfigure ? ""
 , preBuild ? "", postBuild ? ""
-, preInstall ? "", postInstall ? ""
+, installPhase ? "", preInstall ? "", postInstall ? ""
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
+, shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
+, hardeningDisable ? stdenv.lib.optional (ghc.isHaLVM or false) "all"
+, enableSeparateBinOutput ? false
+, enableSeparateDataOutput ? false
+, enableSeparateDocOutput ? doHaddock
+, # Don't fail at configure time if there are multiple versions of the
+  # same package in the (recursive) dependencies of the package being
+  # built. Will delay failures, if any, to compile time.
+  allowInconsistentDependencies ? false
+, maxBuildCores ? 16 # more cores usually don't improve performance: https://ghc.haskell.org/trac/ghc/ticket/9221
+, # If set to true, this builds a pre-linked .o file for this Haskell library.
+  # This can make it slightly faster to load this library into GHCi, but takes
+  # extra disk space and compile time.
+  enableLibraryForGhci ? false
 } @ args:
 
-assert pkgconfigDepends != [] -> pkgconfig != null;
 assert editedCabalFile != null -> revision != null;
+
+# --enable-static does not work on windows. This is a bug in GHC.
+# --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
+assert stdenv.hostPlatform.isWindows -> enableStaticLibraries == false;
 
 let
 
-  inherit (stdenv.lib) optional optionals optionalString versionOlder
-                       concatStringsSep enableFeature optionalAttrs toUpper;
+  inherit (stdenv.lib) optional optionals optionalString versionOlder versionAtLeast
+                       concatStringsSep enableFeature optionalAttrs;
 
   isGhcjs = ghc.isGhcjs or false;
+  isHaLVM = ghc.isHaLVM or false;
+  packageDbFlag = if isGhcjs || isHaLVM || versionOlder "7.6" ghc.version
+                  then "package-db"
+                  else "package-conf";
 
-  newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
+  # GHC used for building Setup.hs
+  #
+  # Same as our GHC, unless we're cross, in which case it is native GHC with the
+  # same version, or ghcjs, in which case its the ghc used to build ghcjs.
+  nativeGhc = buildHaskellPackages.ghc;
+  nativePackageDbFlag = if versionOlder "7.6" nativeGhc.version
+                        then "package-db"
+                        else "package-conf";
+
+  # the target dir for haddock documentation
+  docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
+
+  binDir = if enableSeparateBinOutput then "$bin/bin" else "$out/bin";
+
+  newCabalFileUrl = "mirror://hackage/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
     url = newCabalFileUrl;
     sha256 = editedCabalFile;
@@ -67,60 +128,171 @@ let
                      main = defaultMain
                    '';
 
-  ghc76xOrLater = isGhcjs || stdenv.lib.versionOlder "7.6" ghc.version;
-  packageDbFlag = if ghc76xOrLater then "package-db" else "package-conf";
+  # This awk expression transforms a package conf file like
+  #
+  #   author:               John Doe <john-doe@example.com>
+  #   description:
+  #       The purpose of this library is to do
+  #       foo and bar among other things
+  #
+  # into a more easily processeable form:
+  #
+  #   author: John Doe <john-doe@example.com>
+  #   description: The purpose of this library is to do foo and bar among other things
+  unprettyConf = builtins.toFile "unpretty-cabal-conf.awk" ''
+    /^[^ ]+:/ {
+      # When the line starts with a new field, terminate the previous one with a newline
+      if (started == 1) print ""
+      # to strip leading spaces
+      $1=$1
+      printf "%s", $0
+      started=1
+    }
 
-  hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
+    /^ +/ {
+      # to strip leading spaces
+      $1=$1
+      printf " %s", $0
+    }
 
-  enableParallelBuilding = versionOlder "7.10" ghc.version || (versionOlder "7.8" ghc.version && !hasActiveLibrary);
+    # Terminate the final field with a newline
+    END { print "" }
+  '';
+
+  crossCabalFlags = [
+    "--with-ghc=${ghcCommand}"
+    "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
+    # Pass the "wrong" C compiler rather than none at all so packages that just
+    # use the C preproccessor still work, see
+    # https://github.com/haskell/cabal/issues/6466 for details.
+    "--with-gcc=${(if stdenv.hasCC then stdenv else buildPackages.stdenv).cc.targetPrefix}cc"
+  ] ++ optionals stdenv.hasCC [
+    "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
+    "--with-ar=${stdenv.cc.bintools.targetPrefix}ar"
+    # use the one that comes with the cross compiler.
+    "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
+    "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
+  ] ++ optionals (!isHaLVM) [
+    "--hsc2hs-option=--cross-compile"
+    (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
+  ];
+
+  parallelBuildingFlags = "-j$NIX_BUILD_CORES" + optionalString stdenv.isLinux " +RTS -A64M -RTS";
+
+  crossCabalFlagsString =
+    stdenv.lib.optionalString isCross (" " + stdenv.lib.concatStringsSep " " crossCabalFlags);
+
+  buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
 
   defaultConfigureFlags = [
-    "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
-    "--with-gcc=$CC"            # Clang won't work without that extra information.
+    "--verbose"
+    "--prefix=$out"
+    "--libdir=\\$prefix/lib/\\$compiler"
+    "--libsubdir=\\$abi/\\$libname"
+    (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
+    (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
+  ] ++ optionals stdenv.hasCC [
+    "--with-gcc=$CC" # Clang won't work without that extra information.
+  ] ++ [
     "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
-    (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
-    (optionalString (useCpphs) "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
-    (enableFeature enableSplitObjs "split-objs")
+    (optionalString enableParallelBuilding "--ghc-options=${parallelBuildingFlags}")
+    (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
+    (enableFeature (enableDeadCodeElimination && !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
+    (optionalString ((enableExecutableProfiling || enableLibraryProfiling) && versionOlder "8" ghc.version) "--profiling-detail=${profilingDetail}")
+    (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
     (enableFeature enableSharedLibraries "shared")
-    (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature enableStaticLibraries "library-vanilla"))
+    (optionalString (versionAtLeast ghc.version "7.10") (enableFeature doCoverage "coverage"))
+    (optionalString (versionOlder "8.4" ghc.version) (enableFeature enableStaticLibraries "static"))
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+    (enableFeature doBenchmark "benchmarks")
+    "--enable-library-vanilla"  # TODO: Should this be configurable?
+    (enableFeature enableLibraryForGhci "library-for-ghci")
+  ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" ghc.version)) [
+     "--ghc-option=-split-sections"
+  ] ++ optionals dontStrip [
+    "--disable-library-stripping"
+    "--disable-executable-stripping"
   ] ++ optionals isGhcjs [
-    "--with-hsc2hs=${ghc.nativeGhc}/bin/hsc2hs"
     "--ghcjs"
-  ];
+  ] ++ optionals isCross ([
+    "--configure-option=--host=${stdenv.hostPlatform.config}"
+  ] ++ crossCabalFlags
+  ) ++ optionals enableSeparateBinOutput ["--bindir=${binDir}"];
 
   setupCompileFlags = [
-    (optionalString (!coreSetup) "-${packageDbFlag}=$packageConfDir")
-    (optionalString (isGhcjs || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
-    (optionalString (versionOlder "7.10" ghc.version) "-threaded") # https://github.com/haskell/cabal/issues/2398
+    (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
+    (optionalString enableParallelBuilding (parallelBuildingFlags))
+    "-threaded"       # https://github.com/haskell/cabal/issues/2398
+    "-rtsopts"        # allow us to pass RTS flags to the generated Setup executable
   ];
 
-  isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
-  isSystemPkg = x: !isHaskellPkg x;
+  isHaskellPkg = x: x ? isHaskellLibrary;
 
-  propagatedBuildInputs = buildDepends;
-  otherBuildInputs = extraLibraries ++
-                     buildTools ++
-                     optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends) ++
-                     optionals doCheck testDepends;
-  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
+  allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
+                        optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
-  systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
+  depsBuildBuild = [ nativeGhc ];
+  collectedToolDepends =
+    buildTools ++ libraryToolDepends ++ executableToolDepends ++
+    optionals doCheck testToolDepends ++
+    optionals doBenchmark benchmarkToolDepends;
+  nativeBuildInputs =
+    [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+    setupHaskellDepends ++ collectedToolDepends;
+  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
+  otherBuildInputsHaskell =
+    optionals doCheck (testDepends ++ testHaskellDepends) ++
+    optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends);
+  otherBuildInputsSystem =
+    extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ executableFrameworkDepends ++
+    allPkgconfigDepends ++
+    optionals doCheck (testSystemDepends ++ testFrameworkDepends) ++
+    optionals doBenchmark (benchmarkSystemDepends ++ benchmarkFrameworkDepends);
+  # TODO next rebuild just define as `otherBuildInputsHaskell ++ otherBuildInputsSystem`
+  otherBuildInputs =
+    extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ executableFrameworkDepends ++
+    allPkgconfigDepends ++
+    optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testFrameworkDepends) ++
+    optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkFrameworkDepends);
 
-  ghcEnv = ghc.withPackages (p: haskellBuildInputs);
+  setupCommand = "./Setup";
 
-  setupCommand = if isGhcjs then "${ghc.nodejs}/bin/node ./Setup.jsexe/all.js" else "./Setup";
-  ghcCommand = if isGhcjs then "ghcjs" else "ghc";
-  ghcCommandCaps = toUpper ghcCommand;
+  ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
 
-in
+  nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
+
+  buildPkgDb = ghcName: packageConfDir: ''
+    # If this dependency has a package database, then copy the contents of it,
+    # unless it is one of our GHCs. These can appear in our dependencies when
+    # we are doing native builds, and they have package databases in them, but
+    # we do not want to copy them over.
+    #
+    # We don't need to, since those packages will be provided by the GHC when
+    # we compile with it, and doing so can result in having multiple copies of
+    # e.g. Cabal in the database with the same name and version, which is
+    # ambiguous.
+    if [ -d "$p/lib/${ghcName}/package.conf.d" ] && [ "$p" != "${ghc}" ] && [ "$p" != "${nativeGhc}" ]; then
+      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf ${packageConfDir}/
+      continue
+    fi
+  '';
+in stdenv.lib.fix (drv:
+
+assert allPkgconfigDepends != [] -> pkgconfig != null;
+
 stdenv.mkDerivation ({
-  name = "${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}";
+  name = "${pname}-${version}";
+
+  outputs = [ "out" ]
+         ++ (optional enableSeparateDataOutput "data")
+         ++ (optional enableSeparateDocOutput "doc")
+         ++ (optional enableSeparateBinOutput "bin");
+  setOutputFlags = false;
 
   pos = builtins.unsafeGetAttrPos "pname" args;
 
@@ -130,8 +302,9 @@ stdenv.mkDerivation ({
 
   inherit src;
 
-  nativeBuildInputs = otherBuildInputs ++ optionals (!hasActiveLibrary) propagatedBuildInputs;
-  propagatedNativeBuildInputs = optionals hasActiveLibrary propagatedBuildInputs;
+  inherit depsBuildBuild nativeBuildInputs;
+  buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs;
+  propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
 
@@ -146,34 +319,79 @@ stdenv.mkDerivation ({
   '' + postPatch;
 
   setupCompilerEnvironmentPhase = ''
+    NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
-    export PATH="${ghc}/bin:$PATH"
-    ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
+    ${optionalString (isLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
+    setupPackageConfDir="$TMPDIR/setup-package.conf.d"
+    mkdir -p $setupPackageConfDir
     packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir
 
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
-
-    local inputClosure=""
-    for i in $propagatedNativeBuildInputs $nativeBuildInputs; do
-      findInputs $i inputClosure propagated-native-build-inputs
+  ''
+  # We build the Setup.hs on the *build* machine, and as such should only add
+  # dependencies for the build machine.
+  #
+  # pkgs* arrays defined in stdenv/setup.hs
+  + ''
+    for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
+      ${buildPkgDb nativeGhc.name "$setupPackageConfDir"}
     done
-    for p in $inputClosure; do
-      if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
-        cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
-        continue
-      fi
+    ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
+  ''
+  # For normal components
+  + ''
+    for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
+      ${buildPkgDb ghc.name "$packageConfDir"}
       if [ -d "$p/include" ]; then
         configureFlags+=" --extra-include-dirs=$p/include"
       fi
       if [ -d "$p/lib" ]; then
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
+    ''
+    # It is not clear why --extra-framework-dirs does work fine on Linux
+    + optionalString (!stdenv.buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
+      if [[ -d "$p/Library/Frameworks" ]]; then
+        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+      fi
+  '' + ''
     done
+  ''
+  # only use the links hack if we're actually building dylibs. otherwise, the
+  # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
+  # "ln -s $out/lib/links", which tries to recreate the links dir and fails
+  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables)) ''
+    # Work around a limit in the macOS Sierra linker on the number of paths
+    # referenced by any one dynamic library:
+    #
+    # Create a local directory with symlinks of the *.dylib (macOS shared
+    # libraries) from all the dependencies.
+    local dynamicLinksDir="$out/lib/links"
+    mkdir -p $dynamicLinksDir
+
+    # Unprettify all package conf files before reading/writing them
+    for d in "$packageConfDir/"*; do
+      # gawk -i inplace seems to strip the last newline
+      gawk -f ${unprettyConf} "$d" > tmp
+      mv tmp "$d"
+    done
+
+    for d in $(grep '^dynamic-library-dirs:' "$packageConfDir"/* | cut -d' ' -f2- | tr ' ' '\n' | sort -u); do
+      for lib in "$d/"*.{dylib,so}; do
+        # Allow overwriting because C libs can be pulled in multiple times.
+        ln -sf "$lib" "$dynamicLinksDir"
+      done
+    done
+    # Edit the local package DB to reference the links directory.
+    for f in "$packageConfDir/"*.conf; do
+      sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," "$f"
+    done
+  '') + ''
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
 
     runHook postSetupCompilerEnvironment
@@ -187,10 +405,14 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${ghcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
+
+  # Cabal takes flags like `--configure-option=--host=...` instead
+  configurePlatforms = [];
+  inherit configureFlags;
 
   configurePhase = ''
     runHook preConfigure
@@ -199,11 +421,12 @@ stdenv.mkDerivation ({
 
     echo configureFlags: $configureFlags
     ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
-    if ${gnugrep}/bin/egrep -q '^Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
-      echo >&2 "*** abort because of serious configure-time warning from Cabal"
-      exit 1
-    fi
-
+    ${stdenv.lib.optionalString (!allowInconsistentDependencies) ''
+      if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
+        echo >&2 "*** abort because of serious configure-time warning from Cabal"
+        exit 1
+      fi
+    ''}
     export GHC_PACKAGE_PATH="$packageConfDir:"
 
     runHook postConfigure
@@ -211,9 +434,11 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ${setupCommand} build ${buildTarget}
+    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}
     runHook postBuild
   '';
+
+  inherit doCheck;
 
   checkPhase = ''
     runHook preCheck
@@ -223,10 +448,12 @@ stdenv.mkDerivation ({
 
   haddockPhase = ''
     runHook preHaddock
-    ${optionalString (doHaddock && hasActiveLibrary) ''
+    ${optionalString (doHaddock && isLibrary) ''
       ${setupCommand} haddock --html \
         ${optionalString doHoogle "--hoogle"} \
-        ${optionalString (hasActiveLibrary && hyperlinkSource) "--hyperlink-source"}
+        ${optionalString doHaddockQuickjump "--quickjump"} \
+        ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
+        ${stdenv.lib.concatStringsSep " " haddockFlags}
     ''}
     runHook postHaddock
   '';
@@ -234,43 +461,177 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    ${if !hasActiveLibrary then "${setupCommand} install" else ''
+    ${if !isLibrary then "${setupCommand} install" else ''
       ${setupCommand} copy
       local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
-      local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
-      mv $packageConfFile $packageConfDir/$pkgId.conf
-    ''}
+      if [ -d "$packageConfFile" ]; then
+        mv "$packageConfFile/"* "$packageConfDir"
+        rmdir "$packageConfFile"
+      fi
+      for packageConfFile in "$packageConfDir/"*; do
+        local pkgId=$(gawk -f ${unprettyConf} "$packageConfFile" \
+          | grep '^id:' | cut -d' ' -f2)
+        mv "$packageConfFile" "$packageConfDir/$pkgId.conf"
+      done
 
-    ${optionalString (enableSharedExecutables && isExecutable && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
-      for exe in "$out/bin/"* ; do
+      # delete confdir if there are no libraries
+      find $packageConfDir -maxdepth 0 -empty -delete;
+    ''}
+    ${optionalString isGhcjs ''
+      for exeDir in "${binDir}/"*.jsexe; do
+        exe="''${exeDir%.jsexe}"
+        printWords '#!${nodejs}/bin/node' > "$exe"
+        echo >> "$exe"
+        cat "$exeDir/all.js" >> "$exe"
+        chmod +x "$exe"
+      done
+    ''}
+    ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
+    ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
+      for exe in "${binDir}/"* ; do
         install_name_tool -add_rpath "$out/lib/ghc-${ghc.version}/${pname}-${version}" "$exe"
       done
     ''}
 
+    ${optionalString enableSeparateDocOutput ''
+    for x in ${docdir "$doc"}"/html/src/"*.html; do
+      remove-references-to -t $out $x
+    done
+    mkdir -p $doc
+    ''}
+    ${optionalString enableSeparateDataOutput "mkdir -p $data"}
+
     runHook postInstall
   '';
 
-  passthru = passthru // {
+  passthru = passthru // rec {
 
     inherit pname version;
 
-    isHaskellLibrary = hasActiveLibrary;
+    compiler = ghc;
 
-    env = stdenv.mkDerivation {
-      name = "interactive-${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}-environment";
-      nativeBuildInputs = [ ghcEnv systemBuildInputs ];
-      LANG = "en_US.UTF-8";
-      LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
-      shellHook = ''
-        export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
-        export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
-        export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
-      '';
+    # All this information is intended just for `shellFor`.  It should be
+    # considered unstable and indeed we knew how to keep it private we would.
+    getCabalDeps = {
+      inherit
+        buildDepends
+        buildTools
+        executableFrameworkDepends
+        executableHaskellDepends
+        executablePkgconfigDepends
+        executableSystemDepends
+        executableToolDepends
+        extraLibraries
+        libraryFrameworkDepends
+        libraryHaskellDepends
+        libraryPkgconfigDepends
+        librarySystemDepends
+        libraryToolDepends
+        pkgconfigDepends
+        setupHaskellDepends
+        ;
+    } // stdenv.lib.optionalAttrs doCheck {
+      inherit
+        testDepends
+        testFrameworkDepends
+        testHaskellDepends
+        testPkgconfigDepends
+        testSystemDepends
+        testToolDepends
+        ;
+    } // stdenv.lib.optionalAttrs doBenchmark {
+      inherit
+        benchmarkDepends
+        benchmarkFrameworkDepends
+        benchmarkHaskellDepends
+        benchmarkPkgconfigDepends
+        benchmarkSystemDepends
+        benchmarkToolDepends
+        ;
     };
+
+    # Attributes for the old definition of `shellFor`. Should be removed but
+    # this predates the warning at the top of `getCabalDeps`.
+    getBuildInputs = rec {
+      inherit propagatedBuildInputs otherBuildInputs allPkgconfigDepends;
+      haskellBuildInputs = isHaskellPartition.right;
+      systemBuildInputs = isHaskellPartition.wrong;
+      isHaskellPartition = stdenv.lib.partition
+        isHaskellPkg
+        (propagatedBuildInputs ++ otherBuildInputs ++ depsBuildBuild ++ nativeBuildInputs);
+    };
+
+    isHaskellLibrary = isLibrary;
+
+    # TODO: ask why the split outputs are configurable at all?
+    # TODO: include tests for split if possible
+    # Given the haskell package, returns
+    # the directory containing the haddock documentation.
+    # `null' if no haddock documentation was built.
+    # TODO: fetch the self from the fixpoint instead
+    haddockDir = self: if doHaddock then "${docdir self.doc}/html" else null;
+
+    # Creates a derivation containing all of the necessary dependencies for building the
+    # parent derivation. The attribute set that it takes as input can be viewed as:
+    #
+    #    { withHoogle }
+    #
+    # The derivation that it builds contains no outpaths because it is meant for use
+    # as an environment
+    #
+    #   # Example use
+    #   # Creates a shell with all of the dependencies required to build the "hello" package,
+    #   # and with python:
+    #
+    #   > nix-shell -E 'with (import <nixpkgs> {}); \
+    #   >    haskell.packages.ghc865.hello.envFunc { buildInputs = [ python ]; }'
+    envFunc = { withHoogle ? false }:
+      let
+        name = "ghc-shell-for-${drv.name}";
+
+        withPackages = if withHoogle then ghcWithHoogle else ghcWithPackages;
+
+        # We use the `ghcWithPackages` function from `buildHaskellPackages` if we
+        # want a shell for the sake of cross compiling a package. In the native case
+        # we don't use this at all, and instead put the setupDepends in the main
+        # `ghcWithPackages`. This way we don't have two wrapper scripts called `ghc`
+        # shadowing each other on the PATH.
+        ghcEnvForBuild =
+          assert isCross;
+          buildHaskellPackages.ghcWithPackages (_: setupHaskellDepends);
+
+        ghcEnv = withPackages (_:
+          otherBuildInputsHaskell ++
+          propagatedBuildInputs ++
+          stdenv.lib.optionals (!isCross) setupHaskellDepends);
+
+        ghcCommandCaps = stdenv.lib.toUpper ghcCommand';
+      in stdenv.mkDerivation ({
+        inherit name shellHook;
+
+        depsBuildBuild = stdenv.lib.optional isCross ghcEnvForBuild;
+        nativeBuildInputs =
+          [ ghcEnv ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+          collectedToolDepends;
+        buildInputs =
+          otherBuildInputsSystem;
+        phases = ["installPhase"];
+        installPhase = "echo $nativeBuildInputs $buildInputs > $out";
+        LANG = "en_US.UTF-8";
+        LOCALE_ARCHIVE = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
+        "NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
+        # TODO: is this still valid?
+        "NIX_${ghcCommandCaps}_DOCDIR" = "${ghcEnv}/share/doc/ghc/html";
+        "NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
+          then "${ghcEnv}/lib/HaLVM-${ghc.version}"
+          else "${ghcEnv}/lib/${ghcCommand}-${ghc.version}";
+      });
+
+    env = envFunc { };
 
   };
 
@@ -278,27 +639,31 @@ stdenv.mkDerivation ({
          // optionalAttrs broken               { inherit broken; }
          // optionalAttrs (description != "")  { inherit description; }
          // optionalAttrs (maintainers != [])  { inherit maintainers; }
-         // optionalAttrs (hydraPlatforms != platforms) { inherit hydraPlatforms; }
+         // optionalAttrs (hydraPlatforms != null) { inherit hydraPlatforms; }
          ;
 
 }
+// optionalAttrs (preCompileBuildDriver != "")  { inherit preCompileBuildDriver; }
+// optionalAttrs (postCompileBuildDriver != "") { inherit postCompileBuildDriver; }
 // optionalAttrs (preUnpack != "")      { inherit preUnpack; }
 // optionalAttrs (postUnpack != "")     { inherit postUnpack; }
-// optionalAttrs (configureFlags != []) { inherit configureFlags; }
 // optionalAttrs (patches != [])        { inherit patches; }
 // optionalAttrs (patchPhase != "")     { inherit patchPhase; }
-// optionalAttrs (postPatch != "")      { inherit postPatch; }
 // optionalAttrs (preConfigure != "")   { inherit preConfigure; }
 // optionalAttrs (postConfigure != "")  { inherit postConfigure; }
 // optionalAttrs (preBuild != "")       { inherit preBuild; }
 // optionalAttrs (postBuild != "")      { inherit postBuild; }
-// optionalAttrs (doCheck)              { inherit doCheck; }
+// optionalAttrs (doBenchmark)          { inherit doBenchmark; }
 // optionalAttrs (checkPhase != "")     { inherit checkPhase; }
 // optionalAttrs (preCheck != "")       { inherit preCheck; }
 // optionalAttrs (postCheck != "")      { inherit postCheck; }
 // optionalAttrs (preInstall != "")     { inherit preInstall; }
+// optionalAttrs (installPhase != "")   { inherit installPhase; }
 // optionalAttrs (postInstall != "")    { inherit postInstall; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
-// optionalAttrs (stdenv.isLinux)       { LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+// optionalAttrs (dontStrip)            { inherit dontStrip; }
+// optionalAttrs (hardeningDisable != []) { inherit hardeningDisable; }
+// optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+)
 )

@@ -1,50 +1,26 @@
-x@{builderDefsPackage
-  , unzip
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ lib, fetchzip }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    version="2.0";
-    baseName="theano";
-    name="${baseName}-${version}";
-    url="http://www.thessalonica.org.ru/downloads/${name}.otf.zip";
-    hash="1xiykqbbiawvfk33639awmgdn25b8s2k7vpwncl17bzlk887b4z6";
+let
+  version = "2.0";
+in fetchzip rec {
+  name = "theano-${version}";
+
+  url = "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";
+
+  postFetch = ''
+    mkdir -p $out/share/fonts/opentype
+    mkdir -p $out/share/doc/${name}
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*.txt -d "$out/share/doc/${name}"
+  '';
+
+  sha256 = "1my1symb7k80ys33iphsxvmf6432wx6vjdnxhzhkgrang1rhx1h8";
+
+  meta = with lib; {
+    homepage = "https://github.com/akryukov/theano";
+    description = "An old-style font designed from historic samples";
+    maintainers = with maintainers; [ raskin rycee ];
+    license = licenses.ofl;
+    platforms = platforms.all;
   };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
-
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  phaseNames = ["doUnpack" "installFonts"];
-
-  doUnpack = a.fullDepEntry ''
-    unzip ${src}
-  '' ["addInputs"];
-      
-  meta = {
-    description = "An old-style font";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      all;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.thessalonica.org.ru/ru/fonts-download.html";
-    };
-  };
-}) x
-
+}

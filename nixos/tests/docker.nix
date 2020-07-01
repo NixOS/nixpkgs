@@ -1,24 +1,49 @@
 # This test runs docker and checks if simple container starts
 
-import ./make-test.nix {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "docker";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ nequissimus offline ];
+  };
 
   nodes = {
     docker =
-      { config, pkgs, ... }:
+      { pkgs, ... }:
         {
           virtualisation.docker.enable = true;
+          virtualisation.docker.package = pkgs.docker;
+
+          users.users = {
+            noprivs = {
+              isNormalUser = true;
+              description = "Can't access the docker daemon";
+              password = "foobar";
+            };
+
+            hasprivs = {
+              isNormalUser = true;
+              description = "Can access the docker daemon";
+              password = "foobar";
+              extraGroups = [ "docker" ];
+            };
+          };
         };
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $docker->waitForUnit("docker.service");
-    $docker->succeed("tar cv --files-from /dev/null | docker import - scratch");
-    $docker->succeed("docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratch /bin/sleep 10");
-    $docker->succeed("docker ps | grep sleeping");
-    $docker->succeed("docker stop sleeping");
+    docker.wait_for_unit("sockets.target")
+    docker.succeed("tar cv --files-from /dev/null | docker import - scratchimg")
+    docker.succeed(
+        "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+    )
+    docker.succeed("docker ps | grep sleeping")
+    docker.succeed("sudo -u hasprivs docker ps")
+    docker.fail("sudo -u noprivs docker ps")
+    docker.succeed("docker stop sleeping")
+
+    # Must match version 4 times to ensure client and server git commits and versions are correct
+    docker.succeed('[ $(docker version | grep ${pkgs.docker.version} | wc -l) = "4" ]')
   '';
-
-}
+})

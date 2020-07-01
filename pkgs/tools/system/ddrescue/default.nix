@@ -1,16 +1,19 @@
-{ stdenv, fetchurl, lzip }:
+{ stdenv
+, fetchurl, lzip
+}:
 
 stdenv.mkDerivation rec {
-  name = "ddrescue-1.19";
+  name = "ddrescue-1.25";
 
   src = fetchurl {
     url = "mirror://gnu/ddrescue/${name}.tar.lz";
-    sha256 = "1f278w7i9sx45jk6fsw1kyzx743k3alx1c4w1q8sk05ckafhr3gd";
+    sha256 = "0qqh38izl5ppap9a5izf3hijh94k65s3zbfkczd4b7x04syqwlyf";
   };
 
-  buildInputs = [ lzip ];
+  nativeBuildInputs = [ lzip ];
 
-  doCheck = true;
+  doCheck = true; # not cross;
+  configureFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
 
   meta = with stdenv.lib; {
     description = "GNU ddrescue, a data recovery tool";
@@ -38,11 +41,11 @@ stdenv.mkDerivation rec {
          second and successive copies.
       '';
 
-    homepage = http://www.gnu.org/software/ddrescue/ddrescue.html;
+    homepage = "https://www.gnu.org/software/ddrescue/ddrescue.html";
 
     license = licenses.gpl3Plus;
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar fpletz ];
   };
 }

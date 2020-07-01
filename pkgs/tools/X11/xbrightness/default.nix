@@ -1,33 +1,24 @@
-{ stdenv, fetchurl, xlibs }:
+{ stdenv, fetchurl, imake, gccmakedep
+, libX11, libXaw, libXext, libXmu, libXpm, libXxf86vm  }:
 
 stdenv.mkDerivation {
 
   name = "xbrightness-0.3-mika-akk";
   src = fetchurl {
-    url = http://shallowsky.com/software/xbrightness/xbrightness-0.3-mika-akk.tar.gz;
+    url = "https://shallowsky.com/software/xbrightness/xbrightness-0.3-mika-akk.tar.gz";
     sha256 = "2564dbd393544657cdabe4cbf535d9cfb9abe8edddb1b8cdb1ed4d12f358626e";
   };
 
-  buildInputs = [
-    xlibs.imake
-    xlibs.libX11
-    xlibs.libXaw
-    xlibs.libXext
-    xlibs.libXmu
-    xlibs.libXpm
-    xlibs.libXxf86vm
-  ];
+  nativeBuildInputs = [ imake gccmakedep ];
+  buildInputs = [ libX11 libXaw libXext libXmu libXpm libXxf86vm ];
 
-  configurePhase = "xmkmf";
-
-  installPhase = ''
-    make install BINDIR=$out/bin
-    make install.man MANPATH=$out/share/man
-  '';
+  makeFlags = [ "BINDIR=$(out)/bin" "MANPATH=$(out)/share/man" ];
+  installTargets = [ "install" "install.man" ];
 
   meta = {
     description = "X11 brigthness and gamma software control";
-    homepage = http://shallowsky.com/software;
+    homepage = "http://shallowsky.com/software";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

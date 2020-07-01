@@ -1,5 +1,3 @@
-#!/bin/sh -e
-
 source "$stdenv/setup"
 
 mkdir -p $out/share/GeoIP
@@ -17,4 +15,6 @@ for var in "${!src@}"; do
 done
 
 gzip -dv *.gz
-xz -dv *.xz
+
+ln -s GeoLiteCity.dat GeoIPCity.dat
+ln -s GeoLiteCityv6.dat GeoIPCityv6.dat

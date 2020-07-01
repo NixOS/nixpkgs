@@ -1,22 +1,27 @@
-{ stdenv, fetchurl, ocaml, findlib, camlp4, calendar, csv, ocaml_pcre }:
+{ lib, fetchFromGitHub, buildDunePackage
+, calendar, csv, hex, re
+}:
 
-stdenv.mkDerivation {
-  name = "ocaml-pgocaml-2.2";
-  src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/1506/pgocaml-2.2.tgz;
-    sha256 = "0x0dhlz2rqxpwfdqi384f9fn0ng2irifadmxfm2b4gcz7y1cl9rh";
+buildDunePackage rec {
+  pname = "pgocaml";
+  version = "4.0";
+  src = fetchFromGitHub {
+    owner = "darioteixeira";
+    repo = "pgocaml";
+    rev = "v${version}";
+    sha256 = "1s8c5prr7jb9k76bz990m836czm6k8rv5bvp6s2zg9ra0w19w90j";
   };
 
-  buildInputs = [ ocaml findlib camlp4 ];
-  propagatedBuildInputs = [ calendar csv ocaml_pcre ];
+  minimumOCamlVersion = "4.05";
 
-  createFindlibDestdir = true;
+  preConfigure = "patchShebangs src/genconfig.sh";
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [ calendar csv hex re ];
+
+  meta = with lib; {
     description = "An interface to PostgreSQL databases for OCaml applications";
-    homepage = http://pgocaml.forge.ocamlcore.org/;
+    inherit (src.meta) homepage;
     license = licenses.lgpl2;
-    platforms = ocaml.meta.platforms;
     maintainers = with maintainers; [ vbgl ];
   };
 }

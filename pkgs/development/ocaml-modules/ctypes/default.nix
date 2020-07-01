@@ -1,18 +1,21 @@
-{stdenv, buildOcaml, fetchurl, libffi, pkgconfig, ncurses}:
+{ stdenv, fetchzip, ocaml, findlib, libffi, pkgconfig, ncurses, integers }:
 
-buildOcaml rec {
-  name = "ctypes";
-  version = "0.4.1";
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "ctypes is not available for OCaml ${ocaml.version}"
+else
 
-  src = fetchurl {
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-ctypes-${version}";
+  version = "0.16.0";
+
+  src = fetchzip {
     url = "https://github.com/ocamllabs/ocaml-ctypes/archive/${version}.tar.gz";
-    sha256 = "74564e049de5d3c0e76ea284c225cb658ac1a2b483345be1efb9be4b3c1702f5";
+    sha256 = "0qh2gfx5682wkk2nm1ybspzz9c2xvlnnf6iv08a89kbwa1hvdqrg";
   };
 
-  buildInputs = [ ncurses pkgconfig ];
-  propagatedBuildInputs = [ libffi ];
-
-  hasSharedObjects = true;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml findlib ncurses ];
+  propagatedBuildInputs = [ integers libffi ];
 
   buildPhase =  ''
      make XEN=false libffi.config ctypes-base ctypes-stubs
@@ -20,13 +23,15 @@ buildOcaml rec {
   '';
 
   installPhase =  ''
+    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
     make install XEN=false
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ocamllabs/ocaml-ctypes;
+    homepage = "https://github.com/ocamllabs/ocaml-ctypes";
     description = "Library for binding to C libraries using pure OCaml";
     license = licenses.mit;
     maintainers = [ maintainers.ericbmerritt ];
+    inherit (ocaml.meta) platforms;
   };
 }

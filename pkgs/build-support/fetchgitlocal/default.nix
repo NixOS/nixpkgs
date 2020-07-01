@@ -1,23 +1,40 @@
-{ runCommand, git, nix }: src:
+{ runCommand, git }: src:
 
-let hash = import (runCommand "head-hash.nix"
-  { dummy = builtins.currentTime;
-    preferLocalBuild = true; }
-''
-  cd ${toString src}
-  (${git}/bin/git show && ${git}/bin/git diff) > $out
-  hash=$(${nix}/bin/nix-hash $out)
-  echo "\"$hash\"" > $out
-''); in
+let
+  srcStr = toString src;
 
-runCommand "local-git-export"
-  { dummy = hash;
-    preferLocalBuild = true; }
-''
-  cd ${toString src}
-  mkdir -p "$out"
-  for file in $(${git}/bin/git ls-files); do
-    mkdir -p "$out/$(dirname $file)"
-    cp -d $file "$out/$file" || true # don't fail when trying to copy a directory
-  done
-''
+  # Adds the current directory (respecting ignored files) to the git store, and returns the hash
+  gitHashFile = runCommand "put-in-git" {
+      nativeBuildInputs = [ git ];
+      dummy = builtins.currentTime; # impure, do every time
+      preferLocalBuild = true;
+    } ''
+      cd ${srcStr}
+      DOT_GIT=$(git rev-parse --resolve-git-dir .git) # path to repo
+
+      cp $DOT_GIT/index $DOT_GIT/index-user # backup index
+      git reset # reset index
+      git add . # add current directory
+
+      # hash of current directory
+      # remove trailing newline
+      git rev-parse $(git write-tree) \
+        | tr -d '\n' > $out
+
+      mv $DOT_GIT/index-user $DOT_GIT/index # restore index
+    '';
+
+  gitHash = builtins.readFile gitHashFile; # cache against git hash
+
+  nixPath = runCommand "put-in-nix" {
+      nativeBuildInputs = [ git ];
+      preferLocalBuild = true;
+    } ''
+      mkdir $out
+
+      # dump tar of *current directory* at given revision
+      git -C ${srcStr} archive --format=tar ${gitHash} \
+        | tar xf - -C $out
+    '';
+
+in nixPath

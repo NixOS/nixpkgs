@@ -1,28 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, libxml2, pcre }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, libxml2, pcre
+, darwin}:
 
-# The exact revision specified by Blender's install_deps.sh script.
-let rev = "18da7f4109a8eafaa290a33f5550501cc4c8bae8"; in
+stdenv.mkDerivation rec {
+  pname = "opencollada";
 
-stdenv.mkDerivation {
-  name = "opencollada-1.3-${rev}";
+  version = "1.6.68";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCOLLADA";
-    inherit rev;
-    sha256 = "0ach32ws95mh0ijd8sr22kxka3riq72bb9ng46vs3615dxn7h18d";
+    rev = "v${version}";
+    sha256 = "1ym16fxx9qhf952vva71sdzgbm7ifis0h1n5fj1bfdj8zvvkbw5w";
   };
 
-  buildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AGL ]);
 
   propagatedBuildInputs = [ libxml2 pcre ];
 
   enableParallelBuilding = true;
 
+  patchPhase = ''
+    patch -p1 < ${./pcre.patch}
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
+      --replace math.h cmath
+  '';
+
   meta = {
     description = "A library for handling the COLLADA file format";
-    homepage = https://github.com/KhronosGroup/OpenCOLLADA/;
+    homepage = "https://github.com/KhronosGroup/OpenCOLLADA/";
     maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.mit;
   };
 }

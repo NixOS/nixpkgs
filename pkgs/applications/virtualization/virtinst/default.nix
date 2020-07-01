@@ -1,30 +1,31 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl }:
+{ stdenv, fetchurl, python2Packages, intltool, libxml2Python }:
 
 with stdenv.lib;
 
 let version = "0.600.4"; in
 
 stdenv.mkDerivation rec {
-  name = "virtinst-${version}";
+  pname = "virtinst";
+  inherit version;
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virtinst/virtinst-${version}.tar.gz";
     sha256 = "175laiy49dni8hzi0cn14bbsdsigvgr9h6d9z2bcvbpa29spldvf";
   };
 
-  pythonPath = with pythonPackages;
-    [ setuptools eventlet greenlet gflags netaddr sqlalchemy carrot routes
-      paste_deploy m2crypto ipy twisted sqlalchemy_migrate
-      distutils_extra simplejson readline glance cheetah lockfile httplib2
+  pythonPath = with python2Packages;
+    [ setuptools eventlet greenlet gflags netaddr carrot routes
+      PasteDeploy m2crypto ipy twisted
+      distutils_extra simplejson cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that
-      # libxml2Python is a dependency of libvirt.py. 
+      # libxml2Python is a dependency of libvirt.py.
       libvirt libxml2Python urlgrabber
     ];
 
   buildInputs =
-    [ pythonPackages.python 
-      pythonPackages.wrapPython
-      pythonPackages.mox
+    [ python2Packages.python
+      python2Packages.wrapPython
+      python2Packages.mox
       intltool
     ] ++ pythonPath;
 
@@ -37,9 +38,10 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://virt-manager.org;
+    homepage = "http://virt-manager.org";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [qknight];
     description = "Command line tool which provides an easy way to provision operating systems into virtual machines";
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -1,13 +1,13 @@
 { stdenv, fetchgit, perl, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "safe-rm-${version}";
+  pname = "safe-rm";
   version = "0.12";
 
   src = fetchgit {
     url = "https://gitorious.org/safe-rm/mainline.git";
-    rev = "refs/tags/${name}";
-    sha256 = "1n8ir96rwsg9r47lp3avl5sw548gvyh12zk5riflmmdvq907yi0s";
+    rev = "refs/tags/${pname}-${version}";
+    sha256 = "0zkmwxyl1870ar6jr9h537vmqgkckqs9jd1yv6m4qqzdsmg5gdbq";
   };
 
   propagatedBuildInputs = [ perl coreutils ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool intended to prevent the accidental deletion of important files";
-    homepage = https://launchpad.net/safe-rm;
+    homepage = "https://launchpad.net/safe-rm";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = [ maintainers.koral ];

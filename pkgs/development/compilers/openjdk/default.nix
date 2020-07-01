@@ -1,183 +1,154 @@
-{ stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype
-, which, jdk, nettools, xorg, file
-, fontconfig, cpio, cacert, perl, setJavaClassPath }:
+{ stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
+, zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
+, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
+, libXcursor, libXrandr, fontconfig, openjdk14-bootstrap
+, setJavaClassPath
+, headless ? false
+, enableJavaFX ? openjfx.meta.available, openjfx
+, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
+}:
 
 let
-
-  /**
-   * The JRE libraries are in directories that depend on the CPU.
-   */
-  architecture =
-    if stdenv.system == "i686-linux" then
-      "i386"
-    else if stdenv.system == "x86_64-linux" then
-      "amd64"
-    else
-      throw "openjdk requires i686-linux or x86_64 linux";
-
-  update = "65";
-
-  build = "32";
-
-  # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
-  paxflags = if stdenv.isi686 then "msp" else "m";
-
-  cupsSrc = fetchurl {
-    url = http://ftp.easysw.com/pub/cups/1.5.4/cups-1.5.4-source.tar.bz2;
-    md5 = "de3006e5cf1ee78a9c6145ce62c4e982";
-  };
+  major = "14";
+  update = ".0.1";
+  build = "-ga";
 
   openjdk = stdenv.mkDerivation rec {
-    name = "openjdk-7u${update}b${build}";
+    pname = "openjdk" + lib.optionalString headless "-headless";
+    version = "${major}${update}${build}";
 
     src = fetchurl {
-      url = "http://tarballs.nixos.org/openjdk-7u${update}-b${build}.tar.xz";
-      sha256 = "0lyp75sl5w4b9azphb2nq5cwzli85inpksq4943q4j349rkmdprx";
+      url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
+      sha256 = "0ic7dcrzk62jc65yrshs6xlclmsha7z52bia5s2bkllw1zpmdmip";
     };
 
-    outputs = [ "out" "jre" ];
-
-    buildInputs =
-      [ unzip procps ant which zip cpio nettools alsaLib
-        xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
-        xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
-        fontconfig perl file
-      ];
-
-    NIX_LDFLAGS = "-lfontconfig -lXcursor -lXinerama";
-
-    postUnpack = ''
-      sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
-        -e "s@/bin/ls@${coreutils}/bin/ls@" \
-        openjdk*/hotspot/make/linux/makefiles/sa.make
-
-      sed -i "s@/bin/echo -e@${coreutils}/bin/echo -e@" \
-        openjdk*/{jdk,corba}/make/common/shared/Defs-utils.gmk
-
-      tar xf ${cupsSrc}
-      cupsDir=$(echo $(pwd)/cups-*)
-      makeFlagsArray+=(CUPS_HEADERS_PATH=$cupsDir)
-    '';
+    nativeBuildInputs = [ pkgconfig autoconf ];
+    buildInputs = [
+      cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
+      libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk14-bootstrap
+    ] ++ lib.optionals (!headless && enableGnome2) [
+      gtk3 gnome_vfs GConf glib
+    ];
 
     patches = [
-      ./cppflags-include-fix.patch
-      ./fix-java-home.patch
-      ./paxctl.patch
-      ./read-truststore-from-env.patch
-      ./currency-date-range.patch
-      ./linux-4.0.patch
+      ./fix-java-home-jdk10.patch
+      ./read-truststore-from-env-jdk10.patch
+      ./currency-date-range-jdk10.patch
+      ./increase-javadoc-heap-jdk13.patch
+      # -Wformat etc. are stricter in newer gccs, per
+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
+      # so grab the work-around from
+      # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
+      (fetchurl {
+        url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
+        sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
+      })
+    ] ++ lib.optionals (!headless && enableGnome2) [
+      ./swing-use-gtk-jdk13.patch
     ];
 
-    NIX_NO_SELF_RPATH = true;
-
-    makeFlags = [
-      "SORT=${coreutils}/bin/sort"
-      "ALSA_INCLUDE=${alsaLib}/include/alsa/version.h"
-      "FREETYPE_HEADERS_PATH=${freetype}/include"
-      "FREETYPE_LIB_PATH=${freetype}/lib"
-      "MILESTONE=u${update}"
-      "BUILD_NUMBER=b${build}"
-      "USRBIN_PATH="
-      "COMPILER_PATH="
-      "DEVTOOLS_PATH="
-      "UNIXCOMMAND_PATH="
-      "BOOTDIR=${jdk}"
-      "STATIC_CXX=false"
-      "UNLIMITED_CRYPTO=1"
-      "FULL_DEBUG_SYMBOLS=0"
-    ];
-
-    configurePhase = "true";
-
-    preBuild = ''
-      # We also need to PaX-mark in the middle of the build
-      substituteInPlace hotspot/make/linux/makefiles/launcher.make \
-         --replace XXX_PAXFLAGS_XXX ${paxflags}
-      substituteInPlace jdk/make/common/Program.gmk  \
-         --replace XXX_PAXFLAGS_XXX ${paxflags}
+    prePatch = ''
+      chmod +x configure
+      patchShebangs --build configure
     '';
 
+    configureFlags = [
+      "--with-boot-jdk=${openjdk14-bootstrap.home}"
+      "--enable-unlimited-crypto"
+      "--with-native-debug-symbols=internal"
+      "--with-libjpeg=system"
+      "--with-giflib=system"
+      "--with-libpng=system"
+      "--with-zlib=system"
+      "--with-lcms=system"
+      "--with-stdc++lib=dynamic"
+    ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
+      ++ lib.optional headless "--enable-headless-only"
+      ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
+
+    separateDebugInfo = true;
+
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+
+    NIX_LDFLAGS = toString (lib.optionals (!headless) [
+      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
+    ] ++ lib.optionals (!headless && enableGnome2) [
+      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+    ]);
+
+    buildFlags = [ "all" ];
+
     installPhase = ''
-      mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
+      mkdir -p $out/lib
 
-      cp -av build/*/j2sdk-image/* $out/lib/openjdk
+      mv build/*/images/jdk $out/lib/openjdk
 
-      # Move some stuff to top-level.
-      mv $out/lib/openjdk/include $out/include
-      mv $out/lib/openjdk/man $out/share/man
+      # Remove some broken manpages.
+      rm -rf $out/lib/openjdk/man/ja*
+
+      # Mirror some stuff in top-level.
+      mkdir -p $out/share
+      ln -s $out/lib/openjdk/include $out/include
+      ln -s $out/lib/openjdk/man $out/share/man
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
 
-      # Remove some broken manpages.
-      rm -rf $out/share/man/ja*
-
       # Remove crap from the installation.
-      rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
-
-      # Move the JRE to a separate output.
-      mv $out/lib/openjdk/jre $jre/lib/openjdk/
-      mkdir $out/lib/openjdk/jre
-      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
-
-      rm -rf $out/lib/openjdk/jre/bin
-      ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
-
-      # Set PaX markings
-      exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-      echo "to mark: *$exes*"
-      for file in $exes; do
-        echo "marking *$file*"
-        paxmark ${paxflags} "$file"
-      done
-
-      # Remove duplicate binaries.
-      for i in $(cd $out/lib/openjdk/bin && echo *); do
-        if [ "$i" = java ]; then continue; fi
-        if cmp -s $out/lib/openjdk/bin/$i $jre/lib/openjdk/jre/bin/$i; then
-          ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
-        fi
-      done
-
-      # Generate certificates.
-      pushd $jre/lib/openjdk/jre/lib/security
-      rm cacerts
-      perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ca-bundle.crt
-      popd
+      rm -rf $out/lib/openjdk/demo
+      ${lib.optionalString headless ''
+        rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
+      ''}
 
       ln -s $out/lib/openjdk/bin $out/bin
-      ln -s $jre/lib/openjdk/jre/bin $jre/bin
-    ''; # */
+    '';
 
-    # FIXME: this is unnecessary once the multiple-outputs branch is merged.
     preFixup = ''
-      prefix=$jre stripDirs "$stripDebugList" "''${stripDebugFlags:--S}"
-      patchELF $jre
-      propagatedNativeBuildInputs+=" $jre"
-
-      # Propagate the setJavaClassPath setup hook from the JRE so that
-      # any package that depends on the JRE has $CLASSPATH set up
-      # properly.
-      mkdir -p $jre/nix-support
-      echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-native-build-inputs
+      # Propagate the setJavaClassPath setup hook so that any package
+      # that depends on the JDK has $CLASSPATH set up properly.
+      mkdir -p $out/nix-support
+      #TODO or printWords?  cf https://github.com/NixOS/nixpkgs/pull/27427#issuecomment-317293040
+      echo -n "${setJavaClassPath}" > $out/nix-support/propagated-build-inputs
 
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
       cat <<EOF > $out/nix-support/setup-hook
-      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out/lib/openjdk; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out/lib/openjdk; fi
       EOF
     '';
 
-    meta = {
-      homepage = http://openjdk.java.net/;
-      license = stdenv.lib.licenses.gpl2;
+    postFixup = ''
+      # Build the set of output library directories to rpath against
+      LIBDIRS=""
+      for output in $outputs; do
+        if [ "$output" = debug ]; then continue; fi
+        LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort | uniq | tr '\n' ':'):$LIBDIRS"
+      done
+      # Add the local library paths to remove dependencies on the bootstrap
+      for output in $outputs; do
+        if [ "$output" = debug ]; then continue; fi
+        OUTPUTDIR=$(eval echo \$$output)
+        BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
+        echo "$BINLIBS" | while read i; do
+          patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
+          patchelf --shrink-rpath "$i" || true
+        done
+      done
+    '';
+
+    disallowedReferences = [ openjdk14-bootstrap ];
+
+    meta = with stdenv.lib; {
+      homepage = "http://openjdk.java.net/";
+      license = licenses.gpl2;
       description = "The open-source Java Development Kit";
-      maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.shlevy ];
-      platforms = stdenv.lib.platforms.linux;
+      maintainers = with maintainers; [ edwtjo ];
+      platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ];
     };
 
     passthru = {
-      inherit architecture;
+      architecture = "";
       home = "${openjdk}/lib/openjdk";
     };
   };

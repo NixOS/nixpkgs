@@ -1,31 +1,36 @@
-{ stdenv, fetchgit, docutils }:
+{ stdenv, fetchFromGitHub, docutils, makeWrapper
+, gnupg, curl, rsync, coreutils
+, gawk, gnused, gnugrep
+}:
 
-stdenv.mkDerivation {
-  name = "git-remote-gcrypt-20140715";
+stdenv.mkDerivation rec {
+  pname = "git-remote-gcrypt";
+  version = "1.3";
+  rev = version;
 
-  # Use joeyh's branch that works better with git-annex
-  src = fetchgit {
-    url = "https://github.com/joeyh/git-remote-gcrypt.git";
-    rev = "5dcc77f507d497fe4023e94a47b6a7a1f1146bce";
-    sha256 = "d509efde143cfec4898872b5bb423d52d5d1c940b6a1e21b8444c904bdb250c2";
+  src = fetchFromGitHub {
+    inherit rev;
+    owner = "spwhitton";
+    repo = "git-remote-gcrypt";
+    sha256 = "0n8fzvr6y0pxrbvkywlky2bd8jvi0ayp4n9hwi84l1ldmv4a40dh";
   };
 
-  # Required for rst2man.py
-  buildInputs = [ docutils ];
+  outputs = [ "out" "man" ];
 
-  # The install.sh script expects rst2man, but here it's named rst2man.py
-  patchPhase = ''
-    sed -i 's/rst2man/rst2man.py/g' install.sh
-  '';
+  nativeBuildInputs = [ docutils makeWrapper ];
 
   installPhase = ''
     prefix="$out" ./install.sh
+    wrapProgram "$out/bin/git-remote-gcrypt" \
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg curl rsync coreutils
+                                                    gawk gnused gnugrep ]}"
   '';
 
-  meta = {
-    homepage = "https://github.com/joeyh/git-remote-gcrypt";
-    description = "GNU Privacy Guard-encrypted git remote";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ ellis ];
+  meta = with stdenv.lib; {
+    homepage = "https://spwhitton.name/tech/code/git-remote-gcrypt";
+    description = "A git remote helper for GPG-encrypted remotes";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ ellis montag451 ];
+    platforms = platforms.unix;
   };
 }

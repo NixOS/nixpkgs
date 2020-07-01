@@ -1,31 +1,38 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, autoreconfHook
+, IOKit ? null , ApplicationServices ? null }:
 
 let
-  dbrev = "3849";
+  version = "7.1";
+
+  dbrev = "5062";
+  drivedbBranch = "RELEASE_7_0_DRIVEDB";
   driverdb = fetchurl {
-    url = "http://sourceforge.net/p/smartmontools/code/${dbrev}/tree/trunk/smartmontools/drivedb.h?format=raw";
-    sha256 = "06c1cl0x4sq64l3rmd5rk8wsbggjixphpgj0kf4awqhjgsi102xz";
-    name = "smartmontools-drivedb.h";
+    url    = "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
+    sha256 = "0gggl55h9gq0z846ndhyd7xrpxh8lqfbidblx0598q2wlh9rvlww";
+    name   = "smartmontools-drivedb.h";
   };
-in
-stdenv.mkDerivation rec {
-  name = "smartmontools-6.3";
+
+in stdenv.mkDerivation rec {
+  pname = "smartmontools";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
-    sha256 = "06gy71jh2d3gcfmlbbrsqw7215knkfq59q3j6qdxfrar39fhcxx7";
+    url = "mirror://sourceforge/smartmontools/${pname}-${version}.tar.gz";
+    sha256 = "0imqb7ka4ia5573w8rnpck571pjjc9698pdjcapy9cfyk4n4swrz";
   };
 
-  patchPhase = ''
-    : cp ${driverdb} drivedb.h
-    sed -i -e 's@which which >/dev/null || exit 1@alias which="type -p"@' update-smart-drivedb.in
-  '';
+  patches = [ ./smartmontools.patch ];
+  postPatch = "cp -v ${driverdb} drivedb.h";
+
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [IOKit ApplicationServices];
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Tools for monitoring the health of hard drives";
-    homepage = http://smartmontools.sourceforge.net/;
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.simons ];
+    homepage    = "https://www.smartmontools.org/";
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ peti Frostman ];
+    platforms   = with platforms; linux ++ darwin;
   };
 }

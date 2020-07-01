@@ -1,14 +1,18 @@
-{stdenv, fetchurl} :
+{ stdenv, fetchurl } :
 
 stdenv.mkDerivation rec {
-  name = "joe-3.7";
+  version = "4.6";
+  pname = "joe";
 
   src = fetchurl {
-    url = "mirror://sourceforge/joe-editor/${name}.tar.gz";
-    sha256 = "0vqhffdjn3xwsfa383i6kdrpfwilq8b382ljjhy1v32smphmdr6a";
+    url = "mirror://sourceforge/joe-editor/${pname}-${version}.tar.gz";
+    sha256 = "1pmr598xxxm9j9dl93kq4dv36zyw0q2dh6d7x07hf134y9hhlnj9";
   };
 
-  meta = {
-    homepage = http://joe-editor.sourceforge.net;
+  meta = with stdenv.lib; {
+    description = "A full featured terminal-based screen editor";
+    homepage = "https://joe-editor.sourceforge.io";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

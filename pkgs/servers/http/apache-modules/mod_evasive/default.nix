@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "mod_evasive-1.10.1";
 
   src = fetchurl {
-    url = http://www.zdziarski.com/blog/wp-content/uploads/2010/02/mod_evasive_1.10.1.tar.gz;
+    url = "http://www.zdziarski.com/blog/wp-content/uploads/2010/02/mod_evasive_1.10.1.tar.gz";
     sha256 = "0rsnx50rjv6xygbp9r0gyss7xqdkcb0hy3wh9949jf1im8wm3i07";
   };
 

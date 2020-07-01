@@ -1,33 +1,32 @@
-{ stdenv, fetchurl, fetchzip, ocaml, findlib, erm_xml, cryptokit, camlp4 }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, camlp4, ocamlbuild
+, erm_xml, mirage-crypto, mirage-crypto-rng, base64
+}:
 
-let
-  version = "0.2";
-  disable-tests = fetchurl {
-    url = https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/erm_xmpp/erm_xmpp.0.2/files/disable_tests.patch;
-    sha256 = "09d8630nmx2x8kb8ap1zmsb93zs14cqg7ga1gmdl92jvsjxbhgc1";
-  };
-in
+stdenv.mkDerivation rec {
+  version = "0.3+20200317";
+  name = "ocaml${ocaml.version}-erm_xmpp-${version}";
 
-stdenv.mkDerivation {
-  name = "ocaml-erm_xmpp-${version}";
-
-  src = fetchzip {
-    url = "https://github.com/ermine/xmpp/archive/v${version}.tar.gz";
-    sha256 = "0saw2dmrzv2aadrznvyvchnhivvcwm78x9nwf6flq5v0pqddapk2";
+  src = fetchFromGitHub {
+    owner  = "hannesm";
+    repo   = "xmpp";
+    rev    = "7fa5bea252671fd88625c6af109998b879ca564f";
+    sha256 = "0spzyd9kbyizzwl8y3mq8z19zlkzxnkh2fppry4lyc7vaw7bqrwq";
   };
 
-  patches = [ disable-tests ];
+  buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
+  propagatedBuildInputs = [ erm_xml mirage-crypto mirage-crypto-rng base64 ];
 
-  buildInputs = [ ocaml findlib camlp4 ];
-  propagatedBuildInputs = [ erm_xml cryptokit ];
+  configurePhase = "ocaml setup.ml -configure --prefix $out";
+  buildPhase = "ocaml setup.ml -build";
+  installPhase = "ocaml setup.ml -install";
 
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/ermine/xmpp;
-    description = "OCaml based XMPP implementation";
-    platforms = ocaml.meta.platforms;
+    homepage = "https://github.com/hannesm/xmpp";
+    description = "OCaml based XMPP implementation (fork)";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
+    inherit (ocaml.meta) platforms;
   };
 }

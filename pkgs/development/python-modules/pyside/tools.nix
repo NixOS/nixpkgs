@@ -1,22 +1,28 @@
-{ stdenv, fetchurl, cmake, pyside, python27, qt4, pysideShiboken }:
+{ lib, buildPythonPackage, fetchFromGitHub, cmake, qt4, pyside, pysideShiboken }:
 
-stdenv.mkDerivation {
-  name = "pyside-tools-0.2.15";
+buildPythonPackage rec {
+  pname = "pyside-tools";
+  version = "0.2.15";
+  format = "other";
 
-  src = fetchurl {
-    url = "https://github.com/PySide/Tools/archive/0.2.15.tar.gz";
-    sha256 = "0x4z3aq7jgar74gxzwznl3agla9i1dcskw5gh11jnnwwn63ffzwa";
+  src = fetchFromGitHub {
+    owner = "PySide";
+    repo = "Tools";
+    rev = version;
+    sha256 = "017i2yxgjrisaifxqnl3ym8ijl63l2yl6a3474dsqhlyqz2nx2ll";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ cmake pyside python27 qt4 pysideShiboken ];
+  buildInputs = [ qt4 ];
 
-  meta = {
-    description = "Tools for pyside, the LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
-    license = stdenv.lib.licenses.gpl2;
-    homepage = "http://www.pyside.org";
-    maintainers = [ stdenv.lib.maintainers.chaoflow ];
-    platforms = stdenv.lib.platforms.all;
+  propagatedBuildInputs = [ pyside pysideShiboken ];
+
+  meta = with lib; {
+    description = "Development tools (pyside-uic/rcc/lupdate) for PySide, the LGPL-licensed Python bindings for the Qt framework";
+    license = licenses.gpl2;
+    homepage = "https://wiki.qt.io/PySide";
+    maintainers = [ ];
+    platforms = platforms.all;
   };
 }

@@ -1,73 +1,121 @@
-{ stdenv, fetchurl, buildPythonPackage
-, python, cython, pkgconfig
-, xorg, gtk, glib, pango, cairo, gdk_pixbuf, pygtk, atk, pygobject, pycairo
-, makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
-, ffmpeg, x264, libvpx, pil, libwebp
-, libfakeXinerama }:
+{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig, writeText
+, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
+, wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
+, ffmpeg, x264, libvpx, libwebp, x265
+, libfakeXinerama
+, gst_all_1, pulseaudio, gobject-introspection
+, pam }:
 
-buildPythonPackage rec {
-  name = "xpra-0.14.19";
-  namePrefix = "";
+with lib;
+
+let
+  inherit (python3.pkgs) cython buildPythonApplication;
+
+  xf86videodummy = xorg.xf86videodummy.overrideDerivation (p: {
+    patches = [
+      ./0002-Constant-DPI.patch
+      ./0003-fix-pointer-limits.patch
+      ./0005-support-for-30-bit-depth-in-dummy-driver.patch
+    ];
+  });
+
+  xorgModulePaths = writeText "module-paths" ''
+    Section "Files"
+      ModulePath "${xorgserver}/lib/xorg/modules"
+      ModulePath "${xorgserver}/lib/xorg/modules/extensions"
+      ModulePath "${xorgserver}/lib/xorg/modules/drivers"
+      ModulePath "${xf86videodummy}/lib/xorg/modules/drivers"
+    EndSection
+  '';
+
+in buildPythonApplication rec {
+  pname = "xpra";
+  version = "4.0.2";
 
   src = fetchurl {
-    url = "https://www.xpra.org/src/${name}.tar.xz";
-    sha256 = "0jifaysz4br1v0zibnzgd0k02rgybbsysvwrgbar1452sjb3db5m";
+    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
+    sha256 = "1cs39jzi59hkl421xmhi549ndmdfzkg0ap45f4nlsn9zr9zwmp3x";
   };
 
-  buildInputs = [
-    cython pkgconfig
-
-    xorg.libX11 xorg.renderproto xorg.libXrender xorg.libXi xorg.inputproto xorg.kbproto
-    xorg.randrproto xorg.damageproto xorg.compositeproto xorg.xextproto xorg.recordproto
-    xorg.xproto xorg.fixesproto xorg.libXtst xorg.libXfixes xorg.libXcomposite xorg.libXdamage
-    xorg.libXrandr xorg.libxkbfile
-
-    pango cairo gdk_pixbuf atk gtk glib
-
-    ffmpeg libvpx x264 libwebp
-
-    makeWrapper
-  ];
-
-  propagatedBuildInputs = [
-    pil pygtk pygobject
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit (xorg) xkeyboardconfig;
+      inherit libfakeXinerama;
+    })
+    ./fix-41106.patch
   ];
 
   postPatch = ''
-    sed -i 's|DEFAULT_XVFB_COMMAND = "Xvfb|DEFAULT_XVFB_COMMAND = "Xvfb -xkbdir ${xkeyboard_config}/etc/X11/xkb|' xpra/platform/features.py
+    substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
   '';
 
-  preBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0) $(pkg-config --cflags xtst)"
-  '';
-  setupPyBuildFlags = ["--with-Xdummy"];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  buildInputs = with xorg; [
+    libX11 xorgproto libXrender libXi
+    libXtst libXfixes libXcomposite libXdamage
+    libXrandr libxkbfile
+    ] ++ [
+    cython
 
-  preInstall = ''
-    # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
-    ${python}/bin/${python.executable} setup.py install_data --install-dir=$out --root=$out
-    sed -i '/ = data_files/d' setup.py
+    pango cairo gdk-pixbuf atk.out gtk3 glib
+
+    ffmpeg libvpx x264 libwebp x265
+
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-libav
+
+    pam
+    gobject-introspection
+  ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pillow rencode pycrypto cryptography pycups lz4 dbus-python
+    netifaces numpy pygobject3 pycairo gst-python pam
+    pyopengl paramiko opencv4 python-uinput pyxdg
+    ipaddress idna
+  ];
+
+    # error: 'import_cairo' defined but not used
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
+
+  setupPyBuildFlags = [
+    "--with-Xdummy"
+    "--without-strict"
+    "--with-gtk3"
+    # Override these, setup.py checks for headers in /usr/* paths
+    "--with-pam"
+    "--with-vsock"
+  ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set XPRA_INSTALL_PREFIX "$out"
+      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
+      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudio ]}
+    )
   '';
 
+  # append module paths to xorg.conf
   postInstall = ''
-    wrapProgram $out/bin/xpra \
-      --set XKB_BINDIR "${xkbcomp}/bin" \
-      --set FONTCONFIG_FILE "${fontsConf}" \
-      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib \
-      --prefix PATH : ${getopt}/bin:${xorgserver}/bin:${xauth}/bin:${which}/bin:${utillinux}/bin
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
   '';
 
-  #TODO: replace postInstall with postFixup to avoid double wrapping of xpra; needs more work though
-  #postFixup = ''
-  #  sed -i '2iexport XKB_BINDIR="${xkbcomp}/bin"' $out/bin/xpra
-  #  sed -i '3iexport FONTCONFIG_FILE="${fontsConf}"' $out/bin/xpra
-  #  sed -i '4iexport PATH=${getopt}/bin:${xorgserver}/bin:${xauth}/bin:${which}/bin:${utillinux}/bin\${PATH:+:}\$PATH' $out/bin/xpra
-  #'';
+  doCheck = false;
 
+  enableParallelBuilding = true;
+
+  passthru = { inherit xf86videodummy; };
 
   meta = {
-    homepage = http://xpra.org/;
+    homepage = "http://xpra.org/";
+    downloadPage = "https://xpra.org/src/";
+    downloadURLRegexp = "xpra-.*[.]tar[.]xz$";
     description = "Persistent remote applications for X";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ tstrobel offline numinit ];
   };
 }

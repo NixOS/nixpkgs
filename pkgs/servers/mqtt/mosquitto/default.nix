@@ -1,30 +1,50 @@
-{ stdenv, fetchurl, openssl, libuuid }:
+{ stdenv, lib, fetchFromGitHub, cmake, docbook_xsl, libxslt
+, openssl, libuuid, libwebsockets_3_1, c-ares, libuv
+, systemd ? null, withSystemd ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "1.4";
+  version = "1.6.10";
 
-  name = "${pname}-${version}";
-
-  src = fetchurl {
-    url = http://mosquitto.org/files/source/mosquitto-1.4.tar.gz;
-    sha256 = "1imw5ps0cqda41b574k8hgz9gdr8yy58f76fg8gw14pdnvf3l7sr";
+  src = fetchFromGitHub {
+    owner  = "eclipse";
+    repo   = "mosquitto";
+    rev    = "v${version}";
+    sha256 = "0g9iywm0s08b0ax1qx4j5lixfc1m6p48lv14vlil6wns4azc3fsc";
   };
 
-  buildInputs = [ openssl libuuid ];
+  postPatch = ''
+    for f in html manpage ; do
+      substituteInPlace man/$f.xsl \
+        --replace http://docbook.sourceforge.net/release/xsl/current ${docbook_xsl}/share/xml/docbook-xsl
+    done
 
-  buildFlags = "mosquitto";
+    for f in {lib,lib/cpp,src}/CMakeLists.txt ; do
+      substituteInPlace $f --replace /sbin/ldconfig true
+    done
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp src/mosquitto $out/bin/
+    # the manpages are not generated when using cmake
+    pushd man
+    make
+    popd
   '';
 
-  meta = {
-    homepage = http://mosquitto.org/;
+  buildInputs = [
+    openssl libuuid libwebsockets_3_1 c-ares libuv
+  ] ++ lib.optional withSystemd systemd;
+
+  nativeBuildInputs = [ cmake docbook_xsl libxslt ];
+
+  cmakeFlags = [
+    "-DWITH_THREADING=ON"
+    "-DWITH_WEBSOCKETS=ON"
+  ] ++ lib.optional withSystemd "-DWITH_SYSTEMD=ON";
+
+  meta = with stdenv.lib; {
     description = "An open source MQTT v3.1/3.1.1 broker";
-    platforms = stdenv.lib.platforms.unix;
-    # http://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
-    license = stdenv.lib.licenses.epl10;
+    homepage = "https://mosquitto.org/";
+    license = licenses.epl10;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
   };
 }

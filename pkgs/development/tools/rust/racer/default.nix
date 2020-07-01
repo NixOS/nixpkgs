@@ -1,36 +1,50 @@
-{stdenv, fetchgit, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll, Security }:
 
-with rustPlatform;
+rustPlatform.buildRustPackage rec {
+  pname = "racer";
+  version = "2.1.30";
 
-buildRustPackage rec {
-  #TODO add emacs support
-  name = "racer-git-2015-05-18";
-  src = fetchgit {
-    url = https://github.com/phildawes/racer;
-    rev = "c2d31ed49baa11f06ffc0c7bc8f95dd00037d035";
-    sha256 = "0g420cbqpknhl61a4mpk3bbia8agf657d9vzzcqr338lmni80qz7";
+  src = fetchFromGitHub {
+    owner = "racer-rust";
+    repo = "racer";
+    rev = "c2b0080243fefdad7f7b223e8a7fdef3e1f0fa77";
+    sha256 = "0svvdkfqpk2rw0wxyrhkxy553k55lg7jxc0ly4w1195iwv14ad3y";
   };
 
-  depsSha256 = "0s951apqcr96lvc1jamk6qw3631gwnlnfgcx55vlznfm7shnmywn";
+  cargoSha256 = "0zaqa89z3nf23s2q1jpmfz4lygh4zq9ymql71d748fgjy9psr449";
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper ]
+                ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-  preCheck = ''
-    export RUST_SRC_PATH="${rustc.src}/src"
+  # a nightly compiler is required unless we use this cheat code.
+  RUSTC_BOOTSTRAP=1;
+
+  RUST_SRC_PATH = rustPlatform.rustcSrc;
+  postInstall = ''
+    wrapProgram $out/bin/racer --set-default RUST_SRC_PATH ${rustPlatform.rustcSrc}
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -p target/release/racer $out/bin/
-    wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustc.src}/src"
-    install -d $out/share/emacs/site-lisp
-    install "editors/"*.el $out/share/emacs/site-lisp
+  checkPhase = ''
+    cargo test -- \
+      --skip nameres::test_do_file_search_std \
+      --skip util::test_get_rust_src_path_rustup_ok \
+      --skip util::test_get_rust_src_path_not_rust_source_tree \
+      --skip extern --skip completes_pub_fn --skip find_crate_doc \
+      --skip follows_use_local_package --skip follows_use_for_reexport \
+      --skip follows_rand_crate --skip get_completion_in_example_dir \
+      --skip test_resolve_global_path_in_modules
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/racer --version
   '';
 
   meta = with stdenv.lib; {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
-    homepage = https://github.com/phildawes/racer;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ maintainers.jagajaga ];
+    homepage = "https://github.com/racer-rust/racer";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jagajaga ma27 ];
+    platforms = platforms.all;
   };
 }

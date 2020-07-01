@@ -1,0 +1,172 @@
+From c9b5164c954cd0de80d971f1c4ced16bf41ea81b Mon Sep 17 00:00:00 2001
+From: Eric Wong <e@80x24.org>
+Date: Fri, 29 Nov 2019 12:25:07 +0000
+Subject: [PATCH 2/2] msgtime: drop Date::Parse for RFC2822
+
+Date::Parse is not optimized for RFC2822 dates and isn't
+packaged on OpenBSD.  It's still useful for historical
+email when email clients were less conformant, but is
+less relevant for new emails.
+---
+ lib/PublicInbox/MsgTime.pm | 115 ++++++++++++++++++++++++++++++++-----
+ t/msgtime.t                |   6 ++
+ 2 files changed, 107 insertions(+), 14 deletions(-)
+
+diff --git a/lib/PublicInbox/MsgTime.pm b/lib/PublicInbox/MsgTime.pm
+index 58e11d72..e9b27a49 100644
+--- a/lib/PublicInbox/MsgTime.pm
++++ b/lib/PublicInbox/MsgTime.pm
+@@ -7,24 +7,114 @@ use strict;
+ use warnings;
+ use base qw(Exporter);
+ our @EXPORT_OK = qw(msg_timestamp msg_datestamp);
+-use Date::Parse qw(str2time strptime);
++use Time::Local qw(timegm);
++my @MoY = qw(january february march april may june
++		july august september october november december);
++my %MoY;
++@MoY{@MoY} = (0..11);
++@MoY{map { substr($_, 0, 3) } @MoY} = (0..11);
++
++my %OBSOLETE_TZ = ( # RFC2822 4.3 (Obsolete Date and Time)
++	EST => '-0500', EDT => '-0400',
++	CST => '-0600', CDT => '-0500',
++	MST => '-0700', MDT => '-0600',
++	PST => '-0800', PDT => '-0700',
++	UT => '+0000', GMT => '+0000', Z => '+0000',
++
++	# RFC2822 states:
++	#   The 1 character military time zones were defined in a non-standard
++	#   way in [RFC822] and are therefore unpredictable in their meaning.
++);
++my $OBSOLETE_TZ = join('|', keys %OBSOLETE_TZ);
+ 
+ sub str2date_zone ($) {
+ 	my ($date) = @_;
++	my ($ts, $zone);
++
++	# RFC822 is most likely for email, but we can tolerate an extra comma
++	# or punctuation as long as all the data is there.
++	# We'll use '\s' since Unicode spaces won't affect our parsing.
++	# SpamAssassin ignores commas and redundant spaces, too.
++	if ($date =~ /(?:[A-Za-z]+,?\s+)? # day-of-week
++			([0-9]+),?\s+  # dd
++			([A-Za-z]+)\s+ # mon
++			([0-9]{2,})\s+ # YYYY or YY (or YYY :P)
++			([0-9]+)[:\.] # HH:
++				((?:[0-9]{2})|(?:\s?[0-9])) # MM
++				(?:[:\.]((?:[0-9]{2})|(?:\s?[0-9])))? # :SS
++			\s+	# a TZ offset is required:
++				([\+\-])? # TZ sign
++				[\+\-]* # I've seen extra "-" e.g. "--500"
++				([0-9]+|$OBSOLETE_TZ)(?:\s|$) # TZ offset
++			/xo) {
++		my ($dd, $m, $yyyy, $hh, $mm, $ss, $sign, $tz) =
++					($1, $2, $3, $4, $5, $6, $7, $8);
++		# don't accept non-English months
++		defined(my $mon = $MoY{lc($m)}) or return;
++
++		if (defined(my $off = $OBSOLETE_TZ{$tz})) {
++			$sign = substr($off, 0, 1);
++			$tz = substr($off, 1);
++		}
++
++		# Y2K problems: 3-digit years, follow RFC2822
++		if (length($yyyy) <= 3) {
++			$yyyy += 1900;
++
++			# and 2-digit years from '09 (2009) (0..49)
++			$yyyy += 100 if $yyyy < 1950;
++		}
++
++		$ts = timegm($ss // 0, $mm, $hh, $dd, $mon, $yyyy);
+ 
+-	my $ts = str2time($date);
+-	return undef unless(defined $ts);
++		# Compute the time offset from [+-]HHMM
++		$tz //= 0;
++		my ($tz_hh, $tz_mm);
++		if (length($tz) == 1) {
++			$tz_hh = $tz;
++			$tz_mm = 0;
++		} elsif (length($tz) == 2) {
++			$tz_hh = 0;
++			$tz_mm = $tz;
++		} else {
++			$tz_hh = $tz;
++			$tz_hh =~ s/([0-9]{2})\z//;
++			$tz_mm = $1;
++		}
++		while ($tz_mm >= 60) {
++			$tz_mm -= 60;
++			$tz_hh += 1;
++		}
++		$sign //= '+';
++		my $off = $sign . ($tz_mm * 60 + ($tz_hh * 60 * 60));
++		$ts -= $off;
++		$sign = '+' if $off == 0;
++		$zone = sprintf('%s%02d%02d', $sign, $tz_hh, $tz_mm);
+ 
+-	# off is the time zone offset in seconds from GMT
+-	my ($ss,$mm,$hh,$day,$month,$year,$off) = strptime($date);
+-	return undef unless(defined $off);
++	# Time::Zone and Date::Parse are part of the same distibution,
++	# and we need Time::Zone to deal with tz names like "EDT"
++	} elsif (eval { require Date::Parse }) {
++		$ts = Date::Parse::str2time($date);
++		return undef unless(defined $ts);
+ 
+-	# Compute the time zone from offset
+-	my $sign = ($off < 0) ? '-' : '+';
+-	my $hour = abs(int($off / 3600));
+-	my $min  = ($off / 60) % 60;
+-	my $zone = sprintf('%s%02d%02d', $sign, $hour, $min);
++		# off is the time zone offset in seconds from GMT
++		my ($ss,$mm,$hh,$day,$month,$year,$off) =
++					Date::Parse::strptime($date);
++		return undef unless(defined $off);
++
++		# Compute the time zone from offset
++		my $sign = ($off < 0) ? '-' : '+';
++		my $hour = abs(int($off / 3600));
++		my $min  = ($off / 60) % 60;
++
++		$zone = sprintf('%s%02d%02d', $sign, $hour, $min);
++	} else {
++		warn "Date::Parse missing for non-RFC822 date: $date\n";
++		return undef;
++	}
+ 
++	# Note: we've already applied the offset to $ts at this point,
++	# but we want to keep "git fsck" happy.
+ 	# "-1200" is the furthest westermost zone offset,
+ 	# but git fast-import is liberal so we use "-1400"
+ 	if ($zone >= 1400 || $zone <= -1400) {
+@@ -59,9 +149,6 @@ sub msg_date_only ($) {
+ 	my @date = $hdr->header_raw('Date');
+ 	my ($ts);
+ 	foreach my $d (@date) {
+-		# Y2K problems: 3-digit years
+-		$d =~ s!([A-Za-z]{3}) ([0-9]{3}) ([0-9]{2}:[0-9]{2}:[0-9]{2})!
+-			my $yyyy = $2 + 1900; "$1 $yyyy $3"!e;
+ 		$ts = eval { str2date_zone($d) } and return $ts;
+ 		if ($@) {
+ 			my $mid = $hdr->header_raw('Message-ID');
+diff --git a/t/msgtime.t b/t/msgtime.t
+index 6b396602..d9643b65 100644
+--- a/t/msgtime.t
++++ b/t/msgtime.t
+@@ -84,4 +84,10 @@ is_deeply(datestamp('Fri, 28 Jun 2002 12:54:40 -700'), [1025294080, '-0700']);
+ is_deeply(datestamp('Sat, 12 Jan 2002 12:52:57 -200'), [1010847177, '-0200']);
+ is_deeply(datestamp('Mon, 05 Nov 2001 10:36:16 -800'), [1004985376, '-0800']);
+ 
++# obsolete formats described in RFC2822
++for (qw(UT GMT Z)) {
++	is_deeply(datestamp('Fri, 02 Oct 1993 00:00:00 '.$_), [ 749520000, '+0000']);
++}
++is_deeply(datestamp('Fri, 02 Oct 1993 00:00:00 EDT'), [ 749534400, '-0400']);
++
+ done_testing();
+-- 
+2.24.1
+

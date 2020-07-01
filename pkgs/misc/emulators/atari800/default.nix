@@ -1,24 +1,34 @@
-{ stdenv, fetchurl
-, unzip, zlib, SDL, readline, mesa, libX11 }:
+{ stdenv, fetchFromGitHub, autoreconfHook
+, unzip, zlib, SDL, readline, libGLU, libGL, libX11 }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec{
-  name = "atari800-${version}";
-  version = "3.1.0";
+stdenv.mkDerivation rec {
+  pname = "atari800";
+  version = "4.2.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/atari800/atari800/${version}/${name}.tar.gz";
-    sha256 = "030yz5l1wyq9l0dmiimiiwpzrjr43whycd409xhhpnrdx76046wh";
+  src = fetchFromGitHub {
+    owner = "atari800";
+    repo = "atari800";
+    rev = "ATARI800_${replaceChars ["."] ["_"] version}";
+    sha256 = "15l08clqqayi9izrgsz9achan6gl4x57wqsc8mad3yn0xayzz3qy";
   };
 
-  buildInputs = [ unzip zlib SDL readline mesa libX11 ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = "--target=default --with-video=sdl --with-sound=sdl --with-readline --with-opengl --with-x --enable-riodevice";
+  buildInputs = [ unzip zlib SDL readline libGLU libGL libX11 ];
 
-  preConfigure = "cd src";
+  configureFlags = [
+    "--target=default"
+    "--with-video=sdl"
+    "--with-sound=sdl"
+    "--with-readline"
+    "--with-opengl"
+    "--with-x"
+    "--enable-riodevice"
+  ];
 
   meta = {
-    homepage = "http://atari800.sourceforge.net/";
+    homepage = "https://atari800.github.io/";
     description = "An Atari 8-bit emulator";
     longDescription = ''
       Atari800 is the emulator of Atari 8-bit computer systems and
@@ -27,6 +37,7 @@ stdenv.mkDerivation rec{
       other systems supported by the SDL library.
     '';
     maintainers = [ maintainers.AndersonTorres ];
-    license = licenses.gpl2Plus;    
-  };    
+    license = licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

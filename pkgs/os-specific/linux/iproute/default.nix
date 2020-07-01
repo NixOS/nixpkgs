@@ -1,42 +1,50 @@
-{ fetchurl, stdenv, flex, bison, db, iptables, pkgconfig }:
+{ stdenv, fetchurl
+, buildPackages, bison, flex, pkg-config
+, db, iptables, libelf, libmnl
+}:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-4.0.0";
+  pname = "iproute2";
+  version = "5.7.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "0616cg6liyysfddf6d8i4vyndd9b0hjmfw35icq8p18b0nqnxl2w";
+    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "088gs56iqhdlpw1iqjwrss4zxd4zbl2wl8s2implrrdajjxcfpbj";
   };
 
-  patch = [ ./vpnc.patch ];
-
   preConfigure = ''
-    patchShebangs ./configure
+    # Don't try to create /var/lib/arpd:
     sed -e '/ARPDDIR/d' -i Makefile
   '';
 
+  outputs = [ "out" "dev" ];
+
   makeFlags = [
-    "DESTDIR="
-    "LIBDIR=$(out)/lib"
+    "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
-    "CONFDIR=$(out)/etc"
-    "DOCDIR=$(out)/share/doc/${name}"
-    "MANDIR=$(out)/share/man"
+    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
+    "HDRDIR=$(dev)/include/iproute2"
   ];
 
-  buildInputs = [ db iptables ];
-  nativeBuildInputs = [ bison flex pkgconfig ];
+  buildFlags = [
+    "CONFDIR=/etc/iproute2"
+  ];
+
+  installFlags = [
+    "CONFDIR=$(out)/etc/iproute2"
+  ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
+  nativeBuildInputs = [ bison flex pkg-config ];
+  buildInputs = [ db iptables libelf libmnl ];
 
   enableParallelBuilding = true;
 
-  # Get rid of useless TeX/SGML docs.
-  postInstall = "rm -rf $out/share/doc";
-
   meta = with stdenv.lib; {
-    homepage = http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2;
+    homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ eelco wkennington ];
+    maintainers = with maintainers; [ primeos eelco fpletz globin ];
   };
 }

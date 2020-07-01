@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lua5 }:
 
 stdenv.mkDerivation rec {
-  name    = "lua-sockets-${version}";
+  pname = "lua-sockets";
   version = "2.0.2";
   src = fetchurl {
       url = "http://files.luaforge.net/releases/luasocket/luasocket/luasocket-${version}/luasocket-${version}.tar.gz";
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://w3.impa.br/~diego/software/luasocket/";
     hydraPlatforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ ];
   };
 }

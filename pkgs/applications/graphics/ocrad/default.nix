@@ -1,14 +1,16 @@
 { fetchurl, stdenv, lzip, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "ocrad-0.25";
+  pname = "ocrad";
+  version = "0.27";
 
   src = fetchurl {
-    url = "mirror://gnu/ocrad/${name}.tar.lz";
-    sha256 = "1m2dblgvvjs48rsglfdwq0ib9zk8h9n34xsh67ibrg0g0ffbw477";
+    url = "mirror://gnu/ocrad/${pname}-${version}.tar.lz";
+    sha256 = "0divffvcaim89g4pvqs8kslbcxi475bcl3b4ynphf284k9zfdgx9";
   };
 
-  buildInputs = [ lzip texinfo ];
+  nativeBuildInputs = [ lzip /* unpack */ ];
+  buildInputs = [ texinfo ];
 
   doCheck = true;
 
@@ -29,6 +31,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.gnu;  # arbitrary choice
+    platforms = platforms.unix;
   };
 }

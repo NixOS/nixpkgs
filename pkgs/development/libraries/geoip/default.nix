@@ -1,30 +1,45 @@
-# in geoipDatabase, you can insert a package defining ${geoipDatabase}/share/GeoIP
-# e.g. geolite-legacy
-{ stdenv, fetchurl, pkgs, drvName ? "geoip", geoipDatabase ? null }:
+{ stdenv, fetchFromGitHub, autoreconfHook
+, drvName ? "geoip"
 
-let version = "1.6.2"; in
+# in geoipDatabase, you can insert a package defining
+# "${geoipDatabase}/share/GeoIP" e.g. geolite-legacy
+, geoipDatabase ? "/var/lib/geoip-databases"
+}:
 
-stdenv.mkDerivation {
-  name = "${drvName}-${version}";
+let
+  dataDir = if stdenv.lib.isDerivation geoipDatabase
+    then "${toString geoipDatabase}/share/GeoIP"
+    else geoipDatabase;
+in
+stdenv.mkDerivation rec {
+  pname = drvName;
+  version = "1.6.12";
 
-  src = fetchurl {
-    url = "http://geolite.maxmind.com/download/geoip/api/c/GeoIP-${version}.tar.gz";
-    sha256 = "0dd6si4cvip73kxdn43apg6yygvaf7dnk5awqfg9w2fd2ll0qnh7";
+  src = fetchFromGitHub {
+    owner  = "maxmind";
+    repo   = "geoip-api-c";
+    rev    = "v${version}";
+    sha256 = "0ixyp3h51alnncr17hqp1p0rlqz9w69nlhm60rbzjjz3vjx52ajv";
   };
 
-  postInstall = ''
-    DB=${toString geoipDatabase}
-    if [ -n "$DB" ]; then
-      ln -s $DB/share/GeoIP $out/share/GeoIP
-    fi
+  nativeBuildInputs = [ autoreconfHook ];
+
+  # Cross compilation shenanigans
+  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
+
+  # Fix up the default data directory
+  postConfigure = ''
+    find . -name Makefile.in -exec sed -i -r 's#^pkgdatadir\s*=.+$#pkgdatadir = ${dataDir}#' {} \;
   '';
 
-  meta = {
-    description = "Geolocation API";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.unix;
-    homepage = "http://geolite.maxmind.com/";
-    downloadPage = "http://geolite.maxmind.com/download/";
+  meta = with stdenv.lib; {
+    description = "An API for GeoIP/Geolocation databases";
+    maintainers = with maintainers; [ thoughtpolice raskin ];
+    license     = licenses.lgpl21;
+    platforms   = platforms.unix;
+    homepage    = "https://www.maxmind.com";
   };
 }

@@ -1,34 +1,26 @@
-{ stdenv, fetchurl, bobcat, gcc49, icmake, yodl }:
+{ stdenv, fetchFromGitHub, bobcat, icmake, yodl }:
 
-let version = "2.02.00"; in
 stdenv.mkDerivation rec {
-  name = "flexc++-${version}";
+  pname = "flexc++";
+  version = "2.05.00";
 
-  src = fetchurl {
-    sha256 = "0mz5d0axr4c8rrmn4iw7b5llmf6f3g9cnjzzz3kw02mfzwll79rz";
-    url = "mirror://sourceforge/flexcpp/${version}/flexc++_${version}.orig.tar.gz";
+  src = fetchFromGitHub {
+    sha256 = "0s25d9jsfsqvm34rwf48cxwz23aq1zja3cqlzfz3z33p29wwazwz";
+    rev = version;
+    repo = "flexcpp";
+    owner = "fbb-git";
   };
 
-  meta = with stdenv.lib; {
-    inherit version;
-    description = "";
-    longDescription = ''
-      Flexc++ was designed after `flex'. Flexc++ offers a cleaner class design
-      and requires simpler specification files than offered by flex's C++
-      option.
-    '';
-    homepage = http://flexcpp.sourceforge.net/;
-    downloadPage = http://sourceforge.net/projects/flexcpp/files/;
-    license = with licenses; gpl3;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
-  };
+  setSourceRoot = ''
+    sourceRoot=$(echo */flexc++)
+  '';
 
-  buildInputs = [ bobcat gcc49 icmake yodl ];
+  buildInputs = [ bobcat ];
+  nativeBuildInputs = [ icmake yodl ];
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out
-    patchShebangs ./build
+    patchShebangs .
   '';
 
   buildPhase = ''
@@ -38,10 +30,18 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ./build install man
-    ./build install manual
-    ./build install program
-    ./build install skel
-    ./build install std
+    ./build install x
   '';
+
+  meta = with stdenv.lib; {
+    description = "C++ tool for generating lexical scanners";
+    longDescription = ''
+      Flexc++ was designed after `flex'. Flexc++ offers a cleaner class design
+      and requires simpler specification files than offered by flex's C++
+      option.
+    '';
+    homepage = "https://fbb-git.github.io/flexcpp/";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+  };
 }

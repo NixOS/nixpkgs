@@ -1,6 +1,21 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
+
+let
+
+  cfg = config.powerManagement.scsiLinkPolicy;
+
+  kernel = config.boot.kernelPackages.kernel;
+
+  allowedValues = [
+    "min_power"
+    "max_performance"
+    "medium_power"
+    "med_power_with_dipm"
+  ];
+
+in
 
 {
   ###### interface
@@ -8,12 +23,14 @@ with lib;
   options = {
 
     powerManagement.scsiLinkPolicy = mkOption {
-      default = "";
-      example = "min_power";
-      type = types.str;
+      default = null;
+      type = types.nullOr (types.enum allowedValues);
       description = ''
-        Configure the SCSI link power management policy. By default,
-        the kernel configures "max_performance".
+        SCSI link power management policy. The kernel default is
+        "max_performance".
+        </para><para>
+        "med_power_with_dipm" is supported by kernel versions
+        4.15 and newer.
       '';
     };
 
@@ -22,25 +39,16 @@ with lib;
 
   ###### implementation
 
-  config = mkIf (config.powerManagement.scsiLinkPolicy != "") {
+  config = mkIf (cfg != null) {
 
-    jobs."scsi-link-pm" =
-      { description = "SCSI Link Power Management Policy";
+    assertions = singleton {
+      assertion = (cfg == "med_power_with_dipm") -> versionAtLeast kernel.version "4.15";
+      message = "med_power_with_dipm is not supported for kernels older than 4.15";
+    };
 
-        startOn = "stopped udevtrigger";
-
-        task = true;
-
-        unitConfig.ConditionPathIsReadWrite = "/sys/class/scsi_host";
-
-        script = ''
-          shopt -s nullglob
-          for x in /sys/class/scsi_host/host*/link_power_management_policy; do
-            echo ${config.powerManagement.scsiLinkPolicy} > $x
-          done
-        '';
-      };
-
+    services.udev.extraRules = ''
+      SUBSYSTEM=="scsi_host", ACTION=="add", KERNEL=="host*", ATTR{link_power_management_policy}="${cfg}"
+    '';
   };
 
 }

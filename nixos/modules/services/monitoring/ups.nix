@@ -32,7 +32,7 @@ let
 
       shutdownOrder = mkOption {
         default = 0;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
           When you have multiple UPSes on your system, you usually need to
           turn them off in a certain order.  upsdrvctl shuts down all the
@@ -55,7 +55,7 @@ let
 
       description = mkOption {
         default = "";
-        type = types.string;
+        type = types.str;
         description = ''
           Description of the UPS.
         '';
@@ -63,7 +63,7 @@ let
 
       directives = mkOption {
         default = [];
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         description = ''
           List of configuration directives for this UPS.
         '';
@@ -71,7 +71,7 @@ let
 
       summary = mkOption {
         default = "";
-        type = types.string;
+        type = types.lines;
         description = ''
           Lines which would be added inside ups.conf for handling this UPS.
         '';
@@ -80,7 +80,7 @@ let
     };
 
     config = {
-      directives = mkHeader ([
+      directives = mkOrder 10 ([
         "driver = ${config.driver}"
         "port = ${config.port}"
         ''desc = "${config.description}"''
@@ -151,7 +151,7 @@ in
 
       maxStartDelay = mkOption {
         default = 45;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
           This can be set as a global variable above your first UPS
           definition and it can also be set in a UPS section.  This value
@@ -169,8 +169,7 @@ in
           monitoring directly.  These are usually attached to serial ports,
           but USB devices are also supported.
         '';
-        type = types.attrsOf types.optionSet;
-        options = [ upsOptions ];
+        type = with types; attrsOf (submodule upsOptions);
       };
 
     };
@@ -180,69 +179,63 @@ in
 
     environment.systemPackages = [ pkgs.nut ];
 
-    jobs.upsmon = {
+    systemd.services.upsmon = {
       description = "Uninterruptible Power Supplies (Monitor)";
-      startOn = "ip-up";
-      daemonType = "fork";
-      exec = ''${pkgs.nut}/sbin/upsmon'';
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "forking";
+      script = "${pkgs.nut}/sbin/upsmon";
       environment.NUT_CONFPATH = "/etc/nut/";
       environment.NUT_STATEPATH = "/var/lib/nut/";
     };
 
-    jobs.upsd = {
+    systemd.services.upsd = {
       description = "Uninterruptible Power Supplies (Daemon)";
-      startOn = "started network-interfaces and started upsmon";
-      daemonType = "fork";
+      after = [ "network.target" "upsmon.service" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "forking";
       # TODO: replace 'root' by another username.
-      exec = ''${pkgs.nut}/sbin/upsd -u root'';
+      script = "${pkgs.nut}/sbin/upsd -u root";
       environment.NUT_CONFPATH = "/etc/nut/";
       environment.NUT_STATEPATH = "/var/lib/nut/";
     };
 
-    jobs.upsdrv = {
+    systemd.services.upsdrv = {
       description = "Uninterruptible Power Supplies (Register all UPS)";
-      startOn = "started upsd";
+      after = [ "upsd.service" ];
+      wantedBy = [ "multi-user.target" ];
       # TODO: replace 'root' by another username.
-      exec = ''${pkgs.nut}/bin/upsdrvctl -u root start'';
-      task = true;
+      script = ''${pkgs.nut}/bin/upsdrvctl -u root start'';
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
       environment.NUT_CONFPATH = "/etc/nut/";
       environment.NUT_STATEPATH = "/var/lib/nut/";
     };
 
-    environment.etc = [
-      { source = pkgs.writeText "nut.conf"
+    environment.etc = {
+      "nut/nut.conf".source = pkgs.writeText "nut.conf"
         ''
           MODE = ${cfg.mode}
         '';
-        target = "nut/nut.conf";
-      }
-      { source = pkgs.writeText "ups.conf"
+      "nut/ups.conf".source = pkgs.writeText "ups.conf"
         ''
           maxstartdelay = ${toString cfg.maxStartDelay}
 
-          ${flip concatStringsSep (flip map (attrValues cfg.ups) (ups: ups.summary)) "
+          ${flip concatStringsSep (forEach (attrValues cfg.ups) (ups: ups.summary)) "
 
           "}
         '';
-        target = "nut/ups.conf";
-      }
-      { source = cfg.schedulerRules;
-        target = "nut/upssched.conf";
-      }
+      "nut/upssched.conf".source = cfg.schedulerRules;
       # These file are containing private informations and thus should not
       # be stored inside the Nix store.
       /*
-      { source = ;
-        target = "nut/upsd.conf";
-      }
-      { source = ;
-        target = "nut/upsd.users";
-      }
-      { source = ;
-        target = "nut/upsmon.conf;
-      }
+      "nut/upsd.conf".source = "";
+      "nut/upsd.users".source = "";
+      "nut/upsmon.conf".source = "";
       */
-    ];
+    };
 
     power.ups.schedulerRules = mkDefault "${pkgs.nut}/etc/upssched.conf.sample";
 
@@ -254,21 +247,16 @@ in
 
 
 /*
-    users.extraUsers = [
-      { name = "nut";
-        uid = 84;
+    users.users.nut =
+      { uid = 84;
         home = "/var/lib/nut";
         createHome = true;
         group = "nut";
         description = "UPnP A/V Media Server user";
-      }
-    ];
+      };
 
-    users.extraGroups = [
-      { name = "nut";
-        gid = 84;
-      }
-    ];
+    users.groups."nut" =
+      { gid = 84; };
 */
 
   };

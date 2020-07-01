@@ -1,0 +1,15 @@
+--- a/curses/wicd-curses.py	2015-01-27 22:35:25.414781192 -0300
++++ b/curses/wicd-curses.py	2015-01-28 01:13:48.078904587 -0300
+@@ -1153,9 +1153,10 @@
+         if not ui._started:
+             return False
+ 
+-        input_data = ui.get_input_nonblocking()
++        ui.set_input_timeouts(max_wait=0)
++        input_data = ui.get_input()
+         # Resolve any "alarms" in the waiting
+-        self.handle_keys(input_data[1])
++        self.handle_keys(input_data)
+ 
+         # Update the screen
+         canvas = self.frame.render((self.size), True)

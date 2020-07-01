@@ -1,27 +1,46 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, gmp, libffi }:
 
-let
-  version = "5.5.2";
-in
+stdenv.mkDerivation rec {
+  pname = "polyml";
+  version = "5.8";
 
-stdenv.mkDerivation {
-  name = "polyml-${version}";
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure.ac --replace stdc++ c++
+  '';
 
-  src = fetchurl {
-    url = "mirror://sourceforge/polyml/polyml.${version}.tar.gz";
-    sha256 = "10m680qdad6bd50bav9xjsgmsxw8yxg55vr7grbg0gvykzl2pzbk";
+  patches = [
+    (fetchpatch {
+      name = "new-libffi-FFI_SYSV.patch";
+      url = "https://github.com/polyml/polyml/commit/ad32de7f181acaffaba78d5c3d9e5aa6b84a741c.patch";
+      sha256 = "007q3r2h9kfh3c1nv0dyhipmak44q468ab9bwnz4kk4a2dq76n8v";
+    })
+  ];
+
+  buildInputs = [ libffi gmp ];
+
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+
+  configureFlags = [
+    "--enable-shared"
+    "--with-system-libffi"
+    "--with-gmp"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "polyml";
+    repo = "polyml";
+    rev = "v${version}";
+    sha256 = "1s7q77bivppxa4vd7gxjj5dbh66qnirfxnkzh1ql69rfx1c057n3";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Standard ML compiler and interpreter";
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
-    homepage = http://www.polyml.org/;
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = [ #Add your name here!
-      stdenv.lib.maintainers.z77z
-    ];
+    homepage = "https://www.polyml.org/";
+    license = licenses.lgpl21;
+    platforms = with platforms; (linux ++ darwin);
+    maintainers = with maintainers; [ maggesi kovirobi ];
   };
 }

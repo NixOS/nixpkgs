@@ -1,16 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, libX11, xextproto, libXtst, libXi, libXext
-, libXinerama, glib, cairo, xdotool }:
+{ stdenv, fetchFromGitHub, pkgconfig, libX11, xorgproto, libXtst, libXi, libXext
+, libXinerama, libXrandr, glib, cairo, xdotool }:
 
-stdenv.mkDerivation rec {
-  name = "keynav-0.20110708.0";
+let release = "20180821"; in
+stdenv.mkDerivation {
+  name = "keynav-0.${release}.0";
 
-  src = fetchurl {
-    url = "https://semicomplete.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1gizjhji3yspxxxvb90js3z1bv18rbf5phxg8rciixpj3cccff8z";
+  src = fetchFromGitHub {
+    owner = "jordansissel";
+    repo = "keynav";
+    rev = "78f9e076a5618aba43b030fbb9344c415c30c1e5";
+    sha256 = "0hmc14fj612z5h7gjgk95zyqab3p35c4a99snnblzxfg0p3x2f1d";
   };
 
-  buildInputs = [ pkgconfig libX11 xextproto libXtst libXi libXext libXinerama
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 xorgproto libXtst libXi libXext libXinerama libXrandr
                   glib cairo xdotool ];
+
+  patchPhase = ''
+    echo >>VERSION MAJOR=0
+    echo >>VERSION RELEASE=${release}
+    echo >>VERSION REVISION=0
+  '';
 
   installPhase =
     ''
@@ -21,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Generate X11 mouse clicks from keyboard";
-    homepage = http://www.semicomplete.com/projects/keynav/;
+    homepage = "https://www.semicomplete.com/projects/keynav/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

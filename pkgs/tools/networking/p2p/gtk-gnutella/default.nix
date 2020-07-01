@@ -1,28 +1,73 @@
-{stdenv, fetchurl, pkgconfig, glib, gtk, libxml2, bison, gettext, zlib}:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, bison
+, pkgconfig
+, gettext
+, desktop-file-utils
+, glib
+, gtk2
+, libxml2
+, libbfd
+, zlib
+, binutils
+, gnutls
+, enableGui ? true
+}:
 
-let
-  name = "gtk-gnutella";
-  version = "1.0.1";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
+stdenv.mkDerivation rec {
+  pname = "gtk-gnutella";
+  # NOTE: Please remove hardeningDisable on the next release, see:
+  # https://sourceforge.net/p/gtk-gnutella/bugs/555/#5c19
+  version = "1.1.15";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${name}/${name}-${version}.tar.bz2";
-    sha256 = "010gzk2xqqkm309qnj5k28ghh9i92vvpnn8ly9apzb5gh8bqfm0g";
+  src = fetchFromGitHub {
+    owner = "gtk-gnutella";
+    repo = "gtk-gnutella";
+    rev = "v${version}";
+    sha256 = "1g7w6ywwp2g4qdgmfqkrl1rldk1b4rx50yb7h75hh15mh6nr159r";
   };
 
-  buildInputs = [pkgconfig glib gtk libxml2 bison gettext zlib];
+  nativeBuildInputs = [
+    bison
+    desktop-file-utils
+    gettext
+    pkgconfig
+  ];
+  buildInputs = [
+    glib
+    gnutls
+    libbfd
+    libxml2
+    zlib
+  ]
+  ++
+    stdenv.lib.optionals (enableGui) [ gtk2 ]
+  ;
 
-  NIX_LDFLAGS = "-rpath ${zlib}/lib";
-  configureScript = "./Configure";
-  dontAddPrefix = true;
-  configureFlags = "-d -e -D prefix=$out -D gtkversion=2 -D official=true";
+  configureScript = "./build.sh";
+  configureFlags = [
+    "--configure-only"
+    # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
+    "--disable-malloc"
+  ]
+    ++ stdenv.lib.optionals (!enableGui) [ "--topless" ]
+  ;
 
-  meta = {
-    homepage = "http://gtk-gnutella.sourceforge.net/";
-    description = "a server/client for Gnutella";
-    license = stdenv.lib.licenses.gpl2;
-    broken = true;
+  hardeningDisable = [ "bindnow" "fortify" "pic" "relro" ];
+
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    install -Dm0444 src/${pname}.man $out/share/man/man1/${pname}.1
+  '';
+
+  meta = with stdenv.lib; {
+    description = "A GTK Gnutella client, optimized for speed and scalability";
+    homepage = "http://gtk-gnutella.sourceforge.net/"; # Code: https://github.com/gtk-gnutella/gtk-gnutella
+    changelog = "https://raw.githubusercontent.com/gtk-gnutella/gtk-gnutella/v${version}/ChangeLog";
+    maintainers = [ maintainers.doronbehar ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

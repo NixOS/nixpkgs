@@ -15,6 +15,7 @@ in
   options = {
 
     networking.tcpcrypt.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Whether to enable opportunistic TCP encryption. If the other end
@@ -29,24 +30,23 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton {
-      name = "tcpcryptd";
+    users.users.tcpcryptd = {
       uid = config.ids.uids.tcpcryptd;
       description = "tcpcrypt daemon user";
     };
 
-    jobs.tcpcrypt = {
+    systemd.services.tcpcrypt = {
       description = "tcpcrypt";
 
-      wantedBy = ["multi-user.target"];
-      after = ["network-interfaces.target"];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       path = [ pkgs.iptables pkgs.tcpcrypt pkgs.procps ];
 
       preStart = ''
-        mkdir -p /var/run/tcpcryptd
-        chown tcpcryptd /var/run/tcpcryptd
-        sysctl -n net.ipv4.tcp_ecn >/run/pre-tcpcrypt-ecn-state
+        mkdir -p /run/tcpcryptd
+        chown tcpcryptd /run/tcpcryptd
+        sysctl -n net.ipv4.tcp_ecn > /run/tcpcryptd/pre-tcpcrypt-ecn-state
         sysctl -w net.ipv4.tcp_ecn=0
 
         iptables -t raw -N nixos-tcpcrypt
@@ -58,11 +58,11 @@ in
         iptables -t mangle -I POSTROUTING -j nixos-tcpcrypt
       '';
 
-      exec = "tcpcryptd -x 0x10";
+      script = "tcpcryptd -x 0x10";
 
       postStop = ''
-        if [ -f /run/pre-tcpcrypt-ecn-state ]; then
-          sysctl -w net.ipv4.tcp_ecn=$(cat /run/pre-tcpcrypt-ecn-state)
+        if [ -f /run/tcpcryptd/pre-tcpcrypt-ecn-state ]; then
+          sysctl -w net.ipv4.tcp_ecn=$(cat /run/tcpcryptd/pre-tcpcrypt-ecn-state)
         fi
 
         iptables -t mangle -D POSTROUTING -j nixos-tcpcrypt || true

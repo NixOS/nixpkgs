@@ -1,12 +1,21 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, pkgconfig
 , libgcrypt, libgpgerror, libtasn1
 
 # Optional Dependencies
 , pam ? null, libidn ? null, gnutls ? null
 }:
 
-with stdenv;
 let
+  mkFlag = trueStr: falseStr: cond: name: val: "--"
+    + (if cond then trueStr else falseStr)
+    + name
+    + stdenv.lib.optionalString (val != null && cond != false) "=${val}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
+
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+
   optPam = shouldUsePkg pam;
   optLibidn = shouldUsePkg libidn;
   optGnutls = shouldUsePkg gnutls;
@@ -21,8 +30,9 @@ stdenv.mkDerivation rec {
   };
 
   # Fixes support for gcrypt 1.6+
-  patches = [ ./gcrypt-fix.patch ];
+  patches = [ ./gcrypt-fix.patch ./freebsd-unistd.patch ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libgcrypt libgpgerror libtasn1 optPam optLibidn optGnutls ];
 
   configureFlags = [
@@ -52,20 +62,20 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i $out/lib/libshi{sa,shi}.la \
   '' + optionalString (optLibidn != null) ''
-      -e 's,\(-lidn\),-L${optLibidn}/lib \1,' \
+      -e 's,\(-lidn\),-L${optLibidn.out}/lib \1,' \
   '' + optionalString (optGnutls != null) ''
-      -e 's,\(-lgnutls\),-L${optGnutls}/lib \1,' \
+      -e 's,\(-lgnutls\),-L${optGnutls.out}/lib \1,' \
   '' + ''
-      -e 's,\(-lgcrypt\),-L${libgcrypt}/lib \1,' \
-      -e 's,\(-lgpg-error\),-L${libgpgerror}/lib \1,' \
-      -e 's,\(-ltasn1\),-L${libtasn1}/lib \1,'
+      -e 's,\(-lgcrypt\),-L${libgcrypt.out}/lib \1,' \
+      -e 's,\(-lgpg-error\),-L${libgpgerror.out}/lib \1,' \
+      -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
   '';
 
   meta = {
-    homepage    = http://www.gnu.org/software/shishi/;
+    homepage    = "https://www.gnu.org/software/shishi/";
     description = "An implementation of the Kerberos 5 network security system";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjg lovek323 wkennington ];
-    platforms   = platforms.all;
+    maintainers = with maintainers; [ bjg lovek323 ];
+    platforms   = platforms.linux;
   };
 }

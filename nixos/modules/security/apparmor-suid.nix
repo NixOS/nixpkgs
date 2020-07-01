@@ -4,8 +4,12 @@ let
 in
 with lib;
 {
+  imports = [
+    (mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
+  ];
 
   options.security.apparmor.confineSUIDApplications = mkOption {
+    type = types.bool;
     default = true;
     description = ''
       Install AppArmor profiles for commonly-used SUID application
@@ -19,7 +23,7 @@ with lib;
   config = mkIf (cfg.confineSUIDApplications) {
     security.apparmor.profiles = [ (pkgs.writeText "ping" ''
       #include <tunables/global>
-      /var/setuid-wrappers/ping {
+      /run/wrappers/bin/ping {
         #include <abstractions/base>
         #include <abstractions/consoles>
         #include <abstractions/nameservice>
@@ -28,12 +32,11 @@ with lib;
         capability setuid,
         network inet raw,
 
-        ${pkgs.glibc}/lib/*.so mr,
-        ${pkgs.libcap}/lib/libcap.so* mr,
-        ${pkgs.attr}/lib/libattr.so* mr,
+        ${pkgs.stdenv.cc.libc.out}/lib/*.so mr,
+        ${pkgs.libcap.lib}/lib/libcap.so* mr,
+        ${pkgs.attr.out}/lib/libattr.so* mr,
 
         ${pkgs.iputils}/bin/ping mixr,
-        /var/setuid-wrappers/ping.real r,
 
         #/etc/modules.conf r,
 

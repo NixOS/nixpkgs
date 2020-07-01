@@ -1,39 +1,55 @@
-{ stdenv, fetchurl, m4, cxx ? true, withStatic ? true }:
+{ stdenv, fetchurl, m4
+, cxx ? !stdenv.hostPlatform.useAndroidPrebuilt && !stdenv.hostPlatform.isWasm
+, buildPackages
+, withStatic ? false }:
 
-with { inherit (stdenv.lib) optional; };
+let inherit (stdenv.lib) optional; in
 
-stdenv.mkDerivation rec {
-  name = "gmp-6.0.0a";
+let self = stdenv.mkDerivation rec {
+  name = "gmp-6.2.0";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
-    sha256 = "1bwsfmf0vrx3rwl4xmi5jhhy3v1qx1xj0m7p9hb0fvcw9f09m3kz";
+    sha256 = "1sji8i9yjzfv5l2fsadpgjfyn452q6ab9zvm02k23ssd275rj77m";
   };
 
+  #outputs TODO: split $cxx due to libstdc++ dependency
+  # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
+  # - see #5855 for related discussion
+  outputs = [ "out" "dev" "info" ];
+  passthru.static = self.out;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ m4 ];
 
-  configureFlags =
+  configureFlags = [
+    "--with-pic"
+    (stdenv.lib.enableFeature cxx "cxx")
     # Build a "fat binary", with routines for several sub-architectures
     # (x86), except on Solaris where some tests crash with "Memory fault".
-    # See <http://hydra.nixos.org/build/2760931>, for instance.
+    # See <https://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
-    optional (!stdenv.isSunOS) "--enable-fat"
-    ++ (if cxx then [ "--enable-cxx"  ]
-               else [ "--disable-cxx" ])
-    ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional stdenv.isDarwin "ABI=64"
-    ++ optional stdenv.is64bit "--with-pic"
+    (stdenv.lib.enableFeature (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "fat")
+    # The config.guess in GMP tries to runtime-detect various
+    # ARM optimization flags via /proc/cpuinfo (and is also
+    # broken on multicore CPUs). Avoid this impurity.
+    "--build=${stdenv.buildPlatform.config}"
+  ] ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
+    ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
+    # to build a .dll on windows, we need --disable-static + --enable-shared
+    # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
+    ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"
     ;
 
-  doCheck = true;
+  doCheck = true; # not cross;
 
   dontDisableStatic = withStatic;
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://gmplib.org/";
+    homepage = "https://gmplib.org/";
     description = "GNU multiple precision arithmetic library";
     license = licenses.gpl3Plus;
 
@@ -60,6 +76,7 @@ stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.all;
-    maintainers = [ maintainers.simons ];
+    maintainers = [ maintainers.peti maintainers.vrthra ];
   };
-}
+};
+  in self

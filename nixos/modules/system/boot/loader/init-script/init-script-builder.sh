@@ -69,7 +69,7 @@ addEntry "NixOS - Default" $defaultConfig ""
 
 # Add all generations of the system profile to the menu, in reverse
 # (most recent to least recent) order.
-for link in $((ls -d $defaultConfig/fine-tune/* ) | sort -n); do
+for link in $((ls -d $defaultConfig/specialisation/* ) | sort -n); do
     date=$(stat --printf="%y\n" $link | sed 's/\..*//')
     addEntry "NixOS - variation" $link ""
 done
@@ -80,8 +80,13 @@ for generation in $(
     | sort -n -r); do
     link=/nix/var/nix/profiles/system-$generation-link
     date=$(stat --printf="%y\n" $link | sed 's/\..*//')
-    kernelVersion=$(cd $(dirname $(readlink -f $link/kernel))/lib/modules && echo *)
-    addEntry "NixOS - Configuration $generation ($date - $kernelVersion)" $link "$generation ($date)"
+    if [ -d $link/kernel ]; then
+      kernelVersion=$(cd $(dirname $(readlink -f $link/kernel))/lib/modules && echo *)
+      suffix="($date - $kernelVersion)"
+    else
+      suffix="($date)"
+    fi
+    addEntry "NixOS - Configuration $generation $suffix" $link "$generation ($date)"
 done
 
 mv $tmpOther $targetOther

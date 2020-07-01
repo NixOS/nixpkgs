@@ -1,64 +1,128 @@
-{ stdenv, fetchurl, automake, pkgconfig
-, cups, zlib, libjpeg, libusb1, pythonPackages, saneBackends, dbus
-, polkit, qtSupport ? true, qt4, pyqt4, net_snmp
-, withPlugin ? false, substituteAll, makeWrapper
+{ stdenv, fetchurl, substituteAll
+, pkgconfig
+, cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
+, dbus, file, ghostscript, usbutils
+, net-snmp, openssl, perl, nettools
+, bash, coreutils, utillinux
+# To remove references to gcc-unwrapped
+, removeReferencesTo, qt5
+, withQt5 ? true
+, withPlugin ? false
+, withStaticPPDInstall ? false
 }:
 
 let
 
-  name = "hplip-3.15.4";
+  name = "hplip-${version}";
+  version = "3.20.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0s1yiifp002n8qy0i4cv6j0hq9ikp4jabki5w3xzlaqgd4bjz1x3";
+    sha256 = "004bbd78487b7803cdcf2a96b00de938797227068c4de43ee7ad7d174c4e475a";
   };
-
-  hplip_state =
-    substituteAll
-      {
-        src = ./hplip.state;
-        # evaluated this way, version is always up-to-date
-        version = (builtins.parseDrvName name).version;
-      };
-
-  hplip_arch =
-    {
-      "i686-linux" = "x86_32";
-      "x86_64-linux" = "x86_64";
-      "arm6l-linux" = "arm32";
-      "arm7l-linux" = "arm32";
-    }."${stdenv.system}" or (abort "Unsupported platform ${stdenv.system}");
 
   plugin = fetchurl {
-    url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "00zhaq48m7p6nrxfy16086hzghf2pfr32s53sndbpp2514v2j392";
+    url = "https://developers.hp.com/sites/default/files/${name}-plugin.run";
+    sha256 = "ff3dedda3158be64b985efbf636890ddda5b271ae1f1fbd788219e1344a9c2e7";
   };
+
+  hplipState = substituteAll {
+    inherit version;
+    src = ./hplip.state;
+  };
+
+  hplipPlatforms = {
+    i686-linux   = "x86_32";
+    x86_64-linux = "x86_64";
+    armv6l-linux = "arm32";
+    armv7l-linux = "arm32";
+    aarch64-linux = "aarch64";
+  };
+
+  hplipArch = hplipPlatforms.${stdenv.hostPlatform.system}
+    or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
+
+  pluginArches = [ "x86_32" "x86_64" "arm32" "aarch64" ];
 
 in
 
-stdenv.mkDerivation {
+assert withPlugin -> builtins.elem hplipArch pluginArches
+  || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
+
+python3Packages.buildPythonApplication {
   inherit name src;
+  format = "other";
+
+  buildInputs = [
+    libjpeg
+    cups
+    libusb1
+    sane-backends
+    dbus
+    file
+    ghostscript
+    net-snmp
+    openssl
+    perl
+    zlib
+  ];
+
+  nativeBuildInputs = [
+    pkgconfig
+    removeReferencesTo
+  ] ++ stdenv.lib.optional withQt5 qt5.wrapQtAppsHook;
+
+  pythonPath = with python3Packages; [
+    dbus
+    pillow
+    pygobject3
+    reportlab
+    usbutils
+    sip
+    dbus-python
+  ] ++ stdenv.lib.optionals withQt5 [
+    pyqt5
+    enum-compat
+  ];
+
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${nettools}/bin" ];
+
+  patches = [
+    # remove ImageProcessor usage, it causes segfaults, see
+    # https://bugs.launchpad.net/hplip/+bug/1788706
+    # https://bugs.launchpad.net/hplip/+bug/1787289
+    ./image-processor.patch
+  ];
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
-      -e s,/etc/hp,$out/etc/hp, \
-      -e s,/etc/sane.d,$out/etc/sane.d, \
-      -e s,/usr/include/libusb-1.0,${libusb1}/include/libusb-1.0, \
-      -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor, \
-      -e s,/usr/lib/systemd/system,$out/lib/systemd/system, \
-      -e s,/var/lib/hp,$out/var/lib/hp, \
+      -e s,/etc/hp,$out/etc/hp,g \
+      -e s,/etc/sane.d,$out/etc/sane.d,g \
+      -e s,/usr/include/libusb-1.0,${libusb1.dev}/include/libusb-1.0,g \
+      -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor,g \
+      -e s,/usr/lib/systemd/system,$out/lib/systemd/system,g \
+      -e s,/var/lib/hp,$out/var/lib/hp,g \
+      -e s,/usr/bin/perl,${perl}/bin/perl,g \
+      -e s,/usr/bin/file,${file}/bin/file,g \
+      -e s,/usr/bin/gs,${ghostscript}/bin/gs,g \
+      -e s,/usr/share/cups/fonts,${ghostscript}/share/ghostscript/fonts,g \
+      -e "s,ExecStart=/usr/bin/python /usr/bin/hp-config_usb_printer,ExecStart=$out/bin/hp-config_usb_printer,g" \
       {} +
   '';
 
   preConfigure = ''
     export configureFlags="$configureFlags
+      --with-hpppddir=$out/share/cups/model/HP
       --with-cupsfilterdir=$out/lib/cups/filter
       --with-cupsbackenddir=$out/lib/cups/backend
       --with-icondir=$out/share/applications
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
       --enable-policykit
+      ${stdenv.lib.optionalString withStaticPPDInstall "--enable-cups-ppd-install"}
+      --disable-qt4
+      ${stdenv.lib.optionalString withQt5 "--enable-qt5"}
     "
 
     export makeFlags="
@@ -69,34 +133,22 @@ stdenv.mkDerivation {
       policykit_dbus_sharedir=$out/share/dbus-1/system-services
       hplip_confdir=$out/etc/hp
       hplip_statedir=$out/var/lib/hp
-    ";
+    "
+
+    # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
+    # generation of '*.ppd' files.
+    # This seems to be a 'ppdc' issue when the tool is run in a hermetic sandbox.
+    # Could not find how to fix the problem in 'ppdc' so this is a workaround.
+    export CUPS_DATADIR="${cups}/share/cups"
   '';
 
-  postInstall =
-    ''
-      # Wrap the user-facing Python scripts in /bin without turning the ones
-      # in /share into shell scripts (they need to be importable).
-      # Complicated by the fact that /bin contains just symlinks to /share.
-      for bin in $out/bin/*; do
-        py=`readlink -m $bin`
-        rm $bin
-        cp $py $bin
-        wrapPythonProgramsIn $bin "$out $pythonPath"
-        sed -i "s@$(dirname $bin)/[^ ]*@$py@g" $bin
-      done
+  enableParallelBuilding = true;
 
-      # Remove originals. Knows a little too much about wrapPythonProgramsIn.
-      rm -f $out/bin/.*-wrapped
-
-      wrapPythonPrograms $out/lib "$out $pythonPath"
-    ''
-    + (stdenv.lib.optionalString withPlugin
-    (let hplip_arch =
-          if stdenv.system == "i686-linux" then "x86_32"
-          else if stdenv.system == "x86_64-linux" then "x86_64"
-          else abort "Platform must be i686-linux or x86_64-linux!";
-    in
-    ''
+  #
+  # Running `hp-diagnose_plugin -g` can be used to diagnose
+  # issues with plugins.
+  #
+  postInstall = stdenv.lib.optionalString withPlugin ''
     sh ${plugin} --noexec --keep
     cd plugin_tmp
 
@@ -110,54 +162,85 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/hplip/prnt/plugins
     for plugin in lj hbpl1; do
-      cp $plugin-${hplip_arch}.so $out/share/hplip/prnt/plugins
-      ln -s $out/share/hplip/prnt/plugins/$plugin-${hplip_arch}.so \
+      cp $plugin-${hplipArch}.so $out/share/hplip/prnt/plugins
+      chmod 0755 $out/share/hplip/prnt/plugins/$plugin-${hplipArch}.so
+      ln -s $out/share/hplip/prnt/plugins/$plugin-${hplipArch}.so \
         $out/share/hplip/prnt/plugins/$plugin.so
     done
 
     mkdir -p $out/share/hplip/scan/plugins
-    for plugin in bb_soap bb_marvell bb_soapht fax_marvell; do
-      cp $plugin-${hplip_arch}.so $out/share/hplip/scan/plugins
-      ln -s $out/share/hplip/scan/plugins/$plugin-${hplip_arch}.so \
+    for plugin in bb_soap bb_marvell bb_soapht bb_escl; do
+      cp $plugin-${hplipArch}.so $out/share/hplip/scan/plugins
+      chmod 0755 $out/share/hplip/scan/plugins/$plugin-${hplipArch}.so
+      ln -s $out/share/hplip/scan/plugins/$plugin-${hplipArch}.so \
         $out/share/hplip/scan/plugins/$plugin.so
     done
 
+    mkdir -p $out/share/hplip/fax/plugins
+    for plugin in fax_marvell; do
+      cp $plugin-${hplipArch}.so $out/share/hplip/fax/plugins
+      chmod 0755 $out/share/hplip/fax/plugins/$plugin-${hplipArch}.so
+      ln -s $out/share/hplip/fax/plugins/$plugin-${hplipArch}.so \
+        $out/share/hplip/fax/plugins/$plugin.so
+    done
+
     mkdir -p $out/var/lib/hp
-    cp ${hplip_state} $out/var/lib/hp/hplip.state
+    cp ${hplipState} $out/var/lib/hp/hplip.state
+  '';
 
-    mkdir -p $out/etc/sane.d/dll.d
-    mv $out/etc/sane.d/dll.conf $out/etc/sane.d/dll.d/hpaio.conf
+  # The installed executables are just symlinks into $out/share/hplip,
+  # but wrapPythonPrograms ignores symlinks. We cannot replace the Python
+  # modules in $out/share/hplip with wrapper scripts because they import
+  # each other as libraries. Instead, we emulate wrapPythonPrograms by
+  # 1. Calling patchPythonProgram on the original script in $out/share/hplip
+  # 2. Making our own wrapper pointing directly to the original script.
+  dontWrapPythonPrograms = true;
+  preFixup = ''
+    buildPythonPath "$out $pythonPath"
 
-    rm $out/etc/udev/rules.d/56-hpmud.rules
-    ''));
+    for bin in $out/bin/*; do
+      py=$(readlink -m $bin)
+      rm $bin
+      echo "patching \`$py'..."
+      patchPythonScript "$py"
+      echo "wrapping \`$bin'..."
+      makeWrapper "$py" "$bin" \
+          --prefix PATH ':' "$program_PATH" \
+          --set PYTHONNOUSERSITE "true" \
+          $makeWrapperArgs
+    done
+  '';
 
-  buildInputs = [
-      libjpeg
-      cups
-      libusb1
-      pythonPackages.python
-      pythonPackages.wrapPython
-      saneBackends
-      dbus
-      pkgconfig
-      net_snmp
-    ] ++ stdenv.lib.optional qtSupport qt4;
+  postFixup = ''
+    substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
+    # Patch udev rules:
+    # with plugin, they upload firmware to printers,
+    # without plugin, they complain about the missing plugin.
+    substituteInPlace $out/etc/udev/rules.d/56-hpmud.rules \
+      --replace {,${bash}}/bin/sh \
+      --replace /usr/bin/nohup "" \
+      --replace {,${utillinux}/bin/}logger \
+      --replace {/usr,$out}/bin
+    remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
+  '' + stdenv.lib.optionalString withQt5 ''
+    for f in $out/bin/hp-*;do
+      wrapQtApp $f
+    done
+  '';
 
-  pythonPath = with pythonPackages; [
-      dbus
-      pillow
-      pygobject
-      recursivePthLoader
-      reportlab
-    ] ++ stdenv.lib.optional qtSupport pyqt4;
+  # There are some binaries there, which reference gcc-unwrapped otherwise.
+  stripDebugList = [
+    "share/hplip" "lib/cups/backend" "lib/cups/filter" "lib/python3.7/site-packages" "lib/sane"
+  ];
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
-    homepage = http://hplipopensource.com/;
+    homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
+    downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
-    maintainers = with maintainers; [ ttuegel jgeerds nckx ];
+    platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

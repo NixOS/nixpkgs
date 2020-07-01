@@ -19,6 +19,7 @@ in
         '';
       };
       autorun = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to automatically start the tunnel.
@@ -34,7 +35,7 @@ in
 
       password = mkOption {
         default = "";
-        type = types.string;
+        type = types.str;
         description = ''
           Path to a file (as a string), containing your gogoNET password, if any.
         '';

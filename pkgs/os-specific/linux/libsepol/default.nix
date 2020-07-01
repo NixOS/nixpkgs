@@ -1,28 +1,37 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, flex }:
 
 stdenv.mkDerivation rec {
-  name = "libsepol-${version}";
-  version = "2.3";
-  se_release = "20140506";
-  se_url = "https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases";
+  pname = "libsepol";
+  version = "2.9";
+  se_release = "20190315";
+  se_url = "https://github.com/SELinuxProject/selinux/releases/download";
+
+  outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsepol-${version}.tar.gz";
-    sha256 = "13z6xakc2qqyhlvnc5h53jy7lqmh5b5cnpfn51lmvfdpqd18d3fc";
+    sha256 = "0p8x7w73jn1nysx1d7416wqrhbi0r6isrjxib7jf68fi72q14jx3";
   };
 
-  preBuild = '' makeFlags="$makeFlags PREFIX=$out DESTDIR=$out" '';
+  nativeBuildInputs = [ flex ];
 
-  # TODO: Figure out why the build incorrectly links libsepol.so
-  postInstall = ''
-    rm $out/lib/libsepol.so
-    ln -s libsepol.so.1 $out/lib/libsepol.so
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "BINDIR=$(bin)/bin"
+    "INCDIR=$(dev)/include/sepol"
+    "INCLUDEDIR=$(dev)/include"
+    "MAN3DIR=$(man)/share/man/man3"
+    "MAN8DIR=$(man)/share/man/man8"
+    "SHLIBDIR=$(out)/lib"
+  ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   passthru = { inherit se_release se_url; };
 
   meta = with stdenv.lib; {
-    homepage = http://userspace.selinuxproject.org;
+    description = "SELinux binary policy manipulation library";
+    homepage = "http://userspace.selinuxproject.org";
     platforms = platforms.linux;
     maintainers = [ maintainers.phreedom ];
     license = stdenv.lib.licenses.gpl2;

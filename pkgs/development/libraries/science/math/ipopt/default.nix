@@ -1,27 +1,32 @@
-{ stdenv, fetchurl, unzip, blas, liblapack, gfortran }:
+{ stdenv, fetchurl, unzip, blas, lapack, gfortran }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
-  version = "3.12.3";
-  name = "ipopt-${version}";
+  pname = "ipopt";
+  version = "3.12.13";
 
   src = fetchurl {
-    url = "http://www.coin-or.org/download/source/Ipopt/Ipopt-${version}.zip";
-    sha256 = "0h8qx3hq2m21qrg4v3n26v2qbhl6saxrpa7rbhnmkkcfj5s942yr";
+    url = "https://www.coin-or.org/download/source/Ipopt/Ipopt-${version}.zip";
+    sha256 = "0kzf05aypx8q5mr3sciclk926ans0yi2d2chjdxxgpi3sza609dx";
   };
 
-  preConfigure = ''
-     export CXXDEFS="-DHAVE_RAND -DHAVE_CSTRING -DHAVE_CSTDIO"
-  '';
+  CXXDEFS = [ "-DHAVE_RAND" "-DHAVE_CSTRING" "-DHAVE_CSTDIO" ];
+
+  configureFlags = [
+    "--with-blas-lib=-lblas"
+    "--with-lapack-lib=-llapack"
+  ];
 
   nativeBuildInputs = [ unzip ];
 
-  buildInputs = [ gfortran blas liblapack ];
+  buildInputs = [ gfortran blas lapack ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A software package for large-scale nonlinear optimization";
-    homepage = https://projects.coin-or.org/Ipopt;
+    homepage = "https://projects.coin-or.org/Ipopt";
     license = licenses.epl10;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

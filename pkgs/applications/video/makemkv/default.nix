@@ -1,29 +1,48 @@
-{ stdenv, fetchurl
-, openssl, qt4, mesa, zlib, pkgconfig, libav
+{ stdenv, mkDerivation, fetchurl, autoPatchelfHook
+, ffmpeg_3, openssl, qtbase, zlib, pkgconfig
 }:
 
-stdenv.mkDerivation rec {
-  name = "makemkv-${ver}";
-  ver = "1.9.2";
-  builder = ./builder.sh;
-
+let
+  version = "1.15.1";
+  # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
-    url = "http://www.makemkv.com/download/makemkv-bin-${ver}.tar.gz";
-    sha256 = "0hjby7imja9sg2h68al81n4zl72mc3y3fqmf61sf1sad4njs9bkj";
+    urls = [
+      "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
+      "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
+    ];
+    sha256 = "0c9661sdlld8b1g2pk8lbn3gz7cikh9bjqss11ffkriwii1x9fw0";
   };
-
   src_oss = fetchurl {
-    url = "http://www.makemkv.com/download/makemkv-oss-${ver}.tar.gz";
-    sha256 = "074scfz835jynzmb28i8q44hc6ixvfg3crgirmy02bbpxakyp1v6";
+    urls = [
+      "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
+      "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
+    ];
+    sha256 = "0rm1zykqagy2g8hb7pjrc6akdsym8pgdnx66hnna161jbah3sssy";
   };
+in mkDerivation {
+  pname = "makemkv";
+  inherit version;
 
-  buildInputs = [openssl qt4 mesa zlib pkgconfig libav];
+  srcs = [ src_bin src_oss ];
 
-  libPath = stdenv.lib.makeLibraryPath [stdenv.cc.cc openssl mesa qt4 zlib ]
-          + ":" + stdenv.cc.cc + "/lib64";
+  sourceRoot = "makemkv-oss-${version}";
+
+  nativeBuildInputs = [ autoPatchelfHook pkgconfig ];
+
+  buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm555 -t $out/bin           out/makemkv ../makemkv-bin-${version}/bin/amd64/makemkvcon
+    install -D     -t $out/lib           out/lib{driveio,makemkv,mmbd}.so.*
+    install -D     -t $out/share/MakeMKV ../makemkv-bin-${version}/src/share/*
+
+    runHook postInstall
+  '';
 
   meta = with stdenv.lib; {
-    description = "convert blu-ray and dvd to mkv";
+    description = "Convert blu-ray and dvd to mkv";
     longDescription = ''
       makemkv is a one-click QT application that transcodes an encrypted
       blu-ray or DVD disc into a more portable set of mkv files, preserving
@@ -34,7 +53,8 @@ stdenv.mkDerivation rec {
       expiration date.
     '';
     license = licenses.unfree;
-    homepage = http://makemkv.com;
+    homepage = "http://makemkv.com";
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.titanous ];
   };
 }

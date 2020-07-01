@@ -19,6 +19,7 @@ in
   options = {
 
     services.radvd.enable = mkOption {
+      type = types.bool;
       default = false;
       description =
         ''
@@ -52,31 +53,18 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.radvd =
+    users.users.radvd =
       { uid = config.ids.uids.radvd;
         description = "Router Advertisement Daemon User";
       };
 
     systemd.services.radvd =
       { description = "IPv6 Router Advertisement Daemon";
-
         wantedBy = [ "multi-user.target" ];
-
         after = [ "network.target" ];
-
-        path = [ pkgs.radvd ];
-
-        preStart = ''
-          mkdir -m 755 -p /run/radvd
-          chown radvd /run/radvd
-        '';
-
         serviceConfig =
-          { ExecStart = "@${pkgs.radvd}/sbin/radvd radvd"
-              + " -p /run/radvd/radvd.pid -m syslog -u radvd -C ${confFile}";
+          { ExecStart = "@${pkgs.radvd}/bin/radvd radvd -n -u radvd -C ${confFile}";
             Restart = "always";
-            Type = "forking";
-            PIDFile = "/run/radvd/radvd.pid";
           };
       };
 

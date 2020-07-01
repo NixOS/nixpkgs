@@ -1,8 +1,8 @@
 {stdenv, fetchurl, libXxf86vm, libXext, libX11, libXrandr, gcc}:
 stdenv.mkDerivation {
-  name = "xflux";
+  name = "xflux-2013-09-01";
   src = fetchurl {
-    url = https://justgetflux.com/linux/xflux64.tgz;
+    url = "https://justgetflux.com/linux/xflux64.tgz";
     sha256 = "cc50158fabaeee58c331f006cc1c08fd2940a126e99d37b76c8e878ef20c2021";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       when the sun sets, and then changes it back its colder temperature
       when the sun rises.
     '';
-    homepage = https://justgetflux.com/;
+    homepage = "https://justgetflux.com/";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.paholg ];

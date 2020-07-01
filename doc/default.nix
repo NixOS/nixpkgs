@@ -1,42 +1,28 @@
-with import ./.. { };
-with lib;
-
-stdenv.mkDerivation {
+{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
+let
+  lib = pkgs.lib;
+  doc-support = import ./doc-support { inherit pkgs nixpkgs; };
+in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
-  sources = sourceFilesBySuffices ./. [".xml"];
+  buildInputs = with pkgs; [ pandoc libxml2 libxslt zip jing  xmlformat ];
 
-  buildInputs = [ libxml2 libxslt ];
+  src = ./.;
 
-  xsltFlags = ''
-    --param section.autolabel 1
-    --param section.label.includes.component.label 1
-    --param html.stylesheet 'style.css'
-    --param xref.with.number.and.title 1
-    --param toc.section.depth 3
-    --param admon.style '''
-    --param callout.graphics.extension '.gif'
+  postPatch = ''
+    ln -s ${doc-support} ./doc-support/result
   '';
 
-  buildCommand = ''
-    ln -s $sources/*.xml . # */
+  installPhase = ''
+    dest="$out/share/doc/nixpkgs"
+    mkdir -p "$(dirname "$dest")"
+    mv out/html "$dest"
+    mv "$dest/index.html" "$dest/manual.html"
 
-    echo ${nixpkgsVersion} > .version
+    mv out/epub/manual.epub "$dest/nixpkgs-manual.epub"
 
-    xmllint --noout --nonet --xinclude --noxincludenode \
-      --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
-      manual.xml
-
-    dst=$out/share/doc/nixpkgs
-    mkdir -p $dst
-    xsltproc $xsltFlags --nonet --xinclude \
-      --output $dst/manual.html \
-      ${docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
-      ./manual.xml
-
-    cp ${./style.css} $dst/style.css
-
-    mkdir -p $out/nix-support
-    echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
+    mkdir -p $out/nix-support/
+    echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
+    echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
 }

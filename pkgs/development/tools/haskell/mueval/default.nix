@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, haskellngPackages, packages ? (pkgs: [])
+{ stdenv, makeWrapper, haskellPackages, packages ? (pkgs: [])
 }:
 
 let defaultPkgs = pkgs: [ pkgs.show
@@ -6,14 +6,14 @@ let defaultPkgs = pkgs: [ pkgs.show
                           pkgs.QuickCheck
                           pkgs.mtl
                         ];
-    env = haskellngPackages.ghcWithPackages
+    env = haskellPackages.ghcWithPackages
            (pkgs: defaultPkgs pkgs ++ packages pkgs);
     libDir = "${env}/lib/ghc-${env.version}";
 
 in stdenv.mkDerivation {
   name = "mueval-env";
 
-  inherit (haskellngPackages) mueval;
+  inherit (haskellPackages) mueval;
 
   nativeBuildInputs = [ makeWrapper ];
 

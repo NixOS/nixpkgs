@@ -1,13 +1,13 @@
 { stdenv, fetchurl, cmake, irrlicht, libpng, bzip2, sqlite
-, libjpeg, libXxf86vm, mesa, openal, libvorbis, x11, pkgconfig }:
+, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, xlibsWrapper, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "voxelands-${version}";
-  version = "1504.01";
+  pname = "voxelands";
+  version = "1512.00";
 
   src = fetchurl {
-      url = "http://voxelands.com/downloads/${name}-src.tar.bz2";
-      sha256 = "17jv2pz0mbkkf7jw3jcpix8hb46b382hc7vki42n9rrdynydq5zp";
+    url = "http://voxelands.com/downloads/${pname}-${version}-src.tar.bz2";
+    sha256 = "0bims0y0nyviv2f2nxfj37s3258cjbfp9xd97najz0yylnk3qdfw";
   };
 
   cmakeFlags = [
@@ -18,14 +18,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake irrlicht libpng bzip2 libjpeg sqlite
-    libXxf86vm mesa openal libvorbis x11 pkgconfig
+    libXxf86vm libGLU libGL openal libvorbis xlibsWrapper pkgconfig
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://voxelands.com/;
+    homepage = "http://voxelands.com/";
     description = "Infinite-world block sandbox game based on Minetest";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds c0dehero ];
+    maintainers = with maintainers; [ ];
   };
 }

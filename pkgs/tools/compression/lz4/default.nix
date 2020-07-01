@@ -1,25 +1,48 @@
-{ stdenv, fetchFromGitHub, valgrind }:
+{ stdenv, fetchFromGitHub, valgrind, fetchpatch
+, enableStatic ? false, enableShared ? true
+}:
 
-let version = "129"; in
 stdenv.mkDerivation rec {
-  name = "lz4-${version}";
+  pname = "lz4";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
-    sha256 = "0liq5gvnikchgvalpi52hq0npwlh84w94bj79dcbrcw19may5dwi";
-    rev = "r${version}";
-    repo = "lz4";
-    owner = "Cyan4973";
+    sha256 = "0lpaypmk70ag2ks3kf2dl4ac3ba40n5kc1ainkp9wfjawz76mh61";
+    rev = "v${version}";
+    repo = pname;
+    owner = pname;
   };
+
+  # TODO(@Ericson2314): Separate binaries and libraries
+  outputs = [ "bin" "out" "dev" ];
 
   buildInputs = stdenv.lib.optional doCheck valgrind;
 
   enableParallelBuilding = true;
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [
+    "PREFIX=$(out)"
+    "INCLUDEDIR=$(dev)/include"
+    "BUILD_STATIC=${if enableStatic then "yes" else "no"}"
+    "BUILD_SHARED=${if enableShared then "yes" else "no"}"
+    "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
+  ]
+    # TODO make full dictionary
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
+    ;
 
-  doCheck = true;
+  doCheck = false; # tests take a very long time
   checkTarget = "test";
-  checkFlags = "-j1"; # required since version 128
+
+  # TODO(@Ericson2314): Make resusable setup hook for this issue on Windows.
+  postInstall =
+    stdenv.lib.optionalString stdenv.hostPlatform.isWindows ''
+      mv $out/bin/*.dll $out/lib
+      ln -s $out/lib/*.dll
+    ''
+    + ''
+      moveToOutput bin "$bin"
+    '';
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
@@ -30,9 +53,8 @@ stdenv.mkDerivation rec {
       multiple GB/s per core, typically reaching RAM speed limits on
       multi-core systems.
     '';
-    homepage = https://code.google.com/p/lz4/;
+    homepage = "https://lz4.github.io/lz4/";
     license = with licenses; [ bsd2 gpl2Plus ];
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.all;
   };
 }

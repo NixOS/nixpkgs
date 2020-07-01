@@ -1,0 +1,5 @@
+--- a/src/mup/Makefile.am
++++ b/src/mup/Makefile.am
+@@ -39 +39 @@ fontdata.c:	prolog.ps ../../tools/mup/getfontinfo.ps ../../LICENSE
+-	$(GS) -sDEVICE=nullpage -sOutputFile=/dev/null -dQUIET - < ../../tools/mup/getfontinfo.ps | $(SED) -e "/Warning:/d" >> fontdata.c
++	$(GS) -sDEVICE=nullpage -sOutputFile=/dev/null -dQUIET --permit-file-write=charnames:fontinit - < ../../tools/mup/getfontinfo.ps | $(SED) -e "/Warning:/d" >> fontdata.c

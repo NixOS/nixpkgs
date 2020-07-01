@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ];
 
   meta = with stdenv.lib; {
-    description = "an enhanced version of GNU dd";
+    description = "An enhanced version of GNU dd";
 
-    homepage = http://dcfldd.sourceforge.net/;
+    homepage = "http://dcfldd.sourceforge.net/";
 
     license = licenses.gpl2;
 

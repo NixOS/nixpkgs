@@ -1,5 +1,6 @@
 #! @perl@
 
+use strict;
 use Cwd 'abs_path';
 use File::Spec;
 use File::Path;
@@ -7,6 +8,7 @@ use File::Basename;
 use File::Slurp;
 use File::stat;
 
+umask(0022);
 
 sub uniq {
     my %seen;
@@ -69,8 +71,9 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
 my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
+my @initrdAvailableKernelModules = ();
 my @modulePackages = ();
-my @imports = ("<nixpkgs/nixos/modules/installer/scan/not-detected.nix>");
+my @imports;
 
 
 sub debug {
@@ -88,8 +91,20 @@ sub hasCPUFeature {
 }
 
 
-# Detect the number of CPU cores.
-my $cpus = scalar (grep {/^processor\s*:/} (split '\n', $cpuinfo));
+
+# Determine CPU governor to use
+if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
+    my $governors = read_file("/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors");
+    # ondemand governor is not available on sandy bridge or later Intel CPUs
+    my @desired_governors = ("ondemand", "powersave");
+    my $e;
+
+    foreach $e (@desired_governors) {
+        if (index($governors, $e) != -1) {
+            last if (push @attrs, "powerManagement.cpuFreqGovernor = lib.mkDefault \"$e\";");
+        }
+    }
+}
 
 
 # Virtualization support?
@@ -148,9 +163,25 @@ sub pciCheck {
          $device eq "0x4331" || $device eq "0x43a0" || $device eq "0x43b1"
         ) )
      {
-        push @modulePackages, "\${config.boot.kernelPackages.broadcom_sta}";
+        push @modulePackages, "config.boot.kernelPackages.broadcom_sta";
         push @kernelModules, "wl";
      }
+
+    # broadcom FullMac driver
+    # list taken from
+    # https://wireless.wiki.kernel.org/en/users/Drivers/brcm80211#brcmfmac
+    if ($vendor eq "0x14e4" &&
+        ($device eq "0x43a3" || $device eq "0x43df" || $device eq "0x43ec" ||
+         $device eq "0x43d3" || $device eq "0x43d9" || $device eq "0x43e9" ||
+         $device eq "0x43ba" || $device eq "0x43bb" || $device eq "0x43bc" ||
+         $device eq "0xaa52" || $device eq "0x43ca" || $device eq "0x43cb" ||
+         $device eq "0x43cc" || $device eq "0x43c3" || $device eq "0x43c4" ||
+         $device eq "0x43c5"
+        ) )
+    {
+        # we need e.g. brcmfmac43602-pcie.bin
+        push @imports, "(modulesPath + \"/hardware/network/broadcom-43xx.nix\")";
+    }
 
     # Can't rely on $module here, since the module may not be loaded
     # due to missing firmware.  Ideally we would check modules.pcimap
@@ -174,9 +205,6 @@ sub pciCheck {
 foreach my $path (glob "/sys/bus/pci/devices/*") {
     pciCheck $path;
 }
-
-push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
-
 
 # Idem for USB devices.
 
@@ -217,8 +245,8 @@ foreach my $path (glob "/sys/bus/usb/devices/*") {
 }
 
 
-# Add the modules for all block devices.
-foreach my $path (glob "/sys/class/block/*") {
+# Add the modules for all block and MMC devices.
+foreach my $path (glob "/sys/class/{block,mmc_host}/*") {
     my $module;
     if (-e "$path/device/driver/module") {
         $module = basename `readlink -f $path/device/driver/module`;
@@ -227,6 +255,16 @@ foreach my $path (glob "/sys/class/block/*") {
     }
 }
 
+# Add bcache module, if needed.
+my @bcacheDevices = glob("/dev/bcache*");
+if (scalar @bcacheDevices > 0) {
+    push @initrdAvailableKernelModules, "bcache";
+}
+
+# Prevent unbootable systems if LVM snapshots are present at boot time.
+if (`lsblk -o TYPE` =~ "lvm") {
+    push @initrdKernelModules, "dm-snapshot";
+}
 
 my $virt = `systemd-detect-virt`;
 chomp $virt;
@@ -235,14 +273,31 @@ chomp $virt;
 # Check if we're a VirtualBox guest.  If so, enable the guest
 # additions.
 if ($virt eq "oracle") {
-    push @attrs, "services.virtualboxGuest.enable = true;"
+    push @attrs, "virtualisation.virtualbox.guest.enable = true;"
 }
 
 
 # Likewise for QEMU.
 if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
-    push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
+    push @imports, "(modulesPath + \"/profiles/qemu-guest.nix\")";
 }
+
+# Also for Hyper-V.
+if ($virt eq "microsoft") {
+    push @attrs, "virtualisation.hypervGuest.enable = true;"
+}
+
+
+# Pull in NixOS configuration for containers.
+if ($virt eq "systemd-nspawn") {
+    push @attrs, "boot.isContainer = true;";
+}
+
+
+# Provide firmware for devices that are not detected by this script,
+# unless we're in a VM/container.
+push @imports, "(modulesPath + \"/installer/scan/not-detected.nix\")"
+    if $virt eq "none";
 
 
 # For a device name like /dev/sda1, find a more stable path like
@@ -262,17 +317,32 @@ sub findStableDevPath {
     return $dev;
 }
 
+push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
 
 # Generate the swapDevices option from the currently activated swap
 # devices.
-my @swaps = read_file("/proc/swaps");
-shift @swaps;
+my @swaps = read_file("/proc/swaps", err_mode => 'carp');
 my @swapDevices;
-foreach my $swap (@swaps) {
-    $swap =~ /^(\S+)\s/;
-    next unless -e $1;
-    my $dev = findStableDevPath $1;
-    push @swapDevices, "{ device = \"$dev\"; }";
+if (@swaps) {
+    shift @swaps;
+    foreach my $swap (@swaps) {
+        my @fields = split ' ', $swap;
+        my $swapFilename = $fields[0];
+        my $swapType = $fields[1];
+        next unless -e $swapFilename;
+        my $dev = findStableDevPath $swapFilename;
+        if ($swapType =~ "partition") {
+            # zram devices are more likely created by configuration.nix, so
+            # ignore them here
+            next if ($swapFilename =~ /^\/dev\/zram/);
+            push @swapDevices, "{ device = \"$dev\"; }";
+        } elsif ($swapType =~ "file") {
+            # swap *files* are more likely specified in configuration.nix, so
+            # ignore them here.
+        } else {
+            die "Unsupported swap type: $swapType\n";
+        }
+    }
 }
 
 
@@ -289,6 +359,8 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     chomp $fs;
     my @fields = split / /, $fs;
     my $mountPoint = $fields[4];
+    $mountPoint =~ s/\\040/ /g; # account for mount points with spaces in the name (\040 is the escape character)
+    $mountPoint =~ s/\\011/\t/g; # account for mount points with tabs in the name (\011 is the escape character)
     next unless -d $mountPoint;
     my @mountOptions = split /,/, $fields[5];
 
@@ -298,22 +370,23 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
 
     # Skip special filesystems.
     next if in($mountPoint, "/proc") || in($mountPoint, "/dev") || in($mountPoint, "/sys") || in($mountPoint, "/run") || $mountPoint eq "/var/lib/nfs/rpc_pipefs";
-    next if $mountPoint eq "/var/setuid-wrappers";
 
     # Skip the optional fields.
     my $n = 6; $n++ while $fields[$n] ne "-"; $n++;
     my $fsType = $fields[$n];
     my $device = $fields[$n + 1];
     my @superOptions = split /,/, $fields[$n + 2];
+    $device =~ s/\\040/ /g; # account for devices with spaces in the name (\040 is the escape character)
+    $device =~ s/\\011/\t/g; # account for mount points with tabs in the name (\011 is the escape character)
 
     # Skip the read-only bind-mount on /nix/store.
     next if $mountPoint eq "/nix/store" && (grep { $_ eq "rw" } @superOptions) && (grep { $_ eq "ro" } @mountOptions);
 
     # Maybe this is a bind-mount of a filesystem we saw earlier?
     if (defined $fsByDev{$fields[2]}) {
-        # Make sure this isn't a btrfs subvolume
-        my ($status, @msg) = runCommand("btrfs subvol show $rootDir$mountPoint");
-        if (join("", @msg) =~ /ERROR:/) {
+        # Make sure this isn't a btrfs subvolume.
+        my $msg = `btrfs subvol show $rootDir$mountPoint`;
+        if ($? != 0 || $msg =~ /ERROR:/s) {
             my $path = $fields[3]; $path = "" if $path eq "/";
             my $base = $fsByDev{$fields[2]};
             $base = "" if $base eq "/";
@@ -321,7 +394,7 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
   fileSystems.\"$mountPoint\" =
     { device = \"$base$path\";
       fsType = \"none\";
-      options = \"bind\";
+      options = \[ \"bind\" \];
     };
 
 EOF
@@ -350,19 +423,15 @@ EOF
 
     # Is this a btrfs filesystem?
     if ($fsType eq "btrfs") {
-        my ($status, @id_info) = runCommand("btrfs subvol show $rootDir$mountPoint");
-        if ($status != 0 || join("", @msg) =~ /ERROR:/) {
+        my ($status, @info) = runCommand("btrfs subvol show $rootDir$mountPoint");
+        if ($status != 0 || join("", @info) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
-        my @ids = join("", @id_info) =~ m/Object ID:[ \t\n]*([^ \t\n]*)/;
+        my @ids = join("\n", @info) =~ m/^(?!\/\n).*Subvolume ID:[ \t\n]*([0-9]+)/s;
         if ($#ids > 0) {
             die "Btrfs subvol name for $mountPoint listed multiple times in mount\n"
         } elsif ($#ids == 0) {
-            my ($status, @path_info) = runCommand("btrfs subvol list $rootDir$mountPoint");
-            if ($status != 0) {
-                die "Failed to find $mountPoint subvolume id from btrfs\n";
-            }
-            my @paths = join("", @path_info) =~ m/ID $ids[0] [^\n]* path ([^\n]*)/;
+            my @paths = join("", @info) =~ m/^([^\n]*)/;
             if ($#paths > 0) {
                 die "Btrfs returned multiple paths for a single subvolume id, mountpoint $mountPoint\n";
             } elsif ($#paths != 0) {
@@ -372,6 +441,10 @@ EOF
         }
     }
 
+    # Don't emit tmpfs entry for /tmp, because it most likely comes from the
+    # boot.tmpOnTmpfs option in configuration.nix (managed declaratively).
+    next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
+
     # Emit the filesystem.
     $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
@@ -380,8 +453,8 @@ EOF
 EOF
 
     if (scalar @extraOptions > 0) {
-      $fileSystems .= <<EOF;
-      options = \"${\join ",", uniq(@extraOptions)}\";
+        $fileSystems .= <<EOF;
+      options = \[ ${\join " ", map { "\"" . $_ . "\"" } uniq(@extraOptions)} \];
 EOF
     }
 
@@ -389,15 +462,60 @@ EOF
     };
 
 EOF
+
+    # If this filesystem is on a LUKS device, then add a
+    # boot.initrd.luks.devices entry.
+    if (-e $device) {
+        my $deviceName = basename(abs_path($device));
+        if (-e "/sys/class/block/$deviceName"
+            && read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet') =~ /^CRYPT-LUKS/)
+        {
+            my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
+            if (scalar @slaves == 1) {
+                my $slave = "/dev/" . basename($slaves[0]);
+                if (-e $slave) {
+                    my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
+                    chomp $dmName;
+                    # Ensure to add an entry only once
+                    my $luksDevice = "  boot.initrd.luks.devices.\"$dmName\".device";
+                    if ($fileSystems !~ /^\Q$luksDevice\E/m) {
+                        $fileSystems .= "$luksDevice = \"${\(findStableDevPath $slave)}\";\n\n";
+                    }
+                }
+            }
+        }
+    }
+}
+
+# For lack of a better way to determine it, guess whether we should use a
+# bigger font for the console from the display mode on the first
+# framebuffer. A way based on the physical size/actual DPI reported by
+# the monitor would be nice, but I don't know how to do this without X :)
+my $fb_modes_file = "/sys/class/graphics/fb0/modes";
+if (-f $fb_modes_file && -r $fb_modes_file) {
+    my $modes = read_file($fb_modes_file);
+    $modes =~ m/([0-9]+)x([0-9]+)/;
+    my $console_width = $1, my $console_height = $2;
+    if ($console_width > 1920) {
+        push @attrs, "# High-DPI console";
+        push @attrs, 'console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";';
+    }
 }
 
 
 # Generate the hardware configuration file.
 
-sub toNixExpr {
+sub toNixStringList {
     my $res = "";
     foreach my $s (@_) {
         $res .= " \"$s\"";
+    }
+    return $res;
+}
+sub toNixList {
+    my $res = "";
+    foreach my $s (@_) {
+        $res .= " $s";
     }
     return $res;
 }
@@ -405,7 +523,7 @@ sub toNixExpr {
 sub multiLineList {
     my $indent = shift;
     return " [ ]" if !@_;
-    $res = "\n${indent}[ ";
+    my $res = "\n${indent}[ ";
     my $first = 1;
     foreach my $s (@_) {
         $res .= "$indent  " if !$first;
@@ -416,13 +534,14 @@ sub multiLineList {
     return $res;
 }
 
-my $initrdAvailableKernelModules = toNixExpr(uniq @initrdAvailableKernelModules);
-my $kernelModules = toNixExpr(uniq @kernelModules);
-my $modulePackages = toNixExpr(uniq @modulePackages);
+my $initrdAvailableKernelModules = toNixStringList(uniq @initrdAvailableKernelModules);
+my $initrdKernelModules = toNixStringList(uniq @initrdKernelModules);
+my $kernelModules = toNixStringList(uniq @kernelModules);
+my $modulePackages = toNixList(uniq @modulePackages);
 
 my $fsAndSwap = "";
 if (!$noFilesystems) {
-    $fsAndSwap = "\n${fileSystems}  ";
+    $fsAndSwap = "\n$fileSystems  ";
     $fsAndSwap .= "swapDevices =" . multiLineList("    ", @swapDevices) . ";\n";
 }
 
@@ -430,18 +549,36 @@ my $hwConfig = <<EOF;
 # Do not modify this file!  It was generated by ‘nixos-generate-config’
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
 
 {
   imports =${\multiLineList("    ", @imports)};
 
   boot.initrd.availableKernelModules = [$initrdAvailableKernelModules ];
+  boot.initrd.kernelModules = [$initrdKernelModules ];
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap
-  nix.maxJobs = $cpus;
 ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
+
+sub generateNetworkingDhcpConfig {
+    my $config = <<EOF;
+  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+  # Per-interface useDHCP will be mandatory in the future, so this generated config
+  # replicates the default behaviour.
+  networking.useDHCP = false;
+EOF
+
+    foreach my $path (glob "/sys/class/net/*") {
+        my $dev = basename($path);
+        if ($dev ne "lo") {
+            $config .= "  networking.interfaces.$dev.useDHCP = true;\n";
+        }
+    }
+
+    return $config;
+}
 
 
 if ($showHardwareConfig) {
@@ -459,81 +596,39 @@ if ($showHardwareConfig) {
     if ($force || ! -e $fn) {
         print STDERR "writing $fn...\n";
 
-        my $bootloaderConfig;
+        my $bootLoaderConfig = "";
         if (-e "/sys/firmware/efi/efivars") {
             $bootLoaderConfig = <<EOF;
-  # Use the gummiboot efi boot loader.
-  boot.loader.gummiboot.enable = true;
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 EOF
-        } else {
+        } elsif (-e "/boot/extlinux") {
+            $bootLoaderConfig = <<EOF;
+  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
+  boot.loader.grub.enable = false;
+  # Enables the generation of /boot/extlinux/extlinux.conf
+  boot.loader.generic-extlinux-compatible.enable = true;
+EOF
+        } elsif ($virt ne "systemd-nspawn") {
             $bootLoaderConfig = <<EOF;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
+  # boot.loader.grub.efiSupport = true;
+  # boot.loader.grub.efiInstallAsRemovable = true;
+  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
-  # boot.loader.grub.device = "/dev/sda";
+  # boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 EOF
         }
 
+        my $networkingDhcpConfig = generateNetworkingDhcpConfig();
+
         write_file($fn, <<EOF);
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
-{
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-
-$bootLoaderConfig
-  # networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "lat9w-16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
-
-  # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
-
-  # List packages installed in system profile. To search by name, run:
-  # \$ nix-env -qaP | grep wget
-  # environment.systemPackages = with pkgs; [
-  #   wget
-  # ];
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.kdm.enable = true;
-  # services.xserver.desktopManager.kde4.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.extraUsers.guest = {
-  #   isNormalUser = true;
-  #   uid = 1000;
-  # };
-
-}
+@configuration@
 EOF
+        print STDERR "For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware"
     } else {
         print STDERR "warning: not overwriting existing $fn\n";
     }

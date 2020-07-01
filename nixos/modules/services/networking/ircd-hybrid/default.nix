@@ -12,7 +12,7 @@ let
     substFiles = [ "=>/conf" ./ircd.conf ];
     inherit (pkgs) ircdHybrid coreutils su iproute gnugrep procps;
 
-    ipv6Enabled = if config.networking.enableIPv6 then "true" else "false";
+    ipv6Enabled = boolToString config.networking.enableIPv6;
 
     inherit (cfg) serverName sid description adminEmail
             extraPort;
@@ -36,12 +36,7 @@ in
 
     services.ircdHybrid = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Enable IRCD.
-        ";
-      };
+      enable = mkEnableOption "IRCD";
 
       serverName = mkOption {
         default = "hades.arpa";
@@ -112,26 +107,19 @@ in
 
   config = mkIf config.services.ircdHybrid.enable {
 
-    users.extraUsers = singleton
-      { name = "ircd";
-        description = "IRCD owner";
+    users.users.ircd =
+      { description = "IRCD owner";
         group = "ircd";
         uid = config.ids.uids.ircd;
       };
 
-    users.extraGroups.ircd.gid = config.ids.gids.ircd;
+    users.groups.ircd.gid = config.ids.gids.ircd;
 
-    jobs.ircd_hybrid =
-      { name = "ircd-hybrid";
-
-        description = "IRCD Hybrid server";
-
-        startOn = "started networking";
-        stopOn = "stopping networking";
-
-        exec = "${ircdService}/bin/control start";
-      };
-
+    systemd.services.ircd-hybrid = {
+      description = "IRCD Hybrid server";
+      after = [ "started networking" ];
+      wantedBy = [ "multi-user.target" ];
+      script = "${ircdService}/bin/control start";
+    };
   };
-
 }

@@ -5,8 +5,17 @@
 , gperftools ? null, leveldb ? null
 }:
 
-with stdenv;
+with stdenv.lib;
 let
+  mkFlag = trueStr: falseStr: cond: name: val: "--"
+    + (if cond then trueStr else falseStr)
+    + name
+    + optionalString (val != null && cond != false) "=${val}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+
   optLz4 = shouldUsePkg lz4;
   optSnappy = shouldUsePkg snappy;
   optZlib = shouldUsePkg zlib;
@@ -15,16 +24,15 @@ let
   optGperftools = shouldUsePkg gperftools;
   optLeveldb = shouldUsePkg leveldb;
 in
-with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "wiredtiger-${version}";
-  version = "2.6.0";
+  pname = "wiredtiger";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     repo = "wiredtiger";
     owner = "wiredtiger";
     rev = version;
-    sha256 = "0i2r03bpq9xzp5pw7c67kjac5j7mssiawd9id8lqjdbr6c6772cv";
+    sha256 = "04j2zw8b9jym43r682rh4kpdippxx7iw3ry16nxlbybzar9kgk83";
   };
 
   nativeBuildInputs = [ automake autoconf libtool ];
@@ -51,10 +59,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://wiredtiger.com/;
+    homepage = "http://wiredtiger.com/";
     description = "";
     license = licenses.gpl2;
     platforms = intersectLists platforms.unix platforms.x86_64;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

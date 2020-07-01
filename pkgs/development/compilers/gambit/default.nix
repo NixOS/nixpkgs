@@ -1,22 +1,10 @@
-{ stdenv, fetchurl }:
+{ callPackage, fetchurl }:
 
-stdenv.mkDerivation rec {
-  name    = "gambit-${version}";
-  version = "4.7.3";
-  devver  = "4_7_3";
-
+callPackage ./build.nix rec {
+  version = "4.9.3";
+  git-version = version;
   src = fetchurl {
-    url    = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.7/source/gambc-v${devver}-devel.tgz";
-    sha256 = "12jbr6bc0zmc7vw07a9pliadbvqgwkpmw6cj8awz73clv1j7pxha";
-  };
-
-  configureFlags = [ "--enable-shared" "--enable-single-host" ];
-
-  meta = {
-    description = "Optimizing Scheme to C compiler";
-    homepage    = "http://gambitscheme.org";
-    license     = stdenv.lib.licenses.lgpl2;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
+    url = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.9/source/gambit-v4_9_3.tgz";
+    sha256 = "1p6172vhcrlpjgia6hsks1w4fl8rdyjf9xjh14wxfkv7dnx8a5hk";
   };
 }

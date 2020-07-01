@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  inherit (config.services) jobsTags;
-
   # Put all the system cronjobs together.
   systemCronJobsFile = pkgs.writeText "system-crontab"
     ''
@@ -22,12 +20,12 @@ let
   cronNixosPkg = pkgs.cron.override {
     # The mail.nix nixos module, if there is any local mail system enabled,
     # should have sendmail in this path.
-    sendmailPath = "/var/setuid-wrappers/sendmail";
+    sendmailPath = "/run/wrappers/bin/sendmail";
   };
 
-  allFiles = map (f: "\"${f}\"") (
-    [ "${systemCronJobsFile}" ] ++ config.services.cron.cronFiles
-  );
+  allFiles =
+    optional (config.services.cron.systemCronJobs != []) systemCronJobsFile
+    ++ config.services.cron.cronFiles;
 
 in
 
@@ -41,7 +39,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = "Whether to enable the Vixie cron daemon.";
       };
 
@@ -63,11 +61,11 @@ in
           A list of Cron jobs to be appended to the system-wide
           crontab.  See the manual page for crontab for the expected
           format. If you want to get the results mailed you must setuid
-          sendmail. See <option>security.setuidOwners</option>
+          sendmail. See <option>security.wrappers</option>
 
           If neither /var/cron/cron.deny nor /var/cron/cron.allow exist only root
-          will is allowed to have its own crontab file. The /var/cron/cron.deny file
-          is created automatically for you. So every user can use a crontab.
+          is allowed to have its own crontab file. The /var/cron/cron.deny file
+          is created automatically for you, so every user can use a crontab.
 
           Many nixos modules set systemCronJobs, so if you decide to disable vixie cron
           and enable another cron daemon, you may want it to get its system crontab
@@ -91,36 +89,45 @@ in
 
   ###### implementation
 
-  config = mkIf (config.services.cron.enable && allFiles != []) {
+  config = mkMerge [
 
-    security.setuidPrograms = [ "crontab" ];
+    { services.cron.enable = mkDefault (allFiles != []); }
+    (mkIf (config.services.cron.enable) {
+      security.wrappers.crontab.source = "${cronNixosPkg}/bin/crontab";
+      environment.systemPackages = [ cronNixosPkg ];
+      environment.etc.crontab =
+        { source = pkgs.runCommand "crontabs" { inherit allFiles; preferLocalBuild = true; }
+            ''
+              touch $out
+              for i in $allFiles; do
+                cat "$i" >> $out
+              done
+            '';
+          mode = "0600"; # Cron requires this.
+        };
 
-    environment.systemPackages = [ cronNixosPkg ];
+      systemd.services.cron =
+        { description = "Cron Daemon";
 
-    systemd.services.cron =
-      { description = "Cron Daemon";
+          wantedBy = [ "multi-user.target" ];
 
-        wantedBy = [ "multi-user.target" ];
+          preStart =
+            ''
+              mkdir -m 710 -p /var/cron
 
-        preStart =
-          ''
-            rm -f /etc/crontab
-            cat ${toString allFiles} > /etc/crontab
-            chmod 0600 /etc/crontab
+              # By default, allow all users to create a crontab.  This
+              # is denoted by the existence of an empty cron.deny file.
+              if ! test -e /var/cron/cron.allow -o -e /var/cron/cron.deny; then
+                  touch /var/cron/cron.deny
+              fi
+            '';
 
-            mkdir -m 710 -p /var/cron
+          restartTriggers = [ config.time.timeZone ];
+          serviceConfig.ExecStart = "${cronNixosPkg}/bin/cron -n";
+        };
 
-            # By default, allow all users to create a crontab.  This
-            # is denoted by the existence of an empty cron.deny file.
-            if ! test -e /var/cron/cron.allow -o -e /var/cron/cron.deny; then
-                touch /var/cron/cron.deny
-            fi
-          '';
+    })
 
-        restartTriggers = [ config.environment.etc.localtime.source ];
-        serviceConfig.ExecStart = "${cronNixosPkg}/bin/cron -n";
-      };
-
-  };
+  ];
 
 }

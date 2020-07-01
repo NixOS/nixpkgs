@@ -8,10 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.ratpoison.enable = mkOption {
-      default = false;
-      description = "Enable the Ratpoison window manager.";
-    };
+    services.xserver.windowManager.ratpoison.enable = mkEnableOption "ratpoison";
   };
 
   ###### implementation

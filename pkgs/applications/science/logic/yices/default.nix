@@ -1,42 +1,44 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, gmp-static, gperf, autoreconfHook, libpoly }:
 
-assert stdenv.isLinux;
-
-let
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
-in
 stdenv.mkDerivation rec {
-  name    = "yices-${version}";
-  version = "2.2.1";
+  pname = "yices";
+  version = "2.6.1";
 
-  src =
-    if stdenv.system == "i686-linux"
-    then fetchurl {
-      url = "http://yices.csl.sri.com/cgi-bin/yices2-newdownload.cgi?file=yices-2.2.1-i686-pc-linux-gnu-static-gmp.tar.gz&accept=I+accept";
-      name = "yices-${version}-i686.tar.gz";
-      sha256 = "12jzk3kqlbqa5x6rl92cpzj7dch7gm7fnbj72wifvwgdj4zyhrra";
-    }
-    else fetchurl {
-      url = "http://yices.csl.sri.com/cgi-bin/yices2-newdownload.cgi?file=yices-2.2.1-x86_64-unknown-linux-gnu-static-gmp.tar.gz&accept=I+accept";
-      name = "yices-${version}-x86_64.tar.gz";
-      sha256 = "0fpmihf6ykcg4qbsimkamgcwp4sl1xyxmz7q28ily91rd905ijaj";
-    };
+  src = fetchFromGitHub {
+    owner  = "SRI-CSL";
+    repo   = "yices2";
+    rev    = "Yices-${version}";
+    sha256 = "04vf468spsh00jh7gj94cjnq8kjyfwy9l6r4z7l2pm0zgwkqgyhm";
+  };
 
-  buildPhase = false;
-  installPhase = ''
-    mkdir -p $out/bin $out/lib $out/include
-    cd bin     && mv * $out/bin     && cd ..
-    cd lib     && mv * $out/lib     && cd ..
-    cd include && mv * $out/include && cd ..
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs       = [ gmp-static gperf libpoly ];
+  configureFlags =
+    [ "--with-static-gmp=${gmp-static.out}/lib/libgmp.a"
+      "--with-static-gmp-include-dir=${gmp-static.dev}/include"
+      "--enable-mcsat"
+    ];
 
-    patchelf --set-rpath ${libPath} $out/lib/libyices.so.${version}
+  enableParallelBuilding = true;
+  doCheck = true;
+
+  # Usual shenanigans
+  patchPhase = ''patchShebangs tests/regress/check.sh'';
+
+  # Includes a fix for the embedded soname being libyices.so.2.5, but
+  # only installing the libyices.so.2.5.x file.
+  installPhase = let
+    ver_XdotY = stdenv.lib.versions.majorMinor version;
+  in ''
+      make install LDCONFIG=true
+      ln -sfr $out/lib/libyices.so.{${version},${ver_XdotY}}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = "http://yices.csl.sri.com";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.gpl3;
+    platforms   = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

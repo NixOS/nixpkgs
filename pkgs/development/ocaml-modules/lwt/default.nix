@@ -1,37 +1,28 @@
-{stdenv, fetchzip, which, cryptopp, ocaml, findlib, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, ocaml_text, glib, camlp4}:
+{ lib, fetchzip, pkgconfig, ncurses, libev, buildDunePackage, ocaml
+, cppo, ocaml-migrate-parsetree, ocplib-endian, result
+, mmap, seq
+}:
 
-let
-  version = "2.4.6";
-  inherit (stdenv.lib) optional getVersion versionAtLeast;
-  ocaml_version = getVersion ocaml;
-in
+let inherit (lib) optional versionAtLeast; in
 
-stdenv.mkDerivation {
-
-
-  name = "ocaml-lwt-${version}";
+buildDunePackage rec {
+  pname = "lwt";
+  version = "4.5.0";
 
   src = fetchzip {
-    url = "https://github.com/ocsigen/lwt/archive/${version}.tar.gz";
-    sha256 = "0idci0zadpb8hmblszsrvg6yf36w5a9y6rsdwjc3jww71dgrw5d9";
+    url = "https://github.com/ocsigen/${pname}/archive/${version}.tar.gz";
+    sha256 = "0l836z5zr38969bi77aga7ismj4wb01i3ffxf5v59jsgd3g44r2w";
   };
 
-  buildInputs = [ocaml_oasis pkgconfig which cryptopp ocaml findlib glib ncurses camlp4];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cppo ocaml-migrate-parsetree ]
+   ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
+  propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];
 
-  propagatedBuildInputs = [ ocaml_react ocaml_ssl ocaml_text libev ];
-
-  configureFlags = [ "--enable-react" "--enable-glib" "--enable-ssl" "--enable-text" "--disable-ppx" ]
-  ++ optional (versionAtLeast ocaml_version "4.0" && ! versionAtLeast ocaml_version "4.02") "--enable-toplevel";
-
-  createFindlibDestdir = true;
-
-  meta = with stdenv.lib; {
-    homepage = http://ocsigen.org/lwt;
-    description = "Lightweight thread library for Objective Caml";
-    license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms;
-    maintainers = with maintainers; [
-      z77z vbgl gal_bolle
-    ];
+  meta = {
+    homepage = "https://ocsigen.org/lwt/";
+    description = "A cooperative threads library for OCaml";
+    maintainers = [ lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
   };
 }

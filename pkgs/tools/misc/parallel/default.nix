@@ -1,23 +1,23 @@
-{ fetchurl, stdenv, perl }:
+{ fetchurl, stdenv, perl, makeWrapper, procps }:
 
 stdenv.mkDerivation rec {
-  name = "parallel-20150522";
+  name = "parallel-20200522";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${name}.tar.bz2";
-    sha256 = "01pkckrad3d2i7mkw98zxymp22rsngyjknhh18i4m6hq82bijjjc";
+    sha256 = "10is46v5dpccxibby0zikg1q68mdwpmgdpxk796zka93idd6id29";
   };
 
-  patchPhase =
-    '' sed -i "src/parallel" -e's|/usr/bin/perl|${perl}/bin/perl|g'
-    '';
+  outputs = [ "out" "man" ];
 
-  preBuild =
-    # The `sem' program wants to write to `~/.parallel'.
-    '' export HOME="$PWD"
-    '';
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl procps ];
 
-  buildInputs = [ perl ];
+  postInstall = ''
+    wrapProgram $out/bin/parallel \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ procps perl ]}"
+  '';
+
   doCheck = true;
 
   meta = with stdenv.lib; {
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
          it possible to use output from GNU Parallel as input for other
          programs.
       '';
-    homepage = http://www.gnu.org/software/parallel/;
+    homepage = "https://www.gnu.org/software/parallel/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub vrthra tomberek ];
   };
 }

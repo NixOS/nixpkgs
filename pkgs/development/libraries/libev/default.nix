@@ -1,16 +1,15 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, static ? false }:
 
 stdenv.mkDerivation rec {
-  name = "libev-${version}";
-  version="4.19";
+  pname = "libev";
+  version="4.33";
+
   src = fetchurl {
-    url = "http://dist.schmorp.de/libev/${name}.tar.gz";
-    sha256 = "1jyw7qbl0spxqa0dccj9x1jsw7cj7szff43cq4acmklnra4mzz48";
+    url = "http://dist.schmorp.de/libev/Attic/${pname}-${version}.tar.gz";
+    sha256 = "1sjs4324is7fp21an4aas2z4dwsvs6z4xwrmp72vwpq1s6wbfzjh";
   };
 
-  # Version 4.19 is not valid C11 (which Clang default to)
-  # Check if this is still necessary on upgrade
-  NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-std=c99" else null;
+  configureFlags = stdenv.lib.optional (static) "LDFLAGS=-static";
 
   meta = {
     description = "A high-performance event loop/event model with lots of features";

@@ -1,47 +1,137 @@
-{ stdenv, fetchurl, python, pyqt5, sip_4_16, poppler_utils, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qt53, icu, sqlite
-, pil, makeWrapper, unrar, chmlib, pythonPackages, xz, libusb1, libmtp
+{ lib
+, mkDerivation
+, fetchurl
+, poppler_utils
+, pkgconfig
+, libpng
+, imagemagick
+, libjpeg
+, fontconfig
+, podofo
+, qtbase
+, qmake
+, icu
+, sqlite
+, hunspell
+, hyphen
+, unrarSupport ? false
+, chmlib
+, python2Packages
+, libusb1
+, libmtp
 , xdg_utils
+, makeDesktopItem
+, removeReferencesTo
 }:
 
-stdenv.mkDerivation rec {
-  name = "calibre-2.28.0";
+let
+  pypkgs = python2Packages;
+
+in
+mkDerivation rec {
+  pname = "calibre";
+  version = "4.17.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "15sb74v0nlj45fhlnw1afll35l90cxw78s15fb2nx3fih7ahv3cf";
+    url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
+    sha256 = "1qgzx2q8a5g102z311ibz4aw1ipn2j1lbndgadig7xvy6zdhknma";
   };
 
-  inherit python;
+  patches = [
+    # Patches from Debian that:
+    # - disable plugin installation (very insecure)
+    ./disable_plugins.patch
+    # - switches the version update from enabled to disabled by default
+    ./no_updates_dialog.patch
+    # the unrar patch is not from debian
+  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
-  patchPhase = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip':"  \
+  prePatch = ''
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${pypkgs.pyqt5_with_qtwebkit}/share/sip/PyQt5':"  \
       setup/build_environment.py
+
+    # Remove unneeded files and libs
+    rm -rf resources/calibre-portable.* \
+           src/odf
   '';
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  dontUseQmakeConfigure = true;
 
-  buildInputs =
-    [ python pyqt5 sip_4_16 poppler_utils libpng imagemagick libjpeg
-      fontconfig podofo qt53 pil chmlib icu sqlite libusb1 libmtp xdg_utils
-      pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
-      pythonPackages.cssutils pythonPackages.beautifulsoup pythonPackages.pillow
-      pythonPackages.sqlite3 pythonPackages.netifaces pythonPackages.apsw
-      pythonPackages.cssselect
-    ];
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ pkgconfig qmake removeReferencesTo ];
+
+  CALIBRE_PY3_PORT = builtins.toString pypkgs.isPy3k;
+
+  buildInputs = [
+    poppler_utils
+    libpng
+    imagemagick
+    libjpeg
+    fontconfig
+    podofo
+    qtbase
+    chmlib
+    icu
+    hunspell
+    hyphen
+    sqlite
+    libusb1
+    libmtp
+    xdg_utils
+  ] ++ (
+    with pypkgs; [
+      apsw
+      cssselect
+      css-parser
+      dateutil
+      dnspython
+      feedparser
+      html5-parser
+      lxml
+      markdown
+      netifaces
+      pillow
+      python
+      pyqt5
+      sip
+      regex
+      msgpack
+      beautifulsoup4
+      html2text
+      pyqtwebengine
+      # the following are distributed with calibre, but we use upstream instead
+      odfpy
+    ]
+  ) ++ lib.optionals (!pypkgs.isPy3k) (
+    with pypkgs; [
+      mechanize
+    ]
+  );
 
   installPhase = ''
+    runHook preInstall
+
     export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler_utils}/include/poppler
-    export POPPLER_LIB_DIR=${poppler_utils}/lib
-    export MAGICK_INC=${imagemagick}/include/ImageMagick
-    export MAGICK_LIB=${imagemagick}/lib
-    export FC_INC_DIR=${fontconfig}/include/fontconfig
-    export FC_LIB_DIR=${fontconfig}/lib
-    export PODOFO_INC_DIR=${podofo}/include/podofo
-    export PODOFO_LIB_DIR=${podofo}/lib
-    export SIP_BIN=${sip_4_16}/bin/sip
-    python setup.py install --prefix=$out
+    export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
+    export POPPLER_LIB_DIR=${poppler_utils.out}/lib
+    export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
+    export MAGICK_LIB=${imagemagick.out}/lib
+    export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
+    export FC_LIB_DIR=${fontconfig.lib}/lib
+    export PODOFO_INC_DIR=${podofo.dev}/include/podofo
+    export PODOFO_LIB_DIR=${podofo.lib}/lib
+    export SIP_BIN=${pypkgs.sip}/bin/sip
+    export XDG_DATA_HOME=$out/share
+    export XDG_UTILS_INSTALL_MODE="user"
+
+    ${pypkgs.python.interpreter} setup.py install --root=$out \
+      --prefix=$out \
+      --libdir=$out/lib \
+      --staging-root=$out \
+      --staging-libdir=$out/lib \
+      --staging-sharedir=$out/share
+
 
     PYFILES="$out/bin/* $out/lib/calibre/calibre/web/feeds/*.py
       $out/lib/calibre/calibre/ebooks/metadata/*.py
@@ -50,18 +140,39 @@ stdenv.mkDerivation rec {
     sed -i "s/env python[0-9.]*/python/" $PYFILES
     sed -i "2i import sys; sys.argv[0] = 'calibre'" $out/bin/calibre
 
-    for a in $out/bin/*; do
-      wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
-                     --prefix LD_LIBRARY_PATH : ${unrar}/lib \
-                     --prefix PATH : ${poppler_utils}/bin
+    mkdir -p $out/share
+    cp -a man-pages $out/share/man
+
+    runHook postInstall
+  '';
+
+  # Wrap manually
+  dontWrapQtApps = true;
+  dontWrapGApps = true;
+
+  # Remove some references to shrink the closure size. This reference (as of
+  # 2018-11-06) was a single string like the following:
+  #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
+  preFixup = ''
+    remove-references-to -t ${podofo.dev} $out/lib/calibre/calibre/plugins/podofo.so
+
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        ''${qtWrapperArgs[@]} \
+        ''${gappsWrapperArgs[@]} \
+        --prefix PYTHONPATH : $PYTHONPATH \
+        --prefix PATH : ${poppler_utils.out}/bin
     done
   '';
 
-  meta = with stdenv.lib; {
+  disallowedReferences = [ podofo.dev ];
+
+  meta = with lib; {
     description = "Comprehensive e-book software";
-    homepage = http://calibre-ebook.com;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ viric iElectric pSub ];
+    homepage = "https://calibre-ebook.com";
+    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3;
+    maintainers = with maintainers; [ domenkozar pSub AndersonTorres ];
     platforms = platforms.linux;
+    inherit version;
   };
 }

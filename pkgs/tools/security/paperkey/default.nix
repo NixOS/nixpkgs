@@ -1,17 +1,23 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
+  pname = "paperkey";
+  version = "1.6";
 
-  version = "1.3";
-  name = "paperkey-${version}";
-  
   src = fetchurl {
-    url = "http://www.jabberwocky.com/software/paperkey/${name}.tar.gz";
-    sha256 = "5b57d7522336fb65c4c398eec27bf44ec0aaa35926157b79a76423231792cbfb";
+    url = "https://www.jabberwocky.com/software/paperkey/${pname}-${version}.tar.gz";
+    sha256 = "1xq5gni6gksjkd5avg0zpd73vsr97appksfx0gx2m38s4w9zsid2";
   };
 
+  postPatch = ''
+    for a in checks/*.sh ; do
+      substituteInPlace $a \
+        --replace /bin/echo echo
+    done
+  '';
+
   enableParallelBuilding = true;
-  
+
   meta = with stdenv.lib; {
     description = "Store OpenPGP or GnuPG on paper";
     longDescription = ''
@@ -20,9 +26,9 @@ stdenv.mkDerivation rec {
       retention qualities - far longer than the magnetic or optical means that
       are generally used to back up computer data.
     '';
-    homepage = "http://www.jabberwocky.com/software/paperkey/";
+    homepage = "https://www.jabberwocky.com/software/paperkey/";
     license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.skeidel ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ skeidel ];
   };
 }

@@ -1,27 +1,38 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, getopt }:
+{ stdenv, fetchurl, getopt, makeWrapper, utillinux }:
 
 stdenv.mkDerivation rec {
-  name    = "libseccomp-${version}";
-  version = "2.2.1";
+  pname = "libseccomp";
+  version = "2.4.3";
 
-  src = fetchFromGitHub {
-    owner = "seccomp";
-    repo = "libseccomp";
-    rev = "v${version}";
-    sha256 = "153k3jflcgij19nxghmwlvqlngl84vkld514d31490c6sfkr5fy2";
+  src = fetchurl {
+    url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
+    sha256 = "07crwxqzvl5k2b90a47ii9wgvi09s9hsy5b5jddw9ylp351d25fg";
   };
 
-  buildInputs = [ autoreconfHook getopt ];
+  outputs = [ "out" "lib" "dev" "man" ];
+
+  buildInputs = [ getopt makeWrapper ];
 
   patchPhase = ''
     patchShebangs .
   '';
 
+  checkInputs = [ utillinux ];
+  doCheck = false; # dependency cycle
+
+  # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
+  preFixup = "rm -rfv src";
+
   meta = with stdenv.lib; {
-    description = "high level library for the Linux Kernel seccomp filter";
-    homepage    = "http://sourceforge.net/projects/libseccomp";
-    license     = licenses.lgpl2;
+    description = "High level library for the Linux Kernel seccomp filter";
+    homepage    = "https://github.com/seccomp/libseccomp";
+    license     = licenses.lgpl21;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice wkennington ];
+    badPlatforms = [
+      "alpha-linux"
+      "riscv64-linux" "riscv32-linux"
+      "sparc-linux" "sparc64-linux"
+    ];
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

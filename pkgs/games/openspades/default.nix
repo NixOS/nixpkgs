@@ -1,48 +1,69 @@
-{ stdenv, fetchurl, cmake, curl, glew, makeWrapper, mesa, SDL2,
-  SDL2_image, unzip, wget, zlib, withOpenal ? true, openal ? null }:
-
-assert withOpenal -> openal != null;
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, unzip, zip, file
+, curl, glew , libGL, SDL2, SDL2_image, zlib, freetype, imagemagick
+, openal , opusfile, libogg
+, Cocoa
+}:
 
 stdenv.mkDerivation rec {
-  name = "openspades-${version}";
-  version = "0.0.12";
+  pname = "openspades";
+  version = "0.1.3";
+  devPakVersion = "33";
 
-  src = fetchurl {
-    url = "https://github.com/yvt/openspades/archive/v${version}.tar.gz";
-    sha256 = "1aa848cck8qrp67ha9vrkzm3k24r2aiv1v4dxla6pi22rw98yxzm";
+  src = fetchFromGitHub {
+    owner = "yvt";
+    repo = "openspades";
+    rev = "v${version}";
+    sha256 = "1fvmqbif9fbipd0vphp57pk6blb4yp8xvqlc2ppipk5pjv6a3d2h";
   };
 
-  nativeBuildInputs = 
-    with stdenv.lib;
-    [ cmake curl glew makeWrapper mesa SDL2 SDL2_image unzip wget zlib ]
-    ++ optional withOpenal openal;
+  nativeBuildInputs = [ cmake imagemagick unzip zip file ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DOPENSPADES_INSTALL_BINARY=bin" ];
+  buildInputs = [
+    freetype SDL2 SDL2_image libGL zlib curl glew opusfile openal libogg
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
+  ];
+
+  patches = [
+    # https://github.com/yvt/openspades/pull/793 fix Darwin build
+    (fetchpatch {
+      url = "https://github.com/yvt/openspades/commit/2d13704fefc475b279337e89057b117f711a35d4.diff";
+      sha256 = "1i7rcpjzkjhbv5pp6byzrxv7sb1iamqq5k1vyqlvkbr38k2dz0rv";
+    })
+  ];
+
+  cmakeFlags = [
+    "-DOPENSPADES_INSTALL_BINARY=bin"
+  ];
+
+  devPak = fetchurl {
+    url = "https://github.com/yvt/openspades-paks/releases/download/r${devPakVersion}/OpenSpadesDevPackage-r${devPakVersion}.zip";
+    sha256 = "1bd2fyn7mlxa3xnsvzj08xjzw02baimqvmnix07blfhb78rdq9q9";
+  };
+
+  notoFont = fetchurl {
+    url = "https://github.com/yvt/openspades/releases/download/v0.1.1b/NotoFonts.pak";
+    sha256 = "0kaz8j85wjjnf18z0lz69xr1z8makg30jn2dzdyicd1asrj0q1jm";
+  };
+
+  postPatch = ''
+    sed -i 's,^wget .*,cp $devPak "$PAK_NAME",' Resources/downloadpak.sh
+    patchShebangs Resources
+  '';
+
+  postInstall = ''
+    cp $notoFont $out/share/games/openspades/Resources/
+  '';
 
   enableParallelBuilding = true;
 
-  devPack = fetchurl {
-    url = "http://yvt.jp/files/programs/osppaks/DevPaks27.zip";
-    sha256 = "05y7wldg70v5ys41fm0c8kipyspn524z4pglwr3p8h0gfz9n52v6";
-  };
-
-  preBuild = ''
-    cp $devPack Resources/DevPaks27.zip
-    unzip -u -o Resources/DevPaks27.zip -d Resources/DevPak
-  '';
-
-  # OpenAL is loaded dynamicly
-  postInstall = 
-    if withOpenal then ''
-      wrapProgram "$out/bin/openspades" \
-        --prefix LD_LIBRARY_PATH : "${openal}/lib"
-    '' 
-    else null;
+  NIX_CFLAGS_LINK = "-lopenal";
 
   meta = with stdenv.lib; {
     description = "A compatible client of Ace of Spades 0.75";
     homepage    = "https://github.com/yvt/openspades/";
     license     = licenses.gpl3;
-    platforms   = platforms.linux;
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

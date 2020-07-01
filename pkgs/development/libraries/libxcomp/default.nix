@@ -1,34 +1,28 @@
-{ stdenv, fetchurl, autoreconfHook, libjpeg, libpng12, libX11, zlib }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, libjpeg, libpng, libX11, zlib }:
 
-let version = "3.5.0.31"; in
-stdenv.mkDerivation {
-  name = "libxcomp-${version}";
+stdenv.mkDerivation rec {
+  pname = "libxcomp";
+  version = "3.5.99.16";
 
   src = fetchurl {
-    url = "http://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-full.tar.gz";
-    sha256 = "0a31508wyfyblf6plag2djr4spra5kylcmgg99h83c60ylxxnc11";
+    sha256 = "1m3z9w3h6qpgk265xf030w7lcs181jgw2cdyzshb7l97mn1f7hh2";
+    url = "https://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
   };
 
-  meta = with stdenv.lib; {
-    description = "NX compression library";
-    homepage = "http://wiki.x2go.org/doku.php/wiki:libs:nx-libs";
-    license = with licenses; gpl2;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
-  };
-
-  buildInputs = [ autoreconfHook libjpeg libpng12 libX11 zlib ];
+  buildInputs = [ libjpeg libpng libX11 zlib ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   preAutoreconf = ''
     cd nxcomp/
+    sed -i 's|/src/.libs/libXcomp.a|/src/.libs/libXcomp.la|' test/Makefile.am
   '';
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    mkdir $out/lib
-    cp libXcomp.so* $out/lib
-    mkdir $out/include
-    cp NX.h $out/include
-  '';
+  meta = with stdenv.lib; {
+    description = "NX compression library";
+    homepage = "http://wiki.x2go.org/doku.php/wiki:libs:nx-libs";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+  };
 }

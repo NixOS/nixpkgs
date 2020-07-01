@@ -1,29 +1,29 @@
-{ stdenv, fetchurl, gmp, flex, bison }:
+{ stdenv, fetchurl, autoreconfHook, gmp, flex, bison }:
 
-stdenv.mkDerivation rec {
-  name = "veriT-${version}";
-  version = "201410";
+stdenv.mkDerivation {
+  pname = "veriT";
+  version = "2016";
 
   src = fetchurl {
-    url = "http://www.verit-solver.org/distrib/${name}.tar.gz";
-    sha256 = "0b31rl3wjn3b09jpka93lx83d26m8a5pixa216vq8pmjach8q5a3";
+    url = "http://www.verit-solver.org/distrib/veriT-stable2016.tar.gz";
+    sha256 = "0gvp4diz0qjg0y5ry0p1z7dkdkxw8l7jb8cdhvcnhl06jx977v4b";
   };
 
-  buildInputs = [ gmp flex bison ];
+  nativeBuildInputs = [ autoreconfHook flex bison ];
+  buildInputs = [ gmp ];
 
-  enableParallelBuilding = false;
+  # --disable-static actually enables static linking here...
+  dontDisableStatic = true;
 
-  makeFlags = [
-    "EXTERN=" # use system copy of gmp
-  ];
+  makeFlags = [ "LEX=${flex}/bin/flex" ];
 
-  installPhase = ''
-    install -D -m0755 veriT $out/bin/veriT
+  preInstall = ''
+    mkdir -p $out/bin
   '';
 
   meta = with stdenv.lib; {
     description = "An open, trustable and efficient SMT-solver";
-    homepage = http://www.verit-solver.org/;
+    homepage = "http://www.verit-solver.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

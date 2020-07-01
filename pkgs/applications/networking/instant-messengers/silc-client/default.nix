@@ -19,16 +19,19 @@ stdenv.mkDerivation {
 
   dontDisableStatic = true;
 
-  configureFlags = "--with-ncurses=${ncurses}";
+  hardeningDisable = [ "format" ];
+
+  configureFlags = [ "--with-ncurses=${ncurses.dev}" ];
 
   preConfigure = stdenv.lib.optionalString enablePlugin ''
     configureFlags="$configureFlags --with-silc-plugin=$out/lib/irssi"
   '';
 
-  buildInputs = [ perl pkgconfig glib ncurses ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl glib ncurses ];
 
   meta = {
-    homepage = http://silcnet.org/;
+    homepage = "http://silcnet.org/";
     description = "Secure Internet Live Conferencing server";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];

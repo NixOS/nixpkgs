@@ -6,7 +6,7 @@ export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin; done
 
 usage() {
-    echo "usage: $0 -t <timeout> -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>]" >&2
+    echo "usage: $0 -t <timeout> -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>] [-n <dtbName>]" >&2
     exit 1
 }
 
@@ -15,7 +15,7 @@ default=                # Default configuration
 target=/boot            # Target directory
 numGenerations=0        # Number of other generations to include in the menu
 
-while getopts "t:c:d:g:" opt; do
+while getopts "t:c:d:g:n:" opt; do
     case "$opt" in
         t) # U-Boot interprets '0' as infinite and negative as instant boot
             if [ "$OPTARG" -lt 0 ]; then
@@ -29,6 +29,7 @@ while getopts "t:c:d:g:" opt; do
         c) default="$OPTARG" ;;
         d) target="$OPTARG" ;;
         g) numGenerations="$OPTARG" ;;
+        n) dtbName="$OPTARG" ;;
         \?) usage ;;
     esac
 done
@@ -75,13 +76,15 @@ addEntry() {
 
     copyToKernelsDir "$path/kernel"; kernel=$result
     copyToKernelsDir "$path/initrd"; initrd=$result
-    # XXX UGLY: maybe the system config should have a top-level "dtbs" entry?
-    copyToKernelsDir $(readlink -m "$path/kernel/../dtbs"); dtbs=$result
+    dtbDir=$(readlink -m "$path/dtbs")
+    if [ -e "$dtbDir" ]; then
+        copyToKernelsDir "$dtbDir"; dtbs=$result
+    fi
 
     timestampEpoch=$(stat -L -c '%Z' $path)
 
     timestamp=$(date "+%Y-%m-%d %H:%M" -d @$timestampEpoch)
-    nixosVersion="$(cat $path/nixos-version)"
+    nixosLabel="$(cat $path/nixos-version)"
     extraParams="$(cat $path/kernel-params)"
 
     echo
@@ -89,11 +92,23 @@ addEntry() {
     if [ "$tag" = "default" ]; then
         echo "  MENU LABEL NixOS - Default"
     else
-        echo "  MENU LABEL NixOS - Configuration $tag ($timestamp - $nixosVersion)"
+        echo "  MENU LABEL NixOS - Configuration $tag ($timestamp - $nixosLabel)"
     fi
     echo "  LINUX ../nixos/$(basename $kernel)"
     echo "  INITRD ../nixos/$(basename $initrd)"
-    echo "  FDTDIR ../nixos/$(basename $dtbs)"
+    if [ -d "$dtbDir" ]; then
+        # if a dtbName was specified explicitly, use that, else use FDTDIR
+        if [ -n "$dtbName" ]; then
+            echo "  FDT ../nixos/$(basename $dtbs)/${dtbName}"
+        else
+            echo "  FDTDIR ../nixos/$(basename $dtbs)"
+        fi
+    else
+        if [ -n "$dtbName" ]; then
+            echo "Explicitly requested dtbName $dtbName, but there's no FDTDIR - bailing out." >&2
+            exit 1
+        fi
+    fi
     echo "  APPEND systemConfig=$path init=$path/init $extraParams"
 }
 
@@ -105,20 +120,24 @@ cat > $tmpFile <<EOF
 # Change this to e.g. nixos-42 to temporarily boot to an older configuration.
 DEFAULT nixos-default
 
+MENU TITLE ------------------------------------------------------------
 TIMEOUT $timeout
-$(addEntry $default default)
 EOF
 
-# Add up to $numGenerations generations of the system profile to the menu,
-# in reverse (most recent to least recent) order.
-for generation in $(
-        (cd /nix/var/nix/profiles && ls -d system-*-link) \
-        | sed 's/system-\([0-9]\+\)-link/\1/' \
-        | sort -n -r \
-        | head -n $numGenerations); do
-    link=/nix/var/nix/profiles/system-$generation-link
-    addEntry $link $generation
-done >> $tmpFile
+addEntry $default default >> $tmpFile
+
+if [ "$numGenerations" -gt 0 ]; then
+    # Add up to $numGenerations generations of the system profile to the menu,
+    # in reverse (most recent to least recent) order.
+    for generation in $(
+            (cd /nix/var/nix/profiles && ls -d system-*-link) \
+            | sed 's/system-\([0-9]\+\)-link/\1/' \
+            | sort -n -r \
+            | head -n $numGenerations); do
+        link=/nix/var/nix/profiles/system-$generation-link
+        addEntry $link $generation
+    done >> $tmpFile
+fi
 
 mv -f $tmpFile $target/extlinux/extlinux.conf
 

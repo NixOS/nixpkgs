@@ -2,21 +2,27 @@
 
 with lib;
 
-let
-
-  glibcLocales = pkgs.glibcLocales.override {
-    allLocales = any (x: x == "all") config.i18n.supportedLocales;
-    locales = config.i18n.supportedLocales;
-  };
-
-in
-
 {
   ###### interface
 
   options = {
 
     i18n = {
+      glibcLocales = mkOption {
+        type = types.path;
+        default = pkgs.buildPackages.glibcLocales.override {
+          allLocales = any (x: x == "all") config.i18n.supportedLocales;
+          locales = config.i18n.supportedLocales;
+        };
+        example = literalExample "pkgs.glibcLocales";
+        description = ''
+          Customized pkg.glibcLocales package.
+
+          Changing this option can disable handling of i18n.defaultLocale
+          and supportedLocale.
+        '';
+      };
+
       defaultLocale = mkOption {
         type = types.str;
         default = "en_US.UTF-8";
@@ -25,6 +31,17 @@ in
           The default locale.  It determines the language for program
           messages, the format for dates and times, sort order, and so on.
           It also determines the character set, such as UTF-8.
+        '';
+      };
+
+      extraLocaleSettings = mkOption {
+        type = types.attrsOf types.str;
+        default = {};
+        example = { LC_MESSAGES = "en_US.UTF-8"; LC_TIME = "de_DE.UTF-8"; };
+        description = ''
+          A set of additional system-wide locale settings other than
+          <literal>LANG</literal> which can be configured with
+          <option>i18n.defaultLocale</option>.
         '';
       };
 
@@ -37,31 +54,7 @@ in
           <literal>"all"</literal> means that all locales supported by
           Glibc will be installed.  A full list of supported locales
           can be found at <link
-          xlink:href="http://sourceware.org/cgi-bin/cvsweb.cgi/libc/localedata/SUPPORTED?cvsroot=glibc"/>.
-        '';
-      };
-
-      consoleFont = mkOption {
-        type = types.str;
-        default = "lat9w-16";
-        example = "LatArCyrHeb-16";
-        description = ''
-          The font used for the virtual consoles.  Leave empty to use
-          whatever the <command>setfont</command> program considers the
-          default font.
-        '';
-      };
-
-      consoleKeyMap = mkOption {
-        type = mkOptionType {
-          name = "string or path";
-          check = t: (isString t || types.path.check t);
-        };
-
-        default = "us";
-        example = "fr";
-        description = ''
-          The keyboard mapping table for the virtual consoles.
+          xlink:href="https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED"/>.
         '';
       };
 
@@ -75,25 +68,24 @@ in
   config = {
 
     environment.systemPackages =
-      optional (config.i18n.supportedLocales != []) glibcLocales;
+      # We increase the priority a little, so that plain glibc in systemPackages can't win.
+      optional (config.i18n.supportedLocales != []) (lib.setPrio (-1) config.i18n.glibcLocales);
 
     environment.sessionVariables =
       { LANG = config.i18n.defaultLocale;
         LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
-      };
+      } // config.i18n.extraLocaleSettings;
 
     systemd.globalEnvironment = mkIf (config.i18n.supportedLocales != []) {
-      LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+      LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
     };
 
     # ‘/etc/locale.conf’ is used by systemd.
-    environment.etc = singleton
-      { target = "locale.conf";
-        source = pkgs.writeText "locale.conf"
-          ''
-            LANG=${config.i18n.defaultLocale}
-          '';
-      };
+    environment.etc."locale.conf".source = pkgs.writeText "locale.conf"
+      ''
+        LANG=${config.i18n.defaultLocale}
+        ${concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${v}'') config.i18n.extraLocaleSettings)}
+      '';
 
   };
 }

@@ -1,11 +1,12 @@
-{ callPackage, python, dbus_python, intltool, makeWrapper }:
+{ callPackage, python3Packages, intltool, makeWrapper }:
 let pkg = import ./base.nix {
-  version = "3.0.0";
+  version = "3.2.3";
   pkgName = "cdemu-client";
-  pkgSha256 = "125f6j7c52a0c7smbx323vdpwhx24yl0vglkiyfcbm92fjji14rm";
+  pkgSha256 = "1bvc2m63fx03rbp3ihgl2n7k24lwg5ydwkmr84gsjfcxp46q10zq";
 };
 in callPackage pkg {
-  buildInputs = [ python dbus_python intltool makeWrapper ];
+  buildInputs = [ python3Packages.python python3Packages.dbus-python python3Packages.pygobject3
+                  intltool makeWrapper ];
   drvParams = {
     postFixup = ''
       wrapProgram $out/bin/cdemu \

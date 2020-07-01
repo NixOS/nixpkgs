@@ -1,25 +1,36 @@
 { stdenv, fetchgit, asciidoc, docbook_xsl, libxslt }:
+stdenv.mkDerivation {
+  pname = "trace-cmd";
+  version = "2.9-dev";
 
-stdenv.mkDerivation rec {
-  name    = "trace-cmd-${version}";
-  version = "2.5.3";
+  src = fetchgit (import ./src.nix);
 
-  src = fetchgit {
-    url    = "git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git";
-    rev    = "refs/tags/trace-cmd-v${version}";
-    sha256 = "32db3df07d0371c2b072029c6c86c4204be8cbbcb53840fa8c42dbf2e35c047b";
-  };
+  patches = [ ./fix-Makefiles.patch ];
 
-  buildInputs = [ asciidoc libxslt ];
+  nativeBuildInputs = [ asciidoc libxslt ];
 
-  configurePhase = "true";
-  buildPhase     = "make prefix=$out MANPAGE_DOCBOOK_XSL=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl all doc";
-  installPhase   = "make prefix=$out install install_doc";
+  outputs = [ "out" "lib" "dev" "man" ];
 
-  meta = {
-    description = "user-space tools for the Linux kernel ftrace subsystem";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+  MANPAGE_DOCBOOK_XSL="${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
+
+  dontConfigure = true;
+
+  buildPhase = "make trace-cmd libs doc";
+
+  installTargets = [ "install_cmd" "install_libs" "install_doc" ];
+  installFlags = [
+    "bindir=${placeholder "out"}/bin"
+    "man_dir=${placeholder "man"}/share/man"
+    "libdir=${placeholder "lib"}/lib"
+    "includedir=${placeholder "dev"}/include"
+    "BASH_COMPLETE_DIR=${placeholder "out"}/etc/bash_completion.d"
+  ];
+
+  meta = with stdenv.lib; {
+    description = "User-space tools for the Linux kernel ftrace subsystem";
+    homepage    = "https://kernelshark.org/";
+    license     = licenses.gpl2;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice basvandijk ];
   };
 }

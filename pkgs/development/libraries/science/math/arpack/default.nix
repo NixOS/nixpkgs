@@ -1,27 +1,58 @@
-{ stdenv, fetchurl, gfortran, atlasWithLapack }:
+{ stdenv, fetchFromGitHub, cmake
+, gfortran, blas, lapack, eigen }:
+
+with stdenv.lib;
 
 let
-  version = "3.2.0";
+  version = "3.7.0";
 in
 stdenv.mkDerivation {
-  name = "arpack-${version}";
-  src = fetchurl {
-    url = "https://github.com/opencollab/arpack-ng/archive/${version}.tar.gz";
-    sha256 = "1fwch6vipms1ispzg2djvbzv5wag36f1dmmr3xs3mbp6imfyhvff";
+  pname = "arpack";
+  inherit version;
+
+  src = fetchFromGitHub {
+    owner = "opencollab";
+    repo = "arpack-ng";
+    rev = version;
+    sha256 = "1x7a1dj3dg43nlpvjlh8jzzbadjyr3mbias6f0256qkmgdyk4izr";
   };
 
-  buildInputs = [ gfortran atlasWithLapack ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ gfortran blas lapack eigen ];
 
-  # Auto-detection fails because gfortran brings in BLAS by default
-  configureFlags="--with-blas=-latlas --with-lapack=-latlas";
+  doCheck = true;
+
+  BLAS_LIBS = "-L${blas}/lib -lblas";
+  LAPACK_LIBS = "-L${lapack}/lib -llapack";
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DINTERFACE64=${optionalString blas.isILP64 "1"}"
+  ];
+
+  preCheck = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib
+  '' else ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
+  '' + ''
+    # Prevent tests from using all cores
+    export OMP_NUM_THREADS=2
+  '';
+
+  postInstall = ''
+    mkdir -p $out/lib/pkgconfig
+    cp arpack.pc $out/lib/pkgconfig/
+  '';
+
 
   meta = {
-    homepage = "http://forge.scilab.org/index.php/p/arpack-ng/";
+    homepage = "https://github.com/opencollab/arpack-ng";
     description = ''
       A collection of Fortran77 subroutines to solve large scale eigenvalue
-      problems
+      problems.
     '';
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

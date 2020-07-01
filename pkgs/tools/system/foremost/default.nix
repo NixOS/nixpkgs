@@ -1,16 +1,27 @@
 { stdenv, fetchurl }:
 
-let version = "1.5.7"; in
 stdenv.mkDerivation rec {
-  name = "foremost-${version}";
+  pname = "foremost";
+  version = "1.5.7";
 
   src = fetchurl {
     sha256 = "0d2zxw0ijg8cd3ksgm8cf8jg128zr5x7z779jar90g9f47pm882h";
-    url = "http://foremost.sourceforge.net/pkg/${name}.tar.gz";
+    url = "http://foremost.sourceforge.net/pkg/${pname}-${version}.tar.gz";
   };
 
+  patches = [ ./makefile.patch ];
+
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  enableParallelBuilding = true;
+
+  hardeningDisable = [ "format" ];
+
+  preInstall = ''
+    mkdir -p $out/{bin,share/man/man8}
+  '';
+
   meta = with stdenv.lib; {
-    inherit version;
     description = "Recover files based on their contents";
     longDescription = ''
       Foremost is a console program to recover files based on their headers,
@@ -21,19 +32,8 @@ stdenv.mkDerivation rec {
       look at the data structures of a given file format allowing for a more
       reliable and faster recovery.
     '';
-    homepage = http://foremost.sourceforge.net/;
-    license = with licenses; publicDomain;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    homepage = "http://foremost.sourceforge.net/";
+    license = licenses.publicDomain;
+    platforms = platforms.linux;
   };
-
-  patches = [ ./makefile.patch ];
-
-  makeFlags = "PREFIX=$(out)";
-
-  enableParallelBuilding = true;
-
-  preInstall = ''
-    mkdir -p $out/{bin,share/man/man8}
-  '';
 }

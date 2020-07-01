@@ -1,15 +1,33 @@
-{stdenv, fetchurl, ocaml, findlib, menhir, yojson, ulex, pprint, fix, functory}:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir, yojson, ulex, pprint, fix, functory }:
+
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "mezzo is not available for OCaml ${ocaml.version}"
+else
+
+let
+  check-ocaml-version = with stdenv.lib; versionAtLeast (getVersion ocaml);
+in
+
+assert check-ocaml-version "4";
 
 stdenv.mkDerivation {
 
   name = "mezzo-0.0.m8";
 
-  src = fetchurl {
-    url = https://github.com/protz/mezzo/archive/m8.tar.gz;
-    sha256 = "17mfapgqp8ssa5x9blv72zg9l561zbiwv3ikwi6nl9dd36lwkkc6";
+  src = fetchFromGitHub {
+    owner = "protz";
+    repo = "mezzo";
+    rev = "m8";
+    sha256 = "0yck5r6di0935s3iy2mm9538jkf77ssr789qb06ms7sivd7g3ip6";
   };
 
-  buildInputs = [ ocaml findlib yojson menhir ulex pprint fix functory ];
+  buildInputs = [ ocaml findlib ocamlbuild yojson menhir ulex pprint fix functory ];
+
+  # Sets warning 3 as non-fatal
+  prePatch = stdenv.lib.optionalString (check-ocaml-version "4.02") ''
+    substituteInPlace myocamlbuild.pre.ml \
+    --replace '@1..3' '@1..2+3'
+  '';
 
   createFindlibDestdir = true;
 
@@ -19,10 +37,10 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://protz.github.io/mezzo/;
+    homepage = "http://protz.github.io/mezzo/";
     description = "A programming language in the ML tradition, which places strong emphasis on the control of aliasing and access to mutable memory";
     license = licenses.gpl2;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }
 

@@ -1,34 +1,55 @@
-{ stdenv, fetchurl, ncurses, gtk, pkgconfig, autoconf, automake, perl, halibut, libtool }:
+{ stdenv, lib, fetchurl, autoconf, automake, pkgconfig, libtool
+, gtk2, halibut, ncurses, perl, darwin
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.64";
-  name = "putty-${version}";
+  version = "0.73";
+  pname = "putty";
 
   src = fetchurl {
-    url = "http://the.earth.li/~sgtatham/putty/latest/${name}.tar.gz";
-    sha256 = "089qbzd7w51sc9grm2x3lcbj61jdqsnakb4j4gnf6i2131xcjiia";
+    urls = [
+      "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
+      "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
+    ];
+    sha256 = "076z34jpik2dmlwxicvf1djjgnahcqv12rjhmb9yq6ml7x0bbc1x";
   };
 
-  preConfigure = ''
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isUnix ''
     perl mkfiles.pl
     ( cd doc ; make );
-    sed '/AM_PATH_GTK(/d' -i unix/configure.ac
-    sed '/AC_OUTPUT/iAM_PROG_CC_C_O' -i unix/configure.ac
-    sed '/AC_OUTPUT/iAM_PROG_AR' -i unix/configure.ac
     ./mkauto.sh
     cd unix
+  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
+    cd windows
   '';
 
-  buildInputs = [ gtk ncurses pkgconfig autoconf automake perl halibut libtool ];
+  TOOLPATH = stdenv.cc.targetPrefix;
+  makefile = if stdenv.hostPlatform.isWindows then "Makefile.mgw" else null;
 
-  meta = with stdenv.lib; {
+  installPhase = if stdenv.hostPlatform.isWindows then ''
+    for exe in *.exe; do
+       install -D $exe $out/bin/$exe
+    done
+  '' else null;
+
+  nativeBuildInputs = [ autoconf automake halibut libtool perl pkgconfig ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
+    gtk2 ncurses
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "A Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix
       platforms, along with an xterm terminal emulator.
       It is written and maintained primarily by Simon Tatham.
     '';
-    homepage = http://www.chiark.greenend.org.uk/~sgtatham/putty/;
+    homepage = "https://www.chiark.greenend.org.uk/~sgtatham/putty/";
     license = licenses.mit;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

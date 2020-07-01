@@ -1,22 +1,26 @@
-{ stdenv, fetchgit, libmysql, libxslt, zlib, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, libmysqlclient, libaio
+}:
 
 stdenv.mkDerivation rec {
-  name = "sysbench-2015-04-22";
+  pname = "sysbench";
+  version = "1.0.20";
 
-  buildInputs = [ autoreconfHook libmysql libxslt zlib ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libmysqlclient libaio ];
 
-  src = fetchgit {
-    url = git://github.com/akopytov/sysbench.git;
-    rev = "2b3042883090c9cf8cb9be2b24d3590cdcee112f";
-    sha256 = "0di6jc9ybnqk3pqg45lks2c9003l74xz4g619haw36fvbi28aql6";
+  src = fetchFromGitHub {
+    owner = "akopytov";
+    repo = pname;
+    rev = version;
+    sha256 = "1sanvl2a52ff4shj62nw395zzgdgywplqvwip74ky8q7s6qjf5qy";
   };
 
-  preAutoreconf = ''
-    touch NEWS AUTHORS
-  '';
+  enableParallelBuilding = true;
 
   meta = {
     description = "Modular, cross-platform and multi-threaded benchmark tool";
+    homepage = "https://github.com/akopytov/sysbench";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

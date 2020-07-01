@@ -1,30 +1,32 @@
-{ stdenv, fetchurl, ocaml, findlib, ncurses }:
-
+{ stdenv, fetchpatch, fetchFromGitHub, ocaml, findlib, ncurses }:
+let
+  version = "1.99.19-beta";
+in
 stdenv.mkDerivation {
 
-  name = "ocp-build-1.99.8-beta";
+  name = "ocaml${ocaml.version}-ocp-build-${version}";
 
-  src = fetchurl {
-    url = http://www.typerex.org/pub/ocp-build/ocp-build.1.99.8-beta.tar.gz;
-    sha256 = "03zqpl73ah0fji5baxmk8w0h7waamlnhhysi128yap4abzsh5w87";
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = "ocp-build";
+    rev = version;
+    sha256 = "162k5l0cxyqanxlml5v8mqapdq5qbqc9m4b8wdjq7mf523b3h2zj";
   };
 
-  buildInputs = [ ocaml findlib ncurses ];
+  patches = stdenv.lib.optional (stdenv.lib.versionAtLeast ocaml.version "4.08") (fetchpatch {
+    url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/ocp-pp/ocp-pp.1.99.19-beta/files/0001-Fix-ocp-pp-for-changes-in-compiler-libs.patch";
+    sha256 = "0s0s2hh4d7cmwd6i7ixjgb79vij0r1v54m0vwwi26b3fips09qyn";
+  });
 
-  patches = [ ./fix-for-no-term.patch ];
-
-  # In the Nix sandbox, the TERM variable is unset and stty does not
-  # work. In such a case, ocp-build crashes due to a bug. The
-  # ./fix-for-no-term.patch fixes this bug in the source code and hence
-  # also in the final installed version of ocp-build. However, it does not
-  # fix the bug in the precompiled bootstrap version of ocp-build that is
-  # used during the compilation process. In order to bypass the bug until
-  # it's also fixed upstream, we simply set TERM to some valid entry in the
-  # terminfo database during the bootstrap.
-  TERM = "xterm";
+  buildInputs = [ ocaml findlib ];
+  propagatedBuildInputs = [ ncurses ];
+  preInstall = "mkdir -p $out/bin";
+  preConfigure = ''
+  export configureFlags="$configureFlags --with-metadir=$OCAMLFIND_DESTDIR"
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.typerex.org/ocp-build.html;
+    homepage = "https://www.typerex.org/ocp-build.html";
     description = "A build tool for OCaml";
     longDescription = ''
       ocp-build is a build system for OCaml application, based on simple
@@ -34,7 +36,7 @@ stdenv.mkDerivation {
       between source files.
     '';
     license = licenses.gpl3;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

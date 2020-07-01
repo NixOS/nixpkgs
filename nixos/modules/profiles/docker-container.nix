@@ -2,6 +2,8 @@
 
 with lib;
 
+let inherit (pkgs) writeScript; in
+
 let
  pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
 
@@ -14,21 +16,28 @@ in {
   ];
 
   # Create the tarball
-  system.build.tarball = import ../../lib/make-system-tarball.nix {
-    inherit (pkgs) stdenv perl xz pathsFromGraph;
-
-    contents = [];
+  system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
+    contents = [
+      {
+        source = "${config.system.build.toplevel}/.";
+        target = "./";
+      }
+    ];
     extraArgs = "--owner=0";
 
     # Add init script to image
-    storeContents = [
-      { object = config.system.build.toplevel + "/init";
-        symlink = "/init";
-      }
-    ] ++ (pkgs2storeContents [ pkgs.stdenv ]);
+    storeContents = pkgs2storeContents [
+      config.system.build.toplevel
+      pkgs.stdenv
+    ];
 
     # Some container managers like lxc need these
-    extraCommands = "mkdir -p proc sys dev";
+    extraCommands =
+      let script = writeScript "extra-commands.sh" ''
+            rm etc
+            mkdir -p proc sys dev etc
+          '';
+      in script;
   };
 
   boot.isContainer = true;
@@ -37,12 +46,12 @@ in {
       # After booting, register the contents of the Nix store in the Nix
       # database.
       if [ -f /nix-path-registration ]; then
-        ${config.nix.package}/bin/nix-store --load-db < /nix-path-registration &&
+        ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration &&
         rm /nix-path-registration
       fi
 
       # nixos-rebuild also requires a "system" profile
-      ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+      ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
     '';
 
   # Install new init script

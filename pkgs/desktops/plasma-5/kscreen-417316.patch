@@ -1,0 +1,76 @@
+https://phabricator.kde.org/file/data/dyr2qr4wrhxg4eahkgd3/PHID-FILE-7d4og3zr4mk53u6lzkk2/D27442.diff
+https://bugs.kde.org/show_bug.cgi?id=417316
+
+diff -ru kscreen-5.17.5-orig/kcm/package/contents/ui/main.qml kscreen-5.17.5/kcm/package/contents/ui/main.qml
+--- kscreen-5.17.5-orig/kcm/package/contents/ui/main.qml	2020-01-07 16:28:39.000000000 +0100
++++ kscreen-5.17.5/kcm/package/contents/ui/main.qml	2020-04-03 17:54:26.097809557 +0200
+@@ -24,8 +24,8 @@
+ KCM.SimpleKCM {
+     id: root
+ 
+-    implicitWidth: units.gridUnit * 30
+-    implicitHeight: units.gridUnit * 38
++    implicitWidth: Kirigami.Units.gridUnit * 32
++    implicitHeight: Kirigami.Units.gridUnit * 38
+ 
+     property int selectedOutput: 0
+ 
+@@ -113,7 +113,7 @@
+             id: screen
+ 
+             Layout.alignment: Qt.AlignHCenter
+-            Layout.preferredWidth: Math.max(root.width * 0.8, units.gridUnit * 26)
++            Layout.preferredWidth: Math.max(root.width * 0.8, Kirigami.Units.gridUnit * 26)
+             Layout.topMargin: Kirigami.Units.smallSpacing
+             Layout.bottomMargin: Kirigami.Units.largeSpacing * 2
+ 
+diff -ru kscreen-5.17.5-orig/kcm/package/contents/ui/Output.qml kscreen-5.17.5/kcm/package/contents/ui/Output.qml
+--- kscreen-5.17.5-orig/kcm/package/contents/ui/Output.qml	2020-01-07 16:28:39.000000000 +0100
++++ kscreen-5.17.5/kcm/package/contents/ui/Output.qml	2020-04-03 17:53:22.491686708 +0200
+@@ -19,6 +19,7 @@
+ import QtQuick.Layouts 1.1
+ import QtQuick.Controls 2.3 as Controls
+ import QtGraphicalEffects 1.0
++import org.kde.kirigami 2.4 as Kirigami
+ 
+ Rectangle {
+     id: output
+@@ -77,7 +78,7 @@
+ 
+             Controls.Label {
+                 Layout.fillWidth: true
+-                Layout.margins: units.smallSpacing
++                Layout.margins: Kirigami.Units.smallSpacing
+ 
+                 text: model.display
+                 wrapMode: Text.Wrap
+@@ -87,7 +88,7 @@
+ 
+             Controls.Label {
+                 Layout.fillWidth: true
+-                Layout.bottomMargin: units.smallSpacing
++                Layout.bottomMargin: Kirigami.Units.smallSpacing
+ 
+                 text: "(" + model.size.width + "x" + model.size.height + ")"
+                 horizontalAlignment: Text.AlignHCenter
+diff -ru kscreen-5.17.5-orig/kcm/package/contents/ui/Screen.qml kscreen-5.17.5/kcm/package/contents/ui/Screen.qml
+--- kscreen-5.17.5-orig/kcm/package/contents/ui/Screen.qml	2020-01-07 16:28:39.000000000 +0100
++++ kscreen-5.17.5/kcm/package/contents/ui/Screen.qml	2020-04-03 17:53:22.491686708 +0200
+@@ -45,7 +45,7 @@
+     property int xOffset: (width - totalSize.width / relativeFactor) / 2;
+     property int yOffset: (height - totalSize.height / relativeFactor) / 2;
+ 
+-    implicitHeight: Math.max(root.height * 0.4, units.gridUnit * 13)
++    implicitHeight: Math.max(root.height * 0.4, Kirigami.Units.gridUnit * 13)
+ 
+     Component.onCompleted: background.visible = true;
+ 
+@@ -54,7 +54,7 @@
+         anchors {
+             bottom: parent.bottom
+             horizontalCenter: parent.horizontalCenter
+-            margins: units.smallSpacing
++            margins: Kirigami.Units.smallSpacing
+         }
+         spacing: units.smallSpacing
+         Controls.Button {

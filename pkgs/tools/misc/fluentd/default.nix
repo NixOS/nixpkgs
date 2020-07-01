@@ -1,20 +1,18 @@
-{ stdenv, lib, bundlerEnv, ruby, curl }:
+{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
 
 bundlerEnv {
-  name = "fluentd-0.12.6";
-
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
 
-  buildInputs = [ curl ];
+  pname = "fluentd";
+  gemdir = ./.;
+
+  passthru.updateScript = bundlerUpdateScript "fluentd";
 
   meta = with lib; {
     description = "A data collector";
-    homepage    = http://www.fluentd.org/;
-    license     = with licenses; asl20;
-    maintainers = with maintainers; [ offline ];
+    homepage    = "https://www.fluentd.org/";
+    license     = licenses.asl20;
+    maintainers = with maintainers; [ offline nicknovitski ];
     platforms   = platforms.unix;
   };
 }

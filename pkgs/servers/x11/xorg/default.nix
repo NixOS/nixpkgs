@@ -1,2167 +1,2915 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-args: with args;
+{ lib, newScope, pixman }:
 
-let
-
-  mkDerivation = name: attrs:
-    let newAttrs = (overrides."${name}" or (x: x)) attrs;
-        stdenv = newAttrs.stdenv or args.stdenv;
-    in stdenv.mkDerivation (removeAttrs newAttrs [ "stdenv" ]);
-
-  overrides = import ./overrides.nix {inherit args xorg;};
-
-  xorg = rec {
+lib.makeScope newScope (self: with self; {
 
   inherit pixman;
 
-  applewmproto = (mkDerivation "applewmproto" {
-    name = "applewmproto-1.4.2";
+  appres = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "appres-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/applewmproto-1.4.2.tar.bz2;
-      sha256 = "1zi4p07mp6jmk030p4gmglwxcwp0lzs5mi31y1b4rp8lsqxdxizw";
+      url = "mirror://xorg/individual/app/appres-1.0.5.tar.bz2";
+      sha256 = "0a2r4sxky3k7b3kdb5pbv709q9b5zi3gxjz336wl66f828vqkbgz";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  bdftopcf = (mkDerivation "bdftopcf" {
-    name = "bdftopcf-1.0.5";
+  bdftopcf = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
+    name = "bdftopcf-1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/bdftopcf-1.0.5.tar.bz2;
-      sha256 = "09i03sk878cmx2i40lkpsysn7zqcvlczb30j7x3lryb11jz4gx1q";
+      url = "mirror://xorg/individual/app/bdftopcf-1.1.tar.bz2";
+      sha256 = "18hiscgljrz10zjcws25bis32nyrg3hzgmiq6scrh7izqmgz0kab";
     };
-    buildInputs = [pkgconfig libXfont ];
-  }) // {inherit libXfont ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  bigreqsproto = (mkDerivation "bigreqsproto" {
-    name = "bigreqsproto-1.1.2";
+  bitmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "bitmap-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/bigreqsproto-1.1.2.tar.bz2;
-      sha256 = "07hvfm84scz8zjw14riiln2v4w03jlhp756ypwhq27g48jmic8a6";
+      url = "mirror://xorg/individual/app/bitmap-1.0.9.tar.gz";
+      sha256 = "0kzbv5wh02798l77y9y8d8sjkmzm9cvsn3rjh8a86v5waj50apsb";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw xbitmaps libXmu xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  compositeproto = (mkDerivation "compositeproto" {
-    name = "compositeproto-0.4.2";
+  editres = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "editres-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/compositeproto-0.4.2.tar.bz2;
-      sha256 = "1z0crmf669hirw4s7972mmp8xig80kfndja9h559haqbpvq5k4q4";
+      url = "mirror://xorg/individual/app/editres-1.0.7.tar.bz2";
+      sha256 = "04awfwmy3f9f0bchidc4ssbgrbicn5gzasg3jydpfnp5513d76h8";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  damageproto = (mkDerivation "damageproto" {
-    name = "damageproto-1.2.1";
+  encodings = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
+    name = "encodings-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/damageproto-1.2.1.tar.bz2;
-      sha256 = "0nzwr5pv9hg7c21n995pdiv0zqhs91yz3r8rn3aska4ykcp12z2w";
+      url = "mirror://xorg/individual/font/encodings-1.0.5.tar.bz2";
+      sha256 = "0caafx0yqqnqyvbalxhh3mb0r9v36xmcy5zjhygb2i508dhy35mx";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  dmxproto = (mkDerivation "dmxproto" {
-    name = "dmxproto-2.3.1";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/dmxproto-2.3.1.tar.bz2;
-      sha256 = "02b5x9dkgajizm8dqyx2w6hmqx3v25l67mgf35nj6sz0lgk52877";
-    };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
-
-  dri2proto = (mkDerivation "dri2proto" {
-    name = "dri2proto-2.8";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/proto/dri2proto-2.8.tar.bz2;
-      sha256 = "015az1vfdqmil1yay5nlsmpf6cf7vcbpslxjb72cfkzlvrv59dgr";
-    };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
-
-  dri3proto = (mkDerivation "dri3proto" {
-    name = "dri3proto-1.0";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/proto/dri3proto-1.0.tar.bz2;
-      sha256 = "0x609xvnl8jky5m8jdklw4nymx3irkv32w99dfd8nl800bblkgh1";
-    };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
-
-  encodings = (mkDerivation "encodings" {
-    name = "encodings-1.0.4";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/encodings-1.0.4.tar.bz2;
-      sha256 = "0ffmaw80vmfwdgvdkp6495xgsqszb6s0iira5j0j6pd4i0lk3mnf";
-    };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
-
-  fixesproto = (mkDerivation "fixesproto" {
-    name = "fixesproto-5.0";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/fixesproto-5.0.tar.bz2;
-      sha256 = "1ki4wiq2iivx5g4w5ckzbjbap759kfqd72yg18m3zpbb4hqkybxs";
-    };
-    buildInputs = [pkgconfig xextproto ];
-  }) // {inherit xextproto ;};
-
-  fontadobe100dpi = (mkDerivation "fontadobe100dpi" {
+  fontadobe100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-100dpi-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-adobe-100dpi-1.0.3.tar.bz2";
       sha256 = "0m60f5bd0caambrk8ksknb5dks7wzsg7g7xaf0j21jxmx8rq9h5j";
     };
-    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf fontutil mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontadobe75dpi = (mkDerivation "fontadobe75dpi" {
+  fontadobe75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-75dpi-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-adobe-75dpi-1.0.3.tar.bz2";
       sha256 = "02advcv9lyxpvrjv8bjh1b797lzg6jvhipclz49z8r8y98g4l0n6";
     };
-    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf fontutil mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontadobeutopia100dpi = (mkDerivation "fontadobeutopia100dpi" {
+  fontadobeutopia100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-100dpi-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-100dpi-1.0.4.tar.bz2;
+      url = "mirror://xorg/individual/font/font-adobe-utopia-100dpi-1.0.4.tar.bz2";
       sha256 = "19dd9znam1ah72jmdh7i6ny2ss2r6m21z9v0l43xvikw48zmwvyi";
     };
-    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf fontutil mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontadobeutopia75dpi = (mkDerivation "fontadobeutopia75dpi" {
+  fontadobeutopia75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-75dpi-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-75dpi-1.0.4.tar.bz2;
+      url = "mirror://xorg/individual/font/font-adobe-utopia-75dpi-1.0.4.tar.bz2";
       sha256 = "152wigpph5wvl4k9m3l4mchxxisgsnzlx033mn5iqrpkc6f72cl7";
     };
-    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf fontutil mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontadobeutopiatype1 = (mkDerivation "fontadobeutopiatype1" {
+  fontadobeutopiatype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-type1-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-type1-1.0.4.tar.bz2;
+      url = "mirror://xorg/individual/font/font-adobe-utopia-type1-1.0.4.tar.bz2";
       sha256 = "0xw0pdnzj5jljsbbhakc6q9ha2qnca1jr81zk7w70yl9bw83b54p";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontalias = (mkDerivation "fontalias" {
+  fontalias = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "font-alias-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-alias-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-alias-1.0.3.tar.bz2";
       sha256 = "16ic8wfwwr3jicaml7b5a0sk6plcgc1kg84w02881yhwmqm3nicb";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontarabicmisc = (mkDerivation "fontarabicmisc" {
+  fontarabicmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-arabic-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-arabic-misc-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-arabic-misc-1.0.3.tar.bz2";
       sha256 = "1x246dfnxnmflzf0qzy62k8jdpkb6jkgspcjgbk8jcq9lw99npah";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontbh100dpi = (mkDerivation "fontbh100dpi" {
+  fontbh100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-100dpi-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-bh-100dpi-1.0.3.tar.bz2";
       sha256 = "10cl4gm38dw68jzln99ijix730y7cbx8np096gmpjjwff1i73h13";
     };
-    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf fontutil mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontbh75dpi = (mkDerivation "fontbh75dpi" {
+  fontbh75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-75dpi-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-bh-75dpi-1.0.3.tar.bz2";
       sha256 = "073jmhf0sr2j1l8da97pzsqj805f7mf9r2gy92j4diljmi8sm1il";
     };
-    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf fontutil mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontbhlucidatypewriter100dpi = (mkDerivation "fontbhlucidatypewriter100dpi" {
+  fontbhlucidatypewriter100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-lucidatypewriter-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2";
       sha256 = "1fqzckxdzjv4802iad2fdrkpaxl4w0hhs9lxlkyraq2kq9ik7a32";
     };
-    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf fontutil mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontbhlucidatypewriter75dpi = (mkDerivation "fontbhlucidatypewriter75dpi" {
+  fontbhlucidatypewriter75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-lucidatypewriter-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-lucidatypewriter-75dpi-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-bh-lucidatypewriter-75dpi-1.0.3.tar.bz2";
       sha256 = "0cfbxdp5m12cm7jsh3my0lym9328cgm7fa9faz2hqj05wbxnmhaa";
     };
-    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf fontutil mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontbhttf = (mkDerivation "fontbhttf" {
+  fontbhttf = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-ttf-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-ttf-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-bh-ttf-1.0.3.tar.bz2";
       sha256 = "0pyjmc0ha288d4i4j0si4dh3ncf3jiwwjljvddrb0k8v4xiyljqv";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontbhtype1 = (mkDerivation "fontbhtype1" {
+  fontbhtype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-type1-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-bh-type1-1.0.3.tar.bz2";
       sha256 = "1hb3iav089albp4sdgnlh50k47cdjif9p4axm0kkjvs8jyi5a53n";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontbitstream100dpi = (mkDerivation "fontbitstream100dpi" {
+  fontbitstream100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-bitstream-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-100dpi-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-bitstream-100dpi-1.0.3.tar.bz2";
       sha256 = "1kmn9jbck3vghz6rj3bhc3h0w6gh0qiaqm90cjkqsz1x9r2dgq7b";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontbitstream75dpi = (mkDerivation "fontbitstream75dpi" {
+  fontbitstream75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-bitstream-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-75dpi-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-bitstream-75dpi-1.0.3.tar.bz2";
       sha256 = "13plbifkvfvdfym6gjbgy9wx2xbdxi9hfrl1k22xayy02135wgxs";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontbitstreamtype1 = (mkDerivation "fontbitstreamtype1" {
+  fontbitstreamtype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-bitstream-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-type1-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-bitstream-type1-1.0.3.tar.bz2";
       sha256 = "1256z0jhcf5gbh1d03593qdwnag708rxqa032izmfb5dmmlhbsn6";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontcronyxcyrillic = (mkDerivation "fontcronyxcyrillic" {
+  fontcronyxcyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-cronyx-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-cronyx-cyrillic-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-cronyx-cyrillic-1.0.3.tar.bz2";
       sha256 = "0ai1v4n61k8j9x2a1knvfbl2xjxk3xxmqaq3p9vpqrspc69k31kf";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontcursormisc = (mkDerivation "fontcursormisc" {
+  fontcursormisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-cursor-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-cursor-misc-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-cursor-misc-1.0.3.tar.bz2";
       sha256 = "0dd6vfiagjc4zmvlskrbjz85jfqhf060cpys8j0y1qpcbsrkwdhp";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontdaewoomisc = (mkDerivation "fontdaewoomisc" {
+  fontdaewoomisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-daewoo-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-daewoo-misc-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-daewoo-misc-1.0.3.tar.bz2";
       sha256 = "1s2bbhizzgbbbn5wqs3vw53n619cclxksljvm759h9p1prqdwrdw";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontdecmisc = (mkDerivation "fontdecmisc" {
+  fontdecmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-dec-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-dec-misc-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-dec-misc-1.0.3.tar.bz2";
       sha256 = "0yzza0l4zwyy7accr1s8ab7fjqkpwggqydbm2vc19scdby5xz7g1";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontibmtype1 = (mkDerivation "fontibmtype1" {
+  fontibmtype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-ibm-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-ibm-type1-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-ibm-type1-1.0.3.tar.bz2";
       sha256 = "1pyjll4adch3z5cg663s6vhi02k8m6488f0mrasg81ssvg9jinzx";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontisasmisc = (mkDerivation "fontisasmisc" {
+  fontisasmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-isas-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-isas-misc-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-isas-misc-1.0.3.tar.bz2";
       sha256 = "0rx8q02rkx673a7skkpnvfkg28i8gmqzgf25s9yi0lar915sn92q";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontjismisc = (mkDerivation "fontjismisc" {
+  fontjismisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-jis-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-jis-misc-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-jis-misc-1.0.3.tar.bz2";
       sha256 = "0rdc3xdz12pnv951538q6wilx8mrdndpkphpbblszsv7nc8cw61b";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontmicromisc = (mkDerivation "fontmicromisc" {
+  fontmicromisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-micro-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-micro-misc-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-micro-misc-1.0.3.tar.bz2";
       sha256 = "1dldxlh54zq1yzfnrh83j5vm0k4ijprrs5yl18gm3n9j1z0q2cws";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontmisccyrillic = (mkDerivation "fontmisccyrillic" {
+  fontmisccyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-cyrillic-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-misc-cyrillic-1.0.3.tar.bz2";
       sha256 = "0q2ybxs8wvylvw95j6x9i800rismsmx4b587alwbfqiw6biy63z4";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontmiscethiopic = (mkDerivation "fontmiscethiopic" {
+  fontmiscethiopic = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-ethiopic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-ethiopic-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-misc-ethiopic-1.0.3.tar.bz2";
       sha256 = "19cq7iq0pfad0nc2v28n681fdq3fcw1l1hzaq0wpkgpx7bc1zjsk";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontmiscmeltho = (mkDerivation "fontmiscmeltho" {
+  fontmiscmeltho = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-meltho-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-meltho-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-misc-meltho-1.0.3.tar.bz2";
       sha256 = "148793fqwzrc3bmh2vlw5fdiwjc2n7vs25cic35gfp452czk489p";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontmiscmisc = (mkDerivation "fontmiscmisc" {
+  fontmiscmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-misc-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-misc-1.1.2.tar.bz2;
+      url = "mirror://xorg/individual/font/font-misc-misc-1.1.2.tar.bz2";
       sha256 = "150pq6n8n984fah34n3k133kggn9v0c5k07igv29sxp1wi07krxq";
     };
-    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf fontutil mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontmuttmisc = (mkDerivation "fontmuttmisc" {
+  fontmuttmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-mutt-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-mutt-misc-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-mutt-misc-1.0.3.tar.bz2";
       sha256 = "13qghgr1zzpv64m0p42195k1kc77pksiv059fdvijz1n6kdplpxx";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontschumachermisc = (mkDerivation "fontschumachermisc" {
+  fontschumachermisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-schumacher-misc-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-schumacher-misc-1.1.2.tar.bz2;
+      url = "mirror://xorg/individual/font/font-schumacher-misc-1.1.2.tar.bz2";
       sha256 = "0nkym3n48b4v36y4s927bbkjnsmicajarnf6vlp7wxp0as304i74";
     };
-    buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf fontutil mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontscreencyrillic = (mkDerivation "fontscreencyrillic" {
+  fontscreencyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-screen-cyrillic-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-screen-cyrillic-1.0.4.tar.bz2;
+      url = "mirror://xorg/individual/font/font-screen-cyrillic-1.0.4.tar.bz2";
       sha256 = "0yayf1qlv7irf58nngddz2f1q04qkpr5jwp4aja2j5gyvzl32hl2";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontsonymisc = (mkDerivation "fontsonymisc" {
+  fontsonymisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-sony-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-sony-misc-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-sony-misc-1.0.3.tar.bz2";
       sha256 = "1xfgcx4gsgik5mkgkca31fj3w72jw9iw76qyrajrsz1lp8ka6hr0";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontsproto = (mkDerivation "fontsproto" {
-    name = "fontsproto-2.1.3";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/proto/fontsproto-2.1.3.tar.bz2;
-      sha256 = "1f2sdsd74y34nnaf4m1zlcbhyv8xb6irnisc99f84c4ivnq4d415";
-    };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
-
-  fontsunmisc = (mkDerivation "fontsunmisc" {
+  fontsunmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-sun-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-sun-misc-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-sun-misc-1.0.3.tar.bz2";
       sha256 = "1q6jcqrffg9q5f5raivzwx9ffvf7r11g6g0b125na1bhpz5ly7s8";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontutil = (mkDerivation "fontutil" {
+  fonttosfnt = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, freetype, xorgproto }: stdenv.mkDerivation {
+    name = "fonttosfnt-1.0.5";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/app/fonttosfnt-1.0.5.tar.bz2";
+      sha256 = "00w5in1gznai141wishz8ng7spvi5274n16zj0pdl1ma2vsmy2n8";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libfontenc freetype xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  fontutil = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "font-util-1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/font/font-util-1.3.1.tar.bz2;
+      url = "mirror://xorg/individual/font/font-util-1.3.1.tar.bz2";
       sha256 = "08drjb6cf84pf5ysghjpb4i7xkd2p86k3wl2a0jxs1jif6qbszma";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontwinitzkicyrillic = (mkDerivation "fontwinitzkicyrillic" {
+  fontwinitzkicyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-winitzki-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-winitzki-cyrillic-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.3.tar.bz2";
       sha256 = "181n1bgq8vxfxqicmy1jpm1hnr6gwn1kdhl6hr4frjigs1ikpldb";
     };
-    buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit bdftopcf mkfontdir ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig bdftopcf mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  fontxfree86type1 = (mkDerivation "fontxfree86type1" {
+  fontxfree86type1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-xfree86-type1-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-xfree86-type1-1.0.4.tar.bz2;
+      url = "mirror://xorg/individual/font/font-xfree86-type1-1.0.4.tar.bz2";
       sha256 = "0jp3zc0qfdaqfkgzrb44vi9vi0a8ygb35wp082yz7rvvxhmg9sya";
     };
-    buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
-  }) // {inherit mkfontdir mkfontscale ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig mkfontscale ];
+    buildInputs = [ ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  gccmakedep = (mkDerivation "gccmakedep" {
+  gccmakedep = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "gccmakedep-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/gccmakedep-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/util/gccmakedep-1.0.3.tar.bz2";
       sha256 = "1r1fpy5ni8chbgx7j5sz0008fpb6vbazpy1nifgdhgijyzqxqxdj";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  glamoregl = (mkDerivation "glamoregl" {
-    name = "glamor-egl-0.6.0";
+  iceauth = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, xorgproto }: stdenv.mkDerivation {
+    name = "iceauth-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/glamor-egl-0.6.0.tar.bz2;
-      sha256 = "1jg5clihklb9drh1jd7nhhdsszla6nv7xmbvm8yvakh5wrb1nlv6";
+      url = "mirror://xorg/individual/app/iceauth-1.0.8.tar.bz2";
+      sha256 = "1ik0mdidmyvy48hn8p2hwvf3535rf3m96hhf0mvcqrbj44x23vp6";
     };
-    buildInputs = [pkgconfig dri2proto xorgserver ];
-  }) // {inherit dri2proto xorgserver ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libICE xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  glproto = (mkDerivation "glproto" {
-    name = "glproto-1.4.17";
+  ico = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "ico-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/glproto-1.4.17.tar.bz2;
-      sha256 = "0h5ykmcddwid5qj6sbrszgkcypwn3mslvswxpgy2n2iixnyr9amd";
+      url = "mirror://xorg/individual/app/ico-1.0.5.tar.bz2";
+      sha256 = "0gvpwfk9kvlfn631dgizc45qc2qqjn9pavdp2q7qb3drkvr64fyp";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  iceauth = (mkDerivation "iceauth" {
-    name = "iceauth-1.0.7";
+  imake = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
+    name = "imake-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/iceauth-1.0.7.tar.bz2;
-      sha256 = "02izdyzhwpgiyjd8brzilwvwnfr72ncjb6mzz3y1icwrxqnsy5hj";
+      url = "mirror://xorg/individual/util/imake-1.0.8.tar.bz2";
+      sha256 = "00m7l90ws72k1qm101sd2rx92ckd50cszyng5d4dd77jncbf9lmq";
     };
-    buildInputs = [pkgconfig libICE xproto ];
-  }) // {inherit libICE xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  imake = (mkDerivation "imake" {
-    name = "imake-1.0.7";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/util/imake-1.0.7.tar.bz2;
-      sha256 = "0zpk8p044jh14bis838shbf4100bjg7mccd7bq54glpsq552q339";
-    };
-    buildInputs = [pkgconfig xproto ];
-  }) // {inherit xproto ;};
-
-  inputproto = (mkDerivation "inputproto" {
-    name = "inputproto-2.3.1";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/proto/inputproto-2.3.1.tar.bz2;
-      sha256 = "1lf1jlxp0fc8h6fjdffhd084dqab94966l1zm3rwwsis0mifwiss";
-    };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
-
-  kbproto = (mkDerivation "kbproto" {
-    name = "kbproto-1.0.6";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/kbproto-1.0.6.tar.bz2;
-      sha256 = "0yal11hhpiisy3w8wmacsdzzzcnc3xwnswxz8k7zri40xc5aqz03";
-    };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
-
-  libAppleWM = (mkDerivation "libAppleWM" {
+  libAppleWM = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libAppleWM-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libAppleWM-1.4.1.tar.bz2;
+      url = "mirror://xorg/individual/lib/libAppleWM-1.4.1.tar.bz2";
       sha256 = "0r8x28n45q89x91mz8mv0zkkcxi8wazkac886fyvflhiv2y8ap2y";
     };
-    buildInputs = [pkgconfig applewmproto libX11 libXext xextproto ];
-  }) // {inherit applewmproto libX11 libXext xextproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libFS = (mkDerivation "libFS" {
-    name = "libFS-1.0.6";
+  libFS = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xtrans }: stdenv.mkDerivation {
+    name = "libFS-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libFS-1.0.6.tar.bz2;
-      sha256 = "1mxfsvj9m3pn8cdkcn4kg190zp665mf4pv0083g6xykvsgxzq1wh";
+      url = "mirror://xorg/individual/lib/libFS-1.0.8.tar.bz2";
+      sha256 = "03xxyvpfa3rhqcld4p2chkil482jn9cp80hj17jdybcv2hkkgqf8";
     };
-    buildInputs = [pkgconfig fontsproto xproto xtrans ];
-  }) // {inherit fontsproto xproto xtrans ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xtrans ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libICE = (mkDerivation "libICE" {
-    name = "libICE-1.0.9";
+  libICE = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xtrans }: stdenv.mkDerivation {
+    name = "libICE-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libICE-1.0.9.tar.bz2;
-      sha256 = "00p2b6bsg6kcdbb39bv46339qcywxfl4hsrz8asm4hy6q7r34w4g";
+      url = "mirror://xorg/individual/lib/libICE-1.0.10.tar.bz2";
+      sha256 = "0j638yvmyna2k4mz465jywgdybgdchdqppfx6xfazg7l5khxr1kg";
     };
-    buildInputs = [pkgconfig xproto xtrans ];
-  }) // {inherit xproto xtrans ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xtrans ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libSM = (mkDerivation "libSM" {
-    name = "libSM-1.2.2";
+  libSM = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libuuid, xorgproto, xtrans }: stdenv.mkDerivation {
+    name = "libSM-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libSM-1.2.2.tar.bz2;
-      sha256 = "1gc7wavgs435g9qkp9jw4lhmaiq6ip9llv49f054ad6ryp4sib0b";
+      url = "mirror://xorg/individual/lib/libSM-1.2.3.tar.bz2";
+      sha256 = "1fwwfq9v3sqmpzpscymswxn76xhxnysa24pfim1mcpxhvjcl89id";
     };
-    buildInputs = [pkgconfig libICE libuuid xproto xtrans ];
-  }) // {inherit libICE libuuid xproto xtrans ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libICE libuuid xorgproto xtrans ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libWindowsWM = (mkDerivation "libWindowsWM" {
+  libWindowsWM = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libWindowsWM-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libWindowsWM-1.0.1.tar.bz2;
+      url = "mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2";
       sha256 = "1p0flwb67xawyv6yhri9w17m1i4lji5qnd0gq8v1vsfb8zw7rw15";
     };
-    buildInputs = [pkgconfig windowswmproto libX11 libXext xextproto ];
-  }) // {inherit windowswmproto libX11 libXext xextproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libX11 = (mkDerivation "libX11" {
-    name = "libX11-1.6.3";
+  libX11 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
+    name = "libX11-1.6.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libX11-1.6.3.tar.bz2;
-      sha256 = "04c1vj53xq2xgyxx5vhln3wm2d76hh1n95fvs3myhligkz1sfcfg";
+      url = "mirror://xorg/individual/lib/libX11-1.6.8.tar.bz2";
+      sha256 = "1mbkwhhprhf49s2iwx7kiliprsdvd690zk44x3h53ql9q52si2dj";
     };
-    buildInputs = [pkgconfig inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ];
-  }) // {inherit inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libxcb xtrans ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXScrnSaver = (mkDerivation "libXScrnSaver" {
-    name = "libXScrnSaver-1.2.2";
+  libXScrnSaver = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
+    name = "libXScrnSaver-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libXScrnSaver-1.2.2.tar.bz2;
-      sha256 = "07ff4r20nkkrj7h08f9fwamds9b3imj8jz5iz6y38zqw6jkyzwcg";
+      url = "mirror://xorg/individual/lib/libXScrnSaver-1.2.3.tar.bz2";
+      sha256 = "1y4vx1vabg7j9hamp0vrfrax5b0lmgm3h0lbgbb3hnkv3dd0f5zr";
     };
-    buildInputs = [pkgconfig scrnsaverproto libX11 libXext xextproto ];
-  }) // {inherit scrnsaverproto libX11 libXext xextproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXau = (mkDerivation "libXau" {
-    name = "libXau-1.0.8";
+  libXTrap = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXt }: stdenv.mkDerivation {
+    name = "libXTrap-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXau-1.0.8.tar.bz2;
-      sha256 = "1wm4pv12f36cwzhldpp7vy3lhm3xdcnp4f184xkxsp7b18r7gm7x";
+      url = "mirror://xorg/individual/lib/libXTrap-1.0.1.tar.bz2";
+      sha256 = "0bi5wxj6avim61yidh9fd3j4n8czxias5m8vss9vhxjnk1aksdwg";
     };
-    buildInputs = [pkgconfig xproto ];
-  }) // {inherit xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXaw = (mkDerivation "libXaw" {
-    name = "libXaw-1.0.12";
+  libXau = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
+    name = "libXau-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXaw-1.0.12.tar.bz2;
-      sha256 = "1xnv7jy86j9vhmw74frkzcraynqbw1p1s79jasargsgwfi433z4n";
+      url = "mirror://xorg/individual/lib/libXau-1.0.9.tar.bz2";
+      sha256 = "1v3krc6x0zliaa66qq1bf9j60x5nqfy68v8axaiglxpnvgqcpy6c";
     };
-    buildInputs = [pkgconfig libX11 libXext xextproto libXmu libXpm xproto libXt ];
-  }) // {inherit libX11 libXext xextproto libXmu libXpm xproto libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXcomposite = (mkDerivation "libXcomposite" {
-    name = "libXcomposite-0.4.4";
+  libXaw = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto, libXmu, libXpm, libXt }: stdenv.mkDerivation {
+    name = "libXaw-1.0.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXcomposite-0.4.4.tar.bz2;
-      sha256 = "0y21nfpa5s8qmx0srdlilyndas3sgl0c6rc26d5fx2vx436m1qpd";
+      url = "mirror://xorg/individual/lib/libXaw-1.0.13.tar.bz2";
+      sha256 = "1kdhxplwrn43d9jp3v54llp05kwx210lrsdvqb6944jp29rhdy4f";
     };
-    buildInputs = [pkgconfig compositeproto libX11 libXfixes xproto ];
-  }) // {inherit compositeproto libX11 libXfixes xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext xorgproto libXmu libXpm libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXcursor = (mkDerivation "libXcursor" {
-    name = "libXcursor-1.1.14";
+  libXaw3d = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXmu, libXpm, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "libXaw3d-1.6.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXcursor-1.1.14.tar.bz2;
-      sha256 = "1prkdicl5y5yx32h1azh6gjfbijvjp415javv8dsakd13jrarilv";
+      url = "mirror://xorg/individual/lib/libXaw3d-1.6.3.tar.bz2";
+      sha256 = "0i653s8g25cc0mimkwid9366bqkbyhdyjhckx7bw77j20hzrkfid";
     };
-    buildInputs = [pkgconfig fixesproto libX11 libXfixes xproto libXrender ];
-  }) // {inherit fixesproto libX11 libXfixes xproto libXrender ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext libXmu libXpm xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXdamage = (mkDerivation "libXdamage" {
-    name = "libXdamage-1.1.4";
+  libXcomposite = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
+    name = "libXcomposite-0.4.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXdamage-1.1.4.tar.bz2;
-      sha256 = "1bamagq7g6s0d23l8rb3nppj8ifqj05f7z9bhbs4fdg8az3ffgvw";
+      url = "mirror://xorg/individual/lib/libXcomposite-0.4.5.tar.bz2";
+      sha256 = "13sfcglvz87vl58hd9rszwr73z0z4nwga3c12rfh7f5s2ln8l8dk";
     };
-    buildInputs = [pkgconfig damageproto fixesproto libX11 xextproto libXfixes xproto ];
-  }) // {inherit damageproto fixesproto libX11 xextproto libXfixes xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXfixes ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXdmcp = (mkDerivation "libXdmcp" {
-    name = "libXdmcp-1.1.2";
+  libXcursor = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXfixes, libXrender }: stdenv.mkDerivation {
+    name = "libXcursor-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXdmcp-1.1.2.tar.bz2;
-      sha256 = "1qp4yhxbfnpj34swa0fj635kkihdkwaiw7kf55cg5zqqg630kzl1";
+      url = "mirror://xorg/individual/lib/libXcursor-1.2.0.tar.bz2";
+      sha256 = "10l7c9fm0jmpkm9ab9dz8r6m1pr87vvgqjnbx1psz50h4pwfklrs";
     };
-    buildInputs = [pkgconfig xproto ];
-  }) // {inherit xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXfixes libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXext = (mkDerivation "libXext" {
-    name = "libXext-1.3.3";
+  libXdamage = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
+    name = "libXdamage-1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXext-1.3.3.tar.bz2;
-      sha256 = "0dbfn5bznnrhqzvkrcmw4c44yvvpwdcsrvzxf4rk27r36b9x865m";
+      url = "mirror://xorg/individual/lib/libXdamage-1.1.5.tar.bz2";
+      sha256 = "0igaw2akjf712y3rv7lx473jigxmcv9rs9y8sbrvbhya8f30cd5p";
     };
-    buildInputs = [pkgconfig libX11 xextproto xproto ];
-  }) // {inherit libX11 xextproto xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXfixes ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXfixes = (mkDerivation "libXfixes" {
-    name = "libXfixes-5.0.1";
+  libXdmcp = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
+    name = "libXdmcp-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfixes-5.0.1.tar.bz2;
-      sha256 = "0rs7qgzr6dpr62db7sd91c1b47hzhzfr010qwnpcm8sg122w1gk3";
+      url = "mirror://xorg/individual/lib/libXdmcp-1.1.3.tar.bz2";
+      sha256 = "0ab53h0rkq721ihk5hi469x500f3pgbkm1wy01yf24x5m923nli0";
     };
-    buildInputs = [pkgconfig fixesproto libX11 xextproto xproto ];
-  }) // {inherit fixesproto libX11 xextproto xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXfont = (mkDerivation "libXfont" {
-    name = "libXfont-1.5.1";
+  libXext = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "libXext-1.3.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfont-1.5.1.tar.bz2;
-      sha256 = "1630v3sfvwwlimb2ja10c84ql6v1mw9bdfhvan7pbybkgi99h25p";
+      url = "mirror://xorg/individual/lib/libXext-1.3.4.tar.bz2";
+      sha256 = "0azqxllcsfxc3ilhz6kwc6x7m8wc477p59ir9p0yrsldx766zbar";
     };
-    buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
-  }) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXft = (mkDerivation "libXft" {
-    name = "libXft-2.3.2";
+  libXfixes = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
+    name = "libXfixes-5.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXft-2.3.2.tar.bz2;
-      sha256 = "0k6wzi5rzs0d0n338ms8n8lfyhq914hw4yl2j7553wqxfqjci8zm";
+      url = "mirror://xorg/individual/lib/libXfixes-5.0.3.tar.bz2";
+      sha256 = "1miana3y4hwdqdparsccmygqr3ic3hs5jrqfzp70hvi2zwxd676y";
     };
-    buildInputs = [pkgconfig fontconfig freetype libX11 xproto libXrender ];
-  }) // {inherit fontconfig freetype libX11 xproto libXrender ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXi = (mkDerivation "libXi" {
-    name = "libXi-1.7.4";
+  libXfont = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib }: stdenv.mkDerivation {
+    name = "libXfont-1.5.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.4.tar.bz2;
-      sha256 = "0i12lj973grlp9fa79v0vh9cahk3nf9csdjnf81iip0qcrlc5zrc";
+      url = "mirror://xorg/individual/lib/libXfont-1.5.4.tar.bz2";
+      sha256 = "0hiji1bvpl78aj3a3141hkk353aich71wv8l5l2z51scfy878zqs";
     };
-    buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
-  }) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libfontenc xorgproto freetype xtrans zlib ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXinerama = (mkDerivation "libXinerama" {
-    name = "libXinerama-1.1.3";
+  libXfont2 = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib }: stdenv.mkDerivation {
+    name = "libXfont2-2.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXinerama-1.1.3.tar.bz2;
-      sha256 = "1qlqfvzw45gdzk9xirgwlp2qgj0hbsyiqj8yh8zml2bk2ygnjibs";
+      url = "mirror://xorg/individual/lib/libXfont2-2.0.4.tar.bz2";
+      sha256 = "1rk9pjxcm01lbr1dxhnvk4f2qrn6zp068qjbvvz5w0z5d0rin5bd";
     };
-    buildInputs = [pkgconfig libX11 libXext xextproto xineramaproto ];
-  }) // {inherit libX11 libXext xextproto xineramaproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libfontenc xorgproto freetype xtrans zlib ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXmu = (mkDerivation "libXmu" {
-    name = "libXmu-1.1.2";
+  libXft = callPackage ({ stdenv, pkgconfig, fetchurl, fontconfig, freetype, libX11, xorgproto, libXrender }: stdenv.mkDerivation {
+    name = "libXft-2.3.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXmu-1.1.2.tar.bz2;
-      sha256 = "02wx6jw7i0q5qwx87yf94fsn3h0xpz1k7dz1nkwfwm1j71ydqvkm";
+      url = "mirror://xorg/individual/lib/libXft-2.3.3.tar.bz2";
+      sha256 = "05lja9s54090xwh31r0bqms4v3pimng5xr09g2rdnafx2vk6hp12";
     };
-    buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
-  }) // {inherit libX11 libXext xextproto xproto libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ fontconfig freetype libX11 xorgproto libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXp = (mkDerivation "libXp" {
+  libXi = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXfixes }: stdenv.mkDerivation {
+    name = "libXi-1.7.10";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/lib/libXi-1.7.10.tar.bz2";
+      sha256 = "0q8hz3slga3w3ch8wp0k7ay9ilhz315qnab0w1y2x9w3cf7hv8rn";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext libXfixes ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  libXinerama = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
+    name = "libXinerama-1.1.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/lib/libXinerama-1.1.4.tar.bz2";
+      sha256 = "086p0axqj57nvkaqa6r00dnr9kyrn1m8blgf0zjy25zpxkbxn200";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  libXmu = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "libXmu-1.1.3";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/lib/libXmu-1.1.3.tar.bz2";
+      sha256 = "0cdpqnx6258i4l6qhphvkdiyspysg0i5caqjy820kp63wwjk4d4w";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  libXp = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXau, libXext }: stdenv.mkDerivation {
     name = "libXp-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXp-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/lib/libXp-1.0.3.tar.bz2";
       sha256 = "0mwc2jwmq03b1m9ihax5c6gw2ln8rc70zz4fsj3kb7440nchqdkz";
     };
-    buildInputs = [pkgconfig printproto libX11 libXau libXext xextproto ];
-  }) // {inherit printproto libX11 libXau libXext xextproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXau libXext ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXpm = (mkDerivation "libXpm" {
-    name = "libXpm-3.5.11";
+  libXpm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto, libXt, gettext }: stdenv.mkDerivation {
+    name = "libXpm-3.5.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXpm-3.5.11.tar.bz2;
-      sha256 = "07041q4k8m4nirzl7lrqn8by2zylx0xvh6n0za301qqs3njszgf5";
+      url = "mirror://xorg/individual/lib/libXpm-3.5.13.tar.bz2";
+      sha256 = "09dc6nwlb2122h02vl64k9x56mxnyqz2gwpga0abfv4bb1bxmlcw";
     };
-    buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
-  }) // {inherit libX11 libXext xextproto xproto libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig gettext ];
+    buildInputs = [ libX11 libXext xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXrandr = (mkDerivation "libXrandr" {
-    name = "libXrandr-1.4.2";
+  libXpresent = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
+    name = "libXpresent-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXrandr-1.4.2.tar.bz2;
-      sha256 = "1b95p3l84ppv6j7dbbmg0zrz6k8xdwvnag1l6ajm3gk9qwdb79ya";
+      url = "mirror://xorg/individual/lib/libXpresent-1.0.0.tar.bz2";
+      sha256 = "12kvvar3ihf6sw49h6ywfdiwmb8i1gh8wasg1zhzp6hs2hay06n1";
     };
-    buildInputs = [pkgconfig randrproto renderproto libX11 libXext xextproto xproto libXrender ];
-  }) // {inherit randrproto renderproto libX11 libXext xextproto xproto libXrender ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXrender = (mkDerivation "libXrender" {
-    name = "libXrender-0.9.8";
+  libXrandr = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXrender }: stdenv.mkDerivation {
+    name = "libXrandr-1.5.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXrender-0.9.8.tar.bz2;
-      sha256 = "0qpwyjhbpp734vnhca992pjh4w7ijslidkzx1pcwbbk000pv050x";
+      url = "mirror://xorg/individual/lib/libXrandr-1.5.2.tar.bz2";
+      sha256 = "08z0mqywrm7ij8bxlfrx0d2wy6kladdmkva1nw5k6qix82z0xsla";
     };
-    buildInputs = [pkgconfig renderproto libX11 xproto ];
-  }) // {inherit renderproto libX11 xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXres = (mkDerivation "libXres" {
-    name = "libXres-1.0.7";
+  libXrender = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
+    name = "libXrender-0.9.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXres-1.0.7.tar.bz2;
-      sha256 = "1rd0bzn67cpb2qkc946gch2183r4bdjfhs6cpqbipy47m9a91296";
+      url = "mirror://xorg/individual/lib/libXrender-0.9.10.tar.bz2";
+      sha256 = "0j89cnb06g8x79wmmnwzykgkkfdhin9j7hjpvsxwlr3fz1wmjvf0";
     };
-    buildInputs = [pkgconfig resourceproto libX11 libXext xextproto xproto ];
-  }) // {inherit resourceproto libX11 libXext xextproto xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXt = (mkDerivation "libXt" {
-    name = "libXt-1.1.4";
+  libXres = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
+    name = "libXres-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXt-1.1.4.tar.bz2;
-      sha256 = "0myxwbx9ylam5x3ia5b5f4x8azcqdm420h9ad1r4hrgmi2lrffl4";
+      url = "mirror://xorg/individual/lib/libXres-1.2.0.tar.bz2";
+      sha256 = "1m0jr0lbz9ixpp9ihk68349q0i7ry2379lnfzdy4mrl86ijc2xgz";
     };
-    buildInputs = [pkgconfig libICE kbproto libSM libX11 xproto ];
-  }) // {inherit libICE kbproto libSM libX11 xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXtst = (mkDerivation "libXtst" {
-    name = "libXtst-1.2.2";
+  libXt = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, xorgproto, libSM, libX11 }: stdenv.mkDerivation {
+    name = "libXt-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXtst-1.2.2.tar.bz2;
-      sha256 = "1ngn161nq679ffmbwl81i2hn75jjg5b3ffv6n4jilpvyazypy2pg";
+      url = "mirror://xorg/individual/lib/libXt-1.2.0.tar.bz2";
+      sha256 = "0cbqlyssr8aia88c8i7z59z9d0kp3p2hp6683xhz9ndyv8qza7dk";
     };
-    buildInputs = [pkgconfig inputproto recordproto libX11 libXext xextproto libXi ];
-  }) // {inherit inputproto recordproto libX11 libXext xextproto libXi ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libICE xorgproto libSM libX11 ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXv = (mkDerivation "libXv" {
-    name = "libXv-1.0.10";
+  libXtst = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXi }: stdenv.mkDerivation {
+    name = "libXtst-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXv-1.0.10.tar.bz2;
-      sha256 = "09a5j6bisysiipd0nw6s352565bp0n6gbyhv5hp63s3cd3w95zjm";
+      url = "mirror://xorg/individual/lib/libXtst-1.2.3.tar.bz2";
+      sha256 = "012jpyj7xfm653a9jcfqbzxyywdmwb2b5wr1dwylx14f3f54jma6";
     };
-    buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto ];
-  }) // {inherit videoproto libX11 libXext xextproto xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext libXi ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXvMC = (mkDerivation "libXvMC" {
-    name = "libXvMC-1.0.9";
+  libXv = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
+    name = "libXv-1.0.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXvMC-1.0.9.tar.bz2;
-      sha256 = "0mjp1b21dvkaz7r0iq085r92nh5vkpmx99awfgqq9hgzyvgxf0q7";
+      url = "mirror://xorg/individual/lib/libXv-1.0.11.tar.bz2";
+      sha256 = "125hn06bd3d8y97hm2pbf5j55gg4r2hpd3ifad651i4sr7m16v6j";
     };
-    buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto libXv ];
-  }) // {inherit videoproto libX11 libXext xextproto xproto libXv ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXxf86dga = (mkDerivation "libXxf86dga" {
-    name = "libXxf86dga-1.1.4";
+  libXvMC = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXv }: stdenv.mkDerivation {
+    name = "libXvMC-1.0.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXxf86dga-1.1.4.tar.bz2;
-      sha256 = "0zn7aqj8x0951d8zb2h2andldvwkzbsc4cs7q023g6nzq6vd9v4f";
+      url = "mirror://xorg/individual/lib/libXvMC-1.0.11.tar.bz2";
+      sha256 = "0bb2c996p0smp2lwckffcfh4701bzv7266xh230ag0x68ka38bja";
     };
-    buildInputs = [pkgconfig libX11 libXext xextproto xf86dgaproto xproto ];
-  }) // {inherit libX11 libXext xextproto xf86dgaproto xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext libXv ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXxf86misc = (mkDerivation "libXxf86misc" {
-    name = "libXxf86misc-1.0.3";
+  libXxf86dga = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
+    name = "libXxf86dga-1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXxf86misc-1.0.3.tar.bz2;
-      sha256 = "0nvbq9y6k6m9hxdvg3crycqsnnxf1859wrisqcs37z9fhq044gsn";
+      url = "mirror://xorg/individual/lib/libXxf86dga-1.1.5.tar.bz2";
+      sha256 = "00vjvcdlc1sga251jkxn6gkxmx9h5n290ffxxpa40qbca1gvr61b";
     };
-    buildInputs = [pkgconfig libX11 libXext xextproto xf86miscproto xproto ];
-  }) // {inherit libX11 libXext xextproto xf86miscproto xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libXxf86vm = (mkDerivation "libXxf86vm" {
+  libXxf86misc = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
+    name = "libXxf86misc-1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/lib/libXxf86misc-1.0.4.tar.bz2";
+      sha256 = "107k593sx27vjz3v7gbb223add9i7w0bjc90gbb3jqpin3i07758";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  libXxf86vm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     name = "libXxf86vm-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXxf86vm-1.1.4.tar.bz2;
+      url = "mirror://xorg/individual/lib/libXxf86vm-1.1.4.tar.bz2";
       sha256 = "0mydhlyn72i7brjwypsqrpkls3nm6vxw0li8b2nw0caz7kwjgvmg";
     };
-    buildInputs = [pkgconfig libX11 libXext xextproto xf86vidmodeproto xproto ];
-  }) // {inherit libX11 libXext xextproto xf86vidmodeproto xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libdmx = (mkDerivation "libdmx" {
-    name = "libdmx-1.1.3";
+  libdmx = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
+    name = "libdmx-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libdmx-1.1.3.tar.bz2;
-      sha256 = "00djlxas38kbsrglcmwmxfbmxjdchlbj95pqwjvdg8jn5rns6zf9";
+      url = "mirror://xorg/individual/lib/libdmx-1.1.4.tar.bz2";
+      sha256 = "0hvjfhrcym770cr0zpqajdy3cda30aiwbjzv16iafkqkbl090gr5";
     };
-    buildInputs = [pkgconfig dmxproto libX11 libXext xextproto ];
-  }) // {inherit dmxproto libX11 libXext xextproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libfontenc = (mkDerivation "libfontenc" {
-    name = "libfontenc-1.1.2";
+  libfontenc = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, zlib }: stdenv.mkDerivation {
+    name = "libfontenc-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libfontenc-1.1.2.tar.bz2;
-      sha256 = "0qign0ivqk166l9yfd51gw9lbhgs718bcrmvc40yicjr6gnyz959";
+      url = "mirror://xorg/individual/lib/libfontenc-1.1.4.tar.bz2";
+      sha256 = "0y90170dp8wsidr1dzza0grxr1lfh30ji3b5vkjz4j6x1n0wxz1c";
     };
-    buildInputs = [pkgconfig xproto zlib ];
-  }) // {inherit xproto zlib ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto zlib ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libpciaccess = (mkDerivation "libpciaccess" {
-    name = "libpciaccess-0.13.3";
+  libpciaccess = callPackage ({ stdenv, pkgconfig, fetchurl, zlib }: stdenv.mkDerivation {
+    name = "libpciaccess-0.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libpciaccess-0.13.3.tar.bz2;
-      sha256 = "1qy2i776jb7912dxqylv59p41sa0hw8lmn7asd3ywvp0wk56rmvc";
+      url = "mirror://xorg/individual/lib/libpciaccess-0.16.tar.bz2";
+      sha256 = "12glp4w1kgvmqn89lk19cgr6jccd3awxra4dxisp7pagi06rsk11";
     };
-    buildInputs = [pkgconfig zlib ];
-  }) // {inherit zlib ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ zlib ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libpthreadstubs = (mkDerivation "libpthreadstubs" {
-    name = "libpthread-stubs-0.3";
+  libpthreadstubs = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
+    name = "libpthread-stubs-0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libpthread-stubs-0.3.tar.bz2;
-      sha256 = "16bjv3in19l84hbri41iayvvg4ls9gv1ma0x0qlbmwy67i7dbdim";
+      url = "https://xcb.freedesktop.org/dist/libpthread-stubs-0.4.tar.bz2";
+      sha256 = "0cz7s9w8lqgzinicd4g36rjg08zhsbyngh0w68c3np8nlc8mkl74";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libxcb = (mkDerivation "libxcb" {
-    name = "libxcb-1.11";
+  libxcb = callPackage ({ stdenv, pkgconfig, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python }: stdenv.mkDerivation {
+    name = "libxcb-1.13.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libxcb-1.11.tar.bz2;
-      sha256 = "1xqgc81krx14f2c8yl5chzg5g2l26mhm2rwffy8dx7jv0iq5sqq3";
+      url = "https://xcb.freedesktop.org/dist/libxcb-1.13.1.tar.bz2";
+      sha256 = "1i27lvrcsygims1pddpl5c4qqs6z715lm12ax0n3vx0igapvg7x8";
     };
-    buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
-  }) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig python ];
+    buildInputs = [ libxslt libpthreadstubs libXau xcbproto libXdmcp ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libxkbfile = (mkDerivation "libxkbfile" {
-    name = "libxkbfile-1.0.8";
+  libxkbfile = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
+    name = "libxkbfile-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libxkbfile-1.0.8.tar.bz2;
-      sha256 = "0flg5arw6n3njagmsi4i4l0zl5bfx866a1h9ydc3bi1pqlclxaca";
+      url = "mirror://xorg/individual/lib/libxkbfile-1.1.0.tar.bz2";
+      sha256 = "1irq9crvscd3yb8sr802dhvvfr35jdy1n2yz094xplmd42mbv3bm";
     };
-    buildInputs = [pkgconfig kbproto libX11 ];
-  }) // {inherit kbproto libX11 ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  libxshmfence = (mkDerivation "libxshmfence" {
-    name = "libxshmfence-1.2";
+  libxshmfence = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
+    name = "libxshmfence-1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libxshmfence-1.2.tar.bz2;
-      sha256 = "032b0nlkdrpbimdld4gqvhqx53rzn8fawvf1ybhzn7lcswgjs6yj";
+      url = "mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2";
+      sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
     };
-    buildInputs = [pkgconfig xproto ];
-  }) // {inherit xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  lndir = (mkDerivation "lndir" {
+  listres = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "listres-1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/app/listres-1.0.4.tar.bz2";
+      sha256 = "041bxkvv6f92sm3hhm977c4gdqdv5r1jyxjqcqfi8vkrg3s2j4ka";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXaw libXmu xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  lndir = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "lndir-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/lndir-1.0.3.tar.bz2;
+      url = "mirror://xorg/individual/util/lndir-1.0.3.tar.bz2";
       sha256 = "0pdngiy8zdhsiqx2am75yfcl36l7kd7d7nl0rss8shcdvsqgmx29";
     };
-    buildInputs = [pkgconfig xproto ];
-  }) // {inherit xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  luit = (mkDerivation "luit" {
-    name = "luit-1.1.1";
+  luit = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
+    name = "luit-20190106";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/luit-1.1.1.tar.bz2;
-      sha256 = "0dn694mk56x6hdk6y9ylx4f128h5jcin278gnw2gb807rf3ygc1h";
+      url = "https://invisible-mirror.net/archives/luit/luit-20190106.tgz";
+      sha256 = "081rrajj5hpgx3pvm43grqzscnq5kl320q0wq6zzhf6wrijhz41b";
     };
-    buildInputs = [pkgconfig libfontenc ];
-  }) // {inherit libfontenc ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  makedepend = (mkDerivation "makedepend" {
-    name = "makedepend-1.0.5";
+  makedepend = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
+    name = "makedepend-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/makedepend-1.0.5.tar.bz2;
-      sha256 = "09alw99r6y2bbd1dc786n3jfgv4j520apblyn7cw6jkjydshba7p";
+      url = "mirror://xorg/individual/util/makedepend-1.0.6.tar.bz2";
+      sha256 = "072h9nzh8s5vqfz35dli4fba36fnr219asjrb7p89n8ph0paan6m";
     };
-    buildInputs = [pkgconfig xproto ];
-  }) // {inherit xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  mkfontdir = (mkDerivation "mkfontdir" {
-    name = "mkfontdir-1.0.7";
+  mkfontscale = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, freetype, xorgproto, zlib }: stdenv.mkDerivation {
+    name = "mkfontscale-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/mkfontdir-1.0.7.tar.bz2;
-      sha256 = "0c3563kw9fg15dpgx4dwvl12qz6sdqdns1pxa574hc7i5m42mman";
+      url = "mirror://xorg/individual/app/mkfontscale-1.2.1.tar.bz2";
+      sha256 = "1ixsnsm2mn0zy9ksdid0lj6irnhvasfik9mz8bbrs5sajzmra16a";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libfontenc freetype xorgproto zlib ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  mkfontscale = (mkDerivation "mkfontscale" {
-    name = "mkfontscale-1.1.2";
+  oclock = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt }: stdenv.mkDerivation {
+    name = "oclock-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/mkfontscale-1.1.2.tar.bz2;
-      sha256 = "081z8lwh9c1gyrx3ad12whnpv3jpfbqsc366mswpfm48mwl54vcc";
+      url = "mirror://xorg/individual/app/oclock-1.0.4.tar.bz2";
+      sha256 = "1zmfzfmdp42nvapf0qz1bc3i3waq5sjrpkgfw64qs4nmq30wy86c";
     };
-    buildInputs = [pkgconfig libfontenc freetype xproto zlib ];
-  }) // {inherit libfontenc freetype xproto zlib ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libxkbfile libX11 libXext libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  presentproto = (mkDerivation "presentproto" {
-    name = "presentproto-1.0";
+  sessreg = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
+    name = "sessreg-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/presentproto-1.0.tar.bz2;
-      sha256 = "1kir51aqg9cwazs14ivcldcn3mzadqgykc9cg87rm40zf947sb41";
+      url = "mirror://xorg/individual/app/sessreg-1.1.2.tar.bz2";
+      sha256 = "0crczl25zynkrslmm8sjaxszhrh4i33m7h5fg4wfdb3k8aarxjyz";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  printproto = (mkDerivation "printproto" {
-    name = "printproto-1.0.5";
+  setxkbmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
+    name = "setxkbmap-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/printproto-1.0.5.tar.bz2;
-      sha256 = "06liap8n4s25sgp27d371cc7yg9a08dxcr3pmdjp761vyin3360j";
+      url = "mirror://xorg/individual/app/setxkbmap-1.3.2.tar.bz2";
+      sha256 = "1xdrxs65v7d0rw1yaz0vsz55w4hxym99216p085ya9978j379wlg";
     };
-    buildInputs = [pkgconfig libXau ];
-  }) // {inherit libXau ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libxkbfile ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  randrproto = (mkDerivation "randrproto" {
-    name = "randrproto-1.4.1";
+  smproxy = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libXmu, libXt }: stdenv.mkDerivation {
+    name = "smproxy-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/randrproto-1.4.1.tar.bz2;
-      sha256 = "1p7155hsp48b0sjm4rc67wz6y1nxqrq69vyw0sjxh8h6pcpcngal";
+      url = "mirror://xorg/individual/app/smproxy-1.0.6.tar.bz2";
+      sha256 = "0rkjyzmsdqmlrkx8gy2j4q6iksk58hcc92xzdprkf8kml9ar3wbc";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libICE libSM libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  recordproto = (mkDerivation "recordproto" {
-    name = "recordproto-1.14.2";
+  transset = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "transset-1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/recordproto-1.14.2.tar.bz2;
-      sha256 = "0w3kgr1zabwf79bpc28dcnj0fpni6r53rpi82ngjbalj5s6m8xx7";
+      url = "mirror://xorg/individual/app/transset-1.0.2.tar.bz2";
+      sha256 = "088v8p0yfn4r3azabp6662hqikfs2gjb9xmjjd45gnngwwp19b2b";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  renderproto = (mkDerivation "renderproto" {
-    name = "renderproto-0.11.1";
+  twm = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libX11, libXext, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "twm-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/renderproto-0.11.1.tar.bz2;
-      sha256 = "0dr5xw6s0qmqg0q5pdkb4jkdhaja0vbfqla79qh5j1xjj9dmlwq6";
+      url = "mirror://xorg/individual/app/twm-1.0.10.tar.bz2";
+      sha256 = "1ms5cj1w3g26zg6bxdv1j9hl0pxr4300qnv003cz1q3cl7ffljb4";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libICE libSM libX11 libXext libXmu xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  resourceproto = (mkDerivation "resourceproto" {
-    name = "resourceproto-1.2.0";
+  utilmacros = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
+    name = "util-macros-1.19.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/resourceproto-1.2.0.tar.bz2;
-      sha256 = "0638iyfiiyjw1hg3139pai0j6m65gkskrvd9684zgc6ydcx00riw";
+      url = "mirror://xorg/individual/util/util-macros-1.19.2.tar.bz2";
+      sha256 = "04p7ydqxgq37jklnfj18b70zsifiz4h50wvrk94i2112mmv37r6p";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  scrnsaverproto = (mkDerivation "scrnsaverproto" {
-    name = "scrnsaverproto-1.2.2";
+  viewres = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+    name = "viewres-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/scrnsaverproto-1.2.2.tar.bz2;
-      sha256 = "0rfdbfwd35d761xkfifcscx56q0n56043ixlmv70r4v4l66hmdwb";
+      url = "mirror://xorg/individual/app/viewres-1.0.5.tar.bz2";
+      sha256 = "1mz319kfmvcrdpi22dmdr91mif1j0j3ck1f8mmnz5g1r9kl1in2y";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXaw libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  sessreg = (mkDerivation "sessreg" {
-    name = "sessreg-1.1.0";
+  x11perf = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXft, libXmu, xorgproto, libXrender }: stdenv.mkDerivation {
+    name = "x11perf-1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/sessreg-1.1.0.tar.bz2;
-      sha256 = "0z013rskwmdadd8cdlxvh4asmgim61qijyzfbqmr1q1mg1jpf4am";
+      url = "mirror://xorg/individual/app/x11perf-1.6.1.tar.bz2";
+      sha256 = "0d3wh6z6znwhfdiv0zaggfj0xgish98xa10yy76b9517zj7hnzhw";
     };
-    buildInputs = [pkgconfig xproto ];
-  }) // {inherit xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext libXft libXmu xorgproto libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  setxkbmap = (mkDerivation "setxkbmap" {
-    name = "setxkbmap-1.3.0";
+  xauth = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXext, libXmu, xorgproto }: stdenv.mkDerivation {
+    name = "xauth-1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/setxkbmap-1.3.0.tar.bz2;
-      sha256 = "1inygpvlgc6vr5h9laxw9lnvafnccl3fy0g5n9ll28iq3yfmqc1x";
+      url = "mirror://xorg/individual/app/xauth-1.1.tar.bz2";
+      sha256 = "032klzzw8r09z36x1272ssd79bcisz8j5p8gbdy111fiknvx27bd";
     };
-    buildInputs = [pkgconfig libX11 libxkbfile ];
-  }) // {inherit libX11 libxkbfile ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXau libXext libXmu xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  smproxy = (mkDerivation "smproxy" {
-    name = "smproxy-1.0.5";
+  xbacklight = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb, xcbutil }: stdenv.mkDerivation {
+    name = "xbacklight-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/smproxy-1.0.5.tar.bz2;
-      sha256 = "02fn5wa1gs2jap6sr9j9yk6zsvz82j8l61pf74iyqwa99q4wnb67";
+      url = "mirror://xorg/individual/app/xbacklight-1.2.3.tar.bz2";
+      sha256 = "1plssg0s3pbslg6rfzxp9sx8ryvn8l32zyvc8zp9zsbsfwjg69rs";
     };
-    buildInputs = [pkgconfig libICE libSM libXmu libXt ];
-  }) // {inherit libICE libSM libXmu libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libxcb xcbutil ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  twm = (mkDerivation "twm" {
-    name = "twm-1.0.8";
+  xbitmaps = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
+    name = "xbitmaps-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/twm-1.0.8.tar.bz2;
-      sha256 = "0i1ff8h2gh1ab311da5dlhl0nrma0qbrk403ymzi4cnnacikaq3n";
+      url = "mirror://xorg/individual/data/xbitmaps-1.1.2.tar.bz2";
+      sha256 = "1vh73sc13s7w5r6gnc6irca56s7998bja7wgdivkfn8jccawgw5r";
     };
-    buildInputs = [pkgconfig libICE libSM libX11 libXext libXmu xproto libXt ];
-  }) // {inherit libICE libSM libX11 libXext libXmu xproto libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  utilmacros = (mkDerivation "utilmacros" {
-    name = "util-macros-1.19.0";
+  xcalc = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "xcalc-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/util-macros-1.19.0.tar.bz2;
-      sha256 = "1fnhpryf55l0yqajxn0cxan3kvsjzi67nlanz8clwqzf54cb2d98";
+      url = "mirror://xorg/individual/app/xcalc-1.1.0.tar.bz2";
+      sha256 = "1sxmlcb0sb3h4z05kl5l0kxnhrc0h8c74p9m3zdc7bv58jaldmym";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  videoproto = (mkDerivation "videoproto" {
-    name = "videoproto-2.3.2";
+  xcbproto = callPackage ({ stdenv, pkgconfig, fetchurl, python }: stdenv.mkDerivation {
+    name = "xcb-proto-1.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/videoproto-2.3.2.tar.bz2;
-      sha256 = "1dnlkd9nb0m135lgd6hd61vc29sdyarsyya8aqpx7z10p261dbld";
+      url = "https://xcb.freedesktop.org/dist/xcb-proto-1.13.tar.bz2";
+      sha256 = "1qdxw9syhbvswiqj5dvj278lrmfhs81apzmvx6205s4vcqg7563v";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig python ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  windowswmproto = (mkDerivation "windowswmproto" {
-    name = "windowswmproto-1.0.4";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/windowswmproto-1.0.4.tar.bz2;
-      sha256 = "0syjxgy4m8l94qrm03nvn5k6bkxc8knnlld1gbllym97nvnv0ny0";
-    };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
-
-  x11perf = (mkDerivation "x11perf" {
-    name = "x11perf-1.5.4";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/x11perf-1.5.4.tar.bz2;
-      sha256 = "111iwpxhnxjiq44w96zf0kszg5zpgv1g3ayx18v4nhdzl9bqivi4";
-    };
-    buildInputs = [pkgconfig libX11 libXext libXft libXmu libXrender ];
-  }) // {inherit libX11 libXext libXft libXmu libXrender ;};
-
-  xauth = (mkDerivation "xauth" {
-    name = "xauth-1.0.9";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/app/xauth-1.0.9.tar.bz2;
-      sha256 = "13y2invb0894b1in03jbglximbz6v31y2kr4yjjgica8xciibkjn";
-    };
-    buildInputs = [pkgconfig libX11 libXau libXext libXmu xproto ];
-  }) // {inherit libX11 libXau libXext libXmu xproto ;};
-
-  xbacklight = (mkDerivation "xbacklight" {
-    name = "xbacklight-1.2.1";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/app/xbacklight-1.2.1.tar.bz2;
-      sha256 = "0arnd1j8vzhzmw72mqhjjcb2qwcbs9qphsy3ps593ajyld8wzxhp";
-    };
-    buildInputs = [pkgconfig libxcb xcbutil ];
-  }) // {inherit libxcb xcbutil ;};
-
-  xbitmaps = (mkDerivation "xbitmaps" {
-    name = "xbitmaps-1.1.1";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xbitmaps-1.1.1.tar.bz2;
-      sha256 = "178ym90kwidia6nas4qr5n5yqh698vv8r02js0r4vg3b6lsb0w9n";
-    };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
-
-  xcbproto = (mkDerivation "xcbproto" {
-    name = "xcb-proto-1.11";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-proto-1.11.tar.bz2;
-      sha256 = "0bp3f53l9fy5x3mn1rkj1g81aiyzl90wacwvqdgy831aa3kfxb5l";
-    };
-    buildInputs = [pkgconfig python ];
-  }) // {inherit python ;};
-
-  xcbutil = (mkDerivation "xcbutil" {
+  xcbutil = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-0.4.0.tar.bz2;
+      url = "https://xcb.freedesktop.org/dist/xcb-util-0.4.0.tar.bz2";
       sha256 = "1sahmrgbpyki4bb72hxym0zvxwnycmswsxiisgqlln9vrdlr9r26";
     };
-    buildInputs = [pkgconfig gperf m4 libxcb xproto ];
-  }) // {inherit gperf m4 libxcb xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig m4 ];
+    buildInputs = [ gperf libxcb xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xcbutilcursor = (mkDerivation "xcbutilcursor" {
-    name = "xcb-util-cursor-0.1.2";
+  xcbutilcursor = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xcbutilimage, xcbutilrenderutil, xorgproto, m4 }: stdenv.mkDerivation {
+    name = "xcb-util-cursor-0.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.2.tar.bz2;
-      sha256 = "0fpv46zb7kz04qxwvpax4cpd2kd8yhsm2n0if1isniqdh5xkcrgd";
+      url = "https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.3.tar.bz2";
+      sha256 = "0krr4rcw6r42cncinzvzzdqnmxk3nrgpnadyg2h8k9x10q3hm885";
     };
-    buildInputs = [pkgconfig gperf m4 libxcb xcbutilimage xcbutilrenderutil xproto ];
-  }) // {inherit gperf m4 libxcb xcbutilimage xcbutilrenderutil xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig m4 ];
+    buildInputs = [ gperf libxcb xcbutilimage xcbutilrenderutil xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xcbutilimage = (mkDerivation "xcbutilimage" {
+  xcbutilerrors = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xcbproto, xorgproto, m4 }: stdenv.mkDerivation {
+    name = "xcb-util-errors-1.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "https://xcb.freedesktop.org/dist/xcb-util-errors-1.0.tar.bz2";
+      sha256 = "158rm913dg3hxrrhyvvxr8bcm0pjy5jws70dhy2s12w1krv829k8";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig m4 ];
+    buildInputs = [ gperf libxcb xcbproto xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xcbutilimage = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xcbutil, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-image-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-image-0.4.0.tar.bz2;
+      url = "https://xcb.freedesktop.org/dist/xcb-util-image-0.4.0.tar.bz2";
       sha256 = "1z1gxacg7q4cw6jrd26gvi5y04npsyavblcdad1xccc8swvnmf9d";
     };
-    buildInputs = [pkgconfig gperf m4 libxcb xcbutil xproto ];
-  }) // {inherit gperf m4 libxcb xcbutil xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig m4 ];
+    buildInputs = [ gperf libxcb xcbutil xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xcbutilkeysyms = (mkDerivation "xcbutilkeysyms" {
+  xcbutilkeysyms = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-keysyms-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-keysyms-0.4.0.tar.bz2;
+      url = "https://xcb.freedesktop.org/dist/xcb-util-keysyms-0.4.0.tar.bz2";
       sha256 = "1nbd45pzc1wm6v5drr5338j4nicbgxa5hcakvsvm5pnyy47lky0f";
     };
-    buildInputs = [pkgconfig gperf m4 libxcb xproto ];
-  }) // {inherit gperf m4 libxcb xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig m4 ];
+    buildInputs = [ gperf libxcb xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xcbutilrenderutil = (mkDerivation "xcbutilrenderutil" {
+  xcbutilrenderutil = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-renderutil-0.3.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.9.tar.bz2;
+      url = "https://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.9.tar.bz2";
       sha256 = "0nza1csdvvxbmk8vgv8vpmq7q8h05xrw3cfx9lwxd1hjzd47xsf6";
     };
-    buildInputs = [pkgconfig gperf m4 libxcb xproto ];
-  }) // {inherit gperf m4 libxcb xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig m4 ];
+    buildInputs = [ gperf libxcb xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xcbutilwm = (mkDerivation "xcbutilwm" {
+  xcbutilwm = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-wm-0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-wm-0.4.1.tar.bz2;
+      url = "https://xcb.freedesktop.org/dist/xcb-util-wm-0.4.1.tar.bz2";
       sha256 = "0gra7hfyxajic4mjd63cpqvd20si53j1q3rbdlkqkahfciwq3gr8";
     };
-    buildInputs = [pkgconfig gperf m4 libxcb xproto ];
-  }) // {inherit gperf m4 libxcb xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig m4 ];
+    buildInputs = [ gperf libxcb xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xclock = (mkDerivation "xclock" {
-    name = "xclock-1.0.7";
+  xclock = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+    name = "xclock-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xclock-1.0.7.tar.bz2;
-      sha256 = "1l3xv4bsca6bwxx73jyjz0blav86i7vwffkhdb1ac81y9slyrki3";
+      url = "mirror://xorg/individual/app/xclock-1.0.9.tar.bz2";
+      sha256 = "1fr3q4rszgx7x2zxy2ip592a3fgx20hfwac49p2l5b7jqsr1ying";
     };
-    buildInputs = [pkgconfig libX11 libXaw libXft libxkbfile libXmu xproto libXrender libXt ];
-  }) // {inherit libX11 libXaw libXft libxkbfile libXmu xproto libXrender libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw libXft libxkbfile libXmu xorgproto libXrender libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xcmiscproto = (mkDerivation "xcmiscproto" {
-    name = "xcmiscproto-1.2.2";
+  xcmsdb = callPackage ({ stdenv, pkgconfig, fetchurl, libX11 }: stdenv.mkDerivation {
+    name = "xcmsdb-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xcmiscproto-1.2.2.tar.bz2;
-      sha256 = "1pyjv45wivnwap2wvsbrzdvjc5ql8bakkbkrvcv6q9bjjf33ccmi";
+      url = "mirror://xorg/individual/app/xcmsdb-1.0.5.tar.bz2";
+      sha256 = "1ik7gzlp2igz183x70883000ygp99r20x3aah6xhaslbpdhm6n75";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xcmsdb = (mkDerivation "xcmsdb" {
-    name = "xcmsdb-1.0.4";
+  xcompmgr = callPackage ({ stdenv, pkgconfig, fetchurl, libXcomposite, libXdamage, libXext, libXfixes, libXrender }: stdenv.mkDerivation {
+    name = "xcompmgr-1.1.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xcmsdb-1.0.4.tar.bz2;
-      sha256 = "03ms731l3kvaldq7ycbd30j6134b61i3gbll4b2gl022wyzbjq74";
+      url = "mirror://xorg/individual/app/xcompmgr-1.1.8.tar.bz2";
+      sha256 = "0hvjkanrdlvk3ln5a1jx3c9ggziism2jr1na7jl3zyk0y3sdm28b";
     };
-    buildInputs = [pkgconfig libX11 ];
-  }) // {inherit libX11 ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXcomposite libXdamage libXext libXfixes libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xcursorgen = (mkDerivation "xcursorgen" {
-    name = "xcursorgen-1.0.6";
+  xconsole = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+    name = "xconsole-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xcursorgen-1.0.6.tar.bz2;
-      sha256 = "0v7nncj3kaa8c0524j7ricdf4rvld5i7c3m6fj55l5zbah7r3j1i";
+      url = "mirror://xorg/individual/app/xconsole-1.0.7.tar.bz2";
+      sha256 = "1q2ib1626i5da0nda09sp3vzppjrcn82fff83cw7hwr0vy14h56i";
     };
-    buildInputs = [pkgconfig libpng libX11 libXcursor ];
-  }) // {inherit libpng libX11 libXcursor ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xcursorthemes = (mkDerivation "xcursorthemes" {
-    name = "xcursor-themes-1.0.4";
+  xcursorgen = callPackage ({ stdenv, pkgconfig, fetchurl, libpng, libX11, libXcursor }: stdenv.mkDerivation {
+    name = "xcursorgen-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xcursor-themes-1.0.4.tar.bz2;
-      sha256 = "11mv661nj1p22sqkv87ryj2lcx4m68a04b0rs6iqh3fzp42jrzg3";
+      url = "mirror://xorg/individual/app/xcursorgen-1.0.7.tar.bz2";
+      sha256 = "0ggbv084cavp52hjgcz3vdj0g018axs0m23c03lpc5sgn92gidim";
     };
-    buildInputs = [pkgconfig libXcursor ];
-  }) // {inherit libXcursor ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libpng libX11 libXcursor ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xdm = (mkDerivation "xdm" {
-    name = "xdm-1.1.11";
+  xcursorthemes = callPackage ({ stdenv, pkgconfig, fetchurl, libXcursor }: stdenv.mkDerivation {
+    name = "xcursor-themes-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xdm-1.1.11.tar.bz2;
-      sha256 = "0iqw11977lpr9nk1is4fca84d531vck0mq7jldwl44m0vrnl5nnl";
+      url = "mirror://xorg/individual/data/xcursor-themes-1.0.6.tar.bz2";
+      sha256 = "16a96li0s0ggg60v7f6ywxmsrmxdfizcw55ccv7sp4qjfisca7pf";
     };
-    buildInputs = [pkgconfig libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm libXt ];
-  }) // {inherit libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXcursor ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xdpyinfo = (mkDerivation "xdpyinfo" {
-    name = "xdpyinfo-1.3.1";
+  xdm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+    name = "xdm-1.1.12";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xdpyinfo-1.3.1.tar.bz2;
-      sha256 = "154b29zlrq33lmni883jgwyrb2kx7z8h52jx1s3ys5x5d582iydf";
+      url = "mirror://xorg/individual/app/xdm-1.1.12.tar.bz2";
+      sha256 = "1x17hdymf6rd8jmh4n1sd4g5a8ayr5w94nwjw84qs2fs5pvq7lhd";
     };
-    buildInputs = [pkgconfig libdmx libX11 libxcb libXcomposite libXext libXi libXinerama xproto libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ];
-  }) // {inherit libdmx libX11 libxcb libXcomposite libXext libXi libXinerama xproto libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xdriinfo = (mkDerivation "xdriinfo" {
-    name = "xdriinfo-1.0.4";
+  xdpyinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libdmx, libX11, libxcb, libXcomposite, libXext, libXi, libXinerama, xorgproto, libXrender, libXtst, libXxf86dga, libXxf86misc, libXxf86vm }: stdenv.mkDerivation {
+    name = "xdpyinfo-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xdriinfo-1.0.4.tar.bz2;
-      sha256 = "076bjix941znyjmh3j5jjsnhp2gv2iq53d0ks29mvvv87cyy9iim";
+      url = "mirror://xorg/individual/app/xdpyinfo-1.3.2.tar.bz2";
+      sha256 = "0ldgrj4w2fa8jng4b3f3biaj0wyn8zvya88pnk70d7k12pcqw8rh";
     };
-    buildInputs = [pkgconfig glproto libX11 ];
-  }) // {inherit glproto libX11 ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libdmx libX11 libxcb libXcomposite libXext libXi libXinerama xorgproto libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xev = (mkDerivation "xev" {
-    name = "xev-1.2.1";
+  xdriinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libGL, xorgproto, libX11 }: stdenv.mkDerivation {
+    name = "xdriinfo-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xev-1.2.1.tar.bz2;
-      sha256 = "0hv296mysglcgkx6lj1wxc23kshb2kix1a8yqppxj5vz16mpzw8i";
+      url = "mirror://xorg/individual/app/xdriinfo-1.0.6.tar.bz2";
+      sha256 = "0lcx8h3zd11m4w8wf7dyp89826d437iz78cyrix436bqx31x5k6r";
     };
-    buildInputs = [pkgconfig libX11 xproto libXrandr ];
-  }) // {inherit libX11 xproto libXrandr ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libGL xorgproto libX11 ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xextproto = (mkDerivation "xextproto" {
-    name = "xextproto-7.3.0";
+  xev = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXrandr }: stdenv.mkDerivation {
+    name = "xev-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/xextproto-7.3.0.tar.bz2;
-      sha256 = "1c2vma9gqgc2v06rfxdiqgwhxmzk2cbmknwf1ng3m76vr0xb5x7k";
+      url = "mirror://xorg/individual/app/xev-1.2.3.tar.bz2";
+      sha256 = "02ddsdx138g7szhwklpbzi0cxr34871iay3k28kdcihrz8f4zg36";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto libXrandr ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xeyes = (mkDerivation "xeyes" {
-    name = "xeyes-1.1.1";
+  xeyes = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+    name = "xeyes-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xeyes-1.1.1.tar.bz2;
-      sha256 = "08d5x2kar5kg4yammw6hhk10iva6jmh8cqq176a1z7nm1il9hplp";
+      url = "mirror://xorg/individual/app/xeyes-1.1.2.tar.bz2";
+      sha256 = "0lq5j7fryx1wn998jq6h3icz1h6pqrsbs3adskjzjyhn5l6yrg2p";
     };
-    buildInputs = [pkgconfig libX11 libXext libXmu libXrender libXt ];
-  }) // {inherit libX11 libXext libXmu libXrender libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext libXmu xorgproto libXrender libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86bigfontproto = (mkDerivation "xf86bigfontproto" {
-    name = "xf86bigfontproto-1.2.0";
+  xf86inputevdev = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libevdev, udev, mtdev, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-input-evdev-2.10.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86bigfontproto-1.2.0.tar.bz2;
-      sha256 = "0j0n7sj5xfjpmmgx6n5x556rw21hdd18fwmavp95wps7qki214ms";
+      url = "mirror://xorg/individual/driver/xf86-input-evdev-2.10.6.tar.bz2";
+      sha256 = "1h1y0fwnawlp4yc5llr1l7hwfcxxpln2fxhy6arcf6w6h4z0f9l7";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libevdev udev mtdev xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86dgaproto = (mkDerivation "xf86dgaproto" {
-    name = "xf86dgaproto-2.1";
+  xf86inputjoystick = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-input-joystick-1.6.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86dgaproto-2.1.tar.bz2;
-      sha256 = "0l4hx48207mx0hp09026r6gy9nl3asbq0c75hri19wp1118zcpmc";
+      url = "mirror://xorg/individual/driver/xf86-input-joystick-1.6.3.tar.bz2";
+      sha256 = "1awfq496d082brgjbr60lhm6jvr9537rflwxqdfqwfzjy3n6jxly";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86driproto = (mkDerivation "xf86driproto" {
-    name = "xf86driproto-2.1.1";
+  xf86inputkeyboard = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-input-keyboard-1.9.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86driproto-2.1.1.tar.bz2;
-      sha256 = "07v69m0g2dfzb653jni4x656jlr7l84c1k39j8qc8vfb45r8sjww";
+      url = "mirror://xorg/individual/driver/xf86-input-keyboard-1.9.0.tar.bz2";
+      sha256 = "12032yg412kyvnmc5fha1in7mpi651d8sa1bk4138s2j2zr01jgp";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86inputevdev = (mkDerivation "xf86inputevdev" {
-    name = "xf86-input-evdev-2.9.2";
+  xf86inputlibinput = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libinput, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-input-libinput-0.28.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-evdev-2.9.2.tar.bz2;
-      sha256 = "1v7gmjc1ilyhln80i87rivgls3ajlm8lnkm9rn695img66sjj8vr";
+      url = "mirror://xorg/individual/driver/xf86-input-libinput-0.28.2.tar.bz2";
+      sha256 = "0818vr0yhk9j1y1wcbxzcd458vrvp06rrhi8k43bhqkb5jb4dcxq";
     };
-    buildInputs = [pkgconfig inputproto udev xorgserver xproto ];
-  }) // {inherit inputproto udev xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libinput xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86inputjoystick = (mkDerivation "xf86inputjoystick" {
-    name = "xf86-input-joystick-1.6.2";
+  xf86inputmouse = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-input-mouse-1.9.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-joystick-1.6.2.tar.bz2;
-      sha256 = "038mfqairyyqvz02rk7v3i070sab1wr0k6fkxvyvxdgkfbnqcfzf";
+      url = "mirror://xorg/individual/driver/xf86-input-mouse-1.9.3.tar.bz2";
+      sha256 = "1iawr1wyl2qch1mqszcs0s84i92mh4xxprflnycbw1adc18b7v4k";
     };
-    buildInputs = [pkgconfig inputproto kbproto xorgserver xproto ];
-  }) // {inherit inputproto kbproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86inputkeyboard = (mkDerivation "xf86inputkeyboard" {
-    name = "xf86-input-keyboard-1.8.0";
+  xf86inputsynaptics = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libevdev, libX11, libXi, xorgserver, libXtst }: stdenv.mkDerivation {
+    name = "xf86-input-synaptics-1.9.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-keyboard-1.8.0.tar.bz2;
-      sha256 = "0nyb61w30z32djrllgr2s1i13di3vsl6hg4pqjhxdal71971ria1";
+      url = "mirror://xorg/individual/driver/xf86-input-synaptics-1.9.1.tar.bz2";
+      sha256 = "0xhm03qywwfgkpfl904d08lx00y28m1b6lqmks5nxizixwk3by3s";
     };
-    buildInputs = [pkgconfig inputproto xorgserver xproto ];
-  }) // {inherit inputproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libevdev libX11 libXi xorgserver libXtst ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86inputlibinput = (mkDerivation "xf86inputlibinput" {
-    name = "xf86-input-libinput-0.8.0";
+  xf86inputvmmouse = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, udev, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-input-vmmouse-13.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-libinput-0.8.0.tar.bz2;
-      sha256 = "0fm4vrkw7azipbnwvc2l18g65z77pllsznaajd8q3zpg9ycb0li1";
+      url = "mirror://xorg/individual/driver/xf86-input-vmmouse-13.1.0.tar.bz2";
+      sha256 = "06ckn4hlkpig5vnivl0zj8a7ykcgvrsj8b3iccl1pgn1gaamix8a";
     };
-    buildInputs = [pkgconfig inputproto xorgserver xproto ];
-  }) // {inherit inputproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto udev xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86inputmouse = (mkDerivation "xf86inputmouse" {
-    name = "xf86-input-mouse-1.9.1";
+  xf86inputvoid = callPackage ({ stdenv, pkgconfig, fetchurl, xorgserver, xorgproto }: stdenv.mkDerivation {
+    name = "xf86-input-void-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-mouse-1.9.1.tar.bz2;
-      sha256 = "1kn5kx3qyn9qqvd6s24a2l1wfgck2pgfvzl90xpl024wfxsx719l";
+      url = "mirror://xorg/individual/driver/xf86-input-void-1.4.1.tar.bz2";
+      sha256 = "171k8b8s42s3w73l7ln9jqwk88w4l7r1km2blx1vy898c854yvpr";
     };
-    buildInputs = [pkgconfig inputproto xorgserver xproto ];
-  }) // {inherit inputproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgserver xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86inputsynaptics = (mkDerivation "xf86inputsynaptics" {
-    name = "xf86-input-synaptics-1.8.2";
+  xf86videoamdgpu = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa, libGL, libdrm, udev, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-amdgpu-19.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.8.2.tar.bz2;
-      sha256 = "104cd67dqalp1a73jmi61kdpxwsr61w5x5cmqvh819h2pm71c3kv";
+      url = "mirror://xorg/individual/driver/xf86-video-amdgpu-19.0.1.tar.bz2";
+      sha256 = "1mf6s7i423b2xyl469kwnakrpp5fr41sm8hh7vli5jxdd8crg8da";
     };
-    buildInputs = [pkgconfig inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ];
-  }) // {inherit inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto mesa libGL libdrm udev xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86inputvmmouse = (mkDerivation "xf86inputvmmouse" {
-    name = "xf86-input-vmmouse-13.0.0";
+  xf86videoapm = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-apm-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-vmmouse-13.0.0.tar.bz2;
-      sha256 = "0b31ap9wp7nwpnihz8m7bz3p0hhaipxxhl652nw4v380cq1vdkq4";
+      url = "mirror://xorg/individual/driver/xf86-video-apm-1.3.0.tar.bz2";
+      sha256 = "0znwqfc8abkiha98an8hxsngnz96z6cd976bc4bsvz1km6wqk0c0";
     };
-    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
-  }) // {inherit inputproto randrproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86inputvoid = (mkDerivation "xf86inputvoid" {
-    name = "xf86-input-void-1.4.0";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-void-1.4.0.tar.bz2;
-      sha256 = "01bmk324fq48wydvy1qrnxbw6qz0fjd0i80g0n4cqr1c4mjmif9a";
-    };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
-
-  xf86miscproto = (mkDerivation "xf86miscproto" {
-    name = "xf86miscproto-0.9.3";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/proto/xf86miscproto-0.9.3.tar.bz2;
-      sha256 = "15dhcdpv61fyj6rhzrhnwri9hlw8rjfy05z1vik118lc99mfrf25";
-    };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
-
-  xf86videoark = (mkDerivation "xf86videoark" {
+  xf86videoark = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-ark-0.7.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-ark-0.7.5.tar.bz2;
+      url = "mirror://xorg/individual/driver/xf86-video-ark-0.7.5.tar.bz2";
       sha256 = "07p5vdsj2ckxb6wh02s61akcv4qfg6s1d5ld3jn3lfaayd3f1466";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess xextproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videoast = (mkDerivation "xf86videoast" {
-    name = "xf86-video-ast-0.98.0";
+  xf86videoast = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-ast-1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-ast-0.98.0.tar.bz2;
-      sha256 = "188nv73w0p5xhfxz2dffli44yzyn1qhhq3qkwc8wva9dhg25n8lh";
+      url = "mirror://xorg/individual/driver/xf86-video-ast-1.1.5.tar.bz2";
+      sha256 = "1pm2cy81ma7ldsw0yfk28b33h9z2hcj5rccrxhfxfgvxsiavrnqy";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videoati = (mkDerivation "xf86videoati" {
-    name = "xf86-video-ati-7.5.0";
+  xf86videoati = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa, libGL, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-ati-19.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-ati-7.5.0.tar.bz2;
-      sha256 = "0dkrw036ikym8aacl43lnf04q0wbms5498xg5b3l16ngnq36ygpc";
+      url = "mirror://xorg/individual/driver/xf86-video-ati-19.0.1.tar.bz2";
+      sha256 = "1c31g5q5p3nk9nscwikh1vvfnhdwsxiw7j8v678nlm34hrfh3djw";
     };
-    buildInputs = [pkgconfig fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto mesa libGL libdrm udev libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videocirrus = (mkDerivation "xf86videocirrus" {
-    name = "xf86-video-cirrus-1.5.2";
+  xf86videochips = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-chips-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-cirrus-1.5.2.tar.bz2;
-      sha256 = "1mycqgjp18b6adqj2h90vp324xh8ysyi5migfmjc914vbnkf2q9k";
+      url = "mirror://xorg/individual/driver/xf86-video-chips-1.4.0.tar.bz2";
+      sha256 = "1gqzy7q9v824m7hqkbbmncxg082zm0d4mafgc97c4skyiwgf9wq7";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videodummy = (mkDerivation "xf86videodummy" {
-    name = "xf86-video-dummy-0.3.7";
+  xf86videocirrus = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-cirrus-1.5.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-dummy-0.3.7.tar.bz2;
-      sha256 = "1046p64xap69vlsmsz5rjv0djc970yhvq44fmllmas0mqp5lzy2n";
+      url = "mirror://xorg/individual/driver/xf86-video-cirrus-1.5.3.tar.bz2";
+      sha256 = "1asifc6ld2g9kap15vfhvsvyl69lj7pw3d9ra9mi4najllh7pj7d";
     };
-    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ];
-  }) // {inherit fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videofbdev = (mkDerivation "xf86videofbdev" {
-    name = "xf86-video-fbdev-0.4.4";
+  xf86videodummy = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-dummy-0.3.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-fbdev-0.4.4.tar.bz2;
-      sha256 = "06ym7yy017lanj730hfkpfk4znx3dsj8jq3qvyzsn8w294kb7m4x";
+      url = "mirror://xorg/individual/driver/xf86-video-dummy-0.3.8.tar.bz2";
+      sha256 = "1fcm9vwgv8wnffbvkzddk4yxrh3kc0np6w65wj8k88q7jf3bn4ip";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videogeode = (mkDerivation "xf86videogeode" {
-    name = "xf86-video-geode-2.11.16";
+  xf86videofbdev = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-fbdev-0.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-geode-2.11.16.tar.bz2;
-      sha256 = "19y13xl7yfrgyis92rmxi0ld95ajgr5il0n9j1dridwzw9aizz1q";
+      url = "mirror://xorg/individual/driver/xf86-video-fbdev-0.5.0.tar.bz2";
+      sha256 = "16a66zr0l1lmssa07i3rzy07djxnb45c17ks8c71h8l06xgxihyw";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videoglide = (mkDerivation "xf86videoglide" {
+  xf86videogeode = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-geode-2.11.19";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/driver/xf86-video-geode-2.11.19.tar.bz2";
+      sha256 = "0zn9gb49grds5mcs1dlrx241k2w1sgqmx4i5x7v6159xxqhlqsf6";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xf86videoglide = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-glide-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-glide-1.2.2.tar.bz2;
+      url = "mirror://xorg/individual/driver/xf86-video-glide-1.2.2.tar.bz2";
       sha256 = "1vaav6kx4n00q4fawgqnjmbdkppl0dir2dkrj4ad372mxrvl9c4y";
     };
-    buildInputs = [pkgconfig xextproto xorgserver xproto ];
-  }) // {inherit xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videoglint = (mkDerivation "xf86videoglint" {
-    name = "xf86-video-glint-1.2.8";
+  xf86videoglint = callPackage ({ stdenv, pkgconfig, fetchurl, libpciaccess, xorgproto, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-glint-1.2.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-glint-1.2.8.tar.bz2;
-      sha256 = "08a2aark2yn9irws9c78d9q44dichr03i9zbk61jgr54ncxqhzv5";
+      url = "mirror://xorg/individual/driver/xf86-video-glint-1.2.9.tar.bz2";
+      sha256 = "1lkpspvrvrp9s539bhfdjfh4andaqyk63l6zjn8m3km95smk6a45";
     };
-    buildInputs = [pkgconfig libpciaccess videoproto xextproto xf86dgaproto xorgserver xproto ];
-  }) // {inherit libpciaccess videoproto xextproto xf86dgaproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libpciaccess xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videoi128 = (mkDerivation "xf86videoi128" {
-    name = "xf86-video-i128-1.3.6";
+  xf86videoi128 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-i128-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-i128-1.3.6.tar.bz2;
-      sha256 = "171b8lbxr56w3isph947dnw7x87hc46v6m3mcxdcz44gk167x0pq";
+      url = "mirror://xorg/individual/driver/xf86-video-i128-1.4.0.tar.bz2";
+      sha256 = "1snhpv1igrhifcls3r498kjd14ml6x2xvih7zk9xlsd1ymmhlb4g";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videoi740 = (mkDerivation "xf86videoi740" {
-    name = "xf86-video-i740-1.3.5";
+  xf86videoi740 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-i740-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-i740-1.3.5.tar.bz2;
-      sha256 = "0973zzmdsvlmplcax1c91is7v78lcwy6d9mwp11npgqzl782vq0w";
+      url = "mirror://xorg/individual/driver/xf86-video-i740-1.4.0.tar.bz2";
+      sha256 = "0l3s1m95bdsg4gki943qipq8agswbb84dzcflpxa3vlckwhh3r26";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videointel = (mkDerivation "xf86videointel" {
+  xf86videointel = callPackage ({ stdenv, pkgconfig, fetchurl, cairo, xorgproto, libdrm, libpng, udev, libpciaccess, libX11, xcbutil, libxcb, libXcursor, libXdamage, libXext, libXfixes, xorgserver, libXrandr, libXrender, libxshmfence, libXtst, libXvMC }: stdenv.mkDerivation {
     name = "xf86-video-intel-2.99.917";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-intel-2.99.917.tar.bz2;
+      url = "mirror://xorg/individual/driver/xf86-video-intel-2.99.917.tar.bz2";
       sha256 = "1jb7jspmzidfixbc0gghyjmnmpqv85i7pi13l4h2hn2ml3p83dq0";
     };
-    buildInputs = [pkgconfig dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ];
-  }) // {inherit dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ cairo xorgproto libdrm libpng udev libpciaccess libX11 xcbutil libxcb libXcursor libXdamage libXext libXfixes xorgserver libXrandr libXrender libxshmfence libXtst libXvMC ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videomach64 = (mkDerivation "xf86videomach64" {
-    name = "xf86-video-mach64-6.9.4";
+  xf86videomach64 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-mach64-6.9.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-mach64-6.9.4.tar.bz2;
-      sha256 = "0pl582vnc6hdxqhf5c0qdyanjqxb4crnhqlmxxml5a60syw0iwcp";
+      url = "mirror://xorg/individual/driver/xf86-video-mach64-6.9.6.tar.bz2";
+      sha256 = "171wg8r6py1l138s58rlapin3rlpwsg9spmvhc7l68mm3g3hf1vs";
     };
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videomga = (mkDerivation "xf86videomga" {
-    name = "xf86-video-mga-1.6.4";
+  xf86videomga = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-mga-2.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-mga-1.6.4.tar.bz2;
-      sha256 = "0kyl8w99arviv27pc349zsy2vinnm7mdpy34vr9nzisicw5nkij8";
+      url = "mirror://xorg/individual/driver/xf86-video-mga-2.0.0.tar.bz2";
+      sha256 = "0yaxpgyyj9398nzzr5vnsfxcis76z46p9814yzj8179yl7hld296";
     };
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videomodesetting = (mkDerivation "xf86videomodesetting" {
-    name = "xf86-video-modesetting-0.9.0";
+  xf86videoneomagic = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-neomagic-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-modesetting-0.9.0.tar.bz2;
-      sha256 = "0p6pjn5bnd2wr3lmas4b12zcq12d9ilvssga93fzlg90fdahikwh";
+      url = "mirror://xorg/individual/driver/xf86-video-neomagic-1.3.0.tar.bz2";
+      sha256 = "0r4h673kw8fl7afc30anwbjlbhp82mg15fvaxf470xg7z983k0wk";
     };
-    buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videoneomagic = (mkDerivation "xf86videoneomagic" {
-    name = "xf86-video-neomagic-1.2.8";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-neomagic-1.2.8.tar.bz2;
-      sha256 = "0x48sxs1p3kmwk3pq1j7vl93y59gdmgkq1x5xbnh0yal0angdash";
-    };
-    buildInputs = [pkgconfig fontsproto libpciaccess xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess xorgserver xproto ;};
-
-  xf86videonewport = (mkDerivation "xf86videonewport" {
+  xf86videonewport = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-newport-0.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86-video-newport-0.2.4.tar.bz2;
+      url = "mirror://xorg/individual/driver/xf86-video-newport-0.2.4.tar.bz2";
       sha256 = "1yafmp23jrfdmc094i6a4dsizapsc9v0pl65cpc8w1kvn7343k4i";
     };
-    buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xorgserver xproto ];
-  }) // {inherit fontsproto randrproto renderproto videoproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videonouveau = (mkDerivation "xf86videonouveau" {
-    name = "xf86-video-nouveau-1.0.11";
+  xf86videonouveau = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-nouveau-1.0.15";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-nouveau-1.0.11.tar.bz2;
-      sha256 = "0j3847rnffy81iaxxi6vnd8saadrc9jahfmckr0sjgkzg2rf4kzq";
+      url = "mirror://xorg/individual/driver/xf86-video-nouveau-1.0.15.tar.bz2";
+      sha256 = "0k0xah72ryjwak4dc4crszxrlkmi9x1s7p3sd4la642n77yi1pmf";
     };
-    buildInputs = [pkgconfig dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
-  }) // {inherit dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm udev libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videonv = (mkDerivation "xf86videonv" {
-    name = "xf86-video-nv-2.1.20";
+  xf86videonv = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-nv-2.1.21";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-nv-2.1.20.tar.bz2;
-      sha256 = "1gqh1khc4zalip5hh2nksgs7i3piqq18nncgmsx9qvzi05azd5c3";
+      url = "mirror://xorg/individual/driver/xf86-video-nv-2.1.21.tar.bz2";
+      sha256 = "0bdk3pc5y0n7p53q4gc2ff7bw16hy5hwdjjxkm5j3s7hdyg6960z";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videoopenchrome = (mkDerivation "xf86videoopenchrome" {
-    name = "xf86-video-openchrome-0.3.3";
+  xf86videoomap = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-omap-0.4.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-openchrome-0.3.3.tar.bz2;
-      sha256 = "1v8j4i1r268n4fc5gq54zg1x50j0rhw71f3lba7411mcblg2z7p4";
+      url = "mirror://xorg/individual/driver/xf86-video-omap-0.4.5.tar.bz2";
+      sha256 = "0nmbrx6913dc724y8wj2p6vqfbj5zdjfmsl037v627jj0whx9rwk";
     };
-    buildInputs = [pkgconfig fontsproto glproto libdrm udev libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xf86driproto xorgserver xproto libXvMC ];
-  }) // {inherit fontsproto glproto libdrm udev libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xf86driproto xorgserver xproto libXvMC ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videoqxl = (mkDerivation "xf86videoqxl" {
-    name = "xf86-video-qxl-0.1.3";
+  xf86videoopenchrome = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver, libXvMC }: stdenv.mkDerivation {
+    name = "xf86-video-openchrome-0.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-qxl-0.1.3.tar.bz2;
-      sha256 = "1368dd5mihn3s098n7wa3fpjkp8pnamabfjjipkqs9zyrcvncy3m";
+      url = "mirror://xorg/individual/driver/xf86-video-openchrome-0.6.0.tar.bz2";
+      sha256 = "0x9gq3hw6k661k82ikd1y2kkk4dmgv310xr5q59dwn4k6z37aafs";
     };
-    buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xf86dgaproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xf86dgaproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm udev libpciaccess libX11 libXext xorgserver libXvMC ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videor128 = (mkDerivation "xf86videor128" {
-    name = "xf86-video-r128-6.9.2";
+  xf86videoqxl = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-qxl-0.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-r128-6.9.2.tar.bz2;
-      sha256 = "1q3fsc603k2yinphx5rrcl5356qkpywwz8axlw277l2231gjjbcb";
+      url = "mirror://xorg/individual/driver/xf86-video-qxl-0.1.5.tar.bz2";
+      sha256 = "14jc24znnahhmz4kqalafmllsg8awlz0y6gpgdpk5ih38ph851mi";
     };
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm udev libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videosavage = (mkDerivation "xf86videosavage" {
-    name = "xf86-video-savage-2.3.7";
+  xf86videor128 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-r128-6.11.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-savage-2.3.7.tar.bz2;
-      sha256 = "0i2aqp68rfkrz9c1p6d7ny9x7bjrlnby7q56zf01fb12r42l4784";
+      url = "mirror://xorg/individual/driver/xf86-video-r128-6.11.0.tar.bz2";
+      sha256 = "0snvwmrh8dqyyaq7ggicym6yrsg4brygkx9156r0m095m7fp3rav";
     };
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videosiliconmotion = (mkDerivation "xf86videosiliconmotion" {
-    name = "xf86-video-siliconmotion-1.7.7";
+  xf86videorendition = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-rendition-4.2.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-siliconmotion-1.7.7.tar.bz2;
-      sha256 = "1an321kqvsxq0z35acwl99lc8hpdkayw0q180744ypcl8ffvbf47";
+      url = "mirror://xorg/individual/driver/xf86-video-rendition-4.2.7.tar.bz2";
+      sha256 = "0yzqcdfrnnyaaaa76d4hpwycpq4x2j8qvg9m4q19lj4xbicwc4cm";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess videoproto xextproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess videoproto xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videosis = (mkDerivation "xf86videosis" {
-    name = "xf86-video-sis-0.10.7";
+  xf86videos3virge = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-s3virge-1.11.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-sis-0.10.7.tar.bz2;
-      sha256 = "1l0w84x39gq4y9j81dny9r6rma1xkqvxpsavpkd8h7h8panbcbmy";
+      url = "mirror://xorg/individual/driver/xf86-video-s3virge-1.11.0.tar.bz2";
+      sha256 = "06d1v5s7xf00y18x12cz11sk00rgn0yq95w66kmgzy465pzxvj84";
     };
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xineramaproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xineramaproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videosuncg6 = (mkDerivation "xf86videosuncg6" {
+  xf86videosavage = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-savage-2.3.9";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/driver/xf86-video-savage-2.3.9.tar.bz2";
+      sha256 = "11pcrsdpdrwk0mrgv83s5nsx8a9i4lhmivnal3fjbrvi3zdw94rc";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xf86videosiliconmotion = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-siliconmotion-1.7.9";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/driver/xf86-video-siliconmotion-1.7.9.tar.bz2";
+      sha256 = "1g2r6gxqrmjdff95d42msxdw6vmkg2zn5sqv0rxd420iwy8wdwyh";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xf86videosis = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-sis-0.11.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/driver/xf86-video-sis-0.11.0.tar.bz2";
+      sha256 = "0srvrhydjnynfb7b1s145rgmsk4f71iz0ag4icpmb05944d90xr1";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xf86videosisusb = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-sisusb-0.9.7";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/driver/xf86-video-sisusb-0.9.7.tar.bz2";
+      sha256 = "090lfs3hjz3cjd016v5dybmcsigj6ffvjdhdsqv13k90p4b08h7l";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xf86videosuncg6 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-suncg6-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-suncg6-1.1.2.tar.bz2;
+      url = "mirror://xorg/individual/driver/xf86-video-suncg6-1.1.2.tar.bz2";
       sha256 = "04fgwgk02m4nimlv67rrg1wnyahgymrn6rb2cjj1l8bmzkii4glr";
     };
-    buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
-  }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videosunffb = (mkDerivation "xf86videosunffb" {
+  xf86videosunffb = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-sunffb-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-sunffb-1.2.2.tar.bz2;
+      url = "mirror://xorg/individual/driver/xf86-video-sunffb-1.2.2.tar.bz2";
       sha256 = "07z3ngifwg2d4jgq8pms47n5lr2yn0ai72g86xxjnb3k20n5ym7s";
     };
-    buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
-  }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videotdfx = (mkDerivation "xf86videotdfx" {
-    name = "xf86-video-tdfx-1.4.6";
+  xf86videosunleo = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-sunleo-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-tdfx-1.4.6.tar.bz2;
-      sha256 = "0dvdrhyn1iv6rr85v1c52s1gl0j1qrxgv7x0r7qn3ba0gj38i2is";
+      url = "mirror://xorg/individual/driver/xf86-video-sunleo-1.2.2.tar.bz2";
+      sha256 = "1gacm0s6rii4x5sx9py5bhvs50jd4vs3nnbwjdjymyf31kpdirl3";
     };
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videotga = (mkDerivation "xf86videotga" {
+  xf86videotdfx = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-tdfx-1.5.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/driver/xf86-video-tdfx-1.5.0.tar.bz2";
+      sha256 = "0qc5wzwf1n65si9rc37bh224pzahh7gp67vfimbxs0b9yvhq0i9g";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xf86videotga = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-tga-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-tga-1.2.2.tar.bz2;
+      url = "mirror://xorg/individual/driver/xf86-video-tga-1.2.2.tar.bz2";
       sha256 = "0cb161lvdgi6qnf1sfz722qn38q7kgakcvj7b45ba3i0020828r0";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videotrident = (mkDerivation "xf86videotrident" {
-    name = "xf86-video-trident-1.3.7";
+  xf86videotrident = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-trident-1.3.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-trident-1.3.7.tar.bz2;
-      sha256 = "1bhkwic2acq9za4yz4bwj338cwv5mdrgr2qmgkhlj3bscbg1imgc";
+      url = "mirror://xorg/individual/driver/xf86-video-trident-1.3.8.tar.bz2";
+      sha256 = "0gxcar434kx813fxdpb93126lhmkl3ikabaljhcj5qn3fkcijlcy";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videov4l = (mkDerivation "xf86videov4l" {
-    name = "xf86-video-v4l-0.2.0";
+  xf86videov4l = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-v4l-0.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86-video-v4l-0.2.0.tar.bz2;
-      sha256 = "0pcjc75hgbih3qvhpsx8d4fljysfk025slxcqyyhr45dzch93zyb";
+      url = "mirror://xorg/individual/driver/xf86-video-v4l-0.3.0.tar.bz2";
+      sha256 = "084x4p4avy72mgm2vnnvkicw3419i6pp3wxik8zqh7gmq4xv5z75";
     };
-    buildInputs = [pkgconfig randrproto videoproto xorgserver xproto ];
-  }) // {inherit randrproto videoproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videovesa = (mkDerivation "xf86videovesa" {
-    name = "xf86-video-vesa-2.3.3";
+  xf86videovboxvideo = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-vboxvideo-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-vesa-2.3.3.tar.bz2;
-      sha256 = "1y5fsg0c4bgmh1cfsbnaaf388fppyy02i7mcy9vax78flkjpb2yf";
+      url = "mirror://xorg/individual/driver/xf86-video-vboxvideo-1.0.0.tar.bz2";
+      sha256 = "195z1js3i51qgxvhfw4bxb4dw3jcrrx2ynpm2y3475dypjzs7dkz";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videovmware = (mkDerivation "xf86videovmware" {
-    name = "xf86-video-vmware-13.1.0";
+  xf86videovesa = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-vesa-2.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-vmware-13.1.0.tar.bz2;
-      sha256 = "1k50whwnkzxam2ihc1sw456dx0pvr76naycm4qhyjxqv9d72879w";
+      url = "mirror://xorg/individual/driver/xf86-video-vesa-2.4.0.tar.bz2";
+      sha256 = "1373vsxn6qh00na0s9c09kf09gj78rzi98zq93id8v5zsya3qi5z";
     };
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ];
-  }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videovoodoo = (mkDerivation "xf86videovoodoo" {
+  xf86videovmware = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-vmware-13.3.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/driver/xf86-video-vmware-13.3.0.tar.bz2";
+      sha256 = "0v06qhm059klq40m2yx4wypzb7h53aaassbjfmm6clcyclj1k5s7";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm udev libpciaccess libX11 libXext xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xf86videovoodoo = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-voodoo-1.2.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-voodoo-1.2.5.tar.bz2;
+      url = "mirror://xorg/individual/driver/xf86-video-voodoo-1.2.5.tar.bz2";
       sha256 = "1s6p7yxmi12q4y05va53rljwyzd6ry492r1pgi7wwq6cznivhgly";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xf86dgaproto xorgserver xproto ];
-  }) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xf86dgaproto xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86videowsfb = (mkDerivation "xf86videowsfb" {
+  xf86videowsfb = callPackage ({ stdenv, pkgconfig, fetchurl, xorgserver, xorgproto }: stdenv.mkDerivation {
     name = "xf86-video-wsfb-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86-video-wsfb-0.4.0.tar.bz2;
+      url = "mirror://xorg/individual/driver/xf86-video-wsfb-0.4.0.tar.bz2";
       sha256 = "0hr8397wpd0by1hc47fqqrnaw3qdqd8aqgwgzv38w5k3l3jy6p4p";
     };
-    buildInputs = [pkgconfig xorgserver xproto ];
-  }) // {inherit xorgserver xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgserver xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xf86vidmodeproto = (mkDerivation "xf86vidmodeproto" {
-    name = "xf86vidmodeproto-2.3.1";
+  xf86videoxgi = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
+    name = "xf86-video-xgi-1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86vidmodeproto-2.3.1.tar.bz2;
-      sha256 = "0w47d7gfa8zizh2bshdr2rffvbr4jqjv019mdgyh6cmplyd4kna5";
+      url = "mirror://xorg/individual/driver/xf86-video-xgi-1.6.1.tar.bz2";
+      sha256 = "10xd2vah0pnpw5spn40n4p95mpmgvdkly4i1cz51imnlfsw7g8si";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xfs = (mkDerivation "xfs" {
-    name = "xfs-1.1.4";
+  xfd = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt, gettext }: stdenv.mkDerivation {
+    name = "xfd-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xfs-1.1.4.tar.bz2;
-      sha256 = "1ylz4r7adf567rnlbb52yi9x3qi4pyv954kkhm7ld4f0fkk7a2x4";
+      url = "mirror://xorg/individual/app/xfd-1.1.3.tar.bz2";
+      sha256 = "0n6r1v8sm0z0ycqch035xpm46nv5v4mav3kxh36883l3ln5r6bqr";
     };
-    buildInputs = [pkgconfig libXfont xproto xtrans ];
-  }) // {inherit libXfont xproto xtrans ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig gettext ];
+    buildInputs = [ libxkbfile fontconfig libXaw libXft libXmu xorgproto libXrender libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xgamma = (mkDerivation "xgamma" {
-    name = "xgamma-1.0.5";
+  xfontsel = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+    name = "xfontsel-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xgamma-1.0.5.tar.bz2;
-      sha256 = "0463sawps86jnxn121ramsz4sicy3az5wa5wsq4rqm8dm3za48p3";
+      url = "mirror://xorg/individual/app/xfontsel-1.0.6.tar.bz2";
+      sha256 = "0700lf6hx7dg88wq1yll7zjvf9gbwh06xff20yffkxb289y0pai5";
     };
-    buildInputs = [pkgconfig libX11 libXxf86vm ];
-  }) // {inherit libX11 libXxf86vm ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xhost = (mkDerivation "xhost" {
-    name = "xhost-1.0.6";
+  xfs = callPackage ({ stdenv, pkgconfig, fetchurl, libXfont2, xorgproto, xtrans }: stdenv.mkDerivation {
+    name = "xfs-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xhost-1.0.6.tar.bz2;
-      sha256 = "1hlxm0is9nks1cx033s1733kkib9ivx2bxa3pb9yayqavwibkxd6";
+      url = "mirror://xorg/individual/app/xfs-1.2.0.tar.bz2";
+      sha256 = "0q4q4rbzx159sfn2n52y039fki6nc6a39qdfxa78yjc3aw8i48nv";
     };
-    buildInputs = [pkgconfig libX11 libXau libXmu xproto ];
-  }) // {inherit libX11 libXau libXmu xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXfont2 xorgproto xtrans ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xineramaproto = (mkDerivation "xineramaproto" {
-    name = "xineramaproto-1.2.1";
+  xfsinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libFS, xorgproto }: stdenv.mkDerivation {
+    name = "xfsinfo-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xineramaproto-1.2.1.tar.bz2;
-      sha256 = "0ns8abd27x7gbp4r44z3wc5k9zqxxj8zjnazqpcyr4n17nxp8xcp";
+      url = "mirror://xorg/individual/app/xfsinfo-1.0.6.tar.bz2";
+      sha256 = "1mmir5i7gm71xc0ba8vnizi4744vsd31hknhi4cmgvg6kadqngla";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libFS xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xinit = (mkDerivation "xinit" {
-    name = "xinit-1.3.4";
+  xgamma = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXxf86vm }: stdenv.mkDerivation {
+    name = "xgamma-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinit-1.3.4.tar.bz2;
-      sha256 = "1cq2g469mb2cfgr8k57960yrn90bl33vfqri4pdh2zm0jxrqvn3m";
+      url = "mirror://xorg/individual/app/xgamma-1.0.6.tar.bz2";
+      sha256 = "1lr2nb1fhg5fk2fchqxdxyl739602ggwhmgl2wiv5c8qbidw7w8f";
     };
-    buildInputs = [pkgconfig libX11 xproto ];
-  }) // {inherit libX11 xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto libXxf86vm ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xinput = (mkDerivation "xinput" {
-    name = "xinput-1.6.1";
+  xgc = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+    name = "xgc-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinput-1.6.1.tar.bz2;
-      sha256 = "07w7zlpdhpwzzshg8q0y152cy3wl2fj7x1897glnp2la487jsqxp";
+      url = "mirror://xorg/individual/app/xgc-1.0.5.tar.bz2";
+      sha256 = "0pigvjd3i9fchmj1inqy151aafz3dr0vq1h2zizdb2imvadqv0hl";
     };
-    buildInputs = [pkgconfig inputproto libX11 libXext libXi libXinerama libXrandr ];
-  }) // {inherit inputproto libX11 libXext libXi libXinerama libXrandr ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXaw libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xkbcomp = (mkDerivation "xkbcomp" {
-    name = "xkbcomp-1.3.0";
+  xhost = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXmu, xorgproto }: stdenv.mkDerivation {
+    name = "xhost-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkbcomp-1.3.0.tar.bz2;
-      sha256 = "0aibcbhhjlwcrxh943xg2dswwx5bz1x0pmhs28b55gzsg0vrgb6g";
+      url = "mirror://xorg/individual/app/xhost-1.0.8.tar.bz2";
+      sha256 = "15n3mnd4i5kh4z32qv11580qjgvnng0wry2y753ljrqkkrbkrp52";
     };
-    buildInputs = [pkgconfig libX11 libxkbfile xproto ];
-  }) // {inherit libX11 libxkbfile xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXau libXmu xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xkbevd = (mkDerivation "xkbevd" {
-    name = "xkbevd-1.1.3";
+  xinit = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "xinit-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xkbevd-1.1.3.tar.bz2;
-      sha256 = "05h1xcnbalndbrryyqs8wzy9h3wz655vc0ymhlk2q4aik17licjm";
+      url = "mirror://xorg/individual/app/xinit-1.4.1.tar.bz2";
+      sha256 = "1fdbakx59vyh474skjydj1bbglpby3y03nl7mxn0z9v8gdhqz6yy";
     };
-    buildInputs = [pkgconfig libX11 libxkbfile ];
-  }) // {inherit libX11 libxkbfile ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xkbprint = (mkDerivation "xkbprint" {
-    name = "xkbprint-1.0.3";
+  xinput = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXi, libXinerama, libXrandr }: stdenv.mkDerivation {
+    name = "xinput-1.6.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkbprint-1.0.3.tar.bz2;
-      sha256 = "1h4jb3gjrbjp79h5gcgkjvdxykcy2bmq03smpls820c8wnw6v17s";
+      url = "mirror://xorg/individual/app/xinput-1.6.3.tar.bz2";
+      sha256 = "1vb6xdd1xmk5f7pwc5zcbxfray5sf1vbnscqwf2yl8lv7gfq38im";
     };
-    buildInputs = [pkgconfig libX11 libxkbfile ];
-  }) // {inherit libX11 libxkbfile ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXext libXi libXinerama libXrandr ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xkbutils = (mkDerivation "xkbutils" {
+  xkbcomp = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
+    name = "xkbcomp-1.4.2";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/app/xkbcomp-1.4.2.tar.bz2";
+      sha256 = "0944rrkkf0dxp07vhh9yr4prslxhqyw63qmbjirbv1bypswvrn3d";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libxkbfile xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xkbevd = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
+    name = "xkbevd-1.1.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/app/xkbevd-1.1.4.tar.bz2";
+      sha256 = "0sprjx8i86ljk0l7ldzbz2xlk8916z5zh78cafjv8k1a63js4c14";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libxkbfile ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xkbprint = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
+    name = "xkbprint-1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/app/xkbprint-1.0.4.tar.bz2";
+      sha256 = "04iyv5z8aqhabv7wcpvbvq0ji0jrz1666vw6gvxkvl7szswalgqb";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libxkbfile xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xkbutils = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXaw, libXt }: stdenv.mkDerivation {
     name = "xkbutils-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkbutils-1.0.4.tar.bz2;
+      url = "mirror://xorg/individual/app/xkbutils-1.0.4.tar.bz2";
       sha256 = "0c412isxl65wplhl7nsk12vxlri29lk48g3p52hbrs3m0awqm8fj";
     };
-    buildInputs = [pkgconfig inputproto libX11 libXaw xproto libXt ];
-  }) // {inherit inputproto libX11 libXaw xproto libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto libX11 libXaw libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xkeyboardconfig = (mkDerivation "xkeyboardconfig" {
-    name = "xkeyboard-config-2.11";
+  xkeyboardconfig = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "xkeyboard-config-2.27";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.11.tar.bz2;
-      sha256 = "0xkdyyi759hzls42hp4j3q2lc35n4j6b2g44ilx5qarci5h584p7";
+      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.27.tar.bz2";
+      sha256 = "07wh443lhwv1j0q6xnxnji7f7ahh7xphxj90fv02cdd6zv4aw3b9";
     };
-    buildInputs = [pkgconfig libX11 xproto ];
-  }) // {inherit libX11 xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xkill = (mkDerivation "xkill" {
-    name = "xkill-1.0.4";
+  xkill = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
+    name = "xkill-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkill-1.0.4.tar.bz2;
-      sha256 = "0bl1ky8ps9jg842j4mnmf4zbx8nkvk0h77w7bqjlpwij9wq2mvw8";
+      url = "mirror://xorg/individual/app/xkill-1.0.5.tar.bz2";
+      sha256 = "0szzd9nzn0ybkhnfyizb876irwnjsnb78rcaxx6prb71jmmbpw65";
     };
-    buildInputs = [pkgconfig libX11 libXmu xproto ];
-  }) // {inherit libX11 libXmu xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXmu xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xlsatoms = (mkDerivation "xlsatoms" {
-    name = "xlsatoms-1.1.1";
+  xload = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, gettext }: stdenv.mkDerivation {
+    name = "xload-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xlsatoms-1.1.1.tar.bz2;
-      sha256 = "1y9nfl8s7njxbnci8c20j986xixharasgg40vdw92y593j6dk2rv";
+      url = "mirror://xorg/individual/app/xload-1.1.3.tar.bz2";
+      sha256 = "01sr6yd6yhyyfgn88l867w6h9dn5ikcynaz5rwji6xqxhw1lhkpk";
     };
-    buildInputs = [pkgconfig libxcb ];
-  }) // {inherit libxcb ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig gettext ];
+    buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xlsclients = (mkDerivation "xlsclients" {
-    name = "xlsclients-1.1.3";
+  xlsatoms = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb }: stdenv.mkDerivation {
+    name = "xlsatoms-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xlsclients-1.1.3.tar.bz2;
-      sha256 = "0g9x7rrggs741x9xwvv1k9qayma980d88nhdqw7j3pn3qvy6d5jx";
+      url = "mirror://xorg/individual/app/xlsatoms-1.1.3.tar.bz2";
+      sha256 = "10m3a046jvaw5ywx4y65kl84lsxqan70gww1g1r7cf96ijaqz1jp";
     };
-    buildInputs = [pkgconfig libxcb ];
-  }) // {inherit libxcb ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libxcb ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xmessage = (mkDerivation "xmessage" {
-    name = "xmessage-1.0.4";
+  xlsclients = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb }: stdenv.mkDerivation {
+    name = "xlsclients-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xmessage-1.0.4.tar.bz2;
-      sha256 = "0s5bjlpxnmh8sxx6nfg9m0nr32r1sr3irr71wsnv76s33i34ppxw";
+      url = "mirror://xorg/individual/app/xlsclients-1.1.4.tar.bz2";
+      sha256 = "1h8931sn34mcip6vpi4v7hdmr1r58gkbw4s2p97w98kykks2lgvp";
     };
-    buildInputs = [pkgconfig libXaw libXt ];
-  }) // {inherit libXaw libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libxcb ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xmodmap = (mkDerivation "xmodmap" {
-    name = "xmodmap-1.0.8";
+  xlsfonts = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "xlsfonts-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xmodmap-1.0.8.tar.bz2;
-      sha256 = "1hwzm54m4ng09ls9i4bq0x84zbyhamgzasgrvhxxp8jqk34f7qpg";
+      url = "mirror://xorg/individual/app/xlsfonts-1.0.6.tar.bz2";
+      sha256 = "0s6kxgv78chkwsqmhw929f4pf91gq63f4yvixxnan1h00cx0pf49";
     };
-    buildInputs = [pkgconfig libX11 xproto ];
-  }) // {inherit libX11 xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xorgcffiles = (mkDerivation "xorgcffiles" {
-    name = "xorg-cf-files-1.0.5";
+  xmag = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+    name = "xmag-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/xorg-cf-files-1.0.5.tar.bz2;
-      sha256 = "1m3ypq0xcy46ghxc0svl1rbhpy3zvgmy0aa2mn7w7v7d8d8bh8zd";
+      url = "mirror://xorg/individual/app/xmag-1.0.6.tar.bz2";
+      sha256 = "0qg12ifbbk9n8fh4jmyb625cknn8ssj86chd6zwdiqjin8ivr8l7";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xorgdocs = (mkDerivation "xorgdocs" {
-    name = "xorg-docs-1.7";
+  xmessage = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+    name = "xmessage-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xorg-docs-1.7.tar.bz2;
-      sha256 = "0prphdba6kgr1bxk7r07wxxx6x6pqjw6prr5qclypsb5sf5r3cdr";
+      url = "mirror://xorg/individual/app/xmessage-1.0.5.tar.bz2";
+      sha256 = "0a90kfm0qz8cn2pbpqfyqrc5s9bfvvy14nj848ynvw56wy0zng9p";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXaw libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xorgserver = (mkDerivation "xorgserver" {
-    name = "xorg-server-1.16.4";
+  xmodmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "xmodmap-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.16.4.tar.bz2;
-      sha256 = "0wf8xykcjhvpk9ppjcixvf60p6kkyrpmfj0z29d93a8kjb6f3dmb";
+      url = "mirror://xorg/individual/app/xmodmap-1.0.10.tar.bz2";
+      sha256 = "0z28331i2pm16x671fa9qwsfqdmr6a43bzwmp0dm17a3sx0hjgs7";
     };
-    buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libxshmfence libXt ];
-  }) // {inherit dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libxshmfence libXt ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xorgsgmldoctools = (mkDerivation "xorgsgmldoctools" {
+  xmore = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+    name = "xmore-1.0.3";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/app/xmore-1.0.3.tar.bz2";
+      sha256 = "06r514p30v87vx00ddlck9mwazaqk9bx08ip866p1mw2a46iwjk4";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXaw libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xorgcffiles = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
+    name = "xorg-cf-files-1.0.6";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/util/xorg-cf-files-1.0.6.tar.bz2";
+      sha256 = "0kckng0zs1viz0nr84rdl6dswgip7ndn4pnh5nfwnviwpsfmmksd";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xorgdocs = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
+    name = "xorg-docs-1.7.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/doc/xorg-docs-1.7.1.tar.bz2";
+      sha256 = "0jrc4jmb4raqawx0j9jmhgasr0k6sxv0bm2hrxjh9hb26iy6gf14";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xorgproto = callPackage ({ stdenv, pkgconfig, fetchurl, libXt }: stdenv.mkDerivation {
+    name = "xorgproto-2019.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/proto/xorgproto-2019.1.tar.bz2";
+      sha256 = "16yll1kaffnslik5sizlw3qrigj1gpsgfgyq6903g3mwdixamnm6";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xorgserver = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
+    name = "xorg-server-1.20.8";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/xserver/xorg-server-1.20.8.tar.bz2";
+      sha256 = "0ih15m7gh1z1ly6z7g82bkni719yisqmbk61a1wgp82bxrmn8yyi";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xorgproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xorgsgmldoctools = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xorg-sgml-doctools-1.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xorg-sgml-doctools-1.11.tar.bz2;
+      url = "mirror://xorg/individual/doc/xorg-sgml-doctools-1.11.tar.bz2";
       sha256 = "0k5pffyi5bx8dmfn033cyhgd3gf6viqj3x769fqixifwhbgy2777";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xpr = (mkDerivation "xpr" {
-    name = "xpr-1.0.4";
+  xpr = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
+    name = "xpr-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xpr-1.0.4.tar.bz2;
-      sha256 = "1dbcv26w2yand2qy7b3h5rbvw1mdmdd57jw88v53sgdr3vrqvngy";
+      url = "mirror://xorg/individual/app/xpr-1.0.5.tar.bz2";
+      sha256 = "07qy9lwjvxighcmg6qvjkgagad3wwvidrfx0jz85lgynz3qy0dmr";
     };
-    buildInputs = [pkgconfig libX11 libXmu xproto ];
-  }) // {inherit libX11 libXmu xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXmu xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xprop = (mkDerivation "xprop" {
-    name = "xprop-1.2.2";
+  xprop = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "xprop-1.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xprop-1.2.2.tar.bz2;
-      sha256 = "1ilvhqfjcg6f1hqahjkp8qaay9rhvmv2blvj3w9asraq0aqqivlv";
+      url = "mirror://xorg/individual/app/xprop-1.2.4.tar.bz2";
+      sha256 = "0lzp7kyhpwd5hm83j2zm6j3w3z1z5i4ykgg2nwr01ij6dq4znxwc";
     };
-    buildInputs = [pkgconfig libX11 xproto ];
-  }) // {inherit libX11 xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xproto = (mkDerivation "xproto" {
-    name = "xproto-7.0.27";
+  xrandr = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXrandr, libXrender }: stdenv.mkDerivation {
+    name = "xrandr-1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/xproto-7.0.27.tar.bz2;
-      sha256 = "030ix881p0crnd4bc01nz6cs0afmfv6ivsyyhf0h1j1mnak26vr4";
+      url = "mirror://xorg/individual/app/xrandr-1.5.0.tar.bz2";
+      sha256 = "1kaih7rmzxr1vp5a5zzjhm5x7dn9mckya088sqqw026pskhx9ky1";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto libXrandr libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xrandr = (mkDerivation "xrandr" {
-    name = "xrandr-1.4.3";
+  xrdb = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
+    name = "xrdb-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xrandr-1.4.3.tar.bz2;
-      sha256 = "06xy0kr6ih7ilrwl6b5g6ay75vm2j4lxnv1d5xlj6sdqhqsaqm3i";
+      url = "mirror://xorg/individual/app/xrdb-1.2.0.tar.bz2";
+      sha256 = "0ik9gh6363c47pr0dp7q22nfs8vmavjg2v4bsr0604ppl77nafpj";
     };
-    buildInputs = [pkgconfig libX11 xproto libXrandr libXrender ];
-  }) // {inherit libX11 xproto libXrandr libXrender ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXmu xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xrdb = (mkDerivation "xrdb" {
-    name = "xrdb-1.1.0";
+  xrefresh = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "xrefresh-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xrdb-1.1.0.tar.bz2;
-      sha256 = "0nsnr90wazcdd50nc5dqswy0bmq6qcj14nnrhyi7rln9pxmpp0kk";
+      url = "mirror://xorg/individual/app/xrefresh-1.0.6.tar.bz2";
+      sha256 = "0lv3rlshh7s0z3aqx5ahnnf8cl082m934bk7gv881mz8nydznz98";
     };
-    buildInputs = [pkgconfig libX11 libXmu xproto ];
-  }) // {inherit libX11 libXmu xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xrefresh = (mkDerivation "xrefresh" {
-    name = "xrefresh-1.0.5";
+  xset = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXmu, xorgproto, libXxf86misc }: stdenv.mkDerivation {
+    name = "xset-1.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xrefresh-1.0.5.tar.bz2;
-      sha256 = "1mlinwgvql6s1rbf46yckbfr9j22d3c3z7jx3n6ix7ca18dnf4rj";
+      url = "mirror://xorg/individual/app/xset-1.2.4.tar.bz2";
+      sha256 = "0my987wjvra7l92ry6q44ky383yg3phzxhdbn3lqhapm1ll9bzg4";
     };
-    buildInputs = [pkgconfig libX11 xproto ];
-  }) // {inherit libX11 xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext libXmu xorgproto libXxf86misc ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xset = (mkDerivation "xset" {
-    name = "xset-1.2.3";
+  xsetroot = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xbitmaps, libXcursor, libXmu, xorgproto }: stdenv.mkDerivation {
+    name = "xsetroot-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xset-1.2.3.tar.bz2;
-      sha256 = "0qw0iic27bz3yz2wynf1gxs70hhkcf9c4jrv7zhlg1mq57xz90j3";
+      url = "mirror://xorg/individual/app/xsetroot-1.1.2.tar.bz2";
+      sha256 = "0z21mqvmdl6rl63q77479wgkfygnll57liza1i3va7sr4fx45i0h";
     };
-    buildInputs = [pkgconfig libX11 libXext libXmu xproto libXxf86misc ];
-  }) // {inherit libX11 libXext libXmu xproto libXxf86misc ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xbitmaps libXcursor libXmu xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xsetroot = (mkDerivation "xsetroot" {
-    name = "xsetroot-1.1.0";
+  xsm = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libX11, libXaw, libXt }: stdenv.mkDerivation {
+    name = "xsm-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xsetroot-1.1.0.tar.bz2;
-      sha256 = "1bazzsf9sy0q2bj4lxvh1kvyrhmpggzb7jg575i15sksksa3xwc8";
+      url = "mirror://xorg/individual/app/xsm-1.0.4.tar.bz2";
+      sha256 = "09a4ss1fnrh1sgm21r4n5pivawf34paci3rn6mscyljf7a4vcd4r";
     };
-    buildInputs = [pkgconfig libX11 xbitmaps libXcursor libXmu ];
-  }) // {inherit libX11 xbitmaps libXcursor libXmu ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libICE libSM libX11 libXaw libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xtrans = (mkDerivation "xtrans" {
-    name = "xtrans-1.3.5";
+  xstdcmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
+    name = "xstdcmap-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/xtrans-1.3.5.tar.bz2;
-      sha256 = "00c3ph17acnsch3gbdmx33b9ifjnl5w7vx8hrmic1r1cjcv3pgdd";
+      url = "mirror://xorg/individual/app/xstdcmap-1.0.4.tar.bz2";
+      sha256 = "12vgzsxv4rw25frkgjyli6w6hy10lgpvsx9wzw2v5l5a3qzqp286";
     };
-    buildInputs = [pkgconfig ];
-  }) // {inherit ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXmu xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xvinfo = (mkDerivation "xvinfo" {
-    name = "xvinfo-1.1.2";
+  xtrans = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
+    name = "xtrans-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xvinfo-1.1.2.tar.bz2;
-      sha256 = "1qsh7fszi727l3vwlaf9pb7bpikdv15smrx5qhlgg3kqzl7xklzf";
+      url = "mirror://xorg/individual/lib/xtrans-1.4.0.tar.bz2";
+      sha256 = "0wyp0yc6gi72hwc3kjmvm3vkj9p6s407cb6dxx37jh9wb68l8z1p";
     };
-    buildInputs = [pkgconfig libX11 xproto libXv ];
-  }) // {inherit libX11 xproto libXv ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xwd = (mkDerivation "xwd" {
-    name = "xwd-1.0.6";
+  xtrap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXt, libXTrap }: stdenv.mkDerivation {
+    name = "xtrap-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xwd-1.0.6.tar.bz2;
-      sha256 = "0ybx48agdvjp9lgwvcw79r1x6jbqbyl3fliy3i5xwy4d4si9dcrv";
+      url = "mirror://xorg/individual/app/xtrap-1.0.3.tar.bz2";
+      sha256 = "0sqm4j1zflk1s94iq4waa70hna1xcys88v9a70w0vdw66czhvj2j";
     };
-    buildInputs = [pkgconfig libX11 xproto ];
-  }) // {inherit libX11 xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXt libXTrap ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xwininfo = (mkDerivation "xwininfo" {
-    name = "xwininfo-1.1.3";
+  xvinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXv }: stdenv.mkDerivation {
+    name = "xvinfo-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xwininfo-1.1.3.tar.bz2;
-      sha256 = "1y1zn8ijqslb5lfpbq4bb78kllhch8in98ps7n8fg3dxjpmb13i1";
+      url = "mirror://xorg/individual/app/xvinfo-1.1.4.tar.bz2";
+      sha256 = "0gz7fvxavqlrqynpfbrm2nc9yx8h0ksnbnv34fj7n1q6cq6j4lq3";
     };
-    buildInputs = [pkgconfig libX11 libxcb xproto ];
-  }) // {inherit libX11 libxcb xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto libXv ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-  xwud = (mkDerivation "xwud" {
-    name = "xwud-1.0.4";
+  xwd = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "xwd-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xwud-1.0.4.tar.bz2;
-      sha256 = "1ggql6maivah58kwsh3z9x1hvzxm1a8888xx4s78cl77ryfa1cyn";
+      url = "mirror://xorg/individual/app/xwd-1.0.7.tar.bz2";
+      sha256 = "1537i8q8pgf0sjklakzfvjwrq5b246qjywrx9ll8xfg0p6w1as6d";
     };
-    buildInputs = [pkgconfig libX11 xproto ];
-  }) // {inherit libX11 xproto ;};
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libxkbfile libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
 
-}; in xorg
+  xwininfo = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxcb, xorgproto }: stdenv.mkDerivation {
+    name = "xwininfo-1.1.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/app/xwininfo-1.1.4.tar.bz2";
+      sha256 = "00avrpw4h5mr1klp41lv2j4dmq465v6l5kb5bhm4k5ml8sm9i543";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libxcb xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+  xwud = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
+    name = "xwud-1.0.5";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/app/xwud-1.0.5.tar.bz2";
+      sha256 = "1a8hdgy40smvblnh3s9f0vkqckl68nmivx7d48zk34m8z18p16cr";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xorgproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) {};
+
+})

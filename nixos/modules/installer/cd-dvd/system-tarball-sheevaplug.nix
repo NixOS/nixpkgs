@@ -49,14 +49,13 @@ in
   # Include some utilities that are useful for installing or repairing
   # the system.
   environment.systemPackages =
-    [ pkgs.subversion # for nixos-checkout
-      pkgs.w3m # needed for the manual anyway
+    [ pkgs.w3m # needed for the manual anyway
       pkgs.ddrescue
       pkgs.ccrypt
       pkgs.cryptsetup # needed for dm-crypt volumes
 
       # Some networking tools.
-      pkgs.sshfsFuse
+      pkgs.sshfs-fuse
       pkgs.socat
       pkgs.screen
       pkgs.wpa_supplicant # !!! should use the wpa module
@@ -67,7 +66,7 @@ in
       pkgs.dmraid
 
       # Tools to create / manipulate filesystems.
-      pkgs.btrfsProgs
+      pkgs.btrfs-progs
 
       # Some compression/archiver tools.
       pkgs.unzip
@@ -86,8 +85,7 @@ in
   system.boot.loader.kernelFile = "uImage";
 
   boot.initrd.availableKernelModules =
-    [ "mvsdio" "mmc_block" "reiserfs" "ext3" "ums-cypress" "rtc_mv"
-      "ext4" ];
+    [ "mvsdio" "reiserfs" "ext3" "ums-cypress" "rtc_mv" "ext4" ];
 
   boot.postBootCommands =
     ''
@@ -119,11 +117,10 @@ in
 
   /* fake entry, just to have a happy stage-1. Users
      may boot without having stage-1 though */
-  fileSystems = [
+  fileSystems.fake =
     { mountPoint = "/";
       device = "/dev/something";
-      }
-  ];
+    };
 
   services.mingetty = {
     # Some more help text.
@@ -139,7 +136,7 @@ in
   # Setting vesa, we don't get the nvidia driver, which can't work in arm.
   services.xserver.videoDrivers = [ "vesa" ];
 
-  services.nixosManual.enable = false;
+  documentation.nixos.enable = false;
 
   # Include the firmware for various wireless cards.
   networking.enableRalinkFirmware = true;
@@ -164,7 +161,7 @@ in
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.openssh.enable = true;
-  jobs.openssh.startOn = lib.mkOverride 50 "";
+  systemd.services.openssh.wantedBy = lib.mkOverride 50 [];
 
   # cpufrequtils fails to build on non-pc
   powerManagement.enable = false;

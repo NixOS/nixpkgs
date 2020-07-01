@@ -1,25 +1,21 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-
-  name = "mednafen-server-${version}";
-  version = "0.5.1";
+  pname = "mednafen-server";
+  version = "0.5.2";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/mednafen/Mednafen-Server/${version}/${name}.tar.gz";
-    sha256="0c5wvg938y3h4n5lb0dl8pvmjzphhkbba34r6ikpvdahq166ps4j";
+    url = "https://mednafen.github.io/releases/files/mednafen-server-${version}.tar.xz";
+    sha256 = "0xm7dj5nwnrsv69r72rcnlw03jm0l8rmrg3s05gjfvxyqmlb36dq";
   };
 
-  postInstall = ''
-    mkdir -p $out/share/$name 
-    install -m 644 -t $out/share/$name standard.conf
-  '';
+  postInstall = "install -m 644 -Dt $out/share/mednafen-server standard.conf";
 
   meta = with stdenv.lib; {
     description = "Netplay server for Mednafen";
-    homepage = http://mednafen.sourceforge.net/;
+    homepage = "https://mednafen.github.io/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
 }

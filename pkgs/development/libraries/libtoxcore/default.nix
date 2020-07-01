@@ -1,63 +1,61 @@
-{ stdenv, fetchFromGitHub, autoconf, libtool, automake, libsodium, ncurses, libopus
+{ stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, msgpack
 , libvpx, check, libconfig, pkgconfig }:
 
 let
-  version = "4c220e336330213b151a0c20307d0a1fce04ac9e";
-  date = "20150126";
-in
-stdenv.mkDerivation rec {
-  name = "tox-core-${date}-${builtins.substring 0 7 version}";
+  generic = { version, sha256 }:
+  stdenv.mkDerivation {
+    pname = "libtoxcore";
+    inherit version;
 
-  src = fetchFromGitHub {
-    owner  = "irungentoo";
-    repo   = "toxcore";
-    rev    = version;
-    sha256 = "152yamak9ykl8dgkx1qzyrpa3f4xr1s8lgcb5k58r9lb1iwnhvqc";
+    src = fetchFromGitHub {
+      owner  = "TokTok";
+      repo   = "c-toxcore";
+      rev    = "v${version}";
+      inherit sha256;
+    };
+
+    cmakeFlags = [
+      "-DBUILD_NTOX=ON"
+      "-DDHT_BOOTSTRAP=ON"
+      "-DBOOTSTRAP_DAEMON=ON"
+    ];
+
+    buildInputs = [
+      libsodium msgpack ncurses libconfig
+    ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
+      libopus libvpx
+    ];
+
+    nativeBuildInputs = [ cmake pkgconfig ];
+
+    enableParallelBuilding = true;
+
+    doCheck = false; # hangs, tries to access the net?
+    checkInputs = [ check ];
+
+    postFixup =''
+      sed -i $out/lib/pkgconfig/*.pc \
+        -e "s|^libdir=.*|libdir=$out/lib|" \
+        -e "s|^includedir=.*|includedir=$out/include|"
+    '';
+
+    meta = with stdenv.lib; {
+      description = "P2P FOSS instant messaging application aimed to replace Skype";
+      homepage = "https://tox.chat";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ peterhoeg ];
+      platforms = platforms.all;
+    };
   };
 
-  NIX_LDFLAGS = "-lgcc_s";
+in {
+  libtoxcore_0_1 = generic {
+    version = "0.1.11";
+    sha256 = "1fya5gfiwlpk6fxhalv95n945ymvp2iidiyksrjw1xw95fzsp1ij";
+  };
 
-  postPatch = ''
-    # within Nix chroot builds, localhost is unresolvable
-    sed -i -e '/DEFTESTCASE(addr_resolv_localhost)/d' \
-      auto_tests/network_test.c
-    # takes WAAAY too long (~10 minutes) and would timeout
-    sed -i -e '/DEFTESTCASE[^(]*(many_clients\>/d' \
-      auto_tests/tox_test.c
-  '';
-
-  preConfigure = ''
-    autoreconf -i
-  '';
-
-  configureFlags = [
-    "--with-libsodium-headers=${libsodium}/include"
-    "--with-libsodium-libs=${libsodium}/lib"
-    "--enable-ntox"
-    "--enable-daemon"
-  ];
-
-  buildInputs = [
-    autoconf libtool automake libsodium ncurses
-    check libconfig pkgconfig
-  ] ++ stdenv.lib.optionals (!stdenv.isArm) [
-    libopus
-  ];
-
-  propagatedBuildInputs = stdenv.lib.optionals (!stdenv.isArm) [ libvpx ];
-
-  # Some tests fail randomly due to timeout. This kind of problem is well known
-  # by upstream: https://github.com/irungentoo/toxcore/issues/{950,1054}
-  # They don't recommend running tests on 50core machines with other cpu-bound
-  # tests running in parallel.
-  #
-  # NOTE: run the tests locally on your machine before upgrading this package!
-  doCheck = false;
-
-  meta = with stdenv.lib; {
-    description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric jgeerds ];
-    platforms = platforms.all;
+  libtoxcore_0_2 = generic {
+    version = "0.2.12";
+    sha256 = "0a6sqpm00d2rn0nviqfz4gh9ck1wzci6rxgmqmcyryl5ca19ffvp";
   };
 }

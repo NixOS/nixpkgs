@@ -6,8 +6,6 @@ let
 
   cfg = config.services.xinetd;
 
-  inherit (pkgs) xinetd;
-
   configFile = pkgs.writeText "xinetd.conf"
     ''
       defaults
@@ -46,16 +44,11 @@ in
 
   options = {
 
-    services.xinetd.enable = mkOption {
-      default = false;
-      description = ''
-        Whether to enable the xinetd super-server daemon.
-      '';
-    };
+    services.xinetd.enable = mkEnableOption "the xinetd super-server daemon";
 
     services.xinetd.extraDefaults = mkOption {
       default = "";
-      type = types.string;
+      type = types.lines;
       description = ''
         Additional configuration lines added to the default section of xinetd's configuration.
       '';
@@ -67,71 +60,73 @@ in
         A list of services provided by xinetd.
       '';
 
-      type = types.listOf types.optionSet;
+      type = with types; listOf (submodule ({
 
-      options = {
+        options = {
 
-        name = mkOption {
-          type = types.string;
-          example = "login";
-          description = "Name of the service.";
+          name = mkOption {
+            type = types.str;
+            example = "login";
+            description = "Name of the service.";
+          };
+
+          protocol = mkOption {
+            type = types.str;
+            default = "tcp";
+            description =
+              "Protocol of the service.  Usually <literal>tcp</literal> or <literal>udp</literal>.";
+          };
+
+          port = mkOption {
+            type = types.int;
+            default = 0;
+            example = 123;
+            description = "Port number of the service.";
+          };
+
+          user = mkOption {
+            type = types.str;
+            default = "nobody";
+            description = "User account for the service";
+          };
+
+          server = mkOption {
+            type = types.str;
+            example = "/foo/bin/ftpd";
+            description = "Path of the program that implements the service.";
+          };
+
+          serverArgs = mkOption {
+            type = types.separatedString " ";
+            default = "";
+            description = "Command-line arguments for the server program.";
+          };
+
+          flags = mkOption {
+            type = types.str;
+            default = "";
+            description = "";
+          };
+
+          unlisted = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Whether this server is listed in
+              <filename>/etc/services</filename>.  If so, the port
+              number can be omitted.
+            '';
+          };
+
+          extraConfig = mkOption {
+            type = types.lines;
+            default = "";
+            description = "Extra configuration-lines added to the section of the service.";
+          };
+
         };
 
-        protocol = mkOption {
-          type = types.string;
-          default = "tcp";
-          description =
-            "Protocol of the service.  Usually <literal>tcp</literal> or <literal>udp</literal>.";
-        };
-
-        port = mkOption {
-          type = types.int;
-          default = 0;
-          example = 123;
-          description = "Port number of the service.";
-        };
-
-        user = mkOption {
-          type = types.string;
-          default = "nobody";
-          description = "User account for the service";
-        };
-
-        server = mkOption {
-          type = types.string;
-          example = "/foo/bin/ftpd";
-          description = "Path of the program that implements the service.";
-        };
-
-        serverArgs = mkOption {
-          type = types.string;
-          default = "";
-          description = "Command-line arguments for the server program.";
-        };
-
-        flags = mkOption {
-          type = types.string;
-          default = "";
-          description = "";
-        };
-
-        unlisted = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Whether this server is listed in
-            <filename>/etc/services</filename>.  If so, the port
-            number can be omitted.
-          '';
-        };
-
-        extraConfig = mkOption {
-          type = types.string;
-          default = "";
-          description = "Extra configuration-lines added to the section of the service.";
-        };
-
-      };
+      }));
 
     };
 
@@ -141,18 +136,12 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    jobs.xinetd =
-      { description = "xinetd server";
-
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
-
-        path = [ xinetd ];
-
-        exec = "xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
-      };
-
+    systemd.services.xinetd = {
+      description = "xinetd server";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.xinetd ];
+      script = "exec xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
+    };
   };
-
 }

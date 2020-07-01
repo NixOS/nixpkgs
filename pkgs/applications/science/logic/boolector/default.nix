@@ -1,47 +1,61 @@
-{ stdenv, fetchurl, zlib, useV16 ? false }:
+{ stdenv, fetchFromGitHub, lib, python3
+, cmake, lingeling, btor2tools, gtest, gmp
+}:
 
-let
-  v15 = rec {
-    name    = "boolector-${version}";
-    version = "1.5.118";
-    src = fetchurl {
-      url    = "http://fmv.jku.at/boolector/${name}-with-sat-solvers.tar.gz";
-      sha256 = "17j7q02rryvfwgvglxnhx0kv8hxwy8wbhzawn48lw05i98vxlmk9";
-    };
+stdenv.mkDerivation rec {
+  pname = "boolector";
+  version = "3.2.1";
+
+  src = fetchFromGitHub {
+    owner  = "boolector";
+    repo   = "boolector";
+    rev    = "refs/tags/${version}";
+    sha256 = "0jkmaw678njqgkflzj9g374yk1mci8yqvsxkrqzlifn6bwhwb7ci";
   };
 
-  v16 = rec {
-    name    = "boolector-${version}";
-    version = "1.6.0";
-    src = fetchurl {
-      url    = "http://fmv.jku.at/boolector/${name}-with-sat-solvers.tar.gz";
-      sha256 = "0jka4r6bc3i24axgdp6qbq6gjadwz9kvi11s2c5sbwmdnjd7cp85";
-    };
-  };
-
-  boolectorPkg = if useV16 then v16 else v15;
-  license = with stdenv.lib.licenses; if useV16 then unfreeRedistributable else gpl3;
-in
-stdenv.mkDerivation (boolectorPkg // {
-  buildInputs = [ zlib ];
-  enableParallelBuilding = false;
-
-  buildPhase = "./build.sh";
-
-  installPhase = ''
-    mkdir -p $out/bin $out/lib $out/include
-    cp boolector/boolector      $out/bin
-    cp boolector/deltabtor      $out/bin
-    cp boolector/synthebtor     $out/bin
-    cp boolector/libboolector.a $out/lib
-    cp boolector/boolector.h    $out/include
+  postPatch = ''
+    sed s@REPLACEME@file://${gtest.src}@ ${./cmake-gtest.patch} | patch -p1
   '';
 
-  meta = {
-    inherit license;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ lingeling btor2tools gmp ];
+
+  cmakeFlags =
+    [ "-DBUILD_SHARED_LIBS=ON"
+      "-DUSE_LINGELING=YES"
+      "-DBtor2Tools_INCLUDE_DIR=${btor2tools.dev}/include"
+      "-DBtor2Tools_LIBRARIES=${btor2tools.lib}/lib/libbtor2parser.so"
+    ] ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
+
+  installPhase = ''
+    mkdir -p $out/bin $lib/lib $dev/include
+
+    cp -vr bin/* $out/bin
+    cp -vr lib/* $lib/lib
+
+    rm -rf $out/bin/{examples,tests}
+    # we don't care about gtest related libs
+    rm -rf $lib/lib/libg*
+
+    cd ../src
+    find . -iname '*.h' -exec cp --parents '{}' $dev/include \;
+    rm -rf $dev/include/tests
+  '';
+
+  checkInputs = [ python3 ];
+  doCheck = true;
+  preCheck = ''
+    export LD_LIBRARY_PATH=$(readlink -f lib)
+    patchShebangs ..
+  '';
+
+  outputs = [ "out" "dev" "lib" ];
+
+  meta = with stdenv.lib; {
     description = "An extremely fast SMT solver for bit-vectors and arrays";
-    homepage    = "http://fmv.jku.at/boolector";
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    homepage    = "https://boolector.github.io";
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice ];
   };
-})
+}

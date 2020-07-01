@@ -6,7 +6,7 @@ let
     version="0.12";
     name="${baseName}-${version}";
     hash="1b14zcwlvnxhjxr3ymyzg0mg4sbijkinzpxm641s859jxcgylmll";
-    url="http://download.savannah.gnu.org/releases/mi2ly/mi2ly.0.12.tar.bz2";
+    url="https://download.savannah.gnu.org/releases/mi2ly/mi2ly.0.12.tar.bz2";
     sha256="1b14zcwlvnxhjxr3ymyzg0mg4sbijkinzpxm641s859jxcgylmll";
   };
   buildInputs = [
@@ -21,6 +21,8 @@ stdenv.mkDerivation {
 
   sourceRoot=".";
 
+  hardeningDisable = [ "format" ];
+
   buildPhase = "./cc";
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/mi2ly}
@@ -34,5 +36,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
+    broken = true; # 2018-04-11
   };
 }

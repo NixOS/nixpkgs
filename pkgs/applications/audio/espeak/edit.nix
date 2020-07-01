@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0x8s7vpb7rw5x37yjzy1f98m4f2csdg89libb74fm36gn8ly0hli";
   };
 
-  buildInputs = [ pkgconfig unzip portaudio wxGTK ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ unzip portaudio wxGTK ];
 
   # TODO:
   # Uhm, seems like espeakedit still wants espeak-data/ in $HOME, even thought
@@ -20,9 +21,11 @@ stdenv.mkDerivation rec {
   #  chmod +w ~/espeak-data
 
   patches = [
+    ./gcc6.patch
     ./espeakedit-fix-makefile.patch
     ./espeakedit-configurable-sox-path.patch
     ./espeakedit-configurable-path-espeak-data.patch
+    ./espeakedit-gcc6.patch
   ];
 
   postPatch = ''
@@ -50,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Phoneme editor for espeak";
-    homepage = http://espeak.sourceforge.net/;
+    homepage = "http://espeak.sourceforge.net/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

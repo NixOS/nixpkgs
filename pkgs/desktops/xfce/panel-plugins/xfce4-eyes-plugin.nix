@@ -1,22 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4panel, libxfce4ui, libxfcegui4, xfconf, gtk}:
+{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk3, xfce }:
 
-with stdenv.lib;
+let
+  category = "panel-plugins";
+in
+
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-eyes-plugin";
-  ver_maj = "4.4";
-  ver_min = "3";
+  pname  = "xfce4-eyes-plugin";
+  version = "4.5.1";
 
   src = fetchurl {
-    url = "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0z4161i14m73i515ymhj34c1ycz5fmjmbczdd8plx3nvrxdk76jb";
+    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "1iaszzkagl1mb0cdafrvlfjnjklhhs9y90517par34sjiqbq1dsd";
   };
-  name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool libxfce4util libxfce4ui xfce4panel libxfcegui4 xfconf gtk ];
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+  ];
+  
+  buildInputs = [
+    libxfce4util
+    libxfce4ui
+    xfce4-panel
+    xfconf
+    gtk3
+  ];
+  
+  passthru.updateScript = xfce.updateScript {
+    inherit pname version;
+    attrPath = "xfce.${pname}";
+    versionLister = xfce.archiveLister category pname;
+  };
 
-  meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
-    description = "Eyes following you!";
+  meta = with stdenv.lib; {
+    homepage = "https://docs.xfce.org/panel-plugins/xfce4-eyes-plugin";
+    description = "Rolling eyes (following mouse pointer) plugin for the Xfce panel";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];
   };

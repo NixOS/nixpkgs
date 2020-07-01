@@ -1,0 +1,15 @@
+https://github.com/slacka/WoeUSB/issues/267
+
+diff --git a/src/woeusb b/src/woeusb
+index 8cb292c..c017dbf 100755
+--- a/src/woeusb
++++ b/src/woeusb
+@@ -1661,6 +1661,8 @@ workaround_support_windows_7_uefi_boot(){
+ ## - System lagging while copying data · Issue #113 · slacka/WoeUSB <https://github.com/slacka/WoeUSB/issues/113>
+ ## - The pernicious USB-stick stall problem [LWN.net] <https://lwn.net/Articles/572911/>
+ workaround_linux_make_writeback_buffering_not_suck(){
++	return 0
++
+ 	util_check_function_parameters_quantity 1 "${#}"
+ 	local -r mode="${1}"
+ 

@@ -1,20 +1,6 @@
-{stdenv, fetchurl, boost, openssl}:
+{callPackage, ... } @ args:
 
-stdenv.mkDerivation rec {
-  name = "asio-1.10.6";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/asio/${name}.tar.bz2";
-    sha256 = "0phr6zq8z78dwhhzs3h27q32mcv1ffg2gyq880rw3xmilx01rmz0";
-  };
-
-  propagatedBuildInputs = [ boost ];
-  buildInputs = [ openssl ];
-
-  meta = {
-    homepage = http://asio.sourceforge.net/;
-    description = "Cross-platform C++ library for network and low-level I/O programming";
-    license = stdenv.lib.licenses.boost;
-  };
-
-}
+callPackage ./generic.nix (args // {
+  version = "1.16.1";
+  sha256 = "1333ca6lnsdck4fsgjpbqf4lagxsnbg9970wxlsrinmwvdvdnwg2";
+})

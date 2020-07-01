@@ -1,11 +1,11 @@
 { stdenv, fetchurl, boost }:
 
 stdenv.mkDerivation rec {
-  name = "mini-httpd-1.4";
+  name = "mini-httpd-1.7";
 
   src = fetchurl {
-    url = "mirror://savannah/mini-httpd/${name}.tar.gz";
-    sha256 = "1i46klkx2ca1cgmlilajkx8gf7b7d7c2sj58llxfllh184pb6cpd";
+    url = "https://download-mirror.savannah.gnu.org/releases/mini-httpd/${name}.tar.gz";
+    sha256 = "0jggmlaywjfbdljzv5hyiz49plnxh0har2bnc9dq4xmj1pmjgs49";
   };
 
   buildInputs = [ boost ];
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://mini-httpd.nongnu.org/";
-    description = "a minimalistic high-performance web server";
+    description = "minimalistic high-performance web server";
     license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

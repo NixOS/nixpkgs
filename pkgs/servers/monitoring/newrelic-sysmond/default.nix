@@ -1,14 +1,12 @@
 { stdenv, fetchurl }:
 
-assert stdenv.system == "x86_64-linux";
-
 stdenv.mkDerivation rec {
-  name = "newrelic-sysmond-1.5.1.93";
+  pname = "newrelic-sysmond";
+  version = "2.3.0.132";
 
   src = fetchurl {
-    url = "http://download.newrelic.com/server_monitor/release/newrelic-sysmond-1.5.1.93-linux.tar.gz";
-
-    sha256 = "1bfwyczcf7pvji8lx566jxgy8dhyf1gmqmi64lj10673a86axnwz";
+    url = "https://download.newrelic.com/server_monitor/archive/${version}/newrelic-sysmond-${version}-linux.tar.gz";
+    sha256 = "0cdvffdsadfahfn1779zjfawz6l77awab3g9mw43vsba1568jh4f";
   };
 
   installPhase = ''
@@ -18,13 +16,11 @@ stdenv.mkDerivation rec {
       $out/bin/nrsysmond
   '';
 
-  meta = {
-    homepage = http://newrelic.com/;
-
+  meta = with stdenv.lib; {
     description = "System-wide monitoring for newrelic";
-
-    license = stdenv.lib.licenses.unfree;
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
+    homepage = "https://newrelic.com/";
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lnl7 ];
   };
 }

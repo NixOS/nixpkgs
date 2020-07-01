@@ -1,22 +1,31 @@
-{ fetchurl, stdenv, python, texinfo }:
+{ fetchurl, stdenv, python3Packages, texinfo }:
 
-stdenv.mkDerivation rec {
-  name = "rubber-1.1";
+python3Packages.buildPythonApplication rec {
+  pname = "rubber";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "http://ebeffara.free.fr/pub/${name}.tar.gz";
-    sha256 = "1xbkv8ll889933gyi2a5hj7hhh216k04gn8fwz5lfv5iz8s34gbq";
+    url = "https://launchpad.net/rubber/trunk/${version}/+download/${pname}-${version}.tar.gz";
+    sha256 = "178dmrp0mza5gqjiqgk6dqs0c10s0c517pk6k9pjbam86vf47a1p";
   };
 
-  buildInputs = [ python texinfo ];
+  nativeBuildInputs = [ texinfo ];
 
-  patchPhase = "substituteInPlace configure --replace which \"type -P\"";
+  # I couldn't figure out how to pass the proper parameter to disable pdf generation, so we
+  # use sed to change the default
+  preBuild = ''
+    sed -i -r 's/pdf\s+= True/pdf = False/g' setup.py
+  '';
 
-  postInstall = "rm $out/share/rubber/modules/etex.rub";
+  # the check scripts forces python2. If we need to use python3 at some point, we should use
+  # the correct python
+  checkPhase = ''
+    sed -i 's|python=python3|python=${python3Packages.python.interpreter}|' tests/run.sh
+    cd tests && ${stdenv.shell} run.sh
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Wrapper for LaTeX and friends";
-
     longDescription = ''
       Rubber is a program whose purpose is to handle all tasks related
       to the compilation of LaTeX documents.  This includes compiling
@@ -26,9 +35,9 @@ stdenv.mkDerivation rec {
       produce PostScript documents is also included, as well as usage
       of pdfLaTeX to produce PDF documents.
     '';
-
-    license = stdenv.lib.licenses.gpl2Plus;
-
-    homepage = http://www.pps.jussieu.fr/~beffara/soft/rubber/;
+    license = licenses.gpl2Plus;
+    homepage = "https://launchpad.net/rubber";
+    maintainers = with maintainers; [ ttuegel peterhoeg ];
+    platforms = platforms.unix;
   };
 }

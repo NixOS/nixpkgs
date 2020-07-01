@@ -1,43 +1,46 @@
-{ stdenv, fetchurl, pkgconfig, python, pygtk, gettext, texinfo
-, ghostscript, pysqlite, librsvg, gdk_pixbuf, txt2man, timidity, mpg123
-, alsaUtils, vorbisTools, csound, lilypond
-, makeWrapper
+{ lib, fetchurl, gettext, pkgconfig, texinfo, wrapGAppsHook
+, buildPythonApplication, pycairo, pygobject3
+, gobject-introspection, gtk3, librsvg
+, alsaUtils, timidity, mpg123, vorbis-tools, csound, lilypond
 }:
 
-stdenv.mkDerivation rec {
-  name = "solfege-3.22.2";
+buildPythonApplication rec {
+  name = "solfege-3.23.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/solfege/${name}.tar.gz";
-    sha256 = "1r4g93ka7i8jh5glii5nza0zq0wy4sw0gfzpvkcrhj9yr1h0jsp4";
+    sha256 = "0sc17vf4xz6gy0s0z9ghi68yskikdmyb4gdaxx6imrm40734k8mp";
   };
 
-  buildInputs = [ pkgconfig python pygtk gettext texinfo
-    ghostscript pysqlite librsvg gdk_pixbuf txt2man makeWrapper
+  patches = [
+    ./css.patch
+    ./menubar.patch
+    ./webbrowser.patch
   ];
+
+  nativeBuildInputs = [ gettext pkgconfig texinfo wrapGAppsHook ];
+  buildInputs = [ gobject-introspection gtk3 librsvg ];
+  propagatedBuildInputs = [ pycairo pygobject3 ];
 
   preBuild = ''
     sed -i -e 's|wav_player=.*|wav_player=${alsaUtils}/bin/aplay|' \
            -e 's|midi_player=.*|midi_player=${timidity}/bin/timidity|' \
            -e 's|mp3_player=.*|mp3_player=${mpg123}/bin/mpg123|' \
-           -e 's|ogg_player=.*|ogg_player=${vorbisTools}/bin/ogg123|' \
+           -e 's|ogg_player=.*|ogg_player=${vorbis-tools}/bin/ogg123|' \
            -e 's|csound=.*|csound=${csound}/bin/csound|' \
            -e 's|lilypond-book=.*|lilypond-book=${lilypond}/bin/lilypond-book|' \
            default.config
   '';
 
-  postInstall = ''
-      set -x
-      wrapProgram "$out/bin/solfege" \
-          --prefix PYTHONPATH ':' "$PYTHONPATH" \
-          --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-  '';
+  format = "other";
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Ear training program";
-    homepage = http://www.solfege.org/;
+    homepage = "http://www.solfege.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor orivej ];
   };
 }

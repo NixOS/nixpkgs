@@ -1,27 +1,21 @@
-{stdenv, fetchurl, unzip}:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "stix-otf-${version}";
+let
   version = "1.1.1";
+in fetchzip {
+  name = "stix-otf-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/stixfonts/STIXv${version}-word.zip";
-    sha256 = "1q35wbqn3nh78pdban9z37lh090c6p49q3d00zzxm0axxz66xy4q";
-  };
+  url = "http://ftp.fi.muni.cz/pub/linux/gentoo/distfiles/STIXv${version}-word.zip";
 
-  buildInputs = [unzip];
-
-  phases = ["unpackPhase" "installPhase"];
-
-  sourceRoot = "Fonts/STIX-Word";
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    cp *.otf $out/share/fonts/opentype
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.stixfonts.org/;
+  sha256 = "04d4qxq3i9fyapsmxk6d9v1xirjam8c74fyxs6n24d3gf2945zmw";
+
+  meta = with lib; {
+    homepage = "http://www.stixfonts.org/";
     description = "Fonts for Scientific and Technical Information eXchange";
     license = licenses.ofl;
     platforms = platforms.all;

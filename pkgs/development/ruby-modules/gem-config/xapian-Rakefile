@@ -1,0 +1,33 @@
+# encoding: utf-8
+# Install the xapian binaries into the lib folder of the gem
+require 'rbconfig'
+
+c = RbConfig::CONFIG
+
+source_dir = 'xapian_source'
+bindings = Dir["#{source_dir}/xapian-bindings-*"].first
+bindings = File.basename(bindings, ".tar.xz")
+
+task :default do
+  sh "tar -xJf #{source_dir}/#{bindings}.tar.xz"
+
+  prefix = Dir.pwd
+  ENV['LDFLAGS'] = "-L#{prefix}/lib"
+
+  sh "mkdir -p lib"
+
+  Dir.chdir bindings do
+    ENV['RUBY'] ||= "#{c['bindir']}/#{c['RUBY_INSTALL_NAME']}"
+    sh "./configure --prefix=#{prefix} --exec-prefix=#{prefix} --with-ruby"
+    sh "make clean all"
+  end
+
+  sh "cp -r #{bindings}/ruby/.libs/_xapian.* lib"
+  sh "cp #{bindings}/ruby/xapian.rb lib"
+
+  sh "rm lib/*.la"
+  sh "rm lib/*.lai"
+
+  sh "rm -R #{bindings}"
+  sh "rm -R #{source_dir}"
+end

@@ -1,78 +1,175 @@
-{ stdenv, fetchurl, makeWrapper, autoconf, automake, boost, file, gettext
-, glib, glibc, libgnome_keyring, gnome_keyring, gtk, gtkmm, intltool
-, libctemplate, libglade
+{ stdenv
+, fetchurl
+, substituteAll
+, cmake
+, ninja
+, pkgconfig
+, glibc
+, gtk3
+, gtkmm3
+, pcre
+, swig
+, antlr4_7
+, sudo
+, mysql
+, libxml2
+, libmysqlconnectorcpp
+, vsqlite
+, gdal
 , libiodbc
-, libgnome, libsigcxx, libtool, libuuid, libxml2, libzip, lua, mesa, mysql
-, pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite, sudo
+, libpthreadstubs
+, libXdmcp
+, libuuid
+, libzip
+, libsecret
+, libssh
+, python2
+, jre
+, boost
+, libsigcxx
+, libX11
+, openssl
+, rapidjson
+, proj
+, cairo
+, libxkbcommon
+, epoxy
+, wrapGAppsHook
+, at-spi2-core
+, dbus
+, bash
+, coreutils
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python2.pkgs) paramiko pycairo pyodbc;
+in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "5.2.47";
-  name = "${pname}-${version}";
+  version = "8.0.20";
 
   src = fetchurl {
-    url = "http://mirror.cogentco.com/pub/mysql/MySQLGUITools/mysql-workbench-gpl-${version}-src.tar.gz";
-    sha256 = "1343fn3msdxqfpxw0kgm0mdx5r7g9ra1cpc8p2xhl7kz2pmqp4p6";
+    url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
+    sha256 = "0c0ig2fqfpli7fwb4v4iwvfh4szzj3grx8j9rbh40kllkc8v5qh6";
   };
 
-  buildInputs = [ autoconf automake boost file gettext glib glibc libgnome_keyring gtk gtkmm intltool
-    libctemplate libglade libgnome libiodbc libsigcxx libtool libuuid libxml2 libzip lua makeWrapper mesa
-    mysql.lib paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
+  patches = [
+    ./fix-gdal-includes.patch
 
+    (substituteAll {
+      src = ./hardcode-paths.patch;
+      catchsegv = "${glibc.bin}/bin/catchsegv";
+      bash = "${bash}/bin/bash";
+      cp = "${coreutils}/bin/cp";
+      dd = "${coreutils}/bin/dd";
+      ls = "${coreutils}/bin/ls";
+      mkdir = "${coreutils}/bin/mkdir";
+      nohup = "${coreutils}/bin/nohup";
+      rm = "${coreutils}/bin/rm";
+      rmdir = "${coreutils}/bin/rmdir";
+      sudo = "${sudo}/bin/sudo";
+    })
+
+    # Fix swig not being able to find headers
+    # https://github.com/NixOS/nixpkgs/pull/82362#issuecomment-597948461
+    (substituteAll {
+      src = ./fix-swig-build.patch;
+      cairoDev = "${cairo.dev}";
+    })
+  ];
+
+  # have it look for 4.7.2 instead of 4.7.1
   preConfigure = ''
-    substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc}/bin/catchsegv"
+    substituteInPlace CMakeLists.txt \
+      --replace "antlr-4.7.1-complete.jar" "antlr-4.7.2-complete.jar"
   '';
 
-  postConfigure = ''
-    autoreconf -fi
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkgconfig
+    jre
+    swig
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gtk3
+    gtkmm3
+    libX11
+    antlr4_7.runtime.cpp
+    python2
+    mysql
+    libxml2
+    libmysqlconnectorcpp
+    vsqlite
+    gdal
+    boost
+    libssh
+    openssl
+    rapidjson
+    libiodbc
+    pcre
+    cairo
+    libuuid
+    libzip
+    libsecret
+    libsigcxx
+    proj
+
+    # python dependencies:
+    paramiko
+    pycairo
+    pyodbc
+    # TODO: package sqlanydb and add it here
+
+    # transitive dependencies:
+    libpthreadstubs
+    libXdmcp
+    libxkbcommon
+    epoxy
+    at-spi2-core
+    dbus
+  ];
+
+  postPatch = ''
+    patchShebangs tools/get_wb_version.sh
   '';
 
-  postInstall = ''
-    patchShebangs $out/share/mysql-workbench/extras/build_freetds.sh
+  # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-    for i in $out/lib/mysql-workbench/modules/wb_utils_grt.py \
-             $out/lib/mysql-workbench/modules/wb_server_management.py \
-             $out/lib/mysql-workbench/modules/wb_admin_grt.py; do
-      substituteInPlace $i \
-        --replace "/bin/bash" ${stdenv.shell} \
-        --replace "/usr/bin/sudo" ${sudo}/bin/sudo
+  cmakeFlags = [
+    "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
+    "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
+    "-DWITH_ANTLR_JAR=${antlr4_7.jarLocation}"
+    # mysql-workbench 8.0.20 depends on libmysqlconnectorcpp 1.1.8.
+    # Newer versions of connector still provide the legacy library when enabled
+    # but the headers are in a different location.
+    "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
+  ];
+
+  # There is already an executable and a wrapper in bindir
+  # No need to wrap both
+  dontWrapGApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${python2}/bin"
+      --prefix PROJSO : "${proj}/lib/libproj.so"
+      --set PYTHONPATH $PYTHONPATH
+    )
+  '';
+
+  # Let’s wrap the programs not ending with bin
+  # until https://bugs.mysql.com/bug.php?id=91948 is fixed
+  postFixup = ''
+    find -L "$out/bin" -type f -executable -print0 \
+      | while IFS= read -r -d ''' file; do
+      if [[ "''${file}" != *-bin ]]; then
+        echo "Wrapping program $file"
+        wrapGApp "$file"
+      fi
     done
-
-    wrapProgram "$out/bin/mysql-workbench" \
-      --prefix LD_LIBRARY_PATH : "${python}/lib" \
-      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.cc}/nix-support/orig-cc)/lib64" \
-      --prefix PATH : "${gnome_keyring}/bin" \
-      --prefix PATH : "${python}/bin" \
-      --set PYTHONPATH $PYTHONPATH \
-      --run '
-# The gnome-keyring-daemon must be running.  To allow for environments like
-# kde, xfce where this is not so, we start it first.
-# It is cleaned up using a supervisor subshell which detects that
-# the parent has finished via the closed pipe as terminate signal idiom,
-# used because we cannot clean up after ourselves due to the exec call.
-
-# Start gnome-keyring-daemon, export the environment variables it asks us to set.
-for expr in $( gnome-keyring-daemon --components=ssh,pkcs11 --start ) ; do eval "export "$expr ; done
-
-# Prepare fifo pipe.
-FIFOCTL="/tmp/gnome-keyring-daemon-ctl.$$.fifo"
-[ -p $FIFOCTL ] && rm $FIFOCTL
-mkfifo $FIFOCTL
-
-# Supervisor subshell waits reading from pipe, will receive EOF when parent
-# closes pipe on termination.  Negate read with ! operator to avoid subshell
-# quitting when read EOF returns 1 due to -e option being set.
-(
-    exec 19< $FIFOCTL
-    ! read -u 19
-
-    kill $GNOME_KEYRING_PID
-    rm $FIFOCTL
-) &
-
-exec 19> $FIFOCTL
-            '
   '';
 
   meta = with stdenv.lib; {
@@ -84,9 +181,9 @@ exec 19> $FIFOCTL
       and execute SQL queries.
     '';
 
-    homepage = http://wb.mysql.com/;
+    homepage = "http://wb.mysql.com/";
     license = licenses.gpl2;
     maintainers = [ maintainers.kkallio ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

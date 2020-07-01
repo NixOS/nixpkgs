@@ -8,10 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.sawfish.enable = mkOption {
-      default = false;
-      description = "Enable the Sawfish window manager.";
-    };
+    services.xserver.windowManager.sawfish.enable = mkEnableOption "sawfish";
   };
 
   ###### implementation

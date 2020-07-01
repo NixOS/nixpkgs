@@ -1,74 +1,44 @@
-{ stdenv, fetchurl, ruby, bundler, libiconv, libxslt, libxml2, pkgconfig, libffi, glibc, imagemagickBig, postgresql }:
+{ stdenv, fetchurl, bundlerEnv, ruby }:
 
 let
-  gemspec = map (gem: fetchurl { url=gem.url; sha256=gem.hash; }) (import ./Gemfile.nix);
-in stdenv.mkDerivation rec {
-  version = "2.5.2";
-  name = "redmine-${version}";
+  version = "4.1.1";
+  rubyEnv = bundlerEnv {
+    name = "redmine-env-${version}";
 
-  src = fetchurl {
-    url = "http://www.redmine.org/releases/${name}.tar.gz";
-    sha256 = "0x0zwxyj4dwbk7l64s3lgny10mjf0ba8jwrbafsm4d72sncmacv0";
+    inherit ruby;
+    gemdir = ./.;
+    groups = [ "development" "ldap" "markdown" "minimagick" "openid" "test" ];
   };
+in
+  stdenv.mkDerivation rec {
+    pname = "redmine";
+    inherit version;
 
-  # taken from redmine (2.5.1-2~bpo70+3) in debian wheezy-backports
-  # needed to separate run-time and build-time directories
-  patches = [
-    ./2002_FHS_through_env_vars.patch
-    ./2004_FHS_plugins_assets.patch
-    ./2003_externalize_session_config.patch
-  ];
-  postPatch = ''
-    substituteInPlace lib/redmine/plugin.rb --replace "File.join(Rails.root, 'plugins')" "ENV['RAILS_PLUGINS']"
-    substituteInPlace lib/redmine/plugin.rb --replace "File.join(Rails.root, 'plugins', id.to_s, 'db', 'migrate')" "File.join(ENV['RAILS_PLUGINS'], id.to_s, 'db', 'migrate')"
-    substituteInPlace config/routes.rb --replace '"plugins/*", Rails.root' 'ENV["RAILS_PLUGINS"] + "/*"'
-  '';
+    src = fetchurl {
+      url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
+      sha256 = "1nndy5hz8zvfglxf1f3bsb1pkrfwinfxzkdan1vjs3rkckkszyh5";
+    };
 
-  buildInputs = [
-    ruby bundler libiconv
-    libxslt libxml2 pkgconfig libffi
-    imagemagickBig postgresql
-  ];
+    buildInputs = [ rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler ];
 
-  installPhase = ''
-    mkdir -p $out/share/redmine/
-    cp -R . $out/share/redmine/
-    cd $out/share/redmine
-    ln -s ${./Gemfile.lock} Gemfile.lock
-    export HOME=$(pwd)
+    buildPhase = ''
+      mv config config.dist
+      mv public/themes public/themes.dist
+    '';
 
-    cat > config/database.yml <<EOF
-      production:
-        adapter: postgresql
-    EOF
+    installPhase = ''
+      mkdir -p $out/share
+      cp -r . $out/share/redmine
+      for i in config files log plugins public/plugin_assets public/themes tmp; do
+        rm -rf $out/share/redmine/$i
+        ln -fs /run/redmine/$i $out/share/redmine/$i
+      done
+    '';
 
-    mkdir -p vendor/cache
-    ${stdenv.lib.concatStrings (map (gem: "ln -s ${gem} vendor/cache/${gem.name};") gemspec)}
-
-    bundle config build.nokogiri \
-      --use-system-libraries \
-      --with-iconv-dir=${libiconv} \
-      --with-xslt-dir=${libxslt} \
-      --with-xml2-dir=${libxml2} \
-      --with-pkg-config \
-      --with-pg-config=${postgresql}/bin/pg_config
-
-    bundle install --verbose --local --deployment
-
-    # make sure we always load pg package
-    echo "gem \"pg\"" >> Gemfile
-
-    # make rails server happy
-    mkdir -p tmp/pids
-
-    # cleanup
-    rm config/database.yml
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://www.redmine.org/;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.garbas ];
-    license = licenses.gpl2;
-  };
-}
+    meta = with stdenv.lib; {
+      homepage = "https://www.redmine.org/";
+      platforms = platforms.linux;
+      maintainers = [ maintainers.aanderse ];
+      license = licenses.gpl2;
+    };
+  }

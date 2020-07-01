@@ -1,34 +1,37 @@
-{ stdenv, fetchgit, bison, flex, openssl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, bison, flex, openssl, gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "charybdis-3.5.0-rc1";
+  name = "charybdis-4.1.2";
 
-  src = fetchgit {
-    url = "https://github.com/atheme/charybdis.git";
-    rev = "43a9b61c427cd0f3fa2c192890b8a48d9ea6fb7f";
-    sha256 = "ae2c8a72e6a29c901f9b51759b542ee12c4ec918050a2d9d65e5635077a0fcef";
+  src = fetchFromGitHub {
+    owner = "charybdis-ircd";
+    repo = "charybdis";
+    rev = name;
+    sha256 = "1lndk0yp27qm8bds4jd204ynxcq92fqmpfb0kkcla5zgky3miks3";
   };
 
-  patches = [
-     ./remove-setenv.patch
-  ];
+  postPatch = ''
+    substituteInPlace include/defaults.h --replace 'PKGLOCALSTATEDIR "' '"/var/lib/charybdis'
+  '';
+
+  autoreconfPhase = "sh autogen.sh";
 
   configureFlags = [
     "--enable-epoll"
     "--enable-ipv6"
-    "--enable-openssl=${openssl}"
+    "--enable-openssl=${openssl.dev}"
     "--with-program-prefix=charybdis-"
   ];
 
-  buildInputs = [ bison flex openssl ];
+  nativeBuildInputs = [ autoreconfHook bison flex ];
+  buildInputs = [ openssl gnutls ];
 
-  meta = {
-    description = "An extremely scalable ircd with some cooperation with the ratbox and ircu guys";
-    homepage    = https://github.com/atheme/charybdis;
-    license     = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.lassulus ];
-    platforms   = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "IRCv3 server designed to be highly scalable";
+    homepage    = "https://github.com/charybdis-ircd/charybdis";
+    license     = licenses.gpl2;
+    maintainers = with maintainers; [ lassulus fpletz ];
+    platforms   = platforms.unix;
   };
-
 
 }

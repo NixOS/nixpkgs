@@ -3,7 +3,7 @@
   unzip, zlib, curl, libjpeg, libpng, libvorbis, libtheora
 , libogg, libmodplug
 , # glx
-  libX11, mesa, libXpm, libXext, libXxf86vm, libXxf86dga, alsaLib
+  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, libXxf86dga, alsaLib
 , # sdl
   SDL
 }:
@@ -11,9 +11,10 @@
 let
   version = "2.5.2";
 
-  version_short = stdenv.lib.replaceChars [ "." ] [ "" ] "${version}";
+  version_short = stdenv.lib.replaceChars [ "." ] [ "" ] version;
 in stdenv.mkDerivation {
-  name = "nexuiz-${version}";
+  pname = "nexuiz";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/nexuiz/nexuiz-${version_short}.zip";
@@ -24,7 +25,7 @@ in stdenv.mkDerivation {
     # required for both
     unzip
     # glx
-    libX11 mesa libXpm libXext libXxf86vm libXxf86dga alsaLib
+    libX11 libGLU libGL libXpm libXext libXxf86vm libXxf86dga alsaLib
     # sdl
     SDL
   ];
@@ -36,14 +37,14 @@ in stdenv.mkDerivation {
   '';
 
   NIX_LDFLAGS = ''
-    -rpath ${zlib}/lib
-    -rpath ${curl}/lib
-    -rpath ${libjpeg}/lib
-    -rpath ${libpng}/lib
-    -rpath ${libvorbis}/lib
-    -rpath ${libtheora}/lib
-    -rpath ${libogg}/lib
-    -rpath ${libmodplug}/lib
+    -rpath ${zlib.out}/lib
+    -rpath ${curl.out}/lib
+    -rpath ${libjpeg.out}/lib
+    -rpath ${libpng.out}/lib
+    -rpath ${libvorbis.out}/lib
+    -rpath ${libtheora.out}/lib
+    -rpath ${libogg.out}/lib
+    -rpath ${libmodplug.out}/lib
   '';
 
   buildPhase = ''

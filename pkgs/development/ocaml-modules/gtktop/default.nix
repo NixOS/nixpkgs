@@ -2,6 +2,10 @@
 
 let pname = "gtktop-2.0"; in
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "${pname} is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation {
   name = "ocaml-${pname}";
 
@@ -16,10 +20,10 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://zoggy.github.io/gtktop/;
+    homepage = "http://zoggy.github.io/gtktop/";
     description = "A small OCaml library to ease the creation of graphical toplevels";
     license = stdenv.lib.licenses.lgpl3;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

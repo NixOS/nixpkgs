@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, python, pythonPackages, libxslt, libxml2, makeWrapper }:
-
-let
-  rev = "9de21094a8cf565bdfcf75688e121a5ad1f5397b";
-in
+{ stdenv, fetchFromGitHub, python, pythonPackages, libxslt, libxml2, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "venus-${rev}";
+  pname = "venus";
+  version = "unstable-2011-02-18";
 
-  src = fetchurl {
-    url = "https://github.com/rubys/venus/tarball/${rev}";
-    name = "${name}.tar.bz";
-    sha256 = "0lsc9d83grbi3iwm8ppaig4h9vbmd5h4vvz83lmpnyp7zqfka7dy";
+  src = fetchFromGitHub {
+    owner = "rubys";
+    repo = "venus";
+    rev = "9de21094a8cf565bdfcf75688e121a5ad1f5397b";
+    sha256 = "10yyx4jaxxbwhica12aiw119aywghcr7b24gs9lrmafpa6xd3an2";
   };
 
   preConfigure = ''
@@ -20,15 +18,15 @@ stdenv.mkDerivation rec {
     substituteInPlace planet.py \
         --replace "#!/usr/bin/env python" "#!${python}/bin/python"
     substituteInPlace tests/test_apply.py \
-        --replace "'xsltproc" "'${libxslt}/bin/xsltproc"
+        --replace "'xsltproc" "'${libxslt.bin}/bin/xsltproc"
     substituteInPlace planet/shell/xslt.py \
-        --replace "'xsltproc" "'${libxslt}/bin/xsltproc"
+        --replace "'xsltproc" "'${libxslt.bin}/bin/xsltproc"
   '';
 
   doCheck = true;
   checkPhase = "python runtests.py";
 
-  buildInputs = [ python python.modules.bsddb libxslt
+  buildInputs = [ python libxslt
     libxml2 pythonPackages.genshi pythonPackages.lxml makeWrapper ];
 
   installPhase = ''
@@ -50,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "http://intertwingly.net/code/venus/docs/index.html";
     license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    maintainers = [];
   };
 }

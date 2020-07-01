@@ -11,6 +11,6 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kbdlight ];
-    security.setuidPrograms = [ "kbdlight" ];
+    security.wrappers.kbdlight.source = "${pkgs.kbdlight.out}/bin/kbdlight";
   };
 }

@@ -1,28 +1,23 @@
-{ stdenv, fetchurl, gtk, jack2, lilv, lv2, pkgconfig, python
-, serd, sord , sratom, suil }:
+{ stdenv, fetchurl, gtk3, libjack2, lilv, lv2, pkgconfig, python
+, serd, sord , sratom, suil, wafHook }:
 
 stdenv.mkDerivation  rec {
-  name = "jalv-${version}";
-  version = "1.4.6";
+  pname = "jalv";
+  version = "1.6.4";
 
   src = fetchurl {
-    url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "1f1hcq74n3ziw8bk97mn5a1vgw028dxikv3fchaxd430pbbhqgl9";
+    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
+    sha256 = "1wwfn7yzbs37s2rdlfjgks63svd5g14yyzd2gdl7h0z12qncwsy2";
   };
 
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
-    gtk jack2 lilv lv2 pkgconfig python serd sord sratom suil
+    gtk3 libjack2 lilv lv2 python serd sord sratom suil
   ];
-
-  configurePhase = "python waf configure --prefix=$out";
-
-  buildPhase = "python waf";
-
-  installPhase = "python waf install";
 
   meta = with stdenv.lib; {
     description = "A simple but fully featured LV2 host for Jack";
-    homepage = http://drobilla.net/software/jalv;
+    homepage = "http://drobilla.net/software/jalv";
     license = licenses.isc;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

@@ -1,25 +1,28 @@
-{ stdenv, gmp, gnum4
+{ stdenv, buildPackages, gmp, gnum4
 
 # Version specific args
 , version, src
 , ...}:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
   name = "nettle-${version}";
 
   inherit src;
 
-  buildInputs = [ gnum4 ];
+  outputs = [ "out" "dev" ];
+  outputBin = "dev";
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
-  doCheck = (stdenv.system != "i686-cygwin" && !stdenv.isDarwin);
+  configureFlags = [ "--enable-fat" ]; # runtime selection of HW-accelerated code
+
+  doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.isDarwin);
 
   enableParallelBuilding = true;
 
-  # It doesn't build otherwise
-  dontDisableStatic = true;
-
-  patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
+  patches = stdenv.lib.optional (stdenv.hostPlatform.system == "i686-cygwin")
               ./cygwin.patch;
 
   meta = with stdenv.lib; {
@@ -50,9 +53,8 @@ stdenv.mkDerivation (rec {
 
      license = licenses.gpl2Plus;
 
-     homepage = http://www.lysator.liu.se/~nisse/nettle/;
+     homepage = "http://www.lysator.liu.se/~nisse/nettle/";
 
-     maintainers = with maintainers; [ wkennington ];
      platforms = platforms.all;
   };
 }
@@ -64,5 +66,5 @@ stdenv.lib.optionalAttrs stdenv.isSunOS {
   # /usr/include/mp.h from OpenSolaris.  See
   # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
   # for details.
-  configureFlags = [ "--with-include-path=${gmp}/include" ];
+  configureFlags = [ "--with-include-path=${gmp.dev}/include" ];
 })

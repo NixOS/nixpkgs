@@ -13,12 +13,13 @@ with lib;
       default = false;
       description = ''
         Whether to enable tftpd, a Trivial File Transfer Protocol server.
+        The server will be run as an xinetd service.
       '';
     };
 
     services.tftpd.path = mkOption {
       type = types.path;
-      default = "/home/tftp";
+      default = "/srv/tftp";
       description = ''
         Where the tftp server files are stored.
       '';

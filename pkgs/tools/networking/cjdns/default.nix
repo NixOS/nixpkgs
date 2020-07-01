@@ -1,28 +1,26 @@
-{ stdenv, fetchFromGitHub, nodejs, which, python27, utillinux }:
+{ stdenv, fetchFromGitHub, nodejs, which, python27, utillinux, nixosTests }:
 
-let
-  version = "16"; # see ${src}/util/version/Version.h
-  date = "20150509";
-in
-stdenv.mkDerivation {
-  name = "cjdns-${version}-${date}";
+stdenv.mkDerivation rec {
+  pname = "cjdns";
+  version = "20.7";
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
     repo = "cjdns";
-    rev = "a05ade40dc31caebaf3aa770aac3ab2ecb02d867";
-    sha256 = "07vwsw5d0sdxypl187cyzzdrv0chf4yyjxcymf847afkfr249n29";
+    rev = "cjdns-v${version}";
+    sha256 = "09gpqpzc00pp3cj7lyq9876p7is4bcndpdi5knqbv824vk4bj3k0";
   };
 
   buildInputs = [ which python27 nodejs ] ++
     # for flock
-    stdenv.lib.optional stdenv.isLinux [ utillinux ];
+    stdenv.lib.optional stdenv.isLinux utillinux;
 
+  CFLAGS = "-O2 -Wno-error=stringop-truncation";
   buildPhase =
-    stdenv.lib.optionalString stdenv.isArm "Seccomp_NO=1 "
+    stdenv.lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
     + "bash do";
   installPhase = ''
-    installBin cjdroute makekeys privatetopublic publictoip6
+    install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6
     sed -i 's,/usr/bin/env node,'$(type -P node), \
       $(find contrib -name "*.js")
     sed -i 's,/usr/bin/env python,'$(type -P python), \
@@ -31,11 +29,13 @@ stdenv.mkDerivation {
     cp -R contrib tools node_build node_modules $out/share/cjdns/
   '';
 
+  passthru.tests.basic = nixosTests.cjdns;
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/cjdelisle/cjdns;
+    homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ viric emery ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ ehmry ];
+    platforms = platforms.linux;
   };
 }

@@ -1,29 +1,52 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl
+, CoreServices ? null
+, buildPackages }:
 
-let version = "4.10.8"; in
+let version = "4.25"; in
 
 stdenv.mkDerivation {
-  name = "nspr-${version}";
+  pname = "nspr";
+  inherit version;
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    sha256 = "507ea57c525c0c524dae4857a642b4ef5c9d795518754c7f83422d22fe544a15";
+    url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
+    sha256 = "0mjjk2b7ika3v4y99cnaqz3z1iq1a50r1psn9i3s87gr46z0khqb";
   };
 
-  preConfigure = "cd nspr";
+  patches = [
+    ./0001-Makefile-use-SOURCE_DATE_EPOCH-for-reproducibility.patch
+  ];
 
-  configureFlags = "--enable-optimize --disable-debug ${if stdenv.is64bit then "--enable-64bit" else ""}";
+  outputs = [ "out" "dev" ];
+  outputBin = "dev";
 
-  postInstall =
-    ''
-      find $out -name "*.a" | xargs rm
-    '';
+  preConfigure = ''
+    cd nspr
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace '@executable_path/' "$out/lib/"
+    substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
+  '';
+
+  HOST_CC = "cc";
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  configureFlags = [
+    "--enable-optimize"
+    "--disable-debug"
+  ] ++ stdenv.lib.optional stdenv.is64bit "--enable-64bit";
+
+  postInstall = ''
+    find $out -name "*.a" -delete
+    moveToOutput share "$dev" # just aclocal
+  '';
+
+  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.mozilla.org/projects/nspr/;
+    homepage = "http://www.mozilla.org/projects/nspr/";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
     platforms = platforms.all;
+    license = licenses.mpl20;
   };
 }

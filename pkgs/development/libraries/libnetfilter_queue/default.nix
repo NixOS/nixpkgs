@@ -1,19 +1,21 @@
 { stdenv, fetchurl, pkgconfig, libmnl, libnfnetlink }:
 
 stdenv.mkDerivation rec {
-  name = "libnetfilter_queue-1.0.2";
+  version = "1.0.4";
+  pname = "libnetfilter_queue";
 
   src = fetchurl {
-    url = "ftp://ftp.netfilter.org/pub/libnetfilter_queue/${name}.tar.bz2";
-    sha256 = "0chsmj9ky80068vn458ijz9sh4sk5yc08dw2d6b8yddybpmr1143";
+    url = "https://www.netfilter.org/projects/libnetfilter_queue/files/${pname}-${version}.tar.bz2";
+    sha256 = "0w7s6g8bikch1m4hnxdakpkwgrkw64ikb6wb4v4zvgyiywrk5yai";
   };
 
-  buildInputs = [ pkgconfig libmnl libnfnetlink ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libmnl libnfnetlink ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.netfilter.org/projects/libnetfilter_queue/";
-    description = "userspace API to packets queued by the kernel packet filter";
-
-    platforms = stdenv.lib.platforms.linux;
+    description = "Userspace API to packets queued by the kernel packet filter";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

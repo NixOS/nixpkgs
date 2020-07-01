@@ -7,9 +7,8 @@ let
 
   conf = pkgs.writeText "collectd.conf" ''
     BaseDir "${cfg.dataDir}"
-    PIDFile "${cfg.pidFile}"
-    AutoLoadPlugin ${if cfg.autoLoadPlugin then "true" else "false"}
-    Hostname ${config.networking.hostName}
+    AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
+    Hostname "${config.networking.hostName}"
 
     LoadPlugin syslog
     <Plugin "syslog">
@@ -17,21 +16,48 @@ let
       NotifyLevel "OKAY"
     </Plugin>
 
+    ${concatStrings (mapAttrsToList (plugin: pluginConfig: ''
+      LoadPlugin ${plugin}
+      <Plugin "${plugin}">
+      ${pluginConfig}
+      </Plugin>
+    '') cfg.plugins)}
+
     ${concatMapStrings (f: ''
-    Include "${f}"
+      Include "${f}"
     '') cfg.include}
 
     ${cfg.extraConfig}
   '';
 
+  package =
+    if cfg.buildMinimalPackage
+    then minimalPackage
+    else cfg.package;
+
+  minimalPackage = cfg.package.override {
+    enabledPlugins = [ "syslog" ] ++ builtins.attrNames cfg.plugins;
+  };
+
 in {
   options.services.collectd = with types; {
-    enable = mkOption {
+    enable = mkEnableOption "collectd agent";
+
+    package = mkOption {
+      default = pkgs.collectd;
+      defaultText = "pkgs.collectd";
+      description = ''
+        Which collectd package to use.
+      '';
+      type = types.package;
+    };
+
+    buildMinimalPackage = mkOption {
       default = false;
       description = ''
-        Whether to enable collectd agent.
+        Build a minimal collectd package with only the configured `services.collectd.plugins`
       '';
-      type = bool;
+      type = types.bool;
     };
 
     user = mkOption {
@@ -46,14 +72,6 @@ in {
       default = "/var/lib/collectd";
       description = ''
         Data directory for collectd agent.
-      '';
-      type = path;
-    };
-
-    pidFile = mkOption {
-      default = "/var/run/collectd.pid";
-      description = ''
-        Location of collectd pid file.
       '';
       type = path;
     };
@@ -74,6 +92,15 @@ in {
       type = listOf str;
     };
 
+    plugins = mkOption {
+      default = {};
+      example = { cpu = ""; memory = ""; network = "Server 192.168.1.1 25826"; };
+      description = ''
+        Attribute set of plugin names to plugin config segments
+      '';
+      type = types.attrsOf types.str;
+    };
+
     extraConfig = mkOption {
       default = "";
       description = ''
@@ -85,32 +112,27 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} - - -"
+    ];
+
     systemd.services.collectd = {
       description = "Collectd Monitoring Agent";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.collectd}/sbin/collectd -C ${conf} -P ${cfg.pidFile}";
-        Type = "forking";
-        PIDFile = cfg.pidFile;
-        User = optional (cfg.user!="root") cfg.user;
-        PermissionsStartOnly = true;
+        ExecStart = "${package}/sbin/collectd -C ${conf} -f";
+        User = cfg.user;
+        Restart = "on-failure";
+        RestartSec = 3;
       };
+    };
 
-      preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}
-        install -D /dev/null ${cfg.pidFile}
-        if [ "$(id -u)" = 0 ]; then
-          chown -R ${cfg.user} ${cfg.dataDir};
-          chown ${cfg.user} ${cfg.pidFile}
-        fi
-      '';
-    }; 
-
-    users.extraUsers = optional (cfg.user == "collectd") {
-      name = "collectd";
-      uid = config.ids.uids.collectd;
+    users.users = optionalAttrs (cfg.user == "collectd") {
+      collectd = {
+        isSystemUser = true;
+      };
     };
   };
 }

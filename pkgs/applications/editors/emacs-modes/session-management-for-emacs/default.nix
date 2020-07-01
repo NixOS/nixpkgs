@@ -1,6 +1,6 @@
 {stdenv, fetchurl, emacs}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "session-management-for-emacs-2.2a";
   
   src = fetchurl {
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
        (require 'session)
        (add-hook 'after-init-hook 'session-initialize)
     */
-    description = "small session management for emacs";
-    homepage = http://emacs-session.sourceforge.net/;
+    description = "Small session management for emacs";
+    homepage = "http://emacs-session.sourceforge.net/";
     license = "GPL";
   };
 }

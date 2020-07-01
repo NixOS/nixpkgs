@@ -1,29 +1,43 @@
-{stdenv, fetchurl, tcl}:
+{ stdenv, fetchurl, writeText, tcl }:
 
 stdenv.mkDerivation rec {
-  name = "incrtcl-${version}";
-  version = "3.4.1";
-  
+  pname = "incrtcl";
+  version = "4.2.0";
+
   src = fetchurl {
-    url = mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itcl3.4.1.tar.gz;
-    sha256 = "0s457j9mn3c1wjj43iwy3zwhyz980jlyqn3s9487da9dwwn86c2k";
+    url    = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itcl${version}.tar.gz";
+    sha256 = "0w28v0zaraxcq1s9pa6cihqqwqvvwfgz275lks7w4gl7hxjxmasw";
   };
 
   buildInputs = [ tcl ];
   configureFlags = [ "--with-tcl=${tcl}/lib" ];
+  enableParallelBuilding = true;
+
   patchPhase = ''
-      substituteInPlace configure --replace "\''${TCL_SRC_DIR}/generic" "${tcl}/include"
+    substituteInPlace configure --replace "\''${TCL_SRC_DIR}/generic" "${tcl}/include"
   '';
+
   preConfigure = ''
-      configureFlags="--exec_prefix=$prefix $configureFlags"
+    configureFlags="--exec_prefix=$prefix $configureFlags"
   '';
 
-  passthru = {
-    libPrefix = "itcl3.4";
-  };
+  postInstall = ''
+    rmdir $out/bin
+    mv $out/lib/itcl${version}/* $out/lib
+    rmdir $out/lib/itcl${version}
+  '';
 
-  meta = {
-    homepage = http://incrtcl.sourceforge.net/;
+  setupHook = writeText "setup-hook.sh" ''
+    export ITCL_LIBRARY=@out@/lib
+  '';
+
+  outputs = [ "out" "dev" "man" ];
+
+  meta = with stdenv.lib; {
+    homepage    = "http://incrtcl.sourceforge.net/";
     description = "Object Oriented Enhancements for Tcl/Tk";
+    license     = licenses.tcltk;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -1,0 +1,5 @@
+version: 1.0
+shards:
+  teeplate:
+    github: luckyframework/teeplate
+    version: 0.8.1

@@ -1,32 +1,35 @@
-{ stdenv, fetchurl, zlib }:
+{ stdenv, fetchurl, cmake, perl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libzip-0.11.2";
+  pname = "libzip";
+  version = "1.6.1";
 
   src = fetchurl {
-    url = "http://www.nih.at/libzip/${name}.tar.gz";
-    sha256 = "1mcqrz37vjrfr4gnss37z1m7xih9x9miq3mms78zf7wn7as1znw3";
+    url = "https://www.nih.at/libzip/${pname}-${version}.tar.gz";
+    sha256 = "120xgf7cgjmz9d3yp10lks6lhkgxqb4skbmbiiwf46gx868qxsq6";
   };
 
-  # fix CVE-2015-2331 taken from Debian patch:
-  # https://bugs.debian.org/cgi-bin/bugreport.cgi?msg=12;filename=libzip-0.11.2-1.2-nmu.diff;att=1;bug=780756
+  # Fix pkgconfig file paths
   postPatch = ''
-    substituteInPlace lib/zip_dirent.c --replace \
-      'else if ((cd->entry=(struct zip_entry *)' \
-      'else if (nentry > ((size_t)-1)/sizeof(*(cd->entry)) || (cd->entry=(struct zip_entry *)'
-    cat lib/zip_dirent.c
+    sed -i CMakeLists.txt \
+      -e 's#\\''${exec_prefix}/''${CMAKE_INSTALL_LIBDIR}#''${CMAKE_INSTALL_FULL_LIBDIR}#' \
+      -e 's#\\''${prefix}/''${CMAKE_INSTALL_INCLUDEDIR}#''${CMAKE_INSTALL_FULL_INCLUDEDIR}#'
   '';
 
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ cmake perl ];
   propagatedBuildInputs = [ zlib ];
 
-  # At least mysqlWorkbench cannot find zipconf.h; I think also openoffice
-  # had this same problem.  This links it somewhere that mysqlworkbench looks.
-  postInstall = ''
-    ( cd $out/include ; ln -s ../lib/libzip/include/zipconf.h zipconf.h )
+  preCheck = ''
+    # regress/runtest is a generated file
+    patchShebangs regress
   '';
 
-  meta = {
-    homepage = http://www.nih.at/libzip;
+  meta = with stdenv.lib; {
+    homepage = "https://www.nih.at/libzip";
     description = "A C library for reading, creating and modifying zip archives";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
   };
 }

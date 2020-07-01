@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://linux-diag.sourceforge.net/Sysfsutils.html;
+    homepage = "http://linux-diag.sourceforge.net/Sysfsutils.html";
     longDescription =
       ''
         These are a set of utilites built upon sysfs, a new virtual
@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
         device tree.
       '';
     license = with stdenv.lib.licenses; [ gpl2 lgpl21 ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

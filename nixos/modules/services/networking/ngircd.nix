@@ -34,6 +34,7 @@ in {
         type = types.package;
 
         default = pkgs.ngircd;
+        defaultText = "pkgs.ngircd";
       };
     };
   };
@@ -50,7 +51,7 @@ in {
       serviceConfig.User = "ngircd";
     };
 
-    users.extraUsers.ngircd = {
+    users.users.ngircd = {
       uid = config.ids.uids.ngircd;
       description = "ngircd user.";
     };

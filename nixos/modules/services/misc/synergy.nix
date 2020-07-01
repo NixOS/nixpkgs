@@ -19,12 +19,8 @@ in
       # !!! All these option descriptions needs to be cleaned up.
 
       client = {
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable the Synergy client (receive keyboard and mouse events from a Synergy server).
-          ";
-        };
+        enable = mkEnableOption "the Synergy client (receive keyboard and mouse events from a Synergy server)";
+
         screenName = mkOption {
           default = "";
           description = ''
@@ -47,12 +43,8 @@ in
       };
 
       server = {
-        enable = mkOption {
-          default = false;
-          description = ''
-            Whether to enable the Synergy server (send keyboard and mouse events).
-          '';
-        };
+        enable = mkEnableOption "the Synergy server (send keyboard and mouse events)";
+
         configFile = mkOption {
           default = "/etc/synergy-server.conf";
           description = "The Synergy server configuration file.";
@@ -83,21 +75,23 @@ in
 
   config = mkMerge [
     (mkIf cfgC.enable {
-      systemd.services."synergy-client" = {
-        after = [ "network.target" ];
+      systemd.user.services.synergy-client = {
+        after = [ "network.target" "graphical-session.target" ];
         description = "Synergy client";
-        wantedBy = optional cfgC.autoStart "multi-user.target";
+        wantedBy = optional cfgC.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
         serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
+        serviceConfig.Restart = "on-failure";
       };
     })
     (mkIf cfgS.enable {
-      systemd.services."synergy-server" = {
-        after = [ "network.target" ];
+      systemd.user.services.synergy-server = {
+        after = [ "network.target" "graphical-session.target" ];
         description = "Synergy server";
-        wantedBy = optional cfgS.autoStart "multi-user.target";
+        wantedBy = optional cfgS.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
         serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f ${optionalString (cfgS.address != "") "-a ${cfgS.address}"} ${optionalString (cfgS.screenName != "") "-n ${cfgS.screenName}" }'';
+        serviceConfig.Restart = "on-failure";
       };
     })
   ];

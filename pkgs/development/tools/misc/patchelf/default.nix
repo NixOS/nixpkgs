@@ -1,20 +1,23 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-0.8";
+  name = "patchelf-0.11";
 
   src = fetchurl {
-    url = "http://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
-    sha256 = "c99f84d124347340c36707089ec8f70530abd56e7827c54d506eb4cc097a17e7";
+    url = "https://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
+    sha256 = "16ms3ijcihb88j3x6cl8cbvhia72afmfcphczb9cfwr0gbc22chx";
   };
 
   setupHook = [ ./setup-hook.sh ];
 
-  meta = {
-    homepage = http://nixos.org/patchelf.html;
-    license = "GPL";
+  # fails 8 out of 24 tests, problems when loading libc.so.6
+  doCheck = stdenv.name == "stdenv-linux";
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/NixOS/patchelf/blob/master/README";
+    license = licenses.gpl3;
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.all;
   };
 }

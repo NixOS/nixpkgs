@@ -1,14 +1,19 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
-    lolcat (42.1.0)
-      paint (~> 0.8.3)
-      trollop (~> 1.16.2)
-    paint (0.8.7)
-    trollop (1.16.2)
+    lolcat (100.0.0)
+      manpages (~> 0.6.1)
+      optimist (~> 3.0.0)
+      paint (~> 2.1.0)
+    manpages (0.6.1)
+    optimist (3.0.0)
+    paint (2.1.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   lolcat
+
+BUNDLED WITH
+   2.1.4

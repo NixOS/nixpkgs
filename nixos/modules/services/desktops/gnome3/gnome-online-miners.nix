@@ -4,10 +4,11 @@
 
 with lib;
 
-let
-  gnome3 = config.environment.gnome3.packageSet;
-in
 {
+
+  meta = {
+    maintainers = teams.gnome.members;
+  };
 
   ###### interface
 
@@ -33,9 +34,9 @@ in
 
   config = mkIf config.services.gnome3.gnome-online-miners.enable {
 
-    environment.systemPackages = [ gnome3.gnome-online-miners ];
+    environment.systemPackages = [ pkgs.gnome3.gnome-online-miners ];
 
-    services.dbus.packages = [ gnome3.gnome-online-miners ];
+    services.dbus.packages = [ pkgs.gnome3.gnome-online-miners ];
 
   };
 

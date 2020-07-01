@@ -1,8 +1,9 @@
 { lib, pythonPackages, fetchFromGitHub }:
 
 let version = "0.1.2"; in
-pythonPackages.buildPythonPackage {
-  name = "nixbang-${version}";
+pythonPackages.buildPythonApplication {
+  pname = "nixbang";
+  inherit version;
   namePrefix = "";
 
   src = fetchFromGitHub {
@@ -13,7 +14,7 @@ pythonPackages.buildPythonPackage {
   };
 
   meta = {
-    homepage = https://github.com/madjar/nixbang;
+    homepage = "https://github.com/madjar/nixbang";
     description = "A special shebang to run scripts in a nix-shell";
     maintainers = [ lib.maintainers.madjar ];
     platforms = lib.platforms.all;

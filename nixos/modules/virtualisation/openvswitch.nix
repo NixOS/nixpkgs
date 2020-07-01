@@ -19,9 +19,19 @@ in {
         '';
     };
 
+    resetOnStart = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to reset the Open vSwitch configuration database to a default
+        configuration on every start of the systemd <literal>ovsdb.service</literal>.
+        '';
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.openvswitch;
+      defaultText = "pkgs.openvswitch";
       description = ''
         Open vSwitch package to use.
       '';
@@ -32,6 +42,9 @@ in {
       default = false;
       description = ''
         Whether to start racoon service for openvswitch.
+        Supported only if openvswitch version is less than 2.6.0.
+        Use <literal>virtualisation.vswitch.package = pkgs.openvswitch-lts</literal>
+        for a version that supports ipsec over GRE.
       '';
     };
   };
@@ -39,15 +52,12 @@ in {
   config = mkIf cfg.enable (let
 
     # Where the communication sockets live
-    runDir = "/var/run/openvswitch";
-
-    # Where the config database live (can't be in nix-store)
-    stateDir = "/var/db/openvswitch";
+    runDir = "/run/openvswitch";
 
     # The path to the an initialized version of the database
     db = pkgs.stdenv.mkDerivation {
       name = "vswitch.db";
-      unpackPhase = "true";
+      dontUnpack = true;
       buildPhase = "true";
       buildInputs = with pkgs; [
         cfg.package
@@ -67,7 +77,6 @@ in {
       description = "Open_vSwitch Database Server";
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ];
-      wants = [ "vswitchd.service" ];
       path = [ cfg.package ];
       restartTriggers = [ db cfg.package ];
       # Create the config database
@@ -76,12 +85,20 @@ in {
         mkdir -p ${runDir}
         mkdir -p /var/db/openvswitch
         chmod +w /var/db/openvswitch
+        ${optionalString cfg.resetOnStart "rm -f /var/db/openvswitch/conf.db"}
         if [[ ! -e /var/db/openvswitch/conf.db ]]; then
           ${cfg.package}/bin/ovsdb-tool create \
             "/var/db/openvswitch/conf.db" \
             "${cfg.package}/share/openvswitch/vswitch.ovsschema"
         fi
         chmod -R +w /var/db/openvswitch
+        if ${cfg.package}/bin/ovsdb-tool needs-conversion /var/db/openvswitch/conf.db | grep -q "yes"
+        then
+          echo "Performing database upgrade"
+          ${cfg.package}/bin/ovsdb-tool convert /var/db/openvswitch/conf.db
+        else
+          echo "Database already up to date"
+        fi
         '';
       serviceConfig = {
         ExecStart =
@@ -92,13 +109,14 @@ in {
             --certificate=db:Open_vSwitch,SSL,certificate \
             --bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert \
             --unixctl=ovsdb.ctl.sock \
-            --pidfile=/var/run/openvswitch/ovsdb.pid \
+            --pidfile=/run/openvswitch/ovsdb.pid \
             --detach \
             /var/db/openvswitch/conf.db
           '';
         Restart = "always";
         RestartSec = 3;
-        PIDFile = "/var/run/openvswitch/ovsdb.pid";
+        PIDFile = "/run/openvswitch/ovsdb.pid";
+        # Use service type 'forking' to correctly determine when ovsdb-server is ready.
         Type = "forking";
       };
       postStart = ''
@@ -106,24 +124,28 @@ in {
       '';
     };
 
-    systemd.services.vswitchd = {
+    systemd.services.ovs-vswitchd = {
       description = "Open_vSwitch Daemon";
+      wantedBy = [ "multi-user.target" ];
       bindsTo = [ "ovsdb.service" ];
       after = [ "ovsdb.service" ];
       path = [ cfg.package ];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/ovs-vswitchd \
-          --pidfile=/var/run/openvswitch/ovs-vswitchd.pid \
+          --pidfile=/run/openvswitch/ovs-vswitchd.pid \
           --detach
         '';
-        PIDFile = "/var/run/openvswitch/ovs-vswitchd.pid";
+        PIDFile = "/run/openvswitch/ovs-vswitchd.pid";
+        # Use service type 'forking' to correctly determine when vswitchd is ready.
         Type = "forking";
+        Restart = "always";
+        RestartSec = 3;
       };
     };
 
   }
-  (mkIf cfg.ipsec {
+  (mkIf (cfg.ipsec && (versionOlder cfg.package.version "2.6.0")) {
     services.racoon.enable = true;
     services.racoon.configPath = "${runDir}/ipsec/etc/racoon/racoon.conf";
 
@@ -135,18 +157,19 @@ in {
     systemd.services.ovs-monitor-ipsec = {
       description = "Open_vSwitch Ipsec Daemon";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "racoon.service" ];
-      after = [ "vswitchd.service" ];
+      requires = [ "ovsdb.service" ];
+      before = [ "vswitchd.service" "racoon.service" ];
       environment.UNIXCTLPATH = "/tmp/ovsdb.ctl.sock";
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/ovs-monitor-ipsec \
             --root-prefix ${runDir}/ipsec \
-            --pidfile /var/run/openvswitch/ovs-monitor-ipsec.pid \
+            --pidfile /run/openvswitch/ovs-monitor-ipsec.pid \
             --monitor --detach \
-            unix:/var/run/openvswitch/db.sock
+            unix:/run/openvswitch/db.sock
         '';
-        PIDFile = "/var/run/openvswitch/ovs-monitor-ipsec.pid";
+        PIDFile = "/run/openvswitch/ovs-monitor-ipsec.pid";
+        # Use service type 'forking' to correctly determine when ovs-monitor-ipsec is ready.
         Type = "forking";
       };
 
@@ -155,11 +178,13 @@ in {
         mkdir -p ${runDir}/ipsec/{etc/racoon,etc/init.d/,usr/sbin/}
         ln -fs ${pkgs.ipsecTools}/bin/setkey ${runDir}/ipsec/usr/sbin/setkey
         ln -fs ${pkgs.writeScript "racoon-restart" ''
-        #!${pkgs.stdenv.shell}
-        /var/run/current-system/sw/bin/systemctl $1 racoon
+        #!${pkgs.runtimeShell}
+        /run/current-system/sw/bin/systemctl $1 racoon
         ''} ${runDir}/ipsec/etc/init.d/racoon
       '';
     };
   })]));
+
+  meta.maintainers = with maintainers; [ netixx ];
 
 }

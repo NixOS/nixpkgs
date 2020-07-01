@@ -1,51 +1,58 @@
-{ stdenv, fetchurl, scons, pkgconfig, qt4, portaudio, portmidi, libusb1
-, libmad, protobuf, libvorbis, taglib, libid3tag, flac, libsndfile, libshout
-, fftw, vampSDK
+{ stdenv, mkDerivation, fetchurl, fetchFromGitHub, chromaprint
+, fftw, flac, faad2, glibcLocales, mp4v2
+, libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
+, libGLU, libxcb, lilv, lv2, opusfile
+, pkgconfig, portaudio, portmidi, protobuf, qtbase, qtscript, qtsvg
+, qtx11extras, rubberband, scons, sqlite, taglib, upower, vamp-plugin-sdk
 }:
 
-stdenv.mkDerivation rec {
-  name = "mixxx-${version}";
-  version = "1.11.0";
+let
+  # Because libshout 2.4.2 and newer seem to break streaming in mixxx, build it
+  # with 2.4.1 instead.
+  libshout241 = libshout.overrideAttrs (o: rec {
+    name = "libshout-2.4.1";
+    src = fetchurl {
+      url = "http://downloads.xiph.org/releases/libshout/${name}.tar.gz";
+      sha256 = "0kgjpf8jkgyclw11nilxi8vyjk4s8878x23qyxnvybbgqbgbib7k";
+    };
+  });
+in
+mkDerivation rec {
+  pname = "mixxx";
+  version = "2.2.3";
 
-  src = fetchurl {
-    url = "http://downloads.mixxx.org/${name}/${name}-src.tar.gz";
-    sha256 = "0c833gf4169xvpfn7car9vzvwfwl9d3xwmbfsy36cv8ydifip5h0";
+  src = fetchFromGitHub {
+    owner = "mixxxdj";
+    repo = "mixxx";
+    rev = "release-${version}";
+    sha256 = "1h7q25fv62c5m74d4cn1m6mpanmqpbl2wqbch4qvn488jb2jw1dv";
   };
 
+  nativeBuildInputs = [ scons.py2 ];
   buildInputs = [
-    scons pkgconfig qt4 portaudio portmidi libusb1 libmad protobuf libvorbis
-    taglib libid3tag flac libsndfile libshout fftw vampSDK
+    chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout241 libsndfile
+    libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkgconfig portaudio portmidi protobuf qtbase qtscript qtsvg
+    qtx11extras rubberband sqlite taglib upower vamp-plugin-sdk
   ];
+
+  enableParallelBuilding = true;
 
   sconsFlags = [
     "build=release"
-    "qtdir=${qt4}"
+    "qtdir=${qtbase}"
+    "faad=1"
+    "opus=1"
   ];
 
-  postPatch = ''
-    sed -i -e 's/"which /"type -P /' build/depends.py
-  '';
+  qtWrapperArgs = [
+    "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
+  ];
 
-  buildPhase = ''
-    runHook preBuild
-    mkdir -p "$out"
-    scons \
-      -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
-      $sconsFlags "prefix=$out"
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    scons $sconsFlags "prefix=$out" install
-    runHook postInstall
-  '';
-
-  meta = {
-    homepage = "http://mixxx.org/";
+  meta = with stdenv.lib; {
+    homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.aszlig ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.aszlig maintainers.goibhniu maintainers.bfortz ];
+    platforms = platforms.linux;
   };
 }

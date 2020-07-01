@@ -1,33 +1,38 @@
-{ stdenv, fetchurl, geoip, geolite-legacy, getopt, openssl, perl }:
+{ stdenv, fetchurl, getopt, ip2location-c, openssl, perl
+, libmaxminddb ? null, geolite-legacy ? null }:
 
 stdenv.mkDerivation rec {
-  version = "0.98.0";
-  name = "ipv6calc-${version}";
+  pname = "ipv6calc";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${name}.tar.gz";
-    sha256 = "02r0r4lgz10ivbmgdzivj7dvry1aad75ik9vyy6irjvngjkzg5r3";
+    urls = [
+      "https://www.deepspace6.net/ftp/pub/ds6/sources/ipv6calc/${pname}-${version}.tar.gz"
+      "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${pname}-${version}.tar.gz"
+      "ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/${pname}-${version}.tar.gz"
+    ];
+    sha256 = "18acy0sy3n6jcjjwpxskysinw06czyayx1q4rqc7zc3ic4pkad8r";
   };
 
-  buildInputs = [ geoip geolite-legacy getopt openssl perl ];
+  buildInputs = [ libmaxminddb geolite-legacy getopt ip2location-c openssl perl ];
 
-  patchPhase = ''
+  postPatch = ''
+    patchShebangs *.sh */*.sh
     for i in {,databases/}lib/Makefile.in; do
-      substituteInPlace $i --replace /sbin/ldconfig true
-    done
-    for i in {{,databases/}lib,man}/Makefile.in; do
-      substituteInPlace $i --replace DESTDIR out
+      substituteInPlace $i --replace "/sbin/ldconfig" "ldconfig"
     done
   '';
 
-  configureFlags = ''
-    --disable-bundled-getopt
-    --disable-bundled-md5
-    --disable-dynamic-load
-    --enable-shared
-    --enable-geoip
-    --with-geoip-db=${geolite-legacy}/share/GeoIP
-  '';
+  configureFlags = [
+    "--prefix=${placeholder "out"}"
+    "--libdir=${placeholder "out"}/lib"
+    "--disable-bundled-getopt"
+    "--disable-bundled-md5"
+    "--disable-dynamic-load"
+    "--enable-shared"
+  ] ++ stdenv.lib.optional (libmaxminddb != null) "--enable-mmdb"
+    ++ stdenv.lib.optional (geolite-legacy != null) "--with-geoip-db=${geolite-legacy}/share/GeoIP"
+    ++ stdenv.lib.optional (ip2location-c != null) "--enable-ip2location";
 
   enableParallelBuilding = true;
 
@@ -41,9 +46,8 @@ stdenv.mkDerivation rec {
       difficult) migrating the Perl program ip6_int into.
       Now only one utiltity is needed to do a lot.
     '';
-    homepage = http://www.deepspace6.net/projects/ipv6calc.html;
-    license = with licenses; gpl2;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

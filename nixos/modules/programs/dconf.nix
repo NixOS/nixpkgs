@@ -1,11 +1,15 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 let
-  inherit (lib) mkOption mkIf types mapAttrsToList;
   cfg = config.programs.dconf;
 
   mkDconfProfile = name: path:
-    { source = path; target = "dconf/profile/${name}"; };
+    {
+      name = "dconf/profile/${name}";
+      value.source = path; 
+    };
 
 in
 {
@@ -13,6 +17,7 @@ in
 
   options = {
     programs.dconf = {
+      enable = mkEnableOption "dconf";
 
       profiles = mkOption {
         type = types.attrsOf types.path;
@@ -26,9 +31,17 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.profiles != {}) {
-    environment.etc =
-      (mapAttrsToList mkDconfProfile cfg.profiles);
+  config = mkIf (cfg.profiles != {} || cfg.enable) {
+    environment.etc = optionalAttrs (cfg.profiles != {})
+      (mapAttrs' mkDconfProfile cfg.profiles);
+
+    services.dbus.packages = [ pkgs.dconf ];
+
+    # For dconf executable
+    environment.systemPackages = [ pkgs.dconf ];
+
+    # Needed for unwrapped applications
+    environment.variables.GIO_EXTRA_MODULES = mkIf cfg.enable [ "${pkgs.dconf.lib}/lib/gio/modules" ];
   };
 
 }

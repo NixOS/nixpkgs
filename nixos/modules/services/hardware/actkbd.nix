@@ -15,7 +15,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  bindingCfg = { config, ... }: {
+  bindingCfg = { ... }: {
     options = {
 
       keys = mkOption {
@@ -83,7 +83,7 @@ in
 
           See <command>actkbd</command> <filename>README</filename> for documentation.
 
-          The example shows a piece of what <option>sound.enableMediaKeys</option> does when enabled.
+          The example shows a piece of what <option>sound.mediaKeys.enable</option> does when enabled.
         '';
       };
 
@@ -124,6 +124,9 @@ in
         ExecStart = "${pkgs.actkbd}/bin/actkbd -D -c ${configFile} -d %I";
       };
     };
+
+    # For testing
+    environment.systemPackages = [ pkgs.actkbd ];
 
   };
 

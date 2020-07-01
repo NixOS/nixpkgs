@@ -1,23 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, libftdi, pciutils }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, libftdi1
+, libusb1
+, pciutils
+}:
 
-let version = "0.9.7"; in
 stdenv.mkDerivation rec {
-  name = "flashrom-${version}";
+  pname = "flashrom";
+  version = "1.2";
 
   src = fetchurl {
-    url = "http://download.flashrom.org/releases/${name}.tar.bz2";
-    sha256 = "5a55212d00791981a9a1cb0cdca9d9e58bea6d399864251e7b410b4d3d6137e9";
+    url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
+    sha256 = "0ax4kqnh7kd3z120ypgp73qy1knz47l6qxsqzrfkd97mh5cdky71";
   };
 
-  buildInputs = [ pkgconfig libftdi pciutils ];
+  nativeBuildInputs = [ meson pkgconfig ninja ];
+  buildInputs = [ libftdi1 libusb1 pciutils ];
 
-  preConfigure = "export PREFIX=$out";
-
-  meta = {
+  meta = with lib; {
     homepage = "http://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.funfunctor ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ funfunctor fpletz ];
+    platforms = platforms.all;
+    # https://github.com/flashrom/flashrom/issues/125
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

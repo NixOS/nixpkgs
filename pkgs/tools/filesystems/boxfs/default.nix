@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, curl, fuse, libxml2, pkgconfig }:
 
 let
-  version = "2-20150109";
   srcs = {
     boxfs2 = fetchFromGitHub {
       sha256 = "10af1l3sjnh25shmq5gdnpyqk4vrq7i1zklv4csf1n2nrahln8j8";
@@ -23,18 +22,22 @@ let
     };
   };
 in stdenv.mkDerivation {
-  name = "boxfs-${version}";
+  pname = "boxfs";
+  version = "2-20150109";
 
   src = srcs.boxfs2;
+
   prePatch = with srcs; ''
     substituteInPlace Makefile --replace "git pull" "true"
     cp -a --no-preserve=mode ${libapp} libapp
     cp -a --no-preserve=mode ${libjson} libjson
   '';
+  patches = [ ./work-around-API-borkage.patch ];
 
-  buildInputs = [ curl fuse libxml2 pkgconfig ];
+  buildInputs = [ curl fuse libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  buildFlags = "static";
+  buildFlags = [ "static" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -50,9 +53,8 @@ in stdenv.mkDerivation {
       the terminal and in your browser. When you've done using your files,
       unmount the file system with `fusermount -u mountpoint`.
     '';
-    homepage = https://github.com/drotiro/boxfs2;
-    license = with licenses; gpl3;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    homepage = "https://github.com/drotiro/boxfs2";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

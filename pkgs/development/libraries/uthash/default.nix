@@ -1,21 +1,21 @@
 { stdenv, fetchurl, perl }:
 
 let
-  version = "1.9.9";
+  version = "2.1.0";
 in
-stdenv.mkDerivation rec {
-  name = "uthash-${version}";
+stdenv.mkDerivation {
+  pname = "uthash";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/troydhanson/uthash/archive/v${version}.tar.gz";
-    sha256 = "035z3cs5ignywgh4wqxx358a2nhn3lj0x1ifij6vj0yyyhah3wgj";
+    sha256 = "17k6k97n20jpi9zj3lzvqfw8pv670r6rdqrjf8vrbx6hcj7csb0m";
   };
 
-  buildPhase = ":";
-
-  buildInputs = stdenv.lib.optional doCheck perl;
+  dontBuild = false;
 
   doCheck = true;
+  checkInputs = [ perl ];
   checkTarget = "-C tests/";
 
   installPhase = ''
@@ -25,9 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A hash table for C structures";
-    homepage    = http://troydhanson.github.io/uthash;
+    homepage    = "http://troydhanson.github.io/uthash";
     license     = licenses.bsd2; # it's one-clause, actually, as it's source-only
     platforms   = platforms.all;
   };
 }
-

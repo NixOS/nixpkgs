@@ -1,29 +1,30 @@
-{ lib, stdenv, fetchurl
+{ config, lib, stdenv, fetchurl, pkgconfig, CoreAudio
 , enableAlsa ? true, alsaLib ? null
 , enableLibao ? true, libao ? null
-, enableLame ? false, lame ? null
+, enableLame ? config.sox.enableLame or false, lame ? null
 , enableLibmad ? true, libmad ? null
 , enableLibogg ? true, libogg ? null, libvorbis ? null
+, enableOpusfile ? true, opusfile ? null
 , enableFLAC ? true, flac ? null
 , enablePNG ? true, libpng ? null
+, enableLibsndfile ? true, libsndfile ? null
+# amrnb and amrwb are unfree, disabled by default
+, enableAMR ? false, amrnb ? null, amrwb ? null
+, enableLibpulseaudio ? true, libpulseaudio ? null
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "sox-14.4.1";
+  name = "sox-14.4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/sox/${name}.tar.gz";
-    sha256 = "16x8gykfjdhxg0kdxwzcwgwpm5caa08y2mx18siqsq0ywmpjr34s";
+    sha256 = "0v2znlxkxxcd3f48hf3dx9pq7i6fdhb62kgj7wv8xggz8f35jpxl";
   };
 
-  patches = [
-    # Patches for CVE-2014-8145, found via RedHat bug 1174792.  It was not
-    # clear whether these address a NULL deref and a division by zero.
-    ./0001-Check-for-minimum-size-sphere-headers.patch
-    ./0002-More-checks-for-invalid-MS-ADPCM-blocks.patch
-  ];
+  # configure.ac uses pkg-config only to locate libopusfile
+  nativeBuildInputs = optional enableOpusfile pkgconfig;
 
   buildInputs =
     optional (enableAlsa && stdenv.isLinux) alsaLib ++
@@ -31,14 +32,19 @@ stdenv.mkDerivation rec {
     optional enableLame lame ++
     optional enableLibmad libmad ++
     optionals enableLibogg [ libogg libvorbis ] ++
+    optional enableOpusfile opusfile ++
     optional enableFLAC flac ++
-    optional enablePNG libpng;
+    optional enablePNG libpng ++
+    optional enableLibsndfile libsndfile ++
+    optionals enableAMR [ amrnb amrwb ] ++
+    optional enableLibpulseaudio libpulseaudio ++
+    optional (stdenv.isDarwin) CoreAudio;
 
   meta = {
     description = "Sample Rate Converter for audio";
-    homepage = http://sox.sourceforge.net/;
-    maintainers = [ lib.maintainers.marcweber lib.maintainers.shlevy ];
-    license = lib.licenses.gpl2Plus;
+    homepage = "http://sox.sourceforge.net/";
+    maintainers = [ lib.maintainers.marcweber ];
+    license = if enableAMR then lib.licenses.unfree else lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

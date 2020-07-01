@@ -1,36 +1,22 @@
-{ stdenv, fetchzip, ocaml, findlib, ocpBuild, ocpIndent, opam, cmdliner, ncurses, re, lambdaTerm, libev }:
+{ lib, fetchurl, buildDunePackage, ocp-build, ocp-indent, cmdliner, re }:
 
-let inherit (stdenv.lib) getVersion versionAtLeast optional; in
+buildDunePackage rec {
+  pname = "ocp-index";
+  version = "1.2";
 
-assert versionAtLeast (getVersion ocaml) "3.12.1";
-assert versionAtLeast (getVersion ocpBuild) "1.99.6-beta";
-assert versionAtLeast (getVersion ocpIndent) "1.4.2";
-
-let version = "1.1.1"; in
-
-stdenv.mkDerivation {
-
-  name = "ocp-index-${version}";
-
-  src = fetchzip {
-    url = "http://github.com/OCamlPro/ocp-index/archive/${version}.tar.gz";
-    sha256 = "173lqbyivwv1zf9ifpxa9f8m2y3kybzs3idrwyzy824ixdqv2fww";
+  src = fetchurl {
+    url = "https://github.com/OCamlPro/ocp-index/releases/download/${version}/ocp-index-${version}.tbz";
+    sha256 = "1lchw02sakjjppmzr0rzlarwbg1lc2bl7pwcfpsiycnaz46x6gmr";
   };
 
-  buildInputs = [ ocaml findlib ocpBuild opam cmdliner ncurses re libev ]
-  ++ optional (versionAtLeast (getVersion lambdaTerm) "1.7") lambdaTerm;
-  propagatedBuildInputs = [ ocpIndent ];
+  buildInputs = [ ocp-build cmdliner re ];
 
-  createFindlibDestdir = true;
-
-  preBuild = "export TERM=xterm";
-  postInstall = "mv $out/lib/{ocp-index,ocaml/${getVersion ocaml}/site-lib/}";
+  propagatedBuildInputs = [ ocp-indent ];
 
   meta = {
-    homepage = http://typerex.ocamlpro.com/ocp-index.html;
+    homepage = "http://typerex.ocamlpro.com/ocp-index.html";
     description = "A simple and light-weight documentation extractor for OCaml";
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = ocaml.meta.platforms;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

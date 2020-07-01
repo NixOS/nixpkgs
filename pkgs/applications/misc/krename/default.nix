@@ -1,19 +1,33 @@
-{ stdenv, fetchurl, cmake, automoc4, kdelibs, taglib, exiv2, podofo, gettext, qt4, phonon }:
+{
+  mkDerivation, fetchurl, lib,
+  extra-cmake-modules, kdoctools, wrapGAppsHook,
+  kconfig, kinit, kjsembed, taglib, exiv2, podofo,
+  kcrash
+}:
 
-stdenv.mkDerivation rec {
-  name = "krename-4.0.9";
+let
+  pname = "krename";
+  version = "5.0.0";
+
+in mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/krename/${name}.tar.bz2";
-    sha256 = "11bdg5vdcs393n0aibhm3jh3wxlk5kz78jhkwf7cj9086qkg9wds";
+    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+    sha256 = "136j1dkqrhv458rjh5v3vzjhvq6dhz7k79zk6mmx8zvqacc7cq8a";
   };
 
-  buildInputs = [ cmake automoc4 kdelibs taglib exiv2 podofo gettext qt4 phonon ];
+  buildInputs = [ taglib exiv2 podofo ];
 
-  meta = {
-    homepage = http://www.krename.net;
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+
+  propagatedBuildInputs = [ kconfig kcrash kinit kjsembed ];
+
+  meta = with lib; {
     description = "A powerful batch renamer for KDE";
-    inherit (kdelibs.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    homepage = "https://kde.org/applications/utilities/krename/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ peterhoeg ];
+    inherit (kconfig.meta) platforms;
   };
 }

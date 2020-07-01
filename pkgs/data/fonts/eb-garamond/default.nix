@@ -1,50 +1,25 @@
-x@{builderDefsPackage
-  , unzip
-  , ...}:
-builderDefsPackage
-(a :
+{ lib, fetchzip }:
+
 let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
+  version = "0.016";
+in fetchzip rec {
+  name = "eb-garamond-${version}";
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    version="0.016";
-    name="EBGaramond";
-    url="https://bitbucket.org/georgd/eb-garamond/downloads/${name}-${version}.zip";
-    hash="0y630khn5zh70al3mm84fs767ac94ffyz1w70zzhrhambx07pdx0";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
+  url = "https://bitbucket.org/georgd/eb-garamond/downloads/EBGaramond-${version}.zip";
 
-  name = "eb-garamond-${sourceInfo.version}";
-  inherit buildInputs;
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.otf                                          -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*Changes \*README.markdown \*README.xelualatex -d "$out/share/doc/${name}"
+  '';
 
-  phaseNames = ["doUnpack" "installFonts"];
+  sha256 = "04jq4mpln85zzbla8ybsjw7vn9qr3r0snmk5zykrm24imq7ripv3";
 
-  # This will clean up if/when 8263996 lands.
-  doUnpack = a.fullDepEntry (''
-    unzip ${src}
-    cd ${sourceInfo.name}*
-    mv {ttf,otf}/* .
-  '') ["addInputs"];
-
-  meta = with a.lib; {
+  meta = with lib; {
+    homepage = "http://www.georgduffner.at/ebgaramond/";
     description = "Digitization of the Garamond shown on the Egenolff-Berner specimen";
-    maintainers = with maintainers; [ relrod ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ relrod rycee ];
     license = licenses.ofl;
-    homepage = http://www.georgduffner.at/ebgaramond/;
+    platforms = platforms.all;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "https://github.com/georgd/EB-Garamond/releases";
-    };
-  };
-}) x
-
+}

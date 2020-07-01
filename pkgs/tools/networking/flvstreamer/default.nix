@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    make posix
+    make CC=cc posix
   '';
 
   installPhase = ''
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = http://savannah.nongnu.org/projects/flvstreamer;
+    homepage = "https://savannah.nongnu.org/projects/flvstreamer";
 
     maintainers = [ stdenv.lib.maintainers.thammers ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

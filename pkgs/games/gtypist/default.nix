@@ -1,7 +1,7 @@
-{stdenv, fetchurl, makeWrapper, ncurses, perl, fortune}:
+{stdenv, fetchurl, makeWrapper, libiconv, ncurses, perl, fortune}:
 
 stdenv.mkDerivation rec {
-  name = "gtypist-${version}";
+  pname = "gtypist";
   version = "2.9.5";
 
   src = fetchurl {
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xzrkkmj0b1dw3yr0m9hml2y634cc4h61im6zwcq57s7285z8fn1";
   };
 
-  buildInputs = [ makeWrapper ncurses perl fortune ];
+  buildInputs = [ makeWrapper ncurses perl fortune ]
+   ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
   preFixup = ''
      wrapProgram "$out/bin/typefortune" \
@@ -17,10 +18,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/gtypist;
+    homepage = "https://www.gnu.org/software/gtypist";
     description = "Universal typing tutor";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };
 }

@@ -1,22 +1,25 @@
-{stdenv, fetchurl, qt, libXext, libX11}:
+{ mkDerivation, lib, fetchFromGitHub, cmake, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "qgit-2.5";
-  meta =
-  {
-    license = stdenv.lib.licenses.gpl2;
-    homepage = "http://libre.tibirna.org/projects/qgit/wiki/QGit";
+mkDerivation rec {
+  pname = "qgit";
+  version = "2.9";
+
+  src = fetchFromGitHub {
+    owner = "tibirna";
+    repo = "qgit";
+    rev = "${pname}-${version}";
+    sha256 = "0n4dq9gffm9yd7n5p5qcdfgrmg2kwnfd51hfx10adgj9ibxlnc3z";
+  };
+
+  buildInputs = [ qtbase ];
+
+  nativeBuildInputs = [ cmake ];
+
+  meta = with lib; {
+    license = licenses.gpl2;
+    homepage = "https://github.com/tibirna/qgit";
     description = "Graphical front-end to Git";
-    inherit (qt.meta) platforms;
+    maintainers = with maintainers; [ peterhoeg markuskowa ];
+    inherit (qtbase.meta) platforms;
   };
-  src = fetchurl
-  {
-    url = "http://libre.tibirna.org/attachments/download/9/${name}.tar.gz";
-    sha256 = "25f1ca2860d840d87b9919d34fc3a1b05d4163671ed87d29c3e4a8a09e0b2499";
-  };
-  buildInputs = [qt libXext libX11];
-  configurePhase = "qmake PREFIX=$out";
-  installPhase = ''
-    install -s -D -m 755 bin/qgit "$out/bin/qgit"
-  '';
 }

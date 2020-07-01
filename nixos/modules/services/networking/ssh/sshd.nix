@@ -4,22 +4,31 @@ with lib;
 
 let
 
+  # The splicing information needed for nativeBuildInputs isn't available
+  # on the derivations likely to be used as `cfgc.package`.
+  # This middle-ground solution ensures *an* sshd can do their basic validation
+  # on the configuration.
+  validationPackage = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
+    then cfgc.package
+    else pkgs.buildPackages.openssh;
+
+  sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ validationPackage ]; } ''
+    cat >$out <<EOL
+    ${cfg.extraConfig}
+    EOL
+
+    ssh-keygen -q -f mock-hostkey -N ""
+    sshd -t -f $out -h mock-hostkey
+  '';
+
   cfg  = config.services.openssh;
   cfgc = config.programs.ssh;
 
   nssModulesPath = config.system.nssModules.path;
 
-  knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
-
-  knownHostsText = flip (concatMapStringsSep "\n") knownHosts
-    (h:
-      concatStringsSep "," h.hostNames + " "
-      + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
-    );
-
   userOptions = {
 
-    openssh.authorizedKeys = {
+    options.openssh.authorizedKeys = {
       keys = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -29,6 +38,8 @@ let
           daemon reads in addition to the the user's authorized_keys file.
           You can combine the <literal>keys</literal> and
           <literal>keyFiles</literal> options.
+          Warning: If you are using <literal>NixOps</literal> then don't use this
+          option since it will replace the key required for deployment via ssh.
         '';
       };
 
@@ -48,22 +59,25 @@ let
   };
 
   authKeysFiles = let
-    mkAuthKeyFile = u: {
-      target = "ssh/authorized_keys.d/${u.name}";
+    mkAuthKeyFile = u: nameValuePair "ssh/authorized_keys.d/${u.name}" {
       mode = "0444";
       source = pkgs.writeText "${u.name}-authorized_keys" ''
         ${concatStringsSep "\n" u.openssh.authorizedKeys.keys}
         ${concatMapStrings (f: readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
       '';
     };
-    usersWithKeys = attrValues (flip filterAttrs config.users.extraUsers (n: u:
+    usersWithKeys = attrValues (flip filterAttrs config.users.users (n: u:
       length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
     ));
-  in map mkAuthKeyFile usersWithKeys;
+  in listToAttrs (map mkAuthKeyFile usersWithKeys);
 
 in
 
 {
+  imports = [
+    (mkAliasOptionModule [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
+    (mkAliasOptionModule [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
+  ];
 
   ###### interface
 
@@ -92,7 +106,7 @@ in
 
       forwardX11 = mkOption {
         type = types.bool;
-        default = cfgc.setXAuthLocation;
+        default = false;
         description = ''
           Whether to allow X11 connections to be forwarded.
         '';
@@ -108,9 +122,18 @@ in
         '';
       };
 
+      sftpFlags = mkOption {
+        type = with types; listOf str;
+        default = [];
+        example = [ "-f AUTHPRIV" "-l INFO" ];
+        description = ''
+          Commandline flags to add to sftp-server.
+        '';
+      };
+
       permitRootLogin = mkOption {
-        default = "without-password";
-        type = types.enum ["yes" "without-password" "forced-commands-only" "no"];
+        default = "prohibit-password";
+        type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
         description = ''
           Whether the root user can login using ssh.
         '';
@@ -128,15 +151,40 @@ in
       };
 
       ports = mkOption {
-        type = types.listOf types.int;
+        type = types.listOf types.port;
         default = [22];
         description = ''
           Specifies on which ports the SSH daemon listens.
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to automatically open the specified ports in the firewall.
+        '';
+      };
+
       listenAddresses = mkOption {
-        type = types.listOf types.optionSet;
+        type = with types; listOf (submodule {
+          options = {
+            addr = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                Host, IPv4 or IPv6 address to listen to.
+              '';
+            };
+            port = mkOption {
+              type = types.nullOr types.int;
+              default = null;
+              description = ''
+                Port to listen to.
+              '';
+            };
+          };
+        });
         default = [];
         example = [ { addr = "192.168.3.1"; port = 22; } { addr = "0.0.0.0"; port = 64022; } ];
         description = ''
@@ -147,22 +195,6 @@ in
           NOTE: setting this option won't automatically enable given ports
           in firewall configuration.
         '';
-        options = {
-          addr = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            description = ''
-              Host, IPv4 or IPv6 address to listen to.
-            '';
-          };
-          port = mkOption {
-            type = types.nullOr types.int;
-            default = null;
-            description = ''
-              Port to listen to.
-            '';
-          };
-        };
       };
 
       passwordAuthentication = mkOption {
@@ -184,16 +216,12 @@ in
       hostKeys = mkOption {
         type = types.listOf types.attrs;
         default =
-          [ { path = "/etc/ssh/ssh_host_dsa_key";
-              type = "dsa";
-            }
-            { path = "/etc/ssh/ssh_host_ecdsa_key";
-              type = "ecdsa";
-              bits = 521;
-            }
-            { path = "/etc/ssh/ssh_host_ed25519_key";
-              type = "ed25519";
-            }
+          [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
+            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
+          ];
+        example =
+          [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; rounds = 100; openSSHFormat = true; }
+            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; rounds = 100; comment = "key comment"; }
           ];
         description = ''
           NixOS can automatically generate SSH host keys.  This option
@@ -207,7 +235,111 @@ in
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Files from with authorized keys are read.";
+        description = "Files from which authorized keys are read.";
+      };
+
+      authorizedKeysCommand = mkOption {
+        type = types.str;
+        default = "none";
+        description = ''
+          Specifies a program to be used to look up the user's public
+          keys. The program must be owned by root, not writable by group
+          or others and specified by an absolute path.
+        '';
+      };
+
+      authorizedKeysCommandUser = mkOption {
+        type = types.str;
+        default = "nobody";
+        description = ''
+          Specifies the user under whose account the AuthorizedKeysCommand
+          is run. It is recommended to use a dedicated user that has no
+          other role on the host than running authorized keys commands.
+        '';
+      };
+
+      kexAlgorithms = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "curve25519-sha256@libssh.org"
+          "diffie-hellman-group-exchange-sha256"
+        ];
+        description = ''
+          Allowed key exchange algorithms
+          </para>
+          <para>
+          Defaults to recommended settings from both
+          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          and
+          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+        '';
+      };
+
+      ciphers = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "chacha20-poly1305@openssh.com"
+          "aes256-gcm@openssh.com"
+          "aes128-gcm@openssh.com"
+          "aes256-ctr"
+          "aes192-ctr"
+          "aes128-ctr"
+        ];
+        description = ''
+          Allowed ciphers
+          </para>
+          <para>
+          Defaults to recommended settings from both
+          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          and
+          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+        '';
+      };
+
+      macs = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "hmac-sha2-512-etm@openssh.com"
+          "hmac-sha2-256-etm@openssh.com"
+          "umac-128-etm@openssh.com"
+          "hmac-sha2-512"
+          "hmac-sha2-256"
+          "umac-128@openssh.com"
+        ];
+        description = ''
+          Allowed MACs
+          </para>
+          <para>
+          Defaults to recommended settings from both
+          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          and
+          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+        '';
+      };
+
+      logLevel = mkOption {
+        type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
+        default = "VERBOSE";
+        description = ''
+          Gives the verbosity level that is used when logging messages from sshd(8). The possible values are:
+          QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3. The default is VERBOSE. DEBUG and DEBUG1
+          are equivalent. DEBUG2 and DEBUG3 each specify higher levels of debugging output. Logging with a DEBUG level
+          violates the privacy of users and is not recommended.
+
+          LogLevel VERBOSE logs user's key fingerprint on login.
+          Needed to have a clear audit track of which key was used to log in.
+        '';
+      };
+
+      useDns = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Specifies whether sshd(8) should look up the remote host name, and to check that the resolved host name for
+          the remote IP address maps back to the very same IP address.
+          If this option is set to no (the default) then only addresses and not host names may be used in
+          ~/.ssh/authorized_keys from and sshd_config Match Host directives.
+        '';
       };
 
       extraConfig = mkOption {
@@ -216,60 +348,8 @@ in
         description = "Verbatim contents of <filename>sshd_config</filename>.";
       };
 
-      knownHosts = mkOption {
-        default = {};
-        type = types.loaOf types.optionSet;
-        description = ''
-          The set of system-wide known SSH hosts.
-        '';
-        example = [
-          {
-            hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
-            publicKeyFile = literalExample "./pubkeys/myhost_ssh_host_dsa_key.pub";
-          }
-          {
-            hostNames = [ "myhost2" ];
-            publicKeyFile = literalExample "./pubkeys/myhost2_ssh_host_dsa_key.pub";
-          }
-        ];
-        options = {
-          hostNames = mkOption {
-            type = types.listOf types.string;
-            default = [];
-            description = ''
-              A list of host names and/or IP numbers used for accessing
-              the host's ssh service.
-            '';
-          };
-          publicKey = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-            description = ''
-              The public key data for the host. You can fetch a public key
-              from a running SSH server with the <command>ssh-keyscan</command>
-              command. The public key should not include any host names, only
-              the key type and the key itself. It is allowed to add several
-              lines here, each line will be treated as type/key pair and the
-              host names will be prepended to each line.
-            '';
-          };
-          publicKeyFile = mkOption {
-            default = null;
-            type = types.nullOr types.path;
-            description = ''
-              The path to the public key file for the host. The public
-              key file is read at build time and saved in the Nix store.
-              You can fetch a public key file from a running SSH server
-              with the <command>ssh-keyscan</command> command. The content
-              of the file should follow the same format as described for
-              the <literal>publicKey</literal> option.
-            '';
-          };
-        };
-      };
-
       moduliFile = mkOption {
-        example = "services.openssh.moduliFile = /etc/my-local-ssh-moduli;";
+        example = "/etc/my-local-ssh-moduli;";
         type = types.path;
         description = ''
           Path to <literal>moduli</literal> file to install in
@@ -280,8 +360,8 @@ in
 
     };
 
-    users.extraUsers = mkOption {
-      options = [ userOptions ];
+    users.users = mkOption {
+      type = with types; loaOf (submodule userOptions);
     };
 
   };
@@ -291,58 +371,68 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.sshd =
+    users.users.sshd =
       { isSystemUser = true;
         description = "SSH privilege separation user";
       };
 
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
 
-    environment.etc = authKeysFiles ++ [
-      { source = cfg.moduliFile;
-        target = "ssh/moduli";
-      }
-      { text = knownHostsText;
-        target = "ssh/ssh_known_hosts";
-      }
-    ];
+    environment.etc = authKeysFiles //
+      { "ssh/moduli".source = cfg.moduliFile;
+        "ssh/sshd_config".source = sshconf;
+      };
 
     systemd =
       let
         service =
           { description = "SSH Daemon";
-
             wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
-
+            after = [ "network.target" ];
             stopIfChanged = false;
-
             path = [ cfgc.package pkgs.gawk ];
-
             environment.LD_LIBRARY_PATH = nssModulesPath;
+
+            restartTriggers = optionals (!cfg.startWhenNeeded) [
+              config.environment.etc."ssh/sshd_config".source
+            ];
 
             preStart =
               ''
+                # Make sure we don't write to stdout, since in case of
+                # socket activation, it goes to the remote side (#19589).
+                exec >&2
+
                 mkdir -m 0755 -p /etc/ssh
 
                 ${flip concatMapStrings cfg.hostKeys (k: ''
                   if ! [ -f "${k.path}" ]; then
-                      ssh-keygen -t "${k.type}" ${if k ? bits then "-b ${toString k.bits}" else ""} -f "${k.path}" -N ""
+                      ssh-keygen \
+                        -t "${k.type}" \
+                        ${if k ? bits then "-b ${toString k.bits}" else ""} \
+                        ${if k ? rounds then "-a ${toString k.rounds}" else ""} \
+                        ${if k ? comment then "-C '${k.comment}'" else ""} \
+                        ${if k ? openSSHFormat && k.openSSHFormat then "-o" else ""} \
+                        -f "${k.path}" \
+                        -N ""
                   fi
                 '')}
               '';
 
             serviceConfig =
               { ExecStart =
-                  "${cfgc.package}/sbin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
-                  "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
+                  (optionalString cfg.startWhenNeeded "-") +
+                  "${cfgc.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
+                  "-f /etc/ssh/sshd_config";
                 KillMode = "process";
               } // (if cfg.startWhenNeeded then {
                 StandardInput = "socket";
+                StandardError = "journal";
               } else {
                 Restart = "always";
-                Type = "forking";
-                PIDFile = "/run/sshd.pid";
+                Type = "simple";
               });
+
           };
       in
 
@@ -351,7 +441,10 @@ in
         sockets.sshd =
           { description = "SSH Socket";
             wantedBy = [ "sockets.target" ];
-            socketConfig.ListenStream = cfg.ports;
+            socketConfig.ListenStream = if cfg.listenAddresses != [] then
+              map (l: "${l.addr}:${toString (if l.port != null then l.port else 22)}") cfg.listenAddresses
+            else
+              cfg.ports;
             socketConfig.Accept = true;
           };
 
@@ -363,7 +456,7 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = cfg.ports;
+    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
 
     security.pam.services.sshd =
       { startSession = true;
@@ -371,18 +464,15 @@ in
         unixAuth = cfg.passwordAuthentication;
       };
 
+    # These values are merged with the ones defined externally, see:
+    # https://github.com/NixOS/nixpkgs/pull/10155
+    # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
       [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
-    services.openssh.extraConfig =
+    services.openssh.extraConfig = mkOrder 0
       ''
-        PidFile /run/sshd.pid
-
-        Protocol 2
-
         UsePAM yes
-
-        UsePrivilegeSeparation sandbox
 
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
         ${concatMapStrings (port: ''
@@ -404,7 +494,7 @@ in
         ''}
 
         ${optionalString cfg.allowSFTP ''
-          Subsystem sftp ${cfgc.package}/libexec/sftp-server
+          Subsystem sftp ${cfgc.package}/libexec/sftp-server ${concatStringsSep " " cfg.sftpFlags}
         ''}
 
         PermitRootLogin ${cfg.permitRootLogin}
@@ -415,20 +505,32 @@ in
         PrintMotd no # handled by pam_motd
 
         AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
+        ${optionalString (cfg.authorizedKeysCommand != "none") ''
+          AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
+          AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
+        ''}
 
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
         '')}
+
+        KexAlgorithms ${concatStringsSep "," cfg.kexAlgorithms}
+        Ciphers ${concatStringsSep "," cfg.ciphers}
+        MACs ${concatStringsSep "," cfg.macs}
+
+        LogLevel ${cfg.logLevel}
+
+        ${if cfg.useDns then ''
+          UseDNS yes
+        '' else ''
+          UseDNS no
+        ''}
+
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}]
-      ++ flip mapAttrsToList cfg.knownHosts (name: data: {
-        assertion = (data.publicKey == null && data.publicKeyFile != null) ||
-                    (data.publicKey != null && data.publicKeyFile == null);
-        message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
-      })
-      ++ flip map cfg.listenAddresses ({ addr, port, ... }: {
+      ++ forEach cfg.listenAddresses ({ addr, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
       });

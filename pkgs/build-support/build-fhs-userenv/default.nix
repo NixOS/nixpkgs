@@ -1,21 +1,49 @@
-{ writeText, writeScriptBin, stdenv, ruby } : { env, runScript } :
+{ callPackage, runCommandLocal, writeScript, stdenv, coreutils }:
+
+let buildFHSEnv = callPackage ./env.nix { }; in
+
+args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? {}, passthru ? {}, ... }:
 
 let
-  name = env.pname;
+  env = buildFHSEnv (removeAttrs args [ "runScript" "extraInstallCommands" "meta" "passthru" ]);
 
-  # Sandboxing script
-  chroot-user = writeScriptBin "chroot-user" ''
-    #! ${ruby}/bin/ruby
-    ${builtins.readFile ./chroot-user.rb}
+  chrootenv = callPackage ./chrootenv {};
+
+  init = run: writeScript "${name}-init" ''
+    #! ${stdenv.shell}
+    for i in ${env}/* /host/*; do
+      path="/''${i##*/}"
+      [ -e "$path" ] || ${coreutils}/bin/ln -s "$i" "$path"
+    done
+
+    [ -d "$1" ] && [ -r "$1" ] && cd "$1"
+    shift
+
+    source /etc/profile
+    exec ${run} "$@"
   '';
 
-  init = writeText "init" ''
-           [ -d "$1" ] && [ -r "$1" ] && cd "$1"
-           shift
-           exec "${runScript}" "$@"
-         '';
+in runCommandLocal name {
+  inherit meta;
 
-in writeScriptBin name ''
+  passthru = passthru // {
+    env = runCommandLocal "${name}-shell-env" {
+      shellHook = ''
+        exec ${chrootenv}/bin/chrootenv ${init runScript} "$(pwd)"
+      '';
+    } ''
+      echo >&2 ""
+      echo >&2 "*** User chroot 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
+      echo >&2 ""
+      exit 1
+    '';
+  };
+} ''
+  mkdir -p $out/bin
+  cat <<EOF >$out/bin/${name}
   #! ${stdenv.shell}
-  exec ${chroot-user}/bin/chroot-user ${env} bash -l ${init} "$(pwd)" "$@"
+  exec ${chrootenv}/bin/chrootenv ${init runScript} "\$(pwd)" "\$@"
+  EOF
+  chmod +x $out/bin/${name}
+  ${extraInstallCommands}
 ''

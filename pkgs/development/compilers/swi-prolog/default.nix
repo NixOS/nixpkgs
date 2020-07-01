@@ -1,32 +1,54 @@
-{ stdenv, fetchurl, gmp, readline, openssl, libjpeg, unixODBC, zlib
-, libXinerama, libXft, libXpm, libSM, libXt, freetype, pkgconfig
-, fontconfig
+{ stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
+, libarchive, db, pcre, libedit, libossp_uuid, libXpm
+, libSM, libXt, freetype, pkgconfig, fontconfig
+, cmake, libyaml, Security
+, libjpeg, libX11, libXext, libXft, libXinerama
+, extraLibraries ? [ jdk unixODBC libXpm libSM libXt freetype fontconfig ]
+, extraPacks     ? []
+, withGui ? false
 }:
 
 let
-  version = "6.6.6";
+  version = "8.1.15";
+  packInstall = swiplPath: pack:
+    ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/pack\"), silent(true), interactive(false)])." -t "halt."
+    '';
 in
 stdenv.mkDerivation {
-  name = "swi-prolog-${version}";
+  pname = "swi-prolog";
+  inherit version;
 
-  src = fetchurl {
-    url = "http://www.swi-prolog.org/download/stable/src/pl-${version}.tar.gz";
-    sha256 = "0vcrfskm2hyhv30lxr6v261myb815jc3bgmcn1lgsc9g9qkvp04z";
+  src = fetchFromGitHub {
+    owner = "SWI-Prolog";
+    repo = "swipl-devel";
+    rev = "V${version}";
+    sha256 = "0czbrscx2s4079nmwvipp9cnwfny16m3fpnp823llm7wyljchgvq";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [ gmp readline openssl libjpeg unixODBC libXinerama
-    libXft libXpm libSM libXt zlib freetype pkgconfig fontconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
-  configureFlags = "--with-world --enable-gmp --enable-shared";
+  buildInputs = [ gmp readline openssl
+    libarchive libyaml db pcre libedit libossp_uuid
+    zlib ]
+  ++ stdenv.lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
+  ++ extraLibraries
+  ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-  buildFlags = "world";
+  hardeningDisable = [ "format" ];
+
+  cmakeFlags = [ "-DSWIPL_INSTALL_IN_LIB=ON" ];
+
+  postInstall = builtins.concatStringsSep "\n"
+  ( builtins.map (packInstall "$out") extraPacks
+  );
 
   meta = {
-    homepage = http://www.swi-prolog.org/;
+    homepage = "https://www.swi-prolog.org";
     description = "A Prolog compiler and interpreter";
-    license = "LGPL";
+    license = stdenv.lib.licenses.bsd2;
 
-    hydraPlatforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.optionals (!withGui) stdenv.lib.platforms.darwin;
+    maintainers = [ stdenv.lib.maintainers.meditans ];
   };
 }

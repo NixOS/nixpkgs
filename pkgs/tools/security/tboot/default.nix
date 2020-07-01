@@ -1,16 +1,23 @@
 { stdenv, fetchurl, trousers, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "tboot-1.8.2";
+  pname = "tboot";
+  version = "1.9.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tboot/${name}.tar.gz";
-    sha256 = "1l9ccm7ik9fs7kzg1bjc5cjh0pcf4v0k1c84dmyr51r084i7p31m";
+    url = "mirror://sourceforge/tboot/${pname}-${version}.tar.gz";
+    sha256 = "06f0ggl6vrb5ghklblvh2ixgmmjv31rkp1vfj9qm497iqwq9ac00";
   };
+
+  patches = [ ./tboot-add-well-known-secret-option-to-lcp_writepol.patch ];
 
   buildInputs = [ trousers openssl zlib ];
 
-  patches = [ ./tboot-add-well-known-secret-option-to-lcp_writepol.patch ];
+  enableParallelBuilding = true;
+
+  hardeningDisable = [ "pic" "stackprotector" ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
 
   configurePhase = ''
     for a in lcptools utils tb_polgen; do
@@ -18,14 +25,14 @@ stdenv.mkDerivation rec {
     done
     substituteInPlace docs/Makefile --replace /usr/share /share
   '';
-  installFlags = "DESTDIR=$(out)";
+
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A pre-kernel/VMM module that uses Intel(R) TXT to perform a measured and verified launch of an OS kernel/VMM";
-    homepage    = http://sourceforge.net/projects/tboot/;
+    homepage    = "https://sourceforge.net/projects/tboot/";
     license     = licenses.bsd3;
-    maintainers = [ maintainers.ak ];
-    platforms   = platforms.linux;
+    maintainers = with maintainers; [ ak ];
+    platforms   = [ "x86_64-linux" "i686-linux" ];
   };
 }
-

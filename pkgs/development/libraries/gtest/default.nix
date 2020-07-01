@@ -1,34 +1,31 @@
-{ stdenv, cmake, callPackage }:
-let
-  source = callPackage ./source.nix { };
-in
+{ stdenv, cmake, ninja, fetchFromGitHub }:
+
 stdenv.mkDerivation rec {
-  name = "gtest-${source.version}";
+  pname = "gtest";
+  version = "1.10.0";
 
-  src = source;
+  outputs = [ "out" "dev" ];
 
-  buildInputs = [ cmake ];
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "googletest";
+    rev = "release-${version}";
+    sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
+  };
 
-  configurePhase = ''
-    mkdir build
-    cd build
-    cmake ../ -DCMAKE_INSTALL_PREFIX=$out
-  '';
+  patches = [
+    ./fix-cmake-config-includedir.patch
+  ];
 
-  installPhase = ''
-    mkdir -p $out/lib
-    cp -v libgtest.a libgtest_main.a $out/lib
-    cp -v -r ../include $out
-    cp -v -r ../src $out
-  '';
+  nativeBuildInputs = [ cmake ninja ];
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with stdenv.lib; {
     description = "Google's framework for writing C++ tests";
-    homepage = https://code.google.com/p/googletest/;
+    homepage = "https://github.com/google/googletest";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ zoomulator ];
+    maintainers = with maintainers; [ zoomulator ivan-tkatchev ];
   };
-
-  passthru = { inherit source; };
 }

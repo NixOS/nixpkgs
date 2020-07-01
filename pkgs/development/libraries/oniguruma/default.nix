@@ -1,17 +1,23 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "onig-5.9.5";
+  pname = "onig";
+  version = "6.9.5_rev1";
 
-  src = fetchurl {
-    url = http://www.geocities.jp/kosako3/oniguruma/archive/onig-5.9.5.tar.gz;
-    sha256 = "12j3fsdb8hbhnj29hysal9l7i7s71l0ln3lx8hjpxx5535wawjcz";
+  src = fetchFromGitHub {
+    owner = "kkos";
+    repo = "oniguruma";
+    rev = "v${version}";
+    sha256 = "1sx683hbb58gbjvla69n5vxdzwqhjqisqbfkf9xi95wr7p9ycjhl";
   };
 
-  meta = {
-    homepage = http://www.geocities.jp/kosako3/oniguruma/;
+  nativeBuildInputs = [ autoreconfHook ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/kkos/oniguruma";
     description = "Regular expressions library";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 }

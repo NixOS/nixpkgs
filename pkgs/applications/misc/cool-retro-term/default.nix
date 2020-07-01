@@ -1,33 +1,32 @@
-{ stdenv, fetchgit, makeWrapper, qt5, qmltermwidget }:
+{ stdenv, fetchFromGitHub, mkDerivation, qtbase, qtquick1, qmltermwidget
+, qtquickcontrols, qtgraphicaleffects, qmake }:
 
-stdenv.mkDerivation rec {
-  version = "1.0.0";
-  name = "cool-retro-term-${version}";
+mkDerivation rec {
+  version = "1.1.1";
+  pname = "cool-retro-term";
 
-  src = fetchgit {
-    url = "https://github.com/Swordfish90/cool-retro-term.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "042ikarg6n0c09niwrm987pkzi8xjxxdrg2nqvk9pj7lgmmkkfn1";
-    fetchSubmodules = false;
+  src = fetchFromGitHub {
+    owner = "Swordfish90";
+    repo = "cool-retro-term";
+    rev = version;
+    sha256 = "0mird4k88ml6y61hky2jynrjmnxl849fvhsr5jfdlnv0i7r5vwi5";
   };
 
   patchPhase = ''
     sed -i -e '/qmltermwidget/d' cool-retro-term.pro
   '';
 
-  buildInputs = [ makeWrapper qt5.base qt5.quick1 qmltermwidget ];
+  buildInputs = [ qtbase qtquick1 qmltermwidget qtquickcontrols qtgraphicaleffects ];
+  nativeBuildInputs = [ qmake ];
 
-  configurePhase = "qmake PREFIX=$out";
-
-  installPhase = "make -j $NIX_BUILD_CORES INSTALL_ROOT=$out install";
+  installFlags = [ "INSTALL_ROOT=$(out)" ];
 
   preFixup = ''
     mv $out/usr/share $out/share
     mv $out/usr/bin $out/bin
     rmdir $out/usr
-
-    wrapProgram $out/bin/cool-retro-term \
-      --prefix QML2_IMPORT_PATH : "${qmltermwidget}/lib/qml/"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    ln -s $out/bin/cool-retro-term.app/Contents/MacOS/cool-retro-term $out/bin/cool-retro-term
   '';
 
   enableParallelBuilding = true;
@@ -39,9 +38,9 @@ stdenv.mkDerivation rec {
       feel of the old cathode tube screens. It has been designed to be
       eye-candy, customizable, and reasonably lightweight.
     '';
-    homepage = "https://github.com/Swordifish90/cool-retro-term";
-    license = with stdenv.lib.licenses; [ gpl2 gpl3 ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/Swordfish90/cool-retro-term";
+    license = stdenv.lib.licenses.gpl3Plus;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];
   };
 }

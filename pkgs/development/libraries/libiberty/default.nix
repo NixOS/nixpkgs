@@ -1,28 +1,29 @@
-{ stdenv, fetchurl }:
+{ stdenv, buildPackages, staticBuild ? false }:
 
-stdenv.mkDerivation rec {
-  version = "4.8.4";
-  name = "libiberty-${version}";
+let inherit (buildPackages.buildPackages) gcc; in
 
-  src = fetchurl {
-    url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "15c6gwm6dzsaagamxkak5smdkf1rdfbqqjs9jdbrp3lbg4ism02a";
-  };
+stdenv.mkDerivation {
+  pname = "libiberty";
+  version = "${gcc.cc.version}";
+
+  inherit (gcc.cc) src;
+
+  outputs = [ "out" "dev" ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/libiberty";
 
-  enable_shared = 1;
+  configureFlags = [ "--enable-install-libiberty" ]
+    ++ stdenv.lib.optional (!staticBuild) "--enable-shared";
 
-  installPhase = ''
-    mkdir -p $out/lib
-    cp pic/libiberty.a $out/lib/libiberty_pic.a
+  postInstall = stdenv.lib.optionalString (!staticBuild) ''
+    cp pic/libiberty.a $out/lib*/libiberty.a
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://gcc.gnu.org/;
+    homepage = "https://gcc.gnu.org/";
     license = licenses.lgpl2;
     description = "Collection of subroutines used by various GNU programs";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar ericson2314 ];
     platforms = platforms.unix;
   };
 }

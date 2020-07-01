@@ -1,27 +1,87 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, gnome,
-  fftw, orc, lcms, imagemagick, openexr, libtiff, libjpeg, libgsf, libexif,
-  python27, libpng, matio ? null, cfitsio ? null, libwebp ? null
+{ stdenv
+, pkgconfig
+, glib
+, libxml2
+, expat
+, fftw
+, orc
+, lcms
+, imagemagick
+, openexr
+, libtiff
+, libjpeg
+, libgsf
+, libexif
+, libheif
+, ApplicationServices
+, python27
+, libpng
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, gtk-doc
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation rec {
-  name = "vips-7.42.1";
+  pname = "vips";
+  version = "8.9.2";
 
-  src = fetchurl {
-    url = "http://www.vips.ecs.soton.ac.uk/supported/current/${name}.tar.gz";
-    sha256 = "1gvazsyfa8w9wdwz89rpa1xmfpyk3b0cp4kkila1r9jc3sqp5qjy";
+  outputs = [ "bin" "out" "man" "dev" ];
+
+  src = fetchFromGitHub {
+    owner = "libvips";
+    repo = "libvips";
+    rev = "v${version}";
+    sha256 = "0pgvcp5yjk96izh7kjfprjd9kddx7zqrwwhm8dyalhrwbmj6c2q5";
+    # Remove unicode file names which leads to different checksums on HFS+
+    # vs. other filesystems because of unicode normalisation.
+    extraPostFetch = ''
+      rm -r $out/test/test-suite/images/
+    '';
   };
 
-  buildInputs =
-    [ pkgconfig glib libxml2 fftw orc lcms
-      imagemagick openexr libtiff libjpeg
-      libgsf libexif python27 libpng
-    ];
+  nativeBuildInputs = [
+    pkgconfig
+    autoreconfHook
+    gtk-doc
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    glib
+    libxml2
+    fftw
+    orc
+    lcms
+    imagemagick
+    openexr
+    libtiff
+    libjpeg
+    libgsf
+    libexif
+    libheif
+    libpng
+    python27
+    libpng
+    expat
+  ] ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
+
+  # Required by .pc file
+  propagatedBuildInputs = [
+    glib
+  ];
+
+  autoreconfPhase = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.vips.ecs.soton.ac.uk;
+    homepage = "https://libvips.github.io/libvips/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ kovirobi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

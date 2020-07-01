@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, wxPython, makeDesktopItem }:
+{ stdenv, fetchurl, pythonPackages, makeDesktopItem }:
 
-buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "winpdb-1.4.8";
   namePrefix = "";
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0vkpd24r40j928vc04c721innv0168sbllg97v4zw10adm24d8fs";
   };
 
-  propagatedBuildInputs = [ wxPython ];
+  propagatedBuildInputs = [ pythonPackages.wxPython ];
 
   desktopItem = makeDesktopItem {
     name = "winpdb";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     comment = "Platform independend Python debugger";
     desktopName = "Winpdb";
     genericName = "Python Debugger";
-    categories = "Application;Development;Debugger;";
+    categories = "Development;Debugger;";
   };
 
   # Don't call gnome-terminal with "--disable-factory" flag, which is
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       multiple threads, namespace modification, embedded debugging, encrypted
       communication and is up to 20 times faster than pdb.
     '';
-    homepage = http://winpdb.org/;
+    homepage = "http://winpdb.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

@@ -1,12 +1,9 @@
-{ stdenv, fetchurl, texinfo, perl }:
+{ callPackage, texinfo, perl }:
 
-let build = import ./common.nix; in
-
-/* null cross builder */
-build null {
+callPackage ./common.nix {} {
   name = "glibc-info";
 
-  inherit fetchurl stdenv;
+  outputs = [ "out" ];
 
   configureFlags = [ "--enable-add-ons" ];
 

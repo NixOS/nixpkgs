@@ -1,32 +1,47 @@
-{ stdenv, fetchurl, alsaLib, glib, jack2, libsndfile, pkgconfig
-, pulseaudio }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
+, alsaLib, glib, libjack2, libsndfile, libpulseaudio
+, AudioUnit, CoreAudio, CoreMIDI, CoreServices
+, version ? "2"
+}:
 
-stdenv.mkDerivation  rec {
-  name = "fluidsynth-${version}";
-  version = "1.1.6";
+let
+  versionMap = {
+    "1" = {
+      fluidsynthVersion = "1.1.11";
+      sha256 = "0n75jq3xgq46hfmjkaaxz3gic77shs4fzajq40c8gk043i84xbdh";
+    };
+    "2" = {
+      fluidsynthVersion = "2.0.6";
+      sha256 = "0nas9pp9r8rnziznxm65x2yzf1ryg98zr3946g0br3s38sjf8l3a";
+    };
+  };
+in
 
-  src = fetchurl {
-    url = "mirror://sourceforge/fluidsynth/${name}.tar.bz2";
-    sha256 = "00gn93bx4cz9bfwf3a8xyj2by7w23nca4zxf09ll53kzpzglg2yj";
+with versionMap.${version};
+
+stdenv.mkDerivation  {
+  name = "fluidsynth-${fluidsynthVersion}";
+  version = fluidsynthVersion;
+
+  src = fetchFromGitHub {
+    owner = "FluidSynth";
+    repo = "fluidsynth";
+    rev = "v${fluidsynthVersion}";
+    inherit sha256;
   };
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i '40 i\
-    #include <CoreAudio/AudioHardware.h>\
-    #include <CoreAudio/AudioHardwareDeprecated.h>' \
-    src/drivers/fluid_coreaudio.c
-  '';
+  nativeBuildInputs = [ pkgconfig cmake ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin
-    "-framework CoreAudio";
+  buildInputs = [ glib libsndfile libpulseaudio libjack2 ]
+    ++ lib.optionals stdenv.isLinux [ alsaLib ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
 
-  buildInputs = [ glib libsndfile pkgconfig ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ alsaLib pulseaudio jack2 ];
+  cmakeFlags = [ "-Denable-framework=off" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";
-    homepage    = http://www.fluidsynth.org;
-    license     = licenses.lgpl2;
+    homepage    = "http://www.fluidsynth.org";
+    license     = licenses.lgpl21Plus;
     maintainers = with maintainers; [ goibhniu lovek323 ];
     platforms   = platforms.unix;
   };

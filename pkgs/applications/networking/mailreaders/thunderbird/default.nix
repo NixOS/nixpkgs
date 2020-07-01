@@ -1,120 +1,341 @@
-{ stdenv, fetchurl, pkgconfig, which, m4, gtk, pango, perl, python, zip, libIDL
-, libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xlibs
-, freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
-, yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
-, hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu
+{ autoconf213
+, bzip2
+, cargo
+, common-updater-scripts
+, coreutils
+, curl
+, dbus
+, dbus-glib
+, fetchurl
+, file
+, fontconfig
+, freetype
+, glib
+, gnugrep
+, gnused
+, icu
+, jemalloc
+, lib
+, libGL
+, libGLU
+, libevent
+, libjpeg
+, libnotify
+, libpng
+, libstartup_notification
+, libvpx
+, libwebp
+, llvmPackages
+, m4
+, makeDesktopItem
+, nasm
+, nodejs
+, nspr
+, nss
+, pango
+, perl
+, pkgconfig
+, python2
+, python3
+, runtimeShell
+, rust-cbindgen
+, rustc
+, sqlite
+, stdenv
+, systemd
+, unzip
+, which
+, writeScript
+, xidel
+, xorg
+, yasm
+, zip
+, zlib
+
 , debugBuild ? false
-, # If you want the resulting program to call itself "Thunderbird"
-  # instead of "Shredder", enable this option.  However, those
-  # binaries may not be distributed without permission from the
-  # Mozilla Foundation, see
-  # http://www.mozilla.org/foundation/trademarks/.
-  enableOfficialBranding ? false
+
+, alsaSupport ? stdenv.isLinux, alsaLib
+, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
+, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, waylandSupport ? true
+, libxkbcommon, calendarSupport ? true
+
+, # If you want the resulting program to call itself "Thunderbird" instead
+# of "Earlybird" or whatever, enable this option.  However, those
+# binaries may not be distributed without permission from the
+# Mozilla Foundation, see
+# http://www.mozilla.org/foundation/trademarks/.
+enableOfficialBranding ? false
 }:
 
-let version = "31.7.0"; in
-let verName = "${version}"; in
+assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
-  name = "thunderbird-${verName}";
+  pname = "thunderbird";
+  version = "68.9.0";
 
   src = fetchurl {
-    url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.bz2";
-    sha1 = "90e18f8ecccdaf1ee39493223a7e3ad8b3b7bede";
+    url =
+      "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
+    sha512 =
+      "3q0dikgkfr72hhz39pxi2f0cljn09lw4940qcn9kzfwfid2h290j7pihx6gs0z6h82fl78f9fl1598d064lwl1i2434dzx6bg4p4549";
   };
 
-  buildInputs = # from firefox30Pkgs.xulrunner, but without gstreamer and libvpx
-    [ pkgconfig which libpng gtk perl zip libIDL libjpeg zlib bzip2
-      python dbus dbus_glib pango freetype fontconfig xlibs.libXi
-      xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
-      alsaLib nspr nss libnotify xlibs.pixman yasm mesa
-      xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
-      xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
-      hunspell libevent libstartup_notification cairo icu
-    ] ++ [ m4 ];
+  nativeBuildInputs = [
+    autoconf213
+    cargo
+    gnused
+    llvmPackages.llvm
+    m4
+    nasm
+    nodejs
+    perl
+    pkgconfig
+    python2
+    python3
+    rust-cbindgen
+    rustc
+    which
+    yasm
+  ] ++ lib.optional gtk3Support wrapGAppsHook;
 
-  configurePhase = let configureFlags = [ "--enable-application=mail" ]
-    # from firefox30Pkgs.commonConfigureFlags, but without gstreamer and libvpx
-    ++ [
-      "--with-system-jpeg"
-      "--with-system-zlib"
-      "--with-system-bz2"
-      "--with-system-nspr"
-      "--with-system-nss"
-      "--with-system-libevent"
-      #"--with-system-libvpx"
-      "--with-system-png"
-      "--with-system-icu"
-      "--enable-system-ffi"
-      "--enable-system-hunspell"
-      "--enable-system-pixman"
-      "--enable-system-sqlite"
-      "--enable-system-cairo"
-      "--disable-gstreamer"
-      "--enable-startup-notification"
-      # "--enable-content-sandbox"            # available since 26.0, but not much info available
-      # "--enable-content-sandbox-reporter"   # keeping disabled for now
-      "--disable-crashreporter"
-      "--disable-tests"
-      "--disable-necko-wifi" # maybe we want to enable this at some point
-      "--disable-installer"
-      "--disable-updater"
-      "--disable-pulseaudio"
-    ] ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
-                        else [ "--disable-debug" "--enable-release"
-                               "--disable-debug-symbols"
-                               "--enable-optimize" "--enable-strip" ])
-    ++ [
-      "--disable-javaxpcom"
-      "--enable-stdcxx-compat" # Avoid dependency on libstdc++ 4.7
-    ]
-    ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
-  in ''
-    mkdir -p objdir/mozilla
-    cd objdir
-    echo '${stdenv.lib.concatMapStrings (s : "ac_add_options ${s}\n") configureFlags}' > .mozconfig
-    echo 'ac_add_options --prefix="'"$out"'"' >> .mozconfig
-    echo 'mk_add_options MOZ_MAKE_FLAGS="-j'"$NIX_BUILD_CORES"'"' >> .mozconfig
-    echo 'mk_add_options MOZ_OBJDIR="'`pwd`'"' >> .mozconfig
+  buildInputs = [
+    bzip2
+    dbus
+    dbus-glib
+    file
+    fontconfig
+    freetype
+    glib
+    gtk2
+    icu
+    jemalloc
+    libGL
+    libGLU
+    libevent
+    libjpeg
+    libnotify
+    libpng
+    libstartup_notification
+    libvpx
+    libwebp
+    nspr
+    nss
+    pango
+    perl
+    sqlite
+    unzip
+    xorg.libX11
+    xorg.libXScrnSaver
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXft
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXt
+    xorg.pixman
+    xorg.xorgproto
+    zip
+    zlib
+  ] ++ lib.optional alsaSupport alsaLib
+    ++ lib.optional gtk3Support gtk3
+    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional waylandSupport libxkbcommon;
 
-    export MOZCONFIG=`realpath ./.mozconfig`
+  NIX_CFLAGS_COMPILE =[
+    "-I${glib.dev}/include/gio-unix-2.0"
+    "-I${nss.dev}/include/nss"
+  ];
 
-    patchShebangs ../mozilla/mach
-    ../mozilla/mach configure
+  patches = [
+    ./no-buildconfig.patch
+  ];
+
+  postPatch = ''
+    rm -rf obj-x86_64-pc-linux-gnu
   '';
+
+  hardeningDisable = [ "format" ];
+
+  preConfigure = ''
+    # remove distributed configuration files
+    rm -f configure
+    rm -f js/src/configure
+    rm -f .mozconfig*
+
+    configureScript="$(realpath ./mach) configure"
+    # AS=as in the environment causes build failure https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
+    unset AS
+
+    export MOZCONFIG=$(pwd)/mozconfig
+
+    # Set C flags for Rust's bindgen program. Unlike ordinary C
+    # compilation, bindgen does not invoke $CC directly. Instead it
+    # uses LLVM's libclang. To make sure all necessary flags are
+    # included we need to look in a few places.
+    # TODO: generalize this process for other use-cases.
+
+    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
+      $(< ${stdenv.cc}/nix-support/cc-cflags) \
+      ${stdenv.cc.default_cxx_stdlib_compile} \
+      ${
+        lib.optionalString stdenv.cc.isClang
+        "-idirafter ${stdenv.cc.cc}/lib/clang/${
+          lib.getVersion stdenv.cc.cc
+        }/include"
+      } \
+      ${
+        lib.optionalString stdenv.cc.isGNU
+        "-isystem ${stdenv.cc.cc}/include/c++/${
+          lib.getVersion stdenv.cc.cc
+        } -isystem ${stdenv.cc.cc}/include/c++/${
+          lib.getVersion stdenv.cc.cc
+        }/${stdenv.hostPlatform.config}"
+      } \
+      $NIX_CFLAGS_COMPILE"
+
+    echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
+  '';
+
+  configureFlags = let
+    toolkitSlug = if gtk3Support then
+      "3${lib.optionalString waylandSupport "-wayland"}"
+    else
+      "2";
+    toolkitValue = "cairo-gtk${toolkitSlug}";
+  in [
+    "--enable-application=comm/mail"
+
+    "--with-system-bz2"
+    "--with-system-icu"
+    "--with-system-jpeg"
+    "--with-system-libevent"
+    "--with-system-nspr"
+    "--with-system-nss"
+    "--with-system-png" # needs APNG support
+    "--with-system-icu"
+    "--with-system-zlib"
+    "--with-system-webp"
+    "--with-system-libvpx"
+
+    "--enable-rust-simd"
+    "--enable-crashreporter"
+    "--enable-default-toolkit=${toolkitValue}"
+    "--enable-js-shell"
+    "--enable-necko-wifi"
+    "--enable-startup-notification"
+    "--enable-system-ffi"
+    "--enable-system-pixman"
+    "--enable-system-sqlite"
+
+    "--disable-gconf"
+    "--disable-tests"
+    "--disable-updater"
+    "--enable-jemalloc"
+  ] ++ (if debugBuild then [
+    "--enable-debug"
+    "--enable-profiling"
+  ] else [
+    "--disable-debug"
+    "--enable-release"
+    "--disable-debug-symbols"
+    "--enable-optimize"
+    "--enable-strip"
+  ]) ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+    # on i686-linux: --with-libclang-path is not available in this configuration
+    "--with-libclang-path=${llvmPackages.libclang}/lib"
+    "--with-clang-path=${llvmPackages.clang}/bin/clang"
+  ] ++ lib.optional alsaSupport "--enable-alsa"
+  ++ lib.optional calendarSupport "--enable-calendar"
+  ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  ++ lib.optional pulseaudioSupport "--enable-pulseaudio";
 
   enableParallelBuilding = true;
 
-  buildPhase =  "../mozilla/mach build";
+  postConfigure = ''
+    cd obj-*
+  '';
 
-  installPhase =
-    ''
-      ../mozilla/mach install
+  makeFlags = lib.optionals enableOfficialBranding [
+    "MOZILLA_OFFICIAL=1"
+    "BUILD_OFFICIAL=1"
+  ];
 
-      rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
+  doCheck = false;
 
-      # Create a desktop item.
-      mkdir -p $out/share/applications
-      cat > $out/share/applications/thunderbird.desktop <<EOF
-      [Desktop Entry]
-      Type=Application
-      Exec=$out/bin/thunderbird
-      Icon=$out/lib/thunderbird-${version}/chrome/icons/default/default256.png
-      Name=Thunderbird
-      GenericName=Mail Reader
-      Categories=Application;Network;
-      EOF
-    '';
+  postInstall = let
+    desktopItem = makeDesktopItem {
+      categories = lib.concatStringsSep ";" [ "Application" "Network" ];
+      desktopName = "Thunderbird";
+      genericName = "Mail Reader";
+      name = "thunderbird";
+      exec = "thunderbird %U";
+      icon = "$out/lib/thunderbird/chrome/icons/default/default256.png";
+      mimeType = lib.concatStringsSep ";" [
+        # Email
+        "x-scheme-handler/mailto"
+        "message/rfc822"
+        # Feeds
+        "x-scheme-handler/feed"
+        "application/rss+xml"
+        "application/x-extension-rss"
+        # Newsgroups
+        "x-scheme-handler/news"
+        "x-scheme-handler/snews"
+        "x-scheme-handler/nntp"
+      ];
+    };
+  in ''
+    # TODO: Move to a dev output?
+    rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
+
+    ${desktopItem.buildCommand}
+  '';
+
+  preFixup = ''
+    # Needed to find Mozilla runtime
+    gappsWrapperArgs+=(
+      --argv0 "$out/bin/thunderbird"
+      --set MOZ_APP_LAUNCHER thunderbird
+      # https://github.com/NixOS/nixpkgs/pull/61980
+      --set SNAP_NAME "thunderbird"
+      --set MOZ_LEGACY_PROFILES 1
+      --set MOZ_ALLOW_DOWNGRADE 1
+    )
+  '';
+
+  # FIXME: The XUL portion of this can probably be removed as soon as we
+  # package a Thunderbird >=71.0 since XUL shouldn't be anymore (in use)?
+  postFixup = ''
+    local xul="$out/lib/thunderbird/libxul.so"
+    patchelf --set-rpath "${libnotify}/lib:${systemd.lib}/lib:$(patchelf --print-rpath $xul)" $xul
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    "$out/bin/thunderbird" --version
+  '';
+
+  disallowedRequisites = [
+    stdenv.cc
+  ];
+
+  passthru.updateScript = import ./../../browsers/firefox/update.nix {
+    attrPath = "thunderbird";
+    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    inherit writeScript lib common-updater-scripts xidel coreutils gnused
+      gnugrep curl runtimeShell;
+  };
 
   meta = with stdenv.lib; {
     description = "A full-featured e-mail client";
-    homepage = http://www.mozilla.org/thunderbird/;
-    license =
-      # Official branding implies thunderbird name and logo cannot be reuse,
-      # see http://www.mozilla.org/foundation/licensing.html
-      if enableOfficialBranding then licenses.proprietary else licenses.mpl11;
-    maintainers = [ maintainers.pierron maintainers.eelco ];
+    homepage = "https://www.thunderbird.net";
+    maintainers = with maintainers; [
+      eelco
+      lovesegfault
+      pierron
+    ];
     platforms = platforms.linux;
+    license = licenses.mpl20;
   };
 }

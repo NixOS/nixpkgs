@@ -1,19 +1,28 @@
-{ fetchurl, stdenv, libkrb5 }:
+{ fetchurl, stdenv, autoreconfHook, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-0.3.0";
+  name = "libtirpc-1.2.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "07d1wlfzf3ia09mjn3f3ay8isk7yx4a6ckfkzx5khnqlc7amkzna";
+    sha256 = "1k6i6wma3xs7gmp54z587nd4yi5wrvg2ycl5g36zjnhx32jyjy22";
   };
 
+  outputs = [ "out" "dev" ];
+
+  postPatch = ''
+    sed '1i#include <stdint.h>' -i src/xdr_sizeof.c
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace tirpc/rpc/types.h \
+      --replace '#if defined __APPLE_CC__ || defined __FreeBSD__' \
+                '#if defined __APPLE_CC__ || defined __FreeBSD__ || !defined __GLIBC__'
+  '';
+
+  KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
+  nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
 
-  # http://www.sourcemage.org/projects/grimoire/repository/revisions/d6344b6a3a94b88ed67925a474de5930803acfbf
   preConfigure = ''
-    echo "" > src/des_crypt.c
-
     sed -es"|/etc/netconfig|$out/etc/netconfig|g" -i doc/Makefile.in tirpc/netconfig.h
   '';
 
@@ -22,7 +31,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://sourceforge.net/projects/libtirpc/";
+    homepage = "https://sourceforge.net/projects/libtirpc/";
     description = "The transport-independent Sun RPC implementation (TI-RPC)";
     license = licenses.bsd3;
     platforms = platforms.linux;

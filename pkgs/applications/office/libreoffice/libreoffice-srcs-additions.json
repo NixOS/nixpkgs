@@ -1,0 +1,5 @@
+{
+  "LIBGLTF": {"subdir": "libgltf/"},
+  "ODFVALIDATOR": {"subdir": "../extern/"},
+  "OFFICEOTRON": {"subdir": "../extern/"}
+}

@@ -1,34 +1,31 @@
-{ stdenv, cmake, fetchurl, fetchpatch, pkgconfig, qt5, boost, exiv2, fftwFloat, gsl
+{ stdenv, mkDerivation, cmake, fetchFromGitHub, pkgconfig
+, boost, exiv2, fftwFloat, gsl
 , ilmbase, lcms2, libraw, libtiff, openexr
+, qtbase, qtdeclarative, qttools, qtwebengine, eigen
 }:
 
-stdenv.mkDerivation rec {
-  name = "luminance-hdr-2.4.0";
+mkDerivation rec {
+  pname = "luminance-hdr";
+  version = "2.6.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/qtpfsgui/${name}.tar.bz2";
-    sha256 = "00fldbcizrx8jcnjgq74n3zmbm27dxzl96fxa7q49689mfnlw08l";
+  src = fetchFromGitHub {
+    owner = "LuminanceHDR";
+    repo = "LuminanceHDR";
+    rev = "v.${version}";
+    sha256 = "1izmgjjp8mgyxv57sjjr05z7g7059ykb5wchlcn4wrnnb6aslnvn";
   };
 
-  patches = [(fetchpatch {
-    name = "fix-qt53-build.diff";
-    url = "http://anonscm.debian.org/cgit/pkg-phototools/luminance-hdr.git/"
-      + "plain/debian/patches/51_qt5_printsupport.diff?id=00c869a860062dac181303f2c03a3513c0e210bc";
-    sha256 = "0nzvfxd3ybxx61rj6vxcaaxfrsxrl9af3h8jj7pr3rncisnl9gkl";
-  })];
+  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
-
-  buildInputs =
-    [
-      qt5.base qt5.declarative qt5.tools qt5.webkit
-      boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
-    ];
+  buildInputs = [
+    qtbase qtdeclarative qttools qtwebengine eigen
+    boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
+  ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = with stdenv.lib; {
-    homepage = http://qtpfsgui.sourceforge.net/;
+    homepage = "http://qtpfsgui.sourceforge.net/";
     description = "A complete open source solution for HDR photography";
     license = licenses.gpl2;
     platforms = platforms.linux;

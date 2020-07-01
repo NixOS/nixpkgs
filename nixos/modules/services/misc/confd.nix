@@ -12,12 +12,12 @@ let
     nodes = [ ${concatMapStringsSep "," (s: ''"${s}"'') cfg.nodes}, ]
     prefix = "${cfg.prefix}"
     log-level = "${cfg.logLevel}"
-    watch = ${if cfg.watch then "true" else "false"}
+    watch = ${boolToString cfg.watch}
   '';
 
 in {
   options.services.confd = {
-    enable = mkEnableOption "Whether to enable confd service.";
+    enable = mkEnableOption "confd service";
 
     backend = mkOption {
       description = "Confd config storage backend to use.";
@@ -33,7 +33,7 @@ in {
 
     nodes = mkOption {
       description = "Confd list of nodes to connect to.";
-      default = [ "http://127.0.0.1:4001" ];
+      default = [ "http://127.0.0.1:2379" ];
       type = types.listOf types.str;
     };
 
@@ -63,7 +63,8 @@ in {
 
     package = mkOption {
       description = "Confd package to use.";
-      default = pkgs.goPackages.confd;
+      default = pkgs.confd;
+      defaultText = "pkgs.confd";
       type = types.package;
     };
   };

@@ -1,38 +1,44 @@
-{ stdenv, fetchurl, openssl, avahi, alsaLib, libdaemon, autoconf, automake, libtool, popt, unzip, pkgconfig, libconfig, pulseaudio }:
+{ stdenv, fetchFromGitHub, autoreconfHook, openssl, avahi, alsaLib
+, libdaemon, popt, pkgconfig, libconfig, libpulseaudio, soxr }:
 
 stdenv.mkDerivation rec {
-  version = "2.3.0";
-  name = "shairport-sync-${version}";
+  version = "3.3.6";
+  pname = "shairport-sync";
 
-  src = fetchurl {
-    url = "https://github.com/mikebrady/shairport-sync/archive/${version}.zip";
-    sha256 = "1kslif2ifrn0frvi39d44wpn53sjahwq0xjc0hd98ycf3xbcgndg";
+  src = fetchFromGitHub {
+    sha256 = "0s5aq1a7dmf3n2d6ps6x7xarpn53vvlcbms8k23wl2h5vrx91rwi";
+    rev = version;
+    repo = "shairport-sync";
+    owner = "mikebrady";
   };
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [
     openssl
     avahi
     alsaLib
     libdaemon
-    autoconf
-    automake
-    pkgconfig
-    libtool
     popt
-    unzip
     libconfig
-    pulseaudio
+    libpulseaudio
+    soxr
   ];
 
   enableParallelBuilding = true;
 
-  preConfigure = "autoreconf -vfi";
-  configureFlags = "--with-alsa --with-avahi --with-ssl=openssl --without-initscript --with-pulseaudio";
+  configureFlags = [
+    "--with-alsa" "--with-pipe" "--with-pa" "--with-stdout"
+    "--with-avahi" "--with-ssl=openssl" "--with-soxr"
+    "--without-configfiles"
+    "--sysconfdir=/etc"
+  ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mikebrady/shairport-sync;
+    inherit (src.meta) homepage;
     description = "Airtunes server and emulator with multi-room capabilities";
     license = licenses.mit;
+    maintainers =  with maintainers; [ lnl7 ];
     platforms = platforms.unix;
   };
 }

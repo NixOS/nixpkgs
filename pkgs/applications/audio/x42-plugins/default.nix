@@ -1,30 +1,41 @@
-{ stdenv, fetchurl, fetchgit, ftgl, freefont_ttf, jack2, mesa_glu, pkgconfig
-, libltc, libsndfile, libsamplerate
-, lv2, mesa, gtk2, cairo, pango, fftwFloat, zita-convolver }:
+{ stdenv, fetchurl, pkgconfig
+, libltc, libsndfile, libsamplerate, ftgl, freefont_ttf, libjack2
+, libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  version = "2014-11-01";
-  name = "x42-plugins-${version}";
+  version = "20200411";
+  pname = "x42-plugins";
 
   src = fetchurl {
-    url = "http://gareus.org/misc/x42-plugins/x42-plugins-20141101.tar.xz";
-    sha256 = "0pjdhj58hb4n2053v92l7v7097fjm4xzrl8ks4g1hc7miy98ymdk";
+    url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
+    sha256 = "0y6778l2zc80kvp31mqw3vkcyi7g613jxn3g3lxqfa31i617gh6j";
   };
 
-  buildInputs = [ mesa_glu ftgl freefont_ttf jack2 libltc libsndfile libsamplerate lv2 mesa gtk2 cairo pango fftwFloat pkgconfig  zita-convolver];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libGLU ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat zita-convolver ];
+
+  # Don't remove this. The default fails with 'do not know how to unpack source archive'
+  # every now and then on Hydra. No idea why.
+  unpackPhase = ''
+    tar xf $src
+    sourceRoot=$(echo x42-plugins-*)
+    chmod -R u+w $sourceRoot
+  '';
 
   makeFlags = [ "PREFIX=$(out)" "FONTFILE=${freefont_ttf}/share/fonts/truetype/FreeSansBold.ttf" ];
 
-  # remove check for zita-convolver in /usr/
   patchPhase = ''
-    sed -i "38,42d" convoLV2/Makefile
+    patchShebangs ./stepseq.lv2/gridgen.sh
+    patchShebangs ./matrixmixer.lv2/genttl.sh
+    patchShebangs ./matrixmixer.lv2/genhead.sh
+    sed -i 's|/usr/include/zita-convolver.h|${zita-convolver}/include/zita-convolver.h|g' ./convoLV2/Makefile
   '';
 
   meta = with stdenv.lib;
     { description = "Collection of LV2 plugins by Robin Gareus";
-      homepage = https://github.com/x42/x42-plugins;
+      homepage = "https://github.com/x42/x42-plugins";
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
-      platforms = platforms.linux;
+      platforms = [ "i686-linux" "x86_64-linux" ];
     };
 }

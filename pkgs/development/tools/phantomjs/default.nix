@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, freetype, fontconfig, openssl, unzip }:
+{ stdenv, lib, fetchurl, freetype, fontconfig, openssl, unzip }:
 
-assert stdenv.lib.elem stdenv.system [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+let
+  platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+in
 
 stdenv.mkDerivation rec {
   name = "phantomjs-1.9.8";
@@ -10,13 +12,13 @@ stdenv.mkDerivation rec {
   # because it has bundled a lot of external libraries (like QT and Webkit)
   # and no easy/nice way to use the system versions of these
 
-  src = if stdenv.system == "i686-linux" then
+  src = if stdenv.hostPlatform.system == "i686-linux" then
           fetchurl {
             url = "https://bitbucket.org/ariya/phantomjs/downloads/${name}-linux-i686.tar.bz2";
             sha256 = "11fzmssz9pqf3arh4f36w06sl2nyz8l9h8iyxyd7w5aqnq5la0j1";
           }
         else
-          if stdenv.system == "x86_64-linux" then
+          if stdenv.hostPlatform.system == "x86_64-linux" then
             fetchurl {
               url = "https://bitbucket.org/ariya/phantomjs/downloads/${name}-linux-x86_64.tar.bz2";
               sha256 = "0fhnqxxsxhy125fmif1lwgnlhfx908spy7fx9mng4w72320n5nd1";
@@ -27,12 +29,12 @@ stdenv.mkDerivation rec {
               sha256 = "0j0aq8dgzmb210xdrh0v3d4nblskl3zsckl8bzf1a603wcx085cg";
             };
 
-  buildInputs = if stdenv.isDarwin then [ unzip ] else [];
+  buildInputs = lib.optional stdenv.isDarwin unzip;
 
-  buildPhase = if stdenv.isDarwin then "" else ''
+  buildPhase = lib.optionalString (!stdenv.isDarwin) ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${freetype}/lib:${fontconfig}/lib:${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${openssl}/lib" \
+      --set-rpath "${stdenv.lib.makeLibraryPath [ freetype fontconfig stdenv.cc.cc stdenv.cc.cc openssl ]}" \
       bin/phantomjs
   '';
 
@@ -59,10 +61,10 @@ stdenv.mkDerivation rec {
       - Network Monitoring
     '';
 
-    homepage = http://phantomjs.org/;
-    license = stdenv.lib.licenses.bsd3;
+    homepage = "https://phantomjs.org/";
+    license = lib.licenses.bsd3;
 
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    maintainers = [ lib.maintainers.bluescreen303 ];
+    inherit platforms;
   };
 }

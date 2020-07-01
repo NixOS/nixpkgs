@@ -1,6 +1,0 @@
---- dietlibc-0.27/x86_64/lseek64.S.x86_64-lseek64	2005-03-29 08:46:09.074515293 -0500
-+++ dietlibc-0.27/x86_64/lseek64.S	2005-03-29 08:46:09.074515293 -0500
-@@ -0,0 +1,3 @@
-+#include "syscalls.h"
-+
-+syscall_weak(lseek,lseek64,__libc_lseek64)

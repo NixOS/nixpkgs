@@ -8,15 +8,24 @@ let
   addAttributeName = mapAttrs (a: v: v // {
     text = ''
       #### Activation script snippet ${a}:
+      _localstatus=0
       ${v.text}
+
+      if (( _localstatus > 0 )); then
+        printf "Activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
+      fi
     '';
   });
 
-  path =
-    [ pkgs.coreutils pkgs.gnugrep pkgs.findutils
-      pkgs.glibc # needed for getent
-      pkgs.shadow
-      pkgs.nettools # needed for hostname
+  path = with pkgs; map getBin
+    [ coreutils
+      gnugrep
+      findutils
+      getent
+      stdenv.cc.libc # nscd in update-users-groups.pl
+      shadow
+      nettools # needed for hostname
+      utillinux # needed for mount and mountpoint
     ];
 
 in
@@ -30,18 +39,19 @@ in
     system.activationScripts = mkOption {
       default = {};
 
-      example = {
-        stdio = {
-          text = ''
-            # Needed by some programs.
-            ln -sfn /proc/self/fd /dev/fd
-            ln -sfn /proc/self/fd/0 /dev/stdin
-            ln -sfn /proc/self/fd/1 /dev/stdout
-            ln -sfn /proc/self/fd/2 /dev/stderr
-          '';
-          deps = [];
-        };
-      };
+      example = literalExample ''
+        { stdio = {
+            text = '''
+              # Needed by some programs.
+              ln -sfn /proc/self/fd /dev/fd
+              ln -sfn /proc/self/fd/0 /dev/stdin
+              ln -sfn /proc/self/fd/1 /dev/stdout
+              ln -sfn /proc/self/fd/2 /dev/stderr
+            ''';
+            deps = [];
+          };
+        }
+      '';
 
       description = ''
         A set of shell script fragments that are executed when a NixOS
@@ -57,7 +67,7 @@ in
       apply = set: {
         script =
           ''
-            #! ${pkgs.stdenv.shell}
+            #! ${pkgs.runtimeShell}
 
             systemConfig=@out@
 
@@ -67,7 +77,7 @@ in
             done
 
             _status=0
-            trap "_status=1" ERR
+            trap "_status=1 _localstatus=\$?" ERR
 
             # Ensure a consistent umask.
             umask 0022
@@ -91,9 +101,67 @@ in
             exit $_status
           '';
       };
+    };
+
+    system.userActivationScripts = mkOption {
+      default = {};
+
+      example = literalExample ''
+        { plasmaSetup = {
+            text = '''
+              ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5"
+            ''';
+            deps = [];
+          };
+        }
+      '';
+
+      description = ''
+        A set of shell script fragments that are executed by a systemd user
+        service when a NixOS system configuration is activated. Examples are
+        rebuilding the .desktop file cache for showing applications in the menu.
+        Since these are executed every time you run
+        <command>nixos-rebuild</command>, it's important that they are
+        idempotent and fast.
+      '';
+
+      type = types.attrsOf types.unspecified;
+
+      apply = set: {
+        script = ''
+          unset PATH
+          for i in ${toString path}; do
+            PATH=$PATH:$i/bin:$i/sbin
+          done
+
+          _status=0
+          trap "_status=1 _localstatus=\$?" ERR
+
+          ${
+            let
+              set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
+              withHeadlines = addAttributeName set';
+            in textClosureMap id (withHeadlines) (attrNames withHeadlines)
+          }
+
+          exit $_status
+        '';
+      };
 
     };
 
+    environment.usrbinenv = mkOption {
+      default = "${pkgs.coreutils}/bin/env";
+      example = literalExample ''
+        "''${pkgs.busybox}/bin/env"
+      '';
+      type = types.nullOr types.path;
+      visible = false;
+      description = ''
+        The env(1) executable that is linked system-wide to
+        <literal>/usr/bin/env</literal>.
+      '';
+    };
   };
 
 
@@ -101,51 +169,61 @@ in
 
   config = {
 
-    system.activationScripts.stdio =
-      ''
-        # Needed by some programs.
-        ln -sfn /proc/self/fd /dev/fd
-        ln -sfn /proc/self/fd/0 /dev/stdin
-        ln -sfn /proc/self/fd/1 /dev/stdout
-        ln -sfn /proc/self/fd/2 /dev/stderr
-      '';
+    system.activationScripts.stdio = ""; # obsolete
 
     system.activationScripts.var =
       ''
         # Various log/runtime directories.
 
-        touch /run/utmp # must exist
-        chgrp ${toString config.ids.gids.utmp} /run/utmp
-        chmod 664 /run/utmp
-
-        mkdir -m 0755 -p /run/nix/current-load # for distributed builds
-        mkdir -m 0700 -p /run/nix/remote-stores
-
-        mkdir -m 0755 -p /var/log
-
-        touch /var/log/wtmp /var/log/lastlog # must exist
-        chmod 644 /var/log/wtmp /var/log/lastlog
-
         mkdir -m 1777 -p /var/tmp
 
-        # Empty, read-only home directory of many system accounts.
-        mkdir -m 0555 -p /var/empty
+        # Empty, immutable home directory of many system accounts.
+        mkdir -p /var/empty
+        # Make sure it's really empty
+        ${pkgs.e2fsprogs}/bin/chattr -f -i /var/empty || true
+        find /var/empty -mindepth 1 -delete
+        chmod 0555 /var/empty
+        chown root:root /var/empty
+        ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
       '';
 
-    system.activationScripts.usrbinenv =
-      ''
+    system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
+      then ''
         mkdir -m 0755 -p /usr/bin
-        ln -sfn ${pkgs.coreutils}/bin/env /usr/bin/.env.tmp
+        ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp
         mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
-      '';
-
-    system.activationScripts.tmpfs =
       ''
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devSize}" none /dev
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devShmSize}" none /dev/shm
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.runSize}" none /run
+      else ''
+        rm -f /usr/bin/env
+        rmdir --ignore-fail-on-non-empty /usr/bin /usr
       '';
 
+    system.activationScripts.specialfs =
+      ''
+        specialMount() {
+          local device="$1"
+          local mountPoint="$2"
+          local options="$3"
+          local fsType="$4"
+
+          if mountpoint -q "$mountPoint"; then
+            local options="remount,$options"
+          else
+            mkdir -m 0755 -p "$mountPoint"
+          fi
+          mount -t "$fsType" -o "$options" "$device" "$mountPoint"
+        }
+        source ${config.system.build.earlyMountScript}
+      '';
+
+    systemd.user = {
+      services.nixos-activation = {
+        description = "Run user-specific NixOS activation";
+        script = config.system.userActivationScripts.script;
+        unitConfig.ConditionUser = "!@system";
+        serviceConfig.Type = "oneshot";
+      };
+    };
   };
 
 }

@@ -3,14 +3,18 @@
 let
 xmonadEnv = ghcWithPackages (self: [ self.xmonad ] ++ packages self);
 in stdenv.mkDerivation {
-  name = "xmonad-with-packages";
+  name = "xmonad-with-packages-${xmonadEnv.version}";
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
-    mkdir -p $out/bin
+    install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
     makeWrapper ${xmonadEnv}/bin/xmonad $out/bin/xmonad \
       --set NIX_GHC "${xmonadEnv}/bin/ghc" \
       --set XMONAD_XMESSAGE "${xmessage}/bin/xmessage"
   '';
+
+  # trivial derivation
+  preferLocalBuild = true;
+  allowSubstitutes = false;
 }

@@ -12,34 +12,41 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{ stdenv, perl, perlArchiveCpio, cpio, contents, ubootChooser, compressor, prepend }:
-
+{ stdenvNoCC, perl, cpio, contents, ubootTools
+, name ? "initrd"
+, compressor ? "gzip -9n"
+, prepend ? []
+, lib
+}:
 let
-  inputsFun = ubootName : [perl cpio perlArchiveCpio ]
-    ++ stdenv.lib.optional (ubootName != null) [ (ubootChooser ubootName) ];
-  makeUInitrdFun = ubootName : (ubootName != null);
-in
-stdenv.mkDerivation {
-  name = "initrd";
-  builder = ./make-initrd.sh;
-  nativeBuildInputs = inputsFun stdenv.platform.uboot;
+  # !!! Move this into a public lib function, it is probably useful for others
+  toValidStoreName = x: with builtins;
+    lib.concatStringsSep "-" (filter (x: !(isList x)) (split "[^a-zA-Z0-9_=.?-]+" x));
 
-  makeUInitrd = makeUInitrdFun stdenv.platform.uboot;
+in stdenvNoCC.mkDerivation rec {
+  inherit name;
+
+  builder = ./make-initrd.sh;
+
+  makeUInitrd = stdenvNoCC.hostPlatform.platform.kernelTarget == "uImage";
+
+  nativeBuildInputs = [ perl cpio ]
+    ++ stdenvNoCC.lib.optional makeUInitrd ubootTools;
 
   # !!! should use XML.
   objects = map (x: x.object) contents;
   symlinks = map (x: x.symlink) contents;
   suffices = map (x: if x ? suffix then x.suffix else "none") contents;
-  
-  # For obtaining the closure of `contents'.
-  exportReferencesGraph =
-    map (x: [("closure-" + baseNameOf x.symlink) x.object]) contents;
-  pathsFromGraph = ./paths-from-graph.pl;
-  cpioClean = ./cpio-clean.pl;
 
-  crossAttrs = {
-    nativeBuildInputs = inputsFun stdenv.cross.platform.uboot;
-    makeUInitrd = makeUInitrdFun stdenv.cross.platform.uboot;
-  };
+  # For obtaining the closure of `contents'.
+  # Note: we don't use closureInfo yet, as that won't build with nix-1.x.
+  # See #36268.
+  exportReferencesGraph =
+    lib.zipListsWith
+      (x: i: [("closure-${toValidStoreName (baseNameOf x.symlink)}-${toString i}") x.object])
+      contents
+      (lib.range 0 (lib.length contents - 1));
+  pathsFromGraph = ./paths-from-graph.pl;
+
   inherit compressor prepend;
 }

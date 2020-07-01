@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation rec {
-  name = "fairymax-${version}";
+  pname = "fairymax";
   version = "4.8";
   src = fetchurl {
     url = "http://home.hccnet.nl/h.g.muller/fmax4_8w.c";

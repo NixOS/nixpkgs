@@ -1,23 +1,23 @@
 { stdenv, fetchFromGitHub, curl, libxml2 }:
 
 stdenv.mkDerivation {
-  name = "libs3-2015-01-09";
+  name = "libs3-2018-12-03";
 
   src = fetchFromGitHub {
     owner = "bji";
     repo = "libs3";
-    rev = "4d21fdc0857b88c964649b321057d7105d1e4da3";
-    sha256 = "1c33h8lzlpmsbkymd2dac9g8hqhd6j6yzdjrhha8bcqyys6vcpy3";
+    rev = "111dc30029f64bbf82031f3e160f253a0a63c119";
+    sha256 = "1ahf08hc7ql3fazfmlyj9vrhq7cvarsmgn2v8149y63zr1fl61hs";
   };
 
   buildInputs = [ curl libxml2 ];
 
-  DESTDIR = "\${out}";
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/bji/libs3;
+    homepage = "https://github.com/bji/libs3";
     description = "A library for interfacing with amazon s3";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
   };
 }

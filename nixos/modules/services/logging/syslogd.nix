@@ -83,7 +83,7 @@ in
       };
 
       extraParams = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [ ];
         example = [ "-m 0" ];
         description = ''
@@ -99,6 +99,12 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    assertions =
+      [ { assertion = !config.services.rsyslogd.enable;
+          message = "rsyslogd conflicts with syslogd";
+        }
+      ];
 
     environment.systemPackages = [ pkgs.sysklogd ];
 

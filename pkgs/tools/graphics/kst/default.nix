@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig
-, qt5, gsl, getdata, netcdf, muparser, matio
+, qtbase, gsl, getdata, netcdf, muparser, matio
 }:
 stdenv.mkDerivation rec {
   name = "Kst-2.0.8";
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qt5.base gsl getdata netcdf muparser matio ];
+  buildInputs = [ qtbase gsl getdata netcdf muparser matio ];
 
-  cmakeFlags = "-Dkst_qt5=1 -Dkst_release=1";
+  cmakeFlags = [ "-Dkst_qt5=1" "-Dkst_release=1" ];
 
   postInstall = ''
     mkdir -p $out
@@ -23,9 +23,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Real-time large-dataset viewing and plotting tool";
-    homepage = https://kst-plot.kde.org/;
+    homepage = "https://kst-plot.kde.org/";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.vbgl ];
+    broken = true;
   };
 }

@@ -1,16 +1,17 @@
 {stdenv, fetchurl, openldap, perl}:
-   
+
 stdenv.mkDerivation {
   name = "nss_ldap-265";
-   
+
   src = fetchurl {
-    url = http://www.padl.com/download/nss_ldap-265.tar.gz;
+    url = "http://www.padl.com/download/nss_ldap-265.tar.gz";
     sha256 = "1a16q9p97d2blrj0h6vl1xr7dg7i4s8x8namipr79mshby84vdbp";
   };
 
   preConfigure = ''
     patchShebangs ./vers_string
     sed -i s,vers_string,./vers_string, Makefile*
+    substituteInPlace vers_string --replace "cvslib.pl" "./cvslib.pl"
   '';
 
   patches = [ ./crashes.patch ];
@@ -28,4 +29,10 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ openldap perl ];
+
+  meta = with stdenv.lib; {
+    description = "LDAP module for the Solaris Nameservice Switch (NSS)";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+  };
 }

@@ -1,33 +1,25 @@
-{ stdenv, fetchurl, makeWrapper, glib
-, fontconfig, patchelf, libXext, libX11
-, freetype, libXrender
+{ stdenv, fetchurl, makeWrapper, patchelf
+, fontconfig, freetype, glib, libICE, libSM
+, libX11, libXext, libXrender, zlib
 }:
 
 let
-  arch = if stdenv.system == "x86_64-linux" then "x86_64"
-    else if stdenv.system == "i686-linux" then "i386"
-    else throw "Spideroak client for: ${stdenv.system} not supported!";
+  sha256 = "6d6ca2b383bcc81af1217c696eb77864a2b6db7428f4b5bde5b5913ce705eec5";
 
-  interpreter = if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2"
-    else if stdenv.system == "i686-linux" then "ld-linux.so.2"
-    else throw "Spideroak client for: ${stdenv.system} not supported!";
-
-  sha256 = if stdenv.system == "x86_64-linux" then "0ax5ij3fwq3q9agf7qkw2zg53fcd82llg734pq3swzpn3z1ajs38"
-    else if stdenv.system == "i686-linux" then "18hvgx8bvd2khnqfn434gd4mflv0w5y8kvim72rvya2kwxsyf3i1"
-    else throw "Spideroak client for: ${stdenv.system} not supported!";
-
-  ldpath = stdenv.lib.makeSearchPath "lib" [
-    glib fontconfig libXext libX11 freetype libXrender 
+  ldpath = stdenv.lib.makeLibraryPath [
+    fontconfig freetype glib libICE libSM
+    libX11 libXext libXrender zlib
   ];
 
-  version = "5.1.6";
+  version = "7.5.0";
 
 in stdenv.mkDerivation {
-  name = "spideroak-${version}";
-  
+  pname = "spideroak";
+  inherit version;
+
   src = fetchurl {
-    name = "spideroak-${version}-${arch}";
-    url = "https://spideroak.com/getbuild?platform=slackware&arch=${arch}&version=${version}";
+    name = "SpiderOakONE-${version}-slack_tar_x64.tgz";
+    url = "https://spideroak.com/release/spideroak/slack_tar_x64";
     inherit sha256;
   };
 
@@ -36,21 +28,27 @@ in stdenv.mkDerivation {
   unpackCmd = "tar -xzf $curSrc";
 
   installPhase = ''
-    ensureDir "$out"
+    mkdir "$out"
     cp -r "./"* "$out"
-    ensureDir "$out/bin"
-    rm "$out/usr/bin/SpiderOak"
+    mkdir "$out/bin"
+    rm "$out/usr/bin/SpiderOakONE"
+    rmdir $out/usr/bin || true
+    mv $out/usr/share $out/
 
-    patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
-      "$out/opt/SpiderOak/lib/SpiderOak"
+    rm -f $out/opt/SpiderOakONE/lib/libz*
 
-    RPATH=$out/opt/SpiderOak/lib:${ldpath}
-    makeWrapper $out/opt/SpiderOak/lib/SpiderOak $out/bin/spideroak --set LD_LIBRARY_PATH $RPATH \
-      --set QT_PLUGIN_PATH $out/opt/SpiderOak/lib/plugins/ \
+    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2 \
+      "$out/opt/SpiderOakONE/lib/SpiderOakONE"
+
+    RPATH=$out/opt/SpiderOakONE/lib:${ldpath}
+    makeWrapper $out/opt/SpiderOakONE/lib/SpiderOakONE $out/bin/spideroak --set LD_LIBRARY_PATH $RPATH \
+      --set QT_PLUGIN_PATH $out/opt/SpiderOakONE/lib/plugins/ \
       --set SpiderOak_EXEC_SCRIPT $out/bin/spideroak
+
+    sed -i 's/^Exec=.*/Exec=spideroak/' $out/share/applications/SpiderOakONE.desktop
   '';
 
-  buildInputs = [ patchelf makeWrapper ];
+  nativeBuildInputs = [ patchelf makeWrapper ];
 
   meta = {
     homepage = "https://spideroak.com";

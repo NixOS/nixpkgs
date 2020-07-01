@@ -1,7 +1,7 @@
 # This module defines a global environment configuration and
 # a common configuration for all shells.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -34,27 +34,15 @@ in
 
     environment.variables = mkOption {
       default = {};
+      example = { EDITOR = "nvim"; VISUAL = "nvim"; };
       description = ''
         A set of environment variables used in the global environment.
-        These variables will be set on shell initialisation.
+        These variables will be set on shell initialisation (e.g. in /etc/profile).
         The value of each variable can be either a string or a list of
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = types.attrsOf (mkOptionType {
-        name = "a string or a list of strings";
-        merge = loc: defs:
-          let
-            defs' = filterOverrides defs;
-            res = (head defs').value;
-          in
-          if isList res then concatLists (getValues defs')
-          else if lessThan 1 (length defs') then
-            throw "The option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
-          else if !isString res then
-            throw "The option `${showOption loc}' does not have a string value, in ${showFiles (getFiles defs)}."
-          else res;
-      });
+      type = with types; attrsOf (either str (listOf str));
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };
 
@@ -63,15 +51,15 @@ in
       description = ''
         A list of profiles used to setup the global environment.
       '';
-      type = types.listOf types.string;
+      type = types.listOf types.str;
     };
 
     environment.profileRelativeEnvVars = mkOption {
       type = types.attrsOf (types.listOf types.str);
-      example = { PATH = [ "/bin" "/sbin" ]; MANPATH = [ "/man" "/share/man" ]; };
+      example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
       description = ''
-	Attribute set of environment variable.  Each attribute maps to a list
-	of relative paths.  Each relative path is appended to the each profile
+        Attribute set of environment variable.  Each attribute maps to a list
+        of relative paths.  Each relative path is appended to the each profile
         of <option>environment.profiles</option> to form the content of the
         corresponding environment variable.
       '';
@@ -83,7 +71,7 @@ in
       description = ''
         Shell script code called during global environment initialisation
         after all variables and profileVariables have been set.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -93,7 +81,7 @@ in
       default = "";
       description = ''
         Shell script code called during shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -103,7 +91,7 @@ in
       default = "";
       description = ''
         Shell script code called during login shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -113,29 +101,39 @@ in
       default = "";
       description = ''
         Shell script code called during interactive shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
     };
 
     environment.shellAliases = mkOption {
-      default = {};
-      example = { ll = "ls -l"; };
+      example = { l = null; ll = "ls -l"; };
       description = ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
+        Aliases mapped to <code>null</code> are ignored.
       '';
-      type = types.attrs; # types.attrsOf types.stringOrPath;
+      type = with types; attrsOf (nullOr (either str path));
+    };
+
+    environment.homeBinInPath = mkOption {
+      description = ''
+        Include ~/bin/ in $PATH.
+      '';
+      default = false;
+      type = types.bool;
     };
 
     environment.binsh = mkOption {
       default = "${config.system.build.binsh}/bin/sh";
+      defaultText = "\${config.system.build.binsh}/bin/sh";
       example = literalExample ''
         "''${pkgs.dash}/bin/dash"
       '';
       type = types.path;
+      visible = false;
       description = ''
         The shell executable that is linked system-wide to
         <literal>/bin/sh</literal>. Please note that NixOS assumes all
@@ -146,13 +144,13 @@ in
 
     environment.shells = mkOption {
       default = [];
-      example = [ "/run/current-system/sw/bin/zsh" ];
+      example = literalExample "[ pkgs.bashInteractive pkgs.zsh ]";
       description = ''
         A list of permissible login shells for user accounts.
         No need to mention <literal>/bin/sh</literal>
         here, it is placed into this list implicitly.
       '';
-      type = types.listOf types.path;
+      type = types.listOf (types.either types.shellPackage types.path);
     };
 
   };
@@ -167,24 +165,40 @@ in
     # terminal instead of logging out of X11).
     environment.variables = config.environment.sessionVariables;
 
-    environment.etc."shells".text =
+    environment.profileRelativeEnvVars = config.environment.profileRelativeSessionVariables;
+
+    environment.shellAliases = mapAttrs (name: mkDefault) {
+      ls = "ls --color=tty";
+      ll = "ls -l";
+      l  = "ls -alh";
+    };
+
+    environment.etc.shells.text =
       ''
-        ${concatStringsSep "\n" cfg.shells}
+        ${concatStringsSep "\n" (map utils.toShellPath cfg.shells)}
         /bin/sh
       '';
 
+    # For resetting environment with `. /etc/set-environment` when needed
+    # and discoverability (see motivation of #30418).
+    environment.etc.set-environment.source = config.system.build.setEnvironment;
+
     system.build.setEnvironment = pkgs.writeText "set-environment"
-       ''
-         ${exportedEnvVars}
+      ''
+        # DO NOT EDIT -- this file has been generated automatically.
 
-         ${cfg.extraInit}
+        # Prevent this file from being sourced by child shells.
+        export __NIXOS_SET_ENVIRONMENT_DONE=1
 
-         # The setuid wrappers override other bin directories.
-         export PATH="${config.security.wrapperDir}:$PATH"
+        ${exportedEnvVars}
 
-         # ~/bin if it exists overrides other bin directories.
-         export PATH="$HOME/bin:$PATH"
-       '';
+        ${cfg.extraInit}
+
+        ${optionalString cfg.homeBinInPath ''
+          # ~/bin if it exists overrides other bin directories.
+          export PATH="$HOME/bin:$PATH"
+        ''}
+      '';
 
     system.activationScripts.binsh = stringAfter [ "stdio" ]
       ''

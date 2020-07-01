@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation rec {
-  name = "tegaki-zinnia-japanese-${version}";
+stdenv.mkDerivation {
+  pname = "tegaki-zinnia-japanese";
   version = "0.3";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Japanese handwriting model for the Zinnia engine";
-    homepage = http://tegaki.org/;
+    homepage = "http://tegaki.org/";
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

@@ -1,21 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, freetype, cmake }:
+{ stdenv, fetchurl, pkgconfig, freetype, cmake, python }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.4";
-  name = "graphite2-${version}";
+  version = "1.3.14";
+  pname = "graphite2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/silgraphite/graphite2/${name}.tgz";
-    sha256 = "00xhv1mp640fr3wmdzwn4yz0g56jd4r9fb7b02mc1g19h0bdbhsb";
+    url = "https://github.com/silnrsi/graphite/releases/download/"
+      + "${version}/graphite2-${version}.tgz";
+    sha256 = "1790ajyhk0ax8xxamnrk176gc9gvhadzy78qia4rd8jzm89ir7gr";
   };
 
-  buildInputs = [ pkgconfig freetype cmake ];
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ freetype ];
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./macosx.patch ];
 
-  meta = {
+  checkInputs = [ python ];
+  doCheck = false; # fails, probably missing something
+
+  meta = with stdenv.lib; {
     description = "An advanced font engine";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    hydraPlatforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

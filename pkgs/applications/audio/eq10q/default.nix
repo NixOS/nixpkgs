@@ -1,17 +1,31 @@
-{ stdenv, fetchurl, cmake, fftw, gtkmm, libxcb, lv2, pkgconfig, xlibs }:
+{ stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2, pkgconfig
+, xorg }:
 stdenv.mkDerivation rec {
-  name = "eq10q-2-${version}";
-  version = "beta7.1";
+  pname = "eq10q";
+  version = "2.2";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/eq10q/${name}.tar.gz";
-    sha256 = "1jmrcx4jlx8kgsy5n4jcxa6qkjqvx7d8l2p7dsmw4hj20s39lgyi";
+    url = "mirror://sourceforge/project/eq10q/${pname}-${version}.tar.gz";
+    sha256 = "16mhcav8gwkp29k9ki4dlkajlcgh1i2wvldabxb046d37dq4qzrk";
   };
 
-  buildInputs = [ cmake fftw gtkmm libxcb lv2 pkgconfig xlibs.libpthreadstubs xlibs.libXdmcp xlibs.libxshmfence ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake fftw gtkmm2 libxcb lv2 xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
 
-  installFlags = ''
-    DESTDIR=$(out)
-  '';
+  patches = [
+    (fetchpatch {
+      # glibc 2.27 compatibility
+      url = "https://sources.debian.org/data/main/e/eq10q/2.2~repack0-2.1/debian/patches/05-pow10.patch";
+      sha256 = "07b0wf6k4xqgigv4h095bzfaw8r218wa36r9w1817jcys13r6c5r";
+    })
+  ];
+
+  postPatch = ''
+     # Fix build with lv2 1.18: https://sourceforge.net/p/eq10q/bugs/23/
+     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
+       -exec sed -i {} -e 's/const _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
+   '';
+
+  installFlags = [ "DESTDIR=$(out)" ];
 
   fixupPhase = ''
     cp -r $out/var/empty/local/lib $out
@@ -29,7 +43,7 @@ stdenv.mkDerivation rec {
       64 bits floating point internal audio processing.
       Nice GUI with powerful metering for every plugin.
     '';
-    homepage = http://eq10q.sourceforge.net/;
+    homepage = "http://eq10q.sourceforge.net/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

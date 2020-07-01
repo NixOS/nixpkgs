@@ -11,26 +11,23 @@ let
   # you can provide an easy way to boot the same configuration
   # as you use, but with another kernel
   # !!! fix this
-  cloner = inheritParent: list:
-    map (childConfig:
+  children = mapAttrs (childName: childConfig:
       (import ../../../lib/eval-config.nix {
         inherit baseModules;
+        system = config.nixpkgs.initialSystem;
         modules =
-           (optionals inheritParent modules)
+           (optionals childConfig.inheritParentConfig modules)
         ++ [ ./no-clone.nix ]
-        ++ [ childConfig ];
+        ++ [ childConfig.configuration ];
       }).config.system.build.toplevel
-    ) list;
-
-  children =
-     cloner false config.nesting.children
-  ++ cloner true config.nesting.clone;
-
+    ) config.specialisation;
 
   systemBuilder =
     let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
         "${config.system.boot.loader.kernelFile}";
+      initrdPath = "${config.system.build.initialRamdisk}/" +
+        "${config.system.boot.loader.initrdFile}";
     in ''
       mkdir $out
 
@@ -45,12 +42,17 @@ let
 
         ln -s ${kernelPath} $out/kernel
         ln -s ${config.system.modulesTree} $out/kernel-modules
+        ${optionalString (config.hardware.deviceTree.package != null) ''
+          ln -s ${config.hardware.deviceTree.package} $out/dtbs
+        ''}
 
         echo -n "$kernelParams" > $out/kernel-params
 
-        ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
+        ln -s ${initrdPath} $out/initrd
 
-        ln -s ${config.hardware.firmware} $out/firmware
+        ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+
+        ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
       ''}
 
       echo "$activationScript" > $out/activate
@@ -67,88 +69,116 @@ let
 
       echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
-      echo -n "$nixosVersion" > $out/nixos-version
-      echo -n "$system" > $out/system
+      echo -n "$nixosLabel" > $out/nixos-version
+      echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
 
-      mkdir $out/fine-tune
-      childCount=0
-      for i in $children; do
-        childCount=$(( childCount + 1 ))
-        ln -s $i $out/fine-tune/child-$childCount
-      done
+      mkdir $out/specialisation
+      ${concatStringsSep "\n"
+      (mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${name}") children)}
 
       mkdir $out/bin
+      export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
       substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
 
+      echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
+
       ${config.system.extraSystemBuilderCmds}
     '';
-
-  # Handle assertions
-
-  failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
-
-  showWarnings = res: fold (w: x: builtins.trace "[1;31mwarning: ${w}[0m" x) res config.warnings;
 
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  baseSystem = showWarnings (
-    if [] == failed then pkgs.stdenv.mkDerivation {
-      name = "nixos-${config.system.nixosVersion}";
-      preferLocalBuild = true;
-      buildCommand = systemBuilder;
+  baseSystem = pkgs.stdenvNoCC.mkDerivation {
+    name = let hn = config.networking.hostName;
+               nn = if (hn != "") then hn else "unnamed";
+        in "nixos-system-${nn}-${config.system.nixos.label}";
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    buildCommand = systemBuilder;
 
-      inherit (pkgs) utillinux coreutils;
-      systemd = config.systemd.package;
+    inherit (pkgs) utillinux coreutils;
+    systemd = config.systemd.package;
+    shell = "${pkgs.bash}/bin/sh";
+    su = "${pkgs.shadow.su}/bin/su";
 
-      inherit children;
-      kernelParams = config.boot.kernelParams;
-      installBootLoader =
-        config.system.build.installBootLoader
-        or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
-      activationScript = config.system.activationScripts.script;
-      nixosVersion = config.system.nixosVersion;
+    kernelParams = config.boot.kernelParams;
+    installBootLoader =
+      config.system.build.installBootLoader
+      or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+    activationScript = config.system.activationScripts.script;
+    nixosLabel = config.system.nixos.label;
 
-      configurationName = config.boot.loader.grub.configurationName;
+    configurationName = config.boot.loader.grub.configurationName;
 
-      # Needed by switch-to-configuration.
-      perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
-  } else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
+    # Needed by switch-to-configuration.
+
+    perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
+  };
+
+  # Handle assertions and warnings
+
+  failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+
+  baseSystemAssertWarn = if failedAssertions != []
+    then throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+    else showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
   system = fold ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
-    ) baseSystem config.system.replaceRuntimeDependencies;
+    ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
+    (mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
+  ];
+
   options = {
 
     system.build = mkOption {
       internal = true;
       default = {};
+      type = types.attrs;
       description = ''
         Attribute set of derivations used to setup the system.
       '';
     };
 
-    nesting.children = mkOption {
-      default = [];
+    specialisation = mkOption {
+      default = {};
+      example = lib.literalExample "{ fewJobsManyCores.configuration = { nix.buildCores = 0; nix.maxJobs = 1; }; }";
       description = ''
-        Additional configurations to build.
-      '';
-    };
+        Additional configurations to build. If
+        <literal>inheritParentConfig</literal> is true, the system
+        will be based on the overall system configuration.
 
-    nesting.clone = mkOption {
-      default = [];
-      description = ''
-        Additional configurations to build based on the current
-        configuration which then has a lower priority.
+        To switch to a specialised configuration
+        (e.g. <literal>fewJobsManyCores</literal>) at runtime, run:
+
+        <programlisting>
+        # sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
+        </programlisting>
       '';
+      type = types.attrsOf (types.submodule (
+        { ... }: {
+          options.inheritParentConfig = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Include the entire system's configuration. Set to false to make a completely differently configured system.";
+          };
+
+          options.configuration = mkOption {
+            default = {};
+            description = "Arbitrary NixOS configuration options.";
+          };
+        })
+      );
     };
 
     system.boot.loader.id = mkOption {
@@ -161,10 +191,19 @@ in
 
     system.boot.loader.kernelFile = mkOption {
       internal = true;
-      default = pkgs.stdenv.platform.kernelTarget;
+      default = pkgs.stdenv.hostPlatform.platform.kernelTarget;
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
+      '';
+    };
+
+    system.boot.loader.initrdFile = mkOption {
+      internal = true;
+      default = "initrd";
+      type = types.str;
+      description = ''
+        Name of the initrd file to be passed to the bootloader.
       '';
     };
 
@@ -173,9 +212,10 @@ in
       default = false;
       description = ''
         If enabled, copies the NixOS configuration file
-        <literal>$NIXOS_CONFIG</literal> (usually
-        <filename>/etc/nixos/configuration.nix</filename>)
-        to the system store path.
+        (usually <filename>/etc/nixos/configuration.nix</filename>)
+        and links it from the resulting system
+        (getting to <filename>/run/current-system/configuration.nix</filename>).
+        Note that only this single file is copied, even if it imports others.
       '';
     };
 
@@ -188,11 +228,21 @@ in
       '';
     };
 
+    system.extraDependencies = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      description = ''
+        A list of packages that should be included in the system
+        closure but not otherwise made available to users. This is
+        primarily used by the installation tests.
+      '';
+    };
+
     system.replaceRuntimeDependencies = mkOption {
       default = [];
-      example = lib.literalExample "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { ... }; }) ]";
+      example = lib.literalExample "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
       type = types.listOf (types.submodule (
-        { options, ... }: {
+        { ... }: {
           options.original = mkOption {
             type = types.package;
             description = "The original package to override.";
@@ -223,7 +273,9 @@ in
     system.extraSystemBuilderCmds =
       optionalString
         config.system.copySystemConfiguration
-        "cp ${maybeEnv "NIXOS_CONFIG" "/etc/nixos/configuration.nix"} $out";
+        ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
+            "$out/configuration.nix"
+        '';
 
     system.build.toplevel = system;
 

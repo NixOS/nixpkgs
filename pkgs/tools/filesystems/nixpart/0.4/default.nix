@@ -1,44 +1,43 @@
-{ stdenv, fetchurl, python, buildPythonPackage
+{ stdenv, fetchurl, python, buildPythonApplication
+, libselinux
 # Propagated to blivet
-, useNixUdev ? true, udevSoMajor ? null
+, useNixUdev ? true
+# Needed by NixOps
+, udevSoMajor ? null
 # Propagated dependencies
 , pkgs, urlgrabber
 }:
 
 let
   blivet = import ./blivet.nix {
-    inherit stdenv fetchurl buildPythonPackage;
-    inherit pykickstart pyparted pyblock cryptsetup multipath_tools;
-    inherit useNixUdev udevSoMajor;
-    inherit (pkgs) lsof utillinux udev;
-    libselinux = pkgs.libselinux.override { enablePython = true; };
+    inherit stdenv fetchurl buildPythonApplication;
+    inherit pykickstart pyparted pyblock cryptsetup libselinux multipath_tools;
+    inherit useNixUdev;
+    inherit (pkgs) lsof utillinux systemd;
   };
 
   cryptsetup = import ./cryptsetup.nix {
     inherit stdenv fetchurl python;
-    inherit (pkgs) pkgconfig libgcrypt libuuid popt;
-    devicemapper = lvm2;
+    inherit (pkgs) fetchpatch pkgconfig libgcrypt libuuid popt lvm2;
   };
 
   dmraid = import ./dmraid.nix {
-    inherit stdenv fetchurl;
-    devicemapper = lvm2;
+    inherit stdenv fetchurl lvm2;
   };
 
   lvm2 = import ./lvm2.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) pkgconfig utillinux udev coreutils;
+    inherit (pkgs) fetchpatch pkgconfig utillinux systemd coreutils;
   };
 
   multipath_tools = import ./multipath-tools.nix {
     inherit stdenv fetchurl lvm2;
-    inherit (pkgs) readline udev libaio gzip;
+    inherit (pkgs) fetchpatch readline systemd libaio gzip;
   };
 
   parted = import ./parted.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) utillinux readline libuuid gettext check;
-    devicemapper = lvm2;
+    inherit (pkgs) fetchpatch utillinux readline libuuid gettext check lvm2;
   };
 
   pyblock = import ./pyblock.nix {
@@ -46,20 +45,21 @@ let
   };
 
   pykickstart = import ./pykickstart.nix {
-    inherit stdenv fetchurl python buildPythonPackage urlgrabber;
+    inherit stdenv fetchurl python buildPythonApplication urlgrabber;
   };
 
   pyparted = import ./pyparted.nix {
-    inherit stdenv fetchurl python buildPythonPackage parted;
+    inherit stdenv fetchurl python buildPythonApplication parted;
     inherit (pkgs) pkgconfig e2fsprogs;
   };
 
-in buildPythonPackage rec {
-  name = "nixpart-${version}";
+in buildPythonApplication rec {
+  pname = "nixpart";
   version = "0.4.1";
+  disabled = python.isPy3k;
 
   src = fetchurl {
-    url = "https://github.com/aszlig/nixpart/archive/v${version}.tar.gz";
+    url = "https://github.com/NixOS/nixpart/archive/v${version}.tar.gz";
     sha256 = "0avwd8p47xy9cydlbjxk8pj8q75zyl68gw2w6fnkk78dcb1a3swp";
   };
 
@@ -67,10 +67,11 @@ in buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "NixOS storage manager/partitioner";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.aszlig ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/NixOS/nixpart";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.aszlig ];
+    platforms = platforms.linux;
   };
 }

@@ -1,31 +1,51 @@
-{ stdenv, fetchurl, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl }:
+{ stdenv, fetchurl, pkgconfig
+, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
+, libmspack, systemd, Foundation
+}:
+
 stdenv.mkDerivation rec {
-  name = "clamav-${version}";
-  version = "0.98.6";
+  pname = "clamav";
+  version = "0.102.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/clamav/clamav-${version}.tar.gz";
-    sha256 = "0l99a0shgzpl8rvrrgbm1ki2zxlb7g1n82bhq7f2snj4amfj94b5";
+    url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
+    sha256 = "14q6vi178ih60yz4ja33b6181va1dcj8fyscnmxfx2crav250c7d";
   };
 
-  buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl libiconv ];
+  # don't install sample config files into the absolute sysconfdir folder
+  postPatch = ''
+    substituteInPlace Makefile.in --replace ' etc ' ' '
+  '';
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack
+  ] ++ stdenv.lib.optional stdenv.isLinux systemd
+    ++ stdenv.lib.optional stdenv.isDarwin Foundation;
 
   configureFlags = [
-    "--with-zlib=${zlib}"
-    "--with-libbz2-prefix=${bzip2}"
-    "--with-iconv-dir=${libiconv}"
-    "--with-xml=${libxml2}"
-    "--with-openssl=${openssl}"
-    "--with-libncurses-prefix=${ncurses}"
-    "--with-libcurl=${curl}"
-    "--disable-clamav"
-  ];
+    "--libdir=$(out)/lib"
+    "--sysconfdir=/etc/clamav"
+    "--disable-llvm" # enabling breaks the build at the moment
+    "--with-zlib=${zlib.dev}"
+    "--with-xml=${libxml2.dev}"
+    "--with-openssl=${openssl.dev}"
+    "--with-libcurl=${curl.dev}"
+    "--with-system-libmspack"
+    "--enable-milter"
+  ] ++ stdenv.lib.optional stdenv.isLinux
+    "--with-systemdsystemunitdir=$(out)/lib/systemd";
+
+  postInstall = ''
+    mkdir $out/etc
+    cp etc/*.sample $out/etc
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.clamav.net;
+    homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.robberer ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ phreedom robberer qknight fpletz globin ];
+    platforms = platforms.unix;
   };
 }

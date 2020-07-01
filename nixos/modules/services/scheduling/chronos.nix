@@ -13,7 +13,7 @@ in {
     enable = mkOption {
       description = "Whether to enable graphite web frontend.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     httpPort = mkOption {
@@ -41,7 +41,7 @@ in {
     systemd.services.chronos = {
       description = "Chronos Service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" "zookeeper.service" ];
+      after = [ "network.target" "zookeeper.service" ];
 
       serviceConfig = {
         ExecStart = "${pkgs.chronos}/bin/chronos --master ${cfg.master} --zk_hosts ${concatStringsSep "," cfg.zookeeperHosts} --http_port ${toString cfg.httpPort}";
@@ -49,6 +49,6 @@ in {
       };
     };
 
-    users.extraUsers.chronos.uid = config.ids.uids.chronos;
+    users.users.chronos.uid = config.ids.uids.chronos;
   };
 }

@@ -1,0 +1,26 @@
+From 6cb9aa7c69c20a677ca9fb1bc5fa1580e3236fbd Mon Sep 17 00:00:00 2001
+From: Tom Hall <tahall256@protonmail.ch>
+Date: Sat, 14 Mar 2020 11:55:45 +0000
+Subject: [PATCH] Disable optimised aarch64 dgemm_beta pending fix
+
+Identified as source of https://github.com/xianyi/OpenBLAS/issues/2496,
+but not yet fixed.
+---
+ kernel/arm64/KERNEL.ARMV8 | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/kernel/arm64/KERNEL.ARMV8 b/kernel/arm64/KERNEL.ARMV8
+index fe32d313..33d12f94 100644
+--- a/kernel/arm64/KERNEL.ARMV8
++++ b/kernel/arm64/KERNEL.ARMV8
+@@ -102,7 +102,6 @@ CDOTKERNEL     = zdot.S
+ ZDOTKERNEL     = zdot.S
+ DSDOTKERNEL    = dot.S
+ 
+-DGEMM_BETA     = dgemm_beta.S
+ SGEMM_BETA     = sgemm_beta.S
+ 
+ SGEMMKERNEL    =  sgemm_kernel_$(SGEMM_UNROLL_M)x$(SGEMM_UNROLL_N).S
+-- 
+2.24.1
+

@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
-, buildEnv, config
+, buildEnv, config, runtimeShell
 }:
 
 let
   # Choose your "paksets" of objects, images, text, music, etc.
-  paksets = config.simutrans.paksets or "pak64 pak128";
+  paksets = config.simutrans.paksets or "pak64 pak64.japan pak128 pak128.britain pak128.german";
 
   result = with stdenv.lib; withPaks (
     if paksets == "*" then attrValues pakSpec # taking all
@@ -12,15 +12,14 @@ let
   );
 
   ver1 = "120";
-  ver2 = "0";
+  ver2 = "4";
   ver3 = "1";
   version =   "${ver1}.${ver2}.${ver3}";
   ver_dash =  "${ver1}-${ver2}-${ver3}";
-  ver2_dash = "${ver1}-${ver2}";
 
   binary_src = fetchurl {
     url = "mirror://sourceforge/simutrans/simutrans/${ver_dash}/simutrans-src-${ver_dash}.zip";
-    sha256 = "10rn259nxq2hhfpar8zwgxi1p4djvyygcm2f6qhih7l9clvnw2h1";
+    sha256 = "0yw7vjvmczp022mgk35swwhpbiszpz91mwsgicxglwivgc30vvic";
   };
 
 
@@ -29,21 +28,22 @@ let
     (pakName: attrs: mkPak (attrs // {inherit pakName;}))
   {
     pak64 = {
-      srcPath = "${ver2_dash}/simupak64-${ver_dash}";
-      sha256 = "0y5v1ncpjyhjkkznqmk13kg5d0slhjbbvg1y8q5jxhmhlkghk9q2";
+      srcPath = "121-0/simupak64-121-0";
+      sha256 = "1k335kh8dhm1hdn5iwn3sdgnrlpk0rqxmmgqgqcwsi09cmw45m5c";
     };
     "pak64.japan" = {
-      srcPath = "${ver2_dash}/simupak64.japan-${ver_dash}";
+      # No release for 120.2 yet!
+      srcPath = "120-0/simupak64.japan-120-0-1";
       sha256 = "14swy3h4ij74bgaw7scyvmivfb5fmp21nixmhlpk3mav3wr3167i";
     };
 
     pak128 = {
-      srcPath = "pak128%20for%20ST%20120%20%282.5.2%2B%20nightly%20r1560%2C%20bugfixes%29/pak128-r1560--ST120";
-      sha256 = "1wd51brc4aglqi3w7s8fxgxrw0k7f653w4wbnmk83k07fwfdyf24";
+      srcPath = "pak128%20for%20ST%20120.4.1%20%282.8.1%2C%20priority%20signals%20%2B%20bugfix%29/pak128";
+      sha256 = "0z01y7r0rz7q79vr17bbnkgcbjjrimphy1dwb1pgbiv4klz7j5xw";
     };
     "pak128.britain" = {
-      srcPath = "pak128.Britain%20for%20${ver2_dash}/pak128.Britain.1.16-${ver2_dash}";
-      sha256 = "1rww9rnpk22l2z3s1d7y2gmd6iwhv72s7pff8krnh7z0q386waak";
+      srcPath = "pak128.Britain%20for%20120-1/pak128.Britain.1.18-120-3";
+      sha256 = "1kyb0s54kysvdr0zdln9106yx75d71j4lbw3v87k3i440cj3r1d3";
     };
     "pak128.cs" = { # note: it needs pak128 to work
       url = "mirror://sourceforge/simutrans/Pak128.CS/pak128.cz_v.0.2.1.zip";
@@ -51,8 +51,8 @@ let
     };
     "pak128.german" = {
       url = "mirror://sourceforge/simutrans/PAK128.german/"
-        + "PAK128.german_0.7_${ver1}.x/PAK128.german_0.7.0.1_${ver1}.x.zip";
-      sha256 = "1575akms18raxaijy2kfyqm07wdx6y5q85n7wgvq2fqydrnx33w8";
+        + "pak128.german_1.2_for_ST_121.0/PAK128.german_1.2_for_ST_121-0.zip";
+      sha256 = "1jxjckz4b02yv1mv1zc3pmajpq740dfnlvhr0x762lbrybymvagi";
     };
 
     /* This release contains accented filenames that prevent unzipping.
@@ -70,7 +70,8 @@ let
   }:
     stdenv.mkDerivation {
       name = "simutrans-${pakName}";
-      unpackPhase = "true";
+      dontUnpack = true;
+      preferLocalBuild = true;
       installPhase = let src = fetchurl { inherit url sha256; };
       in ''
         mkdir -p "$out/share/simutrans/${pakName}"
@@ -82,6 +83,7 @@ let
         toStrip=`find . -iname '*.pak' | head -n 1 | sed 's|\./\(.*\)/[^/]*$|\1|'`
         echo "Detected path '$toStrip' to strip"
         mv ./"$toStrip"/* .
+        rm -f "$toStrip/.directory" #pak128.german had this
         rmdir -p "$toStrip"
       '';
     };
@@ -94,9 +96,9 @@ let
     postBuild = ''
       rm "$out/bin" && mkdir "$out/bin"
       cat > "$out/bin/simutrans" <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cd "$out"/share/simutrans
-      exec "${binaries}/bin/simutrans" -use_workdir "\''${extraFlagsArray[@]}" "\$@"
+      exec "${binaries}/bin/simutrans" -use_workdir "\$@"
       EOF
       chmod +x "$out/bin/simutrans"
     '';
@@ -105,14 +107,16 @@ let
     passthru.binaries = binaries;
   };
 
-  binaries = stdenv.mkDerivation rec {
-    name = "simutrans-${version}";
+  binaries = stdenv.mkDerivation {
+    pname = "simutrans";
+    inherit version;
 
     src = binary_src;
 
     sourceRoot = ".";
 
-    buildInputs = [ pkgconfig zlib libpng bzip2 SDL SDL_mixer unzip ];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ zlib libpng bzip2 SDL SDL_mixer unzip ];
 
     configurePhase = let
       # Configuration as per the readme.txt and config.template
@@ -157,12 +161,11 @@ let
         places. Simutrans is an open source remake of Transport Tycoon.
       '';
 
-      homepage = http://www.simutrans.com/;
+      homepage = "http://www.simutrans.com/";
       license = with licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ kkallio vcunat ];
-      platforms = with platforms; linux ++ darwin;
+      maintainers = with maintainers; [ kkallio vcunat phile314 ];
+      platforms = with platforms; linux; # TODO: ++ darwin;
     };
   };
 
 in result
-

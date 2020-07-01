@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, coreutils, gnugrep, utillinux, module_init_tools
-, procps, kbd, dbus_tools }:
+{ stdenv, fetchurl, coreutils, gnugrep, utillinux, kmod
+, procps, kbd, dbus }:
 
 let
 
-  binPath = stdenv.lib.makeSearchPath "bin"
-    [ coreutils gnugrep utillinux module_init_tools procps kbd dbus_tools ];
+  binPath = stdenv.lib.makeBinPath
+    [ coreutils gnugrep utillinux kmod procps kbd dbus ];
 
-  sbinPath = stdenv.lib.makeSearchPath "sbin"
+  sbinPath = stdenv.lib.makeSearchPathOutput "bin" "sbin"
     [ procps ];
 
 in
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   name = "pm-utils-1.4.1";
 
   src = fetchurl {
-    url = "http://pm-utils.freedesktop.org/releases/${name}.tar.gz";
+    url = "https://pm-utils.freedesktop.org/releases/${name}.tar.gz";
     sha256 = "02qc6zaf7ams6qcc470fwb6jvr4abv3lrlx16clqpn36501rkn4f";
   };
 
-  configureFlags = "--sysconfdir=/etc";
+  configureFlags = [ "--sysconfdir=/etc" ];
 
   preConfigure =
     ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://pm-utils.freedesktop.org/wiki/;
+    homepage = "https://pm-utils.freedesktop.org/wiki/";
     description = "A small collection of scripts that handle suspend and resume on behalf of HAL";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

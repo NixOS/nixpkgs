@@ -1,25 +1,24 @@
-{ stdenv, fetchurl, libsepol, libselinux, bison, flex }:
-stdenv.mkDerivation rec {
+{ stdenv, fetchurl, bison, flex, libsepol }:
 
-  name = "checkpolicy-${version}";
-  version = "2.3";
+stdenv.mkDerivation rec {
+  pname = "checkpolicy";
+  version = "2.9";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/checkpolicy-${version}.tar.gz";
-    sha256 = "0yr0r2cxz9lbj7i0wqgcd4wjvc6zf1fmqk0xjybnkdpcmw8jsqwh";
+    sha256 = "13jz6f8zdrijvn5w1j102b36fs41z0q8ii74axw48cj550mw6im9";
   };
 
-  buildInputs = [ libsepol libselinux bison flex ];
+  nativeBuildInputs = [ bison flex ];
+  buildInputs = [ libsepol ];
 
-  preBuild = ''
-    makeFlags="$makeFlags LEX=flex LIBDIR=${libsepol}/lib PREFIX=$out"
-    sed -e 's@[.]o$@& ../lex.yy.o@' -i test/Makefile
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "SELinux policy compiler";
-    license = licenses.gpl2;
-    inherit (libsepol.meta) homepage platforms maintainers;
   };
 }

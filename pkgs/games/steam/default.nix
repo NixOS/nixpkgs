@@ -1,38 +1,25 @@
-{stdenv, fetchurl, traceDeps ? false}:
+{ pkgs, newScope }:
 
-stdenv.mkDerivation rec {
-  name = "${program}-${version}";
-  program = "steam";
-  version = "1.0.0.49";
+let
+  callPackage = newScope self;
 
-  src = fetchurl {
-    url = "http://repo.steampowered.com/steam/pool/steam/s/steam/${program}_${version}.tar.gz";
-    sha256 = "1c1gl5pwvb5gnnnqf5d9hpcjnfjjgmn4lgx8v0fbx1am5xf3p2gx";
+  self = rec {
+    steamArch = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
+                else if pkgs.stdenv.hostPlatform.system == "i686-linux" then "i386"
+                else throw "Unsupported platform: ${pkgs.stdenv.hostPlatform.system}";
+
+    steam-runtime = callPackage ./runtime.nix { };
+    steam-runtime-wrapped = callPackage ./runtime-wrapped.nix { };
+    steam = callPackage ./steam.nix { };
+    steam-fonts = callPackage ./fonts.nix { };
+    steam-chrootenv = callPackage ./chrootenv.nix {
+      glxinfo-i686 = pkgs.pkgsi686Linux.glxinfo;
+      steam-runtime-wrapped-i686 =
+        if steamArch == "amd64"
+        then pkgs.pkgsi686Linux.steamPackages.steam-runtime-wrapped
+        else null;
+    };
+    steamcmd = callPackage ./steamcmd.nix { };
   };
 
-  traceLog = "/tmp/steam-trace-dependencies.log";
-
-  installPhase = ''
-    make DESTDIR=$out install
-    mv $out/usr/* $out #*/
-    rmdir $out/usr
-
-    rm $out/bin/steamdeps
-    ${stdenv.lib.optionalString traceDeps ''
-      cat > $out/bin/steamdeps <<EOF
-      #! /bin/bash
-      echo \$1 >> ${traceLog}
-      cat \$1 >> ${traceLog}
-      echo >> ${traceLog}
-      EOF
-      chmod +x $out/bin/steamdeps
-    ''}
-  '';
-
-  meta = with stdenv.lib; {
-    description = "A digital distribution platform";
-    homepage = http://store.steampowered.com/;
-    license = licenses.unfree;
-    maintainers = with maintainers; [ jagajaga ];
-  };
-}
+in self

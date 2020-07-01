@@ -11,11 +11,16 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/${name}/${version}/${name}-${version}.tar.gz";
     sha256 = "1gsdzzisrk95kajs3gfxks3bjvfd9g680fin6a9pjrism2lyrcr7";
   };
+
+  hardeningDisable = [ "format" ];
+
   patches = [ ./cccc.patch ];
+
   preConfigure = ''
     substituteInPlace install/install.mak --replace /usr/local/bin $out/bin
     substituteInPlace install/install.mak --replace MKDIR=mkdir "MKDIR=mkdir -p"
   '';
+  buildFlags = [ "CCC=c++" "LD=c++" ];
 
   meta = {
     description = "C and C++ Code Counter";

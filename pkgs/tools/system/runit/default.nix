@@ -1,39 +1,61 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, darwin
+
+# Build runit-init as a static binary
+, static ? false
+}:
 
 stdenv.mkDerivation rec {
-  name = "runit-${version}";
+  pname = "runit";
   version = "2.1.2";
 
   src = fetchurl {
-    url = "http://smarden.org/runit/${name}.tar.gz";
+    url = "http://smarden.org/runit/${pname}-${version}.tar.gz";
     sha256 = "065s8w62r6chjjs6m9hapcagy33m75nlnxb69vg0f4ngn061dl3g";
   };
 
-  phases = [ "unpackPhase" "patchPhase" "buildPhase" "checkPhase" "installPhase" ];
+  patches = [
+    ./fix-ar-ranlib.patch
+  ];
 
-  patches = [ ./Makefile.patch ];
+  outputs = [ "out" "man" ];
 
-  buildPhase = ''
-    cd ${name}
-    make -C 'src'
+  sourceRoot = "admin/${pname}-${version}";
+
+  doCheck = true;
+
+  buildInputs = stdenv.lib.optionals static [ stdenv.cc.libc stdenv.cc.libc.static ] ++
+    stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+
+  postPatch = ''
+    sed -i "s,\(#define RUNIT\) .*,\1 \"$out/bin/runit\"," src/runit.h
+    # usernamespace sandbox of nix seems to conflict with runit's assumptions
+    # about unix users. Therefor skip the check
+    sed -i '/.\/chkshsgr/d' src/Makefile
+  '' + stdenv.lib.optionalString (!static) ''
+    sed -i 's,-static,,g' src/Makefile
   '';
 
-  checkPhase = ''
-    make -C 'src' check
+  preBuild = ''
+    cd src
+
+    # Both of these are originally hard-coded to gcc
+    echo ${stdenv.cc.targetPrefix}cc > conf-cc
+    echo ${stdenv.cc.targetPrefix}cc ${stdenv.lib.optionalString stdenv.isDarwin "-Xlinker -x "}> conf-ld
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    for f in $(cat package/commands); do
-      mv src/$f $out/bin/
-    done
+    cp -t $out/bin $(< ../package/commands)
+
+    mkdir -p $man/share/man
+    cp -r ../man $man/share/man/man8
   '';
 
   meta = with stdenv.lib; {
     description = "UNIX init scheme with service supervision";
     license = licenses.bsd3;
     homepage = "http://smarden.org/runit";
-    maintainers = with maintainers; [ rickynils ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ joachifm ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

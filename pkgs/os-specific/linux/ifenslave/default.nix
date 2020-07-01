@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ifenslave-${version}";
+  pname = "ifenslave";
   version = "1.1.0";
 
   src = fetchurl {
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -a ifenslave $out/bin
   '';
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Utility for enslaving networking interfaces under a bond";

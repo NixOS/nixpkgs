@@ -1,0 +1,13 @@
+diff --exclude '*~' -ruN A/torch/CMakeLists.txt B/torch/CMakeLists.txt
+--- A/fem/tests/CMakeLists.txt	2020-04-23 02:35:03.243388917 -0400
++++ B/fem/tests/CMakeLists.txt	2018-12-19 20:18:40.671857320 -0400
+@@ -14,7 +14,7 @@ 
+ SET(MESH2D_BIN "${CMAKE_BINARY_DIR}/meshgen2d/src/Mesh2D")
+
+ MACRO(SUBDIRLIST result curdir depth)
+   set(glob_pattern "*")
+-  FOREACH(D RANGE 1 depth)
++  FOREACH(D RANGE 1 ${depth})
+     FILE(GLOB children RELATIVE ${curdir} ${glob_pattern}) 
+     FOREACH(child ${children})
+       IF(IS_DIRECTORY ${curdir}/${child})

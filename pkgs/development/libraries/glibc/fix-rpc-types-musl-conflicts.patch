@@ -1,0 +1,38 @@
+@@ -, +, @@ 
+---
+ sunrpc/rpc/types.h | 22 ++++++----------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
+--- a/sunrpc/rpc/types.h	
++++ a/sunrpc/rpc/types.h	
+@@ -69,24 +69,14 @@ typedef unsigned long rpcport_t;
+ #include <sys/types.h>
+ #endif
+ 
+-#if defined __APPLE_CC__ || defined __FreeBSD__
+-# define __u_char_defined
+-# define __daddr_t_defined
+-#endif
+-
+-#ifndef __u_char_defined
+-typedef __u_char u_char;
+-typedef __u_short u_short;
+-typedef __u_int u_int;
+-typedef __u_long u_long;
+-typedef __quad_t quad_t;
+-typedef __u_quad_t u_quad_t;
+-typedef __fsid_t fsid_t;
++/* IMPORTANT NOTE: This has been modified to build against the musl C
++ * library and it probably now ONLY builds with the musl C library.
++ *
++ * See: https://sourceware.org/bugzilla/show_bug.cgi?id=21604
++ */
+ # define __u_char_defined
+-#endif
+ #ifndef __daddr_t_defined
+-typedef __daddr_t daddr_t;
+-typedef __caddr_t caddr_t;
++typedef int daddr_t;
+ # define __daddr_t_defined
+ #endif
+ 
+-- 

@@ -1,48 +1,55 @@
-{ stdenv, cmake, fetchurl, gnumake, pkgconfig
-, boost, gettext, tclap, wxGTK
-, freeglut, glew, libXi, libXmu, mesa
-, autopanosiftc, enblendenfuse, exiv2, ilmbase, lensfun, libpng, libtiff
-, openexr, panotools, perlPackages
+{ stdenv, cmake, fetchurl, gnumake, makeWrapper, pkgconfig, fetchpatch
+, autopanosiftc, boost, cairo, enblend-enfuse, exiv2, fftw, flann, gettext
+, glew, ilmbase, lcms2, lensfun, libjpeg, libpng, libtiff, libX11, libXi
+, libXmu, libGLU, libGL, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2013.0.0";
+  name = "hugin-2019.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/${name}.tar.bz2";
-    sha256 = "1mgbvg09xvf0zcm9jfv5lb65nd292l86ffa23yp4pzm6izaiwkj8";
+    sha256 = "1l925qslp98gg7yzmgps10h6dq0nb60wbfk345anlxsv0g2ifizr";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
+  patches = [
+    # Fixes build with exiv2 0.27.1
+    (fetchpatch {
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/hugin-exiv2-0.27.1.patch?h=packages/hugin";
+      sha256 = "1yxvlpvrhyrfd2w6kwx1w3mncsvlzdhp0w7xchy8q6kc2kd5nf7r";
+    })
+  ];
 
-  buildInputs = [ boost gettext tclap wxGTK
-                  freeglut glew libXi libXmu mesa
-                  exiv2 ilmbase lensfun libtiff libpng openexr panotools
-                ];
+  buildInputs = [
+    boost cairo exiv2 fftw flann gettext glew ilmbase lcms2 lensfun libjpeg
+    libpng libtiff libX11 libXi libXmu libGLU libGL openexr panotools sqlite vigra
+    wxGTK zlib
+  ];
+
+  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-
   enableParallelBuilding = true;
 
-  # commandline tools needed by the hugin batch processor
-  # you may have to tell hugin (in the preferences) where these binaries reside
-  propagatedUserEnvPackages = [ autopanosiftc enblendenfuse gnumake
-                                perlPackages.ImageExifTool
-                              ];
+  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   postInstall = ''
-    mkdir -p "$out/nix-support"
-    echo $propagatedUserEnvPackages > $out/nix-support/propagated-user-env-packages
+    for p in $out/bin/*; do
+      wrapProgram "$p" \
+        --suffix PATH : ${autopanosiftc}/bin \
+        --suffix PATH : ${enblend-enfuse}/bin \
+        --suffix PATH : ${gnumake}/bin \
+        --suffix PATH : ${perlPackages.ImageExifTool}/bin
+    done
   '';
 
-  meta = {
-    homepage = http://hugin.sourceforge.net/;
+  meta = with stdenv.lib; {
+    homepage = "http://hugin.sourceforge.net/";
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ hrdinka ];
+    platforms = platforms.linux;
   };
 }

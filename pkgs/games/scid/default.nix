@@ -1,7 +1,7 @@
 { stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "scid-${version}";
+stdenv.mkDerivation {
+  pname = "scid";
   version = "4.3";
 
   src = fetchurl {
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     "BINDIR=$(out)/bin"
     "SHAREDIR=$(out)/share"
   ];
+
+  hardeningDisable = [ "format" ];
 
   dontPatchShebangs = true;
 

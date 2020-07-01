@@ -1,18 +1,29 @@
-{ fetchurl, stdenv, bison, flex, pam, sendmailPath ? "/var/setuid-wrappers/sendmail" }:
+{ stdenv, fetchurl, fetchpatch, bison, flex, pam, perl
+, sendmailPath ? "/run/wrappers/bin/sendmail"
+, atWrapperPath ? "/run/wrappers/bin/at"
+}:
 
-stdenv.mkDerivation {
-  name = "at-3.1.16";
+stdenv.mkDerivation rec {
+  pname = "at";
+  version = "3.1.23";
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
-    url = mirror://debian/pool/main/a/at/at_3.1.16.orig.tar.gz;
-    sha256 = "1hfmnhgi95vsfaa69qlakpwd22al0m0rhqms6sawxvaldafgb6nb";
+    url = "mirror://debian/pool/main/a/at/at_${version}.orig.tar.gz";
+    sha256 = "040pr2ivfbrhvrhzis97cpwfkzpr7nin33nc301aga5aajlhlicp";
   };
 
-  patches = [ ./install.patch ];
+  patches = [
+    ./install.patch
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/riscv/riscv-poky/master/meta/recipes-extended/at/at/0001-remove-glibc-assumption.patch";
+      sha256 = "1rk4hskp0c1jqkanzdxf873i6jgki3xhrm609fsam8an8sl1njnm";
+    })
+  ];
 
-  buildInputs =
-    [ bison flex pam ];
+  nativeBuildInputs = [ bison flex perl /* for `prove` (tests) */ ];
+
+  buildInputs = [ pam ];
 
   preConfigure =
     ''
@@ -22,17 +33,27 @@ stdenv.mkDerivation {
       substituteInPlace ./configure --replace "test -d /var/run" "true"
     '';
 
-  configureFlags =
-    ''
-       --with-etcdir=/etc/at
-       --with-jobdir=/var/spool/atjobs --with-atspool=/var/spool/atspool
-       --with-daemon_username=atd --with-daemon_groupname=atd
-    '';
+  configureFlags = [
+    "--with-etcdir=/etc/at"
+    "--with-jobdir=/var/spool/atjobs"
+    "--with-atspool=/var/spool/atspool"
+    "--with-daemon_username=atd"
+    "--with-daemon_groupname=atd"
+  ];
+
+  doCheck = true;
+
+  # Ensure that "batch" can invoke the setuid "at" wrapper, if it exists, or
+  # else we get permission errors (on NixOS). "batch" is a shell script, so
+  # when the kernel executes it it drops setuid perms.
+  postInstall = ''
+    sed -i "6i test -x ${atWrapperPath} && exec ${atWrapperPath} -qb now  # exec doesn't return" "$out/bin/batch"
+  '';
 
   meta = {
     description = ''The classical Unix `at' job scheduling command'';
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://packages.qa.debian.org/at;
+    homepage = "https://packages.qa.debian.org/at";
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ lib, ... }:
 
 with lib;
 
@@ -17,7 +17,7 @@ let
     #   }
     merge = loc: defs:
       zipAttrs
-        (flatten (imap (n: def: imap (m: def':
+        (flatten (imap1 (n: def: imap1 (m: def':
           maintainer.merge (loc ++ ["[${toString n}-${toString m}]"])
             [{ inherit (def) file; value = def'; }]) def.value) defs));
   };
@@ -39,7 +39,7 @@ in
         default = [];
         example = [ lib.maintainers.all ];
         description = ''
-	  List of maintainers of each module.  This option should be defined at
+          List of maintainers of each module.  This option should be defined at
           most once per module.
         '';
       };
@@ -49,7 +49,7 @@ in
         internal = true;
         example = "./meta.xml";
         description = ''
-	  Documentation prologe for the set of options of each module.  This
+          Documentation prologe for the set of options of each module.  This
           option should be defined at most once per module.
         '';
       };
@@ -57,7 +57,5 @@ in
     };
   };
 
-  config = {
-    meta.maintainers = singleton lib.maintainers.pierron;
-  };
+  meta.maintainers = singleton lib.maintainers.pierron;
 }

@@ -1,21 +1,23 @@
-{ stdenv, fetchurl }:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation {
-  name = "source-sans-pro-2.010";
-  src = fetchurl {
-    url = "https://github.com/adobe-fonts/source-sans-pro/archive/2.010R-ro/1.065R-it.tar.gz";
-    sha256 = "1s3rgia6x9fxc2pvlwm203grqkb49px6q0xnh8kbqxqsgna615p2";
-  };
+let
+  version = "3.006";
+in fetchzip {
+  name = "source-sans-pro-${version}";
 
-  phases = "unpackPhase installPhase";
+  url = "https://github.com/adobe-fonts/source-sans-pro/releases/download/${version}R/source-sans-pro-${version}R.zip";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    find . -name "*.otf" -exec cp {} $out/share/fonts/opentype \;
+  postFetch = ''
+    mkdir -p $out/share/fonts/{opentype,truetype,variable}
+    unzip -j $downloadedFile "*/OTF/*.otf" -d $out/share/fonts/opentype
+    unzip -j $downloadedFile "*/TTF/*.ttf" -d $out/share/fonts/truetype
+    unzip -j $downloadedFile "*/VAR/*.otf" -d $out/share/fonts/variable
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://sourceforge.net/adobe/sourcesans;
+  sha256 = "11jd50cqiq2s0z39rclg73iiw2j5yzgs1glfs9psw5wbbisgysmr";
+
+  meta = with lib; {
+    homepage = "https://adobe-fonts.github.io/source-sans-pro/";
     description = "A set of OpenType fonts designed by Adobe for UIs";
     license = licenses.ofl;
     platforms = platforms.all;

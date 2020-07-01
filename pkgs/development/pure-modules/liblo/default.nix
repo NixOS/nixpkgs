@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "c2ba4d6f94489acf8a8fac73982ae03d5ad4113146eb1f7d6558a956c57cb8ee";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure liblo ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
     description = "A quick and dirty Pure wrapper for the liblo library, which implements Berkeley’s Open Sound Control (OSC) protocol";
-    homepage = http://puredocs.bitbucket.org/pure-liblo.html;
+    homepage = "http://puredocs.bitbucket.org/pure-liblo.html";
     license = stdenv.lib.licenses.lgpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

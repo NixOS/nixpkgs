@@ -1,0 +1,52 @@
+From 29fa058c3127f3b47c347dcaa4a94f4c0e888308 Mon Sep 17 00:00:00 2001
+From: Jaap Boender <jaapb@kerguelen.org>
+Date: Thu, 21 Mar 2019 12:26:51 +0000
+Subject: [PATCH] Compatibility with OCaml 4.08
+
+---
+ src/files.ml                 | 2 +-
+ src/recon.ml                 | 4 ++--
+ src/system/system_generic.ml | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/files.ml b/src/files.ml
+index ba42ad57..5babf21e 100644
+--- a/src/files.ml
++++ b/src/files.ml
+@@ -722,7 +722,7 @@ let get_files_in_directory dir =
+   with End_of_file ->
+     dirh.System.closedir ()
+   end;
+-  Sort.list (<) !files
++  List.sort String.compare !files
+ 
+ let ls dir pattern =
+   Util.convertUnixErrorsToTransient
+diff --git a/src/recon.ml b/src/recon.ml
+index 5ed358d7..0df2cfe4 100644
+--- a/src/recon.ml
++++ b/src/recon.ml
+@@ -651,8 +651,8 @@ let rec reconcile
+ 
+ (* Sorts the paths so that they will be displayed in order                   *)
+ let sortPaths pathUpdatesList =
+-  Sort.list
+-    (fun (p1, _) (p2, _) -> Path.compare p1 p2 <= 0)
++  List.sort
++    Path.compare
+     pathUpdatesList
+ 
+ let rec enterPath p1 p2 t =
+diff --git a/src/system/system_generic.ml b/src/system/system_generic.ml
+index ed8e18f3..0e28a781 100755
+--- a/src/system/system_generic.ml
++++ b/src/system/system_generic.ml
+@@ -47,7 +47,7 @@ let open_out_gen = open_out_gen
+ let chmod = Unix.chmod
+ let chown = Unix.chown
+ let utimes = Unix.utimes
+-let link = Unix.link
++let link s d = Unix.link s d
+ let openfile = Unix.openfile
+ let opendir f =
+   let h = Unix.opendir f in

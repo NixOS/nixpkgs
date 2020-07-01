@@ -1,17 +1,17 @@
-{ stdenv, fetchhg, openssl, pcre, qt4, boost, pkcs11helper }:
+{ stdenv, fetchhg, openssl, pcre-cpp, qt4, boost, pkcs11helper }:
 
 stdenv.mkDerivation {
   name = "meo-20121113";
   
   src = fetchhg {
-    url = http://oss.stamfest.net/hg/meo;
+    url = "http://oss.stamfest.net/hg/meo";
     rev = "b48e5f16cff8";
     sha256 = "0ifg7y28s89i9gwda6fyj1jbrykbcvq8bf1m6rxmdcv5afi3arbq";
   };
 
-  buildFlags = "QMAKE=qmake";
+  buildFlags = [ "QMAKE=qmake" ];
 
-  buildInputs = [ openssl pcre qt4 boost pkcs11helper ];
+  buildInputs = [ openssl pcre-cpp qt4 boost pkcs11helper ];
 
   preConfigure = ''
     sed -i s,-mt$,, meo-gui/meo-gui.pro
@@ -25,10 +25,11 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://oss.stamfest.net/wordpress/meo-multiple-eyepairs-only;
+    homepage = "http://oss.stamfest.net/wordpress/meo-multiple-eyepairs-only";
     description = "Tools to use cryptography for things like four-eyes principles";
     license = stdenv.lib.licenses.agpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true;
   };
 }

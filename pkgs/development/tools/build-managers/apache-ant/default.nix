@@ -1,19 +1,20 @@
 { fetchurl, stdenv, coreutils, makeWrapper }:
 
-let version = "1.9.4"; in
+let version = "1.10.2"; in
 
 stdenv.mkDerivation {
-  name = "ant-${version}";
+  pname = "ant";
+  inherit version;
 
   buildInputs = [ makeWrapper ];
 
   src = fetchurl {
     url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";
-    sha256 = "1kw801p8h5x4f0g8i5yknppssrj5a3xy1aqrkpfnk22bd1snbh90";
+    sha256 = "0662qammjvibh9kgkxzadkayfn2r7iwnagbwaw28crqqclrb2rp1";
   };
 
   contrib = fetchurl {
-    url = mirror://sourceforge/ant-contrib/ant-contrib-1.0b3-bin.tar.bz2;
+    url = "mirror://sourceforge/ant-contrib/ant-contrib-1.0b3-bin.tar.bz2";
     sha256 = "96effcca2581c1ab42a4828c770b48d54852edf9e71cefc9ed2ffd6590571ad1";
   };
 
@@ -23,9 +24,14 @@ stdenv.mkDerivation {
       mv * $out/lib/ant/
 
       # Get rid of the manual (35 MiB).  Maybe we should put this in a
-      # separate output.  Also get rid of the Ant scripts since we
-      # provide our own.
+      # separate output.  Keep the antRun script since it's vanilla sh
+      # and needed for the <exec/> task (but since we set ANT_HOME to
+      # a weird value, we have to move antRun to a weird location).
+      # Get rid of the other Ant scripts since we provide our own.
+      mv $out/lib/ant/bin/antRun $out/bin/
       rm -rf $out/lib/ant/{manual,bin,WHATSNEW}
+      mkdir $out/lib/ant/bin
+      mv $out/bin/antRun $out/lib/ant/bin/
 
       # Install ant-contrib.
       unpackFile $contrib
@@ -40,14 +46,14 @@ stdenv.mkDerivation {
       # JRE by looking for java.  The latter allows just the JRE to be
       # used with (say) ECJ as the compiler.  Finally, allow the GNU
       # JVM.
-      if [ -z "\$JAVA_HOME" ]; then
+      if [ -z "\''${JAVA_HOME-}" ]; then
           for i in javac java gij; do
               if p="\$(type -p \$i)"; then
                   export JAVA_HOME="\$(${coreutils}/bin/dirname \$(${coreutils}/bin/dirname \$(${coreutils}/bin/readlink -f \$p)))"
                   break
               fi
           done
-          if [ -z "\$JAVA_HOME" ]; then
+          if [ -z "\''${JAVA_HOME-}" ]; then
               echo "\$0: cannot find the JDK or JRE" >&2
               exit 1
           fi
@@ -75,7 +81,7 @@ stdenv.mkDerivation {
     ''; # */
 
   meta = {
-    homepage = http://ant.apache.org/;
+    homepage = "http://ant.apache.org/";
     description = "A Java-based build tool";
 
     longDescription = ''

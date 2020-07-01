@@ -1,13 +1,16 @@
 { stdenv, fetchurl, postgresql, openssl, pam ? null, libmemcached ? null }:
 
 stdenv.mkDerivation rec {
-  name = "pgpool-II-3.4.2";
+  pname = "pgpool-II";
+  version = "4.0.6";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "http://www.pgpool.net/download.php?f=${name}.tar.gz";
-    sha256 = "0lf3fvwc2ib4md25a3hnv822nhy9ac06vg0ndw8q9bry66hzwcfh";
+    name = "${pname}-${version}.tar.gz";
+    url = "http://www.pgpool.net/download.php?f=${pname}-${version}.tar.gz";
+    sha256 = "0blmbqczyrgzykby2z3xzmhzd8kgij9izxv50n5cjn5azf7dn8g5";
   };
+
+  patches = [ ./pgpool.patch ];
 
   buildInputs = [ postgresql openssl pam libmemcached ];
 
@@ -22,11 +25,12 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
-    homepage = http://pgpool.net/mediawiki/index.php;
+    homepage = "http://pgpool.net/mediawiki/index.php";
     description = "A middleware that works between postgresql servers and postgresql clients";
     license = licenses.free;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

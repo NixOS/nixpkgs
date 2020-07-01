@@ -3,23 +3,28 @@
 
 stdenv.mkDerivation rec {
   baseName="pure";
-  project="pure-lang";
-  version="0.64";
+  version="0.68";
   name="${baseName}-${version}";
-  extension="tar.gz";
 
   src = fetchurl {
-    url="https://bitbucket.org/purelang/${project}/downloads/${name}.${extension}";
-    sha256="01vvix302gh5vsmnjf2g0rrif3hl1yik4izsx1wrvv1a6hlm5mgg";
+    url="https://github.com/agraef/pure-lang/releases/download/${name}/${name}.tar.gz";
+    sha256="0px6x5ivcdbbp2pz5n1r1cwg1syadklhjw8piqhl63n91i4r7iyb";
   };
 
   buildInputs = [ bison flex makeWrapper ];
   propagatedBuildInputs = [ llvm gmp mpfr readline ];
+  NIX_LDFLAGS = "-lLLVMJIT";
+
+  postPatch = ''
+    for f in expr.cc matcher.cc printer.cc symtable.cc parserdefs.hh; do
+      sed -i '1i\#include <stddef.h>' $f
+    done
+  '';
 
   configureFlags = [ "--enable-release" ];
   doCheck = true;
   checkPhase = ''
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${llvm}/lib make check
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${llvm}/lib make check
   '';
   postInstall = ''
     wrapProgram $out/bin/pure --prefix LD_LIBRARY_PATH : ${llvm}/lib
@@ -35,5 +40,6 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms;
       linux;
     license = lib.licenses.gpl3Plus;
+    broken = true;
   };
 }

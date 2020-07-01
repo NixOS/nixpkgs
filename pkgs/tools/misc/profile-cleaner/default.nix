@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, makeWrapper, parallel, sqlite }:
+{ stdenv, fetchFromGitHub, makeWrapper, parallel, sqlite, bc, file }:
 
 stdenv.mkDerivation rec {
-  version = "2.34";
-  name = "profile-cleaner-${version}";
+  version = "2.41";
+  pname = "profile-cleaner";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-cleaner";
     rev = "v${version}";
-    sha256 = "17z73xyn31668f7vmbj7xs659fcrm0m0mnzja7hz6lipfaviqxrs";
+    sha256 = "11sjf4j9dr6ih9jkg6vqq6gkfg6wly4182bi1008bsm1zdmm5iz7";
   };
 
   buildInputs = [ makeWrapper ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     PREFIX=\"\" DESTDIR=$out make install
     wrapProgram $out/bin/profile-cleaner \
-      --prefix PATH : "${parallel}/bin:${sqlite}/bin"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ parallel sqlite bc file ]}"
   '';
 
   meta = {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       term "browser" is used loosely since profile-cleaner happily works on
       some email clients and newsreaders too.
     '';
-    homepage = https://github.com/graysky2/profile-cleaner;
+    homepage = "https://github.com/graysky2/profile-cleaner";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];

@@ -1,30 +1,46 @@
-{ stdenv, fetchurl, pkgconfig, libusb1 }:
-
-let
-   version = "2.2.1";
-in
+{ stdenv, lib, fetchurl, pkgconfig, makeWrapper
+, libusb1, tcl, utillinux, coreutils, bash }:
 
 stdenv.mkDerivation rec {
-  name = "usb-modeswitch-${version}";
+  pname = "usb-modeswitch";
+  version = "2.6.0";
 
   src = fetchurl {
-    url = "http://www.draisberghof.de/usb_modeswitch/${name}.tar.bz2";
-    sha256 = "1jqih1g0y78w03rchpw7fjvzwjfakak61qjp7hbr1m5nnsh2dn9p";
+    url    = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
+    sha256 = "18wbbxc5cfsmikba0msdvd5qlaga27b32nhrzicyd9mdddp265f2";
   };
 
-  # make clean: we always build from source. It should be necessary on x86_64 only
-  preConfigure = ''
-    find -type f | xargs sed 's@/bin/rm@rm@g' -i
-    make clean
-    mkdir -p $out/{etc,lib/udev,share/man/man1}
-    makeFlags="DESTDIR=$out PREFIX=$out"
+  patches = [ ./configurable-usb-modeswitch.patch ];
+
+  # Remove attempts to write to /etc and /var/lib.
+  postPatch = ''
+    sed -i \
+      -e '/^\tinstall .* usb_modeswitch.conf/s,$(ETCDIR),$(out)/etc,' \
+      -e '\,^\tinstall -d .*/var/lib/usb_modeswitch,d' \
+      Makefile
   '';
 
-  buildInputs = [ pkgconfig libusb1 ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "ETCDIR=/etc"
+    "USE_UPSTART=false"
+    "USE_SYSTEMD=true"
+    "SYSDIR=$(out)/lib/systemd/system"
+    "UDEVDIR=$(out)/lib/udev"
+  ];
 
-  meta = {
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+  postFixup = ''
+    wrapProgram $out/bin/usb_modeswitch_dispatcher \
+      --set PATH ${lib.makeBinPath [ utillinux coreutils bash ]}
+  '';
+
+  buildInputs = [ libusb1 tcl ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+
+  meta = with stdenv.lib; {
+    description = "A mode switching tool for controlling 'multi-mode' USB devices";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ marcweber peterhoeg ];
+    platforms = platforms.linux;
   };
 }

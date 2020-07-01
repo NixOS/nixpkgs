@@ -1,12 +1,38 @@
-{stdenv, fetchurl, python, db}:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pkgs
+, python
+}:
 
-stdenv.mkDerivation rec {
-  name = "bsddb3-6.1.0";
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/source/b/bsddb3/${name}.tar.gz";
-    sha256 = "05gx3rfgq1qrgdmpd6hri6y5l97bh1wczvb6x853jchwi7in6cdi";
+buildPythonPackage rec {
+  pname = "bsddb3";
+  version = "6.2.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "17yw0by4lycwpvnx06cnzbbchz4zvzbx3j89b20xa314xdizmxxh";
   };
-  buildInputs = [python];
-  buildPhase = "true";
-  installPhase = "python ./setup.py install --prefix=$out --berkeley-db=${db}";
+
+  buildInputs = [ pkgs.db ];
+
+  checkPhase = ''
+    ${python.interpreter} test.py
+  '';
+
+  # Path to database need to be set.
+  # Somehow the setup.py flag is not propagated.
+  #setupPyBuildFlags = [ "--berkeley-db=${pkgs.db}" ];
+  # We can also use a variable
+  preConfigure = ''
+    export BERKELEYDB_DIR=${pkgs.db.dev};
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Python bindings for Oracle Berkeley DB";
+    homepage = "https://www.jcea.es/programacion/pybsddb.htm";
+    license = with licenses; [ agpl3 ]; # License changed from bsd3 to agpl3 since 6.x
+    maintainers = [ maintainers.costrouc ];
+  };
+
 }

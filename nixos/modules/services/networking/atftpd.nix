@@ -18,15 +18,29 @@ in
 
       enable = mkOption {
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
         description = ''
-          Whenever to enable the atftpd TFTP server.
+          Whether to enable the atftpd TFTP server. By default, the server
+          binds to address 0.0.0.0.
+        '';
+      };
+
+      extraOptions = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        example = literalExample ''
+          [ "--bind-address 192.168.9.1"
+            "--verbose=7"
+          ]
+        '';
+        description = ''
+          Extra command line arguments to pass to atftp.
         '';
       };
 
       root = mkOption {
-        default = "/var/empty";
-        type = types.uniq types.string;
+        default = "/srv/tftp";
+        type = types.path;
         description = ''
           Document root directory for the atftpd.
         '';
@@ -39,11 +53,11 @@ in
   config = mkIf cfg.enable {
 
     systemd.services.atftpd = {
-      description = "atftpd TFTP server";
+      description = "TFTP Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       # runs as nobody
-      serviceConfig.ExecStart = "${pkgs.atftp}/sbin/atftpd --daemon --no-fork --bind-address 0.0.0.0 ${cfg.root}";
+      serviceConfig.ExecStart = "${pkgs.atftp}/sbin/atftpd --daemon --no-fork ${lib.concatStringsSep " " cfg.extraOptions} ${cfg.root}";
     };
 
   };

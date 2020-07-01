@@ -1,27 +1,42 @@
-{ stdenv, lib, fetchurl, libXi, libXrandr, libXxf86vm, mesa, x11, autoreconfHook }:
+{ stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
 
-let version = "2.8.1";
+let version = "3.2.1";
 in stdenv.mkDerivation {
-  name = "freeglut-${version}";
+  pname = "freeglut";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/freeglut/freeglut-${version}.tar.gz";
-    sha256 = "16lrxxxd9ps9l69y3zsw6iy0drwjsp6m26d1937xj71alqk6dr6x";
+    sha256 = "0s6sk49q8ijgbsrrryb7dzqx2fa744jhx1wck5cz5jia2010w06l";
   };
 
-  buildInputs = [
-    libXi libXrandr libXxf86vm mesa x11
-  ] ++ lib.optionals stdenv.isDarwin [
-    autoreconfHook
-  ];
+  outputs = [ "out" "dev" ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile.am --replace \
-      "SUBDIRS = src include progs doc" \
-      "SUBDIRS = src include doc"
-  '';
+  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper cmake ];
 
-  configureFlags = [ "--enable-warnings" ];
+  cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
+                 "-DOPENGL_INCLUDE_DIR=${libGL}/include"
+                 "-DOPENGL_gl_LIBRARY:FILEPATH=${libGL}/lib/libGL.dylib"
+                 "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
+                 "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
+                 "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
+               ];
 
-  # patches = [ ./0001-remove-typedefs-now-living-in-mesa.patch ];
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    description = "Create and manage windows containing OpenGL contexts";
+    longDescription = ''
+      FreeGLUT is an open source alternative to the OpenGL Utility Toolkit
+      (GLUT) library. GLUT (and hence FreeGLUT) allows the user to create and
+      manage windows containing OpenGL contexts on a wide range of platforms
+      and also read the mouse, keyboard and joystick functions. FreeGLUT is
+      intended to be a full replacement for GLUT, and has only a few
+      differences.
+    '';
+    homepage = "http://freeglut.sourceforge.net/";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
+  };
 }

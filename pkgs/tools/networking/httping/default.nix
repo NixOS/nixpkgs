@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, gettext, ncurses }:
+{ stdenv, fetchurl, gettext, libintl, ncurses, openssl
+, fftw ? null }:
 
 stdenv.mkDerivation rec {
-  name = "httping-${version}";
-
-  version = "2.4";
+  pname = "httping";
+  version = "2.5";
 
   src = fetchurl {
-    url = "http://www.vanheusden.com/httping/${name}.tgz";
-    sha256 = "1110r3gpsj9xmybdw7w4zkhj3zmn5mnv2nq0ijbvrywbn019zdfs";
+    url = "https://vanheusden.com/httping/${pname}-${version}.tgz";
+    sha256 = "1y7sbgkhgadmd93x1zafqc4yp26ssiv16ni5bbi9vmvvdl55m29y";
   };
 
-  buildInputs = [ gettext ncurses ];
+  buildInputs = [ fftw libintl ncurses openssl ];
+  nativeBuildInputs = [ gettext ];
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -18,10 +19,16 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    inherit version;
-    homepage = http://www.vanheusden.com/httping;
+    homepage = "https://vanheusden.com/httping";
     description = "ping with HTTP requests";
-    maintainers = with maintainers; [ nckx rickynils ];
-    platforms = with platforms; linux;
+    longDescription = ''
+      Give httping an url, and it'll show you how long it takes to connect,
+      send a request and retrieve the reply (only the headers). Be aware that
+      the transmission across the network also takes time! So it measures the
+      latency of the webserver + network. It supports IPv6.
+    '';
+    license = licenses.agpl3;
+    maintainers = [];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

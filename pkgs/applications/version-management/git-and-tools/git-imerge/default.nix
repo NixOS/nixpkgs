@@ -1,24 +1,22 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchFromGitHub, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "git-imerge-${version}";
-  version = "0.7.0";
+  pname = "git-imerge";
+  version = "1.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/mhagger/git-imerge/archive/${version}.tar.gz";
-    sha256 = "00nwn3rfhf15wsv01lfji5412d7yz827ric916lnyp662d6gx206";
+  src = fetchFromGitHub {
+    owner = "mhagger";
+    repo = "git-imerge";
+    rev = "v${version}";
+    sha256 = "0vi1w3f0yk4gqhxj2hzqafqq28rihyhyfnp8x7xzib96j2si14a4";
   };
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    make install PREFIX=$out
-    wrapPythonPrograms
-  '';
-
+  makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ] ; 
+ 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mhagger/git-imerge;
+    homepage = "https://github.com/mhagger/git-imerge";
     description = "Perform a merge between two branches incrementally";
     license = licenses.gpl2;
     platforms = platforms.all;

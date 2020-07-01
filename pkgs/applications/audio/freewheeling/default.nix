@@ -1,25 +1,34 @@
-{ stdenv, fetchsvn, pkgconfig, autoconf, automake, gnutls33, freetype
-, SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, jack2, libvorbis
-, libsndfile, libogg
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, gnutls, freetype
+, SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, libjack2, libvorbis
+, libSM, libsndfile, libogg, libtool
 }:
+let
+  makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
+in
 
-stdenv.mkDerivation {
-  name = "freewheeling-100";
+stdenv.mkDerivation rec {
+  pname = "freewheeling";
+  version = "0.6.6";
 
-  src = fetchsvn {
-    url = svn://svn.code.sf.net/p/freewheeling/code;
-    rev = 100;
-    sha256 = "1m6z7p93xyha25qma9bazpzbp04pqdv5h3yrv6851775xsyvzksv";
+  src = fetchFromGitHub {
+    owner = "free-wheeling";
+    repo = "freewheeling";
+    rev = "v${version}";
+    sha256 = "1xff5whr02cixihgd257dc70hnyf22j3zamvhsvg4lp7zq9l2in4";
   };
 
+  nativeBuildInputs = [ pkgconfig autoreconfHook libtool ];
   buildInputs = [
-    pkgconfig autoconf automake gnutls33 freetype SDL SDL_gfx SDL_ttf
-    liblo libxml2 jack2 alsaLib libvorbis libsndfile libogg
+    freetype SDL SDL_gfx SDL_ttf
+    liblo libxml2 libjack2 alsaLib libvorbis libsndfile libogg libSM
+    (gnutls.overrideAttrs (oldAttrs: {
+      configureFlags = oldAttrs.configureFlags ++ [ "--enable-openssl-compatibility" ];
+    }))
   ];
+  NIX_CFLAGS_COMPILE = toString
+    (makeSDLFlags [ SDL SDL_ttf SDL_gfx ] ++ [ "-I${libxml2.dev}/include/libxml2" ]);
 
-  preConfigure = "autoreconf -vfi";
-
-  patches = [ ./am_path_sdl.patch ./xml.patch ];
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "A live looping instrument with JACK and MIDI support";
@@ -31,11 +40,10 @@ stdenv.mkDerivation {
         improv. We leave mice and menus, and dive into our own process
         of making sound.
 
-        Freewheeling runs under Mac OS X and Linux, and is open source
+        Freewheeling runs under macOS and Linux, and is open source
         software, released under the GNU GPL license.
     '' ;
 
-    version = "r100";
     homepage = "http://freewheeling.sourceforge.net";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.sepi ];

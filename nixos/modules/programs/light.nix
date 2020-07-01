@@ -13,7 +13,8 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Whether to install Light backlight control with setuid wrapper.
+          Whether to install Light backlight control command
+          and udev rules granting access to members of the "video" group.
         '';
       };
     };
@@ -21,6 +22,6 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.light ];
-    security.setuidPrograms = [ "light" ];
+    services.udev.packages = [ pkgs.light ];
   };
 }

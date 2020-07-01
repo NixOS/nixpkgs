@@ -1,104 +1,127 @@
-{ stdenv, fetchurl, pkgconfig
-
-# Optional Dependencies
-, zlib ? null, openssl ? null, libssh2 ? null, libnghttp2 ? null, c-ares ? null
-, gss ? null, rtmpdump ? null, openldap ? null, libidn ? null
-
-# Extra arguments
-, suffix ? ""
+{ stdenv, lib, fetchurl, pkgconfig, perl
+, http2Support ? true, nghttp2
+, idnSupport ? false, libidn ? null
+, ldapSupport ? false, openldap ? null
+, zlibSupport ? true, zlib ? null
+, sslSupport ? zlibSupport, openssl ? null
+, gnutlsSupport ? false, gnutls ? null
+, wolfsslSupport ? false, wolfssl ? null
+, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
+, gssSupport ? !stdenv.hostPlatform.isWindows, libkrb5 ? null
+, c-aresSupport ? false, c-ares ? null
+, brotliSupport ? false, brotli ? null
 }:
 
-with stdenv;
-with stdenv.lib;
-let
-  isLight = suffix == "light";
-  isFull = suffix == "full";
-  nameSuffix = optionalString (suffix != "") "-${suffix}";
+assert http2Support -> nghttp2 != null;
+assert idnSupport -> libidn != null;
+assert ldapSupport -> openldap != null;
+assert zlibSupport -> zlib != null;
+assert sslSupport -> openssl != null;
+assert !(gnutlsSupport && sslSupport);
+assert !(gnutlsSupport && wolfsslSupport);
+assert !(sslSupport && wolfsslSupport);
+assert gnutlsSupport -> gnutls != null;
+assert wolfsslSupport -> wolfssl != null;
+assert scpSupport -> libssh2 != null;
+assert c-aresSupport -> c-ares != null;
+assert brotliSupport -> brotli != null;
+assert gssSupport -> libkrb5 != null;
 
-  # Normal Depedencies
-  optZlib = if isLight then null else shouldUsePkg zlib;
-  optOpenssl = if isLight then null else shouldUsePkg openssl;
-  optLibssh2 = if isLight then null else shouldUsePkg libssh2;
-  optLibnghttp2 = if isLight then null else shouldUsePkg libnghttp2;
-  optC-ares = if isLight then null else shouldUsePkg c-ares;
-
-  # Full dependencies
-  optGss = if !isFull then null else shouldUsePkg gss;
-  optRtmpdump = if !isFull then null else shouldUsePkg rtmpdump;
-  optOpenldap = if !isFull then null else shouldUsePkg openldap;
-  optLibidn = if !isFull then null else shouldUsePkg libidn;
-in
 stdenv.mkDerivation rec {
-  name = "curl${nameSuffix}-${version}";
-  version = "7.42.1";
+  pname = "curl";
+  version = "7.70.0";
 
   src = fetchurl {
-    url = "http://curl.haxx.se/download/curl-${version}.tar.bz2";
-    sha256 = "11y8racpj6m4j9w7wa9sifmqvdgf22nk901sfkbxzhhy75rmk472";
+    urls = [
+      "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
+      "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
+    ];
+    sha256 = "1l19b2xmzwjl2fqlbv46kwlz1823miaxczyx2a5lz8k7mmigw2x5";
   };
 
-  # Use pkgconfig only when necessary
-  nativeBuildInputs = optional (!isLight) pkgconfig;
-  propagatedBuildInputs = [
-    optZlib optOpenssl optLibssh2 optLibnghttp2 optC-ares
-    optGss optRtmpdump optOpenldap optLibidn
-  ];
+  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  separateDebugInfo = stdenv.isLinux;
 
-  # Make curl honor CURL_CA_BUNDLE & SSL_CERT_FILE
-  postConfigure = ''
-    echo '#define CURL_CA_BUNDLE (getenv("CURL_CA_BUNDLE") ? getenv("CURL_CA_BUNDLE") : getenv("SSL_CERT_FILE"))' >> lib/curl_config.h
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ pkgconfig perl ];
+
+  # Zlib and OpenSSL must be propagated because `libcurl.la' contains
+  # "-lz -lssl", which aren't necessary direct build inputs of
+  # applications that use Curl.
+  propagatedBuildInputs = with stdenv.lib;
+    optional http2Support nghttp2 ++
+    optional idnSupport libidn ++
+    optional ldapSupport openldap ++
+    optional zlibSupport zlib ++
+    optional gssSupport libkrb5 ++
+    optional c-aresSupport c-ares ++
+    optional sslSupport openssl ++
+    optional gnutlsSupport gnutls ++
+    optional wolfsslSupport wolfssl ++
+    optional scpSupport libssh2 ++
+    optional brotliSupport brotli;
+
+  # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
+  preConfigure = ''
+    sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
+    rm src/tool_hugehelp.c
   '';
 
   configureFlags = [
-    (mkEnable true                    "http"              null)
-    (mkEnable true                    "ftp"               null)
-    (mkEnable true                    "file"              null)
-    (mkEnable (optOpenldap != null)   "ldap"              null)
-    (mkEnable (optOpenldap != null)   "ldaps"             null)
-    (mkEnable true                    "rtsp"              null)
-    (mkEnable true                    "proxy"             null)
-    (mkEnable true                    "dict"              null)
-    (mkEnable true                    "telnet"            null)
-    (mkEnable true                    "tftp"              null)
-    (mkEnable true                    "pop3"              null)
-    (mkEnable true                    "imap"              null)
-    (mkEnable true                    "smb"               null)
-    (mkEnable true                    "smtp"              null)
-    (mkEnable true                    "gopher"            null)
-    (mkEnable (!isLight)              "manual"            null)
-    (mkEnable true                    "libcurl_option"    null)
-    (mkEnable false                   "libgcc"            null) # TODO: Enable on gcc
-    (mkWith   (optZlib != null)       "zlib"              null)
-    (mkEnable true                    "ipv4"              null)
-    (mkWith   (optGss != null)        "gssapi"            null)
-    (mkWith   false                   "winssl"            null)
-    (mkWith   false                   "darwinssl"         null)
-    (mkWith   (optOpenssl != null)    "ssl"               null)
-    (mkWith   false                   "gnutls"            null)
-    (mkWith   false                   "polarssl"          null)
-    (mkWith   false                   "cyassl"            null)
-    (mkWith   false                   "nss"               null)
-    (mkWith   false                   "axtls"             null)
-    (mkWith   false                   "libmetalink"       null)
-    (mkWith   (optLibssh2 != null)    "libssh2"           null)
-    (mkWith   (optRtmpdump!= null)    "librtmp"           null)
-    (mkEnable false                   "versioned-symbols" null)
-    (mkWith   false                   "winidn"            null)
-    (mkWith   (optLibidn != null)     "libidn"            null)
-    (mkWith   (optLibnghttp2 != null) "nghttp2"           null)
-    (mkEnable false                   "sspi"              null)
-    (mkEnable true                    "crypto-auth"       null)
-    (mkEnable (optOpenssl != null)    "tls-srp"           null)
-    (mkEnable true                    "unix-sockets"      null)
-    (mkEnable true                    "cookies"           null)
-    (mkEnable (optC-ares != null)     "ares"              null)
-  ];
+      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
+      # to nss-cacert from the default profile.
+      "--without-ca-bundle"
+      "--without-ca-path"
+      # The build fails when using wolfssl with --with-ca-fallback
+      ( if wolfsslSupport then "--without-ca-fallback" else "--with-ca-fallback")
+      "--disable-manual"
+      ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
+      ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
+      ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
+      ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
+      ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
+      ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
+      ( if brotliSupport then "--with-brotli" else "--without-brotli" )
+    ]
+    ++ stdenv.lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
+    ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
+       # For the 'urandom', maybe it should be a cross-system option
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       "--with-random=/dev/urandom"
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isWindows [
+      "--disable-shared"
+      "--enable-static"
+    ];
 
-  meta = {
+  CXX = "${stdenv.cc.targetPrefix}c++";
+  CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
+
+  doCheck = false; # expensive, fails
+
+  postInstall = ''
+    moveToOutput bin/curl-config "$dev"
+
+    # Install completions
+    make -C scripts install
+  '' + stdenv.lib.optionalString scpSupport ''
+    sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
+  '' + stdenv.lib.optionalString gnutlsSupport ''
+    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so
+    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4
+    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4.4.0
+  '';
+
+  passthru = {
+    inherit sslSupport openssl;
+  };
+
+  meta = with stdenv.lib; {
     description = "A command line tool for transferring files with URL syntax";
-    homepage    = http://curl.haxx.se/;
-    license     = licenses.mit;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ lovek323 wkennington ];
+    homepage    = "https://curl.haxx.se/";
+    license = licenses.curl;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.all;
   };
 }

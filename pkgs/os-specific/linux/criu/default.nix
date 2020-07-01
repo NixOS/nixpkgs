@@ -1,38 +1,51 @@
-{ stdenv, fetchurl, protobuf, protobufc, asciidoc
-, xmlto, utillinux, docbook_xsl, libpaper }:
+{ stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
+, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
+, which, python, makeWrapper, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
-  name    = "criu-${version}";
-  version = "1.3-rc2";
+  pname = "criu";
+  version = "3.14";
 
   src = fetchurl {
-    url    = "http://download.openvz.org/criu/${name}.tar.bz2";
-    sha256 = "1h9ii91aq8cja22j3520vg3qb3y9h6c064s4115s2ldylm8jmi0s";
+    url    = "https://download.openvz.org/criu/${pname}-${version}.tar.bz2";
+    sha256 = "1jrr3v99g18gc0hriz0avq6ccdvyya0j6wwz888sdsc4icc30gzn";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper ];
+  nativeBuildInputs = [ pkgconfig docbook_xsl which makeWrapper docbook_xml_dtd_45 ];
+  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python iptables ];
 
-  patchPhase = ''
-    chmod +w ./scripts/gen-offsets.sh
-    substituteInPlace ./scripts/gen-offsets.sh --replace hexdump ${utillinux}/bin/hexdump
+  postPatch = ''
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
-    substituteInPlace ./Documentation/Makefile --replace "--skip-validation" "--skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
+    substituteInPlace ./Documentation/Makefile --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
+    substituteInPlace ./criu/Makefile --replace "-I/usr/include/libnl3" "-I${libnl.dev}/include/libnl3"
+    substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${version}.0"
+    ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
-  configurePhase = "make config PREFIX=$out";
-  buildPhase     = "make PREFIX=$out";
+  makeFlags = [ "PREFIX=$(out)" "ASCIIDOC=${asciidoc}/bin/asciidoc" "XMLTO=${xmlto}/bin/xmlto" ];
 
-  installPhase = ''
-    mkdir -p $out/etc/logrotate.d
-    make install PREFIX=$out LIBDIR=$out/lib ASCIIDOC=${asciidoc}/bin/asciidoc XMLTO=${xmlto}/bin/xmlto
+  outputs = [ "out" "dev" "man" ];
+
+  preBuild = ''
+    # No idea why but configure scripts break otherwise.
+    export SHELL=""
   '';
 
-  meta = {
-    description = "userspace checkpoint/restore for Linux";
-    homepage    = "http://criu.org";
-    license     = stdenv.lib.licenses.gpl2;
+  hardeningDisable = [ "stackprotector" "fortify" ];
+  # dropping fortify here as well as package uses it by default:
+  # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
+
+  postFixup = ''
+    wrapProgram $out/bin/criu \
+      --prefix PATH : ${lib.makeBinPath [ iptables ]}
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Userspace checkpoint/restore for Linux";
+    homepage    = "https://criu.org";
+    license     = licenses.gpl2;
     platforms   = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

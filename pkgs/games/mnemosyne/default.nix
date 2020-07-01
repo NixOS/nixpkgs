@@ -1,32 +1,56 @@
-{ stdenv
-, fetchurl
-, buildPythonPackage
-, pyqt4
-, matplotlib
-, cherrypy
-, sqlite3
+{ fetchurl
+, python
+, anki
 }:
-let
-  version = "2.3.2";
-in buildPythonPackage rec {
-  name = "mnemosyne-${version}";
+
+python.pkgs.buildPythonApplication rec {
+  pname = "mnemosyne";
+  version = "2.7.1";
+
   src = fetchurl {
-    url    = "http://sourceforge.net/projects/mnemosyne-proj/files/mnemosyne/${name}/Mnemosyne-${version}.tar.gz";
-    sha256 = "0jkrw45i4v24p6xyq94z7rz5948h7f5dspgs5mcdaslnlp2accfp";
+    url    = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
+    sha256 = "0dhvg9cxc6m6kzk75h363h1g0bl80cqz11cijh0zpz9f4w6lnqsq";
   };
-  pythonPath = [
-    pyqt4
-    matplotlib
+
+  nativeBuildInputs = with python.pkgs; [ pyqtwebengine.wrapQtAppsHook ];
+
+  buildInputs = [ anki ];
+
+  propagatedBuildInputs = with python.pkgs; [
+    cheroot
     cherrypy
-    sqlite3
+    googletrans
+    gtts
+    matplotlib
+    pyopengl
+    pyqt5
+    pyqtwebengine
+    webob
   ];
-  preConfigure = ''
+
+  prePatch = ''
     substituteInPlace setup.py --replace /usr $out
     find . -type f -exec grep -H sys.exec_prefix {} ';' | cut -d: -f1 | xargs sed -i s,sys.exec_prefix,\"$out\",
   '';
-  installCommand = "python setup.py install --prefix=$out";
+
+  # No tests/ directrory in tarball
+  doCheck = false;
+
+  postInstall = ''
+    mkdir -p $out/share/applications
+    mv $out/${python.sitePackages}/$out/share/locale $out/share
+    mv mnemosyne.desktop $out/share/applications
+    rm -r $out/${python.sitePackages}/nix
+  '';
+
+  dontWrapQtApps = true;
+
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+  ];
+
   meta = {
-    homepage = http://mnemosyne-proj.org/;
+    homepage = "https://mnemosyne-proj.org/";
     description = "Spaced-repetition software";
     longDescription = ''
       The Mnemosyne Project has two aspects:

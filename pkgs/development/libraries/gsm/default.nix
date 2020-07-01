@@ -8,12 +8,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gsm-${version}";
-  version = "1.0.14";
+  pname = "gsm";
+  version = "1.0.19";
 
   src = fetchurl {
-    url = "http://www.quut.com/gsm/${name}.tar.gz";
-    sha256 = "0b1mx69jq88wva3wk0hi6fcl5a52qhnq2f9p3f3jdh5k61ma252q";
+    url = "http://www.quut.com/gsm/${pname}-${version}.tar.gz";
+    sha256 = "1xkha9ss5g5qnfaybi8il0mcvp8knwg9plgh8404vh58d0pna0s9";
   };
 
   patchPhase = ''
@@ -41,13 +41,11 @@ stdenv.mkDerivation rec {
 
   preInstall = "mkdir -p $out/{bin,lib,man/man1,man/man3,include/gsm}";
 
-  NIX_CFLAGS_COMPILE = optional (!staticSupport) "-fPIC";
-
   parallelBuild = false;
 
   meta = with stdenv.lib; {
     description = "Lossy speech compression codec";
-    homepage    = http://www.quut.com/gsm/;
+    homepage    = "http://www.quut.com/gsm/";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ codyopel raskin ];
     platforms   = platforms.unix;

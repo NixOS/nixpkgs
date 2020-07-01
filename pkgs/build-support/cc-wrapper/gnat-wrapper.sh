@@ -1,34 +1,65 @@
-#! @shell@ -e
+#! @shell@
+set -eu -o pipefail +o posix
+shopt -s nullglob
 
-if [ -n "$NIX_GNAT_WRAPPER_START_HOOK" ]; then
-    source "$NIX_GNAT_WRAPPER_START_HOOK"
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
 fi
 
-if [ -z "$NIX_GNAT_WRAPPER_FLAGS_SET" ]; then
+path_backup="$PATH"
+
+# That @-vars are substituted separately from bash evaluation makes
+# shellcheck think this, and others like it, are useless conditionals.
+# shellcheck disable=SC2157
+if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
+    PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
+fi
+
+source @out@/nix-support/utils.bash
+
+# Flirting with a layer violation here.
+if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+    source @bintools@/nix-support/add-flags.sh
+fi
+
+# Put this one second so libc ldflags take priority.
+if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
-source @out@/nix-support/utils.sh
 
-
-# Figure out if linker flags should be passed.  GCC prints annoying
-# warnings when they are not needed.
+# Parse command line options and set several variables.
+# For instance, figure out if linker flags should be passed.
+# GCC prints annoying warnings when they are not needed.
 dontLink=0
-getVersion=0
 nonFlagArgs=0
+# shellcheck disable=SC2193
 
-for i in "$@"; do
-    if [ "$i" = -c ]; then
+expandResponseParams "$@"
+declare -i n=0
+nParams=${#params[@]}
+while (( "$n" < "$nParams" )); do
+    p=${params[n]}
+    p2=${params[n+1]:-} # handle `p` being last one
+    if [ "$p" = -c ]; then
         dontLink=1
-    elif [ "$i" = -M ]; then
+    elif [ "$p" = -S ]; then
         dontLink=1
-    elif [ "${i:0:1}" != - ]; then
+    elif [ "$p" = -E ]; then
+        dontLink=1
+    elif [ "$p" = -E ]; then
+        dontLink=1
+    elif [ "$p" = -M ]; then
+        dontLink=1
+    elif [ "$p" = -MM ]; then
+        dontLink=1
+    elif [[ "$p" = -x && "$p2" = *-header ]]; then
+        dontLink=1
+    elif [[ "$p" != -?* ]]; then
+        # A dash alone signifies standard input; it is not a flag
         nonFlagArgs=1
-    elif [ "$i" = -m32 ]; then
-        if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_LDFLAGS="$NIX_LDFLAGS -dynamic-linker $(cat @out@/nix-support/dynamic-linker-m32)"
-        fi
     fi
+    n+=1
 done
 
 # If we pass a flag like -Wl, then gcc will call the linker unless it
@@ -40,64 +71,95 @@ if [ "$nonFlagArgs" = 0 ]; then
     dontLink=1
 fi
 
-
 # Optionally filter out paths not refering to the store.
-params=("$@")
-if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
+if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     rest=()
-    n=0
-    while [ $n -lt ${#params[*]} ]; do
+    nParams=${#params[@]}
+    declare -i n=0
+    while (( "$n" < "$nParams" )); do
         p=${params[n]}
-        p2=${params[$((n+1))]}
+        p2=${params[n+1]:-} # handle `p` being last one
         if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
-            skip $p
+            skip "${p:2}"
+        elif [ "$p" = -L ] && badPath "$p2"; then
+            n+=1; skip "$p2"
         elif [ "${p:0:3}" = -I/ ] && badPath "${p:2}"; then
-            skip $p
+            skip "${p:2}"
+        elif [ "$p" = -I ] && badPath "$p2"; then
+            n+=1; skip "$p2"
         elif [ "${p:0:4}" = -aI/ ] && badPath "${p:3}"; then
-            skip $p
+            skip "${p:3}"
+        elif [ "$p" = -aI ] && badPath "$p2"; then
+            n+=1; skip "$p2"
         elif [ "${p:0:4}" = -aO/ ] && badPath "${p:3}"; then
-            skip $p
+            skip "${p:3}"
+        elif [ "$p" = -aO ] && badPath "$p2"; then
+            n+=1; skip "$p2"
+        elif [ "$p" = -isystem ] && badPath "$p2"; then
+            n+=1; skip "$p2"
         else
-            rest=("${rest[@]}" "$p")
+            rest+=("$p")
         fi
-        n=$((n + 1))
+        n+=1
     done
-    params=("${rest[@]}")
+    # Old bash empty array hack
+    params=(${rest+"${rest[@]}"})
 fi
 
 
-# Add the flags for the GNAT compiler proper.
-extraAfter=($NIX_GNATFLAGS_COMPILE)
-extraBefore=()
-
-if [ "`basename $0`x" = "gnatmakex" ]; then
-  extraBefore=("--GNATBIND=@out@/bin/gnatbind --GNATLINK=@out@/bin/gnatlink ")
+# Clear march/mtune=native -- they bring impurity.
+if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
+    rest=()
+    # Old bash empty array hack
+    for p in ${params+"${params[@]}"}; do
+        if [[ "$p" = -m*=native ]]; then
+            skip "$p"
+        else
+            rest+=("$p")
+        fi
+    done
+    # Old bash empty array hack
+    params=(${rest+"${rest[@]}"})
 fi
 
-# Add the flags that should be passed to the linker (and prevent
-# `ld-wrapper' from adding NIX_LDFLAGS again).
-#for i in $NIX_LDFLAGS_BEFORE; do
-#    extraBefore=(${extraBefore[@]} "-largs $i")
-#done
+if [ "$(basename $0)x" = "gnatmakex" ]; then
+    extraBefore=("--GNATBIND=@out@/bin/gnatbind" "--GNATLINK=@out@/bin/gnatlink")
+    extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+fi
+
+if [ "$(basename $0)x" = "gnatbindx" ]; then
+    extraBefore=()
+    extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+fi
+
+if [ "$(basename $0)x" = "gnatlinkx" ]; then
+    extraBefore=()
+    extraAfter=("--GCC=@out@/bin/gcc")
+fi
+
+# As a very special hack, if the arguments are just `-v', then don't
+# add anything.  This is to prevent `gcc -v' (which normally prints
+# out the version number and returns exit code 0) from printing out
+# `No input files specified' and returning exit code 1.
+if [ "$*" = -v ]; then
+    extraAfter=()
+    extraBefore=()
+fi
 
 # Optionally print debug info.
-if [ -n "$NIX_DEBUG" ]; then
-  echo "original flags to @prog@:" >&2
-  for i in "${params[@]}"; do
-      echo "  $i" >&2
-  done
-  echo "extraBefore flags to @prog@:" >&2
-  for i in ${extraBefore[@]}; do
-      echo "  $i" >&2
-  done
-  echo "extraAfter flags to @prog@:" >&2
-  for i in ${extraAfter[@]}; do
-      echo "  $i" >&2
-  done
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
+    # Old bash workaround, see ld-wrapper for explanation.
+    echo "extra flags before to @prog@:" >&2
+    printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2
+    echo "original flags to @prog@:" >&2
+    printf "  %q\n" ${params+"${params[@]}"} >&2
+    echo "extra flags after to @prog@:" >&2
+    printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
 fi
 
-if [ -n "$NIX_GNAT_WRAPPER_EXEC_HOOK" ]; then
-    source "$NIX_GNAT_WRAPPER_EXEC_HOOK"
-fi
-
-exec @prog@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
+PATH="$path_backup"
+# Old bash workaround, see above.
+exec @prog@ \
+    ${extraBefore+"${extraBefore[@]}"} \
+    ${params+"${params[@]}"} \
+    ${extraAfter+"${extraAfter[@]}"}

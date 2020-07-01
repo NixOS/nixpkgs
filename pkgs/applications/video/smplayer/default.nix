@@ -1,25 +1,26 @@
-{ stdenv, fetchurl, qt4 }:
+{ lib, mkDerivation, fetchurl, qmake, qtscript }:
 
-stdenv.mkDerivation rec {
-  name = "smplayer-14.9.0.6690";
+mkDerivation rec {
+  pname = "smplayer";
+  version = "20.4.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/smplayer/${name}.tar.bz2";
-    sha256 = "0nmw69kg8rqvl9icyx1r1v1pyxg6560363l0kyqyja18j79a3j2y";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "0kqdx6q2274gm83rycvdcglka60ymdk4iw2lc39iw7z1zgsv6ky3";
   };
 
-  patches = [ ./basegui.cpp.patch ];
+  buildInputs = [ qtscript ];
+  nativeBuildInputs = [ qmake ];
 
-  buildInputs = [ qt4 ];
+  dontUseQmakeConfigure = true;
 
-  preConfigure = ''
-    makeFlags="PREFIX=$out"
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     description = "A complete front-end for MPlayer";
-    homepage = "http://smplayer.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    longDescription = "Either mplayer or mpv should also be installed for smplayer to play medias";
+    homepage = "https://www.smplayer.info";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

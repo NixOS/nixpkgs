@@ -1,33 +1,39 @@
-{ stdenv, fetchurl, iptables, libnfnetlink }:
+{ stdenv, lib, fetchurl, iptables, libuuid, pkgconfig
+, which, iproute, gnused, coreutils, gawk, makeWrapper
+}:
 
-assert stdenv.isLinux;
-
+let
+  scriptBinEnv = lib.makeBinPath [ which iproute iptables gnused coreutils gawk ];
+in
 stdenv.mkDerivation rec {
-  name = "miniupnpd-1.9.20150430";
+  name = "miniupnpd-2.1.20190502";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "0ajqs3lf2cgq5fm1v79fa23sbb623i89sqnx7d9cnqbqq5py1k71";
-    name = "miniupnpd-1.9.20150430.tar.gz";
+    sha256 = "1m8d0g9b0bjwsnqccw1yapp6n0jghmgzwixwjflwmvi2fi6hdp4b";
+    name = "${name}.tar.gz";
   };
 
-  buildInputs = [ iptables libnfnetlink ];
-
-  NIX_CFLAGS_COMPILE = "-DIPTABLES_143";
-
-  NIX_CFLAGS_LINK = "-liptc -lnfnetlink";
+  buildInputs = [ iptables libuuid ];
+  nativeBuildInputs= [ pkgconfig makeWrapper ];
 
   makefile = "Makefile.linux";
 
-  makeFlags = "LIBS=";
+  buildFlags = [ "miniupnpd" "genuuid" ];
 
-  buildFlags = "miniupnpd genuuid";
+  installFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
-  installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
+  postFixup = ''
+    for script in $out/etc/miniupnpd/ip{,6}tables_{init,removeall}.sh
+    do
+      wrapProgram $script --set PATH '${scriptBinEnv}:$PATH'
+    done
+  '';
 
-  meta = {
-    homepage = http://miniupnp.free.fr/;
+  meta = with stdenv.lib; {
+    homepage = "http://miniupnp.free.fr/";
     description = "A daemon that implements the UPnP Internet Gateway Device (IGD) specification";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
 }

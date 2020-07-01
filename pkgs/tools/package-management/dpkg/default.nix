@@ -1,29 +1,27 @@
-{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper }:
+{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper, coreutils }:
 
-let version = "1.17.25"; in
-
-stdenv.mkDerivation {
-  name = "dpkg-${version}";
+stdenv.mkDerivation rec {
+  pname = "dpkg";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "1akblsdfblih7879gi5qagqpgy6zz866kcyvg5y11ywqmqw9s087";
+    sha256 = "0009dp4p3d2j5vd956achqczf8qizfixha8hw5hzn3h31qmwqcxn";
   };
 
-  postPatch = ''
-    # dpkg tries to force some dependents like debian_devscripts to use
-    # -fstack-protector-strong - not (yet?) a good idea. Disable for now:
-    substituteInPlace scripts/Dpkg/Vendor/Debian.pm \
-      --replace "stackprotectorstrong => 1" "stackprotectorstrong => 0"
-  '';
-
-  configureFlags = "--disable-dselect --with-admindir=/var/lib/dpkg PERL_LIBDIR=$(out)/${perl.libPrefix}";
+  configureFlags = [
+    "--disable-dselect"
+    "--with-admindir=/var/lib/dpkg"
+    "PERL_LIBDIR=$(out)/${perl.libPrefix}"
+    (stdenv.lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
+    (stdenv.lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
+  ];
 
   preConfigure = ''
-    # Nice: dpkg has a circular dependency on itself.  Its configure
+    # Nice: dpkg has a circular dependency on itself. Its configure
     # script calls scripts/dpkg-architecture, which calls "dpkg" in
-    # $PATH.  It doesn't actually use its result, but fails if it
-    # isn't present.  So make a dummy available.
+    # $PATH. It doesn't actually use its result, but fails if it
+    # isn't present, so make a dummy available.
     touch $TMPDIR/dpkg
     chmod +x $TMPDIR/dpkg
     PATH=$TMPDIR:$PATH
@@ -33,7 +31,26 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [ perl zlib bzip2 xz makeWrapper ];
+  patchPhase = ''
+    patchShebangs .
+
+    # Dpkg commands sometimes calls out to shell commands
+    substituteInPlace lib/dpkg/dpkg.h \
+       --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
+       --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
+       --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
+       --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
+       --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
+       --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
+       --replace '"dpkg"' \"$out/bin/dpkg\" \
+       --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
+       --replace '"rm"' \"${coreutils}/bin/rm\" \
+       --replace '"cat"' \"${coreutils}/bin/cat\" \
+       --replace '"diff"' \"${coreutils}/bin/diff\"
+  '';
+
+  buildInputs = [ perl zlib bzip2 xz ];
+  nativeBuildInputs = [ makeWrapper perl ];
 
   postInstall =
     ''
@@ -49,9 +66,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "The Debian package manager";
-    homepage = http://wiki.debian.org/Teams/Dpkg;
-    license = with licenses; gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mornfall nckx ];
+    homepage = "https://wiki.debian.org/Teams/Dpkg";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,31 +1,53 @@
-{ stdenv, fetchurl, zlib, bzip2, pkgconfig, curl, lzma, gettext
-, sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype
-, gtkClient ? false, gtk
-, server ? true, readline }:
+{ stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkgconfig, python3
+, zlib, bzip2, curl, lzma, gettext, libiconv
+, sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
+, gtkClient ? false, gtk3
+, qtClient ? false, qt5
+, server ? true, readline
+, enableSqlite ? true, sqlite
+}:
 
 let
   inherit (stdenv.lib) optional optionals;
-  client = sdlClient || gtkClient;
 
-  sdlName = if sdlClient then "-sdl" else "";
-  gtkName = if gtkClient then "-gtk" else "";
+in stdenv.mkDerivation rec {
+  pname = "freeciv";
+  version = "2.6.2";
 
-  baseName = "freeciv-2.4.0";
-in
-stdenv.mkDerivation {
-  name = baseName + sdlName + gtkName;
-
-  src = fetchurl {
-    url = "mirror://sourceforge/freeciv/${baseName}.tar.bz2";
-    sha256 = "1bc01pyihsrby6w95n49gi90ggp40dyxsy4kmlmwcakxfxprwakv";
+  src = fetchFromGitHub {
+    owner = "freeciv";
+    repo = "freeciv";
+    rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    sha256 = "023slffi06j52amrnmd8n12rmf778cngxx6xg4hbsgckj2nyfmg9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  postPatch = ''
+    for f in {common,utility}/*.py; do
+      substituteInPlace $f \
+        --replace '/usr/bin/env python3' ${python3.interpreter}
+    done
+  '';
 
-  buildInputs = [ zlib bzip2 curl lzma gettext ]
-    ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype ]
-    ++ optional gtkClient gtk
-    ++ optional server readline;
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  buildInputs = [ lua5_3 zlib bzip2 curl lzma gettext libiconv ]
+    ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]
+    ++ optionals gtkClient [ gtk3 ]
+    ++ optionals qtClient  [ qt5.qtbase ]
+    ++ optional server readline
+    ++ optional enableSqlite sqlite;
+
+  configureFlags = [ "--enable-shared" ]
+    ++ optional sdlClient "--enable-client=sdl"
+    ++ optionals qtClient [
+      "--enable-client=qt"
+      "--with-qt5-includes=${qt5.qtbase.dev}/include"
+    ]
+    ++ optional enableSqlite "--enable-fcdb=sqlite3"
+    ++ optional (!gtkClient) "--enable-fcmp=cli"
+    ++ optional (!server)    "--disable-server";
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Multiplayer (or single player), turn-based strategy game";
@@ -37,10 +59,11 @@ stdenv.mkDerivation {
       to the space age...
     '';
 
-    homepage = http://freeciv.wikia.com/;
+    homepage = "http://www.freeciv.org"; # http only
     license = licenses.gpl2;
 
     maintainers = with maintainers; [ pierron ];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
+    hydraPlatforms = platforms.linux; # sdl-config times out on darwin
   };
 }

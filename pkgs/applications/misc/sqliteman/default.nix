@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, qt4, qscintilla }:
 
 stdenv.mkDerivation rec {
-  name = "sqliteman-${version}";
+  pname = "sqliteman";
   version = "1.2.0";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple but powerful Sqlite3 GUI database manager";
-    homepage = http://sqliteman.yarpen.cz/;
+    homepage = "http://sqliteman.yarpen.cz/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.eikek ];

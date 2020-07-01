@@ -3,19 +3,31 @@
 with lib;
 
 let
-  cfg = config.services.vmwareGuest;
-  open-vm-tools = pkgs.open-vm-tools;
+  cfg = config.virtualisation.vmware.guest;
+  open-vm-tools = if cfg.headless then pkgs.open-vm-tools-headless else pkgs.open-vm-tools;
+  xf86inputvmmouse = pkgs.xorg.xf86inputvmmouse;
 in
 {
-  options = {
-    services.vmwareGuest.enable = mkEnableOption "Enable VMWare Guest Support";
+  imports = [
+    (mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
+  ];
+
+  options.virtualisation.vmware.guest = {
+    enable = mkEnableOption "VMWare Guest Support";
+    headless = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to disable X11-related features.";
+    };
   };
 
   config = mkIf cfg.enable {
     assertions = [ {
       assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
-      message = "VMWare guest is not currently supported on ${pkgs.stdenv.system}";
+      message = "VMWare guest is not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } ];
+
+    boot.initrd.kernelModules = [ "vmw_pvscsi" ];
 
     environment.systemPackages = [ open-vm-tools ];
 
@@ -25,18 +37,19 @@ in
         serviceConfig.ExecStart = "${open-vm-tools}/bin/vmtoolsd";
       };
 
-    services.xserver = {
+    environment.etc.vmware-tools.source = "${open-vm-tools}/etc/vmware-tools/*";
+
+    services.xserver = mkIf (!cfg.headless) {
       videoDrivers = mkOverride 50 [ "vmware" ];
+      modules = [ xf86inputvmmouse ];
 
       config = ''
-          Section "InputDevice"
+          Section "InputClass"
             Identifier "VMMouse"
+            MatchDevicePath "/dev/input/event*"
+            MatchProduct "ImPS/2 Generic Wheel Mouse"
             Driver "vmmouse"
           EndSection
-        '';
-
-      serverLayoutSection = ''
-          InputDevice "VMMouse"
         '';
 
       displayManager.sessionCommands = ''

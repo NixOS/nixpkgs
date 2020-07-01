@@ -1,114 +1,169 @@
-{ stdenv, fetchurl, perl
-, withCryptodev ? false, cryptodevHeaders }:
+{ stdenv, fetchurl, buildPackages, perl, coreutils
+, withCryptodev ? false, cryptodev
+, enableSSL2 ? false
+, enableSSL3 ? false
+, static ? false
+}:
+
+with stdenv.lib;
 
 let
-  name = "openssl-1.0.1m";
+  common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
+   stdenv.mkDerivation rec {
+    pname = "openssl";
+    inherit version;
 
-  opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
-    (throw "openssl needs its platform name cross building" null)
-    stdenv.cross;
+    src = fetchurl {
+      url = "https://www.openssl.org/source/${pname}-${version}.tar.gz";
+      inherit sha256;
+    };
 
-  patchesCross = isCross: let
-    isDarwin = stdenv.isDarwin || (isCross && stdenv.cross.libc == "libSystem");
-  in
-    [ # Allow the location of the X509 certificate file (the CA
-      # bundle) to be set through the environment variable
-      # ‘OPENSSL_X509_CERT_FILE’.  This is necessary because the
-      # default location ($out/ssl/cert.pem) doesn't exist, and
-      # hardcoding something like /etc/ssl/cert.pem is impure and
-      # cannot be overriden per-process.  For security, the
-      # environment variable is ignored for setuid binaries.
-      # FIXME: drop this patch; it really isn't necessary, because
-      # OpenSSL already supports a ‘SSL_CERT_FILE’ variable.
-      ./cert-file.patch
-    ]
+    inherit patches;
 
-    ++ stdenv.lib.optionals (isCross && opensslCrossSystem == "hurd-x86")
-         [ ./cert-file-path-max.patch # merge with `cert-file.patch' eventually
-           ./gnu.patch                # submitted upstream
-         ]
+    postPatch = ''
+      patchShebangs Configure
+    '' + optionalString (versionOlder version "1.1.0") ''
+      patchShebangs test/*
+      for a in test/t* ; do
+        substituteInPlace "$a" \
+          --replace /bin/rm rm
+      done
+    '' + optionalString (versionAtLeast version "1.1.1") ''
+      substituteInPlace config --replace '/usr/bin/env' '${coreutils}/bin/env'
+    '' + optionalString (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) ''
+      substituteInPlace crypto/async/arch/async_posix.h \
+        --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
+                  '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
+    '';
 
-    ++ stdenv.lib.optionals (stdenv.system == "x86_64-kfreebsd-gnu")
-        [ ./gnu.patch
-          ./kfreebsd-gnu.patch
-        ]
+    outputs = [ "bin" "dev" "out" "man" ] ++ optional withDocs "doc";
+    setOutputFlags = false;
+    separateDebugInfo = !(stdenv.hostPlatform.useLLVM or false) && stdenv.cc.isGNU;
 
-    ++ stdenv.lib.optional isDarwin ./darwin-arch.patch;
+    nativeBuildInputs = [ perl ];
+    buildInputs = stdenv.lib.optional withCryptodev cryptodev;
 
-  extraPatches = stdenv.lib.optional stdenv.isCygwin ./1.0.1-cygwin64.patch;
-in
+    # TODO(@Ericson2314): Improve with mass rebuild
+    configurePlatforms = [];
+    configureScript = {
+        armv5tel-linux = "./Configure linux-armv4 -march=armv5te";
+        armv6l-linux = "./Configure linux-armv4 -march=armv6";
+        armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
+        x86_64-darwin  = "./Configure darwin64-x86_64-cc";
+        x86_64-linux = "./Configure linux-x86_64";
+        x86_64-solaris = "./Configure solaris64-x86_64-gcc";
+      }.${stdenv.hostPlatform.system} or (
+        if stdenv.hostPlatform == stdenv.buildPlatform
+          then "./config"
+        else if stdenv.hostPlatform.isMinGW
+          then "./Configure mingw${optionalString
+                                     (stdenv.hostPlatform.parsed.cpu.bits != 32)
+                                     (toString stdenv.hostPlatform.parsed.cpu.bits)}"
+        else if stdenv.hostPlatform.isLinux
+          then (if stdenv.hostPlatform.isx86_64
+            then "./Configure linux-x86_64"
+            else "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}")
+        else if stdenv.hostPlatform.isiOS
+          then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+        else
+          throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
+      );
 
-stdenv.mkDerivation {
-  inherit name;
+    configureFlags = [
+      "shared" # "shared" builds both shared and static libraries
+      "--libdir=lib"
+      "--openssldir=etc/ssl"
+    ] ++ stdenv.lib.optionals withCryptodev [
+      "-DHAVE_CRYPTODEV"
+      "-DUSE_CRYPTODEV_DIGESTS"
+    ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
+      ++ stdenv.lib.optional enableSSL3 "enable-ssl3"
+      ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      # OpenSSL needs a specific `no-shared` configure flag.
+      # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
+      # for a comprehensive list of configuration options.
+      ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && static) "no-shared";
 
-  src = fetchurl {
-    urls = [
-      "http://www.openssl.org/source/${name}.tar.gz"
-      "http://openssl.linux-mirror.org/source/${name}.tar.gz"
+    makeFlags = [
+      "MANDIR=$(man)/share/man"
+      # This avoids conflicts between man pages of openssl subcommands (for
+      # example 'ts' and 'err') man pages and their equivalent top-level
+      # command in other packages (respectively man-pages and moreutils).
+      # This is done in ubuntu and archlinux, and possiibly many other distros.
+      "MANSUFFIX=ssl"
     ];
-    sha256 = "0x7gvyybmqm4lv62mlhlm80f1rn7il2qh8224rahqv0i15xhnpq9";
-  };
 
-  patches = (patchesCross false) ++ extraPatches;
+    enableParallelBuilding = true;
 
-  buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
-
-  nativeBuildInputs = [ perl ];
-
-  # On x86_64-darwin, "./config" misdetects the system as
-  # "darwin-i386-cc".  So specify the system type explicitly.
-  configureScript =
-    if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc"
-    else if stdenv.system == "x86_64-solaris" then "./Configure solaris64-x86_64-gcc"
-    else "./config";
-
-  configureFlags = "shared --libdir=lib --openssldir=etc/ssl" +
-    stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS";
-
-  # CYGXXX: used to be set for cygwin with optionalString. Not needed
-  # anymore but kept to prevent rebuild.
-  preBuild = "";
-
-  makeFlags = "MANDIR=$(out)/share/man";
-
-  # Parallel building is broken in OpenSSL.
-  enableParallelBuilding = false;
-
-  postInstall =
-    ''
+    postInstall =
+    stdenv.lib.optionalString (!static) ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
-      if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib)" ]; then
-          rm $out/lib/*.a
+      if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
+          rm "$out/lib/"*.a
       fi
-    ''; # */
 
-  crossAttrs = {
-    patches = patchesCross true;
+    '' +
+    ''
+      mkdir -p $bin
+    '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    ''
+      substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl} ${perl}
+    '' +
+    ''
+      mv $out/bin $bin/
 
-    preConfigure=''
-      # It's configure does not like --build or --host
-      export configureFlags="--libdir=lib --cross-compile-prefix=${stdenv.cross.config}- shared ${opensslCrossSystem}"
+      mkdir $dev
+      mv $out/include $dev/
+
+      # remove dependency on Perl at runtime
+      rm -r $out/etc/ssl/misc
+
+      rmdir $out/etc/ssl/{certs,private}
     '';
 
-    postInstall = ''
-      # Openssl installs readonly files, which otherwise we can't strip.
-      # This could at some stdenv hash change be put out of crossAttrs, too
-      chmod -R +w $out
-
-      # Remove references to perl, to avoid depending on it at runtime
-      rm $out/bin/c_rehash $out/ssl/misc/CA.pl $out/ssl/misc/tsget
+    postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+      # Check to make sure the main output doesn't depend on perl
+      if grep -r '${buildPackages.perl}' $out; then
+        echo "Found an erroneous dependency on perl ^^^" >&2
+        exit 1
+      fi
     '';
-    configureScript = "./Configure";
-  } // stdenv.lib.optionalAttrs (opensslCrossSystem == "darwin64-x86_64-cc") {
-    CC = "gcc";
+
+    meta = with stdenv.lib; {
+      homepage = "https://www.openssl.org/";
+      description = "A cryptographic library that implements the SSL and TLS protocols";
+      license = licenses.openssl;
+      platforms = platforms.all;
+      maintainers = [ maintainers.peti ];
+    } // extraMeta;
   };
 
-  meta = {
-    homepage = http://www.openssl.org/;
-    description = "A cryptographic library that implements the SSL and TLS protocols";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    priority = 10; # resolves collision with ‘man-pages’
+in {
+
+  openssl_1_0_2 = common {
+    version = "1.0.2u";
+    sha256 = "ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16";
+    patches = [
+      ./1.0.2/nix-ssl-cert-file.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./1.0.2/use-etc-ssl-certs-darwin.patch
+       else ./1.0.2/use-etc-ssl-certs.patch)
+    ];
+    extraMeta.knownVulnerabilities = [ "Support for OpenSSL 1.0.2 ended with 2019." ];
+  };
+
+  openssl_1_1 = common {
+    version = "1.1.1g";
+    sha256 = "0ikdcc038i7jk8h7asq5xcn8b1xc2rrbc88yfm4hqbz3y5s4gc6x";
+    patches = [
+      ./1.1/nix-ssl-cert-file.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./1.1/use-etc-ssl-certs-darwin.patch
+       else ./1.1/use-etc-ssl-certs.patch)
+    ];
+    withDocs = true;
   };
 }

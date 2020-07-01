@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, bash, pharo-vm, unzip, makeDesktopItem }:
+{ stdenv, fetchurl, bash, pharo, unzip, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.7-2015.04.20";
-  name = "pharo-launcher-${version}";
+  version = "2017.02.28";
+  pname = "pharo-launcher";
   src = fetchurl {
-    url = "http://files.pharo.org/platform/launcher/blessed/PharoLauncher-user-${version}.zip";
-    sha256 = "0qz8469hadlv6mj8b0hp0jas153alwmja7fr4099jv1b0sx4s0kf";
+    url = "http://files.pharo.org/platform/launcher/PharoLauncher-user-stable-${version}.zip";
+    sha256 = "1hfwjyx0c47s6ivc1zr2sf5mk1xw2zspsv0ns8mj3kcaglzqwiq0";
   };
 
   executable-name = "pharo-launcher";
 
   desktopItem = makeDesktopItem {
     name = "Pharo";
-    exec = "${executable-name}";
+    exec = executable-name;
     icon = "pharo";
     comment = "Launcher for Pharo distributions";
     desktopName = "Pharo";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # because upstream tarball has no top-level directory.
   sourceRoot = ".";
 
-  buildInputs = [ bash pharo-vm unzip ];
+  buildInputs = [ bash pharo unzip ];
 
   installPhase = ''
     mkdir -p $prefix/share/pharo-launcher
@@ -37,10 +37,22 @@ stdenv.mkDerivation rec {
 
     cat > $prefix/bin/${executable-name} <<EOF
     #!${bash}/bin/bash
-
-    exec ${pharo-vm}/bin/pharo-vm-x $prefix/share/pharo-launcher/pharo-launcher.image
+    exec "${pharo}/bin/pharo" $prefix/share/pharo-launcher/pharo-launcher.image
     EOF
     chmod +x $prefix/bin/${executable-name}
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    # Launcher should be able to run for a few seconds without crashing.
+    (set +e
+     export HOME=. # Pharo will try to create files here
+     secs=5
+     echo -n "Running headless Pharo for $secs seconds to check for a crash... "
+     timeout $secs \
+       "${pharo}/bin/pharo" --nodisplay PharoLauncher.image --no-quit eval 'true'
+     test "$?" == 124 && echo "ok")
   '';
 
   meta = {
@@ -63,9 +75,9 @@ stdenv.mkDerivation rec {
       access it very rapidly from your OS application launcher. As a
       result, launching any image is never more than 3 clicks away.
     '';
-    homepage = http://pharo.org;
+    homepage = "http://pharo.org";
     license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.DamienCassou ];
-    platforms = pharo-vm.meta.platforms;
+    maintainers = [ ];
+    platforms = pharo.meta.platforms;
   };
 }

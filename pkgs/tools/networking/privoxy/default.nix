@@ -1,20 +1,32 @@
 { stdenv, fetchurl, autoreconfHook, zlib, pcre, w3m, man }:
 
-stdenv.mkDerivation {
-  name = "privoxy-3.0.22";
+stdenv.mkDerivation rec {
+
+  pname = "privoxy";
+  version = "3.0.28";
 
   src = fetchurl {
-    url = mirror://sourceforge/ijbswa/Sources/3.0.22%20%28stable%29/privoxy-3.0.22-stable-src.tar.gz;
-    sha256 = "0hfcxyb0i7dr6jfxw0y4kqcr09p8gjvcs7igyizyl5in3zn4y88s";
+    url = "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${pname}-${version}-stable-src.tar.gz";
+    sha256 = "0jl2yav1qzqnaqnnx8i6i53ayckkimcrs3l6ryvv7bda6v08rmxm";
   };
 
-  buildInputs = [ autoreconfHook zlib pcre w3m man ];
+  hardeningEnable = [ "pie" ];
+
+  nativeBuildInputs = [ autoreconfHook w3m man ];
+  buildInputs = [ zlib pcre ];
+
+  makeFlags = [ "STRIP="];
+
+  postInstall = ''
+    rm -rf $out/var
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.privoxy.org/;
+    homepage = "https://www.privoxy.org/";
     description = "Non-caching web proxy with advanced filtering capabilities";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.phreedom ];
   };
+
 }

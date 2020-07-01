@@ -1,20 +1,32 @@
-{ stdenv, fetchurl, x11, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig }:
+{ stdenv, fetchurl
+# Image file formats
+, libjpeg, libtiff, giflib, libpng, libwebp
+# imlib2 can load images from ID3 tags.
+, libid3tag
+, freetype , bzip2, pkgconfig
+, x11Support ? true, xlibsWrapper ? null
+}:
 
+let
+  inherit (stdenv.lib) optional;
+in
 stdenv.mkDerivation rec {
-  name = "imlib2-1.4.6";
+  pname = "imlib2";
+  version = "1.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/${name}.tar.bz2";
-    sha256 = "0x1j0ylpclkp8cfpwfpkjywqz124bqskyxbw8pvwzkv2gmrbwldg";
+    url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.bz2";
+    sha256 = "0v8n3dswx7rxqfd0q03xwc7j2w1mv8lv18rdxv487a1xw5vklfad";
   };
 
-  buildInputs = [ x11 libjpeg libtiff giflib libpng bzip2 ];
+  buildInputs = [
+    libjpeg libtiff giflib libpng libwebp
+    bzip2 freetype libid3tag
+  ] ++ optional x11Support xlibsWrapper;
 
   nativeBuildInputs = [ pkgconfig ];
 
-  # From
-  # https://github.com/PhantomX/slackbuilds/blob/master/imlib2/patches/imlib2-giflib51.patch
-  patches = [ ./giflib51.patch ];
+  enableParallelBuilding = true;
 
   preConfigure = ''
     substituteInPlace imlib2-config.in \
@@ -23,9 +35,16 @@ stdenv.mkDerivation rec {
 
   # Do not build amd64 assembly code on Darwin, because it fails to compile
   # with unknow directive errors
-  configureFlags = if stdenv.isDarwin then [ "--enable-amd64=no" ] else null;
+  configureFlags = optional stdenv.isDarwin "--enable-amd64=no"
+    ++ optional (!x11Support) "--without-x";
 
-  meta = {
+  outputs = [ "bin" "out" "dev" ];
+
+  postInstall = ''
+    moveToOutput bin/imlib2-config "$dev"
+  '';
+
+  meta = with stdenv.lib; {
     description = "Image manipulation library";
 
     longDescription = ''
@@ -36,8 +55,9 @@ stdenv.mkDerivation rec {
       easily, without sacrificing speed.
     '';
 
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ spwhitt ];
+    homepage = "https://docs.enlightenment.org/api/imlib2/html";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ spwhitt ];
   };
 }

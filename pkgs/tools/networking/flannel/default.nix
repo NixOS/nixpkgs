@@ -1,25 +1,26 @@
-{ lib, goPackages, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-with goPackages;
+with lib;
 
 buildGoPackage rec {
-  version = "0.1.0";
-  name = "flannel-${version}";
+  pname = "flannel";
+  version = "0.12.0";
+  rev = "v${version}";
+
   goPackagePath = "github.com/coreos/flannel";
+
   src = fetchFromGitHub {
+    inherit rev;
     owner = "coreos";
     repo = "flannel";
-    rev = "v${version}";
-    sha256 = "1f7x6a2c8ix6j5y1r0dq56b58bl2rs2ycbdqb9fz5zv1zk2w20rd";
+    sha256 = "04g7rzgyi3xs3sf5p1a9dmd08crdrz6y1b02ziv3444qk40jyswd";
   };
 
-  dontInstallSrc = true;
-
-  meta = with lib; {
-    description = "Flannel is an etcd backed network fabric for containers";
-    homepage = https://github.com/coreos/flannel;
+  meta = {
+    description = "Network fabric for containers, designed for Kubernetes";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    homepage = "https://github.com/coreos/flannel";
+    maintainers = with maintainers; [johanot offline];
+    platforms = with platforms; linux;
   };
 }

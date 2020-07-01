@@ -1,4 +1,4 @@
-# From an end-user configuration file (`configuration'), build a NixOS
+# From an end-user configuration file (`configuration.nix'), build a NixOS
 # configuration object (`config') from which we can retrieve option
 # values.
 
@@ -17,6 +17,8 @@
   baseModules ? import ../modules/module-list.nix
 , # !!! See comment about args in lib/modules.nix
   extraArgs ? {}
+, # !!! See comment about args in lib/modules.nix
+  specialArgs ? {}
 , modules
 , # !!! See comment about check in lib/modules.nix
   check ? true
@@ -24,9 +26,9 @@
 , lib ? import ../../lib
 }:
 
-let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system;
+let extraArgs_ = extraArgs; pkgs_ = pkgs;
     extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-                   in if e == "" then [] else [(import (builtins.toPath e))];
+                   in if e == "" then [] else [(import e)];
 in
 
 let
@@ -34,7 +36,17 @@ let
     _file = ./eval-config.nix;
     key = _file;
     config = {
-      nixpkgs.system = lib.mkDefault system_;
+      # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
+      # this.  Since the latter defaults to the former, the former should
+      # default to the argument. That way this new default could propagate all
+      # they way through, but has the last priority behind everything else.
+      nixpkgs.system = lib.mkDefault system;
+
+      # Stash the value of the `system` argument. When using `nesting.children`
+      # we want to have the same default value behavior (immediately above)
+      # without any interference from the user's configuration.
+      nixpkgs.initialSystem = system;
+
       _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };
   };
@@ -45,20 +57,17 @@ in rec {
   # system configuration.
   inherit (lib.evalModules {
     inherit prefix check;
-    modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
+    modules = baseModules ++ extraModules ++ [ pkgsModule ] ++ modules;
     args = extraArgs;
-  }) config options;
+    specialArgs =
+      { modulesPath = builtins.toString ../modules; } // specialArgs;
+  }) config options _module;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
-  # FIXME: we enable config.allowUnfree to make packages like
-  # nvidia-x11 available. This isn't a problem because if the user has
-  # ‘nixpkgs.config.allowUnfree = false’, then evaluation will fail on
-  # the 64-bit package anyway. However, it would be cleaner to respect
-  # nixpkgs.config here.
   extraArgs = extraArgs_ // {
-    inherit modules baseModules;
+    inherit baseModules extraModules modules;
   };
 
-  inherit (config._module.args) pkgs;
+  inherit (_module.args) pkgs;
 }

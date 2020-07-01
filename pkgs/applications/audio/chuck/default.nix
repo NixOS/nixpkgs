@@ -1,38 +1,41 @@
-{ stdenv, fetchurl, alsaLib, bison, flex, libsndfile, which }:
+{ stdenv, lib, fetchurl, alsaLib, bison, flex, libsndfile, which
+, AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.3.5.0";
-  name = "chuck-${version}";
+  version = "1.4.0.1";
+  pname = "chuck";
 
   src = fetchurl {
     url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
-    sha256 = "0rj2l5k6ncm4jaiq0igwfc2bzryzchk1is1jhk1n7wifxcf3d3k5";
+    sha256 = "1m0fhndbqaf0lii1asyc50c66bv55ib6mbnm8fzk5qc5ncs0r8hi";
   };
 
-  buildInputs = [ bison flex libsndfile which ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+  nativeBuildInputs = [ flex bison which ];
+
+  buildInputs = [ libsndfile ]
+    ++ lib.optional (!stdenv.isDarwin) alsaLib
+    ++ lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
 
   patches = [ ./darwin-limits.patch ];
 
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-missing-sysroot";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework MultitouchSupport";
+
   postPatch = ''
-    substituteInPlace src/makefile --replace "/usr/bin" "$out/bin"
-    substituteInPlace src/makefile.osx --replace "xcodebuild" "/usr/bin/xcodebuild"
-    substituteInPlace src/makefile.osx --replace "weak_framework" "framework"
+    substituteInPlace src/core/makefile.x/makefile.osx \
+      --replace "weak_framework" "framework" \
+      --replace "MACOSX_DEPLOYMENT_TARGET=10.9" "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET"
   '';
 
-  buildPhase =
-    stdenv.lib.optionals stdenv.isLinux  ["make -C src linux-alsa"] ++
-    stdenv.lib.optionals stdenv.isDarwin ["make -C src osx"];
+  makeFlags = [ "-C src" "DESTDIR=$(out)/bin" ];
+  buildFlags = [ (if stdenv.isDarwin then "osx" else "linux-alsa") ];
 
-  installPhase = ''
-    install -Dm755 ./src/chuck $out/bin/chuck
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "Programming language for real-time sound synthesis and music creation";
-    homepage = http://chuck.cs.princeton.edu;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ ftrvxmtrx ];
+    homepage = "http://chuck.cs.princeton.edu";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ftrvxmtrx ];
   };
 }

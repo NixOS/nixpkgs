@@ -1,37 +1,35 @@
-{ stdenv, fetchurl, binutils, popt, makeWrapper, gawk, which, gnugrep, zlib
-, pkgconfig
-, withGUI ? false , qt4 ? null}:
+{ stdenv, buildPackages
+, fetchurl, pkgconfig
+, libbfd, popt, zlib, linuxHeaders, libiberty_static
+, withGUI ? false, qt4 ? null
+}:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
 assert withGUI -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "oprofile-0.9.9";
+  name = "oprofile-1.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/oprofile/${name}.tar.gz";
-    sha256 = "15vm24jhw4xfd55pfw1rlpzfsh4bl1vyjsajs78bi9xbv8038lhy";
+    sha256 = "1rj76vvkhpfn9k04s7jhb813ximfcwd9h5gh18pr4fgcw6yxiplm";
   };
 
-  patchPhase = ''
-    sed -i "utils/opcontrol" \
-        -e "s|OPCONTROL=.*$|OPCONTROL=\"$out/bin/opcontrol\"|g ;
-            s|OPDIR=.*$|OPDIR=\"$out/bin\"|g ;
-            s|^PATH=.*$||g"
+  postPatch = ''
+    substituteInPlace opjitconv/opjitconv.c \
+      --replace "/bin/rm" "${buildPackages.coreutils}/bin/rm" \
+      --replace "/bin/cp" "${buildPackages.coreutils}/bin/cp"
   '';
 
-  buildInputs = [ binutils zlib popt makeWrapper gawk which gnugrep pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libbfd zlib popt linuxHeaders libiberty_static ]
     ++ stdenv.lib.optionals withGUI [ qt4 ];
 
   configureFlags = [
+      "--with-kernel=${linuxHeaders}"
       "--disable-shared"   # needed because only the static libbfd is available
     ]
     ++ stdenv.lib.optional withGUI "--with-qt-dir=${qt4} --enable-gui=qt4";
-
-  postInstall = ''
-    wrapProgram "$out/bin/opcontrol"					\
-       --prefix PATH : "$out/bin:${gawk}/bin:${which}/bin:${gnugrep}/bin"
-  '';
 
   meta = {
     description = "System-wide profiler for Linux";
@@ -48,7 +46,7 @@ stdenv.mkDerivation rec {
       modules, the kernel, shared libraries, and applications.
     '';
     license = stdenv.lib.licenses.gpl2;
-    homepage = http://oprofile.sourceforge.net/;
+    homepage = "http://oprofile.sourceforge.net/";
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ ];

@@ -1,0 +1,7 @@
+{
+  "url": "https://github.com/tree-sitter/tree-sitter-c",
+  "rev": "6002fcd5e86bb1e8670157bb008b97dbaf656d95",
+  "date": "2019-12-17T10:25:11-08:00",
+  "sha256": "0bcsgwyv9nskkh26hl4hylb03py98d2m565bgvq7fn3f8gyx5w7v",
+  "fetchSubmodules": false
+}

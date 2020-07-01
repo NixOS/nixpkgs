@@ -1,26 +1,59 @@
-{ stdenv, fetchurl, openssl, pkgconfig, gnutls, gsasl, libidn }:
+{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, texinfo
+, netcat-gnu, gnutls, gsasl, libidn2, Security
+, withKeyring ? true, libsecret ? null
+, systemd ? null }:
 
-stdenv.mkDerivation rec {
-  version = "1.6.2";
-  name = "msmtp-${version}";
+let
+  tester = "n"; # {x| |p|P|n|s}
+  journal = if stdenv.isLinux then "y" else "n";
+
+in stdenv.mkDerivation rec {
+  pname = "msmtp";
+  version = "1.8.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/msmtp/${name}.tar.xz";
-    sha256 = "12c7ljahb06pgn8yvvw526xvr11vnr6d4nr0apylixddpxycsvig";
+    url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
+    sha256 = "0q0fg235qk448l1xjcwyxr7vcpzk6w57jzhjbkb0m7nffyhhypzj";
   };
 
-  buildInputs = [ openssl pkgconfig gnutls gsasl libidn ];
+  patches = [
+    ./paths.patch
+  ];
+
+  buildInputs = [ gnutls gsasl libidn2 ]
+    ++ stdenv.lib.optional stdenv.isDarwin Security
+    ++ stdenv.lib.optional withKeyring libsecret;
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig texinfo ];
+
+  configureFlags =
+    [ "--sysconfdir=/etc" ] ++ stdenv.lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   postInstall = ''
-    cp scripts/msmtpq/msmtp-queue scripts/msmtpq/msmtpq $prefix/bin/
-    chmod +x $prefix/bin/msmtp-queue $prefix/bin/msmtpq
+    install -d $out/share/doc/${pname}/scripts
+    cp -r scripts/{find_alias,msmtpqueue,msmtpq,set_sendmail} $out/share/doc/${pname}/scripts
+    install -Dm644 doc/*.example $out/share/doc/${pname}
+
+    substitute scripts/msmtpq/msmtpq $out/bin/msmtpq \
+      --replace @msmtp@      $out/bin/msmtp \
+      --replace @nc@         ${netcat-gnu}/bin/nc \
+      --replace @journal@    ${journal} \
+      ${lib.optionalString (journal == "y") "--replace @systemdcat@ ${systemd}/bin/systemd-cat" } \
+      --replace @test@       ${tester}
+
+    substitute scripts/msmtpq/msmtp-queue $out/bin/msmtp-queue \
+      --replace @msmtpq@ $out/bin/msmtpq
+
+    ln -s msmtp $out/bin/sendmail
+
+    chmod +x $out/bin/*
   '';
 
-  meta = {
-      description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
-      homepage = "http://msmtp.sourceforge.net/";
-      license = stdenv.lib.licenses.gpl3;
-      maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = stdenv.lib.platforms.linux;
-    };
+  meta = with stdenv.lib; {
+    description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
+    homepage = "https://marlam.de/msmtp/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
+  };
 }

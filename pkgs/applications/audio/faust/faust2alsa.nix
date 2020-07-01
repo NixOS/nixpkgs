@@ -4,9 +4,9 @@
 , cairo
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
-, gtk
+, gtk2
 , pango
 }:
 
@@ -20,9 +20,9 @@ faust.wrapWithBuildEnv {
     cairo
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
-    gtk
+    gtk2
     pango
   ];
 

@@ -1,27 +1,63 @@
-{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false }:
+{ stdenv, fetchurl
+# TODO: links -lsigsegv but loses the reference for some reason
+, withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin"), libsigsegv
+, interactive ? false, readline
 
+/* Test suite broke on:
+       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+    || stdenv.isDarwin # XXX: `locale' segfaults
+    || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
+    || stdenv.isFreeBSD
+*/
+, doCheck ? (interactive && stdenv.isLinux), glibcLocales ? null
+, locale ? null
+}:
+
+assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
+
+let
+  inherit (stdenv.lib) optional;
+in
 stdenv.mkDerivation rec {
-  name = "gawk-4.1.3";
+  name = "gawk-5.1.0";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "09d6pmx6h3i2glafm0jd1v1iyrs03vcyv2rkz12jisii3vlmbkz3";
+    sha256 = "1gc2cccqy1x1bf6rhwlmd8q7dz7gnam6nwgl38bxapv6qm5flpyg";
   };
 
-  doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
+  # When we do build separate interactive version, it makes sense to always include man.
+  outputs = [ "out" "info" ] ++ optional (!interactive) "man";
 
-  buildInputs = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
-    ++ stdenv.lib.optional readlineSupport readline;
+  nativeBuildInputs = optional (doCheck && stdenv.isLinux) glibcLocales;
 
-  configureFlags = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") "--with-libsigsegv-prefix=${libsigsegv}"
-    ++ stdenv.lib.optional readlineSupport "--with-readline=${readline}"
-      # only darwin where reported, seems OK on non-chrooted Fedora (don't rebuild stdenv)
-    ++ stdenv.lib.optional (!readlineSupport && stdenv.isDarwin) "--without-readline";
+  buildInputs =
+       optional withSigsegv libsigsegv
+    ++ optional interactive readline
+    ++ optional stdenv.isDarwin locale;
 
-  postInstall = "rm $out/bin/gawk-*";
+  configureFlags = [
+    (if withSigsegv then "--with-libsigsegv-prefix=${libsigsegv}" else "--without-libsigsegv")
+    (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
+  ];
 
-  meta = {
-    homepage = http://www.gnu.org/software/gawk/;
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
+
+  inherit doCheck;
+
+  postInstall = ''
+    rm "$out"/bin/gawk-*
+    ln -s gawk.1 "''${!outputMan}"/share/man/man1/awk.1
+  '';
+
+  passthru = {
+    libsigsegv = if withSigsegv then libsigsegv else null; # for stdenv bootstrap
+  };
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.gnu.org/software/gawk/";
     description = "GNU implementation of the Awk programming language";
 
     longDescription = ''
@@ -38,8 +74,11 @@ stdenv.mkDerivation rec {
       lines of code.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+
+    platforms = platforms.unix ++ platforms.windows;
 
     maintainers = [ ];
   };
 }
+

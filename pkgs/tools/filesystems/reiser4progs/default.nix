@@ -1,15 +1,18 @@
 {stdenv, fetchurl, libaal}:
 
-let version = "1.0.9"; in
+let version = "2.0.0"; in
 stdenv.mkDerivation rec {
-  name = "reiser4progs-${version}";
+  pname = "reiser4progs";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/reiser4/reiser4-utils/${name}.tar.gz";
-    sha256 = "0d6djyd7wjvzbqj738b2z4jr5c2s30g8q8xygipyi0007g42gc7z";
+    url = "mirror://sourceforge/reiser4/reiser4-utils/${pname}-${version}.tar.gz";
+    sha256 = "00kx9prz3d5plp1hn4xdkkd99cw42sanlsjnjhj0fsrlmi9yfs8n";
   };
 
   buildInputs = [libaal];
+
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
     substituteInPlace configure --replace " -static" ""
@@ -19,9 +22,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace ./run-ldconfig true
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit version;
-    homepage = http://www.namesys.com/;
+    homepage = "https://sourceforge.net/projects/reiser4/";
     description = "Reiser4 utilities";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

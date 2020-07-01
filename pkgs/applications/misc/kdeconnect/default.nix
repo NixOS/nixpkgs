@@ -1,34 +1,51 @@
-{ stdenv, fetchurl, gettext, kdelibs, libXtst, libfakekey, makeWrapper, pkgconfig, qca2
-, qjson
+{ mkDerivation
+, lib
+, fetchurl
+, extra-cmake-modules
+, kcmutils
+, kconfigwidgets
+, kdbusaddons
+, kdoctools
+, kiconthemes
+, ki18n
+, knotifications
+, qca-qt5
+, libfakekey
+, libXtst
+, qtx11extras
+, sshfs
+, makeWrapper
+, kwayland
+, kio
 }:
 
-stdenv.mkDerivation rec {
-  name = "kdeconnect-${version}";
-  version = "0.7.3";
+mkDerivation rec {
+  pname = "kdeconnect";
+  version = "1.3.5";
 
   src = fetchurl {
-    url = "http://download.kde.org/unstable/kdeconnect/${version}/src/kdeconnect-kde-${version}.tar.xz";
-    sha256 = "1vrr047bq5skxvibv5pb9ch9dxh005zmar017jzbyb9hilxr8kg4";
+    url = "mirror://kde/stable/${pname}/${version}/${pname}-kde-${version}.tar.xz";
+    sha256 = "02lr3xx5s2mgddac4n3lkgr7ppf1z5m6ajs90rjix0vs8a271kp5";
   };
 
-  buildInputs = [ gettext kdelibs libXtst libfakekey makeWrapper pkgconfig qca2 qjson ];
+  buildInputs = [
+    libfakekey libXtst
+    ki18n kiconthemes kcmutils kconfigwidgets kdbusaddons knotifications
+    qca-qt5 qtx11extras makeWrapper kwayland kio
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A tool to connect and sync your devices with KDE";
-    longDescription = ''
-        The corresponding Android app, "KDE Connect", is available in
-        F-Droid and Google play and has the following features:
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
-        - Share files and URLs to KDE from any app
-        - Clipboard share: copy from or to your desktop
-        - Notifications sync (4.3+): Read your Android notifications from KDE
-        - Multimedia remote control: Use your phone as a remote control
-        - WiFi connection: no usb wire or bluetooth needed
-        - RSA Encryption: your information is safe 
-    '';
-    license = licenses.gpl2;
-    homepage = https://projects.kde.org/projects/playground/base/kdeconnect-kde;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+  postInstall = ''
+    wrapProgram $out/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
+  '';
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    description = "KDE Connect provides several features to integrate your phone and your computer";
+    homepage    = "https://community.kde.org/KDEConnect";
+    license     = with licenses; [ gpl2 ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

@@ -1,75 +1,103 @@
-{ stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
-, docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc, ntdb, tdb, tevent
-, ldb, popt, iniparser, subunit, libbsd, nss_wrapper, socket_wrapper
-, uid_wrapper, libarchive
+{ stdenv
+, fetchurl
+, python
+, pkgconfig
+, bison
+, flex
+, perl
+, libxslt
+, docbook_xsl
+, rpcgen
+, fixDarwinDylibNames
+, docbook_xml_dtd_45
+, readline
+, popt
+, libbsd
+, libarchive
+, zlib
+, liburing
+, fam
+, gnutls
+, libunwind
+, systemd
+, jansson
+, libtasn1
+, tdb
+, cmocka
+, nixosTests
 
-# source3/wscript optionals
-, kerberos ? null
-, zlib ? null
-, openldap ? null
-, cups ? null
-, pam ? null
-, avahi ? null
-, acl ? null
-, libaio ? null
-, fam ? null
-, libceph ? null
-, glusterfs ? null
-
-# buildtools/wafsamba/wscript optionals
-, libiconv ? null
-, gettext ? null
-
-# source4/lib/tls/wscript optionals
-, gnutls ? null
-, libgcrypt ? null
-, libgpgerror ? null
-
-# other optionals
-, ncurses ? null
-, libunwind ? null
-, dbus ? null
-, libibverbs ? null
-, librdmacm ? null
-, systemd ? null
+, enableLDAP ? false, openldap
+, enablePrinting ? false, cups
+, enableProfiling ? true
+, enableMDNS ? false, avahi
+, enableDomainController ? false, gpgme, lmdb
+, enableKerberos ? true, krb5Full
+, enableRegedit ? true, ncurses
+, enableCephFS ? false, libceph
+, enableGlusterFS ? false, glusterfs, libuuid
+, enableAcl ? (!stdenv.isDarwin), acl
+, enablePam ? (!stdenv.isDarwin), pam
 }:
 
-assert kerberos != null -> zlib != null;
-
-let
-  bundledLibs = if kerberos != null && kerberos.implementation == "heimdal" then "NONE" else "com_err";
-  hasGnutls = gnutls != null && libgcrypt != null && libgpgerror != null;
-  isKrb5OrNull = if kerberos != null && kerberos.implementation == "krb5" then true else null;
-  hasInfinibandOrNull = if libibverbs != null && librdmacm != null then true else null;
-in
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "samba-4.2.1";
+  pname = "samba";
+  version = "4.12.3";
 
   src = fetchurl {
-    url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "1hsakc8h6rs48xr6i55m90pd53hpxcqjjnlwq8i2rp0nq4ws5sip";
+    url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
+    sha256 = "09w7aap1cjc41ayhaksm1igc7p7gl40fad4a1l6q4ds9a2jbrb9z";
   };
+
+  outputs = [ "out" "dev" "man" ];
 
   patches = [
     ./4.x-no-persistent-install.patch
-    ./4.x-fix-ctdb-deps.patch
-  ] ++ optional (kerberos != null) ./4.x-heimdal-compat.patch;
+    ./patch-source3__libads__kerberos_keytab.c.patch
+    ./4.x-no-persistent-install-dynconfig.patch
+    ./4.x-fix-makeflags-parsing.patch
+  ];
+
+  nativeBuildInputs = [
+    pkgconfig
+    bison
+    flex
+    perl
+    perl.pkgs.ParseYapp
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_45
+    cmocka
+  ] ++ optionals stdenv.isDarwin [
+    rpcgen
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
-    python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42
-    docbook_xml_dtd_45 readline talloc ntdb tdb tevent ldb popt iniparser
-    subunit libbsd nss_wrapper socket_wrapper uid_wrapper
+    python
+    readline
+    popt
+    jansson
+    libbsd
     libarchive
-
-    kerberos zlib openldap cups pam avahi acl libaio fam libceph glusterfs
-
-    libiconv gettext
-
-    gnutls libgcrypt libgpgerror
-
-    ncurses libunwind dbus libibverbs librdmacm systemd
-  ];
+    zlib
+    fam
+    libunwind
+    gnutls
+    libtasn1
+    tdb
+  ] ++ optionals stdenv.isLinux [ liburing systemd ]
+    ++ optional enableLDAP openldap
+    ++ optional (enablePrinting && stdenv.isLinux) cups
+    ++ optional enableMDNS avahi
+    ++ optionals enableDomainController [ gpgme lmdb ]
+    ++ optional enableKerberos krb5Full
+    ++ optional enableRegedit ncurses
+    ++ optional (enableCephFS && stdenv.isLinux) libceph
+    ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
+    ++ optional enableAcl acl
+    ++ optional enablePam pam;
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -77,75 +105,40 @@ stdenv.mkDerivation rec {
 
     # Fix the XML Catalog Paths
     sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
-  '';
 
-  enableParallelBuilding = true;
+    patchShebangs ./buildtools/bin
+  '';
 
   configureFlags = [
-    # source3/wscript options
-    (mkWith   true                 "static-modules"    "NONE")
-    (mkWith   true                 "shared-modules"    "ALL")
-    (mkWith   true                 "winbind"           null)
-    (mkWith   (openldap != null)   "ads"               null)
-    (mkWith   (openldap != null)   "ldap"              null)
-    (mkEnable (cups != null)       "cups"              null)
-    (mkEnable (cups != null)       "iprint"            null)
-    (mkWith   (pam != null)        "pam"               null)
-    (mkWith   (pam != null)        "pam_smbpass"       null)
-    (mkWith   true                 "quotas"            null)
-    (mkWith   true                 "sendfile-support"  null)
-    (mkWith   true                 "utmp"              null)
-    (mkWith   true                 "utmp"              null)
-    (mkEnable true                 "pthreadpool"       null)
-    (mkEnable (avahi != null)      "avahi"             null)
-    (mkWith   true                 "iconv"             null)
-    (mkWith   (acl != null)        "acl-support"       null)
-    (mkWith   true                 "dnsupdate"         null)
-    (mkWith   true                 "syslog"            null)
-    (mkWith   true                 "automount"         null)
-    (mkWith   (libaio != null)     "aio-support"       null)
-    (mkWith   (fam != null)        "fam"               null)
-    (mkWith   (libarchive != null) "libarchive"        null)
-    (mkWith   true                 "cluster-support"   null)
-    (mkWith   (ncurses != null)    "regedit"           null)
-    (mkWith   libceph              "libcephfs"         libceph)
-    (mkEnable (glusterfs != null)  "glusterfs"         null)
+    "--with-static-modules=NONE"
+    "--with-shared-modules=ALL"
+    "--enable-fhs"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--disable-rpath"
+  ] ++ singleton (if enableDomainController
+         then "--with-experimental-mit-ad-dc"
+         else "--without-ad-dc")
+    ++ optionals enableKerberos [
+    "--with-system-mitkrb5"
+    "--with-system-mitkdc=${krb5Full}"
+  ] ++ optionals (!enableLDAP) [
+    "--without-ldap"
+    "--without-ads"
+  ] ++ optional enableProfiling "--with-profiling-data"
+    ++ optional (!enableAcl) "--without-acl-support"
+    ++ optional (!enablePam) "--without-pam";
 
-    # dynconfig/wscript options
-    (mkEnable true                 "fhs"               null)
-    (mkOther                       "sysconfdir"        "/etc")
-    (mkOther                       "localstatedir"     "/var")
-
-    # buildtools/wafsamba/wscript options
-    (mkOther                       "bundled-libraries" bundledLibs)
-    (mkOther                       "private-libraries" "NONE")
-    (mkOther                       "builtin-libraries" "replace")
-    (mkWith   libiconv             "libiconv"          libiconv)
-    (mkWith   (gettext != null)    "gettext"           gettext)
-
-    # source4/lib/tls/wscript options
-    (mkEnable hasGnutls            "gnutls" null)
-
-    # wscript options
-    (mkWith   isKrb5OrNull         "system-mitkrb5"    null)
-    (if hasGnutls then null else "--without-ad-dc")
-
-    # ctdb/wscript
-    (mkEnable hasInfinibandOrNull  "infiniband"        null)
-    (mkEnable null                 "pmda"              null)
-  ];
-
-  stripAllList = [ "bin" "sbin" ];
-
-  postInstall = ''
-    # Remove unecessary components
-    rm -r $out/{lib,share}/ctdb-tests
-    rm $out/bin/ctdb_run{_cluster,}_tests
+  preBuild = ''
+    export MAKEFLAGS="-j $NIX_BUILD_CORES"
   '';
 
+  # Some libraries don't have /lib/samba in RPATH but need it.
+  # Use find -type f -executable -exec echo {} \; -exec sh -c 'ldd {} | grep "not found"' \;
+  # Looks like a bug in installer scripts.
   postFixup = ''
     export SAMBA_LIBS="$(find $out -type f -name \*.so -exec dirname {} \; | sort | uniq)"
-    read -r -d "" SCRIPT << EOF
+    read -r -d "" SCRIPT << EOF || true
     [ -z "\$SAMBA_LIBS" ] && exit 1;
     BIN='{}';
     OLD_LIBS="\$(patchelf --print-rpath "\$BIN" 2>/dev/null | tr ':' '\n')";
@@ -153,14 +146,18 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "\$ALL_LIBS" "\$BIN" 2>/dev/null || exit $?;
     patchelf --shrink-rpath "\$BIN";
     EOF
-    find $out -type f -exec $SHELL -c "$SCRIPT" \;
+    find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
   '';
 
-  meta = {
-    homepage = http://www.samba.org/;
+  passthru = {
+    tests.samba = nixosTests.samba;
+  };
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.samba.org";
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.unix;
+    maintainers = with maintainers; [ aneeshusa ];
   };
 }

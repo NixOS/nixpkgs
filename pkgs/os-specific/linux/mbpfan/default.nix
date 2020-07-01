@@ -1,20 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, gnugrep, kmod }:
+{ stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "mbpfan-${version}";
-  version = "1.9.0";
+  pname = "mbpfan";
+  version = "2.2.1";
   src = fetchFromGitHub {
     owner = "dgraziotin";
     repo = "mbpfan";
     rev = "v${version}";
-    sha256 = "15nm1d0a0c0lzxqngrpn2qpsydsmglnn6d20djl7brpsq26j24h9";
+    sha256 = "0gc9ypxi55vxs77nx8ihhh9zk7fr9v0m0zfm76q7x0bi6jz11mbr";
   };
-  patches = [ ./fixes.patch ];
-  postPatch = ''
-    substituteInPlace src/main.c \
-      --replace '@GREP@' '${gnugrep}/bin/grep' \
-      --replace '@LSMOD@' '${kmod}/bin/lsmod'
-  '';
   installPhase = ''
     mkdir -p $out/bin $out/etc
     cp bin/mbpfan $out/bin

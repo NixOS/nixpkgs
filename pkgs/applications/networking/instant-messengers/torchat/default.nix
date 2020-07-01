@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python, unzip, wxPython, wrapPython, tor }:
 stdenv.mkDerivation rec {
 
-  name = "torchat-${version}";
+  pname = "torchat";
   version = "0.9.9.553";
 
   src = fetchurl {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/prof7bit/TorChat;
+    homepage = "https://github.com/prof7bit/TorChat";
     description = "Instant messaging application on top of the Tor network and it's location hidden services";
     license = licenses.gpl3;
     maintainers = [ maintainers.phreedom ];

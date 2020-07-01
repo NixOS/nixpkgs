@@ -1,6 +1,6 @@
-{ fetchurl, fetchgit, stdenv, xlibs, gcc44, makeWrapper, ncurses, cmake }:
+{ fetchgit, stdenv, xorg, makeWrapper, ncurses, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   # The Self wrapper stores source in $XDG_DATA_HOME/self or ~/.local/share/self 
   # so that it can be written to when using the Self transposer. Running 'Self'
   # after installation runs without an image. You can then build a Self image with:
@@ -12,16 +12,15 @@ stdenv.mkDerivation rec {
   #   $ Self -s myimage.snap
   #
   version = "4.5.0";
-  name = "self-${version}";
+  pname = "self";
 
   src = fetchgit {
     url    = "https://github.com/russellallen/self";
     rev    = "d16bcaad3c5092dae81ad0b16d503f2a53b8ef86";
-    sha256 = "966025b71542e44fc830b951f404f5721ad410ed24f7236fd0cd820ea0fc5731";
+    sha256 = "1dhs6209407j0ll9w9id31vbawdrm9nz1cjak8g8hixrw1nid4i5";
   };
 
-  # gcc 4.6 and above causes crashes on Self startup but gcc 4.4 works.
-  buildInputs = [ gcc44 ncurses xlibs.libX11 xlibs.libXext makeWrapper cmake ];
+  buildInputs = [ ncurses xorg.libX11 xorg.libXext makeWrapper cmake ];
 
   selfWrapper = ./self;
 
@@ -40,5 +39,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.doublec ];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true; # segfaults on gcc > 4.4
   };
 }

@@ -6,11 +6,15 @@
 # Of course, use of the driver in /usr/lib is highly impure.  But it
 # might actually work ;-)
 
-{stdenv, xlibs, expat, libdrm}:
+{stdenv, xorg, expat, libdrm}:
 
 stdenv.mkDerivation {
   name = "xorg-sys-opengl-3";
   builder = ./builder.sh;
-  neededLibs = [xlibs.libXxf86vm xlibs.libXext expat libdrm stdenv.cc.cc];
-}
+  neededLibs = map (p: p.out)
+    [xorg.libXxf86vm xorg.libXext expat libdrm stdenv.cc.cc];
 
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
+}

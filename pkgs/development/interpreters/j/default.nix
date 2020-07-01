@@ -1,52 +1,75 @@
-{ stdenv, fetchurl, readline }:
+{ stdenv, fetchFromGitHub, readline, libedit, bc
+, avxSupport ? false
+}:
 
 stdenv.mkDerivation rec {
-  name = "j-${version}";
-  version = "701_b";
-  src = fetchurl {
-    url = "http://www.jsoftware.com/download/j${version}_source.tar.gz";
-    sha256 = "1gmjlpxcd647x690c4dxnf8h6ays8ndir6cib70h3zfnkrc34cys";
+  pname = "j";
+  version = "901";
+  jtype = "release-e";
+  src = fetchFromGitHub {
+    owner = "jsoftware";
+    repo = "jsource";
+    rev = "j${version}-${jtype}";
+    sha256 = "13ky37rrl6mc66fckrdnrw64gmvq1qlv6skzd513lab4d0wigshw";
+    name = "jsource";
   };
-  buildInputs = [ readline ];
+
+  buildInputs = [ readline libedit bc ];
   bits = if stdenv.is64bit then "64" else "32";
+  platform =
+    if (stdenv.isAarch32 || stdenv.isAarch64) then "raspberry" else
+    if stdenv.isLinux then "linux" else
+    if stdenv.isDarwin then "darwin" else
+    "unknown";
+  variant = if stdenv.isx86_64 && avxSupport then "avx" else "";
+
+  j64x="j${bits}${variant}";
+
+  doCheck = true;
 
   buildPhase = ''
-    sed -i bin/jconfig -e '
-        s@bits=32@bits=${bits}@g;
-        s@readline=0@readline=1@;
-        s@LIBREADLINE=""@LIBREADLINE=" -lreadline "@;
-        s@-W1,soname,libj.so@-Wl,-soname,libj.so@
-        '
-    sed -i bin/build_libj -e 's@>& make.txt@ 2>\&1 | tee make.txt@'
+    export SOURCE_DIR=$(pwd)
+    export HOME=$TMPDIR
+    export JLIB=$SOURCE_DIR/jlibrary
 
-    touch *.c *.h
-    sh -o errexit bin/build_jconsole
-    sh -o errexit bin/build_libj
-    sh -o errexit bin/build_defs
-    sh -o errexit bin/build_tsdll
+    echo $OUT_DIR
 
-    sed -i j/bin/profile.ijs -e "
-        s@userx=[.] *'.j'@userx=. '/.j'@;
-        s@bin,'/profilex.ijs'@user,'/profilex.ijs'@ ;
-	/install=./ainstall=. install,'/share/j'
-        "
+    cd make2
+
+    patchShebangs .
+    sed -i $JLIB/bin/profile.ijs -e "s@'/usr/share/j/.*'@'$out/share/j'@;"
+
+    j64x="${j64x}" ./build_all.sh
+
+    cp $SOURCE_DIR/bin/${platform}/j${bits}*/* "$JLIB/bin"
+  '';
+
+  checkPhase = ''
+
+    echo 'i. 5' | $JLIB/bin/jconsole | fgrep "0 1 2 3 4"
+
+    # Now run the real tests
+    cd $SOURCE_DIR/test
+    for f in *.ijs
+    do
+      echo $f
+      $JLIB/bin/jconsole < $f > /dev/null || echo FAIL && echo PASS
+    done
   '';
 
   installPhase = ''
     mkdir -p "$out"
-    cp -r j/bin "$out/bin"
-    rm "$out/bin/profilex_template.ijs"
 
     mkdir -p "$out/share/j"
-
-    cp -r docs j/addons j/system "$out/share/j"
+    cp -r $JLIB/{addons,system} "$out/share/j"
+    cp -r $JLIB/bin "$out"
   '';
 
   meta = with stdenv.lib; {
     description = "J programming language, an ASCII-based APL successor";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ raskin synthetica ];
+    platforms = with platforms; linux ++ darwin;
     license = licenses.gpl3Plus;
-    homepage = http://jsoftware.com/;
+    homepage = "http://jsoftware.com/";
   };
 }

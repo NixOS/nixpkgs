@@ -1,32 +1,22 @@
-{ stdenv, fetchurl, ocaml, findlib, ocpBuild, opam, cmdliner }:
+{ lib, fetchzip, buildDunePackage, cmdliner }:
 
-let inherit (stdenv.lib) getVersion versionAtLeast; in
+buildDunePackage rec {
+  version = "1.8.1";
+  pname = "ocp-indent";
 
-assert versionAtLeast (getVersion ocaml) "3.12.1";
-assert versionAtLeast (getVersion ocpBuild) "1.99.3-beta";
-
-stdenv.mkDerivation {
-
-  name = "ocp-indent-1.4.2b";
-
-  src = fetchurl {
-    url = "https://github.com/OCamlPro/ocp-indent/archive/1.4.2b.tar.gz";
-    sha256 = "1p0n2zcl5kf543x2xlqrz1aa51f0dqal8l392sa41j6wx82j0gpb";
+  src = fetchzip {
+    url = "https://github.com/OCamlPro/ocp-indent/archive/${version}.tar.gz";
+    sha256 = "0h4ysh36q1fxc40inhsdq2swqpfm15lpilqqcafs5ska42pn7s68";
   };
 
-  buildInputs = [ ocaml findlib ocpBuild opam cmdliner ];
+  minimumOCamlVersion = "4.02";
 
-  createFindlibDestdir = true;
+  buildInputs = [ cmdliner ];
 
-  postInstall = ''
-    mv $out/lib/{ocp-indent,ocaml/${getVersion ocaml}/site-lib/}
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://typerex.ocamlpro.com/ocp-indent.html";
     description = "A customizable tool to indent OCaml code";
     license = licenses.gpl3;
-    platforms = ocaml.meta.platforms;
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

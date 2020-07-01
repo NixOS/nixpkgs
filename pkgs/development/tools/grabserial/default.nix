@@ -1,22 +1,23 @@
-{ stdenv, fetchgit, buildPythonPackage, pythonPackages }:
+{ lib, fetchFromGitHub, pythonPackages }:
 
-buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
+  pname = "grabserial";
+  version = "2.0.2";
 
-  name = "grabserial-20141120";
-
-  src = fetchgit {
-    url = https://github.com/tbird20d/grabserial.git;
-    rev  = "8b9c98ea35d382bac2aafc7a8a9c02440369a792";
-    sha256 = "ff27f5e5ab38c8450a4a0291e943e6c5a265e56d29d6a1caa849ae3238d71679";
+  src = fetchFromGitHub {
+    owner = "tbird20d";
+    repo = "grabserial";
+    rev = "v${version}";
+    sha256 = "0ryk4w8q6zfmia71nwnk5b7xaxw0sf45dw9q50xp7k76i3k5f9f3";
   };
 
   propagatedBuildInputs = [ pythonPackages.pyserial ];
 
-  meta = {
+  meta = with lib; {
     description = "Python based serial dump and timing program";
-    homepage = https://github.com/tbird20d/grabserial;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ vmandela ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/tbird20d/grabserial";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ vmandela ];
+    platforms = platforms.linux;
   };
 }

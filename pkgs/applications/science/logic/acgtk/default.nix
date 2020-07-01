@@ -1,51 +1,28 @@
-{ stdenv, fetchurl, ocaml, findlib, dypgen, bolt, ansiterminal,
-  buildBytecode ? true,
-  buildNative ? true,
-  installExamples ? true,
-  installEmacsMode ? true }:
-
-let inherit (stdenv.lib) getVersion versionAtLeast
-                         optionals optionalString; in
-
-assert versionAtLeast (getVersion ocaml) "3.07";
-assert versionAtLeast (getVersion dypgen) "20080925";
-assert versionAtLeast (getVersion bolt) "1.4";
-
-assert buildBytecode || buildNative;
+{ stdenv, fetchurl, dune, ocamlPackages }:
 
 stdenv.mkDerivation {
 
-  name = "acgtk-1.1";
+  pname = "acgtk";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "http://www.loria.fr/equipes/calligramme/acg/software/acg-1.1-20140905.tar.gz";
-    sha256 = "1k1ldqg34bwmgdpmi9gry9czlsk85ycjxnkd25fhlf3mmgg4n9p6";
+    url = "https://acg.loria.fr/software/acg-1.5.1-20191113.tar.gz";
+    sha256 = "17595qfwhzz5q091ak6i6bg5wlppbn8zfn58x3hmmmjvx2yfajn1";
   };
 
-  buildInputs = [ ocaml findlib dypgen bolt ansiterminal ];
+  buildInputs = [ dune ] ++ (with ocamlPackages; [
+    ocaml findlib ansiterminal cairo2 cmdliner fmt logs menhir mtime yojson
+  ]);
 
-  patches = [ ./install-emacs-to-site-lisp.patch
-              ./use-nix-ocaml-byteflags.patch ];
+  buildPhase = "dune build";
 
-  # The bytecode executable is dependent on the dynamic library provided by
-  # ANSITerminal. We can use the -dllpath flag of ocamlc (analogous to
-  # -rpath) to make sure that ocamlrun is able to link the library at
-  # runtime and that Nix detects a runtime dependency.
-  NIX_OCAML_BYTEFLAGS = "-dllpath ${ansiterminal}/lib/ocaml/${getVersion ocaml}/site-lib/ANSITerminal";
-
-  buildFlags = optionalString buildBytecode "byte"
-             + " "
-             + optionalString buildNative "opt";
-
-  installTargets = "install"
-                 + " " + optionalString installExamples "install-examples"
-                 + " " + optionalString installEmacsMode "install-emacs";
+  inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
-    homepage = "http://www.loria.fr/equipes/calligramme/acg";
+    homepage = "https://acg.loria.fr/";
     description = "A toolkit for developing ACG signatures and lexicon";
     license = licenses.cecill20;
-    platforms = ocaml.meta.platforms;
+    inherit (ocamlPackages.ocaml.meta) platforms;
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

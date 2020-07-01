@@ -1,7 +1,8 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.programs.nano;
+  LF = "\n";
 in
 
 {
@@ -20,16 +21,22 @@ in
         example = ''
           set nowrap
           set tabstospaces
-          set tabsize 4
+          set tabsize 2
         '';
+      };
+      syntaxHighlight = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to enable syntax highlight for various languages.";
       };
     };
   };
 
   ###### implementation
 
-  config = lib.mkIf (cfg.nanorc != "") {
-    environment.etc."nanorc".text = cfg.nanorc;
+  config = lib.mkIf (cfg.nanorc != "" || cfg.syntaxHighlight) {
+    environment.etc.nanorc.text = lib.concatStrings [ cfg.nanorc
+      (lib.optionalString cfg.syntaxHighlight ''${LF}include "${pkgs.nano}/share/nano/*.nanorc"'') ];
   };
 
 }

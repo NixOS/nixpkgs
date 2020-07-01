@@ -12,7 +12,7 @@ in {
   ###### interface
 
   options = {
-    services.das_watchdog.enable = mkEnableOption "Whether to enable realtime watchdog";
+    services.das_watchdog.enable = mkEnableOption "realtime watchdog";
   };
 
   ###### implementation
@@ -25,7 +25,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "root";
-        Type = "oneshot";
+        Type = "simple";
         ExecStart = "${das_watchdog}/bin/das_watchdog";
         RemainAfterExit = true;
       };

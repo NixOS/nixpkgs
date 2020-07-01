@@ -4,10 +4,11 @@
 
 with lib;
 
-let
-  gnome3 = config.environment.gnome3.packageSet;
-in
 {
+
+  meta = {
+    maintainers = teams.gnome.members;
+  };
 
   ###### interface
 
@@ -19,7 +20,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable Evolution Data Server, a collection of services for 
+          Whether to enable Evolution Data Server, a collection of services for
           storing addressbooks and calendars.
         '';
       };
@@ -33,9 +34,11 @@ in
 
   config = mkIf config.services.gnome3.evolution-data-server.enable {
 
-    environment.systemPackages = [ gnome3.evolution_data_server ];
+    environment.systemPackages = [ pkgs.gnome3.evolution-data-server ];
 
-    services.dbus.packages = [ gnome3.evolution_data_server ];
+    services.dbus.packages = [ pkgs.gnome3.evolution-data-server ];
+
+    systemd.packages = [ pkgs.gnome3.evolution-data-server ];
 
   };
 

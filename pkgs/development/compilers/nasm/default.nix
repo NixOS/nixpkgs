@@ -1,18 +1,32 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromRepoOrCz, autoreconfHook, perl, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  name = "nasm-${version}";
-  version = "2.11.08";
+  pname = "nasm";
+  version = "2.14.02";
 
-  src = fetchurl {
-    url = "http://www.nasm.us/pub/nasm/releasebuilds/${version}/${name}.tar.bz2";
-    sha256 = "0ialkla6i63j8fpv840jy7k5mdf2wbqr98bvbcq0dp0b38ls18wx";
+  src = fetchFromRepoOrCz {
+    repo = "nasm";
+    rev = "${pname}-${version}";
+    sha256 = "15z6ybnzlsrqs2964h6czqhpmr7vc3ln4y4h0z9vrznk4mqcwbsa";
   };
 
+  nativeBuildInputs = [ autoreconfHook perl asciidoc xmlto docbook_xml_dtd_45 docbook_xsl ];
+
+  postBuild = "make manpages";
+
+  doCheck = true;
+
+  checkPhase = ''
+    make golden && make test
+  '';
+
+  NIX_CFLAGS_COMPILE="-Wno-error=attributes";
+
   meta = with stdenv.lib; {
-    homepage = http://www.nasm.us/;
+    homepage = "https://www.nasm.us/";
     description = "An 80x86 and x86-64 assembler designed for portability and modularity";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub willibutz ];
+    license = licenses.bsd2;
   };
 }

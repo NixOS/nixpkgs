@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, ant, jdk, jre }:
+{ stdenv, fetchurl, makeWrapper, makeDesktopItem, jdk, jre, wrapGAppsHook, gtk3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  version = "2.10";
-  name = "jabref-${version}";
+  version = "3.8.1";
+  pname = "jabref";
+
   src = fetchurl {
-    url = "mirror://sourceforge/jabref/${version}/JabRef-${version}-src.tar.bz2";
-    sha256 = "09b57afcfeb1730b58a887dc28f0f4c803e9c00fade1f57245ab70e2a98ce6ad";
+    url = "https://github.com/JabRef/jabref/releases/download/v${version}/JabRef-${version}.jar";
+    sha256 = "11asfym74zdq46i217z5n6vc79gylcx8xn7nvwacfqmym0bz79cg";
   };
 
   desktopItem = makeDesktopItem {
@@ -13,27 +14,31 @@ stdenv.mkDerivation rec {
     name = "jabref";
     desktopName = "JabRef";
     genericName = "Bibliography manager";
-    categories = "Application;Office;";
+    categories = "Office;";
     icon = "jabref";
     exec = "jabref";
   };
 
-  buildInputs = [ ant jdk makeWrapper ];
+  buildInputs = [ makeWrapper jdk wrapGAppsHook gtk3 gsettings-desktop-schemas ];
 
-  buildPhase = ''ant'';
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin $out/share/java $out/share/icons
+
     cp -r ${desktopItem}/share/applications $out/share/
-    cp build/lib/JabRef-${version}.jar $out/share/java/
-    cp src/images/JabRef-icon-mac.svg $out/share/icons/jabref.svg
+
+    jar xf $src images/icons/JabRef-icon-mac.svg
+    cp images/icons/JabRef-icon-mac.svg $out/share/icons/jabref.svg
+
+    ln -s $src $out/share/java/jabref-${version}.jar
     makeWrapper ${jre}/bin/java $out/bin/jabref \
-      --add-flags "-jar $out/share/java/JabRef-${version}.jar"
+      --add-flags "-jar $out/share/java/jabref-${version}.jar"
   '';
 
   meta = with stdenv.lib; {
     description = "Open source bibliography reference manager";
-    homepage = http://jabref.sourceforge.net;
+    homepage = "https://www.jabref.org";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

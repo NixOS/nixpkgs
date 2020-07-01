@@ -1,39 +1,37 @@
-{ stdenv, fetchurl, fetchpatch, python, pkgconfig, cairo, x11, isPyPy }:
+{ lib, fetchFromGitHub, meson, ninja, buildPythonPackage, pytest, pkgconfig, cairo, xlibsWrapper, isPy3k }:
 
-if isPyPy then throw "pycairo not supported for interpreter ${python.executable}" else stdenv.mkDerivation rec {
-  version = "1.10.0";
-  name = "pycairo-${version}";
-  src = if python.is_py3k or false
-    then fetchurl {
-      url = "http://cairographics.org/releases/pycairo-${version}.tar.bz2";
-      sha256 = "1gjkf8x6hyx1skq3hhwcbvwifxvrf9qxis5vx8x5igmmgs70g94s";
-    }
-    else fetchurl {
-      url = "http://cairographics.org/releases/py2cairo-${version}.tar.bz2";
-      sha256 = "0cblk919wh6w0pgb45zf48xwxykfif16qk264yga7h9fdkq3j16k";
-    };
+buildPythonPackage rec {
+  pname = "pycairo";
+  version = "1.18.2";
 
-  patches = [(fetchpatch {
-    url = http://www.linuxfromscratch.org/patches/blfs/svn/pycairo-1.10.0-waf_unpack-1.patch;
-    sha256 = "1bmrhq2nmhx4l5glvyi59r0hc7w5m56kz41frx7v3dcp8f91p7xd";
-  })];
+  format = "other";
 
-  patch_waf = fetchpatch {
-    url = http://www.linuxfromscratch.org/patches/blfs/svn/pycairo-1.10.0-waf_python_3_4-1.patch;
-    sha256 = "0xfl1i9dips2nykyg91f5h5r3xpk2hp1js1gq5z0hwjr0in55id4";
+  src = fetchFromGitHub {
+    owner = "pygobject";
+    repo = "pycairo";
+    rev = "v${version}";
+    sha256 = "142145a2whvlk92jijrbf3i2bqrzmspwpysj0bfypw0krzi0aa6j";
   };
 
-  buildInputs = [ python pkgconfig cairo x11 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+  ];
 
-  configurePhase = ''
-    (
-      cd $(${python.executable} waf unpack)
-      pwd
-      patch -p1 < ${patch_waf}
-    )
+  buildInputs = [
+    cairo
+    xlibsWrapper
+  ];
 
-    ${python.executable} waf configure --prefix=$out
-  '';
-  buildPhase = "${python.executable} waf";
-  installPhase = "${python.executable} waf install";
+  checkInputs = [ pytest ];
+
+  mesonFlags = [ "-Dpython=${if isPy3k then "python3" else "python"}" ];
+
+  meta = with lib; {
+    description = "Python 2/3 bindings for cairo";
+    homepage = "https://pycairo.readthedocs.io/";
+    license = with licenses; [ lgpl2 mpl11 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  };
 }

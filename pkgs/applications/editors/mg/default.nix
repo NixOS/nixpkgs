@@ -1,30 +1,32 @@
-{ fetchurl, stdenv, ncurses }:
-stdenv.mkDerivation rec {
-  name = "mg-20110905";
+{ stdenv, fetchFromGitHub, pkgconfig, ncurses, buildPackages }:
 
-  src = fetchurl {
-    url = http://homepage.boetes.org/software/mg/mg-20110905.tar.gz;
-    sha256 = "0ac2c7wy5kkcflm7cmiqm5xhb5c4yfw3i33iln8civ1yd9z7vlqw";
+stdenv.mkDerivation rec {
+  pname = "mg";
+  version = "6.7";
+
+  src = fetchFromGitHub {
+    owner = "ibara";
+    repo = "mg";
+    rev = "mg-6.7";
+    sha256 = "15adwibq6xrfxbrxzk765g9250iyfn4wbcxd7kcsabiwn6apm0ai";
   };
 
-  dontAddPrefix = true;
+  enableParallelBuilding = true;
 
-  patches = [ ./configure.patch ];
-  patchFlags = "-p0";
+  makeFlags = [ "PKG_CONFIG=${buildPackages.pkgconfig}/bin/${buildPackages.pkgconfig.targetPrefix}pkg-config" ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp mg $out/bin
-    mkdir -p $out/share/man/man1
-    cp mg.1 $out/share/man/man1
+    install -m 555 -Dt $out/bin mg
+    install -m 444 -Dt $out/share/man/man1 mg.1
   '';
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ ncurses ];
 
-  meta = {
-    homepage = http://homepage.boetes.org/software/mg/;
+  meta = with stdenv.lib; {
     description = "Micro GNU/emacs, a portable version of the mg maintained by the OpenBSD team";
-    license = stdenv.lib.licenses.publicDomain;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://man.openbsd.org/OpenBSD-current/man1/mg.1";
+    license = licenses.publicDomain;
+    platforms = platforms.all;
   };
 }

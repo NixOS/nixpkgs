@@ -1,32 +1,28 @@
-{ stdenv, fetchgit, readline, yacc, autoconf, automake, libtool }:
+{ stdenv, fetchurl, readline, yacc }:
 
 let
-  version = "git-2015-04-11";
+  version = "0.9.1";
 in
 stdenv.mkDerivation {
 
-  name = "es-${version}";
+  pname = "es";
+  inherit version;
 
-  src = fetchgit {
-    url = "git://github.com/wryun/es-shell";
-    rev = "fdf29d5296ce3a0ef96d2b5952cff07878753975";
-    sha256 = "1hj0g8r59ry9l50h4gdal38nf8lvb3cgl6c9bx5aabkw5i778dfk";
+  src = fetchurl {
+    url = "https://github.com/wryun/es-shell/releases/download/v${version}/es-${version}.tar.gz";
+    sha256 = "1fplzxc6lncz2lv2fyr2ig23rgg5j96rm2bbl1rs28mik771zd5h";
   };
 
-  buildInputs = [ readline yacc libtool autoconf automake ];
-
-  preConfigure =
-    ''
-      aclocal
-      autoconf
-      libtoolize -qi
-    '';
-
-  configureFlags="--with-readline --prefix=$(out) --bindir=$(out)/bin --mandir=$(out)/man";
-
-  preInstall = ''
-    mkdir -p $out/{bin,man}
+  # The distribution tarball does not have a single top-level directory.
+  preUnpack = ''
+    mkdir $name
+    cd $name
+    sourceRoot=.
   '';
+
+  buildInputs = [ readline yacc ];
+
+  configureFlags = [ "--with-readline" ];
 
   meta = with stdenv.lib; {
     description = "Es is an extensible shell";
@@ -37,9 +33,13 @@ stdenv.mkDerivation {
         functional programming languages, such as Scheme,
         and the Tcl embeddable programming language.
       '';
-    homepage = http://wryun.github.io/es-shell/;
+    homepage = "http://wryun.github.io/es-shell/";
     license = licenses.publicDomain;
-    maintainers = [ maintainers.sjmackenzie ];
+    maintainers = with maintainers; [ sjmackenzie ttuegel ];
     platforms = platforms.all;
+  };
+
+  passthru = {
+    shellPath = "/bin/es";
   };
 }

@@ -1,37 +1,63 @@
-{ stdenv, fetchurl, autoconf, automake, libtool
-, llvm, libcxx, libcxxabi, clang, openssl, libuuid
-, libobjc ? null
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
+, installShellFiles
+, libcxxabi, libuuid
+, libobjc ? null, maloader ? null
+, enableTapiSupport ? true, libtapi
 }:
 
 let
-  baseParams = rec {
-    name = "cctools-port-${version}";
-    version = "862";
 
-    src = let
-      # Should be fetchFromGitHub but it was whining so this will do for now
+  # The targetPrefix prepended to binary names to allow multiple binuntils on the
+  # PATH to both be usable.
+  targetPrefix = stdenv.lib.optionalString
+    (stdenv.targetPlatform != stdenv.hostPlatform)
+    "${stdenv.targetPlatform.config}-";
+in
+
+# Non-Darwin alternatives
+assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
+
+let
+  baseParams = rec {
+    name = "${targetPrefix}cctools-port";
+    version = "927.0.2";
+
+    src = fetchFromGitHub {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
-      rev    = "59d21d2c793c51d205c8b4ab14b9b28e63c72445";
-    in fetchurl {
-      url    = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
-      sha256 = "01f31ijpnplbiyp7ldwzy8vbkn3j3m56n5blsvsav5nlp4lp2g71";
+      rev    = "8239a5211bcf07d6b9d359782e1a889ec1d7cce5";
+      sha256 = "0h8b1my0wf1jyjq63wbiqkl2clgxsf87f6i4fjhqs431fzlq8sac";
     };
 
-    buildInputs = [ autoconf automake libtool openssl libuuid ] ++
-      # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
-      stdenv.lib.optionals (!stdenv.isDarwin) [ llvm clang ] ++
-      stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
+    outputs = [ "out" "dev" "man" ];
 
-    patches = [
-      ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
+    nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ];
+    buildInputs = [ libuuid ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
+      ++ stdenv.lib.optional enableTapiSupport libtapi;
+
+    patches = [ ./ld-ignore-rpath-link.patch ./ld-rpath-nonfinal.patch ];
+
+    __propagatedImpureHostDeps = [
+      # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
+      "/usr/lib/libobjc.A.dylib"
+      "/usr/lib/libobjc.dylib"
     ];
 
     enableParallelBuilding = true;
 
-    configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [ "CXXFLAGS=-I${libcxx}/include/c++/v1" ];
+    # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
+    configurePlatforms = [ "build" "host" ]
+      ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    configureFlags = [ "--disable-clang-as" ]
+      ++ stdenv.lib.optionals enableTapiSupport [
+        "--enable-tapi-support"
+        "--with-libtapi=${libtapi}"
+      ];
 
-    postPatch = ''
+    postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace cctools/Makefile.am --replace libobjc2 ""
+    '' + ''
       sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
 
       # FIXME: there are far more absolute path references that I don't want to fix right now
@@ -55,48 +81,28 @@ let
       #  include_next "unistd.h"
       #endif
       EOF
-    '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-      sed -i -e 's|clang++|& -I${libcxx}/include/c++/v1|' cctools/autogen.sh
-    '';
 
-    preConfigure = ''
       cd cctools
-      sh autogen.sh
     '';
 
     preInstall = ''
       pushd include
       make DSTROOT=$out/include RC_OS=common install
       popd
+
+      installManPage ar/ar.{1,5}
     '';
+
+    passthru = {
+      inherit targetPrefix;
+    };
 
     meta = {
+      broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
       homepage = "http://www.opensource.apple.com/source/cctools/";
-      description = "Mac OS X Compiler Tools (cross-platform port)";
+      description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
+      maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
     };
   };
-in {
-  native = stdenv.mkDerivation (baseParams // {
-    # A hack for now...
-    postInstall = ''
-      cat >$out/bin/dsymutil << EOF
-      #!${stdenv.shell}
-      EOF
-      chmod +x $out/bin/dsymutil
-    '';
-  });
-
-  cross =
-    { cross, maloader, makeWrapper, xctoolchain}: stdenv.mkDerivation (baseParams // {
-      configureFlags = baseParams.configureFlags ++ [ "--target=${cross.config}" ];
-
-      postInstall = ''
-        for tool in dyldinfo dwarfdump dsymutil; do
-          ${makeWrapper}/bin/makeWrapper "${maloader}/bin/ld-mac" "$out/bin/${cross.config}-$tool" \
-            --add-flags "${xctoolchain}/bin/$tool"
-          ln -s "$out/bin/${cross.config}-$tool" "$out/bin/$tool"
-        done
-      '';
-    });
-}
+in stdenv.mkDerivation baseParams

@@ -1,23 +1,26 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, boost }:
 
 stdenv.mkDerivation rec {
-  version = "0.12.0";
-  name = "mdds-${version}";
+  pname = "mdds";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "http://kohei.us/files/mdds/src/mdds_${version}.tar.bz2";
-    sha256 = "10ar7r0gkdl2r7916jlkl5c38cynrh7x9s90a5i8d242r8ixw8ia";
+    url = "https://kohei.us/files/${pname}/src/${pname}-${version}.tar.bz2";
+    sha256 = "0zg0v9rfs92ff1gpnb06gzbxbnd9nqdar5fk8dnkmy0jpnf5qn7i";
   };
 
   postInstall = ''
-   mkdir -p "$out/lib/pkgconfig"
-   cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
+    mkdir -p "$out/lib/pkgconfig"
+    cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
   '';
 
-  meta = {
+  checkInputs = [ boost ];
+
+  meta = with stdenv.lib; {
     inherit version;
-    homepage = https://code.google.com/p/multidimalgorithm/;
+    homepage = "https://gitlab.com/mdds/mdds";
     description = "A collection of multi-dimensional data structure and indexing algorithm";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 }

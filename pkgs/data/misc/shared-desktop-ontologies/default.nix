@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake ];
   
   meta = with stdenv.lib; {
-    homepage = http://oscaf.sourceforge.net/;
+    homepage = "http://oscaf.sourceforge.net/";
     description = "Ontologies necessary for the Nepomuk semantic desktop";
     longDescription = ''
       The shared-desktop-ontologies package brings the semantic web to the
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       are used by projects like KDE or Strigi.
     '';
     platforms = platforms.all;
-    maintainers = [ maintainers.sander maintainers.urkud ];
+    maintainers = [ maintainers.sander ];
   };
 }
 

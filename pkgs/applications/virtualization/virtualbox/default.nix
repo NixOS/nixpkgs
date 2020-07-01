@@ -1,99 +1,125 @@
-{ stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
-, which, alsaLib, curl, libvpx, gawk, nettools
-, xorriso, makeself, perl, pkgconfig, nukeReferences
-, javaBindings ? false, jdk ? null
-, pythonBindings ? false, python ? null
-, enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
-, pulseSupport ? false, pulseaudio ? null
+{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
+, libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
+, qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
+, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
+# If open-watcom-bin is not passed, VirtualBox will fall back to use
+# the shipped alternative sources (assembly).
+, open-watcom-bin ? null
+, makeself, perl
+, javaBindings ? true, jdk ? null # Almost doesn't affect closure size
+, pythonBindings ? false, python3 ? null
+, extensionPack ? null, fakeroot ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , enableHardening ? false
+, headless ? false
+, enable32bitGuests ? true
+, patchelfUnstable # needed until 0.10 is released
 }:
 
 with stdenv.lib;
 
 let
+  python = python3;
   buildType = "release";
+  # Use maintainers/scripts/update.nix to update the version and all related hashes or
+  # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
+  version = "6.1.6";
 
-  version = "4.3.28"; # changes ./guest-additions as well
-
-  forEachModule = action: ''
-    for mod in \
-      out/linux.*/${buildType}/bin/src/vboxdrv \
-      out/linux.*/${buildType}/bin/src/vboxpci \
-      out/linux.*/${buildType}/bin/src/vboxnetadp \
-      out/linux.*/${buildType}/bin/src/vboxnetflt
-    do
-      if [ "x$(basename "$mod")" != xvboxdrv -a ! -e "$mod/Module.symvers" ]
-      then
-        cp -v out/linux.*/${buildType}/bin/src/vboxdrv/Module.symvers \
-          "$mod/Module.symvers"
-      fi
-      INSTALL_MOD_PATH="$out" INSTALL_MOD_DIR=misc \
-      make -C "$MODULES_BUILD_DIR" DEPMOD=/do_not_use_depmod \
-        "M=\$(PWD)/$mod" BUILD_TYPE="${buildType}" ${action}
-    done
-  '';
-
-  # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "100309";
-  extensionPack = requireFile rec {
-    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
-    # IMPORTANT: Hash must be base16 encoded because it's used as an input to
-    # VBoxExtPackHelperApp!
-    # Tip: see http://dlc.sun.com.edgesuite.net/virtualbox/4.3.10/SHA256SUMS
-    sha256 = "72e101d9dc5eabeb76d1ab5bd6d2f817a11c89adfe8bb72cc5d614a2eef532d1";
-    message = ''
-      In order to use the extension pack, you need to comply with the VirtualBox Personal Use
-      and Evaluation License (PUEL) by downloading the related binaries from:
-
-      https://www.virtualbox.org/wiki/Downloads
-
-      Once you have downloaded the file, please use the following command and re-run the
-      installation:
-
-      nix-prefetch-url file://${name}
-    '';
-  };
-
+  iasl' = iasl.overrideAttrs (old: rec {
+    inherit (old) pname;
+    version = "20190108";
+    src = fetchurl {
+      url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
+      sha256 = "0bqhr3ndchvfhxb31147z8gd81dysyz5dwkvmp56832d0js2564q";
+    };
+    NIX_CFLAGS_COMPILE = old.NIX_CFLAGS_COMPILE + " -Wno-error=stringop-truncation";
+  });
 in stdenv.mkDerivation {
-  name = "virtualbox-${version}-${kernel.version}";
+  pname = "virtualbox";
+  inherit version;
 
   src = fetchurl {
-    url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "e157ab76d1958ae2c56b2a3875194fbff3de82486ad0e30032fd5bd772297c31";
+    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
+    sha256 = "b031c30d770f28c5f884071ad933e8c1f83e65b93aaba03a4012077c1d90a54f";
   };
 
+  outputs = [ "out" "modsrc" ];
+
+  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ]
+    ++ optional (!headless) wrapQtAppsHook;
+
+  # Wrap manually because we wrap just a small number of executables.
+  dontWrapQtApps = true;
+
   buildInputs =
-    [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
-      libcap glib lvm2 python alsaLib curl libvpx pam xorriso makeself perl
-      pkgconfig which libXmu nukeReferences ]
+    [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
+      libcap glib lvm2 alsaLib curl libvpx pam makeself perl
+      libXmu libpng libopus python ]
     ++ optional javaBindings jdk
-    ++ optional pythonBindings python
-    ++ optional pulseSupport pulseaudio;
+    ++ optional pythonBindings python # Python is needed even when not building bindings
+    ++ optional pulseSupport libpulseaudio
+    ++ optionals (headless) [ libXrandr libGL ]
+    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ];
+
+  hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 
   prePatch = ''
     set -x
-    MODULES_BUILD_DIR=`echo ${kernel.dev}/lib/modules/*/build`
-    sed -e 's@/lib/modules/`uname -r`/build@'$MODULES_BUILD_DIR@ \
-        -e 's@MKISOFS --version@MKISOFS -version@' \
+    sed -e 's@MKISOFS --version@MKISOFS -version@' \
         -e 's@PYTHONDIR=.*@PYTHONDIR=${if pythonBindings then python else ""}@' \
-        -i configure
-    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2
-    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2
-    find . -type f -iname '*makefile*' -exec sed -i -e 's/depmod -a/:/g' {} +
-    sed -e 's@"libasound.so.2"@"${alsaLib}/lib/libasound.so.2"@g' -i src/VBox/Main/xml/Settings.cpp src/VBox/Devices/Audio/alsa_stubs.c
+        -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++11 \1"@' \
+        ${optionalString (!headless) ''
+        -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
+        ''} -i configure
+    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
+    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
+
+    grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
+      ${optionalString pulseSupport
+        ''s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g''}'
+
+    grep 'libdbus-1\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
+      s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
+
+    grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
+      s@"libasound\.so\.2"@"${alsaLib.out}/lib/libasound.so.2"@g'
+
     export USER=nix
     set +x
   '';
 
-  patches = optional enableHardening ./hardened.patch;
+  patches =
+     optional enableHardening ./hardened.patch
+  ++ [ ./extra_symbols.patch ]
+     # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
+     # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
+     # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
+     # and also because it would unset QT_PLUGIN_PATH for security reasons. We work around
+     # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
+     # after the code that unsets it. Note that qtsvg is included so that SVG icons from
+     # the user's icon theme can be loaded.
+  ++ optional (!headless && enableHardening) (substituteAll {
+      src = ./qt-env-vars.patch;
+      qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
+    })
+  ++ [
+    ./qtx11extras.patch
+  ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
-      src/apps/adpctl/VBoxNetAdpCtl.cpp
+      src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
+  '' + optionalString headless ''
+    # Fix compile error in version 6.1.6
+    substituteInPlace src/VBox/HostServices/SharedClipboard/VBoxSharedClipboardSvc-x11-stubs.cpp \
+      --replace PSHCLFORMATDATA PSHCLFORMATS
   '';
 
+  # first line: ugly hack, and it isn't yet clear why it's a problem
   configurePhase = ''
+    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${lib.getDev stdenv.cc.libc}/include,,g')
+
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
     VBOX_WITH_TESTCASES            :=
     VBOX_WITH_TESTSUITE            :=
@@ -111,15 +137,23 @@ in stdenv.mkDerivation {
     ${optionalString javaBindings ''
     VBOX_JAVA_HOME                 := ${jdk}
     ''}
+    ${optionalString (!headless) ''
+    PATH_QT5_X11_EXTRAS_LIB        := ${getLib qtx11extras}/lib
+    PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
+    TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
+    ''}
     LOCAL_CONFIG
 
-    ./configure --with-qt4-dir=${qt4} \
+    ./configure \
+      ${optionalString headless "--build-headless"} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
       ${optionalString (!pulseSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
-      --disable-kmods --with-mkisofs=${xorriso}/bin/xorrisofs
-    sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
+      ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
+      ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
+      --disable-kmods
+    sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
         -i Config.kmk
@@ -130,8 +164,7 @@ in stdenv.mkDerivation {
 
   buildPhase = ''
     source env.sh
-    kmk BUILD_TYPE="${buildType}"
-    ${forEachModule "modules"}
+    kmk -j $NIX_BUILD_CORES BUILD_TYPE="${buildType}"
   '';
 
   installPhase = ''
@@ -143,16 +176,14 @@ in stdenv.mkDerivation {
     find out/linux.*/${buildType}/bin -mindepth 1 -maxdepth 1 \
       -name src -o -exec cp -avt "$libexec" {} +
 
-    # Install kernel modules
-    ${forEachModule "modules_install"}
-
-    # Create wrapper script
     mkdir -p $out/bin
-    for file in VirtualBox VBoxManage VBoxSDL VBoxBalloonCtrl VBoxBFE VBoxHeadless; do
+    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+        echo "Linking $file to /bin"
+        test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file
     done
 
-    ${optionalString enableExtensionPack ''
+    ${optionalString (extensionPack != null) ''
       mkdir -p "$share"
       "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EXTHELPER
       "$libexec/VBoxExtPackHelperApp" install \
@@ -164,27 +195,42 @@ in stdenv.mkDerivation {
       EXTHELPER
     ''}
 
-    # Create and fix desktop item
-    mkdir -p $out/share/applications
-    sed -i -e "s|Icon=VBox|Icon=$libexec/VBox.png|" $libexec/virtualbox.desktop
-    ln -sfv $libexec/virtualbox.desktop $out/share/applications
-    # Icons
-    mkdir -p $out/share/icons/hicolor
-    for size in `ls -1 $libexec/icons`; do
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
-    done
+    ${optionalString (!headless) ''
+      # Create and fix desktop item
+      mkdir -p $out/share/applications
+      sed -i -e "s|Icon=VBox|Icon=$libexec/VBox.png|" $libexec/virtualbox.desktop
+      ln -sfv $libexec/virtualbox.desktop $out/share/applications
+      # Icons
+      mkdir -p $out/share/icons/hicolor
+      for size in `ls -1 $libexec/icons`; do
+        mkdir -p $out/share/icons/hicolor/$size/apps
+        ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
+      done
+    ''}
 
-    # Get rid of a reference to linux.dev.
-    nuke-refs $out/lib/modules/*/misc/*.ko
+    cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
   '';
 
-  passthru = { inherit version; /* for guest additions */ };
+  preFixup = optionalString (!headless) ''
+    wrapQtApp $out/bin/VirtualBox
+  ''
+  # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
+  # the source code (see postPatch).
+  + optionalString (!headless && !enableHardening) ''
+    wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
+  '';
+
+  passthru = {
+    inherit version;       # for guest additions
+    inherit extensionPack; # for inclusion in profile to prevent gc
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "PC emulator";
-    homepage = http://www.virtualbox.org/;
-    maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    homepage = "https://www.virtualbox.org/";
+    maintainers = with maintainers; [ sander ];
+    platforms = [ "x86_64-linux" ];
   };
 }

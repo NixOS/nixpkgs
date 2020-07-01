@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, buildEnv, makeWrapper, glib, alsaLib , dbus, gtk, atk
-, pango, freetype, fontconfig, gdk_pixbuf , cairo, cups, expat, nspr, gconf, nss
-, xlibs, libcap, unzip
+{ stdenv, fetchurl, buildEnv, makeWrapper, glib, alsaLib , dbus, gtk2, atk
+, pango, freetype, fontconfig, gdk-pixbuf , cairo, cups, expat, nspr, gconf, nss
+, xorg, libcap, unzip
 }:
 
 let
   thrustEnv = buildEnv {
     name = "env-thrust";
     paths = [
-      stdenv.cc.cc glib dbus gtk atk pango freetype fontconfig gdk_pixbuf
-      cairo cups expat alsaLib nspr gconf nss xlibs.libXrender xlibs.libX11
-      xlibs.libXext xlibs.libXdamage xlibs.libXtst xlibs.libXcomposite
-      xlibs.libXi xlibs.libXfixes xlibs.libXrandr xlibs.libXcursor libcap
+      stdenv.cc.cc glib dbus gtk2 atk pango freetype fontconfig gdk-pixbuf
+      cairo cups expat alsaLib nspr gconf nss xorg.libXrender xorg.libX11
+      xorg.libXext xorg.libXdamage xorg.libXtst xorg.libXcomposite
+      xorg.libXi xorg.libXfixes xorg.libXrandr xorg.libXcursor libcap
     ];
   };
 in stdenv.mkDerivation rec {
-  name = "thrust-${version}";
+  pname = "thrust";
   version = "0.7.6";
 
   src = fetchurl {
@@ -39,8 +39,8 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Chromium-based cross-platform / cross-language application framework";
-    homepage = https://github.com/breach/thrust;
-    license = [ licenses.mit ];
+    homepage = "https://github.com/breach/thrust";
+    license = licenses.mit;
     maintainers = [ maintainers.osener ];
     platforms = [ "x86_64-linux" ];
   };

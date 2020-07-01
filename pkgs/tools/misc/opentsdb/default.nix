@@ -1,26 +1,26 @@
-{ stdenv, autoconf, automake, curl, fetchurl, jdk, jre, makeWrapper, nettools, python }:
+{ stdenv, autoconf, automake, curl, fetchurl, jdk, jre, makeWrapper, nettools
+, python, git
+}:
+
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "opentsdb-2.1.0";
+  pname = "opentsdb";
+  version = "2.4.0";
 
   src = fetchurl {
-    url = https://github.com/OpenTSDB/opentsdb/releases/download/v2.1.0/opentsdb-2.1.0.tar.gz;
-    sha256 = "0msijwzdwisqmdd8ikmrzbcqvrnb6ywz6zyd1vg0s5s4syi3cvmp";
+    url = "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "0b0hilqmgz6n1q7irp17h48v8fjpxhjapgw1py8kyav1d51s7mm2";
   };
 
-  buildInputs = [ autoconf automake curl jdk makeWrapper nettools python ];
+  buildInputs = [ autoconf automake curl jdk makeWrapper nettools python git ];
 
-  configurePhase = ''
-    echo > build-aux/fetchdep.sh.in
+  preConfigure = ''
+    patchShebangs ./build-aux/
     ./bootstrap
-    mkdir build
-    cd build
-    ../configure --prefix=$out
-    patchShebangs ../build-aux/
   '';
 
-  installPhase = ''
-    make install
+  postInstall = ''
     wrapProgram $out/bin/tsdb \
       --set JAVA_HOME "${jre}" \
       --set JAVA "${jre}/bin/java"
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Time series database with millisecond precision";
-    homepage = http://opentsdb.net;
+    homepage = "http://opentsdb.net";
     license = licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ maintainers.ocharles ];

@@ -14,15 +14,10 @@ let
         description = "${name} liquidsoap stream";
         wantedBy = [ "multi-user.target" ];
         path = [ pkgs.wget ];
-        preStart =
-          ''
-            mkdir -p /var/log/liquidsoap
-            chown liquidsoap -R /var/log/liquidsoap
-          '';
         serviceConfig = {
-          PermissionsStartOnly="true";
           ExecStart = "${pkgs.liquidsoap}/bin/liquidsoap ${stream}";
           User = "liquidsoap";
+          LogsDirectory = "liquidsoap";
         };
       };
     };
@@ -46,7 +41,7 @@ in
       example = {
         myStream1 = literalExample "\"/etc/liquidsoap/myStream1.liq\"";
         myStream2 = literalExample "./myStream2.liq";
-        myStream3 = literalExample "\"out(playlist(\"/srv/music/\"))\"";
+        myStream3 = literalExample "\"out(playlist(\\\"/srv/music/\\\"))\"";
       };
 
       type = types.attrsOf (types.either types.path types.str);
@@ -57,7 +52,7 @@ in
 
   config = mkIf (builtins.length streams != 0) {
 
-    users.extraUsers.liquidsoap = {
+    users.users.liquidsoap = {
       uid = config.ids.uids.liquidsoap;
       group = "liquidsoap";
       extraGroups = [ "audio" ];
@@ -66,7 +61,7 @@ in
       createHome = true;
     };
 
-    users.extraGroups.liquidsoap.gid = config.ids.gids.liquidsoap;
+    users.groups.liquidsoap.gid = config.ids.gids.liquidsoap;
 
     systemd.services = builtins.listToAttrs ( map streamService streams );
   };

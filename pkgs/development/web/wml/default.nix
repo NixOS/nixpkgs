@@ -1,12 +1,15 @@
 { stdenv, fetchurl, perlPackages, ncurses, lynx, makeWrapper }:
 
-perlPackages.buildPerlPackage rec {
-  name = "wml-2.0.11";
+perlPackages.buildPerlPackage {
+  pname = "wml";
+  version = "2.0.11";
 
   src = fetchurl {
-    url = "http://thewml.org/distrib/${name}.tar.gz";
+    url = "http://thewml.org/distrib/wml-2.0.11.tar.gz";
     sha256 = "0jjxpq91x7y2mgixz7ghqp01m24qa37wl3zz515rrzv7x8cyy4cf";
   };
+
+  setOutputFlags = false;
 
   # Getting lots of Non-ASCII character errors from pod2man.
   # Inserting =encoding utf8 before the first =head occurrence.
@@ -19,31 +22,43 @@ perlPackages.buildPerlPackage rec {
     sed -i 's/ doc / /g' wml_backend/p2_mp4h/Makefile.in
     sed -i '/p2_mp4h\/doc/d' Makefile.in
   '';
-  
-  buildInputs = [ perlPackages.perl ncurses lynx makeWrapper ];
+
+  buildInputs = with perlPackages;
+    [ perl TermReadKey GD BitVector ncurses lynx makeWrapper ImageSize ];
 
   patches = [ ./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch ];
-  
-  preFixup = ''
-    substituteInPlace $out/bin/wml \
+
+  hardeningDisable = [ "format" ];
+
+  postPatch = ''
+    substituteInPlace wml_frontend/wml.src \
       --replace "File::PathConvert::realpath" "Cwd::realpath" \
       --replace "File::PathConvert::abs2rel" "File::Spec->abs2rel" \
       --replace "File::PathConvert" "File::Spec"
 
+    for i in wml_include/des/imgbg.src wml_include/des/imgdot.src; do
+      substituteInPlace $i \
+        --replace "WML::GD" "GD"
+    done
+
+    rm wml_test/t/11-wmk.t
+  '';
+
+  preFixup = ''
     wrapProgram $out/bin/wml \
-      --set PERL5LIB ${with perlPackages; stdenv.lib.makePerlPath [
+      --set PERL5LIB ${with perlPackages; makePerlPath [
         BitVector TermReadKey ImageSize
       ]}
   '';
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
+
+  installTargets = [ "install" ];
 
   meta = with stdenv.lib; {
-    homepage = http://thewml.org/;
+    homepage = "https://www.shlomifish.org/open-source/projects/website-meta-language/";
     description = "Off-line HTML generation toolkit for Unix";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    # Not sure what broke this build, it used to work
-    broken = true;
   };
 }

@@ -1,16 +1,18 @@
 { stdenv, fetchurl, ncurses ? null, perl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "liboping-1.8.0";
+  name = "liboping-1.10.0";
 
   src = fetchurl {
     url = "http://verplant.org/liboping/files/${name}.tar.bz2";
-    sha256 = "1nsvlsvapc64h0anip2hz5ydbgk3an94xqiaa9kivcw1r6193jqx";
+    sha256 = "1n2wkmvw6n80ybdwkjq8ka43z2x8mvxq49byv61b52iyz69slf7b";
   };
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
   buildInputs = [ ncurses perl ];
 
-  configureFlags = stdenv.lib.optionalString (perl == null) "--with-perl-bindings=no";
+  configureFlags = stdenv.lib.optional (perl == null) "--with-perl-bindings=no";
 
   meta = with stdenv.lib; {
     description = "C library to generate ICMP echo requests (a.k.a. ping packets)";
@@ -21,9 +23,9 @@ stdenv.mkDerivation rec {
       Included is a sample application, called oping, which demonstrates the
       library's abilities.
     '';
-    homepage = http://noping.cc/;
+    homepage = "http://noping.cc/";
     license = licenses.lgpl21;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex db ];
 
+  doCheck = false; # needs "y" tool
+
   meta = {
-    homepage = http://bogofilter.sourceforge.net/;
+    homepage = "http://bogofilter.sourceforge.net/";
     longDescription = ''
       Bogofilter is a mail filter that classifies mail as spam or ham
       (non-spam) by a statistical analysis of the message's header and
@@ -22,5 +24,6 @@ stdenv.mkDerivation rec {
       filter.
     '';
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -4,12 +4,14 @@
 # need pkgconfig so that libshout installs ${out}/lib/pkgconfig/shout.pc
 
 stdenv.mkDerivation rec {
-  name = "libshout-2.3.1";
+  name = "libshout-2.4.3";
 
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/libshout/${name}.tar.gz";
-    sha256 = "cf3c5f6b4a5e3fcfbe09fb7024aa88ad4099a9945f7cb037ec06bcee7a23926e";
+    sha256 = "1zhdshas539cs8fsz8022ljxnnncr5lafhfd1dqr1gs125fzb2hd";
   };
+
+  outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ libvorbis libtheora speex ];
@@ -23,9 +25,9 @@ stdenv.mkDerivation rec {
       bad data from getting to the icecast server.
     '';
 
-    homepage = http://www.icecast.org;
+    homepage = "http://www.icecast.org";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
- 
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

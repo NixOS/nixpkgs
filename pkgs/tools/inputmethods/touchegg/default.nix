@@ -1,23 +1,24 @@
-{ stdenv, fetchurl, xlibs, xorgserver, qt4, mesa, geis  }:
+{ stdenv, fetchurl, xorg, xorgserver, qt4, libGLU, libGL, geis, qmake4Hook }:
 
 stdenv.mkDerivation rec {
-  name = "touchegg-${version}";
+  pname = "touchegg";
   version = "1.1.1";
   src = fetchurl {
-    url = "https://touchegg.googlecode.com/files/${name}.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/touchegg/${pname}-${version}.tar.gz";
     sha256 = "95734815c7219d9a71282f3144b3526f2542b4fa270a8e69d644722d024b4038";
   };
 
-  buildInputs = [ xorgserver mesa xlibs.libX11 xlibs.libXtst xlibs.libXext qt4 geis ];
+  buildInputs = [ xorgserver libGLU libGL xorg.libX11 xorg.libXtst xorg.libXext qt4 geis ];
 
-  configurePhase = ''
+  nativeBuildInputs = [ qmake4Hook ];
+
+  preConfigure = ''
     sed -e "s@/usr/@$out/@g" -i $(find . -name touchegg.pro)
     sed -e "s@/usr/@$out/@g" -i $(find ./src/touchegg/config/ -name Config.cpp)
-    qmake touchegg.pro
   '';
 
   meta = {
-    homepage = "https://code.google.com/p/touchegg/";
+    homepage = "https://github.com/JoseExposito/touchegg";
     description = "Macro binding for touch surfaces";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

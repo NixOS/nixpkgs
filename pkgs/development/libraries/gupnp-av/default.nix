@@ -1,21 +1,57 @@
-{ stdenv, fetchurl, gupnp, pkgconfig }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gobject-introspection
+, vala
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, glib
+, libxml2
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
-  name = "gupnp-av-${version}";
-  majorVersion = "0.12";
-  version = "${majorVersion}.4";
-  src = fetchurl {
-    url = "mirror://gnome/sources/gupnp-av/${majorVersion}/gupnp-av-${version}.tar.xz";
-    sha256 = "0nvsvpiyfslz54j4hjh2gsdjkbi2qj2f4k0aw8s7f05kibprr2jl";
-  };
-  
-  buildInputs = [ gupnp pkgconfig ];
+  pname = "gupnp-av";
+  version = "0.12.11";
 
-  meta = {
-    homepage = http://gupnp.org/;
+  outputs = [ "out" "dev" "devdoc" ];
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1p3grslwqm9bc8rmpn4l48d7v9s84nina4r9xbd932dbj8acz7b8";
+  };
+
+  nativeBuildInputs = [
+    pkgconfig
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ];
+
+  buildInputs = [
+    glib
+    libxml2
+  ];
+
+  configureFlags = [
+    "--enable-gtk-doc"
+  ];
+
+  doCheck = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
+    homepage = "http://gupnp.org/";
     description = "A collection of helpers for building AV (audio/video) applications using GUPnP";
-    longDescription = "GUPnP implements the UPnP specification: resource announcement and discovery, description, control, event notification, and presentation (GUPnP includes basic web server functionality through libsoup). GUPnP does not include helpers for construction or control of specific standardized resources (e.g. MediaServer); this is left for higher level libraries utilizing the GUPnP framework.";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
   };
 }

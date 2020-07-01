@@ -1,14 +1,23 @@
-{ stdenv, fetchurl, libuuid }:
+{ stdenv, fetchFromGitHub, cmake, asciidoc, enableDrafts ? false }:
 
 stdenv.mkDerivation rec {
-  name = "zeromq-4.0.5";
+  pname = "zeromq";
+  version = "4.3.2";
 
-  src = fetchurl {
-    url = "http://download.zeromq.org/${name}.tar.gz";
-    sha256 = "0arl8fy8d03xd5h0mgda1s5bajwg8iyh1kk4hd1420rpcxgkrj9v";
+  src = fetchFromGitHub {
+    owner = "zeromq";
+    repo = "libzmq";
+    rev = "v${version}";
+    sha256 = "1q37z05i76ili31j6jlw8988iy6vxadlmd306f99phxfdpqa6bn9";
   };
 
-  buildInputs = [ libuuid ];
+  nativeBuildInputs = [ cmake asciidoc ];
+
+  enableParallelBuilding = true;
+
+  doCheck = false; # fails all the tests (ctest)
+
+  cmakeFlags = stdenv.lib.optional enableDrafts "-DENABLE_DRAFTS=ON";
 
   meta = with stdenv.lib; {
     branch = "4";
@@ -16,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "The Intelligent Transport Layer";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

@@ -1,8 +1,9 @@
 { fetchurl, stdenv, ocaml, makeWrapper, ncurses }:
 
 let version = "0.92"; in
-stdenv.mkDerivation rec {
-  name = "megam-${version}";
+stdenv.mkDerivation {
+  pname = "megam";
+  inherit version;
 
   src = fetchurl {
     url = "http://hal3.name/megam/megam_src.tgz";
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = "CAML_INCLUDES=${ocaml}/lib/ocaml/caml";
+  makeFlags = [ "CAML_INCLUDES=${ocaml}/lib/ocaml/caml" ];
 
   # see https://bugzilla.redhat.com/show_bug.cgi?id=435559
   dontStrip = true;
@@ -36,11 +37,11 @@ stdenv.mkDerivation rec {
           than the iterative scaling techniques used in almost every
           other maxent package out there.  '';
 
-    homepage = http://www.umiacs.umd.edu/~hal/megam;
+    homepage = "http://www.umiacs.umd.edu/~hal/megam";
 
     license = "non-commercial";
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

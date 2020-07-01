@@ -1,17 +1,47 @@
-{ stdenv, fetchurl, ncurses }:
+{ writeText, stdenv, fetchurl, ncurses }:
 
+let
+  version = "0.6.1";
+in
 stdenv.mkDerivation rec {
-  name = "bwm-ng-0.6";
-  
+  pname = "bwm-ng";
+  inherit version;
+
   src = fetchurl {
-    url = "http://www.gropp.org/bwm-ng/${name}.tar.gz";
-    sha256 = "1pgzc8y2y73n72qvbd2g0dkbkw5h0f83k5h9id1rsck8w9c464y1";
+    url = "https://www.gropp.org/bwm-ng/${pname}-${version}.tar.gz";
+    sha256 = "1w0dwpjjm9pqi613i8glxrgca3rdyqyp3xydzagzr5ndc34z6z02";
   };
 
   buildInputs = [ ncurses ];
 
+  # gcc7 has some issues with inline functions
+  patches = [
+    (writeText "gcc7.patch"
+    ''
+    --- a/src/bwm-ng.c
+    +++ b/src/bwm-ng.c
+    @@ -27,5 +27,5 @@
+     /* handle interrupt signal */
+     void sigint(int sig) FUNCATTR_NORETURN;
+    -inline void init(void);
+    +static inline void init(void);
+
+     /* clear stuff and exit */
+    --- a/src/options.c
+    +++ b/src/options.c
+    @@ -35,5 +35,5 @@
+     inline int str2output_type(char *optarg);
+     #endif
+    -inline int str2out_method(char *optarg);
+    +static inline int str2out_method(char *optarg);
+     inline int str2in_method(char *optarg);
+
+    '')
+  ];
+
+
   # This code uses inline in the gnu89 sense: see http://clang.llvm.org/compatibility.html#inline
-  NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-std=gnu89" else null;
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-std=gnu89";
 
   meta = with stdenv.lib; {
     description = "A small and simple console-based live network and disk io bandwidth monitor";
@@ -42,7 +72,7 @@ stdenv.mkDerivation rec {
         This was influenced by the old bwm util written by Barney (barney@freewill.tzo.com) which had some issues with faster interfaces and was very simple. Since i had almost all code done anyway for other projects, i decided to create my own version.
 
         I actually don't know if netstat input is useful at all. I saw this elsewhere, so i added it. Its target is "netstat 1.42 (2001-04-15)" linux or Free/Open/netBSD. If there are other formats i would be happy to add them.
-        
+
         (from homepage)
     '';
   };

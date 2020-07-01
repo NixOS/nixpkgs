@@ -5,13 +5,13 @@ stdenv.mkDerivation {
   # name due to the sed hackery below.  Once patchelf 0.4 is in the
   # tree, we can do this properly.
   #name = "${klibc.name}-shrunk";
-  name = "${klibc.name}";
+  name = klibc.name;
   buildCommand = ''
     mkdir -p $out/lib
-    cp -prd ${klibc}/lib/klibc/bin $out/
-    cp -p ${klibc}/lib/*.so $out/lib/
+    cp -prd ${klibc.out}/lib/klibc/bin $out/
+    cp -p ${klibc.out}/lib/*.so $out/lib/
     chmod +w $out/*
-    old=$(echo ${klibc}/lib/klibc-*.so)
+    old=$(echo ${klibc.out}/lib/klibc-*.so)
     new=$(echo $out/lib/klibc-*.so)
     for i in $out/bin/*; do
       echo $i
@@ -21,4 +21,6 @@ stdenv.mkDerivation {
     done
   ''; # */
   allowedReferences = ["out"];
+
+  inherit (klibc) meta;
 }

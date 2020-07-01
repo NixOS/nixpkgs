@@ -1,36 +1,47 @@
-{ stdenv, fetchurl, glib, libxml2, pkgconfig
-, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
-, libintlOrEmpty
-, intltool, python }:
-let
-  majorVersion = "2.48";
-  version = "${majorVersion}.0";
-in
-stdenv.mkDerivation {
-  name = "libsoup-${version}";
+{ stdenv, fetchurl, glib, libxml2, meson, ninja, pkgconfig, gnome3
+, gnomeSupport ? true, sqlite, glib-networking, gobject-introspection, vala
+, libpsl, python3, brotli }:
+
+stdenv.mkDerivation rec {
+  pname = "libsoup";
+  version = "2.70.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
-    sha256 = "ea34dd64fe44343445daf6dd690d0691e9d973468de44878da97371c16d89784";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0hjk9lgppc5435my0lyywbpmj7ib5vvcylwfin8ki97g9bvj1c2l";
   };
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs libsoup/
-    patch -p1 < ${./bad-symbol.patch}
   '';
 
-  buildInputs = libintlOrEmpty ++ [ intltool python sqlite ];
-  nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
-    ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring ];
-  passthru.propagatedUserEnvPackages = [ glib_networking ];
+  outputs = [ "out" "dev" ];
 
-  # glib_networking is a runtime dependency, not a compile-time dependency
-  configureFlags = "--disable-tls-check" + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
+  buildInputs = [ python3 sqlite libpsl brotli ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala glib ];
+  propagatedBuildInputs = [ glib libxml2 ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  mesonFlags = [
+    "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
+    "-Dgssapi=disabled"
+    "-Dvapi=enabled"
+    "-Dgnome=${if gnomeSupport then "true" else "false"}"
+    "-Dntlm=disabled"
+  ];
+
+  doCheck = false; # ERROR:../tests/socket-test.c:37:do_unconnected_socket_test: assertion failed (res == SOUP_STATUS_OK): (2 == 200)
+
+  passthru = {
+    propagatedUserEnvPackages = [ glib-networking.out ];
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
+    description = "HTTP client/server library for GNOME";
+    homepage = "https://wiki.gnome.org/Projects/libsoup";
+    license = stdenv.lib.licenses.gpl2;
     inherit (glib.meta) maintainers platforms;
   };
 }

@@ -1,55 +1,62 @@
-{ stdenv, edk2, nasm, iasl, seabios, openssl, secureBoot ? false }:
+{ stdenv, lib, edk2, utillinux, nasm, iasl
+, csmSupport ? false, seabios ? null
+, secureBoot ? false
+}:
+
+assert csmSupport -> seabios != null;
 
 let
 
-  targetArch = if stdenv.isi686 then
-    "Ia32"
+  projectDscPath = if stdenv.isi686 then
+    "OvmfPkg/OvmfPkgIa32.dsc"
   else if stdenv.isx86_64 then
-    "X64"
+    "OvmfPkg/OvmfPkgX64.dsc"
+  else if stdenv.isAarch64 then
+    "ArmVirtPkg/ArmVirtQemu.dsc"
   else
     throw "Unsupported architecture";
 
+  version = lib.getVersion edk2;
 in
 
-stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
-  name = "OVMF-2014-12-10";
+edk2.mkDerivation projectDscPath {
+  name = "OVMF-${version}";
 
-  # TODO: properly include openssl for secureBoot
-  buildInputs = [nasm iasl] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
+  outputs = [ "out" "fd" ];
 
-  unpackPhase = ''
-    for file in \
-      "${edk2.src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg};
-    do
-      ln -sv "$file" .
-    done
+  buildInputs = [ utillinux nasm iasl ];
 
-    ${if (seabios == false) then ''
-        ln -sv ${edk2.src}/OvmfPkg .
-      '' else ''
-        cp -r ${edk2.src}/OvmfPkg .
-        chmod +w OvmfPkg/Csm/Csm16
-        cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
-      ''}
+  hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 
-    ${if (secureBoot == true) then ''
-        ln -sv ${edk2.src}/SecurityPkg .
-        ln -sv ${edk2.src}/CryptoPkg .
-      '' else ''
-      ''}
-    '';
+  buildFlags =
+    lib.optional secureBoot "-DSECURE_BOOT_ENABLE=TRUE"
+    ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ];
 
-  buildPhase = if (seabios == false) then ''
-      build ${if secureBoot then "-DSECURE_BOOT_ENABLE=TRUE" else ""}
-    '' else ''
-      build -D CSM_ENABLE -D FD_SIZE_2MB ${if secureBoot then "-DSECURE_BOOT_ENABLE=TRUE" else ""}
-    '';
+  postPatch = lib.optionalString csmSupport ''
+    cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
+  '';
+
+  postFixup = if stdenv.isAarch64 then ''
+    mkdir -vp $fd/FV
+    mkdir -vp $fd/AAVMF
+    mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
+
+    # Uses Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
+    # FIXME: why is it different from Debian dir layout? https://salsa.debian.org/qemu-team/edk2/blob/debian/debian/rules
+    dd of=$fd/AAVMF/QEMU_EFI-pflash.raw       if=/dev/zero bs=1M    count=64
+    dd of=$fd/AAVMF/QEMU_EFI-pflash.raw       if=$fd/FV/QEMU_EFI.fd conv=notrunc
+    dd of=$fd/AAVMF/vars-template-pflash.raw if=/dev/zero bs=1M    count=64
+  '' else ''
+    mkdir -vp $fd/FV
+    mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $fd/FV
+  '';
+
+  dontPatchELF = true;
 
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";
-    homepage = http://sourceforge.net/apps/mediawiki/tianocore/index.php?title=OVMF;
+    homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = stdenv.lib.licenses.bsd2;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-    platforms = ["x86_64-linux" "i686-linux"];
+    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin"];
   };
-})
+}

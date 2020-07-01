@@ -1,32 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, cmake, pango, cairo, glib, imlib2, libXinerama
-, libXrender, libXcomposite, libXdamage, libX11, libXrandr, gtk, libpthreadstubs
-, libXdmcp
+{ stdenv, fetchFromGitLab, pkgconfig, cmake, gettext, cairo, pango, pcre
+, glib, imlib2, gtk2, libXinerama, libXrender, libXcomposite, libXdamage
+, libX11, libXrandr, librsvg, libpthreadstubs, libXdmcp
+, libstartup_notification, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "tint2-${version}";
-  version = "0.11";
+  pname = "tint2";
+  version = "16.7";
 
-  src = fetchurl {
-    url = "http://tint2.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "07a74ag7lhc6706z34zvqj2ikyyl7wnzisfxpld67ljpc1m6w47y";
+  src = fetchFromGitLab {
+    owner = "o9000";
+    repo = "tint2";
+    rev = version;
+    sha256 = "1937z0kixb6r82izj12jy4x8z4n96dfq1hx05vcsvsg1sx3wxgb0";
   };
-        
-  buildInputs = [ pkgconfig cmake pango cairo glib imlib2 libXinerama
-    libXrender libXcomposite libXdamage libX11 libXrandr gtk libpthreadstubs
-    libXdmcp
-  ];
 
-  preConfigure = "substituteInPlace CMakeLists.txt --replace /etc $out/etc";
+  enableParallelBuilding = true;
 
-  cmakeFlags = [
-    "-DENABLE_TINT2CONF=0"
-  ];
+  nativeBuildInputs = [ pkgconfig cmake gettext wrapGAppsHook ];
 
-  meta = {
-    homepage = http://code.google.com/p/tint2;
-    license = stdenv.lib.licenses.gpl2;
-    description = "A simple panel/taskbar unintrusive and light (memory / cpu / aestetic)";
-    platforms = stdenv.lib.platforms.linux;
+  buildInputs = [ cairo pango pcre glib imlib2 gtk2 libXinerama libXrender
+    libXcomposite libXdamage libX11 libXrandr librsvg libpthreadstubs
+    libXdmcp libstartup_notification ];
+
+  postPatch = ''
+    for f in ./src/launcher/apps-common.c \
+             ./src/launcher/icon-theme-common.c
+    do
+      substituteInPlace $f --replace /usr/share/ /run/current-system/sw/share/
+    done
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://gitlab.com/o9000/tint2";
+    description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
   };
 }

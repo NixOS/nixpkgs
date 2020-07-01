@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "kbdlight-${version}";
+  pname = "kbdlight";
   version = "1.3";
 
   src = fetchFromGitHub {
@@ -13,11 +13,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace Makefile \
-      --replace /usr/local $out
+      --replace /usr/local $out \
+      --replace 4755 0755
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/hobarrera/kbdlight;
+    homepage = "https://github.com/hobarrera/kbdlight";
     description = "A very simple application that changes MacBooks' keyboard backlight level";
     license = licenses.isc;
     maintainers = [ maintainers.womfoo ];

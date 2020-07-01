@@ -1,71 +1,64 @@
-{ stdenv, python27Packages, curaengine, makeDesktopItem, fetchurl }:
-let
-  py = python27Packages;
-  version = "15.02.1";
-in
-stdenv.mkDerivation rec {
-  name = "cura-${version}";
+{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
 
-  src = fetchurl {
-    url = "https://github.com/daid/Cura/archive/${version}.tar.gz";
-    sha256 = "18pb31vd9786q522i1i780wpzr6vih9gg9d8k508gh2d5yr4aal6";
+mkDerivation rec {
+  pname = "cura";
+  version = "4.6.1";
+
+  src = fetchFromGitHub {
+    owner = "Ultimaker";
+    repo = "Cura";
+    rev = version;
+    sha256 = "0h1r9caa579d3gfpcmch54rdbkg5df64ds2v84iqsbxwjp0rmn4n";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "Cura";
-    exec = "cura";
-    icon = "cura";
-    comment = "Cura";
-    desktopName = "Cura";
-    genericName = "3D printing host software";
-    categories = "GNOME;GTK;Utility;";
+  materials = fetchFromGitHub {
+    owner = "Ultimaker";
+    repo = "fdm_materials";
+    rev = version;
+    sha256 = "1k5c3qmixhpz3z2yi0fysxcyyf1yhcwmdlrcypkw827lhsialqp4";
   };
 
-  python_deps = with py; [ pyopengl pyserial numpy wxPython30 power setuptools ];
+  buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
+  propagatedBuildInputs = with python3.pkgs; [
+    libsavitar numpy-stl pyserial requests uranium zeroconf
+    sentry-sdk trimesh
+  ] ++ plugins;
+  nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
-  pythonPath = python_deps;
+  cmakeFlags = [
+    "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
+    "-DCURA_VERSION=${version}"
+  ];
 
-  propagatedBuildInputs = python_deps;
+  makeWrapperArgs = [
+    # hacky workaround for https://github.com/NixOS/nixpkgs/issues/59901
+    "--set OMP_NUM_THREADS 1"
+  ];
 
-  buildInputs = [ curaengine py.wrapPython ];
-
-  configurePhase = "";
-  buildPhase = "";
-
-  installPhase = ''
-    # Install Python code.
-    site_packages=$out/lib/python2.7/site-packages
-    mkdir -p $site_packages
-    cp -r Cura $site_packages/
-
-    # Install resources.
-    resources=$out/share/cura
-    mkdir -p $resources
-    cp -r resources/* $resources/
-    sed -i 's|os.path.join(os.path.dirname(__file__), "../../resources")|"'$resources'"|g' $site_packages/Cura/util/resources.py
-
-    # Install executable.
-    mkdir -p $out/bin
-    cp Cura/cura.py $out/bin/cura
-    chmod +x $out/bin/cura
-    sed -i 's|#!/usr/bin/python|#!/usr/bin/env python|' $out/bin/cura
-    wrapPythonPrograms
-
-    # Make it find CuraEngine.
-    echo "def getEngineFilename(): return '${curaengine}/bin/CuraEngine'" >> $site_packages/Cura/util/sliceEngine.py
-
-    # Install desktop item.
-    mkdir -p "$out"/share/applications
-    cp "$desktopItem"/share/applications/* "$out"/share/applications/
-    mkdir -p "$out"/share/icons
-    ln -s "$resources/images/c.png" "$out"/share/icons/cura.png
+  postPatch = ''
+    sed -i 's,/python''${PYTHON_VERSION_MAJOR}/dist-packages,/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages,g' CMakeLists.txt
+    sed -i 's, executable_name = .*, executable_name = "${curaengine}/bin/CuraEngine",' plugins/CuraEngineBackend/CuraEngineBackend.py
   '';
 
-  meta = with stdenv.lib; {
-    description = "3D printing host software";
-    homepage = https://github.com/daid/Cura;
-    license = licenses.agpl3;
+  postInstall = ''
+    mkdir -p $out/share/cura/resources/materials
+    cp ${materials}/*.fdm_material $out/share/cura/resources/materials/
+    mkdir -p $out/lib/cura/plugins
+    for plugin in ${toString plugins}; do
+      ln -s $plugin/lib/cura/plugins/* $out/lib/cura/plugins
+    done
+  '';
+
+  postFixup = ''
+    wrapPythonPrograms
+    wrapQtApp $out/bin/cura
+  '';
+
+  meta = with lib; {
+    description = "3D printer / slicing GUI built on top of the Uranium framework";
+    homepage = "https://github.com/Ultimaker/Cura";
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ abbradar gebner ];
   };
 }

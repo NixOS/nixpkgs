@@ -1,25 +1,30 @@
-{ stdenv, fetchurl, unzip, SDL, mesa, openal, curl, libXxf86vm }:
+{ stdenv, fetchurl, unzip, SDL, libGLU, libGL, openal, curl, libXxf86vm }:
+
 stdenv.mkDerivation rec {
-  name = "urbanterror-${version}";
-  version = "4.2.023";
+  pname = "urbanterror";
+  version = "4.3.4";
+
   srcs =
     [ (fetchurl {
-         url = "http://mirror.urtstats.net/urbanterror/UrbanTerror42_full023.zip";
-         sha256 = "e287e2a17432b81551f5c16e431d752484ce9be10508e756542f653757a29090";
+         url = "http://cdn.urbanterror.info/urt/43/releases/zips/UrbanTerror434_full.zip";
+         sha256 = "1rx4nnndsk88nvd7k4p35cw6znclkkzm2bl5j6vn6mjjdk66jrki";
        })
       (fetchurl {
-         url = "https://github.com/Barbatos/ioq3-for-UrbanTerror-4/archive/release-4.2.023.tar.gz";
-         sha256 = "03zrrx5b96c1srf2p24ca7zygq84byvrmcgh42d8bh5ds579ziqp";
+         url = "https://github.com/FrozenSand/ioq3-for-UrbanTerror-4/archive/release-${version}.zip";
+         sha256 = "1s9pmw7rbnzwzl1llcs0kr2krf4daf8hhnz1j89qk4bq9a9qfp71";
        })
     ];
-  buildInputs = [ unzip SDL mesa openal curl libXxf86vm];
-  sourceRoot = "ioq3-for-UrbanTerror-4-release-4.2.023";
+
+  buildInputs = [ unzip SDL libGL libGLU openal curl libXxf86vm ];
+  sourceRoot = "ioq3-for-UrbanTerror-4-release-${version}";
+
   configurePhase = ''
     echo "USE_OPENAL = 1" > Makefile.local
     echo "USE_OPENAL_DLOPEN = 0" >> Makefile.local
     echo "USE_CURL = 1" >> Makefile.local
     echo "USE_CURL_DLOPEN = 0" >> Makefile.local
   '';
+
   installPhase = ''
     destDir="$out/opt/urbanterror"
     mkdir -p "$destDir"
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
           "$destDir/Quake3-UrT"
     cp -v build/release-linux-*/Quake3-UrT-Ded.* \
           "$destDir/Quake3-UrT-Ded"
-    cp -rv ../UrbanTerror42/q3ut4 "$destDir"
+    cp -rv ../UrbanTerror43/q3ut4 "$destDir"
     cat << EOF > "$out/bin/urbanterror"
     #! ${stdenv.shell}
     cd "$destDir"
@@ -42,11 +47,15 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x "$out/bin/urbanterror-ded"
   '';
+
   postFixup = ''
     p=$out/opt/urbanterror/Quake3-UrT
     cur_rpath=$(patchelf --print-rpath $p)
-    patchelf --set-rpath $cur_rpath:${mesa}/lib $p
+    patchelf --set-rpath $cur_rpath:${libGL}/lib:${libGLU}/lib $p
   '';
+
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "A multiplayer tactical FPS on top of Quake 3 engine";
     longDescription = ''
@@ -56,9 +65,9 @@ stdenv.mkDerivation rec {
       tactical shooter; somewhat realism based, but the motto is "fun over
       realism". This results in a very unique, enjoyable and addictive game.
     '';
-    homepage = http://www.urbanterror.net;
-    license = with licenses; unfreeRedistributable;
-    maintainers = with maintainers; [ astsmtl ];
+    homepage = "http://www.urbanterror.info";
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ astsmtl fpletz ];
     platforms = platforms.linux;
     hydraPlatforms = [];
   };

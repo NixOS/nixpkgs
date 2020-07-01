@@ -1,22 +1,14 @@
-{stdenv, fetchurl, perl, readline, rsh, ssh, pam}:
+{ stdenv, fetchurl, perl, readline, rsh, ssh }:
 
-let
-  name = "pdsh-2.29";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "pdsh-2.34";
 
   src = fetchurl {
-    url = "http://pdsh.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "1kvzz01fyaxfqmbh53f4ljfsgvxdykh5jyr6fh4f1bw2ywxr1w2p";
+    url = "https://github.com/chaos/pdsh/releases/download/${name}/${name}.tar.gz";
+    sha256 = "1s91hmhrz7rfb6h3l5k97s393rcm1ww3svp8dx5z8vkkc933wyxl";
   };
 
-  buildInputs = [perl readline ssh pam];
-
-  /* pdsh uses pthread_cancel(), which requires libgcc_s.so.1 to be
-     loadable at run-time. Adding the flag below ensures that the
-     library can be found. Obviously, though, this is a hack. */
-  NIX_LDFLAGS="-lgcc_s";
+  buildInputs = [ perl readline ssh ];
 
   preConfigure = ''
     configureFlagsArray=(
@@ -25,16 +17,16 @@ stdenv.mkDerivation {
       "--with-machines=/etc/pdsh/machines"
       ${if readline == null then "--without-readline" else "--with-readline"}
       ${if ssh == null then "--without-ssh" else "--with-ssh"}
-      ${if pam == null then "--without-pam" else "--with-pam"}
       ${if rsh == false then "--without-rsh" else "--with-rsh"}
       "--with-dshgroups"
       "--with-xcpu"
       "--disable-debug"
+      '--with-rcmd-rank-list=ssh,krb4,exec,xcpu,rsh'
     )
   '';
 
   meta = {
-    homepage = "http://code.google.com/p/pdsh/";
+    homepage = "https://github.com/chaos/pdsh";
     description = "High-performance, parallel remote shell utility";
     license = stdenv.lib.licenses.gpl2;
 
@@ -47,7 +39,7 @@ stdenv.mkDerivation {
       while timeouts occur on some connections.
     '';
 
-    hydraPlatforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

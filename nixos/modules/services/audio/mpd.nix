@@ -4,22 +4,29 @@ with lib;
 
 let
 
+  name = "mpd";
+
   uid = config.ids.uids.mpd;
   gid = config.ids.gids.mpd;
   cfg = config.services.mpd;
 
   mpdConf = pkgs.writeText "mpd.conf" ''
     music_directory     "${cfg.musicDirectory}"
-    playlist_directory  "${cfg.dataDir}/playlists"
-    db_file             "${cfg.dbFile}"
+    playlist_directory  "${cfg.playlistDirectory}"
+    ${lib.optionalString (cfg.dbFile != null) ''
+      db_file             "${cfg.dbFile}"
+    ''}
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
-    log_file            "syslog"
-    user                "${cfg.user}"
-    group               "${cfg.group}"
 
-    ${optionalString (cfg.network.host != "any") ''bind_to_address "${cfg.network.host}"''}
+    ${optionalString (cfg.network.listenAddress != "any") ''bind_to_address "${cfg.network.listenAddress}"''}
     ${optionalString (cfg.network.port != 6600)  ''port "${toString cfg.network.port}"''}
+    ${optionalString (cfg.fluidsynth) ''
+      decoder {
+              plugin "fluidsynth"
+              soundfont "${pkgs.soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
+      }
+    ''}
 
     ${cfg.extraConfig}
   '';
@@ -33,30 +40,55 @@ in {
     services.mpd = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable MPD, the music player daemon.
         '';
       };
 
-      musicDirectory = mkOption {
-        default = "${cfg.dataDir}/music";
+      startWhenNeeded = mkOption {
+        type = types.bool;
+        default = false;
         description = ''
-          The directory where mpd reads music from.
+          If set, <command>mpd</command> is socket-activated; that
+          is, instead of having it permanently running as a daemon,
+          systemd will start it on the first incoming connection.
+        '';
+      };
+
+      musicDirectory = mkOption {
+        type = with types; either path (strMatching "(http|https|nfs|smb)://.+");
+        default = "${cfg.dataDir}/music";
+        defaultText = ''''${dataDir}/music'';
+        description = ''
+          The directory or NFS/SMB network share where mpd reads music from.
+        '';
+      };
+
+      playlistDirectory = mkOption {
+        type = types.path;
+        default = "${cfg.dataDir}/playlists";
+        defaultText = ''''${dataDir}/playlists'';
+        description = ''
+          The directory where mpd stores playlists.
         '';
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra directives added to to the end of MPD's configuration file,
           mpd.conf. Basic configuration like file location and uid/gid
-          is added automatically to the beginning of the file.
+          is added automatically to the beginning of the file. For available
+          options see <literal>man 5 mpd.conf</literal>'.
         '';
       };
 
       dataDir = mkOption {
-        default = "/var/lib/mpd";
+        type = types.path;
+        default = "/var/lib/${name}";
         description = ''
           The directory where MPD stores its state, tag cache,
           playlists etc.
@@ -64,27 +96,31 @@ in {
       };
 
       user = mkOption {
-        default = "mpd";
+        type = types.str;
+        default = name;
         description = "User account under which MPD runs.";
       };
 
       group = mkOption {
-        default = "mpd";
+        type = types.str;
+        default = name;
         description = "Group account under which MPD runs.";
       };
 
       network = {
 
-        host = mkOption {
-          default = "any";
+        listenAddress = mkOption {
+          type = types.str;
+          default = "127.0.0.1";
+          example = "any";
           description = ''
-            This setting sets the address for the daemon to listen on. Careful attention
-            should be paid if this is assigned to anything other then the default, any.
-            This setting can deny access to control of the daemon.
+            The address for the daemon to listen on.
+            Use <literal>any</literal> to listen on all addresses.
           '';
         };
 
         port = mkOption {
+          type = types.int;
           default = 6600;
           description = ''
             This setting is the TCP port that is desired for the daemon to get assigned
@@ -95,10 +131,20 @@ in {
       };
 
       dbFile = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = "${cfg.dataDir}/tag_cache";
+        defaultText = ''''${dataDir}/tag_cache'';
         description = ''
-          The path to MPD's database.
+          The path to MPD's database. If set to <literal>null</literal> the
+          parameter is omitted from the configuration.
+        '';
+      };
+
+      fluidsynth = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, add fluidsynth soundfont and configure the plugin.
         '';
       };
     };
@@ -110,32 +156,59 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.services.mpd = {
-      after = [ "network.target" "sound.target" ];
-      description = "Music Player Daemon";
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.mpd ];
-      preStart = "mkdir -p ${cfg.dataDir} && chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}";
-      script = "exec mpd --no-daemon ${mpdConf}";
-      serviceConfig = {
-        User = "mpd";
-        PermissionsStartOnly = true;
+    systemd.sockets.mpd = mkIf cfg.startWhenNeeded {
+      description = "Music Player Daemon Socket";
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [
+        "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}"
+      ];
+      socketConfig = {
+        Backlog = 5;
+        KeepAlive = true;
+        PassCredentials = true;
       };
     };
 
-    users.extraUsers = optionalAttrs (cfg.user == "mpd") (singleton {
-      inherit uid;
-      name = "mpd";
-      group = cfg.group;
-      extraGroups = [ "audio" ];
-      description = "Music Player Daemon user";
-      home = "${cfg.dataDir}";
-    });
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.playlistDirectory}' - ${cfg.user} ${cfg.group} - -"
+    ];
 
-    users.extraGroups = optionalAttrs (cfg.group == "mpd") (singleton {
-      name = "mpd";
-      gid = gid;
-    });
+    systemd.services.mpd = {
+      after = [ "network.target" "sound.target" ];
+      description = "Music Player Daemon";
+      wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
+
+      serviceConfig = {
+        User = "${cfg.user}";
+        ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
+        Type = "notify";
+        LimitRTPRIO = 50;
+        LimitRTTIME = "infinity";
+        ProtectSystem = true;
+        NoNewPrivileges = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
+        RestrictNamespaces = true;
+        Restart = "always";
+      };
+    };
+
+    users.users = optionalAttrs (cfg.user == name) {
+      ${name} = {
+        inherit uid;
+        group = cfg.group;
+        extraGroups = [ "audio" ];
+        description = "Music Player Daemon user";
+        home = "${cfg.dataDir}";
+      };
+    };
+
+    users.groups = optionalAttrs (cfg.group == name) {
+      ${name}.gid = gid;
+    };
   };
 
 }

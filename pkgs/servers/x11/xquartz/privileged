@@ -1,4 +1,4 @@
-#!/bin/sh
+#!@shell@
 
 export PATH=@PATH@:$PATH
 export FONTCONFIG_FILE="@FONTCONFIG_FILE@"

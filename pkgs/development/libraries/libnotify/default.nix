@@ -1,27 +1,60 @@
-{ stdenv, fetchurl, pkgconfig, automake, autoconf, libtool
-, glib, gdk_pixbuf, gobjectIntrospection, autoreconfHook }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, libxslt
+, docbook-xsl-ns
+, glib
+, gdk-pixbuf
+, gobject-introspection
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
-  ver_maj = "0.7";
-  ver_min = "6";
-  name = "libnotify-${ver_maj}.${ver_min}";
+  pname = "libnotify";
+  version = "0.7.9";
+
+  outputs = [ "out" "man" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libnotify/${ver_maj}/${name}.tar.xz";
-    sha256 = "0dyq8zgjnnzcah31axnx6afb21kl7bks1gvrg4hjh3nk02j1rxhf";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0qa7cx6ra5hwqnxw95b9svgjg5q6ynm8y843iqjszxvds5z53h36";
   };
 
-  # see Gentoo ebuild - we don't need to depend on gtk+(2/3)
-  preAutoreconf = ''
-    sed -i -e 's:noinst_PROG:check_PROG:' tests/Makefile.am || die
-    sed -i -e '/PKG_CHECK_MODULES(TESTS/d' configure.ac || die
-  '';
+  mesonFlags = [
+    # disable tests as we don't need to depend on GTK (2/3)
+    "-Dtests=false"
+    "-Ddocbook_docs=disabled"
+    "-Dgtk_doc=false"
+  ];
 
-  buildInputs = [ pkgconfig automake autoconf autoreconfHook
-                  libtool glib gdk_pixbuf gobjectIntrospection ];
+  nativeBuildInputs = [
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    libxslt
+    docbook-xsl-ns
+  ];
 
-  meta = {
-    homepage = http://galago-project.org/; # very obsolete but found no better
+  propagatedBuildInputs = [
+    gdk-pixbuf
+    glib
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
+
+  meta = with stdenv.lib; {
+    homepage = "https://developer.gnome.org/notification-spec/";
     description = "A library that sends desktop notifications to a notification daemon";
+    platforms = platforms.unix;
+    maintainers = teams.gnome.members;
+    license = licenses.lgpl21;
   };
 }

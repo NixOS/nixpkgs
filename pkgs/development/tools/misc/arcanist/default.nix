@@ -1,42 +1,53 @@
-{ stdenv, fetchgit, php, flex, makeWrapper }:
+{ stdenv, fetchFromGitHub, php, flex, makeWrapper }:
 
 let
-  libphutil = fetchgit {
-    url    = "git://github.com/phacility/libphutil.git";
-    rev    = "672c0f7d5da9be6cda619428a9da3b91a670ea2f";
-    sha256 = "830c7abce7244afa188255a6f288c345004cc4be1c8bbe93afa2aa2f1768f025";
+  libphutil = fetchFromGitHub {
+    owner = "phacility";
+    repo = "libphutil";
+    rev = "cc2a3dbf590389400da55563cb6993f321ec6d73";
+    sha256 = "1k7sr3racwz845i7r5kdwvgqrz8gldz07pxj3yw77s58rqbix3ad";
   };
-  arcanist = fetchgit {
-    url    = "git://github.com/phacility/arcanist.git";
-    rev    = "64d03ff68bf2ff4ef99186472704df8aface9ef3";
-    sha256 = "e9c5f9a9dcb1be0b7fd6f5fbda865e14277ddb0c1cedd256c459b3540ec6ded7";
+  arcanist = fetchFromGitHub {
+    owner = "phacility";
+    repo = "arcanist";
+    rev = "21a1828ea06cf031e93082db8664d73efc88290a";
+    sha256 = "05rq9l9z7446ks270viay57r5ibx702b5bnlf4ck529zc4abympx";
   };
 in
-stdenv.mkDerivation rec {
-  name    = "arcanist-${version}";
-  version = "20150525";
+stdenv.mkDerivation {
+  pname = "arcanist";
+  version = "20200127";
 
   src = [ arcanist libphutil ];
   buildInputs = [ php makeWrapper flex ];
 
-  unpackPhase = "true";
-  buildPhase = ''
-    ORIG=`pwd`
-    cp -R ${libphutil} libphutil
-    cp -R ${arcanist} arcanist
+  unpackPhase = ''
+    cp -aR ${libphutil} libphutil
+    cp -aR ${arcanist} arcanist
     chmod +w -R libphutil arcanist
-    cd libphutil/support/xhpast
-    make clean all install
-    cd $ORIG
+  '';
+
+  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace libphutil/support/xhpast/Makefile \
+      --replace "-minline-all-stringops" ""
+  '';
+
+  buildPhase = ''
+    (
+      cd libphutil/support/xhpast
+      make clean all install
+    )
   '';
   installPhase = ''
     mkdir -p $out/bin $out/libexec
     cp -R libphutil $out/libexec/libphutil
     cp -R arcanist  $out/libexec/arcanist
-
-    ln -s $out/libexec/arcanist/bin/arc $out/bin
-    wrapProgram $out/bin/arc \
-      --prefix PATH : "${php}/bin"
+    ${if stdenv.isDarwin then ''
+        echo "#! $shell -e" > $out/bin/arc
+        echo "exec ${php}/bin/php $out/libexec/arcanist/scripts/arcanist.php "'"$@"' >> $out/bin/arc
+        chmod +x $out/bin/arc''
+      else ''
+        ln -s $out/libexec/arcanist/scripts/arcanist.php $out/bin/arc''}
   '';
 
   meta = {

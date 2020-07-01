@@ -1,50 +1,33 @@
-{ stdenv, fetchgit, qt5, makeWrapper, libX11 }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "cmst-2014.12.05";
-  rev = "refs/tags/${name}";
-  src = fetchgit {
-    url = "git://github.com/andrew-bibb/cmst.git";
-    inherit rev;
-    sha256 = "070rxv3kyn41ra7nnk1wbqvy6fjg38h7hrdv4dn71b201kmzd194";
+mkDerivation rec {
+  pname = "cmst";
+  version = "2019.01.13";
+
+  src = fetchFromGitHub {
+    repo = "cmst";
+    owner = "andrew-bibb";
+    rev = "${pname}-${version}";
+    sha256 = "13739f0ddld34dcqlfhylzn1zqz5a7jbp4a4id7gj7pcxjx1lafh";
   };
 
-  buildInputs = [ qt5.base makeWrapper ];
+  nativeBuildInputs = [ qmake ];
 
-  configurePhase = ''
-    substituteInPlace ./cmst.pro \
-      --replace "/usr/bin" "$out/bin" \
-      --replace "/usr/share" "$out/usr/share"
+  buildInputs = [ qtbase ];
 
-    substituteInPlace ./cmst.pri \
-      --replace "/usr/lib" "$out/lib" \
-      --replace "/usr/share" "$out/share"
+  enableParallelBuilding = true;
 
-    substituteInPlace ./apps/cmstapp/cmstapp.pro \
-      --replace "/usr/bin" "$out/bin" \
-      --replace "/usr/share" "$out/share"
-
-    substituteInPlace ./apps/rootapp/rootapp.pro \
-      --replace "/etc" "$out/etc" \
-      --replace "/usr/share" "$out/share"
-
-  '';
-
-  buildPhase = ''
-    qmake PREFIX=$out
-    make
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/cmst \
-      --prefix "QTCOMPOSE" ":" "${libX11}/share/X11/locale"
+  postPatch = ''
+    for f in $(find . -name \*.cpp -o -name \*.pri -o -name \*.pro); do
+      substituteInPlace $f --replace /etc $out/etc --replace /usr $out
+    done
   '';
 
   meta = {
     description = "QT GUI for Connman with system tray icon";
     homepage = "https://github.com/andrew-bibb/cmst";
-    maintainers = [ stdenv.lib.maintainers.matejc ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mit;
+    maintainers = [ lib.maintainers.matejc ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

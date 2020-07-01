@@ -1,14 +1,18 @@
 { stdenv, fetchurl, perl, perlPackages }:
 
+let
+  pname = "stow";
+  version = "2.3.1";
+in
 stdenv.mkDerivation {
-  name = "stow-2.2.0";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = mirror://gnu/stow/stow-2.2.0.tar.bz2;
-    sha256 = "01bbsqjmrnd9925s3grvgjnrl52q4w65imrvzy05qaij3pz31g46";
+    url = "mirror://gnu/stow/stow-${version}.tar.bz2";
+    sha256 = "0bs2b90wjkk1camcasy8kn403kazq6c7fj5m5msfl3navbgwz9i6";
   };
 
-  buildInputs = [ perl perlPackages.TestOutput ];
+  buildInputs = with perlPackages; [ perl IOStringy TestOutput ];
 
   doCheck = true;
 
@@ -26,9 +30,7 @@ stdenv.mkDerivation {
     '';
 
     license = stdenv.lib.licenses.gpl3Plus;
-    homepage = http://www.gnu.org/software/stow/;
-
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    homepage = "https://www.gnu.org/software/stow/";
     platforms = stdenv.lib.platforms.all;
   };
 }

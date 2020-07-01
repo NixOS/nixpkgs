@@ -1,32 +1,106 @@
-{ lib, fetchgit, goPackages }:
+{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
 
-with goPackages;
+let
+  common = { stname, target, postInstall ? "" }:
+    buildGoModule rec {
+      version = "1.6.1";
+      name = "${stname}-${version}";
 
-buildGoPackage rec {
-  name = "syncthing-${version}";
-  version = "0.11.6";
-  goPackagePath = "github.com/syncthing/syncthing";
-  src = fetchgit {
-    url = "git://github.com/syncthing/syncthing.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "7fe7d7034c0e502036e2a0bb1b94b1701bd194cc82f07495da8a41c4b097c6a3";
+      src = fetchFromGitHub {
+        owner  = "syncthing";
+        repo   = "syncthing";
+        rev    = "v${version}";
+        sha256 = "1lhbx1mh2hdjjwks3s17i8y9vbl3fnapc1czaf42pp7nf8245q3j";
+      };
+
+      vendorSha256 = "12g63a6jsshzqjgww792xmvybhfbkjx5aza4xnyljjsp453iky7k";
+
+      patches = [
+        ./add-stcli-target.patch
+      ];
+      BUILD_USER="nix";
+      BUILD_HOST="nix";
+
+      buildPhase = ''
+        runHook preBuild
+        go run build.go -no-upgrade -version v${version} build ${target}
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+        install -Dm755 ${target} $out/bin/${target}
+        runHook postInstall
+      '';
+
+      inherit postInstall;
+
+      passthru.tests = with nixosTests; {
+        init = syncthing-init;
+        relay = syncthing-relay;
+      };
+
+      meta = with lib; {
+        homepage = "https://www.syncthing.net/";
+        description = "Open Source Continuous File Synchronization";
+        license = licenses.mpl20;
+        maintainers = with maintainers; [ pshendry joko peterhoeg andrew-d ];
+        platforms = platforms.unix;
+      };
+    };
+
+in {
+  syncthing = common {
+    stname = "syncthing";
+    target = "syncthing";
+
+    postInstall = ''
+      # This installs man pages in the correct directory according to the suffix
+      # on the filename
+      for mf in man/*.[1-9]; do
+        mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
+        mandir="$out/share/man/man$mantype"
+        install -Dm644 "$mf" "$mandir/$(basename "$mf")"
+      done
+
+    '' + lib.optionalString (stdenv.isLinux) ''
+      mkdir -p $out/lib/systemd/{system,user}
+
+      substitute etc/linux-systemd/system/syncthing-resume.service \
+                 $out/lib/systemd/system/syncthing-resume.service \
+                 --replace /usr/bin/pkill ${procps}/bin/pkill
+
+      substitute etc/linux-systemd/system/syncthing@.service \
+                 $out/lib/systemd/system/syncthing@.service \
+                 --replace /usr/bin/syncthing $out/bin/syncthing
+
+      substitute etc/linux-systemd/user/syncthing.service \
+                 $out/lib/systemd/user/syncthing.service \
+                 --replace /usr/bin/syncthing $out/bin/syncthing
+    '';
   };
 
-  subPackages = [ "cmd/syncthing" ];
+  syncthing-cli = common {
+    stname = "syncthing-cli";
 
-  buildFlagsArray = "-ldflags=-w -X main.Version v${version}";
+    target = "stcli";
+  };
 
-  preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+  syncthing-discovery = common {
+    stname = "syncthing-discovery";
+    target = "stdiscosrv";
+  };
 
-  doCheck = true;
+  syncthing-relay = common {
+    stname = "syncthing-relay";
+    target = "strelaysrv";
 
-  dontInstallSrc = true;
+    postInstall = lib.optionalString (stdenv.isLinux) ''
+      mkdir -p $out/lib/systemd/system
 
-  meta = {
-    homepage = http://syncthing.net/;
-    description = "Replaces Dropbox and BitTorrent Sync with something open, trustworthy and decentralized";
-    license = with lib.licenses; mit;
-    maintainers = with lib.maintainers; [ matejc ];
-    platforms = with lib.platforms; unix;
+      substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
+                 $out/lib/systemd/system/strelaysrv.service \
+                 --replace /usr/bin/strelaysrv $out/bin/strelaysrv
+    '';
   };
 }

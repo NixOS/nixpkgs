@@ -1,27 +1,25 @@
-{ stdenv, fetchurl, java }:
+{ stdenv, fetchurl, java, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "jbidwatcher";
-  version = "2.5.2";
-
-  name = "${pname}-${version}";
+  version = "2.5.6";
 
   src = fetchurl {
     url = "http://www.jbidwatcher.com/download/JBidwatcher-${version}.jar";
-    sha256 = "07w75ryn8inm5i1829gabr8lifbycz40ynzsyaw22yzqk5if1n9l";
+    sha256 = "1cw59wh72w1zzibs8x64dma3jc4hry64wjksqs52nc3vpnf0fzfr";
   };
 
   buildInputs = [ java ];
 
   jarfile = "$out/share/java/${pname}/JBidwatcher.jar";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
-    echo > "$out/bin/${pname}" "#!/bin/sh"
+    echo > "$out/bin/${pname}" "#!${runtimeShell}"
     echo >>"$out/bin/${pname}" "${java}/bin/java -Xmx512m -jar ${jarfile}"
     chmod +x "$out/bin/${pname}"
     install -D -m644 ${src} ${jarfile}
@@ -29,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.jbidwatcher.com/";
-    description = "monitor and snipe Ebay auctions";
+    description = "Monitor and snipe Ebay auctions";
     license = "LGPL";
 
     longDescription = ''
@@ -45,6 +43,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

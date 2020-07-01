@@ -1,50 +1,63 @@
-{ stdenv, fetchurl, perl, nettools, java, polyml, proofgeneral }:
+{ stdenv, fetchurl, perl, nettools, java, polyml, z3, rlwrap }:
 # nettools needed for hostname
 
-let
-  dirname = "Isabelle2014";
-  theories = ["HOL" "FOL" "ZF"];
-in
+stdenv.mkDerivation rec {
+  pname = "isabelle";
+  version = "2018";
 
-stdenv.mkDerivation {
-  name = "isabelle-2014";
-  inherit dirname theories;
+  dirname = "Isabelle${version}";
 
   src = if stdenv.isDarwin
     then fetchurl {
-      url = http://isabelle.in.tum.de/dist/Isabelle2014_macos.tar.gz;
-      sha256 = "1aa3vz2nnkkyd4mlsqbs69jqfxlll5h0k5fj9m1j9wqiddqwvwcf";
+      url = "http://isabelle.in.tum.de/website-${dirname}/dist/${dirname}.dmg";
+      sha256 = "0jwnvsf5whklq14ihaxs7b9nbic94mm56nvxljrdbvl6y628j9r5";
     }
     else fetchurl {
-      url = http://isabelle.in.tum.de/dist/Isabelle2014_linux.tar.gz;
-      sha256 = "0z81pwwllavka4r57fx6yi9kbpbb9xbanp8dsjix49qpyj2a72jy";
+      url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
+      sha256 = "1928lwrw1v1p9s23kix30ncpqm8djmrnjixj82f3ni2a8sc3hrsp";
     };
 
-  buildInputs = [ perl polyml ]
+  buildInputs = [ perl polyml z3 ]
              ++ stdenv.lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
 
   postPatch = ''
-    ENV=$(type -p env)
-    patchShebangs "."
-    substituteInPlace lib/Tools/env \
-      --replace /usr/bin/env $ENV
-    substituteInPlace lib/Tools/install \
-      --replace /usr/bin/env $ENV
-    substituteInPlace etc/settings \
-      --subst-var-by ML_HOME "${polyml}/bin" \
-      --subst-var-by PROOFGENERAL_HOME "${proofgeneral}/share/emacs/site-lisp/ProofGeneral"
-    substituteInPlace contrib/jdk/etc/settings \
-      --replace ISABELLE_JDK_HOME= '#ISABELLE_JDK_HOME='
-    substituteInPlace contrib/polyml-5.5.2-1/etc/settings \
-      --replace 'ML_HOME="$POLYML_HOME/$ML_PLATFORM"' \
-                "ML_HOME=\"${polyml}/bin\""
-  '';
+    patchShebangs .
 
-  buildPhase = ''
-    ISABELLE_JDK_HOME=${java} ./bin/isabelle build -s $theories
-  '';
+    cat >contrib/z3*/etc/settings <<EOF
+      Z3_HOME=${z3}
+      Z3_VERSION=${z3.version}
+      Z3_SOLVER=${z3}/bin/z3
+      Z3_INSTALLED=yes
+    EOF
+
+    cat >contrib/polyml-*/etc/settings <<EOF
+      ML_SYSTEM_64=true
+      ML_SYSTEM=${polyml.name}
+      ML_PLATFORM=${stdenv.system}
+      ML_HOME=${polyml}/bin
+      ML_OPTIONS="--minheap 1000"
+      POLYML_HOME="\$COMPONENT"
+      ML_SOURCES="\$POLYML_HOME/src"
+    EOF
+
+    cat >contrib/jdk/etc/settings <<EOF
+      ISABELLE_JAVA_PLATFORM=${stdenv.system}
+      ISABELLE_JDK_HOME=${java}
+    EOF
+
+    echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
+
+    for comp in contrib/jdk contrib/polyml-* contrib/z3-*; do
+      rm -rf $comp/x86*
+    done
+    '' + (if ! stdenv.isLinux then "" else ''
+    arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
+    for f in contrib/*/$arch/{bash_process,epclextract,eprover,nunchaku,SPASS}; do
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
+    done
+    '');
 
   installPhase = ''
     mkdir -p $out/bin
@@ -61,8 +74,9 @@ stdenv.mkDerivation {
       to be expressed in a formal language and provides tools for proving those
       formulas in a logical calculus.
     '';
-    homepage = http://isabelle.in.tum.de/;
+    homepage = "http://isabelle.in.tum.de/";
     license = "LGPL";
     maintainers = [ stdenv.lib.maintainers.jwiegley ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

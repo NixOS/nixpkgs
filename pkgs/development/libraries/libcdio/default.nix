@@ -1,19 +1,24 @@
-{ fetchurl, stdenv, libcddb, pkgconfig, ncurses, help2man }:
+{ stdenv, fetchurl, libcddb, pkgconfig, ncurses, help2man, libiconv, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
-  name = "libcdio-0.93";
-  
+  name = "libcdio-2.1.0";
+
   src = fetchurl {
     url = "mirror://gnu/libcdio/${name}.tar.bz2";
-    sha256 = "1a6x2c5bvpnkn7lhmxkjgz4axmh93m1clrlv41s1wzkc48lnc9zq";
+    sha256 = "0avi6apv5ydjy6b9c3z9a46rvp5i57qyr09vr7x4nndxkmcfjl45";
   };
 
-  buildInputs = [ libcddb pkgconfig ncurses help2man ];
+  postPatch = ''
+    patchShebangs .
+  '';
 
-  # Disabled because one test (check_paranoia.sh) fails.
-  #doCheck = true;
+  nativeBuildInputs = [ pkgconfig help2man ];
+  buildInputs = [ libcddb ncurses ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
 
-  meta = {
+  doCheck = !stdenv.isDarwin;
+
+  meta = with stdenv.lib; {
     description = "A library for OS-independent CD-ROM and CD image access";
     longDescription = ''
       GNU libcdio is a library for OS-independent CD-ROM and
@@ -21,7 +26,8 @@ stdenv.mkDerivation rec {
       ISO-9660 filesystems (libiso9660), as well as utility
       programs such as an audio CD player and an extractor.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://www.gnu.org/software/libcdio/;
+    homepage = "https://www.gnu.org/software/libcdio/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

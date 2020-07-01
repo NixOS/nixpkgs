@@ -1,8 +1,19 @@
-{ stdenv, fetchurl, makeFontsConf, makeWrapper
+{ stdenv, fetchurl, makeFontsConf
+, cacert
 , cairo, coreutils, fontconfig, freefont_ttf
-, glib, gmp, gtk, libffi, libjpeg, libpng
-, libtool, mpfr, openssl, pango, poppler
+, glib, gmp
+, gtk3
+, libedit, libffi
+, libiconv
+, libGL
+, libGLU
+, libjpeg
+, libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
+, disableDocs ? false
+, CoreFoundation
+, gsettings-desktop-schemas
+, wrapGAppsHook
 }:
 
 let
@@ -16,7 +27,11 @@ let
     fontconfig
     glib
     gmp
-    gtk
+    gtk3
+    gsettings-desktop-schemas
+    libedit
+    libGL
+    libGLU
     libjpeg
     libpng
     mpfr
@@ -30,37 +45,51 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "racket-${version}";
-  version = "6.1.1";
+  pname = "racket";
+  version = "7.7"; # always change at once with ./minimal.nix
 
-  src = fetchurl {
-    url = "http://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-    sha256 = "090269522d20e7a5ce85d2251a126745746ebf5e87554c05efe03f3b7173da75";
+  src = (stdenv.lib.makeOverridable ({ name, sha256 }:
+    fetchurl {
+      url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
+      inherit sha256;
+    }
+  )) {
+    name = "${pname}-${version}";
+    sha256 = "0cx5h3k0n58cb442qzp3jlc7n1b9dbaxv9blg2rjil2rn119yrb2";
   };
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.concatStringsSep " " [
+    (stdenv.lib.optionalString (stdenv.cc.isGNU && ! stdenv.isDarwin) "-lgcc_s")
+    (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
+  ];
 
-  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ];
+  nativeBuildInputs = [ cacert wrapGAppsHook ];
+
+  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
 
   preConfigure = ''
-    substituteInPlace src/configure --replace /usr/bin/uname ${coreutils}/bin/uname
+    unset AR
+    for f in src/lt/configure src/cs/c/configure src/racket/src/string.c; do
+      substituteInPlace "$f" --replace /usr/bin/uname ${coreutils}/bin/uname
+    done
     mkdir src/build
     cd src/build
+
+    gappsWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" ${LD_LIBRARY_PATH})
   '';
 
-  configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" ];
+  shared = if stdenv.isDarwin then "dylib" else "shared";
+  configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
+                   ++ stdenv.lib.optional disableDocs [ "--disable-docs" ]
+                   ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-xonx" ];
 
   configureScript = "../configure";
 
   enableParallelBuilding = false;
 
-  postInstall = ''
-    for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}";
-    done
-  '';
 
   meta = with stdenv.lib; {
     description = "A programmable programming language";
@@ -73,9 +102,10 @@ stdenv.mkDerivation rec {
       libraries support applications from web servers and databases to
       GUIs and charts.
     '';
-    homepage = http://racket-lang.org/;
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ kkallio henrytill ];
-    platforms = platforms.linux;
+    homepage = "https://racket-lang.org/";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ kkallio henrytill vrthra ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
+    broken = stdenv.isDarwin; # No support yet for setting FFI lookup path
   };
 }

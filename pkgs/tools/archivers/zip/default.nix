@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, enableNLS ? true, libnatspec ? null, libiconv }:
+{ stdenv, fetchurl, enableNLS ? false, libnatspec ? null, libiconv }:
 
 assert enableNLS -> libnatspec != null;
 
@@ -7,27 +7,34 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
-      ftp://ftp.info-zip.org/pub/infozip/src/zip30.tgz
-      http://pkgs.fedoraproject.org/repo/pkgs/zip/zip30.tar.gz/7b74551e63f8ee6aab6fbc86676c0d37/zip30.tar.gz
+      "ftp://ftp.info-zip.org/pub/infozip/src/zip30.tgz"
+      "https://src.fedoraproject.org/repo/pkgs/zip/zip30.tar.gz/7b74551e63f8ee6aab6fbc86676c0d37/zip30.tar.gz"
     ];
     sha256 = "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h";
   };
+  patchPhase = ''
+    substituteInPlace unix/Makefile --replace 'CC = cc' ""
+  '';
 
-  # should be makeFlags on all archs, not changed yet to prevent rebuild
-  buildFlags="-f unix/Makefile generic";
-  makeFlags = if stdenv.isCygwin then "-f unix/Makefile ${if stdenv.isCygwin then "cygwin" else "generic"}" else null;
+  hardeningDisable = [ "format" ];
 
-  installFlags="-f unix/Makefile prefix=$(out) INSTALL=cp";
+  makefile = "unix/Makefile";
+  buildFlags = if stdenv.isCygwin then [ "cygwin" ] else [ "generic" ];
+  installFlags = [
+    "prefix=${placeholder ''out''}"
+    "INSTALL=cp"
+  ];
 
   patches = if (enableNLS && !stdenv.isCygwin) then [ ./natspec-gentoo.patch.bz2 ] else [];
 
   buildInputs = stdenv.lib.optional enableNLS libnatspec
     ++ stdenv.lib.optional stdenv.isCygwin libiconv;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Compressor/archiver for creating and modifying zipfiles";
-    homepage = http://www.info-zip.org;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    homepage = "http://www.info-zip.org";
+    license = licenses.bsdOriginal;
+    platforms = platforms.all;
+    maintainers = [ ];
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl,
-  pkgconfig, pure, glpk, gmp, libtool, libmysql, libiodbc, zlib }:
+  pkgconfig, pure, glpk, gmp, libtool, libmysqlclient, libiodbc }:
 
 stdenv.mkDerivation rec {
   baseName = "glpk";
@@ -12,11 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   glpkWithExtras = lib.overrideDerivation glpk (attrs: {
-    propagatedNativeBuildInputs = [ gmp libtool libmysql libiodbc ];
+    propagatedBuildInputs = [ gmp libtool libmysqlclient libiodbc ];
+
+    CPPFLAGS = "-I${gmp.dev}/include";
 
     preConfigure = ''
       substituteInPlace configure \
-        --replace /usr/include/mysql ${libmysql}/include/mysql
+        --replace /usr/include/mysql ${libmysqlclient}/include/mysql
     '';
     configureFlags = [ "--enable-dl"
                        "--enable-odbc"
@@ -24,14 +26,14 @@ stdenv.mkDerivation rec {
                        "--with-gmp=yes" ];
   });
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure glpkWithExtras ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
     description = "GLPK interface for the Pure Programming Language";
-    homepage = http://puredocs.bitbucket.org/pure-glpk.html;
+    homepage = "http://puredocs.bitbucket.org/pure-glpk.html";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

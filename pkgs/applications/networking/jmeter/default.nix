@@ -1,18 +1,50 @@
-{ fetchurl, stdenv, ant }:
+{ fetchurl, stdenv, jre, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "jmeter-2.11";
+  pname = "jmeter";
+  version = "5.1.1";
   src = fetchurl {
-    url = "http://archive.apache.org/dist/jmeter/binaries/apache-${name}.tgz";
-    sha256 = "1fr3sw06qncb6yygcf2lbnkxma4v1dbigpf39ajrm0isxbpyv944";
+    url = "https://archive.apache.org/dist/jmeter/binaries/apache-${pname}-${version}.tgz";
+    sha256 = "1bmlxnlcias781mwf3wzpd4935awswbq3w8ijck65bsaw07m2kc4";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir $out
-    cp ./* $out/ -R
+
+    rm bin/*.bat bin/*.cmd
+
+    cp -R * $out/
+
+    substituteInPlace $out/bin/create-rmi-keystore.sh --replace \
+      "keytool -genkey" \
+      "${jre}/lib/openjdk/jre/bin/keytool -genkey"
+
+    # Prefix some scripts with jmeter to avoid clobbering the namespace
+    for i in heapdump.sh mirror-server mirror-server.sh shutdown.sh stoptest.sh create-rmi-keystore.sh; do
+      mv $out/bin/$i $out/bin/jmeter-$i
+      wrapProgram $out/bin/jmeter-$i \
+        --prefix PATH : "${jre}/bin"
+    done
+
+    wrapProgram $out/bin/jmeter --set JAVA_HOME "${jre}"
+    wrapProgram $out/bin/jmeter.sh --set JAVA_HOME "${jre}"
   '';
 
-  meta = {
+  doInstallCheck = true;
+
+  checkInputs = [ coreutils ];
+
+  installCheckPhase = ''
+    $out/bin/jmeter --version 2>&1 | grep -q "${version}"
+    $out/bin/jmeter-heapdump.sh > /dev/null
+    $out/bin/jmeter-shutdown.sh > /dev/null
+    $out/bin/jmeter-stoptest.sh > /dev/null
+    timeout --kill=1s 1s $out/bin/jmeter-mirror-server.sh || test "$?" = "124"
+  '';
+
+  meta = with stdenv.lib; {
     description = "A 100% pure Java desktop application designed to load test functional behavior and measure performance";
     longDescription = ''
       The Apache JMeter desktop application is open source software, a 100%
@@ -20,8 +52,9 @@ stdenv.mkDerivation rec {
       measure performance. It was originally designed for testing Web
       Applications but has since expanded to other test functions.
     '';
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    license = licenses.asl20;
+    maintainers = [ ];
     priority = 1;
+    platforms = platforms.unix;
   };
 }

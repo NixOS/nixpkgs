@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libpng }:
+{ fetchurl, stdenv, libpng, autoreconfHook }:
 
 # debian splits this package into plotutils and libplot2c2
 
@@ -13,13 +13,22 @@ stdenv.mkDerivation rec {
     sha256 = "1arkyizn5wbgvbh53aziv3s6lmd3wm9lqzkhxb3hijlp1y124hjg";
   };
 
-  buildInputs = [libpng];
-
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ libpng ];
   patches = map fetchurl (import ./debian-patches.nix);
 
-  configureFlags = "--enable-libplotter"; # required for pstoedit
+  preBuild = ''
+    # Fix parallel building.
+    make -C libplot xmi.h
+  '';
+
+  configureFlags = [ "--enable-libplotter" ]; # required for pstoedit
+
+  hardeningDisable = [ "format" ];
 
   doCheck = true;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Powerful C/C++ library for exporting 2D vector graphics";
@@ -40,12 +49,10 @@ stdenv.mkDerivation rec {
          graphics.
       '';
 
-    homepage = http://www.gnu.org/software/plotutils/;
+    homepage = "https://www.gnu.org/software/plotutils/";
 
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [
-      stdenv.lib.maintainers.marcweber
-    ];
-    platforms = stdenv.lib.platforms.gnu;
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

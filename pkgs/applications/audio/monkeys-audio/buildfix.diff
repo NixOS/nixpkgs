@@ -1,7 +1,8 @@
-diff -ru monkeys-audio-3.99-u4-b5/src/MACLib/APELink.cpp monkeys-audio-3.99-u4-b5.patched/src/MACLib/APELink.cpp
---- monkeys-audio-3.99-u4-b5/src/MACLib/APELink.cpp	2006-06-01 11:00:57.000000000 +0200
-+++ monkeys-audio-3.99-u4-b5.patched/src/MACLib/APELink.cpp	2012-01-05 14:51:47.000000000 +0100
-@@ -63,10 +63,10 @@
+diff --git a/src/MACLib/APELink.cpp b/src/MACLib/APELink.cpp
+index d349f4b..b00ec83 100644
+--- a/src/MACLib/APELink.cpp
++++ b/src/MACLib/APELink.cpp
+@@ -63,10 +63,10 @@ void CAPELink::ParseData(const char * pData, const str_utf16 * pFilename)
      if (pData != NULL)
      {
          // parse out the information
@@ -16,7 +17,7 @@ diff -ru monkeys-audio-3.99-u4-b5/src/MACLib/APELink.cpp monkeys-audio-3.99-u4-b
  
          if (pHeader && pImageFile && pStartBlock && pFinishBlock)
          {
-@@ -81,7 +81,7 @@
+@@ -81,7 +81,7 @@ void CAPELink::ParseData(const char * pData, const str_utf16 * pFilename)
                  
                  // get the path
                  char cImageFile[MAX_PATH + 1]; int nIndex = 0;
@@ -25,3 +26,24 @@ diff -ru monkeys-audio-3.99-u4-b5/src/MACLib/APELink.cpp monkeys-audio-3.99-u4-b
                  while ((*pImageCharacter != 0) && (*pImageCharacter != '\r') && (*pImageCharacter != '\n'))
                      cImageFile[nIndex++] = *pImageCharacter++;
                  cImageFile[nIndex] = 0;
+diff --git a/src/Shared/All.h b/src/Shared/All.h
+index 328addc..7730e89 100644
+--- a/src/Shared/All.h
++++ b/src/Shared/All.h
+@@ -21,6 +21,8 @@ Global includes
+     #include <windows.h>
+ #endif
+ 
++#include <stdlib.h>
++
+ #ifdef _WIN32
+     #include <mmsystem.h>
+     #include <tchar.h>
+@@ -34,7 +36,6 @@ Global includes
+     #include "NoWindows.h"
+ #endif
+ 
+-#include <stdlib.h>
+ #include <memory.h>
+ #include <stdio.h>
+ #include <math.h>

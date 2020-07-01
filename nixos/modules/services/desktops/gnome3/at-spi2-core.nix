@@ -6,6 +6,10 @@ with lib;
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   ###### interface
 
   options = {
@@ -18,6 +22,9 @@ with lib;
         description = ''
           Whether to enable at-spi2-core, a service for the Assistive Technologies
           available on the GNOME platform.
+
+          Enable this if you get the error or warning
+          <literal>The name org.a11y.Bus was not provided by any .service files</literal>.
         '';
       };
 
@@ -28,12 +35,15 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.gnome3.at-spi2-core.enable {
+  config = mkMerge [
+    (mkIf config.services.gnome3.at-spi2-core.enable {
+      environment.systemPackages = [ pkgs.at-spi2-core ];
+      services.dbus.packages = [ pkgs.at-spi2-core ];
+      systemd.packages = [ pkgs.at-spi2-core ];
+    })
 
-    environment.systemPackages = [ pkgs.at_spi2_core ];
-
-    services.dbus.packages = [ pkgs.at_spi2_core ];
-
-  };
-
+    (mkIf (!config.services.gnome3.at-spi2-core.enable) {
+      environment.variables.NO_AT_BRIDGE = "1";
+    })
+  ];
 }

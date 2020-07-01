@@ -8,11 +8,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = "0mm2sb1p5zz6b0z2s4zhdlix6fafydsxmqjy8zbkwzw4f6lazzyl";
 
-  buildInputs = [ curl ];
+  nativeBuildInputs = [ curl ];
 
-  # We borrow these environment variables from the caller to allow
-  # easy proxy configuration.  This is impure, but a fixed-output
-  # derivation like fetchurl is allowed to do so since its result is
-  # by definition pure.
-  impureEnvVars = ["http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"];
+  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
 }

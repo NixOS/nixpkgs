@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, ncurses, libdrm, libpciaccess }:
+{ stdenv, fetchFromGitHub, pkgconfig, gettext, makeWrapper
+, ncurses, libdrm, libpciaccess, libxcb }:
 
-let version = "v0.8-8-g2499679"; in
-stdenv.mkDerivation {
-  name = "radeontop-${version}";
+stdenv.mkDerivation rec {
+  pname = "radeontop";
+  version = "2019-06-03";
 
   src = fetchFromGitHub {
-    sha256 = "112zf6ms0qpmr9h3l4lg5wik5j206mgij0nypba5lnqzksxh2f88";
-    rev = "2499679fda60c3f6239886296fd2a74155f45f77";
+    sha256 = "1b1m30r2nfwqkajqw6m01xmfhlq83z1qylyijxg7962mp9x2k0gw";
+    rev = "v1.2";
     repo = "radeontop";
     owner = "clbr";
   };
 
-  buildInputs = [ pkgconfig gettext ncurses libdrm libpciaccess ];
+  buildInputs = [ ncurses libdrm libpciaccess libxcb ];
+  nativeBuildInputs = [ pkgconfig gettext makeWrapper ];
 
   enableParallelBuilding = true;
 
@@ -19,7 +21,12 @@ stdenv.mkDerivation {
     substituteInPlace getver.sh --replace ver=unknown ver=${version}
   '';
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    wrapProgram $out/sbin/radeontop \
+      --prefix LD_LIBRARY_PATH : $out/lib
+  '';
 
   meta = with stdenv.lib; {
     description = "Top-like tool for viewing AMD Radeon GPU utilization";
@@ -30,9 +37,9 @@ stdenv.mkDerivation {
       is also valid for OpenCL loads; the other blocks are only useful for GL
       loads. Requires root rights or other permissions to read /dev/mem.
     '';
-    homepage = https://github.com/clbr/radeontop;
+    homepage = "https://github.com/clbr/radeontop";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rycee nckx ];
+    maintainers = with maintainers; [ rycee ];
   };
 }

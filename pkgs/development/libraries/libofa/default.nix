@@ -5,10 +5,11 @@ let
   deb_patch = "5";
 in
 stdenv.mkDerivation rec {
-  name = "libofa-${version}";
+  pname = "libofa";
+  inherit version;
 
   src = fetchurl {
-    url = "http://musicip-libofa.googlecode.com/files/${name}.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/musicip-libofa/${pname}-${version}.tar.gz";
     sha256 = "184ham039l7lwhfgg0xr2vch2xnw1lwh7sid432mh879adhlc5h2";
   };
 
@@ -17,13 +18,23 @@ stdenv.mkDerivation rec {
     sha256 = "1rfkyz13cm8izm90c1xflp4rvsa24aqs6qpbbbqqcbmvzsj6j9yn";
   };
 
+  outputs = [ "out" "dev" ];
+
+  setOutputFlags = false;
+
+  preConfigure = ''
+    configureFlagsArray=(--includedir=$dev/include --libdir=$out/lib)
+  '';
+
   propagatedBuildInputs = [ expat curl fftw ];
 
-  meta = {
-    homepage = http://code.google.com/musicip-libofa/;
+  meta = with stdenv.lib; {
+    homepage = "https://code.google.com/archive/p/musicip-libofa/";
     description = "Library Open Fingerprint Architecture";
     longDescription = ''
       LibOFA (Library Open Fingerprint Architecture) is an open-source audio
       fingerprint created and provided by MusicIP'';
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

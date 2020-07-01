@@ -6,7 +6,7 @@ let
   cfg = config.services.cgminer;
 
   convType = with builtins;
-    v: if isBool v then (if v then "true" else "false") else toString v;
+    v: if isBool v then boolToString v else toString v;
   mergedHwConfig =
     mapAttrsToList (n: v: ''"${n}": "${(concatStringsSep "," (map convType v))}"'')
       (foldAttrs (n: a: [n] ++ a) [] cfg.hardware);
@@ -31,16 +31,11 @@ in
 
     services.cgminer = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable cgminer, an ASIC/FPGA/GPU miner for bitcoin and
-          litecoin.
-        '';
-      };
+      enable = mkEnableOption "cgminer, an ASIC/FPGA/GPU miner for bitcoin and litecoin";
 
       package = mkOption {
         default = pkgs.cgminer;
+        defaultText = "pkgs.cgminer";
         description = "Which cgminer derivation to use.";
         type = types.package;
       };
@@ -109,11 +104,12 @@ in
 
   config = mkIf config.services.cgminer.enable {
 
-    users.extraUsers = optionalAttrs (cfg.user == "cgminer") (singleton
-      { name = "cgminer";
+    users.users = optionalAttrs (cfg.user == "cgminer") {
+      cgminer = {
         uid = config.ids.uids.cgminer;
         description = "Cgminer user";
-      });
+      };
+    };
 
     environment.systemPackages = [ cfg.package ];
 
@@ -125,7 +121,7 @@ in
 
       environment = {
         LD_LIBRARY_PATH = ''/run/opengl-driver/lib:/run/opengl-driver-32/lib'';
-        DISPLAY = ":0";
+        DISPLAY = ":${toString config.services.xserver.display}";
         GPU_MAX_ALLOC_PERCENT = "100";
         GPU_USE_SYNC_OBJECTS = "1";
       };

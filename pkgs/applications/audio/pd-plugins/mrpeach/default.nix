@@ -1,7 +1,7 @@
 { stdenv, fetchurl, puredata }:
 
-stdenv.mkDerivation rec {
-  name = "mrpeach-${version}";
+stdenv.mkDerivation {
+  pname = "mrpeach";
   version = "1.1";
 
   # this was to only usable url I could find:
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "12jqba3jsdrk20ib9wc2wiivki88ypcd4mkzgsri9siywbbz9w8x";
   };
 
-  buildInputs = [puredata ];
+  buildInputs = [ puredata ];
+
+  hardeningDisable = [ "format" ];
 
   patchPhase = ''
     for D in net osc
@@ -52,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A collection of Pd objectclasses for OSC-messages";
-    homepage = http://puredata.info/downloads/osc;
+    homepage = "http://puredata.info/downloads/osc";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

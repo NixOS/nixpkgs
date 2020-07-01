@@ -1,41 +1,40 @@
-{ fetchurl, stdenv, pkgconfig, python, file, bc
-, qt4, hunspell, makeWrapper #, mythes, boost
+{ fetchurl, lib, mkDerivation, pkgconfig, python, file, bc
+, qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.1.3";
-  name = "lyx-${version}";
+mkDerivation rec {
+  version = "2.3.5.1";
+  pname = "lyx";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.1.x/${name}.tar.xz";
-    sha256 = "10jnqz7ilxppv60h0hpkq7wgc3fbcm3z19xhnqz9hwp3brz2xm9g";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
+    sha256 = "0mv32s26igm0pd8vs7d2mk1240dpr83y0a2wyh3xz6b67ph0w157";
   };
 
+  # LaTeX is used from $PATH, as people often want to have it with extra pkgs
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    qtbase qtsvg python file/*for libmagic*/ bc
+    hunspell makeWrapper # enchant
+  ];
+
   configureFlags = [
+    "--enable-qt5"
     #"--without-included-boost"
     /*  Boost is a huge dependency from which 1.4 MB of libs would be used.
         Using internal boost stuff only increases executable by around 0.2 MB. */
     #"--without-included-mythes" # such a small library isn't worth a separate package
   ];
 
-  # LaTeX is used from $PATH, as people often want to have it with extra pkgs
-  buildInputs = [
-    pkgconfig qt4 python file/*for libmagic*/ bc
-    hunspell makeWrapper # enchant
-  ];
-
   enableParallelBuilding = true;
   doCheck = true;
 
   # python is run during runtime to do various tasks
-  postFixup = ''
-    sed '1s:/usr/bin/python:${python}/bin/python:'
+  qtWrapperArgs = [
+    " --prefix PATH : ${python}/bin"
+  ];
 
-    wrapProgram "$out/bin/lyx" \
-      --prefix PATH : '${python}/bin'
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = "http://www.lyx.org";
     license = licenses.gpl2Plus;

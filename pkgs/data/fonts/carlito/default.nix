@@ -1,27 +1,26 @@
-{stdenv, fetchurl}:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "carlito-${version}";
+let
   version = "20130920";
+in fetchzip {
+  name = "carlito-${version}";
 
-  src = fetchurl {
-    url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${version}.tar.gz";
-    sha256 = "0nmgzp6gdvv4dipswrw0l1bfjp4jbic2qvm7dpqiq71jpin2plab";
-  };
+  url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${version}.tar.gz";
 
-  phases = ["unpackPhase" "installPhase"];
-
-  installPhase = ''
+  postFetch = ''
+    tar -xzvf $downloadedFile --strip-components=1
     mkdir -p $out/etc/fonts/conf.d
     mkdir -p $out/share/fonts/truetype
     cp -v *.ttf $out/share/fonts/truetype
     cp -v ${./calibri-alias.conf} $out/etc/fonts/conf.d/30-calibri.conf
   '';
 
-  meta = with stdenv.lib; {
+  sha256 = "0d72zy6kdmxgpi63r3yvi3jh1hb7lvlgv8hgd4ag0x10dz18mbzv";
+
+  meta = with lib; {
     # This font doesn't appear to have any official web site but this
     # one provides some good information and samples.
-    homepage = http://openfontlibrary.org/en/font/carlito;
+    homepage = "http://openfontlibrary.org/en/font/carlito";
     description = "A sans-serif font metric-compatible with Microsoft Calibri";
     longDescription = ''
       Carlito is a free font that is metric-compatible with the

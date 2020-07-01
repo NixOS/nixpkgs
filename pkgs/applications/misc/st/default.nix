@@ -1,31 +1,34 @@
-{ stdenv, fetchurl, pkgconfig, writeText, libX11, ncurses, libXext, libXft, fontconfig
-, conf? null}:
+{ stdenv, fetchurl, pkgconfig, writeText, libX11, ncurses
+, libXft, conf ? null, patches ? [], extraLibs ? []}:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "st-0.5";
-  
+  pname = "st";
+  version = "0.8.4";
+
   src = fetchurl {
-    url = "http://dl.suckless.org/st/${name}.tar.gz";
-    sha256 = "0knxpzaa86pprng6hak8hx8bw22yw22rpz1ffxjpcvqlz3xdv05f";
+    url = "https://dl.suckless.org/st/${pname}-${version}.tar.gz";
+    sha256 = "19j66fhckihbg30ypngvqc9bcva47mp379ch5vinasjdxgn3qbfl";
   };
 
-  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
-  
-  buildInputs = [ pkgconfig libX11 ncurses libXext libXft fontconfig ];
+  inherit patches;
 
-  NIX_LDFLAGS = "-lfontconfig";
+  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
+  postPatch = optionalString (conf!=null) "cp ${configFile} config.def.h";
+
+  nativeBuildInputs = [ pkgconfig ncurses ];
+  buildInputs = [ libX11 libXft ] ++ extraLibs;
 
   installPhase = ''
     TERMINFO=$out/share/terminfo make install PREFIX=$out
   '';
-    
+
   meta = {
-    homepage = http://st.suckless.org/;
-    license = stdenv.lib.licenses.mit;
-    maintainers = with maintainers; [viric];
-    platforms = with platforms; linux;
+    homepage = "https://st.suckless.org/";
+    description = "Simple Terminal for X from Suckless.org Community";
+    license = licenses.mit;
+    maintainers = with maintainers; [andsild];
+    platforms = platforms.linux;
   };
 }

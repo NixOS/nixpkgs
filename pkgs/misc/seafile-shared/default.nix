@@ -1,41 +1,51 @@
-{stdenv, fetchurl, which, automake, autoconf, pkgconfig, curl, libtool, vala, python, intltool, fuse, ccnet}:
+{stdenv, fetchFromGitHub, which, autoreconfHook, pkgconfig, vala, python2, curl, libevent, glib, libsearpc, sqlite, intltool, fuse, ccnet, libuuid }:
 
-stdenv.mkDerivation rec
-{
-  version = "4.0.6";
-  name = "seafile-shared-${version}";
+stdenv.mkDerivation rec {
+  pname = "seafile-shared";
+  version = "7.0.7";
 
-  src = fetchurl
-  {
-    url = "https://github.com/haiwen/seafile/archive/v${version}.tar.gz";
-    sha256 = "1vs1ckxkh0kg1wjklpwdz87d5z60r80q27xv1s6yl7ir65s6zq0i";
+  src = fetchFromGitHub {
+    owner = "haiwen";
+    repo = "seafile";
+    rev = "v${version}";
+    sha256 = "0vgzb923x2q2w1zgbc56d50a5qj9xm77lg7czfzg3va7vd921gy8";
   };
 
-  buildInputs = [ which automake autoconf pkgconfig libtool vala python intltool fuse ];
-  propagatedBuildInputs = [ ccnet curl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    vala
+    pkgconfig
+    python2
+    python2.pkgs.wrapPython
+  ];
 
-  preConfigure = ''
-  sed -ie 's|/bin/bash|/bin/sh|g' ./autogen.sh
-  ./autogen.sh
+  buildInputs = [
+    libuuid
+    sqlite
+    libsearpc
+    libevent
+    curl
+  ];
+
+  configureFlags = [
+    "--disable-server"
+    "--disable-console"
+  ];
+
+  pythonPath = with python2.pkgs; [
+    future
+    libsearpc
+  ];
+
+  postFixup = ''
+    wrapPythonPrograms
   '';
 
-  configureFlags = "--disable-server --disable-console";
-
-  buildPhase = "make -j1";
-
-  postInstall = ''
-  # Remove seafile binary
-  rm -rf "$out/bin/seafile"
-  # Remove cli client binary
-  rm -rf "$out/bin/seaf-cli"
-  '';
-
-  meta =
-  {
+  meta = with stdenv.lib; {
     homepage = "https://github.com/haiwen/seafile";
     description = "Shared components of Seafile: seafile-daemon, libseafile, libseafile python bindings, manuals, and icons";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.calrama ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ ];
   };
 }

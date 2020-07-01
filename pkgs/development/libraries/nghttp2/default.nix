@@ -1,71 +1,77 @@
 { stdenv, fetchurl, pkgconfig
 
-# Optinal Dependencies
-, openssl ? null, libev ? null, zlib ? null, jansson ? null, boost ? null
-, libxml2 ? null, jemalloc ? null
-
-# Extra argument
-, prefix ? ""
+# Optional Dependencies
+, openssl ? null, zlib ? null
+, enableLibEv ? !stdenv.hostPlatform.isWindows, libev ? null
+, enableCAres ? !stdenv.hostPlatform.isWindows, c-ares ? null
+, enableHpack ? false, jansson ? null
+, enableAsioLib ? false, boost ? null
+, enableGetAssets ? false, libxml2 ? null
+, enableJemalloc ? false, jemalloc ? null
+, enableApp ? !stdenv.hostPlatform.isWindows
+, enablePython ? false, python ? null, cython ? null, ncurses ? null, setuptools ? null
 }:
 
-with stdenv;
-with stdenv.lib;
-let
-  isLib = prefix == "lib";
+assert enableHpack -> jansson != null;
+assert enableAsioLib -> boost != null;
+assert enableGetAssets -> libxml2 != null;
+assert enableJemalloc -> jemalloc != null;
+assert enablePython -> python != null && cython != null && ncurses != null && setuptools != null;
 
-  optOpenssl = if isLib then null else shouldUsePkg openssl;
-  optLibev = if isLib then null else shouldUsePkg libev;
-  optZlib = if isLib then null else shouldUsePkg zlib;
+let inherit (stdenv.lib) optional optionals optionalString; in
 
-  hasApp = optOpenssl != null && optLibev != null && optZlib != null;
-
-  optJansson = if isLib then null else shouldUsePkg jansson;
-  #optBoost = if isLib then null else shouldUsePkg boost;
-  optBoost = null; # Currently detection is broken
-  optLibxml2 = if !hasApp then null else shouldUsePkg libxml2;
-  optJemalloc = if !hasApp then null else shouldUsePkg jemalloc;
-in
 stdenv.mkDerivation rec {
-  name = "${prefix}nghttp2-${version}";
-  version = "0.7.14";
+  pname = "nghttp2";
+  version = "1.40.0";
 
-  # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
-    url = "http://pub.wak.io/nixos/tarballs/nghttp2-${version}.tar.bz2";
-    sha256 = "000d50yzyysbr9ldhvnbpzn35vplqm08dnmh55wc5zk273gy383f";
+    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0kyrgd4s2pq51ps5z385kw1hn62m8qp7c4h6im0g4ibrf89qwxc2";
   };
 
-  # Configure script searches for a symbol which does not exist in jemalloc on Darwin
-  # Reported upstream in https://github.com/tatsuhiro-t/nghttp2/issues/233
-  postPatch = if (stdenv.isDarwin && optJemalloc != null) then ''
-    substituteInPlace configure --replace "malloc_stats_print" "je_malloc_stats_print"
-  '' else null;
+  outputs = [ "bin" "out" "dev" "lib" ]
+    ++ optional enablePython "python";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ optJansson optBoost optLibxml2 optJemalloc ]
-    ++ optionals hasApp [ optOpenssl optLibev optZlib ];
+  buildInputs = [ openssl ]
+    ++ optional enableLibEv libev
+    ++ [ zlib ]
+    ++ optional enableCAres c-ares
+    ++ optional enableHpack jansson
+    ++ optional enableAsioLib boost
+    ++ optional enableGetAssets libxml2
+    ++ optional enableJemalloc jemalloc
+    ++ optionals enablePython [ python ncurses setuptools ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [
-    (mkEnable false                 "werror"          null)
-    (mkEnable false                 "debug"           null)
-    (mkEnable true                  "threads"         null)
-    (mkEnable hasApp                "app"             null)
-    (mkEnable (optJansson != null)  "hpack-tools"     null)
-    (mkEnable (optBoost != null)    "asio-lib"        null)
-    (mkEnable false                 "examples"        null)
-    (mkEnable false                 "python-bindings" null)
-    (mkEnable false                 "failmalloc"      null)
-    (mkWith   (optLibxml2 != null)  "libxml2"         null)
-    (mkWith   (optJemalloc != null) "jemalloc"        null)
-    (mkWith   false                 "spdylay"         null)
-    (mkWith   false                 "cython"          null)
-  ];
+    "--with-spdylay=no"
+    "--disable-examples"
+    (stdenv.lib.enableFeature enableApp "app")
+  ] ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib"
+    ++ (if enablePython then [
+    "--with-cython=${cython}/bin/cython"
+  ] else [
+    "--disable-python-bindings"
+  ]);
 
-  meta = {
-    homepage = http://nghttp2.org/;
-    description = "an implementation of HTTP/2 in C";
+  preInstall = optionalString enablePython ''
+    mkdir -p $out/${python.sitePackages}
+    # convince installer it's ok to install here
+    export PYTHONPATH="$PYTHONPATH:$out/${python.sitePackages}"
+  '';
+  postInstall = optionalString enablePython ''
+    mkdir -p $python/${python.sitePackages}
+    mv $out/${python.sitePackages}/* $python/${python.sitePackages}
+  '';
+
+  #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
+
+  meta = with stdenv.lib; {
+    homepage = "https://nghttp2.org/";
+    description = "A C implementation of HTTP/2";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

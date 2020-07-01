@@ -1,61 +1,13 @@
-diff --git a/common/user-list.c b/common/user-list.c
-index 792c6d3..57fbfb7 100644
---- a/common/user-list.c
-+++ b/common/user-list.c
-@@ -331,7 +331,7 @@ load_passwd_file (CommonUserList *user_list, gboolean emit_add_signal)
+diff --git a/src/plymouth.c b/src/plymouth.c
+index d1ed91f4..318f9409 100644
+--- a/src/plymouth.c
++++ b/src/plymouth.c
+@@ -24,7 +24,7 @@ static gboolean has_active_vt = FALSE;
+ static gboolean
+ plymouth_run_command (const gchar *command, gint *exit_status)
+ {
+-    g_autofree gchar *command_line = g_strdup_printf ("plymouth %s", command);
++    g_autofree gchar *command_line = g_strdup_printf ("@plymouth@ %s", command);
+     g_autoptr(GError) error = NULL;
+     gboolean result = g_spawn_command_line_sync (command_line, NULL, NULL, exit_status, &error);
  
-     value = g_key_file_get_string (config, "UserList", "hidden-shells", NULL);
-     if (!value)
--        value = g_strdup ("/bin/false /usr/sbin/nologin");
-+        value = g_strdup ("/run/current-system/sw/bin/nologin");
-     hidden_shells = g_strsplit (value, " ", -1);
-     g_free (value);
- 
-diff --git a/src/seat.c b/src/seat.c
-index f9b149d..9029742 100644
---- a/src/seat.c
-+++ b/src/seat.c
-@@ -343,7 +343,7 @@ run_script (Seat *seat, DisplayServer *display_server, const gchar *script_name,
- 
-     /* Set POSIX variables */
-     process_set_clear_environment (script, TRUE);
--    process_set_env (script, "SHELL", "/bin/sh");
-+    process_set_env (script, "SHELL", "/run/current-system/sw/bin/sh");
- 
-     /* Variables required for regression tests */
-     if (g_getenv ("LIGHTDM_TEST_ROOT"))
-@@ -354,7 +354,7 @@ run_script (Seat *seat, DisplayServer *display_server, const gchar *script_name,
-         process_set_env (script, "PATH", g_getenv ("PATH"));
-     }
-     else
--        process_set_env (script, "PATH", "/usr/local/bin:/usr/bin:/bin");
-+        process_set_env (script, "PATH", "/run/current-system/sw/bin");
- 
-     if (user)
-     {
-diff --git a/src/session-child.c b/src/session-child.c
-index e85f57d..93db0bd 100644
---- a/src/session-child.c
-+++ b/src/session-child.c
-@@ -410,7 +410,7 @@ session_child_run (int argc, char **argv)
-         else
-         {
-             /* Set POSIX variables */
--            pam_putenv (pam_handle, "PATH=/usr/local/bin:/usr/bin:/bin");
-+            pam_putenv (pam_handle, "PATH=/run/current-system/sw/bin");
-             pam_putenv (pam_handle, g_strdup_printf ("USER=%s", username));
-             pam_putenv (pam_handle, g_strdup_printf ("LOGNAME=%s", username));
-             pam_putenv (pam_handle, g_strdup_printf ("HOME=%s", user_get_home_directory (user)));
-diff --git a/src/shared-data-manager.c b/src/shared-data-manager.c
-index 47f1c10..cc82652 100644
---- a/src/shared-data-manager.c
-+++ b/src/shared-data-manager.c
-@@ -68,7 +68,7 @@ delete_unused_user (gpointer key, gpointer value, gpointer user_data)
- 
-     gchar *path = g_build_filename (USERS_DIR, user, NULL);
-     gchar *quoted_path = g_shell_quote (path);
--    gchar *cmd = g_strdup_printf ("/bin/rm -rf %s", quoted_path);
-+    gchar *cmd = g_strdup_printf ("/run/current-system/sw/bin/rm -rf %s", quoted_path);
- 
-     g_spawn_command_line_async (cmd, &error);
-     if (error)

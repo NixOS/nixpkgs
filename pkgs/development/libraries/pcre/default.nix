@@ -1,30 +1,51 @@
-{ stdenv, fetchurl, unicodeSupport ? true, cplusplusSupport ? true
-, windows ? null
+{ stdenv, fetchurl
+, pcre, windows ? null
+, variant ? null
 }:
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "pcre-8.37";
+assert elem variant [ null "cpp" "pcre16" "pcre32" ];
+
+let
+  version = "8.44";
+  pname = if (variant == null) then "pcre"
+    else  if (variant == "cpp") then "pcre-cpp"
+    else  variant;
+
+in stdenv.mkDerivation {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "17bqykp604p7376wj3q2nmjdhrb6v1ny8q08zdwi7qvc02l9wrsi";
+    url = "https://ftp.pcre.org/pub/pcre/pcre-${version}.tar.bz2";
+    sha256 = "0v9nk51wh55pcbnf2jr36yarz8ayajn6d7ywiq2wagivn9c8c40r";
   };
 
-  configureFlags = ''
-    --enable-jit
-    ${if unicodeSupport then "--enable-unicode-properties" else ""}
-    ${if !cplusplusSupport then "--disable-cpp" else ""}
+  outputs = [ "bin" "dev" "out" "doc" "man" ];
+
+  configureFlags = optional (!stdenv.hostPlatform.isRiscV) "--enable-jit" ++ [
+    "--enable-unicode-properties"
+    "--disable-cpp"
+  ]
+    ++ optional (variant != null) "--enable-${variant}";
+
+  # https://bugs.exim.org/show_bug.cgi?id=2173
+  patches = [ ./stacksize-detection.patch ];
+
+  preCheck = ''
+    patchShebangs RunGrepTest
   '';
 
-  doCheck = with stdenv; !(isCygwin || isFreeBSD);
+  doCheck = !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
 
-  crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
-    buildInputs = [ windows.mingw_w64_pthreads.crossDrv ];
-  };
+  postFixup = ''
+    moveToOutput bin/pcre-config "$dev"
+  ''
+    + optionalString (variant != null) ''
+    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
+  '';
 
   meta = {
     homepage = "http://www.pcre.org/";
@@ -40,6 +61,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.all;
-    maintainers = [ maintainers.simons ];
   };
 }

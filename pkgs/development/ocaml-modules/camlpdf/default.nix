@@ -1,15 +1,20 @@
-{ stdenv, fetchgit, ocaml, findlib, ncurses }:
+{ stdenv, fetchFromGitHub, ocaml, findlib }:
+
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "camlpdf is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
-  version = "2.1.1";
-  name = "ocaml-camlpdf-${version}";
-  src = fetchgit {
-    url = https://github.com/johnwhitington/camlpdf.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "118656hc3zv5nwmbhr6llvb7q2pbxk2hz95bv8x4879a9qsnb4xr";
+  version = "2.3";
+  name = "ocaml${ocaml.version}-camlpdf-${version}";
+  src = fetchFromGitHub {
+    owner = "johnwhitington";
+    repo = "camlpdf";
+    rev = "v${version}";
+    sha256 = "1z8h6bjzmlscr6h6kdvzj8kspifb4n9dg7zi54z1cv2qi03kr8dk";
   };
 
-  buildInputs = [ ocaml findlib ncurses ];
+  buildInputs = [ ocaml findlib ];
 
   # Version number in META file is wrong
   patchPhase = ''
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An OCaml library for reading, writing and modifying PDF files";
-    homepage = https://github.com/johnwhitington/camlpdf;
+    homepage = "https://github.com/johnwhitington/camlpdf";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [vbgl];
   };

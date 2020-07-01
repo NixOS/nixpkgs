@@ -1,0 +1,231 @@
+From: Evgeni Golov <evgeni@debian.org>
+Subject: use the system tinyxml instead of the embedded copy
+Last-Update: 2015-08-09
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 7b9e263..bc7ba8c 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -81,12 +81,6 @@ libdesmume_a_SOURCES = \
+ 	utils/libfat/mem_allocate.h \
+ 	utils/libfat/partition.cpp \
+ 	utils/libfat/partition.h \
+-	utils/tinyxml/tinystr.cpp \
+-	utils/tinyxml/tinystr.h \
+-	utils/tinyxml/tinyxml.cpp \
+-	utils/tinyxml/tinyxml.h \
+-	utils/tinyxml/tinyxmlerror.cpp \
+-	utils/tinyxml/tinyxmlparser.cpp \
+ 	utils/glcorearb.h \
+ 	addons/slot2_auto.cpp addons/slot2_mpcf.cpp addons/slot2_paddle.cpp addons/slot2_gbagame.cpp addons/slot2_none.cpp addons/slot2_rumblepak.cpp addons/slot2_guitarGrip.cpp addons/slot2_expMemory.cpp addons/slot2_piano.cpp addons/slot2_passme.cpp addons/slot1_none.cpp addons/slot1_r4.cpp addons/slot1_retail_nand.cpp addons/slot1_retail_auto.cpp addons/slot1_retail_mcrom.cpp addons/slot1_retail_mcrom_debug.cpp addons/slot1comp_mc.cpp addons/slot1comp_mc.h addons/slot1comp_rom.h addons/slot1comp_rom.cpp addons/slot1comp_protocol.h addons/slot1comp_protocol.cpp \
+ 	cheatSystem.cpp cheatSystem.h \
+@@ -204,3 +198,4 @@ if HAVE_GDB_STUB
+ libdesmume_a_SOURCES += gdbstub.h
+ endif
+ libdesmume_a_LIBADD = fs-$(desmume_arch).$(OBJEXT)
++LIBS += -ltinyxml
+diff --git a/src/Makefile.in b/src/Makefile.in
+index 9cf26a3..d9ff7b2 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -184,9 +184,6 @@ am__libdesmume_a_SOURCES_DIST = armcpu.cpp armcpu.h \
+ 	utils/libfat/libfat_public_api.h utils/libfat/lock.cpp \
+ 	utils/libfat/lock.h utils/libfat/mem_allocate.h \
+ 	utils/libfat/partition.cpp utils/libfat/partition.h \
+-	utils/tinyxml/tinystr.cpp utils/tinyxml/tinystr.h \
+-	utils/tinyxml/tinyxml.cpp utils/tinyxml/tinyxml.h \
+-	utils/tinyxml/tinyxmlerror.cpp utils/tinyxml/tinyxmlparser.cpp \
+ 	utils/glcorearb.h addons/slot2_auto.cpp addons/slot2_mpcf.cpp \
+ 	addons/slot2_paddle.cpp addons/slot2_gbagame.cpp \
+ 	addons/slot2_none.cpp addons/slot2_rumblepak.cpp \
+@@ -324,10 +321,6 @@ am_libdesmume_a_OBJECTS = armcpu.$(OBJEXT) arm_instructions.$(OBJEXT) \
+ 	utils/libfat/libfat.$(OBJEXT) \
+ 	utils/libfat/libfat_public_api.$(OBJEXT) \
+ 	utils/libfat/lock.$(OBJEXT) utils/libfat/partition.$(OBJEXT) \
+-	utils/tinyxml/tinystr.$(OBJEXT) \
+-	utils/tinyxml/tinyxml.$(OBJEXT) \
+-	utils/tinyxml/tinyxmlerror.$(OBJEXT) \
+-	utils/tinyxml/tinyxmlparser.$(OBJEXT) \
+ 	addons/slot2_auto.$(OBJEXT) addons/slot2_mpcf.$(OBJEXT) \
+ 	addons/slot2_paddle.$(OBJEXT) addons/slot2_gbagame.$(OBJEXT) \
+ 	addons/slot2_none.$(OBJEXT) addons/slot2_rumblepak.$(OBJEXT) \
+@@ -475,7 +468,7 @@ LIBAGG_LIBS = @LIBAGG_LIBS@
+ LIBGLADE_CFLAGS = @LIBGLADE_CFLAGS@
+ LIBGLADE_LIBS = @LIBGLADE_LIBS@
+ LIBOBJS = @LIBOBJS@
+-LIBS = @LIBS@
++LIBS = @LIBS@ -ltinyxml
+ LIBSOUNDTOUCH_CFLAGS = @LIBSOUNDTOUCH_CFLAGS@
+ LIBSOUNDTOUCH_LIBS = @LIBSOUNDTOUCH_LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+@@ -625,9 +618,6 @@ libdesmume_a_SOURCES = armcpu.cpp armcpu.h arm_instructions.cpp \
+ 	utils/libfat/libfat_public_api.h utils/libfat/lock.cpp \
+ 	utils/libfat/lock.h utils/libfat/mem_allocate.h \
+ 	utils/libfat/partition.cpp utils/libfat/partition.h \
+-	utils/tinyxml/tinystr.cpp utils/tinyxml/tinystr.h \
+-	utils/tinyxml/tinyxml.cpp utils/tinyxml/tinyxml.h \
+-	utils/tinyxml/tinyxmlerror.cpp utils/tinyxml/tinyxmlparser.cpp \
+ 	utils/glcorearb.h addons/slot2_auto.cpp addons/slot2_mpcf.cpp \
+ 	addons/slot2_paddle.cpp addons/slot2_gbagame.cpp \
+ 	addons/slot2_none.cpp addons/slot2_rumblepak.cpp \
+@@ -760,20 +750,6 @@ utils/libfat/lock.$(OBJEXT): utils/libfat/$(am__dirstamp) \
+ 	utils/libfat/$(DEPDIR)/$(am__dirstamp)
+ utils/libfat/partition.$(OBJEXT): utils/libfat/$(am__dirstamp) \
+ 	utils/libfat/$(DEPDIR)/$(am__dirstamp)
+-utils/tinyxml/$(am__dirstamp):
+-	@$(MKDIR_P) utils/tinyxml
+-	@: > utils/tinyxml/$(am__dirstamp)
+-utils/tinyxml/$(DEPDIR)/$(am__dirstamp):
+-	@$(MKDIR_P) utils/tinyxml/$(DEPDIR)
+-	@: > utils/tinyxml/$(DEPDIR)/$(am__dirstamp)
+-utils/tinyxml/tinystr.$(OBJEXT): utils/tinyxml/$(am__dirstamp) \
+-	utils/tinyxml/$(DEPDIR)/$(am__dirstamp)
+-utils/tinyxml/tinyxml.$(OBJEXT): utils/tinyxml/$(am__dirstamp) \
+-	utils/tinyxml/$(DEPDIR)/$(am__dirstamp)
+-utils/tinyxml/tinyxmlerror.$(OBJEXT): utils/tinyxml/$(am__dirstamp) \
+-	utils/tinyxml/$(DEPDIR)/$(am__dirstamp)
+-utils/tinyxml/tinyxmlparser.$(OBJEXT): utils/tinyxml/$(am__dirstamp) \
+-	utils/tinyxml/$(DEPDIR)/$(am__dirstamp)
+ addons/$(am__dirstamp):
+ 	@$(MKDIR_P) addons
+ 	@: > addons/$(am__dirstamp)
+@@ -1035,10 +1011,6 @@ mostlyclean-compile:
+ 	-rm -f utils/libfat/partition.$(OBJEXT)
+ 	-rm -f utils/md5.$(OBJEXT)
+ 	-rm -f utils/task.$(OBJEXT)
+-	-rm -f utils/tinyxml/tinystr.$(OBJEXT)
+-	-rm -f utils/tinyxml/tinyxml.$(OBJEXT)
+-	-rm -f utils/tinyxml/tinyxmlerror.$(OBJEXT)
+-	-rm -f utils/tinyxml/tinyxmlparser.$(OBJEXT)
+ 	-rm -f utils/vfat.$(OBJEXT)
+ 	-rm -f utils/xstring.$(OBJEXT)
+ 
+@@ -1175,10 +1147,6 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@utils/libfat/$(DEPDIR)/libfat_public_api.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@utils/libfat/$(DEPDIR)/lock.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@utils/libfat/$(DEPDIR)/partition.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@utils/tinyxml/$(DEPDIR)/tinystr.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@utils/tinyxml/$(DEPDIR)/tinyxml.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@utils/tinyxml/$(DEPDIR)/tinyxmlerror.Po@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@utils/tinyxml/$(DEPDIR)/tinyxmlparser.Po@am__quote@
+ 
+ .c.o:
+ @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@@ -1449,8 +1417,6 @@ distclean-generic:
+ 	-rm -f utils/decrypt/$(am__dirstamp)
+ 	-rm -f utils/libfat/$(DEPDIR)/$(am__dirstamp)
+ 	-rm -f utils/libfat/$(am__dirstamp)
+-	-rm -f utils/tinyxml/$(DEPDIR)/$(am__dirstamp)
+-	-rm -f utils/tinyxml/$(am__dirstamp)
+ 
+ maintainer-clean-generic:
+ 	@echo "This command is intended for maintainers to use"
+@@ -1460,7 +1426,7 @@ clean: clean-recursive
+ clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
+ 
+ distclean: distclean-recursive
+-	-rm -rf ./$(DEPDIR) addons/$(DEPDIR) filter/$(DEPDIR) metaspu/$(DEPDIR) utils/$(DEPDIR) utils/AsmJit/core/$(DEPDIR) utils/AsmJit/x86/$(DEPDIR) utils/decrypt/$(DEPDIR) utils/libfat/$(DEPDIR) utils/tinyxml/$(DEPDIR)
++	-rm -rf ./$(DEPDIR) addons/$(DEPDIR) filter/$(DEPDIR) metaspu/$(DEPDIR) utils/$(DEPDIR) utils/AsmJit/core/$(DEPDIR) utils/AsmJit/x86/$(DEPDIR) utils/decrypt/$(DEPDIR) utils/libfat/$(DEPDIR)
+ 	-rm -f Makefile
+ distclean-am: clean-am distclean-compile distclean-generic \
+ 	distclean-tags
+@@ -1506,7 +1472,7 @@ install-ps-am:
+ installcheck-am:
+ 
+ maintainer-clean: maintainer-clean-recursive
+-	-rm -rf ./$(DEPDIR) addons/$(DEPDIR) filter/$(DEPDIR) metaspu/$(DEPDIR) utils/$(DEPDIR) utils/AsmJit/core/$(DEPDIR) utils/AsmJit/x86/$(DEPDIR) utils/decrypt/$(DEPDIR) utils/libfat/$(DEPDIR) utils/tinyxml/$(DEPDIR)
++	-rm -rf ./$(DEPDIR) addons/$(DEPDIR) filter/$(DEPDIR) metaspu/$(DEPDIR) utils/$(DEPDIR) utils/AsmJit/core/$(DEPDIR) utils/AsmJit/x86/$(DEPDIR) utils/decrypt/$(DEPDIR) utils/libfat/$(DEPDIR)
+ 	-rm -f Makefile
+ maintainer-clean-am: distclean-am maintainer-clean-generic
+ 
+diff --git a/src/cli/Makefile.am b/src/cli/Makefile.am
+index 1985209..d958323 100755
+--- a/src/cli/Makefile.am
++++ b/src/cli/Makefile.am
+@@ -5,7 +5,7 @@ AM_CPPFLAGS += $(SDL_CFLAGS) $(ALSA_CFLAGS) $(LIBAGG_CFLAGS) $(GLIB_CFLAGS) $(GT
+ 
+ bin_PROGRAMS = desmume-cli
+ desmume_cli_SOURCES = main.cpp ../sndsdl.cpp ../ctrlssdl.h ../ctrlssdl.cpp ../driver.h ../driver.cpp
+-desmume_cli_LDADD = ../libdesmume.a $(SDL_LIBS) $(ALSA_LIBS) $(LIBAGG_LIBS) $(GLIB_LIBS) $(GTHREAD_LIBS) $(LIBSOUNDTOUCH_LIBS)
++desmume_cli_LDADD = ../libdesmume.a $(SDL_LIBS) $(ALSA_LIBS) $(LIBAGG_LIBS) $(GLIB_LIBS) $(GTHREAD_LIBS) $(LIBSOUNDTOUCH_LIBS) -ltinyxml
+ if HAVE_GDB_STUB
+ desmume_cli_LDADD += ../gdbstub/libgdbstub.a
+ endif
+diff --git a/src/cli/Makefile.in b/src/cli/Makefile.in
+index 14efd77..f04ab7d 100644
+--- a/src/cli/Makefile.in
++++ b/src/cli/Makefile.in
+@@ -311,7 +311,7 @@ AM_LDFLAGS =
+ desmume_cli_SOURCES = main.cpp ../sndsdl.cpp ../ctrlssdl.h ../ctrlssdl.cpp ../driver.h ../driver.cpp
+ desmume_cli_LDADD = ../libdesmume.a $(SDL_LIBS) $(ALSA_LIBS) \
+ 	$(LIBAGG_LIBS) $(GLIB_LIBS) $(GTHREAD_LIBS) \
+-	$(LIBSOUNDTOUCH_LIBS) $(am__append_1)
++	$(LIBSOUNDTOUCH_LIBS) -ltinyxml $(am__append_1)
+ all: all-recursive
+ 
+ .SUFFIXES:
+diff --git a/src/gtk-glade/Makefile.am b/src/gtk-glade/Makefile.am
+index b667fca..c79fdac 100755
+--- a/src/gtk-glade/Makefile.am
++++ b/src/gtk-glade/Makefile.am
+@@ -33,7 +33,7 @@ desmume_glade_SOURCES =  \
+ desmume_glade_LDADD = ../libdesmume.a \
+ 			$(SDL_LIBS) $(GTKGLEXT_LIBS) $(LIBGLADE_LIBS) \
+ 			$(GTHREAD_LIBS) $(ALSA_LIBS) $(LIBAGG_LIBS) \
+-			$(LIBSOUNDTOUCH_LIBS)
++			$(LIBSOUNDTOUCH_LIBS) -ltinyxml
+ if HAVE_GDB_STUB
+ desmume_glade_LDADD += ../gdbstub/libgdbstub.a
+ endif
+diff --git a/src/gtk-glade/Makefile.in b/src/gtk-glade/Makefile.in
+index 5f77ec5..012aa72 100644
+--- a/src/gtk-glade/Makefile.in
++++ b/src/gtk-glade/Makefile.in
+@@ -367,7 +367,7 @@ desmume_glade_SOURCES = \
+ 
+ desmume_glade_LDADD = ../libdesmume.a $(SDL_LIBS) $(GTKGLEXT_LIBS) \
+ 	$(LIBGLADE_LIBS) $(GTHREAD_LIBS) $(ALSA_LIBS) $(LIBAGG_LIBS) \
+-	$(LIBSOUNDTOUCH_LIBS) $(am__append_1)
++	$(LIBSOUNDTOUCH_LIBS) -ltinyxml $(am__append_1)
+ all: all-recursive
+ 
+ .SUFFIXES:
+diff --git a/src/gtk/Makefile.am b/src/gtk/Makefile.am
+index 59cb1f2..e451102 100755
+--- a/src/gtk/Makefile.am
++++ b/src/gtk/Makefile.am
+@@ -32,7 +32,7 @@ desmume_SOURCES = \
+ 	../filter/videofilter.cpp ../filter/videofilter.h \
+ 	main.cpp main.h
+ desmume_LDADD = ../libdesmume.a \
+-	$(SDL_LIBS) $(GTK_LIBS) $(GTHREAD_LIBS) $(ALSA_LIBS) $(LIBAGG_LIBS) $(LIBSOUNDTOUCH_LIBS)
++	$(SDL_LIBS) $(GTK_LIBS) $(GTHREAD_LIBS) $(ALSA_LIBS) $(LIBAGG_LIBS) $(LIBSOUNDTOUCH_LIBS) -ltinyxml
+ if HAVE_GDB_STUB
+ desmume_LDADD += ../gdbstub/libgdbstub.a
+ endif
+diff --git a/src/gtk/Makefile.in b/src/gtk/Makefile.in
+index e1a2c37..75f392f 100644
+--- a/src/gtk/Makefile.in
++++ b/src/gtk/Makefile.in
+@@ -382,7 +382,7 @@ desmume_SOURCES = \
+ 
+ desmume_LDADD = ../libdesmume.a $(SDL_LIBS) $(GTK_LIBS) \
+ 	$(GTHREAD_LIBS) $(ALSA_LIBS) $(LIBAGG_LIBS) \
+-	$(LIBSOUNDTOUCH_LIBS) $(am__append_1) $(am__append_2) \
++	$(LIBSOUNDTOUCH_LIBS) -ltinyxml $(am__append_1) $(am__append_2) \
+ 	$(am__append_3)
+ UPDATE_DESKTOP = \
+   appsdir=$(DESTDIR)$(datadir)/applications ; \
+diff --git a/src/utils/advanscene.cpp b/src/utils/advanscene.cpp
+index 8d8f370..09c35bb 100755
+--- a/src/utils/advanscene.cpp
++++ b/src/utils/advanscene.cpp
+@@ -19,7 +19,7 @@
+ #include <time.h>
+ 
+ #define TIXML_USE_STL
+-#include "tinyxml/tinyxml.h"
++#include <tinyxml.h>
+ 
+ #include "advanscene.h"
+ #include "../common.h"

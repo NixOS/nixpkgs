@@ -1,0 +1,52 @@
+From 0251229bfd9617e8a35cf9dd7d338d63fff74a0c Mon Sep 17 00:00:00 2001
+From: Assaf Gordon <assafgordon@gmail.com>
+Date: Mon, 13 May 2019 16:37:40 -0600
+Subject: [PATCH] tests: avoid false-positive in date-debug test
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When debugging an invalid date due to DST switching, the intermediate
+'normalized time' should not be checked - its value can differ between
+systems (e.g. glibc vs musl).
+
+Reported by Niklas Hambüchen in
+https://lists.gnu.org/r/coreutils/2019-05/msg00031.html
+Analyzed by Rich Felker in
+https://lists.gnu.org/r/coreutils/2019-05/msg00039.html
+
+* tests/misc/date-debug.sh: Replace the exact normalized time
+with 'XX:XX:XX' so different values would not trigger test failure.
+---
+ tests/misc/date-debug.sh | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/tests/misc/date-debug.sh b/tests/misc/date-debug.sh
+index aa47f1abb..2ce6f4ce8 100755
+--- a/tests/misc/date-debug.sh
++++ b/tests/misc/date-debug.sh
+@@ -71,7 +71,7 @@ date: input timezone: TZ="America/Edmonton" in date string
+ date: using specified time as starting value: '02:30:00'
+ date: error: invalid date/time value:
+ date:     user provided time: '(Y-M-D) 2006-04-02 02:30:00'
+-date:        normalized time: '(Y-M-D) 2006-04-02 03:30:00'
++date:        normalized time: '(Y-M-D) 2006-04-02 XX:XX:XX'
+ date:                                             --
+ date:      possible reasons:
+ date:        non-existing due to daylight-saving time;
+@@ -81,7 +81,14 @@ date: invalid date 'TZ="America/Edmonton" 2006-04-02 02:30:00'
+ EOF
+ 
+ # date should return 1 (error) for invalid date
+-returns_ 1 date --debug -d "$in2" >out2 2>&1 || fail=1
++returns_ 1 date --debug -d "$in2" >out2-t 2>&1 || fail=1
++
++# The output line of "normalized time" can differ between systems
++# (e.g. glibc vs musl) and should not be checked.
++# See: https://lists.gnu.org/archive/html/coreutils/2019-05/msg00039.html
++sed '/normalized time:/s/ [0-9][0-9]:[0-9][0-9]:[0-9][0-9]/ XX:XX:XX/' \
++    out2-t > out2 || framework_failure_
++
+ compare exp2 out2 || fail=1
+ 
+ ##

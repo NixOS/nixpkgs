@@ -10,12 +10,7 @@ in {
 
     services.fprot = {
       updater = {
-        enable = mkOption {
-          default = false;
-          description = ''
-            Whether to enable automatic F-Prot virus definitions database updates.
-          '';
-        };
+        enable = mkEnableOption "automatic F-Prot virus definitions database updates";
 
         productData = mkOption {
           description = ''
@@ -48,43 +43,37 @@ in {
     services.fprot.updater.licenseKeyfile = mkDefault "${pkgs.fprot}/opt/f-prot/license.key";
 
     environment.systemPackages = [ pkgs.fprot ];
-    environment.etc = singleton {
+    environment.etc."f-prot.conf" = {
       source = "${pkgs.fprot}/opt/f-prot/f-prot.conf";
-      target = "f-prot.conf";
     };
 
-    users.extraUsers = singleton
-      { name = fprotUser;
-        uid = config.ids.uids.fprot;
+    users.users.${fprotUser} =
+      { uid = config.ids.uids.fprot;
         description = "F-Prot daemon user";
         home = stateDir;
       };
 
-    users.extraGroups = singleton
-      { name = fprotGroup;
-        gid = config.ids.gids.fprot;
-      };
+    users.groups.${fprotGroup} =
+      { gid = config.ids.gids.fprot; };
 
     services.cron.systemCronJobs = [ "*/${toString cfg.updater.frequency} * * * * root start fprot-updater" ];
 
-    jobs = {
-      fprot_updater = {
-        name = "fprot-updater";
-          task = true;
-
-          # have to copy fpupdate executable because it insists on storing the virus database in the same dir
-          preStart = ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ${fprotUser}:${fprotGroup} ${stateDir}
-            cp ${pkgs.fprot}/opt/f-prot/fpupdate ${stateDir}
-            ln -sf ${cfg.updater.productData} ${stateDir}/product.data
-          '';
-          #setuid = fprotUser;
-          #setgid = fprotGroup;
-          exec = "/var/lib/fprot/fpupdate --keyfile ${cfg.updater.licenseKeyfile}";
+    systemd.services.fprot-updater = {
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = false;
       };
+      wantedBy = [ "multi-user.target" ];
+
+      # have to copy fpupdate executable because it insists on storing the virus database in the same dir
+      preStart = ''
+        mkdir -m 0755 -p ${stateDir}
+        chown ${fprotUser}:${fprotGroup} ${stateDir}
+        cp ${pkgs.fprot}/opt/f-prot/fpupdate ${stateDir}
+        ln -sf ${cfg.updater.productData} ${stateDir}/product.data
+      '';
+
+      script = "/var/lib/fprot/fpupdate --keyfile ${cfg.updater.licenseKeyfile}";
     };
-
  };
-
 }

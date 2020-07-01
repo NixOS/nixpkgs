@@ -1,0 +1,35 @@
+diff --git a/src/pass/test.rs b/src/pass/test.rs
+index c980a2f..2e6c8cc 100644
+--- a/src/pass/test.rs
++++ b/src/pass/test.rs
+@@ -56,6 +56,7 @@ fn populate_password_list_small_repo() {
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.push("testres");
+ 
+     let mut password_dir: PathBuf = base_path.clone();
+@@ -84,6 +85,7 @@ fn populate_password_list_repo_with_deleted_files() {
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.push("testres");
+ 
+     let mut password_dir: PathBuf = base_path.clone();
+@@ -112,6 +114,7 @@ fn populate_password_list_directory_without_git() {
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.push("testres");
+ 
+     let mut password_dir: PathBuf = base_path.clone();
+@@ -149,4 +152,4 @@ fn parse_signing_keys_empty() {
+     let result = PasswordStore::parse_signing_keys(&None).unwrap();
+ 
+     assert_eq!(result.len(), 0);
+-}
+\ No newline at end of file
++}

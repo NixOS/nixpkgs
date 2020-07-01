@@ -1,28 +1,32 @@
-{ stdenv, fetchurl, makeWrapper, python, perl, zip
-, rtmpdump, nose, mock, pycrypto, substituteAll }:
+{ stdenv, fetchFromGitHub, makeWrapper, python3Packages, perl, zip
+, gitMinimal }:
 
-stdenv.mkDerivation rec {
-  name = "svtplay-dl-${version}";
-  version = "0.10.2015.03.25";
+let
 
-  src = fetchurl {
-    url = "https://github.com/spaam/svtplay-dl/archive/${version}.tar.gz";
-    sha256 = "0j0fg3qrldpaf880v488rr2snw6ghpdln4l9mbvmi70rjzzxv4ap";
+  inherit (python3Packages)
+    python nose pycrypto pyyaml requests mock python-dateutil setuptools;
+
+in stdenv.mkDerivation rec {
+  pname = "svtplay-dl";
+  version = "2.4";
+
+  src = fetchFromGitHub {
+    owner = "spaam";
+    repo = "svtplay-dl";
+    rev = version;
+    sha256 = "146ss7pzh61yw84crk6hzfxkfdnf6bq07m11b6lgsw4hsn71g59w";
   };
 
-  pythonPaths = [ pycrypto ];
-  buildInputs = [ python perl nose mock rtmpdump makeWrapper ] ++ pythonPaths;
-  nativeBuildInputs = [ zip ];
+  pythonPaths = [ pycrypto pyyaml requests ];
+  buildInputs = [ python perl nose mock makeWrapper python-dateutil setuptools ] ++ pythonPaths;
+  nativeBuildInputs = [ gitMinimal zip ];
 
   postPatch = ''
-    substituteInPlace lib/svtplay_dl/fetcher/rtmp.py \
-      --replace '"rtmpdump"' '"${rtmpdump}/bin/rtmpdump"'
-
-    substituteInPlace run-tests.sh \
+    substituteInPlace scripts/run-tests.sh \
       --replace 'PYTHONPATH=lib' 'PYTHONPATH=lib:$PYTHONPATH'
   '';
 
-  makeFlags = "PREFIX=$(out) SYSCONFDIR=$(out)/etc PYTHON=${python}/bin/python";
+  makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc" "PYTHON=${python.interpreter}" ];
 
   postInstall = ''
     wrapProgram "$out/bin/svtplay-dl" \
@@ -30,10 +34,12 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = "sh run-tests.sh -2";
+  checkPhase = ''
+    sh scripts/run-tests.sh -2
+  '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/spaam/svtplay-dl;
+    homepage = "https://github.com/spaam/svtplay-dl";
     description = "Command-line tool to download videos from svtplay.se and other sites";
     license = licenses.mit;
     platforms = stdenv.lib.platforms.linux;

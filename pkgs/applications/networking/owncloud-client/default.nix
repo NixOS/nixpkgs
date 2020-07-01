@@ -1,33 +1,29 @@
-{ stdenv, fetchurl, cmake, qt4, pkgconfig, neon, qtkeychain, sqlite }:
+{ stdenv, fetchurl, mkDerivation, cmake, pkgconfig, qtbase, qtkeychain, sqlite }:
 
-stdenv.mkDerivation rec {
-  name = "owncloud-client" + "-" + version;
-
-  version = "1.7.1";
+mkDerivation rec {
+  pname = "owncloud-client";
+  version = "2.5.4.11654";
 
   src = fetchurl {
-    url = "https://download.owncloud.com/desktop/stable/mirall-${version}.tar.bz2";
-    sha256 = "0n9gv97jqval7xjyix2lkywvmvvfv052s0bd1i8kybdl9rwca6yf";
+    url = "https://download.owncloud.com/desktop/stable/owncloudclient-${version}.tar.xz";
+    sha256 = "0gsnry0786crbnpgg3f1vcqw6mwbz6svhm6mw3767qi4lb33jm31";
   };
 
-  buildInputs =
-    [ cmake qt4 pkgconfig neon qtkeychain sqlite];
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ qtbase qtkeychain sqlite ];
 
-  #configurePhase = ''
-  #  mkdir build
-  #  cd build
-  #  cmake -DBUILD_WITH_QT4=on \
-  #        -DCMAKE_INSTALL_PREFIX=$out \
-  #        -DCMAKE_BUILD_TYPE=Release \
-  #        ..
-  #'';
+  cmakeFlags = [
+    "-UCMAKE_INSTALL_LIBDIR"
+    "-DNO_SHIBBOLETH=1"
+  ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Synchronise your ownCloud with your computer using this desktop client";
-    homepage = https://owncloud.org;
-    maintainers = with stdenv.lib.maintainers; [ qknight ];
-    meta.platforms = stdenv.lib.platforms.unix;
+    homepage = "https://owncloud.org";
+    maintainers = [ maintainers.qknight ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
 }

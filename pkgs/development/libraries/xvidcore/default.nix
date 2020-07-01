@@ -2,12 +2,12 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "xvidcore-${version}";
-  version = "1.3.3";
-  
+  pname = "xvidcore";
+  version = "1.3.5";
+
   src = fetchurl {
-    url = "http://downloads.xvid.org/downloads/${name}.tar.bz2";
-    sha256 = "0m5g75qvapr7xpywg6a83v5x19kw1nm9l2q48lg7jvvpba0bmqdh";
+    url = "http://downloads.xvid.org/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "1d0hy1w9sn6491a3vhyf3vmhq4xkn6yd4ralx1191s6qz5wz483w";
   };
 
   preConfigure = ''
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
   postInstall = optionalString (!stdenv.isDarwin) ''
     rm $out/lib/*.a
   '';
-  
+
   meta = {
     description = "MPEG-4 video codec for PC";
-    homepage    = https://www.xvid.com/;
+    homepage    = "https://www.xvid.com/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ codyopel lovek323 ];
     platforms   = platforms.all;

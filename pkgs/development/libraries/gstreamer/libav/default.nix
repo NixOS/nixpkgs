@@ -1,35 +1,46 @@
-{ stdenv, fetchurl, pkgconfig, python, yasm
-, gst-plugins-base, orc, bzip2
-, withSystemLibav ? true, libav ? null
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, python3
+, gst-plugins-base
+, gettext
+, libav
 }:
 
-assert withSystemLibav -> libav != null;
+# Note that since gst-libav-1.6, libav is actually ffmpeg. See
+# https://gstreamer.freedesktop.org/releases/1.6/ for more info.
 
 stdenv.mkDerivation rec {
-  name = "gst-libav-1.4.5";
-
-  meta = {
-    homepage = "http://gstreamer.freedesktop.org";
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
-  };
+  pname = "gst-libav";
+  version = "1.16.2";
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-libav/${name}.tar.xz";
-    sha256 = "1g7vg9amh3cc3nmc415h6g2rqxqi4wgwqi08hxfbpwq48ri64p30";
+    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1wpfilc98bad9nsv3y1qapxp35dvn2mvwvrmqwrsj58cf09gc967";
   };
 
-  configureFlags = stdenv.lib.optionalString withSystemLibav
-    "--with-system-libav";
+  outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = with stdenv.lib;
-    [ pkgconfig python ]
-    ++ optional (!withSystemLibav) yasm
-    ;
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    pkgconfig
+    python3
+  ];
 
-  buildInputs = with stdenv.lib;
-    [ gst-plugins-base orc bzip2 ]
-    ++ optional withSystemLibav libav
-    ;
+  buildInputs = [
+    gst-plugins-base
+    libav
+  ];
+
+  meta = with lib; {
+    description = "FFmpeg/libav plugin for GStreamer";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+  };
 }

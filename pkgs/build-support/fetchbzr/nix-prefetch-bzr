@@ -26,8 +26,7 @@ repoName=$(echo $url | sed '
   s,.*/\([^/]\+\)/tags/\([^/]\+\)/*$,\1-\2,;t
   s,.*/\([^/]\+\)/*$,\1,;t
 ')
-dstFile=$repoName-r$rev
-test -n "$rev" || dstFile=$repoName
+dstFile="bzr-export"
 
 # If the hash was given, a file with that hash may already be in the
 # store.

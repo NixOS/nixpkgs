@@ -1,4 +1,4 @@
-Origin: http://pkgs.fedoraproject.org/gitweb/?p=qtscriptgenerator.git;a=blob_plain;f=qtscriptgenerator-src-0.1.0-no_QFileOpenEvent.patch;h=f397b5ab13bcfc268e6d7b7ba4c6bc66ae38b5c0;hb=HEAD
+Origin: http://src.fedoraproject.org/gitweb/?p=qtscriptgenerator.git;a=blob_plain;f=qtscriptgenerator-src-0.1.0-no_QFileOpenEvent.patch;h=f397b5ab13bcfc268e6d7b7ba4c6bc66ae38b5c0;hb=HEAD
 diff -up qtscriptgenerator-src-0.1.0/generator/typesystem_gui-common.xml.no_QFileOpenEvent qtscriptgenerator-src-0.1.0/generator/typesystem_gui-common.xml
 --- qtscriptgenerator-src-0.1.0/generator/typesystem_gui-common.xml.no_QFileOpenEvent	2011-12-22 11:34:52.615149619 -0600
 +++ qtscriptgenerator-src-0.1.0/generator/typesystem_gui-common.xml	2011-12-22 11:35:31.808659632 -0600

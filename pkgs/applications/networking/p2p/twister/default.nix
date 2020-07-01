@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, python
+{ stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkgconfig, python2
 , boost, db, openssl, geoip, libiconv, miniupnpc
 , srcOnly, fetchgit
 }:
@@ -8,19 +8,22 @@ let
     name = "twister-html";
     src = fetchgit {
       url = "git://github.com/miguelfreitas/twister-html.git";
-      rev = "891f7bf24e1c3df7ec5e1db23c765df2d7c2d5a9";
-      sha256 = "0d96rfkpwxyiz32k2pd6a64r2kr3600qgp9v73ddcpq593wf11qb";
+      rev = "01e7f7ca9b7e42ed90f91bc42da2c909ca5c0b9b";
+      sha256 = "0scjbin6s1kmi0bqq0dx0qyjw4n5xgmj567n0156i39f9h0dabqy";
     };
   };
 
-in stdenv.mkDerivation rec {
-  name = "twister-${version}";
-  version = "0.9.22";
+  boostPython = boost.override { enablePython = true; };
 
-  src = fetchurl {
-    url = "https://github.com/miguelfreitas/twister-core/"
-        + "archive/v${version}.tar.gz";
-    sha256 = "1haq0d7ypnazs599g4kcq1x914fslc04wazqj54rlvjdp7yx4j3f";
+in stdenv.mkDerivation rec {
+  pname = "twister";
+  version = "2019-08-19";
+
+  src = fetchFromGitHub {
+    owner = "miguelfreitas";
+    repo = "twister-core";
+    rev = "31faf3f63e461ea0a9b23081567a4a552cf06873";
+    sha256 = "0xh1lgnl9nd86jr0mp7m8bkd7r5j4d6chd0y73h2xv4aq5sld0sp";
   };
 
   configureFlags = [
@@ -29,11 +32,13 @@ in stdenv.mkDerivation rec {
     "--disable-deprecated-functions"
     "--enable-tests"
     "--enable-python-binding"
+    "--with-boost-libdir=${boostPython.out}/lib"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake libtool pkgconfig python
-    boost db openssl geoip miniupnpc libiconv
+    autoconf automake libtool python2
+    boostPython db openssl geoip miniupnpc libiconv
   ];
 
   postPatch = ''
@@ -57,5 +62,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.twister.net.co/";
     description = "Peer-to-peer microblogging";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

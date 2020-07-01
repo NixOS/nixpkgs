@@ -1,22 +1,31 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, enableStatic ? false }:
 
 stdenv.mkDerivation rec {
-  name = "xz-5.2.1";
+  name = "xz-5.2.5";
 
   src = fetchurl {
-    url = "http://tukaani.org/xz/${name}.tar.bz2";
-    sha256 = "101a1kih58s1ysqfncqw69qnwx1zlbjxwhnfmp0z5gz0jzs4i4b7";
+    url = "https://tukaani.org/xz/${name}.tar.bz2";
+    sha256 = "1ps2i8i212n0f4xpq6clp7h13q7m1y8slqvxha9i8d0bj0qgj5si";
   };
+
+  outputs = [ "bin" "dev" "out" "man" "doc" ];
+
+  configureFlags = stdenv.lib.optional enableStatic "--disable-shared";
 
   doCheck = true;
 
+  preCheck = ''
+    # Tests have a /bin/sh dependency...
+    patchShebangs tests
+  '';
+
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
-  preConfigure = "unset CONFIG_SHELL";
+  preConfigure = "CONFIG_SHELL=/bin/sh";
 
   postInstall = "rm -rf $out/share/doc";
 
   meta = with stdenv.lib; {
-    homepage = http://tukaani.org/xz/;
+    homepage = "https://tukaani.org/xz/";
     description = "XZ, general-purpose data compression software, successor of LZMA";
 
     longDescription =

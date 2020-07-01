@@ -1,0 +1,26 @@
+{ buildPythonPackage
+, dbus-python
+, fetchFromGitHub
+, numpy
+, stdenv
+, openrazer-daemon
+}:
+
+let
+  common = import ./common.nix { inherit stdenv fetchFromGitHub; };
+in
+buildPythonPackage (common // rec {
+  pname = "openrazer";
+
+  sourceRoot = "source/pylib";
+
+  propagatedBuildInputs = [
+    dbus-python
+    numpy
+    openrazer-daemon
+  ];
+
+  meta = common.meta // {
+    description = "An entirely open source Python library that allows you to manage your Razer peripherals on GNU/Linux";
+  };
+})

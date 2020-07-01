@@ -1,0 +1,51 @@
+--- a/configure	1970-01-01 01:00:01.000000000 +0100
++++ b/configure	2019-10-26 11:54:01.920776490 +0200
+@@ -6642,29 +6642,29 @@
+     require libXinerama X11/extensions/Xinerama.h XineramaQueryExtension -lXinerama
+     require libXext "X11/Xdefs.h X11/Xlib.h X11/extensions/Xext.h" XMissingExtension -lXext
+     if enabled xnvctrl; then
+-        case $target_os in
+-            linux)
++#        case $target_os in
++#            linux)
+                 # Bah. Suse linux doesn't have xnvctrl.
+-                . /etc/os-release
+-                case $ID in
+-                    *suse*)
++#                . /etc/os-release
++#                case $ID in
++#                    *suse*)
+ 			# This is hopefully temporary.
+-			disable xnvctrl_external
+-			;;
+-		    *)
+-                        require XNVctrl "X11/Xlib.h NVCtrl/NVCtrl.h NVCtrl/NVCtrlLib.h" XNVCTRLIsNvScreen -lXNVCtrl || disable xnvctrl
+-                        ;;
+-                esac
+-                ;;
+-            freebsd)
++#			disable xnvctrl_external
++#			;;
++#		    *)
++        require XNVctrl "X11/Xlib.h NVCtrl/NVCtrl.h NVCtrl/NVCtrlLib.h" XNVCTRLIsNvScreen -lXNVCtrl || disable xnvctrl
++#                        ;;
++#                esac
++#                ;;
++#            freebsd)
+                 # This is hopefully temporary, and will eventually
+                 # check for a system library too.
+-                disable xnvctrl_external
+-                ;;
+-            *)
+-                disable xnvctrl
+-                ;;
+-        esac
++#                disable xnvctrl_external
++#                ;;
++#            *)
++#                disable xnvctrl
++#                ;;
++#        esac
+     fi
+ fi
+ 

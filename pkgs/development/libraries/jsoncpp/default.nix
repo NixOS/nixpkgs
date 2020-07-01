@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, python }:
+{ stdenv, fetchFromGitHub, cmake, python, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "jsoncpp-${version}";
-  version = "1.6.2";
+  pname = "jsoncpp";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "open-source-parsers";
     repo = "jsoncpp";
     rev = version;
-    sha256 = "0p92i0hx2k3g8mwrcy339b56bfq8qgpb65id8xllkgd2ns4wi9zi";
+    sha256 = "037d1b1qdmn3rksmn1j71j26bv4hkjv7sn7da261k853xb5899sg";
   };
 
   /* During darwin bootstrap, we have a cp that doesn't understand the
@@ -20,24 +20,36 @@ stdenv.mkDerivation rec {
     export sourceRoot=${src.name}
   '';
 
-  nativeBuildInputs = [
-    # cmake can be built with the system jsoncpp, or its own bundled version.
-    # Obviously we cannot build it against the system jsoncpp that doesn't yet exist, so
-    # we make a bootstrapping build with the bundled version.
-    (cmake.override { jsoncpp = null; })
-    python
+  # Hack to be able to run the test, broken because we use
+  # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
+  preBuild = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH="`pwd`/src/lib_json''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
+  '' else ''
+    export LD_LIBRARY_PATH="`pwd`/src/lib_json''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+  '';
+
+  nativeBuildInputs = [ cmake python ];
+
+  # fix inverted sense in isAnyCharRequiredQuoting on arm. See: https://github.com/open-source-parsers/jsoncpp/pull/1120
+  patches = stdenv.lib.optionals (stdenv.isAarch64 || stdenv.isAarch32) [
+    (fetchpatch {
+      url = "https://github.com/open-source-parsers/jsoncpp/commit/9093358efae9e5981aa60013487fc7215f040a59.patch";
+      sha256 = "1wiqp70sck2md14sfc0zdkblqk9750cl55ykf9d6b9vs1ifzzzq5";
+     })
   ];
 
   cmakeFlags = [
-    "-DJSONCPP_WITH_CMAKE_PACKAGE=1"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_STATIC_LIBS=OFF"
+    "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit version;
-    homepage = https://github.com/open-source-parsers/jsoncpp;
-    description = "A simple API to manipulate JSON data in C++";
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
-    license = with stdenv.lib.licenses; [ mit ];
-    branch = "1.6";
+    homepage = "https://github.com/open-source-parsers/jsoncpp";
+    description = "A C++ library for interacting with JSON.";
+    maintainers = with maintainers; [ ttuegel cpages nand0p ];
+    license = licenses.mit;
+    platforms = platforms.all;
   };
 }

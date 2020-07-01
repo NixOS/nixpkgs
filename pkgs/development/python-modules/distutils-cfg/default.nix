@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ python ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     dest="$out/lib/${python.libPrefix}/site-packages/distutils"

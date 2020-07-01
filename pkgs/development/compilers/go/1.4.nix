@@ -1,24 +1,30 @@
-{ stdenv, lib, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl, Security, goPackages }:
+{ stdenv, lib, fetchurl, fetchpatch, tzdata, iana-etc, libcCross
+, pkgconfig
+, pcre
+, Security }:
 
 let
-  loader386 = "${glibc}/lib/ld-linux.so.2";
-  loaderAmd64 = "${glibc}/lib/ld-linux-x86-64.so.2";
-  loaderArm = "${glibc}/lib/ld-linux.so.3";
+  libc = if stdenv ? cross then libcCross else stdenv.cc.libc;
 in
 
 stdenv.mkDerivation rec {
-  name = "go-${version}";
-  version = "1.4.2";
+  pname = "go";
+  version = "1.4-bootstrap-20161024";
+  revision = "79d85a4965ea7c46db483314c3981751909d7883";
 
   src = fetchurl {
-    url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "3e5d07bc5214a1ffe187cf6406c5b5a80ee44f12f6bca97a5463db0afee2f6ac";
+    url = "https://github.com/golang/go/archive/${revision}.tar.gz";
+    sha256 = "1ljbllwjysya323xxm9s792z8y9jdw19n8sj3mlc8picjclrx5xf";
   };
 
-  # perl is used for testing go vet
-  buildInputs = [ bison bash makeWrapper perl ]
-             ++ lib.optionals stdenv.isLinux [ glibc ]
-             ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pcre ];
+  depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
+
+  hardeningDisable = [ "all" ];
+
+  # The tests try to do stuff with 127.0.0.1 and localhost
+  __darwinAllowLocalNetworking = true;
 
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.
@@ -46,32 +52,91 @@ stdenv.mkDerivation rec {
     sed -i 's,/bin/pwd,'"`type -P pwd`", src/os/os_test.go
     # Disable the unix socket test
     sed -i '/TestShutdownUnix/areturn' src/net/net_test.go
+    # Disable network timeout test
+    sed -i '/TestDialTimeout/areturn' src/net/dial_test.go
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/os/os_test.go
-    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
     # ParseInLocation fails the test
     sed -i '/TestParseInSydney/areturn' src/time/format_test.go
+
+    sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
   '' + lib.optionalString stdenv.isLinux ''
-    sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
-    sed -i 's,/lib/ld-linux.so.3,${loaderArm},' src/cmd/5l/asm.c
-    sed -i 's,/lib64/ld-linux-x86-64.so.2,${loaderAmd64},' src/cmd/6l/asm.c
-    sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
+    # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
+    # that run outside a nix server
+    sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
+
+    # Find the loader dynamically
+    LOADER="$(find ${lib.getLib libc}/lib -name ld-linux\* | head -n 1)"
+
+    # Replace references to the loader
+    find src/cmd -name asm.c -exec sed -i "s,/lib/ld-linux.*\.so\.[0-9],$LOADER," {} \;
+  '' + lib.optionalString stdenv.isDarwin ''
+    sed -i 's,"/etc","'"$TMPDIR"'",' src/os/os_test.go
+    sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
+    sed -i '/TestCgoLookupIP/areturn' src/net/cgo_unix_test.go
+    sed -i '/TestChdirAndGetwd/areturn' src/os/os_test.go
+    sed -i '/TestDialDualStackLocalhost/areturn' src/net/dial_test.go
+    sed -i '/TestRead0/areturn' src/os/os_test.go
+    sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
+
+    # fails when running inside tmux
+    sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
+
+    # unix socket tests fail on darwin
+    sed -i '/TestConnAndListener/areturn' src/net/conn_test.go
+    sed -i '/TestPacketConn/areturn' src/net/conn_test.go
+    sed -i '/TestPacketConn/areturn' src/net/packetconn_test.go
+    sed -i '/TestConnAndPacketConn/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixListenerSpecificMethods/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixConnSpecificMethods/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixListenerSpecificMethods/areturn' src/net/protoconn_test.go
+    sed -i '/TestUnixConnSpecificMethods/areturn' src/net/protoconn_test.go
+    sed -i '/TestStreamConnServer/areturn' src/net/server_test.go
+    sed -i '/TestReadUnixgramWithUnnamedSocket/areturn' src/net/unix_test.go
+    sed -i '/TestReadUnixgramWithZeroBytesBuffer/areturn' src/net/unix_test.go
+    sed -i '/TestUnixgramWrite/areturn' src/net/unix_test.go
+    sed -i '/TestUnixConnLocalAndRemoteNames/areturn' src/net/unix_test.go
+    sed -i '/TestUnixgramConnLocalAndRemoteNames/areturn' src/net/unix_test.go
+    sed -i '/TestWithSimulated/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestFlap/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestNew/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestNewLogger/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestDial/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestWrite/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestConcurrentWrite/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestConcurrentReconnect/areturn' src/log/syslog/syslog_test.go
+
+    # remove IP resolving tests, on darwin they can find fe80::1%lo while expecting ::1
+    sed -i '/TestResolveIPAddr/areturn' src/net/ipraw_test.go
+    sed -i '/TestResolveTCPAddr/areturn' src/net/tcp_test.go
+    sed -i '/TestResolveUDPAddr/areturn' src/net/udp_test.go
+
+    sed -i '/TestCgoExternalThreadSIGPROF/areturn' src/runtime/crash_cgo_test.go
+
+    touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
   '';
 
   patches = [
-    ./cacert-1.4.patch
-    ./remove-tools.patch
+    ./remove-tools-1.4.patch
+    ./creds-test-1.4.patch
+
+    # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
+    # actually works on old versions too.
+    (fetchpatch {
+      url    = "https://github.com/golang/go/commit/91563ced5897faf729a34be7081568efcfedda31.patch";
+      sha256 = "1ny5l3f8a9dpjjrnjnsplb66308a0x13sa0wwr4j6yrkc8j4qxqi";
+    })
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
-           else if stdenv.system == "i686-linux" then "386"
-           else if stdenv.system == "x86_64-linux" then "amd64"
-           else if stdenv.isArm then "arm"
+           else if stdenv.hostPlatform.system == "i686-linux" then "386"
+           else if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
+           else if stdenv.isAarch32 then "arm"
            else throw "Unsupported system";
-  GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
+  GOARM = stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = 1;
+  CGO_ENABLED = 0;
 
   # The go build actually checks for CC=*/clang and does something different, so we don't
   # just want the generic `cc` here.
@@ -86,14 +151,12 @@ stdenv.mkDerivation rec {
     ./all.bash
   '';
 
-  setupHook = ./setup-hook.sh;
-
-  meta = {
+  meta = with stdenv.lib; {
     branch = "1.4";
-    homepage = http://golang.org/;
+    homepage = "http://golang.org/";
     description = "The Go Programming language";
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [ cstrahan wkennington ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ cstrahan ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

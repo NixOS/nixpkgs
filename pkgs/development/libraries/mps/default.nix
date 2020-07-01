@@ -1,22 +1,28 @@
 { stdenv, fetchurl, autoreconfHook, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "mps-${version}";
-  version = "1.114.0";
+  pname = "mps";
+  version = "1.117.0";
 
   src = fetchurl {
-    url    = "http://www.ravenbrook.com/project/mps/release/${version}/mps-kit-${version}.tar.gz";
-    sha256 = "1gb0rdd42ib0fai2jwm2gyii8pk59i1rhblnpdzbdj8cj5g0b30h";
+    url    = "https://www.ravenbrook.com/project/mps/release/${version}/mps-kit-${version}.tar.gz";
+    sha256 = "04ix4l7lk6nxxk9sawpnxbybvqb82lks5606ym10bc1qbc2kqdcz";
   };
 
-  buildInputs = [ autoreconfHook sqlite ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ sqlite ];
 
-  # Fix a slightly annoying build failure in 'make install'
-  patchPhase = "substituteInPlace ./Makefile.in --replace /hot/Release /hot";
+  # needed for 1.116.0 to build with gcc7
+  NIX_CFLAGS_COMPILE = toString [
+    "-Wno-implicit-fallthrough"
+    "-Wno-error=clobbered"
+    "-Wno-error=cast-function-type"
+  ];
+
 
   meta = {
     description = "A flexible memory management and garbage collection library";
-    homepage    = "http://www.ravenbrook.com/project/mps";
+    homepage    = "https://www.ravenbrook.com/project/mps";
     license     = stdenv.lib.licenses.sleepycat;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

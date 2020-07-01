@@ -20,13 +20,13 @@ in
     services.freenet = {
 
       enable = mkOption {
-        type = types.uniq types.bool;
+        type = types.bool;
         default = false;
         description = "Enable the Freenet daemon";
       };
 
       nice = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 10;
         description = "Set the nice level for the Freenet daemon";
       };
@@ -50,7 +50,7 @@ in
       serviceConfig.Nice = cfg.nice;
     };
 
-    users.extraUsers.freenet = {
+    users.users.freenet = {
       group = "freenet";
       description = "Freenet daemon user";
       home = varDir;
@@ -58,7 +58,7 @@ in
       uid = config.ids.uids.freenet;
     };
 
-    users.extraGroups.freenet.gid = config.ids.gids.freenet;
+    users.groups.freenet.gid = config.ids.gids.freenet;
   };
 
 }

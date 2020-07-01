@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Library to access Open Collaboration Service providers";
     license = "LGPL";
-    maintainers = [ maintainers.sander maintainers.urkud maintainers.phreedom ];
+    maintainers = [ maintainers.sander maintainers.phreedom ];
     inherit (qt4.meta) platforms;
   };
 }

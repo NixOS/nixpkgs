@@ -1,29 +1,31 @@
-{ stdenv, fetchurl, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
-, python, ruby, jre, nettools
+{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
+, python, ruby, jre, nettools, bc
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.25";
-  name = "munin-${version}";
+  version = "2.0.63";
+  pname = "munin";
 
-  src = fetchurl {
-    url = "https://github.com/munin-monitoring/munin/archive/${version}.tar.gz";
-    sha256 = "1ig67l3p5fnx44fcvbbinajxlin9i7g9cbac93h2hcvb2qhzzzra";
+  src = fetchFromGitHub {
+    owner = "munin-monitoring";
+    repo = "munin";
+    rev = version;
+    sha256 = "0p1gzy6in15d6596b260qa0a144x8n8567cxdq0x4arw18004s3a";
   };
 
-  buildInputs = [ 
+  buildInputs = [
     makeWrapper
     which
     coreutils
     rrdtool
     nettools
-    perl
+    perlPackages.perl
     perlPackages.ModuleBuild
     perlPackages.HTMLTemplate
     perlPackages.NetCIDR
     perlPackages.NetSSLeay
     perlPackages.NetServer
-    perlPackages.Log4Perl
+    perlPackages.LogLog4perl
     perlPackages.IOSocketInet6
     perlPackages.Socket6
     perlPackages.URI
@@ -34,8 +36,7 @@ stdenv.mkDerivation rec {
     perlPackages.NetSNMP
     perlPackages.NetServer
     perlPackages.ListMoreUtils
-    perlPackages.TimeHiRes
-    perlPackages.LWPUserAgent
+    perlPackages.LWP
     perlPackages.DBDPg
     python
     ruby
@@ -50,13 +51,16 @@ stdenv.mkDerivation rec {
     perlPackages.IOStringy
   ];
 
+  # needs to find a local perl module during build
+  PERL_USE_UNSAFE_INC = "1";
+
   # TODO: tests are failing http://munin-monitoring.org/ticket/1390#comment:1
   # NOTE: important, test command always exits with 0, think of a way to abort the build once tests pass
   doCheck = false;
 
   checkPhase = ''
-   export PERL5LIB="$PERL5LIB:${rrdtool}/lib/perl"
-   LC_ALL=C make -j1 test 
+   export PERL5LIB="$PERL5LIB:${rrdtool}/${perlPackages.perl.libPrefix}"
+   LC_ALL=C make -j1 test
   '';
 
   patches = [
@@ -65,9 +69,13 @@ stdenv.mkDerivation rec {
 
     # https://github.com/munin-monitoring/munin/pull/134
     ./adding_servicedir_munin-node.patch
+
+    ./adding_sconfdir_munin-node.patch
+    ./preserve_environment.patch
   ];
 
   preBuild = ''
+    echo "${version}" > RELEASE
     substituteInPlace "Makefile" \
       --replace "/bin/pwd" "pwd" \
       --replace "HTMLOld.3pm" "HTMLOld.3"
@@ -84,23 +92,24 @@ stdenv.mkDerivation rec {
   # DESTDIR shouldn't be needed (and shouldn't have worked), but munin
   # developers have forgotten to use PREFIX everywhere, so we use DESTDIR to
   # ensure that everything is installed in $out.
-  makeFlags = ''
-    PREFIX=$(out)
-    DESTDIR=$(out)
-    PERLLIB=$(out)/lib/perl5/site_perl
-    PERL=${perl}/bin/perl
-    PYTHON=${python}/bin/python
-    RUBY=${ruby}/bin/ruby
-    JAVARUN=${jre}/bin/java
-    PLUGINUSER=munin
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "DESTDIR=$(out)"
+    "PERLLIB=$(out)/${perlPackages.perl.libPrefix}"
+    "PERL=${perlPackages.perl.outPath}/bin/perl"
+    "PYTHON=${python.outPath}/bin/python"
+    "RUBY=${ruby.outPath}/bin/ruby"
+    "JAVARUN=${jre.outPath}/bin/java"
+    "PLUGINUSER=munin"
+  ];
 
   postFixup = ''
     echo "Removing references to /usr/{bin,sbin}/ from munin plugins..."
-    find "$out/lib/plugins" -type f -print0 | xargs -0 -L1 sed -i -e "s|/usr/bin/||g" -e "s|/usr/sbin/||g"
+    find "$out/lib/plugins" -type f -print0 | xargs -0 -L1 \
+        sed -i -e "s|/usr/bin/||g" -e "s|/usr/sbin/||g" -e "s|\<bc\>|${bc}/bin/bc|g"
 
-    if test -e $out/nix-support/propagated-native-build-inputs; then
-        ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
+    if test -e $out/nix-support/propagated-build-inputs; then
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
     fi
 
     for file in "$out"/bin/munindoc "$out"/sbin/munin-* "$out"/lib/munin-* "$out"/www/cgi/*; do
@@ -109,10 +118,10 @@ stdenv.mkDerivation rec {
             *.jar) continue;;
         esac
         wrapProgram "$file" \
-          --set PERL5LIB "$out/lib/perl5/site_perl:${rrdtool}/lib/perl:${with perlPackages; stdenv.lib.makePerlPath [
-                Log4Perl IOSocketInet6 Socket6 URI DBFile DateManip
+          --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
+                LogLog4perl IOSocketInet6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
-                ListMoreUtils TimeHiRes DBDPg LWPUserAgent
+                ListMoreUtils DBDPg LWP rrdtool
                 ]}"
     done
   '';
@@ -125,9 +134,9 @@ stdenv.mkDerivation rec {
       interface. Munin can help analyze resource trends and 'what just happened
       to kill our performance?' problems.
     '';
-    homepage = http://munin-monitoring.org/;
+    homepage = "http://munin-monitoring.org/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.iElectric maintainers.bjornfor ];
+    maintainers = [ maintainers.domenkozar maintainers.bjornfor ];
     platforms = platforms.linux;
   };
 }

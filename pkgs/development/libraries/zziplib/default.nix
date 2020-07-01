@@ -1,20 +1,62 @@
-{ fetchurl, stdenv, perl, python, zip, xmlto, zlib }:
+{ stdenv
+, perl
+, pkg-config
+, fetchFromGitHub
+, fetchpatch
+, zip
+, unzip
+, python3
+, xmlto
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-  name = "zziplib-0.13.58";
+  pname = "zziplib";
+  version = "0.13.71";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/zziplib/${name}.tar.bz2";
-    sha256 = "13j9f6i8rx0qd5m96iwrcha78h34qpfk5qzi7cv098pms6gq022m";
+  src = fetchFromGitHub {
+    owner = "gdraheim";
+    repo = "zziplib";
+    rev = "v${version}";
+    sha256 = "P+7D57sc2oIABhk3k96aRILpGnsND5SLXHh2lqr9O4E=";
   };
 
-  patchPhase = ''
-    sed -i -e s,--export-dynamic,, configure
-  '';
+  patches = [
+    # Install man pages
+    (fetchpatch {
+      url = "https://github.com/gdraheim/zziplib/commit/5583ccc7a247ee27556ede344e93d3ac1dc72e9b.patch";
+      sha256 = "wVExEZN8Ml1/3GicB0ZYsLVS3KJ8BSz8i4Gu46naz1Y=";
+      excludes = [ "GNUmakefile" ];
+    })
 
-  buildInputs = [ perl python zip xmlto zlib ];
+    # Fix man page formatting
+    (fetchpatch {
+      url = "https://github.com/gdraheim/zziplib/commit/22ed64f13dc239f86664c60496261f544bce1088.patch";
+      sha256 = "ScFVWLc4LQPqkcHn9HK/VkLula4b5HzuYl0b5vi4Ikc=";
+    })
+  ];
 
-  doCheck = true;
+  nativeBuildInputs = [
+    perl
+    pkg-config
+    zip
+    python3
+    xmlto
+  ];
+
+  buildInputs = [
+    zlib
+  ];
+
+  checkInputs = [
+    unzip
+  ];
+
+  # tests are broken (https://github.com/gdraheim/zziplib/issues/20),
+  # and test/zziptests.py requires network access
+  # (https://github.com/gdraheim/zziplib/issues/24)
+  doCheck = false;
+  checkTarget = "check";
 
   meta = with stdenv.lib; {
     description = "Library to extract data from files archived in a zip file";
@@ -30,9 +72,9 @@ stdenv.mkDerivation rec {
 
     license = with licenses; [ lgpl2Plus mpl11 ];
 
-    homepage = http://zziplib.sourceforge.net/;
+    homepage = "http://zziplib.sourceforge.net/";
 
     maintainers = [ ];
-    platforms = python.meta.platforms;
+    platforms = python3.meta.platforms;
   };
 }

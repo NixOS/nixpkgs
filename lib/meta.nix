@@ -1,8 +1,7 @@
 /* Some functions for manipulating meta attributes, as well as the
    name attribute. */
 
-let lib = import ./default.nix;
-in
+{ lib }:
 
 rec {
 
@@ -15,6 +14,11 @@ rec {
   */
   addMetaAttrs = newAttrs: drv:
     drv // { meta = (drv.meta or {}) // newAttrs; };
+
+
+  /* Disable Hydra builds of given derivation.
+  */
+  dontDistribute = drv: addMetaAttrs { hydraPlatforms = []; } drv;
 
 
   /* Change the symbolic name of a package for presentation purposes
@@ -37,16 +41,18 @@ rec {
     let x = builtins.parseDrvName name; in "${x.name}-${suffix}-${x.version}");
 
 
-  /* Apply a function to each derivation and only to derivations in an attrset
+  /* Apply a function to each derivation and only to derivations in an attrset.
   */
   mapDerivationAttrset = f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
 
+  /* Set the nix-env priority of the package.
+  */
+  setPrio = priority: addMetaAttrs { inherit priority; };
 
   /* Decrease the nix-env priority of the package, i.e., other
      versions/variants of the package will be preferred.
   */
-  lowPrio = drv: addMetaAttrs { priority = "10"; } drv;
-
+  lowPrio = setPrio 10;
 
   /* Apply lowPrio to an attrset with derivations
   */
@@ -56,11 +62,29 @@ rec {
   /* Increase the nix-env priority of the package, i.e., this
      version/variant of the package will be preferred.
   */
-  hiPrio = drv: addMetaAttrs { priority = "-10"; } drv;
-
+  hiPrio = setPrio (-10);
 
   /* Apply hiPrio to an attrset with derivations
   */
   hiPrioSet = set: mapDerivationAttrset hiPrio set;
 
+
+  /* Check to see if a platform is matched by the given `meta.platforms`
+     element.
+
+     A `meta.platform` pattern is either
+
+       1. (legacy) a system string.
+
+       2. (modern) a pattern for the platform `parsed` field.
+
+     We can inject these into a patten for the whole of a structured platform,
+     and then match that.
+  */
+  platformMatch = platform: elem: let
+      pattern =
+        if builtins.isString elem
+        then { system = elem; }
+        else { parsed = elem; };
+    in lib.matchAttrs pattern platform;
 }

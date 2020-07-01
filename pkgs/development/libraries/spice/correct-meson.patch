@@ -1,0 +1,26 @@
+diff --git a/meson.build b/meson.build
+index 8b8ae8bb..e58c436c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -2,7 +2,7 @@
+ # project definition
+ #
+ project('spice', 'c',
+-        version : run_command('build-aux/git-version-gen', '${MESON_SOURCE_ROOT}/.tarball-version', check : true).stdout().strip(),
++        version : run_command('build-aux/git-version-gen', meson.source_root() + '/.tarball-version', check : true).stdout().strip(),
+         license : 'LGPLv2.1',
+         meson_version : '>= 0.48')
+
+diff --git a/server/meson.build b/server/meson.build
+index 34d8eef1..988ccab2 100644
+--- a/server/meson.build
++++ b/server/meson.build
+@@ -7,7 +7,7 @@ version_info = meson.project_version().split('.')
+ major = '@0@'.format(version_info[0])
+ minor = '@0@'.format(version_info[1])
+ micro = version_info[2].to_int()
+-if not version_info[3].contains('git')
++if not version_info.contains('git')
+   micro += 1
+ endif
+ micro = '@0@'.format(micro)

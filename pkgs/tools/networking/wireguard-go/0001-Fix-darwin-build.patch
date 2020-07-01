@@ -1,0 +1,26 @@
+From 63360467da4ae6d7fc8c0e05619bdf8813c7e417 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sun, 5 Jan 2020 15:35:15 +0100
+Subject: [PATCH] Fix darwin build
+
+---
+ rwcancel/select_default.go | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/rwcancel/select_default.go b/rwcancel/select_default.go
+index dd23cda..03f3452 100644
+--- a/rwcancel/select_default.go
++++ b/rwcancel/select_default.go
+@@ -9,6 +9,7 @@ package rwcancel
+ 
+ import "golang.org/x/sys/unix"
+ 
+-func unixSelect(nfd int, r *unix.FdSet, w *unix.FdSet, e *unix.FdSet, timeout *unix.Timeval) error {
+-	return unix.Select(nfd, r, w, e, timeout)
++func unixSelect(nfd int, r *unix.FdSet, w *unix.FdSet, e *unix.FdSet, timeout *unix.Timeval) (err error) {
++	_, err = unix.Select(nfd, r, w, e, timeout)
++	return
+ }
+-- 
+2.23.1
+

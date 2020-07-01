@@ -2,8 +2,12 @@
 , parallel ? true
 }:
 
+let
+  mkFlag = optset: flag: if optset then "-D${flag}=ON" else "-D${flag}=OFF";
+in
+
 stdenv.mkDerivation rec {
-  name = "stxxl-${version}";
+  pname = "stxxl";
   version = "1.4.1";
 
   src = fetchurl {
@@ -16,8 +20,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_STATIC_LIBS=OFF"
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DUSE_GNU_PARALLEL=${if parallel then "ON" else "OFF"}"
+    (mkFlag parallel "USE_GNU_PARALLEL")
   ];
 
   passthru = {
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An implementation of the C++ standard template library STL for external memory (out-of-core) computations";
-    homepage = https://github.com/stxxl/stxxl;
+    homepage = "https://github.com/stxxl/stxxl";
     license = licenses.boost;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;

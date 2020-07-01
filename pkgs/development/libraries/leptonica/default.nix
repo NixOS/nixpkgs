@@ -1,19 +1,29 @@
-{stdenv, fetchurl, libpng, libtiff, libjpeg, zlib}:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, which, gnuplot
+, giflib, libjpeg, libpng, libtiff, libwebp, openjpeg, zlib
+}:
 
-stdenv.mkDerivation {
-  name = "leptonica-1.69";
+stdenv.mkDerivation rec {
+  pname = "leptonica";
+  version = "1.79.0";
 
   src = fetchurl {
-    url = http://www.leptonica.org/source/leptonica-1.69.tar.gz;
-    sha256 = "0bd7w0zpmwwfn1cnrlyzjw3jf8x59r0rhdmvk7rigr57rnfnddry";
+    url = "http://www.leptonica.org/source/${pname}-${version}.tar.gz";
+    sha256 = "1n004gv1dj3pq1fcnfdclvvx5nang80336aa67nvs3nnqp4ncn84";
   };
 
-  buildInputs = [ libpng libtiff libjpeg zlib ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ giflib libjpeg libpng libtiff libwebp openjpeg zlib ];
+  enableParallelBuilding = true;
+
+  checkInputs = [ which gnuplot ];
+
+  # Fails on pngio_reg for unknown reason
+  doCheck = false; # !stdenv.isDarwin;
 
   meta = {
     description = "Image processing and analysis library";
-    homepage = http://www.leptonica.org/;
-    # Its own license: http://www.leptonica.org/about-the-license.html
-    license = stdenv.lib.licenses.free;
+    homepage = "http://www.leptonica.org/";
+    license = stdenv.lib.licenses.bsd2; # http://www.leptonica.org/about-the-license.html
+    platforms = stdenv.lib.platforms.unix;
   };
 }

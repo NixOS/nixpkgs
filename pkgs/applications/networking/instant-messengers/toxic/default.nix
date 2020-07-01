@@ -1,30 +1,32 @@
-{ stdenv, fetchFromGitHub, autoconf, libtool, automake, libsodium, ncurses
-, libtoxcore, openal, libvpx, freealut, libconfig, pkgconfig }:
+{ stdenv, fetchFromGitHub, libsodium, ncurses, curl
+, libtoxcore, openal, libvpx, freealut, libconfig, pkgconfig, libopus
+, qrencode, gdk-pixbuf, libnotify }:
 
 stdenv.mkDerivation rec {
-  name = "toxic-dev-20150125";
+  pname = "toxic";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
-    owner = "Tox";
-    repo = "toxic";
-    rev = "4badc983ea";
-    sha256 = "01zk6316v51f1zvp5ss53ay49h3nnaq5snlk0gxmsrmwg71bsnm6";
+    owner  = "Tox";
+    repo   = "toxic";
+    rev    = "v${version}";
+    sha256 = "09l2j3lwvrq7bf3051vjsnml9w63790ly3iylgf26gkrmld6k31w";
   };
 
-  makeFlags = [ "-Cbuild" "PREFIX=$(out)" ];
-  installFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)"];
+  installFlags = [ "PREFIX=$(out)"];
 
   buildInputs = [
-    autoconf libtool automake libtoxcore libsodium ncurses
-    libconfig pkgconfig
-  ] ++ stdenv.lib.optionals (!stdenv.isArm) [
-    openal libvpx freealut
+    libtoxcore libsodium ncurses curl gdk-pixbuf libnotify
+  ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
+    openal libopus libvpx freealut qrencode
   ];
+  nativeBuildInputs = [ pkgconfig libconfig ];
 
   meta = with stdenv.lib; {
     description = "Reference CLI for Tox";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric jgeerds ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

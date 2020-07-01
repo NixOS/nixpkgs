@@ -1,30 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, libsoup, webkit, gtk, glib_networking
-, gsettings_desktop_schemas, makeWrapper
+{ stdenv, fetchFromGitHub, pkgconfig, libsoup, webkitgtk, gtk3, glib-networking
+, gsettings-desktop-schemas, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "vimb-${version}";
-  version = "2.9";
+  pname = "vimb";
+  version = "3.3.0";
 
-  src = fetchurl {
-    url = "https://github.com/fanglingsu/vimb/archive/${version}.tar.gz";
-    sha256 = "0h9m5qfs09lb0dz8a79yccmm3a5rv6z8gi5pkyfh8fqkgkh2940p";
+  src = fetchFromGitHub {
+    owner = "fanglingsu";
+    repo = "vimb";
+    rev = version;
+    sha256 = "1qg18z2gnsli9qgrqfhqfrsi6g9mcgr90w8yab28nxrq4aha6brf";
   };
 
-  # Nixos default ca bundle
-  patchPhase = ''
-    sed -i s,/etc/ssl/certs/ca-certificates.crt,/etc/ssl/certs/ca-bundle.crt, src/config.def.h
-  '';
+  nativeBuildInputs = [ wrapGAppsHook pkgconfig ];
+  buildInputs = [ gtk3 libsoup webkitgtk glib-networking gsettings-desktop-schemas ];
 
-  buildInputs = [ makeWrapper gtk libsoup pkgconfig webkit gsettings_desktop_schemas ];
-
-  makeFlags = [ "PREFIX=$(out)" ];
-
-  preFixup = ''
-    wrapProgram "$out/bin/vimb" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     description = "A Vim-like browser";
@@ -34,9 +26,9 @@ stdenv.mkDerivation rec {
       editor and also easily configurable during runtime. Vimb is mostly
       keyboard driven and does not detract you from your daily work.
     '';
-    homepage = "http://fanglingsu.github.io/vimb/";
+    homepage = "https://fanglingsu.github.io/vimb/";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
+    maintainers = [];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

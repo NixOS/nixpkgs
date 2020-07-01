@@ -1,23 +1,27 @@
-{ fetchurl, stdenv, confuse, yajl, alsaLib, wirelesstools
-  }:
+{ fetchurl, stdenv, libconfuse, yajl, alsaLib, libpulseaudio, libnl, pkgconfig, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  name = "i3status-2.9";
+  name = "i3status-2.13";
 
   src = fetchurl {
-    url = "http://i3wm.org/i3status/${name}.tar.bz2";
-    sha256 = "1qwxbrga2fi5wf742hh9ajwa8b2kpzkjjnhjlz4wlpv21i80kss2";
+    url = "https://i3wm.org/i3status/${name}.tar.bz2";
+    sha256 = "0rhlzb96mw64z2jnhwz9nibc7pxg549626lz5642xxk5hpzwk2ff";
   };
 
-  buildInputs = [ confuse yajl alsaLib wirelesstools ];
+  nativeBuildInputs = [ pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl ];
+  buildInputs = [ libconfuse yajl alsaLib libpulseaudio libnl ];
 
-  makeFlags = "all";
-  installFlags = "PREFIX=\${out}";
+  makeFlags = [ "all" "PREFIX=$(out)" ];
+
+  # This hack is needed because for unknown reasons configure generates a broken makefile on the 2.13 release under nixos
+  preBuild = ''
+    sed -i -e 's/\$(TEST_LOGS) \$(TEST_LOGS/\$(TEST_LOGS)/g' Makefile
+  '';
 
   meta = {
-    description = "A tiling window manager";
-    homepage = http://i3wm.org;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    description = "Generates a status line for i3bar, dzen2, xmobar or lemonbar";
+    homepage = "https://i3wm.org";
+    maintainers = [ ];
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
   };

@@ -1,26 +1,31 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ stdenv, fetchurl, fetchpatch, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "json-c-0.12";
+  name = "json-c-0.13.1";
   src = fetchurl {
     url    = "https://s3.amazonaws.com/json-c_releases/releases/${name}-nodoc.tar.gz";
-    sha256 = "0dgvjjyb9xva63l6sy70sdch2w4ryvacdmfd3fg2f2v13lqx5mkg";
+    sha256 = "0ch1v18wk703bpbyzj7h1mkwvsw4rw4qdwvgykscypvqq10678ll";
   };
 
-  patches = [ ./unused-variable.patch ];
+  patches = [
+    # https://nvd.nist.gov/vuln/detail/CVE-2020-12762
+    (fetchpatch {
+      name = "CVE-2020-12762.patch";
+      url = "https://github.com/json-c/json-c/commit/865b5a65199973bb63dff8e47a2f57e04fec9736.patch";
+      sha256 = "1g5afk4khhm1sb70xrva1pyznshcw3ipzp1g5z60dpzxy303pp6h";
+    })
+  ];
 
-  buildInputs = [ autoreconfHook ]; # won't configure without it, no idea why
+  outputs = [ "out" "dev" ];
 
-  # compatibility hack (for mypaint at least)
-  postInstall = ''
-    ln -s json-c.pc "$out/lib/pkgconfig/json.pc"
-  '';
+  nativeBuildInputs = [ autoconf ];  # for autoheader
 
   meta = with stdenv.lib; {
     description = "A JSON implementation in C";
-    homepage    = https://github.com/json-c/json-c/wiki;
+    homepage    = "https://github.com/json-c/json-c/wiki";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
+    license = licenses.mit;
 
     longDescription = ''
       JSON-C implements a reference counting object model that allows you to

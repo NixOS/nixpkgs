@@ -1,29 +1,32 @@
-{ stdenv, fetchurl, python, cairomm, sparsehash, pycairo, automake, m4,
-pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir, makeWrapper,
-gobjectIntrospection, pygobject3, gtk3, matplotlib }:
+{ fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook
+, pkg-config, boost, expat, scipy, cgal, gmp, mpfr
+, gobject-introspection, pygobject3, gtk3, matplotlib, ncurses
+, buildPythonPackage
+, fetchpatch
+, pythonAtLeast
+, lib
+}:
 
-stdenv.mkDerivation rec {
-  version = "2.2.42";
-  name = "${python.libPrefix}-graph-tool-${version}";
-
-  meta = with stdenv.lib; {
-    description = "Python module for manipulation and statistical analysis of graphs";
-    homepage    = http://graph-tool.skewed.de/;
-    license     = licenses.gpl3;
-    platforms   = platforms.all;
-    maintainer  = [ stdenv.lib.maintainers.joelmo ];
-  };
+buildPythonPackage rec {
+  pname = "graph-tool";
+  format = "other";
+  version = "2.31";
 
   src = fetchurl {
-    url = "http://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    sha256 = "124qmd0mgam7hm87gscp3836ymhhwwnlfm2c5pzpml06da1w0xg9";
+    url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
+    sha256 = "0z6n9xkb5yz7z6rlwl6z9gq3ac5vdsby90nhvvvskadsx2pagd7v";
   };
 
-  preConfigure = ''
-    configureFlags="--with-python-module-path=$out/${python.sitePackages} --enable-openmp"
-  '';
+  configureFlags = [
+    "--with-python-module-path=$(out)/${python.sitePackages}"
+    "--with-boost-libdir=${boost}/lib"
+    "--with-expat=${expat}"
+    "--with-cgal=${cgal}"
+    "--enable-openmp"
+  ];
 
-  buildInputs = [ automake m4 pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ ncurses ];
 
   propagatedBuildInputs = [
     boost
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
     sparsehash
     # drawing
     cairomm
-    gobjectIntrospection
+    gobject-introspection
     gtk3
     pycairo
     matplotlib
@@ -45,4 +48,11 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = false;
+
+  meta = with lib; {
+    description = "Python module for manipulation and statistical analysis of graphs";
+    homepage    = "https://graph-tool.skewed.de/";
+    license     = licenses.gpl3;
+    maintainers = [ maintainers.joelmo ];
+  };
 }

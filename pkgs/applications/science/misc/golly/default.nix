@@ -1,45 +1,39 @@
-{stdenv, fetchurl, wxGTK, perl, python, zlib}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="golly";
-    version="2.6";
-    name="${baseName}-${version}";
-    hash="1n1k3yf23ymlwq4k6p4v2g04qd29pg2rabr4l7m9bj2b2j1zkqhz";
-    url="mirror://sourceforge/project/golly/golly/golly-2.6/golly-2.6-src.tar.gz";
-    sha256="1n1k3yf23ymlwq4k6p4v2g04qd29pg2rabr4l7m9bj2b2j1zkqhz";
-  };
-  buildInputs = [
-    wxGTK perl python zlib
-  ];
-in
+{stdenv, fetchurl, wxGTK, perl, python2, zlib, libGLU, libGL, libX11}:
 stdenv.mkDerivation rec {
-  inherit (s) name version;
-  inherit buildInputs;
+  pname = "golly";
+  version = "3.3";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    sha256 = "1j3ksnar4rdam4xiyspgyrs1pifbvxfxkrn65brkwxpx39mpgzc8";
+    url="mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
   };
 
-  sourceRoot="${name}-src/gui-wx/configure";
+  buildInputs = [
+    wxGTK perl python2 zlib libGLU libGL libX11
+  ];
+
+  setSourceRoot = ''
+    sourceRoot=$(echo */gui-wx/configure)
+  '';
 
   # Link against Python explicitly as it is needed for scripts
   makeFlags=[
     "AM_LDFLAGS="
   ];
-  NIX_LDFLAGS="-lpython${python.majorVersion} -lperl";
+  NIX_LDFLAGS="-l${python2.libPrefix} -lperl";
   preConfigure=''
     export NIX_LDFLAGS="$NIX_LDFLAGS -L$(dirname "$(find ${perl} -name libperl.so)")"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE
       -DPYTHON_SHLIB=$(basename "$(
-        readlink -f ${python}/lib/libpython*.so)")"
+        readlink -f ${python2}/lib/libpython*.so)")"
   '';
 
   meta = {
-    inherit (s) version;
+    inherit version;
     description = "Cellular automata simulation program";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    downloadPage = "http://sourceforge.net/projects/golly/files/golly";
+    downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
 }

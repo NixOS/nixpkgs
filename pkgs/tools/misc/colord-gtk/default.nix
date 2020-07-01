@@ -1,18 +1,58 @@
-{ stdenv, fetchurl, colord, intltool, glib, gtk3, pkgconfig, lcms2 }:
+{ stdenv
+, fetchurl
+, colord
+, gettext
+, meson
+, ninja
+, gobject-introspection
+, gtk-doc
+, docbook-xsl-ns
+, docbook_xsl
+, docbook_xml_dtd_412
+, libxslt
+, glib
+, gtk3
+, pkgconfig
+, lcms2
+}:
 
 stdenv.mkDerivation rec {
-  name = "colord-gtk-0.1.25";
+  pname = "colord-gtk";
+  version = "0.2.0";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
-    sha256 = "02hblw9rw24dhj0wqfw86pfq4y4icb6iaa92308a9jwa6k2923xx";
+    url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
+    sha256 = "05y78jbcbar22sgyhzffhv98dbpl4v6k8j9p807h17y6ighglk1a";
   };
 
-  buildInputs = [ intltool colord glib gtk3 pkgconfig lcms2 ];
+  nativeBuildInputs = [
+    pkgconfig
+    gettext
+    meson
+    ninja
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-ns
+    docbook_xsl
+    docbook_xml_dtd_412
+    libxslt
+  ];
 
-  meta = {
-    homepage = http://www.freedesktop.org/software/colord/intro.html;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+  buildInputs = [
+    glib
+    lcms2
+  ];
+
+  propagatedBuildInputs = [
+    colord
+    gtk3
+  ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.freedesktop.org/software/colord/intro.html";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
   };
 }

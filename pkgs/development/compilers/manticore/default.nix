@@ -1,17 +1,44 @@
-{ stdenv, fetchurl, coreutils, autoconf, automake, smlnj }:
+{ stdenv, fetchFromGitHub, coreutils, autoreconfHook, smlnj }:
 
-stdenv.mkDerivation rec {
-  name = "manticore-${version}";
-  version = "2014.08.18";
-  builder = ./builder.sh;
-  src = fetchurl {
-    url = https://github.com/rrnewton/manticore_temp_mirror/archive/snapshot-20140818.tar.gz; 
-    sha256 = "1x52xpj5gbcpqjqm6aw6ssn901f353zypj3d5scm8i3ad777y29d";
+let
+  rev = "7376cb20ba5285a6b076a73c821e4743809c1d9d";
+in stdenv.mkDerivation {
+  pname = "manticore";
+  version = "2019.12.03";
+ 
+  src = fetchFromGitHub {
+    owner = "ManticoreProject";
+    repo = "manticore";
+    sha256 = "17h3ar7d6145dyrm006r3gd5frk3v4apjk383n78dh4vlniv1ay2";
+    inherit rev;
   };
-  inherit stdenv coreutils autoconf automake smlnj;
+
+  enableParallelBuilding = false;
+ 
+  nativeBuildInputs = [ autoreconfHook ];
+  
+  buildInputs = [ coreutils smlnj ];
+
+  autoreconfFlags = "-Iconfig -vfi";
+
+  unpackPhase = ''
+    mkdir -p $out
+    cd $out
+    unpackFile $src
+    mv source repo_checkout
+    cd repo_checkout
+    chmod u+w . -R
+  ''; 
+  
+  postPatch = ''
+    patchShebangs .
+    substituteInPlace configure.ac --replace 'MANTICORE_ROOT=`pwd`' 'MANTICORE_ROOT=$out/repo_checkout'
+  '';
+
+  preInstall = "mkdir -p $out/bin";
 
   meta = {
-    description = "a parallel, pure variant of Standard ML";
+    description = "A parallel, pure variant of Standard ML";
 
     longDescription = '' 
       Manticore is a high-level parallel programming language aimed at
@@ -23,6 +50,6 @@ stdenv.mkDerivation rec {
       parallel array comprehensions.  
     '';
 
-    homepage = http://manticore.cs.uchicago.edu/;
+    homepage = "http://manticore.cs.uchicago.edu/";
   };
 }

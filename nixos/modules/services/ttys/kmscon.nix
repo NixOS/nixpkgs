@@ -1,8 +1,10 @@
 { config, pkgs, lib, ... }:
 let
-  inherit (lib) mkOption types mkIf optionalString;
+  inherit (lib) mkOption types mkIf;
 
   cfg = config.services.kmscon;
+
+  autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
 
   configDir = pkgs.writeTextFile { name = "kmscon-config"; destination = "/kmscon.conf"; text = cfg.extraConfig; };
 in {
@@ -32,6 +34,22 @@ in {
         default = "";
         example = "font-size=14";
       };
+
+      extraOptions = mkOption {
+        description = "Extra flags to pass to kmscon.";
+        type = types.separatedString " ";
+        default = "";
+        example = "--term xterm-256color";
+      };
+
+      autologinUser = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Username of the account that will be automatically logged in at the console.
+          If unspecified, a login prompt is shown as usual.
+        '';
+      };
     };
   };
 
@@ -53,7 +71,8 @@ in {
       ConditionPathExists=/dev/tty0
 
       [Service]
-      ExecStart=${pkgs.kmscon}/bin/kmscon "--vt=%I" --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p
+      ExecStart=
+      ExecStart=${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
       UtmpIdentifier=%I
       TTYPath=/dev/%I
       TTYReset=yes
@@ -63,13 +82,13 @@ in {
       X-RestartIfChanged=false
     '';
 
-    systemd.units."autovt@.service".unit = pkgs.runCommand "unit" { }
+    systemd.units."autovt@.service".unit = pkgs.runCommand "unit" { preferLocalBuild = true; }
         ''
           mkdir -p $out
           ln -s ${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service $out/autovt@.service
         '';
 
-    systemd.services.systemd-vconsole-setup.restartIfChanged = false;
+    systemd.services.systemd-vconsole-setup.enable = false;
 
     services.kmscon.extraConfig = mkIf cfg.hwRender ''
       drm

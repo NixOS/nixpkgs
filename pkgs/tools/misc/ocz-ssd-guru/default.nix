@@ -1,10 +1,10 @@
-{ fetchurl, stdenv, xlibs, freetype, fontconfig, mesa, glibc, makeWrapper }:
+{ fetchurl, stdenv, xorg, freetype, fontconfig, libGLU, libGL, glibc, makeWrapper }:
 
 let
-  system = if stdenv.system == "x86_64-linux" then "linux64" else "linux32";
+  system = if stdenv.hostPlatform.system == "x86_64-linux" then "linux64" else "linux32";
 in
 stdenv.mkDerivation rec {
-  name = "ocz-ssd-guru-${version}";
+  pname = "ocz-ssd-guru";
   version = "1.0.1170";
 
   src = fetchurl {
@@ -15,16 +15,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   libPath = stdenv.lib.makeLibraryPath [
-      xlibs.libX11
-      xlibs.libxcb
+      xorg.libX11
+      xorg.libxcb
       freetype
       fontconfig
-      xlibs.libXext
-      xlibs.libXi
-      xlibs.libXrender
+      xorg.libXext
+      xorg.libXi
+      xorg.libXrender
       stdenv.cc.cc
       glibc
-      mesa
+      libGLU libGL
   ];
 
   installPhase = ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = {
-    homepage = http://ocz.com/ssd-guru;
+    homepage = "http://ocz.com/ssd-guru";
     description = "SSD Management Tool for OCZ disks";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;

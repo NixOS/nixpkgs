@@ -1,28 +1,32 @@
-{ stdenv, fetchgit, autoconf, automake, libtool,
-pkgconfig, perl, git, libevent, openssl}:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, libevent, openssl}:
 
-stdenv.mkDerivation {
-  name = "libcouchbase-2.4.4";
-  src = fetchgit {
-    url = "https://github.com/couchbase/libcouchbase.git";
-    rev = "4410eebcd813844b6cd6f9c7eeb4ab3dfa2ab8ac";
-    sha256 = "02lzv5l6fvnqr2l9bqfha0pzkzlzjfddn3w5zcbjz36kw4p2p4h9";
-    leaveDotGit = true;
+stdenv.mkDerivation rec {
+  pname = "libcouchbase";
+  version = "2.10.4";
+
+  src = fetchFromGitHub {
+    owner = "couchbase";
+    repo = "libcouchbase";
+    rev = version;
+    sha256 = "1yfmcx65aqd5l87scha6kmm2s38n85ci3gg0h6qfs16s3jfi6bw7";
   };
 
-  preConfigure = ''
-    patchShebangs ./config/
-    ./config/autorun.sh
-  '';
+  cmakeFlags = [ "-DLCB_NO_MOCK=ON" ];
 
-  configureFlags = "--disable-couchbasemock";
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ libevent openssl ];
 
-  buildInputs = [ autoconf automake libtool pkgconfig perl git libevent openssl];
+  # Running tests in parallel does not work
+  enableParallelChecking = false;
 
-  meta = {
+  patches = [ ./0001-Fix-timeouts-in-libcouchbase-testsuite.patch ];
+
+  doCheck = !stdenv.isDarwin;
+
+  meta = with stdenv.lib; {
     description = "C client library for Couchbase";
     homepage = "https://github.com/couchbase/libcouchbase";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

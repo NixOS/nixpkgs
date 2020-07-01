@@ -1,38 +1,37 @@
-{ stdenv, fetchurl, fetchgit, autoconf, automake, wineStaging, perl, xlibs
-  , gnupg, gcc48_multi, mesa, curl, bash, cacert, cabextract, utillinux, attr
-  }:
+{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU, libGL, wine-staging }:
 
 let
-  wine_custom = wineStaging;
+  wine_custom = wine-staging;
 
   mozillaPluginPath = "/lib/mozilla/plugins";
 
 
 in stdenv.mkDerivation rec {
 
-  version = "0.2.8";
+  version = "0.2.8.2";
 
-  name = "pipelight-${version}";
+  pname = "pipelight";
 
   src = fetchurl {
     url = "https://bitbucket.org/mmueller2012/pipelight/get/v${version}.tar.gz";
-    sha256 = "1i440rf22fmd2w86dlm1mpi3nb7410rfczc0yldnhgsvp5p3sm5f";
+    sha256 = "1kyy6knkr42k34rs661r0f5sf6l1s2jdbphdg89n73ynijqmzjhk";
   };
 
-  buildInputs = [ wine_custom xlibs.libX11 gcc48_multi mesa curl ];
-  propagatedbuildInputs = [ curl cabextract ];
+  buildInputs = [ wine_custom libX11 libGLU libGL curl ];
+
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
   patches = [ ./pipelight.patch ];
 
   configurePhase = ''
-    patchShebangs . 
+    patchShebangs .
     ./configure \
       --prefix=$out \
       --moz-plugin-path=$out/${mozillaPluginPath} \
       --wine-path=${wine_custom} \
-      --gpg-exec=${gnupg}/bin/gpg2 \
+      --gpg-exec=${gnupg}/bin/gpg \
       --bash-interp=${bash}/bin/bash \
-      --downloader=${curl}/bin/curl
+      --downloader=${curl.bin}/bin/curl
       $configureFlags
   '';
 
@@ -56,7 +55,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://pipelight.net/";
     license = with stdenv.lib.licenses; [ mpl11 gpl2 lgpl21 ];
     description = "A wrapper for using Windows plugins in Linux browsers";
-    maintainers = with stdenv.lib.maintainers; [skeidel];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with stdenv.lib.maintainers; [ skeidel ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

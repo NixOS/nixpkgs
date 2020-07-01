@@ -1,16 +1,39 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation {
-  name = "objconv-1.0";
+stdenv.mkDerivation rec {
+  pname = "objconv";
+  version = "2.51";
 
-  src = fetchFromGitHub {
-    owner  = "vertis";
-    repo   = "objconv";
-    rev    = "01da9219e684360fd04011599805ee3e699bae96";
-    sha256 = "1by2bbrampwv0qy8vn4hhs49rykczyj7q8g373ym38da3c95bym2";
+  src = fetchurl {
+    # Versioned archive of objconv sources maintained by orivej.
+    url = "https://archive.org/download/objconv/${pname}-${version}.zip";
+    sha256 = "0wp6ld9vk11f4nnkn56627zmlv9k5vafi99qa3yyn1pgcd61zcfs";
   };
 
-  buildPhase = "c++ -o objconv -O2 src/*.cpp";
+  nativeBuildInputs = [ unzip ];
 
-  installPhase = "mkdir -p $out/bin && mv objconv $out/bin";
+  outputs = [ "out" "doc" ];
+
+  unpackPhase = ''
+    mkdir -p "$name"
+    cd "$name"
+    unpackFile "$src"
+    unpackFile source.zip
+  '';
+
+  buildPhase = "c++ -o objconv -O2 *.cpp";
+
+  installPhase = ''
+    mkdir -p $out/bin $out/doc/objconv
+    mv objconv $out/bin
+    mv objconv-instructions.pdf $out/doc/objconv
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Object and executable file converter, modifier and disassembler";
+    homepage = "https://www.agner.org/optimize/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ orivej vrthra ];
+    platforms = platforms.unix;
+  };
 }

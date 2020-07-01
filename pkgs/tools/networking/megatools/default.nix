@@ -1,31 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, glib, fuse, curl, glib_networking, gsettings_desktop_schemas
-, makeWrapper }:
+{ stdenv, fetchgit, autoreconfHook, pkg-config, glib, fuse, curl, glib-networking
+, asciidoc, libxml2, docbook_xsl, docbook_xml_dtd_45, libxslt, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "megatools-${version}";
-  version = "1.9.94";
+  pname = "megatools";
+  version = "1.10.3";
 
-  src = fetchurl {
-    url = "http://megatools.megous.com/builds/${name}.tar.gz";
-    sha256 = "1kms0k652sszcbzmx5nmz07gc8zbqqiskh8hvmvf6xaga7y3lgrx";
+  src = fetchgit {
+    url = "https://megous.com/git/megatools";
+    rev = "5581d06e447b84d0101d36dc96ab72920eec1017";
+    sha256 = "1fh456kjsmdvpmvklkpi06h720yvhahd4rxa6cm5x818pl44p1r4";
   };
 
-  buildInputs = [ pkgconfig glib fuse curl makeWrapper
-      gsettings_desktop_schemas ];
+  nativeBuildInputs = [
+    autoreconfHook pkg-config wrapGAppsHook asciidoc libxml2
+    docbook_xsl docbook_xml_dtd_45 libxslt
+  ];
+  buildInputs = [ glib glib-networking curl ]
+  ++ stdenv.lib.optionals stdenv.isLinux [ fuse ];
 
-  postInstall = ''
-    for i in $(find $out/bin/ -type f); do
-      wrapProgram "$i" \
-            --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-            --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-    done
-  '';
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Command line client for Mega.co.nz";
-    homepage = http://megatools.megous.com/;
+    homepage = "https://megatools.megous.com/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.viric maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ viric AndersonTorres zowoq ];
+    platforms = platforms.unix;
   };
 }

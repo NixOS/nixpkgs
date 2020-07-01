@@ -1,49 +1,45 @@
-{ stdenv, fetchurl, gfortran, atlas, cmake, python, shared ? false }:
+{
+  stdenv,
+  fetchFromGitHub,
+  gfortran,
+  cmake,
+  python2,
+  shared ? true
+}:
 let
-  atlasMaybeShared = atlas.override { inherit shared; };
-  usedLibExtension = if shared then ".so" else ".a";
-  version = "3.4.1";
+  inherit (stdenv.lib) optional;
+  version = "3.9.0";
 in
-stdenv.mkDerivation rec {
-  name = "liblapack-${version}";
-  src = fetchurl {
-    url = "http://www.netlib.org/lapack/lapack-${version}.tgz";
-    sha256 = "93b910f94f6091a2e71b59809c4db4a14655db527cfc5821ade2e8c8ab75380f";
+
+stdenv.mkDerivation {
+  pname = "liblapack";
+  inherit version;
+
+  src = fetchFromGitHub {
+    owner = "Reference-LAPACK";
+    repo = "lapack";
+    rev = "v${version}";
+    sha256 = "0sxnc97z67i7phdmcnq8f8lmxgw10wdwvr8ami0w3pb179cgrbpb";
   };
 
-  propagatedBuildInputs = [ atlasMaybeShared ];
-  buildInputs = [ gfortran cmake ];
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ gfortran python2 cmake ];
 
   cmakeFlags = [
-    "-DUSE_OPTIMIZED_BLAS=ON"
-    "-DBLAS_ATLAS_f77blas_LIBRARY=${atlasMaybeShared}/lib/libf77blas${usedLibExtension}"
-    "-DBLAS_ATLAS_atlas_LIBRARY=${atlasMaybeShared}/lib/libatlas${usedLibExtension}"
     "-DCMAKE_Fortran_FLAGS=-fPIC"
+    "-DLAPACKE=ON"
+    "-DCBLAS=ON"
   ]
-  ++ (stdenv.lib.optional shared "-DBUILD_SHARED_LIBS=ON")
-  ;
+  ++ optional shared "-DBUILD_SHARED_LIBS=ON";
 
-  doCheck = ! shared;
-
-  checkPhase = "
-    sed -i 's,^#!.*,#!${python}/bin/python,' lapack_testing.py
-    ctest
-  ";
+  doCheck = true;
 
   enableParallelBuilding = true;
-
-  passthru = {
-    blas = atlas;
-  };
 
   meta = with stdenv.lib; {
     inherit version;
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
-    license = with licenses; bsd3;
-
+    license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [ maintainers.simons ];
   };
 }

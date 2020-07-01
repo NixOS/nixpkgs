@@ -1,12 +1,11 @@
-diff -Naur gammu-1.33.0.orig/contrib/CMakeLists.txt gammu-1.33.0/contrib/CMakeLists.txt
---- gammu-1.33.0.orig/contrib/CMakeLists.txt	2013-12-26 20:56:22.887772110 +0100
-+++ gammu-1.33.0/contrib/CMakeLists.txt	2013-12-26 20:57:04.386276037 +0100
-@@ -85,7 +85,7 @@
+--- a/contrib/CMakeLists.txt
++++ b/contrib/CMakeLists.txt
+@@ -85,7 +85,7 @@ endif (INSTALL_PHP_EXAMPLES)
  if (INSTALL_BASH_COMPLETION)
+     macro_optional_find_package (BashCompletion)
+     if (NOT BASH_COMPLETION_FOUND)
+-      set (BASH_COMPLETION_COMPLETIONSDIR "/etc/bash_completion.d" CACHE PATH "Location of bash_completion.d")
++      set (BASH_COMPLETION_COMPLETIONSDIR "${CMAKE_INSTALL_PREFIX}/etc/bash_completion.d" CACHE PATH "Location of bash_completion.d")
+     endif (NOT BASH_COMPLETION_FOUND)
      install (
          FILES bash-completion/gammu
--        DESTINATION "/etc/bash_completion.d"
-+        DESTINATION "${CMAKE_INSTALL_PREFIX}/etc/bash_completion.d"
-         COMPONENT "bash"
-         )
- endif (INSTALL_BASH_COMPLETION)

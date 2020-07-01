@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libX11, libXi, libXtst, xextproto }:
+{ stdenv, fetchurl, alsaLib, libX11, libXi, libXtst, xorgproto }:
 
 stdenv.mkDerivation rec {
   name = "mid2key-r1";
@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "tar xvzf $src";
 
-  buildInputs = [ alsaLib libX11 libXi libXtst xextproto ];
+  buildInputs = [ alsaLib libX11 libXi libXtst xorgproto ];
 
   buildPhase = "make";
 
   installPhase = "mkdir -p $out/bin && mv mid2key $out/bin";
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/mid2key/;
+    homepage = "http://code.google.com/p/mid2key/";
     description = "A simple tool which maps midi notes to simulated keystrokes";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];

@@ -1,39 +1,27 @@
-{ stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, x11, sqlite, gsl,
-  pyqt4, qwt, fcgi, pythonPackages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper }:
+{ lib, makeWrapper, symlinkJoin
+, qgis-unwrapped, extraPythonPackages ? (ps: [ ])
+}:
+with lib;
+symlinkJoin rec {
+  inherit (qgis-unwrapped) version;
+  name = "qgis-${version}";
 
-stdenv.mkDerivation rec {
-  name = "qgis-2.8.2";
+  paths = [ qgis-unwrapped ];
 
-  buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl pyqt4 qwt qscintilla
-    fcgi libspatialindex libspatialite postgresql ] ++
-    (with pythonPackages; [ numpy psycopg2 ]);
+  nativeBuildInputs = [ makeWrapper qgis-unwrapped.python3Packages.wrapPython ];
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  # extend to add to the python environment of QGIS without rebuilding QGIS application.
+  pythonInputs = qgis-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-unwrapped.python3Packages);
 
-  # fatal error: ui_qgsdelimitedtextsourceselectbase.h: No such file or directory
-  #enableParallelBuilding = true;
+  postBuild = ''
+    # unpackPhase
 
-  # To handle the lack of 'local' RPATH; required, as they call one of
-  # their built binaries requiring their libs, in the build process.
-  preBuild = ''
-    export LD_LIBRARY_PATH=`pwd`/output/lib:$LD_LIBRARY_PATH
-  '';
+    buildPythonPath "$pythonInputs"
 
-  src = fetchurl {
-    url = "http://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "fd3c01e48224f611c3bb279b0af9cc1dff3844cdc93f7b45e4f37cf8f350bc4b";
-  };
-
-  postInstall = ''
     wrapProgram $out/bin/qgis \
-      --prefix PYTHONPATH : $PYTHONPATH
+      --prefix PATH : $program_PATH \
+      --set PYTHONPATH $program_PYTHONPATH
   '';
 
-  meta = {
-    description = "User friendly Open Source Geographic Information System";
-    homepage = http://www.qgis.org;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [viric];
-  };
+  meta = qgis-unwrapped.meta;
 }

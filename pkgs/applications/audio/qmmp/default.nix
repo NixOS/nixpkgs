@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, cmake, qt4, pkgconfig, x11
+{ stdenv, mkDerivation, fetchurl, cmake, pkgconfig, xlibsWrapper
+, qtbase, qttools, qtmultimedia, qtx11extras
 # transports
 , curl, libmms
 # input plugins
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
-, libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi
+, libcdio, cdparanoia, libcddb, faad2, ffmpeg_3, wildmidi
 # output plugins
-, alsaLib, pulseaudio
+, alsaLib, libpulseaudio
 # effect plugins
 , libsamplerate
 }:
@@ -27,34 +28,37 @@
 # Qmmp installs working .desktop file(s) all by itself, so we don't need to
 # handle that.
 
-stdenv.mkDerivation rec {
-  name = "qmmp-0.8.4";
+mkDerivation rec {
+  name = "qmmp-1.4.0";
 
   src = fetchurl {
     url = "http://qmmp.ylsoftware.com/files/${name}.tar.bz2";
-    sha256 = "1ld69xypyak3lzwmfvzbxsyd4fl841aaq0gmkfa7jpavbdlggydf";
+    sha256 = "13rhnk55d44svksl13w23w2qkfpkq4mc0jy5mi89nzqkzshwvfd8";
   };
 
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs =
     [ # basic requirements
-      cmake qt4 pkgconfig x11
+      qtbase qttools qtmultimedia qtx11extras xlibsWrapper
       # transports
       curl libmms
       # input plugins
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
-      libcdio cdparanoia libcddb faad2 ffmpeg wildmidi
+      libcdio cdparanoia libcddb faad2 ffmpeg_3 wildmidi
       # output plugins
-      alsaLib pulseaudio
+      alsaLib libpulseaudio
       # effect plugins
       libsamplerate
     ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Qt-based audio player that looks like Winamp";
-    homepage = http://qmmp.ylsoftware.com/;
+    homepage = "http://qmmp.ylsoftware.com/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    repositories.svn = http://qmmp.googlecode.com/svn/;
+    repositories.svn = "http://qmmp.googlecode.com/svn/";
   };
 }

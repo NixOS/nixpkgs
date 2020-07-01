@@ -1,152 +1,66 @@
-{ config, lib, options, ... }:
+{ lib, pkgs, ... }:
 
 with lib;
 
-let
+{
+  imports = [
+    /*
+    This file defines some renaming/removing options for backwards compatibility
 
-  alias = from: to: rename {
-    inherit from to;
-    name = "Alias";
-    use = id;
-    define = id;
-    visible = true;
-  };
+    It should ONLY be used when the relevant module can't define these imports
+    itself, such as when the module was removed completely.
+    See https://github.com/NixOS/nixpkgs/pull/61570 for explanation
+    */
 
-  # warn option was renamed
-  obsolete = from: to: rename {
-    inherit from to;
-    name = "Obsolete name";
-    use = x: builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'." x;
-    define = x: builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'." x;
-  };
+    # This alias module can't be where _module.check is defined because it would
+    # be added to submodules as well there
+    (mkAliasOptionModule [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
 
-  # abort if deprecated option is used
-  deprecated = from: to: rename {
-    inherit from to;
-    name = "Deprecated name";
-    use = x: abort "Deprecated option `${showOption from}' is used. It was renamed to `${showOption to}'.";
-    define = x: abort "Deprecated option `${showOption from}' is used. It was renamed to `${showOption to}'.";
-  };
+    # Completely removed modules
+    (mkRemovedOptionModule [ "services" "firefox" "syncserver" "user" ] "")
+    (mkRemovedOptionModule [ "services" "firefox" "syncserver" "group" ] "")
+    (mkRemovedOptionModule [ "services" "winstone" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
+    (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
+    (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule ["services" "cgmanager" "enable"] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "osquery" ] "The osquery module has been removed")
+    (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
+    (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
+    (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
+      "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))
+    (mkRemovedOptionModule [ "services" "xserver" "multitouch" ] ''
+      services.xserver.multitouch (which uses xf86_input_mtrack) has been removed
+      as the underlying package isn't being maintained. Working alternatives are
+      libinput and synaptics.
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "auto" ] ''
+      The services.xserver.displayManager.auto module has been removed
+      because it was only intended for use in internal NixOS tests, and gave the
+      false impression of it being a special display manager when it's actually
+      LightDM. Please use the services.xserver.displayManager.lightdm.autoLogin options
+      instead, or any other display manager in NixOS as they all support auto-login.
+    '')
+    (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
+    (mkRemovedOptionModule ["hardware" "brightnessctl" ] ''
+      The brightnessctl module was removed because newer versions of
+      brightnessctl don't require the udev rules anymore (they can use the
+      systemd-logind API). Instead of using the module you can now
+      simply add the brightnessctl package to environment.systemPackages.
+    '')
+    (mkRemovedOptionModule [ "virtualisation" "rkt" ] "The rkt module has been removed, it was archived by upstream")
 
-  showOption = concatStringsSep ".";
+    (mkRemovedOptionModule ["services" "prey" ] ''
+      prey-bash-client is deprecated upstream
+    '')
 
-  zipModules = list:
-    zipAttrsWith (n: v:
-      if tail v != [] then
-        if all (o: isAttrs o && o ? _type) v then mkMerge v
-        else if n == "_type" then head v
-        else if n == "warnings" then concatLists v
-        else if n == "description" || n == "apply" then
-          abort "Cannot rename an option to multiple options."
-        else zipModules v
-      else head v
-    ) list;
+    (mkRemovedOptionModule ["hardware" "u2f" ] ''
+      The U2F modules module was removed, as all it did was adding the
+      udev rules from libu2f-host to the system. Udev gained native support
+      to handle FIDO security tokens, so this isn't necessary anymore.
+    '')
 
-  rename = { from, to, name, use, define, visible ? false }:
-    let
-      setTo = setAttrByPath to;
-      setFrom = setAttrByPath from;
-      toOf = attrByPath to
-        (abort "Renaming error: option `${showOption to}' does not exists.");
-      fromOf = attrByPath from
-        (abort "Internal error: option `${showOption from}' should be declared.");
-    in
-      [ { options = setFrom (mkOption {
-            description = "${name} of <option>${showOption to}</option>.";
-            apply = x: use (toOf config);
-            inherit visible;
-          });
-
-          config = setTo (mkAliasAndWrapDefinitions define (fromOf options));
-        }
-      ];
-
-  obsolete' = option: singleton
-    { options = setAttrByPath option (mkOption {
-        default = null;
-        visible = false;
-      });
-      config.warnings = optional (getAttrFromPath option config != null)
-        "The option `${showOption option}' defined in your configuration no longer has any effect; please remove it.";
-    };
-
-in zipModules ([]
-
-++ obsolete [ "environment" "x11Packages" ] [ "environment" "systemPackages" ]
-++ obsolete [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ]
-++ obsolete [ "environment" "nix" ] [ "nix" "package" ]
-++ obsolete [ "fonts" "enableFontConfig" ] [ "fonts" "fontconfig" "enable" ]
-++ obsolete [ "fonts" "extraFonts" ] [ "fonts" "fonts" ]
-
-++ obsolete [ "security" "extraSetuidPrograms" ] [ "security" "setuidPrograms" ]
-++ obsolete [ "networking" "enableWLAN" ] [ "networking" "wireless" "enable" ]
-++ obsolete [ "networking" "enableRT73Firmware" ] [ "networking" "enableRalinkFirmware" ]
-
-# FIXME: Remove these eventually.
-++ obsolete [ "boot" "systemd" "sockets" ] [ "systemd" "sockets" ]
-++ obsolete [ "boot" "systemd" "targets" ] [ "systemd" "targets" ]
-++ obsolete [ "boot" "systemd" "services" ] [ "systemd" "services" ]
-
-# Old Grub-related options.
-++ obsolete [ "boot" "copyKernels" ] [ "boot" "loader" "grub" "copyKernels" ]
-++ obsolete [ "boot" "extraGrubEntries" ] [ "boot" "loader" "grub" "extraEntries" ]
-++ obsolete [ "boot" "extraGrubEntriesBeforeNixos" ] [ "boot" "loader" "grub" "extraEntriesBeforeNixOS" ]
-++ obsolete [ "boot" "grubDevice" ] [ "boot" "loader" "grub" "device" ]
-++ obsolete [ "boot" "bootMount" ] [ "boot" "loader" "grub" "bootDevice" ]
-++ obsolete [ "boot" "grubSplashImage" ] [ "boot" "loader" "grub" "splashImage" ]
-
-++ obsolete [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ]
-++ obsolete [ "boot" "extraKernelParams" ] [ "boot" "kernelParams" ]
-
-# OpenSSH
-++ obsolete [ "services" "sshd" "ports" ] [ "services" "openssh" "ports" ]
-++ alias [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ]
-++ obsolete [ "services" "sshd" "allowSFTP" ] [ "services" "openssh" "allowSFTP" ]
-++ obsolete [ "services" "sshd" "forwardX11" ] [ "services" "openssh" "forwardX11" ]
-++ obsolete [ "services" "sshd" "gatewayPorts" ] [ "services" "openssh" "gatewayPorts" ]
-++ obsolete [ "services" "sshd" "permitRootLogin" ] [ "services" "openssh" "permitRootLogin" ]
-++ obsolete [ "services" "xserver" "startSSHAgent" ] [ "services" "xserver" "startOpenSSHAgent" ]
-++ obsolete [ "services" "xserver" "startOpenSSHAgent" ] [ "programs" "ssh" "startAgent" ]
-
-# VirtualBox
-++ obsolete [ "services" "virtualbox" "enable" ] [ "services" "virtualboxGuest" "enable" ]
-
-# Tarsnap
-++ obsolete [ "services" "tarsnap" "config" ] [ "services" "tarsnap" "archives" ]
-
-# proxy
-++ obsolete [ "nix" "proxy" ] [ "networking" "proxy" "default" ]
-
-# KDE
-++ deprecated [ "kde" "extraPackages" ] [ "environment" "systemPackages" ]
-++ obsolete [ "environment" "kdePackages" ] [ "environment" "systemPackages" ]
-
-# Multiple efi bootloaders now
-++ obsolete [ "boot" "loader" "efi" "efibootmgr" "enable" ] [ "boot" "loader" "efi" "canTouchEfiVariables" ]
-
-# NixOS environment changes
-# !!! this hardcodes bash, could we detect from config which shell is actually used?
-++ obsolete [ "environment" "promptInit" ] [ "programs" "bash" "promptInit" ]
-
-++ obsolete [ "services" "xserver" "driSupport" ] [ "hardware" "opengl" "driSupport" ]
-++ obsolete [ "services" "xserver" "driSupport32Bit" ] [ "hardware" "opengl" "driSupport32Bit" ]
-++ obsolete [ "services" "xserver" "s3tcSupport" ] [ "hardware" "opengl" "s3tcSupport" ]
-++ obsolete [ "hardware" "opengl" "videoDrivers" ] [ "services" "xserver" "videoDrivers" ]
-
-++ obsolete [ "services" "mysql55" ] [ "services" "mysql" ]
-
-++ alias    [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ]
-
-# XBMC
-++ obsolete [ "services" "xserver" "windowManager" "xbmc" ] [ "services" "xserver" "desktopManager" "kodi" ]
-++ obsolete [ "services" "xserver" "desktopManager" "xbmc" ] [ "services" "xserver" "desktopManager" "kodi" ]
-
-# Options that are obsolete and have no replacement.
-++ obsolete' [ "boot" "loader" "grub" "bootDevice" ]
-++ obsolete' [ "boot" "initrd" "luks" "enable" ]
-++ obsolete' [ "programs" "bash" "enable" ]
-++ obsolete' [ "services" "samba" "defaultShare" ]
-++ obsolete' [ "services" "syslog-ng" "serviceName" ]
-++ obsolete' [ "services" "syslog-ng" "listenToJournal" ]
-
-)
+    # Do NOT add any option renames here, see top of the file
+  ];
+}

@@ -1,19 +1,30 @@
-{ stdenv, fetchurl, cmake, colord, libX11, libXrandr, lcms2, pkgconfig, kdelibs}:
+{ mkDerivation, lib, fetchurl
+, extra-cmake-modules, ki18n
+, kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kiconthemes, kcmutils
+, kio, knotifications, plasma-framework, kwidgetsaddons, kwindowsystem
+, kitemviews, lcms2, libXrandr, qtx11extras
+}:
 
-stdenv.mkDerivation {
-  name = "colord-kde-0.3.0";
+mkDerivation rec {
+  pname = "colord-kde";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = http://download.kde.org/stable/colord-kde/0.3.0/src/colord-kde-0.3.0.tar.bz2;
-    sha256 = "ab3cdb7c8c98aa2ee8de32a92f87770e1fbd58eade6471f3f24d932b50b4cf09";
+    url = "http://download.kde.org/stable/colord-kde/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "0brdnpflm95vf4l41clrqxwvjrdwhs859n7401wxcykkmw4m0m3c";
   };
 
-  buildInputs = [ cmake colord libX11 libXrandr lcms2 pkgconfig kdelibs ];
+  nativeBuildInputs = [ extra-cmake-modules ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    kconfig kconfigwidgets kcoreaddons kdbusaddons kiconthemes
+    kcmutils ki18n kio knotifications plasma-framework kwidgetsaddons
+    kwindowsystem kitemviews lcms2 libXrandr qtx11extras
+  ];
 
-  meta = {
-    description = "A colord front-end for KDE";
-    license = stdenv.lib.licenses.gpl2Plus;
+  meta = with lib; {
+    homepage = "https://projects.kde.org/projects/playground/graphics/colord-kde";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

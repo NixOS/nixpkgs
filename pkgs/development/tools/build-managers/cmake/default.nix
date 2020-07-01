@@ -1,80 +1,119 @@
-{ stdenv, fetchurl
-, bzip2, curl, expat, jsoncpp, libarchive, xz, zlib
-, useNcurses ? false, ncurses, useQt4 ? false, qt4
-, wantPS ? false, ps ? null
+{ stdenv, lib, fetchurl, pkgconfig
+, bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
+, buildPackages
+# darwin attributes
+, ps
+, isBootstrap ? false
+, useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
+, useNcurses ? false, ncurses
+, useQt4 ? false, qt4
+, withQt5 ? false, qtbase
 }:
 
-with stdenv.lib;
-
-assert wantPS -> (ps != null);
-
-let
-  os = stdenv.lib.optionalString;
-  majorVersion = "3.2";
-  minorVersion = "2";
-  version = "${majorVersion}.${minorVersion}";
-in
+assert withQt5 -> useQt4 == false;
+assert useQt4 -> withQt5 == false;
 
 stdenv.mkDerivation rec {
-  name = "cmake-${os useNcurses "cursesUI-"}${os useQt4 "qt4UI-"}${version}";
-
-  inherit majorVersion;
+  pname = "cmake"
+          + lib.optionalString isBootstrap "-boot"
+          + lib.optionalString useNcurses "-cursesUI"
+          + lib.optionalString withQt5 "-qt5UI"
+          + lib.optionalString useQt4 "-qt4UI";
+  version = "3.17.3";
 
   src = fetchurl {
-    url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "0y3w83al0vh9ll7fnqm3nx7l8hsl85k8iv9abxb791q36rp4xsdd";
+    url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
+    # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
+    sha256 = "0h4c3nwk7wmzcmmlwyb16zmjqr44l4k591m2y9p9zp3m498hvmhb";
   };
 
-  enableParallelBuilding = true;
+  patches = [
+    # Don't search in non-Nix locations such as /usr, but do search in our libc.
+    ./search-path.patch
 
-  patches =
-    # Don't search in non-Nix locations such as /usr, but do search in
-    # Nixpkgs' Glibc.
-    optional (stdenv ? glibc) ./search-path-3.2.patch ++
-    optional (stdenv ? cross) (fetchurl {
-      name = "fix-darwin-cross-compile.patch";
-      url = "http://public.kitware.com/Bug/file_download.php?"
-          + "file_id=4981&type=bug";
-      sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
-    }) ++ stdenv.lib.optional stdenv.isCygwin ./2.8.11-cygwin.patch;
+    # Don't depend on frameworks.
+    ./application-services.patch
 
-  buildInputs =
-    [ bzip2 curl expat libarchive xz zlib ]
-    ++ optional (jsoncpp != null) jsoncpp
-    ++ optional useNcurses ncurses
-    ++ optional useQt4 qt4;
+    # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
+    ./libuv-application-services.patch
 
-  propagatedBuildInputs = optional wantPS ps;
+  ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
-  CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
-
-  configureFlags =
-    [
-      "--docdir=/share/doc/${name}"
-      "--mandir=/share/man"
-    ]
-    ++ optional (!stdenv.isCygwin) "--system-libs"
-    ++ optional (jsoncpp == null) "--no-system-jsoncpp"
-    ++ optional useQt4 "--qt-gui"
-    ++ ["--"]
-    ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
+  outputs = [ "out" ];
+  setOutputFlags = false;
 
   setupHook = ./setup-hook.sh;
 
+  buildInputs =
+    [ setupHook pkgconfig ]
+    ++ lib.optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
+    ++ lib.optional useNcurses ncurses
+    ++ lib.optional useQt4 qt4
+    ++ lib.optional withQt5 qtbase;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
+
+  preConfigure = ''
+    fixCmakeFiles .
+    substituteInPlace Modules/Platform/UnixPaths.cmake \
+      --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
+      --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
+      --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
+    substituteInPlace Modules/FindCxxTest.cmake \
+      --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
+  ''
+  # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
+  + ''
+    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
+  '';
+
+  configureFlags = [
+    "--docdir=share/doc/${pname}${version}"
+  ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
+    ++ lib.optional (useQt4 || withQt5) "--qt-gui"
+    # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
+      "CFLAGS=-D_FILE_OFFSET_BITS=64"
+      "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
+    ]
+    ++ [
+    "--"
+    # We should set the proper `CMAKE_SYSTEM_NAME`.
+    # http://www.cmake.org/Wiki/CMake_Cross_Compiling
+    #
+    # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
+    # strip. Otherwise they are taken to be relative to the source root of the
+    # package being built.
+    "-DCMAKE_CXX_COMPILER=${stdenv.cc.targetPrefix}c++"
+    "-DCMAKE_C_COMPILER=${stdenv.cc.targetPrefix}cc"
+    "-DCMAKE_AR=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+    "-DCMAKE_RANLIB=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
+    "-DCMAKE_STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
+  ]
+    # Avoid depending on frameworks.
+    ++ lib.optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
+
+  # make install attempts to use the just-built cmake
+  preInstall = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    sed -i 's|bin/cmake|${buildPackages.cmake}/bin/cmake|g' Makefile
+  '';
+
   dontUseCmakeConfigure = true;
+  enableParallelBuilding = true;
 
-  preConfigure = optionalString (stdenv ? glibc)
-    ''
-      source $setupHook
-      fixCmakeFiles .
-      substituteInPlace Modules/Platform/UnixPaths.cmake \
-        --subst-var-by glibc ${stdenv.glibc}
-    '';
+  # This isn't an autoconf configure script; triples are passed via
+  # CMAKE_SYSTEM_NAME, etc.
+  configurePlatforms = [ ];
 
-  meta = {
-    homepage = http://www.cmake.org/;
+  doCheck = false; # fails
+
+  meta = with lib; {
+    homepage = "http://www.cmake.org/";
     description = "Cross-Platform Makefile Generator";
-    platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ urkud mornfall ttuegel ];
+    platforms = if useQt4 then qt4.meta.platforms else platforms.all;
+    maintainers = with maintainers; [ ttuegel lnl7 ];
+    license = licenses.bsd3;
   };
 }

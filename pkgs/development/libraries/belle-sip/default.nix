@@ -1,44 +1,52 @@
-{ stdenv, fetchurl, libantlr3c, jre, polarssl }:
+{ antlr3_4
+, bctoolbox
+, cmake
+, fetchFromGitLab
+, jre
+, libantlr3c
+, mbedtls
+, stdenv
+, zlib
+}:
 
-let
-  # We must use antlr-3.4 with belle-sip-1.4.0
-  # We might be able to use antlr-3.5+ in the future
-  antlr = fetchurl {
-    url = "http://www.antlr3.org/download/antlr-3.4-complete.jar";
-    sha256 = "1xqbam8vf04q5fasb0m2n1pn5dbp2yw763sj492ncq04c5mqcglx";
-  };
-in
 stdenv.mkDerivation rec {
-  name = "belle-sip-1.4.0";
+  pname = "belle-sip";
+  # Using master branch for linphone-desktop caused a chain reaction that many
+  # of its dependencies needed to use master branch too.
+  version = "unstable-2020-02-18";
 
-  src = fetchurl {
-    url = "mirror://savannah/linphone/belle-sip/${name}.tar.gz";
-    sha256 = "1lwxfvwvclbh0bfwf69jrknqzqh1igzm293wwwbmq4kn8c5fiypz";
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
+    repo = pname;
+    rev = "0dcb13416eae87edf140771b886aedaf6be8cf60";
+    sha256 = "0pzxk8mkkg6zsnmj1bwggbdjv864psx89gglfm51h8s501kg11fv";
   };
 
-  nativeBuildInputs = [ jre ];
+  nativeBuildInputs = [ jre cmake ];
 
-  # belle-sip.pc doesn't have a library path for antlr3c or polarssl
-  propagatedBuildInputs = [ libantlr3c polarssl ];
+  buildInputs = [ zlib ];
 
-  postPatch = ''
-    mkdir -p $TMPDIR/share/java
-    cp ${antlr} $TMPDIR/share/java/antlr.jar
+  # Do not build static libraries
+  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-    sed -i "s,\(antlr_java_prefixes=\).*,\1\"$TMPDIR/share/java\"," configure
-    cat configure | grep antlr_java
-  '';
-
-  configureFlags = [
-    "--with-polarssl=${polarssl}"
+  NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=format-truncation"
+    "-Wno-error=cast-function-type"
   ];
 
-  enableParallelBuild = true;
+  propagatedBuildInputs = [ antlr3_4 libantlr3c mbedtls bctoolbox ];
+
+  # Fails to build with lots of parallel jobs
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = http://www.linphone.org/index.php/eng;
-    description = "A Voice-over-IP phone";
-    license = licenses.gpl2;
+    homepage = "https://linphone.org/technical-corner/belle-sip";
+    description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
+    license = licenses.gpl3;
     platforms = platforms.all;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

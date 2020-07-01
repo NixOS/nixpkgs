@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -26,7 +26,7 @@ in
         description = ''
           Specification (in the format described by
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>) of the time at
+          <manvolnum>7</manvolnum></citerefentry>) of the time at
           which the garbage collector will run.
         '';
       };
@@ -52,8 +52,8 @@ in
 
     systemd.services.nix-gc =
       { description = "Nix Garbage Collector";
-        script = "exec ${config.nix.package}/bin/nix-collect-garbage ${cfg.options}";
-        startAt = optionalString cfg.automatic cfg.dates;
+        script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
+        startAt = optional cfg.automatic cfg.dates;
       };
 
   };

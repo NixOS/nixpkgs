@@ -1,23 +1,30 @@
-{ stdenv, fetchurl, doxygen, glib, libaccounts-glib, pkgconfig, qt5 }:
+{ stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qtbase, qmake }:
 
 stdenv.mkDerivation rec {
-  name = "accounts-qt-1.11";
-  src = fetchurl {
-    url = "https://accounts-sso.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "07drh4s7zaz4bzg2xhwm50ig1g8vlphfv02nrzz1yi085az1fmch";
+  pname = "accounts-qt";
+  version = "1.16";
+
+  src = fetchFromGitLab {
+    sha256 = "1vmpjvysm0ld8dqnx8msa15hlhrkny02cqycsh4k2azrnijg0xjz";
+    rev = "VERSION_${version}";
+    repo = "libaccounts-qt";
+    owner = "accounts-sso";
   };
 
-  buildInputs = [ glib libaccounts-glib qt5.base ];
-  nativeBuildInputs = [ doxygen pkgconfig ];
+  buildInputs = [ glib libaccounts-glib qtbase ];
+  nativeBuildInputs = [ doxygen pkgconfig qmake ];
 
-  configurePhase = ''
-    qmake PREFIX=$out LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake/AccountsQt5
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake"
   '';
 
-  postInstall = ''
-    mv $out/lib/cmake/AccountsQt5/AccountsQtConfig.cmake \
-       $out/lib/cmake/AccountsQt5/AccountsQt5Config.cmake
-    mv $out/lib/cmake/AccountsQt5/AccountsQtConfigVersion.cmake \
-       $out/lib/cmake/AccountsQt5/AccountsQt5ConfigVersion.cmake
-  '';
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
+  meta = with stdenv.lib; {
+    description = "Qt library for accessing the online accounts database";
+    homepage = "https://gitlab.com/accounts-sso";
+    license = licenses.lgpl21;
+    platforms = with platforms; linux;
+  };
 }

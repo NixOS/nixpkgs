@@ -1,35 +1,34 @@
-{ stdenv, fetchurl, sbclBootstrap, clisp, which}:
+{ stdenv, fetchurl, writeText, sbclBootstrap
+, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
+, threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system)
+, disableImmobileSpace ? false
+  # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
+  # Note that the created binaries still need `patchelf --set-interpreter ...`
+  # to get rid of ${glibc} dependency.
+, purgeNixReferences ? false
+, texinfo
+}:
 
 stdenv.mkDerivation rec {
-  name    = "sbcl-${version}";
-  version = "1.2.11";
+  pname = "sbcl";
+  version = "2.0.2";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "0w1ymazyck5a8bjmsbnq1hps1n4824h3ajh849f1y09dwzd09al8";
+    url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${pname}-${version}-source.tar.bz2";
+    sha256 = "07pyzdjnhcpqwvr3rrk4i18maqdywbq1qj93fnpx1h4b7dp08r28";
   };
 
-  buildInputs = [ which ]
-    ++ (stdenv.lib.optional stdenv.isDarwin sbclBootstrap)
-    ++ (stdenv.lib.optional stdenv.isLinux clisp)
-    ;
+  buildInputs = [texinfo];
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
-    echo "
-    (lambda (features)
-      (flet ((enable (x)
-               (pushnew x features))
-             (disable (x)
-               (setf features (remove x features))))
-        (enable :sb-thread))) " > customize-target-features.lisp
 
     pwd
 
     # SBCL checks whether files are up-to-date in many places..
     # Unfortunately, same timestamp is not good enough
     sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
-    sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
+    #sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
     sed -i src/cold/slam.lisp -e \
       '/file-write-date input/a)'
     sed -i src/cold/slam.lisp -e \
@@ -39,15 +38,7 @@ stdenv.mkDerivation rec {
     sed -i src/code/target-load.lisp -e \
       '/date defaulted-source/i(or (and (= 2208988801 (file-write-date defaulted-source-truename)) (= 2208988801 (file-write-date defaulted-fasl-truename)))'
 
-    # Fix software version retrieval
-    sed -e "s@/bin/uname@$(which uname)@g" -i src/code/*-os.lisp
-
     # Fix the tests
-    sed -e '/deftest pwent/inil' -i contrib/sb-posix/posix-tests.lisp
-    sed -e '/deftest grent/inil' -i contrib/sb-posix/posix-tests.lisp
-    sed -e '/deftest .*ent.non-existing/,+5d' -i contrib/sb-posix/posix-tests.lisp
-    sed -e '/deftest \(pw\|gr\)ent/,+3d' -i contrib/sb-posix/posix-tests.lisp
-
     sed -e '5,$d' -i contrib/sb-bsd-sockets/tests.lisp
     sed -e '5,$d' -i contrib/sb-simple-streams/*test*.lisp
 
@@ -56,7 +47,22 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/runtime/Config.x86-64-darwin \
       --replace mmacosx-version-min=10.4 mmacosx-version-min=10.5
-  '';
+  ''
+  + (if purgeNixReferences
+    then
+      # This is the default location to look for the core; by default in $out/lib/sbcl
+      ''
+        sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
+          -i src/runtime/runtime.c
+      ''
+    else
+      # Fix software version retrieval
+      ''
+        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp \
+          src/code/run-program.lisp
+      ''
+    );
+
 
   preBuild = ''
     export INSTALL_ROOT=$out
@@ -64,24 +70,44 @@ stdenv.mkDerivation rec {
     export HOME=$PWD/test-home
   '';
 
-  buildPhase = if stdenv.isLinux
-    then ''
-      sh make.sh clisp --prefix=$out
-    ''
-    else ''
-      sh make.sh --prefix=$out --xc-host='${sbclBootstrap}/bin/sbcl --core ${sbclBootstrap}/share/sbcl/sbcl.core --disable-debugger --no-userinit --no-sysinit'
-    '';
+  enableFeatures = with stdenv.lib;
+    optional threadSupport "sb-thread" ++
+    optional stdenv.isAarch32 "arm";
+
+  disableFeatures = with stdenv.lib;
+    optional (!threadSupport) "sb-thread" ++
+    optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
+
+  buildPhase = ''
+    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}" ${
+                  stdenv.lib.concatStringsSep " "
+                    (builtins.map (x: "--with-${x}") enableFeatures ++
+                     builtins.map (x: "--without-${x}") disableFeatures)
+                }
+    (cd doc/manual ; make info)
+  '';
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
+  ''
+  + stdenv.lib.optionalString (!purgeNixReferences) ''
+    cp -r src $out/lib/sbcl
+    cp -r contrib $out/lib/sbcl
+    cat >$out/lib/sbcl/sbclrc <<EOF
+     (setf (logical-pathname-translations "SYS")
+       '(("SYS:SRC;**;*.*.*" #P"$out/lib/sbcl/src/**/*.*")
+         ("SYS:CONTRIB;**;*.*.*" #P"$out/lib/sbcl/contrib/**/*.*")))
+    EOF
   '';
 
-  meta = {
-    description = "Lisp compiler";
-    homepage = http://www.sbcl.org;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.all;
+  setupHook = stdenv.lib.optional purgeNixReferences (writeText "setupHook.sh" ''
+    addEnvHooks "$targetOffset" _setSbclHome
+    _setSbclHome() {
+      export SBCL_HOME='@out@/lib/sbcl/'
+    }
+  '');
+
+  meta = sbclBootstrap.meta // {
     inherit version;
     updateWalker = true;
   };

@@ -1,22 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, libzip, glib, libusb1, libftdi, check
-, libserialport, librevisa
+{ stdenv, fetchurl, pkgconfig, libzip, glib, libusb1, libftdi1, check
+, libserialport, librevisa, doxygen, glibmm, python
+, version ? "0.5.1", sha256 ? "171b553dir5gn6w4f7n37waqk62nq2kf1jykx4ifjacdz5xdw3z4"
 }:
 
 stdenv.mkDerivation rec {
-  name = "libsigrok-0.3.0";
+  inherit version;
+  pname = "libsigrok";
 
   src = fetchurl {
-    url = "http://sigrok.org/download/source/libsigrok/${name}.tar.gz";
-    sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
+    url = "https://sigrok.org/download/source/${pname}/${pname}-${version}.tar.gz";
+    inherit sha256;
   };
 
   firmware = fetchurl {
-    url = "http://sigrok.org/download/binary/sigrok-firmware-fx2lafw/sigrok-firmware-fx2lafw-bin-0.1.2.tar.gz";
-    sha256 = "0w0w6l015d16181mx8mgyjha4bv3ba7x36p86k9n1x52809433gj";
+    url = "https://sigrok.org/download/binary/sigrok-firmware-fx2lafw/sigrok-firmware-fx2lafw-bin-0.1.6.tar.gz";
+    sha256 = "14sd8xqph4kb109g073daiavpadb20fcz7ch1ipn0waz7nlly4sw";
   };
 
-  buildInputs = [ pkgconfig libzip glib libusb1 libftdi check libserialport
-    librevisa
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libzip glib libusb1 libftdi1 check libserialport
+    librevisa doxygen glibmm python
   ];
 
   postInstall = ''
@@ -26,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Core library of the sigrok signal analysis software suite";
-    homepage = http://sigrok.org/;
+    homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

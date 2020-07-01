@@ -1,30 +1,30 @@
-{stdenv, fetchgit, libuuid, lzo, zlib, acl}:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, cmocka, acl, libuuid, lzo, zlib, zstd }:
 
 stdenv.mkDerivation rec {
-  name = "mtd-utils-${version}";
-  version = "1.5.1";
+  pname = "mtd-utils";
+  version = "2.1.1";
 
-  src = fetchgit {
-    url = git://git.infradead.org/mtd-utils.git;
-    rev = "refs/tags/v" + version;
-    sha256 = "1bjx42pwl789ara63c672chvgvmqhkj4y132gajqih6naq71f8g7";
+  src = fetchurl {
+    url = "ftp://ftp.infradead.org/pub/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "1lijl89l7hljx8xx70vrz9srd3h41v5gh4b0lvqnlv831yvyh5cd";
   };
 
-  patchPhase = ''
-    sed -i -e s,/usr/local,, -e s,/usr,$out, common.mk
-  '';
+  nativeBuildInputs = [ autoreconfHook pkgconfig ] ++ stdenv.lib.optional doCheck cmocka;
+  buildInputs = [ acl libuuid lzo zlib zstd ];
 
-  buildInputs = [ libuuid lzo zlib acl ];
+  configureFlags = [
+    (stdenv.lib.enableFeature doCheck "unit-tests")
+    (stdenv.lib.enableFeature doCheck "tests")
+  ];
+  enableParallelBuilding = true;
 
-  crossAttrs = {
-    makeFlags = "CC=${stdenv.cross.config}-gcc";
-  };
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = {
     description = "Tools for MTD filesystems";
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://www.linux-mtd.infradead.org/;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    homepage = "http://www.linux-mtd.infradead.org/";
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

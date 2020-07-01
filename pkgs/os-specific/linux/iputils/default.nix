@@ -1,48 +1,60 @@
-{ stdenv, fetchurl, libsysfs, gnutls, openssl, libcap, sp, docbook_sgml_dtd_31
-, SGMLSpm }:
+{ stdenv, fetchFromGitHub, fetchpatch
+, meson, ninja, pkgconfig, gettext, libxslt, docbook_xsl_ns
+, libcap, nettle, libidn2, systemd
+}:
 
-assert stdenv ? glibc;
+with stdenv.lib;
 
 let
-  time = "20121221";
-in
-stdenv.mkDerivation rec {
-  name = "iputils-${time}";
+  version = "20190709";
+  sunAsIsLicense = {
+    fullName = "AS-IS, SUN MICROSYSTEMS license";
+    url = "https://github.com/iputils/iputils/blob/s${version}/rdisc.c";
+  };
+in stdenv.mkDerivation rec {
+  pname = "iputils";
+  inherit version;
 
-  src = fetchurl {
-    url = "http://www.skbuff.net/iputils/iputils-s${time}.tar.bz2";
-    sha256 = "17riqp8dh8dvx32zv3hyrghpxz6xnxa6vai9b4yc485nqngm83s5";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "s${version}";
+    sha256 = "04bp4af15adp79ipxmiakfp0ij6hx5qam266flzbr94pr8z8l693";
   };
 
-  prePatch = ''
-    sed -i s/sgmlspl/sgmlspl.pl/ doc/Makefile
-  '';
+  mesonFlags =
+    [ "-DUSE_CRYPTO=nettle"
+      "-DBUILD_RARPD=true"
+      "-DBUILD_TRACEROUTE6=true"
+      "-DNO_SETCAP_OR_SUID=true"
+      "-Dsystemdunitdir=etc/systemd/system"
+    ]
+    # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
+    ++ optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
 
-  makeFlags = "USE_GNUTLS=no";
-
-  buildInputs = [ libsysfs openssl libcap sp docbook_sgml_dtd_31 SGMLSpm ];
-
-  buildFlags = "man all ninfod";
-
-  # Stdenv doesn't handle symlinks well for that
-  dontGzipMan = true;
-
-  installPhase =
-    ''
-      mkdir -p $out/sbin $out/bin
-      cp -p ping ping6 tracepath tracepath6 traceroute6 $out/bin/
-      cp -p clockdiff arping rdisc ninfod/ninfod $out/sbin/
-
-      mkdir -p $out/share/man/man8
-      cp -p doc/clockdiff.8 doc/arping.8 doc/ping.8 doc/rdisc.8 \
-        doc/tracepath.8 doc/ninfod.8 $out/share/man/man8
-      ln -s $out/share/man/man8/{ping,ping6}.8
-      ln -s $out/share/man/man8/{tracepath,tracepath6}.8
-    '';
+  nativeBuildInputs = [ meson ninja pkgconfig gettext libxslt.bin docbook_xsl_ns ];
+  buildInputs = [ libcap nettle systemd ]
+    ++ optional (!stdenv.hostPlatform.isMusl) libidn2;
 
   meta = {
-    homepage = http://www.skbuff.net/iputils/;
+    homepage = "https://github.com/iputils/iputils";
     description = "A set of small useful utilities for Linux networking";
-    platforms = stdenv.lib.platforms.linux;
+    license = with licenses; [ gpl2Plus bsd3 sunAsIsLicense ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ primeos lheckemann ];
+
+    longDescription = ''
+      A set of small useful utilities for Linux networking including:
+
+      arping
+      clockdiff
+      ninfod
+      ping
+      rarpd
+      rdisc
+      tftpd
+      tracepath
+      traceroute6
+    '';
   };
 }

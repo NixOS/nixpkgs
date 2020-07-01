@@ -1,11 +1,12 @@
 { fetchurl, stdenv, slang, popt }:
 
 stdenv.mkDerivation rec {
-  name = "newt-0.52.15";
+  pname = "newt";
+  version = "0.52.21";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/n/e/newt/${name}.tar.gz";
-    sha256 = "0hg2l0siriq6qrz6mmzr6l7rpl40ay56c8cak87rb2ks7s952qbs";
+    url = "https://fedorahosted.org/releases/n/e/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0cdvbancr7y4nrj8257y5n45hmhizr8isynagy4fpsnpammv8pi6";
   };
 
   patchPhase = ''
@@ -14,16 +15,24 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ slang popt ];
 
-  crossAttrs = {
-    makeFlags = "CROSS_COMPILE=${stdenv.cross.config}-";
-  };
+  NIX_LDFLAGS = "-lncurses";
 
-  meta = {
-    homepage = https://fedorahosted.org/newt/;
+  preConfigure = ''
+    # If CPP is set explicitly, configure and make will not agree about which
+    # programs to use at different stages.
+    unset CPP
+  '';
+
+  makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://fedorahosted.org/newt/";
     description = "Library for color text mode, widget based user interfaces";
 
-    license = stdenv.lib.licenses.lgpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.viric ];
+    license = licenses.lgpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.viric ];
   };
 }

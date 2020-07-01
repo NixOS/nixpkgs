@@ -1,14 +1,13 @@
-diff -urN iniparser3.0b.orig/Makefile iniparser3.0b/Makefile
---- iniparser3.0b.orig/Makefile	2008-01-16 19:56:08.000000000 +0100
-+++ iniparser3.0b/Makefile	2008-01-16 19:56:49.000000000 +0100
-@@ -11,8 +11,8 @@
+--- a/Makefile	2017-10-20 20:30:41.494608284 +0200
++++ b/Makefile	2017-10-20 20:33:22.279212026 +0200
+@@ -20,8 +20,8 @@
  ARFLAGS = rcv
  
  SHLD = ${CC} ${CFLAGS}
--LDSHFLAGS = -shared -Wl,-Bsymbolic  -Wl,-rpath -Wl,/usr/lib -Wl,-rpath,/usr/lib
--LDFLAGS = -Wl,-rpath -Wl,/usr/lib -Wl,-rpath,/usr/lib
+-LDSHFLAGS = -shared -Wl,-Bsymbolic
+-LDFLAGS += -Wl,-rpath -Wl,/usr/lib -Wl,-rpath,/usr/lib
 +LDSHFLAGS = -shared
 +LDFLAGS =
  
- # Set RANLIB to ranlib on systems that require it (Sun OS < 4, Mac OSX)
- # RANLIB  = ranlib
+ # .so.0 is for version 3.x, .so.1 is 4.x
+ SO_TARGET ?= libiniparser.so.1

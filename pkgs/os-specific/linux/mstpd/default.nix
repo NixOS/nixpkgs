@@ -1,24 +1,37 @@
-{ stdenv, fetchsvn }:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "mstpd-svn-${toString version}";
-  version = 61;
+  pname = "mstpd";
+  version = "0.0.8";
 
-  src = fetchsvn {
-    url = "svn://svn.code.sf.net/p/mstpd/code/trunk";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "0n5vqqqq8hk6iqdz100j9ps4zkz71vyl5qgz5bzjhayab2dyq1fd";
+    sha256 = "1xkfydxljdnj49p5r3mirk4k146428b6imfc9bkfps9yjn64mkgb";
   };
 
-  patches = [ ./fixes.patch ];
+  patches = [
+    (fetchpatch {
+      name = "fix-strncpy-gcc9.patch";
+      url = "https://github.com/mstpd/mstpd/commit/d27d7e93485d881d8ff3a7f85309b545edbe1fc6.patch";
+      sha256 = "19456daih8l3y6m9kphjr7pj7slrqzbj6yacnlgznpxyd8y4d86y";
+    })
+  ];
 
-  installFlags = [ "DESTDIR=\${out}" ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  configureFlags = [
+    "--prefix=$(out)"
+    "--sysconfdir=$(out)/etc"
+    "--sbindir=$(out)/sbin"
+    "--libexecdir=$(out)/lib"
+  ];
 
   meta = with stdenv.lib; {
     description = "Multiple Spanning Tree Protocol daemon";
-    homepage = http://sourceforge.net/projects/mstpd/;
+    homepage = "https://github.com/mstpd/mstpd";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

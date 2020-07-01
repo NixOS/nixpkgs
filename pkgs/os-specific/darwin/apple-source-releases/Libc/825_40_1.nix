@@ -1,9 +1,7 @@
-{ stdenv, appleDerivation, ed, unifdef }:
+{ appleDerivation, ed, unifdef }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
-
-  buildInputs = [ ed unifdef ];
+  nativeBuildInputs = [ ed unifdef ];
 
   installPhase = ''
     export SRCROOT=$PWD

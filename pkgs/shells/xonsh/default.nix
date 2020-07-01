@@ -1,31 +1,57 @@
-{stdenv, fetchurl, python3Packages}:
+{ stdenv
+, fetchFromGitHub
+, python3Packages
+, glibcLocales
+, coreutils
+, git
+}:
 
-python3Packages.buildPythonPackage rec {
-  name = "xonsh-${version}";
-  version = "0.1.3";
+python3Packages.buildPythonApplication rec {
+  pname = "xonsh";
+  version = "0.9.18";
 
-  # The logo xonsh prints during build contains unicode characters, and this
-  # fails because locales have not been set up in the build environment.
-  # We can fix this on Linux by setting:
-  #    export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
-  # but this would not be a cross platform solution, so it's simpler to just
-  # patch the setup.py script to not print the logo during build.
-  prePatch = ''
-    substituteInPlace setup.py --replace "print(logo)" ""
+  # fetch from github because the pypi package ships incomplete tests
+  src = fetchFromGitHub {
+    owner  = "xonsh";
+    repo   = "xonsh";
+    rev    = version;
+    sha256 = "1zg5dl9qdysbaw2djy9f7f1ydp7vzjv840cjwqxlmg9615lgg7xa";
+  };
+
+  LC_ALL = "en_US.UTF-8";
+  postPatch = ''
+    sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
+    sed -ie "s|SHELL=xonsh|SHELL=$out/bin/xonsh|" tests/test_integrations.py
+
+    sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' tests/test_integrations.py
+    sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' scripts/xon.sh
+    find scripts -name 'xonsh*' -exec sed -i -e "s|env -S|env|" {} \;
+    find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
+    patchShebangs .
   '';
 
-  propagatedBuildInputs = [ python3Packages.ply ];
+  doCheck = !stdenv.isDarwin;
 
-  src = fetchurl {
-    url = "https://github.com/scopatz/xonsh/archive/${version}.zip";
-    sha256 = "0p2d7p892w77ii8yy51vpw7jlz2y53k8g61m7l8bar3hr3qrl306";
-  };
+  checkPhase = ''
+    HOME=$TMPDIR pytest -k 'not test_repath_backslash and not test_os and not test_man_completion and not test_builtins and not test_main and not test_ptk_highlight and not test_pyghooks'
+    HOME=$TMPDIR pytest -k 'test_builtins or test_main' --reruns 5
+    HOME=$TMPDIR pytest -k 'test_ptk_highlight'
+  '';
+
+  checkInputs = [ python3Packages.pytest python3Packages.pytest-rerunfailures glibcLocales git ];
+
+  propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit pygments ];
 
   meta = with stdenv.lib; {
     description = "A Python-ish, BASHwards-compatible shell";
-    homepage = "http://xonsh.org";
+    homepage = "https://xon.sh/";
+    changelog = "https://github.com/xonsh/xonsh/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = with maintainers; [ spwhitt vrthra ];
     platforms = platforms.all;
+  };
+
+  passthru = {
+    shellPath = "/bin/xonsh";
   };
 }

@@ -161,8 +161,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton {
-      name = "siproxyd";
+    users.users.siproxyd = {
       uid = config.ids.uids.siproxd;
     };
 

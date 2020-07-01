@@ -1,31 +1,29 @@
-{ stdenv, fetchgit, cmake, opencv, qt5 }:
+{ stdenv, fetchFromGitHub, cmake, opencv, qtbase, qtsvg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   version = "0.5";
-  name = "openbr-${version}";
+  pname = "openbr";
 
-  src = fetchgit {
-    url = "https://github.com/biometrics/openbr.git";
+  src = fetchFromGitHub {
+    owner = "biometrics";
+    repo = "openbr";
     rev = "cc364a89a86698cd8d3052f42a3cb520c929b325";
-    sha256 = "16b3mmsf9r1yqqaw89fx0c3bgfg86dz4phry89wqy2hw05szgda3";
+    sha256 = "12y00cf5dlzp9ciiwbihf6xhlkdxpydhscv5hwp83qjdllid9rrz";
   };
 
-  buildInputs = [ opencv qt5.base qt5.svg ];
+  buildInputs = [ opencv qtbase qtsvg ];
 
   nativeBuildInputs = [ cmake ];
 
   enableParallelBuilding = true;
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
-
   meta = {
     description = "Open Source Biometric Recognition";
-    homepage = http://openbiometrics.org/;
+    homepage = "http://openbiometrics.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [flosse];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true;
   };
 }

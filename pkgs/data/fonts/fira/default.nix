@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "fira-4.1";
+let
+  version = "4.202";
+in fetchFromGitHub {
+  name = "fira-${version}";
 
-  src = fetchurl {
-    url = "http://www.carrois.com/downloads/fira_4_1/FiraFonts4100.zip";
-    sha256 = "0mqmmq1m2p0hb0x4mr74gghqr75iglilah7psfb3vdc80fc9h6yk";
-  };
+  owner = "mozilla";
+  repo = "Fira";
+  rev = version;
 
-  buildInputs = [unzip];
-  phases = [ "unpackPhase" "installPhase" ];
-  sourceRoot = "FiraFonts4100";
-
-  installPhase = ''
+  postFetch = ''
+    tar xf $downloadedFile --strip=1
     mkdir -p $out/share/fonts/opentype
-    find . -name "*.otf" -exec cp -v {} $out/share/fonts/opentype \;
+    cp otf/*.otf $out/share/fonts/opentype
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.carrois.com/fira-4-1/;
+  sha256 = "1iwxbp7kw5kghh5nbycb05zby7p2ib61mywva3h6giv2wd4lpxnz";
+
+  meta = with lib; {
+    homepage = "https://mozilla.github.io/Fira/";
     description = "Sans-serif font for Firefox OS";
     longDescription = ''
       Fira Sans is a sans-serif font designed by Erik Spiekermann,

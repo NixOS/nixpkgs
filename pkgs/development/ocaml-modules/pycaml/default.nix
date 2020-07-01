@@ -2,12 +2,7 @@
 
 # This is the original pycaml version with patches from debian.
 
-let debian = fetchurl {
-      url = "mirror://debian/pool/main/p/pycaml/pycaml_0.82-14.debian.tar.gz";
-      sha256 = "a763088ec1fa76c769bf586ed6692e7ac035b0a2bfd48a90a8e7a9539ec0c2f1";
-    };
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   name = "pycaml-0.82-14";
 
   srcs = [
@@ -43,9 +38,9 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://github.com/chemoelectric/pycaml";
+    homepage = "https://github.com/chemoelectric/pycaml";
     description = "Bindings for python and ocaml";
     license = "LGPL";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

@@ -1,27 +1,15 @@
-{ lib, goPackages, fetchFromGitHub }:
-
-with goPackages;
+{ stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  rev = "a60c6a1b171faedc44354bd437d965e5e3bdc220";
-  name = "gotags-${lib.strings.substring 0 7 rev}";
-
+  pname = "gotags";
+  version = "20150803-${stdenv.lib.strings.substring 0 7 rev}";
+  rev = "be986a34e20634775ac73e11a5b55916085c48e7";
+  
   goPackagePath = "github.com/jstemmer/gotags";
 
-  src = fetchFromGitHub {
+  src = fetchgit {
     inherit rev;
-    owner = "jstemmer";
-    repo = "gotags";
-    sha256 = "1drbypby0isdmkq44jmlv59k3jrwvq2jciaccxx2qc2nnx444fkq";
-  };
-
-  dontInstallSrc = true;
-
-  meta = with lib; {
-    description = "Ctags-compatible tag generator for Go";
-    homepage = https://github.com/nsf/gotags;
-    license = licenses.mit;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    url = "https://github.com/jstemmer/gotags";
+    sha256 = "071wyq90b06xlb3bb0l4qjz1gf4nnci4bcngiddfcxf2l41w1vja";
   };
 }

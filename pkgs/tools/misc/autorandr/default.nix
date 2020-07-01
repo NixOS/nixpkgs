@@ -1,41 +1,62 @@
-{ fetchgit
-, stdenv
-, enableXRandr ? true, xrandr ? null
-, enableDisper ? false, disper ? null
-, xdpyinfo }:
-
-assert enableXRandr -> xrandr != null;
-assert enableDisper -> disper != null;
+{ stdenv
+, python3Packages
+, fetchFromGitHub
+, systemd
+, xrandr }:
 
 let
-  rev = "4f5e2401ef";
+  python = python3Packages.python;
+  version = "1.10.1";
 in
   stdenv.mkDerivation {
-    name = "autorandr-${rev}";
+    pname = "autorandr";
+    inherit version;
 
-    src = fetchgit {
-      inherit rev;
-      url = "https://github.com/wertarbyte/autorandr.git";
-      sha256 = "1x8agg6mf5jr0imw7dznr8kxyw970bf252bda9q7b0z4yksya2zd"; 
-    };
+    buildInputs = [ python ];
 
-    patchPhase = ''
-      substituteInPlace "autorandr" \
-        --replace "/usr/bin/xrandr" "${if enableXRandr then xrandr else "/nowhere"}/bin/xrandr" \
-        --replace "/usr/bin/disper" "${if enableDisper then disper else "/nowhere"}/bin/disper" \
-        --replace "/usr/bin/xdpyinfo" "${xdpyinfo}/bin/xdpyinfo"
+    # no wrapper, as autorandr --batch does os.environ.clear()
+    buildPhase = ''
+      substituteInPlace autorandr.py \
+        --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
+        --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
     '';
 
     installPhase = ''
-      mkdir -p "$out/etc/bash_completion.d"
-      cp -v bash_completion/autorandr "$out/etc/bash_completion.d"
-      mkdir -p "$out/bin"
-      cp -v autorandr auto-disper $out/bin
+      runHook preInstall
+      make install TARGETS='autorandr' PREFIX=$out
+
+      make install TARGETS='bash_completion' DESTDIR=$out/share/bash-completion/completions
+
+      make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
+
+      ${if systemd != null then ''
+        make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
+          SYSTEMD_UNIT_DIR=/lib/systemd/system \
+          UDEV_RULES_DIR=/etc/udev/rules.d
+        substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
+          --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl"
+      '' else ''
+        make install TARGETS='pmutils' DESTDIR=$out \
+          PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
+        make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
+          UDEV_RULES_DIR=/etc/udev/rules.d
+      ''}
+
+      runHook postInstall
     '';
 
-    meta = {
-      description = "Automatic display configuration selector based on connected devices";
-      homepage = https://github.com/wertarbyte/autorandr;
-      maintainers = [ stdenv.lib.maintainers.coroa ];
+    src = fetchFromGitHub {
+      owner = "phillipberndt";
+      repo = "autorandr";
+      rev = version;
+      sha256 = "0msw9b1hdy3gbq9w5d04mfizhyirz1c648x84mlcbzl8salm7vpg";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/phillipberndt/autorandr/";
+      description = "Automatically select a display configuration based on connected devices";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ coroa globin ];
+      platforms = platforms.unix;
     };
   }

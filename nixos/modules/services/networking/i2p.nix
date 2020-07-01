@@ -7,26 +7,18 @@ let
   homeDir = "/var/lib/i2p";
 in {
   ###### interface
-  options.services.i2p = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enables i2p as a running service upon activation.
-        '';
-      };
-  };
+  options.services.i2p.enable = mkEnableOption "I2P router";
 
   ###### implementation
   config = mkIf cfg.enable {
-    users.extraUsers.i2p = {
+    users.users.i2p = {
       group = "i2p";
       description = "i2p User";
       home = homeDir;
       createHome = true;
       uid = config.ids.uids.i2p;
     };
-    users.extraGroups.i2p.gid = config.ids.gids.i2p;
+    users.groups.i2p.gid = config.ids.gids.i2p;
     systemd.services.i2p = {
       description = "I2P router with administration interface for hidden services";
       after = [ "network.target" ];

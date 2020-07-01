@@ -1,9 +1,9 @@
 # This module declares the options to define a *display manager*, the
-# program responsible for handling X logins (such as xdm, kdm, gdb, or
-# SLiM).  The display manager allows the user to select a *session
-# type*.  When the user logs in, the display manager starts the
+# program responsible for handling X logins (such as LightDM, GDM, or SDDM).
+# The display manager allows the user to select a *session
+# type*. When the user logs in, the display manager starts the
 # *session script* ("xsession" below) to launch the selected session
-# type.  The session type defines two things: the *desktop manager*
+# type. The session type defines two things: the *desktop manager*
 # (e.g., KDE, Gnome or a plain xterm), and optionally the *window
 # manager* (e.g. kwin or twm).
 
@@ -16,13 +16,6 @@ let
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
 
-  vaapiDrivers = pkgs.buildEnv {
-    name = "vaapi-drivers";
-    paths = cfg.vaapiDrivers;
-    # We only want /lib/dri, but with a single input path, we need "/" for it to work
-    pathsToLink = [ "/" ];
-  };
-
   fontconfig = config.fonts.fontconfig;
   xresourcesXft = pkgs.writeText "Xresources-Xft" ''
     ${optionalString (fontconfig.dpi != 0) ''Xft.dpi: ${toString fontconfig.dpi}''}
@@ -31,69 +24,45 @@ let
     Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}
     Xft.hinting: ${if fontconfig.hinting.enable then "1" else "0"}
     Xft.autohint: ${if fontconfig.hinting.autohint then "1" else "0"}
-    Xft.hintstyle: hint${fontconfig.hinting.style}
+    Xft.hintstyle: hintslight
   '';
 
-  # file provided by services.xserver.displayManager.session.script
-  xsession = wm: dm: pkgs.writeScript "xsession"
+  # file provided by services.xserver.displayManager.sessionData.wrapper
+  xsessionWrapper = pkgs.writeScript "xsession-wrapper"
     ''
-      #! /bin/sh
+      #! ${pkgs.bash}/bin/bash
+
+      # Shared environment setup for graphical sessions.
 
       . /etc/profile
       cd "$HOME"
 
-      # The first argument of this script is the session type.
-      sessionType="$1"
-      if [ "$sessionType" = default ]; then sessionType=""; fi
-
-      ${optionalString (!cfg.displayManager.job.logsXsession) ''
-        exec > ~/.xsession-errors 2>&1
-      ''}
-
-      ${optionalString cfg.displayManager.desktopManagerHandlesLidAndPower ''
-        # Stop systemd from handling the power button and lid switch,
-        # since presumably the desktop environment will handle these.
-        if [ -z "$_INHIBITION_LOCK_TAKEN" ]; then
-          export _INHIBITION_LOCK_TAKEN=1
-          if ! ${config.systemd.package}/bin/loginctl show-session $XDG_SESSION_ID | grep -q '^RemoteHost='; then
-            exec ${config.systemd.package}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key "$0" "$sessionType"
-          fi
-        fi
-
-      ''}
-
-      ${optionalString cfg.startGnuPGAgent ''
-        if test -z "$SSH_AUTH_SOCK"; then
-            # Restart this script as a child of the GnuPG agent.
-            exec "${pkgs.gnupg}/bin/gpg-agent"                         \
-              --enable-ssh-support --daemon                             \
-              --pinentry-program "${pkgs.pinentry}/bin/pinentry-gtk-2"  \
-              --write-env-file "$HOME/.gpg-agent-info"                  \
-              "$0" "$sessionType"
+      ${optionalString cfg.startDbusSession ''
+        if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+          /run/current-system/systemd/bin/systemctl --user start dbus.socket
+          export `/run/current-system/systemd/bin/systemctl --user show-environment | grep '^DBUS_SESSION_BUS_ADDRESS'`
         fi
       ''}
 
-      # Handle being called by kdm.
-      if test "''${1:0:1}" = /; then eval exec "$1"; fi
-
-      # Start PulseAudio if enabled.
-      ${optionalString (config.hardware.pulseaudio.enable) ''
-        ${optionalString (!config.hardware.pulseaudio.systemWide)
-          "${config.hardware.pulseaudio.package}/bin/pulseaudio --start"
-        }
-
-        # Publish access credentials in the root window.
-        ${config.hardware.pulseaudio.package}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
-
-        # Keep track of devices.  Mostly useful for Phonon/KDE.
-        ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
+      ${optionalString cfg.displayManager.job.logToJournal ''
+        if [ -z "$_DID_SYSTEMD_CAT" ]; then
+          export _DID_SYSTEMD_CAT=1
+          exec ${config.systemd.package}/bin/systemd-cat -t xsession "$0" "$@"
+        fi
       ''}
 
-      # Tell systemd about our $DISPLAY. This is needed by the
-      # ssh-agent unit.
-      ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY
+      ${optionalString cfg.displayManager.job.logToFile ''
+        exec &> >(tee ~/.xsession-errors)
+      ''}
 
-      # Load X defaults.
+      # Tell systemd about our $DISPLAY and $XAUTHORITY.
+      # This is needed by the ssh-agent unit.
+      #
+      # Also tell systemd about the dbus session bus address.
+      # This is required by user units using the session bus.
+      /run/current-system/systemd/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
+
+      # Load X defaults. This should probably be safe on wayland too.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
       if test -e ~/.Xresources; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xresources
@@ -101,12 +70,16 @@ let
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
       fi
 
-      export LIBVA_DRIVERS_PATH=${vaapiDrivers}/lib/dri
-
       # Speed up application start by 50-150ms according to
       # http://kdemonkey.blogspot.nl/2008/04/magic-trick.html
-      rm -rf $HOME/.compose-cache
-      mkdir $HOME/.compose-cache
+      rm -rf "$HOME/.compose-cache"
+      mkdir "$HOME/.compose-cache"
+
+      # Work around KDE errors when a user first logs in and
+      # .local/share doesn't exist yet.
+      mkdir -p "$HOME/.local/share"
+
+      unset _DID_SYSTEMD_CAT
 
       ${cfg.displayManager.sessionCommands}
 
@@ -115,66 +88,61 @@ let
           source ~/.xprofile
       fi
 
+      # Start systemd user services for graphical sessions
+      /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+
       # Allow the user to setup a custom session type.
       if test -x ~/.xsession; then
-          exec ~/.xsession
-      else
-          if test "$sessionType" = "custom"; then
-              sessionType="" # fall-thru if there is no ~/.xsession
-          fi
+          eval exec ~/.xsession "$@"
       fi
 
-      # The session type is "<desktop-manager> + <window-manager>", so
-      # extract those.
-      windowManager="''${sessionType##* + }"
-      : ''${windowManager:=${cfg.windowManager.default}}
-      desktopManager="''${sessionType% + *}"
-      : ''${desktopManager:=${cfg.desktopManager.default}}
-
-      # Start the window manager.
-      case $windowManager in
-        ${concatMapStrings (s: ''
-          (${s.name})
-            ${s.start}
-            ;;
-        '') wm}
-        (*) echo "$0: Window manager '$windowManager' not found.";;
-      esac
-
-      # Start the desktop manager.
-      case $desktopManager in
-        ${concatMapStrings (s: ''
-          (${s.name})
-            ${s.start}
-            ;;
-        '') dm}
-        (*) echo "$0: Desktop manager '$desktopManager' not found.";;
-      esac
-
-      test -n "$waitPID" && wait "$waitPID"
-      exit 0
+      if test "$1"; then
+          # Run the supplied session command. Remove any double quotes with eval.
+          eval exec "$@"
+      else
+          # TODO: Do we need this? Should not the session always exist?
+          echo "error: unknown session $1" 1>&2
+          exit 1
+      fi
     '';
 
-  mkDesktops = names: pkgs.runCommand "desktops" {}
+  installedSessions = pkgs.runCommand "desktops"
+    { # trivial derivation
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
     ''
-      mkdir -p $out
-      ${concatMapStrings (n: ''
-        cat - > "$out/${n}.desktop" << EODESKTOP
-        [Desktop Entry]
-        Version=1.0
-        Type=XSession
-        TryExec=${cfg.displayManager.session.script}
-        Exec=${cfg.displayManager.session.script} '${n}'
-        Name=${n}
-        Comment=
-        EODESKTOP
-      '') names}
+      mkdir -p "$out/share/"{xsessions,wayland-sessions}
+
+      ${concatMapStrings (pkg: ''
+        for n in ${concatStringsSep " " pkg.providedSessions}; do
+          if ! test -f ${pkg}/share/wayland-sessions/$n.desktop -o \
+                    -f ${pkg}/share/xsessions/$n.desktop; then
+            echo "Couldn't find provided session name, $n.desktop, in session package ${pkg.name}:"
+            echo "  ${pkg}"
+            return 1
+          fi
+        done
+
+        if test -d ${pkg}/share/xsessions; then
+          ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+        fi
+        if test -d ${pkg}/share/wayland-sessions; then
+          ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+        fi
+      '') cfg.displayManager.sessionPackages}
     '';
+
+  dmDefault = cfg.desktopManager.default;
+  # fallback default for cases when only default wm is set
+  dmFallbackDefault = if dmDefault != null then dmDefault else "none";
+  wmDefault = cfg.windowManager.default;
+
+  defaultSessionFromLegacyOptions = dmFallbackDefault + optionalString (wmDefault != null && wmDefault != "none") "+${wmDefault}";
 
 in
 
 {
-
   options = {
 
     services.xserver.displayManager = {
@@ -195,7 +163,17 @@ in
         default = [];
         example = [ "-ac" "-logverbose" "-verbose" "-nolisten tcp" ];
         description = "List of arguments for the X server.";
-        apply = toString;
+      };
+
+      setupCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Shell commands executed just after the X server has started.
+
+          This option is only effective for display managers for which this feature
+          is supported; currently these are LightDM, GDM and SDDM.
+        '';
       };
 
       sessionCommands = mkOption {
@@ -205,7 +183,10 @@ in
           ''
             xmessage "Hello World!" &
           '';
-        description = "Shell commands executed just before the window or desktop manager is started.";
+        description = ''
+          Shell commands executed just before the window or desktop manager is
+          started. These commands are not currently sourced for Wayland sessions.
+        '';
       };
 
       hiddenUsers = mkOption {
@@ -216,14 +197,24 @@ in
         '';
       };
 
-      desktopManagerHandlesLidAndPower = mkOption {
-        type = types.bool;
-        default = true;
+      sessionPackages = mkOption {
+        type = with types; listOf (package // {
+          description = "package with provided sessions";
+          check = p: assertMsg
+            (package.check p && p ? providedSessions
+            && p.providedSessions != [] && all isString p.providedSessions)
+            ''
+              Package, '${p.name}', did not specify any session names, as strings, in
+              'passthru.providedSessions'. This is required when used as a session package.
+
+              The session names can be looked up in:
+                ${p}/share/xsessions
+                ${p}/share/wayland-sessions
+           '';
+        });
+        default = [];
         description = ''
-          Whether the display manager should prevent systemd from handling
-          lid and power events. This is normally handled by the desktop
-          environment's power manager. Turn this off when using a minimal
-          X11 setup without a full power manager.
+          A list of packages containing x11 or wayland session files to be passed to the display manager.
         '';
       };
 
@@ -245,7 +236,7 @@ in
           session.  Each session script can set the
           <varname>waitPID</varname> shell variable to make this script
           wait until the end of the user session.  Each script is used
-          to define either a windows manager or a desktop manager.  These
+          to define either a window manager or a desktop manager.  These
           can be differentiated by setting the attribute
           <varname>manage</varname> either to <literal>"window"</literal>
           or <literal>"desktop"</literal>.
@@ -254,15 +245,48 @@ in
           inside the display manager with the desktop manager name
           followed by the window manager name.
         '';
-        apply = list: rec {
-          wm = filter (s: s.manage == "window") list;
-          dm = filter (s: s.manage == "desktop") list;
-          names = flip concatMap dm
-            (d: map (w: d.name + optionalString (w.name != "none") (" + " + w.name))
-              (filter (w: d.name != "none" || w.name != "none") wm));
-          desktops = mkDesktops names;
-          script = xsession wm dm;
+      };
+
+      sessionData = mkOption {
+        description = "Data exported for display managers’ convenience";
+        internal = true;
+        default = {};
+        apply = val: {
+          wrapper = xsessionWrapper;
+          desktops = installedSessions;
+          sessionNames = concatMap (p: p.providedSessions) cfg.displayManager.sessionPackages;
+          # We do not want to force users to set defaultSession when they have only single DE.
+          autologinSession =
+            if cfg.displayManager.defaultSession != null then
+              cfg.displayManager.defaultSession
+            else if cfg.displayManager.sessionData.sessionNames != [] then
+              head cfg.displayManager.sessionData.sessionNames
+            else
+              null;
         };
+      };
+
+      defaultSession = mkOption {
+        type = with types; nullOr str // {
+          description = "session name";
+          check = d:
+            assertMsg (d != null -> (str.check d && elem d cfg.displayManager.sessionData.sessionNames)) ''
+                Default graphical session, '${d}', not found.
+                Valid names for 'services.xserver.displayManager.defaultSession' are:
+                  ${concatStringsSep "\n  " cfg.displayManager.sessionData.sessionNames}
+              '';
+        };
+        default =
+          if dmDefault != null || wmDefault != null then
+            defaultSessionFromLegacyOptions
+          else
+            null;
+        example = "gnome";
+        description = ''
+          Graphical session to pre-select in the session chooser (only effective for GDM and LightDM).
+
+          On GDM, LightDM and SDDM, it will also be used as a session for auto-login.
+        '';
       };
 
       job = {
@@ -277,7 +301,7 @@ in
         execCmd = mkOption {
           type = types.str;
           example = literalExample ''
-            "''${pkgs.slim}/bin/slim"
+            "''${pkgs.lightdm}/bin/lightdm"
           '';
           description = "Command to start the display manager.";
         };
@@ -285,17 +309,24 @@ in
         environment = mkOption {
           type = types.attrsOf types.unspecified;
           default = {};
-          example = { SLIM_CFGFILE = "/etc/slim.conf"; };
           description = "Additional environment variables needed by the display manager.";
         };
 
-        logsXsession = mkOption {
+        logToFile = mkOption {
           type = types.bool;
           default = false;
           description = ''
-            Whether the display manager redirects the
-            output of the session script to
-            <filename>~/.xsession-errors</filename>.
+            Whether the display manager redirects the output of the
+            session script to <filename>~/.xsession-errors</filename>.
+          '';
+        };
+
+        logToJournal = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether the display manager redirects the output of the
+            session script to the systemd journal.
           '';
         };
 
@@ -306,9 +337,108 @@ in
   };
 
   config = {
+    assertions = [
+      {
+        assertion = cfg.desktopManager.default != null || cfg.windowManager.default != null -> cfg.displayManager.defaultSession == defaultSessionFromLegacyOptions;
+        message = "You cannot use both services.xserver.displayManager.defaultSession option and legacy options (services.xserver.desktopManager.default and services.xserver.windowManager.default).";
+      }
+    ];
 
-    services.xserver.displayManager.xserverBin = "${xorg.xorgserver}/bin/X";
+    warnings =
+      mkIf (dmDefault != null || wmDefault != null) [
+        ''
+          The following options are deprecated:
+            ${concatStringsSep "\n  " (map ({c, t}: t) (filter ({c, t}: c != null) [
+            { c = dmDefault; t = "- services.xserver.desktopManager.default"; }
+            { c = wmDefault; t = "- services.xserver.windowManager.default"; }
+            ]))}
+          Please use
+            services.xserver.displayManager.defaultSession = "${defaultSessionFromLegacyOptions}";
+          instead.
+        ''
+      ];
 
+    services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
+
+    systemd.user.targets.graphical-session = {
+      unitConfig = {
+        RefuseManualStart = false;
+        StopWhenUnneeded = false;
+      };
+    };
+
+    # Create desktop files and scripts for starting sessions for WMs/DMs
+    # that do not have upstream session files (those defined using services.{display,desktop,window}Manager.session options).
+    services.xserver.displayManager.sessionPackages =
+      let
+        dms = filter (s: s.manage == "desktop") cfg.displayManager.session;
+        wms = filter (s: s.manage == "window") cfg.displayManager.session;
+
+        # Script responsible for starting the window manager and the desktop manager.
+        xsession = dm: wm: pkgs.writeScript "xsession" ''
+          #! ${pkgs.bash}/bin/bash
+
+          # Legacy session script used to construct .desktop files from
+          # `services.xserver.displayManager.session` entries. Called from
+          # `sessionWrapper`.
+
+          # Start the window manager.
+          ${wm.start}
+
+          # Start the desktop manager.
+          ${dm.start}
+
+          ${optionalString cfg.updateDbusEnvironment ''
+            ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
+          ''}
+
+          test -n "$waitPID" && wait "$waitPID"
+
+          /run/current-system/systemd/bin/systemctl --user stop graphical-session.target
+
+          exit 0
+        '';
+      in
+        # We will generate every possible pair of WM and DM.
+        concatLists (
+          crossLists
+            (dm: wm: let
+              sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
+              script = xsession dm wm;
+              desktopNames = if dm ? desktopNames
+                             then concatStringsSep ";" dm.desktopNames
+                             else sessionName;
+            in
+              optional (dm.name != "none" || wm.name != "none")
+                (pkgs.writeTextFile {
+                  name = "${sessionName}-xsession";
+                  destination = "/share/xsessions/${sessionName}.desktop";
+                  # Desktop Entry Specification:
+                  # - https://standards.freedesktop.org/desktop-entry-spec/latest/
+                  # - https://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
+                  text = ''
+                    [Desktop Entry]
+                    Version=1.0
+                    Type=XSession
+                    TryExec=${script}
+                    Exec=${script}
+                    Name=${sessionName}
+                    DesktopNames=${desktopNames}
+                  '';
+                } // {
+                  providedSessions = [ sessionName ];
+                })
+            )
+            [dms wms]
+          );
   };
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ]
+     "The option is no longer necessary because all display managers have already delegated lid management to systemd.")
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "logsXsession" ] [ "services" "xserver" "displayManager" "job" "logToFile" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "logToJournal" ] [ "services" "xserver" "displayManager" "job" "logToJournal" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "extraSessionFilesPackages" ] [ "services" "xserver" "displayManager" "sessionPackages" ])
+  ];
 
 }

@@ -1,32 +1,72 @@
-{ stdenv, fetchurl, pkgconfig, gst-plugins-base, bzip2, libva
-, libdrm, udev, xorg, mesa, yasm, gstreamer, gst-plugins-bad, nasm
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gst-plugins-base
+, bzip2
+, libva
+, wayland
+, libdrm
+, udev
+, xorg
+, libGLU
+, libGL
+, gstreamer
+, gst-plugins-bad
+, nasm
 , libvpx
+, python
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-vaapi-${version}";
-  version = "0.5.10";
+  pname = "gstreamer-vaapi";
+  version = "1.16.2";
 
   src = fetchurl {
-    url = "${meta.homepage}/software/vaapi/releases/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.bz2";
-    sha256 = "179wnz4c4gnw9ibfgjrad9b44icygadaknsgjfw24lr2pz3kdlhd";
+    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "00f6sx700qm1ximi1ag2c27m35dywwhhg6awhz85va34mfqff78r";
   };
 
-  nativeBuildInputs = with stdenv.lib; [ pkgconfig bzip2 ];
+  outputs = [ "out" "dev" ];
 
-  buildInputs = with stdenv.lib; [ gstreamer gst-plugins-base gst-plugins-bad libva libdrm udev
-    xorg.libX11 xorg.libXext xorg.libXv xorg.libXrandr mesa nasm libvpx ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    bzip2
+  ];
 
-  preConfigure = "
-    export GST_PLUGIN_PATH_1_0=$out/lib/gstreamer-1.0
-    mkdir -p $GST_PLUGIN_PATH_1_0
-    ";
-  configureFlags = "--disable-builtin-libvpx --with-gstreamer-api=1.0";
+  buildInputs = [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    libva
+    wayland
+    libdrm
+    udev
+    xorg.libX11
+    xorg.libXext
+    xorg.libXv
+    xorg.libXrandr
+    xorg.libSM
+    xorg.libICE
+    libGL
+    libGLU
+    nasm
+    libvpx
+    python
+  ];
 
-  meta = {
-    homepage = "http://www.freedesktop.org";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
+  mesonFlags = [
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+  ];
+
+  meta = with stdenv.lib; {
+    description = "Set of VAAPI GStreamer Plug-ins";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ tstrobel ];
+    platforms = platforms.linux;
   };
 }

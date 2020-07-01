@@ -1,57 +1,73 @@
-{ stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
+{ lib, stdenv, fetchurl, pkgconfig, zlib, shadow
+, ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.26.2";
+  pname = "util-linux";
+  version = "2.35.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v2.26/${name}.tar.xz";
-    sha256 = "0rlnzmiqdannzf81fbh41541lrck63v9zhskm6h4i2jj8ahvsa8f";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1yfpy6bkab4jw61mpx48gfy24yrqp4a7arvpis8csrkk53fkxpnr";
   };
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
   ];
 
-  #FIXME: make it also work on non-nixos?
-  postPatch = ''
-    # Substituting store paths would create a circular dependency on systemd
-    substituteInPlace include/pathnames.h \
-      --replace "/bin/login" "/run/current-system/sw/bin/login" \
-      --replace "/sbin/shutdown" "/run/current-system/sw/bin/shutdown"
-  '';
+  outputs = [ "bin" "dev" "out" "man" ];
 
-  crossAttrs = {
-    # Work around use of `AC_RUN_IFELSE'.
-    preConfigure = "export scanf_cv_type_modifier=ms";
-  };
+  postPatch = ''
+    patchShebangs tests/run.sh
+
+    substituteInPlace include/pathnames.h \
+      --replace "/bin/login" "${shadow}/bin/login"
+    substituteInPlace sys-utils/eject.c \
+      --replace "/bin/umount" "$bin/bin/umount"
+  '';
 
   # !!! It would be better to obtain the path to the mount helpers
   # (/sbin/mount.*) through an environment variable, but that's
   # somewhat risky because we have to consider that mount can setuid
   # root...
-  configureFlags = ''
-    --enable-write
-    --enable-last
-    --enable-mesg
-    --disable-use-tty-group
-    --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/bin:/sbin
-    ${if ncurses == null then "--without-ncurses" else ""}
-  '';
+  configureFlags = [
+    "--enable-write"
+    "--enable-last"
+    "--enable-mesg"
+    "--disable-use-tty-group"
+    "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
+    "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
+    "--disable-su" # provided by shadow
+    (lib.withFeature (ncurses != null) "ncursesw")
+    (lib.withFeature (systemd != null) "systemd")
+    (lib.withFeatureAs (systemd != null)
+       "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       "scanf_cv_type_modifier=ms"
+  ;
 
+  makeFlags = [
+    "usrbin_execdir=${placeholder "bin"}/bin"
+    "usrsbin_execdir=${placeholder "bin"}/sbin"
+  ];
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs =
     [ zlib pam ]
-    ++ stdenv.lib.optional (ncurses != null) ncurses
-    ++ stdenv.lib.optional (perl != null) perl;
+    ++ lib.filter (p: p != null) [ ncurses systemd perl ];
 
-  postInstall = ''
-    rm $out/bin/su # su should be supplied by the su package (shadow)
+  doCheck = false; # "For development purpose only. Don't execute on production system!"
+
+  postInstall = lib.optionalString minimal ''
+    rm -rf $out/share/{locale,doc,bash-completion}
   '';
 
   enableParallelBuilding = true;
 
-  meta = {
-    homepage = http://www.kernel.org/pub/linux/utils/util-linux/;
+  meta = with lib; {
+    homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "A set of system utilities for Linux";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2; # also contains parts under more permissive licenses
+    platforms = platforms.linux;
+    priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
   };
 }

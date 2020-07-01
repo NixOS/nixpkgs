@@ -1,33 +1,61 @@
-{ stdenv
+{ stdenv, gcc
+, jshon
+, glib
+, nspr
+, nss
+, fetchzip
+, patchelfUnstable
 , enablePepperFlash ? false
-, enableWideVine ? false
 
-, source
+, upstream-info
 }:
 
 with stdenv.lib;
 
 let
-  plugins = stdenv.mkDerivation {
-    name = "chromium-binary-plugins";
+  mkrpath = p: "${makeSearchPathOutput "lib" "lib64" p}:${makeLibraryPath p}";
 
-    # XXX: Only temporary and has to be version-specific
-    src = source.plugins;
+  # Generate a shell fragment that emits flags appended to the
+  # final makeWrapper call for wrapping the browser's main binary.
+  #
+  # Note that this is shell-escaped so that only the variable specified
+  # by the "output" attribute is substituted.
+  mkPluginInfo = { output ? "out", allowedVars ? [ output ]
+                 , flags ? [], envVars ? {}
+                 }: let
+    shSearch = ["'"] ++ map (var: "@${var}@") allowedVars;
+    shReplace = ["'\\''"] ++ map (var: "'\"\${${var}}\"'") allowedVars;
+    # We need to triple-escape "val":
+    #  * First because makeWrapper doesn't do any quoting of its arguments by
+    #    itself.
+    #  * Second because it's passed to the makeWrapper call separated by IFS but
+    #    not by the _real_ arguments, for example the Widevine plugin flags
+    #    contain spaces, so they would end up as separate arguments.
+    #  * Third in order to be correctly quoted for the "echo" call below.
+    shEsc = val: "'${replaceStrings ["'"] ["'\\''"] val}'";
+    mkSh = val: "'${replaceStrings shSearch shReplace (shEsc val)}'";
+    mkFlag = flag: ["--add-flags" (shEsc flag)];
+    mkEnvVar = key: val: ["--set" (shEsc key) (shEsc val)];
+    envList = mapAttrsToList mkEnvVar envVars;
+    quoted = map mkSh (flatten ((map mkFlag flags) ++ envList));
+  in ''
+    mkdir -p "''$${output}/nix-support"
+    echo ${toString quoted} > "''$${output}/nix-support/wrapper-flags"
+  '';
 
-    phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
-    outputs = [ "flash" "widevine" ];
+  flash = stdenv.mkDerivation rec {
+    pname = "flashplayer-ppapi";
+    version = "32.0.0.387";
 
-    unpackCmd = let
-      chan = if source.channel == "dev"    then "chrome-unstable"
-        else if source.channel == "stable" then "chrome"
-        else "chrome-${source.channel}";
-      cext = if versionOlder source.version "41.0.0.0" then "lzma" else "xz";
-    in ''
-      mkdir -p plugins
-      ar p "$src" data.tar.${cext} | tar xJ -C plugins --strip-components=4 \
-        ./opt/google/${chan}/PepperFlash \
-        ./opt/google/${chan}/libwidevinecdm.so \
-        ./opt/google/${chan}/libwidevinecdmadapter.so
+    src = fetchzip {
+      url = "https://fpdownload.adobe.com/pub/flashplayer/pdc/${version}/flash_player_ppapi_linux.x86_64.tar.gz";
+      sha256 = "1igs8nh3zpfcps97ahzh7kknx3rddh6yliig8lxf6jskbpf0qgzf";
+      stripRoot = false;
+    };
+
+    patchPhase = ''
+      chmod +x libpepflashplayer.so
+      patchelf --set-rpath "${mkrpath [ gcc.cc ]}" libpepflashplayer.so
     '';
 
     doCheck = true;
@@ -35,67 +63,31 @@ let
       ! find -iname '*.so' -exec ldd {} + | grep 'not found'
     '';
 
-    patchPhase = let
-      rpaths = [ stdenv.cc.cc ];
-      mkrpath = p: "${makeSearchPath "lib64" p}:${makeSearchPath "lib" p}";
-    in ''
-      for sofile in PepperFlash/libpepflashplayer.so \
-                    libwidevinecdm.so libwidevinecdmadapter.so; do
-        chmod +x "$sofile"
-        patchelf --set-rpath "${mkrpath rpaths}" "$sofile"
-      done
-
-      patchelf --set-rpath "$widevine/lib:${mkrpath rpaths}" \
-        libwidevinecdmadapter.so
-    '';
-
-    installPhase = let
-      wvName = "Widevine Content Decryption Module";
-      wvDescription = "Playback of encrypted HTML audio/video content";
-      wvMimeTypes = "application/x-ppapi-widevine-cdm";
-      wvModule = "$widevine/lib/libwidevinecdmadapter.so";
-      wvInfo = "#${wvName}#${wvDescription}:${wvMimeTypes}";
-    in ''
+    installPhase = ''
       flashVersion="$(
-        sed -n -r 's/.*"version": "([^"]+)",.*/\1/p' PepperFlash/manifest.json
+        "${jshon}/bin/jshon" -F manifest.json -e version -u
       )"
 
-      install -vD PepperFlash/libpepflashplayer.so \
-        "$flash/lib/libpepflashplayer.so"
-      mkdir -p "$flash/nix-support"
-      cat > "$flash/nix-support/chromium-plugin.nix" <<NIXOUT
-        { flags = [
-            "--ppapi-flash-path='$flash/lib/libpepflashplayer.so'"
-            "--ppapi-flash-version=$flashVersion"
-          ];
-        }
-      NIXOUT
+      install -vD libpepflashplayer.so "$out/lib/libpepflashplayer.so"
 
-      install -vD libwidevinecdm.so \
-        "$widevine/lib/libwidevinecdm.so"
-      install -vD libwidevinecdmadapter.so \
-        "$widevine/lib/libwidevinecdmadapter.so"
-      mkdir -p "$widevine/nix-support"
-      cat > "$widevine/nix-support/chromium-plugin.nix" <<NIXOUT
-        { flags = [ "--register-pepper-plugins='${wvModule}${wvInfo}'" ];
-          envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "$widevine/lib";
-        }
-      NIXOUT
+      ${mkPluginInfo {
+        allowedVars = [ "out" "flashVersion" ];
+        flags = [
+          "--ppapi-flash-path=@out@/lib/libpepflashplayer.so"
+          "--ppapi-flash-version=@flashVersion@"
+        ];
+      }}
     '';
 
-    passthru = let
-      enabledPlugins = optional enablePepperFlash plugins.flash
-                    ++ optional enableWideVine    plugins.widevine;
-      getNix = plugin: import "${plugin}/nix-support/chromium-plugin.nix";
-      mergeAttrsets = let
-        f = v: if all isAttrs v then mergeAttrsets v
-          else if all isList  v then concatLists   v
-          else if tail v == []  then head          v
-          else head (tail v);
-      in fold (l: r: zipAttrsWith (_: f) [ l r ]) {};
-    in {
-      inherit enabledPlugins;
-      settings = mergeAttrsets (map getNix enabledPlugins);
+    dontStrip = true;
+
+    meta = {
+      license = stdenv.lib.licenses.unfree;
+      maintainers = with stdenv.lib.maintainers; [ taku0 ];
+      platforms = platforms.x86_64;
     };
   };
-in plugins
+
+in {
+  enabled = optional enablePepperFlash flash;
+}

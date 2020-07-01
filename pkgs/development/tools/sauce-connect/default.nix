@@ -1,22 +1,27 @@
-{ stdenv, lib, fetchurl, zlib }:
+{ stdenv, lib, fetchurl, zlib, unzip }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "sauce-connect-${version}";
-  version = "4.3.6";
+  pname = "sauce-connect";
+  version = "4.5.4";
 
   src = fetchurl (
-    if stdenv.system == "x86_64-linux" then {
+    if stdenv.hostPlatform.system == "x86_64-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux.tar.gz";
-      sha1 = "0d7d2dc12766ac137e62a3e4dad3025b590f9782";
-    } else {
+      sha256 = "1w8fw47q4bzpk5jfagmc0cbp69jdd6jcv2xl1gx91cbp7xd8mcbf";
+    } else if stdenv.hostPlatform.system == "i686-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux32.tar.gz";
-      sha1 = "ee2c3002eae3b29df801a2ac1db77bb5f1c97bcc";
+      sha256 = "1h9n1mzmrmlrbd0921b0sgg7m8z0w71pdb5sif6h1b9f97cp353x";
+    } else {
+      url = "https://saucelabs.com/downloads/sc-${version}-osx.zip";
+      sha256 = "0rkyd402f1n92ad3w1460j1a4m46b29nandv4z6wvg2pasyyf2lj";
     }
   );
 
-  patchPhase = ''
+  buildInputs = [ unzip ];
+
+  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$out/lib:${makeLibraryPath [zlib]}" \
@@ -32,9 +37,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A secure tunneling app for executing tests securely when testing behind firewalls";
-    license = with licenses; unfree;
-    homepage = https://docs.saucelabs.com/reference/sauce-connect/;
+    license = licenses.unfree;
+    homepage = "https://docs.saucelabs.com/reference/sauce-connect/";
     maintainers = with maintainers; [offline];
-    platforms = with platforms; platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

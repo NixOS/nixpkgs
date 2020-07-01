@@ -1,24 +1,32 @@
-{ stdenv, fetchgit, zlib
-, gnutlsSupport ? false, gnutls ? null
+{ stdenv, fetchgit, fetchpatch, zlib
+, gnutlsSupport ? false, gnutls ? null, nettle ? null
 , opensslSupport ? true, openssl ? null
 }:
 
 # Must have an ssl library enabled
 assert (gnutlsSupport || opensslSupport);
-assert gnutlsSupport -> ((gnutlsSupport != null) && (!opensslSupport));
-assert opensslSupport -> ((openssl != null) && (!gnutlsSupport));
+assert gnutlsSupport -> gnutlsSupport != null && nettle != null && !opensslSupport;
+assert opensslSupport -> openssl != null && !gnutlsSupport;
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
-  name = "rtmpdump-${version}";
-  version = "2.4";
+stdenv.mkDerivation {
+  pname = "rtmpdump";
+  version = "2019-03-30";
 
   src = fetchgit {
-    url = git://git.ffmpeg.org/rtmpdump;
+    url = "git://git.ffmpeg.org/rtmpdump";
     # Currently the latest commit is used (a release has not been made since 2011, i.e. '2.4')
-    rev = "a107cef9b392616dff54fabfd37f985ee2190a6f";
-    sha256 = "178h5j7w20g2h9mn6cb7dfr3fa4g4850hpl1lzxmi0nk3blzcsvl";
+    rev = "c5f04a58fc2aeea6296ca7c44ee4734c18401aa3";
+    sha256 = "07ias612jgmxpam9h418kvlag32da914jsnjsfyafklpnh8gdzjb";
   };
+
+  patches = [
+    # Fix build with OpenSSL 1.1
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-video/rtmpdump/files/rtmpdump-openssl-1.1.patch?id=1e7bef484f96e7647f5f0911d3c8caa48131c33b";
+      sha256 = "1wds98pk8qr7shkfl8k49iirxiwd972h18w84bamiqln29wv6ql1";
+    })
+  ];
 
   makeFlags = [ ''prefix=$(out)'' ]
     ++ optional gnutlsSupport "CRYPTO=GNUTLS"
@@ -27,14 +35,18 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.cc.isClang "CC=clang";
 
   propagatedBuildInputs = [ zlib ]
-    ++ optional gnutlsSupport gnutls
+    ++ optionals gnutlsSupport [ gnutls nettle ]
     ++ optional opensslSupport openssl;
+
+  outputs = [ "out" "dev" ];
+
+  separateDebugInfo = true;
 
   meta = {
     description = "Toolkit for RTMP streams";
-    homepage    = http://rtmpdump.mplayerhq.hu/;
+    homepage    = "http://rtmpdump.mplayerhq.hu/";
     license     = licenses.gpl2;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ codyopel viric ];
+    maintainers = with maintainers; [ codyopel ];
   };
 }

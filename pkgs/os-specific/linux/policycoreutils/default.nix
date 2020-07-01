@@ -1,44 +1,35 @@
-{ stdenv, fetchurl, intltool, pcre, libcap_ng, libcgroup
-, libsepol, libselinux, libsemanage, setools
-, python, sepolgen }:
-stdenv.mkDerivation rec {
+{ stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage }:
 
-  name = "policycoreutils-${version}";
-  version = "2.3";
+stdenv.mkDerivation rec {
+  pname = "policycoreutils";
+  version = "2.9";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/policycoreutils-${version}.tar.gz";
-    sha256 = "1lpwxr5hw3dwhlp2p7y8jcr18mvfcrclwd8c2idz3lmmb3pglk46";
+    sha256 = "0yqg5ws5gbl1cbn8msxdk1c3ilmmx58qg5dx883kqyq0517k8g65";
   };
 
-  preConfigure = ''
-    substituteInPlace po/Makefile --replace /usr/bin/install install
-    find . -type f -exec sed -i 's,/usr/bin/python,${python}/bin/python,' {} \;
+  postPatch = ''
+    # Fix install references
+    substituteInPlace po/Makefile \
+       --replace /usr/bin/install install --replace /usr/share /share
+    substituteInPlace newrole/Makefile --replace /usr/share /share
+
+    sed -i -e '39i#include <crypt.h>' run_init/run_init.c
   '';
 
-  buildInputs = [ intltool pcre libcap_ng libcgroup
-    libsepol libselinux libsemanage setools
-    python sepolgen # ToDo? these are optional
+  nativeBuildInputs = [ gettext ];
+  buildInputs = [ libsepol libselinux libsemanage ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SBINDIR=$(out)/sbin"
+    "ETCDIR=$(out)/etc"
+    "BASHCOMPLETIONDIR=$out/share/bash-completion/completions"
+    "LOCALEDIR=$(out)/share/locale"
+    "MAN5DIR=$(out)/share/man/man5"
   ];
-
-  preBuild = ''
-    mkdir -p "$out/lib" && cp -s "${libsepol}/lib/libsepol.a" "$out/lib"
-  '';
-
-  # Creation of the system-config-selinux directory is broken
-  preInstall = ''
-    mkdir -p $out/share/system-config-selinux
-  '';
-
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all";
-  NIX_LDFLAGS = "-lsepol -lpcre";
-
-  makeFlags = "PREFIX=$(out) DESTDIR=$(out) LOCALEDIR=$(out)/share/locale";
-
-  patches = [ ./size_format.patch ];
-
-  patchFlags = [ "-p0" ];
 
   meta = with stdenv.lib; {
     description = "SELinux policy core utilities";
@@ -46,4 +37,3 @@ stdenv.mkDerivation rec {
     inherit (libsepol.meta) homepage platforms maintainers;
   };
 }
-

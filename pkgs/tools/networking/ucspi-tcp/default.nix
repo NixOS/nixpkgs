@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "ucspi-tcp-0.88";
 
   src = fetchurl {
-    url = "http://cr.yp.to/ucspi-tcp/${name}.tar.gz";
+    url = "https://cr.yp.to/ucspi-tcp/${name}.tar.gz";
     sha256 = "171yl9kfm8w7l17dfxild99mbf877a9k5zg8yysgb1j8nz51a1ja";
   };
 
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
       url = "http://ftp.de.debian.org/debian/pool/main/u/ucspi-tcp/ucspi-tcp_0.88-3.diff.gz";
       sha256 = "0mzmhz8hjkrs0khmkzs5i0s1kgmgaqz07h493bd5jj5fm5njxln6";
     })
+    ./remove-setuid.patch
   ];
 
   # Apply Debian patches
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
       Interface, using the TCP protocol. UCSPI tools are available for several
       different networks.
     '';
-    homepage = http://cr.yp.to/ucspi-tcp.html;
+    homepage = "http://cr.yp.to/ucspi-tcp.html";
     license = licenses.publicDomain;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

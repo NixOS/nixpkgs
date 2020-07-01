@@ -1,22 +1,33 @@
-{ stdenv, fetchurl, curl, jansson }:
+{ stdenv
+, fetchFromGitHub
+, curl
+, jansson
+, perl
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "cpuminer-${version}";
-  version = "2.4.1";
+  pname = "cpuminer";
+  version = "2.5.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/cpuminer/pooler-${name}.tar.gz";
-    sha256 = "0grj0swh1q3c3bj3yxji80yhxb09yz62x1n5h8z7c3azq4rrv2w1";
+  src = fetchFromGitHub {
+    owner = "pooler";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0f44i0z8rid20c2hiyp92xq0q0mjj537r05sa6vdbc0nl0a5q40i";
   };
 
-  buildInputs = [ curl jansson ];
+  patchPhase = if stdenv.cc.isClang then "${perl}/bin/perl ./nomacro.pl" else null;
+
+  buildInputs = [ curl jansson autoreconfHook ];
 
   configureFlags = [ "CFLAGS=-O3" ];
 
-  meta = {
-    homepage = https://github.com/pooler/cpuminer;
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/pooler/cpuminer";
     description = "CPU miner for Litecoin and Bitcoin";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pSub ];
   };
 }

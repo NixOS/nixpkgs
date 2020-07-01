@@ -1,25 +1,26 @@
-{ stdenv, makeWrapper, alsaLib, pkgconfig, fetchgit, gnome3, gdk_pixbuf, librsvg }:
+{ stdenv, makeWrapper, alsaLib, pkgconfig, fetchgit, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook }:
 
 stdenv.mkDerivation {
-  name = "gvolicon";
+  name = "gvolicon-2014-04-28";
   src = fetchgit {
     url = "https://github.com/Unia/gvolicon";
-    rev = "c04cafb88124e1e5edc61dd52f76bf13381d5167";
-    sha256 = "31cf770dca0d216e3108b258b4c150cbeb3b127002d53fd6ddddfcf9e3e293aa";
+    rev = "0d65a396ba11f519d5785c37fec3e9a816217a07";
+    sha256 = "1sr9wyy7w898vq63yd003yp3k66hd4vm8b0qsm9zvmwmpiz4wvln";
   };
 
-  buildInputs = [ pkgconfig makeWrapper alsaLib gnome3.gtk ];
-  propagatedBuildInputs = [ gnome3.defaultIconTheme gdk_pixbuf librsvg ];
-  installPhase = ''
-    make install PREFIX=$out
-    wrapProgram "$out/bin/gvolicon" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:${gnome3.gnome_themes_standard}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/gvolicon:$XDG_ICON_DIRS"
-    '';
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    makeWrapper alsaLib gtk3 gdk-pixbuf gnome3.adwaita-icon-theme
+    librsvg wrapGAppsHook
+  ];
+
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE";
 
   meta = {
     description = "A simple and lightweight volume icon that sits in your system tray";
-    homepage = https://github.com/Unia/gvolicon;
+    homepage = "https://github.com/Unia/gvolicon";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.bennofs ];

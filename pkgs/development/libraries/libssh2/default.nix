@@ -1,69 +1,29 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, openssl, zlib, windows }:
 
-# Optional Dependencies
-, zlib ? null
-
-# Crypto Dependencies
-, openssl ? null, libgcrypt ? null
-}:
-
-with stdenv;
-let
-  # Prefer openssl
-  cryptoStr = if shouldUsePkg openssl != null then "openssl"
-    else if shouldUsePkg libgcrypt != null then "libgcrypt"
-      else "none";
-  crypto = {
-    openssl = openssl;
-    libgcrypt = libgcrypt;
-    none = null;
-  }.${cryptoStr};
-
-  optZlib = shouldUsePkg zlib;
-in
-
-assert crypto != null;
-
-with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libssh2-1.5.0";
+  pname = "libssh2";
+  version = "1.9.0";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "1z6hfgak00yz0azx6lk6n688mywhdxx03j6sdf95p3w6ssnnn6c3";
+    url = "${meta.homepage}/download/${pname}-${version}.tar.gz";
+    sha256 = "1zfsz9nldakfz61d2j70pk29zlmj7w2vv46s9l3x2prhcgaqpyym";
   };
 
-  buildInputs = [ crypto optZlib ];
+  outputs = [ "out" "dev" "devdoc" ];
 
-  configureFlags = [
-    (mkWith   (cryptoStr == "openssl")   "openssl"        null)
-    (mkWith   (cryptoStr == "libgcrypt") "libgcrypt"      null)
-    (mkWith   false                      "wicng"          null)
-    (mkWith   optZlib                    "libz"           null)
-    (mkEnable false                      "crypt-none"     null)
-    (mkEnable false                      "mac-none"       null)
-    (mkEnable true                       "gex-new"        null)
-    (mkEnable false                      "debug"          null)
-    (mkEnable false                      "examples-build" null)
+  buildInputs = [ openssl zlib ]
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
+
+  patches = [
+    # Not able to use fetchpatch here: infinite recursion
+    ./CVE-2019-17498.patch
   ];
 
-  postInstall = optionalString (!stdenv.isDarwin) (''
-    sed -i \
-  '' + optionalString (optZlib != null) ''
-      -e 's,\(-lz\),-L${optZlib}/lib \1,' \
-  '' + optionalString (cryptoStr == "openssl") ''
-      -e 's,\(-lssl\|-lcrypto\),-L${openssl}/lib \1,' \
-  '' + optionalString (cryptoStr == "libgcrypt") ''
-      -e 's,\(-lgcrypt\),-L${libgcrypt}/lib \1,' \
-  '' + ''
-      $out/lib/libssh2.la
-  '');
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A client-side C library implementing the SSH2 protocol";
-    homepage = http://www.libssh2.org;
-    license = licenses.gpl2;
+    homepage = "https://www.libssh2.org";
     platforms = platforms.all;
-    maintainers = with maintainers; [ urkud wkennington ];
+    license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

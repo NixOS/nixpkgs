@@ -1,6 +1,38 @@
-{ stdenv, fetchurl, gettext, intltool, pkgconfig, python
-, avahi, bluez, boost, eigen, fftw, glib, glibmm, gtk, gtkmm, jack2
-, ladspaH, librdf, libsndfile, lilv, lv2, serd, sord, sratom
+{ stdenv
+, fetchurl
+, avahi
+, bluez
+, boost
+, curl
+, eigen
+, fftw
+, gettext
+, glib
+, glib-networking
+, glibmm
+, gnome3
+, gsettings-desktop-schemas
+, gtk3
+, gtkmm3
+, hicolor-icon-theme
+, intltool
+, ladspaH
+, libav
+, libjack2
+, libsndfile
+, lilv
+, lrdf
+, lv2
+, pkgconfig
+, python2
+, sassc
+, serd
+, sord
+, sratom
+, wafHook
+, wrapGAppsHook
+, zita-convolver
+, zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
@@ -9,37 +41,71 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "guitarix-${version}";
-  version = "0.32.3";
+  pname = "guitarix";
+  version = "0.40.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.bz2";
-    sha256 = "1ybc5jk7fj6n8qh9ajzl1f6fzdmzab4nwjrh4fsylm94dn1jv0if";
+    url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
+    sha256 = "0q9050499hcj19hvbxb069vxh5yclawjg04vryh46lxm4sfy9g57";
   };
 
-  nativeBuildInputs = [ gettext intltool pkgconfig python ];
+  # see: https://sourceforge.net/p/guitarix/bugs/105
+  patches = [ ./fix-build.patch ];
 
-  buildInputs = [
-    avahi bluez boost eigen fftw glib glibmm gtk gtkmm jack2
-    ladspaH librdf libsndfile lilv lv2 serd sord sratom
+  nativeBuildInputs = [
+    gettext
+    hicolor-icon-theme
+    intltool
+    pkgconfig
+    python2
+    wafHook
+    wrapGAppsHook
   ];
 
-  configureFlags = [
+  buildInputs = [
+    avahi
+    bluez
+    boost
+    curl
+    eigen
+    fftw
+    glib
+    glib-networking.out
+    glibmm
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gtk3
+    gtkmm3
+    ladspaH
+    libav
+    libjack2
+    libsndfile
+    lilv
+    lrdf
+    lv2
+    sassc
+    serd
+    sord
+    sratom
+    zita-convolver
+    zita-resampler
+  ];
+
+  # this doesnt build, probably because we have the wrong faust version:
+  #       "--faust"
+  # aproved versions are 2.20.2 and 2.15.11
+  wafConfigureFlags = [
+    "--no-faust"
+    "--no-font-cache-update"
     "--shared-lib"
     "--no-desktop-update"
-    "--no-faust" # Need to package a release of faust, 0.9.58 or 0.9.65
     "--enable-nls"
-    "--includeresampler" # Zita-resampler not packaged, use vendored version
-    "--includeconvolver" # Zita-convolver not packaged, use vendored version
+    "--install-roboto-font"
+    "--includeresampler"
+    "--includeconvolver"
   ] ++ optional optimizationSupport "--optimization";
 
-  configurePhase = ''python waf configure --prefix=$out $configureFlags'';
-
-  buildPhase = ''python waf build'';
-
-  installPhase = ''python waf install'';
-
-  meta = with stdenv.lib; { 
+  meta = with stdenv.lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";
     longDescription = ''
         guitarix is a virtual guitar amplifier for Linux running with
@@ -63,7 +129,7 @@ stdenv.mkDerivation rec {
       clean-sounds, nice overdrive, fat distortion and a diversity of
       crazy sounds never heard before.
     '';
-    homepage = http://guitarix.sourceforge.net/;
+    homepage = "http://guitarix.sourceforge.net/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ astsmtl goibhniu ];
     platforms = platforms.linux;

@@ -1,0 +1,42 @@
+From 4f457d38e9e75bc97ee7dba633bf0cdd61b8cd5b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Fri, 19 Apr 2019 22:01:16 -0300
+Subject: [PATCH] Use an environment variable to find plugins
+
+---
+ pluginmanager.cpp | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/pluginmanager.cpp b/pluginmanager.cpp
+index 0c03237..79bdf86 100644
+--- a/pluginmanager.cpp
++++ b/pluginmanager.cpp
+@@ -34,13 +34,19 @@ QList<QButtonGroup*> PluginManager::reduceGetOptions(const QString &actionID)
+ void PluginManager::load()
+ {
+ 
+-    QDir dir("/usr/lib/polkit-1-dde/plugins/");
+-    QFileInfoList pluginFiles = dir.entryInfoList((QStringList("*.so")));
++    QStringList pluginsDirs = QProcessEnvironment::systemEnvironment().value("DDE_POLKIT_PLUGINS_DIRS").split(QDir::listSeparator(), QString::SkipEmptyParts);
++    pluginsDirs.append("/usr/lib/polkit-1-dde/plugins/");
+ 
+-    for (const QFileInfo &pluginFile : pluginFiles) {
+-       AgentExtension *plugin = loadFile(pluginFile.absoluteFilePath());
+-       if (plugin)
+-           m_plugins << plugin;
++    for (const QString &dirName : pluginsDirs) {
++        QDir dir(dirName);
++
++        QFileInfoList pluginFiles = dir.entryInfoList((QStringList("*.so")));
++
++        for (const QFileInfo &pluginFile : pluginFiles) {
++            AgentExtension *plugin = loadFile(pluginFile.absoluteFilePath());
++            if (plugin)
++                m_plugins << plugin;
++        }
+     }
+ }
+ 
+-- 
+2.21.0
+

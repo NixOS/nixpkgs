@@ -20,24 +20,24 @@ with lib;
 
   };
 
-  
+
   ###### implementation
 
   config = mkIf config.services.oidentd.enable {
+    systemd.services.oidentd = {
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "forking";
+      script = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup";
+    };
 
-    jobs.oidentd =
-      { startOn = "started network-interfaces";
-        daemonType = "fork";
-        exec = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup";
-      };
-
-    users.extraUsers.oidentd = {
+    users.users.oidentd = {
       description = "Ident Protocol daemon user";
       group = "oidentd";
       uid = config.ids.uids.oidentd;
     };
 
-    users.extraGroups.oidentd.gid = config.ids.gids.oidentd;
+    users.groups.oidentd.gid = config.ids.gids.oidentd;
 
   };
 

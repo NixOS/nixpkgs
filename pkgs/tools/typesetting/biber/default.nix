@@ -1,40 +1,36 @@
-{ stdenv, fetchurl, buildPerlPackage, autovivification, BusinessISBN
-, BusinessISMN, BusinessISSN, ConfigAutoConf, DataCompare, DataDump, DateSimple
-, EncodeEUCJPASCII, EncodeHanExtra, EncodeJIS2K, ExtUtilsLibBuilder
-, FileSlurp, IPCRun3, Log4Perl, LWPProtocolHttps, ListAllUtils, ListMoreUtils
-, ModuleBuild, MozillaCA, ReadonlyXS, RegexpCommon, TextBibTeX, UnicodeCollate
-, UnicodeLineBreak, URI, XMLLibXMLSimple, XMLLibXSLT, XMLWriter }:
+{ stdenv, fetchpatch, perlPackages, shortenPerlShebang, texlive }:
 
 let
-  version = "1.9";
-  pn = "biblatex-biber";
+  biberSource = stdenv.lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
 in
-buildPerlPackage {
-  name = "biber-${version}";
-  src = fetchurl {
-    url = "mirror://sourceforge/project/${pn}/${pn}/${version}/${pn}.tar.gz";
-    sha256 = "1a3iq7l9i54f8nfzjmp1qdb6aqm7977q1g4san470010fkfbvjdc";
-  };
 
-  buildInputs = [
+perlPackages.buildPerlModule {
+  pname = "biber";
+  inherit (biberSource) version;
+
+  src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
+
+  buildInputs = with perlPackages; [
     autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
     DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
-    ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
-    ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
-    UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
+    DateTime DateTimeFormatBuilder DateTimeCalendarJulian
+    ExtUtilsLibBuilder FileSlurper FileWhich IPCRun3 LogLog4perl LWPProtocolHttps ListAllUtils
+    ListMoreUtils MozillaCA ParseRecDescent IOString ReadonlyXS RegexpCommon TextBibTeX
+    UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
+    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit SortKey
+    TestDifferences
+    PerlIOutf8_strict
   ];
-  preConfigure = "touch Makefile.PL";
-  buildPhase = "perl Build.PL --prefix=$out; ./Build build";
-  checkPhase = "./Build test";
-  installPhase = "./Build install";
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
 
-  # Tests seem to be broken
-  doCheck = false;
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/biber
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Backend for BibLaTeX";
-    license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
+    license = with licenses; [ artistic1 gpl1Plus ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.ttuegel ];
   };
 }

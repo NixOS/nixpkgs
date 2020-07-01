@@ -5,16 +5,16 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/bo0ts/ddate";
     rev = "refs/tags/v0.2.2";
-    sha256 = "1mv7x8g6ddzspcxghzz5dsxrj0x7bw5hc9yvqbl9va9z7nahwv80";
+    sha256 = "1qchxnxvghbma6gp1g78wnjxsri0b72ha9axyk31cplssl7yn73f";
   };
 
   buildInputs = [ cmake ];
 
   meta = {
-    homepage = https://github.com/bo0ts/ddate;
+    homepage = "https://github.com/bo0ts/ddate";
     description = "Discordian version of the date program";
     license = stdenv.lib.licenses.publicDomain;
     maintainers = with stdenv.lib.maintainers; [kovirobi];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.all;
   };
 }

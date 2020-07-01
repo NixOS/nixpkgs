@@ -1,32 +1,42 @@
-{stdenv, fetchurl, qt4, pkgconfig, poppler_qt4, djvulibre, libspectre, cups
+{stdenv, mkDerivation, fetchurl, qmake, qtbase, qtsvg, pkgconfig, poppler, djvulibre, libspectre, cups
 , file, ghostscript
 }:
 let
   s = # Generated upstream information
   rec {
     baseName="qpdfview";
-    version = "0.4.14";
+    version = "0.4.18";
     name="${baseName}-${version}";
     url="https://launchpad.net/qpdfview/trunk/${version}/+download/qpdfview-${version}.tar.gz";
-    sha256 = "15d88xzqvrcp9szmz8d1lj65yrdx90j6fp78gia5c8kra2z8bik9";
+    sha256 = "0v1rl126hvblajnph2hkansgi0s8vjdc5yxrm4y3faa0lxzjwr6c";
   };
+  nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [
-    qt4 poppler_qt4 pkgconfig djvulibre libspectre cups file ghostscript
+    qtbase qtsvg poppler djvulibre libspectre cups file ghostscript
   ];
 in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
+mkDerivation {
+  pname = s.baseName;
+  inherit (s) version;
+  inherit nativeBuildInputs buildInputs;
   src = fetchurl {
     inherit (s) url sha256;
   };
-  configurePhase = ''
-    qmake *.pro
-    for i in *.pro; do 
-      qmake "$i" -o "Makefile.$(basename "$i" .pro)"
-    done
-    sed -e "s@/usr/@$out/@g" -i Makefile*
+
+  preConfigure = ''
+    qmakeFlags+=(*.pro)
   '';
+
+  qmakeFlags = [
+    "TARGET_INSTALL_PATH=${placeholder "out"}/bin"
+    "PLUGIN_INSTALL_PATH=${placeholder "out"}/lib/qpdfview"
+    "DATA_INSTALL_PATH=${placeholder "out"}/share/qpdfview"
+    "MANUAL_INSTALL_PATH=${placeholder "out"}/share/man/man1"
+    "ICON_INSTALL_PATH=${placeholder "out"}/share/icons/hicolor/scalable/apps"
+    "LAUNCHER_INSTALL_PATH=${placeholder "out"}/share/applications"
+    "APPDATA_INSTALL_PATH=${placeholder "out"}/share/appdata"
+  ];
+
   meta = {
     inherit (s) version;
     description = "A tabbed document viewer";

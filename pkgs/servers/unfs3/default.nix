@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
          server.
       '';
 
-    homepage = http://unfs3.sourceforge.net/;
+    homepage = "http://unfs3.sourceforge.net/";
 
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;

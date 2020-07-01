@@ -1,31 +1,26 @@
-{ stdenv, fetchurl, zlib, enableStatic ? false,
-sftpPath ? "/var/run/current-system/sw/libexec/sftp-server" }:
+{ stdenv, lib, fetchurl, glibc, zlib
+, enableStatic ? false
+, sftpPath ? "/run/current-system/sw/libexec/sftp-server"
+}:
 
 stdenv.mkDerivation rec {
-  name = "dropbear-2015.67";
+  name = "dropbear-2019.78";
 
   src = fetchurl {
-    url = "http://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
-    sha256 = "1rf8k3v0bklp04a6x85zpa4f45ad5rfqmiv5f1wfbzaxcja0asby";
+    url = "https://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
+    sha256 = "19242qlr40pbqfqd0gg6h8qpj38q6lgv03ja6sahj9vj2abnanaj";
   };
 
   dontDisableStatic = enableStatic;
 
-  configureFlags = stdenv.lib.optional enableStatic "LDFLAGS=-static";
+  configureFlags = lib.optional enableStatic "LDFLAGS=-static";
 
   CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
 
-  # http://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
+  # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
     makeFlags=VPATH=`cat $NIX_CC/nix-support/orig-libc`/lib
   '';
-
-  crossAttrs = {
-    # This works for uclibc, at least.
-    preConfigure = ''
-      makeFlags=VPATH=`cat ${stdenv.ccCross}/nix-support/orig-libc`/lib
-    '';
-  };
 
   patches = [
     # Allow sessions to inherit the PATH from the parent dropbear.
@@ -33,11 +28,13 @@ stdenv.mkDerivation rec {
     ./pass-path.patch
   ];
 
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
 
-  meta = {
-    homepage = http://matt.ucc.asn.au/dropbear/dropbear.html;
-    description = "An small footprint implementation of the SSH 2 protocol";
-    license = stdenv.lib.licenses.mit;
+  meta = with stdenv.lib; {
+    homepage = "http://matt.ucc.asn.au/dropbear/dropbear.html";
+    description = "A small footprint implementation of the SSH 2 protocol";
+    license = licenses.mit;
+    maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
   };
 }

@@ -1,37 +1,43 @@
-{ stdenv, fetchurl, pkgconfig, gtk, gettext, withBuildColors ? true, ncurses ? null}:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, check, dbus, xvfb_run, glib, gtk, gettext, libiconv, json_c, libintl
+}:
 
-assert withBuildColors -> ncurses != null;
-
-with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "girara-${version}";
-  version = "0.2.4";
+  pname = "girara";
+  version = "0.3.4";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "http://pwmt.org/projects/girara/download/${name}.tar.gz";
-    sha256 = "0pnfdsg435b5vc4x8l9pgm77aj7ram1q0bzrp9g4a3bh1r64xq1f";
+    url = "https://git.pwmt.org/pwmt/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
+    sha256 = "08zdsr4zwi49facsl5596l0g1xqqv2jk3sqk841gkxwawcggim44";
   };
 
-  preConfigure = ''
-    sed -i 's/ifdef TPUT_AVAILABLE/ifneq ($(TPUT_AVAILABLE), 0)/' colors.mk
+  nativeBuildInputs = [ meson ninja pkgconfig gettext check dbus xvfb_run ];
+  buildInputs = [ libintl libiconv json_c ];
+  propagatedBuildInputs = [ glib gtk ];
+
+  doCheck = true;
+
+  mesonFlags = [
+    "-Ddocs=disabled" # docs do not seem to be installed
+  ];
+
+  checkPhase = ''
+    export NO_AT_BRIDGE=1
+    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test --print-errorlogs
   '';
 
-  buildInputs = [ pkgconfig gtk gettext ];
-
-  makeFlags = [ "PREFIX=$(out)" ]
-    ++ optional withBuildColors "TPUT=${ncurses}/bin/tput"
-    ++ optional (!withBuildColors) "TPUT_AVAILABLE=0"
-    ;
-
-  meta = {
-    homepage = http://pwmt.org/projects/girara/;
+  meta = with stdenv.lib; {
+    homepage = "https://git.pwmt.org/pwmt/girara";
     description = "User interface library";
     longDescription = ''
-      girara is a library that implements a GTK+ based VIM-like user interface
+      girara is a library that implements a GTK based VIM-like user interface
       that focuses on simplicity and minimalism.
     '';
     license = licenses.zlib;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.garbas ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ ];
   };
 }

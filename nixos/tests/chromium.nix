@@ -1,18 +1,32 @@
-import ./make-test.nix (
-{ pkgs
+{ system ? builtins.currentSystem
+, config ? {}
+, pkgs ? import ../.. { inherit system config; }
 , channelMap ? {
     stable = pkgs.chromium;
     beta   = pkgs.chromiumBeta;
     dev    = pkgs.chromiumDev;
   }
-, ...
-}: rec {
-  name = "chromium";
+}:
+
+with import ../lib/testing-python.nix { inherit system pkgs; };
+with pkgs.lib;
+
+mapAttrs (channel: chromiumPkg: makeTest rec {
+  name = "chromium-${channel}";
+  meta = {
+    maintainers = with maintainers; [ aszlig ];
+    # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
+    inherit (chromiumPkg.meta) timeout;
+  };
 
   enableOCR = true;
 
-  machine.imports = [ ./common/x11.nix ];
-  machine.virtualisation.memorySize = 1024;
+  user = "alice";
+
+  machine.imports = [ ./common/user-account.nix ./common/x11.nix ];
+  machine.virtualisation.memorySize = 2047;
+  machine.test-support.displayManager.auto.user = user;
+  machine.environment.systemPackages = [ chromiumPkg ];
 
   startupHTML = pkgs.writeText "chromium-startup.html" ''
     <!DOCTYPE html>
@@ -23,8 +37,8 @@ import ./make-test.nix (
     </head>
     <body onload="javascript:document.title='startup done'">
       <img src="file://${pkgs.fetchurl {
-        url = "http://nixos.org/logo/nixos.svg";
-        sha256 = "0p2iaqcx2cj24xqycfw1pi4i5461gnn0034lafpi99ph435x6z68";
+        url = "https://nixos.org/logo/nixos-hex.svg";
+        sha256 = "07ymq6nw8kc22m7kzxjxldhiq8gzmc7f45kq2bvhbdm0w5s112s4";
       }}" />
     </body>
     </html>
@@ -35,134 +49,218 @@ import ./make-test.nix (
       xdoScript = pkgs.writeText "${name}.xdo" text;
     in "${pkgs.xdotool}/bin/xdotool '${xdoScript}'";
   in ''
-    sub createNewWin {
-      $machine->nest("creating a new Chromium window", sub {
-        $machine->execute("${xdo "new-window" ''
-          search --onlyvisible --name "startup done"
-          windowfocus --sync
-          windowactivate --sync
-          key Ctrl+n
-        ''}");
-      });
-    }
+    import shlex
+    from contextlib import contextmanager, _GeneratorContextManager
 
-    sub closeWin {
-      Machine::retry sub {
-        $machine->execute("${xdo "close-window" ''
-          search --onlyvisible --name "new tab"
-          windowfocus --sync
-          windowactivate --sync
-          key Ctrl+w
-        ''}");
-        for (1..20) {
-          my ($status, $out) = $machine->execute("${xdo "wait-for-close" ''
-            search --onlyvisible --name "new tab"
-          ''}");
-          return 1 if $status != 0;
-          $machine->sleep(1);
-        }
-      }
-    }
 
-    sub waitForNewWin {
-      my $ret = 0;
-      $machine->nest("waiting for new Chromium window to appear", sub {
-        for (1..20) {
-          my ($status, $out) = $machine->execute("${xdo "wait-for-window" ''
-            search --onlyvisible --name "new tab"
-            windowfocus --sync
-            windowactivate --sync
-          ''}");
-          if ($status == 0) {
-            $ret = 1;
-            last;
-          }
-          $machine->sleep(1);
-        }
-      });
-      return $ret;
-    }
+    # Run as user alice
+    def ru(cmd):
+        return "su - ${user} -c " + shlex.quote(cmd)
 
-    sub createAndWaitForNewWin {
-      for (1..3) {
-        createNewWin;
-        return 1 if waitForNewWin;
-      }
-      die "new window didn't appear within 60 seconds";
-    }
 
-    sub testNewWin {
-      my ($desc, $code) = @_;
-      createAndWaitForNewWin;
-      subtest($desc, $code);
-      closeWin;
-    }
+    def create_new_win():
+        with machine.nested("Creating a new Chromium window"):
+            machine.execute(
+                ru(
+                    "${xdo "new-window" ''
+                      search --onlyvisible --name "startup done"
+                      windowfocus --sync
+                      windowactivate --sync
+                    ''}"
+                )
+            )
+            machine.execute(
+                ru(
+                    "${xdo "new-window" ''
+                      key Ctrl+n
+                    ''}"
+                )
+            )
 
-    sub chromiumTest {
-      my ($channel, $pkg, $code) = @_;
-      $machine->waitForX;
 
-      my $url = "file://${startupHTML}";
-      my $args = "--user-data-dir=/tmp/chromium-$channel";
-      $machine->execute(
-        "ulimit -c unlimited; ".
-        "$pkg/bin/chromium $args \"$url\" & disown"
-      );
-      $machine->waitForText(qr/Type to search or enter a URL to navigate/);
-      $machine->waitUntilSucceeds("${xdo "check-startup" ''
-        search --sync --onlyvisible --name "startup done"
-        # close first start help popup
-        key -delay 1000 Escape
-        windowfocus --sync
-        windowactivate --sync
-      ''}");
+    def close_win():
+        def try_close(_):
+            machine.execute(
+                ru(
+                    "${xdo "close-window" ''
+                      search --onlyvisible --name "new tab"
+                      windowfocus --sync
+                      windowactivate --sync
+                    ''}"
+                )
+            )
+            machine.execute(
+                ru(
+                    "${xdo "close-window" ''
+                      key Ctrl+w
+                    ''}"
+                )
+            )
+            for _ in range(1, 20):
+                status, out = machine.execute(
+                    ru(
+                        "${xdo "wait-for-close" ''
+                          search --onlyvisible --name "new tab"
+                        ''}"
+                    )
+                )
+                if status != 0:
+                    return True
+                machine.sleep(1)
+                return False
 
-      createAndWaitForNewWin;
-      $machine->screenshot($channel."_emptywin");
-      closeWin;
+        retry(try_close)
 
-      $machine->screenshot($channel."_startup_done");
 
-      subtest("Chromium $channel", $code);
+    def wait_for_new_win():
+        ret = False
+        with machine.nested("Waiting for new Chromium window to appear"):
+            for _ in range(1, 20):
+                status, out = machine.execute(
+                    ru(
+                        "${xdo "wait-for-window" ''
+                          search --onlyvisible --name "new tab"
+                          windowfocus --sync
+                          windowactivate --sync
+                        ''}"
+                    )
+                )
+                if status == 0:
+                    ret = True
+                    machine.sleep(10)
+                    break
+                machine.sleep(1)
+        return ret
 
-      $machine->shutdown;
-    }
 
-    for (${let
-      mkArray = name: pkg: "[\"${name}\", \"${pkg}\"]";
-      chanArrays = pkgs.lib.mapAttrsToList mkArray channelMap;
-    in pkgs.lib.concatStringsSep ", " chanArrays}) {
-      my ($channel, $pkg) = @$_;
-      chromiumTest $channel, $pkg, sub {
-        testNewWin "check sandbox", sub {
-          $machine->succeed("${xdo "type-url" ''
-            search --sync --onlyvisible --name "new tab"
-            windowfocus --sync
-            type --delay 1000 "chrome://sandbox"
-          ''}");
+    def create_and_wait_for_new_win():
+        for _ in range(1, 3):
+            create_new_win()
+            if wait_for_new_win():
+                return True
+        assert False, "new window did not appear within 60 seconds"
 
-          $machine->succeed("${xdo "submit-url" ''
-            search --sync --onlyvisible --name "new tab"
-            windowfocus --sync
-            key --delay 1000 Return
-          ''}");
 
-          $machine->screenshot($channel."_sandbox");
+    @contextmanager
+    def test_new_win(description):
+        create_and_wait_for_new_win()
+        with machine.nested(description):
+            yield
+        close_win()
 
-          $machine->succeed("${xdo "submit-url" ''
-            search --sync --onlyvisible --name "sandbox status"
-            windowfocus --sync
-            key --delay 1000 Ctrl+a Ctrl+c
-          ''}");
 
-          my $clipboard = $machine->succeed("${pkgs.xclip}/bin/xclip -o");
-          die "sandbox not working properly: $clipboard"
-          unless $clipboard =~ /(?:suid|namespace) sandbox.*yes/mi
-              && $clipboard =~ /pid namespaces.*yes/mi
-              && $clipboard =~ /network namespaces.*yes/mi
-              && $clipboard =~ /seccomp.*sandbox.*yes/mi;
-        };
-      };
-    }
+    machine.wait_for_x()
+
+    url = "file://${startupHTML}"
+    machine.succeed(ru(f'ulimit -c unlimited; chromium "{url}" & disown'))
+    machine.wait_for_text("startup done")
+    machine.wait_until_succeeds(
+        ru(
+            "${xdo "check-startup" ''
+              search --sync --onlyvisible --name "startup done"
+              # close first start help popup
+              key -delay 1000 Escape
+              windowfocus --sync
+              windowactivate --sync
+            ''}"
+        )
+    )
+
+    create_and_wait_for_new_win()
+    machine.screenshot("empty_windows")
+    close_win()
+
+    machine.screenshot("startup_done")
+
+    with test_new_win("check sandbox"):
+        machine.succeed(
+            ru(
+                "${xdo "type-url" ''
+                  search --sync --onlyvisible --name "new tab"
+                  windowfocus --sync
+                  type --delay 1000 "chrome://sandbox"
+                ''}"
+            )
+        )
+
+        machine.succeed(
+            ru(
+                "${xdo "submit-url" ''
+                  search --sync --onlyvisible --name "new tab"
+                  windowfocus --sync
+                  key --delay 1000 Return
+                ''}"
+            )
+        )
+
+        machine.screenshot("sandbox_info")
+
+        machine.succeed(
+            ru(
+                "${xdo "find-window" ''
+                  search --sync --onlyvisible --name "sandbox status"
+                  windowfocus --sync
+                ''}"
+            )
+        )
+        machine.succeed(
+            ru(
+                "${xdo "copy-sandbox-info" ''
+                  key --delay 1000 Ctrl+a Ctrl+c
+                ''}"
+            )
+        )
+
+        clipboard = machine.succeed(
+            ru("${pkgs.xclip}/bin/xclip -o")
+        )
+
+        filters = [
+            "layer 1 sandbox.*namespace",
+            "pid namespaces.*yes",
+            "network namespaces.*yes",
+            "seccomp.*sandbox.*yes",
+            "you are adequately sandboxed",
+        ]
+        if not all(
+            re.search(filter, clipboard, flags=re.DOTALL | re.IGNORECASE)
+            for filter in filters
+        ):
+            assert False, f"sandbox not working properly: {clipboard}"
+
+        machine.sleep(1)
+        machine.succeed(
+            ru(
+                "${xdo "find-window-after-copy" ''
+                  search --onlyvisible --name "sandbox status"
+                ''}"
+            )
+        )
+
+        clipboard = machine.succeed(
+            ru(
+                "echo void | ${pkgs.xclip}/bin/xclip -i"
+            )
+        )
+        machine.succeed(
+            ru(
+                "${xdo "copy-sandbox-info" ''
+                  key --delay 1000 Ctrl+a Ctrl+c
+                ''}"
+            )
+        )
+
+        clipboard = machine.succeed(
+            ru("${pkgs.xclip}/bin/xclip -o")
+        )
+        if not all(
+            re.search(filter, clipboard, flags=re.DOTALL | re.IGNORECASE)
+            for filter in filters
+        ):
+            assert False, f"copying twice in a row does not work properly: {clipboard}"
+
+        machine.screenshot("after_copy_from_chromium")
+
+    machine.shutdown()
   '';
-})
+}) channelMap

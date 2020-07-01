@@ -13,7 +13,7 @@ let
   };
 
   # Temporary check, for nixos to cope both with nixpkgs stdenv-updates and trunk
-  platform = pkgs.stdenv.platform;
+  inherit (pkgs.stdenv.hostPlatform) platform;
 
 in
 
@@ -44,10 +44,10 @@ in
       copyKernels = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Whether copy the necessary boot files into /boot, so
           /nix/store is not needed by the boot loader.
-        ";
+        '';
       };
 
     };

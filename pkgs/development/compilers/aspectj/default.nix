@@ -1,19 +1,21 @@
 {stdenv, fetchurl, jre}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "aspectj-1.5.2";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/aspectj/aspectj-1.5.2.jar;
-    md5 = "64245d451549325147e3ca1ec4c9e57c";
+    url = "http://archive.eclipse.org/tools/aspectj/${name}.jar";
+    sha256 = "1b3mx248dc1xka1vgsl0jj4sm0nfjsqdcj9r9036mvixj1zj3nmh";
   };
 
   inherit jre;
   buildInputs = [jre];
 
   meta = {
-    homepage = http://www.eclipse.org/aspectj/;
+    homepage = "http://www.eclipse.org/aspectj/";
     description = "A seamless aspect-oriented extension to the Java programming language";
+    platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.epl10;
   };
 }

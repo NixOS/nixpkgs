@@ -2,19 +2,20 @@
 
 let
   arch =
-    if      stdenv.system == "x86_64-linux" then "bandwidth64"
-    else if stdenv.system == "i686-linux" then "bandwidth32"
-    else if stdenv.system == "x86_64-darwin" then "bandwidth-mac64"
-    else if stdenv.system == "i686-darwin" then "bandwidth-mac32"
-    else if stdenv.system == "i686-cygwin" then "bandwidth-win32"
-    else null;
+    if      stdenv.hostPlatform.system == "x86_64-linux" then "bandwidth64"
+    else if stdenv.hostPlatform.system == "i686-linux" then "bandwidth32"
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then "bandwidth-mac64"
+    else if stdenv.hostPlatform.system == "i686-darwin" then "bandwidth-mac32"
+    else if stdenv.hostPlatform.system == "i686-cygwin" then "bandwidth-win32"
+    else throw "Unknown architecture";
 in
 stdenv.mkDerivation rec {
-  name = "bandwidth-1.1b";
+  pname = "bandwidth";
+  version = "1.9.3";
 
   src = fetchurl {
-    url = "http://zsmith.co/archives/${name}.tar.gz";
-    sha256 = "01c3ca0x3rh65j1s2g6cg5xr9fvm0lp2wpmv71vhz55xwqqqmiz8";
+    url = "https://zsmith.co/archives/${pname}-${version}.tar.gz";
+    sha256 = "0zpv2qgkbak0llw47qcakhyh2z3zv4d69kasldmpdlpqryd9za84";
   };
 
   buildInputs = [ nasm ];
@@ -29,10 +30,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://zsmith.co/bandwidth.html;
-    description = "and artificial benchmark for identifying weaknesses in the memory subsystem";
+    homepage = "https://zsmith.co/bandwidth.html";
+    description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip portaudio ];
 
-  patchPhase = ''
+  patches = [
+    ./gcc6.patch
+  ];
+
+  prePatch = ''
     sed -e s,/bin/ln,ln,g -i src/Makefile
     sed -e 's,^CXXFLAGS=-O2,CXXFLAGS=-O2 -D PATH_ESPEAK_DATA=\\\"$(DATADIR)\\\",' -i src/Makefile
   '' + (if portaudio.api_version == 19 then ''
@@ -24,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Compact open source software speech synthesizer";
-    homepage = http://espeak.sourceforge.net/;
+    homepage = "http://espeak.sourceforge.net/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

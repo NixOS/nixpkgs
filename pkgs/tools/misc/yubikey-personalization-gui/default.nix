@@ -1,29 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, yubikey-personalization, qt, libyubikey }:
+{ stdenv, fetchurl, mkDerivation, pkgconfig, qtbase, qmake, imagemagick
+, libyubikey, yubikey-personalization }:
 
-stdenv.mkDerivation rec {
-  name = "yubikey-personalization-gui-3.1.20";
+mkDerivation rec {
+  name = "yubikey-personalization-gui-3.1.25";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubikey-personalization-gui/Releases/${name}.tar.gz";
-    sha256 = "157ra39m4rv7ni28q9n7v3n102h89fn43kccvs91fmqbj02i3qvh";
+    sha256 = "1knyv5yss8lhzaff6jpfqv12fjf1b8b21mfxzx3qi0hw4nl8n2v8";
   };
 
-  buildInputs = [ pkgconfig yubikey-personalization qt libyubikey ];
-  
-  configurePhase = ''
-    qmake
-  '';
+  nativeBuildInputs = [ pkgconfig qmake imagemagick ];
+  buildInputs = [ yubikey-personalization qtbase libyubikey ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp build/release/yubikey-personalization-gui $out/bin
+    install -D -m0755 build/release/yubikey-personalization-gui "$out/bin/yubikey-personalization-gui"
+    install -D -m0644 resources/lin/yubikey-personalization-gui.1 "$out/share/man/man1/yubikey-personalization-gui.1"
+
+    # Desktop files
+    install -D -m0644 resources/lin/yubikey-personalization-gui.desktop "$out/share/applications/yubikey-personalization-gui.desktop"
+    install -D -m0644 resources/lin/yubikey-personalization-gui.desktop "$out/share/pixmaps/yubikey-personalization-gui.xpm"
+
+    # Icons
+    install -D -m0644 resources/lin/yubikey-personalization-gui.png "$out/share/icons/hicolor/128x128/apps/yubikey-personalization-gui.png"
+    for SIZE in 16 24 32 48 64 96; do
+      # set modify/create for reproducible builds
+      convert -scale ''${SIZE} +set date:create +set date:modify \
+        resources/lin/yubikey-personalization-gui.png \
+        yubikey-personalization-gui.png
+
+      install -D -m0644 yubikey-personalization-gui.png "$out/share/icons/hicolor/''${SIZE}x''${SIZE}/apps/yubikey-personalization-gui.png"
+    done
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://developers.yubico.com/yubikey-personalization-gui;
-    description = "a QT based cross-platform utility designed to facilitate reconfiguration of the Yubikey";
+    homepage = "https://developers.yubico.com/yubikey-personalization-gui";
+    description = "A QT based cross-platform utility designed to facilitate reconfiguration of the Yubikey";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

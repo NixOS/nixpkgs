@@ -1,25 +1,30 @@
-{ fetchurl, stdenv, jre, glib, libXtst, gtk, makeWrapper }:
+{ fetchurl, stdenv, jre, glib, libXtst, gtk2, makeWrapper, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "davmail-4.6.1";
+  pname = "davmail";
+  version = "5.4.0";
   src = fetchurl {
-    url = "mirror://sourceforge/davmail/davmail-linux-x86_64-4.6.1-2343.tgz";
-    sha256 = "15kpbrmw9pcifxj4k4m3q0azbl95kfgwvgb8bc9aj00q0yi3wgiq";
+    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-3135.zip";
+    sha256 = "05n2j5canh046744arvni6yfdsandvjkld93w3p7rg116jrh19gq";
   };
 
-  buildInputs = [ makeWrapper ];
+  sourceRoot = ".";
 
-  meta = {
-    description = "A Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
-    maintainers = [ stdenv.lib.maintainers.hinton ];
-    platforms = stdenv.lib.platforms.all;
-    homepage = "http://davmail.sourceforce.net/";
-    license = stdenv.lib.licenses.gpl2;
-  };
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   installPhase = ''
-  mkdir -p $out/bin
-  cp ./* $out/bin/ -R
-  wrapProgram $out/bin/davmail.sh --prefix PATH : ${jre}/bin --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
-   '';
+    mkdir -p $out/share/davmail
+    cp -vR ./* $out/share/davmail
+    makeWrapper $out/share/davmail/davmail $out/bin/davmail \
+      --prefix PATH : ${jre}/bin \
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "http://davmail.sourceforge.net/";
+    description = "A Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
+    maintainers = [ maintainers.hinton ];
+    platforms = platforms.all;
+    license = licenses.gpl2;
+  };
 }

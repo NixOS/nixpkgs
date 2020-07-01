@@ -1,39 +1,78 @@
-{ stdenv, fetchgit, intltool, autoreconfHook, gettext, pkgconfig
-, gtk3, portaudio, libpng, SDL, ffmpeg, udev, libusb1, libv4l, alsaLib }:
+{ config
+, stdenv
+, fetchurl
+, intltool
+, pkgconfig
+, portaudio
+, SDL2
+, ffmpeg_3
+, udev
+, libusb1
+, libv4l
+, alsaLib
+, gsl
+, libpng
+, sfml
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio ? null
+, useQt ? false
+, qtbase ? null
+, wrapQtAppsHook ? null
+# can be turned off if used as a library
+, useGtk ? true
+, gtk3 ? null
+, wrapGAppsHook ? null
+}:
+
+assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
-  version = "1.7.2";
-  rev = "ab84b0b1ed358f0504e1218a0ef792a02b307af8";
-  name = "guvcview-${version}_${rev}";
+  version = "2.0.6";
+  pname = "guvcview";
 
-  src = fetchgit {
-    inherit rev;
-    url = "git://git.code.sf.net/p/guvcview/git-master";
-    sha256 = "08cpbxq3dh2mlsgzk5dj3vfrgap4q281n9h6xzpbsvyifcj1a9n1";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${version}.tar.gz";
+    sha256 = "11byyfpkcik7wvf2qic77zjamfr2rhji97dpj1gy2fg1bvpiqf4m";
   };
 
-  buildInputs =
-    [ SDL
-      alsaLib
-      autoreconfHook
-      ffmpeg
-      gtk3
-      intltool
-      libusb1
-      libv4l
-      pkgconfig
-      portaudio
-      udev
-    ];
+  nativeBuildInputs = [
+    intltool
+    pkgconfig
+  ]
+    ++ stdenv.lib.optionals (useGtk) [ wrapGAppsHook ]
+    ++ stdenv.lib.optionals (useQt) [ wrapQtAppsHook ]
+  ;
 
-  preConfigure = ''
-    ./bootstrap.sh
-  '';
+  buildInputs = [
+    SDL2
+    alsaLib
+    ffmpeg_3
+    libusb1
+    libv4l
+    portaudio
+    udev
+    gsl
+    libpng
+    sfml
+  ] 
+    ++ stdenv.lib.optionals (pulseaudioSupport) [ libpulseaudio ]
+    ++ stdenv.lib.optionals (useGtk) [ gtk3 ]
+    ++ stdenv.lib.optionals (useQt) [
+      qtbase
+    ]
+  ;
+  configureFlags = [
+    "--enable-sfml"
+  ]
+    ++ stdenv.lib.optionals (useGtk) [ "--enable-gtk3" ]
+    ++ stdenv.lib.optionals (useQt) [ "--enable-qt5" ]
+  ;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A simple interface for devices supported by the linux UVC driver";
-    homepage = http://guvcview.sourceforge.net;
-    maintainers = [ stdenv.lib.maintainers.coconnor ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://guvcview.sourceforge.net";
+    maintainers = [ maintainers.coconnor ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

@@ -1,0 +1,11 @@
+--- a/pyramid_chameleon/tests/test_renderers.py
++++ b/pyramid_chameleon/tests/test_renderers.py
+@@ -258,7 +258,7 @@ class TestChameleonRendererLookup(unittest.TestCase):
+         self.assertRaises(ValueError, lookup.__call__, info)
+ 
+     def test___call__spec_alreadyregistered(self):
+-        from pyramid import tests
++        from pyramid_chameleon import tests
+         module_name = tests.__name__
+         relpath = 'test_renderers.py'
+         spec = '%s:%s' % (module_name, relpath)

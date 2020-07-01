@@ -1,33 +1,34 @@
-{ stdenv, callPackage, autoconf, automake, libtool, pkgconfig, zlib, ilmbase }:
-let
-  source = callPackage ./source.nix { };
-in
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, zlib
+, ilmbase
+, fetchpatch 
+, cmake
+, libtool
+}:
 stdenv.mkDerivation rec {
-  name = "openexr-${source.version}";
-  
-  src = source.src;
+  pname = "openexr";
+  version = "2.4.1";
 
-  prePatch = ''
-    cd OpenEXR
-  '';
-
-  preConfigure = ''
-    ./bootstrap
-  '';
-
-  configureFlags = [ "--enable-imfexamples" ];
-  
-  buildInputs = [ autoconf automake libtool pkgconfig ];
-  propagatedBuildInputs = [ ilmbase zlib ];
-
-  patches = [ ./bootstrap.patch ];
-  
-  meta = with stdenv.lib; {
-    homepage = http://www.openexr.com/;
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
+  src = fetchFromGitHub {
+    owner = "AcademySoftwareFoundation";
+    repo = "openexr";
+    rev = "v${version}";
+    sha256 = "020gyl8zv83ag6gbcchmqiyx9rh2jca7j8n52zx1gk4rck7kwc01";
   };
 
-  passthru.source = source;
+  outputs = [ "bin" "dev" "out" "doc" ];
+  nativeBuildInputs = [ cmake libtool ];
+  propagatedBuildInputs = [ ilmbase zlib ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    description = "A high dynamic-range (HDR) image file format";
+    homepage = "https://www.openexr.com/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+  };
 }

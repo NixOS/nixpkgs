@@ -1,15 +1,17 @@
-{ stdenv, lib, bundlerEnv }:
+{ buildRubyGem, lib, ruby }:
 
-let version = "4.3.0";
-in bundlerEnv {
-  name = "gist-${version}";
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+buildRubyGem rec {
+  inherit ruby;
+  name = "${gemName}-${version}";
+  gemName = "gist";
+  version = "5.1.0";
+  source.sha256 = "0s69y6hi5iq5k6317j1kjmhi3mk586j1543q8wa608grwcmbq3fw";
+
   meta = with lib; {
+    description = "Upload code to https://gist.github.com (or github enterprise)";
     homepage = "http://defunkt.io/gist/";
-    description = "upload code to https://gist.github.com (or github enterprise)";
-    platforms = platforms.all;
     license = licenses.mit;
+    maintainers = with maintainers; [ zimbatm ];
+    platforms = ruby.meta.platforms;
   };
 }

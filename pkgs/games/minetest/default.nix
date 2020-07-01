@@ -1,44 +1,90 @@
-{ stdenv, fetchgit, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, mesa, openal, libvorbis, x11, sqlite }:
+{ stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
+, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
+, freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
+, leveldb, postgresql, hiredis, libiconv, OpenGL, OpenAL ? openal, Carbon, Cocoa
+}:
+
+with stdenv.lib;
 
 let
-  version = "0.4.12";
-  sources = {
-    src = fetchgit {
-      url = "https://github.com/minetest/minetest.git";
-      rev = "7993a403f2c17a215e4895ba1848aaf69bb61980";
-      sha256 = "04v6fd9r9by8g47xbjzkhkgac5zpik01idngbbx2in4fxrg3ac7c";
+  boolToCMake = b: if b then "ON" else "OFF";
+
+  generic = { version, rev ? version, sha256, dataRev ? version, dataSha256, buildClient ? true, buildServer ? false }: let
+    sources = {
+      src = fetchFromGitHub {
+        owner = "minetest";
+        repo = "minetest";
+        inherit rev sha256;
+      };
+      data = fetchFromGitHub {
+        owner = "minetest";
+        repo = "minetest_game";
+        rev = dataRev;
+        sha256 = dataSha256;
+      };
     };
-    data = fetchgit {
-      url = "https://github.com/minetest/minetest_game.git";
-      rev = "03c00a831d5c2fd37096449bee49557879068af1";
-      sha256 = "1qqhlfz296rmi3mmlvq1rwv7hq5w964w1scry095xaih7y11ycmk";
+  in stdenv.mkDerivation {
+    pname = "minetest";
+    inherit version;
+
+    src = sources.src;
+
+    cmakeFlags = [
+      "-DBUILD_CLIENT=${boolToCMake buildClient}"
+      "-DBUILD_SERVER=${boolToCMake buildServer}"
+      "-DENABLE_FREETYPE=1"
+      "-DENABLE_GETTEXT=1"
+      "-DENABLE_SYSTEM_JSONCPP=1"
+      "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
+    ] ++ optionals buildClient [
+      "-DOpenGL_GL_PREFERENCE=GLVND"
+    ];
+    
+    NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
+
+    nativeBuildInputs = [ cmake doxygen graphviz ];
+
+    buildInputs = [
+      irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
+      gmp libspatialindex
+    ] ++ optionals stdenv.isDarwin [ 
+      libiconv OpenGL OpenAL Carbon Cocoa
+    ] ++ optionals buildClient [
+      libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
+    ] ++ optionals buildServer [
+      leveldb postgresql hiredis
+    ];
+
+    postInstall = ''
+      mkdir -pv $out/share/minetest/games/minetest_game/
+      cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = "http://minetest.net/";
+      description = "Infinite-world block sandbox game";
+      license = licenses.lgpl21Plus;
+      platforms = platforms.linux ++ platforms.darwin;
+      maintainers = with maintainers; [ pyrolagus fpletz ];
     };
   };
-in stdenv.mkDerivation {
-  name = "minetest-${version}";
 
-  src = sources.src;
-
-  cmakeFlags = [
-    "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
-  ];
-
-  buildInputs = [
-    cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp
-    libXxf86vm mesa openal libvorbis x11 sqlite
-  ];
-
-  postInstall = ''
-    mkdir -pv $out/share/minetest/games/minetest_game/
-    cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://minetest.net/;
-    description = "Infinite-world block sandbox game";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds c0dehero ];
+  v4 = {
+    version = "0.4.17.1";
+    sha256 = "19sfblgh9mchkgw32n7gdvm7a8a9jxsl9cdlgmxn9bk9m939a2sg";
+    dataSha256 = "1g8iw2pya32ifljbdx6z6rpcinmzm81i9minhi2bi1d500ailn7s";
   };
+
+  v5 = {
+    version = "5.2.0";
+    sha256 = "0pj9hkxwc1vzng2khbixi79557sbawf6mqkzl589jciyqa7jqkv1";
+    dataSha256 = "1kjz7x3xiqqnpyrd6339a139pbdxx31c4qpg8pmns410hsm8i358";
+  };
+
+in {
+  minetestclient_4 = generic (v4 // { buildClient = true; buildServer = false; });
+  minetestserver_4 = generic (v4 // { buildClient = false; buildServer = true; });
+
+  minetestclient_5 = generic (v5 // { buildClient = true; buildServer = false; });
+  minetestserver_5 = generic (v5 // { buildClient = false; buildServer = true; });
 }

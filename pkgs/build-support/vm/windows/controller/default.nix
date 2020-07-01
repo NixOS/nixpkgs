@@ -1,5 +1,6 @@
 { stdenv, writeScript, vmTools, makeInitrd
-, samba, vde2, openssh, socat, netcat, coreutils, gnugrep, gzip
+, samba, vde2, openssh, socat, netcat-gnu, coreutils, gnugrep, gzip
+, runtimeShell
 }:
 
 { sshKey
@@ -48,11 +49,11 @@ let
     mount -t proc none /fs/proc
 
     mount -t 9p \
-      -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
+      -o trans=virtio,version=9p2000.L,cache=loose \
       store /fs/nix/store
 
     mount -t 9p \
-      -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
+      -o trans=virtio,version=9p2000.L \
       xchg /fs/xchg
 
     echo root:x:0:0::/root:/bin/false > /fs/etc/passwd
@@ -71,17 +72,15 @@ let
     };
   };
 
-  shellEscape = x: "'${replaceChars ["'"] [("'\\'" + "'")] x}'";
-
   loopForever = "while :; do ${coreutils}/bin/sleep 1; done";
 
   initScript = writeScript "init.sh" (''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     ${coreutils}/bin/cp -L "${sshKey}" /ssh.key
     ${coreutils}/bin/chmod 600 /ssh.key
   '' + (if installMode then ''
     echo -n "Waiting for Windows installation to finish..."
-    while ! ${netcat}/bin/netcat -z 192.168.0.1 22; do
+    while ! ${netcat-gnu}/bin/netcat -z 192.168.0.1 22; do
       echo -n .
       # Print a dot every 10 seconds only to shorten line length.
       ${coreutils}/bin/sleep 10
@@ -120,7 +119,7 @@ let
     ${samba}/sbin/smbd -D
 
     echo -n "Waiting for Windows VM to become available..."
-    while ! ${netcat}/bin/netcat -z 192.168.0.1 22; do
+    while ! ${netcat-gnu}/bin/netcat -z 192.168.0.1 22; do
       echo -n .
       ${coreutils}/bin/sleep 1
     done
@@ -132,7 +131,7 @@ let
       -o StrictHostKeyChecking=no \
       -i /ssh.key \
       -l Administrator \
-      192.168.0.1 -- ${shellEscape command}
+      192.168.0.1 -- ${lib.escapeShellArg command}
   '') + optionalString (suspendTo != null) ''
     ${coreutils}/bin/touch /xchg/suspend_now
     ${loopForever}
@@ -159,7 +158,7 @@ let
     "-net vde,vlan=0,sock=$QEMU_VDE_SOCKET"
   ]);
 
-  maybeKvm64 = optional (stdenv.system == "x86_64-linux") "-cpu kvm64";
+  maybeKvm64 = optional (stdenv.hostPlatform.system == "x86_64-linux") "-cpu kvm64";
 
   cygwinQemuArgs = concatStringsSep " " (maybeKvm64 ++ [
     "-monitor unix:$MONITOR_SOCKET,server,nowait"
@@ -187,7 +186,7 @@ let
     MONITOR_SOCKET="$(pwd)/monitor"
     WINVM_PIDFILE="$(pwd)/winvm.pid"
     CTRLVM_PIDFILE="$(pwd)/ctrlvm.pid"
-    ${vde2}/bin/vde_switch -s "$QEMU_VDE_SOCKET" &
+    ${vde2}/bin/vde_switch -s "$QEMU_VDE_SOCKET" --dirmode 0700 &
     echo 'alive?' | ${socat}/bin/socat - \
       UNIX-CONNECT:$QEMU_VDE_SOCKET/ctl,retry=20
   '';

@@ -1,25 +1,39 @@
-{ lib, goPackages, fetchFromGitHub }:
-
-with goPackages;
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
-  version = "2.0.0";
-  name = "etcd-${version}";
+  pname = "etcd";
+  version = "3.3.22";
+
   goPackagePath = "github.com/coreos/etcd";
+
   src = fetchFromGitHub {
-    owner = "coreos";
+    owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "1s3jilzlqyh2i81pv79cgap6dfj7qrfrwcv4w9lic5ivznz413vc";
+    sha256 = "1rd390qfx9k20j9gh1wp1g9ygc571f2kv1dg2wvqij3kwydhymcj";
   };
 
-  subPackages = [ "./" ];
+  buildPhase = ''
+    cd go/src/${goPackagePath}
+    patchShebangs .
+    ./build
+    ./functional/build
+  '';
+
+  installPhase = ''
+    install -Dm755 bin/* bin/functional/cmd/* -t $out/bin
+  '';
+
+  passthru.tests = with nixosTests; {
+    etcd = etcd;
+    etcd-cluster = etcd-cluster;
+  };
 
   meta = with lib; {
-    description = "A highly-available key value store for shared configuration and service discovery";
-    homepage = http://coreos.com/using-coreos/etcd/;
+    description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cstrahan ];
+    homepage = "https://etcd.io/";
+    maintainers = with maintainers; [ offline zowoq ];
     platforms = platforms.unix;
   };
 }

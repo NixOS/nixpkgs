@@ -1,4 +1,4 @@
-{ stdenv, writeText, writeScriptBin, xorg, xkeyboard_config }:
+{ writeText, writeScriptBin, xorg, xkeyboard_config, runtimeShell }:
 
 let
   xorgConfig = writeText "dummy-xorg.conf" ''
@@ -18,7 +18,7 @@ let
     EndSection
 
     Section "Files"
-      ModulePath "${xorg.xorgserver}/lib/xorg/modules"
+      ModulePath "${xorg.xorgserver.out}/lib/xorg/modules"
       ModulePath "${xorg.xf86videodummy}/lib/xorg/modules"
       XkbDir "${xkeyboard_config}/share/X11/xkb"
       FontPath "${xorg.fontadobe75dpi}/lib/X11/fonts/75dpi"
@@ -73,9 +73,8 @@ let
   '';
 
 in writeScriptBin "xdummy" ''
-  #!${stdenv.shell}
-  export XKB_BINDIR="${xorg.xkbcomp}/bin"
-  exec ${xorg.xorgserver}/bin/Xorg \
+  #!${runtimeShell}
+  exec ${xorg.xorgserver.out}/bin/Xorg \
     -noreset \
     -logfile /dev/null \
     "$@" \

@@ -2,7 +2,7 @@
 
 # Most of the stuff here should probably be moved elsewhere sometime.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -17,39 +17,24 @@ in
   config = {
 
     environment.variables =
-      { LOCATE_PATH = "/var/cache/locatedb";
-        NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
+      { NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
         PAGER = mkDefault "less -R";
         EDITOR = mkDefault "nano";
+        XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
       };
 
-    environment.sessionVariables =
-      { NIX_PATH =
-          [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
-            "nixpkgs=/etc/nixos/nixpkgs"
-            "nixos-config=/etc/nixos/configuration.nix"
-            "/nix/var/nix/profiles/per-user/root/channels"
-          ];
-      };
-
-    environment.profiles =
-      [ "$HOME/.nix-profile"
-        "/nix/var/nix/profiles/default"
+    environment.profiles = mkAfter
+      [ "/nix/var/nix/profiles/default"
         "/run/current-system/sw"
       ];
 
     # TODO: move most of these elsewhere
-    environment.profileRelativeEnvVars =
-      { PATH = [ "/bin" "/sbin" "/lib/kde4/libexec" ];
+    environment.profileRelativeSessionVariables =
+      { PATH = [ "/bin" ];
         INFOPATH = [ "/info" "/share/info" ];
-        PKG_CONFIG_PATH = [ "/lib/pkgconfig" ];
-        TERMINFO_DIRS = [ "/share/terminfo" ];
-        PERL5LIB = [ "/lib/perl5/site_perl" ];
         KDEDIRS = [ "" ];
         STRIGI_PLUGIN_PATH = [ "/lib/strigi/" ];
-        QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" "/lib/qt5/plugins" ];
-        QML_IMPORT_PATH = [ "/lib/qt5/imports" ];
-        QML2_IMPORT_PATH = [ "/lib/qt5/qml" ];
+        QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" ];
         QTWEBKIT_PLUGIN_PATH = [ "/lib/mozilla/plugins/" ];
         GTK_PATH = [ "/lib/gtk-2.0" "/lib/gtk-3.0" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ];
@@ -60,9 +45,6 @@ in
 
     environment.extraInit =
       ''
-         # reset TERM with new TERMINFO available (if any)
-         export TERM=$TERM
-
          unset ASPELL_CONF
          for i in ${concatStringsSep " " (reverseList cfg.profiles)} ; do
            if [ -d "$i/lib/aspell" ]; then

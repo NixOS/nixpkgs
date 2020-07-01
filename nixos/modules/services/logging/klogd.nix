@@ -24,21 +24,14 @@ with lib;
   ###### implementation
 
   config = mkIf config.services.klogd.enable {
-
-    jobs.klogd =
-      { description = "Kernel Log Daemon";
-
-        wantedBy = [ "multi-user.target" ];
-
-        path = [ pkgs.sysklogd ];
-
-        unitConfig.ConditionVirtualization = "!systemd-nspawn";
-
-        exec =
-          "klogd -c 1 -2 -n " +
-          "-k $(dirname $(readlink -f /run/booted-system/kernel))/System.map";
-      };
-
+    systemd.services.klogd = {
+      description = "Kernel Log Daemon";
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.sysklogd ];
+      unitConfig.ConditionVirtualization = "!systemd-nspawn";
+      script =
+        "klogd -c 1 -2 -n " +
+        "-k $(dirname $(readlink -f /run/booted-system/kernel))/System.map";
+    };
   };
-
 }

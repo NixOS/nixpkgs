@@ -1,28 +1,30 @@
-{ lib, goPackages, fetchFromGitHub }:
-
-with goPackages;
+{ stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  rev = "8ca23475bcb43213a55dd8210b69363f6b0e09c1";
-  name = "golint-${lib.strings.substring 0 7 rev}";
-  goPackagePath = "github.com/golang/lint";
+  pname = "lint";
+  version = "20181026-${stdenv.lib.strings.substring 0 7 rev}";
+  rev = "c67002cb31c3a748b7688c27f20d8358b4193582";
+  
+  goPackagePath = "golang.org/x/lint";
+  excludedPackages = "testdata";
 
-  src = fetchFromGitHub {
+  # we must allow references to the original `go` package, as golint uses
+  # compiler go/build package to load the packages it's linting.
+  allowGoReference = true;
+
+  src = fetchgit {
     inherit rev;
-    owner = "golang";
-    repo = "lint";
-    sha256 = "16wbykik6dw3x9s7iqi4ln8kvzsh3g621wb8mk4nfldw7lyqp3cs";
+    url = "https://go.googlesource.com/lint";
+    sha256 = "0gymbggskjmphqxqcx4s0vnlcz7mygbix0vhwcwv5r67c0bf6765";
   };
 
-  subPackages = [ "golint" ];
+  goDeps = ./deps.nix;
 
-  dontInstallSrc = true;
-
-  meta = with lib; {
+  meta = with stdenv.lib; {
+    homepage = "https://golang.org";
     description = "Linter for Go source code";
-    homepage = https://github.com/golang/lint;
-    license = licenses.mit;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jhillyerd ];
+    platforms = platforms.all;
   };
 }

@@ -1,47 +1,57 @@
-{ stdenv, fetchurl, fetchpatch, lib
-, autoconf, automake, gnum4, libtool, git, perl, gnulib, uthash, pkgconfig, gettext
-, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, pango
-, withGTK ? false, gtk2
-, withPython ? false # python-scripting was breaking inconsolata and libertine builds
+{ stdenv, fetchurl, lib
+, cmake, perl, uthash, pkgconfig, gettext
+, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, cairo, pango
+, readline, woff2, zeromq, libuninameslist
+, withSpiro ? false, libspiro
+, withGTK ? false, gtk3
+, withGUI ? withGTK
+, withPython ? true
+, withExtras ? true
+, Carbon ? null, Cocoa ? null
 }:
 
-let
-  version = "20141230"; # also tagged v2.1.0
-in
+assert withGTK -> withGUI;
 
-stdenv.mkDerivation {
-  name = "fontforge-${version}";
+stdenv.mkDerivation rec {
+  pname = "fontforge";
+  version = "20200314";
 
   src = fetchurl {
-    url = "https://github.com/fontforge/fontforge/archive/${version}.tar.gz";
-    sha256 = "1xfi13knn1x7hd7pvr6090qz6qfa5znbs85rg1p5mfj377z2h8rb";
+    url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0qf88wd6riycq56d24brybyc93ns74s0nyyavm43zp2kfcihn6fd";
   };
 
-  patches = [(fetchpatch {
-    name = "use-system-uthash.patch";
-    url = "http://pkgs.fedoraproject.org/cgit/fontforge.git/plain/"
-      + "fontforge-20140813-use-system-uthash.patch?id=8bdf933";
-    sha256 = "0n8i62qv2ygfii535rzp09vvjx4qf9zp5qq7qirrbzm1l9gykcjy";
-  })];
-  patchFlags = "-p0";
+  # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
+  postPatch = ''
+    find . -type f -name '*.c' -exec sed -r -i 's#\btime\(&(.+)\)#if (getenv("SOURCE_DATE_EPOCH")) \1=atol(getenv("SOURCE_DATE_EPOCH")); else &#g' {} \;
+    sed -r -i 's#author\s*!=\s*NULL#& \&\& !getenv("SOURCE_DATE_EPOCH")#g'                            fontforge/cvexport.c fontforge/dumppfa.c fontforge/print.c fontforge/svg.c fontforge/splineutil2.c
+    sed -r -i 's#\bb.st_mtime#getenv("SOURCE_DATE_EPOCH") ? atol(getenv("SOURCE_DATE_EPOCH")) : &#g'  fontforge/parsepfa.c fontforge/sfd.c fontforge/svg.c
+    sed -r -i 's#^\s*ttf_fftm_dump#if (!getenv("SOURCE_DATE_EPOCH")) ttf_fftm_dump#g'                 fontforge/tottf.c
+    sed -r -i 's#sprintf\(.+ author \);#if (!getenv("SOURCE_DATE_EPOCH")) &#g'                        fontforgeexe/fontinfo.c
+  '';
 
-  # FIXME: git isn't really used, but configuration fails without it
+  # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
+
+  nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [
-    git autoconf automake gnum4 libtool perl pkgconfig gettext uthash
+    readline uthash woff2 zeromq libuninameslist
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
   ]
-    ++ lib.optionals withGTK [ gtk2 ]
-    # I'm not sure why pango doesn't seem necessary on Linux
-    ++ lib.optionals stdenv.isDarwin [ pango ];
+    ++ lib.optionals withSpiro [libspiro]
+    ++ lib.optionals withGUI [ gtk3 cairo pango ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
-  configureFlags =
-    lib.optionals (!withPython) [ "--disable-python-scripting" "--disable-python-extension" ]
-    ++ lib.optional withGTK "--enable-gtk2-use";
+  cmakeFlags = [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
+    ++ lib.optional (!withSpiro) "-DENABLE_LIBSPIRO=OFF"
+    ++ lib.optional (!withGUI) "-DENABLE_GUI=OFF"
+    ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
+    ++ lib.optional withExtras "-DENABLE_FONTFORGE_EXTRAS=ON";
 
+  # work-around: git isn't really used, but configuration fails without it
   preConfigure = ''
-    cp -r "${gnulib}" ./gnulib
-    chmod +w -R ./gnulib
-    ./bootstrap --skip-git --gnulib-srcdir=./gnulib
+    # The way $version propagates to $version of .pe-scripts (https://github.com/dejavu-fonts/dejavu-fonts/blob/358190f/scripts/generate.pe#L19)
+    export SOURCE_DATE_EPOCH=$(date -d ${version} +%s)
   '';
 
   postInstall =
@@ -50,12 +60,11 @@ stdenv.mkDerivation {
       rm -r "$out/share/fontforge/python"
     '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "A font editor";
-    homepage = http://fontforge.github.io;
+    homepage = "http://fontforge.github.io";
     platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.bsd3;
+    maintainers = [ stdenv.lib.maintainers.erictapen ];
   };
 }
-

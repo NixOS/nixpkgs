@@ -1,32 +1,38 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchFromGitHub, ncurses }:
 
-stdenv.mkDerivation {
-  name = "sl-3.03";
+stdenv.mkDerivation rec {
+  pname = "sl";
+  version = "5.05";
 
-  src = fetchurl {
-    url = "http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/sl/sl.tar";
-    sha256 = "1x3517aza0wm9hhb02npl8s7xy947cdidxmans27q0gjmj3bvg5j";
+  src = fetchFromGitHub {
+    owner = "eyJhb";
+    repo = "sl";
+    rev = version;
+    sha256 = "11a1rdgb8wagikhxgm81g80g5qsl59mv4qgsval3isykqh8729bj";
   };
-
-  patchPhase = ''
-    sed -i "s/-lcurses -ltermcap/-lncurses/" Makefile
-  '';
 
   buildInputs = [ ncurses ];
 
+  makeFlags = [ "CC:=$(CC)" ];
+
   installPhase = ''
-    mkdir -p $out/bin
-    cp sl $out/bin
+    runHook preInstall
+
+    install -Dm755 -t $out/bin sl
+    install -Dm644 -t $out/share/man/man1 sl.1{,.ja}
+
+    runHook postInstall
   '';
 
-  meta = {
-    homepage = http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/index_e.html;
+  meta = with stdenv.lib; {
+    description = "Steam Locomotive runs across your terminal when you type 'sl'";
+    homepage = "http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/index_e.html";
     license = rec {
       shortName = "Toyoda Masashi's free software license";
       fullName = shortName;
-      url = https://github.com/mtoyoda/sl/blob/master/LICENSE;
+      url = "https://github.com/eyJhb/sl/blob/master/LICENSE";
     };
-    description = "Steam Locomotive runs across your terminal when you type 'sl'";
-    platforms = with stdenv.lib.platforms; unix;
+    maintainers = with maintainers; [ eyjhb ];
+    platforms = platforms.unix;
   };
 }

@@ -1,26 +1,27 @@
-{stdenv, menhir, easy-format, buildOcaml, fetchurl, which}:
+{ stdenv, menhir, easy-format, fetchFromGitHub, buildDunePackage, which, biniou, yojson }:
 
-buildOcaml rec {
-  name = "atd";
-  version = "1.1.2";
+buildDunePackage rec {
+  pname = "atd";
+  version = "2.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/mjambon/atd/archive/v${version}.tar.gz";
-    sha256 = "0ef10c63192aed75e9a4274e89c5f9ca27efb1ef230d9949eda53ad4a9a37291";
+  minimumOCamlVersion = "4.02";
+
+  src = fetchFromGitHub {
+    owner = "mjambon";
+    repo = pname;
+    rev = version;
+    sha256 = "0alzmk97rxg7s6irs9lvf89dy9n3r769my5n4j9p9qyigcdgjaia";
   };
 
-  installPhase = ''
-    mkdir -p $out/bin
-    make PREFIX=$out install
-  '';
+  createFindlibDestdir = true;
 
-  buildInputs = [ which ];
-  propagatedBuildInputs = [ menhir easy-format ];
+  buildInputs = [ which menhir ];
+  propagatedBuildInputs = [ easy-format biniou yojson ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mjambon/atd;
+    homepage = "https://github.com/mjambon/atd";
     description = "Syntax for cross-language type definitions";
     license = licenses.bsd3;
-    maintainers = [ maintainers.jwilberding ];
+    maintainers = with maintainers; [ aij jwilberding ];
   };
 }

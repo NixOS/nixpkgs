@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, intltool, pkgconfig, iconnamingutils, imagemagick, librsvg }:
+{ stdenv, fetchurl, intltool, pkgconfig, iconnamingutils, imagemagick, librsvg
+, gtk/*any version*/, gnome-icon-theme, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   name = "tango-icon-theme-0.8.90";
@@ -10,13 +12,20 @@ stdenv.mkDerivation rec {
 
   patches = [ ./rsvg-convert.patch ];
 
-  buildInputs = [ intltool pkgconfig iconnamingutils imagemagick librsvg ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool iconnamingutils imagemagick librsvg ];
+  propagatedBuildInputs = [ gnome-icon-theme hicolor-icon-theme ];
+  # still missing parent icon themes: cristalsvg
 
-  configureFlags = "--enable-png-creation";
+  dontDropIconThemeCache = true;
+
+  configureFlags = [ "--enable-png-creation" ];
+
+  postInstall = '''${gtk.out}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
 
   meta = {
     description = "A basic set of icons";
-    homepage = http://tango.freedesktop.org/Tango_Icon_Library;
+    homepage = "http://tango.freedesktop.org/Tango_Icon_Library";
     platforms = stdenv.lib.platforms.linux;
   };
 }

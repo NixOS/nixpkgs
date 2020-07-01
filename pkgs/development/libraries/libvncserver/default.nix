@@ -1,41 +1,34 @@
-{stdenv, fetchurl,
-  libtool, libjpeg, openssl, libX11, libXdamage, xproto, damageproto, 
-  xextproto, libXext, fixesproto, libXfixes, xineramaproto, libXinerama, 
-  libXrandr, randrproto, libXtst, zlib
+{ stdenv, fetchzip, fetchpatch, cmake
+, libjpeg, openssl, zlib, libgcrypt, libpng
+, systemd
 }:
-
-assert stdenv.isLinux;
 
 let
   s = # Generated upstream information
   rec {
-    baseName="libvncserver";
-    version="0.9.9";
-    name="${baseName}-${version}";
-    hash="1y83z31wbjivbxs60kj8a8mmjmdkgxlvr2x15yz95yy24lshs1ng";
-    url="mirror://sourceforge/project/libvncserver/libvncserver/0.9.9/LibVNCServer-0.9.9.tar.gz";
-    sha256="1y83z31wbjivbxs60kj8a8mmjmdkgxlvr2x15yz95yy24lshs1ng";
+    pname = "libvncserver";
+    version = "0.9.13";
+    url = "https://github.com/LibVNC/libvncserver/archive/LibVNCServer-${version}.tar.gz";
+    sha256 = "0zz0hslw8b1p3crnfy3xnmrljik359h83dpk64s697dqdcrzy141"; # unpacked archive checksum
   };
-  buildInputs = [
-    libtool libjpeg openssl libX11 libXdamage xproto damageproto
-    xextproto libXext fixesproto libXfixes xineramaproto libXinerama
-    libXrandr randrproto libXtst zlib
-  ];
 in
 stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
+  inherit (s) pname version;
+  src = fetchzip {
     inherit (s) url sha256;
   };
-  preConfigure = ''
-    sed -e 's@/usr/include/linux@${stdenv.cc.libc}/include/linux@g' -i configure
-  '';
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    libjpeg openssl libgcrypt libpng
+  ] ++ stdenv.lib.optional stdenv.isLinux systemd;
+  propagatedBuildInputs = [ zlib ];
   meta = {
     inherit (s) version;
-    description =  "VNC server library";
+    description = "VNC server library";
+    homepage = "https://libvnc.github.io/";
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

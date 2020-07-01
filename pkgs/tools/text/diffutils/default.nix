@@ -1,18 +1,29 @@
-{ stdenv, fetchurl, coreutils ? null }:
+{ stdenv, fetchurl, xz, coreutils ? null }:
 
 stdenv.mkDerivation rec {
-  name = "diffutils-3.3";
+  name = "diffutils-3.7";
 
   src = fetchurl {
     url = "mirror://gnu/diffutils/${name}.tar.xz";
-    sha256 = "1761vymxbp4wb5rzjvabhdkskk95pghnn67464byvzb5mfl8jpm2";
+    sha256 = "09isrg0isjinv8c535nxsi1s86wfdfzml80dbw41dj9x3hiad9xk";
   };
 
-  /* If no explicit coreutils is given, use the one from stdenv. */
-  nativeBuildInputs = [ coreutils ];
+  outputs = [ "out" "info" ];
 
-  meta = {
-    homepage = http://www.gnu.org/software/diffutils/diffutils.html;
+  nativeBuildInputs = [ xz.bin ];
+  /* If no explicit coreutils is given, use the one from stdenv. */
+  buildInputs = [ coreutils ];
+
+  configureFlags =
+    # "pr" need not be on the PATH as a run-time dep, so we need to tell
+    # configure where it is. Covers the cross and native case alike.
+    stdenv.lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
+    ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "gl_cv_func_getopt_gnu=yes";
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
   };
 }

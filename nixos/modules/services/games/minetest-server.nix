@@ -79,12 +79,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.minetest = {
+    users.users.minetest = {
       description     = "Minetest Server Service user";
       home            = "/var/lib/minetest";
       createHome      = true;
       uid             = config.ids.uids.minetest;
+      group           = "minetest";
     };
+    users.groups.minetest.gid = config.ids.gids.minetest;
 
     systemd.services.minetest-server = {
       description   = "Minetest Server Service";
@@ -93,11 +95,12 @@ in
 
       serviceConfig.Restart = "always";
       serviceConfig.User    = "minetest";
+      serviceConfig.Group   = "minetest";
 
       script = ''
         cd /var/lib/minetest
 
-        exec ${pkgs.minetest}/bin/minetestserver ${concatStrings flags}
+        exec ${pkgs.minetest}/bin/minetest --server ${concatStrings flags}
       '';
     };
   };

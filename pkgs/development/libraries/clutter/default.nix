@@ -1,29 +1,38 @@
-{ stdenv, fetchurl, glib, pkgconfig, mesa, libX11, libXext, libXfixes
-, libXdamage, libXcomposite, libXi, cogl, pango, atk, json_glib, 
-gobjectIntrospection 
+{ stdenv, fetchurl, pkgconfig, libGLU, libGL, libX11, libXext, libXfixes
+, libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib
+, gobject-introspection, gtk3, gnome3, libinput, libgudev, libxkbcommon
 }:
 
 let
-  ver_maj = "1.16";
-  ver_min = "2";
+  pname = "clutter";
+  version = "1.26.4";
 in
 stdenv.mkDerivation rec {
-  name = "clutter-${ver_maj}.${ver_min}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/clutter/${ver_maj}/${name}.tar.xz";
-    sha256 = "0hnz6fnrkc7ixrm2x83sxyha32p9896d7ilzhvxwfgzlh26fidqc";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1rn4cd1an6a9dfda884aqpcwcgq8dgydpqvb19nmagw4b70zlj4b";
   };
 
+  outputs = [ "out" "dev" ];
+
+  buildInputs = [ gtk3 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
-    [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
-      atk json_glib gobjectIntrospection
+    [ libX11 libGL libGLU libXext libXfixes libXdamage libXcomposite libXi cogl pango
+      atk json-glib gobject-introspection libxcb libinput libgudev libxkbcommon
     ];
 
   configureFlags = [ "--enable-introspection" ]; # needed by muffin AFAIK
 
   #doCheck = true; # no tests possible without a display
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
     description = "Library for creating fast, dynamic graphical user interfaces";
@@ -44,9 +53,9 @@ stdenv.mkDerivation rec {
       '';
 
     license = stdenv.lib.licenses.lgpl2Plus;
-    homepage = http://www.clutter-project.org/;
+    homepage = "http://www.clutter-project.org/";
 
-    maintainers = with stdenv.lib.maintainers; [ urkud lethalman ];
+    maintainers = with stdenv.lib.maintainers; [ lethalman ];
     platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

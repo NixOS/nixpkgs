@@ -1,31 +1,69 @@
-{ stdenv, fetchgit, zlib, libpng, qt4, pkgconfig
-, withGamepads ? true, SDL # SDL is used for gamepad functionality
+{ SDL2
+, cmake
+, fetchFromGitHub
+, ffmpeg_3
+, glew
+, lib
+, libzip
+, mkDerivation
+, pkgconfig
+, python3
+, qtbase
+, qtmultimedia
+, snappy
+, zlib
 }:
 
-let
-  version = "0.9.9.1";
-  fstat = x: fn: "-D" + fn + "=" + (if x then "ON" else "OFF");
-in stdenv.mkDerivation {
-  name = "PPSSPP-${version}";
+mkDerivation rec {
+  pname = "ppsspp";
+  version = "1.9.4";
 
-  src = fetchgit {
-    url = "https://github.com/hrydgard/ppsspp.git";
-    sha256 = "0fdbda0b4dfbecacd01850f1767e980281fed4cc34a21df26ab3259242d8c352";
-    rev = "bf709790c4fed9cd211f755acaa650ace0f7555a";
+  src = fetchFromGitHub {
+    owner = "hrydgard";
+    repo = "ppsspp";
+    rev = "v${version}";
     fetchSubmodules = true;
+    sha256 = "0ivi0dcfxwa4nz19amki80qacnjhqr42f0ihyby1scxafl3nq55c";
   };
 
-  buildInputs = [ zlib libpng pkgconfig qt4 ]
-                ++ (if withGamepads then [ SDL ] else [ ]);
+  postPatch = ''
+    substituteInPlace git-version.cmake \
+      --replace unknown ${src.rev}
+    substituteInPlace UI/NativeApp.cpp \
+      --replace /usr/share $out/share
+  '';
 
-  configurePhase = "cd Qt && qmake PPSSPPQt.pro";
-  installPhase = "mkdir -p $out/bin && cp ppsspp $out/bin";
+  nativeBuildInputs = [ cmake pkgconfig python3 ];
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.ppsspp.org/";
-    description = "A PSP emulator, the Qt4 version";
+  buildInputs = [
+    SDL2
+    ffmpeg_3
+    glew
+    libzip
+    qtbase
+    qtmultimedia
+    snappy
+    zlib
+  ];
+
+  cmakeFlags = [
+    "-DOpenGL_GL_PREFERENCE=GLVND"
+    "-DUSE_SYSTEM_FFMPEG=ON"
+    "-DUSE_SYSTEM_LIBZIP=ON"
+    "-DUSE_SYSTEM_SNAPPY=ON"
+    "-DUSING_QT_UI=ON"
+  ];
+
+  installPhase = ''
+    mkdir -p $out/share/ppsspp
+    install -Dm555 PPSSPPQt $out/bin/ppsspp
+    mv assets $out/share/ppsspp
+  '';
+
+  meta = with lib; {
+    description = "A PSP emulator for Android, Windows, Mac and Linux, written in C++";
+    homepage = "https://www.ppsspp.org/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.fuuzetsu ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.cygwin;
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

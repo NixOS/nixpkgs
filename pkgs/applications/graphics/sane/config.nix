@@ -4,17 +4,28 @@
 
 with stdenv.lib;
 let installSanePath = path: ''
-      find "${path}/lib/sane" -not -type d -maxdepth 1 | while read backend; do
-        ln -s $backend $out/lib/sane/$(basename $backend)
-      done
+      if [ -e "${path}/lib/sane" ]; then
+        find "${path}/lib/sane" -maxdepth 1 -not -type d | while read backend; do
+          symlink "$backend" "$out/lib/sane/$(basename "$backend")"
+        done
+      fi
 
-      find "${path}/etc/sane.d" -not -type d -maxdepth 1 | while read conf; do
-        ln -s $conf $out/etc/sane.d/$(basename $conf)
-      done
+      if [ -e "${path}/etc/sane.d" ]; then
+        find "${path}/etc/sane.d" -maxdepth 1 -not -type d | while read conf; do
+          name="$(basename $conf)"
+          if [ "$name" = "dll.conf" ] || [ "$name" = "saned.conf" ] || [ "$name" = "net.conf" ]; then
+            cat "$conf" >> "$out/etc/sane.d/$name"
+          else
+            symlink "$conf" "$out/etc/sane.d/$name"
+          fi
+        done
+      fi
 
-      find "${path}/etc/sane.d/dll.d" -not -type d -maxdepth 1 | while read conf; do
-        ln -s $conf $out/etc/sane.d/dll.d/$(basename $conf)
-      done
+      if [ -e "${path}/etc/sane.d/dll.d" ]; then
+        find "${path}/etc/sane.d/dll.d" -maxdepth 1 -not -type d | while read conf; do
+          symlink "$conf" "$out/etc/sane.d/dll.d/$(basename $conf)"
+        done
+      fi
     '';
 in
 stdenv.mkDerivation {
@@ -22,6 +33,14 @@ stdenv.mkDerivation {
   phases = "installPhase";
 
   installPhase = ''
+    function symlink () {
+      local target=$1 linkname=$2
+      if [ -e "$linkname" ]; then
+        echo "warning: conflict for $linkname. Overriding $(readlink $linkname) with $target."
+      fi
+      ln -sfn "$target" "$linkname"
+    }
+
     mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d $out/lib/sane
   '' + concatMapStrings installSanePath paths;
 }

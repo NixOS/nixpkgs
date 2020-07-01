@@ -1,58 +1,65 @@
-{ stdenv, fetchurl, gettext, libuuid, readline }:
+{ stdenv, buildPackages, fetchpatch, fetchgit, autoconf, automake, gettext, libtool, pkgconfig
+, icu, libuuid, readline
+}:
+
+let
+  gentooPatch = name: sha256: fetchpatch {
+    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/xfsprogs/files/${name}?id=2517dd766cf84d251631f4324f7ec4bce912abb9";
+    inherit sha256;
+  };
+in
 
 stdenv.mkDerivation rec {
-  name = "xfsprogs-3.2.2";
+  pname = "xfsprogs";
+  version = "4.19.0";
 
-  src = fetchurl {
-    urls = map (dir: "ftp://oss.sgi.com/projects/xfs/${dir}/${name}.tar.gz")
-      [ "cmd_tars" "previous" ];
-    sha256 = "1aszsqz7gkqdagads18ybslbfkyxq893rykmsz9lm7f33pi5qlhs";
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git";
+    rev = "v${version}";
+    sha256 = "18728hzfxr1bg4bdzqlxjs893ac1zwlfr7nmc2q4a1sxs0sphd1d";
   };
 
-  prePatch = ''
-    sed -i s,/bin/bash,`type -P bash`,g install-sh
-    sed -i s,ldconfig,`type -P ldconfig`,g configure m4/libtool.m4
+  outputs = [ "bin" "dev" "out" "doc" ];
 
-    # Fixes from gentoo 3.2.1 ebuild
-    sed -i "/^PKG_DOC_DIR/s:@pkg_name@:${name}:" include/builddefs.in
-    sed -i '1iLLDFLAGS = -static' {estimate,fsr}/Makefile
-    sed -i "/LLDFLAGS/s:-static::" $(find -name Makefile)
-    sed -i '/LIB_SUBDIRS/s:libdisk::' Makefile
-  '';
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    autoconf automake libtool gettext pkgconfig
+    libuuid # codegen tool uses libuuid
+  ];
+  buildInputs = [ readline icu ];
+  propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
+  enableParallelBuilding = true;
+
+  # Why is all this garbage needed? Why? Why?
   patches = [
-    # This patch fixes shared libs installation, still not fixed in 3.2.2
-    ./xfsprogs-3.2.2-sharedlibs.patch
+    (gentooPatch "xfsprogs-4.15.0-sharedlibs.patch" "0bv2naxpiw7vcsg8p1v2i47wgfda91z1xy1kfwydbp4wmb4nbyyv")
+    (gentooPatch "xfsprogs-4.15.0-docdir.patch" "1srgdidvq2ka0rmfdwpqp92fapgh53w1h7rajm4nnby5vp2v8dfr")
+    (gentooPatch "xfsprogs-4.9.0-underlinking.patch" "1r7l8jphspy14i43zbfnjrnyrdm4cpgyfchblascxylmans0gci7")
   ];
 
-  buildInputs = [ gettext libuuid readline ];
-
-  outputs = [ "out" "lib" ];
-
   preConfigure = ''
-    NIX_LDFLAGS="$(echo $NIX_LDFLAGS | sed "s,$out,$lib,g")"
+    sed -i Makefile -e '/cp include.install-sh/d'
+    make configure
   '';
 
   configureFlags = [
-    "MAKE=make"
-    "MSGFMT=msgfmt"
-    "MSGMERGE=msgmerge"
-    "XGETTEXT=xgettext"
     "--disable-lib64"
     "--enable-readline"
-    "--includedir=$(lib)/include"
-    "--libdir=$(lib)/lib"
   ];
 
   installFlags = [ "install-dev" ];
 
-  enableParallelBuilding = true;
+  # FIXME: forbidden rpath
+  postInstall = ''
+    find . -type d -name .libs | xargs rm -rf
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://xfs.org/;
+    homepage = "http://xfs.org/";
     description = "SGI XFS utilities";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ dezgeg ];
   };
 }

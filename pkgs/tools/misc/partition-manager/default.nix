@@ -1,39 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, cmake, gettext, automoc4, perl
-, parted, libuuid, qt4, kdelibs, kde_baseapps, phonon, libatasmart
+{ mkDerivation, fetchurl, lib
+, extra-cmake-modules, kdoctools, wrapGAppsHook, wrapQtAppsHook
+, kconfig, kcrash, kinit, kpmcore
+, eject, libatasmart , utillinux, qtbase
 }:
 
-stdenv.mkDerivation rec {
-  name = "partitionmanager-1.0.3_p20120804";
+let
+  pname = "partitionmanager";
+in mkDerivation rec {
+  name = "${pname}-${version}";
+  version = "3.3.1";
 
   src = fetchurl {
-    #url = "mirror://sourceforge/partitionman/${name}.tar.bz2";
-    # the upstream version is old and doesn't build
-    url = "http://dev.gentoo.org/~kensington/distfiles/${name}.tar.bz2";
-    sha256 = "1j6zpgj8xs98alzxvcibwch9yj8jsx0s7y864gbdx280jmj8c1np";
+    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+    sha256 = "0jhggb4xksb0k0mj752n6pz0xmccnbzlp984xydqbz3hkigra1si";
   };
 
-  buildInputs = [
-    pkgconfig cmake gettext automoc4 perl
-    parted libuuid qt4 kdelibs kde_baseapps phonon libatasmart
-  ];
+  enableParallelBuilding = true;
 
-  preConfigure = ''
-    export VERBOSE=1
-    cmakeFlagsArray=($cmakeFlagsArray -DGETTEXT_INCLUDE_DIR=${gettext}/include -DCMAKE_INCLUDE_PATH=${qt4}/include/QtGui )
-  '';
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook wrapQtAppsHook ];
 
-  postInstall = ''
-    set -x
-    rpath=`patchelf --print-rpath $out/bin/partitionmanager-bin`:${qt4}/lib
-    for p in $out/bin/partitionmanager-bin; do
-      patchelf --set-rpath $rpath $p
-    done
-  '';
+  # refer to kpmcore for the use of eject
+  buildInputs = [ eject libatasmart utillinux ];
+  propagatedBuildInputs = [ kconfig kcrash kinit kpmcore ];
 
-  meta = {
-    description = "Utility program to help you manage the disk devices";
-    homepage = http://www.kde-apps.org/content/show.php/KDE+Partition+Manager?content=89595; # ?
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+  meta = with lib; {
+    description = "KDE Partition Manager";
+    license = licenses.gpl2;
+    homepage = "https://www.kde.org/applications/system/kdepartitionmanager/";
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

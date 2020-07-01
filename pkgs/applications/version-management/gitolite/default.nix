@@ -1,18 +1,23 @@
-{ stdenv, fetchurl, git, nettools, perl }:
+{ stdenv, fetchFromGitHub, git, lib, makeWrapper, nettools, perl }:
 
 stdenv.mkDerivation rec {
-  name = "gitolite-${version}";
-  version = "3.6.3";
+  pname = "gitolite";
+  version = "3.6.11";
 
-  src = fetchurl {
-    url = "https://github.com/sitaramc/gitolite/archive/v${version}.tar.gz";
-    sha256 = "16cxifjxnri719qb6zzwkdf61x5y957acbdhcgqcan23x1mfn84v";
+  src = fetchFromGitHub {
+    owner = "sitaramc";
+    repo = "gitolite";
+    rev = "v${version}";
+    sha256 = "1rkj7gknwjlc5ij9w39zf5mr647bm45la57yjczydmvrb8c56yrh";
   };
 
-  buildInputs = [ git nettools perl ];
-  buildPhase = "true";
+  buildInputs = [ nettools perl ];
+  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = [ git ];
 
-  patchPhase = ''
+  dontBuild = true;
+
+  postPatch = ''
     substituteInPlace ./install --replace " 2>/dev/null" ""
     substituteInPlace src/lib/Gitolite/Hooks/PostUpdate.pm \
       --replace /usr/bin/perl "${perl}/bin/perl"
@@ -22,16 +27,22 @@ stdenv.mkDerivation rec {
       --replace hostname "${nettools}/bin/hostname"
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/gitolite-shell \
+      --prefix PATH : "${git}/bin"
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     perl ./install -to $out/bin
+    echo ${version} > $out/bin/VERSION
   '';
 
   meta = with stdenv.lib; {
     description = "Finely-grained git repository hosting";
-    homepage    = http://gitolite.com/gitolite/index.html;
+    homepage    = "https://gitolite.com/gitolite/index.html";
     license     = licenses.gpl2;
     platforms   = platforms.unix;
-    maintainers = [ maintainers.thoughtpolice maintainers.lassulus ];
+    maintainers = [ maintainers.thoughtpolice maintainers.lassulus maintainers.tomberek ];
   };
 }

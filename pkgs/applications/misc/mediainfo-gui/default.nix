@@ -1,28 +1,31 @@
-{ stdenv, fetchurl, automake, autoconf, libtool, pkgconfig, libzen, libmediainfo, wxGTK, desktop_file_utils, libSM, imagemagick }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, libmediainfo, wxGTK
+, desktop-file-utils, libSM, imagemagick }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.73";
-  name = "mediainfo-gui-${version}";
+  version = "20.03";
+  pname = "mediainfo-gui";
   src = fetchurl {
-    url = "http://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.bz2";
-    sha256 = "14mbiy1xhj4nlp7hnfqvi518xn1f718b2vbl8xkjqr2sqjdf5jm7";
+    url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
+    sha256 = "1f1shnycf0f1fwka9k9s250l228xjkg0k4k73h8bpld8msighgnw";
   };
 
-  buildInputs = [ automake autoconf libtool pkgconfig libzen libmediainfo wxGTK desktop_file_utils libSM imagemagick ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libzen libmediainfo wxGTK desktop-file-utils libSM
+                  imagemagick ];
 
   sourceRoot = "./MediaInfo/Project/GNU/GUI/";
 
-  preConfigure = "sh autogen";
+  enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Supplies technical and tag information about a video or audio file (GUI version)";
     longDescription = ''
       MediaInfo is a convenient unified display of the most relevant technical
       and tag data for video and audio files.
     '';
-    homepage = http://mediaarea.net/;
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.devhell ];
+    homepage = "https://mediaarea.net/";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.devhell ];
   };
 }

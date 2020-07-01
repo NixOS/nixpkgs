@@ -1,34 +1,51 @@
-{ stdenv, fetchurl, coreutils , unzip, which, pkgconfig , dbus
-, freetype, xdg_utils , libXext, glib, pango , cairo, libX11, libnotify
-, libxdg_basedir , libXScrnSaver, xproto, libXinerama , perl, gdk_pixbuf
+{ stdenv, lib, fetchFromGitHub, makeWrapper
+, pkgconfig, which, perl, libXrandr
+, cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
+, libXinerama, libnotify, pango, xorgproto, librsvg, dunstify ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "dunst-1.1.0";
-  version = "1.1.0";
+  pname = "dunst";
+  version = "1.4.1";
 
-  src = fetchurl {
-    url = "https://github.com/knopwob/dunst/archive/v${version}.tar.gz";
-    sha256 = "0x95f57s0a96c4lifxdpf73v706iggwmdw8742mabbjnxq55l1qs";
+  src = fetchFromGitHub {
+    owner = "dunst-project";
+    repo = "dunst";
+    rev = "v${version}";
+    sha256 = "0xjj1f2jr1ja5grj6wrx5jjz1sx5fpqnvkw7nqi4452j3nc4p4l2";
   };
 
-  buildInputs =
-  [ coreutils unzip which pkgconfig dbus freetype libnotify gdk_pixbuf
-    xdg_utils libXext glib pango cairo libX11 libxdg_basedir
-    libXScrnSaver xproto libXinerama perl];
+  nativeBuildInputs = [ perl pkgconfig which systemd makeWrapper ];
 
-  buildPhase = ''
-    export VERSION=${version};
-    export PREFIX=$out;
-    make dunst;
+  buildInputs = [
+    cairo dbus gdk-pixbuf glib libX11 libXScrnSaver
+    libXinerama libnotify pango xorgproto librsvg libXrandr
+  ];
+
+  outputs = [ "out" "man" ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "VERSION=$(version)"
+    "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
+    "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
+  ];
+
+  buildFlags = if dunstify then [ "dunstify" ] else [];
+
+  postInstall = lib.optionalString dunstify ''
+    install -Dm755 dunstify $out/bin
+  '' + ''
+    wrapProgram $out/bin/dunst \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
-  meta = {
-    description = "lightweight and customizable notification daemon";
-    homepage = http://www.knopwob.org/dunst/;
-    license = stdenv.lib.licenses.bsd3;
+  meta = with lib; {
+    description = "Lightweight and customizable notification daemon";
+    homepage = "https://dunst-project.org/";
+    license = licenses.bsd3;
     # NOTE: 'unix' or even 'all' COULD work too, I'm not sure
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.iElectric ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

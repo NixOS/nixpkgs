@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libX11, cups, zlib, libxml2, pango, atk, gtk, glib
-, gdk_pixbuf }:
+{ stdenv, fetchurl, libX11, cups, zlib, libxml2, pango, atk, gtk2, glib
+, gdk-pixbuf }:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.hostPlatform.system == "i686-linux";
 
 let version = "9.5.5"; in
 
@@ -20,11 +20,13 @@ stdenv.mkDerivation {
   # versions.
 
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk glib gdk_pixbuf ];
+    [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk-pixbuf ];
+
+  passthru.mozillaPlugin = "/libexec/adobe-reader/Browser/intellinux";
 
   meta = {
     description = "Adobe Reader, a viewer for PDF documents";
-    homepage = http://www.adobe.com/products/reader;
+    homepage = "http://www.adobe.com/products/reader";
     license = stdenv.lib.licenses.unfree;
   };
 }

@@ -1,32 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, geoip, ncurses, glib }:
-
-let
-  version = "0.9";
-  mainSrc = fetchurl {
-    url = "http://tar.goaccess.io/goaccess-${version}.tar.gz";
-    sha256 = "1yi7bxrmhvd11ha405bqpz7q442l9bnnx317iy22xzxjl96frn29";
-  };
-in
+{ stdenv, fetchurl, pkgconfig, ncurses, glib, libmaxminddb }:
 
 stdenv.mkDerivation rec {
-  name = "goaccess-${version}";
-  src = mainSrc;
+  version = "1.4";
+  pname = "goaccess";
+
+  src = fetchurl {
+    url = "https://tar.goaccess.io/goaccess-${version}.tar.gz";
+    sha256 = "1gkpjg39f3afdwm9128jqjsfap07p8s027czzlnxfmi5hpzvkyz8";
+  };
 
   configureFlags = [
-    "--enable-geoip"
+    "--enable-geoip=mmdb"
     "--enable-utf8"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
-    geoip
+    libmaxminddb
     ncurses
     glib
   ];
 
   meta = {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";
-    homepage    = http://goaccess.prosoftcorp.com;
+    homepage    = "https://goaccess.io";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = with stdenv.lib.maintainers; [ ederoyd46 ];

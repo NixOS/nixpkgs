@@ -1,23 +1,19 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "peg-0.1.4";
+  name = "peg-0.1.18";
 
   src = fetchurl {
     url = "${meta.homepage}/${name}.tar.gz";
-    sha256 = "01agf4fbqv0r1xyqvj0va8kcrh3f2ka59f1aqvzfrabn7n5p8ik4";
+    sha256 = "114h1y4k8fwcq9m0hfk33dsp7ah8zxzjjzlk71x4iirzczfkn690";
   };
 
   preBuild="makeFlagsArray+=( PREFIX=$out )";
 
-  preInstall=''
-    mkdir -pv $out/bin $out/share/man/man1
-    cp -pv *.1 $out/share/man/man1
-  '';
-
-  meta = {
-    homepage = http://piumarta.com/software/peg/;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+  meta = with stdenv.lib; {
+    homepage = "http://piumarta.com/software/peg/";
+    description = "Tools for generating recursive-descent parsers: programs that perform pattern matching on text";
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 }

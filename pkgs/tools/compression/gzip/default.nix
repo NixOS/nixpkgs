@@ -1,24 +1,43 @@
-{ stdenv, fetchurl }:
+{ stdenv
+, fetchurl
+, xz
+, writeText
+}:
 
 stdenv.mkDerivation rec {
-  name = "gzip-1.6";
+  pname = "gzip";
+  version = "1.10";
 
   src = fetchurl {
-    url = "mirror://gnu/gzip/${name}.tar.xz";
-    sha256 = "0ivqnbhiwd12q8hp3qw6rpsrpw2jg5y2mymk8cn22lsx90dfvprp";
+    url = "mirror://gnu/gzip/${pname}-${version}.tar.xz";
+    sha256 = "1h6p374d3j8d4cdfydzls021xa2yby8myc0h8d6m8bc7k6ncq9c4";
   };
+
+  outputs = [ "out" "man" "info" ];
 
   enableParallelBuilding = true;
 
-  preConfigure = if stdenv.isCygwin then ''
-    sed -i lib/fpending.h -e 's,include <stdio_ext.h>,,'
-  '' else null;
+  nativeBuildInputs = [ xz.bin ];
 
-  # In stdenv-linux, prevent a dependency on bootstrap-tools.
-  makeFlags = "SHELL=/bin/sh GREP=grep";
+  makeFlags = [ "SHELL=/bin/sh" "GREP=grep" ];
+
+  # Many gzip executables are shell scripts that depend upon other gzip
+  # executables being in $PATH.  Rather than try to re-write all the
+  # internal cross-references, just add $out/bin to PATH at the top of
+  # all the executables that are shell scripts.
+  preFixup = ''
+    sed -i '1{;/#!\/bin\/sh/aPATH="'$out'/bin:$PATH"
+    }' $out/bin/*
+  '';
+
+  # set GZIP env variable to "-n" to stop gzip from adding timestamps
+  # to archive headers: https://github.com/NixOS/nixpkgs/issues/86348
+  setupHook = writeText "setup-hook" ''
+    export GZIP="-n"
+  '';
 
   meta = {
-    homepage = http://www.gnu.org/software/gzip/;
+    homepage = "https://www.gnu.org/software/gzip/";
     description = "GNU zip compression program";
 
     longDescription =

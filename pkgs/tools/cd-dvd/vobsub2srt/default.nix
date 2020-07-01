@@ -8,15 +8,16 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     inherit rev;
-    url = https://github.com/ruediger/VobSub2SRT.git;
-    sha256 = "8e867a021ac529e7607627d5944b95bb9f1378ffabd8837e7a028663a8ce5adf";
+    url = "https://github.com/ruediger/VobSub2SRT.git";
+    sha256 = "1rpanrv8bgdh95v2320qbd44xskncvq6y84cbbfc86gw0qxpd9cb";
   };
 
-  buildInputs = [ cmake libtiff pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake libtiff ];
   propagatedBuildInputs = [ tesseract ];
 
   meta = {
-    homepage = https://github.com/ruediger/VobSub2SRT;
+    homepage = "https://github.com/ruediger/VobSub2SRT";
     description = "Converts VobSub subtitles into SRT subtitles";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.unix;

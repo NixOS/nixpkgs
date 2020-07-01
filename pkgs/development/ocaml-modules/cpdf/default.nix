@@ -1,16 +1,15 @@
-{ stdenv, fetchgit, ocaml, findlib, camlpdf, ncurses }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, camlpdf, ncurses }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.0";
-
-let version = "2.1.1"; in
+let version = "2.3"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-cpdf-${version}";
+  name = "ocaml${ocaml.version}-cpdf-${version}";
 
-  src = fetchgit {
-    url = https://github.com/johnwhitington/cpdf-source.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "0c482wfa5q845k0ahx8irg1jl05ncn0kv42dg08zkph7xi6dmgnv";
+  src = fetchFromGitHub {
+    owner = "johnwhitington";
+    repo = "cpdf-source";
+    rev = "v${version}";
+    sha256 = "0i976y1v0l7x7k2n8k6v0h4bw9zlxsv04y4fdxss6dzpsfz49w23";
   };
 
   buildInputs = [ ocaml findlib ncurses ];
@@ -26,10 +25,11 @@ stdenv.mkDerivation {
     cp cpdfmanual.pdf $out/share/doc/cpdf/
   '';
 
-  meta = {
-    homepage = http://www.coherentpdf.com/;
-    platforms = ocaml.meta.platforms;
+  meta = with stdenv.lib; {
+    homepage = "https://www.coherentpdf.com/";
+    platforms = ocaml.meta.platforms or [];
     description = "PDF Command Line Tools";
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.vbgl ];
   };
 }

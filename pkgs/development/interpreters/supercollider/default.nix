@@ -1,40 +1,43 @@
-{ stdenv, fetchurl, cmake, pkgconfig
-, jack2, libsndfile, fftw, curl
-, libXt, qt, readline
-, useSCEL ? false, emacs
+{ stdenv, mkDerivation, fetchurl, cmake, pkgconfig, alsaLib
+, libjack2, libsndfile, fftw, curl, gcc
+, libXt, qtbase, qttools, qtwebengine
+, readline, qtwebsockets, useSCEL ? false, emacs
 }:
-  
-let optional = stdenv.lib.optional; in
 
-stdenv.mkDerivation rec {  
-  name = "supercollider-3.6.6";
+let optional = stdenv.lib.optional;
+in
 
-  meta = {
-    description = "Programming language for real time audio synthesis";
-    homepage = "http://supercollider.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-  };
+mkDerivation rec {
+  pname = "supercollider";
+  version = "3.11.0";
+
 
   src = fetchurl {
-    url = "mirror://sourceforge/supercollider/Source/3.6/SuperCollider-3.6.6-Source.tar.bz2";
-    sha256 = "11khrv6jchs0vv0lv43am8lp0x1rr3h6l2xj9dmwrxcpdayfbalr";
+    url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
+    sha256 = "0l5j7sqrjlm85ql91ybcrvdykfkkwfqd7w3m4llbymw720r2ln9p";
   };
 
-  # QGtkStyle unavailable
-  patchPhase = ''
-    substituteInPlace editors/sc-ide/widgets/code_editor/autocompleter.cpp \
-      --replace Q_WS_X11 Q_GTK_STYLE
-  '';
+  hardeningDisable = [ "stackprotector" ];
 
-  cmakeFlags = ''
-    -DSC_WII=OFF
-    -DSC_EL=${if useSCEL then "ON" else "OFF"} 
-  '';
+  cmakeFlags = [
+    "-DSC_WII=OFF"
+    "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
+  ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig qttools ];
 
-  buildInputs = [ 
-    jack2 libsndfile fftw curl libXt qt readline ]
-    ++ optional useSCEL emacs;
+  enableParallelBuilding = true;
+
+  buildInputs = [
+    gcc libjack2 libsndfile fftw curl libXt qtbase qtwebengine qtwebsockets readline ]
+      ++ optional (!stdenv.isDarwin) alsaLib
+      ++ optional useSCEL emacs;
+
+  meta = with stdenv.lib; {
+    description = "Programming language for real time audio synthesis";
+    homepage = "https://supercollider.github.io";
+    maintainers = with maintainers; [ mrmebelman ];
+    license = licenses.gpl3;
+    platforms = [ "x686-linux" "x86_64-linux" ];
+  };
 }

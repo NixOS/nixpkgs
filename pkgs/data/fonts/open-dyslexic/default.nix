@@ -1,29 +1,24 @@
-{stdenv, fetchgit}:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
+  version = "2016-06-23";
+in fetchzip {
   name = "open-dyslexic-${version}";
-  version = "2014-11-11";
 
-  src = fetchgit {
-    url = "https://github.com/antijingoist/open-dyslexic.git";
-    rev = "f4b5ba89018b44d633608907e15f93fb3fabbabc";
-    sha256 = "04pa7c2cary6pqxsmxqrg7wi19szg7xh8panmvqvmc7jas0mzg6q";
-  };
+  url = "https://github.com/antijingoist/open-dyslexic/archive/20160623-Stable.zip";
 
-  phases = ["unpackPhase" "installPhase"];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    cp -v 'otf/'*.otf $out/share/fonts/opentype
-
-    mkdir -p $out/share/doc/open-dyslexic
-    cp -v README.md $out/share/doc/open-dyslexic
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.otf       -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*/README.md -d $out/share/doc/open-dyslexic
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://opendyslexic.org/;
+  sha256 = "1vl8z5rknh2hpr2f0v4b2qgs5kclx5pzyk8al7243k5db82a2cyi";
+
+  meta = with lib; {
+    homepage = "https://opendyslexic.org/";
     description = "Font created to increase readability for readers with dyslexia";
-    license = "Bitstream Vera License (http://www.gnome.org/fonts/#Final_Bitstream_Vera_Fonts)";
+    license = "Bitstream Vera License (https://www.gnome.org/fonts/#Final_Bitstream_Vera_Fonts)";
     platforms = platforms.all;
     maintainers = [maintainers.rycee];
   };

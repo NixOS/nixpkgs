@@ -1,28 +1,37 @@
-{ stdenv, fetchurl, cmake, boost, openssl }:
-
-let
-  version = "0.11.0";
-in
+{ stdenv, fetchFromGitHub, cmake, boost, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "cpp-netlib-${version}";
+  pname = "cpp-netlib";
+  version = "0.13.0-final";
 
-  src = fetchurl {
-    url = "http://commondatastorage.googleapis.com/cpp-netlib-downloads/${version}/${name}.tar.bz2";
-    md5 = "0765cf203f451394df98e6ddf7bf2541";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "18782sz7aggsl66b4mmi1i0ijwa76iww337fi9sygnplz2hs03a3";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ cmake boost openssl ];
 
-  cmakeFlags = [ "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON" "-DCMAKE_BUILD_TYPE=RELEASE" ];
+  cmakeFlags = [
+    "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"
+  ];
 
   enableParallelBuilding = true;
 
+  # The test driver binary lacks an RPath to the library's libs
+  preCheck = ''
+    export LD_LIBRARY_PATH=$PWD/libs/network/src
+  '';
+
+  # Most tests make network GET requests to various websites
+  doCheck = false;
+
   meta = with stdenv.lib; {
-    description = "A collection of open-source libraries for high level network programming";
-    homepage    = http://cpp-netlib.org;
+    description = "Collection of open-source libraries for high level network programming";
+    homepage    = "https://cpp-netlib.org";
     license     = licenses.boost;
-    maintainers = with maintainers; [ shlevy ];
     platforms   = platforms.all;
   };
 }

@@ -1,4 +1,12 @@
-{ stdenv, perl, buildLinux
+{ buildPackages
+, callPackage
+, perl
+, bison ? null
+, flex ? null
+, gmp ? null
+, libmpc ? null
+, mpfr ? null
+, stdenv
 
 , # The kernel source tarball.
   src
@@ -6,8 +14,14 @@
 , # The kernel version.
   version
 
-, # Overrides to the kernel config.
+, # Allows overriding the default defconfig
+  defconfig ? null
+
+, # Legacy overrides to the intermediate kernel config, as string
   extraConfig ? ""
+
+, # kernel intermediate config overrides, as a set
+ structuredExtraConfig ? {}
 
 , # The version number used for the module directory
   modDirVersion ? version
@@ -18,65 +32,84 @@
   # NixOS to implement kernel-specific behaviour.
   features ? {}
 
+, # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
+  # automatically extended with extra per-version and per-config values.
+  randstructSeed ? ""
+
 , # A list of patches to apply to the kernel.  Each element of this list
   # should be an attribute set {name, patch} where `name' is a
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
+, ignoreConfigErrors ? stdenv.hostPlatform.platform.name != "pc" ||
+                       stdenv.hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
+
+# easy overrides to stdenv.hostPlatform.platform members
+, autoModules ? stdenv.hostPlatform.platform.kernelAutoModules
+, preferBuiltin ? stdenv.hostPlatform.platform.kernelPreferBuiltin or false
+, kernelArch ? stdenv.hostPlatform.platform.kernelArch
+
 , ...
 }:
 
-assert stdenv.platform.name == "sheevaplug" -> stdenv.platform.uboot != null;
 assert stdenv.isLinux;
 
 let
 
   lib = stdenv.lib;
 
-  kernelConfigFun = baseConfig:
+  # Combine the `features' attribute sets of all the kernel patches.
+  kernelFeatures = lib.fold (x: y: (x.features or {}) // y) ({
+    iwlwifi = true;
+    efiBootStub = true;
+    needsCifsUtils = true;
+    netfilterRPFilter = true;
+    grsecurity = false;
+    xen_dom0 = false;
+    ia32Emulation = true;
+  } // features) kernelPatches;
+
+  commonStructuredConfig = import ./common-config.nix {
+    inherit stdenv version ;
+
+    features = kernelFeatures; # Ensure we know of all extra patches, etc.
+  };
+
+  intermediateNixConfig = configfile.moduleStructuredConfig.intermediateNixConfig
+    # extra config in legacy string format
+    + extraConfig
+    + lib.optionalString (stdenv.hostPlatform.platform ? kernelExtraConfig) stdenv.hostPlatform.platform.kernelExtraConfig;
+
+  structuredConfigFromPatches =
+        map ({extraStructuredConfig ? {}, ...}: {settings=extraStructuredConfig;}) kernelPatches;
+
+  # appends kernel patches extraConfig
+  kernelConfigFun = baseConfigStr:
     let
       configFromPatches =
         map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
-    in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
+    in lib.concatStringsSep "\n" ([baseConfigStr] ++ configFromPatches);
 
   configfile = stdenv.mkDerivation {
-    name = "linux-config-${version}";
+    inherit ignoreConfigErrors autoModules preferBuiltin kernelArch;
+    pname = "linux-config";
+    inherit version;
 
     generateConfig = ./generate-config.pl;
 
-    kernelConfig = kernelConfigFun config;
+    kernelConfig = kernelConfigFun intermediateNixConfig;
+    passAsFile = [ "kernelConfig" ];
 
-    ignoreConfigErrors = stdenv.platform.name != "pc";
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    nativeBuildInputs = [ perl gmp libmpc mpfr ]
+      ++ lib.optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ];
 
-    nativeBuildInputs = [ perl ];
-
-    platformName = stdenv.platform.name;
-    kernelBaseConfig = stdenv.platform.kernelBaseConfig;
-    kernelTarget = stdenv.platform.kernelTarget;
-    autoModules = stdenv.platform.kernelAutoModules;
-    arch = stdenv.platform.kernelArch;
-
-    preConfigure = ''
-        buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=Thu Jan 1 00:00:01 UTC 1970")
-    '';
-
-    crossAttrs = let
-        cp = stdenv.cross.platform;
-      in {
-        arch = cp.kernelArch;
-        platformName = cp.name;
-        kernelBaseConfig = cp.kernelBaseConfig;
-        kernelTarget = cp.kernelTarget;
-        autoModules = cp.kernelAutoModules;
-
-        # Just ignore all options that don't apply (We are lazy).
-        ignoreConfigErrors = true;
-
-        kernelConfig = kernelConfigFun configCross;
-
-        inherit (kernel.crossDrv) src patches preUnpack;
-      };
+    platformName = stdenv.hostPlatform.platform.name;
+    # e.g. "defconfig"
+    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.platform.kernelBaseConfig;
+    # e.g. "bzImage"
+    kernelTarget = stdenv.hostPlatform.platform.kernelTarget;
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -84,56 +117,61 @@ let
       sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
     '';
 
-    inherit (kernel) src patches preUnpack;
+    preUnpack = kernel.preUnpack or "";
+
+    inherit (kernel) src patches;
 
     buildPhase = ''
-      cd $buildRoot
+      export buildRoot="''${buildRoot:-build}"
 
       # Get a basic config file for later refinement with $generateConfig.
-      make -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
+      make -C .  O="$buildRoot" $kernelBaseConfig \
+          ARCH=$kernelArch \
+          HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc \
+          HOSTCXX=${buildPackages.stdenv.cc.targetPrefix}g++
 
       # Create the config file.
       echo "generating kernel configuration..."
-      echo "$kernelConfig" > kernel-config
-      DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
-           SRC=../$sourceRoot perl -w $generateConfig
+      ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
+      DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
+           PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. perl -w $generateConfig
     '';
 
-    installPhase = "mv .config $out";
+    installPhase = "mv $buildRoot/.config $out";
 
     enableParallelBuilding = true;
-  };
 
-  kernel = buildLinux {
-    inherit version modDirVersion src kernelPatches;
+    passthru = rec {
 
-    configfile = configfile.nativeDrv or configfile;
+      module = import ../../../../nixos/modules/system/boot/kernel_config.nix;
+      # used also in apache
+      # { modules = [ { options = res.options; config = svc.config or svc; } ];
+      #   check = false;
+      # The result is a set of two attributes
+      moduleStructuredConfig = (lib.evalModules {
+        modules = [
+          module
+          { settings = commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
+          { settings = structuredExtraConfig; _file = "structuredExtraConfig"; }
+        ]
+        ++  structuredConfigFromPatches
+        ;
+      }).config;
 
-    crossConfigfile = configfile.crossDrv or configfile;
+      structuredConfig = moduleStructuredConfig.settings;
+    };
+  }; # end of configfile derivation
+
+  kernel = (callPackage ./manual-config.nix {}) {
+    inherit version modDirVersion src kernelPatches randstructSeed stdenv extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
-
-    crossConfig = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };
 
   passthru = {
-    # Combine the `features' attribute sets of all the kernel patches.
-    features = lib.fold (x: y: (x.features or {}) // y) features kernelPatches;
-
-    meta = kernel.meta // extraMeta;
-
-    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" "meta" ]);
+    features = kernelFeatures;
+    inherit commonStructuredConfig;
+    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
   };
 
-  configWithPlatform = kernelPlatform: import ./common-config.nix
-    { inherit stdenv version kernelPlatform extraConfig;
-      features = passthru.features; # Ensure we know of all extra patches, etc.
-    };
-
-  config = configWithPlatform stdenv.platform;
-  configCross = configWithPlatform stdenv.cross.platform;
-
-  nativeDrv = lib.addPassthru kernel.nativeDrv passthru;
-
-  crossDrv = lib.addPassthru kernel.crossDrv passthru;
-in if kernel ? crossDrv then nativeDrv // { inherit nativeDrv crossDrv; } else lib.addPassthru kernel passthru
+in lib.extendDerivation true passthru kernel

@@ -1,8 +1,8 @@
 /* A small release file, with few packages to be built.  The aim is to reduce
    the load on Hydra when testing the `stdenv-updates' branch. */
 
-{ nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
-, supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
+{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 }:
 
 with import ./release-lib.nix { inherit supportedSystems; };
@@ -14,15 +14,13 @@ with import ./release-lib.nix { inherit supportedSystems; };
     officialRelease = false;
   };
 
-} // (mapTestOn (rec {
+} // (mapTestOn ({
 
   aspell = all;
   at = linux;
-  atlas = linux;
-  aterm25 = all;
   autoconf = all;
   automake = all;
-  avahi = allBut cygwin;  # Cygwin builds fail
+  avahi = unix; # Cygwin builds fail
   bash = all;
   bashInteractive = all;
   bc = all;
@@ -36,10 +34,11 @@ with import ./release-lib.nix { inherit supportedSystems; };
   cpio = all;
   cron = linux;
   cups = linux;
+  dbus = linux;
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
-  emacs24 = gtkSupported;
+  emacs25 = linux;
   enscript = all;
   file = all;
   findutils = all;
@@ -48,13 +47,12 @@ with import ./release-lib.nix { inherit supportedSystems; };
   gcj = linux;
   glibc = linux;
   glibcLocales = linux;
-  gnat = linux;
   gnugrep = all;
   gnum4 = all;
   gnumake = all;
   gnupatch = all;
   gnupg = linux;
-  gnuplot = allBut cygwin;
+  gnuplot = unix; # Cygwin builds fail
   gnused = all;
   gnutar = all;
   gnutls = linux;
@@ -68,10 +66,9 @@ with import ./release-lib.nix { inherit supportedSystems; };
   hdparm = linux;
   hello = all;
   host = linux;
-  iana_etc = linux;
+  iana-etc = linux;
   icewm = linux;
   idutils = all;
-  ifplugd = linux;
   inetutils = linux;
   iputils = linux;
   jnettop = linux;
@@ -81,9 +78,9 @@ with import ./release-lib.nix { inherit supportedSystems; };
   kvm = linux;
   qemu = linux;
   qemu_kvm = linux;
+  lapack-reference = linux;
   less = all;
   lftp = all;
-  liblapack = linux;
   libtool = all;
   libtool_2 = all;
   libxml2 = all;
@@ -96,7 +93,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   lynx = linux;
   lzma = linux;
   man = linux;
-  manpages = linux;
+  man-pages = linux;
   mc = all;
   mcabber = linux;
   mcron = linux;
@@ -106,14 +103,13 @@ with import ./release-lib.nix { inherit supportedSystems; };
   mingetty = linux;
   mk = linux;
   mktemp = all;
-  module_init_tools = linux;
   mono = linux;
   monotone = linux;
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
-  ncat = linux;
-  netcat = all;
+  # netcat broken on darwin
+  netcat = linux;
   nfs-utils = linux;
   nix = all;
   nixUnstable = all;
@@ -123,29 +119,27 @@ with import ./release-lib.nix { inherit supportedSystems; };
   ntp = linux;
   openssh = linux;
   openssl = all;
-  pan = gtkSupported;
+  pan = linux;
   par2cmdline = all;
   pciutils = linux;
   pdf2xml = all;
   perl = all;
   pkgconfig = all;
   pmccabe = linux;
-  policykit = linux;
-  portmap = linux;
   procps = linux;
-  python = allBut cygwin;
-  pythonFull = linux;
+  python = unix; # Cygwin builds fail
   readline = all;
   rlwrap = all;
   rpm = linux;
+  rpcbind = linux;
   rsync = linux;
   screen = linux ++ darwin;
   scrot = linux;
   sdparm = linux;
   sharutils = all;
-  sloccount = allBut cygwin;
+  sloccount = unix; # Cygwin builds fail
   smartmontools = all;
-  sqlite = allBut cygwin;
+  sqlite = unix; # Cygwin builds fail
   squid = linux;
   ssmtp = linux;
   stdenv = all;
@@ -158,22 +152,16 @@ with import ./release-lib.nix { inherit supportedSystems; };
   sysvtools = linux;
   tcl = linux;
   tcpdump = linux;
-  tetex = linux;
-  texLive = linux;
-  texLiveBeamer = linux;
-  texLiveExtra = linux;
   texinfo = all;
   time = linux;
   tinycc = linux;
   udev = linux;
-  unrar = linux;
   unzip = all;
-  upstart = linux;
   usbutils = linux;
   utillinux = linux;
-  utillinuxCurses = linux;
+  utillinuxMinimal = linux;
   w3m = all;
-  webkit = linux;
+  webkitgtk = linux;
   wget = all;
   which = all;
   wicd = linux;
@@ -184,11 +172,5 @@ with import ./release-lib.nix { inherit supportedSystems; };
   xkeyboard_config = linux;
   zile = linux;
   zip = all;
-
-  dbus = {
-    libs = linux;
-    daemon = linux;
-    tools = linux;
-  };
 
 } ))

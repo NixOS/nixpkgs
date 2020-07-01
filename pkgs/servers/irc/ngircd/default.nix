@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, openssl, pam, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "ngircd-21";
+  name = "ngircd-25";
 
   src = fetchurl {
-    url = "http://ngircd.barton.de/pub/ngircd/${name}.tar.xz";
-    sha256 = "19llx54zy6hc8k7kcs1f234qc20mqpnlnb30c663c42jxq5x6xii";
+    url = "https://ngircd.barton.de/pub/ngircd/${name}.tar.xz";
+    sha256 = "0kpf5qi98m9f833r4rx9n6h9p31biwk798jwc1mgzmix7sp7r6f4";
   };
 
   configureFlags = [
@@ -21,9 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Next Generation IRC Daemon";
-    homepage    = http://ngircd.barton.de;
+    homepage    = "https://ngircd.barton.de";
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

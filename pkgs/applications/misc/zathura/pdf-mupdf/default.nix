@@ -1,32 +1,40 @@
-{ stdenv, lib, fetchgit, pkgconfig, zathura_core, gtk, girara, mupdf, openssl, openjpeg, libjpeg, jbig2dec }:
+{ stdenv, lib, meson, ninja, fetchurl, fetchpatch
+, pkgconfig, zathura_core, cairo , gtk-mac-integration, girara, mupdf }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.7";
-  name = "zathura-pdf-mupdf-${version}";
+  version = "0.3.5";
+  pname = "zathura-pdf-mupdf";
 
-  src = fetchgit {
-    url = "https://git.pwmt.org/zathura-pdf-mupdf.git";
-    rev = "99bff723291f5aa2558e5c8b475f496025105f4a";
-    sha256 = "14mfp116a8dmazss3dcipvjs6dclazp36vsbcc53lr8lal5ccfnf";
+  src = fetchurl {
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "1pjwsb7zwclxsvz229fl7y2saf1pv3ifwv3ay8viqxgrp9x3z9hq";
   };
 
-  buildInputs = [ pkgconfig zathura_core gtk girara openssl mupdf openjpeg libjpeg jbig2dec ];
-
-  makeFlags = "PREFIX=$(out) PLUGINDIR=$(out)/lib";
-
   patches = [
-    ./config.patch
+    # compatibility with MuPDF 1.17
+    (fetchpatch {
+      url = "https://git.pwmt.org/pwmt/zathura-pdf-mupdf/-/commit/c7f341addb76d5e6fd8c24c666d8fe97c451a4cb.patch";
+      sha256 = "12rikx2j7dpngfma9x4i504w58a8xx3rc0gmyz183v19hn54c075";
+    })
   ];
 
+  nativeBuildInputs = [ meson ninja pkgconfig ];
+
+  buildInputs = [
+    zathura_core girara mupdf cairo
+  ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
+
+  PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
+
   meta = with lib; {
-    homepage = http://pwmt.org/projects/zathura/;
+    homepage = "https://pwmt.org/projects/zathura-pdf-mupdf/";
     description = "A zathura PDF plugin (mupdf)";
     longDescription = ''
       The zathura-pdf-mupdf plugin adds PDF support to zathura by
       using the mupdf rendering library.
     '';
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
   };
 }

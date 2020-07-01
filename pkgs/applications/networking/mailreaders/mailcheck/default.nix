@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mailcheck-${version}";
+  pname = "mailcheck";
   version = "1.91.2";
 
   patches = [ ./mailcheck-Makefile.patch ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Simple command line tool to check for new messages";
-    homepage    = http://mailcheck.sourceforge.net/;
+    homepage    = "http://mailcheck.sourceforge.net/";
     license     = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ kovirobi ];
     platforms   = stdenv.lib.platforms.linux;

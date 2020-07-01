@@ -1,8 +1,6 @@
-{ stdenv, appleDerivation }:
+{ appleDerivation }:
 
 appleDerivation {
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     substituteInPlace xcodescripts/install_files.sh \
       --replace "/usr/local/" "/" \

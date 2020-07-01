@@ -1,0 +1,12 @@
+--- a/extension.js
++++ b/extension.js
+@@ -29,6 +29,8 @@
+  * https://github.com/The-Panacea-Projects/Gnomenu
+  */
+ 
++
++imports.gi.GIRepository.Repository.prepend_search_path('@gmenu_path@');
+ 
+ // Import Libraries
+ const Main = imports.ui.main;
+

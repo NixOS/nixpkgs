@@ -1,33 +1,25 @@
-{ stdenv, fetchgit, ocaml, findlib, re, sexplib, stringext }:
+{ lib, fetchurl, buildDunePackage, ounit
+, re, stringext
+}:
 
-let version = "1.7.2"; in
+buildDunePackage rec {
+  minimumOCamlVersion = "4.03";
+  pname = "uri";
+  version = "3.1.0";
 
-stdenv.mkDerivation {
-  name = "ocaml-uri-${version}";
-
-  src = fetchgit {
-    url = https://github.com/mirage/ocaml-uri.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "19rq68dzvqzpqc2zvrk5sj1iklknnyrlbcps2vb8iw4cjlrnnaa1";
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    sha256 = "0hxc2mshmqxz2qmjya47dzf858s6lsf3xvqswpzprkvhv0zq4ln4";
   };
 
-  buildInputs = [ ocaml findlib ];
-  propagatedBuildInputs = [ re sexplib stringext ];
-
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
-  buildPhase = ''
-    ocaml setup.ml -build
-    ocaml setup.ml -doc
-  '';
-  installPhase = "ocaml setup.ml -install";
-
-  createFindlibDestdir = true;
+  buildInputs = [ ounit ];
+  propagatedBuildInputs = [ re stringext ];
+  doCheck = true;
 
   meta = {
-    homepage = https://github.com/mirage/ocaml-uri;
-    platforms = ocaml.meta.platforms;
+    homepage = "https://github.com/mirage/ocaml-uri";
     description = "RFC3986 URI parsing library for OCaml";
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

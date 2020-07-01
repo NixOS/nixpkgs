@@ -1,18 +1,24 @@
-{ stdenv, lib, fetchurl, ncurses }:
+{ stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "bviplus-${version}";
-  version = "0.9.4";
+  pname = "bviplus";
+  version = "1.0";
+
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/bviplus/bviplus/${version}/bviplus-${version}.tgz";
-    sha256 = "10x6fbn8v6i0y0m40ja30pwpyqksnn8k2vqd290vxxlvlhzah4zb";
+    url = "mirror://sourceforge/project/bviplus/bviplus/${version}/bviplus-${version}.tgz";
+    sha256 = "08q2fdyiirabbsp5qpn3v8jxp4gd85l776w6gqvrbjwqa29a8arg";
   };
+
   buildInputs = [
     ncurses
   ];
-  makeFlags = "PREFIX=$(out)";
-  meta = with lib; {
-    description = "ncurses based hex editor with a vim-like interface";
+
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  buildFlags = [ "CFLAGS=-fgnu89-inline" ];
+
+  meta = with stdenv.lib; {
+    description = "Ncurses based hex editor with a vim-like interface";
     homepage = "http://bviplus.sourceforge.net";
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -1,40 +1,41 @@
-{stdenv, fetchurl, ocaml, findlib, opam}:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
 
 let
   pname = "cmdliner";
-  version = "0.9.7";
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 
-assert stdenv.lib.versionAtLeast ocaml_version "4.00";
+assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";
 
-stdenv.mkDerivation {
+let param =
+  if stdenv.lib.versionAtLeast ocaml.version "4.03" then {
+    version = "1.0.4";
+    sha256 = "1h04q0zkasd0mw64ggh4y58lgzkhg6yhzy60lab8k8zq9ba96ajw";
+  } else {
+    version = "1.0.2";
+    sha256 = "18jqphjiifljlh9jg8zpl6310p3iwyaqphdkmf89acyaix0s4kj1";
+  }
+; in
 
-  name = "ocaml-${pname}-${version}";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  inherit (param) version;
 
   src = fetchurl {
-    url = "http://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
-    sha256 = "0ymzy1l6z85b6779lfxk179igfpf7rgfik70kr3c7lxmzwy8j6cw";
+    url = "https://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
+    inherit (param) sha256;
   };
 
-  unpackCmd = "tar xjf $src";
-  buildInputs = [ ocaml findlib opam ];
+  nativeBuildInputs = [ ocaml ocamlbuild findlib ];
+  buildInputs = [ topkg ];
+  propagatedBuildInputs = [ result ];
 
-  createFindlibDestdir = true;
-
-  configurePhase = "ocaml pkg/git.ml";
-  buildPhase     = "ocaml pkg/build.ml native=true native-dynlink=true";
-  installPhase   = ''
-    opam-installer --script --prefix=$out ${pname}.install > install.sh
-    sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml_version}/site-lib/
-  '';
+  inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
-    homepage = http://erratique.ch/software/cmdliner;
+    homepage = "https://erratique.ch/software/cmdliner";
     description = "An OCaml module for the declarative definition of command line interfaces";
     license = licenses.bsd3;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms;
   };
 }

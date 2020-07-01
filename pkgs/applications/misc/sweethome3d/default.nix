@@ -1,23 +1,40 @@
-{ stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
-, gtk3, gsettings_desktop_schemas, p7zip }:
+{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, makeDesktopItem, jdk, jre, ant
+, gtk3, gsettings-desktop-schemas, p7zip, libXxf86vm }:
 
 let
 
+  # TODO: Should we move this to `lib`? Seems like its would be useful in many cases.
+  extensionOf = filePath:
+    lib.concatStringsSep "." (lib.tail (lib.splitString "." (builtins.baseNameOf filePath)));
+
+  installIcons = iconName: icons: lib.concatStringsSep "\n" (lib.mapAttrsToList (size: iconFile: ''
+    mkdir -p "$out/share/icons/hicolor/${size}/apps"
+    ln -s -T "${iconFile}" "$out/share/icons/hicolor/${size}/apps/${iconName}.${extensionOf iconFile}"
+  '') icons);
+
   mkSweetHome3D =
-  { name, module, version, src, license, description, icon }:
+  { pname, module, version, src, license, description, desktopName, icons }:
 
   stdenv.mkDerivation rec {
-    inherit name version src description icon;
+    inherit pname version src description;
     exec = stdenv.lib.toLower module;
     sweethome3dItem = makeDesktopItem {
-      inherit name exec icon;
+      inherit exec desktopName;
+      name = pname;
+      icon = pname;
       comment =  description;
-      desktopName = name;
       genericName = "Computer Aided (Interior) Design";
-      categories = "Application;CAD;";
+      categories = "Graphics;2DGraphics;3DGraphics;";
     };
 
-    buildInputs = [ ant jdk jre makeWrapper p7zip gtk3 gsettings_desktop_schemas ];
+    patchPhase = ''
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/amd64/libnativewindow_awt.so
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/amd64/libnativewindow_x11.so
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_awt.so
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_x11.so
+    '';
+
+    buildInputs = [ ant jdk jre makeWrapper p7zip gtk3 gsettings-desktop-schemas ];
 
     buildPhase = ''
       ant furniture textures help
@@ -29,10 +46,14 @@ let
     installPhase = ''
       mkdir -p $out/bin
       cp install/${module}-${version}.jar $out/share/java/.
+
+      ${installIcons pname icons}
+
       cp "${sweethome3dItem}/share/applications/"* $out/share/applications
+
       makeWrapper ${jre}/bin/java $out/bin/$exec \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${gsettings_desktop_schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
-        --add-flags "-jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar ${if stdenv.system == "x86_64-linux" then "-d64" else "-d32"}"
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
+        --add-flags "-jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
     '';
 
     dontStrip = true;
@@ -48,23 +69,29 @@ let
 
   d2u = stdenv.lib.replaceChars ["."] ["_"];
 
-in rec {
+in {
 
   application = mkSweetHome3D rec {
-    version = "4.6.2";
+    pname = stdenv.lib.toLower module + "-application";
+    version = "6.3";
     module = "SweetHome3D";
-    name = stdenv.lib.toLower module + "-application-" + version;
     description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
-    src = fetchcvs {
-      cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
-      sha256 = "0pm0rl5y90cjwyjma7g6nnaz6dv4bqcy8vl3zzxfj0q02ww01gbz";
-      module = module;
-      tag = "V_" + d2u version;
+    src = fetchsvn {
+      url = "https://svn.code.sf.net/p/sweethome3d/code/tags/V_" + d2u version + "/SweetHome3D/";
+      sha256 = "1c13g0f73jgbzmjhdm9knqq1kh3vdl04zl3xlp30g9a1n0jkr38i";
+      rev = "6896";
     };
-    icon = fetchurl {
-      url = "http://sweethome3d.cvs.sourceforge.net/viewvc/sweethome3d/SweetHome3D/src/com/eteks/sweethome3d/viewcontroller/resources/help/images/sweethome3d.png";
-      sha256 = "0lnv2sz2d3m8jx25hz92gzardf0iblykhy5q0q2cyb7mw2qb2p92";
+    desktopName = "Sweet Home 3D";
+    icons = {
+      "32x32" = fetchurl {
+        url = "http://sweethome3d.cvs.sourceforge.net/viewvc/sweethome3d/SweetHome3D/deploy/SweetHome3DIcon32x32.png";
+        sha256 = "1r2fhfg27mx00nfv0qj66rhf719s2g1vhdis7bdc9mqk9x0mb0ir";
+      };
+      "48x48" = fetchurl {
+        url = "http://sweethome3d.cvs.sourceforge.net/viewvc/sweethome3d/SweetHome3D/deploy/SweetHome3DIcon48x48.png";
+        sha256 = "1ap6d75dyqqvx21wddvn8vw2apq3v803vmbxdriwd0dw9rq3zn4g";
+      };
     };
   };
 

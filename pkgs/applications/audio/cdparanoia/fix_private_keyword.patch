@@ -1,0 +1,468 @@
+--- cdparanoia-III-10.2/interface/cdda_interface.h	(revision 15337)
++++ cdparanoia-III-10.2/interface/cdda_interface.h	(revision 15338)
+@@ -85,5 +85,5 @@
+   int is_mmc;
+ 
+-  cdda_private_data_t *private;
++  cdda_private_data_t *private_data;
+   void         *reserved;
+   unsigned char inqbytes[4];
+--- cdparanoia-III-10.2/interface/cooked_interface.c	(revision 15337)
++++ cdparanoia-III-10.2/interface/cooked_interface.c	(revision 15338)
+@@ -14,11 +14,11 @@
+   struct timespec tv1;
+   struct timespec tv2;
+-  int ret1=clock_gettime(d->private->clock,&tv1);
++  int ret1=clock_gettime(d->private_data->clock,&tv1);
+   int ret2=ioctl(fd, command,arg);
+-  int ret3=clock_gettime(d->private->clock,&tv2);
++  int ret3=clock_gettime(d->private_data->clock,&tv2);
+   if(ret1<0 || ret3<0){
+-    d->private->last_milliseconds=-1;
++    d->private_data->last_milliseconds=-1;
+   }else{
+-    d->private->last_milliseconds = (tv2.tv_sec-tv1.tv_sec)*1000. + (tv2.tv_nsec-tv1.tv_nsec)/1000000.;
++    d->private_data->last_milliseconds = (tv2.tv_sec-tv1.tv_sec)*1000. + (tv2.tv_nsec-tv1.tv_nsec)/1000000.;
+   }
+   return ret2;
+--- cdparanoia-III-10.2/interface/interface.c	(revision 15337)
++++ cdparanoia-III-10.2/interface/interface.c	(revision 15338)
+@@ -40,7 +40,7 @@
+     if(d->cdda_fd!=-1)close(d->cdda_fd);
+     if(d->ioctl_fd!=-1 && d->ioctl_fd!=d->cdda_fd)close(d->ioctl_fd);
+-    if(d->private){
+-      if(d->private->sg_hd)free(d->private->sg_hd);
+-      free(d->private);
++    if(d->private_data){
++      if(d->private_data->sg_hd)free(d->private_data->sg_hd);
++      free(d->private_data);
+     }
+ 
+@@ -128,5 +128,5 @@
+       }	
+     }
+-    if(ms)*ms=d->private->last_milliseconds;
++    if(ms)*ms=d->private_data->last_milliseconds;
+     return(sectors);
+   }
+--- cdparanoia-III-10.2/interface/scan_devices.c	(revision 15337)
++++ cdparanoia-III-10.2/interface/scan_devices.c	(revision 15338)
+@@ -265,9 +265,9 @@
+   d->bigendianp=-1; /* We don't know yet... */
+   d->nsectors=-1;
+-  d->private=calloc(1,sizeof(*d->private));
++  d->private_data=calloc(1,sizeof(*d->private_data));
+   {
+     /* goddamnit */
+     struct timespec tv;
+-    d->private->clock=(clock_gettime(CLOCK_MONOTONIC,&tv)<0?CLOCK_REALTIME:CLOCK_MONOTONIC);
++    d->private_data->clock=(clock_gettime(CLOCK_MONOTONIC,&tv)<0?CLOCK_REALTIME:CLOCK_MONOTONIC);
+   }
+   idmessage(messagedest,messages,"\t\tCDROM sensed: %s\n",description);
+@@ -675,13 +675,13 @@
+   d->nsectors=-1;
+   d->messagedest = messagedest;
+-  d->private=calloc(1,sizeof(*d->private));
++  d->private_data=calloc(1,sizeof(*d->private_data));
+   {
+     /* goddamnit */
+     struct timespec tv;
+-    d->private->clock=(clock_gettime(CLOCK_MONOTONIC,&tv)<0?CLOCK_REALTIME:CLOCK_MONOTONIC);
++    d->private_data->clock=(clock_gettime(CLOCK_MONOTONIC,&tv)<0?CLOCK_REALTIME:CLOCK_MONOTONIC);
+   }
+   if(use_sgio){
+     d->interface=SGIO_SCSI;
+-    d->private->sg_buffer=(unsigned char *)(d->private->sg_hd=malloc(MAX_BIG_BUFF_SIZE));
++    d->private_data->sg_buffer=(unsigned char *)(d->private_data->sg_hd=malloc(MAX_BIG_BUFF_SIZE));
+     g_fd=d->cdda_fd=dup(d->ioctl_fd);
+   }else{
+@@ -697,6 +697,6 @@
+ 
+     /* malloc our big buffer for scsi commands */
+-    d->private->sg_hd=malloc(MAX_BIG_BUFF_SIZE);
+-    d->private->sg_buffer=((unsigned char *)d->private->sg_hd)+SG_OFF;
++    d->private_data->sg_hd=malloc(MAX_BIG_BUFF_SIZE);
++    d->private_data->sg_buffer=((unsigned char *)d->private_data->sg_hd)+SG_OFF;
+   }
+ 
+@@ -773,7 +773,7 @@
+   if(g_fd!=-1)close(g_fd);
+   if(d){
+-    if(d->private){
+-      if(d->private->sg_hd)free(d->private->sg_hd);
+-      free(d->private);
++    if(d->private_data){
++      if(d->private_data->sg_hd)free(d->private_data->sg_hd);
++      free(d->private_data);
+     }
+     free(d);
+@@ -822,5 +822,5 @@
+   d->bigendianp=-1; /* We don't know yet... */
+   d->nsectors=-1;
+-  d->private=calloc(1,sizeof(*d->private));
++  d->private_data=calloc(1,sizeof(*d->private_data));
+   d->drive_model=copystring("File based test interface");
+   idmessage(messagedest,messages,"\t\tCDROM sensed: %s\n",d->drive_model);
+--- cdparanoia-III-10.2/interface/scsi_interface.c	(revision 15337)
++++ cdparanoia-III-10.2/interface/scsi_interface.c	(revision 15338)
+@@ -16,11 +16,11 @@
+   struct timespec tv1;
+   struct timespec tv2;
+-  int ret1=clock_gettime(d->private->clock,&tv1);
++  int ret1=clock_gettime(d->private_data->clock,&tv1);
+   int ret2=ioctl(fd, command,arg);
+-  int ret3=clock_gettime(d->private->clock,&tv2);
++  int ret3=clock_gettime(d->private_data->clock,&tv2);
+   if(ret1<0 || ret3<0){
+-    d->private->last_milliseconds=-1;
++    d->private_data->last_milliseconds=-1;
+   }else{
+-    d->private->last_milliseconds = (tv2.tv_sec-tv1.tv_sec)*1000. + (tv2.tv_nsec-tv1.tv_nsec)/1000000.;
++    d->private_data->last_milliseconds = (tv2.tv_sec-tv1.tv_sec)*1000. + (tv2.tv_nsec-tv1.tv_nsec)/1000000.;
+   }
+   return ret2;
+@@ -97,5 +97,5 @@
+   fd_set fdset;
+   struct timeval tv;
+-  struct sg_header *sg_hd=d->private->sg_hd;
++  struct sg_header *sg_hd=d->private_data->sg_hd;
+   int flag=0;
+ 
+@@ -186,5 +186,5 @@
+   int tret1,tret2;
+   int status = 0;
+-  struct sg_header *sg_hd=d->private->sg_hd;
++  struct sg_header *sg_hd=d->private_data->sg_hd;
+   long writebytes=SG_OFF+cmd_len+in_size;
+ 
+@@ -196,5 +196,5 @@
+   memset(sg_hd,0,sizeof(sg_hd)); 
+   memset(sense_buffer,0,SG_MAX_SENSE); 
+-  memcpy(d->private->sg_buffer,cmd,cmd_len+in_size);
++  memcpy(d->private_data->sg_buffer,cmd,cmd_len+in_size);
+   sg_hd->twelve_byte = cmd_len == 12;
+   sg_hd->result = 0;
+@@ -210,5 +210,5 @@
+ 
+   if(bytecheck && out_size>in_size){
+-    memset(d->private->sg_buffer+cmd_len+in_size,bytefill,out_size-in_size); 
++    memset(d->private_data->sg_buffer+cmd_len+in_size,bytefill,out_size-in_size); 
+     /* the size does not remove cmd_len due to the way the kernel
+        driver copies buffers */
+@@ -244,5 +244,5 @@
+ 
+   sigprocmask (SIG_BLOCK, &(d->sigset), NULL );
+-  tret1=clock_gettime(d->private->clock,&tv1);  
++  tret1=clock_gettime(d->private_data->clock,&tv1);  
+   errno=0;
+   status = write(d->cdda_fd, sg_hd, writebytes );
+@@ -290,5 +290,5 @@
+   }
+ 
+-  tret2=clock_gettime(d->private->clock,&tv2);  
++  tret2=clock_gettime(d->private_data->clock,&tv2);  
+   errno=0;
+   status = read(d->cdda_fd, sg_hd, SG_OFF + out_size);
+@@ -314,5 +314,5 @@
+     long i,flag=0;
+     for(i=in_size;i<out_size;i++)
+-      if(d->private->sg_buffer[i]!=bytefill){
++      if(d->private_data->sg_buffer[i]!=bytefill){
+ 	flag=1;
+ 	break;
+@@ -327,7 +327,7 @@
+   errno=0;
+   if(tret1<0 || tret2<0){
+-    d->private->last_milliseconds=-1;
++    d->private_data->last_milliseconds=-1;
+   }else{
+-    d->private->last_milliseconds = (tv2.tv_sec-tv1.tv_sec)*1000 + (tv2.tv_nsec-tv1.tv_nsec)/1000000;
++    d->private_data->last_milliseconds = (tv2.tv_sec-tv1.tv_sec)*1000 + (tv2.tv_nsec-tv1.tv_nsec)/1000000;
+   }
+   return(0);
+@@ -348,5 +348,5 @@
+   memset(&hdr,0,sizeof(hdr));
+   memset(sense,0,sizeof(sense));
+-  memcpy(d->private->sg_buffer,cmd+cmd_len,in_size);
++  memcpy(d->private_data->sg_buffer,cmd+cmd_len,in_size);
+ 
+   hdr.cmdp = cmd;
+@@ -356,5 +356,5 @@
+   hdr.timeout = 50000;
+   hdr.interface_id = 'S';
+-  hdr.dxferp =  d->private->sg_buffer;
++  hdr.dxferp =  d->private_data->sg_buffer;
+   hdr.flags = SG_FLAG_DIRECT_IO;  /* direct IO if we can get it */
+ 
+@@ -401,5 +401,5 @@
+     long i,flag=0;
+     for(i=in_size;i<out_size;i++)
+-      if(d->private->sg_buffer[i]!=bytefill){
++      if(d->private_data->sg_buffer[i]!=bytefill){
+ 	flag=1;
+ 	break;
+@@ -413,5 +413,5 @@
+ 
+   /* Can't rely on .duration because we can't be certain kernel has HZ set to something useful */
+-  /* d->private->last_milliseconds = hdr.duration; */
++  /* d->private_data->last_milliseconds = hdr.duration; */
+ 
+   errno = 0;
+@@ -446,7 +446,7 @@
+   handle_scsi_cmd(d, cmd, 6, 0, 56, 0,0, sense);
+ 
+-  key = d->private->sg_buffer[2] & 0xf;
+-  ASC = d->private->sg_buffer[12];
+-  ASCQ = d->private->sg_buffer[13];
++  key = d->private_data->sg_buffer[2] & 0xf;
++  ASC = d->private_data->sg_buffer[12];
++  ASCQ = d->private_data->sg_buffer[13];
+   
+   if(key == 2 && ASC == 4 && ASCQ == 1) return 0;
+@@ -493,5 +493,5 @@
+ 
+   {
+-    unsigned char *b=d->private->sg_buffer;
++    unsigned char *b=d->private_data->sg_buffer;
+     if(b[0])return(1); /* Handles only up to 256 bytes */
+     if(b[6])return(1); /* Handles only up to 256 bytes */
+@@ -605,6 +605,6 @@
+   if(mode_sense(d,12,0x01))return(-1);
+ 
+-  d->orgdens = d->private->sg_buffer[4];
+-  return(d->orgsize = ((int)(d->private->sg_buffer[10])<<8)+d->private->sg_buffer[11]);
++  d->orgdens = d->private_data->sg_buffer[4];
++  return(d->orgsize = ((int)(d->private_data->sg_buffer[10])<<8)+d->private_data->sg_buffer[11]);
+ }
+ 
+@@ -665,6 +665,6 @@
+   }
+ 
+-  first=d->private->sg_buffer[2];
+-  last=d->private->sg_buffer[3];
++  first=d->private_data->sg_buffer[2];
++  last=d->private_data->sg_buffer[3];
+   tracks=last-first+1;
+ 
+@@ -684,5 +684,5 @@
+     }
+     {
+-      scsi_TOC *toc=(scsi_TOC *)(d->private->sg_buffer+4);
++      scsi_TOC *toc=(scsi_TOC *)(d->private_data->sg_buffer+4);
+ 
+       d->disc_toc[i-first].bFlags=toc->bFlags;
+@@ -705,5 +705,5 @@
+   }
+   {
+-    scsi_TOC *toc=(scsi_TOC *)(d->private->sg_buffer+4);
++    scsi_TOC *toc=(scsi_TOC *)(d->private_data->sg_buffer+4);
+     
+     d->disc_toc[i-first].bFlags=toc->bFlags;
+@@ -739,5 +739,5 @@
+ 
+   /* copy to our structure and convert start sector */
+-  tracks = d->private->sg_buffer[1];
++  tracks = d->private_data->sg_buffer[1];
+   if (tracks > MAXTRK) {
+     cderror(d,"003: CDROM reporting illegal number of tracks\n");
+@@ -755,31 +755,31 @@
+     }
+     
+-    d->disc_toc[i].bFlags = d->private->sg_buffer[10];
++    d->disc_toc[i].bFlags = d->private_data->sg_buffer[10];
+     d->disc_toc[i].bTrack = i + 1;
+ 
+     d->disc_toc[i].dwStartSector= d->adjust_ssize * 
+-	(((signed char)(d->private->sg_buffer[2])<<24) | 
+-	 (d->private->sg_buffer[3]<<16)|
+-	 (d->private->sg_buffer[4]<<8)|
+-	 (d->private->sg_buffer[5]));
++	(((signed char)(d->private_data->sg_buffer[2])<<24) | 
++	 (d->private_data->sg_buffer[3]<<16)|
++	 (d->private_data->sg_buffer[4]<<8)|
++	 (d->private_data->sg_buffer[5]));
+   }
+ 
+   d->disc_toc[i].bFlags = 0;
+   d->disc_toc[i].bTrack = i + 1;
+-  memcpy (&foo, d->private->sg_buffer+2, 4);
+-  memcpy (&bar, d->private->sg_buffer+6, 4);
++  memcpy (&foo, d->private_data->sg_buffer+2, 4);
++  memcpy (&bar, d->private_data->sg_buffer+6, 4);
+   d->disc_toc[i].dwStartSector = d->adjust_ssize * (be32_to_cpu(foo) +
+ 						    be32_to_cpu(bar));
+ 
+   d->disc_toc[i].dwStartSector= d->adjust_ssize * 
+-    ((((signed char)(d->private->sg_buffer[2])<<24) | 
+-      (d->private->sg_buffer[3]<<16)|
+-      (d->private->sg_buffer[4]<<8)|
+-      (d->private->sg_buffer[5]))+
++    ((((signed char)(d->private_data->sg_buffer[2])<<24) | 
++      (d->private_data->sg_buffer[3]<<16)|
++      (d->private_data->sg_buffer[4]<<8)|
++      (d->private_data->sg_buffer[5]))+
+      
+-     ((((signed char)(d->private->sg_buffer[6])<<24) | 
+-       (d->private->sg_buffer[7]<<16)|
+-       (d->private->sg_buffer[8]<<8)|
+-       (d->private->sg_buffer[9]))));
++     ((((signed char)(d->private_data->sg_buffer[6])<<24) | 
++       (d->private_data->sg_buffer[7]<<16)|
++       (d->private_data->sg_buffer[8]<<8)|
++       (d->private_data->sg_buffer[9]))));
+ 
+ 
+@@ -818,5 +818,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,10,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -837,5 +837,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -855,5 +855,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,10,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -873,5 +873,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -891,5 +891,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,10,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -909,5 +909,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -923,5 +923,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -937,5 +937,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -951,5 +951,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -965,5 +965,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -979,5 +979,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -993,5 +993,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -1027,5 +1027,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -1040,5 +1040,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -1053,5 +1053,5 @@
+   if((ret=handle_scsi_cmd(d,cmd,12,0,sectors * CD_FRAMESIZE_RAW,'\177',1,sense)))
+     return(ret);
+-  if(p)memcpy(p,d->private->sg_buffer,sectors*CD_FRAMESIZE_RAW);
++  if(p)memcpy(p,d->private_data->sg_buffer,sectors*CD_FRAMESIZE_RAW);
+   return(0);
+ }
+@@ -1276,5 +1276,5 @@
+   long i;
+   for(i=2351;i>=0;i--)
+-    if(d->private->sg_buffer[i]!=(unsigned char)'\177')
++    if(d->private_data->sg_buffer[i]!=(unsigned char)'\177')
+       return(((i+3)>>2)<<2);
+ 
+@@ -1285,5 +1285,5 @@
+   long i,flag=0;
+   for(i=0;i<2352;i++)
+-    if(d->private->sg_buffer[i]!=0){
++    if(d->private_data->sg_buffer[i]!=0){
+       flag=1;
+       break;
+@@ -1622,5 +1622,5 @@
+   if(mode_sense(d,22,0x2A)==0){
+   
+-    b=d->private->sg_buffer;
++    b=d->private_data->sg_buffer;
+     b+=b[3]+4;
+     
+@@ -1670,5 +1670,5 @@
+     return(NULL);
+   }
+-  return (d->private->sg_buffer);
++  return (d->private_data->sg_buffer);
+ }
+ 
+@@ -1726,6 +1726,6 @@
+ 
+   d->error_retry=1;
+-  d->private->sg_hd=realloc(d->private->sg_hd,d->nsectors*CD_FRAMESIZE_RAW + SG_OFF + 128);
+-  d->private->sg_buffer=((unsigned char *)d->private->sg_hd)+SG_OFF;
++  d->private_data->sg_hd=realloc(d->private_data->sg_hd,d->nsectors*CD_FRAMESIZE_RAW + SG_OFF + 128);
++  d->private_data->sg_buffer=((unsigned char *)d->private_data->sg_hd)+SG_OFF;
+   d->report_all=1;
+   return(0);
+--- cdparanoia-III-10.2/interface/test_interface.c	(revision 15337)
++++ cdparanoia-III-10.2/interface/test_interface.c	(revision 15338)
+@@ -67,7 +67,7 @@
+ 
+   if(begin<lastread)
+-    d->private->last_milliseconds=20;
++    d->private_data->last_milliseconds=20;
+   else
+-    d->private->last_milliseconds=sectors;
++    d->private_data->last_milliseconds=sectors;
+ 
+ #ifdef CDDA_TEST_UNDERRUN

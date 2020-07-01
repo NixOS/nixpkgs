@@ -1,31 +1,21 @@
-{ stdenv, patchelf, zlib, libmad, libpng12, libcaca, mesa, alsaLib, pulseaudio
-, xlibs, plowshare }:
-
-assert stdenv.isLinux;
+{ stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, libGLU, libGL, alsaLib, libpulseaudio
+, xorg }:
 
 let
 
-  inherit (xlibs) libXext libX11;
+  inherit (xorg) libXext libX11;
 
-  lpath = "${stdenv.cc.cc}/lib64:" + stdenv.lib.makeSearchPath "lib" [
-      zlib libmad libpng12 libcaca libXext libX11 mesa alsaLib pulseaudio];
+  lpath = "${stdenv.cc.cc.lib}/lib64:" + stdenv.lib.makeLibraryPath [
+      zlib libmad libpng12 libcaca libXext libX11 libGLU libGL alsaLib libpulseaudio];
 
 in
-assert stdenv.is64bit;
 stdenv.mkDerivation rec {
+  name = "adom-${version}-noteye";
+  version = "1.2.0_pre23";
 
-  name = "adom-1.2.0-noteye";
-
-  # couldn't make fetchurl appear non-robot, even with --user-agent
-  src = stdenv.mkDerivation {
-    name = "adom-1.2.0-noteye.tar.gz";
-    buildCommand = ''
-      ${plowshare}/bin/plowdown "http://www30.zippyshare.com/v/39200582/file.html"
-      F=`ls *tar.gz`
-      mv $F $out
-    '';
-    outputHashAlgo = "sha256";
-    outputHash = "1f825845d5007e676a4d1a3ccd887904b959bdddbcb9f241c42c2dac34037669";
+  src = fetchurl {
+    url = "http://ancardia.uk.to/download/adom_noteye_linux_ubuntu_64_${version}.tar.gz";
+    sha256 = "0sbn0csaqb9cqi0z5fdwvnymkf84g64csg0s9mm6fzh0sm2mi0hz";
   };
 
   buildCommand = ''
@@ -52,14 +42,14 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     cat >$out/bin/adom <<EOF
     #! ${stdenv.shell}
-    (cd $out; $out/adom ; )
+    (cd $out; exec $out/adom ; )
     EOF
     chmod +x $out/bin/adom
   '';
 
   meta = with stdenv.lib; {
     description = "A rogue-like game with nice graphical interface";
-    homepage = http://adom.de/;
+    homepage = "http://adom.de/";
     license = licenses.unfreeRedistributable;
     maintainers = [maintainers.smironov];
 
@@ -67,5 +57,3 @@ stdenv.mkDerivation rec {
     platforms = ["x86_64-linux"];
   };
 }
-
-

@@ -47,7 +47,7 @@ case "$NIX_LISP" in
                   :toplevel (lambda ()
                     (setf common-lisp:*standard-input* (sb-sys::make-fd-stream 0 :input t :buffering :line))
                     (setf common-lisp:*standard-output* (sb-sys::make-fd-stream 1 :output t :buffering :line))
-                    (setf asdf/image:*command-line-arguments* (cdr sb-ext:*posix-argv*))
+                    (setf uiop/image:*command-line-arguments* (cdr sb-ext:*posix-argv*))
                     $code)
                     :executable t :save-runtime-options t :purify t))"
                 systems=":sb-posix $systems"

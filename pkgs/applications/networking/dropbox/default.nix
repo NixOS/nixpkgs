@@ -1,128 +1,85 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
-, dbus_libs, gcc, glib, libdrm, libffi, libICE, libSM
-, libX11, libXmu, ncurses, popt, qt5, zlib
-}:
+{ stdenv, lib, buildFHSUserEnv, writeScript, makeDesktopItem }:
 
-# this package contains the daemon version of dropbox
-# it's unfortunately closed source
-#
-# note: the resulting program has to be invoced as
-# 'dropbox' because the internal python engine takes
-# uses the name of the program as starting point.
+let platforms = [ "i686-linux" "x86_64-linux" ]; in
 
-# Dropbox ships with its own copies of some libraries.
-# Unfortunately, upstream makes changes to the source of
-# some libraries, rendering them incompatible with the
-# open-source versions. Wherever possible, we must try
-# to make the bundled libraries work, rather than replacing
-# them with our own.
+assert lib.elem stdenv.hostPlatform.system platforms;
+
+# Dropbox client to bootstrap installation.
+# The client is self-updating, so the actual version may be newer.
+let
+  version = "83.4.152";
+
+  arch = {
+    x86_64-linux = "x86_64";
+    i686-linux   = "x86";
+  }.${stdenv.hostPlatform.system};
+
+  installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
+in
 
 let
-  # NOTE: When updating, please also update in current stable, as older versions stop working
-  version = "3.4.6";
-  sha256 =
-    {
-      "x86_64-linux" = "0crhv21q48lwa86qcqgbcd9g73biibfrc2vgbavi67cwxvzcskky";
-      "i686-linux" = "0kli84kzg1wcwszjni948zb4qih8mynmyqhdwyiv1l7v5lrhb8k2";
-    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
-
-  arch =
-    {
-      "x86_64-linux" = "x86_64";
-      "i686-linux" = "x86";
-    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
-
-  interpreter =
-    {
-      "x86_64-linux" = "ld-linux-x86-64.so.2";
-      "i686-linux" = "ld-linux.so.2";
-    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
-
-  # relative location where the dropbox libraries are stored
-  appdir = "opt/dropbox";
-
-  ldpath = stdenv.lib.makeSearchPath "lib"
-    [
-      dbus_libs gcc glib libdrm libffi libICE libSM libX11
-      libXmu ncurses popt qt5.base qt5.declarative qt5.webkit
-      zlib
-    ];
-
   desktopItem = makeDesktopItem {
     name = "dropbox";
     exec = "dropbox";
-    comment = "Online directories";
+    comment = "Sync your files across computers and to the web";
     desktopName = "Dropbox";
-    genericName = "Online storage";
-    categories = "Application;Internet;";
+    genericName = "File Synchronizer";
+    categories = "Network;FileTransfer;";
+    startupNotify = "false";
   };
+in
 
-in stdenv.mkDerivation {
-  name = "dropbox-${version}-bin";
-  src = fetchurl {
-    name = "dropbox-${version}.tar.gz";
-    url = "https://dl-web.dropbox.com/u/17/dropbox-lnx.${arch}-${version}.tar.gz";
-    inherit sha256;
-  };
+buildFHSUserEnv {
+  name = "dropbox";
 
-  sourceRoot = ".";
+  targetPkgs = pkgs: with pkgs; with xorg; [
+    libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
+    libXxf86vm libxcb xkeyboardconfig
+    curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
+    procps zlib mesa libxshmfence libpthreadstubs libappindicator
+  ];
 
-  patchPhase = ''
-    rm -f .dropbox-dist/dropboxd
-  '';
-
-  buildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    mkdir -p "$out/${appdir}"
-    cp -r ".dropbox-dist/dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
-
-    rm "$out/${appdir}/libdrm.so.2"
-    rm "$out/${appdir}/libffi.so.6"
-    rm "$out/${appdir}/libicudata.so.42"
-    rm "$out/${appdir}/libicui18n.so.42"
-    rm "$out/${appdir}/libicuuc.so.42"
-    rm "$out/${appdir}/libGL.so.1"
-    rm "$out/${appdir}/libpopt.so.0"
-    rm "$out/${appdir}/libQt5Core.so.5"
-    rm "$out/${appdir}/libQt5DBus.so.5"
-    rm "$out/${appdir}/libQt5Gui.so.5"
-    rm "$out/${appdir}/libQt5Network.so.5"
-    rm "$out/${appdir}/libQt5OpenGL.so.5"
-    rm "$out/${appdir}/libQt5PrintSupport.so.5"
-    rm "$out/${appdir}/libQt5Qml.so.5"
-    rm "$out/${appdir}/libQt5Quick.so.5"
-    rm "$out/${appdir}/libQt5Sql.so.5"
-    rm "$out/${appdir}/libQt5WebKit.so.5"
-    rm "$out/${appdir}/libQt5WebKitWidgets.so.5"
-    rm "$out/${appdir}/libQt5Widgets.so.5"
-    rm "$out/${appdir}/libX11-xcb.so.1"
-
-    rm "$out/${appdir}/qt.conf"
-    rm -fr "$out/${appdir}/plugins"
-
-    find "$out/${appdir}" -type f -a -perm +0100 \
-      -print -exec patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} {} \;
-
-    RPATH=${ldpath}:${gcc.cc}/lib:$out/${appdir}
-    echo "updating rpaths to: $RPATH"
-    find "$out/${appdir}" -type f -a -perm +0100 \
-      -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
-
+  extraInstallCommands = ''
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
-
-    mkdir -p "$out/bin"
-    makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
-      --prefix LD_LIBRARY_PATH : "${ldpath}"
-
-    mkdir -p "$out/share/icons"
-    ln -s "$out/${appdir}/images/hicolor" "$out/share/icons/hicolor"
   '';
 
-  meta = {
-    homepage = "http://www.dropbox.com";
+  runScript = writeScript "install-and-start-dropbox" ''
+    export BROWSER=firefox
+
+    set -e
+
+    do_install=
+    if ! [ -d "$HOME/.dropbox-dist" ]; then
+        do_install=1
+    else
+        installed_version=$(cat "$HOME/.dropbox-dist/VERSION")
+        latest_version=$(printf "${version}\n$installed_version\n" | sort -rV | head -n 1)
+        if [ "x$installed_version" != "x$latest_version" ]; then
+            do_install=1
+        fi
+    fi
+
+    if [ -n "$do_install" ]; then
+        installer=$(mktemp)
+        # Dropbox is not installed.
+        # Download and unpack the client. If a newer version is available,
+        # the client will update itself when run.
+        curl '${installer}' >"$installer"
+        pkill dropbox || true
+        rm -fr "$HOME/.dropbox-dist"
+        tar -C "$HOME" -x -z -f "$installer"
+        rm "$installer"
+    fi
+
+    exec "$HOME/.dropbox-dist/dropboxd" "$@"
+  '';
+
+  meta = with lib; {
     description = "Online stored folders (daemon version)";
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    homepage    = "http://www.dropbox.com/";
+    license     = licenses.unfree;
+    maintainers = with maintainers; [ ttuegel ];
+    platforms   = [ "i686-linux" "x86_64-linux" ];
   };
 }

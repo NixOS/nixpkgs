@@ -11,12 +11,12 @@ addXMLCatalogs () {
     done
 }
 
-if [ -z "$libxmlHookDone" ]; then
+if [ -z "${libxmlHookDone-}" ]; then
     libxmlHookDone=1
 
     # Set up XML_CATALOG_FILES.  An empty initial value prevents
     # xmllint and xsltproc from looking in /etc/xml/catalog.
-    export XML_CATALOG_FILES
+    export XML_CATALOG_FILES=''
     if [ -z "$XML_CATALOG_FILES" ]; then XML_CATALOG_FILES=" "; fi
-    envHooks+=(addXMLCatalogs)
+    addEnvHooks "$hostOffset" addXMLCatalogs
 fi

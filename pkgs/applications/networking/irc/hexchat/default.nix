@@ -1,32 +1,50 @@
-{ stdenv, fetchurl, pkgconfig, gtk, perl, python, gettext
-, libtool, pciutils, dbus_glib, libcanberra, libproxy
-, libsexy, enchant, libnotify, openssl
-, desktop_file_utils, hicolor_icon_theme
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, lua, perl, python3
+, pciutils, dbus-glib, libcanberra-gtk2, libproxy
+, enchant2, libnotify, openssl, isocodes
+, desktop-file-utils
+, meson, ninja
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.9.6.1";
-  name = "hexchat-${version}";
+  pname = "hexchat";
+  version = "2.14.3";
 
-  src = fetchurl {
-    url = "http://dl.hexchat.net/hexchat/${name}.tar.xz";
-    sha256 = "0w34jr1pqril6r011fwxv40m17bnb88q9cv5hf08mv0a9lygyrv2";
+  src = fetchFromGitHub {
+    owner = "hexchat";
+    repo = "hexchat";
+    rev = "v${version}";
+    sha256 = "08kvp0dcn3bvmlqcfp9312075bwkqkpa8m7zybr88pfp210gfl85";
   };
 
+  nativeBuildInputs = [ meson ninja pkgconfig ];
+
   buildInputs = [
-    pkgconfig gtk perl python gettext
-    libtool pciutils dbus_glib libcanberra libproxy
-    libsexy libnotify openssl
-    desktop_file_utils hicolor_icon_theme
+    gtk2 lua perl python3 pciutils dbus-glib libcanberra-gtk2 libproxy
+    libnotify openssl desktop-file-utils
+    isocodes
   ];
 
-  configureFlags = [ "--enable-shm" "--enable-textfe" ];
+  #hexchat and hexchat-text loads enchant spell checking library at run time and so it needs to have route to the path
+  postPatch = ''
+    sed -i "s,libenchant-2.so.2,${enchant2}/lib/libenchant-2.so.2,g" src/fe-gtk/sexy-spell-entry.c
+    sed -i "/flag.startswith('-I')/i if flag.contains('no-such-path')\ncontinue\nendif" plugins/perl/meson.build
+    chmod +x meson_post_install.py
+    for f in meson_post_install.py \
+             src/common/make-te.py \
+             plugins/perl/generate_header.py \
+             po/validate-textevent-translations
+    do
+      patchShebangs $f
+    done
+  '';
 
-  meta = {
+  mesonFlags = [ "-Dwith-lua=lua" "-Dwith-text=true" ];
+
+  meta = with stdenv.lib; {
     description = "A popular and easy to use graphical IRC (chat) client";
-    homepage = http://hexchat.github.io/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    homepage = "https://hexchat.github.io/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ romildo ];
   };
 }

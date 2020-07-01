@@ -1,0 +1,57 @@
+From: Robert Luberda <robert@debian.org>
+Date: Mon, 7 Mar 2011 22:23:56 +0100
+Subject: 0021 Fix gcc warnings
+
+Fix some gcc warnings.
+---
+ correct.c                |    2 +-
+ languages/english/msgs.h |    8 ++++----
+ tree.c                   |    2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/correct.c b/correct.c
+index 79b259f..982b7c6 100644
+--- a/correct.c
++++ b/correct.c
+@@ -825,7 +825,7 @@ static void inserttoken (buf, start, tok, curchar, oktochange)
+ 	for (p = start;  p != *curchar;  p++)
+ 	    (void) putc (*p, logfile);
+ 	(void) putc (' ', logfile);
+-	(void) fputs (tok, logfile);
++	(void) fputs ((char*) tok, logfile);
+ 	(void) putc ('\n', logfile);
+ 	(void) fflush (logfile);
+ 	}
+diff --git a/languages/english/msgs.h b/languages/english/msgs.h
+index d33b42b..f9c87ca 100644
+--- a/languages/english/msgs.h
++++ b/languages/english/msgs.h
+@@ -182,10 +182,10 @@
+ #define CORR_C_HELP_4		"next to each one.  You have the option of replacing the word%s\n"
+ #define CORR_C_HELP_5		"completely, or choosing one of the suggested words.%s\n"
+     /* You may add HELP_6 through HELP_9 if your language needs more lines */
+-#define CORR_C_HELP_6		""
+-#define CORR_C_HELP_7		""
+-#define CORR_C_HELP_8		""
+-#define CORR_C_HELP_9		""
++#define CORR_C_HELP_6		"%s"
++#define CORR_C_HELP_7		"%s"
++#define CORR_C_HELP_8		"%s"
++#define CORR_C_HELP_9		"%s"
+ #define CORR_C_HELP_COMMANDS	"%s\nCommands are:%s\n%s\n"
+ #define CORR_C_HELP_R_CMD	"R       Replace the misspelled word completely.%s\n"
+ #define CORR_C_HELP_BLANK	"Space   Accept the word this time only.%s\n"
+diff --git a/tree.c b/tree.c
+index 05a6918..229ae16 100644
+--- a/tree.c
++++ b/tree.c
+@@ -351,7 +351,7 @@ void treeinsert (word, wordlen, keep)
+     struct dent *	oldhtab;
+     unsigned int	oldhsize;
+     ichar_t		nword[INPUTWORDLEN + MAXAFFIXLEN];
+-    int			isvariant;
++    MASKTYPE		isvariant;
+ 
+     /*
+      * Expand hash table when it is MAXPCT % full.
+-- 

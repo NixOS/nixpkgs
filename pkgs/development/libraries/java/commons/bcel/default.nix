@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.2";
-  name    = "commons-bcel-${version}";
+  pname = "commons-bcel";
 
   src = fetchurl {
     url    = "mirror://apache/commons/bcel/binaries/bcel-${version}.tar.gz";
@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "Gives users a convenient way to analyze, create, and manipulate (binary) Java class files";
     maintainers = with stdenv.lib.maintainers; [ copumpkin ];
     license     = stdenv.lib.licenses.asl20;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

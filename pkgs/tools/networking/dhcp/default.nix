@@ -1,43 +1,32 @@
 { stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper
-, coreutils, gnused, bind, openldap ? null
+, coreutils, gnused, openldap ? null
+, buildPackages, lib
 }:
 
 stdenv.mkDerivation rec {
-  name = "dhcp-${version}";
-  version = "4.3.2";
-  
+  pname = "dhcp";
+  version = "4.4.2";
+
   src = fetchurl {
-    url = "http://ftp.isc.org/isc/dhcp/${version}/${name}.tar.gz";
-    sha256 = "0rc156qqv7293yi69gxvvc8s4cp7fspwl12iqkf6r7vmb2rwjik2";
+    url = "https://ftp.isc.org/isc/dhcp/${version}/${pname}-${version}.tar.gz";
+    sha256 = "08a5003zdxgl41b29zjkxa92h2i40zyjgxg0npvnhpkfl5jcsz0s";
   };
 
   patches =
-    [ # Don't bring down interfaces, because wpa_supplicant doesn't
-      # recover when the wlan interface goes down.  Instead just flush
-      # all addresses, routes and neighbours of the interface.
-      ./flush-if.patch
-
+    [
       # Make sure that the hostname gets set on reboot.  Without this
       # patch, the hostname doesn't get set properly if the old
       # hostname (i.e. before reboot) is equal to the new hostname.
       ./set-hostname.patch
     ];
 
-  # Fixes "socket.c:591: error: invalid application of 'sizeof' to
-  # incomplete type 'struct in6_pktinfo'".  See
-  # http://www.mail-archive.com/blfs-book@linuxfromscratch.org/msg13013.html
-  #
-  # Also adds the ability to run dhcpd as a non-root user / group
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE -DPARANOIA";
+  nativeBuildInputs = [ perl ];
 
-  # It would automatically add -Werror, which disables build in gcc 4.4
-  # due to an uninitialized variable.
-  CFLAGS = "-g -O2 -Wall";
+  buildInputs = [ makeWrapper openldap ];
 
-  buildInputs = [ perl makeWrapper openldap bind ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configureFlags = [
-    "--with-libbind=${bind}"
     "--enable-failover"
     "--enable-execute"
     "--enable-tracing"
@@ -47,7 +36,15 @@ stdenv.mkDerivation rec {
     "--enable-early-chroot"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ] ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+  ] ++ lib.optional stdenv.isLinux "--with-randomdev=/dev/random"
+    ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+
+  NIX_CFLAGS_COMPILE = builtins.toString [
+    "-Wno-error=pointer-compare"
+    "-Wno-error=format-truncation"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=format-overflow"
+  ];
 
   installFlags = [ "DESTDIR=\${out}" ];
 
@@ -71,6 +68,8 @@ stdenv.mkDerivation rec {
       substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
       sed -i "includes/dhcpd.h" \
 	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
+
+      export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
     '';
 
   meta = with stdenv.lib; {
@@ -83,9 +82,8 @@ stdenv.mkDerivation rec {
       client, and relay agent.
    '';
 
-    homepage = http://www.isc.org/products/DHCP/;
+    homepage = "https://www.isc.org/dhcp/";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

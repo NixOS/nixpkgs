@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, utillinux }:
 
-let version = "117"; in
-stdenv.mkDerivation {
-  name = "mcelog-${version}";
+stdenv.mkDerivation rec {
+  pname = "mcelog";
+  version = "169";
 
   src = fetchFromGitHub {
-    sha256 = "0szc5s0bag16ypna336spwb5fagwbxaparn0h78w73wv05kcvwqw";
-    rev = "v${version}";
-    repo = "mcelog";
-    owner = "andikleen";
+    owner  = "andikleen";
+    repo   = "mcelog";
+    rev    = "v${version}";
+    sha256 = "0ghkwfaky026qwj6hmcvz2w2hm8qqj3ysbkxxi603vslmwj56chv";
   };
 
   postPatch = ''
@@ -16,15 +16,36 @@ stdenv.mkDerivation {
       substituteInPlace $i --replace /etc $out/etc
     done
     touch mcelog.conf.5 # avoid regeneration requiring Python
+
+    substituteInPlace Makefile --replace '"unknown"' '"${version}"'
+
+    for i in triggers/*; do
+      substituteInPlace $i --replace 'logger' '${utillinux}/bin/logger'
+    done
   '';
 
-  installFlags = "DESTDIR=$(out) prefix= DOCDIR=/share/doc";
+  enableParallelBuilding = true;
+
+  installFlags = [ "DESTDIR=$(out)" "prefix=" "DOCDIR=/share/doc" ];
+
+  postInstall = ''
+    mkdir -p $out/lib/systemd/system
+    substitute mcelog.service $out/lib/systemd/system/mcelog.service \
+      --replace /usr/sbin $out/bin
+  '';
 
   meta = with stdenv.lib; {
-    inherit version;
-    description = "Log machine checks (memory, IO, and CPU hardware errors)";
-    homepage = http://mcelog.org/;
-    license = with licenses; gpl2;
-    maintainers = with maintainers; [ nckx ];
+    description = "Log x86 machine checks: memory, IO, and CPU hardware errors";
+    longDescription = ''
+      The mcelog daemon accounts memory and some other errors in various ways
+      on modern x86 Linux systems. The daemon can be queried and/or execute
+      triggers when configurable error thresholds are exceeded. This is used to
+      implement a range of automatic predictive failure analysis algorithms,
+      including bad page offlining and automatic cache error handling. All
+      errors are logged to /var/log/mcelog or syslog or the journal.
+    '';
+    homepage = "http://mcelog.org/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

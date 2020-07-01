@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "uni2ascii-4.18";
   src = fetchurl {
-    url = "http://billposer.org/Software/Downloads/${name}.tar.gz";
+    url = "https://billposer.org/Software/Downloads/${name}.tar.gz";
     sha256 = "03lklnzr6ngs4wqiqa7rifd246f441gfvardbsaa5l6fn9pbn94y";
   };
 
   meta = {
     license = stdenv.lib.licenses.gpl3;
-    homepage = http://billposer.org/Software/uni2ascii.html;
+    homepage = "http://billposer.org/Software/uni2ascii.html";
     description = "Converts between UTF-8 and many 7-bit ASCII equivalents and back";
 
     longDescription = '' 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     It also provides ways of converting non-ASCII characters to
     similar ASCII characters, e.g. by stripping diacritics.
     '';
-    maintainers = [ "cillian.deroiste@gmail.com" ];
+    maintainers = with stdenv.lib.maintainers; [ goibhniu ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

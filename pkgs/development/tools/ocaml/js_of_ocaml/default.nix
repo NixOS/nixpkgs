@@ -1,28 +1,18 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_lwt, menhir, ocsigen_deriving, camlp4,
- cmdliner, tyxml, reactivedata}:
+{ stdenv, ocaml, findlib, dune_2, js_of_ocaml-compiler
+, ocaml-migrate-parsetree, ppx_tools_versioned, uchar
+}:
 
 stdenv.mkDerivation {
-  name = "js_of_ocaml-2.5";
-  src = fetchurl {
-    url = https://github.com/ocsigen/js_of_ocaml/archive/2.5.tar.gz;
-    sha256 = "1prm08nf8szmd3p13ysb0yx1cy6lr671bnwsp25iny8hfbs39sjv";
-    };
-  
-  buildInputs = [ocaml findlib menhir ocsigen_deriving
-                 cmdliner tyxml camlp4 reactivedata];
-  propagatedBuildInputs = [ ocaml_lwt ];
+  pname = "js_of_ocaml"; 
 
-  patches = [ ./Makefile.conf.diff ];  
+  inherit (js_of_ocaml-compiler) version src installPhase meta;
 
-  createFindlibDestdir = true;
+  buildInputs = [ findlib ocaml-migrate-parsetree ppx_tools_versioned ];
+  nativeBuildInputs = [ ocaml findlib dune_2 ];
 
-  meta = with stdenv.lib; {
-    homepage = http://ocsigen.org/js_of_ocaml/;
-    description = "Compiler of OCaml bytecode to Javascript. It makes it possible to run Ocaml programs in a Web browser";
-    license = licenses.lgpl2;
-    platforms = ocaml.meta.platforms;
-    maintainers = [
-      maintainers.gal_bolle
-    ];
-  };
+  postPatch = "patchShebangs lib/generate_stubs.sh";
+
+	propagatedBuildInputs = [ js_of_ocaml-compiler uchar ];
+
+	buildPhase = "dune build -p js_of_ocaml";
 }

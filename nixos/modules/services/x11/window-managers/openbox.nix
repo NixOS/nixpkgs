@@ -1,19 +1,13 @@
 {lib, pkgs, config, ...}:
 
+with lib;
 let
-  inherit (lib) mkOption mkIf;
   cfg = config.services.xserver.windowManager.openbox;
 in
 
 {
   options = {
-    services.xserver.windowManager.openbox = {
-      enable = mkOption {
-        default = false;
-        example = true;
-        description = "Enable the Openbox window manager.";
-      };
-    };
+    services.xserver.windowManager.openbox.enable = mkEnableOption "openbox";
   };
 
   config = mkIf cfg.enable {

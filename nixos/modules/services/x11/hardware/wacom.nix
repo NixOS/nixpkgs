@@ -15,6 +15,7 @@ in
     services.xserver.wacom = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the Wacom touchscreen/digitizer/tablet.
@@ -22,7 +23,7 @@ in
           which will make Xorg reconfigure the device ?
 
           If you're not satisfied by the default behaviour you can override
-          <option>environment.etc."X11/xorg.conf.d/50-wacom.conf"</option> in
+          <option>environment.etc."X11/xorg.conf.d/70-wacom.conf"</option> in
           configuration.nix easily.
         '';
       };
@@ -40,7 +41,7 @@ in
 
     services.udev.packages = [ pkgs.xf86_input_wacom ];
 
-    environment.etc."X11/xorg.conf.d/50-wacom.conf".source = "${pkgs.xf86_input_wacom}/share/X11/xorg.conf.d/50-wacom.conf";
+    environment.etc."X11/xorg.conf.d/70-wacom.conf".source = "${pkgs.xf86_input_wacom}/share/X11/xorg.conf.d/70-wacom.conf";
 
   };
 

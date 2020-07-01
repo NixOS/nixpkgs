@@ -1,48 +1,38 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, intltool, itstool, libxml2, brasero
-, libcanberra_gtk3, gnome3, gst_all_1, libmusicbrainz5, libdiscid, isocodes
-, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, glib, gtk3, intltool, itstool, libxml2, brasero
+, libcanberra-gtk3, gnome3, gst_all_1, libmusicbrainz5, libdiscid, isocodes
+, gsettings-desktop-schemas, wrapGAppsHook }:
 
 let
-  major = "3.15";
-  minor = "92";
-  GST_PLUGIN_PATH = stdenv.lib.makeSearchPath "lib/gstreamer-1.0" [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav ];
-
+  pname = "sound-juicer";
+  version = "3.24.0";
 in stdenv.mkDerivation rec {
-  version = "${major}.${minor}";
-  name = "sound-juicer-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://download.gnome.org/sources/sound-juicer/${major}/${name}.tar.xz";
-    sha256 = "b1420f267a4c553f6ca242d3b6082b60682c3d7b431ac3c979bd1ccfbf2687dd";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "19qg4xv0f9rkq34lragkmhii1llxsa87llbl28i759b0ks4f6sny";
   };
 
-  buildInputs = [ pkgconfig gtk3 intltool itstool libxml2 brasero libcanberra_gtk3
-                  gnome3.gsettings_desktop_schemas libmusicbrainz5 libdiscid isocodes
-                  makeWrapper gnome3.dconf
-                  gst_all_1.gstreamer gst_all_1.gst-plugins-base
-                  gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad ];
+  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
+  buildInputs = [
+    glib gtk3 brasero libcanberra-gtk3 gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas libmusicbrainz5 libdiscid isocodes
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
+    gst_all_1.gst-libav
+  ];
 
-  preFixup = ''
-    for f in $out/bin/* $out/libexec/*; do
-      wrapProgram "$f" \
-        --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules" \
-        --prefix GST_PLUGIN_PATH : "${GST_PLUGIN_PATH}"
-    done
-  '';
+  NIX_CFLAGS_COMPILE="-Wno-error=format-nonliteral";
 
-  postInstall = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
-  '';
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A Gnome CD Ripper";
-    homepage = https://wiki.gnome.org/Apps/SoundJuicer;
+    homepage = "https://wiki.gnome.org/Apps/SoundJuicer";
     maintainers = [ maintainers.bdimcheff ];
     license = licenses.gpl2;
     platforms = platforms.linux;

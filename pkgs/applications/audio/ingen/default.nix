@@ -1,45 +1,45 @@
-{ stdenv, fetchsvn, boost, ganv, glibmm, gtk, gtkmm, jack2, lilv-svn
-, lv2, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord-svn, sratom
+{ stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
+, lv2, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord, sratom
+, wafHook
 , suil
 }:
 
 stdenv.mkDerivation  rec {
-  name = "ingen-svn-${rev}";
-  rev = "5675";
+  pname = "ingen";
+  version = "unstable-2019-12-09";
+  name = "${pname}-${version}";
 
-  src = fetchsvn {
-    url = "http://svn.drobilla.net/lad/trunk/ingen";
-    rev = rev;
-    sha256 = "1dk56rzbc0rwlbzr90rv8bh5163xwld32nmkvcz7ajfchi4fnv86";
+  src = fetchgit {
+    url = "https://gitlab.com/drobilla/ingen.git";
+    rev = "e32f32a360f2bf8f017ea347b6d1e568c0beaf68";
+    sha256 = "0wjn2i3j7jb0bmxymg079xpk4iplb91q0xqqnvnpvyldrr7gawlb";
+    deepClone = true;
   };
 
+  nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
-    boost ganv glibmm gtk gtkmm jack2 lilv-svn lv2 makeWrapper pkgconfig
-    python raul serd sord-svn sratom suil
+    boost ganv glibmm gtkmm2 libjack2 lilv lv2 makeWrapper
+    python raul serd sord sratom suil
   ];
 
-  configurePhase = ''
+  preConfigure = ''
     sed -e "s@{PYTHONDIR}/'@out/'@" -i wscript
-    python waf configure --prefix=$out
   '';
 
   propagatedBuildInputs = [ rdflib ];
 
-  buildPhase = "python waf";
-
-  installPhase = ''
-    python waf install
+  postInstall = ''
     for program in ingenams ingenish
     do
       wrapProgram $out/bin/$program \
-        --prefix PYTHONPATH : $out/lib/python${python.majorVersion}/site-packages:$PYTHONPATH
+        --prefix PYTHONPATH : $out/${python.sitePackages}:$PYTHONPATH
     done
   '';
 
   meta = with stdenv.lib; {
     description = "A modular audio processing system using JACK and LV2 or LADSPA plugins";
-    homepage = http://drobilla.net/software/ingen;
-    license = licenses.gpl3;
+    homepage = "http://drobilla.net/software/ingen";
+    license = licenses.agpl3Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
   };

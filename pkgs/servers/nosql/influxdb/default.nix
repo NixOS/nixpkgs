@@ -1,37 +1,26 @@
-{ stdenv, fetchurl, makeWrapper, zlib, bzip2 }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-assert stdenv.isLinux;
+buildGoModule rec {
+  pname = "influxdb";
+  version = "1.8.0";
 
-stdenv.mkDerivation rec {
-  name = "influxdb-${version}";
-  version = "0.8.3";
-  arch = if stdenv.system == "x86_64-linux" then "amd64" else "386";
-
-  src = fetchurl {
-    url = "http://s3.amazonaws.com/influxdb/${name}.${arch}.tar.gz";
-    sha256 = if arch == "amd64" then
-        "e625902d403434c799f9d9ffc2592a3880f82d435423fde7174e5e4fe0f41148" else
-        "5abe9f432553e66c8aff86c4311eba16b874678d04b52bfe9e2019c01059ec78";
+  src = fetchFromGitHub {
+    owner = "influxdata";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "111n36xifmd644xp80imqxx61nlap6fdwx1di2qphlqb43z99jrq";
   };
 
-  buildInputs = [ makeWrapper ];
+  vendorSha256 = "097x3z1fhdl5s3ni2qzbqxqr60l6lqcrbikq20fs052dp287q0sp";
 
-  installPhase = ''
-    install -D influxdb $out/bin/influxdb
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/influxdb
-    wrapProgram "$out/bin/influxdb" \
-        --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc}/lib:${stdenv.cc.cc}/lib64:${zlib}/lib:${bzip2}/lib"
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
-    mkdir -p $out/share/influxdb
-    cp -R admin scripts config.toml $out/share/influxdb
-  '';
+  excludedPackages = "test";
 
-  meta = with stdenv.lib; {
-    description = "Scalable datastore for metrics, events, and real-time analytics";
-    homepage = http://influxdb.com/;
+  meta = with lib; {
+    description = "An open-source distributed time series database";
     license = licenses.mit;
-
-    maintainers = [ maintainers.offline ];
-    platforms = ["i686-linux" "x86_64-linux"];
+    homepage = "https://influxdata.com/";
+    maintainers = with maintainers; [ offline zimbatm ];
   };
 }

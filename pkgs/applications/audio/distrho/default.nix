@@ -1,49 +1,58 @@
-{ stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, jack2
-, libxslt, lv2, pkgconfig, premake3, xlibs }:
+{ stdenv, fetchFromGitHub, alsaLib, fftwSinglePrec, freetype, libjack2
+, pkgconfig, ladspa-sdk, premake3
+, libX11, libXcomposite, libXcursor, libXext, libXinerama, libXrender
+}:
 
-stdenv.mkDerivation rec {
-  name = "distrho-ports-git-2015-05-04";
+let
+  premakeos = if stdenv.hostPlatform.isDarwin then "osx"
+              else if stdenv.hostPlatform.isWindows then "mingw"
+              else "linux";
+in stdenv.mkDerivation rec {
+  pname = "distrho-ports";
+  version = "unstable-2019-10-09";
 
-  src = fetchgit {
-    url = "https://github.com/DISTRHO/DISTRHO-Ports.git";
-    rev = "3f13db5dc7722ed0dcbb5256d7fac1ac9165c2d8";
-    sha256 = "6f740f6a8af714436ef75b858944e8122490a2faa04591a201105e84bca42fa0";
+  src = fetchFromGitHub {
+    owner = "DISTRHO";
+    repo = "DISTRHO-Ports";
+    rev = "7e62235e809e59770d0d91d2c48c3f50ce7c027a";
+    sha256 = "10hpsjcmk0cgcsic9r1wxyja9x6q9wb8w8254dlrnzyswl54r1f8";
   };
 
-  patchPhase = ''
+  configurePhase = ''
+    runHook preConfigure
+
+    sh ./scripts/premake-update.sh ${premakeos}
+
+    runHook postConfigure
+  '';
+
+  postPatch = ''
     sed -e "s#@./scripts#sh scripts#" -i Makefile
   '';
 
+  nativeBuildInputs = [ pkgconfig premake3 ];
   buildInputs = [
-    alsaLib fftwSinglePrec freetype jack2 pkgconfig premake3
-    xlibs.libX11 xlibs.libXcomposite xlibs.libXcursor xlibs.libXext
-    xlibs.libXinerama xlibs.libXrender
+    alsaLib fftwSinglePrec freetype libjack2
+    libX11 libXcomposite libXcursor libXext
+    libXinerama libXrender ladspa-sdk
   ];
 
-  buildPhase = ''
-    sh ./scripts/premake-update.sh linux
-    make lv2
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/lib/lv2
-    cp -a bin/lv2/* $out/lib/lv2/
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://distrho.sourceforge.net;
+    homepage = "http://distrho.sourceforge.net";
     description = "A collection of cross-platform audio effects and plugins";
     longDescription = ''
       Includes:
-      Dexed  drowaudio-distortion drowaudio-distortionshaper drowaudio-flanger
-      drowaudio-reverb drowaudio-tremolo drumsynt EasySSP  eqinox
-      JuceDemoPlugin klangfalter LUFSMeter luftikus obxd pitchedDelay
-      stereosourceseparation TAL-Dub-3 TAL-Filter TAL-Filter-2 TAL-NoiseMaker
-      TAL-Reverb TAL-Reverb-2 TAL-Reverb-3 TAL-Vocoder-2 TheFunction
-      ThePilgrim Vex Wolpertinger
+      Dexed drowaudio-distortion drowaudio-distortionshaper drowaudio-flanger
+      drowaudio-reverb drowaudio-tremolo drumsynth EasySSP eqinox HiReSam
+      JuceDemoPlugin KlangFalter LUFSMeter LUFSMeterMulti Luftikus Obxd
+      PitchedDelay ReFine StereoSourceSeparation TAL-Dub-3 TAL-Filter
+      TAL-Filter-2 TAL-NoiseMaker TAL-Reverb TAL-Reverb-2 TAL-Reverb-3
+      TAL-Vocoder-2 TheFunction ThePilgrim Vex Wolpertinger
     '';
+    license = with licenses; [ gpl2 gpl3 gpl2Plus lgpl3 mit ];
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

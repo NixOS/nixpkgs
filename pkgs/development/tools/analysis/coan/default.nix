@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   version = "6.0.1";
-  name = "coan-${version}";
+  pname = "coan";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/coan2/v${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/coan2/v${version}/${pname}-${version}.tar.gz";
     sha256 = "1d041j0nd1hc0562lbj269dydjm4rbzagdgzdnmwdxr98544yw44";
   };
 
-  buildInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   enableParallelBuilding = true;
 
@@ -26,9 +26,8 @@ stdenv.mkDerivation rec {
       respect to a specified configuration. Dead code removal is an
       application of this sort.
     '';
-    homepage = http://coan2.sourceforge.net/;
-    license = with licenses; bsd3;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ nckx ];
+    homepage = "http://coan2.sourceforge.net/";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

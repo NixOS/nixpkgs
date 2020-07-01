@@ -1,49 +1,55 @@
-{stdenv, fetchurl, unzip, bdftopcf, mkfontdir, mkfontscale}:
+{ stdenv, fetchurl, unzip
+, bdftopcf, mkfontscale, fontforge
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
+  pname = "dina-font";
   version = "2.92";
-  name = "dina-font-${version}";
 
   src = fetchurl {
     url = "http://www.donationcoder.com/Software/Jibz/Dina/downloads/Dina.zip";
     sha256 = "1kq86lbxxgik82aywwhawmj80vsbz3hfhdyhicnlv9km7yjvnl8z";
   };
 
-  buildInputs = [ unzip bdftopcf mkfontdir mkfontscale ];
+  nativeBuildInputs =
+    [ unzip bdftopcf mkfontscale fontforge ];
 
-  dontBuild = true;
   patchPhase = "sed -i 's/microsoft-cp1252/ISO8859-1/' *.bdf";
-  installPhase = ''
-    _get_font_size() {
-      _pt=$\{1%.bdf}
-      _pt=$\{_pt#*-}
-      echo $_pt
+
+  buildPhase = ''
+    newName() {
+      test "''${1:5:1}" = i && _it=Italic || _it=
+      case ''${1:6:3} in
+        400) test -z $it && _weight=Medium ;;
+        700) _weight=Bold ;;
+      esac
+      _pt=''${1%.bdf}
+      _pt=''${_pt#*-}
+      echo "Dina$_weight$_it$_pt"
     }
 
-    for i in Dina_i400-*.bdf; do
-        bdftopcf -t -o DinaItalic$(_get_font_size $i).pcf $i
+    # convert bdf fonts to pcf
+    for i in *.bdf; do
+      bdftopcf -t -o $(newName "$i").pcf "$i"
     done
-    for i in Dina_i700-*.bdf; do
-        bdftopcf -t -o DinaBoldItalic$(_get_font_size $i).pcf $i
-    done
-    for i in Dina_r400-*.bdf; do
-        bdftopcf -t -o DinaMedium$(_get_font_size $i).pcf $i
-    done
-    for i in Dina_r700-*.bdf; do
-        bdftopcf -t -o DinaBold$(_get_font_size $i).pcf $i
-    done
-    gzip *.pcf
+    gzip -n -9 *.pcf
 
-    fontDir="$out/share/fonts/misc"
-    mkdir -p "$fontDir"
-    mv *.pcf.gz "$fontDir"
-
-    cd "$fontDir"
-    mkfontdir
-    mkfontscale
+    # convert bdf fonts to otb
+    for i in *.bdf; do
+      fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$(newName $i).otb\")"
+    done
   '';
 
-  preferLocalBuild = true;
+  installPhase = ''
+    install -D -m 644 -t "$out/share/fonts/misc" *.pcf.gz
+    install -D -m 644 -t "$bdf/share/fonts/misc" *.bdf
+    install -D -m 644 -t "$otb/share/fonts/misc" *.otb
+    mkfontdir "$out/share/fonts/misc"
+    mkfontdir "$bdf/share/fonts/misc"
+    mkfontdir "$otb/share/fonts/misc"
+  '';
+
+  outputs = [ "out" "bdf" "otb" ];
 
   meta = with stdenv.lib; {
     description = "A monospace bitmap font aimed at programmers";
@@ -52,10 +58,9 @@ stdenv.mkDerivation rec {
       relatively compact to allow a lot of code on screen, while (hopefully)
       clear enough to remain readable even at high resolutions.
     '';
-    homepage = https://www.donationcoder.com/Software/Jibz/Dina/;
-    downloadPage = https://www.donationcoder.com/Software/Jibz/Dina/;
+    homepage = "https://www.donationcoder.com/Software/Jibz/Dina/";
+    downloadPage = "https://www.donationcoder.com/Software/Jibz/Dina/";
     license = licenses.free;
     maintainers = [ maintainers.prikhi ];
-    platforms = platforms.linux;
   };
 }

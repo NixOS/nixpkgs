@@ -10,15 +10,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison ];
   patches = [ ./gcc-4.3.3-fixes.patch ];
-  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3";
+  configureFlags = [ "CFLAGS=-O3" "CXXFLAGS=-O3" ];
+  NIX_LDFLAGS = "-lm";
   doCheck = true;
 
   meta = {
-    homepage = "http://sourceforge.net/projects/buddy/";
-    description = "binary decision diagram package";
+    homepage = "https://sourceforge.net/projects/buddy/";
+    description = "Binary decision diagram package";
     license = "as-is";
 
-    platforms = with stdenv.lib.platforms; allBut cygwin;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

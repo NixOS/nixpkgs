@@ -1,44 +1,48 @@
-{ stdenv, fetchurl, linkStatic ? false }:
+{ stdenv, fetchurl
+, linkStatic ? (stdenv.hostPlatform.system == "i686-cygwin")
+, autoreconfHook
+}:
 
-let version = "1.0.6"; in
+stdenv.mkDerivation rec {
+  pname = "bzip2";
+  version = "1.0.6.0.1";
 
-stdenv.mkDerivation {
-  name = "bzip2-${version}";
-
-  builder = ./builder.sh;
-
+  /* We use versions patched to use autotools style properly,
+      saving lots of trouble. */
   src = fetchurl {
-    url = "http://www.bzip.org/${version}/bzip2-${version}.tar.gz";
-    sha256 = "1kfrc7f0ja9fdn6j1y6yir6li818npy6217hvr3wzmnmzhs8z152";
+    urls = map
+      (prefix: prefix + "/people/sbrabec/bzip2/tarballs/${pname}-${version}.tar.gz")
+      [
+        "http://ftp.uni-kl.de/pub/linux/suse"
+        "ftp://ftp.hs.uni-hamburg.de/pub/mirrors/suse"
+        "ftp://ftp.mplayerhq.hu/pub/linux/suse"
+        "http://ftp.suse.com/pub" # the original patched version but slow
+      ];
+    sha256 = "0b5b5p8c7bslc6fslcr1nj9136412v3qcvbg6yxi9argq9g72v8c";
   };
 
-  crossAttrs = {
-    patchPhase = ''
-      sed -i -e '/<sys\\stat\.h>/s|\\|/|' bzip2.c
-      sed -i -e 's/CC=gcc/CC=${stdenv.cross.config}-gcc/' \
-        -e 's/AR=ar/AR=${stdenv.cross.config}-ar/' \
-        -e 's/RANLIB=ranlib/RANLIB=${stdenv.cross.config}-ranlib/' \
-        -e 's/bzip2recover test/bzip2recover/' \
-        Makefile*
-    '';
-  };
+  nativeBuildInputs = [ autoreconfHook ];
 
-  sharedLibrary =
-    !stdenv.isDarwin && !(stdenv ? isStatic) && stdenv.system != "i686-cygwin" && !linkStatic;
+  patches = [
+    ./CVE-2016-3189.patch
+    ./cve-2019-12900.patch
+  ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin "substituteInPlace Makefile --replace 'CC=gcc' 'CC=clang'";
+  postPatch = ''
+    sed -i -e '/<sys\\stat\.h>/s|\\|/|' bzip2.c
+  '';
 
-  preConfigure = "substituteInPlace Makefile --replace '$(PREFIX)/man' '$(PREFIX)/share/man'";
+  outputs = [ "bin" "dev" "out" "man" ];
 
-  makeFlags = if linkStatic then "LDFLAGS=-static" else "";
+  configureFlags =
+    stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];
 
-  inherit linkStatic;
+  enableParallelBuilding = true;
 
-  meta = {
-    homepage = "http://www.bzip.org";
-    description = "high-quality data compression program";
-
-    platforms = stdenv.lib.platforms.all;
+  meta = with stdenv.lib; {
+    description = "High-quality data compression program";
+    license = licenses.bsdOriginal;
+    platforms = platforms.all;
     maintainers = [];
   };
 }

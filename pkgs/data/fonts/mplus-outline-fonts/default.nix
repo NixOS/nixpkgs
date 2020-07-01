@@ -1,24 +1,23 @@
-{ stdenv, fetchurl }:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
+  version = "063a";
+in fetchzip {
   name = "mplus-${version}";
-  version = "TESTFLIGHT-059";
 
-  src = fetchurl {
-    url = "mirror://sourceforgejp/mplus-fonts/62344/mplus-TESTFLIGHT-059.tar.xz";
-    sha256 = "09dzdgqqflpijd3c30m38cyidshawfp4nz162xhn91j9w09y2qkq";
-  };
+  url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";
 
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
+  postFetch = ''
+    tar -xJf $downloadedFile --strip-components=1
     mkdir -p $out/share/fonts/truetype
     cp *.ttf $out/share/fonts/truetype
   '';
 
-  meta = with stdenv.lib; {
+  sha256 = "1khbkch2r96ppifc93bmy1v047pgciyhfmcjb98ggncp5ix885xz";
+
+  meta = with lib; {
     description = "M+ Outline Fonts";
-    homepage = http://mplus-fonts.sourceforge.jp/mplus-outline-fonts/index-en.html;
+    homepage = "https://mplus-fonts.osdn.jp/about-en.html";
     license = licenses.mit;
     maintainers = with maintainers; [ henrytill ];
     platforms = platforms.all;

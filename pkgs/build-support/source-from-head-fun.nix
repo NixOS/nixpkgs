@@ -6,7 +6,7 @@
    app --publish
    to create source snapshots
 
-   The documentation is availible at http://github.com/MarcWeber/nix-repository-manager/raw/master/README
+   The documentation is availible at https://github.com/MarcWeber/nix-repository-manager/raw/master/README
 
 */
 { config }:

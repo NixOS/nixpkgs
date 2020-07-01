@@ -1,0 +1,32 @@
+# The directory Mix will write compiled artifacts to.
+_build/
+
+# If you run "mix test --cover", coverage assets end up here.
+cover/
+
+# The directory Mix downloads your dependencies sources to.
+deps/
+
+# Where third-party dependencies like ExDoc output generated docs.
+doc/
+
+# Ignore .fetch files in case you like to edit your project deps locally.
+.fetch
+
+# If the VM crashes, it generates a dump, let's ignore it too.
+erl_crash.dump
+
+# Also ignore archive artifacts (built via "mix archive.build").
+*.ez
+
+# Ignore package tarball (built via "mix hex.build").
+nixpkgs_github_update-*.tar
+
+# Ignore elixir_ls
+.elixir_ls
+
+# mix escript.build result
+nixpkgs_github_update
+
+# lockfile. only because this is nixpkgs.
+mix.lock

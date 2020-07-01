@@ -1,19 +1,28 @@
-{ stdenv, fetchurl, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
-, readline, makeWrapper, git
+{ stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
+, readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
-  name = "tig-2.1.1";
+  pname = "tig";
+  version = "2.5.1";
 
-  src = fetchurl {
-    url = "http://jonas.nitro.dk/tig/releases/${name}.tar.gz";
-    sha256 = "0bw5wivswwh7vx897q8xc2cqgkqhdzk8gh6fnav2kf34sngigiah";
+  src = fetchFromGitHub {
+    owner = "jonas";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "0wxcbfqsk8p84zizy6lf3gp5j122wrf8c7xlipki6nhcfhksn33b";
   };
 
-  buildInputs = [ ncurses asciidoc xmlto docbook_xsl readline git makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkgconfig ];
 
-  preConfigure = ''
-    export XML_CATALOG_FILES='${docbook_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml'
+  autoreconfFlags = "-I tools -v";
+
+  buildInputs = [ ncurses readline git ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+
+  # those files are inherently impure, we'll handle the corresponding dependencies.
+  postPatch = ''
+      rm -f contrib/config.make-*
   '';
 
   enableParallelBuilding = true;
@@ -21,17 +30,25 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install
     make install-doc
-    mkdir -p $out/etc/bash_completion.d/
-    cp contrib/tig-completion.bash $out/etc/bash_completion.d/
+
+    # fixes tig-completion __git-complete dependency
+    sed -i '1s;^;source ${git}/share/bash-completion/completions/git\n;' contrib/tig-completion.bash
+
+    substituteInPlace contrib/tig-completion.zsh \
+      --replace 'e=$(dirname ''${funcsourcetrace[1]%:*})/tig-completion.bash' "e=$out/share/bash-completion/completions/tig"
+
+    install -D contrib/tig-completion.bash $out/share/bash-completion/completions/tig
+    install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
+    cp contrib/vim.tigrc $out/etc/
 
     wrapProgram $out/bin/tig \
       --prefix PATH ':' "${git}/bin"
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://jonas.nitro.dk/tig/";
+    homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [ garbas bjornfor iElectric qknight ];
+    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

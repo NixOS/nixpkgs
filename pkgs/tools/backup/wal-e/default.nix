@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages, lzop, postgresql, pv }:
 
-pythonPackages.buildPythonPackage rec {
-  name = "wal-e-${version}";
+pythonPackages.buildPythonApplication rec {
+  pname = "wal-e";
   version = "0.6.10";
 
   namePrefix = "";
@@ -24,8 +24,8 @@ pythonPackages.buildPythonPackage rec {
 
   meta = {
     description = "A Postgres WAL-shipping disaster recovery and replication toolkit";
-    homepage = https://github.com/wal-e/wal-e;
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
+    homepage = "https://github.com/wal-e/wal-e";
+    maintainers = [];
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
   };

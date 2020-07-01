@@ -1,50 +1,59 @@
-{ stdenv, fetchzip, python, pythonPackages, unzip, systemd, gamin }:
+{ stdenv, fetchFromGitHub, python3, gamin }:
 
-let version = "0.9.1"; in
+let version = "0.11.1"; in
 
-pythonPackages.buildPythonPackage {
-  name = "fail2ban-${version}";
-  namePrefix = "";
+python3.pkgs.buildPythonApplication {
+  pname = "fail2ban";
+  inherit version;
 
-  src = fetchzip {
-    name   = "fail2ban-${version}-src";
-    url    = "https://github.com/fail2ban/fail2ban/archive/${version}.tar.gz";
-    sha256 = "111xvy2gxwn868kn0zy2fmdfa423z6fk57i7wsfrc0l74p1cdvs5";
+  src = fetchFromGitHub {
+    owner  = "fail2ban";
+    repo   = "fail2ban";
+    rev    = version;
+    sha256 = "0kqvkxpb72y3kgmxf6g36w67499c6gcd2a9yyblagwx12y05f1sh";
   };
 
-  buildInputs = [ unzip ];
-
-  pythonPath = (stdenv.lib.optional stdenv.isLinux systemd)
-    ++ [ python.modules.sqlite3 gamin ];
+  pythonPath = with python3.pkgs;
+    stdenv.lib.optionals stdenv.isLinux [
+      systemd
+    ];
 
   preConfigure = ''
-    substituteInPlace setup.cfg \
-      --replace /usr $out
-
-    substituteInPlace setup.py \
-      --replace /usr $out \
-      --replace /etc $out/etc \
-      --replace /var $TMPDIR/var \
-
-    for i in fail2ban-client fail2ban-regex fail2ban-server; do
-      substituteInPlace $i \
-        --replace /usr/share/fail2ban $out/share/fail2ban
-    done
-
     for i in config/action.d/sendmail*.conf; do
       substituteInPlace $i \
         --replace /usr/sbin/sendmail sendmail \
         --replace /usr/bin/whois whois
     done
+
+    substituteInPlace config/filter.d/dovecot.conf \
+      --replace dovecot.service dovecot2.service
   '';
 
   doCheck = false;
 
+  preInstall = ''
+    substituteInPlace setup.py --replace /usr/share/doc/ share/doc/
+
+    # see https://github.com/NixOS/nixpkgs/issues/4968
+    ${python3.interpreter} setup.py install_data --install-dir=$out --root=$out
+  '';
+
+  postPatch = ''
+    ${stdenv.shell} ./fail2ban-2to3
+  '';
+
+  postInstall = let
+    sitePackages = "$out/${python3.sitePackages}";
+  in ''
+    # see https://github.com/NixOS/nixpkgs/issues/4968
+    rm -rf ${sitePackages}/etc ${sitePackages}/usr ${sitePackages}/var;
+  '';
+
   meta = with stdenv.lib; {
-    homepage    = http://www.fail2ban.org/;
+    homepage    = "https://www.fail2ban.org/";
     description = "A program that scans log files for repeated failing login attempts and bans IP addresses";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ eelco lovek323 ];
+    maintainers = with maintainers; [ eelco lovek323 fpletz ];
     platforms   = platforms.linux ++ platforms.darwin;
   };
 }

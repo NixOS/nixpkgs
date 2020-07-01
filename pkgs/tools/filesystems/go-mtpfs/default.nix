@@ -1,29 +1,20 @@
-{ lib, goPackages, pkgconfig, libmtp, fetchFromGitHub }:
-
-with goPackages;
+{ pkgconfig, libusb1, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  rev = "9c2b46050e8ea8574eaec2124867ac7b11e6471d";
-  name = "go-mtpfs-${lib.strings.substring 0 7 rev}";
+  pname = "go-mtpfs";
+  version = "2018-02-09";
+  rev = "d6f8f3c05ce0ed31435057ec342268a0735863bb";
+
   goPackagePath = "github.com/hanwen/go-mtpfs";
-  src = fetchFromGitHub {
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libusb1 ];
+
+  src = fetchgit {
     inherit rev;
-    owner = "hanwen";
-    repo = "go-mtpfs";
-    sha256 = "0kxi18cb078q4wikfajp3yvp802wzfsfdp431j0dg2jdw8y7gfii";
+    url = "https://github.com/hanwen/go-mtpfs";
+    sha256 = "0a0d5dy92nzp1czh87hx3xfdcpa4jh14j0b64c025ha62s9a4gxk";
   };
 
-  buildInputs = [ go-fuse libmtp usb ];
-
-  subPackages = [ "./" ];
-
-  dontInstallSrc = true;
-
-  meta = with lib; {
-    description = "A simple FUSE filesystem for mounting Android devices as a MTP device";
-    homepage    = https://github.com/hanwen/go-mtpfs;
-    maintainers = with maintainers; [ bennofs ];
-    platforms   = platforms.linux;
-    license     = licenses.bsd3;
-  };
+  goDeps = ./deps.nix;
 }

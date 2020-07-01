@@ -1,44 +1,117 @@
-{ stdenv, fetchurl, unzip, makeDesktopItem, mono }:
+{ stdenv, lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
+  unzip, icoutils, gtk2, xorg, xdotool, xsel, coreutils, unixtools, glib, plugins ? [] }:
 
-stdenv.mkDerivation rec {
-  name = "keepass-${version}";
-  version = "2.29";
+with builtins; buildDotnetPackage rec {
+  baseName = "keepass";
+  version = "2.45";
 
   src = fetchurl {
-    url = "mirror://sourceforge/keepass/KeePass-${version}.zip";
-    sha256 = "16x7m899akpi036c0wlr41w7fz9q0b69yac9q97rqkixb03l4g9d";
+    url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
+    sha256 = "07wyp3k2kiprr47mc4vxb7vmh7g5kshcqw0gq3qr87gi78c9i66m";
   };
 
   sourceRoot = ".";
 
-  phases = [ "unpackPhase" "installPhase" ];
+  buildInputs = [ unzip makeWrapper icoutils ];
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      xsel = "${xsel}/bin/xsel";
+      xprop = "${xorg.xprop}/bin/xprop";
+      xdotool = "${xdotool}/bin/xdotool";
+      uname = "${coreutils}/bin/uname";
+      whereis = "${unixtools.whereis}/bin/whereis";
+      gsettings = "${glib}/bin/gsettings";
+    })
+  ];
+
+  # KeePass looks for plugins in under directory in which KeePass.exe is
+  # located. It follows symlinks where looking for that directory, so
+  # buildEnv is not enough to bring KeePass and plugins together.
+  #
+  # This derivation patches KeePass to search for plugins in specified
+  # plugin derivations in the Nix store and nowhere else.
+  pluginLoadPathsPatch =
+    let outputLc = toString (add 7 (length plugins));
+        patchTemplate = readFile ./keepass-plugins.patch;
+        loadTemplate  = readFile ./keepass-plugins-load.patch;
+        loads =
+          lib.concatStrings
+            (map
+              (p: replaceStrings ["$PATH$"] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate)
+              plugins);
+    in replaceStrings ["$OUTPUT_LC$" "$DO_LOADS$"] [outputLc loads] patchTemplate;
+
+  passAsFile = [ "pluginLoadPathsPatch" ];
+  postPatch = ''
+    sed -i 's/\r*$//' KeePass/Forms/MainForm.cs
+    patch -p1 <$pluginLoadPathsPatchPath
+  '';
+
+  preConfigure = ''
+    rm -rvf Build/*
+    find . -name "*.sln" -print -exec sed -i 's/Format Version 10.00/Format Version 11.00/g' {} \;
+    find . -name "*.csproj" -print -exec sed -i '
+      s#ToolsVersion="3.5"#ToolsVersion="4.0"#g
+      s#<TargetFrameworkVersion>.*</TargetFrameworkVersion>##g
+      s#<PropertyGroup>#<PropertyGroup><TargetFrameworkVersion>v4.5</TargetFrameworkVersion>#g
+      s#<SignAssembly>.*$#<SignAssembly>false</SignAssembly>#g
+      s#<PostBuildEvent>.*sgen.exe.*$##
+    ' {} \;
+  '';
 
   desktopItem = makeDesktopItem {
     name = "keepass";
     exec = "keepass";
     comment = "Password manager";
+    icon = "keepass";
     desktopName = "Keepass";
-    genericName = "Password manager";    
-    categories = "Application;Other;";
+    genericName = "Password manager";
+    categories = "Utility;";
+    mimeType = stdenv.lib.concatStringsSep ";" [
+      "application/x-keepass2"
+      ""
+    ];
   };
 
+  outputFiles = [ "Build/KeePass/Release/*" "Build/KeePassLib/Release/*" ];
+  dllFiles = [ "KeePassLib.dll" ];
+  exeFiles = [ "KeePass.exe" ];
 
-  installPhase = ''
-    mkdir -p "$out/bin"
-    echo "${mono}/bin/mono $out/KeePass.exe" > $out/bin/keepass
-    chmod +x $out/bin/keepass
-    echo $out
-    cp -r ./* $out/
+  # plgx plugin like keefox requires mono to compile at runtime
+  # after loading. It is brought into plugins bin/ directory using
+  # buildEnv in the plugin derivation. Wrapper below makes sure it
+  # is found and does not pollute output path.
+  binPaths = lib.concatStrings (lib.intersperse ":" (map (x: x + "/bin") plugins));
+
+  dynlibPath = stdenv.lib.makeLibraryPath [ gtk2 ];
+
+  postInstall = 
+  let
+    extractFDeskIcons = ./extractWinRscIconsToStdFreeDesktopDir.sh;
+  in
+  ''
     mkdir -p "$out/share/applications"
     cp ${desktopItem}/share/applications/* $out/share/applications
-  '';
+    wrapProgram $out/bin/keepass \
+      --prefix PATH : "$binPaths" \
+      --prefix LD_LIBRARY_PATH : "$dynlibPath"
 
-  buildInputs = [ unzip ];
+    ${extractFDeskIcons} \
+      "./Translation/TrlUtil/Resources/KeePass.ico" \
+      '[^\.]+_[0-9]+_([0-9]+x[0-9]+)x[0-9]+\.png' \
+      '\1' \
+      '([^\.]+).+' \
+      'keepass' \
+      "$out" \
+      "./tmp"
+  '';
 
   meta = {
     description = "GUI password manager with strong cryptography";
-    homepage = http://www.keepass.info/;
-    maintainers = with stdenv.lib.maintainers; [amorsillo];
+    homepage = "http://www.keepass.info/";
+    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz joncojonathan jraygauthier ];
     platforms = with stdenv.lib.platforms; all;
     license = stdenv.lib.licenses.gpl2;
   };

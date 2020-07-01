@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, makeWrapper }:
+{ stdenv, fetchFromGitHub, makeWrapper }:
 let
-  version = "0.7";
+  version = "0.8";
   name = "chibi-scheme-${version}";
 in
 stdenv.mkDerivation {
   inherit name;
 
   meta = {
-    homepage = "https://code.google.com/p/chibi-scheme/";
+    homepage = "https://github.com/ashinn/chibi-scheme";
     description = "Small Footprint Scheme for use as a C Extension Language";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.DerGuteMoritz ];
   };
 
-  src = fetchurl {
-    url = "http://abrek.synthcode.com/${name}.tgz";
-    sha256 = "1hhkq0khgi8i24xv66y7r6pgk1issn1i2bf7rv91rbk0wm0kv7qm";
+  src = fetchFromGitHub {
+    owner = "ashinn";
+    repo = "chibi-scheme";
+    rev = version;
+    sha256 = "0269d5fhaz7nqjb41vh7yz63mp5s4z08fn4sspwc06z32xksigw9";
   };
 
   buildInputs = [ makeWrapper ];

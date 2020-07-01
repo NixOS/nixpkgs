@@ -1,31 +1,38 @@
-{ stdenv, lib, fetchFromGitHub, jansson }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, jansson }:
 
 stdenv.mkDerivation rec {
-  name = "jshon-20140712";
-
-  rev = "a61d7f2f85f4627bc3facdf951746f0fd62334b7";
-  sha256 = "b0365e58553b9613a5636545c5bfd4ad05ab5024f192e1cb1d1824bae4e1a380";
+  pname = "jshon";
+  version = "20170302";
 
   src = fetchFromGitHub {
-    inherit rev sha256;
     owner = "keenerd";
     repo = "jshon";
+    rev = "d919aeaece37962251dbe6c1ee50f0028a5c90e4";
+    sha256 = "1x4zfmsjq0l2y994bxkhx3mn5vzjxxr39iib213zjchi9h6yxvnc";
   };
 
   buildInputs = [ jansson ];
 
-  patchPhase = 
+  patches = [
+    (fetchpatch {
+      # https://github.com/keenerd/jshon/pull/62
+      url = "https://github.com/keenerd/jshon/commit/96b4e9dbf578be7b31f29740b608aa7b34df3318.patch";
+      sha256 = "0kwbn3xb37iqb5y1n8vhzjiwlbg5jmki3f38pzakc24kzc5ksmaa";
+    })
+  ];
+
+  postPatch =
     ''
       substituteInPlace Makefile --replace "/usr/" "/"
     '';
 
-  preInstall = 
+  preInstall =
     ''
       export DESTDIR=$out
     '';
 
   meta = with lib; {
-    homepage = http://kmkeen.com/jshon;
+    homepage = "http://kmkeen.com/jshon";
     description = "JSON parser designed for maximum convenience within the shell";
     license = licenses.free;
     platforms = platforms.all;

@@ -1,31 +1,37 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, lib
+, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
+, enableShared ? !stdenv.hostPlatform.useAndroidPrebuilt
+}:
 
-assert (!stdenv.isLinux);
+# assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
-  name = "libiconv-1.14";
+  pname = "libiconv";
+  version = "1.16";
 
   src = fetchurl {
-    url = "mirror://gnu/libiconv/${name}.tar.gz";
-    sha256 = "04q6lgl3kglmmhw59igq1n7v3rp1rpkypl366cy1k1yn2znlvckj";
+    url = "mirror://gnu/libiconv/${pname}-${version}.tar.gz";
+    sha256 = "016c57srqr0bza5fxjxfrx6aqxkqy0s3gkhcg7p7fhk5i6sv38g6";
   };
 
-  patches = if stdenv.isCygwin then [
-    ./libiconv-1.14-reloc.patch
-    ./libiconv-1.14-wchar.patch
-  ] else null;
+  setupHooks = [
+    ../../../build-support/setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
 
-  # On Cygwin, Libtool produces a `.dll.a', which is not a "real" DLL
-  # (Windows' linker would need to be used somehow to produce an actual
-  # DLL.)  Thus, build the static library too, and this is what Gettext
-  # will actually use.
-  configureFlags = if stdenv.isCygwin then [ "--enable-static" ] else null;
+  postPatch =
+    lib.optionalString ((stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
+      ''
+        sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
+      ''
+    + lib.optionalString (!enableShared) ''
+      sed -i -e '/preload/d' Makefile.in
+    '';
 
-  crossAttrs = {
-    # Disable stripping to avoid "libiconv.a: Archive has no index" (MinGW).
-    dontStrip = true;
-    dontCrossStrip = true;
-  };
+  configureFlags = [
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
+  ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
   meta = {
     description = "An iconv(3) implementation";
@@ -40,12 +46,12 @@ stdenv.mkDerivation rec {
       applications.
     '';
 
-    homepage = http://www.gnu.org/software/libiconv/;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    homepage = "https://www.gnu.org/software/libiconv/";
+    license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
 
     # This library is not needed on GNU platforms.
-    hydraPlatforms = stdenv.lib.platforms.cygwin ++ stdenv.lib.platforms.darwin ++ stdenv.lib.platforms.freebsd;
+    hydraPlatforms = with lib.platforms; cygwin ++ darwin ++ freebsd;
   };
 }

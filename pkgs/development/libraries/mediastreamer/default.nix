@@ -1,39 +1,111 @@
-{ stdenv, fetchurl, pkgconfig, intltool, alsaLib, pulseaudio, speex, gsm
-, libopus, ffmpeg, libX11, libXv, mesa, glew, libtheora, libvpx, SDL, libupnp
-, ortp, libv4l, libpcap, srtp, vim
+{ alsaLib
+, bctoolbox
+, bzrtp
+, cmake
+, doxygen
+, fetchFromGitLab
+, fetchpatch
+, ffmpeg_3
+, glew
+, gsm
+, intltool
+, libGL
+, libGLU
+, libX11
+, libXext
+, libXv
+, libmatroska
+, libopus
+, libpcap
+, libpulseaudio
+, libtheora
+, libupnp
+, libv4l
+, libvpx
+, ortp
+, pkgconfig
+, python
+, SDL
+, speex
+, srtp
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
-  name = "mediastreamer-2.11.1";
+  pname = "mediastreamer2";
+  # Using master branch for linphone-desktop caused a chain reaction that many
+  # of its dependencies needed to use master branch too.
+  version = "unstable-2020-03-20";
 
-  src = fetchurl {
-    url = "mirror://savannah/linphone/mediastreamer/${name}.tar.gz";
-    sha256 = "0gfv4k2rsyvyq838xjgsrxmmn0fkw40apqs8vakzjwzsz2c9z8pd";
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
+    repo = pname;
+    rev = "c5eecb72cb44376d142949051dd0cb7c982608fb";
+    sha256 = "1vp260jxvjlmrmjdl4p23prg4cjln20a7z6zq8dqvfh4iq3ya033";
   };
 
-  postPatch = ''
-    sed -i "s/\(SRTP_LIBS=\"\$SRTP_LIBS -lsrtp\"\)/SRTP_LIBS=\"$(pkg-config --libs-only-l libsrtp)\"/g" configure
-  '';
+  patches = [
+    # Plugins directory is normally fixed during compile time. This patch makes
+    # it possible to set the plugins directory run time with an environment
+    # variable MEDIASTREAMER_PLUGINS_DIR. This makes it possible to construct a
+    # plugin directory with desired plugins and wrap executables so that the
+    # environment variable points to that directory.
+    ./plugins_dir.patch
+  ];
 
-  # TODO: make it load plugins from *_PLUGIN_PATH
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    intltool
+    pkgconfig
+    python
+  ];
 
   propagatedBuildInputs = [
-    alsaLib pulseaudio speex gsm libopus
-    ffmpeg libX11 libXv mesa glew libtheora libvpx SDL libupnp
-    ortp libv4l libpcap srtp
-    vim
+    alsaLib
+    bctoolbox
+    bzrtp
+    ffmpeg_3
+    glew
+    gsm
+    libGL
+    libGLU
+    libX11
+    libXext
+    libXv
+    libmatroska
+    libopus
+    libpcap
+    libpulseaudio
+    libtheora
+    libupnp
+    libv4l
+    libvpx
+    ortp
+    SDL
+    speex
+    srtp
   ];
 
-  configureFlags = [
-    "--enable-external-ortp"
-    "--with-srtp=${srtp}"
+  # Do not build static libraries
+  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+
+  NIX_CFLAGS_COMPILE = toString [
+    "-DGIT_VERSION=\"v${version}\""
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=cast-function-type"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=stringop-overflow"
   ];
+  NIX_LDFLAGS = "-lXext";
 
   meta = with stdenv.lib; {
-    description = "a powerful and lightweight streaming engine specialized for voice/video telephony applications";
-    homepage = http://www.linphone.org/technical-corner/mediastreamer2/overview;
-    license = licenses.gpl2;
+    description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
+    homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
+    license = licenses.gpl3;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

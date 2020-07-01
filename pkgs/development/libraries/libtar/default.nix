@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.20";
-  name = "libtar-${version}";
+  pname = "libtar";
 
   # Maintenance repo for libtar (Arch Linux uses this)
   src = fetchgit {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patches = let
     fp =  name: sha256:
       fetchpatch {
-        url = "http://sources.debian.net/data/main/libt/libtar/1.2.20-4/debian/patches/${name}.patch";
+        url = "https://sources.debian.net/data/main/libt/libtar/1.2.20-4/debian/patches/${name}.patch";
         inherit sha256;
       };
     in [
@@ -24,13 +24,14 @@ stdenv.mkDerivation rec {
       (fp "th_get_size-unsigned-int"  "1ravbs5yrfac98mnkrzciw9hd2fxq4dc07xl3wx8y2pv1bzkwm41")
     ];
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ];
 
   meta = with stdenv.lib; {
     description = "C library for manipulating POSIX tar files";
-    homepage = http://www.feep.net/libtar/;
+    homepage = "https://repo.or.cz/libtar";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

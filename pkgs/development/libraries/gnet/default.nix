@@ -9,13 +9,15 @@ stdenv.mkDerivation {
     sha256 = "1cy78kglzi235md964ikvm0rg801bx0yk9ya8zavndjnaarzqq87";
   };
 
-  buildInputs = [ pkgconfig autoconf automake glib libtool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake glib libtool ];
 
   preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
     description = "A network library, written in C, object-oriented, and built upon GLib";
-    homepage = https://developer.gnome.org/gnet/;
+    homepage = "https://developer.gnome.org/gnet/";
+    license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
   };

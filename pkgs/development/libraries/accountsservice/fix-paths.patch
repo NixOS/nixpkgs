@@ -1,0 +1,125 @@
+diff --git a/src/daemon.c b/src/daemon.c
+index c52bda3..75d214e 100644
+--- a/src/daemon.c
++++ b/src/daemon.c
+@@ -1106,7 +1106,7 @@ daemon_create_user_authorized_cb (Daemon                *daemon,
+ 
+         sys_log (context, "create user '%s'", cd->user_name);
+ 
+-        argv[0] = "/usr/sbin/useradd";
++        argv[0] = "@shadow@/bin/useradd";
+         argv[1] = "-m";
+         argv[2] = "-c";
+         argv[3] = cd->real_name;
+@@ -1318,7 +1318,7 @@ daemon_delete_user_authorized_cb (Daemon                *daemon,
+ 
+         user_set_saved (user, FALSE);
+ 
+-        argv[0] = "/usr/sbin/userdel";
++        argv[0] = "@shadow@/bin/userdel";
+         if (ud->remove_files) {
+                 argv[1] = "-f";
+                 argv[2] = "-r";
+diff --git a/src/user.c b/src/user.c
+index 9f57af5..e65289d 100644
+--- a/src/user.c
++++ b/src/user.c
+@@ -844,7 +844,7 @@ user_change_real_name_authorized_cb (Daemon                *daemon,
+                          accounts_user_get_uid (ACCOUNTS_USER (user)),
+                          name);
+ 
+-                argv[0] = "/usr/sbin/usermod";
++                argv[0] = "@shadown@/bin/usermod";
+                 argv[1] = "-c";
+                 argv[2] = name;
+                 argv[3] = "--";
+@@ -913,7 +913,7 @@ user_change_user_name_authorized_cb (Daemon                *daemon,
+                          accounts_user_get_uid (ACCOUNTS_USER (user)),
+                          name);
+ 
+-                argv[0] = "/usr/sbin/usermod";
++                argv[0] = "@shadow@/bin/usermod";
+                 argv[1] = "-l";
+                 argv[2] = name;
+                 argv[3] = "--";
+@@ -1321,7 +1321,7 @@ user_change_home_dir_authorized_cb (Daemon                *daemon,
+                          accounts_user_get_uid (ACCOUNTS_USER (user)),
+                          home_dir);
+ 
+-                argv[0] = "/usr/sbin/usermod";
++                argv[0] = "@shadow@/bin/usermod";
+                 argv[1] = "-m";
+                 argv[2] = "-d";
+                 argv[3] = home_dir;
+@@ -1378,7 +1378,7 @@ user_change_shell_authorized_cb (Daemon                *daemon,
+                          accounts_user_get_uid (ACCOUNTS_USER (user)),
+                          shell);
+ 
+-                argv[0] = "/usr/sbin/usermod";
++                argv[0] = "@shadow@/bin/usermod";
+                 argv[1] = "-s";
+                 argv[2] = shell;
+                 argv[3] = "--";
+@@ -1520,7 +1520,7 @@ user_change_icon_file_authorized_cb (Daemon                *daemon,
+                         return;
+                 }
+ 
+-                argv[0] = "/bin/cat";
++                argv[0] = "@coreutils@/bin/cat";
+                 argv[1] = filename;
+                 argv[2] = NULL;
+ 
+@@ -1601,7 +1601,7 @@ user_change_locked_authorized_cb (Daemon                *daemon,
+                          locked ? "locking" : "unlocking",
+                          accounts_user_get_user_name (ACCOUNTS_USER (user)),
+                          accounts_user_get_uid (ACCOUNTS_USER (user)));
+-                argv[0] = "/usr/sbin/usermod";
++                argv[0] = "@shadow@/bin/usermod";
+                 argv[1] = locked ? "-L" : "-U";
+                 argv[2] = "--";
+                 argv[3] = accounts_user_get_user_name (ACCOUNTS_USER (user));
+@@ -1726,7 +1726,7 @@ user_change_account_type_authorized_cb (Daemon                *daemon,
+ 
+                 g_free (groups);
+ 
+-                argv[0] = "/usr/sbin/usermod";
++                argv[0] = "@shadow@/bin/usermod";
+                 argv[1] = "-G";
+                 argv[2] = str->str;
+                 argv[3] = "--";
+@@ -1794,7 +1794,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
+                 if (mode == PASSWORD_MODE_SET_AT_LOGIN ||
+                     mode == PASSWORD_MODE_NONE) {
+ 
+-                        argv[0] = "/usr/bin/passwd";
++                        argv[0] = "/run/wrappers/bin/passwd";
+                         argv[1] = "-d";
+                         argv[2] = "--";
+                         argv[3] = accounts_user_get_user_name (ACCOUNTS_USER (user));
+@@ -1806,7 +1806,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
+                         }
+ 
+                         if (mode == PASSWORD_MODE_SET_AT_LOGIN) {
+-                                argv[0] = "/usr/bin/chage";
++                                argv[0] = "@shadow@/bin/chage";
+                                 argv[1] = "-d";
+                                 argv[2] = "0";
+                                 argv[3] = "--";
+@@ -1827,7 +1827,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
+                         accounts_user_set_locked (ACCOUNTS_USER (user), FALSE);
+                 }
+                 else if (accounts_user_get_locked (ACCOUNTS_USER (user))) {
+-                        argv[0] = "/usr/sbin/usermod";
++                        argv[0] = "@shadow@/bin/usermod";
+                         argv[1] = "-U";
+                         argv[2] = "--";
+                         argv[3] = accounts_user_get_user_name (ACCOUNTS_USER (user));
+@@ -1905,7 +1905,7 @@ user_change_password_authorized_cb (Daemon                *daemon,
+ 
+         g_object_freeze_notify (G_OBJECT (user));
+ 
+-        argv[0] = "/usr/sbin/usermod";
++        argv[0] = "@shadow@/bin/usermod";
+         argv[1] = "-p";
+         argv[2] = strings[0];
+         argv[3] = "--";

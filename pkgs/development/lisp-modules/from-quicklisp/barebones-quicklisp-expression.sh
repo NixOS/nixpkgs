@@ -34,7 +34,7 @@ url="${ql_src##* }"
 
 [ "$ql_src_type" = "kmr-git" ] && {
   ql_src_type=git
-  url="http://git.b9.com/$url.git"
+  url="http://git.kpe.io/$url.git"
   export NIX_PREFETCH_GIT_DEEP_CLONE=1
 }
 
