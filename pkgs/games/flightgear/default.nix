@@ -9,7 +9,7 @@ let
   version = "2020.1.2";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
-    pname = "flightgear-base";
+    pname = "flightgear-data";
     inherit version;
 
     src = fetchurl {
