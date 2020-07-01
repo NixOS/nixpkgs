@@ -722,9 +722,6 @@ self: super: {
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
 
-  # https://github.com/dan-t/cabal-lenses/issues/6
-  cabal-lenses = doJailbreak super.cabal-lenses;
-
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
 
@@ -1036,12 +1033,8 @@ self: super: {
   # });
   libnix = dontCheck super.libnix;
 
-  # 2020-06-23: NOTE: > 0.33 => rm 464.patch: https://github.com/jaor/xmobar/issues/466
   # dontCheck: The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
-  xmobar = appendPatch (dontCheck super.xmobar) (pkgs.fetchpatch {
-    url = "https://github.com/jaor/xmobar/pull/464.patch";
-    sha256 = "0y1dd878yzy1cx0cjj0ijd3dmywr7jdmk68vxdjimxzblrdw1al6";
-  });
+  xmobar = dontCheck super.xmobar;
 
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
@@ -1057,14 +1050,6 @@ self: super: {
       url    = "https://github.com/redelmann/scat/pull/6.diff";
       sha256 = "07nj2p0kg05livhgp1hkkdph0j0a6lb216f8x348qjasy0lzbfhl";
     })];
-  });
-
-  # Remove unecessary constraint:
-  # https://github.com/haskell-infra/hackage-trustees/issues/258
-  data-accessor-template = overrideCabal super.data-accessor-template (drv: {
-    postPatch = ''
-      sed -i 's#template-haskell >=2.11 && <2.15#template-haskell#' data-accessor-template.cabal
-    '';
   });
 
   # 2020-06-05: HACK: In Nixpkgs currently this is
@@ -1165,9 +1150,6 @@ self: super: {
   # https://github.com/kazu-yamamoto/dns/issues/150
   dns = dontCheck super.dns;
 
-  # Support recent versions of fast-logger.
-  spacecookie = doJailbreak super.spacecookie;
-
   # apply patches from https://github.com/snapframework/snap-server/pull/126
   # manually until they are accepted upstream
   snap-server = overrideCabal super.snap-server (drv: {
@@ -1188,9 +1170,6 @@ self: super: {
 
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
-
-  # krank-0.1.0 does not accept PyF-0.9.0.0.
-  krank = doJailbreak super.krank;
 
   # the test suite has an overly tight restriction on doctest
   # See https://github.com/ekmett/perhaps/pull/5
