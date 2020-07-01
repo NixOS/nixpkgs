@@ -4537,6 +4537,10 @@ in
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
+  kbs2 = callPackage ../tools/security/kbs2 {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
 
   keepalived = callPackage ../tools/networking/keepalived { };
