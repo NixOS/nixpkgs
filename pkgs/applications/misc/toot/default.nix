@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Mastodon CLI interface";
     homepage    = "https://github.com/ihabunek/toot";
-    license     = licenses.mit;
+    license     = licenses.gpl3;
     maintainers = [ maintainers.matthiasbeyer ];
   };
 
