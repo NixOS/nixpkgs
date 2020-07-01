@@ -8,6 +8,7 @@
 , setproctitle
 , setuptools
 , sound-theme-freedesktop
+, wrapQtAppsHook
 , youtube-dl
 }:
 
@@ -37,10 +38,17 @@ buildPythonApplication rec {
   postInstall = ''
      mkdir -p $out/share/applications
      cp $src/xdg/com.github.persepolisdm.persepolis.desktop $out/share/applications
-     wrapProgram $out/bin/persepolis --prefix PATH : "${lib.makeBinPath [aria libnotify ]}"
   '';
 
-  buildInputs = [ makeWrapper ];
+  # prevent double wrapping
+  dontWrapQtApps = true;
+  nativeBuildInputs = [ wrapQtAppsHook ];
+
+  # feed args to wrapPythonApp
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [aria libnotify ]}"
+    ''''${qtWrapperArgs[@]}''
+  ];
 
   propagatedBuildInputs = [
     pulseaudio
