@@ -1328,160 +1328,162 @@ let
     };
   };
 
-  commonMatchText = def: optionalString (def.matchConfig != {}) ''
+  commonMatchText = def: optionalString (def.matchConfig != { }) ''
     [Match]
     ${attrsToSection def.matchConfig}
   '';
 
   linkToUnit = name: def:
     { inherit (def) enable;
-      text = commonMatchText def +
-        ''
+      text = commonMatchText def
+        + ''
           [Link]
           ${attrsToSection def.linkConfig}
-
-          ${def.extraConfig}
-        '';
+        ''
+        + def.extraConfig;
     };
 
   netdevToUnit = name: def:
     { inherit (def) enable;
-      text = commonMatchText def +
-        ''
+      text = commonMatchText def
+        + ''
           [NetDev]
           ${attrsToSection def.netdevConfig}
-
-          ${optionalString (def.vlanConfig != { }) ''
-            [VLAN]
-            ${attrsToSection def.vlanConfig}
-
-          ''}
-          ${optionalString (def.macvlanConfig != { }) ''
-            [MACVLAN]
-            ${attrsToSection def.macvlanConfig}
-
-          ''}
-          ${optionalString (def.vxlanConfig != { }) ''
-            [VXLAN]
-            ${attrsToSection def.vxlanConfig}
-
-          ''}
-          ${optionalString (def.tunnelConfig != { }) ''
-            [Tunnel]
-            ${attrsToSection def.tunnelConfig}
-
-          ''}
-          ${optionalString (def.peerConfig != { }) ''
-            [Peer]
-            ${attrsToSection def.peerConfig}
-
-          ''}
-          ${optionalString (def.tunConfig != { }) ''
-            [Tun]
-            ${attrsToSection def.tunConfig}
-
-          ''}
-          ${optionalString (def.tapConfig != { }) ''
-            [Tap]
-            ${attrsToSection def.tapConfig}
-
-          ''}
-          ${optionalString (def.wireguardConfig != { }) ''
-            [WireGuard]
-            ${attrsToSection def.wireguardConfig}
-
-          ''}
-          ${flip concatMapStrings def.wireguardPeers (x: ''
-            [WireGuardPeer]
-            ${attrsToSection x.wireguardPeerConfig}
-
-          '')}
-          ${optionalString (def.bondConfig != { }) ''
-            [Bond]
-            ${attrsToSection def.bondConfig}
-
-          ''}
-          ${optionalString (def.xfrmConfig != { }) ''
-            [Xfrm]
-            ${attrsToSection def.xfrmConfig}
-
-          ''}
-          ${optionalString (def.vrfConfig != { }) ''
-            [VRF]
-            ${attrsToSection def.vrfConfig}
-
-          ''}
-          ${def.extraConfig}
-        '';
+        ''
+        + optionalString (def.vlanConfig != { }) ''
+          [VLAN]
+          ${attrsToSection def.vlanConfig}
+        ''
+        + optionalString (def.macvlanConfig != { }) ''
+          [MACVLAN]
+          ${attrsToSection def.macvlanConfig}
+        ''
+        + optionalString (def.vxlanConfig != { }) ''
+          [VXLAN]
+          ${attrsToSection def.vxlanConfig}
+        ''
+        + optionalString (def.tunnelConfig != { }) ''
+          [Tunnel]
+          ${attrsToSection def.tunnelConfig}
+        ''
+        + optionalString (def.peerConfig != { }) ''
+          [Peer]
+          ${attrsToSection def.peerConfig}
+        ''
+        + optionalString (def.tunConfig != { }) ''
+          [Tun]
+          ${attrsToSection def.tunConfig}
+        ''
+        + optionalString (def.tapConfig != { }) ''
+          [Tap]
+          ${attrsToSection def.tapConfig}
+        ''
+        + optionalString (def.wireguardConfig != { }) ''
+          [WireGuard]
+          ${attrsToSection def.wireguardConfig}
+        ''
+        + flip concatMapStrings def.wireguardPeers (x: ''
+          [WireGuardPeer]
+          ${attrsToSection x.wireguardPeerConfig}
+        '')
+        + optionalString (def.bondConfig != { }) ''
+          [Bond]
+          ${attrsToSection def.bondConfig}
+        ''
+        + optionalString (def.xfrmConfig != { }) ''
+          [Xfrm]
+          ${attrsToSection def.xfrmConfig}
+        ''
+        + optionalString (def.vrfConfig != { }) ''
+          [VRF]
+          ${attrsToSection def.vrfConfig}
+        ''
+        + def.extraConfig;
     };
 
   networkToUnit = name: def:
     { inherit (def) enable;
-      text = commonMatchText def +
+      text = commonMatchText def
+        + optionalString (def.linkConfig != { }) ''
+          [Link]
+          ${attrsToSection def.linkConfig}
         ''
-          ${optionalString (def.linkConfig != { }) ''
-            [Link]
-            ${attrsToSection def.linkConfig}
-
-          ''}
-
+        + ''
           [Network]
-          ${attrsToSection def.networkConfig}
+        ''
+        + attrsToSection def.networkConfig
+        + optionalString (def.address != [ ]) ''
           ${concatStringsSep "\n" (map (s: "Address=${s}") def.address)}
+        ''
+        + optionalString (def.gateway != [ ]) ''
           ${concatStringsSep "\n" (map (s: "Gateway=${s}") def.gateway)}
+        ''
+        + optionalString (def.dns != [ ]) ''
           ${concatStringsSep "\n" (map (s: "DNS=${s}") def.dns)}
+        ''
+        + optionalString (def.ntp != [ ]) ''
           ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
+        ''
+        + optionalString (def.bridge != [ ]) ''
           ${concatStringsSep "\n" (map (s: "Bridge=${s}") def.bridge)}
+        ''
+        + optionalString (def.bond != [ ]) ''
           ${concatStringsSep "\n" (map (s: "Bond=${s}") def.bond)}
+        ''
+        + optionalString (def.vrf != [ ]) ''
           ${concatStringsSep "\n" (map (s: "VRF=${s}") def.vrf)}
+        ''
+        + optionalString (def.vlan != [ ]) ''
           ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
+        ''
+        + optionalString (def.macvlan != [ ]) ''
           ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
+        ''
+        + optionalString (def.vxlan != [ ]) ''
           ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
+        ''
+        + optionalString (def.tunnel != [ ]) ''
           ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
+        ''
+        + optionalString (def.xfrm != [ ]) ''
           ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
+        ''
+        + ''
 
-          ${flip concatMapStrings def.addresses (x: ''
-            [Address]
-            ${attrsToSection x.addressConfig}
-
-          '')}
-          ${flip concatMapStrings def.routingPolicyRules (x: ''
-            [RoutingPolicyRule]
-            ${attrsToSection x.routingPolicyRuleConfig}
-
-          '')}
-          ${flip concatMapStrings def.routes (x: ''
-            [Route]
-            ${attrsToSection x.routeConfig}
-
-          '')}
-          ${optionalString (def.dhcpV4Config != { }) ''
-            [DHCPv4]
-            ${attrsToSection def.dhcpV4Config}
-
-          ''}
-          ${optionalString (def.dhcpV6Config != {}) ''
-            [DHCPv6]
-            ${attrsToSection def.dhcpV6Config}
-
-          ''}
-          ${optionalString (def.dhcpServerConfig != { }) ''
-            [DHCPServer]
-            ${attrsToSection def.dhcpServerConfig}
-
-          ''}
-          ${optionalString (def.ipv6PrefixDelegationConfig != {}) ''
-            [IPv6PrefixDelegation]
-            ${attrsToSection def.ipv6PrefixDelegationConfig}
-
-          ''}
-          ${flip concatMapStrings def.ipv6Prefixes (x: ''
-            [IPv6Prefix]
-            ${attrsToSection x.ipv6PrefixConfig}
-
-          '')}
-          ${def.extraConfig}
-        '';
+        ''
+        + flip concatMapStrings def.addresses (x: ''
+          [Address]
+          ${attrsToSection x.addressConfig}
+        '')
+        + flip concatMapStrings def.routingPolicyRules (x: ''
+          [RoutingPolicyRule]
+          ${attrsToSection x.routingPolicyRuleConfig}
+        '')
+        + flip concatMapStrings def.routes (x: ''
+          [Route]
+          ${attrsToSection x.routeConfig}
+        '')
+        + optionalString (def.dhcpV4Config != { }) ''
+          [DHCPv4]
+          ${attrsToSection def.dhcpV4Config}
+        ''
+        + optionalString (def.dhcpV6Config != { }) ''
+          [DHCPv6]
+          ${attrsToSection def.dhcpV6Config}
+        ''
+        + optionalString (def.dhcpServerConfig != { }) ''
+          [DHCPServer]
+          ${attrsToSection def.dhcpServerConfig}
+        ''
+        + optionalString (def.ipv6PrefixDelegationConfig != { }) ''
+          [IPv6PrefixDelegation]
+          ${attrsToSection def.ipv6PrefixDelegationConfig}
+        ''
+        + flip concatMapStrings def.ipv6Prefixes (x: ''
+          [IPv6Prefix]
+          ${attrsToSection x.ipv6PrefixConfig}
+        '')
+        + def.extraConfig;
     };
 
   unitFiles = listToAttrs (map (name: {
