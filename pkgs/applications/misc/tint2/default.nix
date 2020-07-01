@@ -59,6 +59,10 @@ stdenv.mkDerivation rec {
     libstartup_notification
   ];
 
+  cmakeFlags = [
+    "-Ddocdir=share/doc/${pname}"
+  ];
+
   postPatch = ''
     for f in ./src/launcher/apps-common.c \
              ./src/launcher/icon-theme-common.c
