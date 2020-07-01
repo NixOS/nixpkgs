@@ -638,9 +638,6 @@ self: super: {
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
 
-  # We get lots of strange compiler errors during the test suite run.
-  jsaddle = dontCheck super.jsaddle;
-
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal super.stunclient (drv: {
@@ -890,13 +887,6 @@ self: super: {
       cp -v *.info* $out/share/info/
     '';
   });
-
-  # https://github.com/haskell-rewriting/term-rewriting/pull/15
-  # remove on next hackage update
-  term-rewriting = doJailbreak super.term-rewriting;
-
-  # https://github.com/GaloisInc/pure-zlib/pull/11
-  pure-zlib = doJailbreak super.pure-zlib;
 
   # https://github.com/strake/lenz-template.hs/pull/2
   lenz-template = doJailbreak super.lenz-template;
@@ -1194,9 +1184,6 @@ self: super: {
     '';
   });
 
-  # Unnecessary upper bound on vector <0.12.1
-  bitwise-enum = doJailbreak super.bitwise-enum;
-
   # This breaks because of version bounds, but compiles and runs fine.
   # Last commit is 5 years ago, so we likely won't get upstream fixed soon.
   # https://bitbucket.org/rvlm/hakyll-contrib-hyphenation/src/master/
@@ -1222,9 +1209,6 @@ self: super: {
 
   # gitit is unbroken in the latest release
   gitit = markUnbroken super.gitit;
-
-  # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
-  haskell-ci = doJailbreak super.haskell-ci;
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
