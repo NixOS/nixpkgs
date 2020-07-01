@@ -101,11 +101,7 @@ self: super: {
   # Jailbreak to fix the build.
   aeson-diff = doJailbreak super.aeson-diff;
   brick = doJailbreak super.brick;
-  cabal-plan = doJailbreak super.cabal-plan;
-  cborg = doJailbreak super.cborg;
-  cborg-json = doJailbreak super.cborg-json;
   exact-pi = doJailbreak super.exact-pi;
-  relude = dontCheck (doJailbreak super.relude);
   serialise = doJailbreak super.serialise;
   setlocale = doJailbreak super.setlocale;
   shellmet = doJailbreak super.shellmet;
