@@ -33,8 +33,12 @@ NIX_CFLAGS_COMPILE_@suffixSalt@="-B@out@/bin/ $NIX_CFLAGS_COMPILE_@suffixSalt@"
 # Export and assign separately in order that a failing $(..) will fail
 # the script.
 
-if [ -e @out@/nix-support/libc-cflags ]; then
+if [[ "$cInclude" = 1 ]] && [ -e @out@/nix-support/libc-cflags ]; then
     NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/libc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
+fi
+
+if [ -e @out@/nix-support/libc-crt1-cflags ]; then
+    NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/libc-crt1-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
 fi
 
 if [ -e @out@/nix-support/libcxx-cxxflags ]; then
