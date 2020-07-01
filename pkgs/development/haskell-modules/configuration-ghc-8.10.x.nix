@@ -63,12 +63,7 @@ self: super: {
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
   pandoc = doJailbreak super.pandoc;
-  regex-pcre-builtin = doJailbreak super.regex-pcre-builtin;
-  regex-posix = doJailbreak super.regex-posix;
-  regex-tdfa = doJailbreak super.regex-tdfa;
-  split = doJailbreak super.split;
   system-fileio = doJailbreak super.system-fileio;
-  tar = doJailbreak super.tar;
   unliftio-core = doJailbreak super.unliftio-core;
 
   # Use the latest version to fix the build.
