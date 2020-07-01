@@ -78,11 +78,7 @@ self: super: {
   split = doJailbreak super.split;
   system-fileio = doJailbreak super.system-fileio;
   tar = doJailbreak super.tar;
-  tasty-expected-failure = doJailbreak super.tasty-expected-failure;
-  tasty-rerun = doJailbreak super.tasty-rerun;  # https://github.com/ocharles/tasty-rerun/issues/18
   unliftio-core = doJailbreak super.unliftio-core;
-  vector = doJailbreak super.vector;
-  zlib = doJailbreak super.zlib;
 
   # Use the latest version to fix the build.
   lens = self.lens_4_19_2;
@@ -99,7 +95,6 @@ self: super: {
   ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = null; };
 
   # Jailbreak to fix the build.
-  aeson-diff = doJailbreak super.aeson-diff;
   brick = doJailbreak super.brick;
   cabal-plan = doJailbreak super.cabal-plan;
   cborg = doJailbreak super.cborg;
