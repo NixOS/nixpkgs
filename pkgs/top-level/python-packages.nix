@@ -7597,6 +7597,8 @@ in {
 
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
+  pykwalify = callPackage ../development/python-modules/pykwalify { };
+
   wfuzz = callPackage ../development/python-modules/wfuzz { };
 
   wget = callPackage ../development/python-modules/wget { };
