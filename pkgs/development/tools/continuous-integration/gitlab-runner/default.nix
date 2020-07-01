@@ -17,6 +17,7 @@ buildGoPackage rec {
   inherit version;
   pname = "gitlab-runner";
   goPackagePath = "gitlab.com/gitlab-org/gitlab-runner";
+  subPackages = [ "." ];
   commonPackagePath = "${goPackagePath}/common";
   buildFlagsArray = ''
     -ldflags=
@@ -35,7 +36,6 @@ buildGoPackage rec {
   patches = [ ./fix-shell-path.patch ];
 
   postInstall = ''
-    touch $out/bin/hello
     install -d $out/bin/helper-images
     ln -sf ${docker_x86_64} $out/bin/helper-images/prebuilt-x86_64.tar.xz
     ln -sf ${docker_arm} $out/bin/helper-images/prebuilt-arm.tar.xz
