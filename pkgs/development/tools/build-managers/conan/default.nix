@@ -91,7 +91,8 @@ in newPython.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace conans/requirements.txt \
       --replace "PyYAML>=3.11, <3.14.0" "PyYAML" \
-      --replace "deprecation>=2.0, <2.1" "deprecation"
+      --replace "deprecation>=2.0, <2.1" "deprecation" \
+      --replace "six>=1.10.0,<=1.14.0" "six"
   '';
 
   meta = with lib; {
