@@ -15,6 +15,8 @@ with lib;
   config = mkIf cfg.enable {
     boot.kernelModules = [ "tun" ];
 
+    networking.iproute2.enable = true;
+
     systemd.services.mullvad-daemon = {
       description = "Mullvad VPN daemon";
       wantedBy = [ "multi-user.target" ];
