@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses, nixosTests
-, libiconv, openssl, pcre, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
+, libiconv, openssl, pcre2, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
 , libaio, libevent, jemalloc, cracklib, systemd, perl
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , fixDarwinDylibNames, cctools, CoreServices, less
@@ -22,14 +22,14 @@ mariadb = server // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.4.15";
+  version = "10.5.8";
 
   src = fetchurl {
     urls = [
       "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
       "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
     ];
-    sha256 = "0cdfzr768cb7n9ag9gqahr8c6igfn513md67xn4rf98ajmnxg0r7";
+    sha256 = "1s3vfm73911cddjhgpcbkya6nz7ag2zygg56qqzwscn5ybv28j7b";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -37,7 +37,7 @@ common = rec { # attributes common to both builds
     ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
-    ncurses openssl zlib pcre libiconv curl
+    ncurses openssl zlib pcre2 libiconv curl
   ] ++ optionals stdenv.hostPlatform.isLinux [ libaio systemd libkrb5 ]
     ++ optionals stdenv.hostPlatform.isDarwin [ perl cctools CoreServices ]
     ++ optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ];
@@ -182,7 +182,7 @@ server = stdenv.mkDerivation (common // {
   ] ++ optional (!stdenv.hostPlatform.isDarwin && withStorageRocks) [
     "-DWITH_ROCKSDB_JEMALLOC=ON"
   ] ++ optional (!stdenv.hostPlatform.isDarwin) [
-    "-DWITH_JEMALLOC=static"
+    "-DWITH_JEMALLOC=yes"
   ] ++ optional stdenv.hostPlatform.isDarwin [
     "-DPLUGIN_AUTH_PAM=OFF"
     "-DWITHOUT_OQGRAPH=1"
@@ -195,7 +195,6 @@ server = stdenv.mkDerivation (common // {
   postInstall = common.postInstall + ''
     chmod +x "$out"/bin/wsrep_sst_common
     rm "$out"/bin/{mariadb-client-test,mariadb-test,mysql_client_test,mysqltest}
-    rm -r "$out"/data # Don't need testing data
   '' + optionalString withStorageMroonga ''
     mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
   '' + optionalString (!stdenv.hostPlatform.isDarwin) ''
