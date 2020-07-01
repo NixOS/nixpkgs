@@ -521,7 +521,7 @@ in
               if poolImported "${pool}"; then
                 ${optionalString cfgZfs.requestEncryptionCredentials ''
                   ${packages.zfsUser}/sbin/zfs list -rHo name,keylocation ${pool} | while read ds kl; do
-                    case "$kl" in
+                    (case "$kl" in
                       none )
                         ;;
                       prompt )
@@ -530,7 +530,7 @@ in
                       * )
                         ${packages.zfsUser}/sbin/zfs load-key "$ds"
                         ;;
-                      esac
+                    esac) < /dev/null # To protect while read ds kl in case anything reads stdin
                   done
                 ''}
                 echo "Successfully imported ${pool}"
