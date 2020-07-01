@@ -8,7 +8,7 @@
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libXdamage, libevent, libstartup_notification
 , libvpx, libvpx_1_8
-, icu, libpng, jemalloc, glib
+, icu, icu67, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
@@ -111,7 +111,7 @@ stdenv.mkDerivation ({
     xorg.libXScrnSaver xorg.xorgproto
     xorg.libXext unzip makeWrapper
     libevent libstartup_notification /* cairo */
-    icu libpng jemalloc glib
+    libpng jemalloc glib
     nasm
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
@@ -119,8 +119,10 @@ stdenv.mkDerivation ({
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
     nspr nss
   ]
-  ++ lib.optionals  (lib.versionOlder ffversion "75") [ libvpx sqlite ]
+  ++ lib.optionals (lib.versionOlder ffversion "75") [ libvpx sqlite ]
   ++ lib.optional  (lib.versionAtLeast ffversion "75.0") libvpx_1_8
+  ++ lib.optional  (lib.versionOlder ffversion "78") icu
+  ++ lib.optional  (lib.versionAtLeast ffversion "78.0") icu67
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
@@ -200,7 +202,6 @@ stdenv.mkDerivation ({
     "--enable-application=browser"
     "--with-system-jpeg"
     "--with-system-zlib"
-    "--with-system-bz2"
     "--with-system-libevent"
     "--with-system-libvpx"
     "--with-system-png" # needs APNG support
@@ -208,18 +209,20 @@ stdenv.mkDerivation ({
     "--enable-system-ffi"
     "--enable-system-pixman"
     #"--enable-system-cairo"
-    "--enable-startup-notification"
-    #"--enable-content-sandbox" # TODO: probably enable after 54
     "--disable-tests"
     "--disable-necko-wifi" # maybe we want to enable this at some point
     "--disable-updater"
     "--enable-jemalloc"
-    "--disable-gconf"
     "--enable-default-toolkit=${default-toolkit}"
     "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
     "--with-system-nspr"
     "--with-system-nss"
+  ]
+  ++ lib.optionals (lib.versionOlder ffversion "78") [
+    "--with-system-bz2"
+    "--enable-startup-notification"
+    "--disable-gconf"
   ]
   ++ lib.optional (lib.versionOlder ffversion "75") "--enable-system-sqlite"
   ++ lib.optional (stdenv.isDarwin) "--disable-xcode-checks"
