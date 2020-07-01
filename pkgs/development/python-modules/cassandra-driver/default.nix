@@ -12,6 +12,9 @@
 , scales
 , six
 , sure
+, gremlinpython
+, gevent
+, twisted
 }:
 
 buildPythonPackage rec {
@@ -28,7 +31,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six geomet ]
     ++ lib.optionals (pythonOlder "3.4") [ futures ];
 
-  checkInputs = [ eventlet mock nose pytest pytz pyyaml sure ];
+  checkInputs = [ eventlet mock nose pytest pytz pyyaml sure scales gremlinpython gevent twisted ];
 
   # ignore test files which try to do socket.getprotocolname('tcp')
   # as it fails in sandbox mode due to lack of a /etc/protocols file
@@ -38,12 +41,12 @@ buildPythonPackage rec {
   #     --ignore=tests/unit/io/test_eventletreactor.py \
   #     --ignore=tests/unit/io/test_asyncorereactor.py
   # '';
-  disabledTests = [
-    "test_libevreactor"
-    "test_eventletreactor"
-    "test_asyncorereactor"
-  ];
-  doCheck = false;
+  # disabledTests = [
+  #   "test_libevreactor"
+  #   "test_eventletreactor"
+  #   "test_asyncorereactor"
+  # ];
+  # doCheck = false;
 
   meta = with lib; {
     description = "A Python client driver for Apache Cassandra";
