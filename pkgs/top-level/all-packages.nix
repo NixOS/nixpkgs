@@ -13465,7 +13465,9 @@ in
 
   libpqxx = callPackage ../development/libraries/libpqxx { };
 
-  libprom = callPackage ../development/libraries/libprom { };
+  inherit (callPackages ../development/libraries/prometheus-client-c {
+    stdenv = gccStdenv; # Required for darwin
+  }) libprom libpromhttp;
 
   libproxy = callPackage ../development/libraries/libproxy {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation JavaScriptCore;
