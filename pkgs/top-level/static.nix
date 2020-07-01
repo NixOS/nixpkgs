@@ -216,6 +216,10 @@ in {
   libressl = super.libressl.override {
     buildShared = false;
   };
+  libjpeg_turbo = super.libjpeg_turbo.override {
+    enableStatic = true;
+    enableShared = false;
+  };
 
   darwin = super.darwin // {
     libiconv = super.darwin.libiconv.override {

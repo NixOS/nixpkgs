@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, nasm, enableStatic ? false }:
+{ stdenv, fetchurl, fetchpatch, cmake, nasm, enableStatic ? false, enableShared ? true }:
 
 stdenv.mkDerivation rec {
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
+    "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
   ];
 
   doInstallCheck = true;
