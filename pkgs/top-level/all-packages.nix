@@ -5540,6 +5540,8 @@ in
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
 
+  nimmm = callPackage ../applications/misc/nimmm { };
+
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
   nms = callPackage ../tools/misc/nms { };
