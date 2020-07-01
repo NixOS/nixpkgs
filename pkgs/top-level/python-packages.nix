@@ -7679,6 +7679,8 @@ in {
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
+  west = callPackage ../development/python-modules/west { };
+
   wfuzz = callPackage ../development/python-modules/wfuzz { };
 
   wget = callPackage ../development/python-modules/wget { };
