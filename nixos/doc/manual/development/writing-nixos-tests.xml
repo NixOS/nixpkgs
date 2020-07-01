@@ -362,6 +362,18 @@ start_all()
    </varlistentry>
    <varlistentry>
     <term>
+     <methodname>wait_for_console_text</methodname>
+    </term>
+    <listitem>
+     <para>
+      Wait until the supplied regular expressions match a line of the serial
+      console output. This method is useful when OCR is not possibile or
+      accurate enough.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <methodname>wait_for_window</methodname>
     </term>
     <listitem>
