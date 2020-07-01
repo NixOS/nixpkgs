@@ -886,6 +886,8 @@ in {
 
   itanium_demangler = callPackage ../development/python-modules/itanium_demangler { };
 
+  itemadapter = callPackage ../development/python-modules/itemadapter { };
+
   iterm2 = callPackage ../development/python-modules/iterm2 { };
 
   janus = callPackage ../development/python-modules/janus { };
