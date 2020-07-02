@@ -66,12 +66,7 @@ self: super: {
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   ed25519 = doJailbreak super.ed25519;
   email-validate = doJailbreak super.email-validate;  # https://github.com/Porges/email-validate-hs/issues/51
-  feed = doJailbreak super.feed;  # https://github.com/bergmark/feed/issues/48
-  hashable = doJailbreak super.hashable;
   pandoc = doJailbreak super.pandoc;
-  parallel = doJailbreak super.parallel;
-  regex-base = doJailbreak super.regex-base;
-  regex-compat = doJailbreak super.regex-compat;
   regex-pcre-builtin = doJailbreak super.regex-pcre-builtin;
   regex-posix = doJailbreak super.regex-posix;
   regex-tdfa = doJailbreak super.regex-tdfa;
