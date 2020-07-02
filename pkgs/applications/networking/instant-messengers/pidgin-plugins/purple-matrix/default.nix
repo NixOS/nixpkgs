@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   pname = "purple-matrix-unstable";
   version = "2019-06-06";
 
+  buildFlags = [ "CC=cc" ];
+
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "purple-matrix";
