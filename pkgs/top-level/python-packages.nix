@@ -4783,6 +4783,8 @@ in {
 
   pint = callPackage ../development/python-modules/pint { };
 
+  pkutils = callPackage ../development/python-modules/pkutils { };
+
   pygal = callPackage ../development/python-modules/pygal { };
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
