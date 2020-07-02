@@ -701,6 +701,8 @@ in {
 
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
+  expiringdict = callPackage ../development/python-modules/expiringdict { };
+
   dcmstack = callPackage ../development/python-modules/dcmstack { };
 
   dbus-python = callPackage ../development/python-modules/dbus {
