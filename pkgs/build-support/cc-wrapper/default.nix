@@ -229,7 +229,7 @@ stdenv.mkDerivation {
 
   postFixup =
     ''
-      # Backwards compatability for packages expecting this file, e.g. with
+      # Backwards compatibility for packages expecting this file, e.g. with
       # `$NIX_CC/nix-support/dynamic-linker`.
       #
       # TODO(@Ericson2314): Remove this after stable release and force
@@ -240,6 +240,8 @@ stdenv.mkDerivation {
       if [[ -f "$bintools/nix-support/dynamic-linker-m32" ]]; then
         ln -s "$bintools/nix-support/dynamic-linker-m32" "$out/nix-support"
       fi
+
+      touch "$out"/nix-support/{cc-cflags,cc-cflags-before,cc-ldflags,libc-cflags}
     ''
 
     + optionalString isClang ''
@@ -294,6 +296,7 @@ stdenv.mkDerivation {
       ## General libc++ support
       ##
 
+      touch "$out"/nix-support/{libcxx-cxxflags,libcxx-ldflags}
     ''
     + optionalString (libcxx == null && cc ? gcc) ''
       for dir in ${cc.gcc}/include/c++/*; do
