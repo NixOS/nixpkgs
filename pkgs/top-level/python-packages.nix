@@ -7298,9 +7298,7 @@ in {
     inherit (pkgs) zstd pkgconfig;
   };
 
-  zstandard = callPackage ../development/python-modules/zstandard {
-    inherit (pkgs) zstd;
-  };
+  zstandard = callPackage ../development/python-modules/zstandard { };
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 
