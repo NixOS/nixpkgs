@@ -5962,9 +5962,7 @@ in
 
   brickd = callPackage ../servers/brickd { };
 
-  bully = callPackage ../tools/networking/bully {
-    openssl = openssl_1_0_2;
-  };
+  bully = callPackage ../tools/networking/bully { };
 
   pcapc = callPackage ../tools/networking/pcapc { };
 
