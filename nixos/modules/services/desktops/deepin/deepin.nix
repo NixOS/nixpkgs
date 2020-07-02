@@ -33,6 +33,8 @@
 
       programs.dconf.enable = true;
 
+      services.gvfs.enable = true;
+
       environment.systemPackages = [
         pkgs.deepin.dde-api
         pkgs.deepin.dde-calendar
