@@ -252,7 +252,7 @@ if ($grubVersion == 1) {
         timeout $timeout
     ";
     if ($splashImage) {
-        copy $splashImage, "$bootPath/background.xpm.gz" or die "cannot copy $splashImage to $bootPath\n";
+        copy $splashImage, "$bootPath/background.xpm.gz" or die "cannot copy $splashImage to $bootPath: $!\n";
         $conf .= "splashimage " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/background.xpm.gz\n";
     }
 }
@@ -330,7 +330,7 @@ else {
     ";
 
     if ($font) {
-        copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath\n";
+        copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath: $!\n";
         $conf .= "
             insmod font
             if loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/converted-font.pf2; then
@@ -358,7 +358,7 @@ else {
 		    background_color '$backgroundColor'
 		    ";
 		}
-        copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath\n";
+        copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath: $!\n";
         $conf .= "
             insmod " . substr($suffix, 1) . "
             if background_image --mode '$splashMode' " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/background$suffix; then
@@ -392,8 +392,8 @@ sub copyToKernelsDir {
     # kernels or initrd if this script is ever interrupted.
     if (! -e $dst) {
         my $tmp = "$dst.tmp";
-        copy $path, $tmp or die "cannot copy $path to $tmp\n";
-        rename $tmp, $dst or die "cannot rename $tmp to $dst\n";
+        copy $path, $tmp or die "cannot copy $path to $tmp: $!\n";
+        rename $tmp, $dst or die "cannot rename $tmp to $dst: $!\n";
     }
     $copied{$dst} = 1;
     return ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$name";
@@ -416,10 +416,10 @@ sub addEntry {
       # Make sure initrd is not world readable (won't work if /boot is FAT)
       umask 0137;
       my $initrdSecretsPathTemp = File::Temp::mktemp("$initrdSecretsPath.XXXXXXXX");
-      system("$path/append-initrd-secrets", $initrdSecretsPathTemp) == 0 or die "failed to create initrd secrets\n";
+      system("$path/append-initrd-secrets", $initrdSecretsPathTemp) == 0 or die "failed to create initrd secrets: $!\n";
       # Check whether any secrets were actually added
       if (-e $initrdSecretsPathTemp && ! -z _) {
-        rename $initrdSecretsPathTemp, $initrdSecretsPath or die "failed to move initrd secrets into place\n";
+        rename $initrdSecretsPathTemp, $initrdSecretsPath or die "failed to move initrd secrets into place: $!\n";
         $copied{$initrdSecretsPath} = 1;
         $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$initrdName-secrets";
       } else {
@@ -586,7 +586,7 @@ if (get("useOSProber") eq "true") {
 }
 
 # Atomically switch to the new config
-rename $tmpFile, $confFile or die "cannot rename $tmpFile to $confFile\n";
+rename $tmpFile, $confFile or die "cannot rename $tmpFile to $confFile: $!\n";
 
 
 # Remove obsolete files from $bootPath/kernels.
@@ -664,8 +664,8 @@ if (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1") {
 my $requireNewInstall = $devicesDiffer || $extraGrubInstallArgsDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_BOOTLOADER'} // "") eq "1");
 
 # install a symlink so that grub can detect the boot drive
-my $tmpDir = File::Temp::tempdir(CLEANUP => 1) or die "Failed to create temporary space";
-symlink "$bootPath", "$tmpDir/boot" or die "Failed to symlink $tmpDir/boot";
+my $tmpDir = File::Temp::tempdir(CLEANUP => 1) or die "Failed to create temporary space: $!";
+symlink "$bootPath", "$tmpDir/boot" or die "Failed to symlink $tmpDir/boot: $!";
 
 # install non-EFI GRUB
 if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
@@ -679,7 +679,7 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
         if ($grubTarget ne "") {
             push @command, "--target=$grubTarget";
         }
-        (system @command) == 0 or die "$0: installation of GRUB on $dev failed\n";
+        (system @command) == 0 or die "$0: installation of GRUB on $dev failed: $!\n";
     }
 }
 
@@ -698,7 +698,7 @@ if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both"))
         push @command, "--removable" if $efiInstallAsRemovable eq "true";
     }
 
-    (system @command) == 0 or die "$0: installation of GRUB EFI into $efiSysMountPoint failed\n";
+    (system @command) == 0 or die "$0: installation of GRUB EFI into $efiSysMountPoint failed: $!\n";
 }
 
 
@@ -722,5 +722,5 @@ if ($requireNewInstall != 0) {
     close FILE or die;
 
     # Atomically switch to the new state file
-    rename $stateFileTmp, $stateFile or die "cannot rename $stateFileTmp to $stateFile\n";
+    rename $stateFileTmp, $stateFile or die "cannot rename $stateFileTmp to $stateFile: $!\n";
 }
