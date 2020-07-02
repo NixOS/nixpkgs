@@ -43,18 +43,18 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "mattermost-desktop";
-    version = "4.3.1";
+    version = "4.5.0";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
-          sha256 = "076nv5h6xscbw1987az00x493qhqgrli87gnn57zbvz0acgvlhfv";
+          sha256 = "1p44vxs7i9f15h4xjyr99g8x73qygv909a32lfkqip1fh8lk7sf4";
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
           url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-ia32.tar.gz";
-          sha256 = "19ps9g8j6kp4haj6r3yfy4ma2wm6isq5fa8zlcz6g042ajkqq0ij";
+          sha256 = "03pn853z2famqxcsrwayqb94pzghlpfb0qs2nfi8mc5zzsgcic7z";
         }
       else
         throw "Mattermost-Desktop is not currently supported on ${stdenv.hostPlatform.system}";
