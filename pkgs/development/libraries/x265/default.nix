@@ -1,7 +1,6 @@
 { stdenv, fetchurl, fetchpatch, cmake, nasm, numactl
 , numaSupport ? stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)  # Enabled by default on NUMA platforms
 , debugSupport ? false # Run-time sanity checks (debugging)
-, highbitdepthSupport ? false # false=8bits per channel, true=10/12bits per channel
 , werrorSupport ? false # Warnings as errors
 , ppaSupport ? false # PPA profiling instrumentation
 , vtuneSupport ? false # Vtune profiling instrumentation
@@ -13,10 +12,17 @@
 let
   mkFlag = optSet: flag: if optSet then "-D${flag}=ON" else "-D${flag}=OFF";
   inherit (stdenv) is64bit;
-in
 
-stdenv.mkDerivation rec {
-  pname = "x265";
+  cmakeFlagsAll = [
+    "-DSTATIC_LINK_CRT=OFF"
+    (mkFlag debugSupport "CHECKED_BUILD")
+    (mkFlag ppaSupport "ENABLE_PPA")
+    (mkFlag vtuneSupport "ENABLE_VTUNE")
+    (mkFlag custatsSupport "DETAILED_CU_STATS")
+    (mkFlag unittestsSupport "ENABLE_TESTS")
+    (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
+  ];
+
   version = "3.2";
 
   src = fetchurl {
@@ -27,8 +33,6 @@ stdenv.mkDerivation rec {
     sha256 = "0fqkhfhr22gzavxn60cpnj3agwdf5afivszxf3haj5k1sny7jk9n";
   };
 
-  enableParallelBuilding = true;
-
   patches = [
     # Fix build on ARM (#406)
     (fetchpatch {
@@ -37,22 +41,54 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  buildLib = has12Bit: stdenv.mkDerivation rec {
+    name = "libx265-${if has12Bit then "12" else "10"}-${version}";
+    inherit src patches;
+    enableParallelBuilding = true;
+
+    postPatch = ''
+      sed -i 's/unknown/${version}/g' source/cmake/version.cmake
+    '';
+
+    cmakeLibFlags = [
+      "-DENABLE_CLI=OFF"
+      "-DENABLE_SHARED=OFF"
+      "-DENABLE_HDR10_PLUS=ON"
+      "-DEXPORT_C_API=OFF"
+      "-DHIGH_BIT_DEPTH=ON"
+    ];
+    cmakeFlags = [(mkFlag has12Bit "MAIN12")] ++ cmakeLibFlags ++ cmakeFlagsAll;
+
+    preConfigure = ''
+      cd source
+    '';
+
+    nativeBuildInputs = [cmake nasm] ++ stdenv.lib.optional numaSupport numactl;
+  };
+
+  libx265-10 = buildLib false;
+  libx265-12 = buildLib true;
+in
+
+stdenv.mkDerivation rec {
+  pname = "x265";
+  inherit version src patches;
+
+  enableParallelBuilding = true;
+
   postPatch = ''
     sed -i 's/unknown/${version}/g' source/cmake/version.cmake
   '';
 
   cmakeFlags = [
-    (mkFlag debugSupport "CHECKED_BUILD")
-    "-DSTATIC_LINK_CRT=OFF"
-    (mkFlag (highbitdepthSupport && is64bit) "HIGH_BIT_DEPTH")
-    (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-    (mkFlag ppaSupport "ENABLE_PPA")
-    (mkFlag vtuneSupport "ENABLE_VTUNE")
-    (mkFlag custatsSupport "DETAILED_CU_STATS")
     "-DENABLE_SHARED=ON"
+    "-DHIGH_BIT_DEPTH=OFF"
+    "-DENABLE_HDR10_PLUS=OFF"
+    "-DEXTRA_LIB=${libx265-10}/lib/libx265.a;${libx265-12}/lib/libx265.a"
+    "-DLINKED_10BIT=ON"
+    "-DLINKED_12BIT=ON"
     (mkFlag cliSupport "ENABLE_CLI")
-    (mkFlag unittestsSupport "ENABLE_TESTS")
-  ];
+  ] ++ cmakeFlagsAll;
 
   preConfigure = ''
     cd source
