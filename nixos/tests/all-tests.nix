@@ -266,7 +266,7 @@ in
   php = handleTest ./php {};
   plasma5 = handleTest ./plasma5.nix {};
   plotinus = handleTest ./plotinus.nix {};
-  podman = handleTest ./podman.nix {};
+  podman = handleTestOn ["x86_64-linux"] ./podman.nix {};
   postgis = handleTest ./postgis.nix {};
   postgresql = handleTest ./postgresql.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
