@@ -7,11 +7,24 @@ let
   # NixOS option type for git-like configs
   gitIniType = with types;
     let
-      primitiveType = either str (either bool int);
-      multipleType = either primitiveType (listOf primitiveType);
+      primitiveType = oneOf [ str bool int ] //
+        { description = "primitive type: string, boolean or integer";
+          precedence = 1;
+        };
+      multipleType = either primitiveType (listOf primitiveType) //
+        { description = "one or a list of primitive values";
+          precedence = 1;
+        };
       sectionType = lazyAttrsOf multipleType;
       supersectionType = lazyAttrsOf (either multipleType sectionType);
-    in lazyAttrsOf supersectionType;
+    in lazyAttrsOf supersectionType //
+      { description = ''
+          Git configuration: a (lazy) attribute set of either top-level
+          settings or nested attribute sets (sections) of settings.
+          Each setting can be ${multipleType.description}, meaning
+          strings, booleans or integer numbers.
+        '';
+      };
 
   gerritConfig = pkgs.writeText "gerrit.conf" (
     lib.generators.toGitINI cfg.settings
