@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "0128n7jlshw4bpx0vg8lwj8qwdisjxi7mvniwfafgnkzzrfrpaap";
   };
 
+  prePatch = ''
+    substituteInPlace configure \
+      --replace pkg-config "$PKG_CONFIG"
+  '';
+
   patches = [
     ./no-mkdir-localstatedir.patch
     (fetchpatch {
