@@ -2128,6 +2128,8 @@ in {
 
   citeproc-py = callPackage ../development/python-modules/citeproc-py { };
 
+  collective_checkdocs = callPackage ../development/python-modules/collective_checkdocs { };
+
   colorcet = callPackage ../development/python-modules/colorcet { };
 
   coloredlogs = callPackage ../development/python-modules/coloredlogs { };
