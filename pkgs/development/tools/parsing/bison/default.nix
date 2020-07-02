@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bison";
-  version = "3.6.3";
+  version = "3.6.4";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0qry9ar16dpg9nzrq7jh3fqh4ah2xvcf6v00fc81z08yjd1ljk2b";
+    sha256 = "1s8kmfhg7a58vm65fc977ckp8zspy8diayrcjhs3cgrqnmjdx0w1";
   };
 
   nativeBuildInputs = [ m4 perl ] ++ stdenv.lib.optional stdenv.isSunOS help2man;
