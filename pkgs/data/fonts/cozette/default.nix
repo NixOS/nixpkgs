@@ -23,6 +23,6 @@ fetchzip rec {
     homepage = "https://github.com/slavfox/cozette";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ brettlyons ];
+    maintainers = with maintainers; [ brettlyons marsam ];
   };
 }
