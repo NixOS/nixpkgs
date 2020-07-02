@@ -3,26 +3,22 @@
 assert guileSupport -> ( pkgconfig != null && guile != null );
 
 let
-  version = "4.2.1";
+  version = "4.3";
 in
 stdenv.mkDerivation {
   pname = "gnumake";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://gnu/make/make-${version}.tar.bz2";
-    sha256 = "12f5zzyq2w56g95nni65hc0g5p7154033y2f3qmjvd016szn5qnn";
+    url = "mirror://gnu/make/make-${version}.tar.gz";
+    sha256 = "06cfqzpqsvdnsxbysl5p2fgdgxgl9y4p7scpnrfa8z2zgkjdspz0";
   };
 
-  patchFlags = [ "-p0" ];
   patches = [
     # Purity: don't look for library dependencies (of the form `-lfoo') in /lib
     # and /usr/lib. It's a stupid feature anyway. Likewise, when searching for
     # included Makefiles, don't look in /usr/include and friends.
     ./impure-dirs.patch
-    ./pselect.patch
-    # Fix support for glibc 2.27's glob, inspired by http://www.linuxfromscratch.org/lfs/view/8.2/chapter05/make.html
-    ./glibc-2.27-glob.patch
   ];
 
   nativeBuildInputs = stdenv.lib.optionals guileSupport [ pkgconfig ];

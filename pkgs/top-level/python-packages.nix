@@ -4467,7 +4467,9 @@ in {
 
   locustio = callPackage ../development/python-modules/locustio { };
 
-  llvmlite = callPackage ../development/python-modules/llvmlite { llvm = pkgs.llvm_8; };
+  llvmlite = callPackage ../development/python-modules/llvmlite { 
+    llvm = pkgs.llvm_9; # llvmlite always requires a specific version of llvm.
+  };
 
   lockfile = callPackage ../development/python-modules/lockfile { };
 
@@ -6659,8 +6661,12 @@ in {
 
   cmdtest = callPackage ../development/python-modules/cmdtest { };
 
-  tornado = callPackage ../development/python-modules/tornado { };
-  tornado_4 = callPackage ../development/python-modules/tornado { version = "4.5.3"; };
+  tornado = if isPy3k then
+    callPackage ../development/python-modules/tornado { }
+  else
+    callPackage ../development/python-modules/tornado/5.nix { };
+
+  tornado_4 = callPackage ../development/python-modules/tornado/4.nix { };
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 

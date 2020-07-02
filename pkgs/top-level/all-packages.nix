@@ -8218,7 +8218,6 @@ in
   computecpp = wrapCCWith rec {
     cc = computecpp-unwrapped;
     extraPackages = [
-      libstdcxxHook
       llvmPackages.compiler-rt
     ];
     extraBuildCommands = ''
@@ -8359,14 +8358,6 @@ in
   gcc_debug = lowPrio (wrapCC (gcc.cc.override {
     stripped = false;
   }));
-
-  libstdcxxHook = makeSetupHook
-    { substitutions = {
-        gcc = gcc-unwrapped;
-        targetConfig = stdenv.targetPlatform.config;
-      };
-    }
-    ../development/compilers/gcc/libstdc++-hook.sh;
 
   crossLibcStdenv = overrideCC stdenv
     (if stdenv.hostPlatform.useLLVM or false
@@ -9208,17 +9199,13 @@ in
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_42 = callPackage ../development/compilers/rust/1_42.nix {
+  rust_1_44 = callPackage ../development/compilers/rust/1_44.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust_1_43 = callPackage ../development/compilers/rust/1_43.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
-  rust = rust_1_43;
+  rust = rust_1_44;
 
-  rustPackages_1_42 = rust_1_42.packages.stable;
-  rustPackages_1_43 = rust_1_43.packages.stable;
-  rustPackages = rustPackages_1_43;
+  rustPackages_1_44 = rust_1_44.packages.stable;
+  rustPackages = rustPackages_1_44;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
   inherit (rust) makeRustPlatform;
@@ -9435,6 +9422,10 @@ in
       # provide the default choice, avoiding infinite recursion.
       bintools ? if stdenv.targetPlatform.isDarwin then darwin.binutils else binutils
     , libc ? bintools.libc
+    , # libc++ from the default LLVM version is bound at the top level, but we
+      # want the C++ library to be explicitly chosen by the caller, and null by
+      # default.
+      libcxx ? null
     , extraPackages ? stdenv.lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW) threadsCross
     , ...
     } @ extraArgs:
@@ -9447,7 +9438,7 @@ in
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
 
-    inherit cc bintools libc extraPackages zlib;
+    inherit cc bintools libc libcxx extraPackages zlib;
   } // extraArgs; in self);
 
   wrapCC = cc: wrapCCWith {
@@ -10562,8 +10553,7 @@ in
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
   m4 = gnum4;
 
-  gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
-  gnumake = gnumake42;
+  gnumake = callPackage ../development/tools/build-managers/gnumake { };
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
 
@@ -13643,7 +13633,7 @@ in
 
   libva = callPackage ../development/libraries/libva { };
   libva-minimal = libva.override { minimal = true; };
-  libva-utils = callPackage ../development/libraries/libva-utils { };
+  libva-utils = callPackage ../development/libraries/libva/utils.nix { };
 
   libva1 = callPackage ../development/libraries/libva/1.0.0.nix { };
   libva1-minimal = libva1.override { minimal = true; };
@@ -22555,7 +22545,6 @@ in
   thonny = callPackage ../applications/editors/thonny { };
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
-    inherit (rustPackages_1_42) rustc;
     libpng = libpng_apng;
     gtk3Support = true;
   };
