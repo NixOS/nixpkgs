@@ -46,7 +46,7 @@ let
         };
       in fetchurl {
         name = "pdftoepdf-poppler${popplerVersion}.cc";
-        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftoepdf-poppler${popplerVersion}.cc?revision=52959&view=co";
+        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftoepdf-poppler${popplerVersion}.cc?revision=52959&view=co&pathrev=52959";
         sha256 = "0pngvw1jgnm4cqskrzf5a3z8rj4ssl10007n3wbblj50hvvzjph3";
         postFetch = ''
           # The trunk added some extra arguments to certain functions so we need to revert that
@@ -56,7 +56,7 @@ let
       };
       pdftosrc = fetchurl {
         name = "pdftosrc-poppler${popplerVersion}.cc";
-        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftosrc-poppler${popplerVersion}.cc?revision=52959&view=co";
+        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftosrc-poppler${popplerVersion}.cc?revision=52959&view=co&pathrev=52959";
         sha256 = "0iq2cmwvf2lxy32sygrafwqgcwvvbdnvxm5l3mrg9cb2a1g06380";
       };
     in ''
