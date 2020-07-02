@@ -4787,6 +4787,8 @@ in {
 
   pygal = callPackage ../development/python-modules/pygal { };
 
+  pygogo = callPackage ../development/python-modules/pygogo { };
+
   pytaglib = callPackage ../development/python-modules/pytaglib { };
 
   pyte = callPackage ../development/python-modules/pyte { };
