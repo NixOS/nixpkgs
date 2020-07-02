@@ -10657,6 +10657,8 @@ in
 
   insomnia = callPackage ../development/web/insomnia { };
 
+  insomnia-designer = callPackage ../development/web/insomnia/designer.nix { };
+
   iozone = callPackage ../development/tools/misc/iozone { };
 
   itstool = callPackage ../development/tools/misc/itstool { };
