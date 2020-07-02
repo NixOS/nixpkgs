@@ -1,18 +1,11 @@
-{ lib, python3, platformio, esptool, git, protobuf3_10, fetchpatch }:
+{ lib, python3, platformio, esptool, git, protobuf3_11, fetchpatch }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
       protobuf = super.protobuf.override {
-        protobuf = protobuf3_10;
+        protobuf = protobuf3_11;
       };
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1r5faspz73477hlbjgilw05xsms0glmsa371yqdd26znqsvg1b81";
-        };
-      });
     };
   };
 
