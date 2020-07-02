@@ -183,9 +183,10 @@ server = stdenv.mkDerivation (common // {
     "-DWITH_ROCKSDB_JEMALLOC=ON"
   ] ++ optional (!stdenv.hostPlatform.isDarwin) [
     "-DWITH_JEMALLOC=yes"
-  ] ++ optional stdenv.hostPlatform.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     "-DPLUGIN_AUTH_PAM=OFF"
     "-DWITHOUT_OQGRAPH=1"
+    "-DWITHOUT_PLUGIN_S3=1"
   ];
 
   preConfigure = optionalString (!stdenv.hostPlatform.isDarwin) ''
