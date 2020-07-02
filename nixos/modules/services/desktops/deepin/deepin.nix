@@ -35,6 +35,8 @@
 
       services.gvfs.enable = true;
 
+      services.udisks2.enable = true;
+
       environment.systemPackages = [
         pkgs.deepin.dde-api
         pkgs.deepin.dde-calendar
