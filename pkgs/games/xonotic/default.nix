@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommandNoCC, makeDesktopItem
 , xonotic-data, copyDesktopItems
 , # required for both
-  unzip, libjpeg, zlib, libvorbis, curl
+  unzip, libjpeg, zlib, libvorbis, curl, gmp, libpng, freetype, zip, libtheora, libogg
 , # glx
   libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsaLib
 , # sdl
@@ -62,7 +62,7 @@ let
       sha256 = "0axxw04fyz6jlfqd0kp7hdrqa0li31sx1pbipf2j5qp9wvqicsay";
     };
 
-    buildInputs = [ unzip libjpeg zlib libvorbis curl ]
+    buildInputs = [ unzip libjpeg zlib gmp libvorbis libtheora curl libpng freetype ]
       ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsaLib.dev ]
       ++ lib.optional withSDL [ SDL2.dev ];
 
@@ -73,7 +73,9 @@ let
 
     dontStrip = target != "release";
 
-    buildPhase = lib.optionalString withDedicated ''
+    buildPhase = ''
+      (cd ../d0_blind_id && ./configure --prefix="$out" && make -j $NIX_BUILD_CODE -l $NIX_BUILD_CORES)
+    '' + lib.optionalString withDedicated ''
       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES sv-${target}
     '' + lib.optionalString withGLX ''
       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES cl-${target}
@@ -88,6 +90,7 @@ let
         install -Dm644 ../../misc/logos/xonotic_icon.svg \
           $out/share/icons/hicolor/$size/xonotic.svg
       done
+      (cd ../d0_blind_id && make install)
     '' + lib.optionalString withDedicated ''
       install -Dm755 darkplaces-dedicated "$out/bin/xonotic-dedicated"
     '' + lib.optionalString withGLX ''
@@ -98,32 +101,46 @@ let
 
     # Xonotic needs to find libcurl.so at runtime for map downloads
     dontPatchELF = true;
-    postFixup = lib.optionalString withDedicated ''
-      patchelf --add-needed ${curl.out}/lib/libcurl.so $out/bin/xonotic-dedicated
-    '' + lib.optionalString withGLX ''
-      patchelf \
+
+    commonPatchelfArgs = ''
           --add-needed ${curl.out}/lib/libcurl.so \
-          --add-needed ${libvorbis}/lib/libvorbisfile.so \
-          --add-needed ${libvorbis}/lib/libvorbis.so \
-          --add-needed ${libGL.out}/lib/libGL.so \
-          $out/bin/xonotic-glx
-    '' + lib.optionalString withSDL ''
-      patchelf \
-          --add-needed ${curl.out}/lib/libcurl.so \
-          --add-needed ${libvorbis}/lib/libvorbisfile.so \
-          --add-needed ${libvorbis}/lib/libvorbis.so \
-          $out/bin/xonotic-sdl
+          --add-needed ${zlib.out}/lib/libz.so \
+          --add-needed $out/lib/libd0_blind_id.so \
     '';
+
+    commonClientPatchelfArgs= ''
+          --add-needed ${libvorbis.out}/lib/libvorbis.so \
+          --add-needed ${libvorbis.out}/lib/libvorbisfile.so \
+          --add-needed ${libvorbis.out}/lib/libvorbisenc.so \
+          --add-needed ${libtheora.out}/lib/libtheora.so \
+          --add-needed ${libtheora.out}/lib/libtheoraenc.so \
+          --add-needed ${libtheora.out}/lib/libtheoradec.so \
+          --add-needed ${libpng.out}/lib/libpng16.so \
+          --add-needed ${freetype.out}/lib/libfreetype.so \
+    '';
+
+    postFixup =
+      lib.optionalString withDedicated (''
+          patchelf '' + commonPatchelfArgs + ''
+          "$out/bin/xonotic-dedicated"
+      '') + lib.optionalString withGLX (''
+          patchelf '' + commonPatchelfArgs + commonClientPatchelfArgs + ''
+          --add-needed ${libGL.out}/lib/libGL.so \
+          "$out/bin/xonotic-glx"
+      '') + lib.optionalString withSDL (''
+          patchelf '' + commonPatchelfArgs + commonClientPatchelfArgs + ''
+          "$out/bin/xonotic-sdl"
+      '');
   };
 
 in rec {
   xonotic-data = fetchzip {
     name = "xonotic-data-${version}";
     url = "https://dl.xonotic.org/${name}.zip";
-    sha256 = "1ygkh0v68y4sd1w5vpk8dgb65h5jm599hwszdfgjp3ax4d3ml81x";
+    sha256 = "15caj11v9hhr7w55w3rs1rspblzr9lg1crqivbn9pyyq0rif8cpl";
     extraPostFetch = ''
       cd $out
-      rm -rf $(ls | grep -v "^data$")
+      rm -rf $(ls | grep -v "^data$\|^key_0.d0pk$")
     '';
     meta.hydraPlatforms = [];
     passthru.version = version;
@@ -159,3 +176,4 @@ in rec {
     done
   '');
 }
+
