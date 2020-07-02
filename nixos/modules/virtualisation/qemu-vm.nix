@@ -630,7 +630,6 @@ in
       { "/boot" =
           { device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2";
             fsType = "vfat";
-            options = [ "ro" ];
             noCheck = true; # fsck fails on a r/o filesystem
           };
       });
