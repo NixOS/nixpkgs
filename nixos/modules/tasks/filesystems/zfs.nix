@@ -520,7 +520,7 @@ in
               poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
               if poolImported "${pool}"; then
                 ${optionalString cfgZfs.requestEncryptionCredentials ''
-                  ${packages.zfsUser}/sbin/zfs list -rHo name,keylocation ${pool} | while read ds kl; do
+                  ${packages.zfsUser}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
                     (case "$kl" in
                       none )
                         ;;
