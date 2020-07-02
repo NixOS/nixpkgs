@@ -869,11 +869,8 @@ self: super: {
     '';
   });
 
-  # https://github.com/strake/lenz-template.hs/pull/2
-  lenz-template = doJailbreak super.lenz-template;
 
   # https://github.com/haskell-hvr/resolv/pull/6
-  resolv = dontCheck super.resolv;
   resolv_0_1_1_2 = dontCheck super.resolv_0_1_1_2;
 
   # spdx 0.2.2.0 needs older tasty
@@ -897,9 +894,6 @@ self: super: {
 
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
-
-  # Test suite depends on old QuickCheck 2.10.x.
-  cassava = dontCheck super.cassava;
 
   # Test suite depends on cabal-install
   doctest = dontCheck super.doctest;
@@ -945,9 +939,6 @@ self: super: {
     sha256 = "056rk58v9h114mjx62f41x971xn9p3nhsazcf9zrcyxh1ymrdm8j";
   });
 
-  # needed because of testing-feat >=0.4.0.2 && <1.1
-  language-ecmascript = doJailbreak super.language-ecmascript;
-
   # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can.
   sexpr =
     appendPatch (overrideCabal super.sexpr (drv: {
@@ -957,9 +948,6 @@ self: super: {
 
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
-
-  # https://github.com/snapframework/xmlhtml/pull/37
-  xmlhtml = doJailbreak super.xmlhtml;
 
   purescript =
     let
