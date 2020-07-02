@@ -26035,6 +26035,8 @@ in
 
   fuse-emulator = callPackage ../misc/emulators/fuse-emulator {};
 
+  g810-led = callPackage ../misc/g810-led { };
+
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-libav gst-plugins-ugly;
   };
