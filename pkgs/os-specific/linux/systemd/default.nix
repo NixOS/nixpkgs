@@ -170,8 +170,22 @@ in stdenv.mkDerivation {
     "-Dman=true"
   ];
 
-  preConfigure = ''
+  preConfigure = let
+    defaultDnsServers = [
+      # We use these public name services, ordered by their privacy policy (hopefully):
+      #  * Cloudflare (https://1.1.1.1/)
+      #  * Quad9 without filtering (https://www.quad9.net/)
+      #  * Google (https://developers.google.com/speed/public-dns/)
+      "1.1.1.1"
+      "9.9.9.10"
+      "8.8.8.8"
+      "2606:4700:4700::1111"
+      "2620:fe::10"
+      "2001:4860:4860::8888"
+    ];
+  in ''
     mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
+    mesonFlagsArray+=("-Ddns-servers=${toString defaultDnsServers}")
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
