@@ -157,19 +157,15 @@ let
         local passphrase
 
         while true; do
-            echo -n "Passphrase for ${device}: "
             passphrase=
             while true; do
                 if [ -e /crypt-ramfs/passphrase ]; then
-                    echo "reused"
+                    echo "Passphrase for ${device}: reused"
                     passphrase=$(cat /crypt-ramfs/passphrase)
                     break
                 else
-                    # ask cryptsetup-askpass
                     echo -n "${device}" > /crypt-ramfs/device
-
-                    # and try reading it from /dev/console with a timeout
-                    IFS= read -t 1 -r passphrase
+                    passphrase="$(askPassword "Passphrase for ${device}: ")"
                     if [ -n "$passphrase" ]; then
                        ${if luks.reusePassphrases then ''
                          # remember it for the next device
@@ -253,9 +249,7 @@ let
 
         for try in $(seq 3); do
             ${optionalString yubikey.twoFactor ''
-            echo -n "Enter two-factor passphrase: "
-            read -r k_user
-            echo
+            k_user="$(askPassword "Enter two-factor passphrase: ")"
             ''}
 
             if [ ! -z "$k_user" ]; then
@@ -336,16 +330,15 @@ let
         gpg --card-status > /dev/null 2> /dev/null
 
         for try in $(seq 3); do
-            echo -n "PIN for GPG Card associated with device ${device}: "
             pin=
             while true; do
                 if [ -e /crypt-ramfs/passphrase ]; then
-                    echo "reused"
+                    echo "PIN for GPG Card associated with device ${device}: reused"
                     pin=$(cat /crypt-ramfs/passphrase)
                     break
                 else
                     # and try reading it from /dev/console with a timeout
-                    IFS= read -t 1 -r pin
+                    pin="$(askPassword "PIN for GPG Card associated with device ${device}: ")"
                     if [ -n "$pin" ]; then
                        ${if luks.reusePassphrases then ''
                          # remember it for the next device
@@ -396,8 +389,7 @@ let
         ${if fido2.passwordLess then ''
           export passphrase=""
         '' else ''
-          read -rsp "FIDO2 salt for ${device}: " passphrase
-          echo
+          passphrase="$(askPassword "FIDO2 salt for ${device}: ")"
         ''}
         ${optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
           echo "On systems with Linux Kernel < 5.4, it might take a while to initialize the CRNG, you might want to use linuxPackages_latest."
@@ -417,24 +409,6 @@ let
     '' else ''
     open_normally
     ''}
-  '';
-
-  askPass = pkgs.writeScriptBin "cryptsetup-askpass" ''
-    #!/bin/sh
-
-    ${commonFunctions}
-
-    while true; do
-        wait_target "luks" /crypt-ramfs/device 10 "LUKS to request a passphrase" || die "Passphrase is not requested now"
-        device=$(cat /crypt-ramfs/device)
-
-        echo -n "Passphrase for $device: "
-        IFS= read -rs passphrase
-        echo
-
-        rm /crypt-ramfs/device
-        echo -n "$passphrase" > /crypt-ramfs/passphrase
-    done
   '';
 
   preLVM = filterAttrs (n: v: v.preLVM) luks.devices;
@@ -797,8 +771,6 @@ in
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
-      copy_bin_and_libs ${askPass}/bin/cryptsetup-askpass
-      sed -i s,/bin/sh,$out/bin/sh, $out/bin/cryptsetup-askpass
 
       ${optionalString luks.yubikeySupport ''
         copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykchalresp

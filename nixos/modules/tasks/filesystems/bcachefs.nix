@@ -7,18 +7,13 @@ let
   bootFs = filterAttrs (n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)) config.fileSystems;
 
   commonFunctions = ''
-    prompt() {
-        local name="$1"
-        printf "enter passphrase for $name: "
-    }
     tryUnlock() {
         local name="$1"
         local path="$2"
         if bcachefs unlock -c $path > /dev/null 2> /dev/null; then    # test for encryption
-            prompt $name
-            until bcachefs unlock $path 2> /dev/null; do              # repeat until sucessfully unlocked
+            # repeat until sucessfully unlocked
+            until askPassword "Enter passphrase for $name: " | bcachefs unlock $path; do
                 printf "unlocking failed!\n"
-                prompt $name
             done
             printf "unlocking successful.\n"
         fi
