@@ -11,6 +11,7 @@
 , rocksdb, makeWrapper
 , leveldb, oathToolkit
 , libnl, libcap_ng
+, rdkafka
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -93,7 +94,7 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "14.2.9";
+  version = "14.2.10";
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
@@ -101,7 +102,7 @@ in rec {
 
     src = fetchurl {
       url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "0zkh1a23v8g1fa5flqa2d53lv08ancab3li57gybpqpnja90k7il";
+      sha256 = "0bbs3ag8zav283qpxrrndhvh2z01ykm6126fmwrbc1c5f9jfjq39";
     };
 
     patches = [
@@ -118,7 +119,7 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng
+      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
     ] ++ optionals stdenv.isLinux [
       linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
@@ -176,7 +177,7 @@ in rec {
       homepage = "https://ceph.com/";
       description = "Distributed storage system";
       license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
-      maintainers = with maintainers; [ adev ak krav johanot ];
+      maintainers = with maintainers; [ adev ak krav johanot srhb ];
       platforms = [ "x86_64-linux" ];
     };
 

@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, tinycss2, pytest, pytestrunner }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, tinycss2
+, pytest
+, pytestrunner
+}:
 
 buildPythonPackage rec {
   pname = "cssselect2";
   version = "0.3.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,12 +19,10 @@ buildPythonPackage rec {
 
   # We're not interested in code quality tests
   postPatch = ''
-    substituteInPlace setup.py \
+    substituteInPlace setup.cfg \
       --replace "pytest-cov" "" \
       --replace "pytest-flake8" "" \
-      --replace "pytest-isort" ""
-    substituteInPlace setup.cfg \
-      --replace "--cov=cssselect2" "" \
+      --replace "pytest-isort" "" \
       --replace "--flake8" "" \
       --replace "--isort" ""
   '';

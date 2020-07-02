@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "Network-wide ads & trackers blocking DNS server";
     platforms = platforms.linux;
     maintainers = with maintainers; [ numkem ];
+    license = licenses.gpl3;
   };
 }

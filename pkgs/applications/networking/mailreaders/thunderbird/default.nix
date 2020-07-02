@@ -336,5 +336,6 @@ stdenv.mkDerivation rec {
       pierron
     ];
     platforms = platforms.linux;
+    license = licenses.mpl20;
   };
 }

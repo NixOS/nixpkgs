@@ -6,6 +6,8 @@ buildDunePackage rec {
 
   inherit (irmin) version src;
 
+  useDune2 = true;
+
   propagatedBuildInputs = [ irmin ];
 
   checkInputs = lib.optional doCheck irmin-test;

@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , pytestrunner
 , numpy
@@ -10,6 +11,7 @@
 buildPythonPackage rec {
   version = "2.0.0";
   pname = "pydicom";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

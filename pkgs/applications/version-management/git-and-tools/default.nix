@@ -26,7 +26,9 @@ let
 
   darcs-to-git = callPackage ./darcs-to-git { };
 
-  delta = callPackage ./delta { };
+  delta = callPackage ./delta {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
 

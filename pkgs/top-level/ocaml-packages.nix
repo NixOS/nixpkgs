@@ -52,6 +52,8 @@ let
 
     bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
 
+    bigarray-overlap = callPackage ../development/ocaml-modules/bigarray-overlap { };
+
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
 
     bigstring = callPackage ../development/ocaml-modules/bigstring { };
@@ -228,6 +230,10 @@ let
 
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
+    dune-release = callPackage ../development/tools/ocaml/dune-release {
+      inherit (pkgs) opam git mercurial coreutils gnutar bzip2;
+    };
+
     duration =  callPackage ../development/ocaml-modules/duration { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
@@ -324,6 +330,10 @@ let
 
     ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
 
+    ipaddr-cstruct = callPackage ../development/ocaml-modules/ipaddr/cstruct.nix { };
+
+    ipaddr-sexp = callPackage ../development/ocaml-modules/ipaddr/sexp.nix { };
+
     irmin_1 = callPackage ../development/ocaml-modules/irmin/1.4.nix { };
 
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
@@ -340,11 +350,15 @@ let
 
     gg = callPackage ../development/ocaml-modules/gg { };
 
-    git = callPackage ../development/ocaml-modules/git { inherit (pkgs) git; };
+    git = callPackage ../development/ocaml-modules/git {
+      git-binary = pkgs.git;
+    };
 
     git-http = callPackage ../development/ocaml-modules/git-http { };
 
-    git-unix = callPackage ../development/ocaml-modules/git-unix { };
+    git-unix = callPackage ../development/ocaml-modules/git-unix {
+      git-binary = pkgs.git;
+    };
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
@@ -476,6 +490,10 @@ let
     lwt_ssl = callPackage ../development/ocaml-modules/lwt_ssl { };
 
     macaddr = callPackage ../development/ocaml-modules/macaddr { };
+
+    macaddr-cstruct = callPackage ../development/ocaml-modules/macaddr/cstruct.nix { };
+
+    macaddr-sexp = callPackage ../development/ocaml-modules/macaddr/sexp.nix { };
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
@@ -668,7 +686,23 @@ let
 
     omd = callPackage ../development/ocaml-modules/omd { };
 
+    opam-core = callPackage ../development/ocaml-modules/opam-core {
+      inherit (pkgs) opam unzip;
+    };
+
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
+
+    opam-format = callPackage ../development/ocaml-modules/opam-format {
+      inherit (pkgs) unzip;
+    };
+
+    opam-repository = callPackage ../development/ocaml-modules/opam-repository {
+      inherit (pkgs) unzip;
+    };
+
+    opam-state = callPackage ../development/ocaml-modules/opam-state {
+      inherit (pkgs) unzip;
+    };
 
     opium = callPackage ../development/ocaml-modules/opium { };
 

@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/json-c/json-c/wiki";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
+    license = licenses.mit;
 
     longDescription = ''
       JSON-C implements a reference counting object model that allows you to
