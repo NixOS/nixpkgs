@@ -23,7 +23,7 @@ in python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     voluptuous pyyaml paho-mqtt colorlog
     tornado protobuf tzlocal pyserial ifaddr
-    protobuf
+    protobuf click
   ];
 
   # remove all version pinning (E.g tornado==5.1.1 -> tornado)
