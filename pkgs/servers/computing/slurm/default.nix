@@ -2,6 +2,7 @@
 , python, munge, perl, pam, zlib, shadow, coreutils
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, xorg, lz4, rdma-core, nixosTests
+, pmix
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
@@ -26,6 +27,8 @@ stdenv.mkDerivation rec {
     # increase string length to allow for full
     # path of 'echo' in nix store
     ./common-env-echo.patch
+    # Required for configure to pick up the right dlopen path
+    ./pmix-configure.patch
   ];
 
   prePatch = ''
@@ -46,6 +49,7 @@ stdenv.mkDerivation rec {
     curl python munge perl pam zlib
       libmysqlclient ncurses gtk2 lz4 rdma-core
       lua hwloc numactl readline freeipmi shadow.su
+      pmix
   ] ++ stdenv.lib.optionals enableX11 [ xorg.xauth ];
 
   configureFlags = with stdenv.lib;
@@ -56,6 +60,7 @@ stdenv.mkDerivation rec {
       "--with-zlib=${zlib}"
       "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
+      "--with-pmix=${pmix}"
     ] ++ (optional (gtk2 == null)  "--disable-gtktest")
       ++ (optional (!enableX11) "--disable-x11");
 
