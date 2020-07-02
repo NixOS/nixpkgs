@@ -7154,6 +7154,8 @@ in {
 
   maildir-deduplicate = callPackage ../development/python-modules/maildir-deduplicate { };
 
+  mailsuite = callPackage ../development/python-modules/mailsuite { };
+
   d2to1 = callPackage ../development/python-modules/d2to1 { };
 
   ovh = callPackage ../development/python-modules/ovh { };
