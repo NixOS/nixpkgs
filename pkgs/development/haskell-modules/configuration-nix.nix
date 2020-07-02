@@ -443,6 +443,9 @@ self: super: builtins.intersectAttrs super {
                             [ pkgs.darwin.apple_sdk.frameworks.OpenCL ];
   });
 
+  # requires an X11 display in test suite
+  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+
   # depends on 'hie' executable
   lsp-test = dontCheck super.lsp-test;
 

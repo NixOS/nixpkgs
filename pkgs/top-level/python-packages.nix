@@ -1424,6 +1424,8 @@ in {
 
   python-redis-lock = callPackage ../development/python-modules/python-redis-lock { };
 
+  python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-snappy = callPackage ../development/python-modules/python-snappy {
@@ -1477,6 +1479,8 @@ in {
   rlp = callPackage ../development/python-modules/rlp { };
 
   rq = callPackage ../development/python-modules/rq { };
+
+  rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
 
   rx = callPackage ../development/python-modules/rx { };
 
@@ -2959,6 +2963,8 @@ in {
 
   googletrans = callPackage ../development/python-modules/googletrans { };
 
+  gdown = callPackage ../development/python-modules/gdown { };
+
   gpapi = callPackage ../development/python-modules/gpapi { };
   gplaycli = callPackage ../development/python-modules/gplaycli { };
 
@@ -3191,6 +3197,8 @@ in {
   measurement = callPackage ../development/python-modules/measurement {};
 
   midiutil = callPackage ../development/python-modules/midiutil {};
+
+  mido = callPackage ../development/python-modules/mido { };
 
   misaka = callPackage ../development/python-modules/misaka {};
 
@@ -4049,6 +4057,8 @@ in {
 
   google_cloud_runtimeconfig = callPackage ../development/python-modules/google_cloud_runtimeconfig { };
 
+  google_cloud_secret_manager = callPackage ../development/python-modules/google_cloud_secret_manager { };
+
   google_cloud_securitycenter = callPackage ../development/python-modules/google_cloud_securitycenter { };
 
   google_cloud_spanner = callPackage ../development/python-modules/google_cloud_spanner { };
@@ -4142,6 +4152,8 @@ in {
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
+
+  html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
   html5lib = callPackage ../development/python-modules/html5lib { };
 
@@ -4587,6 +4599,8 @@ in {
 
   mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
 
+  meshlabxml = callPackage ../development/python-modules/meshlabxml { };
+
   metaphone = callPackage ../development/python-modules/metaphone { };
 
   mezzanine = callPackage ../development/python-modules/mezzanine { };
@@ -4741,6 +4755,8 @@ in {
   nameparser = callPackage ../development/python-modules/nameparser { };
 
   names = callPackage ../development/python-modules/names { };
+
+  nbclient = callPackage ../development/python-modules/nbclient { };
 
   nbconflux = callPackage ../development/python-modules/nbconflux { };
 
@@ -6060,6 +6076,8 @@ in {
 
   tqdm = callPackage ../development/python-modules/tqdm { };
 
+  trytond = callPackage ../development/python-modules/trytond { };
+
   smmap = callPackage ../development/python-modules/smmap { };
 
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
@@ -7228,6 +7246,8 @@ in {
 
   suseapi = callPackage ../development/python-modules/suseapi { };
 
+  tensorboardx = callPackage ../development/python-modules/tensorboardx { };
+
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
   stripe = callPackage ../development/python-modules/stripe { };
@@ -7319,6 +7339,8 @@ in {
   ftfy = callPackage ../development/python-modules/ftfy { };
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };
+
+  pkuseg = callPackage ../development/python-modules/pkuseg { };
 
   plac = callPackage ../development/python-modules/plac { };
 

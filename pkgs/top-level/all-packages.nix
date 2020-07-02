@@ -213,7 +213,9 @@ in
 
   grsync = callPackage ../applications/misc/grsync { };
 
-  dockerTools = callPackage ../build-support/docker { };
+  dockerTools = callPackage ../build-support/docker {
+    writePython3 = writers.writePython3;
+  };
 
   snapTools = callPackage ../build-support/snap { };
 
@@ -771,8 +773,6 @@ in
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
 
-  aws_shell = callPackage ../tools/admin/aws_shell { };
-
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { python = python3; };
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
@@ -920,6 +920,8 @@ in
   deskew = callPackage ../applications/graphics/deskew { };
 
   detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
+
+  diskonaut = callPackage ../tools/misc/diskonaut { };
 
   diskus = callPackage ../tools/misc/diskus {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -1739,7 +1741,7 @@ in
 
   dua = callPackage ../tools/misc/dua { };
 
-  inherit (ocamlPackages) dune dune_2;
+  inherit (ocamlPackages) dune dune_2 dune-release;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
@@ -2148,7 +2150,9 @@ in
 
   pbzx = callPackage ../tools/compression/pbzx { };
 
-  persepolis = python3Packages.callPackage ../tools/networking/persepolis { };
+  persepolis = python3Packages.callPackage ../tools/networking/persepolis {
+    wrapQtAppsHook = qt5.wrapQtAppsHook;
+  };
 
   pev = callPackage ../development/tools/analysis/pev { };
 
@@ -2892,6 +2896,8 @@ in
   ddccontrol = callPackage ../tools/misc/ddccontrol { };
 
   ddccontrol-db = callPackage ../data/misc/ddccontrol-db { };
+
+  ddcui = libsForQt5.callPackage ../applications/misc/ddcui { };
 
   ddcutil = callPackage ../tools/misc/ddcutil { };
 
@@ -3878,6 +3884,8 @@ in
 
   google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp { };
 
+  gdown = with python3Packages; toPythonApplication gdown;
+
   gopro = callPackage ../tools/video/gopro { };
 
   gource = callPackage ../applications/version-management/gource { };
@@ -4321,6 +4329,8 @@ in
 
   incron = callPackage ../tools/system/incron { };
 
+  industrializer = callPackage ../applications/audio/industrializer { };
+
   inetutils = callPackage ../tools/networking/inetutils { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
@@ -4529,6 +4539,10 @@ in
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
+  kbs2 = callPackage ../tools/security/kbs2 {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
 
   keepalived = callPackage ../tools/networking/keepalived { };
@@ -4708,6 +4722,10 @@ in
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  martin = callPackage ../servers/martin {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   /* Python 3.8 is currently broken with matrix-synapse since `python38Packages.bleach` fails
     (https://github.com/NixOS/nixpkgs/issues/76093) */
   matrix-synapse = callPackage ../servers/matrix-synapse { /*python3 = python38;*/ };
@@ -4722,9 +4740,7 @@ in
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
 
-  mcfly = callPackage ../tools/misc/mcfly {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  mcfly = callPackage ../tools/misc/mcfly { };
 
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -5529,6 +5545,8 @@ in
   nifskope = libsForQt5.callPackage ../tools/graphics/nifskope { };
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
+
+  nimmm = callPackage ../applications/misc/nimmm { };
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
@@ -7193,7 +7211,7 @@ in
 
   tryton = callPackage ../applications/office/tryton { };
 
-  trytond = callPackage ../applications/office/trytond { };
+  trytond = with python3Packages; toPythonApplication trytond;
 
   omapd = callPackage ../tools/security/omapd { };
 
@@ -7692,6 +7710,8 @@ in
   which = callPackage ../tools/system/which { };
 
   whsniff = callPackage ../applications/networking/sniffers/whsniff { };
+
+  wiiuse = callPackage ../development/libraries/wiiuse { };
 
   woeusb = callPackage ../tools/misc/woeusb { };
 
@@ -8737,6 +8757,13 @@ in
   });
 
   go_1_14 = callPackage ../development/compilers/go/1.14.nix ({
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  } // lib.optionalAttrs stdenv.isAarch64 {
+    stdenv = gcc8Stdenv;
+    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
+  });
+
+  go_1_15 = callPackage ../development/compilers/go/1.15.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs stdenv.isAarch64 {
     stdenv = gcc8Stdenv;
@@ -10240,6 +10267,8 @@ in
 
   cloud-nuke = callPackage ../development/tools/cloud-nuke { };
 
+  cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare {};
+
   cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli { };
 
   coan = callPackage ../development/tools/analysis/coan { };
@@ -10417,6 +10446,8 @@ in
   drm_info = callPackage ../development/tools/drm_info { };
 
   drush = callPackage ../development/tools/misc/drush { };
+
+  easypdkprog = callPackage ../development/tools/misc/easypdkprog { };
 
   editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
 
@@ -12603,6 +12634,7 @@ in
   lasso = callPackage ../development/libraries/lasso { };
 
   LASzip = callPackage ../development/libraries/LASzip { };
+  LASzip2 = callPackage ../development/libraries/LASzip/LASzip2.nix { };
 
   lcms = lcms1;
 
@@ -12887,6 +12919,8 @@ in
 
   inherit (callPackage ../development/libraries/libdwarf { })
     libdwarf dwarfdump;
+
+  libe57format = callPackage ../development/libraries/libe57format { };
 
   libeatmydata = callPackage ../development/libraries/libeatmydata { };
 
@@ -14157,6 +14191,8 @@ in
   pcre-cpp = res.pcre.override { variant = "cpp"; };
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
+
+  pdal = callPackage ../development/libraries/pdal { } ;
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
@@ -15460,6 +15496,9 @@ in
   buildGo114Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_14;
   };
+  buildGo115Package = callPackage ../development/go-packages/generic {
+    go = buildPackages.go_1_15;
+  };
 
   buildGoPackage = buildGo114Package;
 
@@ -15468,6 +15507,9 @@ in
   };
   buildGo114Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_14;
+  };
+  buildGo115Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_15;
   };
 
   buildGoModule = buildGo114Module;
@@ -16309,9 +16351,10 @@ in
   };
 
   radicale1 = callPackage ../servers/radicale/1.x.nix { };
-  radicale2 = callPackage ../servers/radicale { };
+  radicale2 = callPackage ../servers/radicale/2.x.nix { };
+  radicale3 = callPackage ../servers/radicale/3.x.nix { };
 
-  radicale = radicale2;
+  radicale = radicale3;
 
   rake = callPackage ../development/tools/build-managers/rake { };
 
@@ -18918,6 +18961,8 @@ in
 
   batik = callPackage ../applications/graphics/batik { };
 
+  batsignal = callPackage ../applications/misc/batsignal { };
+
   baudline = callPackage ../applications/audio/baudline { };
 
   bb =  callPackage ../applications/misc/bb { };
@@ -20555,6 +20600,8 @@ in
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
+  k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
+
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
   kdecoration-viewer = libsForQt5.callPackage ../tools/misc/kdecoration-viewer { };
@@ -21462,6 +21509,8 @@ in
 
   obs-ndi = callPackage ../applications/video/obs-studio/obs-ndi.nix { };
 
+  obsidian = callPackage ../applications/misc/obsidian { };
+
   octoprint = callPackage ../applications/misc/octoprint { };
 
   octoprint-plugins = throw ''octoprint-plugins are now part of the octoprint.python.pkgs package set.'';
@@ -21547,6 +21596,8 @@ in
     # https://www.palemoon.org/sourcecode.shtml
     stdenv = gcc7Stdenv;
   };
+
+  webbrowser = callPackage ../applications/networking/browsers/webbrowser {};
 
   pamix = callPackage ../applications/audio/pamix { };
 

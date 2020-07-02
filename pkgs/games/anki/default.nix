@@ -31,7 +31,7 @@
 
 let
   # when updating, also update rev-manual to a recent version of
-  # https://github.com/dae/ankidocs
+  # https://github.com/ankitects/anki-docs
   # The manual is distributed independently of the software.
   version = "2.1.15";
   sha256-pkg = "12dvyf3j9df4nrhhnqbzd9b21rpzkh4i6yhhangn2zf7ch0pclss";
@@ -42,8 +42,8 @@ let
     pname = "anki-manual";
     inherit version;
     src = fetchFromGitHub {
-      owner = "dae";
-      repo = "ankidocs";
+      owner = "ankitects";
+      repo = "anki-docs";
       rev = rev-manual;
       sha256 = sha256-manual;
     };
@@ -112,16 +112,10 @@ buildPythonApplication rec {
     ./no-version-check.patch
   ];
 
-  buildPhase = ''
-    # Dummy build phase
-    # Anki does not use setup.py
-  '';
+  # Anki does not use setup.py
+  dontBuild = true;
 
   postPatch = ''
-    # Remove unused starter. We'll create our own, minimalistic,
-    # starter.
-    # rm anki/anki
-
     # Remove QT translation files. We'll use the standard QT ones.
     rm "locale/"*.qm
 
@@ -134,10 +128,10 @@ buildPythonApplication rec {
   # UTF-8 locale needed for testing
   LC_ALL = "en_US.UTF-8";
 
+  # - Anki writes some files to $HOME during tests
+  # - Skip tests using network
   checkPhase = ''
-    # - Anki writes some files to $HOME during tests
-    # - Skip tests using network
-    env HOME=$TMP pytest --ignore tests/test_sync.py
+    HOME=$TMP pytest --ignore tests/test_sync.py
   '';
 
   installPhase = ''
@@ -170,6 +164,7 @@ buildPythonApplication rec {
     cp -r ${manual}/share/doc/anki/html $doc/share/doc/anki
   '';
 
+  # now wrapPythonPrograms from postFixup will add both python and qt env variables
   dontWrapQtApps = true;
 
   preFixup = ''
@@ -178,8 +173,6 @@ buildPythonApplication rec {
       --prefix PATH ':' "${lame}/bin:${mplayer}/bin"
     )
   '';
-
-  # now wrapPythonPrograms from postFixup will add both python and qt env variables
 
   passthru = {
     inherit manual;

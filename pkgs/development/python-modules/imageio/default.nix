@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, isPy27
 , pathlib
 , fetchPypi
 , pillow
@@ -16,6 +17,7 @@
 buildPythonPackage rec {
   pname = "imageio";
   version = "2.8.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     sha256 = "fb5fd6d3d17126bbaac9af29fe340e2c97a196eb9416d4f28c0e543744a152cf";
@@ -25,11 +27,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest psutil ] ++ stdenv.lib.optionals isPy3k [
     imageio-ffmpeg ffmpeg_3
     ];
-  propagatedBuildInputs = [ numpy pillow ] ++ stdenv.lib.optionals (!isPy3k) [
-    futures
-    enum34
-    pathlib
-  ];
+  propagatedBuildInputs = [ numpy pillow ];
 
   checkPhase = ''
     export IMAGEIO_USERDIR="$TMP"

@@ -32,8 +32,9 @@ let
 
 in {
   name = "dokuwiki";
-  meta.maintainers = with pkgs.lib.maintainers; [ "1000101" ];
-
+  meta = with pkgs.stdenv.lib; {
+    maintainers = with maintainers; [ maintainers."1000101" ];
+  };
   machine = { ... }: {
     services.dokuwiki."site1.local" = {
       aclUse = false;

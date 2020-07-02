@@ -38,6 +38,10 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace Makefile.in --replace js_of_ocaml.ppx js_of_ocaml-ppx
+  '';
+
   configureFlags = [ "--enable-verbose-make" ];
 
   installTargets = [ "install" "install-lib" ];

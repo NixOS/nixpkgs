@@ -55,6 +55,7 @@ let
       storePath = config.boot.loader.grub.storePath;
       bootloaderId = if args.efiBootloaderId == null then "NixOS${efiSysMountPoint'}" else args.efiBootloaderId;
       timeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
+      users = if cfg.users == {} || cfg.version != 1 then cfg.users else throw "GRUB version 1 does not support user accounts.";
       inherit efiSysMountPoint;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
@@ -135,6 +136,67 @@ in
           installed. Can be used instead of <literal>device</literal> to
           install GRUB onto multiple devices.
         '';
+      };
+
+      users = mkOption {
+        default = {};
+        example = {
+          root = { hashedPasswordFile = "/path/to/file"; };
+        };
+        description = ''
+          User accounts for GRUB. When specified, the GRUB command line and
+          all boot options except the default are password-protected.
+          All passwords and hashes provided will be stored in /boot/grub/grub.cfg,
+          and will be visible to any local user who can read this file. Additionally,
+          any passwords and hashes provided directly in a Nix configuration
+          (as opposed to external files) will be copied into the Nix store, and
+          will be visible to all local users.
+        '';
+        type = with types; attrsOf (submodule {
+          options = {
+            hashedPasswordFile = mkOption {
+              example = "/path/to/file";
+              default = null;
+              type = with types; uniq (nullOr str);
+              description = ''
+                Specifies the path to a file containing the password hash
+                for the account, generated with grub-mkpasswd-pbkdf2.
+                This hash will be stored in /boot/grub/grub.cfg, and will
+                be visible to any local user who can read this file.
+              '';
+            };
+            hashedPassword = mkOption {
+              example = "grub.pbkdf2.sha512.10000.674DFFDEF76E13EA...2CC972B102CF4355";
+              default = null;
+              type = with types; uniq (nullOr str);
+              description = ''
+                Specifies the password hash for the account,
+                generated with grub-mkpasswd-pbkdf2.
+                This hash will be copied to the Nix store, and will be visible to all local users.
+              '';
+            };
+            passwordFile = mkOption {
+              example = "/path/to/file";
+              default = null;
+              type = with types; uniq (nullOr str);
+              description = ''
+                Specifies the path to a file containing the
+                clear text password for the account.
+                This password will be stored in /boot/grub/grub.cfg, and will
+                be visible to any local user who can read this file.
+              '';
+            };
+            password = mkOption {
+              example = "Pa$$w0rd!";
+              default = null;
+              type = with types; uniq (nullOr str);
+              description = ''
+                Specifies the clear text password for the account.
+                This password will be copied to the Nix store, and will be visible to all local users.
+              '';
+            };
+          };
+        });
       };
 
       mirroredBoots = mkOption {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libevent, openssl
+{ stdenv, fetchurl, libevent, openssl, nixosTests
 , bind8Stats       ? false
 , checking         ? false
 , ipv6             ? true
@@ -11,7 +11,7 @@
 , rrtypes          ? false
 , zoneStats        ? false
 
-, configFile ? "etc/nsd/nsd.conf"
+, configFile ? "/etc/nsd/nsd.conf"
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +51,10 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed 's@$(INSTALL_DATA) nsd.conf.sample $(DESTDIR)$(nsdconfigfile).sample@@g' -i Makefile.in
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) nsd;
+  };
 
   meta = with stdenv.lib; {
     homepage = "http://www.nlnetlabs.nl";

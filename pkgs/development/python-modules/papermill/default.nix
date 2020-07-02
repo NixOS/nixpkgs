@@ -7,6 +7,7 @@
 , pyyaml
 , nbformat
 , nbconvert
+, nbclient
 , six
 , tqdm
 , jupyter_client
@@ -14,6 +15,7 @@
 , entrypoints
 , tenacity
 , futures
+, black
 , backports_tempfile
 , isPy27
 , pytest
@@ -37,12 +39,14 @@ buildPythonPackage rec {
     pyyaml
     nbformat
     nbconvert
+    nbclient
     six
     tqdm
     jupyter_client
     requests
     entrypoints
     tenacity
+    black
   ] ++ lib.optionals isPy27 [
     futures
     backports_tempfile

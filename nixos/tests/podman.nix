@@ -71,7 +71,7 @@ import ./make-test-python.nix (
           podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           podman.succeed(
               su_cmd(
-                  "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+                  "podman run --cgroup-manager=cgroupfs --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
               )
           )
           podman.succeed(su_cmd("podman ps | grep sleeping"))
