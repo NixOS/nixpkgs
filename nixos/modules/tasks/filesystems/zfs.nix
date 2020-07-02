@@ -197,9 +197,7 @@ in
           Request encryption keys or passwords for all encrypted datasets on import.
           For root pools the encryption key can be supplied via both an
           interactive prompt (keylocation=prompt) and from a file
-          (keylocation=file://). Note that for data pools the encryption key can
-          be only loaded from a file and not via interactive prompt since the
-          import is processed in a background systemd service.
+          (keylocation=file://).
         '';
       };
 
