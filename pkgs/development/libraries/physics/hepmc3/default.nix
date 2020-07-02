@@ -3,19 +3,21 @@
 let
   pythonVersion = with stdenv.lib.versions; "${major python.version}${minor python.version}";
   withPython = python != null;
+  # ensure that root is built with the same python interpreter, as it links against numpy
+  root_py = if withPython then root.override { inherit python; } else root;
 in
 
 stdenv.mkDerivation rec {
   pname = "hepmc3";
-  version = "3.2.0";
+  version = "3.2.2";
 
   src = fetchurl {
     url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC3-${version}.tar.gz";
-    sha256 = "1z491x3blqs0a2jxmhzhmh4kqdw3ddcbvw69gidg4w6icdvkhcpi";
+    sha256 = "0h9dbsbbf3y7iia27ms9cy4pfk2yyrkdnxcqsbvkhkl0izvv930f";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ root ]
+  buildInputs = [ root_py ]
     ++ stdenv.lib.optional withPython python;
 
   cmakeFlags = [
@@ -29,6 +31,12 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out"/bin/HepMC3-config \
       --replace 'greadlink' '${coreutils}/bin/readlink' \
       --replace 'readlink' '${coreutils}/bin/readlink'
+  '';
+
+  doInstallCheck = withPython;
+  # prevent nix from trying to dereference a null python
+  installCheckPhase = stdenv.lib.optionalString withPython ''
+    PYTHONPATH=${placeholder "out"}/${python.sitePackages} python -c 'import pyHepMC3'
   '';
 
   meta = with stdenv.lib; {
