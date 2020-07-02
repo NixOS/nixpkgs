@@ -6475,6 +6475,8 @@ in {
   else
     callPackage ../development/python-modules/rsa/4_0.nix { };
 
+  rstcheck = callPackage ../development/python-modules/rstcheck { };
+
   squaremap = callPackage ../development/python-modules/squaremap { };
 
   ruamel_base = callPackage ../development/python-modules/ruamel_base { };
