@@ -2,7 +2,8 @@
 , fixDarwinDylibNames
 , file
 , legacySupport ? false
-, enableShared ? true }:
+, static ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "zstd";
@@ -28,9 +29,24 @@ stdenv.mkDerivation rec {
     # work fine, and I'm not sure how to write the condition.
     ++ stdenv.lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
 
+  postPatch =
+  # Patch shebangs for playTests
+  ''
+    patchShebangs programs/zstdgrep
+  '' + stdenv.lib.optionalString (!static) ''
+    substituteInPlace build/cmake/CMakeLists.txt \
+      --replace 'message(SEND_ERROR "You need to build static library to build tests")' ""
+    substituteInPlace build/cmake/tests/CMakeLists.txt \
+      --replace 'libzstd_static' 'libzstd_shared'
+    sed -i \
+      "1aexport ${stdenv.lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
+      tests/playTests.sh
+  '';
+
   cmakeFlags = [
-    "-DZSTD_BUILD_SHARED:BOOL=${if enableShared then "ON" else "OFF"}"
-    # They require STATIC for bin/zstd and tests.
+    "-DZSTD_BUILD_SHARED:BOOL=${if (!static) then "ON" else "OFF"}"
+    "-DZSTD_BUILD_STATIC:BOOL=${if static then "ON" else "OFF"}"
+    "-DZSTD_PROGRAMS_LINK_SHARED:BOOL=${if (!static) then "ON" else "OFF"}"
     "-DZSTD_LEGACY_SUPPORT:BOOL=${if legacySupport then "ON" else "OFF"}"
     "-DZSTD_BUILD_TESTS:BOOL=ON"
   ];
@@ -56,8 +72,6 @@ stdenv.mkDerivation rec {
     substituteInPlace ../programs/zstdless \
       --replace "zstdcat" "$bin/bin/zstdcat"
   '';
-  # Don't duplicate the library code in runtime closures.
-  postInstall = stdenv.lib.optionalString enableShared ''rm "$out"/lib/libzstd.a'';
 
   outputs = [ "bin" "dev" "man" "out" ];
 
