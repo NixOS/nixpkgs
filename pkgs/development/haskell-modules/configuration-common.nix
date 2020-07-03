@@ -787,6 +787,9 @@ self: super: {
   # Needs QuickCheck <2.10, HUnit <1.6 and base <4.10
   pointfree = doJailbreak super.pointfree;
 
+  # Depends on tasty < 1.x, which we don't have.
+  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
+
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
   cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
