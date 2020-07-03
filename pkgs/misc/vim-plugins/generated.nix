@@ -5414,6 +5414,18 @@ let
     meta.homepage = "https://github.com/xolox/vim-misc/";
   };
 
+  vim-monokai = buildVimPluginFrom2Nix {
+    pname = "vim-monokai";
+    version = "2020-06-17";
+    src = fetchFromGitHub {
+      owner = "crusoexia";
+      repo = "vim-monokai";
+      rev = "703a4a6ee96a5772c204c4dd852f246ce71231df";
+      sha256 = "1avp4zr9sa38ygx9c9ffkdb6mmzqv7sxyb093bqq06gfdv8yzk2a";
+    };
+    meta.homepage = "https://github.com/crusoexia/vim-monokai/";
+  };
+
   vim-monokai-pro = buildVimPluginFrom2Nix {
     pname = "vim-monokai-pro";
     version = "2020-05-07";
