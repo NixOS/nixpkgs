@@ -61,11 +61,7 @@ self: super: {
   haddock-library = self.haddock-library_1_9_0;
 
   # Jailbreak to fix the build.
-  async = doJailbreak super.async;
   base-noprelude = doJailbreak super.base-noprelude;
-  ChasingBottoms = doJailbreak super.ChasingBottoms;
-  ed25519 = doJailbreak super.ed25519;
-  email-validate = doJailbreak super.email-validate;  # https://github.com/Porges/email-validate-hs/issues/51
   pandoc = doJailbreak super.pandoc;
   regex-pcre-builtin = doJailbreak super.regex-pcre-builtin;
   regex-posix = doJailbreak super.regex-posix;
