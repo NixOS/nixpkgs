@@ -1502,6 +1502,9 @@ in {
     inherit (pkgs) sentencepiece pkgconfig;
   };
 
+  tokenizers = disabledIf (!isPy3k)
+    (toPythonModule (callPackage ../development/python-modules/tokenizers { }));
+
   transformers = callPackage ../development/python-modules/transformers { };
 
   transforms3d = callPackage ../development/python-modules/transforms3d { };
@@ -4152,6 +4155,8 @@ in {
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
+
+  html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
   html5lib = callPackage ../development/python-modules/html5lib { };
 
@@ -7237,6 +7242,8 @@ in {
   solo-python = disabledIf (! pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
 
   suseapi = callPackage ../development/python-modules/suseapi { };
+
+  tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 

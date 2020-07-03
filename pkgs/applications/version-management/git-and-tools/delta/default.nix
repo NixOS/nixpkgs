@@ -1,25 +1,32 @@
-{ lib, fetchFromGitHub, rustPlatform, llvmPackages, installShellFiles }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, libiconv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = pname;
     rev = version;
-    sha256 = "1b5ap468d0gvgwkx6wqxvayzda2xw95lymd0kl38nq1fc0ica6hk";
+    sha256 = "15c7rsmiinnpxh12520jz3wr0j86vgzjq1ss5pf30fa7lcgicb32";
   };
 
-  LLVM_CONFIG_PATH = "${llvmPackages.llvm}/bin/llvm-config";
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-
-  cargoSha256 = "07mjl751r9d88fnmnan0ip0m3vxqf51vq2y7k3g3yywcgasj9jgr";
+  cargoSha256 = "0lzz32qh80s4dxr0d4pg0qagkn549lr4vbqknl2l0cmlq1bvvq6g";
 
   nativeBuildInputs = [ installShellFiles ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+
   postInstall = ''
-    installShellCompletion --bash --name delta.bash completion/bash/completion.sh
+    installShellCompletion --bash --name delta.bash completion/completion.bash
+    installShellCompletion --zsh --name _delta completion/completion.zsh
   '';
 
   meta = with lib; {
@@ -27,6 +34,6 @@ rustPlatform.buildRustPackage rec {
     description = "A syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ma27 ];
+    maintainers = with maintainers; [ marsam ma27 zowoq ];
   };
 }

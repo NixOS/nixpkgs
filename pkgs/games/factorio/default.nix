@@ -53,11 +53,11 @@ let
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
       alpha = {
         stable        = bdist { sha256 = "1fg2wnia6anzya4m53jf2xqwwspvwskz3awdb3j0v3fzijps94wc"; version = "0.17.79"; withAuth = true; };
-        experimental  = bdist { sha256 = "1h0gv7cdn999hm2fl93kq6g98bzd1x3c8afq8v0a04dqjarjgr86"; version = "0.18.32"; withAuth = true; };
+        experimental  = bdist { sha256 = "1idhq836xk1qvhlval28rskqkw06x8hh0izfw9vsf06xym2knkyf"; version = "0.18.34"; withAuth = true; };
       };
       headless = {
         stable        = bdist { sha256 = "1pr39nm23fj83jy272798gbl9003rgi4vgsi33f2iw3dk3x15kls"; version = "0.17.79"; };
-        experimental  = bdist { sha256 = "017ggrsnhwyfgx99q0wjagafjvk5pb6lcxl72y37gig72bfcapab"; version = "0.18.32"; };
+        experimental  = bdist { sha256 = "05kvb8al7x0as62q6bwk89lmvnjdvsmcm3ahgghl5zzz38rrzbwd"; version = "0.18.34"; };
       };
       demo = {
         stable        = bdist { sha256 = "07qknasaqvzl9vy1fglm7xmdi7ynhmslrb0a209fhbfs0s7qqlgi"; version = "0.17.79"; };
@@ -166,7 +166,7 @@ let
       '';
       homepage = "https://www.factorio.com/";
       license = stdenv.lib.licenses.unfree;
-      maintainers = with stdenv.lib.maintainers; [ Baughn elitak erictapen ];
+      maintainers = with stdenv.lib.maintainers; [ Baughn elitak erictapen priegger ];
       platforms = [ "i686-linux" "x86_64-linux" ];
     };
   };

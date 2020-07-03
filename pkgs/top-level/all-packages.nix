@@ -183,6 +183,8 @@ in
 
   deadcode = callPackage ../development/tools/deadcode { };
 
+  eclipse-mat = callPackage ../development/tools/eclipse-mat { };
+
   glade = callPackage ../development/tools/glade { };
 
   hobbes = callPackage ../development/tools/hobbes { };
@@ -772,8 +774,6 @@ in
   aws-okta = callPackage ../tools/security/aws-okta { };
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
-
-  aws_shell = callPackage ../tools/admin/aws_shell { };
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { python = python3; };
 
@@ -1794,6 +1794,8 @@ in
 
   eschalot = callPackage ../tools/security/eschalot { };
 
+  espanso = callPackage ../applications/office/espanso { };
+
   esphome = callPackage ../tools/misc/esphome { };
 
   esptool = callPackage ../tools/misc/esptool { };
@@ -2152,7 +2154,9 @@ in
 
   pbzx = callPackage ../tools/compression/pbzx { };
 
-  persepolis = python3Packages.callPackage ../tools/networking/persepolis { };
+  persepolis = python3Packages.callPackage ../tools/networking/persepolis {
+    wrapQtAppsHook = qt5.wrapQtAppsHook;
+  };
 
   pev = callPackage ../development/tools/analysis/pev { };
 
@@ -4539,6 +4543,10 @@ in
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
+  kbs2 = callPackage ../tools/security/kbs2 {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
 
   keepalived = callPackage ../tools/networking/keepalived { };
@@ -4736,9 +4744,7 @@ in
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
 
-  mcfly = callPackage ../tools/misc/mcfly {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  mcfly = callPackage ../tools/misc/mcfly { };
 
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -5544,6 +5550,8 @@ in
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
 
+  nimmm = callPackage ../applications/misc/nimmm { };
+
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
   nms = callPackage ../tools/misc/nms { };
@@ -5956,9 +5964,7 @@ in
 
   brickd = callPackage ../servers/brickd { };
 
-  bully = callPackage ../tools/networking/bully {
-    openssl = openssl_1_0_2;
-  };
+  bully = callPackage ../tools/networking/bully { };
 
   pcapc = callPackage ../tools/networking/pcapc { };
 
@@ -7818,9 +7824,7 @@ in
     libxml2 = libxml2Python;
   };
 
-  xsecurelock = callPackage ../tools/X11/xsecurelock {
-    xset = xorg.xset;
-  };
+  xsecurelock = callPackage ../tools/X11/xsecurelock { };
 
   xsel = callPackage ../tools/misc/xsel { };
 
@@ -14982,8 +14986,6 @@ in
   telepathy-glib = callPackage ../development/libraries/telepathy/glib { };
 
   telepathy-farstream = callPackage ../development/libraries/telepathy/farstream {};
-
-  telepathy-qt = callPackage ../development/libraries/telepathy/qt { qtbase = qt4; };
 
   termbox = callPackage ../development/libraries/termbox { };
 

@@ -283,6 +283,12 @@
     githubId = 273837;
     name = "Mateusz Czapliński";
   };
+  akamaus = {
+    email = "dmitryvyal@gmail.com";
+    github = "akamaus";
+    githubId = 58955;
+    name = "Dmitry Vyal";
+  };
   akaWolf = {
     email = "akawolf0@gmail.com";
     github = "akaWolf";
@@ -3716,6 +3722,12 @@
     githubId = 41977;
     name = "Joachim Fasting";
   };
+  joachimschmidt557 = {
+    email = "joachim.schmidt557@outlook.com";
+    github = "joachimschmidt557";
+    githubId = 28556218;
+    name = "Joachim Schmidt";
+  };
   joamaki = {
     email = "joamaki@gmail.com";
     github = "joamaki";
@@ -6313,6 +6325,12 @@
       longkeyid = "rsa4096/4F74D5361C4CA31E";
       fingerprint = "240B 57DE 4271 2480 7CE3  EAC8 4F74 D536 1C4C A31E";
     }];
+  };
+  priegger = {
+    email = "philipp@riegger.name";
+    github = "priegger";
+    githubId = 228931;
+    name = "Philipp Riegger";
   };
   prikhi = {
     email = "pavan.rikhi@gmail.com";
