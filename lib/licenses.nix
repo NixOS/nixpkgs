@@ -95,6 +95,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = ''BSD 2-clause "Simplified" License'';
   };
 
+  bsd2Patent = spdx {
+    spdxId = "BSD-2-Clause-Patent";
+    fullName = ''BSD-2-Clause Plus Patent License'';
+  };
+
   bsd3 = spdx {
     spdxId = "BSD-3-Clause";
     fullName = ''BSD 3-clause "New" or "Revised" License'';
