@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Netflix/vmaf";
     description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
     platforms = platforms.unix;
-    license = licenses.asl20;
+    license = licenses.bsd2Patent;
     maintainers = [ maintainers.cfsmp3 maintainers.marsam ];
   };
 
