@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "State-of-the-art Natural Language Processing for TensorFlow 2.0 and PyTorch";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ pashashocky ];
+    maintainers = with maintainers; [ danieldk pashashocky ];
   };
 }
