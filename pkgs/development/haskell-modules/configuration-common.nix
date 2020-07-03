@@ -1373,4 +1373,13 @@ self: super: {
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;
 
+  # 2020-06-29: These three packages have bumped their dependencies for haskell-gi and haskell-gi-base beyond stack-lts.
+  # Choosing a jailbreak, because a version override would rebuild most of the glibverse and the packages still build with the older version.
+  gi-javascriptcore =
+    # Remove these jailbreaks, when assert fails.
+    assert (pkgs.lib.versionOlder super.haskell-gi-base.version "0.24");
+    doJailbreak super.gi-javascriptcore;
+  gi-soup = doJailbreak super.gi-soup;
+  gi-webkit2 = doJailbreak super.gi-webkit2;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
