@@ -1031,6 +1031,12 @@
     githubId = 5718007;
     name = "Bastian Köcher";
   };
+  blaggacao = {
+    name = "David Arnold";
+    email = "dar@xoe.solutions";
+    github = "blaggacao";
+    githubId = 7548295;
+  };
   blanky0230 = {
     email = "blanky0230@gmail.com";
     github = "blanky0230";
