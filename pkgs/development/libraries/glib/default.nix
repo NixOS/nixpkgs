@@ -48,11 +48,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.64.3";
+  version = "2.64.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "08pbgiv5m3rica4ydvwvpq5mrxbyswx7l1jzjc2ch52xjabvr77y";
+    sha256 = "0l6fggcgdnjif9kzy4crq7520f43bbrgzxz0c821ya3jn8jv7q7p";
   };
 
   patches = optionals stdenv.isDarwin [
