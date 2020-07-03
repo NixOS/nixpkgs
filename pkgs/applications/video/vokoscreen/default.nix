@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, mkDerivation
 , pkgconfig, qtbase, qttools, qmake, qtmultimedia, qtx11extras, alsaLib, libv4l, libXrandr
-, ffmpeg_3
+, ffmpeg
 }:
 
 mkDerivation rec {
@@ -35,7 +35,7 @@ mkDerivation rec {
   '';
 
   postConfigure = ''
-    substituteInPlace settings/QvkSettings.cpp --subst-var-by ffmpeg ${ffmpeg_3}
+    substituteInPlace settings/QvkSettings.cpp --subst-var-by ffmpeg ${ffmpeg}
   '';
 
   meta = with stdenv.lib; {
