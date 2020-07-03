@@ -66,7 +66,6 @@ mkDerivation rec {
     libGLU libGL
     libXt
     openmpi
-    (python3.withPackages (ps: with ps; [ numpy matplotlib mpi4py ]))
     tbb
     boost
     ffmpeg
@@ -76,6 +75,10 @@ mkDerivation rec {
     qttools
     qtxmlpatterns
     qtsvg
+  ];
+
+  propagatedBuildInputs = [
+    (python3.withPackages (ps: with ps; [ numpy matplotlib mpi4py ]))
   ];
 
   meta = with stdenv.lib; {
