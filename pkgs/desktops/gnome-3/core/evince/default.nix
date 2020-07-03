@@ -128,6 +128,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members ++ [ maintainers.vcunat ];
+    maintainers = teams.gnome.members;
   };
 }
