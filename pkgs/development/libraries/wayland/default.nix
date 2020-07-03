@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, meson, pkgconfig, ninja
 , libffi, libxml2, wayland
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
-, withDocumentation ? false, graphviz-nox, doxygen, libxslt, xmlto, python3
+, withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, graphviz-nox, doxygen, libxslt, xmlto, python3
 , docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42
 }:
 
@@ -19,6 +20,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0k995rn96xkplrapz5k648j651wc43kq817xk1x8280h16gsfxa6";
   };
 
+  outputs = [ "out" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
   separateDebugInfo = true;
 
   mesonFlags = [ "-Ddocumentation=${lib.boolToString withDocumentation}" ];
