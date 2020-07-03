@@ -3,16 +3,15 @@
 buildGoPackage rec {
   pname = "skaffold";
   version = "1.12.0";
-  # rev is the ${version} commit, mainly for skaffold version command output
-  rev = "931a70a6334436735bfc4ff7633232dd5fc73cc1";
 
   goPackagePath = "github.com/GoogleContainerTools/skaffold";
   subPackages = ["cmd/skaffold"];
 
   buildFlagsArray = let t = "${goPackagePath}/pkg/skaffold"; in  ''
     -ldflags=
+      -s -w
       -X ${t}/version.version=v${version}
-      -X ${t}/version.gitCommit=${rev}
+      -X ${t}/version.gitCommit=${src.rev}
       -X ${t}/version.buildDate=unknown
   '';
 
