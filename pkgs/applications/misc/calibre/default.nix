@@ -47,7 +47,7 @@ mkDerivation rec {
   ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${pypkgs.pyqt5_with_qtwebkit}/share/sip/PyQt5':"  \
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${pypkgs.pyqt5}/share/sip/PyQt5':"  \
       setup/build_environment.py
 
     # Remove unneeded files and libs
