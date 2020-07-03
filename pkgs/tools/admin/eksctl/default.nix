@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "eksctl";
@@ -17,11 +17,13 @@ buildGoModule rec {
 
   buildFlags = [ "-tags netgo" "-tags release" ];
 
-  postInstall = ''
-    mkdir -p "$out/share/"{bash-completion/completions,zsh/site-functions}
+  nativeBuildInputs = [ installShellFiles ];
 
-    $out/bin/eksctl completion bash > "$out/share/bash-completion/completions/eksctl"
-    $out/bin/eksctl completion zsh > "$out/share/zsh/site-functions/_eksctl"
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/eksctl completion $shell > eksctl.$shell
+      installShellCompletion eksctl.$shell
+    done
   '';
 
   meta = with lib; {
