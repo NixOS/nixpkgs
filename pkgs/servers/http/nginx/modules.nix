@@ -279,6 +279,33 @@ in
     };
   };
 
+  quiche = rec {
+    src = pkgs.quiche.src;
+    patches = [
+      "${src}/extras/nginx/nginx-1.16.patch"
+    ];
+    inputs = with pkgs; [
+      cmake
+      perl
+      go
+    ];
+    preConfigure = ''
+      export HOME=/tmp
+      cp -R ${src} /build/quiche
+      chmod -R +w /build/quiche
+      mkdir -p /build/quiche/target/release/
+      cp ${pkgs.quiche}/lib/libquiche.a /build/quiche/target/release/
+      # turn cargo build into noop
+      substituteInPlace auto/lib/quiche/make --replace "cargo" "echo"
+    '';
+    configureFlags = [
+      "--build=quiche-${pkgs.quiche.version}"
+      "--with-http_v3_module"
+      "--with-openssl=/build/quiche/deps/boringssl"
+      "--with-quiche=/build/quiche"
+    ];
+  };
+
   rtmp ={
     src = fetchFromGitHub {
       owner = "arut";
