@@ -10986,6 +10986,8 @@ in
 
   puppet-lint = callPackage ../development/tools/puppet/puppet-lint { };
 
+  puppeteer-cli = callPackage ../tools/graphics/puppeteer-cli {};
+
   pyrseas = callPackage ../development/tools/database/pyrseas { };
 
   qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
