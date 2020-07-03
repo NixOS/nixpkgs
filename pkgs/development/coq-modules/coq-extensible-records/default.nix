@@ -23,6 +23,8 @@ let
       "8.8"  = versions.pre_8_9;
       "8.9"  = versions.post_8_9;
       "8.10" = versions.post_8_9;
+      "8.11" = versions.post_8_9;
+      "8.12" = versions.post_8_9;
     };
   param = params.${coq.coq-version};
 in
@@ -53,6 +55,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" "8.10" ];
+    compatibleCoqVersions = stdenv.lib.flip builtins.hasAttr params;
   };
 }
