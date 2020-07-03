@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , substituteAll
+, autoreconfHook
 , pkgconfig
 , intltool
 , babl
@@ -60,7 +61,21 @@ in stdenv.mkDerivation rec {
     sha256 = "4S+fh0saAHxCd7YKqB4LZzML5+YVPldJ6tg5uQL8ezw=";
   };
 
+  patches = [
+    # to remove compiler from the runtime closure, reference was retained via
+    # gimp --version --verbose output
+    (substituteAll {
+      src = ./remove-cc-reference.patch;
+      cc_version = stdenv.cc.cc.name;
+    })
+
+    # Use absolute paths instead of relying on PATH
+    # to make sure plug-ins are loaded by the correct interpreter.
+    ./hardcode-plugin-interpreters.patch
+  ];
+
   nativeBuildInputs = [
+    autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
     pkgconfig
     intltool
     gettext
@@ -123,15 +138,6 @@ in stdenv.mkDerivation rec {
     # The check runs before glib-networking is registered
     export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
   '';
-
-  patches = [
-    # to remove compiler from the runtime closure, reference was retained via
-    # gimp --version --verbose output
-    (substituteAll {
-      src = ./remove-cc-reference.patch;
-      cc_version = stdenv.cc.cc.name;
-    })
-  ];
 
   postFixup = ''
     wrapProgram $out/bin/gimp-${lib.versions.majorMinor version} \
