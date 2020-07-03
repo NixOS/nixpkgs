@@ -3216,6 +3216,7 @@ broken-packages:
   - azubi
   - azure-acs
   - azure-email
+  - azure-functions-worker
   - azure-service-api
   - azure-servicebus
   - azurify
