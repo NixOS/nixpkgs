@@ -1794,6 +1794,8 @@ in
 
   eschalot = callPackage ../tools/security/eschalot { };
 
+  espanso = callPackage ../applications/office/espanso { };
+
   esphome = callPackage ../tools/misc/esphome { };
 
   esptool = callPackage ../tools/misc/esptool { };
