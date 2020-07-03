@@ -1332,7 +1332,7 @@ self: super: {
   # 2020-06-24: Tests are broken in hackage distribution.
   # See: https://github.com/robstewart57/rdf4h/issues/39
   rdf4h = dontCheck super.rdf4h;
-  
+
   # hasn't bumped upper bounds
   # test fails: "floskell-test: styles/base.md: openBinaryFile: does not exist (No such file or directory)"
   # https://github.com/ennocramer/floskell/issues/48
@@ -1345,7 +1345,7 @@ self: super: {
 
   # haskell-language-server uses its own fork of ghcide
   # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-  hls-ghcide = 
+  hls-ghcide =
     dontCheck (
       overrideCabal super.hls-ghcide
         (old: {
