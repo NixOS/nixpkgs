@@ -19106,6 +19106,10 @@ in
 
   canto-daemon = callPackage ../applications/networking/feedreaders/canto-daemon { };
 
+  caprine = callPackage ../applications/networking/instant-messengers/caprine {
+    electron = electron_9;
+  };
+
   carddav-util = callPackage ../tools/networking/carddav-util { };
 
   carla = qt5.callPackage ../applications/audio/carla { };
