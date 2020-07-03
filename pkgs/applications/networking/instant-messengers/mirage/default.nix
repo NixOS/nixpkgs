@@ -13,13 +13,13 @@ let
 in
 mkDerivation rec {
   pname = "mirage";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "mirukana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15kcac92h82vina3rn08m35y71h7h76hkyys42sa95hxbl3gpi21";
+    sha256 = "0i891fafdncdz1xg6nji80jb86agsrbdvai9nwf1yy126q7piryv";
     fetchSubmodules = true;
   };
 
