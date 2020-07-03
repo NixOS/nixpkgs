@@ -4330,6 +4330,8 @@ in {
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
 
+  kaggle = callPackage ../development/python-modules/kaggle { };
+
   keyring = if isPy3k then
     callPackage ../development/python-modules/keyring { }
   else
