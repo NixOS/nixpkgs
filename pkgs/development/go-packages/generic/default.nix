@@ -212,6 +212,7 @@ let
 
     preFixup = preFixup + ''
       find $out/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
+      find $out/libexec -type f -exec ${removeExpr removeReferences} '{}' + || true
     '';
 
     strictDeps = true;
