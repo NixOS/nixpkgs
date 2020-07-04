@@ -93,7 +93,7 @@ in
           type = types.bool;
           default = true;
           description = ''
-            Wheter to enable HSTS if HTTPS is also enabled.
+            Whether to enable HSTS if HTTPS is also enabled.
           '';
         };
         maxAgeSeconds = mkOption {
@@ -385,7 +385,7 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Wether to enable email registration.
+          Whether to enable email registration.
         '';
       };
       allowGravatar = mkOption {
