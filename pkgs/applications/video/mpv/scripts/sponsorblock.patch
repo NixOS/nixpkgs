@@ -1,0 +1,20 @@
+diff --git a/sponsorblock_shared/sponsorblock.py b/sponsorblock_shared/sponsorblock.py
+index 94de853..0ab27f6 100644
+--- a/sponsorblock_shared/sponsorblock.py
++++ b/sponsorblock_shared/sponsorblock.py
+@@ -6,6 +6,7 @@ import string
+ import json
+ import sys
+ import os
++from pathlib import Path
+ 
+ if sys.argv[1] in ["submit", "stats", "username"]:
+     if not sys.argv[8]:
+@@ -72,6 +73,7 @@ elif sys.argv[1] == "ranges":
+     print(":".join(times))
+ elif sys.argv[1] == "update":
+     try:
++        Path(str(Path.home()) + "/.local/share/sponsorblock").mkdir(parents=True, exist_ok=True)
+         urllib.request.urlretrieve(sys.argv[3] + "/database.db", sys.argv[2] + ".tmp")
+         os.replace(sys.argv[2] + ".tmp", sys.argv[2])
+     except PermissionError:
