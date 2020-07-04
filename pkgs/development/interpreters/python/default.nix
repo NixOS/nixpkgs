@@ -94,10 +94,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "7";
+      patch = "8";
       suffix = "";
     };
-    sha256 = "0di1y2cna823qgk6sd2lvpjdm3g2qikdd50i2bjd330dpzqsk806";
+    sha256 = "Q6VDQEs2PwA3+J34R48Z2y28DW8//uMQvCmX+nGFSmM=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
