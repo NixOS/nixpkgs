@@ -557,6 +557,8 @@ in {
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
+  btrfs = callPackage ../development/python-modules/btrfs { };
+
   bt_proximity = callPackage ../development/python-modules/bt-proximity { };
 
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
@@ -1501,6 +1503,9 @@ in {
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
     inherit (pkgs) sentencepiece pkgconfig;
   };
+
+  tokenizers = disabledIf (!isPy3k)
+    (toPythonModule (callPackage ../development/python-modules/tokenizers { }));
 
   transformers = callPackage ../development/python-modules/transformers { };
 
@@ -2715,6 +2720,10 @@ in {
   # Alias that we should deprecate
   dateutil = self.python-dateutil;
 
+  debugpy = callPackage ../development/python-modules/debugpy {
+    django = if isPy27 then self.django_1_11 else self.django;
+  };
+
   decorator = callPackage ../development/python-modules/decorator { };
 
   deform = callPackage ../development/python-modules/deform { };
@@ -3731,6 +3740,8 @@ in {
 
   eventlet = callPackage ../development/python-modules/eventlet { };
 
+  executing = callPackage ../development/python-modules/executing { };
+
   exifread = callPackage ../development/python-modules/exifread { };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
@@ -4203,6 +4214,8 @@ in {
   iapws = callPackage ../development/python-modules/iapws { };
 
   icalendar = callPackage ../development/python-modules/icalendar { };
+
+  icecream = callPackage ../development/python-modules/icecream { };
 
   ics = callPackage ../development/python-modules/ics { };
 

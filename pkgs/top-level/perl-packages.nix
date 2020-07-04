@@ -11344,6 +11344,22 @@ let
     };
   };
 
+  MathCalcParser = buildPerlPackage {
+    pname = "Math-Calc-Parser";
+    version = "1.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Math-Calc-Parser-1.005.tar.gz";
+      sha256 = "afc3eb496ab3a3a301b3437af07e197eb743c06090f0101dacf820302f2b7f75";
+    };
+    buildInputs = [ TestNeeds ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Math-Calc-Parser";
+      description = "Parse and evaluate mathematical expressions";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
   MathCalcUnits = buildPerlPackage {
     pname = "Math-Calc-Units";
     version = "1.07";

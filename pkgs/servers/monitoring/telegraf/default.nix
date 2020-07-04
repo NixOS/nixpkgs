@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "telegraf";
-  version = "1.14.4";
+  version = "1.14.5";
 
   goPackagePath = "github.com/influxdata/telegraf";
 
@@ -14,10 +14,10 @@ buildGoModule rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "v${version}";
-    sha256 = "0kbf1r9b9xylq0akmklzy94pcljayhdjm539fwazp5c1364qmbjm";
+    sha256 = "1rnrg1q0dylr62cfkzspp47w818cja3hs6bbarcksmp0s23rq6lz";
   };
 
-  vendorSha256 = "05nj99hl5f5l0a2aswy19wmbm94hd1h03r227gmn419dkzc5hpah";
+  vendorSha256 = "1mjlakf88fa75qldkz62aja0wn0m6xqfr45vjy0lwpi0adc0fz70";
 
   buildFlagsArray = [ ''-ldflags=
     -w -s -X main.version=${version}

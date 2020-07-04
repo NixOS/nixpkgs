@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dpic";
-  version = "2020.03.01";
+  version = "2020.06.01";
 
   src = fetchurl {
     url = "https://ece.uwaterloo.ca/~aplevich/dpic/${pname}-${version}.tar.gz";
-    sha256 = "1wa1b8m98wdyryf0czn5g3g50znrjcdhsrzpqp6zgwr5w4a086mj";
+    sha256 = "1gbkpbjwjaaifxff8amm9b47dynq4l4698snjdgnn4flndw62q88";
   };
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
